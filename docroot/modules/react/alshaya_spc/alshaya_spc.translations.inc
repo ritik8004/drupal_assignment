@@ -453,6 +453,26 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to express delivery feature with context.
+  $strings['v11'] = [
+    'Express Delivery Available' => [
+      'ar' => 'خدمة التوصيل السريع متوفرة',
+      'context' => 'express_delivery_label',
+    ],
+    'Same Day Delivery Available' => [
+      'ar' => 'التوصيل في نفس اليوم متاح',
+      'context' => 'same_day_delivery_label',
+    ],
+    'Express Delivery Available' => [
+      'ar' => 'خدمة التوصيل السريع متوفرة',
+      'context' => 'express_day_delivery_listing',
+    ],
+    'Same Day Delivery Available' => [
+      'ar' => 'التوصيل في نفس اليوم متاح',
+      'context' => 'same_day_delivery_listing',
+    ],
+  ];
+
   return $strings;
 }
 
