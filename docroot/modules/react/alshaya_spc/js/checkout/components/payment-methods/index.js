@@ -369,8 +369,8 @@ export default class PaymentMethods extends React.Component {
 
       // Check if egift card is already redeemed with linked or guest.
       const egiftRedeemed = isEgiftRedemptionDone(cart.cart, cart.cart.totals.egiftRedemptionType);
-      // Disable the payment method that are not supported by egift.
 
+      // Disable the payment method that are not supported by egift.
       if (isEgiftCardEnabled() && egiftRedeemed) {
         disablePaymentMethod = isEgiftUnsupportedPaymentMethod(method.code);
       }
