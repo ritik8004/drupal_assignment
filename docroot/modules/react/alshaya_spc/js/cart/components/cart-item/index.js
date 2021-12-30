@@ -126,7 +126,9 @@ export default class CartItem extends React.Component {
     // Open wishlist confirmation popup if feature is enabled.
     if (isWishlistEnabled()) {
       const { wishlistResponse } = this.state;
-      if (!wishlistResponse && !(isProductExistInWishList(sku))) {
+      const { productInfo: { parentSKU } } = this.state;
+      const wishlistSku = parentSKU || sku;
+      if (!wishlistResponse && !(isProductExistInWishList(wishlistSku))) {
         this.openWishlistModal();
         return;
       }
@@ -354,7 +356,7 @@ export default class CartItem extends React.Component {
               { itemCodeLabel }
               {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.value}`} label={key} />)}
             </div>
-            <ConditionalView condition={isWishlistEnabled()}>
+            <ConditionalView condition={isWishlistEnabled() && !freeItem}>
               <div className="spc-product-wishlist-link">
                 <WishlistContainer
                   context="cart"
