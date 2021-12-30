@@ -50,7 +50,7 @@ foreach ($languages as $language) {
     ],
   ];
 
-  algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
+  algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query));
 
   print $query_suggestion . PHP_EOL;
   print PHP_EOL . PHP_EOL . PHP_EOL;

@@ -237,6 +237,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KLZ3ZQR',
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'P6IDFAXZNC',
+            'write_api_key' => 'c3541599df4aff3f9ad265cbfcae8454',
+            'search_api_key' => '502a840efc5f2f94a995b33a94feec10',
+          ],
           'live' => [
             'exponea.settings' => [
               "name" => "Victoria's Secret",
