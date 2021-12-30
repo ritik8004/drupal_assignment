@@ -87,8 +87,27 @@ class WishlistButton extends React.Component {
   handleProductRemovalFromWishlist = (sku) => {
     removeProductFromWishList(sku).then((response) => {
       const { context } = this.props;
-      if (typeof response.data !== 'undefined'
-        && typeof response.data.status !== 'undefined'
+      if (!hasValue(response)) {
+        // Prepare and dispatch an event when product removed from the storage
+        // so other components like wishlist header can listen and do the
+        // needful.
+        dispatchCustomEvent('productRemovedFromWishlist', {
+          sku,
+          addedInWishList: true,
+        });
+
+        // For wishlist page, we remove full loader.
+        // For other layouts, we remove inline loader of button.
+        if (context === 'wishlist_page') {
+          removeFullScreenLoader();
+        } else {
+          removeInlineLoader('.wishlist-loader .loading');
+        }
+        return;
+      }
+
+      if (hasValue(response.data)
+        && hasValue(response.data.status)
         && response.data.status) {
         // Get existing wishlist data from storage.
         const wishListItems = getWishListData();
