@@ -50,9 +50,7 @@ foreach ($markets as $market) {
           $sort['direction'] . '(' . $sort['field'] . '_' . $lang_code . ')',
         ] + $settings['ranking'];
 
-      $replica_index->setSettings($replica_settings);
-
-      sleep(1);
+      $replica_index->setSettings($replica_settings)->wait();
     }
   }
 }
