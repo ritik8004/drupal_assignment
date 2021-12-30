@@ -8,6 +8,10 @@ import dispatchCustomEvent from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
+import { isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
+import { addPaymentMethodInCart } from '../../../utilities/update_cart';
+import { removeFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import getStringMessage from '../../../utilities/strings';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -81,6 +85,12 @@ export default class CompletePurchase extends React.Component {
       });
     }
 
+    // If full payment is done by egift card then treat it as PseudoPayment
+    // method.
+    if (isFullPaymentDoneByEgift(cart.cart)) {
+      isPseudoPaymentMedthod = true;
+    }
+
     const checkoutButton = e.target.parentNode;
     checkoutButton.classList.add('in-active');
 
@@ -96,7 +106,43 @@ export default class CompletePurchase extends React.Component {
         return;
       }
 
-      placeOrder(cart.cart.payment.method);
+      // If full payment is done by egift then change the payment method to
+      // hps_payment.
+      let paymentMethod = cart.cart.payment.method;
+      if (isFullPaymentDoneByEgift(cart.cart)) {
+        paymentMethod = 'hps_payment';
+
+        const analytics = Drupal.alshayaSpc.getGAData();
+
+        const data = {
+          payment: {
+            method: paymentMethod,
+            additional_data: {},
+            analytics,
+          },
+        };
+
+        const cartUpdate = addPaymentMethodInCart('update payment', data);
+        if (cartUpdate instanceof Promise) {
+          cartUpdate.then((result) => {
+            if (!result) {
+              // Close popup in case of error.
+              removeFullScreenLoader();
+
+              dispatchCustomEvent('spcCheckoutMessageUpdate', {
+                type: 'error',
+                message: getStringMessage('global_error'),
+              });
+            } else {
+              placeOrder(paymentMethod);
+            }
+          }).catch((error) => {
+            Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+          });
+        }
+      } else {
+        placeOrder(paymentMethod);
+      }
     } catch (error) {
       Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
@@ -147,8 +193,11 @@ export default class CompletePurchase extends React.Component {
     }
 
     // Disabled if there is still some error left in payment form.
-    if (document.getElementById('spc-payment-methods') === null
-      || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
+    if ((document.getElementById('spc-payment-methods') === null
+      || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0)
+      // Bypass the payment method error check if the full payment is done by
+      // egift card.
+      && !isFullPaymentDoneByEgift(cart.cart)) {
       // Adding error class in the section.
       const paymentMethods = document.getElementById('spc-payment-methods');
       if (paymentMethods) {

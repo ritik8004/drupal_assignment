@@ -23,7 +23,7 @@ export default class UpdateEgiftCardAmount extends React.Component {
       message = getStringMessage('egift_valid_amount');
       errors = true;
     } else if (egiftAmount > cart.cart_total) {
-      message = Drupal.t('Redeem amount should be less than or equal to the cart value.');
+      message = Drupal.t('Redeem amount should be less than or equal to the cart value.', {}, { context: 'egift' });
       errors = true;
     }
 

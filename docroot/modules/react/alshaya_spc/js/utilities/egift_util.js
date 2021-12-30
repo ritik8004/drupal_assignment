@@ -38,6 +38,7 @@ export const egiftCardHeader = ({
 export const egiftFormElement = ({
   type = '',
   name = '',
+  placeholder = '',
   label = '',
   className = '',
   buttonText = '',
@@ -80,6 +81,7 @@ export const egiftFormElement = ({
             name={`egift_${name}`}
             className={`${className} ${focusClass}`}
             defaultValue={value}
+            placeholder={placeholder}
             disabled={disabled}
             onBlur={(e) => handleEvent(e)}
           />
@@ -101,6 +103,7 @@ export const egiftFormElement = ({
             name={`egift_${name}`}
             className={className}
             defaultValue={value}
+            placeholder={placeholder}
             disabled={disabled}
             onBlur={(e) => handleEvent(e)}
           />
@@ -282,7 +285,7 @@ export const cartContainsOnlyVirtualProduct = (cart) => {
  *   The type of redemption done.
  *
  * @return {boolean}
- *   true if egift redemption is done by guest else false.
+ *   true if egift redemption is done by the given redemption type else false.
  */
 export const isEgiftRedemptionDone = (cart, redemptionType = 'guest') => {
   if (hasValue(cart.totals)) {
@@ -322,6 +325,11 @@ export const isEgiftUnsupportedPaymentMethod = (paymentMethod, cart) => {
  *   Returns True if full payment is done by egift else false.
  */
 export const isFullPaymentDoneByEgift = (cart) => {
+  // Return false if egift is not enabled.
+  if (!isEgiftCardEnabled()) {
+    return false;
+  }
+
   if (hasValue(cart.totals)) {
     const {
       egiftRedeemedAmount,

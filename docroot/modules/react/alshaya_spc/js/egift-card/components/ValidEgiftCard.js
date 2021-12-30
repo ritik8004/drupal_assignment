@@ -116,7 +116,7 @@ export default class ValidEgiftCard extends React.Component {
               // Show the error message when result is false.
               document.getElementById('egift_linkcard_error').innerHTML = result.response_message;
             } else {
-              document.getElementById('egift_linkcard_error').innerHTML = getStringMessage('egift_endpoint_down');
+              document.getElementById('egift_linkcard_error').innerHTML = getStringMessage('global_error');
             }
           });
         }

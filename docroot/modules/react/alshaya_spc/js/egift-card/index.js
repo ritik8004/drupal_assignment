@@ -144,7 +144,7 @@ export default class RedeemEgiftCard extends React.Component {
       } else {
         result = {
           error: true,
-          message: getStringMessage('egift_endpoint_down'),
+          message: getStringMessage('global_error'),
         };
         // Remove the loader once we have the response.
         removeFullScreenLoader();
@@ -188,7 +188,7 @@ export default class RedeemEgiftCard extends React.Component {
       } else {
         result = {
           error: true,
-          message: getStringMessage('egift_endpoint_down'),
+          message: getStringMessage('global_error'),
         };
       }
     }
@@ -243,7 +243,7 @@ export default class RedeemEgiftCard extends React.Component {
     } else {
       result = {
         error: true,
-        message: getStringMessage('egift_endpoint_down'),
+        message: getStringMessage('global_error'),
       };
     }
 

@@ -718,7 +718,7 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           document.getElementById('mobile-error').classList.remove('error');
 
           // Add this only when we are not passing email via form.
-          if (!hasValue(target.email.value)) {
+          if (!hasValue(target.email)) {
             target.email = {
               value: shipping.email,
             };
@@ -728,7 +728,10 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           // For logged in user add customer id from shipping.
           let customerData = {};
           if (drupalSettings.user.uid > 0) {
-            formData.static.customer_id = shipping.customer_id;
+            // Incase of cart having only egift card then shipping information
+            // is not available. use drupalSettings customer_id.
+            formData.static.customer_id = hasValue(shipping) && hasValue(shipping.customer_id)
+              ? shipping.customer_id : drupalSettings.userDetails.customerId;
             customerData = {
               address: {
                 given_name: formData.static.firstname,

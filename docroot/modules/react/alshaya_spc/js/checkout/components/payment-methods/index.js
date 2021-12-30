@@ -28,7 +28,7 @@ import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
-import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
+import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod } from '../../../utilities/egift_util';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -135,14 +135,6 @@ export default class PaymentMethods extends React.Component {
     if (isAuraEnabled() && isFullPaymentDoneByAura(cart)) {
       this.changePaymentMethod('aura_payment');
       return;
-    }
-
-    // If full payment is being done by egift then change the payment method to
-    // 'hps_payment'.
-    if (isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart)) {
-      // @todo To change payment method to hps_payment.
-      // This will be done once we have default payment method selection disable
-      // in place.
     }
 
     if (!(this.isActive())) {
