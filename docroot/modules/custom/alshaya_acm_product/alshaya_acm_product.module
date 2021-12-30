@@ -756,6 +756,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
         $build['item_code']['#markup'] = $sku;
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
+
       }
       elseif ($view_mode == 'matchback' || $view_mode == 'matchback_mobile') {
         $context = 'matchback';
