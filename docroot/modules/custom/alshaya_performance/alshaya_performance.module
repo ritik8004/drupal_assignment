@@ -214,3 +214,33 @@ function alshaya_performance_js_settings_alter(&$settings, AttachedAssetsInterfa
     unset($settings['user']);
   }
 }
+
+/**
+ * Implements hook_js_alter().
+ */
+function alshaya_performance_js_alter(&$javascript, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
+  // Unset external Js for the Performance check up
+  $external = \Drupal::request()->get('external');
+  if (isset($external) && $external == 0) {
+    foreach($javascript as $path => $file) {
+      if ($file['type'] === "external") {
+        unset($javascript[$path]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_css_alter().
+ */
+function alshaya_performance_css_alter(&$css, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
+   // Unset external CSS for the Performance check up
+   $external = \Drupal::request()->get('external');
+   if (isset($external) && $external == 0) {
+     foreach($css as $path => $file) {
+       if ($file['type'] === "external") {
+         unset($css[$path]);
+       }
+     }
+   }
+}

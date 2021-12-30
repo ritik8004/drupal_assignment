@@ -1,0 +1,6 @@
+critical_js:
+  enabled: FALSE
+  critical: ''
+  sitewide: ''
+  ie_only: ''
+enable_uglification: FALSE

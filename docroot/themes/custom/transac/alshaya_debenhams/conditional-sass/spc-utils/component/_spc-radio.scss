@@ -1,0 +1,38 @@
+input[type=radio] {
+  ~ .radio-label,
+  ~ .payment-method-label-wrapper .radio-label {
+    .impress {
+      font-family: $alshaya-thin;
+    }
+  }
+}
+
+.payment-method.payment-method-checkout_com,
+.payment-method.payment-method-checkout_com_upapi {
+  .payment-method-bottom-panel {
+    .spc-checkout-card-option {
+      @include icon('check', after) {
+        position: absolute;
+        font-size: 1.75rem;
+        #{$left}: 0;
+        top: -0.25rem;
+        pointer-events: none;
+        opacity: 0.3;
+      }
+
+      &.selected {
+        &::after {
+          color: $spc-checkout-radio-filled;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.payment-method-label-wrapper {
+  padding-#{$left}: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-#{$right}: 1.75rem;
+}

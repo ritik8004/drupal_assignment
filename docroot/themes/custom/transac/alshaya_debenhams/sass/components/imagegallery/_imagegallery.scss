@@ -3,5 +3,10 @@
     button.slick-arrow {
       display: none !important;
     }
+
+    .slick-track,
+    li.slick-slide {
+      min-height: 50vh;
+    }
   }
 }

@@ -117,15 +117,14 @@ install:
   - echo "memory_limit=576M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - source $BLT_DIR/scripts/travis/setup_project
-  - nvm install 8.12.0
-  - nvm use 8.12.0
-  - npm install -g gulp-cli
+  - source ${BUILD_DIR}/blt/scripts/setup_node.sh
   # Setup the themes here so the node_modules folders can be cached.
   - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
   # Frontend-setup.sh changed directory, hence we return to the original dir.
   - cd ${BUILD_DIR}
 
 script:
+  - blt blt:telemetry:disable --no-interaction
   # Changing path to disable behat test on Travis.
   # - source $BLT_DIR/scripts/travis/run_tests
   - source ${BUILD_DIR}/blt/scripts/run_tests

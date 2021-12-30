@@ -1,0 +1,19 @@
+.spc-delivery-shipping-methods {
+  .shipping-methods {
+    .shipping-method {
+      .method-title {
+        color: $spc-method-title;
+      }
+
+      .carrier-title {
+        color: $spc-carrier-title;
+        font-family: $alshaya-thin;
+      }
+
+      .spc-price {
+        color: $spc-carrier-price;
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+}

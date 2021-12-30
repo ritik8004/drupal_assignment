@@ -90,6 +90,7 @@ header {
   .quantity {
     #{$left}: 0;
     bottom: -0.4375rem;
+    padding-top: 0.125rem;
 
     @include breakpoint($only-mobile) {
       #{$left}: -0.1875rem;
