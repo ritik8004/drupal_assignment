@@ -53,9 +53,7 @@ foreach ($markets as $market) {
           $sort['direction'] . '(' . $sort['field'] . ')',
         ] + $settings['ranking'];
 
-      $replica_index->setSettings($replica_settings);
-
-      sleep(1);
+      $replica_index->setSettings($replica_settings)->wait();
     }
   }
 }

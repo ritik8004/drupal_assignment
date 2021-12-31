@@ -7,6 +7,7 @@ const cartErrorCodes = {
   cartHasOOSItem: 506,
   cartOrderPlacementError: 505,
   cartCheckoutQuantityMismatch: 9010,
+  cartHasUserError: 610,
 };
 
 /**
