@@ -342,8 +342,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
     // Cart object need to be passed to UpdateGiftCardAmount.
     const { cart } = this.props;
-    // egiftGuestRedeemed to check if already redeemed using guest.
-    const egiftGuestRedeemed = isEgiftRedemptionDone(cart.cart);
     // Return if no linked card and if any api fails.
     if (renderWait && egiftLinkedCardNumber == null) {
       return null;
@@ -360,7 +358,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     // if already redeemed or any unsupported payment method selected.
     const disabled = (egiftCardActualBalance === 0
       || isEgiftCardExpired
-      || egiftGuestRedeemed
+      || isEgiftRedemptionDone(cart.cart)
       || UnsupportedPaymentMethod
     );
 
