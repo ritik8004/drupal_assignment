@@ -82,7 +82,7 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
       'url_path',
       'description',
       'meta_title',
-      'meta_keywords',
+      'meta_keyword',
       'meta_description',
       'image',
       'promo_banner_for_mobile',
