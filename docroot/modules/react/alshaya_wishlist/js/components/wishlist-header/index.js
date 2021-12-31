@@ -9,7 +9,6 @@ import {
   getWishlistNotificationTime,
   getWishlistFromBackend,
   addRemoveWishlistItemsInBackend,
-  getWishlistInfoFromBackend,
 } from '../../../../js/utilities/wishlistHelper';
 import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
@@ -45,13 +44,7 @@ export default class WishlistHeader extends React.Component {
       // Load wishlist information from the magento backend, if wishlist
       // data is empty in local storage for authenticate users. First check
       // if wishlist is available for the customer in backend.
-        getWishlistInfoFromBackend().then((response) => {
-          if (hasValue(response.data)) {
-            if (hasValue(response.data.status)) {
-              this.loadWishlistFromBackend();
-            }
-          }
-        });
+        this.loadWishlistFromBackend();
       } else if (hasValue(drupalSettings.wishlist.mergeWishlistForLoggedInUsers)) {
         // Merge wishlist information to the magento backend from local storage,
         // if wishlist data available in local storage and merging wishlist
