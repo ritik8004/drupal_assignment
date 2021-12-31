@@ -135,6 +135,8 @@ export default class AddToBagSimple extends React.Component {
   onClickHandler = (e) => {
     e.preventDefault();
     e.persist();
+    e.stopPropagation();
+
     this.handleUserAction(e, 'add');
   };
 

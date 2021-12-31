@@ -5,6 +5,7 @@ import ProgressBar from './widgets/ProgressBar';
 import {
   showLoader, toggleSearchResultsContainer, toggleSortByFilter, toggleBlockCategoryFilter,
 } from '../../utils';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 // Stats with pagination.
 const PaginationStats = connectStats(({ nbHits, currentResults }) => {
@@ -27,38 +28,40 @@ const PaginationStats = connectStats(({ nbHits, currentResults }) => {
   );
 });
 
-const Pagination = React.memo((props) => {
-  const loadNextCotent = () => {
+const Pagination = ({
+  refineNext, results, hasMore, children,
+}) => {
+  const loadNextContent = (e) => {
+    e.preventDefault();
+    e.persist();
+    e.stopPropagation();
+
     showLoader();
-    props.refineNext();
+    refineNext(e);
   };
 
-  if (props.results > 0) {
-    return (
+  return (
+    <ConditionalView condition={results > 0}>
       <ul className="js-pager__items pager">
         <li className="pager__item">
-          <PaginationStats currentResults={props.results} />
+          <PaginationStats currentResults={results} />
         </li>
-        {props.hasMore && (
+
+        <ConditionalView condition={hasMore}>
           <li className="pager__item">
             <button
+              type="button"
               className="button"
-              type="submit"
               rel="next"
-              onClick={() => loadNextCotent()}
+              onClick={(e) => loadNextContent(e)}
             >
-              {props.children}
+              {children}
             </button>
           </li>
-        )}
+        </ConditionalView>
       </ul>
-    );
-  }
-
-  return (null);
-}, (prevProps, nextProps) => (
-  prevProps.results === nextProps.results
-  && prevProps.hasMore === nextProps.hasMore
-));
+    </ConditionalView>
+  );
+};
 
 export default Pagination;
