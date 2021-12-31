@@ -6,7 +6,7 @@
  */
 
  use Drupal\Core\Cache\Cache;
-use Drupal\node\NodeInterface;
+ use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_alshaya_spc_checkout_build_alter().
