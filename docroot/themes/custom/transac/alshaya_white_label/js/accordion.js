@@ -6,28 +6,27 @@
 (function ($, Drupal) {
   'use strict';
 
+  /**
+   * Function to create accordion.
+   *
+   * @param {object} element
+   *   The HTML element inside which we want to make accordion.
+   */
+  function covertToAccordion(element) {
+    element.once('accordion-init').accordion({
+      heightStyle: 'content',
+      collapsible: true,
+      active: false
+    });
+  }
+
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
-
-      /**
-       * Function to create accordion.
-       *
-       * @param {object} element
-       *   The HTML element inside which we want to make accordion.
-       */
-      Drupal.covertToAccordion = function (element) {
-        element.once('accordion-init').accordion({
-          heightStyle: 'content',
-          collapsible: true,
-          active: false
-        });
-      };
-
       // Accordion for advance page category for mobile.
-      if ($('.c-accordion').length) {
+      if ($('.c-accordion').once) {
         $('.c-accordion').each(function () {
           if ($(this).find('ul').length > 0) {
-            Drupal.covertToAccordion($(this));
+            covertToAccordion($(this));
           }
           else {
             $(this).addClass('empty-accordion-delivery-options');
@@ -39,4 +38,5 @@
       }
     }
   };
+
 })(jQuery, Drupal);
