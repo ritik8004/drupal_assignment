@@ -14,6 +14,7 @@ import {
   isAnonymousUser,
   isShareWishlistPage,
   getSharedWishlistFromBackend,
+  getWishlistLabel,
 } from '../../../../js/utilities/wishlistHelper';
 import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelper';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
@@ -152,8 +153,11 @@ class WishlistProductList extends React.Component {
 
     // Render empty wishlist component if wishlist is empty.
     if (!wishListItemsCount) {
-      const message = drupalSettings.wishlist.config.emptyWishListMessage;
-      return PageEmptyMessage(message);
+      return PageEmptyMessage(Drupal.t(
+        'your @wishlist_label is empty.',
+        { '@wishlist_label': getWishlistLabel() },
+        { context: 'wishlist' },
+      ));
     }
 
     // Get the items per page setting from the drupal settings.

@@ -1,8 +1,4 @@
 enabled: true
-# Config for showing empty message when customers doesn't have products in
-# their favourite list. Token, [alshaya_wishlist:wishlist_label], is used to
-# replace during the preprocess of text for FE.
-empty_wishlist_message: 'your [alshaya_wishlist:wishlist_label] is empty.'
 # Local storage expiration time for guest (default to 7 days)
 # and logged-in users (default to 5 mins) in seconds.
 local_storage_expiration_guest: 604800

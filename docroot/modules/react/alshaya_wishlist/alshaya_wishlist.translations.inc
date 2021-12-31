@@ -89,5 +89,9 @@ function _alshaya_wishlist_translations() {
       'ar' => 'البريد الإلكتروني',
       'context' => 'wishlist',
     ],
+    'your @wishlist_label is empty.' => [
+      'ar' => 'لك @wishlist_label فارغ.',
+      'context' => 'wishlist',
+    ],
   ];
 }

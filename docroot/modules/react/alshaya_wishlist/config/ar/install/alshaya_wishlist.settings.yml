@@ -1,5 +1,4 @@
 wishlist_label: 'المنتجات المفضلة'
-empty_wishlist_message: 'لك [alshaya_wishlist:wishlist_label] فارغ.'
 email_subject: 'شاركه صديق [alshaya_wishlist:wishlist_label] منتجات'
 email_template:
   value: '<h1>مرحبا يا أصدقاء,</h1><p>تحقق من بلدي [alshaya_wishlist:wishlist_label] منتجات <a href="[alshaya_wishlist:wishlist_share_url]">هنا</a>.</p><p>أطيب التمنيات,<br/></p>'
