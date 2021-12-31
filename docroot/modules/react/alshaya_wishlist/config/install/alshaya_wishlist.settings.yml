@@ -10,8 +10,8 @@ remove_after_addtocart: true
 # Both configs below are used in share wishlist email.
 email_subject: 'A friend has shared his [alshaya_wishlist:wishlist_label] products'
 email_template:
-  value: '<h1>Hi Friends,</h1><p>Checkout my [alshaya_wishlist:wishlist_label] products <a href="[alshaya_wishlist:wishlist_share_url]">here</a>.</p><p>Best Wishes,<br/></p>'
-  format: 'rich_text'
+  value: "Hi Friends,\r\n\r\nClick on below link to checkout my [alshaya_wishlist:wishlist_label] products.\r\n\r\n[alshaya_wishlist:wishlist_share_url]\r\n\r\nBest wishes,"
+  format: 'mail_text'
 # Enable or disable wishlist sharing feature.
 enabled_share: true
 langcode: en
