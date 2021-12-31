@@ -301,14 +301,8 @@ export const isEgiftRedemptionDone = (cart, redemptionType = 'guest') => {
 /**
  * Utility function to check if given payment method is unsupported with egift.
  */
-export const isEgiftUnsupportedPaymentMethod = (paymentMethod, cart) => {
+export const isEgiftUnsupportedPaymentMethod = (paymentMethod) => {
   const { notSupportedPaymentMethods } = drupalSettings.egiftCard;
-
-  // Treating hps_payment with linked as unsupported payment methods.
-  if (isEgiftRedemptionDone(cart, 'linked') && paymentMethod === 'hps_payment') {
-    return true;
-  }
-
   return paymentMethod in notSupportedPaymentMethods;
 };
 
