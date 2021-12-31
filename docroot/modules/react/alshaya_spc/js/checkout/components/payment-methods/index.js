@@ -352,12 +352,18 @@ export default class PaymentMethods extends React.Component {
   render = () => {
     const methods = [];
     let disablePaymentMethod = '';
+    let egiftRedeemed = false;
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
     const activePaymentMethods = Object.values(this.getPaymentMethods(active))
       .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
+
+    // Check if egift card is already redeemed with linked or guest.
+    if (isEgiftCardEnabled()) {
+      egiftRedeemed = isEgiftRedemptionDone(cart.cart, cart.cart.totals.egiftRedemptionType);
+    }
 
     Object.entries(activePaymentMethods).forEach(([, method], index) => {
       // If aura enabled and customer is paying some amount of the order
@@ -366,9 +372,6 @@ export default class PaymentMethods extends React.Component {
       if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
         disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
       }
-
-      // Check if egift card is already redeemed with linked or guest.
-      const egiftRedeemed = isEgiftRedemptionDone(cart.cart, cart.cart.totals.egiftRedemptionType);
 
       // Disable the payment method that are not supported by egift.
       if (isEgiftCardEnabled() && egiftRedeemed) {
@@ -401,7 +404,6 @@ export default class PaymentMethods extends React.Component {
         <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated()}>
           <PaymentMethodLinkedEgiftCard
             cart={cart}
-            egiftGuestRedeemed={isEgiftRedemptionDone(cart.cart)}
           />
         </ConditionalView>
         <ConditionalView condition={Object.keys(methods).length > 0}>

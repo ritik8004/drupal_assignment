@@ -54,10 +54,7 @@ export default class RedeemEgiftCard extends React.Component {
       && hasValue(cartData.cart.payment)
       && hasValue(cartData.cart.payment.method)) {
       this.setState({
-        redemptionDisabled: isEgiftUnsupportedPaymentMethod(
-          cartData.cart.payment.method,
-          cartData.cart,
-        ),
+        redemptionDisabled: isEgiftUnsupportedPaymentMethod(cartData.cart.payment.method),
       });
     }
   }
@@ -68,10 +65,7 @@ export default class RedeemEgiftCard extends React.Component {
     if (hasValue(currentCart.payment)
       && hasValue(currentCart.payment.method)) {
       // Updated the state of redemption.
-      const redemptionStatus = isEgiftUnsupportedPaymentMethod(
-        currentCart.payment.method,
-        currentCart,
-      );
+      const redemptionStatus = isEgiftUnsupportedPaymentMethod(currentCart.payment.method);
       this.setState({
         redemptionDisabled: redemptionStatus,
       });

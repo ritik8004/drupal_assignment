@@ -5,7 +5,7 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import UpdateEgiftCardAmount from '../UpdateEgiftCardAmount';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import {
-  callEgiftApi,
+  callEgiftApi, isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
   performRedemption,
   updatePriceSummaryBlock,
@@ -341,8 +341,9 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     } = this.state;
 
     // Cart object need to be passed to UpdateGiftCardAmount.
+    const { cart } = this.props;
     // egiftGuestRedeemed to check if already redeemed using guest.
-    const { cart, egiftGuestRedeemed } = this.props;
+    const egiftGuestRedeemed = isEgiftRedemptionDone(cart.cart);
     // Return if no linked card and if any api fails.
     if (renderWait && egiftLinkedCardNumber == null) {
       return null;
