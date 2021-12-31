@@ -19,7 +19,7 @@ import ErrorMessage from '../error-message';
 import { isDisplayConfigurableBoxes } from '../../../../js/utilities/display';
 import getStringMessage from '../../../../alshaya_spc/js/utilities/strings';
 import WishlistContainer from '../../../../js/utilities/components/wishlist-container';
-import { isWishlistEnabled } from '../../../../js/utilities/wishlistHelper';
+import { isWishlistEnabled, isWishlistPage } from '../../../../js/utilities/wishlistHelper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class ConfigurableForm extends React.Component {
@@ -439,16 +439,18 @@ export default class ConfigurableForm extends React.Component {
               {addToCartText}
             </button>
           </div>
-          {/* Here skuMainCode is parent sku of variant selected */}
-          <WishlistContainer
-            sku={sku}
-            skuCode={parentSku}
-            context="productDrawer"
-            position="top"
-            format="icon"
-            title={productData.title}
-            options={options}
-          />
+          <ConditionalView condition={!isWishlistPage(extraInfo)}>
+            {/* Here skuMainCode is parent sku of variant selected */}
+            <WishlistContainer
+              sku={sku}
+              skuCode={parentSku}
+              context="productDrawer"
+              position="top"
+              format="icon"
+              title={productData.title}
+              options={options}
+            />
+          </ConditionalView>
         </form>
       </>
     );
