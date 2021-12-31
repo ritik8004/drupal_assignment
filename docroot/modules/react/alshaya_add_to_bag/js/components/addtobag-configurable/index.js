@@ -23,6 +23,10 @@ export default class AddToBagConfigurable extends React.Component {
    * Click event handler for the Add button.
    */
   handleOnClick = (e) => {
+    e.preventDefault();
+    e.persist();
+    e.stopPropagation();
+
     const { sku } = this.props;
 
     // Get the container element for placing the loader effect.
