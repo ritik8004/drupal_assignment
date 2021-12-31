@@ -79,17 +79,21 @@ class CartSelectOption extends React.Component {
       ? productInfo[skuCode].variants[variantSelected].parent_sku
       : skuCode;
 
+    // Dispatch magazinev2-variant-selected before replaceState so that data will be available,
+    // to push to productDetailView GTM event when needed.
+    if ((typeof variantSelected !== 'undefined') && (variantSelected !== null)) {
+      document.querySelector('.sku-base-form').dispatchEvent(new CustomEvent('magazinev2-variant-selected', {
+        bubbles: true,
+        detail: { variant: variantSelected },
+      }));
+    }
+
     if (context === 'main') {
       const { currentLanguage } = drupalSettings.path;
       const variantInfo = productInfo[skuCode].variants[variantSelected];
       if (variantInfo !== undefined) {
         const variantUrl = variantInfo.url[currentLanguage];
         if (window.location.pathname !== variantUrl) {
-          // To Prepare data for GTM productDetailView Event,
-          // Which will be pushed with window.history.replaceState.
-          document.querySelector('.sku-base-form').dispatchEvent(new CustomEvent('magazinev2-variant-url-change', {
-            detail: { variant: variantSelected },
-          }));
           window.history.replaceState(variantInfo, variantInfo.title, variantUrl);
           // Language switcher.
           let i;
