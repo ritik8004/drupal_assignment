@@ -2882,4 +2882,16 @@ JS;
     }
   }
 
+  /**
+   * @Then /^I should see tabby payment window$/
+   */
+  public function iShouldSeeTabbyPaymentWindow() {
+    $page = $this->getSession()->getPage();
+    $iframe_element = $page->find('css', '#tabby-checkout iframe');
+    if ($iframe_element == null) {
+      throw new \Exception(sprintf('Iframe element not found.'));
+    }
+
+  }
+
 }
