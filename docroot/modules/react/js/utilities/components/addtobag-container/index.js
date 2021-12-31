@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { isAddToBagEnabled } from '../../addToBagHelper';
 import EmptyErrorBoundary from '../empty-error-boundary/EmptyErrorBoundary';
+import AddToBag from '../../../../alshaya_add_to_bag/js/components/addtobag';
 
 function AddToBagContainer(props) {
   const { productData, isBuyable, extraInfo } = props;
@@ -15,12 +16,10 @@ function AddToBagContainer(props) {
   const { showAddToBag } = extraInfo || {};
 
   if (isAddToBagEnabled() || showAddToBag) {
-    const AddToBagLazy = React.lazy(() => import('../../../../alshaya_add_to_bag/js/components/addtobag' /* webpackChunkName: "atb" */));
-
     return (
       <EmptyErrorBoundary>
         <Suspense fallback={<div />}>
-          <AddToBagLazy
+          <AddToBag
             url={props.url}
             sku={props.sku}
             stockQty={props.stockQty}
