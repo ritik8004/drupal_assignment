@@ -1016,7 +1016,7 @@ function alshaya_white_label_preprocess_menu(&$variables) {
       $attributes = $item['url']->getOption('attributes');
       $attributes['gtm-menu-title'] = $itemEntity->hasTranslation($langcode) ? $itemEntity->getTranslation($langcode)->getTitle() : $item['original_link']->getTitle();
       $item['url']->setOption('attributes', $attributes);
-    }   
+    }
   }
 }
 
@@ -1328,6 +1328,14 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         '#mobile_image' => !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image),
         '#default_image' => _alshaya_white_label_get_image_url($default_image),
       ];
+    }
+  }
+  // Form the accodian content for egift.
+  if ($variables['elements']['#paragraph']->getType() == 'accordion_paragraph') {
+    foreach($variables['elements']['field_title_and_content'] as $key => $value) {
+      if(is_int($key)) {
+        $variables['title_content'][$key] = $value;
+      }
     }
   }
 

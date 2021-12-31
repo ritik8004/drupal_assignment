@@ -293,8 +293,8 @@ export default class PaymentMethods extends React.Component {
 
     // Allow change payment method only if it's allowed for egift.
     if (isEgiftCardEnabled()
-      && isEgiftUnsupportedPaymentMethod(method, cart.cart)
-      && isEgiftRedemptionDone(cart.cart)) {
+      && isEgiftUnsupportedPaymentMethod(method)
+      && isEgiftRedemptionDone(cart.cart, cart.cart.totals.egiftRedemptionType)) {
       return;
     }
 
@@ -352,12 +352,18 @@ export default class PaymentMethods extends React.Component {
   render = () => {
     const methods = [];
     let disablePaymentMethod = '';
+    let egiftRedeemed = false;
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
     const activePaymentMethods = Object.values(this.getPaymentMethods(active))
       .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
+
+    // Check if egift card is already redeemed with linked or guest.
+    if (isEgiftCardEnabled()) {
+      egiftRedeemed = isEgiftRedemptionDone(cart.cart, cart.cart.totals.egiftRedemptionType);
+    }
 
     Object.entries(activePaymentMethods).forEach(([, method], index) => {
       // If aura enabled and customer is paying some amount of the order
@@ -366,9 +372,10 @@ export default class PaymentMethods extends React.Component {
       if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
         disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
       }
+
       // Disable the payment method that are not supported by egift.
-      if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart.cart)) {
-        disablePaymentMethod = isEgiftUnsupportedPaymentMethod(method.code, cart.cart);
+      if (isEgiftCardEnabled() && egiftRedeemed) {
+        disablePaymentMethod = isEgiftUnsupportedPaymentMethod(method.code);
       }
 
       this.paymentMethodRefs[method.code] = React.createRef();
@@ -382,7 +389,7 @@ export default class PaymentMethods extends React.Component {
         key={method.code}
         method={method}
         animationOffset={animationOffset}
-        {...((isAuraEnabled() || (isEgiftCardEnabled() && isEgiftRedemptionDone(cart.cart)))
+        {...((isAuraEnabled() || (isEgiftCardEnabled() && egiftRedeemed))
           && disablePaymentMethod
           && { disablePaymentMethod }
         )}
