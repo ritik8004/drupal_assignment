@@ -1,4 +1,5 @@
 import React from 'react';
+import TextareaAutosize from 'react-autosize-textarea';
 import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
 
@@ -7,6 +8,8 @@ export default class EgiftCardStepTwo extends React.Component {
     super(props);
     this.state = {
       showMessageField: true, // Show or hide message field.
+      egiftMessage: '',
+      textAreaCount: 0,
     };
   }
 
@@ -16,6 +19,8 @@ export default class EgiftCardStepTwo extends React.Component {
     } else {
       e.currentTarget.classList.remove('focus');
     }
+    this.setState({ egiftMessage: encodeURIComponent(e.target.value) });
+    this.setState({ textAreaCount: e.target.value.length });
   };
 
   /**
@@ -42,7 +47,7 @@ export default class EgiftCardStepTwo extends React.Component {
   }
 
   render() {
-    const { showMessageField } = this.state;
+    const { showMessageField, egiftMessage, textAreaCount } = this.state;
     const { activate } = this.props;
     let classList = 'step-wrapper step-two-wrapper';
 
@@ -125,15 +130,18 @@ export default class EgiftCardStepTwo extends React.Component {
                 </div>
                 <div className="egift-input-textfield-wrapper">
                   <div className="egift-input-textfield-item">
-                    <textarea
+                    <TextareaAutosize
+                      type="text"
+                      id="egift-message"
                       name="egift-message"
-                      onBlur={(e) => this.handleEvent(e)}
-                      rows="1"
-                      maxLength="200"
+                      maxLength={parseInt(200, 10)}
+                      onChange={this.handleEvent}
+                      className="form-input"
+                      defaultValue={egiftMessage}
                     />
                     <div className="c-input__bar" />
                     <label>{Drupal.t('Message', {}, { context: 'egift' })}</label>
-                    <div className="textarea-character-limit">200</div>
+                    <div className="textarea-character-limit">{ parseInt(200, 10) - parseInt(textAreaCount, 10) }</div>
                     <div id="email-error" className="error egift-error" />
                   </div>
                 </div>
