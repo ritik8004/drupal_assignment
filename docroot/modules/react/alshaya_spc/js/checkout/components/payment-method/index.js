@@ -80,9 +80,9 @@ export default class PaymentMethod extends React.Component {
         analytics,
       },
     };
-    await addPaymentMethodInCart('update payment', data);
-
-    return true;
+    const response = await addPaymentMethodInCart('update payment', data);
+    // Return boolean response for update payment.
+    return response !== null;
   };
 
   finalisePayment = (paymentData) => {

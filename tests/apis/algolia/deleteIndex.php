@@ -33,8 +33,7 @@ foreach ($languages as $language) {
 
   $index = $client->initIndex($name);
   $settings = $index->getSettings();
-  $index->delete();
-  sleep(10);
+  $index->delete()->wait();
 
   foreach ($settings['replicas'] ?? [] as $replica) {
     $replicaIndex = $client->initIndex($replica);

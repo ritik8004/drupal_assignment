@@ -226,6 +226,10 @@ sites:
     module: alshaya_mu
     type: alshaya_transac
     country: eg
+  muqa:
+    module: alshaya_mu
+    type: alshaya_transac
+    country: qa
   tbskw:
     module: alshaya_tbs
     type: alshaya_transac
