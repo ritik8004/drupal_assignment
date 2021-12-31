@@ -645,3 +645,10 @@ egift-topup-page:
       css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css: {}
   dependencies:
     - alshaya_white_label/egift-common
+
+egift-landing-page:
+  css:
+    theme:
+      css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/alshaya-react-animate
