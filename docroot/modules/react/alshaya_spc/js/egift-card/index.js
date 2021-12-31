@@ -18,7 +18,6 @@ import {
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
 import dispatchCustomEvent from '../../../js/utilities/events';
-import getStringMessage from '../../../js/utilities/strings';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -138,7 +137,7 @@ export default class RedeemEgiftCard extends React.Component {
       } else {
         result = {
           error: true,
-          message: getStringMessage('egift_endpoint_down'),
+          message: drupalSettings.global_error_message,
         };
         // Remove the loader once we have the response.
         removeFullScreenLoader();
@@ -182,7 +181,7 @@ export default class RedeemEgiftCard extends React.Component {
       } else {
         result = {
           error: true,
-          message: getStringMessage('egift_endpoint_down'),
+          message: drupalSettings.global_error_message,
         };
       }
     }
@@ -237,7 +236,7 @@ export default class RedeemEgiftCard extends React.Component {
     } else {
       result = {
         error: true,
-        message: getStringMessage('egift_endpoint_down'),
+        message: drupalSettings.global_error_message,
       };
     }
 

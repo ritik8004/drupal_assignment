@@ -17,7 +17,6 @@ import {
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import getStringMessage from '../../../../js/utilities/strings';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -116,7 +115,7 @@ export default class ValidEgiftCard extends React.Component {
               // Show the error message when result is false.
               document.getElementById('egift_linkcard_error').innerHTML = result.response_message;
             } else {
-              document.getElementById('egift_linkcard_error').innerHTML = getStringMessage('egift_endpoint_down');
+              document.getElementById('egift_linkcard_error').innerHTML = drupalSettings.global_error_message;
             }
           });
         }
