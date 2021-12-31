@@ -586,8 +586,9 @@ export const removeDiffFromWishlist = (productsObj) => {
         // will handle removing product from wishlist for both
         // anonymous and logged in users.
         removeProductFromWishList(keySku).then((response) => {
-          if (typeof response.data !== 'undefined'
-            && typeof response.data.status !== 'undefined'
+          if (hasValue(response)
+            && hasValue(response.data)
+            && hasValue(response.data.status)
             && response.data.status) {
             // Remove the entry for given product sku from existing storage data.
             delete wishListItems[keySku];
