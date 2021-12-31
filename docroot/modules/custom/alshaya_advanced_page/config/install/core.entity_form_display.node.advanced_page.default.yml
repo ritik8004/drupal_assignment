@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.advanced_page.field_show_left_menu
     - field.field.node.advanced_page.field_slider
     - field.field.node.advanced_page.field_use_as_department_page
+    - field.field.node.advanced_page.field_use_as_egift_landing_page
     - node.type.advanced_page
   module:
     - content_moderation
@@ -27,7 +28,7 @@ third_party_settings:
       children:
         - field_views
       parent_name: ''
-      weight: 25
+      weight: 21
       label: 'Views Reference'
       format_type: details
       format_settings:
@@ -73,11 +74,10 @@ third_party_settings:
       children:
         - field_promo_blocks
       parent_name: ''
-      weight: 16
+      weight: 15
       label: 'Promo blocks'
       format_type: details
       format_settings:
-        label: 'Promo blocks'
         required_fields: true
         id: ''
         classes: ''
@@ -146,7 +146,7 @@ content:
     region: content
   field_delivery_banner:
     type: entity_reference_paragraphs
-    weight: 18
+    weight: 17
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -157,7 +157,7 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 17
+    weight: 16
     settings: {  }
     third_party_settings: {  }
     type: metatag_firehose
@@ -218,6 +218,13 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
+  field_use_as_egift_landing_page:
+    weight: 7
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
   langcode:
     type: language_select
     weight: 1

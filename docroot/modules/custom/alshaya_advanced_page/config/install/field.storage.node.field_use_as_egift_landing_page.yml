@@ -2,16 +2,15 @@ langcode: en
 status: true
 dependencies:
   module:
-    - link
-    - paragraphs
-id: paragraph.field_button_link
-field_name: field_button_link
-entity_type: paragraph
-type: link
+    - node
+id: node.field_use_as_egift_landing_page
+field_name: field_use_as_egift_landing_page
+entity_type: node
+type: boolean
 settings: {  }
-module: link
+module: core
 locked: false
-cardinality: 2
+cardinality: 1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false

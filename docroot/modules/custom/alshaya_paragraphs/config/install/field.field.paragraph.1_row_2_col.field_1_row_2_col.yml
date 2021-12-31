@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.storage.paragraph.field_1_row_2_col
     - paragraphs.paragraphs_type.1_row_2_col
+    - paragraphs.paragraphs_type.block_reference
     - paragraphs.paragraphs_type.image_title_subtitle
     - paragraphs.paragraphs_type.promo_block
     - paragraphs.paragraphs_type.section_divider
@@ -27,6 +28,7 @@ settings:
   handler_settings:
     negate: 0
     target_bundles:
+      block_reference: block_reference
       image_title_subtitle: image_title_subtitle
       promo_block: promo_block
       section_divider: section_divider
@@ -74,7 +76,7 @@ settings:
         enabled: false
       block_reference:
         weight: 35
-        enabled: false
+        enabled: true
       image_title_subtitle:
         enabled: true
         weight: 36
@@ -99,9 +101,6 @@ settings:
       views_reference:
         weight: 42
         enabled: false
-      product_carousel_category:
-        enabled: false
-        weight: 43
       delivery_usp_block:
         weight: 44
         enabled: false

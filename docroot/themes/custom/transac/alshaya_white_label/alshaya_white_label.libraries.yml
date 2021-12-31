@@ -267,6 +267,14 @@ product-category-accordion:
     - core/jquery.once
     - core/drupal
 
+accordion:
+  js:
+    js/accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
 pdp_js:
   js:
     js/pdp.js: {}
