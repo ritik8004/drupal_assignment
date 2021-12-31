@@ -37,7 +37,6 @@ export default class ShippingMethod extends React.Component {
     if (hasValue(data.shipping)
       && hasValue(data.shipping.methods)
       && hasValue(data.shipping.method)) {
-
       // Get the selected shipping method from shipping methods list,
       // update state for selected method and set radio button as checked.
       Object.entries(data.shipping.methods).forEach(([, method]) => {
