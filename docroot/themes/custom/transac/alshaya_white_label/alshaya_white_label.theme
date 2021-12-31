@@ -74,12 +74,6 @@ function alshaya_white_label_preprocess_html(&$variables) {
       }
     }
   }
-  // Add custom class for advanced page content type for egift landing page.
-  if ($node instanceof NodeInterface && $node->bundle() === 'advanced_page') {
-    if (!empty($node->get('field_use_as_egift_landing_page')->getValue()) && $node->get('field_use_as_egift_landing_page')->getValue()[0]['value'] == 1) {
-      $variables['attributes']['class'][] = 'egift-landing-page';
-    }
-  }
 
   $current_route = \Drupal::routeMatch();
 
@@ -1022,7 +1016,7 @@ function alshaya_white_label_preprocess_menu(&$variables) {
       $attributes = $item['url']->getOption('attributes');
       $attributes['gtm-menu-title'] = $itemEntity->hasTranslation($langcode) ? $itemEntity->getTranslation($langcode)->getTitle() : $item['original_link']->getTitle();
       $item['url']->setOption('attributes', $attributes);
-    }   
+    }
   }
 }
 

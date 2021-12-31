@@ -6,6 +6,7 @@
  */
 
  use Drupal\Core\Cache\Cache;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_alshaya_spc_checkout_build_alter().
@@ -124,4 +125,17 @@ function alshaya_egift_card_alshaya_my_account_links_alter(array &$links) {
     'route' => 'alshaya_egift_card.my_egift_card',
     'weight' => 11,
   ];
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_egift_card_preprocess_html(&$variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  // Add custom class for advanced page content type for egift landing page.
+  if ($node instanceof NodeInterface && $node->bundle() === 'advanced_page') {
+    if (!empty($node->get('field_use_as_egift_landing_page')->getValue()) && $node->get('field_use_as_egift_landing_page')->getValue()[0]['value'] == 1) {
+      $variables['attributes']['class'][] = 'egift-landing-page';
+    }
+  }
 }
