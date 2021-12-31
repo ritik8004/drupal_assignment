@@ -339,7 +339,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       renderWait,
       apiErrorMessage,
     } = this.state;
-
     // Cart object need to be passed to UpdateGiftCardAmount.
     const { cart } = this.props;
     // Return if no linked card and if any api fails.
