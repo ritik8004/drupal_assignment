@@ -85,6 +85,11 @@ class CartSelectOption extends React.Component {
       if (variantInfo !== undefined) {
         const variantUrl = variantInfo.url[currentLanguage];
         if (window.location.pathname !== variantUrl) {
+          // To Prepare data for GTM productDetailView Event,
+          // Which will be pushed with window.history.replaceState.
+          document.querySelector('.sku-base-form').dispatchEvent(new CustomEvent('magazinev2-variant-url-change', {
+            detail: { variant: variantSelected },
+          }));
           window.history.replaceState(variantInfo, variantInfo.title, variantUrl);
           // Language switcher.
           let i;

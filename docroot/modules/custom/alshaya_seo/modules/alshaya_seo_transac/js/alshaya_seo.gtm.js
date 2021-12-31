@@ -23,7 +23,7 @@ let productOnAlshayaSeoReplaceState = null;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected magazinev2-variant-url-change', function (event, variant, code) {
         var product = $(this).closest('[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
         var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
@@ -724,7 +724,7 @@ let productOnAlshayaSeoReplaceState = null;
     let product = productOnAlshayaSeoReplaceState;
     productOnAlshayaSeoReplaceState = null;
     // Convert the product to a jQuery object, if not already.
-    if (!(product instanceof jQuery) && typeof product !== 'undefined') {
+    if (!(product instanceof jQuery) && product !== null) {
       product = $(product);
     }
     const lastUrl = location.href;
