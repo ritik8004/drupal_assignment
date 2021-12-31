@@ -218,4 +218,26 @@
     return galleryProduct.media_teaser;
   };
 
+  // Event listener to update static promotion.
+  RcsEventManager.addListener('rcsUpdateResults', (e) => {
+    // Return if result is empty.
+    if (typeof e.detail.result === 'undefined'
+      || typeof e.detail.result.promotions === 'undefined') {
+      return null;
+    }
+
+    const promotions = e.detail.result.promotions;
+    // Update the promotions attribute based on the requirement.
+    promotions.forEach((promotion, index) => {
+      promotions[index] = {
+        promo_web_url: promotion.url,
+        text: promotion.label,
+        context: promotion.context,
+        type: promotion.type,
+      }
+    });
+    e.detail.result.promotions = promotions;
+
+  });
+
 })(Drupal);
