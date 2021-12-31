@@ -3,15 +3,14 @@ import {
   placeOrder,
   isDeliveryTypeSameAsInCart,
   isShippingMethodSet,
+  updatePaymentAndPlaceOrder,
 } from '../../../utilities/checkout_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 import { isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
-import { addPaymentMethodInCart } from '../../../utilities/update_cart';
-import { removeFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
-import getStringMessage from '../../../utilities/strings';
+import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -61,18 +60,27 @@ export default class CompletePurchase extends React.Component {
     // Flag to track pseudo payment method.
     let isPseudoPaymentMedthod = false;
 
+    // If full payment is done by egift then change the payment method to
+    // hps_payment.
+    let cartPaymentMethod = cart.cart.payment.method;
+    if (isEgiftCardEnabled()
+      && isFullPaymentDoneByEgift(cart.cart)
+      && cart.cart.payment.method !== 'hps_payment') {
+      cartPaymentMethod = 'hps_payment';
+    }
+
     // Check if payment method in cart is a pseudo method
     // or not and accordingly dispatch event.
-    if (drupalSettings.payment_methods[cart.cart.payment.method]) {
+    if (drupalSettings.payment_methods[cartPaymentMethod]) {
       // Dispatch the event for all payment method
       // except checkout_com_upapi method.
       // For checkout_com_upapi method this
       // handle in its own component.
-      if (cart.cart.payment.method !== 'checkout_com_upapi') {
+      if (cartPaymentMethod !== 'checkout_com_upapi') {
         dispatchCustomEvent('orderPaymentMethod', {
           payment_method: Object
             .values(drupalSettings.payment_methods)
-            .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+            .filter((paymentMethod) => (paymentMethod.code === cartPaymentMethod))
             .shift().gtm_name,
         });
       }
@@ -81,14 +89,8 @@ export default class CompletePurchase extends React.Component {
       // then it's a pseudo payment method.
       isPseudoPaymentMedthod = true;
       dispatchCustomEvent('orderPaymentMethod', {
-        payment_method: cart.cart.payment.method,
+        payment_method: cartPaymentMethod,
       });
-    }
-
-    // If full payment is done by egift card then treat it as PseudoPayment
-    // method.
-    if (isFullPaymentDoneByEgift(cart.cart)) {
-      isPseudoPaymentMedthod = true;
     }
 
     const checkoutButton = e.target.parentNode;
@@ -108,40 +110,13 @@ export default class CompletePurchase extends React.Component {
 
       // If full payment is done by egift then change the payment method to
       // hps_payment.
-      let paymentMethod = cart.cart.payment.method;
-      if (isFullPaymentDoneByEgift(cart.cart)) {
-        paymentMethod = 'hps_payment';
-
-        const analytics = Drupal.alshayaSpc.getGAData();
-
-        const data = {
-          payment: {
-            method: paymentMethod,
-            additional_data: {},
-            analytics,
-          },
-        };
-
-        const cartUpdate = addPaymentMethodInCart('update payment', data);
-        if (cartUpdate instanceof Promise) {
-          cartUpdate.then((result) => {
-            if (!result) {
-              // Close popup in case of error.
-              removeFullScreenLoader();
-
-              dispatchCustomEvent('spcCheckoutMessageUpdate', {
-                type: 'error',
-                message: getStringMessage('global_error'),
-              });
-            } else {
-              placeOrder(paymentMethod);
-            }
-          }).catch((error) => {
-            Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
-          });
-        }
+      if (isEgiftCardEnabled()
+        && isFullPaymentDoneByEgift(cart.cart)
+        && cart.cart.payment.method !== cartPaymentMethod) {
+        // Change payment method to hps_payment and place order.
+        updatePaymentAndPlaceOrder(cartPaymentMethod);
       } else {
-        placeOrder(paymentMethod);
+        placeOrder(cartPaymentMethod);
       }
     } catch (error) {
       Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
@@ -193,11 +168,13 @@ export default class CompletePurchase extends React.Component {
     }
 
     // Disabled if there is still some error left in payment form.
-    if ((document.getElementById('spc-payment-methods') === null
-      || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0)
+    if (document.getElementById('spc-payment-methods') === null
+      || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
       // Bypass the payment method error check if the full payment is done by
       // egift card.
-      && !isFullPaymentDoneByEgift(cart.cart)) {
+      if (isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart)) {
+        return true;
+      }
       // Adding error class in the section.
       const paymentMethods = document.getElementById('spc-payment-methods');
       if (paymentMethods) {

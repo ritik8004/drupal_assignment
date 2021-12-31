@@ -325,11 +325,6 @@ export const isEgiftUnsupportedPaymentMethod = (paymentMethod, cart) => {
  *   Returns True if full payment is done by egift else false.
  */
 export const isFullPaymentDoneByEgift = (cart) => {
-  // Return false if egift is not enabled.
-  if (!isEgiftCardEnabled()) {
-    return false;
-  }
-
   if (hasValue(cart.totals)) {
     const {
       egiftRedeemedAmount,
