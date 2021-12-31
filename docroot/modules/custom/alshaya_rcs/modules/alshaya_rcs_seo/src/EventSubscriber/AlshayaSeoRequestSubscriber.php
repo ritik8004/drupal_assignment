@@ -26,7 +26,7 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
    *
    * @var \Symfony\Component\Routing\Matcher\UrlMatcherInterface
    */
-   protected $accessUnawareRouter;
+  protected $accessUnawareRouter;
 
   /**
    * Constructs a AlshayaSeoRequestSubscriber object.
@@ -49,11 +49,11 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
    */
   public function onKernelRequestRedirect(GetResponseEvent $event) {
     $request = $event->getRequest();
-    $request_path = $event->getRequest()->getPathInfo();
+    $request_path = $request->getPathInfo();
 
     $result = $this->accessUnawareRouter->match($request_path);
-    if ($result['_route'] && $result['_route'] == 'entity.taxonomy_term.canonical') {
-      if (substr($request_path , -1) != '/') {
+    if ($result['_route'] && $result['_route'] == 'entity.taxonomy_term.canonical' || $result['_route'] == 'alshaya_master.home') {
+      if (substr($request_path, -1) != '/') {
         $request_uri = $request_path . '/';
         $response = new RedirectResponse($request_uri, 302);
         $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
