@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_rcs_seo\EventSubscriber;
 
-use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,13 +14,6 @@ use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
 
   /**
-   * Page cache kill service.
-   *
-   * @var \Drupal\Core\PageCache\ResponsePolicy\KillSwitch
-   */
-  protected $killSwitch;
-
-  /**
    * A router implementation which does not check access.
    *
    * @var \Symfony\Component\Routing\Matcher\UrlMatcherInterface
@@ -31,13 +23,10 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
   /**
    * Constructs a AlshayaSeoRequestSubscriber object.
    *
-   * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $kill_switch
-   *   Page cache kill service.
    * @param \Symfony\Component\Routing\Matcher\UrlMatcherInterface $accessUnawareRouter
    *   A router implementation which does not check access.
    */
-  public function __construct(KillSwitch $kill_switch, UrlMatcherInterface $accessUnawareRouter) {
-    $this->killSwitch = $kill_switch;
+  public function __construct(UrlMatcherInterface $accessUnawareRouter) {
     $this->accessUnawareRouter = $accessUnawareRouter;
   }
 
@@ -55,12 +44,10 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
     if ($result['_route'] && $result['_route'] == 'entity.taxonomy_term.canonical' || $result['_route'] == 'alshaya_master.home') {
       if (substr($request_path, -1) != '/') {
         $request_uri = $request_path . '/';
-        $response = new RedirectResponse($request_uri, 302);
+        $response = new RedirectResponse($request_uri, 301);
         $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
         $event->setResponse($response);
 
-        // Disable page cache, we want to change the redirect based on cookie.
-        $this->killSwitch->trigger();
       }
     }
   }
