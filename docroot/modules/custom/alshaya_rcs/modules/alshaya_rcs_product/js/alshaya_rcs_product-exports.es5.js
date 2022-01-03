@@ -693,9 +693,9 @@ exports.computePhFilters = function (input, filter) {
         }
         // Prepare the data object.
         promotionsList.push({
-          link: Drupal.url(promotion.url),
+          link: Drupal.url(promotion.promo_web_url),
           hreflang: drupalSettings.path.currentLanguage,
-          label: promotion.label,
+          label: promotion.text,
         });
       });
       data.promotions = promotionsList;
