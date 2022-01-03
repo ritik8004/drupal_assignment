@@ -1,0 +1,130 @@
+.egift-my-account {
+  margin-top: 1.3125rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 1.5625rem;
+  }
+}
+
+.egift-card-linked-wrapper {
+  max-width: 46.75rem;
+  border: 1px solid $egift-linked-card-border;
+  padding: 1rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 1.5625rem;
+  }
+
+  .egift-card-linked-wrapper-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .egift-linked-title-balance-wrapper {
+    flex: 1;
+    padding: 0 1.25rem;
+
+    @include breakpoint($tablet) {
+      padding: 0 0.625rem;
+    }
+  }
+
+  .egift-linked-thumbnail {
+    width: 3.625rem;
+    line-height: 0;
+
+    @include breakpoint($tablet) {
+      width: 5.3125rem;
+    }
+  }
+
+  .egift-linked-title {
+    font-size: 1rem;
+    line-height: 1.125rem;
+
+    @include breakpoint($tablet) {
+      font-size: 1.25rem;
+      line-height: normal;
+    }
+  }
+
+  .egift-linked-balance {
+    display: flex;
+    font-size: 0.8125rem;
+    line-height: 1.125rem;
+
+    @include breakpoint($tablet) {
+      font-size: 1rem;
+    }
+
+    .price-wrapper {
+      margin-#{$left}: 0.1875rem;
+
+      .price-amount {
+        margin-#{$left}: 0.1875rem;
+      }
+    }
+  }
+
+  .egift-card-remove {
+    border: none;
+    font-size: 0;
+    position: relative;
+    background: 0 0;
+    padding: 0;
+  }
+
+  .egift-linked-card-number-wrapper,
+  .egift-linked-expires-wrapper,
+  .egift-linked-card-type-wrapper,
+  .egift-topup-btn {
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
+  }
+
+  .egift-card-linked-wrapper-bottom {
+    @include breakpoint($tablet) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.125rem;
+    }
+  }
+
+  .egift-light-text {
+    font-size: 0.6875rem;
+    line-height: 1.125rem;
+    color: $egift-linked-card-light-text;
+  }
+
+  .egift-dark-text {
+    font-size: 0.8125rem;
+    line-height: 1.125rem;
+    color: $egift-linked-card-dark-text;
+  }
+
+  .egift-topup-btn {
+    font-family: $alshaya-bold;
+    font-size: 0.8125rem;
+    background: $primary_btn_bg;
+    border-radius: 0;
+    color: $primary_btn_text;
+    border: 1px solid $primary_btn_bg;
+    text-transform: lowercase;
+    padding: 1rem;
+    display: inline-block;
+    height: 3rem;
+    min-width: 10rem;
+    line-height: 1rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+
+    @include breakpoint($only-tablet) {
+      min-width: 6rem;
+    }
+  }
+}

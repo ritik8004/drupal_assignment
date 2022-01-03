@@ -66,6 +66,7 @@ class AlshayaEgiftCardController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_egift_card/alshaya_egift_card_my_account',
+          'alshaya_white_label/egift-myaccount',
         ],
       ],
       '#cache' => [

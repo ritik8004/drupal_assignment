@@ -1,0 +1,38 @@
+.egift-notlinked-warpper {
+  .egift-notlinked-title {
+    font-size: 1rem;
+    line-height: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .egift-link-card-text {
+    font-size: 0.8125rem;
+    line-height: 1.125rem;
+    margin-bottom: 0.5rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .egift-link-card-instruction {
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: #707070;
+    margin-bottom: 1.625rem;
+  }
+
+  .egift-input-textfield-item {
+    max-width: 20rem;
+  }
+
+  .egifts-form-wrapper {
+    padding: 0;
+  }
+
+  .action-buttons {
+    button[type="submit"] {
+      margin-top: 2.25rem;
+    }
+  }
+}
