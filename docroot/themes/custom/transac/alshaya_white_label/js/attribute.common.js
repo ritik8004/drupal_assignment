@@ -50,7 +50,7 @@
       $('.form-item-configurable-select', form).once('configurableAttributeBoxes').parent().addClass('configurable-select');
 
       // Show mobile slider only on mobile resolution.
-      Drupal.select2OptionConvert();
+      Drupal.select2OptionConvert(context);
 
       // Trigger event for other scripts to act after select options conversion
       // is completed.
@@ -59,7 +59,7 @@
       }
 
       $(window).on('resize', function (e) {
-        Drupal.select2OptionConvert();
+        Drupal.select2OptionConvert(context);
       });
 
       if ($(window).width() <= drupalSettings.show_configurable_boxes_after) {
