@@ -8,7 +8,7 @@ import {
   removeProductFromWishList,
   getWishlistLabel,
   getWishlistFromBackend,
-  getWishlistConfigRemoveAfterAddtocart,
+  removeFromWishlistAfterAddtocart,
 } from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
@@ -54,7 +54,7 @@ class WishlistButton extends React.Component {
       // This is only for old pdp, modal and matchback.
       // Check if config for removing product from
       // wishlist after product added to cart is set to true.
-      if (getWishlistConfigRemoveAfterAddtocart()) {
+      if (removeFromWishlistAfterAddtocart()) {
         document.addEventListener('onProductAddToCart', this.handleProductAddToCart);
       }
     }
@@ -66,7 +66,7 @@ class WishlistButton extends React.Component {
     // Check if context present in react components context array.
     // Also, check if config for removing product from
     // wishlist after product added to cart is set to true.
-    if (reactContextArray.includes(context) && getWishlistConfigRemoveAfterAddtocart()) {
+    if (reactContextArray.includes(context) && removeFromWishlistAfterAddtocart()) {
       document.addEventListener('product-add-to-cart-success', this.handleProductAddToCart);
     }
 
