@@ -23,7 +23,7 @@
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
       // Accordion for advance page category for mobile.
-      $('.c-accordion').once().each(function () {
+      $('.c-accordion').once('accordian').each(function () {
         if ($(this).find('ul').length > 0) {
           covertToAccordion($(this));
         }
