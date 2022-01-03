@@ -13,6 +13,12 @@ body.wishlist-enabled {
     .actions {
       a {
         font-family: $hnm-demibold;
+
+        &.sign-in {
+          &:hover {
+            opacity: 1;
+          }
+        }
       }
     }
   }

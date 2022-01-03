@@ -51,6 +51,7 @@
         padding-top: 1.25rem;
         width: 11.875rem;
         text-align: center;
+        color: $wishlist-header-notification-text;
 
         @include breakpoint($tablet) {
           padding-#{$left}: 1.25rem;
@@ -88,6 +89,7 @@
 
         &:hover {
           background: $wishlist-button-bg-hover;
+          opacity: 0.75;
         }
       }
 
@@ -110,11 +112,10 @@
       top: 0;
       font-size: 0;
       background: $wishlist-basket-modal-close-bg;
-      padding: 0.5rem;
       cursor: pointer;
 
       @include icon(close, before) {
-        font-size: 1rem;
+        font-size: 2rem;
         color: $wishlist-basket-modal-close;
       }
     }
