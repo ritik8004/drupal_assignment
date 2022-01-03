@@ -25,7 +25,7 @@ class WishlistProductList extends React.Component {
   constructor(props) {
     super(props);
     let wishListItems = {};
-    let wishListItemsCount = 0;
+    let wishListItemsCount = null;
     // If the current page is not a shared wishlist page. We
     // get wishlist data from the local storage.
     if (!isShareWishlistPage()) {
@@ -34,13 +34,14 @@ class WishlistProductList extends React.Component {
       wishListItemsCount = Object.keys(wishListItems).length;
     }
 
-    const filters = (wishListItemsCount > 0)
+    const filters = (wishListItemsCount !== null && wishListItemsCount > 0)
       ? this.getFiltersFromWishListItems(wishListItems)
       : null;
 
     this.state = {
       filters,
       wishListItemsCount,
+      wishlistDataLoaded: false,
     };
   }
 
@@ -83,6 +84,7 @@ class WishlistProductList extends React.Component {
       // Add event listener for get wishlist load event for logged in user.
       // This will execute when wishlist loaded from the backend
       // and page loads before.
+      showFullScreenLoader();
       document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
     }
     // Update wishlist items after any product is removed.
@@ -120,7 +122,10 @@ class WishlistProductList extends React.Component {
     this.setState({
       filters,
       wishListItemsCount,
+      wishlistDataLoaded: true,
     });
+    // Removed the loader once API call gets completed.
+    removeFullScreenLoader();
   };
 
   /**
@@ -149,15 +154,18 @@ class WishlistProductList extends React.Component {
   };
 
   render() {
-    const { filters, wishListItemsCount } = this.state;
-
-    // Render empty wishlist component if wishlist is empty.
-    if (!wishListItemsCount) {
-      return PageEmptyMessage(Drupal.t(
-        'your @wishlist_label is empty.',
-        { '@wishlist_label': getWishlistLabel() },
-        { context: 'wishlist' },
-      ));
+    const { filters, wishListItemsCount, wishlistDataLoaded } = this.state;
+    const emptyMessage = PageEmptyMessage(Drupal.t(
+      'your @wishlist_label is empty.',
+      { '@wishlist_label': getWishlistLabel() },
+      { context: 'wishlist' },
+    ));
+    // Render empty wishlist component.
+    // Check for wishlist data loaded via api if logged in user.
+    // If anonymous user, check if wishlist item count is 0.
+    if (wishListItemsCount === 0 && ((!isAnonymousUser() && wishlistDataLoaded)
+     || isAnonymousUser())) {
+      return emptyMessage;
     }
 
     // Get the items per page setting from the drupal settings.
