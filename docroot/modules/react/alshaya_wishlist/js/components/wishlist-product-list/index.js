@@ -84,9 +84,11 @@ class WishlistProductList extends React.Component {
     }
     // For wishlist page, data will always be available in storage.
     // So, we should stop the loader after data has loaded from storage.
-    this.setState({
-      wait: false,
-    });
+    if (!isShareWishlistPage()) {
+      this.setState({
+        wait: false,
+      });
+    }
     // Update wishlist items after any product is removed.
     document.addEventListener('productRemovedFromWishlist', this.updateWisListProductsList, false);
   }
