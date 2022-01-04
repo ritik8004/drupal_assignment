@@ -327,32 +327,37 @@ class AlshayaSpcCustomerHelper {
     global $_alshaya_acm_customer_addressbook_processed;
 
     try {
-      $customer = $this->apiWrapper->authenticateCustomerOnMagento($mail, $pass);
+      $token = $this->getCustomerToken($mail, $pass);
 
-      if (!empty($customer) && !empty($customer['customer_id'])) {
-        $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+      if (!empty($token)) {
+        // Get the user data from Magento.
+        $customer = $this->apiWrapper->getCustomer($mail);
 
-        // @todo Remove this condition when we uninstall alshaya_acm module.
-        $cart_id = $this->spcCookies->getSessionCartId();
-        if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
-          // @phpcs:ignore
-          \Drupal::service('acq_cart.cart_storage')->clearCart();
-          user_cookie_delete('acq_cart_id');
+        if (!empty($customer) && !empty($customer['customer_id'])) {
+          $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+
+          // @todo Remove this condition when we uninstall alshaya_acm module.
+          $cart_id = $this->spcCookies->getSessionCartId();
+          if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
+            // @phpcs:ignore
+            \Drupal::service('acq_cart.cart_storage')->clearCart();
+            user_cookie_delete('acq_cart_id');
+          }
+
+          // Check if user exists in Drupal.
+          if ($user = user_load_by_mail($mail)) {
+            // Update the data in Drupal to match the values in Magento.
+            alshaya_acm_customer_update_user_data($user, $customer);
+          }
+          // Create user.
+          else {
+            /** @var \Drupal\user\Entity\User $user */
+            $user = alshaya_acm_customer_create_drupal_user($customer);
+          }
+          $_alshaya_acm_customer_addressbook_processed = TRUE;
+
+          return array_merge($customer, ['user' => $user]);
         }
-
-        // Check if user exists in Drupal.
-        if ($user = user_load_by_mail($mail)) {
-          // Update the data in Drupal to match the values in Magento.
-          alshaya_acm_customer_update_user_data($user, $customer);
-        }
-        // Create user.
-        else {
-          /** @var \Drupal\user\Entity\User $user */
-          $user = alshaya_acm_customer_create_drupal_user($customer);
-        }
-        $_alshaya_acm_customer_addressbook_processed = TRUE;
-
-        return array_merge($customer, ['user' => $user]);
       }
     }
     catch (\Exception $e) {
@@ -363,27 +368,30 @@ class AlshayaSpcCustomerHelper {
   }
 
   /**
-   * Helper function to get a token from Magento using Social Details.
+   * Helper function to get the customer token for API calls.
    *
-   * @param string $mail
+   * If no parameter is passed, we return the token value from the user session.
+   * If parameters are passed, we return the token value after fetching it
+   * from Magento.
+   *
+   * @param string|null $mail
    *   The email address.
+   * @param string|null $pass
+   *   The password.
    *
    * @return string|null
-   *   The token or null.
+   *   The token or NULL.
    */
-  public function getCustomerTokenBySocialDetail($mail) {
-    // @todo This function should only be responsible to return the token from
-    // session. Token creation will happen when the user authenticates either
-    // using user/pass or social login. See Ticket CORE-29594.
-    $token = $this->session->get('magento_customer_token');
-    if (empty($token) || !is_string($token)) {
-      $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail));
-      if ($token === FALSE) {
-        $token = NULL;
-      }
-      $this->session->set('magento_customer_token', $token);
+  public function getCustomerToken($mail = NULL, $pass = NULL) {
+    if (empty($mail)) {
+      return $this->session->get('magento_customer_token');
     }
 
+    $token = $this->apiWrapper->getCustomerToken($mail, $pass);
+    $token = json_decode($token);
+    // If token could not be decoded, store NULL.
+    $token = $token === FALSE ? NULL : $token;
+    $this->session->set('magento_customer_token', $token);
     return $token;
   }
 

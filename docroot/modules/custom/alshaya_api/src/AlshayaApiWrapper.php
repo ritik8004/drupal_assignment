@@ -1009,16 +1009,18 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Authenticate customer through magento api using email.
+   * Get the customer token.
    *
    * @param string $mail
    *   The mail address.
+   * @param string $pass
+   *   The customer password.
    *
-   * @return array
-   *   The array customer data OR empty array.
+   * @return string
+   *   The customer token or null.
    */
-  public function getCustomerTokenBySocialDetail(string $mail) {
-    $endpoint = 'integration/customer/token/bySocialDetail';
+  public function getCustomerToken(string $mail, string $pass) {
+    $endpoint = 'integration/customer/token';
 
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('customer_authenticate'),
@@ -1028,7 +1030,8 @@ class AlshayaApiWrapper {
       return $this->invokeApi(
         $endpoint,
         [
-          'customerEmail' => $mail,
+          'username' => $mail,
+          'password' => $pass,
         ],
         'JSON',
         FALSE,
@@ -1036,12 +1039,13 @@ class AlshayaApiWrapper {
       );
     }
     catch (\Exception $e) {
-      $this->logger->error('Exception while authenticating customer. Error: @response. E-mail: @email', [
+      $this->logger->error('Exception while getting customer token. Error: @response. E-mail: @email', [
         '@response' => $e->getMessage(),
         '@email' => $mail,
       ]);
-      return [];
     }
+
+    return NULL;
   }
 
   /**
