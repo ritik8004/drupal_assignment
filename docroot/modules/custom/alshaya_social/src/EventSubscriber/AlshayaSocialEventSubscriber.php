@@ -130,8 +130,8 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
    *   The event object.
    */
   public function onUserLogin(UserEvent $event) {
-    $user = $event->getUser();
-    $this->customerHelper->getCustomerTokenBySocialDetail($user->getEmail());
+    $mail = $event->getUser()->getEmail();
+    $this->customerHelper->getCustomerTokenBySocialDetail($mail);
   }
 
 }
