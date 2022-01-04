@@ -2568,7 +2568,7 @@ JS;
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
       $this->theElementShouldExist('.spc-cnc-stores-list-map');
-      $this->iWaitSeconds('20');
+      $this->iWaitSeconds('50');
       $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
