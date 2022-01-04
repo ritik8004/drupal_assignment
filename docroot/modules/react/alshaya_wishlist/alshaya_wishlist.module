@@ -10,6 +10,7 @@ use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\node\Entity\Node;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\user\UserInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_theme().
@@ -109,6 +110,12 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
       ]
     );
   }
+
+  // If user is an anonymouse user we will attach a library to
+  // check logout action and clear the wishlist local storage info.
+  if (\Drupal::currentUser()->isAnonymous()) {
+    $page['#attached']['library'][] = 'alshaya_wishlist/wishlist_user_logout';
+  }
 }
 
 /**
@@ -194,5 +201,20 @@ function alshaya_wishlist_user_login(UserInterface $account) {
     // a drupal settings variable to perform action on front.
     // For example, we will merge wishlist soon after user logged in.
     setcookie('merge_user_wishlist', TRUE, ['path' => '/', 'secure' => TRUE]);
+  }
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function alshaya_wishlist_user_logout(AccountInterface $account) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Check if the wishlist feature is enabled.
+  if ($wishlist_helper->isWishListEnabled()) {
+    // Set a one time cookie when user logged out. We will
+    // use this to perform action on front.
+    // For example, we will clear wishlist local storage
+    // soon after user logged out.
+    setcookie('clear_user_wishlist', TRUE, ['path' => '/', 'secure' => TRUE]);
   }
 }
