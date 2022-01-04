@@ -2459,7 +2459,7 @@ JS;
     } else {
       $element = '#payment-method-checkout_com';
     }
-    $this->getSession()->executeScript("jQuery('$element').siblings('label').trigger('click');");
+    $this->getSession()->executeScript("jQuery('$element').siblings('.payment-method-label-wrapper').find('label').trigger('click');");
     $this->iWaitSeconds(10);
     $checkbox = $page->findField($element);
 
