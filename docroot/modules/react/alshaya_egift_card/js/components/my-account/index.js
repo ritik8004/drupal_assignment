@@ -31,9 +31,14 @@ class MyEgiftCard extends React.Component {
     if (result instanceof Promise) {
       result.then((response) => {
         removeFullScreenLoader();
-        if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
+        if (typeof response.data !== 'undefined' && response.data.response_type) {
           this.setState({
             linkedCard: response.data,
+            wait: false,
+          });
+        } else {
+          // Set wait to false to show link card form.
+          this.setState({
             wait: false,
           });
         }
