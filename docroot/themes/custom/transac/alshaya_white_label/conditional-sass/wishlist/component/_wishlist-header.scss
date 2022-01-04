@@ -1,10 +1,4 @@
 body.wishlist-enabled {
-  .block-alshaya-wishlist {
-    width: auto;
-    text-align: $right;
-    flex-grow: 1;
-  }
-
   .wishlist-header {
     padding-#{$right}: 0.9375rem;
     position: relative;
@@ -12,7 +6,6 @@ body.wishlist-enabled {
 
   .wishlist-notification {
     border: 1px solid $wishlist-header-notification-border;
-    border-radius: 0.25rem;
     padding: 0.9375rem;
     position: absolute;
     z-index: 999;
@@ -25,9 +18,14 @@ body.wishlist-enabled {
     .product-name {
       font-size: 0.875rem;
       font-family: $alshaya-bold;
+      color: $wishlist-header-notification-text;
 
       span {
         display: block;
+
+        &:last-child {
+          color: $wishlist-header-notification-span;
+        }
       }
     }
 
@@ -36,6 +34,7 @@ body.wishlist-enabled {
       line-height: 1rem;
       font-family: $alshaya-bold;
       padding-top: 0.6875rem;
+      color: $wishlist-header-notification-text;
     }
 
     .wishlist-user-login {
@@ -68,15 +67,17 @@ body.wishlist-enabled {
 
           &:hover {
             background: $wishlist-button-bg-hover;
+            opacity: 0.75;
           }
         }
 
         &.register {
           border: 1px solid $wishlist-button-border;
           margin-#{$left}: 0.875rem;
+          color: $wishlist-button-register-txt;
 
           &:hover {
-            color: inherit;
+            color: $wishlist-button-register-txt;
           }
         }
       }
@@ -88,17 +89,6 @@ body.wishlist-enabled {
     font-size: 0;
     display: block;
     margin-#{$left}: auto;
-  }
-
-  .block-alshaya-react-mini-cart {
-    @include breakpoint($desktop) {
-      width: auto;
-      top: 0;
-    }
-
-    #mini-cart-wrapper {
-      min-width: auto;
-    }
   }
 
   @include breakpoint($upto-desktop) {
@@ -134,6 +124,12 @@ body.wishlist-enabled {
     .wishlist-header {
       padding-bottom: 0.25rem;
     }
+
+    .wishlist-link {
+      width: 1.625rem;
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
 
   .sticky-filter-wrapper {
@@ -147,26 +143,46 @@ body.wishlist-enabled {
     .sticky-filter-wrapper {
       .wishlist-header.header-wrapper,
       .wishlist-header.sticky-wrapper {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
         z-index: 11;
-        #{$right}: 1.5rem;
+        padding-#{$right}: 0.9375rem;
 
-        @include breakpoint($desktop) {
-          &:last-child {
-            #{$right}: calc((100vw - 79.75rem) / 2);
-          }
-
-          &:nth-last-child(2) {
-            #{$right}: calc((100vw - 73.5rem) / 2);
-          }
+        &:last-child {
+          padding-#{$right}: 0;
         }
       }
 
       .wishlist-icon,
       .wishlist-notification {
         display: block;
+      }
+
+      .wishlist-minicart-sticky-wrapper {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        #{$right}: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+
+        @include breakpoint($desktop) {
+          #{$right}: calc((100vw - 77.15rem) / 2);
+        }
+
+        .wishlist-header.header-wrapper,
+        .wishlist-header.sticky-wrapper {
+          position: relative;
+          #{$right}: 0;
+          top: 0;
+          transform: none;
+        }
+
+        #static-minicart-section {
+          display: block;
+          position: static;
+          transform: none;
+        }
       }
     }
   }
@@ -175,6 +191,27 @@ body.wishlist-enabled {
     &.no-sticky-algolia-search-bar {
       .block-alshaya-algolia-react-autocomplete.show-algolia-search-bar {
         z-index: 2;
+      }
+    }
+  }
+
+  header {
+    .region__header {
+      .block-alshaya-react-mini-cart {
+        @include breakpoint($desktop) {
+          width: auto;
+          top: 0;
+        }
+
+        #mini-cart-wrapper {
+          min-width: auto;
+        }
+      }
+
+      .block-alshaya-wishlist {
+        width: auto;
+        text-align: $right;
+        flex-grow: 1;
       }
     }
   }

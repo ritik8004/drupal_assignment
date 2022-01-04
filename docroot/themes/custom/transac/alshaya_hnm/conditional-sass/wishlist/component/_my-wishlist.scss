@@ -16,6 +16,12 @@
       font-family: $hnm-demibold;
     }
   }
+
+  .addtobag-config-button {
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
 
 .notification-container {

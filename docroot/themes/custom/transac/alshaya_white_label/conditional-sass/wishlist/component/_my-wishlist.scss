@@ -1,73 +1,4 @@
 #my-wishlist {
-  .login-message {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8125rem;
-    font-family: $alshaya-bold;
-    background: $my-wishlist-message-bg;
-    padding: 1rem 1.25rem;
-    padding-#{$left}: 0.5rem;
-    color: $my-wishlist-message-txt;
-
-    @include breakpoint($only-mobile) {
-      padding-#{$right}: 0.9375rem;
-      margin: 0 0.5rem;
-    }
-
-    @include breakpoint($upto-desktop) {
-      flex-direction: column;
-    }
-
-    .text {
-      display: flex;
-      align-items: center;
-
-      @include icon(infomation, before) {
-        font-size: 2rem;
-        margin-#{$right}: 0.5rem;
-      }
-    }
-
-    .actions {
-      @include breakpoint($only-mobile) {
-        margin-#{$left}: 2.5rem;
-      }
-
-      @include breakpoint($upto-desktop) {
-        padding-top: 0.9375rem;
-      }
-
-      a {
-        display: inline-block;
-        border: 1px solid $my-wishlist-message-txt;
-        color: $my-wishlist-message-txt;
-        padding: 0.375rem 0;
-        width: 8.125rem;
-        text-align: center;
-        border-radius: 0.1875rem;
-
-        @include breakpoint($only-mobile) {
-          width: 8.5rem;
-        }
-
-        &:hover {
-          border-color: $my-wishlist-message-bg;
-          background: $my-wishlist-message-txt;
-          color: $my-wishlist-message-bg;
-        }
-
-        &:nth-child(2) {
-          margin-#{$left}: 1.25rem;
-
-          @include breakpoint($only-mobile) {
-            margin-#{$left}: 1.375rem;
-          }
-        }
-      }
-    }
-  }
-
   .empty-message {
     text-align: center;
     padding-top: 4.375rem;
@@ -116,9 +47,11 @@
     color: $wishlist-button-txt;
     margin: 1.5rem 0 0;
     width: 100%;
+    border-radius: 0.125rem;
 
     &:hover {
       background-color: $my-wishlist-share-modal-hover-bg;
+      opacity: 0.75;
     }
 
     @include breakpoint($only-mobile) {
@@ -201,6 +134,7 @@
 
 #wishlist-share {
   font-size: 0.8125rem;
+  color: $wishlist-share-text;
 
   @include breakpoint($only-mobile) {
     width: 100%;
@@ -241,6 +175,75 @@
       }
     }
   }
+
+  .login-message {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8125rem;
+    font-family: $alshaya-bold;
+    background: $my-wishlist-message-bg;
+    padding: 1rem 1.25rem;
+    padding-#{$left}: 0.5rem;
+    color: $my-wishlist-message-txt;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$right}: 0.9375rem;
+      margin: 0 0.5rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      flex-direction: column;
+    }
+
+    .text {
+      display: flex;
+      align-items: center;
+
+      @include icon(infomation, before) {
+        font-size: 2rem;
+        margin-#{$right}: 0.5rem;
+      }
+    }
+
+    .actions {
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 2.5rem;
+      }
+
+      @include breakpoint($upto-desktop) {
+        padding-top: 0.9375rem;
+      }
+
+      a {
+        display: inline-block;
+        border: 1px solid $my-wishlist-message-txt;
+        color: $my-wishlist-message-txt;
+        padding: 0.375rem 0;
+        width: 8.125rem;
+        text-align: center;
+        border-radius: 0.1875rem;
+
+        @include breakpoint($only-mobile) {
+          width: 8.5rem;
+        }
+
+        &:hover {
+          border-color: $my-wishlist-message-bg;
+          background: $my-wishlist-message-txt;
+          color: $my-wishlist-message-bg;
+        }
+
+        &:nth-child(2) {
+          margin-#{$left}: 1.25rem;
+
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: 1.375rem;
+          }
+        }
+      }
+    }
+  }
 }
 
 .wishlist-share-popup-container {
@@ -264,8 +267,8 @@
       font-size: 0;
 
       @include icon(close, before) {
-        background-color: $wishlist-button-bg;
-        color: $wishlist-button-txt;
+        background-color: $wishlist-basket-modal-close-bg;
+        color: $wishlist-basket-modal-close;
         font-size: 1rem;
         padding: 0.375rem;
         cursor: pointer;

@@ -10,7 +10,7 @@ const ShareIcon = () => (
         <use href="#a" />
       </mask>
       <use fill="#000" fillRule="nonzero" href="#a" />
-      <g mask="url(#b)" fill="#CCC">
+      <g mask="url(#b)" fill="#000">
         <path d="M32 32H0V0h32z" />
       </g>
     </g>

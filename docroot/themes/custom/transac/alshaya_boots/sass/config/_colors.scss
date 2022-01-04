@@ -579,9 +579,9 @@ $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
 
 // Wishlist
 $wishlist-header-notification-border: $drakish-blue;
-$wishlist-button-bg: $drakish-blue;
-$wishlist-button-border: $drakish-blue;
-$wishlist-button-bg-hover: $drakish-blue;
+$wishlist-button-bg: $primary_btn_bg;
+$wishlist-button-border: $primary_btn_bg;
+$wishlist-button-bg-hover: $primary_btn_bg;
 $wishlist-header-notification-text: $black-two;
 $wishlist-header-notification-span: $drakish-blue;
 $wishlist-header-login-message: $black-two;
@@ -590,6 +590,7 @@ $wishlist-basket-modal-close-bg: $drakish-blue;
 $wishlist-oos: $error-red;
 $my-wishlist-message-txt: $white;
 $my-wishlist-message-bg: $dark-pink;
+$wishlist-share-text: $black-two;
 
 // Express delivery
 $sameday-express-delivery-drawer-btn: $primary_btn_bg;
