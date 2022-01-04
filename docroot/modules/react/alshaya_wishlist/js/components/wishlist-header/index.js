@@ -9,6 +9,8 @@ import {
   getWishlistNotificationTime,
   getWishlistFromBackend,
   addRemoveWishlistItemsInBackend,
+  guestUserStorageKey,
+  loggedInUserStorageKey,
 } from '../../../../js/utilities/wishlistHelper';
 import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
@@ -30,29 +32,37 @@ export default class WishlistHeader extends React.Component {
   }
 
   componentDidMount() {
-    // Check if wishlist data is null and user is an authenticate user,
-    // we will call backend api to get data from magento and
-    // store the wishlist info data in local storage.
-    // If wishlist data available and user just logged in then we may have
-    // wishlist merge flag enabled so we need to check that too. If merge
-    // wishlist is enabled, we need to move local storage data to backend
-    // via api call and update local storage from backend.
+    // If user is an anonymous user, we need to remove any wishlist
+    // info from logged in user in local storage.
+    if (isAnonymousUser()) {
+      // Remove wishlist info from local storage for logged in users.
+      addWishListInfoInStorage({}, loggedInUserStorageKey());
+    }
+
+    // Check if user is an authenticate user, we have wishlist data
+    // in local storage from guest users and merge wishlist info for logged
+    // in user is true, we will call backend api to merge wishlist info
+    // in magento for the customer. Once it is merged, get updated
+    // data from magento and update the wishlist info data in local storage.
+    // If merge flag is false, we will check for wishlist data in local storage
+    // for logged in user and if found nothing, we will load from backend.
     if (!isAnonymousUser()) {
-      // Get wishlist data from the local storage.
-      const wishListData = getWishListData();
-      if (wishListData === null) {
-      // Load wishlist information from the magento backend, if wishlist
-      // data is empty in local storage for authenticate users. First check
-      // if wishlist is available for the customer in backend.
-        this.loadWishlistFromBackend();
-      } else if (hasValue(drupalSettings.wishlist.mergeWishlistForLoggedInUsers)) {
+      // Guest user's wishlist data from local storage.
+      const wishListDataOfGuestUser = getWishListData(guestUserStorageKey());
+
+      // Remove wishlist info from local storage for guest users, as
+      // we don't want this info to share with logged in users.
+      addWishListInfoInStorage({}, guestUserStorageKey());
+
+      if (wishListDataOfGuestUser
+        && hasValue(drupalSettings.wishlist.mergeWishlistForLoggedInUsers)) {
         // Merge wishlist information to the magento backend from local storage,
         // if wishlist data available in local storage and merging wishlist
         // data flag is set to true.
 
         // Prepare the wishlist item data to push in backend api.
         const itemData = [];
-        Object.values(wishListData).forEach((item) => {
+        Object.values(wishListDataOfGuestUser).forEach((item) => {
           // Prepare sku options if available to push in backend api.
           const skuOptions = [];
           if (item.options.length > 0) {
@@ -83,6 +93,15 @@ export default class WishlistHeader extends React.Component {
               this.loadWishlistFromBackend();
             }
           });
+        }
+      } else {
+        // Get wishlist data from the local storage.
+        const wishListData = getWishListData();
+        if (wishListData === null) {
+          // Load wishlist information from the magento backend, if wishlist
+          // data is empty in local storage for authenticate users. First check
+          // if wishlist is available for the customer in backend.
+          this.loadWishlistFromBackend();
         }
       }
     }

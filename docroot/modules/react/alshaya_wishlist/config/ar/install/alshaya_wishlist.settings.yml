@@ -1,5 +1,5 @@
 wishlist_label: 'المنتجات المفضلة'
-email_subject: 'شاركه صديق [alshaya_wishlist:wishlist_label] منتجات'
+email_subject: 'لقد قام صديقك بمشاركة @wishlist_label الخاصة به'
 email_template:
-  value: "مرحبا يا أصدقاء,\r\n\r\nانقر على الرابط أدناه للخروج من بلدي [alshaya_wishlist:wishlist_label] منتجات.\r\n\r\n[alshaya_wishlist:wishlist_share_url]\r\n\r\nأطيب التمنيات,"
+  value: "مرحبا,\r\n\r\nاضغط على الرابط أدناه للتعرف على المنتجات الموجودة في @wishlist_label الخاصة بي.\r\n\r\n[alshaya_wishlist:wishlist_share_url]\r\n\r\nمع أطيب التمنيات."
   format: 'mail_text'

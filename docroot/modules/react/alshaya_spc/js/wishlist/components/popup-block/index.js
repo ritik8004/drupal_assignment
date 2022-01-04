@@ -114,7 +114,7 @@ export default class WishlistPopupBlock extends React.Component {
                 type="button"
                 onClick={() => this.addToWishlist(false)}
               >
-                {Drupal.t('No, remove it')}
+                {Drupal.t('No, remove it', {}, { context: 'wishlist' })}
               </button>
             </div>
           </div>

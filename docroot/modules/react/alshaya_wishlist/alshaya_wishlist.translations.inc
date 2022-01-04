@@ -90,7 +90,15 @@ function _alshaya_wishlist_translations() {
       'context' => 'wishlist',
     ],
     'your @wishlist_label is empty.' => [
-      'ar' => 'لك @wishlist_label فارغ.',
+      'ar' => '@wishlist_label الخاصة بك فارغة.',
+      'context' => 'wishlist',
+    ],
+    'Yes, move to @wishlist_label' => [
+      'ar' => 'أذهب إلى @wishlist_label',
+      'context' => 'wishlist',
+    ],
+    'No, remove it' => [
+      'ar' => 'قم بإزالتها',
       'context' => 'wishlist',
     ],
   ];
