@@ -23,10 +23,3 @@ wishlist_add_to_cart:
   dependencies:
     - core/jquery
     - core/jquery.once
-
-wishlist_user_logout:
-  js:
-    assets/js/wishlist_user_logout.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.cookie

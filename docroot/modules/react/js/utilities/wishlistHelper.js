@@ -120,9 +120,21 @@ export const getAttributeOptionsForWishlist = (configurableCombinations, skuItem
 export const isAnonymousUser = () => (drupalSettings.user.uid === 0);
 
 /**
+ * Wishlist local storage key for guest users.
+ */
+export const guestUserStorageKey = () => 'guestUserwishlistInfo';
+
+/**
+ * Wishlist local storage key for logged in users.
+ */
+export const loggedInUserStorageKey = () => 'loggedInUserwishlistInfo';
+
+/**
  * Utility function to get wishlist storage key.
  */
-export const getWishListStorageKey = () => 'wishlistInfo';
+export const getWishListStorageKey = () => (isAnonymousUser()
+  ? guestUserStorageKey()
+  : loggedInUserStorageKey());
 
 /**
  * Return the current wishlist info if available.
@@ -130,9 +142,9 @@ export const getWishListStorageKey = () => 'wishlistInfo';
  * @returns {object}
  *  An object of wishlist information.
  */
-export const getWishListData = () => {
+export const getWishListData = (strgKey) => {
   // Get local storage key for the wishlist.
-  const storageKey = getWishListStorageKey();
+  const storageKey = hasValue(strgKey) ? strgKey : getWishListStorageKey();
 
   // Get data from local storage.
   const wishListInfo = getStorageInfo(storageKey);
@@ -199,7 +211,7 @@ export const getWishListDataForSku = (sku) => {
  * @param {object} wishListData
  *  An object of wishlist information.
  */
-export const addWishListInfoInStorage = (wishListData) => {
+export const addWishListInfoInStorage = (wishListData, strgKey = null) => {
   const wishListInfo = {
     infoData: wishListData,
     // Adding current time to storage to know the last time data updated.
@@ -207,7 +219,10 @@ export const addWishListInfoInStorage = (wishListData) => {
   };
 
   // Store data to local storage.
-  setStorageInfo(wishListInfo, getWishListStorageKey());
+  setStorageInfo(
+    wishListInfo,
+    hasValue(strgKey) ? strgKey : getWishListStorageKey(),
+  );
 };
 
 /**
