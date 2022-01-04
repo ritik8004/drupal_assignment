@@ -310,8 +310,7 @@ function getVariantsInfo(product) {
       description: '',
       price: globalThis.rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
       priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.regular_price.value),
-      // @todo Add promotions value here.
-      promotionsRaw: [],
+      promotionsRaw: product.promotions,
       // @todo Add free gift promotion value here.
       freeGiftPromotion: [],
       url: getProductUrls(variantInfo.url_key),
@@ -364,8 +363,7 @@ function processProduct(product) {
     cart_title: product.name,
     url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
     priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
-    // @todo Add promotions value here.
-    promotionsRaw: [],
+    promotionsRaw: product.promotions,
     // @todo Add free gift promotion value here.
     freeGiftPromotion: [],
     is_non_refundable: product.non_refundable_products,
