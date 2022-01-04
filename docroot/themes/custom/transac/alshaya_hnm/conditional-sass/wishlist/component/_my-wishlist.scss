@@ -40,5 +40,14 @@
         font-family: $hnm-demibold;
       }
     }
+
+    .close-modal {
+      top: 0;
+
+      &::before {
+        padding: 0.375rem;
+        font-size: 1rem;
+      }
+    }
   }
 }
