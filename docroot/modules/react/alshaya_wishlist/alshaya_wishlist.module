@@ -10,7 +10,6 @@ use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\node\Entity\Node;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\user\UserInterface;
-use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_theme().
