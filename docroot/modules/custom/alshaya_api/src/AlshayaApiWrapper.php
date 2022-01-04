@@ -951,64 +951,6 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Authenticate customer through magento api.
-   *
-   * @param string $mail
-   *   The mail address.
-   * @param string $pass
-   *   The customer password.
-   *
-   * @return array
-   *   The array customer data OR empty array.
-   */
-  public function authenticateCustomerOnMagento(string $mail, string $pass) {
-    $endpoint = 'customers/by-login-and-password';
-
-    $request_options = [
-      'timeout' => $this->mdcHelper->getPhpTimeout('customer_authenticate'),
-    ];
-
-    try {
-      $response = $this->invokeApi(
-        $endpoint,
-        [
-          'username' => $mail,
-          'password' => $pass,
-        ],
-        'JSON',
-        FALSE,
-        $request_options
-      );
-    }
-    catch (\Exception $e) {
-      return [];
-    }
-
-    if ($response && is_string($response)) {
-      $log_response = $response;
-      $response = Json::decode($response);
-      // Move the cart_id into the customer object.
-      if (isset($response['cart_id'])) {
-        $response['customer']['custom_attributes'][] = [
-          'attribute_code' => 'cart_id',
-          'value' => $response['cart_id'],
-        ];
-      }
-
-      if (is_array($response) && !empty($response['customer'])) {
-        return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
-      }
-
-      // If we reach here, it means something is not correct and we didn't
-      // receive correct/expected response from MDC.
-      $this->logger->error('Exception while authenticating customer. Error: @response', [
-        '@response' => $log_response,
-      ]);
-    }
-    return [];
-  }
-
-  /**
    * Authenticate customer through magento api using email.
    *
    * @param string $mail
