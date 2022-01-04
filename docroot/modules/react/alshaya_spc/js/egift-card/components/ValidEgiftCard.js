@@ -1,5 +1,4 @@
 import React from 'react';
-import getCurrencyCode from '../../../../js/utilities/util';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import {
   callEgiftApi,
@@ -17,6 +16,8 @@ import {
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import PriceElement from '../../utilities/special-price/PriceElement';
+import logger from '../../../../js/utilities/logger';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -60,11 +61,14 @@ export default class ValidEgiftCard extends React.Component {
               isLinkedCardApplicable: true,
             });
           }
+          // Remove loader once processing is done.
+          removeFullScreenLoader();
         });
       }
+    } else {
+      // Remove loader once processing is done.
+      removeFullScreenLoader();
     }
-    // Remove loader once processing is done.
-    removeFullScreenLoader();
   }
 
   openModal = (e) => {
@@ -89,7 +93,7 @@ export default class ValidEgiftCard extends React.Component {
     if (result.error) {
       document.getElementById('egift_remove_card_error').innerHTML = result.message;
     }
-  }
+  };
 
   // Update the user account with egift card.
   handleCardLink = (e) => {
@@ -114,14 +118,26 @@ export default class ValidEgiftCard extends React.Component {
             } else if (isValidResponseWithFalseResult(result)) {
               // Show the error message when result is false.
               document.getElementById('egift_linkcard_error').innerHTML = result.response_message;
+              // Log error in datadog.
+              logger.error('Error Response in eGiftLinkCard. Action: @action CardNumber: @cardNumber Response: @response', {
+                '@action': 'link_card',
+                '@cardNumber': egiftCardNumber,
+                '@response': response.data,
+              });
             } else {
               document.getElementById('egift_linkcard_error').innerHTML = drupalSettings.global_error_message;
+              // Log error in datadog.
+              logger.error('Error Response in eGiftLinkCard. Action: @action CardNumber: @cardNumber Response: @response', {
+                '@action': 'link_card',
+                '@cardNumber': egiftCardNumber,
+                '@response': response,
+              });
             }
+            // Remove loader once processing is done.
+            removeFullScreenLoader();
           });
         }
       }
-      // Remove loader once processing is done.
-      removeFullScreenLoader();
     }
 
     return false;
@@ -177,15 +193,17 @@ export default class ValidEgiftCard extends React.Component {
     } = this.state;
 
     const { cart } = this.props;
-    const currencyCode = getCurrencyCode();
+    const appliedAmount = (
+      <span>
+        {Drupal.t('Applied card amount - @amount', {}, { context: 'egift' })}
+        <PriceElement amount={amount} format="string" showZeroValue />
+      </span>
+    );
 
     return (
       <div className="egift-wrapper">
         {egiftCardHeader({
-          egiftHeading: Drupal.t('Applied card amount - @currencyCode @amount', {
-            '@currencyCode': currencyCode,
-            '@amount': amount,
-          }, { context: 'egift' }),
+          egiftHeading: appliedAmount,
         })}
 
         <ConditionalView conditional={open}>
@@ -204,7 +222,9 @@ export default class ValidEgiftCard extends React.Component {
         <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
         <ConditionalView condition={pendingAmount > 0}>
           <div className="full-redeemed">
-            {Drupal.t('Pay @currencyCode @pendingAmount using another payment method to complete purchase', { '@currencyCode': currencyCode, '@pendingAmount': pendingAmount }, { context: 'egift' })}
+            {Drupal.t('Pay ', {}, { context: 'egift' })}
+            {<PriceElement amount={pendingAmount} format="string" showZeroValue />}
+            {Drupal.t(' using another payment method to complete purchase', {}, { context: 'egift' })}
           </div>
         </ConditionalView>
         <ConditionalView condition={isLinkedCardApplicable}>
