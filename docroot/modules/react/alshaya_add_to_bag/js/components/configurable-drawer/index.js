@@ -82,7 +82,7 @@ class ConfigurableProductDrawer extends React.Component {
 
     // Find the variant data from the props data.
     for (let i = 0; i < productData.variants.length; i++) {
-      if (productData.variants[i].sku === selectedVariant) {
+      if (productData.variants[i].sku.toString() === selectedVariant.toString()) {
         selectedVariantData = productData.variants[i];
         break;
       }
