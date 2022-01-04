@@ -8,15 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * New pdp translations for Express Delivery.
- */
-function alshaya_pdp_react_update_8002() {
-  _alshaya_pdp_react_ed_translations();
-}
-
-/**
- * Implements hook_update_N().
- *
  * New pdp translations.
  */
 function alshaya_pdp_react_update_8001() {
@@ -49,22 +40,6 @@ function _alshaya_pdp_react_translations() {
     ],
     'Copy page link' => [
       'ar' => 'نسخ رابط الصفحة',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-function _alshaya_pdp_react_ed_translations() {
-  // Add translations.
- $strings = [
-    'Express Delivery Available' => [
-      'ar' => 'خدمة التوصيل السريع متوفرة',
-      'context' => 'express_delivery_label',
-    ],
-    'Same Day Delivery Available' => [
-      'ar' => 'التوصيل في نفس اليوم متاح',
-      'context' => 'same_day_delivery_label',
     ],
   ];
 

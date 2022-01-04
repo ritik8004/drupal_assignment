@@ -24,6 +24,10 @@ function alshaya_spc_update_8022() {
   if ($translations) {
     alshaya_i18n_save_translations($translations);
   }
+  $translations = _alshaya_spc_get_translations('v12');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**
