@@ -14,6 +14,25 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Update translations for express delivery feature
+ * with context.
+ */
+function alshaya_spc_update_8022() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v11');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+  $translations = _alshaya_spc_get_translations('v12');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add delivery labels in express delivery config.
  */
 function alshaya_spc_update_8021() {
