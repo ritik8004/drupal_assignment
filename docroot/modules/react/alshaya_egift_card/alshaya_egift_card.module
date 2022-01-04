@@ -130,6 +130,7 @@ function alshaya_egift_card_preprocess_html(&$variables) {
   if ($node instanceof NodeInterface && $node->bundle() === 'advanced_page') {
     if (!empty($node->get('field_use_as_egift_landing_page')->getValue()) && $node->get('field_use_as_egift_landing_page')->getValue()[0]['value'] == 1) {
       $variables['attributes']['class'][] = 'egift-landing-page';
+      $variables['#attached']['library'][] = 'alshaya_white_label/egift-landing-page';
     }
   }
 }

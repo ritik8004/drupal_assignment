@@ -134,7 +134,6 @@ class AlshayaCheckBalanceBlock extends BlockBase implements ContainerFactoryPlug
       '#attached' => [
         'library' => [
           'alshaya_egift_card/alshaya_egift_check_balance',
-          'alshaya_white_label/egift-landing-page',
         ],
       ],
     ];
