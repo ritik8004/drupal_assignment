@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77dea9d706c04e261310fdd629693667",
+    "content-hash": "d82276bada6f0ed9bfda6b40cfb5ba29",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -630,7 +630,7 @@
             "version": "v2.3.4",
             "source": {
                 "type": "git",
-                "url": "git@github.com:fengyuanchen/cropper.git",
+                "url": "https://github.com/fengyuanchen/cropper.git",
                 "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "dist": {
@@ -4142,6 +4142,9 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
+                },
+                "patches_applied": {
+                    "Fix FileSystem error": "https://www.drupal.org/files/issues/2021-03-10/fix-issue-with-advagg-and-s3fs-modules-3201922-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

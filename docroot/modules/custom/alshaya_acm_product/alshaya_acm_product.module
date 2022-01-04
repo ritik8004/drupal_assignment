@@ -895,7 +895,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
  */
 function alshaya_acm_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
   if (!empty($build['sharethis'])) {
+    // Variable to store the sharethis block render output.
+    $renderedBuild = $build['sharethis'];
+    // Removing properties not needed for Drupal renderer service.
+    unset($renderedBuild['#attached']);
+    unset($renderedBuild['#weight']);
     $build['sharethis']['#attached']['library'][] = 'alshaya_acm_product/sharethis';
+    // New drupalSettings variable to store the rendered output and to be used in pdp-layout.
+    $build['sharethis']['#attached']['drupalSettings']['sharethis']['contentRendered'] = \Drupal::service('renderer')->render($renderedBuild);
   }
 }
 
