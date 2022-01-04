@@ -1,0 +1,6 @@
+services:
+  alshaya_rcs_seo.request_subscriber:
+    class: Drupal\alshaya_rcs_seo\EventSubscriber\AlshayaSeoRequestSubscriber
+    arguments: ['@router']
+    tags:
+      - { name: event_subscriber }
