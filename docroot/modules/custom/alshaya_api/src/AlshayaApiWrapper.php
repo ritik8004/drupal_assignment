@@ -1056,6 +1056,7 @@ class AlshayaApiWrapper {
    *   The customer token or null.
    */
   public function getCustomerToken(string $mail, string $pass) {
+    $token = NULL;
     $endpoint = 'integration/customer/token';
 
     $request_options = [
@@ -1063,7 +1064,7 @@ class AlshayaApiWrapper {
     ];
 
     try {
-      return $this->invokeApi(
+      $token = $this->invokeApi(
         $endpoint,
         [
           'username' => $mail,
@@ -1073,6 +1074,10 @@ class AlshayaApiWrapper {
         FALSE,
         $request_options
       );
+
+      $token = json_decode($token);
+      // If token could not be decoded, store NULL.
+      $token = $token === FALSE ? NULL : $token;
     }
     catch (\Exception $e) {
       $this->logger->error('Exception while getting customer token. Error: @response. E-mail: @email', [
@@ -1081,7 +1086,7 @@ class AlshayaApiWrapper {
       ]);
     }
 
-    return NULL;
+    return $token;
   }
 
   /**

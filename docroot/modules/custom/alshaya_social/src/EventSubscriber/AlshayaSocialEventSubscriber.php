@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_social\EventSubscriber;
 
+use Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\social_auth\Event\BeforeRedirectEvent;
 use Drupal\social_auth\Event\FailedAuthenticationEvent;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
+use Drupal\social_auth\Event\UserEvent;
 
 /**
  * Subscriber to set login_error_destination link and redirect on error.
@@ -47,6 +49,13 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
   protected $urlGenerator;
 
   /**
+   * The customer helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
+   */
+  protected $customerHelper;
+
+  /**
    * AlshayaSocialEventSubscriber constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -57,17 +66,21 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
    *   The url generator.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper
+   *   Customer helper object.
    */
   public function __construct(
     RequestStack $request,
     LanguageManagerInterface $language_manager,
     UrlGeneratorInterface $url_generator,
-    LoggerChannelFactory $logger_factory
+    LoggerChannelFactory $logger_factory,
+    AlshayaSpcCustomerHelper $customer_helper
   ) {
     $this->request = $request;
     $this->languageManager = $language_manager;
     $this->urlGenerator = $url_generator;
     $this->logger = $logger_factory->get('alshaya_social');
+    $this->customerHelper = $customer_helper;
   }
 
   /**
@@ -79,6 +92,7 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
       100,
     ];
     $events[SocialAuthEvents::FAILED_AUTH][] = ['onFailedAuth', 100];
+    $events[SocialAuthEvents::USER_LOGIN][] = ['onUserLogin', 100];
     return $events;
   }
 
@@ -107,6 +121,17 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
       $url = $this->urlGenerator->generateFromRoute($redirectPath->getRouteName(), $redirectPath->getRouteParameters(), ['absolute' => TRUE]);
       $event->setResponse(new RedirectResponse($url, '302'));
     }
+  }
+
+  /**
+   * Fetch and set user customer token in session.
+   *
+   * @param \Drupal\social_auth\Event\UserEvent $event
+   *   The event object.
+   */
+  public function onUserLogin(UserEvent $event) {
+    $user = $event->getUser();
+    $this->customerHelper->getCustomerTokenBySocialDetail($user->getEmail());
   }
 
 }

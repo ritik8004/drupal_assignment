@@ -327,7 +327,9 @@ class AlshayaSpcCustomerHelper {
     global $_alshaya_acm_customer_addressbook_processed;
 
     try {
-      $token = $this->getCustomerToken($mail, $pass);
+      $token = $this->apiWrapper->getCustomerToken($mail, $pass);
+      // Set the token in session.
+      $this->setCustomerTokenInSession($token);
 
       if (!empty($token)) {
         // Get the user data from Magento.
@@ -380,44 +382,36 @@ class AlshayaSpcCustomerHelper {
     // @todo This function should only be responsible to return the token from
     // session. Token creation will happen when the user authenticates either
     // using user/pass or social login. See Ticket CORE-29594.
-    $token = $this->session->get('magento_customer_token');
+    $token = $this->getCustomerToken();
     if (empty($token) || !is_string($token)) {
       $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail));
       if ($token === FALSE) {
         $token = NULL;
       }
-      $this->session->set('magento_customer_token', $token);
+      $this->setCustomerTokenInSession($token);
     }
 
     return $token;
   }
 
   /**
+   * Helper function to set the customer token for API calls.
+   *
+   * @param string|null $token
+   *   The token.
+   */
+  public function setCustomerTokenInSession($token) {
+    $this->session->set('magento_customer_token', $token);
+  }
+
+  /**
    * Helper function to get the customer token for API calls.
    *
-   * If no parameter is passed, we return the token value from the user session.
-   * If parameters are passed, we return the token value after fetching it
-   * from Magento.
-   *
-   * @param string|null $mail
-   *   The email address.
-   * @param string|null $pass
-   *   The password.
-   *
-   * @return string|null
-   *   The token or NULL.
+   * @return string
+   *   The token.
    */
-  public function getCustomerToken($mail = NULL, $pass = NULL) {
-    if (empty($mail)) {
-      return $this->session->get('magento_customer_token');
-    }
-
-    $token = $this->apiWrapper->getCustomerToken($mail, $pass);
-    $token = json_decode($token);
-    // If token could not be decoded, store NULL.
-    $token = $token === FALSE ? NULL : $token;
-    $this->session->set('magento_customer_token', $token);
-    return $token;
+  public function getCustomerToken() {
+    return $this->session->get('magento_customer_token');
   }
 
 }
