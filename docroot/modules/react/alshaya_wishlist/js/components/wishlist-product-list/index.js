@@ -82,7 +82,8 @@ class WishlistProductList extends React.Component {
       // and page loads before.
       document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
     }
-    // Removing loader after data has loaded from storage.
+    // For wishlist page, data will always be available in storage.
+    // So, we should stop the loader after data has loaded from storage.
     this.setState({
       wait: false,
     });
