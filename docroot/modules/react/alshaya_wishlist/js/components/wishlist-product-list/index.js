@@ -41,7 +41,7 @@ class WishlistProductList extends React.Component {
     this.state = {
       filters,
       wishListItemsCount,
-      wishlistDataLoaded: false,
+      wait: false,
     };
   }
 
@@ -122,7 +122,7 @@ class WishlistProductList extends React.Component {
     this.setState({
       filters,
       wishListItemsCount,
-      wishlistDataLoaded: true,
+      wait: true,
     });
     // Removed the loader once API call gets completed.
     removeFullScreenLoader();
@@ -154,18 +154,17 @@ class WishlistProductList extends React.Component {
   };
 
   render() {
-    const { filters, wishListItemsCount, wishlistDataLoaded } = this.state;
-    const emptyMessage = PageEmptyMessage(Drupal.t(
-      'your @wishlist_label is empty.',
-      { '@wishlist_label': getWishlistLabel() },
-      { context: 'wishlist' },
-    ));
+    const { filters, wishListItemsCount, wait } = this.state;
     // Render empty wishlist component.
     // Check for wishlist data loaded via api if logged in user.
     // If anonymous user, check if wishlist item count is 0.
-    if (wishListItemsCount === 0 && ((!isAnonymousUser() && wishlistDataLoaded)
+    if (wishListItemsCount === 0 && ((!isAnonymousUser() && wait)
      || isAnonymousUser())) {
-      return emptyMessage;
+      return PageEmptyMessage(Drupal.t(
+        'your @wishlist_label is empty.',
+        { '@wishlist_label': getWishlistLabel() },
+        { context: 'wishlist' },
+      ));
     }
 
     // Get the items per page setting from the drupal settings.
