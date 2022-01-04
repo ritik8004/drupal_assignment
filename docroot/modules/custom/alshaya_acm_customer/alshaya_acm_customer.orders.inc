@@ -213,6 +213,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
   $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+  $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : '';
   $shipping_info = $express_delivery_config->get('status') ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
   $orderDetails['delivery_method'] = $shipping_info[0];
 
@@ -295,7 +296,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       '#address' => $shipping_address_array,
     ];
 
-    $orderDetails['delivery_address'] = render($delivery_address);
+    $orderDetails['delivery_address'] = !$order['is_virtual'] ? render($delivery_address) : NULL;
   }
 
   // Don't show Billing Address for CoD payment method.
@@ -475,8 +476,45 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
     // If SKU not found in Drupal, skip it.
     if (!$sku instanceof SKUInterface) {
-      $product['name'] = $item['name'];
+      $product['name'] = !$item['is_virtual'] ? $item['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
       $product['image'] = '';
+
+      // Show eGift card image and options from order details.
+      if ($product['is_virtual']) {
+        // Get virtual product image.
+        $product['image'] = [
+          '#theme' => 'image',
+          '#uri' => $product['extension_attributes']['product_media'][0]['file'],
+          '#alt' => $product['name'],
+        ];
+
+        // Get product options and add them to attributes.
+        $product_options = json_decode($product['extension_attributes']['product_options'][0], TRUE);
+        $product['attributes'][0] = [
+          'label' => t('Style', [], ['context' => 'egift']),
+          'value' => $item['name'],
+        ];
+        if (!empty($product_options['hps_giftcard_recipient_email'])) {
+          $product['attributes'][1] = [
+            'label' => t('Send to', [], ['context' => 'egift']),
+            'value' => $product_options['hps_giftcard_recipient_email'],
+          ];
+        }
+        if (!empty($product_options['hps_giftcard_message'])) {
+          $product['attributes'][2] = [
+            'label' => t('Message', [], ['context' => 'egift']),
+            'value' => $product_options['hps_giftcard_message'],
+          ];
+        }
+        // @todo update key for card number from order details.
+        if (!empty($product_options['hps_card_number'])) {
+          $product['attributes'][3] = [
+            'label' => t('Card No', [], ['context' => 'egift']),
+            'value' => $product_options['hps_card_number'],
+          ];
+        }
+      }
+
       $products[] = $product;
     }
     else {
@@ -497,6 +535,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
       // Load the first image.
       $product['image'] = alshaya_acm_get_product_display_image($item['sku'], SkuImagesHelper::STYLE_PRODUCT_TEASER, 'cart');
+
       if ($product['image']) {
         $product['image']['#skip_lazy_loading'] = TRUE;
       }
@@ -540,7 +579,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     }
   }
   else {
-    $build['#delivery_detail_notice'] = t('Your order will be delivered at the following address');
+    $build['#delivery_detail_notice'] = !$order['is_virtual'] ? t('Your order will be delivered at the following address') : NULL;
   }
 
   return $build;
