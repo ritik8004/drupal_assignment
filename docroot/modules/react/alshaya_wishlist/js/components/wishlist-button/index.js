@@ -261,16 +261,23 @@ class WishlistButton extends React.Component {
     addProductToWishList(productInfo).then((response) => {
       if (typeof response.data.status !== 'undefined'
         && response.data.status) {
+        // Get the additional configuration options from props.
+        const { extraOptions } = this.props;
+
+        // Prepare event data to pass with productAddedTOwishlist event.
+        const eventData = {
+          productInfo,
+          addedInWishList: true,
+          extraOptions,
+        };
+
         // For anonymous user, we update only storage and wishlist button status.
         // We don't need an api call here.
         if (isAnonymousUser()) {
           // Prepare and dispatch an event when product added to the storage
           // so other components like wishlist header can listen and do the
           // needful.
-          dispatchCustomEvent('productAddedToWishlist', {
-            productInfo,
-            addedInWishList: true,
-          });
+          dispatchCustomEvent('productAddedToWishlist', eventData);
 
           // Removing loader icon from wishlist button for anonymous user.
           removeInlineLoader('.wishlist-loader .loading');
@@ -305,10 +312,7 @@ class WishlistButton extends React.Component {
               // Prepare and dispatch an event when product added to the storage
               // so other components like wishlist header can listen and do the
               // needful.
-              dispatchCustomEvent('productAddedToWishlist', {
-                productInfo,
-                addedInWishList: true,
-              });
+              dispatchCustomEvent('productAddedToWishlist', eventData);
 
               // Removing loader icon to wishlist button.
               removeInlineLoader('.wishlist-loader .loading');

@@ -26,7 +26,7 @@ export default class WishlistHeader extends React.Component {
 
     this.state = {
       wishListItemCount,
-      wishListItemData: null,
+      notificationItemData: null,
       headerClass: 'header-wrapper',
     };
   }
@@ -166,7 +166,7 @@ export default class WishlistHeader extends React.Component {
     // Hide notification after certain milliseconds.
     this.timer = setTimeout(() => {
       this.setState({
-        wishListItemData: null,
+        notificationItemData: null,
       });
       this.timer = null;
     }, getWishlistNotificationTime());
@@ -179,34 +179,41 @@ export default class WishlistHeader extends React.Component {
   handleAddToWishList = (data) => {
     const { productInfo } = data.detail;
     if (productInfo) {
-      // Check if sticky wrapper is active on screen.
-      const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
-      // If sticky header is not present, scroll user to header.
-      // Else show notification on sticky header.
-      if (querySelector === null) {
-        smoothScrollTo('#wishlist-header-wrapper');
-      } else {
-        this.setState({
-          headerClass: 'sticky-wrapper',
-        });
-      }
-
-      if (!isAnonymousUser()) {
-        this.loadWishlistFromBackend();
-      }
-
-      // Set timer for the wishlist notification.
-      this.setTimer();
-
       // Get the wishlist items from the local storage
       // and set the count in state.
       const wishListItems = getWishListData() || {};
       const wishListItemCount = Object.keys(wishListItems).length;
 
-      this.setState({
-        wishListItemCount,
-        wishListItemData: productInfo || null,
-      });
+      // Prepare an object to update the component state.
+      const stateData = { wishListItemCount };
+
+      // Check for the extra configurable options are available.
+      const { extraOptions } = data.detail;
+
+      // Check if extra configurations are empty or if notification flag
+      // is available should not be false to show the notification.
+      if (!hasValue(extraOptions)
+        || (hasValue(extraOptions.notification)
+        && extraOptions.notification)) {
+        // Set timer for the wishlist notification.
+        this.setTimer();
+
+        // Set the notification data.
+        stateData.notificationItemData = productInfo || null;
+
+        // Check if sticky wrapper is active on screen.
+        const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
+        // If sticky header is not present, scroll user to header.
+        // Else show notification on sticky header.
+        if (querySelector === null) {
+          smoothScrollTo('#wishlist-header-wrapper');
+        } else {
+          stateData.headerClass = 'sticky-wrapper';
+        }
+      }
+
+      // Update component state data.
+      this.setState(stateData);
     }
   };
 
@@ -223,16 +230,16 @@ export default class WishlistHeader extends React.Component {
   };
 
   render() {
-    const { wishListItemCount, wishListItemData, headerClass } = this.state;
+    const { wishListItemCount, notificationItemData, headerClass } = this.state;
     const wishlistActiveClass = wishListItemCount !== 0 ? 'wishlist-active' : 'wishlist-inactive';
     return (
       <div className={`wishlist-header ${headerClass}`}>
         <a className={`wishlist-link ${wishlistActiveClass}`} href={Drupal.url('wishlist')}>
           <span className="wishlist-icon">{Drupal.t('my @wishlist_label', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
         </a>
-        <ConditionalView condition={wishListItemData !== null}>
+        <ConditionalView condition={notificationItemData !== null}>
           <WishlistNotification
-            wishListItemData={wishListItemData}
+            notificationItemData={notificationItemData}
           />
         </ConditionalView>
       </div>
