@@ -44,7 +44,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 // DY Fonts.
 @font-face {
   font-family: "JustLovely";
-  src: url("#{$base_theme_fonts_directory_path}/JustLovely.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/JustLovely.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JustLovely.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -52,7 +54,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "JustLovelyExtras";
-  src: url("#{$base_theme_fonts_directory_path}/JustLovelyExtras.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/JustLovelyExtras.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JustLovelyExtras.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -60,7 +64,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "JustLovelySlanted";
-  src: url("#{$base_theme_fonts_directory_path}/JustLovelySlanted.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/JustLovelySlanted.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JustLovelySlanted.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -68,7 +74,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "JustLovelySlantedWide";
-  src: url("#{$base_theme_fonts_directory_path}/JustLovelySlantedWide.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/JustLovelySlantedWide.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JustLovelySlantedWide.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -76,7 +84,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "TrendSansFour-Italic";
-  src: url("#{$base_theme_fonts_directory_path}/TrendSansFour-Italic.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/TrendSansFour-Italic.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/TrendSansFour-Italic.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -84,7 +94,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "TrendSansOne";
-  src: url("#{$base_theme_fonts_directory_path}/TrendSansOne.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/TrendSansOne.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/TrendSansOne.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -92,7 +104,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "TrendSansTwo";
-  src: url("#{$base_theme_fonts_directory_path}/TrendSansTwo.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/TrendSansTwo.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/TrendSansTwo.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

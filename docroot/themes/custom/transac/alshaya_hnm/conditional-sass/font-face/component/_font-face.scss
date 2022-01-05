@@ -3,7 +3,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?p1AKYu') format('woff');
+  src:
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?p1AKYf') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?p1AKYu') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -64,8 +66,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Arabic Regular';
   src:
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff2?jAKPu') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff?jAKPu') format('woff');
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -74,8 +76,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Arabic Semi Bold';
   src:
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff2?jDKPu') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff?jDKPu') format('woff');
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -84,8 +86,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Arabic Bold';
   src:
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff2?jDKZu') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff?jDKZu') format('woff');
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -94,8 +96,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Arabic Light';
   src:
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff2?jNKZu') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff?jNKZu') format('woff');
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
