@@ -34,18 +34,15 @@ class WishlistButton extends React.Component {
 
   componentDidMount = () => {
     const { context, sku } = this.props;
-    const { configurableCombinations } = drupalSettings;
 
     const contextArray = ['pdp', 'modal', 'matchback'];
     if (contextArray.includes(context)) {
-      // Set title for simple sku product on page load.
-      if (!(this.isConfigurableProduct(sku, configurableCombinations))) {
-        const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-        const productInfo = drupalSettings[productKey];
-        this.setState({
-          title: productInfo[sku].cart_title,
-        });
-      }
+      // Set title for sku product on page load.
+      const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
+      const productInfo = drupalSettings[productKey];
+      this.setState({
+        title: productInfo[sku].cart_title ? productInfo[sku].cart_title : '',
+      });
       // Rendering wishlist button as per sku variant info.
       // Event listener is only required for old pdp, modal and matchback.
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
