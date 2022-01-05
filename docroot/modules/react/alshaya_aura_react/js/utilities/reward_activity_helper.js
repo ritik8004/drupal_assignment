@@ -39,6 +39,17 @@ function formatDate(date, type) {
     return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
   }
 
+  // eg. 2020-12-01T23:59:59
+  if (type === 'YYYY-MM-DDT') {
+    // Date in this format `2021-12-14` is considered as midnight that day so if we want to
+    // include all the transactions done on that particular day as well, we have to provide
+    // time as well something like `T23:59:59`.
+    const formatedDate = new Date(
+      date.getTime() - (date.getTimezoneOffset() * 60000),
+    ).setUTCHours(23, 59, 59);
+    return new Date(formatedDate).toISOString();
+  }
+
   // eg. Feb 2021
   if (type === 'Mon-YYYY') {
     return new Date(date).toLocaleString(drupalSettings.path.currentLanguage, { month: 'short', year: 'numeric' });
