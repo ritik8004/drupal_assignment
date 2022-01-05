@@ -3,7 +3,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   var checkIfPaymentButtonShouldBeVisibleInterval = null;
 

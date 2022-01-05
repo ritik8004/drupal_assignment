@@ -39,7 +39,6 @@
  */
 
 (function ($, window, Drupal, drupalSettings) {
-  'use strict';
 
   /* global google */
 

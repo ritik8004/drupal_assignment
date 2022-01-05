@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   // Whether to perform a redirect.
   var redirect = false;

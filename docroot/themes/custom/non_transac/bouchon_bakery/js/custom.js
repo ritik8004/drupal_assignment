@@ -4,7 +4,6 @@
  */
 
 (function ($) {
-  'use strict';
   $('.menu-language-switcher--desktop li').removeClass('is-hidden');
   $('.pdf-link').attr('href', $('.field-pdf-file-upload a').attr('href'));
 })(jQuery);

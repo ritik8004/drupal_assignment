@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.menuItemsLength = {
     attach: function (context, settings) {

@@ -12,7 +12,6 @@ const GTM_CONSTANTS = {
 const productRecommendationsSuffix = 'pr-';
 
 (function ($, Drupal, dataLayer) {
-  'use strict';
 
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;

@@ -1,5 +1,4 @@
 (function ($) {
-  'use strict';
 
   $(document).ready(function () {
     var $share_label = $('.view-product-item__share--label');

@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   Drupal.behaviors.alshayaAlgoliaInsightsListing = {
     attach: function (context) {

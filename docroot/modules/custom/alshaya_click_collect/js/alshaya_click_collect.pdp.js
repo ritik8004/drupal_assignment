@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   // Coordinates of the user's location.
   var asCoords = null;

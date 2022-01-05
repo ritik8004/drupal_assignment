@@ -1,5 +1,4 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict';
   // Track user activity around login/reset/register forms.
   var userLogger = JSON.parse(localStorage.getItem('user_action_logger'));
   if (userLogger && (drupalSettings.user.uid > 0 || userLogger.type === 'change-pwd-form')) {

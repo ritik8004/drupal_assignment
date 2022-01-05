@@ -3,7 +3,6 @@
  * Script for Alshaya secondary main menu behaviors.
  */
 (function ($, Drupal, drupalSettings) {
-  'use strict';
   Drupal.behaviors.alshayaSecondaryMainMenu = {
     attach: function (context) {
       if ($('#block-alshayasecondarymainmenu').length && $('secondary-main-menu-wrapper').length == 0) {

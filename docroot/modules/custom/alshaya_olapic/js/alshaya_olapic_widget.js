@@ -3,7 +3,6 @@
  * Olapic script to add keys to show widgets.
  */
 (function ($, Drupal, drupalSettings, window) {
-  "use strict";
 
   var isOlapicInitialised = false;
 
