@@ -1,0 +1,10 @@
+body.aura-enabled {
+  @include breakpoint($desktop) {
+    .region__menu-secondary {
+      > div,
+      > nav {
+        height: 1.75rem;
+      }
+    }
+  }
+}
