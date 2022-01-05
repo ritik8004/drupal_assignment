@@ -10,8 +10,6 @@ const GTM_CONSTANTS = {
 };
 
 const productRecommendationsSuffix = 'pr-';
-// Product to push productDetailView event.
-let productOnAlshayaSeoReplaceState = null;
 
 (function ($, Drupal, dataLayer) {
   'use strict';
@@ -44,9 +42,6 @@ let productOnAlshayaSeoReplaceState = null;
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
         product.attr('gtm-main-sku', variantInfo['parent_sku']);
-
-        // Set product to push productDetailView event.
-        productOnAlshayaSeoReplaceState = product;
       });
 
       // For simple grouped products.
@@ -59,9 +54,6 @@ let productOnAlshayaSeoReplaceState = null;
         }
 
         var variantInfo = drupalSettings[productKey][sku]['group'][variant];
-
-        // Set product to push productDetailView event.
-        productOnAlshayaSeoReplaceState = $(this);
 
         $(this).attr('gtm-main-sku', variant);
         $(this).attr('gtm-product-sku', variant);
@@ -721,10 +713,9 @@ let productOnAlshayaSeoReplaceState = null;
 
   // Processes the data and pushes it to gtm layer.
   window.addEventListener('onAlshayaSeoReplaceState', function (e) {
-    let product = productOnAlshayaSeoReplaceState;
-    productOnAlshayaSeoReplaceState = null;
+    let product = $('.entity--type-node[data-sku][data-vmode="full"]');
     // Convert the product to a jQuery object, if not already.
-    if (!(product instanceof jQuery) && product !== null) {
+    if (!(product instanceof jQuery) && typeof product !== 'undefined') {
       product = $(product);
     }
     const lastUrl = location.href;

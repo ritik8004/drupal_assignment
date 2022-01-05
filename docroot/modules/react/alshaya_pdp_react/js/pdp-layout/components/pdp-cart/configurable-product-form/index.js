@@ -101,6 +101,14 @@ class ConfigurableProductForm extends React.Component {
       }
     });
 
+    if ((typeof variantSelected !== 'undefined') && (variantSelected !== null)) {
+      const event = new CustomEvent('magazinev2-variant-selected', {
+        bubbles: true,
+        detail: { variant: variantSelected },
+      });
+      document.querySelector('.sku-base-form').dispatchEvent(event);
+    }
+
     // Dispatch event on variant update id aura enabled.
     if (isAuraEnabled()) {
       this.dispatchUpdateEvent(variantSelected);

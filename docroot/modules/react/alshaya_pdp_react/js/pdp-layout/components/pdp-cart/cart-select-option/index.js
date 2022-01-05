@@ -79,15 +79,6 @@ class CartSelectOption extends React.Component {
       ? productInfo[skuCode].variants[variantSelected].parent_sku
       : skuCode;
 
-    // Dispatch magazinev2-variant-selected before replaceState so that data will be available,
-    // to push to productDetailView GTM event when needed.
-    if ((typeof variantSelected !== 'undefined') && (variantSelected !== null)) {
-      document.querySelector('.sku-base-form').dispatchEvent(new CustomEvent('magazinev2-variant-selected', {
-        bubbles: true,
-        detail: { variant: variantSelected },
-      }));
-    }
-
     if (context === 'main') {
       const { currentLanguage } = drupalSettings.path;
       const variantInfo = productInfo[skuCode].variants[variantSelected];
