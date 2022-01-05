@@ -68,6 +68,9 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         {% else %}
           <div id="product-zoom-container"></div>
         {% endif %}
+        {% if content.wishlist_enabled %}
+          {{ content.wishlist_enabled }}
+        {% endif %}
       </div>
 
       <div class="content__sidebar">
