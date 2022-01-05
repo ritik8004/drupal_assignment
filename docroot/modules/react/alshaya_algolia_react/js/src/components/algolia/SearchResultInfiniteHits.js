@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import connectInfiniteHits from './connectors/connectInfiniteHits';
 import Teaser from '../teaser';
-import { getAlgoliaStorageValues, removeLoader } from '../../utils';
+import { removeLoader } from '../../utils';
 
 export default connectInfiniteHits(({
   hits, hasMore, refineNext, pageNumber, pageType, children,
@@ -14,15 +14,13 @@ export default connectInfiniteHits(({
       if (typeof teaserRef.current === 'object' && teaserRef.current !== null) {
         if (hits.length > 0) {
           Drupal.algoliaReact.stickyfacetfilter();
+
+          // Trigger back to search page.
+          Drupal.processBackToSearch();
         }
+
         removeLoader();
-        // Trigger back to search page.
-        window.onpageshow = () => {
-          const storageValue = getAlgoliaStorageValues();
-          if (typeof storageValue !== 'undefined' && storageValue !== null) {
-            Drupal.processBackToSearch(storageValue);
-          }
-        };
+
         // Trigger gtm event one time, only when search we have search results.
         if (hits.length > 0) {
           Drupal.algoliaReact.triggerSearchResultsUpdatedEvent(hits.length);
