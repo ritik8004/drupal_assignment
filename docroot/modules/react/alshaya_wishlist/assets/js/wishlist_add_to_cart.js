@@ -4,25 +4,23 @@
  */
 
 (function ($, Drupal) {
-	'use strict';
+  'use strict';
 
-	Drupal.behaviors.alshayaWishlistAddToCart = {
-		attach: function (context) {
-		// When product is added to cart, it should be removed from wishlist.
-		// For this, we are dispatching an event when product added to cart.
-		$('.sku-base-form', context).once('wishlist-button-wrapper').on('product-add-to-cart-success', function (event) {
-			var productData = event.detail.productData;
-			if (productData && productData !== null) {
-				var wishlistAddToCartEvent = new CustomEvent('onProductAddToCart', {
-					bubbles: true,
-					detail: {
-						productData,
-					}
-				});
-				document.dispatchEvent(wishlistAddToCartEvent);
-			}
-		});
-		}
-	};
+  Drupal.behaviors.alshayaWishlistAddToCart = {
+    attach: function (context) {
+      // When product is added to cart, it should be removed from wishlist.
+      // For this, we are dispatching an event when product added to cart.
+      $('.sku-base-form', context).once('wishlist-button-wrapper').on('product-add-to-cart-success', function (event) {
+        var sku = event.detail.productData.sku;
+        if (sku && sku !== null) {
+          var wishlistAddToCartEvent = new CustomEvent('onProductAddToCart', {
+            bubbles: true,
+            detail: { sku }
+          });
+          document.dispatchEvent(wishlistAddToCartEvent);
+        }
+      });
+    }
+  };
 
 })(jQuery, Drupal);

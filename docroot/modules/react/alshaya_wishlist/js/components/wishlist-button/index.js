@@ -8,6 +8,7 @@ import {
   removeProductFromWishList,
   getWishlistLabel,
   getWishlistFromBackend,
+  removeFromWishlistAfterAddtocart,
 } from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
@@ -52,14 +53,21 @@ class WishlistButton extends React.Component {
       // Handle wishlist state for item when it is added to cart.
       // We call custom event listener defined in wishlist module.
       // This is only for old pdp, modal and matchback.
-      document.addEventListener('onProductAddToCart', this.handleProductAddToCart);
+      // Check if config for removing product from
+      // wishlist after product added to cart is set to true.
+      if (removeFromWishlistAfterAddtocart()) {
+        document.addEventListener('onProductAddToCart', this.handleProductAddToCart);
+      }
     }
 
     // Handle wishlist state for item when it is added to cart.
     // This event listener if generic and called directly for new pdp.
     // Defining context array for new pdp and other product layout build in react.
-    const reactContextArray = ['magazinev2', 'magazinev2-related', 'productDrawer'];
-    if (reactContextArray.includes(context)) {
+    const reactContextArray = ['magazinev2', 'magazinev2-related', 'productDrawer', 'wishlist'];
+    // Check if context present in react components context array.
+    // Also, check if config for removing product from
+    // wishlist after product added to cart is set to true.
+    if (reactContextArray.includes(context) && removeFromWishlistAfterAddtocart()) {
       document.addEventListener('product-add-to-cart-success', this.handleProductAddToCart);
     }
 
@@ -147,8 +155,15 @@ class WishlistButton extends React.Component {
    *  Event detail containing product data.
    */
   handleProductAddToCart = (event) => {
-    if (event.detail && event.detail.productData) {
-      this.handleProductRemovalFromWishlist(event.detail.productData.sku);
+    const { skuCode, addedInWishList } = this.state;
+    // Check if item is already in wishlist.
+    if (addedInWishList && event.detail) {
+      const { context } = this.props;
+      const sku = (context === 'magazinev2' || context === 'magazinev2-related')
+        ? event.detail.productData.sku : event.detail.sku;
+      if (sku === skuCode) {
+        this.handleProductRemovalFromWishlist(sku);
+      }
     }
   }
 

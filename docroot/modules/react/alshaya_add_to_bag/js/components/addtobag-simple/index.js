@@ -15,6 +15,7 @@ import NotBuyableButton from '../buttons/not-buyable';
 import getStringMessage from '../../../../js/utilities/strings';
 import logger from '../../../../js/utilities/logger';
 import { isWishlistPage } from '../../../../js/utilities/wishlistHelper';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class AddToBagSimple extends React.Component {
   constructor(props) {
@@ -250,6 +251,12 @@ export default class AddToBagSimple extends React.Component {
 
       // Push product values to GTM.
       pushSeoGtmData({ element: this.buttonContainerRef.current, qty, prevQty });
+
+      // Dispatch add to cart event for plp products.
+      // We only dispatch event if item is added or updated in cart.
+      if (action === 'add item' || action === 'update item') {
+        dispatchCustomEvent('product-add-to-cart-success', { sku });
+      }
     });
   };
 
