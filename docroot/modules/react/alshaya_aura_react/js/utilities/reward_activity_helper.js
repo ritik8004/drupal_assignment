@@ -41,6 +41,9 @@ function formatDate(date, type) {
 
   // eg. 2020-12-01T23:59:59
   if (type === 'YYYY-MM-DDT') {
+    // Date in this format `2021-12-14` is considered as midnight that day so if we want to
+    // include all the transactions done on that particular day as well, we have to provide
+    // time as well something like `T23:59:59`.
     const formatedDate = new Date(
       date.getTime() - (date.getTimezoneOffset() * 60000),
     ).setUTCHours(23, 59, 59);
