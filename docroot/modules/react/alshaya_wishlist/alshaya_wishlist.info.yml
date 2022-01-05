@@ -1,0 +1,5 @@
+name: Alshaya Wishlist
+type: module
+description: 'Provides the Alshaya Product WishList feature.'
+package: 'Alshaya'
+core_version_requirement: ^8.8 || ^9
