@@ -19,7 +19,7 @@ import {
 import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelper';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
+import Loading from '../../../../js/utilities/loading';
 
 class WishlistProductList extends React.Component {
   constructor(props) {
@@ -41,6 +41,7 @@ class WishlistProductList extends React.Component {
     this.state = {
       filters,
       wishListItemsCount,
+      wait: true,
     };
   }
 
@@ -48,9 +49,6 @@ class WishlistProductList extends React.Component {
     // If this is a shared wishlist page, we need to fetch shared wishlist
     // products from the backend via API and show on the page.
     if (isShareWishlistPage()) {
-      // Show full screen loader until we check for data availablity.
-      showFullScreenLoader();
-
       // Get the shared wishlist items from the backend API.
       getSharedWishlistFromBackend().then((response) => {
         if (hasValue(response.data.items)) {
@@ -72,8 +70,7 @@ class WishlistProductList extends React.Component {
           }
         }
 
-        // Removed the loader once API call gets completed.
-        removeFullScreenLoader();
+        this.setState({ wait: false });
       });
       // We don't want event listeners for shared wishlist page.
       return;
@@ -84,6 +81,13 @@ class WishlistProductList extends React.Component {
       // This will execute when wishlist loaded from the backend
       // and page loads before.
       document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
+    }
+    // For wishlist page, data will always be available in storage.
+    // So, we should stop the loader after data has loaded from storage.
+    if (!isShareWishlistPage()) {
+      this.setState({
+        wait: false,
+      });
     }
     // Update wishlist items after any product is removed.
     document.addEventListener('productRemovedFromWishlist', this.updateWisListProductsList, false);
@@ -149,10 +153,14 @@ class WishlistProductList extends React.Component {
   };
 
   render() {
-    const { filters, wishListItemsCount } = this.state;
-
-    // Render empty wishlist component if wishlist is empty.
-    if (!wishListItemsCount) {
+    const { filters, wishListItemsCount, wait } = this.state;
+    if (wait) {
+      return <Loading />;
+    }
+    // Render empty wishlist component.
+    // Check for wishlist data loaded via api if logged in user.
+    // If anonymous user, check if wishlist item count is 0.
+    if (wishListItemsCount === 0) {
       return PageEmptyMessage(Drupal.t(
         'your @wishlist_label is empty.',
         { '@wishlist_label': getWishlistLabel() },
