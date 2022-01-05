@@ -4,7 +4,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?3ajdhm') format('woff');
+  src:
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?3ajdhs') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?3ajdhm') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

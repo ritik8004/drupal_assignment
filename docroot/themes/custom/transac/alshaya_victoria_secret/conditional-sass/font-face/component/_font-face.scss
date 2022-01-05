@@ -93,7 +93,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?myjxot') format('woff');
+  src:
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?myjxod') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?myjxoe') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
