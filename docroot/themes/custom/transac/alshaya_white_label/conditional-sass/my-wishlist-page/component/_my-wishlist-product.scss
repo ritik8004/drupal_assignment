@@ -1,0 +1,51 @@
+.wishlist-product-wrapper {
+  .wishlist-product {
+    color: $plp_tile_product_text;
+
+    .product-title {
+      font-size: 0.875rem;
+      color: $plp_tile_product_title;
+      margin: 0.5rem 0;
+    }
+
+    .price-block {
+      font-size: 0.875rem;
+
+      .has--special--price,
+      .special--price {
+        display: inline-block;
+      }
+
+      .has--special--price {
+        margin-#{$right}: 0.5rem;
+      }
+    }
+  }
+
+  .wishlist-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 2rem;
+
+    > span {
+      font-size: 0.875rem;
+      color: $content-link_color;
+
+      &.share-product {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+          width: 1.375rem;
+          margin-#{$left}: 0.25rem;
+
+          g {
+            fill: $content-link_color;
+          }
+        }
+      }
+    }
+  }
+}
