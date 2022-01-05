@@ -65,7 +65,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 // DY fonts.
 @font-face {
   font-family: "Avenir-Next-LT-Pro-Heavy-Condensed";
-  src: url("#{$base_theme_fonts_directory_path}/Avenir-Next-LT-Pro-Heavy-Condensed_5190.ttf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Avenir-Next-LT-Pro-Heavy-Condensed_5190.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Avenir-Next-LT-Pro-Heavy-Condensed_5190.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -83,7 +85,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 
 @font-face {
   font-family: "AvenirNext-Bold-Condensed";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-BoldCn.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-BoldCn.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-BoldCn.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -91,7 +95,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 
 @font-face {
   font-family: "AvenirNext-Demi-Italic";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-DemiIt.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-DemiIt.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-DemiIt.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -99,7 +105,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 
 @font-face {
   font-family: "AvenirNextLTPro-Heavy";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Heavy.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Heavy.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Heavy.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -107,7 +115,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 
 @font-face {
   font-family: "AvenirNextLTPro-Italic";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-It.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-It.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-It.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -115,7 +125,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 
 @font-face {
   font-family: "AvenirNextLTPro-Light";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Light.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Light.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -123,7 +135,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 
 @font-face {
   font-family: "AvenirNextLTPro-MediumIt";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-MediumIt.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-MediumIt.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-MediumIt.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -131,7 +145,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 
 @font-face {
   font-family: "AvenirNextLTPro-UltLtCn";
-  src: url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-UltLtCn.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-UltLtCn.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-UltLtCn.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -140,11 +156,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 // DY fonts - 11 Aug 2020
 @font-face {
   font-family: "DidonesqueW05-Bold";
-  src: url("#{$base_theme_fonts_directory_path}/DidonesqueW05-Bold.eot?#iefix") format("embedded-opentype");
   src:
-    url("#{$base_theme_fonts_directory_path}/DidonesqueW05-Bold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/DidonesqueW05-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/DidonesqueW05-Bold.svg#DidonesqueW05-Bold") format("svg");
+    url("#{$base_theme_fonts_directory_path}/DidonesqueW05-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DidonesqueW05-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
