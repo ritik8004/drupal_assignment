@@ -4,10 +4,17 @@
     li {
       margin-top: 0.4375rem;
 
-      a {
-        &.lhn-3 {
+      a,
+      span {
+        &.lhn-3,
+        &.lhn-4 {
           margin-#{$left}: 0.9735rem;
           text-transform: capitalize;
+
+          &.active {
+            font-family: $alshaya-thin;
+            text-decoration: underline;
+          }
         }
       }
     }

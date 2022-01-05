@@ -1,0 +1,198 @@
+<?php
+
+/**
+ * @file
+ * Contains alshaya_wishlist.module.
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\node\Entity\Node;
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_wishlist_theme($existing, $type, $theme, $path) {
+  return [
+    'my_wishlist' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'wishlist_strings' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  // Add cache tag.
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_wishlist.settings']);
+
+  // Return if the feature is not enabled and applicable to display mode.
+  if (!in_array($context, ['matchback', 'pdp', 'modal']) || !\Drupal::service('alshaya_wishlist.helper')->isWishListEnabled()) {
+    return;
+  }
+  $vmode = $context === 'pdp' ? 'full' : $context;
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $productNode = $skuManager->getDisplayNode($sku->getSku());
+
+  // Get the current pdp layout.
+  $acm_product_config = \Drupal::config('alshaya_acm_product.settings');
+  $product_pdp_layout = $acm_product_config->get('pdp_layout');
+
+  if (!empty($productNode->get('field_select_pdp_layout')->getValue()[0]['value'])) {
+    $product_pdp_layout = $productNode->get('field_select_pdp_layout')->getValue()[0]['value'];
+  }
+  // Attach wishlist libraries and add a wishlist markup for FE icon rendering.
+  if ($product_pdp_layout !== 'magazine_v2') {
+    $build['wishlist_enabled']['#markup'] = '<div class="wishlist-pdp-' . $vmode . '"></div>';
+    $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_wishlist_page_attachments_alter(array &$page) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  $settings['enabled'] = $wishlist_helper->isWishListEnabled();
+
+  // Pass the feature status in drupal settings.
+  $page['#attached']['drupalSettings']['wishlist'] = $settings;
+  $wishlist_settings = \Drupal::config('alshaya_wishlist.settings');
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $wishlist_settings->getCacheTags());
+
+  // Do not proceed if wishlist is not enabled.
+  if (!$settings['enabled']) {
+    return;
+  }
+
+  // Get additional config if feature is enabled.
+  $settings['config'] = $wishlist_helper->getWishListConfig();
+  $settings['userDetails'] = $wishlist_helper->getWishListUserDetails();
+  $page['#attached']['drupalSettings']['wishlist'] = $settings;
+  $page['#attached']['library'][] = 'alshaya_white_label/wishlist';
+  // Add custom js library to handle add to cart action for wishlist.
+  $page['#attached']['library'][] = 'alshaya_wishlist/wishlist_add_to_cart';
+
+  // Check if one time user login identification cookie is set
+  // and add a drupal settings in wishlist for enable merging.
+  // After that remove cookie so the merge feature works only
+  // once. We will use this drupal setting variable on front
+  // to sync the wishlist from local storage to magento backend
+  // once user logged in.
+  $cookies = \Drupal::request()->cookies;
+  if ($cookies->get('merge_user_wishlist')
+    && \Drupal::currentUser()->isAuthenticated()
+    && alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
+    // This flag indicates that merge local storage data to
+    // magento backend for the customer just logged in.
+    $page['#attached']['drupalSettings']['wishlist']['mergeWishlistForLoggedInUsers'] = TRUE;
+    $cookies->remove('merge_user_wishlist');
+    setcookie(
+      'merge_user_wishlist',
+      null,
+      [
+        'expires' => REQUEST_TIME - 3600,
+        'path' => '/',
+        'secure' => TRUE
+      ]
+    );
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_wishlist_preprocess_page(array &$variables) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Return if wishlist feature is not enabled.
+  if (!$wishlist_helper->isWishListEnabled()) {
+    return;
+  }
+
+  // Add wishlist strings so those are available on front-end.
+  // @todo attach strings with pdp and cart pages only.
+  \Drupal::moduleHandler()->loadInclude('alshaya_wishlist', 'inc', 'alshaya_wishlist.static_strings');
+  $wishlist_strings = [
+    '#strings' => _alshaya_wishlist_strings(),
+    '#theme' => 'wishlist_strings',
+  ];
+  $variables['page']['content']['wishlist_strings'] = $wishlist_strings;
+
+  // Check if current path doesn't match with the wishlist product listing page.
+  if (!$wishlist_helper->isWishListPage()) {
+    return;
+  }
+
+  // Add classes similar to PLP without left sidebar.
+  $variables['attributes']['class'][] = 'c-plp c-plp-only l-one--w lhn-without-sidebar';
+}
+
+/**
+ * Implements hook_alshaya_add_to_bag_feature_status_alter().
+ */
+function alshaya_wishlist_alshaya_add_to_bag_feature_status_alter(bool &$add_to_bag_feature_status) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Show add to bag button on wishlist page if wishlist feature is enabled.
+  if ($wishlist_helper->isWishListEnabled() && $wishlist_helper->isWishListPage()) {
+    // Mark add to bag feature status true for the my wishlist page.
+    $add_to_bag_feature_status = TRUE;
+  }
+}
+
+/*
+ * Implements hook_preprocess_html().
+ */
+function alshaya_wishlist_preprocess_html(&$variables) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Return if wishlist feature is not enabled.
+  if (!$wishlist_helper->isWishListEnabled()) {
+    return;
+  }
+
+  // Add class to body tag if wishlist feature is enabled.
+  $variables['attributes']['class'][] = 'wishlist-enabled';
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_wishlist_alshaya_my_account_links_alter(array &$links) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Add my wishlist links for my account page.
+  if ($wishlist_helper->isWishListEnabled()) {
+    $links['alshaya_wishlist'] = [
+      'text' => t('my @wishlist_label', [
+        '@wishlist_label' => \Drupal::service('token')->replace('[alshaya_wishlist:wishlist_label]'),
+      ], ['context' => 'wishlist']),
+      'route' => 'alshaya_wishlist.users_wishlist',
+      'weight' => 42,
+    ];
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_wishlist_user_login(UserInterface $account) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Check if the wishlist feature is enabled.
+  if ($wishlist_helper->isWishListEnabled()) {
+    // Set a one time cookie when user logged in. We will
+    // use this above in hook_page_attachments_alter to set
+    // a drupal settings variable to perform action on front.
+    // For example, we will merge wishlist soon after user logged in.
+    setcookie('merge_user_wishlist', TRUE, ['path' => '/', 'secure' => TRUE]);
+  }
+}

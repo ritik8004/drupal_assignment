@@ -119,13 +119,11 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                 >
                   <div className="egift-header-wrapper">
                     <p>
-                      <strong>
-                        {Drupal.t(
-                          'Enter gift card details to check balance & validity.',
-                          {},
-                          { context: 'egift' },
-                        )}
-                      </strong>
+                      {Drupal.t(
+                        'Enter gift card details to check balance & validity.',
+                        {},
+                        { context: 'egift' },
+                      )}
                     </p>
                   </div>
                   <div className="egift-type-card_number">
@@ -147,7 +145,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                       id="egift-button"
                       type="submit"
                       value={Drupal.t(
-                        'CHECK BALANCE',
+                        'Check balance',
                         {},
                         { context: 'egift' },
                       )}

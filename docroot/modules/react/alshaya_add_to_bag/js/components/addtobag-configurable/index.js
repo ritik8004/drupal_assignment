@@ -23,6 +23,10 @@ export default class AddToBagConfigurable extends React.Component {
    * Click event handler for the Add button.
    */
   handleOnClick = (e) => {
+    e.preventDefault();
+    e.persist();
+    e.stopPropagation();
+
     const { sku } = this.props;
 
     // Get the container element for placing the loader effect.
@@ -101,13 +105,26 @@ export default class AddToBagConfigurable extends React.Component {
 
   render() {
     const { drawerStatus, productInfo } = this.state;
-    const { sku, isBuyable, url } = this.props;
+    const {
+      sku,
+      isBuyable,
+      url,
+      // 'extraInfo' is used to pass additional information that
+      // we want to use in this component.
+      extraInfo,
+    } = this.props;
 
     // Early return if product is not buyable.
     if (!isProductBuyable(isBuyable)) {
       return (
         <NotBuyableButton url={url} />
       );
+    }
+
+    let addToCartText = getStringMessage('view_options');
+    // Check if button text is available in extraInfo.
+    if (typeof extraInfo.addToCartButtonText !== 'undefined') {
+      addToCartText = extraInfo.addToCartButtonText;
     }
 
     return (
@@ -120,7 +137,7 @@ export default class AddToBagConfigurable extends React.Component {
             onClick={this.handleOnClick}
             ref={this.buttonContainerRef}
           >
-            {`${getStringMessage('view_options')}`}
+            {addToCartText}
           </button>
         </div>
         <ConditionalView condition={drawerStatus === 'opened'}>
@@ -131,6 +148,7 @@ export default class AddToBagConfigurable extends React.Component {
               productData={productInfo}
               sku={sku}
               url={url}
+              extraInfo={extraInfo}
             />,
             document.querySelector('#configurable-drawer'),
           )}

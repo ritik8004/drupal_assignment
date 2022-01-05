@@ -23,9 +23,9 @@
   cursor: pointer;
   justify-content: center;
   font-family: $alshaya-bold;
-  font-weight: 600;
   font-size: 1rem;
   width: 100%;
+  text-transform: uppercase;
 }
 
 .popup-content.egift-balance-check-content {
@@ -58,12 +58,12 @@
       top: 0.7rem;
 
       @include icon(close, before) {
-        font-size: 2rem;
+        font-size: 1rem;
         color: $egift-balance-close-icon;
       }
 
       @include breakpoint($only-mobile) {
-        right: 0;
+        #{$right}: 0;
       }
     }
   }
@@ -71,25 +71,30 @@
   .egift-balance-check-form {
     padding: 2rem 1.25rem;
     background-color: $egift-balance-sidebar-bg;
+    text-align: #{$left};
 
     .egift-header-wrapper {
       font-size: 1rem;
       line-height: 1.25rem;
       letter-spacing: 0.05rem;
+
+      p {
+        font-family: $alshaya-bold;
+      }
     }
 
     input[type=text] {
       width: 100%;
       border: none;
-      border-bottom: 1px solid $primary_input_border;
+      border-bottom: 1px solid $egift-input-border;
       padding: 0;
       color: $primary_input;
       background-color: transparent;
     }
 
     .egift-button {
-      background: $_gray_222;
-      color: $primary_btn_text;
+      background: $egift-button-border;
+      color: $egift-button-txt;
 
       @include egift-btn;
     }
@@ -134,8 +139,8 @@
         @include egift-btn;
 
         &:first-child {
-          background: $_gray_222;
-          color: $primary_btn_text;
+          background: $egift-button-border;
+          color: $egift-button-txt;
           margin-bottom: 1rem;
         }
       }

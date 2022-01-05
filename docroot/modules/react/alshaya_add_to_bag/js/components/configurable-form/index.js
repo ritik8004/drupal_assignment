@@ -18,6 +18,9 @@ import SizeGuide from '../size-guide';
 import ErrorMessage from '../error-message';
 import { isDisplayConfigurableBoxes } from '../../../../js/utilities/display';
 import getStringMessage from '../../../../alshaya_spc/js/utilities/strings';
+import WishlistContainer from '../../../../js/utilities/components/wishlist-container';
+import { isWishlistEnabled, isWishlistPage } from '../../../../js/utilities/wishlistHelper';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class ConfigurableForm extends React.Component {
   constructor(props) {
@@ -276,11 +279,20 @@ export default class ConfigurableForm extends React.Component {
       setTimeout(() => {
         onItemAddedToCart(true);
       }, 500);
+
+      // Dispatch add to cart event for product drawer components.
+      dispatchCustomEvent('product-add-to-cart-success', { sku: parentSku });
     });
   }
 
   render() {
-    const { sku, selectedVariant, productData } = this.props;
+    const {
+      sku,
+      selectedVariant,
+      productData,
+      extraInfo,
+      parentSku,
+    } = this.props;
     const configurableAttributes = productData.configurable_attributes;
     const { formAttributeValues, quantity, errorMessage } = this.state;
     const hiddenAttributes = getHiddenFormAttributes();
@@ -306,6 +318,29 @@ export default class ConfigurableForm extends React.Component {
 
     const groupData = {};
     let { groupCode } = this.state;
+
+    let addToCartText = getStringMessage('add_to_cart');
+    // Check if button text is available in extraInfo.
+    if (typeof extraInfo.addToCartButtonText !== 'undefined') {
+      addToCartText = extraInfo.addToCartButtonText;
+    }
+
+    const options = [];
+    // Add configurable options only for configurable product.
+    if (isWishlistEnabled() && configurableAttributes && formAttributeValues) {
+      Object.keys(formAttributeValues).forEach((key) => {
+        const option = {
+          option_id: configurableAttributes[key].id,
+          option_value: formAttributeValues[key],
+        };
+
+        // Skipping the psudo attributes.
+        if (drupalSettings.psudo_attribute === undefined
+          || drupalSettings.psudo_attribute !== option.option_id) {
+          options.push(option);
+        }
+      });
+    }
 
     return (
       <>
@@ -395,9 +430,21 @@ export default class ConfigurableForm extends React.Component {
               // Disable add to bag button if max sale limit has reached.
               disabled={isMaxSaleQtyReached(selectedVariant, productData)}
             >
-              {getStringMessage('add_to_cart')}
+              {addToCartText}
             </button>
           </div>
+          <ConditionalView condition={!isWishlistPage(extraInfo)}>
+            {/* Here skuMainCode is parent sku of variant selected */}
+            <WishlistContainer
+              sku={sku}
+              skuCode={parentSku}
+              context="productDrawer"
+              position="top"
+              format="icon"
+              title={productData.title}
+              options={options}
+            />
+          </ConditionalView>
         </form>
       </>
     );

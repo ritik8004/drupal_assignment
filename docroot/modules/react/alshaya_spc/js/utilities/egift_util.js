@@ -5,6 +5,7 @@ import dispatchCustomEvent from '../../../js/utilities/events';
 import { removeFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
+import { isUserAuthenticated } from '../../../js/utilities/helper';
 
 /**
  * Provides the egift card header.
@@ -38,6 +39,7 @@ export const egiftCardHeader = ({
 export const egiftFormElement = ({
   type = '',
   name = '',
+  placeholder = '',
   label = '',
   className = '',
   buttonText = '',
@@ -80,6 +82,7 @@ export const egiftFormElement = ({
             name={`egift_${name}`}
             className={`${className} ${focusClass}`}
             defaultValue={value}
+            placeholder={placeholder}
             disabled={disabled}
             onBlur={(e) => handleEvent(e)}
           />
@@ -101,6 +104,7 @@ export const egiftFormElement = ({
             name={`egift_${name}`}
             className={className}
             defaultValue={value}
+            placeholder={placeholder}
             disabled={disabled}
             onBlur={(e) => handleEvent(e)}
           />
@@ -146,6 +150,12 @@ export const getApiEndpoint = (action, params = {}) => {
 
     case 'eGiftLinkCard':
       endpoint = '/V1/egiftcard/link';
+      break;
+
+    case 'eGiftRemoveRedemption':
+      endpoint = isUserAuthenticated()
+        ? '/V1/egiftcard/remove-redemption'
+        : '/V1/guest-carts/remove-redemption';
       break;
 
     default:
@@ -282,7 +292,7 @@ export const cartContainsOnlyVirtualProduct = (cart) => {
  *   The type of redemption done.
  *
  * @return {boolean}
- *   true if egift redemption is done by guest else false.
+ *   true if egift redemption is done by the given redemption type else false.
  */
 export const isEgiftRedemptionDone = (cart, redemptionType = 'guest') => {
   if (hasValue(cart.totals)) {
@@ -368,6 +378,6 @@ export const isValidResponse = (response) => hasValue(response.data)
  *   True if response is invalid with 200 status else false.
  */
 export const isValidResponseWithFalseResult = (response) => hasValue(response.data)
-  && hasValue(response.data.response_type)
+  && Object.prototype.hasOwnProperty.call(response.data, 'response_type')
   && !response.data.response_type
   && response.status === 200;

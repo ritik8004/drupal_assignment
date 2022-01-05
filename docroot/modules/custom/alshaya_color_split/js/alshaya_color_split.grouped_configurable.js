@@ -53,11 +53,6 @@
             url = Drupal.removeURLParameter(url, 'selected');
             window.history.replaceState(variantInfo, variantInfo.title, url);
             productChanged = true;
-
-            // Trigger an event on variant select.
-            // Only considers variant when url is changed.
-            var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: variantInfo.parent_sku }});
-            document.dispatchEvent(currentSelectedVariantEvent);
           }
 
           $('.language-switcher-language-url .language-link').each(function () {
