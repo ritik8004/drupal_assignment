@@ -3,17 +3,17 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import { isAnonymousUser, getWishlistLabel } from '../../../../js/utilities/wishlistHelper';
 
 const WishlistNotification = ({
-  wishListItemData,
+  notificationItemData,
 }) => {
   // Early return if there is no item to show the notification.
-  if (wishListItemData === null) {
+  if (notificationItemData === null) {
     return null;
   }
 
   return (
     <div className="wishlist-notification notification">
       <div className="product-name">
-        <span>{Drupal.t('@productName', { '@productName': wishListItemData.title }, { context: 'wishlist' })}</span>
+        <span>{Drupal.t('@productName', { '@productName': notificationItemData.title }, { context: 'wishlist' })}</span>
         <span>{Drupal.t('saved to your @wishlist_label on this visit', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
       </div>
       <ConditionalView condition={isAnonymousUser()}>

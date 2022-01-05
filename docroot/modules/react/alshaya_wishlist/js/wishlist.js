@@ -11,7 +11,11 @@ import WishlistButton from './components/wishlist-button';
  * @param {string} context
  *  Context for PDP view mode.
  */
-const renderWishListButton = (elementSelector, context) => {
+const renderWishListButton = (
+  elementSelector,
+  context,
+  extraOptions = null,
+) => {
   const selectedElements = document.getElementsByClassName(elementSelector);
   Array.from(selectedElements).forEach((element) => {
     const sku = element.closest('article').getAttribute('data-sku');
@@ -22,6 +26,7 @@ const renderWishListButton = (elementSelector, context) => {
           context={context}
           position="top-right"
           format="icon"
+          extraOptions={extraOptions}
         />,
         element,
       );
@@ -33,7 +38,11 @@ const renderWishListButton = (elementSelector, context) => {
  * Method to handle the modal on load event and render component.
  */
 const handleModalOnLoad = () => {
-  renderWishListButton('wishlist-pdp-modal', 'modal');
+  renderWishListButton(
+    'wishlist-pdp-modal',
+    'modal',
+    { notification: false },
+  );
 };
 
 /**
