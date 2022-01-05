@@ -183,7 +183,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5ir') format('woff');
+  src:
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?D7b5id') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5ir') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
