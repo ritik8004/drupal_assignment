@@ -5,6 +5,7 @@ import dispatchCustomEvent from '../../../js/utilities/events';
 import { removeFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
+import { isUserAuthenticated } from '../../../js/utilities/helper';
 
 /**
  * Provides the egift card header.
@@ -149,6 +150,12 @@ export const getApiEndpoint = (action, params = {}) => {
 
     case 'eGiftLinkCard':
       endpoint = '/V1/egiftcard/link';
+      break;
+
+    case 'eGiftRemoveRedemption':
+      endpoint = isUserAuthenticated()
+        ? '/V1/egiftcard/remove-redemption'
+        : '/V1/guest-carts/remove-redemption';
       break;
 
     default:
@@ -371,6 +378,6 @@ export const isValidResponse = (response) => hasValue(response.data)
  *   True if response is invalid with 200 status else false.
  */
 export const isValidResponseWithFalseResult = (response) => hasValue(response.data)
-  && hasValue(response.data.response_type)
+  && Object.prototype.hasOwnProperty.call(response.data, 'response_type')
   && !response.data.response_type
   && response.status === 200;

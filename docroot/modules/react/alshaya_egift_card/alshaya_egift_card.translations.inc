@@ -115,8 +115,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Edit amount to use',
         'context' => 'egift',
       ],
-      'Applied card amount - @currencyCode @amount' => [
-        'ar' => 'Applied card amount - @currencyCode @amount',
+      'Applied card amount - ' => [
+        'ar' => 'Applied card amount - ',
         'context' => 'egift',
       ],
       'Remaining Balance - @currencyCode @remainingAmount' => [
@@ -259,8 +259,12 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Pay using egift card (Card is expired)',
         'context' => 'egift',
       ],
-      'Pay @currencyCode @amount using another payment method to complete purchase' => [
-        'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
+      'Pay ' => [
+        'ar' => 'Pay ',
+        'context' => 'egift',
+      ],
+      ' using another payment method to complete purchase' => [
+        'ar' => ' using another payment method to complete purchase',
         'context' => 'egift',
       ],
       'Top-up' => [

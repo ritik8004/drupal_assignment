@@ -18,6 +18,8 @@ import {
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
 import dispatchCustomEvent from '../../../js/utilities/events';
+import { isUserAuthenticated } from '../../../js/utilities/helper';
+import logger from '../../../js/utilities/logger';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -132,6 +134,12 @@ export default class RedeemEgiftCard extends React.Component {
           error: true,
           message: response.data.response_message,
         };
+        // Log error in datadog.
+        logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
+          '@action': 'set_points',
+          '@cardNumber': egiftCardNumber,
+          '@response': response.data,
+        });
         // Remove the loader once we have the response.
         removeFullScreenLoader();
       } else {
@@ -139,6 +147,12 @@ export default class RedeemEgiftCard extends React.Component {
           error: true,
           message: drupalSettings.global_error_message,
         };
+        // Log error in datadog.
+        logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
+          '@action': 'set_points',
+          '@cardNumber': egiftCardNumber,
+          '@response': response,
+        });
         // Remove the loader once we have the response.
         removeFullScreenLoader();
       }
@@ -178,11 +192,23 @@ export default class RedeemEgiftCard extends React.Component {
           error: true,
           message: response.data.response_message,
         };
+        // Log error in datadog.
+        logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
+          '@action': 'send_otp',
+          '@cardNumber': egiftCardNumber,
+          '@response': response.data,
+        });
       } else {
         result = {
           error: true,
           message: drupalSettings.global_error_message,
         };
+        // Log error in datadog.
+        logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
+          '@action': 'send_otp',
+          '@cardNumber': egiftCardNumber,
+          '@response': response,
+        });
       }
     }
     // Remove loader once processing is done.
@@ -194,12 +220,19 @@ export default class RedeemEgiftCard extends React.Component {
   // Remove the added egift card.
   handleEgiftCardRemove = async () => {
     const { cart: cartData } = this.props;
-    const postData = {
-      redeem_points: {
-        action: 'remove_points',
-        quote_id: cartData.cart.cart_id_int,
+    let postData = {
+      redemptionRequest: {
+        masked_quote_id: cartData.cart.cart_id,
       },
     };
+    // Change payload if authenticated user.
+    if (isUserAuthenticated()) {
+      postData = {
+        redemptionRequest: {
+          quote_id: cartData.cart.cart_id_int,
+        },
+      };
+    }
     // Default result object.
     let result = {
       error: false,
@@ -207,7 +240,7 @@ export default class RedeemEgiftCard extends React.Component {
     };
     showFullScreenLoader();
     // Invoke the redemption API.
-    const response = await callEgiftApi('eGiftRedemption', 'POST', postData);
+    const response = await callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
     if (isValidResponse(response)) {
       // Reset the state to move back to initial redeem stage.
       this.setState({
@@ -233,11 +266,25 @@ export default class RedeemEgiftCard extends React.Component {
         error: true,
         message: response.data.response_message,
       };
+      // Log error in datadog.
+      logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
+        '@action': 'remove_redemption',
+        '@response': response.data,
+      });
+      // Remove loader once the data response is available.
+      removeFullScreenLoader();
     } else {
       result = {
         error: true,
         message: drupalSettings.global_error_message,
       };
+      // Log error in datadog.
+      logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
+        '@action': 'remove_redemption',
+        '@response': response,
+      });
+      // Remove loader once the data response is available.
+      removeFullScreenLoader();
     }
 
     return result;
