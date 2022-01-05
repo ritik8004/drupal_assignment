@@ -145,7 +145,7 @@ class WishlistProductList extends React.Component {
       // OR sku:HM0485540011187007<score=3>".
       // We are using filter scoring to sort the results. So
       // the higher score item will display first.
-      filters.push(`sku: ${key}<score=${index}>`);
+      filters.push(`sku: "${key}"<score=${index}>`);
     });
 
     // Prepare the final filter to pass in search widget.
