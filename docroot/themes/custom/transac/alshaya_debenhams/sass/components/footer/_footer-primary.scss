@@ -223,7 +223,6 @@
     @include breakpoint($only-mobile) {
       text-align: $left;
       padding: 0;
-      font-size: 0.875rem;
     }
   }
 }
