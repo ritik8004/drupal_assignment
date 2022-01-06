@@ -7,6 +7,7 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 @font-face {
   font-family: "ThrowMyHandsUpintheAir";
   src:
+    local("ThrowMyHandsUpintheAir"),
     url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAir.woff2") format("woff2"),
     url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAir.ttf");
   font-weight: normal;
@@ -17,6 +18,7 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 @font-face {
   font-family: "ThrowMyHandsUpintheAirBold";
   src:
+    local("ThrowMyHandsUpintheAirBold"),
     url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAirBold.woff2") format("woff2"),
     url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAirBold.ttf");
   font-weight: normal;
@@ -27,6 +29,8 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 @font-face {
   font-family: "Mothercare-Demi";
   src:
+    local("Mothercare Demi"),
+    local("Mothercare-Demi"),
     url("#{$mc_theme_fonts_directory_path}/Mothercare-Demi.woff2") format("woff2"),
     url("#{$mc_theme_fonts_directory_path}/Mothercare-Demi.woff") format("woff");
   font-weight: normal;
@@ -37,6 +41,8 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 @font-face {
   font-family: "Mothercare-Junior";
   src:
+    local("Mothercare Junior"),
+    local("Mothercare-Junior"),
     url("#{$mc_theme_fonts_directory_path}/Mothercare-Junior.woff2") format("woff2"),
     url("#{$mc_theme_fonts_directory_path}/Mothercare-Junior.woff") format("woff");
   font-weight: normal;
@@ -47,6 +53,8 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 @font-face {
   font-family: "Mothercare-Regular";
   src:
+    local("Mothercare Regular"),
+    local("Mothercare-Regular"),
     url("#{$mc_theme_fonts_directory_path}/Mothercare-Regular.woff2") format("woff2"),
     url("#{$mc_theme_fonts_directory_path}/Mothercare-Regular.woff") format("woff");
   font-weight: normal;
@@ -57,6 +65,8 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 @font-face {
   font-family: "Mothercare-Thin";
   src:
+    local("Mothercare Thin"),
+    local("Mothercare-Thin"),
     url("#{$mc_theme_fonts_directory_path}/Mothercare-Thin.woff2") format("woff2"),
     url("#{$mc_theme_fonts_directory_path}/Mothercare-Thin.woff") format("woff");
   font-weight: normal;
@@ -67,6 +77,8 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 @font-face {
   font-family: "Cairo-Regular";
   src:
+    local("Cairo Regular"),
+    local("Cairo-Regular"),
     url("#{$mc_theme_fonts_directory_path}/Cairo-Regular.woff2") format("woff2"),
     url("#{$mc_theme_fonts_directory_path}/Cairo-Regular.woff") format("woff");
   font-weight: normal;
@@ -77,6 +89,8 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 @font-face {
   font-family: "Cairo-SemiBold";
   src:
+    local("Cairo SemiBold"),
+    local("Cairo-SemiBold"),
     url("#{$mc_theme_fonts_directory_path}/Cairo-SemiBold.woff2") format("woff2"),
     url("#{$mc_theme_fonts_directory_path}/Cairo-SemiBold.woff") format("woff");
   font-weight: normal;
