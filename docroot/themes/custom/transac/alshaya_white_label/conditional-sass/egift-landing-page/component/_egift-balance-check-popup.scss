@@ -28,163 +28,167 @@
   text-transform: uppercase;
 }
 
-.popup-content.egift-balance-check-content {
-  max-width: 22.5rem !important;
-  padding: 0 !important;
-  border: none !important;
+.egift-landing-page {
+  .popup-content.egift-balance-check-content {
+    max-width: 22.5rem !important;
+    padding: 0 !important;
+    border: none !important;
 
-  @include breakpoint($only-mobile) {
-    width: 100% !important;
-  }
-
-  .egift-amount-update-wrapper {
-    position: relative;
-
-    .egift-check-bal-title {
-      height: 3.5rem;
-      align-items: center;
-      justify-content: center;
-      display: flex;
-      box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
-      margin-bottom: 0.0625rem;
-      font-size: 1.25rem;
+    @include breakpoint($only-mobile) {
+      width: 100% !important;
     }
 
-    .close {
-      cursor: pointer;
-      position: absolute;
-      color: transparent;
-      #{$right}: 0.625rem;
-      top: 0.7rem;
+    .egift-amount-update-wrapper {
+      position: relative;
 
-      @include icon(close, before) {
+      .egift-check-bal-title {
+        height: 3.5rem;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+        margin-bottom: 0.0625rem;
+        font-size: 1.25rem;
+      }
+
+      .close {
+        cursor: pointer;
+        position: absolute;
+        color: transparent;
+        #{$right}: 0.625rem;
+        top: 0.7rem;
+
+        @include icon(close, before) {
+          font-size: 1rem;
+          color: $egift-balance-close-icon;
+        }
+
+        @include breakpoint($only-mobile) {
+          #{$right}: 0;
+        }
+      }
+    }
+
+    .egift-balance-check-form {
+      padding: 2rem 1.25rem;
+      background-color: $egift-balance-sidebar-bg;
+      text-align: #{$left};
+
+      .egift-header-wrapper {
         font-size: 1rem;
-        color: $egift-balance-close-icon;
+        line-height: 1.25rem;
+        letter-spacing: 0.05rem;
+
+        p {
+          font-family: $alshaya-bold;
+        }
       }
 
-      @include breakpoint($only-mobile) {
-        #{$right}: 0;
-      }
-    }
-  }
-
-  .egift-balance-check-form {
-    padding: 2rem 1.25rem;
-    background-color: $egift-balance-sidebar-bg;
-    text-align: #{$left};
-
-    .egift-header-wrapper {
-      font-size: 1rem;
-      line-height: 1.25rem;
-      letter-spacing: 0.05rem;
-
-      p {
-        font-family: $alshaya-bold;
-      }
-    }
-
-    input[type=text] {
-      width: 100%;
-      border: none;
-      border-bottom: 1px solid $egift-input-border;
-      padding: 0;
-      color: $primary_input;
-      background-color: transparent;
-    }
-
-    .egift-button {
-      background: $egift-button-border;
-      color: $egift-button-txt;
-
-      @include egift-btn;
-    }
-  }
-
-  .egift-topup-btn-wrapper {
-    margin-top: 5rem;
-  }
-
-  .egift-balance-response {
-    text-align: center;
-    padding: 2rem 1.25rem;
-    background-color: $egift-balance-sidebar-bg;
-
-    p {
-      font-size: 1rem;
-      letter-spacing: 0.05rem;
-
-      &.egift-current-balance-text {
-        margin-bottom: 1rem;
+      input[type=text] {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid $egift-input-border;
+        padding: 0;
+        color: $primary_input;
+        background-color: transparent;
       }
 
-      &.egift-price-text {
-        font-size: 1.75rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        letter-spacing: normal;
-        line-height: 1.14;
-      }
+      .egift-button {
+        background: $egift-button-border;
+        color: $egift-button-txt;
 
-      &.egift-card-end-text {
-        color: $egift-disabled-gray2;
-        margin-bottom: 0;
+        @include egift-btn;
       }
     }
 
     .egift-topup-btn-wrapper {
-      display: flex;
-      flex-direction: column;
+      margin-top: 5rem;
+    }
 
-      button {
-        @include egift-btn;
+    .egift-balance-response {
+      text-align: center;
+      padding: 2rem 1.25rem;
+      background-color: $egift-balance-sidebar-bg;
 
-        &:first-child {
-          background: $egift-button-border;
-          color: $egift-button-txt;
+      p {
+        font-size: 1rem;
+        letter-spacing: 0.05rem;
+
+        &.egift-current-balance-text {
           margin-bottom: 1rem;
+        }
+
+        &.egift-price-text {
+          font-size: 1.75rem;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+          letter-spacing: normal;
+          line-height: 1.14;
+        }
+
+        &.egift-card-end-text {
+          color: $egift-disabled-gray2;
+          margin-bottom: 0;
+        }
+      }
+
+      .egift-topup-btn-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        button {
+          @include egift-btn;
+
+          max-width: none;
+
+          &:first-child {
+            background: $egift-button-border;
+            color: $egift-button-txt;
+            margin-bottom: 1rem;
+          }
         }
       }
     }
   }
-}
 
-// Type = Text.
-.egift-type-card_number,
-.egift-type-card_otp {
-  position: relative;
-  margin-bottom: 1.5rem;
+  // Type = Text.
+  .egift-type-card_number,
+  .egift-type-card_otp {
+    position: relative;
+    margin-bottom: 1.5rem;
 
-  input[type=text] {
-    height: 1.5rem;
-    font-size: 0.875rem;
-    color: $egift-form-input;
-  }
+    input[type=text] {
+      height: 1.5rem;
+      font-size: 0.875rem;
+      color: $egift-form-input;
+    }
 
-  label {
-    @include egift-placeholder-label;
-  }
+    label {
+      @include egift-placeholder-label;
+    }
 
-  input:focus ~ label,
-  input.focus ~ label {
-    @include egift-placeholder-active;
-  }
-}
-
-.egift-type-card_number {
-  input[type="text"]:disabled {
-    & ~ label {
+    input:focus ~ label,
+    input.focus ~ label {
       @include egift-placeholder-active;
     }
   }
-}
 
-.egift-code-wrapper {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+  .egift-type-card_number {
+    input[type="text"]:disabled {
+      & ~ label {
+        @include egift-placeholder-active;
+      }
+    }
+  }
 
-  .egift-type-resend_otp,
-  .egift-type-another_card {
-    cursor: pointer;
+  .egift-code-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    .egift-type-resend_otp,
+    .egift-type-another_card {
+      cursor: pointer;
+    }
   }
 }

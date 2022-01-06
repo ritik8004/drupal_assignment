@@ -44,7 +44,7 @@
         }
 
         #check-balance-button {
-          button {
+          & > button {
             @include egift-btn;
 
             border-width: 0.0625rem;
