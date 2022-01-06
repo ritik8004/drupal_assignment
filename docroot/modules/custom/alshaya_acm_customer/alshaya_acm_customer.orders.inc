@@ -216,8 +216,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : '';
   $shipping_info = $express_delivery_config->get('status') ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
   $orderDetails['delivery_method'] = $shipping_info[0];
-
-  $orderDetails['is_pudo_pickup'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
+  $pudo_pickup = !empty($order['shipping']['extension_attributes']['click_and_collect_type']) ? $order['shipping']['extension_attributes']['click_and_collect_type'] : '';
+  $orderDetails['is_pudo_pickup'] = $pudo_pickup === 'pudo_pickup';
 
   if ($orderDetails['is_pudo_pickup']) {
     // We get `price_amount` i.e collection charge values like "5" or "Free"
@@ -232,6 +232,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
+  $order['shipping']['method'] = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
   if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
     $cc_config = \Drupal::config('alshaya_click_collect.settings');
 
@@ -476,45 +477,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
     // If SKU not found in Drupal, skip it.
     if (!$sku instanceof SKUInterface) {
-      $product['name'] = !$item['is_virtual'] ? $item['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
+      $product['name'] = $item['name'];
       $product['image'] = '';
-
-      // Show eGift card image and options from order details.
-      if ($product['is_virtual']) {
-        // Get virtual product image.
-        $product['image'] = [
-          '#theme' => 'image',
-          '#uri' => $product['extension_attributes']['product_media'][0]['file'],
-          '#alt' => $product['name'],
-        ];
-
-        // Get product options and add them to attributes.
-        $product_options = json_decode($product['extension_attributes']['product_options'][0], TRUE);
-        $product['attributes'][0] = [
-          'label' => t('Style', [], ['context' => 'egift']),
-          'value' => $item['name'],
-        ];
-        if (!empty($product_options['hps_giftcard_recipient_email'])) {
-          $product['attributes'][1] = [
-            'label' => t('Send to', [], ['context' => 'egift']),
-            'value' => $product_options['hps_giftcard_recipient_email'],
-          ];
-        }
-        if (!empty($product_options['hps_giftcard_message'])) {
-          $product['attributes'][2] = [
-            'label' => t('Message', [], ['context' => 'egift']),
-            'value' => $product_options['hps_giftcard_message'],
-          ];
-        }
-        // @todo update key for card number from order details.
-        if (!empty($product_options['hps_card_number'])) {
-          $product['attributes'][3] = [
-            'label' => t('Card No', [], ['context' => 'egift']),
-            'value' => $product_options['hps_card_number'],
-          ];
-        }
-      }
-
       $products[] = $product;
     }
     else {
@@ -569,6 +533,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $order['shipping']['method'] = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
   if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
     $build['#delivery_detail_notice'] = t('Your order will be available for pickup at the following store');
 
