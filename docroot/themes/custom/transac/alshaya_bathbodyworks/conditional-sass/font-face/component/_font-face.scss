@@ -4,6 +4,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "BBWTradeGothicLTStd_Bold";
   src:
+    local("BBWTradeGothicLTStd Bold"),
+    local("BBWTradeGothicLTStd_Bold"),
+    local("BBWTradeGothicLTStd Bd2"),
+    local("BBWTradeGothicLTStd-Bd2"),
     url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.woff") format("woff");
   font-weight: normal;
@@ -14,6 +18,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "BBWTradeGothicLTStd";
   src:
+    local("BBWTradeGothicLTStd"),
     url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.woff") format("woff");
   font-weight: normal;
@@ -24,6 +29,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "DroidArabicKufi_Bold";
   src:
+    local("DroidArabicKufi Bold"),
+    local("DroidArabicKufi_Bold"),
+    local("DroidArabicKufi-Bold"),
     url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff");
   font-weight: normal;
@@ -34,6 +42,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "DroidKufi_Regular";
   src:
+    local("DroidKufi Regular"),
+    local("DroidKufi_Regular"),
+    local("DroidKufi-Regular"),
     url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff") format("woff");
   font-weight: normal;
@@ -45,6 +56,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "JustLovely";
   src:
+    local("JustLovely"),
     url("#{$base_theme_fonts_directory_path}/JustLovely.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/JustLovely.otf");
   font-weight: normal;
@@ -55,6 +67,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "JustLovelyExtras";
   src:
+    local("JustLovelyExtras"),
     url("#{$base_theme_fonts_directory_path}/JustLovelyExtras.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/JustLovelyExtras.otf");
   font-weight: normal;
@@ -65,6 +78,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "JustLovelySlanted";
   src:
+    local("JustLovelySlanted"),
     url("#{$base_theme_fonts_directory_path}/JustLovelySlanted.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/JustLovelySlanted.otf");
   font-weight: normal;
@@ -75,6 +89,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "JustLovelySlantedWide";
   src:
+    local("JustLovelySlantedWide"),
     url("#{$base_theme_fonts_directory_path}/JustLovelySlantedWide.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/JustLovelySlantedWide.otf");
   font-weight: normal;
@@ -85,6 +100,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "TrendSansFour-Italic";
   src:
+    local("TrendSansFour Italic"),
+    local("TrendSansFour-Italic"),
     url("#{$base_theme_fonts_directory_path}/TrendSansFour-Italic.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/TrendSansFour-Italic.otf");
   font-weight: normal;
@@ -95,6 +112,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "TrendSansOne";
   src:
+    local("TrendSansOne"),
     url("#{$base_theme_fonts_directory_path}/TrendSansOne.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/TrendSansOne.otf");
   font-weight: normal;
@@ -105,6 +123,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 @font-face {
   font-family: "TrendSansTwo";
   src:
+    local("TrendSansTwo"),
     url("#{$base_theme_fonts_directory_path}/TrendSansTwo.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/TrendSansTwo.otf");
   font-weight: normal;

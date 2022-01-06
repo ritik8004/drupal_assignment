@@ -4,6 +4,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 @font-face {
   font-family: "Roboto-Bold";
   src:
+    local("Roboto Bold"),
+    local("Roboto-Bold"),
+    local("roboto bold"),
+    local("roboto-bold"),
     url("#{$base_theme_fonts_directory_path}/roboto-bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/roboto-bold.woff") format("woff");
   font-weight: normal;
@@ -14,6 +18,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 @font-face {
   font-family: "Roboto-Regular";
   src:
+    local("Roboto Regular"),
+    local("Roboto-Regular"),
+    local("roboto regular"),
+    local("roboto-regular"),
     url("#{$base_theme_fonts_directory_path}/roboto-regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/roboto-regular.woff") format("woff");
   font-weight: normal;
@@ -24,6 +32,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 @font-face {
   font-family: "DroidArabicKufi_Bold";
   src:
+    local("DroidArabicKufi Bold"),
+    local("DroidArabicKufi_Bold"),
+    local("DroidArabicKufi-Bold"),
     url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff");
   font-weight: normal;
@@ -34,6 +45,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 @font-face {
   font-family: "DroidKufi_Regular";
   src:
+    local("DroidKufi Regular"),
+    local("DroidKufi_Regular"),
+    local("DroidKufi-Regular"),
     url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff") format("woff");
   font-weight: normal;
@@ -44,6 +58,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 @font-face {
   font-family: "FootLocker-FLClassic";
   src:
+    local("FootLocker FLClassic"),
+    local("FootLocker-FLClassic"),
     url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff") format("woff");
   font-weight: normal;
@@ -54,6 +70,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 @font-face {
   font-family: "FootLocker-FLStandard";
   src:
+    local("FootLocker FLStandard"),
+    local("FootLocker-FLStandard"),
     url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff") format("woff");
   font-weight: normal;
