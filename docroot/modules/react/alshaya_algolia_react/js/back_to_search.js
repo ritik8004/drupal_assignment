@@ -6,10 +6,16 @@
 (function ($) {
   'use strict';
 
-  Drupal.processBackToSearch = function (storage_value) {
+  Drupal.processBackToSearch = function () {
+    // Do nothing if not doing search as of now.
+    if (window.location.hash.length < 1) {
+      return;
+    }
+
     // On page load, apply filter/sort if any.
-    $('html').once('back-to-list').each(function () {
+    $('html').once('back-to-search').each(function () {
       var storageKey = window.location.hash;
+      var storage_value = Drupal.algolia.getAlgoliaStorageValues(storageKey);
       if (typeof storage_value !== 'undefined' && storage_value !== null) {
         var $context = $('#alshaya-algolia-search');
         // To adjust the grid view mode.

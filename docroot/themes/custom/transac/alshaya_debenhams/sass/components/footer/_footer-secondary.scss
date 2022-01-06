@@ -95,6 +95,10 @@
   }
 
   .c-footer__logos {
+    @include breakpoint($only-mobile) {
+      background: transparent;
+    }
+
     @include breakpoint($tablet) {
       float: $right;
     }

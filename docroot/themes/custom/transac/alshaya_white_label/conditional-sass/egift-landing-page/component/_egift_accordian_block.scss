@@ -18,7 +18,7 @@
       border: none;
 
       @include breakpoint($only-mobile) {
-        text-align: #{$left};
+        text-align: $left;
       }
     }
 
@@ -26,6 +26,7 @@
     .c-accordion_content {
       border: none;
       background-color: $primary_bg;
+      text-align: $left;
     }
 
     .c-accordion__title {
@@ -36,9 +37,14 @@
       padding: 1rem 2.5rem 1rem 1.5rem;
       line-height: normal;
 
+      html[lang=ar] & {
+        padding: 1rem 1.5rem 1rem 2.5rem;
+      }
+
       @include icon(chevrondown, after) {
         #{$right}: 0.9375rem;
         font-size: 0.5rem;
+        top: 1.75rem;
       }
 
       &.ui-accordion-header {
@@ -58,6 +64,7 @@
           color: $egift-accordion-active-title;
           position: absolute;
           #{$right}: 1.875rem;
+          top: 1.3rem;
 
           @include breakpoint($only-mobile) {
             #{$right}: 0.9375rem;
@@ -76,6 +83,10 @@
         list-style-type: none;
         padding: 0 2.5rem 1rem 1.5rem;
         line-height: normal;
+
+        html[lang=ar] & {
+          padding: 0 1.5rem 1rem 2.5rem;
+        }
       }
 
       p {

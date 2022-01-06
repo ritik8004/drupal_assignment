@@ -20,6 +20,6 @@
   background: $btt_bg;
 
   @include breakpoint($only-mobile) {
-    bottom: 5.25rem;
+    bottom: 10.5rem;
   }
 }

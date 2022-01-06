@@ -665,7 +665,7 @@ window.auraBackend.getRewardActivity = async (fromDate = '', toDate = '', maxRes
     rewardActivity = await getCustomerRewardActivity(
       customerId,
       formatDate(new Date(lastTransactionDate.getFullYear(), lastTransactionDate.getMonth()), 'YYYY-MM-DD'),
-      formatDate(new Date(lastTransactionDate.getFullYear(), lastTransactionDate.getMonth(), lastTransactionDate.getDate()), 'YYYY-MM-DD'),
+      formatDate(new Date(lastTransactionDate.getFullYear(), lastTransactionDate.getMonth(), lastTransactionDate.getDate()), 'YYYY-MM-DDT'),
       0,
       channel,
       partnerCode,

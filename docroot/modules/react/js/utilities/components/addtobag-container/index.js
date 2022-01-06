@@ -1,27 +1,31 @@
 import React, { Suspense } from 'react';
 import { isAddToBagEnabled } from '../../addToBagHelper';
 import EmptyErrorBoundary from '../empty-error-boundary/EmptyErrorBoundary';
+import AddToBag from '../../../../alshaya_add_to_bag/js/components/addtobag';
 
 function AddToBagContainer(props) {
-  const { productData, isBuyable } = props;
+  const { productData, isBuyable, extraInfo } = props;
 
   // Return if product data is undefined or empty.
   if (typeof productData === 'undefined' || !productData) {
     return null;
   }
 
-  if (isAddToBagEnabled()) {
-    const AddToBagLazy = React.lazy(() => import('../../../../alshaya_add_to_bag/js/components/addtobag' /* webpackChunkName: "atb" */));
+  // 'showAddToBag' is used to decide whether we want
+  // to show the add to bag button or not.
+  const { showAddToBag } = extraInfo || {};
 
+  if (isAddToBagEnabled() || showAddToBag) {
     return (
       <EmptyErrorBoundary>
         <Suspense fallback={<div />}>
-          <AddToBagLazy
+          <AddToBag
             url={props.url}
             sku={props.sku}
             stockQty={props.stockQty}
             productData={productData}
             isBuyable={isBuyable}
+            extraInfo={extraInfo || {}}
           />
         </Suspense>
       </EmptyErrorBoundary>

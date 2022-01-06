@@ -12,6 +12,7 @@ import {
 } from '../../../utilities/egift_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import LinkedEgiftSVG from '../../../svg-component/linked-egift-svg';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -218,16 +219,23 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       }
     } else {
       // On unchecking the checkbox this will be executed to remove redemption.
-      const postData = {
-        redeem_points: {
-          action: 'remove_points',
-          quote_id: cart.cart.cart_id_int,
+      let postData = {
+        redemptionRequest: {
+          masked_quote_id: cart.cart.cart_id,
         },
       };
+      // Change payload if authenticated user.
+      if (isUserAuthenticated()) {
+        postData = {
+          redemptionRequest: {
+            quote_id: cart.cart.cart_id_int,
+          },
+        };
+      }
 
       showFullScreenLoader();
       // Invoke the remove redemption API.
-      const response = callEgiftApi('eGiftRedemption', 'POST', postData);
+      const response = callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
 
       if (response instanceof Promise) {
         // Handle the error and success message after the egift card is unlinked.

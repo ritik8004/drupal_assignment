@@ -619,6 +619,11 @@ sofa-sectional:
     theme:
       css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}
 
+wishlist:
+  css:
+    theme:
+      css/conditional-sass/wishlist/wishlist.ltr.css: {}
+
 tabby:
   css:
     theme:
