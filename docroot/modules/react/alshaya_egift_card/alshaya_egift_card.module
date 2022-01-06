@@ -148,8 +148,8 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
 
   // Update virtual product details.
   foreach ($build['#products'] as $key => &$product) {
-    
       $style = $product['name'];
+      // @todo update condition for top-up product name.
       $product['name'] = !$product['is_virtual'] ? $product['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
 
       // Show eGift card image and options from order details.
@@ -201,7 +201,7 @@ function alshaya_egift_card_alshaya_acm_customer_recent_order_build_alter(array 
     // Reset order item names.
     $order['#order']['item_names'] = [];
     foreach ($order['#order']['items'] as &$item) {
-      // Set eGift card product name.
+      // Set eGift card product name. @todo update condition for top-up product name.
       $item['name'] = !$item['is_virtual'] ? $item['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
       $order['#order']['item_names'][] = $item['name'];
 
