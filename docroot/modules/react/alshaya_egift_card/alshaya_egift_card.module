@@ -142,6 +142,11 @@ function alshaya_egift_card_preprocess_html(&$variables) {
  * Implements hook_alshaya_acm_customer_orders_details_build_alter().
  */
 function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+
   // Set order name if first item is virtual product.
   $item = reset($order['items']);
   $build['#order']['name'] = !$item['is_virtual'] ? $item['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
@@ -196,6 +201,11 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
  * Implements hook_alshaya_acm_customer_recent_order_build_alter().
  */
 function alshaya_egift_card_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+
   // Update details for virtual Product.
   foreach ($build['recent_order'] as &$order) {
     // Reset order item names.
