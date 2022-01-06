@@ -1,4 +1,5 @@
 import { callMagentoApi } from './requestHelper';
+import { showFullScreenLoader } from './showRemoveFullScreenLoader';
 
 /**
  * Helper function to check if egift card is enabled.
@@ -26,6 +27,8 @@ export const sendOtp = (egiftCardNumber) => {
       action: 'send_otp',
     },
   };
+  // Show loader on api call.
+  showFullScreenLoader();
   // Send OTP to get card balance.
   return callMagentoApi('/V1/egiftcard/getBalance', 'POST', data);
 };

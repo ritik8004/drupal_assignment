@@ -5,6 +5,7 @@ import logger from '../../../../../js/utilities/logger';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { sendOtp } from '../../../../../js/utilities/egiftCardHelper';
 import PriceElement from '../../../../../js/utilities/components/price/price-element';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 export default class EgiftCheckBalanceStepTwo extends React.Component {
   constructor(props) {
@@ -53,9 +54,13 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
             otp: egiftCardOtp,
           },
         };
+        // Show loader on api call.
+        showFullScreenLoader();
         // Call get balance api.
         const BalanceResponse = callMagentoApi('/V1/egiftcard/getBalance', 'POST', postData);
         BalanceResponse.then((response) => {
+          // Remove loader on api success.
+          removeFullScreenLoader();
           if (response.status === 200) {
             if (response.data.response_type === true) {
               // Set the state to next level on api success.
@@ -89,6 +94,8 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
     // Call send otp api.
     const OtpResponse = sendOtp(egiftCardNumber);
     OtpResponse.then((response) => {
+      // Remove loader on api success.
+      removeFullScreenLoader();
       if (response.status === 200) {
         if (response.data.response_type === true) {
           // Clear the otp field on api success.
