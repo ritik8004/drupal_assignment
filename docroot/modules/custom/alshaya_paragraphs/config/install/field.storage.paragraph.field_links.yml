@@ -2,14 +2,15 @@ langcode: en
 status: true
 dependencies:
   module:
-    - link
     - paragraphs
-id: paragraph.field_button_link
-field_name: field_button_link
+id: paragraph.field_usp_timer
+field_name: field_usp_timer
 entity_type: paragraph
-type: link
-settings: {  }
-module: link
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
 locked: false
 cardinality: 1
 translatable: true
