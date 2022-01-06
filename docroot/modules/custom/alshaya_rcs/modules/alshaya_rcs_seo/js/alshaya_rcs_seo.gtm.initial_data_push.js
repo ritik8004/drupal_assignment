@@ -3,7 +3,7 @@
  * Event Listener to alter datalayer.
  */
 
-(function ($, Drupal) {
+(function ($, drupalSettings) {
   'use strict';
 
   // Load product details into initial Data layer.
@@ -11,41 +11,43 @@
       if (e.detail.type === 'product') {
         var entity = e.detail.page_entity;
         // Load product info from local storage.
-        var product_article = $("article.node--type-rcs-product")
-        var product_sku = product_article.attr('gtm-product-sku');
-        var langcode = $('html').attr('lang');
-        var key = 'product:' + langcode + ':' + product_sku;
+        var productArticle = $("article.node--type-rcs-product")
+        var productSku = productArticle.attr('gtm-product-sku');
+        var langcode = drupalSettings.path.currentLanguage;
+        var key = 'product:' + langcode + ':' + productSku;
         var productInfo = JSON.parse(localStorage.getItem(key));
 
         // Assign product GTM variables.
-        e.detail.data().productSKU = entity.type_id === 'configurable'? '' : entity.style_code;
-        e.detail.data().productStyleCode = entity.style_code;
-        e.detail.data().stockStatus = entity.stock_status;
-        e.detail.data().pageType = 'product detail page';
+        var data = e.detail.data();
+        data.productSKU = entity.type_id === 'configurable'? '' : entity.style_code;
+        data.productStyleCode = entity.style_code;
+        data.stockStatus = entity.stock_status;
+        data.pageType = 'product detail page';
         if (entity.stock_status === 'IN_STOCK') {
-          e.detail.data().stockStatus = 'in stock';
+          data.stockStatus = 'in stock';
         }
         else {
-          e.detail.data().stockStatus = 'out of stock';
+          data.stockStatus = 'out of stock';
         }
-        e.detail.data().productName = entity.name;
-        e.detail.data().productBrand = entity.gtm_attributes.brand;
-        e.detail.data().productColor = '';
-        e.detail.data().productPrice = entity.gtm_attributes.price;
-        e.detail.data().productOldPrice = (parseFloat(productInfo.price) !== parseFloat(entity.gtm_attributes.price)) ? productInfo.price : '';
-        e.detail.data().productPictureURL = productInfo.image;
-        e.detail.data().productRating = '';
-        e.detail.data().productReview = '';
-        e.detail.data().magentoProductID = entity.id;
+        data.productName = entity.name;
+        data.productBrand = entity.gtm_attributes.brand;
+        data.productPrice = entity.gtm_attributes.price;
+        data.productOldPrice = (parseFloat(productInfo.price) !== parseFloat(entity.gtm_attributes.price)) ? productInfo.price : '';
+        data.productPictureURL = productInfo.image;
+        data.magentoProductID = entity.id;
         // Set categories.
         var categories = getCategoriesAndDepartment(entity);
-        e.detail.data().subcategory = categories.subcategory;
-        e.detail.data().minorCategory = categories.minorCategory;
-        e.detail.data().majorCategory = categories.majorCategory;
-        e.detail.data().listingName = categories.listingName;
-        e.detail.data().listingId = categories.listingId;
-        e.detail.data().departmentId = categories.departmentId;
-        e.detail.data().departmentName = categories.departmentName;
+        data.subcategory = categories.subcategory;
+        data.minorCategory = categories.minorCategory;
+        data.majorCategory = categories.majorCategory;
+        data.listingName = categories.listingName;
+        data.listingId = categories.listingId;
+        data.departmentId = categories.departmentId;
+        data.departmentName = categories.departmentName;
+        // TODO.
+        data.productColor = '';
+        data.productRating = '';
+        data.productReview = '';
       }
   });
 
@@ -104,4 +106,4 @@
     }
     return;
   }
-})(jQuery, Drupal);
+})(jQuery, drupalSettings);

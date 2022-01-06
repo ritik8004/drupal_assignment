@@ -2,7 +2,7 @@
  * @file push initial data to data layer.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function (drupalSettings) {
   window.dataLayer = window.dataLayer || [];
   var dataLayerAttachment = drupalSettings.dataLayerAttachment;
   if (rcsPhGetPageType() === null) {
@@ -11,11 +11,10 @@
     window.dataLayer.push(dataLayerAttachment);
   }
   else {
-    RcsEventManager.addListener('alshayaPageEntityLoaded', (e) => {
-      var alterInitialDataLayerData = new CustomEvent('alterInitialDataLayerData', {detail: { data: () => dataLayerAttachment, page_entity : e.detail.entity, type :  rcsPhGetPageType()}});
+    RcsEventManager.addListener('alshayaPageEntityLoaded', function(e) {
+      var alterInitialDataLayerData = new CustomEvent('alterInitialDataLayerData', {detail: { data: () => dataLayerAttachment, page_entity : e.detail.entity, type :  e.detail.pageType}});
       document.dispatchEvent(alterInitialDataLayerData);
       window.dataLayer.push(dataLayerAttachment);
     });
   }
-
-})(jQuery, Drupal, drupalSettings);
+})(drupalSettings);

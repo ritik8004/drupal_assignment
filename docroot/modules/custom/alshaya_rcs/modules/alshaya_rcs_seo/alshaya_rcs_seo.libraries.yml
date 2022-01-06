@@ -4,5 +4,5 @@ rcs_product_seo:
   js:
     js/alshaya_rcs_seo.gtm.initial_data_push.js: {}
   dependencies:
-    - core/drupal
+    - core/drupalSettings
     - core/jquery
