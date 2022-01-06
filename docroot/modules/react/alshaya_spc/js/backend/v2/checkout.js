@@ -39,7 +39,8 @@ import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
-import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
+import { cartContainsOnlyVirtualProduct, cartItemIsVirtual } from '../../utilities/egift_util';
+import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -84,6 +85,11 @@ const getCncStatusForCart = async (data) => {
     // We should ideally have ony one call to an endpoint and pass
     // The list of items. This look could happen in the backend.
     // Suppressing the lint error for now.
+
+    // Skip product status check if egift is enabled and is virtual product.
+    if (isEgiftCardEnabled() && cartItemIsVirtual(item)) {
+      return true;
+    }
     // eslint-disable-next-line no-await-in-loop
     const productStatus = await getProductStatus(item.sku);
     if (hasValue(productStatus)

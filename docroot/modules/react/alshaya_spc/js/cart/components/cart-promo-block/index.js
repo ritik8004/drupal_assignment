@@ -6,6 +6,8 @@ import dispatchCustomEvent from '../../../utilities/events';
 import DynamicPromotionCode from './DynamicPromotionCode';
 import { openCartFreeGiftModal, getCartFreeGiftModalId } from '../../../utilities/free_gift_util';
 import Advantagecard from '../../../utilities/advantagecard';
+import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { cartItemIsVirtual } from '../../../utilities/egift_util';
 
 export default class CartPromoBlock extends React.Component {
   constructor(props) {
@@ -35,6 +37,11 @@ export default class CartPromoBlock extends React.Component {
 
     // Get cart items product data.
     Object.keys(items).forEach((key) => {
+      // Skip the get product data for virtual product ( This is applicable
+      // when egift card module is enabled and cart item is virtual.)
+      if (isEgiftCardEnabled() && cartItemIsVirtual(items[key])) {
+        return;
+      }
       Drupal.alshayaSpc.getProductData(key, this.productDataCallback);
     });
   }
