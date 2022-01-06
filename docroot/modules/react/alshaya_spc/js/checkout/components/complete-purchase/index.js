@@ -172,22 +172,21 @@ export default class CompletePurchase extends React.Component {
       || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
       // Bypass the payment method error check if the full payment is done by
       // egift card.
-      if (isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart)) {
-        return true;
-      }
-      // Adding error class in the section.
-      const paymentMethods = document.getElementById('spc-payment-methods');
-      if (paymentMethods) {
-        smoothScrollTo('#spc-payment-methods');
-        const allInputs = document.querySelectorAll('#spc-payment-methods input');
-        for (let x = 0; x < allInputs.length; x++) {
-          // Trigerring payment card errors.
-          const ev = new Event('blur', { bubbles: true });
-          ev.simulated = true;
-          allInputs[x].dispatchEvent(ev);
+      if (!(isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart))) {
+        // Adding error class in the section.
+        const paymentMethods = document.getElementById('spc-payment-methods');
+        if (paymentMethods) {
+          smoothScrollTo('#spc-payment-methods');
+          const allInputs = document.querySelectorAll('#spc-payment-methods input');
+          for (let x = 0; x < allInputs.length; x++) {
+            // Trigerring payment card errors.
+            const ev = new Event('blur', { bubbles: true });
+            ev.simulated = true;
+            allInputs[x].dispatchEvent(ev);
+          }
         }
+        return false;
       }
-      return false;
     }
 
     // Scroll to the billing address section.
