@@ -221,7 +221,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       // On unchecking the checkbox this will be executed to remove redemption.
       let postData = {
         redemptionRequest: {
-          masked_quote_id: cart.cart.cart_id,
+          mask_quote_id: cart.cart.cart_id,
         },
       };
       // Change payload if authenticated user.

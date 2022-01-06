@@ -37,8 +37,6 @@ export default class RedeemEgiftCard extends React.Component {
   componentDidMount = () => {
     // On payment method update, we refetch the cart to get payment method.
     document.addEventListener('refreshCartOnPaymentMethod', this.changeRedemptionStatusBasedOnPaymentMethod, false);
-    // Allow other components to disable/enable redemption.
-    document.addEventListener('changeEgiftRedemptionStatus', this.changeRedemptionStatus, false);
     // Change the redemption screen based on the cart redemption status.
     const { cart: cartData } = this.props;
     // Change the state of redeemption if egift is already available.
@@ -222,7 +220,7 @@ export default class RedeemEgiftCard extends React.Component {
     const { cart: cartData } = this.props;
     let postData = {
       redemptionRequest: {
-        masked_quote_id: cartData.cart.cart_id,
+        mask_quote_id: cartData.cart.cart_id,
       },
     };
     // Change payload if authenticated user.
