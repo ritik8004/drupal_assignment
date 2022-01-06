@@ -130,7 +130,7 @@ class EgiftCardLinked extends React.Component {
           </button>
         </div>
         <ConditionalView condition={topUpForm === false}>
-          <div className="egift-card-linked-wrapper-bottom">
+          <div className="egift-card-linked-wrapper-bottom egifts-form-wrapper">
             <div className="egift-linked-card-number-wrapper">
               <div className="egift-linked-card-number egift-light-text">{Drupal.t('Gift Card number', {}, { context: 'egift' })}</div>
               <div className="egift-linked-card-number-value egift-dark-text">{linkedCard.card_number}</div>
@@ -148,14 +148,16 @@ class EgiftCardLinked extends React.Component {
               <div className="egift-linked-card-type egift-light-text">{Drupal.t('Card Type', {}, { context: 'egift' })}</div>
               <div className="egift-linked-card-type-value egift-dark-text">{linkedCard.card_type}</div>
             </div>
-            <button
-              id="egift-topup-button"
-              type="button"
-              className="egift-topup egift-topup-btn"
-              onClick={(e) => this.handleTopUp(e)}
-            >
-              {Drupal.t('Top up', {}, { context: 'egift' })}
-            </button>
+            <div className="action-buttons">
+              <button
+                id="egift-topup-button"
+                type="button"
+                className="egift-topup egift-topup-btn"
+                onClick={(e) => this.handleTopUp(e)}
+              >
+                {Drupal.t('Top up', {}, { context: 'egift' })}
+              </button>
+            </div>
           </div>
         </ConditionalView>
         <ConditionalView condition={topUpForm}>

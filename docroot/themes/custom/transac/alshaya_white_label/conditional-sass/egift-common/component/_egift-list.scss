@@ -9,7 +9,11 @@
       padding-#{$left}: 1.75rem;
       max-width: 21.75rem;
     }
+  }
 
+  .egift-card-purchase-config-wrapper,
+  .egift-topup-fields-wrapper,
+  .my-egift-top-up-wrapper {
     ul {
       padding-#{$left}: 0;
       margin-bottom: 0;

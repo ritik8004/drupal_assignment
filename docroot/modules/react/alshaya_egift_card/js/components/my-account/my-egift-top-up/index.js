@@ -116,35 +116,38 @@ export default class MyEgiftTopUp extends React.Component {
     }
 
     return (
-      <div className="my-egift-top-up-wrapper">
-        <EgiftCardAmount
-          selected={topUpCard}
-          handleAmountSelect={this.handleAmountSelect}
-        />
-        <div className="action-buttons">
-          <div
-            className="action-cancel"
-          >
-            <button
-              type="button"
-              onClick={() => handleCancelTopUp()}
+      <div className="egifts-form-wrapper">
+        <div className="my-egift-top-up-wrapper">
+          <EgiftCardAmount
+            selected={topUpCard}
+            handleAmountSelect={this.handleAmountSelect}
+          />
+          <div className="action-buttons">
+            <div
+              className="action-cancel"
             >
-              {Drupal.t('Cancel', {}, { context: 'egifts' })}
-            </button>
-          </div>
-          <div
-            className="action-topup"
-          >
-            <div id="my-topup-error" className="error form-error">{displayFormError}</div>
-            <button
-              type="button"
-              name="top-up"
-              className="btn"
-              disabled={disableSubmit}
-              onClick={(e) => this.handleTopUpSubmit(e)}
+              <button
+                type="button"
+                className="my-topup-cancel-btn"
+                onClick={() => handleCancelTopUp()}
+              >
+                {Drupal.t('Cancel', {}, { context: 'egifts' })}
+              </button>
+            </div>
+            <div
+              className="action-topup"
             >
-              {Drupal.t('Top up', {}, { context: 'egift' })}
-            </button>
+              <div id="my-topup-error" className="error form-error">{displayFormError}</div>
+              <button
+                type="button"
+                name="top-up"
+                className="btn my-topup-submit-btn"
+                disabled={disableSubmit}
+                onClick={(e) => this.handleTopUpSubmit(e)}
+              >
+                {Drupal.t('Top up', {}, { context: 'egift' })}
+              </button>
+            </div>
           </div>
         </div>
       </div>

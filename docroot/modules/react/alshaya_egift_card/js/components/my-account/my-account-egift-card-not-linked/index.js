@@ -186,7 +186,7 @@ class EgiftCardNotLinked extends React.Component {
     const { enableVerifyCode } = this.state;
 
     return (
-      <div className="egift-notlinked-warpper">
+      <div className="egift-notlinked-wrapper">
         <div className="egift-notlinked-title">{Drupal.t('Link my egift card', {}, { context: 'egift' })}</div>
         <div className="egift-link-card-text">
           {
@@ -244,14 +244,18 @@ class EgiftCardNotLinked extends React.Component {
               <div id="egift-code-error" className="error" />
             </div>
             <div className="egift-linked-card-links">
-              <div className="egift-resend">
-                <span>{Drupal.t('Didn\'t receive?', {}, { context: 'egift' })}</span>
-                <span onClick={(e) => this.handleResendCode(e)}>
-                  {Drupal.t('Resend Code', {}, { context: 'egift' })}
-                </span>
-                <span onClick={(e) => this.handleChangeCardNumber(e)}>
-                  {Drupal.t('Change Card?', {}, { context: 'egift' })}
-                </span>
+              <div className="egift-resend-wrapper">
+                <div className="egift-resend-wrapper__left">
+                  <span className="egift-light-text">{Drupal.t('Didn\'t receive?', {}, { context: 'egift' })}</span>
+                  <span className="egift-resend-code-text" onClick={(e) => this.handleResendCode(e)}>
+                    {Drupal.t('Resend Code', {}, { context: 'egift' })}
+                  </span>
+                </div>
+                <div className="egift-resend-wrapper__right">
+                  <span className="egift-change-card-text" onClick={(e) => this.handleChangeCardNumber(e)}>
+                    {Drupal.t('Change Card?', {}, { context: 'egift' })}
+                  </span>
+                </div>
               </div>
             </div>
             <div className="action-buttons">
