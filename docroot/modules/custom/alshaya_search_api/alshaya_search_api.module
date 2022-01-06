@@ -245,3 +245,10 @@ function alshaya_search_api_modules_uninstalled($modules) {
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
   alshaya_config_install_configs(['block.block.keywordsearchblock'], 'alshaya_transac', 'optional');
 }
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_search_api_alshaya_master_post_drupal_install() {
+  \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
+}
