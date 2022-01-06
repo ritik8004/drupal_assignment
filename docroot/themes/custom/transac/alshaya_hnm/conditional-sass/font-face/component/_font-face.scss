@@ -15,6 +15,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Regular';
   src:
+    local('HM Sans Regular'),
+    local('HM-Sans-Regular'),
+    local('HMSans Regular'),
+    local('HMSans-Regular'),
     url('#{$base_theme_fonts_directory_path}/HMSans-Regular.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSans-Regular.woff') format('woff');
   font-weight: normal;
@@ -25,6 +29,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Semi Bold';
   src:
+    local('HM Sans Semi Bold'),
+    local('HM-Sans-Semi-Bold'),
+    local('HMSans SemiBold'),
+    local('HMSans-SemiBold'),
     url('#{$base_theme_fonts_directory_path}/HMSans-SemiBold.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSans-SemiBold.woff') format('woff');
   font-weight: normal;
@@ -35,6 +43,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Bold';
   src:
+    local('HM Sans Bold'),
+    local('HM-Sans-Bold'),
+    local('HMSans Bold'),
+    local('HMSans-Bold'),
     url('#{$base_theme_fonts_directory_path}/HMSans-Bold.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSans-Bold.woff') format('woff');
   font-weight: normal;
@@ -45,6 +57,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Italic';
   src:
+    local('HM Sans Italic'),
+    local('HM-Sans-Italic'),
+    local('HMSans Italic'),
+    local('HMSans-Italic'),
     url('#{$base_theme_fonts_directory_path}/HMSans-Italic.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSans-Italic.woff') format('woff');
   font-weight: normal;
@@ -55,6 +71,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Light';
   src:
+    local('HM Sans Light'),
+    local('HM-Sans-Light'),
+    local('HMSans Light'),
+    local('HMSans-Light'),
     url('#{$base_theme_fonts_directory_path}/HMSans-Light.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSans-Light.woff') format('woff');
   font-weight: normal;
@@ -66,6 +86,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Arabic Regular';
   src:
+    local('HM Sans Arabic Regular'),
+    local('HM-Sans-Arabic-Regular'),
+    local('HMSansArabic Regular'),
+    local('HMSansArabic-Regular'),
     url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff') format('woff');
   font-weight: normal;
@@ -76,6 +100,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Arabic Semi Bold';
   src:
+    local('HM Sans Arabic Semi Bold'),
+    local('HM-Sans-Arabic-Semi-Bold'),
+    local('HMSansArabic SemiBold'),
+    local('HMSansArabic-SemiBold'),
     url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff') format('woff');
   font-weight: normal;
@@ -86,6 +114,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Arabic Bold';
   src:
+    local('HM Sans Arabic Bold'),
+    local('HM-Sans-Arabic-Bold'),
+    local('HMSansArabic Bold'),
+    local('HMSansArabic-Bold'),
     url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff') format('woff');
   font-weight: normal;
@@ -96,6 +128,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Sans Arabic Light';
   src:
+    local('HM Sans Arabic Light'),
+    local('HM-Sans-Arabic-Light'),
+    local('HMSansArabic Light'),
+    local('HMSansArabic-Light'),
     url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff') format('woff');
   font-weight: normal;
@@ -107,6 +143,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Serif Regular';
   src:
+    local('HM Serif Regular'),
+    local('HM-Serif-Regular'),
+    local('HMSerif Regular'),
+    local('HMSerif-Regular'),
     url('#{$base_theme_fonts_directory_path}/HMSerif-Regular.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSerif-Regular.woff') format('woff');
   font-weight: normal;
@@ -117,6 +157,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Serif Italic';
   src:
+    local('HM Serif Italic'),
+    local('HM-Serif-Italic'),
+    local('HMSerif Italic'),
+    local('HMSerif-Italic'),
     url('#{$base_theme_fonts_directory_path}/HMSerif-Italic.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSerif-Italic.woff') format('woff');
   font-weight: normal;
@@ -127,6 +171,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 @font-face {
   font-family: 'HM Serif SemiBold';
   src:
+    local('HM Serif SemiBold'),
+    local('HM-Serif-SemiBold'),
+    local('HMSerif SemiBold'),
+    local('HMSerif-SemiBold'),
     url('#{$base_theme_fonts_directory_path}/HMSerif-SemiBold.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/HMSerif-SemiBold.woff') format('woff');
   font-weight: normal;
