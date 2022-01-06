@@ -8,9 +8,8 @@
 
   // Load product details into initial Data layer.
   document.addEventListener('alterInitialDataLayerData', (e) => {
-      if (typeof e.detail.page_entity !== 'undefined') {
+      if (e.detail.type === 'product') {
         var entity = e.detail.page_entity;
-
         // Load product info from local storage.
         var product_article = $("article.node--type-rcs-product")
         var product_sku = product_article.attr('gtm-product-sku');
@@ -98,10 +97,11 @@
             else {
               categories.departmentName += '|' +  categories.subcategory;
             }
+            return categories;
           }
         }
       }
     }
-    return categories;
+    return;
   }
 })(jQuery, Drupal);
