@@ -47,9 +47,9 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
         OtpResponse = sendOtp(cardNumber);
         if (OtpResponse instanceof Promise) {
           OtpResponse.then((res) => {
+            // Remove loader on api success.
+            removeFullScreenLoader();
             if (res.status === 200) {
-              // Remove loader on api success.
-              removeFullScreenLoader();
               if (res.data.response_type === true) {
                 this.setState({
                   egiftCardNumber: cardNumber,
