@@ -545,13 +545,13 @@ class AlshayaConfigManager {
     $this->fileSystem->prepareDirectory($settings_dir, FileSystemInterface::CREATE_DIRECTORY);
     if (file_put_contents($settings_file, $yml_settings)) {
       $this->logger->notice('Configuring alshaya_api.settings.magento_host to @value.', [
-        '@value' => $settings['magento_host'],
+        '@value' => $settings['alshaya_api.settings']['magento_host'],
       ]);
       return 1;
     }
     else {
       $this->logger->notice('Failed configuring alshaya_api.settings.magento_host to @value.', [
-        '@value' => $settings['magento_host'],
+        '@value' => $settings['alshaya_api.settings']['magento_host'],
       ]);
       return 0;
     }
