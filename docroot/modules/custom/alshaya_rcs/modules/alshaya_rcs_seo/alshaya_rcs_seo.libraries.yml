@@ -1,0 +1,8 @@
+rcs_product_seo:
+  version: 1.x
+  header: true
+  js:
+    js/alshaya_rcs_seo.gtm.initial_data_push.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
