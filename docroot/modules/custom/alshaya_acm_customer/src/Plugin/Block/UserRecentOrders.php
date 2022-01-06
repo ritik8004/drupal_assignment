@@ -236,24 +236,14 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
             // Iterate over each order item.
             foreach ($order['items'] as $key => $item) {
-              $order['items'][$key]['name'] = !$item['is_virtual'] ? $item['name'] : $this->t('Alshaya eGift card', [], ['context' => 'egift']);
-              $order['item_names'][] = $order['items'][$key]['name'];
+              $order['item_names'][] = $item['name'];
 
-              if ($item['is_virtual']) {
-                $order['items'][$key]['image'] = [
-                  '#theme' => 'image',
-                  '#uri' => $item['extension_attributes']['product_media'][0]['file'],
-                  '#alt' => $item['name'],
-                ];
-              }
-              else {
-                // Load the first image.
-                $order['items'][$key]['image'] = alshaya_acm_get_product_display_image(
-                  $item['sku'],
-                  SkuImagesHelper::STYLE_PRODUCT_TEASER,
-                  'order_detail'
-                );
-              }
+              // Load the first image.
+              $order['items'][$key]['image'] = alshaya_acm_get_product_display_image(
+                $item['sku'],
+                SkuImagesHelper::STYLE_PRODUCT_TEASER,
+                'order_detail'
+              );
 
               // Total price.
               $order['items'][$key]['total_price'] = [

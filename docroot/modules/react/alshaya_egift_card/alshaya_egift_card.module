@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\node\NodeInterface;
 
@@ -140,9 +141,6 @@ function alshaya_egift_card_preprocess_html(&$variables) {
 /**
  * Implements hook_alshaya_acm_customer_orders_details_build_alter().
  */
-/**
- * Implements hook_alshaya_acm_customer_orders_details_build_alter().
- */
 function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
   // Set order name if first item is virtual product.
   $item = reset($order['items']);
@@ -150,10 +148,7 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
 
   // Update virtual product details.
   foreach ($build['#products'] as $key => &$product) {
-    $sku = SKU::loadFromSku($product['sku']);
-
-    // If SKU not found in Drupal, skip it.
-    if (!$sku instanceof SKUInterface) {
+    
       $style = $product['name'];
       $product['name'] = !$product['is_virtual'] ? $product['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
 
@@ -191,6 +186,32 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
             'value' => $product_options['hps_card_number'],
           ];
         }
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_egift_card_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  // Update details for virtual Product.
+  foreach ($build['recent_order'] as &$order) {
+    // Reset order item names.
+    $order['#order']['item_names'] = [];
+    foreach ($order['#order']['items'] as &$item) {
+      // Set eGift card product name.
+      $item['name'] = !$item['is_virtual'] ? $item['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
+      $order['#order']['item_names'][] = $item['name'];
+
+      if ($item['is_virtual']) {
+        // Set image from order response.
+        $item['image'] = [
+          '#theme' => 'image',
+          '#uri' => $item['extension_attributes']['product_media'][0]['file'],
+          '#alt' => $item['name'],
+        ];
       }
     }
   }
