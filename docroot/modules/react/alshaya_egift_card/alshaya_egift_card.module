@@ -5,8 +5,11 @@
  * Contains alshaya_egift_card.module.
  */
 
- use Drupal\Core\Cache\Cache;
- use Drupal\node\NodeInterface;
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
+use Drupal\Core\Cache\Cache;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_alshaya_spc_checkout_build_alter().
@@ -131,6 +134,94 @@ function alshaya_egift_card_preprocess_html(&$variables) {
     if (!empty($node->get('field_use_as_egift_landing_page')->getValue()) && $node->get('field_use_as_egift_landing_page')->getValue()[0]['value'] == 1) {
       $variables['attributes']['class'][] = 'egift-landing-page';
       $variables['#attached']['library'][] = 'alshaya_white_label/egift-landing-page';
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+
+  // Set order name if first item is virtual product.
+  $item = reset($order['items']);
+  $build['#order']['name'] = !$item['is_virtual'] ? $item['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
+
+  // Update virtual product details.
+  foreach ($build['#products'] as $key => &$product) {
+    $style = $product['name'];
+    // @todo update condition for top-up product name.
+    $product['name'] = !$product['is_virtual'] ? $product['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
+
+    // Show eGift card image and options from order details.
+    if ($product['is_virtual']) {
+      // Get virtual product image.
+      $product['image'] = [
+        '#theme' => 'image',
+        '#uri' => $product['extension_attributes']['product_media'][0]['file'],
+        '#alt' => $product['name'],
+      ];
+
+      // Get product options and add them to attributes.
+      $product_options = json_decode($product['extension_attributes']['product_options'][0], TRUE);
+      $product['attributes'][0] = [
+        'label' => t('Style', [], ['context' => 'egift']),
+        'value' => $style,
+      ];
+      if (!empty($product_options['hps_giftcard_recipient_email'])) {
+        $product['attributes'][1] = [
+          'label' => t('Send to', [], ['context' => 'egift']),
+          'value' => $product_options['hps_giftcard_recipient_email'],
+        ];
+      }
+      if (!empty($product_options['hps_giftcard_message'])) {
+        $product['attributes'][2] = [
+          'label' => t('Message', [], ['context' => 'egift']),
+          'value' => $product_options['hps_giftcard_message'],
+        ];
+      }
+      // @todo update key for card number from order details.
+      if (!empty($product_options['hps_card_number'])) {
+        $product['attributes'][3] = [
+          'label' => t('Card No', [], ['context' => 'egift']),
+          'value' => $product_options['hps_card_number'],
+        ];
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_egift_card_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+
+  // Update details for virtual Product.
+  foreach ($build['recent_order'] as &$order) {
+    // Reset order item names.
+    $order['#order']['item_names'] = [];
+    foreach ($order['#order']['items'] as &$item) {
+      // Set eGift card product name. @todo update condition for top-up product name.
+      $item['name'] = !$item['is_virtual'] ? $item['name'] : t('Alshaya eGift card', [], ['context' => 'egift']);
+      $order['#order']['item_names'][] = $item['name'];
+
+      if ($item['is_virtual']) {
+        // Set image from order response.
+        $item['image'] = [
+          '#theme' => 'image',
+          '#uri' => $item['extension_attributes']['product_media'][0]['file'],
+          '#alt' => $item['name'],
+        ];
+      }
     }
   }
 }
