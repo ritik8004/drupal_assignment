@@ -105,7 +105,7 @@
               collapsible: true,
               active: active
             });
-          });
+          }});
         };
 
         $.fn.cartladdastop = function (element) {
