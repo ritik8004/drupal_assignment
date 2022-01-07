@@ -2,7 +2,7 @@ import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import logger from '../../../../js/utilities/logger';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from '../utility/error';
-import { sendOtp, verifyOtp } from '../../../../js/utilities/otp_helper';
+import { sendOtpWithMobileNo, sendOtpWithCardNo, verifyOtp } from '../../../../js/utilities/otp_helper';
 import { search, searchUserDetails } from './search_helper';
 import validateInput from './validation_helper';
 import { getErrorResponse } from '../../../../js/utilities/error';
@@ -166,7 +166,7 @@ window.auraBackend.sendSignUpOtp = async (mobile, chosenCountryCode) => {
   }
 
   // Send otp for the given mobile number.
-  const responseData = await sendOtp(`${chosenCountryCode}${mobile}`, 'reg');
+  const responseData = await sendOtpWithMobileNo(`${chosenCountryCode}${mobile}`, 'reg');
   // Check for backend error.
   if (hasValue(responseData.error)) {
     return responseData;
@@ -214,7 +214,6 @@ window.auraBackend.sendLinkCardOtp = async (type, value) => {
   let responseData = {};
 
   const searchResponse = await searchUserDetails(type, value);
-
   if (hasValue(searchResponse.error)) {
     logger.error('Error while trying to search mobile number to send link card OTP. Request Data: @data', {
       '@data': JSON.stringify({ type, value }),
@@ -222,14 +221,14 @@ window.auraBackend.sendLinkCardOtp = async (type, value) => {
     return searchResponse.custom ? { data: searchResponse } : searchResponse;
   }
 
-  if (!hasValue(searchResponse.data.mobile)) {
-    logger.error('Error while trying to send link card OTP. Mobile number not found. Request Data: @data', {
+  if (!hasValue(searchResponse.data.apc_identifier_number)) {
+    logger.error('Error while trying to send link card OTP. Card number not found. Request Data: @data', {
       '@data': JSON.stringify({ type, value }),
     });
-    return { data: getErrorResponse(auraErrorCodes.NO_MOBILE_FOUND_MSG, 404) };
+    return { data: getErrorResponse(auraErrorCodes.NO_CARD_FOUND, 404) };
   }
 
-  responseData = await sendOtp(searchResponse.data.mobile, 'link');
+  responseData = await sendOtpWithCardNo(searchResponse.data.apc_identifier_number, 'link');
 
   if (hasValue(responseData.error)) {
     logger.error('Error while trying to send link card OTP. Backend error. Request Data: @data.', {
@@ -239,7 +238,6 @@ window.auraBackend.sendLinkCardOtp = async (type, value) => {
   }
 
   if (hasValue(responseData.status)) {
-    responseData.mobile = searchResponse.data.mobile;
     responseData.cardNumber = searchResponse.data.apc_identifier_number;
   }
 
