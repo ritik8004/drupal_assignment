@@ -63,16 +63,11 @@
             breakpoint: 1025,
             settings: {
               slidesToShow: 2,
-              slidesToScroll: 2,
-              initialSlide: 1
+              slidesToScroll: 2
             }
           }
         ]
       };
-
-      if (bannerPanelFieldItem.length > 3) {
-        promoPanelOptions['initialSlide'] = 1;
-      }
 
       if (bannerPanelFieldItem.length) {
         applyBannerRtl(bannerSliderContainer, promoPanelOptions);
