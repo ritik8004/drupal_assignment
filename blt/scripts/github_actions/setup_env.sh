@@ -18,6 +18,8 @@ cp ~/.ssh/config /root/.ssh/config
 git config --global user.name "Github-Actions-CI"
 git config --global user.email "noreply@github.com"
 
+blt blt:telemetry:disable --no-interaction
+
 # Up the PHP Memory Limit
 touch /usr/local/etc/php/conf.d/docker-php-ext-ci.ini
 echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-ext-ci.ini
