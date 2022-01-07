@@ -78,7 +78,7 @@
   }
 
   .egift-input-field-container {
-    margin-bottom: 2.25rem;
+    margin-bottom: 2rem;
 
     @include breakpoint($only-mobile) {
       &:last-child {
@@ -94,7 +94,7 @@
 
     @include breakpoint($tablet) {
       display: flex;
-      margin-bottom: 3.125rem;
+      margin-bottom: 3rem;
     }
 
     .egift-input-title {
@@ -146,6 +146,17 @@
     .form-error {
       &:empty {
         padding: 0 !important;
+      }
+    }
+
+    .error {
+      width: 100%;
+      padding-bottom: 0.5rem;
+
+      @include breakpoint($tablet) {
+        width: 20.75rem;
+        text-align: $left;
+        margin-#{$left}: auto;
       }
     }
   }
