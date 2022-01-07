@@ -36,7 +36,7 @@ import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import RedeemEgiftCard from '../../../egift-card';
-import { cartContainsAnyNormalProduct } from '../../../utilities/egift_util';
+import { cartContainsAnyNormalProduct, cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 
 window.fetchStore = 'idle';
@@ -293,6 +293,10 @@ export default class Checkout extends React.Component {
       ? Drupal.smartAgent.getInfo()
       : false;
 
+    // Main wrapper class.
+    const mainWrapperClass = `spc-main ${isEgiftCardEnabled()
+      && cartContainsOnlyVirtualProduct(cart.cart) ? 'full-payment-egift' : ''}`;
+
     return (
       <>
         <div className="spc-pre-content">
@@ -303,7 +307,7 @@ export default class Checkout extends React.Component {
             </>
           </ConditionalView>
         </div>
-        <div className="spc-main">
+        <div className={mainWrapperClass}>
           <div className="spc-content">
             {errorSuccessMessage !== null
               && (
