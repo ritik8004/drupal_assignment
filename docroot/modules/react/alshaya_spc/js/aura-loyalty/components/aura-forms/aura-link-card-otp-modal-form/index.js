@@ -84,6 +84,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
         this.setState({
           [linkCardOption]: chosenCountryCode + selectedElementValue,
         });
+
         this.sendOtp({ type: linkCardOption, value: chosenCountryCode + selectedElementValue });
       });
     }

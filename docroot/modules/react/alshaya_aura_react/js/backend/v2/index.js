@@ -214,6 +214,7 @@ window.auraBackend.sendLinkCardOtp = async (type, value) => {
   let responseData = {};
 
   const searchResponse = await searchUserDetails(type, value);
+
   if (hasValue(searchResponse.error)) {
     logger.error('Error while trying to search mobile number to send link card OTP. Request Data: @data', {
       '@data': JSON.stringify({ type, value }),
