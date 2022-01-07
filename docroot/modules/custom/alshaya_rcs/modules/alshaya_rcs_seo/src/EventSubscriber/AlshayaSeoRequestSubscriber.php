@@ -41,15 +41,12 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
     $request_path = $request->getPathInfo();
 
     $result = $this->accessUnawareRouter->match($request_path);
-    if ($result['_route']) {
-      $is_promotion_page = ($result['_route'] == 'entity.node.canonical' && $result['node']->bundle() == 'rcs_promotion');
-      if ($result['_route'] == 'entity.taxonomy_term.canonical' || $result['_route'] == 'alshaya_master.home' || $is_promotion_page) {
-        if (substr($request_path, -1) != '/') {
-          $request_uri = $request_path . '/';
-          $response = new RedirectResponse($request_uri, 301);
-          $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
-          $event->setResponse($response);
-        }
+    if ($result['_route'] && ($result['_route'] == 'entity.taxonomy_term.canonical' || $result['_route'] == 'alshaya_master.home')) {
+      if (substr($request_path, -1) != '/') {
+        $request_uri = $request_path . '/';
+        $response = new RedirectResponse($request_uri, 301);
+        $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
+        $event->setResponse($response);
       }
     }
   }
