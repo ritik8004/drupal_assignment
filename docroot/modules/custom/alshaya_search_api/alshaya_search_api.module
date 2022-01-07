@@ -108,8 +108,7 @@ function alshaya_search_api_views_pre_render(ViewExecutable $view) {
   }
 
   // Add 'back to list' library to search/plp/promo page.
-  if (in_array($view->id(), ['search', 'alshaya_product_list'])
-    && \Drupal::config('alshaya_acm_product.settings')->get('back_to_list')) {
+  if (\Drupal::config('alshaya_acm_product.settings')->get('back_to_list')) {
     $view->element['#attached']['library'][] = 'alshaya_search_api/back_to_list';
   }
 }
