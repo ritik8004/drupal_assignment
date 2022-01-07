@@ -15,7 +15,7 @@
         "ckeditor/font": "^4.9",
         "claviska/jquery-minicolors": "^2.2",
         "drupal/acquia_connector": "^3.0",
-        "drupal/acquia_purge": "^1.0@beta",
+        "drupal/acquia_purge": "^1.1",
         "drupal/acquia_search": "^2.1",
         "drupal/acsf": "^2.47.0",
         "drupal/address": "^1.9",
@@ -348,6 +348,9 @@
             },
             "drupal/datalayer": {
                 "Trigger an event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
+            },
+            "drupal/acquia_purge": {
+                "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2022-01-06/3066449-12.patch"
             }
         },
         "installer-paths": {

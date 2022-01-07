@@ -56,6 +56,8 @@ function alshaya_final_common_install_task($profile) {
   if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     $additional_modules[] = 'shield';
     $additional_modules[] = 'acquia_purge';
+    $additional_modules[] = 'purge_drush';
+    $additional_modules[] = 'purge_queuer_coretags';
   }
 
   foreach ($additional_modules as $module) {
