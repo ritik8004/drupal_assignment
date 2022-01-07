@@ -226,7 +226,7 @@ window.auraBackend.sendLinkCardOtp = async (type, value) => {
     logger.error('Error while trying to send link card OTP. Card number not found. Request Data: @data', {
       '@data': JSON.stringify({ type, value }),
     });
-    return { data: getErrorResponse(auraErrorCodes.NO_CARD_FOUND, 404) };
+    return { data: getErrorResponse(auraErrorCodes.NO_MOBILE_FOUND_MSG, 404) };
   }
 
   responseData = await sendOtpWithCardNo(searchResponse.data.apc_identifier_number, 'link');
