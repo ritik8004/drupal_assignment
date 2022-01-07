@@ -134,14 +134,3 @@ function alshaya_egift_card_preprocess_html(&$variables) {
     }
   }
 }
-
-/**
- * Implements hook_page_attachments().
- */
-function alshaya_egift_card_page_attachments(array &$attachments) {
-  $current_route = \Drupal::routeMatch()->getRouteName();
-  // Add cart notification time for eGift card.
-  if ($current_route == 'alshaya_egift_card.egift_card_purchase') {
-    $attachments['#attached']['drupalSettings']['addToCartNotificationTime'] = \Drupal::config('alshaya_acm_cart_notification.settings')->get('notification_time');
-  }
-}

@@ -114,6 +114,9 @@ class AlshayaEgiftCardController extends ControllerBase {
     // without any language suffix so HTTP_HOST is enough.
     $build['#attached']['drupalSettings']['egiftCard']['mdcMediaUrl'] = 'https://' . $_SERVER['HTTP_HOST'];
 
+    // Added cart notification time.
+    $build['#attached']['drupalSettings']['addToCartNotificationTime'] = \Drupal::config('alshaya_acm_cart_notification.settings')->get('notification_time');
+
     // Use proxy on local env as here we don't have Cloudflare.
     if (Settings::get('env') === 'local') {
       $build['#attached']['drupalSettings']['egiftCard']['mdcMediaUrl'] = '/proxy/?url=' . $api_settings['magento_host'];
