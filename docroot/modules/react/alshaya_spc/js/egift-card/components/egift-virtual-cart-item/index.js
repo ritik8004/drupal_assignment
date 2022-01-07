@@ -10,6 +10,7 @@ import { customStockErrorMessage } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import ConditionalView from '../../../common/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class CartVirtualItem extends React.Component {
   /**
@@ -144,10 +145,12 @@ export default class CartVirtualItem extends React.Component {
                   <span className="spc-cart-product-attribute-label">{Drupal.t('Send to:', {}, { context: 'egift' })}</span>
                   <span className="spc-cart-product-attribute-value">{ recieptEmail }</span>
                 </div>
-                <div className="spc-cart-product-attribute">
-                  <span className="spc-cart-product-attribute-label egift-cart-message-label">{Drupal.t('Message:', {}, { context: 'egift' })}</span>
-                  <span className="spc-cart-product-attribute-value egift-cart-message-value">{ giftCardMessage }</span>
-                </div>
+                <ConditionalView condition={hasValue(giftCardMessage)}>
+                  <div className="spc-cart-product-attribute">
+                    <span className="spc-cart-product-attribute-label egift-cart-message-label">{Drupal.t('Message:', {}, { context: 'egift' })}</span>
+                    <span className="spc-cart-product-attribute-value egift-cart-message-value">{ giftCardMessage }</span>
+                  </div>
+                </ConditionalView>
               </ConditionalView>
             </div>
           </div>
