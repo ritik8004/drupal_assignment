@@ -42,7 +42,7 @@ function alshaya_tabby_alshaya_spc_cart_build_alter(array &$build) {
  */
 function alshaya_tabby_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
   if (!empty($order['payment']) && $order['payment']['method'] === 'tabby') {
-    // Attach tabby_sdk library to show logo on confirmation page.
-    $build['#attached']['library'][] = 'alshaya_tabby/tabby_sdk';
+    // Attach library to show logo on confirmation page.
+    $build['#attached']['library'][] = 'alshaya_tabby/tabby_integration';
   }
 }
