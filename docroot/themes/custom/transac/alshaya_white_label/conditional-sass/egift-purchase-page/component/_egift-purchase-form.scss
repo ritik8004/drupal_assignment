@@ -14,9 +14,6 @@
 
   .step-wrapper {
     .step-title {
-      font-family: $alshaya-bold;
-      font-size: 1.25rem;
-      line-height: 1.25rem;
       margin: 0;
     }
   }
@@ -31,7 +28,11 @@
     }
 
     .step-two-fields {
-      margin-top: 2.5rem;
+      margin-top: 1.5rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 2.5rem;
+      }
     }
 
     .egift-input-title {
@@ -49,6 +50,7 @@
     @include breakpoint($only-mobile) {
       display: flex;
       justify-content: space-between;
+      flex-wrap: wrap;
     }
 
     @include breakpoint($tablet) {

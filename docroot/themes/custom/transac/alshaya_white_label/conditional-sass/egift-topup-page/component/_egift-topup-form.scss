@@ -62,9 +62,21 @@
   }
 
   .action-buttons {
-    button[disabled] {
-      border-color: $egift-purchase-inactive-step-text;
-      background: $egift-purchase-inactive-step-text;
+    button {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+
+      &[disabled] {
+        border-color: $egift-purchase-inactive-step-text;
+        background: $egift-purchase-inactive-step-text;
+      }
+    }
+
+    .error {
+      @include breakpoint($tablet) {
+        width: 100%;
+      }
     }
   }
 }
