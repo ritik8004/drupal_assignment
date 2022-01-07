@@ -328,10 +328,10 @@ class AlshayaSpcCustomerHelper {
 
     try {
       $token = $this->apiWrapper->getCustomerToken($mail, $pass);
-      // Set the token in session.
-      $this->setCustomerTokenInSession($token);
 
       if (!empty($token)) {
+        // Set the token in session.
+        $this->setCustomerTokenInSession($token);
         // Get the user data from Magento.
         $customer = $this->apiWrapper->getCustomer($mail);
 
@@ -408,7 +408,7 @@ class AlshayaSpcCustomerHelper {
    *   The token.
    */
   public function getCustomerToken() {
-    return $this->session->get('magento_customer_token');
+    return $this->session->get('magento_customer_token', NULL);
   }
 
 }
