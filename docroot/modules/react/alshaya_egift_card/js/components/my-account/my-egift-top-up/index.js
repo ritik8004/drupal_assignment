@@ -30,6 +30,8 @@ export default class MyEgiftTopUp extends React.Component {
     const response = await callMagentoApi('/V1/products', 'GET', params);
     removeFullScreenLoader();
     if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
+      document.getElementById('card-details').style.display = 'none';
+      document.getElementById('egift-remove-button').style.display = 'none';
       this.setState({
         topUpCard: response.data.items[0],
       });
@@ -121,6 +123,7 @@ export default class MyEgiftTopUp extends React.Component {
           <EgiftCardAmount
             selected={topUpCard}
             handleAmountSelect={this.handleAmountSelect}
+            myAccountLabel
           />
           <div className="action-buttons">
             <div

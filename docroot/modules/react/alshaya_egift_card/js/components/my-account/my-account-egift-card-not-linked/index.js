@@ -74,6 +74,7 @@ class EgiftCardNotLinked extends React.Component {
    */
   handleChangeCardNumber = (e) => {
     e.preventDefault();
+    document.getElementById('resend-success').innerHTML = Drupal.t('We\'ll send a verification code to your email to verify and link eGift card', {}, { context: 'egift' });
     const { handleCardChange } = this.props;
     this.setState({
       enableVerifyCode: false,
@@ -193,12 +194,11 @@ class EgiftCardNotLinked extends React.Component {
             Drupal.t('You dont have any eGift card linked to your account, link card to use it for your purchases', {}, { context: 'egift' })
           }
         </div>
-        <div className="egift-link-card-instruction">
+        <div className="egift-link-card-instruction" id="resend-success">
           {
             Drupal.t('We\'ll send a verification code to your email to verify and link eGift card', {}, { context: 'egift' })
           }
         </div>
-        <div id="resend-success" className="egift-resend-message" />
         <form
           className="egift-validate-form egifts-form-wrapper"
           method="post"

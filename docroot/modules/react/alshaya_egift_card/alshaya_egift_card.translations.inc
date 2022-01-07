@@ -382,7 +382,15 @@ function _alshaya_egift_card_translations() {
         'ar' => 'You cannot redeem the same card which you\'re trying to topup.',
         'context' => 'egift',
       ],
-
+      'Buy Alshaya eGift Card' => [
+        'ar' => 'Buy Alshaya eGift Card',
+      ],
+      'eGift Card' => [
+        'ar' => 'eGift Card',
+      ],
+      'Top-up eGift card' => [
+        'ar' => 'Top-up eGift card',
+      ],
     ],
   ];
 

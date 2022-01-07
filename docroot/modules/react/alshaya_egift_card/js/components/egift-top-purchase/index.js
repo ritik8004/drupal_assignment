@@ -121,6 +121,11 @@ export default class EgiftTopPurchase extends React.Component {
     // else get card-number from field.
     const cardNumber = egiftCardFor === 'self' ? linkedCardNumber : data.get('card_number');
 
+    if (cardNumber === '') {
+      document.getElementById('card-number-error').innerHTML = Drupal.t('Please enter an eGift card number.', {}, { context: 'egift' });
+      removeFullScreenLoader();
+      return false;
+    }
 
     // Check if cart id is present in local store for anonymous user.
     if (!isUserAuthenticated()) {
@@ -134,7 +139,7 @@ export default class EgiftTopPurchase extends React.Component {
       if (cartId === null) {
         document.getElementById('top-up-error').innerHTML = getDefaultErrorMessage();
         removeFullScreenLoader();
-        return;
+        return false;
       }
     }
 
@@ -183,6 +188,7 @@ export default class EgiftTopPurchase extends React.Component {
         }
       });
     }
+    return true;
   };
 
   render() {
