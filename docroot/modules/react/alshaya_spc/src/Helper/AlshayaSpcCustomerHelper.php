@@ -379,9 +379,6 @@ class AlshayaSpcCustomerHelper {
    *   The token or null.
    */
   public function getCustomerTokenBySocialDetail($mail) {
-    // @todo This function should only be responsible to return the token from
-    // session. Token creation will happen when the user authenticates either
-    // using user/pass or social login. See Ticket CORE-29594.
     $token = $this->getCustomerToken();
     if (empty($token) || !is_string($token)) {
       $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail));
