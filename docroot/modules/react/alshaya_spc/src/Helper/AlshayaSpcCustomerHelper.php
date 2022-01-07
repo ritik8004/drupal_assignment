@@ -369,7 +369,7 @@ class AlshayaSpcCustomerHelper {
    * @return string|null
    *   The token or null.
    */
-  public function getCustomerTokenBySocialDetail($mail) {
+  public function loadCustomerTokenForSocialAccount($mail) {
     $token = $this->getCustomerToken();
     if (empty($token) || !is_string($token)) {
       $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail));
