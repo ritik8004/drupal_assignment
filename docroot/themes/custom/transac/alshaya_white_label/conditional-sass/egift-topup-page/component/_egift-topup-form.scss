@@ -8,6 +8,7 @@
 
     .egift-linked-card-balance {
       margin-bottom: 0.5rem;
+      color: $egift-black-text;
 
       &-label {
         margin-#{$right}: 0.3125rem;
@@ -49,6 +50,14 @@
   .egift-for-field ~ .egift-input-textfield-wrapper {
     .egift-topup-card-number {
       margin-top: 2.1875rem;
+    }
+  }
+
+  .egift-open-amount-wrapper {
+    margin-bottom: 2rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 2.25rem;
     }
   }
 
