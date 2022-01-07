@@ -951,42 +951,6 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Authenticate customer through magento api using email.
-   *
-   * @param string $mail
-   *   The mail address.
-   *
-   * @return string
-   *   The customer token OR null.
-   */
-  public function getCustomerTokenBySocialDetail(string $mail) {
-    $endpoint = 'integration/customer/token/bySocialDetail';
-
-    $request_options = [
-      'timeout' => $this->mdcHelper->getPhpTimeout('customer_authenticate'),
-    ];
-
-    try {
-      return $this->invokeApi(
-        $endpoint,
-        [
-          'customerEmail' => $mail,
-        ],
-        'JSON',
-        FALSE,
-        $request_options
-      );
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Exception while authenticating customer. Error: @response. E-mail: @email', [
-        '@response' => $e->getMessage(),
-        '@email' => $mail,
-      ]);
-      return NULL;
-    }
-  }
-
-  /**
    * Get the customer token.
    *
    * @param string $mail
@@ -1042,6 +1006,42 @@ class AlshayaApiWrapper {
 
     $customer['token'] = $token;
     return $customer;
+  }
+
+  /**
+   * Authenticate customer through magento api using email.
+   *
+   * @param string $mail
+   *   The mail address.
+   *
+   * @return string
+   *   The customer token OR null.
+   */
+  public function getCustomerTokenBySocialDetail(string $mail) {
+    $endpoint = 'integration/customer/token/bySocialDetail';
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('customer_authenticate'),
+    ];
+
+    try {
+      return $this->invokeApi(
+        $endpoint,
+        [
+          'customerEmail' => $mail,
+        ],
+        'JSON',
+        FALSE,
+        $request_options
+      );
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Exception while authenticating customer. Error: @response. E-mail: @email', [
+        '@response' => $e->getMessage(),
+        '@email' => $mail,
+      ]);
+      return NULL;
+    }
   }
 
   /**
