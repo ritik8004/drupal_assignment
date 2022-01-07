@@ -337,15 +337,6 @@ class AlshayaSpcCustomerHelper {
 
         if (!empty($customer) && !empty($customer['customer_id'])) {
           $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-
-          // @todo Remove this condition when we uninstall alshaya_acm module.
-          $cart_id = $this->spcCookies->getSessionCartId();
-          if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
-            // @phpcs:ignore
-            \Drupal::service('acq_cart.cart_storage')->clearCart();
-            user_cookie_delete('acq_cart_id');
-          }
-
           // Check if user exists in Drupal.
           if ($user = user_load_by_mail($mail)) {
             // Update the data in Drupal to match the values in Magento.
