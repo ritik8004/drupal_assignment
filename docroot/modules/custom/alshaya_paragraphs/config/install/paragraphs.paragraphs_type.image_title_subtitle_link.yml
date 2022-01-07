@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: image_title_subtitle_link
+label: Image+Title+Subtitle+Link
+description: ''
+behavior_plugins: {  }

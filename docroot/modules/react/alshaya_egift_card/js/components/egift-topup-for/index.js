@@ -24,6 +24,14 @@ export default class EgiftTopupFor extends React.Component {
     });
   };
 
+  handleEvent = (e) => {
+    if (e.currentTarget.value.length > 0) {
+      e.currentTarget.classList.add('focus');
+    } else {
+      e.currentTarget.classList.remove('focus');
+    }
+  };
+
   render() {
     const {
       optionGiftForSelf,
@@ -89,7 +97,7 @@ export default class EgiftTopupFor extends React.Component {
           </ConditionalView>
         </ConditionalView>
         <ConditionalView condition={isUserAuthenticated() === false}>
-          <div className="card-details-label">
+          <div className="card-details-label subtitle-text">
             {Drupal.t('Card Details', {}, { context: 'egift' })}
           </div>
         </ConditionalView>
@@ -100,6 +108,7 @@ export default class EgiftTopupFor extends React.Component {
                 type="text"
                 id="card_number"
                 name="card_number"
+                onBlur={(e) => this.handleEvent(e)}
                 required
               />
               <div className="c-input__bar" />

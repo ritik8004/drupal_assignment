@@ -136,6 +136,7 @@ export default class EgiftCardStepTwo extends React.Component {
                       name="egift-message"
                       maxLength={parseInt(200, 10)}
                       onChange={this.handleEvent}
+                      onBlur={(e) => this.handleEvent(e)}
                       className="form-input"
                       defaultValue={egiftMessage}
                     />

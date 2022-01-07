@@ -72,6 +72,17 @@
 
         Object.entries(cart_data.items).forEach(function (productItem) {
           const product = productItem[1];
+          // Skip the get product data for virtual product ( This is applicable
+          // when egift card module is enabled and cart item is virtual.)
+          if (typeof drupalSettings.egiftCard !== 'undefined'
+            && typeof drupalSettings.egiftCard.enabled !== 'undefined'
+            && drupalSettings.egiftCard.enabled
+            && ((typeof product.product_type !== 'undefined'
+            && product.product_type === 'virtual')
+            || (Object.prototype.hasOwnProperty.call(product, 'isEgiftCard')
+            && product.isEgiftCard))) {
+            return;
+          }
           Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
             finalPrice: product.finalPrice,
@@ -124,6 +135,17 @@
     var items = JSON.parse(JSON.stringify(cart_data.items));
     Object.entries(items).forEach(function (productItem) {
       const product = productItem[1];
+      // Skip the get product data for virtual product ( This is applicable
+      // when egift card module is enabled and cart item is virtual.)
+      if (typeof drupalSettings.egiftCard !== 'undefined'
+        && typeof drupalSettings.egiftCard.enabled !== 'undefined'
+        && drupalSettings.egiftCard.enabled
+        && ((typeof product.product_type !== 'undefined'
+          && product.product_type === 'virtual')
+          || (Object.prototype.hasOwnProperty.call(product, 'isEgiftCard')
+            && product.isEgiftCard))) {
+        return;
+      }
       Drupal.alshayaSpc.getProductData(
         product.sku,
         function (product, extraData) {

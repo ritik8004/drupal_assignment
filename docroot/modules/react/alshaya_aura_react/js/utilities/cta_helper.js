@@ -160,13 +160,12 @@ function handleLinkYourCard(cardNumber) {
 /**
  * Helper function to handle manual link your card.
  */
-function handleManualLinkYourCard(cardNumber, mobile, otp) {
+function handleManualLinkYourCard(cardNumber, otp) {
   const data = {
     type: 'withOtp',
     uid: getUserDetails().id,
     apcIdentifierId: cardNumber,
     link: 'Y',
-    phoneNumber: mobile,
     otp,
   };
 

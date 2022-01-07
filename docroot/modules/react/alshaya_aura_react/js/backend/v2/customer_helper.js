@@ -29,15 +29,14 @@ const prepareAuraUserStatusUpdateData = (data) => {
   };
 
   if (hasValue(data.type) && data.type === 'withOtp') {
-    if (!hasValue(data.otp) || !hasValue(data.phoneNumber)) {
-      logger.error('Error while trying to prepare data for updating user AURA Status. OTP and mobile number is required. Data: @request_data', {
+    if (!hasValue(data.otp)) {
+      logger.error('Error while trying to prepare data for updating user AURA Status. OTP is required. Data: @request_data', {
         '@request_data': JSON.stringify(data),
       });
-      return getErrorResponse('OTP and mobile number is required.', 404);
+      return getErrorResponse('OTP is required.', 404);
     }
 
     processedData.statusUpdate.otp = data.otp;
-    processedData.statusUpdate.phoneNumber = data.phoneNumber.replace('+', '');
   }
 
   return processedData;

@@ -149,6 +149,7 @@ $_shilling: #a3a3a3;
 $egift-disabled-gray1: #d7d7d7;
 $egift-disabled-gray2: #707070;
 $egift-titamium-white: #e4e4e4;
+$egift-gray: #979797;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -2086,6 +2087,9 @@ $egift-landing-page-sub-block-title: $mothercare-black;
 $egift-landing-page-sub-block-subtitle: $black-two;
 $egift-landing-page-one-row-two-col-box-bg: $egift-titamium-white;
 $egift-button-border: $_gray_222;
+$egift-accordion-title: $mothercare-black;
+$egift-accordion-active-title: $marine-blue;
+$egift-accordion-content: $black-two;
 
 // Wishlist
 $wishlist-header-notification-border: $pumpkin-orange;
@@ -2118,3 +2122,12 @@ $wishlist-header-notification-span: $pumpkin-orange;
 $wishlist-share-text: $mothercare-black;
 $wishlist-share-text: $mothercare-black;
 $my-wishlist-share-modal-header: $mothercare-black;
+
+// eGift myaccount page.
+$egift-linked-card-border: $egift-gray;
+$egift-linked-card-light-text: $grey-light;
+$egift-linked-card-dark-text: $mothercare-black;
+$egift-not-link-gray-text: $egift-disabled-gray2;
+
+// eGift common.
+$egift-black-text: $mothercare-black;

@@ -28,6 +28,8 @@ import WishlistContainer from '../../../../../js/utilities/components/wishlist-c
 import WishlistPopupBlock from '../../../wishlist/components/popup-block';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { cartItemIsVirtual } from '../../../utilities/egift_util';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -43,7 +45,11 @@ export default class CartItem extends React.Component {
 
   componentDidMount() {
     const { item } = this.props;
-    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+    // Skip the get product data for virtual product ( This is applicable
+    // when egift card module is enabled and cart item is virtual.)
+    if (!(isEgiftCardEnabled() && cartItemIsVirtual(item))) {
+      Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+    }
 
     if (isWishlistEnabled()) {
       // Add event listener for add to wishlist action.

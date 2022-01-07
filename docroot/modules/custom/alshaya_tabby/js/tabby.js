@@ -2,7 +2,7 @@
   // Function to initialize the promo widget.
   Drupal.tabbyPromoInit = function (selector, amount, source) {
     // Tabby promo change event.
-    new TabbyPromo({
+    new TabbyProductPageSnippetAlShaya({
       selector: selector,
       currency: drupalSettings.alshaya_spc.currency_config.currency_code,
       price: amount,
@@ -14,7 +14,7 @@
   }
   // Function to initialize the info widget.
   Drupal.tabbyInfoInit = function (selector, amount) {
-    new TabbyInfo({
+    new TabbyLimit5kWidgetAlShaya({
       selector: selector,
       lang: drupalSettings.path.currentLanguage,
       currency: drupalSettings.alshaya_spc.currency_config.currency_code,

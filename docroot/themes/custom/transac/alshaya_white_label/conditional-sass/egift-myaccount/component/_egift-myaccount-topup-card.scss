@@ -1,0 +1,117 @@
+#my-egift-card {
+  .egifts-form-wrapper {
+    padding: 0;
+  }
+
+  .egift-card-amount-list-wrapper {
+    max-width: none;
+  }
+
+  .my-egift-top-up-wrapper {
+    margin-top: 1.875rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2.25rem;
+    }
+
+    ul {
+      @include breakpoint($tablet) {
+        margin-bottom: 2.125rem;
+      }
+
+      li {
+        &:nth-child(4n) {
+          margin-#{$right}: 1rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 3rem;
+          margin-#{$right}: 0.8125rem;
+        }
+      }
+    }
+
+    .egift-open-amount-wrapper {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1.75rem;
+      }
+
+      @include breakpoint($tablet) {
+        max-width: 15rem;
+      }
+    }
+
+    .egift-open-amount-field {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid $primary_input_border;
+      padding: 0;
+      color: $primary_form_input;
+
+      &:focus {
+        outline: 0 !important;
+      }
+
+      &:not(.error):focus ~ .c-input__bar::before,
+      &:not(.error):focus ~ .c-input__bar::after {
+        width: 50%;
+      }
+    }
+
+    .subtitle-text {
+      font-family: $alshaya-thin;
+    }
+
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+
+      @include breakpoint($only-mobile) {
+        flex-direction: column-reverse;
+      }
+
+      @include breakpoint($tablet) {
+        justify-content: flex-end;
+        margin-top: 2rem;
+      }
+    }
+
+    button[type="button"] {
+      margin-bottom: 0;
+    }
+
+    .action-topup {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+
+    .my-topup-submit-btn {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+
+    .my-topup-cancel-btn {
+      font-size: 0.8125rem;
+      line-height: 1rem;
+      background: transparent;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.5rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: 2.5rem;
+      }
+    }
+
+    button[disabled] {
+      &.my-topup-submit-btn {
+        border-color: $egift-purchase-inactive-step-text;
+        background: $egift-purchase-inactive-step-text;
+      }
+    }
+  }
+}
