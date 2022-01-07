@@ -18,17 +18,23 @@ class MyEgiftCard extends React.Component {
   }
 
   componentDidMount() {
-    this.getUserLinkedCard();
+    // Wait for the dom to load otherwise loader is removed
+    // as other js update body.
+    window.addEventListener('load', this.getUserLinkedCard);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('load', this.getUserLinkedCard);
   }
 
   /**
    * Get User linked card helper.
    */
   getUserLinkedCard = () => {
-    showFullScreenLoader();
     // Call to get customer linked card details.
     const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
     if (result instanceof Promise) {
+      showFullScreenLoader();
       result.then((response) => {
         removeFullScreenLoader();
         if (typeof response.data !== 'undefined' && response.data.response_type) {

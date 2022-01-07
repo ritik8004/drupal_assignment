@@ -54,10 +54,12 @@ export default class EgiftTopPurchase extends React.Component {
     if (!isUserAuthenticated()) {
       return;
     }
+    showFullScreenLoader();
     // Call to get customer linked card details.
     const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
     if (result instanceof Promise) {
       result.then((response) => {
+        removeFullScreenLoader();
         if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
           this.setState({
             linkedCardNumber: response.data.card_number !== null ? response.data.card_number : null,
