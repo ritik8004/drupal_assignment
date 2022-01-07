@@ -16,7 +16,7 @@
     }
 
     &::after {
-      content: '/';
+      content: '/\00a0';
       padding-#{$left}: 0;
       padding-#{$right}: 0;
     }
