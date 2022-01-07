@@ -238,6 +238,18 @@ export const updatePriceSummaryBlock = () => {
 };
 
 /**
+ * Checks if cart item is virtual or not.
+ *
+ * @param {object} item
+ *   Cart item object.
+ *
+ * @returns {boolean}
+ *   True if cart item is virtual else false.
+ */
+export const cartItemIsVirtual = (item) => (hasValue(item.product_type) && item.product_type === 'virtual')
+  || (Object.prototype.hasOwnProperty.call(item, 'isEgiftCard') && item.isEgiftCard);
+
+/**
  * Checks if cart contains atleast a single normal product.
  *
  * @param {object} cart
@@ -256,8 +268,7 @@ export const cartContainsAnyNormalProduct = (cart) => {
     }
     // If there is no product type for the cart item then it's non virtual
     // product.
-    if ((hasValue(item.product_type) && item.product_type !== 'virtual')
-      || (Object.prototype.hasOwnProperty.call(item, 'isEgiftCard') && !item.isEgiftCard)) {
+    if (!cartItemIsVirtual(item)) {
       isNonVirtual = true;
     }
   });

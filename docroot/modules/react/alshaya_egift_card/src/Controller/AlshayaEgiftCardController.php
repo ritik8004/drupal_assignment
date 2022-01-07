@@ -66,6 +66,7 @@ class AlshayaEgiftCardController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_egift_card/alshaya_egift_card_my_account',
+          'alshaya_white_label/egift-myaccount',
         ],
       ],
       '#cache' => [
@@ -113,6 +114,9 @@ class AlshayaEgiftCardController extends ControllerBase {
     // We proxy the requests via cloudflare, so we use the current domain as is
     // without any language suffix so HTTP_HOST is enough.
     $build['#attached']['drupalSettings']['egiftCard']['mdcMediaUrl'] = 'https://' . $_SERVER['HTTP_HOST'];
+
+    // Added cart notification time.
+    $build['#attached']['drupalSettings']['addToCartNotificationTime'] = $this->config('alshaya_acm_cart_notification.settings')->get('notification_time');
 
     // Use proxy on local env as here we don't have Cloudflare.
     if (Settings::get('env') === 'local') {

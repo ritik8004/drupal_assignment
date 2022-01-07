@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\rest\ResourceResponse;
+use Drupal\rest\ModifiedResourceResponse;
 use Drupal\views\Views;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -132,7 +132,7 @@ class MagazineTeasers extends ResourceBase {
   /**
    * Responds to GET requests.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return \Drupal\rest\ModifiedResourceResponse
    *   The response returns the magazine listing page.
    */
   public function get() {
@@ -195,8 +195,9 @@ class MagazineTeasers extends ResourceBase {
     else {
       $array_response_data['message'] = $this->t('Data not found');
     }
-    $response = new ResourceResponse($array_response_data);
-    $response->addCacheableDependency($response);
+    // Building response object.
+    $response = new ModifiedResourceResponse($array_response_data);
+
     return $response;
   }
 

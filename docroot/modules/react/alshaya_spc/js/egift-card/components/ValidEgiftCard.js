@@ -195,7 +195,7 @@ export default class ValidEgiftCard extends React.Component {
     const { cart } = this.props;
     const appliedAmount = (
       <span>
-        {Drupal.t('Applied card amount - @amount', {}, { context: 'egift' })}
+        {Drupal.t('Applied card amount - ', {}, { context: 'egift' })}
         <PriceElement amount={amount} format="string" showZeroValue />
       </span>
     );

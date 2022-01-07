@@ -239,8 +239,12 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Redeem amount should be less than or equal to the cart value.',
         'context' => 'egift',
       ],
-      'Pay using egift card (Available Balance: @currencyCode @amount)' => [
-        'ar' => 'Pay using egift card (Available Balance: @currencyCode @amount)',
+      'Pay using egift card ' => [
+        'ar' => 'Pay using egift card ',
+        'context' => 'egift',
+      ],
+      'Available Balance: ' => [
+        'ar' => 'Available Balance: ',
         'context' => 'egift',
       ],
       'Paid With eGfit card' => [

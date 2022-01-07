@@ -42,6 +42,21 @@
           $(node).find('.express-delivery').addClass(variantInfo.express_delivery_class);
         }
 
+        // Trigger an event on variant select.
+        // Only considers variant when url is changed.
+        var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {
+          bubbles: true,
+          detail: {
+            data: {
+              viewMode,
+              sku: $(this).val(),
+              variantSelected: $(this).val(),
+              title: variantInfo.cart_title,
+            }
+          }
+        });
+        document.dispatchEvent(currentSelectedVariantEvent);
+
         if (viewMode === 'full' || viewMode === 'matchback' || viewMode === 'matchback_mobile') {
           $(node).find('.content--item-code .field__value').html($(this).val());
 
@@ -49,11 +64,6 @@
             var url = variantInfo.url[$('html').attr('lang')] + location.search;
             url = Drupal.removeURLParameter(url, 'selected');
             window.history.replaceState(variantInfo, variantInfo.title, url);
-
-            // Trigger an event on variant select.
-            // Only considers variant when url is changed.
-            var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: $(this).val() }});
-            document.dispatchEvent(currentSelectedVariantEvent);
           }
 
           $('.language-switcher-language-url .language-link').each(function () {

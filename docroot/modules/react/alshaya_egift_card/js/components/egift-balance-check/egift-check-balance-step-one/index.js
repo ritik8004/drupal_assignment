@@ -4,6 +4,7 @@ import logger from '../../../../../js/utilities/logger';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import EgiftCheckBalanceStepTwo from '../egift-check-balance-step-two';
 import { sendOtp } from '../../../../../js/utilities/egiftCardHelper';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 export default class EgiftCheckBalanceStepOne extends React.Component {
   constructor(props) {
@@ -43,9 +44,13 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
     // Perform validation.
     if (!this.handleValidation(e)) {
       if (initialStep === 1) {
+        // Show loader on api call.
+        showFullScreenLoader();
         OtpResponse = sendOtp(cardNumber);
         if (OtpResponse instanceof Promise) {
           OtpResponse.then((res) => {
+            // Remove loader on api success.
+            removeFullScreenLoader();
             if (res.status === 200) {
               if (res.data.response_type === true) {
                 this.setState({

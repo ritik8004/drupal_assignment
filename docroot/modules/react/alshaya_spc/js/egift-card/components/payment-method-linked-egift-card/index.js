@@ -1,5 +1,4 @@
 import React from 'react';
-import getCurrencyCode from '../../../../../js/utilities/util';
 import logger from '../../../../../js/utilities/logger';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import UpdateEgiftCardAmount from '../UpdateEgiftCardAmount';
@@ -13,6 +12,7 @@ import {
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import LinkedEgiftSVG from '../../../svg-component/linked-egift-svg';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import PriceElement from '../../../utilities/special-price/PriceElement';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -30,8 +30,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       isEgiftCardExpired: false,
       // check if user performed redemption already.
       isEgiftCardredeemed: false,
-      // Amount to be passed to updatedEgiftCardAmount.
-      modalInputAmount: 0,
       // Egift Card Balance.
       egiftCardActualBalance: 0,
       // Check if user has linked egift card.
@@ -124,7 +122,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 egiftCardRemainingBalance: remainingAmount,
                 egiftCardActualBalance: currentBalance,
                 isEgiftCardExpired: (currentTime > result.data.expiry_date_timestamp),
-                modalInputAmount: cart.cart.totals.base_grand_total,
                 egiftLinkedCardNumber: result.data.card_number,
               });
             }
@@ -221,7 +218,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       // On unchecking the checkbox this will be executed to remove redemption.
       let postData = {
         redemptionRequest: {
-          masked_quote_id: cart.cart.cart_id,
+          mask_quote_id: cart.cart.cart_id,
         },
       };
       // Change payload if authenticated user.
@@ -312,22 +309,12 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
   // Perform Calulations and set state.
   performCalculations = (balancePayable, redeemedAmount, egiftCardActualBalance, cardNumber) => {
+    // Remaining amount is the available card balance after redemption.
     const remainingAmount = egiftCardActualBalance - redeemedAmount;
-    let inputAmount = redeemedAmount;
-    if (balancePayable === 0 && redeemedAmount > 0) {
-      // If api response has balance payable.
-      // then show user for using different payment method.
-      inputAmount = redeemedAmount;
-    } else if (balancePayable > 0 && redeemedAmount > 0) {
-      // If api response has no balance payable.
-      // then show remaining balance to the user.
-      inputAmount = balancePayable + redeemedAmount;
-    }
     this.setState({
       isEgiftCardredeemed: true,
       eGiftbalancePayable: balancePayable,
       egiftCardRemainingBalance: remainingAmount,
-      modalInputAmount: inputAmount,
       egiftLinkedCardNumber: cardNumber,
       openModal: false,
     });
@@ -341,7 +328,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       setChecked,
       isEgiftCardExpired,
       isEgiftCardredeemed,
-      modalInputAmount,
       egiftCardActualBalance,
       egiftLinkedCardNumber,
       renderWait,
@@ -407,12 +393,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                   }
                   <div className="spc-payment-method-desc">
                     <div className="desc-content">
-                      {
-                        Drupal.t('(Available Balance: @currencyCode @amount)',
-                          {
-                            '@currencyCode': getCurrencyCode(), '@amount': cardBlanceAmount,
-                          }, { context: 'egift' })
-                      }
+                      {Drupal.t('Available Balance: ', {}, { context: 'egift' })}
+                      <PriceElement amount={cardBlanceAmount} format="string" showZeroValue />
                     </div>
                   </div>
                 </ConditionalView>
@@ -423,7 +405,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                     <UpdateEgiftCardAmount
                       closeModal={this.closeModal}
                       open={openModal}
-                      amount={modalInputAmount}
+                      amount={cart.cart.totals.egiftRedeemedAmount}
                       remainingAmount={egiftCardRemainingBalance}
                       updateAmount={this.handleAmountUpdate}
                       cart={cart}
@@ -433,12 +415,9 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                   <ConditionalView condition={eGiftbalancePayable > 0}>
                     <div className="spc-payment-method-desc">
                       <div className="desc-content">
-                        {
-                          Drupal.t('Pay @currencyCode @amount using another payment method to complete purchase',
-                            {
-                              '@currencyCode': getCurrencyCode(), '@amount': eGiftbalancePayable,
-                            }, { context: 'egift' })
-                        }
+                        {Drupal.t('Pay ', {}, { context: 'egift' })}
+                        <PriceElement amount={eGiftbalancePayable} format="string" showZeroValue />
+                        {Drupal.t(' using another payment method to complete purchase', {}, { context: 'egift' })}
                       </div>
                     </div>
                   </ConditionalView>

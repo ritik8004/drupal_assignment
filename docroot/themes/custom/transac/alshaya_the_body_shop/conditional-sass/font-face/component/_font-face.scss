@@ -4,6 +4,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Druk-Bold-Web";
   src:
+    local("Druk Bold Web"),
+    local("Druk-Bold-Web"),
     url("#{$base_theme_fonts_directory_path}/Druk-Bold-Web.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Druk-Bold-Web.woff") format("woff");
   font-weight: normal;
@@ -14,6 +16,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "DrukCond-Super-Cy-Web";
   src:
+    local("DrukCond Super Cy Web"),
+    local("DrukCond-Super-Cy-Web"),
     url("#{$base_theme_fonts_directory_path}/DrukCond-Super-Cy-Web.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/DrukCond-Super-Cy-Web.woff") format("woff");
   font-weight: normal;
@@ -24,6 +28,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "DrukWide-Bold-Cy-Web";
   src:
+    local("DrukWide Bold Cy Web"),
+    local("DrukWide-Bold-Cy-Web"),
     url("#{$base_theme_fonts_directory_path}/DrukWide-Bold-Cy-Web.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/DrukWide-Bold-Cy-Web.woff") format("woff");
   font-weight: normal;
@@ -34,6 +40,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "DrukWide-Super-Web";
   src:
+    local("DrukWide Super Web"),
+    local("DrukWide-Super-Web"),
     url("#{$base_theme_fonts_directory_path}/DrukWide-Super-Web.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/DrukWide-Super-Web.woff") format("woff");
   font-weight: normal;
@@ -44,6 +52,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Recoleta-Medium";
   src:
+    local("Recoleta Medium"),
+    local("Recoleta-Medium"),
     url("#{$base_theme_fonts_directory_path}/Recoleta-Medium.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Recoleta-Medium.woff") format("woff");
   font-weight: normal;
@@ -54,6 +64,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Recoleta-SemiBold";
   src:
+    local("Recoleta SemiBold"),
+    local("Recoleta-SemiBold"),
     url("#{$base_theme_fonts_directory_path}/Recoleta-SemiBold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Recoleta-SemiBold.woff") format("woff");
   font-weight: normal;
@@ -64,6 +76,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-Regular";
   src:
+    local("WorkSans Regular"),
+    local("WorkSans-Regular"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-Regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-Regular.woff") format("woff");
   font-weight: normal;
@@ -74,6 +88,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-Light";
   src:
+    local("WorkSans Light"),
+    local("WorkSans-Light"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-Light.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-Light.woff") format("woff");
   font-weight: normal;
@@ -84,6 +100,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-Medium";
   src:
+    local("WorkSans Medium"),
+    local("WorkSans-Medium"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-Medium.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-Medium.woff") format("woff");
   font-weight: normal;
@@ -94,6 +112,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-SemiBold";
   src:
+    local("WorkSans SemiBold"),
+    local("WorkSans-SemiBold"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-SemiBold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-SemiBold.woff") format("woff");
   font-weight: normal;
@@ -104,6 +124,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-Bold";
   src:
+    local("WorkSans Bold"),
+    local("WorkSans-Bold"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-Bold.woff") format("woff");
   font-weight: normal;
@@ -114,6 +136,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "29LT-Bukra-Condensed-Bold";
   src:
+    local("29LT Bukra Condensed Bold"),
+    local("29LT-Bukra-Condensed-Bold"),
     url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Condensed-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Condensed-Bold.woff") format("woff");
   font-weight: normal;
@@ -124,6 +148,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "29LT-Bukra-Wide-Bold";
   src:
+    local("29LT Bukra Wide Bold"),
+    local("29LT-Bukra-Wide-Bold"),
     url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Wide-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Wide-Bold.woff") format("woff");
   font-weight: normal;
@@ -134,6 +160,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "MizanAR-Medium";
   src:
+    local("MizanAR Medium"),
+    local("MizanAR-Medium"),
     url("#{$base_theme_fonts_directory_path}/MizanAR-Medium.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/MizanAR-Medium.woff") format("woff");
   font-weight: normal;
@@ -144,6 +172,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Mada-Bold";
   src:
+    local("Mada Bold"),
+    local("Mada-Bold"),
     url("#{$base_theme_fonts_directory_path}/Mada-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Mada-Bold.woff") format("woff");
   font-weight: normal;
@@ -154,6 +184,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Mada-SemiBold";
   src:
+    local("Mada SemiBold"),
+    local("Mada-SemiBold"),
     url("#{$base_theme_fonts_directory_path}/Mada-SemiBold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Mada-SemiBold.woff") format("woff");
   font-weight: normal;
@@ -164,6 +196,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Mada-Medium";
   src:
+    local("Mada Medium"),
+    local("Mada-Medium"),
     url("#{$base_theme_fonts_directory_path}/Mada-Medium.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Mada-Medium.woff") format("woff");
   font-weight: normal;
@@ -174,6 +208,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Mada-Regular";
   src:
+    local("Mada Regular"),
+    local("Mada-Regular"),
     url("#{$base_theme_fonts_directory_path}/Mada-Regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Mada-Regular.woff") format("woff");
   font-weight: normal;
@@ -183,7 +219,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5ir') format('woff');
+  src:
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?D7b5id') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5ir') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
