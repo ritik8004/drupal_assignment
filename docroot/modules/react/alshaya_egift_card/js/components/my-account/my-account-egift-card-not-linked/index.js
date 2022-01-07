@@ -17,6 +17,14 @@ class EgiftCardNotLinked extends React.Component {
     };
   }
 
+  handleEvent = (e) => {
+    if (e.currentTarget.value.length > 0) {
+      e.currentTarget.classList.add('focus');
+    } else {
+      e.currentTarget.classList.remove('focus');
+    }
+  };
+
   /**
    * Get opt code for card number verification.
    */
@@ -178,7 +186,7 @@ class EgiftCardNotLinked extends React.Component {
     const { enableVerifyCode } = this.state;
 
     return (
-      <div className="egift-notlinked-warpper">
+      <div className="egift-notlinked-wrapper">
         <div className="egift-notlinked-title">{Drupal.t('Link my egift card', {}, { context: 'egift' })}</div>
         <div className="egift-link-card-text">
           {
@@ -192,62 +200,74 @@ class EgiftCardNotLinked extends React.Component {
         </div>
         <div id="resend-success" className="egift-resend-message" />
         <form
-          className="egift-validate-form"
+          className="egift-validate-form egifts-form-wrapper"
           method="post"
           id="egift-val-form"
           onSubmit={(e) => this.handleSubmit(e)}
         >
-          <div className="egift-textfield">
+          <div className="egift-input-textfield-item egift-verify-card-textfield">
             <input
               type="text"
               name="egift-card-number"
-              placeholder={Drupal.t('eGift Card Number', {}, { context: 'egift' })}
               className="egift-card-number"
               readOnly={enableVerifyCode}
               onFocus={() => this.clearErrors()}
+              onBlur={(e) => this.handleEvent(e)}
             />
+            <div className="c-input__bar" />
+            <label>{Drupal.t('eGift Card Number', {}, { context: 'egift' })}</label>
             <div id="egift-card-number-error" className="error" />
           </div>
           <ConditionalView condition={enableVerifyCode === false}>
-            <button
-              className="egift-button"
-              id="egift-redeem-get-code-button"
-              type="submit"
-              onClick={() => { this.state.action = 'getCode'; }}
-            >
-              {Drupal.t('Get Code', {}, { context: 'egift' })}
-            </button>
+            <div className="action-buttons">
+              <button
+                className="egift-button"
+                id="egift-redeem-get-code-button"
+                type="submit"
+                onClick={() => { this.state.action = 'getCode'; }}
+              >
+                {Drupal.t('Get Code', {}, { context: 'egift' })}
+              </button>
+            </div>
           </ConditionalView>
           <ConditionalView condition={enableVerifyCode}>
-            <div className="egift-verify-code">
+            <div className="egift-verify-code egift-input-textfield-item ">
               <input
                 type="text"
                 name="otp-code"
-                placeholder={Drupal.t('Enter verification code', {}, { context: 'egift' })}
                 className="egift-card-verify-code"
                 onFocus={() => this.clearErrors()}
+                onBlur={(e) => this.handleEvent(e)}
               />
+              <div className="c-input__bar" />
+              <label>{Drupal.t('Enter verification code', {}, { context: 'egift' })}</label>
               <div id="egift-code-error" className="error" />
             </div>
             <div className="egift-linked-card-links">
-              <div className="egift-resend">
-                <span>{Drupal.t('Didn\'t receive?', {}, { context: 'egift' })}</span>
-                <span onClick={(e) => this.handleResendCode(e)}>
-                  {Drupal.t('Resend Code', {}, { context: 'egift' })}
-                </span>
-                <span onClick={(e) => this.handleChangeCardNumber(e)}>
-                  {Drupal.t('Change Card?', {}, { context: 'egift' })}
-                </span>
+              <div className="egift-resend-wrapper">
+                <div className="egift-resend-wrapper__left">
+                  <span className="egift-light-text">{Drupal.t('Didn\'t receive?', {}, { context: 'egift' })}</span>
+                  <span className="egift-resend-code-text" onClick={(e) => this.handleResendCode(e)}>
+                    {Drupal.t('Resend Code', {}, { context: 'egift' })}
+                  </span>
+                </div>
+                <div className="egift-resend-wrapper__right">
+                  <span className="egift-change-card-text" onClick={(e) => this.handleChangeCardNumber(e)}>
+                    {Drupal.t('Change Card?', {}, { context: 'egift' })}
+                  </span>
+                </div>
               </div>
             </div>
-            <button
-              className="egift-button"
-              id="egift-redeem-button"
-              type="submit"
-              onClick={() => { this.state.action = 'verifyOtp'; }}
-            >
-              {Drupal.t('Verify', {}, { context: 'egift' })}
-            </button>
+            <div className="action-buttons">
+              <button
+                className="egift-button"
+                id="egift-redeem-button"
+                type="submit"
+                onClick={() => { this.state.action = 'verifyOtp'; }}
+              >
+                {Drupal.t('Verify', {}, { context: 'egift' })}
+              </button>
+            </div>
           </ConditionalView>
 
         </form>

@@ -149,6 +149,7 @@ $_shilling: #a3a3a3;
 $egift-disabled-gray1: #d7d7d7;
 $egift-disabled-gray2: #707070;
 $egift-titamium-white: #e4e4e4;
+$egift-gray: #979797;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -2116,3 +2117,9 @@ $wishlist-header-notification-span: $pumpkin-orange;
 $wishlist-share-text: $mothercare-black;
 $wishlist-share-text: $mothercare-black;
 $my-wishlist-share-modal-header: $mothercare-black;
+
+// eGift myaccount page.
+$egift-linked-card-border: $egift-gray;
+$egift-linked-card-light-text: $grey-light;
+$egift-linked-card-dark-text: $mothercare-black;
+$egift-not-link-gray-text: $egift-disabled-gray2;
