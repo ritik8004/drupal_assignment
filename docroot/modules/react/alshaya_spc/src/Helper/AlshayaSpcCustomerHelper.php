@@ -388,7 +388,7 @@ class AlshayaSpcCustomerHelper {
    * @param string|null $token
    *   The token.
    */
-  public function setCustomerTokenInSession($token) {
+  private function setCustomerTokenInSession($token) {
     $this->session->set('magento_customer_token', $token);
   }
 
