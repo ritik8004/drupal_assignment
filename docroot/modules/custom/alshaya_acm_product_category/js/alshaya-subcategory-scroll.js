@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   // Global variable to set scroll position to be used in viewsScrollTop command.
   var exposedViewOffset;

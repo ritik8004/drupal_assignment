@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   $('body').once('track-add-to-cart-success').on('product-add-to-cart-success', '.sku-base-form', function (event) {
     Drupal.logViaTrackJs({

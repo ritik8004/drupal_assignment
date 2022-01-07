@@ -6,7 +6,6 @@
 /* global isRTL */
 
 (function ($) {
-  'use strict';
   Drupal.behaviors.magazine_gallery = {
     attach: function (context, settings) {
 

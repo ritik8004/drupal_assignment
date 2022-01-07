@@ -4,7 +4,6 @@
  */
 
 (function ($) {
-  'use strict';
 
   Drupal.processBackToSearch = function () {
     // Do nothing if not doing search as of now.

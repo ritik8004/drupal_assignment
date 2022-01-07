@@ -6,7 +6,6 @@
 /* global debounce */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * Adding the hover effect to colour swatches on plp.

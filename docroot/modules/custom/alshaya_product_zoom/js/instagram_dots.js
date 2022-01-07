@@ -6,7 +6,6 @@
 /* global isRTL */
 
 (function ($, Drupal) {
-  'use strict';
   var transformValueBackward = 19;
   var transformValueForward = -19;
   // Distance in px - by how much you want to move the dots.

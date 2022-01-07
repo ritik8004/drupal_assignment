@@ -6,7 +6,6 @@
 /* global autosize */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.autoSizeTextarea = {
     attach: function (context, settings) {

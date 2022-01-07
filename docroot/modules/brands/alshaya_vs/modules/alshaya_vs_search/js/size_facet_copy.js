@@ -1,5 +1,4 @@
 (function ($) {
-  'use strict';
 
   Drupal.behaviors.sizeFacetCopy = {
     attach: function (context, settings) {
