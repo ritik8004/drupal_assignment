@@ -12,14 +12,6 @@ use Drupal\paragraphs\Entity\Paragraph;
  */
 
 /**
- * Implements hook_page_attachments().
- */
-function alshaya_secondary_main_menu_page_attachments(array &$page) {
-  $page['#attached']['library'][] = 'alshaya_secondary_main_menu/secondary_main_menu';
-  $page['#attached']['library'][] = 'alshaya_white_label/secondary-menu';
-}
-
-/**
  * Implements hook_theme().
  */
 function alshaya_secondary_main_menu_theme($existing, $type, $theme, $path) {
