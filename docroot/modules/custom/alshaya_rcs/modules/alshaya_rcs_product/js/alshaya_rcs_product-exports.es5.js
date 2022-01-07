@@ -623,7 +623,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'url':
-      value = `${drupalSettings.rcsPhSettings.productPathPrefix}${input.url_key}.html`;
+      value = `${input.url_key}.html`;
       break;
 
     case 'brand_logo':

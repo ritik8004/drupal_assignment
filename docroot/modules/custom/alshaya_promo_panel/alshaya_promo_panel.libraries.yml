@@ -5,3 +5,4 @@ promo-panel:
   dependencies:
     - core/drupal
     - core/jquery
+    - alshaya_seo_transac/gtm
