@@ -37,14 +37,13 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
    *   The Event to process.
    */
   public function onKernelRequestRedirect(GetResponseEvent $event) {
-    $routeName = $this->routeMatch->getRouteName();
+    $route_name = $this->routeMatch->getRouteName();
     $request = $event->getRequest();
     $request_path = $request->getPathInfo();
 
-    if (in_array($routeName, [
-      'entity.taxonomy_term.canonical',
-      'alshaya_master.home',
-    ])) {
+    $redirect_routes = ['entity.taxonomy_term.canonical', 'alshaya_master.home'];
+    $is_promotion_page = ($route_name == 'entity.node.canonical' && $this->routeMatch->getParameter('node')->bundle() == 'rcs_promotion');
+    if (in_array($route_name, $redirect_routes) || $is_promotion_page) {
       if (substr($request_path, -1) != '/') {
         $request_uri = $request_path . '/';
         $response = new RedirectResponse($request_uri, 301);
