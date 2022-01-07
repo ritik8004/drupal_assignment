@@ -167,31 +167,7 @@ function alshaya_mc_alshaya_performance_preload_alter(array &$preload) {
 
   $preload[] = [
     'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-icons.woff?D7b5iT',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-thin.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-bold.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-arabic-thin.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-arabic-bold.woff2',
+    'href' => $fonts_directory_path . '/alshaya-icons.woff2?D7b5if',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];
