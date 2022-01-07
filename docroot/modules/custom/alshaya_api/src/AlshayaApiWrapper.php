@@ -994,11 +994,12 @@ class AlshayaApiWrapper {
    * @param string $pass
    *   The customer password.
    *
-   * @return string
-   *   The customer token or null.
+   * @return array
+   *   The customer data with token.
    */
-  public function getCustomerToken(string $mail, string $pass) {
+  public function getCustomerUsingAuthDetails(string $mail, string $pass) {
     $token = NULL;
+    $customer = [];
     $endpoint = 'integration/customer/token';
 
     $request_options = [
@@ -1022,13 +1023,25 @@ class AlshayaApiWrapper {
       $token = $token === FALSE ? NULL : $token;
     }
     catch (\Exception $e) {
-      $this->logger->error('Exception while getting customer token. Error: @response. E-mail: @email', [
+      $this->logger->notice('Exception while getting customer token. Error: @response. E-mail: @email', [
         '@response' => $e->getMessage(),
         '@email' => $mail,
       ]);
     }
 
-    return $token;
+    try {
+      // Get the user data from Magento.
+      $customer = !empty($token) ? $this->getCustomer($mail) : $customer;
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Exception while getting customer data. Error: @response. E-mail: @email', [
+        '@response' => $e->getMessage(),
+        '@email' => $mail,
+      ]);
+    }
+
+    $customer['token'] = $token;
+    return $customer;
   }
 
   /**

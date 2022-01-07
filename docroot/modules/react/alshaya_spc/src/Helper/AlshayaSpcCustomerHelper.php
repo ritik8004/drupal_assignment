@@ -327,30 +327,34 @@ class AlshayaSpcCustomerHelper {
     global $_alshaya_acm_customer_addressbook_processed;
 
     try {
-      $token = $this->apiWrapper->getCustomerToken($mail, $pass);
+      $customer = $this->apiWrapper->getCustomerUsingAuthDetails($mail, $pass);
 
-      if (!empty($token)) {
+      if (!empty($customer['customer_id'])) {
         // Set the token in session.
-        $this->setCustomerTokenInSession($token);
-        // Get the user data from Magento.
-        $customer = $this->apiWrapper->getCustomer($mail);
+        $this->setCustomerTokenInSession($customer['token']);
+        $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
-        if (!empty($customer) && !empty($customer['customer_id'])) {
-          $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-          // Check if user exists in Drupal.
-          if ($user = user_load_by_mail($mail)) {
-            // Update the data in Drupal to match the values in Magento.
-            alshaya_acm_customer_update_user_data($user, $customer);
-          }
-          // Create user.
-          else {
-            /** @var \Drupal\user\Entity\User $user */
-            $user = alshaya_acm_customer_create_drupal_user($customer);
-          }
-          $_alshaya_acm_customer_addressbook_processed = TRUE;
-
-          return array_merge($customer, ['user' => $user]);
+        // @todo Remove this condition when we uninstall alshaya_acm module.
+        $cart_id = $this->spcCookies->getSessionCartId();
+        if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
+          // @phpcs:ignore
+          \Drupal::service('acq_cart.cart_storage')->clearCart();
+          user_cookie_delete('acq_cart_id');
         }
+
+        // Check if user exists in Drupal.
+        if ($user = user_load_by_mail($mail)) {
+          // Update the data in Drupal to match the values in Magento.
+          alshaya_acm_customer_update_user_data($user, $customer);
+        }
+        // Create user.
+        else {
+          /** @var \Drupal\user\Entity\User $user */
+          $user = alshaya_acm_customer_create_drupal_user($customer);
+        }
+        $_alshaya_acm_customer_addressbook_processed = TRUE;
+
+        return array_merge($customer, ['user' => $user]);
       }
     }
     catch (\Exception $e) {
