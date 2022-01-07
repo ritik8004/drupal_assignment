@@ -10,7 +10,6 @@ dependencies:
     - paragraphs.paragraphs_type.image_title_subtitle_link
   module:
     - link
-    - svg_image
 id: paragraph.image_title_subtitle_link.default
 targetEntityType: paragraph
 bundle: image_title_subtitle_link

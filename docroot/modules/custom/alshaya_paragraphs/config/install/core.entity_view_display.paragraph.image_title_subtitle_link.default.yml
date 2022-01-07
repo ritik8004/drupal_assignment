@@ -9,7 +9,6 @@ dependencies:
     - paragraphs.paragraphs_type.image_title_subtitle_link
   module:
     - link
-    - svg_image
 id: paragraph.image_title_subtitle_link.default
 targetEntityType: paragraph
 bundle: image_title_subtitle_link
@@ -19,10 +18,6 @@ content:
     weight: 2
     label: hidden
     settings:
-      svg_attributes:
-        width: null
-        height: null
-      svg_render_as_image: true
       image_style: ''
       image_link: ''
     third_party_settings: {  }
@@ -56,5 +51,4 @@ content:
     third_party_settings: {  }
     type: string
     region: content
-hidden:
-  search_api_excerpt: true
+hidden: {  }
