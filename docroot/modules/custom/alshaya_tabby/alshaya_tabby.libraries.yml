@@ -1,3 +1,7 @@
+tabby_integration:
+  js:
+    https://checkout.tabby.ai/integration.js: { type: external }
+
 tabby_sdk:
   js:
     js/tabby.js: { }
