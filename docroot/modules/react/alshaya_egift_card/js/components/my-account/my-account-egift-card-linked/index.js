@@ -79,8 +79,8 @@ class EgiftCardLinked extends React.Component {
    * Cancel top form and show card details.
    */
   handleCancelTopUp = () => {
-    document.getElementById('card-details').style.display = 'block';
-    document.getElementById('egift-remove-button').style.display = 'block';
+    document.getElementById('card-details').style.display = 'flex';
+    document.getElementById('egift-remove-button').style.display = 'flex';
     this.setState({
       topUpForm: false,
     });
