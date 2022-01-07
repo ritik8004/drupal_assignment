@@ -1134,11 +1134,17 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
  */
 const getProductShippingMethods = async (currentArea, sku = undefined, cartId = null) => {
   let cartIdInt = cartId;
+  let cartData = null;
   if (sku === undefined && cartId === null) {
-    const cartData = window.commerceBackend.getCartDataFromStorage();
+    cartData = window.commerceBackend.getCartDataFromStorage();
     if (cartData.cart.cart_id !== null) {
       cartIdInt = cartData.cart.cart_id_int;
     }
+  }
+  // Skip the get shipping method for virtual product ( This is applicable
+  // when egift card module is enabled and cart item is virtual.)
+  if (cartData && cartContainsOnlyVirtualProduct(cartData.cart)) {
+    return null;
   }
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
   const attributes = [];
