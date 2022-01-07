@@ -158,6 +158,12 @@ function alshaya_performance_flush_frontend_caches($include_twig = FALSE) {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_performance_page_attachments_alter(array &$attachments) {
+  // No preloads if param present.
+  $preload_param = \Drupal::request()->get('preload');
+  if (isset($preload_param) && $preload_param == 0) {
+    return;
+  }
+
   $preload = [];
 
   \Drupal::moduleHandler()->alter('alshaya_performance_preload', $preload);

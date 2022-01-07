@@ -524,43 +524,7 @@ function alshaya_hm_alshaya_performance_preload_alter(array &$preload) {
 
   $preload[] = [
     'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-icons.woff?p1AKYu',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/HMSans-Regular.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/HMSans-SemiBold.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/HMSans-Bold.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/HMSansArabic-Regular.woff2?jAKPu',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/HMSansArabic-SemiBold.woff2?jDKPu',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/HMSansArabic-Bold.woff2?jDKZu',
+    'href' => $fonts_directory_path . '/alshaya-icons.woff2?p1AKYf',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];
