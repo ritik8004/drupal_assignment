@@ -102,7 +102,6 @@ gtm_pdp_default:
 
 gtm_initial_data_push:
   version: 1.x
-  header: true
   js:
     js/alshaya_seo.gtm.initial_data_push.js: { weight: -1 }
   dependencies:

@@ -7,17 +7,17 @@ alshaya_js_optimisations.settings:
       label: 'Enable JS Uglification'
     critical_js:
       type: mapping
-      label: 'Critical JS Settings'
+      label: 'Critical JS and Categorisation settings'
       mapping:
-        enabled:
+        status:
           type: boolean
-          label: 'Enable Critical JS'
+          label: 'Enable Critical JS and Categorisation'
         ie_only:
           type: string
           label: 'IE Only Scripts'
         site_libraries:
           type: string
-          label: 'Site Basic Scripts'
+          label: 'Site Libraries'
         critical:
           type: string
           label: 'Critical Scripts'
@@ -27,6 +27,6 @@ alshaya_js_optimisations.settings:
         sitewide_2:
           type: string
           label: 'Sitewide Scripts 2'
-        hidden_data:
+        processed_libraries:
           type: string
-          label: 'Resolved libries data with weights'
+          label: 'Processed JS categories with dependencies'

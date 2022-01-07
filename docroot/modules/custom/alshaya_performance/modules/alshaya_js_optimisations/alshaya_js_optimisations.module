@@ -5,64 +5,112 @@
  * Alshaya JS Optimisations Module file.
  */
 
-use Drupal\Core\Asset\AttachedAssetsInterface;
-use Drupal\Component\Serialization\Yaml;
+use Drupal\alshaya_js_optimisations\AlshayaJsOptimisationHelper;
 
 /**
  * Implements hook_library_info_alter().
  */
 function alshaya_js_optimisations_library_info_alter(&$libraries, $extension) {
-  $config = \Drupal::config('alshaya_js_optimisations.settings');
+  $jsService = \Drupal::service('alshaya_js_optimisations.helper');
+
+  // Fetch settings once instead of calling on every info_alter per page request.
+  if (!isset(AlshayaJsOptimisationHelper::$criticalJsEnabled)) {
+    $jsService->fetchCriticalJsSettings();
+  }
+
+  // Preconditions.
+  if (!AlshayaJsOptimisationHelper::$criticalJsEnabled || empty(AlshayaJsOptimisationHelper::$resolvedLibraries)) {
+    return;
+  }
+
   $performance = \Drupal::config('system.performance');
-  $critical_js = $config->get('critical_js');
-  if ($critical_js['enabled'] && $performance->get('js.preprocess') && !empty($critical_js['hidden_data'])) {
-    $hidden_data = Yaml::decode($critical_js['hidden_data']);
-    if (!empty($hidden_data) && isset($hidden_data[$extension])) {
-      foreach ($libraries as $library => $attributes) {
-        foreach($libraries[$library]['js'] as $path => $data) {
-          if (!empty($hidden_data[$extension][$library]['data-group']) && !empty($hidden_data[$extension][$library]['weight'])) {
-            $libraries[$library]['js'][$path]['attributes']['data-group'] = $hidden_data[$extension][$library]['data-group'];
-            $libraries[$library]['js'][$path]['weight'] = $hidden_data[$extension][$library]['weight'];
-          }
-          else {
-            $libraries[$library]['js'][$path]['attributes']['defer'] = TRUE;
-          }
-        }
+  AlshayaJsOptimisationHelper::$isJsAggregation = $performance->get('js.preprocess');
+  if (!AlshayaJsOptimisationHelper::$isJsAggregation) {
+    return;
+  }
+
+  $processed_libraries = AlshayaJsOptimisationHelper::$resolvedLibraries;
+
+  foreach ($libraries as $library => $library_item) {
+    if (empty($library_item['js'])) {
+      continue;
+    }
+
+    // Enforce JS load on footer.
+    $library_item['header'] = FALSE;
+
+    foreach ($library_item['js'] as $path => $library_config) {
+      $attributes = !empty($library_config['attributes']) ? $library_config['attributes'] : [];
+
+      // Add script categories attributes and weights.
+      if (
+        !empty($processed_libraries[$extension]) &&
+        !empty($processed_libraries[$extension][$library]) &&
+        !empty($processed_libraries[$extension][$library]['attributes']) &&
+        !empty($processed_libraries[$extension][$library]['attributes']['data-group']) &&
+        !empty($processed_libraries[$extension][$library]['weight'])
+      ) {
+        $attributes = array_merge(
+          $attributes,
+          $processed_libraries[$extension][$library]['attributes']
+        );
+        $library_config['weight'] = $processed_libraries[$extension][$library]['weight'];
       }
+
+      // Add 'defer' on all non critical libraries.
+      if (empty($attributes['data-group'])) {
+        $attributes['defer'] = TRUE;
+      }
+
+      $library_config['attributes'] = $attributes;
+      $library_item['js'][$path] = $library_config;
     }
+
+    $libraries[$library] = $library_item;
   }
 }
 
 /**
  * Implements hook_js_alter().
  */
-function alshaya_js_optimisations_js_alter(&$javascript) {
-  $config = \Drupal::config('alshaya_js_optimisations.settings');
-  $critical_js = $config->get('critical_js');
-  if ($critical_js['enabled']) {
-    foreach ($javascript as $key => $value) {
-      $javascript[$key]['preprocess'] = TRUE;
-    }
-  }
-}
+function alshaya_js_optimisations_js_alter(&$javascripts) {
+  $status_critical_js = !AlshayaJsOptimisationHelper::$isJsAggregation || !AlshayaJsOptimisationHelper::$criticalJsEnabled;
+  $status_uglification = \Drupal::config('alshaya_js_optimisations.settings')->get('enable_uglification');
+  $mapping = [];
 
-/**
- * Implements hook_js_alter().
- */
-function alshaya_js_optimisations_js_alter(&$javascripts, AttachedAssetsInterface $assets) {
-  // Alter the JS file only if js uglification is enabled.
-  if (\Drupal::config('alshaya_js_optimisations.settings')->get('enable_uglification')) {
+  if ($status_uglification) {
     $mapping = file_get_contents('build/js-performance-build.json');
-    // Proceed only if file is present.
-    if ($mapping) {
+
+    if (!empty($mapping)) {
       $mapping = json_decode($mapping, TRUE);
-      // Iterate through all the javascript files and replace with the updated
-      // mapping if present.
-      foreach ($javascripts as $key => $value) {
-        if (in_array($key, $mapping['source'])) {
-          $javascripts[$key]['data'] = 'build/' . $value['data'];
-        }
-      }
     }
+    else {
+      $status_uglification = FALSE;
+    }
+  }
+
+  if (!$status_critical_js && !$status_uglification) {
+    // Critical JS and Uglification disabled.
+    return;
+  }
+
+  foreach ($javascripts as $key => $value) {
+    if ($value['type'] !== 'file') {
+      // Processing not required for external scripts.
+      continue;
+    }
+
+    // Enforce load on footer and aggregation on all local scripts.
+    if ($status_critical_js) {
+      $value['preprocess'] = TRUE;
+      $value['scope'] = 'footer';
+    }
+
+    // Replace the uglified JS if available in the mapping.
+    if ($status_uglification && in_array($key, $mapping['source'])) {
+      $value['data'] = 'build/' . $value['data'];
+    }
+
+    $javascripts[$key] = $value;
   }
 }
