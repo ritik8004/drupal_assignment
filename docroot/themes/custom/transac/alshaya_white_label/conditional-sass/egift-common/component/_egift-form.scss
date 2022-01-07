@@ -142,6 +142,12 @@
     button[disabled] {
       color: $egift-purchase-disabled-btn-text;
     }
+
+    .form-error {
+      &:empty {
+        padding: 0 !important;
+      }
+    }
   }
 }
 

@@ -1,4 +1,6 @@
 .topup-page {
+  color: $egift-black-text;
+
   @include breakpoint($only-mobile) {
     padding: 1.375rem 0 0;
     margin-bottom: 0;
@@ -7,6 +9,7 @@
   @include breakpoint($tablet) {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
+    margin-top: 3.5rem;
   }
 
   p {
