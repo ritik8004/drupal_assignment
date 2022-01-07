@@ -5,6 +5,7 @@
  * Module file for alshaya_promo_panel.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 
@@ -26,7 +27,11 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
 
         if ($variables['content']) {
           $variables['#cache']['contexts'][] = 'url.path';
-
+          $defaultLang = \Drupal::languageManager()->getDefaultLanguage();
+          // Fetching block title default translation.
+          \Drupal::languageManager()->setConfigOverrideLanguage($defaultLang);
+          $block = Block::load('todaysoffers');
+          $gtmBlockTitle = !empty($block) ? $block->label() : "TODAY'S OFFERS";
           // Make label a link to redirect to Promo panel page on mobile.
           $element['label'] = [
             '#type' => 'link',
@@ -35,6 +40,7 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
             '#options' => [
               'attributes' => [
                 'class' => ['mobile-link'],
+                'gtm-title' => $gtmBlockTitle,
               ],
             ],
           ];
