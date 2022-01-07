@@ -236,7 +236,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                       <div className="egift-type-resend_otp">
                         <span>
                           {Drupal.t(
-                            "Didn't receive?",
+                            "Didn't receive? ",
                             {},
                             { context: 'egift' },
                           )}

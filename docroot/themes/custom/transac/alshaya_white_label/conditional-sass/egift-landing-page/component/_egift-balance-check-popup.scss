@@ -73,6 +73,10 @@
       background-color: $egift-balance-sidebar-bg;
       text-align: #{$left};
 
+      .error {
+        line-height: 1.25rem;
+      }
+
       .egift-header-wrapper {
         font-size: 1rem;
         line-height: 1.25rem;
