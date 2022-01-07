@@ -389,6 +389,11 @@ function rcs_placeholders_page_bottom(array &$page_bottom) {
   // Allow other modules to alter the data.
   \Drupal::moduleHandler()->alter('rcs_placeholders_graphql_query', $queries);
 
+  // Store cache data an unset in original array so that no further processing
+  // for it occurs in the array.
+  $cache_meta_data = $queries['#cache'] ?? [];
+  unset($queries['#cache']);
+
   // Convert array to graphql.
   foreach ($queries as $query => $fields) {
     $queries[$query] = ArrayGraphQL::convert($fields);
@@ -399,5 +404,6 @@ function rcs_placeholders_page_bottom(array &$page_bottom) {
     '#type'  => 'html_tag',
     '#tag'   => 'script',
     '#value' => Markup::create('var rcsPhGraphqlQuery = ' . json_encode($queries) . ';'),
+    '#cache' => $cache_meta_data,
   ];
 }
