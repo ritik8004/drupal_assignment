@@ -74,7 +74,7 @@ function alshaya_js_optimisations_library_info_alter(&$libraries, $extension) {
  * Implements hook_js_alter().
  */
 function alshaya_js_optimisations_js_alter(&$javascripts) {
-  $status_critical_js = !AlshayaJsOptimisationHelper::$isJsAggregation || !AlshayaJsOptimisationHelper::$criticalJsEnabled;
+  $status_critical_js = AlshayaJsOptimisationHelper::$isJsAggregation && AlshayaJsOptimisationHelper::$criticalJsEnabled;
   $status_uglification = \Drupal::config('alshaya_js_optimisations.settings')->get('enable_uglification');
   $mapping = [];
 
