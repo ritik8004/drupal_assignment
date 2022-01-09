@@ -334,7 +334,10 @@ export default class Checkout extends React.Component {
             />
 
             <ConditionalView condition={isEgiftCardEnabled()}>
-              <RedeemEgiftCard cart={cart} />
+              <RedeemEgiftCard
+                cart={cart}
+                refreshCart={this.refreshCart}
+              />
             </ConditionalView>
 
             {billingComponent}

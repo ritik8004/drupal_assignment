@@ -39,7 +39,7 @@ import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
-import { cartContainsOnlyVirtualProduct, cartItemIsVirtual } from '../../utilities/egift_util';
+import { cartContainsOnlyVirtualProduct, cartItemIsVirtual, isFullPaymentDoneByEgift } from '../../utilities/egift_util';
 import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
 
 window.commerceBackend = window.commerceBackend || {};
@@ -1059,7 +1059,14 @@ const firstAvailableDeliveryMethod = (methods) => methods.find(
  *   The data.
  */
 const applyDefaults = async (data, customerId) => {
-  if (hasValue(data.shipping.method)) {
+  if (hasValue(data.shipping)
+    && hasValue(data.shipping.method)) {
+    return data;
+  }
+
+  // Don't apply default shipping if egift card is enabled and cart contains only
+  // virtual items.
+  if (isEgiftCardEnabled() && cartContainsOnlyVirtualProduct(data.cart)) {
     return data;
   }
 
@@ -1177,6 +1184,9 @@ const getProcessedCheckoutData = async (cartData) => {
   if (!hasValue(data.payment.methods)
     && (hasValue(data.shipping.method)
     || cartContainsOnlyVirtualProduct(data.cart))
+    // Don't call the select payment and get payment methods APIs when
+    // full payment is done by egift card.
+    && !isFullPaymentDoneByEgift(data)
   ) {
     const paymentMethods = await getPaymentMethods();
     if (hasValue(paymentMethods)) {

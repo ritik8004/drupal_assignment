@@ -28,7 +28,7 @@ import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
-import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod } from '../../../utilities/egift_util';
+import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -134,6 +134,10 @@ export default class PaymentMethods extends React.Component {
     // If full payment is being done by aura then we change payment method to `aura_payment`.
     if (isAuraEnabled() && isFullPaymentDoneByAura(cart)) {
       this.changePaymentMethod('aura_payment');
+      return;
+    }
+    // Just return from here is full payment is done by egift card.
+    if (isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart)) {
       return;
     }
 
@@ -390,12 +394,16 @@ export default class PaymentMethods extends React.Component {
 
     const activeClass = active ? 'active' : 'in-active';
 
+    // Change the payment wrapper active class based on the egift full payment.
+    const wrapperActiveClass = isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart) ? 'active' : activeClass;
+
     return (
-      <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
+      <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${wrapperActiveClass}`} style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
         <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated()}>
           <PaymentMethodLinkedEgiftCard
             cart={cart}
+            refreshCart={refreshCart}
           />
         </ConditionalView>
         <ConditionalView condition={Object.keys(methods).length > 0}>

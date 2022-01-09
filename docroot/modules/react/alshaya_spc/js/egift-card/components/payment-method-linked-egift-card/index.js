@@ -160,7 +160,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
   // perform on checking / unchecking the checkbox
   handleOnClick = (e) => {
     const { egiftLinkedCardNumber, egiftCardActualBalance } = this.state;
-    const { cart } = this.props;
+    const { cart, refreshCart } = this.props;
     // On checking the checkbox this will be executed.
     if (e.target.checked) {
       showFullScreenLoader();
@@ -183,7 +183,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 res.data.card_number,
               );
               // Trigger event to update price in order summary block.
-              updatePriceSummaryBlock();
+              updatePriceSummaryBlock(refreshCart);
               // Set checkbox status to checked as redemption was successfull.
               this.setState({
                 setChecked: true,
@@ -240,7 +240,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
           if (result.status === 200) {
             if (result.data.response_type) {
               // Trigger event to update price summary block.
-              updatePriceSummaryBlock();
+              updatePriceSummaryBlock(refreshCart);
 
               this.setState({
                 isEgiftCardredeemed: false,
@@ -279,7 +279,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     const { egiftLinkedCardNumber, egiftCardActualBalance } = this.state;
     showFullScreenLoader();
     // Prepare the request object for redeem API.
-    const { cart } = this.props;
+    const { cart, refreshCart } = this.props;
 
     // Api call to update the redemption amount.
     const response = performRedemption(cart.cart.cart_id_int, updateAmount, egiftLinkedCardNumber, 'linked');
@@ -297,7 +297,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               result.data.card_number,
             );
             // Trigger event to update price in order summary block.
-            updatePriceSummaryBlock();
+            updatePriceSummaryBlock(refreshCart);
           }
           return true;
         }
