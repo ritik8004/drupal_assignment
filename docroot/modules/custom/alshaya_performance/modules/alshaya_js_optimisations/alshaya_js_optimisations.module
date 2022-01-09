@@ -13,7 +13,8 @@ use Drupal\alshaya_js_optimisations\AlshayaJsOptimisationHelper;
 function alshaya_js_optimisations_library_info_alter(&$libraries, $extension) {
   $jsService = \Drupal::service('alshaya_js_optimisations.helper');
 
-  // Fetch settings once instead of calling on every info_alter per page request.
+  // Fetch Critical JS settings once, 
+  // instead of calling on every info_alter, per page request.
   if (!isset(AlshayaJsOptimisationHelper::$criticalJsEnabled)) {
     $jsService->fetchCriticalJsSettings();
   }
@@ -23,8 +24,13 @@ function alshaya_js_optimisations_library_info_alter(&$libraries, $extension) {
     return;
   }
 
-  $performance = \Drupal::config('system.performance');
-  AlshayaJsOptimisationHelper::$isJsAggregation = $performance->get('js.preprocess');
+  // Fetch JS Aggregation settings once, 
+  // instead of calling on every info_alter, per page request.
+  if (!isset(AlshayaJsOptimisationHelper::$isJsAggregation)) {
+    AlshayaJsOptimisationHelper::$isJsAggregation = \Drupal::config('system.performance')->get('js.preprocess');
+  }
+
+  // Preconditions.
   if (!AlshayaJsOptimisationHelper::$isJsAggregation) {
     return;
   }
@@ -74,9 +80,14 @@ function alshaya_js_optimisations_library_info_alter(&$libraries, $extension) {
  * Implements hook_js_alter().
  */
 function alshaya_js_optimisations_js_alter(&$javascripts) {
-  $status_critical_js = AlshayaJsOptimisationHelper::$isJsAggregation && AlshayaJsOptimisationHelper::$criticalJsEnabled;
-  $status_uglification = \Drupal::config('alshaya_js_optimisations.settings')->get('enable_uglification');
+  $js_optimisations = \Drupal::config('alshaya_js_optimisations.settings');
+  $js_aggregation = \Drupal::config('system.performance')->get('js.preprocess');
+
   $mapping = [];
+  $critical_js = $js_optimisations->get('critical_js');
+
+  $status_critical_js = !empty($critical_js) && $critical_js['status'] && $js_aggregation;
+  $status_uglification = $js_optimisations->get('enable_uglification');
 
   if ($status_uglification) {
     $mapping = file_get_contents('build/js-performance-build.json');

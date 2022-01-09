@@ -177,10 +177,6 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
     $config->set('enable_uglification', $form_state->getValue('enable_uglification'));
     $config->save();
 
-    // Save local copy for frequent use.
-    AlshayaJsOptimisationHelper::$resolvedLibraries = $processed_libraries;
-    AlshayaJsOptimisationHelper::$criticalJsEnabled = $critical_js['status'];
-
     // Clear Cache to trigger hook_library_info_alter with updated priorities.
     $this->libraryDiscovery->clearCachedDefinitions();
     $this->routerBuilder->rebuild();

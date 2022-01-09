@@ -138,7 +138,7 @@ class AlshayaJsOptimisationHelper {
    *
    * @var isJsAggregation
    */
-  public static $isJsAggregation = FALSE;
+  public static $isJsAggregation = NULL;
 
   /**
    * Critical JS status flag.
