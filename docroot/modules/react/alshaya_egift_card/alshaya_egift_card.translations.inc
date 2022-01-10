@@ -91,6 +91,10 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Alshaya eGift card',
         'context' => 'egift',
       ],
+      'eGift Card Top-up' => [
+        'ar' => 'eGift Card Top-up',
+        'context' => 'egift',
+      ],
       'Please enter the code.' => [
         'ar' => 'Please enter the code.',
         'context' => 'egift',

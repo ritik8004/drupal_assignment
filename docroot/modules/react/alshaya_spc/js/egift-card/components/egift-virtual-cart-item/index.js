@@ -123,20 +123,25 @@ export default class CartVirtualItem extends React.Component {
           <div className="spc-product-container">
             <div className="spc-product-title-price">
               <div className="spc-product-title egift-product-title">
-                {Drupal.t('Alshaya eGift card', {}, { context: 'egift' })}
+                <ConditionalView condition={hasValue(isTopUp)}>
+                  {Drupal.t('eGift Card Top-up', {}, { context: 'egift' })}
+                </ConditionalView>
+                <ConditionalView condition={!hasValue(isTopUp)}>
+                  {Drupal.t('Alshaya eGift card', {}, { context: 'egift' })}
+                </ConditionalView>
               </div>
               <div className="spc-product-price egift-product-price">
                 <PriceElement amount={price} />
               </div>
             </div>
             <div className="spc-product-attributes-wrapper egift-product-attributes-wrapper">
-              <ConditionalView condition={isTopUp}>
+              <ConditionalView condition={hasValue(isTopUp)}>
                 <div className="spc-cart-product-attributes">
                   <span className="spc-cart-product-attribute-label">{Drupal.t('Card No:', {}, { context: 'egift' })}</span>
                   <span className="spc-cart-product-attribute-value">{topupCardNumber}</span>
                 </div>
               </ConditionalView>
-              <ConditionalView condition={isTopUp === false}>
+              <ConditionalView condition={!hasValue(isTopUp)}>
                 <div className="spc-cart-product-attribute">
                   <span className="spc-cart-product-attribute-label">{Drupal.t('Style:', {}, { context: 'egift' })}</span>
                   <span className="spc-cart-product-attribute-value">{title}</span>

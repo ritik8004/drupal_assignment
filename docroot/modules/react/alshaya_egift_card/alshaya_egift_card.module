@@ -225,3 +225,37 @@ function alshaya_egift_card_alshaya_acm_customer_recent_order_build_alter(array 
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_spc_order_details_settings_alter().
+ */
+function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings, $order) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+  // Add `hps_redeemed_amount` and `balancePayable` in totals to show
+  // with order summary for order confirmation page.
+  if (isset($order['extension']['hps_redeemed_amount'])) {
+    $settings['order_details']['totals']['egiftRedeemedAmount'] = $order['extension']['hps_redeemed_amount'] ?? 0;
+    $settings['order_details']['totals']['balancePayable'] = $order['base_grand_total'] - $order['extension']['hps_redeemed_amount'];
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_egift_card_page_attachments_alter(array &$page) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+  $current_path = \Drupal::service('path.current')->getPath();
+  // Add egift card settings in drupalSettings in checkout confirmation page.
+  if ( $current_path === '/checkout/confirmation') {
+    $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
+    $page['#attached']['drupalSettings']['egiftCard'] = [
+      'enabled' => $egiftCard_settings->isEgiftCardEnabled(),
+    ];
+  }
+}
