@@ -115,6 +115,7 @@ $header_mobile_menu_close_bg: $charcoal;
 $header_toggle_sign_active_tab: $black;
 $header_toggle_sign_default: $light-grey;
 $header_my_account_h3_title: $charcoal;
+$header_my_account_icon: $charcoal;
 
 // Header secondary: ie: top header.
 $header_secondary_bg: $pale-grey;
@@ -262,9 +263,11 @@ $pdp_sizeguide_link: $charcoal;
 $pdp_product_special_price: $sale-red;
 $pdp_white_color_attribute_border: $spanish-grey;
 $pdp_gallery_img_bg: $light-grey;
+$pdp_disable_variant_bg: $anti-flash-white;
+$pdp_disable_variant_text: $spanish-grey;
 
 // SPC
-$spc-cart-background: $anti-flash-white;
+$spc-cart-background: $light-grey;
 $spc-empty-text: $charcoal;
 $spc-checkout_section_title: $black;
 $spc-product-title: $charcoal;
