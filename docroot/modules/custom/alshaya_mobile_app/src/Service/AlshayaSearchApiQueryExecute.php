@@ -543,7 +543,7 @@ class AlshayaSearchApiQueryExecute {
         // Prepare the result item object.
         $result['filter'] = trim($result['filter'], '"');
         $result['count'] = trim($result['count'], '"');
-        $data[] = new Result($result['filter'], $result['filter'], $result['count']);
+        $data[] = new Result($facet, $result['filter'], $result['filter'], $result['count']);
       }
       // Add the result item object to the facet.
       $facet->setResults($data);
@@ -631,7 +631,7 @@ class AlshayaSearchApiQueryExecute {
       if ($facet['key'] == $price_facet_key
         && !empty($result_set['search_api_results']) && isset($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key])
       ) {
-        $facet = $this->processPriceFacet($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key]);
+        $facet = $this->processPriceFacet($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key], $result_set['search_api_results']->getQuery());
       }
     }
 
@@ -862,14 +862,16 @@ class AlshayaSearchApiQueryExecute {
    *
    * @param array $price_facet_result
    *   Price facet result array.
+   * @param object $query
+   *   Search API Query object for the price facet.
    *
    * @return array
    *   Processed price facet result array.
    */
-  public function processPriceFacet(array $price_facet_result) {
+  public function processPriceFacet(array $price_facet_result, $query) {
     /** @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
     $alshaya_search_granular = $this->queryTypePluginManager->createInstance('alshaya_search_granular', [
-      'query' => NULL,
+      'query' => $query,
       'facet' => $this->priceFacet,
       'results' => $price_facet_result,
     ]);
