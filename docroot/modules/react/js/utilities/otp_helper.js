@@ -6,33 +6,6 @@ import { getErrorResponse } from './error';
 /**
  * Calls the API to send OTP.
  *
- * @param {string} identifierNo
- *   Identifier number.
- * @param {string} type
- *   Type of send otp request - registration or link card.
- *
- * @returns {Object}
- *   Return API response/error.
- */
-const sendOtpWithCardNo = (identifierNo, type) => callMagentoApi(`/V1/sendotp/identifierNo/${identifierNo}/type/${type}`, 'GET')
-  .then((response) => {
-    const responseData = { status: response.data };
-
-    if (hasValue(response.data.error)) {
-      logger.notice('Error while trying to send otp for card number @identifierNo. Message: @message', {
-        '@identifierNo': identifierNo,
-        '@message': response.data.error_message,
-      });
-
-      return response.data;
-    }
-
-    return responseData;
-  });
-
-/**
- * Calls the API to send OTP.
- *
  * @param {string} mobile
  *   Mobile number.
  * @param {string} type
@@ -41,7 +14,7 @@ const sendOtpWithCardNo = (identifierNo, type) => callMagentoApi(`/V1/sendotp/id
  * @returns {Object}
  *   Return API response/error.
  */
-const sendOtpWithMobileNo = (mobile, type) => callMagentoApi(`/V1/sendotp/phonenumber/${mobile.replace('+', '')}/type/${type}`, 'GET')
+const sendOtp = (mobile, type) => callMagentoApi(`/V1/sendotp/phonenumber/${mobile.replace('+', '')}/type/${type}`, 'GET')
   .then((response) => {
     const responseData = { status: response.data };
 
@@ -100,7 +73,6 @@ const verifyOtp = (mobile, otp, type, chosenCountryCode) => {
 };
 
 export {
-  sendOtpWithCardNo,
-  sendOtpWithMobileNo,
+  sendOtp,
   verifyOtp,
 };
