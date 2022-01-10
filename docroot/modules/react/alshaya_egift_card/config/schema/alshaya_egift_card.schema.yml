@@ -13,3 +13,6 @@ alshaya_egift_card.settings:
     topup_terms_conditions_text:
       type: text_format
       label: 'Topup: Terms and conditions block text'
+    textarea_maxlength:
+      type: integer
+      label: 'Maximum length of allowed characters allowed'

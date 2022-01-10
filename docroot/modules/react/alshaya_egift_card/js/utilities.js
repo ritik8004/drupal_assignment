@@ -54,8 +54,14 @@ const getImageUrl = (customAttributes, type) => {
   return url;
 };
 
+const getTextAreaMaxLength = () => {
+  const { textAreaMaxlength } = drupalSettings.egiftCard || 200;
+  return textAreaMaxlength;
+};
+
 export {
   getQueryStringForEgiftCards,
   getParamsForTopUpCardSearch,
   getImageUrl,
+  getTextAreaMaxLength,
 };

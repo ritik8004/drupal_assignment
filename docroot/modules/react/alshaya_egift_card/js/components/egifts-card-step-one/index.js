@@ -2,6 +2,7 @@ import React from 'react';
 import HeroImage from './hero-image';
 import EgiftsCardList from './egifts-card-list';
 import EgiftCardAmount from './egift-card-amount';
+import { getTextAreaMaxLength } from '../../utilities';
 
 export default class EgiftCardsListStepOne extends React.Component {
   constructor(props) {
@@ -32,7 +33,7 @@ export default class EgiftCardsListStepOne extends React.Component {
 
     if (document.getElementById('textarea-count')) {
       // Reset count on textarea.
-      document.getElementById('textarea-count').innerHTML = 200;
+      document.getElementById('textarea-count').innerHTML = getTextAreaMaxLength();
     }
 
     // Get all egift card items.
