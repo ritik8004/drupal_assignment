@@ -41,12 +41,7 @@
    * @returns {null}
    */
   function getStorageValues() {
-    var value = Drupal.getItemFromLocalStorage(window.location.pathname);
-    if (typeof value !== 'undefined' && value !== null) {
-      return JSON.parse(value);
-    }
-
-    return null;
+    return Drupal.getItemFromLocalStorage(window.location.pathname);
   }
 
   /**
@@ -86,7 +81,7 @@
     // Remove the grid_type property once applied when back from list
     // so that on next page load, default behavior is used.
     delete storage_value.grid_type;
-    Drupal.addItemInLocalStorage(window.location.pathname, JSON.stringify(storage_value));
+    Drupal.addItemInLocalStorage(window.location.pathname, storage_value);
   }
 
   Drupal.processBackToList = function () {
@@ -120,7 +115,7 @@
         };
 
         // As local storage only supports string key/value pair.
-        Drupal.addItemInLocalStorage(window.location.pathname, JSON.stringify(storage_details));
+        Drupal.addItemInLocalStorage(window.location.pathname, storage_value);
       });
     }
   };

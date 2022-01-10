@@ -20,7 +20,7 @@
   Drupal.addItemInLocalStorage = function (
     storageKey = null,
     storageData = null,
-    expireAfterTime = 0) {
+    expireAfterTime = null) {
     // Return if data to store is not provided, or
     // the local storage key is not set, of
     // storage expiry time is zero.
@@ -30,16 +30,23 @@
 
     // Prepare the expiry time for the storage data. Storage expiry
     // time must be provided in seconds.
-    const expiry_time = new Date().getTime() + (expireAfterTime * 1000);
+    // If it's zero, we don't store data in the local storage.
+    if (expireAfterTime === 0) {
+      return false;
+    }
+
+    // Prepare data to store.
+    const dataToStore = { data: storageData };
+
+    // If this is null, we don't set any expiry to the data storage in the local storage.
+    if (expireAfterTime) {
+      dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime) * 1000);
+    }
 
     // Store data in the local storage with the expiry time.
-    localStorage.setItem(storageKey, JSON.stringify({
-      data: ((typeof storageData === 'object')
-        ? storageData
-        : JSON.parse(storageData)),
-      expiry_time,
-    }));
+    localStorage.setItem(storageKey, JSON.stringify(dataToStore));
 
+    // Return true as an indication of values stored successfully.
     return true;
   };
 
@@ -103,9 +110,11 @@
       ? storageItem.data
       : storageItem;
 
-    // Add expiry time with return data for other components
-    // or modules to perform custom actions
-    dataToReturn.expiry_time = storageItem.expiry_time;
+    // If return data is an object, add expiry time with return data for
+    // other components or modules to perform custom actions
+    if (typeof dataToReturn === 'object') {
+      dataToReturn.expiry_time = storageItem.expiry_time;
+    }
 
     // Return the prepared data.
     return dataToReturn;

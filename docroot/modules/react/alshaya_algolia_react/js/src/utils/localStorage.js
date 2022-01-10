@@ -4,7 +4,7 @@
  */
 
 function removeSearchQuery() {
-  localStorage.removeItem('algolia_search_query');
+  Drupal.removeItemFromLocalStorage('algolia_search_query');
 }
 
 /**
@@ -27,27 +27,27 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function setSearchQuery(queryValue) {
-  localStorage.setItem('algolia_search_query', queryValue);
+  Drupal.addItemInLocalStorage('algolia_search_query', queryValue);
 }
 
 function getSearchQuery() {
-  return localStorage.getItem('algolia_search_query');
+  return Drupal.getItemFromLocalStorage('algolia_search_query');
 }
 
 function setLangRedirect(queryValue) {
-  localStorage.setItem('algoliaLangRedirect', queryValue);
+  Drupal.addItemInLocalStorage('algoliaLangRedirect', queryValue);
 }
 
 function removeLangRedirect() {
-  localStorage.removeItem('algoliaLangRedirect');
+  Drupal.removeItemFromLocalStorage('algoliaLangRedirect');
 }
 
 function getLangRedirect() {
-  return localStorage.getItem('algoliaLangRedirect');
+  return Drupal.getItemFromLocalStorage('algoliaLangRedirect');
 }
 
 function setClickedItem(storageDetails) {
-  localStorage.setItem(window.location.hash, JSON.stringify(storageDetails));
+  Drupal.addItemInLocalStorage(window.location.hash, storageDetails);
 }
 
 function storeClickedItem(event, pageType) {
@@ -66,9 +66,9 @@ function storeClickedItem(event, pageType) {
   };
 
   if (pageType === 'plp') {
-    localStorage.setItem(
+    Drupal.addItemInLocalStorage(
       `${pageType}:${window.location.pathname}`,
-      JSON.stringify(storageDetails),
+      storageDetails,
     );
   } else {
     setClickedItem(storageDetails);

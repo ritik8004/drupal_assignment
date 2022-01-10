@@ -105,14 +105,7 @@ const isDesktop = () => (window.innerWidth > 1024);
  *
  * @returns {null}
  */
-const getAlgoliaStorageValues = () => {
-  const value = localStorage.getItem(window.location.hash);
-  if (typeof value !== 'undefined' && value !== null) {
-    return JSON.parse(value);
-  }
-
-  return null;
-};
+const getAlgoliaStorageValues = () => Drupal.getItemFromLocalStorage(window.location.hash);
 
 export {
   getCurrentSearchQueryString,
