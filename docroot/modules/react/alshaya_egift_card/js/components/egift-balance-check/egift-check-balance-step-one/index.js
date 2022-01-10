@@ -5,6 +5,7 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import EgiftCheckBalanceStepTwo from '../egift-check-balance-step-two';
 import { sendOtp } from '../../../../../js/utilities/egiftCardHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 
 export default class EgiftCheckBalanceStepOne extends React.Component {
   constructor(props) {
@@ -41,7 +42,6 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
     const { initialStep, stepChange } = this.props;
 
     let OtpResponse = {};
-    let message = '';
     // Perform validation.
     if (!this.handleValidation(e)) {
       if (initialStep === 1) {
@@ -70,8 +70,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                 return false;
               }
             } else {
-              message = Drupal.t('Something went wrong, please try again later.', {}, { context: 'egift' });
-              document.getElementById('egift_card_number_error').innerHTML = message;
+              document.getElementById('egift_card_number_error').innerHTML = getDefaultErrorMessage();
             }
             return false;
           });
