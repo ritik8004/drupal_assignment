@@ -54,10 +54,12 @@ export default class EgiftTopPurchase extends React.Component {
     if (!isUserAuthenticated()) {
       return;
     }
+    showFullScreenLoader();
     // Call to get customer linked card details.
     const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
     if (result instanceof Promise) {
       result.then((response) => {
+        removeFullScreenLoader();
         if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
           this.setState({
             linkedCardNumber: response.data.card_number !== null ? response.data.card_number : null,
@@ -100,7 +102,6 @@ export default class EgiftTopPurchase extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    showFullScreenLoader();
 
     // Unset any errors displayed in previous submission.
     this.setState({
@@ -121,6 +122,10 @@ export default class EgiftTopPurchase extends React.Component {
     // else get card-number from field.
     const cardNumber = egiftCardFor === 'self' ? linkedCardNumber : data.get('card_number');
 
+    if (cardNumber === '') {
+      document.getElementById('card-number-error').innerHTML = Drupal.t('Please enter an eGift card number.', {}, { context: 'egift' });
+      return false;
+    }
 
     // Check if cart id is present in local store for anonymous user.
     if (!isUserAuthenticated()) {
@@ -133,8 +138,7 @@ export default class EgiftTopPurchase extends React.Component {
       // Show error if still cart id is null.
       if (cartId === null) {
         document.getElementById('top-up-error').innerHTML = getDefaultErrorMessage();
-        removeFullScreenLoader();
-        return;
+        return false;
       }
     }
 
@@ -150,6 +154,9 @@ export default class EgiftTopPurchase extends React.Component {
         top_up_type: egiftCardFor,
       },
     };
+
+    // Show loader before api call.
+    showFullScreenLoader();
 
     // Call top-up API to add top-up to cart.
     // Don't use bearer token with top-up add to cart API as it is public API.
@@ -183,6 +190,7 @@ export default class EgiftTopPurchase extends React.Component {
         }
       });
     }
+    return true;
   };
 
   render() {

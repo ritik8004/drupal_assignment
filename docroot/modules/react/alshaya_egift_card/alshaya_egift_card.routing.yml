@@ -7,9 +7,9 @@ alshaya_egift_card.egift_card_config:
     _permission: 'administer site configuration'
 
 alshaya_egift_card.topup_card:
-  path: '/gift-card/topup-card'
+  path: '/egift-card/topup-card'
   defaults:
-    _title: 'TopUp Card'
+    _title: 'Top-up eGift card'
     _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaTopUpController::topupcard'
   requirements:
     _permission: 'access content'
@@ -18,14 +18,18 @@ alshaya_egift_card.egift_card_purchase:
   path: '/egift-card/purchase'
   defaults:
     _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::eGiftCardPurchase'
-    _title: 'Buy eGift Card'
+    _title: 'Buy Alshaya eGift Card'
   requirements:
     _access: 'TRUE'
 
 alshaya_egift_card.my_egift_card:
-  path: '/user/gift-card'
+  path: '/user/{user}/egift-card'
   defaults:
     _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::getLinkedCardPage'
     _title: 'eGift Card'
   requirements:
     _custom_access: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::checkAccess'
+  options:
+    parameters:
+      user:
+        type: entity:user

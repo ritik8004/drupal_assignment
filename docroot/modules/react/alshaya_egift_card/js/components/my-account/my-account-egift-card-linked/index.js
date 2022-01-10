@@ -17,6 +17,7 @@ class EgiftCardLinked extends React.Component {
     super(props);
     this.state = {
       topUpForm: false, // Show / hide top-up form.
+      hideCardDetails: false, // Hide card detail only after api for top-up amount ends.
     };
   }
 
@@ -75,9 +76,19 @@ class EgiftCardLinked extends React.Component {
     });
   }
 
+  /**
+   * Cancel top form and show card details.
+   */
   handleCancelTopUp = () => {
     this.setState({
       topUpForm: false,
+      hideCardDetails: false,
+    });
+  }
+
+  handleHideDetails = () => {
+    this.setState({
+      hideCardDetails: true,
     });
   }
 
@@ -88,7 +99,7 @@ class EgiftCardLinked extends React.Component {
       return null;
     }
 
-    const { topUpForm } = this.state;
+    const { topUpForm, hideCardDetails } = this.state;
 
     // Set expired card class.
     let expiredCard = false;
@@ -129,8 +140,8 @@ class EgiftCardLinked extends React.Component {
             <TrashIconSVG />
           </button>
         </div>
-        <ConditionalView condition={topUpForm === false}>
-          <div className="egift-card-linked-wrapper-bottom egifts-form-wrapper">
+        <ConditionalView condition={hideCardDetails === false}>
+          <div className="egift-card-linked-wrapper-bottom egifts-form-wrapper" id="card-details">
             <div className="egift-linked-card-number-wrapper">
               <div className="egift-linked-card-number egift-light-text">{Drupal.t('Gift Card number', {}, { context: 'egift' })}</div>
               <div className="egift-linked-card-number-value egift-dark-text">{linkedCard.card_number}</div>
@@ -164,6 +175,7 @@ class EgiftCardLinked extends React.Component {
           <MyEgiftTopUp
             handleCancelTopUp={this.handleCancelTopUp}
             cardNumber={linkedCard.card_number}
+            handleHideDetails={this.handleHideDetails}
           />
         </ConditionalView>
       </div>
