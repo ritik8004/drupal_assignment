@@ -6,11 +6,10 @@
 
   /**
    * Helper function to add an item into the local storage.
-   *
-   * @param {object|string} storageData
-   *  Data to store in the local storage.
    * @param {string} storageKey
    *  A string key to identify provided data in storage.
+   * @param {object|string} storageData
+   *  Data to store in the local storage.
    * @param {integer} expireAfterTime
    *  Time, in seconds, after this data will be expired and clean.
    *
@@ -18,13 +17,13 @@
    *  true/false based on the action performed.
    */
   Drupal.addItemInLocalStorage = function (
-    storageKey = null,
+    storageKey,
     storageData = null,
     expireAfterTime = null) {
     // Return if data to store is not provided, or
     // the local storage key is not set, of
     // storage expiry time is zero.
-    if (!storageData || !storageKey) {
+    if (!storageKey || (storageData === null)) {
       return false;
     }
 
@@ -59,7 +58,7 @@
    * @returns {boolean}
    *  true/false based on the action performed.
    */
-  Drupal.removeItemFromLocalStorage = function (storageKey = null) {
+  Drupal.removeItemFromLocalStorage = function (storageKey) {
     // Remove item from the local storage if key is set.
     return (storageKey)
       ? localStorage.removeItem(storageKey)
@@ -78,7 +77,7 @@
    *  Return null if no data available or is expired.
    *  Return data object if available.
    */
-  Drupal.getItemFromLocalStorage = function (storageKey = null) {
+  Drupal.getItemFromLocalStorage = function (storageKey) {
     // Return if the local storage key is not set.
     if (!storageKey) {
       return null;
@@ -156,7 +155,6 @@
 
   // Run the cleaner function once on the window load event.
   $(window).once('html').on('load', function () {
-    console.log("Imhere")
     Drupal.runLocalStorageCleaner();
   });
 

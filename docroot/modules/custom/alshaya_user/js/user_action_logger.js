@@ -2,7 +2,6 @@
   'use strict';
   // Track user activity around login/reset/register forms.
   var userLogger = Drupal.getItemFromLocalStorage('user_action_logger');
-  console.log(userLogger)
   if (userLogger && (drupalSettings.user.uid > 0 || userLogger.type === 'change-pwd-form')) {
     Drupal.alshayaLogger(userLogger.level, userLogger.message, userLogger.context);
     // Remove the local storage after logging the message.

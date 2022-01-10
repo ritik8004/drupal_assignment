@@ -47,7 +47,7 @@ function getLangRedirect() {
 }
 
 function setClickedItem(storageDetails) {
-  Drupal.addItemInLocalStorage(window.location.hash, storageDetails);
+  Drupal.addItemInLocalStorage(`search:${window.location.hash}`, storageDetails);
 }
 
 function storeClickedItem(event, pageType) {

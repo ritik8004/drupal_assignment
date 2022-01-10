@@ -1,7 +1,6 @@
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 import getStringMessage from '../../utilities/strings';
-import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 drupalSettings = window.drupalSettings;
 window.commerceBackend = window.commerceBackend || {};
@@ -136,7 +135,7 @@ const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.strin
  * @returns {object|null}
  *   Processed cart data else null.
  */
-window.commerceBackend.getCartDataFromStorage = () => getStorageInfo('cart_data');
+window.commerceBackend.getCartDataFromStorage = () => Drupal.getItemFromLocalStorage('cart_data');
 
 /**
  * Sets the cart data.
@@ -144,22 +143,18 @@ window.commerceBackend.getCartDataFromStorage = () => getStorageInfo('cart_data'
  * @param data
  *   The cart data.
  */
-window.commerceBackend.setCartDataInStorage = (data) => {
-  const cartInfo = { ...data };
-  cartInfo.last_update = new Date().getTime();
-  setStorageInfo(cartInfo);
-};
+window.commerceBackend.setCartDataInStorage = (data) => Drupal.addItemInLocalStorage('cart_data', data);
 
 /**
  * Removes the cart data from storage.
  */
 window.commerceBackend.removeCartDataFromStorage = () => {
-  removeStorageInfo('cart_data');
+  Drupal.removeItemFromLocalStorage('cart_data');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method
   // selection at-least once and not more than once.
-  removeStorageInfo('last_selected_payment');
+  Drupal.removeItemFromLocalStorage('last_selected_payment');
 };
 
 // Do nothing for V1, it should be done already

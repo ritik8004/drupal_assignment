@@ -11,7 +11,6 @@ import {
   getExceptionMessageType,
 } from '../../../../js/utilities/error';
 import StaticStorage from './staticStorage';
-import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import {
   hasValue,
   isObject,
@@ -37,8 +36,8 @@ window.commerceBackend.getCartId = () => {
   // we pass that id from backend via Cookie to Browser.
   const resumeCartId = Cookies.get('resume_cart_id');
   if (hasValue(resumeCartId)) {
-    removeStorageInfo('cart_data');
-    setStorageInfo(resumeCartId, 'cart_id');
+    Drupal.removeItemFromLocalStorage('cart_data');
+    Drupal.addItemInLocalStorage('cart_id', resumeCartId);
     Cookies.remove('resume_cart_id');
   }
 
@@ -115,7 +114,7 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   // As of now it not possible to get it on page load before all
   // other JS is executed and for all other JS refactoring
   // required is huge.
-  setStorageInfo(cartInfo, 'cart_data');
+  Drupal.addItemInLocalStorage('cart_data', cartInfo);
 };
 
 /**
@@ -127,12 +126,12 @@ window.commerceBackend.setCartDataInStorage = (data) => {
 window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   StaticStorage.clear();
 
-  removeStorageInfo('cart_data');
+  Drupal.removeItemFromLocalStorage('cart_data');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method
   // selection at-least once and not more than once.
-  removeStorageInfo('last_selected_payment');
+  Drupal.removeItemFromLocalStorage('last_selected_payment');
 
   if (resetAll) {
     removeCartIdFromStorage();
