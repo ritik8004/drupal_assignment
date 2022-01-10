@@ -68,6 +68,29 @@ function alshaya_cos_transac_preprocess_product_zoom(&$vars) {
   if ($pdp_gallery_type == 'classic') {
     $vars['pdp_gallery_type'] = $pdp_gallery_type;
   }
+
+  // Show delivery option labels if express delivery is enabled.
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+
+  if ($express_delivery_config->get('status')) {
+    // Get parent sku.
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $vars['labels']['#sku'] ?? '';
+    $parent_sku = $skuManager->getParentSkuBySku($sku) ?? $sku;
+
+    if (!empty($parent_sku)) {
+      $sku = $parent_sku->getSku();
+      $delivery_options = alshaya_acm_product_get_delivery_options($sku);
+      if (!empty($delivery_options['values'])) {
+        foreach ($delivery_options['values'] as $key => $option) {
+          $vars['delivery_options'][$key]['status']['#markup'] = $option['status'];
+          $vars['delivery_options'][$key]['label']['#markup'] = $option['label'];
+        }
+      }
+      $vars['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
+    }
+  }
 }
 
 /**
