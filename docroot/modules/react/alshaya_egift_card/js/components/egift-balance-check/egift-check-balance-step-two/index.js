@@ -180,11 +180,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
             <div className="egift-check-bal-title">
               {Drupal.t('Check Balance & Validity', {}, { context: 'egift' })}
             </div>
-            <a className="close" onClick={() => closeModal()}>
-              {' '}
-              &times;
-              {' '}
-            </a>
+            <a className="close" onClick={() => closeModal()}> &times; </a>
             <div className="form-wrapper">
               <ConditionalView condition={initialStep === 2}>
                 <form
@@ -236,7 +232,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                       <div className="egift-type-resend_otp">
                         <span>
                           {Drupal.t(
-                            "Didn't receive? ",
+                            "Didn't receive?",
                             {},
                             { context: 'egift' },
                           )}

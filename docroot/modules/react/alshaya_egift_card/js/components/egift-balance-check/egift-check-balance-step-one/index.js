@@ -109,11 +109,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
             <div className="egift-check-bal-title">
               {Drupal.t('Check Balance & Validity', {}, { context: 'egift' })}
             </div>
-            <a className="close" onClick={() => closeModal()}>
-              {' '}
-              &times;
-              {' '}
-            </a>
+            <a className="close" onClick={() => closeModal()}> &times; </a>
             <div className="form-wrapper">
               <ConditionalView condition={initialStep === 1}>
                 <form

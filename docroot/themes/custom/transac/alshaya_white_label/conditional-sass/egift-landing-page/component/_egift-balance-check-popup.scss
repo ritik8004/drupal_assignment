@@ -193,5 +193,11 @@
     .egift-type-another_card {
       cursor: pointer;
     }
+
+    .egift-type-resend_otp {
+      span:first-child {
+        margin-right: 3px;
+      }
+    }
   }
 }
