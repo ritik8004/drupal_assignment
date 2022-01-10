@@ -2,6 +2,7 @@ import React from 'react';
 import TextareaAutosize from 'react-autosize-textarea';
 import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
+import { getTextAreaMaxLength } from '../../utilities';
 
 export default class EgiftCardStepTwo extends React.Component {
   constructor(props) {
@@ -32,7 +33,7 @@ export default class EgiftCardStepTwo extends React.Component {
     document.getElementById('egift-message').value = e.target.value;
 
     // Get the count of the characters in textarea.
-    const count = parseInt(200, 10) - parseInt(e.target.value.length, 10);
+    const count = parseInt(getTextAreaMaxLength(), 10) - parseInt(e.target.value.length, 10);
 
     // Show the count of characters when user types in textarea.
     document.getElementById('textarea-count').innerHTML = count.toString();
@@ -149,7 +150,7 @@ export default class EgiftCardStepTwo extends React.Component {
                       type="text"
                       id="egift-message"
                       name="egift-message"
-                      maxLength={parseInt(200, 10)}
+                      maxLength={parseInt(getTextAreaMaxLength(), 10)}
                       onChange={(e) => this.handleTextAreaChange(e)}
                       onBlur={(e) => this.handleEvent(e)}
                       className="form-input"
@@ -161,7 +162,7 @@ export default class EgiftCardStepTwo extends React.Component {
                       id="textarea-count"
                       className="textarea-character-limit"
                     >
-                      { parseInt(200, 10) - parseInt(textAreaCount, 10) }
+                      { parseInt(getTextAreaMaxLength(), 10) - parseInt(textAreaCount, 10) }
                     </div>
                     <div id="email-error" className="error egift-error" />
                   </div>

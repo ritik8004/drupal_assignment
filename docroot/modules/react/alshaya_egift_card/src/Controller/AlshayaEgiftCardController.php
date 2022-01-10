@@ -104,27 +104,15 @@ class AlshayaEgiftCardController extends ControllerBase {
           'alshaya_acm_cart_notification/cart_notification_js',
           'alshaya_white_label/egift-purchase-page',
         ],
+        'drupalSettings' => [
+          'egiftCard' => [
+            'textAreaMaxlength' => $config->get('textarea_maxlength')
+          ]
+        ],
       ],
     ];
 
     $build['#cache']['tags'] = Cache::mergeTags([], $config->getCacheTags());
-
-    $api_settings = Settings::get('alshaya_api.settings');
-
-    // We proxy the requests via cloudflare, so we use the current domain as is
-    // without any language suffix so HTTP_HOST is enough.
-    $build['#attached']['drupalSettings']['egiftCard']['mdcMediaUrl'] = 'https://' . $_SERVER['HTTP_HOST'];
-
-    // Added cart notification time.
-    $build['#attached']['drupalSettings']['addToCartNotificationTime'] = $this->config('alshaya_acm_cart_notification.settings')->get('notification_time');
-
-    // Use proxy on local env as here we don't have Cloudflare.
-    if (Settings::get('env') === 'local') {
-      $build['#attached']['drupalSettings']['egiftCard']['mdcMediaUrl'] = '/proxy/?url=' . $api_settings['magento_host'];
-    }
-
-    // @todo append mdc media path from config.
-    $build['#attached']['drupalSettings']['egiftCard']['mdcMediaUrl'] .= '/media/catalog/product/';
 
     return $build;
   }
