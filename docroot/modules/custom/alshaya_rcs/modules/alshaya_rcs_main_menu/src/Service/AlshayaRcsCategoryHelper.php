@@ -464,4 +464,40 @@ class AlshayaRcsCategoryHelper {
     return $department_pages;
   }
 
+  /**
+   * Helper function to build the graphql query dynamically.
+   *
+   * @param int $depth
+   *   Define the depth of the query.
+   *
+   * @return string
+   *   The graphql query to fetch data using API.
+   */
+  public function getRcsCategoryMenuQuery($depth = 0) {
+    $query = [
+      'children_count',
+      'children' => [
+        'id',
+        'level',
+        'name',
+        'meta_title',
+        'include_in_menu',
+        'url_path',
+        'url_key',
+        'show_on_dpt',
+        'show_in_lhn',
+        'show_in_app_navigation',
+        'position',
+        'is_anchor',
+        'display_view_all',
+      ],
+    ];
+
+    if ($depth > 0) {
+      $query['children'] = array_merge($query['children'], $this->getRcsCategoryMenuQuery($depth - 1));
+    }
+
+    return $query;
+  }
+
 }
