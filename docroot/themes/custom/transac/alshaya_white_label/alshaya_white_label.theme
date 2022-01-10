@@ -1381,36 +1381,9 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $paragraph = $variables['elements']['#paragraph'];
     if ($paragraph) {
-
       // If category value is filled.
-      if (!empty($category = $paragraph->get('field_category_carousel'))) {
-        // Fetch values from the paragraph.
-        $category_id = $category->getValue()[0]['target_id'] ?? NULL;
-
-        // If category is null/empty, no need to process further.
-        if (!$category_id) {
-          $variables['content'] = [];
-          return;
-        }
-
-        $category_id = (int) $category_id;
-
-        $is_accordion = FALSE;
-        if ($paragraph->hasField('field_use_as_accordion')
-          && $accordion = $paragraph->get('field_use_as_accordion')->getValue()) {
-          $is_accordion = $accordion[0]['value'];
-        }
-
-        $view_all_text = $paragraph->get('field_view_all_text')->getString();
-
-        // By default we don't show any carousel content.
-        $variables['content'] = [];
-
-        $section_title = $paragraph->get('field_category_carousel_title')->getString();
-
-        $product_in_carousel = (int) $paragraph->get('field_category_carousel_limit')->getString();
-        $carousel = \Drupal::service('alshaya_acm_product_category.carousel_helper')
-          ->getCarousel($category_id, $product_in_carousel, $section_title, $view_all_text, $is_accordion);
+      if (!empty($paragraph->get('field_category_carousel'))) {
+        $carousel = \Drupal::service('alshaya_acm_product_category.carousel_helper')->getCarousel($paragraph);
         $variables = array_merge($variables, $carousel);
       }
     }

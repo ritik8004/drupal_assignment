@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product_category\Service;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
@@ -43,6 +44,20 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
   protected $entityTypeManager;
 
   /**
+   * The source entity for the carousel.
+   *
+   * @var \Drupal\Core\Entity\ContentEntityInterface
+   */
+  protected $entity;
+
+  /**
+   * The carousel main category id.
+   *
+   * @var int
+   */
+  protected $categoryId;
+
+  /**
    * Constructs object of ProductCategoryCarouselHelper.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface\LanguageManagerInterface $language_manager
@@ -67,25 +82,77 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
   }
 
   /**
-   * Create and returns the render array for category carousel accordion.
+   * Sets the source entity for the carousel from which we prepare data.
    *
-   * @param int $category_id
-   *   Category id.
-   * @param string $carousel_title
-   *   Title for the carousel.
-   * @param string $view_all_text
-   *   View all text.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   Source entity for the carousel.
+   */
+  private function setEntity(ContentEntityInterface $entity) {
+    $this->entity = $entity;
+  }
+
+  /**
+   * Gets the category id for the carousel source term.
+   */
+  private function loadCategoryId() {
+    $category_id = $this->entity->get('field_category_carousel')->getString();
+    $this->categoryId = !empty($category_id) ? (int) $category_id : NULL;
+  }
+
+  /**
+   * Checks if the carousel is displayed as an accordion or not.
+   *
+   * @return bool
+   *   Returns true, if carousel is displayed as an accordion else false.
+   */
+  private function isAccordion() {
+    return (bool) $this->entity->get('field_use_as_accordion')->getString();
+  }
+
+  /**
+   * Gets the limit of the items to show in the carousel.
+   *
+   * @return int
+   *   The number of items in the carousel.
+   */
+  private function getCarouselItemsLimit() {
+    return (int) $this->entity->get('field_category_carousel_limit')->getString();
+  }
+
+  /**
+   * Gets the view all text.
+   *
+   * @return string
+   *   The text which is shown in the view all button.
+   */
+  private function getViewAllText() {
+    return $this->entity->get('field_view_all_text')->getString();
+  }
+
+  /**
+   * Gets the title of the carousel.
+   *
+   * @return string
+   *   The title of the carousel.
+   */
+  private function getCarouselTitle() {
+    return $this->entity->get('field_category_carousel_title')->getString();
+  }
+
+  /**
+   * Create and returns the render array for category carousel accordion.
    *
    * @return array
    *   The render array for carousel accordion.
    */
-  private function getCarouselAccordion($category_id, $carousel_title, $view_all_text) {
-    $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
+  private function getCarouselAccordion() {
+    $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($this->categoryId);
     // If given category not available.
     if (!$term instanceof TermInterface) {
       return [];
     }
 
+    $carousel_title = $this->getCarouselTitle();
     if (empty($carousel_title)) {
       $carousel_title = $term->label();
     }
@@ -94,10 +161,11 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
     $accordion_title = [
       '#type' => 'link',
       '#title' => $carousel_title,
-      '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+      '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $this->categoryId]),
     ];
 
     $link = [];
+    $view_all_text = $this->getViewAllText();
     if ($view_all_text) {
       $link = [
         '#title' => $view_all_text,
@@ -105,7 +173,7 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
         '#attributes' => [
           'class' => ['category-accordion-view-all'],
         ],
-        '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+        '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $this->categoryId]),
       ];
     }
 
@@ -113,7 +181,7 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
     $carousel['content']['product_category_carousel'] = [
       '#theme' => 'alshaya_white_label_accordion',
       '#title' => $accordion_title ?: NULL,
-      '#content' => alshaya_acm_product_category_child_terms($category_id),
+      '#content' => alshaya_acm_product_category_child_terms($this->categoryId),
       '#view_all' => $link,
       '#cache' => [
         'tags' => [
@@ -133,28 +201,36 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
   /**
    * {@inheritdoc}
    */
-  public function getCarousel($category_id, int $carousel_limit, $carousel_title, $view_all_text, $is_accordion) {
+  public function getCarousel(ContentEntityInterface $entity) {
+    $this->setEntity($entity);
+    $this->loadCategoryId();
     // By default we don't show any carousel content.
     $carousel['content'] = [];
 
+    // If category is null/empty, no need to process further.
+    if (empty($this->categoryId)) {
+      return $carousel;
+    }
+
+    $is_accordion = $this->isAccordion();
     if ($is_accordion) {
-      $accordion_content = $this->getCarouselAccordion($category_id, $carousel_title, $view_all_text);
+      $accordion_content = $this->getCarouselAccordion();
       return array_merge($carousel, $accordion_content);
     }
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $productCarousel = $this->productCategoryPage->getCurrentSelectedCategory($langcode, $category_id);
+    $productCarousel = $this->productCategoryPage->getCurrentSelectedCategory($langcode, $this->categoryId);
     $settings = $this->configFactory->get('alshaya_acm_product.settings');
 
     // Make carousel title link.
     $carousel_title = [
-      'title' => $carousel_title,
-      'url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id])->toString(),
+      'title' => $this->getCarouselTitle(),
+      'url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $this->categoryId])->toString(),
     ];
 
     $productCarousel = array_merge($productCarousel, [
       'sectionTitle' => $carousel_title,
-      'itemsPerPage' => $carousel_limit,
+      'itemsPerPage' => $this->getCarouselItemsLimit(),
       'vatText' => $settings->get('vat_text'),
     ]);
 
@@ -162,12 +238,12 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
       '#type' => 'container',
       '#attributes' => [
         'class' => ['alshaya-product-category-carousel'],
-        'data-pcc-id' => $category_id,
+        'data-pcc-id' => $this->categoryId,
       ],
       '#attached' => [
         'drupalSettings' => [
           'alshayaProductCarousel' => [
-            $category_id => $productCarousel,
+            $this->categoryId => $productCarousel,
           ],
           'hp_product_carousel_items' => $settings->get('product_carousel_items_settings.hp_product_carousel_items_number'),
         ],
@@ -178,6 +254,7 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
       ],
     ];
 
+    $view_all_text = $this->getViewAllText();
     if ($view_all_text) {
       $carousel['attributes']['class'][] = 'has-view-all-link';
 
@@ -187,7 +264,7 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
         '#attributes' => [
           'class' => ['category-carousel-view-all'],
         ],
-        '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+        '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $this->categoryId]),
       ];
     }
 
