@@ -13,6 +13,7 @@
       display: grid;
       grid-template-columns: 5.4375rem 1fr 4.8125rem;
       grid-gap: 0.8125rem;
+      min-height: 8.125rem;
 
       body.ie & {
         display: -ms-grid;
