@@ -3,7 +3,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_k
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?12adm') format('woff');
+  src:
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?12add') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?12adm') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -13,6 +15,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_k
 @font-face {
   font-family: "Realist-Medium";
   src:
+    local("Realist Medium"),
+    local("Realist-Medium"),
     url("#{$base_theme_fonts_directory_path}/Realist-Medium.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Realist-Medium.woff") format("woff");
   font-weight: normal;
@@ -23,6 +27,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_k
 @font-face {
   font-family: "Realist-Regular";
   src:
+    local("Realist Regular"),
+    local("Realist-Regular"),
     url("#{$base_theme_fonts_directory_path}/Realist-Regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Realist-Regular.woff") format("woff");
   font-weight: normal;
@@ -33,6 +39,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_k
 @font-face {
   font-family: "Realist-SemiLight";
   src:
+    local("Realist SemiLight"),
+    local("Realist-SemiLight"),
     url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.woff") format("woff");
   font-weight: normal;
