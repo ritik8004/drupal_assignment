@@ -4,5 +4,5 @@ import MyEgiftCard from './components/my-account';
 
 ReactDOM.render(
   <MyEgiftCard />,
-  document.querySelector('#my-egift-card'),
+  document.getElementById('my-egift-card'),
 );

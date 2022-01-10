@@ -24,7 +24,7 @@ class AlshayaMyEgiftCardBreadcrumb implements BreadcrumbBuilderInterface {
   protected $currentUser;
 
   /**
-   * AlshayaStaticPageBreadcrumbBuilder constructor.
+   * AlshayaMyEgiftCardBreadcrumb constructor.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current account object.
