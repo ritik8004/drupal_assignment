@@ -8,7 +8,32 @@
     }
   }
 
-  .block-page-title {
+  #block-page-title {
     display: none;
+  }
+
+  .c-breadcrumb {
+    &::before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: $egift-breadcrumb-border;
+      left: 0;
+      top: 50%;
+      position: absolute;
+    }
+
+    #block-breadcrumbs {
+      li {
+        a {
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
   }
 }
