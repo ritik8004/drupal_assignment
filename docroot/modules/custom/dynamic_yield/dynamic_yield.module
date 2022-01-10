@@ -97,10 +97,9 @@ function dynamic_yield_page_attachments(array &$page) {
       $link_tag = _dynamic_yield_get_head_link_tag($rel, $prefetch_url, $tag);
       array_unshift($page['#attached']['html_head'], $link_tag);
     }
-
+    $page['#attached']['library'][] = 'dynamic_yield/dynamic_yield.intelligent_tracking';
   }
   $page['#cache']['tags'][] = 'config:dynamic_yield.settings';
-  $page['#attached']['library'][] = 'dynamic_yield/dynamic_yield.intelligent_tracking';
 }
 
 /**
