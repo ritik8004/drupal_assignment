@@ -408,7 +408,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                       amount={cart.cart.totals.egiftRedeemedAmount}
                       remainingAmount={egiftCardRemainingBalance}
                       updateAmount={this.handleAmountUpdate}
-                      cart={cart}
+                      cart={cart.cart}
                     />
                   </ConditionalView>
 
