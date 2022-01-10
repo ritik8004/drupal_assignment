@@ -116,6 +116,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
             if (result.data.status) {
               this.setState({
                 otpRequested: true,
+                mobile: result.data.mobile || null,
                 cardNumber: result.data.cardNumber || null,
               });
               document.querySelector('.aura-form-items-link-card-options').classList.add('disabled');
@@ -143,7 +144,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
 
   verifyOtpAndLink = () => {
     this.resetModalMessages();
-    const { cardNumber } = this.state;
+    const { mobile, cardNumber } = this.state;
     const otp = getElementValue('otp');
 
     if (otp.length === 0) {
@@ -152,7 +153,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
     }
 
     removeError(getInlineErrorSelector('otp').otp);
-    handleManualLinkYourCard(cardNumber, otp);
+    handleManualLinkYourCard(cardNumber, mobile, otp);
   };
 
   selectOption = (option) => {
