@@ -1523,6 +1523,14 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       $variables['mobile_slug_font_color'] = $mobile_slug_font_color;
     }
   }
+  // Adds new gtm-title html attribute to paragraph items in Today's Offers block.
+  elseif ($variables['elements']['#paragraph']->getType() == 'offers_bordered') {
+    $defaultLangcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    if (!empty($variables['elements']['#paragraph']->getTranslation($defaultLangcode)->get('field_title')->getValue())) {
+      $gtmLabel = $variables['elements']['#paragraph']->getTranslation($defaultLangcode)->get('field_title')->getValue()[0]['value'];
+    }
+    $variables['content']['field_title']['#attributes']['gtm-title'] = $gtmLabel ?? NULL;
+  }
 }
 
 /**
