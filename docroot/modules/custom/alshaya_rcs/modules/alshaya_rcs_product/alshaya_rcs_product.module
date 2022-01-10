@@ -389,18 +389,6 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
-  $delivery_option_home_delivery = [
-    '#theme' => 'rcs_pdp_delivery_option_home_delivery',
-  ];
-  $variables['rcs_templates']['home_delivery'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($delivery_option_home_delivery),
-    '#attributes' => [
-      'class' => 'rcs-templates--delivery_option-home-delivery',
-    ],
-  ];
-
   $size_guide = _alshaya_acm_product_get_size_guide_info(null);
   if (isset($size_guide['link']) && isset($size_guide['attributes'])) {
     $variables['rcs_templates']['size_guide'] = [
