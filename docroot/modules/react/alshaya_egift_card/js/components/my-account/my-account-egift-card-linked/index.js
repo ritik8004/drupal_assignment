@@ -17,6 +17,7 @@ class EgiftCardLinked extends React.Component {
     super(props);
     this.state = {
       topUpForm: false, // Show / hide top-up form.
+      hideCardDetails: false, // Hide card detail only after api for top-up amount ends.
     };
   }
 
@@ -79,10 +80,15 @@ class EgiftCardLinked extends React.Component {
    * Cancel top form and show card details.
    */
   handleCancelTopUp = () => {
-    document.getElementById('card-details').style.display = 'flex';
-    document.getElementById('egift-remove-button').style.display = 'flex';
     this.setState({
       topUpForm: false,
+      hideCardDetails: false,
+    });
+  }
+
+  handleHideDetails = () => {
+    this.setState({
+      hideCardDetails: true,
     });
   }
 
@@ -93,7 +99,7 @@ class EgiftCardLinked extends React.Component {
       return null;
     }
 
-    const { topUpForm } = this.state;
+    const { topUpForm, hideCardDetails } = this.state;
 
     // Set expired card class.
     let expiredCard = false;
@@ -134,39 +140,42 @@ class EgiftCardLinked extends React.Component {
             <TrashIconSVG />
           </button>
         </div>
-        <div className="egift-card-linked-wrapper-bottom egifts-form-wrapper" id="card-details">
-          <div className="egift-linked-card-number-wrapper">
-            <div className="egift-linked-card-number egift-light-text">{Drupal.t('Gift Card number', {}, { context: 'egift' })}</div>
-            <div className="egift-linked-card-number-value egift-dark-text">{linkedCard.card_number}</div>
-          </div>
-          <div className={`egift-linked-expires-wrapper ${expiredCard}`}>
-            <div className="egift-linked-expires egift-light-text">{Drupal.t('Expires on', {}, { context: 'egift' })}</div>
-            <div
-              className={(expiredCard ? 'egift-linked-expires-value expired-card egift-dark-text' : 'egift-linked-expires-value egift-dark-text')}
-            >
-              {expiryDateFormatted}
+        <ConditionalView condition={hideCardDetails === false}>
+          <div className="egift-card-linked-wrapper-bottom egifts-form-wrapper" id="card-details">
+            <div className="egift-linked-card-number-wrapper">
+              <div className="egift-linked-card-number egift-light-text">{Drupal.t('Gift Card number', {}, { context: 'egift' })}</div>
+              <div className="egift-linked-card-number-value egift-dark-text">{linkedCard.card_number}</div>
             </div>
-            {expiredCard && <span>{Drupal.t('This card has expired.', {}, { context: 'egift' })}</span>}
+            <div className={`egift-linked-expires-wrapper ${expiredCard}`}>
+              <div className="egift-linked-expires egift-light-text">{Drupal.t('Expires on', {}, { context: 'egift' })}</div>
+              <div
+                className={(expiredCard ? 'egift-linked-expires-value expired-card egift-dark-text' : 'egift-linked-expires-value egift-dark-text')}
+              >
+                {expiryDateFormatted}
+              </div>
+              {expiredCard && <span>{Drupal.t('This card has expired.', {}, { context: 'egift' })}</span>}
+            </div>
+            <div className="egift-linked-card-type-wrapper">
+              <div className="egift-linked-card-type egift-light-text">{Drupal.t('Card Type', {}, { context: 'egift' })}</div>
+              <div className="egift-linked-card-type-value egift-dark-text">{linkedCard.card_type}</div>
+            </div>
+            <div className="action-buttons">
+              <button
+                id="egift-topup-button"
+                type="button"
+                className="egift-topup egift-topup-btn"
+                onClick={(e) => this.handleTopUp(e)}
+              >
+                {Drupal.t('Top up', {}, { context: 'egift' })}
+              </button>
+            </div>
           </div>
-          <div className="egift-linked-card-type-wrapper">
-            <div className="egift-linked-card-type egift-light-text">{Drupal.t('Card Type', {}, { context: 'egift' })}</div>
-            <div className="egift-linked-card-type-value egift-dark-text">{linkedCard.card_type}</div>
-          </div>
-          <div className="action-buttons">
-            <button
-              id="egift-topup-button"
-              type="button"
-              className="egift-topup egift-topup-btn"
-              onClick={(e) => this.handleTopUp(e)}
-            >
-              {Drupal.t('Top up', {}, { context: 'egift' })}
-            </button>
-          </div>
-        </div>
+        </ConditionalView>
         <ConditionalView condition={topUpForm}>
           <MyEgiftTopUp
             handleCancelTopUp={this.handleCancelTopUp}
             cardNumber={linkedCard.card_number}
+            handleHideDetails={this.handleHideDetails}
           />
         </ConditionalView>
       </div>

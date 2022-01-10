@@ -28,8 +28,13 @@ export default class EgiftCardStepTwo extends React.Component {
    * Handles textarea field count.
    */
   handleTextAreaChange = (e) => {
+    // Set the value of the text area when cursor moves out so label stays on top.
     document.getElementById('egift-message').value = e.target.value;
+
+    // Get the count of the characters in textarea.
     const count = parseInt(200, 10) - parseInt(e.target.value.length, 10);
+
+    // Show the count of characters when user types in textarea.
     document.getElementById('textarea-count').innerHTML = count.toString();
   }
 

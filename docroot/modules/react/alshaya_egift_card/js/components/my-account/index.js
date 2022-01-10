@@ -7,6 +7,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
+import Loading from '../../../../js/utilities/loading';
 
 class MyEgiftCard extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class MyEgiftCard extends React.Component {
   componentDidMount() {
     // Wait for the dom to load otherwise loader is removed
     // as other js update body.
-    window.addEventListener('load', this.getUserLinkedCard);
+    this.getUserLinkedCard();
   }
 
   componentWillUnmount() {
@@ -72,7 +73,11 @@ class MyEgiftCard extends React.Component {
     const { wait, linkedCard } = this.state;
     // Return if API call for Users linkedCard is not complete.
     if (wait) {
-      return null;
+      return (
+        <div className="egift-my-account">
+          <Loading />
+        </div>
+      );
     }
 
     return (

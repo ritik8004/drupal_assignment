@@ -24,14 +24,6 @@ export default class EgiftTopupFor extends React.Component {
     });
   };
 
-  /**
-   * Remove any validation error.
-   */
-  handleOnFocus = (e) => {
-    e.preventDefault();
-    document.getElementById('card-number-error').innerHTML = '';
-  };
-
   handleEvent = (e) => {
     if (e.currentTarget.value.length > 0) {
       e.currentTarget.classList.add('focus');

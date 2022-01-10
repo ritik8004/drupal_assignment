@@ -102,7 +102,6 @@ export default class EgiftTopPurchase extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    showFullScreenLoader();
 
     // Unset any errors displayed in previous submission.
     this.setState({
@@ -125,7 +124,6 @@ export default class EgiftTopPurchase extends React.Component {
 
     if (cardNumber === '') {
       document.getElementById('card-number-error').innerHTML = Drupal.t('Please enter an eGift card number.', {}, { context: 'egift' });
-      removeFullScreenLoader();
       return false;
     }
 
@@ -140,7 +138,6 @@ export default class EgiftTopPurchase extends React.Component {
       // Show error if still cart id is null.
       if (cartId === null) {
         document.getElementById('top-up-error').innerHTML = getDefaultErrorMessage();
-        removeFullScreenLoader();
         return false;
       }
     }
@@ -157,6 +154,9 @@ export default class EgiftTopPurchase extends React.Component {
         top_up_type: egiftCardFor,
       },
     };
+
+    // Show loader before api call.
+    showFullScreenLoader();
 
     // Call top-up API to add top-up to cart.
     // Don't use bearer token with top-up add to cart API as it is public API.

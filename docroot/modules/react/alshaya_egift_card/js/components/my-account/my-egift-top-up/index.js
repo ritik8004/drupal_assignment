@@ -30,8 +30,8 @@ export default class MyEgiftTopUp extends React.Component {
     const response = await callMagentoApi('/V1/products', 'GET', params);
     removeFullScreenLoader();
     if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
-      document.getElementById('card-details').style.display = 'none';
-      document.getElementById('egift-remove-button').style.display = 'none';
+      const { handleHideDetails } = this.props;
+      handleHideDetails();
       this.setState({
         topUpCard: response.data.items[0],
       });
