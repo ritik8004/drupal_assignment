@@ -54,6 +54,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
             otp: egiftCardOtp,
           },
         };
+        let message = '';
         // Show loader on api call.
         showFullScreenLoader();
         // Call get balance api.
@@ -79,6 +80,9 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
               });
               return false;
             }
+          } else {
+            message = Drupal.t('Something went wrong, please try again later.', {}, { context: 'egift' });
+            document.getElementById('egift_card_number_error').innerHTML = message;
           }
           return false;
         });
@@ -93,6 +97,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
     const { egiftCardNumber } = this.state;
     // Show loader on api call.
     showFullScreenLoader();
+    let message = '';
     // Call send otp api.
     const OtpResponse = sendOtp(egiftCardNumber);
     OtpResponse.then((response) => {
@@ -112,6 +117,9 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
           });
           return false;
         }
+      } else {
+        message = Drupal.t('Something went wrong, please try again later.', {}, { context: 'egift' });
+        document.getElementById('egift_card_number_error').innerHTML = message;
       }
       return false;
     });

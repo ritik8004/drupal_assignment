@@ -41,6 +41,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
     const { initialStep, stepChange } = this.props;
 
     let OtpResponse = {};
+    let message = '';
     // Perform validation.
     if (!this.handleValidation(e)) {
       if (initialStep === 1) {
@@ -68,6 +69,9 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                 });
                 return false;
               }
+            } else {
+              message = Drupal.t('Something went wrong, please try again later.', {}, { context: 'egift' });
+              document.getElementById('egift_card_number_error').innerHTML = message;
             }
             return false;
           });
