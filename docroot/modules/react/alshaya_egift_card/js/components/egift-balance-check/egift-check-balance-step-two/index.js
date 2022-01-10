@@ -128,7 +128,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
 
   // Redirect to topup page.
   handleRedirect = () => {
-    window.location.href = Drupal.url('/egift-card/topup-card');
+    window.location.href = Drupal.url('egift-card/topup-card');
     return false;
   }
 
