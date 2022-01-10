@@ -2,9 +2,12 @@
 
 namespace Drupal\alshaya_acm_product_category\Service;
 
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Product category carousel helper service.
@@ -33,6 +36,13 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
   protected $productCategoryPage;
 
   /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Constructs object of ProductCategoryCarouselHelper.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface\LanguageManagerInterface $language_manager
@@ -41,22 +51,97 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
    *   Config factory.
    * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page
    *   Product category page.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
    */
   public function __construct(
     LanguageManagerInterface $language_manager,
     ConfigFactoryInterface $config_factory,
-    ProductCategoryPage $product_category_page
+    ProductCategoryPage $product_category_page,
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->productCategoryPage = $product_category_page;
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * Create and returns the render array for category carousel accordion.
+   *
+   * @param int $category_id
+   *   Category id.
+   * @param string $carousel_title
+   *   Title for the carousel.
+   * @param string $view_all_text
+   *   View all text.
+   *
+   * @return array
+   *   The render array for carousel accordion.
+   */
+  private function getCarouselAccordion($category_id, $carousel_title, $view_all_text) {
+    $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
+    // If given category not available.
+    if (!$term instanceof TermInterface) {
+      return [];
+    }
+
+    if (empty($carousel_title)) {
+      $carousel_title = $term->label();
+    }
+
+    // Create accordion title link.
+    $accordion_title = [
+      '#type' => 'link',
+      '#title' => $carousel_title,
+      '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+    ];
+
+    $link = [];
+    if ($view_all_text) {
+      $link = [
+        '#title' => $view_all_text,
+        '#type' => 'link',
+        '#attributes' => [
+          'class' => ['category-accordion-view-all'],
+        ],
+        '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+      ];
+    }
+
+    // Theme content as accordion.
+    $carousel['content']['product_category_carousel'] = [
+      '#theme' => 'alshaya_white_label_accordion',
+      '#title' => $accordion_title ?: NULL,
+      '#content' => alshaya_acm_product_category_child_terms($category_id),
+      '#view_all' => $link,
+      '#cache' => [
+        'tags' => [
+          ProductCategoryTree::CACHE_TAG,
+        ],
+      ],
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/product-category-accordion',
+        ],
+      ],
+    ];
+
+    return $carousel;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCarousel($category_id, int $carousel_limit, $carousel_title, $view_all_text) {
-    $carousel = [];
+  public function getCarousel($category_id, int $carousel_limit, $carousel_title, $view_all_text, $is_accordion) {
+    // By default we don't show any carousel content.
+    $carousel['content'] = [];
+
+    if ($is_accordion) {
+      $accordion_content = $this->getCarouselAccordion($category_id, $carousel_title, $view_all_text);
+      return array_merge($carousel, $accordion_content);
+    }
+
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $productCarousel = $this->productCategoryPage->getCurrentSelectedCategory($langcode, $category_id);
     $settings = $this->configFactory->get('alshaya_acm_product.settings');

@@ -1408,60 +1408,10 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
         $section_title = $paragraph->get('field_category_carousel_title')->getString();
 
-        if ($is_accordion) {
-          $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($category_id);
-          // If given category not available.
-          if (!$term instanceof TermInterface) {
-            return;
-          }
-
-          if (empty($section_title)) {
-            $section_title = $term->label();
-          }
-
-          // Create accordion title link.
-          $accordion_title = [
-            '#type' => 'link',
-            '#title' => $section_title,
-            '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-          ];
-
-          $link = [];
-          if ($view_all_text) {
-            $link = [
-              '#title' => $view_all_text,
-              '#type' => 'link',
-              '#attributes' => [
-                'class' => ['category-accordion-view-all'],
-              ],
-              '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-            ];
-          }
-
-          // Theme content as accordion.
-          $variables['content']['product_category_carousel'] = [
-            '#theme' => 'alshaya_white_label_accordion',
-            '#title' => $accordion_title ?: NULL,
-            '#content' => alshaya_acm_product_category_child_terms($category_id),
-            '#view_all' => $link,
-            '#cache' => [
-              'tags' => [
-                ProductCategoryTree::CACHE_TAG,
-              ],
-            ],
-            '#attached' => [
-              'library' => [
-                'alshaya_white_label/product-category-accordion',
-              ],
-            ],
-          ];
-        }
-        else {
-          $product_in_carousel = (int) $paragraph->get('field_category_carousel_limit')->getString();
-          $carousel = \Drupal::service('alshaya_acm_product_category.carousel_helper')
-            ->getCarousel($category_id, $product_in_carousel, $section_title, $view_all_text);
-          $variables = array_merge($variables, $carousel);
-        }
+        $product_in_carousel = (int) $paragraph->get('field_category_carousel_limit')->getString();
+        $carousel = \Drupal::service('alshaya_acm_product_category.carousel_helper')
+          ->getCarousel($category_id, $product_in_carousel, $section_title, $view_all_text, $is_accordion);
+        $variables = array_merge($variables, $carousel);
       }
     }
   }

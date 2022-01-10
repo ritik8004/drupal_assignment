@@ -18,10 +18,12 @@ interface ProductCategoryCarouselHelperInterface {
    *   Title for the carousel.
    * @param string $view_all_text
    *   The view all button text for the carousel.
+   * @param bool $is_accordion
+   *   If the carousel should be displayed as accordion or not.
    *
    * @return array
    *   The render array for the carousel.
    */
-  public function getCarousel($category_id, int $carousel_limit, $carousel_title, $view_all_text);
+  public function getCarousel($category_id, int $carousel_limit, $carousel_title, $view_all_text, $is_accordion);
 
 }
