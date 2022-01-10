@@ -108,6 +108,12 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
           'megamenu-dynamic-layout',
         ],
       ],
+      '#attached' => [
+        'library' => [
+          'alshaya_secondary_main_menu/secondary_main_menu',
+          'alshaya_white_label/secondary-menu',
+        ],
+      ],
       '#items' => $menu,
       '#column_tree' => $columns_tree,
       '#menu_type' => $desktop_secondary_main_menu_layout,

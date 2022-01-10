@@ -11,7 +11,7 @@
 
     // Fetch cart id for anonymous user.
     let cartId = localStorage.getItem('cart_id');
-    if (typeof cartId === 'undefined' || cartId === null) {
+    if (typeof cartId === 'undefined' || cartId === null || cartId === 'NA') {
       // Fetch cart id from cart data for authenticated users.
       let data = JSON.parse(localStorage.getItem('cart_data'));
       if (typeof data !== 'undefined'

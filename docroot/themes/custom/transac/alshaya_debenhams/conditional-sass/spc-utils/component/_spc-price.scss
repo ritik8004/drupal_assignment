@@ -2,6 +2,10 @@
   .price-block {
     @include breakpoint($tablet) {
       display: flex;
+
+      #spc-checkout & {
+        display: block;
+      }
     }
   }
 
@@ -12,6 +16,11 @@
     @include breakpoint($tablet) {
       margin-top: 0;
       margin-#{$left}: 0.5rem;
+
+      #spc-checkout & {
+        margin-#{$left}: 0;
+        margin-top: 0.25rem;
+      }
     }
   }
 }
