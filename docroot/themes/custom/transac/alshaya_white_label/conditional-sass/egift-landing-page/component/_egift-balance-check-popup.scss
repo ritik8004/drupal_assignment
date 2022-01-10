@@ -71,7 +71,7 @@
     .egift-balance-check-form {
       padding: 2rem 1.25rem;
       background-color: $egift-balance-sidebar-bg;
-      text-align: #{$left};
+      text-align: $left;
 
       .error {
         line-height: 1.25rem;
@@ -196,7 +196,7 @@
 
     .egift-type-resend_otp {
       span:first-child {
-        margin-right: 3px;
+        margin-#{$right}: 0.188rem;
       }
     }
   }
