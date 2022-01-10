@@ -44,6 +44,7 @@ exports.render = function render(
         if (enrichedDataObj && typeof enrichedDataObj.path !== 'undefined') {
           breadcrumb.url = enrichedDataObj.path;
         }
+        // Added whitespace after trailing slash to match with V2 markup.
         breadcrumbHtml += getBreadcrumbMarkup(breadcrumb, innerHtmlObj, settings) + ' ';
       }
     });
