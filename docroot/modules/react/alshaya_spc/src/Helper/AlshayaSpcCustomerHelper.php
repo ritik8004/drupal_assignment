@@ -327,9 +327,11 @@ class AlshayaSpcCustomerHelper {
     global $_alshaya_acm_customer_addressbook_processed;
 
     try {
-      $customer = $this->apiWrapper->authenticateCustomerOnMagento($mail, $pass);
+      $customer = $this->apiWrapper->getCustomerUsingAuthDetails($mail, $pass);
 
-      if (!empty($customer) && !empty($customer['customer_id'])) {
+      if (!empty($customer['customer_id'])) {
+        // Set the token in session.
+        $this->setCustomerTokenInSession($customer['token']);
         $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
         // @todo Remove this condition when we uninstall alshaya_acm module.
@@ -371,20 +373,37 @@ class AlshayaSpcCustomerHelper {
    * @return string|null
    *   The token or null.
    */
-  public function getCustomerTokenBySocialDetail($mail) {
-    // @todo This function should only be responsible to return the token from
-    // session. Token creation will happen when the user authenticates either
-    // using user/pass or social login. See Ticket CORE-29594.
-    $token = $this->session->get('magento_customer_token');
+  public function loadCustomerTokenForSocialAccount($mail) {
+    $token = $this->getCustomerToken();
     if (empty($token) || !is_string($token)) {
       $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail));
       if ($token === FALSE) {
         $token = NULL;
       }
-      $this->session->set('magento_customer_token', $token);
+      $this->setCustomerTokenInSession($token);
     }
 
     return $token;
+  }
+
+  /**
+   * Helper function to set the customer token for API calls.
+   *
+   * @param string|null $token
+   *   The token.
+   */
+  private function setCustomerTokenInSession($token) {
+    $this->session->set('magento_customer_token', $token);
+  }
+
+  /**
+   * Helper function to get the customer token for API calls.
+   *
+   * @return string
+   *   The token.
+   */
+  public function getCustomerToken() {
+    return $this->session->get('magento_customer_token', NULL);
   }
 
 }
