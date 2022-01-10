@@ -115,3 +115,11 @@ services:
       - '@language_manager'
       - '@current_route_match'
       - '@module_handler'
+
+  alshaya_acm_product_category.carousel_helper:
+    class: Drupal\alshaya_acm_product_category\Service\ProductCategoryCarouselHelper
+    arguments:
+      - '@language_manager'
+      - '@config.factory'
+      - '@alshaya_acm_product_category.page'
+

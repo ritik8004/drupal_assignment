@@ -1458,54 +1458,9 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         }
         else {
           $product_in_carousel = (int) $paragraph->get('field_category_carousel_limit')->getString();
-          $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-          $productCarousel = \Drupal::service('alshaya_acm_product_category.page')->getCurrentSelectedCategory($langcode, $category_id);
-          $settings = \Drupal::config('alshaya_acm_product.settings');
-
-          // Make carousel title link.
-          $carousel_title = [
-            'title' => $section_title,
-            'url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id])->toString(),
-          ];
-
-          $productCarousel = array_merge($productCarousel, [
-            'sectionTitle' => $carousel_title,
-            'itemsPerPage' => $product_in_carousel,
-            'vatText' => $settings->get('vat_text'),
-          ]);
-
-          $variables['content']['product_category_carousel'] = [
-            '#type' => 'container',
-            '#attributes' => [
-              'class' => ['alshaya-product-category-carousel'],
-              'data-pcc-id' => $category_id,
-            ],
-            '#attached' => [
-              'drupalSettings' => [
-                'alshayaProductCarousel' => [
-                  $category_id => $productCarousel,
-                ],
-                'hp_product_carousel_items' => $settings->get('product_carousel_items_settings.hp_product_carousel_items_number'),
-              ],
-              'library' => [
-                'alshaya_algolia_react/product_category_carousel',
-                'alshaya_white_label/product_carousel',
-              ],
-            ],
-          ];
-
-          if ($view_all_text) {
-            $variables['attributes']['class'][] = 'has-view-all-link';
-
-            $variables['content']['view_all'] = [
-              '#title' => $view_all_text,
-              '#type' => 'link',
-              '#attributes' => [
-                'class' => ['category-carousel-view-all'],
-              ],
-              '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-            ];
-          }
+          $carousel = \Drupal::service('alshaya_acm_product_category.carousel_helper')
+            ->getCarousel($category_id, $product_in_carousel, $section_title, $view_all_text);
+          $variables = array_merge($variables, $carousel);
         }
       }
     }
