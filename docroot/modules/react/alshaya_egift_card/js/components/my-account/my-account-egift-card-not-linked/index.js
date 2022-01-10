@@ -46,7 +46,6 @@ class EgiftCardNotLinked extends React.Component {
           this.setState({
             enableVerifyCode: true,
           });
-          document.getElementById('resend-success').innerHTML = Drupal.t('Verification code is send to email address registered with the card number.', {}, { context: 'egift' });
         }
         return true;
       });
@@ -59,12 +58,12 @@ class EgiftCardNotLinked extends React.Component {
     e.preventDefault();
     // Empty otp field.
     document.getElementsByName('otp-code')[0].value = '';
-    // Remove existing success message.
-    document.getElementById('resend-success').innerHTML = '';
     showFullScreenLoader();
     this.getOtpCode().then((response) => {
       if (typeof response !== 'undefined' && response) {
-        document.getElementById('resend-success').innerHTML = Drupal.t('Verification code is send to email address registered with the card number.', {}, { context: 'egift' });
+        this.setState({
+          enableVerifyCode: true,
+        });
       }
     });
   }
@@ -193,12 +192,20 @@ class EgiftCardNotLinked extends React.Component {
             Drupal.t('You dont have any eGift card linked to your account, link card to use it for your purchases', {}, { context: 'egift' })
           }
         </div>
-        <div className="egift-link-card-instruction">
-          {
-            Drupal.t('We\'ll send a verification code to your email to verify and link eGift card', {}, { context: 'egift' })
-          }
-        </div>
-        <div id="resend-success" className="egift-resend-message" />
+        <ConditionalView condition={enableVerifyCode === false}>
+          <div className="egift-link-card-instruction" id="resend-success">
+            {
+              Drupal.t('We\'ll send a verification code to your email to verify and link eGift card', {}, { context: 'egift' })
+            }
+          </div>
+        </ConditionalView>
+        <ConditionalView condition={enableVerifyCode}>
+          <div className="egift-link-card-instruction" id="resend-success">
+            {
+              Drupal.t('Verification code is send to email address registered with the card number.', {}, { context: 'egift' })
+            }
+          </div>
+        </ConditionalView>
         <form
           className="egift-validate-form egifts-form-wrapper"
           method="post"

@@ -12,7 +12,11 @@ import {
 const handleEgiftDetailValidation = (e, props) => {
   let errors = false;
   const { egift_card_number: egiftCardNumber } = e.target.elements;
-  const { cart: cartData } = props;
+  const { cart: cartData, redemptionDisabled } = props;
+  // Don't do anything if redemption is disabled.
+  if (redemptionDisabled) {
+    return errors;
+  }
   // Egift card number validation.
   if (egiftCardNumber.value.length === 0) {
     document.getElementById('egift_card_number_error').innerHTML = getStringMessage('form_egift_card_number');

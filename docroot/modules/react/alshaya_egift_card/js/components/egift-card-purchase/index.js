@@ -224,7 +224,11 @@ export default class EgiftCardPurchase extends React.Component {
         </ConditionalView>
         <ConditionalView condition={egiftItems !== null}>
           <div className="egifts-form-wrapper">
-            <form onSubmit={this.handleSubmit} className="egift-form fadeInUp">
+            <form
+              onSubmit={this.handleSubmit}
+              className="egift-form fadeInUp"
+              id="egift-purchase-form"
+            >
               <EgiftCardsListStepOne
                 items={egiftItems}
                 handleEgiftSelect={this.handleEgiftSelect}

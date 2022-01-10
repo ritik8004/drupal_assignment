@@ -25,6 +25,16 @@ export default class EgiftCardsListStepOne extends React.Component {
    * Handle egift card select from list.
    */
   handleEgiftSelect = (id) => {
+    if (document.getElementById('egift-purchase-form')) {
+      // Reset values.
+      document.getElementById('egift-purchase-form').reset();
+    }
+
+    if (document.getElementById('textarea-count')) {
+      // Reset count on textarea.
+      document.getElementById('textarea-count').innerHTML = 200;
+    }
+
     // Get all egift card items.
     const { items } = this.state;
 
@@ -56,7 +66,11 @@ export default class EgiftCardsListStepOne extends React.Component {
               selected={selectedItem}
               handleEgiftSelect={this.handleEgiftSelect}
             />
-            <EgiftCardAmount selected={selectedItem} handleAmountSelect={handleAmountSelect} />
+            <EgiftCardAmount
+              selected={selectedItem}
+              handleAmountSelect={handleAmountSelect}
+              myAccountLabel={false}
+            />
             <input type="hidden" name="egift-sku" value={selectedItem.sku} />
           </div>
         </div>

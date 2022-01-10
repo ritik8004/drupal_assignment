@@ -222,7 +222,7 @@ export const performRedemption = (quoteId, updateAmount, egiftCardNumber, cardTy
 /**
  * Triggers custom event to update price summary block.
  */
-export const updatePriceSummaryBlock = () => {
+export const updatePriceSummaryBlock = (refreshCart) => {
   const cartData = window.commerceBackend.getCart(true);
   if (cartData instanceof Promise) {
     cartData.then((data) => {
@@ -230,7 +230,14 @@ export const updatePriceSummaryBlock = () => {
         if (data.status === 200) {
           // Update Egift card line item.
           dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
-          removeFullScreenLoader();
+          // Refresh the cart in checkout.
+          const formatedCart = window.commerceBackend.getCartForCheckout();
+          if (formatedCart instanceof Promise) {
+            formatedCart.then((cart) => {
+              refreshCart({ cart: cart.data });
+              removeFullScreenLoader();
+            });
+          }
         }
       }
     });
@@ -348,6 +355,21 @@ export const isFullPaymentDoneByEgift = (cart) => {
       && hasValue(egiftRedemptionType)
       && balancePayable <= 0) {
       return true;
+    }
+
+    if (hasValue(cart.totals.extension_attributes)) {
+      // Check if data is available in raw cart object.
+      const {
+        hps_redeemed_amount: rawEgiftRdeemedAmount,
+        hps_redemption_type: rawEgiftRedemptionType,
+        balance_payble: rawBalancePayable,
+      } = cart.totals.extension_attributes;
+
+      if (hasValue(rawEgiftRdeemedAmount)
+        && hasValue(rawEgiftRedemptionType)
+        && rawBalancePayable <= 0) {
+        return true;
+      }
     }
   }
 

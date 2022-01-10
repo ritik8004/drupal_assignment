@@ -13,15 +13,30 @@ export default class EgiftCardStepTwo extends React.Component {
     };
   }
 
+  /**
+   * Handles onBlur to add remove focus class on fields.
+   */
   handleEvent = (e) => {
     if (e.currentTarget.value.length > 0) {
       e.currentTarget.classList.add('focus');
     } else {
       e.currentTarget.classList.remove('focus');
     }
-    this.setState({ egiftMessage: encodeURIComponent(e.target.value) });
-    this.setState({ textAreaCount: e.target.value.length });
   };
+
+  /**
+   * Handles textarea field count.
+   */
+  handleTextAreaChange = (e) => {
+    // Set the value of the text area when cursor moves out so label stays on top.
+    document.getElementById('egift-message').value = e.target.value;
+
+    // Get the count of the characters in textarea.
+    const count = parseInt(200, 10) - parseInt(e.target.value.length, 10);
+
+    // Show the count of characters when user types in textarea.
+    document.getElementById('textarea-count').innerHTML = count.toString();
+  }
 
   /**
    * Egift show or hide message field on selecting for field.
@@ -135,14 +150,19 @@ export default class EgiftCardStepTwo extends React.Component {
                       id="egift-message"
                       name="egift-message"
                       maxLength={parseInt(200, 10)}
-                      onChange={this.handleEvent}
+                      onChange={(e) => this.handleTextAreaChange(e)}
                       onBlur={(e) => this.handleEvent(e)}
                       className="form-input"
                       defaultValue={egiftMessage}
                     />
                     <div className="c-input__bar" />
                     <label>{Drupal.t('Message', {}, { context: 'egift' })}</label>
-                    <div className="textarea-character-limit">{ parseInt(200, 10) - parseInt(textAreaCount, 10) }</div>
+                    <div
+                      id="textarea-count"
+                      className="textarea-character-limit"
+                    >
+                      { parseInt(200, 10) - parseInt(textAreaCount, 10) }
+                    </div>
                     <div id="email-error" className="error egift-error" />
                   </div>
                 </div>

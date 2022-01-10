@@ -1,12 +1,16 @@
 import React from 'react';
 import EgiftCardOpenAmountField from '../egift-card-open-amount-field';
 import getCurrencyCode from '../../../../../js/utilities/util';
+import ConditionalView
+  from '../../../../../js/utilities/components/conditional-view';
 
 /**
  * Show list of egift card selectable amounts from api.
  */
 const EgiftCardAmount = (props) => {
-  const { selected, handleAmountSelect } = props;
+  const { selected, handleAmountSelect, myAccountLabel } = props;
+
+  const labelOption = typeof myAccountLabel !== 'undefined' ? myAccountLabel : false;
 
   // Get amounts that user can select from api response items.
   const amounts = selected.extension_attributes.hps_giftcard_amount;
@@ -48,13 +52,24 @@ const EgiftCardAmount = (props) => {
 
   return (
     <div className="egift-card-amount-list-wrapper">
-      <div className="egift-card-amount-list-title subtitle-text">
-        {
-          Drupal.t('Amount @currencyCode', {
-            '@currencyCode': getCurrencyCode(),
-          }, { context: 'egift' })
-        }
-      </div>
+      <ConditionalView condition={labelOption === false}>
+        <div className="egift-card-amount-list-title subtitle-text">
+          {
+            Drupal.t('Amount @currencyCode', {
+              '@currencyCode': getCurrencyCode(),
+            }, { context: 'egift' })
+          }
+        </div>
+      </ConditionalView>
+      <ConditionalView condition={labelOption}>
+        <div className="egift-card-amount-list-title subtitle-text">
+          {
+            Drupal.t('Choose Top-up Amount (@currencyCode)', {
+              '@currencyCode': getCurrencyCode(),
+            }, { context: 'egift' })
+          }
+        </div>
+      </ConditionalView>
       <ul>
         {listItems}
       </ul>

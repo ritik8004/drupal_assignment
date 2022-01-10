@@ -17,6 +17,14 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
     };
   }
 
+  handleEvent = (e) => {
+    if (e.currentTarget.value.length > 0) {
+      e.currentTarget.classList.add('focus');
+    } else {
+      e.currentTarget.classList.remove('focus');
+    }
+  };
+
   // Handling validation for egift card otp field.
   handleValidation = (e) => {
     const { value: egiftCardOtp } = e.target.elements.egift_card_otp;
@@ -35,7 +43,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
     }
     document.getElementById('egift_card_otp_error').innerHTML = message;
     return errors;
-  }
+  };
 
   // Handle the form submit.
   handleSubmit = (e) => {
@@ -57,7 +65,11 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
         // Show loader on api call.
         showFullScreenLoader();
         // Call get balance api.
-        const BalanceResponse = callMagentoApi('/V1/egiftcard/getBalance', 'POST', postData);
+        const BalanceResponse = callMagentoApi(
+          '/V1/egiftcard/getBalance',
+          'POST',
+          postData,
+        );
         BalanceResponse.then((response) => {
           // Remove loader on api success.
           removeFullScreenLoader();
@@ -72,11 +84,14 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
             } else {
               // Show error message if api fails and dont proceed further.
               document.getElementById('egift_card_otp_error').innerHTML = response.data.response_message;
-              logger.error('Error in getting users card balance api response. Action: @action CardNumber: @cardNumber Response: @response', {
-                '@action': 'get_balance',
-                '@cardNumber': egiftCardNumber,
-                '@response': response.data.response_message,
-              });
+              logger.error(
+                'Error in getting users card balance api response. Action: @action CardNumber: @cardNumber Response: @response',
+                {
+                  '@action': 'get_balance',
+                  '@cardNumber': egiftCardNumber,
+                  '@response': response.data.response_message,
+                },
+              );
               return false;
             }
           }
@@ -85,7 +100,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
       }
     }
     return false;
-  }
+  };
 
   // Handle re-send otp.
   handleResendCode = (e) => {
@@ -105,18 +120,21 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
         } else {
           // Show error message if api fails and dont proceed further.
           document.getElementById('egift_card_otp_error').innerHTML = response.data.response_message;
-          logger.error('Empty Response in sending opt for getting users card balance . Action: @action CardNumber: @cardNumber Response: @response', {
-            '@action': 'get_balance',
-            '@cardNumber': egiftCardNumber,
-            '@response': response.data.response_message,
-          });
+          logger.error(
+            'Empty Response in sending opt for getting users card balance . Action: @action CardNumber: @cardNumber Response: @response',
+            {
+              '@action': 'get_balance',
+              '@cardNumber': egiftCardNumber,
+              '@response': response.data.response_message,
+            },
+          );
           return false;
         }
       }
       return false;
     });
     return false;
-  }
+  };
 
   // Handle change another card.
   handleChangeCardNumber = () => {
@@ -124,7 +142,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
     // Moves to initial step.
     stepChange(1);
     return false;
-  }
+  };
 
   // Redirect to topup page.
   handleRedirect = () => {
@@ -159,8 +177,10 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
           closeOnDocumentClick={false}
         >
           <div className="egift-amount-update-wrapper">
+            <div className="egift-check-bal-title">
+              {Drupal.t('Check Balance & Validity', {}, { context: 'egift' })}
+            </div>
             <a className="close" onClick={() => closeModal()}> &times; </a>
-            <div className="heading">{Drupal.t('Check Balance & Validity', {}, { context: 'egift' })}</div>
             <div className="form-wrapper">
               <ConditionalView condition={initialStep === 2}>
                 <form
@@ -171,67 +191,103 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                 >
                   <div className="egift-header-wrapper">
                     <p>
-                      <strong>{Drupal.t('Enter gift card details to check balance & validity', {}, { context: 'egift' })}</strong>
+                      {Drupal.t(
+                        'Enter gift card details to check balance & validity',
+                        {},
+                        { context: 'egift' },
+                      )}
                     </p>
                   </div>
                   <div className="egift-type-card_number">
                     <input
                       type="text"
                       name="egift_card_number"
-                      placeholder="eGift Card Number"
                       defaultValue={cardNumber}
                       className="card-number"
                       disabled="disabled"
+                      onBlur={(e) => this.handleEvent(e)}
                     />
+                    <div className="c-input__bar" />
+                    <label>
+                      {Drupal.t('eGift Card Number*', {}, { context: 'egift' })}
+                    </label>
                     <div id="egift_card_number_error" className="error" />
                   </div>
                   <div className="egift-type-card_otp">
                     <input
                       type="text"
                       name="egift_card_otp"
-                      placeholder="eGift Card Otp"
                       className="card-otp"
                       id="egift_card_otp"
+                      onBlur={(e) => this.handleEvent(e)}
                     />
+                    <div className="c-input__bar" />
+                    <label>
+                      {Drupal.t('eGift Card Otp*', {}, { context: 'egift' })}
+                    </label>
                     <div id="egift_card_otp_error" className="error" />
                   </div>
-                  <div className="egift-type-resend_otp">
-                    <span>{Drupal.t('Didn\'t receive?', {}, { context: 'egift' })}</span>
-                    <span onClick={(e) => this.handleResendCode(e)}>
-                      {Drupal.t('Resend Code', {}, { context: 'egift' })}
-                    </span>
+                  <div className="egift-topup-btn-wrapper">
+                    <div className="egift-code-wrapper">
+                      <div className="egift-type-resend_otp">
+                        <span>
+                          {Drupal.t(
+                            "Didn't receive?",
+                            {},
+                            { context: 'egift' },
+                          )}
+                        </span>
+                        <span onClick={(e) => this.handleResendCode(e)}>
+                          {Drupal.t('Resend Code', {}, { context: 'egift' })}
+                        </span>
+                      </div>
+                      <div className="egift-type-another_card">
+                        <span onClick={() => this.handleChangeCardNumber()}>
+                          {Drupal.t('Change Card?', {}, { context: 'egift' })}
+                        </span>
+                      </div>
+                    </div>
+                    <input
+                      className="egift-button"
+                      id="egift-button"
+                      type="submit"
+                      value={Drupal.t(
+                        'Check balance',
+                        {},
+                        { context: 'egift' },
+                      )}
+                    />
                   </div>
-                  <div className="egift-type-another_card">
-                    <span onClick={() => this.handleChangeCardNumber()}>
-                      {Drupal.t('Change Card?', {}, { context: 'egift' })}
-                    </span>
-                  </div>
-                  <input
-                    className="egift-button"
-                    id="egift-button"
-                    type="submit"
-                    value={Drupal.t('CHECK BALANCE', {}, { context: 'egift' })}
-                  />
                 </form>
               </ConditionalView>
               <ConditionalView condition={initialStep === 3}>
                 <div className="egift-balance-response">
-                  <p>
-                    {Drupal.t('Here is your current balance', {}, { context: 'egift' })}
+                  <p className="egift-current-balance-text">
+                    {Drupal.t(
+                      'Here is your current balance',
+                      {},
+                      { context: 'egift' },
+                    )}
                   </p>
-                  <strong>
+                  <p className="egift-price-text">
                     <PriceElement amount={parseInt(egiftCardBalance, 10)} />
-                  </strong>
-                  <p>
-                    {Drupal.t('for eGift card ending in ..', {}, { context: 'egift' })}
+                  </p>
+                  <p className="egift-card-end-text">
+                    {Drupal.t(
+                      'for eGift card ending in ..',
+                      {},
+                      { context: 'egift' },
+                    )}
                     {cardNumber.slice(-4)}
                   </p>
-                  <p>
+                  <p className="egift-valid-text">
                     {Drupal.t('Card valid up to ', {}, { context: 'egift' })}
                     {egiftCardvalidity}
                   </p>
-                  { topupButton }
-                  { anotherCardButton }
+                  <div className="egift-topup-btn-wrapper">
+                    {topupButton}
+                    {anotherCardButton}
+                  </div>
                 </div>
               </ConditionalView>
             </div>
@@ -239,5 +295,5 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
         </Popup>
       </>
     );
-  }
+  };
 }

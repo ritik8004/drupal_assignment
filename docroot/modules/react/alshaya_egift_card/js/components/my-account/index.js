@@ -7,6 +7,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
+import Loading from '../../../../js/utilities/loading';
 
 class MyEgiftCard extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class MyEgiftCard extends React.Component {
   }
 
   componentDidMount() {
+    // Get user linked card.
     this.getUserLinkedCard();
   }
 
@@ -25,10 +27,10 @@ class MyEgiftCard extends React.Component {
    * Get User linked card helper.
    */
   getUserLinkedCard = () => {
-    showFullScreenLoader();
     // Call to get customer linked card details.
     const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
     if (result instanceof Promise) {
+      showFullScreenLoader();
       result.then((response) => {
         removeFullScreenLoader();
         if (typeof response.data !== 'undefined' && response.data.response_type) {
@@ -66,7 +68,11 @@ class MyEgiftCard extends React.Component {
     const { wait, linkedCard } = this.state;
     // Return if API call for Users linkedCard is not complete.
     if (wait) {
-      return null;
+      return (
+        <div className="egift-my-account">
+          <Loading />
+        </div>
+      );
     }
 
     return (
