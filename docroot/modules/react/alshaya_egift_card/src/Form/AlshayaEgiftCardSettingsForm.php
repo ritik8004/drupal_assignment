@@ -93,6 +93,13 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('topup_terms_conditions_text.value'),
     ];
 
+    $form['egift_card_configuration']['textarea_maxlength'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('eGift card message allowed characters.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('textarea_maxlength'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -104,6 +111,7 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
       ->set('egift_card_enabled', $form_state->getValue('enable_disable_egift_card'))
       ->set('payment_methods_not_supported', $form_state->getValue('payment_methods_not_supported'))
       ->set('topup_terms_conditions_text', $form_state->getValue('topup_terms_conditions_text'))
+      ->set('textarea_maxlength', $form_state->getValue('textarea_maxlength'))
       ->save();
 
     parent::submitForm($form, $form_state);
