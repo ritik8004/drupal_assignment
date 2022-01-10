@@ -19,7 +19,7 @@
   }
 
   .paragraph-image_title_subtitle_link {
-    background-color: #efe4ce;
+    background-color: $egift-banner-bg;
     padding: 6rem 4.5rem;
 
     @include breakpoint($only-mobile) {
