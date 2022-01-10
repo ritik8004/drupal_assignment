@@ -13,4 +13,18 @@
       }
     }
   }
+
+  .egift-order-summary {
+    .total-line-item:nth-child(1) {
+      color: $pdp_product_special_price_text;
+    }
+  }
+}
+
+#spc-checkout {
+  .full-payment-egift {
+    .spc-checkout-payment-options {
+      padding-top: 0;
+    }
+  }
 }

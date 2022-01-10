@@ -102,8 +102,11 @@
       &.disabled {
         a,
         span {
-          background: url('#{$dh_theme_img_directory_path}/icons/disabled.png') no-repeat;
-          background-size: 100% 100%;
+          background: none;
+          background-color: $pdp_disable_variant_bg;
+          opacity: 0.4;
+          color: $pdp_disable_variant_text;
+          border: 0;
         }
       }
     }
@@ -249,6 +252,8 @@
     }
 
     .select2-container {
+      width: 4.625rem !important;
+
       .select2-selection {
         width: 4.625rem;
         height: 2.625rem;
@@ -263,6 +268,7 @@
           font-size: 1.25rem;
           line-height: 2.2;
           font-weight: bold;
+          width: 2.6875rem;
         }
       }
     }
