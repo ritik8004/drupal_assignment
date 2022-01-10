@@ -2,13 +2,66 @@
 
 namespace Drupal\alshaya_js_optimisations\Form;
 
+use Drupal\alshaya_js_optimisations\AlshayaJsOptimisationHelper;
+use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Asset\LibraryDiscovery;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteBuilderInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class Alshaya JS Performance Config Form.
  */
 class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
+
+  /**
+   * The JS optimisation service.
+   *
+   * @var \Drupal\alshaya_js_optimisations\AlshayaJsOptimisationHelper
+   */
+  protected $jsOptimisation;
+
+  /**
+   * The Library Discovery object.
+   *
+   * @var \Drupal\Core\Asset\LibraryDiscovery
+   */
+  protected $libraryDiscovery;
+
+  /**
+   * The Route builder object.
+   *
+   * @var \Drupal\Core\Routing\RouteBuilderInterface
+   */
+  protected $routerBuilder;
+
+  /**
+   * Constructs a JS optimisation service object.
+   *
+   * @param \Drupal\alshaya_js_optimisations\AlshayaJsOptimisationHelper $js_optimsation
+   *   Optimisations config, methods and variables.
+   * @param \Drupal\Core\Asset\LibraryDiscovery $library_discovery
+   *   Library Discovery methods and variables.
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
+   *   Route builder methods and variables.
+   */
+  public function __construct(AlshayaJsOptimisationHelper $js_optimsation, LibraryDiscovery $library_discovery, RouteBuilderInterface $router_builder) {
+    $this->jsOptimisation = $js_optimsation;
+    $this->libraryDiscovery = $library_discovery;
+    $this->routerBuilder = $router_builder;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('alshaya_js_optimisations.helper'),
+      $container->get('library.discovery'),
+      $container->get('router.builder'),
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -26,78 +79,58 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @todo Add accordion help texts.
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
+
     $config = $this->config('alshaya_js_optimisations.settings');
+    $critical_js = $config->get('critical_js');
+    $js_optimisations_config = AlshayaJsOptimisationHelper::getJsOptimisationTextConfig();
+    $critical_js_text_config = $js_optimisations_config['critical_js'];
+    $js_categories_config = AlshayaJsOptimisationHelper::$jsCategories;
+    $js_categories = array_keys($js_categories_config);
+    $yaml_placeholder = $this->t('Enter YAML formatted text');
 
     $form['enable_uglification'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Enable JS Uglification'),
-      '#description' => $this->t('Uglification removes whitespaces, minfies variables and function names on the scripts. This will reduce the script size and its download size by a small percentage.'),
+      '#title' => $js_optimisations_config['uglification']['label'],
+      '#description' => $js_optimisations_config['uglification']['description'],
       '#default_value' => $config->get('enable_uglification'),
     ];
 
     $form['critical_js'] = [
       '#type' => 'fieldset',
-      '#title' => $this->t('Critical JS Settings'),
-      '#description' => $this->t('Critical JS functionality helps to prioritise loading of important scripts. Other non critical scripts will be deprioritised and loaded asynchronously. Please configure this settings properly as the wrong settings can break the application and/or give no performance gains.'),
+      '#title' => $critical_js_text_config['label'],
+      '#description' => $critical_js_text_config['description'],
     ];
 
-    $critical_js = $config->get('critical_js');
-
-    $form['critical_js']['enabled'] = [
+    $form['critical_js']['status'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Enable Critical JS'),
-      '#default_value' => isset($critical_js['enabled']) ? $critical_js['enabled'] : FALSE,
+      '#title' => $critical_js_text_config['status_label'],
+      '#default_value' => isset($critical_js['status']) ? $critical_js['status'] : FALSE,
     ];
 
-    $form['critical_js']['critical'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Critical Scripts'),
-      '#placeholder' => $this->t('Enter YAML formatted text'),
-      '#description' => $this->t('JS asset libraries to load with high priority on pageload. They render content and interactions above the fold, that are immediately visible on pageload. They are also responsibe for any critical and highlighting functionality on a page.'),
-      '#rows' => 10,
-      '#states' => [
-        'disabled' => [
-          ':input[name="enabled"]' => ['checked' => FALSE],
+    foreach ($js_categories as $category) {
+      $form['critical_js'][$category] = [
+        '#type' => 'textarea',
+        '#title' => $critical_js_text_config[$category]['label'],
+        '#placeholder' => $yaml_placeholder,
+        '#description' => $critical_js_text_config[$category]['description'],
+        '#rows' => 8,
+        '#states' => [
+          'disabled' => [
+            ':input[name="status"]' => ['checked' => FALSE],
+          ],
         ],
-      ],
-      '#default_value' => isset($critical_js['critical']) ? $critical_js['critical'] : '',
-    ];
+        '#default_value' => isset($critical_js[$category]) ? $critical_js[$category] : '',
+      ];
+    }
 
-    $form['critical_js']['sitewide'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Sitewide Scripts'),
-      '#placeholder' => $this->t('Enter YAML formatted text'),
-      '#description' => $this->t('JS asset libraries used on all pages throughout the site. These are libraries and initialisation codes that are required by all pages.'),
-      '#rows' => 10,
-      '#states' => [
-        'disabled' => [
-          ':input[name="enabled"]' => ['checked' => FALSE],
-        ],
-      ],
-      '#default_value' => isset($critical_js['sitewide']) ? $critical_js['sitewide'] : '',
-    ];
-
-    $form['critical_js']['ie_only'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('IE Only Scripts'),
-      '#placeholder' => $this->t('Enter YAML formatted text'),
-      '#description' => $this->t('JS asset library polyfills used only to provide compatibility with IE.'),
-      '#rows' => 5,
-      '#states' => [
-        'disabled' => [
-          ':input[name="enabled"]' => ['checked' => FALSE],
-        ],
-      ],
-      '#default_value' => isset($critical_js['ie_only']) ? $critical_js['ie_only'] : '',
-    ];
-
-    $warning_message = $this->t('WARNING: Saving this form will rebuild cache on JS files. The first load of site pages will be slower than usual.');
     $form['warning'] = [
       '#type' => 'markup',
-      '#markup' => '<div class="txt-warning">' . $warning_message . '</div>',
+      '#markup' => '<div class="txt-warning">' . $js_optimisations_config['form_warning'] . '</div>',
     ];
 
     return $form;
@@ -108,6 +141,15 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     // Validate YAML syntax.
+    $fields = AlshayaJsOptimisationHelper::$jsCategories;
+    foreach ($fields as $field => $attributes) {
+      try {
+        Yaml::decode($form_state->getValue($field));
+      }
+      catch (\Exception $e) {
+        $form_state->setErrorByName($field, $this->t('Invalid YAML data on %field', ['%field' => $attributes['label']]));
+      }
+    }
   }
 
   /**
@@ -116,17 +158,29 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_js_optimisations.settings');
     $critical_js = [
-      'enabled' => $form_state->getValue('enabled'),
-      'critical' => $form_state->getValue('critical'),
-      'sitewide' => $form_state->getValue('sitewide'),
+      'status' => $form_state->getValue('status'),
       'ie_only' => $form_state->getValue('ie_only'),
+      'site_libraries' => $form_state->getValue('site_libraries'),
+      'critical' => $form_state->getValue('critical'),
+      'sitewide_1' => $form_state->getValue('sitewide_1'),
+      'sitewide_2' => $form_state->getValue('sitewide_2'),
     ];
+
+    // Store processed library info to Critical JS settings.
+    $processed_libraries = [];
+    if ($critical_js['status']) {
+      $processed_libraries = $this->jsOptimisation->resolveCategories($critical_js);
+    }
+    $critical_js['processed_libraries'] = Yaml::encode($processed_libraries);
+
     $config->set('critical_js', $critical_js);
     $config->set('enable_uglification', $form_state->getValue('enable_uglification'));
     $config->save();
 
-    // Clear JS file / aggregates Cache.
-    // Trigger hook_library_info_alter.
+    // Clear Cache to trigger hook_library_info_alter with updated priorities.
+    $this->libraryDiscovery->clearCachedDefinitions();
+    $this->routerBuilder->rebuild();
+
     return parent::submitForm($form, $form_state);
   }
 
