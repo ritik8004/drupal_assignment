@@ -55,8 +55,12 @@ const getImageUrl = (customAttributes, type) => {
 };
 
 const getTextAreaMaxLength = () => {
-  const { textAreaMaxlength } = drupalSettings.egiftCard || 200;
-  return textAreaMaxlength;
+  const { textAreaMaxlength } = drupalSettings.egiftCard;
+  if (textAreaMaxlength !== null) {
+    return textAreaMaxlength;
+  }
+
+  return 200;
 };
 
 export {
