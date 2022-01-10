@@ -15,7 +15,8 @@ import {
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
-import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
+import { cartContainsOnlyVirtualProduct, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
+import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -74,6 +75,11 @@ export default class CnCBillingAddress extends React.Component {
 
   isActive = () => {
     const { cart } = this.props;
+    // Activate the billing address component if full payment is done by egift card.
+    // As in case of full payment done by egift card, we disabled other payment methods.
+    if (isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart)) {
+      return true;
+    }
 
     if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
       return false;
