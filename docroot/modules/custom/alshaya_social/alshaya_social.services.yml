@@ -8,6 +8,7 @@ services:
       - '@language_manager'
       - '@url_generator'
       - '@logger.factory'
+      - '@alshaya_spc.customer_helper'
 
   alshaya_social.helper:
     class: Drupal\alshaya_social\AlshayaSocialHelper
