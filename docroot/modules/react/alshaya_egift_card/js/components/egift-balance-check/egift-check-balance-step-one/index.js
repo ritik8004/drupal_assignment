@@ -5,6 +5,7 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import EgiftCheckBalanceStepTwo from '../egift-check-balance-step-two';
 import { sendOtp } from '../../../../../js/utilities/egiftCardHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 
 export default class EgiftCheckBalanceStepOne extends React.Component {
   constructor(props) {
@@ -83,6 +84,8 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                 );
                 return false;
               }
+            } else {
+              document.getElementById('egift_card_number_error').innerHTML = getDefaultErrorMessage();
             }
             return false;
           });
