@@ -2,6 +2,7 @@ import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
 import PdpInfo from '../pdp-info';
 import { addToCartConfigurable, addToCartSimple } from '../../../utilities/pdp_layout';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 
 
 export default class PdpHeader extends React.PureComponent {
@@ -18,6 +19,8 @@ export default class PdpHeader extends React.PureComponent {
       configurableCombinations,
       pdpLabelRefresh,
       context,
+      skuMainCode,
+      options,
     } = this.props;
 
     const { checkoutFeatureStatus } = drupalSettings;
@@ -51,6 +54,16 @@ export default class PdpHeader extends React.PureComponent {
             pdpProductPrice={pdpProductPrice}
             shortDetail="true"
             animateTitlePrice
+          />
+          { /* Wishlist sticky icon for new pdp mobile appears in header section. */}
+          <WishlistContainer
+            sku={skuCode}
+            skuCode={skuMainCode}
+            context="magazinev2"
+            position="top-right"
+            format="icon"
+            title={title}
+            options={options}
           />
           <div id="block-alshayareactcartminicartblock" dataBlockPluginId="alshaya_react_mini_cart" className="block block-alshaya-spc block-alshaya-react-mini-cart">
             <div id="mini-cart-wrapper">

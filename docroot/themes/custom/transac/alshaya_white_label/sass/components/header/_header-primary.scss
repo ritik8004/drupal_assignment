@@ -110,6 +110,22 @@ header {
       vertical-align: middle;
     }
 
+    @include breakpoint($desktop) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      > div {
+        display: block;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      > div {
+        width: 33.33%;
+      }
+    }
+
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
         position: absolute;
