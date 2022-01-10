@@ -144,7 +144,7 @@ class AlshayaFrontendCommand extends BltTasks {
       }
     }
 
-    $command = 'cd %s; gulp build';
+    $command = 'cd %s; npm run build';
 
     $tasks = $this->taskParallelExec();
     $tasks->waitInterval(1);
