@@ -55,19 +55,23 @@
 }
 
 .c-my-account-nav {
+  width: 86.5%;
+
   li {
     &::after {
       font-size: 1.625rem;
-      #{$right}: 0.25rem;
       margin-top: -1.25rem;
+      #{$right}: 1.125rem;
+      font-weight: bold;
     }
   }
 
   li,
   h3 {
-    padding: 0.9375rem 0.625rem;
+    padding: 0.875rem 1.25rem;
     margin: 0;
-    text-transform: uppercase;
+    text-transform: capitalize;
+    font-size: 0.875rem;
   }
 }
 
@@ -88,6 +92,10 @@ body {
 }
 
 .menu__in {
+  @include breakpoint($upto-desktop) {
+    #{$right}: 0.75rem;
+  }
+
   &::after {
     @include breakpoint($upto-desktop) {
       font-size: 1.625rem;

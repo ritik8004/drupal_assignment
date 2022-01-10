@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d82276bada6f0ed9bfda6b40cfb5ba29",
+    "content-hash": "c57feedd9a26e77506252055660a158a",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -3434,9 +3434,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-8.x-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "8.x-1.1",
                     "datestamp": "1590768773",
@@ -3444,6 +3441,12 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "branch-alias": {
+                    "dev-8.x-1.x": "1.x-dev"
+                },
+                "patches_applied": {
+                    "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2022-01-06/3066449-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -27525,7 +27528,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "acquia/acsf-tools": 20,
-        "drupal/acquia_purge": 10,
         "drupal/block_field": 15,
         "drupal/captcha": 10,
         "drupal/change_pwd_page": 10,
