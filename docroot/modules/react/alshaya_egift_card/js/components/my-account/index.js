@@ -19,13 +19,8 @@ class MyEgiftCard extends React.Component {
   }
 
   componentDidMount() {
-    // Wait for the dom to load otherwise loader is removed
-    // as other js update body.
+    // Get user linked card.
     this.getUserLinkedCard();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('load', this.getUserLinkedCard);
   }
 
   /**
