@@ -49,15 +49,15 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <div class="egift_landing_banner">
-        <div class="egift_banner_image">
+    <div class="paragraph_banner_block">
+        <div class="paragraph_banner_image">
             {{ content.field_banner}}
         </div>
-        <div class="egift_banner_title_subtitle">
+        <div class="paragraph_banner_title_subtitle">
             {{ content.field_title }}
             {{ content.field_sub_title }}
         </div>
-        <div class="egift_banner_buttons">
+        <div class="paragraph_banner_buttons">
             {{ content.field_links}}
         </div>
     </div>
