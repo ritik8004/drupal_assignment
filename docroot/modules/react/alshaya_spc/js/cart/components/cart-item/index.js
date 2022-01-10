@@ -133,19 +133,23 @@ export default class CartItem extends React.Component {
         return;
       }
     }
-    // Adding class on remove button for showing progress when click.
-    document.getElementById(`remove-item-${id}`).classList.add('loading');
-    const afterCartUpdate = () => {
-      // Remove loading class.
-      document.getElementById(`remove-item-${id}`).classList.remove('loading');
-    };
-    this.triggerUpdateCart({
-      action,
-      sku,
-      qty: 0,
-      callback: afterCartUpdate,
-      successMsg: Drupal.t('The product has been removed from your cart.'),
-    });
+    const elem = document.getElementById(`remove-item-${id}`);
+    if (typeof elem !== 'undefined' && elem !== null) {
+      // Adding class on remove button for showing progress when click.
+      elem.classList.add('loading');
+      const afterCartUpdate = () => {
+        // Remove loading class.
+        elem.classList.remove('loading');
+      };
+
+      this.triggerUpdateCart({
+        action,
+        sku,
+        qty: 0,
+        callback: afterCartUpdate,
+        successMsg: Drupal.t('The product has been removed from your cart.'),
+      });
+    }
   };
 
   /**
