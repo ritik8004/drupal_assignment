@@ -37,6 +37,7 @@ class AlshayaMyEgiftCardBreadcrumb implements BreadcrumbBuilderInterface {
    * {@inheritdoc}
    */
   public function applies(RouteMatchInterface $route_match) {
+    // This breadcrumb should only be applicable for /user/{user}/egift-card
     return $route_match->getRouteName() == 'alshaya_egift_card.my_egift_card';
   }
 

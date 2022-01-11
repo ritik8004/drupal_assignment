@@ -146,8 +146,7 @@ export default class EgiftTopPurchase extends React.Component {
       topup: {
         sku: topUpCard.sku,
         amount: amountSet,
-        // @todo update customer email for anonymous user.
-        customer_email: (isUserAuthenticated()) ? drupalSettings.userDetails.userEmailID : 'test@test.com',
+        customer_email: (isUserAuthenticated()) ? drupalSettings.userDetails.userEmailID : '',
         card_number: cardNumber,
         // For anonymous top-up-type default set to other.
         top_up_type: egiftCardFor,
