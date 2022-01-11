@@ -243,19 +243,23 @@ function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings,
 }
 
 /**
- * Implements hook_page_attachments_alter().
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
+ * Updating build array for bv pixel integration.
+ *
+ * @param array $build
+ *   Reference to the build array of spc confirmation.
+ * @param string $order
+ *   Order details array.
  */
-function alshaya_egift_card_page_attachments_alter(array &$page) {
+function alshaya_egift_card_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
   // Do not proceed if Egift card is not enabled.
   if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
     return;
   }
-  $current_path = \Drupal::service('path.current')->getPath();
+
   // Add egift card settings in drupalSettings in checkout confirmation page.
-  if ( $current_path === '/checkout/confirmation') {
-    $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
-    $page['#attached']['drupalSettings']['egiftCard'] = [
-      'enabled' => $egiftCard_settings->isEgiftCardEnabled(),
-    ];
-  }
+  $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
+  $build['#attached']['drupalSettings']['egiftCard'] = [
+    'enabled' => $egiftCard_settings->isEgiftCardEnabled(),
+  ];
 }

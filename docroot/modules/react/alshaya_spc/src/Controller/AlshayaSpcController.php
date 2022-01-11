@@ -710,6 +710,10 @@ class AlshayaSpcController extends ControllerBase {
       $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
     }
 
+    // If has only virtual product get telephone from billing.
+    if ($this->config('alshaya_egift_card.settings')->get('egift_card_enabled') && $order['is_virtual']) {
+      $phone_number = $this->orderHelper->getFormattedMobileNumber($order['billing']['telephone']);
+    }
     // Order Totals.
     $totals = [
       'subtotal_incl_tax' => $order['totals']['sub'],
