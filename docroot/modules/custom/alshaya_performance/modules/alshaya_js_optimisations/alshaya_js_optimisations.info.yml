@@ -5,6 +5,3 @@ core_version_requirement: ^8 || ^9
 configure: alshaya_js_optimisations.settings
 package: Alshaya
 description: 'Contains all code related to JS performance improvements.'
-
-dependencies:
-  - alshaya_performance:alshaya_performance
