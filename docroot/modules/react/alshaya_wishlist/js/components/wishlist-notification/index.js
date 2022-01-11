@@ -13,8 +13,13 @@ const WishlistNotification = ({
   return (
     <div className="wishlist-notification notification">
       <div className="product-name">
-        <span>{Drupal.t('@productName', { '@productName': notificationItemData.title }, { context: 'wishlist' })}</span>
-        <span>{Drupal.t('saved to your @wishlist_label on this visit', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
+        <span>{notificationItemData.title}</span>
+        <ConditionalView condition={isAnonymousUser()}>
+          <span>{Drupal.t('saved to your @wishlist_label on this visit', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
+        </ConditionalView>
+        <ConditionalView condition={!isAnonymousUser()}>
+          <span>{Drupal.t('saved to your @wishlist_label', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
+        </ConditionalView>
       </div>
       <ConditionalView condition={isAnonymousUser()}>
         <div className="wishlist-query">
