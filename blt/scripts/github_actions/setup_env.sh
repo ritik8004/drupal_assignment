@@ -10,6 +10,11 @@ chmod 600 ~/.ssh/config
 # Trust all Acquia git/svn hosts.
 printf "Host *.enterprise-g1.hosting.acquia.com\n  StrictHostKeyChecking no\n" >> ~/.ssh/config
 
+# Github actions will run steps as root.
+# Related to https://github.community/t/how-to-run-action-as-a-non-root-user/17572
+mkdir -p /root/.ssh
+cp ~/.ssh/config /root/.ssh/config
+
 # Set the git configuration
 git config --global user.name "Github-Actions-CI"
 git config --global user.email "noreply@github.com"

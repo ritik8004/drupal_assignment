@@ -45,7 +45,7 @@ class MagazineTeasers extends ResourceBase {
   protected $requestStack;
 
   /**
-   * The language manager.
+   * The language manager service.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
