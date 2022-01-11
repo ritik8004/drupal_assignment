@@ -33,11 +33,11 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
     let message = '';
     // Egift card otp validation.
     if (egiftCardOtp.length === 0) {
-      message = Drupal.t('Please enter otp.', {}, { context: 'egift' });
+      message = Drupal.t('Please enter verification code.', {}, { context: 'egift' });
       errors = true;
     } else if (!egiftCardOtp.match(/^[a-z0-9A-Z]+$/i)) {
       // Check if the otp is valid or not.
-      message = Drupal.t('Please enter valid otp.', {}, { context: 'egift' });
+      message = Drupal.t('Please enter a valid verification code.', {}, { context: 'egift' });
       errors = true;
     } else {
       message = '';

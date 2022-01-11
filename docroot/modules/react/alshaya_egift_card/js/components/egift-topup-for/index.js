@@ -113,7 +113,7 @@ export default class EgiftTopupFor extends React.Component {
               />
               <div className="error" id="card-number-error" />
               <div className="c-input__bar" />
-              <label>{Drupal.t('eGift Card number', {}, { context: 'egift' })}</label>
+              <label>{Drupal.t('eGift Card Number', {}, { context: 'egift' })}</label>
             </div>
           </div>
         </ConditionalView>
