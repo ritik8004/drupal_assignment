@@ -3,20 +3,13 @@
  * Event Listener to alter datalayer.
  */
 
-(function ($, drupalSettings) {
+(function (drupalSettings) {
   'use strict';
 
   // Load product details into initial Data layer.
   document.addEventListener('alterInitialDataLayerData', (e) => {
       if (e.detail.type === 'product') {
         var entity = e.detail.page_entity;
-        // Load product info from local storage.
-        var productArticle = $("article.node--type-rcs-product")
-        var productSku = productArticle.attr('gtm-product-sku');
-        var langcode = drupalSettings.path.currentLanguage;
-        var key = 'product:' + langcode + ':' + productSku;
-        var productInfo = JSON.parse(localStorage.getItem(key));
-
         // Assign product GTM variables.
         var data = e.detail.data();
         data.productSKU = entity.type_id === 'configurable'? '' : entity.style_code;
@@ -32,18 +25,20 @@
         data.productName = entity.name;
         data.productBrand = entity.gtm_attributes.brand;
         data.productPrice = entity.gtm_attributes.price;
-        data.productOldPrice = (parseFloat(productInfo.price) !== parseFloat(entity.gtm_attributes.price)) ? productInfo.price : '';
-        data.productPictureURL = productInfo.image;
+        // Todo.
+        data.productOldPrice = '';
+
+        // Get product image.
+        let image = window.commerceBackend.getFirstImage(entity);
+        data.productPictureURL = image.url;
         data.magentoProductID = entity.id;
+
         // Set categories.
-        var categories = getCategoriesAndDepartment(entity);
-        data.subcategory = categories.subcategory;
-        data.minorCategory = categories.minorCategory;
-        data.majorCategory = categories.majorCategory;
-        data.listingName = categories.listingName;
-        data.listingId = categories.listingId;
-        data.departmentId = categories.departmentId;
-        data.departmentName = categories.departmentName;
+        let categories = getCategoriesAndDepartment(entity);
+        for (let prop in categories) {
+          data[prop] = categories[prop];
+        }
+
         // TODO.
         data.productColor = '';
         data.productRating = '';
@@ -51,14 +46,14 @@
       }
   });
 
-/**
- * Get categories and department for Product GTM data.
- *
- * @param {object} entity
- *   The product entity object.
- * @returns
- *   {object} Category and department data.
- */
+  /**
+   * Get categories and department for Product GTM data.
+   *
+   * @param {object} entity
+   *   The product entity object.
+   * @returns
+   *   {object} Category and department data.
+   */
   function getCategoriesAndDepartment(entity) {
     var categories = {
       subcategory : '',
@@ -70,40 +65,32 @@
       departmentName: '',
     };
 
-    for (let i = 0; i < entity.category_ids_in_admin.length ; i++) {
-      for (let j = 0; j < entity.categories.length; j++) {
-        if (entity.categories[j].id == entity.category_ids_in_admin[i]) {
-          if (entity.categories[j].level == 4) {
-            categories.subcategory = entity.categories[j].name;
-            categories.listingName = entity.categories[j].name;
-            categories.listingId = entity.categories[j].id;
-            for (let x = 0; x < entity.categories[j].breadcrumbs.length; x++) {
-              if (entity.categories[j].breadcrumbs[x].category_level == 2) {
-                categories.majorCategory = entity.categories[j].breadcrumbs[x].category_name;
-                categories.departmentId = entity.categories[j].breadcrumbs[x].category_id;
-                categories.departmentName = categories.majorCategory;
-              }
-              if (entity.categories[j].breadcrumbs[x].category_level == 3) {
-                categories.minorCategory = entity.categories[j].breadcrumbs[x].category_name;
-                if (categories.departmentName == '') {
-                  categories.departmentName = categories.minorCategory;
-                }
-                else {categories.departmentName
-                  categories.departmentName += '|' +  categories.minorCategory;
-                }
-              }
-            }
-            if (categories.departmentName == '') {
-              categories.departmentName = categories.subcategory;
-            }
-            else {
-              categories.departmentName += '|' +  categories.subcategory;
-            }
-            return categories;
-          }
+    // Get categories from breadcrumb.
+    var breadcrumbs = renderRcsBreadcrumb.normalize(entity);
+    if (Array.isArray(breadcrumbs)) {
+      // Remove the product from breadcrumb.
+      breadcrumbs.pop();
+      // Get the department name.
+      for (let i = 0; i < breadcrumbs.length;  i++) {
+        if (categories.departmentName === '') {
+          categories.departmentName = breadcrumbs[i].text;
+        }
+        else {
+          categories.departmentName += '|' + breadcrumbs[i].text;
         }
       }
+      categories.departmentId = breadcrumbs[0].id;
+      categories.majorCategory = breadcrumbs[0].text;
+      categories.minorCategory = breadcrumbs[1].text;
+      if (typeof breadcrumbs[2] !== 'undefined') {
+        categories.subcategory = breadcrumbs[2].text;
+      }
+      // Lowest category as listing category.
+      var listing_category = breadcrumbs.pop();
+      categories.listingId = listing_category.text;
+      categories.listingName = listing_category.id;
     }
-    return;
+
+    return categories;
   }
-})(jQuery, drupalSettings);
+})(drupalSettings);

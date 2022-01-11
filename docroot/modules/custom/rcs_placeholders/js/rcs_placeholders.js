@@ -84,7 +84,7 @@
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
 
-          //RCS Entity Loaded.
+          // RCS Entity Loaded.
           if (pageType) {
             RcsEventManager.fire('alshayaPageEntityLoaded', {
               detail: {
