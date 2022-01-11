@@ -9,11 +9,6 @@ import Loading from '../../../utilities/loading';
 import AppointmentSelection from '../appointment-selection';
 import CustomerDetails from '../customer-details';
 import Confirmation from '../confirmation';
-import {
-  setStorageInfo,
-  getStorageInfo,
-  removeStorageInfo,
-} from '../../../utilities/storage';
 import AppointmentTimeSlot from '../appointment-timeslot';
 import AppointmentLogin from '../appointment-login';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
@@ -45,7 +40,7 @@ const AppointmentStore = React.lazy(async () => {
 export default class Appointment extends React.Component {
   constructor(props) {
     super(props);
-    let localStorageValues = getStorageInfo();
+    let localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
     const { search } = window.location;
     const params = new URLSearchParams(search);
     const appointment = params.get('appointment');
@@ -55,7 +50,7 @@ export default class Appointment extends React.Component {
       // Empty localStore if user leaves edit appointment incomplete
       // and wants to book new appointment.
       if (appointmentId && appointmentId !== appointment) {
-        removeStorageInfo();
+        Drupal.removeItemFromLocalStorage('appointment_data');
         localStorageValues = null;
       }
     }
@@ -68,7 +63,11 @@ export default class Appointment extends React.Component {
       if (userId !== 0 && localStorageValues.appointmentStep === 'select-login-guest') {
         this.state.appointmentStep = 'customer-details';
         localStorageValues.appointmentStep = 'customer-details';
-        setStorageInfo(localStorageValues);
+        Drupal.addItemInLocalStorage(
+          'appointment_data',
+          localStorageValues,
+          drupalSettings.alshaya_appointment.local_storage_expire * 60,
+        );
       }
     } else {
       this.state = {
@@ -115,7 +114,7 @@ export default class Appointment extends React.Component {
                   }
                 } else {
                   const { baseUrl, pathPrefix } = drupalSettings.path;
-                  removeStorageInfo();
+                  Drupal.removeItemFromLocalStorage('appointment_data');
                   window.location.replace(`${baseUrl}${pathPrefix}appointment/booking`);
                 }
               });
@@ -147,25 +146,25 @@ export default class Appointment extends React.Component {
         // If no error and we get translation from api.
         if (result.error === undefined && result.data !== undefined) {
           const translation = result.data;
-          const localStorage = getStorageInfo();
+          const appointmentData = Drupal.getItemFromLocalStorage('appointment_data');
           // Update localstore translation for appointment category.
-          if (localStorage.appointmentCategory.name !== undefined) {
-            localStorage.appointmentCategory.name = this.getTranslation(
-              localStorage.appointmentCategory.name, translation,
+          if (appointmentData.appointmentCategory.name !== undefined) {
+            appointmentData.appointmentCategory.name = this.getTranslation(
+              appointmentData.appointmentCategory.name, translation,
             );
           }
 
           // Update localstore translation for appointment type.
-          if (localStorage.appointmentType.label !== undefined) {
-            localStorage.appointmentType.label = this.getTranslation(
-              localStorage.appointmentType.label, translation,
+          if (appointmentData.appointmentType.label !== undefined) {
+            appointmentData.appointmentType.label = this.getTranslation(
+              appointmentData.appointmentType.label, translation,
             );
           }
 
           // Update localstore translation for appointment type list.
-          if (localStorage.appointmentTypeItems !== undefined) {
-            localStorage.appointmentTypeItems.forEach((item, index) => {
-              localStorage.appointmentTypeItems[index] = {
+          if (appointmentData.appointmentTypeItems !== undefined) {
+            appointmentData.appointmentTypeItems.forEach((item, index) => {
+              appointmentData.appointmentTypeItems[index] = {
                 id: item.id,
                 name: this.getTranslation(item.name, translation),
                 description: this.getTranslation(item.description, translation),
@@ -174,20 +173,24 @@ export default class Appointment extends React.Component {
           }
 
           // Update localstore translation for Store list.
-          if (localStorage.storeList !== undefined) {
-            localStorage.storeList.forEach((item, i) => {
-              localStorage.storeList[i] = this.translateStore(item, translation);
+          if (appointmentData.storeList !== undefined) {
+            appointmentData.storeList.forEach((item, i) => {
+              appointmentData.storeList[i] = this.translateStore(item, translation);
             });
           }
 
           // Update localstore translation for seleced store.
-          if (localStorage.selectedStoreItem !== undefined) {
-            const { selectedStoreItem } = localStorage;
-            localStorage.selectedStoreItem = this.translateStore(selectedStoreItem, translation);
+          if (appointmentData.selectedStoreItem !== undefined) {
+            const { selectedStoreItem } = appointmentData;
+            appointmentData.selectedStoreItem = this.translateStore(selectedStoreItem, translation);
           }
 
-          localStorage.langcode = drupalSettings.path.currentLanguage;
-          setStorageInfo(localStorage);
+          appointmentData.langcode = drupalSettings.path.currentLanguage;
+          Drupal.addItemInLocalStorage(
+            'appointment_data',
+            appointmentData,
+            drupalSettings.alshaya_appointment.local_storage_expire * 60,
+          );
         }
         this.setAppointmentRender();
         removeFullScreenLoader();
@@ -235,7 +238,7 @@ export default class Appointment extends React.Component {
   validateAppointmentEdit(client, appointment) {
     if (client.clientExternalId !== appointment.clientExternalId) {
       const { baseUrl, pathPrefix } = drupalSettings.path;
-      removeStorageInfo();
+      Drupal.removeItemFromLocalStorage('appointment_data');
       window.location.replace(`${baseUrl}${pathPrefix}appointment/booking`);
     }
 
@@ -307,8 +310,13 @@ export default class Appointment extends React.Component {
       originalTimeSlot: appointment.appointmentStartDate,
       appointmentId: appointment.confirmationNumber,
     };
-    removeStorageInfo();
-    setStorageInfo(localstore);
+    Drupal.removeItemFromLocalStorage('appointment_data');
+    Drupal.addItemInLocalStorage(
+      'appointment_data',
+      localstore,
+      drupalSettings.alshaya_appointment.local_storage_expire * 60,
+    );
+
     this.setState({
       ...localstore,
       appointmentRender: true,
@@ -323,11 +331,15 @@ export default class Appointment extends React.Component {
       stepval = 'customer-details';
     }
 
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
 
     localStorageValues.appointmentStep = stepval;
     localStorageValues.langcode = drupalSettings.path.currentLanguage;
-    setStorageInfo(localStorageValues);
+    Drupal.addItemInLocalStorage(
+      'appointment_data',
+      localStorageValues,
+      drupalSettings.alshaya_appointment.local_storage_expire * 60,
+    );
 
     this.setState((prevState) => ({
       ...prevState,

@@ -1,6 +1,5 @@
 import React from 'react';
 import _find from 'lodash/find';
-import { getStorageInfo } from '../../../../../utilities/storage';
 import TextField from '../../../../../utilities/textfield';
 import { fetchAPIData } from '../../../../../utilities/api/fetchApiData';
 import getStringMessage from '../../../../../../../js/utilities/strings';
@@ -8,7 +7,7 @@ import getStringMessage from '../../../../../../../js/utilities/strings';
 export default class CompanionDetails extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
 
     if (localStorageValues) {
       this.state = {

@@ -4,7 +4,6 @@ import ReactToPrint from 'react-to-print';
 import OrderSummaryBlock from '../../utilities/order-summary-block';
 import OrderSummary from './OrderSummary';
 import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
-import { removeStorageInfo } from '../../utilities/storage';
 import VatFooterText from '../../utilities/vat-footer';
 import ConditionalView from '../../common/components/conditional-view';
 import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
@@ -50,7 +49,7 @@ class CheckoutConfirmation extends React.Component {
       // Remove the 'shippingaddress-formdata' from localStorage
       // when we come to the order confirmation page after the order
       // has been placed.
-      removeStorageInfo('shippingaddress-formdata');
+      Drupal.removeItemFromLocalStorage('shippingaddress-formdata');
       if (Cookies.get('middleware_order_placed')) {
         window.commerceBackend.removeCartDataFromStorage(true);
         Cookies.remove('middleware_order_placed');
