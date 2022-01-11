@@ -1,12 +1,11 @@
 import React from 'react';
-import { getStorageInfo } from '../../../../../utilities/storage';
 import TextField from '../../../../../utilities/textfield';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class ClientDetails extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
 
     if (localStorageValues) {
       this.state = {

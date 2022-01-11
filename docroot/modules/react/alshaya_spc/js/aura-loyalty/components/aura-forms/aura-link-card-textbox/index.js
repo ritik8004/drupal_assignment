@@ -11,11 +11,6 @@ import { getUserInput, processCheckoutCart } from '../../utilities/checkout_help
 import {
   showFullScreenLoader,
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
-import {
-  setStorageInfo,
-  getStorageInfo,
-  removeStorageInfo,
-} from '../../../../../../js/utilities/storage';
 import getStringMessage from '../../../../utilities/strings';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
@@ -36,7 +31,7 @@ class AuraFormLinkCard extends React.Component {
     document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
 
     // Get data from localStorage.
-    const localStorageValues = getStorageInfo(getAuraCheckoutLocalStorageKey());
+    const localStorageValues = Drupal.getItemFromLocalStorage(getAuraCheckoutLocalStorageKey());
 
     if (localStorageValues === null) {
       return;
@@ -91,7 +86,10 @@ class AuraFormLinkCard extends React.Component {
       const { cartId } = this.props;
       const dataForStorage = { cartId, ...searchData };
 
-      setStorageInfo(dataForStorage, getAuraCheckoutLocalStorageKey());
+      Drupal.addItemInLocalStorage(
+        getAuraCheckoutLocalStorageKey(),
+        dataForStorage,
+      );
     }
 
     this.setState({
@@ -114,7 +112,7 @@ class AuraFormLinkCard extends React.Component {
   };
 
   handlePlaceOrderEvent = () => {
-    removeStorageInfo(getAuraCheckoutLocalStorageKey());
+    Drupal.removeItemFromLocalStorage(getAuraCheckoutLocalStorageKey());
   };
 
   showResponse = (data) => {
@@ -159,7 +157,7 @@ class AuraFormLinkCard extends React.Component {
       type: 'failure',
       message: '',
     });
-    removeStorageInfo(getAuraCheckoutLocalStorageKey());
+    Drupal.removeItemFromLocalStorage(getAuraCheckoutLocalStorageKey());
   };
 
   addCard = () => {

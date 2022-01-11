@@ -26,7 +26,7 @@ export default class CartRecommendedProducts extends React.Component {
   componentDidMount() {
     // Remove any old storage.
     const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
-    localStorage.removeItem(key);
+    Drupal.removeItemFromLocalStorage(key);
     const { items } = this.props;
     this.spcRecommendationHandler(items);
 
@@ -66,7 +66,7 @@ export default class CartRecommendedProducts extends React.Component {
 
             // Storing in localstorage to be used by GTM.
             const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
-            localStorage.setItem(key, JSON.stringify(result.data));
+            Drupal.addItemInLocalStorage(key, result.data);
             dispatchCustomEvent('recommendedProductsLoad', { products: result.data });
           }
         }, 100);

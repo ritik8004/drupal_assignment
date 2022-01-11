@@ -11,7 +11,6 @@ import Loading from '../../../utilities/loading';
 import {
   getCustomerDetails,
 } from '../../../../../alshaya_aura_react/js/utilities/customer_helper';
-import { getStorageInfo, removeStorageInfo } from '../../../utilities/storage';
 import { isDeliveryTypeSameAsInCart } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { getAuraPointsToEarn, processCheckoutCart } from '../utilities/checkout_helper';
@@ -33,13 +32,13 @@ class AuraCheckoutRewards extends React.Component {
     document.addEventListener('loyaltyStatusUpdated', this.updateState, false);
     // Listener to get the updated aura points.
     document.addEventListener('auraPointsToEarnApiInvoked', this.handleAuraPointsToEarn, false);
-    let localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+    let localStorageValues = Drupal.getItemFromLocalStorage(getAuraLocalStorageKey());
 
     // Logged in user.
     if (getUserDetails().id) {
       // Remove localstorage values if present for a logged in user.
       if (localStorageValues) {
-        removeStorageInfo(getAuraLocalStorageKey());
+        Drupal.removeItemFromLocalStorage(getAuraLocalStorageKey());
       }
 
       document.addEventListener('customerDetailsFetched', this.updateState, false);
@@ -113,7 +112,7 @@ class AuraCheckoutRewards extends React.Component {
       return;
     }
 
-    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+    const localStorageValues = Drupal.getItemFromLocalStorage(getAuraLocalStorageKey());
 
     // In case loyalty card already exists in cart,
     // attach loyalty card only if it's different.
