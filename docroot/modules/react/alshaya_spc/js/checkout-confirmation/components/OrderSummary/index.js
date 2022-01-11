@@ -147,9 +147,10 @@ const OrderSummary = (props) => {
   }
   // Dont show Delivery related summary if order has only virtual product,
   // i.e Egift card or Egift Topup.
-  const showDelivery = isEgiftCardEnabled && drupalSettings.order_details.isOnlyVirtualProduct
-    ? drupalSettings.order_details.isOnlyVirtualProduct
-    : false;
+  let showDeliverySummary = true;
+  if (isEgiftCardEnabled() && drupalSettings.order_details.isOnlyVirtualProduct) {
+    showDeliverySummary = false;
+  }
 
   return (
     <div className="spc-order-summary">
@@ -188,7 +189,7 @@ const OrderSummary = (props) => {
         <input type="checkbox" id="spc-detail-open" />
         <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
         <div className="spc-detail-content">
-          <ConditionalView condition={customerAddress.length > 0 && showDelivery}>
+          <ConditionalView condition={customerAddress.length > 0 && showDeliverySummary}>
             <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerShippingName} address={customerAddress.join(', ')} />
           </ConditionalView>
           {(storeAddress.length > 0 && storeInfo !== undefined)
@@ -219,7 +220,7 @@ const OrderSummary = (props) => {
           </ConditionalView>
           <OrderSummaryItem type="mobile" label={Drupal.t('Mobile Number')} value={mobileNumber} />
           <OrderSummaryItem label={Drupal.t('Payment method')} value={methodIcon || method} />
-          <ConditionalView condition={showDelivery}>
+          <ConditionalView condition={showDeliverySummary}>
             <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
             <OrderSummaryItem label={etaLabel} value={expectedDelivery} />
           </ConditionalView>
