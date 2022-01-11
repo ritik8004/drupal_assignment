@@ -155,7 +155,7 @@ class AlshayaFrontendCommand extends BltTasks {
       $fullCommand = sprintf($command, $theme);
       getenv('LANDO')
         ? $tasks->process($fullCommand)
-        : $tasks->exec();
+        : $tasks->exec($fullCommand);
     }
 
     return $tasks->run();
