@@ -58,7 +58,7 @@
    * @returns {boolean}
    *  true/false based on the action performed.
    */
-  Drupal.removeItemFromLocalStorage = function (storageKey = 0) {
+  Drupal.removeItemFromLocalStorage = function (storageKey) {
     // Remove item from the local storage if key is set.
     return (storageKey)
       ? localStorage.removeItem(storageKey)

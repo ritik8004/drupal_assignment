@@ -1,5 +1,5 @@
 appointment_companion_limit: 10
-local_storage_expire: 600 #Seconds
+local_storage_expire: 600000 #Milliseconds
 store_finder:
   max_num_of_locations: 100
   unit: 'miles'

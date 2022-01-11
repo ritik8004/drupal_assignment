@@ -110,12 +110,6 @@ global.Drupal.getItemFromLocalStorage = function (storageKey) {
     ? storageItem.data
     : storageItem;
 
-  // If return data is an object, add expiry time with return data for
-  // other components or modules to perform custom actions
-  if (typeof dataToReturn === 'object') {
-    dataToReturn.expiry_time = storageItem.expiry_time;
-  }
-
   // Return the prepared data.
   return dataToReturn;
 };

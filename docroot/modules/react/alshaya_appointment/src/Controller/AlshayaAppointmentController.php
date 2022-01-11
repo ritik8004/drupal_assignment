@@ -140,7 +140,8 @@ class AlshayaAppointmentController extends ControllerBase {
         'middleware_url' => _alshaya_appointment_get_middleware_url(),
         'step_labels' => $this->getAppointmentSteps(),
         'appointment_companion_limit' => $alshaya_appointment_config->get('appointment_companion_limit'),
-        'local_storage_expire' => $alshaya_appointment_config->get('local_storage_expire'),
+        // Convert the expiry time into the seconds.
+        'local_storage_expire' => ($alshaya_appointment_config->get('local_storage_expire') / 1000),
         'country_code' => $country_code,
         'store_finder' => array_merge(
           $alshaya_appointment_config->get('store_finder'),
