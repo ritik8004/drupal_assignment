@@ -43,7 +43,7 @@ const config = require("./gulp/config");
 const customStreams = require("./gulp/custom-streams")(libraries, config);
 
 // Clean Task.
-const clean = require("./gulp/clean")(libraries);
+const clean = require("./gulp/clean")(libraries, config);
 
 // JS Performance Task.
 const js_performance = require("./gulp/js-performance")(
