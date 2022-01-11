@@ -167,6 +167,7 @@ class ProductCategoryPage {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
 
+    /** @var \Drupal\taxonomy\TermStorage */
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $term = empty($tid) ? $term = $this->getTermForRoute() : $storage->load($tid);
 

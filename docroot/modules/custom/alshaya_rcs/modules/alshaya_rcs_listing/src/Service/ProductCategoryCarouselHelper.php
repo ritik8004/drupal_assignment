@@ -40,6 +40,16 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
   }
 
   /**
+   * Gets the value of the slug field.
+   *
+   * @return string
+   *   The value of the slug field.
+   */
+  private function getSlug() {
+    return $this->entity->get('field_category_carousel_slug')->getString();
+  }
+
+  /**
    * Create and returns the render array for category carousel accordion.
    *
    * @return array
@@ -103,17 +113,20 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
       return array_merge($carousel, $accordion_content);
     }
 
-    $settings = $this->configFactory->get('alshaya_acm_product.settings');
-
+    $slug = $this->getSlug();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Make carousel title link.
     $carousel_title = [
       'title' => $this->getCarouselTitle(),
+      'url' => "/$langcode/$slug/",
     ];
 
+    $settings = $this->configFactory->get('alshaya_acm_product.settings');
     $productCarousel = [
       'sectionTitle' => $carousel_title,
       'itemsPerPage' => $this->getCarouselItemsLimit(),
       'vatText' => $settings->get('vat_text'),
+      'slug' => $slug,
     ];
 
     $carousel['content']['product_category_carousel'] = [
