@@ -30,7 +30,6 @@ import dispatchCustomEvent from '../../../utilities/events';
 import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout-rewards/aura-checkout-container';
 import isAuraEnabled from '../../../../../js/utilities/helper';
 import validateCartResponse from '../../../utilities/validation_util';
-import { getStorageInfo } from '../../../utilities/storage';
 import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
@@ -153,7 +152,7 @@ export default class Checkout extends React.Component {
     }
 
     if (result.shipping && result.shipping.method === null) {
-      const shippingAddress = getStorageInfo('shippingaddress-formdata');
+      const shippingAddress = Drupal.getItemFromLocalStorage('shippingaddress-formdata');
       if (shippingAddress) {
         showFullScreenLoader();
         const cartInfo = addShippingInCart('update shipping', shippingAddress);

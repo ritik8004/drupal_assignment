@@ -6,7 +6,6 @@ import AuraMyAccountVerifiedUser from './linked-verified';
 import { getAllAuraStatus } from '../../../utilities/helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 import AuraProgressWrapper from '../../aura-progress';
-import { getStorageInfo } from '../../../../../js/utilities/storage';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { getAuraLocalStorageKey } from '../../../utilities/aura_utils';
 
@@ -37,7 +36,7 @@ const LoyaltyClubBlock = (props) => {
   }
 
   const loyaltyStatusInt = parseInt(loyaltyStatus, 10);
-  const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+  const localStorageValues = Drupal.getItemFromLocalStorage(getAuraLocalStorageKey());
 
   if (loyaltyStatusInt !== '') {
     // Guest user and pending enrollment.

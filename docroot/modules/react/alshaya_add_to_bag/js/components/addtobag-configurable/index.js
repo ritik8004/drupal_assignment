@@ -63,7 +63,7 @@ export default class AddToBagConfigurable extends React.Component {
         this.openDrawer(response);
 
         // Store info in storage.
-        addProductInfoInStorage({ infoData: response }, sku);
+        addProductInfoInStorage(response, sku);
       });
     }
   }

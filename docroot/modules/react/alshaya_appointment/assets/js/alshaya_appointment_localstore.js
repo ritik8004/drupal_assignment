@@ -7,7 +7,7 @@ var params = window.location.search;
 // reset the localstore and load page with step parameter
 // to start from step 1.
 if (params.indexOf('?') === -1 || params.indexOf('step') === -1) {
-  localStorage.removeItem('appointment_data');
+  Drupal.removeItemFromLocalStorage('appointment_data');
   if (params.indexOf('?') > -1) {
     params += '&step=set';
   } else {

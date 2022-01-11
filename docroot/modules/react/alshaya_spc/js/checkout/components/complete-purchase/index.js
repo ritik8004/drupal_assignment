@@ -29,7 +29,7 @@ export default class CompletePurchase extends React.Component {
     // 'benefit_pay_modal_auto_opened' is used to ensure that we auto open the
     // benefit pay modal only once for a user. Removing this key just after
     // placing order to remove old value.
-    localStorage.removeItem('benefit_pay_modal_auto_opened');
+    Drupal.removeItemFromLocalStorage('benefit_pay_modal_auto_opened');
   }
 
   /**

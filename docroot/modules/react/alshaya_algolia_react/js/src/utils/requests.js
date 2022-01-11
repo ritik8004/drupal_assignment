@@ -8,38 +8,29 @@ function getStorageKey(facetName) {
 export function setFacetStorage(facetName, data) {
   if (!data) return null;
   const storageKey = getStorageKey(facetName);
-  // Adding current time to storage.
-  const facetInfo = { data, last_update: new Date().getTime() };
-  const dataToStore = JSON.stringify(facetInfo);
-  localStorage.setItem(storageKey, dataToStore);
+  // Adding data to local storage with expiry time.
+  Drupal.addItemInLocalStorage(
+    storageKey,
+    data,
+    parseInt(drupalSettings.algoliaSearch.local_storage_expire, 10),
+  );
   return storageKey;
 }
 
 export function removeFacetStorage(facetName) {
   const storageKey = getStorageKey(facetName);
-  localStorage.removeItem(storageKey);
+  Drupal.removeItemFromLocalStorage(storageKey);
 }
 
 export function getFacetStorage(facetName, inverted = false) {
   const storageKey = getStorageKey(facetName);
 
-  const storageItem = localStorage.getItem(storageKey);
-  if (!storageItem) {
+  const storageItemArray = Drupal.getItemFromLocalStorage(storageKey);
+  if (!storageItemArray) {
     return null;
   }
 
-  const storageItemArray = JSON.parse(storageItem);
-  const storageExpireTime = parseInt(drupalSettings.algoliaSearch.local_storage_expire, 10);
-  const expireTime = storageExpireTime * 60 * 1000;
-  const currentTime = new Date().getTime();
-
-  // Return null if data is expired and clear localStorage.
-  if (((currentTime - storageItemArray.last_update) > expireTime)) {
-    removeFacetStorage(storageKey);
-    return null;
-  }
-
-  return inverted ? _invert(storageItemArray.data) : storageItemArray.data;
+  return inverted ? _invert(storageItemArray) : storageItemArray;
 }
 
 // Store the api requests that are in queue.

@@ -255,12 +255,12 @@ export default class PaymentMethods extends React.Component {
     const methodIdentifer = `${method}:${cartData.cart.cart_id}`;
 
     // If we have already triggered once for the method and cart do nothing.
-    const lastSelectedMethodIdentifier = localStorage.getItem('last_selected_payment');
+    const lastSelectedMethodIdentifier = Drupal.getItemFromLocalStorage('last_selected_payment');
     if (paymentDiv.checked && lastSelectedMethodIdentifier === methodIdentifer) {
       return;
     }
 
-    localStorage.setItem('last_selected_payment', methodIdentifer);
+    Drupal.addItemInLocalStorage('last_selected_payment', methodIdentifer);
 
     paymentDiv.checked = true;
 
