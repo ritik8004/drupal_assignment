@@ -126,6 +126,7 @@ export default class MyEgiftTopUp extends React.Component {
             myAccountLabel
           />
           <div className="action-buttons">
+            <div id="my-topup-error" className="error form-error">{displayFormError}</div>
             <div
               className="action-cancel"
             >
@@ -140,7 +141,6 @@ export default class MyEgiftTopUp extends React.Component {
             <div
               className="action-topup"
             >
-              <div id="my-topup-error" className="error form-error">{displayFormError}</div>
               <button
                 type="button"
                 name="top-up"

@@ -4,12 +4,16 @@
     line-height: 1.125rem;
     margin-bottom: 0.5rem;
     color: $egift-linked-card-dark-text;
+
+    @include breakpoint($tablet) {
+      margin-top: 2.125rem;
+    }
   }
 
   .egift-link-card-text {
     font-size: 0.8125rem;
     line-height: 1.125rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     color: $egift-linked-card-dark-text;
 
     @include breakpoint($tablet) {

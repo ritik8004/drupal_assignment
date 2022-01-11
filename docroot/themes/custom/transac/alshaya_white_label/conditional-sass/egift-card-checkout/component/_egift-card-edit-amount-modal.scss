@@ -44,6 +44,7 @@
         color: transparent;
         right: 0.625rem;
         top: 1rem;
+        z-index: 99;
 
         @include icon('close') {
           font-size: 2rem;
@@ -83,7 +84,8 @@
         color: $primary_btn_text;
         font-family: $alshaya-bold;
         font-weight: normal;
-        font-size: 1rem;
+        font-size: 0.8125rem;
+        line-height: 1rem;
         width: 100%;
         border: none;
       }

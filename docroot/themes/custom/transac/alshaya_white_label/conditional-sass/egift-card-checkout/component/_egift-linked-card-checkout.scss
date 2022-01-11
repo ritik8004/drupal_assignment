@@ -44,9 +44,36 @@
   .edit-egift-payment-amount {
     font-size: 0.875rem;
     line-height: 1.25rem;
-    margin-top: 1.0625rem;
     display: inline-block;
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  .payment-method-bottom-panel {
+    padding-#{$right}: 1.25rem;
+    padding-bottom: 1.25rem;
+    padding-#{$left}: 3rem;
+    margin-top: -0.625rem;
+
+    @include breakpoint($tablet) {
+      max-width: 27rem;
+    }
+
+    .desc-content {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      margin: 0.625rem 0;
+      color: $egift-checkout-info;
+    }
+  }
+
+  .error {
+    display: block;
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+    margin-top: -0.625rem;
+    padding-#{$right}: 1.25rem;
+    padding-#{$left}: 3rem;
+    padding-bottom: 1rem;
   }
 }
