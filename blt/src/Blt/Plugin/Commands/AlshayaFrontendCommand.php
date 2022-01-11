@@ -148,14 +148,14 @@ class AlshayaFrontendCommand extends BltTasks {
 
     // Execute in sequence in local.
     $tasks = getenv('LANDO')
-      ? $this->taskParallelExec()
-      : $this->taskExecStack();
+      ? $this->taskExecStack()
+      : $this->taskParallelExec();
 
     foreach ($themes ?? [] as $theme) {
       $fullCommand = sprintf($command, $theme);
       getenv('LANDO')
-        ? $tasks->process($fullCommand)
-        : $tasks->exec($fullCommand);
+        ? $tasks->exec($fullCommand)
+        : $tasks->process($fullCommand);
     }
 
     return $tasks->run();
