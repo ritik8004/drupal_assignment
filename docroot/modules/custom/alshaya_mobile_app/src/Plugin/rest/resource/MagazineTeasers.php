@@ -151,7 +151,8 @@ class MagazineTeasers extends ResourceBase {
    *   The response returns the magazine listing page.
    */
   public function get() {
-    $entityCacheTags = $entityCacheContexts = [];
+    $entityCacheTags = [];
+    $entityCacheContexts = ['url'];
     $offset = $this->requestStack->query->get('offset');
     $limit = $this->requestStack->query->get('limit');
     if ($offset == NULL || $limit == NULL) {
