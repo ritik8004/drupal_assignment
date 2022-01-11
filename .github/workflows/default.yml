@@ -163,6 +163,9 @@ jobs:
     runs-on: ubuntu-18.04
     if: ${{ github.event_name == 'push' }}
 
+    container:
+      image: devwithlando/php:7.4-fpm-4
+
     env:
       CI: GITHUB_ACTIONS
       COMPOSER_MEMORY_LIMIT: -1
