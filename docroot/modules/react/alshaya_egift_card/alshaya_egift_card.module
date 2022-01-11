@@ -244,7 +244,7 @@ function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings,
 
 /**
  * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
- * Updating build array for bv pixel integration.
+ * Updating build array for egift card integration.
  *
  * @param array $build
  *   Reference to the build array of spc confirmation.
