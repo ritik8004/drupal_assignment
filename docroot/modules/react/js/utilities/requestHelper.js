@@ -4,7 +4,6 @@ import { cartErrorCodes, getDefaultErrorMessage, getProcessedErrorMessage } from
 import { hasValue, isArray } from './conditionsUtility';
 import logger from './logger';
 import { isUserAuthenticated } from './helper';
-import { getStorageInfo } from '../../alshaya_spc/js/utilities/storage';
 
 /**
  * Wrapper to get cart settings.
@@ -292,7 +291,7 @@ const getMagentoApiParams = (url, method = 'GET', data = {}, useBearerToken = tr
   // if top-up masked id exists in local storage.
   const { enabled } = drupalSettings.egiftCard || false;
   if (enabled && (url.indexOf('getCart') > -1 || url.indexOf('updateCart') > -1)) {
-    const topUpQuote = getStorageInfo('topupQuote');
+    const topUpQuote = Drupal.getItemFromLocalStorage('topupQuote');
     if (topUpQuote !== null) {
       params.params = {
         digitalcart_id: topUpQuote.maskedQuoteId,
