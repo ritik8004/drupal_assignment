@@ -55,16 +55,16 @@ function _alshaya_egift_card_translations() {
         'ar' => 'CHECK BALANCE',
         'context' => 'egift',
       ],
-      'Here is your card balance' => [
-        'ar' => 'Here is your card balance',
+      'Here is your current balance' => [
+        'ar' => 'Here is your current balance',
         'context' => 'egift',
       ],
       'for eGift card ending in ..' => [
         'ar' => 'for eGift card ending in ..',
         'context' => 'egift',
       ],
-      'Card Valid Up To' => [
-        'ar' => 'Card Valid Up To',
+      'Card Valid Up To ' => [
+        'ar' => 'Card Valid Up To ',
         'context' => 'egift',
       ],
       'TOP UP CARD' => [

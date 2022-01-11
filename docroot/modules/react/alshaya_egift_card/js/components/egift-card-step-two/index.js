@@ -47,7 +47,7 @@ export default class EgiftCardStepTwo extends React.Component {
     // Hide message field if egift card is for self
     // and show if its for friends and family.
     const eGiftForLabelElement = document.getElementById('recipient-label');
-    if (eGiftFor === 'Myself') {
+    if (eGiftFor === 'self') {
       // Update label
       eGiftForLabelElement.innerHTML = Drupal.t('My Details', {}, { context: 'egift' });
       this.setState({
@@ -91,7 +91,7 @@ export default class EgiftCardStepTwo extends React.Component {
                     type="radio"
                     name="egift-for"
                     id="egiftFor-friends-family"
-                    value="Friends and family"
+                    value="friends"
                     onChange={(e) => this.handleChange(e)}
                   />
                   <label htmlFor="egiftFor-friends-family">
@@ -103,7 +103,7 @@ export default class EgiftCardStepTwo extends React.Component {
                     type="radio"
                     name="egift-for"
                     id="egiftFor-myself"
-                    value="Myself"
+                    value="self"
                     onChange={(e) => this.handleChange(e)}
                   />
                   <label htmlFor="egiftFor-myself">

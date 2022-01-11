@@ -24,50 +24,53 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     }),
   ];
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
-  $build['#attached']['library'][] = 'alshaya_white_label/egift-card-checkout';
+  // Add the egift related settings only if egift feature is enabled.
+  if ($egiftCard_settings && $egiftCard_settings->isEgiftCardEnabled()) {
+    $build['#attached']['library'][] = 'alshaya_white_label/egift-card-checkout';
 
-  $build['#strings'][] = [
-    'key' => 'form_egift_card_number',
-    'value' => t('Please enter your card number.', [], [
-      'context' => 'egift'
-    ]),
-  ];
-  $build['#strings'][] = [
-    'key' => 'form_egift_code',
-    'value' => t('Please enter the code.', [], [
-      'context' => 'egift'
-    ]),
-  ];
-  $build['#strings'][] = [
-    'key' => 'form_egift_amount',
-    'value' => t('Please enter the amount.', [], [
-      'context' => 'egift'
-    ]),
-  ];
-  $build['#strings'][] = [
-    'key' => 'egift_insufficient_balance',
-    'value' => t('Insufficient balance, Please topup the card or lower the redeem amount.', [], [
-      'context' => 'egift'
-    ]),
-  ];
-  $build['#strings'][] = [
-    'key' => 'egift_amount_update_failed',
-    'value' => t('Amount updated failed! Please try again after sometime.', [], [
-      'context' => 'egift'
-    ]),
-  ];
-  $build['#strings'][] = [
-    'key' => 'egift_valid_amount',
-    'value' => t('Please enter a valid amount.', [], [
-      'context' => 'egift'
-    ]),
-  ];
-  $build['#strings'][] = [
-    'key' => 'egift_valid_card_number',
-    'value' => t('Please enter a valid card number.', [], [
-      'context' => 'egift',
-    ]),
-  ];
+    $build['#strings'][] = [
+      'key' => 'form_egift_card_number',
+      'value' => t('Please enter your card number.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'form_egift_code',
+      'value' => t('Please enter the code.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'form_egift_amount',
+      'value' => t('Please enter the amount.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'egift_insufficient_balance',
+      'value' => t('Insufficient balance, Please topup the card or lower the redeem amount.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'egift_amount_update_failed',
+      'value' => t('Amount updated failed! Please try again after sometime.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'egift_valid_amount',
+      'value' => t('Please enter a valid amount.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'egift_valid_card_number',
+      'value' => t('Please enter a valid card number.', [], [
+        'context' => 'egift',
+      ]),
+    ];
+  }
 }
 
 /**
@@ -78,7 +81,10 @@ function alshaya_egift_card_alshaya_spc_cart_build_alter(array &$build) {
   $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
   // Add egift card settings in drupalSettings.
   $build['#attached']['drupalSettings']['egiftCard']['enabled'] = $egiftCard_settings->isEgiftCardEnabled();
-  $build['#attached']['library'][] = 'alshaya_white_label/egift-cart';
+  // Attach library around egift only if egift feature is enabled.
+  if ($egiftCard_settings && $egiftCard_settings->isEgiftCardEnabled()) {
+    $build['#attached']['library'][] = 'alshaya_white_label/egift-cart';
+  }
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
 }
 
@@ -142,6 +148,8 @@ function alshaya_egift_card_preprocess_html(&$variables) {
  * Implements hook_alshaya_acm_customer_orders_details_build_alter().
  */
 function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Add egift settings config tags to make it work on config change.
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
   // Do not proceed if Egift card is not enabled.
   if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
     return;
@@ -200,6 +208,8 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
  * Implements hook_alshaya_acm_customer_recent_order_build_alter().
  */
 function alshaya_egift_card_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  // Add egift settings config tags to make it work on config change.
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
   // Do not proceed if Egift card is not enabled.
   if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
     return;
