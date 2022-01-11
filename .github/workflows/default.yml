@@ -120,7 +120,9 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
 
       - name: Setup environment
-        run: bash $SCRIPT_DIR/setup_env.sh
+        run: |
+          bash $SCRIPT_DIR/setup_env.sh
+          bash $SCRIPT_DIR/setup_mysql.sh
 
       - name: Install Node
         uses: actions/setup-node@v2
