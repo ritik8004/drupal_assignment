@@ -240,6 +240,11 @@ function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings,
     $settings['order_details']['totals']['egiftRedeemedAmount'] = $order['extension']['hps_redeemed_amount'] ?? 0;
     $settings['order_details']['totals']['balancePayable'] = $order['base_grand_total'] - $order['extension']['hps_redeemed_amount'];
   }
+
+  // If has only virtual product get telephone from billing.
+  if ($order['is_virtual']) {
+    $settings['order_details']['mobile_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['billing']['telephone']);
+  }
 }
 
 /**
