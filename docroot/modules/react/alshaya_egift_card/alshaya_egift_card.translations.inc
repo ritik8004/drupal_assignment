@@ -23,26 +23,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'eGift Card Number',
         'context' => 'egift',
       ],
-      'Something went wrong, please try again later.' => [
-        'ar' => 'Something went wrong, please try again later.',
-        'context' => 'egift',
-      ],
-      'Please enter otp.' => [
-        'ar' => 'Please enter otp.',
-        'context' => 'egift',
-      ],
-      'Please enter valid otp.' => [
-        'ar' => 'Please enter valid otp.',
-        'context' => 'egift',
-      ],
-      'Please enter card number.' => [
-        'ar' => 'Please enter card number.',
-        'context' => 'egift',
-      ],
-      'Please enter valid card number.' => [
-        'ar' => 'Please enter valid card number.',
-        'context' => 'egift',
-      ],
       'Terms & Conditions' => [
         'ar' => 'Terms & Conditions',
         'context' => 'egift',
@@ -89,10 +69,6 @@ function _alshaya_egift_card_translations() {
       ],
       'Alshaya eGift card' => [
         'ar' => 'Alshaya eGift card',
-        'context' => 'egift',
-      ],
-      'Please enter the code.' => [
-        'ar' => 'Please enter the code.',
         'context' => 'egift',
       ],
       'Please enter the amount.' => [
@@ -211,24 +187,12 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Amount updated failed! Please try again after sometime.',
         'context' => 'egift',
       ],
-      'There was some error while removing the gift card. Please try again' => [
-        'ar' => 'There was some error while removing the gift card. Please try again',
-        'context' => 'egift',
-      ],
       'Please add a email id in your account to perform this operation.' => [
         'ar' => 'Please add a email id in your account to perform this operation.',
         'context' => 'egift',
       ],
       'Please enter a valid amount' => [
         'ar' => 'Please enter a valid amount',
-        'context' => 'egift',
-      ],
-      'Please enter a valid card number.' => [
-        'ar' => 'Please enter a valid card number.',
-        'context' => 'egift',
-      ],
-      'Didn’t receive?' => [
-        'ar' => 'Didn’t receive?',
         'context' => 'egift',
       ],
       'Verification code sent successfully.' => [
@@ -295,8 +259,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Card No:',
         'context' => 'egift',
       ],
-      'eGift Card number' => [
-        'ar' => 'eGift Card number',
+      'eGift Card Number*' => [
+        'ar' => 'eGift Card Number*',
         'context' => 'egift',
       ],
       'Card Details' => [
@@ -308,10 +272,6 @@ function _alshaya_egift_card_translations() {
       ],
       'Balanace:' => [
         'ar' => 'Balanace:',
-        'context' => 'egift',
-      ],
-      'Gift Card number' => [
-        'ar' => 'Gift Card number',
         'context' => 'egift',
       ],
       'Expires on' => [
@@ -384,9 +344,6 @@ function _alshaya_egift_card_translations() {
       ],
       'Buy Alshaya eGift Card' => [
         'ar' => 'Buy Alshaya eGift Card',
-      ],
-      'eGift Card' => [
-        'ar' => 'eGift Card',
       ],
       'Top-up eGift card' => [
         'ar' => 'Top-up eGift card',

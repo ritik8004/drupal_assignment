@@ -36,7 +36,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     ];
     $build['#strings'][] = [
       'key' => 'form_egift_code',
-      'value' => t('Please enter the code.', [], [
+      'value' => t('Please enter verification code.', [], [
         'context' => 'egift'
       ]),
     ];
