@@ -2,16 +2,16 @@
  * @file
  * JS code to integrate with GTM.
  */
-const GTM_CONSTANTS = {
-  CART_ERRORS: 'cart errors',
-  CHECKOUT_ERRORS: 'checkout errors',
-  PAYMENT_ERRORS: 'other payment errors',
-  GENUINE_PAYMENT_ERRORS: 'payment errors',
-};
-
-const productRecommendationsSuffix = 'pr-';
-
 (function ($, Drupal, dataLayer) {
+
+  window.GTM_CONSTANTS = {
+    CART_ERRORS: 'cart errors',
+    CHECKOUT_ERRORS: 'checkout errors',
+    PAYMENT_ERRORS: 'other payment errors',
+    GENUINE_PAYMENT_ERRORS: 'payment errors',
+  };
+
+  window.productRecommendationsSuffix = 'pr-';
 
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;
