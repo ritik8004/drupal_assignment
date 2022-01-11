@@ -549,7 +549,7 @@
         cart_items = cartItemsArg
       }
       else {
-        var cart = JSON.parse(localStorage.getItem('cart_data'));
+        var cart = Drupal.getItemFromLocalStorage('cart_data');
         if (cart !== null && cart.cart !== null) {
           cart_items = cart.cart.items
         }

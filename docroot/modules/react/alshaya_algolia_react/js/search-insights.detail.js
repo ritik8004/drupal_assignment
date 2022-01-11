@@ -12,8 +12,8 @@
         var queryId, objectId= null;
 
         try {
-          if (localStorage.getItem('algolia_search_clicks') !== null) {
-            var algolia_clicks = JSON.parse(localStorage.getItem('algolia_search_clicks'));
+          if (Drupal.getItemFromLocalStorage('algolia_search_clicks') !== null) {
+            var algolia_clicks = Drupal.getItemFromLocalStorage('algolia_search_clicks');
             if (algolia_clicks
               && algolia_clicks[sku] !== undefined
               && algolia_clicks[sku] !== null

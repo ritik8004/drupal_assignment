@@ -9,14 +9,11 @@
 
   Drupal.alshayaSpc.getCartData = function () {
     // @todo find better way to get this using commerceBackend.
-    var cart_data = localStorage.getItem('cart_data');
-    if (cart_data) {
-      cart_data = JSON.parse(cart_data);
-      if (cart_data && cart_data.cart !== undefined) {
-        cart_data = cart_data.cart;
-        if (cart_data.cart_id !== null) {
-          return cart_data;
-        }
+    var cart_data = Drupal.getItemFromLocalStorage('cart_data');
+    if (cart_data && cart_data.cart !== undefined) {
+      cart_data = cart_data.cart;
+      if (cart_data.cart_id !== null) {
+        return cart_data;
       }
     }
 
@@ -49,7 +46,7 @@
     var data = null;
 
     try {
-      data = JSON.parse(localStorage.getItem(key));
+      data = Drupal.getItemFromLocalStorage(key);
     }
     catch (e) {
       // Do nothing, we will use PDP API to get the info again.
@@ -158,7 +155,7 @@
     // This is to avoid the situation where a child product have more than one
     // Parent products. In this case it will fetch the product name and id of
     // the parent product from the local storage.
-    var localStorageData = JSON.parse(localStorage.getItem(key));
+    var localStorageData = Drupal.getItemFromLocalStorage(key);
     if (localStorageData != null && localStorageData.gtmAttributes !== undefined) {
       data.gtmAttributes.id = localStorageData.gtmAttributes.id ? localStorageData.gtmAttributes.id : data.gtmAttributes.id;
       data.gtmAttributes.name = localStorageData.gtmAttributes.name ? localStorageData.gtmAttributes.name : data.gtmAttributes.name;
@@ -184,7 +181,8 @@
       'created': new Date().getTime(),
     };
 
-    localStorage.setItem(key, JSON.stringify(productData));
+    // @todo: we may need to setup an expiration time here.
+    Drupal.addItemInLocalStorage(key, productData);
 
     // Return as well if required for re-use.
     return data;

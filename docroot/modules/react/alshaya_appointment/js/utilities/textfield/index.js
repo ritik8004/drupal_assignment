@@ -3,7 +3,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import _has from 'lodash/has';
 import moment from 'moment';
-import { getStorageInfo } from '../storage';
 
 const TextField = (props) => {
   const countryMobileCode = drupalSettings.alshaya_appointment.country_mobile_code;
@@ -16,7 +15,7 @@ const TextField = (props) => {
     handleChange,
     section,
   } = props;
-  const localStorageValues = getStorageInfo();
+  const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
   let dateValue = '';
 
   if (_has(localStorageValues, section)) {

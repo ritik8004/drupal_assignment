@@ -28,11 +28,7 @@
    *   Return the value of object or null.
    */
   Drupal.algolia.getAlgoliaStorageValues = function(key) {
-    var value = localStorage.getItem(key);
-    if (typeof value !== 'undefined' && value !== null) {
-      return JSON.parse(value);
-    }
-    return null;
+    return Drupal.getItemFromLocalStorage(key);
   }
 
   /**
@@ -48,7 +44,7 @@
    *   The local storage value.
    */
   Drupal.algolia.scrollToAlgoliaProduct = function($context, wrapper, storageKey, storage_value) {
-    localStorage.removeItem(storageKey);
+    Drupal.removeItemFromLocalStorage(storageKey);
 
     var wait_for_product = setTimeout(function () {
       var first_visible_product = $(wrapper + ' article[data-sku="' + storage_value.sku + '"]:visible:first', $context);
@@ -93,7 +89,7 @@
     // Remove the grid_type property once applied when back from list
     // so that on next page load, default behavior is used.
     delete storage_value.grid_type;
-    localStorage.setItem(storageKey, JSON.stringify(storage_value));
+    Drupal.addItemInLocalStorage(storageKey, storage_value);
   }
  // Adding to use global.
   Drupal.algoliaGetActualPageNumber = function () {
