@@ -13,24 +13,13 @@ class StaticMinicart extends React.Component {
   }
 
   /**
-   * Handler for cart refresh events.
-   */
-  handleRefreshCart = (e) => {
-    const data = e.detail.data();
-    this.updateStaticMinicartValues(data);
-  };
-
-  /**
    * Listen to cart refresh events triggered from other components.
    */
   componentDidMount = () => {
     // Check if the cart data is present in local storage.
-    let cartData = Drupal.getItemFromLocalStorage('cart_data');
-    if (cartData) {
-      cartData = JSON.parse(cartData);
-      if (cartData && cartData.cart !== undefined) {
-        this.updateStaticMinicartValues(cartData.cart);
-      }
+    const cartData = Drupal.getItemFromLocalStorage('cart_data');
+    if (cartData && cartData.cart !== undefined) {
+      this.updateStaticMinicartValues(cartData.cart);
     }
 
     // Listen to `refreshCart` event triggered
@@ -39,6 +28,14 @@ class StaticMinicart extends React.Component {
 
     // Listen to `refreshMiniCart` event triggered
     document.addEventListener('refreshMiniCart', this.handleRefreshCart, false);
+  };
+
+  /**
+   * Handler for cart refresh events.
+   */
+  handleRefreshCart = (e) => {
+    const data = e.detail.data();
+    this.updateStaticMinicartValues(data);
   };
 
   /**

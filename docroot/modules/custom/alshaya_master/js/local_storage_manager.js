@@ -59,10 +59,7 @@
    *  true/false based on the action performed.
    */
   Drupal.removeItemFromLocalStorage = function (storageKey) {
-    // Remove item from the local storage if key is set.
-    return (storageKey)
-      ? localStorage.removeItem(storageKey)
-      : false;
+    localStorage.removeItem(storageKey)
   };
 
   /**
@@ -78,19 +75,26 @@
    *  Return data object if available.
    */
   Drupal.getItemFromLocalStorage = function (storageKey) {
-    // Return if the local storage key is not set.
-    if (!storageKey) {
-      return null;
-    }
-
     // Return is item not found in the storage with the provided key.
     let storageItem = localStorage.getItem(storageKey);
     if (!storageItem) {
       return null;
     }
 
-    // If item is available parse the info to JSON object.
-    storageItem = JSON.parse(storageItem);
+    try {
+      // If item is available parse the info to JSON object.
+      storageItem = JSON.parse(storageItem);
+    }
+    catch (error) {
+      // Log an error message for debugging.
+      Drupal.alshayaLogger('warning', 'Invalid data found for @storageKey in local storage. Error message: @message', {
+        '@storageKey': storageKey,
+        '@message': error.message,
+      });
+
+      // If JSON parse failed we return string.
+      return storageItem;
+    }
 
     // Check if the storage items data isn't expired. For that,
     // we will check if the expiry_time is set with the storage
@@ -103,14 +107,21 @@
       return null;
     }
 
-    // Prepare data to return. If the data attribute is set
-    // else we will return item retrieved from storage.
-    const dataToReturn = (typeof storageItem.data !== 'undefined')
-      ? storageItem.data
-      : storageItem;
+    // Remove and return null, if local storage data is in old format.
+    // For checking old format,
+    // - expiry_time must not be set as we do set this in new format only
+    // - last_update or create must be set that we use now.
+    // - anything within the data object doesn't impact.
+    if (typeof storageItem.expiry_time === 'undefined'
+      && (typeof storageItem.last_update !== 'undefined'
+      || typeof storageItem.created !== 'undefined')) {
+      // If item is expired, we will remove this from the local storage.
+      Drupal.removeItemFromLocalStorage(storageKey);
+      return null;
+    }
 
-    // Return the prepared data.
-    return dataToReturn;
+    // If it's a new format simply return the data.
+    return storageItem.data;
   };
 
   /**

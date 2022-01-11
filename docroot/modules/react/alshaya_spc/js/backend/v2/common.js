@@ -114,7 +114,11 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   // As of now it not possible to get it on page load before all
   // other JS is executed and for all other JS refactoring
   // required is huge.
-  Drupal.addItemInLocalStorage('cart_data', cartInfo);
+  Drupal.addItemInLocalStorage(
+    'cart_data',
+    cartInfo,
+    parseInt(drupalSettings.alshaya_spc.cart_storage_expiration, 10) * 60,
+  );
 };
 
 /**

@@ -143,7 +143,11 @@ window.commerceBackend.getCartDataFromStorage = () => Drupal.getItemFromLocalSto
  * @param data
  *   The cart data.
  */
-window.commerceBackend.setCartDataInStorage = (data) => Drupal.addItemInLocalStorage('cart_data', data);
+window.commerceBackend.setCartDataInStorage = (data) => Drupal.addItemInLocalStorage(
+  'cart_data',
+  data,
+  parseInt(drupalSettings.alshaya_spc.cart_storage_expiration, 10) * 60,
+);
 
 /**
  * Removes the cart data from storage.

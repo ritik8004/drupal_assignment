@@ -91,6 +91,10 @@ class AlshayaReactMiniCartBlock extends BlockBase implements ContainerFactoryPlu
 
     $settings['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
 
+    $cart_config = $this->configFactory->get('alshaya_acm.cart_config');
+    $cache_tags = Cache::mergeTags($cache_tags, $cart_config->getCacheTags());
+    $settings['alshaya_spc']['cart_storage_expiration'] = $cart_config->get('cart_storage_expiration') ?? 15;
+
     $build = [
       '#type' => 'markup',
       '#markup' => '<div id="mini-cart-wrapper"></div><div id="cart_notification"></div>',
