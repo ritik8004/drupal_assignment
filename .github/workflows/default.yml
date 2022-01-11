@@ -121,6 +121,7 @@ jobs:
 
       - name: Frontend and React setup
         run: blt alshayafe:setup
+        if: ${{ github.event_name == 'pull_request' }}
 
       - name: React validate
         run: blt alshayafe:test-react
@@ -139,14 +140,6 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ env.SSH_DEPLOYMENT_KEY }}"
         if: ${{ env.SSH_DEPLOYMENT_KEY }}
-
-      - name: React build
-        run: blt alshayafe:build-react
-        if: ${{ github.event_name == 'push' }}
-
-      - name: Frontend build
-        run: blt alshayafe:build-all-themes
-        if: ${{ github.event_name == 'push' }}
 
       - name: Deploy branch
         run: bash $SCRIPT_DIR/deploy_branch.sh
