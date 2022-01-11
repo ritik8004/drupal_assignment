@@ -43,11 +43,6 @@ jobs:
     needs: changedfiles
     if: ${{ github.event_name == 'pull_request' && (needs.changedfiles.outputs.composer || needs.changedfiles.outputs.docroot) }}
 
-    strategy:
-      fail-fast: true
-      matrix:
-        drupal-profile: [ 'alshaya_transac' ]
-
     container:
       image: devwithlando/php:7.4-fpm-4
 
