@@ -164,8 +164,9 @@ jobs:
         run: bash $SCRIPT_DIR/run_tests.sh
 
   deploy:
-    name: Full (Build, Validate, Test, Deploy)
+    name: Deploy
     runs-on: ubuntu-18.04
+    if: ${{ github.event_name == 'push' }}
 
     env:
       CI: GITHUB_ACTIONS
@@ -250,8 +251,8 @@ jobs:
 
       - name: Deploy branch
         run: bash $SCRIPT_DIR/deploy_branch.sh
-        if: ${{ env.SSH_DEPLOYMENT_KEY && github.event_name == 'push' && contains(github.ref, 'refs/heads') }}
+        if: ${{ env.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/heads') }}
 
       - name: Deploy tag
         run: bash $SCRIPT_DIR/deploy_tag.sh
-        if: ${{ env.SSH_DEPLOYMENT_KEY && github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
+        if: ${{ env.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/tags') }}
