@@ -12,13 +12,14 @@ import CategoryCarouselInfiniteHits from '../algolia/CategoryCarouselInfiniteHit
 const ProductCategoryCarousel = ({
   searchState, createURL, onSearchStateChange, categoryId,
 }) => {
+  const carouselData = window.commerceBackend.getCarouselData(categoryId);
   const {
     category_field: categoryField,
     hierarchy,
     itemsPerPage,
     ruleContext,
     sectionTitle,
-  } = drupalSettings.alshayaProductCarousel[categoryId];
+  } = carouselData;
 
   const {
     filterOos,

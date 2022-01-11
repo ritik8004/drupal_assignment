@@ -10,3 +10,7 @@ rcs_listing_dynamic_yield:
     js/alshaya_rcs_listing_dy.js: {}
   dependencies:
     - rcs_magento_placeholders/rcs_magento_placeholders
+
+product_carousel_utility:
+  js:
+    js/alshaya_rcs_product_category_carousel.utility.js: {}

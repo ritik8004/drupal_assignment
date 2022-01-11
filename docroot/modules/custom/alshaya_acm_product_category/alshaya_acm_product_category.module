@@ -796,3 +796,13 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
     }
   }
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_acm_product_category_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'alshaya_algolia_react' && isset($libraries['product_category_carousel'])) {
+    $module_path = drupal_get_path('module', 'alshaya_acm_product_category');
+    $libraries['product_category_carousel']['js']["/$module_path/js/product_category_carousel.utility.js"] = [];
+  }
+}

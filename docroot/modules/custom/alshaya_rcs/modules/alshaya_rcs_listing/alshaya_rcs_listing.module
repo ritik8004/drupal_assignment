@@ -142,3 +142,15 @@ function alshaya_rcs_listing_rcs_placeholders_processor_path_alter(string &$path
     $path = substr($path, 0, stripos($path, '/--'));
   }
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_listing_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'alshaya_algolia_react' && isset($libraries['product_category_carousel'])) {
+    $module_path = drupal_get_path('module', 'alshaya_rcs_listing');
+    // Unset any js attached before.
+    $libraries['product_category_carousel']['js'] = [];
+    $libraries['product_category_carousel']['js']["/$module_path/js/alshaya_rcs_product_category_carousel.utility.js"] = [];
+  }
+}
