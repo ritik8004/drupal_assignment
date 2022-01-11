@@ -10,7 +10,6 @@ services:
   alshaya_seo.generator:
     decorates: pathauto.generator
     decoration_priority: 9
-    public: false
     class: Drupal\alshaya_seo\Decorator\AlshayaSeoPathautoGenerator
     arguments:
       - '@config.factory'
