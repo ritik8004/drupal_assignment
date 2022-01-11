@@ -58,7 +58,7 @@
    * @returns {boolean}
    *  true/false based on the action performed.
    */
-  Drupal.removeItemFromLocalStorage = function (storageKey) {
+  Drupal.removeItemFromLocalStorage = function (storageKey = 0) {
     // Remove item from the local storage if key is set.
     return (storageKey)
       ? localStorage.removeItem(storageKey)
@@ -109,40 +109,17 @@
       ? storageItem.data
       : storageItem;
 
-    // If return data is an object, add expiry time with return data for
-    // other components or modules to perform custom actions
-    if (typeof dataToReturn === 'object') {
-      dataToReturn.expiry_time = storageItem.expiry_time;
-    }
-
     // Return the prepared data.
     return dataToReturn;
   };
 
   /**
-   * Async function to check the local storage data for the given keys
+   * Async function to check the local storage data for all keys
    * and remove if expiry time for that data is reached.
    */
   Drupal.runLocalStorageCleaner = async function () {
-    // Key to consider for checking and cleaning. These can be modified
-    // and more can be added here based on the future implementation.
-    // @todo: see if we can make it dynamic and manage from the relevant
-    // modules itself.
-    const keysForCleaner = [
-      'facets',
-      'productinfo',
-      'cart_data',
-      'appointment_data',
-      'wishlist',
-      'user_action_logger',
-    ];
-
     // Get all the local storage keys having the above defined key strings.
-    const filteredKeys = Object.keys(localStorage).filter(
-      (localStgKey) => keysForCleaner.some(
-        (stgKey) => (localStgKey.indexOf(stgKey) > -1)
-      )
-    );
+    const filteredKeys = Object.keys(localStorage);
 
     // If we have keys available to clean, iterate and run get item storage
     // helper func for each to remove it from local storage, if expired
