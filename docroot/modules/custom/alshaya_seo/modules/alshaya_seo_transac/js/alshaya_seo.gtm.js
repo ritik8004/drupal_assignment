@@ -41,6 +41,7 @@ const productRecommendationsSuffix = 'pr-';
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
+        product.attr('gtm-main-sku', variantInfo['parent_sku']);
       });
 
       // For simple grouped products.
@@ -702,6 +703,53 @@ const productRecommendationsSuffix = 'pr-';
     }
   };
 
+  // Simple proxy to dispatch a custom event on window.history.replaceState
+  window.history.replaceState = new Proxy(window.history.replaceState, {
+    apply: (target, thisArg, argArray) => {
+      window.dispatchEvent(new CustomEvent('onAlshayaSeoReplaceState', {detail: { data: () => argArray }}));
+      return target.apply(thisArg, argArray);
+    },
+  });
+
+  // Processes the data and pushes it to gtm layer.
+  window.addEventListener('onAlshayaSeoReplaceState', function (e) {
+    let product = $('.entity--type-node[data-sku][data-vmode="full"]');
+    // Convert the product to a jQuery object, if not already.
+    if (!(product instanceof jQuery) && typeof product !== 'undefined') {
+      product = $(product);
+    }
+    const lastUrl = location.href;
+    const url = e.detail.data()[2];
+
+    if (product !== null && !lastUrl.includes(url)) {
+      var amount = product.attr('gtm-price').replace(/\,/g,'');
+      // Prepare data.
+      var data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: drupalSettings.gtm.currency,
+          detail: {
+            products: {
+              name: product.attr('gtm-name'),
+              id: product.attr('gtm-main-sku'),
+              price: parseFloat(amount),
+              category: product.attr('gtm-category'),
+              variant: product.attr('gtm-product-sku'),
+              dimension2: product.attr('gtm-sku-type'),
+              dimension3: product.attr('gtm-dimension3'),
+              dimension4: product.attr('gtm-dimension4')
+            }
+          }
+        }
+      };
+      if (product.attr('gtm-brand')) {
+        data.ecommerce.detail.products.brand = product.attr('gtm-brand');
+      }
+      // Push into datalayer.
+      dataLayer.push(data);
+    }
+  });
+
   /**
    * Function to provide product data object.
    *
@@ -844,8 +892,9 @@ const productRecommendationsSuffix = 'pr-';
    * @param highlights
    * @param gtmPageType
    * @param event
+   * @param promoBlockDetails
    */
-  Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event) {
+  Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event, promoBlockDetails = null) {
     var promotions = [];
     var promo_para_elements = '.paragraph--type--promo-block, .c-slider-promo, .field--name-body > div[class^="rectangle"]:visible';
     var promotion_counter = 0;
@@ -902,6 +951,19 @@ const productRecommendationsSuffix = 'pr-';
           }
         }
       }
+      else if (gtmPageType === 'footer promo panel') {
+        creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
+        // Slider behaviour when first item is repeated after last item
+        // turning first item index to number of promotion items plus one.
+        // Taking first position in such case.
+        if ($(highlight).attr('data-slick-index') == promoBlockDetails.promotionItemCount) {
+          position = 1;
+        }
+        else {
+          position = Number($(highlight).attr('data-slick-index')) + 1;
+        }
+        var promoItemName = $(highlight).find('.field--name-field-title').attr('gtm-title').toUpperCase();
+      }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
         if (!creative) {
@@ -919,7 +981,7 @@ const productRecommendationsSuffix = 'pr-';
         }
 
         // Remove file extensions from fileName.
-        if (fileName.lastIndexOf('.') !== -1) {
+        if (fileName.lastIndexOf('.') !== -1 && gtmPageType !== 'footer promo panel') {
           fileName = fileName.substring(0, fileName.lastIndexOf('.'));
         }
         fileName = fileName.toLowerCase();
@@ -929,13 +991,14 @@ const productRecommendationsSuffix = 'pr-';
           (fileName.indexOf('mm') === 0) ||
           (fileName.indexOf('dp') === 0) ||
           (fileName.indexOf('lp') === 0) ||
-          (fileName.indexOf('oth') === 0)
+          (fileName.indexOf('oth') === 0) ||
+          (gtmPageType === 'footer promo panel')
         )) {
           var promotion = {
-            creative: creative.replace(/\/en\/|\/ar\//, ''),
-            id: fileName,
-            name: gtmPageType,
-            position: 'slot' + position
+            creative: (gtmPageType === 'footer promo panel') ? decodeURI(fileName) : creative.replace(/\/en\/|\/ar\//, ''),
+            id: (gtmPageType === 'footer promo panel') ? promoItemName : fileName,
+            name: (gtmPageType === 'footer promo panel') ? promoBlockDetails.promoBlockLabel : gtmPageType,
+            position: (gtmPageType === 'footer promo panel') ? position : 'slot' + position
           };
           if (typeof promotion !== 'undefined') {
             promotion_counter++;
@@ -1031,10 +1094,6 @@ const productRecommendationsSuffix = 'pr-';
     };
 
     dataLayer.push(data);
-
-    // Trigger Product Details View
-    var quickView = 'yes';
-    Drupal.alshayaSeoGtmPushProductDetailView(element, listName, quickView);
   };
   /**
    * Helper function to push lead events.

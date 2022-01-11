@@ -1,3 +1,4 @@
+status: true
 server: algolia
 options:
   algolia_index_apply_suffix: '1'

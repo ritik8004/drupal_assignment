@@ -66,7 +66,7 @@
       // Highlight the shipping method row when an option is selected.
       $('#shipping_methods_wrapper .form-type-radio input[type="radio"]:checked').parent().addClass('selected');
       $('#shipping_methods_wrapper .form-type-radio input[type="radio"]').once('bind-events').on('click', function () {
-          $(this).parent().addClass('selected').siblings().removeClass('selected');
+        $(this).parent().addClass('selected').siblings().removeClass('selected');
       });
 
       $('#change-address').once('bind-events').each(function () {

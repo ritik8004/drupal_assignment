@@ -24,7 +24,7 @@
   }
 
   .spc-cart-shipping-methods {
-    padding-top: 1.75rem;
+    padding-top: 1.5rem;
   }
 
   .sku-cart-delivery-methods {
@@ -96,9 +96,12 @@
     }
 
     .carrier-title {
-      padding: 0.125rem 0.4375rem;
-      padding-bottom: 0.1875rem;
-      padding-#{$right}: 1.5rem;
+      padding: 0.125rem 1.5rem 0.1875rem 0.4375rem;
+      display: inline-block;
+
+      html[lang=ar] & {
+        padding: 0.125rem 0.4375rem 0.1875rem 1.5rem;
+      }
     }
 
     .information-icon {
@@ -109,8 +112,6 @@
         top: 0;
 
         html[lang=ar] & {
-          top: -0.0625rem;
-
           @include breakpoint($only-mobile) {
             top: -0.125rem;
           }
@@ -221,7 +222,8 @@
     }
 
     @include breakpoint($desktop) {
-      .shipping-tags-first-row {
+      .shipping-tags-first-row,
+      .shipping-tags-second-row {
         .information-icon {
           &::after {
             position: absolute;

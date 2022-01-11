@@ -237,6 +237,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KLZ3ZQR',
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'P6IDFAXZNC',
+            'write_api_key' => 'c3541599df4aff3f9ad265cbfcae8454',
+            'search_api_key' => '502a840efc5f2f94a995b33a94feec10',
+          ],
           'live' => [
             'exponea.settings' => [
               "name" => "Victoria's Secret",
@@ -373,6 +378,25 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         'live' => [
           'dynamic_yield.settings' => [
             'section_id' => '9877013',
+          ],
+        ],
+      ],
+    ],
+    'dh' => [
+      'default' => [
+        'default' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9878438',
+          ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'G1FVH4K241',
+            'write_api_key' => '23f029d266e7c1427a1614110f0e0b0f',
+            'search_api_key' => '7c541cb89dc95ded52fa2acc70850541',
+          ],
+        ],
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9878439',
           ],
         ],
       ],

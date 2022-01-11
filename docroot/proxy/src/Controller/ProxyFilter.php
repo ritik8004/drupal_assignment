@@ -37,9 +37,12 @@ class ProxyFilter implements FilterInterface {
    */
   public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next) {
     // Collect arguments from query string.
-    parse_str(parse_url($request->getUri()->getQuery(), PHP_URL_QUERY), $query);
+    $query = $request->getQueryParams();
 
-    // Build uri with query string arguments.
+    // Remove the url parameter which is for host.
+    unset($query['url']);
+
+    // Build uri with remaining query string arguments.
     $uri = $this->url . '?' . http_build_query($query);
 
     // Do the request.

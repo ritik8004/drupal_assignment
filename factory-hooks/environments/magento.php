@@ -69,6 +69,31 @@ $magentos = [
       'store_id' => ['en' => 38, 'ar' => 35],
     ],
   ],
+  'dh_prod' => [
+    'url' => 'https://deb.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 14],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 5],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 8, 'ar' => 11],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 20, 'ar' => 17],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 26, 'ar' => 23],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
+    ],
+  ],
   // COS.
   'cos_integration' => [
     'url' => 'https://integration-5ojmyuq-vlvasu2xupli4.eu-3.magentosite.cloud',

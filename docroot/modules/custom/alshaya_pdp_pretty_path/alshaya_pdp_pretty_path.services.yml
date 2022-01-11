@@ -1,0 +1,13 @@
+services:
+  alshaya_pdp_pretty_path.helper:
+    class: Drupal\alshaya_pdp_pretty_path\Service\AlshayaPdpPrettyPathHelper
+  alshaya_pdp_pretty_path.path_processor:
+    class: Drupal\alshaya_pdp_pretty_path\PathProcessor\PathProcessorPdpPrettyPath
+    arguments: ['@current_route_match', '@path_alias.manager']
+    tags:
+      - { name: path_processor_inbound, priority: 80 }
+      - { name: path_processor_outbound, priority: 90 }
+  alshaya_pdp_pretty_path.route_subscriber:
+    class: Drupal\alshaya_pdp_pretty_path\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

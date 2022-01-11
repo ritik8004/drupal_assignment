@@ -1,0 +1,74 @@
+.spc-order-summary-order-preview,
+.spc-order-summary-order-detail {
+  .spc-order-summary-item {
+    &.spc-order-summary-address-item {
+      .spc-value {
+        .spc-address-name {
+          font-family: $alshaya-thin;
+        }
+      }
+    }
+  }
+}
+
+.spc-order-summary-item.order-summary-banner-fawry {
+  > span {
+    &:first-child {
+      font-size: 0.75rem;
+      color: $fawry-banner;
+      line-height: 1.67;
+      max-width: 24.125rem;
+
+      > a {
+        color: $fawry-banner;
+        text-decoration: underline;
+      }
+
+      @include breakpoint($upto-desktop) {
+        max-width: 13.125rem;
+      }
+    }
+
+    &:last-child {
+      max-width: 4.625rem;
+    }
+  }
+}
+
+.spc-order-summary-order-detail {
+  margin-top: 0.3125rem;
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.75rem;
+    height: 3.5rem;
+
+    &::before {
+      display: none;
+    }
+
+    @include icon('chevrondown', 'after') {
+      font-size: 2rem;
+      display: inline-block;
+      transition: tansform 0.3s ease-in-out;
+    }
+  }
+
+  .spc-detail-content {
+    height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+  }
+
+  input[type=checkbox]:checked {
+    ~ .spc-detail-content {
+      height: auto;
+    }
+
+    + label::after {
+      transform: rotate(180deg);
+    }
+  }
+}

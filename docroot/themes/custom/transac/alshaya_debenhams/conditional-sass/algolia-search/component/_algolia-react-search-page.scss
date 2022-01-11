@@ -20,10 +20,21 @@
     .c-collapse-item {
       .c-collapse__title {
         font-size: 0.8125rem;
-        text-transform: uppercase;
+        font-family: $dh-semibold;
+        text-transform: capitalize;
+
+        @include breakpoint($only-mobile) {
+          font-family: $alshaya-thin;
+          font-size: 0.875rem;
+        }
 
         &::after {
           #{$right}: 1.5rem;
+          font-weight: bold;
+
+          html[lang=ar] & {
+            left: 1.25rem;
+          }
         }
       }
     }
@@ -31,11 +42,18 @@
 
   .c-page-title {
     font-weight: normal;
+    font-size: 2.25rem;
+    font-family: $dh-Juana-black;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.25rem;
+      padding: 1.375rem 0;
+    }
   }
 
   .c-products__item {
     .special--price {
-      margin-#{$left}: 0.625rem;
+      margin-#{$left}: 0;
 
       @include breakpoint($only-mobile) {
         margin-#{$left}: 0;
@@ -44,7 +62,7 @@
 
     .price-currency {
       @include breakpoint($only-mobile) {
-        margin-#{$right}: 0.0625rem;
+        margin-#{$right}: 0;
       }
     }
   }

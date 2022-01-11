@@ -219,10 +219,13 @@ class CustomerController extends ControllerBase {
       '#account' => $account,
       '#next_page_button' => $nextPageButton,
       '#help_block' => $help_block,
-      '#attached' => [
-        'library' => ['alshaya_acm_customer/orders-list'],
-      ],
     ];
+
+    if (!empty($orderDetails)) {
+      $build['#attached'] = [
+        'library' => ['alshaya_acm_customer/orders-list'],
+      ];
+    }
 
     $cache_time_limit = $this->config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
     $build['#cache'] = ['max-age' => $cache_time_limit];

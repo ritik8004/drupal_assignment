@@ -1,8 +1,24 @@
 .path--store-finder,
 .nodetype--store {
+  .store-finder--wrapper {
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        width: 51.7%;
+      }
+    }
+
+    html[lang=ar] & {
+      @include breakpoint($only-tablet) {
+        width: 48%;
+      }
+    }
+  }
+
   .c-content__region,
   .view-stores-finder {
     max-width: 77rem;
+    padding-#{$left}: 1.25rem;
+    padding-#{$right}: 1.25rem;
   }
 
   .view-header {
@@ -29,7 +45,7 @@
   .mobile-only-back-to-glossary {
     a {
       @include icon(chevron#{$left}, after) {
-        color: $content_link_color;
+        color: $primary_text;
         font-size: 2.25rem;
         top: -0.125rem;
       }
@@ -61,6 +77,12 @@
 
   .current-location,
   .cc-near-me {
+    html[lang=ar] & {
+      @include breakpoint($desktop) {
+        width: 18%;
+      }
+    }
+
     &::before {
       background: url('../../../imgs/icons/ic-mylocation.svg') no-repeat;
       width: 1.625rem;
@@ -164,6 +186,7 @@
           &::after {
             font-size: 2.25rem;
             top: 0.25rem;
+            #{$right}: -0.375rem;
           }
         }
       }
@@ -361,10 +384,10 @@
   .hours--wrapper {
     .hours--label.open {
       &::after {
-        transform: rotate(180deg);
+        transform: none;
 
         html[lang=ar] & {
-          transform: rotate(180deg);
+          transform: none;
         }
       }
     }
@@ -457,6 +480,10 @@
 
         &::after {
           transform: rotate(180deg);
+
+          html[lang=ar] & {
+            transform: rotate(180deg);
+          }
         }
       }
 
@@ -479,9 +506,14 @@
   .hours--wrapper .hours--label,
   .hours--wrapper .open--hours,
   .view-on--map a,
-  .get--directions a {
-    padding-bottom: 0.875rem;
-    padding-top: 0.875rem;
+  .get--directions {
+    font-weight: normal;
+    padding: 1rem 0;
+
+    a {
+      padding-bottom: 0.875rem;
+      padding-top: 0.875rem;
+    }
   }
 }
 

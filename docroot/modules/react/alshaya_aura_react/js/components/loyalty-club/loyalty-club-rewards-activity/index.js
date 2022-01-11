@@ -29,7 +29,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
       fromDate: '',
       toDate: '',
       type: '',
-      brand: '',
+      brand: 'all',
       wait: true,
       noStatement: false,
     };
@@ -66,8 +66,6 @@ class LoyaltyClubRewardsActivity extends React.Component {
         this.setState({
           activity: statement,
           wait: false,
-          fromDate,
-          toDate,
           type,
           brand,
           noStatement: !statement.length,
@@ -85,7 +83,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     this.setState({
       fromDate: formatDate(new Date(date.getFullYear(), date.getMonth()), 'YYYY-MM-DD'),
-      toDate: formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DD'),
+      toDate: formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DDT'),
     });
   };
 
@@ -166,7 +164,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
   handleDateChange = (selectedOption) => {
     const date = new Date(selectedOption.value);
     const fromDate = formatDate(date, 'YYYY-MM-DD');
-    const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DD');
+    const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DDT');
     const { type, brand } = this.state;
 
     this.fetchRewardActivity(fromDate, toDate, 0, type, brand);

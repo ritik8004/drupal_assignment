@@ -290,42 +290,7 @@ function alshaya_bp_transac_alshaya_performance_preload_alter(array &$preload) {
 
   $preload[] = [
     'as' => 'font',
-    'href' => $icon_directory_path . '/alshaya-icons.woff?D7b5iT',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff',
-  ];
-
-  $themeHandler = \Drupal::service('theme_handler');
-  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
-  $fonts_directory_path = '/' . $themePath . '/fonts';
-
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/BootsSharp-Regular.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/BootsSharp-Bold.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/BootsSharp-Light.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/Tahoma.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/Tahoma-Bold.woff2',
+    'href' => $icon_directory_path . '/alshaya-icons.woff2?D7b5if',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];

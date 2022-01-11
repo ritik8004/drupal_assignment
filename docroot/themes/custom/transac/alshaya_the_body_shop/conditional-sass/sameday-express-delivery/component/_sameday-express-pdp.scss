@@ -12,4 +12,16 @@
       }
     }
   }
+
+  .express-delivery-text {
+    width: 14.5rem;
+
+    @include breakpoint($tablet) {
+      width: 13.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 15.5rem;
+    }
+  }
 }
