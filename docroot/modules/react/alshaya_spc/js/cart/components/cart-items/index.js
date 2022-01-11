@@ -28,7 +28,7 @@ export default class CartItems extends React.Component {
       const qtyLimits = {};
       Object.entries(items).forEach(([, productData]) => {
         const key = `product:${drupalSettings.path.currentLanguage}:${productData.sku}`;
-        const product = JSON.parse(localStorage.getItem(key));
+        const product = Drupal.getItemFromLocalStorage(key);
         if (product !== null && product.maxSaleQtyParent) {
           qtyLimits[product.parentSKU] = (typeof qtyLimits[product.parentSKU] !== 'undefined')
             ? qtyLimits[product.parentSKU] + productData.qty
@@ -43,7 +43,7 @@ export default class CartItems extends React.Component {
       if (Object.keys(qtyLimits).length > 0) {
         Object.entries(items).forEach(([, productData]) => {
           const key = `product:${drupalSettings.path.currentLanguage}:${productData.sku}`;
-          const product = JSON.parse(localStorage.getItem(key));
+          const product = Drupal.getItemFromLocalStorage(key);
           if (product !== null) {
             CartItems.qtyLimits[productData.sku] = qtyLimits[product.parentSKU];
           }

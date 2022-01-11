@@ -10,7 +10,6 @@ import {
   setUpapiApplePayCofig,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
-import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
 import PaymentMethodPostpay from '../payment-method-postpay';
@@ -147,15 +146,15 @@ export default class PaymentMethod extends React.Component {
         // 2D flow success.
         const { cart } = this.props;
         placeOrder(cart.cart.payment.method);
-        removeStorageInfo('spc_selected_card');
-        removeStorageInfo('billing_shipping_same');
+        Drupal.removeItemFromLocalStorage('spc_selected_card');
+        Drupal.removeItemFromLocalStorage('billing_shipping_same');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
         Drupal.logJavascriptError('3d flow finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
-        removeStorageInfo('spc_selected_card');
-        removeStorageInfo('billing_shipping_same');
+        Drupal.removeItemFromLocalStorage('spc_selected_card');
+        Drupal.removeItemFromLocalStorage('billing_shipping_same');
         window.location = result.redirectUrl;
       } else {
         Drupal.logJavascriptError(

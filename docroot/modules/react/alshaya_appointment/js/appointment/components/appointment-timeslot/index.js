@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 import AppointmentSlots from '../appointment-selectslot';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import AppointmentCalendar from '../appointment-calendar';
@@ -15,7 +14,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 export default class AppointmentTimeSlot extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
@@ -53,7 +52,11 @@ export default class AppointmentTimeSlot extends React.Component {
   }
 
   handleSubmit = () => {
-    setStorageInfo(this.state);
+    Drupal.addItemInLocalStorage(
+      'appointment_data',
+      this.state,
+      drupalSettings.alshaya_appointment.local_storage_expire * 60,
+    );
     const { handleSubmit } = this.props;
     handleSubmit();
     smoothScrollTo('#appointment-booking');

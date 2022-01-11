@@ -10,7 +10,7 @@
     attach: function (context) {
       $('#alshaya-algolia-search, #alshaya-algolia-plp').once('alshayaAlgoliaInsights').on('click', '[data-insights-query-id] .product-selected-url', function (event) {
         var hit = $(this).closest('[data-insights-query-id]');
-        var algolia_clicks = JSON.parse(localStorage.getItem('algolia_search_clicks'));
+        var algolia_clicks = Drupal.getItemFromLocalStorage('algolia_search_clicks');
         if (algolia_clicks === null) {
           algolia_clicks = {};
         }
@@ -18,7 +18,7 @@
           'query-id': hit.attr('data-insights-query-id'),
           'object-id': hit.attr('data-insights-object-id'),
         };
-        localStorage.setItem('algolia_search_clicks', JSON.stringify(algolia_clicks));
+        Drupal.addItemInLocalStorage('algolia_search_clicks', algolia_clicks);
 
         window.aa('clickedObjectIDsAfterSearch', {
           userToken: Drupal.getAlgoliaUserToken(),

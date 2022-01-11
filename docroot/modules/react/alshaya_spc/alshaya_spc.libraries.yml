@@ -6,6 +6,7 @@ cart_utilities:
     - core/drupal
     - core/jquery.once
     - alshaya_react/react_pollyfill
+    - alshaya_master/local_storage_manager
 
 mini_cart:
   version: 1.x

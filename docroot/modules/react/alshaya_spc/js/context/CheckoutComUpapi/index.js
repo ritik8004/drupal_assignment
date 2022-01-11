@@ -1,5 +1,4 @@
 import React from 'react';
-import { getStorageInfo } from '../../utilities/storage';
 
 export const CheckoutComUpapiContext = React.createContext();
 
@@ -22,7 +21,7 @@ class CheckoutComUpapiContextProvider extends React.Component {
 
   componentDidMount() {
     const hasCards = this.hasTokenizedCards();
-    const storageSelectedCard = getStorageInfo('spc_selected_card');
+    const storageSelectedCard = Drupal.getItemFromLocalStorage('spc_selected_card');
     let selectedCard = (hasCards) ? 'existing' : 'new';
     selectedCard = (hasCards && storageSelectedCard && storageSelectedCard === 'new')
       ? 'new'
