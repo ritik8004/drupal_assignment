@@ -5,7 +5,6 @@ import AppointmentTypeList from './components/appointment-type-list';
 import AppointmentCompanion from './components/appointment-companion';
 import AppointmentForYou from './components/appointment-for-you';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
-import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import { getInputValue, getParam } from '../../../utilities/helper';
 import {
   showFullScreenLoader,
@@ -22,7 +21,7 @@ const companionItems = [...Array(parseInt(listItems, 10))]
 export default class AppointmentType extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
@@ -138,7 +137,11 @@ export default class AppointmentType extends React.Component {
   }
 
   handleSubmit = () => {
-    setStorageInfo(this.state);
+    Drupal.addItemInLocalStorage(
+      'appointment_data',
+      this.state,
+      drupalSettings.alshaya_appointment.local_storage_expire * 60,
+    );
     const { handleSubmit } = this.props;
     handleSubmit();
     smoothScrollTo('#appointment-booking');

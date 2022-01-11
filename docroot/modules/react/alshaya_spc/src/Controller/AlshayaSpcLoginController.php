@@ -168,6 +168,10 @@ class AlshayaSpcLoginController extends ControllerBase {
 
     $build['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
 
+    $cart_config = $this->config('alshaya_acm.cart_config');
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cart_config->getCacheTags());
+    $build['#attached']['drupalSettings']['alshaya_spc']['cart_storage_expiration'] = $cart_config->get('cart_storage_expiration') ?? 15;
+
     $this->moduleHandler()->alter('alshaya_spc_checkout_login_build', $build);
 
     return $build;

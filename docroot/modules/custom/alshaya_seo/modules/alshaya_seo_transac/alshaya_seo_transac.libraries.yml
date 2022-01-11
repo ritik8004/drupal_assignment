@@ -9,6 +9,7 @@ gtm:
     - core/underscore
     - alshaya_master/common_functions
     - alshaya_master/jquery_is_in_viewport
+    - alshaya_master/local_storage_manager
     - alshaya_white_label/slider_banner
 
 gtm_algolia:
@@ -41,6 +42,7 @@ gtm_spc_cart:
     - alshaya_seo_transac/gtm_spc
     - core/drupal.debounce
     - alshaya_master/jquery_is_in_viewport
+    - alshaya_master/local_storage_manager
 
 gtm_spc_checkout:
   js:
@@ -55,6 +57,7 @@ gtm_spc:
     - core/jquery
     - core/Drupal
     - alshaya_spc/cart_utilities
+    - alshaya_master/local_storage_manager
 
 product_list:
   version: 1.x
@@ -108,3 +111,4 @@ gtm_initial_data_push:
   dependencies:
     - core/drupal
     - core/jquery
+    - alshaya_master/local_storage_manager
