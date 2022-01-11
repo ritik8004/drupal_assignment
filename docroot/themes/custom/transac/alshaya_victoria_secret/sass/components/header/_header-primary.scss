@@ -24,6 +24,39 @@
   }
 }
 
+.super-category-beauty,
+.super-category-pink {
+  .block-system-branding-block {
+    .site-brand-home {
+      .logo {
+        img {
+          height: 3rem;
+
+          html[lang=ar] & {
+            height: 3rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.super-category-swim {
+  .block-system-branding-block {
+    .site-brand-home {
+      .logo {
+        img {
+          height: 2.5rem;
+
+          html[lang=ar] & {
+            height: 2.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
 .c-pre-content__region {
   border: 0;
 
