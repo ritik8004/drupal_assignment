@@ -23,10 +23,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'eGift Card Number',
         'context' => 'egift',
       ],
-      'Something went wrong, please try again later.' => [
-        'ar' => 'Something went wrong, please try again later.',
-        'context' => 'egift',
-      ],
       'Terms & Conditions' => [
         'ar' => 'Terms & Conditions',
         'context' => 'egift',
