@@ -24,8 +24,9 @@ export default class DeliveryAreaSelect extends React.Component {
         getDeliveryAreaValue(currentArea.value[areaFieldKey]).then(
           (result) => {
             if (result !== null && result.items.length > 0) {
+              const currentLocationId = Number(currentArea.value[areaFieldKey]);
               const areaObj = result.items.find(
-                (element) => element.location_id === currentArea.value[areaFieldKey],
+                (element) => Number(element.location_id) === currentLocationId,
               );
               if (areaObj && Object.keys(areaObj).length !== 0) {
                 currentArea.label[currentLanguage] = areaObj.label;
