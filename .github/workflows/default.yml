@@ -38,7 +38,7 @@ jobs:
           echo "::set-output name=scss::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs)"
 
   validate:
-    name: Full (Build, Validate, Test, Deploy)
+    name: Validate
     runs-on: ubuntu-18.04
     needs: changedfiles
     if: ${{ github.event_name == 'pull_request' && (needs.changedfiles.outputs.composer || needs.changedfiles.outputs.docroot) }}
