@@ -294,7 +294,7 @@ export default class Checkout extends React.Component {
 
     // Main wrapper class.
     const mainWrapperClass = `spc-main ${isEgiftCardEnabled()
-      && cartContainsOnlyVirtualProduct(cart.cart) ? 'full-payment-egift' : ''}`;
+      && cartContainsOnlyVirtualProduct(cart.cart) ? 'spc-virtual-product-checkout' : ''}`;
 
     return (
       <>
