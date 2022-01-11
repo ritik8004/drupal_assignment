@@ -221,11 +221,6 @@ class UserResetPassword extends ResourceBase {
   protected function validateNewPassword(UserInterface $user, string $new_password) {
     $errors = [];
 
-    $user_context_values = [];
-    $user_context_values['mail'] = $user->getEmail();
-    $user_context_values['name'] = $user->getAccountName();
-    $user_context_values['uid'] = $user->id();
-
     $policies = $this->getApplicablePolicies($user->getRoles());
 
     /** @var \Drupal\password_policy\Entity\PasswordPolicy $policy */
@@ -236,7 +231,7 @@ class UserResetPassword extends ResourceBase {
         $plugin = $this->passwordPolicyManager->createInstance($constraint['id'], $constraint);
 
         // Execute validation.
-        $validation = $plugin->validate($new_password, $user_context_values);
+        $validation = $plugin->validate($new_password, $user);
         if (!$validation->isValid()) {
           $errors[] = (string) $validation->getErrorMessage();
         }
