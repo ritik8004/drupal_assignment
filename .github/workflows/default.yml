@@ -96,6 +96,7 @@ jobs:
         run: |
           composer self-update
           composer self-update --1
+          composer global require hirak/prestissimo
           composer validate --no-check-all --ansi
           composer install --no-interaction
 
@@ -126,14 +127,17 @@ jobs:
 
       - name: Install Node
         uses: actions/setup-node@v2
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
         with:
           node-version: "8.17.0"
 
       - name: Install Gulp
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
         run: npm install -g gulp-cli
 
       - name: Cache node modules
         id: npm-cache-dir
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
 
@@ -147,15 +151,16 @@ jobs:
           key: ${{ runner.os }}-node
 
       - name: Frontend and React setup
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
         run: blt alshayafe:setup
 
       - name: React validate
+        if: ${{ needs.changedfiles.outputs.js }}
         run: blt alshayafe:test-react
-        if: ${{ github.event_name == 'pull_request' && needs.changedfiles.outputs.js }}
 
       - name: Frontend validate
+        if: ${{ needs.changedfiles.outputs.scss }}
         run: blt alshayafe:test-themes
-        if: ${{ github.event_name == 'pull_request' && needs.changedfiles.outputs.scss }}
 
       - name: Run Tests
         run: bash $SCRIPT_DIR/run_tests.sh
@@ -195,6 +200,7 @@ jobs:
         run: |
           composer self-update
           composer self-update --1
+          composer global require hirak/prestissimo
           composer validate --no-check-all --ansi
           composer install --no-interaction
 
