@@ -16,3 +16,4 @@ user_action_logger:
     js/user_action_logger.js: {}
   dependencies:
     - alshaya_master/common_functions
+    - alshaya_master/local_storage_manager
