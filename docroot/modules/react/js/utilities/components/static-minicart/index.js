@@ -25,7 +25,7 @@ class StaticMinicart extends React.Component {
    */
   componentDidMount = () => {
     // Check if the cart data is present in local storage.
-    let cartData = localStorage.getItem('cart_data');
+    let cartData = Drupal.getItemFromLocalStorage('cart_data');
     if (cartData) {
       cartData = JSON.parse(cartData);
       if (cartData && cartData.cart !== undefined) {
