@@ -10,7 +10,7 @@ import {
 import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
 import MyEgiftTopUp from '../my-egift-top-up';
-import TrashIconSVG from '../../../../../alshaya_spc/js/svg-component/trash-icon-svg';
+import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 
 class EgiftCardLinked extends React.Component {
   constructor(props) {
