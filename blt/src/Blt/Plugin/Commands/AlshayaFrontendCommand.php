@@ -146,12 +146,16 @@ class AlshayaFrontendCommand extends BltTasks {
 
     $command = 'cd %s; npm run build';
 
-    $tasks = $this->taskParallelExec();
-    $tasks->waitInterval(1);
+    // Execute in sequence in local.
+    $tasks = getenv('LANDO')
+      ? $this->taskParallelExec()
+      : $this->taskExecStack();
+
     foreach ($themes ?? [] as $theme) {
       $fullCommand = sprintf($command, $theme);
-      $this->say($fullCommand);
-      $tasks->process($fullCommand);
+      getenv('LANDO')
+        ? $tasks->process($fullCommand)
+        : $tasks->exec();
     }
 
     return $tasks->run();
