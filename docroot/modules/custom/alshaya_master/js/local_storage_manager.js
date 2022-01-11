@@ -140,7 +140,7 @@
     // Get all the local storage keys having the above defined key strings.
     const filteredKeys = Object.keys(localStorage).filter(
       (localStgKey) => keysForCleaner.some(
-        (stgKey) => localStgKey.includes(stgKey)
+        (stgKey) => (localStgKey.indexOf(stgKey) > -1)
       )
     );
 
