@@ -98,7 +98,7 @@ jobs:
           composer self-update --1
           composer global require hirak/prestissimo
           composer validate --no-check-all --ansi
-          composer install --no-interaction
+          composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
       - name: Prepare bin executables
         run: |
@@ -202,7 +202,7 @@ jobs:
           composer self-update --1
           composer global require hirak/prestissimo
           composer validate --no-check-all --ansi
-          composer install --no-interaction
+          composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
       - name: Prepare bin executables
         run: |
