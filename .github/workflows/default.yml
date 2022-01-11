@@ -12,6 +12,7 @@ defaults:
 jobs:
   changedfiles:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
     # Map a step output to a job output
     outputs:
       all: ${{ steps.changes.outputs.all}}
