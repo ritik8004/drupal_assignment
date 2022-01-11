@@ -503,10 +503,9 @@ function alshaya_seo_google_tag_container_validate_handler($form, FormStateInter
  */
 function alshaya_seo_node_update(EntityInterface $node) {
   // Create entity alias for arabic translation when english translation is saved.
-  if ($node->bundle() == 'acq_product') {
-    if ($node->language()->getId() === 'en' && $node->hasTranslation('ar')) {
-      $node_translation = $node->getTranslation('ar');
-      \Drupal::service('alshaya_seo.generator')->createEntityAlias($node_translation,'update');
-    }
+  if ($node->bundle() == 'acq_product' && $node->language()->getId() === 'en'
+    && $node->hasTranslation('ar')) {
+    $node_translation = $node->getTranslation('ar');
+    \Drupal::service('pathauto.generator')->createEntityAlias($node_translation, 'update');
   }
 }
