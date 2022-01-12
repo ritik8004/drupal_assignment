@@ -259,10 +259,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Card No:',
         'context' => 'egift',
       ],
-      'eGift Card Number*' => [
-        'ar' => 'eGift Card Number*',
-        'context' => 'egift',
-      ],
       'Card Details' => [
         'ar' => 'Card Details',
         'context' => 'egift',

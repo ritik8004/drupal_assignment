@@ -139,7 +139,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                     />
                     <div className="c-input__bar" />
                     <label>
-                      {Drupal.t('eGift Card Number*', {}, { context: 'egift' })}
+                      {Drupal.t('eGift Card Number', {}, { context: 'egift' })}
                     </label>
                     <div id="egift_card_number_error" className="error" />
                   </div>
