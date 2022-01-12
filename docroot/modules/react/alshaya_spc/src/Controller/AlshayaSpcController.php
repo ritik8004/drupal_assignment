@@ -699,7 +699,7 @@ class AlshayaSpcController extends ControllerBase {
     $order = $this->orderHelper->getLastOrder();
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderDetails($order);
-    $delivery_method_description = $orderDetails['delivery_method_description'];
+    $delivery_method_description = $orderDetails['delivery_method_description'] ?? '';
     // Display custom label in description
     // if same day delivery is selected as shipping method.
     $checkout_settings = $this->config('alshaya_acm_checkout.settings');
@@ -719,7 +719,7 @@ class AlshayaSpcController extends ControllerBase {
       'surcharge' => $order['totals']['surcharge'],
     ];
 
-    if ($orderDetails['delivery_type'] !== 'cc') {
+    if (isset($orderDetails['delivery_type']) && $orderDetails['delivery_type'] !== 'cc') {
       $totals['shipping_incl_tax'] = $order['totals']['shipping'] ?? 0;
     }
 
