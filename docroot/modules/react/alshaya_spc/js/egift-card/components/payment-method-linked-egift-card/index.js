@@ -8,6 +8,7 @@ import {
   isEgiftUnsupportedPaymentMethod,
   performRedemption,
   updatePriceSummaryBlock,
+  updateRedeemAmount,
 } from '../../../utilities/egift_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import LinkedEgiftSVG from '../../../svg-component/linked-egift-svg';
@@ -275,36 +276,25 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
   };
 
   // Update egift amount.
-  handleAmountUpdate = (updateAmount) => {
-    const { egiftLinkedCardNumber, egiftCardActualBalance } = this.state;
-    showFullScreenLoader();
+  handleAmountUpdate = async (updateAmount) => {
+    const { egiftCardActualBalance } = this.state;
     // Prepare the request object for redeem API.
     const { cart, refreshCart } = this.props;
 
     // Api call to update the redemption amount.
-    const response = performRedemption(cart.cart.cart_id_int, updateAmount, egiftLinkedCardNumber, 'linked');
-    if (response instanceof Promise) {
-      response.then((result) => {
-        if (result.status === 200) {
-          if (result.data.redeemed_amount !== null && result.data.response_type) {
-            const balancePayable = result.data.balance_payable;
-            const redeemedAmount = result.data.redeemed_amount;
-            // Perform calculations and set state.
-            this.performCalculations(
-              balancePayable,
-              redeemedAmount,
-              egiftCardActualBalance,
-              result.data.card_number,
-            );
-            // Trigger event to update price in order summary block.
-            updatePriceSummaryBlock(refreshCart);
-          }
-          return true;
-        }
-        return false;
-      });
+    const response = await updateRedeemAmount(updateAmount, cart, refreshCart);
+    if (!response.error) {
+      const { redeemedAmount, balancePayable, cardNumber } = response;
+      // Perform calculations and set state.
+      this.performCalculations(
+        balancePayable,
+        redeemedAmount,
+        egiftCardActualBalance,
+        cardNumber,
+      );
     }
-    return true;
+
+    return response;
   }
 
   // Perform Calulations and set state.

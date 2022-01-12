@@ -2,7 +2,7 @@ import React from 'react';
 import { callMagentoApi } from '../../../js/utilities/requestHelper';
 import logger from '../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../js/utilities/events';
-import { removeFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
 import { isUserAuthenticated } from '../../../js/utilities/helper';
@@ -156,6 +156,12 @@ export const getApiEndpoint = (action, params = {}) => {
       endpoint = isUserAuthenticated()
         ? '/V1/egiftcard/remove-redemption'
         : '/V1/guest-carts/remove-redemption';
+      break;
+
+    case 'eGiftUpdateAmount':
+      endpoint = isUserAuthenticated()
+        ? '/V1/egiftcard/mine/update-redemption-amount'
+        : '/V1/egiftcard/guest-carts/update-redemption-amount';
       break;
 
     default:
@@ -414,3 +420,86 @@ export const isValidResponseWithFalseResult = (response) => hasValue(response.da
   && Object.prototype.hasOwnProperty.call(response.data, 'response_type')
   && !response.data.response_type
   && response.status === 200;
+
+/**
+ * Updates the redeem amount.
+ *
+ * @param {string} updatedAmount
+ *   The updated amount provided by user.
+ * @param {object} cart
+ *   The cart object.
+ * @param {function} refreshCart
+ *   The function to refresh the cart.
+ *
+ * @return {object}
+ *   The result object containing the information of API call.
+ */
+export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
+  // Prepare the post data.
+  let postData = {
+    redemptionRequest: {
+      amount: updatedAmount,
+      mask_quote_id: cart.cart_id,
+    },
+  };
+
+  // Change the post data if user is authenticated.
+  if (isUserAuthenticated()) {
+    postData = {
+      redemptionRequest: {
+        amount: updatedAmount,
+      },
+    };
+  }
+  // Default result object.
+  let result = {
+    error: false,
+    message: '',
+  };
+  showFullScreenLoader();
+  // Invoke the redemption API to update the redeem amount.
+  const response = await callEgiftApi('eGiftUpdateAmount', 'POST', postData);
+  if (isValidResponse(response)) {
+    // Update the cart total.
+    updatePriceSummaryBlock(refreshCart);
+    // Update the result object with the required data.
+    const {
+      redeemed_amount: redeemedAmount,
+      balance_payable: balancePayable,
+      card_number: cardNumber,
+    } = response.data;
+
+    result = {
+      error: false,
+      redeemedAmount,
+      balancePayable,
+      cardNumber,
+    };
+  } else if (isValidResponseWithFalseResult(response)) {
+    result = {
+      error: true,
+      message: response.data.response_message,
+    };
+    // Log error in datadog.
+    logger.error('Error Response in eGiftUpdateAmount. Action: @action Response: @response', {
+      '@action': 'update Amount',
+      '@response': response.data,
+    });
+    // Remove loader once the data response is available.
+    removeFullScreenLoader();
+  } else {
+    result = {
+      error: true,
+      message: drupalSettings.global_error_message,
+    };
+    // Log error in datadog.
+    logger.error('Error Response in eGiftUpdateAmount. Action: @action Response: @response', {
+      '@action': 'update Amount',
+      '@response': response,
+    });
+    // Remove loader once the data response is available.
+    removeFullScreenLoader();
+  }
+
+  return result;
+};

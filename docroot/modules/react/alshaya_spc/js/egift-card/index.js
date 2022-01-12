@@ -302,7 +302,7 @@ export default class RedeemEgiftCard extends React.Component {
       egiftCardNumber,
       redemptionDisabled,
     } = this.state;
-    const { cart: cartData } = this.props;
+    const { cart: cartData, refreshCart } = this.props;
 
     return (
       <div className="redeem-egift-card">
@@ -331,6 +331,7 @@ export default class RedeemEgiftCard extends React.Component {
             removeCard={this.handleEgiftCardRemove}
             cart={cartData.cart}
             egiftCardNumber={egiftCardNumber}
+            refreshCart={refreshCart}
           />
         </ConditionalView>
       </div>
