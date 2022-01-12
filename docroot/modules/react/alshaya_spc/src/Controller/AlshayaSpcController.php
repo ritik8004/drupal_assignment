@@ -739,11 +739,6 @@ class AlshayaSpcController extends ControllerBase {
       $itemKey = $item['is_virtual'] ? $item['item_id'] : $item['sku'];
       // Populate price and other info from order response data.
       $productList[$itemKey] = $this->orderHelper->getSkuDetails($item);
-      // For egift topup card set isTopUp and topupCardNumber from order data.
-      if ($order['is_virtual'] && $item['sku'] === 'giftcard_topup') {
-        $productList[$itemKey]['isTopUp'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->is_topup ?? FALSE;
-        $productList[$itemKey]['topupCardNumber'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->card_number ?? 0;
-      }
       // Calculate the ordered quantity of each sku.
       $number_of_items += $productList[$itemKey]['qtyOrdered'];
     }

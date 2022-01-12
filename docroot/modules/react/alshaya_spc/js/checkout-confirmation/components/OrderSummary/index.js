@@ -13,6 +13,7 @@ import getStringMessage from '../../../utilities/strings';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import EgiftOrderSummaryItem from '../../../egift-card/components/egift-order-summary-item';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -217,6 +218,11 @@ const OrderSummary = (props) => {
             )}
           <ConditionalView condition={billingAddress.length > 0}>
             <OrderSummaryItem type="address" label={Drupal.t('Billing address')} name={customerNameBilling} address={billingAddress.join(', ')} />
+          </ConditionalView>
+          <ConditionalView condition={isEgiftCardEnabled()}>
+            <EgiftOrderSummaryItem
+              orderDetails={drupalSettings.order_details}
+            />
           </ConditionalView>
           <OrderSummaryItem type="mobile" label={Drupal.t('Mobile Number')} value={mobileNumber} />
           <OrderSummaryItem label={Drupal.t('Payment method')} value={methodIcon || method} />
