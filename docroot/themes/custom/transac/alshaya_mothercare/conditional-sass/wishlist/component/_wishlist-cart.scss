@@ -1,0 +1,11 @@
+#spc-cart {
+  .wishlist-popup-container {
+    .wishlist-popup-block {
+      button#wishlist-yes {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
