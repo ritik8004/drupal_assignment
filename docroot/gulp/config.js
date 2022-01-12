@@ -31,6 +31,7 @@ const blackList = [
   "modules/react/alshaya_sofa_sectional/js/**",
   "modules/react/alshaya_spc/js/**",
   "modules/react/alshaya_stylefinder/**",
+  "modules/react/alshaya_wishlist/js/**",
   "modules/react/js/**",
   "modules/contrib/lightning_workflow/modules/lightning_scheduler/**",
 

@@ -31,6 +31,7 @@ jobs:
       docroot: ${{ steps.changes.outputs.docroot}}
       js: ${{ steps.changes.outputs.js }}
       scss: ${{ steps.changes.outputs.scss }}
+      package: ${{ steps.changes.outputs.package }}
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
@@ -47,6 +48,7 @@ jobs:
           echo "::set-output name=docroot::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs)"
           echo "::set-output name=js::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs)"
           echo "::set-output name=scss::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs)"
+          echo "::set-output name=package::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep package | xargs)"
       - name: Check if there are changes.
         run: |
           echo "No changes found in PR."
@@ -97,6 +99,7 @@ jobs:
           echo ${{needs.changedfiles.outputs.docroot}}
           echo ${{needs.changedfiles.outputs.js}}
           echo ${{needs.changedfiles.outputs.scss}}
+          echo ${{needs.changedfiles.outputs.package}}
 
       - name: Prepare environment variables
         run: |
@@ -143,7 +146,7 @@ jobs:
 
       - name: Install Node
         uses: actions/setup-node@v2
-        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss || needs.changedfiles.outputs.package }}
         with:
           node-version: "8.17.0"
 
@@ -153,7 +156,7 @@ jobs:
 
       - name: Cache node modules
         id: npm-cache-dir
-        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss || needs.changedfiles.outputs.package }}
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
 
@@ -177,6 +180,10 @@ jobs:
       - name: Frontend validate
         if: ${{ needs.changedfiles.outputs.scss }}
         run: blt alshayafe:test-themes
+
+      - name: JS Uglification setup
+        if: ${{ needs.changedfiles.outputs.package && contains(needs.changedfiles.outputs.package, 'docroot/package') }}
+        run: blt alshayafe:setup-uglify
 
       - name: Run Tests
         run: bash $SCRIPT_DIR/run_tests.sh

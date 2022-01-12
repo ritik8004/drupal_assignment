@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains install, update, uninstall hooks for alshaya_js_optimisations module.
+ * Contains install, update, uninstall hooks.
  */
 
 /**
