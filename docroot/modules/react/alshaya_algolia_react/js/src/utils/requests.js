@@ -12,7 +12,7 @@ export function setFacetStorage(facetName, data) {
   Drupal.addItemInLocalStorage(
     storageKey,
     data,
-    parseInt(drupalSettings.algoliaSearch.local_storage_expire, 10),
+    parseInt(drupalSettings.algoliaSearch.local_storage_expire, 10) * 60,
   );
   return storageKey;
 }
