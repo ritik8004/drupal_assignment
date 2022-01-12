@@ -6,7 +6,7 @@ import {
   isEgiftRedemptionDone,
   isValidResponse,
   isValidResponseWithFalseResult,
-  performRedemption,
+  updateRedeemAmount,
 } from '../../utilities/egift_util';
 import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
@@ -14,7 +14,6 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
-import dispatchCustomEvent from '../../../../js/utilities/events';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import PriceElement from '../../utilities/special-price/PriceElement';
 import logger from '../../../../js/utilities/logger';
@@ -144,43 +143,21 @@ export default class ValidEgiftCard extends React.Component {
   };
 
   // Update egift amount.
-  handleAmountUpdate = (updateAmount) => {
+  handleAmountUpdate = async (updateAmount) => {
     // Prepare the request object for redeem API.
-    const { cart, egiftCardNumber } = this.props;
-    showFullScreenLoader();
-    // Invoke the redemption API to update the redeem amount.
-    const response = performRedemption(cart.cart_id_int, updateAmount, egiftCardNumber, 'guest');
-    if (response instanceof Promise) {
-      response.then((result) => {
-        // Remove loader once result is available.
-        removeFullScreenLoader();
-        if (result.status === 200) {
-          if (result.data.redeemed_amount !== null && result.data.response_type !== false) {
-            this.setState({
-              amount: updateAmount,
-              open: false,
-            });
-            // Update the cart total.
-            showFullScreenLoader();
-            const currentCart = window.commerceBackend.getCart(true);
-            if (currentCart instanceof Promise) {
-              currentCart.then((data) => {
-                if (data.data !== undefined && data.data.error === undefined) {
-                  if (data.status === 200) {
-                    // Update Egift card line item.
-                    dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
-                    removeFullScreenLoader();
-                  }
-                }
-              });
-            }
-            return true;
-          }
-        }
-        return false;
+    const { cart, refreshCart } = this.props;
+    const result = await updateRedeemAmount(updateAmount, cart, refreshCart);
+    if (!result.error) {
+      const { redeemedAmount, balancePayable } = result;
+      // Update the state with the valid response from endpoint.
+      this.setState({
+        amount: redeemedAmount,
+        open: false,
+        pendingAmount: balancePayable,
       });
     }
-    return true;
+
+    return result;
   }
 
   render = () => {
