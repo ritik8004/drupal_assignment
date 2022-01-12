@@ -383,8 +383,10 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                   }
                   <div className="spc-payment-method-desc">
                     <div className="desc-content">
+                      (
                       {Drupal.t('Available Balance: ', {}, { context: 'egift' })}
                       <PriceElement amount={cardBlanceAmount} format="string" showZeroValue />
+                      )
                     </div>
                   </div>
                 </ConditionalView>

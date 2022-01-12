@@ -99,8 +99,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Applied card amount - ',
         'context' => 'egift',
       ],
-      'Remaining Balance - @currencyCode @remainingAmount' => [
-        'ar' => 'Remaining Balance - @currencyCode @remainingAmount',
+      'Remaining Balance - ' => [
+        'ar' => 'Remaining Balance - ',
         'context' => 'egift',
       ],
       'Link this card for faster payment next time' => [
