@@ -545,6 +545,10 @@ function alshaya_master_element_info_alter(array &$info) {
  * Processor for the mobile number field to disable the country code.
  */
 function _alshaya_master_mobile_number_process(array &$element, FormStateInterface $form_state) {
+  if (strpos($form_state->getBuildInfo()['form_id'], '_api_form') > -1) {
+    return $element;
+  }
+
   $default_site_country = _alshaya_custom_get_site_level_country_code();
 
   // Set default country as per site.
@@ -605,6 +609,10 @@ function _alshaya_master_mobile_number_validate(array &$element, FormStateInterf
   // @see \Drupal\mobile_number\Element\MobileNumber::mobileNumberValidate
   $input = $form_state->getUserInput();
   $pp = NestedArray::getValue($input, $tree_parents);
+  if (empty($pp)) {
+    return;
+  }
+
   // Remove country code from the value, as we are using a single input for
   // country code and mobile number or local number.
   if (!empty($pp['local_number'])) {
