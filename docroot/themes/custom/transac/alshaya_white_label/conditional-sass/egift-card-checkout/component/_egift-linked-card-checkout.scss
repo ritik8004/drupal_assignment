@@ -76,4 +76,14 @@
     padding-#{$left}: 3rem;
     padding-bottom: 1rem;
   }
+
+  &.payment-method {
+    .payment-method-top-panel {
+      align-items: flex-start;
+
+      svg {
+        margin-top: 1rem;
+      }
+    }
+  }
 }

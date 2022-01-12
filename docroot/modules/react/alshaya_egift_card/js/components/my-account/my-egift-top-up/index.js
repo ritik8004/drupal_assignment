@@ -10,7 +10,6 @@ import {
   getDefaultErrorMessage,
   getProcessedErrorMessage,
 } from '../../../../../js/utilities/error';
-import { setStorageInfo } from '../../../../../js/utilities/storage';
 
 export default class MyEgiftTopUp extends React.Component {
   constructor(props) {
@@ -103,7 +102,7 @@ export default class MyEgiftTopUp extends React.Component {
             id: response.data.quote_details.id,
             maskedQuoteId: response.data.masked_quote_id,
           };
-          setStorageInfo(topUpQuote, 'topupQuote');
+          Drupal.addItemInLocalStorage('topupQuote', topUpQuote);
           window.location = Drupal.url('checkout');
         }
       });
