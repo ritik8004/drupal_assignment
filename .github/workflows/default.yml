@@ -3,7 +3,18 @@ name: Validate Pull Request
 on:
   workflow_dispatch:
   push:
+    branches:
+      - develop-alshaya-v2
+      - develop-egift-card
+      - develop
+      - qa
+      - uat
+      - master
   pull_request:
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 defaults:
   run:
