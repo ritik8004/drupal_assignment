@@ -1,0 +1,9 @@
+.c-plp {
+  .c-products__item {
+    .wishlist-icon {
+      @include breakpoint($only-mobile) {
+        top: 1.25rem;
+      }
+    }
+  }
+}
