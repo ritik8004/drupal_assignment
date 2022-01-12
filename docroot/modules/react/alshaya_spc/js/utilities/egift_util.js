@@ -234,28 +234,35 @@ export const updatePriceSummaryBlock = (refreshCart) => {
   const cartData = window.commerceBackend.getCart(true);
   if (cartData instanceof Promise) {
     cartData.then((data) => {
-      if (data.data !== undefined && data.data.error === undefined) {
-        if (data.status === 200) {
-          // Update Egift card line item.
-          dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
-          // Refresh the cart in checkout.
-          const formatedCart = window.commerceBackend.getCartForCheckout();
-          if (formatedCart instanceof Promise) {
-            formatedCart.then((cart) => {
-              // Validate if response was successful or failure.
-              if (cart.status === 200) {
-                refreshCart({ cart: cart.data });
-              } else {
-                dispatchCustomEvent('spcCheckoutMessageUpdate', {
-                  type: 'error',
-                  message: drupalSettings.global_error_message,
-                });
-              }
-              // Remove loader once request is full filled.
-              removeFullScreenLoader();
-            });
-          }
+      if (data.status === 200
+        && data.data !== undefined
+        && data.data.error === undefined) {
+        // Update Egift card line item.
+        dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+        // Refresh the cart in checkout.
+        const formatedCart = window.commerceBackend.getCartForCheckout();
+        if (formatedCart instanceof Promise) {
+          formatedCart.then((cart) => {
+            // Validate if response was successful or failure.
+            if (hasValue(cart) && hasValue(cart.data)) {
+              refreshCart({ cart: cart.data });
+            } else {
+              dispatchCustomEvent('spcCheckoutMessageUpdate', {
+                type: 'error',
+                message: drupalSettings.global_error_message,
+              });
+            }
+            // Remove loader once request is full filled.
+            removeFullScreenLoader();
+          });
         }
+      } else {
+        dispatchCustomEvent('spcCheckoutMessageUpdate', {
+          type: 'error',
+          message: drupalSettings.global_error_message,
+        });
+        // Remove loader once request is full filled.
+        removeFullScreenLoader();
       }
     });
   }
