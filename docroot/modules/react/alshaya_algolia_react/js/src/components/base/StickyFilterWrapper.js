@@ -4,6 +4,8 @@ import { facetFieldAlias, isMobile } from '../../utils';
 import { isAddToBagEnabled } from '../../../../../js/utilities/addToBagHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import StaticMinicart from '../../../../../js/utilities/components/static-minicart';
+import { isWishlistEnabled } from '../../../../../js/utilities/wishlistHelper';
+import WishlistHeader from '../../../../../alshaya_wishlist/js/components/wishlist-header';
 
 /**
  * Sticky filters.
@@ -49,10 +51,25 @@ const StickyFilterWrapper = React.forwardRef(({ callback, pageType = null }, ref
         {callback(filtersCallBack)}
       </div>
 
+      <ConditionalView condition={!isMobile() && isWishlistEnabled()}>
+        <div className="wishlist-minicart-sticky-wrapper">
+
+          { /* Add wishlist icon for the desktop view wishlist feature enabled. */}
+          <WishlistHeader />
+
+          { /* Add static minicart for the desktop view if addToBag feature enabled. */}
+          <ConditionalView condition={!isMobile() && isAddToBagEnabled()}>
+            <StaticMinicart />
+          </ConditionalView>
+
+        </div>
+      </ConditionalView>
+
       { /* Add static minicart for the desktop view if addToBag feature enabled. */}
-      <ConditionalView condition={!isMobile() && isAddToBagEnabled()}>
+      <ConditionalView condition={!isMobile() && isAddToBagEnabled() && !isWishlistEnabled()}>
         <StaticMinicart />
       </ConditionalView>
+
     </div>
   );
 });

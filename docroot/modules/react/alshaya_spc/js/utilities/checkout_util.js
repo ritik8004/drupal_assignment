@@ -169,7 +169,7 @@ export const placeOrder = (paymentMethod) => {
  * user billing shipping same or not.
  */
 export const isBillingSameAsShippingInStorage = () => {
-  const same = localStorage.getItem('billing_shipping_same');
+  const same = Drupal.getItemFromLocalStorage('billing_shipping_same');
   return (same === null || same === 'true');
 };
 
@@ -185,7 +185,7 @@ export const removeBillingFlagFromStorage = (cart) => {
   if (cart.cart !== undefined
     && (cart.cart.billing_address === null
       || cart.cart.billing_address.city === 'NONE')) {
-    localStorage.removeItem('billing_shipping_same');
+    Drupal.removeItemFromLocalStorage('billing_shipping_same');
   }
 };
 
@@ -198,7 +198,7 @@ export const setBillingFlagInStorage = (cart) => {
   if (cart.cart_id !== undefined
     && cart.shipping.type === 'home_delivery'
     && isBillingSameAsShippingInStorage()) {
-    localStorage.setItem('billing_shipping_same', true);
+    Drupal.addItemInLocalStorage('billing_shipping_same', true);
   }
 };
 

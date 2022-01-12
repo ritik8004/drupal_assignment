@@ -30,7 +30,7 @@
 
     // Get product info from storage.
     var key = 'product:' + drupalSettings.path.currentLanguage + ':' + product.sku;
-    var productInfo = JSON.parse(localStorage.getItem(key));
+    var productInfo = Drupal.getItemFromLocalStorage(key);
     if (productInfo !== null) {
       var productDetails = Drupal.alshayaSeoSpc.gtmProduct(productInfo, product.qty);
       productDetails.metric2 = product.finalPrice;
@@ -79,7 +79,7 @@
    */
   Drupal.alshayaSeoSpc.getRecommendationGtmAttributes = function (sku) {
     var key = 'recommendedProduct:' + drupalSettings.path.currentLanguage;
-    var relatedProductsInfo = JSON.parse(localStorage.getItem(key));
+    var relatedProductsInfo = Drupal.getItemFromLocalStorage(key);
     // Cannot use Drupal.alshayaSeoSpc.gtmProduct as the method expectes
     // product parameter to have gtmAttributes key while in localstorage
     // it has gtm_attributes key.

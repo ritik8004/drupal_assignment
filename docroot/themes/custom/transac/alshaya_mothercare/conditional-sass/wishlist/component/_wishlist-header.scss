@@ -1,0 +1,39 @@
+body.wishlist-enabled {
+  #wishlist-header-wrapper {
+    @include breakpoint($only-mobile) {
+      #{$right}: 2.125rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 0.1875rem;
+      #{$right}: 3.4375rem;
+    }
+
+    .wishlist-header {
+      padding-bottom: 0;
+      padding-#{$right}: 1.25rem;
+    }
+  }
+
+  .wishlist-notification {
+    .actions {
+      a.sign-in {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  header {
+    .region__header {
+      .block-alshaya-wishlist {
+        @include breakpoint($only-mobile) {
+          position: absolute;
+          top: 0;
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+}

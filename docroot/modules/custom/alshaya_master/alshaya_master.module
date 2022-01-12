@@ -983,4 +983,6 @@ function _alshaya_master_get_subbrand_logo_image_link() {
  */
 function alshaya_master_preprocess_html(&$variables) {
   $variables['#attached']['library'][] = 'alshaya_master/common_fixes';
+  // Add Alshaya library for managing local storage.
+  $variables['#attached']['library'][] = 'alshaya_master/local_storage_manager';
 }

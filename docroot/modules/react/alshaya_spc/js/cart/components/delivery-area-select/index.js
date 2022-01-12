@@ -2,7 +2,6 @@ import React from 'react';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { getAreaFieldKey, getDeliveryAreaStorage, getDeliveryAreaValue } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
-import { setStorageInfo } from '../../../utilities/storage';
 import AreaListBlock from '../area-list-block';
 
 export default class DeliveryAreaSelect extends React.Component {
@@ -25,12 +24,13 @@ export default class DeliveryAreaSelect extends React.Component {
         getDeliveryAreaValue(currentArea.value[areaFieldKey]).then(
           (result) => {
             if (result !== null && result.items.length > 0) {
+              const currentLocationId = Number(currentArea.value[areaFieldKey]);
               const areaObj = result.items.find(
-                (element) => element.location_id === currentArea.value[areaFieldKey],
+                (element) => Number(element.location_id) === currentLocationId,
               );
               if (areaObj && Object.keys(areaObj).length !== 0) {
                 currentArea.label[currentLanguage] = areaObj.label;
-                setStorageInfo(currentArea, 'deliveryinfo-areadata');
+                Drupal.addItemInLocalStorage('deliveryinfo-areadata', currentArea);
                 this.setState({
                   areaLabel: areaObj.label,
                 });

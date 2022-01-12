@@ -943,14 +943,16 @@ class AlshayaAlgoliaIndexHelper {
    *
    * @param string|array $attributes
    *   The name of the attribute.
+   * @param string $index_name
+   *   The name of the algolia index to add attribute for.
    *
    * @throws \Exception
    *   If attribute is already present in the index, then exception is thrown.
    */
-  public function addCustomFacetToIndex($attributes) {
+  public function addCustomFacetToIndex($attributes, $index_name = '') {
     $attributes = is_array($attributes) ? $attributes : [$attributes];
     /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
-    $indexNames = $this->getAlgoliaIndexNames();
+    $indexNames = !empty($index_name) ? [$index_name] : $this->getAlgoliaIndexNames();
     foreach ($indexNames as $indexName) {
       $search_api_index = 'search_api.index.' . $indexName;
       // @todo If an entity field is to be added, the function should be modified
