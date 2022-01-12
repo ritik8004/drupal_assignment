@@ -3,6 +3,13 @@ name: Validate Pull Request
 on:
   workflow_dispatch:
   push:
+    branches:
+      - develop-alshaya-v2
+      - develop-egift-card
+      - develop
+      - qa
+      - uat
+      - master
   pull_request:
 
 defaults:
