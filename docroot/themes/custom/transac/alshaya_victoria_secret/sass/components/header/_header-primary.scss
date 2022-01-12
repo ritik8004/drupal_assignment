@@ -24,16 +24,43 @@
   }
 }
 
-.super-category-beauty,
-.super-category-pink {
-  .block-system-branding-block {
-    .site-brand-home {
-      .logo {
-        img {
-          height: 3rem;
+.super-category-beauty {
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home {
+          .logo {
+            img {
+              width: 18.75rem;
+              height: 3rem;
 
-          html[lang=ar] & {
-            height: 3rem;
+              html[lang=ar] & {
+                width: 18.75rem;
+                height: 3rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.super-category-pink {
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home {
+          .logo {
+            img {
+              width: 9.063rem;
+              height: 3rem;
+
+              html[lang=ar] & {
+                width: 9.063rem;
+                height: 3rem;
+              }
+            }
           }
         }
       }
@@ -42,14 +69,20 @@
 }
 
 .super-category-swim {
-  .block-system-branding-block {
-    .site-brand-home {
-      .logo {
-        img {
-          height: 2.49rem;
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home {
+          .logo {
+            img {
+              width: 9.375rem;
+              height: 2.49rem;
 
-          html[lang=ar] & {
-            height: 2.49rem;
+              html[lang=ar] & {
+                width: 9.375rem;
+                height: 2.49rem;
+              }
+            }
           }
         }
       }
