@@ -252,6 +252,7 @@ export default class RedeemEgiftCard extends React.Component {
       this.setState({
         codeSent: false,
         codeValidated: false,
+        egiftCardNumber: '',
       });
       // Update the cart total.
       updatePriceSummaryBlock(refreshCart);

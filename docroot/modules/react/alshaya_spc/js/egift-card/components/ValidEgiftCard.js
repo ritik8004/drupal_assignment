@@ -36,7 +36,6 @@ export default class ValidEgiftCard extends React.Component {
       cart,
     } = this.props;
 
-    showFullScreenLoader();
     // Proceed only if redemption is done.
     if (isEgiftRedemptionDone(cart)) {
       this.setState({
@@ -60,13 +59,8 @@ export default class ValidEgiftCard extends React.Component {
               isLinkedCardApplicable: true,
             });
           }
-          // Remove loader once processing is done.
-          removeFullScreenLoader();
         });
       }
-    } else {
-      // Remove loader once processing is done.
-      removeFullScreenLoader();
     }
   }
 

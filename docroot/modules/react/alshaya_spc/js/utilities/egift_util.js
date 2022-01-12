@@ -84,6 +84,7 @@ export const egiftFormElement = ({
             defaultValue={value}
             placeholder={placeholder}
             disabled={disabled}
+            step="any"
             onBlur={(e) => handleEvent(e)}
           />
           <div className="c-input__bar" />
@@ -102,6 +103,7 @@ export const egiftFormElement = ({
           <input
             type={type}
             name={`egift_${name}`}
+            id={`egift_${name}`}
             className={className}
             defaultValue={value}
             placeholder={placeholder}
@@ -240,7 +242,16 @@ export const updatePriceSummaryBlock = (refreshCart) => {
           const formatedCart = window.commerceBackend.getCartForCheckout();
           if (formatedCart instanceof Promise) {
             formatedCart.then((cart) => {
-              refreshCart({ cart: cart.data });
+              // Validate if response was successful or failure.
+              if (cart.status === 200) {
+                refreshCart({ cart: cart.data });
+              } else {
+                dispatchCustomEvent('spcCheckoutMessageUpdate', {
+                  type: 'error',
+                  message: drupalSettings.global_error_message,
+                });
+              }
+              // Remove loader once request is full filled.
               removeFullScreenLoader();
             });
           }
