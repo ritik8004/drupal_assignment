@@ -706,8 +706,8 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get formatted customer phone number.
     $phone_number = '';
-    if (in_array('address', $order['shipping'])) {
-      $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    if (in_array('address', array_keys($order['shipping']))) {
+      $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone'] ?? '');
     }
 
     // Order Totals.
