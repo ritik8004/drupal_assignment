@@ -395,7 +395,14 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
+        // Prepare overrides data for the facet.
+        $overrides['name'] = $field['label'];
+        if (isset($field['widget'])) {
+          foreach ($field['widget'] as $key => $widget) {
+            $overrides['widget'][$key] = $widget;
+          }
+        }
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, $overrides);
       }
       break;
 

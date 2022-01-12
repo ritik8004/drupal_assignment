@@ -6,6 +6,26 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Change widget for delivery_ways facets from checkbox
+ * to widget "delivery_ways".
+ */
+function alshaya_cos_transac_update_8001() {
+  $facet_ids = [
+    'plp_delivery_ways',
+    'promo_delivery_ways',
+    'delivery_ways',
+  ];
+
+  foreach ($facet_ids as $facet_id) {
+    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
+      ->set('widget.type', 'delivery_ways')
+      ->save();
+  }
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_cos_transac_install() {

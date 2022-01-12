@@ -18,24 +18,6 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
- * Update widget type for delivery_ways facets in algolia.
- */
-function alshaya_acm_product_update_8079() {
-  $facet_ids = [
-    'plp_delivery_ways',
-    'promo_delivery_ways',
-    'delivery_ways',
-  ];
-  foreach ($facet_ids as $facet_id) {
-    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
-      ->set('widget.type', 'delivery_ways')
-      ->save();
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * [6.9.0] Add the config value for the brand name display in plp.
  */
 function alshaya_acm_product_update_8078() {
