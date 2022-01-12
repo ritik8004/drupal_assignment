@@ -1612,18 +1612,6 @@ function alshaya_acm_product_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
-
-  // Set widget type for delivery_ways facets in algolia.
-  $facet_ids = [
-    'plp_delivery_ways',
-    'promo_delivery_ways',
-    'delivery_ways',
-  ];
-  foreach ($facet_ids as $facet_id) {
-    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
-      ->set('widget.type', 'delivery_ways')
-      ->save();
-  }
 }
 
 /**
