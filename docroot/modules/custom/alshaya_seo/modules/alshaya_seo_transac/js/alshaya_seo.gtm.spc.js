@@ -160,7 +160,7 @@
    *   The product item object.
    *
    * @returns {boolean}
-   *   Return true if product is valid to be checked for status else false.
+   *   Returns true if the product is a virtual egift product else false.
    */
   Drupal.alshayaSeoSpc.isEgiftVirtualProduct = function (product) {
     return typeof drupalSettings.egiftCard !== 'undefined'

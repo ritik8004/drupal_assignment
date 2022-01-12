@@ -17,7 +17,6 @@ import {
   getDefaultErrorMessage,
   getProcessedErrorMessage,
 } from '../../../../js/utilities/error';
-import { getStorageInfo, setStorageInfo } from '../../../../js/utilities/storage';
 import logger from '../../../../js/utilities/logger';
 
 export default class EgiftTopPurchase extends React.Component {
@@ -90,7 +89,7 @@ export default class EgiftTopPurchase extends React.Component {
       id: data.quote_details.id,
       maskedQuoteId: data.masked_quote_id,
     };
-    setStorageInfo(topUpQuote, 'topupQuote');
+    Drupal.addItemInLocalStorage('topupQuote', topUpQuote);
   };
 
   logAddTopupError = (params, response) => {
@@ -129,7 +128,7 @@ export default class EgiftTopPurchase extends React.Component {
 
     // Check if cart id is present in local store for anonymous user.
     if (!isUserAuthenticated()) {
-      let cartId = getStorageInfo('cart_id');
+      let cartId = window.commerceBackend.getCartId();
       if (cartId === null) {
         // Create an empty cart and set cart id in storage.
         cartId = window.commerceBackend.createCart();
@@ -147,8 +146,7 @@ export default class EgiftTopPurchase extends React.Component {
       topup: {
         sku: topUpCard.sku,
         amount: amountSet,
-        // @todo update customer email for anonymous user.
-        customer_email: (isUserAuthenticated()) ? drupalSettings.userDetails.userEmailID : 'test@test.com',
+        customer_email: (isUserAuthenticated()) ? drupalSettings.userDetails.userEmailID : '',
         card_number: cardNumber,
         // For anonymous top-up-type default set to other.
         top_up_type: egiftCardFor,

@@ -399,42 +399,40 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                   </div>
                 </ConditionalView>
               </label>
-              <ConditionalView condition={!isEgiftCardExpired}>
-                <div className="payment-method-bottom-panel payment-method-form checkout_com_egift_linked_card">
-                  <ConditionalView conditional={openModal}>
-                    <UpdateEgiftCardAmount
-                      closeModal={this.closeModal}
-                      open={openModal}
-                      amount={cart.cart.totals.egiftRedeemedAmount}
-                      remainingAmount={egiftCardRemainingBalance}
-                      updateAmount={this.handleAmountUpdate}
-                      cart={cart.cart}
-                    />
-                  </ConditionalView>
-
-                  <ConditionalView condition={eGiftbalancePayable > 0}>
-                    <div className="spc-payment-method-desc">
-                      <div className="desc-content">
-                        {Drupal.t('Pay ', {}, { context: 'egift' })}
-                        <PriceElement amount={eGiftbalancePayable} format="string" showZeroValue />
-                        {Drupal.t(' using another payment method to complete purchase', {}, { context: 'egift' })}
-                      </div>
-                    </div>
-                  </ConditionalView>
-
-
-                  <ConditionalView condition={cart.cart.totals.egiftRedemptionType === 'linked'}>
-                    <div className="edit-egift-payment-amount" onClick={this.openModal}>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
-                  </ConditionalView>
-
-                </div>
-              </ConditionalView>
             </div>
             <LinkedEgiftSVG />
-            <ConditionalView condition={apiErrorMessage !== ''}>
-              <div id="api-error">{apiErrorMessage}</div>
-            </ConditionalView>
           </div>
+          <ConditionalView condition={!isEgiftCardExpired && cart.cart.totals.egiftRedemptionType === 'linked'}>
+            <div className="payment-method-bottom-panel payment-method-form checkout_com_egift_linked_card">
+              <ConditionalView conditional={openModal}>
+                <UpdateEgiftCardAmount
+                  closeModal={this.closeModal}
+                  open={openModal}
+                  amount={cart.cart.totals.egiftRedeemedAmount}
+                  remainingAmount={egiftCardRemainingBalance}
+                  updateAmount={this.handleAmountUpdate}
+                  cart={cart.cart}
+                />
+              </ConditionalView>
+
+              <ConditionalView condition={eGiftbalancePayable > 0}>
+                <div className="spc-payment-method-desc">
+                  <div className="desc-content">
+                    {Drupal.t('Pay ', {}, { context: 'egift' })}
+                    <PriceElement amount={eGiftbalancePayable} format="string" showZeroValue />
+                    {Drupal.t(' using another payment method to complete purchase', {}, { context: 'egift' })}
+                  </div>
+                </div>
+              </ConditionalView>
+
+              <div className="edit-egift-payment-amount" onClick={this.openModal}>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
+
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={apiErrorMessage !== ''}>
+            <div id="api-error" className="error">{apiErrorMessage}</div>
+          </ConditionalView>
         </div>
       </>
     );

@@ -14,7 +14,6 @@ import {
   smoothScrollToAddressField,
   smoothScrollTo,
 } from './smoothScroll';
-import { setStorageInfo } from './storage';
 import { isExpressDeliveryEnabled } from '../../../js/utilities/expressDeliveryHelper';
 import { setDeliveryAreaStorage } from './delivery_area_util';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
@@ -599,7 +598,7 @@ export const checkoutAddressProcess = (e) => {
 
         const cartData = { cart: cartResult };
         // Store the address in localStorage.
-        setStorageInfo(formData, 'shippingaddress-formdata');
+        Drupal.addItemInLocalStorage('shippingaddress-formdata', formData);
         // Trigger event.
         dispatchCustomEvent('refreshCartOnAddress', cartData);
       });

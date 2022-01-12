@@ -36,7 +36,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     ];
     $build['#strings'][] = [
       'key' => 'form_egift_code',
-      'value' => t('Please enter the code.', [], [
+      'value' => t('Please enter verification code.', [], [
         'context' => 'egift'
       ]),
     ];
@@ -275,11 +275,6 @@ function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings,
  *   Order details array.
  */
 function alshaya_egift_card_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
-  // Do not proceed if Egift card is not enabled.
-  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
-    return;
-  }
-
   // Add egift card settings in drupalSettings in checkout confirmation page.
   $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
   $build['#attached']['drupalSettings']['egiftCard'] = [

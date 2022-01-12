@@ -10,7 +10,7 @@ import {
 import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
 import MyEgiftTopUp from '../my-egift-top-up';
-import TrashIconSVG from '../../../../../alshaya_spc/js/svg-component/trash-icon-svg';
+import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 
 class EgiftCardLinked extends React.Component {
   constructor(props) {
@@ -143,7 +143,7 @@ class EgiftCardLinked extends React.Component {
         <ConditionalView condition={hideCardDetails === false}>
           <div className="egift-card-linked-wrapper-bottom egifts-form-wrapper" id="card-details">
             <div className="egift-linked-card-number-wrapper">
-              <div className="egift-linked-card-number egift-light-text">{Drupal.t('Gift Card number', {}, { context: 'egift' })}</div>
+              <div className="egift-linked-card-number egift-light-text">{Drupal.t('eGift Card Number', {}, { context: 'egift' })}</div>
               <div className="egift-linked-card-number-value egift-dark-text">{linkedCard.card_number}</div>
             </div>
             <div className={`egift-linked-expires-wrapper ${expiredCard}`}>

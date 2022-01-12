@@ -63,17 +63,32 @@
     }
 
     .action-buttons {
-      display: flex;
-      align-items: center;
       margin-top: 1rem;
 
       @include breakpoint($only-mobile) {
-        flex-direction: column-reverse;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       @include breakpoint($tablet) {
-        justify-content: flex-end;
+        text-align: $right;
         margin-top: 2rem;
+      }
+
+      .error {
+        font-size: 0.75rem;
+        color: $primary_input_inline_error;
+        padding-top: 0.3125rem;
+        display: block;
+
+        @include breakpoint($only-mobile) {
+          order: 1;
+        }
+
+        @include breakpoint($tablet) {
+          width: 16.75rem;
+        }
       }
     }
 
@@ -84,7 +99,19 @@
     .action-topup {
       @include breakpoint($only-mobile) {
         width: 100%;
+        order: 2;
       }
+    }
+
+    .action-cancel {
+      @include breakpoint($only-mobile) {
+        order: 3;
+      }
+    }
+
+    .action-cancel,
+    .action-topup {
+      display: inline-block;
     }
 
     .my-topup-submit-btn {

@@ -2,7 +2,6 @@ import React from 'react';
 import _has from 'lodash/has';
 import parse from 'html-react-parser';
 import { getInputValue } from '../../../utilities/helper';
-import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import ClientDetails from './components/client-details';
 import CompanionDetails from './components/companion-details';
 import { processCustomerDetails } from '../../../utilities/validate';
@@ -18,7 +17,7 @@ import stickyCTAButtonObserver from '../../../utilities/StickyCTA';
 export default class CustomerDetails extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
 
     if (localStorageValues) {
       this.state = {
@@ -248,7 +247,11 @@ export default class CustomerDetails extends React.Component {
     // Validate form fields.
     const isError = await processCustomerDetails(e);
     if (!isError) {
-      setStorageInfo(this.state);
+      Drupal.addItemInLocalStorage(
+        'appointment_data',
+        this.state,
+        drupalSettings.alshaya_appointment.local_storage_expire * 60,
+      );
       // Book appointment.
       this.bookAppointment();
     } else {

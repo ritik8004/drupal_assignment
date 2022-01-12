@@ -20,11 +20,15 @@
         vertical-align: bottom;
       }
 
-      @include breakpoint($upto-tablet) {
-        .egift-product-tile {
+      .egift-product-tile {
+        min-height: 8.125rem;
+
+        @include breakpoint($upto-tablet) {
           grid-template-columns: 5.4375rem 1fr 2rem;
         }
+      }
 
+      @include breakpoint($upto-tablet) {
         .spc-cart-product-attribute {
           display: flex;
         }
@@ -33,6 +37,14 @@
           width: 8rem;
         }
       }
+    }
+  }
+}
+
+.spc-order-summary-block {
+  .egift-order-summary {
+    .total-line-item:nth-child(1) {
+      color: $pdp_product_special_price_text;
     }
   }
 }
