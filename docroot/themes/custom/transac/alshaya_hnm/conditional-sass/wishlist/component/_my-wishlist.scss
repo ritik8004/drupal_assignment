@@ -22,6 +22,14 @@
       opacity: 1;
     }
   }
+
+  .addtobag-button-container {
+    margin-#{$left}: 0.5rem;
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 1.25rem;
+    }
+  }
 }
 
 .notification-container {
