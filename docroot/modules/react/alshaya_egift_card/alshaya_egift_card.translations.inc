@@ -356,6 +356,18 @@ function _alshaya_egift_card_translations() {
       'Top-up eGift card' => [
         'ar' => 'Top-up eGift card',
       ],
+      'eGift card to:' => [
+        'ar' => 'eGift card to:',
+      ],
+      'eGift card will be sent immediately' => [
+        'ar' => 'eGift card will be sent immediately',
+      ],
+      'Top-up to:' => [
+        'ar' => 'Top-up to:',
+      ],
+      'Top-up amount will reflect immediately in card' => [
+        'ar' => 'Top-up amount will reflect immediately in card',
+      ],
     ],
   ];
 
