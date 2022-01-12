@@ -71,10 +71,13 @@
     display: block;
     font-size: 0.75rem;
     color: $primary_input_inline_error;
-    margin-top: -0.625rem;
-    padding-#{$right}: 1.25rem;
-    padding-#{$left}: 3rem;
-    padding-bottom: 1rem;
+
+    &.linked-card-payment-error {
+      margin-top: -0.625rem;
+      padding-#{$right}: 1.25rem;
+      padding-#{$left}: 3rem;
+      padding-bottom: 1rem;
+    }
   }
 
   &.payment-method {

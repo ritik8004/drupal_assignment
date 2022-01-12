@@ -421,7 +421,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
           </ConditionalView>
 
           <ConditionalView condition={apiErrorMessage !== ''}>
-            <div id="api-error" className="error">{apiErrorMessage}</div>
+            <div id="api-error" className="error linked-card-payment-error">{apiErrorMessage}</div>
           </ConditionalView>
         </div>
       </>
