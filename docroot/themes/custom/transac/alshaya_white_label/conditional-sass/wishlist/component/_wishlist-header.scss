@@ -101,7 +101,7 @@ body.wishlist-enabled {
 
   #wishlist-header-wrapper {
     position: absolute;
-    top: 0.5rem;
+    top: 0.75rem;
     #{$right}: 1.875rem;
 
     @include breakpoint($only-mobile) {
