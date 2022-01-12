@@ -262,18 +262,18 @@ function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings,
   if ($order['is_virtual']) {
     // If has only virtual product get telephone from billing.
     $settings['order_details']['mobile_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['billing']['telephone']);
-    foreach ($settings['order_details']['items'] as $itemKey => $item){
-      // For egift topup card set isTopUp and topupCardNumber from order data.
-      if ($item['sku'] === 'giftcard_topup') {
-        $settings['order_details']['items'][$itemKey]['isTopUp'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->is_topup ?? FALSE;
-        $settings['order_details']['items'][$itemKey]['topupCardNumber'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->card_number ?? 0;
-        // For egift topup card set topupRecieptEmail to show in order confirmation summary.
-        $settings['order_details']['topupRecieptEmail'] = $order['customer_email'];
-      }
-      if (isset($item['egiftOptions']['hps_giftcard_recipient_email'])) {
-        // For egift card set giftCardRecieptEmail to show in order confirmation summary.
-        $settings['order_details']['giftCardRecieptEmail'][] = $item['egiftOptions']['hps_giftcard_recipient_email'];
-      }
+  }
+  foreach ($settings['order_details']['items'] as $itemKey => $item){
+    // For egift topup card set isTopUp and topupCardNumber from order data.
+    if ($item['sku'] === 'giftcard_topup') {
+      $settings['order_details']['items'][$itemKey]['isTopUp'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->is_topup ?? FALSE;
+      $settings['order_details']['items'][$itemKey]['topupCardNumber'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->card_number ?? 0;
+      // For egift topup card set topupRecieptEmail to show in order confirmation summary.
+      $settings['order_details']['topupRecieptEmail'] = $order['customer_email'];
+    }
+    if (isset($item['egiftOptions']['hps_giftcard_recipient_email'])) {
+      // For egift card set giftCardRecieptEmail to show in order confirmation summary.
+      $settings['order_details']['giftCardRecieptEmail'][] = $item['egiftOptions']['hps_giftcard_recipient_email'];
     }
   }
 }

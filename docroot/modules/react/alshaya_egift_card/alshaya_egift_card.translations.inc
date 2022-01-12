@@ -75,10 +75,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'eGift Card Top-up',
         'context' => 'egift',
       ],
-      'Please enter the code.' => [
-        'ar' => 'Please enter the code.',
-        'context' => 'egift',
-      ],
       'Please enter the amount.' => [
         'ar' => 'Please enter the amount.',
         'context' => 'egift',
