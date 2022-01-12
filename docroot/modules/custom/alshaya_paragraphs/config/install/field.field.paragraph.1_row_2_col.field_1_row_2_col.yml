@@ -101,6 +101,9 @@ settings:
       views_reference:
         weight: 42
         enabled: false
+      product_carousel_category:
+        enabled: false
+        weight: 43
       delivery_usp_block:
         weight: 44
         enabled: false
