@@ -28,26 +28,23 @@ class MobileValidationWebformHandler extends WebformHandlerBase {
    * Check the mobile number is valid or not.
    */
   public function validateForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
-
     // Check web or app. This validation only on app.
     if (\Drupal::routeMatch()->getRouteName() == 'rest.webform_rest_submit.POST') {
-      $mobile_number = $webform_submission->getElementData('mobile_number_full');
+      $mobile_number = $webform_submission->getElementData('mobile_number');
       $preference_channel = $webform_submission->getElementData('select_your_preference_of_channel_of_communication');
       $original_mobile_number = $webform_submission->getElementData('mobile_number');
 
       // Preference channel field select mobile option.
       // And mobile number field is mandatory.
-      if ($preference_channel == 'Mobile' && empty($mobile_number)) {
+      if ($preference_channel == 'Mobile' && empty($mobile_number['value'])) {
         $error_msg = $this->t('Mobile Number is mandatory');
       }
-
-      if (!empty($mobile_number)) {
-
+      elseif (!empty($mobile_number['value'])) {
         /** @var \Drupal\mobile_number\MobileNumberUtilInterface $util */
         $util = \Drupal::service('mobile_number.util');
 
         // Check mobile number is valid or not.
-        if (!is_object($util->getMobileNumber($mobile_number))) {
+        if (!is_object($util->getMobileNumber($mobile_number['value']))) {
           $error_msg = $this->t('The phone number %value provided for %field is not a valid mobile number for country %country.',
             [
               '%value' => $mobile_number,
