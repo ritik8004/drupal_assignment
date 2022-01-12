@@ -15,9 +15,11 @@
       {% else %}
       <div id="product-zoom-container"></div>
       {% endif %}
+      {% if content.wishlist_enabled %}
+        {{ content.wishlist_enabled }}
+      {% endif %}
       <div class="matchback-hover-text">{{ 'Tap Image to Enlarge'|t }}</div>
     </div>
-
     <div class="cross-sell-product-component-center">
       {% if content.matchback_product_collection %}
         <div class="matchback-prod-collection-label">

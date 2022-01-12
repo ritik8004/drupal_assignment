@@ -1,32 +1,8 @@
-export const setStorageInfo = (data, storageKey = 'reviews_data') => {
-  const dataToStore = (typeof data === 'object') ? JSON.stringify(data) : data;
-  localStorage.setItem(storageKey, dataToStore);
-};
+export const setStorageInfo = (data, storageKey = 'reviews_data') => Drupal.addItemInLocalStorage(storageKey, data);
 
-export const removeStorageInfo = (storageKey = 'reviews_data') => {
-  localStorage.removeItem(storageKey);
-};
+export const removeStorageInfo = (storageKey = 'reviews_data') => Drupal.removeItemFromLocalStorage(storageKey);
 
-export const getStorageInfo = (storageKey = 'reviews_data') => {
-  const storageItem = localStorage.getItem(storageKey);
-  if (!storageItem) {
-    return null;
-  }
-  try {
-    return JSON.parse(storageItem);
-  } catch (e) {
-    return storageItem;
-  }
-};
-
-export const removeReviewsFromStorage = () => {
-  removeStorageInfo('reviews_data');
-};
-
-export const getInfoFromStorage = () => {
-  const reviewData = getStorageInfo('reviews_data');
-  return reviewData;
-};
+export const getStorageInfo = (storageKey = 'reviews_data') => Drupal.getItemFromLocalStorage(storageKey);
 
 export const updateStorageInfo = (contentType, contentObj, contentId) => {
   const storageList = getStorageInfo(contentType) !== null
@@ -44,10 +20,10 @@ export const updateStorageInfo = (contentType, contentObj, contentId) => {
       return contentStorage;
     });
     if (contentExists) {
-      setStorageInfo(JSON.stringify(updatedStorage), contentType);
+      setStorageInfo(updatedStorage, contentType);
     } else {
       storageList.push(contentObj);
-      setStorageInfo(JSON.stringify(storageList), contentType);
+      setStorageInfo(storageList, contentType);
     }
   }
 };

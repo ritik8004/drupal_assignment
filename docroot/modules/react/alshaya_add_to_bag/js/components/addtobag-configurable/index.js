@@ -63,7 +63,7 @@ export default class AddToBagConfigurable extends React.Component {
         this.openDrawer(response);
 
         // Store info in storage.
-        addProductInfoInStorage({ infoData: response }, sku);
+        addProductInfoInStorage(response, sku);
       });
     }
   }
@@ -105,13 +105,26 @@ export default class AddToBagConfigurable extends React.Component {
 
   render() {
     const { drawerStatus, productInfo } = this.state;
-    const { sku, isBuyable, url } = this.props;
+    const {
+      sku,
+      isBuyable,
+      url,
+      // 'extraInfo' is used to pass additional information that
+      // we want to use in this component.
+      extraInfo,
+    } = this.props;
 
     // Early return if product is not buyable.
     if (!isProductBuyable(isBuyable)) {
       return (
         <NotBuyableButton url={url} />
       );
+    }
+
+    let addToCartText = getStringMessage('view_options');
+    // Check if button text is available in extraInfo.
+    if (typeof extraInfo.addToCartButtonText !== 'undefined') {
+      addToCartText = extraInfo.addToCartButtonText;
     }
 
     return (
@@ -124,7 +137,7 @@ export default class AddToBagConfigurable extends React.Component {
             onClick={this.handleOnClick}
             ref={this.buttonContainerRef}
           >
-            {`${getStringMessage('view_options')}`}
+            {addToCartText}
           </button>
         </div>
         <ConditionalView condition={drawerStatus === 'opened'}>
@@ -135,6 +148,7 @@ export default class AddToBagConfigurable extends React.Component {
               productData={productInfo}
               sku={sku}
               url={url}
+              extraInfo={extraInfo}
             />,
             document.querySelector('#configurable-drawer'),
           )}

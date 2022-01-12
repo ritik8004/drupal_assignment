@@ -167,8 +167,12 @@ libraries-override:
         theme:
           css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css
 
+  alshaya_white_label/wishlist:
+      css:
+        theme:
+          css/conditional-sass/wishlist/wishlist.ltr.css: css/conditional-sass/wishlist/wishlist.ltr.css
+
   alshaya_white_label/sameday-express-delivery:
     css:
       theme:
         css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css
-

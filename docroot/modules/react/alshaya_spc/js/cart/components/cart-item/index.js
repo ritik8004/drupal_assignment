@@ -15,7 +15,6 @@ import QtyLimit from '../qty-limit';
 import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
-import { getStorageInfo } from '../../../utilities/storage';
 import { isQtyLimitReached, customStockErrorMessage } from '../../../utilities/checkout_util';
 import validateCartResponse from '../../../utilities/validation_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
@@ -23,6 +22,9 @@ import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';
 import AdvantageCardExcludedItem from '../advantage-card';
 import CartShippingMethods from '../cart-shipping-methods';
+import { isWishlistEnabled, isProductExistInWishList } from '../../../../../js/utilities/wishlistHelper';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
+import WishlistPopupBlock from '../../../wishlist/components/popup-block';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
@@ -32,12 +34,20 @@ export default class CartItem extends React.Component {
     this.state = {
       wait: true,
       productInfo: null,
+      showWishlistPopup: false,
+      // wishlistResponse tracks if user has responded in wishlist popup.
+      wishlistResponse: false,
     };
   }
 
   componentDidMount() {
     const { item } = this.props;
     Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+
+    if (isWishlistEnabled()) {
+      // Add event listener for add to wishlist action.
+      document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);
+    }
   }
 
   componentDidUpdate() {
@@ -64,22 +74,81 @@ export default class CartItem extends React.Component {
   };
 
   /**
+   * To open the wishlist confirmation popup.
+   * Popup will show up while deleting item from cart.
+   */
+  openWishlistModal = () => {
+    this.setState({
+      showWishlistPopup: true,
+    });
+  }
+
+  /**
+   * To close the wishlist confirmation popup.
+   * Once popup closes, we move on to deleting the item from cart.
+   */
+  closeWishlistModal = (removeFromBasket = true) => {
+    const { item: { sku, id } } = this.props;
+    if (!removeFromBasket) {
+      this.setState({
+        showWishlistPopup: false,
+      });
+    } else {
+      this.setState({ showWishlistPopup: false, wishlistResponse: removeFromBasket }, () => {
+        this.removeCartItem(sku, 'remove item', id);
+      });
+    }
+  };
+
+  /**
+   * Once item is added to wishlist, remove item from cart.
+   */
+  handleAddToWishList = (e) => {
+    if (typeof e.detail.productInfo !== 'undefined'
+      && e.detail.productInfo.sku) {
+      const { item: { sku, id } } = this.props;
+      const { productInfo: { parentSKU } } = this.state;
+      // Compare with sku in case of simple sku.
+      // Or compare with parent sku in case of configurable sku.
+      if (e.detail.productInfo.sku === sku || e.detail.productInfo.sku === parentSKU) {
+        this.setState({ wishlistResponse: true }, () => {
+          this.removeCartItem(sku, 'remove item', id);
+        });
+      }
+    }
+  };
+
+  /**
    * Remove item from the cart.
    */
   removeCartItem = (sku, action, id) => {
-    // Adding class on remove button for showing progress when click.
-    document.getElementById(`remove-item-${id}`).classList.add('loading');
-    const afterCartUpdate = () => {
-      // Remove loading class.
-      document.getElementById(`remove-item-${id}`).classList.remove('loading');
-    };
-    this.triggerUpdateCart({
-      action,
-      sku,
-      qty: 0,
-      callback: afterCartUpdate,
-      successMsg: Drupal.t('The product has been removed from your cart.'),
-    });
+    // Open wishlist confirmation popup if feature is enabled.
+    if (isWishlistEnabled()) {
+      const { wishlistResponse } = this.state;
+      const { productInfo: { parentSKU } } = this.state;
+      const wishlistSku = parentSKU || sku;
+      if (!wishlistResponse && !(isProductExistInWishList(wishlistSku))) {
+        this.openWishlistModal();
+        return;
+      }
+    }
+    const elem = document.getElementById(`remove-item-${id}`);
+    if (typeof elem !== 'undefined' && elem !== null) {
+      // Adding class on remove button for showing progress when click.
+      elem.classList.add('loading');
+      const afterCartUpdate = () => {
+        // Remove loading class.
+        elem.classList.remove('loading');
+      };
+
+      this.triggerUpdateCart({
+        action,
+        sku,
+        qty: 0,
+        callback: afterCartUpdate,
+        successMsg: Drupal.t('The product has been removed from your cart.'),
+      });
+    }
   };
 
   /**
@@ -124,7 +193,7 @@ export default class CartItem extends React.Component {
           if (action === 'remove item') {
             triggerRecommendedRefresh = true;
           } else {
-            const cartFromStorage = getStorageInfo();
+            const cartFromStorage = Drupal.getItemFromLocalStorage('cart_data');
             // If number of items in storage not matches with
             // what we get from mdc, we refresh recommended products.
             if (cartFromStorage !== null
@@ -178,7 +247,7 @@ export default class CartItem extends React.Component {
   }
 
   render() {
-    const { wait } = this.state;
+    const { wait, showWishlistPopup } = this.state;
     if (wait === true) {
       return (null);
     }
@@ -248,6 +317,23 @@ export default class CartItem extends React.Component {
       ? 'sku-max-quantity-limit-reached'
       : '';
 
+    const attributeOptions = [];
+    // Add configurable options only for configurable product.
+    if (isWishlistEnabled() && parentSKU) {
+      Object.keys(options).forEach((key) => {
+        const option = {
+          option_id: options[key].option_id,
+          option_value: options[key].option_value,
+        };
+
+        // Skipping the psudo attributes.
+        if (drupalSettings.psudo_attribute === undefined
+          || drupalSettings.psudo_attribute !== option.option_id) {
+          attributeOptions.push(option);
+        }
+      });
+    }
+
     return (
       <div
         className={`spc-cart-item fadeInUp ${qtyLimitClass}`}
@@ -273,6 +359,27 @@ export default class CartItem extends React.Component {
               { itemCodeLabel }
               {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.value}`} label={key} />)}
             </div>
+            <ConditionalView condition={isWishlistEnabled() && !freeItem}>
+              <div className="spc-product-wishlist-link">
+                <WishlistContainer
+                  context="cart"
+                  position="cart-item"
+                  sku={parentSKU || sku}
+                  title={title}
+                  options={attributeOptions}
+                  format="text"
+                />
+              </div>
+              {/* When user clicks on delete, pop shown asking if product added to wishlist. */}
+              <ConditionalView condition={showWishlistPopup}>
+                <WishlistPopupBlock
+                  sku={parentSKU}
+                  title={title}
+                  itemImage={cartImage}
+                  closeWishlistModal={this.closeWishlistModal}
+                />
+              </ConditionalView>
+            </ConditionalView>
           </div>
           <div className="spc-product-tile-actions">
             <button
@@ -285,7 +392,6 @@ export default class CartItem extends React.Component {
             >
               <TrashIconSVG />
             </button>
-
             <div className="qty">
               <div className="qty-loader-placeholder" />
               <CartQuantitySelect

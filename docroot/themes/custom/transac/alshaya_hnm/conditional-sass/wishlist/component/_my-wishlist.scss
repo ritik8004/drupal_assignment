@@ -1,0 +1,61 @@
+#my-wishlist {
+  .login-message {
+    font-family: $hnm-demibold;
+  }
+
+  .empty-message {
+    .actions {
+      a {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+
+  .oos-text-container {
+    .oos-text {
+      font-family: $hnm-demibold;
+    }
+  }
+
+  .addtobag-config-button {
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .addtobag-button-container {
+    margin-#{$left}: 0.5rem;
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 1.25rem;
+    }
+  }
+}
+
+.notification-container {
+  font-family: $hnm-demibold;
+}
+
+.wishlist-share-popup-container {
+  .wishlist-share-popup-block {
+    .header {
+      font-family: $hnm-demibold;
+    }
+
+    .actions {
+      button,
+      .link-copied {
+        font-family: $hnm-demibold;
+      }
+    }
+
+    .close-modal {
+      top: 0;
+
+      &::before {
+        padding: 0.375rem;
+        font-size: 1rem;
+      }
+    }
+  }
+}

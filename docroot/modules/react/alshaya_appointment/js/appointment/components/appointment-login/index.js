@@ -1,11 +1,10 @@
 import React from 'react';
-import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class AppointmentLogin extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
@@ -19,7 +18,11 @@ export default class AppointmentLogin extends React.Component {
   }
 
   handleSubmit = () => {
-    setStorageInfo(this.state);
+    Drupal.addItemInLocalStorage(
+      'appointment_data',
+      this.state,
+      drupalSettings.alshaya_appointment.local_storage_expire * 60,
+    );
     const { handleSubmit } = this.props;
     handleSubmit();
   }

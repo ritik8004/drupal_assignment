@@ -1,8 +1,4 @@
 import React from 'react';
-import {
-  getStorageInfo,
-  removeStorageInfo,
-} from '../../../../js/utilities/storage';
 import { getAuraLocalStorageKey, getAuraDetailsDefaultState } from '../../utilities/aura_utils';
 import {
   getUserDetails,
@@ -27,7 +23,7 @@ class Header extends React.Component {
       ...getAuraDetailsDefaultState(),
     };
 
-    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+    const localStorageValues = Drupal.getItemFromLocalStorage(getAuraLocalStorageKey());
 
     if (localStorageValues) {
       // Use localStorage values only for anonymous users.
@@ -40,7 +36,7 @@ class Header extends React.Component {
         return;
       }
       // Remove localstorage values if its a logged in user.
-      removeStorageInfo(getAuraLocalStorageKey());
+      Drupal.removeItemFromLocalStorage(getAuraLocalStorageKey());
     }
   }
 

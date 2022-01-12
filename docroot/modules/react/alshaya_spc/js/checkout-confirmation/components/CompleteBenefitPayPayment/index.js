@@ -67,7 +67,7 @@ class CompleteBenefitPayPayment extends React.Component {
         // We only want to auto open payment modal once so checking
         // `benefit_pay_modal_auto_opened` from storage to check if this is user's
         // first visit of confirmation page or user is reloading the page.
-        if (typeof window.InApp !== 'undefined' && !localStorage.getItem('benefit_pay_modal_auto_opened')) {
+        if (typeof window.InApp !== 'undefined' && !Drupal.getItemFromLocalStorage('benefit_pay_modal_auto_opened')) {
           this.openInAppModal();
         }
       };
@@ -85,7 +85,7 @@ class CompleteBenefitPayPayment extends React.Component {
       this.errorCallback,
     );
     // Save that benefit pay modal was auto opened once.
-    localStorage.setItem('benefit_pay_modal_auto_opened', true);
+    Drupal.addItemInLocalStorage('benefit_pay_modal_auto_opened', true);
   }
 
   render() {

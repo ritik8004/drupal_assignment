@@ -2,7 +2,6 @@ import React from 'react';
 import AreaListBlock from '../../../cart/components/area-list-block';
 import ConditionalView from '../../../common/components/conditional-view';
 import { getAreaFieldKey, getDeliveryAreaStorage, getDeliveryAreaValue } from '../../../utilities/delivery_area_util';
-import { setStorageInfo } from '../../../utilities/storage';
 import getStringMessage from '../../../utilities/strings';
 
 export default class PdpSelectArea extends React.Component {
@@ -38,7 +37,7 @@ export default class PdpSelectArea extends React.Component {
               );
               if (areaObj && Object.keys(areaObj).length !== 0) {
                 currentArea.label[currentLanguage] = areaObj.label;
-                setStorageInfo(currentArea, 'deliveryinfo-areadata');
+                Drupal.addItemInLocalStorage('deliveryinfo-areadata', currentArea);
                 this.setState({
                   areaLabel: areaObj.label,
                 });

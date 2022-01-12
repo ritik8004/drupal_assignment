@@ -25,6 +25,7 @@ describe('Checkout', () => {
 
     afterEach(() => {
       StaticStorage.clear();
+      localStorage.clear();
       // Clear and reset any mocks set by other tests.
       jest.clearAllMocks();
       jest.resetAllMocks();
