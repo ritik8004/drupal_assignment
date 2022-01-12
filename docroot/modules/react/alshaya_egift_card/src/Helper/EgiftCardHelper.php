@@ -79,10 +79,7 @@ class EgiftCardHelper {
     $term_conditions_text = $config->get('topup_terms_conditions_text') != null
       ? $this->token->replace($config->get('topup_terms_conditions_text')['value'])
       : '';
-
-    return [
-      '#markup' => '<p>' . $this->t('Terms & Conditions', [], ['context' => 'egift']) . '</p>' . $term_conditions_text,
-    ];
+    return $term_conditions_text;
   }
 
 }

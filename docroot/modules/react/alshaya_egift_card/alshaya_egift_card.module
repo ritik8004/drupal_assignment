@@ -91,7 +91,6 @@ function alshaya_egift_card_theme() {
       'variables' => [
         'block_title' => '',
         'block_description' => '',
-        'check_balance_button' => '',
       ]
     ],
     'egift_topup_page' => [
