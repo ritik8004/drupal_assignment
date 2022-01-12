@@ -2,7 +2,7 @@
   margin: 3.5rem 0 0.625rem;
 
   @include breakpoint($tablet) {
-    margin: 5rem 0 1rem;
+    margin: 5rem 0 0;
   }
 
   .field--name-field-group-title {

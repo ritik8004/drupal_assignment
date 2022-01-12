@@ -12,10 +12,16 @@
 }
 
 .egift-landing-page {
-  .c-content__slider {
-    max-width: 64.125rem;
-    margin-#{$left}: auto;
-    margin-#{$right}: auto;
+  .c-content {
+    .c-content__slider {
+      max-width: 64.125rem;
+      margin-#{$left}: auto;
+      margin-#{$right}: auto;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 2rem;
+      }
+    }
   }
 
   .paragraph-image_title_subtitle_link {

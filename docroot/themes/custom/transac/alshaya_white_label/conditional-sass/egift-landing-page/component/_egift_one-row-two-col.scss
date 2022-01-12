@@ -14,12 +14,6 @@
 
 .egift-landing-page {
   .field--name-field-1-row-2-col {
-    &.field__items {
-      @include breakpoint($only-mobile) {
-        margin: 0 1.5rem;
-      }
-    }
-
     .field--name-field-1-row-2-col {
       background-color: $egift-landing-page-one-row-two-col-box-bg;
       text-align: center;
