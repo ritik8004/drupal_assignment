@@ -64,7 +64,7 @@ common_functions:
 
 local_storage_manager:
   js:
-    js/local_storage_manager.js: {}
+    js/local_storage_manager.js: { weight: -10 }
   dependencies:
     - core/drupal
     - core/jquery
