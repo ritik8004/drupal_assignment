@@ -172,6 +172,10 @@ class AlshayaSpcLoginController extends ControllerBase {
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cart_config->getCacheTags());
     $build['#attached']['drupalSettings']['alshaya_spc']['cart_storage_expiration'] = $cart_config->get('cart_storage_expiration') ?? 15;
 
+    $product_config = $this->config('alshaya_acm_product.settings');
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $product_config->getCacheTags());
+    $build['#attached']['drupalSettings']['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
+
     $this->moduleHandler()->alter('alshaya_spc_checkout_login_build', $build);
 
     return $build;
