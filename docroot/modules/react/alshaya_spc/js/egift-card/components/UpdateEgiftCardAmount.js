@@ -1,8 +1,8 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import getCurrencyCode from '../../../../js/utilities/util';
 import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
 import getStringMessage from '../../../../js/utilities/strings';
+import PriceElement from '../../utilities/special-price/PriceElement';
 
 export default class UpdateEgiftCardAmount extends React.Component {
   // Handling validation for the changing the amount of egift card.
@@ -55,7 +55,18 @@ export default class UpdateEgiftCardAmount extends React.Component {
       remainingAmount,
     } = this.props;
 
-    const currencyCode = getCurrencyCode();
+    const appliedAmount = (
+      <span>
+        {Drupal.t('Applied card amount - ', {}, { context: 'egift' })}
+        <PriceElement amount={amount} format="string" showZeroValue />
+      </span>
+    );
+    const remainingBalance = remainingAmount ? (
+      <span>
+        {Drupal.t('Remaining Balance - ', {}, { context: 'egift' })}
+        <PriceElement amount={remainingAmount} format="string" showZeroValue />
+      </span>
+    ) : '';
 
     return (
       <>
@@ -76,14 +87,8 @@ export default class UpdateEgiftCardAmount extends React.Component {
                 onSubmit={this.handleSubmit}
               >
                 {egiftCardHeader({
-                  egiftHeading: Drupal.t('Applied card amount - @currencyCode @amount', {
-                    '@currencyCode': currencyCode,
-                    '@amount': amount,
-                  }, { context: 'egift' }),
-                  egiftSubHeading: (remainingAmount ? Drupal.t('Remaining Balance - @currencyCode @remainingAmount', {
-                    '@currencyCode': currencyCode,
-                    '@remainingAmount': remainingAmount,
-                  }, { context: 'egift' }) : ''),
+                  egiftHeading: appliedAmount,
+                  egiftSubHeading: remainingBalance,
                 })}
                 {egiftFormElement({
                   type: 'number',
