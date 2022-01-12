@@ -53,9 +53,7 @@
       // Do nothing, we will use PDP API to get the info again.
     }
 
-    var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
-    var currentTime = new Date().getTime();
-    if (data !== null && ((currentTime - data.created) < expireTime)) {
+    if (data) {
       try {
         callback(data, extraData);
       }
@@ -179,11 +177,14 @@
       'maxSaleQtyParent': data.maxSaleQtyParent,
       'gtmAttributes': data.gtmAttributes,
       'isNonRefundable': data.isNonRefundable,
-      'created': new Date().getTime(),
     };
 
-    // @todo: we may need to setup an expiration time here.
-    Drupal.addItemInLocalStorage(key, productData);
+    // Add product data in local storage with expiration time.
+    Drupal.addItemInLocalStorage(
+      key,
+      productData,
+      parseInt(drupalSettings.alshaya_spc.productExpirationTime) * 60,
+    );
 
     // Return as well if required for re-use.
     return data;
