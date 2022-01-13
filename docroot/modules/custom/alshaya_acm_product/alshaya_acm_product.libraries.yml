@@ -23,6 +23,7 @@ product_detail:
     - alshaya_acm_cart_notification/cart_notification_js
     - alshaya_white_label/jquery_mobile_touch_swipe
     - alshaya_white_label/attribute
+    - alshaya_master/local_storage_manager
 
 sku_gallery_format:
   version: 1.x

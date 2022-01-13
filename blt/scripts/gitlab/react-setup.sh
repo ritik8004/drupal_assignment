@@ -54,7 +54,7 @@ then
   npm run lint $docrootDir/modules/react/js/
 
   # Validate files now.
-  for subdir in $(find $docrootDir/modules/react -mindepth 1 -maxdepth 1 -type d)
+  for subdir in $(find $docrootDir/modules/react -mindepth 1 -maxdepth 1 -type d -not -path '*/\.*')
   do
     # Ignore some directories which are not react feature modules.
     ignore=0

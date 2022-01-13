@@ -1,9 +1,4 @@
 import Axios from 'axios';
-import {
-  getStorageInfo,
-  removeStorageInfo,
-  setStorageInfo,
-} from '../../utilities/storage';
 import logger from '../../../../js/utilities/logger';
 
 /**
@@ -17,18 +12,18 @@ const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.cust
 const removeCartIdFromStorage = () => {
   // Always remove cart_data, we have added this as workaround with
   // to-do at right place.
-  removeStorageInfo('cart_data');
+  Drupal.removeItemFromLocalStorage('cart_data');
 
   if (isUserAuthenticated()) {
-    setStorageInfo(window.authenticatedUserCartId, 'cart_id');
+    Drupal.addItemInLocalStorage('cart_id', window.authenticatedUserCartId);
     return;
   }
 
-  removeStorageInfo('cart_id');
+  Drupal.removeItemFromLocalStorage('cart_id');
 };
 
 const getCartIdFromStorage = () => {
-  let cartId = getStorageInfo('cart_id');
+  let cartId = Drupal.getItemFromLocalStorage('cart_id');
 
   // Check if cartId is of authenticated user.
   if (cartId === window.authenticatedUserCartId) {

@@ -172,8 +172,8 @@ const productRecommendationsSuffix = 'pr-';
         userId = userDetails.userID;
       }
 
-      if (localStorage.getItem('userID') === undefined) {
-        localStorage.setItem('userID', userId);
+      if (!Drupal.getItemFromLocalStorage('userID')) {
+        Drupal.addItemInLocalStorage('userID', userId);
       }
 
       // Set platformType.
@@ -261,15 +261,17 @@ const productRecommendationsSuffix = 'pr-';
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
-        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID && loginType !== undefined) {
+        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && Drupal.getItemFromLocalStorage('userID') !== userDetails.userID && loginType !== undefined) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
-          localStorage.setItem('userID', userDetails.userID);
+          Drupal.addItemInLocalStorage('userID', userDetails.userID);
         }
 
         // Fire logout success event on successful sign-in.
-        if (localStorage.getItem('userID') && localStorage.getItem('userID') != userDetails.userID && userDetails.userID === 0) {
+        if (Drupal.getItemFromLocalStorage('userID')
+          && Drupal.getItemFromLocalStorage('userID') != userDetails.userID
+          && userDetails.userID === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
-          localStorage.setItem('userID', userDetails.userID);
+          Drupal.addItemInLocalStorage('userID', userDetails.userID);
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_login_type', {path: '/'});
         }
 

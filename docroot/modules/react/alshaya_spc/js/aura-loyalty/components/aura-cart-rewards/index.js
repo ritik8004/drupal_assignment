@@ -8,7 +8,6 @@ import AuraNotLinkedData from './components/not-linked-data';
 import { getAllAuraStatus, getUserDetails } from '../../../../../alshaya_aura_react/js/utilities/helper';
 import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import Loading from '../../../utilities/loading';
-import { getStorageInfo } from '../../../utilities/storage';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { redeemAuraPoints, getAuraPointsToEarn } from '../utilities/checkout_helper';
@@ -46,7 +45,7 @@ class AuraCartRewards extends React.Component {
       this.updateAuraDetails();
     } else {
       // Guest user.
-      let localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+      let localStorageValues = Drupal.getItemFromLocalStorage(getAuraLocalStorageKey());
 
       if (localStorageValues === null) {
         localStorageValues = { wait: false };

@@ -58,7 +58,7 @@ export default class HDBillingAddress extends React.Component {
     // has changed the billing address. We set in localstorage.
     if (data.error === undefined && this.isComponentMounted) {
       if (data.cart !== undefined) {
-        localStorage.setItem('billing_shipping_same', false);
+        Drupal.addItemInLocalStorage('billing_shipping_same', false);
         this.setState({
           shippingAsBilling: false,
         });

@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import { getStorageInfo } from '../../../utilities/storage';
 import StoreAddress from '../appointment-store/components/store-address';
 import SectionTitle from '../section-title';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
@@ -16,7 +15,7 @@ export default class AppointmentSelection extends React.Component {
 
   render() {
     const { step } = this.props;
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
     const {
       appointmentCategory, appointmentType, selectedStoreItem, selectedSlot, appointmentId,
     } = localStorageValues;

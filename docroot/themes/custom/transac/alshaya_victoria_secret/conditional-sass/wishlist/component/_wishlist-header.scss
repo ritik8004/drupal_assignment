@@ -1,0 +1,44 @@
+body.wishlist-enabled {
+  header {
+    .region__header {
+      > div {
+        @include breakpoint($desktop) {
+          flex-basis: auto;
+          flex-grow: unset;
+        }
+      }
+    }
+  }
+
+  #wishlist-header-wrapper {
+    @include breakpoint($upto-desktop) {
+      width: 8%;
+      #{$right}: 7.5rem;
+      top: 3.4375rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 34%;
+      #{$right}: 9.0625rem;
+      text-align: center;
+    }
+
+    .wishlist-header {
+      padding-bottom: 0;
+    }
+  }
+
+  .wishlist-notification {
+    @include breakpoint($only-mobile) {
+      #{$right}: -5.3125rem;
+    }
+  }
+
+  &.header-sticky-filter {
+    #wishlist-header-wrapper {
+      @include breakpoint($only-mobile) {
+        transform: translate3d(0, -2.8125rem, 0);
+      }
+    }
+  }
+}

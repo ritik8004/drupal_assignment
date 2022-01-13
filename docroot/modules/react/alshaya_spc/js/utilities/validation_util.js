@@ -45,7 +45,8 @@ const validateCartResponse = (response) => {
     // OMS. In that case we redirect to cart page and show the error message
     // recived in the response.
     if (typeof response.error_message !== 'undefined') {
-      localStorage.setItem('stockErrorResponseMessage', response.error_message);
+      // @todo: we may add an expiration time.
+      Drupal.addItemInLocalStorage('stockErrorResponseMessage', response.error_message);
     }
     redirectToCart();
     return false;

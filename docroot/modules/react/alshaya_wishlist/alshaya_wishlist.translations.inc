@@ -37,8 +37,12 @@ function _alshaya_wishlist_translations() {
       'ar' => 'الخاصة بي @wishlist_label',
       'context' => 'wishlist',
     ],
-    '@productName saved to your @wishlist_label on this visit' => [
-      'ar' => '@productName تم الحفظ في قائمتك @wishlist_label في هذه الزيارة',
+    'saved to your @wishlist_label on this visit' => [
+      'ar' => 'تم الحفظ في قائمتك @wishlist_label في هذه الزيارة',
+      'context' => 'wishlist',
+    ],
+    'saved to your @wishlist_label' => [
+      'ar' => 'تم الحفظ في قائمتك @wishlist_label',
       'context' => 'wishlist',
     ],
     'Keep it for next time?' => [

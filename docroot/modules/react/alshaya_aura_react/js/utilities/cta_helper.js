@@ -4,10 +4,6 @@ import {
 } from './helper';
 import dispatchCustomEvent from '../../../js/utilities/events';
 import {
-  setStorageInfo,
-  removeStorageInfo,
-} from '../../../js/utilities/storage';
-import {
   getAuraLocalStorageKey,
   getAuraDetailsDefaultState,
   addInlineLoader,
@@ -46,7 +42,11 @@ function handleSignUp(auraUserDetails) {
       email: auraUserDetails.data.email || '',
       mobile: auraUserDetails.data.mobile || '',
     };
-    setStorageInfo(auraUserData, getAuraLocalStorageKey());
+
+    Drupal.addItemInLocalStorage(
+      getAuraLocalStorageKey(),
+      auraUserData,
+    );
   }
 
   dispatchCustomEvent('loyaltyStatusUpdated', { stateValues: auraUserData });
@@ -77,7 +77,7 @@ function handleNotYou(cardNumber) {
       loyaltyStatus: auraStatus,
       signUpComplete: false,
     };
-    removeStorageInfo(getAuraLocalStorageKey());
+    Drupal.removeItemFromLocalStorage(getAuraLocalStorageKey());
     dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
     return;
   }

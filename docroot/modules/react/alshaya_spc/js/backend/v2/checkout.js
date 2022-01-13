@@ -34,7 +34,6 @@ import {
   isObject,
   isArray,
 } from '../../../../js/utilities/conditionsUtility';
-import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
 import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities/error';
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
@@ -282,20 +281,7 @@ const getDefaultPaymentFromOrder = async (order) => {
  * @returns {object|null}
  *   Returns the store data object if found else null.
  */
-const getSavedDrupalStoreData = (key) => {
-  const savedStoreData = getStorageInfo(key);
-
-  if (savedStoreData !== null) {
-    const expireTime = drupalSettings.cncStoreInfoCacheTime * 60 * 1000;
-    const currentTime = new Date().getTime();
-
-    if ((currentTime - savedStoreData.created) < expireTime) {
-      return savedStoreData;
-    }
-  }
-
-  return null;
-};
+const getSavedDrupalStoreData = (key) => Drupal.getItemFromLocalStorage(key);
 
 /**
  * Sets the store data in the local storage.
@@ -305,12 +291,11 @@ const getSavedDrupalStoreData = (key) => {
  * @param {object} data
  *   The store data object.
  */
-const setDrupalStoreData = (key, data) => {
-  // eslint-disable-next-line no-param-reassign
-  data.created = new Date().getTime();
-
-  setStorageInfo(data, key);
-};
+const setDrupalStoreData = (key, data) => Drupal.addItemInLocalStorage(
+  key,
+  data,
+  (drupalSettings.cncStoreInfoCacheTime * 60),
+);
 
 /**
  * Gets the data for a particular store.

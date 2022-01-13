@@ -28,12 +28,9 @@ if (window.NodeList && !NodeList.prototype.forEach) {
 }
 
 const getBackToPlpPage = (pageType) => {
-  const plplocalStorage = localStorage.getItem(`${pageType}:${window.location.pathname}`);
-  if (plplocalStorage) {
-    const plpPathData = JSON.parse(plplocalStorage);
-    if (plpPathData.page) {
-      return parseInt(plpPathData.page, 10);
-    }
+  const plplocalStorage = Drupal.getItemFromLocalStorage(`${pageType}:${window.location.pathname}`);
+  if (plplocalStorage && typeof plplocalStorage.page !== 'undefined') {
+    return parseInt(plplocalStorage.page, 10);
   }
   return null;
 };
