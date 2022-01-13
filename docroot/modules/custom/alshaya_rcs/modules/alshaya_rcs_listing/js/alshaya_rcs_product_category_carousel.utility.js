@@ -7,5 +7,5 @@ window.commerceBackend = window.commerceBackend || {};
  *   The data required for builing the carousel.
  */
 window.commerceBackend.getCarouselData = function () {
-  return '';
+  return drupalSettings.alshayaProductCarousel;
 }

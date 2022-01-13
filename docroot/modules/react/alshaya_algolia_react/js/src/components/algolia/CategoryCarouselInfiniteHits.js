@@ -4,7 +4,7 @@ import ProductCategoryTeaser from '../product-category-carousel-teaser';
 import ConditionalView from '../../../common/components/conditional-view';
 
 const CategoryCarouselInfiniteHits = connectInfiniteHits(({
-  hits, gtmContainer, categoryId,
+  hits, gtmContainer, categoryId, vatText,
 }) => {
   useEffect(() => {
     // Trigger the Drupal JS once the component is mounted properly.
@@ -27,6 +27,7 @@ const CategoryCarouselInfiniteHits = connectInfiniteHits(({
                 hit={hit}
                 categoryId={categoryId}
                 gtmContainer={gtmContainer}
+                vatText={vatText}
               />
             ))
           }

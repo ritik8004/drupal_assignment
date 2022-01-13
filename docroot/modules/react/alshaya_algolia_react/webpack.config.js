@@ -11,6 +11,7 @@ var config = {
     plp: './js/src/PlpIndex.js',
     plpv2: './js/src/PlpV2Index.js',
     productCategoryCarousel: './js/src/ProductCategoryCarousel.js',
+    productCategoryCarouselV2: './js/src/ProductCategoryCarouselV2.js',
   },
   mode: 'production',
   output: {

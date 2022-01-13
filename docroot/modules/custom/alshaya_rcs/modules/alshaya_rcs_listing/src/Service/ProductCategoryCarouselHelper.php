@@ -9,6 +9,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Url;
 
 /**
  * Product category carousel helper service.
@@ -57,12 +58,13 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
    */
   private function getCarouselAccordion() {
     $carousel_title = $this->getCarouselTitle();
+    $slug = $this->getSlug();
 
     // Create accordion title link.
     $accordion_title = [
       '#type' => 'link',
       '#title' => $carousel_title,
-      '#url' => '',
+      '#url' => $slug,
     ];
 
     $link = [];
@@ -74,7 +76,7 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
         '#attributes' => [
           'class' => ['category-accordion-view-all'],
         ],
-        '#url' => '',
+        '#url' => $slug,
       ];
     }
 
@@ -115,19 +117,15 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
 
     $slug = $this->getSlug();
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $category_url = "/$langcode/$slug/";
+
     // Make carousel title link.
     $carousel_title = [
       'title' => $this->getCarouselTitle(),
-      'url' => "/$langcode/$slug/",
+      'url' => $category_url,
     ];
 
     $settings = $this->configFactory->get('alshaya_acm_product.settings');
-    $productCarousel = [
-      'sectionTitle' => $carousel_title,
-      'itemsPerPage' => $this->getCarouselItemsLimit(),
-      'vatText' => $settings->get('vat_text'),
-      'slug' => $slug,
-    ];
 
     $carousel['content']['product_category_carousel'] = [
       '#type' => 'container',
@@ -136,12 +134,16 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
       ],
       '#attached' => [
         'drupalSettings' => [
-          'isRcsCategory' => TRUE,
-          'carouselData' => $productCarousel,
+          'alshayaProductCarousel' => [
+            'sectionTitle' => $carousel_title,
+            'itemsPerPage' => $this->getCarouselItemsLimit(),
+            'vatText' => $settings->get('vat_text'),
+            'slug' => $slug,
+          ],
           'hp_product_carousel_items' => $settings->get('product_carousel_items_settings.hp_product_carousel_items_number'),
         ],
         'library' => [
-          'alshaya_algolia_react/product_category_carousel',
+          'alshaya_algolia_react/product_category_carousel_v2',
           'alshaya_white_label/product_carousel',
         ],
       ],
@@ -157,7 +159,7 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
         '#attributes' => [
           'class' => ['category-carousel-view-all'],
         ],
-        '#url' => '',
+        '#url' => Url::fromUserInput($category_url),
       ];
     }
 

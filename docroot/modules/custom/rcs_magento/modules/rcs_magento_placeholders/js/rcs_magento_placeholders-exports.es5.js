@@ -251,6 +251,23 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       result = response.data.products.items[0];
       break;
 
+      case 'category_parents':
+      request.data = prepareQuery(`{
+        categoryList(filters: {url_path: {eq: "${params.urlPath}"}}) {
+          uid
+          name
+          breadcrumbs {
+            category_name
+            category_level
+            category_url_key
+            category_url_path
+          }
+        }
+      }`);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.categoryList[0];
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
