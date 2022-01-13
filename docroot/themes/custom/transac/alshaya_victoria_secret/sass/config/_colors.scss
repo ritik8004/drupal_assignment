@@ -1152,9 +1152,18 @@ $plp-quick-view-product-size-text-disabled: $white;
 
 // Wishlist
 $wishlist-header-notification-border: $brilliant-rose;
-$wishlist-button-bg: $brilliant-rose;
-$wishlist-button-bg-hover: $brilliant-rose;
 $wishlist-button-border: $brilliant-rose;
+$wishlist-header-notification-text: $black;
+$wishlist-header-notification-span: $brilliant-rose;
+$wishlist-header-login-message: $black;
+$wishlist-button-bg: $primary_btn_bg;
+$wishlist-button-bg-hover: $primary_btn_bg;
+$wishlist-button-register-txt: $brilliant-rose;
+$wishlist-basket-modal-close-bg: $brilliant-rose;
+$wishlist-share-text: $black;
+$my-wishlist-share-modal-hover-bg: $primary_btn_bg;
+$wishlist-oos: $red-error;
+$my-wishlist-share-modal-header: $brilliant-rose;
 
 // Express delivery
 $sameday-express-delivery-drawer-btn: $primary_btn_bg;

@@ -373,7 +373,7 @@
       // Getting GTM menu label for L2 menu items.
       var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? $(this).attr('gtm-menu-title') : $(this).text();
       var navigationData = {
-        event: menuLabel + ' Navigation',
+        event: 'L2 Navigation',
         eventLabel: parentLabel + ' > ' + menuLabel
       };
       pushNavigationData(navigationData);
@@ -381,6 +381,7 @@
 
     // Push navigation events in dataLayer for 3rd Level.
     $('.menu--three__link').once().on('click', function () {
+      var eventName = 'L3 Navigation';
       var menuLabel = '';
       // Create the event label with parent menu item and current target link text.
       var parentLink = $(this).closest('.menu--one__list-item').find('.menu--one__link');
@@ -393,6 +394,7 @@
 
       // If the menu item is 4th level.
       if ($(this).closest('.menu__list-item').hasClass('menu--four__list-item')) {
+        eventName = 'L4 Navigation';
         nextChildLink = $(this).closest('.menu--three__list-item').find('.menu--three__link');
         // Getting GTM menu label for L3 menu items and appending L1 + L2.
         menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? (parentLabel + ' > ' + nextChildLink.attr('gtm-menu-title')) : (parentLabel + ' > ' + nextChildLink.text());
@@ -407,7 +409,7 @@
       }
 
       var navigationData = {
-        event: $(this).attr('gtm-menu-title') + ' Navigation',
+        event: eventName,
         eventLabel: menuLabel
       };
       pushNavigationData(navigationData);

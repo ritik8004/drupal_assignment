@@ -12,7 +12,6 @@ import {
   removeCartIdFromStorage,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
-import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
 import {
@@ -343,7 +342,7 @@ window.commerceBackend.createCart = async () => {
 
     // If its a guest customer, keep cart_id in the local storage.
     if (!isUserAuthenticated()) {
-      setStorageInfo(response.data, 'cart_id');
+      Drupal.addItemInLocalStorage('cart_id', response.data);
     }
 
     // Get fresh cart once to ensure static caches are warm.

@@ -15,7 +15,6 @@ import QtyLimit from '../qty-limit';
 import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
-import { getStorageInfo } from '../../../utilities/storage';
 import { isQtyLimitReached, customStockErrorMessage } from '../../../utilities/checkout_util';
 import validateCartResponse from '../../../utilities/validation_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
@@ -193,7 +192,7 @@ export default class CartItem extends React.Component {
           if (action === 'remove item') {
             triggerRecommendedRefresh = true;
           } else {
-            const cartFromStorage = getStorageInfo();
+            const cartFromStorage = Drupal.getItemFromLocalStorage('cart_data');
             // If number of items in storage not matches with
             // what we get from mdc, we refresh recommended products.
             if (cartFromStorage !== null

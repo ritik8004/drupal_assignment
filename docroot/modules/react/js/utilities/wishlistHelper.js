@@ -1,4 +1,3 @@
-import { getStorageInfo, setStorageInfo } from './storage';
 import { hasValue } from './conditionsUtility';
 import { callMagentoApi } from './requestHelper';
 import logger from './logger';
@@ -147,28 +146,7 @@ export const getWishListData = (strgKey) => {
   const storageKey = hasValue(strgKey) ? strgKey : getWishListStorageKey();
 
   // Get data from local storage.
-  const wishListInfo = getStorageInfo(storageKey);
-
-  // If data is not available in storage, we flag it to check/fetch from api.
-  if (!wishListInfo || !wishListInfo.infoData) {
-    return null;
-  }
-
-  // Configurable expiration time, by default it is 300s.
-  const storageExpireTime = isAnonymousUser()
-    ? getWishlistInfoStorageExpirationForGuest()
-    : getWishlistInfoStorageExpirationForLoggedIn();
-  const expireTime = storageExpireTime * 1000;
-  const currentTime = new Date().getTime();
-
-  // If data is expired, we flag it to check/fetch from api.
-  if ((currentTime - wishListInfo.last_update) > expireTime) {
-    // Empty wishlist info from local storage.
-    setStorageInfo({}, getWishListStorageKey());
-    return null;
-  }
-
-  return wishListInfo.infoData;
+  return Drupal.getItemFromLocalStorage(storageKey);
 };
 
 /**
@@ -212,16 +190,16 @@ export const getWishListDataForSku = (sku) => {
  *  An object of wishlist information.
  */
 export const addWishListInfoInStorage = (wishListData, strgKey = null) => {
-  const wishListInfo = {
-    infoData: wishListData,
-    // Adding current time to storage to know the last time data updated.
-    last_update: new Date().getTime(),
-  };
+  // Configurable expiration time, by default it is 300s.
+  const storageExpireTime = isAnonymousUser()
+    ? getWishlistInfoStorageExpirationForGuest()
+    : getWishlistInfoStorageExpirationForLoggedIn();
 
   // Store data to local storage.
-  setStorageInfo(
-    wishListInfo,
+  Drupal.addItemInLocalStorage(
     hasValue(strgKey) ? strgKey : getWishListStorageKey(),
+    wishListData,
+    storageExpireTime,
   );
 };
 

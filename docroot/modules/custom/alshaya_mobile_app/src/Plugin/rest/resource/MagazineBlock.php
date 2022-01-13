@@ -11,6 +11,9 @@ use Drupal\rest\ResourceResponse;
 use Drupal\views\Views;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Render\RenderContext;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Render\RendererInterface;
 
 /**
  * Provides a resource to get magazine block.
@@ -52,6 +55,13 @@ class MagazineBlock extends ResourceBase {
   protected $configFactory;
 
   /**
+   * The renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -70,6 +80,8 @@ class MagazineBlock extends ResourceBase {
    *   The entity repository.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
    */
 
   /**
@@ -83,12 +95,14 @@ class MagazineBlock extends ResourceBase {
     LoggerInterface $logger,
     MobileAppUtility $mobile_app_utility,
     EntityRepositoryInterface $entity_repository,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    RendererInterface $renderer
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->entityRepository = $entity_repository;
     $this->configFactory = $config_factory;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -103,7 +117,8 @@ class MagazineBlock extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('entity.repository'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('renderer')
     );
   }
 
@@ -120,15 +135,26 @@ class MagazineBlock extends ResourceBase {
     $magazine_listing_page_url = $magazine_listing_page_url_obj->getGeneratedUrl();
     $magazine_array_render = [];
     $magazine_block = [];
-    $magazine_view = Views::getView($view_id);
-    if (!is_object($magazine_view)) {
-      $this->mobileAppUtility->throwException();
-    }
 
-    $magazine_view->setDisplay($display_id);
-    $magazine_view_title = $magazine_view->getTitle();
-    $magazine_view->execute();
-    if (count($magazine_view->result) < 1) {
+    $context = new RenderContext();
+    $result = $this->renderer->executeInRenderContext($context, function () use ($view_id, $display_id) {
+      $magazine_view = Views::getView($view_id);
+      $magazine_view->setDisplay($display_id);
+      $magazine_view_title = $magazine_view->getTitle();
+      $magazine_view->execute();
+
+      return [
+        'view_result' => $magazine_view->result,
+        'view_title' => $magazine_view_title,
+      ];
+    });
+    // Handle any bubbled cacheability metadata.
+    if (!$context->isEmpty()) {
+      $bubbleable_metadata = $context->pop();
+      BubbleableMetadata::createFromObject($result)
+        ->merge($bubbleable_metadata);
+    }
+    if (isset($result['view_result']) && count($result['view_result']) < 1) {
       $this->mobileAppUtility->throwException();
     }
 
@@ -137,14 +163,14 @@ class MagazineBlock extends ResourceBase {
     $magazi_view_limit = $this->configFactory->getEditable('views.view.' . $view_id)->get('display.default.display_options.pager.options.items_per_page');
     $magazine_array_render = [
       'type' => 'magazine_block',
-      'title' => $magazine_view_title,
+      'title' => $result['view_title'],
       'url' => $magazine_listing_page_url,
       'deeplink' => self::ENDPOINT_PREFIX . 'page/magazine-teasers?offset=' . $magazi_view_offset . '&limit=' . $magazi_view_limit,
     ];
 
     // @codingStandardsIgnoreLine
     $magazine_array_render['view_more_link_text'] = $this->t($magazine_view_more_text);
-    foreach ($magazine_view->result as $magazine_result_value) {
+    foreach ($result['view_result'] as $magazine_result_value) {
       $magazine_entity = $this->entityRepository->getTranslationFromContext($magazine_result_value->_entity);
       $magazine_block['title'] = $magazine_entity->getTitle();
       $magazine_entity_url_obj = Url::fromRoute('entity.node.canonical', ['node' => $magazine_entity->id()]);
