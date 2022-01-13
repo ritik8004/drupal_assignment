@@ -186,7 +186,7 @@ class EgiftCardNotLinked extends React.Component {
 
     return (
       <div className="egift-notlinked-wrapper">
-        <div className="egift-notlinked-title">{Drupal.t('Link my egift card', {}, { context: 'egift' })}</div>
+        <div className="egift-notlinked-title">{Drupal.t('Link eGift card to account', {}, { context: 'egift' })}</div>
         <div className="egift-link-card-text">
           {
             Drupal.t('You dont have any eGift card linked to your account, link card to use it for your purchases', {}, { context: 'egift' })

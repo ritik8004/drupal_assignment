@@ -286,8 +286,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Top up',
         'context' => 'egift',
       ],
-      'Link my egift card' => [
-        'ar' => 'Link my egift card',
+      'Link eGift card to account' => [
+        'ar' => 'Link eGift card to account',
         'context' => 'egift',
       ],
       'eGift Card' => [
