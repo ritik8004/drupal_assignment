@@ -205,6 +205,9 @@ function alshaya_acm_promotion_acq_sku_base_fields_updated(array $fields, $op = 
 
         // Prepare overrides data for the facet.
         $overrides['name'] = $field['label'];
+
+        // If widget data is present in fields array, include that in overrides
+        // to ensure correct widget information is added while creating facets.
         if (isset($field['widget'])) {
           foreach ($field['widget'] as $key => $widget) {
             $overrides['widget'][$key] = $widget;
