@@ -6,6 +6,7 @@ import {
 import dispatchCustomEvent from '../events';
 import validateCartResponse from '../validation_util';
 import { getTopUpQuote } from '../egift_util';
+import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId, cncStoresLimit } = args;
@@ -20,7 +21,9 @@ export const fetchCartData = async () => {
   // If user is requesting for cart data and it's for Topup card then check if
   // page is other than /checkout. If 'YES' then remove the topup quote from
   // localstorage.
-  if (drupalSettings.path.currentPath !== 'checkout' && getTopUpQuote()) {
+  if (isEgiftCardEnabled()
+    && drupalSettings.path.currentPath !== 'checkout'
+    && getTopUpQuote()) {
     Drupal.removeItemFromLocalStorage('topupQuote');
   }
   // First thing, load the guest cart id for association later if required.
