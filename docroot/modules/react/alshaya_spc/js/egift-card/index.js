@@ -21,6 +21,7 @@ import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
 import dispatchCustomEvent from '../../../js/utilities/events';
 import { isUserAuthenticated } from '../../../js/utilities/helper';
 import logger from '../../../js/utilities/logger';
+import { getDefaultErrorMessage } from '../../../js/utilities/error';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -151,7 +152,7 @@ export default class RedeemEgiftCard extends React.Component {
       } else {
         result = {
           error: true,
-          message: drupalSettings.global_error_message,
+          message: getDefaultErrorMessage(),
         };
         // Log error in datadog.
         logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
@@ -207,7 +208,7 @@ export default class RedeemEgiftCard extends React.Component {
       } else {
         result = {
           error: true,
-          message: drupalSettings.global_error_message,
+          message: getDefaultErrorMessage(),
         };
         // Log error in datadog.
         logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
@@ -271,7 +272,7 @@ export default class RedeemEgiftCard extends React.Component {
     } else {
       result = {
         error: true,
-        message: drupalSettings.global_error_message,
+        message: getDefaultErrorMessage(),
       };
       // Log error in datadog.
       logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {

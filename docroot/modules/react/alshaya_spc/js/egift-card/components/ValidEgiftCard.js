@@ -17,6 +17,7 @@ import {
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import PriceElement from '../../utilities/special-price/PriceElement';
 import logger from '../../../../js/utilities/logger';
+import { getDefaultErrorMessage } from '../../../../js/utilities/error';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -118,7 +119,7 @@ export default class ValidEgiftCard extends React.Component {
                 '@response': response.data,
               });
             } else {
-              document.getElementById('egift_linkcard_error').innerHTML = drupalSettings.global_error_message;
+              document.getElementById('egift_linkcard_error').innerHTML = getDefaultErrorMessage();
               // Log error in datadog.
               logger.error('Error Response in eGiftLinkCard. Action: @action CardNumber: @cardNumber Response: @response', {
                 '@action': 'link_card',
