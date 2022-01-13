@@ -194,6 +194,9 @@ export default class AddressForm extends React.Component {
       showEmail,
       shippingAsBilling = null,
       isExpressDeliveryAvailable,
+      // if fillDefaultValue is true,
+      // Default value will be always be available to form.
+      fillDefaultValue,
     } = this.props;
 
     const {
@@ -206,8 +209,9 @@ export default class AddressForm extends React.Component {
 
     let defaultAddressVal = [];
     if (defaultVal) {
-      if ((isExpressDeliveryEnabled() && isExpressDeliveryAvailable)
-        || !isExpressDeliveryEnabled()) {
+      if ((typeof fillDefaultValue !== 'undefined' && fillDefaultValue)
+      || (isExpressDeliveryEnabled() && isExpressDeliveryAvailable)
+      || !isExpressDeliveryEnabled()) {
         defaultAddressVal = defaultVal;
       }
     }
