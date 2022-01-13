@@ -86,12 +86,6 @@
       storageItem = JSON.parse(storageItem);
     }
     catch (error) {
-      // Log an error message for debugging.
-      Drupal.alshayaLogger('warning', 'Invalid data found for @storageKey in local storage. Error message: @message', {
-        '@storageKey': storageKey,
-        '@message': error.message,
-      });
-
       // If JSON parse failed we return string.
       return storageItem;
     }
