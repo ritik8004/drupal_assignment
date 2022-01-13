@@ -18,6 +18,7 @@ import {
   getProcessedErrorMessage,
 } from '../../../../js/utilities/error';
 import logger from '../../../../js/utilities/logger';
+import Loading from '../../../../js/utilities/loading';
 
 export default class EgiftTopPurchase extends React.Component {
   constructor(props) {
@@ -43,6 +44,14 @@ export default class EgiftTopPurchase extends React.Component {
         topUpCard: response.data.items[0],
         wait: true,
       }, () => this.getUserLinkedCard());
+    } else {
+      this.setState({
+        wait: true,
+      });
+      // If /V1/products API is returning Error.
+      logger.error('Error while calling the Topup Product search Data Api @params', {
+        '@params': params,
+      });
     }
   }
 
@@ -201,9 +210,17 @@ export default class EgiftTopPurchase extends React.Component {
       displayFormError,
     } = this.state;
 
-    if (!wait) {
-      // Return if wait is false as no top-up card found.
+    if (wait && topUpCard === null) {
+      // Return if wait is true as no top-up card found.
       return null;
+    }
+    if (!wait && topUpCard === null) {
+      // Show loader if wait is false as no top-up card found.
+      return (
+        <div className="egifts-form-wrapper" style={{ animationDelay: '0.4s' }}>
+          <Loading />
+        </div>
+      );
     }
 
     return (
