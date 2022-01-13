@@ -9,6 +9,8 @@ import EgiftCardsListStepOne from '../egifts-card-step-one';
 import EgiftCardStepTwo from '../egift-card-step-two';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
+import logger from '../../../../js/utilities/logger';
+import Loading from '../../../../js/utilities/loading';
 
 export default class EgiftCardPurchase extends React.Component {
   constructor(props) {
@@ -27,11 +29,17 @@ export default class EgiftCardPurchase extends React.Component {
     if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
       this.setState({
         egiftItems: response.data.items,
+        wait: true,
+      });
+    } else {
+      this.setState({
+        wait: true,
+      });
+      // If /V1/products API is returning Error.
+      logger.error('Error while calling the Egift Product search Data Api @params', {
+        '@params': params,
       });
     }
-    this.setState({
-      wait: true,
-    });
   }
 
   /**
@@ -214,6 +222,15 @@ export default class EgiftCardPurchase extends React.Component {
       activateStepTwo,
       amountSet,
     } = this.state;
+
+    if (!wait && egiftItems === null) {
+      // Show loader if wait is false as no Egift card found.
+      return (
+        <div className="egifts-form-wrapper" style={{ animationDelay: '0.4s' }}>
+          <Loading />
+        </div>
+      );
+    }
 
     return (
       <>
