@@ -49,11 +49,6 @@
     width: 100%;
     border-radius: 0.125rem;
 
-    &:hover {
-      background-color: $my-wishlist-share-modal-hover-bg;
-      opacity: 0.75;
-    }
-
     @include breakpoint($only-mobile) {
       padding: 0.5rem;
     }
@@ -91,13 +86,15 @@
   .addtobag-button {
     border-radius: 0.125rem;
 
-    &:hover {
-      background-color: $my-wishlist-share-modal-hover-bg;
-      opacity: 0.75;
-    }
-
     &::before {
       content: '';
+    }
+  }
+
+  .addtobag-config-button,
+  .addtobag-button {
+    &:hover {
+      background-color: $plp-primary-cta-hover-bg;
     }
   }
 
@@ -256,6 +253,25 @@
 
           @include breakpoint($only-mobile) {
             margin-#{$left}: 1.375rem;
+          }
+        }
+      }
+    }
+  }
+
+  .product-drawer-container {
+    .login-message {
+      flex-direction: column;
+
+      .actions {
+        @include breakpoint($desktop) {
+          margin-#{$left}: 0.9375rem;
+          margin-top: 1.25rem;
+        }
+
+        a {
+          @include breakpoint($only-mobile) {
+            width: 7.75rem;
           }
         }
       }
