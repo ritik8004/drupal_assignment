@@ -1,0 +1,18 @@
+.attribute-wrapper {
+  &_size {
+    + .alshaya-select-wrapper {
+      @include breakpoint($only-mobile) {
+        display: flex;
+        flex-direction: column-reverse;
+      }
+
+      label {
+        @include breakpoint($only-mobile) {
+          position: relative;
+          margin-bottom: 0.4rem;
+        }
+      }
+    }
+  }
+}
+
