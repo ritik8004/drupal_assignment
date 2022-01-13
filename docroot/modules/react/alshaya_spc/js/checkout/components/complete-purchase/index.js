@@ -30,6 +30,10 @@ export default class CompletePurchase extends React.Component {
     // benefit pay modal only once for a user. Removing this key just after
     // placing order to remove old value.
     Drupal.removeItemFromLocalStorage('benefit_pay_modal_auto_opened');
+    // Remove the topup quote id if exists in thee local storage.
+    if (isEgiftCardEnabled()) {
+      Drupal.removeItemFromLocalStorage('topupQuote');
+    }
   }
 
   /**

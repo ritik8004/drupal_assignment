@@ -415,3 +415,35 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
 
   return result;
 };
+
+/**
+ * Checks if Topup is in progress.
+ *
+ * @returns {object|null}
+ *   Returns topup quote object or null.
+ */
+export const getTopUpQuote = () => Drupal.getItemFromLocalStorage('topupQuote');
+
+/**
+ * Checks if user is trying to topup and redeem using same card.
+ *
+ * @param {object} cart
+ *   The cart object.
+ * @param {string} cardNumber
+ *   The card number using trying to redeem.
+ *
+ * @returns {boolean}
+ *   Returns true if trying to topup and redeem using name card else false.
+ */
+export const selfCardTopup = (cart, cardNumber) => {
+  let selfTopup = false;
+  // Check if user is trying to use topup and redeem same card.
+  Object.keys(cart.items).forEach((key) => {
+    if (hasValue(cart.items[key].topupCardNumber)
+      && cardNumber === cart.items[key].topupCardNumber) {
+      selfTopup = true;
+    }
+  });
+
+  return selfTopup;
+};

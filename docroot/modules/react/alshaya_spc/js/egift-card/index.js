@@ -2,6 +2,7 @@ import React from 'react';
 import ConditionalView from '../common/components/conditional-view';
 import PaymentMethodIcon from '../svg-component/payment-method-svg';
 import {
+  getTopUpQuote,
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
   isValidResponse,
@@ -78,13 +79,6 @@ export default class RedeemEgiftCard extends React.Component {
         });
       }
     }
-  }
-
-  // Update the redemption status.
-  changeRedemptionStatus = (status) => {
-    this.setState({
-      redemptionDisabled: status,
-    });
   }
 
   // Perform code validation.
@@ -227,9 +221,15 @@ export default class RedeemEgiftCard extends React.Component {
   // Remove the added egift card.
   handleEgiftCardRemove = async () => {
     const { cart: cartData, refreshCart } = this.props;
+    let quoteId = cartData.cart.cart_id;
+    // Check if topup is applicable.
+    const topUpQuote = getTopUpQuote();
+    if (topUpQuote) {
+      quoteId = topUpQuote.maskedQuoteId;
+    }
     let postData = {
       redemptionRequest: {
-        mask_quote_id: cartData.cart.cart_id,
+        mask_quote_id: quoteId,
       },
     };
     // Change payload if authenticated user.
