@@ -14,6 +14,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import LinkedEgiftSVG from '../../../svg-component/linked-egift-svg';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import Loading from '../../../../../js/utilities/loading';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -134,6 +135,9 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             });
           }
         } else {
+          this.setState({
+            renderWait: false,
+          });
           // If eGiftHpsCustomerData API is returning Error.
           logger.error('Error while calling the egift HPS Customer Data Api @customerEmail. Message: @message', {
             '@customerEmail': drupalSettings.userDetails.userEmailID,
@@ -325,8 +329,16 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     } = this.state;
     // Cart object need to be passed to UpdateGiftCardAmount.
     const { cart } = this.props;
-    // Return if no linked card and if any api fails.
+    // show loader till we get response from API.
     if (renderWait && egiftLinkedCardNumber == null) {
+      return (
+        <div className="payment-method payment-method-checkout_com_egift_linked_card" style={{ animationDelay: '0.4s' }}>
+          <Loading />
+        </div>
+      );
+    }
+    // Return if no linked card and if any api fails.
+    if (!renderWait && egiftLinkedCardNumber == null) {
       return null;
     }
 
