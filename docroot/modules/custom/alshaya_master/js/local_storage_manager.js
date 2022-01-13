@@ -115,7 +115,7 @@
     }
 
     // If it's a new format simply return the data.
-    return storageItem.data;
+    return (typeof storageItem.data !== 'undefined') ? storageItem.data : storageItem;
   };
 
   /**
