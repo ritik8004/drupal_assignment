@@ -1,0 +1,33 @@
+.product-drawer {
+  &-content-wrapper {
+    .product-details-wrapper {
+      .size-guide-link {
+        @include breakpoint($desktop) {
+          top: 0;
+        }
+      }
+
+      .content--item-code {
+        @include breakpoint($only-mobile) {
+          margin-bottom: 1rem;
+        }
+      }
+
+      .sku-form {
+        .form-swatch-list-wrapper {
+          .li-swatch-image {
+            a {
+              img {
+                border-radius: 100%;
+              }
+
+              &::after {
+                border-radius: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

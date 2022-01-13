@@ -1,0 +1,11 @@
+.attribute-wrapper {
+  &_size {
+    @include breakpoint($only-mobile) {
+      display: block;
+      float: none;
+      margin: 0;
+      width: auto;
+    }
+  }
+}
+
