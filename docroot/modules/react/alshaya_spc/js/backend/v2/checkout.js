@@ -38,8 +38,13 @@ import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
-import { cartContainsOnlyVirtualProduct, cartItemIsVirtual, isFullPaymentDoneByEgift } from '../../utilities/egift_util';
-import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import {
+  cartContainsOnlyVirtualProduct,
+  cartItemIsVirtual,
+  getTopUpQuote,
+  isFullPaymentDoneByEgift,
+} from '../../utilities/egift_util';
+import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -2051,8 +2056,11 @@ const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
     customerId = cart.data.cart.customer.id;
   }
 
-  // Remove cart id and other caches from session.
-  window.commerceBackend.removeCartDataFromStorage(true);
+  // Remove card id if it was not an topup purchase.
+  if (getTopUpQuote() === null) {
+    // Remove cart id and other caches from session.
+    window.commerceBackend.removeCartDataFromStorage(true);
+  }
 
   // Post order id and cart data to Drupal.
   const data = {

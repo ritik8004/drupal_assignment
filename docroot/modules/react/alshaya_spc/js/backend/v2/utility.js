@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
 import logger from '../../../../js/utilities/logger';
 import { getTopUpQuote } from '../../utilities/egift_util';
 
@@ -56,7 +57,7 @@ const getCartIdFromStorage = () => {
  */
 const getApiEndpoint = (action, params = {}) => {
   let endpoint = '';
-  let topUpQuote = '';
+  let topUpQuote = null;
   // Reassigning params to updated the cart id.
   // Doing this to avoid no-param-reassign eslint issue.
   const endPointParams = params;
@@ -95,9 +96,11 @@ const getApiEndpoint = (action, params = {}) => {
     case 'updateCart':
       // Check if Topup is in progress then get topup quoteid and use guest
       // endpoint to perform topup.
-      topUpQuote = getTopUpQuote();
-      if (topUpQuote !== null) {
-        endPointParams.cartId = topUpQuote.maskedQuoteId;
+      if (isEgiftCardEnabled()) {
+        topUpQuote = getTopUpQuote();
+        if (topUpQuote !== null) {
+          endPointParams.cartId = topUpQuote.maskedQuoteId;
+        }
       }
       endpoint = isUserAuthenticated() && topUpQuote === null
         ? '/V1/carts/mine/updateCart'
@@ -125,9 +128,11 @@ const getApiEndpoint = (action, params = {}) => {
     case 'placeOrder':
       // Check if Topup is in progress then get topup quoteid and use guest
       // endpoint to perform topup.
-      topUpQuote = getTopUpQuote();
-      if (topUpQuote !== null) {
-        endPointParams.cartId = topUpQuote.maskedQuoteId;
+      if (isEgiftCardEnabled()) {
+        topUpQuote = getTopUpQuote();
+        if (topUpQuote !== null) {
+          endPointParams.cartId = topUpQuote.maskedQuoteId;
+        }
       }
       endpoint = isUserAuthenticated() && topUpQuote === null
         ? '/V1/carts/mine/order'
