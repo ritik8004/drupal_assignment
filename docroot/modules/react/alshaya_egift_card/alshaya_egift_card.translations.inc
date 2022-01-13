@@ -12,349 +12,349 @@ function _alshaya_egift_card_translations() {
   $strings = [
     'v1' => [
       'Check Balance & Validity' => [
-        'ar' => 'Check Balance & Validity',
+        'ar' => 'تحقق من الرصيد والصلاحية',
         'context' => 'egift',
       ],
       'Enter gift card details to check balance & validity.' => [
-        'ar' => 'Enter gift card details to check balance & validity.',
+        'ar' => 'أدخل تفاصيل بطاقة الهدايا للتحقق من الرصيد والصلاحية.',
         'context' => 'egift',
       ],
       'eGift Card Number' => [
-        'ar' => 'eGift Card Number',
+        'ar' => ' رقم بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
       'Terms & Conditions' => [
-        'ar' => 'Terms & Conditions',
+        'ar' => 'الشروط والأحكام',
         'context' => 'egift',
       ],
       'Please enter your email address.' => [
-        'ar' => 'Please enter your email address.',
+        'ar' => 'أدخل عنوان البريد الإلكتروني الخاص بك.',
         'context' => 'egift',
       ],
       'CHECK BALANCE' => [
-        'ar' => 'CHECK BALANCE',
+        'ar' => 'تحقق من الرصيد',
         'context' => 'egift',
       ],
       'Here is your current balance' => [
-        'ar' => 'Here is your current balance',
+        'ar' => 'رصيدك الحالي هو',
         'context' => 'egift',
       ],
       'for eGift card ending in ..' => [
-        'ar' => 'for eGift card ending in ..',
+        'ar' => 'تنتهي بطاقة الهدايا الإلكترونية في',
         'context' => 'egift',
       ],
       'Card Valid Up To ' => [
-        'ar' => 'Card Valid Up To ',
+        'ar' => 'البطاقة صالحة حتى ',
         'context' => 'egift',
       ],
       'TOP UP CARD' => [
-        'ar' => 'TOP UP CARD',
+        'ar' => 'بطاقة شحن الرصيد',
         'context' => 'egift',
       ],
       'CHECK ANOTHER CARD' => [
-        'ar' => 'CHECK ANOTHER CARD',
+        'ar' => ' تحقق من بطاقة أخرى',
         'context' => 'egift',
       ],
       'Style:' => [
-        'ar' => 'Style:',
+        'ar' => 'التصميم:',
         'context' => 'egift',
       ],
       'Send to:' => [
-        'ar' => 'Send to:',
+        'ar' => 'مرسلة إلى:',
         'context' => 'egift',
       ],
       'Message:' => [
-        'ar' => 'Message:',
+        'ar' => 'الرسالة:',
         'context' => 'egift',
       ],
       'Alshaya eGift card' => [
-        'ar' => 'Alshaya eGift card',
+        'ar' => 'بطاقة الشايع للهدايا الإلكترونية',
         'context' => 'egift',
       ],
       'eGift Card Top-up' => [
-        'ar' => 'eGift Card Top-up',
+        'ar' => 'تعبئة بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
       'Please enter the amount.' => [
-        'ar' => 'Please enter the amount.',
+        'ar' => 'يرجى إدخال المبلغ.',
         'context' => 'egift',
       ],
       'Insufficient balance, Please topup the card or lower the redeem amount.' => [
-        'ar' => 'Insufficient balance, Please topup the card or lower the redeem amount.',
+        'ar' => 'الرصيد غير كافٍ، يرجى تعبئة البطاقة أو تقليل مبلغ الاسترداد.',
         'context' => 'egift',
       ],
       'Verify eGift Card to redeem from card balance' => [
-        'ar' => 'Verify eGift Card to redeem from card balance',
+        'ar' => 'قم بتفعيل بطاقة الهدايا الإلكترونية للاستفادة من رصيد البطاقة',
         'context' => 'egift',
       ],
       'We’ll send a verification code to your email to verify eGift card' => [
-        'ar' => 'We’ll send a verification code to your email to verify eGift card',
+        'ar' => 'سنرسل رمز تحقق إلى بريدك الإلكتروني لتفعيل بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
       'Edit amount to use' => [
-        'ar' => 'Edit amount to use',
+        'ar' => 'قم بتعديل المبلغ المراد استخدامه ',
         'context' => 'egift',
       ],
       'Applied card amount - ' => [
-        'ar' => 'Applied card amount - ',
+        'ar' => 'مبلغ البطاقة المستخدم - ',
         'context' => 'egift',
       ],
       'Remaining Balance - ' => [
-        'ar' => 'Remaining Balance - ',
+        'ar' => 'الرصيد المتبقي - ',
         'context' => 'egift',
       ],
       'Link this card for faster payment next time' => [
-        'ar' => 'Link this card for faster payment next time',
+        'ar' => 'اربط هذه البطاقة للدفع بشكل أسرع في المرة القادمة',
         'context' => 'egift',
       ],
       'Verification code is send to email address registered with the card number.' => [
-        'ar' => 'Verification code is send to email address registered with the card number.',
+        'ar' => 'يتم إرسال رمز التحقق إلى عنوان البريد الإلكتروني المسجل برقم البطاقة.',
         'context' => 'egift',
       ],
       'Resend Code' => [
-        'ar' => 'Resend Code',
+        'ar' => ' أعد إرسال الرمز',
         'context' => 'egift',
       ],
       'Change Card?' => [
-        'ar' => 'Change Card?',
+        'ar' => 'ترغب في تغيير البطاقة؟',
         'context' => 'egift',
       ],
       'add to bag' => [
-        'ar' => 'add to bag',
+        'ar' => ' أضف الى الحقيبة',
         'context' => 'egift',
       ],
       'checkout' => [
-        'ar' => 'checkout',
+        'ar' => ' الدفع',
         'context' => 'egift',
       ],
       'No eGift cards found.' => [
-        'ar' => 'No eGift cards found.',
+        'ar' => 'لا توجد بطاقات هدايا إلكترونية',
         'context' => 'egift',
       ],
       '1. Select your style and card amount' => [
-        'ar' => '1. Select your style and card amount',
+        'ar' => '1. اختر المبلغ والتصميم',
         'context' => 'egift',
       ],
       '2. Enter Gift card details' => [
-        'ar' => '2. Enter Gift card details',
+        'ar' => '2. أدخل تفاصيل بطاقة الهدايا',
         'context' => 'egift',
       ],
       'Buying this gift for' => [
-        'ar' => 'Buying this gift for',
+        'ar' => 'أقوم بشراء الهدية من أجل ',
         'context' => 'egift',
       ],
       'Friends and family' => [
-        'ar' => 'Friends and family',
+        'ar' => 'الأصدقاء والعائلة ',
         'context' => 'egift',
       ],
       'Myself' => [
-        'ar' => 'Myself',
+        'ar' => 'نفسي ',
         'context' => 'egift',
       ],
       'Recipient Details' => [
-        'ar' => 'Recipient Details',
+        'ar' => 'تفاصيل المستلم ',
         'context' => 'egift',
       ],
       'My Details' => [
-        'ar' => 'My Details',
+        'ar' => 'تفاصيلي ',
         'context' => 'egift',
       ],
       'Name*' => [
-        'ar' => 'Name*',
+        'ar' => 'الاسم* ',
         'context' => 'egift',
       ],
       'Email*' => [
-        'ar' => 'Email*',
+        'ar' => 'البريد الإلكتروني* ',
         'context' => 'egift',
       ],
       'Write a message' => [
-        'ar' => 'Write a message',
+        'ar' => 'اكتب رسالة ',
         'context' => 'egift',
       ],
       'Message' => [
-        'ar' => 'Message',
+        'ar' => 'الرسالة ',
         'context' => 'egift',
       ],
       'Please enter amount or select from above.' => [
-        'ar' => 'Please enter amount or select from above.',
+        'ar' => 'الرجاء إدخال المبلغ أو الاختيار من أعلاه. ',
         'context' => 'egift',
       ],
       'Please enter amount in the range of @amountFrom to @amountTo' => [
-        'ar' => 'Please enter amount in the range of @amountFrom to @amountTo',
+        'ar' => 'الرجاء إدخال المبلغ من @amountFrom إلى @amountTo  ',
         'context' => 'egift',
       ],
       'Amount @currencyCode' => [
-        'ar' => 'Amount @currencyCode',
+        'ar' => 'المبلغ @currencyCode ',
         'context' => 'egift',
       ],
       'Please add a email id in your account to perform this operation.' => [
-        'ar' => 'Please add a email id in your account to perform this operation.',
+        'ar' => 'يرجى إضافة البريد الإلكتروني في حسابك لإجراء هذه العملية.',
         'context' => 'egift',
       ],
       'Please enter a valid amount' => [
-        'ar' => 'Please enter a valid amount',
+        'ar' => ' يرجى إدخال مبلغ صالح',
         'context' => 'egift',
       ],
       'Verification code sent successfully.' => [
-        'ar' => 'Verification code sent successfully.',
+        'ar' => 'تم إرسال رمز التحقق بنجاح.',
         'context' => 'egift',
       ],
       'Redeem amount should be less than or equal to the cart value.' => [
-        'ar' => 'Redeem amount should be less than or equal to the cart value.',
+        'ar' => 'يجب أن يكون مبلغ الاسترداد بقيمة أقل أو مساوية لقيمة حقيبة التسوق',
         'context' => 'egift',
       ],
       'Pay using egift card ' => [
-        'ar' => 'Pay using egift card ',
+        'ar' => ' الدفع باستخدام بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
       'Available Balance: ' => [
-        'ar' => 'Available Balance: ',
+        'ar' => ' الرصيد المتوفر:',
         'context' => 'egift',
       ],
       'Paid With eGfit card' => [
-        'ar' => 'Paid With eGfit card',
+        'ar' => ' مدفوعة عبر بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
       'Balance Payable' => [
-        'ar' => 'Balance Payable',
+        'ar' => ' الرصيد مستحق الدفع',
         'context' => 'egift',
       ],
       'Pay using egift card (Remaining Balance: @currencyCode @amount)' => [
-        'ar' => 'Pay using egift card (Remaining Balance: @currencyCode @amount)',
+        'ar' => ' الدفع باستخدام بطاقة الهدايا الإلكترونية (الرصيد المتبقي: @currencyCode @amount)',
         'context' => 'egift',
       ],
       'Pay using egift card (Card is expired)' => [
-        'ar' => 'Pay using egift card (Card is expired)',
+        'ar' => ' الدفع باستخدام بطاقة الهدايا الإلكترونية (البطاقة منتهية الصلاحية)',
         'context' => 'egift',
       ],
       'Pay ' => [
-        'ar' => 'Pay ',
+        'ar' => 'الدفع',
         'context' => 'egift',
       ],
       ' using another payment method to complete purchase' => [
-        'ar' => ' using another payment method to complete purchase',
+        'ar' => ' استخدم طريقة دفع أخرى لإتمام الشراء',
         'context' => 'egift',
       ],
       'Top-up' => [
-        'ar' => 'Top-up',
+        'ar' => 'اشحن رصيد',
         'context' => 'egift',
       ],
       'Top-up for' => [
-        'ar' => 'Top-up for',
+        'ar' => ' اشحن رصيد لـ',
         'context' => 'egift',
       ],
       'My Card' => [
-        'ar' => 'My Card',
+        'ar' => ' بطاقتي',
         'context' => 'egift',
       ],
       'Other\'s Card' => [
-        'ar' => 'Other\'s Card',
+        'ar' => ' بطاقة أخرى',
         'context' => 'egift',
       ],
       'Card Balance:' => [
-        'ar' => 'Card Balance:',
+        'ar' => ' رصيد البطاقة:',
         'context' => 'egift',
       ],
       'Card No:' => [
-        'ar' => 'Card No:',
+        'ar' => 'رقم البطاقة:',
         'context' => 'egift',
       ],
       'Card Details' => [
-        'ar' => 'Card Details',
+        'ar' => ' تفاصيل البطاقة',
         'context' => 'egift',
       ],
       'My eGift Card' => [
-        'ar' => 'My eGift Card',
+        'ar' => ' بطاقة الهدية الإلكترونية الخاصة بي',
       ],
       'Balanace:' => [
-        'ar' => 'Balanace:',
+        'ar' => 'الرصيد:',
         'context' => 'egift',
       ],
       'Expires on' => [
-        'ar' => 'Expires on',
+        'ar' => ' تنتهي صلاحيته في',
         'context' => 'egift',
       ],
       'This card has expired.' => [
-        'ar' => 'This card has expired.',
+        'ar' => ' هذه البطاقة منتهية الصلاحية.',
         'context' => 'egift',
       ],
       'Card Type' => [
-        'ar' => 'Card Type',
+        'ar' => ' نوع البطاقة',
         'context' => 'egift',
       ],
       'Top up' => [
-        'ar' => 'Top up',
+        'ar' => 'اشحن رصيد',
         'context' => 'egift',
       ],
       'Link eGift card to account' => [
-        'ar' => 'Link eGift card to account',
+        'ar' => 'ربط بطاقة الهدايا الإلكترونية الخاصة بي',
         'context' => 'egift',
       ],
       'eGift Card' => [
-        'ar' => 'eGift Card',
+        'ar' => ' بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
       'You dont have any eGift card linked to your account, link card to use it for your purchases' => [
-        'ar' => 'You dont have any eGift card linked to your account, link card to use it for your purchases',
+        'ar' => ' ليس لديك أي بطاقة هدايا إلكترونية مرتبطة بحسابك، قم بربط حسابك ببطاقة هدايا لاستخدامها في عملية الشراء',
         'context' => 'egift',
       ],
       'We\'ll send a verification code to your email to verify and link eGift card' => [
-        'ar' => 'We\'ll send a verification code to your email to verify and link eGift card',
+        'ar' => ' سنرسل رمز تحقق إلى بريدك الإلكتروني لتفعيل بطاقة الهدايا الإلكترونية وربطها',
         'context' => 'egift',
       ],
       'Get Code' => [
-        'ar' => 'Get Code',
+        'ar' => ' الحصول على رمز',
         'context' => 'egift',
       ],
       'Enter verification code' => [
-        'ar' => 'Enter verification code',
+        'ar' => ' أدخل رمز التحقق',
         'context' => 'egift',
       ],
       'Didn\'t receive?' => [
-        'ar' => 'Didn\'t receive?',
+        'ar' => ' لم تستلم الرمز؟',
         'context' => 'egift',
       ],
       'Verify' => [
-        'ar' => 'Verify',
+        'ar' => 'تفعيل',
         'context' => 'egift',
       ],
       'Please enter an eGift card number.' => [
-        'ar' => 'Please enter an eGift card number.',
+        'ar' => ' الرجاء إدخال رقم بطاقة الهدايا الإلكترونية. ',
         'context' => 'egift',
       ],
       'Please enter a valid eGift card number.' => [
-        'ar' => 'Please enter a valid eGift card number.',
+        'ar' => 'الرجاء إدخال رقم صالح لبطاقة الهدايا الإلكترونية. ',
         'context' => 'egift',
       ],
       'Please enter verification code.' => [
-        'ar' => 'Please enter verification code.',
+        'ar' => 'الرجاء إدخال رمز التحقق. ',
         'context' => 'egift',
       ],
       'Please enter a valid verification code.' => [
-        'ar' => 'Please enter a valid verification code.',
+        'ar' => 'الرجاء إدخال رمز تحقق صالح. ',
         'context' => 'egift',
       ],
       'You cannot redeem the same card which you\'re trying to topup.' => [
-        'ar' => 'You cannot redeem the same card which you\'re trying to topup.',
+        'ar' => 'لا يمكنك استرداد نفس البطاقة التي تحاول إعادة شحنها. ',
         'context' => 'egift',
       ],
       'Buy Alshaya eGift Card' => [
-        'ar' => 'Buy Alshaya eGift Card',
+        'ar' => 'شراء بطاقة هدايا الشايع الإلكترونية لشحن رصيدك',
       ],
       'Top-up eGift card' => [
-        'ar' => 'Top-up eGift card',
+        'ar' => 'قم بتعبئة بطاقة الهدايا الإلكترونية',
       ],
       'eGift card to:' => [
-        'ar' => 'eGift card to:',
+        'ar' => ' بطاقة الهدايا الإلكترونية لـ:',
       ],
       'eGift card will be sent immediately' => [
-        'ar' => 'eGift card will be sent immediately',
+        'ar' => ' سيتم إرسال بطاقة الهدايا الإلكترونية على الفور',
       ],
       'Top-up to:' => [
-        'ar' => 'Top-up to:',
+        'ar' => ' تعبئة الرصيد لـ:',
       ],
       'Top-up amount will reflect immediately in card' => [
-        'ar' => 'Top-up amount will reflect immediately in card',
+        'ar' => ' سيتم إضافة مبلغ التعبئة على الفور في البطاقة',
       ],
     ],
   ];
