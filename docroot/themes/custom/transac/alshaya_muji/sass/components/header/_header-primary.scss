@@ -1123,3 +1123,22 @@ li.has-bg-color {
     }
   }
 }
+
+.static-minicart-wrapper {
+  .cart-link {
+    width: 1.4rem;
+  }
+
+  .cart-link-total {
+    padding-#{$left}: 0.5rem;
+  }
+
+  .quantity {
+    bottom: 0;
+    color: $primary_minicart_static_quantity_text;
+
+    html[lang="ar"] & {
+      #{$right}: 0;
+    }
+  }
+}
