@@ -131,14 +131,14 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
       '#type' => 'container',
       '#attributes' => [
         'class' => ['alshaya-product-category-carousel'],
+        'data-slug' => $slug,
       ],
       '#attached' => [
         'drupalSettings' => [
           'alshayaProductCarousel' => [
-            'sectionTitle' => $carousel_title,
             'itemsPerPage' => $this->getCarouselItemsLimit(),
             'vatText' => $settings->get('vat_text'),
-            'slug' => $slug,
+            $slug => $carousel_title,
           ],
           'hp_product_carousel_items' => $settings->get('product_carousel_items_settings.hp_product_carousel_items_number'),
         ],
