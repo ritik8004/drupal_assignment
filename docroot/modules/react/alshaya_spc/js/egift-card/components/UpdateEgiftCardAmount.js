@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup';
 import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
 import getStringMessage from '../../../../js/utilities/strings';
 import PriceElement from '../../utilities/special-price/PriceElement';
+import { getAmountWithCurrency } from '../../utilities/checkout_util';
 
 export default class UpdateEgiftCardAmount extends React.Component {
   // Handling validation for the changing the amount of egift card.
@@ -95,7 +96,7 @@ export default class UpdateEgiftCardAmount extends React.Component {
                   name: 'amount',
                   className: 'amount',
                   label: 'Amount',
-                  value: amount,
+                  value: getAmountWithCurrency(amount, false).amount,
                 })}
                 <div className="egift-submit-btn-wrapper">
                   {egiftFormElement({
