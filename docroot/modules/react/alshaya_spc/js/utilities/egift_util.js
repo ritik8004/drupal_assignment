@@ -6,6 +6,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../js/utilit
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
 import { isUserAuthenticated } from '../../../js/utilities/helper';
+import { getDefaultErrorMessage } from '../../../js/utilities/error';
 
 /**
  * Provides the egift card header.
@@ -249,7 +250,7 @@ export const updatePriceSummaryBlock = (refreshCart) => {
             } else {
               dispatchCustomEvent('spcCheckoutMessageUpdate', {
                 type: 'error',
-                message: drupalSettings.global_error_message,
+                message: getDefaultErrorMessage(),
               });
             }
             // Remove loader once request is full filled.
@@ -259,7 +260,7 @@ export const updatePriceSummaryBlock = (refreshCart) => {
       } else {
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
-          message: drupalSettings.global_error_message,
+          message: getDefaultErrorMessage(),
         });
         // Remove loader once request is full filled.
         removeFullScreenLoader();
@@ -508,7 +509,7 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
   } else {
     result = {
       error: true,
-      message: drupalSettings.global_error_message,
+      message: getDefaultErrorMessage(),
     };
     // Log error in datadog.
     logger.error('Error Response in eGiftUpdateAmount. Action: @action Response: @response', {
