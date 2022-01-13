@@ -127,6 +127,10 @@
           margin-bottom: 0.5rem;
           letter-spacing: normal;
           line-height: 1.14;
+
+          .price-currency {
+            margin-#{$right}: 0.5rem;
+          }
         }
 
         &.egift-card-end-text {
