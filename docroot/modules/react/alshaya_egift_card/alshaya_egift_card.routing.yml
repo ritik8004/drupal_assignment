@@ -7,7 +7,7 @@ alshaya_egift_card.egift_card_config:
     _permission: 'administer site configuration'
 
 alshaya_egift_card.topup_card:
-  path: '/egift-card/topup-card'
+  path: '/egift-card/topup'
   defaults:
     _title: 'Top-up eGift card'
     _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaTopUpController::topupcard'

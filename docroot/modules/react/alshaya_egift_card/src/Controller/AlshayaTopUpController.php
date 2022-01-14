@@ -43,7 +43,7 @@ class AlshayaTopUpController extends ControllerBase {
   }
 
   /**
-   * Callback for opening the modal form.
+   * E-Gift top-up card controller.
    */
   public function topupcard() {
     $eGift_status = $this->egiftCardHelper->isEgiftCardEnabled();
