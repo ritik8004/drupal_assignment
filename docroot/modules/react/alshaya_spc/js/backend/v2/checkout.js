@@ -42,6 +42,7 @@ import {
   cartContainsOnlyVirtualProduct,
   cartItemIsVirtual,
   getTopUpQuote,
+  isBearerTokenRequired,
   isFullPaymentDoneByEgift,
 } from '../../utilities/egift_util';
 import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
@@ -2056,7 +2057,7 @@ const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
     customerId = cart.data.cart.customer.id;
   }
 
-  // Remove card id if it was not an topup purchase.
+  // Remove card id if it was not a topup purchase.
   if (getTopUpQuote() === null) {
     // Remove cart id and other caches from session.
     window.commerceBackend.removeCartDataFromStorage(true);
@@ -2192,7 +2193,9 @@ window.commerceBackend.placeOrder = async (data) => {
     cartId: window.commerceBackend.getCartId(),
   };
 
-  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
+  // As we are using guest cart update in case of Topup, we will not pass
+  // bearerToken.
+  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT', null, isBearerTokenRequired('place order'))
     .then(async (response) => {
       const result = {
         success: true,

@@ -3,7 +3,7 @@
  * Removes topupQuote of egift conditionally.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function (Drupal, drupalSettings) {
   'use strict';
 
   Drupal.behaviors.alshayaEgiftTopup = {
@@ -19,4 +19,4 @@
       }
     },
   };
-})(jQuery, Drupal, drupalSettings);
+})(Drupal, drupalSettings);

@@ -130,10 +130,15 @@ function alshaya_egift_card_preprocess_html(&$variables) {
       $variables['#attached']['library'][] = 'alshaya_white_label/egift-landing-page';
     }
   }
+}
 
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_egift_card_page_attachments(array &$page) {
   // Attach the egift topup library.
   if (\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
-    $variables['#attached']['library'][] = 'alshaya_egift_card/alshaya_egift_topup';
+    $page['#attached']['library'][] = 'alshaya_egift_card/alshaya_egift_topup';
   }
 }
 

@@ -20,7 +20,7 @@ import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollecti
 import isAuraEnabled from '../../../../js/utilities/helper';
 import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
-import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
+import { cartContainsOnlyVirtualProduct, getTopUpQuote, isBearerTokenRequired } from '../../utilities/egift_util';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -759,6 +759,10 @@ const validateRequestData = async (request) => {
   const cartCustomerId = await getCartCustomerId();
   if (drupalSettings.userDetails.customerId > 0) {
     if (!hasValue(cartCustomerId)) {
+      // If it's a topup operation then use customer id from drupal settings.
+      if (getTopUpQuote() !== null) {
+        return 200;
+      }
       // @todo Check if we should associate cart and proceed.
       // Todo copied from middleware.
       return 400;
@@ -836,7 +840,9 @@ const updateCart = async (postData) => {
     '@action': action,
   });
 
-  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
+  // As we are using guest cart update in case of Topup, we will not pass
+  // bearerToken.
+  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data), isBearerTokenRequired(action))
     .then((response) => {
       if (!hasValue(response.data)
         || (hasValue(response.data.error) && response.data.error)) {

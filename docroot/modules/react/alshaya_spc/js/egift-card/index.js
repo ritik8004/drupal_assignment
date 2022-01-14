@@ -98,7 +98,7 @@ export default class RedeemEgiftCard extends React.Component {
         redeem_points: {
           action: 'set_points',
           quote_id: cartData.cart.cart_id_int,
-          amount: cartData.cart.cart_total,
+          amount: cartData.cart.base_grand_total,
           card_number: egiftCardNumber,
           payment_method: 'hps_payment',
           card_type: 'guest',

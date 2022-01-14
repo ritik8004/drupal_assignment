@@ -27,5 +27,4 @@ alshaya_egift_topup:
   js:
     assets/js/egift_topup_check.js: {}
   dependencies:
-    - core/jquery
     - core/drupalSettings

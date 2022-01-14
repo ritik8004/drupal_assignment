@@ -422,7 +422,35 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
  * @returns {object|null}
  *   Returns topup quote object or null.
  */
-export const getTopUpQuote = () => Drupal.getItemFromLocalStorage('topupQuote');
+export const getTopUpQuote = () => {
+  // Return null if egift card is not enabled.
+  if (!isEgiftCardEnabled()) {
+    return null;
+  }
+
+  return Drupal.getItemFromLocalStorage('topupQuote');
+};
+
+/**
+ * Checks if bearer token should be passed.
+ *
+ * @param {string} action
+ *   The action user is performing.
+ *
+ * @return {boolean}
+ *   Return true is required else false.
+ */
+export const isBearerTokenRequired = (action) => {
+  if (isEgiftCardEnabled()
+    && (action === 'update billing'
+    || action === 'update payment'
+    || action === 'place order')
+    && getTopUpQuote()) {
+    return false;
+  }
+
+  return true;
+};
 
 /**
  * Checks if user is trying to topup and redeem using same card.

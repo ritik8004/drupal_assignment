@@ -17,6 +17,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
 import { cartContainsOnlyVirtualProduct, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -142,9 +143,12 @@ export default class CnCBillingAddress extends React.Component {
                       closeModal={triggerCloseModal}
                       cart={cart}
                       processAddress={this.processAddress}
-                      // Show email id field in case of egift card is enabled
-                      // and cart contains only virtual products.
-                      showEmail={cartContainsOnlyVirtualProduct(cart.cart)}
+                      // Show email id field in case of egift card is enabled,
+                      // cart contains only virtual products and anonymous user.
+                      showEmail={
+                        !isUserAuthenticated()
+                        && cartContainsOnlyVirtualProduct(cart.cart)
+                      }
                       showEditButton={false}
                       type="billing"
                       formContext="billing"
