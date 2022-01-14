@@ -1,13 +1,13 @@
 import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import {
-  callEgiftApi,
   egiftCardHeader,
   isEgiftRedemptionDone,
   isValidResponse,
   isValidResponseWithFalseResult,
   updateRedeemAmount,
 } from '../../utilities/egift_util';
+import { callEgiftApi } from '../../../../js/utilities/egiftCardHelper';
 import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import {

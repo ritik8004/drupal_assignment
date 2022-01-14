@@ -4,12 +4,12 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import UpdateEgiftCardAmount from '../UpdateEgiftCardAmount';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import {
-  callEgiftApi, isEgiftRedemptionDone,
+  isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
-  performRedemption,
   updatePriceSummaryBlock,
   updateRedeemAmount,
 } from '../../../utilities/egift_util';
+import { callEgiftApi, performRedemption } from '../../../../../js/utilities/egiftCardHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import LinkedEgiftSVG from '../../../svg-component/linked-egift-svg';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';

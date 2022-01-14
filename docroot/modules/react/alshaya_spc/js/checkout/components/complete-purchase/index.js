@@ -10,7 +10,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 import { isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
-import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {

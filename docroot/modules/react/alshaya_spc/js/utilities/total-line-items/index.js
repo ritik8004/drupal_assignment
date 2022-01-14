@@ -13,7 +13,7 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import Tabby from '../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../js/tabby/components';
-import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import EgiftCheckoutOrderSummary from '../../egift-card/components/egift-checkout-order-summary';
 
 class TotalLineItems extends React.Component {

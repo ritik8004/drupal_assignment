@@ -26,7 +26,7 @@ import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
 import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
 

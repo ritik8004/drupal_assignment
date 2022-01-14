@@ -36,7 +36,7 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import RedeemEgiftCard from '../../../egift-card';
 import { cartContainsAnyNormalProduct, cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
-import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 
 window.fetchStore = 'idle';
 
