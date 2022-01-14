@@ -162,7 +162,7 @@ class WishlistProductList extends React.Component {
     // If anonymous user, check if wishlist item count is 0.
     if (wishListItemsCount === 0) {
       return PageEmptyMessage(Drupal.t(
-        'your @wishlist_label is empty.',
+        'Your @wishlist_label is empty.',
         { '@wishlist_label': getWishlistLabel() },
         { context: 'wishlist' },
       ));
