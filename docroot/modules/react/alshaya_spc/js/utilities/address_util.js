@@ -17,9 +17,9 @@ import {
 import { isExpressDeliveryEnabled } from '../../../js/utilities/expressDeliveryHelper';
 import { setDeliveryAreaStorage } from './delivery_area_util';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
-import { getTopUpQuote } from './egift_util';
 import { isEgiftCardEnabled } from '../../../js/utilities/util';
 import { isUserAuthenticated } from '../../../js/utilities/helper';
+import { getTopUpQuote } from '../../../js/utilities/egiftCardHelper';
 
 /**
  * Use this to auto scroll to the right field in address form upon

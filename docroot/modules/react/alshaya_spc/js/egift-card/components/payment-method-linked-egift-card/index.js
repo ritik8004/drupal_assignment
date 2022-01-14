@@ -280,7 +280,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     const { cart, refreshCart } = this.props;
 
     // Api call to update the redemption amount.
-    const response = await updateRedeemAmount(updateAmount, cart, refreshCart);
+    const response = await updateRedeemAmount(updateAmount, cart.cart, refreshCart);
     if (!response.error) {
       const { redeemedAmount, balancePayable, cardNumber } = response;
       // Perform calculations and set state.

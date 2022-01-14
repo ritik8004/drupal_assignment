@@ -2,14 +2,13 @@ import React from 'react';
 import ConditionalView from '../common/components/conditional-view';
 import PaymentMethodIcon from '../svg-component/payment-method-svg';
 import {
-  getTopUpQuote,
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
   isValidResponse,
   isValidResponseWithFalseResult,
   updatePriceSummaryBlock,
 } from '../utilities/egift_util';
-import { callEgiftApi } from '../../../js/utilities/egiftCardHelper';
+import { callEgiftApi, getTopUpQuote } from '../../../js/utilities/egiftCardHelper';
 import GetEgiftCard from './components/GetEgiftCard';
 import ValidateEgiftCard from './components/ValidateEgiftCard';
 import ValidEgiftCard from './components/ValidEgiftCard';
@@ -98,7 +97,7 @@ export default class RedeemEgiftCard extends React.Component {
         redeem_points: {
           action: 'set_points',
           quote_id: cartData.cart.cart_id_int,
-          amount: cartData.cart.base_grand_total,
+          amount: cartData.cart.totals.base_grand_total,
           card_number: egiftCardNumber,
           payment_method: 'hps_payment',
           card_type: 'guest',

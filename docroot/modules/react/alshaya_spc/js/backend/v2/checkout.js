@@ -41,11 +41,11 @@ import { isCollectionPoint } from '../../utilities/cnc_util';
 import {
   cartContainsOnlyVirtualProduct,
   cartItemIsVirtual,
-  getTopUpQuote,
   isBearerTokenRequired,
   isFullPaymentDoneByEgift,
 } from '../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 

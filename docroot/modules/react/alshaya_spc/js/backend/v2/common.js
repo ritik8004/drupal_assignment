@@ -20,7 +20,8 @@ import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollecti
 import isAuraEnabled from '../../../../js/utilities/helper';
 import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
-import { cartContainsOnlyVirtualProduct, getTopUpQuote, isBearerTokenRequired } from '../../utilities/egift_util';
+import { cartContainsOnlyVirtualProduct, isBearerTokenRequired } from '../../utilities/egift_util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -755,14 +756,15 @@ const validateRequestData = async (request) => {
     return 404;
   }
 
+  // If it's a topup operation then return 200 as we are using guest update cart
+  // endpoint, So we will not get customer id from cart.
+  if (getTopUpQuote() !== null) {
+    return 200;
+  }
   // Backend validation.
   const cartCustomerId = await getCartCustomerId();
   if (drupalSettings.userDetails.customerId > 0) {
     if (!hasValue(cartCustomerId)) {
-      // If it's a topup operation then use customer id from drupal settings.
-      if (getTopUpQuote() !== null) {
-        return 200;
-      }
       // @todo Check if we should associate cart and proceed.
       // Todo copied from middleware.
       return 400;

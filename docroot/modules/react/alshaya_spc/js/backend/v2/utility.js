@@ -1,7 +1,6 @@
 import Axios from 'axios';
-import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import logger from '../../../../js/utilities/logger';
-import { getTopUpQuote } from '../../utilities/egift_util';
 
 /**
  * Get user role authenticated or anonymous.
@@ -96,12 +95,12 @@ const getApiEndpoint = (action, params = {}) => {
     case 'updateCart':
       // Check if Topup is in progress then get topup quoteid and use guest
       // endpoint to perform topup.
-      if (isEgiftCardEnabled()) {
-        topUpQuote = getTopUpQuote();
-        if (topUpQuote !== null) {
-          endPointParams.cartId = topUpQuote.maskedQuoteId;
-        }
+      topUpQuote = getTopUpQuote();
+      if (topUpQuote !== null) {
+        endPointParams.cartId = topUpQuote.maskedQuoteId;
       }
+      // If user is authenticated and trying to topup then we will use guest
+      // update cart endpoint.
       endpoint = isUserAuthenticated() && topUpQuote === null
         ? '/V1/carts/mine/updateCart'
         : `/V1/guest-carts/${endPointParams.cartId}/updateCart`;
@@ -128,12 +127,12 @@ const getApiEndpoint = (action, params = {}) => {
     case 'placeOrder':
       // Check if Topup is in progress then get topup quoteid and use guest
       // endpoint to perform topup.
-      if (isEgiftCardEnabled()) {
-        topUpQuote = getTopUpQuote();
-        if (topUpQuote !== null) {
-          endPointParams.cartId = topUpQuote.maskedQuoteId;
-        }
+      topUpQuote = getTopUpQuote();
+      if (topUpQuote !== null) {
+        endPointParams.cartId = topUpQuote.maskedQuoteId;
       }
+      // If user is authenticated and trying to topup then we will use guest
+      // update cart endpoint.
       endpoint = isUserAuthenticated() && topUpQuote === null
         ? '/V1/carts/mine/order'
         : `/V1/guest-carts/${endPointParams.cartId}/order`;

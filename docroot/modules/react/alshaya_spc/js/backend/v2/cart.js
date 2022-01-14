@@ -21,7 +21,7 @@ import {
 } from '../../../../js/utilities/conditionsUtility';
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import { getExceptionMessageType } from '../../../../js/utilities/error';
-import { getTopUpQuote } from '../../utilities/egift_util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -372,7 +372,7 @@ window.commerceBackend.createCart = async () => {
     });
 
     // If its a guest customer, keep cart_id in the local storage.
-    if (!isUserAuthenticated() || getTopUpQuote() !== null) {
+    if (!isUserAuthenticated()) {
       Drupal.addItemInLocalStorage('cart_id', response.data);
     }
 

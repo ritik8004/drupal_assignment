@@ -5,8 +5,8 @@ import {
 } from '../get_cart';
 import dispatchCustomEvent from '../events';
 import validateCartResponse from '../validation_util';
-import { getTopUpQuote } from '../egift_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId, cncStoresLimit } = args;

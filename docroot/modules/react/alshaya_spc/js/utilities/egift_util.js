@@ -1,5 +1,5 @@
 import React from 'react';
-import { callEgiftApi } from '../../../js/utilities/egiftCardHelper';
+import { callEgiftApi, getTopUpQuote } from '../../../js/utilities/egiftCardHelper';
 import logger from '../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../js/utilities/events';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
@@ -334,6 +334,28 @@ export const isValidResponseWithFalseResult = (response) => hasValue(response.da
   && response.status === 200;
 
 /**
+ * Checks if bearer token should be passed.
+ *
+ * @param {string} action
+ *   The action user is performing.
+ *
+ * @return {boolean}
+ *   Return true is required else false.
+ */
+export const isBearerTokenRequired = (action) => {
+  if (isEgiftCardEnabled()
+    && (action === 'update billing'
+      || action === 'update payment'
+      || action === 'place order'
+      || action === 'update redeem amount')
+    && getTopUpQuote()) {
+    return false;
+  }
+
+  return true;
+};
+
+/**
  * Updates the redeem amount.
  *
  * @param {string} updatedAmount
@@ -347,16 +369,20 @@ export const isValidResponseWithFalseResult = (response) => hasValue(response.da
  *   The result object containing the information of API call.
  */
 export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
+  // Check if user is performing topup, if 'YES' then get the topup masked id.
+  const topUpQuote = getTopUpQuote();
   // Prepare the post data.
   let postData = {
     redemptionRequest: {
       amount: updatedAmount,
-      mask_quote_id: cart.cart_id,
+      mask_quote_id: topUpQuote ? topUpQuote.maskedQuoteId : cart.cart_id,
     },
   };
 
   // Change the post data if user is authenticated.
-  if (isUserAuthenticated()) {
+  // Added check of topup quote as in case of topup, we use guest update
+  // redemption endpoint.
+  if (isUserAuthenticated() && topUpQuote === null) {
     postData = {
       redemptionRequest: {
         amount: updatedAmount,
@@ -370,7 +396,7 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
   };
   showFullScreenLoader();
   // Invoke the redemption API to update the redeem amount.
-  const response = await callEgiftApi('eGiftUpdateAmount', 'POST', postData);
+  const response = await callEgiftApi('eGiftUpdateAmount', 'POST', postData, isBearerTokenRequired('update redeem amount'));
   if (isValidResponse(response)) {
     // Update the cart total.
     updatePriceSummaryBlock(refreshCart);
@@ -414,42 +440,6 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
   }
 
   return result;
-};
-
-/**
- * Checks if Topup is in progress.
- *
- * @returns {object|null}
- *   Returns topup quote object or null.
- */
-export const getTopUpQuote = () => {
-  // Return null if egift card is not enabled.
-  if (!isEgiftCardEnabled()) {
-    return null;
-  }
-
-  return Drupal.getItemFromLocalStorage('topupQuote');
-};
-
-/**
- * Checks if bearer token should be passed.
- *
- * @param {string} action
- *   The action user is performing.
- *
- * @return {boolean}
- *   Return true is required else false.
- */
-export const isBearerTokenRequired = (action) => {
-  if (isEgiftCardEnabled()
-    && (action === 'update billing'
-    || action === 'update payment'
-    || action === 'place order')
-    && getTopUpQuote()) {
-    return false;
-  }
-
-  return true;
 };
 
 /**
