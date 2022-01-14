@@ -1,0 +1,15 @@
+.is-not-buyable,
+.addtobag-config-button,
+.product-drawer-content-wrapper .pdp-link {
+  &:hover {
+    background: $plp-secondary-cta-hover-bg;
+    color: $primary_btn_text;
+  }
+}
+
+.product-drawer-content-wrapper .pdp-link {
+  a:hover {
+    color: $primary_btn_text;
+  }
+}
+
