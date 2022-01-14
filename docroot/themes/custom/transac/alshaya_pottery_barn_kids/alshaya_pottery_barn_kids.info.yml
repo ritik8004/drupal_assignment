@@ -112,3 +112,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css
+
+  alshaya_white_label/wishlist:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/wishlist/wishlist.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/wishlist/wishlist.ltr.css
