@@ -1,7 +1,6 @@
 import React from 'react';
 import PriceElement
   from '../../../../../js/utilities/components/price/price-element';
-import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import logger from '../../../../../js/utilities/logger';
 import {
   removeFullScreenLoader,
@@ -11,6 +10,7 @@ import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
 import MyEgiftTopUp from '../my-egift-top-up';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
+import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
 
 class EgiftCardLinked extends React.Component {
   constructor(props) {
@@ -28,21 +28,22 @@ class EgiftCardLinked extends React.Component {
     e.preventDefault();
     showFullScreenLoader();
     // Call magento API to remove linked eGift card.
-    return callMagentoApi('/V1/egiftcard/unlinkcard', 'POST', {})
-      .then((response) => {
+    const response = callEgiftApi('eGiftUnlinkCard', 'POST', {});
+    if (response instanceof Promise) {
+      response.then((result) => {
         removeFullScreenLoader();
         // Check for error from handleResponse.
-        if (typeof response.data !== 'undefined' && typeof response.data.error !== 'undefined' && response.data.error) {
-          logger.error('Error while unlinking card. @error', { '@error': JSON.stringify(response.data) });
+        if (result.status !== 200) {
+          logger.error('Error while unlinking card. @error', { '@error': JSON.stringify(result.data) });
         }
-
         // Remove card if no error response returned.
-        if (typeof response.data !== 'undefined' && response.data.response_type) {
+        if (typeof result.data !== 'undefined' && result.data.response_type) {
           // Calls parent component method to reset and show link new card form.
           const { removeCard } = this.props;
           removeCard();
         }
       });
+    }
   }
 
   /**
