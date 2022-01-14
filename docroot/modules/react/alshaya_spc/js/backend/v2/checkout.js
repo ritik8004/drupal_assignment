@@ -45,7 +45,7 @@ import {
   isBearerTokenRequired,
   isFullPaymentDoneByEgift,
 } from '../../utilities/egift_util';
-import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 
 window.commerceBackend = window.commerceBackend || {};
 

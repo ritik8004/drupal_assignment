@@ -18,7 +18,7 @@ import { isExpressDeliveryEnabled } from '../../../js/utilities/expressDeliveryH
 import { setDeliveryAreaStorage } from './delivery_area_util';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getTopUpQuote } from './egift_util';
-import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../js/utilities/util';
 import { isUserAuthenticated } from '../../../js/utilities/helper';
 
 /**

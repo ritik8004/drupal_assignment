@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import logger from '../../../../js/utilities/logger';
 import { getTopUpQuote } from '../../utilities/egift_util';
 
