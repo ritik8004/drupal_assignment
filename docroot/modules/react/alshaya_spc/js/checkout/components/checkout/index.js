@@ -34,6 +34,8 @@ import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getCartShippingMethods, getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { checkAreaAvailabilityStatusOnCart, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 window.fetchStore = 'idle';
 
@@ -49,6 +51,7 @@ export default class Checkout extends React.Component {
       messageType: null,
       errorSuccessMessage: null,
       isPostpayInitialised: false,
+      isExpressDeliveryAvailable: false,
     };
   }
 
@@ -68,7 +71,6 @@ export default class Checkout extends React.Component {
             redirectToCart();
             return;
           }
-
           // Redirect to basket if uid don't match, we will handle
           // association and everything there.
           if (result.uid !== drupalSettings.user.uid) {
@@ -79,7 +81,37 @@ export default class Checkout extends React.Component {
           document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
 
           this.processAddressFromLocalStorage(result);
-          this.processCheckout(result);
+
+          // Check if SSD/ED is enabled.
+          if (isExpressDeliveryEnabled()) {
+            try {
+              const cartId = result.cart_id_int;
+              if (cartId) {
+                // Get shipping Methods for the selected Area
+                // product may support SSD/ED, but for selected area,
+                // It might be disabled.
+                const areaSelected = getDeliveryAreaStorage();
+                getCartShippingMethods(areaSelected, null, cartId).then(
+                  (response) => {
+                    if (response !== null) {
+                      // Show prefilled area when SDD/ED is available.
+                      if (!hasValue(response.error)
+                        && checkAreaAvailabilityStatusOnCart(response)) {
+                        this.setState({
+                          isExpressDeliveryAvailable: true,
+                        });
+                      }
+                      this.processCheckout(result);
+                    }
+                  },
+                );
+              }
+            } catch (error) {
+              Drupal.logJavascriptError('Could not fetch shipping methods', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+            }
+          } else {
+            this.processCheckout(result);
+          }
         });
       } else {
         redirectToCart();
@@ -269,6 +301,7 @@ export default class Checkout extends React.Component {
       errorSuccessMessage,
       messageType,
       isPostpayInitialised,
+      isExpressDeliveryAvailable,
     } = this.state;
     // While page loads and all info available.
 
@@ -310,7 +343,11 @@ export default class Checkout extends React.Component {
 
             <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
             <ClicknCollectContextProvider cart={cart}>
-              <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
+              <DeliveryInformation
+                refreshCart={this.refreshCart}
+                cart={cart}
+                isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+              />
             </ClicknCollectContextProvider>
 
             <ConditionalView condition={isAuraEnabled()}>
