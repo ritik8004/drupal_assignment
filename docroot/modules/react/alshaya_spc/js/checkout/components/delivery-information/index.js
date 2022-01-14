@@ -40,7 +40,7 @@ export default class DeliveryInformation extends React.Component {
   };
 
   render() {
-    const { cart, refreshCart } = this.props;
+    const { cart, refreshCart, isExpressDeliveryAvailable } = this.props;
 
     let title = '';
     if (cart.delivery_type !== undefined) {
@@ -61,9 +61,21 @@ export default class DeliveryInformation extends React.Component {
 
     let deliveryComponent = null;
     if (this.showEmpty(cart)) {
-      deliveryComponent = <EmptyDeliveryText cart={cart} refreshCart={refreshCart} />;
+      deliveryComponent = (
+        <EmptyDeliveryText
+          cart={cart}
+          refreshCart={refreshCart}
+          isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+        />
+      );
     } else if (deliveryType === 'home_delivery') {
-      deliveryComponent = <HomeDeliveryInfo cart={cart} refreshCart={refreshCart} />;
+      deliveryComponent = (
+        <HomeDeliveryInfo
+          cart={cart}
+          refreshCart={refreshCart}
+          isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+        />
+      );
     } else if (deliveryType === 'click_and_collect') {
       deliveryComponent = <ClicknCollectDeiveryInfo cart={cart} refreshCart={refreshCart} />;
     }
