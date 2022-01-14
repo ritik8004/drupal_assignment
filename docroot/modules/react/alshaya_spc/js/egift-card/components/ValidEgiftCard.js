@@ -101,7 +101,10 @@ export default class ValidEgiftCard extends React.Component {
       // Call the egift link card endpoint if checkbox is checked.
       if (egiftLinkCard) {
         const response = callEgiftApi('eGiftLinkCard', 'POST', {
-          card_number: egiftCardNumber,
+          link_data: {
+            action: 'verified_redemption_link',
+            card_number: egiftCardNumber,
+          },
         });
         if (response instanceof Promise) {
           response.then((result) => {

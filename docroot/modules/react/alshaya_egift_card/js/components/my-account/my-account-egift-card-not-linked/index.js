@@ -28,10 +28,15 @@ class EgiftCardNotLinked extends React.Component {
   /**
    * Get opt code for card number verification.
    */
-  getOtpCode = () => {
-    // Get logged in user email address.
-    const { userEmailID } = drupalSettings.userDetails;
-    return callMagentoApi(`/V1/sendemailotp/email/${userEmailID}`, 'GET', {})
+  getOtpCode = (cardNumber) => {
+    // Prepare params for send otp api.
+    const params = {
+      link_data: {
+        action: 'send_otp',
+        card_number: cardNumber,
+      },
+    };
+    return callMagentoApi('/V1/egiftcard/link', 'POST', params)
       .then((response) => {
         removeFullScreenLoader();
         // Check for error from handleResponse.
@@ -41,8 +46,15 @@ class EgiftCardNotLinked extends React.Component {
           return false;
         }
 
+        // Check error from magento
+        if (typeof response.data !== 'undefined' && response.data.response_type === false) {
+          document.getElementById('egift-card-number-error').innerHTML = response.data.response_message;
+          logger.error('Error while unlinking card. @error', { '@error': JSON.stringify(response.data) });
+          return false;
+        }
+
         // If response is true, otp is send, show verify otp fields.
-        if (typeof response.data !== 'undefined' && response.data === true) {
+        if (typeof response.data !== 'undefined' && response.data.response_type) {
           this.setState({
             enableVerifyCode: true,
           });
@@ -135,8 +147,14 @@ class EgiftCardNotLinked extends React.Component {
         showFullScreenLoader();
 
         // Verify otp.
-        const { userEmailID } = drupalSettings.userDetails;
-        callMagentoApi(`/V1/verifyemailotp/email/${userEmailID}/otp/${otp}`, 'GET').then((response) => {
+        const params = {
+          link_data: {
+            action: 'verify_otp_link',
+            card_number: cardNumber,
+            otp,
+          },
+        };
+        callMagentoApi('/V1/egiftcard/link', 'POST', params).then((response) => {
           // Check for error from handleResponse.
           if (typeof response.data !== 'undefined' && typeof response.data.error !== 'undefined' && response.data.error) {
             document.getElementById('egift-code-error').innerHTML = response.data.error_message;
@@ -145,29 +163,18 @@ class EgiftCardNotLinked extends React.Component {
             return false;
           }
 
+          // Check for error from magento.
+          if (typeof response.data !== 'undefined' && response.data.response_type === false) {
+            document.getElementById('egift-code-error').innerHTML = response.data.response_message;
+            logger.error('Error while verifying otp. @error', { '@error': JSON.stringify(response.data) });
+            removeFullScreenLoader();
+            return false;
+          }
+
           // If response is true, otp is verified, link card to the customer.
-          if (typeof response.data !== 'undefined' && response.data === true) {
-            // Get params for link card api.
-            const params = {
-              card_number: cardNumber,
-              customerId: drupalSettings.userDetails.customerId,
-            };
-
-            // Call link eGift card API.
-            callMagentoApi('/V1/egiftcard/link', 'POST', params).then((result) => {
-              removeFullScreenLoader();
-              // Check for error from handleResponse.
-              if (typeof result.data !== 'undefined' && typeof result.data.error !== 'undefined' && result.data.error) {
-                document.getElementById('egift-code-error').innerHTML = result.data.error_message;
-                logger.error('Error while linking card to customer. @error', { '@error': JSON.stringify(result.data) });
-              }
-
-              // If response type is true, then show linked card.
-              if (typeof result.data !== 'undefined' && result.data.response_type === true) {
-                const { showCard } = this.props;
-                showCard();
-              }
-            });
+          if (typeof response.data !== 'undefined' && response.data.response_type) {
+            const { showCard } = this.props;
+            showCard();
           }
           return true;
         });
@@ -176,7 +183,7 @@ class EgiftCardNotLinked extends React.Component {
       }
       default: {
         showFullScreenLoader();
-        this.getOtpCode();
+        this.getOtpCode(cardNumber);
       }
     }
   }
@@ -218,7 +225,6 @@ class EgiftCardNotLinked extends React.Component {
               name="egift-card-number"
               className="egift-card-number"
               readOnly={enableVerifyCode}
-              onFocus={() => this.clearErrors()}
               onBlur={(e) => this.handleEvent(e)}
             />
             <div className="c-input__bar" />
