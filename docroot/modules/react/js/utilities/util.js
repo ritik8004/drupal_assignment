@@ -12,3 +12,16 @@ export default function getCurrencyCode() {
 
   return null;
 }
+
+/**
+ * Helper function to check if egift card is enabled.
+ */
+export const isEgiftCardEnabled = () => {
+  let egiftCardStatus = false;
+  if (typeof drupalSettings.egiftCard !== 'undefined'
+    && typeof drupalSettings.egiftCard.enabled !== 'undefined') {
+    egiftCardStatus = drupalSettings.egiftCard.enabled;
+  }
+
+  return egiftCardStatus;
+};

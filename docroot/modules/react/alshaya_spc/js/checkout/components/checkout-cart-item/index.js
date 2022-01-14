@@ -7,7 +7,7 @@ import CartPromotion from '../../../cart/components/cart-promotion';
 import ProductFlag from '../../../utilities/product-flag';
 import CartItemFree from '../../../cart/components/cart-item-free';
 import Notifications from '../../../cart/components/cart-item/components/Notifications';
-import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
 
 class CheckoutCartItem extends React.Component {

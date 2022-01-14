@@ -6,7 +6,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import DynamicPromotionCode from './DynamicPromotionCode';
 import { openCartFreeGiftModal, getCartFreeGiftModalId } from '../../../utilities/free_gift_util';
 import Advantagecard from '../../../utilities/advantagecard';
-import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
 
 export default class CartPromoBlock extends React.Component {

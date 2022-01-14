@@ -16,7 +16,7 @@ import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
 import { cartContainsOnlyVirtualProduct, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
-import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 

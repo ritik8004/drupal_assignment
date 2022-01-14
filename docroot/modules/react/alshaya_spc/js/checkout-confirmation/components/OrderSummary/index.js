@@ -12,7 +12,7 @@ import PriceElement from '../../../utilities/special-price/PriceElement';
 import getStringMessage from '../../../utilities/strings';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
-import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import EgiftOrderSummaryItem from '../../../egift-card/components/egift-order-summary-item';
 
 const OrderSummary = (props) => {

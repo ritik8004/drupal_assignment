@@ -19,7 +19,7 @@ import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import isAuraEnabled from '../../../../js/utilities/helper';
 import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
-import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 
 window.authenticatedUserCartId = 'NA';

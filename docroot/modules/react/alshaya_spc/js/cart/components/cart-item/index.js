@@ -27,7 +27,7 @@ import WishlistContainer from '../../../../../js/utilities/components/wishlist-c
 import WishlistPopupBlock from '../../../wishlist/components/popup-block';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
-import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
 
 export default class CartItem extends React.Component {

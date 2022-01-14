@@ -2,13 +2,13 @@ import React from 'react';
 import ConditionalView from '../common/components/conditional-view';
 import PaymentMethodIcon from '../svg-component/payment-method-svg';
 import {
-  callEgiftApi,
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
   isValidResponse,
   isValidResponseWithFalseResult,
   updatePriceSummaryBlock,
 } from '../utilities/egift_util';
+import { callEgiftApi } from '../../../js/utilities/egiftCardHelper';
 import GetEgiftCard from './components/GetEgiftCard';
 import ValidateEgiftCard from './components/ValidateEgiftCard';
 import ValidEgiftCard from './components/ValidEgiftCard';
@@ -17,7 +17,7 @@ import {
   showFullScreenLoader,
 } from '../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
-import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../js/utilities/util';
 import dispatchCustomEvent from '../../../js/utilities/events';
 import { isUserAuthenticated } from '../../../js/utilities/helper';
 import logger from '../../../js/utilities/logger';

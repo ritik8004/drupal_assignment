@@ -39,7 +39,7 @@ import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/u
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
 import { cartContainsOnlyVirtualProduct, cartItemIsVirtual, isFullPaymentDoneByEgift } from '../../utilities/egift_util';
-import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 
 window.commerceBackend = window.commerceBackend || {};
 
