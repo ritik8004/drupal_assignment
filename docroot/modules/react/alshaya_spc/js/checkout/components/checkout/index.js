@@ -34,7 +34,7 @@ import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getCartShippingMethods, getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 import { checkAreaAvailabilityStatusOnCart, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 window.fetchStore = 'idle';
@@ -87,11 +87,8 @@ export default class Checkout extends React.Component {
             try {
               const cartId = result.cart_id_int;
               if (cartId) {
-                // Get shipping Methods for the selected Area
-                // product may support SSD/ED, but for selected area,
-                // It might be disabled.
-                const areaSelected = getDeliveryAreaStorage();
-                getCartShippingMethods(areaSelected, null, cartId).then(
+                // Get shipping Methods on product level.
+                getCartShippingMethods(null, null, cartId).then(
                   (response) => {
                     if (response !== null) {
                       // Show prefilled area when SDD/ED is available.
