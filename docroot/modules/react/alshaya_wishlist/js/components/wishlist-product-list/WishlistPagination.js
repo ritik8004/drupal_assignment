@@ -19,7 +19,11 @@ const PaginationStats = connectStats(({ nbHits, currentResults }) => (
 ));
 
 const WishlistPagination = React.memo((props) => {
-  const loadNextCotent = () => {
+  const loadNextCotent = (e) => {
+    e.preventDefault();
+    e.persist();
+    e.stopPropagation();
+
     showLoader();
     props.refineNext();
   };
@@ -35,7 +39,7 @@ const WishlistPagination = React.memo((props) => {
             type="button"
             className="button"
             rel="next"
-            onClick={() => loadNextCotent()}
+            onClick={(e) => loadNextCotent(e)}
           >
             {props.children}
           </button>
