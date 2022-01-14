@@ -132,17 +132,16 @@
     var data = null;
 
     try {
-      data = JSON.parse(localStorage.getItem(key));
+      data = Drupal.getItemFromLocalStorage(key);
     }
     catch (e) {
       // Do nothing, we will use PDP API to get the info again.
     }
 
-    var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
-    var currentTime = new Date().getTime();
-    if (data !== null && ((currentTime - data.created) < expireTime)) {
+    if (data) {
       return data;
     }
+
     return false;
   };
 
