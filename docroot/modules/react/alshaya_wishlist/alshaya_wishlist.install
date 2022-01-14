@@ -6,6 +6,8 @@
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
 
 /**
  * Implements hook_install().
@@ -37,6 +39,15 @@ function alshaya_wishlist_install() {
   $alshaya_wishlist['alshaya_wishlist'] = 'alshaya_wishlist';
   $config->set('my_account_enabled_links', serialize($alshaya_wishlist));
   $config->save();
+
+  // Adjust wishlist header block weight so this appears
+  // before the alshayareactcartminicartblock block.
+  $wishlist_header_block = Block::load('alshayawishlistheaderblock');
+  $minicart_header_block = Block::load('alshayareactcartminicartblock');
+  if (($wishlist_header_block instanceof BlockInterface) && ($minicart_header_block instanceof BlockInterface)) {
+    $wishlist_header_block->setWeight(($minicart_header_block->getWeight()) - 1);
+    $wishlist_header_block->save();
+  }
 }
 
 /**
