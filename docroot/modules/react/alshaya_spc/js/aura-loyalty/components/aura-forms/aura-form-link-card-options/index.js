@@ -30,7 +30,7 @@ class AuraFormLinkCardOptions extends React.Component {
             name="linking-options"
             value="mobile"
             className="linking-option-radio"
-            defaultChecked={selectedOption === 'mobile'}
+            checked={selectedOption === 'mobile'}
           />
           <label
             className="aura-radio-sim"
@@ -46,7 +46,7 @@ class AuraFormLinkCardOptions extends React.Component {
             name="linking-options"
             value="cardNumber"
             className="linking-option-radio"
-            defaultChecked={selectedOption === 'cardNumber'}
+            checked={selectedOption === 'cardNumber'}
           />
           <label
             className="aura-radio-sim"
@@ -62,7 +62,7 @@ class AuraFormLinkCardOptions extends React.Component {
             name="linking-options"
             value="email"
             className="linking-option-radio"
-            defaultChecked={selectedOption === 'email'}
+            checked={selectedOption === 'email'}
           />
           <label
             className="aura-radio-sim"
