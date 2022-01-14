@@ -230,6 +230,7 @@ export default class AddressItem extends React.Component {
                       show_prefered
                       default_val={editAddressData}
                       processAddress={this.processAddress}
+                      fillDefaultValue
                     />
                   </>
                 </Popup>

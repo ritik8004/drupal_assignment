@@ -233,6 +233,7 @@ export default class EmptyDeliveryText extends React.Component {
         cart: cartVal,
       },
       cart: mainCart,
+      isExpressDeliveryAvailable,
     } = this.props;
 
     let defaultVal = null;
@@ -310,6 +311,7 @@ export default class EmptyDeliveryText extends React.Component {
                       type="shipping"
                       showEmail={drupalSettings.user.uid === 0}
                       default_val={defaultVal}
+                      isExpressDeliveryAvailable={isExpressDeliveryAvailable}
                     />
                   </React.Suspense>
                 )}

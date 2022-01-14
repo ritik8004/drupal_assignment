@@ -97,10 +97,20 @@ export default class AddressList extends React.Component {
     }
 
     const {
-      cart, closeModal, headingText, showEditButton, type, formContext, areaUpdated,
+      cart,
+      closeModal,
+      headingText,
+      showEditButton,
+      type,
+      formContext,
+      areaUpdated,
+      isExpressDeliveryAvailable,
     } = this.props;
 
     const processNewAddressForAddressChange = isExpressDeliveryEnabled() && areaUpdated;
+    const isExpressDeliveryAvailableOnCheckout = isExpressDeliveryEnabled()
+      && areaUpdated
+      && isExpressDeliveryAvailable;
 
     const addressItem = [];
     // Get Selected Area.
@@ -195,6 +205,7 @@ export default class AddressList extends React.Component {
                     headingText={headingText}
                     processAddress={this.processAddress}
                     formContext={formContext}
+                    isExpressDeliveryAvailable={isExpressDeliveryAvailableOnCheckout}
                   />
                 </Popup>
               </>
