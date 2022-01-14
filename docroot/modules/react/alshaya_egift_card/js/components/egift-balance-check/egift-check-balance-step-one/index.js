@@ -148,11 +148,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                       className="egift-button"
                       id="egift-button"
                       type="submit"
-                      value={Drupal.t(
-                        'Check balance',
-                        {},
-                        { context: 'egift' },
-                      )}
+                      value={Drupal.t('CHECK BALANCE', {}, { context: 'egift' })}
                     />
                   </div>
                 </form>
