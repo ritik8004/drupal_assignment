@@ -197,7 +197,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                   <div className="egift-header-wrapper">
                     <p>
                       {Drupal.t(
-                        'Enter gift card details to check balance & validity',
+                        'Enter gift card details to check balance & validity.',
                         {},
                         { context: 'egift' },
                       )}
@@ -214,7 +214,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                     />
                     <div className="c-input__bar" />
                     <label>
-                      {Drupal.t('eGift Card Number*', {}, { context: 'egift' })}
+                      {Drupal.t('eGift Card Number', {}, { context: 'egift' })}
                     </label>
                     <div id="egift_card_number_error" className="error" />
                   </div>
@@ -228,7 +228,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                     />
                     <div className="c-input__bar" />
                     <label>
-                      {Drupal.t('eGift Card Otp*', {}, { context: 'egift' })}
+                      {Drupal.t('Enter verification code', {}, { context: 'egift' })}
                     </label>
                     <div id="egift_card_otp_error" className="error" />
                   </div>
@@ -282,7 +282,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                     {cardNumber.slice(-4)}
                   </p>
                   <p className="egift-valid-text">
-                    {Drupal.t('Card valid up to ', {}, { context: 'egift' })}
+                    {Drupal.t('Card valid up to', {}, { context: 'egift' })}
                     {egiftCardvalidity}
                   </p>
                   <div className="egift-topup-btn-wrapper">

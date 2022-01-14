@@ -34,11 +34,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
       errors = true;
     } else if (!egiftCardNumber.match(/^[a-z0-9A-Z]+$/i)) {
       // Check if the card number is valid or not.
-      message = Drupal.t(
-        'Please enter a valid eGift card number.',
-        {},
-        { context: 'egift' },
-      );
+      message = Drupal.t('Please enter a valid eGift card number.', {}, { context: 'egift' });
       errors = true;
     } else {
       message = '';
