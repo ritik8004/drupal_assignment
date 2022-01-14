@@ -41,7 +41,6 @@ import { isCollectionPoint } from '../../utilities/cnc_util';
 import {
   cartContainsOnlyVirtualProduct,
   cartItemIsVirtual,
-  isBearerTokenRequired,
   isFullPaymentDoneByEgift,
 } from '../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
@@ -2193,9 +2192,10 @@ window.commerceBackend.placeOrder = async (data) => {
     cartId: window.commerceBackend.getCartId(),
   };
 
-  // As we are using guest cart update in case of Topup, we will not pass
+  // As we are using guest cart update in case of Topup, we will not use
   // bearerToken.
-  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT', null, isBearerTokenRequired('place order'))
+  const bearerToken = (getTopUpQuote() === null);
+  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT', null, bearerToken)
     .then(async (response) => {
       const result = {
         success: true,

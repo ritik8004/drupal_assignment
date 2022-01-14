@@ -334,28 +334,6 @@ export const isValidResponseWithFalseResult = (response) => hasValue(response.da
   && response.status === 200;
 
 /**
- * Checks if bearer token should be passed.
- *
- * @param {string} action
- *   The action user is performing.
- *
- * @return {boolean}
- *   Return true is required else false.
- */
-export const isBearerTokenRequired = (action) => {
-  if (isEgiftCardEnabled()
-    && (action === 'update billing'
-      || action === 'update payment'
-      || action === 'place order'
-      || action === 'update redeem amount')
-    && getTopUpQuote()) {
-    return false;
-  }
-
-  return true;
-};
-
-/**
  * Updates the redeem amount.
  *
  * @param {string} updatedAmount
@@ -395,8 +373,12 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
     message: '',
   };
   showFullScreenLoader();
+  // As we are using guest edit amount redemption in case of Topup, we will not
+  // use bearerToken.
+  const bearerToken = (getTopUpQuote() === null);
+
   // Invoke the redemption API to update the redeem amount.
-  const response = await callEgiftApi('eGiftUpdateAmount', 'POST', postData, isBearerTokenRequired('update redeem amount'));
+  const response = await callEgiftApi('eGiftUpdateAmount', 'POST', postData, bearerToken);
   if (isValidResponse(response)) {
     // Update the cart total.
     updatePriceSummaryBlock(refreshCart);

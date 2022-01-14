@@ -20,7 +20,7 @@ import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollecti
 import isAuraEnabled from '../../../../js/utilities/helper';
 import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
-import { cartContainsOnlyVirtualProduct, isBearerTokenRequired } from '../../utilities/egift_util';
+import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.authenticatedUserCartId = 'NA';
@@ -844,7 +844,13 @@ const updateCart = async (postData) => {
 
   // As we are using guest cart update in case of Topup, we will not pass
   // bearerToken.
-  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data), isBearerTokenRequired(action))
+  let bearerToken = true;
+  if ((action === 'update billing'
+    || action === 'update payment')
+    && getTopUpQuote()) {
+    bearerToken = false;
+  }
+  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data), bearerToken)
     .then((response) => {
       if (!hasValue(response.data)
         || (hasValue(response.data.error) && response.data.error)) {
