@@ -4,7 +4,7 @@ const PageEmptyMessage = (message) => (
   <div className="empty-message">
     <div className="text">{message}</div>
     <div className="actions">
-      <a href={Drupal.url('')}>{Drupal.t('Continue shopping')}</a>
+      <a href={Drupal.url('')}>{Drupal.t('go shopping')}</a>
     </div>
   </div>
 );
