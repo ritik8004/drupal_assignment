@@ -15,7 +15,6 @@ import {
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import {
   getDefaultErrorMessage,
-  getProcessedErrorMessage,
 } from '../../../../js/utilities/error';
 import logger from '../../../../js/utilities/logger';
 import Loading from '../../../../js/utilities/loading';
@@ -32,6 +31,7 @@ export default class EgiftTopPurchase extends React.Component {
       linkedCardBalance: null, // User linked card balance.
       disableSubmit: true, // Flag to enable / disable top-up submit button.
       displayFormError: '', // Display form errors.
+      cardNumberError: '', // Display card number error.
     };
   }
 
@@ -114,6 +114,7 @@ export default class EgiftTopPurchase extends React.Component {
     // Unset any errors displayed in previous submission.
     this.setState({
       displayFormError: '',
+      cardNumberError: '',
     });
 
     // Get Form data.
@@ -180,14 +181,19 @@ export default class EgiftTopPurchase extends React.Component {
         }
 
         // In case of 200 response but with error process error message to display and log error.
-        if (typeof response.data.response_type !== 'undefined' && response.data.response_type === false) {
-          let message = getProcessedErrorMessage(response);
-          if (message === undefined) {
-            message = getDefaultErrorMessage();
+        if (typeof response.data !== 'undefined' && response.data.response_type === false) {
+          // If egift card is for others, then show card number error.
+          if (egiftCardFor === 'other') {
+            this.setState({
+              cardNumberError: response.data.response_message,
+            });
+            this.logAddTopupError(params, response);
+          } else {
+            // Show response error on submit.
+            this.setState({
+              displayFormError: response.data.response_message,
+            }, () => this.logAddTopupError(params, response));
           }
-          this.setState({
-            displayFormError: message,
-          }, () => this.logAddTopupError(params, response));
         }
 
         // Redirect user to checkout if response type is true.
@@ -208,6 +214,7 @@ export default class EgiftTopPurchase extends React.Component {
       linkedCardNumber,
       linkedCardBalance,
       displayFormError,
+      cardNumberError,
     } = this.state;
 
     if (wait && topUpCard === null) {
@@ -233,6 +240,7 @@ export default class EgiftTopPurchase extends React.Component {
                 <EgiftTopupFor
                   linkedCardNumber={linkedCardNumber}
                   linkedCardBalance={linkedCardBalance}
+                  cardNumberError={cardNumberError}
                 />
                 <EgiftCardAmount
                   selected={topUpCard}

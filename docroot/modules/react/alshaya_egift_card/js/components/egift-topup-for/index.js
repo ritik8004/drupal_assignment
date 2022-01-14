@@ -40,6 +40,7 @@ export default class EgiftTopupFor extends React.Component {
     const {
       linkedCardNumber,
       linkedCardBalance,
+      cardNumberError,
     } = this.props;
 
     return (
@@ -111,7 +112,9 @@ export default class EgiftTopupFor extends React.Component {
                 onFocus={(e) => this.handleOnFocus(e)}
                 onBlur={(e) => this.handleEvent(e)}
               />
-              <div className="error" id="card-number-error" />
+              <div className="error" id="card-number-error">
+                {cardNumberError}
+              </div>
               <div className="c-input__bar" />
               <label>{Drupal.t('eGift Card Number', {}, { context: 'egift' })}</label>
             </div>
