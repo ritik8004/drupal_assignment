@@ -39,7 +39,7 @@ const WishlistPagination = React.memo((props) => {
             type="button"
             className="button"
             rel="next"
-            onClick={() => loadNextCotent()}
+            onClick={(e) => loadNextCotent(e)}
           >
             {props.children}
           </button>
