@@ -5,7 +5,6 @@
  * Module file.
  */
 
-use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -64,9 +63,9 @@ function alshaya_stores_finder_transac_preprocess_views_view_field__field_store_
   /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_finder_utility */
   $store_finder_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
 
-  /* @var \Drupal\node\Entity\Node $node */
+  /** @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
-  /* @var \Drupal\Core\Entity\EntityRepository $entity_repository */
+  /** @var \Drupal\Core\Entity\EntityRepository $entity_repository */
   $entity_repository = \Drupal::service('entity.repository');
   $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   // Get correct translated node in current language.

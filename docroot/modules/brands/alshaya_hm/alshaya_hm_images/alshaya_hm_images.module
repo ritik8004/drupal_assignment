@@ -7,10 +7,8 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Block\BlockPluginInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 
@@ -150,7 +148,8 @@ function alshaya_hm_images_alshaya_acm_product_media_items_alter(array &$media, 
 
   foreach ($assets ?? [] as $asset) {
     if (!empty($asset['drupal_uri'])) {
-      $asset['media_type'] = $assetsManager->getAssetType($asset);;
+      $asset['media_type'] = $assetsManager->getAssetType($asset);
+
       $media[] = $asset;
     }
   }
@@ -300,7 +299,7 @@ function alshaya_hm_images_block_view_alter(array &$build, BlockPluginInterface 
 }
 
 /**
- * Implements hook_alshaya_acm_product_pdp_swath_type_alter();
+ * Implements hook_alshaya_acm_product_pdp_swath_type_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
   /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_asset_manager */

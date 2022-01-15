@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Install, update and uninstall functions for the alshaya_vat module.
@@ -13,8 +14,8 @@ function alshaya_vat_install() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-      'block.block.alshayavatcertificateblock',
-    ],
+    'block.block.alshayavatcertificateblock',
+  ],
     'alshaya_vat',
     'install',
     $manager::MODE_REPLACE

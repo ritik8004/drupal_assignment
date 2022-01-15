@@ -317,7 +317,7 @@ function whitelabel_preprocess_field__node__field_store_open_hours__store(&$vari
  * Implements hook_preprocess_views_view_field().
  */
 function whitelabel_preprocess_views_view_field__stores_finder__page_1__field_store_open_hours(&$variables) {
-  /* @var \Drupal\node\Entity\Node $node */
+  /** @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
   $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
   $output = $node->field_store_open_hours->view('default');
@@ -328,7 +328,7 @@ function whitelabel_preprocess_views_view_field__stores_finder__page_1__field_st
  * Implements hook_preprocess_views_view_field().
  */
 function whitelabel_preprocess_views_view_field__stores_finder__page_3__field_store_open_hours(&$variables) {
-  /* @var \Drupal\node\Entity\Node $node */
+  /** @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
   $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
   $output = $node->field_store_open_hours->view('default');
@@ -339,7 +339,7 @@ function whitelabel_preprocess_views_view_field__stores_finder__page_3__field_st
  * Implements hook_preprocess_views_view_field().
  */
 function whitelabel_preprocess_views_view_field__stores_finder__attachment_1__field_store_open_hours(&$variables) {
-  /* @var \Drupal\node\Entity\Node $node */
+  /** @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
   $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
   $output = $node->field_store_open_hours->view('default');
@@ -354,7 +354,7 @@ function whitelabel_preprocess_views_view_unformatted__store_list(&$variables) {
   if ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_1') {
     if (!empty($variables['rows'])) {
       foreach ($variables['rows'] as $key => $row) {
-        /* @var \Drupal\node\Entity\Node $store_node */
+        /** @var \Drupal\node\Entity\Node $store_node */
         $store_node = $row['content']['#row']->_entity;
         $store_node = \Drupal::service('entity.repository')->getTranslationFromContext($store_node);
         if ($latitude_longitude = $store_node->get('field_latitude_longitude')) {

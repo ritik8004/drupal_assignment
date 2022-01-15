@@ -45,7 +45,7 @@ function alshaya_search_api_theme($existing, $type, $theme, $path) {
  *   Index name from which field needs to be removed.
  */
 function _alshaya_search_api_remove_field_from_indexes($field_code, $index) {
-  /* @var \Drupal\search_api\Entity\Index $index */
+  /** @var \Drupal\search_api\Entity\Index $index */
   $index = Index::load($index);
 
   if ($index->getField($field_code)) {

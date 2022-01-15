@@ -35,7 +35,7 @@ function alshaya_mc_node_view(array &$build, EntityInterface $entity, EntityView
       }
 
       // Trim the short description.
-      /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+      /** @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
       $product_helper = \Drupal::service('alshaya_acm_product.helper');
       $short_desc = $product_helper->createShortDescription($return['short_desc']['value']['#markup']);
       // If there is 'readmore' available only then process.

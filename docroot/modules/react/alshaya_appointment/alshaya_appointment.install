@@ -22,7 +22,7 @@ function alshaya_appointment_update_8003() {
   $translation = [
     'No stores are available in this location. Please try a different area.' => [
       'ar' => 'لا توجد محلات متوفرة في هذه المنطقة. يرجى اختيار منطقة مختلفة.',
-    ]
+    ],
   ];
   alshaya_i18n_save_translations($translation);
 }

@@ -28,7 +28,7 @@ function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id)
  * Implements template_preprocess_block().
  */
 function alshaya_hm_preprocess_block(&$variables) {
-  // @Todo: Figure out which block needs this preprocess & add a test around plugin id to avoid this being called for all blocks.
+  // @todo Figure out which block needs this preprocess & add a test around plugin id to avoid this being called for all blocks.
   // Set alshaya-private-card image path.
   $image_path = drupal_get_path('module', 'alshaya_hm') . '/images/alshaya-priv-card.svg';
   if ($variables['base_plugin_id'] == 'join_the_club') {
@@ -259,7 +259,10 @@ function alshaya_hm_acq_sku_product_sku_alter(SKU $sku, array $product) {
   }
   else {
     if (!empty($sku->get('attr_composition')->getString())) {
-      \Drupal::logger('alshaya_hm')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', ['@sku' => $sku->getSku(), '@json' => $sku->get('attr_composition')->getString()]);
+      \Drupal::logger('alshaya_hm')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', [
+        '@sku' => $sku->getSku(),
+        '@json' => $sku->get('attr_composition')->getString(),
+      ]);
     }
 
     $sku->set('attr_composition', NULL);
@@ -401,10 +404,11 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
               $object['collection_labels'][$lan_key][$attribute] = $sku->get($attribute)->getString();
             }
           }
-          $object['collection_labels'] = $object['collection_labels'] ?? (object)$object['collection_labels'];
+          $object['collection_labels'] = $object['collection_labels'] ?? (object) $object['collection_labels'];
         }
       }
-    } else {
+    }
+    else {
       $sku = _alshaya_hm_get_language_specific_data($object['search_api_language'], $object['sku'], $node);
       if (!empty($label_attributes) && $sku) {
         foreach ($label_attributes as $attribute) {
@@ -412,7 +416,7 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
             $object['collection_labels'][$attribute] = $sku->get($attribute)->getString();
           }
         }
-        $object['collection_labels'] = $object['collection_labels'] ?? (object)$object['collection_labels'];
+        $object['collection_labels'] = $object['collection_labels'] ?? (object) $object['collection_labels'];
         $concept_values = $sku->get('attr_concept')->getValue();
         if (!empty($concept_values)) {
           $object['attr_concept'] = array_map(function ($item) {
@@ -503,7 +507,7 @@ function alshaya_hm_alshaya_product_list_exclude_attribute_alter(array &$exclude
 /**
  * Get Language specific SKU and Node.
  */
-function _alshaya_hm_get_language_specific_data($lang, $sku_data, $node){
+function _alshaya_hm_get_language_specific_data($lang, $sku_data, $node) {
   $sku = SKU::loadFromSku($sku_data, $lang);
   if (!($sku instanceof SKUInterface)) {
     return FALSE;

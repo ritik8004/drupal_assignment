@@ -15,7 +15,7 @@ use Drupal\block\BlockInterface;
 
 /**
  * Implements hook_update_N().
- * 
+ *
  * Updating entity view display to hide DY banner name
  * from PLP and advanced page from website.
  */
@@ -24,7 +24,7 @@ function alshaya_acm_product_category_update_8046() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
-      'core.entity_view_display.taxonomy_term.acq_product_category.default'
+      'core.entity_view_display.taxonomy_term.acq_product_category.default',
     ],
     'alshaya_acm_product_category',
     'install',
@@ -33,7 +33,7 @@ function alshaya_acm_product_category_update_8046() {
   // Hide banner title from advanced pages.
   $manager->updateConfigs(
     [
-      'core.entity_view_display.paragraph.promo_block.default'
+      'core.entity_view_display.paragraph.promo_block.default',
     ],
     'alshaya_paragraphs',
     'install',
@@ -495,7 +495,7 @@ function alshaya_acm_product_category_update_8027() {
  * Add new field to store original category.
  */
 function alshaya_acm_product_category_update_8026() {
-  /* @var \Drupal\alshaya_config\AlshayaConfigManager $config_manager */
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $config_manager */
   $config_manager = \Drupal::service('alshaya_config.manager');
 
   $configs = [
@@ -533,7 +533,7 @@ function alshaya_acm_product_category_update_8026() {
  * Making 'field_plp_menu' paragraph field non-translatable.
  */
 function alshaya_acm_product_category_update_8025() {
-  /* @var \Drupal\alshaya_config\AlshayaConfigManager $config_manager */
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $config_manager */
   $config_manager = \Drupal::service('alshaya_config.manager');
   $configs = [
     'field.field.taxonomy_term.acq_product_category.field_plp_menu',
