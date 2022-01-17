@@ -279,7 +279,7 @@ function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings,
       $settings['order_details']['items'][$itemKey]['isTopUp'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->is_topup ?? FALSE;
       $settings['order_details']['items'][$itemKey]['topupCardNumber'] = $order['extension']['topup_card_number'] ?? 0;
       // For egift topup card set topupRecieptEmail to show in order confirmation summary.
-      $settings['order_details']['topupRecieptEmail'] = $order['customer_email'];
+      $settings['order_details']['isTopUp'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->is_topup ?? FALSE;
     }
     if (isset($item['egiftOptions']['hps_giftcard_recipient_email'])) {
       // For egift card set giftCardRecieptEmail to show in order confirmation summary.

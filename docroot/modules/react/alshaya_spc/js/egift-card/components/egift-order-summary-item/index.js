@@ -19,13 +19,10 @@ const EgiftOrderSummaryItem = (props) => {
     );
   }
   // If order has any topup card.
-  if (orderDetails.topupRecieptEmail !== undefined) {
+  if (orderDetails.isTopUp !== undefined) {
     return (
       <div className="spc-order-summary-item order-summary-item fadeInUp redeem">
         <span className="spc-topup-label">{Drupal.t('Top-up to:', {}, { context: 'egift' })}</span>
-        <span className="spc-topup-value always-ltr">
-          {orderDetails.topupRecieptEmail}
-        </span>
         <span className="spc-topup-value always-ltr">
           {Drupal.t('Top-up amount will reflect immediately in card', {}, { context: 'egift' })}
         </span>

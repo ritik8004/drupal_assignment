@@ -1,5 +1,7 @@
 import React from 'react';
 import TotalLineItem from '../../../utilities/total-line-item';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import ConditionalView from '../../../common/components/conditional-view';
 
 const EgiftCheckoutOrderSummary = (props) => {
   const { totals } = props;
@@ -21,15 +23,18 @@ const EgiftCheckoutOrderSummary = (props) => {
     <div className="egift-order-summary">
       <TotalLineItem
         name="paid-with-egift"
-        title={Drupal.t('Paid With eGfit card', {}, { context: 'egift' })}
+        title={Drupal.t('Paid With eGift card', {}, { context: 'egift' })}
         value={egiftRedeemedAmount}
       />
-      <TotalLineItem
-        name="balance-payable"
-        title={Drupal.t('Balance Payable', {}, { context: 'egift' })}
-        value={balancePayable}
-        showZeroValue
-      />
+      <ConditionalView condition={!hasValue(totals.paidWithAura)}>
+        {/* If paidWithAura show balancePayable form AuraCheckoutOrderSummary. */}
+        <TotalLineItem
+          name="balance-payable"
+          title={Drupal.t('Balance Payable', {}, { context: 'egift' })}
+          value={balancePayable}
+          showZeroValue
+        />
+      </ConditionalView>
     </div>
   );
 };
