@@ -118,6 +118,7 @@ function alshaya_search_api_views_pre_render(ViewExecutable $view) {
  */
 function alshaya_search_api_language_switch_links_alter(array &$links, $type, Url $url) {
   $query = \Drupal::request()->query->all();
+  unset($query['_wrapper_format']);
 
   // Alter block only if we have selected color query parameter on a PDP.
   if (!empty($query)) {
