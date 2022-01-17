@@ -183,12 +183,12 @@ function alshaya_performance_page_attachments_alter(array &$attachments) {
     ];
 
     // Only add `crossorigin` attribute when needed.
-    if(isset($item['crossorigin'])) {
+    if (isset($item['crossorigin'])) {
       $preload_render['#attributes']['crossorigin'] = $item['crossorigin'];
     }
 
     // Only add `type` attribute when needed.
-    if(isset($item['type'])) {
+    if (isset($item['type'])) {
       $preload_render['#attributes']['type'] = $item['type'];
     }
 
@@ -224,11 +224,11 @@ function alshaya_performance_js_settings_alter(&$settings, AttachedAssetsInterfa
 /**
  * Implements hook_js_alter().
  */
-function alshaya_performance_js_alter(&$javascript, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
-  // Unset external Js for the Performance check up
+function alshaya_performance_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  // Unset external Js for the Performance check up.
   $external = \Drupal::request()->get('external');
   if (isset($external) && $external == 0) {
-    foreach($javascript as $path => $file) {
+    foreach ($javascript as $path => $file) {
       if ($file['type'] === "external") {
         unset($javascript[$path]);
       }
@@ -239,14 +239,14 @@ function alshaya_performance_js_alter(&$javascript, \Drupal\Core\Asset\AttachedA
 /**
  * Implements hook_css_alter().
  */
-function alshaya_performance_css_alter(&$css, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
-   // Unset external CSS for the Performance check up
-   $external = \Drupal::request()->get('external');
-   if (isset($external) && $external == 0) {
-     foreach($css as $path => $file) {
-       if ($file['type'] === "external") {
-         unset($css[$path]);
-       }
-     }
-   }
+function alshaya_performance_css_alter(&$css, AttachedAssetsInterface $assets) {
+  // Unset external CSS for the Performance check up.
+  $external = \Drupal::request()->get('external');
+  if (isset($external) && $external == 0) {
+    foreach ($css as $path => $file) {
+      if ($file['type'] === "external") {
+        unset($css[$path]);
+      }
+    }
+  }
 }

@@ -2,6 +2,7 @@ name: 'Alshaya Transac-lite profile'
 description: 'An installation profile for Alshaya sites without ACM and MDC integration.'
 type: profile
 core: '8.x'
+core_version_requirement: ^8 || ^9
 dependencies:
   - block_content_machine_name:block_content_machine_name
   - menu_link_modal:menu_link_modal

@@ -276,7 +276,7 @@ function alshaya_install() {
     ])
     ->save();
 
-  // TODO: List the modules common for transac and non-transac profiles.
+  // @todo List the modules common for transac and non-transac profiles.
   $modules = [
     'alshaya_paragraph_block',
   ];
@@ -289,7 +289,10 @@ function alshaya_install() {
     $_alshaya_modules_installed[] = $module;
   }
 
-  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya', $modules]);
+  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', [
+    'alshaya',
+    $modules,
+  ]);
   \Drupal::service('module_installer')->uninstall(['field_ui']);
   \Drupal::service('module_installer')->uninstall(['quickedit']);
 }

@@ -44,7 +44,7 @@ function alshaya_captcha_form_captcha_point_add_form_alter(array &$form, FormSta
  *   Form state instance.
  */
 function _alshaya_captcha_delay_attempt_element(array &$form, FormStateInterface $form_state) {
-  /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
+  /** @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
   $captcha_point = $form_state->getFormObject()->getEntity();
   $form['captcha_delay_attempts'] = [
     '#type' => 'number',
@@ -74,12 +74,12 @@ function alshaya_captcha_form_captcha_point_add_form_builder($entity_type, Captc
  */
 function alshaya_captcha_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   // Whether captcha enabled on form on not.
-  $captcha = isset($form['captcha'])?: FALSE;
+  $captcha = isset($form['captcha']) ?: FALSE;
 
   // If captcha enabled on form.
   if ($captcha) {
 
-    /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
+    /** @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
     $captcha_point = \Drupal::entityTypeManager()
       ->getStorage('captcha_point')
       ->load($form_id);
@@ -172,6 +172,7 @@ function _alshaya_captcha_form_no_delay_captcha_validate(&$form, FormStateInterf
   if ($errors = $form_state->getErrors()) {
     if (isset($errors['captcha_response'])) {
       // If captcha response is empty (user didn't use the captcha).
+      // @codingStandardsIgnoreLine
       if (empty($_POST['g-recaptcha-response'])) {
         $errors['captcha_response'] = t('Please fill the captcha.');
       }
