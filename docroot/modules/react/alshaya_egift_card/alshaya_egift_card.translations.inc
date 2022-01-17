@@ -211,7 +211,7 @@ function _alshaya_egift_card_translations() {
         'ar' => ' الرصيد المتوفر:',
         'context' => 'egift',
       ],
-      'Paid With eGfit card' => [
+      'Paid With eGift card' => [
         'ar' => ' مدفوعة عبر بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
