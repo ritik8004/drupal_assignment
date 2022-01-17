@@ -24,10 +24,6 @@ header {
   a {
     min-width: 12.5rem;
 
-    html[lang=ar] & {
-      margin-top: 0.75rem;
-    }
-
     @include breakpoint($upto-desktop) {
       min-width: 8.25rem;
       max-width: 8.25rem;
@@ -42,7 +38,10 @@ header {
         width: auto;
         margin-top: 0;
         height: auto;
-        max-width: 8.25rem;
+
+        @include breakpoint($upto-desktop) {
+          max-width: 8.25rem;
+        }
       }
     }
   }
@@ -59,10 +58,12 @@ header {
 
   .cart-link {
     background-position: center $right;
+    margin-bottom: 0.6875rem;
+    #{$left}: 1.0625rem;
 
     @include breakpoint($upto-desktop) {
       background-size: 72%;
-      top: 0.3125rem;
+      top: 0.6875rem;
       #{$left}: -0.6875rem;
 
       html[lang=ar] & {
