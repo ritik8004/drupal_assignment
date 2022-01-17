@@ -44,7 +44,7 @@ export const getTopUpQuote = () => {
  * @returns {string}
  *   The api endpoint.
  */
-export const getApiEndpoint = (action = {}) => {
+export const getApiEndpoint = (action) => {
   let endpoint = '';
   switch (action) {
     case 'eGiftGetBalance':
