@@ -27,6 +27,10 @@
         data.productPrice = entity.gtm_attributes.price;
         // Todo.
         data.productOldPrice = '';
+        const prices = window.commerceBackend.getPrices(entity, false);
+        if (prices.price !== entity.gtm_attributes.price) {
+          data.productOldPrice = prices.price;
+        }
 
         // Get product image.
         let image = window.commerceBackend.getFirstImage(entity);
