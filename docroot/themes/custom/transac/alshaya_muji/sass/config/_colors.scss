@@ -31,6 +31,7 @@ $whisper-dark: #e5e5e5;
 $light-greyish: #ccc;
 $gray-bg: #f1f2f5;
 $rosewood: #660014;
+$mujilighttheme: rgba(127,0,25,0.1);
 
 /* ------- 2. Primary Colors ------- */
 
@@ -361,7 +362,7 @@ $plp_all_filter_filter_arrow: $cod-gray;
 $plp_facet_label: $cod-gray;
 $color_facet_active_border: $cod-gray;
 $plp-primary-cta-hover-bg: $rosewood;
-$plp-secondary-cta-hover-bg: $mujidarkred;
+$plp-secondary-cta-hover-bg: $mujilighttheme;
 
 // PLP Product tile.
 $plp_tile_product_title: $black;
