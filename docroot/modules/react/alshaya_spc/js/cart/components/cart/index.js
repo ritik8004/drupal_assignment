@@ -110,9 +110,9 @@ export default class Cart extends React.Component {
       }
 
       // To show the success/error message on cart top.
-      const stockErrorMessage = localStorage.getItem('stockErrorResponseMessage');
+      const stockErrorMessage = Drupal.getItemFromLocalStorage('stockErrorResponseMessage');
       if (stockErrorMessage) {
-        localStorage.removeItem('stockErrorResponseMessage');
+        Drupal.removeItemFromLocalStorage('stockErrorResponseMessage');
         this.setState({
           messageType: 'error',
           message: stockErrorMessage,

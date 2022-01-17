@@ -1,0 +1,56 @@
+body.wishlist-enabled {
+  header {
+    .c-header__region {
+      .region__header {
+        @include breakpoint($desktop) {
+          .block-alshaya-wishlist {
+            width: auto;
+          }
+
+          .block-alshaya-react-mini-cart {
+            width: auto;
+
+            .acq-mini-cart {
+              display: flex;
+              align-items: center;
+
+              .cart-link-total {
+                margin: 0;
+
+                .price {
+                  white-space: nowrap;
+                }
+              }
+            }
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          display: flex;
+          align-items: center;
+        }
+      }
+
+      .block-alshaya-react-mini-cart {
+        @include breakpoint($only-tablet) {
+          top: 0;
+        }
+      }
+    }
+  }
+
+  #wishlist-header-wrapper {
+    @include breakpoint($only-mobile) {
+      top: 1.25rem;
+      #{$right}: 2.5rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      position: unset;
+    }
+
+    .wishlist-header {
+      padding-bottom: 0;
+    }
+  }
+}

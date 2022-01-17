@@ -119,7 +119,14 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     // Decrease latency.
     $settings['memcache']['options'][Memcached::OPT_TCP_NODELAY] = TRUE;
 
-    if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
+    // Update memcache settings for GITHUB.
+    if (isset($_ENV['GITHUB_ACTIONS'])) {
+      $settings['memcache']['servers'] = [
+        'memcache:11211' => 'default',
+      ];
+    }
+    // Update memcache settings for local.
+    elseif (isset($settings, $settings['env']) && $settings['env'] == 'local') {
       global $host_site_code;
       $settings['memcache']['key_prefix'] = $host_site_code;
 

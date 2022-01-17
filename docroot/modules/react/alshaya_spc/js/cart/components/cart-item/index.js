@@ -15,7 +15,6 @@ import QtyLimit from '../qty-limit';
 import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
-import { getStorageInfo } from '../../../utilities/storage';
 import { isQtyLimitReached, customStockErrorMessage } from '../../../utilities/checkout_util';
 import validateCartResponse from '../../../utilities/validation_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
@@ -132,19 +131,23 @@ export default class CartItem extends React.Component {
         return;
       }
     }
-    // Adding class on remove button for showing progress when click.
-    document.getElementById(`remove-item-${id}`).classList.add('loading');
-    const afterCartUpdate = () => {
-      // Remove loading class.
-      document.getElementById(`remove-item-${id}`).classList.remove('loading');
-    };
-    this.triggerUpdateCart({
-      action,
-      sku,
-      qty: 0,
-      callback: afterCartUpdate,
-      successMsg: Drupal.t('The product has been removed from your cart.'),
-    });
+    const elem = document.getElementById(`remove-item-${id}`);
+    if (typeof elem !== 'undefined' && elem !== null) {
+      // Adding class on remove button for showing progress when click.
+      elem.classList.add('loading');
+      const afterCartUpdate = () => {
+        // Remove loading class.
+        elem.classList.remove('loading');
+      };
+
+      this.triggerUpdateCart({
+        action,
+        sku,
+        qty: 0,
+        callback: afterCartUpdate,
+        successMsg: Drupal.t('The product has been removed from your cart.'),
+      });
+    }
   };
 
   /**
@@ -189,7 +192,7 @@ export default class CartItem extends React.Component {
           if (action === 'remove item') {
             triggerRecommendedRefresh = true;
           } else {
-            const cartFromStorage = getStorageInfo();
+            const cartFromStorage = Drupal.getItemFromLocalStorage('cart_data');
             // If number of items in storage not matches with
             // what we get from mdc, we refresh recommended products.
             if (cartFromStorage !== null

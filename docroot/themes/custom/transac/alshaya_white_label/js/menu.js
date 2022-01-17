@@ -358,7 +358,7 @@
       // Getting GTM menu label for L1 menu items.
       var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? $(this).attr('gtm-menu-title') : $(this).text();
       var navigationData = {
-        event: 'Category Navigation',
+        event: 'Main Navigation',
         eventLabel: menuLabel
       };
       pushNavigationData(navigationData);
@@ -373,7 +373,7 @@
       // Getting GTM menu label for L2 menu items.
       var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? $(this).attr('gtm-menu-title') : $(this).text();
       var navigationData = {
-        event: 'Sub Category',
+        event: 'L2 Navigation',
         eventLabel: parentLabel + ' > ' + menuLabel
       };
       pushNavigationData(navigationData);
@@ -381,6 +381,8 @@
 
     // Push navigation events in dataLayer for 3rd Level.
     $('.menu--three__link').once().on('click', function () {
+      var eventName = 'L3 Navigation';
+      var menuLabel = '';
       // Create the event label with parent menu item and current target link text.
       var parentLink = $(this).closest('.menu--one__list-item').find('.menu--one__link');
       // Getting GTM menu label for L1 menu items.
@@ -390,18 +392,24 @@
       // Getting GTM menu label for L2 menu items and appending L1.
       parentLabel = (typeof nextChildLink.attr('gtm-menu-title') !== 'undefined' && nextChildLink.attr('gtm-menu-title') !== false) ? (parentLabel + ' > ' + nextChildLink.attr('gtm-menu-title')) : (parentLabel + ' > ' + nextChildLink.text());
 
-      // Getting GTM menu label for L3 menu items and appending L1 + L2.
-      var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? (parentLabel + ' > ' + $(this).attr('gtm-menu-title')) : (parentLabel + ' > ' + $(this).text());
-
       // If the menu item is 4th level.
       if ($(this).closest('.menu__list-item').hasClass('menu--four__list-item')) {
-        nextChildLink = $(this).closest('.menu--three__list-item').find('.menu--three__link').first();
+        eventName = 'L4 Navigation';
+        nextChildLink = $(this).closest('.menu--three__list-item').find('.menu--three__link');
+        // Getting GTM menu label for L3 menu items and appending L1 + L2.
+        menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? (parentLabel + ' > ' + nextChildLink.attr('gtm-menu-title')) : (parentLabel + ' > ' + nextChildLink.text());
+
+        nextChildLink = $(this).closest('.menu--four__list-item').find('.menu--three__link').first();
         // Getting GTM menu label for L4 menu items and appending L1 + L2 + L3.
         menuLabel = (typeof nextChildLink.attr('gtm-menu-title') !== 'undefined' && nextChildLink.attr('gtm-menu-title') !== false) ? (menuLabel + ' > ' + nextChildLink.attr('gtm-menu-title')) : (menuLabel + ' > ' + nextChildLink.text());
       }
+      else {
+        // Getting GTM menu label for L3 menu items and appending L1 + L2.
+        menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? (parentLabel + ' > ' + $(this).attr('gtm-menu-title')) : (parentLabel + ' > ' + $(this).text());
+      }
 
       var navigationData = {
-        event: 'Sub Category',
+        event: eventName,
         eventLabel: menuLabel
       };
       pushNavigationData(navigationData);

@@ -12,7 +12,7 @@ const AvailableAreaItems = ({
   const areaFieldKey = getAreaFieldKey();
   let activeClass = 'in-active';
   if (currentArea !== null && areaFieldKey !== null) {
-    if (parseInt(currentArea.value[areaFieldKey], 10) === attr) {
+    if (parseInt(currentArea.value[areaFieldKey], 10) === parseInt(attr, 10)) {
       activeClass = 'active';
     }
   }

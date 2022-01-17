@@ -6,6 +6,7 @@
 # Example for updb mode: deploy_tag.sh branch 5.6.0-build updb
 # Example for hotfix mode: deploy_tag.sh main 5.6.1-build hotfix
 # Example for hotfix mode and do CRF at the end: deploy_tag.sh main 5.6.1-build hotfix_crf
+# Example for hotfix mode and do CR at the end: deploy_tag.sh main 5.6.1-build hotfix_cr
 
 branch="$1"
 tag="$2"
@@ -19,11 +20,12 @@ then
   echo "Example for updb mode: deploy_tag.sh main 5.6.0-build updb"
   echo "Example for hotfix mode: deploy_tag.sh main 5.6.1-build hotfix"
   echo "Example for hotfix mode and do CRF at the end: deploy_tag.sh main 5.6.1-build hotfix_crf"
+  echo "Example for hotfix mode and do CR at the end: deploy_tag.sh main 5.6.1-build hotfix_cr"
   exit
 fi
 
 # Validate mode is supported.
-if [ "$mode" != "prep" -a "$mode" != "updb" -a "$mode" != "hotfix" -a "$mode" != "hotfix_crf" ]
+if [ "$mode" != "prep" -a "$mode" != "updb" -a "$mode" != "hotfix" -a "$mode" != "hotfix_crf" -a "$mode" != "hotfix_cr" ]
 then
   echo "Deployment mode $mode not supported."
   echo "Command usage: deploy_tag.sh BRANCH TAG MODE"
@@ -31,6 +33,7 @@ then
   echo "Example for updb mode: deploy_tag.sh main 5.6.0-build updb"
   echo "Example for hotfix mode: deploy_tag.sh main 5.6.1-build hotfix"
   echo "Example for hotfix mode and do CRF at the end: deploy_tag.sh main 5.6.1-build hotfix_crf"
+  echo "Example for hotfix mode and do CR at the end: deploy_tag.sh main 5.6.1-build hotfix_cr"
   exit
 fi
 

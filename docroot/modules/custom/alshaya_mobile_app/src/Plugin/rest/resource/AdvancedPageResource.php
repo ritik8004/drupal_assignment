@@ -19,6 +19,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Render\RenderContext;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Render\RendererInterface;
 
 /**
  * Provides a resource to node data of advanced page.
@@ -76,6 +79,20 @@ class AdvancedPageResource extends ResourceBase {
   protected $entityRepository;
 
   /**
+   * The renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * The render context.
+   *
+   * @var \Drupal\Core\Render\RenderContext
+   */
+  protected $renderContext;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -98,6 +115,8 @@ class AdvancedPageResource extends ResourceBase {
    *   The config factory.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity repository.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
    */
   public function __construct(
     array $configuration,
@@ -109,7 +128,8 @@ class AdvancedPageResource extends ResourceBase {
     RequestStack $request_stack,
     EntityTypeManagerInterface $entity_type_manager,
     ConfigFactoryInterface $config_factory,
-    EntityRepositoryInterface $entityRepository
+    EntityRepositoryInterface $entityRepository,
+    RendererInterface $renderer
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
@@ -117,6 +137,7 @@ class AdvancedPageResource extends ResourceBase {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->entityRepository = $entityRepository;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -133,7 +154,8 @@ class AdvancedPageResource extends ResourceBase {
       $container->get('request_stack'),
       $container->get('entity_type.manager'),
       $container->get('config.factory'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('renderer')
     );
   }
 
@@ -274,10 +296,7 @@ class AdvancedPageResource extends ResourceBase {
    *   Data array.
    */
   private function getCategoryData(int $parent_tid) {
-    $subcategory_list_view = Views::getView('product_category_level_2_3');
-    $subcategory_list_view->setDisplay('block_2');
-    $subcategory_list_view->setArguments([$parent_tid]);
-    $subcategory_list_view->execute();
+    $subcategory_list_view = $this->handleViewBubbleMetadata('product_category_level_2_3', 'block_2', $parent_tid);
     $data = [];
     foreach ($subcategory_list_view->result as $subcategory_list_view_value) {
       $sub_category_entity_list = $subcategory_list_view_value->_entity;
@@ -305,10 +324,7 @@ class AdvancedPageResource extends ResourceBase {
    *   Data array.
    */
   private function getChildCategoryData(int $child_tid) {
-    $childCategory_list_view = Views::getView('product_category_level_3');
-    $childCategory_list_view->setDisplay('block_1');
-    $childCategory_list_view->setArguments([$child_tid]);
-    $childCategory_list_view->execute();
+    $childCategory_list_view = $this->handleViewBubbleMetadata('product_category_level_3', 'block_1', $child_tid);
     $data = [];
     foreach ($childCategory_list_view->result as $childCategory_list_view_value) {
       $child_category_entity_list = $childCategory_list_view_value->_entity;
@@ -323,6 +339,38 @@ class AdvancedPageResource extends ResourceBase {
       ];
     }
     return $data;
+  }
+
+  /**
+   * Fetches view result with handling its cache metadata.
+   *
+   * @param string $view_id
+   *   View id.
+   * @param string $display_id
+   *   View display id.
+   * @param string $arguments
+   *   View arguments.
+   *
+   * @return array
+   *   Data array.
+   */
+  private function handleViewBubbleMetadata($view_id, $display_id, $arguments) {
+    $this->renderContext = $this->renderContext ?? (new RenderContext());
+    $result = $this->renderer->executeInRenderContext($this->renderContext, function () use ($view_id, $display_id, $arguments) {
+      $view = Views::getView($view_id);
+      $view->setDisplay($display_id);
+      $view->setArguments([$arguments]);
+      $view->execute();
+
+      return $view;
+    });
+    if (!$this->renderContext->isEmpty()) {
+      $bubbleable_metadata = $this->renderContext->pop();
+      BubbleableMetadata::createFromObject($result)
+        ->merge($bubbleable_metadata);
+    }
+
+    return $result;
   }
 
 }

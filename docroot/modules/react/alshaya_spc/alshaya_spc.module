@@ -345,10 +345,7 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
 
     // For V2, add user token to drupalSettings for direct backend calls.
     if (\Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion() == 2) {
-      $settings['userDetails']['customerToken'] = \Drupal::service('alshaya_spc.customer_helper')
-        ->getCustomerTokenBySocialDetail(
-          $user->get('mail')->getString()
-        );
+      $settings['userDetails']['customerToken'] = \Drupal::service('alshaya_spc.customer_helper')->getCustomerToken();
     }
   }
 }

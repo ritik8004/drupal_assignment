@@ -3,7 +3,6 @@ import axios from 'axios';
 import StaticStorage from '../../../../js/backend/v2/staticStorage';
 import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import { drupalSettings, Drupal } from '../globals';
-import { getStorageInfo } from '../../../../js/utilities/storage';
 import * as cart from '../../../../js/backend/v2/cart';
 
 describe('Cart', () => {
@@ -183,7 +182,7 @@ describe('Cart', () => {
       const result = await window.commerceBackend.createCart();
       expect(axios).toHaveBeenCalled();
       expect(result).toEqual('ZYJ47012050MHZ');
-      expect(getStorageInfo('cart_id')).toEqual('ZYJ47012050MHZ');
+      expect(global.Drupal.getItemFromLocalStorage('cart_id')).toEqual('ZYJ47012050MHZ');
     });
 
     it('Test with returning error and status 200', async () => {
@@ -196,7 +195,7 @@ describe('Cart', () => {
       const result = await window.commerceBackend.createCart();
       expect(axios).toHaveBeenCalled();
       expect(result).toEqual(null);
-      expect(getStorageInfo('cart_id')).toEqual(null);
+      expect(global.Drupal.getItemFromLocalStorage('cart_id')).toEqual(null);
     });
 
     it('Test with returning error and status 500', async () => {
@@ -209,7 +208,7 @@ describe('Cart', () => {
       const result = await window.commerceBackend.createCart();
       expect(axios).toHaveBeenCalled();
       expect(result).toEqual(null);
-      expect(getStorageInfo('cart_id')).toEqual(null);
+      expect(global.Drupal.getItemFromLocalStorage('cart_id')).toEqual(null);
     });
   });
 });

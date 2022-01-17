@@ -12582,17 +12582,17 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "3.0.0-beta1",
+            "version": "3.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "3.0.0-beta1"
+                "reference": "3.0.0-beta3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta1.zip",
-                "reference": "3.0.0-beta1",
-                "shasum": "242350c2676b61aebc066ac7eaefa9ddd26de6f3"
+                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta3.zip",
+                "reference": "3.0.0-beta3",
+                "shasum": "1cb726c306696623180ebe06f9f94a3393634eb5"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.0",
@@ -12605,11 +12605,16 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-beta1",
-                    "datestamp": "1624863519",
+                    "version": "3.0.0-beta3",
+                    "datestamp": "1634877221",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
                     }
                 },
                 "patches_applied": {
@@ -21015,7 +21020,7 @@
                     "type": "tidelift"
                 }
             ],
-            "abandoned": "use `EnglishInflector` from the String component instead",
+            "abandoned": "EnglishInflector from the String component",
             "time": "2021-07-21T12:38:00+00:00"
         },
         {

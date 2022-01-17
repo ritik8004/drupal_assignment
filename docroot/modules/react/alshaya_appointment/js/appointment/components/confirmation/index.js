@@ -3,7 +3,6 @@ import moment from 'moment';
 import AddToCalendar from 'react-add-to-calendar';
 import ReactToPrint from 'react-to-print';
 import ConfirmationItems from './components/confirmation-items';
-import { getStorageInfo, removeStorageInfo } from '../../../utilities/storage';
 import {
   addressCleanup,
   getArrayFromCompanionData, getTimeFormat,
@@ -16,7 +15,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 export default class Confirmation extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
 
     if (localStorageValues) {
       this.state = {
@@ -26,8 +25,8 @@ export default class Confirmation extends React.Component {
   }
 
   componentDidMount() {
-    // Clear localStorage.
-    removeStorageInfo();
+    // Clear local storage.
+    Drupal.removeItemFromLocalStorage('appointment_data');
     // We need a sticky button in mobile.
     if (window.innerWidth < 768) {
       stickyCTAButtonObserver();

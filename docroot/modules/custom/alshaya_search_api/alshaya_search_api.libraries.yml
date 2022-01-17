@@ -17,3 +17,4 @@ back_to_list:
   dependencies:
     - alshaya_master/common_functions
     - alshaya_master/jquery_is_in_viewport
+    - alshaya_master/local_storage_manager
