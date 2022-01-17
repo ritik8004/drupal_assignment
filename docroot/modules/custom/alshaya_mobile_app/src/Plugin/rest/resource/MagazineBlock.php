@@ -195,6 +195,8 @@ class MagazineBlock extends ResourceBase {
     }
     $response = new ResourceResponse($magazine_array_render);
     $response->addCacheableDependency($response);
+    // Add cacheTags node_type as the view depend on node type magazine_article.
+    $response->getCacheableMetadata()->addCacheTags(['node_type:magazine_article']);
     return $response;
   }
 
