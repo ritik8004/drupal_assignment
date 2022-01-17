@@ -82,7 +82,7 @@ export default class EgiftTopupFor extends React.Component {
             <div className="card-details">
               <div className="egift-linked-card-balance">
                 <span className="egift-linked-card-balance-label">
-                  {Drupal.t('Card Balance: ', {}, { context: 'egift' })}
+                  {Drupal.t('Card Balance:', {}, { context: 'egift' })}
                 </span>
                 <PriceElement
                   amount={linkedCardBalance !== null ? parseFloat(linkedCardBalance) : undefined}

@@ -95,14 +95,14 @@ export default class UpdateEgiftCardAmount extends React.Component {
                   type: 'number',
                   name: 'amount',
                   className: 'amount',
-                  label: 'Amount',
+                  label: Drupal.t('Amount', {}, { context: 'egift' }),
                   value: getAmountWithCurrency(amount, false).amount,
                 })}
                 <div className="egift-submit-btn-wrapper">
                   {egiftFormElement({
                     type: 'submit',
                     name: 'button',
-                    buttonText: 'Edit Amount',
+                    buttonText: Drupal.t('Edit Amount', {}, { context: 'egift' }),
                   })}
                 </div>
               </form>

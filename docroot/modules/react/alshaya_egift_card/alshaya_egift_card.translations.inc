@@ -203,7 +203,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'يجب أن يكون مبلغ الاسترداد بقيمة أقل أو مساوية لقيمة حقيبة التسوق',
         'context' => 'egift',
       ],
-      'Pay using egift card ' => [
+      'Pay using egift card' => [
         'ar' => ' الدفع باستخدام بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
@@ -263,7 +263,7 @@ function _alshaya_egift_card_translations() {
         'ar' => ' تفاصيل البطاقة',
         'context' => 'egift',
       ],
-      'My eGift Card' => [
+      'eGift Card' => [
         'ar' => ' بطاقة الهدية الإلكترونية الخاصة بي',
       ],
       'Balanace:' => [
@@ -355,6 +355,34 @@ function _alshaya_egift_card_translations() {
       ],
       'Top-up amount will reflect immediately in card' => [
         'ar' => ' سيتم إضافة مبلغ التعبئة على الفور في البطاقة',
+      ],
+      'Please enter recipient name' => [
+        'ar' => 'يرجى إدخال اسم صحيح',
+        'context' => 'egift',
+      ],
+      'Please enter valid email address' => [
+        'ar' => 'أدخل عنوان البريد الإلكتروني الخاص بك.',
+        'context' => 'egift',
+      ],
+      'Amount' => [
+        'ar' => 'المبلغ',
+        'context' => 'egift',
+      ],
+      'Edit Amount' => [
+        'ar' => 'قم بتعديل المبلغ',
+        'context' => 'egift',
+      ],
+      'Choose Top-up Amount (@currencyCode)' => [
+        'ar' => 'Choose Top-up Amount (@currencyCode)',
+        'context' => 'egift',
+      ],
+      'Cancel' => [
+        'ar' => 'Cancel',
+        'context' => 'egift',
+      ],
+      'Redeem eGift Card' => [
+        'ar' => 'Redeem eGift Card',
+        'context' => 'egift',
       ],
     ],
   ];

@@ -90,7 +90,7 @@ const GetEgiftCard = (props) => {
           {egiftFormElement({
             type: 'text',
             name: 'card_number',
-            placeholder: 'eGift Card Number',
+            placeholder: Drupal.t('eGift Card Number', {}, { context: 'egift' }),
             className: 'card-number',
             value: egiftCardNumber,
             disabled: disable,
