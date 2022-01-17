@@ -1,6 +1,5 @@
 import React from 'react';
 import ConditionalView from '../common/components/conditional-view';
-import PaymentMethodIcon from '../svg-component/payment-method-svg';
 import {
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
@@ -22,6 +21,7 @@ import dispatchCustomEvent from '../../../js/utilities/events';
 import { isUserAuthenticated } from '../../../js/utilities/helper';
 import logger from '../../../js/utilities/logger';
 import { getDefaultErrorMessage } from '../../../js/utilities/error';
+import RedeemEgiftSVG from '../svg-component/redeem-egift-svg';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -32,6 +32,7 @@ export default class RedeemEgiftCard extends React.Component {
       egiftEmail: '',
       egiftCardNumber: '',
       redemptionDisabled: false,
+      active: false,
     };
   }
 
@@ -78,6 +79,12 @@ export default class RedeemEgiftCard extends React.Component {
         });
       }
     }
+  }
+
+  // Update the redemption accordion status.
+  changeRedemptionAccordionStatus = () => {
+    const { active } = this.state;
+    this.setState({ active: !active });
   }
 
   // Perform code validation.
@@ -302,39 +309,48 @@ export default class RedeemEgiftCard extends React.Component {
       egiftEmail,
       egiftCardNumber,
       redemptionDisabled,
+      active,
     } = this.state;
     const { cart: cartData, refreshCart } = this.props;
+    const activeClass = active || codeValidated ? 'active' : '';
+    const codeValidationClass = codeValidated ? 'has-validated-code' : '';
+    const disabledRedemptionClass = redemptionDisabled || isEgiftRedemptionDone(cartData.cart, 'linked') ? 'in-active' : '';
 
     return (
       <div className="redeem-egift-card">
         {/* TO update the Payment Method Icon here for egift. */}
-        <PaymentMethodIcon methodName="egiftCart" />
-        <div>{Drupal.t('Redeem eGift Card', {}, { context: 'egift' })}</div>
-        <ConditionalView condition={!codeSent && !codeValidated}>
-          <GetEgiftCard
-            getCode={this.handleGetCode}
-            egiftCardNumber={egiftCardNumber}
-            redemptionDisabled={redemptionDisabled}
-            cart={cartData.cart}
-          />
-        </ConditionalView>
-        <ConditionalView condition={codeSent}>
-          <ValidateEgiftCard
-            resendCode={this.handleGetCode}
-            codeValidation={this.handleCodeValidation}
-            egiftEmail={egiftEmail}
-            egiftCardNumber={egiftCardNumber}
-            changeEgiftCard={this.handleChangeEgiftCard}
-          />
-        </ConditionalView>
-        <ConditionalView condition={codeValidated}>
-          <ValidEgiftCard
-            removeCard={this.handleEgiftCardRemove}
-            cart={cartData.cart}
-            egiftCardNumber={egiftCardNumber}
-            refreshCart={refreshCart}
-          />
-        </ConditionalView>
+        <div className={`redeem-egift-card-header-container ${activeClass} ${codeValidationClass} ${disabledRedemptionClass}`} onClick={() => this.changeRedemptionAccordionStatus()}>
+          <RedeemEgiftSVG />
+          <div className="redeem-egift-card-header-label">{Drupal.t('Redeem eGift Card', {}, { context: 'egift' })}</div>
+          <span className="accordion-icon" />
+        </div>
+        <div className="redeem-egift-card-content">
+          <ConditionalView condition={!codeSent && !codeValidated}>
+            <GetEgiftCard
+              getCode={this.handleGetCode}
+              egiftCardNumber={egiftCardNumber}
+              redemptionDisabled={redemptionDisabled}
+              cart={cartData.cart}
+            />
+          </ConditionalView>
+          <ConditionalView condition={codeSent}>
+            <ValidateEgiftCard
+              resendCode={this.handleGetCode}
+              codeValidation={this.handleCodeValidation}
+              egiftEmail={egiftEmail}
+              egiftCardNumber={egiftCardNumber}
+              changeEgiftCard={this.handleChangeEgiftCard}
+            />
+          </ConditionalView>
+          <ConditionalView condition={codeValidated}>
+            <ValidEgiftCard
+              removeCard={this.handleEgiftCardRemove}
+              cart={cartData.cart}
+              egiftCardNumber={egiftCardNumber}
+              refreshCart={refreshCart}
+            />
+          </ConditionalView>
+        </div>
       </div>
     );
   }
