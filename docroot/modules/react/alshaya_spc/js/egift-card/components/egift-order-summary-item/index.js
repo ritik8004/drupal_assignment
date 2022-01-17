@@ -4,7 +4,6 @@ const EgiftOrderSummaryItem = (props) => {
   const {
     orderDetails,
   } = props;
-  console.log(orderDetails);
   // If order has any egift card.
   if (orderDetails.giftCardRecieptEmail !== undefined) {
     return (
