@@ -171,16 +171,14 @@ export default class ValidEgiftCard extends React.Component {
     const appliedAmount = (
       <span>
         {Drupal.t('Applied card amount - ', {}, { context: 'egift' })}
-        <PriceElement amount={amount} format="string" showZeroValue />
+        <span className="price-wrapper">
+          <PriceElement amount={amount} format="string" showZeroValue />
+        </span>
       </span>
     );
 
     return (
       <div className="egift-wrapper">
-        {egiftCardHeader({
-          egiftHeading: appliedAmount,
-        })}
-
         <ConditionalView conditional={open}>
           <UpdateEgiftCardAmount
             closeModal={this.closeModal}
@@ -190,11 +188,16 @@ export default class ValidEgiftCard extends React.Component {
             cart={cart}
           />
         </ConditionalView>
-        <div className="remove-egift-card">
-          <button type="button" onClick={this.handleRemoveCard}>{Drupal.t('Remove', {}, { context: 'egift' })}</button>
-          <div id="egift_remove_card_error" className="error" />
+        <div className="egift-redeem-applied-amount-wrapper">
+          {egiftCardHeader({
+            egiftHeading: appliedAmount,
+          })}
+          <div className="remove-egift-card">
+            <button type="button" onClick={this.handleRemoveCard}>{Drupal.t('Remove', {}, { context: 'egift' })}</button>
+            <div id="egift_remove_card_error" className="error" />
+          </div>
         </div>
-        <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
+        <div className="egift-redeem-edit-amount" onClick={this.openModal}>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
         <ConditionalView condition={pendingAmount > 0}>
           <div className="full-redeemed">
             {Drupal.t('Pay ', {}, { context: 'egift' })}
@@ -203,15 +206,17 @@ export default class ValidEgiftCard extends React.Component {
           </div>
         </ConditionalView>
         <ConditionalView condition={isLinkedCardApplicable}>
-          <input
-            type="checkbox"
-            id="guest-link-egift-card"
-            name="egift_link_card"
-            onChange={this.handleCardLink}
-            disabled={disableLinkCard}
-          />
-          <label htmlFor="guest-link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
-          <div id="egift_linkcard_error" className="error" />
+          <div className="egift-redeem-link-card-wrapper">
+            <input
+              type="checkbox"
+              id="guest-link-egift-card"
+              name="egift_link_card"
+              onChange={this.handleCardLink}
+              disabled={disableLinkCard}
+            />
+            <label htmlFor="guest-link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
+            <div id="egift_linkcard_error" className="error" />
+          </div>
         </ConditionalView>
       </div>
     );

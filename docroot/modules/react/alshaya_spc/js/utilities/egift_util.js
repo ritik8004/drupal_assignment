@@ -40,7 +40,6 @@ export const egiftCardHeader = ({
 export const egiftFormElement = ({
   type = '',
   name = '',
-  placeholder = '',
   label = '',
   className = '',
   buttonText = '',
@@ -83,7 +82,6 @@ export const egiftFormElement = ({
             name={`egift_${name}`}
             className={`${className} ${focusClass}`}
             defaultValue={value}
-            placeholder={placeholder}
             disabled={disabled}
             step="any"
             onBlur={(e) => handleEvent(e)}
@@ -100,14 +98,13 @@ export const egiftFormElement = ({
 
     default:
       rtnTemplate = (
-        <div className={`egift-type-${type} spc-type-textfield`}>
+        <div className={`egift-type-${type} spc-type-textfield ${className}-wrapper`}>
           <input
             type={type}
             name={`egift_${name}`}
             id={`egift_${name}`}
-            className={className}
+            className={`${className} ${focusClass}`}
             defaultValue={value}
-            placeholder={placeholder}
             disabled={disabled}
             onBlur={(e) => handleEvent(e)}
           />
