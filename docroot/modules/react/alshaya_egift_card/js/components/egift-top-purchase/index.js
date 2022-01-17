@@ -4,7 +4,7 @@ import EgiftCardAmount from '../egifts-card-step-one/egift-card-amount';
 import {
   getParamsForTopUpCardSearch,
 } from '../../utilities';
-import { callMagentoApi } from '../../../../js/utilities/requestHelper';
+import { callEgiftApi } from '../../../../js/utilities/egiftCardHelper';
 import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
 import EgiftTopupFor from '../egift-topup-for';
@@ -38,7 +38,7 @@ export default class EgiftTopPurchase extends React.Component {
   async componentDidMount() {
     const params = getParamsForTopUpCardSearch();
     // Get Top up card details.
-    const response = await callMagentoApi('/V1/products', 'GET', params);
+    const response = await callEgiftApi('eGiftProductSearch', 'GET', params);
     if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
       this.setState({
         topUpCard: response.data.items[0],
@@ -64,7 +64,7 @@ export default class EgiftTopPurchase extends React.Component {
     }
     showFullScreenLoader();
     // Call to get customer linked card details.
-    const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
+    const result = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
     if (result instanceof Promise) {
       result.then((response) => {
         removeFullScreenLoader();
@@ -168,7 +168,7 @@ export default class EgiftTopPurchase extends React.Component {
 
     // Call top-up API to add top-up to cart.
     // Don't use bearer token with top-up add to cart API as it is public API.
-    const result = callMagentoApi('/V1/egiftcard/topup', 'POST', params, false);
+    const result = callEgiftApi('eGiftTopup', 'POST', params, false);
     if (result instanceof Promise) {
       result.then((response) => {
         removeFullScreenLoader();

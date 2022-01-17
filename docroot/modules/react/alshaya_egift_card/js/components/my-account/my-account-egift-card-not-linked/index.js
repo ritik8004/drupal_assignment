@@ -1,12 +1,12 @@
 import React from 'react';
 import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
-import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import logger from '../../../../../js/utilities/logger';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
 
 class EgiftCardNotLinked extends React.Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class EgiftCardNotLinked extends React.Component {
         card_number: cardNumber,
       },
     };
-    return callMagentoApi('/V1/egiftcard/link', 'POST', params)
+    return callEgiftApi('eGiftLinkCard', 'POST', params)
       .then((response) => {
         removeFullScreenLoader();
         // Check for error from handleResponse.
@@ -154,7 +154,7 @@ class EgiftCardNotLinked extends React.Component {
             otp,
           },
         };
-        callMagentoApi('/V1/egiftcard/link', 'POST', params).then((response) => {
+        callEgiftApi('eGiftLinkCard', 'POST', params).then((response) => {
           // Check for error from handleResponse.
           if (typeof response.data !== 'undefined' && typeof response.data.error !== 'undefined' && response.data.error) {
             document.getElementById('egift-code-error').innerHTML = response.data.error_message;

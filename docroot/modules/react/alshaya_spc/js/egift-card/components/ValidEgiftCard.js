@@ -46,12 +46,10 @@ export default class ValidEgiftCard extends React.Component {
     }
 
     // Validate if link card is applicable.
-    if (isUserAuthenticated()
-      && drupalSettings.userDetails.userEmailID) {
-      const params = { email: drupalSettings.userDetails.userEmailID };
+    if (isUserAuthenticated()) {
       // Invoke magento API to check if any egift card is already associated
       // with the user account.
-      const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {}, params);
+      const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
       if (response instanceof Promise) {
         response.then((result) => {
           if (isValidResponseWithFalseResult(result)) {

@@ -40,39 +40,33 @@ export const getTopUpQuote = () => {
  *
  * @param {string} action
  *   Callname for the API.
- * @param {object} params
- *   The object with cartId, itemId.
  *
  * @returns {string}
  *   The api endpoint.
  */
-export const getApiEndpoint = (action, params = {}) => {
+export const getApiEndpoint = (action = {}) => {
   let endpoint = '';
   switch (action) {
     case 'eGiftGetBalance':
-      endpoint = '/V1/egiftcard/getBalance';
+      endpoint = '/V1/egiftcard/getBalance'; // endpoint to check egift card balance.
       break;
 
     case 'eGiftRedemption':
-      endpoint = '/V1/egiftcard/transact';
-      break;
-
-    case 'eGiftHpsSearch':
-      endpoint = `/V1/egiftcard/hps-search/email/${params.email}`;
+      endpoint = '/V1/egiftcard/transact'; // endpoint to do egift card Redemption.
       break;
 
     case 'eGiftHpsCustomerData':
-      endpoint = '/V1/customers/hpsCustomerData';
+      endpoint = '/V1/customers/hpsCustomerData'; // endpoint to get egift card details of logged in user.
       break;
 
     case 'eGiftLinkCard':
-      endpoint = '/V1/egiftcard/link';
+      endpoint = '/V1/egiftcard/link'; // endpoint to link egift card with user account.
       break;
 
     case 'eGiftRemoveRedemption':
       endpoint = isUserAuthenticated()
         ? '/V1/egiftcard/remove-redemption'
-        : '/V1/guest-carts/remove-redemption';
+        : '/V1/guest-carts/remove-redemption'; // endpoint to remove egift redemption amount.
       break;
 
     case 'eGiftUpdateAmount':
@@ -80,15 +74,19 @@ export const getApiEndpoint = (action, params = {}) => {
       // endpoint to perform topup.
       endpoint = isUserAuthenticated() && getTopUpQuote() == null
         ? '/V1/egiftcard/mine/update-redemption-amount'
-        : '/V1/egiftcard/guest-carts/update-redemption-amount';
+        : '/V1/egiftcard/guest-carts/update-redemption-amount'; // endpoint to update egift redemption amount.
       break;
 
     case 'eGiftUnlinkCard':
-      endpoint = '/V1/egiftcard/unlinkcard';
+      endpoint = '/V1/egiftcard/unlinkcard'; // endpoint to unlink egift card from user account.
       break;
 
     case 'eGiftProductSearch':
-      endpoint = '/V1/products';
+      endpoint = '/V1/products'; // endpoint to get details of egift card or egift topup card.
+      break;
+
+    case 'eGiftTopup':
+      endpoint = '/V1/egiftcard/topup'; // endpoint to topup a egift card.
       break;
 
     default:
@@ -109,16 +107,14 @@ export const getApiEndpoint = (action, params = {}) => {
  *   The request method.
  * @param {object} postData
  *   The object containing post data
- * @param {object} params
- *   The object containing param info.
  * @param {boolean} bearerToken
  *   The bearerToken flag.
  *
  * @returns {object}
  *   Returns the promise object.
  */
-export const callEgiftApi = (action, method, postData, params = {}, bearerToken = true) => {
-  const endpoint = getApiEndpoint(action, params);
+export const callEgiftApi = (action, method, postData, bearerToken = true) => {
+  const endpoint = getApiEndpoint(action);
   return callMagentoApi(endpoint, method, postData, bearerToken);
 };
 

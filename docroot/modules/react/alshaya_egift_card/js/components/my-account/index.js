@@ -2,12 +2,12 @@ import React from 'react';
 import EgiftCardLinked from './my-account-egift-card-linked';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import EgiftCardNotLinked from './my-account-egift-card-not-linked';
-import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import Loading from '../../../../js/utilities/loading';
+import { callEgiftApi } from '../../../../js/utilities/egiftCardHelper';
 
 class MyEgiftCard extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class MyEgiftCard extends React.Component {
    */
   getUserLinkedCard = () => {
     // Call to get customer linked card details.
-    const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
+    const result = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
     if (result instanceof Promise) {
       showFullScreenLoader();
       result.then((response) => {
