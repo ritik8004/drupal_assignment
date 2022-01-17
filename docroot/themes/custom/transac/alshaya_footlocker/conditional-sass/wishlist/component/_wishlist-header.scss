@@ -1,27 +1,25 @@
 body.wishlist-enabled {
   .wishlist-header {
-    padding-#{$right}: 0.3125rem;
-
     .wishlist-icon {
-      width: 2.125rem;
-      height: 2.125rem;
       background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty-header.svg');
     }
 
     .wishlist-active {
       .wishlist-icon {
-        background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled-header.svg');
+        background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
       }
     }
   }
 
   #wishlist-header-wrapper {
-    top: 0.25rem;
+    top: 0.875rem;
 
-    @include breakpoint($only-mobile) {
-      html[lang=ar] & {
-        top: 0.5rem;
-      }
+    @include breakpoint($tablet) {
+      top: 0.5rem;
+    }
+
+    .wishlist-header {
+      padding-bottom: 0;
     }
   }
 }
