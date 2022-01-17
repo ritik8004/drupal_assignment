@@ -30,6 +30,12 @@ header {
       margin-#{$left}: 3rem;
       margin-top: 0.5625rem;
     }
+
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        margin-top: 0.875rem;
+      }
+    }
   }
 
   img {
@@ -73,7 +79,7 @@ header {
 
     @include breakpoint($only-mobile) {
       html[lang=ar] & {
-        right: -0.3125rem;
+        right: -0.5rem;
       }
     }
 
@@ -170,10 +176,10 @@ header {
   @include breakpoint($only-mobile) {
     .store {
       #{$right}: 17%;
-      top: 1.125rem;
+      top: 1.25rem;
 
       html[lang=ar] & {
-        left: 13%;
+        left: 14.5%;
       }
     }
   }
@@ -221,8 +227,8 @@ header {
       width: 2rem;
 
       html[lang=ar] & {
-        top: 0.875rem;
-        left: 20%;
+        top: 1rem;
+        left: 22%;
       }
     }
   }
