@@ -6,6 +6,7 @@ import {
   egiftFormElement,
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
+  selfCardTopup,
 } from '../../utilities/egift_util';
 
 // Validation function.
@@ -25,7 +26,7 @@ const handleEgiftDetailValidation = (e, props) => {
     // Check if the card number is valid or not.
     document.getElementById('egift_card_number_error').innerHTML = getStringMessage('egift_valid_card_number');
     errors = true;
-  } else if (cartData.topupCardNumber === egiftCardNumber.value) {
+  } else if (selfCardTopup(cartData, egiftCardNumber.value)) {
     document.getElementById('egift_card_number_error').innerHTML = Drupal.t('You cannot redeem the same card which you\'re trying to topup.', {}, { context: 'egift' });
     errors = true;
   } else {

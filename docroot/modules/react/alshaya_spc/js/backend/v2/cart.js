@@ -21,6 +21,7 @@ import {
 } from '../../../../js/utilities/conditionsUtility';
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import { getExceptionMessageType } from '../../../../js/utilities/error';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -392,7 +393,9 @@ window.commerceBackend.createCart = async () => {
 
 window.commerceBackend.associateCartToCustomer = async (pageType) => {
   // If user is not logged in, no further processing required.
-  if (!isUserAuthenticated()) {
+  // We are not suppose to call associated cart for customer if user is doing
+  // topup.
+  if (!isUserAuthenticated() || getTopUpQuote() !== null) {
     return;
   }
 

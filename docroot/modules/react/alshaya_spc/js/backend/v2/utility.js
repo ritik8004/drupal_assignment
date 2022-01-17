@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import logger from '../../../../js/utilities/logger';
 
 /**
@@ -55,6 +56,11 @@ const getCartIdFromStorage = () => {
  */
 const getApiEndpoint = (action, params = {}) => {
   let endpoint = '';
+  let topUpQuote = null;
+  // Reassigning params to updated the cart id.
+  // Doing this to avoid no-param-reassign eslint issue.
+  const endPointParams = params;
+
   switch (action) {
     case 'associateCart':
       endpoint = isUserAuthenticated()
@@ -71,55 +77,71 @@ const getApiEndpoint = (action, params = {}) => {
     case 'getCart':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/getCart'
-        : `/V1/guest-carts/${params.cartId}/getCart`;
+        : `/V1/guest-carts/${endPointParams.cartId}/getCart`;
       break;
 
     case 'addUpdateItems':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/items'
-        : `/V1/guest-carts/${params.cartId}/items`;
+        : `/V1/guest-carts/${endPointParams.cartId}/items`;
       break;
 
     case 'removeItems':
       endpoint = isUserAuthenticated()
-        ? `/V1/carts/mine/items/${params.itemId}`
-        : `/V1/guest-carts/${params.cartId}/items/${params.itemId}`;
+        ? `/V1/carts/mine/items/${endPointParams.itemId}`
+        : `/V1/guest-carts/${endPointParams.cartId}/items/${endPointParams.itemId}`;
       break;
 
     case 'updateCart':
-      endpoint = isUserAuthenticated()
+      // Check if Topup is in progress then get topup quoteid and use guest
+      // endpoint to perform topup.
+      topUpQuote = getTopUpQuote();
+      if (topUpQuote !== null) {
+        endPointParams.cartId = topUpQuote.maskedQuoteId;
+      }
+      // If user is authenticated and trying to topup then we will use guest
+      // update cart endpoint.
+      endpoint = isUserAuthenticated() && topUpQuote === null
         ? '/V1/carts/mine/updateCart'
-        : `/V1/guest-carts/${params.cartId}/updateCart`;
+        : `/V1/guest-carts/${endPointParams.cartId}/updateCart`;
       break;
 
     case 'estimateShippingMethods':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/estimate-shipping-methods'
-        : `/V1/guest-carts/${params.cartId}/estimate-shipping-methods`;
+        : `/V1/guest-carts/${endPointParams.cartId}/estimate-shipping-methods`;
       break;
 
     case 'getPaymentMethods':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/payment-methods'
-        : `/V1/guest-carts/${params.cartId}/payment-methods`;
+        : `/V1/guest-carts/${endPointParams.cartId}/payment-methods`;
       break;
 
     case 'selectedPaymentMethod':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/selected-payment-method'
-        : `/V1/guest-carts/${params.cartId}/selected-payment-method`;
+        : `/V1/guest-carts/${endPointParams.cartId}/selected-payment-method`;
       break;
 
     case 'placeOrder':
-      endpoint = isUserAuthenticated()
+      // Check if Topup is in progress then get topup quoteid and use guest
+      // endpoint to perform topup.
+      topUpQuote = getTopUpQuote();
+      if (topUpQuote !== null) {
+        endPointParams.cartId = topUpQuote.maskedQuoteId;
+      }
+      // If user is authenticated and trying to topup then we will use guest
+      // update cart endpoint.
+      endpoint = isUserAuthenticated() && topUpQuote === null
         ? '/V1/carts/mine/order'
-        : `/V1/guest-carts/${params.cartId}/order`;
+        : `/V1/guest-carts/${endPointParams.cartId}/order`;
       break;
 
     case 'getCartStores':
       endpoint = isUserAuthenticated()
-        ? `/V1/click-and-collect/stores/cart/mine/lat/${params.lat}/lon/${params.lon}`
-        : `/V1/click-and-collect/stores/guest-cart/${params.cartId}/lat/${params.lat}/lon/${params.lon}`;
+        ? `/V1/click-and-collect/stores/cart/mine/lat/${endPointParams.lat}/lon/${endPointParams.lon}`
+        : `/V1/click-and-collect/stores/guest-cart/${endPointParams.cartId}/lat/${endPointParams.lat}/lon/${endPointParams.lon}`;
       break;
 
     case 'getLastOrder':
@@ -131,7 +153,7 @@ const getApiEndpoint = (action, params = {}) => {
     case 'getTabbyAvailableProducts':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/tabby-available-products'
-        : `/V1/guest-carts/${params.cartId}/tabby-available-products`;
+        : `/V1/guest-carts/${endPointParams.cartId}/tabby-available-products`;
       break;
 
     default:

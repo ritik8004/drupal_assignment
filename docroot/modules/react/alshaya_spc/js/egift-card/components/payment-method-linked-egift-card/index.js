@@ -6,6 +6,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/
 import {
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
+  selfCardTopup,
   updatePriceSummaryBlock,
   updateRedeemAmount,
 } from '../../../utilities/egift_util';
@@ -55,15 +56,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
           if (result.data.card_number !== null && result.data.response_type) {
             // While doing topup of same egift card which is linked to the logged in customer,
             // dont show linked card redemption section in checkout page.
-            let selfTopup = false;
-            Object.keys(cart.cart.items).forEach((key) => {
-              if (hasValue(cart.cart.items[key].topupCardNumber)
-                && result.data.card_number === cart.cart.items[key].topupCardNumber) {
-                selfTopup = true;
-              }
-            });
             // If selfTopup no need to show linked card redemption section in checkout page.
-            if (selfTopup) {
+            if (selfCardTopup(cart.cart, result.data.card_number)) {
               return;
             }
 
@@ -286,7 +280,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     const { cart, refreshCart } = this.props;
 
     // Api call to update the redemption amount.
-    const response = await updateRedeemAmount(updateAmount, cart, refreshCart);
+    const response = await updateRedeemAmount(updateAmount, cart.cart, refreshCart);
     if (!response.error) {
       const { redeemedAmount, balancePayable, cardNumber } = response;
       // Perform calculations and set state.

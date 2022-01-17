@@ -21,6 +21,7 @@ import isAuraEnabled from '../../../../js/utilities/helper';
 import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -755,6 +756,11 @@ const validateRequestData = async (request) => {
     return 404;
   }
 
+  // If it's a topup operation then return 200 as we are using guest update cart
+  // endpoint, So we will not get customer id from cart.
+  if (getTopUpQuote() !== null) {
+    return 200;
+  }
   // Backend validation.
   const cartCustomerId = await getCartCustomerId();
   if (drupalSettings.userDetails.customerId > 0) {
@@ -836,7 +842,15 @@ const updateCart = async (postData) => {
     '@action': action,
   });
 
-  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
+  // As we are using guest cart update in case of Topup, we will not pass
+  // bearerToken.
+  let bearerToken = true;
+  if ((action === 'update billing'
+    || action === 'update payment')
+    && getTopUpQuote()) {
+    bearerToken = false;
+  }
+  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data), bearerToken)
     .then((response) => {
       if (!hasValue(response.data)
         || (hasValue(response.data.error) && response.data.error)) {

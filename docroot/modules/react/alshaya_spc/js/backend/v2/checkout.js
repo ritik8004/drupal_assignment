@@ -38,8 +38,13 @@ import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
-import { cartContainsOnlyVirtualProduct, cartItemIsVirtual, isFullPaymentDoneByEgift } from '../../utilities/egift_util';
+import {
+  cartContainsOnlyVirtualProduct,
+  cartItemIsVirtual,
+  isFullPaymentDoneByEgift,
+} from '../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -2051,8 +2056,11 @@ const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
     customerId = cart.data.cart.customer.id;
   }
 
-  // Remove cart id and other caches from session.
-  window.commerceBackend.removeCartDataFromStorage(true);
+  // Remove card id if it was not a topup purchase.
+  if (getTopUpQuote() === null) {
+    // Remove cart id and other caches from session.
+    window.commerceBackend.removeCartDataFromStorage(true);
+  }
 
   // Post order id and cart data to Drupal.
   const data = {
@@ -2184,7 +2192,10 @@ window.commerceBackend.placeOrder = async (data) => {
     cartId: window.commerceBackend.getCartId(),
   };
 
-  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
+  // As we are using guest cart update in case of Topup, we will not use
+  // bearerToken.
+  const bearerToken = (getTopUpQuote() === null);
+  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT', null, bearerToken)
     .then(async (response) => {
       const result = {
         success: true,

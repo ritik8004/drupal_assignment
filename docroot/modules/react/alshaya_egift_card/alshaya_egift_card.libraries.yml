@@ -21,3 +21,10 @@ alshaya_egift_check_balance:
     dist/egift_check_balance.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_egift_topup:
+  version: 1.x
+  js:
+    assets/js/egift_topup_check.js: {}
+  dependencies:
+    - core/drupalSettings

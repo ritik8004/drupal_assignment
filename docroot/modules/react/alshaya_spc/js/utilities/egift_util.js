@@ -1,5 +1,5 @@
 import React from 'react';
-import { callEgiftApi } from '../../../js/utilities/egiftCardHelper';
+import { callEgiftApi, getTopUpQuote } from '../../../js/utilities/egiftCardHelper';
 import logger from '../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../js/utilities/events';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
@@ -347,16 +347,20 @@ export const isValidResponseWithFalseResult = (response) => hasValue(response.da
  *   The result object containing the information of API call.
  */
 export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
+  // Check if user is performing topup, if 'YES' then get the topup masked id.
+  const topUpQuote = getTopUpQuote();
   // Prepare the post data.
   let postData = {
     redemptionRequest: {
       amount: updatedAmount,
-      mask_quote_id: cart.cart_id,
+      mask_quote_id: topUpQuote ? topUpQuote.maskedQuoteId : cart.cart_id,
     },
   };
 
   // Change the post data if user is authenticated.
-  if (isUserAuthenticated()) {
+  // Added check of topup quote as in case of topup, we use guest update
+  // redemption endpoint.
+  if (isUserAuthenticated() && topUpQuote === null) {
     postData = {
       redemptionRequest: {
         amount: updatedAmount,
@@ -369,8 +373,12 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
     message: '',
   };
   showFullScreenLoader();
+  // As we are using guest edit amount redemption in case of Topup, we will not
+  // use bearerToken.
+  const bearerToken = (getTopUpQuote() === null);
+
   // Invoke the redemption API to update the redeem amount.
-  const response = await callEgiftApi('eGiftUpdateAmount', 'POST', postData);
+  const response = await callEgiftApi('eGiftUpdateAmount', 'POST', postData, bearerToken);
   if (isValidResponse(response)) {
     // Update the cart total.
     updatePriceSummaryBlock(refreshCart);
@@ -414,4 +422,28 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
   }
 
   return result;
+};
+
+/**
+ * Checks if user is trying to topup and redeem using same card.
+ *
+ * @param {object} cart
+ *   The cart object.
+ * @param {string} cardNumber
+ *   The card number using trying to redeem.
+ *
+ * @returns {boolean}
+ *   Returns true if trying to topup and redeem using name card else false.
+ */
+export const selfCardTopup = (cart, cardNumber) => {
+  let selfTopup = false;
+  // Check if user is trying to use topup and redeem same card.
+  Object.keys(cart.items).forEach((key) => {
+    if (hasValue(cart.items[key].topupCardNumber)
+      && cardNumber === cart.items[key].topupCardNumber) {
+      selfTopup = true;
+    }
+  });
+
+  return selfTopup;
 };

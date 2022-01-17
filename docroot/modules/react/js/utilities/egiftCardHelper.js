@@ -1,6 +1,7 @@
 import { callMagentoApi } from './requestHelper';
 import { isUserAuthenticated } from './helper';
 import logger from './logger';
+import { isEgiftCardEnabled } from './util';
 
 /**
  * Provides the egift send otp api response.
@@ -17,6 +18,21 @@ export const sendOtp = (egiftCardNumber) => {
   };
   // Send OTP to get card balance.
   return callMagentoApi('/V1/egiftcard/getBalance', 'POST', data);
+};
+
+/**
+ * Checks if Topup is in progress.
+ *
+ * @returns {object|null}
+ *   Returns topup quote object or null.
+ */
+export const getTopUpQuote = () => {
+  // Return null if egift card is not enabled.
+  if (!isEgiftCardEnabled()) {
+    return null;
+  }
+
+  return Drupal.getItemFromLocalStorage('topupQuote');
 };
 
 /**
@@ -60,7 +76,9 @@ export const getApiEndpoint = (action, params = {}) => {
       break;
 
     case 'eGiftUpdateAmount':
-      endpoint = isUserAuthenticated()
+      // Check if Topup is in progress then get topup quoteid and use guest
+      // endpoint to perform topup.
+      endpoint = isUserAuthenticated() && getTopUpQuote() == null
         ? '/V1/egiftcard/mine/update-redemption-amount'
         : '/V1/egiftcard/guest-carts/update-redemption-amount';
       break;
@@ -89,13 +107,15 @@ export const getApiEndpoint = (action, params = {}) => {
  *   The object containing post data
  * @param {object} params
  *   The object containing param info.
+ * @param {boolean} bearerToken
+ *   The bearerToken flag.
  *
  * @returns {object}
  *   Returns the promise object.
  */
-export const callEgiftApi = (action, method, postData, params) => {
+export const callEgiftApi = (action, method, postData, params = {}, bearerToken = true) => {
   const endpoint = getApiEndpoint(action, params);
-  return callMagentoApi(endpoint, method, postData);
+  return callMagentoApi(endpoint, method, postData, bearerToken);
 };
 
 /**

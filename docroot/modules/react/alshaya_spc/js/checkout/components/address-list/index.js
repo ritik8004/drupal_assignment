@@ -18,6 +18,7 @@ import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 
 export default class AddressList extends React.Component {
   isComponentMounted = false;
@@ -190,9 +191,12 @@ export default class AddressList extends React.Component {
                 >
                   <AddressForm
                     closeModal={triggerCloseModal}
-                    // Show email id field in case of egift card is enabled
-                    // and cart contains only virtual products.
-                    showEmail={cartContainsOnlyVirtualProduct(cart.cart)}
+                    // Show email id field in case of egift card is enabled,
+                    // cart contains only virtual products and anonymous user.
+                    showEmail={
+                      !isUserAuthenticated()
+                      && cartContainsOnlyVirtualProduct(cart.cart)
+                    }
                     show_prefered
                     default_val={defaultVal}
                     headingText={headingText}

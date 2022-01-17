@@ -8,7 +8,7 @@ import {
   isValidResponseWithFalseResult,
   updatePriceSummaryBlock,
 } from '../utilities/egift_util';
-import { callEgiftApi } from '../../../js/utilities/egiftCardHelper';
+import { callEgiftApi, getTopUpQuote } from '../../../js/utilities/egiftCardHelper';
 import GetEgiftCard from './components/GetEgiftCard';
 import ValidateEgiftCard from './components/ValidateEgiftCard';
 import ValidEgiftCard from './components/ValidEgiftCard';
@@ -80,13 +80,6 @@ export default class RedeemEgiftCard extends React.Component {
     }
   }
 
-  // Update the redemption status.
-  changeRedemptionStatus = (status) => {
-    this.setState({
-      redemptionDisabled: status,
-    });
-  }
-
   // Perform code validation.
   handleCodeValidation = async (code) => {
     const { egiftEmail, egiftCardNumber } = this.state;
@@ -104,7 +97,7 @@ export default class RedeemEgiftCard extends React.Component {
         redeem_points: {
           action: 'set_points',
           quote_id: cartData.cart.cart_id_int,
-          amount: cartData.cart.cart_total,
+          amount: cartData.cart.totals.base_grand_total,
           card_number: egiftCardNumber,
           payment_method: 'hps_payment',
           card_type: 'guest',
@@ -227,9 +220,15 @@ export default class RedeemEgiftCard extends React.Component {
   // Remove the added egift card.
   handleEgiftCardRemove = async () => {
     const { cart: cartData, refreshCart } = this.props;
+    let quoteId = cartData.cart.cart_id;
+    // Check if topup is applicable.
+    const topUpQuote = getTopUpQuote();
+    if (topUpQuote) {
+      quoteId = topUpQuote.maskedQuoteId;
+    }
     let postData = {
       redemptionRequest: {
-        mask_quote_id: cartData.cart.cart_id,
+        mask_quote_id: quoteId,
       },
     };
     // Change payload if authenticated user.
