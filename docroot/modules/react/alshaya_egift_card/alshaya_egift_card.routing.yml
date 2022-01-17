@@ -26,7 +26,7 @@ alshaya_egift_card.my_egift_card:
   path: '/user/{user}/egift-card'
   defaults:
     _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::getLinkedCardPage'
-    _title: 'eGift Card'
+    _title_callback: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::getUserEgiftPageTitle'
   requirements:
     _custom_access: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::checkAccess'
   options:

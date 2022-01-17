@@ -117,4 +117,8 @@ class AlshayaEgiftCardController extends ControllerBase {
     return $build;
   }
 
+  function getUserEgiftPageTitle() {
+    return $this->t('eGift Card', [], ['context' => 'egift']);
+  }
+
 }

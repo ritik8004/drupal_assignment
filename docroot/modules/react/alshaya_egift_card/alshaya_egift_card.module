@@ -30,7 +30,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
 
     $build['#strings'][] = [
       'key' => 'form_egift_card_number',
-      'value' => t('Please enter your card number.', [], [
+      'value' => t('Please enter an eGift card number.', [], [
         'context' => 'egift'
       ]),
     ];
@@ -60,7 +60,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     ];
     $build['#strings'][] = [
       'key' => 'egift_valid_card_number',
-      'value' => t('Please enter a valid card number.', [], [
+      'value' => t('Please enter a valid eGift card number.', [], [
         'context' => 'egift',
       ]),
     ];

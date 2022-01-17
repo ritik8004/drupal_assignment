@@ -64,7 +64,7 @@ export default class ValidateEgiftCard extends React.Component {
               {egiftFormElement({
                 type: 'text',
                 name: 'card_number',
-                placeholder: 'eGift Card Number',
+                placeholder: Drupal.t('eGift Card Number', {}, { context: 'egift' }),
                 className: 'card-number',
                 value: egiftCardNumber,
                 disabled: true,
@@ -72,7 +72,7 @@ export default class ValidateEgiftCard extends React.Component {
               {egiftFormElement({
                 type: 'text',
                 name: 'verification_code',
-                placeholder: 'Enter verification code',
+                placeholder: Drupal.t('Enter verification code', {}, { context: 'egift' }),
                 className: 'verification-code',
               })}
               {egiftFormElement({

@@ -385,7 +385,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
                 <ConditionalView condition={!isEgiftCardExpired}>
                   {
-                    Drupal.t('Pay using egift card', { context: 'egift' })
+                    Drupal.t('Pay using egift card', {}, { context: 'egift' })
                   }
                   <div className="spc-payment-method-desc">
                     <div className="desc-content">
