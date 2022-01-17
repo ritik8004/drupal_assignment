@@ -19,13 +19,13 @@
       padding-#{$left}: 0;
 
       &.ratingfull {
-        @include icon(rating-filled) {
+        @include icon(ratingfull) {
           font-size: 2.5rem;
         }
       }
 
       &.rating {
-        @include icon(rating-empty) {
+        @include icon(rating) {
           font-size: 2.5rem;
         }
       }
