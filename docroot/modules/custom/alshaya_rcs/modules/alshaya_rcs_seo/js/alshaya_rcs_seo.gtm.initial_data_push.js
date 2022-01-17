@@ -25,7 +25,6 @@
         data.productName = entity.name;
         data.productBrand = entity.gtm_attributes.brand;
         data.productPrice = entity.gtm_attributes.price;
-        // Todo.
         data.productOldPrice = '';
         const prices = window.commerceBackend.getPrices(entity, false);
         if (prices.price !== entity.gtm_attributes.price) {
