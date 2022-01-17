@@ -4,6 +4,10 @@
   &:hover {
     background: $plp-secondary-cta-hover-bg;
     color: $primary_btn_text;
+    
+    a {
+      color: $primary_btn_text;
+    }
   }
 }
 
