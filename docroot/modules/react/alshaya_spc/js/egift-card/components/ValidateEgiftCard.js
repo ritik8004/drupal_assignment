@@ -61,32 +61,44 @@ export default class ValidateEgiftCard extends React.Component {
               id="egift-val-form"
               onSubmit={this.handleSubmit}
             >
-              {egiftFormElement({
-                type: 'text',
-                name: 'card_number',
-                placeholder: Drupal.t('eGift Card Number', {}, { context: 'egift' }),
-                className: 'card-number',
-                value: egiftCardNumber,
-                disabled: true,
-              })}
-              {egiftFormElement({
-                type: 'text',
-                name: 'verification_code',
-                placeholder: Drupal.t('Enter verification code', {}, { context: 'egift' }),
-                className: 'verification-code',
-              })}
-              {egiftFormElement({
-                type: 'submit',
-                name: 'button',
-                buttonText: 'Verify',
-              })}
+              <div className="egift-validate-form-input-wrapper">
+                {egiftFormElement({
+                  type: 'text',
+                  name: 'card_number',
+                  label: Drupal.t('eGift Card Number', {}, { context: 'egift' }),
+                  className: 'card-number',
+                  value: egiftCardNumber,
+                  disabled: true,
+                })}
+                {egiftFormElement({
+                  type: 'text',
+                  name: 'verification_code',
+                  label: Drupal.t('Enter verification code', {}, { context: 'egift' }),
+                  className: 'verification-code',
+                })}
+                <div className="egift-redeem-card-links">
+                  <div className="egift-resend-wrapper">
+                    <div className="egift-resend-wrapper__left">
+                      <span className="egift-light-text">{Drupal.t('Didn\'t receive?', {}, { context: 'egift' })}</span>
+                      <span className="egift-resend-code-text" onClick={(e) => this.handleResendCode(e)}>
+                        {Drupal.t('Resend Code', {}, { context: 'egift' })}
+                      </span>
+                    </div>
+                    <div className="egift-resend-wrapper__right">
+                      <span className="egift-change-card-text" onClick={(e) => this.handleChangeCard(e)}>
+                        {Drupal.t('Change Card?', {}, { context: 'egift' })}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-              <div className="modify-wrapper">
-                <span>
-                  {Drupal.t('Didn’t receive?', {}, { context: 'egift' })}
-                  <strong onClick={this.handleResendCode}>{Drupal.t('Resend Code', {}, { context: 'egift' })}</strong>
-                </span>
-                <span onClick={this.handleChangeCard}>{Drupal.t('Change Card?', {}, { context: 'egift' })}</span>
+              <div className="egift-verify-code-redeem-submit-btn">
+                {egiftFormElement({
+                  type: 'submit',
+                  name: 'button',
+                  buttonText: 'Verify',
+                })}
               </div>
             </form>
           </div>

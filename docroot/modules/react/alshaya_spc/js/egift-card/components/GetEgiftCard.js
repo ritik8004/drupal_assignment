@@ -82,25 +82,27 @@ const GetEgiftCard = (props) => {
       })}
       <div className="egift-form-wrapper">
         <form
-          className="egift-get-form"
+          className="egift-redeem-get-code-form"
           method="post"
-          id="egift-get-form"
+          id="egift-redeem-get-code-form"
           onSubmit={(e) => handleSubmit(e, props)}
         >
           {egiftFormElement({
             type: 'text',
             name: 'card_number',
-            placeholder: Drupal.t('eGift Card Number', {}, { context: 'egift' }),
+            label: Drupal.t('eGift Card Number', {}, { context: 'egift' }),
             className: 'card-number',
             value: egiftCardNumber,
             disabled: disable,
           })}
-          {egiftFormElement({
-            type: 'submit',
-            name: 'button',
-            buttonText: 'Get Code',
-            disabled: disable,
-          })}
+          <div className="egift-get-code-redeem-submit-btn">
+            {egiftFormElement({
+              type: 'submit',
+              name: 'button',
+              buttonText: 'Get Code',
+              disabled: disable,
+            })}
+          </div>
         </form>
       </div>
     </div>
