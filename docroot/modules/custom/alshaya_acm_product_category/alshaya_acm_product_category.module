@@ -7,11 +7,8 @@
 
 use Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter\SkuGalleryFormatter;
 use Drupal\block\Entity\Block;
-use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -288,7 +285,12 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     // If translation is available, we check the fields.
     else {
       $old_term = $term->original->getTranslation($langcode);
-      $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name', 'field_show_in_lhn'];
+      $fields_to_check = [
+        'field_commerce_status',
+        'field_category_include_menu',
+        'name',
+        'field_show_in_lhn',
+      ];
 
       foreach ($fields_to_check as $field) {
         if ($term->get($field)->getString() != $old_term->get($field)->getString()) {
@@ -475,6 +477,7 @@ function alshaya_acm_product_category_views_pre_build(ViewExecutable $view) {
       $view->setItemsPerPage(0);
 
       // Remove show_on_load to avoid any extra processing.
+      // @codingStandardsIgnoreLine
       unset($_GET['show_on_load']);
       \Drupal::request()->query->remove('show_on_load');
     }
@@ -575,7 +578,7 @@ function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $conte
     // Remove shop- as prefix from url if true.
     $is_remove_shop_prefix = $term->get('field_remove_shop_prefix')->getString();
     if ($is_remove_shop_prefix) {
-      if (strpos($alias, 'shop-') !== false) {
+      if (strpos($alias, 'shop-') !== FALSE) {
         $alias = str_replace('shop-', '', $alias);
       }
       return;
@@ -662,7 +665,7 @@ function alshaya_acm_product_category_block_access(Block $block, $operation, Acc
   if ($operation == 'view' && $block->id() == 'categoryfacetplp') {
     $route = \Drupal::routeMatch();
     if ($route->getRouteName() == 'entity.taxonomy_term.canonical') {
-      /* @var \Drupal\taxonomy\Entity\Term $term */
+      /** @var \Drupal\taxonomy\Entity\Term $term */
       $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
 
       if (empty($term)) {

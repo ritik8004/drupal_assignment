@@ -11,4 +11,3 @@ source_configuration:
   thumbnails_directory: 'public://oembed_thumbnails'
   source_field: field_media_oembed_video
 field_map: {  }
-

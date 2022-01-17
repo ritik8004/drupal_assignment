@@ -358,7 +358,6 @@ function alshaya_stores_finder_set_markers($name = '', $type = 'module') {
     ->save(TRUE);
 }
 
-
 /**
  * Implements hook_block_access().
  */

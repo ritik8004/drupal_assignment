@@ -16,7 +16,7 @@ function alshaya_social_update_8004() {
     ->execute();
 }
 
- /**
+/**
  * Implements hook_update_N().
  *
  * Adding custom blocks for social login blocks.

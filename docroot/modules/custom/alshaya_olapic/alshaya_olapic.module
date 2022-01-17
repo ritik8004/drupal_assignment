@@ -5,7 +5,6 @@
  * Module file for Alshaya Olapic.
  */
 
-
 /**
  * Implements hook_library_info_build().
  */
@@ -69,7 +68,7 @@ function alshaya_olapic_theme($existing, $type, $theme, $path) {
  *
  * @param array $build
  *   Reference to the build array of spc confirmation.
- * @param string $data_apikeys
+ * @param string $data_apikey
  *   Olapic data api key.
  * @param string $base_currency_code
  *   Olapic data currency code.
