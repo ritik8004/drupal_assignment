@@ -136,9 +136,13 @@ function alshaya_egift_card_preprocess_html(&$variables) {
  * Implements hook_page_attachments().
  */
 function alshaya_egift_card_page_attachments(array &$page) {
+  // Add egift settings config tags to make it work on config change.
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
   // Attach the egift topup library.
   if (\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
     $page['#attached']['library'][] = 'alshaya_egift_card/alshaya_egift_topup';
+    // Add the topup quote expiration time in drupalSettings.
+    $page['#attached']['drupalSettings']['egiftCard']['topupQuoteExpirationTime'] = \Drupal::service('alshaya_egift_card.egift_card_helper')->getTopupQuoteExpirationTime();
   }
 }
 

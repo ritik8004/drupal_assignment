@@ -21,6 +21,29 @@ export const sendOtp = (egiftCardNumber) => {
 };
 
 /**
+ * Checks if the topup quote is expired or not.
+ *
+ * @returns {boolean}
+ *   Returns true if topup quote is expired else false.
+ */
+export const isTopupQuoteExpired = (topupQuoteExpirationTime) => {
+  // Get the topup quote and check if it's expired.
+  const topupQuote = Drupal.getItemFromLocalStorage('topupQuote');
+  if (topupQuote !== null) {
+    const currentTime = new Date().getTime();
+    // Calculate the expiration time.
+    const expireTime = new Date(topupQuote.created);
+    const minutes = expireTime.getMinutes();
+    expireTime.setMinutes(minutes + topupQuoteExpirationTime);
+    // Remove the topup quote from local storage if expired.
+    if (currentTime > expireTime.getTime()) {
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
  * Checks if Topup is in progress.
  *
  * @returns {object|null}
@@ -30,6 +53,12 @@ export const getTopUpQuote = () => {
   // Return null if egift card is not enabled.
   if (!isEgiftCardEnabled()) {
     return null;
+  }
+  // Check if topup quote is expired, if 'YES' then remove it from local
+  // storage.
+  const { topupQuoteExpirationTime } = drupalSettings.egiftCard;
+  if (topupQuoteExpirationTime > 0 && isTopupQuoteExpired(topupQuoteExpirationTime)) {
+    Drupal.removeItemFromLocalStorage('topupQuote');
   }
 
   return Drupal.getItemFromLocalStorage('topupQuote');

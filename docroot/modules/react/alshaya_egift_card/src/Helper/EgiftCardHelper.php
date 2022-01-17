@@ -82,4 +82,14 @@ class EgiftCardHelper {
     return $term_conditions_text;
   }
 
+  /**
+   * Helper to get the topup quote expiration time.
+   *
+   * @return integer
+   *   An integer containing the expiration time ( in mins ).
+   */
+  public function getTopupQuoteExpirationTime() {
+    return $this->configFactory->get('alshaya_egift_card.settings')->get('topup_quote_expiration');
+  }
+
 }

@@ -16,3 +16,6 @@ alshaya_egift_card.settings:
     textarea_maxlength:
       type: integer
       label: 'Maximum length of allowed characters allowed'
+    topup_quote_expiration:
+      type: integer
+      label: 'Expiration time for the topup quote local storage item'

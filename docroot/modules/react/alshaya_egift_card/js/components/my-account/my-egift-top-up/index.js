@@ -101,6 +101,7 @@ export default class MyEgiftTopUp extends React.Component {
           const topUpQuote = {
             id: response.data.quote_details.id,
             maskedQuoteId: response.data.masked_quote_id,
+            created: new Date().getTime(),
           };
           Drupal.addItemInLocalStorage('topupQuote', topUpQuote);
           window.location = Drupal.url('checkout');
