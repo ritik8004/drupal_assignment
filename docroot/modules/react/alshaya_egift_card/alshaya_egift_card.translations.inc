@@ -199,7 +199,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'تم إرسال رمز التحقق بنجاح.',
         'context' => 'egift',
       ],
-      'Redeem amount should be less than or equal to the cart value.' => [
+      'Redeem amount should be less than or equal to the balance payable.' => [
         'ar' => 'يجب أن يكون مبلغ الاسترداد بقيمة أقل أو مساوية لقيمة حقيبة التسوق',
         'context' => 'egift',
       ],
