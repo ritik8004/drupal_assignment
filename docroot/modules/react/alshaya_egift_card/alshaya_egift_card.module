@@ -309,6 +309,11 @@ function alshaya_egift_card_alshaya_spc_checkout_confirmation_order_build_alter(
  * Implements hook_alshaya_acm_customer_update_order_summary_alter().
  */
 function alshaya_egift_card_alshaya_acm_customer_update_order_summary_alter(array &$order, array &$orderRow) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+
   // We will display the name of first order item.
   $item = reset($order['items']);
   if ($item['is_virtual']) {
