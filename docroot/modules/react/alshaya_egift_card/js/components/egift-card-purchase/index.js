@@ -7,7 +7,7 @@ import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
 import EgiftCardsListStepOne from '../egifts-card-step-one';
 import EgiftCardStepTwo from '../egift-card-step-two';
-import { callMagentoApi } from '../../../../js/utilities/requestHelper';
+import { callEgiftApi } from '../../../../js/utilities/egiftCardHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import logger from '../../../../js/utilities/logger';
 import Loading from '../../../../js/utilities/loading';
@@ -25,7 +25,7 @@ export default class EgiftCardPurchase extends React.Component {
 
   async componentDidMount() {
     const params = getQueryStringForEgiftCards();
-    const response = await callMagentoApi('/V1/products', 'GET', params);
+    const response = await callEgiftApi('eGiftProductSearch', 'GET', params);
     if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
       this.setState({
         egiftItems: response.data.items,

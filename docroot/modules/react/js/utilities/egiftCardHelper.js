@@ -87,6 +87,10 @@ export const getApiEndpoint = (action, params = {}) => {
       endpoint = '/V1/egiftcard/unlinkcard';
       break;
 
+    case 'eGiftProductSearch':
+      endpoint = '/V1/products';
+      break;
+
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
