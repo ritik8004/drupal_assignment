@@ -226,6 +226,7 @@ function alshaya_egift_card_alshaya_acm_customer_recent_order_build_alter(array 
 
   // Update details for virtual Product.
   foreach ($build['recent_order'] as &$order) {
+    // Reset order item names.
     $order['#order']['item_names'] = [];
     foreach ($order['#order']['items'] as &$item) {
       if ($item['is_virtual']) {
