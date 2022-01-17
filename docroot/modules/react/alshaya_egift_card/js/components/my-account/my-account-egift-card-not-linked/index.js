@@ -71,7 +71,8 @@ class EgiftCardNotLinked extends React.Component {
     // Empty otp field.
     document.getElementsByName('otp-code')[0].value = '';
     showFullScreenLoader();
-    this.getOtpCode().then((response) => {
+    const cardNumber = document.getElementsByClassName('egift-card-number')[0].value;
+    this.getOtpCode(cardNumber).then((response) => {
       if (typeof response !== 'undefined' && response) {
         this.setState({
           enableVerifyCode: true,
