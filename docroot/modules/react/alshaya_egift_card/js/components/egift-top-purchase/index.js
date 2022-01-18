@@ -94,9 +94,11 @@ export default class EgiftTopPurchase extends React.Component {
    * Set the quote id received from topup api response in storage.
    */
   setTopUpQuoteIdInStorage = (data) => {
+    // Add expiration timestamp in the object.
     const topUpQuote = {
       id: data.quote_details.id,
       maskedQuoteId: data.masked_quote_id,
+      created: new Date().getTime(),
     };
     Drupal.addItemInLocalStorage('topupQuote', topUpQuote);
   };

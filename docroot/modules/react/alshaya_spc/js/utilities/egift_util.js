@@ -372,10 +372,10 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
   showFullScreenLoader();
   // As we are using guest edit amount redemption in case of Topup, we will not
   // use bearerToken.
-  const bearerToken = (getTopUpQuote() === null);
+  const useBearerToken = (getTopUpQuote() === null);
 
   // Invoke the redemption API to update the redeem amount.
-  const response = await callEgiftApi('eGiftUpdateAmount', 'POST', postData, bearerToken);
+  const response = await callEgiftApi('eGiftUpdateAmount', 'POST', postData, {}, useBearerToken);
   if (isValidResponse(response)) {
     // Update the cart total.
     updatePriceSummaryBlock(refreshCart);

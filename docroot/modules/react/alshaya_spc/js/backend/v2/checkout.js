@@ -2194,8 +2194,8 @@ window.commerceBackend.placeOrder = async (data) => {
 
   // As we are using guest cart update in case of Topup, we will not use
   // bearerToken.
-  const bearerToken = (getTopUpQuote() === null);
-  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT', null, bearerToken)
+  const useBearerToken = (getTopUpQuote() === null);
+  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT', null, useBearerToken)
     .then(async (response) => {
       const result = {
         success: true,

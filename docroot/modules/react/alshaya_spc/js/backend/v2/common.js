@@ -844,13 +844,13 @@ const updateCart = async (postData) => {
 
   // As we are using guest cart update in case of Topup, we will not pass
   // bearerToken.
-  let bearerToken = true;
+  let useBearerToken = true;
   if ((action === 'update billing'
     || action === 'update payment')
     && getTopUpQuote()) {
-    bearerToken = false;
+    useBearerToken = false;
   }
-  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data), bearerToken)
+  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data), useBearerToken)
     .then((response) => {
       if (!hasValue(response.data)
         || (hasValue(response.data.error) && response.data.error)) {
