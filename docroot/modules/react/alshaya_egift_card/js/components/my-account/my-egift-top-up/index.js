@@ -1,6 +1,5 @@
 import React from 'react';
 import EgiftCardAmount from '../../egifts-card-step-one/egift-card-amount';
-import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import { getParamsForTopUpCardSearch } from '../../../utilities';
 import {
   removeFullScreenLoader,
@@ -10,6 +9,7 @@ import {
   getDefaultErrorMessage,
   getProcessedErrorMessage,
 } from '../../../../../js/utilities/error';
+import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
 
 export default class MyEgiftTopUp extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ export default class MyEgiftTopUp extends React.Component {
     const params = getParamsForTopUpCardSearch();
     showFullScreenLoader();
     // Get Top up card details.
-    const response = await callMagentoApi('/V1/products', 'GET', params);
+    const response = await callEgiftApi('eGiftProductSearch', 'GET', params);
     removeFullScreenLoader();
     if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
       const { handleHideDetails } = this.props;
@@ -74,7 +74,7 @@ export default class MyEgiftTopUp extends React.Component {
 
     // Call top-up API to add top-up to cart.
     // Don't use bearer token with top-up add to cart API as it is public API.
-    callMagentoApi('/V1/egiftcard/topup', 'POST', params, false)
+    callEgiftApi('eGiftTopup', 'POST', params, false)
       .then((response) => {
         removeFullScreenLoader();
 
