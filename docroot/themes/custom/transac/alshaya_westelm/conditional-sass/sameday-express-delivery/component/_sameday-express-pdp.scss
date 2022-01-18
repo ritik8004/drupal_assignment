@@ -16,5 +16,16 @@
       }
     }
   }
-}
 
+  .express-delivery-title-wrapper {
+    .c-accordion__title::after {
+      transition: none;
+    }
+
+    &.ui-state-active {
+      .c-accordion__title::after {
+        transform: rotate(270deg);
+      }
+    }
+  }
+}
