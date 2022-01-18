@@ -1,5 +1,10 @@
 .acq-content-product {
   .cart-shipping-method {
+    .carrier-title {
+      color: $pdp-delivery-section-title;
+      font-family: $aeo-bold;
+    }
+
     .method-title {
       color: $pdp-delivery-section-subtitle;
     }
@@ -18,6 +23,14 @@
           top: 0.75rem;
           background: url(/themes/custom/transac/alshaya_american_eagle/imgs/icons/minus.svg) no-repeat center;
         }
+      }
+    }
+  }
+
+  #pdp-area-select {
+    .delivery-area-label {
+      .availability-link {
+        color: $pdp-delivery-section-title;
       }
     }
   }

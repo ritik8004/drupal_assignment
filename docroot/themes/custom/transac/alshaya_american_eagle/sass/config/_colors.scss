@@ -19,6 +19,7 @@ $windows-blue: $black;
 $thunderbird: #b91824;
 $boulder-grey: #7c7c7c;
 $_plp_secondary_cta_hover: rgba(0, 0, 0, 0.1);
+$black_text: #222;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -694,5 +695,6 @@ $wishlist-share-text: $black;
 $my-wishlist-share-modal-header: $black;
 
 // Express delivery.
-$pdp-delivery-section-subtitle: $grey;
+$pdp-delivery-section-subtitle: $dove-gray;
+$pdp-delivery-section-title: $black_text;
 
