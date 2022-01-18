@@ -166,4 +166,3 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css
-     
