@@ -108,7 +108,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
   // Handle re-send otp.
   handleResendCode = (e) => {
     e.preventDefault();
-    const { egiftCardNumber } = this.state;
+    const { cardNumber: egiftCardNumber } = this.props;
     // Show loader on api call.
     showFullScreenLoader();
     // Call send otp api.
