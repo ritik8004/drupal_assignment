@@ -10,6 +10,7 @@ import {
   getProcessedErrorMessage,
 } from '../../../../../js/utilities/error';
 import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class MyEgiftTopUp extends React.Component {
   constructor(props) {
@@ -48,7 +49,7 @@ export default class MyEgiftTopUp extends React.Component {
   };
 
 
-  handleTopUpSubmit = (e) => {
+  handleTopUpSubmit = async (e) => {
     e.preventDefault();
     const { topUpCard, amountSet } = this.state;
 
@@ -58,6 +59,20 @@ export default class MyEgiftTopUp extends React.Component {
     });
 
     const { cardNumber } = this.props;
+
+    // Check if cart id is present for anonymous or authenticated user.
+    if (window.commerceBackend.isAnonymousUserWithoutCart()
+      || await window.commerceBackend.isAuthenticatedUserWithoutCart()) {
+      const cartId = await window.commerceBackend.createCart();
+
+      // Show error if still cart id is null.
+      if (!hasValue(cartId)) {
+        this.setState({
+          displayFormError: getDefaultErrorMessage(),
+        });
+        return false;
+      }
+    }
 
     // Prepare params for add top-up to cart.
     const params = {
@@ -107,6 +122,8 @@ export default class MyEgiftTopUp extends React.Component {
           window.location = Drupal.url('checkout');
         }
       });
+
+    return true;
   };
 
   render() {

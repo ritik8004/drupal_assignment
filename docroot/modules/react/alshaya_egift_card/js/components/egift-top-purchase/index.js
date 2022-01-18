@@ -139,7 +139,7 @@ export default class EgiftTopPurchase extends React.Component {
       return false;
     }
 
-    // Check if cart id is present in local store for anonymous user.
+    // Check if cart id is present for anonymous or authenticated user.
     if (window.commerceBackend.isAnonymousUserWithoutCart()
       || await window.commerceBackend.isAuthenticatedUserWithoutCart()) {
       const cartId = await window.commerceBackend.createCart();
