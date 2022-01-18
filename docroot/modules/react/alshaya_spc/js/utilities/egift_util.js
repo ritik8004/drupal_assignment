@@ -264,13 +264,11 @@ export const isFullPaymentDoneByEgift = (cart) => {
       egiftRedeemedAmount,
       egiftRedemptionType,
       balancePayable,
-      base_grand_total: baseGrandTotal,
     } = cart.totals;
 
     if (hasValue(egiftRedeemedAmount)
       && hasValue(egiftRedemptionType)
-      && balancePayable <= 0
-      && (baseGrandTotal - balancePayable) <= 0) {
+      && balancePayable <= 0) {
       return true;
     }
 
@@ -284,8 +282,7 @@ export const isFullPaymentDoneByEgift = (cart) => {
 
       if (hasValue(rawEgiftRdeemedAmount)
         && hasValue(rawEgiftRedemptionType)
-        && rawBalancePayable <= 0
-        && (baseGrandTotal - balancePayable) <= 0) {
+        && rawBalancePayable <= 0) {
         return true;
       }
     }
