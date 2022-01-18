@@ -94,7 +94,7 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
     ];
 
     $form['egift_card_configuration']['textarea_maxlength'] = [
-      '#type' => 'textfield',
+      '#type' => 'number',
       '#title' => $this->t('eGift card message allowed characters.'),
       '#required' => TRUE,
       '#default_value' => $config->get('textarea_maxlength'),
