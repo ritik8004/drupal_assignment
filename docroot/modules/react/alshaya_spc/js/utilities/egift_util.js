@@ -264,11 +264,13 @@ export const isFullPaymentDoneByEgift = (cart) => {
       egiftRedeemedAmount,
       egiftRedemptionType,
       balancePayable,
+      base_grand_total: baseGrandTotal,
     } = cart.totals;
 
     if (hasValue(egiftRedeemedAmount)
       && hasValue(egiftRedemptionType)
-      && balancePayable <= 0) {
+      && balancePayable <= 0
+      && (baseGrandTotal - balancePayable) <= 0) {
       return true;
     }
 
@@ -282,7 +284,8 @@ export const isFullPaymentDoneByEgift = (cart) => {
 
       if (hasValue(rawEgiftRdeemedAmount)
         && hasValue(rawEgiftRedemptionType)
-        && rawBalancePayable <= 0) {
+        && rawBalancePayable <= 0
+        && (baseGrandTotal - balancePayable) <= 0) {
         return true;
       }
     }
@@ -443,4 +446,31 @@ export const selfCardTopup = (cart, cardNumber) => {
   });
 
   return selfTopup;
+};
+
+/**
+ * Checks and returns the applicable cart total for egift.
+ *
+ * @param {object} cart
+ *   The cart object.
+ *
+ * @returns {string}
+ *   Returns the applicable cart total for egift.
+ */
+export const getEgiftCartTotal = (cart) => {
+  // Get the cart total and calculate the amount based on balance payable.
+  const {
+    base_grand_total: baseGrandTotal,
+    balancePayable,
+    egiftRedeemedAmount,
+  } = cart.totals;
+
+  let cartTotal = baseGrandTotal;
+  if (balancePayable >= 0
+    && egiftRedeemedAmount >= 0
+    && (balancePayable + egiftRedeemedAmount) < cartTotal) {
+    cartTotal = balancePayable + egiftRedeemedAmount;
+  }
+
+  return cartTotal;
 };

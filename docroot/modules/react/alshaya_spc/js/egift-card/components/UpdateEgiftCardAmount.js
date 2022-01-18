@@ -1,6 +1,6 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
+import { egiftCardHeader, egiftFormElement, getEgiftCartTotal } from '../../utilities/egift_util';
 import getStringMessage from '../../../../js/utilities/strings';
 import PriceElement from '../../utilities/special-price/PriceElement';
 import { getAmountWithCurrency } from '../../utilities/checkout_util';
@@ -23,8 +23,8 @@ export default class UpdateEgiftCardAmount extends React.Component {
     } else if (egiftAmount <= 0) {
       message = getStringMessage('egift_valid_amount');
       errors = true;
-    } else if (egiftAmount > cart.totals.base_grand_total) {
-      message = Drupal.t('Redeem amount should be less than or equal to the cart total.', {}, { context: 'egift' });
+    } else if (egiftAmount > getEgiftCartTotal(cart)) {
+      message = Drupal.t('Redeem amount should be less than or equal to the balance payable.', {}, { context: 'egift' });
       errors = true;
     }
 

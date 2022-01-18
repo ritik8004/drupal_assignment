@@ -1,6 +1,7 @@
 import React from 'react';
 import ConditionalView from '../common/components/conditional-view';
 import {
+  getEgiftCartTotal,
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
   isValidResponse,
@@ -104,7 +105,7 @@ export default class RedeemEgiftCard extends React.Component {
         redeem_points: {
           action: 'set_points',
           quote_id: cartData.cart.cart_id_int,
-          amount: cartData.cart.totals.base_grand_total,
+          amount: getEgiftCartTotal(cartData.cart),
           card_number: egiftCardNumber,
           payment_method: 'hps_payment',
           card_type: 'guest',

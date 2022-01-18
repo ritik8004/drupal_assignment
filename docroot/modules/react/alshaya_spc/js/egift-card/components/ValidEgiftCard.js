@@ -32,7 +32,6 @@ export default class ValidEgiftCard extends React.Component {
   }
 
   componentDidMount = () => {
-    // Calculate the remaining amount and egift card amount to be used.
     const {
       cart,
     } = this.props;
