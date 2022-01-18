@@ -34,3 +34,16 @@
     transition: 0.3s;
   }
 }
+
+.button {
+  &.status-pending,
+  &.status-delivered,
+  &.status-complete,
+  &.status-processing,
+  &.status-returned {
+    font-family: $dh-semibold;
+    font-weight: normal;
+    color: $user_order_list_status_btn_text;
+    padding-top: 0.25rem;
+  }
+}

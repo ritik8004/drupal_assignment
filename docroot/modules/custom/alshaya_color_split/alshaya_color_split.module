@@ -490,7 +490,7 @@ function alshaya_color_split_page_attachments(array &$attachments) {
     'acq_cart.cart',
     'alshaya_spc.checkout',
     'alshaya_spc.checkout.confirmation',
-    ])) {
+  ])) {
     return;
   }
 
@@ -515,7 +515,7 @@ function alshaya_color_split_alshaya_rcs_product_order_build_alter(array &$build
 /**
  * Attach required information around color split.
  *
- * @param Array $attachments
+ * @param array $attachments
  *   An array containing attachment information.
  */
 function _alshaya_color_split_attach_info(array &$attachments) {

@@ -94,7 +94,7 @@ function alshaya_rcs_listing_migrate_field_carousel_slug() {
   $query->addField('pa', 'alias');
   $query->innerJoin('path_alias', 'pa', "pa.path=concat('/taxonomy/term/', td.tid) AND pa.langcode = td.langcode");
   $query->isNotNull('pa.alias');
-  $query->distinct(true);
+  $query->distinct(TRUE);
   $result = $query->execute()->fetchAll();
 
   $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');

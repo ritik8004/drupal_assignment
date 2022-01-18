@@ -138,7 +138,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
 
       // Create a name without spaces and any special character.
       // For the logo file name - we always want the english value.
-      // @TODO: Move this to a separate field and remove name dependency.
+      // @todo Move this to a separate field and remove name dependency.
       $parent_en = \Drupal::service('entity.repository')->getTranslationFromContext($parent, 'en');
       $term_clean_name = Html::cleanCssIdentifier(mb_strtolower($parent_en->label()));
       // Set the language suffix for logo based on current language.
@@ -607,7 +607,12 @@ function alshaya_super_category_get_default_term($langcode = NULL) {
  * Implements hook_block_access().
  */
 function alshaya_super_category_block_access(Block $block, $operation, AccountInterface $account) {
-  if ($operation != 'view' || !in_array($block->getPluginId(), ['system_breadcrumb_block', 'page_title_block'])) {
+  if ($operation != 'view'
+    || !in_array(
+      $block->getPluginId(),
+      ['system_breadcrumb_block', 'page_title_block']
+    )
+  ) {
     return;
   }
 
@@ -622,7 +627,7 @@ function alshaya_super_category_block_access(Block $block, $operation, AccountIn
     return;
   }
 
-  /* @var \Drupal\node\Entity\Node $node */
+  /** @var \Drupal\node\Entity\Node $node */
   $node = $route->getParameter('node');
   if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
     /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
@@ -652,7 +657,8 @@ function alshaya_super_category_form_taxonomy_term_acq_product_category_form_alt
     }
     $termDepth = taxonomy_term_depth_get_by_tid($form['tid']['#value']);
     if ($termDepth != 1) {
-      // Hide the super category logo fields since it is not required for children categories.
+      // Hide the super category logo fields since it is not required for
+      // children categories.
       $form['field_logo_active_image']['#access'] = FALSE;
       $form['field_logo_inactive_image']['#access'] = FALSE;
       $form['field_logo_header_image']['#access'] = FALSE;
@@ -721,11 +727,11 @@ function alshaya_super_category_preprocess_html(&$variables) {
     return;
   }
 
-  /* @var \Drupal\Core\Routing\AdminContext $admin_context */
+  /** @var \Drupal\Core\Routing\AdminContext $admin_context */
   $admin_context = \Drupal::service('router.admin_context');
   // Process super category related stuff only for non admin routes.
   if (!$admin_context->isAdminRoute()) {
-    /* @var \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree */
+    /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree */
     $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
     // Get the super category term.
     $term = $product_category_tree->getCategoryTermRequired();

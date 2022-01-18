@@ -109,7 +109,7 @@ function alshaya_department_page_update_8001() {
   // If there are any department pages available.
   if (!empty($department_pages)) {
     foreach ($department_pages as $tid => $nid) {
-      /* @var \Drupal\Core\Path\AliasStorage $alias_storage */
+      /** @var \Drupal\Core\Path\AliasStorage $alias_storage */
       $alias_storage = \Drupal::service('path.alias_storage');
       // Get enabled langcodes.
       $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
@@ -158,7 +158,7 @@ function alshaya_department_page_update_8001() {
  *   Source path.
  */
 function _alshaya_department_page_delete_alias($source_path) {
-  /* @var \Drupal\redirect\RedirectRepository $redirect_repository */
+  /** @var \Drupal\redirect\RedirectRepository $redirect_repository */
   $redirect_repository = \Drupal::service('redirect.repository');
   $redirects = $redirect_repository->findBySourcePath($source_path);
   if ($redirects) {

@@ -16,6 +16,6 @@ function alshaya_stores_migrate_update_8301() {
   ], 'alshaya_stores_migrate');
 
   // Remove the old configs.
-  // @todo: Use generic method alshaya_config_delete_configs, when available.
+  // @todo Use generic method alshaya_config_delete_configs, when available.
   \Drupal::configFactory()->getEditable('migrate_plus.migration.store')->delete();
 }

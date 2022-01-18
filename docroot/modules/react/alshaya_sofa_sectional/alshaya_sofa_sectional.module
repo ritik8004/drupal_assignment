@@ -8,10 +8,7 @@
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\node\Entity\Node;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_color_split\AlshayaColorSplitManager;
 use Drupal\acq_commerce\SKUInterface;
-use Drupal\alshaya_sofa_sectional\Services\SofaSectionalHelper;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -36,7 +33,7 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
   }
 
   // Attach a unique class with view mode to render form in context.
-  $build['#attributes']['class'][] = 'has-sofa-sectional-'. $view_mode .'-form';
+  $build['#attributes']['class'][] = 'has-sofa-sectional-' . $view_mode . '-form';
 
   // Add a unique class if PDP has a sofa and sectional form.
   $build['#attributes']['class'][] = 'has-sofa-sectional-form';

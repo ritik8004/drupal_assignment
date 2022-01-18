@@ -59,7 +59,7 @@ function datadog_js_page_attachments(array &$attachments) {
 
   array_unshift($attachments['#attached']['html_head'], $init_script);
 
-  // Ignoring the cross origin script if qparam external is set to 0
+  // Ignoring the cross origin script if qparam external is set to 0.
   $external = \Drupal::request()->get('external');
   if (isset($external) && $external == 0) {
     return;

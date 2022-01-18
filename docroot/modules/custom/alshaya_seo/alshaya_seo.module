@@ -155,7 +155,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
       // Adding PHP_EOL on both sides to make it look exactly same as expected.
       '#value' => PHP_EOL . json_encode($gkg_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
       '#weight' => 100,
-  ];
+    ];
   $attachments['#attached']['html_head'][] = [$gkg_script, 'gkg_data'];
   // Adding Product schema for PDP.
   // For rcs_product type, we process the schema in the rcs code.
@@ -167,16 +167,19 @@ function alshaya_seo_page_attachments(array &$attachments) {
 
     if (!empty($product_schema_data)) {
       $product_script = [
-          '#type' => 'html_tag',
-          '#tag' => 'script',
-          '#attributes' => [
-            'type' => 'application/ld+json',
-          ],
-          // Adding PHP_EOL on both sides to make it look exactly same as expected.
-          '#value' => PHP_EOL . json_encode($product_schema_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
-          '#weight' => 110,
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#attributes' => [
+          'type' => 'application/ld+json',
+        ],
+        // Adding PHP_EOL on both sides so it looks exactly same as expected.
+        '#value' => PHP_EOL . json_encode($product_schema_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
+        '#weight' => 110,
       ];
-      $attachments['#attached']['html_head'][] = [$product_script, 'product_data'];
+      $attachments['#attached']['html_head'][] = [
+        $product_script,
+        'product_data',
+      ];
     }
   }
 }
@@ -488,11 +491,10 @@ function alshaya_seo_form_google_tag_container_alter(&$form, FormStateInterface 
  *
  * @param array $form
  *   An associative array containing the structure of the form.
- *
- * @param \Drupal\Core\Form\FormStateInterface $formState
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The current state of the form.
  */
-function alshaya_seo_google_tag_container_validate_handler($form, FormStateInterface $form_state) {
+function alshaya_seo_google_tag_container_validate_handler(array $form, FormStateInterface $form_state) {
   // Unset conditions to resolve gtm tag visibilty for anonymous users.
   $condition_ids = $form_state->getTemporaryValue('filtered_conditions');
   if (!empty($condition_ids)) {
@@ -504,8 +506,10 @@ function alshaya_seo_google_tag_container_validate_handler($form, FormStateInter
  * Implements hook_ENTITY_TYPE_translation_create() for node entities.
  */
 function alshaya_seo_node_translation_create(EntityInterface $node) {
-  // Create entity alias for arabic translation when english translation is saved.
-  if ($node->bundle() == 'acq_product' && $node->language()->getId() === 'en'
+  // Create entity alias for arabic translation
+  // when english translation is saved.
+  if ($node->bundle() == 'acq_product'
+    && $node->language()->getId() === 'en'
     && $node->hasTranslation('ar')) {
     $node_translation = $node->getTranslation('ar');
     \Drupal::service('pathauto.generator')->createEntityAlias($node_translation, 'update');

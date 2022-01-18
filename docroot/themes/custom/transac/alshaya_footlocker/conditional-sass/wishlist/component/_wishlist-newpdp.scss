@@ -1,0 +1,11 @@
+body.wishlist-enabled {
+  &.magazine-layout-v2 {
+    .magv2-header:not(.magv2-pdp-sticky-header) {
+      .wishlist-button-wrapper {
+        @include breakpoint($only-mobile) {
+          #{$right}: -0.1875rem;
+        }
+      }
+    }
+  }
+}

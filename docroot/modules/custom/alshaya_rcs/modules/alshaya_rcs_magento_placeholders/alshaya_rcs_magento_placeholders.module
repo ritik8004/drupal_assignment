@@ -1,7 +1,11 @@
 <?php
 
+/**
+ * @file
+ * Module file.
+ */
+
 use Drupal\Core\Site\Settings;
-use Drupal\Core\Url;
 
 /**
  * Implements hook_page_attachments().

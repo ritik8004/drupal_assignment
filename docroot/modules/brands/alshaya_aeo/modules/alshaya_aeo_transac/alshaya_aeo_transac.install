@@ -10,10 +10,10 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
  * Implements hook_update_N().
- *
- * Set image_thumb_gallery => false to use single image gallery on listing pages.
  */
 function alshaya_aeo_transac_update_8005() {
+  // Set image_thumb_gallery => false to use single image gallery
+  // on listing pages.
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(

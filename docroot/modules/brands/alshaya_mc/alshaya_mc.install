@@ -23,7 +23,7 @@ function alshaya_mc_update_8321() {
   );
   \Drupal::service('acq_sku.fields_manager')->addFields();
 
-  // Adding fields in search_api index
+  // Adding fields in search_api index.
   $manager->updateConfigs(
     ['search_api.index.product'],
     'alshaya_product',

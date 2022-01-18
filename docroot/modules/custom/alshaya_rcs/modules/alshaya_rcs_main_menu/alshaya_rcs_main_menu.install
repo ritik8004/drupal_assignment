@@ -79,7 +79,7 @@ function alshaya_rcs_main_menu_install() {
  */
 function _alshaya_rcs_main_menu_advance_page_batch_operation(&$sandbox) {
   // Bulk update all the advanced page node with the product category.
-    $nids = \Drupal::entityQuery('node')
+  $nids = \Drupal::entityQuery('node')
     ->condition('type', 'advanced_page')
     ->execute();
   // Use the sandbox to store the information needed to track progression.

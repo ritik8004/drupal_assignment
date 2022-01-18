@@ -113,7 +113,10 @@ function alshaya_non_transac_install() {
   }
 
   // Invoke a hook to let other modules know that profile installation is done.
-  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya_non_transac', $modules]);
+  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', [
+    'alshaya_non_transac',
+    $modules,
+  ]);
 
   $strings = [
     'find a store' => [

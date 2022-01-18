@@ -21,7 +21,7 @@ function alshaya_rcs_preprocess_block(&$variables) {
   $rcs_library = '';
 
   // Attach CSS theming to RCS blocks via asset libraries.
-  switch($variables['base_plugin_id']) {
+  switch ($variables['base_plugin_id']) {
     case 'rcs_ph_navigation_menu':
       $rcs_library = 'alshaya_white_label/rcs-ph-navigation-menu';
       break;

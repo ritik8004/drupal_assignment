@@ -190,14 +190,14 @@ function alshaya_bbw_transac_search_api_algolia_objects_alter(array &$objects, I
       foreach ($nodeLanguages as $lan_key => $lan_value) {
         $node_object = $node->getTranslation($lan_key);
         $raw_title = _alshaya_bbw_transac_get_language_specific_data($lan_key, $object['sku'], $node_object);
-        if ($raw_title){
+        if ($raw_title) {
           $object['raw_title'][$lan_key] = $raw_title;
         }
       }
     }
     else {
       $raw_title = _alshaya_bbw_transac_get_language_specific_data($object['search_api_language'], $object['sku'], $node);
-      if($raw_title){
+      if ($raw_title) {
         $object['raw_title'] = $raw_title;
       }
     }
@@ -214,7 +214,7 @@ function alshaya_bbw_transac_alshaya_product_list_exclude_attribute_alter(array 
 /**
  * Get Language specific SKU and Node.
  */
-function _alshaya_bbw_transac_get_language_specific_data($lang, $sku_data, $node){
+function _alshaya_bbw_transac_get_language_specific_data($lang, $sku_data, $node) {
   $sku = SKU::loadFromSku($sku_data, $lang);
   if (!($sku instanceof SKUInterface)) {
     return FALSE;

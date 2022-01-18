@@ -26,8 +26,6 @@ function alshaya_tabby_node_view(array &$build, EntityInterface $entity, EntityV
 
 /**
  * Implements hook_alshaya_spc_cart_build_alter().
- *
- * @param array $build
  */
 function alshaya_tabby_alshaya_spc_cart_build_alter(array &$build) {
   /** @var \Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper $alshayaTabbyHelper */
@@ -36,9 +34,7 @@ function alshaya_tabby_alshaya_spc_cart_build_alter(array &$build) {
 }
 
 /**
- * Implements spc_checkout_confirmation_order_build_alter().
- *
- * @param array $build
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
  */
 function alshaya_tabby_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
   if (!empty($order['payment']) && $order['payment']['method'] === 'tabby') {

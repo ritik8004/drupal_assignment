@@ -100,7 +100,7 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
         if ($cart->getExtension('loyalty_card')) {
           $privilege_card = $cart->getExtension('loyalty_card');
         }
-        // @TODO: What if user really doesn't want to use loyalty card?
+        // @todo What if user really doesn't want to use loyalty card?
         elseif (\Drupal::currentUser()->isAuthenticated()) {
           $user = User::load(\Drupal::currentUser()->id());
           $privilege_card = $user->get('field_privilege_card_number')->getString();
@@ -139,7 +139,7 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
       $add_privilege_fields = TRUE;
 
       // Allow loyalty only if its enabled.
-      // @TODO: type tel?
+      // @todo type tel?
       $form['field_privilege_card_number']['widget'][0]['value']['#type'] = 'tel';
       _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
 
@@ -350,7 +350,10 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#element_validate' => [
       '_alshaya_loyalty_compare_field_values',
     ],
-    '#limit_validation_errors' => [['privilege_card_number'], ['privilege_card_number2']],
+    '#limit_validation_errors' => [
+      ['privilege_card_number'],
+      ['privilege_card_number2'],
+    ],
     '#suffix' => '</div>',
     '#default_current_value' => $default_value,
   ];
@@ -447,7 +450,7 @@ function alshaya_loyalty_preprocess_input(&$variables) {
  * Implements hook_preprocess_user().
  */
 function alshaya_loyalty_preprocess_user(&$variables) {
-  /* @var \Drupal\user\Entity\User $user */
+  /** @var \Drupal\user\Entity\User $user */
   $user = $variables['user'];
   $card = $user->get('field_privilege_card_number')->getString();
   if (empty($card)) {

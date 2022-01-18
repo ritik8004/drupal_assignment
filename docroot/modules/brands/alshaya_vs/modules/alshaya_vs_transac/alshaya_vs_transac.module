@@ -203,7 +203,7 @@ function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
     ];
 
     // Get short description of given html.
-    /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+    /** @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
     $product_helper = \Drupal::service('alshaya_acm_product.helper');
     $desc = $product_helper->createShortDescription($description_value);
     if (!empty($desc['read_more'])) {
@@ -283,7 +283,8 @@ function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
   if ($context === 'pdp' || $context === 'modal') {
     $title = '<span class="title--sub">' . $collection . '</span>';
     $title .= '<span class="title--main">' . $new . ' ' . $short_description . '</span>';
-  } else {
+  }
+  else {
     $title = implode(' ', [$new, $collection, $short_description]);
   }
 
