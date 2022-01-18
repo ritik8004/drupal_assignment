@@ -45,13 +45,12 @@ export default class ValidateEgiftCard extends React.Component {
   }
 
   render = () => {
-    const { egiftEmail, egiftCardNumber } = this.props;
+    const { egiftCardNumber } = this.props;
     return (
       <>
         <div className="egift-wrapper">
           {egiftCardHeader({
             egiftHeading: Drupal.t('Verify eGift Card to redeem from card balance', {}, { context: 'egift' }),
-            egiftSubHeading: Drupal.t('Verification code sent to @email', { '@email': egiftEmail }, { context: 'egift' }),
           })}
 
           <div className="egift-form-wrapper">
