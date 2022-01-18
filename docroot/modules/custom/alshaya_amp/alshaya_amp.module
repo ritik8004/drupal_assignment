@@ -7,6 +7,7 @@
 
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_theme().
@@ -146,5 +147,15 @@ function alshaya_amp_page_top(&$page) {
     if (!empty($page['google_tag_noscript_tag'])) {
       unset($page['google_tag_noscript_tag']);
     }
+  }
+}
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function alshaya_amp_language_switch_links_alter(array &$links, $type, Url $url) {
+  foreach ($links as $lang => $url_object) {
+    // This is set from Drupal\amp\EventSubscriber\AmpEventSubscriber.
+    unset($links[$lang]['query']['_wrapper_format']);
   }
 }
