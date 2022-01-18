@@ -45,7 +45,7 @@ function alshaya_pdp_layouts_form_alter(&$form, $form_state, $form_id) {
     'node_acq_product_form',
     'node_rcs_product_edit_form',
     'node_rcs_product_form',
-    ]
+  ]
   )) {
     $product_settings_form = \Drupal::config('alshaya_acm_product.settings');
     $global_layout = $product_settings_form->get('pdp_layout');

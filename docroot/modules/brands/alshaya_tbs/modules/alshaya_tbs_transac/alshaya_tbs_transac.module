@@ -17,7 +17,7 @@ function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, E
   if (($entity->bundle() == 'rcs_product')) {
     $build['#attached']['library'][] = 'alshaya_tbs_transac/product';
   }
-  else if ($entity->bundle() == 'acq_product') {
+  elseif ($entity->bundle() == 'acq_product') {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $skuManager->getSkuForNode($entity);
@@ -322,4 +322,3 @@ function alshaya_tbs_transac_alshaya_performance_preload_alter(array &$preload) 
 function alshaya_tbs_transac_rcs_placeholders_graphql_query_alter(&$query_fields) {
   $query_fields['products']['items']['short_description'] = ['html'];
 }
-

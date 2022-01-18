@@ -317,8 +317,8 @@ function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
 }
 
 /**
-* Implements hook_ENTITY_TYPE_insert().
-*/
+ * Implements hook_ENTITY_TYPE_insert().
+ */
 function alshaya_facets_pretty_paths_taxonomy_term_insert(TermInterface $term) {
   if ($term->bundle() == 'sku_product_option') {
     $facet_item_value = $term->getName();
@@ -333,8 +333,8 @@ function alshaya_facets_pretty_paths_taxonomy_term_insert(TermInterface $term) {
 }
 
 /**
-  * Implements hook_ENTITY_TYPE_update().
-  */
+ * Implements hook_ENTITY_TYPE_update().
+ */
 function alshaya_facets_pretty_paths_taxonomy_term_update(TermInterface $term) {
   if ($term->bundle() == 'sku_product_option') {
     $facet_item_value = $term->getName();
