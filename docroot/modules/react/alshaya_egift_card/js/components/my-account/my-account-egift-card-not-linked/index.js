@@ -122,7 +122,7 @@ class EgiftCardNotLinked extends React.Component {
     }
 
     // If card number is non english show error.
-    if (/[\u0600-\u06FF]/.test(cardNumber)) {
+    if (!cardNumber.match(/^[a-z0-9A-Z]+$/i)) {
       document.getElementById('egift-card-number-error').innerHTML = Drupal.t('Please enter a valid eGift card number.', {}, { context: 'egift' });
       return;
     }
@@ -140,7 +140,7 @@ class EgiftCardNotLinked extends React.Component {
         }
 
         // If otp is non english show error.
-        if (/[\u0600-\u06FF]/.test(otp)) {
+        if (!otp.match(/^[a-z0-9A-Z]+$/i)) {
           document.getElementById('egift-code-error').innerHTML = Drupal.t('Please enter a valid verification code.', {}, { context: 'egift' });
           return;
         }
