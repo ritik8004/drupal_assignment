@@ -371,7 +371,6 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     return Cache::mergeTags(parent::getCacheTags(), [
       'user:' . $this->currentUser->id(),
       'config:alshaya_user.settings',
-      'config:alshaya_egift_card.settings',
     ]);
   }
 
