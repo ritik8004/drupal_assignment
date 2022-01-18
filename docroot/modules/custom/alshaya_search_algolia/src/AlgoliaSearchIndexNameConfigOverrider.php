@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_search_api;
+namespace Drupal\alshaya_search_algolia;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
@@ -21,6 +21,20 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     if (!empty($overrides)) {
       return $overrides;
     }
+
+    // Default overrides for acquia_search_index.
+    $overrides['search_api.index.acquia_search_index']['read_only'] = TRUE;
+    $overrides['search_api.index.acquia_search_index']['status'] = TRUE;
+    $overrides['search_api.index.acquia_search_index']['server'] = 'algolia';
+    $overrides['search_api.index.acquia_search_index']['options']['algolia_index_apply_suffix'] = TRUE;
+    $overrides['search_api.index.acquia_search_index']['options']['algolia_index_list'] = '';
+
+    $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_apply_suffix'] = TRUE;
+    $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_list'] = '';
+    $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_batch_deletion'] = TRUE;
+
+    $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_batch_deletion'] = TRUE;
+    $overrides['search_api.index.alshaya_algolia_index']['options']['object_id_field'] = 'field_skus';
 
     // @codingStandardsIgnoreLine
     global $_acsf_site_name;
