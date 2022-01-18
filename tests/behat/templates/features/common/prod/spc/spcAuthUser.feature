@@ -15,7 +15,7 @@ Feature: Test the My Account functionality
     And I should see "You have no recent orders to display."
 
   @address
-  Scenario: As an authenticated user, I should be able to address to my address book
+  Scenario: As an authenticated user, I should be able to add address to my address book
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
