@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_produuct;
+namespace Drupal\alshaya_acm_product;
 
 use Drupal\Core\Config\ConfigFactory;
 
