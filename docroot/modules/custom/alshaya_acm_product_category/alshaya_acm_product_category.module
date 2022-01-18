@@ -97,6 +97,11 @@ function alshaya_acm_product_category_preprocess_block(&$variables) {
       $variables['attributes']['class'][] = 'hide-on-mobile';
     }
   }
+  // Invalidate views block whenever acq_product_category term updated.
+  if ($variables['plugin_id'] == 'views_block:product_category_level_3-block_2') {
+    $variables['content']['#cache']['tags'][] = 'taxonomy_term_list:acq_product_category';
+  }
+
 }
 
 /**
