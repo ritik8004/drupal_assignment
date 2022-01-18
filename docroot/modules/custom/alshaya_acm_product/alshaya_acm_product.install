@@ -10,8 +10,6 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
 use Drupal\user\Entity\Role;
-use Drupal\block\BlockInterface;
-use Drupal\block\Entity\Block;
 use Drupal\search_api\Item\Field;
 use Drupal\facets\Entity\Facet;
 
@@ -22,10 +20,10 @@ use Drupal\facets\Entity\Facet;
  */
 function alshaya_acm_product_update_8078() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-    $manager = \Drupal::service('alshaya_config.manager');
-    $manager->updateConfigs([
-      'alshaya_acm_product.display_settings',
-    ],
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'alshaya_acm_product.display_settings',
+  ],
       'alshaya_acm_product',
       'install',
       AlshayaConfigManager::MODE_ADD_MISSING,
@@ -132,7 +130,7 @@ function alshaya_acm_product_update_8073() {
     AlshayaConfigManager::MODE_MERGE
   );
   \Drupal::service('acq_sku.fields_manager')->addFields();
-  // Adding fields in search_api index
+  // Adding fields in search_api index.
   $manager->updateConfigs(
     ['search_api.index.product'],
     'alshaya_product',
@@ -179,8 +177,8 @@ function alshaya_acm_product_update_8072() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-      'rest.resource.product_linked_skus_v2'
-    ],
+    'rest.resource.product_linked_skus_v2',
+  ],
     'alshaya_acm_product',
     'install'
   );
@@ -196,10 +194,10 @@ function alshaya_acm_product_update_8072() {
  */
 function alshaya_acm_product_update_8071() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-    $manager = \Drupal::service('alshaya_config.manager');
-    $manager->updateConfigs([
-      'alshaya_acm_product.display_settings',
-    ],
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'alshaya_acm_product.display_settings',
+  ],
       'alshaya_acm_product',
       'install',
       AlshayaConfigManager::MODE_ADD_MISSING,
@@ -223,6 +221,7 @@ function alshaya_acm_product_update_8070() {
   }
   $role->save();
 }
+
 /**
  * Implements hook_update_N().
  *
@@ -286,9 +285,9 @@ function alshaya_acm_product_update_8066() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-      'rest.resource.stock_v2',
-      'rest.resource.product_v2'
-    ],
+    'rest.resource.stock_v2',
+    'rest.resource.product_v2',
+  ],
     'alshaya_acm_product',
     'install'
   );

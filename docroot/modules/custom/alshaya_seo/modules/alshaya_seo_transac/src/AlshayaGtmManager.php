@@ -551,7 +551,7 @@ class AlshayaGtmManager {
     $attributes['gtm-stock'] = '';
 
     // Override values from parent if parent sku available.
-    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
+    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId, 'en')) {
       // Overriding the products name as per CORE-26973.
       $attributes['gtm-name'] = trim($parent_sku->label());
       $attributes['gtm-sku-type'] = $parent_sku->bundle();

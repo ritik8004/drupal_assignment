@@ -9,7 +9,6 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Url;
 
 /**
  * Implements hook_alshaya_search_algolia_object_alter().
@@ -31,7 +30,7 @@ function alshaya_pdp_pretty_path_alshaya_search_algolia_object_alter(array &$obj
  */
 function alshaya_pdp_pretty_path_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   $current_uri = \Drupal::request()->getRequestUri();
-  if ($entity->bundle() !== 'acq_product' || stripos($current_uri, '/-', 0) === false) {
+  if ($entity->bundle() !== 'acq_product' || stripos($current_uri, '/-', 0) === FALSE) {
     return;
   }
 
@@ -73,14 +72,5 @@ function alshaya_pdp_pretty_path_alshaya_feed_variant_info_alter(&$variant, SKUI
       // Use only first swatch attribute for pretty path.
       break;
     }
-  }
-}
-
-/**
- * Implements hook_language_switch_links_alter().
- */
-function alshaya_pdp_pretty_path_language_switch_links_alter(array &$links, $type, Url $url) {
-  foreach ($links as $lang => $url_object) {
-    unset($links[$lang]['query']['_wrapper_format']);
   }
 }

@@ -22,7 +22,8 @@ use Drupal\acq_commerce\SKUInterface;
  * Implements hook_alshaya_stores_finder_store_update_alter().
  */
 function alshaya_spc_alshaya_stores_finder_store_update_alter(&$node, array $store) {
-  // Set value in `field_store_type` to denote if it's a store or a collection point.
+  // Set value in `field_store_type` to denote if it's a store or a
+  // collection point.
   if (isset($store['pudo_service'])) {
     $node->get('field_store_type')->setValue($store['pudo_service']);
   }
@@ -30,7 +31,6 @@ function alshaya_spc_alshaya_stores_finder_store_update_alter(&$node, array $sto
 
 /**
  * Implements hook_alshaya_spc_checkout_build_alter().
- * Add cnc collection point feature related data.
  */
 function alshaya_spc_alshaya_spc_checkout_build_alter(array &$build) {
   $config = \Drupal::config('alshaya_spc.collection_points');
@@ -180,7 +180,7 @@ function alshaya_spc_alshaya_acm_product_light_product_data_alter(SKU $sku, arra
 function _alshaya_spc_get_address_fields() {
   $fields = [];
 
-  /* @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
   $alshaya_addressbook_settings = \Drupal::config('alshaya_addressbook.settings');
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
@@ -301,7 +301,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
     'dev',
     'dev2',
     'dev3',
-    'qa2'
+    'qa2',
   ]);
 
   // Use proxy on only specific environments.
@@ -341,7 +341,7 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
       ->getStorage('user')
       ->load($current_user->id());
 
-    $settings['userDetails']['customerId']= (int) $user->get('acq_customer_id')->getString();
+    $settings['userDetails']['customerId'] = (int) $user->get('acq_customer_id')->getString();
 
     // For V2, add user token to drupalSettings for direct backend calls.
     if (\Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion() == 2) {
@@ -419,11 +419,9 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   }
   // Injecting express delivery component only to old pdp layouts.
   // New PDP will directly call delivery options component.
-  if ($product_pdp_layout !== 'magazine_v2') {
-    $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
-  } else {
-    $build['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v2';
-  }
+  $build['#attached']['library'][] = $product_pdp_layout !== 'magazine_v2'
+    ? 'alshaya_spc/express_delivery'
+    : 'alshaya_spc/commerce_backend.cart.v2';
 
   unset($build['home_delivery']);
 }

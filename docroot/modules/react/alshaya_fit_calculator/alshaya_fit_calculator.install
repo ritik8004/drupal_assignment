@@ -5,15 +5,11 @@
  * Install file.
  */
 
-use \Drupal\block\Entity\Block;
-
 /**
- * Add Fit calculator block on PDP for size-guide modal
- * in default theme and translation added.
- *
  * Implements hook_install().
  */
 function alshaya_fit_calculator_install() {
+  // Add Fit calculator block on PDP for size-guide modal in default theme.
   $current_theme = \Drupal::config('system.theme')->get('default');
   \Drupal::configFactory()->getEditable('block.block.alshayafitcalculator')
     ->set('theme', $current_theme)

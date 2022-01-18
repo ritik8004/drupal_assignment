@@ -64,7 +64,8 @@ function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity
  */
 function alshaya_cos_transac_preprocess_product_zoom(&$vars) {
   $pdp_gallery_type = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_type');
-  // Set pdp_gallery_type to show swatch images in mobile with classic gallery in magazine layout.
+  // Set pdp_gallery_type to show swatch images in mobile with classic
+  // gallery in magazine layout.
   if ($pdp_gallery_type == 'classic') {
     $vars['pdp_gallery_type'] = $pdp_gallery_type;
   }
@@ -201,7 +202,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   // which they should be displayed.
   $return['description'][] = $description;
 
-  /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+  /** @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
   $product_helper = \Drupal::service('alshaya_acm_product.helper');
   $short_desc = $product_helper->createShortDescription($description['value']['#markup']);
   $return['short_desc']['value'] = strip_tags($short_desc['html']);

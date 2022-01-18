@@ -23,8 +23,6 @@ function alshaya_pdp_react_install() {
 
 /**
  * Method for new pdp translations.
- *
- * @return void
  */
 function _alshaya_pdp_react_translations() {
   // Add translations.

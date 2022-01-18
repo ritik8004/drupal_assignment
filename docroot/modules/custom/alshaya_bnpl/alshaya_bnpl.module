@@ -26,8 +26,6 @@ function alshaya_bnpl_node_view(array &$build, EntityInterface $entity, EntityVi
 
 /**
  * Implements hook_alshaya_spc_cart_build_alter().
- *
- * @param array $build
  */
 function alshaya_bnpl_alshaya_spc_cart_build_alter(array &$build) {
   /** @var \Drupal\alshaya_bnpl\AlshayaBnplWidgetHelper $bnplWidgetHelper */
