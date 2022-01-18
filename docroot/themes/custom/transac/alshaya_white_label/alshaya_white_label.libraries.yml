@@ -672,3 +672,8 @@ egift-myaccount:
       css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css: {}
   dependencies:
     - alshaya_white_label/egift-common
+
+egift-card-checkout-confirmation:
+  css:
+    theme:
+      css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: {}

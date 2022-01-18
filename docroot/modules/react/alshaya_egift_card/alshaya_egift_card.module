@@ -307,6 +307,10 @@ function alshaya_egift_card_alshaya_spc_checkout_confirmation_order_build_alter(
   $build['#attached']['drupalSettings']['egiftCard'] = [
     'enabled' => $egiftCard_settings->isEgiftCardEnabled(),
   ];
+
+  if ($egiftCard_settings && $egiftCard_settings->isEgiftCardEnabled()) {
+    $build['#attached']['library'][] = 'alshaya_white_label/egift-card-checkout-confirmation';
+  }
 }
 
 /**
