@@ -109,7 +109,6 @@ export default class EgiftTopupFor extends React.Component {
                 type="text"
                 id="card_number"
                 name="card_number"
-                onFocus={(e) => this.handleOnFocus(e)}
                 onBlur={(e) => this.handleEvent(e)}
               />
               <div className="error" id="card-number-error">
