@@ -33,4 +33,12 @@
       header: false
     });
   }
+  // Initialize the promo popup on page.
+  Drupal.tabbyPromoPopup = function (amount) {
+    new TabbyPromoAlShaya({
+      currency: drupalSettings.alshaya_spc.currency_config.currency_code,
+      price: amount,
+      infoAttrName: 'tabbyInfoAlshaya',
+    });
+  }
 })(Drupal, drupalSettings);
