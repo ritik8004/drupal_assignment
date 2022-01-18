@@ -1,0 +1,23 @@
+.wishlist-share-popup-container {
+  .wishlist-share-popup-block {
+    .actions {
+      button.email-share-link {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+#my-wishlist {
+  .empty-message {
+    .actions {
+      a {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

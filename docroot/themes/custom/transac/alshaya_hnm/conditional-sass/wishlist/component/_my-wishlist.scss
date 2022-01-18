@@ -7,6 +7,10 @@
     .actions {
       a {
         font-family: $hnm-demibold;
+
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   }
@@ -40,6 +44,12 @@
       button,
       .link-copied {
         font-family: $hnm-demibold;
+      }
+
+      button.email-share-link {
+        &:hover {
+          opacity: 1;
+        }
       }
     }
 
