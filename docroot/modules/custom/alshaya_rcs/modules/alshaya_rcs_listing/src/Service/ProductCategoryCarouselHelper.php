@@ -82,18 +82,32 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
 
     // Theme content as accordion.
     $carousel['content']['product_category_carousel'] = [
-      '#theme' => 'alshaya_white_label_accordion',
-      '#title' => $accordion_title ?: NULL,
-      '#content' => [],
-      '#view_all' => $link,
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['alshaya-product-category-carousel-accordion'],
+        'data-slug' => $slug,
+        'data-title' => $accordion_title ?? NULL,
+        'data-view-all' => json_encode([
+          'text' => $this->getViewAllText(),
+          'class' => 'category-accordion-view-all',
+        ]),
+      ],
+      '#content' => '#rcs.carousel.accordion#',
       '#cache' => [
         'tags' => [
           ProductCategoryTree::CACHE_TAG,
         ],
       ],
       '#attached' => [
+        'drupalSettings' => [
+          'alshayaProductCarousel' => [
+            $slug => $carousel_title,
+          ],
+        ],
         'library' => [
           'alshaya_white_label/product-category-accordion',
+          'alshaya_algolia_react/product_category_carousel_v2',
+          'alshaya_white_label/product_carousel',
         ],
       ],
     ];

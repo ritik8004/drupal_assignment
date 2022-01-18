@@ -14,3 +14,8 @@ rcs_listing_dynamic_yield:
 product_carousel_utility:
   js:
     js/alshaya_rcs_product_category_carousel.utility.js: {}
+
+carousel.accordion:
+  version: 1.x
+  js:
+    templates/alshaya-rcs-carousel-accordion.handlebars: {}

@@ -169,6 +169,17 @@ exports.render = function render(
       }
       break;
 
+    case 'carousel_accordion':
+      // Render the PLP mobile menu block.
+      if (typeof globalThis.renderRcsCarousel !== 'undefined') {
+        html += globalThis.renderRcsCarousel.render(
+          settings,
+          entity,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       Drupal.alshayaLogger('debug', 'Placeholder @placeholder not supported for render.', {
         '@placeholder': placeholder
