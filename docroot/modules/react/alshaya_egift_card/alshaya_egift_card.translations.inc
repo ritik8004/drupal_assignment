@@ -290,10 +290,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'ربط بطاقة الهدايا الإلكترونية الخاصة بي',
         'context' => 'egift',
       ],
-      'eGift Card' => [
-        'ar' => ' بطاقة الهدايا الإلكترونية',
-        'context' => 'egift',
-      ],
       'You dont have any eGift card linked to your account, link card to use it for your purchases' => [
         'ar' => ' ليس لديك أي بطاقة هدايا إلكترونية مرتبطة بحسابك، قم بربط حسابك ببطاقة هدايا لاستخدامها في عملية الشراء',
         'context' => 'egift',
@@ -382,6 +378,10 @@ function _alshaya_egift_card_translations() {
       ],
       'Redeem eGift Card' => [
         'ar' => 'Redeem eGift Card',
+        'context' => 'egift',
+      ],
+      'Enter amount' => [
+        'ar' => 'إدخال المبلغ',
         'context' => 'egift',
       ],
     ],
