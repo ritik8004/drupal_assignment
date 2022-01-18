@@ -328,3 +328,12 @@ function alshaya_egift_card_alshaya_acm_customer_update_order_summary_alter(arra
     $orderRow['name'] = $item['sku'] == 'giftcard_topup' ? t('eGift Card Top-up', [], ['context' => 'egift']) : t('Alshaya eGift card', [],  ['context' => 'egift']);
   }
 }
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function alshaya_egift_card_block_view_alter(&$build, $block) {
+  if ($block->getPluginId() === 'alshaya_my_account_links') {
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_egift_card.settings']);
+  }
+}

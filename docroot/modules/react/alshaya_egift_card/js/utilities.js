@@ -1,7 +1,6 @@
 /**
  * Get query string for egift list api.
  *
- * @todo convert string to object of params.
  */
 const getQueryStringForEgiftCards = () => ({
   'searchCriteria[pageSize]': 5,
