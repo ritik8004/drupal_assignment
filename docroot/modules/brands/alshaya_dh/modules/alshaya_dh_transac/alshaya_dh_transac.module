@@ -62,8 +62,6 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
     $description_value .= $desc;
   }
 
-  $description_value .= '<h2>' . t('Details and care') . '</h2>';
-
   $list_of_attributes = [
     'attr_details_and_care' => '',
     'attr_style_taxonomy' => t('Style'),
@@ -95,6 +93,7 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
       '#theme' => 'pdp_details_care',
       '#properties' => $properties,
     ];
+    $description_value .= '<h2>' . t('Details and care') . '</h2>';
     $description_value .= $details_and_care_value;
     $description_value .= render($details_and_care);
   }
