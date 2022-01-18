@@ -26,6 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
+use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
 
 /**
  * Class Alshaya Spc Controller.
@@ -110,6 +111,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $spcHelper;
 
   /**
+   * Delivery Options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager $payment_method_manager
@@ -134,6 +142,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Acm checkout com api helper.
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
    *   Spc helper service.
+   * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
+   *   Delivery Options Helper.
    */
   public function __construct(AlshayaSpcPaymentMethodManager $payment_method_manager,
                               CheckoutOptionsManager $checkout_options_manager,
@@ -145,7 +155,8 @@ class AlshayaSpcController extends ControllerBase {
                               LanguageManagerInterface $language_manager,
                               ModuleHandlerInterface $module_handler,
                               AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper,
-                              AlshayaSpcHelper $spc_helper) {
+                              AlshayaSpcHelper $spc_helper,
+                              DeliveryOptionsHelper $delivery_options_helper) {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
@@ -157,6 +168,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->moduleHandler = $module_handler;
     $this->checkoutComApiHelper = $checkout_com_api_helper;
     $this->spcHelper = $spc_helper;
+    $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 
   /**
@@ -174,7 +186,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('language_manager'),
       $container->get('module_handler'),
       $container->get('alshaya_acm_checkoutcom.api_helper'),
-      $container->get('alshaya_spc.helper')
+      $container->get('alshaya_spc.helper'),
+      $container->get('alshaya_acm_product.delivery_options_helper')
     );
   }
 
@@ -252,7 +265,7 @@ class AlshayaSpcController extends ControllerBase {
 
     $express_delivery_config = $this->config('alshaya_spc.express_delivery');
     // Show express delivery options if feature is enabled.
-    if ($express_delivery_config->get('status')) {
+    if ($this->deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
       $build['#attached']['drupalSettings']['expressDelivery'] = [
         'enabled' => TRUE,
       ];
@@ -674,8 +687,9 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $express_delivery_config = $this->config('alshaya_spc.express_delivery');
+
     // Show express delivery options if feature is enabled.
-    if ($express_delivery_config->get('status')) {
+    if ($this->deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
       $build['#attached']['drupalSettings']['expressDelivery'] = [
         'enabled' => TRUE,
       ];

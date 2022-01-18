@@ -102,3 +102,11 @@ alshaya_spc.callback_payment_error:
     _permission: 'access content'
   options:
     no_cache: 'TRUE'
+
+alshaya_spc.alshaya_delivery_options_settings:
+  path: '/admin/config/alshaya/delivery-options'
+  defaults:
+    _form: '\Drupal\alshaya_spc\Form\AlshayaDeliveryOptionsConfigForm'
+    _title: 'Alshaya Delivery Options Configuration'
+  requirements:
+    _permission: 'administer site configuration'

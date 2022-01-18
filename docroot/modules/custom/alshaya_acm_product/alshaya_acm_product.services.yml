@@ -197,3 +197,8 @@ services:
       - '@request_stack'
   alshaya_acm_product.sku_images_helper:
     class: Drupal\alshaya_acm_product\SkuImagesHelper
+
+  alshaya_acm_product.delivery_options_helper:
+    class: Drupal\alshaya_acm_product\DeliveryOptionsHelper
+    arguments:
+      - '@config.factory'
