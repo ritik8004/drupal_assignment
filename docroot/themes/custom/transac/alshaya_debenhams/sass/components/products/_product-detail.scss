@@ -333,6 +333,12 @@
     }
   }
 
+  .read-more-description-link-mobile,
+  .show-less-link {
+    font-family: $dh-semibold;
+    font-size: 0.75rem;
+  }
+
   .field {
     &__label {
       font-weight: normal;
@@ -346,15 +352,19 @@
       font-family: $dh-light;
 
       .desc-wrapper {
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-          font-weight: normal;
-          text-transform: uppercase;
-          padding-bottom: 0.375rem;
+        .desc-value {
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6 {
+            margin: 1rem 0 0.8125rem;
+          }
+
+          .details-care-label {
+            font-family: $dh-semibold;
+          }
         }
 
         .composition-wrapper {
