@@ -10,6 +10,28 @@ use Drupal\Core\Field\BaseFieldDefinition;
 /**
  * Implements hook_update_N().
  *
+ * Adds Country Switcher block.
+ */
+function alshaya_menus_update_8004() {
+
+  // Add block.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['block.block.countryswitcher'],
+    'alshaya_menus',
+    'install'
+  );
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_menus', 'alshaya_menus.translations');
+  $translations = _alshaya_menus_translations();
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Plugin of type string changed to string_textfield.
  */
 function alshaya_menus_update_8003() {
