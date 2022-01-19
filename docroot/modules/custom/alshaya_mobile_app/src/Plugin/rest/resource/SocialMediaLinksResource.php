@@ -117,12 +117,13 @@ class SocialMediaLinksResource extends ResourceBase {
 
         // Get class of the menu item.
         $menu_class = '';
-        if (!empty($menu_link_content->getPluginDefinition()['options']['attributes'])
-          && !empty($menu_link_content->getPluginDefinition()['options']['attributes']['class'])) {
-          $menu_class = $menu_link_content->getPluginDefinition()['options']['attributes']['class'];
+        $menu_plugin = $menu_link_content->getPluginDefinition();
+        if (isset($menu_plugin['options']['attributes']['class']) && !empty($menu_plugin['options']['attributes']['class'])) {
+          $menu_class = $menu_plugin['options']['attributes']['class'];
+          $menu_class = is_array($menu_class) ? reset($menu_class) : $menu_class;
         }
         // Get menu id.
-        $menu_id = $menu_link_content->getPluginDefinition()['metadata']['entity_id'];
+        $menu_id = $menu_plugin['metadata']['entity_id'];
         // Load with menu id and get menu link object.
         $menu_link_obj = $this->entityTypeManager->getStorage('menu_link_content')->load($menu_id);
 
