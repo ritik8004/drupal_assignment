@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm_product;
 use Drupal\Core\Config\ConfigFactory;
 
 /**
- * Class containing general helper methods for delivery options.
+ * Class containing general helper methods to enable same day/express delivery.
  */
 class DeliveryOptionsHelper {
 
