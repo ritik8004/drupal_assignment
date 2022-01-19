@@ -10,6 +10,8 @@ on:
       - qa
       - uat
       - master
+  create:
+    tags:
   pull_request:
 
 concurrency:
@@ -184,7 +186,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-18.04
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' || github.event_name == 'create' }}
 
     container:
       image: devwithlando/php:7.4-fpm-4
