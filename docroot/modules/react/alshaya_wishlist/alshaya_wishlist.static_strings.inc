@@ -26,5 +26,9 @@ function _alshaya_wishlist_strings() {
       'key' => 'remove_from_wishlist',
       'value' => t('Remove', [], ['context' => 'wishlist']),
     ],
+    [
+      'key' => 'empty_wishlist',
+      'value' => t('Your @wishlist_label is empty.', [], ['context' => 'wishlist']),
+    ],
   ];
 }
