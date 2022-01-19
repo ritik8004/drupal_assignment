@@ -14,6 +14,7 @@ use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Cache\Cache;
+use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
 
 /**
  * Provides the default laypout for PDP.
@@ -56,6 +57,13 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   private $optionsHelper;
 
   /**
+   * Delivery Options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
+  /**
    * Constructs a new MagazineV2PdpLayout.
    *
    * @param array $configuration
@@ -72,6 +80,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    *   Config Factory service object.
    * @param \Drupal\alshaya_product_options\ProductOptionsHelper $options_helper
    *   Product Options Helper.
+   * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
+   *   Delivery Options Helper.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -79,13 +89,15 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_image_manager,
                               ConfigFactoryInterface $config_factory,
-                              ProductOptionsHelper $options_helper) {
+                              ProductOptionsHelper $options_helper,
+                              DeliveryOptionsHelper $delivery_options_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->skuManager = $sku_manager;
     $this->skuImageManager = $sku_image_manager;
     $this->configFactory = $config_factory;
     $this->optionsHelper = $options_helper;
+    $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 
   /**
@@ -99,7 +111,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('config.factory'),
-      $container->get('alshaya_product_options.helper')
+      $container->get('alshaya_product_options.helper'),
+      $container->get('alshaya_acm_product.delivery_options_helper')
     );
   }
 
@@ -151,17 +164,17 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
     $vars['#cache']['tags'] = Cache::mergeTags($vars['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
     // Checking if express delivery enabled.
-    if ($express_delivery_config->get('status')) {
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDelivery'] = $express_delivery_config->get('status');
+    if ($this->deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDelivery'] = TRUE;
       // Show delivery options as per order in express delivery config.
       $delivery_options = alshaya_acm_product_get_delivery_options($sku);
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['deliveryOptions'] = $delivery_options['values'];
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] ? 'active' : 'in-active';
     }
 
     // Set delivery options only if product is buyable.
     // Hide home delivery default options if express delivery enabled.
-    if ($is_product_buyable && !($express_delivery_config->get('status'))) {
+    if ($is_product_buyable && !($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) {
       // Check if home delivery is available for this product.
       if (alshaya_acm_product_available_home_delivery($sku)) {
         $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
@@ -297,10 +310,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['rawGallery'] = $variant_gallery;
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $child->get('final_price')->getString());
 
-        $parent_sku = $this->skuManager->getParentSkuBySku($child);
-        $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku->getSku());
-        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['deliveryOptions'] = $delivery_options['values'];
-        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
         if ($child_sku == reset($sorted_variants)) {
           $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $variant_gallery;
         }
