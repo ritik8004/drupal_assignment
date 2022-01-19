@@ -4,7 +4,7 @@
       box-shadow: none;
 
       a {
-        @include btn();
+        @include button-brand();
       }
     }
   }

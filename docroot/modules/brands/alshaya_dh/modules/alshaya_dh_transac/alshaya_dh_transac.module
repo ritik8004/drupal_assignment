@@ -9,7 +9,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 
-
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
@@ -62,8 +61,6 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
     $description_value .= $desc;
   }
 
-  $description_value .= '<h2>' . t('Details and care') . '</h2>';
-
   $list_of_attributes = [
     'attr_details_and_care' => '',
     'attr_style_taxonomy' => t('Style'),
@@ -95,6 +92,7 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
       '#theme' => 'pdp_details_care',
       '#properties' => $properties,
     ];
+    $description_value .= '<h2>' . t('Details and care') . '</h2>';
     $description_value .= $details_and_care_value;
     $description_value .= render($details_and_care);
   }
@@ -107,7 +105,7 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
   // which they should be displayed.
   $return['description'][] = $description;
 
-  /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+  /** @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
   $product_helper = \Drupal::service('alshaya_acm_product.helper');
   $short_desc = $product_helper->createShortDescription($description['value']['#markup']);
   $return['short_desc']['value'] = strip_tags($short_desc['html']);

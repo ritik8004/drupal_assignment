@@ -21,7 +21,8 @@ function alshaya_kz_transac_lite_update_8004() {
   $connection = \Drupal::database();
   $query = $connection->select('ticket', 'tkt');
   $query->fields('tkt', [
-    'id', 'langcode', $source_column]);
+    'id', 'langcode', $source_column,
+  ]);
   $query->isNotNull('tkt.' . $source_column);
   $result = $query->execute()->fetchAll();
 

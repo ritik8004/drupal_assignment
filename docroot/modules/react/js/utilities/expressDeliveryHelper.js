@@ -66,9 +66,35 @@ const checkAreaAvailabilityStatusOnCart = (cartShippingMethods) => {
   return true;
 };
 
+/**
+ * Helper function to check if Express delivery is enabled.
+ */
+const checkSameDayDeliveryStatus = () => {
+  if (typeof drupalSettings.expressDelivery !== 'undefined'
+    && typeof drupalSettings.expressDelivery.same_day_delivery !== 'undefined') {
+    return drupalSettings.expressDelivery.same_day_delivery;
+  }
+
+  return false;
+};
+
+/**
+ * Helper function to check if Express delivery is enabled.
+ */
+const checkExpressDeliveryStatus = () => {
+  if (typeof drupalSettings.expressDelivery !== 'undefined'
+    && typeof drupalSettings.expressDelivery.express_delivery !== 'undefined') {
+    return drupalSettings.expressDelivery.express_delivery;
+  }
+
+  return false;
+};
+
 export {
   isExpressDeliveryEnabled,
   checkProductExpressDeliveryStatus,
   checkShippingMethodsStatus,
   checkAreaAvailabilityStatusOnCart,
+  checkSameDayDeliveryStatus,
+  checkExpressDeliveryStatus,
 };

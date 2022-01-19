@@ -8,7 +8,6 @@
 use Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\alshaya_search_api\EventSubscriber\AlshayaSearchApiProductProcessedEventSubscriber;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\TypedData\Exception\MissingDataException as MissingDataExceptionAlias;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Query\ConditionInterface;
@@ -46,9 +45,10 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     // For the rest endpoint.
     // Tag added in CategoryProductListResource::prepareAndExecuteQuery().
     if ($query->hasTag('category_product_list')) {
-      // @TODO: Find a way to use the class constant here.
+      // @todo Find a way to use the class constant here.
       // Module alshaya_mobile_app is not dependency of current one.
       // Get requested sort option for mobile app.
+      // @codingStandardsIgnoreLine
       $exposed_input = $_REQUEST['sort'] ?? '';
 
       // If no sorting option provided, we add the default sort here.
@@ -59,6 +59,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     }
     // For web get the requested sort option.
     else {
+      // @codingStandardsIgnoreLine
       $exposed_input = $_REQUEST['sort_bef_combine'] ?? '';
     }
 
@@ -428,7 +429,11 @@ function alshaya_acm_product_position_term_validate(array &$form, FormStateInter
     if (!empty($sort_options)) {
 
       // Sort the options based on weight.
-      uasort($sort_options, [AlshayaPlpSortSettingsForm::class, 'weightArraySort']);
+      uasort($sort_options, [
+        AlshayaPlpSortSettingsForm::class,
+        'weightArraySort',
+      ]);
+
       $result = [];
       // Prepare sort option array for saving in config.
       foreach ($sort_options as $key => $sort_option) {

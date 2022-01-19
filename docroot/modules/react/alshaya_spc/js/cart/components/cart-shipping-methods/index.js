@@ -38,12 +38,7 @@ const CartShippingMethods = (props) => {
     <div className="sku-cart-delivery-methods">
       <div className="shipping-tags-first-row">
         {
-          shippingMethods.filter((el, i) => i < 2).map(ShippingMethodTag)
-        }
-      </div>
-      <div className="shipping-tags-second-row">
-        {
-          shippingMethods.filter((el, i) => i > 1).map(ShippingMethodTag)
+          shippingMethods.map(ShippingMethodTag)
         }
       </div>
     </div>

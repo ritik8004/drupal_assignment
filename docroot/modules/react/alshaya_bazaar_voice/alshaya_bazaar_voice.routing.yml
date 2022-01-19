@@ -3,25 +3,25 @@ alshaya_bazaar_voice.bv_form_config:
   defaults:
     _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::getWriteReviewFieldsConfig'
   requirements:
-    _access: 'TRUE'
+    _permission: 'access content'
 alshaya_bazaar_voice.upload:
   path: '/uploadfile'
   defaults:
     _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::uploadFile'
   requirements:
-    _access: 'TRUE'
+    _permission: 'access content'
 alshaya_bazaar_voice.uas_token:
   path: '/get-uas-token'
   defaults:
     _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::getUasToken'
   requirements:
-    _access: 'TRUE'
+    _permission: 'access content'
 alshaya_bazaar_voice.product_review_stats:
   path: '/get-product-review-stats/{productId}'
   defaults:
     _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::getProductReviewStatistics'
   requirements:
-    _access: 'TRUE'
+    _permission: 'access content'
 alshaya_bazaar_voice.user_reviews:
   path: '/user/{user}/reviews'
   defaults:

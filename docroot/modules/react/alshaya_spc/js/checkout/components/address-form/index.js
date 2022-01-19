@@ -23,6 +23,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 export default class AddressForm extends React.Component {
   isComponentMounted = true;
@@ -192,6 +193,10 @@ export default class AddressForm extends React.Component {
       closeModal,
       showEmail,
       shippingAsBilling = null,
+      isExpressDeliveryAvailable,
+      // if fillDefaultValue is true,
+      // Default value will be always be available to form.
+      fillDefaultValue,
     } = this.props;
 
     const {
@@ -204,7 +209,11 @@ export default class AddressForm extends React.Component {
 
     let defaultAddressVal = [];
     if (defaultVal) {
-      defaultAddressVal = defaultVal;
+      if ((typeof fillDefaultValue !== 'undefined' && fillDefaultValue)
+      || (isExpressDeliveryEnabled() && isExpressDeliveryAvailable)
+      || !isExpressDeliveryEnabled()) {
+        defaultAddressVal = defaultVal;
+      }
     }
 
     Object.entries(window.drupalSettings.address_fields).forEach(
