@@ -4,7 +4,7 @@ const TabbyWidget = (props) => {
   const {
     classNames, mobileOnly, pageType, id,
   } = props;
-  const { tabby: tabbyConfig } = window.drupalSettings;
+  const { tabby: tabbyConfig, path } = window.drupalSettings;
 
   switch (pageType) {
     case 'pdp':
@@ -22,7 +22,7 @@ const TabbyWidget = (props) => {
       );
     case 'checkout':
       return (
-        <button type="button" className={classNames} data-tabby-info="installments" />
+        <button type="button" className={classNames} data-tabby-info-alshaya="installments" data-tabby-language={path.currentLanguage} />
       );
     default:
       return null;
