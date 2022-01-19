@@ -96,7 +96,7 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
    */
   public function build() {
     $user_details = [
-      'userId' => $this->currentUser->id(),
+      'userId' => (alshaya_acm_customer_is_customer($this->currentUser)) ? alshaya_acm_customer_is_customer($this->currentUser) : $this->currentUser->id(),
       'emailId' => $this->currentUser->getEmail(),
     ];
     $product_review_data = NULL;
