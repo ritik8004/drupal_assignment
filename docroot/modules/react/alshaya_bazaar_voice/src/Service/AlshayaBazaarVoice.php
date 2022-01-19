@@ -621,7 +621,7 @@ class AlshayaBazaarVoice {
     $config = $this->configFactory->get('bazaar_voice.settings');
     $sharedKey = $config->get('shared_secret_key');
     $maxAge = $config->get('max_age');
-    $userId = (alshaya_acm_customer_is_customer($this->currentUser)) ? alshaya_acm_customer_is_customer($this->currentUser) : $this->currentUser->id();
+    $userId = alshaya_acm_customer_is_customer($this->currentUser, TRUE);
     $mail = $this->currentUser->getEmail();
     $productId = $this->currentRequest->get('product');
 
@@ -802,7 +802,7 @@ class AlshayaBazaarVoice {
     $sanitized_sku = $this->skuManager->getSanitizedSku($sku_id);
     $config = $this->configFactory->get('bazaar_voice.settings');
     $myaccount_reviews_limit = $config->get('myaccount_reviews_limit');
-    $customer_id = (alshaya_acm_customer_is_customer($this->currentUser)) ? alshaya_acm_customer_is_customer($this->currentUser) : $this->currentUser->id();
+    $customer_id = alshaya_acm_customer_is_customer($this->currentUser, TRUE);
     $extra_params = [
       'filter' => 'AuthorId:' . $customer_id,
       'Include' => 'Authors,Products',

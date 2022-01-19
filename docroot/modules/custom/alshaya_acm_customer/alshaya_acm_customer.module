@@ -832,12 +832,13 @@ function alshaya_acm_customer_alshaya_i18n_onetime_translation_add() {
  *
  * @param \Drupal\user\UserInterface|\Drupal\Core\Session\AccountProxy $user
  *   User to check if it is valid customer.
+ * @param bool $return_id
+ *   Flag to specify if we should return id or boolean.
  *
- * @return bool|string
- *   Id if user is customer, false otherwise.
+ * @return bool|int|string
+ *   Boolean or id based on the flag status.
  */
-function alshaya_acm_customer_is_customer($user) {
-  $return_id = FALSE;
+function alshaya_acm_customer_is_customer($user, bool $return_id = FALSE) {
   if ($user instanceof UserInterface) {
     // Do nothing, we need this to have else condition.
   }
@@ -845,12 +846,13 @@ function alshaya_acm_customer_is_customer($user) {
     $user = User::load($user->id());
   }
   else {
-    return $return_id;
+    return $return_id ? 0 : FALSE;
   }
 
-  if (!empty($user->get('acq_customer_id')->getString())) {
-    $return_id = $user->get('acq_customer_id')->getString();
+  $user_id = $user->get('acq_customer_id')->getString();
+  if (empty($user_id)) {
+    return $return_id ? 0 : FALSE;
   }
 
-  return $return_id;
+  return $return_id ? $user_id : TRUE;
 }
