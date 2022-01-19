@@ -382,10 +382,12 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   }
   $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
 
+  /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
+  $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
   // Return if express delivery feature is disabled.
   // And product is not buyable.
   // Otherwise show express delivery options.
-  if (!($express_delivery_config->get('status')) || !(alshaya_acm_product_is_buyable($sku))) {
+  if (!($deliveryOptionsHelper->ifSddEdFeatureEnabled()) || !(alshaya_acm_product_is_buyable($sku))) {
     return;
   }
   // Adding address related configs to load area list block.
