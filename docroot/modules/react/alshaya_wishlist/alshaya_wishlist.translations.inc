@@ -105,5 +105,10 @@ function _alshaya_wishlist_translations() {
       'ar' => 'قم بإزالتها',
       'context' => 'wishlist',
     ],
+    'go shopping' => [
+      'en' => 'Go Shopping',
+      'ar' => 'اذهب للتسوق',
+      'context' => 'wishlist',
+    ],
   ];
 }
