@@ -58,6 +58,9 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             // dont show linked card redemption section in checkout page.
             // If selfTopup no need to show linked card redemption section in checkout page.
             if (selfCardTopup(cart.cart, result.data.card_number)) {
+              this.setState({
+                renderWait: false,
+              });
               return;
             }
 
