@@ -288,12 +288,12 @@ export const isFullPaymentDoneByEgift = (cart) => {
     const {
       egiftRedeemedAmount,
       egiftRedemptionType,
-      balancePayable,
+      base_grand_total: baseGrandTotal,
     } = cart.totals;
 
     if (hasValue(egiftRedeemedAmount)
       && hasValue(egiftRedemptionType)
-      && balancePayable <= 0) {
+      && baseGrandTotal === egiftRedeemedAmount) {
       return true;
     }
 
@@ -302,12 +302,11 @@ export const isFullPaymentDoneByEgift = (cart) => {
       const {
         hps_redeemed_amount: rawEgiftRdeemedAmount,
         hps_redemption_type: rawEgiftRedemptionType,
-        balance_payble: rawBalancePayable,
       } = cart.totals.extension_attributes;
 
       if (hasValue(rawEgiftRdeemedAmount)
         && hasValue(rawEgiftRedemptionType)
-        && rawBalancePayable <= 0) {
+        && baseGrandTotal === rawEgiftRdeemedAmount) {
         return true;
       }
     }
@@ -483,15 +482,17 @@ export const getEgiftCartTotal = (cart) => {
   // Get the cart total and calculate the amount based on balance payable.
   const {
     base_grand_total: baseGrandTotal,
-    balancePayable,
+    totalBalancePayable,
     egiftRedeemedAmount,
   } = cart.totals;
 
   let cartTotal = baseGrandTotal;
-  if (balancePayable >= 0
+  // The cart total for egift should be less than the redemption amount and
+  // the pending balance.
+  if (totalBalancePayable >= 0
     && egiftRedeemedAmount >= 0
-    && (balancePayable + egiftRedeemedAmount) < cartTotal) {
-    cartTotal = balancePayable + egiftRedeemedAmount;
+    && (totalBalancePayable + egiftRedeemedAmount) < cartTotal) {
+    cartTotal = totalBalancePayable + egiftRedeemedAmount;
   }
 
   return cartTotal;

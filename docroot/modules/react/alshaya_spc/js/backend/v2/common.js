@@ -362,6 +362,7 @@ const getProcessedCartData = async (cartData) => {
     cartData.totals.total_segments.forEach((element) => {
       if (element.code === 'balance_payable') {
         data.totals.balancePayable = element.value;
+        data.totals.totalBalancePayable = element.value;
       }
       if (element.code === 'aura_payment') {
         data.totals.paidWithAura = element.value;
