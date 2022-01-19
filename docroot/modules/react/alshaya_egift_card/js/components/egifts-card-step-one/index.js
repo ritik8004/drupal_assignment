@@ -36,6 +36,14 @@ export default class EgiftCardsListStepOne extends React.Component {
       document.getElementById('textarea-count').innerHTML = getTextAreaMaxLength();
     }
 
+    // Remove active class from previous card amount.
+    const amountElements = document.getElementsByClassName('item-amount');
+    if (typeof amountElements !== 'undefined' && amountElements !== null) {
+      for (let i = 0; i < amountElements.length; i++) {
+        amountElements[i].classList.remove('active');
+      }
+    }
+
     // Get all egift card items.
     const { items } = this.state;
 
