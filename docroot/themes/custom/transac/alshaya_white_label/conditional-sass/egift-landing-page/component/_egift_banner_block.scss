@@ -26,7 +26,7 @@
 
   .paragraph-image_title_subtitle_link {
     background-color: $egift-banner-bg;
-    padding: 6rem 4.5rem;
+    padding: 5.625rem 4.625rem;
 
     @include breakpoint($only-mobile) {
       padding: 2rem 1.5rem;
@@ -82,7 +82,7 @@
       }
 
       .field--name-field-links {
-        width: 48%;
+        width: 48.1%;
 
         @include breakpoint($only-mobile) {
           width: 100%;
@@ -119,6 +119,14 @@
     @include breakpoint($only-mobile) {
       order: 2;
       margin-bottom: 1rem;
+    }
+
+    .field--name-field-banner {
+      margin-#{$right}: 2.563rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0;
+      }
     }
 
     img {
