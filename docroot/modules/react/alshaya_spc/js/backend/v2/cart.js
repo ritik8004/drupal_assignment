@@ -113,6 +113,13 @@ const triggerStockRefresh = (data) => callDrupalApi(
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
+ * Check if user is authenticated and without cart.
+ *
+ * @returns bool
+ */
+window.commerceBackend.isAuthenticatedUserWithoutCart = () => isAuthenticatedUserWithoutCart();
+
+/**
  * Returns the processed cart data.
  *
  * @todo check why getCart in V1 and V2 are different

@@ -18,6 +18,7 @@ import {
 } from '../../../../js/utilities/error';
 import logger from '../../../../js/utilities/logger';
 import Loading from '../../../../js/utilities/loading';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export default class EgiftTopPurchase extends React.Component {
   constructor(props) {
@@ -110,7 +111,7 @@ export default class EgiftTopPurchase extends React.Component {
     });
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
 
     // Unset any errors displayed in previous submission.
@@ -138,16 +139,13 @@ export default class EgiftTopPurchase extends React.Component {
       return false;
     }
 
-    // Check if cart id is present in local store for anonymous user.
-    if (!isUserAuthenticated()) {
-      let cartId = window.commerceBackend.getCartId();
-      if (cartId === null) {
-        // Create an empty cart and set cart id in storage.
-        cartId = window.commerceBackend.createCart();
-      }
+    // Check if cart id is present for anonymous or authenticated user.
+    if (window.commerceBackend.isAnonymousUserWithoutCart()
+      || await window.commerceBackend.isAuthenticatedUserWithoutCart()) {
+      const cartId = await window.commerceBackend.createCart();
 
       // Show error if still cart id is null.
-      if (cartId === null) {
+      if (!hasValue(cartId)) {
         document.getElementById('top-up-error').innerHTML = getDefaultErrorMessage();
         return false;
       }
