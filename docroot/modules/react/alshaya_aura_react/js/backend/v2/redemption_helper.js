@@ -80,6 +80,10 @@ const redeemPoints = (cardNumber, data) => callMagentoApi(`/V1/apc/${cardNumber}
       paidWithAura: 0,
       balancePayable: 0,
       balancePoints: 0,
+      // Adding an extra total balance payable attribute, so that we can use this
+      // in egift.
+      // Doing this because while removing AURA points, we remove the Balance
+      // Payable attribute from cart total.
       totalBalancePayable: 0,
     },
   };
