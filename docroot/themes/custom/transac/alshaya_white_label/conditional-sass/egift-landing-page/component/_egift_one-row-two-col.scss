@@ -73,6 +73,7 @@
           .field--name-field-button-link {
             @include egift-btn;
 
+            position: relative;
             border: 1px solid $egift-button-border;
           }
         }
