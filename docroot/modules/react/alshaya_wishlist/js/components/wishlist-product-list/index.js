@@ -20,6 +20,7 @@ import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelpe
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import Loading from '../../../../js/utilities/loading';
+import getStringMessage from '../../../../js/utilities/strings';
 
 class WishlistProductList extends React.Component {
   constructor(props) {
@@ -162,8 +163,7 @@ class WishlistProductList extends React.Component {
     // If anonymous user, check if wishlist item count is 0.
     if (wishListItemsCount === 0) {
       return PageEmptyMessage(
-        'Your @wishlist_label is empty.',
-        { '@wishlist_label': getWishlistLabel() },
+        getStringMessage('empty_wishlist', { '@wishlist_label': getWishlistLabel() }),
         'wishlist',
       );
     }
