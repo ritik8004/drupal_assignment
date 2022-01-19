@@ -1,22 +1,4 @@
 .acq-content-product {
-  .cart-shipping-method {
-    .carrier-title {
-      color: $pdp-delivery-section-title;
-    }
-
-    .method-title {
-      color: $pdp-delivery-section-subtitle;
-    }
-  }
-
-  #pdp-area-select {
-    .delivery-area-label {
-      .availability-link {
-        color: $pdp-delivery-section-title;
-      }
-    }
-  }
-
   .express-delivery-title-wrapper {
     .c-accordion__title::after {
       transition: none;
