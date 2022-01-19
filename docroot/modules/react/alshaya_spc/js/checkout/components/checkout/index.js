@@ -34,6 +34,8 @@ import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
+import { checkAreaAvailabilityStatusOnCart, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import RedeemEgiftCard from '../../../egift-card';
 import { cartContainsAnyNormalProduct, cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
@@ -52,6 +54,7 @@ export default class Checkout extends React.Component {
       messageType: null,
       errorSuccessMessage: null,
       isPostpayInitialised: false,
+      isExpressDeliveryAvailable: false,
     };
   }
 
@@ -82,7 +85,34 @@ export default class Checkout extends React.Component {
           document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
 
           this.processAddressFromLocalStorage(result);
-          this.processCheckout(result);
+
+          // Check if SSD/ED is enabled.
+          if (isExpressDeliveryEnabled()) {
+            try {
+              const cartId = result.cart_id_int;
+              if (cartId) {
+                // Get shipping Methods on product level.
+                getCartShippingMethods(null, null, cartId).then(
+                  (response) => {
+                    if (response !== null) {
+                      // Show prefilled area when SDD/ED is available.
+                      if (!hasValue(response.error)
+                        && checkAreaAvailabilityStatusOnCart(response)) {
+                        this.setState({
+                          isExpressDeliveryAvailable: true,
+                        });
+                      }
+                      this.processCheckout(result);
+                    }
+                  },
+                );
+              }
+            } catch (error) {
+              Drupal.logJavascriptError('Could not fetch shipping methods', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+            }
+          } else {
+            this.processCheckout(result);
+          }
         });
       } else {
         redirectToCart();
@@ -272,6 +302,7 @@ export default class Checkout extends React.Component {
       errorSuccessMessage,
       messageType,
       isPostpayInitialised,
+      isExpressDeliveryAvailable,
     } = this.state;
     // While page loads and all info available.
 
@@ -317,7 +348,11 @@ export default class Checkout extends React.Component {
             <ConditionalView condition={cartContainsAnyNormalProduct(cart.cart)}>
               <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
               <ClicknCollectContextProvider cart={cart}>
-                <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
+                <DeliveryInformation
+                  refreshCart={this.refreshCart}
+                  cart={cart}
+                  isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+                />
               </ClicknCollectContextProvider>
             </ConditionalView>
 

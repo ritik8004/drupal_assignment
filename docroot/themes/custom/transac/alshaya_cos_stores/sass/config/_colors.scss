@@ -21,6 +21,7 @@ $jungle-green: #26a69a;
 $blue-cola: #007fdb;
 $bright-blue: #2182d5;
 $teal: #26a69a;
+$_plp_cta_hover: #333;
 
 // Global elements.
 $primary_text: $eerie-black;
@@ -381,6 +382,9 @@ $plp_clear_all_btn_disabled: $bright-gray;
 $plp_clear_all_btn_text: $outer-space;
 $plp_all_filter_button_color: $primary_btn_bg;
 
+// PLP add to cart.
+$plp-primary-cta-hover-bg: $_plp_cta_hover;
+
 // Dynamic Promotions.
 $promo_dynamic_label_bg: $eerie-black;
 $promo_dynamic_label_txt: $eerie-black;
@@ -449,3 +453,19 @@ $sameday-express-delivery-drawer-btn: $outer-space;
 $spc-cart-delivery-popup-search-border: $eerie-black;
 $spc-cart-delivery-tags: $eerie-black;
 $spc-cart-delivery-area-select: $eerie-black;
+
+// Wishlist
+$wishlist-header-notification-border: $eerie-black;
+$wishlist-button-border: $eerie-black;
+$wishlist-header-notification-text: $eerie-black;
+$wishlist-header-notification-span: $dark-gray;
+$wishlist-header-login-message: $eerie-black;
+$wishlist-button-bg: $primary_btn_bg;
+$wishlist-button-bg-hover: $primary_btn_bg;
+$wishlist-button-register-txt: $outer-space;
+$wishlist-basket-modal-close-bg: $outer-space;
+$wishlist-share-text: $eerie-black;
+$my-wishlist-share-modal-hover-bg: $primary_btn_bg;
+$my-wishlist-share-modal-header: $eerie-black;
+$wishlist-pdp-button-selected-txt: $outer-space;
+$wishlist-oos: $blood;

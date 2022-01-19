@@ -13,7 +13,10 @@
 function alshaya_config_update_8602() {
   $moduleHandler = \Drupal::service('module_handler');
   if (!$moduleHandler->moduleExists('admin_toolbar')) {
-    \Drupal::service('module_installer')->install(['admin_toolbar', 'admin_toolbar_tools']);
+    \Drupal::service('module_installer')->install([
+      'admin_toolbar',
+      'admin_toolbar_tools',
+    ]);
     drupal_flush_all_caches();
   }
 }

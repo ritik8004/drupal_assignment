@@ -307,8 +307,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/sub-brand-logo';
   }
 
-  // Product List LHN Block
-  if($node_bundle === 'product_list') {
+  // Product List LHN Block.
+  if ($node_bundle === 'product_list') {
     $lhn_block = \Drupal::entityTypeManager()->getStorage('block')->load('productlistlhnblock');
     if (empty($lhn_block->getPlugin()->build())) {
       $variables['enable_lhn_tree'] = 0;
@@ -494,7 +494,7 @@ function alshaya_white_label_theme_suggestions_views_view_unformatted_alter(arra
  * Implements hook_preprocess_views_view_field().
  */
 function alshaya_white_label_preprocess_views_view_field__stores_finder__page_1__field_store_open_hours(&$variables) {
-  /* @var \Drupal\node\Entity\Node $node */
+  /** @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
   $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
   $output = $node->field_store_open_hours->view('default');
@@ -505,7 +505,7 @@ function alshaya_white_label_preprocess_views_view_field__stores_finder__page_1_
  * Implements hook_preprocess_views_view_field().
  */
 function alshaya_white_label_preprocess_views_view_field__stores_finder__page_3__field_store_open_hours(&$variables) {
-  /* @var \Drupal\node\Entity\Node $node */
+  /** @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
   $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
   $output = $node->field_store_open_hours->view('default');
@@ -516,7 +516,7 @@ function alshaya_white_label_preprocess_views_view_field__stores_finder__page_3_
  * Implements hook_preprocess_views_view_field().
  */
 function alshaya_white_label_preprocess_views_view_field__stores_finder__attachment_1__field_store_open_hours(&$variables) {
-  /* @var \Drupal\node\Entity\Node $node */
+  /** @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
   $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
   $output = $node->field_store_open_hours->view('default');
@@ -657,7 +657,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
     if ($current_route->getRouteName() == 'alshaya_stores_finder.store_detail') {
-      $variables['previous_page'] = $current_route->getParameter('type')?: 'glossary';
+      $variables['previous_page'] = $current_route->getParameter('type') ?: 'glossary';
       $variables['#attached']['library'][] = 'alshaya_stores_finder/store_finder_preserve_history';
     }
   }
@@ -881,7 +881,7 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
 
   // For performance testing & debugging purposes adding a quick bypass for
   // escaping GTM JS on a page.
-  // Usage: ?GTM=BLOCK (OR) ?external=0
+  // Usage: ?GTM=BLOCK (OR) ?external=0.
   $param = \Drupal::request()->get('GTM');
   $external = \Drupal::request()->get('external');
   if ((isset($external) && $external == 0) || $param === 'BLOCK') {
@@ -949,7 +949,7 @@ function alshaya_white_label_preprocess_field(&$variables, $hook) {
  * Implements hook_preprocess_user().
  */
 function alshaya_white_label_preprocess_user(&$variables) {
-  /* @var \Drupal\user\Entity\User $user */
+  /** @var \Drupal\user\Entity\User $user */
   $user = $variables['user'];
   if ($user) {
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
@@ -1046,7 +1046,7 @@ function alshaya_white_label_preprocess_views_view_unformatted__store_list(&$var
   if ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_1') {
     if (!empty($variables['rows'])) {
       foreach ($variables['rows'] as $key => $row) {
-        /* @var \Drupal\node\Entity\Node $store_node */
+        /** @var \Drupal\node\Entity\Node $store_node */
         $store_node = $row['content']['#row']->_entity;
         $store_node = \Drupal::service('entity.repository')->getTranslationFromContext($store_node);
         if ($latitude_longitude = $store_node->get('field_latitude_longitude')) {
@@ -1198,7 +1198,7 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
   ];
   $variables['maintenance_image'] = '';
   if (\Drupal::service('module_handler')->moduleExists('dynamic_yield')) {
-    // the function dynamic_yield_page_attachments expects html_head in the
+    // The function dynamic_yield_page_attachments expects html_head in the
     // #attached.
     if (!isset($variables['#attached']['html_head'])) {
       $variables['#attached']['html_head'] = [];
@@ -1212,9 +1212,9 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
   }
   $container_service = \Drupal::service('entity_type.manager')->getStorage('google_tag_container');
   $ids = $container_service
-  ->getQuery()
-  ->condition('status', 1)
-  ->execute();
+    ->getQuery()
+    ->condition('status', 1)
+    ->execute();
   if ($ids) {
     $id = reset($ids);
   }
@@ -1222,10 +1222,12 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
   if ($container) {
     $gtm_data = $container->snippets();
     if ($gtm_data) {
-      $variables['#attached']['html_head'][] =  [
-        ['#tag' => 'script',
-        '#attributes' => ['type' => 'text/javascript',],
-        '#value' => $gtm_data['script'],],
+      $variables['#attached']['html_head'][] = [
+        [
+          '#tag' => 'script',
+          '#attributes' => ['type' => 'text/javascript'],
+          '#value' => $gtm_data['script'],
+        ],
       ];
     }
   }
@@ -1332,8 +1334,8 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
   }
   // Form the accodian content for egift.
   if ($variables['elements']['#paragraph']->getType() == 'accordion_paragraph') {
-    foreach($variables['elements']['field_title_and_content'] as $key => $value) {
-      if(is_int($key)) {
+    foreach ($variables['elements']['field_title_and_content'] as $key => $value) {
+      if (is_int($key)) {
         $variables['title_content'][$key] = $value;
       }
     }
@@ -1365,7 +1367,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     }
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'product_carousel_category') {
-    /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $paragraph = $variables['elements']['#paragraph'];
     if ($paragraph) {
 
@@ -1477,7 +1479,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
               'library' => [
                 'alshaya_algolia_react/product_category_carousel',
                 'alshaya_white_label/product_carousel',
-              ]
+              ],
             ],
           ];
 
@@ -1498,7 +1500,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     }
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'delivery_usp_block') {
-    /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $paragraph = $variables['paragraph'];
     $timer_value = [];
     $timer_value[$paragraph->id()] = $paragraph->get('field_usp_timer')->getString();
@@ -1507,7 +1509,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'slug_banner') {
 
-    /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $advanced_page_slug_banner = $variables['paragraph'];
     if (!empty($advanced_page_slug_banner)) {
       $variables['#attached']['library'][] = 'alshaya_white_label/slug-banner';
@@ -1531,7 +1533,8 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       $variables['mobile_slug_font_color'] = $mobile_slug_font_color;
     }
   }
-  // Adds new gtm-title html attribute to paragraph items in Today's Offers block.
+  // Adds new gtm-title html attribute to paragraph items in
+  // Today's Offers block.
   elseif ($variables['elements']['#paragraph']->getType() == 'offers_bordered') {
     $defaultLangcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
     if (!empty($variables['elements']['#paragraph']->getTranslation($defaultLangcode)->get('field_title')->getValue())) {

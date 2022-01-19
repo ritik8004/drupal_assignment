@@ -25,10 +25,10 @@ tabby_promos:
 
 tabby_card:
   js:
-    https://checkout.tabby.ai/integration.js: { type: external }
     https://checkout.tabby.ai/tabby-card.js: { type: external }
   dependencies:
-    - alshaya_tabby/tabby_sdk
+    - alshaya_tabby/tabby_integration
+    - alshaya_tabby/tabby_promos
 
 tabby_pdp:
   version: 1.x

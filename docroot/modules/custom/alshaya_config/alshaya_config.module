@@ -128,9 +128,10 @@ function alshaya_config_modules_installed($modules) {
         $translations = $storage->listAll();
 
         foreach ($translations as $translation) {
-          try{
+          try {
             $manager->updateConfigTranslations($translation, $langcode, $module);
-          } catch (\Exception $e) {
+          }
+          catch (\Exception $e) {
             \Drupal::logger($module)->notice('Error while saving config for translation: @translation from module @module. Message: @message', [
               '@translation' => $translation,
               '@module' => $module,

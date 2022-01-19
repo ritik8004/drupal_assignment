@@ -65,7 +65,7 @@ class WishlistShare extends React.Component {
   onShareAllClick = () => {
     // Redirect to login page if custom is not logged in.
     if (isAnonymousUser()) {
-      window.location = Drupal.url(`user/login?destination=${drupalSettings.path.currentPath}`);
+      window.location = Drupal.url(`user/login?destination=/${drupalSettings.path.currentPath}`);
       return;
     }
 

@@ -13,7 +13,8 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Enhance existing paragraph and added accordian and mul row mul col paragraph type.
+ * Enhance existing paragraph and added accordian
+ * and mul row mul col paragraph type.
  */
 function alshaya_paragraphs_update_8130() {
   $configs = [
@@ -539,7 +540,7 @@ function alshaya_paragraphs_update_8110() {
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
 
-  // @TODO: Language settings config missing completely for promo_block_button.
+  // @todo Language settings config missing completely for promo_block_button.
   $configs = [
     'language.content_settings.paragraph.1_row_1_col',
     'language.content_settings.paragraph.promo_block',

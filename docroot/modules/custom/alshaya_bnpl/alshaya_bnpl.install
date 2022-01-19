@@ -18,7 +18,7 @@ function alshaya_bnpl_install() {
   $postpay->setName('تقسيط بوست باي');
   $postpay->save();
 
-  // Disable new postpay payment method by default
+  // Disable new postpay payment method by default.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
   $data = $config->get('exclude_payment_methods');
   $data['postpay'] = 'postpay';

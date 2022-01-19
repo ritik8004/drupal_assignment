@@ -130,7 +130,7 @@ function alshaya_master_update_8043() {
       'ar' => 'استخدم الرمز',
     ],
     'to get a Free Gift' => [
-      'ar' => 'للحصول على هدية مجانية'
+      'ar' => 'للحصول على هدية مجانية',
     ],
   ];
 
@@ -2170,7 +2170,7 @@ function alshaya_master_install() {
       'ar' => 'استخدم الرمز',
     ],
     'to get a Free Gift' => [
-      'ar' => 'للحصول على هدية مجانية'
+      'ar' => 'للحصول على هدية مجانية',
     ],
     'If %identifier is a valid account, an email will be sent with instructions to reset your password.' => [
       'en' => 'If your account is valid, an email will be sent with instructions to reset your password.',

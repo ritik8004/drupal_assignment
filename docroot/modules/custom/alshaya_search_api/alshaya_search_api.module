@@ -45,7 +45,7 @@ function alshaya_search_api_theme($existing, $type, $theme, $path) {
  *   Index name from which field needs to be removed.
  */
 function _alshaya_search_api_remove_field_from_indexes($field_code, $index) {
-  /* @var \Drupal\search_api\Entity\Index $index */
+  /** @var \Drupal\search_api\Entity\Index $index */
   $index = Index::load($index);
 
   if ($index->getField($field_code)) {
@@ -118,6 +118,7 @@ function alshaya_search_api_views_pre_render(ViewExecutable $view) {
  */
 function alshaya_search_api_language_switch_links_alter(array &$links, $type, Url $url) {
   $query = \Drupal::request()->query->all();
+  unset($query['_wrapper_format']);
 
   // Alter block only if we have selected color query parameter on a PDP.
   if (!empty($query)) {
