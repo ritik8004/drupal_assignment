@@ -10,19 +10,21 @@ use Drupal\Core\Database\Database;
 use Doctrine\DBAL\DBALException;
 use Drupal\Core\Utility\UpdateException;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
  * Implements hook_update_N().
  *
- * Add delivery labels in express delivery config.
+ * Add separate configs for same day and express delivery config.
  */
 function alshaya_spc_update_8023() {
-  // Add translations.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_spc.express_delivery'],
     'alshaya_spc',
-    'install'
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
   );
 }
 

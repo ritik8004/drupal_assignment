@@ -42,7 +42,7 @@ class DeliveryOptionsHelper {
   }
 
   /**
-   * Gets the commerce backend version.
+   * Gets same day delivery feature status.
    *
    * @return bool
    *   TRUE if same day delivery is enabled.
@@ -52,7 +52,7 @@ class DeliveryOptionsHelper {
   }
 
   /**
-   * Gets the commerce backend version.
+   * Gets express delivery feature status.
    *
    * @return bool
    *   TRUE if express day delivery is enabled.

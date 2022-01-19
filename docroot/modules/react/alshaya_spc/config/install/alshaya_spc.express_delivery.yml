@@ -1,8 +1,9 @@
-# Status is to check if express delivery is enabled.
+# Same day delivery status is to check if same day delivery is enabled.
+same_day_delivery_status: false
+# Express delivery status is to check if express delivery is enabled.
+express_delivery_status: false
 # Delivery options order determines the order in which delivery
 # options are displayed on PDP.
-same_day_delivery_status: false
-express_delivery_status: false
 delivery_options_order:
   - same_day_delivery
   - express_delivery

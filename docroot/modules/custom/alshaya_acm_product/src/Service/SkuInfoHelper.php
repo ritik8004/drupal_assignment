@@ -620,7 +620,6 @@ class SkuInfoHelper {
       }
     }
 
-    $expressDeliveryConfig = $this->configFactory->get('alshaya_spc.express_delivery');
     // Check if express delivery feature is enabled.
     if ($this->deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
       $current_parent = $this->skuManager->getParentSkuBySku($child);
@@ -632,10 +631,12 @@ class SkuInfoHelper {
         $parent_sku = (string) $child->getSku();
       }
 
-      // Prepare delivery options for each variants for simple sku.
-      $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku);
-      $variant['deliveryOptions'] = !empty($delivery_options['values']) ? $delivery_options['values'] : [];
-      $variant['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] ? 'active' : 'in-active';
+      if (isset($parent_sku)) {
+        // Prepare delivery options for each variants for simple sku.
+        $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku);
+        $variant['deliveryOptions'] = !empty($delivery_options['values']) ? $delivery_options['values'] : [];
+        $variant['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] ? 'active' : 'in-active';
+      }
     }
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
