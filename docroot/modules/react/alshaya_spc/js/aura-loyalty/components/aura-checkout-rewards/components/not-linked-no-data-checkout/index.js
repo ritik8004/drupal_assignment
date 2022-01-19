@@ -25,8 +25,11 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
   };
 
   render() {
-    const { pointsToEarn, cartId } = this.props;
+    const { pointsToEarn, cartId, formActive } = this.props;
     const { showLinkCardMessage } = this.state;
+
+    // Add active or in-active class based on the formActive flag.
+    const active = formActive ? 'active' : 'in-active';
 
     return (
       <div className="block-content guest-user">
@@ -37,7 +40,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
           </div>
           <div className="subtitle-2">{ getMembersToEarnMessage(pointsToEarn) }</div>
         </div>
-        <div className="spc-aura-link-card-form">
+        <div className={`spc-aura-link-card-form ${active}`}>
           <div className="label">
             { getStringMessage('checkout_already_member_question') }
             <ToolTip enable question>{ getStringMessage('checkout_already_member_question_tooltip') }</ToolTip>
@@ -46,6 +49,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
             <AuraFormLinkCard
               enableShowLinkCardMessage={this.enableShowLinkCardMessage}
               cartId={cartId}
+              formActive={formActive}
             />
           </div>
         </div>

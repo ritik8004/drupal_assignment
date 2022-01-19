@@ -248,8 +248,13 @@ class AuraFormRedeemPoints extends React.Component {
     } = this.state;
 
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
-    const { totals, paymentMethodInCart } = this.props;
-    const paymentNotSupported = isUnsupportedPaymentMethod(paymentMethodInCart);
+    const { totals, paymentMethodInCart, formActive } = this.props;
+    let paymentNotSupported = isUnsupportedPaymentMethod(paymentMethodInCart);
+
+    // Disable Aura payment method if cart contains any virtual product.
+    if (!formActive) {
+      paymentNotSupported = true;
+    }
 
     return (
       <div className={paymentNotSupported

@@ -199,6 +199,31 @@ export const cartContainsAnyNormalProduct = (cart) => {
 };
 
 /**
+ * Checks if cart contains any virtual product.
+ *
+ * @param {object} cart
+ *   The cart object.
+ * @returns {boolean}
+ *   Returns true if cart contains any virtual product else false.
+ */
+export const cartContainsAnyVirtualProduct = (cart) => {
+  // A flag to keep track of if there are any virtual products in cart.
+  let virtualProductInCart = false;
+  Object.values(cart.items).forEach((item) => {
+    // Return if we have already encounted a single virtual product.
+    if (virtualProductInCart) {
+      return;
+    }
+    // If a single virtual product encounted then mark flag as true.
+    if (cartItemIsVirtual(item)) {
+      virtualProductInCart = true;
+    }
+  });
+
+  return virtualProductInCart;
+};
+
+/**
  * Checks if cart has only egift card products or other products as well.
  *
  * @param {object} cart
