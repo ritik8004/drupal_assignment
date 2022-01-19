@@ -13,68 +13,78 @@
 }
 
 .egift-landing-page {
-  .field--name-field-1-row-2-col {
+  .paragraph--type--_-row-2-col {
     .field--name-field-1-row-2-col {
-      background-color: $egift-landing-page-one-row-two-col-box-bg;
-      text-align: center;
-      padding: 1.875rem;
-      width: calc(50% - 0.75rem);
+      .field--name-field-1-row-2-col {
+        background-color: $egift-landing-page-one-row-two-col-box-bg;
+        text-align: center;
+        padding: 1.875rem;
+        width: calc(50% - 0.75rem);
 
-      .check-balance-wrapper {
-        .checkbalance-title {
-          display: block;
-          font-size: 1.25rem;
-          line-height: 2.5rem;
-          margin-bottom: 0.5rem;
-        }
-
-        .checkbalance-description {
-          display: inline-block;
-          min-height: 3.5rem;
-          line-height: 1.54rem;
-
-          @include breakpoint($only-mobile) {
-            min-height: 4.5rem;
+        &:first-child {
+          &.field__item {
+            @include breakpoint($only-mobile) {
+              margin-bottom: 1.5rem;
+            }
           }
         }
 
-        #check-balance-button {
-          & > button {
-            @include egift-btn;
-
-            border-width: 0.0625rem;
-            background: transparent;
-          }
-        }
-      }
-
-      .paragraph--type--image-title-subtitle {
-        .field--name-field-title {
-          display: block;
-          font-size: 1.25rem;
-          line-height: 2.5rem;
-          margin-bottom: 0.5rem;
-        }
-
-        .field--name-field-description {
-          display: inline-block;
-          min-height: 3.5rem;
-          line-height: 1.54rem;
-
-          @include breakpoint($only-mobile) {
-            min-height: 4.5rem;
+        .check-balance-wrapper {
+          .checkbalance-title {
+            display: block;
+            font-size: 1.25rem;
+            line-height: 2.5rem;
+            margin-bottom: 0.5rem;
           }
 
-          p {
-            margin-bottom: 0;
+          .checkbalance-description {
+            display: inline-block;
+            min-height: 3.5rem;
+            line-height: 1.54rem;
+
+            @include breakpoint($only-mobile) {
+              min-height: 4.5rem;
+            }
+          }
+
+          #check-balance-button {
+            & > button {
+              @include egift-btn;
+
+              border-width: 0.0625rem;
+              background: transparent;
+            }
           }
         }
 
-        .field--name-field-button-link {
+        .paragraph--type--image-title-subtitle {
+          .field--name-field-title {
+            display: block;
+            font-size: 1.25rem;
+            line-height: 2.5rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .field--name-field-description {
+            display: inline-block;
+            min-height: 3.5rem;
+            line-height: 1.54rem;
+
+            @include breakpoint($only-mobile) {
+              min-height: 4.5rem;
+            }
+
+            p {
+              margin-bottom: 0;
+            }
+          }
+
           .field--name-field-button-link {
-            @include egift-btn;
+            .field--name-field-button-link {
+              @include egift-btn;
 
-            border: 1px solid $egift-button-border;
+              border: 1px solid $egift-button-border;
+            }
           }
         }
       }
