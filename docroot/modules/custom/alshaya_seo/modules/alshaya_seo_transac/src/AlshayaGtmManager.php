@@ -463,13 +463,15 @@ class AlshayaGtmManager {
    *   Identifier of the product variant on SKU entity.
    * @param \Drupal\acq_commerce\SKUInterface|null $child
    *   The child sku object or null.
+   * @param string|null $parentSku
+   *   Parent product SKU value.
    *
    * @return array
    *   Attributes on sku to be exposed to GTM.
    *
    * @throws \InvalidArgumentException
    */
-  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL) {
+  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL, $parentSku = NULL) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
@@ -966,7 +968,10 @@ class AlshayaGtmManager {
         continue;
       }
 
-      $product = $this->fetchSkuAtttributes($item['sku']);
+      $product = $item['product_type'] === 'configurable'
+        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'])
+        : $this->fetchSkuAtttributes($item['sku']);
+
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
       }

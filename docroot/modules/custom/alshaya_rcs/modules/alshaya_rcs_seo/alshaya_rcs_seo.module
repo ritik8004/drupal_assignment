@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Module file for RCS Seo.
+ */
+
+/**
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
+ */
+function alshaya_rcs_seo_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
+  $build['#attached']['library'][] = 'alshaya_rcs_seo/order_confirmation';
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'datalayer' && isset($libraries['datapush'])) {
+    // We add this library as a depedency so that it gets loaded before
+    // datalayer/datapush library and attaches the event listener.
+    $libraries['datapush']['dependencies'][] = 'alshaya_rcs_seo/order_confirmation';
+  }
+}

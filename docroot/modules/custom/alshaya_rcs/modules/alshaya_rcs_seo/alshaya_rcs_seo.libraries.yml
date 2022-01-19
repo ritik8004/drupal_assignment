@@ -1,0 +1,7 @@
+order_confirmation:
+  js:
+    js/alshaya_rcs_seo.order_confirmation.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_spc/cart_utilities
+    - alshaya_acm_product/product_utility
