@@ -19,7 +19,14 @@
         background-color: $egift-landing-page-one-row-two-col-box-bg;
         text-align: center;
         padding: 1.875rem;
-        width: calc(50% - 0.75rem);
+
+        &.field__item {
+          width: calc(50% - 0.75rem);
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+          }
+        }
 
         &:first-child {
           &.field__item {
