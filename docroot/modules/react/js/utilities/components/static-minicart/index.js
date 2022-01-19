@@ -31,19 +31,19 @@ class StaticMinicart extends React.Component {
   };
 
   /**
-   * Handler for cart refresh events.
-   */
-  handleRefreshCart = (e) => {
-    const data = e.detail.data();
-    this.updateStaticMinicartValues(data);
-  };
-
-  /**
    * Remove the event listner when component gets deleted.
    */
   componentWillUnmount = () => {
     document.removeEventListener('refreshCart', this.handleRefreshCart, false);
     document.removeEventListener('refreshMiniCart', this.handleRefreshCart, false);
+  };
+
+  /**
+   * Handler for cart refresh events.
+   */
+  handleRefreshCart = (e) => {
+    const data = e.detail.data();
+    this.updateStaticMinicartValues(data);
   };
 
   /**
