@@ -161,11 +161,11 @@ class WishlistProductList extends React.Component {
     // Check for wishlist data loaded via api if logged in user.
     // If anonymous user, check if wishlist item count is 0.
     if (wishListItemsCount === 0) {
-      return PageEmptyMessage(Drupal.t(
+      return PageEmptyMessage(
         'Your @wishlist_label is empty.',
         { '@wishlist_label': getWishlistLabel() },
-        { context: 'wishlist' },
-      ));
+        'wishlist',
+      );
     }
 
     // Get the items per page setting from the drupal settings.
