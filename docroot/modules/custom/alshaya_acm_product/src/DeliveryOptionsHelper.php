@@ -17,7 +17,7 @@ class DeliveryOptionsHelper {
   protected $configFactory;
 
   /**
-   * DeliveryOptionsHelper constructor.
+   * Delivery Options Helper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Config factory manager.
