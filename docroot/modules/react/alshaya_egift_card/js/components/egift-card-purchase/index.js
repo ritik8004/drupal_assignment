@@ -113,10 +113,10 @@ export default class EgiftCardPurchase extends React.Component {
     let isError = false;
 
     // Get firstname lastname values for validation.
-    const name = data.get('egift-recipient-name');
+    const name = data.get('egift-recipient-name').trim();
 
     // Validate name field.
-    if (name === '') {
+    if (name === '' || !name.match(/^[a-zA-Z ]+$/)) {
       document.getElementById('fullname-error').innerHTML = Drupal.t('Please enter recipient name', {}, { context: 'egift' });
       document.getElementById('fullname-error').classList.add('error');
       isError = true;
@@ -127,7 +127,7 @@ export default class EgiftCardPurchase extends React.Component {
     }
 
     // Get recipient email.
-    const email = data.get('egift-recipient-email');
+    const email = data.get('egift-recipient-email').trim();
     // Validate email.
     if (email === '') {
       document.getElementById('email-error').innerHTML = Drupal.t('Please enter valid email address', {}, { context: 'egift' });
