@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import PriceElement
   from '../../../../../js/utilities/components/price/price-element';
 import logger from '../../../../../js/utilities/logger';
@@ -47,27 +48,6 @@ class EgiftCardLinked extends React.Component {
   }
 
   /**
-   * Get day in st, nd, rd, th format.
-   */
-  dateNthFormat = (d) => {
-    if (d > 3 && d < 21) return `${d}th`;
-    switch (d % 10) {
-      case 1: {
-        return `${d}st`;
-      }
-      case 2: {
-        return `${d}nd`;
-      }
-      case 3: {
-        return `${d}rd`;
-      }
-      default: {
-        return `${d}th`;
-      }
-    }
-  }
-
-  /**
    * Handle Top-up button click.
    */
   handleTopUp = (e) => {
@@ -110,9 +90,8 @@ class EgiftCardLinked extends React.Component {
     }
 
     // Get formatted expiry date.
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const expiryDate = new Date(linkedCard.expiry_date);
-    const expiryDateFormatted = `${this.dateNthFormat(expiryDate.getDate())}, ${months[expiryDate.getMonth()]} ${expiryDate.getFullYear()}`;
+    moment.locale(drupalSettings.path.currentLanguage);
+    const expiryDateFormatted = moment.unix(linkedCard.expiry_date_timestamp).format('Do, MMM YYYY');
 
     return (
       <div className="egift-card-linked-wrapper">
