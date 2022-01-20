@@ -405,7 +405,7 @@ class AlshayaSpcOrderHelper {
     $orderDetails['delivery_charge'] = $order['totals']['shipping'];
 
     // Skip Shipping information if only virtual product in order,
-    // i.e egift card product or rgift topup.
+    // i.e. e-gift card product or e-gift top-up.
     if (!$order['is_virtual']) {
       $express_delivery_config = $this->configFactory->get('alshaya_spc.express_delivery');
       $shipping_info = $express_delivery_config->get('status') ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
