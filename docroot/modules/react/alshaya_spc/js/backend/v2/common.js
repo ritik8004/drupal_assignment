@@ -19,6 +19,9 @@ import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import isAuraEnabled from '../../../../js/utilities/helper';
 import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -250,7 +253,11 @@ const formatCart = (cartData) => {
   // to allow users to fill addresses.
   if (shippingMethod === '') {
     data.shipping = {};
-    data.cart.billing_address = {};
+    // Bypass this empty settings of billing address for egift enabled and
+    // containing only virtual item in cart.
+    if (!cartContainsOnlyVirtualProduct(data.cart)) {
+      data.cart.billing_address = {};
+    }
   }
   return data;
 };
@@ -340,7 +347,7 @@ const getProcessedCartData = async (cartData) => {
     },
     items: [],
     ...(collectionPointsEnabled() && hasValue(cartData.shipping))
-      && { collection_charge: cartData.shipping.price_amount || '' },
+    && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
   // Totals.
@@ -350,16 +357,41 @@ const getProcessedCartData = async (cartData) => {
   }
 
   // If Aura enabled, add aura related details.
-  if (isAuraEnabled()) {
+  // If Egift card is enabled get balance_payable.
+  if (isAuraEnabled() || isEgiftCardEnabled()) {
     cartData.totals.total_segments.forEach((element) => {
       if (element.code === 'balance_payable') {
         data.totals.balancePayable = element.value;
+        // Adding an extra total balance payable attribute, so that we can use
+        // this in egift.
+        // Doing this because while removing AURA points, we remove the Balance
+        // Payable attribute from cart total.
+        data.totals.totalBalancePayable = element.value;
       }
       if (element.code === 'aura_payment') {
         data.totals.paidWithAura = element.value;
       }
     });
+  }
+  if (isAuraEnabled()) {
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
+  }
+
+  // If egift card enabled, add the hps_redeemed_amount
+  // add hps_redemption_type to cart.
+  if (isEgiftCardEnabled()) {
+    data.totals.egiftRedeemedAmount = 0;
+    data.totals.egiftRedemptionType = '';
+    data.totals.egiftCardNumber = '';
+    if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
+      data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
+    }
+    if (hasValue(cartData.totals.extension_attributes.hps_redemption_type)) {
+      data.totals.egiftRedemptionType = cartData.totals.extension_attributes.hps_redemption_type;
+    }
+    if (hasValue(cartData.cart.extension_attributes.hps_redemption_card_number)) {
+      data.totals.egiftCardNumber = cartData.cart.extension_attributes.hps_redemption_card_number;
+    }
   }
 
   if (!hasValue(cartData.shipping) || !hasValue(cartData.shipping.method)) {
@@ -393,7 +425,16 @@ const getProcessedCartData = async (cartData) => {
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
-      data.items[item.sku] = {
+      // Set isEgiftCard for virtual product.
+      let isEgiftCard = false;
+      let itemKey = item.sku;
+      if (isEgiftCardEnabled() && item.product_type !== 'undefined' && item.product_type === 'virtual') {
+        isEgiftCard = true;
+        // to show multiple egift product in cart seperately changing this to item_id,
+        // as sku will be the same.
+        itemKey = item.item_id;
+      }
+      data.items[itemKey] = {
         id: item.item_id,
         title: item.name,
         qty: item.qty,
@@ -401,11 +442,13 @@ const getProcessedCartData = async (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
+        isEgiftCard,
       };
 
       // Get stock data on cart and checkout pages.
       const spcPageType = window.spcPageType || '';
-      if (spcPageType === 'cart' || spcPageType === 'checkout') {
+      // No need of stock data for egift card products.
+      if ((spcPageType === 'cart' || spcPageType === 'checkout') && !isEgiftCard) {
         // Suppressing the lint error for now.
         // eslint-disable-next-line no-await-in-loop
         const stockInfo = await getProductStatus(item.sku);
@@ -419,13 +462,13 @@ const getProcessedCartData = async (cartData) => {
             '@stockInfo': JSON.stringify(stockInfo || {}),
           });
 
-          delete data.items[item.sku];
+          delete data.items[itemKey];
           // eslint-disable-next-line no-continue
           continue;
         }
 
-        data.items[item.sku].in_stock = stockInfo.in_stock;
-        data.items[item.sku].stock = stockInfo.stock;
+        data.items[itemKey].in_stock = stockInfo.in_stock;
+        data.items[itemKey].stock = stockInfo.stock;
 
         // If any item is OOS.
         if (!hasValue(stockInfo.in_stock) || !hasValue(stockInfo.stock)) {
@@ -435,12 +478,31 @@ const getProcessedCartData = async (cartData) => {
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
-          data.items[item.sku].error_msg = item.extension_attributes.error_message;
+          data.items[itemKey].error_msg = item.extension_attributes.error_message;
           data.is_error = true;
         }
 
         if (typeof item.extension_attributes.promo_rule_id !== 'undefined') {
-          data.items[item.sku].promoRuleId = item.extension_attributes.promo_rule_id;
+          data.items[itemKey].promoRuleId = item.extension_attributes.promo_rule_id;
+        }
+        // Extension attributes information for eGift products.
+        if (isEgiftCard && typeof item.extension_attributes.is_egift !== 'undefined' && item.extension_attributes.is_egift) {
+          if (typeof item.extension_attributes.egift_options !== 'undefined') {
+            data.items[itemKey].egiftOptions = item.extension_attributes.egift_options;
+          }
+          if (typeof item.extension_attributes.product_media !== 'undefined') {
+            data.items[itemKey].media = item.extension_attributes.product_media[0].file;
+          }
+
+          // If eGift product is top-up card add check to the product item.
+          if (typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
+            data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
+          }
+
+          // If item is a top-up card add the card number used for top-up.
+          data.items[itemKey].topupCardNumber = (
+            hasValue(item.extension_attributes.topup_card_number)
+          ) ? item.extension_attributes.topup_card_number : null;
         }
       }
 
@@ -451,15 +513,15 @@ const getProcessedCartData = async (cartData) => {
           // Final price to use.
           // For the free gift the key 'price_incl_tax' is missing.
           if (typeof totalItem.price_incl_tax !== 'undefined') {
-            data.items[item.sku].finalPrice = totalItem.price_incl_tax;
+            data.items[itemKey].finalPrice = totalItem.price_incl_tax;
           } else {
-            data.items[item.sku].finalPrice = totalItem.base_price;
+            data.items[itemKey].finalPrice = totalItem.base_price;
           }
 
           // Free Item is only for free gift products which are having
           // price 0, rest all are free but still via different rules.
           if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
-            data.items[item.sku].freeItem = true;
+            data.items[itemKey].freeItem = true;
           }
         }
       });
@@ -699,6 +761,11 @@ const validateRequestData = async (request) => {
     return 404;
   }
 
+  // If it's a topup operation then return 200 as we are using guest update cart
+  // endpoint, So we will not get customer id from cart.
+  if (getTopUpQuote() !== null) {
+    return 200;
+  }
   // Backend validation.
   const cartCustomerId = await getCartCustomerId();
   if (drupalSettings.userDetails.customerId > 0) {
@@ -780,7 +847,15 @@ const updateCart = async (postData) => {
     '@action': action,
   });
 
-  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
+  // As we are using guest cart update in case of Topup, we will not pass
+  // bearerToken.
+  let useBearerToken = true;
+  if ((action === 'update billing'
+    || action === 'update payment')
+    && getTopUpQuote()) {
+    useBearerToken = false;
+  }
+  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data), useBearerToken)
     .then((response) => {
       if (!hasValue(response.data)
         || (hasValue(response.data.error) && response.data.error)) {
@@ -1081,11 +1156,17 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
  */
 const getProductShippingMethods = async (currentArea, sku = undefined, cartId = null) => {
   let cartIdInt = cartId;
+  let cartData = null;
   if (sku === undefined && cartId === null) {
-    const cartData = window.commerceBackend.getCartDataFromStorage();
+    cartData = window.commerceBackend.getCartDataFromStorage();
     if (cartData.cart.cart_id !== null) {
       cartIdInt = cartData.cart.cart_id_int;
     }
+  }
+  // Skip the get shipping method for virtual product ( This is applicable
+  // when egift card module is enabled and cart item is virtual.)
+  if (cartData && cartContainsOnlyVirtualProduct(cartData.cart)) {
+    return null;
   }
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
   const attributes = [];

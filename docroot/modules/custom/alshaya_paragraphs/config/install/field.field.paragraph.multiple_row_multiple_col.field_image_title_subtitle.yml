@@ -1,0 +1,127 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_image_title_subtitle
+    - paragraphs.paragraphs_type.image_title_subtitle
+    - paragraphs.paragraphs_type.multiple_row_multiple_col
+  module:
+    - entity_reference_revisions
+id: paragraph.multiple_row_multiple_col.field_image_title_subtitle
+field_name: field_image_title_subtitle
+entity_type: paragraph
+bundle: multiple_row_multiple_col
+label: Image+Title+Subtitle
+description: ''
+required: false
+translatable: false
+skip_translation_check: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      image_title_subtitle: image_title_subtitle
+    target_bundles_drag_drop:
+      1_row_1st_col_2_row_2nd_col:
+        weight: 34
+        enabled: false
+      1_row_1_col:
+        weight: 35
+        enabled: false
+      1_row_1_col_dept:
+        weight: 36
+        enabled: false
+      1_row_2_col:
+        weight: 37
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 38
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 39
+        enabled: false
+      1_row_2_col_dept:
+        weight: 40
+        enabled: false
+      1_row_3_col:
+        weight: 41
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 42
+        enabled: false
+      1_row_3_col_dept:
+        weight: 43
+        enabled: false
+      1_row_3_col_flex:
+        weight: 44
+        enabled: false
+      1_row_3_col_text:
+        weight: 45
+        enabled: false
+      1_row_4_col:
+        weight: 46
+        enabled: false
+      accordion_paragraph:
+        weight: 47
+        enabled: false
+      banner:
+        weight: 48
+        enabled: false
+      banner_full_width:
+        weight: 49
+        enabled: false
+      block_reference:
+        weight: 50
+        enabled: false
+      delivery_usp_block:
+        weight: 51
+        enabled: false
+      image_title_subtitle:
+        enabled: true
+        weight: 52
+      main_menu_highlight:
+        weight: 53
+        enabled: false
+      multiple_row_multiple_col:
+        weight: 54
+        enabled: false
+      offers_bordered:
+        weight: 55
+        enabled: false
+      product_carousel_category:
+        weight: 56
+        enabled: false
+      promo_block:
+        weight: 57
+        enabled: false
+      promo_block_button:
+        weight: 58
+        enabled: false
+      promo_block_text:
+        weight: 59
+        enabled: false
+      related_info_one_column:
+        weight: 60
+        enabled: false
+      section_divider:
+        weight: 61
+        enabled: false
+      slug_banner:
+        weight: 62
+        enabled: false
+      text_links:
+        weight: 63
+        enabled: false
+      title_textarea:
+        weight: 64
+        enabled: false
+      video:
+        weight: 65
+        enabled: false
+      views_reference:
+        weight: 66
+        enabled: false
+field_type: entity_reference_revisions

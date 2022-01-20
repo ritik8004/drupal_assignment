@@ -713,13 +713,16 @@ class AlshayaSpcController extends ControllerBase {
     $order = $this->orderHelper->getLastOrder();
     // Get order type hd/cnc and other details.
     $orderDetails = $this->orderHelper->getOrderDetails($order);
-    $delivery_method_description = $orderDetails['delivery_method_description'];
+    $delivery_method_description = $orderDetails['delivery_method_description'] ?? '';
     // Display custom label in description
     // if same day delivery is selected as shipping method.
     $checkout_settings = $this->config('alshaya_acm_checkout.settings');
 
     // Get formatted customer phone number.
-    $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    $phone_number = '';
+    if (in_array('address', array_keys($order['shipping']))) {
+      $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone'] ?? '');
+    }
 
     // Order Totals.
     $totals = [
@@ -730,7 +733,7 @@ class AlshayaSpcController extends ControllerBase {
       'surcharge' => $order['totals']['surcharge'],
     ];
 
-    if ($orderDetails['delivery_type'] !== 'cc') {
+    if (isset($orderDetails['delivery_type']) && $orderDetails['delivery_type'] !== 'cc') {
       $totals['shipping_incl_tax'] = $order['totals']['shipping'] ?? 0;
     }
 
@@ -746,10 +749,12 @@ class AlshayaSpcController extends ControllerBase {
       if (in_array($item['sku'], array_keys($productList))) {
         continue;
       }
+      // For Egift card set itemKey as item_id.
+      $itemKey = $item['is_virtual'] ? $item['item_id'] : $item['sku'];
       // Populate price and other info from order response data.
-      $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
+      $productList[$itemKey] = $this->orderHelper->getSkuDetails($item);
       // Calculate the ordered quantity of each sku.
-      $number_of_items += $productList[$item['sku']]['qtyOrdered'];
+      $number_of_items += $productList[$itemKey]['qtyOrdered'];
     }
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
