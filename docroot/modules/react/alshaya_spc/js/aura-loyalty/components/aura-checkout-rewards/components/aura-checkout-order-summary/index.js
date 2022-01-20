@@ -3,10 +3,15 @@ import TotalLineItem from '../../../../../utilities/total-line-item';
 import DeliveryVATSuffix from '../../../../../utilities/delivery-vat-suffix';
 
 const AuraCheckoutOrderSummary = (props) => {
-  const { totals, shippingAmount, dontShowVatText } = props;
+  const {
+    totals,
+    shippingAmount,
+    dontShowVatText,
+    context,
+  } = props;
   let balancePayableTitle = Drupal.t('Balance Payable');
-  if (document.getElementById('spc-checkout-confirmation')) {
-    // show amount paid title only in orderconfiration page
+  if (context === 'confirmation' || context === 'print') {
+    // show amount paid title only in order confirmation page
     balancePayableTitle = Drupal.t('Amount Paid', {}, { context: 'egift' });
   }
   if (totals === undefined || totals === null) {
