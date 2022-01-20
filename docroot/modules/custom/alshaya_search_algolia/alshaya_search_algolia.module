@@ -12,7 +12,6 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
-use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -194,7 +193,6 @@ function alshaya_search_algolia_alshaya_search_filter_link_alter(&$link, array &
   $link = '/' . $langcode . '/search#refinementList[attr_' . $data['attribute_code'] . '][0]=';
 }
 
-
 /**
  * Implements hook_srp_sort_settings_form_alter().
  */
@@ -216,4 +214,3 @@ function _alshaya_search_algolia_sort_settings_submit(&$form, FormStateInterface
     $algolia_search_helper->updateReplicaIndex($sort_fields);
   }
 }
-

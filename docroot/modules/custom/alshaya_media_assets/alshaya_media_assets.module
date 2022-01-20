@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+/**
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
 function alshaya_media_assets_rcs_placeholders_graphql_query_alter(&$queries) {

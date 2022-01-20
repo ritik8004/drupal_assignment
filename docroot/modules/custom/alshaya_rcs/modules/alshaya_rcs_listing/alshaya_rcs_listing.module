@@ -20,13 +20,13 @@ function alshaya_rcs_listing_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-rcs-promotional-banner',
       'variables' => [
         'fields' => NULL,
-      ]
+      ],
     ],
     'alshaya_rcs_plp_mobile_menu' => [
       'template' => 'alshaya-rcs-plp-mobile-menu',
       'variables' => [
         'data' => NULL,
-      ]
+      ],
     ],
   ];
 }
@@ -92,7 +92,7 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
         'id',
         'name',
         'url_path',
-        'category_quick_link_plp_mob'
+        'category_quick_link_plp_mob',
       ],
       'breadcrumbs' => [
         'category_id',
@@ -114,8 +114,9 @@ function alshaya_rcs_listing_field_widget_entity_reference_paragraphs_form_alter
   if ($element['#paragraph_type'] == 'product_carousel_category'
     && isset($element['subform']['field_category_carousel'])
     && isset($element['subform']['field_category_carousel_slug'])) {
-    // Hide the entity reference field when the text field is present on the form.
-    $element['subform']['field_category_carousel']['#access'] = false;
+    // Hide the entity reference field when the text field is present on the
+    // form.
+    $element['subform']['field_category_carousel']['#access'] = FALSE;
   }
 }
 

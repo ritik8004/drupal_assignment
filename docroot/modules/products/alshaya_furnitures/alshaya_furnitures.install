@@ -5,14 +5,14 @@
  * The module file for alshaya_furnitures.
  */
 
- /**
-  * Implements hook_update_N().
-  *
-  * Enable the module alshaya_secondary_main_menu.
-  */
- function alshaya_furnitures_update_8005() {
-   \Drupal::service('module_installer')->install(['alshaya_secondary_main_menu']);
- }
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the module alshaya_secondary_main_menu.
+ */
+function alshaya_furnitures_update_8005() {
+  \Drupal::service('module_installer')->install(['alshaya_secondary_main_menu']);
+}
 
 /**
  * Implements hook_update_N().

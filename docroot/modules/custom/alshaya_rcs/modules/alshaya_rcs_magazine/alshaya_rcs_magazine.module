@@ -31,7 +31,6 @@ function alshaya_rcs_magazine_rcs_handlebars_templates_alter(&$templates, $entit
   $templates['product.block.price.item'] = 'alshaya_rcs_product';
 }
 
-
 /**
  * Implements hook_rcs_placeholders_graphql_query().
  */
@@ -50,7 +49,7 @@ function alshaya_rcs_magazine_rcs_placeholders_graphql_query() {
       'price_range' => [
         'maximum_price' => [
           'regular_price' => [
-            'value'
+            'value',
           ],
           'final_price' => [
             'value',

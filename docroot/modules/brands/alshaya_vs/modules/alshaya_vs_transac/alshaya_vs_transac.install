@@ -71,8 +71,8 @@ function alshaya_vs_transac_update_8014() {
 /**
  * Implements hook_update_N().
  *
- * [5.14.0] Adds lining and coverage fields in the sku base field existing config.
- * [5.14.0] Reindex to udpate the processed node titles.
+ * [5.14.0] Adds lining and coverage fields in sku base field existing config.
+ * [5.14.0] Reindex to update the processed node titles.
  */
 function alshaya_vs_transac_update_8013() {
   $manager = \Drupal::service('alshaya_config.manager');
@@ -356,7 +356,7 @@ function alshaya_vs_transac_install() {
   // subscriber written for config save, which will always override the value
   // from the config placed in override folder and that will not allow drush
   // command, for super category feature, to execute properly.
-  /* @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
+  /** @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
   $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
   $super_category_feature->enableSuperCategory();
 

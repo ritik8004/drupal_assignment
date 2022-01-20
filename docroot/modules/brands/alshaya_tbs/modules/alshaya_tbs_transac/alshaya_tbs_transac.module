@@ -17,7 +17,7 @@ function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, E
   if (($entity->bundle() == 'rcs_product')) {
     $build['#attached']['library'][] = 'alshaya_tbs_transac/product';
   }
-  else if ($entity->bundle() == 'acq_product') {
+  elseif ($entity->bundle() == 'acq_product') {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $skuManager->getSkuForNode($entity);
@@ -39,7 +39,7 @@ function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, E
       }
 
       // Trim the short description.
-      /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+      /** @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
       $product_helper = \Drupal::service('alshaya_acm_product.helper');
       $short_desc = $product_helper->createShortDescription($product_description['short_desc']['value']['#markup']);
       // If there is 'readmore' available only then process.
@@ -225,18 +225,14 @@ function _alshaya_tbs_transac_get_product_title(SKU $sku, $context) {
 }
 
 /**
- * A helper function to get the product ingredients.
+ * A helper function to update the product ingredients in $build.
  *
  * @param Drupal\acq_sku\Entity\SKU $sku
  *   A object contains values for attributes.
  * @param array $build
  *   A build array.
- *
- * @return string
- *   Ingredients content.
  */
 function _alshaya_tbs_transac_get_product_ingredients(SKU $sku, array &$build) {
-
   $ingredients_fields = [
     'attr_mainkeyingredients_name',
     'attr_mainkeyingredients_description',
@@ -244,8 +240,9 @@ function _alshaya_tbs_transac_get_product_ingredients(SKU $sku, array &$build) {
     'attr_keyingredients_description2',
     'attr_keyingredients_name3',
     'attr_keyingredients_description3',
-    'attr_technical_ingredients_description'
+    'attr_technical_ingredients_description',
   ];
+
   $ingredients_content = '';
   $label = '<h4 class="ingredients_label">';
   $description_div = '<div class="ingredients_description">';
@@ -260,10 +257,10 @@ function _alshaya_tbs_transac_get_product_ingredients(SKU $sku, array &$build) {
           $value[0]['value'] . '</div></div></div></div>';
         continue;
       }
-      if (strpos($ingredients_field, '_name') !== false) {
+      if (strpos($ingredients_field, '_name') !== FALSE) {
         $ingredients_content .= $label . $value[0]['value'] . '</h4>';
       }
-      if (strpos($ingredients_field, '_description') !== false) {
+      if (strpos($ingredients_field, '_description') !== FALSE) {
         $ingredients_content .= $description_div . $value[0]['value'] . '</div>';
       }
     }
@@ -282,16 +279,12 @@ function _alshaya_tbs_transac_get_product_ingredients(SKU $sku, array &$build) {
 }
 
 /**
- * A helper function to get the product's howtouse fields content.
+ * A helper function to get the product's howtouse fields content in $build.
  *
  * @param Drupal\acq_sku\Entity\SKU $sku
  *   A object contains values for attributes.
  * @param array $build
  *   A build array.
- *
- * @return string
- *   howtouse_name content.
- *   howtouse_description content.
  */
 function _alshaya_tbs_transac_get_product_howtouse(SKU $sku, array &$build) {
   if ($howtouse_name = $sku->get('attr_howtouse_name')->getString()) {
@@ -329,4 +322,3 @@ function alshaya_tbs_transac_alshaya_performance_preload_alter(array &$preload) 
 function alshaya_tbs_transac_rcs_placeholders_graphql_query_alter(&$query_fields) {
   $query_fields['products']['items']['short_description'] = ['html'];
 }
-

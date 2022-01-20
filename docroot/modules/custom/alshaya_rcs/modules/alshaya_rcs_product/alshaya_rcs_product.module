@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Module file.
+ */
+
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -42,7 +47,7 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
       'variables' => [],
     ],
     'page__rcs_pdp' => [
-      'variable'
+      'variable',
     ],
     'rcs_product_zoom' => [
       'variables' => [
@@ -153,7 +158,7 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
  * @return array
  *   CnC settings and cache metadata.
  */
-function _getCncSettings() {
+function _get_cnc_settings() {
   $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
 
   return [
@@ -194,7 +199,6 @@ function alshaya_rcs_product_alshaya_spc_checkout_confirmation_order_build_alter
 
 /**
  * Implements hook_ENTITY_TYPE_view().
- *
  */
 function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() !== 'rcs_product') {
@@ -343,7 +347,7 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
   ];
 
   $price_block_template = [
-    '#theme' => 'rcs_price_block'
+    '#theme' => 'rcs_price_block',
   ];
 
   $variables['rcs_templates']['price'] = [
@@ -389,7 +393,7 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
-  $size_guide = _alshaya_acm_product_get_size_guide_info(null);
+  $size_guide = _alshaya_acm_product_get_size_guide_info(NULL);
   if (isset($size_guide['link']) && isset($size_guide['attributes'])) {
     $variables['rcs_templates']['size_guide'] = [
       '#type' => 'html_tag',
@@ -587,7 +591,7 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'price_range' => [
         'maximum_price' => [
           'regular_price' => [
-            'value'
+            'value',
           ],
           'final_price' => [
             'value',
@@ -663,12 +667,12 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
             'reserve_and_collect',
             'attribute_set_id',
             'swatch_data' => [
-       	      'swatch_type',
+              'swatch_type',
             ],
             'price_range' => [
               'maximum_price' => [
                 'regular_price' => [
-                  'value'
+                  'value',
                 ],
                 'final_price' => [
                   'value',
@@ -774,7 +778,7 @@ function _alshaya_rcs_product_get_recommended_product_field_query() {
     'price_range' => [
       'maximum_price' => [
         'regular_price' => [
-          'value'
+          'value',
         ],
         'final_price' => [
           'value',
@@ -921,8 +925,8 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
           'class' => ['block-alshaya-acm-customer'],
           'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
           'data-param-item-skus' => Json::encode(array_unique($itemSkus)),
-        ]
-      ]
+        ],
+      ],
     ];
 
     // Attach the color split config in the build array using alter hook.
@@ -969,9 +973,9 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
       '#attributes' => [
         'id' => 'rcs-ph-order_teaser',
         'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
-        'data-param-item-skus' => Json::encode(array_unique($itemSkus))
-      ]
-    ]
+        'data-param-item-skus' => Json::encode(array_unique($itemSkus)),
+      ],
+    ],
   ];
 
   // Attach the color split config in the build array using alter hook.
@@ -986,7 +990,7 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
 /**
  * Get order teaser image render array.
  *
- * @param array $item.
+ * @param array $item
  *   An array containing product info.
  *
  * @return array
@@ -1009,7 +1013,7 @@ function _alshaya_rcs_product_get_order_teaser_image(array $item) {
 /**
  * Attach required information around product images.
  *
- * @param Array $build
+ * @param array $build
  *   An array containing build information.
  */
 function _alshaya_rcs_product_get_product_image_config(array &$build) {
@@ -1021,11 +1025,11 @@ function _alshaya_rcs_product_get_product_image_config(array &$build) {
 /**
  * Attach required settings related to CnC.
  *
- * @param Array $build
+ * @param array $build
  *   An array containing build information.
  */
 function _alshaya_rcs_product_get_cnc_config(array &$build) {
-  $cnc_settings = _getCncSettings();
+  $cnc_settings = _get_cnc_settings();
   $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
   $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
 }

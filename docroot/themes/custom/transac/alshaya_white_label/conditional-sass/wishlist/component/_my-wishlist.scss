@@ -19,6 +19,7 @@
 
         &:hover {
           background-color: $my-wishlist-share-modal-hover-bg;
+          opacity: 0.75;
         }
       }
     }
@@ -180,13 +181,22 @@
 
     @include breakpoint($only-mobile) {
       flex-direction: column;
+      margin: 0 1.25rem;
+      width: auto !important;
 
       .c-page-title {
         font-size: 1.25rem !important;
         padding-bottom: 0.4375rem;
         margin: 0;
         line-height: normal !important;
+        width: 100%;
+        border-bottom: 1px solid $my-wishlist-page-title-border;
       }
+    }
+
+    @include breakpoint($tablet) {
+      border-bottom: 1px solid $my-wishlist-page-title-border;
+      padding-bottom: 0.1875rem;
     }
   }
 
@@ -344,6 +354,7 @@
 
           &:hover {
             background-color: $my-wishlist-share-modal-hover-bg;
+            opacity: 0.75;
           }
         }
 

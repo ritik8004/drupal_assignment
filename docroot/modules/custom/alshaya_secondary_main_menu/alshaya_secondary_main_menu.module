@@ -1,15 +1,11 @@
 <?php
 
-use Drupal\Core\Link;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\paragraphs\Entity\Paragraph;
-
 /**
  * @file
  * Module file.
  */
+
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_theme().
@@ -59,15 +55,15 @@ function alshaya_secondary_main_menu_theme($existing, $type, $theme, $path) {
  *   An associative array containing menu items.
  */
 function alshaya_secondary_main_menu_preprocess_alshaya_secondary_main_menu_level1(array &$variables) {
-   if ($variables['menu_type'] == 'default' ) {
-     _alshaya_secondary_main_menu_process_tag_attributes($variables['column_tree']);
-   }
-   else {
+  if ($variables['menu_type'] == 'default') {
+    _alshaya_secondary_main_menu_process_tag_attributes($variables['column_tree']);
+  }
+  else {
     _alshaya_secondary_main_menu_process_tag_attributes($variables['items']);
-   }
- }
+  }
+}
 
- /**
+/**
  * Prepares href for anchor tag for given menu item.
  */
 function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
@@ -80,9 +76,9 @@ function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
         $record['l1_object']['tag_attr'] = "href={$record['l1_object']['url']->toString()}";
       }
       if (!empty($record['columns'])) {
-        foreach($record['columns'] as $l2 => $value) {
-          $record['columns'][$l2]['tag']= 'div';
-          $record['columns'][$l2]['tag_attr']= 'div';
+        foreach ($record['columns'] as $l2 => $value) {
+          $record['columns'][$l2]['tag'] = 'div';
+          $record['columns'][$l2]['tag_attr'] = 'div';
           if (!empty($record['columns'][$l2]['url']->toString())) {
             $record['columns'][$l2]['tag'] = 'a';
             $record['columns'][$l2]['tag_attr'] = "href={$record['columns'][$l2]['url']->toString()}";
@@ -93,8 +89,8 @@ function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
         }
       }
     }
-    else{
-      foreach($record['columns'] as $rec) {
+    else {
+      foreach ($record['columns'] as $rec) {
         $record['columns']['tag'] = 'div';
         $record['columns']['tag_attr'] = '';
         if (!empty(($rec['url']->toString()))) {
@@ -129,22 +125,22 @@ function _alshaya_secondary_main_menu_process_tag_attributes_columns(array &$dat
 /**
  * Implements hook_preprocess_HOOK().
  */
- function alshaya_secondary_main_menu_preprocess_alshaya_secondary_main_menu_level2(&$variables) {
-   $variables['menu_type'] = \Drupal::config('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_layout');
-   if ($variables['menu_type'] == 'default') {
-     $highlight_paragraph = $variables['data']['l1_object']['highlight_paragraph'];
-   }
- }
+function alshaya_secondary_main_menu_preprocess_alshaya_secondary_main_menu_level2(&$variables) {
+  $variables['menu_type'] = \Drupal::config('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_layout');
+  if ($variables['menu_type'] == 'default') {
+    $highlight_paragraph = $variables['data']['l1_object']['highlight_paragraph'];
+  }
+}
 
 /**
- * Implements hook_form_alter();
+ * Implements hook_form_alter().
  */
 function alshaya_secondary_main_menu_form_alter(&$form, FormStateInterface $form_state) {
-  if(($form['#form_id'] == 'menu_link_content_secondary-main-menu_form') && ($form['menu_parent']['#default_value'] != "secondary-main-menu:")) {
+  if (($form['#form_id'] == 'menu_link_content_secondary-main-menu_form') && ($form['menu_parent']['#default_value'] != "secondary-main-menu:")) {
     $form['field_secondary_menu_highlight']['#access'] = FALSE;
     $form['field_add_highlights']['#access'] = FALSE;
   }
-  if($form['#form_id'] == 'menu_link_content_secondary-main-menu_form') {
+  if ($form['#form_id'] == 'menu_link_content_secondary-main-menu_form') {
     unset($form['link']['widget']['0']['options']['attributes']['target']);
     $form['field_secondary_menu_highlight']['widget']['0']['top']['paragraph_type_title']['info']['#markup'] = t('Secondary Menu Highlights Block');
     $form['field_secondary_menu_highlight']['widget']['0']['subform']['field_highlight_image']['widget'][0]['#description'] = t('Please upload only square images greater than 253 X 253. One file only. 32 MB limit. Allowed types: png gif jpg jpeg.');

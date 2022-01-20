@@ -86,22 +86,22 @@ function alshaya_cos_transac_install() {
       'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
     ],
     'read more' => [
-      'ar' => 'اقرأ المزيد'
+      'ar' => 'اقرأ المزيد',
     ],
     'read less' => [
-      'ar' => 'اقرأ  أقل'
+      'ar' => 'اقرأ  أقل',
     ],
     'Product Description' => [
-      'ar' => 'وصف المنتج'
+      'ar' => 'وصف المنتج',
     ],
     'Product Detail' => [
-      'ar' => 'تفاصيل المنتج'
+      'ar' => 'تفاصيل المنتج',
     ],
     'Product No:' => [
-      'ar' => 'رمز المنتج'
+      'ar' => 'رمز المنتج',
     ],
     'size guide' => [
-      'ar' => 'دليل المقاسات'
+      'ar' => 'دليل المقاسات',
     ],
   ];
 
@@ -150,7 +150,7 @@ function alshaya_cos_transac_modules_installed($modules) {
 
   // Hide grid toggle option on listing pages.
   \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
-    ->set('hide_grid_toggle', true)
+    ->set('hide_grid_toggle', TRUE)
     ->save();
 
   // Reset region and weight for alshaya main menu block.

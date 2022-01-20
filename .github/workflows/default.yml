@@ -47,6 +47,11 @@ jobs:
           echo "::set-output name=docroot::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs)"
           echo "::set-output name=js::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs)"
           echo "::set-output name=scss::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs)"
+      - name: Check if there are changes.
+        run: |
+          echo "No changes found in PR."
+          exit 1
+        if: ${{ !(steps.changes.outputs.all) }}
 
   validate:
     name: Validate

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Install file.
+ */
+
 use Drupal\taxonomy\Entity\Term;
 use Drupal\node\Entity\Node;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
@@ -22,11 +27,11 @@ function rcs_placeholders_install() {
   $config = \Drupal::service('config.factory')->getEditable('rcs_placeholders.settings');
 
   // Placeholder category term.
-  $term = Term::create(array(
-    'parent' => array(),
+  $term = Term::create([
+    'parent' => [],
     'name' => '#rcs.category.name#',
     'vid' => 'rcs_category',
-  ));
+  ]);
   $term->save();
 
   foreach ($languages as $langcode => $language) {
@@ -39,10 +44,10 @@ function rcs_placeholders_install() {
   $config->set('category.placeholder_tid', $term->id())->save();
 
   // Placeholder product node.
-  $node = Node::create(array(
+  $node = Node::create([
     'type' => 'rcs_product',
     'title' => '#rcs.product.name#',
-  ));
+  ]);
   $node->save();
 
   foreach ($languages as $langcode => $language) {
@@ -55,10 +60,10 @@ function rcs_placeholders_install() {
   $config->set('product.placeholder_nid', $node->id())->save();
 
   // Placeholder promotion node.
-  $node = Node::create(array(
+  $node = Node::create([
     'type' => 'rcs_promotion',
     'title' => '#rcs.promotion.name#',
-  ));
+  ]);
   $node->save();
 
   foreach ($languages as $langcode => $language) {
@@ -144,8 +149,7 @@ function rcs_placeholders_install() {
 /**
  * Implements hook_uninstall().
  */
- function rcs_placeholders_uninstall() {
-
+function rcs_placeholders_uninstall() {
   // Delete node fields.
   $field_names = ['field_product_slug', 'field_metatags'];
   foreach ($field_names as $field_name) {
@@ -172,19 +176,19 @@ function rcs_placeholders_install() {
     }
   }
 
-   // Remove module configs.
-    $config_ids = [
-      'metatag.metatag_defaults.node__rcs_product',
-      'metatag.metatag_defaults.taxonomy_term__rcs_category',
-      'metatag.settings',
-      'node.type.rcs_promotion',
-      'pathauto.pattern.rcs_category',
-      'pathauto.pattern.rcs_product',
-      'pathauto.pattern.rcs_promotion',
-      'system.menu.rcs-navigation',
-    ];
-    foreach ($config_ids as $config_id) {
-      $config = \Drupal::service('config.factory')->getEditable($config_id);
-      $config->delete();
-    }
- }
+  // Remove module configs.
+  $config_ids = [
+    'metatag.metatag_defaults.node__rcs_product',
+    'metatag.metatag_defaults.taxonomy_term__rcs_category',
+    'metatag.settings',
+    'node.type.rcs_promotion',
+    'pathauto.pattern.rcs_category',
+    'pathauto.pattern.rcs_product',
+    'pathauto.pattern.rcs_promotion',
+    'system.menu.rcs-navigation',
+  ];
+  foreach ($config_ids as $config_id) {
+    $config = \Drupal::service('config.factory')->getEditable($config_id);
+    $config->delete();
+  }
+}

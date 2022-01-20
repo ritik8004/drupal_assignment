@@ -23,3 +23,8 @@ services:
       - '@acq_sku.product_info_helper'
       - '@module_handler'
       - '@alshaya_acm_product.sku_images_helper'
+
+  alshaya_search_algolia.algolia_index_name_override:
+    class: Drupal\alshaya_search_algolia\AlgoliaSearchIndexNameConfigOverrider
+    tags:
+      - { name: config.factory.override, priority: -2 }

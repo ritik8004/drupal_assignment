@@ -1,0 +1,7 @@
+.spc-pre-content {
+  .impress-subtitle {
+    @include breakpoint($only-tablet) {
+      width: 65%;
+    }
+  }
+}
