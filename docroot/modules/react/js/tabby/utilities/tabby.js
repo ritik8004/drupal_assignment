@@ -19,16 +19,13 @@ const Tabby = {
     if (!tabbyStatus) {
       tabbyStatus = [];
     }
-    tabbyStatus[cart.cart.cart_total] = [];
     // Get available methods from MDC.
     const response = callMagentoApiSynchronous(getApiEndpoint('getTabbyAvailableProducts', { cartId: window.commerceBackend.getCartId() }));
-    tabbyStatus[cart.cart.cart_total].status = 'disabled';
+    tabbyStatus[cart.cart.cart_total] = false;
     if (hasValue(response.available_products)) {
       const { installment } = response.available_products;
       if (installment.is_available) {
-        tabbyStatus[cart.cart.cart_total].status = 'enabled';
-      } else {
-        tabbyStatus[cart.cart.cart_total].rejection_reason = hasValue(installment.rejection_reason) ? installment.rejection_reason : '';
+        tabbyStatus[cart.cart.cart_total] = true;
       }
       StaticStorage.set('tabbyStatus', tabbyStatus);
     }
