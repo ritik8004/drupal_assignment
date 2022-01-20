@@ -21,7 +21,6 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
 
     $attributes['gtm-name'] = '#rcs.product.gtmAttributes.name#';
     $attributes['gtm-product-sku'] = '#rcs.product.sku#';
-    $attributes['gtm-product-sku-class-identifier'] = '#rcs.product._self|sku-clean#';
     $attributes['gtm-sku-type'] = '#rcs.product.skuType#';
 
     // Dimension1 & 2 correspond to size & color.
