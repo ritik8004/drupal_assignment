@@ -28,7 +28,7 @@ module.exports = function (libraries, config, streams) {
     }
 
     return (
-      src(filterPath, { base: "." })
+      src(filterPath, { base: ".", allowEmpty: true })
         .pipe(ignore.exclude(blackList))
         .pipe(gulpIf(babelBuildPaths, babelBuild()))
         .pipe(gulpIf(iifeFiles, iife())) // if 'config.excludeStrict' is empty.

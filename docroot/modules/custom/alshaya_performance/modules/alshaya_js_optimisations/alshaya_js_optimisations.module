@@ -13,7 +13,7 @@ use Drupal\alshaya_js_optimisations\AlshayaJsOptimisationHelper;
 function alshaya_js_optimisations_library_info_alter(&$libraries, $extension) {
   $jsService = \Drupal::service('alshaya_js_optimisations.helper');
 
-  // Fetch Critical JS settings once, 
+  // Fetch Critical JS settings once,
   // instead of calling on every info_alter, per page request.
   if (!isset(AlshayaJsOptimisationHelper::$criticalJsEnabled)) {
     $jsService->fetchCriticalJsSettings();
@@ -24,7 +24,7 @@ function alshaya_js_optimisations_library_info_alter(&$libraries, $extension) {
     return;
   }
 
-  // Fetch JS Aggregation settings once, 
+  // Fetch JS Aggregation settings once,
   // instead of calling on every info_alter, per page request.
   if (!isset(AlshayaJsOptimisationHelper::$isJsAggregation)) {
     AlshayaJsOptimisationHelper::$isJsAggregation = \Drupal::config('system.performance')->get('js.preprocess');
@@ -120,6 +120,7 @@ function alshaya_js_optimisations_js_alter(&$javascripts) {
     // Replace the uglified JS if available in the mapping.
     if ($status_uglification && in_array($key, $mapping['source'])) {
       $value['data'] = 'build/' . $value['data'];
+      $value['minified'] = TRUE;
     }
 
     $javascripts[$key] = $value;

@@ -17,7 +17,7 @@ const gulpPlugins = require("gulp-load-plugins")();
 const gulpIf = gulpPlugins.if;
 const { ignore, uglify, babel, iife } = gulpPlugins;
 const { src, dest, series } = require("gulp");
-const { argv } = require("yargs");
+const argv = require("minimist")(process.argv.slice(2));
 
 // Libraries grouped to a single object for passing as parameter.
 const libraries = {
@@ -43,7 +43,7 @@ const config = require("./gulp/config");
 const customStreams = require("./gulp/custom-streams")(libraries, config);
 
 // Clean Task.
-const clean = require("./gulp/clean")(libraries);
+const clean = require("./gulp/clean")(libraries, config);
 
 // JS Performance Task.
 const js_performance = require("./gulp/js-performance")(
