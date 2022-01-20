@@ -4,6 +4,10 @@ header {
 
     @include breakpoint($only-mobile) {
       height: 3rem;
+
+      html[lang=ar] & {
+        height: 3.4375rem;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -33,7 +37,7 @@ header {
 
     @include breakpoint($only-mobile) {
       html[lang=ar] & {
-        margin-top: 0.875rem;
+        margin-top: 0.8125rem;
       }
     }
   }
@@ -221,8 +225,8 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      top: 0.75rem;
-      #{$right}: 24%;
+      top: 0.9375rem;
+      #{$right}: 24.5%;
       margin-#{$right}: 0;
       width: 2rem;
 
