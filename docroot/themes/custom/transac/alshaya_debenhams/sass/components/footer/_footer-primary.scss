@@ -209,7 +209,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        max-width: 21rem;
+        max-width: unset;
         width: 100%;
       }
 
