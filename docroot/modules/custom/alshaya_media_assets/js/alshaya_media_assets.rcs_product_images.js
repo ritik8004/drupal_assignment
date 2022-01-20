@@ -79,27 +79,29 @@
     productRecommendations.forEach(function eachRecommendationType(type) {
       if (Drupal.hasValue(product[type])) {
         product[type].forEach(function (recommendedProduct) {
-          recommendedProduct.variants.forEach(function setRecommendedProductImage(variant) {
-            variant.product.media_teaser = null;
-            try {
-              mediaData = JSON.parse(variant.product.assets_teaser);
-              mediaData.every(function setTeaserMedia(media) {
-                variant.product.media_teaser = media.styles.product_teaser;
-                // We do this so that we are able to detect in getSkuForGallery
-                // that the variant has media.
-                variant.product.media = variant.product.media_teaser;
-                // Break as there is only 1 teaser image expected.
-                return false;
-              });
-            }
-            catch (e) {
-              Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
-                '@type': type,
-                '@sku': variant.product.sku,
-                '@message': e.message,
-              });
-            }
-          });
+          if (Array.isArray(recommendedProduct.variants) && recommendedProduct.variants.length !== 0) {
+            recommendedProduct.variants.forEach(function setRecommendedProductImage(variant) {
+              variant.product.media_teaser = null;
+              try {
+                mediaData = JSON.parse(variant.product.assets_teaser);
+                mediaData.every(function setTeaserMedia(media) {
+                  variant.product.media_teaser = media.styles.product_teaser;
+                  // We do this so that we are able to detect in getSkuForGallery
+                  // that the variant has media.
+                  variant.product.media = variant.product.media_teaser;
+                  // Break as there is only 1 teaser image expected.
+                  return false;
+                });
+              }
+              catch (e) {
+                Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
+                  '@type': type,
+                  '@sku': variant.product.sku,
+                  '@message': e.message,
+                });
+              }
+            });
+          }
         });
       }
     });
