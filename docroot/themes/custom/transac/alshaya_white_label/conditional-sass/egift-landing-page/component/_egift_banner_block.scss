@@ -26,7 +26,7 @@
 
   .paragraph-image_title_subtitle_link {
     background-color: $egift-banner-bg;
-    padding: 6rem 4.5rem;
+    padding: 5.625rem 4.625rem;
 
     @include breakpoint($only-mobile) {
       padding: 2rem 1.5rem;
@@ -47,8 +47,10 @@
     flex-direction: column;
     grid-column: span 1 / span 1;
     text-align: $left;
+    margin-#{$left}: 1.25rem;
 
     @include breakpoint($only-mobile) {
+      margin-#{$left}: 0;
       text-align: center;
       margin-bottom: 1.5rem;
     }
@@ -72,6 +74,11 @@
   .paragraph_banner_buttons {
     grid-column: span 1 / span 1;
     order: 3;
+    margin-#{$left}: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0;
+    }
 
     .field--name-field-links {
       display: flex;
@@ -82,7 +89,7 @@
       }
 
       .field--name-field-links {
-        width: 48%;
+        width: 48.1%;
 
         @include breakpoint($only-mobile) {
           width: 100%;
@@ -115,10 +122,12 @@
     justify-content: center;
     grid-row: span 2 / span 2;
     flex-direction: column;
+    margin-#{$right}: 1.313rem;
 
     @include breakpoint($only-mobile) {
       order: 2;
       margin-bottom: 1rem;
+      margin-#{$right}: 0;
     }
 
     img {

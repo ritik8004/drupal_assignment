@@ -20,6 +20,14 @@
         text-align: center;
         padding: 1.875rem;
 
+        &.field__item {
+          width: calc(50% - 0.75rem);
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+          }
+        }
+
         &:first-child {
           &.field__item {
             @include breakpoint($only-mobile) {
