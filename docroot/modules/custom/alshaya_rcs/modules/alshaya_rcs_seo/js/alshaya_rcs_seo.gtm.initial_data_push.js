@@ -33,7 +33,7 @@
           data[prop] = categories[prop];
         }
 
-        // TODO.
+        // TODO. CORE-37241.
         data.productColor = '';
         data.productRating = '';
         data.productReview = '';
