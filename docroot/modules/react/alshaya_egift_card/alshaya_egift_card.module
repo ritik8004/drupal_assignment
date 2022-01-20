@@ -1,0 +1,340 @@
+<?php
+
+/**
+ * @file
+ * Contains alshaya_egift_card.module.
+ */
+
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
+use Drupal\Core\Cache\Cache;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ */
+function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
+  // Do not proceed if egift card is not enabled.
+  $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
+  $build['#attached']['drupalSettings']['egiftCard'] = [
+    'enabled' => $egiftCard_settings->isEgiftCardEnabled(),
+    'notSupportedPaymentMethods' => array_filter($egiftCard_settings->getNotSupportedPaymentMethods(), function($method) {
+      return $method !== '0';
+    }),
+  ];
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
+  // Add the egift related settings only if egift feature is enabled.
+  if ($egiftCard_settings && $egiftCard_settings->isEgiftCardEnabled()) {
+    $build['#attached']['library'][] = 'alshaya_white_label/egift-card-checkout';
+
+    $build['#strings'][] = [
+      'key' => 'form_egift_card_number',
+      'value' => t('Please enter an eGift card number.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'form_egift_code',
+      'value' => t('Please enter verification code.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'form_egift_amount',
+      'value' => t('Please enter the amount.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'egift_insufficient_balance',
+      'value' => t('Insufficient balance, Please topup the card or lower the redeem amount.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'egift_valid_amount',
+      'value' => t('Please enter a valid amount.', [], [
+        'context' => 'egift'
+      ]),
+    ];
+    $build['#strings'][] = [
+      'key' => 'egift_valid_card_number',
+      'value' => t('Please enter a valid eGift card number.', [], [
+        'context' => 'egift',
+      ]),
+    ];
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_egift_card_alshaya_spc_cart_build_alter(array &$build) {
+  // Do not proceed if egift card is not enabled.
+  $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
+  // Add egift card settings in drupalSettings.
+  $build['#attached']['drupalSettings']['egiftCard']['enabled'] = $egiftCard_settings->isEgiftCardEnabled();
+  // Attach library around egift only if egift feature is enabled.
+  if ($egiftCard_settings && $egiftCard_settings->isEgiftCardEnabled()) {
+    $build['#attached']['library'][] = 'alshaya_white_label/egift-cart';
+  }
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_egift_card_theme() {
+  return [
+    'egift_balance_check_block' => [
+      'variables' => [
+        'block_title' => '',
+        'block_description' => '',
+      ]
+    ],
+    'egift_topup_page' => [
+      'variables' => [
+        'terms_block_content' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_egift_card_alshaya_my_account_links_alter(array &$links) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+
+  // Add My egift card link.
+  $links['alshaya_my_egift_card'] = [
+    'text' => t('eGift Card', [], ['context' => 'egift']),
+    'route' => 'alshaya_egift_card.my_egift_card',
+    'weight' => 11,
+  ];
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_egift_card_preprocess_html(&$variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  // Add custom class for advanced page content type for egift landing page.
+  if ($node instanceof NodeInterface && $node->bundle() === 'advanced_page') {
+    if (!empty($node->get('field_use_as_egift_landing_page')->getValue()) && $node->get('field_use_as_egift_landing_page')->getValue()[0]['value'] == 1) {
+      $variables['attributes']['class'][] = 'egift-landing-page';
+      $variables['#attached']['library'][] = 'alshaya_white_label/egift-landing-page';
+    }
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_egift_card_page_attachments(array &$page) {
+  // Add egift settings config tags to make it work on config change.
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
+  // Attach the egift topup library.
+  if (\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    $page['#attached']['library'][] = 'alshaya_egift_card/alshaya_egift_topup';
+    // Add the topup quote expiration time in drupalSettings.
+    $page['#attached']['drupalSettings']['egiftCard']['topupQuoteExpirationTime'] = \Drupal::service('alshaya_egift_card.egift_card_helper')->getTopupQuoteExpirationTime();
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Add egift settings config tags to make it work on config change.
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+
+  // Set order name if first item is virtual product.
+  $item = reset($order['items']);
+  if ($item['is_virtual']) {
+    $build['#order']['name'] = $item['sku'] == 'giftcard_topup'
+      ? t('eGift Card Top-up', [], ['context' => 'egift'])
+      : t('Alshaya eGift card', [], ['context' => 'egift']);
+  }
+
+  // Update Payment method name for hps payment.
+  if ($build["#order_details"]["payment_method"] === 'hps_payment') {
+    $build["#order_details"]["payment_method"] = t('eGift Card', [], ['context' => 'egift']);
+  }
+
+  // Update virtual product details.
+  foreach ($build['#products'] as $key => &$product) {
+    $style = $product['name'];
+
+    // Show eGift card image and options from order details.
+    if ($product['is_virtual']) {
+      $product['name'] = $product['sku'] == 'giftcard_topup'
+        ? t('eGift Card Top-up', [], ['context' => 'egift'])
+        : t('Alshaya eGift card', [], ['context' => 'egift']);
+
+      // Get virtual product image.
+      $product['image'] = [
+        '#theme' => 'image',
+        '#uri' => $product['extension_attributes']['product_media'][0]['file'],
+        '#alt' => $product['name'],
+      ];
+
+      // Get product options and add them to attributes.
+      $product_options = json_decode($product['extension_attributes']['product_options'][0], TRUE);
+      $product['attributes'][0] = [
+        'label' => t('Style', [], ['context' => 'egift']),
+        'value' => $style,
+      ];
+      if (!empty($product_options['hps_giftcard_recipient_email'])) {
+        $product['attributes'][1] = [
+          'label' => t('Send to', [], ['context' => 'egift']),
+          'value' => $product_options['hps_giftcard_recipient_email'],
+        ];
+      }
+      if (!empty($product_options['hps_giftcard_message'])) {
+        $product['attributes'][2] = [
+          'label' => t('Message', [], ['context' => 'egift']),
+          'value' => $product_options['hps_giftcard_message'],
+        ];
+      }
+      // @todo update key for card number from order details.
+      if (!empty($product_options['hps_card_number'])) {
+        $product['attributes'][3] = [
+          'label' => t('Card No', [], ['context' => 'egift']),
+          'value' => $product_options['hps_card_number'],
+        ];
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_egift_card_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  // Add egift settings config tags to make it work on config change.
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+
+  // Update details for virtual Product.
+  foreach ($build['recent_order'] as &$order) {
+    // Reset order item names.
+    $order['#order']['item_names'] = [];
+    foreach ($order['#order']['items'] as &$item) {
+      if ($item['is_virtual']) {
+        // Set eGift card product name.
+        $item['name'] = $item['sku'] == 'giftcard_topup'
+          ? t('eGift Card Top-up', [], ['context' => 'egift'])
+          : t('Alshaya eGift card', [], ['context' => 'egift']);
+        // Set image from order response.
+        $item['image'] = [
+          '#theme' => 'image',
+          '#uri' => $item['extension_attributes']['product_media'][0]['file'],
+          '#alt' => $item['name'],
+        ];
+      }
+      $order['#order']['item_names'][] = $item['name'];
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_order_details_settings_alter().
+ */
+function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings, $order) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+  // Add `hps_redeemed_amount` and `balancePayable` in totals to show
+  // with order summary for order confirmation page.
+  if (isset($order['extension']['hps_redeemed_amount'])) {
+    $settings['order_details']['totals']['egiftRedeemedAmount'] = $order['extension']['hps_redeemed_amount'] ?? 0;
+    $settings['order_details']['totals']['totalBalancePayable'] = $order['base_grand_total'] - $order['extension']['hps_redeemed_amount'];
+    $settings['order_details']['totals']['balancePayable'] = $order['base_grand_total'] - ($order['extension']['hps_redeemed_amount'] ?? 0) - ($order['extension']['aura_payment_value'] ?? 0);
+    // If paid with egift card.
+    if ($order['payment']['method'] === 'hps_payment') {
+      $settings['order_details']['payment']['method'] = t('eGift Card', [], ['context' => 'egift']);
+    } else {
+      $settings['order_details']['payment']['method'] = $settings['order_details']['payment']['method'] . ' , '. t('eGift Card', [], ['context' => 'egift']);
+    }
+  }
+  // set isOnlyVirtualProduct TRUE if order has only virtual product,
+  // i.e Egift card product or Egift Topup.
+  $settings['order_details']['isOnlyVirtualProduct'] = $order['is_virtual'] ?? FALSE;
+  if ($order['is_virtual']) {
+    // If has only virtual product get telephone from billing.
+    $settings['order_details']['mobile_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['billing']['telephone']);
+  }
+  foreach ($settings['order_details']['items'] as $itemKey => $item){
+    // For egift topup card set isTopUp and topupCardNumber from order data.
+    if ($item['sku'] === 'giftcard_topup') {
+      $settings['order_details']['items'][$itemKey]['isTopUp'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->is_topup ?? FALSE;
+      $settings['order_details']['items'][$itemKey]['topupCardNumber'] = $order['extension']['topup_card_number'] ?? 0;
+      // For egift topup card set topupRecieptEmail to show in order confirmation summary.
+      $settings['order_details']['isTopUp'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->is_topup ?? FALSE;
+    }
+    if (isset($item['egiftOptions']['hps_giftcard_recipient_email'])) {
+      // For egift card set giftCardRecieptEmail to show in order confirmation summary.
+      $settings['order_details']['giftCardRecieptEmail'][] = $item['egiftOptions']['hps_giftcard_recipient_email'];
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
+ * Updating build array for egift card integration.
+ *
+ * @param array $build
+ *   Reference to the build array of spc confirmation.
+ * @param string $order
+ *   Order details array.
+ */
+function alshaya_egift_card_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
+  // Add egift card settings in drupalSettings in checkout confirmation page.
+  $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
+  $build['#attached']['drupalSettings']['egiftCard'] = [
+    'enabled' => $egiftCard_settings->isEgiftCardEnabled(),
+  ];
+
+  if ($egiftCard_settings && $egiftCard_settings->isEgiftCardEnabled()) {
+    $build['#attached']['library'][] = 'alshaya_white_label/egift-card-checkout-confirmation';
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_update_order_summary_alter().
+ */
+function alshaya_egift_card_alshaya_acm_customer_update_order_summary_alter(array &$order, array &$orderRow) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
+    return;
+  }
+
+  // We will display the name of first order item.
+  $item = reset($order['items']);
+  if ($item['is_virtual']) {
+    $orderRow['name'] = $item['sku'] == 'giftcard_topup' ? t('eGift Card Top-up', [], ['context' => 'egift']) : t('Alshaya eGift card', [],  ['context' => 'egift']);
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function alshaya_egift_card_block_view_alter(&$build, $block) {
+  if ($block->getPluginId() === 'alshaya_my_account_links') {
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_egift_card.settings']);
+  }
+}

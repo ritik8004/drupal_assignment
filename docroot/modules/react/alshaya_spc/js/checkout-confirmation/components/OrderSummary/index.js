@@ -12,6 +12,8 @@ import PriceElement from '../../../utilities/special-price/PriceElement';
 import getStringMessage from '../../../utilities/strings';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import EgiftOrderSummaryItem from '../../../egift-card/components/egift-order-summary-item';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -144,6 +146,12 @@ const OrderSummary = (props) => {
   if (methodCode === 'tabby') {
     methodIcon = <PaymentMethodIcon methodName={methodCode} methodLabel={method} />;
   }
+  // Dont show Delivery related summary if order has only virtual product,
+  // i.e Egift card or Egift Topup.
+  let showDeliverySummary = true;
+  if (isEgiftCardEnabled() && drupalSettings.order_details.isOnlyVirtualProduct) {
+    showDeliverySummary = false;
+  }
 
   return (
     <div className="spc-order-summary">
@@ -182,7 +190,7 @@ const OrderSummary = (props) => {
         <input type="checkbox" id="spc-detail-open" />
         <label htmlFor="spc-detail-open">{Drupal.t('order detail')}</label>
         <div className="spc-detail-content">
-          <ConditionalView condition={customerAddress.length > 0}>
+          <ConditionalView condition={customerAddress.length > 0 && showDeliverySummary}>
             <OrderSummaryItem type="address" label={Drupal.t('delivery to')} name={customerShippingName} address={customerAddress.join(', ')} />
           </ConditionalView>
           {(storeAddress.length > 0 && storeInfo !== undefined)
@@ -211,10 +219,17 @@ const OrderSummary = (props) => {
           <ConditionalView condition={billingAddress.length > 0}>
             <OrderSummaryItem type="address" label={Drupal.t('Billing address')} name={customerNameBilling} address={billingAddress.join(', ')} />
           </ConditionalView>
+          <ConditionalView condition={isEgiftCardEnabled()}>
+            <EgiftOrderSummaryItem
+              orderDetails={drupalSettings.order_details}
+            />
+          </ConditionalView>
           <OrderSummaryItem type="mobile" label={Drupal.t('Mobile Number')} value={mobileNumber} />
           <OrderSummaryItem label={Drupal.t('Payment method')} value={methodIcon || method} />
-          <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
-          <OrderSummaryItem label={etaLabel} value={expectedDelivery} />
+          <ConditionalView condition={showDeliverySummary}>
+            <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
+            <OrderSummaryItem label={etaLabel} value={expectedDelivery} />
+          </ConditionalView>
           <OrderSummaryItem label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>

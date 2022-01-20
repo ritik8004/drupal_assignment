@@ -1,0 +1,25 @@
+.egift-input-field {
+  &-wrapper {
+    .egift-input-field-item {
+      input[type=radio] ~ label {
+        @include icon(radio-empty, before) {
+          margin-#{$right}: 1rem;
+          position: relative;
+          color: $primary_radiobtn_empty;
+          vertical-align: middle;
+          border: none;
+          font-size: 2.5rem;
+          top: -0.9375rem;
+          #{$left}: -0.625rem;
+          background: transparent;
+        }
+      }
+
+      input[type=radio]:checked ~ label {
+        @include icon(radio-filled, before) {
+          border: none;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{{ attach_library('alshaya_white_label/accordion') }}
+{% block paragraph %}
+  {% if content.field_group_title %}
+    {{ content.field_group_title }}
+  {% endif %}
+  {% if title_content is not empty %}
+  <div class="c-accordion">
+    {% for key, item in title_content %}
+      {% if title_content[key]['#paragraph'].field_html_heading is not empty and title_content[key]['#paragraph'].field_body is not empty %}
+        <h3 class="c-accordion__title">
+          {{ title_content[key]['#paragraph'].field_html_heading.0.value|raw }}
+        </h3>
+        <div class="c-accordion_content">
+          <ul>
+            <li>
+              {{ title_content[key]['#paragraph'].field_body.0.value|raw }}
+            </li>
+          </ul>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endblock paragraph %}

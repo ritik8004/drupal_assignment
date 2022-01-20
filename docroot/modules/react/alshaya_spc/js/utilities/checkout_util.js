@@ -3,6 +3,8 @@ import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
+import { cartContainsOnlyVirtualProduct } from './egift_util';
+import { addPaymentMethodInCart } from './update_cart';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -513,6 +515,22 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
 };
 
 /**
+ * Determines if shipping method is set in cart.
+ *
+ * @param {object} cart
+ *   The cart object.
+ */
+export const isShippingMethodSet = (cart) => {
+  // Set this as true if egift card is enabled and only virtual product is added
+  // in the cart.
+  if (cartContainsOnlyVirtualProduct(cart.cart)) {
+    return true;
+  }
+
+  return cart.cart.shipping.method !== null;
+};
+
+/**
  * Get recommended products.
  *
  * @param {*} skus
@@ -656,3 +674,40 @@ export const binValidation = (bin) => {
  * Helper to get cnc store limit config.
  */
 export const getCnCStoresLimit = () => drupalSettings.cnc_stores_limit || 0;
+
+/**
+ * Update payment method and then place order.
+ *
+ * @param {string} paymentMethod
+ *   The paymentMethod using which user is placing order.
+ */
+export const updatePaymentAndPlaceOrder = (paymentMethod) => {
+  const analytics = Drupal.alshayaSpc.getGAData();
+
+  const data = {
+    payment: {
+      method: paymentMethod,
+      additional_data: {},
+      analytics,
+    },
+  };
+
+  const cartUpdate = addPaymentMethodInCart('update payment', data);
+  if (cartUpdate instanceof Promise) {
+    cartUpdate.then((result) => {
+      if (!result) {
+        // Remove loader in case of error.
+        removeFullScreenLoader();
+
+        dispatchCustomEvent('spcCheckoutMessageUpdate', {
+          type: 'error',
+          message: drupalSettings.global_error_message,
+        });
+      } else {
+        placeOrder(paymentMethod);
+      }
+    }).catch((error) => {
+      Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+    });
+  }
+};

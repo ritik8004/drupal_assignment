@@ -1330,6 +1330,14 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       ];
     }
   }
+  // Form the accodian content for egift.
+  if ($variables['elements']['#paragraph']->getType() == 'accordion_paragraph') {
+    foreach ($variables['elements']['field_title_and_content'] as $key => $value) {
+      if (is_int($key)) {
+        $variables['title_content'][$key] = $value;
+      }
+    }
+  }
 
   // Only for the banner paragraph.
   if ($variables['elements']['#paragraph']->getType() == 'banner') {
