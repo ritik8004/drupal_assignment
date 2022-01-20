@@ -83,7 +83,12 @@ class TotalLineItems extends React.Component {
   };
 
   render() {
-    const { totals, isCartPage, collectionCharge } = this.props;
+    const {
+      totals,
+      isCartPage,
+      context,
+      collectionCharge,
+    } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
@@ -163,7 +168,10 @@ class TotalLineItems extends React.Component {
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
           <ConditionalView condition={isEgiftCardEnabled()}>
-            <EgiftCheckoutOrderSummary totals={totals} />
+            <EgiftCheckoutOrderSummary
+              totals={totals}
+              context={context}
+            />
           </ConditionalView>
           <div className="delivery-vat">
             <ConditionalView condition={shippingAmount === null}>
@@ -177,6 +185,7 @@ class TotalLineItems extends React.Component {
               totals={totals}
               dontShowVatText={dontShowVatText}
               shippingAmount={shippingAmount}
+              context={context}
             />
           </ConditionalView>
           {postpay}

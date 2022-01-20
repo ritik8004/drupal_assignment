@@ -4,8 +4,12 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ConditionalView from '../../../common/components/conditional-view';
 
 const EgiftCheckoutOrderSummary = (props) => {
-  const { totals } = props;
-
+  const { totals, context } = props;
+  let balancePayableTitle = Drupal.t('Balance Payable', {}, { context: 'egift' });
+  if (context === 'confirmation' || context === 'print') {
+    // show amount paid title only in order confirmation page
+    balancePayableTitle = Drupal.t('Amount Paid', {}, { context: 'egift' });
+  }
   if (totals === undefined || totals === null) {
     return null;
   }
@@ -30,7 +34,7 @@ const EgiftCheckoutOrderSummary = (props) => {
         {/* If paidWithAura show balancePayable form AuraCheckoutOrderSummary. */}
         <TotalLineItem
           name="balance-payable"
-          title={Drupal.t('Balance Payable', {}, { context: 'egift' })}
+          title={balancePayableTitle}
           value={totalBalancePayable}
           showZeroValue
         />
