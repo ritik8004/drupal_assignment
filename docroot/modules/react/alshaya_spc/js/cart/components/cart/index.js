@@ -293,8 +293,9 @@ export default class Cart extends React.Component {
               cartShippingMethods: response,
             });
             // Check if SDD/ED is available on product level.
-            if (!hasValue(response.error)
+            if (typeof response !== 'undefined'
               && response !== null
+              && !hasValue(response.error)
               && checkAreaAvailabilityStatusOnCart(response)) {
               this.setState({
                 showAreaAvailabilityStatusOnCart: true,

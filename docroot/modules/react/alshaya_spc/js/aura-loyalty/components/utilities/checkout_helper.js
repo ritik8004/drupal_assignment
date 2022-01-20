@@ -160,7 +160,8 @@ function isPaymentMethodSetAsAura(cart) {
 function isFullPaymentDoneByAura(cart) {
   if (cart.cart.totals !== undefined
     && Object.keys(cart.cart.totals).length !== 0
-    && cart.cart.totals.balancePayable <= 0) {
+    && cart.cart.totals.balancePayable <= 0
+    && (cart.cart.totals.paidWithAura === cart.cart.totals.base_grand_total)) {
     return true;
   }
 

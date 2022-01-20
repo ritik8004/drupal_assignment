@@ -3,7 +3,7 @@ import Cleave from 'cleave.js/react';
 import { handleNotYou, handleLinkYourCard } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 
 const AuraFormUnlinkedCard = (props) => {
-  const { cardNumber } = props;
+  const { cardNumber, formActive } = props;
 
   return (
     <div className="spc-aura-unlink-card-wrapper link-card-wrapper">
@@ -24,6 +24,7 @@ const AuraFormUnlinkedCard = (props) => {
           <button
             type="submit"
             className="spc-aura-link-card-submit spc-aura-button"
+            disabled={!formActive}
             onClick={() => handleLinkYourCard(cardNumber)}
           >
             { Drupal.t('Submit') }

@@ -1,0 +1,18 @@
+.egifts-form-wrapper {
+  .egift-card-amount-list-wrapper {
+    ul {
+      li {
+        &:not(.active) {
+          &:hover {
+            border-color: $plp-quick-view-product-size-border-hover;
+            background: $plp-quick-view-product-size-hover-bg;
+          }
+        }
+      }
+    }
+  }
+
+  .subtitle-text {
+    font-family: $hnm-demibold;
+  }
+}

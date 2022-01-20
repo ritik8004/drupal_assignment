@@ -103,7 +103,7 @@ function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alte
     if ($bazaar_voice_api_helper->isBvConfigurationsAvailable()) {
       $bazaarvoice_config = \Drupal::config('bazaar_voice.settings');
       $locale = $bazaarvoice_config->get('locale');
-      $user_id = \Drupal::currentUser()->getAccount()->acq_customer_id;
+      $user_id = alshaya_acm_customer_is_customer(\Drupal::currentUser(), TRUE);
       if (!empty($build['#attached']['drupalSettings']['order_details'])) {
         // Attach bvpixel library to order confirmation page.
         $build['#attached']['library'][] = 'alshaya_bazaar_voice/bvpixel_tracking';
