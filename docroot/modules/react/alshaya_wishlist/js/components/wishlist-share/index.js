@@ -1,5 +1,4 @@
 import React from 'react';
-import ShareIcon from './share-icon';
 import SharePopup from './share-popup';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import {
@@ -123,7 +122,7 @@ class WishlistShare extends React.Component {
       <>
         <button type="button" onClick={this.onShareAllClick}>
           <span className="text">{Drupal.t('Share All', {}, { context: 'wishlist' })}</span>
-          <span className="icon"><ShareIcon /></span>
+          <span className="icon"></span>
         </button>
         <ConditionalView condition={wishlistShareLink !== null}>
           <SharePopup
