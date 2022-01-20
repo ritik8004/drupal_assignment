@@ -42,6 +42,7 @@
 
   /**
    * Get categories and department for Product GTM data.
+   *  @see Drupal\alshaya_seo_transac\AlshayaGtmManager::fetchDepartmentAttributes()
    *
    * @param {object} entity
    *   The product entity object.
