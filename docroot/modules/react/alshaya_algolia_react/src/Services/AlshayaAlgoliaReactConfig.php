@@ -19,6 +19,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
 
 /**
  * Class AlshayaAlogoliaReactConfig.
@@ -88,6 +89,13 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   protected $moduleHandler;
 
   /**
+   * Delivery Options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -110,6 +118,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   Alshaya Options List service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
+   *   Delivery Options Helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -121,7 +131,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     AlshayaPlpSortOptionsService $plp_sort_options,
     AlshayaRequestContextManager $alshayaRequestContextManager,
     AlshayaOptionsListHelper $alshaya_options_service,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    DeliveryOptionsHelper $delivery_options_helper
   ) {
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
@@ -133,6 +144,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $this->requestContextManager = $alshayaRequestContextManager;
     $this->alshayaOptionsService = $alshaya_options_service;
     $this->moduleHandler = $module_handler;
+    $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 
   /**
@@ -145,7 +157,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       $container->get('facets.manager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('entity_type.manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_acm_product.delivery_options_helper')
     );
   }
 
@@ -345,8 +358,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
           }
           if ($widget['type'] === 'delivery_ways') {
             // If feature enabled then only show facet.
-            $express_delivery_config = $this->configFactory->get('alshaya_spc.express_delivery');
-            if (!($express_delivery_config->get('status'))) {
+            if (!($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) {
               continue;
             }
             $identifier = $this->identifireSuffixUpdate('attr_delivery_ways', $page_type);
