@@ -40,7 +40,7 @@ export default class ValidEgiftCard extends React.Component {
     if (isEgiftRedemptionDone(cart)) {
       this.setState({
         amount: cart.totals.egiftRedeemedAmount,
-        pendingAmount: cart.totals.balancePayable,
+        pendingAmount: cart.totals.totalBalancePayable,
       });
     }
 
@@ -143,12 +143,12 @@ export default class ValidEgiftCard extends React.Component {
     const { cart, refreshCart } = this.props;
     const result = await updateRedeemAmount(updateAmount, cart, refreshCart);
     if (!result.error) {
-      const { redeemedAmount, balancePayable } = result;
+      const { redeemedAmount, totalBalancePayable } = result;
       // Update the state with the valid response from endpoint.
       this.setState({
         amount: redeemedAmount,
         open: false,
-        pendingAmount: balancePayable,
+        pendingAmount: totalBalancePayable,
       });
     }
 

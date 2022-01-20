@@ -109,8 +109,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 }
               }
               // balancePayable amount to show in order summary.
-              const balancePayable = (hasValue(cart.cart.totals.balancePayable))
-                ? cart.cart.totals.balancePayable
+              const balancePayable = (hasValue(cart.cart.totals.totalBalancePayable))
+                ? cart.cart.totals.totalBalancePayable
                 : 0;
 
               // Set state to show Pay using egift card option under Payment Methods.
@@ -285,10 +285,10 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     // Api call to update the redemption amount.
     const response = await updateRedeemAmount(updateAmount, cart.cart, refreshCart);
     if (!response.error) {
-      const { redeemedAmount, balancePayable, cardNumber } = response;
+      const { redeemedAmount, totalBalancePayable, cardNumber } = response;
       // Perform calculations and set state.
       this.performCalculations(
-        balancePayable,
+        totalBalancePayable,
         redeemedAmount,
         egiftCardActualBalance,
         cardNumber,

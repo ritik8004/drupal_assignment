@@ -262,7 +262,8 @@ function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings,
   // with order summary for order confirmation page.
   if (isset($order['extension']['hps_redeemed_amount'])) {
     $settings['order_details']['totals']['egiftRedeemedAmount'] = $order['extension']['hps_redeemed_amount'] ?? 0;
-    $settings['order_details']['totals']['balancePayable'] = $order['base_grand_total'] - $order['extension']['hps_redeemed_amount'];
+    $settings['order_details']['totals']['totalBalancePayable'] = $order['base_grand_total'] - $order['extension']['hps_redeemed_amount'];
+    $settings['order_details']['totals']['balancePayable'] = $order['base_grand_total'] - ($order['extension']['hps_redeemed_amount'] ?? 0) - ($order['extension']['aura_payment_value'] ?? 0);
     // If paid with egift card.
     if ($order['payment']['method'] === 'hps_payment') {
       $settings['order_details']['payment']['method'] = t('eGift Card', [], ['context' => 'egift']);
