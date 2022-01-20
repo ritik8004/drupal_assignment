@@ -125,7 +125,11 @@ class AuraCartRewards extends React.Component {
     if (action === 'remove points') {
       // Remove all aura related keys from totals if present.
       Object.entries(stateValues).forEach(([key]) => {
-        delete cartTotals[key];
+        // Don't remove totalBalancePayable attribute as this will be used in
+        // egift to check remaining balance.
+        if (key !== 'totalBalancePayable') {
+          delete cartTotals[key];
+        }
       });
     }
     // Dispatch an event to update totals in cart object.

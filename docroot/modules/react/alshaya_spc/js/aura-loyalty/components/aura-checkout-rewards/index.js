@@ -18,6 +18,8 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import { cartContainsAnyVirtualProduct } from '../../../utilities/egift_util';
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -193,6 +195,9 @@ class AuraCheckoutRewards extends React.Component {
     const active = this.isActive();
     const activeClass = active ? 'active' : 'in-active';
 
+    // Disable AURA guest user link card form if cart contains virtual products.
+    const formActive = !(isEgiftCardEnabled() && cartContainsAnyVirtualProduct(cart.cart));
+
     if (wait) {
       return (
         <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }}>
@@ -214,6 +219,7 @@ class AuraCheckoutRewards extends React.Component {
             pointsToEarn={auraPointsToEarn}
             cartId={cart.cart.cart_id || ''}
             wait={waitForPoints}
+            formActive={formActive}
           />
         </ConditionalView>
 
@@ -226,6 +232,7 @@ class AuraCheckoutRewards extends React.Component {
             expiryDate={expiryDate}
             cardNumber={cardNumber}
             totals={cart.cart.totals}
+            formActive={formActive}
             paymentMethodInCart={cart.cart.payment.method || ''}
             wait={waitForPoints}
           />
@@ -246,6 +253,7 @@ class AuraCheckoutRewards extends React.Component {
             cardNumber={cardNumber}
             pointsToEarn={auraPointsToEarn}
             wait={waitForPoints}
+            formActive={formActive}
           />
         </ConditionalView>
       </div>
