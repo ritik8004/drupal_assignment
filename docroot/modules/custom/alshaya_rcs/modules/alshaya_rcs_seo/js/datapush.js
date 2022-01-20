@@ -1,6 +1,6 @@
 /**
  * @file
- * Push initial data to data layer.
+ * P  ush initial data to data layer.
  */
 
 (function (drupalSettings) {
@@ -14,7 +14,13 @@
   else {
     // Load initial GTM data after RCS page entity is loaded.
     RcsEventManager.addListener('alshayaPageEntityLoaded', function(e) {
-      var alterInitialDataLayerData = new CustomEvent('alterInitialDataLayerData', {detail: { data: () => dataLayerAttachment, page_entity : e.detail.entity, type :  e.detail.pageType}});
+      var alterInitialDataLayerData = new CustomEvent('alterInitialDataLayerData', {
+        detail: {
+          data: () => dataLayerAttachment,
+          page_entity : e.detail.entity,
+          type :  e.detail.pageType,
+        }
+      });
       document.dispatchEvent(alterInitialDataLayerData);
       window.dataLayer.push(dataLayerAttachment);
     });

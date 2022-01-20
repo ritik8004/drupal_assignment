@@ -5,23 +5,6 @@
  * Module file for rcs seo.
  */
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-
-/**
- * @file
- * Contains general hooks and alters.
- */
-
-/**
- * Implements hook_ENTITY_TYPE_view().
- */
-function alshaya_rcs_seo_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() == 'rcs_product') {
-    $build['#attached']['library'][] = 'alshaya_rcs_seo/alshaya_rcs_product_seo';
-  }
-}
-
 /**
  * Implements hook_library_info_alter().
  */
@@ -30,13 +13,11 @@ function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
     return;
   }
 
-  foreach ($libraries['datapush']['js'] as $source => $options) {
-    if ($source === 'js/datapush.js') {
-      $new_source = "/" . drupal_get_path('module', 'alshaya_rcs_seo') . "/js/datapush.js";
-      unset($libraries['datapush']['js'][$source]);
-      $libraries['datapush']['js'][$new_source] = $options;
-    }
-  }
+  $new_source = "/" . drupal_get_path('module', 'alshaya_rcs_seo') . "/js/datapush.js";
+  $options = $libraries['datapush']['js']['js/datapush.js'];
+  unset($libraries['datapush']['js']['js/datapush.js']);
+  $libraries['datapush']['js'][$new_source] = $options;
+
   $libraries['datapush']['dependencies'] = [
     'rcs_placeholders/helpers',
     'alshaya_rcs_seo/alshaya_rcs_product_seo',
