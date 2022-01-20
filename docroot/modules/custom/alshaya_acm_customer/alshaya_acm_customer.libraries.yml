@@ -2,7 +2,6 @@ orders-list:
   version: VERSION
   js:
     js/orders-list.js : {}
-    js/url.min.js : {}
   dependencies:
     - core/jquery
     - core/jquery.once

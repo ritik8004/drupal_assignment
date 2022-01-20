@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "839f549a4859274989ee18226b46d364",
+    "content-hash": "d3e96e4a7dbbae7ac1fb9d758ae3fa75",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -16319,7 +16319,7 @@
             "time": "2017-05-08T12:10:56+00:00"
         },
         {
-            "name": "jqueryvalidate/jqueryvalidate",
+            "name": "jquery-validation/jquery-validation",
             "version": "1.17.0",
             "dist": {
                 "type": "zip",
