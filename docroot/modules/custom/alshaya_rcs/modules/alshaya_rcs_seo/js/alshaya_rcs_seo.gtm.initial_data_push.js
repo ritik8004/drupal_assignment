@@ -12,24 +12,15 @@
         var entity = e.detail.page_entity;
         // Assign product GTM variables.
         var data = e.detail.data();
-        data.productSKU = entity.type_id === 'configurable'? '' : entity.style_code;
+        data.productSKU = (entity.type_id === 'configurable') ? '' : entity.style_code;
         data.productStyleCode = entity.style_code;
-        data.stockStatus = entity.stock_status;
         data.pageType = 'product detail page';
-        if (entity.stock_status === 'IN_STOCK') {
-          data.stockStatus = 'in stock';
-        }
-        else {
-          data.stockStatus = 'out of stock';
-        }
+        data.stockStatus = (entity.stock_status === 'IN_STOCK') ? 'in stock' : 'out of stock';
         data.productName = entity.name;
         data.productBrand = entity.gtm_attributes.brand;
         data.productPrice = entity.gtm_attributes.price;
-        data.productOldPrice = '';
         const prices = window.commerceBackend.getPrices(entity, false);
-        if (prices.price !== entity.gtm_attributes.price) {
-          data.productOldPrice = prices.price;
-        }
+        data.productOldPrice = (prices.price !== entity.gtm_attributes.price) ? prices.price : '';
 
         // Get product image.
         let image = window.commerceBackend.getFirstImage(entity);

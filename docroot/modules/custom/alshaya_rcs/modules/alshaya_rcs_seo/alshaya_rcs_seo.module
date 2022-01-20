@@ -13,7 +13,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function alshaya_rcs_seo_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'rcs_product') {
-    $build['#attached']['library'][] = 'alshaya_rcs_seo/rcs_product_seo';
+    $build['#attached']['library'][] = 'alshaya_rcs_seo/alshaya_rcs_product_seo';
   }
 }
 
@@ -32,5 +32,8 @@ function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
       $libraries['datapush']['js'][$new_source] = $options;
     }
   }
-  $libraries['datapush']['dependencies'] = ['alshaya_rcs_seo/rcs_product_seo' , 'rcs_placeholders/helpers'];
+  $libraries['datapush']['dependencies'] = [
+    'rcs_placeholders/helpers',
+    'alshaya_rcs_seo/alshaya_rcs_product_seo'
+  ];
 }
