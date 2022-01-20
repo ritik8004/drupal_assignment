@@ -6,19 +6,27 @@
  */
 
 /**
- * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
- */
-function alshaya_rcs_seo_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
-  $build['#attached']['library'][] = 'alshaya_rcs_seo/order_confirmation';
-}
-
-/**
  * Implements hook_library_info_alter().
  */
 function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
-  if ($extension == 'datalayer' && isset($libraries['datapush'])) {
-    // We add this library as a depedency so that it gets loaded before
-    // datalayer/datapush library and attaches the event listener.
-    $libraries['datapush']['dependencies'][] = 'alshaya_rcs_seo/order_confirmation';
+  if ($extension === 'datalayer' && isset($libraries['datapush'])) {
+    // Load it in the footer as the files which contain the event handlers will
+    // be loaded in the footer only.
+    unset($libraries['datapush']['header']);
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'alshaya_spc.checkout.confirmation') {
+    // This adds the library to the top of the array and above the
+    // datalayer/datapush library.
+    // If we put the weight=-1 for this, then the library dependencies are
+    // loaded later, thus causing issues.
+    // Hence we follow this approach.
+    array_unshift($attachments['#attached']['library'], 'alshaya_rcs_seo/order_confirmation');
   }
 }
