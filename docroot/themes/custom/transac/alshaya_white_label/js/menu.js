@@ -20,10 +20,14 @@
     setMenuWidth();
   });
 
+  // Scan for rcs menu.
+  var $rcsMenu = $('#rcs-ph-navigation_menu');
+  var isRcsMenu = $rcsMenu.length;
+
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
-      // Return if the placeholders text there in code.
-      if ($('.menu__list-item:contains(#rcs.menuItem.name#)').length > 0) {
+      // For RCS Menu, do not proceed until main menu is completely loaded.
+      if (isRcsMenu && !$rcsMenu.hasClass('rcs-loaded')) {
         return;
       }
 
