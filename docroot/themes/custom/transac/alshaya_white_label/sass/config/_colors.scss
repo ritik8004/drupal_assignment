@@ -147,6 +147,10 @@ $_ancestral-water: #d0d0d0;
 $_screeching_white: #eee;
 $_shilling: #a3a3a3;
 $wishlist-magazine-mobile-bg: rgba(0, 0, 0, 0.05);
+$egift-disabled-gray1: #d7d7d7;
+$egift-disabled-gray2: #707070;
+$egift-titamium-white: #e4e4e4;
+$egift-gray: #979797;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -2059,6 +2063,37 @@ $sofa-sectional-disabled-clear-option-text: $primary_text;
 $sofa-sectional-disabled-clear-option-border: $light-greyish;
 $sofa-sectional-select-border: $new-pdp-blue;
 
+// eGift purchase page.
+$egift-purchase-page-border: $warm-grey-two;
+$egift-input-radio-background: $white-five;
+$egift-purchase-inactive-step-text: $_ancestral-water;
+$egift-purchase-disabled-btn-border: $egift-disabled-gray1;
+$egift-purchase-disabled-btn-text: $egift-disabled-gray2;
+$egift-purchase-radio-label: $mothercare-black;
+
+// eGift card checkout.
+$egift-edit-amount-modal-content-bg: $white-smoke-light;
+$egift-edit-amount-modal-subtitle: $egift-disabled-gray2;
+
+//eGift balance check
+$egift-input-label: $grey-light;
+$egift-balance-sidebar-bg: $white-smoke-light;
+$egift-balance-close-icon: $mothercare-black;
+$egift-form-input: $mothercare-black;
+$egift-button-txt: $primary_btn_text;
+$egift-input-border: $primary_input_border;
+
+// eGift landing page.
+$egift-landing-page-sub-block-title: $mothercare-black;
+$egift-landing-page-sub-block-subtitle: $black-two;
+$egift-landing-page-one-row-two-col-box-bg: $egift-titamium-white;
+$egift-button-border: $_gray_222;
+$egift-accordion-title: $mothercare-black;
+$egift-accordion-active-title: $marine-blue;
+$egift-accordion-content: $black-two;
+$egift-banner-bg: $bleach_white;
+$egift-breadcrumb-border: $_gray;
+
 // Wishlist
 $wishlist-header-notification-border: $pumpkin-orange;
 $wishlist-header-notification-bg: $white-five;
@@ -2090,3 +2125,18 @@ $wishlist-header-notification-span: $brownish-grey;
 $wishlist-share-text: $mothercare-black;
 $my-wishlist-share-modal-header: $mothercare-black;
 $my-wishlist-page-title-border: $plp_facet_border;
+
+// eGift myaccount page.
+$egift-linked-card-border: $egift-gray;
+$egift-linked-card-light-text: $grey-light;
+$egift-linked-card-dark-text: $mothercare-black;
+$egift-not-link-gray-text: $egift-disabled-gray2;
+
+// eGift common.
+$egift-black-text: $mothercare-black;
+
+// eGift Checkout.
+$egift-checkout-info: $_spc-billing-help;
+
+// Redeem eGift.
+$egift-redeem-form-subtitle: $egift-disabled-gray2;

@@ -1,0 +1,30 @@
+.spc-order-summary-block {
+  .spc-product-attributes {
+    .egift-cart-message-value {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 7.9rem;
+      display: inline-block;
+      vertical-align: bottom;
+
+      @include breakpoint($desktop) {
+        width: 8.9rem;
+      }
+    }
+  }
+
+  .egift-order-summary {
+    .total-line-item:nth-child(1) {
+      color: $pdp_product_special_price_text;
+    }
+  }
+}
+
+#spc-checkout {
+  .spc-virtual-product-checkout {
+    .spc-checkout-payment-options {
+      padding-top: 0;
+    }
+  }
+}
