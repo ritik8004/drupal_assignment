@@ -220,7 +220,7 @@ function _alshaya_egift_card_translations() {
         'context' => 'egift',
       ],
       'Amount Paid' => [
-        'ar' => 'Amount Paid Arabic',
+        'ar' => 'المبلغ المدفوع',
         'context' => 'egift',
       ],
       'Pay using egift card (Remaining Balance: @currencyCode @amount)' => [
