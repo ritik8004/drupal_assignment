@@ -122,7 +122,7 @@ class WishlistShare extends React.Component {
       <>
         <button type="button" onClick={this.onShareAllClick}>
           <span className="text">{Drupal.t('Share All', {}, { context: 'wishlist' })}</span>
-          <span className="icon"></span>
+          <span className="icon" />
         </button>
         <ConditionalView condition={wishlistShareLink !== null}>
           <SharePopup
