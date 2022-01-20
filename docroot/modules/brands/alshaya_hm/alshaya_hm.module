@@ -349,8 +349,8 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
     // Get parent sku.
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-    // Express Delivery.
+    /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
+    $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
     $parent_sku = $skuManager->getParentSkuBySku($vars['sku']) ?? $vars['sku'];
     if (!empty($parent_sku)) {
       /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
@@ -358,7 +358,7 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
       $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
       $vars['product_attribute_labels'] = $labels;
       // Show delivery option labels if express delivery is enabled.
-      if ($express_delivery_config->get('status')) {
+      if ($deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
         $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku->getSku());
         if (!empty($delivery_options['values'])) {
           foreach ($delivery_options['values'] as $key => $option) {

@@ -35,6 +35,9 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 import { checkAreaAvailabilityStatusOnCart, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import RedeemEgiftCard from '../../../egift-card';
+import { cartContainsAnyNormalProduct, cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 
 window.fetchStore = 'idle';
 
@@ -70,6 +73,7 @@ export default class Checkout extends React.Component {
             redirectToCart();
             return;
           }
+
           // Redirect to basket if uid don't match, we will handle
           // association and everything there.
           if (result.uid !== drupalSettings.user.uid) {
@@ -285,7 +289,7 @@ export default class Checkout extends React.Component {
     const { cart } = this.state;
     const { totals } = event.detail;
     const cartData = cart;
-    cartData.cart.totals = { ...cartData.cart.totals, ...totals };
+    cartData.cart.totals = { ...totals };
 
     this.setState({ cart: cartData });
   };
@@ -318,6 +322,10 @@ export default class Checkout extends React.Component {
       ? Drupal.smartAgent.getInfo()
       : false;
 
+    // Main wrapper class.
+    const mainWrapperClass = `spc-main ${isEgiftCardEnabled()
+      && cartContainsOnlyVirtualProduct(cart.cart) ? 'spc-virtual-product-checkout' : ''}`;
+
     return (
       <>
         <div className="spc-pre-content">
@@ -328,7 +336,7 @@ export default class Checkout extends React.Component {
             </>
           </ConditionalView>
         </div>
-        <div className="spc-main">
+        <div className={mainWrapperClass}>
           <div className="spc-content">
             {errorSuccessMessage !== null
               && (
@@ -336,15 +344,16 @@ export default class Checkout extends React.Component {
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
-
-            <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
-            <ClicknCollectContextProvider cart={cart}>
-              <DeliveryInformation
-                refreshCart={this.refreshCart}
-                cart={cart}
-                isExpressDeliveryAvailable={isExpressDeliveryAvailable}
-              />
-            </ClicknCollectContextProvider>
+            <ConditionalView condition={cartContainsAnyNormalProduct(cart.cart)}>
+              <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
+              <ClicknCollectContextProvider cart={cart}>
+                <DeliveryInformation
+                  refreshCart={this.refreshCart}
+                  cart={cart}
+                  isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+                />
+              </ClicknCollectContextProvider>
+            </ConditionalView>
 
             <ConditionalView condition={isAuraEnabled()}>
               <AuraCheckoutContainer cart={cart} />
@@ -356,6 +365,13 @@ export default class Checkout extends React.Component {
               cart={cart}
               isPostpayInitialised={isPostpayInitialised}
             />
+
+            <ConditionalView condition={isEgiftCardEnabled()}>
+              <RedeemEgiftCard
+                cart={cart}
+                refreshCart={this.refreshCart}
+              />
+            </ConditionalView>
 
             {billingComponent}
 

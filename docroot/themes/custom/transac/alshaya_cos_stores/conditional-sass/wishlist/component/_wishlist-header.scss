@@ -8,6 +8,10 @@ body.wishlist-enabled {
   #wishlist-header-wrapper {
     top: 0.5rem;
 
+    @include breakpoint($only-mobile) {
+      #{$right}: 2.5rem;
+    }
+
     @include breakpoint($tablet) {
       top: 0.25rem;
     }

@@ -21,6 +21,7 @@ import {
 } from '../../../../js/utilities/conditionsUtility';
 import { callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import { getExceptionMessageType } from '../../../../js/utilities/error';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -87,6 +88,13 @@ const returnExistingCartWithError = (code, message) => ({
  * @returns bool
  */
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
+
+/**
+ * Check if user is authenticated and without cart.
+ *
+ * @returns bool
+ */
+window.commerceBackend.isAuthenticatedUserWithoutCart = () => isAuthenticatedUserWithoutCart();
 
 /**
  * Returns the processed cart data.
@@ -188,6 +196,13 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
         quote_id: cartId,
       },
     };
+
+    // Check if product type is virtual (eg: eGift card), if product type
+    // is virtual then update product type and options to cart item.
+    if (data.product_type === 'virtual') {
+      itemData.cartItem.product_type = data.product_type;
+      itemData.cartItem.product_option = data.options;
+    }
   }
 
   if (data.action === 'update item') {
@@ -362,7 +377,9 @@ window.commerceBackend.createCart = async () => {
 
 window.commerceBackend.associateCartToCustomer = async (pageType) => {
   // If user is not logged in, no further processing required.
-  if (!isUserAuthenticated()) {
+  // We are not suppose to call associated cart for customer if user is doing
+  // topup.
+  if (!isUserAuthenticated() || getTopUpQuote() !== null) {
     return;
   }
 
