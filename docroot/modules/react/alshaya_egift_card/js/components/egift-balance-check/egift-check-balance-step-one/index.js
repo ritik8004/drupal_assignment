@@ -10,9 +10,7 @@ import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 export default class EgiftCheckBalanceStepOne extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      egiftCardNumber: '', // eGift card number.
-    };
+    this.state = {};
   }
 
   handleEvent = (e) => {
@@ -62,11 +60,8 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
             removeFullScreenLoader();
             if (res.status === 200) {
               if (res.data.response_type === true) {
-                this.setState({
-                  egiftCardNumber: cardNumber,
-                });
                 // Update the step to next level on api success.
-                stepChange(2);
+                stepChange(2, cardNumber);
               } else {
                 // Update the error on api failure and dont proceed further.
                 document.getElementById('egift_card_number_error').innerHTML = res.data.response_message;
@@ -92,7 +87,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
   };
 
   render = () => {
-    const { egiftCardNumber } = this.state;
+    const { egiftCardNumber } = this.props;
     const {
       closeModal, open, initialStep, stepChange,
     } = this.props;
@@ -132,6 +127,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                       name="egift_card_number"
                       className="card-number"
                       onBlur={(e) => this.handleEvent(e)}
+                      defaultValue={egiftCardNumber}
                     />
                     <div className="c-input__bar" />
                     <label>
