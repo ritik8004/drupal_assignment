@@ -143,6 +143,14 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
 
   // Handle change another card.
   handleChangeCardNumber = () => {
+    const { stepChange, cardNumber } = this.props;
+    // Moves to initial step.
+    stepChange(1, cardNumber);
+    return false;
+  };
+
+  // Handle check another card.
+  handleCheckAnotherCard = () => {
     const { stepChange } = this.props;
     // Moves to initial step.
     stepChange(1);
@@ -171,7 +179,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
     const topupName = Drupal.t('TOP UP CARD', {}, { context: 'egift' });
     const buttonName = Drupal.t('CHECK ANOTHER CARD', {}, { context: 'egift' });
     const topupButton = React.createElement('button', { type: 'submit', onClick: this.handleRedirect }, topupName);
-    const anotherCardButton = React.createElement('button', { type: 'submit', onClick: this.handleChangeCardNumber }, buttonName);
+    const anotherCardButton = React.createElement('button', { type: 'submit', onClick: this.handleCheckAnotherCard }, buttonName);
 
     return (
       <>

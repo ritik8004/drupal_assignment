@@ -8,6 +8,7 @@ export default class EgiftCheckBalance extends React.Component {
     this.state = {
       openModal: false, // OpenModal.
       initialStep: 1, // InitialStep of the modal.
+      egiftCardNumber: '', // Egift Card Number.
     };
   }
 
@@ -25,13 +26,15 @@ export default class EgiftCheckBalance extends React.Component {
     this.setState({
       openModal: false,
       initialStep: 1,
+      egiftCardNumber: '',
     });
   };
 
   // Update the initial step.
-  handleStepChange = (updatedStep) => {
+  handleStepChange = (updatedStep, cardNumber = '') => {
     this.setState({
       initialStep: updatedStep,
+      egiftCardNumber: cardNumber,
     });
   };
 
@@ -39,6 +42,7 @@ export default class EgiftCheckBalance extends React.Component {
     const {
       initialStep,
       openModal,
+      egiftCardNumber,
     } = this.state;
     const buttonName = Drupal.t('CHECK BALANCE', {}, { context: 'egift' });
     const button = React.createElement('button', { type: 'submit', onClick: this.openModal }, buttonName);
@@ -51,6 +55,7 @@ export default class EgiftCheckBalance extends React.Component {
             open={openModal}
             initialStep={initialStep}
             stepChange={this.handleStepChange}
+            egiftCardNumber={egiftCardNumber}
           />
         </ConditionalView>
       </>
