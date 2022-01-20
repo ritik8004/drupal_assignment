@@ -125,8 +125,11 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               });
             }
           } else {
-            // If Empty Response form eGiftHpsCustomerData Api.
-            logger.error('Empty Response @customerEmail. Message: @message', {
+            this.setState({
+              renderWait: false,
+            });
+            // If Empty Response or no linked card form eGiftHpsCustomerData Api Dont show loader.
+            logger.error('Empty Response or not linker card @customerEmail. Message: @message', {
               '@customerEmail': drupalSettings.userDetails.userEmailID,
               '@message': result.data.response_message,
             });

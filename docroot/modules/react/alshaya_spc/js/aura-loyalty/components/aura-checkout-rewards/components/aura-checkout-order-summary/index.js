@@ -4,7 +4,11 @@ import DeliveryVATSuffix from '../../../../../utilities/delivery-vat-suffix';
 
 const AuraCheckoutOrderSummary = (props) => {
   const { totals, shippingAmount, dontShowVatText } = props;
-
+  let balancePayableTitle = Drupal.t('Balance Payable');
+  if (document.getElementById('spc-checkout-confirmation')) {
+    // show amount paid title only in orderconfiration page
+    balancePayableTitle = Drupal.t('Amount Paid', {}, { context: 'egift' });
+  }
   if (totals === undefined || totals === null) {
     return null;
   }
@@ -25,7 +29,7 @@ const AuraCheckoutOrderSummary = (props) => {
       <div className="hero-total aura-hero-total">
         <TotalLineItem
           name="balance-payable"
-          title={Drupal.t('Balance Payable')}
+          title={balancePayableTitle}
           value={balancePayable}
           showZeroValue
         />

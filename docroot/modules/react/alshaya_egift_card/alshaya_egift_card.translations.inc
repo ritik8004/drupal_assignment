@@ -219,6 +219,10 @@ function _alshaya_egift_card_translations() {
         'ar' => ' الرصيد مستحق الدفع',
         'context' => 'egift',
       ],
+      'Amount Paid' => [
+        'ar' => 'Amount Paid Arabic',
+        'context' => 'egift',
+      ],
       'Pay using egift card (Remaining Balance: @currencyCode @amount)' => [
         'ar' => ' الدفع باستخدام بطاقة الهدايا الإلكترونية (الرصيد المتبقي: @currencyCode @amount)',
         'context' => 'egift',
