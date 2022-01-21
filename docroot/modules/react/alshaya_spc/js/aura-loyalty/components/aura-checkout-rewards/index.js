@@ -18,8 +18,9 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import { cartContainsAnyVirtualProduct } from '../../../utilities/egift_util';
+
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -161,6 +162,12 @@ class AuraCheckoutRewards extends React.Component {
     // We have redemption available only for linked and verified users so we proceed
     // further to show/hide aura section only for linked and verified user.
     if (loyaltyStatus !== allAuraStatus.APC_LINKED_VERIFIED) {
+      return true;
+    }
+
+    // If full payment is done by AURA and egift then make sure that AURA is not
+    // disabled and other payment methods should get disabled.
+    if (isFullPaymentDoneByPseudoPaymentMedthods(cart.cart)) {
       return true;
     }
 

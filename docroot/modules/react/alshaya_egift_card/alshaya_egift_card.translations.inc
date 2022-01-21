@@ -388,6 +388,10 @@ function _alshaya_egift_card_translations() {
         'ar' => 'إدخال المبلغ',
         'context' => 'egift',
       ],
+      'The egift card balance is not sufficient to pay remaining amount, Please use another payment method.' => [
+        'ar' => 'The egift card balance is not sufficient to pay remaining amount, Please use another payment method.',
+        'context' => 'egift',
+      ],
     ],
   ];
 
