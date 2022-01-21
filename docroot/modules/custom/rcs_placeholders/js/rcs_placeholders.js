@@ -84,6 +84,16 @@
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
 
+          // RCS Entity Loaded.
+          if (pageType) {
+            RcsEventManager.fire('alshayaPageEntityLoaded', {
+              detail: {
+                pageType,
+                entity,
+              }
+            });
+          }
+
           // Add class to remove loader styles after RCS info is filled.
           $('.rcs-page').addClass(classRcsLoaded);
         });

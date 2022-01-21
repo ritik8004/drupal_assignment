@@ -16,6 +16,10 @@ import {
 } from './smoothScroll';
 import { isExpressDeliveryEnabled } from '../../../js/utilities/expressDeliveryHelper';
 import { setDeliveryAreaStorage } from './delivery_area_util';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
+import { isEgiftCardEnabled } from '../../../js/utilities/util';
+import { isUserAuthenticated } from '../../../js/utilities/helper';
+import { getTopUpQuote } from '../../../js/utilities/egiftCardHelper';
 
 /**
  * Use this to auto scroll to the right field in address form upon
@@ -648,8 +652,8 @@ export const getAddressPopupClassName = () => (drupalSettings.user.uid > 0
  * Saves customer address added in billing in addressbook.
  */
 export const saveCustomerAddressFromBilling = (data) => {
-  // If logged in user.
-  if (drupalSettings.user.uid > 0) {
+  // If logged in user and user is not doing topup.
+  if (getTopUpQuote() === null && drupalSettings.user.uid > 0) {
     // Add/update user address.
     return addEditUserAddress(data, false);
   }
@@ -715,15 +719,30 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           document.getElementById('mobile-error').innerHTML = '';
           document.getElementById('mobile-error').classList.remove('error');
 
-          target.email = {
-            value: shipping.email,
-          };
+          // Add this only when we are not passing email via form.
+          if (!hasValue(target.email)) {
+            let userEmail = hasValue(shipping) ? shipping.email : '';
+            // Update user email id if it's missing from shipping method.
+            if (!hasValue(userEmail)
+              && isEgiftCardEnabled()
+              && isUserAuthenticated()) {
+              userEmail = drupalSettings.userDetails.userEmailID;
+            }
+            target.email = {
+              value: userEmail,
+            };
+          }
           const formData = prepareAddressDataFromForm(target);
 
           // For logged in user add customer id from shipping.
           let customerData = {};
-          if (drupalSettings.user.uid > 0) {
-            formData.static.customer_id = shipping.customer_id;
+          // If user is doing topup then don't pass the customer detail as we are
+          // using guest cart update endpoint for authenticated user for topup.
+          if (getTopUpQuote() === null && drupalSettings.user.uid > 0) {
+            // Incase of cart having only egift card then shipping information
+            // is not available. use drupalSettings customer_id.
+            formData.static.customer_id = hasValue(shipping) && hasValue(shipping.customer_id)
+              ? shipping.customer_id : drupalSettings.userDetails.customerId;
             customerData = {
               address: {
                 given_name: formData.static.firstname,

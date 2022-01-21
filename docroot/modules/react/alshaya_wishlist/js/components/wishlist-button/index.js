@@ -237,6 +237,10 @@ class WishlistButton extends React.Component {
    * Add or remove product from the wishlist.
    */
   toggleWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.persist();
+
     const {
       addedInWishList, skuCode, options, title,
     } = this.state;

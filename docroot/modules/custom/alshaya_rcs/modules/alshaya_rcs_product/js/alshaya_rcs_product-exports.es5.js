@@ -393,8 +393,9 @@ exports.computePhFilters = function (input, filter) {
 
   switch(filter) {
     case 'price':
-      const priceVal = getFormattedAmount(input.price_range.maximum_price.regular_price.value);
-      const finalPriceVal = getFormattedAmount(input.price_range.maximum_price.final_price.value);
+      const prices = window.commerceBackend.getPrices(input, true);
+      const priceVal = prices.price;
+      const finalPriceVal = prices.finalPrice;
 
       const price = jQuery('.rcs-templates--price').clone();
       jQuery('.price-amount', price).html(priceVal);
