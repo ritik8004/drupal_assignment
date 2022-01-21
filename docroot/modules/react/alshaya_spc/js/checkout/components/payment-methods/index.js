@@ -218,19 +218,11 @@ export default class PaymentMethods extends React.Component {
             return;
           }
 
-          if (method.code === 'tabby' && !Tabby.isAvailable()) {
+          if (method.code === 'tabby'
+            && (!Tabby.isAvailable() || !Tabby.productAvailable(this))) {
             return;
           }
-
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
-          // Get the product available for tabby.
-          if (method.code === 'tabby') {
-            const available = Tabby.productAvailable(this);
-            paymentMethods[method.code].status = available.status;
-            if (hasValue(available.rejection_reason)) {
-              paymentMethods[method.code].rejection_reason = available.rejection_reason;
-            }
-          }
         }
       });
     } else {
