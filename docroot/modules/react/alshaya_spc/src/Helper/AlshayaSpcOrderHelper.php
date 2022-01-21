@@ -457,7 +457,6 @@ class AlshayaSpcOrderHelper {
     // Skip Shipping information if only virtual product in order,
     // i.e. e-gift card product or e-gift top-up.
     if (!$order['is_virtual']) {
-      $express_delivery_config = $this->configFactory->get('alshaya_spc.express_delivery');
       $shipping_info = $this->deliveryOptionsHelper->ifSddEdFeatureEnabled() ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
       $orderDetails['delivery_method'] = $shipping_info[0];
       $orderDetails['delivery_method_description'] = ($order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup')

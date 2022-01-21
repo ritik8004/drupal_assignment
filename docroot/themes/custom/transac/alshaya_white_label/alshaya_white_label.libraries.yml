@@ -548,6 +548,7 @@ plp-add-to-cart:
       css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-react-animate
+    - alshaya_white_label/magic-dots
 
 style-review-stars:
   css:
@@ -683,6 +684,11 @@ rcs-algolia-plp:
   css:
     theme:
       css/conditional-sass/rcs-algolia-plp/rcs-algolia-plp.ltr.css: {}
+
+magic-dots:
+  css:
+    theme:
+      css/conditional-sass/magic-dots/magic-dots.ltr.css: {}
 
 egift-common:
   css:
