@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import { checkExpressDeliveryStatus, checkSameDayDeliveryStatus } from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../common/components/conditional-view';
 import {
   getAreaParentFieldKey,
@@ -200,8 +201,12 @@ export default class AreaListBlock extends React.Component {
               </div>
               <div className="delivery-type-wrapper">
                 <span className="standard-delivery">{Drupal.t('Standard')}</span>
-                <span className="sameday-delivery">{Drupal.t('Same Day')}</span>
-                <span className="express-delivery">{Drupal.t('Express')}</span>
+                <ConditionalView condition={checkSameDayDeliveryStatus()}>
+                  <span className="sameday-delivery">{Drupal.t('Same Day')}</span>
+                </ConditionalView>
+                <ConditionalView condition={checkExpressDeliveryStatus()}>
+                  <span className="express-delivery">{Drupal.t('Express')}</span>
+                </ConditionalView>
               </div>
               <div className="area-list-label">{`${Drupal.t('Select an area')}`}</div>
               <ConditionalView condition={items.length !== 0}>
