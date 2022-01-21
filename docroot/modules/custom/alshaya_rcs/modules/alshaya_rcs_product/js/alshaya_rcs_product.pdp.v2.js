@@ -675,7 +675,7 @@ async function getProductLabelsData (sku) {
  *   The main sku for the product being displayed.
  */
 function renderProductLabels(product, sku, mainSku) {
-  getProductLabelsData(sku).then(function (labelsData) {
+  getProductLabelsData(mainSku).then(function (labelsData) {
     globalThis.rcsPhRenderingEngine.render(
       drupalSettings,
       'product-labels',
