@@ -503,9 +503,9 @@ function alshaya_seo_google_tag_container_validate_handler(array $form, FormStat
 }
 
 /**
- * Implements hook_ENTITY_TYPE_translation_create() for node entities.
+ * Implements hook_ENTITY_TYPE_update() for node entities.
  */
-function alshaya_seo_node_translation_create(EntityInterface $node) {
+function alshaya_seo_node_update(EntityInterface $node) {
   // Create entity alias for arabic translation
   // when english translation is saved.
   if ($node->bundle() == 'acq_product'
