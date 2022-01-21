@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - develop-alshaya-v2
-      - develop-egift-card
+      - develop-perf-js
       - develop
       - qa
       - uat
