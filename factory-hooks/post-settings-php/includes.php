@@ -47,7 +47,6 @@ if (empty($_acsf_site_name) && $settings['env'] == 'local') {
 // properly. But it doesn't really matter too much which site we will install
 // locally, as we only run very simplistic behat tests against it.
 if (empty($_acsf_site_name) &&  $settings['env'] === 'travis') {
-  echo "Setting up vsae for travis environment.";
   $_acsf_site_name = 'vsae';
 }
 

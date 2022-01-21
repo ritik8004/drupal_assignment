@@ -1,4 +1,4 @@
-@javascript @auth @bazaar-voice @hmkwuat @bbwkwuat @bbwaeuat
+@javascript @auth @bazaar-voice
 Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
 
   Background:

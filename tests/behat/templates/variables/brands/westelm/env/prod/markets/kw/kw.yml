@@ -1,6 +1,6 @@
 variables:
   url_product_page: 'buy-shiny-brite™-colored-glass-ball-ornaments-set-20.html'
-  product_listing_page_url: '/shop-holiday/holiday-decor/ornaments-tree-decor/'
-  spc_product_listing_page: '/shop-holiday/holiday-decor/ornaments-tree-decor/'
-  spc_basket_page: '/shop-holiday/holiday-decor/ornaments-tree-decor/'
+  product_listing_page_url: '/shop-holiday/holiday-decor/ornaments/'
+  spc_product_listing_page: '/shop-holiday/holiday-decor/ornaments/'
+  spc_basket_page: '/shop-holiday/holiday-decor/ornaments/'
   spc_pdp_page: 'buy-shiny-brite™-colored-glass-ball-ornaments-set-20.html'

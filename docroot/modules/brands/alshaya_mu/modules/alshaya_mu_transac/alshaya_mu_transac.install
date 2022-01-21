@@ -45,7 +45,8 @@ function alshaya_mu_transac_update_8006() {
 /**
  * Implements hook_update_N().
  *
- * [6.4.0] Add field for new attribute `season_code` and enable `alshaya_product_lpn`.
+ * [6.4.0] Add field for new attribute `season_code` and
+ * enable `alshaya_product_lpn`.
  */
 function alshaya_mu_transac_update_8005() {
   $manager = \Drupal::service('alshaya_config.manager');
@@ -63,7 +64,8 @@ function alshaya_mu_transac_update_8005() {
 /**
  * Implements hook_update_N().
  *
- * Set image_thumb_gallery => false to use single image gallery on listing pages.
+ * Set image_thumb_gallery => false to use single image gallery on
+ * listing pages.
  */
 function alshaya_mu_transac_update_8004() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */

@@ -27,6 +27,7 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
 
 /**
  * Class Alshaya Spc Order Helper.
@@ -169,6 +170,13 @@ class AlshayaSpcOrderHelper {
   protected $skuImagesHelper;
 
   /**
+   * Delivery Options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -207,6 +215,8 @@ class AlshayaSpcOrderHelper {
    *   Renderer.
    * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
    *   Sku imagese helper.
+   * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
+   *   Delivery Options Helper.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -225,7 +235,8 @@ class AlshayaSpcOrderHelper {
                               ConfigFactory $configFactory,
                               StoresFinderUtility $store_finder,
                               RendererInterface $renderer,
-                              SkuImagesHelper $images_helper) {
+                              SkuImagesHelper $images_helper,
+                              DeliveryOptionsHelper $delivery_options_helper) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -244,6 +255,7 @@ class AlshayaSpcOrderHelper {
     $this->storeFinder = $store_finder;
     $this->renderer = $renderer;
     $this->skuImagesHelper = $images_helper;
+    $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 
   /**
@@ -403,12 +415,11 @@ class AlshayaSpcOrderHelper {
       $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
     }
     $orderDetails['delivery_charge'] = $order['totals']['shipping'];
-
     // Skip Shipping information if only virtual product in order,
     // i.e. e-gift card product or e-gift top-up.
     if (!$order['is_virtual']) {
       $express_delivery_config = $this->configFactory->get('alshaya_spc.express_delivery');
-      $shipping_info = $express_delivery_config->get('status') ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
+      $shipping_info = $this->deliveryOptionsHelper->ifSddEdFeatureEnabled() ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
       $orderDetails['delivery_method'] = $shipping_info[0];
       $orderDetails['delivery_method_description'] = ($order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup')
         ? $shipping_info[0]

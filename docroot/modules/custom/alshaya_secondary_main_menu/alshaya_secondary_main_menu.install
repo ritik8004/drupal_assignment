@@ -1,11 +1,12 @@
 <?php
- use Drupal\block\Entity\Block;
- use Drupal\block\BlockInterface;
 
 /**
  * @file
- * Install, update and uninstall functions for the alshaya_secondary_main_menu module.
+ * Install file.
  */
+
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
 
 /**
  * Implements hook_install().
@@ -20,12 +21,12 @@ function alshaya_secondary_main_menu_install() {
   }
   $algolia_block = Block::load('alshayaalgoliareactautocomplete');
   if ($algolia_block instanceof BlockInterface) {
-    Block::load('branding')->setWeight(($algolia_block->getWeight())+1)->save();
-    Block::load('alshayasecondarymainmenu')->setWeight(($algolia_block->getWeight())+2)->save();
+    Block::load('branding')->setWeight(($algolia_block->getWeight()) + 1)->save();
+    Block::load('alshayasecondarymainmenu')->setWeight(($algolia_block->getWeight()) + 2)->save();
   }
   $main_block = Block::load('alshayamainmenu');
   if ($main_block instanceof BlockInterface) {
-    Block::load('promomenuimages')->setWeight(($main_block->getWeight())+1)->save();
+    Block::load('promomenuimages')->setWeight(($main_block->getWeight()) + 1)->save();
   }
 }
 

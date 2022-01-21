@@ -123,6 +123,8 @@ $ cd docroot/modules/react/alshaya_spc
 $ lando npm run build:dev
 ```
 
+keep global node version 14.x+ in host machine to aviod react linting issue.
+
 ### Xdebug
 
 Xdebug can be enabled/disabled quickly by using the `lando xdebug-on` and `lando xdebug-off` commands.

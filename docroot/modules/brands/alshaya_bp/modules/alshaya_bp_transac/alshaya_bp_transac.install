@@ -38,7 +38,7 @@ function alshaya_bp_transac_update_8016() {
  */
 function alshaya_bp_transac_update_8015() {
   // Set page_types to product_option_list
-  // in block.block.brandcategory
+  // in block.block.brandcategory.
   \Drupal::configFactory()->getEditable('block.block.brandcategory')
     ->merge([
       'visibility' => [
@@ -70,7 +70,7 @@ function alshaya_bp_transac_update_8014() {
   );
   \Drupal::service('acq_sku.fields_manager')->addFields();
 
-  // Adding fields in search_api index
+  // Adding fields in search_api index.
   $manager->updateConfigs(
     ['search_api.index.product'],
     'alshaya_product',
@@ -87,7 +87,7 @@ function alshaya_bp_transac_update_8014() {
   // Re-indexing all the products.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 
-  // Adjust Block Facets weight for attr_brand_category
+  // Adjust Block Facets weight for attr_brand_category.
   $blocks = [
     'brandcategory' => 'alshaya_search_facets_block_all',
     'promobrandcategory' => 'alshaya_promo_facets_block_all',
@@ -132,11 +132,11 @@ function alshaya_bp_transac_update_8012() {
   $new_labels = [
     [
       'value' => 'attr_brand ASC',
-      'label' => 'Brand A to Z'
+      'label' => 'Brand A to Z',
     ],
     [
       'value' => 'attr_brand DESC',
-      'label' => 'Brand Z to A'
+      'label' => 'Brand Z to A',
     ],
   ];
   $labels = array_merge($labels, $new_labels);
@@ -149,7 +149,7 @@ function alshaya_bp_transac_update_8012() {
   $available_sort_options = $config->get('available_sort_options');
   $available_sort_options['attr_brand'] = 'Brand';
   $config->set('available_sort_options', $available_sort_options);
-  // Update sorting options labels
+  // Update sorting options labels.
   $labels = $config->get('sort_options_labels');
   $labels = array_merge($labels, $new_labels);
   $config->set('sort_options_labels', $labels);
@@ -181,7 +181,10 @@ function alshaya_bp_transac_update_8010() {
   /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
   $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
 
-  $sku_fields_manager->updateFieldType(['attr_pil', 'attr_indications_age_restrictions']);
+  $sku_fields_manager->updateFieldType([
+    'attr_pil',
+    'attr_indications_age_restrictions',
+  ]);
 }
 
 /**
@@ -190,15 +193,15 @@ function alshaya_bp_transac_update_8010() {
  * Update category term path aliases.
  */
 function alshaya_bp_transac_update_8009() {
- $manager = \Drupal::service('alshaya_config.manager');
- $configs = ['pathauto.pattern.product_category_pathauto'];
- $manager->updateConfigs($configs, 'alshaya_acm_product_category');
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = ['pathauto.pattern.product_category_pathauto'];
+  $manager->updateConfigs($configs, 'alshaya_acm_product_category');
 
- // Now run batch process to update the term aliases.
- // @see Drupal\pathauto\Commands\PathautoCommands::generateAliases().
- $batch = [
-   'title' => t('Bulk updating URL aliases'),
-   'operations' => [
+  // Now run batch process to update the term aliases.
+  // @see Drupal\pathauto\Commands\PathautoCommands::generateAliases().
+  $batch = [
+    'title' => t('Bulk updating URL aliases'),
+    'operations' => [
      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
        [
@@ -206,12 +209,12 @@ function alshaya_bp_transac_update_8009() {
          'all',
        ],
      ],
-   ],
-   'finished' => '_alshaya_bp_transac_term_alias_update_batch_finished',
-   'progressive' => FALSE,
- ];
+    ],
+    'finished' => '_alshaya_bp_transac_term_alias_update_batch_finished',
+    'progressive' => FALSE,
+  ];
 
- batch_set($batch);
+  batch_set($batch);
 }
 
 /**
@@ -504,7 +507,7 @@ function alshaya_bp_transac_install() {
   // Install metatag translations.
   _alshaya_bp_transac_save_metatag_translations();
 
-  // Install metatag
+  // Install metatag.
   _alshaya_bp_transac_save_metatag();
 }
 
