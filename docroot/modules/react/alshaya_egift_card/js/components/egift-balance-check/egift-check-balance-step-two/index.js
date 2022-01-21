@@ -290,7 +290,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                     {cardNumber.slice(-4)}
                   </p>
                   <p className="egift-valid-text">
-                    {Drupal.t('Card valid up to', {}, { context: 'egift' })}
+                    {Drupal.t('Card valid up to ', {}, { context: 'egift' })}
                     {egiftCardvalidity}
                   </p>
                   <div className="egift-topup-btn-wrapper">
