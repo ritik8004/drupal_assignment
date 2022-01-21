@@ -112,6 +112,15 @@
       align-items: center;
       margin-top: 2.125rem;
     }
+
+    .egift-linked-card-number-wrapper {
+      display: flex;
+      flex-direction: column;
+
+      .egift-linked-card-number-value {
+        border: none;
+      }
+    }
   }
 
   .egift-light-text {

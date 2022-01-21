@@ -1,4 +1,5 @@
 import React from 'react';
+import Cleave from 'cleave.js/react';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
@@ -92,7 +93,17 @@ export default class EgiftTopupFor extends React.Component {
                 <span className="egift-linked-card-balance-label">
                   {Drupal.t('Card No:', {}, { context: 'egift' })}
                 </span>
-                <span>{ linkedCardNumber !== null ? linkedCardNumber : '' }</span>
+                <span>
+                  { linkedCardNumber !== null ? (
+                    <Cleave
+                      name="egift-linked-card-value"
+                      className=""
+                      disabled
+                      value={linkedCardNumber}
+                      options={{ blocks: [4, 4, 4, 4] }}
+                    />
+                  ) : '' }
+                </span>
               </div>
             </div>
           </ConditionalView>
