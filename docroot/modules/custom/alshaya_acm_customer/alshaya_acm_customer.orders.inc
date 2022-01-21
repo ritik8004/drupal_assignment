@@ -212,9 +212,9 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
-  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-  $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : '';
-  $shipping_info = $express_delivery_config->get('status') ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
+  /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
+  $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
+  $shipping_info = $deliveryOptionsHelper->ifSddEdFeatureEnabled() ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
   $orderDetails['delivery_method'] = $shipping_info[0];
   $pudo_pickup = !empty($order['shipping']['extension_attributes']['click_and_collect_type']) ? $order['shipping']['extension_attributes']['click_and_collect_type'] : '';
   $orderDetails['is_pudo_pickup'] = $pudo_pickup === 'pudo_pickup';
