@@ -660,6 +660,7 @@ async function getProductLabelsData (sku) {
       staticDataStore.labels[sku] = productLabels.items;
     });
   }
+
   return staticDataStore.labels[sku];
 }
 
