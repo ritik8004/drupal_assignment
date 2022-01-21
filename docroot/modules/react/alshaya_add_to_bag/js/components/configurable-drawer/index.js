@@ -6,9 +6,6 @@ import ConfigurableForm from '../configurable-form';
 import Price from '../../../../js/utilities/components/price';
 import Promotions from '../promotions';
 import { getVatText } from '../../../../js/utilities/price';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import 'react-magic-slider-dots/dist/magic-dots.css';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import Lozenges
   from '../../../../alshaya_algolia_react/js/common/components/lozenges';
