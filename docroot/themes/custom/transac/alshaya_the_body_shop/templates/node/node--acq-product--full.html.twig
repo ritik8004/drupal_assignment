@@ -12,6 +12,9 @@
         </div>
       </div>
     {% endif %}
+    {% if content.wishlist_enabled %}
+      {{ content.wishlist_enabled }}
+    {% endif %}
     {% if quantity_limit_enabled == true %}
       <div class="order-quantity-limit-message mobile-only"></div>
     {% endif %}

@@ -17,8 +17,8 @@ const isAddToBagEnabled = () => {
 /**
  * Add the markup for configurable drawer.
  */
-const createConfigurableDrawer = () => {
-  if (isAddToBagEnabled()) {
+const createConfigurableDrawer = (force) => {
+  if (isAddToBagEnabled() || force) {
     const id = 'configurable-drawer';
     if (!document.getElementById(id)) {
       const element = document.createElement('div');

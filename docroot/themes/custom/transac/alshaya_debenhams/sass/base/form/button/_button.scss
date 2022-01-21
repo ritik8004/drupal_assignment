@@ -7,6 +7,7 @@
   color: $primary_btn_text;
   text-transform: unset;
   height: 2.625rem;
+  line-height: 1.3;
 
   &:hover {
     background: $primary_btn_hover_bg;
@@ -25,10 +26,28 @@
   color: $primary_btn_text;
   text-transform: unset;
   height: 2.625rem;
+  line-height: 1.3;
 
   &:hover {
     background: $primary_btn_hover_bg;
     border: 2px solid $primary_btn_hover_border;
     transition: 0.3s;
+  }
+}
+
+.button {
+  &.status-pending,
+  &.status-delivered,
+  &.status-complete,
+  &.status-processing,
+  &.status-returned {
+    font-family: $dh-semibold;
+    font-weight: normal;
+    color: $user_order_list_status_btn_text;
+    padding-top: 0.25rem;
+
+    html[lang=ar] & {
+      padding-top: 0.125rem;
+    }
   }
 }

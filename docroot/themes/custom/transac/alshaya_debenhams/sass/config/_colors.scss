@@ -92,6 +92,7 @@ $footer_link_hover: $black;
 $footer_subscribe_btn_border: $medium-sky-blue;
 $newsletter_submit_btn: $white;
 $lang_switch_firsttime_bg: $charcoal;
+$newsletter_success: $green;
 
 // Copyright
 $copyright_footer_bg: $pale-grey;
@@ -114,6 +115,7 @@ $header_mobile_menu_close_bg: $charcoal;
 $header_toggle_sign_active_tab: $black;
 $header_toggle_sign_default: $light-grey;
 $header_my_account_h3_title: $charcoal;
+$header_my_account_icon: $charcoal;
 
 // Header secondary: ie: top header.
 $header_secondary_bg: $pale-grey;
@@ -176,15 +178,15 @@ $user_form_layout_divider_color: $pale-grey;
 // Store finder header form.
 $store_finder_header_desktop: $charcoal;
 $store_finder_subheader: $charcoal;
-$store_finder_backbtn: $black;
+$store_finder_backbtn: $white;
 $store_finder_icon: $charcoal;
 $store_finder_text: $charcoal;
-$store_finder_border_hover: $grey;
+$store_finder_border_hover: $medium-sky-blue;
 $store_finder_search_label: $charcoal;
 $store_finder_search_input: $grey;
 $store_finder_search_input_mobile_border: $grey;
 $store_finder_search_input_border: $grey;
-$store_finder_btn_act_hover_state: $white;
+$store_finder_btn_act_hover_state: $medium-sky-blue;
 $store_finder_individual_list_view: $white;
 $store_finder_individual_hour_border: $grey;
 $store_finder_search_results_tile_link: $charcoal;
@@ -261,9 +263,15 @@ $pdp_sizeguide_link: $charcoal;
 $pdp_product_special_price: $sale-red;
 $pdp_white_color_attribute_border: $spanish-grey;
 $pdp_gallery_img_bg: $light-grey;
-
+$pdp_disable_variant_bg: $anti-flash-white;
+$pdp_disable_variant_text: $spanish-grey;
+$pdp_cc_other_stores: $black;
+$pdp_cc_storefinder_link: $black;
+$pdp_all_stores_modal_close_bg: $charcoal;
+$pdp_all_stores_modal_list_name: $charcoal;
+$pdp_all_stores_modal_border: $grey;
 // SPC
-$spc-cart-background: $anti-flash-white;
+$spc-cart-background: $light-grey;
 $spc-empty-text: $charcoal;
 $spc-checkout_section_title: $black;
 $spc-product-title: $charcoal;
@@ -360,6 +368,7 @@ $user_order_list_text: $charcoal;
 $user_order_list_dark: $charcoal;
 $windows-blue: $black;
 $block_acm_customer_txt: $black;
+$user_order_list_status_btn_text: $white;
 
 // User Form
 $user_field_link: $charcoal;
@@ -418,9 +427,9 @@ $modal_close_bg: $charcoal;
 $modal_close_text: $white;
 
 // Back to top
-$btt_bg: $pale-grey;
+$btt_bg: $light-grey;
 $btt_text: $charcoal;
-$btt_border: $light-grey;
+$btt_border: $grey;
 
 // PLP frame.
 $frame_promo: $sale-red;

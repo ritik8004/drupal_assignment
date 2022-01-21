@@ -4,7 +4,7 @@
  */
 
 function removeSearchQuery() {
-  localStorage.removeItem('algolia_search_query');
+  Drupal.removeItemFromLocalStorage('algolia_search_query');
 }
 
 /**
@@ -27,30 +27,36 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function setSearchQuery(queryValue) {
-  localStorage.setItem('algolia_search_query', queryValue);
+  Drupal.addItemInLocalStorage('algolia_search_query', queryValue);
 }
 
 function getSearchQuery() {
-  return localStorage.getItem('algolia_search_query');
+  return Drupal.getItemFromLocalStorage('algolia_search_query');
 }
 
 function setLangRedirect(queryValue) {
-  localStorage.setItem('algoliaLangRedirect', queryValue);
+  Drupal.addItemInLocalStorage('algoliaLangRedirect', queryValue);
 }
 
 function removeLangRedirect() {
-  localStorage.removeItem('algoliaLangRedirect');
+  Drupal.removeItemFromLocalStorage('algoliaLangRedirect');
 }
 
 function getLangRedirect() {
-  return localStorage.getItem('algoliaLangRedirect');
+  return Drupal.getItemFromLocalStorage('algoliaLangRedirect');
 }
 
 function setClickedItem(storageDetails) {
-  localStorage.setItem(window.location.hash, JSON.stringify(storageDetails));
+  Drupal.addItemInLocalStorage(`search:${window.location.hash}`, storageDetails);
 }
 
 function storeClickedItem(event, pageType) {
+  // Do nothing for buttons inside our markup, for example in slick-dots.
+  // Do nothing if user trying to use cmd + click.
+  if (event.target.tagName.toLowerCase() === 'button' || event.metaKey) {
+    return;
+  }
+
   const articleNode = event.target.closest('.node--view-mode-search-result');
 
   // This happens when we display the Add To Bag configurable drawer. The drawer
@@ -66,9 +72,9 @@ function storeClickedItem(event, pageType) {
   };
 
   if (pageType === 'plp') {
-    localStorage.setItem(
+    Drupal.addItemInLocalStorage(
       `${pageType}:${window.location.pathname}`,
-      JSON.stringify(storageDetails),
+      storageDetails,
     );
   } else {
     setClickedItem(storageDetails);

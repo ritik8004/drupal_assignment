@@ -1,0 +1,111 @@
+.wishlist-enabled {
+  .magazine-layout-node {
+    .basic-details-wrapper {
+      .sku-base-form {
+        button[type="submit"] {
+          margin-bottom: 1.25rem;
+          max-width: 13.875rem; // Need to recheck for AR once translation available.
+        }
+      }
+
+      .modal-share-this {
+        .share-icon {
+          @include breakpoint($desktop) {
+            #{$left}: 14.875rem;
+          }
+        }
+      }
+
+      .wishlist-button-wrapper {
+        border: 1px solid $wishlist-pdp-button-border;
+        padding: 0.25rem 1rem;
+        width: 100%;
+        max-width: 13.875rem; // Need to recheck for AR once translation available.
+        height: 2.1875rem;
+        margin-bottom: 1.25rem;
+        text-align: center;
+
+        @include breakpoint($desktop) {
+          &:hover {
+            color: $wishlist-button-txt;
+            background: $wishlist-magazine-pdp-button-hover-bg;
+            border-color: $wishlist-magazine-pdp-button-hover-border;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-top: 2.25rem;
+          margin-bottom: 0;
+          padding: 0.25rem 0.625rem;
+        }
+
+        &.in-wishlist {
+          border-color: $wishlist-pdp-button-selected-txt;
+
+          .wishlist-icon.pdp {
+            color: $wishlist-pdp-button-selected-txt;
+          }
+
+          &:hover {
+            background: transparent;
+          }
+        }
+
+        .wishlist-icon.pdp {
+          margin-#{$left}: 0;
+          font-size: 0.8125rem;
+          padding-left: 1.5625rem;
+          vertical-align: middle;
+          display: inline;
+          text-transform: uppercase;
+          line-height: 1.87;
+          font-family: $alshaya-bold;
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .wishlist-button-wrapper {
+        &.wishlist-loader {
+          &.loading {
+            position: absolute;
+            top: 0.625rem;
+            z-index: 1;
+            #{$right}: 0.625rem;
+            height: 1.875rem;
+            width: 1.875rem;
+
+            .wishlist-icon {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    .wishlist-pdp-wrapper.mobile-only {
+      position: absolute;
+      top: 1.25rem;
+      #{$right}: 1.25rem;
+      z-index: 2;
+      background: $wishlist-magazine-mobile-bg;
+      padding: 0.5rem;
+      border-radius: 50%;
+
+      .wishlist-icon {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+
+    .wishlist-pdp-wrapper.desktop-only {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+}

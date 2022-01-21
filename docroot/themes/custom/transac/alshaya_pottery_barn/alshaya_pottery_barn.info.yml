@@ -152,6 +152,11 @@ libraries-override:
       theme:
         css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css
 
+  alshaya_white_label/wishlist:
+    css:
+      theme:
+        css/conditional-sass/wishlist/wishlist.ltr.css: css/conditional-sass/wishlist/wishlist.ltr.css
+
   alshaya_white_label/sameday-express-delivery:
     css:
       theme:

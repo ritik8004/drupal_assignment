@@ -4,6 +4,10 @@ header {
 
     @include breakpoint($only-mobile) {
       height: 3rem;
+
+      html[lang=ar] & {
+        height: 3.4375rem;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -24,15 +28,17 @@ header {
   a {
     min-width: 12.5rem;
 
-    html[lang=ar] & {
-      margin-top: 0.75rem;
-    }
-
     @include breakpoint($upto-desktop) {
       min-width: 8.25rem;
       max-width: 8.25rem;
       margin-#{$left}: 3rem;
       margin-top: 0.5625rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        margin-top: 0.8125rem;
+      }
     }
   }
 
@@ -42,7 +48,10 @@ header {
         width: auto;
         margin-top: 0;
         height: auto;
-        max-width: 8.25rem;
+
+        @include breakpoint($upto-desktop) {
+          max-width: 8.25rem;
+        }
       }
     }
   }
@@ -59,10 +68,12 @@ header {
 
   .cart-link {
     background-position: center $right;
+    margin-bottom: 0.6875rem;
+    #{$left}: 1.0625rem;
 
     @include breakpoint($upto-desktop) {
       background-size: 72%;
-      top: 0.3125rem;
+      top: 0.6875rem;
       #{$left}: -0.6875rem;
 
       html[lang=ar] & {
@@ -72,7 +83,7 @@ header {
 
     @include breakpoint($only-mobile) {
       html[lang=ar] & {
-        right: -0.3125rem;
+        right: -0.5rem;
       }
     }
 
@@ -169,10 +180,10 @@ header {
   @include breakpoint($only-mobile) {
     .store {
       #{$right}: 17%;
-      top: 1.125rem;
+      top: 1.25rem;
 
       html[lang=ar] & {
-        left: 13%;
+        left: 14.5%;
       }
     }
   }
@@ -214,14 +225,14 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      top: 0.75rem;
-      #{$right}: 24%;
+      top: 0.9375rem;
+      #{$right}: 24.5%;
       margin-#{$right}: 0;
       width: 2rem;
 
       html[lang=ar] & {
-        top: 0.875rem;
-        left: 20%;
+        top: 1rem;
+        left: 22%;
       }
     }
   }

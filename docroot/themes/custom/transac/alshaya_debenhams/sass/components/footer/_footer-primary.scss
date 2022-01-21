@@ -142,6 +142,13 @@
       @include ellipsis-text;
     }
   }
+
+  .edit-newsletter {
+    .ladda-spinner {
+      margin-#{$right}: -1.75rem;
+      top: 1.1875rem;
+    }
+  }
 }
 
 .alshaya-newsletter-subscribe {
@@ -195,8 +202,14 @@
       max-width: 12.5rem;
       margin-#{$right}: 0.625rem;
 
+      html[lang=ar] & {
+        @include breakpoint($desktop) {
+          max-width: 14rem;
+        }
+      }
+
       @include breakpoint($only-mobile) {
-        max-width: 21rem;
+        max-width: unset;
         width: 100%;
       }
 
@@ -223,7 +236,6 @@
     @include breakpoint($only-mobile) {
       text-align: $left;
       padding: 0;
-      font-size: 0.875rem;
     }
   }
 }
@@ -263,20 +275,27 @@
       li {
         a {
           text-transform: unset;
+          text-decoration: none;
         }
 
         &.en {
-          a,
-          &.is-active a {
-            font-family: $dh-regular;
+          a {
+            font-family: $dh-light;
             margin-#{$left}: 0;
+          }
+
+          &.is-active a {
+            font-family: $dh-semibold;
           }
         }
 
         &.ar {
-          a,
-          &.is-active a {
+          a {
             font-family: $dh-GESST-light;
+          }
+
+          &.is-active a {
+            font-family: $dh-GESST-bold;
           }
         }
 

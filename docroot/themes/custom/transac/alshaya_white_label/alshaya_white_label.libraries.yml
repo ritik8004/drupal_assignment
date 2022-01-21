@@ -540,6 +540,7 @@ plp-add-to-cart:
       css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-react-animate
+    - alshaya_white_label/magic-dots
 
 style-review-stars:
   css:
@@ -611,7 +612,17 @@ sofa-sectional:
     theme:
       css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}
 
+wishlist:
+  css:
+    theme:
+      css/conditional-sass/wishlist/wishlist.ltr.css: {}
+
 tabby:
   css:
     theme:
       css/conditional-sass/tabby/tabby.ltr.css: {}
+
+magic-dots:
+  css:
+    theme:
+      css/conditional-sass/magic-dots/magic-dots.ltr.css: {}

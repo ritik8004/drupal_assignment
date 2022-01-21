@@ -47,9 +47,19 @@
 
   .site-brand-home {
     a {
+      padding-top: 0.5rem;
+
       @include breakpoint($only-mobile) {
         margin: 0 auto;
         margin-top: 0.1875rem;
+      }
+    }
+  }
+
+  .site-brand-wrapper {
+    html[lang=ar] & {
+      @include breakpoint($desktop) {
+        height: 7rem;
       }
     }
   }

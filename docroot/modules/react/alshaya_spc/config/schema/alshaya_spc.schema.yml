@@ -32,9 +32,12 @@ alshaya_spc.advantage_card:
 
 alshaya_spc.express_delivery:
   type: config_object
-  label: 'Express delivery configuration'
+  label: 'Delivery options configuration'
   mapping:
-    status:
+    same_day_delivery_status:
+      type: boolean
+      label: 'Same Day delivery status'
+    express_delivery_status:
       type: boolean
       label: 'Express delivery status'
     delivery_options_order:

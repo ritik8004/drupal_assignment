@@ -38,12 +38,12 @@
 
         // Update sameday and express delivery labels on variant change.
         if (drupalSettings.expressDelivery !== 'undefined' && drupalSettings.expressDelivery.enabled) {
-          for (var option in variantInfo.delivery_options) {
+          for (var option in variantInfo.deliveryOptions) {
             $(node).find('.' + option).removeClass('active in-active');
-            $(node).find('.' + option).addClass(variantInfo.delivery_options[option].status);;
+            $(node).find('.' + option).addClass(variantInfo.deliveryOptions[option].status);;
           }
           $(node).find('.express-delivery').removeClass('active in-active');
-          $(node).find('.express-delivery').addClass(variantInfo.express_delivery_class);
+          $(node).find('.express-delivery').addClass(variantInfo.expressDeliveryClass);
         }
 
         var productChanged = false;
@@ -53,11 +53,6 @@
             url = Drupal.removeURLParameter(url, 'selected');
             window.history.replaceState(variantInfo, variantInfo.title, url);
             productChanged = true;
-
-            // Trigger an event on variant select.
-            // Only considers variant when url is changed.
-            var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: variantInfo.parent_sku }});
-            document.dispatchEvent(currentSelectedVariantEvent);
           }
 
           $('.language-switcher-language-url .language-link').each(function () {

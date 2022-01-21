@@ -54,7 +54,7 @@ export default class CnCBillingAddress extends React.Component {
       // has changed the billing address. We set in localstorage.
       if (data.error === undefined) {
         if (data.cart !== undefined) {
-          localStorage.setItem(localStorageKey, false);
+          Drupal.addItemInLocalStorage(localStorageKey, false);
         }
       }
 

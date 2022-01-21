@@ -1,0 +1,19 @@
+.spc-delivery-area {
+  .spc-filter-panel-search-form-item {
+    &::after {
+      content: '';
+      background: url('../../../imgs/assets/search.svg') no-repeat;
+      background-position: center;
+      top: 0.3125rem;
+      display: block;
+      width: 2.624rem;
+      height: 2.375rem;
+    }
+  }
+
+  .actions {
+    div.select-area-link {
+      background-color: $primary_btn_bg;
+    }
+  }
+}

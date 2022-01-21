@@ -134,10 +134,35 @@
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
 
+        // Dispatch event on modal load each time to perform action on load.
+        // We need to load wishlist component first before we set product data.
+        if (viewMode === 'modal' || viewMode === 'matchback') {
+          var eventName = (viewMode === 'modal') ? 'onModalLoad' : 'onMatchbackLoad';
+          var currentMatchBackLoad = new CustomEvent(eventName, {bubbles: true, detail: { data: sku }});
+          document.dispatchEvent(currentMatchBackLoad);
+        }
+
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+          var parentSku = variantInfo.parent_sku;
+          var title = variantInfo.cart_title;
+
+          // Trigger an event on variant select.
+          // Only considers variant when url is changed.
+          var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {
+            bubbles: true,
+            detail: {
+              data: {
+                viewMode,
+                sku: parentSku,
+                variantSelected: selected,
+                title,
+              }
+            }
+          });
+          document.dispatchEvent(currentSelectedVariantEvent);
 
           if (typeof variantInfo === 'undefined') {
             Drupal.alshayaLogger('warning', 'Error occurred during attribute selection, sku: @sku, selected: @selected, variant: @variant', {
@@ -452,6 +477,9 @@
 
   Drupal.getSelectedCombination = function (form) {
     var selectedValues = Drupal.getSelectedValues(form);
+    // Trigger an event to pass selected configurable options.
+    var configurableCombinationsEvent = new CustomEvent('onConfigurationOptionsLoad', {bubbles: true, detail: { data: selectedValues }});
+    document.dispatchEvent(configurableCombinationsEvent);
     var selectedCombination = '';
 
     for (var code in selectedValues) {
@@ -522,7 +550,7 @@
         cart_items = cartItemsArg
       }
       else {
-        var cart = JSON.parse(localStorage.getItem('cart_data'));
+        var cart = Drupal.getItemFromLocalStorage('cart_data');
         if (cart !== null && cart.cart !== null) {
           cart_items = cart.cart.items
         }

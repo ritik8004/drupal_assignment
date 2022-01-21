@@ -6,6 +6,7 @@ import PromotionsFrame from '../promotion-frame';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
 import AddToBagContainer from '../../../../../js/utilities/components/addtobag-container';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 import ConditionalView from '../../../common/components/conditional-view';
 import DisplayStar from '../stars';
 import {
@@ -16,10 +17,13 @@ import {
   productListIndexStatus,
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
-import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { checkExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 
 const Teaser = ({
-  hit, gtmContainer = null, pageType,
+  hit, gtmContainer = null, pageType, extraInfo,
+  // 'extraInfo' is used to pass additional information that
+  // we want to use in this component.
 }) => {
   const { showSwatches } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
@@ -96,6 +100,13 @@ const Teaser = ({
     && showReviewsRating === 1
     && overallRating !== '');
 
+  // Check if it's a wishlist page and stock status
+  // of the sku available in extraInfo data. If stock
+  // status says OOS then show the OOS button.
+  const showOOSButton = (isWishlistPage(extraInfo)
+    && typeof extraInfo.inStock !== 'undefined'
+    && !extraInfo.inStock);
+
   return (
     <div className={teaserClass}>
       <article
@@ -142,6 +153,16 @@ const Teaser = ({
               setSlider={setSlider}
             />
           </a>
+          {/* Render the component if the page isn't wishlist listing page. */}
+          <ConditionalView condition={!isWishlistPage(extraInfo)}>
+            <WishlistContainer
+              context="wishlist"
+              position="top-right"
+              sku={hit.sku}
+              title={attribute.title}
+              format="icon"
+            />
+          </ConditionalView>
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
@@ -196,6 +217,7 @@ const Teaser = ({
           </div>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
+              && checkExpressDeliveryStatus()
               && hit.attr_express_delivery !== undefined
               && hit.attr_express_delivery[0] === '1'
             }
@@ -206,6 +228,7 @@ const Teaser = ({
           </ConditionalView>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
+              && checkExpressDeliveryStatus()
               && pageType === 'plp'
               && hit.attr_express_delivery !== undefined
               && hit.attr_express_delivery[currentLanguage][0] === '1'
@@ -216,13 +239,35 @@ const Teaser = ({
             </div>
           </ConditionalView>
         </div>
-        <AddToBagContainer
-          url={attribute.url}
-          sku={hit.sku}
-          stockQty={hit.stock_quantity}
-          productData={attribute.atb_product_data}
-          isBuyable={attribute.is_buyable}
-        />
+        {/* Don't render component on wishlist page if product is OOS. */}
+        <ConditionalView condition={!showOOSButton}>
+          <AddToBagContainer
+            url={attribute.url}
+            sku={hit.sku}
+            stockQty={hit.stock_quantity}
+            productData={attribute.atb_product_data}
+            isBuyable={attribute.is_buyable}
+            // Pass extra information to the component for update the behaviour.
+            extraInfo={extraInfo}
+          />
+        </ConditionalView>
+        {/* Render OOS message on wishlist page if product is OOS. */}
+        <ConditionalView condition={showOOSButton}>
+          <div className="oos-text-container">
+            <span className="oos-text">
+              { Drupal.t('Out of stock') }
+            </span>
+          </div>
+        </ConditionalView>
+        {/* Render the component if the page is wishlist listing page. */}
+        <ConditionalView condition={isWishlistPage(extraInfo)}>
+          <WishlistContainer
+            context="wishlist_page"
+            position="top-right"
+            sku={hit.sku}
+            format="link"
+          />
+        </ConditionalView>
       </article>
     </div>
   );

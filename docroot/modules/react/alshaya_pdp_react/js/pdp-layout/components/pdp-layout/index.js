@@ -24,6 +24,8 @@ import PpdRatingsReviews from '../pdp-ratings-reviews';
 import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import PdpExpressDelivery from '../pdp-express-delivery';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
+import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -173,6 +175,9 @@ const PdpLayout = () => {
     setPanelContent(null);
   }, [panelContent]);
 
+  // Get configurable options only for configurable product.
+  const options = getAttributeOptionsForWishlist(configurableCombinations, skuItemCode, variant);
+
   return (skuItemCode) ? (
     <>
       <div className={`magv2-header ${(isMobile ? 'fadeInVertical' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
@@ -186,10 +191,12 @@ const PdpLayout = () => {
           brandLogoAlt={brandLogoAlt}
           brandLogoTitle={brandLogoTitle}
           skuCode={skuItemCode}
+          skuMainCode={skuMainCode}
           configurableCombinations={configurableCombinations}
           productInfo={productInfo}
           pdpLabelRefresh={pdpLabelRefresh}
           context="main"
+          options={options}
         />
       </div>
       <div className="magv2-main" ref={mainContainer}>
@@ -272,6 +279,18 @@ const PdpLayout = () => {
               />
             ) : outOfStock}
           </div>
+          {/* Here skuMainCode is parent sku of variant selected */}
+          <ConditionalView condition={window.innerWidth > 767}>
+            <WishlistContainer
+              sku={skuItemCode}
+              skuCode={skuMainCode}
+              context="magazinev2"
+              position="top-right"
+              format="link"
+              title={title}
+              options={options}
+            />
+          </ConditionalView>
           <PdpDescription
             skuCode={skuMainCode}
             pdpDescription={description}
