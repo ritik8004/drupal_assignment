@@ -43,7 +43,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'تنتهي بطاقة الهدايا الإلكترونية في',
         'context' => 'egift',
       ],
-      'Card valid up to' => [
+      'Card valid up to ' => [
         'ar' => 'البطاقة صالحة حتى ',
         'context' => 'egift',
       ],
