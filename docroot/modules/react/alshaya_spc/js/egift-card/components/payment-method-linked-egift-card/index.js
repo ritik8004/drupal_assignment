@@ -168,6 +168,15 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     const { cart, refreshCart } = this.props;
     // On checking the checkbox this will be executed.
     if (e.target.checked) {
+      // Validate if some amount is paid with AURA then make sure that user is
+      // havinig sufficient balance to pay pending balance by Egift.
+      if (hasValue(cart.cart.totals.balancePayable)
+        && cart.cart.totals.balancePayable > egiftCardActualBalance) {
+        this.setState({
+          apiErrorMessage: Drupal.t('The egift card balance is not sufficient to pay remaining amount, Please use another payment method.', {}, { context: 'egift' }),
+        });
+        return;
+      }
       showFullScreenLoader();
       // Perform linking of Egift card by calling the redemption API.
       const redemptionResponse = performRedemption(
