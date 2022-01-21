@@ -18,9 +18,9 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import { cartContainsAnyVirtualProduct } from '../../../utilities/egift_util';
-import { isFullPaymentDoneByEgiftAndAura } from '../../../../../js/utilities/egiftCardHelper';
+
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -167,7 +167,7 @@ class AuraCheckoutRewards extends React.Component {
 
     // If full payment is done by AURA and egift then make sure that AURA is not
     // disabled and other payment methods should get disabled.
-    if (isFullPaymentDoneByEgiftAndAura(cart.cart)) {
+    if (isFullPaymentDoneByPseudoPaymentMedthods(cart.cart)) {
       return true;
     }
 

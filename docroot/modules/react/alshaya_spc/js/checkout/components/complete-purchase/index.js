@@ -10,8 +10,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 import { isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
-import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
-import { isFullPaymentDoneByEgiftAndAura } from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import isAuraEnabled from '../../../../../js/utilities/helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
@@ -72,7 +71,7 @@ export default class CompletePurchase extends React.Component {
     let cartPaymentMethod = cart.cart.payment.method;
     if (isEgiftCardEnabled()
       && (isFullPaymentDoneByEgift(cart.cart)
-      || isFullPaymentDoneByEgiftAndAura(cart.cart))
+      || isFullPaymentDoneByPseudoPaymentMedthods(cart.cart))
       && cart.cart.payment.method !== 'hps_payment') {
       cartPaymentMethod = 'hps_payment';
     }
@@ -120,7 +119,7 @@ export default class CompletePurchase extends React.Component {
       // payment method to hps_payment.
       if (isEgiftCardEnabled()
         && (isFullPaymentDoneByEgift(cart.cart)
-        || isFullPaymentDoneByEgiftAndAura(cart.cart))
+        || isFullPaymentDoneByPseudoPaymentMedthods(cart.cart))
         && cart.cart.payment.method !== cartPaymentMethod) {
         // Change payment method to hps_payment and place order.
         updatePaymentAndPlaceOrder(cartPaymentMethod);
@@ -182,7 +181,7 @@ export default class CompletePurchase extends React.Component {
       // Bypass the payment method error check if the full payment is done by
       // egift car or full payment is done by Egift + AURA.
       if (!((isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart))
-        || isFullPaymentDoneByEgiftAndAura(cart.cart))) {
+        || isFullPaymentDoneByPseudoPaymentMedthods(cart.cart))) {
         // Adding error class in the section.
         const paymentMethods = document.getElementById('spc-payment-methods');
         if (paymentMethods) {
@@ -215,8 +214,9 @@ export default class CompletePurchase extends React.Component {
       return false;
     }
 
-    // Throw error if user some how baypass the FE checks and trying to place
-    // order.
+    // If somehow user bypass the frontend checks and tries to place order, then
+    // we are validating that user has done full payment by egift and aura and
+    // balance payable is less than 0.
     if (isEgiftCardEnabled()
       && isAuraEnabled()
       && hasValue(cart.cart.totals)
