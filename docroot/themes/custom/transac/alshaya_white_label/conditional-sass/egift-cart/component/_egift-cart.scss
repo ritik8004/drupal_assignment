@@ -31,6 +31,10 @@
       @include breakpoint($upto-tablet) {
         .spc-cart-product-attribute {
           display: flex;
+
+          .spc-cart-product-attribute-label {
+            flex-shrink: 0;
+          }
         }
 
         .egift-cart-message-value {

@@ -53,6 +53,8 @@
   }
 
   .egift-card-amount-list-wrapper {
+    max-width: 19.375rem;
+
     @include breakpoint($tablet) {
       max-width: 15rem;
     }
@@ -68,7 +70,7 @@
       padding: 0.5rem;
       margin-#{$right}: 1.125rem;
       margin-bottom: 0.75rem;
-      width: 3.375rem;
+      width: 4rem;
       height: 2.0625rem;
       border: 1px solid $plp-quick-view-product-size-active-bg;
 
