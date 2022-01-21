@@ -1176,7 +1176,9 @@ const getProcessedCheckoutData = async (cartData) => {
     || cartContainsOnlyVirtualProduct(data.cart))
     // Don't call the select payment and get payment methods APIs when
     // full payment is done by egift card.
-    && !isFullPaymentDoneByEgift(data)
+    // Here I'm passing processed card data as we are checking the result in
+    // isFullPaymentDoneByEgift on processed cart.
+    && !(isFullPaymentDoneByEgift(await getProcessedCartData(data)))
   ) {
     const paymentMethods = await getPaymentMethods();
     if (hasValue(paymentMethods)) {

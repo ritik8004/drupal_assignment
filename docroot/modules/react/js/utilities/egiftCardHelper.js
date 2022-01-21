@@ -1,7 +1,8 @@
 import { callMagentoApi } from './requestHelper';
-import { isUserAuthenticated } from './helper';
+import isAuraEnabled, { isUserAuthenticated } from './helper';
 import logger from './logger';
 import { isEgiftCardEnabled } from './util';
+import { hasValue } from './conditionsUtility';
 
 /**
  * Provides the egift send otp api response.
@@ -177,4 +178,34 @@ export const performRedemption = (quoteId, updateAmount, egiftCardNumber, cardTy
   // Invoke the redemption API to update the redeem amount.
   const response = callEgiftApi('eGiftRedemption', 'POST', postData);
   return response;
+};
+
+/**
+ * Checks if full payment is done by egift and Aura.
+ *
+ * @param {object} cart
+ *   The cart object.
+ *
+ * @return {boolean}
+ *   Returns true if full payment is done by egift and Aura else false.
+ */
+export const isFullPaymentDoneByEgiftAndAura = (cart) => {
+  // Return false if Egift and Aura is not enabled.
+  if (!(isEgiftCardEnabled() && isAuraEnabled())) {
+    return false;
+  }
+  // Extract the redeem information from total.
+  const { paidWithAura, egiftRedeemedAmount, balancePayable } = cart.totals;
+
+  // If paid with Aura, egift redeem amount exists in total and balance payable
+  // is less than 0 then this confirms that full payment is done by Aura and
+  // egift.
+  if (hasValue(paidWithAura)
+    && hasValue(egiftRedeemedAmount)
+    && Object.prototype.hasOwnProperty.call(cart.totals, 'balancePayable')
+    && balancePayable <= 0) {
+    return true;
+  }
+
+  return false;
 };

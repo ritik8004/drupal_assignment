@@ -298,24 +298,6 @@ export const isFullPaymentDoneByEgift = (cart) => {
       && baseGrandTotal === egiftRedeemedAmount) {
       return true;
     }
-
-    // Adding check for raw cart data as well because some cart object might
-    // not have the processed data.
-    if (hasValue(cart.totals.extension_attributes)) {
-      // Check if data is available in raw cart object.
-      const {
-        hps_redeemed_amount: rawEgiftRdeemedAmount,
-        hps_redemption_type: rawEgiftRedemptionType,
-        balance_payble: rawBalancePayable,
-      } = cart.totals.extension_attributes;
-
-      if (hasValue(rawEgiftRdeemedAmount)
-        && hasValue(rawEgiftRedemptionType)
-        && rawBalancePayable <= 0
-        && baseGrandTotal === rawEgiftRdeemedAmount) {
-        return true;
-      }
-    }
   }
 
   return false;
