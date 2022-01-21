@@ -113,6 +113,10 @@
       color: $store_finder_btn_act_hover_state;
       line-height: 0.5;
     }
+
+    &::before {
+      line-height: 0.5;
+    }
   }
 
   .map-view-link {
