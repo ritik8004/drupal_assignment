@@ -1,0 +1,29 @@
+#egift-card-purchase-wrapper {
+  .egift-list-wrapper {
+    margin-bottom: 2rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 2.3125rem;
+    }
+
+    ul {
+      li {
+        height: 4rem;
+        width: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-#{$right}: 1rem;
+
+        &.active {
+          border: 1px solid $plp-quick-view-product-size-active-bg;
+        }
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+}

@@ -16,8 +16,11 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_3_col_flex
     - paragraphs.paragraphs_type.1_row_3_col_text
     - paragraphs.paragraphs_type.1_row_4_col
+    - paragraphs.paragraphs_type.accordion_paragraph
     - paragraphs.paragraphs_type.block_reference
     - paragraphs.paragraphs_type.delivery_usp_block
+    - paragraphs.paragraphs_type.image_title_subtitle
+    - paragraphs.paragraphs_type.multiple_row_multiple_col
     - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.views_reference
   module:
@@ -49,11 +52,14 @@ settings:
       1_row_2_col_dept: 1_row_2_col_dept
       1_row_3_col_dept: 1_row_3_col_dept
       block_reference: block_reference
-      1_row_4_col: 1_row_4_col
       1_row_3_col_flex: 1_row_3_col_flex
+      1_row_4_col: 1_row_4_col
       views_reference: views_reference
+      image_title_subtitle: image_title_subtitle
       delivery_usp_block: delivery_usp_block
+      accordion_paragraph: accordion_paragraph
       section_divider: section_divider
+      multiple_row_multiple_col: multiple_row_multiple_col
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         enabled: true
@@ -109,18 +115,18 @@ settings:
       block_reference:
         enabled: true
         weight: 30
-      1_row_4_col:
-        enabled: true
-        weight: 33
       1_row_3_col_flex:
         enabled: true
         weight: 31
+      1_row_4_col:
+        enabled: true
+        weight: 33
       views_reference:
         enabled: true
         weight: 34
       image_title_subtitle:
-        weight: 39
         enabled: true
+        weight: 39
       offers_bordered:
         weight: 41
         enabled: false
@@ -133,6 +139,9 @@ settings:
       title_textarea:
         weight: 46
         enabled: false
+      accordion_paragraph:
+        enabled: true
+        weight: 47
       video:
         weight: 47
         enabled: false
@@ -142,6 +151,9 @@ settings:
       product_carousel_category:
         weight: 50
         enabled: false
+      multiple_row_multiple_col:
+        enabled: true
+        weight: 54
       slug_banner:
         weight: 56
         enabled: false

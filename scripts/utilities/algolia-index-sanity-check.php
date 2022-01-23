@@ -50,12 +50,6 @@ $algolia_options = [
   ],
 ];
 
-$days = $extra[1] ?? 60;
-$days = is_numeric($days) ? $days : 60;
-$time = strtotime("-$days days");
-
-$algolia_options['numericFilters'] = 'changed<' . $time;
-
 $indexes = [];
 foreach (['en', 'ar'] as $lang) {
   $indexes[$lang] = implode('_', [$index_name, $lang]);
@@ -63,9 +57,8 @@ foreach (['en', 'ar'] as $lang) {
 $indexes['product_list'] = implode('_', [$index_name, 'product_list']);
 
 foreach ($indexes as $type => $index_name) {
-  $logger->notice('Finding entries with changed older then @days day(s) in index @index', [
+  $logger->notice('Browsing all entries in index @index', [
     '@index' => $index_name,
-    '@days' => $days,
   ]);
 
   try {
@@ -87,10 +80,11 @@ foreach ($indexes as $type => $index_name) {
       : $row['nid'];
   }
 
+  $data_in_algolia = array_filter($data_in_algolia);
+
   if (empty($data_in_algolia)) {
-    $logger->notice('No items found in the index @index with changed before @days days.', [
+    $logger->notice('No items found in the index @index.', [
       '@index' => $index->getIndexName(),
-      '@days' => $days,
     ]);
 
     continue;
@@ -110,11 +104,10 @@ foreach ($indexes as $type => $index_name) {
 
   $data_available_in_system = $query->execute()->fetchCol();
 
-  $data_to_remove = array_diff($data_in_algolia, $data_available_in_system);
+  $data_to_remove = array_diff($data_in_algolia, array_filter($data_available_in_system));
   if (empty($data_to_remove)) {
-    $logger->notice('All data is legitimate in the index @index with changed before @days days.', [
+    $logger->notice('All data is legitimate in the index @index.', [
       '@index' => $index->getIndexName(),
-      '@days' => $days,
     ]);
 
     continue;
