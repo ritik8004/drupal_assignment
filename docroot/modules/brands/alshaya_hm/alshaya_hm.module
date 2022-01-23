@@ -14,6 +14,40 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function alshaya_hm_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'product_category_level_3') {
+    // We want to allow creation creation of page upto 3 level.
+    if ($display_id === 'entity_reference_1') {
+      $handler = $view->getHandler($display_id, 'filter', 'depth_level');
+      $handler['operator'] = '<=';
+      $handler['value']['value'] = 3;
+      $view->setHandler($display_id, 'filter', 'depth_level', $handler);
+    }
+    // Allow creation of page for the category even if 'include in menu'
+    // is not enabled.
+    if ($display_id === 'block_1') {
+      $view->removeHandler($display_id, 'filter', 'field_category_include_menu_value');
+    }
+  }
+  // Display categories in LHN comes under L1 any visiting category.
+  if ($view->id() === 'product_category_level_2_3' && $display_id === 'block_2') {
+    /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+    $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+    $tid = $product_category_tree->getDepartmentPageCategoryIdFromRoute();
+    // Get term storage.
+    $term_storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
+    $term = $term_storage->load($tid);
+    // Get l1 category.
+    $l1_term = $product_category_tree->getL1Category($term);
+
+    $args = [$l1_term->id()];
+  }
+}
 
 /**
  * Implements hook_form_alter().
