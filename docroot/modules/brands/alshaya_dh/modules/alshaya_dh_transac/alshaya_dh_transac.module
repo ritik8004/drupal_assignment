@@ -94,7 +94,7 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
     ];
     $description_value .= '<h2>' . t('Details and care') . '</h2>';
     $description_value .= $details_and_care_value;
-    $description_value .= _alshaya_dh_transac_render_data_based_on_context($details_and_care);
+    $description_value .= \Drupal::service('renderer')->renderPlain($details_and_care);
   }
 
   $description['value'] = [
@@ -111,18 +111,4 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
   $return['short_desc']['value'] = strip_tags($short_desc['html']);
 
   return $return;
-}
-
-/**
- * Returns The rendered HTML.
- */
-function _alshaya_dh_transac_render_data_based_on_context($data) {
-  $render_data = NULL;
-  try {
-    $render_data = render($data);
-  }
-  catch (\Exception $exception) {
-    $render_data = \Drupal::service('renderer')->renderPlain($data);
-  }
-  return $render_data;
 }

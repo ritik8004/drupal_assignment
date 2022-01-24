@@ -95,6 +95,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   $search_direction = 'self';
   $description_value = '';
   $desc = $skuManager->fetchProductAttribute($sku_entity, 'attr_description', $search_direction);
+  $renderer = \Drupal::service('renderer');
 
   // Get data from article level.
   if (!empty($desc)) {
@@ -116,7 +117,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
     $composition_markup['#composition']['#markup'] = $markupText;
   }
 
-  $description_value .= _alshaya_cos_transac_render_data_based_on_context($composition_markup);
+  $description_value .= $renderer->renderPlain($composition_markup);
 
   // Render the wrapper div for article warning always so that the same
   // can be filled with data on variant selection.
@@ -127,11 +128,11 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
       '#warning' => ['#markup' => $warning],
     ];
   }
-  $description_value .= _alshaya_cos_transac_render_data_based_on_context($warning_markup);
+  $description_value .= $renderer->renderPlain($warning_markup);
 
   $config = \Drupal::config('alshaya_acm_product.settings');
   if (!empty($config->get('legal_notice_enabled'))) {
-    $description_value .= _alshaya_cos_transac_render_data_based_on_context($config->get('legal_notice_summary')['value']);
+    $description_value .= render($config->get('legal_notice_summary')['value']);
   }
 
   $item_code = [
@@ -140,7 +141,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
     '#item_code' => $sku_entity->getSku(),
   ];
 
-  $description_value .= _alshaya_cos_transac_render_data_based_on_context($item_code);
+  $description_value .= $renderer->renderPlain($item_code);
 
   $description['value'] = [
     '#markup' => $description_value,
@@ -156,20 +157,6 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   $return['short_desc']['value'] = strip_tags($short_desc['html']);
 
   return $return;
-}
-
-/**
- * Returns The rendered HTML.
- */
-function _alshaya_cos_transac_render_data_based_on_context($data) {
-  $render_data = NULL;
-  try {
-    $render_data = render($data);
-  }
-  catch (\Exception $exception) {
-    $render_data = \Drupal::service('renderer')->renderPlain($data);
-  }
-  return $render_data;
 }
 
 /**
