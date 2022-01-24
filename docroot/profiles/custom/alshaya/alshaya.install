@@ -8,17 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Uninstall `advagg` module.
- */
-function alshaya_update_8014() {
-  if (\Drupal::moduleHandler()->moduleExists('advagg')) {
-    \Drupal::service('module_installer')->uninstall(['advagg']);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Uninstall `scheduled_updates` module.
  */
 function alshaya_update_8013() {
