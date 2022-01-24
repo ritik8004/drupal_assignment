@@ -855,13 +855,14 @@ class AlshayaGtmManager {
     $dimension7 = '';
     $dimension8 = '';
 
+    $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : [];
     $shipping_info = explode(' - ', $order['shipping_description']);
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $deliveryOption = 'Home Delivery';
     $deliveryType = $shipping_info[0];
 
-    $shipping_method_name = $order['shipping']['method'];
+    $shipping_method_name = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
     if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
       $deliveryOption = 'Click and Collect';
       $deliveryType = $order['shipping']['extension_attributes']['click_and_collect_type'];
@@ -1179,8 +1180,8 @@ class AlshayaGtmManager {
         $productStyleCode = [];
         $store_code = '';
         $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-
-        if ($order['shipping']['method'] === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+        $shipping_method = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
+        if ($shipping_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
         }
