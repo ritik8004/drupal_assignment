@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Cleave from 'cleave.js/react';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import ConditionalView from '../../../common/components/conditional-view';
@@ -60,7 +61,15 @@ class CheckoutVirtualCartItem extends React.Component {
             <ConditionalView condition={hasValue(isTopUp)}>
               <div className="spc-cart-product-attribute">
                 <span className="spc-cart-product-attribute-label">{Drupal.t('Card No:', {}, { context: 'egift' })}</span>
-                <span className="spc-cart-product-attribute-value">{topupCardNumber}</span>
+                <span className="spc-cart-product-attribute-value">
+                  <Cleave
+                    name="spc-cart-topupCardNumber-value"
+                    className="spc-cart-topupCardNumber-value"
+                    disabled
+                    value={topupCardNumber}
+                    options={{ blocks: [4, 4, 4, 4] }}
+                  />
+                </span>
               </div>
             </ConditionalView>
             <ConditionalView condition={!hasValue(isTopUp)}>
