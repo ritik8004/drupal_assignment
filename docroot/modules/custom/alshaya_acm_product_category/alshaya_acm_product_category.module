@@ -254,6 +254,9 @@ function alshaya_acm_product_category_acq_sku_product_node_alter(NodeInterface $
  */
 function alshaya_acm_product_category_taxonomy_term_insert(TermInterface $term) {
   if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
+    $skuCategoryMapHelper = \Drupal::service('alshaya_acm_product_category.mapping_manager');
+    $skuCategoryMapHelper->mapSkuCategory($term);
+
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
   }
 }
