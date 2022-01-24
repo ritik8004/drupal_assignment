@@ -1,5 +1,5 @@
 variables:
-  spc_product_listing_page: '/shop-women/new-arrivals/shoes-accessories/'
-  spc_basket_page: '/shop-women/new-arrivals/shoes-accessories/'
-  product_listing_page_url: '/shop-women/new-arrivals/shoes-accessories/'
-  spc_pdp_page: 'buy-wash-bag-transparent.html'
+  spc_product_listing_page: '/shop-women/shop-product/beauty/'
+  spc_basket_page: '/shop-women/shop-product/beauty/'
+  product_listing_page_url: '/shop-women/shop-product/beauty/'
+  spc_pdp_page: '/buy-lip-gloss-bisous.html/'
