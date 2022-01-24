@@ -39,8 +39,12 @@ function alshaya_acm_customer_get_user_orders(int $customer_id, $search_key = ''
   foreach ($orders as &$order) {
     $order_items = [];
     foreach ($order['items'] as $item) {
-      if (!isset($order_items[$item['sku']])) {
+      // If product is virtual then use item_id instead of sku as key.
+      if (!isset($order_items[$item['sku']]) && !$item['is_virtual']) {
         $order_items[$item['sku']] = $item;
+      }
+      else {
+        $order_items[$item['item_id']] = $item;
       }
       $sku_entity = SKU::loadFromSku(alshaya_acm_customer_clean_sku($item['sku']));
       if ($sku_entity instanceof SKUInterface) {
