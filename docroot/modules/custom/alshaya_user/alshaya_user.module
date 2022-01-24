@@ -266,12 +266,9 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   $form['account']['current_pass']['#title'] = t('current password');
   $form['actions']['submit']['#value'] = t('change password');
 
-  // Set this as password policy module checks for the role element.
-  $form['account']['roles']['#default_value'] = [];
-
   // Password policy custom validation.
   $form['#validate'][] = '_password_policy_user_profile_form_validate';
-  $form['#validate'][] = 'alshaya_user_change_password_validate';
+  $form['#submit'][] = 'alshaya_user_change_password_submit';
   $form['#submit'][] = '_password_policy_user_profile_form_submit';
 
   // Add password validation attribute.
@@ -281,9 +278,9 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
 }
 
 /**
- * Custom validate function for change password form.
+ * Custom submit function for change password form.
  */
-function alshaya_user_change_password_validate(&$form, FormStateInterface &$form_state) {
+function alshaya_user_change_password_submit(&$form, FormStateInterface &$form_state) {
   if (!$form_state->getErrors()) {
     $account = \Drupal::routeMatch()->getParameter('user');
 
