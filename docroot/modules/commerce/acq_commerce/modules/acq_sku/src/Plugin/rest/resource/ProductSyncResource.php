@@ -478,7 +478,7 @@ class ProductSyncResource extends ResourceBase {
 
           $categories = (isset($product['categories'])) ? $product['categories'] : [];
           $categories = $this->formatCategories($categories);
-          $node->field_category = $categories;
+          $node->field_category = array_values($categories);
 
           // Check if the SKU is configurable & mark its node as unpublished.
           // Publish it when we receive a simple SKU for this one.
