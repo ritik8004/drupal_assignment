@@ -2,11 +2,17 @@ import React from 'react';
 import {
   placeOrder,
   isDeliveryTypeSameAsInCart,
+  isShippingMethodSet,
+  updatePaymentAndPlaceOrder,
 } from '../../../utilities/checkout_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
+import { isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
+import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
+import isAuraEnabled from '../../../../../js/utilities/helper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -26,6 +32,10 @@ export default class CompletePurchase extends React.Component {
     // benefit pay modal only once for a user. Removing this key just after
     // placing order to remove old value.
     Drupal.removeItemFromLocalStorage('benefit_pay_modal_auto_opened');
+    // Remove the topup quote id if exists in the local storage.
+    if (isEgiftCardEnabled()) {
+      Drupal.removeItemFromLocalStorage('topupQuote');
+    }
   }
 
   /**
@@ -56,18 +66,28 @@ export default class CompletePurchase extends React.Component {
     // Flag to track pseudo payment method.
     let isPseudoPaymentMedthod = false;
 
+    // If full payment is done by egift or egift + AURA then change the payment
+    // method to hps_payment.
+    let cartPaymentMethod = cart.cart.payment.method;
+    if (isEgiftCardEnabled()
+      && (isFullPaymentDoneByEgift(cart.cart)
+      || isFullPaymentDoneByPseudoPaymentMedthods(cart.cart))
+      && cart.cart.payment.method !== 'hps_payment') {
+      cartPaymentMethod = 'hps_payment';
+    }
+
     // Check if payment method in cart is a pseudo method
     // or not and accordingly dispatch event.
-    if (drupalSettings.payment_methods[cart.cart.payment.method]) {
+    if (drupalSettings.payment_methods[cartPaymentMethod]) {
       // Dispatch the event for all payment method
       // except checkout_com_upapi method.
       // For checkout_com_upapi method this
       // handle in its own component.
-      if (cart.cart.payment.method !== 'checkout_com_upapi') {
+      if (cartPaymentMethod !== 'checkout_com_upapi') {
         dispatchCustomEvent('orderPaymentMethod', {
           payment_method: Object
             .values(drupalSettings.payment_methods)
-            .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+            .filter((paymentMethod) => (paymentMethod.code === cartPaymentMethod))
             .shift().gtm_name,
         });
       }
@@ -76,7 +96,7 @@ export default class CompletePurchase extends React.Component {
       // then it's a pseudo payment method.
       isPseudoPaymentMedthod = true;
       dispatchCustomEvent('orderPaymentMethod', {
-        payment_method: cart.cart.payment.method,
+        payment_method: cartPaymentMethod,
       });
     }
 
@@ -95,7 +115,17 @@ export default class CompletePurchase extends React.Component {
         return;
       }
 
-      placeOrder(cart.cart.payment.method);
+      // If full payment is done by egift or egift + AURA then change the
+      // payment method to hps_payment.
+      if (isEgiftCardEnabled()
+        && (isFullPaymentDoneByEgift(cart.cart)
+        || isFullPaymentDoneByPseudoPaymentMedthods(cart.cart))
+        && cart.cart.payment.method !== cartPaymentMethod) {
+        // Change payment method to hps_payment and place order.
+        updatePaymentAndPlaceOrder(cartPaymentMethod);
+      } else {
+        placeOrder(cartPaymentMethod);
+      }
     } catch (error) {
       Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
@@ -111,7 +141,7 @@ export default class CompletePurchase extends React.Component {
     // If delivery method selected same as what in cart.
     const deliverSameAsInCart = isDeliveryTypeSameAsInCart(cart);
     // If shipping info set in cart or not.
-    const isShippingSet = (cart.cart.shipping.method !== null);
+    const isShippingSet = isShippingMethodSet(cart);
     // If billing info set in cart or not.
     let isBillingSet = false;
     if (cart.cart.billing_address !== null) {
@@ -148,19 +178,24 @@ export default class CompletePurchase extends React.Component {
     // Disabled if there is still some error left in payment form.
     if (document.getElementById('spc-payment-methods') === null
       || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
-      // Adding error class in the section.
-      const paymentMethods = document.getElementById('spc-payment-methods');
-      if (paymentMethods) {
-        smoothScrollTo('#spc-payment-methods');
-        const allInputs = document.querySelectorAll('#spc-payment-methods input');
-        for (let x = 0; x < allInputs.length; x++) {
-          // Trigerring payment card errors.
-          const ev = new Event('blur', { bubbles: true });
-          ev.simulated = true;
-          allInputs[x].dispatchEvent(ev);
+      // Bypass the payment method error check if the full payment is done by
+      // egift car or full payment is done by Egift + AURA.
+      if (!((isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart))
+        || isFullPaymentDoneByPseudoPaymentMedthods(cart.cart))) {
+        // Adding error class in the section.
+        const paymentMethods = document.getElementById('spc-payment-methods');
+        if (paymentMethods) {
+          smoothScrollTo('#spc-payment-methods');
+          const allInputs = document.querySelectorAll('#spc-payment-methods input');
+          for (let x = 0; x < allInputs.length; x++) {
+            // Trigerring payment card errors.
+            const ev = new Event('blur', { bubbles: true });
+            ev.simulated = true;
+            allInputs[x].dispatchEvent(ev);
+          }
         }
+        return false;
       }
-      return false;
     }
 
     // Scroll to the billing address section.
@@ -176,6 +211,21 @@ export default class CompletePurchase extends React.Component {
         billingAddress[0].appendChild(tag);
         tag.setAttribute('id', 'billing-address-information-error');
       }
+      return false;
+    }
+
+    // If somehow user bypass the frontend checks and tries to place order, then
+    // we are validating that user has done full payment by egift and aura and
+    // balance payable is less than 0.
+    if (isEgiftCardEnabled()
+      && isAuraEnabled()
+      && hasValue(cart.cart.totals)
+      && hasValue(cart.cart.totals.balancePayable)
+      && cart.cart.totals.balancePayable > 0) {
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: drupalSettings.global_error_message,
+      });
       return false;
     }
 

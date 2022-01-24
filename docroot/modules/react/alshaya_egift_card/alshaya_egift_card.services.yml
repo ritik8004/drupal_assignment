@@ -1,0 +1,17 @@
+services:
+  alshaya_egift_card.egift_card_helper:
+    class: Drupal\alshaya_egift_card\Helper\EgiftCardHelper
+    arguments:
+      - '@config.factory'
+      - '@token'
+  alshaya_egift_card.egift_list_breadcrumb:
+    class: Drupal\alshaya_egift_card\Breadcrumb\AlshayaEgiftCardBreadcrumb
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }
+
+  alshaya_egift_card.my_egift_card_breadcrumb:
+    class: Drupal\alshaya_egift_card\Breadcrumb\AlshayaMyEgiftCardBreadcrumb
+    arguments:
+      - '@current_user'
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }

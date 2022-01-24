@@ -30,6 +30,8 @@ $white-smoke-light: #f2f2f2;
 $whisper-dark: #e5e5e5;
 $light-greyish: #ccc;
 $gray-bg: #f1f2f5;
+$rosewood: #660014;
+$mujilighttheme: rgba(127, 0, 25, 0.1);
 
 /* ------- 2. Primary Colors ------- */
 
@@ -244,9 +246,10 @@ $mm_mob_arrow_icon: $cod-gray;
 
 //  Mini Cart.
 $primary_minicart_text: $black;
-$primary_minicart_quantity_bg: $alizarin-crimson;
+$primary_minicart_quantity_bg: $mujidarkred;
 $primary_minicart_hover: $mujidarkred;
 $primary_minicart_quantity_text: $black;
+$primary_minicart_static_quantity_text: $white;
 
 // Counters.
 $primary_counter_bg: $black;
@@ -358,6 +361,8 @@ $plp_facet_count_number: $cod-gray;
 $plp_all_filter_filter_arrow: $cod-gray;
 $plp_facet_label: $cod-gray;
 $color_facet_active_border: $cod-gray;
+$plp-primary-cta-hover-bg: $rosewood;
+$plp-secondary-cta-hover-bg: $mujilighttheme;
 
 // PLP Product tile.
 $plp_tile_product_title: $black;
@@ -688,6 +693,5 @@ $wishlist-button-register-txt: $black;
 $wishlist-basket-modal-close-bg: $black;
 $wishlist-oos: $alizarin-crimson;
 $my-wishlist-message-txt: $white;
-$my-wishlist-message-bg: $scarlet-two;
 $wishlist-share-text: $black;
 $my-wishlist-share-modal-header: $black;

@@ -237,6 +237,10 @@ class WishlistButton extends React.Component {
    * Add or remove product from the wishlist.
    */
   toggleWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.persist();
+
     const {
       addedInWishList, skuCode, options, title,
     } = this.state;
@@ -396,10 +400,12 @@ class WishlistButton extends React.Component {
   render() {
     const { addedInWishList } = this.state;
     const { context, position, format } = this.props;
+    // Default wishlist text.
+    let buttonTextKey = addedInWishList ? 'remove_from_wishlist' : 'add_to_wishlist';
 
-    // If product is already removed from wishlist page, button is not required.
-    if (!addedInWishList && context === 'wishlist_page') {
-      return null;
+    // For wishlist page, button text is always remove link.
+    if (context === 'wishlist_page') {
+      buttonTextKey = 'remove_from_wishlist';
     }
 
     // If product is already added into wishlist, button is not required on cart page.
@@ -411,9 +417,6 @@ class WishlistButton extends React.Component {
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
     const wishListButtonClass = addedInWishList ? 'in-wishlist wishlist-button-wrapper' : 'wishlist-button-wrapper';
-
-    // Wishlist text for my-wishlist page.
-    let buttonTextKey = addedInWishList ? 'remove_from_wishlist' : 'add_to_wishlist';
 
     // Wishlist text for PDP layouts.
     const viewModes = ['pdp', 'magazinev2', 'modal', 'matchback', 'productDrawer'];

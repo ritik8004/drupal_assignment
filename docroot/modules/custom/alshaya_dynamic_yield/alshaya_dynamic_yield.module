@@ -5,7 +5,6 @@
  * Primary module hooks for Alshaya Dynamic Yield module.
  */
 
-use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 
 /**

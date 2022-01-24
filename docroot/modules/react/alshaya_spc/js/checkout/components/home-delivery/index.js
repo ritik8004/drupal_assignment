@@ -95,6 +95,7 @@ export default class HomeDeliveryInfo extends React.Component {
       cart: { cart: { shipping: { address } } },
       cart: cartVal,
       refreshCart,
+      isExpressDeliveryAvailable,
     } = this.props;
     const { areaUpdated } = this.state;
     const addressData = [];
@@ -153,6 +154,7 @@ export default class HomeDeliveryInfo extends React.Component {
                         : null
                     }
                     areaUpdated={areaUpdated}
+                    isExpressDeliveryAvailable={isExpressDeliveryAvailable}
                   />
                 </React.Suspense>
               </Popup>
@@ -168,6 +170,7 @@ export default class HomeDeliveryInfo extends React.Component {
         <ConditionalView condition={isExpressDeliveryEnabled()}>
           <AreaConfirmationPopup
             cart={cartVal}
+            isExpressDeliveryAvailable={isExpressDeliveryAvailable}
           />
         </ConditionalView>
       </div>

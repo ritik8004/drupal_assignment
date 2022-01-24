@@ -15,6 +15,7 @@
       // Fetch cart id from cart data for authenticated users.
       let data = Drupal.getItemFromLocalStorage('cart_data');
       if (typeof data !== 'undefined'
+        && data !== null
         && typeof data.cart !== 'undefined'
         && typeof data.cart.cart_id !== 'undefined'
         && data.cart.cart_id !== null

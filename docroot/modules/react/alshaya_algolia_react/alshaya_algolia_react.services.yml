@@ -12,6 +12,7 @@ services:
      - '@alshaya_acm_product.context_manager'
      - '@alshaya_options_list.alshaya_options_service'
      - '@module_handler'
+     - '@alshaya_acm_product.delivery_options_helper'
 
   alshaya_algolia_react.helper:
     class: Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper

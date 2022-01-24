@@ -20,6 +20,7 @@ import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelpe
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import Loading from '../../../../js/utilities/loading';
+import getStringMessage from '../../../../js/utilities/strings';
 
 class WishlistProductList extends React.Component {
   constructor(props) {
@@ -161,11 +162,10 @@ class WishlistProductList extends React.Component {
     // Check for wishlist data loaded via api if logged in user.
     // If anonymous user, check if wishlist item count is 0.
     if (wishListItemsCount === 0) {
-      return PageEmptyMessage(Drupal.t(
-        'your @wishlist_label is empty.',
-        { '@wishlist_label': getWishlistLabel() },
-        { context: 'wishlist' },
-      ));
+      return PageEmptyMessage(
+        getStringMessage('empty_wishlist', { '@wishlist_label': getWishlistLabel() }),
+        'wishlist',
+      );
     }
 
     // Get the items per page setting from the drupal settings.

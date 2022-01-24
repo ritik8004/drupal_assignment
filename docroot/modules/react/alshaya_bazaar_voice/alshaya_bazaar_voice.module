@@ -83,32 +83,26 @@ function alshaya_bazaar_voice_page_attachments(array &$page) {
     '#tag' => 'script',
     '#attributes' => [
       'type' => 'text/javascript',
-      ],
+    ],
     '#value' => 'window.IGLOO = window.IGLOO || {
     "bbout_element_id" : "ioBlackBox","enable_rip" : true,"enable_flash" : false,"install_flash" : false,"loader" : {"version" : "general5","fp_static" : false}};',
-    ],
+  ],
     'fppath',
-    ];
+  ];
 }
 
 /**
  * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
- * Updating build array for bv pixel integration.
- *
- * @param array $build
- *   Reference to the build array of spc confirmation.
- * @param string $order
- *   Order details array.
  */
 function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
   /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
   $bazaar_voice_api_helper = \Drupal::service('bazaar_voice.api_helper');
-  if (!empty($build['#attached']['drupalSettings'])){
+  if (!empty($build['#attached']['drupalSettings'])) {
     if ($bazaar_voice_api_helper->isBvConfigurationsAvailable()) {
       $bazaarvoice_config = \Drupal::config('bazaar_voice.settings');
       $locale = $bazaarvoice_config->get('locale');
-      $user_id = \Drupal::currentUser()->getAccount()->acq_customer_id;
-      if(!empty($build['#attached']['drupalSettings']['order_details'])) {
+      $user_id = alshaya_acm_customer_is_customer(\Drupal::currentUser(), TRUE);
+      if (!empty($build['#attached']['drupalSettings']['order_details'])) {
         // Attach bvpixel library to order confirmation page.
         $build['#attached']['library'][] = 'alshaya_bazaar_voice/bvpixel_tracking';
         $build['#attached']['drupalSettings']['order_details']['bv_extra_params'] = [
@@ -119,7 +113,7 @@ function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alte
           'country' => $order['shipping']['address']['country_id'] ?? '',
           'nickname' => $order['customer_firstname'] ?? '',
           'customer_is_guest' => $order['customer_is_guest'] ?? '',
-          'customer_id' => ($user_id > 0) ? $user_id : null,
+          'customer_id' => ($user_id > 0) ? $user_id : NULL,
           'locale' => $locale ?? '',
         ];
       }
@@ -184,7 +178,8 @@ function _alshaya_bazaar_voice_plp_rating_reviews($form, FormStateInterface $for
     $plp_settings->set('sort_options.attr_bv_average_overall_rating', '');
     // Disable rating filter block.
     $facet_block->disable();
-  } else {
+  }
+  else {
     // Enable top rated option.
     $slp_settings->set('sort_options.attr_bv_average_overall_rating', 'attr_bv_average_overall_rating');
     $plp_settings->set('sort_options.attr_bv_average_overall_rating', 'attr_bv_average_overall_rating');
@@ -289,7 +284,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   }
   if (!empty($bazaarvoiceSettings)) {
     $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
-    foreach(array_keys($build['#products']) as $key) {
+    foreach (array_keys($build['#products']) as $key) {
       $parent_sku_id = $alshayaBazaarVoice->checkParentSku($build['#products'][$key]['sku']);
       $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
       $build['#products'][$key]['bazaarvoice_link'] = TRUE;
@@ -301,8 +296,8 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
 }
 
 /**
-  * Implements hook_page_attachments_schema_data_alter().
-  */
+ * Implements hook_page_attachments_schema_data_alter().
+ */
 function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachments, array &$product_schema_data) {
   $route_match = \Drupal::routeMatch();
 
@@ -313,7 +308,7 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
 
   if ($route_match->getRouteName() == 'entity.node.canonical') {
-    /* @var \Drupal\node\Entity\Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
     // If 'product' node.
     if ($node && $node->getType() == 'acq_product') {
@@ -321,43 +316,45 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
       // Get sanitized sku.
       $sanitized_sku = $skuManager->getSanitizedSku($sku);
       $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics($sanitized_sku);
-      $productData = $productReviewStats[$sanitized_sku]['productData'];
-      // Adding product data to drupal settings
-      $attachments['#attached']['drupalSettings']['productReviewStats'] = [
-        'productId' => $sanitized_sku,
-        'productData' => $productReviewStats[$sanitized_sku]['productData'] ?? NULL,
-      ];
-      // Get the range of ratings for SEO.
-      if (!empty($productData['ReviewStatistics']['RatingDistribution'])) {
-        $range = array_column($productData['ReviewStatistics']['RatingDistribution'], 'RatingValue');
-      }
-      if ($productData['ReviewStatistics']['TotalReviewCount'] > 0) {
-        // Adding product and review data for SEO.
-        $product_schema_data['aggregateRating'] = [
-          '@type' => 'AggregateRating',
-          'bestRating' => max($range),
-          'ratingValue' => number_format((float)$productData['ReviewStatistics']['AverageOverallRating'], 2, '.', '') ?? NULL,
-          'worstRating' => min($range),
-          'reviewCount' => $productData['ReviewStatistics']['TotalReviewCount'] ?? NULL,
+      if ($productReviewStats !== NULL) {
+        $productData = $productReviewStats[$sanitized_sku]['productData'];
+        // Adding product data to drupal settings.
+        $attachments['#attached']['drupalSettings']['productReviewStats'] = [
+          'productId' => $sanitized_sku,
+          'productData' => $productReviewStats[$sanitized_sku]['productData'] ?? NULL,
         ];
-      }
+        // Get the range of ratings for SEO.
+        if (!empty($productData['ReviewStatistics']['RatingDistribution'])) {
+          $range = array_column($productData['ReviewStatistics']['RatingDistribution'], 'RatingValue');
+        }
+        if ($productData['ReviewStatistics']['TotalReviewCount'] > 0) {
+          // Adding product and review data for SEO.
+          $product_schema_data['aggregateRating'] = [
+            '@type' => 'AggregateRating',
+            'bestRating' => max($range),
+            'ratingValue' => number_format((float) $productData['ReviewStatistics']['AverageOverallRating'], 2, '.', '') ?? NULL,
+            'worstRating' => min($range),
+            'reviewCount' => $productData['ReviewStatistics']['TotalReviewCount'] ?? NULL,
+          ];
+        }
 
-      if ($productReviewStats !== NULL && isset($productReviewStats[$sanitized_sku]['reviews'])) {
-        foreach ($productReviewStats[$sanitized_sku]['reviews'] as $review) {
-          if ($review['UserNickname'] !== null) {
-            $product_schema_data['review'][] = [
-              '@type' => 'Review',
-              'author' => $review['UserNickname'],
-              'datePublished' => $review['SubmissionTime'],
-              'description' => $review['ReviewText'],
-              'name' => $review['Title'],
-              'reviewRating' => [
-                '@type' => 'Rating',
-                'bestRating' => max($range),
-                'ratingValue' => $review['Rating'],
-                'worstRating' => min($range),
-              ],
-            ];
+        if ($productReviewStats !== NULL && isset($productReviewStats[$sanitized_sku]['reviews'])) {
+          foreach ($productReviewStats[$sanitized_sku]['reviews'] as $review) {
+            if ($review['UserNickname'] !== NULL) {
+              $product_schema_data['review'][] = [
+                '@type' => 'Review',
+                'author' => $review['UserNickname'],
+                'datePublished' => $review['SubmissionTime'],
+                'description' => $review['ReviewText'],
+                'name' => $review['Title'],
+                'reviewRating' => [
+                  '@type' => 'Rating',
+                  'bestRating' => max($range),
+                  'ratingValue' => $review['Rating'],
+                  'worstRating' => min($range),
+                ],
+              ];
+            }
           }
         }
       }

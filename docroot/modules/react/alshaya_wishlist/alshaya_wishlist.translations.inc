@@ -93,7 +93,7 @@ function _alshaya_wishlist_translations() {
       'ar' => 'البريد الإلكتروني',
       'context' => 'wishlist',
     ],
-    'your @wishlist_label is empty.' => [
+    'Your @wishlist_label is empty.' => [
       'ar' => '@wishlist_label الخاصة بك فارغة.',
       'context' => 'wishlist',
     ],
@@ -103,6 +103,11 @@ function _alshaya_wishlist_translations() {
     ],
     'No, remove it' => [
       'ar' => 'قم بإزالتها',
+      'context' => 'wishlist',
+    ],
+    'go shopping' => [
+      'en' => 'Go Shopping',
+      'ar' => 'اذهب للتسوق',
       'context' => 'wishlist',
     ],
   ];

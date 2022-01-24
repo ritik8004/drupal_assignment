@@ -121,7 +121,6 @@ class AlshayaLoyaltyController extends ControllerBase {
         'title1' => $loyalty_benefits_config->get('loyalty_benefits_title1') ?? '',
         'title2' => $loyalty_benefits_config->get('loyalty_benefits_title2') ?? '',
       ],
-      'loyaltyBenefitsContent' => $loyalty_benefits_content ? $loyalty_benefits_content['value'] : '',
       'allBrands' => $this->apiHelper->getAuraApiConfig(
         [AuraDictionaryApiConstants::APC_BRANDS],
         $this->languageManager->getCurrentLanguage()->getId(),

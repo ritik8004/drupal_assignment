@@ -18,6 +18,9 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
+import { cartContainsAnyVirtualProduct } from '../../../utilities/egift_util';
+
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -162,6 +165,12 @@ class AuraCheckoutRewards extends React.Component {
       return true;
     }
 
+    // If full payment is done by AURA and egift then make sure that AURA is not
+    // disabled and other payment methods should get disabled.
+    if (isFullPaymentDoneByPseudoPaymentMedthods(cart.cart)) {
+      return true;
+    }
+
     // If payment methods is not defined or empty, return false
     // to set aura section as in-active.
     if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
@@ -193,6 +202,9 @@ class AuraCheckoutRewards extends React.Component {
     const active = this.isActive();
     const activeClass = active ? 'active' : 'in-active';
 
+    // Disable AURA guest user link card form if cart contains virtual products.
+    const formActive = !(isEgiftCardEnabled() && cartContainsAnyVirtualProduct(cart.cart));
+
     if (wait) {
       return (
         <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }}>
@@ -214,6 +226,7 @@ class AuraCheckoutRewards extends React.Component {
             pointsToEarn={auraPointsToEarn}
             cartId={cart.cart.cart_id || ''}
             wait={waitForPoints}
+            formActive={formActive}
           />
         </ConditionalView>
 
@@ -226,6 +239,7 @@ class AuraCheckoutRewards extends React.Component {
             expiryDate={expiryDate}
             cardNumber={cardNumber}
             totals={cart.cart.totals}
+            formActive={formActive}
             paymentMethodInCart={cart.cart.payment.method || ''}
             wait={waitForPoints}
           />
@@ -246,6 +260,7 @@ class AuraCheckoutRewards extends React.Component {
             cardNumber={cardNumber}
             pointsToEarn={auraPointsToEarn}
             wait={waitForPoints}
+            formActive={formActive}
           />
         </ConditionalView>
       </div>

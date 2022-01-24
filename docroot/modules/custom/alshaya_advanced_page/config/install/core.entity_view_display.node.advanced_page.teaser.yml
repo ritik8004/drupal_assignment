@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.advanced_page.field_promo_blocks
     - field.field.node.advanced_page.field_related_info
     - field.field.node.advanced_page.field_slider
+    - field.field.node.advanced_page.field_use_as_egift_landing_page
     - node.type.advanced_page
   module:
     - text
@@ -46,3 +47,4 @@ hidden:
   field_slider: true
   langcode: true
   content_moderation_control: true
+  field_use_as_egift_landing_page: true

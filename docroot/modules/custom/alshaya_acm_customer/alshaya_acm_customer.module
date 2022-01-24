@@ -131,7 +131,8 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
  */
 function alshaya_acm_customer_block_access(Block $block, $operation, AccountInterface $account) {
   // Not allow 'recent orders' block other than user/{uid} page.
-  if ($operation == 'view' && in_array($block->id(), ['userrecentorders', 'myaccountneedhelp'])) {
+  $blocks_to_check = ['userrecentorders', 'myaccountneedhelp'];
+  if ($operation == 'view' && in_array($block->id(), $blocks_to_check)) {
     $current_route = \Drupal::routeMatch()->getRouteName();
     return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
   }
@@ -294,9 +295,9 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
 
       if ($user && alshaya_acm_customer_is_customer($user) && isset($customer['addresses'])) {
         foreach ($customer['addresses'] as $key => $address) {
-          // Todo: ApiWrapper::authenticateCustomer() returns the 'extension'
-          // Todo: as array while ApiWrapper::getCustomer() returns 'extension'
-          // Todo: as object and thus we need to typecaste here.
+          // @todo ApiWrapper::authenticateCustomer() returns the 'extension'
+          // @todo as array while ApiWrapper::getCustomer() returns 'extension'
+          // @todo as object and thus we need to typecaste here.
           if (!empty($address['extension']) && !is_array($address['extension'])) {
             $customer['addresses'][$key]['extension'] = (array) $address['extension'];
           }
@@ -441,7 +442,10 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
   alshaya_acm_customer_user_email_validate($form, $form_state);
 
   // We also process default authentication code.
-  call_user_func_array($form_state->prepareCallback('::validateAuthentication'), [&$form, &$form_state]);
+  call_user_func_array(
+    $form_state->prepareCallback('::validateAuthentication'),
+    [&$form, &$form_state]
+  );
 }
 
 /**
@@ -549,7 +553,10 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
 
   // Process default validation if no errors found.
   if (!$form_state->getErrors()) {
-    call_user_func_array($form_state->prepareCallback('::validateForm'), [&$form, &$form_state]);
+    call_user_func_array(
+      $form_state->prepareCallback('::validateForm'),
+      [&$form, &$form_state]
+    );
   }
 }
 
@@ -618,7 +625,10 @@ function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterf
   $subscribe = $form_state->getValue('field_subscribe_newsletter');
 
   // Call the ::save method of Drupal first to get account created in Drupal.
-  call_user_func_array($form_state->prepareCallback('::save'), [&$form, &$form_state]);
+  call_user_func_array(
+    $form_state->prepareCallback('::save'),
+    [&$form, &$form_state]
+  );
 
   // Get form storage.
   $storage = $form_state->getStorage();
@@ -653,7 +663,10 @@ function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterf
       $apiWrapper->subscribeNewsletter($user->getEmail());
     }
     catch (\Exception $e) {
-      \Drupal::logger('alshaya_acm_customer')->error('Error occurred while subscribing @email during registration. Error message: @error', ['@email' => $user->getEmail(), '@error' => $e->getMessage()]);
+      \Drupal::logger('alshaya_acm_customer')->error('Error occurred while subscribing @email during registration. Error message: @error', [
+        '@email' => $user->getEmail(),
+        '@error' => $e->getMessage(),
+      ]);
     }
   }
 
@@ -681,7 +694,10 @@ function alshaya_acm_customer_change_pwd_form_validate_password(array &$form, Fo
 
   // For all users who don't have customer_id, we store password only in Drupal.
   if (!alshaya_acm_customer_is_customer($user)) {
-    call_user_func_array($form_state->prepareCallback('::validateForm'), [&$form, &$form_state]);
+    call_user_func_array(
+      $form_state->prepareCallback('::validateForm'),
+      [&$form, &$form_state]
+    );
     return;
   }
 
@@ -723,7 +739,10 @@ function alshaya_acm_customer_change_pwd_form_update_password(array &$form, Form
 
   // For all users except just authenticated, we store password only in Drupal.
   if (!alshaya_acm_customer_is_customer($user)) {
-    call_user_func_array($form_state->prepareCallback('::submitForm'), [&$form, &$form_state]);
+    call_user_func_array(
+      $form_state->prepareCallback('::submitForm'),
+      [&$form, &$form_state]
+    );
   }
   else {
     // Get password from user's input.
@@ -813,11 +832,13 @@ function alshaya_acm_customer_alshaya_i18n_onetime_translation_add() {
  *
  * @param \Drupal\user\UserInterface|\Drupal\Core\Session\AccountProxy $user
  *   User to check if it is valid customer.
+ * @param bool $return_id
+ *   Flag to specify if we should return id or boolean.
  *
- * @return bool
- *   True if user is customer, false otherwise.
+ * @return bool|int|string
+ *   Boolean or id based on the flag status.
  */
-function alshaya_acm_customer_is_customer($user) {
+function alshaya_acm_customer_is_customer($user, bool $return_id = FALSE) {
   if ($user instanceof UserInterface) {
     // Do nothing, we need this to have else condition.
   }
@@ -825,12 +846,13 @@ function alshaya_acm_customer_is_customer($user) {
     $user = User::load($user->id());
   }
   else {
-    return FALSE;
+    return $return_id ? 0 : FALSE;
   }
 
-  if (empty($user->get('acq_customer_id')->getString())) {
-    return FALSE;
+  $user_id = $user->get('acq_customer_id')->getString();
+  if (empty($user_id)) {
+    return $return_id ? 0 : FALSE;
   }
 
-  return TRUE;
+  return $return_id ? $user_id : TRUE;
 }

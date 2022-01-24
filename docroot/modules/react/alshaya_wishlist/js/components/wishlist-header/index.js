@@ -97,7 +97,9 @@ export default class WishlistHeader extends React.Component {
       } else {
         // Get wishlist data from the local storage.
         const wishListData = getWishListData();
-        if (wishListData === null) {
+        if (wishListData === null
+          || (typeof wishListData === 'object'
+          && Object.keys(wishListData).length === 0)) {
           // Load wishlist information from the magento backend, if wishlist
           // data is empty in local storage for authenticate users. First check
           // if wishlist is available for the customer in backend.
@@ -206,7 +208,7 @@ export default class WishlistHeader extends React.Component {
         // If sticky header is not present, scroll user to header.
         // Else show notification on sticky header.
         if (querySelector === null) {
-          smoothScrollTo('#wishlist-header-wrapper');
+          smoothScrollTo('html, body');
         } else {
           stateData.headerClass = 'sticky-wrapper';
         }

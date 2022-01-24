@@ -70,7 +70,10 @@ function alshaya_block_delete_blocks(array $blocks, $theme = NULL) {
   $theme = empty($theme) ? \Drupal::config('system.theme')->get('default') : $theme;
 
   foreach ($blocks as $block_id) {
-    $block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id, 'theme' => $theme]);
+    $block = \Drupal::entityTypeManager()
+      ->getStorage('block')
+      ->loadByProperties(['id' => $block_id, 'theme' => $theme]);
+
     if (!empty($block)) {
       $block = reset($block);
       $block->delete();
