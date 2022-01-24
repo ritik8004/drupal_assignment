@@ -100,14 +100,12 @@
     }
   }
 
-  .in-wishlist {
-    .wishlist-link {
-      padding-top: 0.625rem;
-      color: $wishlist-oos;
+  .wishlist-link {
+    padding-top: 0.625rem;
+    color: $wishlist-oos;
 
-      &:hover {
-        text-decoration: underline;
-      }
+    &:hover {
+      text-decoration: underline;
     }
   }
 
