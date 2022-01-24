@@ -68,3 +68,5 @@ product_utility:
   version: 1.x
   js:
     js/alshaya_acm_product.utility.js: {}
+  dependencies:
+    - alshaya_master/common_functions
