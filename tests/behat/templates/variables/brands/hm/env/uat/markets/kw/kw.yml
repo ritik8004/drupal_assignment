@@ -1,6 +1,6 @@
 variables:
   url_product_page: 'buy-slub-jersey-t-shirt-white.html'
-  product_listing_page_url: "/shop-new-arrivals/"
-  spc_product_listing_page: '/shop-new-arrivals/'
-  spc_basket_page: '/shop-new-arrivals/'
-  spc_pdp_page: 'buy-3-4-length-leggings.html'
+  product_listing_page_url: "/shop-mens/"
+  spc_product_listing_page: '/shop-mens/'
+  spc_basket_page: '/shop-mens/'
+  spc_pdp_page: 'buy-viscose-shirt-white.html'
