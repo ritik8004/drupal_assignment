@@ -147,9 +147,9 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       });
     }
     // Event listener on delivery information update to remove redeemed Amount.
-    document.addEventListener('refreshCartOnAddress', this.handleRemoveCard, false);
+    document.addEventListener('refreshCartOnAddress', this.handleRemoveCard);
     // Event listener on CnC store selection.
-    document.addEventListener('storeSelected', this.handleRemoveCard, false);
+    document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
   }
 
   openModal = (e) => {
@@ -238,6 +238,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     }
   };
 
+  // Remove redeemed Card.
   handleRemoveCard = async () => {
     const { egiftLinkedCardNumber } = this.state;
     const { cart, refreshCart } = this.props;
@@ -257,7 +258,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
     showFullScreenLoader();
     // Invoke the remove redemption API.
-    const response = callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
+    const response = await callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
 
     if (response instanceof Promise) {
       // Handle the error and success message after the egift card is unlinked.

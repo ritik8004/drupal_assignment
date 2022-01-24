@@ -60,11 +60,10 @@ export default class ValidEgiftCard extends React.Component {
         });
       }
     }
-
     // Event listener on delivery information update to remove redeemed amount.
-    document.addEventListener('refreshCartOnAddress', this.handleRemoveCard, false);
+    document.addEventListener('refreshCartOnAddress', this.handleRemoveCard);
     // Event listener on CnC store selection.
-    document.addEventListener('storeSelected', this.handleRemoveCard, false);
+    document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
   }
 
   openModal = (e) => {
