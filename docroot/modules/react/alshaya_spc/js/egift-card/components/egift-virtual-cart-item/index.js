@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Cleave from 'cleave.js/react';
 import { updateCartItemData } from '../../../utilities/update_cart';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import Notifications from '../../../cart/components/cart-item/components/Notifications';
@@ -138,7 +139,15 @@ export default class CartVirtualItem extends React.Component {
               <ConditionalView condition={hasValue(isTopUp)}>
                 <div className="spc-cart-product-attributes">
                   <span className="spc-cart-product-attribute-label">{Drupal.t('Card No:', {}, { context: 'egift' })}</span>
-                  <span className="spc-cart-product-attribute-value">{topupCardNumber}</span>
+                  <span className="spc-cart-product-attribute-value">
+                    <Cleave
+                      name="spc-cart-topupCardNumber-value"
+                      className="spc-cart-topupCardNumber-value"
+                      disabled
+                      value={topupCardNumber}
+                      options={{ blocks: [4, 4, 4, 4] }}
+                    />
+                  </span>
                 </div>
               </ConditionalView>
               <ConditionalView condition={!hasValue(isTopUp)}>
