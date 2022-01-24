@@ -170,8 +170,11 @@
               )
             );
 
+            // Add class to remove loader styles on RCS Placeholders.
+            $(this).addClass(classRcsLoaded);
             // Re-attach all behaviors.
             rcsPhApplyDrupalJs($(this).parent()[0]);
+            return;
           } catch (error) {
             Drupal.alshayaLogger(
               "error",
