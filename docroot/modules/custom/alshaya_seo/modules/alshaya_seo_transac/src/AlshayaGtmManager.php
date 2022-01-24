@@ -1180,8 +1180,8 @@ class AlshayaGtmManager {
         $productStyleCode = [];
         $store_code = '';
         $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-        $shipping_method = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
-        if ($shipping_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+        $shipping_method_name = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
+        if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
         }
