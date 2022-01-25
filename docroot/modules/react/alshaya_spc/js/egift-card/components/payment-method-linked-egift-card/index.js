@@ -50,7 +50,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
     // Invoke magento API to get the user card number
     const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
-
     if (response instanceof Promise) {
       response.then((result) => {
         if (result.status === 200) {
@@ -64,9 +63,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               });
               return;
             }
-
             // Card Available Balance.
-            const currentBalance = parseInt(result.data.current_balance, 10);
+            const currentBalance = parseFloat(result.data.current_balance, 10);
             // Current Time stamp to check for expiry.
             const currentTime = Math.floor(Date.now() / 1000);
 
