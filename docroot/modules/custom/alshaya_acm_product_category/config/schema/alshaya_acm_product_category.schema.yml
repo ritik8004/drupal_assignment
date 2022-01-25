@@ -22,3 +22,6 @@ alshaya_acm_product_category.settings:
     grouping_page_header_style:
       type: string
       label: 'Grouping Page Header Style'
+    all_categories_department_page:
+      type: boolean
+      label: 'Allow all the levels of categories can be used under department page.'
