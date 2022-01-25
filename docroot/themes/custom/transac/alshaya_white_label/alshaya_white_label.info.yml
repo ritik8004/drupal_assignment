@@ -28,6 +28,9 @@ libraries:
   - alshaya_white_label/ucfix
 
 libraries-override:
+  clientside_validation_jquery/jquery.validate:
+    js:
+      /libraries/jquery-validation/dist/jquery.validate.js: /libraries/jquery-validation/dist/jquery.validate.min.js
   back_to_top/back_to_top_icon:
     css:
       theme:
