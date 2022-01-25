@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c57feedd9a26e77506252055660a158a",
+    "content-hash": "70a9a42e171b7122ec40a9e2580a618d",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -4112,88 +4112,6 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/adminimal_theme",
                 "issues": "https://www.drupal.org/project/issues/adminimal_theme"
-            }
-        },
-        {
-            "name": "drupal/advagg",
-            "version": "4.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/advagg.git",
-                "reference": "8.x-4.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/advagg-8.x-4.1.zip",
-                "reference": "8.x-4.1",
-                "shasum": "8d79a764c5166896b18f6fbc7bdd50348adba3e4"
-            },
-            "require": {
-                "drupal/core": "^8.8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-4.1",
-                    "datestamp": "1591379060",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9"
-                    }
-                },
-                "patches_applied": {
-                    "Fix FileSystem error": "https://www.drupal.org/files/issues/2021-03-10/fix-issue-with-advagg-and-s3fs-modules-3201922-3.patch"
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Mike Carper (mikeytown2)",
-                    "homepage": "https://www.drupal.org/u/mikeytown2",
-                    "role": "Creator, Maintainer"
-                },
-                {
-                    "name": "Nick Wilde (nickwilde)",
-                    "homepage": "https://www.drupal.org/u/nickwilde",
-                    "email": "design@briarmoon.ca",
-                    "role": "Drupal 8 Port/maintainer"
-                },
-                {
-                    "name": "Other Contributors",
-                    "homepage": "https://www.drupal.org/node/1066416/committers",
-                    "role": "Contributors"
-                },
-                {
-                    "name": "iamcarrico",
-                    "homepage": "https://www.drupal.org/user/1300542"
-                },
-                {
-                    "name": "mikeytown2",
-                    "homepage": "https://www.drupal.org/user/282446"
-                },
-                {
-                    "name": "rupl",
-                    "homepage": "https://www.drupal.org/user/411999"
-                },
-                {
-                    "name": "thalles",
-                    "homepage": "https://www.drupal.org/user/3589086"
-                }
-            ],
-            "description": "Improved aggregation of CSS/JS files to speed up page load times.",
-            "homepage": "https://drupal.org/project/advagg",
-            "support": {
-                "source": "https://git.drupalcode.org/project/advagg",
-                "issues": "https://drupal.org/project/issues/advagg",
-                "irc": "irc://irc.freenode.org/drupal-contribute"
             }
         },
         {
@@ -10305,17 +10223,17 @@
         },
         {
             "name": "drupal/mobile_app_links",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/mobile_app_links.git",
-                "reference": "8.x-1.1"
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/mobile_app_links-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "9821562b079f1223eee3e70289b9f462ab4c5a6a"
+                "url": "https://ftp.drupal.org/files/projects/mobile_app_links-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "6238e05d364a8a0490dabac685dedfecb3e61343"
             },
             "require": {
                 "drupal/core": "^8.7||^9.0",
@@ -10324,8 +10242,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1637137244",
+                    "version": "8.x-1.2",
+                    "datestamp": "1642999336",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16404,7 +16322,7 @@
             "time": "2017-05-08T12:10:56+00:00"
         },
         {
-            "name": "jqueryvalidate/jqueryvalidate",
+            "name": "jquery-validation/jquery-validation",
             "version": "1.17.0",
             "dist": {
                 "type": "zip",
