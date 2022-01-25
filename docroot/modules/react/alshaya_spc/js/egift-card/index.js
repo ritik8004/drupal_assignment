@@ -228,11 +228,6 @@ export default class RedeemEgiftCard extends React.Component {
   // Remove the added egift card.
   handleEgiftCardRemove = async () => {
     const { cart: cartData, refreshCart } = this.props;
-    // Default result object.
-    let result = {
-      error: false,
-      message: '',
-    };
     // Remove redemption from the cart.
     const response = await removeEgiftRedemption(cartData.cart);
     if (!response.error) {
@@ -244,33 +239,9 @@ export default class RedeemEgiftCard extends React.Component {
       });
       // Update the cart total.
       updatePriceSummaryBlock(refreshCart);
-    } else if (isValidResponseWithFalseResult(response)) {
-      result = {
-        error: true,
-        message: response.data.response_message,
-      };
-      // Log error in datadog.
-      logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
-        '@action': 'remove_redemption',
-        '@response': response.data,
-      });
-      // Remove loader once the data response is available.
-      removeFullScreenLoader();
-    } else {
-      result = {
-        error: true,
-        message: getDefaultErrorMessage(),
-      };
-      // Log error in datadog.
-      logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
-        '@action': 'remove_redemption',
-        '@response': response,
-      });
-      // Remove loader once the data response is available.
-      removeFullScreenLoader();
     }
 
-    return result;
+    return response;
   }
 
   // Change the egift card.
