@@ -301,14 +301,18 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   // Reset counter.
   StaticStorage.remove('apiCallAttempts');
 
-  const cartResponse = await window.commerceBackend.getCart(true);
-  // Remove redemption of egift when module is enabled and redemption is already
-  // applied.
+  const cartData = await window.commerceBackend.getCart(true);
+  // Remove redemption of egift when feature is enabled and redemption is
+  // already applied.
   if (isEgiftCardEnabled()) {
-    await removeRedemptionOnCartUpdate(cartResponse.data);
+    // As we don't get cart object here in this function, we need to get a fresh
+    // cart to check if redemption is already applied in the cart.
+    await removeRedemptionOnCartUpdate(cartData.data);
   }
-
-  return window.commerceBackend.getCart(true);
+  // Return a promise object.
+  return new Promise((resolve) => {
+    resolve(cartData);
+  });
 };
 
 /**
@@ -335,8 +339,8 @@ window.commerceBackend.applyRemovePromo = async (data) => {
     .then(async (response) => {
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
-      // Remove redemption of egift when module is enabled and redemption is already
-      // applied.
+      // Remove redemption of egift when feature is enabled and redemption is
+      // already applied.
       if (isEgiftCardEnabled()) {
         await removeRedemptionOnCartUpdate(response.data);
       }

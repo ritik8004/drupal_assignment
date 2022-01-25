@@ -228,6 +228,8 @@ export default class RedeemEgiftCard extends React.Component {
   // Remove the added egift card.
   handleEgiftCardRemove = async () => {
     const { cart: cartData, refreshCart } = this.props;
+    // Show loader while doing API call.
+    showFullScreenLoader();
     // Remove redemption from the cart.
     const response = await removeEgiftRedemption(cartData.cart);
     if (!response.error) {

@@ -121,8 +121,8 @@ export const egiftFormElement = ({
 /**
  * Triggers custom event to update price summary block.
  */
-export const updatePriceSummaryBlock = (refreshCart) => {
-  showFullScreenLoader();
+export const updatePriceSummaryBlock = (refreshCart = null) => {
+  // Fetch the fresh cart data and update the summary block.
   const cartData = window.commerceBackend.getCart(true);
   if (cartData instanceof Promise) {
     cartData.then((data) => {
@@ -131,13 +131,22 @@ export const updatePriceSummaryBlock = (refreshCart) => {
         && data.data.error === undefined) {
         // Update Egift card line item.
         dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
-        // Refresh the cart in checkout.
         const formatedCart = window.commerceBackend.getCartForCheckout();
         if (formatedCart instanceof Promise) {
           formatedCart.then((cart) => {
             // Validate if response was successful or failure.
             if (hasValue(cart) && hasValue(cart.data)) {
-              refreshCart({ cart: cart.data });
+              // Refresh the cart in checkout and check if refresh function is
+              // available.
+              if (refreshCart) {
+                refreshCart({ cart: cart.data });
+              } else {
+                // Calling refresh cart event so that cart components
+                // are refreshed.
+                dispatchCustomEvent('refreshCart', {
+                  data: () => cart.data,
+                });
+              }
             } else {
               dispatchCustomEvent('spcCheckoutMessageUpdate', {
                 type: 'error',
@@ -466,7 +475,6 @@ export const removeEgiftRedemption = async (cartData) => {
     };
   }
 
-  showFullScreenLoader();
   // Invoke the redemption API.
   const response = await callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
   if (isValidResponse(response)) {
@@ -565,15 +573,19 @@ export const removeRedemptionOnCartUpdate = async (cart) => {
   // items.
   if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart, cart.totals.egiftRedemptionType)) {
     // Remove Redemption as we are updating the cart items.
+    showFullScreenLoader();
     const removeRedemption = await removeEgiftRedemption(cart);
     if (removeRedemption.error) {
       // Log the error if redemption is not removed.
       logger.notice('Remove redemption failed, @cart', {
         '@cartId': cart,
       });
-    } else {
-      // Update the total in cart summary block.
-      dispatchCustomEvent('updateTotalsInCart', { totals: cart.totals });
+      // Remove redemption when error occured.
+      removeFullScreenLoader();
+      return;
     }
+
+    // Update the total in cart summary block.
+    updatePriceSummaryBlock();
   }
 };
