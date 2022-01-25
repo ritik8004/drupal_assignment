@@ -16,6 +16,7 @@ import LinkedEgiftSVG from '../../../svg-component/linked-egift-svg';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import Loading from '../../../../../js/utilities/loading';
+import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -291,7 +292,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
           });
           removeFullScreenLoader();
           this.setState({
-            apiErrorMessage: Drupal.t('Something went wrong please try again later.', {}, { context: 'egift' }),
+            apiErrorMessage: getDefaultErrorMessage(),
             renderWait: false,
           });
         }
