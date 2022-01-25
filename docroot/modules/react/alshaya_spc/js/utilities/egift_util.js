@@ -577,7 +577,7 @@ export const removeRedemptionOnCartUpdate = async (cart) => {
     const removeRedemption = await removeEgiftRedemption(cart);
     if (removeRedemption.error) {
       // Log the error if redemption is not removed.
-      logger.notice('Remove redemption failed, @cart', {
+      logger.error('Remove redemption failed, @cart', {
         '@cartId': cart,
       });
       // Remove redemption when error occured.
