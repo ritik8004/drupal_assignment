@@ -16382,7 +16382,7 @@
             "time": "2017-05-08T12:10:56+00:00"
         },
         {
-            "name": "jqueryvalidate/jqueryvalidate",
+            "name": "jquery-validation/jquery-validation",
             "version": "1.17.0",
             "dist": {
                 "type": "zip",
