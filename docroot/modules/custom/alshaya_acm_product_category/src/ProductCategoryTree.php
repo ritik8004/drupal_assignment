@@ -878,10 +878,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       $terms = [];
       if ($node->bundle() == 'advanced_page') {
         $terms = $node->get('field_product_category')->getValue();
-      }
-
-      if (count($terms) > 0) {
-        $tid = $terms[0]['target_id'];
+        if (count($terms) > 0) {
+          $tid = $terms[0]['target_id'];
+        }
       }
     }
 
