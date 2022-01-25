@@ -17,10 +17,8 @@ use Drupal\block\BlockInterface;
  * Implements hook_update_N().
  *
  * Adding new field `all_categories_department_page`.
- * Create new table to store category that
- * does not exist in drupal.
  */
-function alshaya_acm_product_category_update_8047() {
+function alshaya_acm_product_category_update_8048() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -29,6 +27,15 @@ function alshaya_acm_product_category_update_8047() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create new table to store category that
+ * does not exist in drupal.
+ */
+function alshaya_acm_product_category_update_8047() {
   $schema = alshaya_acm_product_category_schema();
   \Drupal::database()->schema()->createTable('sku_category_map', $schema['sku_category_map']);
 }

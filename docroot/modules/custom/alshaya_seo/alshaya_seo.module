@@ -337,7 +337,6 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
     ($view->id() === 'product_category_level_2_3') && ($view->current_display === 'block_2'));
   if (($is_product_level_3_view) &&
     ($field->getPluginId() === 'term_name')) {
-    $tid = NULL;
     /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
     $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
     $tid = $product_category_tree->getDepartmentPageCategoryIdFromRoute();
