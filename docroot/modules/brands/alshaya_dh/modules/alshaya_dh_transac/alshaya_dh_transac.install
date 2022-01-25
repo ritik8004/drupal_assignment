@@ -77,36 +77,36 @@ function alshaya_dh_transac_install() {
       'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
     ],
     'read more' => [
-      'ar' => 'اقرأ المزيد'
+      'ar' => 'اقرأ المزيد',
     ],
     'read less' => [
-      'ar' => 'اقرأ  أقل'
+      'ar' => 'اقرأ  أقل',
     ],
     'Product Description' => [
-      'ar' => 'وصف المنتج'
+      'ar' => 'وصف المنتج',
     ],
     'Product Detail' => [
-      'ar' => 'تفاصيل المنتج'
+      'ar' => 'تفاصيل المنتج',
     ],
     'Product No:' => [
-      'ar' => 'رمز المنتج'
+      'ar' => 'رمز المنتج',
     ],
     'size guide' => [
-      'ar' => 'دليل المقاسات'
+      'ar' => 'دليل المقاسات',
     ],
     'sign up' => [
       'en' => 'Subscribe',
-      'ar' => 'تسجيل'
+      'ar' => 'تسجيل',
     ],
     'Social links' => [
       'en' => 'Follow us',
-      'ar' => 'تابعنا'
+      'ar' => 'تابعنا',
     ],
     'Select your prefered communication channel' => [
-      'ar' => 'حدد قناة الاتصال المفضلة لديك'
+      'ar' => 'حدد قناة الاتصال المفضلة لديك',
     ],
     'Details and care' => [
-      'ar' => 'التفاصيل والعناية'
+      'ar' => 'التفاصيل والعناية',
     ],
     'Sleeve Length' => [
       'ar' => 'طول الكم',
@@ -127,7 +127,7 @@ function alshaya_dh_transac_install() {
       'ar' => 'الخامة',
     ],
     'Product Type' => [
-      'ar' => 'نوع المنتج'
+      'ar' => 'نوع المنتج',
     ],
   ];
 

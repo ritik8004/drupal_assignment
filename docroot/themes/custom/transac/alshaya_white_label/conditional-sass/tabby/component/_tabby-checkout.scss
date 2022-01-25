@@ -57,22 +57,6 @@
           }
         }
       }
-
-      &.disabled {
-        pointer-events: none;
-
-        .payment-method-top-panel {
-          opacity: 0.2;
-        }
-
-        .payment-method-bottom-panel {
-          display: none;
-        }
-
-        .tabby-promo-snippet__logo-img {
-          background-image: url('#{$base_theme_img_directory_path}/cards/tabby-disabled.svg');
-        }
-      }
     }
   }
 }

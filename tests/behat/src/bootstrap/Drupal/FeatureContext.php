@@ -2459,7 +2459,7 @@ JS;
     } else {
       $element = '#payment-method-checkout_com';
     }
-    $this->getSession()->executeScript("jQuery('$element').siblings('label').trigger('click');");
+    $this->getSession()->executeScript("jQuery('$element').siblings('.payment-method-label-wrapper').find('label').trigger('click');");
     $this->iWaitSeconds(10);
     $checkbox = $page->findField($element);
 
@@ -2568,7 +2568,7 @@ JS;
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
       $this->theElementShouldExist('.spc-cnc-stores-list-map');
-      $this->iWaitSeconds('20');
+      $this->iWaitSeconds('50');
       $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
@@ -2880,6 +2880,18 @@ JS;
       }
       $page->find('css', '#block-alshaya-algolia-react-plp .plp-facet-product-filter #attr_delivery_ways h3')->click();
     }
+  }
+
+  /**
+   * @Then /^I should see tabby payment window$/
+   */
+  public function iShouldSeeTabbyPaymentWindow() {
+    $page = $this->getSession()->getPage();
+    $iframe_element = $page->find('css', '#tabby-checkout iframe');
+    if ($iframe_element == null) {
+      throw new \Exception(sprintf('Iframe element not found.'));
+    }
+
   }
 
 }

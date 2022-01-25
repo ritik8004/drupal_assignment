@@ -1,0 +1,12 @@
+.egift-landing-page {
+  .c-accordion-delivery-option-parent {
+    .c-accordion__title {
+      font-family: $hnm-demibold;
+
+      @include icon(chevrondown, after) {
+        #{$right}: 0.9375rem;
+        font-size: 0.5rem;
+      }
+    }
+  }
+}

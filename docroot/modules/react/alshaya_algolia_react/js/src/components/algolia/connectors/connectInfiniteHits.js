@@ -77,7 +77,10 @@ export default createConnector({
       };
     }
 
-    const page = (this.firstReceivedPage === undefined && typeof props.defaultpageRender === 'number') ? props.defaultpageRender - 1 : results.page;
+    const page = (this.firstReceivedPage === undefined && typeof props.defaultpageRender === 'number')
+      ? props.defaultpageRender - 1
+      : results.page;
+
     const { hits } = results;
     const { hitsPerPage } = results;
     let { nbPages } = results;
@@ -93,18 +96,23 @@ export default createConnector({
     const hitsWithPositions = addAbsolutePositions(hits, hitsPerPage, page);
     const hitsWithPositionsAndQueryID = addQueryID(hitsWithPositions, results.queryID);
 
-    if (this.firstReceivedPage === undefined && typeof props.defaultpageRender === 'number') {
+    // Consider the custom work done for showing multiple pages on load
+    // for Back to PLP feature. Consider it only if we loaded more than 1 page.
+    if (this.firstReceivedPage === undefined
+      && typeof props.defaultpageRender === 'number'
+      && props.defaultpageRender > 1) {
       this.allResults = _toConsumableArray(hitsWithPositionsAndQueryID);
+
       // Used Drupal settings to know the pages based on set number of items.
-      if (results.nbHits > parseInt((drupalSettings.algoliaSearch.itemsPerPage), 10)) {
-        nbPages = Math.ceil(
-          results.nbHits / parseInt((drupalSettings.algoliaSearch.itemsPerPage), 10),
-        );
+      const itemsPerPage = parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
+      if (results.nbHits > itemsPerPage) {
+        nbPages = Math.ceil(results.nbHits / itemsPerPage);
       }
 
       this.firstReceivedPage = 0;
       this.lastReceivedPage = props.defaultpageRender;
-    } else if (this.firstReceivedPage === undefined || !_isEqual(currentState, this.prevState)) {
+    } else if (this.firstReceivedPage === undefined
+      || !_isEqual(currentState, this.prevState)) {
       const $diff = diffObject(currentState, this.prevState);
 
       this.allResults = (this.allResults.length > 0 && Object.prototype.hasOwnProperty.call($diff, 'hitsPerPage'))
@@ -151,19 +159,29 @@ export default createConnector({
     };
   },
   getSearchParameters: function getSearchParameters(searchParameters, props, searchState) {
+    // Custom work done here to support loading multiple pages first time.
+    // This is to support Back to PLP feature.
     return searchParameters.setQueryParameters({
-      page: (typeof props.defaultpageRender === 'number') ? 0 : getCurrentRefinement(props, searchState, this.context) - 1,
-      hitsPerPage: (typeof props.defaultpageRender === 'number') ? searchParameters.hitsPerPage * props.defaultpageRender : searchParameters.hitsPerPage,
+      page: (typeof props.defaultpageRender === 'number')
+        ? 0
+        : getCurrentRefinement(props, searchState, this.context) - 1,
+      hitsPerPage: (typeof props.defaultpageRender === 'number')
+        ? searchParameters.hitsPerPage * props.defaultpageRender
+        : searchParameters.hitsPerPage,
     });
   },
   refine: function refine(props, searchState, event, index) {
     let finalIndex = index;
-    if (typeof props.defaultpageRender === 'number' && props.defaultpageRender > 1) {
+
+    // Consider the custom work done for showing multiple pages on load
+    // for Back to PLP feature. Consider it only if we loaded more than 1 page.
+    if (typeof props.defaultpageRender === 'number'
+      && props.defaultpageRender > 1) {
       finalIndex = props.defaultpageRender;
-    } else if (finalIndex === undefined && this.lastReceivedPage !== undefined) {
-      finalIndex = this.lastReceivedPage + 1;
     } else if (finalIndex === undefined) {
-      finalIndex = getCurrentRefinement(props, searchState, this.context);
+      finalIndex = this.lastReceivedPage !== undefined
+        ? this.lastReceivedPage + 1
+        : getCurrentRefinement(props, searchState, this.context);
     }
 
     const id = getId();

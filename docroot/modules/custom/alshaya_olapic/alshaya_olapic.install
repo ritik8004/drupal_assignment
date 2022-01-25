@@ -5,8 +5,9 @@
  * Install file for Alshaya Olapic.
  */
 
-use Drupal\alshaya_config\AlshayaConfigManager;
-
+/**
+ * Implements hook_install().
+ */
 function alshaya_olapic_install() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
@@ -27,7 +28,8 @@ function alshaya_olapic_install() {
 /**
  * Implements hook_uninstall().
  *
- * Delete block config. We need to ensure all the block configuration added in the module
+ * Delete block config.
+ * We need to ensure all the block configuration added in the module.
  */
 function alshaya_olapic_uninstall() {
   if ($config = \Drupal::configFactory()->getEditable('block.block.alshayaolapicwidget')) {

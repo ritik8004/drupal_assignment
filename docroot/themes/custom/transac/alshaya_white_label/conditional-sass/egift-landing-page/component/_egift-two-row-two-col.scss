@@ -1,0 +1,75 @@
+.paragraph--type--multiple-row-multiple-col {
+  margin: 3.5rem 0 0.625rem;
+
+  @include breakpoint($tablet) {
+    margin: 5rem 0 0;
+  }
+
+  .field--name-field-group-title {
+    font-family: $alshaya-bold;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    text-align: center;
+    margin-bottom: 2.25rem;
+
+    @include breakpoint($tablet) {
+      font-size: 1.75rem;
+      line-height: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+  }
+
+  .field--name-field-image-title-subtitle {
+    @include breakpoint($tablet) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .field--name-field-image-title-subtitle {
+      margin-bottom: 2.8125rem;
+      text-align: $left;
+
+      @include breakpoint($tablet) {
+        width: 48%;
+        margin-bottom: 3.375rem;
+      }
+    }
+  }
+
+  .paragraph--type--image-title-subtitle {
+    .field--name-field-banner {
+      width: 1.875rem;
+      float: $left;
+
+      @include breakpoint($tablet) {
+        width: 2.4375rem;
+      }
+    }
+
+    .field--name-field-title,
+    .field--name-field-sub-title {
+      font-size: 0.8125rem;
+      line-height: 1.25rem;
+      padding-#{$left}: 3.125rem;
+
+      @include breakpoint($tablet) {
+        padding-#{$left}: 4.5625rem;
+      }
+    }
+
+    .field--name-field-title {
+      font-family: $alshaya-bold;
+      color: $egift-landing-page-sub-block-title;
+      margin-bottom: 0.25rem;
+
+      @include breakpoint($tablet) {
+        font-size: 1rem;
+      }
+    }
+
+    .field--name-field-sub-title {
+      color: $egift-landing-page-sub-block-subtitle;
+    }
+  }
+}

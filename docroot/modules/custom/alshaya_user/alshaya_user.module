@@ -266,12 +266,8 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   $form['account']['current_pass']['#title'] = t('current password');
   $form['actions']['submit']['#value'] = t('change password');
 
-  // Set this as password policy module checks for the role element.
-  $form['account']['roles']['#default_value'] = [];
-
-  // Password policy custom validation.
-  $form['#validate'][] = '_password_policy_user_profile_form_validate';
-  $form['#validate'][] = 'alshaya_user_change_password_validate';
+  // Password policy submit handlers.
+  $form['#submit'][] = 'alshaya_user_change_password_submit';
   $form['#submit'][] = '_password_policy_user_profile_form_submit';
 
   // Add password validation attribute.
@@ -281,9 +277,9 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
 }
 
 /**
- * Custom validate function for change password form.
+ * Custom submit function for change password form.
  */
-function alshaya_user_change_password_validate(&$form, FormStateInterface &$form_state) {
+function alshaya_user_change_password_submit(&$form, FormStateInterface &$form_state) {
   if (!$form_state->getErrors()) {
     $account = \Drupal::routeMatch()->getParameter('user');
 
@@ -369,7 +365,7 @@ function alshaya_user_alshaya_api_update_customer_api_request_alter(array &$requ
  * Implements hook_entity_type_alter().
  */
 function alshaya_user_entity_type_alter(array &$entity_types) {
-  /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   $entity_types['user']->setFormClass('default', 'Drupal\alshaya_user\Form\AlshayaUserProfileForm');
 }
 
@@ -453,7 +449,7 @@ function _alshaya_user_password_policy_history_insert_password_hash(AccountInter
 
   if ($account) {
     // See _password_policy_history_insert_password_hash() for code below.
-    // @TODO: We should refactor the module and remove this code.
+    // @todo We should refactor the module and remove this code.
     $connection = Database::getConnection();
 
     $hashed_pass = \Drupal::service('password')->hash($password);
@@ -586,7 +582,10 @@ function alshaya_user_first_name_last_name(string $name): array {
  * Custom method for user redirect.
  */
 function _alshaya_user_password_reset_submit(array $form, FormStateInterface $form_state) {
-  call_user_func_array($form_state->prepareCallback('::submitForm'), [&$form, &$form_state]);
+  call_user_func_array(
+    $form_state->prepareCallback('::submitForm'),
+    [&$form, &$form_state]
+  );
   // Redirect to login page after form submit.
   $form_state->setRedirect('user.login');
 }

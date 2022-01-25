@@ -116,7 +116,10 @@ function alshaya_i18n_update_context(array $strings) {
 
       if ($target = $locale_storage->findString($conditions)) {
         // Update translation source entry.
-        $target->setValues(['context' => $context, 'version' => \Drupal::VERSION]);
+        $target->setValues([
+          'context' => $context,
+          'version' => \Drupal::VERSION,
+        ]);
         $target->save();
       }
     }

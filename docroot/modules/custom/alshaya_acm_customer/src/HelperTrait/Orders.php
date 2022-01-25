@@ -62,7 +62,8 @@ trait Orders {
     $total_cancelled_quantity = 0;
 
     foreach ($order['items'] as $item) {
-      if (isset($items[$item['sku']])) {
+      // For virtual products use item_id instead of sku as key.
+      if (isset($items[$item['sku']]) && !$item['is_virtual']) {
         continue;
       }
 
@@ -91,8 +92,10 @@ trait Orders {
         $processed_item['attributes'] = $item['attributes'];
       }
 
+      // Set key as item_id if product is virtual.
+      $item_key = $item['is_virtual'] ? $item['item_id'] : $item['sku'];
       // Add all other info.
-      $items[$item['sku']] = $processed_item + $item;
+      $items[$item_key] = $processed_item + $item;
     }
     $order['items'] = $items;
 

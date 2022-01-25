@@ -136,7 +136,8 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
 
     if ($queuing_required) {
       if ($is_full_catalog_promotion) {
-        // Queue products when promotion label/context changes for full catalog promotions.
+        // Queue products when promotion label/context changes for full
+        // catalog promotions.
         $product_queue_utility->queueAllProducts();
         // Since all products are already queued, we do not need to apply
         // further checks.
@@ -144,7 +145,7 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
       else {
         /** @var \Drupal\acq_promotion\AcqPromotionsManager $promotion_manager */
         $promotion_manager = \Drupal::service('acq_promotion.promotions_manager');
-        // Fetch the Associated SKUs
+        // Fetch the Associated SKUs.
         $skus = $promotion_manager->getSkusForPromotion($promotion['rule_id']);
 
         // Queue associated SKUs when promotion label/context changes.
@@ -164,7 +165,7 @@ function alshaya_acm_promotion_acq_promotion_data_alter(&$promotion) {
 
   // Conductor api version.
   $middleware_version = \Drupal::config('acq_commerce.conductor')->get('api_version');
-  // @Todo: remove it when we using v2 for all.
+  // @todo remove it when we using v2 for all.
   $extension_key = $middleware_version == 'v2' ? 'extension' : 'extension_attributes';
 
   // Remove the free gift skus from products list.

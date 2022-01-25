@@ -265,7 +265,7 @@ function alshaya_spc_update_8011() {
   $checkoutcom_upapi_fawry->setName('فوري');
   $checkoutcom_upapi_fawry->save();
 
-  // Disable new fawry method by default
+  // Disable new fawry method by default.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
   $data = $config->get('exclude_payment_methods');
   $data['checkout_com_upapi_fawry'] = 'checkout_com_upapi_fawry';
