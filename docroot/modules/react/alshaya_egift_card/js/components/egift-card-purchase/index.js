@@ -22,6 +22,8 @@ export default class EgiftCardPurchase extends React.Component {
       amountSet: 0,
       formError: '', // Set form error from MDC.
     };
+    // Set ref for error element.
+    this.errorElementRef = React.createRef();
   }
 
   async componentDidMount() {
@@ -218,6 +220,9 @@ export default class EgiftCardPurchase extends React.Component {
             formError: errorMessage,
           });
 
+          // Scroll to error.
+          this.errorElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
           return false;
         }
 
@@ -261,15 +266,19 @@ export default class EgiftCardPurchase extends React.Component {
               className="egift-form fadeInUp"
               id="egift-purchase-form"
             >
+              <div
+                ref={this.errorElementRef}
+                className="error errors-container"
+                id="edit-errors-container"
+              >
+                { formError }
+              </div>
               <EgiftCardsListStepOne
                 items={egiftItems}
                 handleEgiftSelect={this.handleEgiftSelect}
                 handleAmountSelect={this.handleAmountSelect}
               />
               <EgiftCardStepTwo activate={activateStepTwo} />
-              <div className="error errors-container" id="edit-errors-container">
-                { formError }
-              </div>
               <div className="action-buttons sku-base-form fadeInUp">
                 <button
                   type="submit"
