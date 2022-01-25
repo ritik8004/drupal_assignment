@@ -865,6 +865,29 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   }
 
   /**
+   * Get the term id for a department page from current route.
+   *
+   * @return int|null
+   *   Return the taxonomy term ID if found else NULL.
+   */
+  public function getDepartmentPageCategoryIdFromRoute() {
+    static $tid = NULL;
+
+    if (empty($tid) && $this->routeMatch->getRouteName() == 'entity.node.canonical') {
+      $node = $this->routeMatch->getParameter('node');
+      $terms = [];
+      if ($node->bundle() == 'advanced_page') {
+        $terms = $node->get('field_product_category')->getValue();
+        if (count($terms) > 0) {
+          $tid = $terms[0]['target_id'];
+        }
+      }
+    }
+
+    return $tid;
+  }
+
+  /**
    * Get the complete category tree.
    *
    * @param mixed $langcode
