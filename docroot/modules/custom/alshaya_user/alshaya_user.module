@@ -266,8 +266,7 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   $form['account']['current_pass']['#title'] = t('current password');
   $form['actions']['submit']['#value'] = t('change password');
 
-  // Password policy custom validation.
-  $form['#validate'][] = '_password_policy_user_profile_form_validate';
+  // Password policy submit handlers.
   $form['#submit'][] = 'alshaya_user_change_password_submit';
   $form['#submit'][] = '_password_policy_user_profile_form_submit';
 
