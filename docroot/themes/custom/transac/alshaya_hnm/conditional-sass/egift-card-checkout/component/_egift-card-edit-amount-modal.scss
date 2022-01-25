@@ -12,6 +12,9 @@
       }
 
       .close {
+        #{$right}: 0.625rem;
+        top: 1rem;
+
         &::before {
           font-size: 0.8rem;
         }
