@@ -16,7 +16,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
   font-family: "Helvetica-Light";
   src:
     local("Helvetica Light"),
-    local("Helvetica-Light"),
     url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff") format("woff");
   font-weight: normal;
@@ -28,7 +27,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
   font-family: "Helvetica-Bold";
   src:
     local("Helvetica Bold"),
-    local("Helvetica-Bold"),
     url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff") format("woff");
   font-weight: normal;
@@ -39,7 +37,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
 @font-face {
   font-family: "HelveticaNeue";
   src:
-    local("HelveticaNeue"),
     local("Helvetica Neue"),
     url("#{$base_theme_fonts_directory_path}/HelveticaNeue.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/HelveticaNeue.woff") format("woff");
@@ -51,9 +48,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
 @font-face {
   font-family: "HelveticaNeue-Medium";
   src:
-    local("HelveticaNeue Medium"),
     local("Helvetica Neue Medium"),
-    local("HelveticaNeue-Medium"),
     url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff") format("woff");
   font-weight: normal;
@@ -64,9 +59,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
 @font-face {
   font-family: "HelveticaNeue-Bold";
   src:
-    local("HelveticaNeue Bold"),
     local("Helvetica Neue Bold"),
-    local("HelveticaNeue-Bold"),
     url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff") format("woff");
   font-weight: normal;
@@ -78,7 +71,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
   font-family: "Tahoma-Bold";
   src:
     local("Tahoma Bold"),
-    local("Tahoma-Bold"),
     url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff") format("woff");
   font-weight: normal;

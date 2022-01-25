@@ -279,7 +279,7 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                     )}
                   </p>
                   <p className="egift-price-text">
-                    <PriceElement amount={parseInt(egiftCardBalance, 10)} />
+                    <PriceElement amount={parseFloat(egiftCardBalance, 10)} />
                   </p>
                   <p className="egift-card-end-text">
                     {Drupal.t(

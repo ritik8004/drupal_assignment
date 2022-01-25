@@ -151,7 +151,7 @@
           @include egift-btn;
 
           max-width: none;
-          background: $egift-transparent-button-bg;
+          background: transparent;
           border-radius: 0;
 
           &:first-child {
