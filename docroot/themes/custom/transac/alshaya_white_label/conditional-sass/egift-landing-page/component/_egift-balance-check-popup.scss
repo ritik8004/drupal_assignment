@@ -106,6 +106,10 @@
 
     .egift-topup-btn-wrapper {
       margin-top: 5rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
     }
 
     .egift-balance-response {
@@ -147,6 +151,8 @@
           @include egift-btn;
 
           max-width: none;
+          background: $egift-transparent-button-bg;
+          border-radius: 0;
 
           &:first-child {
             background: $egift-button-border;
@@ -192,6 +198,10 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
+
+    @include breakpoint($only-mobile) {
+      flex-direction: column;
+    }
 
     .egift-type-resend_otp,
     .egift-type-another_card {
