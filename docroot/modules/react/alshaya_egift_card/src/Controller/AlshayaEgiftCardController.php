@@ -106,7 +106,8 @@ class AlshayaEgiftCardController extends ControllerBase {
         ],
         'drupalSettings' => [
           'egiftCard' => [
-            'textAreaMaxlength' => $config->get('textarea_maxlength')
+            'textAreaMaxlength' => $config->get('textarea_maxlength'),
+            'enabled' => $config->get('egift_card_enabled')
           ]
         ],
       ],

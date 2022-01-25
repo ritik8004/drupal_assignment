@@ -6,9 +6,10 @@ import {
   isEgiftUnsupportedPaymentMethod,
   isValidResponse,
   isValidResponseWithFalseResult,
+  removeEgiftRedemption,
   updatePriceSummaryBlock,
 } from '../utilities/egift_util';
-import { callEgiftApi, getTopUpQuote } from '../../../js/utilities/egiftCardHelper';
+import { callEgiftApi } from '../../../js/utilities/egiftCardHelper';
 import GetEgiftCard from './components/GetEgiftCard';
 import ValidateEgiftCard from './components/ValidateEgiftCard';
 import ValidEgiftCard from './components/ValidEgiftCard';
@@ -19,7 +20,6 @@ import {
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { isEgiftCardEnabled } from '../../../js/utilities/util';
 import dispatchCustomEvent from '../../../js/utilities/events';
-import { isUserAuthenticated } from '../../../js/utilities/helper';
 import logger from '../../../js/utilities/logger';
 import { getDefaultErrorMessage } from '../../../js/utilities/error';
 import RedeemEgiftSVG from '../svg-component/redeem-egift-svg';
@@ -228,34 +228,14 @@ export default class RedeemEgiftCard extends React.Component {
   // Remove the added egift card.
   handleEgiftCardRemove = async () => {
     const { cart: cartData, refreshCart } = this.props;
-    let quoteId = cartData.cart.cart_id;
-    // Check if topup is applicable.
-    const topUpQuote = getTopUpQuote();
-    if (topUpQuote) {
-      quoteId = topUpQuote.maskedQuoteId;
-    }
-    let postData = {
-      redemptionRequest: {
-        mask_quote_id: quoteId,
-      },
-    };
-    // Change payload if authenticated user.
-    if (isUserAuthenticated()) {
-      postData = {
-        redemptionRequest: {
-          quote_id: cartData.cart.cart_id_int,
-        },
-      };
-    }
     // Default result object.
     let result = {
       error: false,
       message: '',
     };
-    showFullScreenLoader();
-    // Invoke the redemption API.
-    const response = await callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
-    if (isValidResponse(response)) {
+    // Remove redemption from the cart.
+    const response = await removeEgiftRedemption(cartData.cart);
+    if (!response.error) {
       // Reset the state to move back to initial redeem stage.
       this.setState({
         codeSent: false,

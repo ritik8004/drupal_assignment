@@ -435,6 +435,73 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
 };
 
 /**
+ * Removes redemption if it's applied.
+ *
+ * @param {object} cartData
+ *   The cart object.
+ */
+export const removeEgiftRedemption = async (cartData) => {
+  let quoteId = cartData.cart_id;
+  // Default result object.
+  let result = {
+    error: false,
+    message: '',
+  };
+  // Check if topup is applicable.
+  const topUpQuote = getTopUpQuote();
+  if (topUpQuote) {
+    quoteId = topUpQuote.maskedQuoteId;
+  }
+  let postData = {
+    redemptionRequest: {
+      mask_quote_id: quoteId,
+    },
+  };
+  // Change payload if authenticated user.
+  if (isUserAuthenticated()) {
+    postData = {
+      redemptionRequest: {
+        quote_id: cartData.cart_id_int,
+      },
+    };
+  }
+
+  showFullScreenLoader();
+  // Invoke the redemption API.
+  const response = await callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
+  if (isValidResponse(response)) {
+    // Remove loader once the data response is available.
+    removeFullScreenLoader();
+  } else if (isValidResponseWithFalseResult(response)) {
+    result = {
+      error: true,
+      message: response.data.response_message,
+    };
+    // Log error in datadog.
+    logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
+      '@action': 'remove_redemption',
+      '@response': response.data,
+    });
+    // Remove loader once the data response is available.
+    removeFullScreenLoader();
+  } else {
+    result = {
+      error: true,
+      message: getDefaultErrorMessage(),
+    };
+    // Log error in datadog.
+    logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
+      '@action': 'remove_redemption',
+      '@response': response,
+    });
+    // Remove loader once the data response is available.
+    removeFullScreenLoader();
+  }
+
+  return result;
+};
+
+/**
  * Checks if user is trying to topup and redeem using same card.
  *
  * @param {object} cart
@@ -485,4 +552,28 @@ export const getEgiftCartTotal = (cart) => {
   }
 
   return cartTotal;
+};
+
+/**
+ * Checks and remove the redemption if exists.
+ *
+ * @param {object} cart
+ *   The cart object.
+ */
+export const removeRedemptionOnCartUpdate = async (cart) => {
+  // Remove Redemption if any applied in the cart as we have updated the cart
+  // items.
+  if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart, cart.totals.egiftRedemptionType)) {
+    // Remove Redemption as we are updating the cart items.
+    const removeRedemption = await removeEgiftRedemption(cart);
+    if (removeRedemption.error) {
+      // Log the error if redemption is not removed.
+      logger.notice('Remove redemption failed, @cart', {
+        '@cartId': cart,
+      });
+    } else {
+      // Update the total in cart summary block.
+      dispatchCustomEvent('updateTotalsInCart', { totals: cart.totals });
+    }
+  }
 };

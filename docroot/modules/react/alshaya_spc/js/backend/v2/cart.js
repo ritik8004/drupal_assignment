@@ -22,6 +22,8 @@ import {
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import { getExceptionMessageType } from '../../../../js/utilities/error';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { removeRedemptionOnCartUpdate } from '../../utilities/egift_util';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -299,6 +301,13 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   // Reset counter.
   StaticStorage.remove('apiCallAttempts');
 
+  const cartResponse = await window.commerceBackend.getCart(true);
+  // Remove redemption of egift when module is enabled and redemption is already
+  // applied.
+  if (isEgiftCardEnabled()) {
+    await removeRedemptionOnCartUpdate(cartResponse.data);
+  }
+
   return window.commerceBackend.getCart(true);
 };
 
@@ -326,6 +335,11 @@ window.commerceBackend.applyRemovePromo = async (data) => {
     .then(async (response) => {
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
+      // Remove redemption of egift when module is enabled and redemption is already
+      // applied.
+      if (isEgiftCardEnabled()) {
+        await removeRedemptionOnCartUpdate(response.data);
+      }
       return response;
     });
 };
