@@ -58,6 +58,9 @@ function bazaar_voice_library_info_build() {
       'js' => [
         $bazaar_voice_url => [
           'type' => 'external',
+          'attributes' => [
+            'defer' => TRUE,
+          ],
         ],
       ],
     ];
