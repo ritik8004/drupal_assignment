@@ -17,6 +17,8 @@ use Drupal\block\BlockInterface;
  * Implements hook_update_N().
  *
  * Adding new field `all_categories_department_page`.
+ * Create new table to store category that
+ * does not exist in drupal.
  */
 function alshaya_acm_product_category_update_8047() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -27,6 +29,8 @@ function alshaya_acm_product_category_update_8047() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+  $schema = alshaya_acm_product_category_schema();
+  \Drupal::database()->schema()->createTable('sku_category_map', $schema['sku_category_map']);
 }
 
 /**
@@ -538,7 +542,7 @@ function alshaya_acm_product_category_update_8026() {
   $config_manager->updateConfigs($configs, 'alshaya_search');
 
   // Ensure field_category_original is populated for original content.
-  // Direct DB query here is fine as we don't use it anywhere except
+  // Direct DB query here is fine as we don\'t use it anywhere except
   // during sync.
   \Drupal::database()->query('INSERT INTO node__field_category_original (SELECT * FROM node__field_category)');
 }
@@ -1036,4 +1040,36 @@ function alshaya_acm_product_category_update_8001() {
   // Revert the view to have language filter.
   $reverter = \Drupal::service('config_update.config_update');
   $reverter->revert('view', 'plp_promotional_banner');
+}
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines the database tables used by this module.
+ *
+ * @see hook_schema()
+ */
+function alshaya_acm_product_category_schema() {
+  $schema['sku_category_map'] = [
+    'description' => 'Stores SKU and magento category Ids.',
+    'fields' => [
+      'sku' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+      ],
+      'mdc_category_id' => [
+        'description' => 'Magento category id.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+    ],
+    'unique keys' => [
+      'sku_mdc_category_id' => [
+        'sku',
+        'mdc_category_id',
+      ],
+    ],
+  ];
+  return $schema;
 }
