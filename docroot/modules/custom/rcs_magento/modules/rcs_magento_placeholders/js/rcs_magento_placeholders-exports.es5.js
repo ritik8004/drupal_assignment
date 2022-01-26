@@ -171,20 +171,16 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       }
 
       // Prepare request parameters.
-      // @todo: we are using 'category' API for now which is going to be
-      // deprecated, but only available API to support both 2.3 and 2.4
-      // magento version, so as suggested we are using this for now but
-      // need to change this when this got deprecated in coming magento
-      // version and replace it with 'categoryList' magento API.
-      request.data = prepareQuery(`{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory})
+      // Fetch categories for navigation menu using categoryList api.
+      request.data = prepareQuery(`{categoryList(filters: { ids: { eq: "${drupalSettings.alshayaRcs.navigationMenu.rootCategory}"}})
         ${rcsPhGraphqlQuery.navigationMenu}
       }`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
       if (response !== null) {
-        // Skip the default category data always.
-        result = response.data.category.children[0].children;
+        // Get children for root category.
+        result = response.data.categoryList[0].children;
       }
       break;
 
