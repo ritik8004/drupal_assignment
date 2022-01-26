@@ -1,0 +1,9 @@
+.path--wishlist {
+  #block-page-title {
+    .c-page-title {
+      @include breakpoint($only-mobile) {
+        margin-top: 1rem;
+      }
+    }
+  }
+}
