@@ -372,6 +372,11 @@ window.commerceBackend.refreshCart = async (data) => {
     .then(async (response) => {
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
+      // Remove redemption of egift when feature is enabled and redemption is
+      // already applied.
+      if (isEgiftCardEnabled()) {
+        await removeRedemptionOnCartUpdate(response.data);
+      }
       return response;
     });
 };
