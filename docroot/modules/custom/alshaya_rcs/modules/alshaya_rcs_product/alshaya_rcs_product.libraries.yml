@@ -52,6 +52,11 @@ product.promotions:
   js:
     templates/rcs-product-promotions.handlebars: {}
 
+product.delivery_info:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-info-block.handlebars: {}
+
 product.delivery_option_cnc:
   version: 1.x
   js:

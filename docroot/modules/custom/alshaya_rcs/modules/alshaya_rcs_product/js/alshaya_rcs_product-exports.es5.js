@@ -210,6 +210,32 @@ exports.render = function render(
 ) {
   let html = "";
   switch (placeholder) {
+    case "delivery-info":
+      // Add express delivery options that are available on product entity.
+      const deliveryInfo = {
+        delivery_in_only_city_text: drupalSettings.alshayaRcs.pdp.delivery_in_only_city_text,
+        expressDelivery: [],
+        sameDayDelivery: {
+          text: null,
+          sub_text: null,
+        }
+      };
+
+      // Express delivery.
+      drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
+        if (entity[option.id] === 1) {
+          deliveryInfo.expressDelivery.push(option);
+        }
+      });
+
+      // Same day delivery.
+      if (entity.same_day_delivery === 1) {
+        deliveryInfo.sameDayDelivery = drupalSettings.alshayaRcs.pdp.sameDayDelivery;
+      }
+
+      html = handlebarsRenderer.render('product.delivery_info', deliveryInfo);
+      break;
+
     case "delivery-option":
       if (!isProductBuyable(entity)) {
         break;
