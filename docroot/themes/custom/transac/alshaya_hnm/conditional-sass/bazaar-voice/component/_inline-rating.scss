@@ -17,13 +17,13 @@
     top: 0.125rem;
 
     .icon-ic_ratingfull {
-      @include icon(rating-filled) {
+      @include icon(ratingfull) {
         font-size: 1.5rem;
       }
     }
 
     .icon-ic_rating {
-      @include icon(rating-empty) {
+      @include icon(rating) {
         font-size: 1.5rem;
       }
     }
