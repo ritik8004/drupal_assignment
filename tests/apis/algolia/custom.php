@@ -122,7 +122,7 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   $settings['ranking'] = $ranking;
   unset($settings['replicas']);
 
-  $index->setSettings($settings, ['forwardToReplicas' => TRUE,])->wait();
+  $index->setSettings($settings, ['forwardToReplicas' => TRUE])->wait();
 
   $query_suggestion = $name . '_query';
   $query = [
@@ -135,15 +135,14 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
       ],
     ],
   ];
-
-  // Let index be created properly and crons executed.
+  algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query));
 
   foreach ($sorts as $sort) {
     $replica = $name . '_' . implode('_', $sort);
     $settings['replicas'][] = $replica;
   }
 
-  $index->setSettings($settings, ['forwardToReplicas' => TRUE,])->wait();
+  $index->setSettings($settings, ['forwardToReplicas' => TRUE])->wait();
 
   foreach ($sorts as $sort) {
     $replica = $name . '_' . implode('_', $sort);
