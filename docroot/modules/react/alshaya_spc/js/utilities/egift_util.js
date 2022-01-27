@@ -122,6 +122,7 @@ export const egiftFormElement = ({
  * Triggers custom event to update price summary block.
  */
 export const updatePriceSummaryBlock = (refreshCart) => {
+  showFullScreenLoader();
   const cartData = window.commerceBackend.getCart(true);
   if (cartData instanceof Promise) {
     cartData.then((data) => {
