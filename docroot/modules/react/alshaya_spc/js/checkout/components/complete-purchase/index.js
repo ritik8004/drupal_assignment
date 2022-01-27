@@ -12,7 +12,6 @@ import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 import { isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
 import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import isAuraEnabled from '../../../../../js/utilities/helper';
-import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -216,12 +215,13 @@ export default class CompletePurchase extends React.Component {
 
     // If somehow user bypass the frontend checks and tries to place order, then
     // we are validating that user has done full payment by egift and aura and
-    // balance payable is less than 0.
+    // balance payable is greater than 0.
+    const { balancePayable, paidWithAura, egiftRedeemedAmount } = cart.cart.totals;
     if (isEgiftCardEnabled()
       && isAuraEnabled()
-      && hasValue(cart.cart.totals)
-      && hasValue(cart.cart.totals.balancePayable)
-      && cart.cart.totals.balancePayable > 0) {
+      && paidWithAura > 0
+      && egiftRedeemedAmount > 0
+      && balancePayable > 0) {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
         message: drupalSettings.global_error_message,
