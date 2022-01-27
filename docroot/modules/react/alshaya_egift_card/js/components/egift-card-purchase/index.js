@@ -268,7 +268,7 @@ export default class EgiftCardPurchase extends React.Component {
             >
               <div
                 ref={this.errorElementRef}
-                className="error errors-container"
+                className="error errors-container egift-purchase-page-error"
                 id="edit-errors-container"
               >
                 { formError }
