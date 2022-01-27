@@ -89,12 +89,17 @@
             }
           }
 
-          .field--name-field-button-link {
-            .field--name-field-button-link {
-              @include egift-btn;
+          & > .field--name-field-button-link {
+            @include egift-btn;
 
-              position: relative;
-              border: 1px solid $egift-button-border;
+            position: relative;
+            border: 1px solid $egift-button-border;
+
+            .field--name-field-button-link {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
             }
           }
         }
