@@ -81,6 +81,7 @@
       @include breakpoint($tablet) {
         width: 3rem;
         margin-#{$right}: 1rem;
+        margin-bottom: 1rem;
       }
 
       &:hover,
