@@ -86,13 +86,10 @@ export default class EgiftCardPurchase extends React.Component {
 
       // If Aura is enabled and alreay redeemed with aura points,
       // On adding eGfit products to cart remove aura redeemed points.
-      if (isAuraEnabled()) {
-        // Return if paidWithAura and balancePayable is not present in response
-        if (response.data.totals.paidWithAura === undefined
-          || response.data.totals.balancePayable === undefined
-          || response.data.loyaltyCard === undefined) {
-          return;
-        }
+      if (isAuraEnabled()
+        && (typeof response.data.totals.paidWithAura !== undefined
+          || typeof response.data.totals.balancePayable !== undefined
+          || typeof response.data.loyaltyCard !== undefined)) {
         const cardNumber = response.data.loyaltyCard;
         // Call API to remove redeemed aura points.
         const requestData = {
