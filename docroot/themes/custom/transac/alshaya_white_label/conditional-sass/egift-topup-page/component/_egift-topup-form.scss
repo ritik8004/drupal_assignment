@@ -102,4 +102,10 @@
       align-items: center;
     }
   }
+
+  .error {
+    &:empty {
+      padding: 0 !important;
+    }
+  }
 }
