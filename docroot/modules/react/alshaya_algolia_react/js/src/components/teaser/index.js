@@ -169,7 +169,7 @@ const Teaser = ({
               context="wishlist"
               position="top-right"
               sku={hit.sku}
-              title={attribute.title}
+              title={attribute.title && Parser(attribute.title)}
               format="icon"
             />
           </ConditionalView>

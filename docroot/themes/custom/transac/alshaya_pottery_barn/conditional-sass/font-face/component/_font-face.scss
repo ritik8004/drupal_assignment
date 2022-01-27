@@ -1,8 +1,5 @@
 $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/fonts';
 
-// Replaced ; with it's encodeURIComponent %3B to avoid issue in aggregated CSS.
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300%3B400%3B600%3B700&family=Open+Sans:wght@300%3B400%3B600%3B700&subset=arabic&display=swap');
-
 @font-face {
   font-family: 'alshaya-icons';
   src:
@@ -17,8 +14,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Montserrat-Bold";
   src:
-    local("Montserrat Bold"),
-    local("Montserrat-Bold"),
     url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff") format("woff");
   font-weight: normal;
@@ -29,8 +24,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Montserrat-Medium";
   src:
-    local("Montserrat Medium"),
-    local("Montserrat-Medium"),
     url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff") format("woff");
   font-weight: normal;
@@ -41,8 +34,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Montserrat-Regular";
   src:
-    local("Montserrat Regular"),
-    local("Montserrat-Regular"),
     url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff") format("woff");
   font-weight: normal;
@@ -53,8 +44,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Montserrat-SemiBold";
   src:
-    local("Montserrat SemiBold"),
-    local("Montserrat-SemiBold"),
     url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff") format("woff");
   font-weight: normal;
@@ -65,8 +54,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "NunitoSans-Regular";
   src:
-    local("NunitoSans Regular"),
-    local("NunitoSans-Regular"),
     url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff") format("woff");
   font-weight: normal;
@@ -77,8 +64,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "SweetSansPro-Medium";
   src:
-    local("SweetSansPro Medium"),
-    local("SweetSansPro-Medium"),
     url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff") format("woff");
   font-weight: normal;
@@ -89,8 +74,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: 'FranklinGothicLTPro-BkCm';
   src:
-    local("FranklinGothicLTPro BkCm"),
-    local("FranklinGothicLTPro-BkCm"),
     url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff") format("woff");
   font-weight: normal;
@@ -100,8 +83,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "NeutrafaceDisplay-Light";
   src:
-    local("NeutrafaceDisplay Light"),
-    local("NeutrafaceDisplay-Light"),
     url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff") format("woff");
   font-weight: normal;
@@ -111,8 +92,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Canela-Thin";
   src:
-    local("Canela Thin"),
-    local("Canela-Thin"),
     url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff") format("woff");
   font-weight: normal;

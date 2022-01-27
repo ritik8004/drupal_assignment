@@ -13,6 +13,27 @@ use Drupal\block\BlockInterface;
 
 /**
  * Implements hook_update_N().
+ *
+ * Set config to allow all the level of categories can be used
+ * under department page.
+ */
+function alshaya_bp_transac_update_8018() {
+  // Upddate config specific to boots.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    [
+      'views.view.product_category_level_3',
+      'views.view.product_category_level_2_3',
+    ],
+    'alshaya_acm_product_category'
+  );
+  // Allow all level of categories under department page.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
+  $config->set('all_categories_department_page', TRUE)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
  */
 function alshaya_bp_transac_update_8017() {
   // Metatag update.

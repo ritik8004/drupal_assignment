@@ -9,7 +9,7 @@
 /**
  * How to use this:
  *
- * Usage: php createIndex.php [brand] [env] [app_id] [app_secret_admin]
+ * Usage: php createQuerySuggestion.php [brand] [env] [app_id] [app_secret_admin]
  *
  * Ensure settings.php is updated with proper application id and admin secret
  * key. Once that is done, please go through all the arrays here:

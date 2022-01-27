@@ -4,9 +4,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
 @font-face {
   font-family: 'Mothercare';
   src:
-    local('Mothercare'),
-    local('alshaya bold'),
-    local('alshaya-bold'),
     url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff') format('woff');
   font-weight: normal;
@@ -17,10 +14,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
 @font-face {
   font-family: 'MothercareThin';
   src:
-    local('MothercareThin'),
-    local('Mothercare Thin'),
-    local('alshaya thin'),
-    local('alshaya-thin'),
     url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff') format('woff');
   font-weight: normal;
@@ -31,10 +24,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
 @font-face {
   font-family: 'Cairo-300';
   src:
-    local('Cairo 300'),
-    local('Cairo-300'),
-    local('alshaya arabic thin'),
-    local('alshaya-arabic-thin'),
     url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.woff') format('woff');
   font-weight: normal;
@@ -45,10 +34,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
 @font-face {
   font-family: 'Cairo-bold';
   src:
-    local('Cairo bold'),
-    local('Cairo-bold'),
-    local('alshaya arabic bold'),
-    local('alshaya-arabic-bold'),
     url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.woff2') format('woff2'),
     url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.woff') format('woff');
   font-weight: normal;

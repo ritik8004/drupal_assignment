@@ -45,7 +45,7 @@ show_color_images_on_filter:
 
 sharethis:
   js:
-    js/sharethis.js: { weight: -3 }
+    js/sharethis.js: { weight: -3, attributes: { defer: true } }
   dependencies:
     - core/jquery.once
     - core/drupalSettings
