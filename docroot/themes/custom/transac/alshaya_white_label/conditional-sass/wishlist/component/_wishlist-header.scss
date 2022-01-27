@@ -24,7 +24,7 @@ body.wishlist-enabled {
       span {
         display: block;
 
-        &:last-child {
+        &:last-child:not(.content--form) {
           color: $wishlist-header-notification-span;
         }
       }
