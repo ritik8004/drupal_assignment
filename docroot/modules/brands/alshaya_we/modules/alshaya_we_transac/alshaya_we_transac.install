@@ -10,6 +10,21 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Add translation for the Category string.
+ */
+function alshaya_we_transac_update_8003() {
+  // Add string translations.
+  $strings = [
+    'Category' => [
+      'ar' => 'التصنيف',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Marks color,size,material and fabric as attributes to index.
  */
 function alshaya_we_transac_update_8002() {
@@ -95,6 +110,9 @@ function alshaya_we_transac_install() {
     'seo_brand_name' => [
       'en' => 'West elm',
       'ar' => 'بوتري بارن',
+    ],
+    'Category' => [
+      'ar' => 'التصنيف',
     ],
   ];
   alshaya_i18n_save_translations($strings);
