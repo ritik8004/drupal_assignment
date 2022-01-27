@@ -151,13 +151,16 @@
           @include egift-btn;
 
           max-width: none;
-          background: transparent;
-          border-radius: 0;
 
           &:first-child {
             background: $egift-button-border;
             color: $egift-button-txt;
             margin-bottom: 1rem;
+          }
+
+          &:last-child {
+            background: transparent;
+            border-radius: 0;
           }
         }
       }

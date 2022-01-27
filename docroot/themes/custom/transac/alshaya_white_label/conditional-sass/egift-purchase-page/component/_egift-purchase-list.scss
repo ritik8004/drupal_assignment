@@ -1,6 +1,6 @@
 #egift-card-purchase-wrapper {
   .egift-list-wrapper {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 
     @include breakpoint($tablet) {
       margin-bottom: 2.3125rem;
@@ -14,6 +14,10 @@
         align-items: center;
         justify-content: center;
         margin-#{$right}: 1rem;
+
+        @include breakpoint($only-mobile) {
+          margin-bottom: 1rem;
+        }
 
         &.active {
           border: 1px solid $plp-quick-view-product-size-active-bg;
