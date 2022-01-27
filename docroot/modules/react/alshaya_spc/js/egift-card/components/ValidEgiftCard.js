@@ -64,6 +64,8 @@ export default class ValidEgiftCard extends React.Component {
     document.addEventListener('refreshCartOnAddress', this.handleRemoveCard);
     // Event listener on CnC store selection.
     document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
+    // Event listener on shiping method update to remove redeemed Amount.
+    document.addEventListener('changeShippingMethod', this.handleRemoveCard);
   }
 
   openModal = (e) => {
