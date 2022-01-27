@@ -28,6 +28,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'tags.twitter_cards_creator' => '@mothercareuk',
             'tags.twitter_cards_site' => '@mothercareuk',
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => '85P9T1V60C',
+            'write_api_key' => 'ea8561f7093852e68b6249dcc43fffb8',
+            'search_api_key' => '4ba68b233942124df647412788abc1a6',
+          ],
           'live' => [
             'exponea.settings' => [
               "name" => "Mothercare",
@@ -70,6 +75,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
           'dynamic_yield.settings' => [
             'section_id' => '9876643',
+          ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'K7UIYK0Z4N',
+            'write_api_key' => '804c03fc66596604c35678800db985a1',
+            'search_api_key' => 'f091f48004825744f8801da3aa0652e7',
           ],
           'live' => [
             'exponea.settings' => [
@@ -157,6 +167,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9876649',
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'AIKOT3OXG3',
+            'write_api_key' => '2e6f964c31911eeacf08a86a3214de80',
+            'search_api_key' => 'cef961ffa727a31e2c48b3ad7f3fa931',
+          ],
           'live' => [
             'exponea.settings' => [
               "name" => "Bath and Body Works",
@@ -210,6 +225,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@potterybarn',
             'tags.twitter_cards_site' => '@potterybarn',
+          ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'KBYTOTQY6T',
+            'write_api_key' => '476aa3e3e1899bcb61a214ed76aef9d3',
+            'search_api_key' => '2f593110889b57b563b11b6c80980d25',
           ],
           'live' => [
             'exponea.settings' => [
