@@ -25,16 +25,22 @@ const DeliveryTypeFilter = ({
   return (
     <ul>
       {deliveryItems.map((item) => {
-        if (typeof facetValues[item.label] === 'undefined') {
-          facetValues[item.label] = item.label;
-        }
-        const [expressValue, expressClass] = facetValues[item.label].split(',');
         if (item.label === 'same_day_delivery_available' && !checkSameDayDeliveryStatus()) {
           return null;
         }
         if (item.label === 'express_day_delivery_available' && !checkExpressDeliveryStatus()) {
           return null;
         }
+        if (typeof facetValues[item.label] === 'undefined') {
+          if (item.label === 'same_day_delivery_available') {
+            facetValues[item.label] = props.sameDayValue;
+          } else if (item.label === 'express_day_delivery_available') {
+            facetValues[item.label] = props.expressDeliveryValue;
+          } else {
+            facetValues[item.label] = item.label;
+          }
+        }
+        const [expressValue, expressClass] = facetValues[item.label].split(',');
         return (
           <li
             key={item.label}
