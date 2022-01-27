@@ -12,6 +12,9 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/uti
 import logger from '../../../../js/utilities/logger';
 import Loading from '../../../../js/utilities/loading';
 import { smoothScrollTo } from '../../../../alshaya_spc/js/utilities/smoothScroll';
+import isAuraEnabled from '../../../../js/utilities/helper';
+import { getUserDetails } from '../../../../alshaya_aura_react/js/utilities/helper';
+import { redeemAuraPoints } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
 
 export default class EgiftCardPurchase extends React.Component {
   constructor(props) {
@@ -62,7 +65,6 @@ export default class EgiftCardPurchase extends React.Component {
    */
   handleUpdateCartResponse = (response, productData) => {
     const productInfo = productData;
-
     // Return response data if the error present to process it by component itself.
     if (response.data.error === true) {
       return response.data;
@@ -82,6 +84,24 @@ export default class EgiftCardPurchase extends React.Component {
       const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response.data; } } });
       document.dispatchEvent(refreshCartEvent);
 
+      // If Aura is enabled and alreay redeemed with aura points,
+      // On adding eGfit products to cart remove aura redeemed points.
+      if (isAuraEnabled()) {
+        // Return if paidWithAura and balancePayable is not present in response
+        if (response.data.totals.paidWithAura === undefined
+          || response.data.totals.balancePayable === undefined
+          || response.data.loyaltyCard === undefined) {
+          return;
+        }
+        const cardNumber = response.data.loyaltyCard;
+        // Call API to remove redeemed aura points.
+        const requestData = {
+          action: 'remove points',
+          userId: getUserDetails().id,
+          cardNumber,
+        };
+        redeemAuraPoints(requestData);
+      }
       // Show minicart notification.
       Drupal.cartNotification.triggerNotification(productData);
     }
