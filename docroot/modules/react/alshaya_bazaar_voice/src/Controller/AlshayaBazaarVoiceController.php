@@ -8,6 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Alshaya BazaarVoice Controller.
@@ -29,17 +31,28 @@ class AlshayaBazaarVoiceController extends ControllerBase {
   protected $fileSystem;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AlshayaBazaarVoiceController constructor.
    *
    * @param \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshaya_bazaar_voice
    *   Alshaya BazaarVoice Helper.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The filesystem service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(AlshayaBazaarVoice $alshaya_bazaar_voice,
-                              FileSystemInterface $file_system) {
+                              FileSystemInterface $file_system,
+                              ConfigFactoryInterface $config_factory) {
     $this->alshayaBazaarVoice = $alshaya_bazaar_voice;
     $this->fileSystem = $file_system;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -48,7 +61,8 @@ class AlshayaBazaarVoiceController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_bazaar_voice.service'),
-      $container->get('file_system')
+      $container->get('file_system'),
+      $container->get('config.factory')
     );
   }
 
@@ -123,6 +137,61 @@ class AlshayaBazaarVoiceController extends ControllerBase {
     // Add user review of current product in user settings.
     $reviewStatsData = $this->alshayaBazaarVoice->getProductReviewStatistics($productId);
     return new JsonResponse(!empty($reviewStatsData) ? reset($reviewStatsData) : []);
+  }
+
+  /**
+   * Returns write a revivew form coming from Bazaarvoice.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function pieWriteReviewContainer(Request $request) {
+    $bvaction = $request->query->get('bvaction');
+    $bvproductId = $request->query->get('bvproductId');
+
+    if (empty($bvaction) || empty($bvproductId)) {
+      throw new NotFoundHttpException();
+    }
+
+    $config = $this->configFactory->get('bazaar_voice.settings');
+    $url = $config->get('bvpixel_base_url') . '/';
+    $url .= $config->get('client_name') . '/';
+    $url .= $config->get('site_id') . '/';
+    $url .= $config->get('environment') . '/';
+    $url .= $config->get('locale') . '/';
+    $url .= 'bv.js';
+
+    $build['#markup'] = '<p>Please wait...</p>';
+    $bvPageType = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'bv:pageType',
+        'content' => 'container',
+      ],
+    ];
+    $robots = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'robots',
+        'content' => 'noindex, nofollow',
+      ],
+    ];
+    $script = [
+      '#tag' => 'script',
+      '#attributes' => [
+        'async' => TRUE,
+        'src' => $url,
+      ],
+    ];
+
+    $build['#attached']['html_head'][] = [$robots, 'robots'];
+    $build['#attached']['html_head'][] = [$bvPageType, 'bv:pageType'];
+    $build['#attached']['html_head'][] = [$script];
+
+    return $build;
   }
 
 }
