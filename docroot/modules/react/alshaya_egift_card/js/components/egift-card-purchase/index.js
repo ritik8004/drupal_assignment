@@ -11,6 +11,7 @@ import { callEgiftApi } from '../../../../js/utilities/egiftCardHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import logger from '../../../../js/utilities/logger';
 import Loading from '../../../../js/utilities/loading';
+import { smoothScrollTo } from '../../../../alshaya_spc/js/utilities/smoothScroll';
 
 export default class EgiftCardPurchase extends React.Component {
   constructor(props) {
@@ -221,7 +222,7 @@ export default class EgiftCardPurchase extends React.Component {
           });
 
           // Scroll to error.
-          this.errorElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          smoothScrollTo('body');
 
           return false;
         }
@@ -268,7 +269,7 @@ export default class EgiftCardPurchase extends React.Component {
             >
               <div
                 ref={this.errorElementRef}
-                className="error errors-container"
+                className="error errors-container egift-purchase-page-error"
                 id="edit-errors-container"
               >
                 { formError }
