@@ -71,10 +71,12 @@
     margin: 0;
   }
 
-  /* Firefox */
+  /* Firefox & safari */
   input[type=number] {
     -moz-appearance: textfield;
     padding-#{$left}: 2.5rem !important;
+    -webkit-text-fill-color: $appointment-form-input;
+    opacity: 1;
   }
 }
 

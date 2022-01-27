@@ -209,7 +209,8 @@
     }
   }
 
-  #my-wishlist {
+  #my-wishlist,
+  .product-drawer-container {
     .login-message {
       display: flex;
       justify-content: space-between;
@@ -283,6 +284,11 @@
   .product-drawer-container {
     .login-message {
       flex-direction: column;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$right}: 1.25rem;
+        margin: 0;
+      }
 
       .actions {
         @include breakpoint($desktop) {

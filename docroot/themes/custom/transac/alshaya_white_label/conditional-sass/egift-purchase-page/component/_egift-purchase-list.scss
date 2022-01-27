@@ -14,13 +14,18 @@
         align-items: center;
         justify-content: center;
         margin-#{$right}: 1rem;
+        border: 1px solid transparent;
 
         @include breakpoint($only-mobile) {
           margin-bottom: 1rem;
         }
 
         &.active {
-          border: 1px solid $plp-quick-view-product-size-active-bg;
+          border: 1px solid $plp-quick-view-product-size-border-hover;
+        }
+
+        &:hover {
+          border: 1px solid $plp-quick-view-product-size-border-hover;
         }
 
         img {
