@@ -65,6 +65,7 @@ export default class EgiftCardPurchase extends React.Component {
    */
   handleUpdateCartResponse = (response, productData) => {
     const productInfo = productData;
+
     // Return response data if the error present to process it by component itself.
     if (response.data.error === true) {
       return response.data;
@@ -87,9 +88,9 @@ export default class EgiftCardPurchase extends React.Component {
       // If Aura is enabled and alreay redeemed with aura points,
       // On adding eGfit products to cart remove aura redeemed points.
       if (isAuraEnabled()
-        && (typeof response.data.totals.paidWithAura !== undefined
-          || typeof response.data.totals.balancePayable !== undefined
-          || typeof response.data.loyaltyCard !== undefined)) {
+        && (typeof response.data.totals.paidWithAura !== 'undefined'
+          || typeof response.data.totals.balancePayable !== 'undefined'
+          || typeof response.data.loyaltyCard !== 'undefined')) {
         const cardNumber = response.data.loyaltyCard;
         // Call API to remove redeemed aura points.
         const requestData = {
