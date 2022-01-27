@@ -1,5 +1,6 @@
 .secondary-main-menu-wrapper {
   width: calc(100% - (32rem)) !important;
+  flex-shrink: 0;
 
   .site-brand-home {
     display: flex;
