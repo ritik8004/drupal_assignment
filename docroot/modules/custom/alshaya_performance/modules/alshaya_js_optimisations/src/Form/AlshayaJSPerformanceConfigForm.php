@@ -167,11 +167,11 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
     ];
 
     // Store processed library info to Critical JS settings.
-    $processed_libraries = [];
+    $processed_libraries = '';
     if ($critical_js['status']) {
-      $processed_libraries = $this->jsOptimisation->resolveCategories($critical_js);
+      $processed_libraries = $this->jsOptimisation->generateProcessedLibraries($critical_js);
     }
-    $critical_js['processed_libraries'] = Yaml::encode($processed_libraries);
+    $critical_js['processed_libraries'] = $processed_libraries;
 
     $config->set('critical_js', $critical_js);
     $config->set('enable_uglification', $form_state->getValue('enable_uglification'));

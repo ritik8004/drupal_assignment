@@ -126,3 +126,14 @@ function alshaya_js_optimisations_js_alter(&$javascripts) {
     $javascripts[$key] = $value;
   }
 }
+
+/**
+ * Implements hook_cache_flush().
+ *
+ * Rebuild the JS categories for processed libraries.
+ *
+ * @todo Find a better approach to rebuild the processed libraries.
+ */
+function alshaya_js_optimisations_cache_flush() {
+  \Drupal::service('alshaya_js_optimisations.helper')->generateProcessedLibraries([], TRUE);
+}
