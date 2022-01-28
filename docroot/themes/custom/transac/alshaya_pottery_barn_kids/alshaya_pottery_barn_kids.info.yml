@@ -117,3 +117,8 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/wishlist/wishlist.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/wishlist/wishlist.ltr.css
+
+  alshaya_white_label/country-switcher:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/country-switcher/country-switcher.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/country-switcher/country-switcher.ltr.css
