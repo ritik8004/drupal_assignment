@@ -309,7 +309,8 @@ function getVariantsInfo(product) {
       // @todo Implement this.
       description: '',
       price: globalThis.rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
-      priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.regular_price.value),
+      finalPrice: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
+      priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
       promotionsRaw: product.promotions,
       // @todo Add free gift promotion value here.
       freeGiftPromotion: [],
@@ -362,6 +363,8 @@ function processProduct(product) {
     cart_image: window.commerceBackend.getCartImage(product),
     cart_title: product.name,
     url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
+    price: globalThis.rcsPhRenderingEngine.computePhFilters(product, 'price'),
+    finalPrice: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value),
     priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
     promotionsRaw: product.promotions,
     // @todo Add free gift promotion value here.

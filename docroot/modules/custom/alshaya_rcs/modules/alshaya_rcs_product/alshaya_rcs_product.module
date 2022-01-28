@@ -142,11 +142,28 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
 
   // Replace DY library.
   foreach ($attachments['#attached']['library'] as $key => $value) {
-    if ($value == 'alshaya_dynamic_yield/alshaya_dynamic_yield.product_modal') {
-      // Remove original library.
-      unset($attachments['#attached']['library'][$key]);
-      // Add RCC library.
-      $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
+    // Count variable which prevents unnecessary execution of the foreach loop.
+    $libraries_to_change = 2;
+
+    switch ($value) {
+      case 'alshaya_dynamic_yield/alshaya_dynamic_yield.product_modal':
+        // Remove original library.
+        unset($attachments['#attached']['library'][$key]);
+        // Add RCS library.
+        $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
+        $libraries_to_change--;
+        break;
+
+      case 'alshaya_aura_react/alshaya_aura_pdp':
+        // Remove original library.
+        unset($attachments['#attached']['library'][$key]);
+        // Add RCS library.
+        $attachments['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_pdp.v2';
+        $libraries_to_change--;
+        break;
+    }
+
+    if (!$libraries_to_change) {
       break;
     }
   }
