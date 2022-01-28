@@ -440,11 +440,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             "display" => "standalone",
             "gcm_sender_id" => "130945280786",
           ],
-          'algolia_sandbox.settings' => [
-            'app_id' => 'testing24192T8KHZ',
-            'write_api_key' => '1a3473b08a7e58f0b808fe4266e08187',
-            'search_api_key' => '950ad607b0d79914702c82849af9a63f',
-          ],
         ],
       ],
     ],
