@@ -101,6 +101,20 @@ export default class EgiftCardPurchase extends React.Component {
       }
       // Show minicart notification.
       Drupal.cartNotification.triggerNotification(productData);
+
+      // GTM product attributes.
+      const productGtm = {
+        name: productData.product_name,
+        price: productData.price,
+        variant: productData.sku,
+        dimension2: 'virtual',
+        dimension4: 1,
+        quantity: productData.quantity,
+        metric2: productData.price,
+      };
+
+      // Push addtocart gtm event.
+      Drupal.alshayaSeoGtmPushAddToCart(productGtm);
     }
     removeFullScreenLoader();
 
@@ -215,6 +229,7 @@ export default class EgiftCardPurchase extends React.Component {
           variant: params.sku,
           image: productImage,
           product_name: product.name,
+          price: amount,
         };
 
         if (response.data.error) {

@@ -198,7 +198,24 @@ export default class EgiftTopPurchase extends React.Component {
 
         // Redirect user to checkout if response type is true.
         if (typeof response.data.response_type !== 'undefined' && response.data.response_type) {
+          // GTM product attributes.
+          const productGtm = {
+            name: topUpCard.name,
+            price: params.topup.amount,
+            variant: topUpCard.sku,
+            dimension2: topUpCard.type_id,
+            dimension4: 1,
+            quantity: 1,
+            metric2: params.topup.amount,
+          };
+
+          // Push addtocart gtm event.
+          Drupal.alshayaSeoGtmPushAddToCart(productGtm);
+
+          // Add top-up quote Id to storage.
           this.setTopUpQuoteIdInStorage(response.data);
+
+          // Redirect to checkout
           window.location = Drupal.url('checkout');
         }
       });
