@@ -357,33 +357,12 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $facet_values = $this->loadFacetValues($identifier, $page_type);
           }
           if ($widget['type'] === 'delivery_ways') {
+
             // If feature enabled then only show facet.
             if (!($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) {
               continue;
             }
             $identifier = $this->identifireSuffixUpdate('attr_delivery_ways', $page_type);
-            $langcode = $this->languageManager->getCurrentLanguage()->getId();
-            $same_value = $this->t(
-              'Same Day Delivery Available',
-              [],
-              [$langcode,
-                'context' => 'same_day_delivery_listing',
-              ]
-            );
-            $express_value = $this->t(
-              'Express Delivery Available',
-              [],
-              [$langcode,
-                'context' => 'express_day_delivery_listing',
-              ]
-            );
-            $facet_values = $this->loadFacetValues($identifier, $page_type);
-            if (isset($facet_values['express_day_delivery_available'])) {
-              $facet_values['express_day_delivery_available'] = $express_value . ',express_delivery';
-            }
-            if (isset($facet_values['same_day_delivery_available'])) {
-              $facet_values['same_day_delivery_available'] = $same_value . ',same_day_delivery';
-            }
           }
 
           // For HNM we are using "size_group_list" widget type
@@ -394,7 +373,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'checkbox';
           }
 
-          $filter_facets[explode('.', $identifier)[0]] = [
+          $filterKey = explode('.', $identifier)[0];
+          $filter_facets[$filterKey] = [
             'identifier' => $identifier,
             'label' => $block->label(),
             'name' => $facet->getName(),
@@ -404,6 +384,30 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             'alias' => $facet->getUrlAlias(),
             'facet_values' => $facet_values,
           ];
+
+          if ($widget['type'] === 'delivery_ways') {
+            // If feature enabled then only show facet.
+            if (!($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) {
+              continue;
+            }
+            $langcode = $this->languageManager->getCurrentLanguage()->getId();
+            $same_value = $this->t(
+              'Same Day Delivery Available',
+              [],
+              [$langcode,
+                'context' => 'same_day_delivery_listing',
+              ]
+            );
+            $filter_facets[$filterKey]['same_value'] = $same_value . ',same_day_delivery';
+            $express_value = $this->t(
+              'Express Delivery Available',
+              [],
+              [$langcode,
+                'context' => 'express_day_delivery_listing',
+              ]
+            );
+            $filter_facets[$filterKey]['express_value'] = $express_value . ',express_delivery';
+          }
         }
       }
     }
