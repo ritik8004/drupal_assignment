@@ -59,9 +59,10 @@
             & > button {
               @include egift-btn;
 
+              color: $primary_btn_bg;
               border-width: 0.0625rem;
               background: transparent;
-              border: 1px solid $egift-button-border;
+              border: 1px solid $primary_btn_bg;
             }
           }
         }
@@ -92,8 +93,9 @@
           & > .field--name-field-button-link {
             @include egift-btn;
 
+            color: $primary_btn_bg;
             position: relative;
-            border: 1px solid $egift-button-border;
+            border: 1px solid $primary_btn_bg;
 
             .field--name-field-button-link {
               width: 100%;
