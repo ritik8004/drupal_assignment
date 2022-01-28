@@ -25,6 +25,7 @@ regions:
 libraries:
   - alshaya_pottery_barn/global_styles
   - alshaya_white_label/ucfix
+  - alshaya_pottery_barn/fonts
 
 libraries-override:
   alshaya_white_label/ltr_print_styles:

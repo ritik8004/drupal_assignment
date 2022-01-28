@@ -94,7 +94,7 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
     ];
     $description_value .= '<h2>' . t('Details and care') . '</h2>';
     $description_value .= $details_and_care_value;
-    $description_value .= render($details_and_care);
+    $description_value .= \Drupal::service('renderer')->renderPlain($details_and_care);
   }
 
   $description['value'] = [

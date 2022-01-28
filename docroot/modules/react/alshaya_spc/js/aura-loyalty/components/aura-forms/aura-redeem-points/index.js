@@ -15,6 +15,8 @@ import {
 } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import dispatchCustomEvent from '../../../../utilities/events';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { isEgiftCardEnabled } from '../../../../../../js/utilities/util';
 
 class AuraFormRedeemPoints extends React.Component {
   constructor(props) {
@@ -36,6 +38,8 @@ class AuraFormRedeemPoints extends React.Component {
     document.addEventListener('refreshCartOnAddress', this.undoRedeemPoints, false);
     // Event listener on CnC store selection.
     document.addEventListener('storeSelected', this.undoRedeemPoints, false);
+    // Event listener on shiping method update to remove redeemed Amount.
+    document.addEventListener('changeShippingMethod', this.undoRedeemPoints);
 
     const { totals } = this.props;
 
@@ -117,7 +121,11 @@ class AuraFormRedeemPoints extends React.Component {
 
       // Remove all aura related keys from totals if present.
       Object.entries(stateValues).forEach(([key]) => {
-        delete cartTotals[key];
+        // Don't remove totalBalancePayable attribute as this will be used in
+        // egift to check remaining balance.
+        if (key !== 'totalBalancePayable') {
+          delete cartTotals[key];
+        }
       });
 
       // Remove class.
@@ -167,13 +175,28 @@ class AuraFormRedeemPoints extends React.Component {
     }
 
     const maxPointsToRedeem = this.redemptionLimit();
-    const { base_grand_total: grandTotal } = totals;
+    const {
+      base_grand_total: grandTotal,
+      egiftRedeemedAmount,
+      totalBalancePayable,
+    } = totals;
+
     const grandTotalPoints = Math.round(grandTotal * getPointToPriceRatio());
+    const balancePayablePoints = totalBalancePayable > 0
+      ? Math.round(totalBalancePayable * getPointToPriceRatio())
+      : null;
     const pointsInInt = parseInt(points, 10);
     let errorMsg = '';
 
     if (pointsInInt > grandTotalPoints) {
       errorMsg = getStringMessage('points_exceed_order_total');
+      // Check if some amount is already redeemed using egift, if YES then
+      // check if AURA points are equal to the remaining balance.
+    } else if (isEgiftCardEnabled()
+      && hasValue(egiftRedeemedAmount)
+      && egiftRedeemedAmount > 0
+      && ((pointsInInt !== balancePayablePoints))) {
+      errorMsg = Drupal.t('You can only redeem full pending balance or use other payment method.');
     } else if (pointsInInt > parseInt(pointsInAccount, 10)) {
       errorMsg = `${getStringMessage('you_can_redeem_maximum')} ${maxPointsToRedeem} ${getStringMessage('points')}`;
     }
@@ -248,8 +271,13 @@ class AuraFormRedeemPoints extends React.Component {
     } = this.state;
 
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
-    const { totals, paymentMethodInCart } = this.props;
-    const paymentNotSupported = isUnsupportedPaymentMethod(paymentMethodInCart);
+    const { totals, paymentMethodInCart, formActive } = this.props;
+    let paymentNotSupported = isUnsupportedPaymentMethod(paymentMethodInCart);
+
+    // Disable Aura payment method if cart contains any virtual product.
+    if (!formActive) {
+      paymentNotSupported = true;
+    }
 
     return (
       <div className={paymentNotSupported

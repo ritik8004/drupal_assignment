@@ -14,6 +14,7 @@ body.wishlist-enabled {
     #{$right}: 0;
     top: 2.5rem;
     text-align: center;
+    min-width: 12.5rem;
 
     .product-name {
       font-size: 0.875rem;
@@ -23,7 +24,7 @@ body.wishlist-enabled {
       span {
         display: block;
 
-        &:last-child {
+        &:last-child:not(.content--form) {
           color: $wishlist-header-notification-span;
         }
       }

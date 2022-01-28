@@ -1,6 +1,7 @@
 import React from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { checkExpressDeliveryStatus, checkSameDayDeliveryStatus } from '../../../../../../js/utilities/expressDeliveryHelper';
 
 const DeliveryTypeFilter = ({
   items, itemCount, refine, searchForItems, isFromSearch, ...props
@@ -24,7 +25,18 @@ const DeliveryTypeFilter = ({
   return (
     <ul>
       {deliveryItems.map((item) => {
-        if (typeof facetValues[item.label] === 'undefined') {
+        if (item.label === 'same_day_delivery_available' && !checkSameDayDeliveryStatus()) {
+          return null;
+        }
+        if (item.label === 'express_day_delivery_available' && !checkExpressDeliveryStatus()) {
+          return null;
+        }
+
+        if (item.label === 'same_day_delivery_available') {
+          facetValues[item.label] = props.sameDayValue;
+        } else if (item.label === 'express_day_delivery_available') {
+          facetValues[item.label] = props.expressDeliveryValue;
+        } else {
           facetValues[item.label] = item.label;
         }
         const [expressValue, expressClass] = facetValues[item.label].split(',');

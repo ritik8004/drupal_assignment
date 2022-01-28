@@ -51,6 +51,12 @@ function setClickedItem(storageDetails) {
 }
 
 function storeClickedItem(event, pageType) {
+  // Do nothing for buttons inside our markup, for example in slick-dots.
+  // Do nothing if user trying to use cmd + click.
+  if (event.target.tagName.toLowerCase() === 'button' || event.metaKey) {
+    return;
+  }
+
   const articleNode = event.target.closest('.node--view-mode-search-result');
 
   // This happens when we display the Add To Bag configurable drawer. The drawer

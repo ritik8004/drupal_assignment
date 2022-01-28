@@ -1,0 +1,91 @@
+@mixin egift-placeholder-label() {
+  font-size: 0.875rem;
+  color: $appointment-input-label;
+  position: absolute;
+  #{$left}: 0;
+  top: 0;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+@mixin egift-placeholder-active() {
+  top: -1rem;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
+}
+
+.egift-input-textfield-wrapper {
+  @include breakpoint($only-mobile) {
+    margin-top: 1.625rem;
+  }
+
+  @include breakpoint($tablet) {
+    width: 20rem;
+  }
+
+  textarea {
+    resize: none;
+    padding-#{$right}: 2.5rem;
+  }
+
+  .textarea-character-limit {
+    @include egift-placeholder-label;
+
+    top: auto;
+    bottom: 0.125rem;
+    #{$left}: auto;
+    #{$right}: 0;
+
+    html[lang=ar] & {
+      bottom: 0.625rem;
+    }
+  }
+}
+
+.egift-input-textfield-item {
+  position: relative;
+
+  input[type=text],
+  input[type=email],
+  input[type=number],
+  textarea {
+    height: 1.5rem;
+    font-size: 0.875rem;
+    color: $appointment-form-input;
+    background: transparent;
+  }
+
+  label {
+    @include egift-placeholder-label;
+  }
+
+  input:focus ~ label,
+  input.focus ~ label,
+  textarea:focus ~ label,
+  textarea.focus ~ label {
+    @include egift-placeholder-active;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox & safari */
+  input[type=number] {
+    -moz-appearance: textfield;
+    padding-#{$left}: 2.5rem !important;
+    -webkit-text-fill-color: $appointment-form-input;
+    opacity: 1;
+  }
+}
+
+.egift-error {
+  &:empty {
+    padding: 0 !important;
+  }
+}

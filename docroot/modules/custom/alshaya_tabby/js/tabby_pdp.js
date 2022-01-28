@@ -53,7 +53,7 @@
     tabbyWidget.each(function () {
       const selector = $(this).attr('id');
       if (selector !== undefined) {
-        Drupal.tabbyPromoInit('#' + selector, variantPrice, 'product');
+        Drupal.tabbyPromoInit('#' + selector, variantPrice.replace(',', ''), 'product');
       }
     });
   }

@@ -1,0 +1,100 @@
+.egift-landing-page {
+  .c-accordion-delivery-option-parent {
+    display: block;
+
+    .field--name-field-group-title {
+      margin: 2.5rem 0;
+      font-size: 1.75rem;
+      font-family: $alshaya-bold;
+      text-align: center;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.25rem;
+        line-height: 1.4;
+      }
+    }
+
+    .c-accordion {
+      border: none;
+
+      @include breakpoint($only-mobile) {
+        text-align: $left;
+      }
+    }
+
+    .c-accordion__title,
+    .c-accordion_content {
+      border: none;
+      background-color: $primary_bg;
+      text-align: $left;
+    }
+
+    .c-accordion__title {
+      font-family: $alshaya-bold;
+      margin-top: 1rem;
+      font-size: 0.813rem;
+      text-transform: none;
+      color: $egift-accordion-title;
+      padding: 1rem 2.5rem 1rem 1.5rem;
+      line-height: normal;
+
+      html[lang=ar] & {
+        padding: 1rem 1.5rem 1rem 2.5rem;
+      }
+
+      @include icon(chevrondown, after) {
+        #{$right}: 0.9375rem;
+        font-size: 0.5rem;
+        top: 1.75rem;
+      }
+
+      &.ui-accordion-header {
+        &::after {
+          @include breakpoint($only-mobile) {
+            #{$right}: 0;
+          }
+        }
+      }
+
+      &.ui-state-active {
+        margin-bottom: 0;
+        color: $egift-accordion-active-title;
+
+        &::after {
+          transform: rotate(180deg);
+          color: $egift-accordion-active-title;
+          position: absolute;
+          #{$right}: 1.875rem;
+          top: 1.3rem;
+
+          @include breakpoint($only-mobile) {
+            #{$right}: 0.9375rem;
+          }
+        }
+
+        & + .c-accordion_content {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+
+    .c-accordion_content {
+      ul {
+        margin: 0;
+        list-style-type: none;
+        padding: 0 2.5rem 1rem 1.5rem;
+        line-height: normal;
+
+        html[lang=ar] & {
+          padding: 0 1.5rem 1rem 2.5rem;
+        }
+      }
+
+      p {
+        margin-bottom: 0;
+        color: $egift-accordion-content;
+        font-size: 0.813rem;
+      }
+    }
+  }
+}

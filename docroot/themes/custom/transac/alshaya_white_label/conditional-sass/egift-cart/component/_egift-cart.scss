@@ -1,0 +1,54 @@
+.spc-cart-items {
+  .spc-cart-item {
+    &.egift-cart-item {
+      .egift-product-title,
+      .egift-product-price {
+        font-size: 0.875rem;
+        line-height: 1.125rem;
+      }
+
+      .egift-cart-message-label {
+        vertical-align: middle;
+      }
+
+      .egift-cart-message-value {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 8.9rem;
+        display: inline-block;
+        vertical-align: bottom;
+      }
+
+      .egift-product-tile {
+        min-height: 8.125rem;
+
+        @include breakpoint($upto-tablet) {
+          grid-template-columns: 5.4375rem 1fr 2rem;
+        }
+      }
+
+      @include breakpoint($upto-tablet) {
+        .spc-cart-product-attribute {
+          display: flex;
+
+          .spc-cart-product-attribute-label {
+            flex-shrink: 0;
+          }
+        }
+
+        .egift-cart-message-value {
+          width: 8rem;
+        }
+      }
+    }
+  }
+}
+
+.spc-order-summary-block {
+  .egift-order-summary {
+    .total-line-item:nth-child(1) {
+      color: $pdp_product_special_price_text;
+    }
+  }
+}

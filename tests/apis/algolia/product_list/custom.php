@@ -73,7 +73,6 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
     foreach ($languages as $lang_code) {
       $replica = $name . '_' . $lang_code . '_' . implode('_', $sort);
       $settings['replicas'][] = $replica;
-      $client->copyIndex($name, $replica)->wait();
     }
   }
 
