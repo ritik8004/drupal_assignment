@@ -373,7 +373,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'checkbox';
           }
 
-          $filter_facets[explode('.', $identifier)[0]] = [
+          $filterKey = explode('.', $identifier)[0];
+          $filter_facets[$filterKey] = [
             'identifier' => $identifier,
             'label' => $block->label(),
             'name' => $facet->getName(),
@@ -390,7 +391,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
               continue;
             }
             $langcode = $this->languageManager->getCurrentLanguage()->getId();
-            $filterKey = explode('.', $identifier)[0];
             $same_value = $this->t(
               'Same Day Delivery Available',
               [],

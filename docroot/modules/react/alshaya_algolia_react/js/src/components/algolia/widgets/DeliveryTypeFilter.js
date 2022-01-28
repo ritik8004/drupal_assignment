@@ -31,14 +31,13 @@ const DeliveryTypeFilter = ({
         if (item.label === 'express_day_delivery_available' && !checkExpressDeliveryStatus()) {
           return null;
         }
-        if (typeof facetValues[item.label] === 'undefined') {
-          if (item.label === 'same_day_delivery_available') {
-            facetValues[item.label] = props.sameDayValue;
-          } else if (item.label === 'express_day_delivery_available') {
-            facetValues[item.label] = props.expressDeliveryValue;
-          } else {
-            facetValues[item.label] = item.label;
-          }
+
+        if (item.label === 'same_day_delivery_available') {
+          facetValues[item.label] = props.sameDayValue;
+        } else if (item.label === 'express_day_delivery_available') {
+          facetValues[item.label] = props.expressDeliveryValue;
+        } else {
+          facetValues[item.label] = item.label;
         }
         const [expressValue, expressClass] = facetValues[item.label].split(',');
         return (
