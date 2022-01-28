@@ -1224,6 +1224,22 @@ const productRecommendationsSuffix = 'pr-';
         productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
       }
     }
+    else if (eventType === 'plp-results-updated') {
+      // Using concat instead of assignment since plp-results-updated event gets
+      // triggered both on page load and clicking on load more button.
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
+      if (productImpressionsTimer === null ) {
+        // This is for page load where we push default number of items i.e. 4.
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionDefaultItemsInQueue));
+      }
+      else {
+        // This is when clicked on load more where we push existing items in
+        // productImpressions and newly added items from load more.
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+      }
+      // Setting timer event.
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
+    }
     else {
       // This is for cases like scroll/carousel events.
       // Add new impressions to the global productImpressions.
@@ -1255,20 +1271,16 @@ const productRecommendationsSuffix = 'pr-';
     var count = productLinkProcessedSelector.length + 1;
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        var condition = true;
         var position = $(this).attr('data-insights-position');
         if (position === undefined) {
           $(this).attr('list-item-position', count);
+          position = count;
         }
-        // Only on scroll we check if product is in view or not.
-        if (eventType == 'scroll') {
-          condition = $(this).isElementInViewPort(0, 10);
-        }
-        if (condition) {
+        if ($(this).isElementInViewPort(0, 10)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;
-          impression.position = count;
+          impression.position = position;
           // Keep variant empty for impression pages. Populated only post add to cart action.
           impression.variant = '';
           impressions.push(impression);

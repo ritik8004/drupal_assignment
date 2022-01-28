@@ -270,4 +270,18 @@
       padding-top: 0.25rem;
     }
   }
+
+  .error {
+    display: block;
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+
+    &.egift-remove-redeem-card-error {
+      margin-top: 0.625rem;
+
+      &:empty {
+        margin: 0;
+      }
+    }
+  }
 }
