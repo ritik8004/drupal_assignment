@@ -78,6 +78,11 @@
       padding-#{$right}: 1.25rem;
       padding-#{$left}: 3rem;
       padding-bottom: 1rem;
+
+      &:empty {
+        padding: 0;
+        margin: 0;
+      }
     }
   }
 
