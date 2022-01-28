@@ -25,7 +25,7 @@
     .c-accordion__title,
     .c-accordion_content {
       border: none;
-      background-color: $primary_bg;
+      background-color: $egift-accordion-bg;
       text-align: $left;
     }
 
@@ -44,7 +44,6 @@
 
       @include icon(chevrondown, after) {
         #{$right}: 0.9375rem;
-        font-size: 0.5rem;
         top: 1.75rem;
       }
 
