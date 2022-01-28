@@ -50,13 +50,3 @@ function alshaya_menus_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
-
-/**
- * Implements hook_page_attachments_alter().
- */
-function alshaya_menus_page_attachments_alter(array &$attachments) {
-  $block = \Drupal\block\Entity\Block::load('countryswitcher');
-  if (!empty($block) && $block->status()) {
-    $attachments['#attached']['library'][] = 'alshaya_white_label/country-switcher';
-  }
-}
