@@ -59,6 +59,7 @@
             font-size: 0.8125rem;
             line-height: 1.38;
             margin: 0;
+            padding-bottom: 0.5rem;
           }
 
           .menu--two__list {
@@ -203,7 +204,6 @@
           &:hover {
             .menu--one__link {
               padding-top: 0.125rem;
-              padding-bottom: 0.0625rem;
               border-top: 0;
               border-bottom: 1px solid $hfd-menu-link-color-hover;
               cursor: pointer;
@@ -354,6 +354,23 @@
 }
 
 @include breakpoint($desktop) {
+  .c-secondary-header__region {
+    .secondary-main-menu-wrapper {
+      width: 100% !important;
+
+      .megamenu-dynamic-layout {
+        margin: 0 0.425rem;
+        max-width: unset;
+
+        ul {
+          &.secondary--main--menu__list {
+            max-width: unset;
+          }
+        }
+      }
+    }
+  }
+
   .block-alshaya-secondary-main-menu {
     position: relative;
     z-index: 3;

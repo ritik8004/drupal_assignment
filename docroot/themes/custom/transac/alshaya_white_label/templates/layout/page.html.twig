@@ -29,7 +29,10 @@
         <header class="c-header">
           <div class="l-container">
             <div class="c-header__region">
-              {{ page.header }}
+              {{ page.header|without('alshayasecondarymainmenu') }}
+            </div>
+             <div class="c-secondary-header__region">
+              {{drupal_entity('block', 'alshayasecondarymainmenu')}}
             </div>
           </div>
         </header>
