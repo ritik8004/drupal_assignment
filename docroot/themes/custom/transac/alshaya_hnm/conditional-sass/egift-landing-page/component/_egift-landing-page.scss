@@ -6,4 +6,21 @@
       }
     }
   }
+
+  .c-breadcrumb {
+    &::before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: $egift-breadcrumb-border;
+      #{$left}: 0;
+      top: 50%;
+      position: absolute;
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
 }
