@@ -486,7 +486,7 @@ export const getWishlistLabel = () => (drupalSettings.wishlist.wishlist_label ? 
  */
 export const removeFromWishlistAfterAddtocart = () => {
   if (drupalSettings.wishlist && drupalSettings.wishlist.config
-    && drupalSettings.wishlist.config.removeAfterAddtocart) {
+    && typeof drupalSettings.wishlist.config.removeAfterAddtocart !== 'undefined') {
     return drupalSettings.wishlist.config.removeAfterAddtocart;
   }
   return false;
