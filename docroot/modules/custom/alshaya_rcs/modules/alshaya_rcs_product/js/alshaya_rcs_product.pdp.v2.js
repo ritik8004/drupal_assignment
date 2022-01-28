@@ -314,6 +314,7 @@ function getVariantsInfo(product) {
       // @todo Add free gift promotion value here.
       freeGiftPromotion: [],
       url: getProductUrls(variantInfo.url_key),
+      gtm_price: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
     }
 
     // Set max sale quantity data.
