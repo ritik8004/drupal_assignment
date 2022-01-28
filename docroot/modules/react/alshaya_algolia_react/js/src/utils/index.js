@@ -36,7 +36,6 @@ export {
 
 export {
   setSearchQuery,
-  removeSearchQuery,
   getSearchQuery,
   setLangRedirect,
   removeLangRedirect,
