@@ -87,6 +87,8 @@ const WidgetManager = React.memo((props) => {
             facetValues={filter.facet_values}
             attribute={filter.identifier}
             itemCount={itemCount}
+            sameDayValue={filter.same_value}
+            expressDeliveryValue={filter.express_value}
           />
         </ConditionalView>
       );
