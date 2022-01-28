@@ -12,8 +12,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/uti
 import logger from '../../../../js/utilities/logger';
 import Loading from '../../../../js/utilities/loading';
 import { smoothScrollTo } from '../../../../alshaya_spc/js/utilities/smoothScroll';
-import isAuraEnabled from '../../../../js/utilities/helper';
-import { getUserDetails } from '../../../../alshaya_aura_react/js/utilities/helper';
+import isAuraEnabled, { getAuraUserDetails } from '../../../../js/utilities/helper';
 import { redeemAuraPoints } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
 
 export default class EgiftCardPurchase extends React.Component {
@@ -95,7 +94,7 @@ export default class EgiftCardPurchase extends React.Component {
         // Call API to remove redeemed aura points.
         const requestData = {
           action: 'remove points',
-          userId: getUserDetails().id,
+          userId: getAuraUserDetails().id,
           cardNumber,
         };
         redeemAuraPoints(requestData);

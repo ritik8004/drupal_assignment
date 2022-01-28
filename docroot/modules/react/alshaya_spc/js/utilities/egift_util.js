@@ -123,7 +123,6 @@ export const egiftFormElement = ({
  */
 export const updatePriceSummaryBlock = (refreshCart = null) => {
   // Fetch the fresh cart data and update the summary block.
-  showFullScreenLoader();
   const cartData = window.commerceBackend.getCart(true);
   if (cartData instanceof Promise) {
     cartData.then((data) => {
