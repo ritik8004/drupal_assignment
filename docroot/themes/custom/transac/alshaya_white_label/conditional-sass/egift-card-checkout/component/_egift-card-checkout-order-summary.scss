@@ -23,8 +23,13 @@
 
 #spc-checkout {
   .spc-virtual-product-checkout {
-    .spc-checkout-payment-options {
+    .spc-checkout-payment-options,
+    .spc-aura-checkout-rewards-block {
       padding-top: 0;
+    }
+
+    .spc-aura-checkout-rewards-block {
+      padding-bottom: 2.5rem;
     }
   }
 }
