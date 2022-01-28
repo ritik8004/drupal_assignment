@@ -2,6 +2,7 @@
   .accordion-icon {
     &::before {
       font-size: 2rem;
+      #{$right}: 0.875rem;
     }
   }
 }
