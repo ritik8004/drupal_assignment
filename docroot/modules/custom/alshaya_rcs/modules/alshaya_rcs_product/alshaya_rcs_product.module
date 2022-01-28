@@ -327,10 +327,10 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     $enabled = $express_delivery_config->get($option . '_status');
     if ($enabled) {
       $delivery_options[] = [
-        // @todo test config translation on AR site
         'id' => $option,
-        'label' => t('@label',
-          ['@label' => $express_delivery_config->get($option . '_label')],
+        // @codingStandardsIgnoreLine
+        'label' => t($express_delivery_config->get($option . '_label'),
+          [],
           ['context' => $option . '_label']
         ),
       ];
