@@ -1,4 +1,3 @@
-import { getUserDetails } from '../../alshaya_aura_react/js/utilities/helper';
 
 /**
  * Helper function to check if AURA is enabled.
@@ -24,4 +23,12 @@ export const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetai
 /**
  * Helper function to get aura user details.
  */
-export const getAuraUserDetails = () => getUserDetails();
+export const getAuraUserDetails = () => {
+  let loyaltyUserDetails = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'userDetails')) {
+    loyaltyUserDetails = drupalSettings.aura.userDetails;
+  }
+
+  return loyaltyUserDetails;
+};
