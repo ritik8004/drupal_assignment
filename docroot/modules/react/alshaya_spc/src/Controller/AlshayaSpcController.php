@@ -794,6 +794,7 @@ class AlshayaSpcController extends ControllerBase {
 
     if ($orderDetails['payment']['methodCode'] === 'checkout_com_upapi_benefitpay') {
       $checkoutcomConfig = $this->checkoutComApiHelper->getCheckoutcomUpApiConfig();
+      $settings['order_details']['payment']['environment'] = $checkoutcomConfig['environment'];
       $settings['order_details']['payment']['benefitpayMerchantId'] = $checkoutcomConfig['benefit_pay_merchant_id'];
       $settings['order_details']['payment']['benefitpayAppId'] = $checkoutcomConfig['benefit_pay_app_id'];
       $settings['order_details']['payment']['benefitpaySecretKey'] = $checkoutcomConfig['benefit_pay_secret_key'];
