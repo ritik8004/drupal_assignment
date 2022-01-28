@@ -1,4 +1,3 @@
-
 /**
  * Helper function to check if AURA is enabled.
  */
