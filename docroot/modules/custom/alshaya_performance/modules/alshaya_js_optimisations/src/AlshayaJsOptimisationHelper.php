@@ -166,9 +166,32 @@ class AlshayaJsOptimisationHelper {
   }
 
   /**
+   * Generate JS processed libraries.
+   *
+   * @param array $critical_js
+   *   Critical JS config.
+   * @param bool $reset
+   *   Whether to reset the processed libraries.
+   *
+   * @return array
+   *   Return the processed values.
+   */
+  public function generateProcessedLibraries(array $critical_js = [], $reset = FALSE) {
+    if (empty($critical_js)) {
+      $settings = $this->configFactory->getEditable('alshaya_js_optimisations.settings');
+      $critical_js = $settings->get('critical_js');
+    }
+    $processed_libraries = $this->resolveCategories($critical_js);
+    if ($reset && isset($settings)) {
+      $settings->set('critical_js.processed_libraries', $processed_libraries)->save();
+    }
+    return $processed_libraries;
+  }
+
+  /**
    * Resolve dependencies, assign weights and attributes.
    */
-  public function resolveCategories($critical_js = []) {
+  public function resolveCategories($critical_js = [], $encode = TRUE) {
     $js_category = self::$jsCategories;
     $categories = array_keys($js_category);
     $resolved_data = [];
@@ -248,8 +271,7 @@ class AlshayaJsOptimisationHelper {
         }
       }
     }
-
-    return $resolved_data;
+    return $encode ? Yaml::encode($resolved_data) : $resolved_data;
   }
 
   /**
