@@ -34,9 +34,13 @@
     @include egift-placeholder-label;
 
     top: auto;
-    bottom: 0.625rem;
+    bottom: 0.125rem;
     #{$left}: auto;
     #{$right}: 0;
+
+    html[lang=ar] & {
+      bottom: 0.625rem;
+    }
   }
 }
 
