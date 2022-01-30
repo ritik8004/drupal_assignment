@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Alshaya BazaarVoice Controller.
@@ -31,28 +30,17 @@ class AlshayaBazaarVoiceController extends ControllerBase {
   protected $fileSystem;
 
   /**
-   * Config Factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * AlshayaBazaarVoiceController constructor.
    *
    * @param \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshaya_bazaar_voice
    *   Alshaya BazaarVoice Helper.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The filesystem service.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config Factory.
    */
   public function __construct(AlshayaBazaarVoice $alshaya_bazaar_voice,
-                              FileSystemInterface $file_system,
-                              ConfigFactoryInterface $config_factory) {
+                              FileSystemInterface $file_system) {
     $this->alshayaBazaarVoice = $alshaya_bazaar_voice;
     $this->fileSystem = $file_system;
-    $this->configFactory = $config_factory;
   }
 
   /**
@@ -61,8 +49,7 @@ class AlshayaBazaarVoiceController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_bazaar_voice.service'),
-      $container->get('file_system'),
-      $container->get('config.factory')
+      $container->get('file_system')
     );
   }
 
