@@ -156,14 +156,6 @@ class AlshayaBazaarVoiceController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $config = $this->configFactory->get('bazaar_voice.settings');
-    $url = $config->get('bvpixel_base_url') . '/';
-    $url .= $config->get('client_name') . '/';
-    $url .= $config->get('site_id') . '/';
-    $url .= $config->get('environment') . '/';
-    $url .= $config->get('locale') . '/';
-    $url .= 'bv.js';
-
     $build['#markup'] = '<p>Please wait...</p>';
     $bvPageType = [
       '#tag' => 'meta',
@@ -179,17 +171,10 @@ class AlshayaBazaarVoiceController extends ControllerBase {
         'content' => 'noindex, nofollow',
       ],
     ];
-    $script = [
-      '#tag' => 'script',
-      '#attributes' => [
-        'async' => TRUE,
-        'src' => $url,
-      ],
-    ];
 
     $build['#attached']['html_head'][] = [$robots, 'robots'];
     $build['#attached']['html_head'][] = [$bvPageType, 'bv:pageType'];
-    $build['#attached']['html_head'][] = [$script];
+    $build['#attached']['library'][] = 'bazaar_voice/bazaar_voice';
 
     return $build;
   }
