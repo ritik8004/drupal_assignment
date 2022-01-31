@@ -107,7 +107,8 @@ class AlshayaEgiftCardController extends ControllerBase {
         'drupalSettings' => [
           'egiftCard' => [
             'textAreaMaxlength' => $config->get('textarea_maxlength')
-          ]
+          ],
+          'addToCartNotificationTime' => $this->config('alshaya_acm_cart_notification.settings')->get('notification_time'),
         ],
       ],
     ];
