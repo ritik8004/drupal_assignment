@@ -7,6 +7,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Utility\Token;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Helper class for Wishlist.
@@ -46,6 +47,13 @@ class WishListHelper {
   protected $tokenManager;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * WishListHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -56,17 +64,21 @@ class WishListHelper {
    *   The current path service.
    * @param \Drupal\Core\Utility\Token $token_manager
    *   Token manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     AccountProxyInterface $account_proxy,
     CurrentPathStack $current_path,
-    Token $token_manager
+    Token $token_manager,
+    LanguageManagerInterface $language_manager
   ) {
     $this->configFactory = $config_factory;
     $this->currentUser = $account_proxy;
     $this->currentPath = $current_path;
     $this->tokenManager = $token_manager;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -77,7 +89,6 @@ class WishListHelper {
    */
   public function getWishListConfig() {
     $alshaya_wishlist_config = $this->configFactory->get('alshaya_wishlist.settings');
-
     $config = [
       'localStorageExpirationForGuest' => $alshaya_wishlist_config->get('local_storage_expiration_guest'),
       'localStorageExpirationForLoggedIn' => $alshaya_wishlist_config->get('local_storage_expiration_logged_in'),
@@ -86,6 +97,20 @@ class WishListHelper {
       'shareEmailSubject' => $this->tokenManager->replace($alshaya_wishlist_config->get('email_subject')) ?? '',
       'shareEmailMessage' => $this->tokenManager->replace($alshaya_wishlist_config->get('email_template.value')) ?? '',
     ];
+
+    // Check for the current language and if it's not english default,
+    // we need to get the overidden configs and update them for a few
+    // specific wishlist configs. This is because for VS and WES we were
+    // not getting the language specific configs and thus it's causing
+    // issues on the my wishlist page for the translations.
+    // @todo this is, however, a temporary fix and we need to find out
+    // the root cause of the problem behind this for VS and WES.
+    $langCode = $this->languageManager->getCurrentLanguage()->getId();
+    if ($langCode !== 'en') {
+      $alshaya_wishlist_config = $this->languageManager->getLanguageConfigOverride($langCode, 'alshaya_wishlist.settings');
+      $config['shareEmailSubject'] = $this->tokenManager->replace($alshaya_wishlist_config->get('email_subject')) ?? '';
+      $config['shareEmailMessage'] = $this->tokenManager->replace($alshaya_wishlist_config->get('email_template.value')) ?? '';
+    }
 
     return $config;
   }
