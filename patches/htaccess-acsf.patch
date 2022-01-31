@@ -5,9 +5,9 @@ index 5f57c24..91bb98a 100644
 @@ -155,6 +155,8 @@ AddEncoding gzip svgz
    # Copy and adapt this rule to directly execute PHP files in contributed or
    # custom modules or to run another PHP application in the same directory.
-   RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics.php$
+   RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics\.php$
 +  # ACSF requirement: allow access to apc_rebuild.php.
-+  RewriteCond %{REQUEST_URI} !/sites/g/apc_rebuild.php$
++  RewriteCond %{REQUEST_URI} !/sites/g/apc_rebuild\.php$
    # Deny access to any other PHP files that do not match the rules above.
    # Specifically, disallow autoload.php from being served directly.
    RewriteRule "^(.+/.*|autoload)\.php($|/)" - [F]
