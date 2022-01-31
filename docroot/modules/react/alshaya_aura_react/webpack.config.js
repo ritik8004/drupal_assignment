@@ -7,7 +7,8 @@ var config = {
     my_accounts: './js/my-accounts',
     header: './js/header',
     pdp: './js/pdp',
-    pdpV2: './js/pdpV2',
+    // This is dynamically added in alshaya_rcs_product_library_info_alter().
+    pdpRcs: './js/pdpRcs',
     aura_backend_v1: './js/backend/v1/',
     aura_backend_v2: './js/backend/v2/',
   },

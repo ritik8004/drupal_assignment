@@ -5,8 +5,8 @@ import isAuraEnabled from '../../js/utilities/helper';
 
 let componentAttached = false;
 
-Drupal.behaviors.auraPdpV2Behavior = {
-  attach: function auraPdpV2() {
+Drupal.behaviors.auraPdpRcsBehavior = {
+  attach: function auraPdpRcs() {
     const pageLoaded = document.querySelector('.rcs-page.rcs-loaded');
     if (!componentAttached
         && pageLoaded

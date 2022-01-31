@@ -51,15 +51,6 @@ alshaya_aura_pdp:
     - alshaya_react/react
     - alshaya_acm_product/product_utility
 
-# This will be used in V3.
-alshaya_aura_pdp.v2:
-  js:
-    dist/pdpV2.bundle.js: {}
-    assets/js/productHelper.js: {}
-  dependencies:
-    - alshaya_react/react
-    - alshaya_acm_product/product_utility
-
 # This is compatible with commerce backend version 1.
 aura_backend.v1:
   js:
