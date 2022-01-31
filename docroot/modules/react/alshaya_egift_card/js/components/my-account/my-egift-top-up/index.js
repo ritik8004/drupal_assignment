@@ -152,7 +152,7 @@ export default class MyEgiftTopUp extends React.Component {
                 className="my-topup-cancel-btn"
                 onClick={() => handleCancelTopUp()}
               >
-                {Drupal.t('Cancel', {}, { context: 'egifts' })}
+                {Drupal.t('Cancel', {}, { context: 'egift' })}
               </button>
             </div>
             <div
