@@ -23,7 +23,7 @@ function alshaya_menus_update_8004() {
 
   // Add translations.
   module_load_include('inc', 'alshaya_menus', 'alshaya_menus.translations');
-  $translations = _alshaya_menus_translations();
+  $translations = _alshaya_menus_get_translations('v1');
   if ($translations) {
     alshaya_i18n_save_translations($translations);
   }
