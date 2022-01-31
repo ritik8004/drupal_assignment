@@ -33,6 +33,12 @@
 
     .egift-input-textfield-item {
       flex: 1;
+
+      html[lang=ar] & {
+        @include breakpoint($only-mobile) {
+          flex: 0 0 78%;
+        }
+      }
     }
 
     .open-amount-currency {
