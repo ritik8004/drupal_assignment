@@ -93,6 +93,10 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
   public function success(Request $request) {
     $order_id = $request->query->get('order_id');
     $encrypted_order_id = $request->query->get('encrypted_order_id');
+    // In case of error, we redirect to cart page.
+    $redirect = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString(), 302);
+    $redirect->setMaxAge(0);
+    $redirect->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
     if ($encrypted_order_id) {
       $order_id = SecureText::decrypt(
         $encrypted_order_id,
@@ -101,16 +105,11 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     }
     elseif ($order_id
       && $this->configFactory->get('alshaya_spc.settings')->get('order_id_fallback') === 'disabled') {
-      $this->logger->error('Order id fallback set to disabled. OrderId: @order_id.', [
+      $this->logger->warning('Order id fallback set to disabled. OrderId: @order_id.', [
         '@order_id' => $order_id,
       ]);
-      $order_id = NULL;
+      return $redirect;
     }
-
-    // In case of error, we redirect to cart page.
-    $redirect = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString(), 302);
-    $redirect->setMaxAge(0);
-    $redirect->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
 
     // If order id is not available in request.
     if (!$order_id) {
