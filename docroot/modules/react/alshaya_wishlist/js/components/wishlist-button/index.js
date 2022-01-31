@@ -69,7 +69,7 @@ class WishlistButton extends React.Component {
     }
 
     // Check if the context is wishlist page itself and remove product from
-    // user's wishlist after added to the cart regardless the config setting.
+    // user's wishlist after added to the cart, regardless the config setting.
     if (context === 'wishlist_page') {
       document.addEventListener('product-add-to-cart-success', this.handleProductAddToCart);
     }
