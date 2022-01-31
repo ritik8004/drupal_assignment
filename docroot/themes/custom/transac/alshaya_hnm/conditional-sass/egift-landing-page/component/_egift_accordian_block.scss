@@ -6,13 +6,21 @@
       &::after {
         #{$right}: 0.9375rem;
         font-size: 0.5rem;
-        top: 1.75rem;
+
+        @include breakpoint($only-mobile) {
+          #{$right}: 0;
+          top: 1.6rem;
+        }
       }
 
       &.ui-state-active {
         &::after {
           #{$right}: 1.875rem;
           top: 1.3rem;
+
+          @include breakpoint($only-mobile) {
+            #{$right}: 0.9375rem;
+          }
         }
       }
     }
