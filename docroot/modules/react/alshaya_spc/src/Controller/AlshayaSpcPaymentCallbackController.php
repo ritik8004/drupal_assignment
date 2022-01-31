@@ -50,7 +50,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected ConfigFactoryInterface $configFactory;
+  protected $configFactory;
 
   /**
    * AlshayaSpcUpapiPaymentController constructor.
@@ -94,7 +94,10 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     $order_id = $request->query->get('order_id');
     $encrypted_order_id = $request->query->get('encrypted_order_id');
     if ($encrypted_order_id) {
-      $order_id = $encrypted_order_id;
+      $order_id = SecureText::decrypt(
+        $encrypted_order_id,
+        Settings::get('alshaya_api.settings')['consumer_secret']
+      );
     }
     elseif ($order_id
       && $this->configFactory->get('alshaya_spc.settings')->get('order_id_fallback') === 'disabled') {
