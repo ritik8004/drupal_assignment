@@ -13,6 +13,21 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_update().
+ *
+ * Add alshaya_spc config for order_id_fallback.
+ */
+function alshaya_spc_update_8024() {
+  // Add alshaya_spc.settings config.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_spc.settings'],
+    'alshaya_spc',
+    'install'
+  );
+}
+
+/**
  * Implements hook_update_N().
  *
  * Add separate configs for same day and express delivery config.

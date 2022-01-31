@@ -6,6 +6,7 @@ use Drupal\alshaya_spc\Helper\CookieHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
@@ -45,17 +46,28 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
   protected $logger;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected ConfigFactoryInterface $configFactory;
+
+  /**
    * AlshayaSpcUpapiPaymentController constructor.
    *
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders Manager.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(OrdersManager $orders_manager,
-                              LoggerChannelInterface $logger) {
+                              LoggerChannelInterface $logger,
+                              ConfigFactoryInterface $config_factory) {
     $this->ordersManager = $orders_manager;
     $this->logger = $logger;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -64,7 +76,8 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_acm_customer.orders_manager'),
-      $container->get('logger.factory')->get('AlshayaSpcUpapiPaymentController')
+      $container->get('logger.factory')->get('AlshayaSpcUpapiPaymentController'),
+      $container->get('config.factory')
     );
   }
 
@@ -79,6 +92,17 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
    */
   public function success(Request $request) {
     $order_id = $request->query->get('order_id');
+    $encrypted_order_id = $request->query->get('encrypted_order_id');
+    if ($encrypted_order_id) {
+      $order_id = $encrypted_order_id;
+    }
+    elseif ($order_id
+      && $this->configFactory->get('alshaya_spc.settings')->get('order_id_fallback') === 'disabled') {
+      $this->logger->error('Order id fallback set to disabled. OrderId: @order_id.', [
+        '@order_id' => $order_id,
+      ]);
+      $order_id = NULL;
+    }
 
     // In case of error, we redirect to cart page.
     $redirect = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString(), 302);
