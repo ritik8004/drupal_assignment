@@ -393,7 +393,7 @@ function _alshaya_egift_card_translations() {
         'context' => 'egift',
       ],
       'Do you want to unlink this card from this account?' => [
-        'ar' => 'Do you want to unlink this card from this account?',
+        'ar' => 'هل تريد إلغاء ربط هذه البطاقة بهذا الحساب؟',
         'context' => 'egift',
       ]
     ],
