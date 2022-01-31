@@ -392,6 +392,10 @@ function _alshaya_egift_card_translations() {
         'ar' => 'رصيد بطاقة الهدايا الإلكترونية غير كافي لدفع المبلغ المتبقي، يرجى استخدام وسيلة دفع أخرى',
         'context' => 'egift',
       ],
+      'Do you want to unlink this card from this account?' => [
+        'ar' => 'Do you want to unlink this card from this account?',
+        'context' => 'egift',
+      ]
     ],
   ];
 
