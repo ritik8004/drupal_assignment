@@ -2,19 +2,6 @@
   .c-accordion-delivery-option-parent {
     .c-accordion__title {
       font-family: $vs-bentonsans-regular;
-
-      &::after {
-        top: 1.5rem;
-      }
-
-      &.ui-state-active {
-        font-family: $vs-bentonsans-medium;
-
-        &::after {
-          #{$right}: 0.9375rem;
-          top: 0.6rem;
-        }
-      }
     }
   }
 }
