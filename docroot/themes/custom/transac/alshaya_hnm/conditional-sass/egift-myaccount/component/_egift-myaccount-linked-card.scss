@@ -5,3 +5,23 @@
     }
   }
 }
+
+.egift-card-linked-wrapper {
+  .egift-unlink-card-confirm-overlay {
+    .egift-unlink-card-confirm-content {
+      button.egift-card-remove-confirm-yes {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    .close {
+      padding: 0.5rem;
+
+      &::before {
+        font-size: 1rem;
+      }
+    }
+  }
+}
