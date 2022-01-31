@@ -100,13 +100,6 @@ function alshaya_menus_install() {
   \Drupal::entityDefinitionUpdateManager()
     ->installFieldStorageDefinition('social_id', 'menu_link_content', 'menu_link_content', $storage_definition);
 
-  // Add block.
-  \Drupal::service('alshaya_config.manager')->updateConfigs(
-    ['block.block.countryswitcher'],
-    'alshaya_menus',
-    'install'
-  );
-
   // Add translations.
   module_load_include('inc', 'alshaya_menus', 'alshaya_menus.translations');
   $translations = _alshaya_menus_get_translations();
