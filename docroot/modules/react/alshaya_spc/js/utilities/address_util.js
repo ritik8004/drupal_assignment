@@ -727,13 +727,22 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           // If valid mobile number, remove error message.
           document.getElementById('mobile-error').innerHTML = '';
           document.getElementById('mobile-error').classList.remove('error');
-
+          // A flag value to check if error exists.
+          let isError = false;
           // Validate if email id exists then throw error and return.
           if (result.data.email === 'exists') {
-            // Removing loader in case validation fail.
-            removeFullScreenLoader();
             document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
             document.getElementById('email-error').classList.add('error');
+            isError = true;
+          } else if (result.data.email === 'invalid') {
+            document.getElementById('email-error').innerHTML = getStringMessage('form_error_email_not_valid', { '%mail': validationData.email });
+            document.getElementById('email-error').classList.add('error');
+            isError = true;
+          }
+          // Return from here if error exists.
+          if (isError) {
+            // Removing loader in case validation fail.
+            removeFullScreenLoader();
             addressFormInlineErrorScroll();
             return;
           }
