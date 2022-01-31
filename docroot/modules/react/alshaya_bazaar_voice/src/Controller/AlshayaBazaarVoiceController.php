@@ -143,7 +143,6 @@ class AlshayaBazaarVoiceController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $build['#markup'] = '<p>Please wait...</p>';
     $bvPageType = [
       '#tag' => 'meta',
       '#attributes' => [
