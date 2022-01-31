@@ -113,7 +113,7 @@ class AlshayaEgiftCardController extends ControllerBase {
       ],
     ];
 
-    $build['#cache']['tags'] = Cache::mergeTags([], $config->getCacheTags());
+    $build['#cache']['tags'] = Cache::mergeTags(['alshaya_acm_cart_notification.settings'], $config->getCacheTags());
 
     return $build;
   }
