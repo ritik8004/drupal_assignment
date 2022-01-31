@@ -6,3 +6,4 @@ services:
       - '@current_user'
       - '@path.current'
       - '@token'
+      - '@language_manager'
