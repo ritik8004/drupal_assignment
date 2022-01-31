@@ -25,7 +25,7 @@
     .c-accordion__title,
     .c-accordion_content {
       border: none;
-      background-color: $primary_bg;
+      background-color: $egift-accordion-bg;
       text-align: $left;
     }
 
@@ -44,8 +44,7 @@
 
       @include icon(chevrondown, after) {
         #{$right}: 0.9375rem;
-        font-size: 0.5rem;
-        top: 1.75rem;
+        top: 1.5rem;
       }
 
       &.ui-accordion-header {
@@ -64,8 +63,7 @@
           transform: rotate(180deg);
           color: $egift-accordion-active-title;
           position: absolute;
-          #{$right}: 1.875rem;
-          top: 1.3rem;
+          top: 0.6rem;
 
           @include breakpoint($only-mobile) {
             #{$right}: 0.9375rem;

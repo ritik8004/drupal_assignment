@@ -687,6 +687,15 @@ export const processBillingUpdateFromForm = (e, shipping) => {
     fullname: extractFirstAndLastName(target.fullname.value.trim()),
   };
 
+  // If email id exists that means user is not an authenticated user and cart
+  // contains only virtual item.
+  // Now we are adding validation here to check if an account already exists
+  // with this email id, if 'YES' then user will have to login before placing
+  // order.
+  if (hasValue(target.email)) {
+    validationData.email = target.email.value;
+  }
+
   const validationRequest = validateInfo(validationData);
   if (validationRequest instanceof Promise) {
     validationRequest.then((result) => {
@@ -718,6 +727,25 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           // If valid mobile number, remove error message.
           document.getElementById('mobile-error').innerHTML = '';
           document.getElementById('mobile-error').classList.remove('error');
+          // A flag value to check if error exists.
+          let isError = false;
+          // Validate if email id exists then throw error and return.
+          if (result.data.email === 'exists') {
+            document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
+            document.getElementById('email-error').classList.add('error');
+            isError = true;
+          } else if (result.data.email === 'invalid') {
+            document.getElementById('email-error').innerHTML = getStringMessage('form_error_email_not_valid', { '%mail': validationData.email });
+            document.getElementById('email-error').classList.add('error');
+            isError = true;
+          }
+          // Return from here if error exists.
+          if (isError) {
+            // Removing loader in case validation fail.
+            removeFullScreenLoader();
+            addressFormInlineErrorScroll();
+            return;
+          }
 
           // Add this only when we are not passing email via form.
           if (!hasValue(target.email)) {
