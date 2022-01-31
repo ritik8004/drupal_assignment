@@ -10,18 +10,9 @@ use Drupal\Core\Field\BaseFieldDefinition;
 /**
  * Implements hook_update_N().
  *
- * Adds Country Switcher block.
+ * Adds translations for Country Switcher block.
  */
 function alshaya_menus_update_8004() {
-
-  // Add block.
-  \Drupal::service('alshaya_config.manager')->updateConfigs(
-    ['block.block.countryswitcher'],
-    'alshaya_menus',
-    'install'
-  );
-
-  // Add translations.
   module_load_include('inc', 'alshaya_menus', 'alshaya_menus.translations');
   $translations = _alshaya_menus_get_translations('v1');
   if ($translations) {
