@@ -49,11 +49,6 @@ export default class CartItem extends React.Component {
     if (!(isEgiftCardEnabled() && cartItemIsVirtual(item))) {
       Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
     }
-
-    if (isWishlistEnabled()) {
-      // Add event listener for add to wishlist action.
-      document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);
-    }
   }
 
   componentDidUpdate() {
@@ -103,24 +98,6 @@ export default class CartItem extends React.Component {
       this.setState({ showWishlistPopup: false, wishlistResponse: removeFromBasket }, () => {
         this.removeCartItem(sku, 'remove item', id);
       });
-    }
-  };
-
-  /**
-   * Once item is added to wishlist, remove item from cart.
-   */
-  handleAddToWishList = (e) => {
-    if (typeof e.detail.productInfo !== 'undefined'
-      && e.detail.productInfo.sku) {
-      const { item: { sku, id } } = this.props;
-      const { productInfo: { parentSKU } } = this.state;
-      // Compare with sku in case of simple sku.
-      // Or compare with parent sku in case of configurable sku.
-      if (e.detail.productInfo.sku === sku || e.detail.productInfo.sku === parentSKU) {
-        this.setState({ wishlistResponse: true }, () => {
-          this.removeCartItem(sku, 'remove item', id);
-        });
-      }
     }
   };
 
