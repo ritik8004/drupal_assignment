@@ -1,8 +1,129 @@
 /**
  * Listens to the 'rcsUpdateResults' event and updates the result object
- * with media data.
+ * with assets data.
  */
  (function () {
+  /**
+   * Sets the configurable product media data in the main product object.
+   *
+   * @param {Object} product
+   *   Product object.
+   */
+  function setProductMediaConfigurable(product) {
+    // Temporary store for media data.
+    let mediaData = {};
+    product.variants.forEach(function eachVariant(variant) {
+      variant.product.media = [];
+      variant.product.media_teaser = '';
+
+      try {
+        if (Drupal.hasValue(variant.product.assets_pdp)) {
+          mediaData = JSON.parse(variant.product.assets_pdp);
+          mediaData.forEach(function setGalleryMedia(media) {
+            variant.product.media.push({
+              // @todo Add type of asset when dealing with video etc.
+              url: media.url,
+              medium: media.styles.product_zoom_medium_606x504,
+              zoom: media.styles.product_zoom_large_800x800,
+              thumbnails: media.styles.pdp_gallery_thumbnail,
+              teaser: media.styles.product_teaser,
+            });
+          });
+        }
+      }
+      catch (e) {
+        Drupal.alshayaLogger('error', 'Exception occurred while parsing variant product assets for sku @sku : @message', {
+          '@sku': variant.product.sku,
+          '@message': e.message
+        });
+      }
+
+      try {
+        variant.product.media_cart = null;
+        if (Drupal.hasValue(variant.product.assets_cart)) {
+          mediaData = JSON.parse(variant.product.assets_cart);
+          variant.product.media_cart = mediaData[0].styles.cart_thumbnail;
+        }
+      }
+      catch (e) {
+        Drupal.alshayaLogger('error', 'Exception occurred while parsing cart product assets for sku @sku: @message', {
+          '@sku': variant.product.sku,
+          '@message': e.message,
+        });
+      }
+
+      try {
+        variant.product.media_teaser = null;
+        if (Drupal.hasValue(variant.product.assets_teaser)) {
+          mediaData = JSON.parse(variant.product.assets_teaser);
+          mediaData.every(function setTeaserMedia(media) {
+            variant.product.media_teaser = media.styles.product_teaser;
+            // We do this so that we are able to detect in getSkuForGallery
+            // that the variant has media.
+            variant.product.media = variant.product.media_teaser;
+            // Break as there is only 1 teaser image expected.
+            return false;
+          });
+        }
+      }
+      catch (e) {
+        Drupal.alshayaLogger('error', 'Exception occurred while parsing teaser product assets for sku @sku: @message', {
+          '@sku': variant.product.sku,
+          '@message': e.message,
+        });
+      }
+    });
+  }
+
+  /**
+   * Sets media data into the configurable recommended product object.
+   *
+   * @param {Object} recommendedProduct
+   *   Recommended product object.
+   */
+  function setProductRecommendationsMediaConfigurable(recommendedProduct) {
+    recommendedProduct.variants.forEach(function setRecommendedProductMedia(variant) {
+      variant.product.media_teaser = null;
+      try {
+        mediaData = JSON.parse(variant.product.assets_teaser);
+        mediaData.every(function setTeaserMedia(media) {
+          variant.product.media_teaser = media.styles.product_teaser;
+          // We do this so that we are able to detect in getSkuForGallery
+          // that the variant has media.
+          variant.product.media = variant.product.media_teaser;
+          // Break as there is only 1 teaser image expected.
+          return false;
+        });
+      }
+      catch (e) {
+        Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
+          '@type': type,
+          '@sku': variant.product.sku,
+          '@message': e.message,
+        });
+      }
+    });
+  }
+
+  /**
+   * Sets product recommendations media data into the main product object.
+   *
+   * @param {Object} product
+   *   Product object.
+   */
+  function setProductRecommendationsMedia(product) {
+    const productRecommendations = ['upsell_products', 'related_products', 'crosssell_products'];
+    productRecommendations.forEach(function eachRecommendationType(type) {
+      if (Drupal.hasValue(product[type])) {
+        product[type].forEach(function (recommendedProduct) {
+          if (recommendedProduct.type_id === 'configurable') {
+            setProductRecommendationsMediaConfigurable(recommendedProduct);
+          }
+        });
+      }
+    });
+  }
+
   /**
    * Sets media data to the passed product object.
    *
@@ -10,100 +131,15 @@
    *   The raw product object.
    */
   function setMediaData(product) {
-    let mediaData = {};
     product.media = [];
-
-    if (product.type_id === configurable) {
-      product.variants.forEach(function eachVariant(variant) {
-        variant.product.media = [];
-        variant.product.media_teaser = '';
-
-        try {
-          if (Drupal.hasValue(variant.product.media_gallery)) {
-            variant.product.media_gallery.forEach(function setGalleryMedia(media) {
-              variant.product.media.push({
-                url: media.url,
-              });
-            });
-          }
-        }
-        catch (e) {
-          Drupal.alshayaLogger('error', 'Exception occurred while parsing variant product assets for sku @sku : @message', {
-            '@sku': variant.product.sku,
-            '@message': e.message
-          });
-        }
-
-        try {
-          variant.product.media_cart = null;
-          if (Drupal.hasValue(variant.product.assets_cart)) {
-            mediaData = JSON.parse(variant.product.assets_cart);
-            variant.product.media_cart = mediaData[0].styles.cart_thumbnail;
-          }
-        }
-        catch (e) {
-          Drupal.alshayaLogger('error', 'Exception occurred while parsing cart product assets for sku @sku: @message', {
-            '@sku': variant.product.sku,
-            '@message': e.message,
-          });
-        }
-
-        try {
-          variant.product.media_teaser = null;
-          if (Drupal.hasValue(variant.product.assets_teaser)) {
-            mediaData = JSON.parse(variant.product.assets_teaser);
-            mediaData.every(function setTeaserMedia(media) {
-              variant.product.media_teaser = media.styles.product_teaser;
-              // We do this so that we are able to detect in getSkuForGallery
-              // that the variant has media.
-              variant.product.media = variant.product.media_teaser;
-              // Break as there is only 1 teaser image expected.
-              return false;
-            });
-          }
-        }
-        catch (e) {
-          Drupal.alshayaLogger('error', 'Exception occurred while parsing teaser product assets for sku @sku: @message', {
-            '@sku': variant.product.sku,
-            '@message': e.message,
-          });
-        }
-      });
+    if (product.type_id === 'configurable') {
+      setProductMediaConfigurable(product);
     }
 
-    const productRecommendations = ['upsell_products', 'related_products', 'crosssell_products'];
-    productRecommendations.forEach(function eachRecommendationType(type) {
-      if (Drupal.hasValue(product[type])) {
-        product[type].forEach(function (recommendedProduct) {
-          recommendedProduct.variants.forEach(function setRecommendedProductImage(variant) {
-            variant.product.media_teaser = null;
-            try {
-              mediaData = JSON.parse(variant.product.assets_teaser);
-              mediaData.every(function setTeaserMedia(media) {
-                variant.product.media_teaser = media.styles.product_teaser;
-                // We do this so that we are able to detect in getSkuForGallery
-                // that the variant has media.
-                variant.product.media = variant.product.media_teaser;
-                // Break as there is only 1 teaser image expected.
-                return false;
-              });
-            }
-            catch (e) {
-              Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
-                '@type': type,
-                '@sku': variant.product.sku,
-                '@message': e.message,
-              });
-            }
-          });
-        });
-      }
-    });
+    setProductRecommendationsMedia(product);
   }
 
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
-    console.log('THIS FILE IS CALLED');
-    return;
     // We do not want further processing:
     // 1. If page is not a product page
     // 2. If the result object in the event data is undefined
