@@ -373,15 +373,15 @@ function _alshaya_egift_card_translations() {
         'context' => 'egift',
       ],
       'Choose Top-up Amount (@currencyCode)' => [
-        'ar' => 'Choose Top-up Amount (@currencyCode)',
+        'ar' => '(@currencyCode) اختر مبلغ التعبئة',
         'context' => 'egift',
       ],
       'Cancel' => [
-        'ar' => 'Cancel',
+        'ar' => 'إلغاء',
         'context' => 'egift',
       ],
       'Redeem eGift Card' => [
-        'ar' => 'Redeem eGift Card',
+        'ar' => 'استرداد بطاقة الهدايا',
         'context' => 'egift',
       ],
       'Enter amount' => [
