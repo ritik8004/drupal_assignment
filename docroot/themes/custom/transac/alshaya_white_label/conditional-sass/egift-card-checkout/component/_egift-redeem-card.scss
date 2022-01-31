@@ -221,10 +221,10 @@
     flex-grow: 1;
 
     @include icon('chevrondown') {
-      font-size: 0.525rem;
+      font-size: 2rem;
       position: absolute;
       top: 50%;
-      #{$right}: 1.5rem;
+      #{$right}: 0.875rem;
       transform: translateY(-50%);
       transition: transform 0.125s ease-in-out;
     }

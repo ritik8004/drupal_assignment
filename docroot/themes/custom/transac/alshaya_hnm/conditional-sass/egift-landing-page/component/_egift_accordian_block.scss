@@ -3,9 +3,17 @@
     .c-accordion__title {
       font-family: $hnm-demibold;
 
-      @include icon(chevrondown, after) {
+      &::after {
         #{$right}: 0.9375rem;
         font-size: 0.5rem;
+        top: 1.75rem;
+      }
+
+      &.ui-state-active {
+        &::after {
+          #{$right}: 1.875rem;
+          top: 1.3rem;
+        }
       }
     }
   }
