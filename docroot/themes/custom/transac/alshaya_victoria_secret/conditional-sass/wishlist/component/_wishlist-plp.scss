@@ -7,3 +7,13 @@
     }
   }
 }
+
+body:not(.frontpage) {
+  &.hide-header {
+    .block-alshaya-react-wishlist-header {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+}
