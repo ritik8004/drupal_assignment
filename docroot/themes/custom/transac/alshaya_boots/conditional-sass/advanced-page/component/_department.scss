@@ -5,6 +5,16 @@
     text-align: center;
     border: none;
   }
+
+  .c-category-list {
+    &__item {
+      a {
+        &.active {
+          font-family: $alshaya-bold;
+        }
+      }
+    }
+  }
 }
 
 .nodetype--advanced_page {
