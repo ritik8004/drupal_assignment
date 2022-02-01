@@ -96,16 +96,25 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
     // This flag indicates that merge local storage data to
     // magento backend for the customer just logged in.
     $page['#attached']['drupalSettings']['wishlist']['mergeWishlistForLoggedInUsers'] = TRUE;
-    $cookies->remove('merge_user_wishlist');
-    setcookie(
-      'merge_user_wishlist',
-      NULL,
-      [
-        'expires' => REQUEST_TIME - 3600,
-        'path' => '/',
-        'secure' => TRUE,
-      ]
-    );
+    // Check if this is not a social login window and remove the merge
+    // wishlist cookies. Otherwise, we will wait for next page refresh
+    // remove this and let the FE action processed.
+    if (!$cookies->get('Drupal_visitor_alshaya_user_login_type')) {
+      $cookies->remove('merge_user_wishlist');
+      setcookie(
+        'merge_user_wishlist',
+        NULL,
+        [
+          'expires' => REQUEST_TIME - 3600,
+          'path' => '/',
+          'secure' => TRUE,
+        ]
+      );
+    }
+    // Delete this one time cookie as if this is set, it means we are in
+    // social login callback popup.
+    // @todo we should remove this on FE if used in other modules.
+    user_cookie_delete('alshaya_user_login_type');
   }
 }
 
