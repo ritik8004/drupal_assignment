@@ -10,6 +10,16 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Added top_facets limit to alshaya_algolia_react.settings config.
+ */
+function alshaya_algolia_react_update_8007() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  $config->set('top_facets_limit', 5)->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Added product elements alignment config to frames.
  */
 function alshaya_algolia_react_update_8006() {

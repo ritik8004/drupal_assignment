@@ -1,3 +1,4 @@
 # Write the react module name one per line for which this module needs a rebuild.
 alshaya_bazaar_voice
 alshaya_spc
+alshaya_wishlist

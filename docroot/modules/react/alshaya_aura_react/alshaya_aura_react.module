@@ -68,7 +68,12 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   elseif ($current_route_name === 'alshaya_spc.checkout.confirmation') {
     $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc-confirmation';
   }
-  elseif ($current_route_name === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
+  elseif ($current_route_name === 'entity.node.canonical'
+    && in_array($current_route->getParameter('node')->bundle(), [
+      'rcs_product',
+      'acq_product',
+    ])
+  ) {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_pdp';
   }
   elseif ($current_route_name === 'entity.user.canonical') {
@@ -300,7 +305,7 @@ function alshaya_aura_react_preprocess_alshaya_main_menu_level1(array &$variable
  * Implements hook_preprocess_node().
  */
 function alshaya_aura_react_preprocess_node(&$variables) {
-  if ($variables['node']->bundle() === 'acq_product') {
+  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
     $variables['aura_enabled'] = \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled();
   }
 }

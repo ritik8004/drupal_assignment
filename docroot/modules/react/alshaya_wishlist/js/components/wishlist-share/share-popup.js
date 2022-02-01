@@ -5,6 +5,7 @@ import {
   getWishlistLabel,
   getWishlistNotificationTime,
 } from '../../../../js/utilities/wishlistHelper';
+import getStringMessage from '../../../../js/utilities/strings';
 
 export default class SharePopup extends React.Component {
   constructor(props) {
@@ -91,7 +92,7 @@ export default class SharePopup extends React.Component {
             >
               {Drupal.t('Close')}
             </a>
-            <div className="header">{Drupal.t('Share Your List', {}, { context: 'wishlist' })}</div>
+            <div className="header">{getStringMessage('share_your_list', { '@wishlist_label': getWishlistLabel() })}</div>
             <div className="content">
               {Drupal.t('Share all your @wishlist_label with friends and family.', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
             </div>

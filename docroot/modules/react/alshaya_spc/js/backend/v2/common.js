@@ -376,6 +376,7 @@ const getProcessedCartData = async (cartData) => {
     data.totals.egiftRedeemedAmount = 0;
     data.totals.egiftRedemptionType = '';
     data.totals.egiftCardNumber = '';
+    data.totals.egiftCurrentBalance = 0;
     if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
       data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
     }
@@ -384,6 +385,9 @@ const getProcessedCartData = async (cartData) => {
     }
     if (hasValue(cartData.cart.extension_attributes.hps_redemption_card_number)) {
       data.totals.egiftCardNumber = cartData.cart.extension_attributes.hps_redemption_card_number;
+    }
+    if (hasValue(cartData.totals.extension_attributes.hps_current_balance)) {
+      data.totals.egiftCurrentBalance = cartData.totals.extension_attributes.hps_current_balance;
     }
   }
 

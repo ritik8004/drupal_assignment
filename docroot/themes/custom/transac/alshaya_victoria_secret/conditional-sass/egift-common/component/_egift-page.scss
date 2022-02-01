@@ -1,0 +1,13 @@
+.page-standard {
+  &.c-egift-purchase-page {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 4.375rem;
+    }
+  }
+
+  &.c-egift-topup-page {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 3.5rem;
+    }
+  }
+}

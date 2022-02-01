@@ -685,6 +685,11 @@ rcs-algolia-plp:
     theme:
       css/conditional-sass/rcs-algolia-plp/rcs-algolia-plp.ltr.css: {}
 
+country-switcher:
+  css:
+    theme:
+      css/conditional-sass/country-switcher/country-switcher.ltr.css: {}
+
 magic-dots:
   css:
     theme:

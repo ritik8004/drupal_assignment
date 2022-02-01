@@ -34,3 +34,9 @@ alshaya_bazaar_voice.user_reviews:
     parameters:
       user:
         type: entity:user
+alshaya_bazaar_voice.pie_write_review_container:
+  path: '/pie-write-review-container'
+  defaults:
+    _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::pieWriteReviewContainer'
+  requirements:
+    _permission: 'access content'

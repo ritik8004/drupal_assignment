@@ -250,6 +250,11 @@ libraries-override:
       theme:
         css/conditional-sass/wishlist/wishlist.ltr.css: css/conditional-sass/wishlist/wishlist.ltr.css
 
+  alshaya_white_label/country-switcher:
+    css:
+      theme:
+        css/conditional-sass/country-switcher/country-switcher.ltr.css: css/conditional-sass/country-switcher/country-switcher.ltr.css
+
   alshaya_white_label/egift-card-checkout-confirmation:
     css:
       theme:
