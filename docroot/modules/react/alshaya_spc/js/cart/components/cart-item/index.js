@@ -111,7 +111,9 @@ export default class CartItem extends React.Component {
    */
   handleAddToWishList = (e) => {
     if (typeof e.detail.productInfo !== 'undefined'
-      && e.detail.productInfo.sku) {
+      && e.detail.productInfo.sku
+      && (typeof e.detail.removeFromCart === 'undefined'
+      || e.detail.removeFromCart)) {
       const { item: { sku, id } } = this.props;
       const { productInfo: { parentSKU } } = this.state;
       // Compare with sku in case of simple sku.
