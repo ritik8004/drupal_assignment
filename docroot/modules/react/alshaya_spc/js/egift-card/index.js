@@ -269,6 +269,8 @@ export default class RedeemEgiftCard extends React.Component {
     const { cart: cartData, refreshCart } = this.props;
     const activeClass = active || codeValidated ? 'active' : '';
     const codeValidationClass = codeValidated ? 'has-validated-code' : '';
+    // Disable redemption if redemptionDisable is set as true or redemption is
+    // done by linked card or full payment is done by AURA.
     const disabledRedemptionClass = redemptionDisabled
       || isEgiftRedemptionDone(cartData.cart, 'linked')
       || isFullPaymentDoneByAura(cartData) ? 'in-active' : '';

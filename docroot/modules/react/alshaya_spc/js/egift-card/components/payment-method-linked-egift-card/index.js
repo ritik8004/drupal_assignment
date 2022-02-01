@@ -372,7 +372,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     }
 
     // Disable link card checkbox when egiftcard balance is 0 or is expired,
-    // if already redeemed or any unsupported payment method selected.
+    // if already redeemed or any unsupported payment method selected or full
+    // payment is done by AURA.
     const disabled = (egiftCardActualBalance === 0
       || isEgiftCardExpired
       || isEgiftRedemptionDone(cart.cart)
