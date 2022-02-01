@@ -148,6 +148,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   $search_direction = 'self';
   $description_value = '';
   $desc = $skuManager->fetchProductAttribute($sku_entity, 'attr_description', $search_direction);
+  $renderer = \Drupal::service('renderer');
 
   // Get data from article level.
   if (!empty($desc)) {
@@ -169,7 +170,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
     $composition_markup['#composition']['#markup'] = $markupText;
   }
 
-  $description_value .= render($composition_markup);
+  $description_value .= $renderer->renderPlain($composition_markup);
 
   // Render the wrapper div for article warning always so that the same
   // can be filled with data on variant selection.
@@ -180,7 +181,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
       '#warning' => ['#markup' => $warning],
     ];
   }
-  $description_value .= render($warning_markup);
+  $description_value .= $renderer->renderPlain($warning_markup);
 
   $config = \Drupal::config('alshaya_acm_product.settings');
   if (!empty($config->get('legal_notice_enabled'))) {
@@ -193,7 +194,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
     '#item_code' => $sku_entity->getSku(),
   ];
 
-  $description_value .= render($item_code);
+  $description_value .= $renderer->renderPlain($item_code);
 
   $description['value'] = [
     '#markup' => $description_value,

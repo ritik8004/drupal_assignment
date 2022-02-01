@@ -6,7 +6,7 @@ local_storage_expiration_logged_in: 300
 wishlist_label: 'favorites'
 # Config for removing products from wishlist after it's been
 # added to cart from PDP, PLP, Wishlist or any other pages.
-remove_after_addtocart: true
+remove_after_addtocart: false
 # Both configs below are used in share wishlist email.
 email_subject: 'A friend has shared his [alshaya_wishlist:wishlist_label] products'
 email_template:

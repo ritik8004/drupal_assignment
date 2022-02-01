@@ -75,14 +75,6 @@ export default class ShippingMethod extends React.Component {
     // Show the loader.
     showFullScreenLoader();
 
-    const event = new CustomEvent('changeShippingMethod', {
-      bubbles: true,
-      detail: {
-        data: method,
-      },
-    });
-    document.dispatchEvent(event);
-
     // Prepare shipping data.
     const tempShippingData = cart.cart.shipping.address;
     Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
@@ -117,6 +109,15 @@ export default class ShippingMethod extends React.Component {
             selectedOption: method.method_code,
           });
           document.getElementById(`shipping-method-${method.method_code}`).checked = true;
+
+          // Custom Event for shipping method change.
+          const event = new CustomEvent('changeShippingMethod', {
+            bubbles: true,
+            detail: {
+              data: method,
+            },
+          });
+          document.dispatchEvent(event);
         } else {
           // In case of error, prepare error info
           // and call refresh cart so that message is shown.

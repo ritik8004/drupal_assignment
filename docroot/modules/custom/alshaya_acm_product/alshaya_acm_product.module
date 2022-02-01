@@ -651,6 +651,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
         $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
         // Check if express delivery feature enabled and product buyable.
+        $build['delivery_options'] = [];
         if ($deliveryOptionsHelper->ifSddEdFeatureEnabled() && (alshaya_acm_product_is_buyable($sku_entity))) {
           $build['express_delivery'] = [
             '#theme' => 'pdp_express_delivery_option',

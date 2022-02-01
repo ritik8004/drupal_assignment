@@ -68,6 +68,12 @@ class WishlistButton extends React.Component {
       document.addEventListener('product-add-to-cart-success', this.handleProductAddToCart);
     }
 
+    // Check if the context is wishlist page itself and remove product from
+    // user's wishlist after added to the cart, regardless the config setting.
+    if (context === 'wishlist_page') {
+      document.addEventListener('product-add-to-cart-success', this.handleProductAddToCart);
+    }
+
     if (!isAnonymousUser()) {
       // Add event listener for get wishlist load event for logged in user.
       // This will execute when wishlist loaded from the backend
@@ -296,7 +302,7 @@ class WishlistButton extends React.Component {
           dispatchCustomEvent('productAddedToWishlist', eventData);
 
           // Removing loader icon from wishlist button for anonymous user.
-          removeInlineLoader('.wishlist-loader .loading');
+          removeInlineLoader('.wishlist-loader.loading');
 
           // Update the wishlist button state.
           this.updateWishListStatus(true);
@@ -331,13 +337,16 @@ class WishlistButton extends React.Component {
               dispatchCustomEvent('productAddedToWishlist', eventData);
 
               // Removing loader icon to wishlist button.
-              removeInlineLoader('.wishlist-loader .loading');
+              removeInlineLoader('.wishlist-loader.loading');
 
               // Update the wishlist button state.
               this.updateWishListStatus(true);
             }
           });
         }
+      } else {
+        // Removing loader icon from wishlist button if there is an error.
+        removeInlineLoader('.wishlist-loader.loading');
       }
     });
   }
@@ -400,10 +409,12 @@ class WishlistButton extends React.Component {
   render() {
     const { addedInWishList } = this.state;
     const { context, position, format } = this.props;
+    // Default wishlist text.
+    let buttonTextKey = addedInWishList ? 'remove_from_wishlist' : 'add_to_wishlist';
 
-    // If product is already removed from wishlist page, button is not required.
-    if (!addedInWishList && context === 'wishlist_page') {
-      return null;
+    // For wishlist page, button text is always remove link.
+    if (context === 'wishlist_page') {
+      buttonTextKey = 'remove_from_wishlist';
     }
 
     // If product is already added into wishlist, button is not required on cart page.
@@ -415,9 +426,6 @@ class WishlistButton extends React.Component {
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
     const wishListButtonClass = addedInWishList ? 'in-wishlist wishlist-button-wrapper' : 'wishlist-button-wrapper';
-
-    // Wishlist text for my-wishlist page.
-    let buttonTextKey = addedInWishList ? 'remove_from_wishlist' : 'add_to_wishlist';
 
     // Wishlist text for PDP layouts.
     const viewModes = ['pdp', 'magazinev2', 'modal', 'matchback', 'productDrawer'];

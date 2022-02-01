@@ -25,11 +25,12 @@
     .c-accordion__title,
     .c-accordion_content {
       border: none;
-      background-color: $primary_bg;
+      background-color: $egift-accordion-bg;
       text-align: $left;
     }
 
     .c-accordion__title {
+      font-family: $alshaya-bold;
       margin-top: 1rem;
       font-size: 0.813rem;
       text-transform: none;
@@ -37,21 +38,28 @@
       padding: 1rem 2.5rem 1rem 1.5rem;
       line-height: normal;
 
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 1rem;
+      }
+
       html[lang=ar] & {
         padding: 1rem 1.5rem 1rem 2.5rem;
+
+        @include breakpoint($only-mobile) {
+          padding-right: 1rem;
+        }
       }
 
       @include icon(chevrondown, after) {
         #{$right}: 0.9375rem;
-        font-size: 0.5rem;
-        top: 1.75rem;
+        top: 1.5rem;
+        font-size: 1.5rem;
+        color: $egift-accordion-title;
       }
 
-      &.ui-accordion-header {
-        &::after {
-          @include breakpoint($only-mobile) {
-            #{$right}: 0;
-          }
+      &::after {
+        @include breakpoint($only-mobile) {
+          #{$right}: 0.625rem;
         }
       }
 
@@ -63,11 +71,10 @@
           transform: rotate(180deg);
           color: $egift-accordion-active-title;
           position: absolute;
-          #{$right}: 1.875rem;
-          top: 1.3rem;
+          top: 0.6rem;
 
           @include breakpoint($only-mobile) {
-            #{$right}: 0.9375rem;
+            #{$right}: 0.625rem;
           }
         }
 
@@ -84,8 +91,16 @@
         padding: 0 2.5rem 1rem 1.5rem;
         line-height: normal;
 
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: 1rem;
+        }
+
         html[lang=ar] & {
           padding: 0 1.5rem 1rem 2.5rem;
+
+          @include breakpoint($only-mobile) {
+            padding-right: 1rem;
+          }
         }
       }
 

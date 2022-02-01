@@ -84,6 +84,16 @@
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
 
+          // RCS Entity Loaded.
+          if (pageType) {
+            RcsEventManager.fire('alshayaPageEntityLoaded', {
+              detail: {
+                pageType,
+                entity,
+              }
+            });
+          }
+
           // Add class to remove loader styles after RCS info is filled.
           $('.rcs-page').addClass(classRcsLoaded);
         });
@@ -160,8 +170,13 @@
               )
             );
 
+            // Add class to remove loader styles on RCS Placeholders.
+            // This is done before triggering the Drupal behaviors so that the
+            // code in the behaviors knows that replacement has been completed.
+            $(this).addClass(classRcsLoaded);
             // Re-attach all behaviors.
             rcsPhApplyDrupalJs($(this).parent()[0]);
+            return;
           } catch (error) {
             Drupal.alshayaLogger(
               "error",

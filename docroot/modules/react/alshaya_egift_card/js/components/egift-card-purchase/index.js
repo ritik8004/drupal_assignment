@@ -11,6 +11,9 @@ import { callEgiftApi } from '../../../../js/utilities/egiftCardHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import logger from '../../../../js/utilities/logger';
 import Loading from '../../../../js/utilities/loading';
+import { smoothScrollTo } from '../../../../alshaya_spc/js/utilities/smoothScroll';
+import isAuraEnabled, { getAuraUserDetails } from '../../../../js/utilities/helper';
+import { redeemAuraPoints } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
 
 export default class EgiftCardPurchase extends React.Component {
   constructor(props) {
@@ -20,7 +23,10 @@ export default class EgiftCardPurchase extends React.Component {
       wait: false, // Waiting till we get data from api and show to user.
       activateStepTwo: false, // Set on amount select to show step 2.
       amountSet: 0,
+      formError: '', // Set form error from MDC.
     };
+    // Set ref for error element.
+    this.errorElementRef = React.createRef();
   }
 
   async componentDidMount() {
@@ -78,8 +84,37 @@ export default class EgiftCardPurchase extends React.Component {
       const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response.data; } } });
       document.dispatchEvent(refreshCartEvent);
 
+      // If Aura is enabled and alreay redeemed with aura points,
+      // On adding eGfit products to cart remove aura redeemed points.
+      if (isAuraEnabled()
+        && (typeof response.data.totals.paidWithAura !== 'undefined'
+          || typeof response.data.totals.balancePayable !== 'undefined'
+          || typeof response.data.loyaltyCard !== 'undefined')) {
+        const cardNumber = response.data.loyaltyCard;
+        // Call API to remove redeemed aura points.
+        const requestData = {
+          action: 'remove points',
+          userId: getAuraUserDetails().id,
+          cardNumber,
+        };
+        redeemAuraPoints(requestData);
+      }
       // Show minicart notification.
       Drupal.cartNotification.triggerNotification(productData);
+
+      // GTM product attributes.
+      const productGtm = {
+        name: productData.product_name,
+        price: productData.price,
+        variant: productData.sku,
+        dimension2: 'virtual',
+        dimension4: 1,
+        quantity: productData.quantity,
+        metric2: productData.price,
+      };
+
+      // Push addtocart gtm event.
+      Drupal.alshayaSeoGtmPushAddToCart(productGtm);
     }
     removeFullScreenLoader();
 
@@ -105,6 +140,9 @@ export default class EgiftCardPurchase extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    this.setState({
+      formError: '',
+    });
     showFullScreenLoader();
     const { egiftItems } = this.state;
     const data = new FormData(e.target);
@@ -191,20 +229,34 @@ export default class EgiftCardPurchase extends React.Component {
           variant: params.sku,
           image: productImage,
           product_name: product.name,
+          price: amount,
         };
 
         if (response.data.error) {
-          // Prepare and dispatch the add to cart failed event.
-          const form = document.getElementsByClassName('sku-base-form')[0];
-          const productAddToCartFailed = new CustomEvent('product-add-to-cart-failed', {
-            bubbles: true,
-            detail: {
-              params,
-              productData,
-              message: response.error_message,
-            },
+          // Remove full screen loader.
+          removeFullScreenLoader();
+
+          // Get error message.
+          let errorMessage = response.data.error_message;
+
+          // If error code 604 set product not found.
+          if (response.data.error_code === 604) {
+            errorMessage = Drupal.t('The product that you are trying to add is not available.');
+          }
+
+          // Log error on datadog and ga.
+          const label = `Update cart failed for Product [${params.sku}}] `;
+          Drupal.alshayaSeoGtmPushAddToCartFailure(label, errorMessage);
+
+          // Show error message.
+          this.setState({
+            formError: errorMessage,
           });
-          form.dispatchEvent(productAddToCartFailed);
+
+          // Scroll to error.
+          smoothScrollTo('body');
+
+          return false;
         }
 
         return this.handleUpdateCartResponse(
@@ -221,6 +273,7 @@ export default class EgiftCardPurchase extends React.Component {
       wait,
       activateStepTwo,
       amountSet,
+      formError,
     } = this.state;
 
     if (!wait && egiftItems === null) {
@@ -246,6 +299,13 @@ export default class EgiftCardPurchase extends React.Component {
               className="egift-form fadeInUp"
               id="egift-purchase-form"
             >
+              <div
+                ref={this.errorElementRef}
+                className="error errors-container egift-purchase-page-error"
+                id="edit-errors-container"
+              >
+                { formError }
+              </div>
               <EgiftCardsListStepOne
                 items={egiftItems}
                 handleEgiftSelect={this.handleEgiftSelect}

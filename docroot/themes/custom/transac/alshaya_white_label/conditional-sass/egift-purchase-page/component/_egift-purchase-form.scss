@@ -94,4 +94,27 @@
       align-items: center;
     }
   }
+
+  .egift-purchase-page-error {
+    font-size: 0.8125rem;
+    font-family: $alshaya-bold;
+    display: flex;
+    align-items: center;
+    background: $primary_input_inline_error;
+    padding: 0.75rem 1.25rem;
+    padding-#{$left}: 0.5rem;
+    color: $pdp_error_text;
+    margin-top: 0;
+    margin-bottom: 1rem;
+
+    @include breakpoint($tablet) {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    @include icon(warning, before) {
+      font-size: 1.5rem;
+      margin-#{$right}: 0.5rem;
+    }
+  }
 }

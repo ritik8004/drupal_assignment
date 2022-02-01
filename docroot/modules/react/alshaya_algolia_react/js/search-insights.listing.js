@@ -10,8 +10,13 @@
     attach: function (context) {
       $('#alshaya-algolia-search, #alshaya-algolia-plp').once('alshayaAlgoliaInsights').on('click', '[data-insights-query-id] .product-selected-url', function (event) {
         // Do nothing for buttons inside our markup, for example in slick-dots.
-        // Do nothing if user trying to use cmd + click.
-        if (event.target.tagName.toLowerCase() === 'button' || event.metaKey) {
+        // Do nothing if user trying to use cmd/ctrl + click OR
+        // cmd/ctrl + shift + click.
+        if (event.target.tagName.toLowerCase() === 'button'
+          || event.metaKey
+          || event.shiftKey
+          || event.ctrlKey
+        ) {
           return;
         }
 

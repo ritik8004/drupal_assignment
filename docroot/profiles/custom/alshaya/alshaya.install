@@ -8,6 +8,23 @@
 /**
  * Implements hook_update_N().
  *
+ * Uninstalls track_js and alshaya_track_js modules.
+ */
+function alshaya_update_8014() {
+  if ((\Drupal::moduleHandler()->moduleExists('track_js'))) {
+    \Drupal::service('module_installer')->uninstall(['track_js']);
+  }
+  if ((\Drupal::moduleHandler()->moduleExists('alshaya_track_js'))) {
+    \Drupal::service('module_installer')->uninstall(['alshaya_track_js']);
+  }
+  if ((\Drupal::moduleHandler()->moduleExists('google_page_speed'))) {
+    \Drupal::service('module_installer')->uninstall(['google_page_speed']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Uninstall `scheduled_updates` module.
  */
 function alshaya_update_8013() {

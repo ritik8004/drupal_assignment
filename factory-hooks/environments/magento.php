@@ -1377,6 +1377,33 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
+  'we_test' => [
+    'url' => 'https://wes-test.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '4xtw4osc8e7fv45cy187xhhobr6xt59e',
+      'consumer_secret' => '3b5nydivhlbwm6v29ekyhv3v8v2s2pl4',
+      'access_token' => 'm8cgs2h1dj4zqvx1qy8293aygeu7zcar',
+      'access_token_secret' => '4mocc81s1pnejkm57fimdjw49mqcz4rl',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 15],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 6],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 9, 'ar' => 12],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 21, 'ar' => 18],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 31, 'ar' => 28],
+    ],
+  ],
   'we_uat' => [
     'url' => 'https://wes-uat.store.alshaya.com',
     'magento_secrets' => [
@@ -1608,6 +1635,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 34, 'ar' => 31],
     ],
+    'jo' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
+    ],
   ],
   'aeo_prod' => [
     'url' => 'https://aeo.store.alshaya.com',
@@ -1656,6 +1686,33 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
+  'mu_test' => [
+    'url' => 'https://muji-test.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'cd2hqmtyqht62jka3w54jm1bdd9zdlhq',
+      'consumer_secret' => 'x00pjn155x2aoah9e782rokxdc0v5hc1',
+      'access_token' => 'c4vbucn0mw17usii8locm564lmhzq53f',
+      'access_token_secret' => 'l6ngd0xnrssi8z918egboaklgobofj69',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 28, 'ar' => 25],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 34, 'ar' => 31],
     ],
   ],
   'mu_apc' => [

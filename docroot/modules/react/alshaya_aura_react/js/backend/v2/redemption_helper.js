@@ -100,18 +100,18 @@ const redeemPoints = (cardNumber, data) => callMagentoApi(`/V1/apc/${cardNumber}
     responseData.data.balancePoints = hasValue(response.data.redeem_response.house_hold_balance)
       ? response.data.redeem_response.house_hold_balance
       : responseData.data.balancePoints;
+  }
 
-    // Adding an extra total balance payable attribute, so that we can use this
-    // in egift.
-    // Doing this because while removing AURA points, we remove the Balance
-    // Payable attribute from cart total.
-    if (hasValue(response.data.totals)) {
-      response.data.totals.total_segments.forEach((element) => {
-        if (element.code === 'balance_payable') {
-          responseData.data.totalBalancePayable = element.value;
-        }
-      });
-    }
+  // Adding an extra total balance payable attribute, so that we can use this
+  // in egift.
+  // Doing this because while removing AURA points, we remove the Balance
+  // Payable attribute from cart total.
+  if (hasValue(response.data.totals)) {
+    response.data.totals.total_segments.forEach((element) => {
+      if (element.code === 'balance_payable') {
+        responseData.data.totalBalancePayable = element.value;
+      }
+    });
   }
 
   return responseData;

@@ -212,6 +212,7 @@
       'id': data.id,
       'sku': data.sku,
       'parentSKU': data.parentSKU,
+      'skuType': data.skuType,
       'title': data.title,
       'url': data.url,
       'image': data.image,
@@ -346,6 +347,7 @@
     Drupal.alshayaSpc.storeProductData({
       sku: productDataSKU,
       parentSKU: parentSKU,
+      skuType: productInfo.type,
       title: productName,
       url: productUrl,
       image: productImage,

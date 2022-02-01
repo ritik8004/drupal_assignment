@@ -60,6 +60,12 @@ export default class ValidEgiftCard extends React.Component {
         });
       }
     }
+    // Event listener on delivery information update to remove redeemed amount.
+    document.addEventListener('refreshCartOnAddress', this.handleRemoveCard);
+    // Event listener on CnC store selection.
+    document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
+    // Event listener on shiping method update to remove redeemed Amount.
+    document.addEventListener('changeShippingMethod', this.handleRemoveCard);
   }
 
   openModal = (e) => {
@@ -191,10 +197,10 @@ export default class ValidEgiftCard extends React.Component {
           })}
           <div className="remove-egift-card">
             <button type="button" onClick={this.handleRemoveCard}>{Drupal.t('Remove', {}, { context: 'egift' })}</button>
-            <div id="egift_remove_card_error" className="error" />
           </div>
         </div>
         <div className="egift-redeem-edit-amount" onClick={this.openModal}>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
+        <div id="egift_remove_card_error" className="error egift-remove-redeem-card-error" />
         <ConditionalView condition={pendingAmount > 0}>
           <div className="full-redeemed">
             {Drupal.t('Pay ', {}, { context: 'egift' })}

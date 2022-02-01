@@ -10,7 +10,8 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 import { isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
-import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -30,7 +31,7 @@ export default class CompletePurchase extends React.Component {
     // benefit pay modal only once for a user. Removing this key just after
     // placing order to remove old value.
     Drupal.removeItemFromLocalStorage('benefit_pay_modal_auto_opened');
-    // Remove the topup quote id if exists in thee local storage.
+    // Remove the topup quote id if exists in the local storage.
     if (isEgiftCardEnabled()) {
       Drupal.removeItemFromLocalStorage('topupQuote');
     }
@@ -64,11 +65,12 @@ export default class CompletePurchase extends React.Component {
     // Flag to track pseudo payment method.
     let isPseudoPaymentMedthod = false;
 
-    // If full payment is done by egift then change the payment method to
-    // hps_payment.
+    // If full payment is done by egift or egift + AURA then change the payment
+    // method to hps_payment.
     let cartPaymentMethod = cart.cart.payment.method;
     if (isEgiftCardEnabled()
-      && isFullPaymentDoneByEgift(cart.cart)
+      && (isFullPaymentDoneByEgift(cart.cart)
+      || isFullPaymentDoneByPseudoPaymentMedthods(cart.cart))
       && cart.cart.payment.method !== 'hps_payment') {
       cartPaymentMethod = 'hps_payment';
     }
@@ -112,10 +114,11 @@ export default class CompletePurchase extends React.Component {
         return;
       }
 
-      // If full payment is done by egift then change the payment method to
-      // hps_payment.
+      // If full payment is done by egift or egift + AURA then change the
+      // payment method to hps_payment.
       if (isEgiftCardEnabled()
-        && isFullPaymentDoneByEgift(cart.cart)
+        && (isFullPaymentDoneByEgift(cart.cart)
+        || isFullPaymentDoneByPseudoPaymentMedthods(cart.cart))
         && cart.cart.payment.method !== cartPaymentMethod) {
         // Change payment method to hps_payment and place order.
         updatePaymentAndPlaceOrder(cartPaymentMethod);
@@ -175,8 +178,9 @@ export default class CompletePurchase extends React.Component {
     if (document.getElementById('spc-payment-methods') === null
       || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
       // Bypass the payment method error check if the full payment is done by
-      // egift card.
-      if (!(isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart))) {
+      // egift car or full payment is done by Egift + AURA.
+      if (!((isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart))
+        || isFullPaymentDoneByPseudoPaymentMedthods(cart.cart))) {
         // Adding error class in the section.
         const paymentMethods = document.getElementById('spc-payment-methods');
         if (paymentMethods) {
@@ -206,6 +210,22 @@ export default class CompletePurchase extends React.Component {
         billingAddress[0].appendChild(tag);
         tag.setAttribute('id', 'billing-address-information-error');
       }
+      return false;
+    }
+
+    // If somehow user bypass the frontend checks and tries to place order, then
+    // we are validating that user has done full payment by egift and aura and
+    // balance payable is greater than 0.
+    const { balancePayable, paidWithAura, egiftRedeemedAmount } = cart.cart.totals;
+    if (isEgiftCardEnabled()
+      && isAuraEnabled()
+      && paidWithAura > 0
+      && egiftRedeemedAmount > 0
+      && balancePayable > 0) {
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: drupalSettings.global_error_message,
+      });
       return false;
     }
 

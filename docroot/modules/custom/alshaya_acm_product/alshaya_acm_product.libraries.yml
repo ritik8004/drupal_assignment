@@ -45,7 +45,7 @@ show_color_images_on_filter:
 
 sharethis:
   js:
-    js/sharethis.js: { weight: -3 }
+    js/sharethis.js: { weight: -3, attributes: { defer: true } }
   dependencies:
     - core/jquery.once
     - core/drupalSettings
@@ -68,6 +68,8 @@ product_utility:
   version: 1.x
   js:
     js/alshaya_acm_product.utility.js: {}
+  dependencies:
+    - alshaya_master/common_functions
 
 add_to_bag_utility:
   version: 1.x
