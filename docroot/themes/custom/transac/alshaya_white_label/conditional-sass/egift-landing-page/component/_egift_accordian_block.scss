@@ -37,6 +37,7 @@
       color: $egift-accordion-title;
       padding: 1rem 2.5rem 1rem 1.5rem;
       line-height: normal;
+      height: auto;
 
       @include breakpoint($only-mobile) {
         padding-#{$left}: 1rem;
