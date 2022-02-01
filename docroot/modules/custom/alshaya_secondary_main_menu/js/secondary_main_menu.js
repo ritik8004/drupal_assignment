@@ -8,8 +8,7 @@
     attach: function (context) {
       if ($('#block-alshayasecondarymainmenu').length && $('secondary-main-menu-wrapper').length == 0) {
         if ($(window).width() > 1024) {
-          $('#block-branding, #block-alshayasecondarymainmenu')
-            .wrapAll('<div class="secondary-main-menu-wrapper"></div>');
+          $('#block-branding, #block-alshayasecondarymainmenu', context).once('alshayaSecondaryMainMenu').wrapAll('<div class="secondary-main-menu-wrapper"></div>');
           $('.secondary--main--menu .column').each(function (index) {
             const menuItemsCount = $(this).find("li.menu--three__list-item").length;
             const numberOfItems = 16;
