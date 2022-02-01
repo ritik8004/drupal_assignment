@@ -29,6 +29,9 @@ alshaya_algolia_react.settings:
     hide_grid_toggle:
       type: boolean
       label: 'Grid toggle hide/show in srp/plp.'
+    top_facets_limit:
+      type: integer
+      label: 'Number of filters to show on srp/plp page top.'
 
 alshaya_algolia_react.product_frames:
   type: config_object

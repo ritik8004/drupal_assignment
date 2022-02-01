@@ -107,7 +107,7 @@ const SearchResultsComponent = ({
             <>
               <Filters
                 indexName={indexName}
-                limit={4}
+                limit={drupalSettings.algoliaSearch.topFacetsLimit}
                 callback={(callerProps) => callback(callerProps)}
                 pageType="search"
               />
