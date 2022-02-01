@@ -186,7 +186,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       // Perform linking of Egift card by calling the redemption API.
       const redemptionResponse = performRedemption(
         cart.cart.cart_id_int,
-        cart.cart.totals.base_grand_total,
+        egiftCardActualBalance, // Send card balance amount.
         egiftLinkedCardNumber,
         'linked',
       );
