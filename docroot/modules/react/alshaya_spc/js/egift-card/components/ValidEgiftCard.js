@@ -41,7 +41,7 @@ export default class ValidEgiftCard extends React.Component {
     if (isEgiftRedemptionDone(cart)) {
       this.setState({
         amount: cart.totals.egiftRedeemedAmount,
-        cardBalance: cart.totals.egiftCurrentBalance - cart.totals.egiftRedeemedAmount,
+        cardBalance: cart.totals.egiftCurrentBalance,
         pendingAmount: cart.totals.totalBalancePayable,
       });
     }
@@ -156,7 +156,7 @@ export default class ValidEgiftCard extends React.Component {
       this.setState({
         amount: redeemedAmount,
         open: false,
-        cardBalance: cart.totals.egiftCurrentBalance - redeemedAmount,
+        cardBalance: cart.totals.egiftCurrentBalance,
         pendingAmount: balancePayable,
       });
     }
