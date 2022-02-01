@@ -9,7 +9,7 @@ body.wishlist-enabled {
     top: 0.5rem;
 
     @include breakpoint($only-mobile) {
-      #{$right}: 2.5rem;
+      #{$right}: 3rem;
     }
 
     @include breakpoint($tablet) {
