@@ -885,18 +885,16 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       'rcs_magento_placeholders/rcs_magento_placeholders',
     ];
   }
-
   // Replace DY library.
-  if ($extension === 'alshaya_dynamic_yield' && isset($libraries['alshaya_dynamic_yield.product_modal'])) {
+  elseif ($extension === 'alshaya_dynamic_yield' && isset($libraries['alshaya_dynamic_yield.product_modal'])) {
     $options = $libraries['alshaya_dynamic_yield.product_modal']['js']['js/alshaya_dynamic_yield.product_modal.js'];
     unset($libraries['alshaya_dynamic_yield.product_modal']['js']['js/alshaya_dynamic_yield.product_modal.js']);
     $libraries['alshaya_dynamic_yield.product_modal']['js']["/$self_module_path/js/alshaya_rcs_product.modal.js"] = $options;
     $libraries['alshaya_dynamic_yield.product_modal']['dependencies'][] = 'alshaya_acm_cart_notification/cart_notification_js';
     $libraries['alshaya_dynamic_yield.product_modal']['dependencies'][] = 'rcs_placeholders/helpers';
   }
-
   // Replace AURA PDP library with RCS supported one.
-  if ($extension === 'alshaya_aura_react' && isset($libraries['alshaya_aura_pdp'])) {
+  elseif ($extension === 'alshaya_aura_react' && isset($libraries['alshaya_aura_pdp'])) {
     $options = $libraries['alshaya_aura_pdp']['js']['dist/pdp.bundle.js'];
     unset($libraries['alshaya_aura_pdp']['js']['dist/pdp.bundle.js']);
     $aura_module_path = drupal_get_path('module', 'alshaya_aura_react');

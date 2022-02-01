@@ -5,6 +5,8 @@ import isAuraEnabled from '../../js/utilities/helper';
 
 let componentAttached = false;
 
+// Note: This file is dynamically loaded in the library_info_alter hook of
+// alshaya_rcs_product.module.
 Drupal.behaviors.auraPdpRcsBehavior = {
   attach: function auraPdpRcs() {
     const pageLoaded = document.querySelector('.rcs-page.rcs-loaded');
