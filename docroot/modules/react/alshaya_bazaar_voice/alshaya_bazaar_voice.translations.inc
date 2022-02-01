@@ -169,5 +169,8 @@ function _alshaya_bazaar_voice_translations() {
     'Back to Original Comment' => [
       'ar' => 'الرجوع للتعليق الأصلي',
     ],
+    'Please login with the email address used to purchase this product to write a review.' => [
+      'ar' => 'يرجى تسجيل الدخول من خلال البريد الالكتروني المستخدم لشراء هذا المنتج كي تتمكن من كتابة مراجعة.',
+    ],
   ];
 }
