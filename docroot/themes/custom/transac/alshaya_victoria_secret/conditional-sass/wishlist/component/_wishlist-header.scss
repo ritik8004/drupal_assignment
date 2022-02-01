@@ -13,7 +13,7 @@ body.wishlist-enabled {
   #wishlist-header-wrapper {
     @include breakpoint($upto-desktop) {
       width: 8%;
-      #{$right}: 7.5rem;
+      #{$right}: 8.25rem;
       top: 3.4375rem;
     }
 
@@ -21,6 +21,7 @@ body.wishlist-enabled {
       width: 34%;
       #{$right}: 9.0625rem;
       text-align: center;
+      z-index: 10;
     }
 
     .wishlist-header {
