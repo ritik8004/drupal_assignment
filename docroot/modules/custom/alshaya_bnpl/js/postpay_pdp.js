@@ -1,16 +1,29 @@
 (function ($, Drupal) {
+  // Flag to check if Postpay is initialized or not.
+  var postpayInitialized = false;
+  // Updates the flag variable once Postpay is initialized.
+  document.addEventListener('alshayaPostpayInit', () => {
+    postpayInitialized = true;
+
+    // We trigger Drupal behavior here so that in case Postpay was initialized
+    // after the behaviors are finished executing, then this will take care of
+    // executing the behavior code again.
+    Drupal.behaviors.postpayPDP.attach(document);
+  });
+
   Drupal.behaviors.postpayPDP = {
     attach: function (context, settings) {
-      var skuBaseForm = $('.sku-base-form').not('[data-sku *= "#"]');
+      if (!postpayInitialized) {
+        return;
+      }
 
-      document.addEventListener('alshayaPostpayInit', () => {
-        skuBaseForm.each(function () {
-          setPostpayWidgetAmount(this);
-        });
+      var skuBaseForm = $('.sku-base-form', context).not('[data-sku *= "#"]');
+      skuBaseForm.once('postpay-pdp-initial').each(function () {
+        setPostpayWidgetAmount(this);
+      });
 
-        skuBaseForm.once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
-          setPostpayWidgetAmount(this, variant, event);
-        });
+      skuBaseForm.once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+        setPostpayWidgetAmount(this, variant, event);
       });
     }
   };
