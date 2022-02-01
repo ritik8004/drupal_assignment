@@ -1635,6 +1635,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 34, 'ar' => 31],
     ],
+    'jo' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
+    ],
   ],
   'aeo_prod' => [
     'url' => 'https://aeo.store.alshaya.com',
