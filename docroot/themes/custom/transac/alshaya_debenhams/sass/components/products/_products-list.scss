@@ -37,6 +37,16 @@
         }
       }
     }
+
+    .block-page-title-block {
+      &.mobile {
+        h1 {
+          @include breakpoint($only-mobile) {
+            padding: 1.375rem 0;
+          }
+        }
+      }
+    }
   }
 
   .c-products__item {
