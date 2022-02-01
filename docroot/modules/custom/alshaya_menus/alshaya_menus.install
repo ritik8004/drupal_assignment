@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\block\Entity\Block;
 
 /**
  * Implements hook_update_N().
@@ -26,6 +27,14 @@ function alshaya_menus_update_8004() {
   $translations = _alshaya_menus_get_translations('v1');
   if ($translations) {
     alshaya_i18n_save_translations($translations);
+  }
+
+  // Disabling the block.
+  // To be manually enabled from Block Layout in each site.
+  $block = Block::load('countryswitcher');
+  if (!empty($block) && $block->status()) {
+    $block->setStatus(FALSE);
+    $block->save();
   }
 }
 
