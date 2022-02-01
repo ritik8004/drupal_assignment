@@ -630,6 +630,11 @@ tabby:
     theme:
       css/conditional-sass/tabby/tabby.ltr.css: {}
 
+country-switcher:
+  css:
+    theme:
+      css/conditional-sass/country-switcher/country-switcher.ltr.css: {}
+
 magic-dots:
   css:
     theme:
