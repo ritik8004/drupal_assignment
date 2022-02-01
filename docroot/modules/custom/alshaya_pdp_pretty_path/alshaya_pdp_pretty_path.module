@@ -10,7 +10,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\acq_sku\Entity\SKU;
 
- /**
+/**
  * Implements hook_alshaya_search_algolia_object_alter().
  */
 function alshaya_pdp_pretty_path_alshaya_search_algolia_object_alter(array &$object) {

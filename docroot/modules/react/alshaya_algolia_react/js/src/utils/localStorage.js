@@ -3,35 +3,15 @@
  * related get, set, remove.
  */
 
-function removeSearchQuery() {
-  Drupal.removeItemFromLocalStorage('algolia_search_query');
-}
-
-/**
- * Remove search query from local storage to not render search results
- * block when user redirects to another page.
- */
-window.onbeforeunload = () => {
-  removeSearchQuery();
-};
-
-/**
- * Remove search query from local storage to not render search results when
- * no #query or #refinement in url.
- */
-window.addEventListener('DOMContentLoaded', () => {
-  const query = window.location.hash;
-  if (query.indexOf('#query') < 0 && query.indexOf('#refinementList') < 0) {
-    removeSearchQuery();
-  }
-});
+// Global variable to keep algolia search query.
+window.algoliaSearchQuery = '';
 
 function setSearchQuery(queryValue) {
-  Drupal.addItemInLocalStorage('algolia_search_query', queryValue);
+  window.algoliaSearchQuery = queryValue;
 }
 
 function getSearchQuery() {
-  return Drupal.getItemFromLocalStorage('algolia_search_query');
+  return window.algoliaSearchQuery;
 }
 
 function setLangRedirect(queryValue) {
@@ -83,7 +63,6 @@ function storeClickedItem(event, pageType) {
 
 export {
   setSearchQuery,
-  removeSearchQuery,
   getSearchQuery,
   setLangRedirect,
   removeLangRedirect,
