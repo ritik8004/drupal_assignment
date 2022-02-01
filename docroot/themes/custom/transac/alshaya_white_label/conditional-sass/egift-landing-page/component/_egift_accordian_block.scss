@@ -38,20 +38,28 @@
       padding: 1rem 2.5rem 1rem 1.5rem;
       line-height: normal;
 
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 1rem;
+      }
+
       html[lang=ar] & {
         padding: 1rem 1.5rem 1rem 2.5rem;
+
+        @include breakpoint($only-mobile) {
+          padding-right: 1rem;
+        }
       }
 
       @include icon(chevrondown, after) {
         #{$right}: 0.9375rem;
         top: 1.5rem;
+        font-size: 1.5rem;
+        color: $egift-accordion-title;
       }
 
-      &.ui-accordion-header {
-        &::after {
-          @include breakpoint($only-mobile) {
-            #{$right}: 0;
-          }
+      &::after {
+        @include breakpoint($only-mobile) {
+          #{$right}: 0.625rem;
         }
       }
 
@@ -66,7 +74,7 @@
           top: 0.6rem;
 
           @include breakpoint($only-mobile) {
-            #{$right}: 0.9375rem;
+            #{$right}: 0.625rem;
           }
         }
 
@@ -83,8 +91,16 @@
         padding: 0 2.5rem 1rem 1.5rem;
         line-height: normal;
 
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: 1rem;
+        }
+
         html[lang=ar] & {
           padding: 0 1.5rem 1rem 2.5rem;
+
+          @include breakpoint($only-mobile) {
+            padding-right: 1rem;
+          }
         }
       }
 

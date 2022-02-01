@@ -31,6 +31,7 @@
       @include breakpoint($upto-tablet) {
         .spc-cart-product-attribute {
           display: flex;
+          flex-wrap: wrap;
 
           .spc-cart-product-attribute-label {
             flex-shrink: 0;
