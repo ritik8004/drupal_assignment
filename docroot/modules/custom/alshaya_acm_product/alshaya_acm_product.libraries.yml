@@ -68,3 +68,8 @@ product_utility:
   version: 1.x
   js:
     js/alshaya_acm_product.utility.js: {}
+
+add_to_bag_utility:
+  version: 1.x
+  js:
+    js/alshaya_acm_add_to_bag.utility.js: {}

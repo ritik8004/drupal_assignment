@@ -21,6 +21,7 @@ const UnorderedList = (props) => {
   } = props;
   let selectedValueLabel = null;
   const { isGroup } = groupData;
+  const allowedNumValues = allowedValues.map((value) => parseInt(value, 10));
   const listItems = options.map((option) => {
     let element = null;
     const classes = [];
@@ -28,9 +29,9 @@ const UnorderedList = (props) => {
       ? option.label[groupData.defaultGroup]
       : option.label;
 
-    if (allowedValues.length > 0
-      && !allowedValues.includes(option.value)
-      && !allowedValues.includes(parseInt(option.value, 10))) {
+    if (allowedNumValues.length > 0
+      && !allowedNumValues.includes(option.value)
+      && !allowedNumValues.includes(parseInt(option.value, 10))) {
       classes.push(disabledClass);
     }
 
