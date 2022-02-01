@@ -1519,6 +1519,36 @@ $magentos = [
       'store_id' => ['en' => 14, 'ar' => 13],
     ],
   ],
+  'aeo_test' => [
+    'url' => 'https://aeo-test.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
+      'consumer_secret' => 'k63ke42x62x1hssrtxy1e33c5vmyqgwy',
+      'access_token' => 'o0kvxvg1hge9j51twpyztl9uxvvq78y2',
+      'access_token_secret' => '05m2gsyg0sxrs87aehwghc2ct0ttmtuo',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
+    ],
+  ],
   'aeo_apc' => [
     'url' => 'https://apc-uovxi7i-tw5uijob6hir2.eu-3.magentosite.cloud',
     'magento_secrets' => [
