@@ -23,6 +23,7 @@ import dispatchCustomEvent from '../../../js/utilities/events';
 import logger from '../../../js/utilities/logger';
 import { getDefaultErrorMessage } from '../../../js/utilities/error';
 import RedeemEgiftSVG from '../svg-component/redeem-egift-svg';
+import { isFullPaymentDoneByAura } from '../aura-loyalty/components/utilities/checkout_helper';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -268,7 +269,9 @@ export default class RedeemEgiftCard extends React.Component {
     const { cart: cartData, refreshCart } = this.props;
     const activeClass = active || codeValidated ? 'active' : '';
     const codeValidationClass = codeValidated ? 'has-validated-code' : '';
-    const disabledRedemptionClass = redemptionDisabled || isEgiftRedemptionDone(cartData.cart, 'linked') ? 'in-active' : '';
+    const disabledRedemptionClass = redemptionDisabled
+      || isEgiftRedemptionDone(cartData.cart, 'linked')
+      || isFullPaymentDoneByAura(cartData) ? 'in-active' : '';
 
     return (
       <div className="redeem-egift-card">

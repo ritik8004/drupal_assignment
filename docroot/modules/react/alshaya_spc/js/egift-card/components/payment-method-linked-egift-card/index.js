@@ -17,6 +17,7 @@ import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import Loading from '../../../../../js/utilities/loading';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
+import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -376,6 +377,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       || isEgiftCardExpired
       || isEgiftRedemptionDone(cart.cart)
       || UnsupportedPaymentMethod
+      || isFullPaymentDoneByAura(cart)
     );
 
     // Add `in-active` class if disabled property is true.
