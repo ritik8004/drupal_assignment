@@ -4,6 +4,11 @@
   // Updates the flag variable once Postpay is initialized.
   document.addEventListener('alshayaPostpayInit', () => {
     postpayInitialized = true;
+
+    // We trigger Drupal behavior here so that in case Postpay was initialized
+    // after the behaviors are finished executing, then this will take care of
+    // executing the behavior code again.
+    Drupal.behaviors.postpayPDP.attach(document);
   });
 
   Drupal.behaviors.postpayPDP = {
@@ -12,7 +17,7 @@
         return;
       }
 
-      var skuBaseForm = $('.sku-base-form').not('[data-sku *= "#"]');
+      var skuBaseForm = $('.sku-base-form', context).not('[data-sku *= "#"]');
       skuBaseForm.once('postpay-pdp-initial').each(function () {
         setPostpayWidgetAmount(this);
       });
