@@ -217,6 +217,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'productTitleTrimEnabled' => $product_frame_settings->get('product_title_trim'),
       'productElementAlignmentEnabled' => FALSE,
       'hideGridToggle' => $alshaya_algolia_react_setting_values->get('hide_grid_toggle') ?? 0,
+      'topFacetsLimit' => $alshaya_algolia_react_setting_values->get('top_facets_limit'),
     ];
 
     // Set product elements alignment to true only
