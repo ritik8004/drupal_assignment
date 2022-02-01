@@ -211,3 +211,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css
+
+  alshaya_white_label/egift-cart:
+    css:
+      theme:
+        css/conditional-sass/egift-cart/egift-cart.ltr.css: css/conditional-sass/egift-cart/egift-cart.ltr.css
