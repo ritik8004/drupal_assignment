@@ -415,7 +415,8 @@ const getProcessedCartData = async (cartData) => {
     data.items = {};
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
-      const parentSKU = item.product_type === 'configurable' ? item.extension_attributes.parent_product_sku : null;
+      const hasParentSku = (item.extension_attributes && Object.prototype.hasOwnProperty.call(item.extension_attributes, 'parent_product_sku'));
+      const parentSKU = (item.product_type === 'configurable' && hasParentSku) ? item.extension_attributes.parent_product_sku : null;
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
