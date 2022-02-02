@@ -50,6 +50,11 @@ product.delivery_info:
   js:
     templates/rcs-pdp-delivery-info-block.handlebars: {}
 
+product.delivery_options:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-options.handlebars: {}
+
 product.delivery_option_cnc:
   version: 1.x
   js:

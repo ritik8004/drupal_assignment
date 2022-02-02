@@ -997,7 +997,7 @@ const prepareFilterUrl = (filters, base = 'searchCriteria', groupId = 0) => {
     });
   });
 
-  return url;
+  return encodeURIComponent(url);
 };
 
 /**

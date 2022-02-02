@@ -69,9 +69,6 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     'form_element_select' => [
       'variables' => [],
     ],
-    'rcs_pdp_delivery_option' => [
-      'variables' => [],
-    ],
     'rcs_not_buyable_product' => [
       'variables' => [
         'not_buyable_message' => NULL,
@@ -312,20 +309,24 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $delivery_options_order = $express_delivery_config->get('delivery_options_order');
   $delivery_options = [];
   foreach ($delivery_options_order as $option) {
-    $enabled = $express_delivery_config->get($option . '_status');
-    if ($enabled) {
-      $delivery_options[] = [
-        'id' => $option,
-        // @codingStandardsIgnoreLine
-        'label' => t($express_delivery_config->get($option . '_label'),
-          [],
-          ['context' => $option . '_label']
-        ),
-      ];
-    }
+    $delivery_options[] = [
+      'status' => $express_delivery_config->get($option . '_status'),
+      'id' => $option,
+      // @codingStandardsIgnoreLine
+      'label' => t($express_delivery_config->get($option . '_label'),
+        [],
+        ['context' => $option . '_label']
+      ),
+    ];
   }
+  $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
   $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['expressDelivery'] = $delivery_options;
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
+
+  // Address fields configs for Delivery options side drawer.
+  $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
+  $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
+  $build['#attached']['drupalSettings']['country_code'] = $country_code;
 }
 
 /**
@@ -393,19 +394,6 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     '#value' => render($form_element_select_template),
     '#attributes' => [
       'class' => 'rcs-templates--form_element_select',
-    ],
-  ];
-
-
-  $delivery_option = [
-    '#theme' => 'rcs_pdp_delivery_option',
-  ];
-  $variables['rcs_templates']['delivery_option'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($delivery_option),
-    '#attributes' => [
-      'class' => 'rcs-templates--delivery_option',
     ],
   ];
 
@@ -857,6 +845,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'product.order_quantity_limit' => 'alshaya_rcs_product',
     'product.promotions' => 'alshaya_rcs_product',
     'product.delivery_info' => 'alshaya_rcs_product',
+    'product.delivery_options' => 'alshaya_rcs_product',
     'product.delivery_option_cnc' => 'alshaya_rcs_product',
     'product.delivery_option_hd' => 'alshaya_rcs_product',
     'gallery.product.product_zoom' => 'alshaya_rcs_product',
@@ -1069,4 +1058,31 @@ function _alshaya_rcs_product_get_cnc_config(array &$build) {
   $cnc_settings = _get_cnc_settings();
   $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
   $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
+}
+
+/**
+ * Implements hook_preprocess_page__rcs_pdp().
+ *
+ * This hook being called instead of hook_preprocess_page().
+ * Alternatively we could invoke hook_preprocess_page() here.
+ */
+function alshaya_rcs_product_preprocess_page__rcs_pdp(&$variables) {
+  $strings = [
+    '#theme' => 'translatable_strings',
+    '#strings' => [
+      [
+        'key' => 'backend_obsolete_version',
+        'value' => t('We have upgraded your experience, please refresh the page and try again.'),
+      ],
+      [
+        'key' => 'check_area_availability',
+        'value' => t('Check availability in your area', [], ['context' => 'delivery_area']),
+      ],
+      [
+        'key' => 'governate_label',
+        'value' => t('Select @label', [], ['context' => 'delivery_area']),
+      ],
+    ],
+  ];
+  $variables['page']['content']['commerce_backend'] = $strings;
 }

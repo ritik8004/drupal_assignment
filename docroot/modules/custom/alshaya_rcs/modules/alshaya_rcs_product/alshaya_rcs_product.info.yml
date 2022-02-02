@@ -7,3 +7,5 @@ dependencies:
   - alshaya_rcs_magento_placeholders:alshaya_rcs_magento_placeholders
   - rcs_handlebars:rcs_handlebars
   - alshaya_acm_product:alshaya_acm_product
+  - alshaya_spc:alshaya_spc
+  - alshaya_custom:alshaya_custom
