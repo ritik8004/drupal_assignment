@@ -18,7 +18,6 @@
 
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * Trigger views AJAX refresh on click.

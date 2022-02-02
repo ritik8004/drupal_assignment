@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   Drupal.checkoutComTokenised = false;
   Drupal.checkoutComTokenisationProcessed = false;
@@ -112,7 +111,6 @@
    * @param form
    */
   function checkoutcom_form_submit_handler(form) {
-    'use strict';
     var $ = jQuery.noConflict();
 
     // Submit form if card is tokenised and there are no form errors.

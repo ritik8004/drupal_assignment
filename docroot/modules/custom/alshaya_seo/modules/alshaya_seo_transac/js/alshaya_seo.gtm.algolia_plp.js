@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, dataLayer, debounce, drupalSettings) {
-  'use strict';
 
   Drupal.behaviors.algoliaPLP = {
     attach: function (context, settings) {

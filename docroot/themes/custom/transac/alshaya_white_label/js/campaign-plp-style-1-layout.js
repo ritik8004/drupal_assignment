@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /* global videojs */
   /* global MobileDetect */

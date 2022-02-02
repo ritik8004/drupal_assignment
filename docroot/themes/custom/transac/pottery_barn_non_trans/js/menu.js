@@ -6,7 +6,6 @@
 /* global debounce */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {

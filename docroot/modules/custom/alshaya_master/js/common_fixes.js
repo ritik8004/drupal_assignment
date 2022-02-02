@@ -1,5 +1,4 @@
 (function () {
-  'use strict';
 
   // For all the Drupal JS we want to use Underscore JS only.
   // @todo find better way to identify if the variable is
