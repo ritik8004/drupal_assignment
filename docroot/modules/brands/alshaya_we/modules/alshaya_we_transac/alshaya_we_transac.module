@@ -9,12 +9,16 @@
  * Implements hook_alshaya_performance_preload_alter().
  */
 function alshaya_we_transac_alshaya_performance_preload_alter(array &$preload) {
-  // WestElm's icon font comes from whitelabel.
-  $icon_directory_path = '/' . drupal_get_path('theme', 'alshaya_white_label') . '/fonts';
-
   $preload[] = [
     'as' => 'font',
-    'href' => $icon_directory_path . '/alshaya-icons.woff2?D7b5if',
+    'href' => '/themes/custom/transac/alshaya_westelm/fonts/GTEestiDisplay-Light.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  // WestElm's icon font comes from whitelabel.
+  $preload[] = [
+    'as' => 'font',
+    'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-icons.woff2?D7b5if',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];

@@ -117,13 +117,29 @@ function alshaya_fl_transac_alshaya_acm_product_gallery_alter(array &$gallery, S
  * Implements hook_alshaya_performance_preload_alter().
  */
 function alshaya_fl_transac_alshaya_performance_preload_alter(array &$preload) {
-  // Footlocker's icon font comes from whitelabel.
-  $icon_directory_path = '/' . drupal_get_path('theme', 'alshaya_white_label') . '/fonts';
-
-  $preload[] = [
+  $alshaya_preload = [
     'as' => 'font',
-    'href' => $icon_directory_path . '/alshaya-icons.woff2?D7b5if',
+    'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-icons.woff2?D7b5if',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];
+  $site_preloads = [
+    'en' => [
+      $alshaya_preload,
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_footlocker/fonts/DroidKufi-Regular.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      $alshaya_preload,
+    ],
+  ];
+  // Footlocker's icon font comes from whitelabel.
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
 }
