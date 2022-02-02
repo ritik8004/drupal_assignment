@@ -399,6 +399,10 @@ function _alshaya_egift_card_translations() {
       'You can only redeem full pending balance or use other payment method.' => [
         'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
         'context' => 'egift',
+      ],
+      'Please pay full amount via Egift card or use other payment method.' => [
+        'ar' => 'Please pay full amount via Egift card or use other payment method.',
+        'context' => 'egift',
       ]
     ],
   ];
