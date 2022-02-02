@@ -118,9 +118,8 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
  */
 function alshaya_dh_transac_gtm_product_attributes_alter($product, array &$attributes) {
   // Update brand name in data layer.
-  $sku = SKU::loadFromSku($attributes['gtm-product-sku']);
-  if ($sku instanceof SKU && $sku->hasTranslation('en')) {
-    $sku = $sku->getTranslation('en');
+  $sku = SKU::loadFromSku($attributes['gtm-product-sku'], 'en');
+  if ($sku instanceof SKU) {
     $attributes['gtm-brand'] = $sku->get('attr_brand_name')->getString();
   }
 }
