@@ -6,7 +6,7 @@
  */
 
 use Drupal\search_api\Entity\Index;
-use Drupal\search_api\Item\Field;
+use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
  * Implements hook_update_N().
@@ -15,22 +15,20 @@ use Drupal\search_api\Item\Field;
  * to add created field.
  */
 function alshaya_search_algolia_update_8011() {
-  $index_storage = \Drupal::entityTypeManager()
-    ->getStorage('search_api_index');
-  $index = ['alshaya_algolia_index', 'alshaya_algolia_product_list_index'];
-  foreach ($index as $singleIndex) {
-    $singleIndexEntity = $index_storage->load($singleIndex);
-
-    // Add 'created' field.
-    $field_intro = new Field($singleIndexEntity, 'created');
-    $field_intro->setType('date');
-    $field_intro->setPropertyPath('created');
-    $field_intro->setDatasourceId('entity:node');
-    $field_intro->setLabel('Authored on');
-    $singleIndexEntity->addField($field_intro);
-
-    $singleIndexEntity->save();
-  }
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Adding fields in search_api index.
+  $manager->updateConfigs(
+    ['search_api.index.alshaya_algolia_index'],
+    'alshaya_search_algolia',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+  $manager->updateConfigs(
+    ['search_api.index.alshaya_algolia_product_list_index'],
+    'alshaya_search_algolia',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
 
   // Re-index items.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
