@@ -1037,7 +1037,7 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
   // @todo pending cofirmation from MDC on using api call for each click.
   let url = '/V1/deliverymatrix/address-locations/search?';
   const params = prepareFilterUrl(filters);
-  url = url.concat(params);
+  url = encodeURIComponent(url.concat(params));
   try {
     // Associate cart to customer.
     const response = await callMagentoApi(url, 'GET', {});
