@@ -297,14 +297,39 @@ function alshaya_vs_transac_preprocess_acq_sku__free_gift(&$variables) {
  * Implements hook_alshaya_performance_preload_alter().
  */
 function alshaya_vs_transac_alshaya_performance_preload_alter(array &$preload) {
-  $themeHandler = \Drupal::service('theme_handler');
-  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
-  $fonts_directory_path = '/' . $themePath . '/fonts';
-
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-icons.woff2?myjxod',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
+  $site_preloads = [
+    'en' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Book.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Bold.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_victoria_secret/fonts/DroidArabicKufi.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_victoria_secret/fonts/DroidArabicKufi-Bold.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+    ],
   ];
+  // Preloading fonts here.
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
 }
