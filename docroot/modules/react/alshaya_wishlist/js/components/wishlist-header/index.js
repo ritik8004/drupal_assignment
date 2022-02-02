@@ -49,13 +49,14 @@ export default class WishlistHeader extends React.Component {
     if (!isAnonymousUser()) {
       // Guest user's wishlist data from local storage.
       const wishListDataOfGuestUser = getWishListData(guestUserStorageKey());
-      // Remove wishlist info from local storage for guest users, as
-      // we don't want this info to share with logged in users.
-      addWishListInfoInStorage({}, guestUserStorageKey());
       if (wishListDataOfGuestUser
         && typeof wishListDataOfGuestUser === 'object'
         && Object.keys(wishListDataOfGuestUser).length > 0
         && hasValue(drupalSettings.wishlist.mergeWishlistForLoggedInUsers)) {
+        // Remove wishlist info from local storage for guest users, as
+        // we don't want this info to share with logged in users.
+        addWishListInfoInStorage({}, guestUserStorageKey());
+
         // Merge wishlist information to the magento backend from local storage,
         // if wishlist data available in local storage and merging wishlist
         // data flag is set to true.
@@ -208,7 +209,7 @@ export default class WishlistHeader extends React.Component {
         // If sticky header is not present, scroll user to header.
         // Else show notification on sticky header.
         if (querySelector === null) {
-          smoothScrollTo('html, body');
+          smoothScrollTo('body');
         } else {
           stateData.headerClass = 'sticky-wrapper';
         }
