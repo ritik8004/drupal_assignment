@@ -129,6 +129,11 @@ function redeemAuraPoints(data) {
             balancePayable: result.data.data.balancePayable,
             paidWithAura: result.data.data.paidWithAura,
             balancePoints: result.data.data.balancePoints,
+            // Adding an extra total balance payable attribute, so that we can use this
+            // in egift.
+            // Doing this because while removing AURA points, we remove the Balance
+            // Payable attribute from cart total.
+            totalBalancePayable: result.data.data.totalBalancePayable,
           };
         }
       } else {
