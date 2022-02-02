@@ -305,7 +305,7 @@ exports.render = function render(
         }
         else {
           // Standard delivery options.
-          deliveryOptions.hd = drupalSettings.alshayaRcs.alshaya_home_delivery;
+          deliveryOptions.hd = drupalSettings.alshaya_home_delivery;
           deliveryOptions.hd.type = 'standard_delivery';
         }
       }
