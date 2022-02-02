@@ -16,6 +16,8 @@ import LinkedEgiftSVG from '../../../svg-component/linked-egift-svg';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import Loading from '../../../../../js/utilities/loading';
+import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
+import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -49,7 +51,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
     // Invoke magento API to get the user card number
     const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
-
     if (response instanceof Promise) {
       response.then((result) => {
         if (result.status === 200) {
@@ -63,9 +64,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               });
               return;
             }
-
             // Card Available Balance.
-            const currentBalance = parseInt(result.data.current_balance, 10);
+            const currentBalance = parseFloat(result.data.current_balance, 10);
             // Current Time stamp to check for expiry.
             const currentTime = Math.floor(Date.now() / 1000);
 
@@ -146,6 +146,12 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
         }
       });
     }
+    // Event listener on delivery information update to remove redeemed Amount.
+    document.addEventListener('refreshCartOnAddress', this.handleRemoveCard);
+    // Event listener on CnC store selection.
+    document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
+    // Event listener on shiping method update to remove redeemed Amount.
+    document.addEventListener('changeShippingMethod', this.handleRemoveCard);
   }
 
   openModal = (e) => {
@@ -181,7 +187,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       // Perform linking of Egift card by calling the redemption API.
       const redemptionResponse = performRedemption(
         cart.cart.cart_id_int,
-        cart.cart.totals.base_grand_total,
+        egiftCardActualBalance, // Send card balance amount.
         egiftLinkedCardNumber,
         'linked',
       );
@@ -230,63 +236,70 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       }
     } else {
       // On unchecking the checkbox this will be executed to remove redemption.
-      let postData = {
-        redemptionRequest: {
-          mask_quote_id: cart.cart.cart_id,
-        },
-      };
-      // Change payload if authenticated user.
-      if (isUserAuthenticated()) {
-        postData = {
-          redemptionRequest: {
-            quote_id: cart.cart.cart_id_int,
-          },
-        };
-      }
-
-      showFullScreenLoader();
-      // Invoke the remove redemption API.
-      const response = callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
-
-      if (response instanceof Promise) {
-        // Handle the error and success message after the egift card is unlinked.
-        response.then((result) => {
-          if (result.status === 200) {
-            if (result.data.response_type) {
-              // Trigger event to update price summary block.
-              updatePriceSummaryBlock(refreshCart);
-
-              this.setState({
-                isEgiftCardredeemed: false,
-                egiftCardRemainingBalance: 0,
-                eGiftbalancePayable: 0,
-                apiErrorMessage: '',
-                setChecked: false,
-              });
-            } else {
-              logger.error('Empty Response while calling the cancel eGiftRedemption. Action: @action, CardNumber: @cardNumber, Response: @response', {
-                '@action': postData.redeem_points.action,
-                '@cardNumber': egiftLinkedCardNumber,
-                '@response': result.data.response_message,
-              });
-              removeFullScreenLoader();
-            }
-          } else {
-            logger.error('Error while calling the cancel eGiftRedemption for unlinking egift card. Action: @action, CardNumber: @cardNumber, Response: @response', {
-              '@action': postData.redeem_points.action,
-              '@cardNumber': egiftLinkedCardNumber,
-              '@response': result.data.error_message,
-            });
-            removeFullScreenLoader();
-            this.setState({
-              apiErrorMessage: Drupal.t('Something went wrong please try again later.', {}, { context: 'egift' }),
-              renderWait: false,
-            });
-          }
-        });
-      }
+      this.handleRemoveCard();
     }
   };
+
+  // Remove redeemed Card.
+  handleRemoveCard = () => {
+    const { egiftLinkedCardNumber } = this.state;
+    const { cart, refreshCart } = this.props;
+    let postData = {
+      redemptionRequest: {
+        mask_quote_id: cart.cart.cart_id,
+      },
+    };
+    // Change payload if authenticated user.
+    if (isUserAuthenticated()) {
+      postData = {
+        redemptionRequest: {
+          quote_id: cart.cart.cart_id_int,
+        },
+      };
+    }
+
+    showFullScreenLoader();
+    // Invoke the remove redemption API.
+    const response = callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
+
+    if (response instanceof Promise) {
+      // Handle the error and success message after the egift card is unlinked.
+      response.then((result) => {
+        if (result.status === 200) {
+          if (result.data.response_type) {
+            // Trigger event to update price summary block.
+            updatePriceSummaryBlock(refreshCart);
+
+            this.setState({
+              isEgiftCardredeemed: false,
+              egiftCardRemainingBalance: 0,
+              eGiftbalancePayable: 0,
+              apiErrorMessage: '',
+              setChecked: false,
+            });
+          } else {
+            logger.error('Empty Response while calling the cancel eGiftRedemption. Action: @action, CardNumber: @cardNumber, Response: @response', {
+              '@action': postData.redeem_points.action,
+              '@cardNumber': egiftLinkedCardNumber,
+              '@response': result.data.response_message,
+            });
+            removeFullScreenLoader();
+          }
+        } else {
+          logger.error('Error while calling the cancel eGiftRedemption for unlinking egift card. Action: @action, CardNumber: @cardNumber, Response: @response', {
+            '@action': postData.redeem_points.action,
+            '@cardNumber': egiftLinkedCardNumber,
+            '@response': result.data.error_message,
+          });
+          removeFullScreenLoader();
+          this.setState({
+            apiErrorMessage: getDefaultErrorMessage(),
+            renderWait: false,
+          });
+        }
+      });
+    }
+  }
 
   // Update egift amount.
   handleAmountUpdate = async (updateAmount) => {
@@ -359,11 +372,13 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     }
 
     // Disable link card checkbox when egiftcard balance is 0 or is expired,
-    // if already redeemed or any unsupported payment method selected.
+    // if already redeemed or any unsupported payment method selected or full
+    // payment is done by AURA.
     const disabled = (egiftCardActualBalance === 0
       || isEgiftCardExpired
       || isEgiftRedemptionDone(cart.cart)
       || UnsupportedPaymentMethod
+      || isFullPaymentDoneByAura(cart)
     );
 
     // Add `in-active` class if disabled property is true.

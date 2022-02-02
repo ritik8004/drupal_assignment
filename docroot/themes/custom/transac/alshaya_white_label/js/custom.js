@@ -6,7 +6,6 @@
 /* global debounce */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   Drupal.customGlobal = Drupal.customGlobal || {};
 

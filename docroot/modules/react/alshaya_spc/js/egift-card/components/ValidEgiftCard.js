@@ -28,6 +28,7 @@ export default class ValidEgiftCard extends React.Component {
       pendingAmount: 0,
       isLinkedCardApplicable: false,
       disableLinkCard: false,
+      cardBalance: 0,
     };
   }
 
@@ -40,6 +41,7 @@ export default class ValidEgiftCard extends React.Component {
     if (isEgiftRedemptionDone(cart)) {
       this.setState({
         amount: cart.totals.egiftRedeemedAmount,
+        cardBalance: cart.totals.egiftCurrentBalance,
         pendingAmount: cart.totals.totalBalancePayable,
       });
     }
@@ -60,6 +62,12 @@ export default class ValidEgiftCard extends React.Component {
         });
       }
     }
+    // Event listener on delivery information update to remove redeemed amount.
+    document.addEventListener('refreshCartOnAddress', this.handleRemoveCard);
+    // Event listener on CnC store selection.
+    document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
+    // Event listener on shiping method update to remove redeemed Amount.
+    document.addEventListener('changeShippingMethod', this.handleRemoveCard);
   }
 
   openModal = (e) => {
@@ -143,12 +151,13 @@ export default class ValidEgiftCard extends React.Component {
     const { cart, refreshCart } = this.props;
     const result = await updateRedeemAmount(updateAmount, cart, refreshCart);
     if (!result.error) {
-      const { redeemedAmount, totalBalancePayable } = result;
+      const { redeemedAmount, balancePayable } = result;
       // Update the state with the valid response from endpoint.
       this.setState({
         amount: redeemedAmount,
         open: false,
-        pendingAmount: totalBalancePayable,
+        cardBalance: cart.totals.egiftCurrentBalance,
+        pendingAmount: balancePayable,
       });
     }
 
@@ -159,6 +168,7 @@ export default class ValidEgiftCard extends React.Component {
     const {
       open,
       amount,
+      cardBalance,
       pendingAmount,
       isLinkedCardApplicable,
       disableLinkCard,
@@ -174,6 +184,15 @@ export default class ValidEgiftCard extends React.Component {
       </span>
     );
 
+    const remainingBalance = (
+      <span>
+        {Drupal.t('Remaining Balance - ', {}, { context: 'egift' })}
+        <span className="price-wrapper">
+          <PriceElement amount={cardBalance} format="string" showZeroValue />
+        </span>
+      </span>
+    );
+
     return (
       <div className="egift-wrapper">
         <ConditionalView conditional={open}>
@@ -183,18 +202,20 @@ export default class ValidEgiftCard extends React.Component {
             amount={amount}
             updateAmount={this.handleAmountUpdate}
             cart={cart}
+            remainingAmount={cardBalance}
           />
         </ConditionalView>
         <div className="egift-redeem-applied-amount-wrapper">
           {egiftCardHeader({
             egiftHeading: appliedAmount,
+            egiftSubHeading: remainingBalance,
           })}
           <div className="remove-egift-card">
             <button type="button" onClick={this.handleRemoveCard}>{Drupal.t('Remove', {}, { context: 'egift' })}</button>
-            <div id="egift_remove_card_error" className="error" />
           </div>
         </div>
         <div className="egift-redeem-edit-amount" onClick={this.openModal}>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
+        <div id="egift_remove_card_error" className="error egift-remove-redeem-card-error" />
         <ConditionalView condition={pendingAmount > 0}>
           <div className="full-redeemed">
             {Drupal.t('Pay ', {}, { context: 'egift' })}

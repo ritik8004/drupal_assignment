@@ -4,8 +4,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNext-DemiBold";
   src:
-    local("AvenirNext DemiBold"),
-    local("AvenirNext-DemiBold"),
+    local("Avenir Next Demi Bold"),
     url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.woff") format("woff");
   font-weight: normal;
@@ -16,7 +15,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNext";
   src:
-    local("AvenirNext"),
+    local("Avenir Next"),
     url("#{$base_theme_fonts_directory_path}/AvenirNext.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNext.woff") format("woff");
   font-weight: normal;
@@ -27,8 +26,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNextLTW01-Regular";
   src:
-    local("AvenirNextLTW01 Regular"),
-    local("AvenirNextLTW01-Regular"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTW01-Regular.woff") format("woff");
   font-weight: normal;
@@ -40,7 +37,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
   font-family: "Tahoma-Bold";
   src:
     local("Tahoma Bold"),
-    local("Tahoma-Bold"),
     url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff") format("woff");
   font-weight: normal;
@@ -63,10 +59,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNext LT Pro";
   src:
-    local("AvenirNext LT Pro"),
-    local("AvenirNext-LT-Pro"),
-    local("AvenirNextLTPro Bold"),
-    local("AvenirNextLTPro-Bold"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.woff") format("woff");
   font-weight: bold;
@@ -78,11 +70,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "Avenir-Next-LT-Pro-Heavy-Condensed";
   src:
-    local("Avenir Next LT Pro Heavy Condensed"),
-    local("Avenir-Next-LT-Pro-Heavy-Condensed"),
-    local("Avenir Next LT Pro Heavy Condensed 5190"),
-    local("Avenir-Next-LT-Pro-Heavy-Condensed_5190"),
-    local("Avenir-Next-LT-Pro-Heavy-Condensed-5190"),
+    local("Avenir Next Condensed Heavy"),
     url("#{$base_theme_fonts_directory_path}/Avenir-Next-LT-Pro-Heavy-Condensed_5190.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Avenir-Next-LT-Pro-Heavy-Condensed_5190.ttf");
   font-weight: normal;
@@ -93,10 +81,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNext-Bold";
   src:
-    local("AvenirNext Bold"),
-    local("AvenirNext-Bold"),
-    local("AvenirNextLTPro Bold"),
-    local("AvenirNextLTPro-Bold"),
+    local("Avenir Next Bold"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Bold.woff") format("woff");
   font-weight: normal;
@@ -107,10 +92,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNext-Bold-Condensed";
   src:
-    local("AvenirNext Bold Condensed"),
-    local("AvenirNext-Bold-Condensed"),
-    local("AvenirNextLTPro BoldCn"),
-    local("AvenirNextLTPro-BoldCn"),
+    local("Avenir Next Condensed Bold"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-BoldCn.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-BoldCn.otf");
   font-weight: normal;
@@ -121,10 +103,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNext-Demi-Italic";
   src:
-    local("AvenirNext Demi Italic"),
-    local("AvenirNext-Demi-Italic"),
-    local("AvenirNextLTPro DemiIt"),
-    local("AvenirNextLTPro-DemiIt"),
+    local("Avenir Next Demi Bold Italic"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-DemiIt.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-DemiIt.otf");
   font-weight: normal;
@@ -135,8 +114,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNextLTPro-Heavy";
   src:
-    local("AvenirNextLTPro Heavy"),
-    local("AvenirNextLTPro-Heavy"),
+    local("Avenir Next Heavy"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Heavy.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Heavy.otf");
   font-weight: normal;
@@ -147,10 +125,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNextLTPro-Italic";
   src:
-    local("AvenirNextLTPro Italic"),
-    local("AvenirNextLTPro-Italic"),
-    local("AvenirNextLTPro It"),
-    local("AvenirNextLTPro-It"),
+    local("Avenir Next Italic"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-It.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-It.otf");
   font-weight: normal;
@@ -161,8 +136,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNextLTPro-Light";
   src:
-    local("AvenirNextLTPro Light"),
-    local("AvenirNextLTPro-Light"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Light.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-Light.otf");
   font-weight: normal;
@@ -173,8 +146,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNextLTPro-MediumIt";
   src:
-    local("AvenirNextLTPro MediumIt"),
-    local("AvenirNextLTPro-MediumIt"),
+    local("Avenir Next Medium Italic"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-MediumIt.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-MediumIt.otf");
   font-weight: normal;
@@ -185,8 +157,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "AvenirNextLTPro-UltLtCn";
   src:
-    local("AvenirNextLTPro UltLtCn"),
-    local("AvenirNextLTPro-UltLtCn"),
+    local("Avenir Next Condensed Ultra Light"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-UltLtCn.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/AvenirNextLTPro-UltLtCn.otf");
   font-weight: normal;
@@ -198,8 +169,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle
 @font-face {
   font-family: "DidonesqueW05-Bold";
   src:
-    local("DidonesqueW05 Bold"),
-    local("DidonesqueW05-Bold"),
     url("#{$base_theme_fonts_directory_path}/DidonesqueW05-Bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/DidonesqueW05-Bold.woff") format("woff");
   font-weight: normal;

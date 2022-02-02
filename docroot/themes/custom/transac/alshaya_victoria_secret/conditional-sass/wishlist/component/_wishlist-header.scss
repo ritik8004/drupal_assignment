@@ -41,4 +41,12 @@ body.wishlist-enabled {
       }
     }
   }
+
+  &.hide-minimalistic-header.no-sticky-algolia-search-bar {
+    #wishlist-header-wrapper {
+      @include breakpoint($only-mobile) {
+        transform: translate3d(0, -2.875rem, 0);
+      }
+    }
+  }
 }

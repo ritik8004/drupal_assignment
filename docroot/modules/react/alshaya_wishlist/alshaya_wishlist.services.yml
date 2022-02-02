@@ -6,3 +6,9 @@ services:
       - '@current_user'
       - '@path.current'
       - '@token'
+      - '@language_manager'
+
+  alshaya_wishlist.event_subscriber:
+    class: Drupal\alshaya_wishlist\EventSubscriber\AlshayaWishlistEventSubscriber
+    tags:
+      - { name: event_subscriber }

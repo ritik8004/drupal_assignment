@@ -217,6 +217,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'productTitleTrimEnabled' => $product_frame_settings->get('product_title_trim'),
       'productElementAlignmentEnabled' => FALSE,
       'hideGridToggle' => $alshaya_algolia_react_setting_values->get('hide_grid_toggle') ?? 0,
+      'topFacetsLimit' => $alshaya_algolia_react_setting_values->get('top_facets_limit'),
     ];
 
     // Set product elements alignment to true only
@@ -356,6 +357,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
           if ($widget['type'] === 'swatch_list') {
             $facet_values = $this->loadFacetValues($identifier, $page_type);
           }
+
+          $same_value = NULL;
+          $express_value = NULL;
           if ($widget['type'] === 'delivery_ways') {
             // If feature enabled then only show facet.
             if (!($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) {
@@ -394,7 +398,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'checkbox';
           }
 
-          $filter_facets[explode('.', $identifier)[0]] = [
+          $filterKey = explode('.', $identifier)[0];
+          $filter_facets[$filterKey] = [
             'identifier' => $identifier,
             'label' => $block->label(),
             'name' => $facet->getName(),
@@ -404,6 +409,15 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             'alias' => $facet->getUrlAlias(),
             'facet_values' => $facet_values,
           ];
+
+          if ($widget['type'] === 'delivery_ways') {
+            // If feature enabled then only show facet.
+            if (!($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) {
+              continue;
+            }
+            $filter_facets[$filterKey]['same_value'] = $same_value . ',same_day_delivery';
+            $filter_facets[$filterKey]['express_value'] = $express_value . ',express_delivery';
+          }
         }
       }
     }

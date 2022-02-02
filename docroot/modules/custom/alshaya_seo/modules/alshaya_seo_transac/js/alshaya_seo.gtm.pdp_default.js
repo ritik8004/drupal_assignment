@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   $(window).on('load', function () {
     // Trigger productDetailView event.

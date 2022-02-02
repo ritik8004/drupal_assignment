@@ -4,3 +4,4 @@ hits: 4
 top_results: 4
 items_per_page: 36
 hide_grid_toggle: false
+top_facets_limit: 5

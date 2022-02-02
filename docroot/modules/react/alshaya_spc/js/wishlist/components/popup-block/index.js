@@ -33,6 +33,7 @@ export default class WishlistPopupBlock extends React.Component {
           dispatchCustomEvent('productAddedToWishlist', {
             productInfo,
             addedInWishList: true,
+            removeFromCart: false,
           });
 
           // If user is logged in we need to update the products from

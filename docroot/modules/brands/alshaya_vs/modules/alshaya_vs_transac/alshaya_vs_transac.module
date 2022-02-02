@@ -107,27 +107,6 @@ function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = 
 }
 
 /**
- * Implements hook_ENTITY_TYPE_load() for node entities.
- */
-function alshaya_vs_transac_node_load($nodes) {
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  /** @var \Drupal\node\NodeInterface $node */
-  foreach ($nodes as $node) {
-    if ($node->bundle() === 'acq_product') {
-      $sku_string = $skuManager->getSkuForNode($node);
-      $sku = SKU::loadFromSku($sku_string);
-
-      if ($sku instanceof SKU) {
-        // This is done for all Meta title, Page title.
-        $node->setTitle(_alshaya_vs_transac_get_title($sku, 'meta'));
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {

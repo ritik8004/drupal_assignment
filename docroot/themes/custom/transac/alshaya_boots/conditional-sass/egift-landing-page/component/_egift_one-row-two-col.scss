@@ -1,0 +1,22 @@
+.egift-landing-page {
+  .paragraph--type--_-row-2-col {
+    .field--name-field-1-row-2-col {
+      .field--name-field-1-row-2-col {
+        .paragraph--type--image-title-subtitle {
+          & > .field--name-field-button-link {
+            text-decoration: none;
+            padding-bottom: 0;
+
+            &::before {
+              content: unset;
+            }
+          }
+
+          .field--name-field-title {
+            border: none;
+          }
+        }
+      }
+    }
+  }
+}

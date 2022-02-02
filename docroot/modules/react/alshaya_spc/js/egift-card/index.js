@@ -6,9 +6,10 @@ import {
   isEgiftUnsupportedPaymentMethod,
   isValidResponse,
   isValidResponseWithFalseResult,
+  removeEgiftRedemption,
   updatePriceSummaryBlock,
 } from '../utilities/egift_util';
-import { callEgiftApi, getTopUpQuote } from '../../../js/utilities/egiftCardHelper';
+import { callEgiftApi } from '../../../js/utilities/egiftCardHelper';
 import GetEgiftCard from './components/GetEgiftCard';
 import ValidateEgiftCard from './components/ValidateEgiftCard';
 import ValidEgiftCard from './components/ValidEgiftCard';
@@ -19,10 +20,10 @@ import {
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { isEgiftCardEnabled } from '../../../js/utilities/util';
 import dispatchCustomEvent from '../../../js/utilities/events';
-import { isUserAuthenticated } from '../../../js/utilities/helper';
 import logger from '../../../js/utilities/logger';
 import { getDefaultErrorMessage } from '../../../js/utilities/error';
 import RedeemEgiftSVG from '../svg-component/redeem-egift-svg';
+import { isFullPaymentDoneByAura } from '../aura-loyalty/components/utilities/checkout_helper';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -228,34 +229,11 @@ export default class RedeemEgiftCard extends React.Component {
   // Remove the added egift card.
   handleEgiftCardRemove = async () => {
     const { cart: cartData, refreshCart } = this.props;
-    let quoteId = cartData.cart.cart_id;
-    // Check if topup is applicable.
-    const topUpQuote = getTopUpQuote();
-    if (topUpQuote) {
-      quoteId = topUpQuote.maskedQuoteId;
-    }
-    let postData = {
-      redemptionRequest: {
-        mask_quote_id: quoteId,
-      },
-    };
-    // Change payload if authenticated user.
-    if (isUserAuthenticated()) {
-      postData = {
-        redemptionRequest: {
-          quote_id: cartData.cart.cart_id_int,
-        },
-      };
-    }
-    // Default result object.
-    let result = {
-      error: false,
-      message: '',
-    };
+    // Show loader while doing API call.
     showFullScreenLoader();
-    // Invoke the redemption API.
-    const response = await callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
-    if (isValidResponse(response)) {
+    // Remove redemption from the cart.
+    const response = await removeEgiftRedemption(cartData.cart);
+    if (!response.error) {
       // Reset the state to move back to initial redeem stage.
       this.setState({
         codeSent: false,
@@ -264,33 +242,9 @@ export default class RedeemEgiftCard extends React.Component {
       });
       // Update the cart total.
       updatePriceSummaryBlock(refreshCart);
-    } else if (isValidResponseWithFalseResult(response)) {
-      result = {
-        error: true,
-        message: response.data.response_message,
-      };
-      // Log error in datadog.
-      logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
-        '@action': 'remove_redemption',
-        '@response': response.data,
-      });
-      // Remove loader once the data response is available.
-      removeFullScreenLoader();
-    } else {
-      result = {
-        error: true,
-        message: getDefaultErrorMessage(),
-      };
-      // Log error in datadog.
-      logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
-        '@action': 'remove_redemption',
-        '@response': response,
-      });
-      // Remove loader once the data response is available.
-      removeFullScreenLoader();
     }
 
-    return result;
+    return response;
   }
 
   // Change the egift card.
@@ -315,7 +269,11 @@ export default class RedeemEgiftCard extends React.Component {
     const { cart: cartData, refreshCart } = this.props;
     const activeClass = active || codeValidated ? 'active' : '';
     const codeValidationClass = codeValidated ? 'has-validated-code' : '';
-    const disabledRedemptionClass = redemptionDisabled || isEgiftRedemptionDone(cartData.cart, 'linked') ? 'in-active' : '';
+    // Disable redemption if redemptionDisable is set as true or redemption is
+    // done by linked card or full payment is done by AURA.
+    const disabledRedemptionClass = redemptionDisabled
+      || isEgiftRedemptionDone(cartData.cart, 'linked')
+      || isFullPaymentDoneByAura(cartData) ? 'in-active' : '';
 
     return (
       <div className="redeem-egift-card">

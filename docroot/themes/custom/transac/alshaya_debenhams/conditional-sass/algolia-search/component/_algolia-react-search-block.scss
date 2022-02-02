@@ -410,11 +410,11 @@ body {
     .show-all-filters-algolia,
     .block-facet-blockcategory-facet-search {
       @include breakpoint($only-mobile) {
-        top: 3.4375rem;
+        top: 3.375rem;
         z-index: 9;
 
         html[lang=ar] & {
-          top: 4.125rem;
+          top: 3.8125rem;
         }
       }
     }

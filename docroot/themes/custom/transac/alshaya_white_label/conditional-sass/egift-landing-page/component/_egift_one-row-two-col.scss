@@ -38,6 +38,7 @@
 
         .check-balance-wrapper {
           .checkbalance-title {
+            font-family: $alshaya-bold;
             display: block;
             font-size: 1.25rem;
             line-height: 2.5rem;
@@ -58,15 +59,17 @@
             & > button {
               @include egift-btn;
 
+              color: $primary_btn_bg;
               border-width: 0.0625rem;
               background: transparent;
-              border: 1px solid $egift-button-border;
+              border: 1px solid $primary_btn_bg;
             }
           }
         }
 
         .paragraph--type--image-title-subtitle {
           .field--name-field-title {
+            font-family: $alshaya-bold;
             display: block;
             font-size: 1.25rem;
             line-height: 2.5rem;
@@ -87,12 +90,18 @@
             }
           }
 
-          .field--name-field-button-link {
-            .field--name-field-button-link {
-              @include egift-btn;
+          & > .field--name-field-button-link {
+            @include egift-btn;
 
-              position: relative;
-              border: 1px solid $egift-button-border;
+            color: $primary_btn_bg;
+            position: relative;
+            border: 1px solid $primary_btn_bg;
+
+            .field--name-field-button-link {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
             }
           }
         }

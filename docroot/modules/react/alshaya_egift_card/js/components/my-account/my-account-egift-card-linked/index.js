@@ -1,5 +1,7 @@
 import React from 'react';
 import moment from 'moment';
+import Cleave from 'cleave.js/react';
+import Popup from 'reactjs-popup';
 import PriceElement
   from '../../../../../js/utilities/components/price/price-element';
 import logger from '../../../../../js/utilities/logger';
@@ -34,7 +36,11 @@ class EgiftCardLinked extends React.Component {
       response.then((result) => {
         removeFullScreenLoader();
         // Check for error from handleResponse.
-        if (result.status !== 200) {
+        if (result.data.error) {
+          logger.error('Error while unlinking card. @error', { '@error': JSON.stringify(result.data) });
+        }
+        // Check if error from API.
+        if (typeof result.data !== 'undefined' && result.data.response_type === false) {
           logger.error('Error while unlinking card. @error', { '@error': JSON.stringify(result.data) });
         }
         // Remove card if no error response returned.
@@ -111,20 +117,59 @@ class EgiftCardLinked extends React.Component {
               <PriceElement amount={parseFloat(linkedCard.current_balance)} />
             </div>
           </div>
-          <button
-            id="egift-remove-button"
-            type="button"
-            className="egift-card-remove"
-            onClick={(e) => this.removeCardAction(e)}
+          <Popup
+            trigger={(
+              <button
+                id="egift-remove-button"
+                type="button"
+                className="egift-card-remove"
+              >
+                <TrashIconSVG />
+              </button>
+              )}
+            modal
+            className="egift-unlink-card-confirm"
+            closeOnDocumentClick={false}
           >
-            <TrashIconSVG />
-          </button>
+            {(close) => (
+              <div className="modal">
+                <a className="close" onClick={close}>
+                  &times;
+                </a>
+                <p>
+                  {Drupal.t('Do you want to unlink this card from this account?', {}, { context: 'egift' })}
+                </p>
+                <div className="confirm-actions">
+                  <button
+                    type="button"
+                    className="egift-card-remove-confirm-yes"
+                    onClick={(e) => this.removeCardAction(e)}
+                  >
+                    {Drupal.t('Yes')}
+                  </button>
+                  <button
+                    type="button"
+                    className="egift-card-remove-confirm-no"
+                    onClick={() => close()}
+                  >
+                    {Drupal.t('No')}
+                  </button>
+                </div>
+              </div>
+            )}
+          </Popup>
         </div>
         <ConditionalView condition={hideCardDetails === false}>
           <div className="egift-card-linked-wrapper-bottom egifts-form-wrapper" id="card-details">
             <div className="egift-linked-card-number-wrapper">
               <div className="egift-linked-card-number egift-light-text">{Drupal.t('eGift Card Number', {}, { context: 'egift' })}</div>
-              <div className="egift-linked-card-number-value egift-dark-text">{linkedCard.card_number}</div>
+              <Cleave
+                name="egift-linked-card-number-value"
+                className="egift-linked-card-number-value egift-dark-text"
+                disabled
+                value={linkedCard.card_number}
+                options={{ blocks: [4, 4, 4, 4] }}
+              />
             </div>
             <div className={`egift-linked-expires-wrapper ${expiredCard}`}>
               <div className="egift-linked-expires egift-light-text">{Drupal.t('Expires on', {}, { context: 'egift' })}</div>

@@ -112,6 +112,15 @@
       align-items: center;
       margin-top: 2.125rem;
     }
+
+    .egift-linked-card-number-wrapper {
+      display: flex;
+      flex-direction: column;
+
+      .egift-linked-card-number-value {
+        border: none;
+      }
+    }
   }
 
   .egift-light-text {
@@ -147,6 +156,76 @@
         @include breakpoint($only-tablet) {
           min-width: 6rem;
         }
+      }
+    }
+  }
+
+  .egift-unlink-card-confirm-overlay {
+    .egift-unlink-card-confirm-content {
+      width: 20rem !important;
+
+      @include breakpoint($tablet) {
+        width: 28rem !important;
+      }
+    }
+
+    .modal {
+      padding: 1.875rem;
+
+      @include breakpoint($tablet) {
+        padding: 1.25rem;
+      }
+
+      .confirm-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        margin-top: 2.25rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 2.5625rem;
+        }
+      }
+
+      button.egift-card-remove-confirm-yes,
+      button.egift-card-remove-confirm-no {
+        border-radius: 0.125rem;
+        border: unset;
+        height: 2.5rem;
+        padding: 0 1.25rem;
+        width: 11.875rem;
+      }
+
+      button.egift-card-remove-confirm-yes {
+        background: $wishlist-button-bg;
+        color: $wishlist-button-txt;
+
+        &:hover {
+          background: $wishlist-button-bg-hover;
+          opacity: 0.75;
+        }
+      }
+
+      button.egift-card-remove-confirm-no {
+        color: $wishlist-button-bg;
+        border: 1px solid $wishlist-basket-button-border;
+        background: $wishlist-basket-button-bg;
+        margin-#{$left}: 1rem;
+      }
+    }
+
+    .close {
+      position: absolute;
+      #{$right}: 0;
+      top: 0;
+      font-size: 0;
+      background: $wishlist-basket-modal-close-bg;
+      cursor: pointer;
+
+      @include icon(close, before) {
+        font-size: 2rem;
+        color: $wishlist-basket-modal-close;
       }
     }
   }

@@ -38,6 +38,8 @@ class AuraFormRedeemPoints extends React.Component {
     document.addEventListener('refreshCartOnAddress', this.undoRedeemPoints, false);
     // Event listener on CnC store selection.
     document.addEventListener('storeSelected', this.undoRedeemPoints, false);
+    // Event listener on shiping method update to remove redeemed Amount.
+    document.addEventListener('changeShippingMethod', this.undoRedeemPoints);
 
     const { totals } = this.props;
 
@@ -123,6 +125,8 @@ class AuraFormRedeemPoints extends React.Component {
         // egift to check remaining balance.
         if (key !== 'totalBalancePayable') {
           delete cartTotals[key];
+        } else {
+          cartTotals.totalBalancePayable = stateValues.totalBalancePayable;
         }
       });
 

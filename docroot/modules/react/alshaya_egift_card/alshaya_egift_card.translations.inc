@@ -373,15 +373,15 @@ function _alshaya_egift_card_translations() {
         'context' => 'egift',
       ],
       'Choose Top-up Amount (@currencyCode)' => [
-        'ar' => 'Choose Top-up Amount (@currencyCode)',
+        'ar' => '(@currencyCode) اختر مبلغ التعبئة',
         'context' => 'egift',
       ],
       'Cancel' => [
-        'ar' => 'Cancel',
+        'ar' => 'إلغاء',
         'context' => 'egift',
       ],
       'Redeem eGift Card' => [
-        'ar' => 'Redeem eGift Card',
+        'ar' => 'استرداد بطاقة الهدايا',
         'context' => 'egift',
       ],
       'Enter amount' => [
@@ -389,9 +389,13 @@ function _alshaya_egift_card_translations() {
         'context' => 'egift',
       ],
       'The egift card balance is not sufficient to pay remaining amount, Please use another payment method.' => [
-        'ar' => 'The egift card balance is not sufficient to pay remaining amount, Please use another payment method.',
+        'ar' => 'رصيد بطاقة الهدايا الإلكترونية غير كافي لدفع المبلغ المتبقي، يرجى استخدام وسيلة دفع أخرى',
         'context' => 'egift',
       ],
+      'Do you want to unlink this card from this account?' => [
+        'ar' => 'هل تريد إلغاء ربط هذه البطاقة بهذا الحساب؟',
+        'context' => 'egift',
+      ]
     ],
   ];
 

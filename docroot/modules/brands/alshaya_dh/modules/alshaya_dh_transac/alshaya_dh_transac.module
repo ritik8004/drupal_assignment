@@ -94,7 +94,7 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
     ];
     $description_value .= '<h2>' . t('Details and care') . '</h2>';
     $description_value .= $details_and_care_value;
-    $description_value .= render($details_and_care);
+    $description_value .= \Drupal::service('renderer')->renderPlain($details_and_care);
   }
 
   $description['value'] = [
@@ -111,4 +111,15 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
   $return['short_desc']['value'] = strip_tags($short_desc['html']);
 
   return $return;
+}
+
+/**
+ * Implements hook_gtm_product_attributes_alter().
+ */
+function alshaya_dh_transac_gtm_product_attributes_alter($product, array &$attributes) {
+  // Update brand name in data layer.
+  $sku = SKU::loadFromSku($attributes['gtm-product-sku'], 'en');
+  if ($sku instanceof SKU) {
+    $attributes['gtm-brand'] = $sku->get('attr_brand_name')->getString();
+  }
 }

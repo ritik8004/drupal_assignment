@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.alshayaWishlistAddToCart = {
     attach: function (context) {
