@@ -395,6 +395,10 @@ function _alshaya_egift_card_translations() {
       'Do you want to unlink this card from this account?' => [
         'ar' => 'هل تريد إلغاء ربط هذه البطاقة بهذا الحساب؟',
         'context' => 'egift',
+      ],
+      'You can only redeem full pending balance or use other payment method.' => [
+        'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
+        'context' => 'egift',
       ]
     ],
   ];
