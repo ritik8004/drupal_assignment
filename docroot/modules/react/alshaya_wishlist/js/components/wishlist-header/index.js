@@ -209,7 +209,7 @@ export default class WishlistHeader extends React.Component {
         // If sticky header is not present, scroll user to header.
         // Else show notification on sticky header.
         if (querySelector === null) {
-          smoothScrollTo('html, body');
+          smoothScrollTo('body');
         } else {
           stateData.headerClass = 'sticky-wrapper';
         }
