@@ -9,7 +9,7 @@
  * BazaarVoice translation.
  */
 function _alshaya_bazaar_voice_translations() {
-  return [
+  $strings['v1'] = [
     'Write a review' => [
       'ar' => 'كتابة مراجعة',
     ],
@@ -169,8 +169,38 @@ function _alshaya_bazaar_voice_translations() {
     'Back to Original Comment' => [
       'ar' => 'الرجوع للتعليق الأصلي',
     ],
+  ];
+
+  // Strings to show message to unauthorized user to write a review.
+  $strings['v2'] = [
     'Please login with the email address used to purchase this product to write a review.' => [
       'ar' => 'يرجى تسجيل الدخول من خلال البريد الالكتروني المستخدم لشراء هذا المنتج كي تتمكن من كتابة مراجعة.',
     ],
   ];
+
+  return $strings;
+}
+
+/**
+ * Get translations for given version.
+ *
+ * @param string $version
+ *   Version number like 'v1' etc.
+ *
+ * @return array
+ *   Translations.
+ */
+function _alshaya_bazaar_voice_get_translations(string $version = '') {
+  $translations = _alshaya_bazaar_voice_translations();
+  // If no version mentioned, return all version strings.
+  if (empty($version)) {
+    $trans_data = [];
+    foreach ($translations as $trans) {
+      $trans_data = array_merge($trans_data, $trans);
+    }
+
+    return $trans_data;
+  }
+
+  return $translations[$version] ?? [];
 }
