@@ -6,7 +6,6 @@
 /* eslint-disable */
 function isRTL() {
 /* eslint-enable */
-  'use strict';
 
   var html = jQuery('html');
   var dir = html.attr('dir');
@@ -21,7 +20,6 @@ function isRTL() {
 /* eslint-disable */
 function debounce(func, wait, immediate) {
 /* eslint-enable */
-  'use strict';
 
   var timeout;
 

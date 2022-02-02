@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.skuShowColorImagesOnFilter = {
     attach: function (context, settings) {

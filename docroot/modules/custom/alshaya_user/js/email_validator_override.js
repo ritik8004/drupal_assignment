@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   $.validator.methods.email = function (value, element) {
     if (this.optional(element) && value.length === 0) {
