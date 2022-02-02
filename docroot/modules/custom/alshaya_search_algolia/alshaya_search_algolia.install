@@ -18,13 +18,10 @@ function alshaya_search_algolia_update_8011() {
   $manager = \Drupal::service('alshaya_config.manager');
   // Adding fields in search_api index.
   $manager->updateConfigs(
-    ['search_api.index.alshaya_algolia_index'],
-    'alshaya_search_algolia',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
-  );
-  $manager->updateConfigs(
-    ['search_api.index.alshaya_algolia_product_list_index'],
+    [
+      'search_api.index.alshaya_algolia_index',
+      'search_api.index.alshaya_algolia_product_list_index',
+    ],
     'alshaya_search_algolia',
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
