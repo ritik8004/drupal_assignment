@@ -6,7 +6,6 @@
 /* global isRTL */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.deliveryUsp = {
     attach: function (context, settings) {

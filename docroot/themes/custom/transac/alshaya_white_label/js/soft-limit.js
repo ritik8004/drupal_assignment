@@ -5,8 +5,6 @@
 
 (function ($) {
 
-  'use strict';
-
   Drupal.behaviors.facetSoftLimit = {
     attach: function (context, settings) {
       if (typeof settings.facets !== 'undefined' && settings.facets.softLimit !== 'undefined') {

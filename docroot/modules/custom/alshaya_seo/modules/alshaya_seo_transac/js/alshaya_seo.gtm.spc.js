@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings, dataLayer) {
-  'use strict';
 
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 

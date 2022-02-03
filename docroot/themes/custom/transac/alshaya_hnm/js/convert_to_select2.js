@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.select2select = {
     attach: function (context, settings) {

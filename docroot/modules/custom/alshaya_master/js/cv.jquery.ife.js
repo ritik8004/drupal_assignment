@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * Attaches jQuery validate behavior to forms.

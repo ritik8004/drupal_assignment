@@ -27,7 +27,6 @@ Feature: SPC Classic PDP block for desktop
     And I click on "#pdp-home-delivery" element
     Then the element "#pdp-home-delivery .ui-accordion-header" should exist
     And the element "#pdp-stores-container" should exist
-    And the element ".sharethis-wrapper" should exist
 
   @pdp @language
   Scenario: To verify user is able to see product details on the PDP page for second language
@@ -53,4 +52,3 @@ Feature: SPC Classic PDP block for desktop
     And I click on "#pdp-home-delivery" element
     Then the element "#pdp-home-delivery .ui-accordion-header" should exist
     And the element "#pdp-stores-container" should exist
-    And the element ".sharethis-wrapper" should exist

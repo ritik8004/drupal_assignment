@@ -3,7 +3,6 @@
  * Order detail page.
  */
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.orderDetail = {
     attach: function () {

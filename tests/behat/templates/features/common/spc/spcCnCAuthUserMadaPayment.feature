@@ -38,18 +38,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 30 seconds
     And I wait for the page to load
@@ -121,18 +110,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I wait for the page to load
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 30 seconds
     And I wait for the page to load
@@ -209,17 +187,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait 10 seconds
     And I wait 10 seconds
     And I wait for the page to load
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 30 seconds
@@ -257,17 +225,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 30 seconds
@@ -341,18 +299,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 30 seconds
     And I wait for the page to load
@@ -428,18 +375,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I wait for the page to load
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 30 seconds
     And I wait for the page to load

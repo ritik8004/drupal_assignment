@@ -3,7 +3,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   var browserFacetUrl = drupalSettings.currentRequestInternalPath || window.location.pathname;
   var setTimeoutConst = null;

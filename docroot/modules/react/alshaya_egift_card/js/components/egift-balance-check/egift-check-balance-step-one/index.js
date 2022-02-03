@@ -125,7 +125,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                     <input
                       type="text"
                       name="egift_card_number"
-                      className="card-number"
+                      className={egiftCardNumber !== '' ? 'card-number focus' : 'card-number'}
                       onBlur={(e) => this.handleEvent(e)}
                       defaultValue={egiftCardNumber}
                     />

@@ -3,7 +3,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * All custom js for checkout flow analytics.

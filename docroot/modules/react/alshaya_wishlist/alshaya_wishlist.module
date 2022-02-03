@@ -90,22 +90,22 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   // to sync the wishlist from local storage to magento backend
   // once user logged in.
   $cookies = \Drupal::request()->cookies;
-  if ($cookies->get('merge_user_wishlist')
+  if ($cookies->get('Drupal_visitor_merge_user_wishlist')
     && \Drupal::currentUser()->isAuthenticated()
     && alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
-    // This flag indicates that merge local storage data to
-    // magento backend for the customer just logged in.
-    $page['#attached']['drupalSettings']['wishlist']['mergeWishlistForLoggedInUsers'] = TRUE;
-    $cookies->remove('merge_user_wishlist');
-    setcookie(
-      'merge_user_wishlist',
-      NULL,
-      [
-        'expires' => REQUEST_TIME - 3600,
-        'path' => '/',
-        'secure' => TRUE,
-      ]
-    );
+    // Check if this is not a social login window and remove the merge
+    // wishlist cookies. Otherwise, we will wait for next page refresh
+    // remove this and let the FE action processed.
+    if (!$cookies->get('Drupal_visitor_alshaya_user_login_type')) {
+      // This flag indicates that merge local storage data to
+      // magento backend for the customer just logged in.
+      $page['#attached']['drupalSettings']['wishlist']['mergeWishlistForLoggedInUsers'] = TRUE;
+      user_cookie_delete('merge_user_wishlist');
+    }
+    // Delete this one time cookie as if this is set, it means we are in
+    // social login callback popup.
+    // @todo we should remove this on FE if used in other modules.
+    user_cookie_delete('alshaya_user_login_type');
   }
 }
 
@@ -191,6 +191,6 @@ function alshaya_wishlist_user_login(UserInterface $account) {
     // use this above in hook_page_attachments_alter to set
     // a drupal settings variable to perform action on front.
     // For example, we will merge wishlist soon after user logged in.
-    setcookie('merge_user_wishlist', TRUE, ['path' => '/', 'secure' => TRUE]);
+    user_cookie_save(['merge_user_wishlist' => TRUE]);
   }
 }
