@@ -7,7 +7,7 @@ dependencies:
     - alshaya_white_label
 id: alshayasecondarymainmenu
 theme: alshaya_white_label
-region: header
+region: sub_header_menu
 weight: -50
 provider: null
 plugin: alshaya_secondary_main_menu
