@@ -7,6 +7,37 @@
 
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
+use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adds Country Switcher block.
+ */
+function alshaya_seo_transac_update_8414() {
+
+  // Add block.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['block.block.countryswitcher'],
+    'alshaya_seo_transac',
+    'install'
+  );
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_seo_transac', 'alshaya_seo_transac.translations');
+  $translations = _alshaya_seo_transac_get_translations('v1');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+
+  // Disabling the block.
+  // To be manually enabled from Block Layout in each site.
+  $block = Block::load('countryswitcher');
+  if (!empty($block) && $block->status()) {
+    $block->setStatus(FALSE);
+    $block->save();
+  }
+}
 
 /**
  * Implements hook_update_N().
@@ -242,6 +273,13 @@ function alshaya_seo_transac_install() {
   }
 
   $config->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_seo_transac', 'alshaya_seo_transac.translations');
+  $translations = _alshaya_seo_transac_get_translations();
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**
