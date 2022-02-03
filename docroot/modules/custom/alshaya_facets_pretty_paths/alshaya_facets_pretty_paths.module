@@ -321,10 +321,16 @@ function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
  */
 function alshaya_facets_pretty_paths_taxonomy_term_insert(TermInterface $term) {
   if ($term->bundle() == 'sku_product_option') {
+    $langcode = $term->language()->getId();
     $facet_item_value = $term->getName();
     $key = strtolower($facet_item_value);
     $facet_alias = $term->get('field_sku_attribute_code')->getValue()[0]['value'];
-    $langcode = $term->language()->getId();
+    // Use en translation for pretty path.
+    if ($langcode != 'en' && $term->hasTranslation('en')) {
+      $term_en = $term->getTranslation('en');
+      $facet_en_value = $term_en->getName();
+      $key = strtolower($facet_en_value);
+    }
 
     // Insert facet alias.
     $pretty_aliases = \Drupal::service('alshaya_facets_pretty_paths.pretty_aliases');
@@ -337,10 +343,16 @@ function alshaya_facets_pretty_paths_taxonomy_term_insert(TermInterface $term) {
  */
 function alshaya_facets_pretty_paths_taxonomy_term_update(TermInterface $term) {
   if ($term->bundle() == 'sku_product_option') {
+    $langcode = $term->language()->getId();
     $facet_item_value = $term->getName();
     $key = strtolower($facet_item_value);
+    // Use en translation for pretty path.
+    if ($langcode != 'en' && $term->hasTranslation('en')) {
+      $term_en = $term->getTranslation('en');
+      $facet_en_value = $term_en->getName();
+      $key = strtolower($facet_en_value);
+    }
     $facet_alias = $term->get('field_sku_attribute_code')->getValue()[0]['value'];
-    $langcode = $term->language()->getId();
 
     $database = \Drupal::database();
     $query = $database->select('facets_pretty_path', 'fpp');
