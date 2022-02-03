@@ -1,15 +1,22 @@
 import React from 'react';
 import Select from 'react-select';
-import { checkExpressDeliveryStatus, checkSameDayDeliveryStatus } from '../../../../../js/utilities/expressDeliveryHelper';
+import {
+  checkExpressDeliveryStatus,
+  checkSameDayDeliveryStatus,
+} from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../common/components/conditional-view';
 import {
   getAreaParentFieldKey,
-  getDeliveryAreaList, getDeliveryAreaStorage, getGovernatesList, setDeliveryAreaStorage,
+  getDeliveryAreaList,
+  getDeliveryAreaStorage,
+  getGovernatesList,
+  setDeliveryAreaStorage,
 } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import SectionTitle from '../../../utilities/section-title';
 import getStringMessage from '../../../utilities/strings';
 import AvailableAreaItems from '../available-area-items';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class AreaListBlock extends React.Component {
   constructor(props) {
@@ -50,7 +57,7 @@ export default class AreaListBlock extends React.Component {
           });
           if (areaSelected !== null && governateKey !== null) {
             defaultOptions = options.find(
-              (element) => element.value === areaSelected.value[governateKey],
+              (element) => parseInt(element.value, 10) === areaSelected.value[governateKey],
             );
           } else if (options.length > 0) {
             [defaultOptions] = options;
@@ -58,7 +65,7 @@ export default class AreaListBlock extends React.Component {
         }
         getDeliveryAreaList(defaultOptions.value).then(
           (result) => {
-            if (result !== null && Object.keys(result.items).length > 0) {
+            if (hasValue(result) && Object.keys(result.items).length > 0) {
               this.setState({
                 areaListItems: result.items,
                 items: result.items,
@@ -89,7 +96,7 @@ export default class AreaListBlock extends React.Component {
       });
       getDeliveryAreaList(selectedOption.value).then(
         (response) => {
-          if (response !== null && Object.keys(response.items).length > 0) {
+          if (hasValue(response) && Object.keys(response.items).length > 0) {
             this.setState({
               items: response.items,
               areaListItems: response.items,
