@@ -10,20 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * [6.11.0] Secondary menu placement in region.
- */
-function alshaya_we_transac_update_8004() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['block.block.alshayasecondarymainmenu'],
-    'alshaya_we_transac',
-    'optional'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add translation for the Category string.
  */
 function alshaya_we_transac_update_8003() {

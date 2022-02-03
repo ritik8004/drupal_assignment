@@ -10,20 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * [6.11.0] Secondary menu placement in region.
- */
-function alshaya_pbk_transac_update_8002() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['block.block.alshayasecondarymainmenu'],
-    'alshaya_pbk_transac',
-    'optional'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * [5.4.0] Mark size, color, fabric and material fields to be indexed in Algolia
  * Remove size_lhn and color_lhn as facets.
  * Add the missing sitemap configurations.

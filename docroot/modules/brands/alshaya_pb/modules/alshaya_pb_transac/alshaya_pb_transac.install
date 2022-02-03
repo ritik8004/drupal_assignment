@@ -12,20 +12,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * [6.11.0] Secondary menu placement in region.
- */
-function alshaya_pb_transac_update_8017() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['block.block.alshayasecondarymainmenu'],
-    'alshaya_pb_transac',
-    'optional'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
  * Queue items for acquia_search_index.
