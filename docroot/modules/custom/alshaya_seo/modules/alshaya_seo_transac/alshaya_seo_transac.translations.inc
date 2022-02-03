@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Contains Alshaya Menus translations.
+ * Contains Alshaya SEO Transac translations.
  */
 
 /**
- * Alshaya Menus translation.
+ * Alshaya SEO Transac translation.
  */
-function _alshaya_menus_translations() {
+function _alshaya_seo_transac_translations() {
   $strings = [
     'v1' => [
       'Select country' => [
@@ -29,8 +29,8 @@ function _alshaya_menus_translations() {
  * @return array
  *   Translations.
  */
-function _alshaya_menus_get_translations(string $version = NULL) {
-  $translations = _alshaya_menus_translations();
+function _alshaya_seo_transac_get_translations(string $version = NULL) {
+  $translations = _alshaya_seo_transac_translations();
   // If no version mentioned, return all version strings.
   if (empty($version)) {
     $trans_data = [];

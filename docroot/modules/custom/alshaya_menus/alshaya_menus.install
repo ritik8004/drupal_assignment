@@ -6,37 +6,6 @@
  */
 
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\block\Entity\Block;
-
-/**
- * Implements hook_update_N().
- *
- * Adds Country Switcher block.
- */
-function alshaya_menus_update_8004() {
-
-  // Add block.
-  \Drupal::service('alshaya_config.manager')->updateConfigs(
-    ['block.block.countryswitcher'],
-    'alshaya_menus',
-    'install'
-  );
-
-  // Add translations.
-  module_load_include('inc', 'alshaya_menus', 'alshaya_menus.translations');
-  $translations = _alshaya_menus_get_translations('v1');
-  if ($translations) {
-    alshaya_i18n_save_translations($translations);
-  }
-
-  // Disabling the block.
-  // To be manually enabled from Block Layout in each site.
-  $block = Block::load('countryswitcher');
-  if (!empty($block) && $block->status()) {
-    $block->setStatus(FALSE);
-    $block->save();
-  }
-}
 
 /**
  * Implements hook_update_N().
@@ -108,11 +77,4 @@ function alshaya_menus_install() {
     ]);
   \Drupal::entityDefinitionUpdateManager()
     ->installFieldStorageDefinition('social_id', 'menu_link_content', 'menu_link_content', $storage_definition);
-
-  // Add translations.
-  module_load_include('inc', 'alshaya_menus', 'alshaya_menus.translations');
-  $translations = _alshaya_menus_get_translations();
-  if ($translations) {
-    alshaya_i18n_save_translations($translations);
-  }
 }

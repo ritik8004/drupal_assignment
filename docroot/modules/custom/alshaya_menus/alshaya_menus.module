@@ -35,18 +35,3 @@ function alshaya_menus_form_menu_link_content_menu_link_content_form_alter(&$for
     $form['social_id']['#access'] = FALSE;
   }
 }
-
-/**
- * Implements hook_theme().
- */
-function alshaya_menus_theme($existing, $type, $theme, $path) {
-  return [
-    'alshaya_country_switcher' => [
-      'template' => 'alshaya-country-switcher',
-      'variables' => [
-        'markets' => NULL,
-        'currentMarket' => NULL,
-      ],
-    ],
-  ];
-}

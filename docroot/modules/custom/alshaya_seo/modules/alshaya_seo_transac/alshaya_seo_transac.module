@@ -412,6 +412,13 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
         'term_tree' => NULL,
       ],
     ],
+    'alshaya_country_switcher' => [
+      'template' => 'alshaya-country-switcher',
+      'variables' => [
+        'markets' => NULL,
+        'currentMarket' => NULL,
+      ],
+    ],
   ];
 }
 
