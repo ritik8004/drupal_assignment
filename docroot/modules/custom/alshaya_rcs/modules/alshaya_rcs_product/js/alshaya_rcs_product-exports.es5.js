@@ -237,7 +237,7 @@ exports.render = function render(
 ) {
   let html = "";
   switch (placeholder) {
-    case "delivery-info":
+    case "delivery-info-block":
       if (!isProductBuyable(entity)) {
         break;
       }

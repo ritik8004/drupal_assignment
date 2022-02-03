@@ -112,7 +112,7 @@ exports.render = function render(
       }
       break;
 
-    case "delivery-info":
+    case "delivery-info-block":
     case "delivery-options":
     case 'mobile-upsell-products':
     case 'upsell-products':
