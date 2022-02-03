@@ -273,6 +273,13 @@ function alshaya_seo_transac_install() {
   }
 
   $config->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_seo_transac', 'alshaya_seo_transac.translations');
+  $translations = _alshaya_seo_transac_get_translations();
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**
