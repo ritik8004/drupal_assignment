@@ -384,6 +384,7 @@ export default class CartItem extends React.Component {
                   sku={parentSKU}
                   title={title}
                   itemImage={cartImage}
+                  options={attributeOptions}
                   closeWishlistModal={this.closeWishlistModal}
                 />
               </ConditionalView>
