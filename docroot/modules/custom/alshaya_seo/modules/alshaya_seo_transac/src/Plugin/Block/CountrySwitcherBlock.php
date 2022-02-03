@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_menus\Plugin\Block;
+namespace Drupal\alshaya_seo_transac\Plugin\Block;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Block\BlockBase;
@@ -15,7 +15,7 @@ use Drupal\external_hreflang\Plugin\metatag\Tag\ExternalHreflang;
  * Provides country switcher block in all brands.
  *
  * @Block(
- *   id = "alshaya_menus_country_switcher",
+ *   id = "alshaya_seo_transac_country_switcher",
  *   admin_label = @Translation("Country Switcher")
  * )
  */
