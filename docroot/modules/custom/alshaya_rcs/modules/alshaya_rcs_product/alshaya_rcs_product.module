@@ -47,7 +47,9 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
       'variables' => [],
     ],
     'page__rcs_pdp' => [
-      'variable',
+      'base hook' => 'page',
+      'template' => 'page--rcs-pdp',
+      'render element' => 'html',
     ],
     'rcs_product_zoom' => [
       'variables' => [
@@ -1058,31 +1060,4 @@ function _alshaya_rcs_product_get_cnc_config(array &$build) {
   $cnc_settings = _get_cnc_settings();
   $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
   $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
-}
-
-/**
- * Implements hook_preprocess_page__rcs_pdp().
- *
- * This hook being called instead of hook_preprocess_page().
- * Alternatively we could invoke hook_preprocess_page() here.
- */
-function alshaya_rcs_product_preprocess_page__rcs_pdp(&$variables) {
-  $strings = [
-    '#theme' => 'translatable_strings',
-    '#strings' => [
-      [
-        'key' => 'backend_obsolete_version',
-        'value' => t('We have upgraded your experience, please refresh the page and try again.'),
-      ],
-      [
-        'key' => 'check_area_availability',
-        'value' => t('Check availability in your area', [], ['context' => 'delivery_area']),
-      ],
-      [
-        'key' => 'governate_label',
-        'value' => t('Select @label', [], ['context' => 'delivery_area']),
-      ],
-    ],
-  ];
-  $variables['page']['content']['commerce_backend'] = $strings;
 }
