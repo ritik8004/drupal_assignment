@@ -341,11 +341,20 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
       ->getStorage('user')
       ->load($current_user->id());
 
-    $settings['userDetails']['customerId'] = (int) $user->get('acq_customer_id')->getString();
+    $customerId = (int) $user->get('acq_customer_id')->getString();
+    $settings['userDetails']['customerId'] = $customerId;
 
     // For V2, add user token to drupalSettings for direct backend calls.
     if (\Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion() == 2) {
-      $settings['userDetails']['customerToken'] = \Drupal::service('alshaya_spc.customer_helper')->getCustomerToken();
+      $customerToken = \Drupal::service('alshaya_spc.customer_helper')->getCustomerToken();
+      $settings['userDetails']['customerToken'] = $customerToken;
+      if (empty($customerToken)) {
+        // Adding logger to check if we have empty token.
+        \Drupal::logger('alshaya_spc')->error('Customer token is empty for the customerId:@customer_id userId:@user_id', [
+          '@customer_id' => $customerId,
+          '@user_id' => $current_user->id(),
+        ]);
+      }
     }
   }
 }
