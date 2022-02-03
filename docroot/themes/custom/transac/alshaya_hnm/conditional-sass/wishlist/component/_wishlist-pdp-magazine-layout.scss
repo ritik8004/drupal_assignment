@@ -6,22 +6,6 @@
           font-family: $hnm-demibold;
         }
       }
-
-      .wishlist-button-wrapper {
-        &:hover {
-          .wishlist-icon {
-            background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-hover.svg');
-          }
-        }
-
-        &.in-wishlist {
-          &:hover {
-            .wishlist-icon {
-              background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
-            }
-          }
-        }
-      }
     }
   }
 }
