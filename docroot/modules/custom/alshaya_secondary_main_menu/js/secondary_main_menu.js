@@ -7,7 +7,7 @@
     attach: function (context) {
       if ($('#block-alshayasecondarymainmenu').length && $('secondary-main-menu-wrapper').length == 0) {
         if ($(window).width() > 1024) {
-          $('#block-branding, #block-alshayasecondarymainmenu', context).once('alshayaSecondaryMainMenu').wrapAll('<div class="secondary-main-menu-wrapper"></div>');
+          $('#block-alshayasecondarymainmenu').once('alshayaSecondaryMainMenu').wrapAll('<div class="secondary-main-menu-wrapper"></div>');
           $('.secondary--main--menu .column').each(function (index) {
             const menuItemsCount = $(this).find("li.menu--three__list-item").length;
             const numberOfItems = 16;
@@ -39,7 +39,7 @@
           let megamenu = $('#block-alshayamainmenu ul.menu--one__list');
           megamenu.append($('.promo-wrapper'));
           megamenu.append($('#block-alshayasecondarymainmenu .secondary--main--menu'));
-          $('.secondary--main--menu', context).once('alshayaSecondaryMainMenu').prepend('<li class="secondary-main-menu-header closed">' + Drupal.t('More') + ' </li>')
+          $('.secondary--main--menu').once('alshayaSecondaryMainMenu').prepend('<li class="secondary-main-menu-header closed">' + Drupal.t('More') + ' </li>')
           $('#block-alshayamainmenu .secondary--main--menu').show();
           $('.main--menu .promo-wrapper').show();
           $('.secondary-main-menu-header').on('click', function () {
