@@ -924,6 +924,12 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     $aura_module_path = drupal_get_path('module', 'alshaya_aura_react');
     $libraries['alshaya_aura_pdp']['js']["/$aura_module_path/dist/pdpRcs.bundle.js"] = $options;
   }
+  // Replace Alshaya SPC PDP library with RCS supported one.
+  elseif ($extension === 'alshaya_spc' && isset($libraries['express_delivery'])) {
+    $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
+    unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
+    $libraries['express_delivery']['js']["dist/pdpRcsEd.bundle.js"] = $options;
+  }
 }
 
 /**
