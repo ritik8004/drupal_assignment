@@ -87,7 +87,9 @@ export default class Checkout extends React.Component {
           this.processAddressFromLocalStorage(result);
 
           // Check if SSD/ED is enabled.
-          if (isExpressDeliveryEnabled()) {
+          // If cart contain only virtual products then we don't check the
+          // cart shipping methods.
+          if (isExpressDeliveryEnabled() && !cartContainsOnlyVirtualProduct(result)) {
             try {
               const cartId = result.cart_id_int;
               if (cartId) {
