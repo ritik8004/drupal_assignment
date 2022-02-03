@@ -6,7 +6,6 @@
 /* global isRTL */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.magazineArticleSlider = {
     attach: function (context, settings) {

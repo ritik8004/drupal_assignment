@@ -1,5 +1,4 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   /**
    * Custom js around color split for add to cart form.

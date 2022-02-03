@@ -10,6 +10,8 @@ import {
 } from '../../../utilities/address_util';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
 
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
@@ -111,7 +113,12 @@ export default class BillingInfo extends React.Component {
                     closeModal={triggerCloseModal}
                     cart={cart}
                     processAddress={this.processAddress}
-                    showEmail={false}
+                    // Show email id field in case of egift card is enabled,
+                    // cart contains only virtual products and anonymous user.
+                    showEmail={
+                      !isUserAuthenticated()
+                      && cartContainsOnlyVirtualProduct(cart.cart)
+                    }
                     showEditButton={false}
                     shippingAsBilling={shippingAsBilling}
                     type="billing"

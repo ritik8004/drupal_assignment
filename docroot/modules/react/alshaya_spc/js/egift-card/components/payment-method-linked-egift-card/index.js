@@ -17,6 +17,7 @@ import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import Loading from '../../../../../js/utilities/loading';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
+import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -186,7 +187,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       // Perform linking of Egift card by calling the redemption API.
       const redemptionResponse = performRedemption(
         cart.cart.cart_id_int,
-        cart.cart.totals.base_grand_total,
+        egiftCardActualBalance, // Send card balance amount.
         egiftLinkedCardNumber,
         'linked',
       );
@@ -371,11 +372,13 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     }
 
     // Disable link card checkbox when egiftcard balance is 0 or is expired,
-    // if already redeemed or any unsupported payment method selected.
+    // if already redeemed or any unsupported payment method selected or full
+    // payment is done by AURA.
     const disabled = (egiftCardActualBalance === 0
       || isEgiftCardExpired
       || isEgiftRedemptionDone(cart.cart)
       || UnsupportedPaymentMethod
+      || isFullPaymentDoneByAura(cart)
     );
 
     // Add `in-active` class if disabled property is true.

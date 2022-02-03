@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, debounce) {
-  'use strict';
 
   Drupal.alshayaSeoGtmPushSearchEvent = function (context, settings) {
     $('.c-header #edit-keywords').once('internalsearch').each(function () {

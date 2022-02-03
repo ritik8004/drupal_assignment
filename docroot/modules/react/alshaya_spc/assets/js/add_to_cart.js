@@ -1,5 +1,4 @@
 (function ($, Drupal, document) {
-  'use strict';
 
   Drupal.behaviors.alshayaSpcAddToCart = {
     attach: function (context, settings) {

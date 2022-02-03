@@ -383,6 +383,7 @@ const getProcessedCartData = async (cartData) => {
     data.totals.egiftRedeemedAmount = 0;
     data.totals.egiftRedemptionType = '';
     data.totals.egiftCardNumber = '';
+    data.totals.egiftCurrentBalance = 0;
     if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
       data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
     }
@@ -391,6 +392,9 @@ const getProcessedCartData = async (cartData) => {
     }
     if (hasValue(cartData.cart.extension_attributes.hps_redemption_card_number)) {
       data.totals.egiftCardNumber = cartData.cart.extension_attributes.hps_redemption_card_number;
+    }
+    if (hasValue(cartData.totals.extension_attributes.hps_current_balance)) {
+      data.totals.egiftCurrentBalance = cartData.totals.extension_attributes.hps_current_balance;
     }
   }
 
@@ -1163,10 +1167,21 @@ const getProductShippingMethods = async (currentArea, sku = undefined, cartId = 
       cartIdInt = cartData.cart.cart_id_int;
     }
   }
+  // Return if cart id is null.
+  if (cartIdInt === null) {
+    return {
+      error: true,
+      error_message: '',
+    };
+  }
+
   // Skip the get shipping method for virtual product ( This is applicable
   // when egift card module is enabled and cart item is virtual.)
   if (cartData && cartContainsOnlyVirtualProduct(cartData.cart)) {
-    return null;
+    return {
+      error: true,
+      error_message: '',
+    };
   }
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
   const attributes = [];
