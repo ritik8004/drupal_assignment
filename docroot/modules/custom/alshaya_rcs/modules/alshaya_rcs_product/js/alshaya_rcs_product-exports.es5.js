@@ -14,27 +14,39 @@ function isProductAvailableForHomeDelivery(entity) {
 }
 
 /**
+ * Check if the provided product is available for Click and Collect.
  *
  * @param entity
+ *   The entity.
+ *
  * @return {Boolean}
+ *   True if CNC is available, otherwise false.
  */
 function isProductAvailableForClickAndCollect(entity) {
   return window.commerceBackend.isProductAvailableForClickAndCollect(entity);
 }
 
 /**
+ * Check if the provided product is available for Same day delivery.
  *
  * @param entity
- * @return {boolean}
+ *   The entity.
+ *
+ * @return {Boolean}
+ *   True if SDD is available, otherwise false.
  */
 function isProductAvailableForSameDayDelivery(entity) {
   return entity.same_day_delivery === 1;
 }
 
 /**
+ * Check if the provided product is available for Express delivery.
  *
  * @param entity
- * @return {boolean}
+ *   The entity.
+ *
+ * @return {Boolean}
+ *   True if ED is available, otherwise false.
  */
 function isProductAvailableForExpressDelivery(entity) {
   return entity.express_delivery === 1;
