@@ -4,6 +4,7 @@ import { egiftCardHeader, egiftFormElement, getEgiftCartTotal } from '../../util
 import getStringMessage from '../../../../js/utilities/strings';
 import PriceElement from '../../utilities/special-price/PriceElement';
 import { getAmountWithCurrency } from '../../utilities/checkout_util';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export default class UpdateEgiftCardAmount extends React.Component {
   // Handling validation for the changing the amount of egift card.
@@ -26,9 +27,17 @@ export default class UpdateEgiftCardAmount extends React.Component {
     } else if (egiftAmount > getEgiftCartTotal(cart)) {
       message = Drupal.t('Redeem amount should be less than or equal to the balance payable.', {}, { context: 'egift' });
       errors = true;
+    } else if (hasValue(cart.totals) && hasValue(cart.totals.paidWithAura)
+      && ((parseFloat(egiftAmount) + cart.totals.paidWithAura) < cart.totals.base_grand_total)) {
+      message = Drupal.t('You can only redeem full pending balance or use other payment method.', {}, { context: 'egift' });
+      errors = true;
     }
-
-    document.getElementById('egift_amount_error').innerHTML = message;
+    // Set error message if errors is true.
+    if (errors) {
+      document.getElementById('egift_amount_error').innerHTML = message;
+    } else {
+      document.getElementById('egift_amount_error').innerHTML = '';
+    }
 
     return errors;
   }
