@@ -5,8 +5,7 @@ body.wishlist-enabled {
     }
 
     @include breakpoint($only-tablet) {
-      top: 0.1875rem;
-      #{$right}: 3.4375rem;
+      position: unset;
     }
 
     .wishlist-header {
@@ -27,6 +26,11 @@ body.wishlist-enabled {
 
   header {
     .region__header {
+      @include breakpoint($only-tablet) {
+        display: flex;
+        align-items: center;
+      }
+
       .block-alshaya-wishlist {
         @include breakpoint($only-mobile) {
           position: absolute;

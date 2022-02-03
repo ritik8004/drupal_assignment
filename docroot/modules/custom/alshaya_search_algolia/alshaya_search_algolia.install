@@ -6,6 +6,30 @@
  */
 
 use Drupal\search_api\Entity\Index;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating alshaya_algolia_index and alshaya_algolia_product_list_index
+ * to add created field.
+ */
+function alshaya_search_algolia_update_8011() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Adding fields in search_api index.
+  $manager->updateConfigs(
+    [
+      'search_api.index.alshaya_algolia_index',
+      'search_api.index.alshaya_algolia_product_list_index',
+    ],
+    'alshaya_search_algolia',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+
+  // Re-index items.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
 
 /**
  * Implements hook_update_N().

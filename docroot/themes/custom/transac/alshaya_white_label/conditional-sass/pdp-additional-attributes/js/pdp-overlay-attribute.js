@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.pdp_overlay_attributes = {
     attach: function (context, settings) {

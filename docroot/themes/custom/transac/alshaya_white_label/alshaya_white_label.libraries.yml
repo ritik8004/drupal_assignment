@@ -8,7 +8,6 @@ global_styles:
     js/form.js: {}
     js/one_time_language_slider.js: {}
     js/footer-space-filler.js: {}
-    vendor/js/details-polyfill.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
     - core/jquery
@@ -23,7 +22,12 @@ global_styles:
     - alshaya_white_label/utils
     - core/drupal.dialog.ajax
     - alshaya_white_label/alshaya_image_lazy_load
+    - alshaya_white_label/detail_polyfill
 
+detail_polyfill:
+  js:
+    vendor/js/details-polyfill.js: {attributes: { nomodule: true }}
+    
 ltr_styles:
   css:
     theme:

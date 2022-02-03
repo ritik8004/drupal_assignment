@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop-alshaya-v2
-      - develop-perf-js
       - develop
       - qa
       - uat

@@ -4,7 +4,6 @@
  */
 
 (function () {
-    'use strict';
     Drupal.behaviors.storeFinderPreserveHistory = {
         attach: function () {
             // Push store finder to history when accessing the store detail via store-finder AJAX.

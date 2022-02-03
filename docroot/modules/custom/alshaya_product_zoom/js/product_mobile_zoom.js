@@ -6,7 +6,6 @@
 /* global isRTL */
 
 (function ($) {
-  'use strict';
   Drupal.behaviors.alshaya_product_mobile_zoom = {
     attach: function (context, settings) {
       function applyRtl(ocObject, options) {

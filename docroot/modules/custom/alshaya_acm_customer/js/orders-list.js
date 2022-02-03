@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   var $pager = null;
 

@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.slideOutMenu = {
     attach: function (context, settings) {

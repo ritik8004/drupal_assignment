@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   var getProductDataRequests = {};
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};
@@ -396,7 +395,7 @@
         // ref: docroot/libraries/jqueryvalidate/lib/jquery.form.js:623
         if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
           var data = xhr.responseJSON;
-          window.commerceBackend.callProductDataCallbacks(data);
+          window.commerceBackend.callProductDataCallbacks(data.sku);
         }
       });
       // Set analytics data in hidden field.

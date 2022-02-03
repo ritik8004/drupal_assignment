@@ -4,6 +4,6 @@ variables:
   product_listing_page_url: '/shop-toys/building-sets-blocks/outdoor-toys/'
   spc_promotion_listing_page: '/buy-boboli-satin-bermuda-shorts-stretch-for-baby-boy.html/'
   np_plp_product_page: '/buy-mummy-and-daddy-bear-romper.html/'
-  np_plp_page: '/buy-teamsterz-mighty-moverz-double-decker.html/'
+  np_plp_page: '/shop-toys/building-sets-blocks/outdoor-toys/'
   spc_pdp_page: '/buy-teamsterz-mighty-moverz-double-decker.html/'
   new_pdp_enabled: TRUE
