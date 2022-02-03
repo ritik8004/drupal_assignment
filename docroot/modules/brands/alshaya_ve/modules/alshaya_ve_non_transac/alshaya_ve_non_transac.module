@@ -218,3 +218,34 @@ function alshaya_ve_non_transac_preprocess_views_view_field__stores_finder__glos
   $output = $node->field_store_open_hours->view('default');
   $variables['output'] = $output;
 }
+
+/**
+ * Implements hook_alshaya_performance_preload_alter().
+ */
+function alshaya_ve_non_transac_alshaya_performance_preload_alter(array &$preload) {
+  $alshaya_preload = [
+    'as' => 'font',
+    'href' => '/themes/custom/non_transac/vision_express/fonts/font-icons.woff2?2pxs5f',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $site_preloads = [
+    'en' => [
+      $alshaya_preload,
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      $alshaya_preload,
+    ],
+  ];
+  // Preloading fonts here.
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
+}

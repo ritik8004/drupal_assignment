@@ -5,8 +5,6 @@
 
 (function ($, Drupal) {
 
-  'use strict';
-
   /**
    * @namespace
    */

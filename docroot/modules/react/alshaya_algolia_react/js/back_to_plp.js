@@ -4,7 +4,6 @@
  */
 
 (function ($) {
-  'use strict';
 
   Drupal.processBackToPLP = function () {
     // On page load, apply filter/sort if any.

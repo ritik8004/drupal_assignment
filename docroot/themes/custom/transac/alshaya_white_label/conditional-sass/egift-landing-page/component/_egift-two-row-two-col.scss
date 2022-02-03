@@ -39,11 +39,11 @@
 
   .paragraph--type--image-title-subtitle {
     .field--name-field-banner {
-      width: 1.875rem;
+      width: auto;
       float: $left;
 
-      @include breakpoint($tablet) {
-        width: 2.4375rem;
+      img {
+        max-height: 2.875rem;
       }
     }
 
@@ -51,11 +51,7 @@
     .field--name-field-sub-title {
       font-size: 0.8125rem;
       line-height: 1.25rem;
-      padding-#{$left}: 3.125rem;
-
-      @include breakpoint($tablet) {
-        padding-#{$left}: 4.5625rem;
-      }
+      padding-#{$left}: 4.125rem;
     }
 
     .field--name-field-title {

@@ -187,7 +187,6 @@
  */
 
 (function ($, _, Drupal, drupalSettings) {
-  'use strict';
 
   /* global google */
 

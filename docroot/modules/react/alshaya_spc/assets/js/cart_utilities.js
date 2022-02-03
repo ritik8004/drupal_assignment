@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   var getProductDataRequests = {};
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};

@@ -1,5 +1,4 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   // Helper to prepare total price of the selected variant considering the quantity.
   Drupal.getSelectedVariantDetails = function (element) {

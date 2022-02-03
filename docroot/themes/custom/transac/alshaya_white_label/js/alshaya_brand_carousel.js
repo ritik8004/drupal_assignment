@@ -6,7 +6,6 @@
  /* global isRTL */
 
  (function ($, Drupal) {
-   'use strict';
 
    Drupal.behaviors.alshayaBrandCarousel = {
      attach: function (context, settings) {

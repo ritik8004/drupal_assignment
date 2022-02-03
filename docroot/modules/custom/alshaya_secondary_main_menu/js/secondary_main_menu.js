@@ -3,7 +3,6 @@
  * Script for Alshaya secondary main menu behaviors.
  */
 (function ($, Drupal, drupalSettings) {
-  'use strict';
   Drupal.behaviors.alshayaSecondaryMainMenu = {
     attach: function (context) {
       if ($('#block-alshayasecondarymainmenu').length && $('secondary-main-menu-wrapper').length == 0) {
@@ -40,7 +39,7 @@
           let megamenu = $('#block-alshayamainmenu ul.menu--one__list');
           megamenu.append($('.promo-wrapper'));
           megamenu.append($('#block-alshayasecondarymainmenu .secondary--main--menu'));
-          $('.secondary--main--menu').prepend('<li class="secondary-main-menu-header closed">' + Drupal.t('More') + ' </li>')
+          $('.secondary--main--menu', context).once('alshayaSecondaryMainMenu').prepend('<li class="secondary-main-menu-header closed">' + Drupal.t('More') + ' </li>')
           $('#block-alshayamainmenu .secondary--main--menu').show();
           $('.main--menu .promo-wrapper').show();
           $('.secondary-main-menu-header').on('click', function () {
