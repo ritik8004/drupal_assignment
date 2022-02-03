@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - alshaya_menus
+    - alshaya_seo_transac
   theme:
     - alshaya_white_label
 id: countryswitcher
@@ -10,11 +10,11 @@ theme: alshaya_white_label
 region: footer_secondary
 weight: 100
 provider: null
-plugin: alshaya_menus_country_switcher
+plugin: alshaya_seo_transac_country_switcher
 settings:
-  id: alshaya_menus_country_switcher
+  id: alshaya_seo_transac_country_switcher
   label: 'Country Switcher'
-  provider: alshaya_menus
+  provider: alshaya_seo_transac
   label_display: '0'
 visibility:
   {  }
