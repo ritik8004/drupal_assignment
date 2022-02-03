@@ -1769,3 +1769,40 @@ html {
     }
   }
 }
+
+@include breakpoint($desktop) {
+  .supermenu {
+    header {
+      .region__header {
+        position: relative;
+      }
+
+      &.c-header {
+        .c-header__region {
+          padding-bottom: 1rem;
+        }
+      }
+    }
+
+    .site-brand-home {
+      .logo {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 50%;
+
+        img {
+          vertical-align: middle;
+        }
+
+        picture {
+          vertical-align: middle;
+
+          img {
+            vertical-align: baseline;
+          }
+        }
+      }
+    }
+  }
+}
