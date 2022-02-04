@@ -1127,6 +1127,7 @@ li.has-bg-color {
 .static-minicart-wrapper {
   .cart-link {
     width: 1.4rem;
+    height: 1.7rem;
   }
 
   .cart-link-total {
@@ -1134,8 +1135,11 @@ li.has-bg-color {
   }
 
   .quantity {
-    bottom: 0;
-    color: $primary_minicart_static_quantity_text;
+    bottom: auto;
+    #{$left}: auto;
+    background: transparent;
+    top: 50%;
+    transform: translateY(-50%);
 
     html[lang="ar"] & {
       #{$right}: 0;
