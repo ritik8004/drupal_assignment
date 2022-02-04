@@ -177,7 +177,7 @@
           }
 
           &.is-active {
-            right: 0;
+            #{$right}: 0;
 
             .facet-item__value {
               @include icon(checkboxfull) {
