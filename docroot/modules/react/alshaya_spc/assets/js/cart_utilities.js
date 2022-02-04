@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   var getProductDataRequests = {};
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};
@@ -385,20 +384,6 @@
 
   Drupal.behaviors.spcCartUtilities = {
     attach: function(context) {
-      // Ajax success to trigger callbacks once api request from
-      // Drupal.alshayaSpc.getProductData finished.
-      $(document).once('getProductData-success').ajaxSuccess(function( event, xhr, settings ) {
-        if (!settings.hasOwnProperty('requestOrigin') || settings.requestOrigin !== 'getProductData') {
-          return;
-        }
-
-        // Check if the xhr status is successful.
-        // ref: docroot/libraries/jqueryvalidate/lib/jquery.form.js:623
-        if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
-          var data = xhr.responseJSON;
-          window.commerceBackend.callProductDataCallbacks(data);
-        }
-      });
       // Set analytics data in hidden field.
       Drupal.SpcPopulateDataFromGA();
     }

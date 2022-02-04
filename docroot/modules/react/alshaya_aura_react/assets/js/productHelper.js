@@ -1,5 +1,4 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   // Helper to prepare total price of the selected variant considering the quantity.
   Drupal.getSelectedVariantDetails = function (element) {
@@ -18,9 +17,10 @@
       var context = (viewMode === 'full')
         ? 'main'
         : 'related';
-      var variantInfo = (drupalSettings[productKey][sku]['type'] === 'simple')
-        ? drupalSettings[productKey][sku]
-        : drupalSettings[productKey][sku]['variants'][currentSelectedVariant];
+      var productData = window.commerceBackend.getProductData(sku);
+      var variantInfo = (productData.type === 'simple')
+        ? productData
+        : productData.variants[currentSelectedVariant];
       var price = variantInfo ? variantInfo.finalPrice.replace(/,/g, '') : 0;
       data = {
         amount: price * quantity,

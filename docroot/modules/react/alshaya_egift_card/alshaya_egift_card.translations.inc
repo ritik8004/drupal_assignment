@@ -187,10 +187,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'المبلغ @currencyCode ',
         'context' => 'egift',
       ],
-      'Please add a email id in your account to perform this operation.' => [
-        'ar' => 'يرجى إضافة البريد الإلكتروني في حسابك لإجراء هذه العملية.',
-        'context' => 'egift',
-      ],
       'Please enter a valid amount' => [
         'ar' => ' يرجى إدخال مبلغ صالح',
         'context' => 'egift',
@@ -394,6 +390,14 @@ function _alshaya_egift_card_translations() {
       ],
       'Do you want to unlink this card from this account?' => [
         'ar' => 'هل تريد إلغاء ربط هذه البطاقة بهذا الحساب؟',
+        'context' => 'egift',
+      ],
+      'You can only redeem full pending balance or use other payment method.' => [
+        'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
+        'context' => 'egift',
+      ],
+      'Please pay full amount via Egift card or use other payment method.' => [
+        'ar' => 'يرجى دفع المبلغ بالكامل عبر بطاقة الهدايا الإلكترونية أو استخدام طريقة دفع أخرى.',
         'context' => 'egift',
       ]
     ],

@@ -162,13 +162,35 @@ function _alshaya_mc_get_product_description($sku_entity) {
  */
 function alshaya_mc_alshaya_performance_preload_alter(array &$preload) {
   // Mothercare's styles and fonts come from whitelabel.
-  $themePath = drupal_get_path('theme', 'alshaya_white_label');
-  $fonts_directory_path = '/' . $themePath . '/fonts';
-
-  $preload[] = [
+  $alshaya_preload = [
     'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-icons.woff2?D7b5if',
+    'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-icons.woff2?D7b5if',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];
+  $site_preloads = [
+    'en' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-thin.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      $alshaya_preload,
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-arabic-thin.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      $alshaya_preload,
+    ],
+  ];
+  // Preloading fonts here.
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
 }

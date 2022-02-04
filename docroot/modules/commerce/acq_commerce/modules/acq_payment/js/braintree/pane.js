@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, braintree) {
-  'use strict';
 
   Drupal.behaviors.braintree = {
     attach: function (context, settings) {

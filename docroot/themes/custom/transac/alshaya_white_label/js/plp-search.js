@@ -4,7 +4,6 @@
  */
 
 (function ($) {
-  'use strict';
   Drupal.behaviors.alshayaPLPSearch = {
     attach: function (context, settings) {
 

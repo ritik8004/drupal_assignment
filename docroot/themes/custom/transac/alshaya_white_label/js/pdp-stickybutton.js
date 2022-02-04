@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * Helper function to make add to cart button sticky.

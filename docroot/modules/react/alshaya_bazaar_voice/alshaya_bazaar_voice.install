@@ -13,6 +13,19 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Add translations.
+ */
+function alshaya_bazaar_voice_update_8005() {
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  $translations = _alshaya_bazaar_voice_get_translations('v2');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add configs for Google translations.
  * Add new field for sorting optons.
  * Add translations.

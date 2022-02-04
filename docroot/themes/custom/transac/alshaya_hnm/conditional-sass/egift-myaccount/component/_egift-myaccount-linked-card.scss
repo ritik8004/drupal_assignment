@@ -14,6 +14,11 @@
           opacity: 1;
         }
       }
+
+      button.egift-card-remove-confirm-yes,
+      button.egift-card-remove-confirm-no {
+        text-transform: uppercase;
+      }
     }
 
     .close {

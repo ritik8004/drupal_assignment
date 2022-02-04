@@ -1,5 +1,4 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict';
   /**
    * All custom js for product pretty path.
    */

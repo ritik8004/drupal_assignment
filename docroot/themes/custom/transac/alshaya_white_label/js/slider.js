@@ -8,7 +8,6 @@
 /* global debounce */
 
 (function ($, Drupal) {
-  'use strict';
 
   // Call centerDots() to apply slick dots vertically center aligned.
   function centerDots() {

@@ -3,6 +3,10 @@ enabled: true
 # and logged-in users (default to 5 mins) in seconds.
 local_storage_expiration_guest: 604800
 local_storage_expiration_logged_in: 300
+# If true, on every page load it will call magento api to fetch
+# fresh wishlist data and store that in local storage for
+# authenticate users only.
+force_load_wishlist_from_backend: true
 wishlist_label: 'favorites'
 # Config for removing products from wishlist after it's been
 # added to cart from PDP, PLP, Wishlist or any other pages.

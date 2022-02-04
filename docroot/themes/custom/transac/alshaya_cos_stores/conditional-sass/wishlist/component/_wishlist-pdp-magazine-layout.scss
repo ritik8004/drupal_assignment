@@ -28,18 +28,11 @@
           width: auto;
           padding-#{$left}: 2rem;
           font-size: 0.875rem;
-        }
 
-        &:hover {
-          .wishlist-icon {
-            background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-hover.svg');
-          }
-        }
-
-        &.in-wishlist {
-          &:hover {
-            .wishlist-icon {
-              background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
+          @include breakpoint($tablet) {
+            &::after {
+              width: 1.5rem;
+              height: 1.5rem;
             }
           }
         }

@@ -86,6 +86,11 @@
 
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
+        {% if aura_enabled is defined and aura_enabled %}
+          {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+          <div id="aura-pdp"></div>
+        {% endif %}
+
         {% if content.reviews_rating %}
           {{content.reviews_rating}}
         {% endif %}

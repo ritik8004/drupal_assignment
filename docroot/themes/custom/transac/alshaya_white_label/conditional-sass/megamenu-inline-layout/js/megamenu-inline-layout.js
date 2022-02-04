@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   var menuLevel2 = '.menu--two__list';
   var menuLevel3 = '.menu--three__list';

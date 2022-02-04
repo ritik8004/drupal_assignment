@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings, dataLayer) {
-  'use strict';
 
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
@@ -33,7 +32,8 @@
     var productInfo = Drupal.getItemFromLocalStorage(key);
     if (productInfo !== null) {
       var productDetails = Drupal.alshayaSeoSpc.gtmProduct(productInfo, product.qty);
-      productDetails.metric2 = product.finalPrice;
+      // metric value will be negative in case of product removal from cart.
+      productDetails.metric2 = gtmEvent === 'removeFromCart' ? -1 * product.finalPrice : product.finalPrice;
       productData.ecommerce[action].products.push(productDetails);
       dataLayer.push(productData);
     }

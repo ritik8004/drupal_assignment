@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_js_optimisations_install() {
+  // 'alshaya_js_optimisations' module must execute at last.
+  module_set_weight('alshaya_js_optimisations', 100);
+}

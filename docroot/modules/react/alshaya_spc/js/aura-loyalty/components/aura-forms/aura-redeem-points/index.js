@@ -125,6 +125,8 @@ class AuraFormRedeemPoints extends React.Component {
         // egift to check remaining balance.
         if (key !== 'totalBalancePayable') {
           delete cartTotals[key];
+        } else {
+          cartTotals.totalBalancePayable = stateValues.totalBalancePayable;
         }
       });
 

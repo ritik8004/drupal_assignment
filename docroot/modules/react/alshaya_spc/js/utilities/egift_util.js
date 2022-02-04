@@ -546,17 +546,17 @@ export const getEgiftCartTotal = (cart) => {
   // Get the cart total and calculate the amount based on balance payable.
   const {
     base_grand_total: baseGrandTotal,
-    totalBalancePayable,
+    balancePayable,
     egiftRedeemedAmount,
   } = cart.totals;
 
   let cartTotal = baseGrandTotal;
   // The cart total for egift should be less than the redemption amount and
   // the pending balance.
-  if (totalBalancePayable >= 0
+  if (balancePayable >= 0
     && egiftRedeemedAmount >= 0
-    && (totalBalancePayable + egiftRedeemedAmount) < cartTotal) {
-    cartTotal = totalBalancePayable + egiftRedeemedAmount;
+    && (balancePayable + egiftRedeemedAmount) < cartTotal) {
+    cartTotal = balancePayable + egiftRedeemedAmount;
   }
 
   return cartTotal;

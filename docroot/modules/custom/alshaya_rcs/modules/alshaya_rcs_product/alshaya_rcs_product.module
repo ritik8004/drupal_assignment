@@ -139,17 +139,6 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
   \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
   // Add the library which adds adds the schema script tag.
   $attachments['#attached']['library'][] = 'alshaya_rcs_product/schema_org';
-
-  // Replace DY library.
-  foreach ($attachments['#attached']['library'] as $key => $value) {
-    if ($value == 'alshaya_dynamic_yield/alshaya_dynamic_yield.product_modal') {
-      // Remove original library.
-      unset($attachments['#attached']['library'][$key]);
-      // Add RCC library.
-      $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
-      break;
-    }
-  }
 }
 
 /**
@@ -209,7 +198,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_rcs_product/main';
   $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
   $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
-  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
   $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
@@ -865,6 +853,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
  * Implements hook_library_info_alter().
  */
 function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
+  $self_module_path = drupal_get_path('module', 'alshaya_rcs_product');
   // Alter the product utility library to replace the base JS file with the
   // utility file provided by this module.
   if ($extension === 'alshaya_acm_product') {
@@ -897,6 +886,21 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     $libraries['order_print']['dependencies'] = [
       'rcs_magento_placeholders/rcs_magento_placeholders',
     ];
+  }
+  // Replace DY library.
+  elseif ($extension === 'alshaya_dynamic_yield' && isset($libraries['alshaya_dynamic_yield.product_modal'])) {
+    $options = $libraries['alshaya_dynamic_yield.product_modal']['js']['js/alshaya_dynamic_yield.product_modal.js'];
+    unset($libraries['alshaya_dynamic_yield.product_modal']['js']['js/alshaya_dynamic_yield.product_modal.js']);
+    $libraries['alshaya_dynamic_yield.product_modal']['js']["/$self_module_path/js/alshaya_rcs_product.modal.js"] = $options;
+    $libraries['alshaya_dynamic_yield.product_modal']['dependencies'][] = 'alshaya_acm_cart_notification/cart_notification_js';
+    $libraries['alshaya_dynamic_yield.product_modal']['dependencies'][] = 'rcs_placeholders/helpers';
+  }
+  // Replace AURA PDP library with RCS supported one.
+  elseif ($extension === 'alshaya_aura_react' && isset($libraries['alshaya_aura_pdp'])) {
+    $options = $libraries['alshaya_aura_pdp']['js']['dist/pdp.bundle.js'];
+    unset($libraries['alshaya_aura_pdp']['js']['dist/pdp.bundle.js']);
+    $aura_module_path = drupal_get_path('module', 'alshaya_aura_react');
+    $libraries['alshaya_aura_pdp']['js']["/$aura_module_path/dist/pdpRcs.bundle.js"] = $options;
   }
 }
 
