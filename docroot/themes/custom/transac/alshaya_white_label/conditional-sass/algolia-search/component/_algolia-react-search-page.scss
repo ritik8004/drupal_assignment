@@ -240,7 +240,11 @@
       }
 
       ul {
+        width: max-content;
+
         .facet-item {
+          padding-#{$right}: 1.125rem;
+
           .listing-inline-star {
             .rating-label {
               width: 17%;
