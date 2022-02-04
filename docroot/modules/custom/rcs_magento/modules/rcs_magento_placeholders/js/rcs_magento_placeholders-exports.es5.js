@@ -233,6 +233,17 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       // @todo To use graphql query to get the order details.
       break;
 
+    // Get the product data for the given sku.
+    case 'product':
+      // Build query.
+      const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
+      const filterValue = operator === 'in' ? JSON.stringify(params.sku) : `"${params.sku}"`;
+      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: ${filterValue} }}) ${rcsPhGraphqlQuery.products}}`);
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items[0];
+
+      break;
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;

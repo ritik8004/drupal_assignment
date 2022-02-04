@@ -75,3 +75,7 @@ add_to_bag_utility:
   version: 1.x
   js:
     js/alshaya_acm_add_to_bag.utility.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

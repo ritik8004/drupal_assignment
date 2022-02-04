@@ -7,7 +7,6 @@ cart_utilities:
     - core/jquery.once
     - alshaya_react/react_pollyfill
     - alshaya_acm_product/product_utility
-    - alshaya_acm_product/add_to_bag_utility
 
 mini_cart:
   version: 1.x

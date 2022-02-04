@@ -52,16 +52,6 @@ function alshaya_algolia_react_page_attachments(array &$attachments) {
   // This is used in Algolia Analytics to filter data based on admin/non-admin
   // user.
   $attachments['#attached']['drupalSettings']['user']['isCustomer'] = _alshaya_seo_process_gtm();
-
-  // Ignore admin paths.
-  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
-    return;
-  }
-  // Get click and collect settings on search and listing page.
-  $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
-  $attachments['#attached']['drupalSettings']['alshaya_click_collect'] = [
-    'status' => $cnc_settings->get('feature_status'),
-  ];
 }
 
 /**

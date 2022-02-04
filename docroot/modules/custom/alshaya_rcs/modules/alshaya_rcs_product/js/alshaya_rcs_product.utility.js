@@ -234,6 +234,7 @@
     var prices = {
       price : formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value) : product.price_range.maximum_price.regular_price.value,
       finalPrice: formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value) : product.price_range.maximum_price.final_price.value,
+      percent_off: product.price_range.maximum_price.discount.percent_off,
     };
     return prices;
   };

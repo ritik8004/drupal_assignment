@@ -1,5 +1,4 @@
 (function (Drupal) {
-  window.commerceBackend = window.commerceBackend || {};
 
    /**
    * Return product info from backend.
@@ -12,16 +11,38 @@
    * @returns {object}
    *   The product info object.
    */
-  window.commerceBackend.getProductDataAddToBagListing = async function (sku, parentSKU = null) {
+  window.commerceBackend.getProductDataAddToBagListing = async function (sku, parentSKU) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
 
     // The product will be fetched and saved in static storage.
     var productInfo = {};
-    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
+    // var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
+    const response = await globalThis.rcsPhCommerceBackend.getData('product', {sku: mainSKU});
+    console.log(response);
     if (response) {
-      RcsPhStaticStorage.set('product_' + mainSKU, response[0]);
-      productInfo = processProductInfo(response[0]);
+      // Get product labels.
+      const productLabels = await globalThis.rcsPhCommerceBackend.getData(
+        'labels',
+        { productIds: [response.id] },
+        null,
+        drupalSettings.path.currentLanguage,
+        ''
+      );
+      let labels = [];
+      productLabels[0]['items'].forEach(function (label) {
+        labels.push({
+          image: {
+            url: label.image,
+            alt: label.name,
+            title: label.name
+          },
+          position: label.position
+        });
+      });
+      RcsPhStaticStorage.set('product_' + response.sku, response);
+      productInfo = processProductInfo(response, labels);
     }
+    console.log(productInfo);
     return productInfo;
   };
 
@@ -34,7 +55,7 @@
    * @returns {object}
    *   The product info object.
    */
-  function processProductInfo(product) {
+  function processProductInfo(product, labels) {
     var productInfo = {};
     productInfo.title = product.name;
     productInfo.max_sale_qty_parent_enable = false;
@@ -42,48 +63,26 @@
       productInfo.max_sale_qty_parent_enable = true;
     }
 
-    // Get product labels.
-    const productLabels = globalThis.rcsPhCommerceBackend.getDataSynchronous(
-      'labels',
-      { productIds: [product.id] },
-      null,
-      drupalSettings.path.currentLanguage,
-      ''
-    );
-    let labels = [];
-    productLabels[0]['items'].forEach(function (label) {
-      labels.push({
-        image: {
-          url: label.image,
-          alt: label.name,
-          title: label.name
-        },
-        position: label.position
-      });
-    });
-
     // Process product variants.
     productInfo.variants = [];
     product.variants.forEach(function (variant) {
-      let variant_data = variant.product;
-      // Get Cart image.
-      let cart = JSON.parse(variant_data.assets_cart);
-      let maximum_price = variant_data.price_range.maximum_price;
+      let variantData = variant.product;
+      let prices = window.commerceBackend.getPrices(variantData);
 
       productInfo.variants.push({
-        sku: variant_data.sku,
+        sku: variantData.sku,
         parent_sku: product.sku,
         cart_title: product.name,
-        cart_image: cart[0].url,
-        media: {images: variant_data.media},
+        cart_image: variantData.media_cart,
+        media: {images: variantData.media},
         product_labels: labels,
-        original_price: maximum_price.regular_price.value,
-        final_price: maximum_price.final_price.value,
-        discount_percentage: maximum_price.discount.percent_off,
-        max_sale_qty: variant_data.stock_data.max_sale_qty,
+        original_price: prices.price,
+        final_price: prices.finalPrice,
+        discount_percentage: prices.percent_off,
+        max_sale_qty: variantData.stock_data.max_sale_qty,
         stock: {
-          qty: variant_data.stock_data.qty,
-          status: (variant_data.stock_status == "IN_STOCK") ? true : false,
+          qty: variantData.stock_data.qty,
+          status: (variantData.stock_status == "IN_STOCK") ? true : false,
         }
       });
     });

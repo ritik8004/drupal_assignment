@@ -12,7 +12,7 @@
    * @returns {object}
    *   The product info object.
    */
-  window.commerceBackend.getProductDataAddToBagListing = function (sku, parentSKU = null) {
+  window.commerceBackend.getProductDataAddToBagListing = async function (sku, parentSKU) {
     var sku = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     var storageKey = getProductInfoStorageKey(sku);
 
