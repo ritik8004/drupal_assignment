@@ -298,9 +298,9 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
         // the customer token in the session here.
         // And since the user password is not available yet, we call
         // loadCustomerTokenForSocialAccount() to fetch the token.
-        /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $api_wrapper */
-        $api_wrapper = \Drupal::service('alshaya_spc.customer_helper');
-        $api_wrapper->loadCustomerTokenForSocialAccount($email);
+        /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper */
+        $customer_helper = \Drupal::service('alshaya_spc.customer_helper');
+        $customer_helper->loadCustomerTokenForSocialAccount($email);
 
         foreach ($customer['addresses'] as $key => $address) {
           // @todo ApiWrapper::authenticateCustomer() returns the 'extension'
@@ -520,16 +520,15 @@ function alshaya_acm_customer_user_login(UserInterface $account) {
     ]);
   }
 
-
   $route_name = \Drupal::routeMatch()->getRouteName();
   if ($route_name === 'user_registrationpassword.confirm') {
     // We set the customer token in the session as in the next page the user
     // will be landing on the My Account page.
     // And since the user password is not available yet, we call
     // loadCustomerTokenForSocialAccount() to fetch the token.
-    /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $api_wrapper */
-    $api_wrapper = \Drupal::service('alshaya_spc.customer_helper');
-    $api_wrapper->loadCustomerTokenForSocialAccount($account->getEmail());
+    /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper */
+    $customer_helper = \Drupal::service('alshaya_spc.customer_helper');
+    $customer_helper->loadCustomerTokenForSocialAccount($account->getEmail());
   }
 }
 
