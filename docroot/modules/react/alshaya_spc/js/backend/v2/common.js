@@ -997,7 +997,7 @@ const prepareFilterData = (filters, base = 'searchCriteria', groupId = 0) => {
 
   filters.forEach((filter, index) => {
     Object.keys(filter).forEach((key) => {
-      data[`${base}[filter_groups][${groupId}][filters][${index}][${key}]`] = `${filter[key]}`;
+      data[`${base}[filter_groups][${groupId}][filters][${index}][${key}]`] = filter[key];
     });
   });
 
