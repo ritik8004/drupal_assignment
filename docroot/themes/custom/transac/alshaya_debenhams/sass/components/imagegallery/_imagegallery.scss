@@ -30,11 +30,11 @@
     padding: 0;
 
     .slick-prev {
-      #{$left}: 20%;
+      left: 20%;
     }
 
     .slick-next {
-      #{$right}: 20%;
+      right: 20%;
     }
   }
 }
