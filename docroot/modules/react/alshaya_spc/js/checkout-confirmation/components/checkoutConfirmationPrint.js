@@ -55,7 +55,6 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
           <ConditionalView condition={payment.methodCode === 'checkout_com_upapi_benefitpay'}>
             <CompleteBenefitPayPayment payment={payment} totals={totals} />
           </ConditionalView>
-          <OrderSummary />
         </div>
         <div className="spc-sidebar">
           <OrderSummaryBlock
