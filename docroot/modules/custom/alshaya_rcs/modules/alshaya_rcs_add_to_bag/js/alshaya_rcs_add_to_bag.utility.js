@@ -17,11 +17,12 @@
     // The product will be fetched and saved in static storage.
     var productInfo = {};
     const response = await globalThis.rcsPhCommerceBackend.getData('product', {sku: mainSKU});
-    if (response) {
+    if (response && response.length > 0) {
+      const product = response[0];
       // Get product labels.
       const productLabels = await globalThis.rcsPhCommerceBackend.getData(
         'labels',
-        { productIds: [response.id] },
+        { productIds: [product.id] },
         null,
         drupalSettings.path.currentLanguage,
         ''
@@ -37,8 +38,8 @@
           position: label.position
         });
       });
-      RcsPhStaticStorage.set('product_' + response.sku, response);
-      productInfo = processProductInfo(response, labels);
+      RcsPhStaticStorage.set('product_' + product.sku, product);
+      productInfo = processProductInfo(product, labels);
     }
     return productInfo;
   };
@@ -48,6 +49,8 @@
    *
    * @param {object} product
    *   Product object.
+   * @param {array} labels
+   *   Product labels.
    *
    * @returns {object}
    *   The product info object.
