@@ -978,9 +978,6 @@ const getFormattedError = (code, message) => ({
 /**
  * Helper function to prepare the data.
  *
- * Prepared strings look like below:
- *   searchCriteria[filter_groups][0][filters][0][field]=field
- *
  * @param array $filters
  *   Array containing all filters, must contain field and value, can contain
  *   condition_type too or all that is supported by Magento.
@@ -997,6 +994,9 @@ const prepareFilterData = (filters, base = 'searchCriteria', groupId = 0) => {
 
   filters.forEach((filter, index) => {
     Object.keys(filter).forEach((key) => {
+      // Prepared string like below.
+      // searchCriteria[filter_groups][0][filters][0][field]=field
+      // This is how Magento search criteria in APIs work.
       data[`${base}[filter_groups][${groupId}][filters][${index}][${key}]`] = filter[key];
     });
   });
@@ -1042,7 +1042,6 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
   };
 
   filters.push(countryFilters);
-  // @todo pending cofirmation from MDC on using api call for each click.
   const url = '/V1/deliverymatrix/address-locations/search';
 
   try {
