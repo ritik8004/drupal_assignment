@@ -347,7 +347,7 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
       // Try to fetch the customer token again if empty.
       if (empty($customerToken)) {
         \Drupal::logger('alshaya_spc')
-          ->error('Fetching token for customerId:@customer_id userId:@user_id using loadCustomerTokenForSocialAccount as token was not available', [
+          ->warning('Fetching token for customerId:@customer_id userId:@user_id using loadCustomerTokenForSocialAccount as token was not available', [
             '@customer_id' => $customerId,
             '@user_id' => $current_user->id(),
           ]);
@@ -363,6 +363,7 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
           ]);
           $response = new RedirectResponse(Url::fromRoute('user.logout')->toString());
           $response->send();
+          exit;
         }
       }
 

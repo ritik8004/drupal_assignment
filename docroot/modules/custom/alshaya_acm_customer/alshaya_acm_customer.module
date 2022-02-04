@@ -293,7 +293,7 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
       $customer = $api_wrapper->getCustomer($email);
       $user = user_load_by_mail($email);
 
-      if ($user && alshaya_acm_customer_is_customer($user) && isset($customer['addresses'])) {
+      if ($user && alshaya_acm_customer_is_customer($user)) {
         // In the next page the user session will have started. So we set
         // the customer token in the session here.
         // And since the user password is not available yet, we call
@@ -302,18 +302,20 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
         $customer_helper = \Drupal::service('alshaya_spc.customer_helper');
         $customer_helper->loadCustomerTokenForSocialAccount($email);
 
-        foreach ($customer['addresses'] as $key => $address) {
-          // @todo ApiWrapper::authenticateCustomer() returns the 'extension'
-          // @todo as array while ApiWrapper::getCustomer() returns 'extension'
-          // @todo as object and thus we need to typecaste here.
-          if (!empty($address['extension']) && !is_array($address['extension'])) {
-            $customer['addresses'][$key]['extension'] = (array) $address['extension'];
+        if (isset($customer['addresses'])) {
+          foreach ($customer['addresses'] as $key => $address) {
+            // @todo ApiWrapper::authenticateCustomer() returns the 'extension'
+            // @todo as array while ApiWrapper::getCustomer() returns 'extension'
+            // @todo as object and thus we need to typecaste here.
+            if (!empty($address['extension']) && !is_array($address['extension'])) {
+              $customer['addresses'][$key]['extension'] = (array) $address['extension'];
+            }
           }
-        }
 
-        \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-        // Update the user info from MDC to Drupal.
-        alshaya_acm_customer_update_user_data($user, $customer);
+          \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+          // Update the user info from MDC to Drupal.
+          alshaya_acm_customer_update_user_data($user, $customer);
+        }
       }
     }
     catch (\Exception $e) {
