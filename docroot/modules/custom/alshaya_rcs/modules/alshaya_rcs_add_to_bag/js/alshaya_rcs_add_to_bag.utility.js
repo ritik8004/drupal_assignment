@@ -16,9 +16,7 @@
 
     // The product will be fetched and saved in static storage.
     var productInfo = {};
-    // var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
     const response = await globalThis.rcsPhCommerceBackend.getData('product', {sku: mainSKU});
-    console.log(response);
     if (response) {
       // Get product labels.
       const productLabels = await globalThis.rcsPhCommerceBackend.getData(
@@ -42,7 +40,6 @@
       RcsPhStaticStorage.set('product_' + response.sku, response);
       productInfo = processProductInfo(response, labels);
     }
-    console.log(productInfo);
     return productInfo;
   };
 
@@ -117,7 +114,7 @@
         values: option.values.map(function (option_value) {
           return {
             label: option_value.store_label,
-            value: option_value.value_index
+            value: option_value.value_index.toString(),
           };
         })
       };

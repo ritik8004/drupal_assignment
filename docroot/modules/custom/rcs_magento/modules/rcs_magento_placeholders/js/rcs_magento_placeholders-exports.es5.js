@@ -307,7 +307,6 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
 
-      result = [];
       if (response && response.data.products.total_count) {
         response.data.products.items.forEach(function (product) {
           RcsEventManager.fire('rcsUpdateResults', {
@@ -315,26 +314,9 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
               result: product,
             }
           });
-          result.push(product);
         });
       }
       break;
-
-    case 'labels':
-      request.data = prepareQuery(`{
-          amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
-            items{
-              image
-              name
-              position
-              product_id
-            }
-          }
-        }`);
-
-    response = rcsCommerceBackend.invokeApiSynchronous(request);
-    result = response.data.amLabelProvider;
-    break;
 
     case 'product-option':
       const staticKey = `product_options_${params.attributeCode}`;
