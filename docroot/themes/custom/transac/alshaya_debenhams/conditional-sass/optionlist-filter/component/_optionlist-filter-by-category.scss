@@ -27,15 +27,15 @@
   }
 
   .attribute-overlay-close-icon {
-    #{$right}: 9px;
+    #{$right}: 0.5625rem;
     top: 0.25rem;
 
     &.mobile--close {
-      width: 29px;
-      height: 29px;
+      width: 1.8125rem;
+      height: 1.8125rem;
 
       span {
-        width: 13px;
+        width: 0.8125rem;
       }
     }
   }
@@ -74,10 +74,10 @@
 
 .attribute-search-form {
   &::after {
-    #{$right}: 9px;
-    top: 9px;
-    width: 41px;
-    height: 38px;
+    #{$right}: 0.5625rem;
+    top: 0.5625rem;
+    width: 2.5625rem;
+    height: 2.375rem;
     border-top-#{$right}-radius: 0;
     border-bottom-#{$right}-radius: 0;
 
@@ -85,7 +85,7 @@
       font-weight: bold;
       font-size: 1.75rem;
       #{$right}: 0;
-      top: 5px;
+      top: 0.3125rem;
     }
   }
 
