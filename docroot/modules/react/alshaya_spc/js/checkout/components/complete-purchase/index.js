@@ -9,10 +9,14 @@ import dispatchCustomEvent from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
-import { isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
+import {
+  cartContainsAnyNormalProduct,
+  cartContainsAnyVirtualProduct,
+  isEgiftRedemptionDone,
+  isFullPaymentDoneByEgift,
+} from '../../../utilities/egift_util';
 import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import isAuraEnabled from '../../../../../js/utilities/helper';
-import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -216,15 +220,32 @@ export default class CompletePurchase extends React.Component {
 
     // If somehow user bypass the frontend checks and tries to place order, then
     // we are validating that user has done full payment by egift and aura and
-    // balance payable is less than 0.
+    // balance payable is greater than 0.
+    const { balancePayable, paidWithAura, egiftRedeemedAmount } = cart.cart.totals;
     if (isEgiftCardEnabled()
       && isAuraEnabled()
-      && hasValue(cart.cart.totals)
-      && hasValue(cart.cart.totals.balancePayable)
-      && cart.cart.totals.balancePayable > 0) {
+      && paidWithAura > 0
+      && egiftRedeemedAmount > 0
+      && balancePayable > 0) {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
         message: drupalSettings.global_error_message,
+      });
+      return false;
+    }
+
+    // If somehow user bypass the frontend checks and tries to place order, then
+    // here we will validate if cart contains normal + digital product and user
+    // has redeem partial points from egift.
+    if (isEgiftCardEnabled()
+      && cartContainsAnyNormalProduct(cart.cart)
+      && cartContainsAnyVirtualProduct(cart.cart)
+      && (isEgiftRedemptionDone(cart.cart)
+      || isEgiftRedemptionDone(cart.cart, 'linked'))
+      && !isFullPaymentDoneByEgift(cart.cart)) {
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: Drupal.t('Please pay full amount via Egift card or use other payment method.', {}, { context: 'egift' }),
       });
       return false;
     }

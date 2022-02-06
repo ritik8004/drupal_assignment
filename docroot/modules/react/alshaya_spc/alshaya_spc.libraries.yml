@@ -9,7 +9,6 @@ cart_utilities:
 
 mini_cart:
   version: 1.x
-  footer: true
   js:
     dist/minicart.bundle.js: { }
   dependencies:
@@ -17,7 +16,6 @@ mini_cart:
 
 cart:
   version: 1.x
-  footer: true
   js:
     dist/cart.bundle.js: { }
   dependencies:
@@ -31,7 +29,6 @@ cart:
 
 checkout:
   version: 1.x
-  footer: true
   js:
     dist/checkout.bundle.js: { }
   dependencies:
@@ -41,7 +38,6 @@ checkout:
 
 add_to_cart:
   version: 1.x
-  footer: true
   js:
     assets/js/add_to_cart.js: { }
   dependencies:
@@ -50,7 +46,6 @@ add_to_cart:
 
 checkout-confirmation:
   version: 1.x
-  footer: true
   js:
     dist/checkout_confirmation.bundle.js: { }
   dependencies:
@@ -83,7 +78,7 @@ googlemapapi:
     - core/jquery
     - core/drupalSettings
   js:
-    js/google-maps-api.js: {}
+    assets/js/google-maps-api.js: {}
 
 commerce_backend.cart.v1:
   js:
@@ -112,7 +107,6 @@ commerce_backend.checkout.v2:
 
 express_delivery:
   version: 1.x
-  footer: true
   js:
     dist/expressdelivery.bundle.js: { }
   dependencies:

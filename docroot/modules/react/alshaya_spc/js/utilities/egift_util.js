@@ -121,7 +121,8 @@ export const egiftFormElement = ({
 /**
  * Triggers custom event to update price summary block.
  */
-export const updatePriceSummaryBlock = (refreshCart) => {
+export const updatePriceSummaryBlock = (refreshCart = null) => {
+  // Fetch the fresh cart data and update the summary block.
   const cartData = window.commerceBackend.getCart(true);
   if (cartData instanceof Promise) {
     cartData.then((data) => {
@@ -130,13 +131,22 @@ export const updatePriceSummaryBlock = (refreshCart) => {
         && data.data.error === undefined) {
         // Update Egift card line item.
         dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
-        // Refresh the cart in checkout.
         const formatedCart = window.commerceBackend.getCartForCheckout();
         if (formatedCart instanceof Promise) {
           formatedCart.then((cart) => {
             // Validate if response was successful or failure.
             if (hasValue(cart) && hasValue(cart.data)) {
-              refreshCart({ cart: cart.data });
+              // Refresh the cart in checkout and check if refresh function is
+              // available.
+              if (refreshCart) {
+                refreshCart({ cart: cart.data });
+              } else {
+                // Calling refresh cart event so that cart components
+                // are refreshed.
+                dispatchCustomEvent('refreshCart', {
+                  data: () => cart.data,
+                });
+              }
             } else {
               dispatchCustomEvent('spcCheckoutMessageUpdate', {
                 type: 'error',
@@ -434,6 +444,72 @@ export const updateRedeemAmount = async (updatedAmount, cart, refreshCart) => {
 };
 
 /**
+ * Removes redemption if it's applied.
+ *
+ * @param {object} cartData
+ *   The cart object.
+ */
+export const removeEgiftRedemption = async (cartData) => {
+  let quoteId = cartData.cart_id;
+  // Default result object.
+  let result = {
+    error: false,
+    message: '',
+  };
+  // Check if topup is applicable.
+  const topUpQuote = getTopUpQuote();
+  if (topUpQuote) {
+    quoteId = topUpQuote.maskedQuoteId;
+  }
+  let postData = {
+    redemptionRequest: {
+      mask_quote_id: quoteId,
+    },
+  };
+  // Change payload if authenticated user.
+  if (isUserAuthenticated()) {
+    postData = {
+      redemptionRequest: {
+        quote_id: cartData.cart_id_int,
+      },
+    };
+  }
+
+  // Invoke the redemption API.
+  const response = await callEgiftApi('eGiftRemoveRedemption', 'POST', postData);
+  if (isValidResponse(response)) {
+    // Remove loader once the data response is available.
+    removeFullScreenLoader();
+  } else if (isValidResponseWithFalseResult(response)) {
+    result = {
+      error: true,
+      message: response.data.response_message,
+    };
+    // Log error in datadog.
+    logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
+      '@action': 'remove_redemption',
+      '@response': response.data,
+    });
+    // Remove loader once the data response is available.
+    removeFullScreenLoader();
+  } else {
+    result = {
+      error: true,
+      message: getDefaultErrorMessage(),
+    };
+    // Log error in datadog.
+    logger.error('Error Response in remove eGiftRedemption. Action: @action Response: @response', {
+      '@action': 'remove_redemption',
+      '@response': response,
+    });
+    // Remove loader once the data response is available.
+    removeFullScreenLoader();
+  }
+
+  return result;
+};
+
+/**
  * Checks if user is trying to topup and redeem using same card.
  *
  * @param {object} cart
@@ -470,18 +546,46 @@ export const getEgiftCartTotal = (cart) => {
   // Get the cart total and calculate the amount based on balance payable.
   const {
     base_grand_total: baseGrandTotal,
-    totalBalancePayable,
+    balancePayable,
     egiftRedeemedAmount,
   } = cart.totals;
 
   let cartTotal = baseGrandTotal;
   // The cart total for egift should be less than the redemption amount and
   // the pending balance.
-  if (totalBalancePayable >= 0
+  if (balancePayable >= 0
     && egiftRedeemedAmount >= 0
-    && (totalBalancePayable + egiftRedeemedAmount) < cartTotal) {
-    cartTotal = totalBalancePayable + egiftRedeemedAmount;
+    && (balancePayable + egiftRedeemedAmount) < cartTotal) {
+    cartTotal = balancePayable + egiftRedeemedAmount;
   }
 
   return cartTotal;
+};
+
+/**
+ * Checks and remove the redemption if exists.
+ *
+ * @param {object} cart
+ *   The cart object.
+ */
+export const removeRedemptionOnCartUpdate = async (cart) => {
+  // Remove Redemption if any applied in the cart as we have updated the cart
+  // items.
+  if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart, cart.totals.egiftRedemptionType)) {
+    // Remove Redemption as we are updating the cart items.
+    showFullScreenLoader();
+    const removeRedemption = await removeEgiftRedemption(cart);
+    if (removeRedemption.error) {
+      // Log the error if redemption is not removed.
+      logger.error('Remove redemption failed, @cart', {
+        '@cartId': cart,
+      });
+      // Remove redemption when error occured.
+      removeFullScreenLoader();
+      return;
+    }
+
+    // Update the total in cart summary block.
+    updatePriceSummaryBlock();
+  }
 };

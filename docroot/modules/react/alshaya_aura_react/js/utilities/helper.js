@@ -1,3 +1,5 @@
+import { getAuraUserDetails } from '../../../js/utilities/helper';
+
 /**
  * Helper function to get all AURA Status.
  */
@@ -71,13 +73,7 @@ function getUserProfileInfo(firstName, lastName) {
  * Helper function to get aura user details.
  */
 function getUserDetails() {
-  let loyaltyUserDetails = {};
-  if (typeof drupalSettings.aura !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura, 'userDetails')) {
-    loyaltyUserDetails = drupalSettings.aura.userDetails;
-  }
-
-  return loyaltyUserDetails;
+  return getAuraUserDetails();
 }
 
 /**

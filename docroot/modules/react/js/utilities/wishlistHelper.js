@@ -237,12 +237,11 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
       skuAttributesOptionData[attributeCode] = attributeData.values[0].value;
       return;
     }
-
     const attributeValueFromSku = skuData.options.find(
-      (option) => ((option.id === attributeData.id) ? option.value : false),
+      (option) => ((option.option_id === attributeData.id) ? option : false),
     );
     if (attributeValueFromSku) {
-      skuAttributesOptionData[attributeCode] = attributeValueFromSku.value;
+      skuAttributesOptionData[attributeCode] = attributeValueFromSku.option_value;
     }
   });
 
@@ -260,7 +259,6 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
     const [key, value] = data;
     skuAttributeCombination = `${skuAttributeCombination}${key}|${value}||`;
   });
-
   // Check if we have a valid combination string and a variant is available
   // with that key in given product data information. If so return variant sku.
   const configurableCombinations = productData.configurable_combinations;
@@ -486,10 +484,10 @@ export const getWishlistLabel = () => (drupalSettings.wishlist.wishlist_label ? 
  */
 export const removeFromWishlistAfterAddtocart = () => {
   if (drupalSettings.wishlist && drupalSettings.wishlist.config
-    && drupalSettings.wishlist.config.removeAfterAddtocart) {
+    && typeof drupalSettings.wishlist.config.removeAfterAddtocart !== 'undefined') {
     return drupalSettings.wishlist.config.removeAfterAddtocart;
   }
-  return true;
+  return false;
 };
 
 /**

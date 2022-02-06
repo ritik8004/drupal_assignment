@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   Drupal.behaviors.alshayaSocial = {
     attach: function (context, settings) {

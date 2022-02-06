@@ -642,6 +642,8 @@ $rr-form-head-row-border: $peacock-blue;
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $_plp_cta_hover;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+$plp-quick-view-product-size-active-bg: $primary_text;
+$plp-quick-view-product-size-border-hover: $primary_text;
 
 // Benefit pay
 $bp-section-title: $peacock-blue;
@@ -667,3 +669,10 @@ $my-wishlist-share-modal-hover-bg: $primary_btn_bg;
 $wishlist-oos: $scarlet;
 $wishlist-share-text: $black;
 $my-wishlist-share-modal-header: $peacock-blue;
+
+// Country Switcher
+$country-switcher-label-mobile: $black;
+
+// eGift Landing page
+$egift-primary-text: $primary_text;
+$egift-accordion-active-title: $primary_link-active;

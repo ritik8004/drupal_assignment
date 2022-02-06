@@ -18,3 +18,16 @@ export default function isAuraEnabled() {
  *   True if user is authenticated.
  */
 export const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.customerId);
+
+/**
+ * Helper function to get aura user details.
+ */
+export const getAuraUserDetails = () => {
+  let loyaltyUserDetails = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'userDetails')) {
+    loyaltyUserDetails = drupalSettings.aura.userDetails;
+  }
+
+  return loyaltyUserDetails;
+};

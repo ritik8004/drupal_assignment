@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, dataLayer, debounce, drupalSettings) {
-  'use strict';
 
   Drupal.behaviors.algoliaPLP = {
     attach: function (context, settings) {
@@ -18,7 +17,7 @@
         });
       });
 
-      $(window).once('alshaya-seo-gtm-product-plp-algolia').on('scroll load', debounce(function (event) {
+      $(window).once('alshaya-seo-gtm-product-plp-algolia').on('scroll', debounce(function (event) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_impressions, $('#alshaya-algolia-plp'), drupalSettings, event);
       }, 500));
 

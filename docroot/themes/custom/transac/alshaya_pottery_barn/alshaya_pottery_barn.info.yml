@@ -11,6 +11,7 @@ regions:
   menu_primary: 'Menu Primary'
   menu_secondary: 'Menu Secondary'
   header: Header
+  sub_header_menu: 'Sub Header Menu'
   pre_content: 'Pre content'
   breadcrumb: Breadcrumb
   hero_content: 'Hero Content'
@@ -25,6 +26,7 @@ regions:
 libraries:
   - alshaya_pottery_barn/global_styles
   - alshaya_white_label/ucfix
+  - alshaya_pottery_barn/fonts
 
 libraries-override:
   alshaya_white_label/ltr_print_styles:
@@ -161,3 +163,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css
+
+  alshaya_white_label/country-switcher:
+    css:
+      theme:
+        css/conditional-sass/country-switcher/country-switcher.ltr.css: css/conditional-sass/country-switcher/country-switcher.ltr.css

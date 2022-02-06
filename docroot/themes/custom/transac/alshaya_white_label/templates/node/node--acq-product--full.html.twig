@@ -96,7 +96,7 @@ set classes = [
               </div>
             {% endfor %}
             </div>
-          {% elseif content.same_day_delivery_text and content.delivery_options is not defined and content.delivery_options is not empty %}
+          {% elseif content.same_day_delivery_text and content.delivery_options is empty %}
             <div class="same-day-delivery">
               <div class="same-day-content">
                 <p>{{ content.same_day_delivery_text }}</p>

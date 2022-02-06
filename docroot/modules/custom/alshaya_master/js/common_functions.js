@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.removeURLParameter = function (url, parameter) {
     var urlparts = url.split('?');

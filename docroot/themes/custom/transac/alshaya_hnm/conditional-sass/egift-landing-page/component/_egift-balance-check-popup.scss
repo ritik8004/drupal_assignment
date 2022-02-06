@@ -4,6 +4,19 @@
       .egift-check-bal-title {
         font-family: $hnm-demibold;
       }
+
+      .close {
+        #{$right}: 0.625rem;
+        top: 1rem;
+
+        @include breakpoint($only-mobile) {
+          top: 1.3rem;
+        }
+
+        &::before {
+          font-size: 1rem;
+        }
+      }
     }
 
     .egift-balance-check-form {

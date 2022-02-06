@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
   Drupal.behaviors.rePositionSizeGuideLinkJS = {
     attach: function () {
       setTimeout(function rePositionSizeGuideLink() {

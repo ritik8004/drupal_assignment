@@ -42,6 +42,7 @@
   }
 
   .edit-egift-payment-amount {
+    font-family: $alshaya-bold;
     font-size: 0.875rem;
     line-height: 1.25rem;
     display: inline-block;
@@ -77,6 +78,11 @@
       padding-#{$right}: 1.25rem;
       padding-#{$left}: 3rem;
       padding-bottom: 1rem;
+
+      &:empty {
+        padding: 0;
+        margin: 0;
+      }
     }
   }
 

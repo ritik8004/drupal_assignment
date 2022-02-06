@@ -21,6 +21,7 @@ body.wishlist-enabled {
       width: 34%;
       #{$right}: 9.0625rem;
       text-align: center;
+      z-index: 10;
     }
 
     .wishlist-header {
@@ -38,6 +39,28 @@ body.wishlist-enabled {
     #wishlist-header-wrapper {
       @include breakpoint($only-mobile) {
         transform: translate3d(0, -2.8125rem, 0);
+      }
+    }
+  }
+
+  &.hide-minimalistic-header.no-sticky-algolia-search-bar {
+    #wishlist-header-wrapper {
+      @include breakpoint($only-mobile) {
+        transform: translate3d(0, -2.875rem, 0);
+      }
+    }
+  }
+
+  &.frontpage {
+    #wishlist-header-wrapper {
+      #{$right}: auto;
+
+      @include breakpoint($only-mobile) {
+        #{$right}: calc(50% - 4%);
+
+        .wishlist-header {
+          padding-#{$right}: 0;
+        }
       }
     }
   }

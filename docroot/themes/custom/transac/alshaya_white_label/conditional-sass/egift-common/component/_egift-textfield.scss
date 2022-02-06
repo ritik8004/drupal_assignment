@@ -34,9 +34,13 @@
     @include egift-placeholder-label;
 
     top: auto;
-    bottom: 0.625rem;
+    bottom: 0.125rem;
     #{$left}: auto;
     #{$right}: 0;
+
+    html[lang=ar] & {
+      bottom: 0.625rem;
+    }
   }
 }
 
@@ -71,10 +75,12 @@
     margin: 0;
   }
 
-  /* Firefox */
+  /* Firefox & safari */
   input[type=number] {
     -moz-appearance: textfield;
     padding-#{$left}: 2.5rem !important;
+    -webkit-text-fill-color: $appointment-form-input;
+    opacity: 1;
   }
 }
 

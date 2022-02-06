@@ -43,8 +43,7 @@
         position: absolute;
         #{$right}: 0;
         color: transparent;
-        right: 0.625rem;
-        top: 1rem;
+        top: 0.7rem;
         z-index: 99;
 
         @include icon('close') {

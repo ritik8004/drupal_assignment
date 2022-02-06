@@ -1,0 +1,12 @@
+@include breakpoint($tablet) {
+  .country-ae {
+    .region__footer-secondary {
+      flex-flow: wrap;
+    }
+
+    #block-countryswitcher {
+      order: 4;
+      padding-top: 1.25rem;
+    }
+  }
+}

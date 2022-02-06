@@ -22,6 +22,10 @@
         display: inline-block;
         font-size: 0.8125rem;
         line-height: 1.25rem;
+
+        input {
+          border: none;
+        }
       }
     }
   }
@@ -96,6 +100,12 @@
       font-size: 1.125rem;
       display: flex;
       align-items: center;
+    }
+  }
+
+  .error {
+    &:empty {
+      padding: 0 !important;
     }
   }
 }

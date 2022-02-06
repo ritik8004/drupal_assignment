@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * Animate & Scroll to subcategory header.

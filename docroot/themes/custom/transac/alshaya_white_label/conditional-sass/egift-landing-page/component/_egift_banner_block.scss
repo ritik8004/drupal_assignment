@@ -98,14 +98,15 @@
         a {
           @include egift-btn;
 
-          border: 1px solid $egift-button-border;
+          color: $primary_btn_bg;
+          border: 1px solid $primary_btn_bg;
           max-width: none;
         }
 
         &:last-child {
           a {
-            background-color: $egift-button-border;
-            color: $egift-landing-page-one-row-two-col-box-bg;
+            background-color: $primary_btn_bg;
+            color: $primary_btn_text;
           }
 
           @include breakpoint($only-mobile) {
@@ -132,6 +133,7 @@
 
     img {
       max-width: 28rem;
+      object-fit: contain;
     }
   }
 }

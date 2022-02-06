@@ -1,0 +1,13 @@
+.spc-cart-items {
+  .spc-cart-item.egift-cart-item {
+    .egift-product-tile {
+      @include breakpoint($only-mobile) {
+        grid-template-columns: 5.4375rem 1fr 3rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        grid-template-columns: 5.4375rem 1fr 3.7rem;
+      }
+    }
+  }
+}
