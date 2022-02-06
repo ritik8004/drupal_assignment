@@ -30,6 +30,12 @@
             color: $wishlist-button-txt;
             background: $wishlist-magazine-pdp-button-hover-bg;
             border-color: $wishlist-magazine-pdp-button-hover-border;
+
+            .wishlist-icon.pdp {
+              &::after {
+                background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-hover.svg?sdR5t6A');
+              }
+            }
           }
         }
 
@@ -44,22 +50,52 @@
 
           .wishlist-icon.pdp {
             color: $wishlist-pdp-button-selected-txt;
+
+            @include breakpoint($tablet) {
+              &::after {
+                background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
+              }
+            }
           }
 
           &:hover {
             background: transparent;
+          }
+
+          &.wishlist-button-wrapper {
+            @include breakpoint($desktop) {
+              padding: 0.25rem 0.5rem;
+            }
           }
         }
 
         .wishlist-icon.pdp {
           margin-#{$left}: 0;
           font-size: 0.8125rem;
-          padding-left: 1.5625rem;
+          padding-#{$left}: 1.5625rem;
           vertical-align: middle;
           display: inline;
           text-transform: uppercase;
           line-height: 1.87;
           font-family: $alshaya-bold;
+
+          @include breakpoint($tablet) {
+            position: relative;
+            width: 100%;
+            background: unset;
+
+            &::after {
+              background: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty.svg') no-repeat;
+              background-size: contain;
+              width: 1.125rem;
+              height: 1.125rem;
+              content: '';
+              display: inline-block;
+              position: absolute;
+              #{$left}: 0;
+              top: 0;
+            }
+          }
         }
       }
     }
