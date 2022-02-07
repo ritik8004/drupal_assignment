@@ -100,6 +100,11 @@ libraries-override:
       theme:
         css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css
 
+  alshaya_white_label/optionlist_filter:
+    css:
+      theme:
+        css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css: css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css
+
   alshaya_white_label/aura-loyalty-global:
     css:
       theme:
