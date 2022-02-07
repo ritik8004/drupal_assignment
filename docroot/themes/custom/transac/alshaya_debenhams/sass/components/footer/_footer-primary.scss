@@ -47,6 +47,10 @@
     @include breakpoint($only-tablet) {
       width: 68%;
       display: inline-flex;
+
+      html[lang=ar] & {
+        width: 64%;
+      }
     }
 
     @include breakpoint($desktop) {
