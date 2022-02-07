@@ -257,11 +257,10 @@
             calcMaxHeight = $('.block-alshaya-main-menu').height() + $('.block-alshaya-main-menu').offset().top;
             var maxHeight = menuLevel2.map(function () {
               return $(this).height();
-            })
-                .toArray()
-                .reduce(function (first, second) {
-                  return Math.max(first, second);
-                });
+            }).toArray()
+              .reduce(function (first, second) {
+                return Math.max(first, second);
+              });
 
             menuBackdrop.height(maxHeight);
             menuLevel2.each(function () {
