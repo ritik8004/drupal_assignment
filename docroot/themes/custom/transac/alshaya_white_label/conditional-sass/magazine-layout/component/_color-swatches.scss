@@ -143,8 +143,8 @@
         .select2Option {
           .select-buttons {
             background-color: $colour-swatches-simple-effect-bg;
-            margin-left: -0.5rem;
-            padding-left: 0.5rem !important;
+            margin-#{$left}: -0.5rem;
+            padding-#{$left}: 0.5rem !important;
             overflow: visible;
 
             li,
