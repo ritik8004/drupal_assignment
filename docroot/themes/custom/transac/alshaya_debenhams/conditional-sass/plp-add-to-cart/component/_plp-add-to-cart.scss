@@ -1,0 +1,33 @@
+.addtobag-button {
+  @include button-brand();
+
+  font-family: $dh-semibold;
+}
+
+.addtobag-button-container {
+  @include breakpoint($tablet) {
+    margin-#{$left}: 1rem;
+  }
+}
+
+.is-not-buyable,
+.addtobag-config-button {
+  @include btn();
+
+  margin-left: 1rem;
+}
+
+.addtobag-button,
+.product-drawer-content-wrapper .config-form-addtobag-button {
+  &:hover {
+    border: 0;
+  }
+}
+
+.product-drawer-content-wrapper {
+  .pdp-link {
+    &:hover {
+      background: $primary_btn_bg;
+    }
+  }
+}
