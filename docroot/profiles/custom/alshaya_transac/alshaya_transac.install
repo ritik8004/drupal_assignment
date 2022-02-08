@@ -26,6 +26,46 @@ function alshaya_transac_update_8137() {
 /**
  * Implements hook_update_n().
  *
+ * Uninstall amp contrib and custom modules.
+ */
+function alshaya_transac_update_8137() {
+  // Remove alshaya_amp themes.
+  $theme_handler = \Drupal::service('theme_handler');
+  // Remove alshaya_amp_hnm theme.
+  if ($theme_handler->themeExists('alshaya_amp_hnm')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_hnm']);
+  }
+  // Remove alshaya_amp_mothercare theme.
+  if ($theme_handler->themeExists('alshaya_amp_mothercare')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_mothercare']);
+  }
+  // Remove alshaya_amp_pottery_barn theme.
+  if ($theme_handler->themeExists('alshaya_amp_pottery_barn')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_pottery_barn']);
+  }
+  // Remove alshaya_amp_victoria_secret theme.
+  if ($theme_handler->themeExists('alshaya_amp_victoria_secret')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_victoria_secret']);
+  }
+  // Remove alshaya_amp_white_label theme.
+  if ($theme_handler->themeExists('alshaya_amp_white_label')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_white_label']);
+  }
+  // Remove amptheme theme.
+  if ($theme_handler->themeExists('amptheme')) {
+    \Drupal::service('theme_installer')->uninstall(['amptheme']);
+  }
+  // Remove am contrib and custom modules.
+  $module_handler = \Drupal::service('module_handler');
+  // Remove amp module.
+  if ($module_handler->moduleExists('amp')) {
+    \Drupal::service('module_installer')->uninstall(['amp']);
+  }
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * [6.4.0] Uninstall redundant drupal core themes.
  */
 function alshaya_transac_update_8136() {

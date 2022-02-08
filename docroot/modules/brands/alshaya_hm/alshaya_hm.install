@@ -1281,9 +1281,6 @@ function alshaya_hm_install() {
 
   alshaya_config_install_configs($configs, 'alshaya_hm', 'optional');
 
-  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
-  _alshaya_master_initialize_amp('alshaya_amp_hnm');
-
   // Set the number of items to show in a gallery on PDP.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('pdp_slider_items_settings.pdp_slider_items_number', 3)

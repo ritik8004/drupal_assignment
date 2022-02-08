@@ -130,3 +130,5 @@ fields:
     facet: 1
     index: 1
     translatable: 0
+    widget:
+      type: delivery_ways
