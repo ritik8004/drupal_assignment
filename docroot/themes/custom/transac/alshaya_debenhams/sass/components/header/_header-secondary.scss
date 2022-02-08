@@ -50,7 +50,16 @@
   .menu--account,
   .block-alshaya-stores-finder,
   .block-language-blocklanguage-interface {
-    height: 1.875rem;
+    height: 2rem;
+    overflow: hidden;
+  }
+
+  .block-language-blocklanguage-interface {
+    .en a {
+      html[lang=ar] & {
+        font-family: $dh-regular;
+      }
+    }
   }
 }
 
