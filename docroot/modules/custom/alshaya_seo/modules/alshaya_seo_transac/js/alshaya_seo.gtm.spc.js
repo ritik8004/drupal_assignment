@@ -75,6 +75,29 @@
           // Skip the get product data for virtual product ( This is applicable
           // when egift card module is enabled and cart item is virtual.)
           if (Drupal.alshayaSeoSpc.isEgiftVirtualProduct(product)) {
+            cartDataLayer.productStyleCode.push(product.id);
+            cartDataLayer.productSKU.push(product.sku);
+            //GTM product attributes for egift card.
+            const productGtm = {
+              id: product.id,
+              name: product.product_name,
+              price: product.price,
+              variant: product.sku,
+              dimension2: 'virtual',
+              dimension4: 1,
+              quantity: product.quantity,
+            };
+            cartDataLayer.checkout.products.push(productGtm);
+            if (typeof cartDataLayer.cartItemsFlocktory !== 'undefined') {
+              const flocktory = {
+                id: product.sku,
+                price: product.price,
+                count: product.qty,
+                title: product.title,
+                image: product.media,
+              };
+              cartDataLayer.cartItemsFlocktory.push(flocktory);
+            }
             return;
           }
           Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
