@@ -14,7 +14,7 @@
 .addtobag-config-button {
   @include btn();
 
-  margin-left: 1rem;
+  margin-#{$left}: 1rem;
 }
 
 .addtobag-button,
