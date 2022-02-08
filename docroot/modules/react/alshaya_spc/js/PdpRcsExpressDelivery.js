@@ -7,8 +7,8 @@ const id = '#express-delivery-options';
 
 // Note: This file is dynamically loaded in the library_info_alter hook of
 // alshaya_rcs_product.module.
-Drupal.behaviors.alshayaSpcPdpRcsEdBehavior = {
-  attach: function alshayaSpcPdpRcsEd() {
+Drupal.behaviors.alshayaSpcPdpRcsExpressDeliveryBehavior = {
+  attach: function alshayaSpcPdpRcsExpressDelivery() {
     const pageLoaded = document.querySelector('.rcs-page.rcs-loaded');
     if (!componentAttached
         && pageLoaded
