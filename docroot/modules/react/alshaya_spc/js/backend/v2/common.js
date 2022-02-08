@@ -1167,11 +1167,7 @@ const getProductShippingMethods = async (currentArea, sku = undefined, cartId = 
       cartIdInt = cartData.cart.cart_id_int;
     }
   }
-  // Skip the get shipping method for virtual product ( This is applicable
-  // when egift card module is enabled and cart item is virtual.)
-  if (cartData && cartContainsOnlyVirtualProduct(cartData.cart)) {
-    return null;
-  }
+
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
   const attributes = [];
   if (currentArea !== null) {

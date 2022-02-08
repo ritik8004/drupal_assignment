@@ -1804,5 +1804,18 @@ html {
         }
       }
     }
+
+    &.alias--cart-login,
+    &.alias--checkout,
+    &.alias--checkout-confirmation {
+      .site-brand-home {
+        .logo {
+          position: relative;
+          left: auto;
+          transform: none;
+          top: auto;
+        }
+      }
+    }
   }
 }

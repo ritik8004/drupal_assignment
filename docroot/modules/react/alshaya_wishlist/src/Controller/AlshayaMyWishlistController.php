@@ -135,6 +135,7 @@ class AlshayaMyWishlistController extends ControllerBase {
         ],
       ],
       '#cache' => [
+        'contexts' => ['user'],
         'tags' => $cache_tags,
       ],
     ];

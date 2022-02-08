@@ -4,6 +4,8 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import UpdateEgiftCardAmount from '../UpdateEgiftCardAmount';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import {
+  cartContainsAnyNormalProduct,
+  cartContainsAnyVirtualProduct,
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
   selfCardTopup,
@@ -176,8 +178,14 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     if (e.target.checked) {
       // Validate if some amount is paid with AURA then make sure that user is
       // havinig sufficient balance to pay pending balance by Egift.
-      if (hasValue(cart.cart.totals.balancePayable)
-        && cart.cart.totals.balancePayable > egiftCardActualBalance) {
+      if ((hasValue(cart.cart.totals.balancePayable)
+        && cart.cart.totals.balancePayable > egiftCardActualBalance)
+        // If cart contains Normal + Digital products then only one payment
+        // method is allowed, So here we are checking if user can pay full
+        // amount using linked card based on card balance.
+        || (cartContainsAnyNormalProduct(cart.cart)
+        && cartContainsAnyVirtualProduct(cart.cart)
+        && cart.cart.totals.base_grand_total > egiftCardActualBalance)) {
         this.setState({
           apiErrorMessage: Drupal.t('The egift card balance is not sufficient to pay remaining amount, Please use another payment method.', {}, { context: 'egift' }),
         });
