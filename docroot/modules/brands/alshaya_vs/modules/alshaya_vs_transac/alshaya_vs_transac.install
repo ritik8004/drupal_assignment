@@ -307,9 +307,6 @@ function alshaya_vs_transac_install() {
   // Save overridden configs.
   _alshaya_config_save_overridden_configs('alshaya_vs_transac');
 
-  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
-  _alshaya_master_initialize_amp('alshaya_amp_victoria_secret');
-
   // Add string translations.
   $strings = [
     'Corporate Info' => [
