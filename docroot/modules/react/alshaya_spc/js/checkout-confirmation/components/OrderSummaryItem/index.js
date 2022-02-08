@@ -9,12 +9,23 @@ const OrderSummaryItem = (props) => {
     label,
     value,
     animationDelay: animationDelayValue,
+    context,
   } = props;
+
+  let styles = {
+    animationDelay: animationDelayValue,
+  };
+  if (context === 'print') {
+    styles = {
+      animation: 'none !important',
+      transition: 'none !important',
+    };
+  }
 
   if (type === 'address') {
     const { name, address } = props;
     return (
-      <div className="spc-order-summary-item spc-order-summary-address-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
+      <div className="spc-order-summary-item spc-order-summary-address-item fadeInUp" style={styles}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">
           <span className="spc-address-name">
@@ -41,7 +52,7 @@ const OrderSummaryItem = (props) => {
       collectionCharge,
     } = props;
     return (
-      <div className="spc-order-summary-item spc-order-summary-address-item spc-order-summary-cnc fadeInUp" style={{ animationDelay: animationDelayValue }}>
+      <div className="spc-order-summary-item spc-order-summary-address-item spc-order-summary-cnc fadeInUp" style={styles}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">
           <div className="spc-store-name-wrapper">
@@ -97,7 +108,7 @@ const OrderSummaryItem = (props) => {
 
   if (type === 'markup') {
     return (
-      <div className="spc-order-summary-item spc-order-summary-markup-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
+      <div className="spc-order-summary-item spc-order-summary-markup-item fadeInUp" style={styles}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">{parse(value)}</span>
       </div>
@@ -106,7 +117,7 @@ const OrderSummaryItem = (props) => {
 
   if (type === 'mobile') {
     return (
-      <div className="spc-order-summary-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
+      <div className="spc-order-summary-item fadeInUp" style={styles}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value phone-number" dir="ltr">{value}</span>
       </div>
@@ -114,7 +125,7 @@ const OrderSummaryItem = (props) => {
   }
 
   return (
-    <div className="spc-order-summary-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
+    <div className="spc-order-summary-item fadeInUp" style={styles}>
       <span className="spc-label">{`${label}:`}</span>
       <span className="spc-value">{value}</span>
     </div>
