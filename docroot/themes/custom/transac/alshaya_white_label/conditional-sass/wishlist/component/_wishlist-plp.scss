@@ -5,12 +5,6 @@
     }
 
     .wishlist-icon {
-      position: absolute;
-      top: 0.625rem;
-      z-index: 1;
-      #{$right}: 0.625rem;
-      font-size: 0;
-
       @include breakpoint($desktop) {
         &:hover {
           background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
@@ -50,6 +44,19 @@
         #{$right}: 1.25rem;
         font-size: 0;
       }
+    }
+  }
+}
+
+.c-plp,
+#top-results {
+  .c-products__item {
+    .wishlist-icon {
+      position: absolute;
+      top: 0.625rem;
+      z-index: 1;
+      #{$right}: 0.625rem;
+      font-size: 0;
     }
   }
 }
