@@ -64,6 +64,11 @@ header {
     @include breakpoint($upto-desktop) {
       display: none;
     }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: -0.9375rem;
+      padding-#{$right}: 0;
+    }
   }
 
   .cart-link {
