@@ -648,7 +648,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -12497,17 +12497,17 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "3.0.0-beta3",
+            "version": "3.0.0-beta4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "3.0.0-beta3"
+                "reference": "3.0.0-beta4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta3.zip",
-                "reference": "3.0.0-beta3",
-                "shasum": "1cb726c306696623180ebe06f9f94a3393634eb5"
+                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta4.zip",
+                "reference": "3.0.0-beta4",
+                "shasum": "478a29060e30719602f5718264da3fe73873d5b9"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.0",
@@ -12520,8 +12520,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-beta3",
-                    "datestamp": "1634877221",
+                    "version": "3.0.0-beta4",
+                    "datestamp": "1644316380",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -12798,12 +12798,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "8.x-3.0-beta1",
-                    "datestamp": "1605436873",
+                    "datestamp": "1640512021",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
