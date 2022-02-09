@@ -1,7 +1,7 @@
 {{#if expressDelivery.length }}
   <div class="express-delivery desktop {{ express_delivery_class }}">
     {{#each expressDelivery}}
-      <div class="express-delivery-text {{ this.id }} active">
+      <div class="express-delivery-text {{ this.id }} {{ this.class }}">
         <span>{{ this.label }}</span>
       </div>
     {{/each}}
