@@ -475,7 +475,6 @@ class AlshayaRcsCategoryHelper {
    */
   public function getRcsCategoryMenuQuery($depth = 0) {
     $query = [
-      'children_count',
       'children' => [
         'id',
         'level',

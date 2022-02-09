@@ -171,8 +171,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       }
 
       // Prepare request parameters.
-      // Fetch categories for navigation menu using categoryList api.
-      request.data = prepareQuery(`{categoryList(filters: { ids: { eq: "${drupalSettings.alshayaRcs.navigationMenu.rootCategory}"}})
+      // Fetch categories for navigation menu using categories api.
+      request.data = prepareQuery(`{categories(filters: { ids: { eq: "${drupalSettings.alshayaRcs.navigationMenu.rootCategory}"}})
         ${rcsPhGraphqlQuery.navigationMenu}
       }`);
 
@@ -180,7 +180,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       // Get exact data from response.
       if (response !== null) {
         // Get children for root category.
-        result = response.data.categoryList[0].children;
+        result = response.data.categories.items[0].children;
       }
       break;
 
