@@ -29,7 +29,6 @@ use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Detection\MobileDetect;
-use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
 
 /**
  * Class Alshaya Gtm Manager.
@@ -257,13 +256,6 @@ class AlshayaGtmManager {
   protected $productCategoryHelper;
 
   /**
-   * Egiftcard Helper service object.
-   *
-   * @var \Drupal\alshaya_egift_card\Helper\EgiftCardHelper
-   */
-  protected $egiftCardHelper;
-
-  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -302,8 +294,6 @@ class AlshayaGtmManager {
    *   Entity Repository object.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $productCategoryHelper
    *   Product Category Helper.
-   * @param \Drupal\alshaya_egift_card\Helper\EgiftCardHelper $egiftCardHelper
-   *   The egift card helper service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -322,8 +312,7 @@ class AlshayaGtmManager {
                               ModuleHandlerInterface $module_handler,
                               OrdersManager $orders_manager,
                               EntityRepositoryInterface $entityRepository,
-                              ProductCategoryHelper $productCategoryHelper,
-                              EgiftCardHelper $egiftCardHelper) {
+                              ProductCategoryHelper $productCategoryHelper) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -342,7 +331,6 @@ class AlshayaGtmManager {
     $this->ordersManager = $orders_manager;
     $this->entityRepository = $entityRepository;
     $this->productCategoryHelper = $productCategoryHelper;
-    $this->egiftCardHelper = $egiftCardHelper;
   }
 
   /**
@@ -906,7 +894,7 @@ class AlshayaGtmManager {
       }
 
       // If its a virtual product i.e egift card or egift topup.
-      if ($this->egiftCardHelper->isEgiftCardEnabled() && $item['type'] === 'virtual') {
+      if ($item['type'] === 'virtual') {
         $products[$item['item_id']] = [
           'name' => $item['name'],
           'id' => $item['item_id'],
@@ -1229,7 +1217,7 @@ class AlshayaGtmManager {
             $productStyleCode[] = $this->skuManager->getSkuForNode($product_node);
           }
           // If its a virtual product i.e egift card or egift topup.
-          if ($this->egiftCardHelper->isEgiftCardEnabled() && $orderItem['type'] === 'virtual') {
+          if ($orderItem['type'] === 'virtual') {
             $productStyleCode[] = $orderItem['item_id'];
           }
         }
