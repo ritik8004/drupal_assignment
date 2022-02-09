@@ -68,6 +68,8 @@ export default class ValidEgiftCard extends React.Component {
     document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
     // Event listener on shiping method update to remove redeemed Amount.
     document.addEventListener('changeShippingMethod', this.handleRemoveCard);
+    // Event listener on cart refresh/update.
+    document.addEventListener('updateTotalsInCart', this.handleBalanceUpdate);
   }
 
   openModal = (e) => {
@@ -93,6 +95,23 @@ export default class ValidEgiftCard extends React.Component {
       document.getElementById('egift_remove_card_error').innerHTML = result.message;
     }
   };
+
+  // Handle card balance update.
+  handleBalanceUpdate = (e) => {
+    const {
+      egiftRedeemedAmount,
+      egiftCurrentBalance,
+      totalBalancePayable,
+    } = e.detail.totals;
+    // Proceed only if redemption is done.
+    if (hasValue(e.detail) && isEgiftRedemptionDone(e.detail)) {
+      this.setState({
+        amount: egiftRedeemedAmount,
+        cardBalance: egiftCurrentBalance,
+        pendingAmount: totalBalancePayable,
+      });
+    }
+  }
 
   // Update the user account with egift card.
   handleCardLink = (e) => {
@@ -156,7 +175,6 @@ export default class ValidEgiftCard extends React.Component {
       this.setState({
         amount: redeemedAmount,
         open: false,
-        cardBalance: cart.totals.egiftCurrentBalance,
         pendingAmount: balancePayable,
       });
     }
