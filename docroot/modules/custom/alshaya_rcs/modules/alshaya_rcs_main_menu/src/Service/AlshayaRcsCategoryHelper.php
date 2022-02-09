@@ -469,13 +469,16 @@ class AlshayaRcsCategoryHelper {
    *
    * @param int $depth
    *   Define the depth of the query.
+   * @param bool $is_root_level
+   *   Checks if depth is at root level.
    *
    * @return string
    *   The graphql query to fetch data using API.
    */
-  public function getRcsCategoryMenuQuery($depth = 0) {
+  public function getRcsCategoryMenuQuery($depth = 0, $is_root_level = TRUE) {
+    $item_key = $is_root_level ? 'items' : 'children';
     $query = [
-      'children' => [
+      $item_key => [
         'id',
         'level',
         'name',
@@ -491,11 +494,9 @@ class AlshayaRcsCategoryHelper {
         'display_view_all',
       ],
     ];
-
     if ($depth > 0) {
-      $query['children'] = array_merge($query['children'], $this->getRcsCategoryMenuQuery($depth - 1));
+      $query[$item_key] = array_merge($query[$item_key], $this->getRcsCategoryMenuQuery($depth - 1, FALSE));
     }
-
     return $query;
   }
 

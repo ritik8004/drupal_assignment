@@ -241,8 +241,6 @@ function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
 
   $query_fields['navigationMenu'] = \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')
     ->getRcsCategoryMenuQuery($menu_max_depth);
-  $query_fields['navigationMenu']['items'] = $query_fields['navigationMenu']['children'];
-  unset($query_fields['navigationMenu']['children']);
   $query_fields['#cache']['tags'] = $rcs_main_menu_config->getCacheTags();
 
   return $query_fields;
