@@ -216,4 +216,21 @@ body.wishlist-enabled {
       }
     }
   }
+
+  &.supermenu {
+    header {
+      .region__header {
+        @include breakpoint($desktop) {
+          .block-alshaya-wishlist {
+            flex-grow: unset;
+          }
+
+          > .block-system-branding-block {
+            width: auto;
+            flex-grow: 1;
+          }
+        }
+      }
+    }
+  }
 }
