@@ -53,13 +53,12 @@
           .menu--one__link {
             height: auto;
             padding: 0 0 0.125rem;
-            border-bottom: 0;
             color: $hfd-menu-link-color;
             font-family: $open-sans;
             font-size: 0.8125rem;
-            line-height: 1.38;
+            line-height: 2.375rem;
             margin: 0;
-            padding-bottom: 0.5rem;
+            border-bottom: 2px solid transparent;
           }
 
           .menu--two__list {

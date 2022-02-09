@@ -259,11 +259,6 @@
 
         &.is-active {
           #{$right}: 0 !important;
-
-          &::after {
-            #{$right}: 0;
-            top: 0.8rem;
-          }
         }
 
         .facet-item__value {
@@ -275,6 +270,18 @@
             min-width: 1.5rem;
             top: 0.125rem;
             position: relative;
+          }
+        }
+      }
+    }
+
+    #attr_delivery_ways {
+      ul {
+        li.facet-item {
+          &.is-active {
+            .facet-item__value {
+              padding-#{$right}: 1.5rem;
+            }
           }
         }
       }
