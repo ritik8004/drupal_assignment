@@ -972,7 +972,7 @@ const getFormattedError = (code, message) => ({
 });
 
 /**
- * Helper function to prepare filter url query string.
+ * Helper function to prepare the data.
  *
  * @param array $filters
  *   Array containing all filters, must contain field and value, can contain
@@ -982,23 +982,22 @@ const getFormattedError = (code, message) => ({
  * @param int $group_id
  *   Filter group id, mostly 0.
  *
- * @return string
- *   Prepared URL query string.
+ * @return object
+ *   Prepared data.
  */
-const prepareFilterUrl = (filters, base = 'searchCriteria', groupId = 0) => {
-  let url = '';
+const prepareFilterData = (filters, base = 'searchCriteria', groupId = 0) => {
+  const data = {};
 
   filters.forEach((filter, index) => {
     Object.keys(filter).forEach((key) => {
       // Prepared string like below.
       // searchCriteria[filter_groups][0][filters][0][field]=field
       // This is how Magento search criteria in APIs work.
-      url = url.concat(`${base}[filter_groups][${groupId}][filters][${index}][${key}]=${filter[key]}`);
-      url = url.concat('&');
+      data[`${base}[filter_groups][${groupId}][filters][${index}][${key}]`] = filter[key];
     });
   });
 
-  return url;
+  return data;
 };
 
 /**
@@ -1039,13 +1038,11 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
   };
 
   filters.push(countryFilters);
-  // @todo pending cofirmation from MDC on using api call for each click.
-  let url = '/V1/deliverymatrix/address-locations/search?';
-  const params = prepareFilterUrl(filters);
-  url = url.concat(params);
+  const url = '/V1/deliverymatrix/address-locations/search';
+
   try {
     // Associate cart to customer.
-    const response = await callMagentoApi(url, 'GET', {});
+    const response = await callMagentoApi(url, 'GET', prepareFilterData(filters));
 
     if (hasValue(response.data.error) && response.data.error) {
       logger.error('Error in getting shipping methods for cart. Error: @message', {
@@ -1163,22 +1160,7 @@ const getProductShippingMethods = async (currentArea, sku = undefined, cartId = 
       cartIdInt = cartData.cart.cart_id_int;
     }
   }
-  // Return if cart id is null.
-  if (cartIdInt === null) {
-    return {
-      error: true,
-      error_message: '',
-    };
-  }
 
-  // Skip the get shipping method for virtual product ( This is applicable
-  // when egift card module is enabled and cart item is virtual.)
-  if (cartData && cartContainsOnlyVirtualProduct(cartData.cart)) {
-    return {
-      error: true,
-      error_message: '',
-    };
-  }
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
   const attributes = [];
   if (currentArea !== null) {
@@ -1241,6 +1223,5 @@ export {
   isCartHasOosItem,
   getProductStatus,
   getLocations,
-  prepareFilterUrl,
   getProductShippingMethods,
 };

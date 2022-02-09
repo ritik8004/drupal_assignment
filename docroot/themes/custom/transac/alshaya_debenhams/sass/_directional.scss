@@ -4,3 +4,4 @@ $dh-light: if-ltr($dh-light, $dh-arabic-light);
 $dh-Juana-semibold: if-ltr($dh-Juana-semibold, $dh-GESST-bold);
 $dh-black: if-ltr($dh-black, $dh-arabic-bold);
 $dh-medium: if-ltr($dh-medium, $dh-arabic-medium);
+$dh-Juana-bold: if-ltr($dh-Juana-bold, $dh-GESST-bold);

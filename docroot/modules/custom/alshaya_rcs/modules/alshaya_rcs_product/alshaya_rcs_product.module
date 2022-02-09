@@ -47,7 +47,9 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
       'variables' => [],
     ],
     'page__rcs_pdp' => [
-      'variable',
+      'base hook' => 'page',
+      'template' => 'page--rcs-pdp',
+      'render element' => 'html',
     ],
     'rcs_product_zoom' => [
       'variables' => [
@@ -67,9 +69,6 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
       'variables' => [],
     ],
     'form_element_select' => [
-      'variables' => [],
-    ],
-    'rcs_pdp_delivery_option' => [
       'variables' => [],
     ],
     'rcs_not_buyable_product' => [
@@ -298,6 +297,38 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshaya_home_delivery'] = $home_delivery_config;
   $config = \Drupal::config('alshaya_acm_product.home_delivery');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $config->getCacheTags());
+
+  // PDP Same day delivery.
+  $delivery_options = [
+    'text' => $product_settings->get('same_day_delivery_text'),
+    'sub_text' => $product_settings->get('same_day_delivery_sub_text'),
+  ];
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['sameDayDelivery'] = $delivery_options;
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['delivery_in_only_city_text'] = $product_settings->get('delivery_in_only_city_text');
+
+  // PDP Express Delivery.
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+  $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+  $delivery_options = [];
+  foreach ($delivery_options_order as $option) {
+    $delivery_options[] = [
+      'status' => $express_delivery_config->get($option . '_status'),
+      'id' => $option,
+      // @codingStandardsIgnoreLine
+      'label' => t($express_delivery_config->get($option . '_label'),
+        [],
+        ['context' => $option . '_label']
+      ),
+    ];
+  }
+  $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['expressDelivery'] = $delivery_options;
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
+
+  // Address fields configs for Delivery options side drawer.
+  $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
+  $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
+  $build['#attached']['drupalSettings']['country_code'] = $country_code;
 }
 
 /**
@@ -365,19 +396,6 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     '#value' => render($form_element_select_template),
     '#attributes' => [
       'class' => 'rcs-templates--form_element_select',
-    ],
-  ];
-
-
-  $delivery_option = [
-    '#theme' => 'rcs_pdp_delivery_option',
-  ];
-  $variables['rcs_templates']['delivery_option'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($delivery_option),
-    '#attributes' => [
-      'class' => 'rcs-templates--delivery_option',
     ],
   ];
 
@@ -574,6 +592,8 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'url_key',
       'is_buyable',
       'stock_status',
+      'express_delivery',
+      'same_day_delivery',
       'ship_to_store',
       'reserve_and_collect',
       'price_range' => [
@@ -651,6 +671,8 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
             'sku',
             'meta_title',
             'stock_status',
+            'express_delivery',
+            'same_day_delivery',
             'ship_to_store',
             'reserve_and_collect',
             'attribute_set_id',
@@ -824,6 +846,8 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'product.block.description' => 'alshaya_rcs_product',
     'product.order_quantity_limit' => 'alshaya_rcs_product',
     'product.promotions' => 'alshaya_rcs_product',
+    'product.delivery_info' => 'alshaya_rcs_product',
+    'product.delivery_options' => 'alshaya_rcs_product',
     'product.delivery_option_cnc' => 'alshaya_rcs_product',
     'product.delivery_option_hd' => 'alshaya_rcs_product',
     'gallery.product.product_zoom' => 'alshaya_rcs_product',
@@ -899,6 +923,12 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     unset($libraries['alshaya_aura_pdp']['js']['dist/pdp.bundle.js']);
     $aura_module_path = drupal_get_path('module', 'alshaya_aura_react');
     $libraries['alshaya_aura_pdp']['js']["/$aura_module_path/dist/pdpRcs.bundle.js"] = $options;
+  }
+  // Replace Alshaya SPC Express Delivery library with RCS supported one.
+  elseif ($extension === 'alshaya_spc' && isset($libraries['express_delivery'])) {
+    $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
+    unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
+    $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
   }
 }
 
