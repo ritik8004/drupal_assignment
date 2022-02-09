@@ -100,7 +100,17 @@ libraries-override:
       theme:
         css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css
 
+  alshaya_white_label/optionlist_filter:
+    css:
+      theme:
+        css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css: css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css
+
   alshaya_white_label/aura-loyalty-global:
     css:
       theme:
         css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
+
+  alshaya_white_label/plp-add-to-cart:
+    css:
+      theme:
+        css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css

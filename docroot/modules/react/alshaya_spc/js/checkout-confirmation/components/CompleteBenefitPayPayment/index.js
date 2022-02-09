@@ -59,7 +59,8 @@ class CompleteBenefitPayPayment extends React.Component {
     if (!scriptExists) {
       const inAppScript = document.createElement('script');
       inAppScript.async = true;
-      inAppScript.src = '/modules/react/alshaya_spc/assets/js/benefit_pay_in_app.min.js';
+      const { environment } = drupalSettings.order_details.payment;
+      inAppScript.src = `/modules/react/alshaya_spc/assets/js/${environment}/benefit_pay_in_app.min.js`;
       inAppScript.id = 'benefit-pay-in-app';
       document.body.appendChild(inAppScript);
       inAppScript.onload = () => {

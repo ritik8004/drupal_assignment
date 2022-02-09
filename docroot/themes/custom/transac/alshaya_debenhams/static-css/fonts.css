@@ -1,0 +1,259 @@
+@font-face {
+  font-family: "SofiaPro-UltraLight";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-UltraLight.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-UltraLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-SemiBold";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-SemiBold.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-SemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-Bold";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Bold.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-ExtraLight";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-ExtraLight.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-ExtraLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-Light";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Light.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-Medium";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Medium.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-Black";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Black.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Black.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Black";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Black.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Black.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Bold";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Bold.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-ExtraBold";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-ExtraBold.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-ExtraBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-ExtraLight";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-ExtraLight.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-ExtraLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Light";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Light.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Medium";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Medium.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Regular";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Regular.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaBlack";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaBlack.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaBlack.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaBold";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaBold.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaExtraLight";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaExtraLight.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaExtraLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaLight";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaLight.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaMedium";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaMedium.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaMedium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaRegular";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaRegular.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaRegular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaSemiBold";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaSemiBold.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaSemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaThin";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaThin.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/JuanaThin.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GESSTwoLight-Light";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/GESSTwoLight-Light.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/GESSTwoLight-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GESSTwoBold-Bold";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/GESSTwoBold-Bold.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/GESSTwoBold-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GESSTwoMedium-Medium";
+  src:
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/GESSTwoMedium-Medium.woff2") format("woff2"),
+    url("https://dhkw7.factory.alshaya.com/themes/custom/transac/alshaya_debenhams/fonts/GESSTwoMedium-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
