@@ -29,6 +29,18 @@
           }
         }
       }
+
+      #attr_product_collection {
+        ul {
+          li.facet-item {
+            &.is-active {
+              .facet-item__value {
+                padding-#{$right}: 1.5rem;
+              }
+            }
+          }
+        }
+      }
     }
 
     .filter__inner {
