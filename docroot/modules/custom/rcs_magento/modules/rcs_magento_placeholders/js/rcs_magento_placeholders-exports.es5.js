@@ -178,7 +178,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
-      if (response !== null) {
+      if (response !== null && Array.isArray(response.data.categories.items[0].children)) {
         // Get children for root category.
         result = response.data.categories.items[0].children;
       }
