@@ -8,7 +8,7 @@
   var productDetailViewTriggered = false;
   Drupal.behaviors.alshayaSeoGtmPdpBehavior = {
     attach: function (context, settings) {
-      var node = jQuery('.entity--type-node.node--view-mode-full').not('[data-sku *= "#"]');
+      var node = jQuery('.entity--type-node[data-vmode="full"]').not('[data-sku *= "#"]');
       if (!productDetailViewTriggered && node.length > 0) {
         productDetailViewTriggered = true;
         // Trigger productDetailView event.
