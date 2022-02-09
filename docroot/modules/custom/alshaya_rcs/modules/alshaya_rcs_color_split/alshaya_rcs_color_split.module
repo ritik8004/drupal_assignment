@@ -6,6 +6,8 @@
  */
 
 use Drupal\alshaya_color_split\AlshayaColorSplitConfig;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Attach required information around color split.
@@ -65,4 +67,17 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
     AlshayaColorSplitConfig::get('attribute_code_color_id'),
     $color_code_attribute,
   );
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_rcs_color_split_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if (($entity->bundle() !== 'rcs_product')) {
+    return;
+  }
+  // Attach both the libraries as we do not know the type of the product
+  // in backend.
+  $build['#attached']['library'][] = 'alshaya_color_split/grouped_simple';
+  $build['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
 }
