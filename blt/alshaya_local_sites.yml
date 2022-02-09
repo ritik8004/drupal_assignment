@@ -130,7 +130,7 @@ sites:
     module: alshaya_kz
     type: alshaya_transac_lite
     country: kw
-  venontransacme:
+  venontransac:
     module: alshaya_ve
     type: alshaya_non_transac
     country: kw
