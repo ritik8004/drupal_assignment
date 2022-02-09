@@ -25,6 +25,11 @@
 
         input {
           border: none;
+
+          html[lang=ar] & {
+            direction: ltr;
+            text-align: right;
+          }
         }
       }
     }
