@@ -77,7 +77,7 @@
           if (Drupal.alshayaSeoSpc.isEgiftVirtualProduct(product)) {
             cartDataLayer.productStyleCode.push(product.id);
             cartDataLayer.productSKU.push(product.sku);
-            //GTM product attributes for egift card.
+            // GTM product attributes for egift card.
             const productGtm = {
               id: product.id,
               name: product.product_name,

@@ -912,7 +912,7 @@ class AlshayaGtmManager {
           'id' => $item['item_id'],
           'price' => $item['price'],
           'variant' => $item['sku'],
-          'dimension2' => 'virtual',
+          'dimension2' => $item['type'],
           'dimension4' => 1,
           'quantity' => $item['ordered'],
         ];
