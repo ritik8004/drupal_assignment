@@ -18,7 +18,6 @@ class AlshayaFrontendCommand extends BltTasks {
   protected static $themeTypes = [
     'transac',
     'non_transac',
-    'amp',
     'transac_lite',
   ];
 

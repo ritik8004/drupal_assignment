@@ -14,6 +14,7 @@ import {
 } from '../../../../js/utilities/wishlistHelper';
 import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { isDesktop } from '../../../../js/utilities/display';
 
 export default class WishlistHeader extends React.Component {
   constructor(props) {
@@ -205,12 +206,20 @@ export default class WishlistHeader extends React.Component {
         // Set the notification data.
         stateData.notificationItemData = productInfo || null;
 
-        // Check if sticky wrapper is active on screen.
-        const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
+        // Check if sticky header wrapper is active on screen.
+        const stickyHeader = document.querySelector('body.header-sticky-filter');
+        // Check if sticky search wrapper is active on screen.
+        const stickySearch = document.querySelector('body.Sticky-algolia-search.header-sticky-filter');
         // If sticky header is not present, scroll user to header.
         // Else show notification on sticky header.
-        if (querySelector === null) {
-          smoothScrollTo('body');
+        if (stickyHeader === null || stickySearch !== null) {
+          // By default scroll the user to body section.
+          let scrollToSelector = 'body';
+          if (!isDesktop()) {
+            // If mobile or tablet then scroll the user to header section.
+            scrollToSelector = '.c-header';
+          }
+          smoothScrollTo(scrollToSelector);
         } else {
           stateData.headerClass = 'sticky-wrapper';
         }

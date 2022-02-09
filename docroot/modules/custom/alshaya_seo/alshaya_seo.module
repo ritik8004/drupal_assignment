@@ -6,6 +6,7 @@
  */
 
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
+use Drupal\alshaya_seo\Services\UrlHelper;
 use Drupal\alshaya_user\Plugin\Block\MyAccountLinks;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityInterface;
@@ -518,4 +519,12 @@ function alshaya_seo_node_update(EntityInterface $node) {
     $node_translation = $node->getTranslation('ar');
     \Drupal::service('pathauto.generator')->createEntityAlias($node_translation, 'update');
   }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function alshaya_seo_pathauto_alias_alter(&$alias, array &$context) {
+  // Replace special characters from the path.
+  $alias = strtr($alias, UrlHelper::SPECIAL_CHARACTERS_MAP);
 }

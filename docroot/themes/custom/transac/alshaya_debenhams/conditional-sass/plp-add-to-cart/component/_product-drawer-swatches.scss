@@ -1,0 +1,31 @@
+.swatch-list {
+  .li-swatch-image,
+  .li-swatch-color {
+    a {
+      &.active {
+        &::after {
+          border: 1px solid $pdp_white_color_attribute_border;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+
+  .li-swatch-image {
+    img {
+      border-radius: 50%;
+    }
+  }
+}
+
+.form-swatch-list-wrapper,
+.form-list-wrapper {
+  span {
+    font-size: 1rem;
+    font-family: $dh-light;
+  }
+
+  .selected-text {
+    font-family: $dh-semibold;
+  }
+}

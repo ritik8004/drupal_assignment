@@ -1779,27 +1779,29 @@ html {
 
       &.c-header {
         .c-header__region {
-          padding-bottom: 1rem;
+          padding-bottom: 0.4rem;
         }
       }
     }
 
-    .site-brand-home {
-      .logo {
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        top: 50%;
-
-        img {
-          vertical-align: middle;
-        }
-
-        picture {
-          vertical-align: middle;
+    .block-system-branding-block {
+      .site-brand-home {
+        .logo {
+          position: absolute;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          top: 50%;
 
           img {
-            vertical-align: baseline;
+            vertical-align: middle;
+          }
+
+          picture {
+            vertical-align: middle;
+
+            img {
+              vertical-align: baseline;
+            }
           }
         }
       }

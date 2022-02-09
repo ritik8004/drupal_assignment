@@ -22,7 +22,7 @@ function getCurrentRefinement(props, searchState, context) {
   const page = 1;
   const currentRefinement = getCurrentRefinementValue(props, searchState, context, id, page);
 
-  if (typeof props.defaultpageRender === 'number') {
+  if (typeof props.defaultpageRender === 'number' && props.defaultpageRender > 1) {
     return props.defaultpageRender;
   }
 
@@ -162,10 +162,10 @@ export default createConnector({
     // Custom work done here to support loading multiple pages first time.
     // This is to support Back to PLP feature.
     return searchParameters.setQueryParameters({
-      page: (typeof props.defaultpageRender === 'number')
+      page: (typeof props.defaultpageRender === 'number' && props.defaultpageRender > 1)
         ? 0
         : getCurrentRefinement(props, searchState, this.context) - 1,
-      hitsPerPage: (typeof props.defaultpageRender === 'number')
+      hitsPerPage: (typeof props.defaultpageRender === 'number' && props.defaultpageRender > 1)
         ? searchParameters.hitsPerPage * props.defaultpageRender
         : searchParameters.hitsPerPage,
     });
