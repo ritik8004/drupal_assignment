@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: accordion_paragraph
+label: 'Accordion Paragraph'
+description: ''
+behavior_plugins: {  }

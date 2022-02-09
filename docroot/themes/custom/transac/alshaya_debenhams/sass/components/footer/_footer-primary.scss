@@ -14,9 +14,12 @@
     }
   }
 
+  @include breakpoint($only-tablet) {
+    padding-top: 1.25rem;
+  }
+
   @include breakpoint($desktop) {
-    padding: 0;
-    padding-top: 2.5rem;
+    padding: 2.5rem 0;
   }
 
   .primary--footer--right {
@@ -42,8 +45,12 @@
 
   .footer--abouthelp {
     @include breakpoint($only-tablet) {
-      width: 70%;
+      width: 68%;
       display: inline-flex;
+
+      html[lang=ar] & {
+        width: 64%;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -209,7 +216,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        max-width: 21rem;
+        max-width: unset;
         width: 100%;
       }
 

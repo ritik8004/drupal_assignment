@@ -3,6 +3,7 @@ alshaya_appointment:
     dist/appointment.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_appointment/gtm_appointment_booking
 
 alshaya_appointment_view:
   js:
@@ -12,14 +13,12 @@ alshaya_appointment_view:
 
 alshaya_appointment_socialauth:
   version: 1.x
-  footer: true
   js:
     assets/js/alshaya_appointment_socialauth.js: {}
   dependencies:
     - alshaya_social/alshaya_social_popup
 
 alshaya_appointment_localstore:
-  header: true # This needs at the top of the page.
   version: 1.x
   js:
     assets/js/alshaya_appointment_localstore.js: {}
@@ -27,4 +26,4 @@ alshaya_appointment_localstore:
 gtm_appointment_booking:
   version: 1.x
   js:
-    assets/js/alshaya_appointment.gtm.appointment_booking.js: { weight: -1 } # We need this before appointment.js
+    assets/js/alshaya_appointment.gtm.appointment_booking.js: {}

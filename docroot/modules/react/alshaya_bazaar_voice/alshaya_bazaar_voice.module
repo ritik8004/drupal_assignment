@@ -103,7 +103,7 @@ function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alte
     if ($bazaar_voice_api_helper->isBvConfigurationsAvailable()) {
       $bazaarvoice_config = \Drupal::config('bazaar_voice.settings');
       $locale = $bazaarvoice_config->get('locale');
-      $user_id = \Drupal::currentUser()->getAccount()->acq_customer_id;
+      $user_id = alshaya_acm_customer_is_customer(\Drupal::currentUser(), TRUE);
       if (!empty($build['#attached']['drupalSettings']['order_details'])) {
         // Attach bvpixel library to order confirmation page.
         $build['#attached']['library'][] = 'alshaya_bazaar_voice/bvpixel_tracking';
@@ -322,43 +322,45 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
       // Get sanitized sku.
       $sanitized_sku = $skuManager->getSanitizedSku($sku);
       $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics($sanitized_sku);
-      $productData = $productReviewStats[$sanitized_sku]['productData'];
-      // Adding product data to drupal settings.
-      $attachments['#attached']['drupalSettings']['productReviewStats'] = [
-        'productId' => $sanitized_sku,
-        'productData' => $productReviewStats[$sanitized_sku]['productData'] ?? NULL,
-      ];
-      // Get the range of ratings for SEO.
-      if (!empty($productData['ReviewStatistics']['RatingDistribution'])) {
-        $range = array_column($productData['ReviewStatistics']['RatingDistribution'], 'RatingValue');
-      }
-      if ($productData['ReviewStatistics']['TotalReviewCount'] > 0) {
-        // Adding product and review data for SEO.
-        $product_schema_data['aggregateRating'] = [
-          '@type' => 'AggregateRating',
-          'bestRating' => max($range),
-          'ratingValue' => number_format((float) $productData['ReviewStatistics']['AverageOverallRating'], 2, '.', '') ?? NULL,
-          'worstRating' => min($range),
-          'reviewCount' => $productData['ReviewStatistics']['TotalReviewCount'] ?? NULL,
+      if ($productReviewStats !== NULL) {
+        $productData = $productReviewStats[$sanitized_sku]['productData'];
+        // Adding product data to drupal settings.
+        $attachments['#attached']['drupalSettings']['productReviewStats'] = [
+          'productId' => $sanitized_sku,
+          'productData' => $productReviewStats[$sanitized_sku]['productData'] ?? NULL,
         ];
-      }
+        // Get the range of ratings for SEO.
+        if (!empty($productData['ReviewStatistics']['RatingDistribution'])) {
+          $range = array_column($productData['ReviewStatistics']['RatingDistribution'], 'RatingValue');
+        }
+        if ($productData['ReviewStatistics']['TotalReviewCount'] > 0) {
+          // Adding product and review data for SEO.
+          $product_schema_data['aggregateRating'] = [
+            '@type' => 'AggregateRating',
+            'bestRating' => max($range),
+            'ratingValue' => number_format((float) $productData['ReviewStatistics']['AverageOverallRating'], 2, '.', '') ?? NULL,
+            'worstRating' => min($range),
+            'reviewCount' => $productData['ReviewStatistics']['TotalReviewCount'] ?? NULL,
+          ];
+        }
 
-      if ($productReviewStats !== NULL && isset($productReviewStats[$sanitized_sku]['reviews'])) {
-        foreach ($productReviewStats[$sanitized_sku]['reviews'] as $review) {
-          if ($review['UserNickname'] !== NULL) {
-            $product_schema_data['review'][] = [
-              '@type' => 'Review',
-              'author' => $review['UserNickname'],
-              'datePublished' => $review['SubmissionTime'],
-              'description' => $review['ReviewText'],
-              'name' => $review['Title'],
-              'reviewRating' => [
-                '@type' => 'Rating',
-                'bestRating' => max($range),
-                'ratingValue' => $review['Rating'],
-                'worstRating' => min($range),
-              ],
-            ];
+        if ($productReviewStats !== NULL && isset($productReviewStats[$sanitized_sku]['reviews'])) {
+          foreach ($productReviewStats[$sanitized_sku]['reviews'] as $review) {
+            if ($review['UserNickname'] !== NULL) {
+              $product_schema_data['review'][] = [
+                '@type' => 'Review',
+                'author' => $review['UserNickname'],
+                'datePublished' => $review['SubmissionTime'],
+                'description' => $review['ReviewText'],
+                'name' => $review['Title'],
+                'reviewRating' => [
+                  '@type' => 'Rating',
+                  'bestRating' => max($range),
+                  'ratingValue' => $review['Rating'],
+                  'worstRating' => min($range),
+                ],
+              ];
+            }
           }
         }
       }

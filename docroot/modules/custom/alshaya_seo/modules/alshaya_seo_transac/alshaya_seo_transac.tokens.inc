@@ -122,6 +122,11 @@ function alshaya_seo_transac_token_info() {
     'name' => t('Super Category.'),
   ];
 
+  $info['tokens']['alshaya_seo']['currency'] = [
+    'name' => t('Currency'),
+    'description' => t('Website currency'),
+  ];
+
   return $info;
 }
 
@@ -410,6 +415,11 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
         case 'super_category':
           $super_category = _alshaya_super_category_get_super_category_for_term();
           $replacements[$original] = isset($super_category) ? $super_category->label() : '';
+          break;
+
+        case 'currency':
+          $currency_code = \Drupal::config('acq_commerce.currency')->get('currency_code');
+          $replacements[$original] = $currency_code;
           break;
       }
     }

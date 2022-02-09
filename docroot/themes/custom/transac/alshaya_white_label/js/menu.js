@@ -6,7 +6,6 @@
 /* global debounce, dataLayer */
 
 (function ($, Drupal) {
-  'use strict';
 
   var css = document.createElement('style');
   css.type = 'text/css';
@@ -20,10 +19,14 @@
     setMenuWidth();
   });
 
+  // Scan for rcs menu.
+  var $rcsMenu = $('#block-alshayarcsmainmenu #rcs-ph-navigation_menu');
+
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
-      // Return if the placeholders text there in code.
-      if ($('.menu__list-item:contains(#rcs.menuItem.name#)').length > 0) {
+      var isRcsMenu = $(context).children($rcsMenu).length;
+      // For RCS Menu, do not proceed until main menu is completely loaded.
+      if (isRcsMenu && !$rcsMenu.hasClass('rcs-loaded')) {
         return;
       }
 
@@ -166,8 +169,8 @@
       });
 
       // Close mobile menu when clicked outside the menu.
-      var mobileMenu = $('.main--menu');
-      $('body', context).once().click(function (e) {
+      var mobileMenu = $('.main--menu', context);
+      $('body').once().click(function (e) {
         if (mobileMenu.hasClass('menu--active') && e.target === $('.menu--active')[0]) {
           $('.mobile--close').trigger('click');
         }

@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   // Home page email sign up form popup.
   $('#contact, .email-signup').on('click', function (e) {

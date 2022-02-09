@@ -647,9 +647,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+        /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
+        $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
         $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
-        // Express Delivery.
-        if (($express_delivery_config->get('status')) && (alshaya_acm_product_is_buyable($sku_entity))) {
+        // Check if express delivery feature enabled and product buyable.
+        $build['delivery_options'] = [];
+        if ($deliveryOptionsHelper->ifSddEdFeatureEnabled() && (alshaya_acm_product_is_buyable($sku_entity))) {
           $build['express_delivery'] = [
             '#theme' => 'pdp_express_delivery_option',
             '#title' => t('Delivery Options'),
@@ -662,7 +665,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
               $build['delivery_options'][$key]['label']['#markup'] = $option['label'];
             }
           }
-          $build['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
+          $build['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] ? 'active' : 'in-active';
         }
 
         // Delivery in only city.
@@ -2201,17 +2204,20 @@ function alshaya_acm_product_get_delivery_options($sku) {
   // Show delivery options as per order defined in config.
   $delivery_options = [];
   foreach ($delivery_options_order as $option) {
-    $status = $sku_entity->get('attr_' . $option)->getString();
-    $delivery_options['values'][$option] = [
-      'status' => $status === '1' ? 'active' : 'in-active',
-      // @todo check why we really need to pass variable to t().
-      // @codingStandardsIgnoreLine
-      'label' => t($express_delivery_config->get($option . '_label'), [], [
-        'context' => $option . '_label',
-      ]),
-    ];
-    if ($status === '1') {
-      $isExpressDeliveryApplicable = TRUE;
+    // Checking if particular delivery method is enabled.
+    if ($express_delivery_config->get($option . '_status')) {
+      $status = $sku_entity->get('attr_' . $option)->getString();
+      $delivery_options['values'][$option] = [
+        'status' => $status === '1' ? 'active' : 'in-active',
+        // @todo check why we really need to pass variable to t().
+        // @codingStandardsIgnoreLine
+        'label' => t($express_delivery_config->get($option . '_label'), [], [
+          'context' => $option . '_label',
+        ]),
+      ];
+      if ($status === '1') {
+        $isExpressDeliveryApplicable = TRUE;
+      }
     }
   }
 

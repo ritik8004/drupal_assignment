@@ -21,6 +21,9 @@ import {
 } from '../../../../js/utilities/conditionsUtility';
 import { callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import { getExceptionMessageType } from '../../../../js/utilities/error';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { removeRedemptionOnCartUpdate } from '../../utilities/egift_util';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -87,6 +90,13 @@ const returnExistingCartWithError = (code, message) => ({
  * @returns bool
  */
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
+
+/**
+ * Check if user is authenticated and without cart.
+ *
+ * @returns bool
+ */
+window.commerceBackend.isAuthenticatedUserWithoutCart = () => isAuthenticatedUserWithoutCart();
 
 /**
  * Returns the processed cart data.
@@ -188,6 +198,13 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
         quote_id: cartId,
       },
     };
+
+    // Check if product type is virtual (eg: eGift card), if product type
+    // is virtual then update product type and options to cart item.
+    if (data.product_type === 'virtual') {
+      itemData.cartItem.product_type = data.product_type;
+      itemData.cartItem.product_option = data.options;
+    }
   }
 
   if (data.action === 'update item') {
@@ -261,7 +278,18 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   // Reset counter.
   StaticStorage.remove('apiCallAttempts');
 
-  return window.commerceBackend.getCart(true);
+  const cartData = await window.commerceBackend.getCart(true);
+  // Remove redemption of egift when feature is enabled and redemption is
+  // already applied.
+  if (isEgiftCardEnabled()) {
+    // As we don't get cart object here in this function, we need to get a fresh
+    // cart to check if redemption is already applied in the cart.
+    await removeRedemptionOnCartUpdate(cartData.data);
+  }
+  // Return a promise object.
+  return new Promise((resolve) => {
+    resolve(cartData);
+  });
 };
 
 /**
@@ -288,6 +316,11 @@ window.commerceBackend.applyRemovePromo = async (data) => {
     .then(async (response) => {
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
+      // Remove redemption of egift when feature is enabled and redemption is
+      // already applied.
+      if (isEgiftCardEnabled()) {
+        await removeRedemptionOnCartUpdate(response.data);
+      }
       return response;
     });
 };
@@ -316,6 +349,11 @@ window.commerceBackend.refreshCart = async (data) => {
     .then(async (response) => {
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
+      // Remove redemption of egift when feature is enabled and redemption is
+      // already applied.
+      if (isEgiftCardEnabled()) {
+        await removeRedemptionOnCartUpdate(response.data);
+      }
       return response;
     });
 };
@@ -362,7 +400,9 @@ window.commerceBackend.createCart = async () => {
 
 window.commerceBackend.associateCartToCustomer = async (pageType) => {
   // If user is not logged in, no further processing required.
-  if (!isUserAuthenticated()) {
+  // We are not suppose to call associated cart for customer if user is doing
+  // topup.
+  if (!isUserAuthenticated() || getTopUpQuote() !== null) {
     return;
   }
 

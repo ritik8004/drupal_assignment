@@ -5,7 +5,6 @@ global_styles:
   js:
     js/form.js: {}
     js/custom_overrides.js: {}
-    vendor/js/details-polyfill.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
@@ -14,6 +13,11 @@ global_styles:
     - core/jquery.cookie
     - mobile_number/element
     - alshaya_white_label/utils
+    - alshaya_hnm/detail_polyfill
+
+detail_polyfill:
+  js:
+    vendor/js/details-polyfill.js: {attributes: { nomodule: true }}
 
 ltr_styles:
   css:

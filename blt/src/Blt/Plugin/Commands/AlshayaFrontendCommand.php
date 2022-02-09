@@ -18,7 +18,6 @@ class AlshayaFrontendCommand extends BltTasks {
   protected static $themeTypes = [
     'transac',
     'non_transac',
-    'amp',
     'transac_lite',
   ];
 
@@ -68,6 +67,22 @@ class AlshayaFrontendCommand extends BltTasks {
    */
   public function setupReact() {
     $dir = $this->getConfigValue('docroot') . '/modules/react';
+    $task = $this->taskExec('npm install');
+    $task->dir($dir);
+    $result = $task->run();
+    $this->say($result->getOutputData());
+    $this->say($result->getMessage());
+    return $result;
+  }
+
+  /**
+   * Setup JS Uglification.
+   *
+   * @command alshayafe:setup-uglify
+   * @aliases setup-uglify
+   */
+  public function setupUglification() {
+    $dir = $this->getConfigValue('docroot');
     $task = $this->taskExec('npm install');
     $task->dir($dir);
     $result = $task->run();
@@ -229,6 +244,37 @@ class AlshayaFrontendCommand extends BltTasks {
     }
 
     return $tasks->run();
+  }
+
+  /**
+   * Build JS files for uglification.
+   *
+   * @param string $path
+   *   Specific file path for JS uglification.
+   *
+   * @command alshayafe:build-uglify
+   * @aliases build-uglify
+   */
+  public function buildJsUglification(string $path = '') {
+    $dir = $this->getConfigValue('docroot');
+    $cmd = 'npm run build';
+
+    // Build specific paths instead of whole docroot.
+    if (!empty($path)) {
+      // Set path relative to docroot.
+      $relative = explode('docroot/', $path, 2);
+      if (count($relative) === 2) {
+        $path = $relative[1];
+      }
+      $cmd = $cmd . ' -- --path=' . $path;
+    }
+
+    $task = $this->taskExec($cmd);
+    $task->dir($dir);
+    $result = $task->run();
+    $this->say($result->getOutputData());
+    $this->say($result->getMessage());
+    return $result;
   }
 
   /**

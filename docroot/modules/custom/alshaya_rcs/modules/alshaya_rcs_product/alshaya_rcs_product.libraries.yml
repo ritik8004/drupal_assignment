@@ -20,13 +20,6 @@ schema_org:
   dependencies:
     - rcs_placeholders/helpers
 
-rcs_product_modal:
-  version: 1.x
-  js:
-    js/alshaya_rcs_product.modal.js: {}
-  dependencies:
-    - alshaya_spc/add_to_cart
-
 product.block.description:
   version: 1.x
   js:
@@ -51,6 +44,16 @@ product.promotions:
   version: 1.x
   js:
     templates/rcs-product-promotions.handlebars: {}
+
+product.delivery_info:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-info-block.handlebars: {}
+
+product.delivery_options:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-options.handlebars: {}
 
 product.delivery_option_cnc:
   version: 1.x

@@ -1,5 +1,4 @@
 (function ($) {
-  'use strict';
 
   $(document).ready(function () {
     function showPassword(el, elToggle) {

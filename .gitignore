@@ -179,3 +179,10 @@ docroot/profiles/.gitignore
 /.editorconfig
 /.gitattributes
 .lando.local.yml
+
+# Ignore all built JS files and node modules.
+dist
+node_modules
+
+# Ignore JS uglification builds.
+docroot/build

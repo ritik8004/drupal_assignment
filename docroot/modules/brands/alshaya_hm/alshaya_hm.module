@@ -349,8 +349,8 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
     // Get parent sku.
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-    // Express Delivery.
+    /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
+    $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
     $parent_sku = $skuManager->getParentSkuBySku($vars['sku']) ?? $vars['sku'];
     if (!empty($parent_sku)) {
       /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
@@ -358,7 +358,7 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
       $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
       $vars['product_attribute_labels'] = $labels;
       // Show delivery option labels if express delivery is enabled.
-      if ($express_delivery_config->get('status')) {
+      if ($deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
         $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku->getSku());
         if (!empty($delivery_options['values'])) {
           foreach ($delivery_options['values'] as $key => $option) {
@@ -522,14 +522,27 @@ function _alshaya_hm_get_language_specific_data($lang, $sku_data, $node) {
  * Implements hook_alshaya_performance_preload_alter().
  */
 function alshaya_hm_alshaya_performance_preload_alter(array &$preload) {
-  $themeHandler = \Drupal::service('theme_handler');
-  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
-  $fonts_directory_path = '/' . $themePath . '/fonts';
-
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-icons.woff2?p1AKYf',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
+  $site_preloads = [
+    'en' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_hnm/fonts/HMSans-Regular.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_hnm/fonts/HMSansArabic-Regular.woff2?jAKPu',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+    ],
   ];
+  // Preloading fonts here.
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
 }

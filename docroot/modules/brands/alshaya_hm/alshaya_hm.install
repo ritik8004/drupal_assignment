@@ -15,6 +15,18 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Set config to allow the all level of categories can be used
+ * under department page.
+ */
+function alshaya_hm_update_8056() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
+  $config->set('all_categories_department_page', TRUE)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.12.0] Add fields in search_api_index to support MAPP.
  */
 function alshaya_hm_update_8055() {
@@ -1268,9 +1280,6 @@ function alshaya_hm_install() {
   $configs = ['acq_sku.configurable_form_settings'];
 
   alshaya_config_install_configs($configs, 'alshaya_hm', 'optional');
-
-  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
-  _alshaya_master_initialize_amp('alshaya_amp_hnm');
 
   // Set the number of items to show in a gallery on PDP.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')

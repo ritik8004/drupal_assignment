@@ -14,6 +14,7 @@ import {
 } from '../../../../js/utilities/wishlistHelper';
 import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { isDesktop } from '../../../../js/utilities/display';
 
 export default class WishlistHeader extends React.Component {
   constructor(props) {
@@ -49,13 +50,14 @@ export default class WishlistHeader extends React.Component {
     if (!isAnonymousUser()) {
       // Guest user's wishlist data from local storage.
       const wishListDataOfGuestUser = getWishListData(guestUserStorageKey());
-
-      // Remove wishlist info from local storage for guest users, as
-      // we don't want this info to share with logged in users.
-      addWishListInfoInStorage({}, guestUserStorageKey());
-
       if (wishListDataOfGuestUser
+        && typeof wishListDataOfGuestUser === 'object'
+        && Object.keys(wishListDataOfGuestUser).length > 0
         && hasValue(drupalSettings.wishlist.mergeWishlistForLoggedInUsers)) {
+        // Remove wishlist info from local storage for guest users, as
+        // we don't want this info to share with logged in users.
+        addWishListInfoInStorage({}, guestUserStorageKey());
+
         // Merge wishlist information to the magento backend from local storage,
         // if wishlist data available in local storage and merging wishlist
         // data flag is set to true.
@@ -97,9 +99,10 @@ export default class WishlistHeader extends React.Component {
       } else {
         // Get wishlist data from the local storage.
         const wishListData = getWishListData();
-        if (wishListData === null
+        if (hasValue(drupalSettings.wishlist.config.forceLoadWishlistFromBackend)
+          || (wishListData === null
           || (typeof wishListData === 'object'
-          && Object.keys(wishListData).length === 0)) {
+          && Object.keys(wishListData).length === 0))) {
           // Load wishlist information from the magento backend, if wishlist
           // data is empty in local storage for authenticate users. First check
           // if wishlist is available for the customer in backend.
@@ -203,12 +206,20 @@ export default class WishlistHeader extends React.Component {
         // Set the notification data.
         stateData.notificationItemData = productInfo || null;
 
-        // Check if sticky wrapper is active on screen.
-        const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
+        // Check if sticky header wrapper is active on screen.
+        const stickyHeader = document.querySelector('body.header-sticky-filter');
+        // Check if sticky search wrapper is active on screen.
+        const stickySearch = document.querySelector('body.Sticky-algolia-search.header-sticky-filter');
         // If sticky header is not present, scroll user to header.
         // Else show notification on sticky header.
-        if (querySelector === null) {
-          smoothScrollTo('#wishlist-header-wrapper');
+        if (stickyHeader === null || stickySearch !== null) {
+          // By default scroll the user to body section.
+          let scrollToSelector = 'body';
+          if (!isDesktop()) {
+            // If mobile or tablet then scroll the user to header section.
+            scrollToSelector = '.c-header';
+          }
+          smoothScrollTo(scrollToSelector);
         } else {
           stateData.headerClass = 'sticky-wrapper';
         }

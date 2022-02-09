@@ -463,13 +463,15 @@ class AlshayaGtmManager {
    *   Identifier of the product variant on SKU entity.
    * @param \Drupal\acq_commerce\SKUInterface|null $child
    *   The child sku object or null.
+   * @param string|null $parentSku
+   *   Parent product SKU value.
    *
    * @return array
    *   Attributes on sku to be exposed to GTM.
    *
    * @throws \InvalidArgumentException
    */
-  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL) {
+  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL, $parentSku = NULL) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
@@ -929,13 +931,14 @@ class AlshayaGtmManager {
     $dimension7 = '';
     $dimension8 = '';
 
+    $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : [];
     $shipping_info = explode(' - ', $order['shipping_description']);
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $deliveryOption = 'Home Delivery';
     $deliveryType = $shipping_info[0];
 
-    $shipping_method_name = $order['shipping']['method'];
+    $shipping_method_name = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
     if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
       $deliveryOption = 'Click and Collect';
       $deliveryType = $order['shipping']['extension_attributes']['click_and_collect_type'];
@@ -966,7 +969,10 @@ class AlshayaGtmManager {
         continue;
       }
 
-      $product = $this->fetchSkuAtttributes($item['sku']);
+      $product = $item['product_type'] === 'configurable'
+        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'])
+        : $this->fetchSkuAtttributes($item['sku']);
+
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
       }
@@ -1266,8 +1272,8 @@ class AlshayaGtmManager {
         $productStyleCode = [];
         $store_code = '';
         $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-
-        if ($order['shipping']['method'] === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+        $shipping_method_name = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
+        if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
         }

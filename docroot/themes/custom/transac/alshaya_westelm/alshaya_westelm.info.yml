@@ -11,6 +11,7 @@ regions:
   menu_primary: 'Menu Primary'
   menu_secondary: 'Menu Secondary'
   header: Header
+  sub_header_menu: 'Sub Header Menu'
   pre_content: 'Pre content'
   breadcrumb: Breadcrumb
   hero_content: 'Hero Content'
@@ -161,3 +162,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/wishlist/wishlist.ltr.css: css/conditional-sass/wishlist/wishlist.ltr.css
+
+  alshaya_white_label/sameday-express-delivery:
+    css:
+      theme:
+        css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css

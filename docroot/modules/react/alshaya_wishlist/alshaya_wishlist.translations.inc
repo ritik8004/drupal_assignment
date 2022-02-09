@@ -98,11 +98,16 @@ function _alshaya_wishlist_translations() {
       'context' => 'wishlist',
     ],
     'Yes, move to @wishlist_label' => [
-      'ar' => 'أذهب إلى @wishlist_label',
+      'ar' => 'نعم، أضف',
       'context' => 'wishlist',
     ],
     'No, remove it' => [
       'ar' => 'قم بإزالتها',
+      'context' => 'wishlist',
+    ],
+    'go shopping' => [
+      'en' => 'Go Shopping',
+      'ar' => 'اذهب للتسوق',
       'context' => 'wishlist',
     ],
   ];

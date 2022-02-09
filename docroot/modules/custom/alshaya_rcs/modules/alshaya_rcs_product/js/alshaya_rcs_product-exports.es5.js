@@ -14,6 +14,45 @@ function isProductAvailableForHomeDelivery(entity) {
 }
 
 /**
+ * Check if the provided product is available for Click and Collect.
+ *
+ * @param entity
+ *   The entity.
+ *
+ * @return {Boolean}
+ *   True if CNC is available, otherwise false.
+ */
+function isProductAvailableForClickAndCollect(entity) {
+  return window.commerceBackend.isProductAvailableForClickAndCollect(entity);
+}
+
+/**
+ * Check if the provided product is available for Same day delivery.
+ *
+ * @param entity
+ *   The entity.
+ *
+ * @return {Boolean}
+ *   True if SDD is available, otherwise false.
+ */
+function isProductAvailableForSameDayDelivery(entity) {
+  return entity.same_day_delivery === 1;
+}
+
+/**
+ * Check if the provided product is available for Express delivery.
+ *
+ * @param entity
+ *   The entity.
+ *
+ * @return {Boolean}
+ *   True if ED is available, otherwise false.
+ */
+function isProductAvailableForExpressDelivery(entity) {
+  return entity.express_delivery === 1;
+}
+
+/**
  * Check if the product is buyable.
  *
  * @param {object} entity
@@ -210,38 +249,79 @@ exports.render = function render(
 ) {
   let html = "";
   switch (placeholder) {
-    case "delivery-option":
+    case "delivery-info-block":
       if (!isProductBuyable(entity)) {
         break;
       }
 
-      let cncEnabled = window.commerceBackend.isProductAvailableForClickAndCollect(entity);
-      if (cncEnabled || isProductAvailableForHomeDelivery(entity)) {
-        const deliveryOptionsWrapper = jQuery('.rcs-templates--delivery_option').clone();
+      // Add express delivery options that are available on product entity.
+      const deliveryInfo = {
+        delivery_in_only_city_text: drupalSettings.alshayaRcs.pdp.delivery_in_only_city_text,
+        expressDelivery: [],
+        sameDayDelivery: {
+          text: null,
+          sub_text: null,
+        }
+      };
 
-        const hdHtml = handlebarsRenderer.render('product.delivery_option_hd', drupalSettings.alshaya_home_delivery);
-        jQuery('.field__content', deliveryOptionsWrapper).append(hdHtml);
+      // Express delivery.
+      drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
+        if (option.status === 1 && entity[option.id] === 1) {
+          deliveryInfo.expressDelivery.push(option);
+        }
+      });
 
-        // Add click and collect to the delivery options field.
-        const ccData = {
+      // Same day delivery.
+      if (entity.same_day_delivery === 1) {
+        deliveryInfo.sameDayDelivery = drupalSettings.alshayaRcs.pdp.sameDayDelivery;
+      }
+
+      html = handlebarsRenderer.render('product.delivery_info', deliveryInfo);
+      break;
+
+    case "delivery-options":
+      if (!isProductBuyable(entity)) {
+        break;
+      }
+
+      const deliveryOptions = {};
+      const cncEnabled = isProductAvailableForClickAndCollect(entity);
+      if (cncEnabled) {
+        deliveryOptions.cnc = {
           state: cncEnabled ? 'enabled' : 'disabled',
-          title: drupalSettings.alshaya_click_collect.title,
-          subtitle: (cncEnabled === true)
+            title: drupalSettings.alshaya_click_collect.title,
+            subtitle: (cncEnabled === true)
             ? drupalSettings.alshaya_click_collect.subtitle.enabled
             : drupalSettings.alshaya_click_collect.subtitle.disabled,
-          sku: entity.sku,
-          sku_clean: window.commerceBackend.cleanCssIdentifier(entity.sku),
-          sku_type: entity.type_id,
-          help_text: drupalSettings.alshaya_click_collect.help_text,
-          available_at_title: '',
-          select_option_text: drupalSettings.alshaya_click_collect.select_option_text,
-          store_finder_form: drupalSettings.alshaya_click_collect.store_finder_form,
+            sku: entity.sku,
+            sku_clean: window.commerceBackend.cleanCssIdentifier(entity.sku),
+            sku_type: entity.type_id,
+            help_text: drupalSettings.alshaya_click_collect.help_text,
+            available_at_title: '',
+            select_option_text: drupalSettings.alshaya_click_collect.select_option_text,
+            store_finder_form: drupalSettings.alshaya_click_collect.store_finder_form,
         };
-        const ccHtml = handlebarsRenderer.render('product.delivery_option_cnc', ccData);
-        jQuery('.field__content', deliveryOptionsWrapper).append(ccHtml);
-
-        html += deliveryOptionsWrapper.html();
       }
+
+      const hdEnabled = isProductAvailableForHomeDelivery(entity);
+      if (hdEnabled) {
+        const skuSddEnabled = isProductAvailableForSameDayDelivery(entity);
+        const skuEdEnabled = isProductAvailableForExpressDelivery(entity);
+        if (drupalSettings.expressDelivery.enabled && (skuSddEnabled || skuEdEnabled)) {
+          // Express delivery options.
+          deliveryOptions.hd = {
+            type: 'express_delivery',
+            title: Drupal.t('Delivery Options'),
+            subtitle: Drupal.t('Explore the delivery options applicable to your area.'),
+          }
+        }
+        else {
+          // Standard delivery options.
+          deliveryOptions.hd = drupalSettings.alshaya_home_delivery;
+          deliveryOptions.hd.type = 'standard_delivery';
+        }
+      }
+      html += handlebarsRenderer.render('product.delivery_options', deliveryOptions);
       break;
 
     case 'mobile-upsell-products':
@@ -393,8 +473,9 @@ exports.computePhFilters = function (input, filter) {
 
   switch(filter) {
     case 'price':
-      const priceVal = getFormattedAmount(input.price_range.maximum_price.regular_price.value);
-      const finalPriceVal = getFormattedAmount(input.price_range.maximum_price.final_price.value);
+      const prices = window.commerceBackend.getPrices(input, true);
+      const priceVal = prices.price;
+      const finalPriceVal = prices.finalPrice;
 
       const price = jQuery('.rcs-templates--price').clone();
       jQuery('.price-amount', price).html(priceVal);

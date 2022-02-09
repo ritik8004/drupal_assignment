@@ -85,6 +85,7 @@ const OrderSummaryBlock = ({
         <TotalLineItems
           totals={totals}
           isCartPage={showCheckoutButton}
+          context={context}
           {...(collectionPointsEnabled()
             && hasValue(collectionCharge)
             && { collectionCharge }

@@ -64,20 +64,15 @@ set classes = [
 
           <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
-          {% if content.same_day_delivery_text %}
-            <div class="same-day-delivery">
-              <div class="same-day-content">
-                <p>{{ content.same_day_delivery_text }}</p>
-                <p>{{ content.same_day_delivery_sub_text }}</p>
-              </div>
-            </div>
-          {% elseif content.delivery_in_only_city_text %}
-            <div class="delivery-in-only-city">
-              <p>{{ content.delivery_in_only_city_text }}</p>
-            </div>
-          {% endif %}
+          <div id="rcs-ph-delivery-info-block"></div>
+
         </div>
       {% endblock %}
+
+      {% if aura_enabled is defined and aura_enabled %}
+        {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+        <div id="aura-pdp"></div>
+      {% endif %}
 
       {% block pdpSidebar %}
         <div class="content__sidebar">
@@ -122,7 +117,7 @@ set classes = [
             {% block afterDescription %}
             {% endblock %}
 
-            <div id="rcs-ph-delivery-option"></div>
+            <div id="rcs-ph-delivery-options"></div>
 
             {{ content.sharethis }}
 

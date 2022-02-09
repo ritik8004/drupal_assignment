@@ -1,9 +1,9 @@
 variables:
-  url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  spc_product_listing_page: '/shop-mens/accessories/caps/'
-  spc_basket_page: '/shop-mens/accessories/caps/'
-  spc_pdp_page: 'buy-new-balance-twin-city-cap-team-red.html'
-  product_listing_page_url: '/shop-mens/accessories/caps/'
-  np_plp_product_page: '/buy-new-balance-twin-city-cap-team-red.html/'
-  np_plp_page: '/shop-kids/upto-4-years/shoes/'
+  url_product_page: 'buy-champion-mens-t-shirt-black-0.html'
+  spc_product_listing_page: '/shop-mens/clothing/t-shirts/'
+  spc_basket_page: '/shop-mens/clothing/t-shirts/'
+  spc_pdp_page: 'buy-champion-mens-t-shirt-black-0.html'
+  product_listing_page_url: '/shop-mens/clothing/t-shirts/'
+  np_plp_product_page: '/buy-champion-mens-t-shirt-black-0.html'
+  np_plp_page: '/shop-mens/clothing/t-shirts/'
   new_pdp_enabled: TRUE

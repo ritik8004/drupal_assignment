@@ -21,12 +21,12 @@
   }
 
   @include breakpoint($desktop) {
-    top: 3.25rem;
-    #{$right}: 0.125rem;
+    top: 2.9375rem;
+    #{$right}: -0.9375rem;
 
     html[lang=ar] & {
-      top: 3.75rem;
-      left: 0.125rem;
+      top: 2.9375rem;
+      left: -0.9375rem;
     }
   }
 

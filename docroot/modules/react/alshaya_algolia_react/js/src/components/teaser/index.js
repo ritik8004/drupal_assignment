@@ -17,7 +17,7 @@ import {
   productListIndexStatus,
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
-import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { checkExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 
 const Teaser = ({
@@ -169,7 +169,7 @@ const Teaser = ({
               context="wishlist"
               position="top-right"
               sku={hit.sku}
-              title={attribute.title}
+              title={attribute.title && Parser(attribute.title)}
               format="icon"
             />
           </ConditionalView>
@@ -227,6 +227,7 @@ const Teaser = ({
           </div>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
+              && checkExpressDeliveryStatus()
               && hit.attr_express_delivery !== undefined
               && hit.attr_express_delivery[0] === '1'
             }
@@ -237,6 +238,7 @@ const Teaser = ({
           </ConditionalView>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
+              && checkExpressDeliveryStatus()
               && pageType === 'plp'
               && hit.attr_express_delivery !== undefined
               && hit.attr_express_delivery[currentLanguage][0] === '1'

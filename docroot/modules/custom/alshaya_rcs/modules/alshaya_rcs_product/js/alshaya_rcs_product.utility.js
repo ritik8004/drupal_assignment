@@ -218,6 +218,26 @@
     return galleryProduct.media_teaser;
   };
 
+
+  /**
+   * Get the prices from product entity.
+   *
+   * @param {object} product
+   *   The raw product object.
+   * @param {boolean} formatted
+   *   if we need to return formatted price.
+   *
+   * @return {array}
+   *   The price array.
+   */
+  window.commerceBackend.getPrices = function (product, formatted) {
+    var prices = {
+      price : formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value) : product.price_range.maximum_price.regular_price.value,
+      finalPrice: formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value) : product.price_range.maximum_price.final_price.value,
+    };
+    return prices;
+  };
+
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty.

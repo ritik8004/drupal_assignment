@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.checkoutComProcessed = false;
   var checkoutComOldFormData = '';

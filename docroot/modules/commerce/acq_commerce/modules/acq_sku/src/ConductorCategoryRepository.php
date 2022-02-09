@@ -105,7 +105,7 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
     // Prepare array to use array_intersect_key.
     foreach ($commerce_ids as $commerce_id) {
       if (!empty($mappings[$commerce_id])) {
-        $return[] = $mappings[$commerce_id];
+        $return[$commerce_id] = $mappings[$commerce_id];
       }
     }
     return $return;

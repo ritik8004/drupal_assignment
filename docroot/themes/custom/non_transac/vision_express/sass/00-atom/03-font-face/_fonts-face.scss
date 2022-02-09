@@ -1,49 +1,48 @@
 @font-face {
   font-family: 'font-icons';
-  src: url('/themes/custom/non_transac/vision_express/fonts/font-icons.eot?2pxs5l');
-  src: url('/themes/custom/non_transac/vision_express/fonts/font-icons.eot?2pxs5l#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/font-icons.ttf?2pxs5l') format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/font-icons.woff?2pxs5l') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/font-icons.woff2?2pxs5l') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/font-icons.svg?2pxs5l#font-icons') format('svg');
+  src: url('/themes/custom/non_transac/vision_express/fonts/font-icons.woff2?2pxs5f') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/font-icons.woff?2pxs5f') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Helvetica';
-  src: url('/themes/custom/non_transac/vision_express/fonts/Helvetica.eot?#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/Helvetica.woff') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/Helvetica.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/Helvetica.ttf')  format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/Helvetica.svg#NotoKufiArabic-Bold') format('svg');
+  src: local('Helvetica'), url('/themes/custom/non_transac/vision_express/fonts/Helvetica.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/Helvetica.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'HelveticaNeue';
-  src: url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue.eot?#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue.woff') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue.ttf')  format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue.svg#NotoKufiArabic-Bold') format('svg');
+  src: local('Helvetica Neue'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'HelveticaNeue-Thin';
-  src: url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.eot?#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.woff') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.ttf')  format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.svg#NotoKufiArabic-Bold') format('svg');
+  src: local('Helvetica Neue Thin'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'HelveticaNeue-Bold';
-  src: url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.eot?#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.woff') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.ttf')  format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.svg#NotoKufiArabic-Bold') format('svg');
+  src: local('Helvetica Neue Bold'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'DroidArabicKufi';
-  src: url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.eot?#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.woff') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.ttf')  format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.svg#NotoKufiArabic-Bold') format('svg');
+  src: url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'DroidArabicKufi-Bold';
-  src: url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi-Bold.eot?#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi-Bold.woff') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi-Bold.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi-Bold.ttf')  format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi-Bold.svg#NotoKufiArabic-Bold') format('svg');
+  src: url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi-Bold.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi-Bold.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }

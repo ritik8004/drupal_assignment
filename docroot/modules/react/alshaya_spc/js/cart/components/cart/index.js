@@ -36,6 +36,7 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
+import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -279,7 +280,13 @@ export default class Cart extends React.Component {
 
   displayShippingMethods = (event) => {
     const currentArea = event.detail;
-    const { checkShowAreaAvailabilityStatus } = this.state;
+    const { checkShowAreaAvailabilityStatus, items } = this.state;
+    // If cart contain only virtual products then we don't check the
+    // cart shipping methods.
+    if (cartContainsOnlyVirtualProduct({ items })) {
+      return;
+    }
+
     showFullScreenLoader();
     // fetch product level SSD/ED status only on initial load
     // or when user removes any product.
@@ -293,8 +300,9 @@ export default class Cart extends React.Component {
               cartShippingMethods: response,
             });
             // Check if SDD/ED is available on product level.
-            if (!hasValue(response.error)
+            if (typeof response !== 'undefined'
               && response !== null
+              && !hasValue(response.error)
               && checkAreaAvailabilityStatusOnCart(response)) {
               this.setState({
                 showAreaAvailabilityStatusOnCart: true,

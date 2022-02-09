@@ -107,27 +107,6 @@ function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = 
 }
 
 /**
- * Implements hook_ENTITY_TYPE_load() for node entities.
- */
-function alshaya_vs_transac_node_load($nodes) {
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  /** @var \Drupal\node\NodeInterface $node */
-  foreach ($nodes as $node) {
-    if ($node->bundle() === 'acq_product') {
-      $sku_string = $skuManager->getSkuForNode($node);
-      $sku = SKU::loadFromSku($sku_string);
-
-      if ($sku instanceof SKU) {
-        // This is done for all Meta title, Page title.
-        $node->setTitle(_alshaya_vs_transac_get_title($sku, 'meta'));
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
@@ -318,14 +297,39 @@ function alshaya_vs_transac_preprocess_acq_sku__free_gift(&$variables) {
  * Implements hook_alshaya_performance_preload_alter().
  */
 function alshaya_vs_transac_alshaya_performance_preload_alter(array &$preload) {
-  $themeHandler = \Drupal::service('theme_handler');
-  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
-  $fonts_directory_path = '/' . $themePath . '/fonts';
-
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-icons.woff2?myjxod',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
+  $site_preloads = [
+    'en' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Book.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Bold.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_victoria_secret/fonts/DroidArabicKufi.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_victoria_secret/fonts/DroidArabicKufi-Bold.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+    ],
   ];
+  // Preloading fonts here.
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
 }
