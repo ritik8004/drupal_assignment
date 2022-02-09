@@ -239,6 +239,11 @@
             border: none;
             background: $spc-cart-product-attribute-input;
 
+            @include breakpoint($only-mobile) {
+              -webkit-text-fill-color: $spc-product-attributes;
+              opacity: 1;
+            }
+
             html[lang=ar] & {
               direction: ltr;
               text-align: right;
