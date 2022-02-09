@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b678cab86be272bca9753f32bf2ab1c6",
+    "content-hash": "7da7565bbffb2f33bf9880b60db8053b",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -6180,16 +6180,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.2.11",
+            "version": "9.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "5e2414d2d825999807b6ca3334fc9bdaa11bf8d4"
+                "reference": "c00365209216db25626860f3229e02f0ab75ab58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/5e2414d2d825999807b6ca3334fc9bdaa11bf8d4",
-                "reference": "5e2414d2d825999807b6ca3334fc9bdaa11bf8d4",
+                "url": "https://api.github.com/repos/drupal/core/zipball/c00365209216db25626860f3229e02f0ab75ab58",
+                "reference": "c00365209216db25626860f3229e02f0ab75ab58",
                 "shasum": ""
             },
             "require": {
@@ -6428,9 +6428,9 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/9.2.11"
+                "source": "https://github.com/drupal/core/tree/9.2.12"
             },
-            "time": "2022-01-19T00:14:13+00:00"
+            "time": "2022-02-04T20:23:35+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",

@@ -42,7 +42,7 @@
         "drupal/conditional_fields": "^4.0@alpha",
         "drupal/config_rewrite": "^1.4",
         "drupal/config_update": "^1.7",
-        "drupal/core": "9.2.11",
+        "drupal/core": "9.2.12",
         "drupal/core-composer-scaffold": "9.2.11",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
@@ -260,7 +260,15 @@
                 "CORE-34870 - Log JS and CSS aggregated files creation": "patches/core/logs_for_aggregated_css_and_js_dump.patch",
                 "Add cache buster to aggregated JS files": "https://git.drupalcode.org/issue/drupal-3243296/-/merge_requests/1.patch?v=1",
                 "Add getoriginal method for languageConfigOverride": "https://www.drupal.org/files/issues/2021-11-10/getOriginal-method-for-languageConfigOverride-3248728-3.patch",
-                "Allow having separate CSS files for RTL": "patches/core/rtl_styles.patch"
+                "Allow having separate CSS files for RTL": "patches/core/rtl_styles.patch",
+                "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/2021-01-18/956186-128.patch",
+                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/2021-08-11/multiple-ajax-submissions-2876197-28.patch",
+                "Verify that the configured service exists before calling it in CacheFactory": "https://www.drupal.org/files/issues/2021-12-09/2429321-85.patch",
+                "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2021-01-06/3007424-108.patch",
+                "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2021-07-01/3063118-10.patch",
+                "CORE-26181 - Drupal alters SVG fill path with broken base url and breaks SVG CSS": "https://www.drupal.org/files/issues/2021-11-04/drupal-9.3.x-fix_broken_svg-2362643-81.patch",
+                "Issue 2685749: Add a Machine Name widget to core": "https://www.drupal.org/files/issues/2022-02-08/2685749-103.patch",
+                "Add views render caching on views ajax requests": "https://www.drupal.org/files/issues/2021-01-19/views-render_caching_ajax_requests-2500313-70-92x.patch"
             },
             "drupal/mobile_number": {
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
