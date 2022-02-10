@@ -587,7 +587,6 @@ window.commerceBackend.cleanCssIdentifier = function (identifier) {
  */
 function renderProductLabels(product, sku, mainSku) {
   window.commerceBackend.getProductLabelsData(mainSku).then(function (labelsData) {
-    console.log(labelsData);
     globalThis.rcsPhRenderingEngine.render(
       drupalSettings,
       'product-labels',
