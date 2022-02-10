@@ -32,6 +32,7 @@ $light-greyish: #ccc;
 $gray-bg: #f1f2f5;
 $rosewood: #660014;
 $mujilighttheme: rgba(127, 0, 25, 0.1);
+$_egift_landing_page_banner_bg: #fbf7ea;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -702,6 +703,7 @@ $country-switcher-label-mobile: $black;
 // eGift Landing page
 $egift-primary-text: $primary_text;
 $egift-accordion-active-title: $primary_link-active;
+$egift-banner-bg: $_egift_landing_page_banner_bg;
 
 // PLP add to cart.
 $plp-quick-view-product-size-text-active: $black;
