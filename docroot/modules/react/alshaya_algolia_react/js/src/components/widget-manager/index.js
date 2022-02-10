@@ -20,7 +20,6 @@ const WidgetManager = React.memo((props) => {
 
   let currentWidget = '';
   let className = '';
-
   switch (filter.widget.type) {
     case 'sort_by':
       currentWidget = (
