@@ -79,3 +79,4 @@ add_to_bag_utility:
     - core/jquery
     - core/drupal
     - core/drupalSettings
+    - alshaya_master/local_storage_manager

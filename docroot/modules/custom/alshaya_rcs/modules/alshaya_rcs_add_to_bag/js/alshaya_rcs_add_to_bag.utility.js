@@ -19,16 +19,11 @@
     const response = await globalThis.rcsPhCommerceBackend.getData('product', {sku: mainSKU});
     if (response && response.length > 0) {
       const product = response[0];
+      RcsPhStaticStorage.set('product_' + product.sku, product);
       // Get product labels.
-      const productLabels = await globalThis.rcsPhCommerceBackend.getData(
-        'labels',
-        { productIds: [product.id] },
-        null,
-        drupalSettings.path.currentLanguage,
-        ''
-      );
       let labels = [];
-      productLabels[0]['items'].forEach(function (label) {
+      const productLabels = await window.commerceBackend.getProductLabelsData(mainSKU);
+      productLabels.forEach(function (label) {
         labels.push({
           image: {
             url: label.image,
@@ -38,10 +33,9 @@
           position: label.position
         });
       });
-      RcsPhStaticStorage.set('product_' + product.sku, product);
-      productInfo = processProductInfo(product, labels);
+      const productInfo = processProductInfo(product, labels);
+      return productInfo;
     }
-    return productInfo;
   };
 
   /**
