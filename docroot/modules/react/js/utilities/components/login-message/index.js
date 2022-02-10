@@ -7,7 +7,7 @@ const LoginMessage = ({
 
   let loginUrl = 'user/login';
   let registerUrl = 'user/register';
-  if (destination !== null) {
+  if (destination) {
     loginUrl += `?destination=${destination}`;
     registerUrl += `?destination=${destination}`;
   }
