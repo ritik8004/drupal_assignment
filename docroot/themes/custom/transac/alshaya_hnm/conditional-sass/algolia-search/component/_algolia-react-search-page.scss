@@ -278,6 +278,18 @@
         }
       }
     }
+
+    #attr_delivery_ways {
+      ul {
+        li.facet-item {
+          &.is-active {
+            .facet-item__value {
+              padding-#{$right}: 0;
+            }
+          }
+        }
+      }
+    }
   }
 
   #attr_size.size_group_list {

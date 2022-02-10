@@ -1,0 +1,12 @@
+#cart_notification,
+#static_minicart_notification {
+  &.error-notification {
+    &.has--notification::before {
+      border-color: $error-red;
+    }
+  }
+}
+
+.error-message {
+  margin-top: 0.75rem;
+}
