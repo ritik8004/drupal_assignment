@@ -98,6 +98,7 @@ $light-white: #fdf1f5;
 $dark-pink: #fc45b2;
 $pink-hover:  #d84e82;
 $_plp_secondary_cta_hover: rgba(239, 95, 150, 0.1);
+$_egift_landing_page_banner_bg: #fcf2f6;
 
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
@@ -1171,3 +1172,4 @@ $spc-cart-delivery-popup-search-border: $secondary_border;
 
 // eGift landing page.
 $egift-accordion-active-title: $mothercare-black;
+$egift-banner-bg: $_egift_landing_page_banner_bg;
