@@ -47,18 +47,18 @@
     }
   }
 
-  .menu--account,
-  .block-alshaya-stores-finder,
-  .block-language-blocklanguage-interface {
-    height: 2rem;
-    overflow: hidden;
-  }
-
   .block-language-blocklanguage-interface {
     .en a {
       html[lang=ar] & {
         font-family: $dh-regular;
       }
+    }
+  }
+
+  .region__menu-secondary,
+  ul {
+    @include breakpoint($desktop) {
+      height: 2rem;
     }
   }
 }
