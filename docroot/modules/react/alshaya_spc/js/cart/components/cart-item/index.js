@@ -333,12 +333,7 @@ export default class CartItem extends React.Component {
           option_id: options[key].option_id,
           option_value: options[key].option_value,
         };
-
-        // Skipping the psudo attributes.
-        if (drupalSettings.psudo_attribute === undefined
-          || drupalSettings.psudo_attribute !== option.option_id) {
-          attributeOptions.push(option);
-        }
+        attributeOptions.push(option);
       });
     }
 
