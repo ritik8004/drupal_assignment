@@ -391,3 +391,14 @@ export function isProductElementAlignmentEnabled() {
   }
   return false;
 }
+
+/**
+ * Get sort index from local storage.
+ */
+export const getBackToPlpPageIndex = () => {
+  const plplocalStorage = Drupal.getItemFromLocalStorage(`plp:${window.location.pathname}`);
+  if (plplocalStorage && typeof plplocalStorage.sort !== 'undefined') {
+    window.algoliaPlpSortIndex = plplocalStorage.sort;
+  }
+  return window.algoliaPlpSortIndex || null;
+};
