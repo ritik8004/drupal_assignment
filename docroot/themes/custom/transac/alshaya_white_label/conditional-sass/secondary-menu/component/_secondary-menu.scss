@@ -59,6 +59,7 @@
             line-height: 2.375rem;
             margin: 0;
             border-bottom: 2px solid transparent;
+            border-top: 0;
           }
 
           .menu--two__list {
@@ -202,7 +203,7 @@
 
           &:hover {
             .menu--one__link {
-              padding-top: 0.125rem;
+              padding-top: 0;
               border-top: 0;
               border-bottom: 1px solid $hfd-menu-link-color-hover;
               cursor: pointer;
