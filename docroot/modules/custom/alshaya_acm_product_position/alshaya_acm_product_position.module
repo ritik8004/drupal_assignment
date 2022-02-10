@@ -48,7 +48,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
       // @todo Find a way to use the class constant here.
       // Module alshaya_mobile_app is not dependency of current one.
       // Get requested sort option for mobile app.
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       $exposed_input = $_REQUEST['sort'] ?? '';
 
       // If no sorting option provided, we add the default sort here.
@@ -59,7 +59,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     }
     // For web get the requested sort option.
     else {
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       $exposed_input = $_REQUEST['sort_bef_combine'] ?? '';
     }
 

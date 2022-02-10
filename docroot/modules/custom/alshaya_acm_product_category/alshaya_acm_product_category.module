@@ -525,7 +525,7 @@ function alshaya_acm_product_category_views_pre_build(ViewExecutable $view) {
       $view->setItemsPerPage(0);
 
       // Remove show_on_load to avoid any extra processing.
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       unset($_GET['show_on_load']);
       \Drupal::request()->query->remove('show_on_load');
     }

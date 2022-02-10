@@ -226,7 +226,7 @@ function alshaya_color_split_form_sku_base_form_alter(&$form, FormStateInterface
   }
 
   // Allow providing translations for custom configurable field label.
-  // @codingStandardsIgnoreLine
+  // phpcs:ignore
   $label = t($grouping_attribute, ['context' => 'configurable_attribute']);
 
   $form['variants_in_group'] = [

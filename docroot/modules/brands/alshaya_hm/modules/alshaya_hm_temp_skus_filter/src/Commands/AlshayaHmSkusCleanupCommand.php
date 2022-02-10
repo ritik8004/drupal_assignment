@@ -34,9 +34,8 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     $batch_size = $options['size'];
     $count_descriptive = 0;
 
-    // @codingStandardsIgnoreStart
+    // phpcs:ignore
     $connection = \Drupal::database();
-    // @codingStandardsIgnoreEnd
 
     // Fetch list of all season5+ SKUs which don't have any DescriptiveStillLife
     // images.
@@ -151,12 +150,12 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
       $context['results']['success'] = $context['results']['error'] = 0;
     }
 
-    // @codingStandardsIgnoreStart
+    // phpcs:disable
     global $acsf_site_code;
     global $country_code;
 
     $connection = \Drupal::database();
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
 
     $fp = fopen('/tmp/skus_' . $acsf_site_code . $country_code . '.log', 'a');
 
@@ -243,10 +242,10 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
       return FALSE;
     }
 
-    // @codingStandardsIgnoreStart
+    // phpcs:disable
     /** @var \Drupal\alshaya_acm_product\SkuManager $skumanager */
     $skumanager = \Drupal::service('alshaya_acm_product.skumanager');
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
 
     $parent_sku = $skumanager->getParentSkuBySku($sku);
 
@@ -274,14 +273,14 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
   public function postCleanupCallback($success, $results, $operations) {
     // Log data to watchdog around SKUs that were deleted & configurable SKUs
     // that were cleaned up as a result of deleting simple SKUs.
-    // @codingStandardsIgnoreStart
+    // phpcs:disable
     if (!empty($results['skus_processed'])) {
       \Drupal::logger('acq_sku')->info(dt('Cleaned up following SKUs without any DescriptiveStillLife image. List of SKUs deleted: @skus', ['@skus' => implode(',', $results['skus_processed'])]));
     }
     if (!empty($results['parent_sku_processed'])) {
       \Drupal::logger('acq_sku')->info(dt('Cleaned up configurable SKUs without any children items: @skus', ['@skus' => implode(',', $results['parent_sku_processed'])]));
     }
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
   }
 
 }

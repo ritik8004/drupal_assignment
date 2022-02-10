@@ -37,7 +37,7 @@ function alshaya_get_site_environment() {
  */
 function alshaya_get_site_country_code($site_name = '') {
   if (empty($site_name)) {
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     global $host_site_code, $_acsf_site_name;
 
     // Get host_site_code or acsf_site_name based on environment.

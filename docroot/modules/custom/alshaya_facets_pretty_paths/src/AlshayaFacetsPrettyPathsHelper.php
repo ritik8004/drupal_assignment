@@ -513,7 +513,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $static[$facet_id] = [
       'type' => $type,
       // Since prefix text is dynamic - Size/at. we use t() with variable.
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       'prefix_text' => $this->t($facet_prefix_text),
       'visibility' => $facet_visibility,
     ];

@@ -560,7 +560,7 @@ class AlshayaPromotionsManager {
 
         // Ignoring variable in t() error, we prepare the variable above
         // and use as variable as there are two scenarios.
-        // @codingStandardsIgnoreLine
+        // phpcs:ignore
         $free_gift_promos[$promotion_id]['link']['#markup'] = $this->t($message, $message_arguments);
       }
       else {

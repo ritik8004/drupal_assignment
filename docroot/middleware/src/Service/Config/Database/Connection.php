@@ -77,7 +77,7 @@ class Connection extends DoctrineConnection {
         // Close the connection.
         fclose($fn);
 
-        // @codingStandardsIgnoreLine
+        // phpcs:ignore
         $params['dbname'] = $db_con_info['"database"'];
         $params['user'] = $db_con_info['"username"'];
         $params['password'] = $db_con_info['"password"'];

@@ -190,7 +190,7 @@ class AlshayaAcmCommands extends DrushCommands {
     // Update the conductor config.
     if (!empty($acm)) {
       include_once DRUPAL_ROOT . '/../factory-hooks/environments/conductor.php';
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       global $conductors;
 
       if (isset($conductors[$acm])) {
@@ -215,7 +215,7 @@ class AlshayaAcmCommands extends DrushCommands {
     // Update the magento config.
     if (!empty($mdc)) {
       include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       global $magentos;
 
       if (isset($magentos[$mdc])) {

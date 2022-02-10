@@ -1166,7 +1166,7 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     // per page, we ignore the parameter.
     if ($show_on_load > $per_page) {
       if ($show_on_load % $per_page !== 0) {
-        // @codingStandardsIgnoreLine
+        // phpcs:ignore
         unset($_GET['show_on_load']);
         $request->query->set('show_on_load', NULL);
       }
@@ -2205,7 +2205,7 @@ function alshaya_acm_product_get_delivery_options($sku) {
       $delivery_options['values'][$option] = [
         'status' => $status === '1' ? 'active' : 'in-active',
         // @todo check why we really need to pass variable to t().
-        // @codingStandardsIgnoreLine
+        // phpcs:ignore
         'label' => t($express_delivery_config->get($option . '_label'), [], [
           'context' => $option . '_label',
         ]),

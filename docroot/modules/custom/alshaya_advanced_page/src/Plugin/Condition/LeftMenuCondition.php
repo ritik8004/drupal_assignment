@@ -46,11 +46,11 @@ class LeftMenuCondition extends ConditionPluginBase implements ContainerFactoryP
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   *  @codingStandardsIgnoreStart
+   *  phpcs:disable
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
   }
 
   /**

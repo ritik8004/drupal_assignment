@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 $brand = isset($argv, $argv[1]) ? $argv[1] : '';
 $env = isset($argv, $argv[2]) ? $argv[2] : '';

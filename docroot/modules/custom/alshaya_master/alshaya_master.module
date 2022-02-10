@@ -22,7 +22,7 @@ use Drupal\user\UserInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 
-// @codingStandardsIgnoreLine
+// phpcs:ignore
 define('ALSHAYA_MASTER_CUSTOM_LOGO_TYPES', ['email', 'mobile']);
 
 /**
@@ -931,7 +931,7 @@ function _alshaya_master_initialize_brand_theme($brand_theme) {
  */
 function alshaya_master_acquia_search_get_list_of_possible_cores_alter(&$possible_core_ids, $core_service) {
 
-  // @codingStandardsIgnoreLine
+  // phpcs:ignore
   global $acsf_site_code;
 
   $ah_env = preg_replace('@[^a-zA-Z0-9]+@', '', $core_service['ah_env']);

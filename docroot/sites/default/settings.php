@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 // ===== Added by acsf-init, please do not delete. Section start. =====
 $_acsf_infrastructure = include dirname(__FILE__) . '/acsf.settings.php';

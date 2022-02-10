@@ -89,7 +89,7 @@ class GoogleCategoryMappingController extends ControllerBase {
    */
   public function downloadGoogleCategoryMapping() {
     $path = file_create_url($this->fileSystem->realpath("temporary://"));
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     global $_acsf_site_name;
     $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
     $filename = 'google-category-mapping-' . $_acsf_site_name . '-' . $time_format . '.csv';

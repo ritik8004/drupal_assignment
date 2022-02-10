@@ -410,7 +410,7 @@ function whitelabel_preprocess_form_element(array &$variables) {
 /**
  * Implements hook_form_alter().
  */
-// @codingStandardsIgnoreLine
+// phpcs:ignore
 function whitelabel_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'user_login_form' || $form_id == 'user_register_form') {
     $form['actions']['submit']['#attributes']['class'][] = 'button--form-submit';

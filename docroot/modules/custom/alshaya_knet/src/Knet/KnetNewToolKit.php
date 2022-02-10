@@ -224,7 +224,7 @@ class KnetNewToolKit extends E24PaymentPipe {
    */
   protected function byteArray2Hex($byteArray) {
     $chars = array_map("chr", $byteArray);
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     $bin = join($chars);
     return bin2hex($bin);
   }
@@ -274,7 +274,7 @@ class KnetNewToolKit extends E24PaymentPipe {
    */
   protected function byteArray2String($byteArray) {
     $chars = array_map("chr", $byteArray);
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     return join($chars);
   }
 

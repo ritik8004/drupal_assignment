@@ -15,7 +15,7 @@ use GuzzleHttp\Client;
 // for how to generate a client ID and Secret.
 require_once 'credentials.php';
 
-// @codingStandardsIgnoreLine
+// phpcs:ignore
 function invokeApi($api, $type = 'GET', $options = []) {
   global $_clientId, $_clientSecret;
 

@@ -466,7 +466,7 @@ class AcqSkuPositionCommands extends DrushCommands {
         }
 
         // Recursively prepare category data from children.
-        // @codingStandardsIgnoreLine giving warning for anonymous function.
+        // phpcs:ignore giving warning for anonymous function.
         $cat_recur_data = function ($cats) use (&$cat_recur_data, &$cat_data, $drupal_cat_data) {
           foreach ($cats as $cat) {
             if (!isset($cat['category_id']) || empty($cat['name'])) {
@@ -491,7 +491,7 @@ class AcqSkuPositionCommands extends DrushCommands {
 
             // If there are children for the term.
             if (!empty($cat['children'])) {
-              // @codingStandardsIgnoreLine giving warning for anonymous function.
+              // phpcs:ignore giving warning for anonymous function.
               $cat_recur_data($cat['children']);
             }
           }

@@ -2279,7 +2279,7 @@ function alshaya_master_install() {
   $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
 
   // Enable only FB, Twitter, Pinterest.
-  // @codingStandardsIgnoreLine
+  // phpcs:ignore
   $configFactory->set('service_option', "'Facebook:facebook','Twitter:twitter','Pinterest:pinterest'");
 
   // Disable all extras.

@@ -198,7 +198,7 @@ class AlshayaSearchApiFacetsManager {
     foreach ($this->getNonDefaultLanguageCodes() ?? [] as $langcode) {
       $config = $this->languageManager->getLanguageConfigOverride($langcode, $block_id);
       $settings = [];
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       $settings['label'] = t($data['name'], [], ['langcode' => $langcode]);
       $config->set('settings', $settings);
       $config->save();

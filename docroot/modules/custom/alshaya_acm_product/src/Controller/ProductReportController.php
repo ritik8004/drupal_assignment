@@ -85,7 +85,7 @@ class ProductReportController extends ControllerBase {
    */
   public function downloadReport() {
     $path = file_create_url($this->fileSystem->realpath("temporary://"));
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     global $_acsf_site_name;
     $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
     $filename = 'product-report-' . $_acsf_site_name . '-' . $time_format . '.csv';
@@ -128,7 +128,7 @@ class ProductReportController extends ControllerBase {
    */
   public function downloadProductReportWithCategory() {
     $path = file_create_url($this->fileSystem->realpath("temporary://"));
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     global $_acsf_site_name;
     $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
     $filename = 'product-report-' . $_acsf_site_name . '-with-cat-' . $time_format . '.csv';
