@@ -34,7 +34,7 @@ services:
       - '@pathauto.alias_storage_helper'
       - '@module_handler'
       - '@router.route_provider'
-      - '@path.alias_manager'
+      - '@path_alias.manager'
   alshaya_seo.meta_image_event:
     class: 'Drupal\alshaya_seo\EventSubscriber\DefaultMetaImageEventSubscriber'
     arguments:

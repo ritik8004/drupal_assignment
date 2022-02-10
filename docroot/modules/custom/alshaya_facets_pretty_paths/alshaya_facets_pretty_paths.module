@@ -289,7 +289,7 @@ function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
       $facets_path = '--' . $view_path_parts[1];
     }
 
-    $internal_path = \Drupal::service('path.alias_manager')->getPathByAlias('/' . $view_path);
+    $internal_path = \Drupal::service('path_alias.manager')->getPathByAlias('/' . $view_path);
 
     $path_parts = [
       $language,

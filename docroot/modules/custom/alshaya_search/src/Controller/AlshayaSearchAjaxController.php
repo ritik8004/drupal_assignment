@@ -10,8 +10,6 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\facets\Controller\FacetBlockAjaxController;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Block\BlockManager;
-use Drupal\Core\Entity\EntityManager;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\PathProcessor\PathProcessorManager;
 use Drupal\Core\Render\RendererInterface;
@@ -72,8 +70,6 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
   /**
    * Constructs a FacetBlockAjaxController object.
    *
-   * @param \Drupal\Core\Entity\EntityManager $entityManager
-   *   The Entity Manager Service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
    * @param \Drupal\Core\Path\CurrentPathStack $currentPath
@@ -81,8 +77,6 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    * @param \Symfony\Component\Routing\RouterInterface $router
    *   The router service.
    * @param \Drupal\Core\PathProcessor\PathProcessorManager $pathProcessor
-   *   The path processor service.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger service.
    * @param \Drupal\Core\Block\BlockManager $blockManager
    *   The Block manager service.
@@ -97,19 +91,17 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The Module Handler service.
    */
-  public function __construct(EntityManager $entityManager,
-                              RendererInterface $renderer,
+  public function __construct(RendererInterface $renderer,
                               CurrentPathStack $currentPath,
                               RouterInterface $router,
                               PathProcessorManager $pathProcessor,
-                              LoggerChannelFactoryInterface $logger,
                               BlockManager $blockManager,
                               CurrentRouteMatch $currentRouteMatch,
                               RequestStack $request_stack,
                               Token $token,
                               AlshayaFacetsPrettyPathsHelper $facets_pretty_path_helper,
                               ModuleHandlerInterface $module_handler) {
-    parent::__construct($entityManager, $renderer, $currentPath, $router, $pathProcessor, $logger);
+    parent::__construct($renderer, $currentPath, $router, $pathProcessor, $currentRouteMatch);
     $this->blockManager = $blockManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->requestStack = $request_stack;
@@ -123,12 +115,10 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager'),
       $container->get('renderer'),
       $container->get('path.current'),
       $container->get('router'),
       $container->get('path_processor_manager'),
-      $container->get('logger.factory'),
       $container->get('plugin.manager.block'),
       $container->get('current_route_match'),
       $container->get('request_stack'),

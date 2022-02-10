@@ -720,7 +720,7 @@ function alshaya_master_alshaya_master_post_drupal_install() {
 
   // Disable unwanted core views.
   if ($views_to_disable = Settings::get('views_to_disable')) {
-    $view_storage = \Drupal::service('entity.manager')->getStorage('view');
+    $view_storage = \Drupal::service('entity_type.manager')->getStorage('view');
     foreach ($views_to_disable as $view_machine_name) {
       // Disable the view.
       if ($view = $view_storage->load($view_machine_name)) {

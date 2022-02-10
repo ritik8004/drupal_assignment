@@ -446,7 +446,7 @@ function whitelabel_preprocess_html(&$variables) {
   }
 
   $path = \Drupal::service('path.current')->getPath();
-  $alias = trim(\Drupal::service('path.alias_manager')
+  $alias = trim(\Drupal::service('path_alias.manager')
     ->getAliasByPath($path), '/');
   // Alias path class.
   $alias_class = preg_replace("/\//", '-', $alias);

@@ -422,7 +422,7 @@ function alshaya_super_category_pathauto_alias_alter(&$alias, array $context) {
     }
 
     // Get term alias to append with node alias.
-    $term_alias = \Drupal::service('path.alias_manager')->getAliasByPath(
+    $term_alias = \Drupal::service('path_alias.manager')->getAliasByPath(
       '/taxonomy/term/' . $parent['id'],
       $context['language']
     );
@@ -691,7 +691,7 @@ function alshaya_super_category_language_switch_links_alter(array &$links, $type
     if (!empty($brand)) {
       foreach ($links as $lang => $url_object) {
         // Get term alias to replace it for brand query.
-        $alias = \Drupal::service('path.alias_manager')
+        $alias = \Drupal::service('path_alias.manager')
           ->getAliasByPath('/taxonomy/term/' . $brand, $lang);
         // Decode url string of encoded value. (arabic strings are encoded).
         $alias = str_replace("/", '', urldecode($alias));
@@ -755,7 +755,7 @@ function alshaya_super_category_alshaya_search_query_param_alter(&$query, FormSt
   }
 
   // Get brand path in given language to redirect.
-  $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/taxonomy/term/' . $brand, $redirect_lang->getId());
+  $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/taxonomy/term/' . $brand, $redirect_lang->getId());
   // Decode url string of encoded value. (arabic strings are encoded).
   if ($brand = str_replace("/", '', urldecode($alias))) {
     $query['brand'] = $brand;

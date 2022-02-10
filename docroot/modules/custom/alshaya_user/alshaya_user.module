@@ -553,7 +553,7 @@ function alshaya_user_link_alter(&$variables) {
   }
   elseif ($url->isRouted() && $url->getRouteName() == 'user.logout') {
     $path = \Drupal::service('path.current')->getPath();
-    $variables['options']['query']['destination'] = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . \Drupal::service('path.alias_manager')->getAliasByPath($path);
+    $variables['options']['query']['destination'] = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . \Drupal::service('path_alias.manager')->getAliasByPath($path);
   }
 }
 
