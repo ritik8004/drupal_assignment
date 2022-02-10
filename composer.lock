@@ -820,16 +820,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.209.17",
+            "version": "3.209.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3ed5a5ff379e518a4e8c089e412207774daa25e7"
+                "reference": "2f8a8c885daf45fe9f919312a66a68115d6733b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3ed5a5ff379e518a4e8c089e412207774daa25e7",
-                "reference": "3ed5a5ff379e518a4e8c089e412207774daa25e7",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2f8a8c885daf45fe9f919312a66a68115d6733b5",
+                "reference": "2f8a8c885daf45fe9f919312a66a68115d6733b5",
                 "shasum": ""
             },
             "require": {
@@ -905,22 +905,22 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.209.17"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.209.22"
             },
-            "time": "2022-02-03T19:19:22+00:00"
+            "time": "2022-02-10T19:14:07+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
-            "version": "2.0.5",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Bacon/BaconQrCode.git",
-                "reference": "7190fc6c20370e0e93da6717b182b8249d5b8e71"
+                "reference": "0069435e2a01a57193b25790f105a5d3168653c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/7190fc6c20370e0e93da6717b182b8249d5b8e71",
-                "reference": "7190fc6c20370e0e93da6717b182b8249d5b8e71",
+                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/0069435e2a01a57193b25790f105a5d3168653c1",
+                "reference": "0069435e2a01a57193b25790f105a5d3168653c1",
                 "shasum": ""
             },
             "require": {
@@ -959,9 +959,9 @@
             "homepage": "https://github.com/Bacon/BaconQrCode",
             "support": {
                 "issues": "https://github.com/Bacon/BaconQrCode/issues",
-                "source": "https://github.com/Bacon/BaconQrCode/tree/2.0.5"
+                "source": "https://github.com/Bacon/BaconQrCode/tree/2.0.6"
             },
-            "time": "2022-01-31T00:43:09+00:00"
+            "time": "2022-02-04T20:16:05+00:00"
         },
         {
             "name": "behat/behat",
@@ -3004,16 +3004,16 @@
         },
         {
             "name": "consolidation/self-update",
-            "version": "2.0.3",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/self-update.git",
-                "reference": "117dcc9494dc970a6ae307103c41d654e6253bc4"
+                "reference": "8a64bdd8daf5faa8e85f56534dd99caf928164b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/self-update/zipball/117dcc9494dc970a6ae307103c41d654e6253bc4",
-                "reference": "117dcc9494dc970a6ae307103c41d654e6253bc4",
+                "url": "https://api.github.com/repos/consolidation/self-update/zipball/8a64bdd8daf5faa8e85f56534dd99caf928164b3",
+                "reference": "8a64bdd8daf5faa8e85f56534dd99caf928164b3",
                 "shasum": ""
             },
             "require": {
@@ -3053,9 +3053,9 @@
             "description": "Provides a self:update command for Symfony Console applications.",
             "support": {
                 "issues": "https://github.com/consolidation/self-update/issues",
-                "source": "https://github.com/consolidation/self-update/tree/2.0.3"
+                "source": "https://github.com/consolidation/self-update/tree/2.0.5"
             },
-            "time": "2021-12-30T19:08:32+00:00"
+            "time": "2022-02-09T22:44:24+00:00"
         },
         {
             "name": "consolidation/site-alias",
@@ -3944,16 +3944,16 @@
         },
         {
             "name": "drupal-ckeditor-libraries-group/font",
-            "version": "4.17.1",
+            "version": "4.17.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal-ckeditor-libraries-group/font.git",
-                "reference": "b6152ef945efcae2c8c3bb083ffc34bde6696532"
+                "reference": "3a5572e78e64e2bfe60410203e6e03bf7f0d9f80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal-ckeditor-libraries-group/font/zipball/b6152ef945efcae2c8c3bb083ffc34bde6696532",
-                "reference": "b6152ef945efcae2c8c3bb083ffc34bde6696532",
+                "url": "https://api.github.com/repos/drupal-ckeditor-libraries-group/font/zipball/3a5572e78e64e2bfe60410203e6e03bf7f0d9f80",
+                "reference": "3a5572e78e64e2bfe60410203e6e03bf7f0d9f80",
                 "shasum": ""
             },
             "type": "drupal-library",
@@ -3974,7 +3974,7 @@
                 "issues": "https://github.com/ckeditor/ckeditor4/issues",
                 "source": "https://github.com/ckeditor/ckeditor4/tree/master/plugins/font"
             },
-            "time": "2021-07-15T11:15:39+00:00"
+            "time": "2022-01-25T09:28:39+00:00"
         },
         {
             "name": "drupal/acquia_connector",
@@ -4262,17 +4262,17 @@
         },
         {
             "name": "drupal/acsf",
-            "version": "2.69.0",
+            "version": "2.71.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acsf.git",
-                "reference": "8.x-2.69"
+                "reference": "8.x-2.71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-2.69.zip",
-                "reference": "8.x-2.69",
-                "shasum": "649186e899e719f8886ab385706bf56e6afe1183"
+                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-2.71.zip",
+                "reference": "8.x-2.71",
+                "shasum": "56e9c49613adf8b5e3944abbddad770de9930f34"
             },
             "require": {
                 "drupal/acsf_duplication": "*",
@@ -4291,8 +4291,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.69",
-                    "datestamp": "1612957028",
+                    "version": "8.x-2.71",
+                    "datestamp": "1644404678",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4362,7 +4362,7 @@
         },
         {
             "name": "drupal/acsf_duplication",
-            "version": "2.69.0",
+            "version": "2.71.0",
             "require": {
                 "drupal/acsf": "^2",
                 "drupal/core": "^8 || ^9"
@@ -4370,8 +4370,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.69",
-                    "datestamp": "1612957028",
+                    "version": "8.x-2.71",
+                    "datestamp": "1644404678",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4432,7 +4432,7 @@
         },
         {
             "name": "drupal/acsf_theme",
-            "version": "2.69.0",
+            "version": "2.71.0",
             "require": {
                 "drupal/acsf": "^2",
                 "drupal/acsf_variables": "*",
@@ -4441,8 +4441,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.69",
-                    "datestamp": "1612957028",
+                    "version": "8.x-2.71",
+                    "datestamp": "1644404678",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4503,7 +4503,7 @@
         },
         {
             "name": "drupal/acsf_variables",
-            "version": "2.69.0",
+            "version": "2.71.0",
             "require": {
                 "drupal/acsf": "^2",
                 "drupal/core": "^8 || ^9"
@@ -4511,8 +4511,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.69",
-                    "datestamp": "1612957028",
+                    "version": "8.x-2.71",
+                    "datestamp": "1644404678",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5292,20 +5292,20 @@
         },
         {
             "name": "drupal/blazy",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/blazy.git",
-                "reference": "8.x-2.5"
+                "reference": "8.x-2.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/blazy-8.x-2.5.zip",
-                "reference": "8.x-2.5",
-                "shasum": "3680004a49099dcef1440d327e5f316f8309a7e6"
+                "url": "https://ftp.drupal.org/files/projects/blazy-8.x-2.6.zip",
+                "reference": "8.x-2.6",
+                "shasum": "76390c0e9a1be55fe7e0365c1b8e6fcc6c9825b6"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9"
+                "drupal/core": "^8.8 || ^9 || ^10"
             },
             "conflict": {
                 "drupal/csp": "<1.12"
@@ -5313,8 +5313,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.5",
-                    "datestamp": "1633496312",
+                    "version": "8.x-2.6",
+                    "datestamp": "1644225274",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -13065,26 +13065,26 @@
         },
         {
             "name": "drupal/role_delegation",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/role_delegation.git",
-                "reference": "8.x-1.1"
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/role_delegation-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "a63b548056cc729beacfd385625fafb983e0f73e"
+                "url": "https://ftp.drupal.org/files/projects/role_delegation-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "08095bada0f492e70d32fcf357a8c01825ca81fc"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^9.2 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1580498751",
+                    "version": "8.x-1.2",
+                    "datestamp": "1644486753",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14244,27 +14244,27 @@
         },
         {
             "name": "drupal/slick",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/slick.git",
-                "reference": "8.x-2.4"
+                "reference": "8.x-2.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/slick-8.x-2.4.zip",
-                "reference": "8.x-2.4",
-                "shasum": "8e36a1c5d4ebb2930501a885e99d217df4de759b"
+                "url": "https://ftp.drupal.org/files/projects/slick-8.x-2.5.zip",
+                "reference": "8.x-2.5",
+                "shasum": "ab6a2b079dd5619058e1cd47c1fc0a7ce292e7ef"
             },
             "require": {
                 "drupal/blazy": "~2.0",
-                "drupal/core": "^8.8 || ^9"
+                "drupal/core": "^8.8 || ^9 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.4",
-                    "datestamp": "1633496714",
+                    "version": "8.x-2.5",
+                    "datestamp": "1644225299",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14358,7 +14358,7 @@
         },
         {
             "name": "drupal/sms",
-            "version": "2.0.0-alpha1",
+            "version": "2.0.0",
             "require": {
                 "drupal/core": "^8.9 || ^9",
                 "drupal/dynamic_entity_reference": "^1.0",
@@ -14369,11 +14369,11 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha1",
-                    "datestamp": "1587947771",
+                    "version": "2.0.0",
+                    "datestamp": "1644087867",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -14406,17 +14406,17 @@
         },
         {
             "name": "drupal/smsframework",
-            "version": "2.0.0-alpha1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/smsframework.git",
-                "reference": "2.0.0-alpha1"
+                "reference": "2.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/smsframework-2.0.0-alpha1.zip",
-                "reference": "2.0.0-alpha1",
-                "shasum": "7c9cc563eb8e13346194255fadf498249c507489"
+                "url": "https://ftp.drupal.org/files/projects/smsframework-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "5f0100a46cacf8e5498a5d8dbc404a44dcdde9d7"
             },
             "require": {
                 "drupal/core": "^8.9 || ^9"
@@ -14428,11 +14428,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha1",
-                    "datestamp": "1587947771",
+                    "version": "2.0.0",
+                    "datestamp": "1644087867",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -16625,16 +16625,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.12.42",
+            "version": "8.12.43",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "33c8dc586ab0d430193dc721d597a3aa79803d06"
+                "reference": "27bc97a4941f42d320fb6da3de0dcaaf7db69f5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/33c8dc586ab0d430193dc721d597a3aa79803d06",
-                "reference": "33c8dc586ab0d430193dc721d597a3aa79803d06",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/27bc97a4941f42d320fb6da3de0dcaaf7db69f5d",
+                "reference": "27bc97a4941f42d320fb6da3de0dcaaf7db69f5d",
                 "shasum": ""
             },
             "require": {
@@ -16694,7 +16694,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php"
             },
-            "time": "2022-01-28T08:38:37+00:00"
+            "time": "2022-02-09T07:46:55+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -19678,16 +19678,16 @@
         },
         {
             "name": "phar-io/version",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "bae7c545bef187884426f042434e561ab1ddb182"
+                "reference": "15a90844ad40f127afd244c0cad228de2a80052a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/bae7c545bef187884426f042434e561ab1ddb182",
-                "reference": "bae7c545bef187884426f042434e561ab1ddb182",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/15a90844ad40f127afd244c0cad228de2a80052a",
+                "reference": "15a90844ad40f127afd244c0cad228de2a80052a",
                 "shasum": ""
             },
             "require": {
@@ -19723,9 +19723,9 @@
             "description": "Library for handling version information and constraints",
             "support": {
                 "issues": "https://github.com/phar-io/version/issues",
-                "source": "https://github.com/phar-io/version/tree/3.1.0"
+                "source": "https://github.com/phar-io/version/tree/3.1.1"
             },
-            "time": "2021-02-23T14:00:09+00:00"
+            "time": "2022-02-07T21:56:48+00:00"
         },
         {
             "name": "phenx/php-font-lib",
@@ -21963,16 +21963,16 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "5.0.3",
+            "version": "5.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "23bd5951f7ff26f12d4e3242864df3e08dec4e49"
+                "reference": "19c519631c5a511b7ed0ad64a6713fdb3fd25fe4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/23bd5951f7ff26f12d4e3242864df3e08dec4e49",
-                "reference": "23bd5951f7ff26f12d4e3242864df3e08dec4e49",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/19c519631c5a511b7ed0ad64a6713fdb3fd25fe4",
+                "reference": "19c519631c5a511b7ed0ad64a6713fdb3fd25fe4",
                 "shasum": ""
             },
             "require": {
@@ -22015,7 +22015,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/global-state/issues",
-                "source": "https://github.com/sebastianbergmann/global-state/tree/5.0.3"
+                "source": "https://github.com/sebastianbergmann/global-state/tree/5.0.4"
             },
             "funding": [
                 {
@@ -22023,7 +22023,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-11T13:31:12+00:00"
+            "time": "2022-02-10T07:01:19+00:00"
         },
         {
             "name": "sebastian/lines-of-code",
@@ -29167,16 +29167,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.4.5",
+            "version": "1.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "150d1fbd82fb71ff76b3bd7f6ea6006d89c5f0c3"
+                "reference": "8a7761f1c520e0dad6e04d862fdc697445457cfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/150d1fbd82fb71ff76b3bd7f6ea6006d89c5f0c3",
-                "reference": "150d1fbd82fb71ff76b3bd7f6ea6006d89c5f0c3",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8a7761f1c520e0dad6e04d862fdc697445457cfe",
+                "reference": "8a7761f1c520e0dad6e04d862fdc697445457cfe",
                 "shasum": ""
             },
             "require": {
@@ -29207,7 +29207,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.4.5"
+                "source": "https://github.com/phpstan/phpstan/tree/1.4.6"
             },
             "funding": [
                 {
@@ -29227,7 +29227,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-02T19:35:10+00:00"
+            "time": "2022-02-06T12:56:13+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
