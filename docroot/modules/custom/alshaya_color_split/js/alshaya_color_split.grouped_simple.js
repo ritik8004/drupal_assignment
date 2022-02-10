@@ -17,7 +17,7 @@
         var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
         var productInfo = window.commerceBackend.getProductData(sku, productKey);
 
-        if (typeof productInfo === null) {
+        if (productInfo === null) {
           return;
         }
 

@@ -808,12 +808,12 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
   }
 
   var colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
-  var isSupportsMultipleColor = Drupal.hasValue(colorAttributeConfig.support_multiple_attributes);
+  var supportsMultipleColor = Drupal.hasValue(colorAttributeConfig.support_multiple_attributes);
   var data = {};
   var rawProductData = window.commerceBackend.getProductData(sku, false, false);
   var productType = rawProductData.type_id;
 
-  if (isSupportsMultipleColor == true && productType === 'configurable') {
+  if (supportsMultipleColor && productType === 'configurable') {
     var configColorAttribute = colorAttributeConfig.configurable_color_attribute;
     var combinations = window.commerceBackend.getConfigurableCombinations(sku);
     var colorLabelAttribute = colorAttributeConfig.configurable_color_label_attribute.replace('attr_', '');
