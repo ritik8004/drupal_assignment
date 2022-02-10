@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7da7565bbffb2f33bf9880b60db8053b",
+    "content-hash": "bfeedf47631c3da17f6368d78f97a66c",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -6434,7 +6434,7 @@
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "9.2.11",
+            "version": "9.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
@@ -6478,13 +6478,13 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.2.11"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.2.12"
             },
             "time": "2021-08-24T12:04:07+00:00"
         },
         {
             "name": "drupal/core-dev",
-            "version": "9.2.11",
+            "version": "9.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-dev.git",
@@ -6530,7 +6530,7 @@
             ],
             "description": "require-dev dependencies from drupal/drupal; use in addition to drupal/core-recommended to run tests from drupal/core.",
             "support": {
-                "source": "https://github.com/drupal/core-dev/tree/9.2.11"
+                "source": "https://github.com/drupal/core-dev/tree/9.2.12"
             },
             "time": "2021-06-01T16:41:50+00:00"
         },
