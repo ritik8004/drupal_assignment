@@ -14,6 +14,7 @@ const SortByList = ({ items, refine, name }) => (
           if (item.isRefined) return;
           refine(item.value);
         }}
+        data-sort={item.value}
       >
         <a
           href="#"

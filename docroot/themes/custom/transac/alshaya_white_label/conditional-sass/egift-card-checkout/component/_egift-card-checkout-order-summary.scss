@@ -32,4 +32,27 @@
       padding-bottom: 2.5rem;
     }
   }
+
+  .product-content {
+    .product-item {
+      .spc-product-attributes {
+        .spc-cart-product-attribute-value {
+          input {
+            border: none;
+            background: transparent;
+
+            @include breakpoint($only-mobile) {
+              -webkit-text-fill-color: $egift-checkout-card-number;
+              opacity: 1;
+            }
+
+            html[lang=ar] & {
+              direction: ltr;
+              text-align: right;
+            }
+          }
+        }
+      }
+    }
+  }
 }

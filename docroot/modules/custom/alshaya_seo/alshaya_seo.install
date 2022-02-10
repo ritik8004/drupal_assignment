@@ -66,8 +66,6 @@ function alshaya_seo_update_8016(&$sandbox) {
   $sandbox['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['current'] / $sandbox['max']);
 
   if ($sandbox['#finished'] >= 1) {
-    // Queue all products as URL alias might have been updated.
-    \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
     return 'The batch URL Alias update is finished.';
   }
 }
