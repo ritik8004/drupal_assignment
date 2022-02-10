@@ -173,11 +173,15 @@ class WishlistProductList extends React.Component {
 
     // Add the drawer markup for add to bag feature.
     createConfigurableDrawer(true);
+    const destination = drupalSettings.path
+      ? `/${drupalSettings.path.pathPrefix}${drupalSettings.path.currentPath}` : null;
 
     return (
       <>
         <ConditionalView condition={isAnonymousUser() && !isShareWishlistPage()}>
-          <LoginMessage />
+          <LoginMessage
+            destination={destination}
+          />
         </ConditionalView>
         <NotificationMessage />
         <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
