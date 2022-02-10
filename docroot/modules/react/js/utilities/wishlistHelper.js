@@ -100,12 +100,7 @@ export const getAttributeOptionsForWishlist = (configurableCombinations, skuItem
         option_id: configurableCombinations[skuItemCode].configurables[key].attribute_id,
         option_value: configurableCombinations[skuItemCode].bySku[variant][key],
       };
-
-      // Skipping the psudo attributes.
-      if (drupalSettings.psudo_attribute === undefined
-        || drupalSettings.psudo_attribute !== option.option_id) {
-        options.push(option);
-      }
+      options.push(option);
     });
   }
   return options;
@@ -235,7 +230,6 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
     if (typeof attributeData.is_pseudo_attribute !== 'undefined'
       && attributeData.is_pseudo_attribute) {
       skuAttributesOptionData[attributeCode] = attributeData.values[0].value;
-      return;
     }
     const attributeValueFromSku = skuData.options.find(
       (option) => ((option.option_id === attributeData.id) ? option : false),
