@@ -20,12 +20,17 @@ const WidgetManager = React.memo((props) => {
 
   let currentWidget = '';
   let className = '';
+  let plpSortIndex = null;
   switch (filter.widget.type) {
     case 'sort_by':
+      // If page type is search then default sort index is taken from filter.
+      if (pageType !== 'search') {
+        plpSortIndex = getBackToPlpPageIndex();
+      }
       currentWidget = (
         <SortByList
           name={name}
-          defaultRefinement={getBackToPlpPageIndex(pageType) || filter.widget.items[0].value}
+          defaultRefinement={plpSortIndex || filter.widget.items[0].value}
           items={filter.widget.items}
         />
       );
