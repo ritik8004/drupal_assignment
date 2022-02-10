@@ -15,7 +15,7 @@ import { getBackToPlpPageIndex } from '../../utils/indexUtils';
 const WidgetManager = React.memo((props) => {
   const
     {
-      facet: filter, itemCount, facet: { name },
+      facet: filter, itemCount, facet: { name }, pageType,
     } = props;
 
   let currentWidget = '';
@@ -25,7 +25,7 @@ const WidgetManager = React.memo((props) => {
       currentWidget = (
         <SortByList
           name={name}
-          defaultRefinement={getBackToPlpPageIndex() || filter.widget.items[0].value}
+          defaultRefinement={getBackToPlpPageIndex(pageType) || filter.widget.items[0].value}
           items={filter.widget.items}
         />
       );

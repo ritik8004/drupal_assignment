@@ -395,7 +395,11 @@ export function isProductElementAlignmentEnabled() {
 /**
  * Get sort index from local storage.
  */
-export const getBackToPlpPageIndex = () => {
+export const getBackToPlpPageIndex = (pageType) => {
+  // If page type is search then default sort index is taken from filter.
+  if (pageType === 'search') {
+    return null;
+  }
   const plplocalStorage = Drupal.getItemFromLocalStorage(`plp:${window.location.pathname}`);
   if (plplocalStorage && typeof plplocalStorage.sort !== 'undefined') {
     window.algoliaPlpSortIndex = plplocalStorage.sort;
