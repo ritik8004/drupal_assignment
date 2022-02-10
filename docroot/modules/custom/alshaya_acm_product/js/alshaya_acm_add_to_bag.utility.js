@@ -54,7 +54,7 @@
           // Processing of error here.
           Drupal.removeItemFromLocalStorage(storageKey);
           Drupal.logJavascriptError('Failed to fetch product info data.', error, 'product_info_resource');
-          reject;
+          reject(error);
         }
       });
     });

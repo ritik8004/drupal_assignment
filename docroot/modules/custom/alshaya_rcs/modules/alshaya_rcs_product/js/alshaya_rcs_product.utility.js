@@ -240,6 +240,52 @@
   };
 
   /**
+   * Gets the siblings and parent of the given sku.
+   *
+   * @param {string} sku
+   *   The given sku.
+   *
+   * @returns
+   *   An object containing the product skus in the keys and the product entities
+   * in the values.
+   * If sku is simple and is the main product, then sku is returned.
+   * If sku is simple a child product, then all the siblings and parent are
+   * returned.
+   * If sku is configurable, then the sku and its children are returned.
+   */
+  function getSkuSiblingsAndParent(sku) {
+    const allProducts = window.commerceBackend.getProductData(null, null, false);
+    const data = {};
+
+    Object.keys(allProducts).forEach(function eachMainProduct(mainProductSku) {
+      const mainProduct = allProducts[mainProductSku];
+
+      if (mainProduct.sku === sku) {
+        data[sku] = mainProduct;
+        if (mainProduct.type_id === 'configurable') {
+          mainProduct.variants.forEach(function eachVariantProduct(variant) {
+            data[variant.product.sku] = variant.product;
+          });
+        }
+      }
+      else {
+        if (mainProduct.type_id === 'configurable') {
+          mainProduct.variants.forEach(function eachVariantProduct(variant) {
+            if (variant.product.sku === sku) {
+              data[mainProduct.sku] = mainProduct;
+              mainProduct.variants.forEach(function eachVariantProduct(variant) {
+                data[variant.product.sku] = variant.product;
+              });
+            }
+          });
+        }
+      }
+    });
+
+    return data;
+  }
+
+  /**
    * Gets the labels data for the given product ID.
    *
    * @param sku
@@ -285,52 +331,6 @@
     }
 
     return staticDataStore.labels[sku];
-  }
-
-  /**
-   * Gets the siblings and parent of the given sku.
-   *
-   * @param {string} sku
-   *   The given sku.
-   *
-   * @returns
-   *   An object containing the product skus in the keys and the product entities
-   * in the values.
-   * If sku is simple and is the main product, then sku is returned.
-   * If sku is simple a child product, then all the siblings and parent are
-   * returned.
-   * If sku is configurable, then the sku and its children are returned.
-   */
-  function getSkuSiblingsAndParent(sku) {
-    const allProducts = window.commerceBackend.getProductData(null, null, false);
-    const data = {};
-
-    Object.keys(allProducts).forEach(function eachMainProduct(mainProductSku) {
-      const mainProduct = allProducts[mainProductSku];
-
-      if (mainProduct.sku === sku) {
-        data[sku] = mainProduct;
-        if (mainProduct.type_id === 'configurable') {
-          mainProduct.variants.forEach(function eachVariantProduct(variant) {
-            data[variant.product.sku] = variant.product;
-          });
-        }
-      }
-      else {
-        if (mainProduct.type_id === 'configurable') {
-          mainProduct.variants.forEach(function eachVariantProduct(variant) {
-            if (variant.product.sku === sku) {
-              data[mainProduct.sku] = mainProduct;
-              mainProduct.variants.forEach(function eachVariantProduct(variant) {
-                data[variant.product.sku] = variant.product;
-              });
-            }
-          });
-        }
-      }
-    });
-
-    return data;
   }
 
   // Event listener to update static promotion.

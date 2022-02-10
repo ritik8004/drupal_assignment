@@ -24,3 +24,30 @@ function alshaya_rcs_add_to_bag_library_info_alter(&$libraries, $extension) {
     }
   }
 }
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_rcs_add_to_bag_page_attachments_alter(array &$page) {
+  $add_to_bag_feature_status = \Drupal::service('alshaya_add_to_bag.helper')->isAddToBagFeatureEnabled();
+  $add_to_bag_settings = \Drupal::config('alshaya_add_to_bag.settings');
+  if (!$add_to_bag_feature_status) {
+    return;
+  }
+
+  // Attach add to bag utility.
+  $current_route = \Drupal::routeMatch();
+  $current_route_name = $current_route->getRouteName();
+  $checkout_routes = [
+    'alshaya_spc.checkout.confirmation',
+    'alshaya_spc.checkout',
+  ];
+  if (!in_array($current_route_name, $checkout_routes)) {
+    $page['#attached']['library'][] = 'alshaya_acm_product/add_to_bag_utility';
+    // Get click and collect settings on search and listing page.
+    $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
+    $page['#attached']['drupalSettings']['alshaya_click_collect'] = [
+      'status' => $cnc_settings->get('feature_status'),
+    ];
+  }
+}

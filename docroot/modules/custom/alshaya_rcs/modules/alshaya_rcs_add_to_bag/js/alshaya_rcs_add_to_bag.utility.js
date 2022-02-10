@@ -16,13 +16,13 @@
 
     // The product will be fetched and saved in static storage.
     var productInfo = {};
-    const response = await globalThis.rcsPhCommerceBackend.getData('product', {sku: mainSKU});
+    var response = await globalThis.rcsPhCommerceBackend.getData('product', {sku: mainSKU});
     if (response && response.length > 0) {
-      const product = response[0];
+      var product = response[0];
       RcsPhStaticStorage.set('product_' + product.sku, product);
       // Get product labels.
       let labels = [];
-      const productLabels = await window.commerceBackend.getProductLabelsData(mainSKU);
+      var productLabels = await window.commerceBackend.getProductLabelsData(mainSKU);
       productLabels.forEach(function (label) {
         labels.push({
           image: {
@@ -33,8 +33,15 @@
           position: label.position
         });
       });
-      const productInfo = processProductInfo(product, labels);
+      var productInfo = processProductInfo(product, labels);
       return productInfo;
+    }
+    else {
+      response = {
+        error: true,
+        error_message: 'Product could not be loaded!',
+      };
+      return response;
     }
   };
 
