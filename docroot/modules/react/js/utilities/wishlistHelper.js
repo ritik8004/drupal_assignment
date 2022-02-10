@@ -228,7 +228,9 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
   Object.keys(configurableAttributes).forEach((attributeCode) => {
     const attributeData = configurableAttributes[attributeCode];
     if (typeof attributeData.is_pseudo_attribute !== 'undefined'
-      && attributeData.is_pseudo_attribute) {
+      && attributeData.is_pseudo_attribute
+      && typeof attributeData.values !== 'undefined'
+      && attributeData.values.length > 0) {
       skuAttributesOptionData[attributeCode] = attributeData.values[0].value;
     }
     const attributeValueFromSku = skuData.options.find(
