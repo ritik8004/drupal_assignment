@@ -10,6 +10,7 @@ import StarRatingFilter from '../algolia/widgets/StarRatingFilter';
 import DeliveryTypeFilter from '../algolia/widgets/DeliveryTypeFilter';
 import ConditionalView from '../../../common/components/conditional-view';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { getBackToPlpPageIndex } from '../../utils/indexUtils';
 
 const WidgetManager = React.memo((props) => {
   const
@@ -19,12 +20,13 @@ const WidgetManager = React.memo((props) => {
 
   let currentWidget = '';
   let className = '';
+
   switch (filter.widget.type) {
     case 'sort_by':
       currentWidget = (
         <SortByList
           name={name}
-          defaultRefinement={filter.widget.items[0].value}
+          defaultRefinement={getBackToPlpPageIndex() || filter.widget.items[0].value}
           items={filter.widget.items}
         />
       );
