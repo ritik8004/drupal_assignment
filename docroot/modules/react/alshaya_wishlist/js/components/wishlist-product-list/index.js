@@ -177,7 +177,9 @@ class WishlistProductList extends React.Component {
     return (
       <>
         <ConditionalView condition={isAnonymousUser() && !isShareWishlistPage()}>
-          <LoginMessage />
+          <LoginMessage
+            destination={Drupal.url(drupalSettings.path.currentPath)}
+          />
         </ConditionalView>
         <NotificationMessage />
         <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
