@@ -522,9 +522,9 @@
       var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
       var productData = window.commerceBackend.getProductData(sku, productKey);
 
-      var parentInfo = typeof productData !== "undefined" ? productData : '';
+      var parentInfo = productData !== null ? productData : '';
       // At parent level, sku and selected will be same.
-      var variantInfo = (typeof productData !== "undefined"
+      var variantInfo = (productData !== null
         && typeof productData['variants'] !== "undefined"
         && sku !== selected)
         ? productData['variants'][selected] : '';

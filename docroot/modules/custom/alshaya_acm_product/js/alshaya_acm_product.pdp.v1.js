@@ -99,8 +99,12 @@ window.commerceBackend.updateGallery = function (product, layout, gallery, sku, 
  *   The configurable color details.
  */
 window.commerceBackend.getConfigurableColorDetails = function (sku) {
-  return {
-    sku_configurable_color_attribute: drupalSettings.sku_configurable_color_attribute,
-    sku_configurable_options_color: drupalSettings.sku_configurable_options_color,
+  var data = {};
+  if (drupalSettings.sku_configurable_color_attribute) {
+    data.sku_configurable_color_attribute = drupalSettings.sku_configurable_color_attribute;
   }
+  if (drupalSettings.sku_configurable_options_color) {
+    data.sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
+  }
+  return data;
 }

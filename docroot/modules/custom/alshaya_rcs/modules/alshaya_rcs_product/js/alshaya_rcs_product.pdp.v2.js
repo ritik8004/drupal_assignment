@@ -807,21 +807,23 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
     return staticDataStore.configurableColorData[sku];
   }
 
-  const colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
-  const isSupportsMultipleColor = Drupal.hasValue(colorAttributeConfig.configurable_color_attribute);
-  const configColorAttribute = colorAttributeConfig.configurable_color_attribute;
+  var colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
+  var isSupportsMultipleColor = Drupal.hasValue(colorAttributeConfig.support_multiple_attributes);
+  var data = {};
+  var rawProductData = window.commerceBackend.getProductData(sku, false, false);
+  var productType = rawProductData.type_id;
 
-  if (isSupportsMultipleColor) {
-    const colorLabelAttribute = colorAttributeConfig.configurable_color_label_attribute.replace('attr_', '');
-    const colorCodeAttribute = colorAttributeConfig.configurable_color_code_attribute.replace('attr_', '');
+  if (isSupportsMultipleColor == true && productType === 'configurable') {
+    var configColorAttribute = colorAttributeConfig.configurable_color_attribute;
+    var combinations = window.commerceBackend.getConfigurableCombinations(sku);
+    var colorLabelAttribute = colorAttributeConfig.configurable_color_label_attribute.replace('attr_', '');
+    var colorCodeAttribute = colorAttributeConfig.configurable_color_code_attribute.replace('attr_', '');
     // Translate color attribute option values to the rgb color values &
     // expose the same in Drupal settings to javascript.
-    const combinations = window.commerceBackend.getConfigurableCombinations(sku);
-    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
-    const configurableOptions = rawProductData.configurable_options;
+    var configurableOptions = rawProductData.configurable_options;
 
-    const variants = {};
-    const skuConfigurableOptionsColor = {};
+    var variants = {};
+    var skuConfigurableOptionsColor = {};
 
     // Do this mapping for easy access.
     rawProductData.variants.forEach(function (variant) {
@@ -832,7 +834,7 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
       option.values.forEach(function (value) {
         if (Drupal.hasValue(combinations.attribute_sku[configColorAttribute][value.value_index])) {
           combinations.attribute_sku[configColorAttribute][value.value_index].forEach(function (variantSku) {
-            const colorOptionsList = {
+            var colorOptionsList = {
               display_label: window.commerceBackend.getAttributeValueLabel(option.attribute_code, variants[variantSku].product[colorLabelAttribute]),
               swatch_type: 'RGB',
               display_value: variants[variantSku].product[colorCodeAttribute],
@@ -852,12 +854,13 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
           });
         }
       });
+
+      data = {
+        sku_configurable_options_color: skuConfigurableOptionsColor,
+        sku_configurable_color_attribute: configColorAttribute,
+      }
     });
 
-    const data = {
-      sku_configurable_options_color: skuConfigurableOptionsColor,
-      sku_configurable_color_attribute: configColorAttribute,
-    }
     staticDataStore.configurableColorData[sku] = data;
 
     return data;
