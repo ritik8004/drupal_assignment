@@ -114,8 +114,13 @@ export default createConnector({
     } else if (this.firstReceivedPage === undefined
       || !_isEqual(currentState, this.prevState)) {
       const $diff = diffObject(currentState, this.prevState);
-
-      this.allResults = (this.allResults.length > 0 && Object.prototype.hasOwnProperty.call($diff, 'hitsPerPage'))
+      // Concatenate results if hitsPerPage is in diff,
+      // index is not present in diff,
+      // page is greater than 0.
+      this.allResults = (this.allResults.length > 0
+        && Object.prototype.hasOwnProperty.call($diff, 'hitsPerPage')
+        && !Object.prototype.hasOwnProperty.call($diff, 'index')
+        && results.page > 0)
         ? [].concat(_toConsumableArray(this.allResults),
           _toConsumableArray(hitsWithPositionsAndQueryID))
         : _toConsumableArray(hitsWithPositionsAndQueryID);
