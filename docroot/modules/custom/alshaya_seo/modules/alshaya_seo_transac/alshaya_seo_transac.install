@@ -12,6 +12,17 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Adds products to queue after alshaya_seo_update_8016() has run.
+ * Non-transac sites do not have the Queue utility service, so we queue here.
+ */
+function alshaya_seo_transac_update_8415() {
+  // Queue all products as URL alias might have been updated.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adds Country Switcher block.
  */
 function alshaya_seo_transac_update_8414() {
