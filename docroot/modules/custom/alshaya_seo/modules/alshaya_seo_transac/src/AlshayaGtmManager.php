@@ -893,6 +893,20 @@ class AlshayaGtmManager {
         continue;
       }
 
+      // If its a virtual product i.e egift card or egift topup.
+      if ($item['type'] === 'virtual') {
+        $products[$item['item_id']] = [
+          'name' => $item['name'],
+          'id' => $item['item_id'],
+          'price' => $item['price'],
+          'variant' => $item['sku'],
+          'dimension2' => $item['type'],
+          'dimension4' => 1,
+          'quantity' => $item['ordered'],
+        ];
+        continue;
+      }
+
       $product = $this->fetchSkuAtttributes($item['sku']);
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
@@ -1201,6 +1215,10 @@ class AlshayaGtmManager {
 
           if ($product_node instanceof NodeInterface) {
             $productStyleCode[] = $this->skuManager->getSkuForNode($product_node);
+          }
+          // If its a virtual product i.e egift card or egift topup.
+          if ($orderItem['type'] === 'virtual') {
+            $productStyleCode[] = $orderItem['item_id'];
           }
         }
 
