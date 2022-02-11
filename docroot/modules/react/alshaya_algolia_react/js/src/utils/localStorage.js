@@ -51,10 +51,14 @@ function storeClickedItem(event, pageType) {
     return;
   }
 
+  const sortByOption = document.getElementById('sort_by').querySelector('.active-item');
+  const sortByIndex = sortByOption.getAttribute('data-sort');
+
   const storageDetails = {
     sku: articleNode.getAttribute('data-sku'),
     grid_type: articleNode.classList.contains('product-large') ? 'large' : 'small',
     page: Drupal.algoliaGetActualPageNumber(),
+    sort: sortByIndex,
   };
 
   if (pageType === 'plp') {
