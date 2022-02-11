@@ -150,6 +150,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory($lang));
     // Set default EN category filter in product list index for VM.
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $algoliaSearchValues['hierarchy_lhn'] = $algoliaSearchValues['hierarchy'];
       $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory('en'));
     }
     $reactTeaserView = $common_config['commonReactTeaserView'];
