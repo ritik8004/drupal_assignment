@@ -1,6 +1,7 @@
 attribute_weights:
   default:
-    size: 1
-show_quantity: TRUE
+    color: 1
+    size: 2
 sortable_options:
+  - color
   - size

@@ -10,16 +10,16 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Update attribute_weights to set color higher in weight.
+ * Override `attribute_weights and sortable_options`.
  */
 function alshaya_mu_transac_update_8008() {
-  $config = \Drupal::configFactory()->getEditable('acq_sku.configurable_form_settings');
-  $attribute_weights = $config->get('attribute_weights');
-  $attribute_weights['default'] = ['color' => 1, 'size' => 2];
-  $config->set('attribute_weights', $attribute_weights);
-  $sortable_options = ['color', 'size'];
-  $config->set('sortable_options', $sortable_options);
-  $config->save(TRUE);
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['acq_sku.configurable_form_settings'],
+    'acq_sku'
+  );
 }
 
 /**
