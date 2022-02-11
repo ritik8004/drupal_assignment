@@ -84,7 +84,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
       $form['page_types'][$page_type] = [
         '#type' => 'checkbox',
         '#title' => $page_type_value,
-        '#default_value' => (isset($this->configuration['page_types'][$page_type])) ? $this->configuration['page_types'][$page_type] : 0,
+        '#default_value' => $this->configuration['page_types'][$page_type],
       ];
     }
     $form['show_on_selected_pages'] = [
@@ -93,7 +93,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
         1 => $this->t('Show in the selected page types'),
         0 => $this->t('Hide in the selected page types'),
       ],
-      '#default_value' => (isset($this->configuration['show_on_selected_pages'])) ? $this->configuration['show_on_selected_pages'] : 0,
+      '#default_value' => $this->configuration['show_on_selected_pages'],
     ];
     $form += parent::buildConfigurationForm($form, $form_state);
     unset($form['negate']);
