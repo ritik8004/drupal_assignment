@@ -294,7 +294,10 @@ const withPlpUrlAliasSync = (
         let categoryFieldFacet = `${this.categoryFieldName}.lvl0`;
 
         if (productListIndexStatus()) {
-          categoryFieldFacet = `${this.categoryFieldName}.en.lvl0`;
+          const { currentLanguage } = drupalSettings.path;
+          categoryFieldFacet = (this.categoryFieldName === 'lhn_category')
+            ? `${this.categoryFieldName}.${currentLanguage}.lvl0`
+            : `${this.categoryFieldName}.en.lvl0`;
         }
 
         const hierarchyValue = element.values.slice(0, 1);
