@@ -42,7 +42,8 @@ $config['search_api.index.alshaya_algolia_product_list_index']['options']['algol
 
 // This will need to be overridden in brand specific settings files on each
 // env using prod app for each brand.
-if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
+if (isset($settings['algolia_sandbox.settings'], $settings['algolia_sandbox.settings']['app_id'])
+  && !in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
   $config['search_api.server.algolia']['backend_config']['application_id'] = $settings['algolia_sandbox.settings']['app_id'];
   $config['search_api.server.algolia']['backend_config']['api_key'] = $settings['algolia_sandbox.settings']['write_api_key'];
   $config['alshaya_algolia_react.settings']['application_id'] = $settings['algolia_sandbox.settings']['app_id'];

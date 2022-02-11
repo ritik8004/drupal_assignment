@@ -188,10 +188,18 @@ body.wishlist-enabled {
     }
   }
 
-  @include breakpoint($upto-desktop) {
-    &.no-sticky-algolia-search-bar {
-      .block-alshaya-algolia-react-autocomplete.show-algolia-search-bar {
+  &.no-sticky-algolia-search-bar {
+    .block-alshaya-algolia-react-autocomplete.show-algolia-search-bar {
+      @include breakpoint($upto-desktop) {
         z-index: 2;
+      }
+    }
+
+    &.hide-header {
+      .block-alshaya-algolia-react-autocomplete.show-algolia-search-bar {
+        @include breakpoint($only-mobile) {
+          z-index: 15;
+        }
       }
     }
   }
@@ -231,6 +239,22 @@ body.wishlist-enabled {
           }
         }
       }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    &.hide-header:not(.menu--open) {
+      #wishlist-header-wrapper {
+        z-index: 14;
+
+        .wishlist-notification {
+          top: 2.75rem;
+        }
+      }
+    }
+
+    &.hide-header.Sticky-algolia-search.header-sticky-filter {
+      top: 2.5rem;
     }
   }
 }
