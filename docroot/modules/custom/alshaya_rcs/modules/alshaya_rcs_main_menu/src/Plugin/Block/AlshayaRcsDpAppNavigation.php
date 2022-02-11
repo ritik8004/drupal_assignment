@@ -26,7 +26,7 @@ class AlshayaRcsDpAppNavigation extends BlockBase implements ContainerFactoryPlu
   protected $configFactory;
 
   /**
-   * CheckoutRegisterBlock constructor.
+   * Constructor for AlshayaRcsDpAppNavigation.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
