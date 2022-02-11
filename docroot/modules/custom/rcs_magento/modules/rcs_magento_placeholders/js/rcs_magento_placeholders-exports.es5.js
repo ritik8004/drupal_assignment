@@ -171,13 +171,16 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
       // Prepare request parameters.
       // Fetch categories for navigation menu using categories api.
-      request.data = prepareQuery(`{categories(filters: { ids: { eq: "${drupalSettings.alshayaRcs.navigationMenu.rootCategory}"}})
+      request.data = prepareQuery(`{categories(filters: { ids: { eq: "${params.category_id}"}})
         ${rcsPhGraphqlQuery.navigationMenu}
       }`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
-      if (response !== null && Array.isArray(response.data.categories.items[0].children)) {
+      if (response !== null
+        && Array.isArray(response.data.categories.items)
+        && response.data.categories.items.length > 0
+      ) {
         // Get children for root category.
         result = response.data.categories.items[0].children;
       }
