@@ -1,0 +1,98 @@
+name: Non-Transac
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: '0 6 * * *'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-18.04
+
+    container:
+      image: devwithlando/php:7.4-fpm-4
+
+    services:
+      database:
+        image: mariadb
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 32574:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      memcache:
+        image: memcached:latest
+
+    env:
+      CI: GITHUB_ACTIONS
+      COMPOSER_MEMORY_LIMIT: -1
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER_PASSWORD: drupal
+      MYSQL_USER_NAME: drupal
+      MYSQL_DATABASE_NAME: drupal
+      MYSQL_HOST: database
+      INSTALL_TYPE: install
+
+    steps:
+      - name: Repo check
+        run: |
+          echo "We should not run actions in forks."
+          exit 1
+        if: ${{ github.repository_owner != 'acquia-pso' }}
+
+      - name: Prepare environment variables
+        run: |
+          echo "GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+          echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
+          echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
+          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Composer install
+        run: |
+          composer self-update
+          composer self-update --1
+          composer global require hirak/prestissimo
+          composer validate --no-check-all --ansi
+          composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
+
+      - name: Prepare bin executables
+        run: |
+          ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
+          ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
+
+      - name: Cache dependencies installed with Composer
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            "${{ steps.composer-cache.outputs.dir }}"
+            ~/.drush/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Setup environment
+        run: |
+          bash $SCRIPT_DIR/setup_env.sh
+          bash $SCRIPT_DIR/setup_mysql.sh
+
+      # @todo check if this really works or we need one step per directory
+      - uses: actions/cache@v2
+        with:
+          path: |
+            "${{ steps.npm-cache-dir.outputs.dir }}"
+            ~/.npm
+            ~/.nvm
+          key: ${{ runner.os }}-node
+
+      - name: Run Tests
+        run: bash $SCRIPT_DIR/run_tests_non_transac.sh
