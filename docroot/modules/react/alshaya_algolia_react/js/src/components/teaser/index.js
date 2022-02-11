@@ -86,6 +86,21 @@ const Teaser = ({
   if (attribute.title === undefined) {
     return null;
   }
+  const labels = [];
+  if (attribute.product_labels.length > 0) {
+    attribute.product_labels.forEach((label) => {
+      labels.push({
+        image: {
+          url: label.image,
+          alt: label.text,
+          title: label.text,
+          styles: label.styles,
+        },
+        position: label.position,
+      });
+    });
+  }
+
 
   let teaserClass = 'c-products__item views-row';
   if (isProductFrameEnabled()) {
@@ -157,7 +172,7 @@ const Teaser = ({
 
               media={hit.media}
               title={attribute.title}
-              labels={attribute.product_labels}
+              labels={labels}
               sku={hit.sku}
               initSlider={initSlider}
               setSlider={setSlider}
