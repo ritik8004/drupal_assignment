@@ -43,6 +43,7 @@ class WishlistProductList extends React.Component {
       filters,
       wishListItemsCount,
       wait: true,
+      defaultpageRender: 1,
     };
   }
 
@@ -110,6 +111,19 @@ class WishlistProductList extends React.Component {
   }
 
   /**
+   * Increase the rendered page state on every click of load more.
+   */
+  increasePagesToLoadByDefault = () => {
+    const { defaultpageRender } = this.state;
+    // When we remove an item we need to re-render
+    // with same number of pages loaded by default so we update
+    // defaultPageRender with number of pages to load.
+    this.setState({
+      defaultpageRender: defaultpageRender + 1,
+    });
+  };
+
+  /**
    * Update product listing on my wishlist page after
    * wishlist info is available in storage.
    */
@@ -154,7 +168,13 @@ class WishlistProductList extends React.Component {
   };
 
   render() {
-    const { filters, wishListItemsCount, wait } = this.state;
+    const {
+      filters,
+      wishListItemsCount,
+      wait,
+      defaultpageRender,
+    } = this.state;
+
     if (wait) {
       return <Loading />;
     }
@@ -193,9 +213,13 @@ class WishlistProductList extends React.Component {
               gtmContainer="wishlist page"
               pageType="plp"
               wishListItemsCount={wishListItemsCount}
+              defaultpageRender={defaultpageRender}
             >
               {(paginationArgs) => (
-                <WishlistPagination {...paginationArgs}>
+                <WishlistPagination
+                  {...paginationArgs}
+                  increasePagesToLoadByDefault={this.increasePagesToLoadByDefault}
+                >
                   {Drupal.t('Load more products')}
                 </WishlistPagination>
               )}
