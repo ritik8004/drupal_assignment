@@ -111,10 +111,13 @@ class WishlistProductList extends React.Component {
   }
 
   /**
-   * Increase the rendered page state on every page load.
+   * Increase the rendered page state on every click of load more.
    */
   setDefaultpageRender = () => {
     const { defaultpageRender } = this.state;
+    // Set the current page state in defaultpageRender to fetch the results
+    // till last loaded page. This is required when we remove the product
+    // from the wishlist.
     this.setState({
       defaultpageRender: defaultpageRender + 1,
     });
