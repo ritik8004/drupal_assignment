@@ -25,6 +25,7 @@ const WishlistPagination = React.memo((props) => {
     e.stopPropagation();
 
     showLoader();
+    props.setDefaultpageRender();
     props.refineNext();
   };
 
