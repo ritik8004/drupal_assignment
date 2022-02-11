@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import BVStaticStorage from '../bvStaticStorage';
-import hasValue from '../../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 function getBvUrl(bazaarVoiceSettings) {
   return bazaarVoiceSettings.reviews.bazaar_voice.endpoint;
