@@ -1,6 +1,11 @@
 <?php
 // @codingStandardsIgnoreFile
 
+/**
+ * Example of execution:
+ * php scripts/cloudflare/clear_cf_specific_url.php www.bathandbodyworks.com.sa/modules/react/alshaya_algolia_react/dist/vendors~atb-4b8779bc4a39b2b56c2e.js
+ */
+
 require_once 'common.php';
 
 $url = $argv[1] ?? '';

@@ -477,7 +477,7 @@ class AlshayaGtmManager {
     $attributes['gtm-stock'] = '';
 
     // Override values from parent if parent sku available.
-    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
+    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId, 'en')) {
       // Overriding the products name as per CORE-26973.
       $attributes['gtm-name'] = trim($parent_sku->label());
       $attributes['gtm-sku-type'] = $parent_sku->bundle();
@@ -855,13 +855,14 @@ class AlshayaGtmManager {
     $dimension7 = '';
     $dimension8 = '';
 
+    $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : [];
     $shipping_info = explode(' - ', $order['shipping_description']);
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $deliveryOption = 'Home Delivery';
     $deliveryType = $shipping_info[0];
 
-    $shipping_method_name = $order['shipping']['method'];
+    $shipping_method_name = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
     if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
       $deliveryOption = 'Click and Collect';
       $deliveryType = $order['shipping']['extension_attributes']['click_and_collect_type'];
@@ -889,6 +890,20 @@ class AlshayaGtmManager {
     foreach ($orderItems as $item) {
       // We might get two entries for same product if configurable.
       if (isset($products[$item['sku']])) {
+        continue;
+      }
+
+      // If its a virtual product i.e egift card or egift topup.
+      if ($item['type'] === 'virtual') {
+        $products[$item['item_id']] = [
+          'name' => $item['name'],
+          'id' => $item['item_id'],
+          'price' => $item['price'],
+          'variant' => $item['sku'],
+          'dimension2' => $item['type'],
+          'dimension4' => 1,
+          'quantity' => $item['ordered'],
+        ];
         continue;
       }
 
@@ -1179,8 +1194,8 @@ class AlshayaGtmManager {
         $productStyleCode = [];
         $store_code = '';
         $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-
-        if ($order['shipping']['method'] === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+        $shipping_method_name = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
+        if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
         }
@@ -1200,6 +1215,10 @@ class AlshayaGtmManager {
 
           if ($product_node instanceof NodeInterface) {
             $productStyleCode[] = $this->skuManager->getSkuForNode($product_node);
+          }
+          // If its a virtual product i.e egift card or egift topup.
+          if ($orderItem['type'] === 'virtual') {
+            $productStyleCode[] = $orderItem['item_id'];
           }
         }
 

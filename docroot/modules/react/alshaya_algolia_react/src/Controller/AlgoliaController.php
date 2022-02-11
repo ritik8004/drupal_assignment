@@ -109,6 +109,7 @@ class AlgoliaController extends ControllerBase {
     $settings['gallery']['showHoverImage'] = $config['commonReactTeaserView']['gallery']['showHoverImage'];
     $settings['gallery']['showThumbnails'] = $config['commonReactTeaserView']['gallery']['showThumbnails'];
     $settings['swatches'] = $config['commonReactTeaserView']['swatches'];
+    $settings['showBrandName'] = $config['commonReactTeaserView']['showBrandName'];
 
     return new JsonResponse($settings);
   }

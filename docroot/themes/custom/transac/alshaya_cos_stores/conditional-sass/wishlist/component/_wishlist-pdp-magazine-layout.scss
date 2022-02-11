@@ -1,0 +1,42 @@
+.wishlist-enabled {
+  .magazine-layout-node {
+    .basic-details-wrapper {
+      .modal-share-this {
+        .share-icon {
+          @include breakpoint($desktop) {
+            #{$left}: 20rem;
+          }
+        }
+      }
+
+      .sku-base-form {
+        button[type="submit"] {
+          @include breakpoint($desktop) {
+            margin-bottom: 1.5rem;
+          }
+        }
+      }
+
+      .wishlist-button-wrapper {
+        min-width: 18.75rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .wishlist-icon.pdp {
+          width: auto;
+          padding-#{$left}: 2rem;
+          font-size: 0.875rem;
+
+          @include breakpoint($tablet) {
+            &::after {
+              width: 1.5rem;
+              height: 1.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

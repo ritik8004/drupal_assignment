@@ -1,4 +1,4 @@
-@javascript @checkoutPayment @auth @clickCollect @fawry @tbsegprod
+@javascript @checkoutPayment @auth @clickCollect @fawry
 Feature: SPC Checkout using Click & Collect store for Guest user using Fawry payment method
 
   Background:
@@ -35,21 +35,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And the element "div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {region_option} |
-      | spc-area-select-selected      | {city_option}   |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
@@ -86,21 +72,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And the element "div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {language_region_option} |
-      | spc-area-select-selected-city | {language_city_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And I wait for AJAX to finish
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
@@ -138,17 +110,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And the element "div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {language_region_option} |
-      | spc-area-select-selected-city | {language_city_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist

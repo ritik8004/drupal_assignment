@@ -117,3 +117,14 @@
     }
   }
 }
+
+.path--user {
+  .qty-sel-btn--down,
+  .qty-sel-btn--up {
+    background: $primary_btn_bg;
+
+    &:hover {
+      background: $plp-primary-cta-hover-bg;
+    }
+  }
+}

@@ -1,0 +1,100 @@
+body.aura-enabled {
+  @include breakpoint($upto-desktop) {
+    #block-alshayamainmenu {
+      &.aura-header-modal-open {
+        ul.menu__list {
+          overflow: visible;
+
+          #aura-mobile-header-shop {
+            .popup-overlay.aura-modal-form {
+              width: 100vw;
+              top: -2.9375rem !important;
+            }
+          }
+        }
+      }
+
+      ul.menu__list {
+        li:first-of-type {
+          border-top: 1px solid $header_border;
+        }
+      }
+    }
+
+    #aura-mobile-header-shop:not(:empty) {
+      .aura-header-guest-tooltip {
+        border-radius: 0.625rem;
+        background-image: $aura-hb-menu-aura-tooltip;
+        margin: 1.25rem;
+
+        html[lang=ar] & {
+          background-image: $aura-hb-menu-aura-tooltip-ar;
+        }
+      }
+
+      .aura-header-link {
+        .aura-header-hb-menu-title {
+          display: flex;
+          align-items: center;
+          padding: 1.25rem;
+          position: relative;
+
+          span.preview-text {
+            font-size: 0.875rem;
+            font-family: $aura-regular;
+            color: $aura-hb-tooltip-preview-text;
+            padding-#{$right}: 0.5rem;
+            transition: opacity 0.2s ease-in-out, transform 0.4s ease-in-out;
+          }
+
+          .join-aura {
+            svg {
+              max-width: 6.25rem;
+              transition: all 0.4s ease-in-out;
+            }
+          }
+        }
+
+        .aura-header-hb-menu-expand {
+          background: url('#{$base_theme_img_directory_path}/aura/aura-chevron-shape.svg') center center no-repeat;
+          width: 2rem;
+          height: 2rem;
+          display: inline-block;
+          background-size: initial;
+          position: absolute;
+          #{$right}: 1.5rem;
+          transition: transform 0.3s ease-in-out;
+          cursor: pointer;
+          top: 1.625rem;
+        }
+
+        &.open {
+          .aura-header-hb-menu-expand {
+            transform: rotate(180deg);
+          }
+
+          .join-aura {
+            svg {
+              max-width: 119px !important;
+              transform: translateX(-4.875rem);
+
+              html[lang=ar] & {
+                transform: translateX(4.875rem);
+              }
+            }
+          }
+
+          .preview-text {
+            transform: translateY(-4.875rem);
+            opacity: 0;
+          }
+        }
+      }
+    }
+
+    .aura-header-popup-wrapper {
+      font-family: $aura-bold;
+      padding: 0 1.25rem 1.5rem;
+    }
+  }
+}

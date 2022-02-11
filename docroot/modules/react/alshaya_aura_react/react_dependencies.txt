@@ -1,0 +1,2 @@
+# Write the react module name one per line for which this module needs a rebuild.
+alshaya_spc

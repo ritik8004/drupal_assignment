@@ -1,0 +1,120 @@
+#egift-card-purchase-wrapper {
+  .step-title {
+    font-family: $alshaya-bold;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    margin-bottom: 1rem;
+    margin-top: 0;
+
+    @include breakpoint($tablet) {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .step-wrapper {
+    .step-title {
+      margin: 0;
+    }
+  }
+
+  .step-two-wrapper {
+    border-bottom: 1px solid $egift-purchase-page-border;
+
+    &:not(.active) {
+      .step-title {
+        color: $egift-purchase-inactive-step-text;
+      }
+    }
+
+    .step-two-fields {
+      margin-top: 1.5rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 2.5rem;
+      }
+    }
+
+    .egift-input-title {
+      font-family: $alshaya-bold;
+      font-size: 1rem;
+      line-height: 1.25rem;
+    }
+
+    #egift-message {
+      padding-#{$right}: 1.55rem !important;
+    }
+  }
+
+  .action-buttons {
+    @include breakpoint($only-mobile) {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    @include breakpoint($tablet) {
+      text-align: $right;
+    }
+
+    button[type="submit"] {
+      &:nth-of-type(1) {
+        margin-#{$right}: 0.75rem;
+      }
+    }
+
+    button[disabled] {
+      &.egift-purchase-add-to-cart-button {
+        border-color: $egift-purchase-disabled-btn-border;
+        background: transparent;
+      }
+
+      &.egift-purchase-checkout-button {
+        border-color: $egift-purchase-inactive-step-text;
+        background: $egift-purchase-inactive-step-text;
+      }
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 15rem;
+
+    .loader-icon {
+      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      padding-#{$left}: 2.5rem;
+      background-size: contain;
+      color: $spc-loader-text;
+      min-width: 2rem;
+      min-height: 2rem;
+      font-size: 1.125rem;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .egift-purchase-page-error {
+    font-size: 0.8125rem;
+    font-family: $alshaya-bold;
+    display: flex;
+    align-items: center;
+    background: $primary_input_inline_error;
+    padding: 0.75rem 1.25rem;
+    padding-#{$left}: 0.5rem;
+    color: $pdp_error_text;
+    margin-top: 0;
+    margin-bottom: 1rem;
+
+    @include breakpoint($tablet) {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    @include icon(warning, before) {
+      font-size: 1.5rem;
+      margin-#{$right}: 0.5rem;
+    }
+  }
+}

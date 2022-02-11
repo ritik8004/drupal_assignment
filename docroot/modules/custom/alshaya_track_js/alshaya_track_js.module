@@ -9,6 +9,9 @@
  * Implements hook_page_attachments().
  */
 function alshaya_track_js_page_attachments(array &$page) {
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
   $page['#attached']['library'][] = 'alshaya_track_js/main';
 }
 

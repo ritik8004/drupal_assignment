@@ -1,0 +1,32 @@
+.egift-my-account {
+  .egift-linked-balance {
+    .price-wrapper {
+      font-family: $hnm-demibold;
+    }
+  }
+}
+
+.egift-card-linked-wrapper {
+  .egift-unlink-card-confirm-overlay {
+    .egift-unlink-card-confirm-content {
+      button.egift-card-remove-confirm-yes {
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      button.egift-card-remove-confirm-yes,
+      button.egift-card-remove-confirm-no {
+        text-transform: uppercase;
+      }
+    }
+
+    .close {
+      padding: 0.5rem;
+
+      &::before {
+        font-size: 1rem;
+      }
+    }
+  }
+}

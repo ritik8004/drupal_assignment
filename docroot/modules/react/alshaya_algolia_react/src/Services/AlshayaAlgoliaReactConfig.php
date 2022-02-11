@@ -19,6 +19,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
 
 /**
  * Class AlshayaAlogoliaReactConfig.
@@ -88,6 +89,13 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   protected $moduleHandler;
 
   /**
+   * Delivery Options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -110,6 +118,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   Alshaya Options List service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
+   *   Delivery Options Helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -121,7 +131,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     AlshayaPlpSortOptionsService $plp_sort_options,
     AlshayaRequestContextManager $alshayaRequestContextManager,
     AlshayaOptionsListHelper $alshaya_options_service,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    DeliveryOptionsHelper $delivery_options_helper
   ) {
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
@@ -133,6 +144,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $this->requestContextManager = $alshayaRequestContextManager;
     $this->alshayaOptionsService = $alshaya_options_service;
     $this->moduleHandler = $module_handler;
+    $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 
   /**
@@ -145,7 +157,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       $container->get('facets.manager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('entity_type.manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_acm_product.delivery_options_helper')
     );
   }
 
@@ -204,6 +217,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'productTitleTrimEnabled' => $product_frame_settings->get('product_title_trim'),
       'productElementAlignmentEnabled' => FALSE,
       'hideGridToggle' => $alshaya_algolia_react_setting_values->get('hide_grid_toggle') ?? 0,
+      'topFacetsLimit' => $alshaya_algolia_react_setting_values->get('top_facets_limit'),
     ];
 
     // Set product elements alignment to true only
@@ -249,6 +263,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showSwatches' => $display_settings->get('color_swatches'),
         'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
       ],
+      'showBrandName' => $display_settings->get('show_brand_name_plp'),
     ];
     // Allow other modules to alter or add extra configs
     // in agolia react common configurations.
@@ -342,10 +357,12 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
           if ($widget['type'] === 'swatch_list') {
             $facet_values = $this->loadFacetValues($identifier, $page_type);
           }
+
+          $same_value = NULL;
+          $express_value = NULL;
           if ($widget['type'] === 'delivery_ways') {
             // If feature enabled then only show facet.
-            $express_delivery_config = $this->configFactory->get('alshaya_spc.express_delivery');
-            if (!($express_delivery_config->get('status'))) {
+            if (!($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) {
               continue;
             }
             $identifier = $this->identifireSuffixUpdate('attr_delivery_ways', $page_type);
@@ -381,7 +398,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'checkbox';
           }
 
-          $filter_facets[explode('.', $identifier)[0]] = [
+          $filterKey = explode('.', $identifier)[0];
+          $filter_facets[$filterKey] = [
             'identifier' => $identifier,
             'label' => $block->label(),
             'name' => $facet->getName(),
@@ -391,6 +409,15 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             'alias' => $facet->getUrlAlias(),
             'facet_values' => $facet_values,
           ];
+
+          if ($widget['type'] === 'delivery_ways') {
+            // If feature enabled then only show facet.
+            if (!($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) {
+              continue;
+            }
+            $filter_facets[$filterKey]['same_value'] = $same_value . ',same_day_delivery';
+            $filter_facets[$filterKey]['express_value'] = $express_value . ',express_delivery';
+          }
         }
       }
     }

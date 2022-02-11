@@ -39,8 +39,12 @@ function alshaya_acm_customer_get_user_orders(int $customer_id, $search_key = ''
   foreach ($orders as &$order) {
     $order_items = [];
     foreach ($order['items'] as $item) {
-      if (!isset($order_items[$item['sku']])) {
+      // If product is virtual then use item_id instead of sku as key.
+      if (!isset($order_items[$item['sku']]) && !$item['is_virtual']) {
         $order_items[$item['sku']] = $item;
+      }
+      else {
+        $order_items[$item['item_id']] = $item;
       }
       $sku_entity = SKU::loadFromSku(alshaya_acm_customer_clean_sku($item['sku']));
       if ($sku_entity instanceof SKUInterface) {
@@ -186,6 +190,9 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
                                ? \Drupal::service('alshaya_acm_customer.orders_manager')->getRefundText($order['payment']['method'])
                                : NULL;
 
+  // Invoke the alter hook to allow all modules to modify order details.
+  \Drupal::moduleHandler()->alter('alshaya_acm_customer_update_order_summary', $order, $orderRow);
+
   return $orderRow;
 }
 
@@ -209,11 +216,12 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
-
-  $shipping_info = explode(' - ', $order['shipping_description']);
+  /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
+  $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
+  $shipping_info = $deliveryOptionsHelper->ifSddEdFeatureEnabled() ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
   $orderDetails['delivery_method'] = $shipping_info[0];
-
-  $orderDetails['is_pudo_pickup'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
+  $pudo_pickup = !empty($order['shipping']['extension_attributes']['click_and_collect_type']) ? $order['shipping']['extension_attributes']['click_and_collect_type'] : '';
+  $orderDetails['is_pudo_pickup'] = $pudo_pickup === 'pudo_pickup';
 
   if ($orderDetails['is_pudo_pickup']) {
     // We get `price_amount` i.e collection charge values like "5" or "Free"
@@ -228,6 +236,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
+  $order['shipping']['method'] = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
   if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
     $cc_config = \Drupal::config('alshaya_click_collect.settings');
 
@@ -292,7 +301,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       '#address' => $shipping_address_array,
     ];
 
-    $orderDetails['delivery_address'] = render($delivery_address);
+    $orderDetails['delivery_address'] = !$order['is_virtual'] ? render($delivery_address) : NULL;
   }
 
   // Don't show Billing Address for CoD payment method.
@@ -494,6 +503,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
       // Load the first image.
       $product['image'] = alshaya_acm_get_product_display_image($item['sku'], SkuImagesHelper::STYLE_PRODUCT_TEASER, 'cart');
+
       if ($product['image']) {
         $product['image']['#skip_lazy_loading'] = TRUE;
       }
@@ -527,6 +537,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $order['shipping']['method'] = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
   if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
     $build['#delivery_detail_notice'] = t('Your order will be available for pickup at the following store');
 
@@ -537,7 +548,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     }
   }
   else {
-    $build['#delivery_detail_notice'] = t('Your order will be delivered at the following address');
+    $build['#delivery_detail_notice'] = !$order['is_virtual'] ? t('Your order will be delivered at the following address') : NULL;
   }
 
   return $build;

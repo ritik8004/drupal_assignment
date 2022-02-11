@@ -1,10 +1,10 @@
 $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/fonts';
 
-@import url('https://fonts.googleapis.com/css?family=Cairo:300,400,600,700|Open+Sans:300,400,600,700&subset=arabic&display=swap');
-
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?3ajdhm') format('woff');
+  src:
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?3ajdhs') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?3ajdhm') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

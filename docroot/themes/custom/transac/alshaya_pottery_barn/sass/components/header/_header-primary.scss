@@ -193,9 +193,32 @@ header {
       }
 
       .block-system-branding-block .site-brand-home {
-        @include breakpoint($only-tablet) {
-          img {
-            width: 17.5625rem;
+        img {
+          width: 10.4rem;
+          height: 1.03rem;
+
+          @include breakpoint($tablet) {
+            width: 17.57rem;
+            height: 1.25rem;
+          }
+
+          @include breakpoint($desktop) {
+            width: 29rem;
+            height: 2.07rem;
+          }
+
+          html[lang="ar"] & {
+            height: 2.45rem;
+
+            @include breakpoint($tablet) {
+              width: 18.19rem;
+              height: 3.75rem;
+            }
+
+            @include breakpoint($desktop) {
+              width: 25.94rem;
+              height: 4.49rem;
+            }
           }
         }
       }

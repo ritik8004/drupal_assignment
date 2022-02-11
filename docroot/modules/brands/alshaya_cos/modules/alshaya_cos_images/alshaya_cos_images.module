@@ -81,7 +81,8 @@ function alshaya_cos_images_alshaya_acm_product_media_items_alter(array &$media,
 
   foreach ($assets ?? [] as $asset) {
     if (!empty($asset['drupal_uri'])) {
-      $asset['media_type'] = $assetsManager->getAssetType($asset);;
+      $asset['media_type'] = $assetsManager->getAssetType($asset);
+
       $media[] = $asset;
     }
   }
@@ -97,7 +98,7 @@ function alshaya_cos_images_block_view_alter(array &$build, BlockPluginInterface
 }
 
 /**
- * Implements hook_alshaya_acm_product_pdp_swath_type_alter();
+ * Implements hook_alshaya_acm_product_pdp_swath_type_alter().
  */
 function alshaya_cos_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
   /** @var \Drupal\alshaya_cos_images\SkuAssetManager $sku_asset_manager */

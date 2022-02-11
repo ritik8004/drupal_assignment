@@ -6,6 +6,7 @@ dependencies:
     - node.type.advanced_page
     - paragraphs.paragraphs_type.banner
     - paragraphs.paragraphs_type.delivery_usp_block
+    - paragraphs.paragraphs_type.image_title_subtitle_link
   module:
     - entity_reference_revisions
 id: node.advanced_page.field_slider
@@ -25,6 +26,7 @@ settings:
     target_bundles:
       banner: banner
       delivery_usp_block: delivery_usp_block
+      image_title_subtitle_link: image_title_subtitle_link
     target_bundles_drag_drop:
       banner:
         enabled: true
@@ -104,4 +106,7 @@ settings:
       views_reference:
         weight: 54
         enabled: false
+      image_title_subtitle_link:
+        enabled: true
+        weight: 55
 field_type: entity_reference_revisions

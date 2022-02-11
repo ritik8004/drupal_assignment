@@ -57,7 +57,7 @@ class SimpleProductForm extends React.Component {
     const id = `add-to-cart-${context}`;
 
     return (
-      <form action="#" className="sku-base-form" method="post" id={`pdp-add-to-cart-form-${context}`} parentsku={skuCode} variantselected={variantSelected}>
+      <form action="#" className="sku-base-form" method="post" id={`pdp-add-to-cart-form-${context}`} parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
         <div id="add-to-cart-error" className="error" />
         <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
           <QuantityDropdown
@@ -65,6 +65,7 @@ class SimpleProductForm extends React.Component {
             productInfo={productInfo}
             skuCode={skuCode}
             stockQty={stockQty}
+            context={context}
           />
         </div>
         {(isProductBuyable(productInfo[skuCode].is_product_buyable)) ? (

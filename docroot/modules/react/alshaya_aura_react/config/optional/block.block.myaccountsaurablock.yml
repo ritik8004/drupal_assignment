@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_aura_react
+    - user
+  theme:
+    - alshaya_white_label
+id: myaccountsaurablock
+theme: alshaya_white_label
+region: content
+weight: -73
+provider: null
+plugin: my_accounts_aura_block
+settings:
+  id: my_accounts_aura_block
+  label: 'My Accounts AURA block'
+  provider: alshaya_aura_react
+  label_display: '0'
+visibility:
+  user_role:
+    id: user_role
+    roles:
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

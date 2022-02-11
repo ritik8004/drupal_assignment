@@ -1,0 +1,38 @@
+.aura-form-messages-container {
+  .aura-message {
+    font-size: 0.875rem;
+    padding: 0.75rem;
+
+    &.error-aura-message {
+      color: $spc-checkout-error-message-color;
+      background-color: $spc-checkout-error-message-background;
+      margin-bottom: 1rem;
+
+      @include icon(warning) {
+        width: 2.125rem;
+        height: 2.125rem;
+        display: inline-block;
+        font-size: 2rem;
+        margin-#{$right}: 0.3125rem;
+        vertical-align: middle;
+        text-indent: 0;
+      }
+    }
+
+    &.success-aura-message {
+      color: $spc-checkout-error-message-color;
+      background-color: $aura-spc-response-message;
+      margin-bottom: 1rem;
+
+      @include icon(checkshape) {
+        width: 2.125rem;
+        height: 2.125rem;
+        display: inline-block;
+        font-size: 2rem;
+        margin-#{$right}: 0.3125rem;
+        vertical-align: middle;
+        text-indent: 0;
+      }
+    }
+  }
+}

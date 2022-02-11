@@ -9,7 +9,7 @@
 /**
  * How to use this:
  *
- * Usage: php createIndex.php [brand] [env] [app_id] [app_secret_admin]
+ * Usage: php createQuerySuggestion.php [brand] [env] [app_id] [app_secret_admin]
  *
  * Ensure settings.php is updated with proper application id and admin secret
  * key. Once that is done, please go through all the arrays here:
@@ -50,7 +50,7 @@ foreach ($languages as $language) {
     ],
   ];
 
-  algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
+  algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query));
 
   print $query_suggestion . PHP_EOL;
   print PHP_EOL . PHP_EOL . PHP_EOL;

@@ -1,0 +1,105 @@
+.options-page-content {
+  .attribute-detail-link {
+    border-radius: 1.3125rem;
+    text-transform: unset;
+    font-size: 1rem;
+    font-family: $alshaya-bold;
+  }
+
+  .attribute-description {
+    font-size: 1rem;
+  }
+
+  .options-page-title {
+    font-family: $dh-Juana-bold;
+    font-size: 1.5rem;
+    text-transform: unset;
+  }
+
+  .attribute-title {
+    font-family: $alshaya-bold;
+  }
+}
+
+.optionlist-filter-overlay {
+  .attribute-filter-block-title {
+    text-transform: unset;
+    line-height: 1.7;
+  }
+
+  .attribute-overlay-close-icon {
+    #{$right}: 0.5625rem;
+    top: 0.25rem;
+
+    &.mobile--close {
+      width: 1.8125rem;
+      height: 1.8125rem;
+
+      span {
+        width: 0.8125rem;
+      }
+    }
+  }
+}
+
+.attribute-filter-name-thumbnile {
+  .title {
+    border-width: 1px;
+    border-radius: 0;
+
+    a {
+      line-height: 0.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      min-height: 4.5625rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      border-width: 1px;
+    }
+  }
+}
+
+.attribute-filter-name-thumbnile,
+.attribute-filter-name-list {
+  a {
+    text-transform: capitalize;
+  }
+}
+
+.group-heading {
+  font-family: $dh-Juana-bold;
+  text-transform: uppercase;
+}
+
+.attribute-search-form {
+  &::after {
+    #{$right}: 0.5625rem;
+    top: 0.5625rem;
+    width: 2.5625rem;
+    height: 2.375rem;
+    border-top-#{$right}-radius: 0;
+    border-bottom-#{$right}-radius: 0;
+
+    @include breakpoint($tablet) {
+      font-weight: bold;
+      font-size: 1.75rem;
+      #{$right}: 0;
+      top: 0.3125rem;
+    }
+  }
+
+  input {
+    &::placeholder {
+      font-size: 0.875rem;
+      color: $attribute-search-placeholder-text;
+    }
+  }
+
+  #alshaya-options-list-autocomplete-form {
+    border-width: 1px;
+    border-radius: 0;
+    padding-top: 0.3125rem !important;
+  }
+}

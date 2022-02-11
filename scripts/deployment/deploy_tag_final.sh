@@ -19,11 +19,12 @@ then
   echo "Example for updb mode: deploy_tag.sh main 5.6.0-build updb"
   echo "Example for hotfix mode: deploy_tag.sh main 5.6.1-build hotfix"
   echo "Example for hotfix mode and do CRF at the end: deploy_tag.sh main 5.6.1-build hotfix_crf"
+  echo "Example for hotfix mode and do CR at the end: deploy_tag.sh main 5.6.1-build hotfix_cr"
   exit
 fi
 
 # Validate mode is supported.
-if [ "$mode" != "prep" -a "$mode" != "updb" -a "$mode" != "hotfix" -a "$mode" != "hotfix_crf" ]
+if [ "$mode" != "prep" -a "$mode" != "updb" -a "$mode" != "hotfix" -a "$mode" != "hotfix_crf" -a "$mode" != "hotfix_cr" ]
 then
   echo "Deployment mode $mode not supported."
   echo "Command usage: deploy_tag.sh BRANCH TAG MODE"
@@ -31,6 +32,7 @@ then
   echo "Example for updb mode: deploy_tag.sh main 5.6.0-build updb"
   echo "Example for hotfix mode: deploy_tag.sh main 5.6.1-build hotfix"
   echo "Example for hotfix mode and do CRF at the end: deploy_tag.sh main 5.6.1-build hotfix_crf"
+  echo "Example for hotfix mode and do CR at the end: deploy_tag.sh main 5.6.1-build hotfix_cr"
   exit
 fi
 
@@ -219,6 +221,12 @@ if [ "$mode" = "hotfix_crf" ]
 then
   log_message_and_details "Doing CRF now as requested"
   $clear_caches_post_command crf 20 &>> ${log_file}
+fi
+
+if [ "$mode" = "hotfix_cr" ]
+then
+  log_message_and_details "Doing CR now as requested"
+  $clear_caches_post_command cr 30 &>> ${log_file}
 fi
 
 log_message_and_details "Release completed"

@@ -47,10 +47,10 @@ class RangeWidget extends CheckboxWidget {
   /**
    * {@inheritdoc}
    */
-  public function getQueryType(array $query_types) {
+  public function getQueryType() {
     // The `numeric` type maps to `search_api_granular` which will correctly
     // handle ranges.
-    return $query_types['numeric'];
+    return 'numeric';
   }
 
 }

@@ -28,6 +28,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'tags.twitter_cards_creator' => '@mothercareuk',
             'tags.twitter_cards_site' => '@mothercareuk',
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => '85P9T1V60C',
+            'write_api_key' => 'ea8561f7093852e68b6249dcc43fffb8',
+            'search_api_key' => '4ba68b233942124df647412788abc1a6',
+          ],
           'live' => [
             'exponea.settings' => [
               "name" => "Mothercare",
@@ -70,6 +75,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
           'dynamic_yield.settings' => [
             'section_id' => '9876643',
+          ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'K7UIYK0Z4N',
+            'write_api_key' => '804c03fc66596604c35678800db985a1',
+            'search_api_key' => 'f091f48004825744f8801da3aa0652e7',
           ],
           'live' => [
             'exponea.settings' => [
@@ -157,6 +167,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9876649',
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'AIKOT3OXG3',
+            'write_api_key' => '2e6f964c31911eeacf08a86a3214de80',
+            'search_api_key' => 'cef961ffa727a31e2c48b3ad7f3fa931',
+          ],
           'live' => [
             'exponea.settings' => [
               "name" => "Bath and Body Works",
@@ -211,6 +226,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'tags.twitter_cards_creator' => '@potterybarn',
             'tags.twitter_cards_site' => '@potterybarn',
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'KBYTOTQY6T',
+            'write_api_key' => '476aa3e3e1899bcb61a214ed76aef9d3',
+            'search_api_key' => '2f593110889b57b563b11b6c80980d25',
+          ],
           'live' => [
             'exponea.settings' => [
               "name" => "Pottery Barn",
@@ -236,6 +256,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KLZ3ZQR',
+          ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'P6IDFAXZNC',
+            'write_api_key' => 'c3541599df4aff3f9ad265cbfcae8454',
+            'search_api_key' => '502a840efc5f2f94a995b33a94feec10',
           ],
           'live' => [
             'exponea.settings' => [
@@ -377,6 +402,25 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
     ],
+    'dh' => [
+      'default' => [
+        'default' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9878438',
+          ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'G1FVH4K241',
+            'write_api_key' => '23f029d266e7c1427a1614110f0e0b0f',
+            'search_api_key' => '7c541cb89dc95ded52fa2acc70850541',
+          ],
+        ],
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9878439',
+          ],
+        ],
+      ],
+    ],
     'default' => [
       'default' => [
         'default' => [
@@ -395,11 +439,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             "start_url" => "/",
             "display" => "standalone",
             "gcm_sender_id" => "130945280786",
-          ],
-          'algolia_sandbox.settings' => [
-            'app_id' => 'testing24192T8KHZ',
-            'write_api_key' => '1a3473b08a7e58f0b808fe4266e08187',
-            'search_api_key' => '950ad607b0d79914702c82849af9a63f',
           ],
         ],
       ],

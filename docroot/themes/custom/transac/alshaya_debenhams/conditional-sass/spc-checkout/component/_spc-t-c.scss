@@ -1,0 +1,11 @@
+.spc-checkout-terms-conditions {
+  @include breakpoint($only-mobile) {
+    font-size: 0.875rem;
+  }
+
+  a {
+    font-family: $alshaya-thin;
+    text-transform: unset;
+    text-decoration: underline;
+  }
+}

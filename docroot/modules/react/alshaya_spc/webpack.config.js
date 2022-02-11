@@ -33,9 +33,12 @@ var config = {
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         options: {
           rootMode: "upward",
+          presets: ['@babel/preset-env',
+            '@babel/react',{
+              'plugins': ['@babel/plugin-proposal-class-properties']}]
         }
       }
     ]

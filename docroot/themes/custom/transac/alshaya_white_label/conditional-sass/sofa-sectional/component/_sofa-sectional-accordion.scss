@@ -52,11 +52,11 @@
     }
 
     position: relative;
-    border-bottom: 1px solid $accordion_border;
+    border-bottom: 0.0625rem solid $accordion_border;
     color: $accordion_title;
     font-size: 0.875rem;
     font-weight: normal;
-    height: 3.75rem;
+    min-height: 3.75rem;
     line-height: 2.9375rem;
     margin-bottom: 0;
     margin-top: 0;
@@ -95,9 +95,7 @@
     .config-value {
       font-family: $alshaya-bold;
       color: $sofa-sectional-title;
-      text-overflow: ellipsis;
       overflow: hidden;
-      white-space: nowrap;
     }
 
     .config-index-number {
@@ -164,7 +162,8 @@
           pointer-events: none;
         }
 
-        .swatch-color {
+        .swatch-color,
+        .swatch-fabric {
           word-break: break-word;
         }
 

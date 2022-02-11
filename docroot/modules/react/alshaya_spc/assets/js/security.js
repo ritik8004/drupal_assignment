@@ -1,5 +1,4 @@
 (function () {
-  'use strict';
 
   window.addEventListener('storage', function (event) {
     if (event.key !== 'cart_id') {

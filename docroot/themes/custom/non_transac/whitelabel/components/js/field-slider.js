@@ -8,7 +8,6 @@
 /* eslint-disable */
 function isRTL() {
   /* eslint-enable */
-  'use strict';
 
   var html = jQuery('html');
   var dir = html.attr('dir');
@@ -21,7 +20,6 @@ function isRTL() {
 }
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.sliderBanner = {
     attach: function (context, settings) {

@@ -9,7 +9,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 
-
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
@@ -19,7 +18,12 @@ function alshaya_dh_transac_node_view(array &$build, EntityInterface $entity, En
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
+
     if ($sku_entity instanceof SKU) {
+      if ($product_brand = $sku_entity->get('attr_brand_name')->getString()) {
+        $build['product_brand']['#markup'] = $product_brand;
+      }
+
       $return = _alshaya_dh_transac_get_product_description($sku_entity);
       $build['description'] = $return['description'];
       $build['short_desc'] = $return['short_desc'];
@@ -32,6 +36,9 @@ function alshaya_dh_transac_node_view(array &$build, EntityInterface $entity, En
  */
 function alshaya_dh_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($view_mode == 'modal') {
+    if ($product_brand = $sku_entity->get('attr_brand_name')->getString()) {
+      $build['product_brand']['#markup'] = $product_brand;
+    }
     $return = _alshaya_dh_transac_get_product_description($sku_entity);
     $build['short_desc'] = $return['short_desc'];
     $build['description'] = $return['description'];
@@ -54,6 +61,42 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
     $description_value .= $desc;
   }
 
+  $list_of_attributes = [
+    'attr_details_and_care' => '',
+    'attr_style_taxonomy' => t('Style'),
+    'attr_sleeve_length' => t('Sleeve Length'),
+    'attr_length' => t('Length'),
+    'attr_neckline' => t('Neckline'),
+    'attr_detail' => t('Detail'),
+    'attr_design' => t('Design'),
+    'attr_fabric' => t('Fabric'),
+  ];
+
+  $properties = [];
+  $details_and_care_value = '';
+  foreach ($list_of_attributes as $key => $title) {
+    if ($value = $sku_entity->get($key)->getString()) {
+      if ($key === 'attr_details_and_care') {
+        $details_and_care_value = '<p>' . $value . '</p>';
+        $value = '';
+      }
+      $properties[] = [
+        'label' => $title,
+        'value' => $value,
+      ];
+    }
+  }
+
+  if (!empty($properties)) {
+    $details_and_care = [
+      '#theme' => 'pdp_details_care',
+      '#properties' => $properties,
+    ];
+    $description_value .= '<h2>' . t('Details and care') . '</h2>';
+    $description_value .= $details_and_care_value;
+    $description_value .= \Drupal::service('renderer')->renderPlain($details_and_care);
+  }
+
   $description['value'] = [
     '#markup' => $description_value,
   ];
@@ -62,10 +105,21 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
   // which they should be displayed.
   $return['description'][] = $description;
 
-  /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+  /** @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
   $product_helper = \Drupal::service('alshaya_acm_product.helper');
   $short_desc = $product_helper->createShortDescription($description['value']['#markup']);
   $return['short_desc']['value'] = strip_tags($short_desc['html']);
 
   return $return;
+}
+
+/**
+ * Implements hook_gtm_product_attributes_alter().
+ */
+function alshaya_dh_transac_gtm_product_attributes_alter($product, array &$attributes) {
+  // Update brand name in data layer.
+  $sku = SKU::loadFromSku($attributes['gtm-product-sku'], 'en');
+  if ($sku instanceof SKU) {
+    $attributes['gtm-brand'] = $sku->get('attr_brand_name')->getString();
+  }
 }

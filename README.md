@@ -1,4 +1,3 @@
-
 # Alshaya
 
 ACSF D8 commerce project with Magento integration done via Acquia Conductor.
@@ -33,6 +32,13 @@ There are 2 git repositories on the project:
 
 The synchronisation between the 2 repositories is ensured by blt.
 Cf. `blt deploy`.
+
+#### Back merges
+
+Any code merged into upstream branch is automatically back-merged.
+
+* There is Heroku APP running to do this
+* Back merges are done from master => uat => qa => develop => develop-*
 
 ### Local git repository
 
@@ -74,7 +80,7 @@ To prepare your local env:
 * Run:
   * From outside VM:
     * `composer clear-cache`
-    * `composer install`
+    * `composer install --ignore-platform-reqs -n`
     * `composer blt-alias`
     * `vagrant up`
     * `vagrant ssh` to ssh into your vm
@@ -83,6 +89,7 @@ To prepare your local env:
       If any case composer version of your local machine and VM is not matching then downgrade or upgrade the version as per your requirement. Then run : `composer self-update --1` (i.e 1.10.10)
 
   * From inside VM:
+    * `composer build-middlewares`
     * `blt blt:init:git-hooks`
     * `blt blt:init:settings`
     * `blt frontend:setup`
@@ -368,3 +375,13 @@ Download and add [xhprof](https://www.drupal.org/project/xhprof) in docroot/modu
   - vendor/mglaman/drupal-check/drupal-check -d docroot/modules/custom
 * Analysis.
   - vendor/mglaman/drupal-check/drupal-check -a docroot/modules/custom
+
+### General Notes
+#### Issue with accesing cloud urls from Linux Systems
+There is an issue observered when trying to access dev/uat etc website urls from linux systems.
+The issue happens because CloudFlare blocks the request and we see the message `Site can't be reached` in the browser.
+In such a situation, we need to add the following  mapping to the `/etc/hosts` file in the local system and then access the website again (the IP address can be the same for all the domains)
+```
+104.16.65.106	hmkw5-pprod.factory.alshaya.com
+104.16.65.106	weae2-test.factory.alshaya.com
+```

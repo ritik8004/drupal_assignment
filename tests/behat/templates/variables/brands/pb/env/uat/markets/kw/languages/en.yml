@@ -15,6 +15,7 @@ variables:
   add_to_cart_link: 'add to cart'
   vat: ''
   checkout_link: 'continue to checkout'
+  language_spc_knet_option: 'عيديتي [KNET]'
   spc_search_byname: ''
   language_collection_filter: ''
   language_sort_filter: 'رتب حسب'

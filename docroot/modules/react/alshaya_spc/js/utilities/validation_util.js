@@ -45,7 +45,8 @@ const validateCartResponse = (response) => {
     // OMS. In that case we redirect to cart page and show the error message
     // recived in the response.
     if (typeof response.error_message !== 'undefined') {
-      localStorage.setItem('stockErrorResponseMessage', response.error_message);
+      // @todo: we may add an expiration time.
+      Drupal.addItemInLocalStorage('stockErrorResponseMessage', response.error_message);
     }
     redirectToCart();
     return false;
@@ -60,9 +61,14 @@ const validateCartResponse = (response) => {
     }
 
     if (window.location.pathname.search(/checkout/i) >= 0) {
+      let errorMessage = drupalSettings.global_error_message;
+      // This happens when cart is locked.
+      if (errorCode === 610 && typeof response.error_message !== 'undefined') {
+        errorMessage = response.error_message;
+      }
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
-        message: drupalSettings.global_error_message,
+        message: errorMessage,
       });
 
       return false;

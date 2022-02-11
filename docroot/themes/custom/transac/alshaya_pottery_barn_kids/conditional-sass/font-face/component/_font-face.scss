@@ -1,14 +1,6 @@
 // PBK fonts are same as PB so we have only additional fonts here.
 $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_kids/fonts';
 
-@font-face {
-  font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?12adm') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 //DY fonts.
 @font-face {
   font-family: "Realist-Medium";

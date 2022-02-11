@@ -4,12 +4,12 @@
  */
 
 (function ($) {
-  'use strict';
 
-  Drupal.processBackToSearch = function (storage_value) {
+  Drupal.processBackToSearch = function () {
     // On page load, apply filter/sort if any.
-    $('html').once('back-to-list').each(function () {
-      var storageKey = window.location.hash;
+    $('#alshaya-algolia-autocomplete').once('back-to-search').each(function () {
+      var storageKey = `search:${window.location.hash}`;
+      var storage_value = Drupal.algolia.getAlgoliaStorageValues(storageKey);
       if (typeof storage_value !== 'undefined' && storage_value !== null) {
         var $context = $('#alshaya-algolia-search');
         // To adjust the grid view mode.

@@ -1,0 +1,11 @@
+aura_enabled: true # Config to enable/disable AURA.
+aura_app_store_link: 'https://aura-mena.com/en'
+aura_google_play_link: 'https://aura-mena.com/en'
+aura_rewards_header_learn_more_link: 'user/loyalty-club'
+aura_reward_activity_time_limit_in_months: 12
+aura_signup_terms_and_conditions_link: ''
+aura_unsupported_payment_methods:
+  - cashondelivery
+  - postpay
+  - tabby
+langcode: en

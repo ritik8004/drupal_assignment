@@ -6,7 +6,7 @@
 (function ($, Drupal, drupalSettings) {
   Drupal.behaviors.bvpixel_tracking = {
     attach(context, settings) {
-      const orderFromStorage = localStorage.getItem('bvpixel_order_id');
+      const orderFromStorage = Drupal.getItemFromLocalStorage('bvpixel_order_id');
       // Return if same order.
       // Else remove order from local storage if new order.
       if (orderFromStorage !== null) {
@@ -14,7 +14,7 @@
           return;
         }
       }
-      localStorage.removeItem('bvpixel_order_id');
+      Drupal.removeItemFromLocalStorage('bvpixel_order_id');
       const productsArray = [];
       Object.keys(drupalSettings.order_details.items).forEach((sku) => {
         const itemObj = {};
@@ -39,10 +39,10 @@
         items: productsArray,
       };
       window.bvCallback = function (BV) {
-        // Sending order details through bv pixel function. 
+        // Sending order details through bv pixel function.
         BV.pixel.trackTransaction(transactionData);
         // Store transaction info in local storage.
-        localStorage.setItem('bvpixel_order_id', transactionData.orderId);
+        Drupal.addItemInLocalStorage('bvpixel_order_id', transactionData.orderId);
       };
     },
   };

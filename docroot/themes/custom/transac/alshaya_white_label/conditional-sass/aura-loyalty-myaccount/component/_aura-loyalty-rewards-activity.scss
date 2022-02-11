@@ -1,0 +1,159 @@
+.loyalty-club-rewards-wrapper {
+  color: $aura-loyalty-activity-txt;
+
+  .reward-activity-statement {
+    @include breakpoint($upto-desktop) {
+      overflow-y: auto;
+    }
+  }
+
+  .header-row,
+  .reward-activity > div.statement-row {
+    min-height: 3.125rem;
+    padding: 0.625rem 0;
+    align-items: center;
+    display: inline-grid;
+    font-family: $aura-regular;
+    grid-template-columns: 8rem 7.8125rem 8rem 6.5625rem 8.0625rem 6.1875rem 11.125rem;
+
+    > span.order-id {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    > span.order-id,
+    > span.date {
+      padding-#{$left}: 0.5rem;
+    }
+
+    > span.amount,
+    > span.aura-points {
+      text-align: $right;
+      padding-#{$left}: 0.75rem;
+    }
+
+    > span.type {
+      padding-#{$left}: 0.75rem;
+      text-align: $right;
+    }
+
+    > span.brand-name {
+      padding-#{$left}: 0.5rem;
+    }
+
+    > span.status {
+      padding-#{$left}: 2.9375rem;
+    }
+  }
+
+  .header-row {
+    font-family: $aura-bold;
+    border-bottom: 1px solid $aura-loyalty-club-border;
+  }
+
+  .reward-activity > div.statement-row {
+    &:nth-child(odd) {
+      background: $aura-loyalty-club-odd-row;
+    }
+
+    &:nth-child(even) {
+      background: $aura-loyalty-club-even-row;
+    }
+  }
+}
+
+.style {
+  &-N,
+  &-W {
+    color: $_aura_status_hold;
+  }
+
+  &-B {
+    color: $_aura_status_credit;
+  }
+
+  &-E,
+  &-C,
+  &-S {
+    color: $_aura_status_debit;
+  }
+}
+
+.statement-row .status {
+  display: flex;
+  align-items: center;
+
+  &::before {
+    content: '';
+    width: 0.9375rem;
+    height: 0.9375rem;
+    display: inline-block;
+    margin-#{$right}: 0.375rem;
+  }
+
+  &.style {
+    &-N::before,
+    &-W::before {
+      background: url(#{$base_theme_img_directory_path}/aura/aura-pending.svg) no-repeat center center;
+    }
+
+    &-S::before {
+      background: url(#{$base_theme_img_directory_path}/aura/aura-circle.svg) no-repeat center center;
+    }
+
+    &-B::before {
+      background: url(#{$base_theme_img_directory_path}/aura/aura-check.svg) no-repeat center center;
+    }
+
+    &-E::before,
+    &-C::before {
+      background: url(#{$base_theme_img_directory_path}/aura/aura-warning.svg) no-repeat center center;
+    }
+  }
+}
+
+div.empty-row {
+  background: $aura-my-account-reward-activity-bg;
+  padding: 3.625rem;
+  text-align: center;
+
+  @include breakpoint($only-mobile) {
+    padding: 1.25rem;
+  }
+
+  > div {
+    font-size: 1.5rem;
+    letter-spacing: 1.07px;
+    color: $aura-my-account-reward-activity;
+    font-family: $aura-regular;
+    margin-bottom: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.375rem;
+      line-height: 31px;
+      letter-spacing: 0.98px;
+    }
+
+    .highlight {
+      font-family: $aura-bold;
+    }
+
+    .app-links {
+      margin-top: 1.25rem;
+
+      svg path,
+      svg g {
+        color: $aura-my-account-reward-activity;
+      }
+    }
+
+    a {
+      color: $aura-my-account-reward-activity;
+      text-decoration: underline;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

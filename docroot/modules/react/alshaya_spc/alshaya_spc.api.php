@@ -35,6 +35,18 @@ function hook_alshaya_spc_cart_build_alter(array &$build) {
 }
 
 /**
+ * Alter hook to allow other modules to change the order detail settings.
+ *
+ * @param array $settings
+ *   Order details settings.
+ * @param array $order
+ *   Order data.
+ */
+function hook_alshaya_spc_order_details_settings_alter(array &$settings, array $order) {
+
+}
+
+/**
  * Allow other modules to change the build array for checkout page.
  *
  * @param array $build

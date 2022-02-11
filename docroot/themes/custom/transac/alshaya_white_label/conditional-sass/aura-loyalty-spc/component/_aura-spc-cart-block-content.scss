@@ -1,0 +1,257 @@
+.spc-aura-cart-rewards-block {
+  position: relative;
+  margin-bottom: 2.5rem;
+  font-family: $aura-regular;
+
+  > .spc-loading-container {
+    background: white;
+    min-height: 2rem;
+  }
+
+  .popup-content {
+    .spc-checkout-section-title {
+      font-size: inherit;
+      font-family: inherit;
+      color: inherit;
+      margin: 0;
+    }
+  }
+
+  .spc-checkout-section-title {
+    > span {
+      font-family: $aura-regular;
+      color: $spc-aura-cart-section-title-light;
+    }
+  }
+
+  .block-content.guest-user {
+    background-image: $aura-spc-block-bg-desktop;
+    border-radius: 0.625rem;
+    padding: 1.25rem;
+    display: flex;
+
+    html[lang=ar] & {
+      background-image: $aura-spc-block-bg-desktop-ar;
+    }
+
+    .spc-aura-points-to-earn {
+      color: $aura-normal-text;
+      padding-#{$right}: 1.25rem;
+
+      @include breakpoint($tablet) {
+        width: 45%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 49%;
+
+        html[lang=ar] & {
+          width: 40%;
+        }
+      }
+
+      .spc-aura-highlight {
+        color: $aura-highlight;
+        font-family: $aura-bold;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      flex-direction: column;
+      background-image: $aura-block-bg-mobile;
+      margin: 0 1.25rem;
+
+      html[lang=ar] & {
+        background-image: $aura-block-bg-mobile-ar;
+      }
+
+      .spc-aura-points-to-earn {
+        text-align: center;
+        padding: 0 1.25rem 1.25rem;
+      }
+    }
+
+    .spc-join-aura-link {
+      min-width: 10rem;
+      height: 2.875rem;
+      border-radius: 1.75rem;
+      border-style: solid;
+      border-width: 2px;
+      background-image: $aura-join-link;
+      background-origin: border-box;
+      background-clip: content-box, border-box;
+      flex-grow: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-color: transparent;
+      cursor: pointer;
+      font-family: $aura-bold;
+      letter-spacing: 0.71px;
+      font-size: 1rem;
+      color: $aura-join-link-text;
+
+      @include breakpoint($only-tablet) {
+        min-width: 8rem;
+      }
+
+      html[lang=ar] & {
+        min-width: 12rem;
+        background-image: $aura-join-link-ar;
+        text-align: center;
+      }
+
+      &-wrapper {
+        @include breakpoint($only-mobile) {
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .block-content.registered-user-linked,
+  .block-content.registered-user-linked-pending-enrollment {
+    .spc-aura-points-to-earn {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      font-family: $aura-regular;
+
+      .spc-aura-highlight {
+        color: $aura-cart-points;
+        font-family: $aura-bold;
+      }
+
+      > span:first-child {
+        width: 62%;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: 0 1.25rem;
+    }
+  }
+
+  .block-content {
+    .actions {
+      > div:not(:last-child) {
+        margin-bottom: 0.625rem;
+      }
+    }
+
+    &.registered-user-linked,
+    &.registered-user-linked-pending-enrollment,
+    &.registered-user-unlinked-card {
+      .spc-aura-points-to-earn {
+        .spc-aura-highlight {
+          .spc-loading-container {
+            min-height: auto;
+          }
+        }
+      }
+    }
+  }
+
+  .block-content.registered-user-unlinked-card {
+    @include breakpoint($only-mobile) {
+      padding: 0 1.25rem;
+    }
+
+    .spc-aura-points-to-earn {
+      margin-bottom: 1.25rem;
+      display: block;
+      font-family: $aura-regular;
+
+      .spc-aura-highlight {
+        color: #772583;
+        font-family: $aura-bold;
+      }
+    }
+
+    .actions {
+      padding: 1.25rem;
+      border-radius: 0.625rem;
+      background-image: linear-gradient(129deg, rgba(239, 192, 110, 0.1) -18%, rgba(227, 28, 121, 0.1) 46%, rgba(119, 37, 131, 0.1) 106%);
+
+      @include breakpoint($only-tablet) {
+        padding: 1rem;
+      }
+
+      .form-items {
+        display: flex;
+        align-items: center;
+
+        input[type=text] {
+          height: 3.125rem;
+          padding: 0;
+          border: none;
+          border-top-#{$left}-radius: 0.25rem;
+          border-bottom-#{$left}-radius: 0.25rem;
+          font-size: 0.875rem;
+          padding-#{$left}: 0.9375rem;
+          padding-#{$right}: 0.9375rem;
+          flex-grow: 1;
+          background: $aura-spc-textbox-link-card-textbox;
+
+          &::placeholder {
+            color: $aura-spc-textbox-placeholder;
+          }
+        }
+
+        button {
+          height: 3.125rem;
+          min-width: 6.4375rem;
+          background: #fff;
+          border: 1px solid #772583;
+          color: #772583;
+          padding: 0 1.5625rem;
+          text-align: center;
+          font-family: $alshaya-bold;
+          border-radius: 0;
+          border-top-#{$right}-radius: 0.25rem;
+          border-bottom-#{$right}-radius: 0.25rem;
+
+          @include breakpoint($only-tablet) {
+            min-width: 5.4375rem;
+            padding: 0 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .spc-aura-unlink-card-wrapper {
+    .description,
+    .no-link-message {
+      b,
+      a {
+        color: $aura-spc-cart-unlinked-highlight;
+      }
+
+      a {
+        text-decoration: underline;
+        padding-#{$left}: 0.5rem;
+        cursor: pointer;
+      }
+    }
+
+    .description {
+      font-family: $aura-regular;
+      margin-bottom: 1.25rem;
+      color: $aura-spc-cart-unlinked-desc;
+
+      b {
+        font-family: $aura-bold;
+        display: block;
+      }
+    }
+
+    .no-link-message {
+      margin-top: 1.25rem;
+
+      a {
+        cursor: pointer;
+      }
+    }
+  }
+}

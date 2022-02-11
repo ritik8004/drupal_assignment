@@ -1,0 +1,12 @@
+.algolia-promotion-list-content {
+  .close {
+    background: $modal_close_bg;
+
+    &::before {
+      font-size: 2rem;
+      color: $modal_close_text;
+      #{$left}: 0;
+      top: 0;
+    }
+  }
+}

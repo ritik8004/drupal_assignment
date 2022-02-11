@@ -1,3 +1,6 @@
+{% if aura_enabled is defined and aura_enabled %}
+  {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+{% endif %}
 <div id="pdp-layout" {{ attributes }} {{ gtm_attributes }}></div>
 {% if bazaarvoice_strings %}
   {{ bazaarvoice_strings }}

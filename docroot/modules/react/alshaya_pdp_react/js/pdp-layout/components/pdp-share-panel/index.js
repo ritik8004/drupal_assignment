@@ -40,7 +40,7 @@ class PdpSharePanel extends React.Component {
     const { open } = this.state;
     // Add correct class.
     const expandedState = open === true ? 'show' : '';
-    const sharethisContent = sharethis !== undefined ? parse(sharethis.content) : null;
+    const sharethisContent = sharethis !== undefined ? parse(sharethis.contentRendered) : null;
 
     return (
       <div

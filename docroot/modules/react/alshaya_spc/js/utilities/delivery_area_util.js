@@ -1,7 +1,7 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader } from './checkout_util';
-import { removeStorageInfo, setStorageInfo, getStorageInfo } from './storage';
 import getStringMessage from './strings';
+import { getProductShippingMethods } from '../backend/v2/common';
 
 export const getGovernatesList = () => window.commerceBackend.getGovernatesList()
   .then(
@@ -57,9 +57,10 @@ export const getDeliveryAreaList = (governateId) => window.commerceBackend.getDe
     Drupal.logJavascriptError('get-delivery-areas', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 
-export const getCartShippingMethods = (currArea, sku) => window.commerceBackend.getShippingMethods(
+export const getCartShippingMethods = (currArea, sku, cartId) => getProductShippingMethods(
   currArea,
   sku,
+  cartId,
 )
   .then(
     (responseData) => {
@@ -111,13 +112,7 @@ export const getDeliveryAreaValue = (areaId) => window.commerceBackend.getDelive
 /**
  * Fetching delivery area values choosen by user.
  */
-export const getDeliveryAreaStorage = () => {
-  const deliveryArea = getStorageInfo('deliveryinfo-areadata');
-  if (deliveryArea !== null) {
-    return deliveryArea;
-  }
-  return null;
-};
+export const getDeliveryAreaStorage = () => Drupal.getItemFromLocalStorage('deliveryinfo-areadata');
 
 export const getAreaFieldKey = () => {
   if (drupalSettings.address_fields) {
@@ -140,7 +135,7 @@ export const setDeliveryAreaStorage = (areaSelected) => {
   const areaFieldKey = getAreaFieldKey();
   const areaParentFieldKey = getAreaParentFieldKey();
   if (areaFieldKey !== null && areaParentFieldKey !== null) {
-    removeStorageInfo('deliveryinfo-areadata');
+    Drupal.removeItemFromLocalStorage('deliveryinfo-areadata');
     const { currentLanguage } = drupalSettings.path;
     const deliveryArea = {
       label: {
@@ -151,6 +146,6 @@ export const setDeliveryAreaStorage = (areaSelected) => {
         [areaParentFieldKey]: areaSelected.governate,
       },
     };
-    setStorageInfo(deliveryArea, 'deliveryinfo-areadata');
+    Drupal.addItemInLocalStorage('deliveryinfo-areadata', deliveryArea);
   }
 };

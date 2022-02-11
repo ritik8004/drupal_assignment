@@ -951,7 +951,7 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Authenticate customer through magento api.
+   * Get the customer token.
    *
    * @param string $mail
    *   The mail address.
@@ -959,17 +959,19 @@ class AlshayaApiWrapper {
    *   The customer password.
    *
    * @return array
-   *   The array customer data OR empty array.
+   *   The customer data with token.
    */
-  public function authenticateCustomerOnMagento(string $mail, string $pass) {
-    $endpoint = 'customers/by-login-and-password';
+  public function getCustomerUsingAuthDetails(string $mail, string $pass) {
+    $token = NULL;
+    $customer = [];
+    $endpoint = 'integration/customer/token';
 
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('customer_authenticate'),
     ];
 
     try {
-      $response = $this->invokeApi(
+      $token = $this->invokeApi(
         $endpoint,
         [
           'username' => $mail,
@@ -979,33 +981,31 @@ class AlshayaApiWrapper {
         FALSE,
         $request_options
       );
+
+      $token = json_decode($token);
+      // If token could not be decoded, store NULL.
+      $token = $token === FALSE ? NULL : $token;
     }
     catch (\Exception $e) {
-      return [];
-    }
-
-    if ($response && is_string($response)) {
-      $log_response = $response;
-      $response = Json::decode($response);
-      // Move the cart_id into the customer object.
-      if (isset($response['cart_id'])) {
-        $response['customer']['custom_attributes'][] = [
-          'attribute_code' => 'cart_id',
-          'value' => $response['cart_id'],
-        ];
-      }
-
-      if (is_array($response) && !empty($response['customer'])) {
-        return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
-      }
-
-      // If we reach here, it means something is not correct and we didn't
-      // receive correct/expected response from MDC.
-      $this->logger->error('Exception while authenticating customer. Error: @response', [
-        '@response' => $log_response,
+      $this->logger->notice('Exception while getting customer token. Error: @response. E-mail: @email', [
+        '@response' => $e->getMessage(),
+        '@email' => $mail,
       ]);
     }
-    return [];
+
+    try {
+      // Get the user data from Magento.
+      $customer = !empty($token) ? $this->getCustomer($mail) : $customer;
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Exception while getting customer data. Error: @response. E-mail: @email', [
+        '@response' => $e->getMessage(),
+        '@email' => $mail,
+      ]);
+    }
+
+    $customer['token'] = $token;
+    return $customer;
   }
 
   /**
@@ -1014,8 +1014,8 @@ class AlshayaApiWrapper {
    * @param string $mail
    *   The mail address.
    *
-   * @return array
-   *   The array customer data OR empty array.
+   * @return string
+   *   The customer token OR null.
    */
   public function getCustomerTokenBySocialDetail(string $mail) {
     $endpoint = 'integration/customer/token/bySocialDetail';
@@ -1040,7 +1040,7 @@ class AlshayaApiWrapper {
         '@response' => $e->getMessage(),
         '@email' => $mail,
       ]);
-      return [];
+      return NULL;
     }
   }
 
@@ -1155,7 +1155,9 @@ class AlshayaApiWrapper {
           ];
         }
 
-        if (is_array($response)) {
+        // In few scenarios like missing required field, MDC returns error as
+        // an array but we don't need to process response if its for an error.
+        if (is_array($response) && empty($response['message'])) {
           $response = MagentoApiResponseHelper::customerFromSearchResult($response);
         }
         else {

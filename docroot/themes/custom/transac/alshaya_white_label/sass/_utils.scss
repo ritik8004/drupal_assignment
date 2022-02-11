@@ -384,6 +384,16 @@ body {
   opacity: 1;
 }
 
+// Force ltr on a element in arabic.
+@mixin force-ltr {
+  html[lang=ar] & {
+    direction: ltr;
+    display: inline-block;
+
+    @content;
+  }
+}
+
 // RR thumbnail image container style
 @mixin bv-photo-upload-container () {
   border: 0;

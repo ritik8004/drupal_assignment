@@ -12,6 +12,7 @@
 
   <!-- Set ignore extensions. -->
   <!-- @see https://www.drupal.org/node/2867601#comment-12075633 -->
+  <arg name="extensions" value="php,module,inc,install,test,profile,theme,info,txt,md,yml"/>
   <arg name="ignore" value="*.css,*.md,*.txt,*.png,*.gif,*.jpeg,*.jpg,*.svg,*.min.js"/>
 
   <!-- Use colors in output. -->
@@ -22,7 +23,7 @@
   <!-- Include existing standards. -->
   <rule ref="Drupal"/>
   <rule ref="DrupalPractice" />
-<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+  <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
   <rule ref="Generic.CodeAnalysis.EmptyPHPStatement" />
   <rule ref="Generic.Files.ByteOrderMark"/>
   <rule ref="Generic.Files.LineEndings"/>
@@ -100,10 +101,12 @@
   <rule ref="PSR2.Classes.PropertyDeclaration">
     <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
   </rule>
-  <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
-  <rule ref="PSR2.Namespaces.UseDeclaration">
-    <exclude name="PSR2.Namespaces.UseDeclaration.UseAfterNamespace"/>
+  <rule ref="DrupalPractice.CodeAnalysis.VariableAnalysis">
+    <exclude name="DrupalPractice.CodeAnalysis.VariableAnalysis.UnusedVariable"/>
+    <exclude name="DrupalPractice.CodeAnalysis.VariableAnalysis.UndefinedUnsetVariable"/>
   </rule>
+  <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
+  <rule ref="PSR2.Namespaces.UseDeclaration" />
 
   <!-- Squiz sniffs -->
   <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
@@ -209,6 +212,9 @@
   </rule>
   <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
   <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+  <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
+    <severity>0</severity>
+  </rule>
 
   <!-- Zend sniffs -->
   <rule ref="Zend.Files.ClosingTag"/>

@@ -9,16 +9,30 @@
 
     &-title {
       font-family: $alshaya-bold;
-      font-size: 1rem;
+      font-size: 0.9375rem;
       padding-bottom: 0.3125rem;
       color: $sofa-sectional-title;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: 0.9375rem;
+      }
     }
 
     &-subtitle {
       font-family: $alshaya-bold;
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       padding-bottom: 0.375rem;
       color: $sofa-sectional-text;
+      letter-spacing: 0.03125rem;
+      line-height: 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: 0.5rem;
+      }
+
+      html[lang=ar] & {
+        letter-spacing: normal;
+      }
     }
 
     &-image-preview {

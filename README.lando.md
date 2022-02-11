@@ -38,8 +38,10 @@ Add the below line in ~/.bashrc.
 
 All steps are executed on your host OS.
 
+  * `npm i -g yarn` - Install Yarn (make sure npm is available before this is executed).
   * `lando start` - this will configure and set up your containers and services.
   * `lando composer install` - This will install all the composer packages.
+  * `lando composer build-middlewares` - This will install all the composer packages for the middleware applications.
   * `lando create-databases` - This will create all the required databases.
   * `lando blt blt:init:git-hooks` - this will initialize git hooks.
   * `lando blt blt:init:settings` - this will initialize settings.
@@ -120,6 +122,8 @@ For example to compile the JS for `alshaya_spc`.
 $ cd docroot/modules/react/alshaya_spc
 $ lando npm run build:dev
 ```
+
+keep global node version 14.x+ in host machine to aviod react linting issue.
 
 ### Xdebug
 

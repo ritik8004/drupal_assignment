@@ -28,6 +28,7 @@ $icon-bg: rgba(242, 242, 242, 0.3);
 $_plp_cta_hover: #000;
 $_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
 $ripe-lemon: #f0d51f;
+$_egift_landing_page_banner_bg: $cool-blue-two;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -642,8 +643,38 @@ $rr-form-head-row-border: $peacock-blue;
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $_plp_cta_hover;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+$plp-quick-view-product-size-active-bg: $primary_text;
+$plp-quick-view-product-size-border-hover: $primary_text;
 
 // Benefit pay
 $bp-section-title: $peacock-blue;
 $bp-mobile-pay-button-txt: $white;
 $bp-mobile-scan-bg: $cerulean-two;
+
+// Express delivery.
+$pdp-delivery-section-subtitle: $warm-grey-one;
+$sameday-express-delivery-drawer-btn: $primary_btn_bg;
+$spc-cart-delivery-popup-search-border: $black;
+
+// Wishlist
+$wishlist-header-notification-border: $peacock-blue;
+$wishlist-header-notification-text: $black;
+$wishlist-header-notification-span: $peacock-blue;
+$wishlist-header-login-message: $black;
+$wishlist-button-bg: $primary_btn_bg;
+$wishlist-button-bg-hover: $primary_btn_bg;
+$wishlist-button-border: $black;
+$wishlist-button-register-txt: $black;
+$wishlist-basket-modal-close-bg: $black;
+$my-wishlist-share-modal-hover-bg: $primary_btn_bg;
+$wishlist-oos: $scarlet;
+$wishlist-share-text: $black;
+$my-wishlist-share-modal-header: $peacock-blue;
+
+// Country Switcher
+$country-switcher-label-mobile: $black;
+
+// eGift Landing page
+$egift-primary-text: $primary_text;
+$egift-accordion-active-title: $primary_link-active;
+$egift-banner-bg: $_egift_landing_page_banner_bg;

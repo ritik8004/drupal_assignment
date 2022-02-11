@@ -18,6 +18,8 @@ import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
+import AuraCartContainer from '../../../aura-loyalty/components/aura-cart-rewards/aura-cart-container';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 import PostpayCart from '../postpay/postpay';
 import Postpay from '../../../utilities/postpay';
@@ -30,9 +32,12 @@ import DeliveryAreaSelect from '../delivery-area-select';
 import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
-import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { isExpressDeliveryEnabled, checkAreaAvailabilityStatusOnCart } from '../../../../../js/utilities/expressDeliveryHelper';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
+import TabbyWidget from '../../../../../js/tabby/components';
+import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -52,6 +57,12 @@ export default class Cart extends React.Component {
       message: null,
       cartShippingMethods: null,
       panelContent: null,
+      auraDetails: null,
+      // To show/hide Area Select option based on SSD/ED availability.
+      showAreaAvailabilityStatusOnCart: false,
+      // if set to true, execution will check/recheck
+      // DeliveryAreaSelect availability on cart page.
+      checkShowAreaAvailabilityStatus: true,
     };
   }
 
@@ -101,9 +112,9 @@ export default class Cart extends React.Component {
       }
 
       // To show the success/error message on cart top.
-      const stockErrorMessage = localStorage.getItem('stockErrorResponseMessage');
+      const stockErrorMessage = Drupal.getItemFromLocalStorage('stockErrorResponseMessage');
       if (stockErrorMessage) {
-        localStorage.removeItem('stockErrorResponseMessage');
+        Drupal.removeItemFromLocalStorage('stockErrorResponseMessage');
         this.setState({
           messageType: 'error',
           message: stockErrorMessage,
@@ -141,6 +152,12 @@ export default class Cart extends React.Component {
           countAsPageview: false,
         });
       }
+      // Event to trigger to Show Delivery Area Select if express delivery enabled.
+      // setting checkShowAreaAvailabilityStatus to true will do the recheck for
+      // whether to show DeliveryAreaSelect or not on cart page.
+      this.setState({
+        checkShowAreaAvailabilityStatus: true,
+      });
     }, false);
 
     // Event handles cart message update.
@@ -177,11 +194,35 @@ export default class Cart extends React.Component {
         this.updateCartMessage('error', qtyMismatchErrorInfo.message);
       }
     }
+
+    // Event listerner to update any change in cart totals.
+    document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
+
+    // If aura is enabled, add a listner to update aura customer details.
+    if (isAuraEnabled()) {
+      document.addEventListener('customerDetailsFetched', this.updateAuraDetails, false);
+    }
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
+    if (isAuraEnabled()) {
+      document.removeEventListener('customerDetailsFetched', this.updateAuraDetails, false);
+    }
   }
+
+  // Event listener to update aura details.
+  updateAuraDetails = (event) => {
+    this.setState({
+      auraDetails: { ...event.detail.stateValues },
+    });
+  };
+
+  // Event listener to update cart totals.
+  handleTotalsUpdateEvent = (event) => {
+    const { totals } = event.detail;
+    this.setState({ totals });
+  };
 
   saveDynamicPromotions = (event) => {
     const {
@@ -236,18 +277,73 @@ export default class Cart extends React.Component {
 
   displayShippingMethods = (event) => {
     const currentArea = event.detail;
+    const { checkShowAreaAvailabilityStatus, items } = this.state;
+    // If cart contain only virtual products then we don't check the
+    // cart shipping methods.
+    if (cartContainsOnlyVirtualProduct({ items })) {
+      return;
+    }
+
     showFullScreenLoader();
+    // fetch product level SSD/ED status only on initial load
+    // or when user removes any product.
+    if (checkShowAreaAvailabilityStatus) {
+      // check shipping Methods without area to get the
+      // Default shipping methods.
+      getCartShippingMethods(null).then(
+        (response) => {
+          if (response !== null) {
+            this.setState({
+              cartShippingMethods: response,
+            });
+            // Check if SDD/ED is available on product level.
+            if (typeof response !== 'undefined'
+              && response !== null
+              && !hasValue(response.error)
+              && checkAreaAvailabilityStatusOnCart(response)) {
+              this.setState({
+                showAreaAvailabilityStatusOnCart: true,
+              });
+              // fetch Area based shipping methods if current area
+              // is selected by user.
+              if (currentArea !== null) {
+                this.setCartShippingMethods(currentArea);
+              }
+            } else {
+              // Don't show DeliveryAreaSelect if no product supports
+              // SDD/ED on product level.
+              this.setState({
+                showAreaAvailabilityStatusOnCart: false,
+              });
+            }
+            // Setting check area availablity to false,
+            // to stop product level API call if user only
+            // Area change.
+            this.setState({
+              checkShowAreaAvailabilityStatus: false,
+            });
+          }
+        },
+      );
+    } else {
+      // set Cart shipping methods based on selected area.
+      this.setCartShippingMethods(currentArea);
+    }
+    removeFullScreenLoader();
+  }
+
+  setCartShippingMethods = (currentArea) => {
     getCartShippingMethods(currentArea).then(
-      (response) => {
-        if (response !== null) {
+      (responseWithArea) => {
+        if (responseWithArea !== null) {
           this.setState({
-            cartShippingMethods: response,
+            cartShippingMethods: responseWithArea,
           });
         }
-        removeFullScreenLoader();
       },
     );
   }
+
 
   // Adding panel for area list block.
   getPanelData = (data) => {
@@ -282,6 +378,8 @@ export default class Cart extends React.Component {
       cartShippingMethods,
       panelContent,
       collectionCharge,
+      auraDetails,
+      showAreaAvailabilityStatusOnCart,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -323,6 +421,11 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
+    // Check if the tabby is enabled.
+    if (Tabby.isTabbyEnabled()) {
+      preContentActive = 'visible';
+    }
+
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
@@ -337,7 +440,14 @@ export default class Cart extends React.Component {
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
           {postPayData.postpayEligibilityMessage}
-
+          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+            <TabbyWidget
+              pageType="cart"
+              classNames="spc-tabby-info"
+              mobileOnly={false}
+              id="tabby-cart-info"
+            />
+          </ConditionalView>
           <ConditionalView condition={smartAgentInfo !== false}>
             <>
               <SASessionBanner agentName={smartAgentInfo.name} />
@@ -348,6 +458,14 @@ export default class Cart extends React.Component {
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />
           {postPayData.postpay}
+          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+            <TabbyWidget
+              pageType="cart"
+              classNames="spc-tabby-mobile-preview"
+              mobileOnly
+              id="tabby-promo-cart-mobile"
+            />
+          </ConditionalView>
         </div>
         <div className="spc-main">
           <div className="spc-content">
@@ -361,6 +479,7 @@ export default class Cart extends React.Component {
                   animationDelayValue="0.4s"
                   getPanelData={this.getPanelData}
                   removePanelData={this.removePanelData}
+                  showAreaAvailabilityStatusOnCart={showAreaAvailabilityStatusOnCart}
                 />
               </ConditionalView>
             </div>
@@ -381,6 +500,9 @@ export default class Cart extends React.Component {
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
               items={items}
             />
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
+            </ConditionalView>
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}

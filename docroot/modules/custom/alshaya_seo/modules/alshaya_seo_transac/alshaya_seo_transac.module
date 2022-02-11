@@ -45,6 +45,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
   $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);
 
   if (_alshaya_seo_process_gtm()) {
+    $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_initial_data_push';
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
@@ -129,7 +130,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
   $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
   if ($route_match->getRouteName() == 'entity.node.canonical') {
-    /* @var \Drupal\node\Entity\Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
     // If 'product' node.
     if ($node && $node->getType() == 'acq_product') {
@@ -165,7 +166,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
         $snippet['description'] = $product_description;
         $snippet['image'] = $product_image;
         $snippet['sku'] = $sku_id;
-        // @Todo: Change this once brand field is available.
+        // @todo Change this once brand field is available.
         $snippet['brand'] = [
           '@type' => 'Thing',
           'name' => \Drupal::config('system.site')->get('name'),
@@ -207,7 +208,8 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
   // For checkout page, we don't always want to trigger checkout event first
   // thing. so we don't alter data_layer for checkout page here and it will
   // trigger events from javascript (alshaya_seo.gtm.spc_checkout.js).
-  if (in_array($current_route['route_name'], ['alshaya_spc.checkout', 'acq_cart.cart'])) {
+  $routes_to_exclude = ['alshaya_spc.checkout', 'acq_cart.cart'];
+  if (in_array($current_route['route_name'], $routes_to_exclude)) {
     return;
   }
   try {
@@ -263,7 +265,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       if ($advantage_card_config->get('advantageCardEnabled')
         && $attributes['actionField']['coupon'] === 'advantage_card'
         && $data_layer['userId']) {
-        $attributes['actionField']['coupon'] = 'Advantage_Card_'.$data_layer['userId'];
+        $attributes['actionField']['coupon'] = 'Advantage_Card_' . $data_layer['userId'];
         $attributes['actionField']['isAdvantageCard'] = 'Yes';
       }
 
@@ -408,6 +410,13 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-sitemap',
       'variables' => [
         'term_tree' => NULL,
+      ],
+    ],
+    'alshaya_country_switcher' => [
+      'template' => 'alshaya-country-switcher',
+      'variables' => [
+        'markets' => NULL,
+        'currentMarket' => NULL,
       ],
     ],
   ];

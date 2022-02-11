@@ -170,7 +170,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     // Address book link.
     $links['address_book'] = [
       'text' => t('address book'),
-      'route' => 'entity.profile.type.user_profile_form',
+      'route' => 'profile.user_page.multiple',
       'options' => [
         'profile_type' => 'address_book',
       ],
@@ -281,7 +281,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       if ($link['route'] == $currentRoute) {
         $options = $activeLinkOptions;
       }
-      elseif (($currentRoute == 'entity.profile.edit_form' || $currentRoute == 'entity.profile.type.user_profile_form.add') && $link['route'] == 'entity.profile.type.user_profile_form') {
+      elseif (($currentRoute == 'entity.profile.edit_form' || $currentRoute == 'profile.user_page.add_form') && $link['route'] == 'profile.user_page.multiple') {
         $options = $activeLinkOptions;
       }
       elseif ($alshaya_acm_customer_status && ($link['route'] == 'acq_customer.orders' && $currentRoute == 'alshaya_acm_customer.orders_detail')) {
@@ -296,6 +296,10 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       if ($key !== 'my_account') {
         $link_item_class_name = 'my-account-' . strtolower(str_replace(' ', '-', $link['text']));
         $options['attributes']['class'][] = ' ' . $link_item_class_name;
+
+        if (isset($link['class'])) {
+          $options['attributes']['class'][] = $link['class'];
+        }
       }
       else {
         $link_item_class_name = strtolower(str_replace(' ', '-', $link['text']));
@@ -329,12 +333,14 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       '#markup' => '<h3 class="my-account-title">' . $this->t('Welcome, @name', [
         '@name' => $this->userInfo->getName(),
       ]) . '</h3>',
+      '#weight' => -2,
     ];
 
     $build['my_account_mobile_title'] = [
       '#markup' => '<h3 class="my-account-mobile-title1">' . $this->t('my account') . '</h3><h4 class="my-account-mobile-title2">' . $this->t('logged in as @name', [
         '@name' => $this->userInfo->getName(),
       ]) . '</h4>',
+      '#weight' => -2,
     ];
 
     $build['my_account_links'] = [

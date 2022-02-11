@@ -1,0 +1,83 @@
+.filters {
+  text-align: center;
+  margin-bottom: 3.125rem;
+
+  .reward-activity-filter {
+    width: 14.5625rem;
+    display: inline-block;
+    margin: 0 0.625rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.25rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &.open {
+      .spcAuraSelect__indicators {
+        transform: rotate(180deg);
+      }
+
+      .spcAuraSelect__control {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: none;
+      }
+    }
+
+    .spcAuraSelect__control {
+      border-radius: 1.75rem;
+      border-color: $aura-my-account-filters;
+      height: 2.5rem;
+      font-size: 1rem;
+      font-family: $aura-regular;
+      color: $aura-my-account-filters;
+      box-shadow: none;
+
+      .spcAuraSelect__value-container {
+        padding-#{$left}: 1.5625rem;
+      }
+
+      .spcAuraSelect__indicators {
+        flex-grow: 0.15;
+        transition: transform 0.3s ease-in-out;
+        background: url('#{$base_theme_img_directory_path}/aura/aura-chevron-dark.svg') center center no-repeat;
+
+        .spcAuraSelect__indicator-separator,
+        svg {
+          visibility: hidden;
+        }
+      }
+    }
+
+    .spcAuraSelect__menu {
+      font-size: 1rem;
+      font-family: $aura-regular;
+      color: $aura-my-account-filters;
+      margin: 0;
+      border-bottom-left-radius: 1.75rem;
+      border-bottom-right-radius: 1.75rem;
+      box-shadow: none;
+
+      .spcAuraSelect__menu-list {
+        border-bottom-left-radius: 1.75rem;
+        border-bottom-right-radius: 1.75rem;
+        border: 1px solid $aura-my-account-filters;
+        border-top: none;
+        padding: 0;
+
+        .spcAuraSelect__option {
+          padding-#{$left}: 1.5625rem;
+          text-align: $left;
+
+          &.spcAuraSelect__option--is-selected {
+            background-color: $aura-my-account-filters-active-bg;
+            color: $aura-my-account-filters;
+          }
+        }
+      }
+    }
+  }
+}

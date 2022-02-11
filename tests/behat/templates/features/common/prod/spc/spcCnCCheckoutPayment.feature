@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @clickCollect @pbkaepprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @pbkaeprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @vskwpprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @vssapprod @vskwprod @tbskwprod @vsaepprod @mckwprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwprod @vssaprod @vsaeprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod
+@javascript @guest @checkoutPayment @clickCollect @pbkaepprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @pbkaeprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @vskwpprod @aeoaeprod @aeokwprod @aeosaprod @vssapprod @vskwprod @tbskwprod @vsaepprod @mckwprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwprod @vssaprod @vsaeprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod
 Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method for Guest User
 
   Background:
@@ -40,14 +40,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | locality                      | {locality}    |
-    Then I click jQuery "#address-form-action #save-address" element on page
+    And I add the billing address on checkout page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
@@ -91,14 +84,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | locality                      | {locality}    |
-    Then I click jQuery "#address-form-action #save-address" element on page
+    And I add the billing address on checkout page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
@@ -145,14 +131,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | locality                      | {locality}    |
-    Then I click jQuery "#address-form-action #save-address" element on page
+    And I add the billing address on checkout page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
@@ -199,14 +178,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | locality                      | {locality}    |
-    Then I click jQuery "#address-form-action #save-address" element on page
+    And I add the billing address on checkout page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load

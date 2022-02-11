@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, dataLayer, debounce, drupalSettings) {
-  'use strict';
 
   var searchQuery = [];
   var initNoOfResults = null;

@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Contains install hook for alshaya_wishlist.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
+
+/**
+ * Implements hook_install().
+ *
+ * Update default configurations for the wishlist feature.
+ */
+function alshaya_wishlist_install() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Enable wishlist header block.
+  // Move wishlist block from white label to active theme.
+  $manager->updateConfigs(
+    [
+      'block.block.alshayawishlistheaderblock',
+    ],
+    'alshaya_wishlist',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_wishlist', 'alshaya_wishlist.translations');
+  if ($translations = _alshaya_wishlist_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+
+  // Enable My wishlist link in the menu.
+  $config = \Drupal::configFactory()->getEditable('alshaya_user.settings');
+  $alshaya_wishlist = unserialize($config->get('my_account_enabled_links'));
+  $alshaya_wishlist['alshaya_wishlist'] = 'alshaya_wishlist';
+  $config->set('my_account_enabled_links', serialize($alshaya_wishlist));
+  $config->save();
+
+  // Adjust wishlist header block weight so this appears
+  // before the alshayareactcartminicartblock block.
+  $wishlist_header_block = Block::load('alshayawishlistheaderblock');
+  $minicart_header_block = Block::load('alshayareactcartminicartblock');
+  if (($wishlist_header_block instanceof BlockInterface) && ($minicart_header_block instanceof BlockInterface)) {
+    $wishlist_header_block->setWeight(($minicart_header_block->getWeight()) - 1);
+    $wishlist_header_block->save();
+  }
+}
+
+/**
+ * Implements hook_install().
+ *
+ * Remove configurations for the wishlist feature.
+ */
+function alshaya_wishlist_uninstall() {
+  \Drupal::configFactory()->getEditable('block.block.alshayawishlistheaderblock')->delete();
+}

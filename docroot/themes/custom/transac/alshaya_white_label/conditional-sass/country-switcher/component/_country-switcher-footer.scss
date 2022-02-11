@@ -1,0 +1,13 @@
+#block-countryswitcher {
+  font-size: 0.75rem;
+  text-align: center;
+  float: $right;
+  width: 100%;
+  color: $country-switcher-label-mobile;
+  padding: 0.625rem 0;
+
+  @include breakpoint($tablet) {
+    padding-bottom: 1.25rem;
+    color: $country-switcher-label;
+  }
+}

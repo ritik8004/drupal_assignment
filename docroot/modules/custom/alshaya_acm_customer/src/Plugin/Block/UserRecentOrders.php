@@ -295,6 +295,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
         // Allow other modules to update recent order build.
         $this->moduleHandler->alter('alshaya_acm_customer_recent_order_build', $build);
       }
+      $this->moduleHandler->alter('alshaya_acm_customer_alshaya_user_recent_orders_build', $build);
     }
     catch (\Exception $e) {
       // If any error during api/service calling.

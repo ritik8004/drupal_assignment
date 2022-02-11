@@ -1,0 +1,10 @@
+{% if properties is not empty %}
+  {% for property in properties %}
+    <div class="details-care-wrapper">
+    {% if property.label is not empty %}
+      <span class="details-care-label">{{ property.label }}:</span>
+    {% endif %}
+      <span class="details-care-value">{{ property.value }}</span>
+    </div>
+  {% endfor %}
+{% endif %}

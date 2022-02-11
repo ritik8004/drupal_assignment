@@ -1,0 +1,61 @@
+.spc-order-summary-block {
+  .spc-product-attributes {
+    .egift-cart-message-value {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 7.9rem;
+      display: inline-block;
+      vertical-align: bottom;
+
+      @include breakpoint($desktop) {
+        width: 8.9rem;
+      }
+    }
+
+    .spc-cart-product-attribute-value {
+      input {
+        border: none;
+        background: transparent;
+        direction: ltr !important;
+        text-align: $left;
+
+        @include breakpoint($only-mobile) {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .egift-order-summary {
+    .total-line-item:nth-child(1) {
+      color: $pdp_product_special_price_text;
+    }
+  }
+}
+
+.spc-order-summary-order-preview,
+.spc-order-summary-order-detail {
+  .spc-egift-value {
+    text-align: $right;
+  }
+
+  .spc-egift-value-wrapper,
+  .spc-topup-value-wrapper {
+    @include breakpoint($upto-desktop) {
+      width: 60%;
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 20.125rem;
+    }
+
+    .spc-egift-mail-value {
+      display: block;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+      margin-bottom: 0.3125rem;
+      color: $spc-checkout-order-detail-label;
+    }
+  }
+}

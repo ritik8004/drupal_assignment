@@ -4,6 +4,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 @font-face {
   font-family: "Roboto-Bold";
   src:
+    local("Roboto Bold"),
     url("#{$base_theme_fonts_directory_path}/roboto-bold.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/roboto-bold.woff") format("woff");
   font-weight: normal;
@@ -14,6 +15,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 @font-face {
   font-family: "Roboto-Regular";
   src:
+    local("Roboto"),
     url("#{$base_theme_fonts_directory_path}/roboto-regular.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/roboto-regular.woff") format("woff");
   font-weight: normal;

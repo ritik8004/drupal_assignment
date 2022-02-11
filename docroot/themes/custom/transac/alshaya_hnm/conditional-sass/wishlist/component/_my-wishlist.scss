@@ -1,0 +1,81 @@
+#my-wishlist {
+  .login-message {
+    font-family: $hnm-demibold;
+  }
+
+  .empty-message {
+    .actions {
+      a {
+        font-family: $hnm-demibold;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .oos-text-container {
+    .oos-text {
+      font-family: $hnm-demibold;
+    }
+  }
+
+  .addtobag-button-container {
+    margin-#{$left}: 0.5rem;
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 1.25rem;
+    }
+  }
+
+  .express_delivery {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.3125rem 0.1875rem;
+    border: 0.0625rem solid $pdp_product_same_day_btn_border;
+    margin-top: 0.625rem;
+    display: table;
+  }
+}
+
+.notification-container {
+  font-family: $hnm-demibold;
+}
+
+.wishlist-share-popup-container {
+  .wishlist-share-popup-block {
+    .header {
+      font-family: $hnm-demibold;
+    }
+
+    .actions {
+      button,
+      .link-copied {
+        font-family: $hnm-demibold;
+      }
+
+      button.email-share-link {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    .close-modal {
+      top: 0;
+
+      &::before {
+        padding: 0.375rem;
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+#wishlist-share {
+  > button {
+    .icon {
+      background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-share.svg');
+    }
+  }
+}

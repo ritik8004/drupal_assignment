@@ -5,7 +5,9 @@ import {
   gerAreaLabelById, getAreaParentId, getUserAddressList, updateSelectedAddress,
 } from '../../../utilities/address_util';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
-import { getAreaFieldKey, getDeliveryAreaStorage, setDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import {
+  getAreaFieldKey, getDeliveryAreaStorage, setDeliveryAreaStorage,
+} from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 
@@ -20,22 +22,24 @@ export default class AreaConfirmationPopup extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      cart: { cart: { shipping: { address } } },
-    } = this.props;
     const { areaSelected } = this.state;
+    const { cart, isExpressDeliveryAvailable } = this.props;
+    const { address } = cart.cart.shipping;
+    if (isExpressDeliveryAvailable && address) {
+      const areaFieldKey = getAreaFieldKey();
+      if (areaSelected !== null && areaFieldKey !== null) {
+        if (areaSelected.value[areaFieldKey] !== parseInt(address[areaFieldKey], 10)) {
+          this.setState({
+            open: true,
+            lastOrderArea: parseInt(address[areaFieldKey], 10),
+          });
+        }
+      }
+    }
+
     document.addEventListener('openAreaPopupConfirmation', this.openAreaPopupConfirmation);
 
     document.addEventListener('refreshAreaConfirmationState', this.refreshAreaConfirmationState);
-    const areaFieldKey = getAreaFieldKey();
-    if (areaSelected !== null && areaFieldKey !== null) {
-      if (areaSelected.value[areaFieldKey] !== parseInt(address[areaFieldKey], 10)) {
-        this.setState({
-          open: true,
-          lastOrderArea: parseInt(address[areaFieldKey], 10),
-        });
-      }
-    }
   }
 
   closeModal = () => {
