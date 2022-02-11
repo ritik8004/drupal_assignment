@@ -201,9 +201,9 @@ class ProductCategoryMappingManager {
       foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
         foreach (array_chunk($skus, 6) as $chunk) {
           $this->ingestApi->productFullSync($store_id, $langcode, implode(',', $chunk), '', 2);
-          $this->logger->notice('SKUs are syncd from category mapping table @sku, $mdc and drupal category $cat for Language @lang', [
+          $this->logger->notice('SKUs are syncd from category mapping table @sku, @mdc and drupal category @cat for Language @lang', [
             '@sku' => implode(',', $chunk),
-            '$mdc' => $commerce_id,
+            '@mdc' => $commerce_id,
             '@cat' => $term->id(),
             '@lang' => $langcode,
           ]);
