@@ -53,7 +53,9 @@
         error: function (xhr, textStatus, error) {
           // Processing of error here.
           Drupal.removeItemFromLocalStorage(storageKey);
-          Drupal.logJavascriptError('Failed to fetch product info data.', error, 'product_info_resource');
+          Drupal.alshayaLogger('error', 'Failed to fetch product info data: @error', {
+            '@error': error
+          });
           reject(error);
         }
       });
@@ -67,6 +69,6 @@
    * @returns {string}
    */
   var getProductInfoStorageKey = function getProductInfoStorageKey(sku) {
-    return "productinfo:".concat(btoa(sku), ":").concat(drupalSettings.path.currentLanguage);
+    return "productinfo:" + btoa(sku) + ":" + drupalSettings.path.currentLanguage;
   };
 })(Drupal, jQuery);

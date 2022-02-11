@@ -242,8 +242,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items;
-
       break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
