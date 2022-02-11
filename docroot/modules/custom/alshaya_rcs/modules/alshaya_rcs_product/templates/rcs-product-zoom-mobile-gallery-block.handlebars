@@ -1,0 +1,63 @@
+{{#if (eq data.root.pdp_gallery_type "classic")}}
+  {{! Add slider counter }}
+  <div class="slider__counter"></div>
+{{/if}}
+<div class="mobilegallery">
+  <ul
+    id="product-image-gallery-mobile"
+    class="mobilegallery__thumbnails {{data.root.pager_flag}}"
+  >
+    {{#each data.root.thumbnails}}
+      {{#if (eq this.type "youtube")}}
+        <li class="mobilegallery__thumbnails__video youtube">
+          <div class="mobileplayer-wrapper">
+            <iframe
+              class="mobileplayer"
+              src="{{this.url}}"
+              style="position:absolute;top:0;left:0;width:100%;height:100%;"
+              frameborder="0"
+              webkitallowfullscreen
+              mozallowfullscreen
+              allowfullscreen
+            ></iframe>
+          </div>
+        </li>
+      {{else if (eq this.type "vimeo")}}
+        <li class="mobilegallery__thumbnails__video vimeo">
+          <div class="mobileplayer-wrapper">
+            <iframe
+              class="mobileplayer"
+              src="{{this.url}}"
+              style="position:absolute;top:0;left:0;width:100%;height:100%;"
+              frameborder="0"
+              webkitallowfullscreen
+              mozallowfullscreen
+              allowfullscreen
+            ></iframe>
+          </div>
+        </li>
+      {{else if (eq this.type "video")}}
+        <li class="mobilegallery__thumbnails__video pdp-video">
+          <button class="pdp-video-close"></button>
+          <video class="gallery-video" loading="lazy" muted="muted" loop>
+            <source src="{{lazy_load_placeholder}}" data-src="{{this.url}}" />
+            {{t "Your browser does not support the video tag."}}
+          </video>
+          <div class="pdp-video-controls">
+            <div class="control" title="{{t "Play/Pause Video"}}"></div>
+          </div>
+        </li>
+      {{else}}
+        <li>
+          <img
+            loading="lazy"
+            src="{{this.zoomurl}}"
+            alt="{{this.label}}"
+            title="{{this.label}}"
+          />
+        </li>
+      {{/if}}
+    {{/each}}
+  </ul>
+  <div class="product-labels"></div>
+</div>

@@ -5,7 +5,9 @@ import {
   gerAreaLabelById, getAreaParentId, getUserAddressList, updateSelectedAddress,
 } from '../../../utilities/address_util';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
-import { getDeliveryAreaStorage, setDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import {
+  getAreaFieldKey, getDeliveryAreaStorage, setDeliveryAreaStorage,
+} from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 
@@ -20,23 +22,24 @@ export default class AreaConfirmationPopup extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      cart: { cart: { shipping: { address } } },
-    } = this.props;
     const { areaSelected } = this.state;
+    const { cart, isExpressDeliveryAvailable } = this.props;
+    const { address } = cart.cart.shipping;
+    if (isExpressDeliveryAvailable && address) {
+      const areaFieldKey = getAreaFieldKey();
+      if (areaSelected !== null && areaFieldKey !== null) {
+        if (areaSelected.value[areaFieldKey] !== parseInt(address[areaFieldKey], 10)) {
+          this.setState({
+            open: true,
+            lastOrderArea: parseInt(address[areaFieldKey], 10),
+          });
+        }
+      }
+    }
+
     document.addEventListener('openAreaPopupConfirmation', this.openAreaPopupConfirmation);
 
     document.addEventListener('refreshAreaConfirmationState', this.refreshAreaConfirmationState);
-
-    if (areaSelected !== null && drupalSettings.address_fields) {
-      const areaFieldKey = drupalSettings.address_fields.administrative_area.key;
-      if (areaSelected.value.area !== parseInt(address[areaFieldKey], 10)) {
-        this.setState({
-          open: true,
-          lastOrderArea: parseInt(address[areaFieldKey], 10),
-        });
-      }
-    }
   }
 
   closeModal = () => {
@@ -71,7 +74,8 @@ export default class AreaConfirmationPopup extends React.Component {
     e.preventDefault();
     const { open, areaSelected } = this.state;
     let areaFound = false;
-    if (areaSelected !== null) {
+    const areaFieldKey = getAreaFieldKey();
+    if (areaSelected !== null && areaFieldKey !== null) {
       if (drupalSettings.user.uid === 0) {
         dispatchCustomEvent('openAddressContentPopup', open);
       } else if (drupalSettings.user.uid > 0) {
@@ -81,7 +85,7 @@ export default class AreaConfirmationPopup extends React.Component {
             const areaCheck = list.find((address) => {
               // If area already exists in address lists.
               // Make that address as default address of customer.
-              if (areaSelected.value.area === parseInt(address.administrative_area, 10)) {
+              if (areaSelected.value[areaFieldKey] === parseInt(address.administrative_area, 10)) {
                 // Show loader.
                 showFullScreenLoader();
                 updateSelectedAddress(address, 'shipping');
@@ -125,9 +129,9 @@ export default class AreaConfirmationPopup extends React.Component {
   refreshPopupState = (cartData) => {
     const { areaSelected } = this.state;
     const { address } = cartData.cart.shipping;
-    if (areaSelected !== null && drupalSettings.address_fields) {
-      const areaFieldKey = drupalSettings.address_fields.administrative_area.key;
-      if (areaSelected.value.area !== parseInt(address[areaFieldKey], 10)) {
+    const areaFieldKey = getAreaFieldKey();
+    if (areaSelected !== null && areaFieldKey !== null) {
+      if (areaSelected.value[areaFieldKey] !== parseInt(address[areaFieldKey], 10)) {
         this.setState({
           open: true,
           lastOrderArea: parseInt(address[areaFieldKey], 10),
@@ -139,9 +143,10 @@ export default class AreaConfirmationPopup extends React.Component {
   render() {
     const { open, lastOrderArea, areaSelected } = this.state;
     const currentAreaLabel = gerAreaLabelById(false, lastOrderArea);
+    const areaFieldKey = getAreaFieldKey();
     let storageAreaLabel = '';
     if (areaSelected !== null) {
-      storageAreaLabel = gerAreaLabelById(false, areaSelected.value.area);
+      storageAreaLabel = gerAreaLabelById(false, areaSelected.value[areaFieldKey]);
     }
     return (
       <>

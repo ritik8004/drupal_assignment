@@ -51,7 +51,7 @@ const StoreItem = ({
         <span className="store-distance">
           {getStringMessage(
             'cnc_distance',
-            { '@distance': store.formatted_distance },
+            { '@distance': store.formatted_distance || '' },
           )}
         </span>
       </span>

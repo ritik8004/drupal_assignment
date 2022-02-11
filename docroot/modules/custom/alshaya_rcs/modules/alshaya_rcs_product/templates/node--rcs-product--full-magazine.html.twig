@@ -59,24 +59,13 @@
               {% endif %}
             </div>
 
-            <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
+            <div class="promotions promotions-full-view-mode">#rcs.product._self|promotions#</div>
           </div>
 
           <div class="vat-text">#rcs.product._self|vat_text#</div>
         </div>
 
-        {% if content.same_day_delivery_text %}
-          <div class="same-day-delivery">
-            <div class="same-day-content">
-              <p>{{ content.same_day_delivery_text }}</p>
-              <p>{{ content.same_day_delivery_sub_text }}</p>
-            </div>
-          </div>
-        {% elseif content.delivery_in_only_city_text %}
-          <div class="delivery-in-only-city">
-            <p>{{ content.delivery_in_only_city_text }}</p>
-          </div>
-        {% endif %}
+        <div id="rcs-ph-delivery-info-block"></div>
 
         {% if content.delivery_link is not empty %}
           <div class="delivery">
@@ -85,6 +74,11 @@
         {% endif %}
 
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
+
+        {% if aura_enabled is defined and aura_enabled %}
+          {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+          <div id="aura-pdp"></div>
+        {% endif %}
 
         {% if content.reviews_rating %}
           {{content.reviews_rating}}
@@ -125,6 +119,9 @@
 
         <div class="mobile-content-wrapper">
           {% block shortDescBlock %}
+            <div class="short-description-wrapper">
+              #rcs.product._self|short_description#
+            </div>
           {% endblock %}
 
           {% block descBlock %}
@@ -133,7 +130,7 @@
           {% block afterDescription %}
           {% endblock %}
 
-          <div id="rcs-ph-delivery-option"></div>
+          <div id="rcs-ph-delivery-options"></div>
 
         </div>
 
@@ -158,3 +155,4 @@
     {{content.reviews_section}}
   {% endif %}
 {% endblock %}
+

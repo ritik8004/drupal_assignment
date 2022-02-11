@@ -379,3 +379,26 @@ export function isProductTitleTrimEnabled() {
   }
   return false;
 }
+
+/**
+ * Get product elements alignment status.
+ *
+ * @returns {boolean}
+ */
+export function isProductElementAlignmentEnabled() {
+  if (drupalSettings.algoliaSearch.productElementAlignmentEnabled === true) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Get sort index from local storage.
+ */
+export const getBackToPlpPageIndex = () => {
+  const plplocalStorage = Drupal.getItemFromLocalStorage(`plp:${window.location.pathname}`);
+  if (plplocalStorage && typeof plplocalStorage.sort !== 'undefined') {
+    window.algoliaPlpSortIndex = plplocalStorage.sort;
+  }
+  return window.algoliaPlpSortIndex || null;
+};

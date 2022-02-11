@@ -17,6 +17,12 @@ fields:
     index: 1
     facet: 1
 
+  article_style:
+    label: 'Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
   composition:
     label: 'Composition'
     description: 'Product Composition.'
@@ -33,3 +39,8 @@ fields:
   rgb_color:
     label: 'RGB color'
     type: 'string'
+
+  assets:
+    label: 'Assets'
+    type: 'text_long'
+    translatable: 0

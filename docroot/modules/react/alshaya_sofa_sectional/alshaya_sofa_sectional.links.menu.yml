@@ -1,0 +1,6 @@
+alshaya_sofa_sectional.settings_form:
+  title: 'Alshaya sofa sectional Configuration'
+  description: 'Configure settings for sofa and sectional products.'
+  route_name: alshaya_sofa_sectional.settings_form
+  parent: alshaya_master.alshaya_admin
+  weight: 20

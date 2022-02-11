@@ -5,6 +5,8 @@
  * Contains common generic site related helper functions.
  */
 
+use Acquia\Blt\Robo\Common\EnvironmentDetector;
+
 /**
  * Get site environment.
  *
@@ -13,10 +15,11 @@
  */
 function alshaya_get_site_environment() {
   $env = 'local';
-  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
-    $env = $_ENV['AH_SITE_ENVIRONMENT'];
+
+  if (EnvironmentDetector::isAcsfEnv()) {
+    $env = EnvironmentDetector::getAhEnv();
   }
-  elseif (getenv('TRAVIS') || getenv('CI_BUILD_ID')) {
+  elseif (EnvironmentDetector::isCiEnv()) {
     $env = 'travis';
   }
 

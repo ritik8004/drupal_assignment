@@ -20,13 +20,13 @@ function alshaya_rcs_listing_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-rcs-promotional-banner',
       'variables' => [
         'fields' => NULL,
-      ]
+      ],
     ],
     'alshaya_rcs_plp_mobile_menu' => [
       'template' => 'alshaya-rcs-plp-mobile-menu',
       'variables' => [
         'data' => NULL,
-      ]
+      ],
     ],
   ];
 }
@@ -46,6 +46,7 @@ function alshaya_rcs_listing_preprocess_page(&$variables) {
       // Add description placeholder for mobile view.
       $variables['category_term_name'] = $term->getName();
       $variables['category_term_description'] = '#rcs.category.description#';
+      $variables['#attached']['library'][] = 'alshaya_white_label/rcs-ph-term-description';
 
       // Taking the sidebar visibility check from config for PLP.
       $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
@@ -80,6 +81,9 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
       'level',
       'url_path',
       'description',
+      'meta_title',
+      'meta_keyword',
+      'meta_description',
       'image',
       'promo_banner_for_mobile',
       'promotion_banner_mobile',
@@ -88,7 +92,7 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
         'id',
         'name',
         'url_path',
-        'category_quick_link_plp_mob'
+        'category_quick_link_plp_mob',
       ],
       'breadcrumbs' => [
         'category_id',
@@ -101,4 +105,27 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
   ];
 
   return $query_fields;
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function alshaya_rcs_listing_field_widget_entity_reference_paragraphs_form_alter(&$element, &$form_state, $context) {
+  if ($element['#paragraph_type'] == 'product_carousel_category'
+    && isset($element['subform']['field_category_carousel'])
+    && isset($element['subform']['field_category_carousel_slug'])) {
+    // Hide the entity reference field when the text field is present on the
+    // form.
+    $element['subform']['field_category_carousel']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_rcs_placeholders_processor_path_alter().
+ */
+function alshaya_rcs_listing_rcs_placeholders_processor_path_alter(string &$path) {
+  // Remove the facets params based of the /-- prefix.
+  if (stripos($path, '/--', 0) !== FALSE) {
+    $path = substr($path, 0, stripos($path, '/--'));
+  }
 }

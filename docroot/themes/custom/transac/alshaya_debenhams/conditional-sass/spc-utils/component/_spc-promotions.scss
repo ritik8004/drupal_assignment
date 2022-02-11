@@ -1,0 +1,7 @@
+.spc-promotions:not(:empty) {
+  span {
+    > a {
+      font-size: 0.875rem;
+    }
+  }
+}

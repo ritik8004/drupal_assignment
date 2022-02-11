@@ -87,16 +87,22 @@ class AlshayaAlgoliaV2Listing extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
     $algoliaSearch['pageSubType'] = self::PAGE_SUB_TYPE;
 
+    // Add renderer library of PLP to the block.
+    array_push(
+      $common_config['otherRequiredValues']['libraries'],
+      'alshaya_algolia_react/plpv2',
+      'alshaya_rcs_listing/renderer',
+      'alshaya_white_label/rcs-algolia-plp',
+    );
+
+    // Remove the v1 PLP library.
+    $libraries = array_diff($common_config['otherRequiredValues']['libraries'], ['alshaya_algolia_react/plp']);
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-plp"></div>',
       '#attached' => [
-        'library' => [
-          'alshaya_algolia_react/plpv2',
-          'alshaya_rcs_listing/renderer',
-          'alshaya_white_label/algolia_search',
-          'alshaya_white_label/slick_css',
-        ],
+        'library' => $libraries,
         'drupalSettings' => [
           'algoliaSearch' => $algoliaSearch,
           'reactTeaserView' => $reactTeaserView,

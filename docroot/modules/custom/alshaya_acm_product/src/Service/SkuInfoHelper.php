@@ -22,6 +22,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\Core\TypedData\TranslatableInterface;
+use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
 
 /**
  * Class Sku Info Helper.
@@ -122,6 +123,13 @@ class SkuInfoHelper {
   protected $productInfoHelper;
 
   /**
+   * Delivery Options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -150,6 +158,8 @@ class SkuInfoHelper {
    *   The Product Category helper service.
    * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
    *   Product Info Helper.
+   * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
+   *   Delivery Options Helper.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -164,7 +174,8 @@ class SkuInfoHelper {
     ProductOrderLimit $product_order_limit,
     ConfigFactoryInterface $config_factory,
     ProductCategoryHelper $product_category_helper,
-    ProductInfoHelper $product_info_helper
+    ProductInfoHelper $product_info_helper,
+    DeliveryOptionsHelper $delivery_options_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -179,6 +190,7 @@ class SkuInfoHelper {
     $this->configFactory = $config_factory;
     $this->productCategoryHelper = $product_category_helper;
     $this->productInfoHelper = $product_info_helper;
+    $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 
   /**
@@ -521,7 +533,13 @@ class SkuInfoHelper {
     $productInfo = [];
     $productInfo['type'] = $sku->bundle();
     $productInfo['priceRaw'] = _alshaya_acm_format_price_with_decimal((float) $sku->get('price')->getString());
+    $productInfo['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $sku->get('final_price')->getString());
     $productInfo['cart_title'] = $this->productInfoHelper->getTitle($sku, 'basket');
+
+    // Add price block for parent SKU too.
+    $price = $this->priceHelper->getPriceBlockForSku($sku);
+    $productInfo['price'] = $this->renderer->renderPlain($price);
+
     $this->moduleHandler->alter('sku_product_info', $productInfo, $sku);
     return $productInfo;
   }
@@ -555,6 +573,7 @@ class SkuInfoHelper {
     ];
     $variant['price'] = $this->renderer->renderPlain($price);
     $variant['priceRaw'] = _alshaya_acm_format_price_with_decimal((float) $child->get('price')->getString());
+    $variant['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $child->get('final_price')->getString());
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
 
@@ -598,6 +617,25 @@ class SkuInfoHelper {
           'absolute' => FALSE,
           'language' => $language,
         ])->toString();
+      }
+    }
+
+    // Check if express delivery feature is enabled.
+    if ($this->deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
+      $current_parent = $this->skuManager->getParentSkuBySku($child);
+      if ($current_parent instanceof SKUInterface) {
+        $parent_sku = $current_parent->getSku();
+      }
+      // Below condition is only for simple products.
+      elseif (empty($parent)) {
+        $parent_sku = (string) $child->getSku();
+      }
+
+      if (isset($parent_sku)) {
+        // Prepare delivery options for each variants for simple sku.
+        $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku);
+        $variant['deliveryOptions'] = !empty($delivery_options['values']) ? $delivery_options['values'] : [];
+        $variant['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] ? 'active' : 'in-active';
       }
     }
 

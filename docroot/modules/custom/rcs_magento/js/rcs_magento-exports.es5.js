@@ -20,10 +20,13 @@ exports.invokeApi = async function (request) {
   }
 
   return jQuery.ajax({
-    url: drupalSettings.alshayaRcs.commerceBackend.baseUrl + '/' + request.uri,
+    url: drupalSettings.rcs.commerceBackend.baseUrl + request.uri,
     method: request.method,
     headers,
     data: request.data,
+    // This will help to prevent the spinner from stopping on ajax complete in
+    // cart_notification.js.
+    rcs: true,
     success: function (response) {
       return response;
     },
@@ -45,7 +48,7 @@ exports.invokeApi = async function (request) {
  * @param {string} callback
  *   The function to call on successful response.
  */
- exports.invokeApiAsync = function (request) {
+ exports.invokeApiSynchronous = function (request) {
   const headers = {};
   let result = null;
 
@@ -56,11 +59,14 @@ exports.invokeApi = async function (request) {
   }
 
   jQuery.ajax({
-    url: drupalSettings.alshayaRcs.commerceBackend.baseUrl + '/' + request.uri,
+    url: drupalSettings.rcs.commerceBackend.baseUrl + request.uri,
     method: request.method,
     headers,
     async: false,
     data: request.data,
+    // This will help to prevent the spinner from stopping on ajax complete in
+    // cart_notification.js.
+    rcs: true,
     success: function (response) {
       result = response;
     },

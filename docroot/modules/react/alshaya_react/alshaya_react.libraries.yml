@@ -1,11 +1,12 @@
 react:
   version: 2
   js:
-    js/react.production.min.js: { preprocess: false, minified: true }
-    js/react-dom.production.min.js: { preprocess: false, minified: true }
+    js/react.production.min.js: { preprocess: false, minified: true, weight: -25 }
+    js/react-dom.production.min.js: { preprocess: false, minified: true, weight: -25 }
   dependencies:
     - core/drupal
     - alshaya_react/react_pollyfill
+    - alshaya_react/axios
 
 react_pollyfill:
   version: 1.x
@@ -16,3 +17,8 @@ react_pollyfill:
     dist/object.bundle.js: {}
   dependencies:
     - core/drupal
+
+axios:
+  version: 1.x
+  js:
+    js/axios.min.js: { preprocess: false, minified: true, weight: -25 }

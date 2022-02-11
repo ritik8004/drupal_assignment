@@ -1,0 +1,12 @@
+color_swatches: true
+color_swatches_show_product_image: true
+show_child_images_after_selecting: 'all'
+show_parent_images_in_child: true
+swatches:
+  pdp:
+    - color
+plp_slider:
+  item: 3
+  margin: 3
+swatch_plp_limit: 4
+show_brand_name_plp: true

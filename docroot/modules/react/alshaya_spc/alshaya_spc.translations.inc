@@ -394,13 +394,13 @@ function _alshaya_spc_translations() {
       'ar' => 'متوفر في نقطة الاستلام خلال',
     ],
     'Holiday' => [
-      'ar' => 'الجمعة',
+      'ar' => 'عطلة',
     ],
   ];
 
   // Strings related to express delivery feature.
   $strings['v10'] = [
-    'Express Delivery available' => [
+    'Express Delivery Available' => [
       'ar' => 'خدمة التوصيل السريع متوفرة',
     ],
     'Explore the delivery options applicable to your area.' => [
@@ -418,7 +418,7 @@ function _alshaya_spc_translations() {
     'Select an area' => [
       'ar' => 'اختر المنطقة',
     ],
-    'Same Day Delivery available' => [
+    'Same Day Delivery Available' => [
       'ar' => 'التوصيل في نفس اليوم متاح',
     ],
     'Selected Area' => [
@@ -447,6 +447,35 @@ function _alshaya_spc_translations() {
     ],
     'Express' => [
       'ar' => 'دمة التوصيل السريع',
+    ],
+    'Express Delivery' => [
+      'ar' => 'دمة التوصيل السريع',
+    ],
+  ];
+
+  // Strings related to express delivery feature with context
+  // for listing pages.
+  $strings['v11'] = [
+    'Express Delivery Available' => [
+      'ar' => 'خدمة التوصيل السريع متوفرة',
+      'context' => 'express_day_delivery_listing',
+    ],
+    'Same Day Delivery Available' => [
+      'ar' => 'التوصيل في نفس اليوم متاح',
+      'context' => 'same_day_delivery_listing',
+    ],
+  ];
+
+  // Strings related to express delivery feature with context
+  // for PDP pages.
+  $strings['v12'] = [
+    'Express Delivery Available' => [
+      'ar' => 'خدمة التوصيل السريع متوفرة',
+      'context' => 'express_delivery_label',
+    ],
+    'Same Day Delivery Available' => [
+      'ar' => 'التوصيل في نفس اليوم متاح',
+      'context' => 'same_day_delivery_label',
     ],
   ];
 

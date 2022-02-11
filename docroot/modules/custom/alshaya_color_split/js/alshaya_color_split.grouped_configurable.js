@@ -1,5 +1,4 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   /**
    * Custom js around color split for add to cart form.
@@ -15,10 +14,11 @@
         var node = $(this).parents('article.entity--type-node:first');
         var sku = $(this).attr('data-sku');
         var productKey = (node.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        var productInfo = window.commerceBackend.getProductData(sku, productKey);
+        if (productInfo === null) {
           return;
         }
-        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        var variantInfo = productInfo.variants[variant];
 
         // We can have mix of color split and normal products.
         // Avoid processing further if we have a product which is normal but
@@ -34,6 +34,16 @@
         // Avoid processing again and again for variants of same color.
         if ($(node).find('.content--item-code .field__value').html() === variantInfo.parent_sku) {
           return;
+        }
+
+        // Update sameday and express delivery labels on variant change.
+        if (drupalSettings.expressDelivery !== 'undefined' && drupalSettings.expressDelivery.enabled) {
+          for (var option in variantInfo.deliveryOptions) {
+            $(node).find('.' + option).removeClass('active in-active');
+            $(node).find('.' + option).addClass(variantInfo.deliveryOptions[option].status);;
+          }
+          $(node).find('.express-delivery').removeClass('active in-active');
+          $(node).find('.express-delivery').addClass(variantInfo.expressDeliveryClass);
         }
 
         var productChanged = false;

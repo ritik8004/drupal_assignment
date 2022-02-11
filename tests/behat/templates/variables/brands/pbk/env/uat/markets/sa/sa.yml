@@ -1,0 +1,7 @@
+variables:
+  url_product_page: 'buy-tiny-dancer-sham.html'
+  spc_pdp_page: 'buy-tiny-dancer-flannel-standard-sham.html'
+  product_listing_page_url: '/shop-kids/infants/new-arrivals/'
+  spc_product_listing_page: '/shop-kids/infants/new-arrivals/'
+  spc_basket_page: '/shop-kids/infants/new-arrivals/'
+  spc_bank_product: '/shop-kids/infants/new-arrivals/'

@@ -8,7 +8,7 @@ import ConditionalView from '../../common/components/conditional-view';
 import CompleteBenefitPayPayment
   from './CompleteBenefitPayPayment';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
   const {
@@ -51,10 +51,10 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
       </div>
       <div className="spc-main">
         <div className="spc-content">
+          <OrderSummary context="print" />
           <ConditionalView condition={payment.methodCode === 'checkout_com_upapi_benefitpay'}>
             <CompleteBenefitPayPayment payment={payment} totals={totals} />
           </ConditionalView>
-          <OrderSummary />
         </div>
         <div className="spc-sidebar">
           <OrderSummaryBlock

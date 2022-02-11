@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @clickCollect @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @hmaeuat @mcsauat @mcaeuat @flsauat @bbwsauat @vssauat @tbskwuat @auth @hmkwuat @hmsauat @flkwuat @bbwsauat @flaeuat @bbwaeuat @vsaeuat
+@javascript @returnUser @checkoutPayment @clickCollect @mujikwuat @mujisauat @mujiaeuat @pbkaeuat @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @hmaeuat @mcsauat @mcaeuat @flsauat @bbwsauat @vssauat @tbskwuat @auth @hmkwuat @hmsauat @flkwuat @bbwsauat @flaeuat @bbwaeuat @vsaeuat
 Feature: SPC Checkout using Click & Collect store for returning customer using Checkout (2D) Card Payment Method
 
   Background:

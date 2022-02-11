@@ -1,0 +1,7 @@
+name: Alshaya Sofa and Sectional
+type: module
+description: 'Module to implement Sofa and Sectional feature on PDP pages for specified category.'
+package: 'Alshaya'
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - alshaya_react:alshaya_react

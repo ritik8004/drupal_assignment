@@ -1,0 +1,21 @@
+enabled: true
+# Local storage expiration time for guest (default to 7 days)
+# and logged-in users (default to 5 mins) in seconds.
+local_storage_expiration_guest: 604800
+local_storage_expiration_logged_in: 300
+# If true, on every page load it will call magento api to fetch
+# fresh wishlist data and store that in local storage for
+# authenticate users only.
+force_load_wishlist_from_backend: true
+wishlist_label: 'favorites'
+# Config for removing products from wishlist after it's been
+# added to cart from PDP, PLP, Wishlist or any other pages.
+remove_after_addtocart: false
+# Both configs below are used in share wishlist email.
+email_subject: 'A friend has shared his [alshaya_wishlist:wishlist_label] products'
+email_template:
+  value: "Hi Friends,\r\n\r\nClick on below link to checkout my [alshaya_wishlist:wishlist_label] products.\r\n\r\n[alshaya_wishlist:wishlist_share_url]\r\n\r\nBest wishes,"
+  format: 'mail_text'
+# Enable or disable wishlist sharing feature.
+enabled_share: true
+langcode: en

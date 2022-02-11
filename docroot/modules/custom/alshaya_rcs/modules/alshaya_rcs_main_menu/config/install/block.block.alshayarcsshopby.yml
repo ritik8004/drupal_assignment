@@ -13,7 +13,7 @@ provider: null
 plugin: alshaya_rcs_shop_by_block
 settings:
   id: alshaya_rcs_shop_by_block
-  label: 'Alshaya Rcs Shop by'
+  label: 'Shop by'
   provider: alshaya_rcs_main_menu
-  label_display: '0'
+  label_display: visible
 visibility: {  }

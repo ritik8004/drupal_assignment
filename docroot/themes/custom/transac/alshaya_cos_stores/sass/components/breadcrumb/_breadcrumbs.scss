@@ -1,4 +1,8 @@
 .c-breadcrumb {
+  ol {
+    padding: 1.3125rem 1.5rem 0;
+  }
+
   li {
     font-weight: normal;
     text-transform: uppercase;
@@ -13,6 +17,8 @@
 
     &::after {
       content: '/';
+      padding-#{$left}: 0;
+      padding-#{$right}: 0;
     }
   }
 }

@@ -20,16 +20,97 @@ schema_org:
   dependencies:
     - rcs_placeholders/helpers
 
-rcs_product_modal:
+product.block.description:
   version: 1.x
   js:
-    js/alshaya_rcs_product.modal.js: {}
-  dependencies:
-    - alshaya_rcs/add_to_cart
+    templates/rcs-product-description-block.handlebars: {}
 
-utility:
+product.block.short_description.pdp:
   version: 1.x
   js:
-    js/alshaya_rcs_product.utility.js: {}
-  dependencies:
-    - rcs_placeholders/helpers
+    templates/rcs-product-short-description-block.handlebars: {}
+
+product.block.short_description.pdp-magazine:
+  version: 1.x
+  js:
+    templates/rcs-product-short-description-full-magazine-block.handlebars: {}
+
+product.order_quantity_limit:
+  version: 1.x
+  js:
+    templates/rcs-product-order-quantity-limit.handlebars: {}
+
+product.promotions:
+  version: 1.x
+  js:
+    templates/rcs-product-promotions.handlebars: {}
+
+product.delivery_info:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-info-block.handlebars: {}
+
+product.delivery_options:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-options.handlebars: {}
+
+product.delivery_option_cnc:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-option-click-and-collect.handlebars: {}
+
+product.delivery_option_hd:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-option-home-delivery.handlebars: {}
+
+product.block.price:
+  version: 1.x
+  js:
+    templates/rcs-product-price-block.handlebars: {}
+
+product.teaser:
+  version: 1.x
+  js:
+    templates/rcs-product-teaser.handlebars: {}
+
+product.block.price.item:
+  version: 1.x
+  js:
+    templates/rcs-product-price-item-block.handlebars: {}
+
+gallery.product.product_zoom:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom.handlebars: {}
+
+gallery.product.product_labels:
+  version: 1.x
+  js:
+    templates/rcs-product-labels.handlebars: {}
+
+gallery.product.block.product_zoom_default_gallery:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom-default-gallery-block.handlebars: {}
+
+gallery.product.block.product_zoom_mobile_gallery:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom-mobile-gallery-block.handlebars: {}
+
+gallery.product.block.product_zoom_modal_gallery:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom-modal-gallery-block.handlebars: {}
+
+gallery.product.block.product_zoom_magazine_gallery:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom-magazine-gallery-block.handlebars: {}
+
+product.order:
+  version: 1.x
+  js:
+    js/alshaya_rcs_order.js: {}

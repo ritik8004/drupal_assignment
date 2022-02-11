@@ -1,0 +1,7 @@
+alshaya_sofa_sectional.settings_form:
+  path: '/admin/config/alshaya/sofa-sectional-settings'
+  defaults:
+    _form: '\Drupal\alshaya_sofa_sectional\Form\AlshayaSofaSectionalConfigForm'
+    _title: 'Alshaya Sofa Sectional Settings'
+  requirements:
+    _permission: 'administer alshaya config'

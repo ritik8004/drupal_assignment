@@ -233,11 +233,6 @@
       transition: background-color 0.5s ease;
       position: relative;
 
-      &::after {
-        content: "";
-        position: absolute;
-      }
-
       &.add-to-bag-loader {
         font-size: 0 !important;
         pointer-events: none;

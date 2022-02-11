@@ -1,0 +1,215 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_dh.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_dh_transac_install() {
+  // Enable pims module for using v2.
+  \Drupal::service('module_installer')->install(['alshaya_pims']);
+  // Enable pretty path for pdp urls.
+  \Drupal::service('module_installer')->install(['alshaya_pdp_pretty_path']);
+
+  // Enable and set alshaya_dh as default theme and set the site logo,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_debenhams');
+
+  // Reset theme logo.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  $current_theme = $active_theme->getName();
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  \Drupal::configFactory()
+    ->getEditable($current_theme . '.settings')
+    ->set('logo', [
+      'path' => $site_logo . '.svg',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $site_favicon . '.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+
+  // Add the site name.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('name', 'Debenhams')
+    ->save();
+
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+        'url' => '',
+        'use_default' => FALSE,
+      ],
+    ])
+    ->save();
+
+  // Translate store finder block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Set the default value for back to store list link.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all The Debenhams Stores');
+  $config->save();
+
+
+  $strings = [
+    'seo_brand_name' => [
+      'en' => 'Debenhams',
+      'ar' => 'دبنهامز',
+    ],
+    'get email offers and the latest news from @site_name' => [
+      'en' => 'Enjoy 10% off your first order',
+      'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
+    ],
+    'read more' => [
+      'ar' => 'اقرأ المزيد',
+    ],
+    'read less' => [
+      'ar' => 'اقرأ  أقل',
+    ],
+    'Product Description' => [
+      'ar' => 'وصف المنتج',
+    ],
+    'Product Detail' => [
+      'ar' => 'تفاصيل المنتج',
+    ],
+    'Product No:' => [
+      'ar' => 'رمز المنتج',
+    ],
+    'size guide' => [
+      'ar' => 'دليل المقاسات',
+    ],
+    'sign up' => [
+      'en' => 'Subscribe',
+      'ar' => 'تسجيل',
+    ],
+    'Social links' => [
+      'en' => 'Follow us',
+      'ar' => 'تابعنا',
+    ],
+    'Select your prefered communication channel' => [
+      'ar' => 'حدد قناة الاتصال المفضلة لديك',
+    ],
+    'Details and care' => [
+      'ar' => 'التفاصيل والعناية',
+    ],
+    'Sleeve Length' => [
+      'ar' => 'طول الكم',
+    ],
+    'Length' => [
+      'ar' => 'الطول',
+    ],
+    'Neckline' => [
+      'ar' => 'الياقة',
+    ],
+    'Detail' => [
+      'ar' => 'التفاصيل',
+    ],
+    'Design' => [
+      'ar' => 'التصميم',
+    ],
+    'Fabric' => [
+      'ar' => 'الخامة',
+    ],
+    'Product Type' => [
+      'ar' => 'نوع المنتج',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
+  // Install metatag transalations.
+  _alshaya_dh_get_metatag_translations();
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_dh_transac');
+  }
+
+  // Configure map marker on checkout for CnC.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_dh/images/dh-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_dh/images/dh-pin-inactive.svg')
+    ->save();
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services .= ",'Instagram:instagram','Email:email'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
+ * Get translations of metatag.
+ */
+function _alshaya_dh_get_metatag_translations() {
+  $strings = [
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => '[current-date:html_year] Sale',
+      'ar' => 'عروض [current-date:html_year]',
+    ],
+    'alshaya_seo_sale_text_before_cod' => [
+      'en' => 'Explore [current-date:html_year] [term:name] collections and get the best prices in [alshaya_seo:country].',
+      'ar' => 'اكتشف مجموعات [term:name] واحصل على أفضل الأسعار في [alshaya_seo:country].',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Buy Debenhams - [term:name] - [current-date:html_year] sale and offers',
+      'ar' => 'عروض وخصومات Debenhams - [term:name] - [current-date:html_year]',
+    ],
+    'alshaya_seo_sale_keywords' => [
+      'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
+      'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
+    ],
+    'alshaya_seo_keywords' => [
+      'en' => 'Shop [term:name] Collection Online, Shop [term:name], Shop best [term:name] products,Shop [term:name] in [alshaya_seo:country], Buy [alshaya_seo:brand_name] [term:name] online, [alshaya_seo:term_cities]',
+      'ar' => 'تسوق مجموعة [term:name] أونلاين، تسوق [term:name]، تسوق أفضل منتجات [term:name]، تسوق [term:name] في [alshaya_seo:country]، اشتري [alshaya_seo:brand_name] [term:name] أونلاين، تسوق [alshaya_seo:term_cities]',
+    ],
+    'alshaya_seo_text_before_cod' => [
+      'en' => 'Find a wide range of [term:name] collections varying at the best price and quality to meet all demands.',
+      'ar' => 'احصل على مجموعة كبيرة من اختيارات [term:name] متنوعة بأفضل سعر وجودة .',
+    ],
+    'alshaya_seo_l2_text_before_cod' => [
+      'en' => 'Explore the best deals on [term:name] available at the best prices. A wide range of mothers and babies’ products from top brands.',
+      'ar' => ' احصل على مجموعة كبيرة من اختيارات [term:name] متنوعة بأفضل سعر وجودة لتلبي كل التطلعات.',
+    ],
+    'alshaya_seo_l3_text_before_cod' => [
+      'en' => 'Explore the variety of top quality [term:name] collection at the best prices and delivery to all [alshaya_seo:country].',
+      'ar' => 'أفضل العلامات التجارية [term:name] عالية الجودة بأفضل الأسعار وتوصيل متاح لكل [alshaya_seo:country].',
+    ],
+    'alshaya_seo_desc_free_delivery_n_cod' => [
+      'en' => 'Enjoy ✓ Free Returns and ✓ Cash on Delivery!',
+      'ar' => 'ستمتع بمزايا ✓  الاسترجاع المجاني ✓  الدفع عند الاستلام!',
+    ],
+    'alshaya_seo_page_title' => [
+      'en' => 'Shop [term:name] Collection Online | [site:name]',
+      'ar' => 'تسوق مجموعة أزياء [term:name] اتش آند إم | [site:name]',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop [alshaya_seo:brand_name] [term:name] collection online in [alshaya_seo:cities] and whole [alshaya_seo:country].',
+      'ar' => 'تسوق مجموعة [term:name] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:cities]، وكل أنحاء [alshaya_seo:country].',
+    ],
+    'alshaya_seo_l3_desc_start' => [
+      'en' => 'Shop [alshaya_seo:brand_name][term:name] collection in [alshaya_seo:cities] and [alshaya_seo:country] from top brand.',
+      'ar' => 'تسوق تشكيلة [term:name] من [alshaya_seo:brand_name] في [alshaya_seo:cities]، و[alshaya_seo:country] لأفضل العلامات التجارية.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

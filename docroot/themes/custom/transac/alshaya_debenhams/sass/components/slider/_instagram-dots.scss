@@ -1,0 +1,17 @@
+%slider-dots {
+  width: 0.5625rem !important;
+  height: 0.5625rem !important;
+  margin: 0 0.5625rem !important;
+}
+
+.i-dots {
+  .slick-dots-container > li {
+    @extend %slider-dots;
+
+    border: 1px solid $instagram_dots_default_border !important;
+
+    &.slick-active {
+      @extend %slider-dots;
+    }
+  }
+}

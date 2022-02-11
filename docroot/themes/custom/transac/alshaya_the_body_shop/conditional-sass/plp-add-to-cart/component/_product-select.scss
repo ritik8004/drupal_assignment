@@ -1,9 +1,12 @@
 .alshaya-select {
   .alshayaSelect__control {
-    width: 5.5625rem;
     border: 0.0625rem solid $pdp_qty_select_border;
     height: 3.125rem;
     font-size: 1.125rem;
+
+    @include breakpoint($tablet) {
+      width: 5.5625rem;
+    }
 
     &:hover {
       border-color: $pdp_qty_select_border;
@@ -22,7 +25,9 @@
   }
 
   .alshayaSelect__menu {
-    width: 5.5625rem;
+    @include breakpoint($tablet) {
+      width: 5.5625rem;
+    }
 
     .alshayaSelect__menu-list {
       border-color: $pdp_qty_select_border;

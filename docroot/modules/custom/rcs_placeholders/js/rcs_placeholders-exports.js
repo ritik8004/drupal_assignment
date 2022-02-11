@@ -42,15 +42,19 @@ function rcsRedirectToPage(url) {
   location.href = url;
 }
 
-rcsTranslatedText = (str, args, options) => {
-  if (rcsPhIsBrowserContext()) {
-    return Drupal.t(str, args, options);
-  }
+// Override Drupal.t() from Drupal Core.
+if (typeof Drupal.tOriginal === 'undefined') {
+  Drupal.tOriginal = Drupal.t;
+  Drupal.t = function (str, args, options) {
+    if (rcsPhIsBrowserContext()) {
+      return Drupal.tOriginal(str, args, options);
+    }
 
-  // Add special markup to ensure it is processed in the browser properly.
-  args = args || {};
-  options = options || {};
-  return '<span class="rcs-drupal-t" data-str="' + str + '" data-args="' + escape(JSON.stringify(args)) + '" data-options="' + escape(JSON.stringify(options)) + '"></span>';
+    // Add special markup to ensure it is processed in the browser properly.
+    args = args || {};
+    options = options || {};
+    return '<span class="rcs-drupal-t" data-str="' + str + '" data-args="' + escape(JSON.stringify(args)) + '" data-options="' + escape(JSON.stringify(options)) + '"></span>';
+  };
 }
 
 rcsHtmlDecode = (input) => {
@@ -217,3 +221,4 @@ rcsPhGetPageType = () => typeof drupalSettings.rcsPage !== 'undefined'
                            && typeof drupalSettings.rcsPage.type !== 'undefined'
                              ? drupalSettings.rcsPage.type
                              : null;
+

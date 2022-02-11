@@ -1,0 +1,14 @@
+.c-accordion__title,
+.c-collapse__title {
+  @include icon(plus, after) {
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+
+  &.ui-state-active {
+    @include icon(close, after) {
+      font-size: 1.5rem;
+      #{$right}: 0;
+    }
+  }
+}

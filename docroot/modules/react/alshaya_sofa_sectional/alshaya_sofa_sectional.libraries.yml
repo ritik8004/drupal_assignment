@@ -1,0 +1,22 @@
+sofa_sectional:
+  version: 1.x
+  js:
+    dist/sofasectional.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - alshaya_spc/cart_utilities
+
+sofa_sectional_utilities:
+  js:
+    assets/js/sofa_sectional_utilities.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+# Library to attach with products detail view in modal.
+product_modal_view:
+  js:
+    assets/js/product_modal_view.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal

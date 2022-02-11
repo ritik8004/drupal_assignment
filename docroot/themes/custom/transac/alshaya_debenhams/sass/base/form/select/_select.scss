@@ -1,0 +1,9 @@
+.select2-dropdown {
+  border-color: $primary_dropdown_border;
+}
+
+.select2-container--open {
+  .select2-dropdown--below {
+    border-radius: 0;
+  }
+}

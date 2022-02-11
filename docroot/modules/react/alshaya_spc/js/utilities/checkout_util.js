@@ -2,7 +2,9 @@ import axios from 'axios';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
-import hasValue from '../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
+import { cartContainsOnlyVirtualProduct } from './egift_util';
+import { addPaymentMethodInCart } from './update_cart';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -169,7 +171,7 @@ export const placeOrder = (paymentMethod) => {
  * user billing shipping same or not.
  */
 export const isBillingSameAsShippingInStorage = () => {
-  const same = localStorage.getItem('billing_shipping_same');
+  const same = Drupal.getItemFromLocalStorage('billing_shipping_same');
   return (same === null || same === 'true');
 };
 
@@ -185,7 +187,7 @@ export const removeBillingFlagFromStorage = (cart) => {
   if (cart.cart !== undefined
     && (cart.cart.billing_address === null
       || cart.cart.billing_address.city === 'NONE')) {
-    localStorage.removeItem('billing_shipping_same');
+    Drupal.removeItemFromLocalStorage('billing_shipping_same');
   }
 };
 
@@ -198,7 +200,7 @@ export const setBillingFlagInStorage = (cart) => {
   if (cart.cart_id !== undefined
     && cart.shipping.type === 'home_delivery'
     && isBillingSameAsShippingInStorage()) {
-    localStorage.setItem('billing_shipping_same', true);
+    Drupal.addItemInLocalStorage('billing_shipping_same', true);
   }
 };
 
@@ -398,7 +400,8 @@ export const customStockErrorMessage = (cartResult) => {
 export const cartValidationOnUpdate = (cartResult, redirect) => {
   let sameNumberOfItems = true;
   // If no error or OOS.
-  if (cartResult.error === undefined
+  if (cartResult
+    && cartResult.error === undefined
     && cartResult.in_stock !== false
     && cartResult.is_error === false
     && (cartResult.response_message === null
@@ -410,6 +413,10 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
       const continueCheckoutLink = (drupalSettings.user.uid === 0)
         ? 'cart/login'
         : 'checkout';
+
+      // Dispatch an event when user is moving to checkout page by
+      // clicking on `continue to checkout` link.
+      dispatchCustomEvent('continueToCheckoutFromCart', { cartResult });
 
       // Redirect to next page.
       window.location.href = Drupal.url(continueCheckoutLink);
@@ -505,6 +512,22 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   }
 
   return false;
+};
+
+/**
+ * Determines if shipping method is set in cart.
+ *
+ * @param {object} cart
+ *   The cart object.
+ */
+export const isShippingMethodSet = (cart) => {
+  // Set this as true if egift card is enabled and only virtual product is added
+  // in the cart.
+  if (cartContainsOnlyVirtualProduct(cart.cart)) {
+    return true;
+  }
+
+  return cart.cart.shipping.method !== null;
 };
 
 /**
@@ -651,3 +674,40 @@ export const binValidation = (bin) => {
  * Helper to get cnc store limit config.
  */
 export const getCnCStoresLimit = () => drupalSettings.cnc_stores_limit || 0;
+
+/**
+ * Update payment method and then place order.
+ *
+ * @param {string} paymentMethod
+ *   The paymentMethod using which user is placing order.
+ */
+export const updatePaymentAndPlaceOrder = (paymentMethod) => {
+  const analytics = Drupal.alshayaSpc.getGAData();
+
+  const data = {
+    payment: {
+      method: paymentMethod,
+      additional_data: {},
+      analytics,
+    },
+  };
+
+  const cartUpdate = addPaymentMethodInCart('update payment', data);
+  if (cartUpdate instanceof Promise) {
+    cartUpdate.then((result) => {
+      if (!result) {
+        // Remove loader in case of error.
+        removeFullScreenLoader();
+
+        dispatchCustomEvent('spcCheckoutMessageUpdate', {
+          type: 'error',
+          message: drupalSettings.global_error_message,
+        });
+      } else {
+        placeOrder(paymentMethod);
+      }
+    }).catch((error) => {
+      Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+    });
+  }
+};

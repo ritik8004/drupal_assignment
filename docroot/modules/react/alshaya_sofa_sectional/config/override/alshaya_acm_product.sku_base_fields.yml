@@ -1,0 +1,25 @@
+fields:
+  configuration:
+    label: 'Configuration'
+    configurable: 1
+    cardinality: 1
+  cushion_style:
+    label: 'Cushion style'
+    configurable: 1
+    cardinality: 1
+  fabric_color:
+    label: 'Fabric and Color'
+    configurable: 1
+    cardinality: 1
+  leg_style:
+    label: 'Leg style'
+    configurable: 1
+    cardinality: 1
+  width:
+    label: 'Width'
+    configurable: 1
+    cardinality: 1
+  depth:
+    label: 'Depth'
+    configurable: 1
+    cardinality: 1

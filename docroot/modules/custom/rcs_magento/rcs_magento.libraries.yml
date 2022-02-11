@@ -3,3 +3,4 @@ backend:
     dist/rcs_magento.bundle.js: {}
   dependencies:
     - core/jquery
+    - rcs_placeholders/helpers

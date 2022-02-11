@@ -86,6 +86,7 @@ exports.normalize = function normalize(
         url: deepestCategory.breadcrumbs[i].category_url_path,
         text: deepestCategory.breadcrumbs[i].category_name,
         data_url: deepestCategory.breadcrumbs[i].category_url_path,
+        id: deepestCategory.breadcrumbs[i].category_id,
       });
     });
 
@@ -94,6 +95,7 @@ exports.normalize = function normalize(
       url: deepestCategory.url_path,
       text: deepestCategory.name,
       data_url: deepestCategory.url_path,
+      id: deepestCategory.id,
     });
   }
 

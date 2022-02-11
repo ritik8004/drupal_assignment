@@ -1,4 +1,4 @@
-@javascript @guest @cnc @madaPayment @clickCollect @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @vssauat @flsauat @tbskwuat @flaeuat @bbwsauat @mcsauat @mcaeuat
+@javascript @guest @cnc @madaPayment @clickCollect @mujikwuat @mujisauat @mujiaeuat @pbkaeuat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @vssauat @flsauat @tbskwuat @flaeuat @bbwsauat @mcsauat @mcaeuat
 Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest Users
 
   Background:
@@ -36,23 +36,9 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
-    And I wait 10 seconds
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
+    And I add the billing address on checkout page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
-    And I wait for the page to load
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 30 seconds
     And I wait for the page to load
@@ -129,21 +115,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I wait for the page to load
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
@@ -224,24 +196,8 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
-    And I wait 10 seconds
     And I wait for the page to load
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -283,21 +239,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
@@ -376,22 +318,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 30 seconds
     And I wait for the page to load
@@ -472,22 +399,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I wait for the page to load
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load

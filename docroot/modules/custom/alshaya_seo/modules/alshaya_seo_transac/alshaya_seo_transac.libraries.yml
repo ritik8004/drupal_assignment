@@ -8,6 +8,9 @@ gtm:
     - core/jquery.once
     - core/underscore
     - alshaya_master/common_functions
+    - alshaya_master/jquery_is_in_viewport
+    - alshaya_master/local_storage_manager
+    - alshaya_white_label/slider_banner
 
 gtm_algolia:
   version: 1.x
@@ -39,6 +42,7 @@ gtm_spc_cart:
     - alshaya_seo_transac/gtm_spc
     - core/drupal.debounce
     - alshaya_master/jquery_is_in_viewport
+    - alshaya_master/local_storage_manager
 
 gtm_spc_checkout:
   js:
@@ -53,6 +57,7 @@ gtm_spc:
     - core/jquery
     - core/Drupal
     - alshaya_spc/cart_utilities
+    - alshaya_master/local_storage_manager
 
 product_list:
   version: 1.x
@@ -62,6 +67,7 @@ product_list:
     - alshaya_seo_transac/gtm
     - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
+
 search_list:
   version: 1.x
   js:
@@ -70,6 +76,7 @@ search_list:
     - alshaya_seo_transac/gtm
     - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
+
 product_slider:
   version: 1.x
   js:
@@ -96,10 +103,11 @@ gtm_pdp_default:
     - alshaya_seo_transac/gtm
     - core/drupal.debounce
 
-dy_product_recom:
+gtm_initial_data_push:
   version: 1.x
   js:
-    js/alshaya_seo.gtm.dy_product.js: {}
+    js/alshaya_seo.gtm.initial_data_push.js: { weight: -1 }
   dependencies:
-    - alshaya_seo_transac/gtm
-    - core/drupal.debounce
+    - core/drupal
+    - core/jquery
+    - alshaya_master/local_storage_manager

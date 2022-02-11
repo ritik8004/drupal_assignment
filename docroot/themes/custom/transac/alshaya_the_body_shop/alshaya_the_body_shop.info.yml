@@ -106,6 +106,11 @@ libraries-override:
       theme:
         css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
 
+  alshaya_white_label/aura-loyalty-global:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
+
   alshaya_white_label/contact:
     css:
       theme:
@@ -115,3 +120,68 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css
+
+  alshaya_white_label/sameday-express-delivery:
+    css:
+      theme:
+        css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css
+
+  alshaya_white_label/checkout-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css
+
+  alshaya_white_label/checkout-confirmation-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css
+
+  alshaya_white_label/wishlist:
+    css:
+      theme:
+        css/conditional-sass/wishlist/wishlist.ltr.css: css/conditional-sass/wishlist/wishlist.ltr.css
+
+  alshaya_white_label/country-switcher:
+    css:
+      theme:
+        css/conditional-sass/country-switcher/country-switcher.ltr.css: css/conditional-sass/country-switcher/country-switcher.ltr.css
+
+  alshaya_white_label/egift-common:
+    css:
+      theme:
+        css/conditional-sass/egift-common/egift-common.ltr.css: css/conditional-sass/egift-common/egift-common.ltr.css
+
+  alshaya_white_label/egift-purchase-page:
+    css:
+      theme:
+        css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css: css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css
+
+  alshaya_white_label/egift-topup-page:
+    css:
+      theme:
+        css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css: css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css
+
+  alshaya_white_label/egift-card-checkout:
+    css:
+      theme:
+        css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css
+
+  alshaya_white_label/egift-landing-page:
+    css:
+      theme:
+        css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css: css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css
+
+  alshaya_white_label/egift-myaccount:
+    css:
+      theme:
+        css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css: css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css
+
+  alshaya_white_label/egift-card-checkout-confirmation:
+    css:
+      theme:
+        css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css
+
+  alshaya_white_label/egift-cart:
+    css:
+      theme:
+        css/conditional-sass/egift-cart/egift-cart.ltr.css: css/conditional-sass/egift-cart/egift-cart.ltr.css

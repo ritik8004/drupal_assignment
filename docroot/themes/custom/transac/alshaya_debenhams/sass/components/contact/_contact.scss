@@ -1,0 +1,35 @@
+.address-book-address,
+.contact-form,
+.user-communication-preference,
+.webform-submission-alshaya-contact-form,
+.profile-form {
+  max-width: 26rem;
+
+  legend {
+    font-weight: normal;
+    font-size: 1.125rem;
+    font-family: $dh-Juana-semibold;
+  }
+
+  .form-submit {
+    text-transform: unset;
+    border: 2px solid $primary_empty_btn_border;
+    font-size: 1rem;
+    font-family: $dh-semibold;
+    border-radius: 1.3125rem;
+    min-width: 5.875rem;
+    width: auto;
+    line-height: 2;
+
+    html[lang=ar] & {
+      line-height: 1.4;
+      letter-spacing: 1.14px;
+    }
+
+    &:hover {
+      background: $primary_btn_hover_bg;
+      border: 2px solid $primary_btn_hover_border;
+      transition: 0.3s;
+    }
+  }
+}

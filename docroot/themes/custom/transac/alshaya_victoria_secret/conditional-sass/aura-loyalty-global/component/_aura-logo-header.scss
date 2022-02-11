@@ -1,0 +1,56 @@
+#block-aurarewardsheader {
+  @include breakpoint($desktop) {
+    height: auto !important;
+
+    .aura-header-link.open {
+      a.join-aura {
+        &:hover {
+          background: #fff;
+
+          svg {
+            // VS needs a white logo as header is black.
+            .letter {
+              fill: #1e2749;
+            }
+
+            .circle {
+              fill: url("#gradient1");
+            }
+          }
+        }
+      }
+    }
+
+    #aura-header-modal {
+      svg {
+        // VS needs a white logo as header is black.
+        .letter {
+          fill: #bcc9ff;
+        }
+
+        .circle {
+          fill: url("#gradient2");
+        }
+      }
+
+      a.join-aura {
+        padding: 0.5625rem 0;
+
+        &:hover {
+          background: #fff;
+
+          svg {
+            // VS needs a white logo as header is black.
+            .letter {
+              fill: #1e2749;
+            }
+
+            .circle {
+              fill: url("#gradient1");
+            }
+          }
+        }
+      }
+    }
+  }
+}

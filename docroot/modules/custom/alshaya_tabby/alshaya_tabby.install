@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_tabby module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_tabby_install() {
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+  // Create taxonomy term for the new method.
+  $tabby = $checkout_options_manager->loadPaymentMethod('tabby', '4 interest-free payments with tabby');
+
+  $tabby_ar = $tabby->hasTranslation('ar')
+    ? $tabby->getTranslation('ar')
+    : $tabby->addTranslation('ar', []);
+  $tabby_ar->setName('4 دفعات بدون فوائد مع تابي');
+  $tabby_ar->save();
+
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+
+  // Disable the new payment by default.
+  $exclude_payment_methods = $config->get('exclude_payment_methods');
+  $exclude_payment_methods['tabby'] = 'tabby';
+  $config->set('exclude_payment_methods', $exclude_payment_methods);
+
+  // Exclude the new method from refunds too by default.
+  $refund_exclude_payment_methods = $config->get('refund_exclude_payment_methods');
+  $refund_exclude_payment_methods['tabby'] = 'tabby';
+  $config->set('refund_exclude_payment_methods', $refund_exclude_payment_methods);
+
+  $config->save();
+
+  $strings = [
+    'Continue with tabby' => [
+      'ar' => 'واصل مع تابي',
+    ],
+    'Your tabby order has been cancelled' => [
+      'ar' => 'تم إلغاء طلب تابي الخاص بك',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

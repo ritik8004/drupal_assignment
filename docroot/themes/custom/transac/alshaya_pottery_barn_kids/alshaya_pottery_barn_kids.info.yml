@@ -11,6 +11,7 @@ regions:
   menu_primary: 'Menu Primary'
   menu_secondary: 'Menu Secondary'
   header: Header
+  sub_header_menu: 'Sub Header Menu'
   pre_content: 'Pre content'
   breadcrumb: Breadcrumb
   hero_content: 'Hero Content'
@@ -88,6 +89,11 @@ libraries-override:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/my-account/my-account.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/my-account/my-account.ltr.css
 
+  alshaya_white_label/aura-loyalty-global:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
+
   alshaya_white_label/alshaya-vat-certificate:
     css:
       theme:
@@ -97,3 +103,23 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/slug-banner/slug-banner.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/slug-banner/slug-banner.ltr.css
+
+  alshaya_white_label/checkout-pudo-aramex:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css
+
+  alshaya_white_label/checkout-confirmation-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css
+
+  alshaya_white_label/wishlist:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/wishlist/wishlist.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/wishlist/wishlist.ltr.css
+
+  alshaya_white_label/country-switcher:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/country-switcher/country-switcher.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/country-switcher/country-switcher.ltr.css

@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect @tbskwuat @mckwuat @flkwuat @bbwkwuat @pbkwuat @hmkwuat @westelmkwuat @bpkwuat
+@javascript @KNET @KNetPayment @clickCollect @aeokwuat @bbwkwuat @bpkwuat @hmkwuat @vskwuat @tbskwuat @flkwuat @mckwuat @mujikwuat @pbkwuat @pbkkwuat @westelmkwuat
 Feature: SPC Checkout Click and Collect using KNET payment method
 
   Background:
@@ -31,18 +31,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I scroll to the "#spc-payment-methods" element
     And I select the Knet payment method
     And I wait for AJAX to finish
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | locality                      | {locality}    |
-    Then I click jQuery "#address-form-action #save-address" element on page
+    And I add the billing address on checkout page
     And I wait 10 seconds
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -90,18 +79,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I scroll to the "#spc-payment-methods" element
     And I select the Knet payment method
     And I wait for AJAX to finish
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected      | {language_area_option} |
-      | locality                      | {locality}    |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -147,19 +125,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I scroll to the "#spc-payment-methods" element
     And I select the Knet payment method
     And I wait for AJAX to finish
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | locality                      | {locality}    |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish

@@ -13,6 +13,7 @@
 (function main($) {
 
   var pageEntity = null;
+  const classRcsLoaded = 'rcs-loaded';
 
   $(document).ready(function ready() {
     if (
@@ -82,13 +83,25 @@
 
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
+
+          // RCS Entity Loaded.
+          if (pageType) {
+            RcsEventManager.fire('alshayaPageEntityLoaded', {
+              detail: {
+                pageType,
+                entity,
+              }
+            });
+          }
+
+          // Add class to remove loader styles after RCS info is filled.
+          $('.rcs-page').addClass(classRcsLoaded);
         });
     }
   });
 
   // Process the Drupal.t markup from middleware.
   // For direct access we should not use this class.
-  // This is added for middleware in rcsTranslatedText().
   $('.rcs-drupal-t').each((index, item) => {
     $(item).replaceWith(Drupal.t(
       $(item).attr('data-str'),
@@ -142,24 +155,42 @@
         $(this)[0].innerHTML
       )
       .then(data => {
-        if (params['get-data'] && data === null) {
-          return;
-        }
-        // Pass the data to the rendering engine.
-        $(this).html(
-          renderer.render(
-            drupalSettings,
-            blockPhId[1],
-            params,
-            data,
-            pageEntity,
-            drupalSettings.path.currentLanguage,
-            $(this)[0].innerHTML
-          )
-        );
+        if (!params["get-data"] || data) {
+          try {
+            // Pass the data to the rendering engine.
+            $(this).html(
+              renderer.render(
+                drupalSettings,
+                blockPhId[1],
+                params,
+                data,
+                pageEntity,
+                drupalSettings.path.currentLanguage,
+                $(this)[0].innerHTML
+              )
+            );
 
-        // Re-attach all behaviors.
-        rcsPhApplyDrupalJs($(this).parent()[0]);
+            // Add class to remove loader styles on RCS Placeholders.
+            // This is done before triggering the Drupal behaviors so that the
+            // code in the behaviors knows that replacement has been completed.
+            $(this).addClass(classRcsLoaded);
+            // Re-attach all behaviors.
+            rcsPhApplyDrupalJs($(this).parent()[0]);
+            return;
+          } catch (error) {
+            Drupal.alshayaLogger(
+              "error",
+              "Error occurred while rendering block of ID @blockId - @error",
+              {
+                "@blockId": blockPhId[1],
+                "@error": error,
+              }
+            );
+          }
+        }
+
+        // Add class to remove loader styles on RCS Placeholders.
+        $(this).addClass(classRcsLoaded);
       });
   }
 

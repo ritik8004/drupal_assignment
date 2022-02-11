@@ -48,6 +48,11 @@ class PromotionProductListResource extends ResourceBase {
   const NODE_BUNDLE = 'acq_promotion';
 
   /**
+   * Page Type.
+   */
+  const PAGE_TYPE = 'listing';
+
+  /**
    * Facet source ID.
    */
   const FACET_SOURCE_ID = 'search_api:views_block__alshaya_product_list__block_2';
@@ -187,41 +192,55 @@ class PromotionProductListResource extends ResourceBase {
       // Load the promotion node object.
       $node = $this->entityTypeManager->getStorage('node')->load($id);
       // If given node exists in system.
-      if ($node instanceof NodeInterface) {
-        // If node is not of promotion type or active.
-        if ($node->bundle() != self::NODE_BUNDLE || !$node->isPublished()) {
+      if (!$node instanceof NodeInterface) {
+        // Validate if it's the rule_id of a node.
+        $query = $this->entityTypeManager->getStorage('node')->getQuery('AND');
+        $query->condition('type', 'acq_promotion');
+        $query->condition('field_acq_promotion_rule_id', $id);
+        $id = $query->execute();
+        if ($id) {
+          $id = array_values($id)[0];
+          // Load the promotion node object.
+          $node = $this->entityTypeManager->getStorage('node')->load($id);
+          if (!$node instanceof NodeInterface) {
+            $this->mobileAppUtility->throwException();
+          }
+        }
+        else {
           $this->mobileAppUtility->throwException();
         }
-
-        // Get language specific version of node.
-        $node = $this->entityRepository->getTranslationFromContext($node, $this->languageManager->getCurrentLanguage()->getId());
-
-        // Get result set.
-        $rule_id = (int) $node->get('field_acq_promotion_rule_id')->getString();
-        // Extract the rule id as we are now indexing based on rule id.
-        $result_set = $this->prepareAndExecuteQuery($rule_id);
-        // Add promo data in result set.
-        $response_data = $this->addExtraPromoData($node);
-        // Make response data similar to web site.
-        $this->alshayaSearchApiQueryExecute->setFacetsToIgnore(['category_facet_promo']);
-
-        AlshayaRequestContextManager::updateDefaultContext('app');
-
-        // Prepare response from result set.
-        $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-        $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
-
-        // Filter the empty products.
-        $response_data['products'] = array_filter($response_data['products']);
-
-        return (new ModifiedResourceResponse($response_data));
+      }
+      // If node is not of promotion type or active.
+      if ($node->bundle() != self::NODE_BUNDLE || !$node->isPublished()) {
+        $this->mobileAppUtility->throwException();
       }
 
-      $this->mobileAppUtility->throwException();
+      // Get language specific version of node.
+      $node = $this->entityRepository->getTranslationFromContext($node, $this->languageManager->getCurrentLanguage()->getId());
 
+      // Get result set.
+      $rule_id = (int) $node->get('field_acq_promotion_rule_id')->getString();
+      // Extract the rule id as we are now indexing based on rule id.
+      $result_set = $this->prepareAndExecuteQuery($rule_id);
+      // Add promo data in result set.
+      $response_data = $this->addExtraPromoData($node);
+      // Make response data similar to web site.
+      $this->alshayaSearchApiQueryExecute->setFacetsToIgnore(['category_facet_promo']);
+
+      AlshayaRequestContextManager::updateDefaultContext('app');
+
+      // Prepare response from result set.
+      $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+      $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2', self::PAGE_TYPE);
+
+      // Filter the empty products.
+      $response_data['products'] = array_filter($response_data['products']);
+
+      return (new ModifiedResourceResponse($response_data));
     }
 
     $this->mobileAppUtility->throwException();
+
   }
 
   /**
@@ -264,6 +283,20 @@ class PromotionProductListResource extends ResourceBase {
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      // Get the config value for not executing search query.
+      $respond_ignore_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_ignore_algolia_data');
+
+      $response['algolia_data'] = [
+        'filter_field' => 'promotion_nid',
+        'filter_value' => $rule_id,
+        'rule_contexts' => '',
+      ];
+
+      // Return only algolia data if the config value is set to false.
+      if ($respond_ignore_algolia_data) {
+        return $response;
+      }
+
       $index = $storage->load('alshaya_algolia_index');
 
       /** @var \Drupal\search_api\Query\QueryInterface $query */
@@ -296,11 +329,6 @@ class PromotionProductListResource extends ResourceBase {
 
       // Prepare and execute query and pass result set.
       $response = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'promo');
-      $response['algolia_data'] = [
-        'filter_field' => 'promotion_nid',
-        'filter_value' => $rule_id,
-        'rule_contexts' => '',
-      ];
 
       return $response;
     }

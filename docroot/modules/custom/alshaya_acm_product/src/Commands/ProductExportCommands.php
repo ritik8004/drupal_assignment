@@ -323,11 +323,16 @@ class ProductExportCommands extends DrushCommands {
         case 'meta':
           // Key can be one of the following: name or property.
           $key = isset($tag['#attributes']['name']) ? $tag['#attributes']['name'] : $tag['#attributes']['property'];
-          $return[$key] = $tag['#attributes']['content'];
+          $value = $tag['#attributes']['content'];
 
-          if ($key === 'twitter:url') {
-            $return[$key] = self::convertAbsoluteToRelativeUrl($tag['#attributes']['content'], $node->language()->getId());
+          // Magento cannot import description text > 255 chars. Also the
+          // SEO team recommended to keep it restricted to 250 chars.
+          if ($key === 'description') {
+            $value = mb_substr($value, 0, 250);
           }
+          // We append "meta_" to the key as it is the requirement for the
+          // Magento side import.
+          $return["meta_$key"] = $value;
           break;
       }
     }

@@ -22,15 +22,36 @@
 
 .c-facet.c-accordion,
 .c-facet.c-collapse-item {
+  &:not(.block-facet-blockcategory-facet-search) {
+    &:not(.algolia-plp-category-facet) ul,
+    ul {
+      z-index: 3;
+      text-transform: uppercase;
+    }
+  }
+
   .c-accordion__title,
   .c-collapse__title {
     font-size: 0.8125rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+
     &::after {
       #{$right}: 1.5rem;
       font-size: 1rem;
+    }
+
+    .c-plp & {
+      @include breakpoint($only-mobile) {
+        @include icon(chevrondown, after) {
+          font-size: 0.875rem;
+          #{$right}: 0.875rem;
+        }
+      }
     }
   }
 }

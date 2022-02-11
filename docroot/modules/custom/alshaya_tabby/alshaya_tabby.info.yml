@@ -1,0 +1,8 @@
+name: 'Alshaya Tabby'
+type: module
+description: 'Contains Tabby payment method related code.'
+package: 'Alshaya'
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_acm_checkout:alshaya_acm_checkout

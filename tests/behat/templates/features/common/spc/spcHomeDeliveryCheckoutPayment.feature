@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @homeDelivery @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmkwuat @pbsauat @tbskwuat @hmaeuat @flsauat @mcsauat @mcaeuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
+@javascript @guest @checkoutPayment @homeDelivery @mujikwuat @mujisauat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmkwuat @pbsauat @tbskwuat @hmaeuat @flsauat @mcsauat @mcaeuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
 
   Background:

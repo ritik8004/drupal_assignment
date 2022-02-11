@@ -14,7 +14,10 @@ use Drupal\Core\Field\BaseFieldDefinition;
  */
 function alshaya_menus_update_8003() {
   $base_definition = \Drupal::entityDefinitionUpdateManager()->getFieldStorageDefinition('social_id', 'menu_link_content');
-  $base_definition->setDisplayOptions('form', ['type' => 'string_textfield', 'weight' => 21]);
+  $base_definition->setDisplayOptions(
+    'form',
+    ['type' => 'string_textfield', 'weight' => 21]
+  );
   \Drupal::entityDefinitionUpdateManager()->updateFieldStorageDefinition($base_definition);
   $entity_type = \Drupal::entityTypeManager()->getDefinition('menu_link_content');
   \Drupal::entityDefinitionUpdateManager()->installEntityType($entity_type);

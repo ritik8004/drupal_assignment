@@ -1,6 +1,7 @@
 variables:
-  url_product_page: 'buy-mid-century-art-display-round-coffee-table.html'
-  product_listing_page_url: '/shop-furniture/'
-  spc_product_listing_page: '/shop-furniture/'
-  spc_basket_page: '/shop-furniture/'
-  spc_pdp_page: 'buy-mid-century-art-display-round-coffee-table.html'
+  url_product_page: 'buy-connor-side-table-limestone.html'
+  product_listing_page_url: '/shop-new-arrivals/test-new/small-ticket/'
+  spc_product_listing_page: '/shop-new-arrivals/test-new/small-ticket/'
+  spc_basket_page: '/shop-new-arrivals/test-new/small-ticket/'
+  spc_pdp_page: 'buy-connor-side-table-limestone.html'
+  spc_sofa_page: '/shop-furniture/sofas-sectional/'

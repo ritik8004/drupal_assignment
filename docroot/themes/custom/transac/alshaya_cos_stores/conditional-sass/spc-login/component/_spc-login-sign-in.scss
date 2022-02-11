@@ -33,4 +33,13 @@
       }
     }
   }
+
+  .site-brand-home {
+    a {
+      @include breakpoint($only-mobile) {
+        margin: 0 auto;
+        margin-top: 0.1875rem;
+      }
+    }
+  }
 }

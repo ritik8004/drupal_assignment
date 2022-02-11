@@ -2,6 +2,14 @@
   #alshaya-algolia-search {
     .c-content__region {
       width: 100%;
+
+      @include breakpoint($tablet) {
+        .alias--cart & {
+          width: 75.5%;
+          float: none;
+          margin: 0 auto;
+        }
+      }
     }
   }
 }
@@ -23,5 +31,21 @@
 
   .c-page-title {
     font-weight: normal;
+  }
+
+  .c-products__item {
+    .special--price {
+      margin-#{$left}: 0.625rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0;
+      }
+    }
+
+    .price-currency {
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0.0625rem;
+      }
+    }
   }
 }

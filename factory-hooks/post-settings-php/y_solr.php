@@ -9,7 +9,8 @@
  */
 
 // Connect to Acquia Cloud Search server on Cloud.
-if (isset($_ENV['AH_SITE_NAME'])) {
+$ah_env = getenv('AH_SITE_ENVIRONMENT');
+if ($ah_env && $ah_env !== 'ide') {
   $config['search_api.server.acquia_search_server']['name'] = 'Acquia Search API Solr server';
   $config['search_api.server.acquia_search_server']['backend_config']['connector'] = 'solr_acquia_connector';
 }

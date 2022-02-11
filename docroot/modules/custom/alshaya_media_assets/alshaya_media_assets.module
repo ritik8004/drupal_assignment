@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query_alter().
+ */
+function alshaya_media_assets_rcs_placeholders_graphql_query_alter(&$queries) {
+  array_push(
+    $queries['products']['items'],
+    'asset_type',
+  );
+
+  array_push(
+    $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
+    'assets_swatch',
+    'assets_pdp',
+    'assets_cart',
+  );
+
+  // Query for teaser assets for product recommendations.
+  if (isset($queries['products']['items']['upsell_products'])) {
+    $queries['products']['items']['upsell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
+  }
+  if (isset($queries['products']['items']['related_products'])) {
+    $queries['products']['items']['related_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
+  }
+  if (isset($queries['products']['items']['crosssell_products'])) {
+    $queries['products']['items']['crosssell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
+  }
+}
+
+/**
+ * Implements hook_ENTITY_view().
+ */
+function alshaya_media_assets_page_attachments(&$attachments) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+  $attachments['#attached']['library'][] = 'alshaya_media_assets/rcs_product_images';
+}

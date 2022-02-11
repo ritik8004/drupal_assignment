@@ -1,45 +1,6 @@
 import Axios from 'axios';
-import {
-  getStorageInfo,
-  removeStorageInfo,
-  setStorageInfo,
-} from '../../utilities/storage';
-
-/**
- * Logs messages in the backend.
- *
- * @todo This is a placeholder for logger.
- *
- * @param {string} level
- *   The error level.
- * @param {string} message
- *   The message.
- * @param {string} context
- *   The context.
- */
-const logger = {
-  send: (level, message, context) => {
-    if (typeof Drupal.logViaDataDog !== 'undefined') {
-      Drupal.logViaDataDog(level, message, context);
-      return;
-    }
-
-    // Avoid console log in npm tests.
-    if (typeof drupalSettings.jest !== 'undefined') {
-      return;
-    }
-
-    console.debug(level, Drupal.formatString(message, context));
-  },
-  emergency: (message, context) => logger.send('emergency', message, context),
-  alert: (message, context) => logger.send('alert', message, context),
-  critical: (message, context) => logger.send('critical', message, context),
-  error: (message, context) => logger.send('error', message, context),
-  warning: (message, context) => logger.send('warning', message, context),
-  notice: (message, context) => logger.send('notice', message, context),
-  info: (message, context) => logger.send('info', message, context),
-  debug: (message, context) => logger.send('debug', message, context),
-};
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import logger from '../../../../js/utilities/logger';
 
 /**
  * Get user role authenticated or anonymous.
@@ -52,18 +13,18 @@ const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.cust
 const removeCartIdFromStorage = () => {
   // Always remove cart_data, we have added this as workaround with
   // to-do at right place.
-  removeStorageInfo('cart_data');
+  Drupal.removeItemFromLocalStorage('cart_data');
 
   if (isUserAuthenticated()) {
-    setStorageInfo(window.authenticatedUserCartId, 'cart_id');
+    Drupal.addItemInLocalStorage('cart_id', window.authenticatedUserCartId);
     return;
   }
 
-  removeStorageInfo('cart_id');
+  Drupal.removeItemFromLocalStorage('cart_id');
 };
 
 const getCartIdFromStorage = () => {
-  let cartId = getStorageInfo('cart_id');
+  let cartId = Drupal.getItemFromLocalStorage('cart_id');
 
   // Check if cartId is of authenticated user.
   if (cartId === window.authenticatedUserCartId) {
@@ -95,6 +56,11 @@ const getCartIdFromStorage = () => {
  */
 const getApiEndpoint = (action, params = {}) => {
   let endpoint = '';
+  let topUpQuote = null;
+  // Reassigning params to updated the cart id.
+  // Doing this to avoid no-param-reassign eslint issue.
+  const endPointParams = params;
+
   switch (action) {
     case 'associateCart':
       endpoint = isUserAuthenticated()
@@ -111,61 +77,83 @@ const getApiEndpoint = (action, params = {}) => {
     case 'getCart':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/getCart'
-        : `/V1/guest-carts/${params.cartId}/getCart`;
+        : `/V1/guest-carts/${endPointParams.cartId}/getCart`;
       break;
 
     case 'addUpdateItems':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/items'
-        : `/V1/guest-carts/${params.cartId}/items`;
+        : `/V1/guest-carts/${endPointParams.cartId}/items`;
       break;
 
     case 'removeItems':
       endpoint = isUserAuthenticated()
-        ? `/V1/carts/mine/items/${params.itemId}`
-        : `/V1/guest-carts/${params.cartId}/items/${params.itemId}`;
+        ? `/V1/carts/mine/items/${endPointParams.itemId}`
+        : `/V1/guest-carts/${endPointParams.cartId}/items/${endPointParams.itemId}`;
       break;
 
     case 'updateCart':
-      endpoint = isUserAuthenticated()
+      // Check if Topup is in progress then get topup quoteid and use guest
+      // endpoint to perform topup.
+      topUpQuote = getTopUpQuote();
+      if (topUpQuote !== null) {
+        endPointParams.cartId = topUpQuote.maskedQuoteId;
+      }
+      // If user is authenticated and trying to topup then we will use guest
+      // update cart endpoint.
+      endpoint = isUserAuthenticated() && topUpQuote === null
         ? '/V1/carts/mine/updateCart'
-        : `/V1/guest-carts/${params.cartId}/updateCart`;
+        : `/V1/guest-carts/${endPointParams.cartId}/updateCart`;
       break;
 
     case 'estimateShippingMethods':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/estimate-shipping-methods'
-        : `/V1/guest-carts/${params.cartId}/estimate-shipping-methods`;
+        : `/V1/guest-carts/${endPointParams.cartId}/estimate-shipping-methods`;
       break;
 
     case 'getPaymentMethods':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/payment-methods'
-        : `/V1/guest-carts/${params.cartId}/payment-methods`;
+        : `/V1/guest-carts/${endPointParams.cartId}/payment-methods`;
       break;
 
     case 'selectedPaymentMethod':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/selected-payment-method'
-        : `/V1/guest-carts/${params.cartId}/selected-payment-method`;
+        : `/V1/guest-carts/${endPointParams.cartId}/selected-payment-method`;
       break;
 
     case 'placeOrder':
-      endpoint = isUserAuthenticated()
+      // Check if Topup is in progress then get topup quoteid and use guest
+      // endpoint to perform topup.
+      topUpQuote = getTopUpQuote();
+      if (topUpQuote !== null) {
+        endPointParams.cartId = topUpQuote.maskedQuoteId;
+      }
+      // If user is authenticated and trying to topup then we will use guest
+      // update cart endpoint.
+      endpoint = isUserAuthenticated() && topUpQuote === null
         ? '/V1/carts/mine/order'
-        : `/V1/guest-carts/${params.cartId}/order`;
+        : `/V1/guest-carts/${endPointParams.cartId}/order`;
       break;
 
     case 'getCartStores':
       endpoint = isUserAuthenticated()
-        ? `/V1/click-and-collect/stores/cart/mine/lat/${params.lat}/lon/${params.lon}`
-        : `/V1/click-and-collect/stores/guest-cart/${params.cartId}/lat/${params.lat}/lon/${params.lon}`;
+        ? `/V1/click-and-collect/stores/cart/mine/lat/${endPointParams.lat}/lon/${endPointParams.lon}`
+        : `/V1/click-and-collect/stores/guest-cart/${endPointParams.cartId}/lat/${endPointParams.lat}/lon/${endPointParams.lon}`;
       break;
 
     case 'getLastOrder':
       endpoint = isUserAuthenticated()
         ? '/V1/customer-order/me/getLastOrder'
         : '';
+      break;
+
+    case 'getTabbyAvailableProducts':
+      endpoint = isUserAuthenticated()
+        ? '/V1/carts/mine/tabby-available-products'
+        : `/V1/guest-carts/${endPointParams.cartId}/tabby-available-products`;
       break;
 
     default:
@@ -196,7 +184,6 @@ const getIp = () => Axios({ url: 'https://www.cloudflare.com/cdn-cgi/trace' })
 
 /* eslint-disable import/prefer-default-export */
 export {
-  logger,
   getApiEndpoint,
   isUserAuthenticated,
   getIp,

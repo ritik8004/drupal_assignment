@@ -18,6 +18,9 @@ cloud_zoom_common:
   js:
     js/product_mobile_zoom.js: {}
   dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
     - core/drupal.dialog
     - core/jquery.ui.draggable
     - alshaya_white_label/slick
@@ -32,6 +35,9 @@ instagram_dots:
   js:
     js/instagram_dots.js: {}
   dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
     - alshaya_white_label/slick
 
 cloud_zoom_pdp_gallery:
@@ -39,6 +45,9 @@ cloud_zoom_pdp_gallery:
   js:
     js/product_zoom.js: {}
   dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
     - core/drupalSettings
     - alshaya_product_zoom/cloud_zoom_common
     - alshaya_product_zoom/instagram_dots

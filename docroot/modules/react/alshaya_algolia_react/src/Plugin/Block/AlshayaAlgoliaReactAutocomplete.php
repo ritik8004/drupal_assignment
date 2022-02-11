@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
+use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
 
 /**
  * Provides a block to display 'autocomplete block' for mobile.
@@ -35,6 +36,13 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
   protected $alshayaAlgoliaReactConfig;
 
   /**
+   * Delivery Options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
+  /**
    * AlshayaAlgoliaReactAutocomplete constructor.
    *
    * @param array $configuration
@@ -47,17 +55,21 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
    *   The config factory.
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
    *   Alshaya Algolia React Config.
+   * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
+   *   Delivery Options Helper.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     ConfigFactoryInterface $config_factory,
-    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
+    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config,
+    DeliveryOptionsHelper $delivery_options_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->alshayaAlgoliaReactConfig = $alshaya_algolia_react_config;
+    $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 
   /**
@@ -74,7 +86,8 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('alshaya_algoila_react.alshaya_algolia_react_config')
+      $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
+      $container->get('alshaya_acm_product.delivery_options_helper')
     );
   }
 
@@ -127,11 +140,14 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
     $express_status = [
       'enabled' => FALSE,
     ];
-    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-    if ($express_delivery_config->get('status')) {
+    if ($this->deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
       $express_status = [
         'enabled' => TRUE,
+        'same_day_delivery' => $this->deliveryOptionsHelper->getSameDayDeliveryStatus(),
+        'express_delivery' => $this->deliveryOptionsHelper->getExpressDeliveryStatus(),
       ];
+
+      $libraries[] = 'alshaya_white_label/sameday-express-delivery';
     }
 
     return [

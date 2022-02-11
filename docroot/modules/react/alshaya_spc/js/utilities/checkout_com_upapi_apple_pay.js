@@ -8,6 +8,7 @@ import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
 import { addPaymentMethodInCart } from './update_cart';
 import cartActions from './cart_actions';
+import logger from '../../../js/utilities/logger';
 
 let applePaySessionObject;
 
@@ -60,9 +61,12 @@ const CheckoutComUpapiApplePay = {
   },
 
   onValidateMerchant: (event) => {
+    logger.debug('Inside onValidateMerchant for Apple Pay UPAPI.');
+
     const controllerUrl = Drupal.url('checkoutcom/upapi/applepay/validate');
     const validationUrl = `${controllerUrl}?u=${event.validationURL}`;
     Axios.get(validationUrl).then((merchantSession) => {
+      logger.debug('Merchant validation successful for Apple Pay UPAPI.');
       applePaySessionObject.completeMerchantValidation(merchantSession.data);
     }).catch((error) => {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
@@ -75,6 +79,8 @@ const CheckoutComUpapiApplePay = {
   },
 
   onPaymentAuthorized: (event) => {
+    logger.debug('Inside onPaymentAuthorized for Apple Pay UPAPI.');
+
     const upApiApplePayConfig = getUpapiApplePayConfig();
     const url = upApiApplePayConfig.api_url;
     const { token } = event.payment;

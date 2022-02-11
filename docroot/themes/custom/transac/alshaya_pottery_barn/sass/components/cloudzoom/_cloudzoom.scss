@@ -59,9 +59,5 @@
     @include breakpoint($tablet) {
       min-height: 26.25rem;
     }
-
-    @include breakpoint($desktop) {
-      min-height: 40rem;
-    }
   }
 }

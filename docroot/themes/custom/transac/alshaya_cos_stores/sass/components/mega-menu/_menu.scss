@@ -2,8 +2,8 @@
   .block-alshaya-main-menu {
     ul {
       &.menu--one__list {
-        width: 64%;
-        padding-left: 0.75rem;
+        width: 70%;
+        padding-#{$left}: 1.5rem;
       }
     }
 
@@ -35,7 +35,7 @@
     &:not(.megamenu-inline-layout) {
       li.menu--one__list-item {
         ul.menu--two__list {
-          #{$left}: -11%;
+          #{$left}: -13%;
           min-width: 79rem;
 
           .menu--two__list-item {
@@ -70,6 +70,14 @@
 
       &.shop {
         width: 50%;
+      }
+    }
+
+    .menu--active & {
+      #{$left}: -0.0625rem;
+
+      html[lang=ar] & {
+        right: 0;
       }
     }
   }

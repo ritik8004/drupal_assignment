@@ -1,6 +1,9 @@
 (function ($, Drupal) {
-
+  // Set the flag to false initially.
+  // To ensure Postpay API is called only after Init has happened.
+  var postPayInitFlag = false;
   document.addEventListener('alshayaPostpayInit', () => {
+    postPayInitFlag = true;
     alshayaPostpayCheckAmount();
   });
 
@@ -19,6 +22,10 @@
   });
 
   function alshayaPostpayCheckAmount() {
+    // Check if PostPay is initialised.
+    if (!postPayInitFlag) {
+      return;
+    }
     var amount = $('.postpay-widget').attr('data-amount');
     if (typeof amount === 'undefined'
       || !(amount)

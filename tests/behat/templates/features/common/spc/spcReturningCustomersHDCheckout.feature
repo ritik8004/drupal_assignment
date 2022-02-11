@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @homeDelivery @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @pbsauat @bbwsauat @mcsauat @mcaeuat @hmaeuat @mckwuat @tbskwuat @flsauat @vssauat @bbwkwuat @auth @flaeuat @bbwaeuat @vsaeuat @hmkwuat @hmsauat @flkwuat
+@javascript @returnUser @checkoutPayment @homeDelivery @mujikwuat @mujisauat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @pbsauat @bbwsauat @mcsauat @mcaeuat @hmaeuat @mckwuat @tbskwuat @flsauat @vssauat @bbwkwuat @auth @flaeuat @bbwaeuat @vsaeuat @hmkwuat @hmsauat @flkwuat
 Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2D) Card Payment Method
 
   Background:

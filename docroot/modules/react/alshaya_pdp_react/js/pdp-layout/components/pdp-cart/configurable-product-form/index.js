@@ -5,6 +5,8 @@ import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
 import { smoothScrollToActiveSwatch } from '../../../../../../js/utilities/smoothScroll';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import isAuraEnabled from '../../../../../../js/utilities/helper';
 import { isProductBuyable } from '../../../../../../js/utilities/display';
 
 class ConfigurableProductForm extends React.Component {
@@ -82,7 +84,9 @@ class ConfigurableProductForm extends React.Component {
 
   // To get available attribute value based on user selection.
   refreshConfigurables = (code, codeValue, variantSelected) => {
-    const { configurableCombinations, skuCode } = this.props;
+    const {
+      configurableCombinations, skuCode,
+    } = this.props;
     const selectedValues = this.selectedValues();
     // Refresh configurables.
     let { combinations } = configurableCombinations[skuCode];
@@ -103,6 +107,11 @@ class ConfigurableProductForm extends React.Component {
         detail: { variant: variantSelected },
       });
       document.querySelector('.sku-base-form').dispatchEvent(event);
+    }
+
+    // Dispatch event on variant update id aura enabled.
+    if (isAuraEnabled()) {
+      this.dispatchUpdateEvent(variantSelected);
     }
 
     if (typeof combinations[code] === 'undefined') {
@@ -126,6 +135,24 @@ class ConfigurableProductForm extends React.Component {
       });
     }
   }
+
+  dispatchUpdateEvent = (variantSelected) => {
+    const {
+      skuCode, productInfo, context, firstChild,
+    } = this.props;
+
+    // Dispatching event on variant change to listen in react.
+    const selectedVariant = variantSelected || firstChild;
+    const qty = document.querySelector(`#pdp-add-to-cart-form-${context} input[name="quantity"]`).value;
+    const priceKey = (context === 'related') ? 'final_price' : 'finalPrice';
+    const price = productInfo[skuCode].variants
+      ? productInfo[skuCode].variants[selectedVariant][priceKey]
+      : productInfo[skuCode][priceKey];
+    const data = {
+      amount: price * qty,
+    };
+    dispatchCustomEvent('auraProductUpdate', { data, context });
+  };
 
   selectedValues = () => {
     const { configurableCombinations, skuCode, context } = this.props;
@@ -244,6 +271,7 @@ class ConfigurableProductForm extends React.Component {
             productInfo={productInfo}
             skuCode={skuCode}
             stockQty={stockQty}
+            context={context}
           />
         </div>
         {(isProductBuyable(productInfo[skuCode].is_product_buyable)) ? (

@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   Drupal.behaviors.alshayaSocial = {
     attach: function (context, settings) {
@@ -18,6 +17,10 @@
             if (destination) {
               window.location.href = destination;
             } else {
+              // Log the social login.
+              Drupal.alshayaLogger('warning', 'User performed social authentication on @authLink and failed.', {
+                '@authLink': authLink,
+              });
               window.location.reload();
             }
           }

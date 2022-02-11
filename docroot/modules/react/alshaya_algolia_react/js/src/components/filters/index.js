@@ -35,6 +35,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
         facet={facet}
         indexName={indexName}
         filterResult={(test) => updateFilterResult(test)}
+        pageType={pageType}
       />,
     );
   });

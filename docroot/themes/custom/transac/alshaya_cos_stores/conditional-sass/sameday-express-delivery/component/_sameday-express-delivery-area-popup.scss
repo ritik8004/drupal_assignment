@@ -1,0 +1,13 @@
+.spc-delivery-area {
+  .spc-filter-panel-search-form-item {
+    &::after {
+      content: '';
+      background: url(../../../imgs/icons/search.svg) no-repeat;
+      display: inline-block;
+      width: 2.125rem;
+      height: 2.125rem;
+      top: 0.85rem;
+      #{$left}: 2rem;
+    }
+  }
+}

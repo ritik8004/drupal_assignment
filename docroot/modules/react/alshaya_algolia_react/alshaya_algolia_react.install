@@ -10,6 +10,33 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Added top_facets limit to alshaya_algolia_react.settings config.
+ */
+function alshaya_algolia_react_update_8007() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  $config->set('top_facets_limit', 5)->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Added product elements alignment config to frames.
+ */
+function alshaya_algolia_react_update_8006() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.product_frames'],
+    'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Added product teaser frames settings.
  */
 function alshaya_algolia_react_update_8005() {
@@ -25,13 +52,13 @@ function alshaya_algolia_react_update_8005() {
 
   $strings = [
     'Shop all products in this offer' => [
-      'ar' => 'تسوق جميع المنتجات المشمولة بهذا العرض'
+      'ar' => 'تسوق جميع المنتجات المشمولة بهذا العرض',
     ],
     'Offers available' => [
-      'ar' => 'العروض متوفرة'
+      'ar' => 'العروض متوفرة',
     ],
     'You can combine promotions but only one offer code can be used per transaction' => [
-      'ar' => 'يمكنك الجمع بين العروض الترويجية ولكن لا يمكن استخدام إلا رمز عرض واحد لكل معاملة تجارية'
+      'ar' => 'يمكنك الجمع بين العروض الترويجية ولكن لا يمكن استخدام إلا رمز عرض واحد لكل معاملة تجارية',
     ],
   ];
   alshaya_i18n_save_translations($strings);
@@ -184,13 +211,13 @@ function alshaya_algolia_react_install() {
       'ar' => 'العروض',
     ],
     'Shop all products in this offer' => [
-      'ar' => 'تسوق جميع المنتجات المشمولة بهذا العرض'
+      'ar' => 'تسوق جميع المنتجات المشمولة بهذا العرض',
     ],
     'Offers available' => [
-      'ar' => 'العروض متوفرة'
+      'ar' => 'العروض متوفرة',
     ],
     'You can combine promotions but only one offer code can be used per transaction' => [
-      'ar' => 'يمكنك الجمع بين العروض الترويجية ولكن لا يمكن استخدام إلا رمز عرض واحد لكل معاملة تجارية'
+      'ar' => 'يمكنك الجمع بين العروض الترويجية ولكن لا يمكن استخدام إلا رمز عرض واحد لكل معاملة تجارية',
     ],
   ];
 

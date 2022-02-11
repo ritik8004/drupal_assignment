@@ -849,7 +849,8 @@ class SkuManager {
     $promos = $this->productCacheManager->get($sku, $cache_key);
 
     if (!is_array($promos)) {
-      $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
+      // Use 'all' for context to get promotions for Algolia / Search.
+      $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart'], NULL, NULL, 'all');
       $tags = [];
       foreach (array_keys($promos) as $id) {
         $tags[] = 'node:' . $id;
@@ -907,9 +908,12 @@ class SkuManager {
       $query->condition('nid', $promotion_nids, 'IN');
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
-      if (!empty($context)) {
+
+      // Use 'all' for context to get promotions for both web and app.
+      if (!empty($context) && $context !== 'all') {
         $query->condition('field_acq_promotion_context', $context);
       }
+
       $query->exists('field_acq_promotion_label');
       $promotion_nids = $query->execute();
     }
@@ -2211,6 +2215,18 @@ class SkuManager {
   }
 
   /**
+   * Helper function to get swatch attributes to exclude from PLP.
+   *
+   * @return array
+   *   Array containing attributes to exclude.
+   */
+  public function getSwatchAttributesToExcludeOnPlp() {
+    static $value = NULL;
+    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('exclude_swatches_on_plp') ?? [];
+    return $value;
+  }
+
+  /**
    * Wrapper function to get value of swatch attribute for given SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -2372,7 +2388,6 @@ class SkuManager {
 
     foreach ($configurable_attributes as $code) {
       $fieldKey = 'attr_' . $code;
-
       if ($sku->hasField($fieldKey)) {
         $value = $sku->get($fieldKey)->getString();
         $context = $this->requestContextManager->getContext();
@@ -2380,12 +2395,17 @@ class SkuManager {
           continue;
         }
 
+        // Get raw attributes values for configurable options.
+        $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
+
         $configurableFieldValues[$fieldKey] = [
           'attribute_id' => $fieldKey,
           'label' => $this->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
           'value' => $sku->get($fieldKey)->getString(),
+          'option_id' => $raw_options['option_id'] ?? '' ,
+          'option_value' => $raw_options['option_value'] ?? '',
         ];
       }
     }
@@ -3455,7 +3475,11 @@ class SkuManager {
       foreach ($this->getAttributesToIndex() as $key => $field) {
         $field_key = 'attr_' . $key;
         $field_data = $child->get($field_key)->getValue();
-
+        // We don't need values from child sku.
+        // Express delivery attribute will be considered at parent level.
+        if ($field_key == 'attr_express_delivery') {
+          continue;
+        }
         if (!empty($field_data)) {
           $size_group = '';
           if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
@@ -3864,6 +3888,30 @@ class SkuManager {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Utility function to get configurable options raw values.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param string $code
+   *   Attribute code.
+   *
+   * @return array
+   *   Return configurable options.
+   */
+  public function getConfigurableRawAttributesData(SKUInterface $sku, $code) {
+    $parent_sku = $this->getParentSkuBySku($sku);
+    if ($parent_sku instanceof SKUInterface) {
+      $product_tree = Configurable::deriveProductTree($parent_sku);
+      $options = [
+        'option_id' => $product_tree['configurables'][$code]['attribute_id'] ?? '',
+        'option_value' => $product_tree['combinations']['by_sku'][$sku->getSku()][$code] ?? '',
+      ];
+      return $options;
+    }
+    return NULL;
   }
 
 }

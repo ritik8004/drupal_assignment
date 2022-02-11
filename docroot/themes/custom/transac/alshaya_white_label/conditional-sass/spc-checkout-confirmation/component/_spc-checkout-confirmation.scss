@@ -70,11 +70,11 @@
 
 .benefit-pay-container {
   background: $spc-checkout-order-detail-bg;
-  padding: 0 0.5rem 1.5625rem;
+  padding: 1.5625rem 0.5rem;
   position: relative;
 
   @include breakpoint($only-mobile) {
-    padding: 2.1875rem 0 1.5625rem;
+    padding: 1.5625rem 0;
   }
 
   &::after {
@@ -88,7 +88,6 @@
 
   button {
     margin: 0 auto;
-    margin-bottom: 2.1875rem;
     display: block;
     padding: 0.625rem 1.25rem;
     text-transform: uppercase;

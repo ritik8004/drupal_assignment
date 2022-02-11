@@ -29,7 +29,33 @@ function rcs_placeholders_theme($existing, $type, $theme, $path) {
       'base hook' => 'node',
       'variables' => [],
     ],
+    // A generic field template to render fields as placeholder blocks.
+    'field__rcs_placeholder_block' => [
+      'variables' => [
+        'items' => [],
+        'content_attributes' => [],
+        'title' => NULL,
+        'label_display' => NULL,
+        'language' => NULL,
+        'field_name' => NULL,
+        'field_type' => NULL,
+        'field_translatable' => NULL,
+        'entity_type' => NULL,
+        'bundle' => NULL,
+        'object' => NULL,
+        'formatter' => NULL,
+        'is_multiple' => NULL,
+        'third_party_settings' => NULL,
+      ],
+    ],
   ];
+}
+
+/**
+ * Implements hook_preprocess_field__rcs_placeholder_block().
+ */
+function rcs_placeholders_preprocess_field__rcs_placeholder_block(&$variables) {
+  $variables['label'] = $variables['title'];
 }
 
 /**
@@ -51,7 +77,7 @@ function rcs_placeholders_preprocess_html(&$variables) {
     $variables['#attached']['drupalSettings']['rcsPage']['urlKey'] = RcsPhPathProcessor::getUrlKey();
     $variables['#attached']['drupalSettings']['rcsPage']['fullPath'] = RcsPhPathProcessor::getFullPath();
 
-    if($config->get(RcsPhPathProcessor::$entityType . '.enrichment')) {
+    if ($config->get(RcsPhPathProcessor::$entityType . '.enrichment')) {
       $variables['#attached']['drupalSettings']['rcsPage']['enrichment'] = RcsPhPathProcessor::$entityData;
     }
   }
@@ -59,6 +85,10 @@ function rcs_placeholders_preprocess_html(&$variables) {
   // We need to override default cache context as we use the placeholder term
   // for different categories.
   $variables['#cache']['contexts'][] = 'url';
+
+  // Add page type to node markup to be able to do the initial skeleton.
+  $variables['attributes']['class'][] = 'rcs-page';
+  $variables['attributes']['class'][] = 'page-type-' . RcsPhPathProcessor::$entityType;
 }
 
 /**
@@ -77,7 +107,8 @@ function rcs_placeholders_preprocess_node(&$variables) {
 
       $variables['#cache']['contexts'][] = 'url';
 
-      // Add list cache tag for nodes for which we do not have any enrichment yet.
+      // Add list cache tag for nodes for which we do not have any enrichment
+      // yet.
       if ($variables['node']->id() === $config->get('product.placeholder_nid')) {
         $variables['#cache']['tags'][] = 'node_list';
       }
@@ -158,7 +189,7 @@ function rcs_placeholders_page_attachments(array &$attachments) {
   $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'] = $attributes;
 }
 
-/*
+/**
  * Clear route cache after enriched entity is created or deleted.
  *
  * @param \Drupal\Core\Entity\EntityInterface $entity
@@ -166,7 +197,7 @@ function rcs_placeholders_page_attachments(array &$attachments) {
  */
 function _rcs_placeholders_clear_route_cache(EntityInterface $entity) {
   if (($entity->getEntityTypeId() === 'taxonomy_term' && $entity->bundle() === 'rcs_category')
-    || ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'rcs_product')){
+    || ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'rcs_product')) {
     Cache::invalidateTags(['4xx-response', 'route_match', 'http_response']);
   }
 }
@@ -201,10 +232,21 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
 
   $entity_type = $node ? 'node' : 'taxonomy_term';
 
+  if (isset($data['tabs'][0]['entity.' . $entity_type . '.edit_form'])) {
+    $edit_tab = &$data['tabs'][0]['entity.' . $entity_type . '.edit_form'];
+  }
+  else {
+    $edit_tab = NULL;
+  }
+
   // If the entity is enriched, we only alter the tabs label.
   if (($node && $node->nid->value !== $config->get('product.placeholder_nid')) || ($term && $term->tid->value !== $config->get('category.placeholder_tid'))) {
-    $data['tabs'][0]['entity.' . $entity_type . '.edit_form']['#link']['title'] = t('Edit the enrichment');
-    $data['tabs'][0]['entity.' . $entity_type . '.delete_form']['#link']['title'] = t('Delete the enrichment');
+    if ($edit_tab) {
+      $edit_tab['#link']['title'] = t('Edit the enrichment');
+    }
+    if (isset($data['tabs'][0]['entity.' . $entity_type . '.delete_form'])) {
+      $data['tabs'][0]['entity.' . $entity_type . '.delete_form']['#link']['title'] = t('Delete the enrichment');
+    }
   }
   // If the entity is not enriched, alter the tabs links.
   else {
@@ -222,8 +264,10 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
       $url = Url::fromUserInput('/admin/structure/taxonomy/manage/rcs_category/add?name=#rcs.category.name#&slug=' . $config->get('category.path_prefix') . '#rcs.category.slug#');
     }
 
-    $data['tabs'][0]['entity.' . $entity_type . '.edit_form']['#link']['url'] = $url;
-    $data['tabs'][0]['entity.' . $entity_type . '.edit_form']['#link']['title'] = t('Enrich');
+    if ($edit_tab) {
+      $edit_tab['#link']['url'] = $url;
+      $edit_tab['#link']['title'] = t('Enrich');
+    }
   }
 }
 
@@ -235,7 +279,7 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   Form State.
  */
-function _rcs_placeholders_enrichment_form_alter(&$form, FormStateInterface $form_state) {
+function _rcs_placeholders_enrichment_form_alter(array &$form, FormStateInterface $form_state) {
   $entity = $form_state->getFormObject()->getEntity();
 
   // We only alter the form for new product/category.
@@ -243,11 +287,11 @@ function _rcs_placeholders_enrichment_form_alter(&$form, FormStateInterface $for
     return;
   }
 
-  // @TODO: Check if need to secure the $q values.
+  // @todo Check if need to secure the $q values.
   // Assuming it is safe for now as it is only accessible to contributors.
   $q = \Drupal::request()->query->all();
 
-  // @TODO: We may want to determine the title/name field using an entity
+  // @todo We may want to determine the title/name field using an entity
   // method.
   $title_field = $entity->getEntityTypeId() == 'node' ? 'title' : 'name';
   $slug_field = $entity->getEntityTypeId() == 'node' ? 'field_product_slug' : 'field_category_slug';
@@ -269,7 +313,7 @@ function rcs_placeholders_form_taxonomy_term_rcs_category_form_alter(&$form, For
 }
 
 /**
- * Implements hook_form_node_NODE-TYPE_form_alter().
+ * Implements hook_form_node_NODE_TYPE_form_alter().
  */
 function rcs_placeholders_form_node_rcs_product_form_alter(&$form, FormStateInterface $form_state) {
   _rcs_placeholders_enrichment_form_alter($form, $form_state);
@@ -280,7 +324,12 @@ function rcs_placeholders_form_node_rcs_product_form_alter(&$form, FormStateInte
  */
 function rcs_placeholders_block_access(Block $block, $operation, AccountInterface $account) {
   // We only want to alter the access rule for the breadcrumb blocks.
-  if ($operation !== 'view' || !in_array($block->getPluginId(), ['system_breadcrumb_block', 'rcs_ph_breadcrumb'])) {
+  if ($operation !== 'view'
+    || !in_array($block->getPluginId(), [
+      'system_breadcrumb_block',
+      'rcs_ph_breadcrumb',
+    ])
+  ) {
     return AccessResult::neutral();
   }
 
@@ -294,7 +343,12 @@ function rcs_placeholders_block_access(Block $block, $operation, AccountInterfac
     $entity = \Drupal::routeMatch()->getParameter('node');
   }
 
-  $rcs_entity = $entity && in_array($entity->bundle(), ['rcs_category', 'rcs_product']);
+  $rcs_entity = $entity
+    && in_array($entity->bundle(), [
+      'rcs_category',
+      'rcs_product',
+      'rcs_promotion',
+    ]);
 
   // We don't want to display the default breadcrumb on PLP/PDP.
   if ($rcs_entity && $block->getPluginId() === 'system_breadcrumb_block') {
@@ -346,6 +400,11 @@ function rcs_placeholders_page_bottom(array &$page_bottom) {
   // Allow other modules to alter the data.
   \Drupal::moduleHandler()->alter('rcs_placeholders_graphql_query', $queries);
 
+  // Store cache data an unset in original array so that no further processing
+  // for it occurs in the array.
+  $cache_meta_data = $queries['#cache'] ?? [];
+  unset($queries['#cache']);
+
   // Convert array to graphql.
   foreach ($queries as $query => $fields) {
     $queries[$query] = ArrayGraphQL::convert($fields);
@@ -356,5 +415,6 @@ function rcs_placeholders_page_bottom(array &$page_bottom) {
     '#type'  => 'html_tag',
     '#tag'   => 'script',
     '#value' => Markup::create('var rcsPhGraphqlQuery = ' . json_encode($queries) . ';'),
+    '#cache' => $cache_meta_data,
   ];
 }

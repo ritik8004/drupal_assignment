@@ -5,7 +5,7 @@ import React from 'react';
  */
 const ShippingMethodTag = (shippingMethod) => (
   <div key={shippingMethod.carrier_code} className={`cart-shipping-method ${shippingMethod.carrier_code.toString().toLowerCase()} ${shippingMethod.available ? 'active' : 'in-active'}`}>
-    <span className="carrier-title">{shippingMethod.carrier_title}</span>
+    <span className="carrier-title">{shippingMethod.cart_page_title}</span>
     <span className="information-icon">
       <span className="method-title">
         <span>{shippingMethod.method_title}</span>
@@ -38,12 +38,7 @@ const CartShippingMethods = (props) => {
     <div className="sku-cart-delivery-methods">
       <div className="shipping-tags-first-row">
         {
-          shippingMethods.filter((el, i) => i < 2).map(ShippingMethodTag)
-        }
-      </div>
-      <div className="shipping-tags-second-row">
-        {
-          shippingMethods.filter((el, i) => i > 1).map(ShippingMethodTag)
+          shippingMethods.map(ShippingMethodTag)
         }
       </div>
     </div>

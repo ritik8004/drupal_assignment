@@ -10,6 +10,7 @@ var config = {
     autocomplete: './js/src/SearchIndex.js',
     plp: './js/src/PlpIndex.js',
     plpv2: './js/src/PlpV2Index.js',
+    productCategoryCarousel: './js/src/ProductCategoryCarousel.js',
   },
   mode: 'production',
   output: {
@@ -24,7 +25,8 @@ var config = {
   },
   externals: {
     react: 'React',
-    'react-dom': 'ReactDOM'
+    'react-dom': 'ReactDOM',
+    axios: 'axios',
   },
   module: {
     rules: [

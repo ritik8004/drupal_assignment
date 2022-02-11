@@ -9,7 +9,7 @@ import {
   prepareAddressDataForShipping,
 } from '../../../utilities/address_util';
 import ConditionalView from '../../../common/components/conditional-view';
-import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class ShippingMethod extends React.Component {
   constructor(props) {
@@ -18,6 +18,40 @@ export default class ShippingMethod extends React.Component {
     this.state = {
       selectedOption: selected,
     };
+  }
+
+  componentDidMount = () => {
+    document.addEventListener('onShippingAddressUpdate', this.refreshShippingMethodState, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('onShippingAddressUpdate', this.refreshShippingMethodState, false);
+  }
+
+  /**
+   * Handles shipping method update.
+   */
+  refreshShippingMethodState = (e) => {
+    const data = e.detail;
+
+    if (hasValue(data.shipping)
+      && hasValue(data.shipping.methods)
+      && hasValue(data.shipping.method)) {
+      // Get the selected shipping method from shipping methods list,
+      // update state for selected method and set radio button as checked.
+      Object.entries(data.shipping.methods).forEach(([, method]) => {
+        if (data.shipping.method.indexOf(method.method_code) !== -1) {
+          this.setState({
+            selectedOption: method.method_code,
+          });
+          // Add delay to ensure selected shipping method markup is rendered
+          // before setting the radio button as checked.
+          setTimeout(() => {
+            document.getElementById(`shipping-method-${method.method_code}`).checked = true;
+          }, 10);
+        }
+      });
+    }
   }
 
   /**
@@ -40,14 +74,6 @@ export default class ShippingMethod extends React.Component {
 
     // Show the loader.
     showFullScreenLoader();
-
-    const event = new CustomEvent('changeShippingMethod', {
-      bubbles: true,
-      detail: {
-        data: method,
-      },
-    });
-    document.dispatchEvent(event);
 
     // Prepare shipping data.
     const tempShippingData = cart.cart.shipping.address;
@@ -83,6 +109,15 @@ export default class ShippingMethod extends React.Component {
             selectedOption: method.method_code,
           });
           document.getElementById(`shipping-method-${method.method_code}`).checked = true;
+
+          // Custom Event for shipping method change.
+          const event = new CustomEvent('changeShippingMethod', {
+            bubbles: true,
+            detail: {
+              data: method,
+            },
+          });
+          document.dispatchEvent(event);
         } else {
           // In case of error, prepare error info
           // and call refresh cart so that message is shown.
@@ -124,7 +159,7 @@ export default class ShippingMethod extends React.Component {
           <span className="method-title">{method.method_title}</span>
           <span className="spc-price">{price}</span>
         </label>
-        <ConditionalView condition={isExpressDeliveryEnabled() && !method.available}>
+        <ConditionalView condition={!method.available}>
           <div className="method-error-message">{method.error_message}</div>
         </ConditionalView>
       </div>

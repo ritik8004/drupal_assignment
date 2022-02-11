@@ -39,9 +39,14 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_seo_transac_page_attachments_alter(&$page) {
+  // Settings to enable error tracking on GA.
+  // Add this for all users to ensure they are available even for admins.
+  $page['#attached']['drupalSettings']['gtm']['log_errors_to_console'] = Settings::get('log_errors_to_console', 1);
+  $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);
+
   if (_alshaya_seo_process_gtm()) {
+    $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_initial_data_push';
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
-    $page['#attached']['library'][] = 'alshaya_seo_transac/dy_product_recom';
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     if (\Drupal::moduleHandler()->moduleExists('alshaya_algolia_react')) {
@@ -68,9 +73,6 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       );
     }
 
-    // Settings to enable error tracking on GA.
-    $page['#attached']['drupalSettings']['gtm']['log_errors_to_console'] = Settings::get('log_errors_to_console', 1);
-    $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);
     // Settings from the setting form for the module.
     $seo_transac_settings = \Drupal::config('alshaya_seo_transac.settings');
     $page['#attached']['drupalSettings']['gtm']['productImpressionDefaultItemsInQueue'] = $seo_transac_settings->get('product_impressions_default_items_in_queue');
@@ -96,7 +98,7 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
 
   if (in_array($bundle, ['acq_product', 'rcs_product']) &&
     (\Drupal::languageManager()->getCurrentLanguage()->getId() === $entity->language()->getId())) {
-    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $alshayaGtmManager */
+    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     if ($bundle === 'rcs_product') {
       $product_node = $gtm_manager->fetchRcsProductGtmAttributes($entity, $view_mode);
@@ -134,7 +136,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
   $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
   if ($route_match->getRouteName() == 'entity.node.canonical') {
-    /* @var \Drupal\node\Entity\Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
     if (!$node) {
       return $snippet;
@@ -147,7 +149,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
       $snippet['@context'] = 'http://schema.org';
       $snippet['@type'] = 'Product';
       $snippet['description'] = _alshaya_seo_get_node_meta_description();
-      // @Todo: Change this once brand field is available.
+      // @todo Change this once brand field is available.
       $snippet['brand'] = [
         '@type' => 'Thing',
         'name' => \Drupal::config('system.site')->get('name'),
@@ -231,7 +233,8 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
   // For checkout page, we don't always want to trigger checkout event first
   // thing. so we don't alter data_layer for checkout page here and it will
   // trigger events from javascript (alshaya_seo.gtm.spc_checkout.js).
-  if (in_array($current_route['route_name'], ['alshaya_spc.checkout', 'acq_cart.cart'])) {
+  $routes_to_exclude = ['alshaya_spc.checkout', 'acq_cart.cart'];
+  if (in_array($current_route['route_name'], $routes_to_exclude)) {
     return;
   }
   try {
@@ -287,7 +290,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       if ($advantage_card_config->get('advantageCardEnabled')
         && $attributes['actionField']['coupon'] === 'advantage_card'
         && $data_layer['userId']) {
-        $attributes['actionField']['coupon'] = 'Advantage_Card_'.$data_layer['userId'];
+        $attributes['actionField']['coupon'] = 'Advantage_Card_' . $data_layer['userId'];
         $attributes['actionField']['isAdvantageCard'] = 'Yes';
       }
 
@@ -432,6 +435,13 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-sitemap',
       'variables' => [
         'term_tree' => NULL,
+      ],
+    ],
+    'alshaya_country_switcher' => [
+      'template' => 'alshaya-country-switcher',
+      'variables' => [
+        'markets' => NULL,
+        'currentMarket' => NULL,
       ],
     ],
   ];

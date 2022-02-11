@@ -1,9 +1,9 @@
 variables:
-  spc_product_listing_page: '/shop-new/'
-  spc_basket_page: '/shop-new/'
-  spc_pdp_page: 'buy-indian-cotton-poplin-short-pants.html'
-  product_listing_page_url: "/shop-new/"
-  spc_plp_add_to_cart_single: '/shop-new/'
+  spc_product_listing_page: '/shop-fashion-mens-socks/'
+  spc_basket_page: '/shop-fashion-mens-socks/'
+  spc_pdp_page: 'buy-indian-cotton-jersey-stitch-crew-neck-s-s-t-shirt-white.html'
+  product_listing_page_url: "/shop-fashion-mens-socks/"
+  spc_plp_add_to_cart_single: '/shop-fashion-mens-socks/'
   spc_promotion_listing_page: '//'
-  spc_single_product_detail_page_coupon: 'buy-indian-cotton-poplin-short-pants.html'
-  spc_bank_product: '/shop-new/'
+  spc_single_product_detail_page_coupon: 'buy-indian-cotton-jersey-stitch-crew-neck-s-s-t-shirt-white.html'
+  spc_bank_product: '/shop-fashion-mens-socks/'

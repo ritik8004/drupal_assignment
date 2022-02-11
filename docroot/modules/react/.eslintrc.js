@@ -31,6 +31,8 @@ module.exports = {
     GTM_CONSTANTS: true,
     debounce: true,
     BV: true,
+    axios: true,
+    _: true,
   },
   parser: "babel-eslint",
   parserOptions: {

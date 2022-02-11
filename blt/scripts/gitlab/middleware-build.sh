@@ -1,10 +1,22 @@
 #!/usr/bin/env bash
 # This file runs during the middleware build.
 
-middlewareDir="$1"
+deployDir="$1"
 
-echo "Building middleware."
+echo "Building SPC middleware."
 
-cd $middlewareDir
+cd "$deployDir/docroot/middleware"
+composer validate --no-check-all --ansi
+composer install --no-interaction
+
+echo "Building Appointment middleware."
+
+cd "$deployDir/docroot/appointment"
+composer validate --no-check-all --ansi
+composer install --no-interaction
+
+echo "Building Proxy middleware."
+
+cd "$deployDir/docroot/proxy"
 composer validate --no-check-all --ansi
 composer install --no-interaction

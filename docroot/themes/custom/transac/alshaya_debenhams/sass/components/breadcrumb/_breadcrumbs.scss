@@ -1,0 +1,27 @@
+.c-breadcrumb {
+  ol {
+    max-width: 77rem;
+  }
+
+  li {
+    a {
+      font-family: $dh-light;
+    }
+
+    font-weight: normal;
+
+    &:last-of-type {
+      font-weight: normal;
+    }
+
+    &:last-of-type a {
+      font-weight: normal;
+    }
+
+    &::after {
+      content: '/';
+      padding-#{$left}: 0;
+      padding-#{$right}: 0;
+    }
+  }
+}

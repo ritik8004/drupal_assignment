@@ -35,6 +35,18 @@ function hook_alshaya_spc_cart_build_alter(array &$build) {
 }
 
 /**
+ * Alter hook to allow other modules to change the order detail settings.
+ *
+ * @param array $settings
+ *   Order details settings.
+ * @param array $order
+ *   Order data.
+ */
+function hook_alshaya_spc_order_details_settings_alter(array &$settings, array $order) {
+
+}
+
+/**
  * Allow other modules to change the build array for checkout page.
  *
  * @param array $build
@@ -51,6 +63,18 @@ function hook_alshaya_spc_checkout_build_alter(array &$build) {
  *   Reference to the build array of checkout login page.
  */
 function hook_alshaya_spc_checkout_login_build_alter(array &$build) {
+  $build['#attached']['drupalSettings']['item_code_label'] = 'Item Code';
+}
+
+/**
+ * Alter the build for the checkout confirmation page.
+ *
+ * @param array $build
+ *   Checkout confirmation page build data.
+ * @param array $order
+ *   Order data.
+ */
+function hook_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
   $build['#attached']['drupalSettings']['item_code_label'] = 'Item Code';
 }
 

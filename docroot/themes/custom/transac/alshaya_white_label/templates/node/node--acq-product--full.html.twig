@@ -21,6 +21,9 @@ set classes = [
             </div>
           </div>
         {% endif %}
+        {% if content.wishlist_enabled %}
+          {{ content.wishlist_enabled }}
+        {% endif %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
@@ -57,6 +60,10 @@ set classes = [
             <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
+          {% if content.tabby %}
+            <div class="tabby"> {{ content.tabby }} </div>
+          {% endif %}
+
           <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
 
           {% if vat_text %}
@@ -82,16 +89,14 @@ set classes = [
 
           {# Delivery options will load if express delivery enabled. #}
           {% if content.delivery_options %}
-            <div class="express-delivery">
-              {% for key,delivery_option in content.delivery_options %}
-                <div class="express-delivery-text {{ key }}">
-                  <p>{{ delivery_option }}</p>
-                </div>
-              {% endfor %}
+            <div class="express-delivery {{ content.express_delivery_class }}">
+            {% for key,delivery_option in content.delivery_options %}
+              <div class="express-delivery-text {{ key }} {{ delivery_option.status }}">
+                <span>{{ delivery_option.label }}</span>
+              </div>
+            {% endfor %}
             </div>
-          {% endif %}
-
-          {% if content.same_day_delivery_text %}
+          {% elseif content.same_day_delivery_text and content.delivery_options is empty %}
             <div class="same-day-delivery">
               <div class="same-day-content">
                 <p>{{ content.same_day_delivery_text }}</p>
@@ -103,6 +108,12 @@ set classes = [
               <p>{{ content.delivery_in_only_city_text }}</p>
             </div>
           {% endif %}
+
+          {% if aura_enabled is defined and aura_enabled %}
+            {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+            <div id="aura-pdp"></div>
+          {% endif %}
+
         </div>
       {% endblock %}
 
@@ -211,7 +222,9 @@ set classes = [
             {% if content.home_delivery or content.click_and_collect %}
               <div class="delivery-options-wrapper">
                 <div class="product-out-of-stock-layer"></div>
-                <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                {% if not content.express_delivery %}
+                  <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                {% endif %}
                 <div class="field__content">
                   {{ content.home_delivery }}
 

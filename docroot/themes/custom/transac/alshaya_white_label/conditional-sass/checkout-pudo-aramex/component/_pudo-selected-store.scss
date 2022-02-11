@@ -5,6 +5,7 @@
     .spc-cnc-store-name {
       .store-name {
         margin-bottom: 0;
+        color: $spc-cnc-store-list-distance;
       }
     }
   }
@@ -20,6 +21,10 @@
         #{$right}: calc(100% + 0.625rem);
         #{$left}: auto;
       }
+    }
+
+    .store-distance {
+      #{$right}: 0;
     }
 
     .spc-store-name-wrapper {

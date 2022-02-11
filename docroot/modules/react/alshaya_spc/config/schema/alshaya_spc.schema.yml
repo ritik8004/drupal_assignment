@@ -1,3 +1,11 @@
+alshaya_spc.settings:
+  type: config_object
+  label: 'Alshaya spc configuration'
+  mapping:
+    order_id_fallback:
+      type: string
+      label: 'Order id fallback if new encrypted parameter not available'
+
 alshaya_spc.click_n_collect:
   type: config_object
   label: 'spc click and collect configuration'
@@ -32,9 +40,12 @@ alshaya_spc.advantage_card:
 
 alshaya_spc.express_delivery:
   type: config_object
-  label: 'Express delivery configuration'
+  label: 'Delivery options configuration'
   mapping:
-    status:
+    same_day_delivery_status:
+      type: boolean
+      label: 'Same Day delivery status'
+    express_delivery_status:
       type: boolean
       label: 'Express delivery status'
     delivery_options_order:
@@ -43,3 +54,9 @@ alshaya_spc.express_delivery:
       sequence:
         type: string
         label: 'Delivery option type'
+    same_day_delivery_label:
+      type: string
+      label: 'Same Day Delivery Label'
+    express_delivery_label:
+      type: string
+      label: 'Express Delivery Label'

@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * Js to convert to select2Option to transform into boxes from select list.
@@ -13,7 +12,7 @@
    */
   Drupal.select2OptionConvert = function (context) {
     if ($(window).width() < 768) {
-      $('#configurable_ajax').addClass('visually-hidden');
+      $('#configurable_ajax', context).addClass('visually-hidden');
     }
     // Hide the dropdowns when user resizes window and is now in desktop mode.
     $('.form-item-configurable-select').addClass('visually-hidden');
@@ -281,8 +280,16 @@
 
           // Moving sharethis before description field in mobile.
           var sharethisSection = $('.basic-details-wrapper .modal-share-this', product).clone();
+          // Check if express delivery feature is enabled.
           if ($('.magazine-product-description .modal-share-this', product).length < 1) {
-            sharethisSection.once('bind-events').insertAfter(product.find('.magazine-swatch-placeholder'));
+            var magzine_swatch_placeholder = product.find('.magazine-swatch-placeholder');
+            if (typeof settings.expressDelivery !== 'undefined'
+              && typeof settings.expressDelivery.enabled !== 'undefined'
+              && document.querySelector('.express-delivery.mobile') !== null) {
+              // Moving sharethis below Express delivery tag placement in mobile magazine layout.
+              magzine_swatch_placeholder = product.find('.express-delivery.mobile');
+            }
+            sharethisSection.once('bind-events').insertAfter(magzine_swatch_placeholder);
           }
           $('.basic-details-wrapper .modal-share-this', product).addClass('visually-hidden');
           if ($('.magazine-product-description .modal-share-this', product).hasClass('visually-hidden')) {
@@ -351,7 +358,7 @@
         });
       });
 
-      if ($(window).width() > 767) {
+      if ($(window).width() > 767 && drupalSettings.pdp_gallery_type !== 'classic') {
         // JS to make sidebar sticky beyond Mobile.
         // PDP Sidebar.
         var sidebarWrapper = $('.content-sidebar-wrapper');

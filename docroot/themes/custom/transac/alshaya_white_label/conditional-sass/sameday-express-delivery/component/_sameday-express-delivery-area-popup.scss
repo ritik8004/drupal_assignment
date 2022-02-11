@@ -38,7 +38,6 @@ body.overlay-delivery-area {
 
     @include breakpoint($only-mobile) {
       transform: translateY(0);
-      #{$left}: 0;
     }
 
     @include breakpoint($tablet) {
@@ -73,35 +72,38 @@ body.overlay-delivery-area {
   z-index: 14;
   opacity: 0;
 
-  html[lang=ar] & {
-    transform: translateX(-100%);
-  }
-
   @include breakpoint($only-mobile) {
     transform: translateY(100%);
     margin-top: 8.75rem;
+    #{$left}: 0;
   }
 
   @include breakpoint($tablet) {
     width: 24.0625rem;
     max-width: 24.0625rem;
+
+    html[lang=ar] & {
+      transform: translateX(-100%);
+    }
   }
 }
 
 .spc-delivery-area {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  overflow: scroll;
 
   .title-block {
     display: flex;
-    align-items: baseline;
-    padding-top: 1.875rem;
-    padding-#{$right}: 0.9375rem;
-    padding-#{$left}: 1.125rem;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 -0.0625rem 1.25rem 0.5625rem $sticky-btn;
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 0;
 
     @include breakpoint($only-mobile) {
       padding-top: 1.0625rem;
-      justify-content: end;
     }
   }
 
@@ -119,7 +121,8 @@ body.overlay-delivery-area {
   .spc-checkout-section-title {
     color: $spc-cart-delivery-popup-title;
     text-align: center;
-    padding: 0 2.1875rem;
+    padding: 0 1rem;
+    margin-bottom: 0;
 
     @include breakpoint($only-mobile) {
       font-size: 1rem;
@@ -129,15 +132,37 @@ body.overlay-delivery-area {
   .close-modal {
     font-size: 0;
     cursor: pointer;
+    position: absolute;
+    #{$right}: 0;
+    color: transparent;
+    top: 50%;
+    transform: translateY(-50%);
 
     @include icon(close, before) {
-      font-size: 1rem;
+      font-size: 3rem;
+      color: $sameday-express-delivery-drawer-cross;
+
+      @include breakpoint($tablet) {
+        padding-top: 0.9375rem;
+      }
     }
   }
 
   .area-list-block-content {
-    margin-top: 0.625rem;
-    text-align: #{$left};
+    text-align: $left;
+    color: $sameday-express-delivery-drawer-text;
+    overflow: scroll;
+    margin-top: 0;
+
+    &::before {
+      content: '';
+      display: block;
+      border-top: 0.625rem solid $delivery-modal-bg;
+    }
+
+    .area-list-block-wrapper {
+      margin-top: 1rem;
+    }
   }
 
   .governate-label,
@@ -158,6 +183,29 @@ body.overlay-delivery-area {
       border-bottom: 0.0625rem solid $spc-cart-delivery-popup-border;
       border-radius: 0;
       background: $spc-cart-delivery-popup-bg;
+
+      &.spcSelect__control--menu-is-open {
+        .spcSelect__dropdown-indicator {
+          &::before {
+            transform: translateY(-50%) rotate(270deg);
+          }
+        }
+      }
+
+      .spcSelect__dropdown-indicator {
+        &::before {
+          position: absolute;
+          content: '';
+          border-style: solid;
+          height: 0;
+          width: 0;
+          border-width: 0.3rem 0 0.3rem 0.3rem;
+          border-color: transparent transparent transparent $spc-cart-delivery-popup-title;
+          #{$right}: 1rem;
+          top: 50%;
+          transform: translateY(-50%) rotate(90deg);
+        }
+      }
     }
   }
 
@@ -167,6 +215,7 @@ body.overlay-delivery-area {
 
   .spcSelect__value-container {
     padding-#{$left}: 0;
+    height: 2.375rem;
   }
 
   .spcSelect__single-value {
@@ -183,7 +232,7 @@ body.overlay-delivery-area {
     position: relative;
 
     @include icon(search, after) {
-      color: $algolia-search-icon;
+      color: $sameday-express-delivery-drawer-search;
       font-size: 1.5rem;
       height: 2.75rem;
       display: inline-flex;
@@ -213,10 +262,21 @@ body.overlay-delivery-area {
     font-size: 0.75rem;
     font-family: $alshaya-bold;
     display: flex;
+    justify-content: center;
+
+    @include breakpoint($only-mobile) {
+      padding: 0;
+    }
+
+    html[lang=ar] & {
+      padding: 0;
+      justify-content: space-between;
+    }
 
     span {
       display: flex;
       align-items: center;
+      margin: 0;
 
       &:nth-child(2),
       &:nth-child(3) {
@@ -229,6 +289,10 @@ body.overlay-delivery-area {
         height: 1.5rem;
         display: inline-block;
         margin-#{$right}: 0.625rem;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 0.375rem;
+        }
       }
 
       &.sameday-delivery {
@@ -265,11 +329,12 @@ body.overlay-delivery-area {
       margin-bottom: 0.3125rem;
       display: flex;
       align-items: center;
+      cursor: pointer;
 
       &.active {
         .area-select-item-wrapper {
-          @include icon(radio-filled, before) {
-            font-size: 3rem;
+          &::before {
+            border: 0.1875rem solid $primary_radiobtn_filled;
           }
         }
       }
@@ -284,8 +349,18 @@ body.overlay-delivery-area {
       align-items: center;
       width: 100%;
 
-      @include icon(radio-empty, before) {
-        font-size: 3rem;
+      &::before {
+        content: '';
+        position: relative;
+        width: 1.5rem;
+        height: 1.25rem;
+        background: transparent;
+        display: inline-block;
+        border-radius: 100%;
+        border: 1px solid $primary_radiobtn_empty;
+        margin-#{$right}: 1rem;
+        margin-#{$left}: 1rem;
+        vertical-align: middle;
       }
     }
 
@@ -365,7 +440,7 @@ body.overlay-delivery-area {
       text-align: center;
       font-size: 0.8125rem;
       line-height: 1rem;
-      background-color: $spc-cart-delivery-popup-search-border;
+      background-color: $sameday-express-delivery-drawer-btn;
       padding: 1rem;
       width: 100%;
       margin: 1rem 0;
@@ -374,6 +449,37 @@ body.overlay-delivery-area {
 
     a.select-area-link {
       color: $spc-cart-delivery-popup-list-bg;
+    }
+  }
+}
+
+.magazine-layout-v2 {
+  .magv2-sidebar {
+    .spc-delivery-wrapper {
+      @include breakpoint($only-mobile) {
+        #{$left}: 0;
+      }
+
+      @include breakpoint($tablet) {
+        max-width: 23.4375rem;
+      }
+    }
+
+    .spc-delivery-area {
+      .title-block {
+        font-family: $alshaya-bold;
+        color: $magv2-popup-header-label;
+        font-size: 1.25rem;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.delivery-loader {
+  &.loading {
+    @include componentLoader(transparent, 'after') {
+      background-position: $left;
     }
   }
 }

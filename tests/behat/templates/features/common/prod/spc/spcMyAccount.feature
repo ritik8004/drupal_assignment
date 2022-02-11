@@ -1,4 +1,4 @@
-@javascript @smoke @bpkwprod @tbsegprod @bpaeprod @bpsaprod @westelmkwprod @westelmaeprod @aeoaeprod @aeokwprod @aeosaprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @mcaepprod @vskwprod @mckwprod @tbskwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
+@javascript @smoke @pbkaepprod @pbksapprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @pbkaeprod @westelmkwpprod @westelmsapprod @westelmaepprod @vskwpprod @pbksaprod @pbkkwprod @bpkwprod @tbsegprod @bpaeprod @bpsaprod @westelmkwprod @westelmaeprod @aeoaeprod @aeokwprod @aeosaprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @mcaepprod @vskwprod @mckwprod @tbskwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
 Feature: Test the My Account functionality
 
   Background:
@@ -63,8 +63,6 @@ Feature: Test the My Account functionality
       | field_address[0][address][dependent_locality]        | {building}    |
       | field_address[0][address][locality]                  | {locality}    |
       | field_address[0][address][address_line2]             | {floor}       |
-      | field_address[0][address][sorting_code]              | {landmark}    |
-      | field_address[0][address][postal_code]               | {postal_code} |
     And I press "op"
     When I wait for AJAX to finish
     And I wait 10 seconds

@@ -1,0 +1,125 @@
+.spc-aura-checkout-rewards-block .spc-aura-link-card-form-content > .spc-aura-link-card-wrapper {
+  .form-items {
+    height: 2.25rem;
+    display: flex;
+    position: relative;
+    align-items: flex-start;
+
+    &.success {
+      cursor: not-allowed;
+
+      > .spc-aura-link-card-input-mobile-aura-mobile-field,
+      > .spc-aura-link-card-input-card,
+      > .spc-aura-link-card-input-email,
+      > .spc-aura-link-card-submit {
+        pointer-events: none;
+      }
+
+      @include icon('check') {
+        display: inline-flex;
+        font-size: 1.8125rem;
+        position: absolute;
+        #{$right}: 6.25rem;
+        height: 100%;
+        width: 2rem;
+        align-items: center;
+        justify-content: center;
+        color: $aura-spc-response-message;
+        z-index: 1;
+      }
+    }
+
+    > .spc-aura-link-card-input-mobile-aura-mobile-field {
+      height: 100%;
+      width: calc(100% - 6.1875rem);
+      display: flex;
+      align-items: center;
+      border: 1px solid $aura-spc-textbox-border;
+      border-top-#{$left}-radius: 0.25rem;
+      border-top-#{$right}-radius: 0;
+      border-bottom-#{$right}-radius: 0;
+      border-bottom-#{$left}-radius: 0.25rem;
+      border-#{$right}: 0;
+
+      .field-wrapper {
+        height: 100%;
+        align-items: center !important;
+        max-width: 15.125rem;
+
+        .spc-aura-mobile-number-country-code {
+          margin-#{$left}: 0.75rem;
+
+          label {
+            display: none;
+          }
+
+          .spcAuraSelect__control {
+            border-bottom: none !important;
+          }
+        }
+
+        .spc-type-textfield {
+          margin-#{$left}: 0 !important;
+          width: 100% !important;
+          display: flex;
+          align-items: center;
+
+          input {
+            border: none;
+            border-radius: 0;
+            border-#{$right}: 0;
+            padding-#{$left}: 0.75rem;
+          }
+        }
+      }
+
+      .spc-type-textfield {
+        label {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+
+  input,
+  button {
+    height: 100%;
+  }
+
+  input.spc-aura-link-card-input {
+    border: 1px solid $aura-spc-textbox-border;
+    border-top-#{$left}-radius: 0.25rem;
+    border-top-#{$right}-radius: 0;
+    border-bottom-#{$right}-radius: 0;
+    border-bottom-#{$left}-radius: 0.25rem;
+    border-#{$right}: 0;
+    padding-#{$left}: 0.75rem;
+    width: calc(100% - 6.1875rem);
+
+    @include force-ltr {
+      text-align: right;
+    }
+
+    &::placeholder {
+      color: $aura-spc-textbox-placeholder;
+    }
+  }
+
+  button.spc-aura-button {
+    width: 6.1875rem;
+    border-radius: 0;
+    border-top-#{$right}-radius: 0.25rem;
+    border-bottom-#{$right}-radius: 0.25rem;
+  }
+}
+
+.spc-aura-link-api-response-message:not(:empty) {
+  color: $aura-spc-response-message;
+  padding-top: 0.4375rem;
+  padding-#{$left}: 0.8125rem;
+  font-size: 0.75rem;
+
+  &.error {
+    color: $primary_input_inline_error;
+  }
+}

@@ -1,0 +1,18 @@
+attribute_weights:
+  default:
+    # Keeping this low to show before size attribute on furniture brands.
+    configuration: 1
+    # Keeping the below ones high to show after the size attributes.
+    width: 11
+    depth: 12
+    cushion_style: 13
+    fabric_color: 14
+    leg_style: 15
+show_quantity: TRUE
+sortable_options:
+  - configuration
+  - width
+  - depth
+  - cushion_style
+  - fabric_color
+  - leg_style

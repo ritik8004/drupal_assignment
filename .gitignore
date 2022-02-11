@@ -3,6 +3,7 @@ local.settings.php
 local.drush.yml
 local.site.yml
 local.services.yml
+site.txt
 tests/apis/conductor_v2/settings.php
 tests/behat/local.yml
 box/local.config.yml
@@ -40,6 +41,7 @@ docroot/themes/custom/*/css
 docroot/themes/custom/transac/*/css
 docroot/themes/custom/non_transac/*/css
 docroot/themes/custom/amp/*/css
+docroot/themes/custom/transac_lite/*/css/
 docroot/themes/custom/*/styleguide
 docroot/themes/custom/non_transac/*/styleguide
 
@@ -177,3 +179,10 @@ docroot/profiles/.gitignore
 /.editorconfig
 /.gitattributes
 .lando.local.yml
+
+# Ignore all built JS files and node modules.
+dist
+node_modules
+
+# Ignore JS uglification builds.
+docroot/build

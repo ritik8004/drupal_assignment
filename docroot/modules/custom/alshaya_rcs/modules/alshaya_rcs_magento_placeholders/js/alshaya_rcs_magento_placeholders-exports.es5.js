@@ -87,7 +87,33 @@ exports.render = function render(
       }
       break;
 
-    case "delivery-option":
+    case 'field_magazine_shop_the_story':
+      let data = [];
+      // Sort results in the same order as in the CMS.
+      JSON.parse(params.skus).forEach((sku) => {
+        const i = inputs.findIndex(i => i.sku === sku);
+        if (inputs[i]) {
+          data.push(inputs[i]);
+        }
+      });
+
+      // Render template.
+      html = handlebarsRenderer.render('product.teaser', { data: data });
+      break;
+
+    case 'order_teaser':
+      // Get individual table row items to perform token replacement.
+      if (typeof globalThis.renderRcsOrders != 'undefined') {
+        html += globalThis.renderRcsOrders.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
+    case "delivery-info-block":
+    case "delivery-options":
     case 'mobile-upsell-products':
     case 'upsell-products':
     case 'mobile-related-products':
@@ -95,6 +121,7 @@ exports.render = function render(
     case 'mobile-crosssell-products':
     case 'crosssell-products':
     case 'classic-gallery':
+    case 'product-labels':
       // Render super category block.
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         html += globalThis.renderRcsProduct.render(
@@ -153,6 +180,9 @@ exports.render = function render(
 exports.computePhFilters = function (input, filter) {
   let value = '';
 
+  // @todo Review if we really need this switch or we can call
+  // globalThis.renderRcsProduct.computePhFilters directly as there is already
+  // a switch there.
   switch(filter) {
     case 'price':
     case 'sku':
@@ -175,6 +205,8 @@ exports.computePhFilters = function (input, filter) {
     case 'name':
     case 'description':
     case 'short_description':
+    case 'promotions':
+    case 'teaser_image':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }

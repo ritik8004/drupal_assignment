@@ -1,0 +1,94 @@
+fields:
+  color:
+    configurable: 1
+
+  material:
+    label: 'Material'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  pattern:
+    label: 'Pattern'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  category_taxonomy:
+    label: 'Category Taxonomy'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  style_taxonomy:
+    label: 'Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  brand_name:
+    label: 'Brand'
+    index: 1
+    facet: 1
+
+  gender:
+    label: 'Gender'
+    index: 1
+    facet: 1
+
+  age_group:
+    label: 'Age Group'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  gtin:
+    label: 'Gtin'
+    type: 'string'
+    index: 1
+
+  mpn:
+    label: 'MPN'
+    type: 'string'
+    index: 1
+
+  ean:
+    label: 'EAN'
+    type: 'string'
+    index: 1
+
+  details_and_care:
+    label: 'Details and care'
+    type: 'text_long'
+
+  custom_label_1:
+    label: 'Custom label1'
+    type: 'text_long'
+
+  condition:
+    label: 'Condition'
+    index: 1
+
+  sleeve_length:
+    label: 'Sleeve length'
+    index: 1
+
+  length:
+    label: 'Length'
+    index: 1
+
+  neckline:
+    label: 'NeckLine'
+    index: 1
+
+  detail:
+    label: 'Detail'
+    index: 1
+
+  design:
+    label: 'Design'
+    index: 1
+
+  fabric:
+    label: 'Fabric'
+    index: 1

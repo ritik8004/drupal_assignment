@@ -1,5 +1,4 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   /**
    * Custom js around color split for add to cart form.
@@ -16,7 +15,9 @@
         var sku = $(node).attr('data-sku');
         var viewMode = $(node).attr('data-vmode');
         var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        var productInfo = window.commerceBackend.getProductData(sku, productKey);
+
+        if (productInfo === null) {
           return;
         }
 
@@ -26,11 +27,36 @@
 
         $('[name="selected_variant_sku"]', node).val($(this).val());
 
-        var variantInfo = drupalSettings[productKey][sku]['group'][$(this).val()];
+        var variantInfo = productInfo['group'][$(this).val()];
         Drupal.updateGallery(node, variantInfo.layout,variantInfo.gallery);
 
         // Trigger event for other modules to hook into.
         $(node).trigger('group-item-selected', [$(this).val()]);
+
+        // Update sameday and express delivery labels on variant change.
+        if (drupalSettings.expressDelivery !== 'undefined' && drupalSettings.expressDelivery.enabled) {
+          for (var option in variantInfo.deliveryOptions) {
+            $(node).find('.' + option).removeClass('active in-active');
+            $(node).find('.' + option).addClass(variantInfo.deliveryOptions[option].status);;
+          }
+          $(node).find('.express-delivery').removeClass('active in-active');
+          $(node).find('.express-delivery').addClass(variantInfo.expressDeliveryClass);
+        }
+
+        // Trigger an event on variant select.
+        // Only considers variant when url is changed.
+        var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {
+          bubbles: true,
+          detail: {
+            data: {
+              viewMode,
+              sku: $(this).val(),
+              variantSelected: $(this).val(),
+              title: variantInfo.cart_title,
+            }
+          }
+        });
+        document.dispatchEvent(currentSelectedVariantEvent);
 
         if (viewMode === 'full' || viewMode === 'matchback' || viewMode === 'matchback_mobile') {
           $(node).find('.content--item-code .field__value').html($(this).val());

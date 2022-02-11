@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\block\Entity\Block;
@@ -21,6 +22,7 @@ use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_search_algolia\Helper\AlshayaAlgoliaSortHelper;
 
 /**
  * Class Alshaya Search Api Query Execute.
@@ -310,18 +312,8 @@ class AlshayaSearchApiQueryExecute {
   public function prepareExecuteQuery(QueryInterface $query, string $page_type, ?string $keyword = '') {
     // Get all facets for the given facet source.
     $facets = $this->facetManager->getFacetsByFacetSourceId($this->getFacetSourceId());
-
-    // Prepare an array of key/value where key will be the facet id and value
-    // will be the facet object.
-    // Example - ['skus_sku_reference_final_price' => facet_object_here].
-    foreach ($facets as $facet) {
-      $this->processedFacetsArray[$facet->id()] = $facet;
-      // Storing price facet temporary to use later for special handling.
-      if ($facet->getFieldIdentifier() == 'final_price') {
-        $this->priceFacet = $facet;
-      }
-    }
-
+    // Get the processed facets array along with final price.
+    $this->processedFacetsArray = $this->getProcessedFacets($facets);
     // Filter by published nodes as same is done in views.
     if ($query->getIndex()->id() !== 'alshaya_algolia_index') {
       $query->addCondition('status', NodeInterface::PUBLISHED);
@@ -551,7 +543,7 @@ class AlshayaSearchApiQueryExecute {
         // Prepare the result item object.
         $result['filter'] = trim($result['filter'], '"');
         $result['count'] = trim($result['count'], '"');
-        $data[] = new Result($result['filter'], $result['filter'], $result['count']);
+        $data[] = new Result($facet, $result['filter'], $result['filter'], $result['count']);
       }
       // Add the result item object to the facet.
       $facet->setResults($data);
@@ -580,6 +572,29 @@ class AlshayaSearchApiQueryExecute {
   }
 
   /**
+   * Get the Processed facets array.
+   *
+   * @param array $facets
+   *   Actual facets.
+   *
+   * @return array
+   *   Processed facets array.
+   */
+  protected function getProcessedFacets(array $facets) {
+    // Prepare an array of key/value where key will be the facet id and value
+    // will be the facet object.
+    // Example - ['skus_sku_reference_final_price' => facet_object_here].
+    foreach ($facets as $facet) {
+      $this->processedFacetsArray[$facet->id()] = $facet;
+      // Storing price facet temporary to use later for special handling.
+      if ($facet->getFieldIdentifier() == 'final_price') {
+        $this->priceFacet = $facet;
+      }
+    }
+    return $this->processedFacetsArray;
+  }
+
+  /**
    * Prepare response data array.
    *
    * @param array $result_set
@@ -589,11 +604,19 @@ class AlshayaSearchApiQueryExecute {
    *   Response array.
    */
   public function prepareResponseFromResult(array $result_set) {
+    $respond_ignore_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_ignore_algolia_data');
+    if ($respond_ignore_algolia_data) {
+      // Get all facets for the given facet source.
+      $facets = $this->facetManager->getEnabledFacets();
+      // Get the processed facets array along with final price.
+      $result_set['processed_facets'] = $this->getProcessedFacets($facets);
+    }
+
     // Prepare facet data.
     $facet_result = $this->prepareFacetData($result_set);
 
     // Prepare product data.
-    $product_data = $this->prepareProductData($result_set);
+    $product_data = isset($result_set['search_api_results']) ? $this->prepareProductData($result_set) : [];
 
     // Process the price facet for special handling.
     // Get price facet key.
@@ -606,9 +629,9 @@ class AlshayaSearchApiQueryExecute {
     foreach ($facet_result as &$facet) {
       // If price facet.
       if ($facet['key'] == $price_facet_key
-        && isset($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key])
+        && !empty($result_set['search_api_results']) && isset($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key])
       ) {
-        $facet = $this->processPriceFacet($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key]);
+        $facet = $this->processPriceFacet($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key], $result_set['search_api_results']->getQuery());
       }
     }
 
@@ -657,7 +680,9 @@ class AlshayaSearchApiQueryExecute {
    *   Facet data.
    */
   public function prepareFacetData(array $result_set) {
+    $respond_ignore_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_ignore_algolia_data');
     $facets_data = $result_set['processed_facets'];
+
     // Prepare facet data first.
     $facet_result = [];
     foreach ($facets_data as $key => $facet) {
@@ -673,7 +698,9 @@ class AlshayaSearchApiQueryExecute {
       }
       // If no result available for a facet, skip that.
       $facet_results = $facet->getResults();
-      if (empty($facet_results)) {
+      // Respond all config labels when respond_algolia_data is false
+      // If not process the available filters.
+      if (empty($facet_results) && !$respond_ignore_algolia_data) {
         continue;
       }
 
@@ -779,13 +806,24 @@ class AlshayaSearchApiQueryExecute {
    *   Views machine id.
    * @param string $display_id
    *   Views display id.
+   * @param string $page_type
+   *   Page Type.
    *
    * @return array
    *   Sort array.
    */
-  public function prepareSortData(string $views_id, string $display_id) {
+  public function prepareSortData(string $views_id, string $display_id, string $page_type) {
     // If PLP views.
     $sort_data = [];
+    $lang = $this->languageManager->getCurrentLanguage()->getId();
+    $alshaya_algolia_index = AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index');
+    $algolia_product_list_index = AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index');
+    if ($alshaya_algolia_index || $algolia_product_list_index) {
+      $index_name = AlshayaAlgoliaSortHelper::getAlgoliaIndexName($lang, $page_type);
+      $sort_data = AlshayaAlgoliaSortHelper::getSortByOptions($index_name, $page_type);
+      return $sort_data;
+    }
+
     // If plp/promo list page.
     if ($views_id == 'alshaya_product_list') {
       // If promo list page.
@@ -824,14 +862,16 @@ class AlshayaSearchApiQueryExecute {
    *
    * @param array $price_facet_result
    *   Price facet result array.
+   * @param object $query
+   *   Search API Query object for the price facet.
    *
    * @return array
    *   Processed price facet result array.
    */
-  public function processPriceFacet(array $price_facet_result) {
+  public function processPriceFacet(array $price_facet_result, $query) {
     /** @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
     $alshaya_search_granular = $this->queryTypePluginManager->createInstance('alshaya_search_granular', [
-      'query' => NULL,
+      'query' => $query,
       'facet' => $this->priceFacet,
       'results' => $price_facet_result,
     ]);

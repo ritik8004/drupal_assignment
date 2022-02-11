@@ -18,87 +18,16 @@ window.commerceBackend = window.commerceBackend || {};
  *    The product data.
  */
 window.commerceBackend.getProductData = function (sku, productKey, processed) {
-  if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
+  var key = productKey === 'undefined' || !productKey ? 'productInfo' : productKey;
+  if (typeof sku === 'undefined' || sku === null) {
+    return drupalSettings[key];
+  }
+
+  if (typeof drupalSettings[key] === 'undefined' || typeof drupalSettings[key][sku] === 'undefined') {
     return null;
   }
 
-  return drupalSettings[productKey][sku];
-}
-
-/**
- * Processes product data and stores it to local storage.
- *
- * @param {string} viewMode
- *   The product view mode, eg. matchback.
- * @param {object} productData
- *   An object containing some processed product data.
- */
-window.commerceBackend.storeProductDataOnAddToCart = function (viewMode, productData) {
-  var productInfo = drupalSettings[viewMode][productData.parentSku];
-  var options = [];
-  var productUrl = productInfo.url;
-  var price = productInfo.priceRaw;
-  var promotions = productInfo.promotionsRaw;
-  var freeGiftPromotion = productInfo.freeGiftPromotion;
-  var productDataSKU = productData.sku;
-  var parentSKU = productData.sku;
-  var maxSaleQty = productInfo.maxSaleQty;
-  var maxSaleQtyParent = productInfo.max_sale_qty_parent;
-  var gtmAttributes = productInfo.gtm_attributes;
-  var isNonRefundable = productInfo.is_non_refundable;
-
-  if (productInfo.type === 'configurable') {
-    var productVariantInfo = productInfo['variants'][productData.variant];
-    productDataSKU = productData.variant;
-    price = productVariantInfo.priceRaw;
-    parentSKU = productVariantInfo.parent_sku;
-    promotions = productVariantInfo.promotionsRaw;
-    freeGiftPromotion = productVariantInfo.freeGiftPromotion || freeGiftPromotion;
-    options = productVariantInfo.configurableOptions;
-    maxSaleQty = productVariantInfo.maxSaleQty;
-    maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
-
-    if (productVariantInfo.url !== undefined) {
-      var langcode = jQuery('html').attr('lang');
-      productUrl = productVariantInfo.url[langcode];
-    }
-    gtmAttributes.price = productVariantInfo.gtm_price || price;
-  }
-  else if (productInfo.group !== undefined) {
-    var productVariantInfo = productInfo.group[productData.sku];
-    price = productVariantInfo.priceRaw;
-    parentSKU = productVariantInfo.parent_sku;
-    promotions = productVariantInfo.promotionsRaw;
-    freeGiftPromotion = productVariantInfo.freeGiftPromotion || freeGiftPromotion;
-    if (productVariantInfo.grouping_options !== undefined
-      && productVariantInfo.grouping_options.length > 0) {
-      options = productVariantInfo.grouping_options;
-    }
-    maxSaleQty = productVariantInfo.maxSaleQty;
-    maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
-
-    var langcode = jQuery('html').attr('lang');
-    productUrl = productVariantInfo.url[langcode];
-    gtmAttributes.price = productVariantInfo.gtm_price || price;
-  }
-
-  // Store proper variant sku in gtm data now.
-  gtmAttributes.variant = productDataSKU;
-  Drupal.alshayaSpc.storeProductData({
-    sku: productDataSKU,
-    parentSKU: parentSKU,
-    title: productData.product_name,
-    url: productUrl,
-    image: productData.image,
-    price: price,
-    options: options,
-    promotions: promotions,
-    freeGiftPromotion: freeGiftPromotion,
-    maxSaleQty: maxSaleQty,
-    maxSaleQtyParent: maxSaleQtyParent,
-    gtmAttributes: gtmAttributes,
-    isNonRefundable: isNonRefundable,
-  });
+  return drupalSettings[key][sku];
 }
 
 /**
@@ -133,14 +62,14 @@ window.commerceBackend.updateGallery = function (product, layout, gallery, sku, 
     return;
   }
 
-  if ($(product).find('.gallery-wrapper').length > 0) {
+  if (jQuery(product).find('.gallery-wrapper').length > 0) {
     // Since matchback products are also inside main PDP, when we change the variant
     // of the main PDP we'll get multiple .gallery-wrapper, so we are taking only the
     // first one which will be of main PDP to update main PDP gallery only.
-    $(product).find('.gallery-wrapper').first().replaceWith(gallery);
+    jQuery(product).find('.gallery-wrapper').first().replaceWith(gallery);
   }
   else {
-    $(product).find('#product-zoom-container').replaceWith(gallery);
+    jQuery(product).find('#product-zoom-container').replaceWith(gallery);
   }
 
   if (layout === 'pdp-magazine') {
@@ -154,13 +83,33 @@ window.commerceBackend.updateGallery = function (product, layout, gallery, sku, 
     // Hide the thumbnails till JS is applied.
     // We use opacity through a class on parent to ensure JS get's applied
     // properly and heights are calculated properly.
-    $('#product-zoom-container', product).addClass('whiteout');
+    jQuery('#product-zoom-container', product).addClass('whiteout');
     setTimeout(function () {
       Drupal.behaviors.alshaya_product_zoom.attach(document);
       Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
 
       // Show thumbnails again.
-      $('#product-zoom-container', product).removeClass('whiteout');
+      jQuery('#product-zoom-container', product).removeClass('whiteout');
     }, 1);
   }
 };
+
+/**
+ * Gets the configurable color details.
+ *
+ * @param {string} sku
+ *   The sku value.
+ *
+ * @returns {object}
+ *   The configurable color details.
+ */
+window.commerceBackend.getConfigurableColorDetails = function (sku) {
+  var data = {};
+  if (drupalSettings.sku_configurable_color_attribute) {
+    data.sku_configurable_color_attribute = drupalSettings.sku_configurable_color_attribute;
+  }
+  if (drupalSettings.sku_configurable_options_color) {
+    data.sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
+  }
+  return data;
+}

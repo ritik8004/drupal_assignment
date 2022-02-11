@@ -1,4 +1,5 @@
 {% if fields.promotion_banner or fields.promotion_banner_mobile %}
+    {{ attach_library('alshaya_white_label/rcs-ph-promotional-banner') }}
     <div class="picture-tag {{ fields.class }}">
         <picture>
           {% if fields.promotion_banner and fields.promotion_banner_mobile %}

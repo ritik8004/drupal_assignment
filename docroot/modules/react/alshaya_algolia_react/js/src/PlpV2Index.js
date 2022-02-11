@@ -20,6 +20,10 @@ import PlpApp from './plp/PlpApp';
           } = listingElement.data();
           // Adding processed class to just execute the rendering once.
           listingElement.addClass('processed');
+          // Update the drupal settings promotionNodeId with promotion id.
+          if (promotionId) {
+            window.drupalSettings.algoliaSearch.promotionNodeId = promotionId.toString();
+          }
           ReactDOM.render(
             <PlpApp
               categoryField={categoryField}

@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.removeURLParameter = function (url, parameter) {
     var urlparts = url.split('?');
@@ -67,6 +66,26 @@
 
   $.fn.hideLoader = function () {
     $('.ajax-progress, .ajax-progress-throbber').remove();
+  };
+
+  /**
+   * Wrapper for logger for vanilla JS files.
+   * @see logger.js.
+   *
+   * @param level
+   *   The level which is also the method we call on the object.
+   * @param message
+   *   The message to log.
+   * @param context
+   *   The context.
+   */
+  Drupal.alshayaLogger = function (level, message, context) {
+    if (typeof Drupal.logViaDataDog !== 'undefined') {
+      Drupal.logViaDataDog(level, message, context);
+    }
+    else {
+      console.debug(level, Drupal.formatString(message, context));
+    }
   };
 
 })(jQuery, Drupal);

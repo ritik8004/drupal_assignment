@@ -1,7 +1,7 @@
 variables:
-  spc_product_listing_page: '/victorias-secret/shop-mapp/mapp-l3/mapp-l4/'
-  spc_pdp_page: 'buy-pink-dog-bath-bomb.html'
-  spc_basket_page: '//victorias-secret/shop-mapp/mapp-l3/mapp-l4/'
-  product_listing_page_url: '//victorias-secret/shop-mapp/mapp-l3/mapp-l4/'
-  spc_promotion_listing_page: '/promotion/buy-any-2-items-and-get-1-free-buy2g1/'
+  spc_product_listing_page: '/victorias-secret/shop-mapp/mapp-l3/'
+  spc_pdp_page: 'buy-lightly-lined-wireless-bra-almost-nude.html'
+  spc_basket_page: '/victorias-secret/shop-mapp/mapp-l3/'
+  product_listing_page_url: '/victorias-secret/shop-mapp/mapp-l3/'
+  spc_promotion_listing_page: ' '
   new_checkout_enabled: TRUE

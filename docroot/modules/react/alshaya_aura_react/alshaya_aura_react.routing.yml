@@ -1,0 +1,23 @@
+alshaya_aura_react.my_loyalty_club:
+  path: '/user/loyalty-club'
+  defaults:
+    _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::loyaltyClub'
+    _title_callback: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::getLoyaltyClubTitle'
+  requirements:
+    _custom_access: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::checkAccess'
+
+alshaya_aura_react.aura_loyalty_config:
+  path: '/admin/config/alshaya/aura-loyalty'
+  defaults:
+    _form: '\Drupal\alshaya_aura_react\Form\AlshayaAuraSettingsForm'
+    _title: 'Alshaya AURA Configurations'
+  requirements:
+    _permission: 'administer site configuration'
+
+alshaya_aura_react.aura_loyalty_benefits_config:
+  path: '/admin/config/alshaya/aura-loyalty-benefits'
+  defaults:
+    _form: '\Drupal\alshaya_aura_react\Form\AlshayaAuraLoyaltyBenefitsForm'
+    _title: 'AURA Loyalty Benefits Configuration'
+  requirements:
+    _permission: 'administer site configuration'

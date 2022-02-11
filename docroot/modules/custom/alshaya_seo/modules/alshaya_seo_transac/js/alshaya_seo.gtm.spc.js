@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings, dataLayer) {
-  'use strict';
 
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
@@ -72,10 +71,39 @@
 
         Object.entries(cart_data.items).forEach(function (productItem) {
           const product = productItem[1];
+          // Skip the get product data for virtual product ( This is applicable
+          // when egift card module is enabled and cart item is virtual.)
+          if (Drupal.alshayaSeoSpc.isEgiftVirtualProduct(product)) {
+            cartDataLayer.productStyleCode.push(product.id);
+            cartDataLayer.productSKU.push(product.sku);
+            // GTM product attributes for egift card.
+            const productGtm = {
+              id: product.id,
+              name: product.product_name,
+              price: product.price,
+              variant: product.sku,
+              dimension2: 'virtual',
+              dimension4: 1,
+              quantity: product.quantity,
+            };
+            cartDataLayer.checkout.products.push(productGtm);
+            if (typeof cartDataLayer.cartItemsFlocktory !== 'undefined') {
+              const flocktory = {
+                id: product.sku,
+                price: product.price,
+                count: product.qty,
+                title: product.title,
+                image: product.media,
+              };
+              cartDataLayer.cartItemsFlocktory.push(flocktory);
+            }
+            return;
+          }
           Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
             finalPrice: product.finalPrice,
             cartDataLayer: Object.assign({}, cartDataLayer),
+            parentSKU: product.parentSKU,
           });
         });
       }
@@ -124,6 +152,11 @@
     var items = JSON.parse(JSON.stringify(cart_data.items));
     Object.entries(items).forEach(function (productItem) {
       const product = productItem[1];
+      // Skip the get product data for virtual product ( This is applicable
+      // when egift card module is enabled and cart item is virtual.)
+      if (Drupal.alshayaSeoSpc.isEgiftVirtualProduct(product)) {
+        return;
+      }
       Drupal.alshayaSpc.getProductData(
         product.sku,
         function (product, extraData) {
@@ -138,9 +171,29 @@
         },
         {
         qty: product.qty,
-        finalPrice: product.finalPrice
+        finalPrice: product.finalPrice,
+        parentSKU: product.parentSKU,
       });
     });
   };
+
+  /**
+   * Checks if the product is valid to be processed for product status check.
+   *
+   * @param {object} product
+   *   The product item object.
+   *
+   * @returns {boolean}
+   *   Returns true if the product is a virtual egift product else false.
+   */
+  Drupal.alshayaSeoSpc.isEgiftVirtualProduct = function (product) {
+    return typeof drupalSettings.egiftCard !== 'undefined'
+      && typeof drupalSettings.egiftCard.enabled !== 'undefined'
+      && drupalSettings.egiftCard.enabled
+      && ((typeof product.product_type !== 'undefined'
+      && product.product_type === 'virtual')
+      || (Object.prototype.hasOwnProperty.call(product, 'isEgiftCard')
+      && product.isEgiftCard));
+  }
 
 })(jQuery, Drupal, drupalSettings, dataLayer);

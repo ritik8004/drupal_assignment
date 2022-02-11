@@ -1,0 +1,33 @@
+.price--discount {
+  @include breakpoint($tablet) {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    display: inline-block;
+
+    td.price & {
+      margin-top: 0.245rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    font-size: 0.875rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-bottom: 0.375rem;
+    margin-#{$left}: 0;
+    margin-top: 0;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 0;
+  }
+}
+
+.node--view-mode-search-result {
+  .has--special--price {
+    @include breakpoint($only-mobile) {
+      display: inline-block;
+    }
+  }
+}

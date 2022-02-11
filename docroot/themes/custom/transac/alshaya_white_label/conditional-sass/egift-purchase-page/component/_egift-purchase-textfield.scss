@@ -1,0 +1,9 @@
+.egift-input-textfield-name {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 2.375rem;
+  }
+
+  @include breakpoint($tablet) {
+    margin-bottom: 2.5rem;
+  }
+}

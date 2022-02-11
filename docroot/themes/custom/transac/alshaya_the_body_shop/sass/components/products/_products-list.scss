@@ -138,6 +138,7 @@
                 height: 1.625rem;
                 border-top-#{$left}-radius: 1rem;
                 border-bottom-#{$left}-radius: 1rem;
+                text-transform: none;
               }
 
               &.js-facet-deactivate {

@@ -10,8 +10,111 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
 use Drupal\user\Entity\Role;
-use Drupal\block\BlockInterface;
-use Drupal\block\Entity\Block;
+use Drupal\search_api\Item\Field;
+use Drupal\facets\Entity\Facet;
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.9.0] Add the config value for the brand name display in plp.
+ */
+function alshaya_acm_product_update_8078() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'alshaya_acm_product.display_settings',
+  ],
+      'alshaya_acm_product',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING,
+    );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add granularity processor to range_checkbox type Facets.
+ */
+function alshaya_acm_product_update_8077() {
+  foreach (Facet::loadMultiple() as $facet) {
+    $widget = $facet->getWidget();
+    // Checking widget type range_checkbox.
+    if ($widget['type'] === 'range_checkbox') {
+      // Migrate widget to processor settings.
+      $settings = [
+        'granularity' => !empty($widget['config']['granularity']) ? $widget['config']['granularity'] : 5,
+      ];
+      $facet->addProcessor([
+        'processor_id' => 'granularity_item',
+        'weights' => ['build' => 35],
+        'settings' => $settings,
+      ]);
+      $facet->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Creating Delivery Ways facet field under
+ * product Search API Index if does not exist.
+ */
+function alshaya_acm_product_update_8076() {
+  // Search API Index storage object.
+  $index_storage = \Drupal::entityTypeManager()
+    ->getStorage('search_api_index');
+  // Product Search API Index.
+  $index = $index_storage->load('product');
+
+  // Check if attr_delivery_ways facet field not added to index.
+  if (!array_key_exists('attr_delivery_ways', $index->getFields())) {
+    // Index the attr_delivery_ways field.
+    $field_delivery_ways = new Field($index, 'attr_delivery_ways');
+    $field_delivery_ways->setLabel('SKUs » SKU Reference » Different Delivery Types');
+    $field_delivery_ways->setDatasourceId('entity:node');
+    $field_delivery_ways->setPropertyPath('field_skus:entity:attr_delivery_ways');
+    $field_delivery_ways->setType('string');
+
+    $index->addField($field_delivery_ways);
+
+    $index->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new settings for swatch attribute images roles and
+ * for excluding swatch attributes from PLP pages.
+ */
+function alshaya_acm_product_update_8075() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Re-saving the stock resource to moved outside mobile app.
+ * Add new settings for local storage cache time for product data.
+ */
+function alshaya_acm_product_update_8074() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
 
 /**
  * Implements hook_update_N().
@@ -27,18 +130,18 @@ function alshaya_acm_product_update_8073() {
     AlshayaConfigManager::MODE_MERGE
   );
   \Drupal::service('acq_sku.fields_manager')->addFields();
-  // Adding fields in search_api index
+  // Adding fields in search_api index.
   $manager->updateConfigs(
     ['search_api.index.product'],
     'alshaya_product',
     'install',
-    AlshayaConfigManager::MODE_MERGE
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
   $manager->updateConfigs(
     ['search_api.index.acquia_search_index'],
     'alshaya_search',
     'optional',
-    AlshayaConfigManager::MODE_MERGE
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
 
   $blocks = [
@@ -74,8 +177,8 @@ function alshaya_acm_product_update_8072() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-      'rest.resource.product_linked_skus_v2'
-    ],
+    'rest.resource.product_linked_skus_v2',
+  ],
     'alshaya_acm_product',
     'install'
   );
@@ -91,10 +194,10 @@ function alshaya_acm_product_update_8072() {
  */
 function alshaya_acm_product_update_8071() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-    $manager = \Drupal::service('alshaya_config.manager');
-    $manager->updateConfigs([
-      'alshaya_acm_product.display_settings',
-    ],
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'alshaya_acm_product.display_settings',
+  ],
       'alshaya_acm_product',
       'install',
       AlshayaConfigManager::MODE_ADD_MISSING,
@@ -118,6 +221,7 @@ function alshaya_acm_product_update_8070() {
   }
   $role->save();
 }
+
 /**
  * Implements hook_update_N().
  *
@@ -181,9 +285,9 @@ function alshaya_acm_product_update_8066() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-      'rest.resource.stock_v2',
-      'rest.resource.product_v2'
-    ],
+    'rest.resource.stock_v2',
+    'rest.resource.product_v2',
+  ],
     'alshaya_acm_product',
     'install'
   );

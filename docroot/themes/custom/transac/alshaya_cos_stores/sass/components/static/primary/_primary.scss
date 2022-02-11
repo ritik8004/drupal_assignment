@@ -1,0 +1,33 @@
+.c-content__body {
+  line-height: 1.5;
+
+  p,
+  ul {
+    text-align: $left;
+  }
+
+  // wiswig editor styles
+  .promo-anchor-padding-right {
+    margin-#{$right}: 0.625rem;
+  }
+
+  // Use section divider on wiswig
+  hr {
+    border: 0;
+    height: 0;
+    border-top: $border-default;
+  }
+
+  @include breakpoint($desktop) {
+    .central-container {
+      width: 58%;
+      margin: 0 auto;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .central-container {
+      width: 100%;
+    }
+  }
+}

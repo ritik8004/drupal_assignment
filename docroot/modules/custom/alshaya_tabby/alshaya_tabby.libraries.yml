@@ -1,0 +1,46 @@
+tabby_integration:
+  js:
+    https://checkout.tabby.ai/integration.js: { type: external }
+
+tabby_sdk:
+  js:
+    js/tabby.js: { }
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
+
+tabby_info:
+  js:
+    https://checkout.tabby.ai/tabby-limit-widget-al-shaya.js: { type: external }
+  dependencies:
+    - alshaya_tabby/tabby_sdk
+
+tabby_promos:
+  js:
+    https://checkout.tabby.ai/tabby-promo-al-shaya.js: { type: external }
+  dependencies:
+    - alshaya_tabby/tabby_sdk
+
+tabby_card:
+  js:
+    https://checkout.tabby.ai/tabby-card.js: { type: external }
+  dependencies:
+    - alshaya_tabby/tabby_integration
+    - alshaya_tabby/tabby_promos
+
+tabby_pdp:
+  version: 1.x
+  js:
+    js/tabby_pdp.js: { }
+  dependencies:
+    - alshaya_tabby/tabby_promos
+
+tabby_cart:
+  version: 1.x
+  js:
+    js/tabby_cart.js: { }
+  dependencies:
+    - alshaya_tabby/tabby_promos
+    - alshaya_tabby/tabby_info

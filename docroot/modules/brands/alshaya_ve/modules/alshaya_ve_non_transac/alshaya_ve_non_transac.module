@@ -18,7 +18,10 @@ function alshaya_ve_non_transac_views_pre_render(ViewExecutable $view) {
   if ($view->id() == 'non_transac_acquia_index_search' && $view->total_rows > 0) {
     $format_plural = new PluralTranslatableMarkup($view->total_rows, '(1 result)', '(@count results)');
     if (!empty($view->getExposedInput()['keywords'])) {
-      $view->setTitle(t('"@keyword" @results', ['@keyword' => $view->getExposedInput()['keywords'], '@results' => $format_plural]));
+      $view->setTitle(t('"@keyword" @results', [
+        '@keyword' => $view->getExposedInput()['keywords'],
+        '@results' => $format_plural,
+      ]));
     }
     else {
       $view->setTitle(t('@results',
@@ -209,9 +212,40 @@ function alshaya_ve_non_transac_js_alter(&$javascript, AttachedAssetsInterface $
  * Implements hook_preprocess_views_view_field().
  */
 function alshaya_ve_non_transac_preprocess_views_view_field__stores_finder__glossary_map_view__field_store_open_hours(&$variables) {
-  /* @var \Drupal\node\Entity\Node $node */
+  /** @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
   $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
   $output = $node->field_store_open_hours->view('default');
   $variables['output'] = $output;
+}
+
+/**
+ * Implements hook_alshaya_performance_preload_alter().
+ */
+function alshaya_ve_non_transac_alshaya_performance_preload_alter(array &$preload) {
+  $alshaya_preload = [
+    'as' => 'font',
+    'href' => '/themes/custom/non_transac/vision_express/fonts/font-icons.woff2?2pxs5f',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $site_preloads = [
+    'en' => [
+      $alshaya_preload,
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      $alshaya_preload,
+    ],
+  ];
+  // Preloading fonts here.
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
 }

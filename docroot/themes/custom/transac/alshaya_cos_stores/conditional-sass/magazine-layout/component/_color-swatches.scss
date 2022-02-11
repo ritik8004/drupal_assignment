@@ -1,0 +1,239 @@
+.magazine-layout {
+  .magazine-swatch-placeholder,
+  .form-item-configurables-article-castor-id,
+  .form-item-configurables-color {
+    @include breakpoint($only-mobile) {
+      background: transparent !important;
+    }
+
+    .select2Option {
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
+
+      .show-less-color,
+      .show-more-color,
+      .selected-text {
+        font-size: 0.75rem;
+        line-height: 1.33;
+        letter-spacing: 0.6px;
+        color: $colour-swatches-show-list-button;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          text-align: center;
+        }
+      }
+
+      .selected-text {
+        letter-spacing: normal;
+        font-weight: normal;
+        margin-#{$left}: 0.25rem;
+        font-size: 0.875rem;
+      }
+
+      .show-less-color,
+      .show-more-color {
+        margin-top: 0.3125rem;
+        margin-bottom: 1.125rem;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .list-title {
+        margin-bottom: 0.625rem;
+
+        @include breakpoint($only-mobile) {
+          margin-bottom: 1.625rem;
+          display: inline-flex;
+          width: 100%;
+          justify-content: center;
+        }
+
+        span {
+          &:first-child {
+            display: inline-block;
+          }
+        }
+      }
+
+      .select-buttons {
+        @include breakpoint($only-mobile) {
+          text-align: center;
+          white-space: nowrap;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          display: block !important;
+          font-size: 0;
+        }
+
+        li,
+        span {
+          a {
+            margin: 0;
+            margin-#{$right}: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: none;
+            max-height: inherit;
+            min-width: inherit;
+            line-height: 0;
+            padding: 0;
+            position: relative;
+
+            @include breakpoint($only-mobile) {
+              width: 2rem;
+            }
+
+            &.picked {
+              background: none;
+              box-shadow: none;
+
+              &::before {
+                content: '';
+                border: 1px solid $pdp_swatch_selected_border;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                #{$left}: 0;
+                #{$right}: 0;
+
+                @include breakpoint($only-mobile) {
+                  border: 1px solid $white;
+                  outline: 1px solid $pdp_swatch_selected_border;
+                  position: absolute;
+                }
+              }
+            }
+
+            @include breakpoint($tablet) {
+              width: 1.75rem;
+              padding: 0.125rem;
+            }
+          }
+
+          a:not([data-swatch-type=RGB]) {
+            @include breakpoint($only-mobile) {
+              width: 2rem;
+            }
+
+            &.picked {
+              &::before {
+                @include breakpoint($only-mobile) {
+                  border-width: 1px;
+                  top: -0.0625rem;
+                  bottom: -0.0625rem;
+                }
+              }
+            }
+          }
+
+          a[data-swatch-type=RGB] {
+            height: 1.5rem;
+            width: 1.5rem;
+            top: 0.125rem;
+
+            @include breakpoint($only-mobile) {
+              height: 1.875rem;
+              width: 1.875rem;
+              margin-bottom: 0.1875rem;
+            }
+
+            &.picked {
+              background: none;
+              box-shadow: none;
+              top: 0.125rem;
+
+              &::before {
+                content: '';
+                border: 1px solid $pdp_swatch_selected_border;
+                top: -0.125rem;
+                bottom: -0.125rem;
+                #{$left}: -0.125rem;
+                #{$right}: -0.125rem;
+                position: absolute;
+
+                @include breakpoint($only-mobile) {
+                  outline: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.swatch-toggle {
+      .select2Option {
+        .select-buttons {
+          @include breakpoint($only-mobile) {
+            margin: 0 1rem;
+            white-space: inherit;
+          }
+
+          li,
+          span {
+            @include breakpoint($only-mobile) {
+              display: inline-flex;
+
+              a:not([data-swatch-type=RGB]) {
+                margin-bottom: 0.5rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      &.simple-swatch-effect {
+        margin-bottom: 0.625rem;
+
+        .select2Option {
+          .select-buttons {
+            padding: 0.75rem 0.0625rem;
+            overflow-x: auto;
+
+            li,
+            span {
+              a:not([data-swatch-type=RGB]) {
+                margin-bottom: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .select2Option {
+    @include breakpoint($only-mobile) {
+      display: block;
+    }
+
+    h4 {
+      color: $colour-swatches-show-list-button;
+    }
+  }
+
+  .basic-details-wrapper {
+    .field--name-field-skus {
+      .form-item-configurables-size {
+        label {
+          display: none;
+        }
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .magazine-swatch-placeholder {
+    .configurable-swatch {
+      > label {
+        display: none;
+      }
+    }
+  }
+}

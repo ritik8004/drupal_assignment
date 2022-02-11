@@ -44,14 +44,15 @@ exports.render = function render(
         if (enrichedDataObj && typeof enrichedDataObj.path !== 'undefined') {
           breadcrumb.url = enrichedDataObj.path;
         }
-        breadcrumbHtml += getBreadcrumbMarkup(breadcrumb, innerHtmlObj, settings);
+        // Added whitespace after trailing slash to match with V2 markup.
+        breadcrumbHtml += getBreadcrumbMarkup(breadcrumb, innerHtmlObj, settings) + ' ';
       }
     });
 
     // Remove the placeholders markup.
     innerHtmlObj.find('li').remove();
     // Update with the resultant markups.
-    innerHtmlObj.find('ol').append(homeEl + breadcrumbHtml);
+    innerHtmlObj.find('ol').append(homeEl + ' ' + breadcrumbHtml);
   }
   return innerHtmlObj.html();
 }

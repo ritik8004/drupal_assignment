@@ -1,0 +1,7 @@
+#rcs-ph-lhn_block:not(.rcs-loaded) ul {
+  & > * {
+    visibility: hidden;
+  }
+
+  @include text-block-loader;
+}

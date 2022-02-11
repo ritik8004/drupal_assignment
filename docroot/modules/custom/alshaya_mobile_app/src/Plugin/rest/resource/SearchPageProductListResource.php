@@ -71,6 +71,11 @@ class SearchPageProductListResource extends ResourceBase {
   const SELLING_PRICE_FACET_KEY = 'selling_price';
 
   /**
+   * Page Type & Page Sub Type.
+   */
+  const PAGE_TYPE = 'listing';
+
+  /**
    * Parse mode plugin manager.
    *
    * @var \Drupal\search_api\ParseMode\ParseModePluginManager
@@ -162,7 +167,7 @@ class SearchPageProductListResource extends ResourceBase {
     AlshayaRequestContextManager::updateDefaultContext('app');
 
     $response_data = $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData(self::VIEWS_ID, self::VIEWS_DISPLAY_ID);
+    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData(self::VIEWS_ID, self::VIEWS_DISPLAY_ID, self::PAGE_TYPE);
 
     // Filter the empty products.
     $response_data['products'] = array_filter($response_data['products']);

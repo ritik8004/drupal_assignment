@@ -6,14 +6,38 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Enables the alshaya_media_assets module.
+ */
+function alshaya_cos_transac_update_8002() {
+  \Drupal::service('module_installer')->install(['alshaya_media_assets']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change widget for delivery_ways facets from checkbox
+ * to widget "delivery_ways".
+ */
+function alshaya_cos_transac_update_8001() {
+  $facet_ids = [
+    'plp_delivery_ways',
+    'promo_delivery_ways',
+    'delivery_ways',
+  ];
+
+  foreach ($facet_ids as $facet_id) {
+    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
+      ->set('widget.type', 'delivery_ways')
+      ->save();
+  }
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_cos_transac_install() {
-  // Hide grid toggle option on listing pages.
-  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
-  ->set('hide_grid_toggle', true)
-  ->save();
-
   // Enable and set alshaya_cos as default theme and set the site logo,
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_cos_stores');
@@ -69,6 +93,7 @@ function alshaya_cos_transac_install() {
   // Setting all products buyable to be false by default.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('all_products_buyable', 0)
+    ->set('pdp_layout', 'magazine')
     ->save();
 
   $strings = [
@@ -76,13 +101,27 @@ function alshaya_cos_transac_install() {
       'en' => 'COS Store',
       'ar' => 'متجر COS',
     ],
-    'Product Description' => [
-      'en' => 'What does it do for you?',
-      'ar' => 'ما الذي تفعله من اجلك؟',
-    ],
     'get email offers and the latest news from @site_name' => [
       'en' => 'Enjoy 10% off your first order',
       'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
+    ],
+    'read more' => [
+      'ar' => 'اقرأ المزيد',
+    ],
+    'read less' => [
+      'ar' => 'اقرأ  أقل',
+    ],
+    'Product Description' => [
+      'ar' => 'وصف المنتج',
+    ],
+    'Product Detail' => [
+      'ar' => 'تفاصيل المنتج',
+    ],
+    'Product No:' => [
+      'ar' => 'رمز المنتج',
+    ],
+    'size guide' => [
+      'ar' => 'دليل المقاسات',
     ],
   ];
 
@@ -107,17 +146,47 @@ function alshaya_cos_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
     // Get the sharethis configuration.
     $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-    if ($configFactory->get('node_types.acq_product')) {
-      // Disable share this for Product CT.
-      $configFactory->clear('node_types.acq_product');
-    }
+
+    // Enable share this for Products.
+    $configFactory->set('node_types.acq_product', 'acq_product');
+
     // Enable share this for Magazine CT.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_magazine')) {
       $configFactory->set('node_types.magazine_article', 'magazine_article');
     }
+
     // Save the changes.
     $configFactory->save();
   }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_cos_transac_modules_installed($modules) {
+  if (!in_array('alshaya_algolia_react', $modules)) {
+    return;
+  }
+
+  // Hide grid toggle option on listing pages.
+  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
+    ->set('hide_grid_toggle', TRUE)
+    ->save();
+
+  // Reset region and weight for alshaya main menu block.
+  $weight = \Drupal::entityTypeManager()->getStorage('block')
+    ->load('alshayaalgoliareactautocomplete')->getWeight();
+
+  $weight = $weight - 1;
+  $block = \Drupal::entityTypeManager()->getStorage('block')
+    ->load('alshayamainmenu');
+  $block->setRegion('header');
+  $block->setWeight($weight);
+  $block->save();
+
+  $block = \Drupal::entityTypeManager()->getStorage('block')->load('branding');
+  $block->setWeight($weight - 1);
+  $block->save();
 }
 
 /**

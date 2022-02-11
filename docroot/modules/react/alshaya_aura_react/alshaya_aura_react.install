@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Aura translation strings.
+ */
+function alshaya_aura_react_update_8002() {
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  if ($translations = _alshaya_aura_react_get_translations('v3')) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Aura translation strings.
+ */
+function alshaya_aura_react_update_8001() {
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  if ($translations = _alshaya_aura_react_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_aura_react_install() {
+  // Enable My Loyalty Club link in the menu.
+  $config = \Drupal::configFactory()->getEditable('alshaya_user.settings');
+  $alshaya_loyalty_club = unserialize($config->get('my_account_enabled_links'));
+  $alshaya_loyalty_club['alshaya_loyalty_club'] = 'alshaya_loyalty_club';
+  $config->set('my_account_enabled_links', serialize($alshaya_loyalty_club));
+  $config->save();
+
+  // Move myaccountsaurablock and aurarewardsheader block to proper theme.
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+
+  $config_factory = \Drupal::configFactory();
+
+  // Set the My Accounts AURA block to appear just below the page title.
+  $page_title_weight = (int) $config_factory->get('block.block.page_title')->get('weight');
+  $config_factory->getEditable('block.block.myaccountsaurablock')->set('weight', $page_title_weight + 1)->save();
+
+  // Set the AURA rewards header block to appear just below the welcome user.
+  $welcome_user_weight = (int) $config_factory->get('block.block.welcomeuser')->get('weight');
+  $config_factory->getEditable('block.block.aurarewardsheader')->set('weight', $welcome_user_weight + 1)->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  if ($translations = _alshaya_aura_react_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}

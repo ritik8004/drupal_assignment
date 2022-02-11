@@ -116,6 +116,13 @@ class AlshayaApiCommands extends DrushCommands {
   protected $categoryMappingManager;
 
   /**
+   * Drupal Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
    * AlshayaApiCommands constructor.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
@@ -160,7 +167,7 @@ class AlshayaApiCommands extends DrushCommands {
     $this->skuManager = $skuManager;
     $this->i18nHelper = $i18nHelper;
     $this->ingestApiWrapper = $ingestAPIWrapper;
-    $this->logger = $loggerChannelFactory->get('alshaya_api');
+    $this->drupalLogger = $loggerChannelFactory->get('AlshayaApiCommands');
     $this->connection = $connection;
     $this->entityTypeManager = $entityTypeManager;
     $this->lock = $lock;
@@ -176,15 +183,17 @@ class AlshayaApiCommands extends DrushCommands {
    *
    * @param string $message
    *   Message to log.
+   * @param array $arguments
+   *   Log arguments.
    * @param bool $verbose
    *   Show in console or not.
    */
-  protected function logMessage($message, $verbose) {
+  protected function logMessage(string $message, array $arguments, $verbose = TRUE) {
     if ($verbose) {
-      $this->logger()->notice($message);
+      $this->drupalLogger->notice($message, $arguments);
     }
     else {
-      $this->logger()->info($message);
+      $this->drupalLogger->info($message, $arguments);
     }
   }
 
@@ -211,11 +220,11 @@ class AlshayaApiCommands extends DrushCommands {
     $skus = array_diff($skus, $already_requested[$langcode]);
     $already_requested[$langcode] = array_merge($already_requested[$langcode], $skus);
 
-    $this->logger()->notice(dt('Requesting sync for skus: @skus (count: @count) in language: @langcode', [
+    $this->drupalLogger->notice('Requesting sync for skus: @skus (count: @count) in language: @langcode', [
       '@skus' => implode(',', $skus),
       '@count' => count($skus),
       '@langcode' => $langcode,
-    ]));
+    ]);
 
     foreach (array_chunk($skus, $page_size) as $chunk) {
       $this->ingestApiWrapper->productFullSync(
@@ -352,7 +361,7 @@ class AlshayaApiCommands extends DrushCommands {
     $result = $this->connection->query('SELECT field_skus_value, field_commerce_id_value FROM node__field_skus
     LEFT JOIN node__field_category_original category
       ON node__field_skus.entity_id = category.entity_id
-    LEFT JOIN taxonomy_term__field_commerce_id 
+    LEFT JOIN taxonomy_term__field_commerce_id
       ON category.field_category_original_target_id = taxonomy_term__field_commerce_id.entity_id')->fetchAll();
 
     $dskus = [];
@@ -404,12 +413,12 @@ class AlshayaApiCommands extends DrushCommands {
       }
 
       if ($message) {
-        $this->logMessage($message, $verbose);
+        $this->logMessage($message, [], $verbose);
       }
     }
 
     if (empty($to_sync)) {
-      $this->logger()->notice('No category mapping diff found.');
+      $this->drupalLogger->notice('No category mapping diff found.');
       return;
     }
 
@@ -488,7 +497,7 @@ class AlshayaApiCommands extends DrushCommands {
         $message = $sku . ' | ';
         $message .= 'Drupal stock:' . $data['quantity'] . ' | ';
         $message .= 'MDC stock:' . $mdata['qty'];
-        $this->logMessage($message, $verbose);
+        $this->logMessage($message, [], $verbose);
 
         $to_update[$sku] = $mdata;
 
@@ -503,7 +512,7 @@ class AlshayaApiCommands extends DrushCommands {
         $message = $sku . ' | ';
         $message .= 'Drupal stock status:' . $data['status'] . ' | ';
         $message .= 'MDC stock status:' . $mdata['stock_status'];
-        $this->logMessage($message, $verbose);
+        $this->logMessage($message, [], $verbose);
 
         $to_update[$sku] = $mdata;
 
@@ -526,7 +535,7 @@ class AlshayaApiCommands extends DrushCommands {
         $message = $sku . ' | ';
         $message .= 'Drupal max sale quantity:' . $data['max_sale_qty'] . ' | ';
         $message .= 'MDC max sale quantity:' . $mdata['max_sale_qty'];
-        $this->logMessage($message, $verbose);
+        $this->logMessage($message, [], $verbose);
 
         $to_update[$sku] = $mdata;
 
@@ -536,7 +545,7 @@ class AlshayaApiCommands extends DrushCommands {
     }
 
     if (empty($to_update)) {
-      $this->logger()->notice('No stock difference found.');
+      $this->drupalLogger->notice('No stock difference found.');
       return;
     }
 
@@ -552,6 +561,12 @@ class AlshayaApiCommands extends DrushCommands {
           (int) $mdata['stock_status'],
           (float) $mdata['max_sale_qty'],
           (bool) $mdata['use_config_max_sale_qty']
+        );
+
+        $this->logMessage(
+          'Updated stock for SKU: @sku, data: @data.',
+          ['@sku' => $sku, '@data' => json_encode($mdata)],
+          $verbose
         );
       }
 
@@ -627,14 +642,14 @@ class AlshayaApiCommands extends DrushCommands {
         $message .= 'MDC price:' . $m_price . ' | ';
         $message .= 'Drupal final price:' . $d_final_price . ' | ';
         $message .= 'MDC final price:' . $m_final_price;
-        $this->logMessage($message, $verbose);
+        $this->logMessage($message, [], $verbose);
 
         $to_sync[$sku] = $mdata;
       }
     }
 
     if (empty($to_sync)) {
-      $this->logger()->notice('No price difference found.');
+      $this->drupalLogger->notice('No price difference found.');
       return;
     }
 
@@ -650,6 +665,8 @@ class AlshayaApiCommands extends DrushCommands {
           $sku_entity->get('price')->setValue($mdata['price']);
           $sku_entity->get('final_price')->setValue($mdata['final_price']);
           $sku_entity->save();
+
+          $this->logMessage('Updated price for SKU @sku.', ['@sku' => $sku], $verbose);
         }
       }
 
@@ -693,7 +710,9 @@ class AlshayaApiCommands extends DrushCommands {
     $in_magento_only = array_diff(array_keys($mskus), array_keys($dskus));
 
     if (!empty($in_magento_only)) {
-      $this->logMessage('Products not available in Drupal: ' . implode(', ', $in_magento_only), TRUE);
+      $this->logMessage('Products not available in Drupal: @skus.', [
+        '@skus' => implode(', ', $in_magento_only),
+      ]);
 
       $confirmation = dt('Do you want to sync products that are not available in Drupal? Count: @count', [
         '@count' => count($in_magento_only),
@@ -712,7 +731,9 @@ class AlshayaApiCommands extends DrushCommands {
     }
 
     if (!empty($in_drupal_only)) {
-      $this->logMessage('Products available only in Drupal: ' . implode(', ', $in_drupal_only), TRUE);
+      $this->logMessage('Products available only in Drupal: @skus.', [
+        '@skus' => implode(', ', $in_drupal_only),
+      ]);
 
       $confirmation_delete = dt('Do you want to delete products directly in Drupal? Count: @count', [
         '@count' => count($in_drupal_only),
@@ -722,6 +743,8 @@ class AlshayaApiCommands extends DrushCommands {
         '@count' => count($in_drupal_only),
       ]);
 
+      $verbose = $options['verbose'] ?? FALSE;
+
       if ($this->io()->confirm($confirmation_delete)) {
         foreach ($in_drupal_only as $sku) {
           $sku_entity = SKU::loadFromSku($sku, NULL, FALSE, FALSE);
@@ -730,10 +753,10 @@ class AlshayaApiCommands extends DrushCommands {
             continue;
           }
 
-          $message = dt('Removing disabled SKU @sku from the system.', [
-            '@sku' => $sku,
-          ]);
-          $this->logMessage($message, $options['verbose'] ?? FALSE);
+          $this->logMessage('Removing disabled SKU @sku from the system.',
+            ['@sku' => $sku],
+            $verbose
+          );
 
           $lock_key = 'deleteProduct' . $sku;
 
@@ -767,10 +790,10 @@ class AlshayaApiCommands extends DrushCommands {
           // Release the lock.
           $this->lock->release($lock_key);
 
-          $message = dt('Disabled SKU @sku removed from the system.', [
-            '@sku' => $sku,
-          ]);
-          $this->logMessage($message, $options['verbose'] ?? FALSE);
+          $this->logMessage('Disabled SKU @sku removed from the system.',
+            ['@sku' => $sku],
+            $verbose
+          );
         }
       }
       elseif ($this->io()->confirm($confirmation_sync)) {
@@ -858,7 +881,7 @@ class AlshayaApiCommands extends DrushCommands {
 
       // Notify in debug mode.
       if ($msource == 'api') {
-        $this->logger->notice(dt('With source=api, stock and price will not be validated.'));
+        $this->drupalLogger->notice('With source=api, stock and price will not be validated.');
       }
     }
 
@@ -1258,7 +1281,7 @@ class AlshayaApiCommands extends DrushCommands {
         foreach ($languages as $langcode => $language) {
           foreach ($to_be_deleted[$type][$langcode] as $sku) {
             if ($sku_entity = SKU::loadFromSku($sku, $langcode, FALSE, TRUE)) {
-              $this->logger->notice('Removing disabled @language @type SKU @sku from the system: @sku.', [
+              $this->drupalLogger->notice('Removing disabled @language @type SKU @sku from the system: @sku.', [
                 '@language' => $languages[$langcode]->getName(),
                 '@type' => $type,
                 '@sku' => $sku,
@@ -1401,7 +1424,10 @@ class AlshayaApiCommands extends DrushCommands {
           }
         }
         catch (\Exception $e) {
-          $this->logger->warning('Impossible to delete the product node @nid', ['@nid' => $nid]);
+          $this->drupalLogger->warning('Impossible to delete the product node @nid, exception: @message.', [
+            '@nid' => $nid,
+            '@exception' => $e->getMessage(),
+          ]);
         }
       }
     }

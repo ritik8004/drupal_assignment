@@ -22,6 +22,14 @@ $drupal_database = $host_site_code == 'default_local'
 
 $host = getenv('LANDO') ? 'database' : 'localhost';
 
+$prefix = '';
+
+if (getenv('AH_SITE_ENVIRONMENT') === 'ide') {
+  $drupal_database = 'drupal';
+  $host = 'localhost';
+  $prefix = $host_site_code;
+}
+
 $databases = array(
   'default' =>
     array(
@@ -34,7 +42,7 @@ $databases = array(
           'port' => '3306',
           'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
           'driver' => 'mysql',
-          'prefix' => '',
+          'prefix' => $prefix,
         ),
     ),
 );

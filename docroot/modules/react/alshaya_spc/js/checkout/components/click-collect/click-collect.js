@@ -1,6 +1,4 @@
 import React from 'react';
-import _find from 'lodash/find';
-import _findIndex from 'lodash/findIndex';
 import parse from 'html-react-parser';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import createFetcher from '../../../utilities/api/fetcher';
@@ -36,7 +34,7 @@ import {
   getCncModalButtonText,
 } from '../../../utilities/cnc_util';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
-import { logger } from '../../../backend/v2/utility';
+import logger from '../../../../../js/utilities/logger';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -68,6 +66,7 @@ class ClickCollect extends React.Component {
       selectedStore,
       updateModal,
       storeList,
+      locationAccess,
       outsideCountryError,
     } = this.context;
     updateModal(true);
@@ -98,17 +97,61 @@ class ClickCollect extends React.Component {
     if (outsideCountryError) {
       smoothScrollTo('.spc-cnc-address-form-sidebar .spc-checkout-section-title');
     }
+
+    if (locationAccess === false || outsideCountryError === true) {
+      // Adjust list height so it is scrollable, when we have a location error.
+      this.dynamicListHeightWhenLocationError();
+    }
   }
 
   componentDidUpdate() {
-    const { outsideCountryError } = this.context;
+    const {
+      outsideCountryError,
+      locationAccess,
+    } = this.context;
+
     if (outsideCountryError) {
       smoothScrollTo('.spc-cnc-address-form-sidebar .spc-checkout-section-title');
+    }
+
+    if (locationAccess === false || outsideCountryError === true) {
+      // Adjust list height so it is scrollable, when we have a location error.
+      this.dynamicListHeightWhenLocationError();
     }
   }
 
   componentWillUnmount() {
     document.removeEventListener('markerClick', this.mapMarkerClick);
+  }
+
+  dynamicListHeightWhenLocationError = () => {
+    // In mobile the sidebar is fullscreen, and entire view is scrollable.
+    // This fix is needed only for tablet and desktop which show the CnC as modal.
+    if (window.innerWidth >= 768) {
+      // The Title of modal. `Collection Store`.
+      const modalTitle = document.querySelector('.spc-cnc-stores-list-map > .spc-checkout-section-title').offsetHeight;
+      // The modal/sidebar height.
+      const modalHeight = document.querySelector('.spc-cnc-address-form-sidebar').offsetHeight;
+      // The message container which has error/warning along with its 10px top margin.
+      const messageContainer = document.querySelector('.spc-cnc-address-form-wrapper > .spc-messages-container.click-n-collect-store-modal').offsetHeight + 10;
+      // The subtitle for the form `Find Your Nearest Store`.
+      const subTitle = document.querySelector('.spc-cnc-address-form-content > .spc-checkout-section-title').offsetHeight;
+      // The search form along with its 10px bottom margin.
+      const searchForm = document.querySelector('.spc-cnc-location-search-wrapper').offsetHeight + 10;
+      // The sticky CTA.
+      const storeSelectCTA = document.querySelector('.spc-cnc-stores-list-map + .spc-cnc-store-actions').offsetHeight;
+      // Store List height = Modal height - height of all other elements.
+      const listHeight = modalHeight
+        - modalTitle - messageContainer - subTitle - searchForm - storeSelectCTA;
+      document.getElementById('click-and-collect-list-view').style.height = `${listHeight}px`;
+    }
+  };
+
+  resetListHeightWhenLocationError = () => {
+    // Remove the height set in dynamicListHeightWhenLocationError(), on error dismissal.
+    if (window.innerWidth >= 768) {
+      document.getElementById('click-and-collect-list-view').style.removeProperty('height');
+    }
   }
 
   /**
@@ -330,7 +373,7 @@ class ClickCollect extends React.Component {
   openMarkerOfStore = (storeCode, storeList = null, showInfoWindow = true) => {
     const { storeList: contextStoreList } = this.context;
     const storeListArg = (!storeList) ? contextStoreList : storeList;
-    const index = _findIndex(storeListArg, {
+    const index = _.findIndex(storeListArg, {
       code: storeCode,
     });
     this.selectStoreButtonVisibility(index >= 0);
@@ -378,13 +421,20 @@ class ClickCollect extends React.Component {
     if (window.innerWidth < 768) {
       this.toggleFullScreen(false);
     }
-
+    // Log a debug to know what is the store code being passed.
+    logger.debug('Store code @storeCode selected by the user.', {
+      '@storeCode': storeCode,
+    });
     // Find the store object with the given store-code from the store list.
-    const store = _find(storeList, { code: storeCode });
-
-    if (store === undefined || store.name === undefined) {
+    const store = _.find(storeList, { code: storeCode });
+    if (store === undefined) {
       logger.error('Unable to find store from list.', {
         storeCode,
+        storeList,
+      });
+    } else if (store !== undefined && store.name === undefined) {
+      logger.error('Unable to find store name in the store found in list', {
+        store,
         storeList,
       });
     }
@@ -483,6 +533,7 @@ class ClickCollect extends React.Component {
       if (type === 'locationAccessDenied') {
         updateLocationAccess(true);
       }
+      this.resetListHeightWhenLocationError();
     }, 200);
   }
 
@@ -536,7 +587,7 @@ class ClickCollect extends React.Component {
               )}
               {outsideCountryError === true
               && (
-                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable outside-country-error">
                   {parse(getStringMessage('location_outside_country_cnc'))}
                   <button type="button" onClick={(e) => this.dismissErrorMessage(e, 'outsidecountry')}>
                     {getStringMessage('dismiss')}

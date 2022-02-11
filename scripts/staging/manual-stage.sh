@@ -99,8 +99,14 @@ do
   # Remove the last two characters which are always the country code.
   brand_code=${site_code%??}
 
+  algolia_v2_enabled=""
+  if [[ ${target_env:2} == "pprod" ]];
+  then
+    algolia_v2_enabled=$(ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri ev \"echo \Drupal::entityTypeManager()->getStorage('search_api_index')->load('alshaya_algolia_product_list_index')->get('status')\"")
+  fi
+
   echo
-  echo "Droppping and importing database again for $current_site"
+  echo "Dropping and importing database again for $current_site"
   ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sql-drop -y; drush -l $uri sql-cli < ~/manual-stage/$current_site.sql"
 
   echo "Restore config for the target site"
@@ -118,6 +124,22 @@ do
     echo
     echo "Initiating reset-individual-site-post-stage on $current_site in a screen."
     ssh $target "screen -S $current_site -dm bash -c \"cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; ../scripts/staging/reset-individual-site-post-stage.sh '$current_site'\""
+  else
+    if [[ "$algolia_v2_enabled" == "1" ]];
+    then
+      echo "Algolia V2 was enabled on site $current_site so we enable again."
+      ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri pm:enable alshaya_algolia_react"
+      ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri alshaya-algolia-react enable"
+      ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-dis product"
+      ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-en alshaya_algolia_product_list_index"
+      ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri crf"
+    fi
+
+    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c acquia_search_index"
+    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c alshaya_algolia_index"
+    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c alshaya_algolia_product_list_index"
+
+    ssh $target "screen -S $current_site -dm bash -c \"cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sapi-i\""
   fi
 done
 
@@ -145,9 +167,6 @@ do
     echo "Initiating rsync of product media files in screen rsync_${current_site}_${target_env}"
     screen -S rsync_media_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder --delete"
     screen -S rsync_brand_${current_site}_${target_env} -dm bash -c "rsync -auv $brand_files_folder/* --exclude 'styles' $target:$target_brand_files_folder  --delete"
-    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c acquia_search_index"
-    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c alshaya_algolia_index"
-    ssh $target "screen -S $current_site -dm bash -c \"cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sapi-i\""
   fi
 
   if [[ "$type" == "proxy" ]]; then

@@ -5,8 +5,13 @@
 
   Drupal.behaviors.alshayaRcsModalBehavior = {
     attach: function (context, settings) {
-      $('.open-modal-pdp').once('pdp-modal-processed').on('click', function (e) {
+      $('.open-modal-pdp, #dy-recommendation a.product-quick-view-link').once('pdp-modal-processed').on('click', function (e) {
         e.preventDefault();
+
+        // Display loader.
+        if (typeof Drupal.cartNotification.spinner_start === 'function') {
+          Drupal.cartNotification.spinner_start();
+        }
 
         // Get the template with placeholders for modal view.
         var content = $('<div>').append($('.rcs-templates--product-modal').clone());
@@ -17,13 +22,17 @@
           .addClass('acq-content-product-modal');
 
         // Reset cloud zoom image attributes.
-        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('data-zoom-url', '"#rcs.product_modal._self|image#"');
-        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', '"#rcs.product_modal._self|image#"');
+        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('data-zoom-url', '"#rcs.product_modal._self|teaser_image#"');
+        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', '"#rcs.product_modal._self|teaser_image#"');
 
-        // Get url key for product whose details are required.
-        var skuUrlKey = $(this).parent('article').find('.sku-url-key').val();
+        // Try to get sku from the element clicked. Works with DY block.
+        var sku = $(this).data('sku');
+        if (!sku) {
+          // Try to get sku from parent article. Works with RCS recommended block.
+          sku = $(this).parent('article').data('sku');
+        }
 
-        globalThis.rcsPhCommerceBackend.getData('product-recommendation', {url_key: skuUrlKey})
+        globalThis.rcsPhCommerceBackend.getData('product-recommendation', {sku: sku}, null, null, null, true)
           .then(function (entity) {
             if (entity === null || typeof entity === 'undefined') {
               return;
@@ -57,7 +66,7 @@
 
             // Call behaviours with modal context.
             var modalContext = $('.pdp-modal-box');
-            rcsPhApplyDrupalJs(modalContext)
+            rcsPhApplyDrupalJs(modalContext);
           },
           function () {
             console.log('Could not fetch data!');
@@ -66,17 +75,5 @@
         return false;
       });
     }
-  };
-
-  /**
-   * Get query for graphQl.
-   *
-   * @param {string} urlKey
-   *   Url key of product.
-   * @returns {string}
-   *   Query string for graphql.
-   */
-  Drupal.alshayaRcs.getProductQuery = function (urlKey) {
-    return `{products(filter: {url_key: {eq: "`+ urlKey + `"}}) ${rcsPhGraphqlQuery.products}}`;
   };
 })(jQuery, Drupal);

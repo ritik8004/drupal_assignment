@@ -1,0 +1,8 @@
+.is-not-buyable,
+.addtobag-config-button,
+.product-drawer-content-wrapper .pdp-link {
+  &:hover {
+    background: $plp-secondary-cta-hover-bg;
+  }
+}
+

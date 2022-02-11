@@ -39,10 +39,10 @@ function alshaya_mobile_app_update_8080() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-      'rest.resource.product_exclude_linked_v2',
-      'rest.resource.skus_product_list_v2',
-      'rest.resource.deeplink_v2'
-    ],
+    'rest.resource.product_exclude_linked_v2',
+    'rest.resource.skus_product_list_v2',
+    'rest.resource.deeplink_v2',
+  ],
     'alshaya_mobile_app',
     'install'
   );
@@ -66,10 +66,11 @@ function alshaya_mobile_app_update_8079() {
   }
   $role->save();
 }
+
 /**
  * Implements hook_update_N().
  *
- * [5.18.0] Re-indexing items for updating swatch URLs from relative to absolute.
+ * [5.18.0] Reindexing items for updating swatch URLs from relative to absolute.
  */
 function alshaya_mobile_app_update_8078() {
   // Re-index only on brands where we have swatches for plp.
@@ -103,10 +104,10 @@ function alshaya_mobile_app_update_8076() {
 }
 
 /**
-* Implements hook_update_N().
-*
-* Add new API to get dropdown/option values from webform.
-*/
+ * Implements hook_update_N().
+ *
+ * Add new API to get dropdown/option values from webform.
+ */
 function alshaya_mobile_app_update_8075() {
   \Drupal::service('alshaya_config.manager')->updateConfigs(
     ['rest.resource.webform_options_list'],
@@ -134,7 +135,7 @@ function alshaya_mobile_app_update_8074() {
   );
 
   // Delete all existing value for "Dy Banner (mobile app)".
-  /** @var $connection \Drupal\Core\Database\Connection */
+  /** @var \Drupal\Core\Database\Connection $connection */
   $connection = \Drupal::database();
 
   $field_storage = FieldStorageConfig::loadByName('taxonomy_term', 'field_dy_banner');
@@ -303,7 +304,10 @@ function alshaya_mobile_app_update_8012() {
  */
 function alshaya_mobile_app_update_8011() {
   \Drupal::service('alshaya_config.manager')->updateConfigs(
-    ['rest.resource.product_exclude_linked', 'rest.resource.product_linked_skus'],
+    [
+      'rest.resource.product_exclude_linked',
+      'rest.resource.product_linked_skus',
+    ],
     'alshaya_mobile_app'
   );
 

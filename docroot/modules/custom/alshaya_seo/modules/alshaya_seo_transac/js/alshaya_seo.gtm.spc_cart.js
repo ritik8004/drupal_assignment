@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings, dataLayer) {
-  'use strict';
 
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
@@ -30,10 +29,11 @@
 
     // Get product info from storage.
     var key = 'product:' + drupalSettings.path.currentLanguage + ':' + product.sku;
-    var productInfo = JSON.parse(localStorage.getItem(key));
+    var productInfo = Drupal.getItemFromLocalStorage(key);
     if (productInfo !== null) {
       var productDetails = Drupal.alshayaSeoSpc.gtmProduct(productInfo, product.qty);
-      productDetails.metric2 = product.finalPrice;
+      // metric value will be negative in case of product removal from cart.
+      productDetails.metric2 = gtmEvent === 'removeFromCart' ? -1 * product.finalPrice : product.finalPrice;
       productData.ecommerce[action].products.push(productDetails);
       dataLayer.push(productData);
     }
@@ -79,7 +79,7 @@
    */
   Drupal.alshayaSeoSpc.getRecommendationGtmAttributes = function (sku) {
     var key = 'recommendedProduct:' + drupalSettings.path.currentLanguage;
-    var relatedProductsInfo = JSON.parse(localStorage.getItem(key));
+    var relatedProductsInfo = Drupal.getItemFromLocalStorage(key);
     // Cannot use Drupal.alshayaSeoSpc.gtmProduct as the method expectes
     // product parameter to have gtmAttributes key while in localstorage
     // it has gtm_attributes key.

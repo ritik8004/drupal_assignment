@@ -10,7 +10,6 @@ import SavedCardsList from './components/SavedCardsList';
 import NewCard from './components/NewCard';
 import { CheckoutComContext } from '../../../context/CheckoutCom';
 import SelectedCard from './components/SelectedCard';
-import { setStorageInfo } from '../../../utilities/storage';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
@@ -199,7 +198,10 @@ class PaymentMethodCheckoutCom extends React.Component {
     const { updateState } = this.context;
     updateState(obj);
     if (({}).hasOwnProperty.call(obj, 'selectedCard')) {
-      setStorageInfo(obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard, 'spc_selected_card');
+      Drupal.addItemInLocalStorage(
+        'spc_selected_card',
+        obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard,
+      );
     }
 
     dispatchCustomEvent('refreshCompletePurchaseSection', {});

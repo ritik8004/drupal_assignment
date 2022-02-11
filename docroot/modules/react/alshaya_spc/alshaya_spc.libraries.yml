@@ -4,11 +4,12 @@ cart_utilities:
   dependencies:
     - core/jquery
     - core/drupal
+    - core/jquery.once
     - alshaya_react/react_pollyfill
+    - alshaya_acm_product/product_utility
 
 mini_cart:
   version: 1.x
-  footer: true
   js:
     dist/minicart.bundle.js: { }
   dependencies:
@@ -16,28 +17,28 @@ mini_cart:
 
 cart:
   version: 1.x
-  footer: true
   js:
     dist/cart.bundle.js: { }
   dependencies:
     - core/drupal.ajax
     - core/drupal.dialog
+    - core/underscore
     - alshaya_react/react
     - alshaya_product_zoom/cloud_zoom_pdp_gallery
     - alshaya_spc/cart_utilities
+    - alshaya_master/common_functions
 
 checkout:
   version: 1.x
-  footer: true
   js:
     dist/checkout.bundle.js: { }
   dependencies:
+    - core/underscore
     - alshaya_react/react
     - alshaya_spc/cart_utilities
 
 add_to_cart:
   version: 1.x
-  footer: true
   js:
     assets/js/add_to_cart.js: { }
   dependencies:
@@ -46,7 +47,6 @@ add_to_cart:
 
 checkout-confirmation:
   version: 1.x
-  footer: true
   js:
     dist/checkout_confirmation.bundle.js: { }
   dependencies:
@@ -79,7 +79,7 @@ googlemapapi:
     - core/jquery
     - core/drupalSettings
   js:
-    js/google-maps-api.js: {}
+    assets/js/google-maps-api.js: {}
 
 commerce_backend.cart.v1:
   js:
@@ -103,14 +103,18 @@ commerce_backend.checkout.v2:
   js:
     dist/backend_checkout_v2.bundle.js: {}
   dependencies:
+    - core/underscore
     - alshaya_spc/security
 
 express_delivery:
   version: 1.x
-  footer: true
   js:
     dist/expressdelivery.bundle.js: { }
   dependencies:
     - alshaya_react/react
     - alshaya_spc/cart_utilities
     - alshaya_spc/commerce_backend.cart.v2
+
+dynamic_promotion_label:
+  js:
+    dist/dynamic_promotion_label.bundle.js: {}

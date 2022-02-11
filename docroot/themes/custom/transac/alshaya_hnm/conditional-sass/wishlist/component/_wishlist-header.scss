@@ -1,0 +1,33 @@
+body.wishlist-enabled {
+  .wishlist-notification {
+    border-radius: unset;
+
+    .product-name {
+      font-family: $hnm-demibold;
+    }
+
+    .wishlist-query {
+      font-family: $hnm-demibold;
+    }
+
+    .actions {
+      a {
+        font-family: $hnm-demibold;
+
+        &.sign-in {
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  #wishlist-header-wrapper {
+    top: 0.5rem;
+
+    @include breakpoint($only-tablet) {
+      top: 0;
+    }
+  }
+}

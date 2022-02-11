@@ -13,6 +13,12 @@
       .store-name {
         color: $spc-cnc-store-list-distance;
       }
+
+      .store-distance {
+        @include breakpoint($only-mobile) {
+          #{$right}: 3rem;
+        }
+      }
     }
   }
 
@@ -46,8 +52,29 @@
   }
 }
 
+#click-and-collect-list-view,
+#google-map-cnc,
+.map-store-list,
+#click-and-collect-selected-store {
+  .pudo-collection-list {
+    .store-distance {
+      position: absolute;
+      #{$right}: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
 .map-store-list {
   .pudo-collection-list {
     padding-#{$left}: 2.125rem;
+
+    .store-distance {
+      @include breakpoint($only-mobile) {
+        #{$right}: 0;
+        top: calc(50% - 0.5rem);
+      }
+    }
   }
 }

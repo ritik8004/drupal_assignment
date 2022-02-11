@@ -1,0 +1,23 @@
+.acq-content-product {
+  #express-delivery-options {
+    border-bottom: none;
+  }
+
+  .express-delivery-detail {
+    margin-top: 0.9375rem;
+    color: $pdp-delivery-section-text;
+  }
+
+  .express-delivery-title-wrapper {
+    letter-spacing: inherit;
+    margin-bottom: 0;
+
+    &.ui-state-active {
+      .c-accordion__title {
+        &::after {
+          transform: rotate(270deg);
+        }
+      }
+    }
+  }
+}

@@ -87,8 +87,14 @@ class SkuImagesManagerPims extends SkuImagesManager {
     $zoom_style = $settings['zoom_style'];
     $slide_style = $settings['slide_style'];
 
-    if (!empty($media_item['file'])) {
-      $file_uri = $media_item['file'];
+    if (!empty($media_item['file']) || !empty($media_item['pims_image']['url'])) {
+      $file_uri = (isset($media_item['file'])) ? $media_item['file'] : '';
+
+      // For asset type attribute we need below changes e.g. hm and cos.
+      if (!empty($media_item['pims_image']['url']) && isset($media_item['pims_image']['styles'])) {
+        $file_uri = $media_item['pims_image']['url'];
+        $media_item = $media_item['pims_image'];
+      }
 
       // Show original full image in the modal inside a draggable container.
       $original_image = file_create_url($file_uri);

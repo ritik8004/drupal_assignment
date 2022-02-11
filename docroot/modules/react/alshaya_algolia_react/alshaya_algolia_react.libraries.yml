@@ -11,6 +11,7 @@ vendor:
     dist/algolia.bundle.js: {}
     js/alshaya_algolia_react.js: {}
   dependencies:
+    - core/jquery.once
     - alshaya_react/react
     - alshaya_algolia_react/back_to_search
     - alshaya_search_api/product_height
@@ -20,12 +21,14 @@ search_insights_listing:
     js/search-insights.listing.js: {}
   dependencies:
     - core/jquery
+    - core/jquery.once
     - alshaya_algolia_react/search_insights
 
 search_insights_detail:
   js:
     js/search-insights.detail.js: {}
   dependencies:
+    - core/jquery.once
     - alshaya_master/common_functions
     - alshaya_algolia_react/search_insights
 
@@ -36,6 +39,7 @@ search_insights:
   dependencies:
     - core/drupalSettings
     - core/jquery.cookie
+    - alshaya_master/local_storage_manager
 
 plp:
   js:
@@ -45,6 +49,7 @@ plp:
   dependencies:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common
+    - core/jquery.once
 
 plpv2:
   js:
@@ -54,11 +59,19 @@ plpv2:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common
 
+product_category_carousel:
+  js:
+    dist/productCategoryCarousel.js: {}
+  dependencies:
+    - core/drupalSettings
+
 algolia_common:
   js:
     js/alshaya_algolia_global.js: {}
   dependencies:
     - core/jquery
+    - alshaya_master/jquery_is_in_viewport
+    - alshaya_master/local_storage_manager
 
 back_to_plp:
   js:

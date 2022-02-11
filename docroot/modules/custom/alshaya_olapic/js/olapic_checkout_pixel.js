@@ -4,8 +4,6 @@
  */
 (function ($, Drupal, drupalSettings) {
 
-    'use strict';
-
     Drupal.behaviors.olapiccheckoutpixel = {
         attach: function (context) {
             if (typeof drupalSettings.cartObject != "undefined") {

@@ -24,13 +24,19 @@ const AssetGallery = ({
           loading="lazy"
         />
       </div>
-      <div className="alshaya_search_hoverimage">
-        <ImageElement
-          src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
-          title={title}
-          loading="lazy"
-        />
-      </div>
+      {
+        typeof hoverImage.url !== 'undefined'
+          ? (
+            <div className="alshaya_search_hoverimage">
+              <ImageElement
+                src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
+                title={title}
+                className="lazy"
+              />
+            </div>
+          )
+          : ''
+      }
       <Lozenges labels={labels} sku={sku} />
     </div>
   );

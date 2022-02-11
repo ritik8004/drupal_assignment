@@ -1,0 +1,24 @@
+.sofa-section-config-item-wrapper {
+  display: flex;
+  font-size: 0.6875rem;
+  line-height: 1.125rem;
+  padding-bottom: 0.3125rem;
+
+  .sofa-section-config-item-title {
+    font-family: $alshaya-bold;
+    width: 35%;
+    padding-#{$right}: 0.3125rem;
+    margin-#{$right}: 0.625rem;
+    text-align: $right;
+    color: $sofa-sectional-title;
+
+    @include breakpoint($only-tablet) {
+      width: 42%;
+    }
+  }
+
+  .sofa-section-config-item-value {
+    width: 62%;
+    overflow: hidden;
+  }
+}

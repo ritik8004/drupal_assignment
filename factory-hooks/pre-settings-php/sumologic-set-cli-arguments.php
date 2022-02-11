@@ -33,7 +33,8 @@ if (!function_exists('alshaya_get_cli_request_id')) {
 
 }
 
-if (isset($_ENV['AH_SITE_ENVIRONMENT']) && PHP_SAPI === 'cli') {
+$ah_env = getenv('AH_SITE_ENVIRONMENT');
+if ($ah_env && $ah_env !== 'ide' && PHP_SAPI === 'cli') {
   // Set the `request method`.
   putenv('REQUEST_METHOD=CLI');
   // Set the `domain`.

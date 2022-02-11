@@ -1,0 +1,262 @@
+// Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_debenhams/fonts';
+
+@font-face {
+  font-family: "SofiaPro-UltraLight";
+  src:
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-UltraLight.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-UltraLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-SemiBold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-SemiBold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-SemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro";
+  src:
+    url("#{$base_theme_fonts_directory_path}/SofiaPro.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SofiaPro.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-ExtraLight";
+  src:
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-ExtraLight.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-ExtraLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-Light";
+  src:
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-Medium";
+  src:
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SofiaPro-Black";
+  src:
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-Black.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SofiaPro-Black.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Black";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Black.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Black.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-ExtraBold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tajawal-ExtraBold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-ExtraBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-ExtraLight";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tajawal-ExtraLight.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-ExtraLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Light";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Medium";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal-Regular";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaBlack";
+  src:
+    url("#{$base_theme_fonts_directory_path}/JuanaBlack.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JuanaBlack.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaBold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/JuanaBold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JuanaBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaExtraLight";
+  src:
+    url("#{$base_theme_fonts_directory_path}/JuanaExtraLight.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JuanaExtraLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaLight";
+  src:
+    url("#{$base_theme_fonts_directory_path}/JuanaLight.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JuanaLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaMedium";
+  src:
+    url("#{$base_theme_fonts_directory_path}/JuanaMedium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JuanaMedium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaRegular";
+  src:
+    url("#{$base_theme_fonts_directory_path}/JuanaRegular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JuanaRegular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaSemiBold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/JuanaSemiBold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JuanaSemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JuanaThin";
+  src:
+    url("#{$base_theme_fonts_directory_path}/JuanaThin.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/JuanaThin.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GESSTwoLight-Light";
+  src:
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight-Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GESSTwoBold-Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/GESSTwoBold-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoBold-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GESSTwoMedium-Medium";
+  src:
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

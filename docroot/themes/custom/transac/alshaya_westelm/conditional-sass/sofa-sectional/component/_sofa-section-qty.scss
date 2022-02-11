@@ -1,0 +1,42 @@
+.alshaya-select-wrapper {
+  @include breakpoint($tablet) {
+    width: 5.375rem !important;
+  }
+
+  label {
+    font-size: 0.9375rem;
+  }
+
+  .alshayaSelect__value-container {
+    justify-content: flex-start;
+  }
+
+  .alshaya-select {
+    .alshayaSelect__control {
+      height: 3.125rem;
+      min-height: 3.125rem;
+    }
+  }
+}
+
+.basic-details-wrapper {
+  .field--name-field-skus .sku-base-form {
+    .sofa-sectional-addtobag-button-wrapper {
+      @include breakpoint($tablet) {
+        width: 62%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 69%;
+      }
+
+      .sofa-sectional-addtobag-button {
+        width: 100%;
+
+        @include breakpoint($only-mobile) {
+          position: static;
+        }
+      }
+    }
+  }
+}

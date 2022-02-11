@@ -1,0 +1,16 @@
+#alshaya-algolia-search,
+#alshaya-algolia-plp,
+#top-results,
+#my-wishlist {
+  .c-products__item.product-title-trim {
+    .field--name-name {
+      a {
+        .suggested-text {
+          @include breakpoint($only-mobile) {
+            line-height: normal;
+          }
+        }
+      }
+    }
+  }
+}

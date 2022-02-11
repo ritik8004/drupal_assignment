@@ -5,6 +5,8 @@ set classes = [
   view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 ]
 %}
+{% set attributes = attributes.addClass(classes) %}
+
 <article data-sku="#rcs.product._self|sku#" data-sku-type="#rcs.product._self|sku-type#" {{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
     {% block mainContent %}
@@ -24,12 +26,12 @@ set classes = [
     {% block contentSidebar %}
       {% block titleBlock %}
         <div class="content__title_wrapper">
-          <div>#rcs.product._self|brand_logo#</div>
+          <div class="field field-brand-logo">#rcs.product._self|brand_logo#</div>
 
           {% block productBrand %}
           {% endblock %}
 
-          <h1><span>#rcs.product._self|name#</span></h1>
+          <h1><span class="field field-product-name">#rcs.product._self|name#</span></h1>
 
           {% block pricePrefix %}
           {% endblock %}
@@ -43,7 +45,7 @@ set classes = [
             <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
-          <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
+          <div class="promotions promotions-full-view-mode">#rcs.product._self|promotions#</div>
 
           <div class="vat-text">#rcs.product._self|vat_text#</div>
 
@@ -62,20 +64,15 @@ set classes = [
 
           <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
-          {% if content.same_day_delivery_text %}
-            <div class="same-day-delivery">
-              <div class="same-day-content">
-                <p>{{ content.same_day_delivery_text }}</p>
-                <p>{{ content.same_day_delivery_sub_text }}</p>
-              </div>
-            </div>
-          {% elseif content.delivery_in_only_city_text %}
-            <div class="delivery-in-only-city">
-              <p>{{ content.delivery_in_only_city_text }}</p>
-            </div>
-          {% endif %}
+          <div id="rcs-ph-delivery-info-block"></div>
+
         </div>
       {% endblock %}
+
+      {% if aura_enabled is defined and aura_enabled %}
+        {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+        <div id="aura-pdp"></div>
+      {% endif %}
 
       {% block pdpSidebar %}
         <div class="content__sidebar">
@@ -120,7 +117,7 @@ set classes = [
             {% block afterDescription %}
             {% endblock %}
 
-            <div id="rcs-ph-delivery-option"></div>
+            <div id="rcs-ph-delivery-options"></div>
 
             {{ content.sharethis }}
 

@@ -1,0 +1,473 @@
+/*
+ * Theming of product detail page.
+ */
+.c-pdp.l-one--w {
+  @include breakpoint($desktop) {
+    max-width: 66.9375rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.content {
+  &__title_wrapper {
+    @include breakpoint($only-mobile) {
+      margin: 0 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .price {
+      font-size: 1rem;
+      margin-bottom: 0.625rem;
+
+      &--discount {
+        font-size: 0.875rem;
+        font-family: $dh-light;
+        margin-#{$left}: 0.25rem;
+        vertical-align: top;
+        margin-top: 0;
+      }
+    }
+
+    h1,
+    h1 span {
+      margin-top: 0;
+      color: $primary_text;
+      font-weight: normal;
+      font-size: 1.5625rem;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      width: 100%;
+    }
+
+    .content--item-code {
+      font-size: 0.75rem;
+    }
+
+    .content--brand {
+      font-size: 1.125rem;
+      font-family: $dh-semibold;
+      margin-bottom: 0.625rem;
+      letter-spacing: 1.5px;
+    }
+  }
+
+  &__main {
+    @include breakpoint($tablet) {
+      min-height: 58rem;
+    }
+  }
+
+  &__sidebar {
+    .mobile-content-wrapper {
+      @include breakpoint($only-mobile) {
+        padding: 0 1.25rem;
+      }
+    }
+  }
+}
+
+.select2Option {
+  h4 {
+    font-size: 1rem;
+    font-family: $dh-light;
+  }
+
+  .selected-text {
+    font-weight: normal;
+    font-family: $dh-semibold;
+  }
+
+  .select-buttons {
+    li {
+      a,
+      span {
+        margin-top: 0.75rem;
+        min-width: 2.375rem;
+        border-radius: 1.375rem;
+        padding-bottom: 0.625rem;
+
+        &.picked {
+          border: 1px solid $pdp_size_selected_border;
+        }
+
+        &:hover {
+          background: $pdp_size_option_hover_bg;
+        }
+      }
+
+      &.disabled {
+        a,
+        span {
+          background: none;
+          background-color: $pdp_disable_variant_bg;
+          opacity: 0.4;
+          color: $pdp_disable_variant_text;
+          border: 0;
+        }
+      }
+    }
+  }
+}
+
+.special--price {
+  .price-wrapper {
+    .price {
+      margin-#{$left}: 0.25rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+}
+
+.store-finder-form-wrapper {
+  .search-store {
+    button {
+      width: 7rem;
+      font-family: $dh-semibold;
+      font-size: 0.875rem;
+      text-transform: unset;
+      border-radius: 1.3125rem;
+      margin-#{$left}: 0.5rem;
+      border: 2px solid $pdp_cc_btn_border;
+
+      &:hover {
+        background: $primary_btn_hover_bg;
+        border: 2px solid $primary_btn_hover_border;
+        transition: 0.3s;
+      }
+    }
+
+    input[type='text'] {
+      width: calc(100% - 8rem);
+    }
+  }
+}
+
+.click-collect-top-stores {
+  .empty-store-list {
+    font-size: 0.875rem;
+  }
+}
+
+.delivery-options-wrapper {
+  .c-accordion {
+    &__title {
+      padding: 0.3125rem 0 0;
+
+      .subtitle {
+        text-transform: none;
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .field__label {
+    font-weight: normal;
+    font-family: $dh-semibold;
+    margin: 1.625rem 0 0.8125rem;
+  }
+}
+
+.basic-details-wrapper .field--name-field-skus {
+  .form-item-configurables-size {
+    @include breakpoint($only-mobile) {
+      margin-top: 1.25rem;
+    }
+
+    @include breakpoint($tablet) {
+      order: 1;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+    }
+
+    select.form-select {
+      @include breakpoint($only-mobile) {
+        height: 2.625rem;
+      }
+    }
+
+    &::after {
+      @include breakpoint($only-mobile) {
+        top: 0.875rem;
+        font-weight: bold;
+        font-size: 1.25rem;
+      }
+    }
+
+    &::before,
+    &::after {
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+  }
+
+  .sku-base-form {
+    .form-item {
+      @include breakpoint($only-tablet) {
+        padding-top: 0;
+      }
+    }
+
+    button[type="submit"] {
+      padding: 0.75rem 1.375rem 0.5rem;
+
+      @include breakpoint($only-mobile) {
+        height: 2.625rem;
+        border-radius: 2rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-top: 1.5rem;
+        margin-#{$left}: 1.25rem;
+        min-width: 10.0625rem;
+
+        html[lang=ar] & {
+          width: 10.0625rem;
+          margin-right: 0.5rem;
+          float: left;
+        }
+      }
+    }
+  }
+
+  .form-item-quantity {
+    &::after {
+      font-size: 1.25rem;
+      line-height: 2.2;
+      font-weight: bold;
+    }
+
+    label {
+      font-size: 1rem;
+      font-family: $dh-light;
+    }
+
+    .select2-container {
+      width: 4.625rem !important;
+
+      .select2-selection {
+        width: 4.625rem;
+        height: 2.625rem;
+
+        .select2-selection__rendered {
+          line-height: 2.5;
+        }
+      }
+
+      .select2-selection__arrow {
+        &::after {
+          font-size: 1.25rem;
+          line-height: 2.2;
+          font-weight: bold;
+          width: 2.6875rem;
+        }
+      }
+    }
+
+    select.form-select {
+      height: 2.625rem;
+      width: 100%;
+    }
+  }
+
+  .configurable-select,
+  .configurable-swatch {
+    > label {
+      @include breakpoint($only-mobile) {
+        display: block;
+        font-size: 1rem;
+        font-family: $dh-light;
+      }
+    }
+  }
+
+  #configurable_ajax {
+    margin-top: 0.625rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+
+  .form-item {
+    &.form-type-select {
+      &.form-item-quantity {
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+
+        @include breakpoint($only-tablet) {
+          float: $left;
+        }
+      }
+    }
+  }
+}
+
+.field--name-field-skus {
+  .sku-base-form > {
+    div,
+    .js-form-wrapper {
+      @include breakpoint($tablet) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.short-description-wrapper {
+  &:not(.matchback-description-wrapper) {
+    .c-pdp & {
+      margin-bottom: 0.875rem;
+      color: $primary_text;
+    }
+  }
+
+  .read-more-description-link-mobile,
+  .show-less-link {
+    font-family: $dh-semibold;
+    font-size: 0.75rem;
+  }
+
+  .field {
+    &__label {
+      font-weight: normal;
+      cursor: default;
+      font-family: $dh-semibold;
+      margin: 1.625rem 0 0.8125rem;
+    }
+
+    &__content {
+      padding: 0 0 0.9375rem;
+      font-family: $dh-light;
+
+      .desc-wrapper {
+        .desc-value {
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6 {
+            margin: 1rem 0 0.8125rem;
+          }
+
+          .details-care-label {
+            font-family: $dh-semibold;
+          }
+        }
+
+        .composition-wrapper {
+          margin-bottom: 1rem;
+        }
+
+        a {
+          text-decoration: underline;
+          color: $content_link_color;
+        }
+      }
+    }
+  }
+
+  .desc-value {
+    p {
+      margin: 0;
+      padding-bottom: 1rem;
+    }
+  }
+
+  .read-more-description-link-mobile,
+  .show-less-link {
+    font-weight: normal;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+// Layout of the detail page
+.nodetype--acq_product {
+  #backtotop {
+    @include breakpoint($only-mobile) {
+      &::after {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.field--name {
+  &-field-skus {
+    .sku-base-form {
+      button[type="submit"] {
+        font-size: 1rem;
+        text-transform: unset;
+        border-radius: 1.3125rem;
+        height: 2.625rem;
+        background: $primary_brand_button;
+
+        @include breakpoint($desktop) {
+          margin-#{$left}: 1rem;
+          min-width: 13.5rem;
+        }
+      }
+    }
+  }
+}
+
+.description-wrapper {
+  .field {
+    &__label {
+      font-size: 1.125rem;
+      font-weight: normal;
+      padding-bottom: 0.375rem;
+    }
+  }
+
+  .desc-wrapper,
+  .description-section,
+  .address {
+    padding-top: 0;
+    font-family: $dh-light;
+  }
+
+  .desc-value {
+    padding-top: 0.75rem;
+
+    h2 {
+      border-bottom: 1px solid $primary_border;
+      margin-top: 0.9375rem;
+      font-size: 1.125rem;
+      font-weight: normal;
+    }
+
+    .details-care-wrapper {
+      .details-care-label {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+}
+
+.nodetype--acq_product,
+.acq-content-product-modal {
+  .content__title_wrapper {
+    .vat-text {
+      font-size: 0.75rem;
+      margin-#{$right}: 1rem;
+      margin-bottom: 1.25rem;
+    }
+  }
+}

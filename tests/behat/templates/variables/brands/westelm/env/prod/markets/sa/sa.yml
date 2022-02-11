@@ -1,7 +1,7 @@
 variables:
-  url_product_page: 'buy-chadwick-console.html'
-  product_listing_page_url: '/shop-new/new-arrivals/fall-collection/'
-  spc_product_listing_page: '/shop-new/new-arrivals/fall-collection/'
-  spc_basket_page: '/shop-new/new-arrivals/fall-collection/'
-  spc_pdp_page: 'buy-portside-outdoor-expandable-dining-table-6-textilene-chairs-set.html'
-  spc_bank_product: 'buy-portside-outdoor-expandable-dining-table-6-textilene-chairs-set.html'
+  url_product_page: 'buy-pierced-porcelain-hurricanes-vases-constellation.html'
+  product_listing_page_url: '/shop-holiday/holiday-decor/decor-cushions/'
+  spc_product_listing_page: '/shop-holiday/holiday-decor/decor-cushions/'
+  spc_basket_page: '/shop-holiday/holiday-decor/decor-cushions/'
+  spc_pdp_page: 'buy-pierced-porcelain-hurricanes-vases-constellation.html'
+  spc_bank_product: 'buy-pierced-porcelain-hurricanes-vases-constellation.html'

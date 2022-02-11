@@ -132,8 +132,11 @@ AddOutputFilterByType DEFLATE application/x-font-ttf
   # Don't redirect local dev sites.
   RewriteCond %{HTTP_HOST} !^local\. [NC]
   RewriteCond %{HTTP_HOST} !\.site$ [NC]
+  RewriteCond %{HTTP_HOST} !\.cloud$ [NC]
   # Don't redirect on all *.hm.com domains.
   RewriteCond %{HTTP_HOST} !\.hm\.com$ [NC]
+  # Don't redirect on all *.cosstores.com domains.
+  RewriteCond %{HTTP_HOST} !\.cosstores\.com$ [NC]
   RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a

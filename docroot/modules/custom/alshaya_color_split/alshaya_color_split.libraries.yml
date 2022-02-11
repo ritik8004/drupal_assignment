@@ -3,6 +3,7 @@ grouped_configurable:
   js:
     js/alshaya_color_split.grouped_configurable.js: {}
   dependencies:
+    - core/jquery.once
     - alshaya_acm_product/product_detail
 
 grouped_simple:
@@ -10,4 +11,5 @@ grouped_simple:
   js:
     js/alshaya_color_split.grouped_simple.js: {}
   dependencies:
+    - core/jquery.once
     - alshaya_acm_product/product_detail

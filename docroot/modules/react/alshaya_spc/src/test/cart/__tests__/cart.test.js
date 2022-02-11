@@ -1,9 +1,8 @@
 jest.mock('axios');
 import axios from 'axios';
 import StaticStorage from '../../../../js/backend/v2/staticStorage';
-import { callMagentoApi } from '../../../../js/backend/v2/common';
+import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import { drupalSettings, Drupal } from '../globals';
-import { getStorageInfo } from '../../../../js/utilities/storage';
 import * as cart from '../../../../js/backend/v2/cart';
 
 describe('Cart', () => {
@@ -92,13 +91,13 @@ describe('Cart', () => {
     });
 
     it('Test response for 404 error', async () => {
-      axios.mockResolvedValue({ data: { message: 'Not found' }, status: 404 });
+      axios.mockResolvedValue({ data: { message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.' }, status: 404 });
       const result = await callMagentoApi('/cart', 'POST', {});
       expect(result).toEqual({
         data: {
           error: true,
           error_code: 404,
-          error_message: 'Not found',
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         },
         status: 404,
       });
@@ -127,7 +126,7 @@ describe('Cart', () => {
         data: {
           error: true,
           error_code: 600,
-          error_message: 'Back-end system is down',
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         },
         status: 501,
       });
@@ -163,13 +162,13 @@ describe('Cart', () => {
     });
 
     it('Test response for non 200 response', async () => {
-      axios.mockResolvedValue({ data: { message: 'Something is wrong' }, status: 405 });
+      axios.mockResolvedValue({ data: { message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.' }, status: 405 });
       const result = await callMagentoApi('/cart', 'POST', {});
       expect(result).toEqual({
         data: {
           error: true,
           error_code: 500,
-          error_message: 'Something is wrong',
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         },
         status: 405,
       });
@@ -183,7 +182,7 @@ describe('Cart', () => {
       const result = await window.commerceBackend.createCart();
       expect(axios).toHaveBeenCalled();
       expect(result).toEqual('ZYJ47012050MHZ');
-      expect(getStorageInfo('cart_id')).toEqual('ZYJ47012050MHZ');
+      expect(global.Drupal.getItemFromLocalStorage('cart_id')).toEqual('ZYJ47012050MHZ');
     });
 
     it('Test with returning error and status 200', async () => {
@@ -196,7 +195,7 @@ describe('Cart', () => {
       const result = await window.commerceBackend.createCart();
       expect(axios).toHaveBeenCalled();
       expect(result).toEqual(null);
-      expect(getStorageInfo('cart_id')).toEqual(null);
+      expect(global.Drupal.getItemFromLocalStorage('cart_id')).toEqual(null);
     });
 
     it('Test with returning error and status 500', async () => {
@@ -209,7 +208,7 @@ describe('Cart', () => {
       const result = await window.commerceBackend.createCart();
       expect(axios).toHaveBeenCalled();
       expect(result).toEqual(null);
-      expect(getStorageInfo('cart_id')).toEqual(null);
+      expect(global.Drupal.getItemFromLocalStorage('cart_id')).toEqual(null);
     });
   });
 });

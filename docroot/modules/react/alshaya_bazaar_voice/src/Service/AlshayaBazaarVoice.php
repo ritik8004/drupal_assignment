@@ -430,8 +430,8 @@ class AlshayaBazaarVoice {
       $basic_configs['max_age'] = $config->get('max_age');
       // Get Configs for Google translation API.
       $google_translations_api = Settings::get('google_translations_api');
-      $basic_configs['google_api_endpoint'] = $google_translations_api['endpoint'];
-      $basic_configs['google_api_key'] = $google_translations_api['api_key'];
+      $basic_configs['google_api_endpoint'] = $google_translations_api['endpoint'] ?? '';
+      $basic_configs['google_api_key'] = $google_translations_api['api_key'] ?? '';
     }
     $basic_configs['api_version'] = $config->get('api_version');
     $basic_configs['locale'] = $config->get('locale');
@@ -621,7 +621,7 @@ class AlshayaBazaarVoice {
     $config = $this->configFactory->get('bazaar_voice.settings');
     $sharedKey = $config->get('shared_secret_key');
     $maxAge = $config->get('max_age');
-    $userId = $this->currentUser->id();
+    $userId = alshaya_acm_customer_is_customer($this->currentUser, TRUE);
     $mail = $this->currentUser->getEmail();
     $productId = $this->currentRequest->get('product');
 
@@ -845,8 +845,9 @@ class AlshayaBazaarVoice {
     $sanitized_sku = $this->skuManager->getSanitizedSku($sku_id);
     $config = $this->configFactory->get('bazaar_voice.settings');
     $myaccount_reviews_limit = $config->get('myaccount_reviews_limit');
+    $customer_id = alshaya_acm_customer_is_customer($this->currentUser, TRUE);
     $extra_params = [
-      'filter' => 'AuthorId:' . $this->currentUser->id(),
+      'filter' => 'AuthorId:' . $customer_id,
       'Include' => 'Authors,Products',
       'stats' => 'Reviews',
       'Limit' => $myaccount_reviews_limit,

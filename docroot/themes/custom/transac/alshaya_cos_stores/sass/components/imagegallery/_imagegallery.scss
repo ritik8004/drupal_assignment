@@ -1,0 +1,22 @@
+.ui-dialog .ui-dialog-titlebar-close {
+  color: inherit;
+  background-color: transparent;
+}
+
+.mobilegallery {
+  margin-bottom: 1.25rem;
+
+  #product-image-gallery-mobile {
+    ul.slick-dots {
+      @include breakpoint($only-mobile) {
+        display: none !important;
+      }
+    }
+
+    button.slick-arrow {
+      @include breakpoint($only-mobile) {
+        display: none !important;
+      }
+    }
+  }
+}

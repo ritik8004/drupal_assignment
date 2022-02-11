@@ -123,3 +123,6 @@ alshaya_acm_product.settings:
     delivery_in_only_city_text:
       type: label
       label: 'Delivery in only city'
+    pdp_gallery_type:
+      type: string
+      label: 'PDP gallery type Override'

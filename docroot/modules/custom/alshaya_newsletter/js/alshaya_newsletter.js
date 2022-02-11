@@ -1,5 +1,4 @@
 (function ($) {
-  'use strict';
   Drupal.behaviors.alshayaNewsletter = {
     attach: function (context, settings) {
 

@@ -1,0 +1,53 @@
+.c-user-password,
+.c-user-register,
+.c-user-login {
+  h1 {
+    font-family: $dh-Juana-black;
+    top: -5.875rem;
+  }
+}
+
+.c-user-password h1 {
+  top: -4.25rem;
+}
+
+.c-user--node {
+  .c-page-title {
+    @include breakpoint($desktop) {
+      font-size: 2.25rem;
+    }
+  }
+}
+
+.order-detail,
+.c-change-password,
+.c-communication-preferences,
+.c-user-edit,
+.c-order-list,
+.c-user--node,
+.c-address-book,
+.c-payment-cards,
+.c-loyalty-club-page {
+  .block-page-title-block {
+    .back-link {
+      @include breakpoint($only-mobile) {
+        h1.c-page-title {
+          padding-#{$left}: 1.5rem;
+        }
+
+        @include icon(chevron#{$left}, before) {
+          position: absolute;
+          #{$left}: -0.5rem;
+          top: 0.5rem;
+          transform: rotate(0deg);
+          font-weight: bold;
+          font-size: 1.75rem;
+
+          html[lang=ar] & {
+            transform: rotate(0deg);
+          }
+        }
+      }
+    }
+  }
+}

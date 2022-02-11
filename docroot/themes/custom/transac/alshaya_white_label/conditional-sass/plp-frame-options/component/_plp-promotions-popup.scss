@@ -70,7 +70,8 @@
 }
 
 #alshaya-algolia-search,
-#alshaya-algolia-plp {
+#alshaya-algolia-plp,
+#my-wishlist {
   .c-products__item.promotion-frame {
     .promotions-popup-wrapper {
       .promotions {
@@ -90,7 +91,7 @@
         &-text {
           font-size: 1rem;
           color: $frame_promo;
-          margin-bottom: 0.875rem;
+          margin-bottom: 0.625rem;
 
           @include breakpoint($only-mobile) {
             font-size: 0.75rem;
@@ -98,7 +99,10 @@
         }
 
         &-link {
+          font-family: $alshaya-thin;
           font-size: 0.9375rem;
+          line-height: 1.375rem;
+          font-weight: normal;
           color: $plp-popup-title;
           text-decoration: underline;
           margin: 0;

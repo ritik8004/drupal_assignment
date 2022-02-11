@@ -1,0 +1,131 @@
+.form-swatch-list-wrapper {
+  .selected-image:not(:empty) {
+    margin-#{$right}: 0.75rem;
+
+    img {
+      height: 2.1875rem;
+      width: auto;
+      vertical-align: middle;
+    }
+  }
+
+  .li-swatch-image {
+    display: flex;
+    align-items: center;
+
+    a {
+      flex-shrink: 0;
+    }
+
+    img {
+      height: 3.125rem;
+      width: auto;
+      margin-#{$right}: 0.75rem;
+    }
+  }
+}
+
+.sofa-section-accordion .Collapsible__contentInner {
+  .swatch-list {
+    padding: 0;
+    margin: 0;
+
+    @include breakpoint($only-mobile) {
+      &:not(.fabric_color) {
+        display: flex;
+      }
+    }
+
+    &.fabric_color {
+      display: flex;
+
+      @include breakpoint($tablet) {
+        flex-wrap: wrap;
+        border: 1px solid $accordion_border;
+        border-radius: 0.125rem;
+        background: $sofa-sectional-config-item-bg;
+        padding: 0.9375rem;
+        max-height: 28.125rem;
+        overflow-y: scroll;
+      }
+
+      li {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        text-align: center;
+        color: $sofa-sectional-title;
+        border: none;
+        padding: 0;
+        width: 4.6rem;
+        height: auto;
+        margin: 0.125rem;
+        margin-#{$right}: 0.375rem;
+
+        @include breakpoint($only-mobile) {
+          background: none;
+        }
+
+        &.active,
+        &:hover {
+          border: none;
+          outline: none;
+        }
+
+        &.active {
+          a {
+            border: 1px solid $sofa-sectional-active-border;
+            position: relative;
+
+            &::after {
+              content: "";
+              height: 2.1875rem;
+              width: 0.9375rem;
+              border-right: 0.21875rem solid #fff;
+              border-bottom: 0.21875rem solid #fff;
+              transform: rotate(45deg);
+              position: absolute;
+              top: 15%;
+              #{$left}: 39%;
+            }
+          }
+        }
+
+        &:not(.active) {
+          a:hover {
+            border: 1px solid $accordion_border;
+          }
+        }
+
+        a {
+          height: 4.6rem;
+          width: 4.6rem;
+          border: 1px solid transparent;
+          margin-bottom: 0.125rem;
+          padding: 0.125rem;
+        }
+
+        img {
+          height: 100%;
+          width: auto;
+          margin: 0;
+        }
+
+        .swatch-color {
+          font-family: $alshaya-bold;
+          font-size: 0.75rem;
+          line-height: 0.8125rem;
+          margin: 0.125rem 0 0.3125rem;
+          overflow: hidden;
+          max-width: 5rem;
+        }
+
+        .swatch-fabric {
+          font-size: 0.6875rem;
+          line-height: 0.8125rem;
+          margin-bottom: 0.8125rem;
+        }
+      }
+    }
+  }
+}

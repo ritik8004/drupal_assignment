@@ -6,6 +6,7 @@
  */
 
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
+use Drupal\alshaya_seo\Services\UrlHelper;
 use Drupal\alshaya_user\Plugin\Block\MyAccountLinks;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityInterface;
@@ -155,7 +156,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
       // Adding PHP_EOL on both sides to make it look exactly same as expected.
       '#value' => PHP_EOL . json_encode($gkg_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
       '#weight' => 100,
-  ];
+    ];
   $attachments['#attached']['html_head'][] = [$gkg_script, 'gkg_data'];
   // Adding Product schema for PDP.
   // For rcs_product type, we process the schema in the rcs code.
@@ -167,16 +168,19 @@ function alshaya_seo_page_attachments(array &$attachments) {
 
     if (!empty($product_schema_data)) {
       $product_script = [
-          '#type' => 'html_tag',
-          '#tag' => 'script',
-          '#attributes' => [
-            'type' => 'application/ld+json',
-          ],
-          // Adding PHP_EOL on both sides to make it look exactly same as expected.
-          '#value' => PHP_EOL . json_encode($product_schema_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
-          '#weight' => 110,
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#attributes' => [
+          'type' => 'application/ld+json',
+        ],
+        // Adding PHP_EOL on both sides so it looks exactly same as expected.
+        '#value' => PHP_EOL . json_encode($product_schema_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
+        '#weight' => 110,
       ];
-      $attachments['#attached']['html_head'][] = [$product_script, 'product_data'];
+      $attachments['#attached']['html_head'][] = [
+        $product_script,
+        'product_data',
+      ];
     }
   }
 }
@@ -336,6 +340,9 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
     ($view->id() === 'product_category_level_2_3') && ($view->current_display === 'block_2'));
   if (($is_product_level_3_view) &&
     ($field->getPluginId() === 'term_name')) {
+    /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+    $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+    $tid = $product_category_tree->getDepartmentPageCategoryIdFromRoute();
     $args = $view->args;
     $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($args[0]);
     $parent_term = array_shift($parents);
@@ -349,7 +356,10 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
     $term = $variables['row']->_entity;
     $term_class_name = str_replace(' ', '-', strtolower(preg_replace('/[^A-Za-z0-9-\s]/', '', $term->getName())));
     $term_classes[] = 'left-nav-' . $term_class_name;
-
+    // Add class 'active' in LHN which match category coming from route.
+    if ($tid === $term->id()) {
+      $term_classes[] = 'active';
+    }
     $options = [
       'attributes' => [
         'class' => $term_classes,
@@ -488,14 +498,35 @@ function alshaya_seo_form_google_tag_container_alter(&$form, FormStateInterface 
  *
  * @param array $form
  *   An associative array containing the structure of the form.
- *
- * @param \Drupal\Core\Form\FormStateInterface $formState
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The current state of the form.
  */
-function alshaya_seo_google_tag_container_validate_handler($form, FormStateInterface $form_state) {
+function alshaya_seo_google_tag_container_validate_handler(array $form, FormStateInterface $form_state) {
   // Unset conditions to resolve gtm tag visibilty for anonymous users.
   $condition_ids = $form_state->getTemporaryValue('filtered_conditions');
   if (!empty($condition_ids)) {
     $form_state->setTemporaryValue('filtered_conditions', []);
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for node entities.
+ */
+function alshaya_seo_node_update(EntityInterface $node) {
+  // Create entity alias for arabic translation
+  // when english translation is saved.
+  if ($node->bundle() == 'acq_product'
+    && $node->language()->getId() === 'en'
+    && $node->hasTranslation('ar')) {
+    $node_translation = $node->getTranslation('ar');
+    \Drupal::service('pathauto.generator')->createEntityAlias($node_translation, 'update');
+  }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function alshaya_seo_pathauto_alias_alter(&$alias, array &$context) {
+  // Replace special characters from the path.
+  $alias = strtr($alias, UrlHelper::SPECIAL_CHARACTERS_MAP);
 }

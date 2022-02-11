@@ -1,14 +1,18 @@
 .acq-content-product {
-  .express-delivery-title-wrapper {
-    @include icon(chevrondown, after) {
-      #{$right}: 0.9375rem;
-      font-size: 0.5rem;
-    }
-  }
-
   .select-area-popup-wrapper {
     .spc-checkout-section-title {
       font-family: $hnm-demibold;
+    }
+  }
+
+  .express-delivery-title {
+    letter-spacing: 0.0625rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    .simple-swatch-effect + .express-delivery,
+    .product-swatch + .express-delivery {
+      margin-top: 1.8125rem;
     }
   }
 }

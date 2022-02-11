@@ -28,7 +28,12 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
   let homeDelivery = false;
   // Check if we are in HD or CC modal.
   if (container === null || container === undefined) {
-    container = document.querySelector('.spc-cnc-selected-store-content');
+    // If we are in mobile the scroll is on popup.
+    if (window.innerWidth < 768) {
+      container = document.querySelector('.popup-content');
+    } else {
+      container = document.querySelector('.spc-cnc-selected-store-content');
+    }
   }
   // Check if we need to scroll to contact fields.
   if (contactField === true) {

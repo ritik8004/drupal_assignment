@@ -1,0 +1,54 @@
+.magazine-layout-node {
+  .modal-share-this {
+    @include breakpoint($only-mobile) {
+      padding: 0;
+      border-top: 0;
+      border-bottom: 0;
+    }
+
+    .share-icon {
+      text-indent: -9999px;
+
+      @include breakpoint($only-tablet) {
+        position: static;
+        justify-content: $left;
+      }
+
+      @include breakpoint($desktop) {
+        top: -4.5rem;
+        #{$left}: 20rem;
+
+        html[lang=ar] & {
+          right: 20rem;
+        }
+      }
+
+      &::before {
+        content: '';
+        background: url('#{$cos_theme_img_directory_path}/icons/share.svg') center center no-repeat;
+        border: 1px solid $primary_border;
+        width: 3rem;
+        height: 3rem;
+
+        @include breakpoint($only-mobile) {
+          border: 0;
+          width: 2.5rem;
+          height: 2.5rem;
+          position: relative;
+          top: 0.125rem;
+        }
+      }
+    }
+  }
+}
+
+html {
+  &.social-modal-overlay {
+    .close-icon {
+      @include icon(close, before) {
+        background: none;
+        font-size: 2rem;
+      }
+    }
+  }
+}

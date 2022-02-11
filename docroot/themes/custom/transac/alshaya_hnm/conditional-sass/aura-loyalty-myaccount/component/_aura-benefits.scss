@@ -1,0 +1,11 @@
+.loyalty-club-details-wrapper .aura-loyalty-benefits-row .star-icon::before {
+  height: 2rem;
+  width: 2rem;
+  font-size: 2rem;
+
+  @include breakpoint($upto-desktop) {
+    height: 1.5rem;
+    width: 1.5rem;
+    font-size: 1.5rem;
+  }
+}

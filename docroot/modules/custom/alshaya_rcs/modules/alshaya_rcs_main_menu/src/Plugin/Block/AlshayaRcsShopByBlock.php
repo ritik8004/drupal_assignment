@@ -42,6 +42,11 @@ class AlshayaRcsShopByBlock extends AlshayaShopByBlock {
           ],
         ],
       ],
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/rcs-shop-by-block',
+        ],
+      ]
     ];
   }
 

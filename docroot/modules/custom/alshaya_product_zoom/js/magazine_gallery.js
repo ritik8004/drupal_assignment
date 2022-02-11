@@ -6,7 +6,6 @@
 /* global isRTL */
 
 (function ($) {
-  'use strict';
   Drupal.behaviors.magazine_gallery = {
     attach: function (context, settings) {
 
@@ -31,9 +30,6 @@
           $(this).addClass('clicked');
           Drupal.behaviors.magazine_gallery.mobileDialog.show();
           Drupal.behaviors.magazine_gallery.mobileDialog.showModal();
-          if (typeof Drupal.blazy !== 'undefined') {
-            Drupal.blazy.revalidate();
-          }
         });
 
         this.attachMagazineDialogClose('mobile', context);
@@ -52,12 +48,6 @@
           $(this).addClass('clicked');
           Drupal.behaviors.magazine_gallery.desktopDialog.show();
           Drupal.behaviors.magazine_gallery.desktopDialog.showModal();
-          // Adding timeout to revalidate blazy once modal is completely loaded.
-          setTimeout(function () {
-            if (typeof Drupal.blazy !== 'undefined') {
-              Drupal.blazy.revalidate();
-            }
-          }, 700);
         });
 
         this.attachMagazineDialogClose('desktop', context);
@@ -134,7 +124,6 @@
     var gallery = $('#product-full-screen-gallery');
     var currentSlide = $('.pdp-image.clicked').attr('data-image-index');
     slickModalOptions.initialSlide = currentSlide;
-    Drupal.blazy.revalidate();
     Drupal.productZoomApplyRtl(gallery, slickModalOptions, document);
 
     // Create Instagram Dots.
@@ -247,9 +236,6 @@
           }
           $(this).parent().siblings('.slick-slide').removeClass('slick-current');
           $(this).parent().addClass('slick-current');
-          if (typeof Drupal.blazy !== 'undefined') {
-            Drupal.blazy.revalidate();
-          }
 
           var li = $(this).closest('li');
           img_scale = 1;
@@ -294,7 +280,6 @@
     var gallery = $('#product-image-gallery-mob');
     var currentSlide = $('.pdp-image.clicked').attr('data-image-index');
     slickMobileModalOptions.initialSlide = parseInt(currentSlide);
-    Drupal.blazy.revalidate();
     Drupal.productZoomApplyRtl(gallery, slickMobileModalOptions, document);
 
     // Create Instagram Dots.
@@ -313,9 +298,6 @@
         $(image).attr('data-translate-y', 0);
         $(image).css('transform', 'translate3d(0px, 0px, 0px) scale3d(1, 1, 1)');
         $(image).parent().removeClass('active');
-      }
-      if (typeof Drupal.blazy !== 'undefined') {
-        Drupal.blazy.revalidate();
       }
     });
 

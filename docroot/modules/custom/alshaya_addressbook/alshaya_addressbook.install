@@ -5,14 +5,13 @@
  * Install file.
  */
 
-use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_update_N().
- * 
+ *
  * [6.2.0] Removing dm_version from alshaya_addressbook.settings.
  */
 function alshaya_addressbook_update_8309() {

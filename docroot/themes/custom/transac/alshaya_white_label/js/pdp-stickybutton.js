@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * Helper function to make add to cart button sticky.
@@ -13,8 +12,10 @@
    * @param {string} state The moment when function is called, initial/after.
    */
   function stickyAddtobasketButton(direction, state) {
+    var defaultAddToCart = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart');
+    var sofaSectionalAddToCart = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .sofa-sectional-addtobag-button');
     // Add to cart button.
-    var button = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart');
+    var button = sofaSectionalAddToCart.length > 0 ? sofaSectionalAddToCart : defaultAddToCart;
     // This is the wrapper that holds delivery options.
     var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
     var windowBottom;

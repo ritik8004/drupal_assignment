@@ -6,19 +6,24 @@ import PromotionsFrame from '../promotion-frame';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
 import AddToBagContainer from '../../../../../js/utilities/components/addtobag-container';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 import ConditionalView from '../../../common/components/conditional-view';
 import DisplayStar from '../stars';
 import {
+  isProductElementAlignmentEnabled,
   isProductFrameEnabled,
   isProductTitleTrimEnabled,
   isPromotionFrameEnabled,
   productListIndexStatus,
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
-import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { checkExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 
 const Teaser = ({
-  hit, gtmContainer = null, pageType,
+  hit, gtmContainer = null, pageType, extraInfo,
+  // 'extraInfo' is used to pass additional information that
+  // we want to use in this component.
 }) => {
   const { showSwatches } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
@@ -27,6 +32,7 @@ const Teaser = ({
   const [slider, setSlider] = useState(false);
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
+  const { showBrandName } = drupalSettings.reactTeaserView;
 
   if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
     const { plp_attributes: plpAttributes } = drupalSettings;
@@ -80,6 +86,21 @@ const Teaser = ({
   if (attribute.title === undefined) {
     return null;
   }
+  const labels = [];
+  if (attribute.product_labels.length > 0) {
+    attribute.product_labels.forEach((label) => {
+      labels.push({
+        image: {
+          url: label.image,
+          alt: label.text,
+          title: label.text,
+          styles: label.styles,
+        },
+        position: label.position,
+      });
+    });
+  }
+
 
   let teaserClass = 'c-products__item views-row';
   if (isProductFrameEnabled()) {
@@ -93,6 +114,23 @@ const Teaser = ({
   if (isProductTitleTrimEnabled()) {
     teaserClass = `${teaserClass} product-title-trim`;
   }
+
+  if (isProductElementAlignmentEnabled()) {
+    teaserClass = `${teaserClass} product-element-alignment`;
+  }
+
+  const showRating = (hit.attr_bv_total_review_count !== undefined
+    && hit.attr_bv_total_review_count > 0
+    && showReviewsRating !== undefined
+    && showReviewsRating === 1
+    && overallRating !== '');
+
+  // Check if it's a wishlist page and stock status
+  // of the sku available in extraInfo data. If stock
+  // status says OOS then show the OOS button.
+  const showOOSButton = (isWishlistPage(extraInfo)
+    && typeof extraInfo.inStock !== 'undefined'
+    && !extraInfo.inStock);
 
   return (
     <div className={teaserClass}>
@@ -134,12 +172,22 @@ const Teaser = ({
 
               media={hit.media}
               title={attribute.title}
-              labels={attribute.product_labels}
+              labels={labels}
               sku={hit.sku}
               initSlider={initSlider}
               setSlider={setSlider}
             />
           </a>
+          {/* Render the component if the page isn't wishlist listing page. */}
+          <ConditionalView condition={!isWishlistPage(extraInfo)}>
+            <WishlistContainer
+              context="wishlist"
+              position="top-right"
+              sku={hit.sku}
+              title={attribute.title && Parser(attribute.title)}
+              format="icon"
+            />
+          </ConditionalView>
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
@@ -149,6 +197,14 @@ const Teaser = ({
                 </ul>
               </div>
               )}
+            <ConditionalView condition={showBrandName && attribute.attr_brand_name !== undefined}>
+              <div className="listing-brand-name">
+                {attribute.attr_brand_name}
+              </div>
+            </ConditionalView>
+            <ConditionalView condition={showBrandName && attribute.attr_brand_name === undefined}>
+              <div className="alignment-placeholder" />
+            </ConditionalView>
             <h2 className="field--name-name">
               <a href={attribute.url} className="product-selected-url">
                 <div className="aa-suggestion">
@@ -158,14 +214,14 @@ const Teaser = ({
                 </div>
               </a>
             </h2>
-            <ConditionalView condition={
-                hit.attr_bv_total_review_count !== undefined
-                && hit.attr_bv_total_review_count > 0
-                && showReviewsRating !== undefined
-                && showReviewsRating === 1
-                && overallRating !== ''
-              }
-            >
+
+            {/* Adding placeholder div for alignment
+            if rating is not available and boots frame feature is enabled. */}
+            <ConditionalView condition={!showRating && isProductElementAlignmentEnabled()}>
+              <div className="alignment-placeholder" />
+            </ConditionalView>
+
+            <ConditionalView condition={showRating}>
               <div className="listing-inline-star">
                 <DisplayStar starPercentage={overallRating} />
                 (
@@ -186,6 +242,7 @@ const Teaser = ({
           </div>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
+              && checkExpressDeliveryStatus()
               && hit.attr_express_delivery !== undefined
               && hit.attr_express_delivery[0] === '1'
             }
@@ -194,14 +251,48 @@ const Teaser = ({
               {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
             </div>
           </ConditionalView>
+          <ConditionalView condition={
+              isExpressDeliveryEnabled()
+              && checkExpressDeliveryStatus()
+              && pageType === 'plp'
+              && hit.attr_express_delivery !== undefined
+              && hit.attr_express_delivery[currentLanguage][0] === '1'
+            }
+          >
+            <div className="express_delivery">
+              {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
+            </div>
+          </ConditionalView>
         </div>
-        <AddToBagContainer
-          url={attribute.url}
-          sku={hit.sku}
-          stockQty={hit.stock_quantity}
-          productData={attribute.atb_product_data}
-          isBuyable={attribute.is_buyable}
-        />
+        {/* Don't render component on wishlist page if product is OOS. */}
+        <ConditionalView condition={!showOOSButton}>
+          <AddToBagContainer
+            url={attribute.url}
+            sku={hit.sku}
+            stockQty={hit.stock_quantity}
+            productData={attribute.atb_product_data}
+            isBuyable={attribute.is_buyable}
+            // Pass extra information to the component for update the behaviour.
+            extraInfo={extraInfo}
+          />
+        </ConditionalView>
+        {/* Render OOS message on wishlist page if product is OOS. */}
+        <ConditionalView condition={showOOSButton}>
+          <div className="oos-text-container">
+            <span className="oos-text">
+              { Drupal.t('Out of stock') }
+            </span>
+          </div>
+        </ConditionalView>
+        {/* Render the component if the page is wishlist listing page. */}
+        <ConditionalView condition={isWishlistPage(extraInfo)}>
+          <WishlistContainer
+            context="wishlist_page"
+            position="top-right"
+            sku={hit.sku}
+            format="link"
+          />
+        </ConditionalView>
       </article>
     </div>
   );

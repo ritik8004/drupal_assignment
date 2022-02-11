@@ -15,5 +15,8 @@ exports.render = function render(
     return innerHtmlObj[0].outerHTML;
   }
 
+  // Add class to remove loader styles after RCS info is filled.
+  jQuery('.page-type-promotion').addClass('rcs-loaded');
+
   return '';
 }

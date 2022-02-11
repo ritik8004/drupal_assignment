@@ -1,0 +1,56 @@
+// Section didvider to be used as Block heading
+.paragraph--type--section-divider {
+  &::before {
+    border-top: none;
+  }
+
+  .field--name-field-section-divider-text {
+    padding: 0;
+
+    @include style-font(false, 1.875rem, 1.5rem, 0, 0);
+  }
+}
+
+// advance page textarea anchor link.
+.nodetype--advanced_page {
+  .paragraph--type--title-textarea,
+  .field--name-field-description {
+    a {
+      color: $content_link_color;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .field--name-field-title {
+    text-transform: unset;
+    text-align: $left;
+
+    @include style-font(false, 1.125rem, 0.875rem, 1rem, 1rem);
+  }
+}
+
+.c-promo__item {
+  text-align: $left;
+
+  @include breakpoint($desktop) {
+    margin-bottom: 4.5rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.field--name-field-1-row-4-col {
+  &.field__items {
+    .field--name-field-1-row-4-col {
+      &.field__item {
+        text-align: $left;
+      }
+    }
+  }
+}

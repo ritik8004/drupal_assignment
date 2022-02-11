@@ -35,7 +35,7 @@ function alshaya_mc_node_view(array &$build, EntityInterface $entity, EntityView
       }
 
       // Trim the short description.
-      /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+      /** @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
       $product_helper = \Drupal::service('alshaya_acm_product.helper');
       $short_desc = $product_helper->createShortDescription($return['short_desc']['value']['#markup']);
       // If there is 'readmore' available only then process.
@@ -162,37 +162,35 @@ function _alshaya_mc_get_product_description($sku_entity) {
  */
 function alshaya_mc_alshaya_performance_preload_alter(array &$preload) {
   // Mothercare's styles and fonts come from whitelabel.
-  $themePath = drupal_get_path('theme', 'alshaya_white_label');
-  $fonts_directory_path = '/' . $themePath . '/fonts';
-
-  $preload[] = [
+  $alshaya_preload = [
     'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-icons.woff?D7b5iT',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-thin.woff2',
+    'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-icons.woff2?D7b5if',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-bold.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
+  $site_preloads = [
+    'en' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-thin.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      $alshaya_preload,
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-arabic-thin.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      $alshaya_preload,
+    ],
   ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-arabic-thin.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/alshaya-arabic-bold.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
+  // Preloading fonts here.
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
 }

@@ -3,5 +3,6 @@ variables:
   spc_basket_page: '/shop-women/tops/t-shirts/'
   product_listing_page_url: "/shop-women/tops/t-shirts/"
   np_plp_page: '/shop-women/tops/t-shirts/'
-  np_plp_product_page: '/buy-ae-true-tee-olive.html/'
+  np_plp_product_page: '/buy-ae-soft-sexy-long-sleeve-v-neck-t-shirt-burgundy.html/'
+  spc_pdp_page: '/buy-ae-soft-sexy-long-sleeve-v-neck-t-shirt-burgundy.html/'
   np_promotion: 0

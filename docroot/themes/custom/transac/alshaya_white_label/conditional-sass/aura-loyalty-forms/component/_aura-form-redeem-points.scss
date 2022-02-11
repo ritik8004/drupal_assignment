@@ -1,0 +1,78 @@
+.spc-aura-redeem-points-form-wrapper {
+  background: $aura-spc-checkout-block-bg;
+  padding: 1.25rem;
+  margin-top: 0.3125rem;
+
+  &.redeemed {
+    .label {
+      display: none;
+    }
+
+    .form-items .inputs {
+      display: block;
+      font-size: 0.875rem;
+      line-height: 20px;
+      font-family: $aura-regular;
+
+      > span {
+        padding-#{$right}: 0.25rem;
+
+        div.price {
+          display: inline;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    border-radius: 0.625rem;
+  }
+
+  .label {
+    font-size: 0.875rem;
+    padding-bottom: 0.625rem;
+    display: block;
+    font-family: $aura-regular;
+  }
+
+  .form-items {
+    display: flex;
+    align-items: center;
+
+    .inputs {
+      display: flex;
+      align-items: center;
+    }
+
+    button {
+      width: 9.0625rem;
+      margin-#{$left}: 1.875rem;
+
+      &:disabled {
+        opacity: 0.4;
+      }
+    }
+
+    .spc-aura-redeem-points-separator {
+      padding: 0 0.8125rem;
+      color: $aura-spc-redeem-separator;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+    }
+
+    @include breakpoint($upto-desktop) {
+      display: block;
+
+      .spc-aura-redeem-form-submit {
+        margin-#{$left}: 0;
+        margin-top: 1.875rem;
+        width: 100%;
+      }
+    }
+  }
+
+  .spc-aura-link-api-response-message.error {
+    font-size: 0.75rem;
+    font-family: $aura-regular;
+  }
+}

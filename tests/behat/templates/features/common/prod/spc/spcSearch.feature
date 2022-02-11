@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @search @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @flsaprod @vskwprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
+@javascript @account @smoke @auth @search @pbkaepprod @pbksapprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @westelmsapprod @westelmkwpprod @westelmaepprod @vssapprod @vskwpprod @vsaepprod @pbkaeprod @pbksaprod @pbkkwprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @flsaprod @vskwprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
 Feature: Test search functionality
 
   Background:
@@ -23,10 +23,10 @@ Feature: Test search functionality
 
   @desktop
   Scenario: Verify Search Results Message for No Results
-    When I fill in "search" with "NO-Results"
+    When I fill in "search" with "ABCDE"
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then the element ".dy_unit .dy-404" should exist
+    Then the element ".hits-empty-state" should exist
 
   @desktop
   Scenario: As a Guest, I should be able to see the header on SRP

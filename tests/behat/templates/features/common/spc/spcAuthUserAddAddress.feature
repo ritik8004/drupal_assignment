@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @bpaeuat @tbseguat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @hmaeuat @hmeguat @bbwsauat @flsauat @hmkwqa @tbskwuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @bbwaeuat @flkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
+@javascript @account @smoke @auth @mujikwuat @mujisauat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @bpaeuat @tbseguat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @hmaeuat @hmeguat @bbwsauat @flsauat @hmkwqa @tbskwuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @bbwaeuat @flkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
 Feature: Test the adding address to existing user account
 
   Background:
@@ -35,6 +35,6 @@ Feature: Test the adding address to existing user account
       | field_address[0][address][postal_code]               | {postal_code} |
     And I press "op"
     When I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 10 seconds
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 

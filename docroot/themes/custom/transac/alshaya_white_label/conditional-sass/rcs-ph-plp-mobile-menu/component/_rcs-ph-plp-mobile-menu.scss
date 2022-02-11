@@ -1,0 +1,9 @@
+#rcs-ph-plp_mobile_menu:not(.rcs-loaded) {
+  width: auto;
+
+  & > * {
+    visibility: hidden;
+  }
+
+  @include plain-loader;
+}

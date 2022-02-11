@@ -33,8 +33,6 @@ use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
 use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
 use Drupal\alshaya_acm_product\SkuImagesHelper;
-use Drupal\search_api\Entity\Index;
-use Drupal\search_api\Query\ConditionGroup;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionInterface;
@@ -425,10 +423,23 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['pdp_details_care'] = [
+    'variables' => [
+      'properties' => [],
+    ],
+  ];
+
   $items['product_order_quantity_limit'] = [
     'variables' => [
       'message' => NULL,
       'limit_reached' => NULL,
+    ],
+  ];
+
+  $items['pdp_express_delivery_option'] = [
+    'variables' => [
+      'title' => NULL,
+      'subtitle' => NULL,
     ],
   ];
 
@@ -636,19 +647,25 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+        /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
+        $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
         $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
-        // Express Delivery
-        if ($express_delivery_config->get('status')) {
+        // Check if express delivery feature enabled and product buyable.
+        $build['delivery_options'] = [];
+        if ($deliveryOptionsHelper->ifSddEdFeatureEnabled() && (alshaya_acm_product_is_buyable($sku_entity))) {
+          $build['express_delivery'] = [
+            '#theme' => 'pdp_express_delivery_option',
+            '#title' => t('Delivery Options'),
+            '#subtitle' => t('Explore the delivery options applicable to your area.'),
+          ];
           $delivery_options = alshaya_acm_product_get_delivery_options($sku);
-          if ($delivery_options !== NULL) {
-            // Show delivery options as per order defined in config.
-            $delivery_options_order = $express_delivery_config->get('delivery_options_order');
-            foreach ($delivery_options_order as $option) {
-              if ($delivery_options[$option]['label']) {
-                $build['delivery_options'][$option]['#markup'] = $delivery_options[$option]['label'];
-              }
+          if (!empty($delivery_options['values'])) {
+            foreach ($delivery_options['values'] as $key => $option) {
+              $build['delivery_options'][$key]['status']['#markup'] = $option['status'];
+              $build['delivery_options'][$key]['label']['#markup'] = $option['label'];
             }
           }
+          $build['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] ? 'active' : 'in-active';
         }
 
         // Delivery in only city.
@@ -665,7 +682,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (alshaya_acm_product_available_home_delivery($sku)) {
             $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
 
-            // @TODO: Next day delivery not available for now.
+            // @todo Next day delivery not available for now.
             $build['home_delivery'] = [
               '#theme' => 'pdp_delivery_option',
               '#title' => $home_delivery_config['title'],
@@ -757,7 +774,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
           if (!empty($sku_media)) {
-            $image = $skuImagesHelper->getSkuImage($sku_media,SkuImagesHelper::STYLE_PRODUCT_TEASER);
+            $image = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
             if (!empty($image)) {
               $build['image'] = $image;
             }
@@ -767,7 +784,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       // Process price block and gallery for modal,
       // matchback and full view mode.
-      if (in_array($view_mode, ['modal', 'full', 'matchback', 'matchback_mobile'])) {
+      $view_modes_allowed = ['modal', 'full', 'matchback', 'matchback_mobile'];
+      if (in_array($view_mode, $view_modes_allowed)) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
         $quantity_limit_enabled = \Drupal::config('alshaya_acm.settings')->get('quantity_limit_enabled');
 
@@ -853,6 +871,19 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ? $view_mode
           : 'productInfo';
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()] = $productInfo;
+
+        // Pass config for showing/hiding quantity selector in configurable
+        // product form.
+        $build['#attached']['drupalSettings']['showQuantity'] = \Drupal::service('acq_sku.cart_form_helper')->showQuantity();
+
+        // Send the cart quantity options to be used while displaying quantity
+        // dropdown. Adding the setting to global namespace.
+        $build['#attached']['drupalSettings']['cartQuantityOptions'] = _alshaya_acm_get_cart_quantity_options();
+
+        // Send the flag for max sale quantity enabled or not and
+        // if the max sale error message to hide or not.
+        $build['#attached']['drupalSettings']['maxSaleQuantityEnabled'] = $quantity_limit_enabled;
+        $build['#attached']['drupalSettings']['maxSaleHideMessage'] = \Drupal::config('alshaya_acm.settings')->get('hide_max_qty_limit_message');
       }
 
       if (isset($context)) {
@@ -867,7 +898,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
  */
 function alshaya_acm_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
   if (!empty($build['sharethis'])) {
+    // Variable to store the sharethis block render output.
+    $renderedBuild = $build['sharethis'];
+    // Removing properties not needed for Drupal renderer service.
+    unset($renderedBuild['#attached']);
+    unset($renderedBuild['#weight']);
     $build['sharethis']['#attached']['library'][] = 'alshaya_acm_product/sharethis';
+    // New drupalSettings variable to store the rendered output and to be used
+    // in pdp-layout.
+    $build['sharethis']['#attached']['drupalSettings']['sharethis']['contentRendered'] = \Drupal::service('renderer')->render($renderedBuild);
   }
 }
 
@@ -990,7 +1029,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     if ($sku_media) {
       /** @var \Drupal\alshaya_acm_product\SkuImagesHelper $skuImagesHelper */
       $skuImagesHelper = \Drupal::service('alshaya_acm_product.sku_images_helper');
-      $build['image'] = $skuImagesHelper->getSkuImage($sku_media,SkuImagesHelper::STYLE_PRODUCT_TEASER);
+      $build['image'] = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
     }
   }
 }
@@ -1129,6 +1168,7 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     // per page, we ignore the parameter.
     if ($show_on_load > $per_page) {
       if ($show_on_load % $per_page !== 0) {
+        // @codingStandardsIgnoreLine
         unset($_GET['show_on_load']);
         $request->query->set('show_on_load', NULL);
       }
@@ -1185,9 +1225,14 @@ function alshaya_acm_product_theme_registry_alter(array &$theme_registry) {
 function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
   global $pager_page_array;
 
-  if (isset($vars['view']) && in_array($vars['view']->id(), ['search', 'alshaya_product_list'])) {
+  $views = ['search', 'alshaya_product_list'];
+  if (isset($vars['view']) && in_array($vars['view']->id(), $views)) {
     $search_page = $vars['view']->id() == 'search' && $vars['view']->current_display == 'page';
-    $product_list = $vars['view']->id() == 'alshaya_product_list' && in_array($vars['view']->current_display, ['block_1', 'block_2']);
+    $product_list = $vars['view']->id() == 'alshaya_product_list'
+      && in_array(
+        $vars['view']->current_display,
+        ['block_1', 'block_2']
+      );
     $page_auto_load = \Drupal::config('alshaya_acm_product.settings')->get('list_view_auto_page_load_count');
 
     $request = \Drupal::request();
@@ -1427,7 +1472,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $combinations = [];
 
     foreach ($product_tree['combinations']['by_sku'] as $options) {
-      $combinations = NestedArray::mergeDeepArray([$combinations, $sku_manager->getCombinationArray($options)], TRUE);
+      $combinations = NestedArray::mergeDeepArray([
+        $combinations,
+        $sku_manager->getCombinationArray($options),
+      ], TRUE);
     }
 
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['bySku'] = $product_tree['combinations']['by_sku'];
@@ -1565,6 +1613,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // add to cart form on every change on the form & the form state cache doesn't
   // get re-used. Instead, keeps flooding key_value_expire table.
   $form_state->disableCache();
+
+  // Allow other modules to take some action after the form data are altered.
+  \Drupal::moduleHandler()->alter('alshaya_acm_product_skubaseform', $form, $sku_entity);
 }
 
 /**
@@ -1575,9 +1626,12 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
   if ($operation == 'view' && $block->getPluginId() == 'page_title_block') {
     $route = \Drupal::routeMatch();
     if ($route->getRouteName() == 'entity.node.canonical') {
-      /* @var \Drupal\node\Entity\Node $node */
+      /** @var \Drupal\node\Entity\Node $node */
       $node = $route->getParameter('node');
-      return AccessResult::forbiddenIf(in_array($node->bundle(), ['acq_product', 'rcs_product']));
+      return AccessResult::forbiddenIf(in_array($node->bundle(), [
+        'acq_product',
+        'rcs_product',
+      ]));
     }
   }
 }
@@ -1587,13 +1641,13 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
  *
  * @param mixed $taxonomy_term
  *   The term object.
- * @param string langcode
+ * @param string $langcode
  *   (optional) The langcode.
  *
  * @return array
  *   Array containing link html and attributes.
  */
-function _alshaya_acm_product_get_size_guide_info($taxonomy_term, $langcode = null) {
+function _alshaya_acm_product_get_size_guide_info($taxonomy_term, $langcode = NULL) {
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   if ($config->get('size_guide_enabled')) {
     $size_guide_anchor = ($taxonomy_term instanceof TermInterface) ? alshaya_acm_product_get_size_guide_anchor($taxonomy_term) : [];
@@ -1780,7 +1834,7 @@ function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $sto
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   foreach ($nodes as $node) {
-    /* @var \Drupal\node\Entity\Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     if (!$node instanceof NodeInterface) {
       continue;
     }
@@ -2005,9 +2059,12 @@ function _alshaya_acm_product_adjust_block_weight(string $type, string $base_blo
   $active_theme = \Drupal::service('theme.manager')->getActiveTheme()->getName();
   $block_storage = \Drupal::entityTypeManager()->getStorage('block');
   // Get all block of `content` region with active theme.
-  $all_content_region_blocks = $block_storage->loadByProperties(['region' => 'content', 'theme' => $active_theme]);
+  $all_content_region_blocks = $block_storage->loadByProperties([
+    'region' => 'content',
+    'theme' => $active_theme,
+  ]);
 
-  /* @var \Drupal\facets\FacetInterface[] $facets */
+  /** @var \Drupal\facets\FacetInterface[] $facets */
   $facets = \Drupal::service('facets.manager')->getEnabledFacets();
   $facet_blocks = [];
   if (!empty($facets)) {
@@ -2103,7 +2160,8 @@ function alshaya_acm_product_alshaya_acm_product_remove_disabled_products_alter(
  * Prepare image for matchback mobile display.
  */
 function alshaya_acm_product_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
-  // Process only if matchback is enabled and ajax request device argument value is mobile.
+  // Process only if matchback is enabled and ajax request device argument value
+  // is mobile.
   if (!\Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback')
     || \Drupal::routeMatch()->getRawParameter('device') !== 'mobile') {
     return;
@@ -2139,14 +2197,31 @@ function alshaya_acm_product_get_delivery_options($sku) {
     return NULL;
   }
 
-  return [
-    'same_day_delivery' => [
-      'status' => $sku_entity->get('attr_same_day_delivery')->getString(),
-      'label' => t('Same Day Delivery available'), [], ['context' => 'sameday_delivery_label'],
-    ],
-    'express_delivery' => [
-      'status' => $sku_entity->get('attr_express_delivery')->getString(),
-      'label' => t('Express Delivery available', [], ['context' => 'express_delivery_label']),
-    ],
-  ];
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+  $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+  $isExpressDeliveryApplicable = FALSE;
+
+  // Show delivery options as per order defined in config.
+  $delivery_options = [];
+  foreach ($delivery_options_order as $option) {
+    // Checking if particular delivery method is enabled.
+    if ($express_delivery_config->get($option . '_status')) {
+      $status = $sku_entity->get('attr_' . $option)->getString();
+      $delivery_options['values'][$option] = [
+        'status' => $status === '1' ? 'active' : 'in-active',
+        // @todo check why we really need to pass variable to t().
+        // @codingStandardsIgnoreLine
+        'label' => t($express_delivery_config->get($option . '_label'), [], [
+          'context' => $option . '_label',
+        ]),
+      ];
+      if ($status === '1') {
+        $isExpressDeliveryApplicable = TRUE;
+      }
+    }
+  }
+
+  $delivery_options['express_delivery_applicable'] = $isExpressDeliveryApplicable;
+
+  return $delivery_options;
 }

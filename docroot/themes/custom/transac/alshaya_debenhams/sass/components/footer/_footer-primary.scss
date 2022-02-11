@@ -1,0 +1,398 @@
+.c-footer-primary {
+  border-width: 1px;
+
+  .footer--menu {
+    width: 70%;
+
+    @include breakpoint($only-mobile) {
+      margin: 0;
+      width: 100%;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 67%;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    padding-top: 1.25rem;
+  }
+
+  @include breakpoint($desktop) {
+    padding: 2.5rem 0;
+  }
+
+  .primary--footer--right {
+    @include breakpoint($desktop) {
+      width: 30%;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 30%;
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($desktop) {
+      width: 21.7%;
+      margin-#{$right}: 1rem;
+    }
+  }
+
+  .l-container {
+    max-width: 74rem;
+  }
+
+  .footer--abouthelp {
+    @include breakpoint($only-tablet) {
+      width: 68%;
+      display: inline-flex;
+
+      html[lang=ar] & {
+        width: 64%;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 69%;
+    }
+  }
+
+  .c-footer-menu--about {
+    html[lang=en] &,
+    html[lang=ar] & {
+      @include breakpoint($desktop) {
+        width: 45%;
+        margin-#{$left}: 4%;
+      }
+    }
+  }
+
+  .c-footer-menu--help {
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+      padding-#{$left}: 2.75rem;
+    }
+
+    h3 {
+      @include breakpoint($only-mobile) {
+        border-bottom: 1px solid $accordion_border;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: 4%;
+      width: 45%;
+    }
+  }
+
+  .language-switcher-language-url {
+    ul {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}
+
+.c-footer-menu--help {
+  html[lang=ar] & {
+    @include breakpoint($desktop) {
+      width: 45%;
+    }
+  }
+}
+
+.footer--social {
+  @include breakpoint($only-tablet) {
+    margin-#{$left}: 0;
+  }
+}
+
+.c-footer-menu--about h3,
+.c-footer-menu--help h3,
+.c-footer-menu--category h3,
+.c-footer-menu--static-links h3 {
+  margin-top: 0.25rem;
+  font-family: $dh-semibold;
+  font-size: 1rem;
+
+  @include breakpoint($only-mobile) {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
+
+    &::after {
+      font-size: 1.25rem;
+      #{$right}: 1.125rem;
+      font-weight: bold;
+    }
+  }
+}
+
+#alshaya-newsletter-subscribe {
+  input[type="email"] {
+    padding-#{$left}: 0.625rem;
+    border: 0;
+  }
+
+  #edit-email {
+    padding-#{$right}: 0;
+    border: 1px solid $primary_input_border;
+
+    html[lang=ar] & {
+      padding-left: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-#{$right}: 10%;
+
+      @include ellipsis-text;
+    }
+  }
+
+  .edit-newsletter {
+    .ladda-spinner {
+      margin-#{$right}: -1.75rem;
+      top: 1.1875rem;
+    }
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  width: 100%;
+
+  @include breakpoint($tablet) {
+    max-width: 22rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 0 1.25rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 0;
+    margin-top: 2rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    max-width: 14.75rem;
+    min-width: 13rem;
+  }
+
+  .form {
+    &-submit {
+      height: 2.5rem;
+      font-size: 1rem;
+      padding: 0.625rem 1.875rem;
+      border-radius: 1.3125rem;
+      border: 2px solid $footer_subscribe_btn_border;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        bottom: -4.5rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$right}: 0;
+        font-size: 0.75rem;
+        padding: 0.625rem 1rem;
+      }
+    }
+
+    &-email {
+      font-size: 0.875rem;
+      margin-top: 0.3125rem;
+      height: 2.5rem;
+    }
+
+    &-item {
+      max-width: 12.5rem;
+      margin-#{$right}: 0.625rem;
+
+      html[lang=ar] & {
+        @include breakpoint($desktop) {
+          max-width: 14rem;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        max-width: unset;
+        width: 100%;
+      }
+
+      @include breakpoint($only-tablet) {
+        max-width: 7rem;
+      }
+
+      input.error {
+        border-width: 1px !important;
+      }
+    }
+  }
+
+  .newsletter-block-label {
+    font-size: 1.25rem;
+    color: $footer_title_h3;
+    text-transform: unset;
+    width: 100%;
+
+    html[lang=ar] & {
+      font-family: $dh-arabic-medium;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: $left;
+      padding: 0;
+    }
+  }
+}
+
+.c-social-links {
+  @include breakpoint($only-mobile) {
+    margin: 0 1.25rem;
+  }
+
+  ul {
+    @include breakpoint($only-mobile) {
+      text-align: $left;
+    }
+  }
+
+  h3 {
+    margin-#{$left}: 0.125rem;
+    color: $footer_title_h3;
+    font-weight: normal;
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.125rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 2.8125rem;
+    }
+  }
+}
+
+.c-footer-primary,
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        a {
+          text-transform: unset;
+          text-decoration: none;
+        }
+
+        &.en {
+          a {
+            font-family: $dh-light;
+            margin-#{$left}: 0;
+          }
+
+          &.is-active a {
+            font-family: $dh-semibold;
+          }
+        }
+
+        &.ar {
+          a {
+            font-family: $dh-GESST-light;
+          }
+
+          &.is-active a {
+            font-family: $dh-GESST-bold;
+          }
+        }
+
+        &:first-child {
+          &::after {
+            content: "";
+          }
+        }
+      }
+    }
+  }
+}
+
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}
+
+.language--switcher {
+  &.only-first-time {
+    .language-switcher-close {
+      top: -0.125rem;
+    }
+  }
+}
+
+.highlights {
+  .highlighted {
+    &.title_subtitle {
+      @include breakpoint($desktop) {
+        max-width: 17.875rem;
+      }
+    }
+  }
+
+  .hightlight__title {
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.c-footer-menu {
+  @include breakpoint($desktop) {
+    width: 100%;
+  }
+
+  &--category,
+  a {
+    text-transform: unset;
+    text-align: $left;
+  }
+
+  a {
+    padding-top: 0.9375rem;
+    padding-bottom: 0;
+    line-height: 2;
+  }
+
+  .cols-6 & {
+    &:last-child:not(:only-child) {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0;
+      }
+    }
+  }
+}
+
+.c-footer-is-accordion {
+  .accordion--body {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.25rem;
+      padding-bottom: 1.875rem;
+      border-bottom: 1px solid $accordion_border;
+      border-top: 0;
+    }
+  }
+}
+
+.open--accordion {
+  .is-accordion {
+    &::after {
+      @include breakpoint($only-mobile) {
+        font-weight: bold;
+      }
+    }
+  }
+}

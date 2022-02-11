@@ -1,0 +1,42 @@
+alshaya_aura_react.settings:
+  type: config_object
+  label: 'AURA Loyalty Settings'
+  mapping:
+    aura_enabled:
+      type: boolean
+      label: 'Config to enable/disable AURA'
+    aura_app_store_link:
+      type: text
+      label: 'AURA Apple App Store Link'
+    aura_google_play_link:
+      type: text
+      label: 'AURA Google Play Store Link'
+    aura_rewards_header_learn_more_link:
+      type: text
+      label: 'AURA Rewards Header Learn More Link'
+    aura_reward_activity_time_limit_in_months:
+      type: integer
+      label: 'Reward activity transaction history limit in months'
+    aura_signup_terms_and_conditions_link:
+      type: text
+      label: 'AURA Sign up terms and conditions Link'
+    aura_unsupported_payment_methods:
+      type: sequence
+      label: 'Aura Unsupported Payment Methods'
+      sequence:
+        type: string
+        label: 'Unsupported Payment Method'
+
+alshaya_aura_react.loyalty_benefits:
+  type: config_object
+  label: 'AURA Loyalty Benefits Settings'
+  mapping:
+    loyalty_benefits_title1:
+      type: text
+      label: 'AURA Loyalty Benefits Title 1'
+    loyalty_benefits_title2:
+      type: text
+      label: 'AURA Loyalty Benefits Title 2'
+    loyalty_benefits_content:
+      type: text_format
+      label: 'AURA Loyalty Benefits Content'

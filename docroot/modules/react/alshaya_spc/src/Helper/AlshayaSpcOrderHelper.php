@@ -27,6 +27,7 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
 
 /**
  * Class Alshaya Spc Order Helper.
@@ -169,6 +170,20 @@ class AlshayaSpcOrderHelper {
   protected $skuImagesHelper;
 
   /**
+   * Spc helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
+   * Delivery Options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -206,7 +221,11 @@ class AlshayaSpcOrderHelper {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
    * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
-   *   Sku imagese helper.
+   *   Sku images helper.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   Spc helper service.
+   * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
+   *   Delivery Options Helper.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -225,7 +244,9 @@ class AlshayaSpcOrderHelper {
                               ConfigFactory $configFactory,
                               StoresFinderUtility $store_finder,
                               RendererInterface $renderer,
-                              SkuImagesHelper $images_helper) {
+                              SkuImagesHelper $images_helper,
+                              AlshayaSpcHelper $spc_helper,
+                              DeliveryOptionsHelper $delivery_options_helper) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -244,6 +265,8 @@ class AlshayaSpcOrderHelper {
     $this->storeFinder = $store_finder;
     $this->renderer = $renderer;
     $this->skuImagesHelper = $images_helper;
+    $this->spcHelper = $spc_helper;
+    $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 
   /**
@@ -301,6 +324,30 @@ class AlshayaSpcOrderHelper {
   }
 
   /**
+   * Fetches SKU details required for order confirmation page with V2 backend.
+   *
+   * @return array
+   *   The response containing required SKU data.
+   */
+  private function getSkuDetailsV2(array $item) {
+    $parent_sku = $item['product_type'] === 'configurable'
+      ? $item['extension_attributes']['parent_product_sku']
+      : NULL;
+
+    return [
+      'sku' => $item['sku'],
+      'parentSKU' => $parent_sku,
+      'product_type' => $item['product_type'],
+      'freeItem' => ($item['price_incl_tax'] == 0),
+      'title' => $item['name'],
+      'finalPrice' => $this->skuInfoHelper->formatPriceDisplay((float) $item['price']),
+      'id' => $item['item_id'],
+      // Added quantity of product for checkout olapic pixel.
+      'qtyOrdered' => $item['qty_ordered'],
+    ];
+  }
+
+  /**
    * Responds to GET requests.
    *
    * Returns available delivery method data.
@@ -309,6 +356,10 @@ class AlshayaSpcOrderHelper {
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(array $item) {
+    if ($this->spcHelper->getCommerceBackendVersion() == 2) {
+      return $this->getSkuDetailsV2($item);
+    }
+
     // We will use this as flag in React to avoid reading from local storage
     // and also avoid doing API call.
     $data['prepared'] = TRUE;
@@ -322,6 +373,14 @@ class AlshayaSpcOrderHelper {
     $data['isNonRefundable'] = NULL;
     // Added quantity of product for checkout olapic pixel.
     $data['qtyOrdered'] = $item['qty_ordered'];
+    // Prepare Egift Card Product,If item is virtual means its an egift card.
+    if ($item['is_virtual']) {
+      $data['isEgiftCard'] = $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_enabled');
+      $data['media'] = $item['extension_attributes']['product_media'][0]['file'];
+      $data['egiftOptions'] = json_decode($item['extension_attributes']['product_options'][0], TRUE);
+      $data['price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
+      return $data;
+    }
 
     $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);
@@ -391,68 +450,72 @@ class AlshayaSpcOrderHelper {
    */
   public function getOrderDetails(array $order) {
     $orderDetails = [];
-
-    $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    if (in_array('address', $order['shipping'])) {
+      $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    }
     $orderDetails['delivery_charge'] = $order['totals']['shipping'];
+    // Skip Shipping information if only virtual product in order,
+    // i.e. e-gift card product or e-gift top-up.
+    if (!$order['is_virtual']) {
+      $shipping_info = $this->deliveryOptionsHelper->ifSddEdFeatureEnabled() ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
+      $orderDetails['delivery_method'] = $shipping_info[0];
+      $orderDetails['delivery_method_description'] = ($order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup')
+        ? $shipping_info[0]
+        : ($shipping_info[1] ?? $shipping_info[0]);
+      $shipping_address = $order['shipping']['address'];
+      $orderDetails['customerNameShipping'] = $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
 
-    $shipping_info = explode(' - ', $order['shipping_description']);
-    $orderDetails['delivery_method'] = $shipping_info[0];
-    $orderDetails['delivery_method_description'] = ($order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup')
-      ? $shipping_info[0]
-      : ($shipping_info[1] ?? $shipping_info[0]);
-    $shipping_address = $order['shipping']['address'];
-    $orderDetails['customerNameShipping'] = $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
+      $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
+      $orderDetails['shipping_method_code'] = $shipping_method_code;
+      if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
+        $orderDetails['delivery_type'] = 'cc';
+        $orderDetails['type'] = $orderDetails['delivery_method_description'];
 
-    $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
-    $orderDetails['shipping_method_code'] = $shipping_method_code;
-    if ($shipping_method_code == $this->checkoutOptionManager->getClickandColectShippingMethod()) {
-      $orderDetails['delivery_type'] = 'cc';
-      $orderDetails['type'] = $orderDetails['delivery_method_description'];
+        $store_code = $order['shipping']['extension_attributes']['store_code'];
+        $cc_type = $order['shipping']['extension_attributes']['click_and_collect_type'];
+        $orderDetails['view_on_map_link'] = '';
+        $orderDetails['collection_charge'] = $order['shipping']['extension_attributes']['price_amount'] ?? '';
+        $orderDetails['collection_date'] = $order['shipping']['extension_attributes']['pickup_date'] ?? '';
 
-      $store_code = $order['shipping']['extension_attributes']['store_code'];
-      $cc_type = $order['shipping']['extension_attributes']['click_and_collect_type'];
-      $orderDetails['view_on_map_link'] = '';
-      $orderDetails['collection_charge'] = $order['shipping']['extension_attributes']['price_amount'] ?? '';
-      $orderDetails['collection_date'] = $order['shipping']['extension_attributes']['pickup_date'] ?? '';
+        // Getting store node object from store code.
+        if ($store_data = $this->storeFinder->getMultipleStoresExtraData([$store_code => []])) {
+          $store_node = current($store_data);
+          $orderDetails['store']['store_name'] = $store_node['name'];
+          $country_list = $this->countryRepository->getList();
+          $orderDetails['store']['store_address'] = $store_node['cart_address_raw'];
+          $orderDetails['store']['store_address']['country'] = $country_list[$store_node['cart_address_raw']['country_code']];
+          $orderDetails['store']['store_phone'] = $store_node['phone_number'];
+          $orderDetails['store']['map_link'] = $store_node['view_on_map_link'];
+          $orderDetails['store']['store_open_hours'] = $store_node['open_hours_group'];
+          $lat = $store_node['lat'];
+          $lng = $store_node['lng'];
+          $orderDetails['store']['view_on_map_link'] = 'https://maps.google.com/?q=' . $lat . ',' . $lng;
+          $orderDetails['store']['collection_point'] = $order['shipping']['extension_attributes']['collection_point'] ?? '';
+          $orderDetails['store']['pudo_available'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
 
-      // Getting store node object from store code.
-      if ($store_data = $this->storeFinder->getMultipleStoresExtraData([$store_code => []])) {
-        $store_node = current($store_data);
-        $orderDetails['store']['store_name'] = $store_node['name'];
-        $country_list = $this->countryRepository->getList();
-        $orderDetails['store']['store_address'] = $store_node['cart_address_raw'];
-        $orderDetails['store']['store_address']['country'] = $country_list[$store_node['cart_address_raw']['country_code']];
-        $orderDetails['store']['store_phone'] = $store_node['phone_number'];
-        $orderDetails['store']['map_link'] = $store_node['view_on_map_link'];
-        $orderDetails['store']['store_open_hours'] = $store_node['open_hours_group'];
-        $lat = $store_node['lat'];
-        $lng = $store_node['lng'];
-        $orderDetails['store']['view_on_map_link'] = 'https://maps.google.com/?q=' . $lat . ',' . $lng;
-        $orderDetails['store']['collection_point'] = $order['shipping']['extension_attributes']['collection_point'] ?? '';
-        $orderDetails['store']['pudo_available'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
+          $cc_text = ($cc_type == 'reserve_and_collect')
+            ? $this->configFactory->get('alshaya_click_collect.settings')->get('click_collect_rnc')
+            : $store_node['delivery_time'];
 
-        $cc_text = ($cc_type == 'reserve_and_collect')
-          ? $this->configFactory->get('alshaya_click_collect.settings')->get('click_collect_rnc')
-          : $store_node['delivery_time'];
+          if (!empty($cc_text)) {
+            $orderDetails['delivery_method_description'] = ($orderDetails['store']['pudo_available'] === TRUE)
+              ? $this->t('@shipping_method_description', [
+                '@shipping_method_description' => $cc_text,
+              ])
+              : $this->t('@shipping_method_name (@shipping_method_description)', [
+                '@shipping_method_name' => $orderDetails['delivery_method'],
+                '@shipping_method_description' => $cc_text,
+              ]);
 
-        if (!empty($cc_text)) {
-          $orderDetails['delivery_method_description'] = ($orderDetails['store']['pudo_available'] === TRUE)
-            ? $this->t('@shipping_method_description', [
-              '@shipping_method_description' => $cc_text,
-            ])
-            : $this->t('@shipping_method_name (@shipping_method_description)', [
-              '@shipping_method_name' => $orderDetails['delivery_method'],
-              '@shipping_method_description' => $cc_text,
-            ]);
-
-          $orderDetails['shipping_method_code'] = $shipping_method_code;
+            $orderDetails['shipping_method_code'] = $shipping_method_code;
+          }
         }
       }
-    }
-    else {
-      $orderDetails['type'] = $this->t('Home delivery');
-      $orderDetails['delivery_type'] = 'HD';
-      $orderDetails['delivery_address'] = $this->getProcessedAddress($order['shipping']['address']);
+      else {
+        $orderDetails['type'] = $this->t('Home delivery');
+        $orderDetails['delivery_type'] = 'HD';
+        $orderDetails['delivery_address'] = $this->getProcessedAddress($order['shipping']['address']);
+      }
     }
 
     $payment = $this->checkoutOptionManager->loadPaymentMethod($order['payment']['method']);
@@ -519,11 +582,11 @@ class AlshayaSpcOrderHelper {
         break;
 
       case 'checkout_com_upapi_benefitpay':
-        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'];
-        $orderDetails['payment']['qrData'] = $payment_info['qr_data'];
-        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
-        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
-        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
+        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'] ?? '';
+        $orderDetails['payment']['qrData'] = $payment_info['qr_data'] ?? '';
+        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'] ?? '';
+        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'] ?? '';
+        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'] ?? '';
 
         break;
     }
@@ -541,6 +604,11 @@ class AlshayaSpcOrderHelper {
    *   Formatted number if possible, as is otherwise.
    */
   public function getFormattedMobileNumber(string $number) {
+    // Return if number is empty or null.
+    if (empty($number)) {
+      return '';
+    }
+
     try {
       return $this->mobileUtil->getFormattedMobileNumber($number);
     }
@@ -564,7 +632,9 @@ class AlshayaSpcOrderHelper {
     $country_list = $this->countryRepository->getList();
     $processed['country'] = $country_list[$processed['country_code']];
 
-    $processed['telephone'] = $this->getFormattedMobileNumber($processed['mobile_number']['value']);
+    if (in_array('mobile_number', $processed)) {
+      $processed['telephone'] = $this->getFormattedMobileNumber($processed['mobile_number']['value']);
+    }
 
     // Remove empty items.
     return array_filter($processed);

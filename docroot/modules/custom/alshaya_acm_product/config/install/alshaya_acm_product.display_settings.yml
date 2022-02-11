@@ -16,6 +16,12 @@ swatch_plp_limit: 3
 swatches:
   pdp: {  }
   plp: {  }
+# Added swatch attibute specific media roles like
+# 'swatch_image' or 'configuration_attr_image'.
+swatches_roles: { }
+# Added swatches to exclude from the PLP/SRP and listing pages
+# we don't want configuration swatches to show on PLP.
+exclude_swatches_on_plp: { }
 short_desc_characters: 160
 short_desc_text_summary: true
 hide_not_required_option: false
@@ -24,6 +30,7 @@ price_display_mode: 'simple'
 show_currency_on_second_price: false
 show_color_images_on_filter: 0
 show_pdp_additional_attributes_overlay: false
+show_brand_name_plp: false
 color_attribute_config:
   support_multiple_attributes: false
   configurable_color_attribute: ''

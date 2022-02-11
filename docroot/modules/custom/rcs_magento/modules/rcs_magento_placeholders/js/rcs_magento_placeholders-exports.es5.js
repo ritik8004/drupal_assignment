@@ -7,24 +7,50 @@
  *   The url key.
  */
 async function handleNoItemsInResponse(request, urlKey) {
-  request.data = JSON.stringify({
-    query: `{urlResolver(url: "${urlKey}") {
+  request.data = prepareQuery(`{urlResolver(url: "${urlKey}") {
       redirectCode
       relative_url
     }}`
-  });
+  );
 
   let response = await rcsCommerceBackend.invokeApi(request);
+  let rcs404 = `${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`;
+
   if (response.data.urlResolver === null) {
-    rcsRedirectToPage(`${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`);
+    return rcsRedirectToPage(rcs404);
   }
-  else if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
-    rcsRedirectToPage(response.data.urlResolver.relative_url);
+
+  if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
+    return rcsRedirectToPage(response.data.urlResolver.relative_url);
   }
-  else {
-    // @todo use DataDog https://alshayagroup.atlassian.net/browse/CORE-34720
-    console.log(`No route/redirect found for ${urlKey}.`);
-  }
+
+  RcsEventManager.fire('error', {
+    'level': 'warning',
+    'message': `No route/redirect found for ${urlKey}.`,
+    'context': {
+      'method': 'handleNoItemsInResponse',
+    },
+  });
+
+  // Redirect to 404 page when proper redirection was not received.
+  return rcsRedirectToPage(rcs404);
+}
+
+/**
+ * Prepares query string for GraphQL GET request.
+ *
+ * @param {string} data
+ *   The string to prepare.
+ *
+ * @returns {string}
+ *   The compressed and URL safe string.
+ */
+function prepareQuery(data) {
+  // Remove unnecessary characters.
+  let query = global.rcsQueryCompressor(data);
+  // Encode to valid uri format.
+  query = encodeURIComponent(query);
+  return `query=${query}`;
 }
 
 exports.getEntity = async function getEntity(langcode) {
@@ -34,10 +60,11 @@ exports.getEntity = async function getEntity(langcode) {
   }
 
   const request = {
-    uri: 'graphql',
-    method: 'POST',
+    uri: '/graphql',
+    method: 'GET',
     headers: [
       ["Content-Type", "application/json"],
+      ["Store", drupalSettings.rcs.commerceBackend.store],
     ],
   };
 
@@ -47,16 +74,11 @@ exports.getEntity = async function getEntity(langcode) {
 
   switch (pageType) {
     case 'product':
-      // Add extra headers.
-      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
-
       // Remove .html suffix from the full path.
       let prodUrlKey = urlKey.replace('.html', '');
 
-      // Build query.
-      request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`
-      });
+      // Compress the query.
+      request.data = prepareQuery(`{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products} }`);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -71,9 +93,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     case 'category':
       // Build query.
-      request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`
-      });
+      request.data = prepareQuery(`{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -87,9 +107,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     case 'promotion':
       // Build query.
-      request.data = JSON.stringify({
-        query: `{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`
-      });
+      request.data = prepareQuery(`{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -97,7 +115,7 @@ exports.getEntity = async function getEntity(langcode) {
         result = response.data.promotionUrlResolver;
       }
       if (!result || (typeof result.title !== 'string')) {
-        await handleNoItemsInResponse(request, urlKey);
+        rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`);
       }
       break;
 
@@ -111,15 +129,12 @@ exports.getEntity = async function getEntity(langcode) {
   if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+    const updateResult = RcsEventManager.fire('rcsUpdateResults', {
       detail: {
         result: result,
         pageType: pageType,
       }
     });
-
-    // To trigger the Event.rcs_magento_placeholders-exports.es5.js
-    document.dispatchEvent(updateResult);
 
     return updateResult.detail.result;
   }
@@ -127,19 +142,20 @@ exports.getEntity = async function getEntity(langcode) {
   return result;
 };
 
-exports.getData = async function getData(placeholder, params, entity, langcode) {
+exports.getData = async function getData(placeholder, params, entity, langcode, markup, loaderOnUpdates = false) {
   const request = {
-    uri: 'graphql',
-    method: 'POST',
+    uri: '/graphql',
+    method: 'GET',
     headers: [
       ['Content-Type', 'application/json'],
-      ['Store', drupalSettings.alshayaRcs.commerceBackend.store],
+      ['Store', drupalSettings.rcs.commerceBackend.store],
     ],
     language: langcode,
   };
 
   let response = null;
   let result = null;
+
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
     // Just return empty string so that render() function gets called later.
@@ -155,23 +171,26 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       }
 
       // Prepare request parameters.
-      request.data = JSON.stringify({
-        // @todo: we are using 'category' API for now which is going to be
-        // deprecated, but only available API to support both 2.3 and 2.4
-        // magento version, so as suggested we are using this for now but
-        // need to change this when this got deprecated in coming magento
-        // version and replace it with 'categoryList' magento API.
-        query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
-            ${drupalSettings.alshayaRcs.navigationMenu.query}
-          }
-        }`
-      });
+      // Fetch categories for navigation menu using categories api.
+      request.data = prepareQuery(`{categories(filters: { ids: { eq: "${drupalSettings.alshayaRcs.navigationMenu.rootCategory}"}})
+        ${rcsPhGraphqlQuery.navigationMenu}
+      }`);
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      // Get exact data from response.
+      if (response !== null && Array.isArray(response.data.categories.items[0].children)) {
+        // Get children for root category.
+        result = response.data.categories.items[0].children;
+      }
+      break;
+
+    case 'field_magazine_shop_the_story':
+      request.data = prepareQuery(`{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.magazine_shop_the_story}}`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
       if (response !== null) {
-        // Skip the default category data always.
-        result = response.data.category.children[0].children;
+        result = response.data.products.items;
       }
       break;
 
@@ -181,30 +200,33 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'labels':
-        request.data = JSON.stringify({
-          query: `query{
+        request.data = prepareQuery(`{
             amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
               items{
                 image
                 name
                 position
+                product_id
               }
             }
-          }`
-        });
+          }`);
 
-        response = await rcsCommerceBackend.invokeApi(request);
-        result = response.data.amLabelProvider;
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.amLabelProvider;
       break;
 
     case 'product-recommendation':
-      request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${params.url_key}" }}) ${rcsPhGraphqlQuery.products}}`
-      });
+      // @TODO Review this query to use only fields that are required for the display.
+      request.data = prepareQuery(`{ products(filter: { sku: { eq: "${params.sku}" }}) ${rcsPhGraphqlQuery.products}}`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
       RcsPhStaticStorage.set('product_' + result.sku, result);
+
+      break;
+
+    case 'order_teaser':
+      // @todo To use graphql query to get the order details.
       break;
 
     default:
@@ -212,16 +234,41 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
   }
 
+  if ((result && result !== null)
+    || placeholder === 'order_teaser') {
+    // Display loader.
+    if (loaderOnUpdates) {
+      RcsEventManager.fire('startLoader');
+    }
+
+    // Creating custom event to to perform extra operation and update the result
+    // object.
+    const updateResult = RcsEventManager.fire('rcsUpdateResults', {
+      detail: {
+        result: result,
+        params: params,
+        placeholder: placeholder,
+      }
+    });
+
+    // Hide loader.
+    if (loaderOnUpdates) {
+      RcsEventManager.fire('stopLoader');
+    }
+
+    return updateResult.detail.result;
+  }
+
   return result;
 };
 
-exports.getDataAsync = function getDataAsync(placeholder, params, entity, langcode) {
+exports.getDataSynchronous = function getDataSynchronous(placeholder, params, entity, langcode) {
   const request = {
     uri: '/graphql',
     method: 'GET',
     headers: [
       ['Content-Type', 'application/json'],
-      ['Store', drupalSettings.alshayaRcs.commerceBackend.store],
+      ['Store', drupalSettings.rcs.commerceBackend.store],
     ],
   };
 
@@ -230,13 +277,63 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
 
   switch (placeholder) {
     case 'products-in-style':
-      request.method = 'POST';
-      request.data = JSON.stringify({
-        query: `{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`
-      });
+      request.data = prepareQuery(`{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`);
 
-      response = rcsCommerceBackend.invokeApiAsync(request);
+      response = rcsCommerceBackend.invokeApiSynchronous(request);
       result = response.data.products.items;
+      break;
+
+    // Get the product data for the given sku.
+    case 'product':
+      // Build query.
+      const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
+      const filterValue = operator === 'in' ? JSON.stringify(params.sku) : `"${params.sku}"`;
+      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: ${filterValue} }}) ${rcsPhGraphqlQuery.products}}`);
+
+      response = rcsCommerceBackend.invokeApiSynchronous(request);
+
+      if (response && response.data.products.total_count) {
+        response.data.products.items.forEach(function (product) {
+          RcsEventManager.fire('rcsUpdateResults', {
+            detail: {
+              result: product,
+            }
+          });
+        });
+      }
+      break;
+
+    case 'product-option':
+      const staticKey = `product_options_${params.attributeCode}`;
+      const staticOption = RcsPhStaticStorage.get(staticKey);
+
+      if (staticOption !== null) {
+        return staticOption;
+      }
+
+      request.data = prepareQuery(`{ customAttributeMetadata(attributes: { entity_type: "4", attribute_code: "${params.attributeCode}" }) ${rcsPhGraphqlQuery.product_options}}`);
+
+      result = rcsCommerceBackend.invokeApiSynchronous(request);
+
+      RcsPhStaticStorage.set(staticKey, result);
+      break;
+
+    case 'dynamic-promotion-label':
+      request.data = prepareQuery(`{${params.queryType}(
+            ${params.queryProductSku}
+            context: "web"
+            ${params.queryProductViewMode}
+            cart: {
+              ${params.queryCartAttr}
+              items: [
+                ${params.cartInfo}
+              ]
+            }
+          )
+            ${params.queryBody}
+          }`
+        );
+      result = rcsCommerceBackend.invokeApiSynchronous(request);
       break;
 
     default:

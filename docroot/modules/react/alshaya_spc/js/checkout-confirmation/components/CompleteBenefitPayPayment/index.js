@@ -1,10 +1,6 @@
 import React from 'react';
-import QRCode from 'react-qr-code';
 import hmacSHA256 from 'crypto-js/hmac-sha256';
 import Base64 from 'crypto-js/enc-base64';
-import DeviceView from '../../../common/components/device-view';
-import PriceElement from '../../../utilities/special-price/PriceElement';
-import BenefitPaySVG from '../../../svg-component/payment-method-svg/components/benefit-pay-svg';
 
 class CompleteBenefitPayPayment extends React.Component {
   successCallback = () => {
@@ -58,23 +54,27 @@ class CompleteBenefitPayPayment extends React.Component {
   loadBenefitPayModal = () => {
     const scriptExists = document.getElementById('benefit-pay-in-app');
 
+    // Check if benefit pay script is already added on the page by
+    // checking the element id added by the script.
     if (!scriptExists) {
       const inAppScript = document.createElement('script');
       inAppScript.async = true;
-      inAppScript.src = '/modules/react/alshaya_spc/assets/js/benefit_pay_in_app.min.js';
+      const { environment } = drupalSettings.order_details.payment;
+      inAppScript.src = `/modules/react/alshaya_spc/assets/js/${environment}/benefit_pay_in_app.min.js`;
       inAppScript.id = 'benefit-pay-in-app';
-      document.head.appendChild(inAppScript);
+      document.body.appendChild(inAppScript);
       inAppScript.onload = () => {
+        // Automatically open the Benefit Pay widget modal when user lands on the confirmation page.
         // We only want to auto open payment modal once so checking
         // `benefit_pay_modal_auto_opened` from storage to check if this is user's
         // first visit of confirmation page or user is reloading the page.
-        if (typeof InApp !== 'undefined' && !localStorage.getItem('benefit_pay_modal_auto_opened')) {
+        if (typeof window.InApp !== 'undefined' && !Drupal.getItemFromLocalStorage('benefit_pay_modal_auto_opened')) {
           this.openInAppModal();
         }
       };
     }
 
-    if (typeof InApp !== 'undefined') {
+    if (typeof window.InApp !== 'undefined') {
       this.openInAppModal();
     }
   }
@@ -86,61 +86,18 @@ class CompleteBenefitPayPayment extends React.Component {
       this.errorCallback,
     );
     // Save that benefit pay modal was auto opened once.
-    localStorage.setItem('benefit_pay_modal_auto_opened', true);
+    Drupal.addItemInLocalStorage('benefit_pay_modal_auto_opened', true);
   }
 
   render() {
-    const { payment, totals } = this.props;
-
     return (
       <div className="benefit-pay-container">
-        <DeviceView device="mobile">
-          <button
-            type="button"
-            ref={() => { this.loadBenefitPayModal(); }}
-            onClick={() => { this.loadBenefitPayModal(); }}
-            className="inapp-btn"
-          />
-        </DeviceView>
-        <DeviceView device="above-mobile">
-          <div className="title">{Drupal.t('Please complete your payment by scanning the QR code.')}</div>
-          <div className="benefit-pay-wrapper">
-            <div className="benefit-pay-content">
-              <div className="benefit-pay-header">
-                <BenefitPaySVG />
-                <div className="title">{Drupal.t('BenefitPay')}</div>
-              </div>
-              <div className="qr-code-wrapper">
-                <div className="qr-left">
-                  <span>{Drupal.t('Scan to Pay')}</span>
-                  <QRCode value={payment.qrData} size="100" />
-                </div>
-                <div className="info-right">
-                  <div>
-                    <span className="spc-label">
-                      {Drupal.t('Merchant')}
-                    </span>
-                    <span className="spc-value merchant-value">{Drupal.t('Alshaya')}</span>
-                  </div>
-                  <div>
-                    <span className="spc-label">
-                      {Drupal.t('Amount')}
-                    </span>
-                    <span className="spc-value">
-                      <PriceElement amount={totals.base_grand_total} format="string" />
-                    </span>
-                  </div>
-                  <div>
-                    <span className="spc-label">
-                      {Drupal.t('Reference number')}
-                    </span>
-                    <span className="spc-value">{payment.referenceNumber}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </DeviceView>
+        <button
+          type="button"
+          ref={() => { this.loadBenefitPayModal(); }}
+          onClick={() => { this.loadBenefitPayModal(); }}
+          className="inapp-btn"
+        />
       </div>
     );
   }

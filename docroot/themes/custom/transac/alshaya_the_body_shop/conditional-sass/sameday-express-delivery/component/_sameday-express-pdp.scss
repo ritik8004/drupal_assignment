@@ -1,0 +1,27 @@
+.acq-content-product {
+  .express-delivery-title {
+    border-top: none;
+  }
+
+  .express-delivery-title-wrapper {
+    &.ui-state-active {
+      .c-accordion__title {
+        &::after {
+          transform: translate(0, -50%);
+        }
+      }
+    }
+  }
+
+  .express-delivery-text {
+    width: 14.5rem;
+
+    @include breakpoint($tablet) {
+      width: 13.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 15.5rem;
+    }
+  }
+}

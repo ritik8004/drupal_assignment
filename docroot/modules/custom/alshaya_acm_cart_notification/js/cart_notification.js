@@ -1,5 +1,4 @@
 (function ($, Drupal, document) {
-  'use strict';
 
   Drupal.cartNotification = Drupal.cartNotification || {};
 
@@ -114,6 +113,7 @@
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
+      var $document = $(document);
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
         var productData = e.detail.productData;
         Drupal.cartNotification.triggerNotification(productData);
@@ -160,8 +160,11 @@
         }
       });
 
-      $(document).ajaxComplete(function (event, xhr, settings) {
-        if (!settings.hasOwnProperty('extraData')) {
+      $document.ajaxComplete(function (event, xhr, settings) {
+        // For RCS operations, we have the startLoader and stopLoader event
+        // listeners to manage the loader behavior.
+        if (!settings.hasOwnProperty('extraData')
+          && !Drupal.hasValue(settings.rcs)) {
           Drupal.cartNotification.spinner_stop();
         }
         else if ((settings.hasOwnProperty('extraData')) &&
@@ -294,6 +297,19 @@
           }, 'slow');
         }
       };
+
+      if (window.RcsEventManager) {
+        $document
+          .once("rcs-event-loaders")
+          .each(() => {
+            window.RcsEventManager.addListener("startLoader", () => {
+              Drupal.cartNotification.spinner_start();
+            });
+            window.RcsEventManager.addListener("stopLoader", () => {
+              Drupal.cartNotification.spinner_stop();
+            });
+          });
+      }
     }
   };
 

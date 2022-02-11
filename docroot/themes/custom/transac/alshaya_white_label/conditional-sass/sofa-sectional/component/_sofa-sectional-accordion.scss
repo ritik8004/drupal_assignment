@@ -1,0 +1,228 @@
+.c-pdp,
+.acq-content-product-modal {
+  .sku-base-form {
+    .sofa-section-accordion {
+      label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding-#{$left}: 0.625rem;
+        padding-#{$right}: 2.5rem;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+        text-transform: capitalize;
+        cursor: pointer;
+
+        &.active {
+          .config-number-wrapper {
+            .config-index-number {
+              color: $sofa-sectional-config-item-bg;
+              background: $sofa-sectional-active-accordion;
+              border: 1px solid $sofa-sectional-active-accordion;
+            }
+          }
+
+          .config-name {
+            margin-bottom: 0.3125rem;
+          }
+        }
+
+        &:not(.active) {
+          .config-name {
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.sofa-section-accordion {
+  border-left: 1px solid $pdp_title_section_border;
+  border-right: 1px solid $pdp_title_section_border;
+
+  @include breakpoint($only-mobile) {
+    border: none;
+  }
+
+  .Collapsible__trigger {
+    @include icon(chevrondown, after) {
+      color: $accordion_title_icon;
+    }
+
+    position: relative;
+    border-bottom: 0.0625rem solid $accordion_border;
+    color: $accordion_title;
+    font-size: 0.875rem;
+    font-weight: normal;
+    min-height: 3.75rem;
+    line-height: 2.9375rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-transform: lowercase;
+    outline: none;
+    cursor: pointer;
+    display: block;
+
+    &::after {
+      @include u-center--vertically;
+
+      font-size: 1.75rem;
+      font-weight: 700;
+      #{$right}: 0.375rem;
+    }
+
+    &.is-open {
+      @include icon(chevronup, after);
+
+      border-bottom: none;
+
+      &::after {
+        font-weight: 700;
+      }
+    }
+
+    span {
+      line-height: 1.2;
+    }
+
+    .config-name {
+      font-size: 0.75rem;
+      color: $sofa-sectional-title;
+    }
+
+    .config-value {
+      font-family: $alshaya-bold;
+      color: $sofa-sectional-title;
+      overflow: hidden;
+    }
+
+    .config-index-number {
+      font-size: 1.125rem;
+      width: 2.1875rem;
+      height: 2.1875rem;
+      margin-#{$right}: 0.75rem;
+      text-align: center;
+      border: 1px solid $sofa-sectional-title;
+      color: $sofa-sectional-title;
+      display: block;
+      line-height: 2.1875rem;
+      border-radius: 50%;
+    }
+
+    .config-text-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: calc(100% - 6.25rem);
+    }
+  }
+
+  .Collapsible__contentInner {
+    border-bottom: 1px solid $accordion_border;
+
+    .attribute-options-list {
+      margin: 0;
+      padding: 0.625rem 0;
+      border-top: 1px solid $accordion_border;
+      background: $sofa-sectional-bg;
+
+      @include breakpoint($only-mobile) {
+        display: flex;
+        overflow-x: scroll;
+      }
+
+      @include breakpoint($tablet) {
+        padding: 1.25rem 0.625rem;
+      }
+
+      li {
+        list-style: none;
+        border: 1px solid $accordion_border;
+        background: $sofa-sectional-config-item-bg;
+        cursor: pointer;
+        font-size: 0.75rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &.active,
+        &:hover {
+          border: 1px solid $sofa-sectional-active-border;
+          outline: 0.125rem solid $sofa-sectional-active-border;
+          outline-offset: -2px;
+        }
+
+        &.disabled {
+          background: linear-gradient(to bottom right, $sofa-sectional-config-item-bg 49%, $accordion_border 49%, $accordion_border 51%, $sofa-sectional-config-item-bg 51%);
+          background-color: $sofa-sectional-config-item-bg;
+          pointer-events: none;
+        }
+
+        .swatch-color,
+        .swatch-fabric {
+          word-break: break-word;
+        }
+
+        @include breakpoint($only-mobile) {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-around;
+          padding: 0 0.625rem;
+          margin: 0 0.625rem;
+          width: 8.125rem;
+          height: 10.625rem;
+          flex-shrink: 0;
+          text-align: center;
+
+          &:first-child {
+            margin-#{$left}: 0.9375rem;
+          }
+
+          &:not(:first-child) {
+            margin-#{$left}: 0;
+          }
+        }
+
+        @include breakpoint($tablet) {
+          margin-bottom: 1.25rem;
+          padding: 0.78125rem 0.9375rem;
+        }
+      }
+    }
+  }
+
+  .form-swatch-list-wrapper {
+    .Collapsible__trigger {
+      label:not(.active) {
+        .config-text-wrapper {
+          flex-direction: row;
+          justify-content: initial;
+          align-items: center;
+
+          .fabric-color-icon {
+            content: "";
+            background: url('#{$base_theme_img_directory_path}/icons/fabric-color-icon.svg') no-repeat;
+            background-size: contain;
+            display: inline-block;
+            height: 2.5rem;
+            width: 3.125rem;
+            margin: 0 0.625rem;
+          }
+        }
+      }
+
+      .active {
+        .config-text-wrapper {
+          .fabric-color-icon {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

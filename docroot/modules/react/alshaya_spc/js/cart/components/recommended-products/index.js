@@ -5,6 +5,8 @@ import SectionTitle from '../../../utilities/section-title';
 import { getRecommendedProducts } from '../../../utilities/checkout_util';
 import isRTL from '../../../utilities/rtl';
 import dispatchCustomEvent from '../../../utilities/events';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 // Use smoothscroll to fill for Safari and IE,
 // Otherwise while scrollIntoView() is supported by all,
 // Smooth transition is not supported apart from Chrome & FF.
@@ -24,7 +26,7 @@ export default class CartRecommendedProducts extends React.Component {
   componentDidMount() {
     // Remove any old storage.
     const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
-    localStorage.removeItem(key);
+    Drupal.removeItemFromLocalStorage(key);
     const { items } = this.props;
     this.spcRecommendationHandler(items);
 
@@ -64,7 +66,7 @@ export default class CartRecommendedProducts extends React.Component {
 
             // Storing in localstorage to be used by GTM.
             const key = `recommendedProduct:${drupalSettings.path.currentLanguage}`;
-            localStorage.setItem(key, JSON.stringify(result.data));
+            Drupal.addItemInLocalStorage(key, result.data);
             dispatchCustomEvent('recommendedProductsLoad', { products: result.data });
           }
         }, 100);
@@ -73,7 +75,12 @@ export default class CartRecommendedProducts extends React.Component {
   };
 
   spcRefreshCartRecommendation = (event) => {
-    const { items } = event.detail;
+    const { items, triggerRecommendedRefresh } = event.detail;
+    // Update cart shipping methods on recommendation refresh.
+    if (isExpressDeliveryEnabled() && !triggerRecommendedRefresh) {
+      const currentArea = getDeliveryAreaStorage();
+      dispatchCustomEvent('displayShippingMethods', currentArea);
+    }
     this.spcRecommendationHandler(items);
   };
 

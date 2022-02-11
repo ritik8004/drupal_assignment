@@ -1,0 +1,173 @@
+name: Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  changedfiles:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    # Map a step output to a job output
+    outputs:
+      all: ${{ steps.changes.outputs.all}}
+      composer: ${{ steps.changes.outputs.composer}}
+      docroot: ${{ steps.changes.outputs.docroot}}
+      js: ${{ steps.changes.outputs.js }}
+      scss: ${{ steps.changes.outputs.scss }}
+    steps:
+      # Make sure we have some code to diff.
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+
+      - name: Get changed files
+        id: changes
+        # Set outputs using the command.
+        run: |
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
+          echo "::set-output name=composer::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs)"
+          echo "::set-output name=docroot::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs)"
+          echo "::set-output name=js::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs)"
+          echo "::set-output name=scss::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs)"
+      - name: Check if there are changes.
+        run: |
+          echo "No changes found in PR. This could also mean your branch is not updated, please rebase."
+          exit 1
+        if: ${{ !(steps.changes.outputs.all) }}
+
+  validate:
+    name: Validate
+    runs-on: ubuntu-18.04
+    needs: changedfiles
+    if: ${{ github.event_name == 'pull_request' && (needs.changedfiles.outputs.composer || needs.changedfiles.outputs.docroot) }}
+
+    container:
+      image: devwithlando/php:7.4-fpm-4
+
+    services:
+      database:
+        image: mariadb
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 32574:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      memcache:
+        image: memcached:latest
+
+    env:
+      CI: GITHUB_ACTIONS
+      COMPOSER_MEMORY_LIMIT: -1
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER_PASSWORD: drupal
+      MYSQL_USER_NAME: drupal
+      MYSQL_DATABASE_NAME: drupal
+      MYSQL_HOST: database
+      INSTALL_TYPE: install
+
+    steps:
+      - name: Repo check
+        run: |
+          echo "We should not run actions in forks."
+          exit 1
+        if: ${{ github.repository_owner != 'acquia-pso' }}
+
+      - name: echo changed files
+        run: |
+          echo ${{needs.changedfiles.outputs.composer}}
+          echo ${{needs.changedfiles.outputs.docroot}}
+          echo ${{needs.changedfiles.outputs.js}}
+          echo ${{needs.changedfiles.outputs.scss}}
+
+      - name: Prepare environment variables
+        run: |
+          echo "GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+          echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
+          echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
+          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Composer install
+        run: |
+          composer self-update
+          composer self-update --1
+          composer global require hirak/prestissimo
+          composer validate --no-check-all --ansi
+          composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
+
+      - name: Prepare bin executables
+        run: |
+          ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
+          ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
+
+      - name: Build all middleware
+        run: bash ${GITHUB_WORKSPACE}/blt/scripts/middleware-build.sh "${GITHUB_WORKSPACE}"
+
+      - name: Cache dependencies installed with Composer
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            "${{ steps.composer-cache.outputs.dir }}"
+            ~/.drush/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Setup environment
+        run: |
+          bash $SCRIPT_DIR/setup_env.sh
+          bash $SCRIPT_DIR/setup_mysql.sh
+
+      - name: Install Node
+        uses: actions/setup-node@v2
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
+        with:
+          node-version: "8.17.0"
+
+      - name: Install Gulp
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
+        run: npm install -g gulp-cli
+
+      - name: Cache node modules
+        id: npm-cache-dir
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+
+      # @todo check if this really works or we need one step per directory
+      - uses: actions/cache@v2
+        with:
+          path: |
+            "${{ steps.npm-cache-dir.outputs.dir }}"
+            ~/.npm
+            ~/.nvm
+          key: ${{ runner.os }}-node
+
+      - name: Frontend and React setup
+        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
+        run: blt alshayafe:setup
+
+      - name: React validate
+        if: ${{ needs.changedfiles.outputs.js }}
+        run: blt alshayafe:test-react
+
+      - name: Frontend validate
+        if: ${{ needs.changedfiles.outputs.scss }}
+        run: blt alshayafe:test-themes
+
+      - name: Run Tests
+        run: bash $SCRIPT_DIR/run_tests.sh

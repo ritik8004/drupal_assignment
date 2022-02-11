@@ -98,6 +98,7 @@ header {
       @include breakpoint($only-tablet) {
         #mini-cart-wrapper {
           margin-top: 0;
+          height: 3.375rem;
 
           .block-cart-mini-block .cart-link,
           .block-alshaya-react-mini-cart .cart-link {
@@ -192,6 +193,33 @@ header {
           html[lang=ar] & {
             max-width: 11rem;
           }
+
+          .logo {
+            img {
+              width: 9.5rem;
+              height: 1.71rem;
+
+              @include breakpoint($tablet) {
+                width: 9.75rem;
+                height: 1.75rem;
+              }
+
+              html[lang=ar] & {
+                width: 7.5rem;
+                height: 3.07rem;
+
+                @include breakpoint($tablet) {
+                  width: 8rem;
+                  height: 3.75rem;
+                }
+
+                @include breakpoint($desktop) {
+                  width: 10rem;
+                  height: 4.1rem;
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -214,10 +242,6 @@ header {
       .block-system-branding-block .site-brand-home {
         @include breakpoint($only-tablet) {
           max-width: 17.5625rem;
-
-          img {
-            width: 100%;
-          }
         }
       }
 

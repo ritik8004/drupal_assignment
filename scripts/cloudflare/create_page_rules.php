@@ -20,13 +20,13 @@ if (empty($zone)) {
 
 $domain_clean = str_replace('www.', '', $domain);
 
-$rules['alx_v2'] = [
+$rules['cache_react_dist'] = [
   "targets" => [
     [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/*/spc/resume-cart-from-agent*",
+        "value" => "*" . $domain_clean . "/modules/react/*/dist/*",
       ],
     ],
   ],
@@ -35,52 +35,12 @@ $rules['alx_v2'] = [
       "id" => "browser_cache_ttl",
       "value" => 0,
     ],
-  ],
-  "priority" => 95,
-  "status" => "active",
-];
-
-$rules['commerce_v2'] = [
-  "targets" => [
     [
-      "target" => "url",
-      "constraint" => [
-        "operator" => "matches",
-        "value" => "*" . $domain_clean . "/rest/*_*/V1/*",
-      ],
+      "id" => "edge_cache_ttl",
+      "value" => 2678400,
     ],
   ],
-  "actions" => [
-    [
-      "id" => "resolve_override",
-      "value" => "commerce." . $domain_clean . "",
-    ],
-    [
-      "id" => "host_header_override",
-      "value" => "ri.store.alshaya.com",
-    ],
-  ],
-  "priority" => 97,
-  "status" => "active",
-];
-
-$rules['commerce_v2_callback'] = [
-  "targets" => [
-    [
-      "target" => "url",
-      "constraint" => [
-        "operator" => "matches",
-        "value" => "*" . $domain_clean . "/*/spc/payment-callback/*",
-      ],
-    ],
-  ],
-  "actions" => [
-    [
-      "id" => "browser_cache_ttl",
-      "value" => 0,
-    ],
-  ],
-  "priority" => 98,
+  "priority" => 96,
   "status" => "active",
 ];
 

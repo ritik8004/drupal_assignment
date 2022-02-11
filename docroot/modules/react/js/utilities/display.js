@@ -28,7 +28,67 @@ const isProductBuyable = (productBuyable) => (
   && (drupalSettings.is_all_products_buyable || productBuyable)
 );
 
+/**
+ * Returns the array of hidden/lpn form attribute names.
+ *
+ * @returns array
+ *  The array of hidden form attribute names.
+ */
+const getHiddenFormAttributes = () => (typeof drupalSettings.lpn !== 'undefined'
+  ? drupalSettings.lpn.lpn_attribute
+  : []);
+
+/**
+ * Returns the allowed values for quantity for the quantity dropdown.
+ *
+ * @returns array
+ *   The list of allowed values for quantity.
+ */
+const getQuantityDropdownValues = () => (
+  drupalSettings.showQuantity
+    && typeof drupalSettings.cartQuantityOptions === 'object'
+    ? Object.values(drupalSettings.cartQuantityOptions)
+    : []
+);
+
+/**
+ * Helper function to check if max sale quantity message is enabled.
+ */
+const isHideMaxSaleMsg = () => {
+  if (typeof drupalSettings.maxSaleHideMessage !== 'undefined') {
+    return drupalSettings.maxSaleHideMessage;
+  }
+
+  return false;
+};
+
+/**
+ * Helper function to check if max sale quantity condition is enabled.
+ */
+const isMaxSaleQtyEnabled = () => {
+  if (typeof drupalSettings.maxSaleQuantityEnabled !== 'undefined') {
+    return drupalSettings.maxSaleQuantityEnabled;
+  }
+
+  return false;
+};
+
+/**
+ * Return the current view of device.
+ *
+ * @returns boolean
+ *   If the device is desktop or not.
+ */
+const isDesktop = () => (
+  window.innerWidth > 1023
+);
+
 export {
   isDisplayConfigurableBoxes,
   isProductBuyable,
+  getHiddenFormAttributes,
+  getQuantityDropdownValues,
+  isHideMaxSaleMsg,
+  isMaxSaleQtyEnabled,
+  isDesktop,
 };

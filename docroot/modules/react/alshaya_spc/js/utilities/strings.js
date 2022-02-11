@@ -1,3 +1,5 @@
+import logger from '../../../js/utilities/logger';
+
 const getStringMessage = (key, replacement) => {
   try {
     const element = document.querySelector(`[data-string-id="${key}"]`);
@@ -5,8 +7,11 @@ const getStringMessage = (key, replacement) => {
       const str = element.value.toString();
       return replacement ? Drupal.formatString(str, replacement) : str;
     }
-  } catch (e) {
-    Drupal.logJavascriptError('getStringMessage fail', e, GTM_CONSTANTS.CHECKOUT_ERRORS);
+  } catch (error) {
+    logger.error('Error occurred in getStringMessage.', {
+      string: key,
+      error,
+    });
   }
 
   return '';

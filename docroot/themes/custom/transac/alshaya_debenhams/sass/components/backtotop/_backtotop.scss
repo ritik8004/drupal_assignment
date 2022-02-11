@@ -1,0 +1,25 @@
+#backtotop {
+  @include icon(chevronup, after) {
+    font-size: 1.5rem;
+    position: absolute;
+    top: 0.5rem;
+    #{$right}: 0.125rem;
+    background: transparent;
+    font-weight: bold;
+
+    html[lang=ar] & {
+      right: 0.125rem;
+    }
+  }
+
+  #{$right}: 1.25rem;
+  bottom: 6.25rem;
+  height: 2.625rem;
+  width: 2.625rem;
+  border: 1px solid $btt_border;
+  background: $btt_bg;
+
+  @include breakpoint($only-mobile) {
+    bottom: 10.5rem;
+  }
+}

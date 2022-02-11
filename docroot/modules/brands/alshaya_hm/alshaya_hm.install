@@ -15,6 +15,18 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Set config to allow the all level of categories can be used
+ * under department page.
+ */
+function alshaya_hm_update_8056() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
+  $config->set('all_categories_department_page', TRUE)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.12.0] Add fields in search_api_index to support MAPP.
  */
 function alshaya_hm_update_8055() {
@@ -256,19 +268,25 @@ function alshaya_hm_update_8048() {
   $logo_file_name = 'h-m-logo-bw.svg';
   $logo_updated_file_name = 'h-m-logo-bw.svg?' . \Drupal::time()->getRequestTime();
 
-  /* @var \Drupal\block_content\Entity\BlockContent $footer_logo_block */
+  /** @var \Drupal\block_content\Entity\BlockContent $footer_logo_block */
   $footer_logo_block = \Drupal::service('entity.repository')
     ->loadEntityByUuid('block_content', '6a8aca33-da8d-4c88-953c-0ffbdcc63447');
   $footer_logo_block_content = $footer_logo_block->body->value;
   $block_content_en = str_replace($logo_file_name, $logo_updated_file_name, $footer_logo_block_content);
-  $footer_logo_block->set('body', ['value' => $block_content_en, 'format' => 'rich_text']);
+  $footer_logo_block->set('body', [
+    'value' => $block_content_en,
+    'format' => 'rich_text',
+  ]);
   $footer_logo_block->save();
 
   // Updating translated version.
   $footer_logo_block_ar = $footer_logo_block->getTranslation('ar');
   $footer_logo_block_content = $footer_logo_block_ar->body->value;
   $block_content_ar = str_replace($logo_file_name, $logo_updated_file_name, $footer_logo_block_content);
-  $footer_logo_block_ar->set('body', ['value' => $block_content_ar, 'format' => 'rich_text']);
+  $footer_logo_block_ar->set('body', [
+    'value' => $block_content_ar,
+    'format' => 'rich_text',
+  ]);
   $footer_logo_block_ar->save();
 }
 
@@ -799,15 +817,21 @@ function alshaya_hm_update_8015() {
                    </a>
                  </div>";
 
-  /* @var \Drupal\block_content\Entity\BlockContent $footer_logo_block */
+  /** @var \Drupal\block_content\Entity\BlockContent $footer_logo_block */
   $footer_logo_block = \Drupal::service('entity.repository')
     ->loadEntityByUuid('block_content', '6a8aca33-da8d-4c88-953c-0ffbdcc63447');
-  $footer_logo_block->set('body', ['value' => $block_content_en, 'format' => 'rich_text']);
+  $footer_logo_block->set('body', [
+    'value' => $block_content_en,
+    'format' => 'rich_text',
+  ]);
   $footer_logo_block->save();
 
   // Updating translated version.
   $footer_logo_block_ar = $footer_logo_block->getTranslation('ar');
-  $footer_logo_block_ar->set('body', ['value' => $block_content_ar, 'format' => 'rich_text']);
+  $footer_logo_block_ar->set('body', [
+    'value' => $block_content_ar,
+    'format' => 'rich_text',
+  ]);
   $footer_logo_block_ar->save();
 }
 
@@ -1248,17 +1272,6 @@ function alshaya_hm_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
-
-  // Save overridden configs.
-  _alshaya_config_save_overridden_configs('alshaya_hm');
-
-  // Override config for configurable product add to cart forms.
-  $configs = ['acq_sku.configurable_form_settings'];
-
-  alshaya_config_install_configs($configs, 'alshaya_hm', 'optional');
-
-  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
-  _alshaya_master_initialize_amp('alshaya_amp_hnm');
 
   // Set the number of items to show in a gallery on PDP.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')

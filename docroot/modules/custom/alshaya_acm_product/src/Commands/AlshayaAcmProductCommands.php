@@ -787,9 +787,9 @@ class AlshayaAcmProductCommands extends DrushCommands {
     // Get nids for which translation is available.
     $query = $this->connection->select('node', 'n');
     $query->addField('n', 'nid');
-    $query->innerJoin('url_alias', 'ua', "ua.source=concat('/node/', n.nid)");
-    $query->condition('ua.langcode', $langcode);
-    $query->condition('ua.alias', '/node/%', 'NOT LIKE');
+    $query->innerJoin('path_alias', 'pa', "pa.path=concat('/node/', n.nid)");
+    $query->condition('pa.langcode', $langcode);
+    $query->condition('pa.alias', '/node/%', 'NOT LIKE');
     $nids = $query->execute()->fetchCol();
 
     // Get Product nids for which translation is not available.

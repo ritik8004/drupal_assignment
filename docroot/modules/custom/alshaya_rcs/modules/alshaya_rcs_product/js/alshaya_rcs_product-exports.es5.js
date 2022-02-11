@@ -14,6 +14,45 @@ function isProductAvailableForHomeDelivery(entity) {
 }
 
 /**
+ * Check if the provided product is available for Click and Collect.
+ *
+ * @param entity
+ *   The entity.
+ *
+ * @return {Boolean}
+ *   True if CNC is available, otherwise false.
+ */
+function isProductAvailableForClickAndCollect(entity) {
+  return window.commerceBackend.isProductAvailableForClickAndCollect(entity);
+}
+
+/**
+ * Check if the provided product is available for Same day delivery.
+ *
+ * @param entity
+ *   The entity.
+ *
+ * @return {Boolean}
+ *   True if SDD is available, otherwise false.
+ */
+function isProductAvailableForSameDayDelivery(entity) {
+  return entity.same_day_delivery === 1;
+}
+
+/**
+ * Check if the provided product is available for Express delivery.
+ *
+ * @param entity
+ *   The entity.
+ *
+ * @return {Boolean}
+ *   True if ED is available, otherwise false.
+ */
+function isProductAvailableForExpressDelivery(entity) {
+  return entity.express_delivery === 1;
+}
+
+/**
  * Check if the product is buyable.
  *
  * @param {object} entity
@@ -50,6 +89,46 @@ function applyEllipsis(value) {
   return {
     value: value,
     read_more: read_more,
+  };
+}
+
+/**
+ * Gets legal notice value from config.
+ *
+ * @returns {object}
+ *   Object containing the legal notice details.
+ */
+function getLegalNotice() {
+  return {
+    status: Drupal.hasValue(drupalSettings.alshayaRcs.legalNotice.status)
+      ? drupalSettings.alshayaRcs.legalNotice.status
+      : false,
+    label: Drupal.hasValue(drupalSettings.alshayaRcs.legalNotice.label)
+      ? drupalSettings.alshayaRcs.legalNotice.label
+      : '',
+    summary: Drupal.hasValue(drupalSettings.alshayaRcs.legalNotice.summary)
+      ? drupalSettings.alshayaRcs.legalNotice.summary.value
+      : '',
+  };
+}
+
+/**
+ * Gets additional PDP description value from config.
+ *
+ * @returns {object}
+ *   Object containing the additional description.
+ */
+function getAdditionalPdpDescription() {
+  return {
+    status: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescription.status)
+      ? drupalSettings.alshayaRcs.additionalPdpDescription.status
+      : false,
+    label: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescription.label)
+      ? drupalSettings.alshayaRcs.additionalPdpDescription.label
+      : '',
+    summary: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescription.summary)
+      ? drupalSettings.alshayaRcs.additionalPdpDescription.summary.value
+      : '',
   };
 }
 
@@ -113,6 +192,52 @@ function getFormattedAmount(priceAmount) {
 };
 exports.getFormattedAmount = getFormattedAmount;
 
+/**
+ * Get SKU based on attribute option id.
+ *
+ * @param {string} $sku
+ *   The parent sku value.
+ * @param {string} attribute
+ *   Attribute to search for.
+ * @param {Number} option_id
+ *   Option id for selected attribute.
+ *
+ * @return {string}
+ *   SKU value matching the attribute option id.
+ */
+function getChildSkuFromAttribute(sku, attribute, option_id) {
+  const combinations = window.commerceBackend.getConfigurableCombinations(sku);
+
+  if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
+    console.log(`No combination available for attribute ${attribute} and option ${option_id} for SKU ${sku}`);
+    return null;
+  }
+
+  return combinations.attribute_sku[attribute][option_id][0];
+}
+
+/**
+ * Get the swatch image url for the provided sku.
+ *
+ * @param {string} sku
+ *   The SKU value.
+ *
+ * @returns {string}
+ *   The swatch image url.
+ */
+function getPdpSwatchImageUrl(product, childSku) {
+  let swatchImageUrl = null;
+  product.variants.forEach(function (variant) {
+    if (variant.product.sku == childSku) {
+      swatchImageUrl = variant.product.media.swatch;
+      // Break from the loop.
+      return false;
+    }
+  });
+
+  return swatchImageUrl;
+}
+
 exports.render = function render(
   settings,
   placeholder,
@@ -124,65 +249,79 @@ exports.render = function render(
 ) {
   let html = "";
   switch (placeholder) {
-    case "delivery-option":
+    case "delivery-info-block":
       if (!isProductBuyable(entity)) {
         break;
       }
 
-      const deliveryOptionsWrapper = jQuery('.rcs-templates--delivery_option').clone();
-      const cncEnabled = window.commerceBackend.isProductAvailableForClickAndCollect(entity);
-      const isDeliveryOptionsAvailable = isProductAvailableForHomeDelivery(entity) || cncEnabled;
+      // Add express delivery options that are available on product entity.
+      const deliveryInfo = {
+        delivery_in_only_city_text: drupalSettings.alshayaRcs.pdp.delivery_in_only_city_text,
+        expressDelivery: [],
+        sameDayDelivery: {
+          text: null,
+          sub_text: null,
+        }
+      };
 
-      if (isDeliveryOptionsAvailable) {
-        const homeDelivery = jQuery('.rcs-templates--delivery_option-home-delivery').clone().children();
-        jQuery('.field__content', deliveryOptionsWrapper).append(homeDelivery);
+      // Express delivery.
+      drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
+        if (option.status === 1 && entity[option.id] === 1) {
+          deliveryInfo.expressDelivery.push(option);
+        }
+      });
 
-        const clickAndCollect = jQuery('.rcs-templates--delivery_option-click-and-collect').clone().children();
+      // Same day delivery.
+      if (entity.same_day_delivery === 1) {
+        deliveryInfo.sameDayDelivery = drupalSettings.alshayaRcs.pdp.sameDayDelivery;
+      }
 
-        if (entity.type_id === 'configurable') {
-          jQuery('.c-accordion_content .simple', clickAndCollect).remove();
+      html = handlebarsRenderer.render('product.delivery_info', deliveryInfo);
+      break;
+
+    case "delivery-options":
+      if (!isProductBuyable(entity)) {
+        break;
+      }
+
+      const deliveryOptions = {};
+      const cncEnabled = isProductAvailableForClickAndCollect(entity);
+      if (cncEnabled) {
+        deliveryOptions.cnc = {
+          state: cncEnabled ? 'enabled' : 'disabled',
+            title: drupalSettings.alshaya_click_collect.title,
+            subtitle: (cncEnabled === true)
+            ? drupalSettings.alshaya_click_collect.subtitle.enabled
+            : drupalSettings.alshaya_click_collect.subtitle.disabled,
+            sku: entity.sku,
+            sku_clean: window.commerceBackend.cleanCssIdentifier(entity.sku),
+            sku_type: entity.type_id,
+            help_text: drupalSettings.alshaya_click_collect.help_text,
+            available_at_title: '',
+            select_option_text: drupalSettings.alshaya_click_collect.select_option_text,
+            store_finder_form: drupalSettings.alshaya_click_collect.store_finder_form,
+        };
+      }
+
+      const hdEnabled = isProductAvailableForHomeDelivery(entity);
+      if (hdEnabled) {
+        const skuSddEnabled = isProductAvailableForSameDayDelivery(entity);
+        const skuEdEnabled = isProductAvailableForExpressDelivery(entity);
+        if (drupalSettings.expressDelivery.enabled && (skuSddEnabled || skuEdEnabled)) {
+          // Express delivery options.
+          deliveryOptions.hd = {
+            type: 'express_delivery',
+            title: Drupal.t('Delivery Options'),
+            subtitle: Drupal.t('Explore the delivery options applicable to your area.'),
+          }
         }
         else {
-          jQuery('.c-accordion_content .configurable', clickAndCollect).remove();
+          // Standard delivery options.
+          deliveryOptions.hd = drupalSettings.alshaya_home_delivery;
+          deliveryOptions.hd.type = 'standard_delivery';
         }
-
-        clickAndCollect.attr({
-          'data-state': cncEnabled ? 'enabled' : 'disabled',
-          'data-product-type': entity.type_id,
-          'data-sku-clean': window.commerceBackend.cleanCssIdentifier(entity.sku),
-        });
-
-        const subTitle = cncEnabled
-          ? drupalSettings.alshaya_click_collect.subtitle.enabled
-          : drupalSettings.alshaya_click_collect.subtitle.disabled;
-        jQuery('.subtitle', clickAndCollect).html(subTitle);
-
-        // Add click and collect to the delivery options field.
-        jQuery('.field__content', deliveryOptionsWrapper).append(clickAndCollect);
       }
-
-      html += deliveryOptionsWrapper.html();
-      break;
-
-    case "navigation_menu":
-      // Process rcs navigation renderer, if available.
-      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
-        html += globalThis.renderRcsNavigationMenu.render(
-          settings,
-          inputs,
-          innerHtml
-        );
-      }
-      break;
-
-    case 'product_category_list':
-      // Process rcs plp renderer, if available.
-      if (typeof globalThis.renderRcsListing !== 'undefined') {
-        html += globalThis.renderRcsListing.render(
-          entity,
-          innerHtml
-        );
-      }
+      html += handlebarsRenderer.render('product.delivery_options', deliveryOptions);
       break;
 
     case 'mobile-upsell-products':
@@ -193,7 +332,7 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(upsell_products, rcsTranslatedText('You may also like', {}, 'alshaya_static_text|pdp_upsell_title'));
+      html = getProductRecommendation(upsell_products, Drupal.t('You may also like', {}, { context: 'alshaya_static_text|pdp_upsell_title' }));
       break;
 
     case 'mobile-related-products':
@@ -204,7 +343,7 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(related_products, rcsTranslatedText('Related', {}, 'alshaya_static_text|pdp_related_title'));
+      html = getProductRecommendation(related_products, Drupal.t('Related', {}, { context : 'alshaya_static_text|pdp_related_title' }));
       break;
 
     case 'mobile-crosssell-products':
@@ -215,186 +354,115 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(crosssell_products, rcsTranslatedText('Customers also bought', {}, 'alshaya_static_text|pdp_crosssell_title'));
+      html = getProductRecommendation(crosssell_products, Drupal.t('Customers also bought', {}, { context: 'alshaya_static_text|pdp_crosssell_title' }));
       break;
 
     case 'classic-gallery':
-      const gallery = jQuery('.rcs-templates--rcs-product-zoom');
-      const mediaCollection = entity.media_gallery;
+      let mediaCollection = {
+        gallery: [],
+        zoom: [],
+        thumbnails: [],
+      };
+
+      switch (drupalSettings.alshayaRcs.useParentImages) {
+        case 'never':
+          // Get the images from the variants.
+          entity.variants.forEach(function (variant) {
+            // Only fetch media for the selected variant.
+            if (variant.product.sku !== params.sku) {
+              return;
+            }
+            variant.product.media.forEach(function (variantMedia) {
+              mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+                type: 'image',
+                thumburl: variantMedia.thumbnails,
+                mediumurl: variantMedia.medium,
+                zoomurl: variantMedia.zoom,
+                fullurl: variantMedia.url,
+              });
+            });
+            // Break from the loop.
+            return false;
+          });
+          break;
+
+        default:
+          // @todo Add default case when working on other brands.
+          break;
+      }
 
       // If no media, return;
-      if (!mediaCollection.length) {
+      if (!mediaCollection.thumbnails.length) {
         html = '';
         break;
       }
 
-      mediaCollection.forEach((media) => {
-        const galleryElement = jQuery('<li></li>');
+      const data = {
+        mainImage: {
+          zoomurl: mediaCollection.thumbnails[0].zoomurl,
+          mediumurl: mediaCollection.thumbnails[0].mediumurl,
+          label: entity.name,
+        },
+        pager_flag: (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryLimit[params.galleryLimit])
+          ? 'pager-yes'
+          : 'pager-no',
+        thumbnails: mediaCollection.thumbnails,
+        lazy_load_placeholder: drupalSettings.alshayaRcs.lazyLoadPlaceholder,
+        pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
+      }
 
-        const galleryElementAnchor = jQuery('<a></a>');
-        galleryElementAnchor.attr({
-          href: media.url,
-          class: 'imagegallery__thumbnails__image a-gallery',
-        });
+      html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      break;
 
-        const galleryElementImg = jQuery('<img />');
-        galleryElementImg.attr({
-          class: 'b-lazy',
-          // @todo: Replace with lazy loaded image.
-          src: media.url,
-          'data-src': media.url,
-          alt: media.label,
-          title: media.label,
-        });
+    case 'product-labels':
+      // Remove the wrapper div if no labels are to be rendered.
+      if (!Drupal.hasValue(params.labelsData)) {
+        jQuery('.product-labels', params.product).remove();
+        return;
+      }
 
-        galleryElementAnchor.append(galleryElementImg);
-        galleryElement.append(galleryElementAnchor);
-        jQuery('#product-full-screen-gallery', gallery).append(galleryElement);
-      });
+      const productLabelsData = {
+        topRight: [],
+        topLeft: [],
+        bottomRight: [],
+        bottomLeft: [],
+        sku: params.sku,
+        mainSku: params.mainSku,
+        type: params.type,
+      };
 
-      // Get the template for the thumbnails.
-      const thumbnailTemplate = jQuery('.rcs-templates--product_thumbnails').clone();
+      params.labelsData.forEach(function (label) {
+        if (!Drupal.hasValue(label.image)) {
+          return;
+        }
 
-      // This is the list that will hold the thumbnails.
-      const thumbnails = jQuery('<ul id="lightSlider"></ul>');
-
-      mediaCollection.forEach((media) => {
-        // @todo: Fetch the type from the input.
-        const type = 'image';
-        switch (type) {
-          case 'youtube':
+        switch (label.position) {
+          case 'top-right':
+            productLabelsData.topRight.push({url: label.image, name: label.name});
             break;
-
-          case 'vimeo':
+          case 'top-left':
+            productLabelsData.topLeft.push({url: label.image, name: label.name});
             break;
-
-          case 'pdp-video':
+          case 'bottom-right':
+            productLabelsData.bottomRight.push({url: label.image, name: label.name});
             break;
-
-          // Image.
-          default:
-            const imageUrl = media.url;
-            const imageLabel = media.label;
-            // Get the image element from the template and start adding the
-            // required attributes.
-            const element = jQuery('.default', thumbnailTemplate).clone();
-            const anchor = jQuery('a', element);
-
-            anchor.attr({
-              // @todo: Replace this with the zoomed image.
-              'data-zoom-url': imageUrl,
-              // @todo: Replace this with the medium image.
-              href: imageUrl,
-            });
-
-            jQuery('img', anchor).attr({
-              src:  imageUrl,
-              'data-src': imageUrl,
-              alt: imageLabel,
-              title: imageLabel,
-            });
-
-            // Append the li element to the list.
-            thumbnails.append(element);
+          case 'bottom-left':
+            productLabelsData.bottomLeft.push({url: label.image, name: label.name});
+            break;
         }
       });
 
-      if (mediaCollection.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit) {
-        thumbnails.addClass('pager-yes');
-      }
-      else {
-        thumbnails.addClass('pager-no');
-      }
-
-      jQuery('.cloudzoom__thumbnails', gallery).html(thumbnails);
-
-      // Get the template for the mobile.
-      const mobileGalleryTemplate = jQuery('.rcs-templates--product_gallery_mobile').clone();
-      const mobileGallery = jQuery('<div>');
-
-      mediaCollection.forEach((media) => {
-        // @todo: Fetch the type from the input.
-        const type = 'image';
-        switch (type) {
-          case 'youtube':
-            break;
-
-          case 'vimeo':
-            break;
-
-          case 'pdp-video':
-            break;
-
-          // Image.
-          default:
-            const imageUrl = media.url;
-            const imageLabel = media.label;
-            // Get the image element from the template and start adding the
-            // required attributes.
-            const element = jQuery('.default', mobileGalleryTemplate).clone();
-
-            jQuery('img', element).attr({
-              src:  imageUrl,
-              'data-src': imageUrl,
-              alt: imageLabel,
-              title: imageLabel,
-            });
-
-            // Append the li element to the list.
-            mobileGallery.append(element);
-        }
-      });
-
-      jQuery('#product-image-gallery-mobile', gallery).html(mobileGallery.html());
-
-      // Get the labels data.
-      const labels = inputs.labels;
-      if (labels.length) {
-        const labelsData = {};
-        labels.forEach(function (label) {
-          // Don't render labels with unknown positions.
-          if (!(['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(label.position))) {
-            return;
-          }
-
-          if (typeof labelsData[label.position] === 'undefined') {
-            labelsData[label.position] = [];
-          }
-          // Group the labels by position.
-          labelsData[label.position].push(label);
-        });
-
-        const productLabels = jQuery('<div class="product-labels"><div class="labels-wrapper" data-type="pdp" data-sku="#rcs.product._self|sku#" data-main-sku="#rcs.product._self|sku#"></div></div>');
-        const labelsWrapper = productLabels.find('.labels-wrapper');
-
-        Object.keys(labelsData).forEach(function (position) {
-          const positionLabels = jQuery('<div>').addClass(`labels-container ${position}`);
-          labelsData[position].forEach(function (labelData) {
-            const individualLabel = jQuery('<div>').addClass('label');
-            const img = jQuery('<img>').attr({
-              src: labelData.image,
-              alt: labelData.name,
-              title: labelData.name,
-            });
-            individualLabel.append(img);
-            positionLabels.append(individualLabel);
-          });
-          labelsWrapper.append(positionLabels);
-        });
-
-        // jQuery('.product-labels .labels-wrapper', gallery).html(productLabels.html());
-        const productLabelsMarkup = productLabels.html();
-        jQuery('.cloudzoom__herocontainer', gallery).append(productLabelsMarkup);
-        jQuery('.mobilegallery', gallery).append(productLabelsMarkup);
-      }
-
-      html += gallery.html();
+      const labelsMarkup = handlebarsRenderer.render('gallery.product.product_labels', {labels: productLabelsData});
+      jQuery('.product-labels', params.product).html(labelsMarkup);
       break;
 
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;
   }
+
+  // Add class to remove loader styles after RCS info is filled.
+  jQuery('.page-type-product').addClass('rcs-loaded');
 
   return html;
 };
@@ -405,8 +473,9 @@ exports.computePhFilters = function (input, filter) {
 
   switch(filter) {
     case 'price':
-      const priceVal = getFormattedAmount(input.price_range.maximum_price.regular_price.value);
-      const finalPriceVal = getFormattedAmount(input.price_range.maximum_price.final_price.value);
+      const prices = window.commerceBackend.getPrices(input, true);
+      const priceVal = prices.price;
+      const finalPriceVal = prices.finalPrice;
 
       const price = jQuery('.rcs-templates--price').clone();
       jQuery('.price-amount', price).html(priceVal);
@@ -420,8 +489,8 @@ exports.computePhFilters = function (input, filter) {
         jQuery('.has--special--price', priceBlock).html(price.html());
         jQuery('.special--price', priceBlock).html(finalPrice.html());
 
-        let discount = jQuery('.price--discount').html();
-        discount = discount.replace('@discount', input.price_range.maximum_price.discount.percent_off);
+        let discount = jQuery('.price--discount', priceBlock).html();
+        discount = discount.replace('@discount', Math.round(input.price_range.maximum_price.discount.percent_off));
         jQuery('.price--discount', priceBlock).html(discount);
       }
       else {
@@ -452,20 +521,8 @@ exports.computePhFilters = function (input, filter) {
       value = drupalSettings.vat_text;
       break;
 
-    case 'image':
-      value = ((input.media_gallery.length > 0)
-          && (typeof input.media_gallery[0].url !== 'undefined'
-            || input.media_gallery[0].url
-            || input.media_gallery[0].url !== '')
-        )
-        ? input.media_gallery[0].url
-        : '';
-      break;
-
-    case 'thumbnail_count':
-      // @todo: Fetch this from the correct key.
-      mediaCollection = input.media_gallery;
-      value = mediaCollection.length;
+    case 'teaser_image':
+      value = window.commerceBackend.getTeaserImage(input);
       break;
 
     case 'add_to_cart':
@@ -480,20 +537,26 @@ exports.computePhFilters = function (input, filter) {
       const skuBaseForm = jQuery('.rcs-templates--sku-base-form').clone();
       skuBaseForm.find('.sku-base-form-template').removeClass('sku-base-form-template').addClass('sku-base-form');
 
-      // @todo Check for how to fetch the max sale quantity.
-      const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
-      const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
-      // Remove the quantity filter.
-      quantityDroprown.html('');
+      if (drupalSettings.alshayaRcs.showQuantity) {
+        // @todo Check for how to fetch the max sale quantity.
+        const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
+        const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
+        // Remove the quantity filter.
+        quantityDroprown.html('');
 
-      for (let i = 1; i <= quantity; i++) {
-        if (i === 1) {
-          quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
-          continue;
+        for (let i = 1; i <= quantity; i++) {
+          if (i === 1) {
+            quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
+            continue;
+          }
+          quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
         }
-        quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
+        jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
       }
-      jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
+      else {
+        jQuery('.js-form-item-quantity', skuBaseForm).remove();
+      }
+
 
       // This wrapper will be removed after processing.
       const tempDivWrapper = jQuery('<div>');
@@ -503,7 +566,7 @@ exports.computePhFilters = function (input, filter) {
         const sizeGuide = jQuery('.rcs-templates--size-guide');
         let sizeGuideAttributes = [];
         if (sizeGuide.length) {
-          let sizeGuideAttributes = sizeGuide.attr('data-attributes');
+          sizeGuideAttributes = sizeGuide.attr('data-attributes');
           sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
         }
 
@@ -527,7 +590,6 @@ exports.computePhFilters = function (input, filter) {
             'data-selected-title': option.label,
             'data-drupal-selector': `edit-configurables-${formattedAttributeCode}`,
             id: `edit-configurables-${formattedAttributeCode}`,
-            // class: 'form-item-configurable-swatch form-select required valid visually-hidden',
             class: 'form-select required valid',
             name: `configurables[${option.attribute_code}]`,
             'aria-require': true,
@@ -535,7 +597,9 @@ exports.computePhFilters = function (input, filter) {
           });
 
           // Check if the attribute is a swatch attribute.
+          let optionIsSwatch = false;
           if (drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code)) {
+            optionIsSwatch = true;
             configurableOptionsList.addClass('form-item-configurable-swatch');
             optionsListWrapper.addClass('configurable-swatch');
           }
@@ -546,14 +610,35 @@ exports.computePhFilters = function (input, filter) {
 
           // Add a disabled option which will be used as the label for the option.
           let selectOption = jQuery('<option></option>');
-          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(rcsTranslatedText(`Select ${option.attribute_code}`));
+          let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
+          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(text);
           configurableOptionsList.append(selectOption);
+
+          const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
+
+          if (Drupal.hasValue(configurableColorDetails) && optionIsSwatch){
+            configurableOptionsList.attr({
+              'data-default-title': Drupal.t('Color'),
+              'title': Drupal.t('Color'),
+            });
+          }
 
           // Add the option values.
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
-            selectOption.attr({value: value.value_index}).text(value.store_label);
+            const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            selectOption.attr({value: value.value_index}).text(label);
             configurableOptionsList.append(selectOption);
+
+            if (optionIsSwatch) {
+              const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
+              // If configurableColorDetails has value, then we process the
+              // swatch data in
+              // Drupal.alshaya_color_images_generate_swatch_markup().
+              if (childSku !== null && !Drupal.hasValue(configurableColorDetails)) {
+                selectOption.attr({'swatch-image': getPdpSwatchImageUrl(input, childSku)});
+              }
+            }
           });
 
           if (sizeGuideAttributes.includes(option.attribute_code)) {
@@ -603,14 +688,10 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'first_image':
-      // @todo: Use the correct image key.
-      value = ((input.media_gallery.length > 0)
-          && (typeof input.media_gallery[0].url !== 'undefined'
-            || input.media_gallery[0].url
-            || input.media_gallery[0].url !== '')
-        )
-        ? input.media_gallery[0].url
-        : drupalSettings.alshayaRcs.default_meta_image
+      const firstImage = window.commerceBackend.getFirstImage(input);
+      value = Drupal.hasValue(firstImage)
+        ? firstImage.url
+        : drupalSettings.alshayaRcs.default_meta_image;
       break;
 
     case 'schema_stock':
@@ -623,7 +704,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'url':
-      value = `${drupalSettings.rcsPhSettings.productPathPrefix}${input.url_key}.html`;
+      value = `${input.url_key}.html`;
       break;
 
     case 'brand_logo':
@@ -648,20 +729,26 @@ exports.computePhFilters = function (input, filter) {
       data = input.description;
 
       // Add legal notice.
-      data.legal_notice = {
-        enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
-        label: drupalSettings.alshayaRcs.legal_notice_label,
-        summary: drupalSettings.alshayaRcs.legal_notice_summary,
-      };
+      data.legal_notice = getLegalNotice();
+
+      // Add Additional description.
+      data.additional_description = getAdditionalPdpDescription();
 
       // Render handlebars plugin.
-      value = handlebarsRenderer.render(`field.product.${filter}`, data);
+      value = handlebarsRenderer.render(`product.block.${filter}`, data);
       break;
 
     case 'short_description':
       // Prepare the object data for rendering.
       data = (input.short_description) ? input.short_description : input.description;
-      data.read_more = false;
+
+      // Add description (Used inside short description on Magazine layout).
+      data.description = input.description;
+      // Add legal notice.
+      data.description.legal_notice = getLegalNotice();
+
+      // Add Additional description.
+      data.description.additional_description = getAdditionalPdpDescription();
 
       // Apply ellipsis.
       let tmp = applyEllipsis(data.html);
@@ -669,7 +756,33 @@ exports.computePhFilters = function (input, filter) {
       data.read_more = tmp.read_more;
 
       // Render handlebars plugin.
-      value = handlebarsRenderer.render(`field.product.${filter}`, data);
+      value = handlebarsRenderer.render(`product.block.${filter}.${drupalSettings.alshayaRcs.pdpLayout}`, data);
+      break;
+
+    case 'promotions':
+      const promotions = input.promotions || [];
+      if (typeof promotions === 'undefined' || promotions === null) {
+        break;
+      }
+      data.sku = input.sku;
+
+      let promotionsList = [];
+      promotions.forEach((promotion, index) => {
+        const context = promotion.context || {};
+        if (typeof context === 'undefined' || !context.includes('web')) {
+          return;
+        }
+        // Prepare the data object.
+        promotionsList.push({
+          link: Drupal.url(promotion.promo_web_url),
+          hreflang: drupalSettings.path.currentLanguage,
+          label: promotion.text,
+        });
+      });
+      data.promotions = promotionsList;
+
+      // Render handlebars plugin.
+      value = handlebarsRenderer.render(`product.${filter}`, data);
       break;
 
     default:

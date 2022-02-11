@@ -177,6 +177,8 @@
           }
 
           &.is-active {
+            #{$right}: 0;
+
             .facet-item__value {
               @include icon(checkboxfull) {
                 color: $primary_checkbox_filled;
@@ -212,39 +214,6 @@
         }
       }
     }
-
-    #attr_delivery_ways {
-      li {
-        .facet-item__label {
-          display: flex;
-
-          &::before {
-            content: '';
-            width: 1.375rem;
-            height: 1.375rem;
-            display: inline-block;
-            margin-#{$right}: 0.5rem;
-            margin-#{$left}: 0.625rem;
-          }
-        }
-
-        &.same_day_delivery {
-          .facet-item__label {
-            &::before {
-              background: url('#{$base_theme_img_directory_path}/icons/same-day-delivery.svg') no-repeat;
-            }
-          }
-        }
-
-        &.express_delivery {
-          .facet-item__label {
-            &::before {
-              background: url('#{$base_theme_img_directory_path}/icons/express-delivery.svg') no-repeat;
-            }
-          }
-        }
-      }
-    }
   }
 
   .sticky-filter-wrapper {
@@ -273,10 +242,45 @@
       }
 
       ul {
-        .facet-item {
-          .listing-inline-star {
-            .rating-label {
-              width: 17%;
+        .listing-inline-star {
+          .rating-label {
+            width: 17%;
+          }
+        }
+      }
+    }
+
+    ul {
+      width: max-content;
+      max-width: 18.75rem;
+
+      li.facet-item {
+        padding-#{$right}: 1.125rem;
+
+        &.is-active {
+          #{$right}: 0 !important;
+        }
+
+        .facet-item__value {
+          align-items: flex-start;
+        }
+
+        .facet-item__label {
+          &::before {
+            min-width: 1.5rem;
+            top: 0.125rem;
+            position: relative;
+          }
+        }
+      }
+    }
+
+    #attr_delivery_ways {
+      ul {
+        li.facet-item {
+          &.is-active {
+            .facet-item__value {
+              padding-#{$right}: 1.5rem;
             }
           }
         }
@@ -293,15 +297,6 @@
       @include breakpoint($tablet) {
         margin-#{$left}: 0.3125rem;
       }
-    }
-
-    .express_delivery {
-      font-size: 0.6875rem;
-      padding: 0.125rem 0.375rem;
-      border: 0.0625rem solid $plp_express_delivery_tag;
-      width: 6.125rem;
-      margin: 0 auto;
-      margin-top: 0.625rem;
     }
   }
 

@@ -17,7 +17,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
-use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use CommerceGuys\Addressing\AddressFormat\FieldOverride;
 
 /**
@@ -25,7 +24,7 @@ use CommerceGuys\Addressing\AddressFormat\FieldOverride;
  */
 function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$form, FormStateInterface $form_state) {
   $user_id = \Drupal::currentUser()->getAccount()->id();
-  /* @var \Drupal\user\Entity\User $user */
+  /** @var \Drupal\user\Entity\User $user */
   $user = User::load($user_id);
   /** @var \Drupal\profile\Entity\ProfileInterface|bool $default_address */
   $default_address = \Drupal::entityTypeManager()->getStorage('profile')
@@ -36,11 +35,10 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
 
   // If user doesn't have any default address yet.
   if (!$default_address) {
-    $form['actions']['submit']['#access'] = FALSE;
-    $form['actions']['set_default']['#value'] = t('add address');
+    $form['actions']['submit']['#access'] = TRUE;
+    $form['actions']['submit']['#value'] = t('add address');
   }
   else {
-    $form['actions']['set_default']['#access'] = FALSE;
     $form['actions']['submit']['#value'] = t('add address');
     $form['actions']['submit']['#ajax'] = [
       'callback' => 'alshaya_addressbook_save_ajax_callback',
@@ -67,7 +65,11 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
   if ($form_state->getErrors()) {
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('.address-book-form-ajax-wrapper', $form));
-    $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['.address-book-form-ajax-wrapper', TRUE]));
+    $response->addCommand(new InvokeCommand(
+      NULL,
+      'firstErrorFocus',
+      ['.address-book-form-ajax-wrapper', TRUE]
+    ));
     // Adds mobile number prefix on validation fail as it lost in ajax call.
     $response->addCommand(new InvokeCommand(NULL, 'mobileNumberPrefixAjax'));
     return $response;
@@ -76,7 +78,7 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
   if (!$form_state->getErrors()) {
     $entity   = $form_state->getFormObject()->getEntity();
     $response = new AjaxResponse();
-    $response->addCommand(new RedirectCommand(Url::fromRoute('entity.profile.type.user_profile_form', [
+    $response->addCommand(new RedirectCommand(Url::fromRoute('profile.user_page.multiple', [
       'user'         => $entity->getOwnerId(),
       'profile_type' => $entity->bundle(),
     ])->toString()));
@@ -491,7 +493,7 @@ function _alshaya_addressbook_mobile_process_validate($form, FormStateInterface 
  * Implements hook_entity_type_alter().
  */
 function alshaya_addressbook_entity_type_alter(array &$entity_types) {
-  /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   $entity_types['profile']->setFormClass('delete', 'Drupal\alshaya_addressbook\Form\AlshayaProfileDeleteForm');
   $entity_types['profile']->setFormClass('add', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
   $entity_types['profile']->setFormClass('edit', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
@@ -695,7 +697,7 @@ function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountIn
  * Implements template_preprocess_profile().
  */
 function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
-  /* @var \Drupal\profile\Entity\Profile $profile */
+  /** @var \Drupal\profile\Entity\Profile $profile */
   if (isset($variables['elements'], $variables['elements']['#profile'])) {
     $profile = $variables['elements']['#profile'];
   }
@@ -876,7 +878,10 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
         $set_default_options = [
           'language' => $current_language,
           'query' => [
-            'destination' => Url::fromRoute("entity.profile.type.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
+            'destination' => Url::fromRoute("profile.user_page.multiple", [
+              'user' => $current_user->id(),
+              'profile_type' => 'address_book',
+            ])->toString(),
           ],
         ];
 
@@ -890,7 +895,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       }
     }
 
-    if ($route_match->getRouteName() == 'entity.profile.type.user_profile_form') {
+    if ($route_match->getRouteName() == 'profile.user_page.multiple') {
       $variables['#attached']['library'][] = 'alshaya_addressbook/alshaya_myaccount_addressbook';
     }
   }

@@ -15,4 +15,6 @@ click-and-collect.pdp:
   js:
     js/alshaya_click_collect.pdp.js: {}
   dependencies:
+    - core/jquery.once
+    - core/jquery.ui.accordion
     - alshaya_click_collect/click-and-collect.common

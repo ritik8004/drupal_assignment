@@ -1,10 +1,66 @@
 #alshaya-algolia-search,
-#alshaya-algolia-plp {
-  .c-products__item.product-frame {
-    border: 1px solid $_screeching_white;
+#alshaya-algolia-plp,
+#my-wishlist {
+  .c-products__item {
+    &.product-frame {
+      border: 1px solid $_screeching_white;
 
-    article {
-      padding-bottom: 1.25rem;
+      article {
+        padding-bottom: 1.25rem;
+      }
+    }
+
+    &.product-element-alignment {
+      .product-plp-detail-wrapper {
+        .field--name-name {
+          height: 1.75rem;
+
+          @include breakpoint($tablet) {
+            height: 2.5rem;
+          }
+        }
+
+        .alignment-placeholder {
+          height: 0.875rem;
+          margin-bottom: 0.5rem;
+
+          html[lang=ar] & {
+            height: 0.75rem;
+
+            @include breakpoint($tablet) {
+              height: 0.9375rem;
+            }
+          }
+
+          @include breakpoint($tablet) {
+            height: 1.0625rem;
+          }
+        }
+
+        .special-price-block {
+          height: 1.75rem;
+
+          html[lang=ar] & {
+            height: 1.5rem;
+
+            @include breakpoint($tablet) {
+              height: 2.375rem;
+            }
+
+            @include breakpoint($desktop) {
+              height: 2rem;
+            }
+          }
+
+          @include breakpoint($tablet) {
+            height: 2.6875rem;
+          }
+
+          @include breakpoint($desktop) {
+            height: 2.3125rem;
+          }
+        }
+      }
     }
   }
 }

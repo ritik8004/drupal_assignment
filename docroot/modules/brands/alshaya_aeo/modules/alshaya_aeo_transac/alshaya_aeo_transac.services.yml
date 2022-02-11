@@ -1,0 +1,5 @@
+services:
+  alshaya_aeo_transac.product_info_requested_event:
+    class: Drupal\alshaya_aeo_transac\EventSubscriber\ProductInfoRequestedEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }

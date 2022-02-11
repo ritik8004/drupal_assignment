@@ -151,6 +151,14 @@
   background-repeat: no-repeat;
 }
 
+.c-footer__logo--fawry {
+  background-image: url(#{$base_theme_img_directory_path}/cards/fawry.png);
+  width: 4.25rem;
+  height: 1.25rem;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
 .c-footer__logo--mada {
   background-image: url(#{$base_theme_img_directory_path}/cards/card-mada-logo.svg);
   width: 4.5625rem;

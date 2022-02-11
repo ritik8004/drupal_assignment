@@ -7,6 +7,8 @@ import CartPromotion from '../../../cart/components/cart-promotion';
 import ProductFlag from '../../../utilities/product-flag';
 import CartItemFree from '../../../cart/components/cart-item-free';
 import Notifications from '../../../cart/components/cart-item/components/Notifications';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import { cartItemIsVirtual } from '../../../utilities/egift_util';
 
 class CheckoutCartItem extends React.Component {
   constructor(props) {
@@ -29,8 +31,15 @@ class CheckoutCartItem extends React.Component {
       return;
     }
 
+    // Skip the get product data for virtual product ( This is applicable
+    // when egift card module is enabled and cart item is virtual.)
+    if (isEgiftCardEnabled() && cartItemIsVirtual(item)) {
+      return;
+    }
+
+    const parentSKU = item.product_type === 'configurable' ? item.parentSKU : null;
     // Key will be like 'product:en:testsku'
-    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback, { parentSKU });
   }
 
   /**

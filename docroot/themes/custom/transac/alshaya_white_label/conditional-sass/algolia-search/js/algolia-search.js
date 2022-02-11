@@ -6,7 +6,6 @@
 /* global debounce */
 
 (function ($, Drupal) {
-  'use strict';
 
   /* The solution has been encouraged from https://css-tricks.com/the-trick-to-viewport-units-on-mobile
   *
@@ -16,9 +15,9 @@
   *
   */
   if ($(window).width() < 768) {
-    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit 
-    var vh = window.innerHeight * 0.01; 
-    // Then we set the value in the --vh custom property to the root of the document 
+    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+    var vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
     document.documentElement.style.setProperty('--vh', "".concat(vh, "px"));
   }
 

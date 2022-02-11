@@ -1,0 +1,20 @@
+.redeem-egift-card {
+  .redeem-egift-card-content {
+    .egift-redeem-edit-amount {
+      font-family: $hnm-demibold;
+    }
+  }
+
+  .egift-redeem-applied-amount-wrapper {
+    .egift-header-title {
+      font-family: $hnm-demibold;
+    }
+  }
+
+  .accordion-icon {
+    &::before {
+      font-size: 0.525rem;
+      #{$right}: 1.5rem;
+    }
+  }
+}

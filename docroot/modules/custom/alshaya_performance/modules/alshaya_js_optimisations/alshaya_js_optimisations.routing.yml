@@ -1,0 +1,7 @@
+alshaya_js_optimisations.settings:
+  path: '/admin/config/development/performance/js'
+  defaults:
+    _form: '\Drupal\alshaya_js_optimisations\Form\AlshayaJSPerformanceConfigForm'
+    _title: 'JS Performance Settings'
+  requirements:
+    _permission: 'administer site configuration'

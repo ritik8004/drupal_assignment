@@ -1,0 +1,11 @@
+services:
+  alshaya_cos_images.skuassetsmanager:
+    class: Drupal\alshaya_cos_images\SkuAssetManager
+    arguments:
+      - '@config.factory'
+  alshaya_cos_images.product_info_requested_event:
+    class: Drupal\alshaya_cos_images\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_cos_images.skuassetsmanager'
+    tags:
+      - { name: 'event_subscriber' }

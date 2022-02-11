@@ -7,7 +7,10 @@ window.commerceBackend = window.commerceBackend || {};
 /**
  * Local static data store.
  */
-staticDataStore = {};
+let staticDataStore = {
+  cnc_status: {},
+  configurableColorData: {},
+};
 
 /**
  * Utility function to check if an item is an object or not.
@@ -164,7 +167,7 @@ function getConfigurables(product) {
   const configurables = {};
   product.configurable_options.forEach(function (option) {
     configurables[option.attribute_code] = {
-      attribute_id: atob(option.attribute_uid),
+      attribute_id: parseInt(atob(option.attribute_uid), 10),
       code: option.attribute_code,
       label: option.label,
       position: option.position,
@@ -186,24 +189,27 @@ function getConfigurables(product) {
  * Get the configurable options for the given variant.
  *
  * @param product
- *  The product entity.
+ *  The main product object.
  * @param {object} variant
  *   The variant object.
  *
  * @return {array}
  *   The array of variant configurable options.
  */
-function getVariantConfigurableOptions(product, variantAttributes) {
+function getVariantConfigurableOptions(product, variant) {
   const productConfigurables = getConfigurables(product);
+  const variantConfigurableOptions = [];
 
-  return variantAttributes.map(function (attribute) {
-    return {
-      attribute_id: attribute.code,
-      label: productConfigurables[attribute.code].label,
-      value: attribute.label,
-      value_id: attribute.value_index,
-    }
+  Object.keys(productConfigurables).forEach(function (attributeCode) {
+    variantConfigurableOptions.push({
+      attribute_id: `attr_${attributeCode}`,
+      label: productConfigurables[attributeCode].label,
+      value: window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
+      value_id: variant.product[attributeCode],
+    });
   });
+
+  return variantConfigurableOptions;
 }
 
 /**
@@ -216,7 +222,7 @@ function getVariantConfigurableOptions(product, variantAttributes) {
  */
 function getProductUrls(urlKey, langcode = null) {
   const urls = {};
-  drupalSettings.alshayaRcs.languages.forEach(function (language) {
+  drupalSettings.alshayaSpc.languages.forEach(function (language) {
     urls[language] = `/${language}/${urlKey}.html`;
   });
 
@@ -283,16 +289,14 @@ function getVariantsInfo(product) {
     const variantSku = variantInfo.sku;
     // @todo Add code for commented keys.
     info[variantSku] = {
-      // @todo Add proper implementation for cart image.
-      cart_image: jQuery('.logo img').attr('src'),
-      // @todo Add brand specific cart title.
-      cart_title: 'Temp title',
-      click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variant),
-      color_attribute: variant.color_attribute,
-      // color_value: '',
+      cart_image: window.commerceBackend.getCartImage(variant.product),
+      cart_title: product.name,
+      click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
+      color_attribute: Drupal.hasValue(variantInfo.color_attribute) ? variantInfo.color_attribute : '',
+      color_value: Drupal.hasValue(variantInfo.color) ? variantInfo.color : '',
       sku: variantInfo.sku,
-      parent_sku: variant.parent_sku,
-      configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
+      parent_sku: variantInfo.parent_sku,
+      configurableOptions: getVariantConfigurableOptions(product, variant),
       // @todo Fetch layout dynamically.
       layout: drupalSettings.alshayaRcs.pdpLayout,
       gallery: '',
@@ -300,16 +304,18 @@ function getVariantsInfo(product) {
         qty: variantInfo.stock_data.qty,
         // We get only enabled products in the API.
         status: 1,
+        in_stock: variantInfo.stock_status === 'IN_STOCK',
       },
       // @todo Implement this.
       description: '',
       price: globalThis.rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
-      priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.regular_price.value),
-      // @todo Add promotions value here.
-      promotionsRaw: [],
+      finalPrice: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
+      priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
+      promotionsRaw: product.promotions,
       // @todo Add free gift promotion value here.
       freeGiftPromotion: [],
-      url: getProductUrls(product.url_key),
+      url: getProductUrls(variantInfo.url_key),
+      gtm_price: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
     }
 
     // Set max sale quantity data.
@@ -355,17 +361,22 @@ function processProduct(product) {
     gtm_attributes: product.gtm_attributes,
     gallery: null,
     identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
-    // @todo Add proper implementation for cart image.
-    cart_image: jQuery('.logo img').attr('src'),
-    // @todo Add brand specific cart title.
-    cart_title: 'Temp title',
+    cart_image: window.commerceBackend.getCartImage(product),
+    cart_title: product.name,
     url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
+    price: globalThis.rcsPhRenderingEngine.computePhFilters(product, 'price'),
+    finalPrice: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value),
     priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
-    // @todo Add promotions value here.
-    promotionsRaw: [],
+    promotionsRaw: product.promotions,
     // @todo Add free gift promotion value here.
     freeGiftPromotion: [],
     is_non_refundable: product.non_refundable_products,
+    stock: {
+      qty: product.stock_data.qty,
+      // We get only enabled products in the API.
+      status: 1,
+      in_stock: product.stock_status === 'IN_STOCK',
+    },
   };
 
   let maxSaleQty = 0;
@@ -436,19 +447,19 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
     firstChild: '',
   };
 
-  productData.variants = Object.keys(productData.variants).map(function (variantSku) {
-    const variant = productData.variants[variantSku];
-    const variantConfigurableAttributes = {};
-    variant.configurableOptions.forEach(function (variantConfigurableOption) {
-      variantConfigurableAttributes[variantConfigurableOption.attribute_id] = variantConfigurableOption.value_id;
-    })
+  const rawProductData = window.commerceBackend.getProductData(sku, false, false);
 
-    for (var i = 0; i < configurableCodes.length; i++) {
-      if (typeof variantConfigurableAttributes[configurableCodes[i]] === 'undefined') {
-        delete(productData.variants[variantSku]);
+  rawProductData.variants.forEach(function (variant) {
+    const product = variant.product;
+    const variantSku = product.sku;
+    let attributeVal = null;
+
+    for (let i = 0; i < configurableCodes.length; i++) {
+      attributeVal = product[configurableCodes[i]];
+
+      if (typeof attributeVal === 'undefined') {
         return;
       }
-      var attributeVal = variantConfigurableAttributes[configurableCodes[i]];
 
       combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'
         ? combinations.by_sku[variantSku]
@@ -458,16 +469,19 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
       combinations.attribute_sku[configurableCodes[i]] = typeof combinations.attribute_sku[configurableCodes[i]] !== 'undefined'
         ? combinations.attribute_sku[configurableCodes[i]]
         : {};
-      combinations.attribute_sku[configurableCodes[i]][attributeVal] = variantSku;
+
+      combinations.attribute_sku[configurableCodes[i]][attributeVal] = typeof combinations.attribute_sku[configurableCodes[i]][attributeVal] !== 'undefined'
+        ? combinations.attribute_sku[configurableCodes[i]][attributeVal]
+        : [];
+      combinations.attribute_sku[configurableCodes[i]][attributeVal].push(variantSku);
     }
   });
 
   var firstChild = Object.entries(combinations.attribute_sku)[0];
   firstChild = Object.entries(firstChild[1]);
-  combinations.firstChild = firstChild[0][1];
+  combinations.firstChild = firstChild[0][1][0];
 
   // @todo: Add check for simple product.
-  // @todo Add sorting for the configurable options based on weights.
   Object.keys(combinations.by_sku).forEach(function (sku) {
     const combinationString = getSelectedCombination(combinations.by_sku[sku]);
     combinations.by_attribute[combinationString] = sku;
@@ -502,12 +516,17 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
  * @see alshaya_acm_product_available_click_collect().
  */
 window.commerceBackend.isProductAvailableForClickAndCollect = function (product) {
+  if (Drupal.hasValue(staticDataStore.cnc_status[product.sku])) {
+    return staticDataStore.cnc_status[product.sku];
+  }
   // Product could be either available for ship to store or for reserve and
   // collect. In both cases click and collect option will be considered as
   // available.
   // Magento provides for 2 for disabled and 1 for enabled.
-  return (drupalSettings.alshaya_click_collect.status === 'enabled')
+  staticDataStore.cnc_status[product.sku] = (drupalSettings.alshaya_click_collect.status === 'enabled')
     && (parseInt(product.ship_to_store, 10) === 1 || parseInt(product.reserve_and_collect, 10) === 1);
+
+  return staticDataStore.cnc_status[product.sku];
 }
 
 /**
@@ -553,14 +572,6 @@ window.commerceBackend.cleanCssIdentifier = function (identifier) {
   cleanedIdentifier = cleanedIdentifier.replace(/^[0-9]/, '_').replace(/^(-[0-9])|^(--)/, '__');
 
   return cleanedIdentifier.toLowerCase();
-}
-
-/**
- * Perform some function when product is added to cart.
- */
-window.commerceBackend.storeProductDataOnAddToCart = function () {
-  // We do nothing here for V2.
-  return;
 }
 
 /**
@@ -618,7 +629,7 @@ function getSkuSiblingsAndParent(sku) {
  * @returns object
  *   The labels data for the given product ID.
  */
-window.commerceBackend.getLabelsData = async function (sku) {
+async function getProductLabelsData (sku) {
   if (typeof staticDataStore.labels === 'undefined') {
     staticDataStore.labels = {};
     staticDataStore.labels[sku] = null;
@@ -635,8 +646,13 @@ window.commerceBackend.getLabelsData = async function (sku) {
     productIds[products[sku].id] = sku;
   });
 
-  const labels = await globalThis.rcsPhCommerceBackend
-                                              .getData('labels', { productIds: Object.keys(productIds) }, null, drupalSettings.path.currentLanguage, '')
+  const labels = await globalThis.rcsPhCommerceBackend.getData(
+    'labels',
+    { productIds: Object.keys(productIds) },
+    null,
+    drupalSettings.path.currentLanguage,
+    ''
+  );
 
   if (Array.isArray(labels) && labels.length) {
     labels.forEach(function (productLabels) {
@@ -650,6 +666,32 @@ window.commerceBackend.getLabelsData = async function (sku) {
   }
 
   return staticDataStore.labels[sku];
+}
+
+/**
+ * Get the labels data for the selected SKU.
+ *
+ * @param {object} product
+ *   The product wrapper jquery object.
+ * @param {string} sku
+ *   The sku for which labels is to be retreived.
+ * @param {string} mainSku
+ *   The main sku for the product being displayed.
+ */
+function renderProductLabels(product, sku, mainSku) {
+  getProductLabelsData(mainSku).then(function (labelsData) {
+    globalThis.rcsPhRenderingEngine.render(
+      drupalSettings,
+      'product-labels',
+      {
+        sku,
+        mainSku,
+        type: 'pdp',
+        labelsData,
+        product,
+      },
+    );
+  });
 }
 
 /**
@@ -667,9 +709,9 @@ window.commerceBackend.getLabelsData = async function (sku) {
  *   The parent SKU value if exists.
  */
 window.commerceBackend.updateGallery = async function (product, layout, productGallery, sku, parentSku) {
-  let rawProduct = null;
   const mainSku = typeof parentSku !== 'undefined' ? parentSku : sku;
   const productData = window.commerceBackend.getProductData(mainSku, null, false);
+  const viewMode = product.parents('.entity--type-node').attr('data-vmode');
 
   if (typeof parentSku === 'undefined') {
     rawProduct = productData;
@@ -682,13 +724,11 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     });
   }
 
-  let labels = await window.commerceBackend.getLabelsData(sku);
-
   // Maps gallery value from backend to the appropriate filter.
   let galleryType = null;
   switch (drupalSettings.alshayaRcs.pdpLayout) {
-    case 'pdp':
-      galleryType = 'classic-gallery';
+    case 'pdp-magazine':
+      galleryType = drupalSettings.alshayaRcs.pdpGalleryType === 'classic' ? 'classic-gallery' : 'magazine-gallery';
       break;
   }
 
@@ -696,9 +736,14 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     .render(
       drupalSettings,
       galleryType,
-      {},
-      { labels },
-      rawProduct,
+      {
+        galleryLimit: viewMode === 'modal' ? 'modal' : 'others',
+        // The simple SKU.
+        sku,
+      },
+      { },
+      // rawProduct,
+      productData,
       drupalSettings.path.currentLanguage,
       null,
     );
@@ -706,6 +751,13 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
   if (gallery === '' || gallery === null) {
     return;
   }
+
+  // Here we render the product labels asynchronously.
+  // If we try to do it synchronously, then javascript moves on to other tasks
+  // while the labels are fetched from the API.
+  // This causes discrepancy in the flow, since in V1 the updateGallery()
+  // executes completely in one flow.
+  renderProductLabels(product, sku, mainSku);
 
   if (jQuery(product).find('.gallery-wrapper').length > 0) {
     // Since matchback products are also inside main PDP, when we change the variant
@@ -738,3 +790,79 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     }, 1);
   }
 };
+
+/**
+ * Gets the configurable color details.
+ *
+ * @param {string} sku
+ *   The sku value.
+ *
+ * @returns {object}
+ *   The configurable color details.
+ *
+ * @see https://github.com/acquia-pso/alshaya/blob/6.7.0/docroot/modules/custom/alshaya_acm_product/alshaya_acm_product.module#L1513
+ */
+window.commerceBackend.getConfigurableColorDetails = function (sku) {
+  if (Drupal.hasValue(staticDataStore.configurableColorData[sku])) {
+    return staticDataStore.configurableColorData[sku];
+  }
+
+  var colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
+  var supportsMultipleColor = Drupal.hasValue(colorAttributeConfig.support_multiple_attributes);
+  var data = {};
+  var rawProductData = window.commerceBackend.getProductData(sku, false, false);
+  var productType = rawProductData.type_id;
+
+  if (supportsMultipleColor && productType === 'configurable') {
+    var configColorAttribute = colorAttributeConfig.configurable_color_attribute;
+    var combinations = window.commerceBackend.getConfigurableCombinations(sku);
+    var colorLabelAttribute = colorAttributeConfig.configurable_color_label_attribute.replace('attr_', '');
+    var colorCodeAttribute = colorAttributeConfig.configurable_color_code_attribute.replace('attr_', '');
+    // Translate color attribute option values to the rgb color values &
+    // expose the same in Drupal settings to javascript.
+    var configurableOptions = rawProductData.configurable_options;
+
+    var variants = {};
+    var skuConfigurableOptionsColor = {};
+
+    // Do this mapping for easy access.
+    rawProductData.variants.forEach(function (variant) {
+      variants[variant.product.sku] = variant;
+    })
+
+    configurableOptions.forEach(function (option) {
+      option.values.forEach(function (value) {
+        if (Drupal.hasValue(combinations.attribute_sku[configColorAttribute][value.value_index])) {
+          combinations.attribute_sku[configColorAttribute][value.value_index].forEach(function (variantSku) {
+            var colorOptionsList = {
+              display_label: window.commerceBackend.getAttributeValueLabel(option.attribute_code, variants[variantSku].product[colorLabelAttribute]),
+              swatch_type: 'RGB',
+              display_value: variants[variantSku].product[colorCodeAttribute],
+            };
+
+            // The behavior is same as
+            // hook_alshaya_acm_product_pdp_swath_type_alter().
+            RcsEventManager.fire('alshayaRcsAlterPdpSwatch', {
+              detail: {
+                sku,
+                colorOptionsList,
+                variantSku,
+              }
+            });
+
+            skuConfigurableOptionsColor[value.value_index] = colorOptionsList;
+          });
+        }
+      });
+
+      data = {
+        sku_configurable_options_color: skuConfigurableOptionsColor,
+        sku_configurable_color_attribute: configColorAttribute,
+      }
+    });
+
+    staticDataStore.configurableColorData[sku] = data;
+
+    return data;
+  }
+}

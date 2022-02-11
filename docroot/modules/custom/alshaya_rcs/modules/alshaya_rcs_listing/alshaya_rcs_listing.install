@@ -56,6 +56,9 @@ function alshaya_rcs_listing_install() {
       }
     }
   }
+
+  // Migrate data.
+  alshaya_rcs_listing_migrate_field_carousel_slug();
 }
 
 /**
@@ -69,5 +72,43 @@ function alshaya_rcs_listing_uninstall() {
     if ($block instanceof BlockInterface) {
       $block->enable()->save();
     }
+  }
+
+  // Uninstall configs.
+  $configs = [
+    'field.field.paragraph.product_carousel_category.field_category_carousel_slug',
+    'field.storage.paragraph.field_category_carousel_slug',
+  ];
+  foreach ($configs as $name) {
+    Drupal::configFactory()->getEditable($name)->delete();
+  }
+}
+
+/**
+ * Helper to migrate data from term to text field.
+ */
+function alshaya_rcs_listing_migrate_field_carousel_slug() {
+  $query = \Drupal::database()->select('paragraph__field_category_carousel', 'pfc');
+  $query->addField('pfc', 'revision_id');
+  $query->innerJoin('taxonomy_term_field_data', 'td', 'td.tid = pfc.field_category_carousel_target_id');
+  $query->addField('pa', 'alias');
+  $query->innerJoin('path_alias', 'pa', "pa.path=concat('/taxonomy/term/', td.tid) AND pa.langcode = td.langcode");
+  $query->isNotNull('pa.alias');
+  $query->distinct(TRUE);
+  $result = $query->execute()->fetchAll();
+
+  $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+
+  foreach ($result as $item) {
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = $paragraph_storage->loadRevision($item->revision_id);
+
+    // Remove prefix.
+    $value = str_replace('shop-', '', $item->alias);
+
+    // Remove slashes.
+    $value = trim($value, '/');
+
+    $paragraph->set('field_category_carousel_slug', $value)->save();
   }
 }

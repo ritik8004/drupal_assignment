@@ -220,6 +220,26 @@ function clear_cache_for_url(string $zone, string $url) {
   return invoke_api($api_url, 'POST', $data);
 }
 
+function clear_cache_for_prefix(string $zone, string $prefix) {
+  $data = [
+    'prefixes' => [$prefix],
+  ];
+
+  $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/purge_cache';
+
+  return invoke_api($api_url, 'POST', $data);
+}
+
+function clear_cache_for_urls(string $zone, array $urls) {
+  $data = [
+    'files' => $urls,
+  ];
+
+  $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/purge_cache';
+
+  return invoke_api($api_url, 'POST', $data);
+}
+
 function get_page_rules_for_zone(string $zone) {
   $data = [
     'page' => 1,

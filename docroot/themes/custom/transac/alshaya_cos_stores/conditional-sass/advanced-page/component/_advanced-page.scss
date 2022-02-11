@@ -1,0 +1,43 @@
+.nodetype--advanced_page {
+  .node--type-advanced-page {
+    .c-content__primary {
+      @include breakpoint($desktop) {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+.nodetype--advanced_page {
+  .c-content__body {
+    color: $content_pagetitle;
+
+    h2 {
+      @include style-font(false, 3.75rem, 1.5rem, false, 1.5rem);
+    }
+
+    h3 {
+      @include style-font(false, 1.5rem, 1.375rem, false, 1.5rem);
+    }
+
+    h4,
+    h5 {
+      @include style-font(false, 1.875rem, 1.5rem);
+    }
+
+    h2,
+    h3,
+    h4,
+    h5 {
+      margin: 0;
+      line-height: normal;
+      font-weight: normal;
+    }
+  }
+
+  .field--name-field-html-heading {
+    p {
+      @include style-font(false, 1.875rem, 1.5rem, false);
+    }
+  }
+}
