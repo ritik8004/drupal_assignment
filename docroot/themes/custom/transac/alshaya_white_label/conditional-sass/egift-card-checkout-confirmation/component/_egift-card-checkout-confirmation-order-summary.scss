@@ -21,7 +21,6 @@
         text-align: $left;
 
         @include breakpoint($only-mobile) {
-          -webkit-text-fill-color: $egift-checkout-card-number;
           opacity: 1;
         }
       }
