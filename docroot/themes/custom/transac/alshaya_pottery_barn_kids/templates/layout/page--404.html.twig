@@ -44,6 +44,11 @@
           <div class="c-header__region">
             {{ page.header }}
           </div>
+          {% if page.sub_header_menu %}
+            <div class="c-secondary-header__region">
+              {{ page.sub_header_menu }}
+            </div> 
+          {% endif %}
         </div>
       </header>
     {% endif %}
