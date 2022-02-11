@@ -74,7 +74,6 @@ jobs:
       MYSQL_DATABASE_NAME: drupal
       MYSQL_HOST: database
       INSTALL_TYPE: install
-      PROFILE: ${{ matrix.drupal-profile }}
 
     steps:
       - name: Repo check
