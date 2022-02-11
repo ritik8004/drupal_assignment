@@ -18,11 +18,16 @@ window.commerceBackend = window.commerceBackend || {};
  *    The product data.
  */
 window.commerceBackend.getProductData = function (sku, productKey, processed) {
-  if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
+  var key = productKey === 'undefined' || !productKey ? 'productInfo' : productKey;
+  if (typeof sku === 'undefined' || sku === null) {
+    return drupalSettings[key];
+  }
+
+  if (typeof drupalSettings[key] === 'undefined' || typeof drupalSettings[key][sku] === 'undefined') {
     return null;
   }
 
-  return drupalSettings[productKey][sku];
+  return drupalSettings[key][sku];
 }
 
 /**
