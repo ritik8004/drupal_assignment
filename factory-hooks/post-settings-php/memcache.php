@@ -54,6 +54,15 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
           'factory' => ['@memcache.backend.cache.factory', 'get'],
           'arguments' => ['container'],
         ],
+        'memcache.factory' => [
+          'class' => 'Drupal\memcache\Driver\MemcacheDriverFactory',
+          'arguments' => ['@memcache.settings'],
+        ],
+        'memcache.timestamp.invalidator.bin' => [
+          'class' => 'Drupal\memcache\Invalidator\MemcacheTimestampInvalidator',
+          # Adjust tolerance factor as appropriate when not running memcache on localhost.
+          'arguments' => ['@memcache.factory', 'memcache_bin_timestamps', 0.001],
+        ],
         'cache_tags_provider.container' => [
           'class' => 'Drupal\Core\Cache\DatabaseCacheTagsChecksum',
           'arguments' => ['@database'],
@@ -64,6 +73,7 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
             'container',
             '@memcache.backend.cache.container',
             '@cache_tags_provider.container',
+            '@memcache.timestamp.invalidator.bin',
           ],
         ],
       ],
@@ -94,6 +104,7 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     $settings['cache']['bins']['alshaya_acm_promotion'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['pretty_paths'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['bnpl'] = 'cache.backend.permanent_memcache';
+    $settings['cache']['bins']['tabby'] = 'cache.backend.permanent_memcache';
 
     // Enable stampede protection.
     $settings['memcache']['stampede_protection'] = TRUE;
@@ -108,7 +119,14 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     // Decrease latency.
     $settings['memcache']['options'][Memcached::OPT_TCP_NODELAY] = TRUE;
 
-    if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
+    // Update memcache settings for GITHUB.
+    if (isset($_ENV['GITHUB_ACTIONS'])) {
+      $settings['memcache']['servers'] = [
+        'memcache:11211' => 'default',
+      ];
+    }
+    // Update memcache settings for local.
+    elseif (isset($settings, $settings['env']) && $settings['env'] == 'local') {
       global $host_site_code;
       $settings['memcache']['key_prefix'] = $host_site_code;
 

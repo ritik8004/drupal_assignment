@@ -6,25 +6,18 @@ import {
   getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
-  callDrupalApi,
-  callMagentoApi,
   getCartCustomerEmail,
   getCartCustomerId,
   matchStockQuantity,
   isCartHasOosItem,
   getProductStatus,
-  getCartSettings,
 } from './common';
-import {
-  cartErrorCodes,
-  getDefaultErrorMessage,
-} from './error';
 import {
   getApiEndpoint,
   isUserAuthenticated,
   getIp,
 } from './utility';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
 import cartActions from '../../utilities/cart_actions';
 import {
   getPaymentMethods,
@@ -41,7 +34,17 @@ import {
   isObject,
   isArray,
 } from '../../../../js/utilities/conditionsUtility';
-import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
+import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities/error';
+import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import { isCollectionPoint } from '../../utilities/cnc_util';
+import {
+  cartContainsOnlyVirtualProduct,
+  cartItemIsVirtual,
+  isFullPaymentDoneByEgift,
+} from '../../utilities/egift_util';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -83,11 +86,18 @@ const getCncStatusForCart = async (data) => {
   // Process items.
   for (let i = 0; i < data.cart.items.length; i++) {
     const item = data.cart.items[i];
+
+    // Skip product status check if egift is enabled and is virtual product.
+    if (isEgiftCardEnabled() && cartItemIsVirtual(item)) {
+      return true;
+    }
+
     // We should ideally have ony one call to an endpoint and pass
     // The list of items. This look could happen in the backend.
     // Suppressing the lint error for now.
+    const parentSKU = item.product_type === 'configurable' ? item.extension_attributes.parent_product_sku : null;
     // eslint-disable-next-line no-await-in-loop
-    const productStatus = await getProductStatus(item.sku);
+    const productStatus = await getProductStatus(item.sku, parentSKU);
     if (hasValue(productStatus)
       && isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
     ) {
@@ -206,12 +216,14 @@ const processLastOrder = (orderData) => {
  *
  * @param {string} customerId
  *   The customer id.
+ * @param {boolean} force
+ *   Bypass static cache.
  * @returns {Promise<AxiosPromise<Object>>}
  *   Customer last order or null.
  */
-const getLastOrder = async (customerId) => {
+const getLastOrder = async (customerId, force = false) => {
   const staticOrder = StaticStorage.get('last_order');
-  if (staticOrder !== null) {
+  if (!force && staticOrder !== null) {
     return staticOrder;
   }
 
@@ -282,20 +294,7 @@ const getDefaultPaymentFromOrder = async (order) => {
  * @returns {object|null}
  *   Returns the store data object if found else null.
  */
-const getSavedDrupalStoreData = (key) => {
-  const savedStoreData = getStorageInfo(key);
-
-  if (savedStoreData !== null) {
-    const expireTime = drupalSettings.cncStoreInfoCacheTime * 60 * 1000;
-    const currentTime = new Date().getTime();
-
-    if ((currentTime - savedStoreData.created) < expireTime) {
-      return savedStoreData;
-    }
-  }
-
-  return null;
-};
+const getSavedDrupalStoreData = (key) => Drupal.getItemFromLocalStorage(key);
 
 /**
  * Sets the store data in the local storage.
@@ -305,12 +304,11 @@ const getSavedDrupalStoreData = (key) => {
  * @param {object} data
  *   The store data object.
  */
-const setDrupalStoreData = (key, data) => {
-  // eslint-disable-next-line no-param-reassign
-  data.created = new Date().getTime();
-
-  setStorageInfo(data, key);
-};
+const setDrupalStoreData = (key, data) => Drupal.addItemInLocalStorage(
+  key,
+  data,
+  (drupalSettings.cncStoreInfoCacheTime * 60),
+);
 
 /**
  * Gets the data for a particular store.
@@ -457,7 +455,13 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
     stores = stores.slice(0, cncStoresLimit);
   }
 
+  const isCollectionPointEnabled = collectionPointsEnabled();
   stores.forEach((store) => {
+    // Do not fetch the Store data from Drupal if PUDO is disabled and the store
+    // is a collection point.
+    if (!isCollectionPointEnabled && isCollectionPoint(store)) {
+      return;
+    }
     storeInfoPromises.push(getStoreInfo(store));
   });
 
@@ -1005,9 +1009,11 @@ const applyDefaultShipping = async (order) => {
     const { methods } = response;
     for (let i = 0; i < methods.length; i++) {
       const method = methods[i];
+      // Check if last order's method is available for the order.
       if (typeof method.carrier_code !== 'undefined'
         && order.shipping.method.indexOf(method.carrier_code, 0) === 0
         && order.shipping.method.indexOf(method.method_code, 0) !== -1
+        && method.available
       ) {
         logger.debug('Setting shipping/billing address from user last HD order. Cart: @cartId, Address: @address, Billing: @billing.', {
           '@cartId': window.commerceBackend.getCartId(),
@@ -1023,6 +1029,18 @@ const applyDefaultShipping = async (order) => {
 };
 
 /**
+ * Returns first available method.
+ *
+ * @param {array}
+ *   Methods array.
+ *
+ * @return {array}
+ *   First available method.
+ */
+const firstAvailableDeliveryMethod = (methods) => methods.find(
+  (element) => element.available === true,
+);
+/**
  * Apply defaults to cart for customer.
  *
  * @param {object} cartData
@@ -1033,7 +1051,14 @@ const applyDefaultShipping = async (order) => {
  *   The data.
  */
 const applyDefaults = async (data, customerId) => {
-  if (hasValue(data.shipping.method)) {
+  if (hasValue(data.shipping)
+    && hasValue(data.shipping.method)) {
+    return data;
+  }
+
+  // Don't apply default shipping if egift card is enabled and cart contains only
+  // virtual items.
+  if (isEgiftCardEnabled() && cartContainsOnlyVirtualProduct(data.cart)) {
     return data;
   }
 
@@ -1074,8 +1099,7 @@ const applyDefaults = async (data, customerId) => {
         '@cartId': window.commerceBackend.getCartId(),
         '@address': JSON.stringify(address),
       });
-
-      return selectHd(address, methods[0], address, methods);
+      return selectHd(address, firstAvailableDeliveryMethod(methods), address, methods);
     }
   }
 
@@ -1089,8 +1113,12 @@ const applyDefaults = async (data, customerId) => {
         '@cartId': window.commerceBackend.getCartId(),
         '@address': JSON.stringify(data.shipping.address),
       });
-
-      return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
+      return selectHd(
+        data.shipping.address,
+        firstAvailableDeliveryMethod(methods),
+        data.shipping.address,
+        methods,
+      );
     }
   }
 
@@ -1143,9 +1171,16 @@ const getProcessedCheckoutData = async (cartData) => {
     }
     data.shipping.methods = response.methods;
   }
-
+  // Shipping method will not be available when egift is enabled and cart
+  // contain only virtual items.
   if (!hasValue(data.payment.methods)
-    && hasValue(data.shipping.method)
+    && (hasValue(data.shipping.method)
+    || cartContainsOnlyVirtualProduct(data.cart))
+    // Don't call the select payment and get payment methods APIs when
+    // full payment is done by egift card.
+    // Here we are passing processed card data as we are checking the result in
+    // isFullPaymentDoneByEgift on processed cart.
+    && !(isFullPaymentDoneByEgift(await getProcessedCartData(data)))
   ) {
     const paymentMethods = await getPaymentMethods();
     if (hasValue(paymentMethods)) {
@@ -1189,7 +1224,12 @@ const getProcessedCheckoutData = async (cartData) => {
 
     // If payment method is not available in the list, we set the first
     // available payment method in React, here we remove it from response.
-    if (typeof response.payment.method !== 'undefined' && !codes.includes(response.payment.method)) {
+    // `aura_payment` is pseudo payment method, it won't be in
+    // the list of payment methods so do not remove payment method
+    // if it's `aura_payment`.
+    if (typeof response.payment.method !== 'undefined'
+      && !codes.includes(response.payment.method)
+      && response.payment.method !== 'aura_payment') {
       delete (response.payment.method);
     }
 
@@ -1261,6 +1301,17 @@ const isUpapiPaymentMethod = (paymentMethod) => paymentMethod.indexOf('upapi', 0
  *   TRUE if payment methods from postpay
  */
 const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay', 0) !== -1;
+
+/**
+ * Checks if tabby payment method.
+ *
+ * @param {string} paymentMethod
+ *   Payment method code.
+ *
+ * @return {bool}
+ *   TRUE if payment methods from tabby
+ */
+const isTabbyPaymentMethod = (paymentMethod) => paymentMethod.indexOf('tabby', 0) !== -1;
 
 /**
  * Prepare message to log when API fail after payment successful.
@@ -1422,7 +1473,7 @@ const paymentUpdate = async (data) => {
       method: paymentData.method,
       additional_data: (hasValue(paymentData.additional_data))
         ? paymentData.additional_data
-        : [],
+        : {},
     },
   };
 
@@ -1459,7 +1510,9 @@ const paymentUpdate = async (data) => {
   }
 
   // If upapi payment method (payment method via checkout.com).
-  if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
+  if (isUpapiPaymentMethod(paymentData.method)
+    || isPostpayPaymentMethod(paymentData.method)
+    || isTabbyPaymentMethod(paymentData.method)) {
     // Add success and fail redirect url to additional data.
     params.payment.additional_data.successUrl = `${window.location.origin}${Drupal.url('spc/payment-callback/success')}`;
     params.payment.additional_data.failUrl = `${window.location.origin}${Drupal.url(`spc/payment-callback/${paymentData.method}/error`)}`;
@@ -1573,10 +1626,13 @@ const isAddressExtensionAttributesValid = (data) => {
 
   const cartAddressCustom = [];
 
-  // Prepare cart address field data.
-  data.shipping.address.custom_attributes.forEach((item) => {
-    cartAddressCustom[item.attribute_code] = item.value;
-  });
+  if (hasValue(data.shipping.address)
+    && hasValue(data.shipping.address.custom_attributes)) {
+    // Prepare cart address field data.
+    data.shipping.address.custom_attributes.forEach((item) => {
+      cartAddressCustom[item.attribute_code] = item.value;
+    });
+  }
 
   // Check each required field in custom attributes available in cart
   // shipping address or not.
@@ -1626,29 +1682,34 @@ const validateBeforePaymentFinalise = async () => {
     errorMessage = 'Cart contains some items which are not in stock.';
     errorCode = cartErrorCodes.cartHasOOSItem;
   } else if (!hasValue(cartData.shipping.method)
+    && !cartContainsOnlyVirtualProduct(cartData.cart)
   ) {
     // Check if shipping method is present else throw error.
     isError = true;
     logger.error('Error while finalizing payment. No shipping method available. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (!hasValue(cartData.shipping.address)
-    || !hasValue(cartData.shipping.address.custom_attributes)
+  } else if ((!hasValue(cartData.shipping.address)
+    || !hasValue(cartData.shipping.address.custom_attributes))
+    && !cartContainsOnlyVirtualProduct(cartData.cart)
   ) {
     // If shipping address not have custom attributes.
     isError = true;
     logger.error('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (!isAddressExtensionAttributesValid(cartData)) {
+  } else if (!isAddressExtensionAttributesValid(cartData)
+    && !cartContainsOnlyVirtualProduct(cartData.cart)) {
     // If address extension attributes doesn't contain all the required
     // fields or required field value is empty, not process/place order.
     isError = true;
     logger.error('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (!hasValue(cartData.shipping.address.firstname)
-    || !hasValue(cartData.shipping.address.lastname)
+  } else if ((!hasValue(cartData.shipping.address)
+    || !hasValue(cartData.shipping.address.firstname)
+    || !hasValue(cartData.shipping.address.lastname))
+    && !cartContainsOnlyVirtualProduct(cartData.cart)
   ) {
     // If first/last name not available in shipping address.
     isError = true;
@@ -1713,9 +1774,25 @@ window.commerceBackend.getCartForCheckout = async () => {
   return getCart()
     .then(async (response) => {
       const cart = response;
+
+      // Check if response itself is empty.
+      // This could happen for multiple reasons,
+      // For example isAnonymousUserWithoutCart or we got 404.
+      if (!hasValue(cart) || !hasValue(cart.data)) {
+        logger.warning('Empty response received for getCart API call.');
+
+        return {
+          data: {
+            error: true,
+            error_code: 500,
+            error_message: 'Empty response received.',
+          },
+        };
+      }
+
       const cartId = window.commerceBackend.getCartId();
 
-      if (!hasValue(cart.data) || hasValue(cart.data.error_message)) {
+      if (hasValue(cart.data.error_message)) {
         logger.error('Error while getting cart: @cartId, Error: @message.', {
           '@cartId': cartId,
           '@message': cart.data.error_message,
@@ -1906,10 +1983,16 @@ window.commerceBackend.addShippingMethod = async (data) => {
   }
 
   if (!hasValue(carrierInfo)) {
-    carrierInfo = {
-      code: shippingMethods[0].carrier_code,
-      method: shippingMethods[0].method_code,
-    };
+    // Find the first available method.
+    const selectedMethod = shippingMethods.find(
+      (method) => method.available === true,
+    );
+    if (selectedMethod && selectedMethod !== null) {
+      carrierInfo = {
+        code: selectedMethod.carrier_code,
+        method: selectedMethod.method_code,
+      };
+    }
   }
 
   const params = {
@@ -1977,8 +2060,11 @@ const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
     customerId = cart.data.cart.customer.id;
   }
 
-  // Remove cart id and other caches from session.
-  window.commerceBackend.removeCartDataFromStorage(true);
+  // Remove card id if it was not a topup purchase.
+  if (getTopUpQuote() === null) {
+    // Remove cart id and other caches from session.
+    window.commerceBackend.removeCartDataFromStorage(true);
+  }
 
   // Post order id and cart data to Drupal.
   const data = {
@@ -2025,7 +2111,11 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // Check if shipping method is present else throw error.
-  if (!hasValue(cart.data.shipping.method)) {
+  // Skip the shipping and billing address validation when egift card is enabled
+  // and cart contain only virtual products.
+  const egiftWithVirtualProduct = cartContainsOnlyVirtualProduct(cart.data.cart);
+  if (!hasValue(cart.data.shipping.method)
+  && !egiftWithVirtualProduct) {
     logger.error('Error while placing order. No shipping method available. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
@@ -2039,7 +2129,9 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // Check if shipping address not have custom attributes.
-  if (!hasValue(cart.data.shipping.address.custom_attributes)) {
+  if (hasValue(cart.data.shipping.address)
+    && !hasValue(cart.data.shipping.address.custom_attributes)
+    && !egiftWithVirtualProduct) {
     logger.error('Error while placing order. Shipping address not contains all info. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
@@ -2052,7 +2144,8 @@ window.commerceBackend.placeOrder = async (data) => {
     };
   }
 
-  if (!isAddressExtensionAttributesValid(cart.data)) {
+  if (!isAddressExtensionAttributesValid(cart.data)
+    && !egiftWithVirtualProduct) {
     // If address extension attributes doesn't contain all the required
     // fields or required field value is empty, not process/place order.
     logger.error('Error while placing order. Shipping address not contains all required extension attributes. Cart: @cart', {
@@ -2068,8 +2161,10 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // If first/last name not available in shipping address.
-  if (!hasValue(cart.data.shipping.address.firstname)
-    || !hasValue(cart.data.shipping.address.lastname)) {
+  if (hasValue(cart.data.shipping.address)
+    && (!hasValue(cart.data.shipping.address.firstname)
+    || !hasValue(cart.data.shipping.address.lastname))
+    && !egiftWithVirtualProduct) {
     logger.error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', {
       '@cart': JSON.stringify(cart),
     });
@@ -2101,7 +2196,10 @@ window.commerceBackend.placeOrder = async (data) => {
     cartId: window.commerceBackend.getCartId(),
   };
 
-  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
+  // As we are using guest cart update in case of Topup, we will not use
+  // bearerToken.
+  const useBearerToken = (getTopUpQuote() === null);
+  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT', null, useBearerToken)
     .then(async (response) => {
       const result = {
         success: true,
@@ -2128,17 +2226,47 @@ window.commerceBackend.placeOrder = async (data) => {
         return { data: result };
       }
 
-      if (!hasValue(response.data) || hasValue(response.data.error)) {
+      if (!hasValue(response.data)) {
+        logger.warning('Got empty response while placing the order.');
         return response;
       }
 
-      const orderId = parseInt(response.data, 10);
-      if (!orderId) {
-        logger.error('Place order returned an empty order id. Response: @response Cart: @cart .', {
+      let orderId = parseInt(response.data, 10);
+
+      // In case of errors, double check the order.
+      if (hasValue(response.data.error)
+        && response.data.error_code >= 500
+        && getCartSettings('doubleCheckEnabled')
+        && isUserAuthenticated()
+        && !isPostpayPaymentMethod(data.data.paymentMethod.method)
+        && !isUpapiPaymentMethod(data.data.paymentMethod.method)
+      ) {
+        // Get quote_id from last order to compare with cart id.
+        const lastOrder = await getLastOrder(drupalSettings.userDetails.customerId, true);
+        if (hasValue(lastOrder)
+          && hasValue(lastOrder.quote_id)
+          && lastOrder.quote_id === cart.data.cart.id
+        ) {
+          orderId = lastOrder.order_id;
+          // We were able to match the last order id with the cart submitted.
+          logger.warning('Place order failed but order was placed, we will move forward. Message: @message. Reserved order id: @reservedOrderId. Cart id: @cartId', {
+            '@cartId': cart.data.cart.id,
+            '@message': (hasValue(response.data.error_message)) ? response.data.error_message : '',
+            '@reservedOrderId': (hasValue(cart.data.cart.reserved_order_id)) ? cart.data.cart.reserved_order_id : '',
+          });
+        }
+      }
+
+      if (!orderId || Number.isNaN(orderId)) {
+        logger.error('Place order failed. Response: @response, Cart: @cart.', {
           '@response': JSON.stringify(response),
           '@cart': JSON.stringify(cart),
         });
 
+        // If response already has error details return them as is.
+        if (hasValue(response.data.error)) {
+          return response;
+        }
         result.error = true;
         result.error_code = 604;
         result.success = false;

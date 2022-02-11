@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   var getProductDataRequests = {};
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};
@@ -10,14 +9,11 @@
 
   Drupal.alshayaSpc.getCartData = function () {
     // @todo find better way to get this using commerceBackend.
-    var cart_data = localStorage.getItem('cart_data');
-    if (cart_data) {
-      cart_data = JSON.parse(cart_data);
-      if (cart_data && cart_data.cart !== undefined) {
-        cart_data = cart_data.cart;
-        if (cart_data.cart_id !== null) {
-          return cart_data;
-        }
+    var cart_data = Drupal.getItemFromLocalStorage('cart_data');
+    if (cart_data && cart_data.cart !== undefined) {
+      cart_data = cart_data.cart;
+      if (cart_data.cart_id !== null) {
+        return cart_data;
       }
     }
 
@@ -50,15 +46,13 @@
     var data = null;
 
     try {
-      data = JSON.parse(localStorage.getItem(key));
+      data = Drupal.getItemFromLocalStorage(key);
     }
     catch (e) {
       // Do nothing, we will use PDP API to get the info again.
     }
 
-    var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
-    var currentTime = new Date().getTime();
-    if (data !== null && ((currentTime - data.created) < expireTime)) {
+    if (data) {
       try {
         callback(data, extraData);
       }
@@ -90,10 +84,10 @@
     // extraData info in an object, to trigger callback function call on
     // success of api request.
     if (getProductDataRequests[sku] && getProductDataRequests[sku]['api'] === 'requested') {
-      getProductDataRequests[sku]['callbacks'][callback] = {
+      getProductDataRequests[sku]['callbacks'].push({
         callback: callback,
         extraData: extraData,
-      };
+      });
       return;
     }
 
@@ -103,19 +97,100 @@
     if (!getProductDataRequests[sku]) {
       getProductDataRequests[sku] = {
         'api': 'requested',
-        'callbacks': {},
+        'callbacks': [],
       }
-      getProductDataRequests[sku]['callbacks'][callback] = {
+      getProductDataRequests[sku]['callbacks'].push({
         callback: callback,
         extraData: extraData,
-      };
+      });
     }
 
     const parentSKU = Drupal.hasValue(extraData.parentSKU) ? extraData.parentSKU : null;
     window.commerceBackend.getProductDataFromBackend(sku, parentSKU).then(function () {
-      getProductDataRequests[sku]['api'] = 'finished';
+      window.commerceBackend.callProductDataCallbacks(sku);
     });
   };
+
+  /**
+   * Fetches the product data from local storage.
+   *
+   * The difference of this with Drupal.alshayaSpc.getLocalStorageProductData()
+   * is that the function directly returns the data instead of calling the
+   * callback.
+   *
+   * @param {string} sku
+   *   SKU value.
+   *
+   * @returns {Object|Boolean}
+   *   If product is found in storage, it is returned else false is returned.
+   */
+  Drupal.alshayaSpc.getLocalStorageProductDataV2 = function (sku) {
+    var langcode = $('html').attr('lang');
+    var key = ['product', langcode, sku].join(':');
+
+    var data = null;
+
+    try {
+      data = Drupal.getItemFromLocalStorage(key);
+    }
+    catch (e) {
+      // Do nothing, we will use PDP API to get the info again.
+    }
+
+    if (data) {
+      return data;
+    }
+
+    return false;
+  };
+
+  /**
+   * V2 version of Drupal.alshayaSpc.getProductData().
+   *
+   * This method uses async/await instead of the callback invocation method
+   * followed by the V1 version.
+   *
+   * @param {string} sku
+   *   SKU value.
+   * @param {string|null} parentSKU
+   *   Parent sku value.
+   */
+  Drupal.alshayaSpc.getProductDataV2 = async function (sku, parentSKU = null) {
+    var data = Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
+    if (data) {
+      return data;
+    }
+
+    // Call API, fetch data and store product data in storage.
+    await window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
+
+    // Return product data from storage.
+    return Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
+  }
+
+  /**
+   * V2 version of Drupal.alshayaSpc.getProductData().
+   *
+   * This method is syncronous to execute code in sequence so that we have
+   * proper execution of code.
+   *
+   * @param {string} sku
+   *   SKU value.
+   * @param {string|null} parentSKU
+   *   Parent sku value.
+   */
+  Drupal.alshayaSpc.getProductDataV2Synchronous = function (sku, parentSKU = null) {
+    var data = Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
+    if (data) {
+      return data;
+    }
+
+    // Call API, fetch data and store product data in storage.
+    window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
+
+    // Return product data from storage.
+    return Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
+  }
 
   Drupal.alshayaSpc.storeProductData = function (data) {
     var langcode = $('html').attr('lang');
@@ -124,7 +199,7 @@
     // This is to avoid the situation where a child product have more than one
     // Parent products. In this case it will fetch the product name and id of
     // the parent product from the local storage.
-    var localStorageData = JSON.parse(localStorage.getItem(key));
+    var localStorageData = Drupal.getItemFromLocalStorage(key);
     if (localStorageData != null && localStorageData.gtmAttributes !== undefined) {
       data.gtmAttributes.id = localStorageData.gtmAttributes.id ? localStorageData.gtmAttributes.id : data.gtmAttributes.id;
       data.gtmAttributes.name = localStorageData.gtmAttributes.name ? localStorageData.gtmAttributes.name : data.gtmAttributes.name;
@@ -136,6 +211,7 @@
       'id': data.id,
       'sku': data.sku,
       'parentSKU': data.parentSKU,
+      'skuType': data.skuType,
       'title': data.title,
       'url': data.url,
       'image': data.image,
@@ -147,12 +223,16 @@
       'maxSaleQtyParent': data.maxSaleQtyParent,
       'gtmAttributes': data.gtmAttributes,
       'isNonRefundable': data.isNonRefundable,
-      'created': new Date().getTime(),
       'stock': data.stock,
       'cncEnabled': data.cncEnabled,
     };
 
-    localStorage.setItem(key, JSON.stringify(productData));
+    // Add product data in local storage with expiration time.
+    Drupal.addItemInLocalStorage(
+      key,
+      productData,
+      parseInt(drupalSettings.alshaya_spc.productExpirationTime) * 60,
+    );
 
     // Return as well if required for re-use.
     return data;
@@ -266,6 +346,7 @@
     Drupal.alshayaSpc.storeProductData({
       sku: productDataSKU,
       parentSKU: parentSKU,
+      skuType: productInfo.type,
       title: productName,
       url: productUrl,
       image: productImage,
@@ -282,30 +363,27 @@
     });
   }
 
+  /**
+   * Call the callbacks for product data.
+   *
+   * @param {string} sku
+   *   The SKU value.
+   */
+  window.commerceBackend.callProductDataCallbacks = function callProductDataCallbacks(sku) {
+    getProductDataRequests[sku]['api'] = 'finished';
+
+    if (getProductDataRequests[sku]['callbacks'].length > 0) {
+      getProductDataRequests[sku]['callbacks'].forEach(function (callbackData) {
+        Drupal.alshayaSpc.getLocalStorageProductData(sku, callbackData.callback, callbackData.extraData);
+      });
+      // Delete the object for the sku, as we don't need this data on the
+      // page any more.
+      delete getProductDataRequests[sku];
+    }
+  }
+
   Drupal.behaviors.spcCartUtilities = {
     attach: function(context) {
-      // Ajax success to trigger callbacks once api request from
-      // Drupal.alshayaSpc.getProductData finished.
-      $(document).once('getProductData-success').ajaxSuccess(function( event, xhr, settings ) {
-        if (!settings.hasOwnProperty('requestOrigin') || settings.requestOrigin !== 'getProductData') {
-          return;
-        }
-
-        // Check if the xhr status is successful.
-        // ref: docroot/libraries/jqueryvalidate/lib/jquery.form.js:623
-        if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
-          var data = xhr.responseJSON;
-          if (Object.keys(getProductDataRequests[data.sku]['callbacks']).length > 0) {
-            for (var key in getProductDataRequests[data.sku]['callbacks']) {
-              var callbackObj = getProductDataRequests[data.sku]['callbacks'][key];
-              Drupal.alshayaSpc.getLocalStorageProductData(data.sku, callbackObj.callback, callbackObj.extraData);
-            }
-            // Delete the object for the sku, as we don't need this data on the
-            // page any more.
-            delete getProductDataRequests[data.sku];
-          }
-        }
-      });
       // Set analytics data in hidden field.
       Drupal.SpcPopulateDataFromGA();
     }
@@ -359,7 +437,7 @@
     if (cartId) {
       context.cCartId = cartId;
       const cartData = Drupal.alshayaSpc.getCartData();
-      if (typeof cartData.cart_id_int !== 'undefined') {
+      if (cartData && typeof cartData.cart_id_int !== 'undefined') {
         context.cCartIdInt = cartData.cart_id_int;
       }
     }

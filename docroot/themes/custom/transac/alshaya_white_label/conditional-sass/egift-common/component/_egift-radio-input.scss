@@ -1,0 +1,53 @@
+.egift-input-field {
+  &-wrapper {
+    display: flex;
+    align-items: center;
+
+    .egift-input-field-item {
+      &:first-child {
+        margin-#{$right}: 4.375rem;
+      }
+
+      input[type=radio] {
+        display: none;
+      }
+
+      input[type=radio] ~ label {
+        &::before {
+          content: '';
+          width: 0.875rem;
+          height: 0.875rem;
+          background: $egift-input-radio-background;
+          display: inline-block;
+          border-radius: 100%;
+          border: 1px solid $primary_radiobtn_empty;
+          margin-#{$right}: 0.4rem;
+          position: relative;
+          top: 0.125rem;
+        }
+      }
+
+      input[type=radio]:checked ~ label::before {
+        border: 0.25rem solid $primary_radiobtn_filled;
+      }
+
+      input[type=checkbox] ~ label::before {
+        line-height: 1.3125rem;
+        display: inline-block;
+        vertical-align: bottom;
+        color: $appointment-checkbox-color;
+        margin-#{$right}: 0.4rem;
+      }
+
+      input[type=checkbox]:checked ~ label::before {
+        line-height: 1.3125rem;
+      }
+
+      label {
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+        color: $egift-purchase-radio-label;
+      }
+    }
+  }
+}

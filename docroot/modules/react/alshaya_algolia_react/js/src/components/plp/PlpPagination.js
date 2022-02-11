@@ -3,6 +3,7 @@ import { connectStats } from 'react-instantsearch-dom';
 
 import ProgressBar from '../algolia/widgets/ProgressBar';
 import { showLoader } from '../../utils';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 // Stats with pagination.
 const PaginationStats = connectStats(({ nbHits, currentResults }) => (
@@ -19,33 +20,40 @@ const PaginationStats = connectStats(({ nbHits, currentResults }) => (
   </>
 ));
 
-const PlpPagination = React.memo((props) => {
-  const loadNextCotent = () => {
+const PlpPagination = ({
+  refineNext, results, hasMore, children,
+}) => {
+  const loadNextContent = (e) => {
+    e.preventDefault();
+    e.persist();
+    e.stopPropagation();
+
     showLoader();
-    props.refineNext();
+    refineNext(e);
   };
 
-  return (props.results > 0) ? (
-    <ul className="js-pager__items pager">
-      <li className="pager__item">
-        <PaginationStats currentResults={props.results} />
-      </li>
-      {props.hasMore && (
+  return (
+    <ConditionalView condition={results > 0}>
+      <ul className="js-pager__items pager">
         <li className="pager__item">
-          <button
-            type="button"
-            className="button"
-            rel="next"
-            onClick={() => loadNextCotent()}
-          >
-            {props.children}
-          </button>
+          <PaginationStats currentResults={results} />
         </li>
-      )}
-    </ul>
-  ) : (null);
-}, (prevProps, nextProps) => (
-  prevProps.results === nextProps.results && prevProps.hasMore === nextProps.hasMore
-));
+
+        <ConditionalView condition={hasMore}>
+          <li className="pager__item">
+            <button
+              type="button"
+              className="button"
+              rel="next"
+              onClick={(e) => loadNextContent(e)}
+            >
+              {children}
+            </button>
+          </li>
+        </ConditionalView>
+      </ul>
+    </ConditionalView>
+  );
+};
 
 export default PlpPagination;

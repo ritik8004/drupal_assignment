@@ -97,7 +97,7 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
         'max_age' => $config->get('max_age'),
         'reviews_initial_load' => $config->get('reviews_initial_load'),
         'reviews_on_loadmore' => $config->get('reviews_on_loadmore'),
-        'user_id' => $this->currentUser->id(),
+        'user_id' => alshaya_acm_customer_is_customer($this->currentUser, TRUE),
         'stats' => 'Reviews',
         'myaccount_reviews_limit' => $config->get('myaccount_reviews_limit'),
       ],

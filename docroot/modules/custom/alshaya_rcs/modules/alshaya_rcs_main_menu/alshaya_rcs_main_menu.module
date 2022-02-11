@@ -5,9 +5,7 @@
  * Constains hooks and alters for Alshaya Rcs Main Menu.
  */
 
-use Drupal\node\Entity\Node;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\taxonomy\TermInterface;
@@ -23,8 +21,8 @@ function alshaya_rcs_main_menu_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-rcs-dp-app-navigation',
       'variables' => [
         'data' => NULL,
-      ]
-    ]
+      ],
+    ],
   ];
 }
 
@@ -192,7 +190,8 @@ function alshaya_rcs_main_menu_node_delete(EntityInterface $node) {
 /**
  * Invalidate enriched term cache tags.
  *
- * @param \Drupal\Core\Entity\EntityInterface $node.
+ * @param \Drupal\Core\Entity\EntityInterface $node
+ *   Product node object.
  */
 function _alshaya_rcs_main_menu_invalidate_enriched_term_cache(EntityInterface $node) {
   $path_processor = \Drupal::service('Drupal\rcs_placeholders\Service\RcsPhPathProcessor');
@@ -219,34 +218,30 @@ function alshaya_rcs_main_menu_preprocess_block(&$variables) {
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function alshaya_rcs_main_menu_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  // Add template suggestion based on machine name.
+  if (array_key_exists('#id', $variables['elements'])) {
+    switch ($variables['elements']['#id']) {
+      case 'alshayarcsshopby':
+        $suggestions[] = 'block__shopby';
+        break;
+    }
+  }
+}
+
+/**
  * Implements hook_rcs_placeholders_graphql_query().
  */
 function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
-  $config = \Drupal::config('alshaya_rcs_main_menu.settings');
-  $menu_max_depth = $config->get('menu_max_depth');
   $query_fields = [];
+  $rcs_main_menu_config = \Drupal::config('alshaya_rcs_main_menu.settings');
+  $menu_max_depth = $rcs_main_menu_config->get('menu_max_depth');
 
-  for ($i = 0; $i < $menu_max_depth; $i++) {
-    $items = [
-      'children_count',
-      'children' => [
-        'id',
-        'level',
-        'name',
-        'meta_title',
-        'include_in_menu',
-        'url_path',
-        'url_key',
-        'show_on_dpt',
-        'show_in_lhn',
-        'show_in_app_navigation',
-        'position',
-        'is_anchor',
-        'display_view_all',
-      ],
-    ];
-    $query_fields = array_merge_recursive($items, ['children' => $query_fields]);
-  }
+  $query_fields['navigationMenu'] = \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')
+    ->getRcsCategoryMenuQuery($menu_max_depth);
+  $query_fields['#cache']['tags'] = $rcs_main_menu_config->getCacheTags();
 
-  return ['navigation_menu' => $query_fields];
+  return $query_fields;
 }

@@ -14,6 +14,8 @@ import PdpRelatedProducts from '../pdp-related-products';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
+import isAuraEnabled from '../../../../../js/utilities/helper';
+import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 import magv2Sticky from '../../../utilities/magv2StickySidebar';
 import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
 import Lozenges
@@ -22,6 +24,8 @@ import PpdRatingsReviews from '../pdp-ratings-reviews';
 import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import PdpExpressDelivery from '../pdp-express-delivery';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
+import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -77,6 +81,7 @@ const PdpLayout = () => {
     freeGiftPromoType,
     deliveryOptions,
     expressDeliveryClass,
+    isProductBuyable,
   } = productValues;
 
   const emptyRes = (
@@ -127,6 +132,7 @@ const PdpLayout = () => {
     });
   };
 
+  const [cardNumber, setCard] = useState(null);
   const stickyButton = () => {
     const headerButton = () => {
       if ((buttonRef !== null) && (buttonRef !== undefined)) {
@@ -150,6 +156,13 @@ const PdpLayout = () => {
   useEffect(() => {
     sidebarSticky();
     showStickyHeader();
+
+    if (isAuraEnabled()) {
+      document.addEventListener('customerDetailsFetched', (e) => {
+        const { stateValues } = e.detail;
+        setCard(stateValues.cardNumber);
+      });
+    }
     stickyButton();
   },
   []);
@@ -161,6 +174,9 @@ const PdpLayout = () => {
   const removePanelData = useCallback(() => {
     setPanelContent(null);
   }, [panelContent]);
+
+  // Get configurable options only for configurable product.
+  const options = getAttributeOptionsForWishlist(configurableCombinations, skuItemCode, variant);
 
   return (skuItemCode) ? (
     <>
@@ -175,10 +191,12 @@ const PdpLayout = () => {
           brandLogoAlt={brandLogoAlt}
           brandLogoTitle={brandLogoTitle}
           skuCode={skuItemCode}
+          skuMainCode={skuMainCode}
           configurableCombinations={configurableCombinations}
           productInfo={productInfo}
           pdpLabelRefresh={pdpLabelRefresh}
           context="main"
+          options={options}
         />
       </div>
       <div className="magv2-main" ref={mainContainer}>
@@ -203,6 +221,7 @@ const PdpLayout = () => {
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
             animateTitlePrice
+            context="main"
           />
           <div className="promotions promotions-full-view-mode">
             <PdpPromotionLabel
@@ -223,6 +242,9 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
+          <ConditionalView condition={isAuraEnabled()}>
+            <AuraPDP mode="main" />
+          </ConditionalView>
           <ConditionalView condition={isExpressDeliveryEnabled()
             && checkProductExpressDeliveryStatus(skuItemCode)}
           >
@@ -230,7 +252,7 @@ const PdpLayout = () => {
               {deliveryOptions && deliveryOptions !== null
                 && Object.keys(deliveryOptions).length > 0
                 && Object.keys(deliveryOptions).map((option) => (
-                  <div key={option} className={`express-delivery-text ${deliveryOptions[option].status}`}>
+                  <div key={option} className={`express-delivery-text ${option} ${deliveryOptions[option].status}`}>
                     <span>{deliveryOptions[option].label}</span>
                   </div>
                 ))}
@@ -257,6 +279,18 @@ const PdpLayout = () => {
               />
             ) : outOfStock}
           </div>
+          {/* Here skuMainCode is parent sku of variant selected */}
+          <ConditionalView condition={window.innerWidth > 767}>
+            <WishlistContainer
+              sku={skuItemCode}
+              skuCode={skuMainCode}
+              context="magazinev2"
+              position="top-right"
+              format="link"
+              title={title}
+              options={options}
+            />
+          </ConditionalView>
           <PdpDescription
             skuCode={skuMainCode}
             pdpDescription={description}
@@ -269,7 +303,7 @@ const PdpLayout = () => {
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />
-          <ConditionalView condition={isExpressDeliveryEnabled()}>
+          <ConditionalView condition={isExpressDeliveryEnabled() && isProductBuyable}>
             <PdpExpressDelivery />
           </ConditionalView>
           <ConditionalView condition={!isExpressDeliveryEnabled()}>
@@ -291,6 +325,7 @@ const PdpLayout = () => {
               skuItemCode={skuItemCode}
               getPanelData={getPanelData}
               removePanelData={removePanelData}
+              cardNumber={cardNumber}
             />
           ))}
         </div>

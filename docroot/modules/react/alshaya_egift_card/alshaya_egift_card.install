@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Drupal\Core\Url;
+use Drupal\block\BlockInterface;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_egift_card_install() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_egift_card', 'alshaya_egift_card.translations');
+  if ($translations = _alshaya_egift_card_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+
+  // Allow breadcrumb on url.
+  $block = \Drupal::service('entity_type.manager')->getStorage('block')->load('breadcrumbs');
+  if ($block instanceof BlockInterface) {
+    $visibility = $block->getVisibility();
+    $breadcrumb_url_string = PHP_EOL . '/' . Url::fromRoute('alshaya_egift_card.egift_card_purchase', [])->getInternalPath();
+    if (isset($visibility['request_path']['pages']) && !stripos($visibility['request_path']['pages'], $breadcrumb_url_string)) {
+      $visibility['request_path']['pages'] = $visibility['request_path']['pages'] . $breadcrumb_url_string;
+      $block->setVisibilityConfig('request_path', $visibility['request_path']);
+      $block->save();
+    }
+  } else {
+    \Drupal::logger('alshaya_egift_card')->notice('Breadcrumb block is missing or not configured properly.');
+  }
+  // Enable My Gift Card link in the menu.
+  $config = \Drupal::configFactory()->getEditable('alshaya_user.settings');
+  $alshaya_my_egift_card = unserialize($config->get('my_account_enabled_links'));
+  $alshaya_my_egift_card['alshaya_my_egift_card'] = 'alshaya_my_egift_card';
+  $config->set('my_account_enabled_links', serialize($alshaya_my_egift_card));
+  $config->save();
+}

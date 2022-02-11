@@ -1,0 +1,19 @@
+.alias--cart {
+  .shipping-methods {
+    .sku-cart-delivery-methods {
+      .carrier-title {
+        padding: 0.3rem 1.5rem 0.3rem 0.3rem;
+
+        html[lang=ar] & {
+          padding: 0.3rem 0.3rem 0.3rem 1.5rem;
+        }
+      }
+    }
+  }
+
+  #delivery-area-select {
+    .delivery-area-label {
+      align-items: baseline;
+    }
+  }
+}

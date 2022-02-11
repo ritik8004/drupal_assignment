@@ -53,7 +53,7 @@ variables:
   floor: 'Floor C'
   mobile: '55667788'
   store_area: 'Mubarak Al Kabeer Coop'
-  language_city_option: 'Ahmadi'
+  language_city_option: 'الأحمدي'
   language_area_option: 'أم الهيمان'
   order_confirm_text: 'Order Confirmation'
   order_detail: 'order detail'

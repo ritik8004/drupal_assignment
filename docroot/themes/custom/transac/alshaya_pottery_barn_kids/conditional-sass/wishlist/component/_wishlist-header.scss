@@ -1,0 +1,11 @@
+body.wishlist-enabled {
+  header {
+    .region__header {
+      .block-alshaya-react-mini-cart {
+        @include breakpoint($only-tablet) {
+          top: 0.625rem;
+        }
+      }
+    }
+  }
+}

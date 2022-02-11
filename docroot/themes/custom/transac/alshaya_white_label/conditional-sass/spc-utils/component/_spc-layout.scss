@@ -86,6 +86,10 @@
       @include breakpoint($only-mobile) {
         width: 100%;
       }
+
+      @include breakpoint($only-tablet) {
+        width: 53%;
+      }
     }
 
     .spc-sidebar {
@@ -94,6 +98,10 @@
       @include breakpoint($only-mobile) {
         width: 100%;
         margin-top: 2.5rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 44%;
       }
     }
   }

@@ -158,7 +158,7 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
       && $route_match->getParameter('node')->bundle() == 'advanced_page') {
     $breadcrumb_links[] = Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>');
 
-    /* @var \Drupal\node\Entity\Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
 
     if ($field_product_category = $node->get('field_product_category')) {
@@ -219,7 +219,7 @@ function alshaya_bp_transac_pathauto_alias_alter(&$alias, array $context) {
     return;
   }
   // Remove shop-department- from url alias.
-  if (strpos($alias, 'shop-department-') !== false) {
+  if (strpos($alias, 'shop-department-') !== FALSE) {
     $alias = str_replace('shop-department-', '', $alias);
   }
 }
@@ -239,11 +239,11 @@ function alshaya_bp_transac_acq_sku_clean_synced_data_alter(&$context_results) {
     if ($data['type'] == 'taxonomy_term') {
       // Query for categories mapped in I&A pages.
       $value = \Drupal::database()->select('taxonomy_term__field_remove_shop_prefix', 'frsp')
-      ->fields('frsp', ['field_remove_shop_prefix_value'])
-      ->condition('entity_id', $data['entity_id'])
-      ->condition('bundle', 'acq_product_category')
-      ->execute()
-      ->fetchCol();
+        ->fields('frsp', ['field_remove_shop_prefix_value'])
+        ->condition('entity_id', $data['entity_id'])
+        ->condition('bundle', 'acq_product_category')
+        ->execute()
+        ->fetchCol();
       if (reset($value)) {
         unset($context_results[$key]);
       }
@@ -259,11 +259,12 @@ function alshaya_bp_transac_views_query_alter(ViewExecutable $view, QueryPluginB
   ($view->id() == 'product_category_level_2_3' && $view->current_display === 'block_2')) {
     foreach ($query->where as &$condition_group) {
       foreach ($condition_group['conditions'] as &$condition) {
-        // Boolean field value is made 5 so that terms appear irrespective of TRUE or FALSE.
+        // Boolean field value is made 5 so that terms appear irrespective
+        // of TRUE or FALSE.
         if (($condition['field'] == 'taxonomy_term__field_category_include_menu.field_category_include_menu_value') ||
         ($condition['field'] == 'taxonomy_term_field_data_taxonomy_term__parent__taxonomy_term__field_category_include_menu.field_category_include_menu_value')) {
           $condition['value'] = 5;
-          $condition['operator']='!=';
+          $condition['operator'] = '!=';
         }
       }
     }
@@ -286,46 +287,15 @@ function alshaya_bp_transac_alshaya_search_api_facet_block_data_alter(&$block_da
  */
 function alshaya_bp_transac_alshaya_performance_preload_alter(array &$preload) {
   // Footlocker's icon font comes from whitelabel.
-  $icon_directory_path = '/' . drupal_get_path('theme', 'alshaya_white_label') . '/fonts';
-
   $preload[] = [
     'as' => 'font',
-    'href' => $icon_directory_path . '/alshaya-icons.woff?D7b5iT',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff',
-  ];
-
-  $themeHandler = \Drupal::service('theme_handler');
-  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
-  $fonts_directory_path = '/' . $themePath . '/fonts';
-
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/BootsSharp-Regular.woff2',
+    'href' => '/themes/custom/transac/alshaya_boots/fonts/BootsSharp-Regular.woff2',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];
   $preload[] = [
     'as' => 'font',
-    'href' => $fonts_directory_path . '/BootsSharp-Bold.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/BootsSharp-Light.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/Tahoma.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/Tahoma-Bold.woff2',
+    'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-icons.woff2?D7b5if',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];

@@ -3,54 +3,46 @@
  * related get, set, remove.
  */
 
-function removeSearchQuery() {
-  localStorage.removeItem('algolia_search_query');
-}
-
-/**
- * Remove search query from local storage to not render search results
- * block when user redirects to another page.
- */
-window.onbeforeunload = () => {
-  removeSearchQuery();
-};
-
-/**
- * Remove search query from local storage to not render search results when
- * no #query or #refinement in url.
- */
-window.addEventListener('DOMContentLoaded', () => {
-  const query = window.location.hash;
-  if (query.indexOf('#query') < 0 && query.indexOf('#refinementList') < 0) {
-    removeSearchQuery();
-  }
-});
+// Global variable to keep algolia search query.
+window.algoliaSearchQuery = '';
 
 function setSearchQuery(queryValue) {
-  localStorage.setItem('algolia_search_query', queryValue);
+  window.algoliaSearchQuery = queryValue;
 }
 
 function getSearchQuery() {
-  return localStorage.getItem('algolia_search_query');
+  return window.algoliaSearchQuery;
 }
 
 function setLangRedirect(queryValue) {
-  localStorage.setItem('algoliaLangRedirect', queryValue);
+  Drupal.addItemInLocalStorage('algoliaLangRedirect', queryValue);
 }
 
 function removeLangRedirect() {
-  localStorage.removeItem('algoliaLangRedirect');
+  Drupal.removeItemFromLocalStorage('algoliaLangRedirect');
 }
 
 function getLangRedirect() {
-  return localStorage.getItem('algoliaLangRedirect');
+  return Drupal.getItemFromLocalStorage('algoliaLangRedirect');
 }
 
 function setClickedItem(storageDetails) {
-  localStorage.setItem(window.location.hash, JSON.stringify(storageDetails));
+  Drupal.addItemInLocalStorage(`search:${window.location.hash}`, storageDetails);
 }
 
 function storeClickedItem(event, pageType) {
+  // Do nothing for buttons inside our markup, for example in slick-dots.
+  // Do nothing if user trying to use cmd/ctrl + click OR
+  // cmd/ctrl + shift + click.
+  if (event.target.tagName.toLowerCase() === 'button'
+    || event.metaKey
+    || event.shiftKey
+    || event.ctrlKey
+    || event.altKey
+  ) {
+    return;
+  }
+
   const articleNode = event.target.closest('.node--view-mode-search-result');
 
   // This happens when we display the Add To Bag configurable drawer. The drawer
@@ -59,16 +51,20 @@ function storeClickedItem(event, pageType) {
     return;
   }
 
+  const sortByOption = document.getElementById('sort_by').querySelector('.active-item');
+  const sortByIndex = sortByOption.getAttribute('data-sort');
+
   const storageDetails = {
     sku: articleNode.getAttribute('data-sku'),
     grid_type: articleNode.classList.contains('product-large') ? 'large' : 'small',
     page: Drupal.algoliaGetActualPageNumber(),
+    sort: sortByIndex,
   };
 
   if (pageType === 'plp') {
-    localStorage.setItem(
+    Drupal.addItemInLocalStorage(
       `${pageType}:${window.location.pathname}`,
-      JSON.stringify(storageDetails),
+      storageDetails,
     );
   } else {
     setClickedItem(storageDetails);
@@ -77,7 +73,6 @@ function storeClickedItem(event, pageType) {
 
 export {
   setSearchQuery,
-  removeSearchQuery,
   getSearchQuery,
   setLangRedirect,
   removeLangRedirect,

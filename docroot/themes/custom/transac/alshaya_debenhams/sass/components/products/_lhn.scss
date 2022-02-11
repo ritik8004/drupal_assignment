@@ -1,0 +1,33 @@
+.block-alshaya-category-lhn-block,
+.block-alshaya-product-list-lhn-block {
+  ul {
+    li {
+      margin-top: 0.4375rem;
+
+      a,
+      span {
+        &.lhn-3,
+        &.lhn-4 {
+          margin-#{$left}: 0.9735rem;
+          text-transform: capitalize;
+
+          &.active {
+            font-family: $alshaya-thin;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  > ul > li {
+    margin-bottom: 1rem;
+
+    > .lhn-2 {
+      font-family: $dh-semibold;
+      font-size: 0.75rem;
+      text-transform: capitalize;
+      letter-spacing: 1px;
+    }
+  }
+}

@@ -206,7 +206,7 @@ function alshaya_acm_update_8010() {
  * Enable consumers module and configure client.
  */
 function alshaya_acm_update_8009() {
-  // @TODO: Move module dependency to acq_commerce module after discussion.
+  // @todo Move module dependency to acq_commerce module after discussion.
   // We have to create consumer in custom code only so nothing blocking us
   // from using it in our custom module for now.
   // Enable consumers module.

@@ -2,12 +2,15 @@ import React from 'react';
 import PostpayCart
   from '../../../../../alshaya_spc/js/cart/components/postpay/postpay';
 import Postpay from '../../../../../alshaya_spc/js/utilities/postpay';
+import TabbyWidget from '../../../../../js/tabby/components';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
   shortDetail = false, brandLogo,
   brandLogoAlt, brandLogoTitle, animateTitlePrice,
-  hidepostpay,
+  hidepostpay, context,
 }) => {
   let discountPercantage = null;
   const productPriceNumber = pdpProductPrice.replace(',', '');
@@ -74,6 +77,13 @@ const PdpInfo = ({
         </div>
       </div>
       {postpay}
+      <ConditionalView condition={context === 'main' && Tabby.isTabbyEnabled()}>
+        <TabbyWidget
+          classNames=""
+          pageType="pdp"
+          id="tabby-promo-pdp-main"
+        />
+      </ConditionalView>
     </div>
   );
 };

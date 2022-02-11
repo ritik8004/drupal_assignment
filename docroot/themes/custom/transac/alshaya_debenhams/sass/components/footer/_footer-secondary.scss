@@ -57,10 +57,15 @@
   }
 
   .l-container {
-    @include container(77rem);
+    @include container(74rem);
 
     .path--cart & {
-      @include container(77rem);
+      @include container(74rem);
+    }
+
+    .path--checkout &,
+    .alias--cart-login & {
+      @include container(64rem);
     }
   }
 }
@@ -90,6 +95,10 @@
   }
 
   .c-footer__logos {
+    @include breakpoint($only-mobile) {
+      background: transparent;
+    }
+
     @include breakpoint($tablet) {
       float: $right;
     }

@@ -4,6 +4,7 @@
  * @file
  * Module file with hooks specific to COS brand.
  */
+
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -48,17 +49,14 @@ function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity
     return;
   }
 
-  $path = drupal_get_path('module', 'alshaya_cos_transac');
-
-  // Override default template for description block.
-  $templates['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
-  $templates['product']['description-details']['block'] = "$path/templates/rcs-product-description-details-block.handlebars";
+  $templates['product.block.description'] = 'alshaya_cos_transac';
+  $templates['product.block.description_details'] = 'alshaya_cos_transac';
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
   if ($sku_manager->getPdpLayout($entity) == 'pdp-magazine') {
-    // Override default template for short description block when using magazine layout.
-    $templates['product']['short_description']['block'] = "$path/templates/rcs-product-short-description-full-magazine-block.handlebars";
+    $templates['product.block.short_description.pdp-magazine'] = "alshaya_cos_transac";
   }
 }
 
@@ -67,9 +65,33 @@ function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity
  */
 function alshaya_cos_transac_preprocess_product_zoom(&$vars) {
   $pdp_gallery_type = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_type');
-  // Set pdp_gallery_type to show swatch images in mobile with classic gallery in magazine layout.
+  // Set pdp_gallery_type to show swatch images in mobile with classic
+  // gallery in magazine layout.
   if ($pdp_gallery_type == 'classic') {
     $vars['pdp_gallery_type'] = $pdp_gallery_type;
+  }
+
+  // Show delivery option labels if express delivery is enabled.
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+
+  if ($express_delivery_config->get('status')) {
+    // Get parent sku.
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $vars['labels']['#sku'] ?? '';
+    $parent_sku = $skuManager->getParentSkuBySku($sku) ?? $sku;
+
+    if (!empty($parent_sku)) {
+      $sku = $parent_sku->getSku();
+      $delivery_options = alshaya_acm_product_get_delivery_options($sku);
+      if (!empty($delivery_options['values'])) {
+        foreach ($delivery_options['values'] as $key => $option) {
+          $vars['delivery_options'][$key]['status']['#markup'] = $option['status'];
+          $vars['delivery_options'][$key]['label']['#markup'] = $option['label'];
+        }
+      }
+      $vars['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
+    }
   }
 }
 
@@ -123,10 +145,12 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
+  $search_direction = 'self';
   $description_value = '';
   $desc = $skuManager->fetchProductAttribute($sku_entity, 'attr_description', $search_direction);
+  $renderer = \Drupal::service('renderer');
 
+  // Get data from article level.
   if (!empty($desc)) {
     $description_value .= $desc;
   }
@@ -146,7 +170,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
     $composition_markup['#composition']['#markup'] = $markupText;
   }
 
-  $description_value .= render($composition_markup);
+  $description_value .= $renderer->renderPlain($composition_markup);
 
   // Render the wrapper div for article warning always so that the same
   // can be filled with data on variant selection.
@@ -157,7 +181,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
       '#warning' => ['#markup' => $warning],
     ];
   }
-  $description_value .= render($warning_markup);
+  $description_value .= $renderer->renderPlain($warning_markup);
 
   $config = \Drupal::config('alshaya_acm_product.settings');
   if (!empty($config->get('legal_notice_enabled'))) {
@@ -170,7 +194,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
     '#item_code' => $sku_entity->getSku(),
   ];
 
-  $description_value .= render($item_code);
+  $description_value .= $renderer->renderPlain($item_code);
 
   $description['value'] = [
     '#markup' => $description_value,
@@ -180,7 +204,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   // which they should be displayed.
   $return['description'][] = $description;
 
-  /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+  /** @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
   $product_helper = \Drupal::service('alshaya_acm_product.helper');
   $short_desc = $product_helper->createShortDescription($description['value']['#markup']);
   $return['short_desc']['value'] = strip_tags($short_desc['html']);
@@ -194,9 +218,11 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
 function alshaya_cos_transac_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $search_direction = 'parent';
+  // Get data from article level "color variant".
   $parent_sku = $skuManager->getParentSkuBySku($child);
-  $composition = $skuManager->fetchProductAttribute($child, 'attr_composition', 'self');
-  $washing_instructions = $skuManager->fetchProductAttribute($child, 'attr_washing_instructions', 'self');
+  $composition = $skuManager->fetchProductAttribute($child, 'attr_composition', $search_direction);
+  $washing_instructions = $skuManager->fetchProductAttribute($child, 'attr_washing_instructions', $search_direction);
   $markupText = _alshaya_cos_transac_get_formated_text($composition, $washing_instructions);
   $composition_markup = '';
   if (!empty($markupText)) {
@@ -215,7 +241,7 @@ function alshaya_cos_transac_sku_variant_info_alter(array &$variant, SKUInterfac
     'markup' => $composition_markup,
   ];
 
-  $warning = $skuManager->fetchProductAttribute($child, 'attr_article_warning', 'self');
+  $warning = $skuManager->fetchProductAttribute($child, 'attr_article_warning', $search_direction);
   $warning_markup = '';
   if (!empty($warning)) {
     $markup = [

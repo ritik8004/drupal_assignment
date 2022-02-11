@@ -4,3 +4,4 @@ variables:
   spc_product_listing_page: '/shop-new-arrivals/test-new/small-ticket/'
   spc_basket_page: '/shop-new-arrivals/test-new/small-ticket/'
   spc_pdp_page: 'buy-connor-side-table-limestone.html'
+  spc_sofa_page: '/shop-furniture/sofas-sectional/'

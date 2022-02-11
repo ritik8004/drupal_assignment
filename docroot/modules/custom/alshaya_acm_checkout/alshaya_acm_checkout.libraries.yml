@@ -7,15 +7,6 @@ checkout_flow:
     - core/jquery.once
     - core/drupal
 
-click-and-collect:
-  version: 1.x
-  js:
-    js/alshaya_acm_checkout.cc.js: {}
-  dependencies:
-    - core/drupal.ajax
-    - core/underscore
-    - geolocation/geolocation.geocoder.googlegeocodingapi
-
 analytics:
   version: 1.x
   js:

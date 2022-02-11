@@ -102,4 +102,12 @@
       background: $plp-secondary-cta-hover-bg;
     }
   }
+
+  .addtobag-button {
+    background: $primary_btn_bg;
+
+    &:hover {
+      background: $plp-primary-cta-hover-bg;
+    }
+  }
 }

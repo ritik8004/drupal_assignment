@@ -100,7 +100,7 @@ export default class ReviewSummary extends React.Component {
     let filterParams = '';
     // Set default sorting options.
     const sortOptions = bazaarVoiceSettings.reviews.bazaar_voice.sorting_options;
-    const { currentSortOption } = this.state;
+    const { currentSortOption, analyticsState } = this.state;
     if (sortOptions.length > 0
       && (extraParams === undefined || currentSortOption === 'none')) {
       let optionVal = '';
@@ -161,15 +161,6 @@ export default class ReviewSummary extends React.Component {
               const { currentPage, numberOfPages } = this.state;
               this.changePaginationButtonStatus(currentPage, numberOfPages);
             });
-            const { analyticsState } = this.state;
-            // Track reviews into bazaarvoice analytics.
-            if (analyticsState === false) {
-              trackPassiveAnalytics(result.data);
-              this.setState({
-                analyticsState: true,
-              });
-            }
-            trackContentImpression(result.data);
           } else {
             this.setState({
               totalReviews: result.data.TotalResults,
@@ -177,6 +168,14 @@ export default class ReviewSummary extends React.Component {
               noResultmessage: getStringMessage('no_review_found'),
             });
           }
+          // Track reviews into bazaarvoice analytics.
+          if (!analyticsState) {
+            trackPassiveAnalytics(result.data);
+            this.setState({
+              analyticsState: true,
+            });
+          }
+          trackContentImpression(result.data);
         } else {
           removeFullScreenLoader();
           Drupal.logJavascriptError('review-summary', result.error);

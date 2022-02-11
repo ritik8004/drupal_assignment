@@ -7,7 +7,6 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\search_api\IndexInterface;
 use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
@@ -36,6 +35,11 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   $page['#attached']['drupalSettings']['add_to_bag']['display_addtobag'] = $add_to_bag_feature_status;
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $add_to_bag_settings->getCacheTags());
 
+  // Allow other modules to update the feature status so all the required
+  // libraries and settings will be available on the page but the main
+  // feature status in drupalSettings still says false.
+  \Drupal::moduleHandler()->alter('alshaya_add_to_bag_feature_status', $add_to_bag_feature_status);
+
   if (!$add_to_bag_feature_status) {
     return;
   }
@@ -54,7 +58,8 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   // Attach cart utilities library if feature is enabled.
   $page['#attached']['library'][] = 'alshaya_spc/cart_utilities';
 
-  // Check if the acm cart notification settings exist and assign notification time in drupal settings.
+  // Check if the acm cart notification settings exist and assign notification
+  // time in drupal settings.
   $acm_cart_notification_settings = \Drupal::config('alshaya_acm_cart_notification.settings');
   if ($acm_cart_notification_settings) {
     $page['#attached']['drupalSettings']['addToCartNotificationTime'] = $acm_cart_notification_settings->get('notification_time');
@@ -103,7 +108,7 @@ function alshaya_add_to_bag_preprocess_page(&$variables) {
 
   $status = \Drupal::requestStack()->getCurrentRequest()->attributes->get('exception');
   // For 404 page, page.content is not rendered so we add it to pre_content.
-  if ($status && $status->getStatusCode() == 404){
+  if ($status && $status->getStatusCode() == 404) {
     $variables['page']['pre_content']['add_to_bag_strings'] = $add_to_bag_strings;
   }
   else {
@@ -127,14 +132,14 @@ function alshaya_add_to_bag_search_api_algolia_objects_alter(array &$objects, In
       foreach ($nodeLanguages as $lan_key => $lan_value) {
         $node_object = $node->getTranslation($lan_key);
         $atb_attribute = _alshaya_add_to_bag_get_language_specific_data($lan_key, $object['sku'], $node_object);
-        if ($atb_attribute){
+        if ($atb_attribute) {
           $object[$atbAttributeName][$lan_key] = $atb_attribute;
         }
       }
     }
     else {
       $atb_attribute = _alshaya_add_to_bag_get_language_specific_data($object['search_api_language'], $object['sku'], $node);
-      if($atb_attribute){
+      if ($atb_attribute) {
         $object[$atbAttributeName] = $atb_attribute;
       }
     }
@@ -152,7 +157,7 @@ function alshaya_add_to_bag_alshaya_product_list_exclude_attribute_alter(array &
 /**
  * Get Language specific SKU and Node.
  */
-function _alshaya_add_to_bag_get_language_specific_data($lang, $sku_data, $node){
+function _alshaya_add_to_bag_get_language_specific_data($lang, $sku_data, $node) {
   $sku = SKU::loadFromSku($sku_data, $lang);
   if (!($sku instanceof SKUInterface)) {
     return FALSE;

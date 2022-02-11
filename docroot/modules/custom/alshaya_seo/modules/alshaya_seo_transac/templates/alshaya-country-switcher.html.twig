@@ -1,0 +1,12 @@
+<div class='switch-country'>
+    <label for='switch_country'>{{ 'Select country'|t }}</label>
+    <select name='switch_country' class='switch_country_dropdown' onchange='location = this.value;'>
+        {% for marketName, marketUrl in markets %}
+            {% if currentMarket == marketName %}
+                <option value='{{ marketUrl }}' selected='selected'>{{ marketName }}</option>
+            {% else %}
+                <option value='{{ marketUrl }}'>{{ marketName }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+</div>

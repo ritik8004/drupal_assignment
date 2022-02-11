@@ -57,6 +57,14 @@ function datadog_js_page_attachments(array &$attachments) {
     'datadog_js_init',
   ];
 
+  array_unshift($attachments['#attached']['html_head'], $init_script);
+
+  // Ignoring the cross origin script if qparam external is set to 0.
+  $external = \Drupal::request()->get('external');
+  if (isset($external) && $external == 0) {
+    return;
+  }
+
   $library_script = [
     [
       '#tag' => 'script',
@@ -68,6 +76,5 @@ function datadog_js_page_attachments(array &$attachments) {
     'datadog_js_library',
   ];
 
-  array_unshift($attachments['#attached']['html_head'], $init_script);
   array_unshift($attachments['#attached']['html_head'], $library_script);
 }

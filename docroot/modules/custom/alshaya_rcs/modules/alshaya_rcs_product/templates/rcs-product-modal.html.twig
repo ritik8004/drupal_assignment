@@ -1,14 +1,25 @@
 {{ attach_library('alshaya_white_label/attribute') }}
 
-{%
-  set classes = [
-  'node',
-  'node--type-' ~ node.bundle|clean_class,
-  view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
-]
-%}
-
-<article class="entity--type-node" data-vmode="modal" data-sku="#rcs.product_modal._self|sku#" {{ gtm_attributes }}>
+<article
+    class="entity--type-node"
+    data-vmode="modal"
+    data-sku="#rcs.product_modal._self|sku#"
+    gtm-type="gtm-product-link"
+    gtm-category="#rcs.product_modal.gtm_attributes.category#"
+    gtm-container="not defined"
+    gtm-view-mode="modal"
+    gtm-cart-value=""
+    gtm-main-sku="#rcs.product_modal._self|sku#"
+    gtm-name="#rcs.product_modal.name#"
+    gtm-product-sku=""
+    gtm-product-sku-class-identifier="#rcs.product_modal.gtm_attributes.id#"
+    gtm-sku-type="#rcs.product_modal._self|sku-type#"
+    gtm-brand="#rcs.product_modal.gtm_attributes.brand#"
+    gtm-dimension4="#rcs.product_modal.gtm_attributes.dimension4#"
+    gtm-price="#rcs.product_modal.gtm_attributes.price#"
+    gtm-dimension3="#rcs.product_modal.gtm_attributes.dimension3#"
+    gtm-stock=""
+  >
   {# The following class will be changed to acq-content-product-modal in JS. #}
   {# It is added here directly in order to avoid JS detecting multiple classes. #}
   <div class="acq-content-product-modal-template">

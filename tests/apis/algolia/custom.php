@@ -42,14 +42,14 @@ function algolia_get_query_suggestions($app_id, $app_secret_admin, $index) {
   return $queries;
 }
 
-function algolia_add_query_suggestion($app_id, $app_secret_admin, $name, $data) {
+function algolia_add_query_suggestion($app_id, $app_secret_admin, $data) {
   $ch = curl_init();
 
   curl_setopt($ch, CURLOPT_URL, ALGOLIA_QUERY_SUGGESTTIONS_URL);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
   curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_TIMEOUT, 3000);
+  curl_setopt($ch, CURLOPT_TIMEOUT, 30000);
 
   curl_setopt($ch, CURLOPT_ENCODING, 'gzip, deflate');
 
@@ -59,12 +59,15 @@ function algolia_add_query_suggestion($app_id, $app_secret_admin, $name, $data) 
   $headers[] = 'Content-Type: application/json';
   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
+  print 'Creating Query suggestion for following data:' . PHP_EOL;
+  print $data . PHP_EOL;
+
   $result = curl_exec($ch);
   if (curl_errno($ch)) {
     echo 'Error:' . curl_error($ch) . PHP_EOL . PHP_EOL;
   }
   else {
-    print $result . PHP_EOL . PHP_EOL;
+    print 'Query Suggestions Result: ' . $result . PHP_EOL . PHP_EOL;
   }
   curl_close($ch);
 }
@@ -105,10 +108,6 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   $searchable_attributes = $settingsSource['searchableAttributes'];
 
   $name = $prefix . '_' . $language;
-
-  // Just need a dummy index to create our index as there is no API to create
-  // new index directly.
-  $client->copyIndex('dummy', $name);
   $index = $client->initIndex($name);
 
   $settings = $settingsSource;
@@ -123,27 +122,7 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   $settings['ranking'] = $ranking;
   unset($settings['replicas']);
 
-  $index->setSettings($settings, ['forwardToReplicas' => TRUE,]);
-
-  foreach ($sorts as $sort) {
-    $replica = $name . '_' . implode('_', $sort);
-    $settings['replicas'][] = $replica;
-    $client->copyIndex($name, $replica);
-  }
-  sleep(3);
-
-  $index->setSettings($settings, ['forwardToReplicas' => TRUE,]);
-
-  foreach ($sorts as $sort) {
-    $replica = $name . '_' . implode('_', $sort);
-    $replica_index = $client->initIndex($replica);
-    $replica_settings = $replica_index->getSettings();
-    $replica_settings['ranking'] = [
-        'desc(stock)',
-        $sort['direction'] . '(' . $sort['field'] . ')',
-      ] + $ranking;
-    $replica_index->setSettings($replica_settings);
-  }
+  $index->setSettings($settings, ['forwardToReplicas' => TRUE])->wait();
 
   $query_suggestion = $name . '_query';
   $query = [
@@ -156,10 +135,25 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
       ],
     ],
   ];
+  algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query));
 
-  // Let index be created properly and crons executed.
-  sleep(60);
-  algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
+  foreach ($sorts as $sort) {
+    $replica = $name . '_' . implode('_', $sort);
+    $settings['replicas'][] = $replica;
+  }
+
+  $index->setSettings($settings, ['forwardToReplicas' => TRUE])->wait();
+
+  foreach ($sorts as $sort) {
+    $replica = $name . '_' . implode('_', $sort);
+    $replica_index = $client->initIndex($replica);
+    $replica_settings = $replica_index->getSettings();
+    $replica_settings['ranking'] = [
+        'desc(stock)',
+        $sort['direction'] . '(' . $sort['field'] . ')',
+      ] + $ranking;
+    $replica_index->setSettings($replica_settings)->wait();
+  }
 
   print $name . PHP_EOL;
   print $query_suggestion . PHP_EOL;
@@ -262,8 +256,7 @@ function algolia_update_index($client, $index, $settingsSource, $settingsSourceR
   $settings = $index->getSettings();
   $settingsSource['replicas'] = $settings['replicas'];
 
-  $index->setSettings($settingsSource);
-  sleep(1);
+  $index->setSettings($settingsSource)->wait();
 
   unset($settingsSource['replicas']);
 
@@ -277,8 +270,7 @@ function algolia_update_index($client, $index, $settingsSource, $settingsSourceR
 
     $replicaIndex = $client->initIndex($replica);
 
-    $replicaIndex->setSettings($settingsSourceReplica[$replica_key]);
-    sleep(1);
+    $replicaIndex->setSettings($settingsSourceReplica[$replica_key])->wait();
   }
 
   algolia_save_rules($index, $rules);

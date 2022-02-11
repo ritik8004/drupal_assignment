@@ -849,7 +849,8 @@ class SkuManager {
     $promos = $this->productCacheManager->get($sku, $cache_key);
 
     if (!is_array($promos)) {
-      $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
+      // Use 'all' for context to get promotions for Algolia / Search.
+      $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart'], NULL, NULL, 'all');
       $tags = [];
       foreach (array_keys($promos) as $id) {
         $tags[] = 'node:' . $id;
@@ -907,9 +908,12 @@ class SkuManager {
       $query->condition('nid', $promotion_nids, 'IN');
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
-      if (!empty($context)) {
+
+      // Use 'all' for context to get promotions for both web and app.
+      if (!empty($context) && $context !== 'all') {
         $query->condition('field_acq_promotion_context', $context);
       }
+
       $query->exists('field_acq_promotion_label');
       $promotion_nids = $query->execute();
     }
@@ -2384,7 +2388,6 @@ class SkuManager {
 
     foreach ($configurable_attributes as $code) {
       $fieldKey = 'attr_' . $code;
-
       if ($sku->hasField($fieldKey)) {
         $value = $sku->get($fieldKey)->getString();
         $context = $this->requestContextManager->getContext();
@@ -2392,12 +2395,17 @@ class SkuManager {
           continue;
         }
 
+        // Get raw attributes values for configurable options.
+        $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
+
         $configurableFieldValues[$fieldKey] = [
           'attribute_id' => $fieldKey,
           'label' => $this->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
           'value' => $sku->get($fieldKey)->getString(),
+          'option_id' => $raw_options['option_id'] ?? '' ,
+          'option_value' => $raw_options['option_value'] ?? '',
         ];
       }
     }
@@ -3880,6 +3888,30 @@ class SkuManager {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Utility function to get configurable options raw values.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param string $code
+   *   Attribute code.
+   *
+   * @return array
+   *   Return configurable options.
+   */
+  public function getConfigurableRawAttributesData(SKUInterface $sku, $code) {
+    $parent_sku = $this->getParentSkuBySku($sku);
+    if ($parent_sku instanceof SKUInterface) {
+      $product_tree = Configurable::deriveProductTree($parent_sku);
+      $options = [
+        'option_id' => $product_tree['configurables'][$code]['attribute_id'] ?? '',
+        'option_value' => $product_tree['combinations']['by_sku'][$sku->getSku()][$code] ?? '',
+      ];
+      return $options;
+    }
+    return NULL;
   }
 
 }

@@ -84,6 +84,16 @@
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
 
+          // RCS Entity Loaded.
+          if (pageType) {
+            RcsEventManager.fire('alshayaPageEntityLoaded', {
+              detail: {
+                pageType,
+                entity,
+              }
+            });
+          }
+
           // Add class to remove loader styles after RCS info is filled.
           $('.rcs-page').addClass(classRcsLoaded);
         });
@@ -145,27 +155,42 @@
         $(this)[0].innerHTML
       )
       .then(data => {
-        if (params['get-data'] && data === null) {
-          return;
+        if (!params["get-data"] || data) {
+          try {
+            // Pass the data to the rendering engine.
+            $(this).html(
+              renderer.render(
+                drupalSettings,
+                blockPhId[1],
+                params,
+                data,
+                pageEntity,
+                drupalSettings.path.currentLanguage,
+                $(this)[0].innerHTML
+              )
+            );
+
+            // Add class to remove loader styles on RCS Placeholders.
+            // This is done before triggering the Drupal behaviors so that the
+            // code in the behaviors knows that replacement has been completed.
+            $(this).addClass(classRcsLoaded);
+            // Re-attach all behaviors.
+            rcsPhApplyDrupalJs($(this).parent()[0]);
+            return;
+          } catch (error) {
+            Drupal.alshayaLogger(
+              "error",
+              "Error occurred while rendering block of ID @blockId - @error",
+              {
+                "@blockId": blockPhId[1],
+                "@error": error,
+              }
+            );
+          }
         }
-        // Pass the data to the rendering engine.
-        $(this).html(
-          renderer.render(
-            drupalSettings,
-            blockPhId[1],
-            params,
-            data,
-            pageEntity,
-            drupalSettings.path.currentLanguage,
-            $(this)[0].innerHTML
-          )
-        );
 
         // Add class to remove loader styles on RCS Placeholders.
         $(this).addClass(classRcsLoaded);
-
-        // Re-attach all behaviors.
-        rcsPhApplyDrupalJs($(this).parent()[0]);
       });
   }
 

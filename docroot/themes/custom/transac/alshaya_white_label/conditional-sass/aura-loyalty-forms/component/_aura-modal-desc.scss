@@ -1,0 +1,17 @@
+.aura-otp-submit-description {
+  font-size: 0.874rem;
+  padding: 1.25rem 2rem 0;
+  text-align: center;
+  font-family: $aura-regular;
+
+  .part {
+    padding-#{$right}: 0.3125rem;
+  }
+
+  .resend-otp {
+    display: block;
+    color: $aura-form-modal-desc-link;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

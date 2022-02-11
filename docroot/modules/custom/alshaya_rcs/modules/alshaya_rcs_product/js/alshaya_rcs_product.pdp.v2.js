@@ -309,12 +309,13 @@ function getVariantsInfo(product) {
       // @todo Implement this.
       description: '',
       price: globalThis.rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
-      priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.regular_price.value),
-      // @todo Add promotions value here.
-      promotionsRaw: [],
+      finalPrice: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
+      priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
+      promotionsRaw: product.promotions,
       // @todo Add free gift promotion value here.
       freeGiftPromotion: [],
       url: getProductUrls(variantInfo.url_key),
+      gtm_price: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
     }
 
     // Set max sale quantity data.
@@ -363,9 +364,10 @@ function processProduct(product) {
     cart_image: window.commerceBackend.getCartImage(product),
     cart_title: product.name,
     url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
+    price: globalThis.rcsPhRenderingEngine.computePhFilters(product, 'price'),
+    finalPrice: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value),
     priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
-    // @todo Add promotions value here.
-    promotionsRaw: [],
+    promotionsRaw: product.promotions,
     // @todo Add free gift promotion value here.
     freeGiftPromotion: [],
     is_non_refundable: product.non_refundable_products,
@@ -677,7 +679,7 @@ async function getProductLabelsData (sku) {
  *   The main sku for the product being displayed.
  */
 function renderProductLabels(product, sku, mainSku) {
-  getProductLabelsData(sku).then(function (labelsData) {
+  getProductLabelsData(mainSku).then(function (labelsData) {
     globalThis.rcsPhRenderingEngine.render(
       drupalSettings,
       'product-labels',
@@ -805,21 +807,23 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
     return staticDataStore.configurableColorData[sku];
   }
 
-  const colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
-  const isSupportsMultipleColor = Drupal.hasValue(colorAttributeConfig.configurable_color_attribute);
-  const configColorAttribute = colorAttributeConfig.configurable_color_attribute;
+  var colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
+  var supportsMultipleColor = Drupal.hasValue(colorAttributeConfig.support_multiple_attributes);
+  var data = {};
+  var rawProductData = window.commerceBackend.getProductData(sku, false, false);
+  var productType = rawProductData.type_id;
 
-  if (isSupportsMultipleColor) {
-    const colorLabelAttribute = colorAttributeConfig.configurable_color_label_attribute.replace('attr_', '');
-    const colorCodeAttribute = colorAttributeConfig.configurable_color_code_attribute.replace('attr_', '');
+  if (supportsMultipleColor && productType === 'configurable') {
+    var configColorAttribute = colorAttributeConfig.configurable_color_attribute;
+    var combinations = window.commerceBackend.getConfigurableCombinations(sku);
+    var colorLabelAttribute = colorAttributeConfig.configurable_color_label_attribute.replace('attr_', '');
+    var colorCodeAttribute = colorAttributeConfig.configurable_color_code_attribute.replace('attr_', '');
     // Translate color attribute option values to the rgb color values &
     // expose the same in Drupal settings to javascript.
-    const combinations = window.commerceBackend.getConfigurableCombinations(sku);
-    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
-    const configurableOptions = rawProductData.configurable_options;
+    var configurableOptions = rawProductData.configurable_options;
 
-    const variants = {};
-    const skuConfigurableOptionsColor = {};
+    var variants = {};
+    var skuConfigurableOptionsColor = {};
 
     // Do this mapping for easy access.
     rawProductData.variants.forEach(function (variant) {
@@ -830,7 +834,7 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
       option.values.forEach(function (value) {
         if (Drupal.hasValue(combinations.attribute_sku[configColorAttribute][value.value_index])) {
           combinations.attribute_sku[configColorAttribute][value.value_index].forEach(function (variantSku) {
-            const colorOptionsList = {
+            var colorOptionsList = {
               display_label: window.commerceBackend.getAttributeValueLabel(option.attribute_code, variants[variantSku].product[colorLabelAttribute]),
               swatch_type: 'RGB',
               display_value: variants[variantSku].product[colorCodeAttribute],
@@ -850,12 +854,13 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
           });
         }
       });
+
+      data = {
+        sku_configurable_options_color: skuConfigurableOptionsColor,
+        sku_configurable_color_attribute: configColorAttribute,
+      }
     });
 
-    const data = {
-      sku_configurable_options_color: skuConfigurableOptionsColor,
-      sku_configurable_color_attribute: configColorAttribute,
-    }
     staticDataStore.configurableColorData[sku] = data;
 
     return data;

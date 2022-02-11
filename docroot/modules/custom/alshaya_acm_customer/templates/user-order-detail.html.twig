@@ -25,9 +25,10 @@
 {% if bazaarvoice_strings %}
   {{ bazaarvoice_strings }}
 {% endif %}
+{% set aura_class = order.auraEnabled ? 'has-aura-points' %}
 <div{{ attributes }}>
 
-  <table class="user__order--detail">
+  <table class="user__order--detail {{aura_class}}">
     <tbody>
       <tr class="order-summary-row">
         <td class="order-transaction">
@@ -94,7 +95,20 @@
             {{ order.total }}
           </div>
         </td>
-        <td class="above-mobile empty--cell">&nbsp;</td>
+        {% if order.auraEnabled %}
+          <td class="above-mobile">
+            <div class="dark points-earned">
+              <span>{{ "Points Earned"|t }}</span>
+              <span>{{ order.apcAccruedPoints }}</span>
+            </div>
+            <div class="dark points-redeemed">
+              <span>{{ "Points Redeemed"|t }}</span>
+              <span>{{ order.apcRedeemedPoints }}</span>
+            </div>
+          </td>
+        {% else %}
+          <td class="above-mobile empty--cell">&nbsp;</td>
+        {% endif %}
       </tr>
 
       {% if delivery_detail_notice %}
@@ -132,8 +146,10 @@
               <div class="dark no-direction">{{ order_details.contact_no }}</div>
             </div>
           {% else %}
-            <div class="label font-small">{{ "Delivery details"|t }}</div>
-            <div>{{ order_details.delivery_address }}</div>
+            {% if order_details.delivery_address %}
+              <div class="label font-small">{{ "Delivery details"|t }}</div>
+              <div>{{ order_details.delivery_address }}</div>
+            {% endif %}
           {% endif %}
 
           <div class="mobile-only payment--details">
@@ -199,10 +215,12 @@
             <div>{{ order_details.billing_address }}</div>
           {% endif %}
 
+          {% if order_details.delivery_method %}
           <div class="mobile-only delivery--method">
             <div class="label font-small">{{ "Delivery method"|t }}</div>
             <div class="dark">{{ order_details.delivery_method }}</div>
           </div>
+          {% endif %}
         </td>
 
         <td class="desktop-only">
@@ -239,8 +257,10 @@
             <div class="dark">{{ order_details.payment.resultCode }}</div>
           {% endif %}
 
+          {% if order_details.delivery_method %}
           <div class="label delivery-method font-small">{{ "Delivery method"|t }}</div>
           <div class="dark">{{ order_details.delivery_method }}</div>
+          {% endif %}
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
@@ -364,7 +384,7 @@
       <div class="dark">{{ product.name }}</div>
       {% if product.attributes is not empty %}
         {% for attribute in product.attributes %}
-          <div class="light">
+          <div class="light attr-wrapper">
             {% trans %}
               {{ attribute.label }}: {{ attribute.value }}
             {% endtrans %}

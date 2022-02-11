@@ -377,7 +377,8 @@ function alshaya_advanced_page_block_access(Block $block, $operation, AccountInt
   // been tricked into thinking the department page as a term page.
   if (strpos($block_plugin, 'facet_block:') !== FALSE
     || ($block_plugin === 'views_block:alshaya_product_list-block_1')
-    || ($block_plugin === 'alshaya_algolia_react_plp')
+    || ($block_plugin === 'alshaya_algolia_react_plp'
+    || ($block_plugin === 'alshaya_algolia_listing_v2'))
   ) {
     // Not show block for department page.
     $route_object = \Drupal::routeMatch()->getRouteObject();

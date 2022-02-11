@@ -1,0 +1,33 @@
+.acq-content-product {
+  .cart-shipping-method {
+    .carrier-title {
+      color: $pdp-delivery-section-title;
+    }
+  }
+
+  .express-delivery-title-wrapper {
+    .c-accordion__title {
+      &::after {
+        transition: none;
+      }
+    }
+
+    &.ui-state-active {
+      .c-accordion__title {
+        &::after {
+          top: 0.75rem;
+          background: url(/themes/custom/transac/alshaya_american_eagle/imgs/icons/minus.svg) no-repeat center;
+        }
+      }
+    }
+  }
+
+  #pdp-area-select {
+    .delivery-area-label {
+      .availability-link {
+        color: $pdp-delivery-section-title;
+      }
+    }
+  }
+}
+

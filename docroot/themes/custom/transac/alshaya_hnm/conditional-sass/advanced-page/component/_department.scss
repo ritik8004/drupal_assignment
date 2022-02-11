@@ -62,6 +62,17 @@
       }
     }
   }
+
+  .c-category-list {
+    &__item {
+      a {
+        &.active {
+          color: $lhn_link_hover_active;
+          font-family: $hnm-regular;
+        }
+      }
+    }
+  }
 }
 
 .nodetype--department_page {

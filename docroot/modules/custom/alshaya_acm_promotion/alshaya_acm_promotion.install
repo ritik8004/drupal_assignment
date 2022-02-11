@@ -18,7 +18,7 @@ function alshaya_acm_promotion_update_8027(&$sandbox) {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-    'pathauto.pattern.promotion_url_alias'
+    'pathauto.pattern.promotion_url_alias',
   ],
     'alshaya_acm_promotion',
     'install',
@@ -69,7 +69,7 @@ function alshaya_acm_promotion_update_8026() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-    'rest.resource.promotions_dynamic_label'
+    'rest.resource.promotions_dynamic_label',
   ],
     'alshaya_acm_promotion',
     'install'
@@ -82,7 +82,8 @@ function alshaya_acm_promotion_update_8026() {
   \Drupal::service('router.builder')->rebuild();
 }
 
-/** Implements hook_update_N().
+/**
+ * Implements hook_update_N().
  *
  * [5.15.0]Adding field for contextual promotions.
  */

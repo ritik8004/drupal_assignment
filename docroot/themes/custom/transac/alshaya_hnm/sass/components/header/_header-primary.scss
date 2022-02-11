@@ -98,6 +98,22 @@ header {
         }
       }
     }
+
+    .block-system-branding-block {
+      .site-brand-home {
+        .logo {
+          img {
+            width: 2.5rem;
+            height: 1.66rem;
+
+            @include breakpoint($desktop) {
+              width: 4.25rem;
+              height: 2.77rem;
+            }
+          }
+        }
+      }
+    }
   }
 
   #block-alshaya-white-label-search,
@@ -1013,8 +1029,6 @@ html[lang=ar] {
   .block-system-branding-block {
     .site-brand-home {
       img {
-        width: auto;
-        height: auto;
         margin-top: 0;
         max-width: 100%;
       }

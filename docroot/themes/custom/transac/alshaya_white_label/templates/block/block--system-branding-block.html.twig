@@ -15,9 +15,9 @@
 #}
 {% set attributes = attributes.addClass('site-branding') %}
 {% set site_path = content.site_path is defined ? content.site_path : path('<front>') %}
-{% set site_logo = site_logo ~ '?tY6kui' %}
+{% set site_logo = site_logo ~ '?tY6kjl' %}
 {% if mobile_site_logo %}
-  {% set mobile_site_logo = mobile_site_logo ~ '?tY6kui' %}
+  {% set mobile_site_logo = mobile_site_logo ~ '?tY6kjl' %}
 {% endif %}
 {% block content %}
     {% if site_logo %}
@@ -26,17 +26,17 @@
           {% if mobile_site_logo %}
             <picture>
               <source media="(max-width: 767px)" srcset="{{ mobile_site_logo }}">
-              <img loading="lazy" src="{{ site_logo }}" alt="{{ site_name }}"/>
+              <img src="{{ site_logo }}" alt="{{ site_name }}"/>
             </picture>
           {% else %}
-            <img loading="lazy" src="{{ site_logo }}" alt="{{ site_name }}"/>
+            <img src="{{ site_logo }}" alt="{{ site_name }}"/>
           {% endif %}
         </a>
 
         {# If sub brand logo available #}
         {% if sub_brand_logo_img %}
           <a href="{{ sub_brand_logo_link }}" title="{{ sub_brand_logo_title }}" rel="home" class="sub-brand-logo logo">
-            <img loading="lazy" src="{{ sub_brand_logo_img }}?ytDfk6" alt="{{ sub_brand_logo_alt }}"/>
+            <img src="{{ sub_brand_logo_img }}?ytDfk6" alt="{{ sub_brand_logo_alt }}"/>
           </a>
           {% endif %}
       </div>

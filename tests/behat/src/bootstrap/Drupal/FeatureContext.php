@@ -2411,7 +2411,7 @@ JS;
    */
   public function iFillinQpayPin()
   {
-    $this->getSession()->executeScript("jQuery('#code').val('EWqkqrfnrM0=,g+8WOynUiEc=,AAgbpZAMi2s=,IHO+KVh/Zn8=,BPw/OgQmym0=,TGtG0oHxTgw=,');");
+    $this->getSession()->executeScript("jQuery('#pinField').val('123456');");
   }
 
   /**
@@ -2459,7 +2459,7 @@ JS;
     } else {
       $element = '#payment-method-checkout_com';
     }
-    $this->getSession()->executeScript("jQuery('$element').siblings('label').trigger('click');");
+    $this->getSession()->executeScript("jQuery('$element').siblings('.payment-method-label-wrapper').find('label').trigger('click');");
     $this->iWaitSeconds(10);
     $checkbox = $page->findField($element);
 
@@ -2568,7 +2568,7 @@ JS;
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
       $this->theElementShouldExist('.spc-cnc-stores-list-map');
-      $this->iWaitSeconds('20');
+      $this->iWaitSeconds('50');
       $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
@@ -2626,41 +2626,7 @@ JS;
           $this->iWaitSeconds('20');
         }
       } else {
-        $script = <<<JS
-        jQuery(".spc-address-form-guest-overlay input#fullname").val("Test User");
-        jQuery(".spc-address-form-guest-overlay input[name=\"email\"]").val("user@test.com");
-        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
-        var value = "55667788";
-        if (maxlength == 9) {
-            value = value + "9";
-        }
-        jQuery("input[name=\"mobile\"]").val(value);
-        jQuery(".spc-address-form-guest-overlay input#locality").val("Block 1");
-        jQuery(".spc-address-form-guest-overlay input#address_line1").val("Street A");
-        jQuery(".spc-address-form-guest-overlay input#dependent_locality").val("Building B");
-        jQuery(".spc-address-form-guest-overlay input#address_line2").val("Floor C");
-JS;
-        $session->executeScript($script);
-        $city = $page->find('css', '#spc-area-select-selected-city');
-        if ($city !== null) {
-          $city->click();
-          $this->iWaitSeconds('5');
-          $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
-          $area_value = $this->getSession()->evaluateScript('return jQuery(\'#spc-area-select-selected\').text()');
-          if ($area_value == 'Select Area' or 'Choose a region') {
-            $page->find('css', '#spc-area-select-selected')->click();
-            $this->iWaitSeconds('5');
-            $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
-          }
-        }
-        else {
-          $page->find('css', '#spc-area-select-selected')->click();
-          $this->iWaitSeconds('5');
-          $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
-        }
-        $page->find('css', 'button#save-address')->click();
-        $this->iWaitForAjaxToFinish();
-        $this->iWaitSeconds('20');
+        $this->fillFormAndSubmit($session, $page);
       }
     }
     $this->theElementShouldExist('.delivery-information-preview');
@@ -2788,7 +2754,7 @@ JS;
     $knet_expiration = $page->find('css', '#cardExpdate .col:nth-child(2) select:first-child');
     if ($knet_expiration != null) {
       $this->getSession()->executeScript("jQuery('#debitMonthSelect').val(9)");
-      $this->getSession()->executeScript("jQuery('#debitYearSelect').val(2021)");
+      $this->getSession()->executeScript("jQuery('#debitYearSelect').val(2025)");
       $this->iWaitSeconds('20');
     }
     else {
@@ -2880,6 +2846,83 @@ JS;
       }
       $page->find('css', '#block-alshaya-algolia-react-plp .plp-facet-product-filter #attr_delivery_ways h3')->click();
     }
+  }
+
+  /**
+   * @Then /^I should see tabby payment window$/
+   */
+  public function iShouldSeeTabbyPaymentWindow() {
+    $page = $this->getSession()->getPage();
+    $iframe_element = $page->find('css', '#tabby-checkout iframe');
+    if ($iframe_element == null) {
+      throw new \Exception(sprintf('Iframe element not found.'));
+    }
+
+  }
+
+  /**
+   * @Given /^I add the billing address on checkout page$/
+   */
+  public function iAddTheBillingAddressOnCheckoutPage() {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $top_panel = $page->find('css', '.spc-billing-top-panel');
+    if ($top_panel != null) {
+      $text = $session->evaluateScript('return jQuery(".spc-billing-top-panel").text()');
+      if ($text == 'please add your billing address.') {
+        $session->executeScript('jQuery(\'.spc-billing-top-panel\').click()');
+        $this->iWaitSeconds('5');
+        $this->fillFormAndSubmit($session, $page, TRUE);
+      }
+    }
+  }
+
+  /**
+   * Fills billing information form and submit.
+   * @param $session
+   * @param $page
+   * @param $billing_address
+   */
+  public function fillFormAndSubmit($session, $page, $billing_address = FALSE) {
+    $script = <<<JS
+        jQuery(".spc-address-form-guest-overlay input#fullname").val("Test User");
+        jQuery(".spc-address-form-guest-overlay input[name=\"email\"]").val("user@test.com");
+        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
+        var country_code = jQuery(".country-code").text();
+        var value = "55667788";
+        if (maxlength == 9) {
+            value = value + "9";
+        }
+        if (country_code == '+20') {
+            value = "1255557111";
+        }
+        jQuery("input[name=\"mobile\"]").val(value);
+        jQuery(".spc-address-form-guest-overlay input#locality").val("Block 1");
+        jQuery(".spc-address-form-guest-overlay input#address_line1").val("Street A");
+        jQuery(".spc-address-form-guest-overlay input#dependent_locality").val("Building B");
+        jQuery(".spc-address-form-guest-overlay input#address_line2").val("Floor C");
+JS;
+    $session->executeScript($script);
+    $city = $page->find('css', '#spc-area-select-selected-city');
+    if ($city !== null) {
+      $city->click();
+      $this->iWaitSeconds('5');
+      $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+      $area_value = $this->getSession()->evaluateScript('return jQuery(\'#spc-area-select-selected\').text()');
+      if ($area_value == 'Select Area' or 'Choose a region') {
+        $page->find('css', '#spc-area-select-selected')->click();
+        $this->iWaitSeconds('5');
+        $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+      }
+    }
+    else {
+      $page->find('css', '#spc-area-select-selected')->click();
+      $this->iWaitSeconds('5');
+      $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+    }
+    $page->find('css', 'button#save-address')->click();
+    $this->iWaitForAjaxToFinish();
+    $this->iWaitSeconds('20');
   }
 
 }

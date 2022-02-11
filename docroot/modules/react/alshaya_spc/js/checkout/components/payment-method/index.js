@@ -10,7 +10,6 @@ import {
   setUpapiApplePayCofig,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
-import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
 import PaymentMethodPostpay from '../payment-method-postpay';
@@ -24,6 +23,10 @@ import CheckoutComUpapiApplePay
 import PaymentMethodCheckoutComUpapiFawry
   from '../payment-method-checkout-com-upapi-fawry';
 import cartActions from '../../../utilities/cart_actions';
+import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
+import isAuraEnabled from '../../../../../js/utilities/helper';
+import PaymentMethodTabby from '../payment-method-tabby';
+import TabbyWidget from '../../../../../js/tabby/components';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -33,6 +36,7 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
     this.paymentMethodPostpay = React.createRef();
+    this.paymentMethodTabby = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
   }
 
@@ -74,9 +78,9 @@ export default class PaymentMethod extends React.Component {
         analytics,
       },
     };
-    await addPaymentMethodInCart('update payment', data);
-
-    return true;
+    const response = await addPaymentMethodInCart('update payment', data);
+    // Return boolean response for update payment.
+    return response !== null;
   };
 
   finalisePayment = (paymentData) => {
@@ -141,15 +145,15 @@ export default class PaymentMethod extends React.Component {
         // 2D flow success.
         const { cart } = this.props;
         placeOrder(cart.cart.payment.method);
-        removeStorageInfo('spc_selected_card');
-        removeStorageInfo('billing_shipping_same');
+        Drupal.removeItemFromLocalStorage('spc_selected_card');
+        Drupal.removeItemFromLocalStorage('billing_shipping_same');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
         Drupal.logJavascriptError('3d flow finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
-        removeStorageInfo('spc_selected_card');
-        removeStorageInfo('billing_shipping_same');
+        Drupal.removeItemFromLocalStorage('spc_selected_card');
+        Drupal.removeItemFromLocalStorage('billing_shipping_same');
         window.location = result.redirectUrl;
       } else {
         Drupal.logJavascriptError(
@@ -166,12 +170,13 @@ export default class PaymentMethod extends React.Component {
   };
 
   render() {
-    const { method } = this.props;
     const {
+      method,
       isSelected,
       changePaymentMethod,
       cart,
       animationOffset,
+      disablePaymentMethod,
     } = this.props;
     const animationDelayValue = `${0.4 + animationOffset}s`;
 
@@ -194,6 +199,11 @@ export default class PaymentMethod extends React.Component {
       additionalClasses = drupalSettings.postpay_widget_info.postpay_mode_class;
     }
 
+    // Add `in-active` class if disablePaymentMethod property is true.
+    additionalClasses = disablePaymentMethod
+      ? `${additionalClasses} in-active`
+      : additionalClasses;
+
     return (
       <>
         <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
@@ -205,24 +215,43 @@ export default class PaymentMethod extends React.Component {
               defaultChecked={isSelected}
               value={method.code}
               name="payment-method"
+              {...(disablePaymentMethod
+                && { disabled: disablePaymentMethod })}
             />
 
-            <label className="radio-sim radio-label">
-              {method.name}
-              <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
-                <div className="spc-payment-method-desc">
-                  <div className="desc-content">
-                    <CodSurchargeInformation
-                      surcharge={cart.cart.surcharge}
-                      messageKey="cod_surcharge_short_description"
-                    />
+            <div className="payment-method-label-wrapper">
+              <label className="radio-sim radio-label">
+                {method.name}
+                <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
+                  <div className="spc-payment-method-desc">
+                    <div className="desc-content">
+                      <CodSurchargeInformation
+                        surcharge={cart.cart.surcharge}
+                        messageKey="cod_surcharge_short_description"
+                      />
+                    </div>
                   </div>
-                </div>
-              </ConditionalView>
-            </label>
+                </ConditionalView>
+              </label>
 
-            <PaymentMethodIcon methodName={method.code} />
+              <ConditionalView condition={method.code === 'tabby'}>
+                <TabbyWidget
+                  pageType="checkout"
+                  classNames="installment-popup"
+                />
+              </ConditionalView>
+            </div>
+            <PaymentMethodIcon methodName={method.code} methodLabel={method.name} />
           </div>
+          <ConditionalView condition={isAuraEnabled()
+          && method.code === 'cashondelivery'
+          && disablePaymentMethod === true
+          && !isFullPaymentDoneByAura(cart)}
+          >
+            <div className="payment-method-bottom-panel no-payment-description">
+              {Drupal.t('Cash on delivery is not available along with the Aura points.')}
+            </div>
+          </ConditionalView>
 
           <ConditionalView condition={isSelected && method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
             <div className={`payment-method-bottom-panel ${method.code}`}>
@@ -265,6 +294,16 @@ export default class PaymentMethod extends React.Component {
                 ref={this.PaymentMethodPostpay}
                 postpay={drupalSettings.postpay}
                 postpayWidgetInfo={drupalSettings.postpay_widget_info}
+                cart={cart}
+              />
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={(isSelected && method.code === 'tabby')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <PaymentMethodTabby
+                ref={this.paymentMethodTabby}
+                tabby={drupalSettings.tabby}
                 cart={cart}
               />
             </div>

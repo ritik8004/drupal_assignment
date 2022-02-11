@@ -1,0 +1,112 @@
+.spc-aura-mobile-number {
+  + .spc-type-textfield {
+    margin-top: 1.5rem;
+  }
+
+  &.open {
+    .spcAuraSelect__indicator {
+      &::before {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .field-wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    .error {
+      display: none;
+    }
+
+    .spc-type-textfield {
+      margin-#{$left}: 1.25rem;
+      width: calc(100% - 1.25rem - 5.625rem);
+      margin-bottom: 0;
+    }
+
+    .spc-aura-mobile-number-country-code {
+      width: 5.625rem;
+      z-index: 4;
+
+      label {
+        color: $spc-input-label;
+        font-size: 0.75rem;
+      }
+
+      .spcAuraSelect__value-container {
+        padding: 0;
+      }
+
+      .spcAuraSelect__control {
+        font-size: 0.875rem;
+        border: none;
+        min-height: 1.5rem;
+        border-bottom: 1px solid $primary_input_border;
+        border-radius: 0;
+        box-shadow: none;
+
+        .spcAuraSelect__indicator-separator,
+        .spcAuraSelect__indicator svg {
+          display: none;
+        }
+      }
+    }
+
+    .spcAuraSelect__control--is-disabled {
+      opacity: 0.5;
+      background: none;
+
+      .spcAuraSelect__single-value--is-disabled {
+        color: initial;
+      }
+    }
+
+    .spcAuraSelect__menu {
+      margin: 0;
+      box-shadow: none;
+
+      .spcAuraSelect__menu-list {
+        padding: 0;
+        border: 1px solid $spc-select-border;
+        border-top-width: 0;
+
+        > div {
+          color: $spc-select-text;
+          border-top: 1px solid $spc-select-border-separator;
+          font-size: 0.75rem;
+          letter-spacing: 1px;
+          background: $spc-select_bg;
+          cursor: pointer;
+          padding: 0.75rem;
+
+          @include arabic-letter-spacing;
+
+          &:hover,
+          &.spcAuraSelect__option--is-selected {
+            background: $spc-select_bg_hover;
+          }
+
+          &.spcAuraSelect__option--is-disabled {
+            pointer-events: none;
+            opacity: 0.5;
+            background: $greyish !important;
+          }
+        }
+      }
+    }
+
+    .spcAuraSelect__indicator {
+      padding: 0;
+
+      @include icon('chevrondown') {
+        font-size: 1.5rem;
+        color: #000;
+        transition: transform 0.3s ease-in-out;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+}

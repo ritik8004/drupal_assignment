@@ -1,0 +1,33 @@
+services:
+  alshaya_rcs_seo.request_subscriber:
+    class: Drupal\alshaya_rcs_seo\EventSubscriber\AlshayaSeoRequestSubscriber
+    arguments: ['@current_route_match']
+    tags:
+      - { name: event_subscriber }
+
+  alshaya_rcs_seo.gtm_manager:
+    class: Drupal\alshaya_rcs_seo\Services\AlshayaRcsSeoGtmManager
+    public: false
+    decorates: alshaya_seo_transac.gtm_manager
+    decoration_priority: 1
+    arguments:
+      - '@current_route_match'
+      - '@config.factory'
+      - '@acq_cart.cart_storage'
+      - '@alshaya_acm.cart_helper'
+      - '@current_user'
+      - '@request_stack'
+      - '@entity_type.manager'
+      - '@alshaya_acm_checkout.options_manager'
+      - '@language_manager'
+      - '@cache.alshaya'
+      - '@database'
+      - '@alshaya_addressbook.manager'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@module_handler'
+      - '@alshaya_acm_customer.orders_manager'
+      - '@entity.repository'
+      - '@alshaya_acm_product.category_helper'
+    calls:
+      - [setStoreFinderUtility, ['@?alshaya_stores_finder_transac.utility']]

@@ -118,6 +118,8 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
         ],
       ],
     ];
+    // Attach the Listing rendrer library.
+    $build['#attached']['library'][] = 'alshaya_rcs_listing/renderer';
 
     return $build;
   }

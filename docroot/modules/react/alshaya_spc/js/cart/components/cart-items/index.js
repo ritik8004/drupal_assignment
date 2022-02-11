@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CartItem from '../cart-item';
+import CartVirtualItem from '../../../egift-card/components/egift-virtual-cart-item';
 
 export default class CartItems extends React.Component {
   static products = {};
@@ -28,7 +29,7 @@ export default class CartItems extends React.Component {
       const qtyLimits = {};
       Object.entries(items).forEach(([, productData]) => {
         const key = `product:${drupalSettings.path.currentLanguage}:${productData.sku}`;
-        const product = JSON.parse(localStorage.getItem(key));
+        const product = Drupal.getItemFromLocalStorage(key);
         if (product !== null && product.maxSaleQtyParent) {
           qtyLimits[product.parentSKU] = (typeof qtyLimits[product.parentSKU] !== 'undefined')
             ? qtyLimits[product.parentSKU] + productData.qty
@@ -43,7 +44,7 @@ export default class CartItems extends React.Component {
       if (Object.keys(qtyLimits).length > 0) {
         Object.entries(items).forEach(([, productData]) => {
           const key = `product:${drupalSettings.path.currentLanguage}:${productData.sku}`;
-          const product = JSON.parse(localStorage.getItem(key));
+          const product = Drupal.getItemFromLocalStorage(key);
           if (product !== null) {
             CartItems.qtyLimits[productData.sku] = qtyLimits[product.parentSKU];
           }
@@ -78,20 +79,36 @@ export default class CartItems extends React.Component {
         ? (CartItems.qtyLimits[product.sku] || product.qty)
         : 0;
 
-      productItems.push(
-        <CartItem
-          animationOffset={animationOffset}
-          key={key}
-          item={product}
-          skus={skus}
-          callable={this.productCheckCallable}
-          qtyLimit={productQtyLimit}
-          productPromotion={productPromotion}
-          couponCode={couponCode}
-          totalsItems={totals.items}
-          cartShippingMethods={cartShippingMethods}
-        />,
-      );
+      // Render CartVirtualItem component for virtual Product i.e Egift card
+      if (product.isEgiftCard) {
+        productItems.push(
+          <CartVirtualItem
+            animationOffset={animationOffset}
+            key={key}
+            item={product}
+            skus={skus}
+            productPromotion={productPromotion}
+            couponCode={couponCode}
+            totalsItems={totals.items}
+          />,
+        );
+      } else {
+        // Render CartItem component for Normal Products
+        productItems.push(
+          <CartItem
+            animationOffset={animationOffset}
+            key={key}
+            item={product}
+            skus={skus}
+            callable={this.productCheckCallable}
+            qtyLimit={productQtyLimit}
+            productPromotion={productPromotion}
+            couponCode={couponCode}
+            totalsItems={totals.items}
+            cartShippingMethods={cartShippingMethods}
+          />,
+        );
+      }
     });
 
     return (

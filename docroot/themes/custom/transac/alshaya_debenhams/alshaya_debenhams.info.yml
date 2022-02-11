@@ -54,3 +54,63 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
+
+  alshaya_white_label/spc-utils:
+    css:
+      theme:
+        css/conditional-sass/spc-utils/spc-utils.ltr.css: css/conditional-sass/spc-utils/spc-utils.ltr.css
+
+  alshaya_white_label/my-account:
+      css:
+        theme:
+          css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/spc-cart:
+    css:
+      theme:
+        css/conditional-sass/spc-cart/spc-cart.ltr.css: css/conditional-sass/spc-cart/spc-cart.ltr.css
+
+  alshaya_white_label/tooltip:
+    css:
+      theme:
+        css/conditional-sass/tooltip/tooltip.ltr.css: css/conditional-sass/tooltip/tooltip.ltr.css
+
+  alshaya_white_label/spc-login:
+    css:
+      theme:
+        css/conditional-sass/spc-login/spc-login.ltr.css: css/conditional-sass/spc-login/spc-login.ltr.css
+
+  alshaya_white_label/spc-checkout:
+    css:
+      theme:
+        css/conditional-sass/spc-checkout/spc-checkout.ltr.css: css/conditional-sass/spc-checkout/spc-checkout.ltr.css
+
+  alshaya_white_label/spc-checkout-confirmation:
+    css:
+      theme:
+        css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css: css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css
+
+  alshaya_white_label/plp-frame-options:
+    css:
+      theme:
+        css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css
+
+  alshaya_white_label/sitemap:
+    css:
+      theme:
+        css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css
+
+  alshaya_white_label/optionlist_filter:
+    css:
+      theme:
+        css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css: css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css
+
+  alshaya_white_label/aura-loyalty-global:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
+
+  alshaya_white_label/plp-add-to-cart:
+    css:
+      theme:
+        css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css

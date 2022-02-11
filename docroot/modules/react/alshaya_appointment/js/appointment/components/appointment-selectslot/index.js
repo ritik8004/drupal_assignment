@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import { getStorageInfo } from '../../../utilities/storage';
 import { getDateFormat, getTimeFormat } from '../../../utilities/helper';
 import getStringMessage from '../../../../../js/utilities/strings';
 
@@ -8,7 +7,7 @@ export default class AppointmentSlots extends React.Component {
   constructor(props) {
     super(props);
 
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
     const { selectedSlot, appointmentId } = localStorageValues;
     if (selectedSlot) {
       this.state = {

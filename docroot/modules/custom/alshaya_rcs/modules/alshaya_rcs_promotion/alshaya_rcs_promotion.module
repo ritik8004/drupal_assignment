@@ -5,7 +5,7 @@
  * Module file.
  */
 
- /**
+/**
  * Implements hook_theme().
  */
 function alshaya_rcs_promotion_theme($existing, $type, $theme, $path) {
@@ -51,12 +51,17 @@ function alshaya_rcs_promotion_rcs_placeholders_graphql_query() {
         'label',
         'description',
       ],
+      'qualified' => [
+        'rule_id',
+        'label',
+        'type',
+      ],
       'next_eligible' => [
         'rule_id',
         'label',
         'type',
         'coupon',
-        'coupon_discount',
+        'couponDiscount',
         'threshold_reached',
       ],
     ],

@@ -169,20 +169,20 @@ var options = {
 };
 
 // Tasks
-require('./gulp-tasks/build')(gulp, plugins, options);
-require('./gulp-tasks/clean')(gulp, plugins, options);
-require('./gulp-tasks/clean-css')(gulp, plugins, options);
-require('./gulp-tasks/clean-styleguide')(gulp, plugins, options);
-require('./gulp-tasks/compile-sass')(gulp, plugins, options);
-require('./gulp-tasks/compile-styleguide')(gulp, plugins, options);
-require('./gulp-tasks/default')(gulp, plugins, options);
-require('./gulp-tasks/lint-js')(gulp, plugins, options);
-require('./gulp-tasks/lint-css')(gulp, plugins, options);
-require('./gulp-tasks/minify-css')(gulp, plugins, options);
-require('./gulp-tasks/test-css')(gulp, plugins, options);
-require('./gulp-tasks/watch')(gulp, plugins, options);
+require('../gulp-tasks/build')(gulp, plugins, options);
+require('../gulp-tasks/clean')(gulp, plugins, options);
+require('../gulp-tasks/clean-css')(gulp, plugins, options);
+require('../gulp-tasks/clean-styleguide')(gulp, plugins, options);
+require('../gulp-tasks/compile-sass')(gulp, plugins, options);
+require('../gulp-tasks/compile-styleguide')(gulp, plugins, options);
+require('../gulp-tasks/default')(gulp, plugins, options);
+require('../gulp-tasks/lint-js')(gulp, plugins, options);
+require('../gulp-tasks/lint-css')(gulp, plugins, options);
+require('../gulp-tasks/minify-css')(gulp, plugins, options);
+require('../gulp-tasks/test-css')(gulp, plugins, options);
+require('../gulp-tasks/watch')(gulp, plugins, options);
 // Compile only conditional.
-require('./gulp-tasks/build-conditional')(gulp, plugins, options);
+require('../gulp-tasks/build-conditional')(gulp, plugins, options);
 
 // Credits:
 //

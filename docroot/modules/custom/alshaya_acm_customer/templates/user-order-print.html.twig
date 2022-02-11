@@ -73,8 +73,10 @@
             <div class="dark no-direction">{{ order_details.contact_no }}</div>
           </div>
         {% else %}
-          <div class="label font-small">{{ "Delivery details"|t }}</div>
-          <div>{{ order_details.delivery_address }}</div>
+          {% if order_details.delivery_address %}
+            <div class="label font-small">{{ "Delivery details"|t }}</div>
+            <div>{{ order_details.delivery_address }}</div>
+          {% endif %}
         {% endif %}
 
         <div class="mobile-only payment--details">
@@ -140,10 +142,12 @@
           <div>{{ order_details.billing_address }}</div>
         {% endif %}
 
+        {% if order_details.delivery_method %}
         <div class="mobile-only delivery--method">
           <div class="label font-small">{{ "Delivery method"|t }}</div>
           <div class="dark">{{ order_details.delivery_method }}</div>
         </div>
+        {% endif %}
       </td>
 
       <td class="desktop-only">
@@ -180,8 +184,10 @@
           <div class="dark">{{ order_details.result_code }}</div>
         {% endif %}
 
-        <div class="label delivery-method font-small">{{ "Delivery method"|t }}</div>
-        <div class="dark">{{ order_details.delivery_method }}</div>
+        {% if order_details.delivery_method %}
+          <div class="label delivery-method font-small">{{ "Delivery method"|t }}</div>
+          <div class="dark">{{ order_details.delivery_method }}</div>
+        {% endif %}
       </td>
       <td class="above-mobile empty--cell">&nbsp;</td>
     </tr>
@@ -311,7 +317,7 @@
       <div class="dark">{{ product.name }}</div>
 
       {% for attribute in product.attributes %}
-        <div>
+        <div class="attr-wrapper">
           {% trans %}
           {{ attribute.label }}: {{ attribute.value }}
           {% endtrans %}

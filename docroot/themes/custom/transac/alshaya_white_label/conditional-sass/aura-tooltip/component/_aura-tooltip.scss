@@ -1,0 +1,82 @@
+.spc-order-summary-item.aura-order-summary-item,
+.spc-aura-checkout-rewards-block .block-content,
+.aura-card-linked-verified-wrapper .aura-points-on-hold,
+.aura-pdp-points-section,
+.loyalty-club-details-wrapper,
+.spc-aura-cart-rewards-block .spc-join-aura-link-wrapper {
+  .tooltip-anchor {
+    display: inline-block;
+    margin-#{$left}: 0.5rem;
+
+    .tooltip-box {
+      font-family: $aura-regular;
+      background: $aura-order-confirmation-points-tooltip-bg;
+      box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.24);
+      border: none;
+      color: $aura-order-confirmation-points-tooltip-txt;
+      bottom: 1.75rem;
+      #{$left}: 50%;
+      transform: translateX(-50%);
+
+      html[lang=ar] & {
+        transform: translateX(50%);
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$left}: -50%;
+      }
+
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+
+    &::before {
+      background: $aura-order-confirmation-points-question-bg;
+      border: none;
+      color: $aura-order-confirmation-points-question-txt;
+    }
+  }
+}
+
+.spc-aura-checkout-rewards-block {
+  .block-content .tooltip-anchor .tooltip-box {
+    @include breakpoint($only-mobile) {
+      #{$left}: -54%;
+    }
+  }
+}
+
+#spc-checkout-confirmation {
+  .spc-order-summary-item.aura-order-summary-item .tooltip-box {
+    @include breakpoint($only-mobile) {
+      #{$left}: -4rem;
+    }
+  }
+}
+
+.loyalty-club-details-wrapper {
+  .tooltip-anchor {
+    margin-#{$left}: 0.25rem;
+  }
+
+  .title {
+    .tooltip-anchor {
+      margin-#{$left}: 0.25rem;
+      top: -0.375rem;
+
+      .tooltip-box {
+        @include breakpoint($only-mobile) {
+          #{$left}: -50%;
+        }
+      }
+    }
+  }
+}
+
+.spc-aura-cart-rewards-block .spc-join-aura-link-wrapper {
+  .tooltip-anchor {
+    top: -0.1875rem;
+  }
+}

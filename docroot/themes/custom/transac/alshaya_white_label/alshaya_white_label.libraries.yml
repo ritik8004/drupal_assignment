@@ -8,7 +8,6 @@ global_styles:
     js/form.js: {}
     js/one_time_language_slider.js: {}
     js/footer-space-filler.js: {}
-    vendor/js/details-polyfill.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
     - core/jquery
@@ -23,7 +22,12 @@ global_styles:
     - alshaya_white_label/utils
     - core/drupal.dialog.ajax
     - alshaya_white_label/alshaya_image_lazy_load
+    - alshaya_white_label/detail_polyfill
 
+detail_polyfill:
+  js:
+    vendor/js/details-polyfill.js: {attributes: { nomodule: true }}
+    
 ltr_styles:
   css:
     theme:
@@ -267,6 +271,14 @@ product-category-accordion:
     - core/jquery.once
     - core/drupal
 
+accordion:
+  js:
+    js/accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
 pdp_js:
   js:
     js/pdp.js: {}
@@ -420,6 +432,68 @@ sub-brand-logo:
     theme:
       css/conditional-sass/sub-brand-logo/sub-brand-logo.ltr.css: {}
 
+aura-loyalty-tooltip:
+  css:
+    theme:
+      css/conditional-sass/aura-tooltip/aura-tooltip.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/tooltip
+
+aura-loyalty-messages:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-messages/aura-loyalty-messages.ltr.css: {}
+
+aura-loyalty-spc-common:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-spc-common/aura-loyalty-spc-common.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-tooltip
+    - alshaya_white_label/aura-loyalty-messages
+
+aura-loyalty-forms:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css: {}
+
+aura-loyalty-spc:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-spc/aura-loyalty-spc.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-spc-common
+    - alshaya_white_label/aura-loyalty-forms
+
+aura-loyalty-spc-confirmation:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-spc-confirmation/aura-loyalty-spc-confirmation.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-spc-common
+
+aura-loyalty-global:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: {}
+
+aura-loyalty-myaccount:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-tooltip
+    - alshaya_white_label/aura-loyalty-messages
+    - alshaya_white_label/aura-loyalty-forms
+    - alshaya_white_label/alshaya-react-animate
+
+aura-loyalty-pdp:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-tooltip
+
 alshaya-fit-calculator:
   css:
     theme:
@@ -478,6 +552,7 @@ plp-add-to-cart:
       css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-react-animate
+    - alshaya_white_label/magic-dots
 
 style-review-stars:
   css:
@@ -549,6 +624,16 @@ sofa-sectional:
     theme:
       css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}
 
+wishlist:
+  css:
+    theme:
+      css/conditional-sass/wishlist/wishlist.ltr.css: {}
+
+tabby:
+  css:
+    theme:
+      css/conditional-sass/tabby/tabby.ltr.css: {}
+
 rcs-alshaya-magazine:
   css:
     theme:
@@ -603,3 +688,62 @@ rcs-algolia-plp:
   css:
     theme:
       css/conditional-sass/rcs-algolia-plp/rcs-algolia-plp.ltr.css: {}
+
+country-switcher:
+  css:
+    theme:
+      css/conditional-sass/country-switcher/country-switcher.ltr.css: {}
+
+magic-dots:
+  css:
+    theme:
+      css/conditional-sass/magic-dots/magic-dots.ltr.css: {}
+
+egift-common:
+  css:
+    theme:
+      css/conditional-sass/egift-common/egift-common.ltr.css: {}
+
+egift-purchase-page:
+  css:
+    theme:
+      css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/alshaya-react-animate
+    - alshaya_white_label/egift-common
+
+egift-card-checkout:
+  css:
+    theme:
+      css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: {}
+
+egift-cart:
+  css:
+    theme:
+      css/conditional-sass/egift-cart/egift-cart.ltr.css: {}
+
+egift-topup-page:
+  css:
+    theme:
+      css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/egift-common
+
+egift-landing-page:
+  css:
+    theme:
+      css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/alshaya-react-animate
+
+egift-myaccount:
+  css:
+    theme:
+      css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/egift-common
+
+egift-card-checkout-confirmation:
+  css:
+    theme:
+      css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: {}

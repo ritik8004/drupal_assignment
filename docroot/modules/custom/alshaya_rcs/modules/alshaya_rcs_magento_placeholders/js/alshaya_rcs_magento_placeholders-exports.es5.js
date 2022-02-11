@@ -98,10 +98,22 @@ exports.render = function render(
       });
 
       // Render template.
-      html = handlebarsRenderer.render('field.magazine_article.product_teaser', { data: data });
+      html = handlebarsRenderer.render('product.teaser', { data: data });
       break;
 
-    case "delivery-option":
+    case 'order_teaser':
+      // Get individual table row items to perform token replacement.
+      if (typeof globalThis.renderRcsOrders != 'undefined') {
+        html += globalThis.renderRcsOrders.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
+    case "delivery-info-block":
+    case "delivery-options":
     case 'mobile-upsell-products':
     case 'upsell-products':
     case 'mobile-related-products':

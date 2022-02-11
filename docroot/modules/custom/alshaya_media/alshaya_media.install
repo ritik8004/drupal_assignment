@@ -54,24 +54,25 @@ function alshaya_media_update_8105() {
 
   $connection = \Drupal::database();
 
-  // media__field_document ==> media__field_media_document
+  // media__field_document ==> media__field_media_document.
   $document_query = $connection->select('media__field_document', 'mfd')->fields('mfd');
   $connection->insert('media__field_media_document')->from($document_query)->execute();
-  // media_revision__field_document ==> media_revision__field_media_document
+  // media_revision__field_document ==> media_revision__field_media_document.
   $document_rev_query = $connection->select('media_revision__field_document', 'mrfd')->fields('mrfd');
   $connection->insert('media_revision__field_media_document')->from($document_rev_query)->execute();
 
-  // media__image ==> media__field_media_image
+  // media__image ==> media__field_media_image.
   $image_query = $connection->select('media__image', 'mimg')->fields('mimg');
   $connection->insert('media__field_media_image')->from($image_query)->execute();
-  // media_revision__image ==> media_revision__field_media_image
+  // media_revision__image ==> media_revision__field_media_image.
   $image_rev_query = $connection->select('media_revision__image', 'mrimg')->fields('mrimg');
   $connection->insert('media_revision__field_media_image')->from($image_rev_query)->execute();
 
-  // media__field_media_video_embed_field ==> media__field_media_oembed_video
+  // media__field_media_video_embed_field ==> media__field_media_oembed_video.
   $video_query = $connection->select('media__field_media_video_embed_field', 'mvd')->fields('mvd');
   $connection->insert('media__field_media_oembed_video')->from($video_query)->execute();
-  // media_revision__field_media_video_embed_field ==> media_revision__field_media_oembed_video
+  // media_revision__field_media_video_embed_field
+  // ==> media_revision__field_media_oembed_video.
   $video_rev_query = $connection->select('media_revision__field_media_video_embed_field', 'mrvd')->fields('mrvd');
   $connection->insert('media_revision__field_media_oembed_video')->from($video_rev_query)->execute();
 

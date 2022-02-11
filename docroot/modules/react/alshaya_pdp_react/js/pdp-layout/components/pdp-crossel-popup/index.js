@@ -10,8 +10,13 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import isAuraEnabled from '../../../../../js/utilities/helper';
+import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
+import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -113,6 +118,10 @@ class CrossellPopupContent extends React.Component {
       <span className="out-of-stock">{Drupal.t('Out of Stock')}</span>
     );
 
+    // Get configurable options only for configurable product.
+    const options = getAttributeOptionsForWishlist(configurableCombinations,
+      relatedSku, variantSelected);
+
     return (relatedProductData) ? (
       <PdpPopupContainer className="magv2-crossell-popup-container">
         <PdpPopupWrapper className="magv2-crossell-popup-wrapper">
@@ -133,6 +142,15 @@ class CrossellPopupContent extends React.Component {
             >
               <Lozenges labels={labels} sku={relatedSku} />
             </PdpGallery>
+            <WishlistContainer
+              sku={relatedSku}
+              skuCode={skuMainCode}
+              context="magazinev2-related"
+              position="top-right"
+              format="icon"
+              title={title}
+              options={options}
+            />
             <PdpInfo
               title={title}
               finalPrice={parseFloat(finalPrice)
@@ -153,6 +171,9 @@ class CrossellPopupContent extends React.Component {
                 promotions={promotions}
               />
             </div>
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraPDP mode="related" />
+            </ConditionalView>
             {stockStatus ? (
               <PdpCart
                 skuCode={relatedSku}

@@ -75,6 +75,12 @@ body.supermenu {
       top: $super-menu-height;
     }
   }
+
+  .c-header__region {
+    @include breakpoint($desktop) {
+      padding-bottom: 1rem;
+    }
+  }
 }
 
 body.supermenu.header-sticky-filter {

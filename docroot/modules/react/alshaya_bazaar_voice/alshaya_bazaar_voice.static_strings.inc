@@ -312,8 +312,7 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'invalid_pie_user_details',
-      'value' => t('Logged in e-mail address does not matches with the email address used to purchase the product. 
-      To write a review on this product, please logout and login with same email address you have used for the purchase.'),
+      'value' => t('Please login with the email address used to purchase this product to write a review.'),
     ],
   ];
 }

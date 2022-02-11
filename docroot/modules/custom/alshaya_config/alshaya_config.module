@@ -85,8 +85,10 @@ function _alshaya_config_save_overridden_configs($module_name) {
  * Implements hook_modules_installed().
  */
 function alshaya_config_modules_installed($modules) {
+  $root_path = \Drupal::root();
+
   foreach ($modules as $module) {
-    $override_path = \Drupal::root() . '/' . drupal_get_path('module', $module) . '/config/override/';
+    $override_path = $root_path . '/' . drupal_get_path('module', $module) . '/config/override/';
 
     // Check if the module has overrides & install those configs.
     if (file_exists($override_path)) {
@@ -106,6 +108,32 @@ function alshaya_config_modules_installed($modules) {
           catch (\Exception $e) {
             \Drupal::logger($module)->warning('Error while saving config for override: @override from module @module. Message: @message', [
               '@override' => $override,
+              '@module' => $module,
+              '@message' => $e->getMessage(),
+            ]);
+          }
+        }
+      }
+    }
+
+    // Apply the language config overrides.
+    $languages = \Drupal::languageManager()->getLanguages();
+    /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+    $manager = \Drupal::service('alshaya_config.manager');
+
+    foreach ($languages as $langcode => $language) {
+      $translation_path = $root_path . '/' . drupal_get_path('module', $module) . '/config/' . $langcode . '/install';
+      if (file_exists($translation_path)) {
+        $storage = new FileStorage($translation_path);
+        $translations = $storage->listAll();
+
+        foreach ($translations as $translation) {
+          try {
+            $manager->updateConfigTranslations($translation, $langcode, $module);
+          }
+          catch (\Exception $e) {
+            \Drupal::logger($module)->notice('Error while saving config for translation: @translation from module @module. Message: @message', [
+              '@translation' => $translation,
               '@module' => $module,
               '@message' => $e->getMessage(),
             ]);

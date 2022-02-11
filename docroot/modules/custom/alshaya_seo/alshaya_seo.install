@@ -10,6 +10,69 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Remove special characters from URL aliases for nodes and terms.
+ */
+function alshaya_seo_update_8016(&$sandbox) {
+  $entities = [];
+  // Fetch all nodes in the system.
+  $entities['node'] = \Drupal::entityQuery('node')->execute();
+  // Fetch all terms in the system.
+  $entities['taxonomy_term'] = \Drupal::entityQuery('taxonomy_term')->execute();
+
+  $result = [];
+
+  foreach ($entities as $type => $entity_list) {
+    foreach ($entity_list as $entity_id) {
+      $result[] = [
+        'entity_type' => $type,
+        'id' => $entity_id,
+      ];
+    }
+  }
+
+  // Use the sandbox to store the information needed to track progression.
+  if (!isset($sandbox['current'])) {
+    // The count of entities visited so far.
+    $sandbox['current'] = 0;
+    // Total entities that must be visited.
+    $sandbox['max'] = count($result);
+  }
+
+  // Process entities by groups of 50.
+  $limit = 50;
+  $result = array_slice($result, $sandbox['current'], $limit);
+  $storage = [
+    'node' => \Drupal::entityTypeManager()->getStorage('node'),
+    'taxonomy_term' => \Drupal::entityTypeManager()->getStorage('taxonomy_term'),
+  ];
+  /** @var \Drupal\pathauto\PathautoGenerator $path_auto_generator */
+  $path_auto_generator = \Drupal::service('pathauto.generator');
+
+  foreach ($result as $row) {
+    $entity_storage = $storage[$row['entity_type']];
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+    $entity = $entity_storage->load($row['id']);
+
+    foreach ($entity->getTranslationLanguages() as $langcode => $language) {
+      $entity_translation = $entity->getTranslation($langcode);
+      // Update Entity URL alias.
+      $path_auto_generator->updateEntityAlias($entity_translation, 'update');
+    }
+
+    // Update our progress information.
+    $sandbox['current']++;
+  }
+
+  $sandbox['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['current'] / $sandbox['max']);
+
+  if ($sandbox['#finished'] >= 1) {
+    return 'The batch URL Alias update is finished.';
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating global metatag configuration.
  */
 function alshaya_seo_update_8015() {

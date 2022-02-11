@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../../alshaya_spc/js/utilities/storage';
+import logger from '../../../js/utilities/logger';
 
 /**
  * Ajax call for updating the cart.
@@ -300,6 +300,13 @@ export const pushSeoGtmData = (productData) => {
     return;
   }
 
+  if (productData.element === null) {
+    logger.warning('Error in pushing data to GTM. productData: @productData.', {
+      '@productData': JSON.stringify(productData),
+    });
+    return;
+  }
+
   // Get the quantity difference.
   const diffQty = productData.qty - productData.prevQty;
 
@@ -409,10 +416,10 @@ export const getSelectedOptionsForGtm = (
  * Returns the product info local storage expiration time.
  *
  * @returns integer
- *  Time in minutes format.
+ *  Time in seconds format.
  */
 export const getProductinfoLocalStorageExpiration = () => (typeof drupalSettings.add_to_bag.productinfo_local_storage_expiration !== 'undefined'
-  ? parseInt(drupalSettings.add_to_bag.productinfo_local_storage_expiration, 10)
+  ? (parseInt(drupalSettings.add_to_bag.productinfo_local_storage_expiration, 10) * 60)
   : 0);
 
 /**
@@ -431,7 +438,7 @@ export const getProductInfoStorageKey = (sku) => (`productinfo:${btoa(sku)}:${dr
 export const removeProductInfoInStorage = (sku) => {
   // Get local storage key for the product.
   const storageKey = getProductInfoStorageKey(sku);
-  removeStorageInfo(storageKey);
+  Drupal.removeItemFromLocalStorage(storageKey);
 };
 
 /**
@@ -443,16 +450,15 @@ export const removeProductInfoInStorage = (sku) => {
  *  Sku of product.
  */
 export const addProductInfoInStorage = (productData, sku) => {
-  const productInfo = { ...productData };
-
-  // Adding current time to storage to know the last time data updated.
-  productInfo.last_update = new Date().getTime();
-
   // Get local storage key for the product.
   const storageKey = getProductInfoStorageKey(sku);
 
   // Store data to local storage.
-  setStorageInfo(productInfo, storageKey);
+  Drupal.addItemInLocalStorage(
+    storageKey,
+    productData,
+    getProductinfoLocalStorageExpiration(),
+  );
 };
 
 /**
@@ -470,24 +476,14 @@ export const productInfoAvailableInStorage = (sku) => {
   const storageKey = getProductInfoStorageKey(sku);
 
   // Get data from local storage.
-  const productInfo = getStorageInfo(storageKey);
+  const productInfo = Drupal.getItemFromLocalStorage(storageKey);
 
   // If data is not available in storage, we flag it to check/fetch from api.
-  if (!productInfo || !productInfo.infoData || !productInfo.infoData.title) {
+  if (productInfo && !productInfo.title) {
     return null;
   }
 
-  // Configurable expiration time, by default it is 10m.
-  const storageExpireTime = getProductinfoLocalStorageExpiration();
-  const expireTime = storageExpireTime * 60 * 1000;
-  const currentTime = new Date().getTime();
-
-  // If data is expired, we flag it to check/fetch from api.
-  if ((currentTime - productInfo.last_update) > expireTime) {
-    return null;
-  }
-
-  return productInfo.infoData;
+  return productInfo;
 };
 
 /**

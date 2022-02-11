@@ -26,15 +26,10 @@ function alshaya_rcs_magazine_rcs_handlebars_templates_alter(&$templates, $entit
     return;
   }
 
-  // Provide template for product teaser.
-  $path = drupal_get_path('module', 'alshaya_rcs_product');
-  $templates['field']['magazine_article'] = [
-    'product_teaser' => "$path/templates/rcs-product-teaser.handlebars",
-  ];
-  $templates['block']['product']['price'] = "$path/templates/rcs-product-price-block.handlebars";
-  $templates['block']['product']['price_item'] = "$path/templates/rcs-product-price-item-block.handlebars";
+  $templates['product.teaser'] = 'alshaya_rcs_product';
+  $templates['product.block.price'] = 'alshaya_rcs_product';
+  $templates['product.block.price.item'] = 'alshaya_rcs_product';
 }
-
 
 /**
  * Implements hook_rcs_placeholders_graphql_query().
@@ -54,7 +49,7 @@ function alshaya_rcs_magazine_rcs_placeholders_graphql_query() {
       'price_range' => [
         'maximum_price' => [
           'regular_price' => [
-            'value'
+            'value',
           ],
           'final_price' => [
             'value',

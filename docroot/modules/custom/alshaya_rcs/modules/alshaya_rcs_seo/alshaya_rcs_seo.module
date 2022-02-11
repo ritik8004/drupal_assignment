@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Module file for RCS Seo.
+ */
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
+  if ($extension !== 'datalayer') {
+    return;
+  }
+
+  $new_source = "/" . drupal_get_path('module', 'alshaya_rcs_seo') . "/js/datapush.js";
+  $options = $libraries['datapush']['js']['js/datapush.js'];
+  unset($libraries['datapush']['js']['js/datapush.js']);
+  $libraries['datapush']['js'][$new_source] = $options;
+
+  $libraries['datapush']['dependencies'] = [
+    'rcs_placeholders/helpers',
+    'alshaya_rcs_seo/alshaya_rcs_product_seo',
+  ];
+
+  // Load it in the footer as the files which contain the event handlers will
+  // be loaded in the footer only.
+  unset($libraries['datapush']['header']);
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'alshaya_spc.checkout.confirmation') {
+    // This adds the library to the top of the array and above the
+    // datalayer/datapush library.
+    // If we put the weight=-1 for this, then the library dependencies are
+    // loaded later, thus causing issues.
+    // Hence we follow this approach.
+    array_unshift($attachments['#attached']['library'], 'alshaya_rcs_seo/order_confirmation');
+  }
+}

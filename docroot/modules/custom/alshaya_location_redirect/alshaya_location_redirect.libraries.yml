@@ -5,3 +5,4 @@ redirect:
     - core/jquery
     - core/drupal
     - core/drupalSettings
+    - alshaya_master/local_storage_manager

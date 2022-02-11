@@ -15,6 +15,9 @@ import {
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
+import { cartContainsOnlyVirtualProduct, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -54,7 +57,7 @@ export default class CnCBillingAddress extends React.Component {
       // has changed the billing address. We set in localstorage.
       if (data.error === undefined) {
         if (data.cart !== undefined) {
-          localStorage.setItem(localStorageKey, false);
+          Drupal.addItemInLocalStorage(localStorageKey, false);
         }
       }
 
@@ -73,6 +76,11 @@ export default class CnCBillingAddress extends React.Component {
 
   isActive = () => {
     const { cart } = this.props;
+    // Activate the billing address component if full payment is done by egift card.
+    // As in case of full payment done by egift card, we disabled other payment methods.
+    if (isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart)) {
+      return true;
+    }
 
     if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
       return false;
@@ -86,7 +94,8 @@ export default class CnCBillingAddress extends React.Component {
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show billing.
-    if (cart.cart.shipping.method === null) {
+    if (cart.cart.shipping.method === null
+      && !cartContainsOnlyVirtualProduct(cart.cart)) {
       return (null);
     }
 
@@ -100,12 +109,15 @@ export default class CnCBillingAddress extends React.Component {
     }
 
     const shippingAddress = cart.cart.shipping.address;
-    const editAddressData = {
-      static: {
-        fullname: makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || ''),
-        telephone: shippingAddress.telephone,
-      },
-    };
+    let editAddressData = {};
+    if (shippingAddress) {
+      editAddressData = {
+        static: {
+          fullname: makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || ''),
+          telephone: shippingAddress.telephone,
+        },
+      };
+    }
 
     const activeClass = this.isActive() ? 'active' : 'in-active';
 
@@ -131,7 +143,12 @@ export default class CnCBillingAddress extends React.Component {
                       closeModal={triggerCloseModal}
                       cart={cart}
                       processAddress={this.processAddress}
-                      showEmail={false}
+                      // Show email id field in case of egift card is enabled,
+                      // cart contains only virtual products and anonymous user.
+                      showEmail={
+                        !isUserAuthenticated()
+                        && cartContainsOnlyVirtualProduct(cart.cart)
+                      }
                       showEditButton={false}
                       type="billing"
                       formContext="billing"

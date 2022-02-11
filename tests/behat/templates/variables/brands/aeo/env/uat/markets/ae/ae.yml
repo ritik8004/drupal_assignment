@@ -1,8 +1,7 @@
 variables:
-  spc_product_listing_page: '/shop-cloths-test/'
-  spc_basket_page: '/shop-cloths-test/'
-  product_listing_page_url: "/shop-cloths-test/"
-  np_plp_page: '/shop-cloths-test/'
-  np_plp_product_page: '/buy-ae-graphic-t-shirt-test-teal.html/'
-  spc_pdp_page: '/buy-ae-graphic-t-shirt-test-teal.html/'
-  np_promotion: 0
+  spc_product_listing_page: '/#query=jacket'
+  spc_basket_page: '/#query=jacket'
+  product_listing_page_url: "/#query=jacket"
+  np_plp_page: '/#query=jacket'
+  np_plp_product_page: '/buy-ae-puffer-jacket-orange.html/'
+  spc_pdp_page: '/buy-ae-puffer-jacket-orange.html/'

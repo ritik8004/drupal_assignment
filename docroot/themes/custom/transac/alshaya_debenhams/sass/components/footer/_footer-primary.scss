@@ -14,9 +14,12 @@
     }
   }
 
+  @include breakpoint($only-tablet) {
+    padding-top: 1.25rem;
+  }
+
   @include breakpoint($desktop) {
-    padding: 0;
-    padding-top: 2.5rem;
+    padding: 2.5rem 0;
   }
 
   .primary--footer--right {
@@ -42,8 +45,12 @@
 
   .footer--abouthelp {
     @include breakpoint($only-tablet) {
-      width: 70%;
+      width: 68%;
       display: inline-flex;
+
+      html[lang=ar] & {
+        width: 64%;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -115,8 +122,9 @@
     font-size: 0.875rem;
 
     &::after {
-      font-size: 1rem;
+      font-size: 1.25rem;
       #{$right}: 1.125rem;
+      font-weight: bold;
     }
   }
 }
@@ -131,24 +139,39 @@
     padding-#{$right}: 0;
     border: 1px solid $primary_input_border;
 
+    html[lang=ar] & {
+      padding-left: 0;
+    }
+
     @include breakpoint($only-tablet) {
       padding-#{$right}: 10%;
 
       @include ellipsis-text;
     }
   }
+
+  .edit-newsletter {
+    .ladda-spinner {
+      margin-#{$right}: -1.75rem;
+      top: 1.1875rem;
+    }
+  }
 }
 
 .alshaya-newsletter-subscribe {
-  max-width: 22rem;
   width: 100%;
 
-  html[lang=ar] & {
-    width: 95%;
+  @include breakpoint($tablet) {
+    max-width: 22rem;
   }
 
   @include breakpoint($only-mobile) {
-    margin: 1rem 1.25rem 2.5rem;
+    padding: 0 1.25rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 0;
+    margin-top: 2rem;
   }
 
   @include breakpoint($only-tablet) {
@@ -186,8 +209,14 @@
       max-width: 12.5rem;
       margin-#{$right}: 0.625rem;
 
+      html[lang=ar] & {
+        @include breakpoint($desktop) {
+          max-width: 14rem;
+        }
+      }
+
       @include breakpoint($only-mobile) {
-        max-width: 21rem;
+        max-width: unset;
         width: 100%;
       }
 
@@ -214,7 +243,6 @@
     @include breakpoint($only-mobile) {
       text-align: $left;
       padding: 0;
-      font-size: 0.875rem;
     }
   }
 }
@@ -254,20 +282,27 @@
       li {
         a {
           text-transform: unset;
+          text-decoration: none;
         }
 
         &.en {
-          a,
-          &.is-active a {
-            font-family: $dh-regular;
+          a {
+            font-family: $dh-light;
             margin-#{$left}: 0;
+          }
+
+          &.is-active a {
+            font-family: $dh-semibold;
           }
         }
 
         &.ar {
-          a,
-          &.is-active a {
+          a {
             font-family: $dh-GESST-light;
+          }
+
+          &.is-active a {
+            font-family: $dh-GESST-bold;
           }
         }
 
@@ -287,6 +322,14 @@
       li {
         margin-top: 0.25rem;
       }
+    }
+  }
+}
+
+.language--switcher {
+  &.only-first-time {
+    .language-switcher-close {
+      top: -0.125rem;
     }
   }
 }
@@ -340,6 +383,16 @@
       padding-bottom: 1.875rem;
       border-bottom: 1px solid $accordion_border;
       border-top: 0;
+    }
+  }
+}
+
+.open--accordion {
+  .is-accordion {
+    &::after {
+      @include breakpoint($only-mobile) {
+        font-weight: bold;
+      }
     }
   }
 }

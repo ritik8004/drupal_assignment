@@ -1,5 +1,4 @@
 (function ($) {
-  'use strict';
 
   $(document).ready(function () {
     var $offer_toggler = $('.block-todays-offer h2');

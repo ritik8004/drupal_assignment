@@ -448,7 +448,7 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
   }
 
   // We don't show surcharge in totals on basket page.
-  // @TODO: Re-visit when working on CORE-4483.
+  // @todo Re-visit when working on CORE-4483.
   $surcharge = $cart->getExtension('surcharge');
 
   if ($surcharge) {
@@ -789,7 +789,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
 
   if (!$is_free_sku_item) {
     if ($parent_sku) {
-      /* @var \Drupal\node\Entity\Node $parent_node */
+      /** @var \Drupal\node\Entity\Node $parent_node */
       $parent_node = alshaya_acm_product_get_display_node($parent_sku->getSKU());
       if ($parent_node) {
         $name = [
@@ -800,7 +800,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
       }
     }
     else {
-      /* @var \Drupal\node\Entity\Node $product_node */
+      /** @var \Drupal\node\Entity\Node $product_node */
       $product_node = alshaya_acm_product_get_display_node($sku_entity);
       if ($product_node) {
         $name = [
@@ -888,7 +888,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
 
   if (empty($name)) {
     if ($is_free_sku_item) {
-      /* @var \Drupal\node\Entity\Node $product_node */
+      /** @var \Drupal\node\Entity\Node $product_node */
       $product_node = alshaya_acm_product_get_display_node($sku_entity);
       $name = [
         '#title' => $product_node ? $product_node->getTitle() : $sku_entity->get('name')->getString(),

@@ -5,7 +5,7 @@
   .region__menu-primary {
     @include breakpoint($desktop) {
       float: $left;
-      width: 50%;
+      width: 45%;
     }
 
     .menu--one__list {
@@ -24,6 +24,31 @@
         justify-content: center;
       }
     }
+  }
+
+  .brand-victorias-secret,
+  .brand-pink,
+  .brand-beauty,
+  .brand-swim {
+    img {
+      height: 1.625rem;
+    }
+  }
+
+  .brand-victorias-secret img {
+    width: 3.4375rem;
+  }
+
+  .brand-pink img {
+    width: 2.5rem;
+  }
+
+  .brand-beauty img {
+    width: 3.125rem;
+  }
+
+  .brand-swim img {
+    width: 1.75rem;
   }
 }
 

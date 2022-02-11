@@ -1,0 +1,5 @@
+alshaya_egift_card.egift_card_config:
+  title: 'Alshaya Egift Card Configurations'
+  base_route_name: alshaya_egift_card.egift_card_config
+  names:
+    - alshaya_egift_card.settings

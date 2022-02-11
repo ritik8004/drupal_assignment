@@ -29,6 +29,20 @@ const ProductCategoryTeaser = ({
     return null;
   }
 
+  const labels = [];
+  if (attribute.product_labels.length > 0) {
+    attribute.product_labels.forEach((label) => {
+      label.push({
+        image: {
+          url: label.image,
+          alt: label.text,
+          title: label.text,
+        },
+        position: label.position,
+      });
+    });
+  }
+
   const teaserClass = 'views-row';
 
   return (
@@ -56,7 +70,7 @@ const ProductCategoryTeaser = ({
               <Gallery
                 media={hit.media.splice(0, 1)}
                 title={attribute.title}
-                labels={attribute.product_labels}
+                labels={labels}
                 sku={hit.sku}
               />
             </ConditionalView>

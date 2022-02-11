@@ -26,12 +26,18 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
+import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout-rewards/aura-checkout-container';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 import validateCartResponse from '../../../utilities/validation_util';
-import { getStorageInfo } from '../../../utilities/storage';
 import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
+import { checkAreaAvailabilityStatusOnCart, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import RedeemEgiftCard from '../../../egift-card';
+import { cartContainsAnyNormalProduct, cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 
 window.fetchStore = 'idle';
 
@@ -47,6 +53,7 @@ export default class Checkout extends React.Component {
       messageType: null,
       errorSuccessMessage: null,
       isPostpayInitialised: false,
+      isExpressDeliveryAvailable: false,
     };
   }
 
@@ -73,8 +80,40 @@ export default class Checkout extends React.Component {
             redirectToCart();
             return;
           }
+          // Event listerner to update any change in totals in cart object.
+          document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
+
           this.processAddressFromLocalStorage(result);
-          this.processCheckout(result);
+
+          // Check if SSD/ED is enabled.
+          // If cart contain only virtual products then we don't check the
+          // cart shipping methods.
+          if (isExpressDeliveryEnabled() && !cartContainsOnlyVirtualProduct(result)) {
+            try {
+              const cartId = result.cart_id_int;
+              if (cartId) {
+                // Get shipping Methods on product level.
+                getCartShippingMethods(null, null, cartId).then(
+                  (response) => {
+                    if (response !== null) {
+                      // Show prefilled area when SDD/ED is available.
+                      if (!hasValue(response.error)
+                        && checkAreaAvailabilityStatusOnCart(response)) {
+                        this.setState({
+                          isExpressDeliveryAvailable: true,
+                        });
+                      }
+                      this.processCheckout(result);
+                    }
+                  },
+                );
+              }
+            } catch (error) {
+              Drupal.logJavascriptError('Could not fetch shipping methods', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+            }
+          } else {
+            this.processCheckout(result);
+          }
         });
       } else {
         redirectToCart();
@@ -144,7 +183,7 @@ export default class Checkout extends React.Component {
     }
 
     if (result.shipping && result.shipping.method === null) {
-      const shippingAddress = getStorageInfo('shippingaddress-formdata');
+      const shippingAddress = Drupal.getItemFromLocalStorage('shippingaddress-formdata');
       if (shippingAddress) {
         showFullScreenLoader();
         const cartInfo = addShippingInCart('update shipping', shippingAddress);
@@ -247,6 +286,16 @@ export default class Checkout extends React.Component {
     );
   };
 
+  // Event listener to update totals in cart.
+  handleTotalsUpdateEvent = (event) => {
+    const { cart } = this.state;
+    const { totals } = event.detail;
+    const cartData = cart;
+    cartData.cart.totals = { ...totals };
+
+    this.setState({ cart: cartData });
+  };
+
   render() {
     const {
       wait,
@@ -254,6 +303,7 @@ export default class Checkout extends React.Component {
       errorSuccessMessage,
       messageType,
       isPostpayInitialised,
+      isExpressDeliveryAvailable,
     } = this.state;
     // While page loads and all info available.
 
@@ -274,6 +324,10 @@ export default class Checkout extends React.Component {
       ? Drupal.smartAgent.getInfo()
       : false;
 
+    // Main wrapper class.
+    const mainWrapperClass = `spc-main ${isEgiftCardEnabled()
+      && cartContainsOnlyVirtualProduct(cart.cart) ? 'spc-virtual-product-checkout' : ''}`;
+
     return (
       <>
         <div className="spc-pre-content">
@@ -284,7 +338,7 @@ export default class Checkout extends React.Component {
             </>
           </ConditionalView>
         </div>
-        <div className="spc-main">
+        <div className={mainWrapperClass}>
           <div className="spc-content">
             {errorSuccessMessage !== null
               && (
@@ -292,11 +346,20 @@ export default class Checkout extends React.Component {
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
+            <ConditionalView condition={cartContainsAnyNormalProduct(cart.cart)}>
+              <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
+              <ClicknCollectContextProvider cart={cart}>
+                <DeliveryInformation
+                  refreshCart={this.refreshCart}
+                  cart={cart}
+                  isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+                />
+              </ClicknCollectContextProvider>
+            </ConditionalView>
 
-            <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
-            <ClicknCollectContextProvider cart={cart}>
-              <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
-            </ClicknCollectContextProvider>
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraCheckoutContainer cart={cart} />
+            </ConditionalView>
 
             <PaymentMethods
               ref={this.paymentMethods}
@@ -304,6 +367,13 @@ export default class Checkout extends React.Component {
               cart={cart}
               isPostpayInitialised={isPostpayInitialised}
             />
+
+            <ConditionalView condition={isEgiftCardEnabled()}>
+              <RedeemEgiftCard
+                cart={cart}
+                refreshCart={this.refreshCart}
+              />
+            </ConditionalView>
 
             {billingComponent}
 

@@ -73,6 +73,9 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@acq_sku.category_repo'
+      - '@database'
+      - '@acq_commerce.ingest_api'
+      - '@acq_commerce.i18n_helper'
 
   alshaya_acm_product_category.page:
     class: Drupal\alshaya_acm_product_category\Service\ProductCategoryPage

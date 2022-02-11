@@ -1,0 +1,11 @@
+body.wishlist-enabled {
+  #wishlist-header-wrapper {
+    @include breakpoint($only-mobile) {
+      top: 1.125rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 0.75rem;
+    }
+  }
+}

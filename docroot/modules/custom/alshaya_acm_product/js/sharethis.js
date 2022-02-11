@@ -4,7 +4,6 @@
  */
 
 (function ($, drupalSettings) {
-  'use strict';
 
   var shareThisLoadingCounter = 0;
 

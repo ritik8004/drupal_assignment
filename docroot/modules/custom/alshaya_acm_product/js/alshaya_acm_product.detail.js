@@ -1,5 +1,4 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   // The threshold for how far you should reach before loading related products.
   var scrollThreshold = 200;
@@ -64,8 +63,15 @@
       // Trigger matchback color change on main product color change.
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
         var selected = $(this).val();
-        var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
+        var sku = $(this).parents('form').attr('data-sku');
+        var productKey = Drupal.getProductKeyForProductViewMode('full');
+        var variantInfo = window.commerceBackend.getProductData(sku, productKey);
+        // Use swatch value to update query param from pretty path.
+        if (variantInfo.swatch_param !== undefined) {
+          Drupal.getSelectedProductFromSwatch(sku, selected, productKey);
+        }
 
+        var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
         $('article[data-vmode="' + viewMode + '"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
           var swatchSelector = $(this).parent().siblings('.select2Option');
 
@@ -123,6 +129,10 @@
               code
             ]
           );
+          // Dispatching event on variant change to listen in react.
+          if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled) {
+            Drupal.dispatchAuraProductUpdateEvent($(this));
+          }
         }
       });
 
@@ -147,12 +157,42 @@
           window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, productData.sku);
         }
 
+        // Dispatch event on modal load each time to perform action on load.
+        // We need to load wishlist component first before we set product data.
+        if (viewMode === 'modal' || viewMode === 'matchback') {
+          var eventName = (viewMode === 'modal') ? 'onModalLoad' : 'onMatchbackLoad';
+          var currentMatchBackLoad = new CustomEvent(eventName, {bubbles: true, detail: { data: sku }});
+          document.dispatchEvent(currentMatchBackLoad);
+        }
+
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = productData.variants[variant];
+          var parentSku = variantInfo.parent_sku;
+          var title = variantInfo.cart_title;
+
+          // Trigger an event on variant select.
+          // Only considers variant when url is changed.
+          var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {
+            bubbles: true,
+            detail: {
+              data: {
+                viewMode,
+                sku: parentSku,
+                variantSelected: selected,
+                title,
+              }
+            }
+          });
+          document.dispatchEvent(currentSelectedVariantEvent);
 
           if (typeof variantInfo === 'undefined') {
+            Drupal.alshayaLogger('warning', 'Error occurred during attribute selection, sku: @sku, selected: @selected, variant: @variant', {
+              '@sku': sku,
+              '@selected': selected,
+              '@variant': variant,
+            });
             return;
           }
 
@@ -206,7 +246,7 @@
             ? Object.keys(variants)[0]
             : configurableCombinations.firstChild;
 
-          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
+          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, productData);
 
           if (selectedSkuFromQueryParam !== '') {
             selectedSku = selectedSkuFromQueryParam;
@@ -267,6 +307,12 @@
         });
       }
 
+      if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled) {
+        $('select.edit-quantity').once('product-edit-quantity').on('change', function () {
+          // Dispatching event on quantity change to listen in react.
+          Drupal.dispatchAuraProductUpdateEvent($(this));
+        });
+      }
     }
   };
 
@@ -321,6 +367,16 @@
         break;
       }
 
+      if (selectedValues === null) {
+        Drupal.alshayaLogger('warning', 'Error occurred during fetching nextcode from Drupal.alshayaAcmProductSelectConfiguration, sku: @sku, combinations: @combinations, selectedCode: @selectedCode, selectedValue: @selectedValue', {
+          '@sku': sku,
+          '@combinations': combinations,
+          '@selectedCode': selectedCode,
+          '@selectedValue': selectedValue,
+        });
+        return;
+      }
+
       combinations = combinations[code][selectedValues[code]];
     }
 
@@ -372,8 +428,7 @@
     var viewMode = $(form).parents('article.entity--type-node:first').attr('data-vmode')
     var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
     var productData = window.commerceBackend.getProductData(sku, productKey);
-    var variants = productData.variants;
-    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
+    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, productData);
     var combinations = window.commerceBackend.getConfigurableCombinations(sku);
 
     if (selectedSku) {
@@ -410,6 +465,9 @@
 
   Drupal.getSelectedCombination = function (form) {
     var selectedValues = Drupal.getSelectedValues(form);
+    // Trigger an event to pass selected configurable options.
+    var configurableCombinationsEvent = new CustomEvent('onConfigurationOptionsLoad', {bubbles: true, detail: { data: selectedValues }});
+    document.dispatchEvent(configurableCombinationsEvent);
     var selectedCombination = '';
 
     for (var code in selectedValues) {
@@ -464,9 +522,9 @@
       var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
       var productData = window.commerceBackend.getProductData(sku, productKey);
 
-      var parentInfo = typeof productData !== "undefined" ? productData : '';
+      var parentInfo = productData !== null ? productData : '';
       // At parent level, sku and selected will be same.
-      var variantInfo = (typeof productData !== "undefined"
+      var variantInfo = (productData !== null
         && typeof productData['variants'] !== "undefined"
         && sku !== selected)
         ? productData['variants'][selected] : '';
@@ -482,7 +540,7 @@
         cart_items = cartItemsArg
       }
       else {
-        var cart = JSON.parse(localStorage.getItem('cart_data'));
+        var cart = Drupal.getItemFromLocalStorage('cart_data');
         if (cart !== null && cart.cart !== null) {
           cart_items = cart.cart.items
         }
@@ -576,12 +634,17 @@
     return productKey
   };
 
-  Drupal.getSelectedProductFromQueryParam = function (viewMode, variants) {
+  Drupal.getSelectedProductFromQueryParam = function (viewMode, productInfo) {
+    var selectedSku = '';
+    // Use swatch from query parameter if pdp pretty path module is enabled.
+    if (productInfo.swatch_param !== undefined) {
+      selectedSku = Drupal.getSelectedSkuFromPdpPrettyPath(productInfo);
+    }
     // Use selected from query parameter only for main product.
+    var variants = productInfo['variants'];
     var selected = (viewMode === 'full')
       ? parseInt(Drupal.getQueryVariable('selected'))
       : 0;
-    var selectedSku = '';
 
     if (selected > 0) {
       for (var i in variants) {

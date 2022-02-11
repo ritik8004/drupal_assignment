@@ -1,0 +1,16 @@
+.spc-cart-items {
+  .spc-cart-item {
+    .spc-product-attributes-wrapper {
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .spc-product-tile {
+      grid-template-columns: 7.1875rem 1fr 4.8125rem;
+
+      .spc-product-image {
+        border: 1px solid $primary_border;
+      }
+    }
+  }
+}

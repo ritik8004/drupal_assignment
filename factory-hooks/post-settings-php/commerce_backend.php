@@ -21,11 +21,8 @@ $settings['middleware_auth'] = '5um6y5nxl3oqms9qw0jai36qkryrrocg';
 // operations.
 // 2 = backend is magento, i.e. we call magento APIs directly to perform
 // commerce operations.
-$settings['commerce_backend']['version'] = 1;
+$settings['commerce_backend']['version'] = 2;
 
 // Use this setting to toggle blocking and unblocking of calls to middleware
 // after making the switch to V2.
-$settings['commerce_backend']['block_middleware'] = 0;
-if ($env === 'local') {
-  $settings['commerce_backend']['block_middleware'] = 1;
-}
+$settings['commerce_backend']['block_middleware'] = 1;

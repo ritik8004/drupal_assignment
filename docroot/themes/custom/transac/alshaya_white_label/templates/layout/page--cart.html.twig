@@ -27,13 +27,18 @@
         {% include directory ~ '/../alshaya_white_label/templates/partial/nojs.html.twig' %}
 
         {% if page.header %}
-            <header class="c-header">
-                <div class="l-container">
-                    <div class="c-header__region">
-                        {{ page.header }}
-                    </div>
-                </div>
-            </header>
+          <header class="c-header">
+            <div class="l-container">
+              <div class="c-header__region">
+                {{ page.header }}
+              </div>
+              {% if page.sub_header_menu %}
+                <div class="c-secondary-header__region">
+                  {{ page.sub_header_menu }}
+                </div> 
+              {% endif %}
+            </div>
+          </header>
         {% endif %}
         <!-- /header -->
 

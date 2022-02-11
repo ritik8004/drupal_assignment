@@ -4,11 +4,17 @@ import VatText from '../vat-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
+import AuraCheckoutOrderSummary from '../../aura-loyalty/components/aura-checkout-rewards/components/aura-checkout-order-summary';
+import isAuraEnabled from '../../../../js/utilities/helper';
 import PostpayCart from '../../cart/components/postpay/postpay';
 import Postpay from '../postpay';
 import Advantagecard from '../advantagecard';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import Tabby from '../../../../js/tabby/utilities/tabby';
+import TabbyWidget from '../../../../js/tabby/components';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import EgiftCheckoutOrderSummary from '../../egift-card/components/egift-checkout-order-summary';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -23,6 +29,10 @@ class TotalLineItems extends React.Component {
   componentDidMount = () => {
     document.addEventListener('applyDynamicPromotions', this.applyDynamicPromotions, false);
   };
+
+  componentWillUnmount = () => {
+    document.removeEventListener('applyDynamicPromotions', this.applyDynamicPromotions, false);
+  }
 
   applyDynamicPromotions = (event) => {
     // If promo contains no data, set to null.
@@ -73,9 +83,23 @@ class TotalLineItems extends React.Component {
   };
 
   render() {
-    const { totals, isCartPage, collectionCharge } = this.props;
+    const {
+      totals,
+      isCartPage,
+      context,
+      collectionCharge,
+    } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
+
+    // Check for aura totals.
+    let dontShowVatText = false;
+    const { paidWithAura } = totals;
+
+    if (paidWithAura > 0) {
+      dontShowVatText = true;
+    }
+
     // Using a separate variable(shippingAmount) to update the value
     // not using the variable in props(totals) as it will
     // update the global value.
@@ -143,6 +167,12 @@ class TotalLineItems extends React.Component {
 
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
+          <ConditionalView condition={isEgiftCardEnabled()}>
+            <EgiftCheckoutOrderSummary
+              totals={totals}
+              context={context}
+            />
+          </ConditionalView>
           <div className="delivery-vat">
             <ConditionalView condition={shippingAmount === null}>
               <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
@@ -150,7 +180,23 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
+          <ConditionalView condition={isAuraEnabled()}>
+            <AuraCheckoutOrderSummary
+              totals={totals}
+              dontShowVatText={dontShowVatText}
+              shippingAmount={shippingAmount}
+              context={context}
+            />
+          </ConditionalView>
           {postpay}
+          <ConditionalView condition={isCartPage && Tabby.isTabbyEnabled()}>
+            <TabbyWidget
+              pageType="cart"
+              classNames="spc-tabby"
+              mobileOnly={false}
+              id="tabby-promo-cart"
+            />
+          </ConditionalView>
         </div>
       </div>
     );

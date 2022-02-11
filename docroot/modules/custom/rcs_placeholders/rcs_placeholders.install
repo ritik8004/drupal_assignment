@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * @file
+ * Install file.
+ */
+
 use Drupal\taxonomy\Entity\Term;
 use Drupal\node\Entity\Node;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\Core\Url;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Implements hook_install().
@@ -20,11 +27,11 @@ function rcs_placeholders_install() {
   $config = \Drupal::service('config.factory')->getEditable('rcs_placeholders.settings');
 
   // Placeholder category term.
-  $term = Term::create(array(
-    'parent' => array(),
+  $term = Term::create([
+    'parent' => [],
     'name' => '#rcs.category.name#',
     'vid' => 'rcs_category',
-  ));
+  ]);
   $term->save();
 
   foreach ($languages as $langcode => $language) {
@@ -37,10 +44,10 @@ function rcs_placeholders_install() {
   $config->set('category.placeholder_tid', $term->id())->save();
 
   // Placeholder product node.
-  $node = Node::create(array(
+  $node = Node::create([
     'type' => 'rcs_product',
     'title' => '#rcs.product.name#',
-  ));
+  ]);
   $node->save();
 
   foreach ($languages as $langcode => $language) {
@@ -53,10 +60,10 @@ function rcs_placeholders_install() {
   $config->set('product.placeholder_nid', $node->id())->save();
 
   // Placeholder promotion node.
-  $node = Node::create(array(
+  $node = Node::create([
     'type' => 'rcs_promotion',
     'title' => '#rcs.promotion.name#',
-  ));
+  ]);
   $node->save();
 
   foreach ($languages as $langcode => $language) {
@@ -137,4 +144,51 @@ function rcs_placeholders_install() {
   \Drupal::database()
     ->schema()
     ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function rcs_placeholders_uninstall() {
+  // Delete node fields.
+  $field_names = ['field_product_slug', 'field_metatags'];
+  foreach ($field_names as $field_name) {
+    $field = FieldConfig::loadByName('node', 'rcs_product', $field_name);
+    if (!empty($field)) {
+      $field->delete();
+    }
+    $field_storage = FieldStorageConfig::loadByName('node', $field_name);
+    if (!empty($field_storage)) {
+      $field_storage->delete();
+    }
+  }
+
+  // Delete taxonomy fields.
+  $field_names = ['field_category_slug', 'field_metatags'];
+  foreach ($field_names as $field_name) {
+    $field = FieldConfig::loadByName('taxonomy_term', 'rcs_category', $field_name);
+    if (!empty($field)) {
+      $field->delete();
+    }
+    $field_storage = FieldStorageConfig::loadByName('taxonomy_term', $field_name);
+    if (!empty($field_storage)) {
+      $field_storage->delete();
+    }
+  }
+
+  // Remove module configs.
+  $config_ids = [
+    'metatag.metatag_defaults.node__rcs_product',
+    'metatag.metatag_defaults.taxonomy_term__rcs_category',
+    'metatag.settings',
+    'node.type.rcs_promotion',
+    'pathauto.pattern.rcs_category',
+    'pathauto.pattern.rcs_product',
+    'pathauto.pattern.rcs_promotion',
+    'system.menu.rcs-navigation',
+  ];
+  foreach ($config_ids as $config_id) {
+    $config = \Drupal::service('config.factory')->getEditable($config_id);
+    $config->delete();
+  }
 }

@@ -32,7 +32,7 @@
           sku = $(this).parent('article').data('sku');
         }
 
-        globalThis.rcsPhCommerceBackend.getData('product-recommendation', {sku: sku})
+        globalThis.rcsPhCommerceBackend.getData('product-recommendation', {sku: sku}, null, null, null, true)
           .then(function (entity) {
             if (entity === null || typeof entity === 'undefined') {
               return;
@@ -75,17 +75,5 @@
         return false;
       });
     }
-  };
-
-  /**
-   * Get query for graphQl.
-   *
-   * @param {string} urlKey
-   *   Url key of product.
-   * @returns {string}
-   *   Query string for graphql.
-   */
-  Drupal.alshayaRcs.getProductQuery = function (urlKey) {
-    return `{products(filter: {url_key: {eq: "`+ urlKey + `"}}) ${rcsPhGraphqlQuery.products}}`;
   };
 })(jQuery, Drupal);

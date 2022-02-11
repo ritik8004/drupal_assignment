@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, dataLayer) {
-  'use strict';
 
   $('body[gtm-container="checkout login page"]').once('gtm_checkout_login').each(function () {
     // @todo: Remove when we merge login section with checkout.

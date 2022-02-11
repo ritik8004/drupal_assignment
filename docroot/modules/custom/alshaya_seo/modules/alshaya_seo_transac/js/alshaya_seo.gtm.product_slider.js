@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, debounce) {
-  'use strict';
 
   Drupal.alshayaSeoGtmProductSlider = Drupal.alshayaSeoGtmProductSlider || {};
 

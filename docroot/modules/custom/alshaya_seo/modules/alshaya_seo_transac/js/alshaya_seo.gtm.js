@@ -2,17 +2,16 @@
  * @file
  * JS code to integrate with GTM.
  */
-const GTM_CONSTANTS = {
-  CART_ERRORS: 'cart errors',
-  CHECKOUT_ERRORS: 'checkout errors',
-  PAYMENT_ERRORS: 'other payment errors',
-  GENUINE_PAYMENT_ERRORS: 'payment errors',
-};
-
-const productRecommendationsSuffix = 'pr-';
-
 (function ($, Drupal, dataLayer) {
-  'use strict';
+
+  window.GTM_CONSTANTS = {
+    CART_ERRORS: 'cart errors',
+    CHECKOUT_ERRORS: 'checkout errors',
+    PAYMENT_ERRORS: 'other payment errors',
+    GENUINE_PAYMENT_ERRORS: 'payment errors',
+  };
+
+  window.productRecommendationsSuffix = 'pr-';
 
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;
@@ -21,7 +20,7 @@ const productRecommendationsSuffix = 'pr-';
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+      $('body').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', '.sku-base-form', function (event, variant, code) {
         var product = $(this).closest('[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
         var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
@@ -43,6 +42,7 @@ const productRecommendationsSuffix = 'pr-';
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
+        product.attr('gtm-main-sku', variantInfo['parent_sku']);
       });
 
       // For simple grouped products.
@@ -171,8 +171,8 @@ const productRecommendationsSuffix = 'pr-';
         userId = userDetails.userID;
       }
 
-      if (localStorage.getItem('userID') === undefined) {
-        localStorage.setItem('userID', userId);
+      if (!Drupal.getItemFromLocalStorage('userID')) {
+        Drupal.addItemInLocalStorage('userID', userId);
       }
 
       // Set platformType.
@@ -260,15 +260,17 @@ const productRecommendationsSuffix = 'pr-';
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
-        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID && loginType !== undefined) {
+        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && Drupal.getItemFromLocalStorage('userID') !== userDetails.userID && loginType !== undefined) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
-          localStorage.setItem('userID', userDetails.userID);
+          Drupal.addItemInLocalStorage('userID', userDetails.userID);
         }
 
         // Fire logout success event on successful sign-in.
-        if (localStorage.getItem('userID') && localStorage.getItem('userID') != userDetails.userID && userDetails.userID === 0) {
+        if (Drupal.getItemFromLocalStorage('userID')
+          && Drupal.getItemFromLocalStorage('userID') != userDetails.userID
+          && userDetails.userID === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
-          localStorage.setItem('userID', userDetails.userID);
+          Drupal.addItemInLocalStorage('userID', userDetails.userID);
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_login_type', {path: '/'});
         }
 
@@ -704,6 +706,53 @@ const productRecommendationsSuffix = 'pr-';
     }
   };
 
+  // Simple proxy to dispatch a custom event on window.history.replaceState
+  window.history.replaceState = new Proxy(window.history.replaceState, {
+    apply: (target, thisArg, argArray) => {
+      window.dispatchEvent(new CustomEvent('onAlshayaSeoReplaceState', {detail: { data: () => argArray }}));
+      return target.apply(thisArg, argArray);
+    },
+  });
+
+  // Processes the data and pushes it to gtm layer.
+  window.addEventListener('onAlshayaSeoReplaceState', function (e) {
+    let product = $('.entity--type-node[data-sku][data-vmode="full"]');
+    // Convert the product to a jQuery object, if not already.
+    if (!(product instanceof jQuery) && typeof product !== 'undefined') {
+      product = $(product);
+    }
+    const lastUrl = location.href;
+    const url = e.detail.data()[2];
+
+    if (product !== null && !lastUrl.includes(url)) {
+      var amount = product.attr('gtm-price').replace(/\,/g,'');
+      // Prepare data.
+      var data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: drupalSettings.gtm.currency,
+          detail: {
+            products: {
+              name: product.attr('gtm-name'),
+              id: product.attr('gtm-main-sku'),
+              price: parseFloat(amount),
+              category: product.attr('gtm-category'),
+              variant: product.attr('gtm-product-sku'),
+              dimension2: product.attr('gtm-sku-type'),
+              dimension3: product.attr('gtm-dimension3'),
+              dimension4: product.attr('gtm-dimension4')
+            }
+          }
+        }
+      };
+      if (product.attr('gtm-brand')) {
+        data.ecommerce.detail.products.brand = product.attr('gtm-brand');
+      }
+      // Push into datalayer.
+      dataLayer.push(data);
+    }
+  });
+
   /**
    * Function to provide product data object.
    *
@@ -846,8 +895,9 @@ const productRecommendationsSuffix = 'pr-';
    * @param highlights
    * @param gtmPageType
    * @param event
+   * @param promoBlockDetails
    */
-  Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event) {
+  Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event, promoBlockDetails = null) {
     var promotions = [];
     var promo_para_elements = '.paragraph--type--promo-block, .c-slider-promo, .field--name-body > div[class^="rectangle"]:visible';
     var promotion_counter = 0;
@@ -904,6 +954,19 @@ const productRecommendationsSuffix = 'pr-';
           }
         }
       }
+      else if (gtmPageType === 'footer promo panel') {
+        creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
+        // Slider behaviour when first item is repeated after last item
+        // turning first item index to number of promotion items plus one.
+        // Taking first position in such case.
+        if ($(highlight).attr('data-slick-index') == promoBlockDetails.promotionItemCount) {
+          position = 1;
+        }
+        else {
+          position = Number($(highlight).attr('data-slick-index')) + 1;
+        }
+        var promoItemName = $(highlight).find('.field--name-field-title').attr('gtm-title').toUpperCase();
+      }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
         if (!creative) {
@@ -921,7 +984,7 @@ const productRecommendationsSuffix = 'pr-';
         }
 
         // Remove file extensions from fileName.
-        if (fileName.lastIndexOf('.') !== -1) {
+        if (fileName.lastIndexOf('.') !== -1 && gtmPageType !== 'footer promo panel') {
           fileName = fileName.substring(0, fileName.lastIndexOf('.'));
         }
         fileName = fileName.toLowerCase();
@@ -931,13 +994,14 @@ const productRecommendationsSuffix = 'pr-';
           (fileName.indexOf('mm') === 0) ||
           (fileName.indexOf('dp') === 0) ||
           (fileName.indexOf('lp') === 0) ||
-          (fileName.indexOf('oth') === 0)
+          (fileName.indexOf('oth') === 0) ||
+          (gtmPageType === 'footer promo panel')
         )) {
           var promotion = {
-            creative: creative.replace(/\/en\/|\/ar\//, ''),
-            id: fileName,
-            name: gtmPageType,
-            position: 'slot' + position
+            creative: (gtmPageType === 'footer promo panel') ? decodeURI(fileName) : creative.replace(/\/en\/|\/ar\//, ''),
+            id: (gtmPageType === 'footer promo panel') ? promoItemName : fileName,
+            name: (gtmPageType === 'footer promo panel') ? promoBlockDetails.promoBlockLabel : gtmPageType,
+            position: (gtmPageType === 'footer promo panel') ? position : 'slot' + position
           };
           if (typeof promotion !== 'undefined') {
             promotion_counter++;
@@ -1033,10 +1097,6 @@ const productRecommendationsSuffix = 'pr-';
     };
 
     dataLayer.push(data);
-
-    // Trigger Product Details View
-    var quickView = 'yes';
-    Drupal.alshayaSeoGtmPushProductDetailView(element, listName, quickView);
   };
   /**
    * Helper function to push lead events.
@@ -1165,6 +1225,22 @@ const productRecommendationsSuffix = 'pr-';
         productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, { type: 'timer' });
       }
     }
+    else if (eventType === 'plp-results-updated') {
+      // Using concat instead of assignment since plp-results-updated event gets
+      // triggered both on page load and clicking on load more button.
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
+      if (productImpressionsTimer === null ) {
+        // This is for page load where we push default number of items i.e. 4.
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionDefaultItemsInQueue));
+      }
+      else {
+        // This is when clicked on load more where we push existing items in
+        // productImpressions and newly added items from load more.
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+      }
+      // Setting timer event.
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
+    }
     else {
       // This is for cases like scroll/carousel events.
       // Add new impressions to the global productImpressions.
@@ -1196,20 +1272,16 @@ const productRecommendationsSuffix = 'pr-';
     var count = productLinkProcessedSelector.length + 1;
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        var condition = true;
         var position = $(this).attr('data-insights-position');
         if (position === undefined) {
           $(this).attr('list-item-position', count);
+          position = count;
         }
-        // Only on scroll we check if product is in view or not.
-        if (eventType == 'scroll') {
-          condition = $(this).isElementInViewPort(0, 10);
-        }
-        if (condition) {
+        if ($(this).isElementInViewPort(0, 10)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;
-          impression.position = count;
+          impression.position = position;
           // Keep variant empty for impression pages. Populated only post add to cart action.
           impression.variant = '';
           impressions.push(impression);

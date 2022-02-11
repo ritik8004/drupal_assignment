@@ -1,0 +1,5 @@
+alshaya_js_optimisations.settings:
+  title: 'JS Performance Settings'
+  parent: system.performance_settings
+  description: 'Configure JS performance optimisation settings.'
+  route_name: alshaya_js_optimisations.settings

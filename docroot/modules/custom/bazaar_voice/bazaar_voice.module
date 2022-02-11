@@ -23,21 +23,12 @@ function bazaar_voice_module_implements_alter(&$implementations, $hook) {
  */
 function bazaar_voice_page_attachments(array &$page) {
   /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
-	$bazaar_voice = \Drupal::service('bazaar_voice.api_helper');
+  $bazaar_voice = \Drupal::service('bazaar_voice.api_helper');
 
   // Check if BV script to be loaded as per current route.
-	if ($bazaar_voice->isCurrentRouteInBvList()) {
+  if ($bazaar_voice->isCurrentRouteInBvList()) {
     // Add BV pixel script to header.
-    $page['#attached']['html_head']['bazaar_voice'] = [
-		[
-			'#type' => 'html_tag',
-			'#tag' => 'script',
-			'#attributes' => [
-				'src' => $bazaar_voice->getBvDynamicScriptCode(),
-			],
-		],
-		'bvpath',
-		];
+    $page['#attached']['library'][] = 'bazaar_voice/bazaar_voice';
   }
 }
 
@@ -48,7 +39,31 @@ function bazaar_voice_local_tasks_alter(&$local_tasks) {
   // Change config translation local task hierarchy.
   if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.bazaar_voice.review_settings_form'])) {
     $local_tasks['config_translation.local_tasks:config_translation.item.overview.bazaar_voice.review_settings_form']['parent_id'] = 'bazaar_voice.review_settings_form';
-		$local_tasks['config_translation.local_tasks:config_translation.item.overview.bazaar_voice.review_filter_settings_form']['parent_id'] = 'bazaar_voice.review_filter_settings_form';
+    $local_tasks['config_translation.local_tasks:config_translation.item.overview.bazaar_voice.review_filter_settings_form']['parent_id'] = 'bazaar_voice.review_filter_settings_form';
     $local_tasks['config_translation.local_tasks:config_translation.item.overview.bazaar_voice.error_messages_settings_form']['parent_id'] = 'bazaar_voice.error_messages_settings_form';
   }
+}
+
+/**
+ * Implements hook_library_info_build().
+ */
+function bazaar_voice_library_info_build() {
+  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
+  $bazaar_voice = \Drupal::service('bazaar_voice.api_helper');
+  $bazaar_voice_url = $bazaar_voice->getBvDynamicScriptCode();
+  $libraries = [];
+
+  if (!empty($bazaar_voice_url)) {
+    $libraries['bazaar_voice'] = [
+      'js' => [
+        $bazaar_voice_url => [
+          'type' => 'external',
+          'attributes' => [
+            'defer' => TRUE,
+          ],
+        ],
+      ],
+    ];
+  }
+  return $libraries;
 }

@@ -1,13 +1,13 @@
 .star-ratings-wrapper {
   .inline-star {
     .icon-ic_ratingfull {
-      @include icon(rating-filled) {
+      @include icon(ratingfull) {
         color: $rr-stars-color;
       }
     }
 
     .icon-ic_rating {
-      @include icon(rating-empty) {
+      @include icon(rating) {
         color: $rr-stars-color;
       }
     }

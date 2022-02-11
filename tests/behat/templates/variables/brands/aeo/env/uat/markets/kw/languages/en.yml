@@ -15,6 +15,7 @@ variables:
   language_color_filter: ''
   language_size_filter: 'المقاس'
   language_filters: ''
+  language_spc_knet_option: 'عيديتي [KNET]'
   language_promotional_filter: ''
   language_add_to_cart_link: 'أضف إلى سلة التسوق'
   add_to_cart_link: 'Add To Bag'

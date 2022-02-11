@@ -8,6 +8,10 @@
   /**
    * Fetch the product data from backend.
    *
+   * This is just a helper method for Drupal.alshayaSpc.getProductData() and
+   * Drupal.alshayaSpc.getProductDataV2().
+   * Do not invoke directly.
+   *
    * @param {string} sku
    *   The sku value.
    * @param {string} parentSKU
@@ -17,7 +21,7 @@
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    await globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
   };
@@ -27,22 +31,24 @@
    *
    * @param {string} sku
    *   The sku value.
+   * @param {string} parentSKU
+   *   The parent sku value.
+   *
+   * @returns {object}
+   *   The product stock data.
    */
-  window.commerceBackend.getProductStatus = async function (sku) {
-    let stock = null;
+  window.commerceBackend.getProductStatus = async function (sku, parentSKU) {
     // Product data, containing stock information, is already present in local
     // storage before this function is invoked. So no need to call a separate
     // API to fetch stock status for V2.
-    Drupal.alshayaSpc.getLocalStorageProductData(sku, function (product) {
-      stock = {
-        stock: product.stock.qty,
-        in_stock: product.stock.in_stock,
-        cnc_enabled: product.cncEnabled,
-        max_sale_qty: product.maxSaleQty,
-      };
-    });
+    const product = await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
 
-    return stock;
+    return {
+      stock: product.stock.qty,
+      in_stock: product.stock.in_stock,
+      cnc_enabled: product.cncEnabled,
+      max_sale_qty: product.maxSaleQty,
+    };
   };
 
   /**
@@ -211,4 +217,47 @@
     const galleryProduct = getSkuForGallery(product);
     return galleryProduct.media_teaser;
   };
+
+
+  /**
+   * Get the prices from product entity.
+   *
+   * @param {object} product
+   *   The raw product object.
+   * @param {boolean} formatted
+   *   if we need to return formatted price.
+   *
+   * @return {array}
+   *   The price array.
+   */
+  window.commerceBackend.getPrices = function (product, formatted) {
+    var prices = {
+      price : formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value) : product.price_range.maximum_price.regular_price.value,
+      finalPrice: formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value) : product.price_range.maximum_price.final_price.value,
+    };
+    return prices;
+  };
+
+  // Event listener to update static promotion.
+  RcsEventManager.addListener('rcsUpdateResults', (e) => {
+    // Return if result is empty.
+    if (typeof e.detail.result === 'undefined'
+      || typeof e.detail.result.promotions === 'undefined') {
+      return null;
+    }
+
+    const promotions = e.detail.result.promotions;
+    // Update the promotions attribute based on the requirement.
+    promotions.forEach((promotion, index) => {
+      promotions[index] = {
+        promo_web_url: promotion.url,
+        text: promotion.label,
+        context: promotion.context,
+        type: promotion.type,
+      }
+    });
+    e.detail.result.promotions = promotions;
+
+  });
+
 })(Drupal);

@@ -1,0 +1,34 @@
+input[type=radio].linking-option-radio {
+  display: none;
+
+  ~ .aura-radio-sim::before {
+    content: '';
+    display: inline-block;
+    width: 2.375rem;
+    height: 2.375rem;
+    background: url('#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-empty.svg') no-repeat;
+  }
+
+  &:checked {
+    ~ .aura-radio-sim::before {
+      background: url('#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-filled.svg') no-repeat;
+    }
+  }
+
+  ~ .radio-label {
+    font-size: 0.875rem;
+    font-family: $aura-regular;
+    color: $aura-spc-link-card-radio-label;
+  }
+}
+
+div.linking-option {
+  display: inline-flex;
+  font-size: 0.875rem;
+
+  label {
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+  }
+}

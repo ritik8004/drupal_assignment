@@ -87,6 +87,10 @@ header {
   }
 
   #mini-cart-wrapper {
+    @include breakpoint($desktop) {
+      height: 2.25rem;
+    }
+
     @include breakpoint($upto-desktop) {
       float: none;
       margin: 0;

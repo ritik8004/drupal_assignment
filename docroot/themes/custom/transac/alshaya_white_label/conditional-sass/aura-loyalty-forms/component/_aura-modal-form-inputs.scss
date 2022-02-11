@@ -1,0 +1,62 @@
+@mixin aura-placeholder-label() {
+  font-size: 0.875rem;
+  color: $spc-input-label;
+  position: absolute;
+  #{$left}: 0;
+  top: 0;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+@mixin aura-placeholder-active() {
+  top: -1rem;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
+}
+
+.aura-modal-form-items {
+  .spc-type-textfield,
+  .spc-type-tel {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  input:disabled {
+    background: none;
+    opacity: 0.5;
+  }
+
+  .error {
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+    padding-top: 0.3125rem;
+    display: block;
+  }
+
+  // Type = Text.
+  .spc-type-textfield {
+    input[type=text],
+    input[type=tel],
+    input[type=email],
+    input[type=password] {
+      height: 1.5rem;
+      font-size: 0.875rem;
+      color: $spc-form-input;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid $primary_input_border;
+      padding: 0;
+    }
+
+    label {
+      @include aura-placeholder-label;
+    }
+
+    input:focus ~ label,
+    input.focus ~ label {
+      @include aura-placeholder-active;
+    }
+  }
+}

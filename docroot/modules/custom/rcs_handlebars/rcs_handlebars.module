@@ -1,60 +1,31 @@
 <?php
 
+/**
+ * @file
+ * Module file.
+ */
+
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Render\Markup;
 
 /**
- * Implements hook_entity_view().
+ * Implements hook_entity_view_alter().
  */
 function rcs_handlebars_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  $rcs_handlebars_templates = &drupal_static('rcs_handlebars_templates', []);
+  $entity_types = [
+    'node',
+    'taxonomy_term',
+  ];
+  if (!in_array($entity->getEntityType()->id(), $entity_types)) {
+    return;
+  }
 
-  // Invoke hook to get default values.
-  $templates = \Drupal::moduleHandler()->invokeAll('rcs_handlebars_templates', [$entity]);
-
-  // Allow other modules to alter the data based on entity.
-  \Drupal::moduleHandler()->alter('rcs_handlebars_templates', $templates, $entity);
-
-  $rcs_handlebars_templates = array_merge_recursive($rcs_handlebars_templates, $templates);
-
-  // If any module provided handlebars templates, we need to add the renderer.
-  $build['#attached']['library'][] = 'rcs_handlebars/main';
+  \Drupal::service('rcs_handlebars.service')->attachLibraries($build, $entity);
 }
 
 /**
- * Implements hook_page_bottom().
+ * Implements hook_library_info_alter().
  */
-function rcs_handlebars_page_bottom(array &$page_bottom) {
-  $templates = &drupal_static('rcs_handlebars_templates', []);
-
-  // Load templates.
-  array_walk_recursive ($templates, function(&$value, $key){
-    if (strpos($value, '.handlebars') !== FALSE) {
-      $value = file_get_contents($value);
-    }
-  });
-
-  // Encode array.
-  $scripts = json_encode($templates, JSON_UNESCAPED_UNICODE);
-
-  // Embed handlebars templates.
-  $page_bottom['rcs_handlebars_handlebars'] = [
-    '#type'  => 'html_tag',
-    '#tag'   => 'script',
-    '#value' => Markup::create("var rcsHandlebarsTemplates = $scripts;"),
-  ];
-}
-
-/**
- * Implements hook_rcs_handlebars_templates().
- */
-function rcs_handlebars_rcs_handlebars_templates(EntityInterface $entity) {
-  // List of handlebars templates to be embedded on the page.
-  return [
-    // List of block templates.
-    'block' => [],
-    // List of field templates.
-    'field' => [],
-  ];
+function rcs_handlebars_library_info_alter(&$libraries, $extension) {
+  \Drupal::service('rcs_handlebars.service')->libraryInfoAlter($libraries, $extension);
 }

@@ -13,6 +13,8 @@ var config = {
     backend_checkout_v1: './js/backend/v1/checkout.js',
     backend_checkout_v2: './js/backend/v2/checkout.js',
     dynamic_promotion_label: './js/promotions-dynamic-labels.js',
+    // This is dynamically added in alshaya_rcs_product_library_info_alter().
+    PdpRcsExpressDelivery: './js/PdpRcsExpressDelivery',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -34,9 +36,12 @@ var config = {
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         options: {
           rootMode: "upward",
+          presets: ['@babel/preset-env',
+            '@babel/react',{
+              'plugins': ['@babel/plugin-proposal-class-properties']}]
         }
       }
     ]

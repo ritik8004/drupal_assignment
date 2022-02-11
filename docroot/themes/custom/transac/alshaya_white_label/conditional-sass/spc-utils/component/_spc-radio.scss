@@ -1,7 +1,8 @@
 input[type=radio] {
   display: none;
 
-  ~ .radio-sim::before {
+  ~ .radio-sim::before,
+  ~ .payment-method-label-wrapper .radio-sim::before {
     content: '';
     position: absolute;
     #{$left}: 0;
@@ -12,21 +13,24 @@ input[type=radio] {
     font-size: 3.125rem;
   }
 
-  ~ .radio-sim {
+  ~ .radio-sim,
+  ~ .payment-method-label-wrapper .radio-sim {
     @include icon(radio-empty, before) {
       color: $spc-checkout-radio-empty;
     }
   }
 
   &:checked {
-    ~ .radio-sim {
+    ~ .radio-sim,
+    ~ .payment-method-label-wrapper .radio-sim {
       @include icon(radio-filled, before) {
         color: $spc-checkout-radio-filled;
       }
     }
   }
 
-  ~ .radio-label {
+  ~ .radio-label,
+  ~ .payment-method-label-wrapper .radio-label {
     font-size: 0.875rem;
     font-family: $alshaya-thin;
     color: $spc-checkout-delivery-method-txt;
@@ -60,4 +64,11 @@ input[type=radio] {
       }
     }
   }
+}
+
+.payment-method-label-wrapper {
+  padding-#{$left}: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-#{$right}: 1.75rem;
 }

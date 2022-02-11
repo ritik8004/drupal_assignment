@@ -10,17 +10,34 @@
  *
  * Enables the alshaya_media_assets module.
  */
-function alshaya_cos_transac_update_8001() {
+function alshaya_cos_transac_update_8002() {
   \Drupal::service('module_installer')->install(['alshaya_media_assets']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change widget for delivery_ways facets from checkbox
+ * to widget "delivery_ways".
+ */
+function alshaya_cos_transac_update_8001() {
+  $facet_ids = [
+    'plp_delivery_ways',
+    'promo_delivery_ways',
+    'delivery_ways',
+  ];
+
+  foreach ($facet_ids as $facet_id) {
+    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
+      ->set('widget.type', 'delivery_ways')
+      ->save();
+  }
 }
 
 /**
  * Implements hook_install().
  */
 function alshaya_cos_transac_install() {
-  // Enable algolia as default search index.
-  \Drupal::service('module_installer')->install(['alshaya_search_algolia']);
-
   // Enable and set alshaya_cos as default theme and set the site logo,
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_cos_stores');
@@ -89,22 +106,22 @@ function alshaya_cos_transac_install() {
       'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
     ],
     'read more' => [
-      'ar' => 'اقرأ المزيد'
+      'ar' => 'اقرأ المزيد',
     ],
     'read less' => [
-      'ar' => 'اقرأ  أقل'
+      'ar' => 'اقرأ  أقل',
     ],
     'Product Description' => [
-      'ar' => 'وصف المنتج'
+      'ar' => 'وصف المنتج',
     ],
     'Product Detail' => [
-      'ar' => 'تفاصيل المنتج'
+      'ar' => 'تفاصيل المنتج',
     ],
     'Product No:' => [
-      'ar' => 'رمز المنتج'
+      'ar' => 'رمز المنتج',
     ],
     'size guide' => [
-      'ar' => 'دليل المقاسات'
+      'ar' => 'دليل المقاسات',
     ],
   ];
 
@@ -153,7 +170,7 @@ function alshaya_cos_transac_modules_installed($modules) {
 
   // Hide grid toggle option on listing pages.
   \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
-    ->set('hide_grid_toggle', true)
+    ->set('hide_grid_toggle', TRUE)
     ->save();
 
   // Reset region and weight for alshaya main menu block.

@@ -1,6 +1,11 @@
 <?php
 
-use \Drupal\Core\Entity\ContentEntityInterface;
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\field\Entity\FieldStorageConfig;
 
 /**
@@ -13,20 +18,25 @@ function alshaya_quiz_preprocess_decoupled_component_block(array &$variables) {
 }
 
 /**
- * Custom Function to get translated terms of the passed array of terms
- * @param  array $terms
+ * Custom Function to get translated terms of the passed array of terms.
+ *
+ * @param array $attribute
  *   List of terms of respective attribute code.
  *
  * @return array
  *   Array of translated terms
  */
-function _alshaya_quiz_get_translated_terms($attribute) {
-  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
-    ->loadByProperties(['field_sku_attribute_code' => $attribute, 'vid' => 'sku_product_option']);
+function _alshaya_quiz_get_translated_terms(array $attribute) {
+  $terms = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term')
+    ->loadByProperties([
+      'field_sku_attribute_code' => $attribute,
+      'vid' => 'sku_product_option',
+    ]);
   $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $options = [];
   foreach ($terms as $term) {
-    if($term->hasTranslation($lang)){
+    if ($term->hasTranslation($lang)) {
       $translated_terms = \Drupal::service('entity.repository')->getTranslationFromContext($term, $lang);
       $options[] = $translated_terms->getName();
     }
@@ -47,7 +57,6 @@ function _alshaya_quiz_get_translated_terms($attribute) {
  *
  * @return array
  *   An array of possible key and value options.
- *
  */
 function alshaya_quiz_allowed_choice_1_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
@@ -66,7 +75,6 @@ function alshaya_quiz_allowed_choice_1_values(FieldStorageConfig $definition, Co
  *
  * @return array
  *   An array of possible key and value options.
- *
  */
 function alshaya_quiz_allowed_choice_2_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
@@ -85,7 +93,6 @@ function alshaya_quiz_allowed_choice_2_values(FieldStorageConfig $definition, Co
  *
  * @return array
  *   An array of possible key and value options.
- *
  */
 function alshaya_quiz_allowed_choice_3_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');

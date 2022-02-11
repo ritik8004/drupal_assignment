@@ -319,4 +319,5 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
     }
     return $columns_tree;
   }
+
 }

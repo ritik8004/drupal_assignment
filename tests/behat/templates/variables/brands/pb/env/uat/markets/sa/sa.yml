@@ -1,5 +1,5 @@
 variables:
   product_listing_page_url: '/shop-furniture/living-room/all-living-room/'
-  spc_pdp_page: '/buy-verdigris-lantern.html/'
+  spc_pdp_page: '/buy-lorraine-coffee-table.html/'
   spc_product_listing_page: '/shop-furniture/living-room/all-living-room/'
-  spc_basket_page: '/shop-furniture/living-room/all-living-room/'
+  spc_basket_page: '/buy-aaron-dining-chair.html/'

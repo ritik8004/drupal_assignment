@@ -33,7 +33,7 @@ class AlshayaFacetAllOption extends ProcessorPluginBase implements BuildProcesso
       }, $results));
 
       // Prepare `All` result facet item.
-      $all_result_item = new Result(0, $this->t('All'), $max_items);
+      $all_result_item = new Result($facet, 0, $this->t('All'), $max_items);
 
       // Get any one result item from current facet, get its url and then use
       // this url for `all` result with some changes.

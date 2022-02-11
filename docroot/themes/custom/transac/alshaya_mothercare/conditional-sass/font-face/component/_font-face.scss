@@ -6,7 +6,9 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 
 @font-face {
   font-family: "ThrowMyHandsUpintheAir";
-  src: url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAir.ttf");
+  src:
+    url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAir.woff2") format("woff2"),
+    url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAir.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -14,7 +16,9 @@ $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts
 
 @font-face {
   font-family: "ThrowMyHandsUpintheAirBold";
-  src: url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAirBold.ttf");
+  src:
+    url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAirBold.woff2") format("woff2"),
+    url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAirBold.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

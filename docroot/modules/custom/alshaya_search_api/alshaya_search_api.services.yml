@@ -6,7 +6,6 @@ services:
     class: Drupal\alshaya_search_api\FacetManager\AlshayaSearchApiFacetsManager
     arguments:
       - '@plugin.manager.facets.query_type'
-      - '@plugin.manager.facets.widget'
       - '@plugin.manager.facets.facet_source'
       - '@plugin.manager.facets.processor'
       - '@entity_type.manager'
@@ -56,8 +55,3 @@ services:
       - '@logger.factory'
     tags:
       - { name: event_subscriber }
-
-  alshaya_search_api.algolia_index_name_override:
-    class: Drupal\alshaya_search_api\AlgoliaSearchIndexNameConfigOverrider
-    tags:
-      - { name: config.factory.override, priority: -2 }

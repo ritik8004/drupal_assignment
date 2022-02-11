@@ -4,7 +4,6 @@ import ReactToPrint from 'react-to-print';
 import OrderSummaryBlock from '../../utilities/order-summary-block';
 import OrderSummary from './OrderSummary';
 import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
-import { removeStorageInfo } from '../../utilities/storage';
 import VatFooterText from '../../utilities/vat-footer';
 import ConditionalView from '../../common/components/conditional-view';
 import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
@@ -12,11 +11,25 @@ import CompleteBenefitPayPayment
   from './CompleteBenefitPayPayment';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
+import isAuraEnabled from '../../../../js/utilities/helper';
+import {
+  getCustomerDetails,
+} from '../../../../alshaya_aura_react/js/utilities/customer_helper';
+import { getUserDetails } from '../../../../alshaya_aura_react/js/utilities/helper';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {};
+
+    // Set loyaltyStatus state variable only for logged in users if Aura enabled.
+    if (isAuraEnabled() && getUserDetails().id) {
+      this.state = {
+        loyaltyStatus: 0,
+      };
+    }
 
     const currentUrl = window.location.href;
     const currentTitle = document.title;
@@ -36,7 +49,7 @@ class CheckoutConfirmation extends React.Component {
       // Remove the 'shippingaddress-formdata' from localStorage
       // when we come to the order confirmation page after the order
       // has been placed.
-      removeStorageInfo('shippingaddress-formdata');
+      Drupal.removeItemFromLocalStorage('shippingaddress-formdata');
       if (Cookies.get('middleware_order_placed')) {
         window.commerceBackend.removeCartDataFromStorage(true);
         Cookies.remove('middleware_order_placed');
@@ -49,7 +62,21 @@ class CheckoutConfirmation extends React.Component {
   componentDidMount() {
     // Make sidebar sticky.
     stickySidebar();
+
+    // If Aura enabled and logged in user, invoke API to fetch user's loyalty status.
+    if (isAuraEnabled() && getUserDetails().id) {
+      document.addEventListener('customerDetailsFetched', this.updateState, false);
+      // Get customer details.
+      getCustomerDetails({ fetchPoints: false, fetchTier: false });
+    }
   }
+
+  // Event listener callback to update states.
+  updateState = (data) => {
+    this.setState({
+      ...data.detail.stateValues,
+    });
+  };
 
   onPrintError = (errorLocation, error) => {
     logger.warning('Error launching checkout print. ErrorLocation: @errorLocation, error: @message', {
@@ -77,6 +104,8 @@ class CheckoutConfirmation extends React.Component {
       },
     } = drupalSettings.order_details;
 
+    const { loyaltyStatus } = this.state;
+
     return (
       <>
         <div className="spc-pre-content fadeInUp" style={{ animationDelay: '0.4s' }}>
@@ -94,7 +123,12 @@ class CheckoutConfirmation extends React.Component {
             <ConditionalView condition={payment.methodCode === 'checkout_com_upapi_benefitpay'}>
               <CompleteBenefitPayPayment payment={payment} totals={totals} />
             </ConditionalView>
-            <OrderSummary />
+            <OrderSummary
+              {...(isAuraEnabled()
+                && hasValue(loyaltyStatus)
+                && { loyaltyStatus }
+              )}
+            />
             <ConditionalView condition={window.innerWidth > 768}>
               <div className="checkout-link submit fadeInUp" style={{ animationDelay: '1s' }}>
                 <a href={Drupal.url('')} className="checkout-link">

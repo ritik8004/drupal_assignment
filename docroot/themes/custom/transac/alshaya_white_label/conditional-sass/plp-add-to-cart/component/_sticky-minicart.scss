@@ -16,12 +16,4 @@
     display: block;
     z-index: 1;
   }
-
-  .sticky-filter-wrapper {
-    .container-without-product {
-      @include breakpoint($desktop-wide) {
-        width: 46.35rem;
-      }
-    }
-  }
 }

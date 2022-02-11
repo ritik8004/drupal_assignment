@@ -1,0 +1,40 @@
+#my-loyalty-club {
+  margin-top: 2.5rem;
+
+  @include breakpoint($only-mobile) {
+    margin-top: 1.25rem;
+  }
+}
+
+.aura-my-account {
+  .block-my-accounts-aura-block {
+    margin-top: 2.5rem;
+
+    ~ .block-alshaya-user-recent-orders .edit-account {
+      top: -0.7rem;
+    }
+  }
+}
+
+#my-accounts-aura-mobile {
+  @include breakpoint($tablet) {
+    display: none;
+  }
+
+  &:not(:empty) {
+    padding: 1.25rem 0;
+    border-top: 1px solid $primary_border;
+  }
+}
+
+#my-accounts-aura {
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+}
+
+.l-one--w.c-loyalty-club-page {
+  @include breakpoint($desktop) {
+    margin-top: 2.5rem;
+  }
+}

@@ -1,30 +1,27 @@
-import Axios from 'axios';
-import qs from 'qs';
 import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
   getCartIdFromStorage,
   isUserAuthenticated,
   removeCartIdFromStorage,
-  detectCFChallenge,
-  detectCaptcha,
 } from './utility';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
 import {
-  cartErrorCodes,
   getDefaultErrorMessage,
   getExceptionMessageType,
-  getProcessedErrorMessage,
-} from './error';
+} from '../../../../js/utilities/error';
 import StaticStorage from './staticStorage';
-import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import {
   hasValue,
   isObject,
-  isArray,
 } from '../../../../js/utilities/conditionsUtility';
 import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import isAuraEnabled from '../../../../js/utilities/helper';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
+import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -42,8 +39,8 @@ window.commerceBackend.getCartId = () => {
   // we pass that id from backend via Cookie to Browser.
   const resumeCartId = Cookies.get('resume_cart_id');
   if (hasValue(resumeCartId)) {
-    removeStorageInfo('cart_data');
-    setStorageInfo(resumeCartId, 'cart_id');
+    Drupal.removeItemFromLocalStorage('cart_data');
+    Drupal.addItemInLocalStorage('cart_id', resumeCartId);
     Cookies.remove('resume_cart_id');
   }
 
@@ -120,7 +117,11 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   // As of now it not possible to get it on page load before all
   // other JS is executed and for all other JS refactoring
   // required is huge.
-  setStorageInfo(cartInfo, 'cart_data');
+  Drupal.addItemInLocalStorage(
+    'cart_data',
+    cartInfo,
+    parseInt(drupalSettings.alshaya_spc.cart_storage_expiration, 10) * 60,
+  );
 };
 
 /**
@@ -132,12 +133,12 @@ window.commerceBackend.setCartDataInStorage = (data) => {
 window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   StaticStorage.clear();
 
-  removeStorageInfo('cart_data');
+  Drupal.removeItemFromLocalStorage('cart_data');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method
   // selection at-least once and not more than once.
-  removeStorageInfo('last_selected_payment');
+  Drupal.removeItemFromLocalStorage('last_selected_payment');
 
   if (resetAll) {
     removeCartIdFromStorage();
@@ -155,321 +156,6 @@ const checkoutComVaultMethod = () => 'checkout_com_cc_vault';
 // Magento method, to append for UAPAPI vault (tokenized card) transaction.
 // @See CHECKOUT_COM_UPAPI_VAULT_METHOD in \App\Service\CheckoutCom\APIWrapper
 const checkoutComUpapiVaultMethod = () => 'checkout_com_upapi_vault';
-
-/**
- * Wrapper to get cart settings.
- *
- * @param {string} key
- *   The key for the configuration.
- * @returns {(number|string!Object!Array)}
- *   Returns the configuration.
- */
-const getCartSettings = (key) => window.drupalSettings.cart[key];
-
-/**
- * Get the complete path for the Magento API.
- *
- * @param {string} path
- *  The API path.
- */
-const i18nMagentoUrl = (path) => `${getCartSettings('url')}${path}`;
-
-const logApiStats = (response) => {
-  try {
-    if (!hasValue(response) || !hasValue(response.config) || !hasValue(response.config.headers)) {
-      return response;
-    }
-
-    const transferTime = Date.now() - response.config.headers.RequestTime;
-    logger.debug('Finished API request @url in @transferTime, ResponseCode: @responseCode, Method: @method.', {
-      '@url': response.config.url,
-      '@transferTime': transferTime,
-      '@responseCode': response.status,
-      '@method': response.config.method,
-    });
-  } catch (error) {
-    logger.error('Failed to log API response time, error: @message', {
-      '@message': error.message,
-    });
-  }
-
-  return response;
-};
-
-/**
- * Logs API response to the logging system.
- *
- * @param {string} type
- *   The type of log message.
- * @param {*} message
- *   The message text.
- * @param {*} statusCode
- *   The API response status code.
- * @param {*} code
- *   The code value in the response.
- */
-const logApiResponse = (type, message, statusCode, code) => {
-  logger[type]('Commerce backend call failed. Response Code: @responseCode, Error Code: @resultCode, Exception: @message.', {
-    '@responseCode': statusCode,
-    '@resultCode': hasValue(code) ? code : '-',
-    '@message': hasValue(message) ? message : '-',
-  });
-};
-
-/**
- * Handle errors and messages.
- *
- * @param {Promise} apiResponse
- *   The response from the API.
- *
- * @returns {Promise}
- *   Returns a promise object.
- */
-const handleResponse = (apiResponse) => {
-  logApiStats(apiResponse);
-  const response = {};
-  response.data = {};
-  response.status = apiResponse.status;
-
-  // In case we don't receive any response data.
-  if (typeof apiResponse.data === 'undefined') {
-    logApiResponse('warning', 'Error while doing MDC api. Response result is empty.', apiResponse.status);
-
-    const error = {
-      data: {
-        error: true,
-        error_code: 500,
-        error_message: getDefaultErrorMessage(),
-      },
-    };
-    return new Promise((resolve) => resolve(error));
-  }
-
-  // If the response contains Captcha, the page will be reloaded once per session.
-  detectCaptcha(apiResponse);
-  // If the response contains a CF Challenge, the page will be reloaded once per session.
-  detectCFChallenge(apiResponse);
-  // Treat each status code.
-  if (apiResponse.status === 202) {
-    // Place order can return 202, this isn't error.
-    // Do nothing here, we will let code below return the response.
-  } else if (apiResponse.status === 500) {
-    logApiResponse('warning', getProcessedErrorMessage(apiResponse), apiResponse.status);
-
-    // Server error responses.
-    response.data.error = true;
-    response.data.error_code = 500;
-  } else if (apiResponse.status > 500) {
-    // Server error responses.
-    response.data.error = true;
-    response.data.error_code = 600;
-    logApiResponse('warning', apiResponse.data.error_message, apiResponse.status);
-  } else if (apiResponse.status === 401) {
-    if (isUserAuthenticated()) {
-      // Customer Token expired.
-      logApiResponse('warning', `Got 401 response, redirecting to user/logout. ${apiResponse.data.message}`, apiResponse.status);
-
-      // Log the user out and redirect to the login page.
-      window.location = Drupal.url('user/logout');
-
-      // Throw an error to prevent further javascript execution.
-      throw new Error('The customer token is invalid.');
-    }
-
-    response.data.error = true;
-    response.data.error_code = 401;
-    logApiResponse('warning', apiResponse.data.message, apiResponse.status);
-  } else if (apiResponse.status !== 200) {
-    // Set default values.
-    response.data.error = true;
-    response.data.error_message = getDefaultErrorMessage();
-
-    // Check for empty resonse data.
-    if (!hasValue(apiResponse) || !hasValue(apiResponse.data)) {
-      logApiResponse('warning', 'Error while doing MDC api. Response result is empty', apiResponse.status);
-      response.data.error_code = 500;
-    } else if (apiResponse.status === 404
-      && !hasValue(apiResponse.data)
-      && hasValue(apiResponse.message)) {
-      response.data.code = 404;
-      response.data.error_code = 404;
-      response.data.error_message = response.message;
-
-      // Log the error message.
-      logApiResponse('warning', response.data.error_message, apiResponse.status, response.data.code);
-    } else if (hasValue(apiResponse.data.message)) {
-      // Process message.
-      response.data.error_message = getProcessedErrorMessage(apiResponse);
-
-      // Log the error message.
-      logApiResponse('warning', response.data.error_message, apiResponse.status, apiResponse.data.code);
-
-      // The following case happens when there is a stock mismatch between
-      // Magento and OMS.
-      if (apiResponse.status === 400
-        && typeof apiResponse.data.code !== 'undefined'
-        && apiResponse.data.code === cartErrorCodes.cartCheckoutQuantityMismatch) {
-        response.data.code = cartErrorCodes.cartCheckoutQuantityMismatch;
-        response.data.error_code = cartErrorCodes.cartCheckoutQuantityMismatch;
-      } else if (apiResponse.status === 404) {
-        response.data.error_code = 404;
-      } else {
-        response.data.error_code = 500;
-      }
-    } else if (hasValue(apiResponse.data.messages)
-      && hasValue(apiResponse.data.messages.error)
-      && hasValue(response.data.messages.error)
-    ) {
-      // Other messages.
-      const error = apiResponse.data.messages.error[0];
-      logApiResponse('info', error.message, apiResponse.status, error.code);
-      response.data.error_code = error.code;
-      response.data.error_message = error.message;
-    }
-  } else if (typeof apiResponse.data.messages !== 'undefined'
-    && typeof apiResponse.data.messages.error !== 'undefined') {
-    const error = apiResponse.data.messages.error.shift();
-    response.data.error = true;
-    response.data.error_code = error.code;
-    response.data.error_message = error.message;
-    logApiResponse('info', error.message, apiResponse.status, error.code);
-  } else if (isArray(apiResponse.data.response_message)
-    && hasValue(apiResponse.data.response_message[1])
-    && apiResponse.data.response_message[1] === 'error') {
-    // When there is error in response_message from custom updateCart API.
-    response.data.error = true;
-    response.data.error_code = 400;
-    [response.data.error_message] = apiResponse.data.response_message;
-    logApiResponse('info', JSON.stringify(response.data.response_message), apiResponse.status, response.data.error_code);
-  }
-
-  // Assign response data as is if no error.
-  if (typeof response.data.error === 'undefined') {
-    response.data = JSON.parse(JSON.stringify(apiResponse.data));
-  } else if (apiResponse.status > 400 && apiResponse.status < 700) {
-    // Format error for specific cases so that in the front end we show user
-    // friendly error messages.
-    response.data.error_message = getDefaultErrorMessage();
-  }
-
-  return new Promise((resolve) => resolve(response));
-};
-
-/**
- * Make an AJAX call to Magento API.
- *
- * @param {string} url
- *   The url to send the request to.
- * @param {string} method
- *   The request method.
- * @param {object} data
- *   The object to send for POST request.
- *
- * @returns {Promise<AxiosPromise<object>>}
- *   Returns a promise object.
- */
-const callMagentoApi = (url, method = 'GET', data = {}) => {
-  const params = {
-    url: i18nMagentoUrl(url),
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      'Alshaya-Channel': 'web',
-    },
-  };
-
-  if (isUserAuthenticated()) {
-    params.headers.Authorization = `Bearer ${window.drupalSettings.userDetails.customerToken}`;
-  }
-
-  if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
-    params.data = data;
-  }
-
-  params.headers = params.headers || {};
-  params.headers.RequestTime = Date.now();
-
-  return Axios(params)
-    .then((response) => handleResponse(response))
-    .catch((error) => {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        return handleResponse(error.response);
-      }
-      if (error.request) {
-        // The request was made but no response was received
-        return handleResponse(error.request);
-      }
-
-      logger.error('Something happened in setting up the request that triggered an error: @message.', {
-        '@message': error.message,
-      });
-
-      return error;
-    });
-};
-
-/**
- * Make an AJAX call to Drupal API.
- *
- * @param {string} url
- *   The url to send the request to.
- * @param {string} method
- *   The request method.
- * @param {object} data
- *   The object to send with the request.
- *
- * @returns {Promise<AxiosPromise<object>>}
- *   Returns a promise object.
- */
-const callDrupalApi = (url, method = 'GET', data = {}) => {
-  const headers = {};
-  const params = {
-    url: `/${window.drupalSettings.path.currentLanguage}${url}`,
-    method,
-    data,
-  };
-
-  if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
-    Object.keys(data).forEach((optionName) => {
-      if (optionName === 'form_params') {
-        headers['Content-Type'] = 'application/x-www-form-urlencoded';
-        params.data = qs.stringify(data[optionName]);
-      }
-    });
-  }
-
-  params.headers = params.headers || {};
-  params.headers.RequestTime = Date.now();
-
-  return Axios(params)
-    .then((response) => logApiStats(response))
-    .catch((error) => {
-      if (hasValue(error.response) && hasValue(error.response.status)) {
-        logApiStats(error.response);
-        const responseCode = parseInt(error.response.status, 10);
-
-        if (responseCode === 404) {
-          logger.warning('Drupal page no longer available.', { ...params });
-          return null;
-        }
-
-        logger.error('Drupal API call failed.', {
-          responseCode,
-          ...params,
-        });
-        return null;
-      }
-
-      logger.error('Something happened in setting up the request that triggered an error: @message.', {
-        '@message': error.message,
-        ...params,
-      });
-
-      return null;
-    });
-};
 
 /**
  * Format the cart data to have better structured array.
@@ -567,7 +253,11 @@ const formatCart = (cartData) => {
   // to allow users to fill addresses.
   if (shippingMethod === '') {
     data.shipping = {};
-    data.cart.billing_address = {};
+    // Bypass this empty settings of billing address for egift enabled and
+    // containing only virtual item in cart.
+    if (!cartContainsOnlyVirtualProduct(data.cart)) {
+      data.cart.billing_address = {};
+    }
   }
   return data;
 };
@@ -585,8 +275,10 @@ const staticProductStatus = [];
  *
  * @param {Promise<string|null>} sku
  *  The sku for which the status is required.
+ * @param {string} parentSKU
+ *  The parent sku value.
  */
-const getProductStatus = async (sku) => {
+const getProductStatus = async (sku, parentSKU) => {
   if (typeof sku === 'undefined' || !sku) {
     return null;
   }
@@ -596,7 +288,7 @@ const getProductStatus = async (sku) => {
     return staticProductStatus[sku];
   }
 
-  staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku);
+  staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku, parentSKU);
 
   return staticProductStatus[sku];
 };
@@ -648,13 +340,55 @@ const getProcessedCartData = async (cartData) => {
     },
     items: [],
     ...(collectionPointsEnabled() && hasValue(cartData.shipping))
-      && { collection_charge: cartData.shipping.price_amount || '' },
+    && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
   // Totals.
   if (typeof cartData.totals.base_grand_total !== 'undefined') {
     data.cart_total = cartData.totals.base_grand_total;
     data.minicart_total = cartData.totals.base_grand_total;
+  }
+
+  // If Aura enabled, add aura related details.
+  // If Egift card is enabled get balance_payable.
+  if (isAuraEnabled() || isEgiftCardEnabled()) {
+    cartData.totals.total_segments.forEach((element) => {
+      if (element.code === 'balance_payable') {
+        data.totals.balancePayable = element.value;
+        // Adding an extra total balance payable attribute, so that we can use
+        // this in egift.
+        // Doing this because while removing AURA points, we remove the Balance
+        // Payable attribute from cart total.
+        data.totals.totalBalancePayable = element.value;
+      }
+      if (element.code === 'aura_payment') {
+        data.totals.paidWithAura = element.value;
+      }
+    });
+  }
+  if (isAuraEnabled()) {
+    data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
+  }
+
+  // If egift card enabled, add the hps_redeemed_amount
+  // add hps_redemption_type to cart.
+  if (isEgiftCardEnabled()) {
+    data.totals.egiftRedeemedAmount = 0;
+    data.totals.egiftRedemptionType = '';
+    data.totals.egiftCardNumber = '';
+    data.totals.egiftCurrentBalance = 0;
+    if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
+      data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
+    }
+    if (hasValue(cartData.totals.extension_attributes.hps_redemption_type)) {
+      data.totals.egiftRedemptionType = cartData.totals.extension_attributes.hps_redemption_type;
+    }
+    if (hasValue(cartData.cart.extension_attributes.hps_redemption_card_number)) {
+      data.totals.egiftCardNumber = cartData.cart.extension_attributes.hps_redemption_card_number;
+    }
+    if (hasValue(cartData.totals.extension_attributes.hps_current_balance)) {
+      data.totals.egiftCurrentBalance = cartData.totals.extension_attributes.hps_current_balance;
+    }
   }
 
   if (!hasValue(cartData.shipping) || !hasValue(cartData.shipping.method)) {
@@ -689,7 +423,16 @@ const getProcessedCartData = async (cartData) => {
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
-      data.items[item.sku] = {
+      // Set isEgiftCard for virtual product.
+      let isEgiftCard = false;
+      let itemKey = item.sku;
+      if (isEgiftCardEnabled() && item.product_type !== 'undefined' && item.product_type === 'virtual') {
+        isEgiftCard = true;
+        // to show multiple egift product in cart seperately changing this to item_id,
+        // as sku will be the same.
+        itemKey = item.item_id;
+      }
+      data.items[itemKey] = {
         id: item.item_id,
         title: item.name,
         qty: item.qty,
@@ -698,14 +441,16 @@ const getProcessedCartData = async (cartData) => {
         freeItem: false,
         finalPrice: item.price,
         parentSKU,
+        isEgiftCard,
       };
 
       // Get stock data on cart and checkout pages.
       const spcPageType = window.spcPageType || '';
-      if (spcPageType === 'cart' || spcPageType === 'checkout') {
+      // No need of stock data for egift card products.
+      if ((spcPageType === 'cart' || spcPageType === 'checkout') && !isEgiftCard) {
         // Suppressing the lint error for now.
         // eslint-disable-next-line no-await-in-loop
-        const stockInfo = await getProductStatus(item.sku);
+        const stockInfo = await getProductStatus(item.sku, parentSKU);
 
         // Do not show the products which are not available in
         // system but only available in cart.
@@ -716,13 +461,13 @@ const getProcessedCartData = async (cartData) => {
             '@stockInfo': JSON.stringify(stockInfo || {}),
           });
 
-          delete data.items[item.sku];
+          delete data.items[itemKey];
           // eslint-disable-next-line no-continue
           continue;
         }
 
-        data.items[item.sku].in_stock = stockInfo.in_stock;
-        data.items[item.sku].stock = stockInfo.stock;
+        data.items[itemKey].in_stock = stockInfo.in_stock;
+        data.items[itemKey].stock = stockInfo.stock;
 
         // If any item is OOS.
         if (!hasValue(stockInfo.in_stock) || !hasValue(stockInfo.stock)) {
@@ -732,12 +477,31 @@ const getProcessedCartData = async (cartData) => {
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
-          data.items[item.sku].error_msg = item.extension_attributes.error_message;
+          data.items[itemKey].error_msg = item.extension_attributes.error_message;
           data.is_error = true;
         }
 
         if (typeof item.extension_attributes.promo_rule_id !== 'undefined') {
-          data.items[item.sku].promoRuleId = item.extension_attributes.promo_rule_id;
+          data.items[itemKey].promoRuleId = item.extension_attributes.promo_rule_id;
+        }
+        // Extension attributes information for eGift products.
+        if (isEgiftCard && typeof item.extension_attributes.is_egift !== 'undefined' && item.extension_attributes.is_egift) {
+          if (typeof item.extension_attributes.egift_options !== 'undefined') {
+            data.items[itemKey].egiftOptions = item.extension_attributes.egift_options;
+          }
+          if (typeof item.extension_attributes.product_media !== 'undefined') {
+            data.items[itemKey].media = item.extension_attributes.product_media[0].file;
+          }
+
+          // If eGift product is top-up card add check to the product item.
+          if (typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
+            data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
+          }
+
+          // If item is a top-up card add the card number used for top-up.
+          data.items[itemKey].topupCardNumber = (
+            hasValue(item.extension_attributes.topup_card_number)
+          ) ? item.extension_attributes.topup_card_number : null;
         }
       }
 
@@ -748,15 +512,15 @@ const getProcessedCartData = async (cartData) => {
           // Final price to use.
           // For the free gift the key 'price_incl_tax' is missing.
           if (typeof totalItem.price_incl_tax !== 'undefined') {
-            data.items[item.sku].finalPrice = totalItem.price_incl_tax;
+            data.items[itemKey].finalPrice = totalItem.price_incl_tax;
           } else {
-            data.items[item.sku].finalPrice = totalItem.base_price;
+            data.items[itemKey].finalPrice = totalItem.base_price;
           }
 
           // Free Item is only for free gift products which are having
           // price 0, rest all are free but still via different rules.
           if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
-            data.items[item.sku].freeItem = true;
+            data.items[itemKey].freeItem = true;
           }
         }
       });
@@ -996,6 +760,11 @@ const validateRequestData = async (request) => {
     return 404;
   }
 
+  // If it's a topup operation then return 200 as we are using guest update cart
+  // endpoint, So we will not get customer id from cart.
+  if (getTopUpQuote() !== null) {
+    return 200;
+  }
   // Backend validation.
   const cartCustomerId = await getCartCustomerId();
   if (drupalSettings.userDetails.customerId > 0) {
@@ -1077,7 +846,15 @@ const updateCart = async (postData) => {
     '@action': action,
   });
 
-  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
+  // As we are using guest cart update in case of Topup, we will not pass
+  // bearerToken.
+  let useBearerToken = true;
+  if ((action === 'update billing'
+    || action === 'update payment')
+    && getTopUpQuote()) {
+    useBearerToken = false;
+  }
+  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data), useBearerToken)
     .then((response) => {
       if (!hasValue(response.data)
         || (hasValue(response.data.error) && response.data.error)) {
@@ -1194,7 +971,7 @@ const getFormattedError = (code, message) => ({
 });
 
 /**
- * Helper function to prepare filter url query string.
+ * Helper function to prepare the data.
  *
  * @param array $filters
  *   Array containing all filters, must contain field and value, can contain
@@ -1204,23 +981,22 @@ const getFormattedError = (code, message) => ({
  * @param int $group_id
  *   Filter group id, mostly 0.
  *
- * @return string
- *   Prepared URL query string.
+ * @return object
+ *   Prepared data.
  */
-const prepareFilterUrl = (filters, base = 'searchCriteria', groupId = 0) => {
-  let url = '';
+const prepareFilterData = (filters, base = 'searchCriteria', groupId = 0) => {
+  const data = {};
 
   filters.forEach((filter, index) => {
     Object.keys(filter).forEach((key) => {
       // Prepared string like below.
       // searchCriteria[filter_groups][0][filters][0][field]=field
       // This is how Magento search criteria in APIs work.
-      url = url.concat(`${base}[filter_groups][${groupId}][filters][${index}][${key}]=${filter[key]}`);
-      url = url.concat('&');
+      data[`${base}[filter_groups][${groupId}][filters][${index}][${key}]`] = filter[key];
     });
   });
 
-  return url;
+  return data;
 };
 
 /**
@@ -1261,13 +1037,11 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
   };
 
   filters.push(countryFilters);
-  // @todo pending cofirmation from MDC on using api call for each click.
-  let url = '/V1/deliverymatrix/address-locations/search?';
-  const params = prepareFilterUrl(filters);
-  url = url.concat(params);
+  const url = '/V1/deliverymatrix/address-locations/search';
+
   try {
     // Associate cart to customer.
-    const response = await callMagentoApi(url, 'GET', {});
+    const response = await callMagentoApi(url, 'GET', prepareFilterData(filters));
 
     if (hasValue(response.data.error) && response.data.error) {
       logger.error('Error in getting shipping methods for cart. Error: @message', {
@@ -1371,19 +1145,21 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
 };
 
 /**
- * Gets governates list items.
+ * Gets product shipping methods.
  *
  * @returns {Promise<object>}
  *  returns list of governates.
  */
-window.commerceBackend.getShippingMethods = async (currentArea, sku = undefined) => {
-  let cartId = null;
-  if (sku === undefined) {
-    const cartData = window.commerceBackend.getCartDataFromStorage();
+const getProductShippingMethods = async (currentArea, sku = undefined, cartId = null) => {
+  let cartIdInt = cartId;
+  let cartData = null;
+  if (sku === undefined && cartId === null) {
+    cartData = window.commerceBackend.getCartDataFromStorage();
     if (cartData.cart.cart_id !== null) {
-      cartId = cartData.cart.cart_id_int;
+      cartIdInt = cartData.cart.cart_id_int;
     }
   }
+
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
   const attributes = [];
   if (currentArea !== null) {
@@ -1398,7 +1174,7 @@ window.commerceBackend.getShippingMethods = async (currentArea, sku = undefined)
   try {
     const params = {
       productAndAddressInformation: {
-        cart_id: cartId,
+        cart_id: cartIdInt,
         product_sku: (sku !== undefined) ? sku : null,
         address: {
           custom_attributes: attributes,
@@ -1432,8 +1208,6 @@ export {
   isAnonymousUserWithoutCart,
   isAuthenticatedUserWithoutCart,
   associateCartToCustomer,
-  callDrupalApi,
-  callMagentoApi,
   preUpdateValidation,
   getCart,
   getCartWithProcessedData,
@@ -1441,7 +1215,6 @@ export {
   getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
-  getCartSettings,
   getFormattedError,
   getCartCustomerEmail,
   getCartCustomerId,
@@ -1449,5 +1222,5 @@ export {
   isCartHasOosItem,
   getProductStatus,
   getLocations,
-  prepareFilterUrl,
+  getProductShippingMethods,
 };

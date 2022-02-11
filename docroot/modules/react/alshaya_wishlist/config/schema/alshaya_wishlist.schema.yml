@@ -1,0 +1,28 @@
+alshaya_wishlist.settings:
+  type: config_object
+  label: 'Alshaya Wishlist Configuration'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Switch to enable and disable Wishlist.'
+    local_storage_expiration_guest:
+      type: integer
+      label: 'Expire time for wishlist info in localStorage for guest users.'
+    local_storage_expiration_logged_in:
+      type: integer
+      label: 'Expire time for wishlist info in localStorage for logged in users.'
+    wishlist_label:
+      type: text
+      label: 'Label used for wishlist feature as per brand requirement.'
+    remove_after_addtocart:
+      type: boolean
+      label: 'Remove product from wishlist after product added to cart.'
+    email_subject:
+      type: text
+      label: 'Email subject to share your favourite products.'
+    email_template:
+      type: text_format
+      label: 'Email template to share your favourite products.'
+    enabled_share:
+      type: boolean
+      label: 'Switch to enable and disable Wishlist sharing feature.'

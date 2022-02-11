@@ -190,14 +190,14 @@ function alshaya_bbw_transac_search_api_algolia_objects_alter(array &$objects, I
       foreach ($nodeLanguages as $lan_key => $lan_value) {
         $node_object = $node->getTranslation($lan_key);
         $raw_title = _alshaya_bbw_transac_get_language_specific_data($lan_key, $object['sku'], $node_object);
-        if ($raw_title){
+        if ($raw_title) {
           $object['raw_title'][$lan_key] = $raw_title;
         }
       }
     }
     else {
       $raw_title = _alshaya_bbw_transac_get_language_specific_data($object['search_api_language'], $object['sku'], $node);
-      if($raw_title){
+      if ($raw_title) {
         $object['raw_title'] = $raw_title;
       }
     }
@@ -214,7 +214,7 @@ function alshaya_bbw_transac_alshaya_product_list_exclude_attribute_alter(array 
 /**
  * Get Language specific SKU and Node.
  */
-function _alshaya_bbw_transac_get_language_specific_data($lang, $sku_data, $node){
+function _alshaya_bbw_transac_get_language_specific_data($lang, $sku_data, $node) {
   $sku = SKU::loadFromSku($sku_data, $lang);
   if (!($sku instanceof SKUInterface)) {
     return FALSE;
@@ -231,42 +231,35 @@ function _alshaya_bbw_transac_get_language_specific_data($lang, $sku_data, $node
  * Implements hook_alshaya_performance_preload_alter().
  */
 function alshaya_bbw_transac_alshaya_performance_preload_alter(array &$preload) {
+  $alshaya_preload = [
+    'as' => 'font',
+    'href' => '/themes/custom/transac/alshaya_white_label/fonts/alshaya-icons.woff2?D7b5if',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $site_preloads = [
+    'en' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_bathbodyworks/fonts/BBWTradeGothicLTStd.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      $alshaya_preload,
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_bathbodyworks/fonts/DroidKufi-Regular.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      $alshaya_preload,
+    ],
+  ];
   // BBW's icon font comes from whitelabel.
-  $icon_directory_path = '/' . drupal_get_path('theme', 'alshaya_white_label') . '/fonts';
-
-  $preload[] = [
-    'as' => 'font',
-    'href' => $icon_directory_path . '/alshaya-icons.woff?D7b5iT',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff',
-  ];
-
-  $themeHandler = \Drupal::service('theme_handler');
-  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
-  $fonts_directory_path = '/' . $themePath . '/fonts';
-
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/BBWTradeGothicLTStd-Bd2.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/BBWTradeGothicLTStd.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/DroidArabicKufi-Bold.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/DroidKufi-Regular.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
 }

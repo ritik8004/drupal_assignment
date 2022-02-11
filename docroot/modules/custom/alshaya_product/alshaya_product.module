@@ -22,7 +22,10 @@ function alshaya_product_views_query_alter(ViewExecutable $view, QueryPluginBase
     $term = \Drupal::request()->attributes->get('taxonomy_term');
 
     // Remove content for product category page.
-    if (in_array($term->getVocabularyId(), ['acq_product_category', 'rcs_category'])) {
+    if (in_array($term->getVocabularyId(), [
+      'acq_product_category',
+      'rcs_category',
+    ])) {
       foreach ($query->where as &$condition_group) {
         foreach ($condition_group['conditions'] as &$condition) {
           if ($condition['field'] == 'taxonomy_index.tid = :taxonomy_index_tid') {
@@ -51,7 +54,10 @@ function alshaya_product_views_pre_execute(ViewExecutable $view) {
     $term = \Drupal::request()->attributes->get('taxonomy_term');
 
     // Remove feeds for product category page.
-    if (in_array($term->getVocabularyId(), ['acq_product_category', 'rcs_category'])) {
+    if (in_array($term->getVocabularyId(), [
+      'acq_product_category',
+      'rcs_category',
+    ])) {
       unset($view->feedIcons);
     }
   }
@@ -61,8 +67,8 @@ function alshaya_product_views_pre_execute(ViewExecutable $view) {
  * Implements hook_alshaya_master_post_drupal_install().
  */
 function alshaya_product_alshaya_master_post_drupal_install() {
-  // @TODO: ACR2-2190 - get promotion_nid created properly during install.
-  // @TODO: ACR2-2477: https://www.drupal.org/project/search_api/issues/2896248.
+  // @todo ACR2-2190 - get promotion_nid created properly during install.
+  // @todo ACR2-2477: https://www.drupal.org/project/search_api/issues/2896248.
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
 
   // Execute all pending search_api tasks.
@@ -181,7 +187,17 @@ function alshaya_product_acq_sku_base_fields_updated(array $fields, $op = 'add')
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']], $index->status());
+        // Prepare overrides data for the facet.
+        $overrides['name'] = $field['label'];
+
+        // If widget data is present in fields array, include that in overrides
+        // to ensure correct widget information is added while creating facets.
+        if (isset($field['widget'])) {
+          foreach ($field['widget'] as $key => $widget) {
+            $overrides['widget'][$key] = $widget;
+          }
+        }
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, $overrides, $index->status());
       }
       break;
 

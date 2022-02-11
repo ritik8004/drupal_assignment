@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Rating from '../../../../../alshaya_bazaar_voice/js/src/rating/components/rating';
 import ReviewSummary from '../../../../../alshaya_bazaar_voice/js/src/reviews/components/review-summary';
-import { setStorageInfo } from '../../../../../alshaya_bazaar_voice/js/src/utilities/storage';
 import { isOpenWriteReviewForm } from '../../../../../alshaya_bazaar_voice/js/src/utilities/user_util';
+import { trackPassiveAnalytics } from '../../../../../alshaya_bazaar_voice/js/src/utilities/analytics';
 
 const PpdRatingsReviews = (props) => {
   const {
@@ -15,7 +15,7 @@ const PpdRatingsReviews = (props) => {
       removePanelData();
     }, 400);
     // Disable write review popup on page load.
-    setStorageInfo(false, 'openPopup');
+    Drupal.addItemInLocalStorage('openPopup', false);
   };
 
   const openModal = () => {
@@ -49,6 +49,9 @@ const PpdRatingsReviews = (props) => {
     }
   },
   []);
+
+  // Track passive impression for dynamic layout on pdp.
+  trackPassiveAnalytics();
 
   return (
     <Rating childClickHandler={openRatingsReviewPanel} />

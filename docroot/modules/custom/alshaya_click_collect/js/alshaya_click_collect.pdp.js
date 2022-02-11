@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   // Coordinates of the user's location.
   var asCoords = null;
@@ -36,7 +35,7 @@
       // the events to be attached.
       var node = $('.sku-base-form').not('[data-sku *= "#"]').closest('article.entity--type-node').first();
 
-      $('.sku-base-form', node).once('click-collect').on('variant-selected', function (event, variant, code) {
+      $('body').once('click-collect').on('variant-selected', '.sku-base-form', function (event, variant, code) {
         var sku = $(this).attr('data-sku');
         var productKey = Drupal.getProductKeyForProductViewMode(node.attr('data-vmode'));
         var productInfo = window.commerceBackend.getProductData(sku, productKey);
