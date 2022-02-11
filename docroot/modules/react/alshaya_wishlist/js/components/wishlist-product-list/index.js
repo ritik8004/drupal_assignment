@@ -113,11 +113,11 @@ class WishlistProductList extends React.Component {
   /**
    * Increase the rendered page state on every click of load more.
    */
-  setDefaultpageRender = () => {
+  increasePagesToLoadByDefault = () => {
     const { defaultpageRender } = this.state;
-    // Set the current page state in defaultpageRender to fetch the results
-    // till last loaded page. This is required when we remove the product
-    // from the wishlist.
+    // When we remove an item we need to re-render
+    // with same number of pages loaded by default so we update
+    // defaultPageRender with number of pages to load.
     this.setState({
       defaultpageRender: defaultpageRender + 1,
     });
@@ -218,7 +218,7 @@ class WishlistProductList extends React.Component {
               {(paginationArgs) => (
                 <WishlistPagination
                   {...paginationArgs}
-                  setDefaultpageRender={this.setDefaultpageRender}
+                  increasePagesToLoadByDefault={this.increasePagesToLoadByDefault}
                 >
                   {Drupal.t('Load more products')}
                 </WishlistPagination>
