@@ -63,7 +63,6 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
   public function defaultConfiguration() {
     $config = parent::defaultConfiguration();
     $page_types = $this->getPageTypes();
-
     foreach ($page_types as $pageType => $values) {
       $config['page_types'][$pageType] = 0;
     }
@@ -94,9 +93,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
         1 => $this->t('Show in the selected page types'),
         0 => $this->t('Hide in the selected page types'),
       ],
-      '#default_value' => (isset($this->configuration['show_on_selected_pages']))
-        ? $this->configuration['show_on_selected_pages']
-        : 0,
+      '#default_value' => (isset($this->configuration['show_on_selected_pages'])) ? $this->configuration['show_on_selected_pages'] : 0,
     ];
     $form += parent::buildConfigurationForm($form, $form_state);
     unset($form['negate']);
