@@ -56,6 +56,7 @@ const PlpApp = ({
     itemsPerPage,
     filterOos,
     pageSubType,
+    hierarchy_lhn: lhnCategoryFilter,
     max_category_tree_depth: categoryDepth,
     subCategories,
     categoryFacetEnabled,
@@ -135,10 +136,11 @@ const PlpApp = ({
     && pageSubType === 'plp'
     && categoryFacetEnabled
     && nestedLevel < parseInt(categoryDepth, 10) + 1)) {
+    const { currentLanguage } = drupalSettings.path;
     for (let i = 0; i <= nestedLevel; i++) {
       if (productListIndexStatus()) {
         // Set default EN category filter in product list index for VM.
-        categoryFieldAttributes.push(`lhn_category.en.lvl${i}`);
+        categoryFieldAttributes.push(`lhn_category.${currentLanguage}.lvl${i}`);
       } else {
         categoryFieldAttributes.push(`lhn_category.lvl${i}`);
       }
@@ -192,7 +194,7 @@ const PlpApp = ({
                 <h3 className="c-facet__title c-accordion__title c-collapse__title plp-category-facet-title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                 <PLPHierarchicalMenu
                   attributes={categoryFieldAttributes}
-                  rootPath={defaultCategoryFilter}
+                  rootPath={lhnCategoryFilter}
                   facetLevel={1}
                   ref={plpCategoryRef}
                   showParentLevel={false}
