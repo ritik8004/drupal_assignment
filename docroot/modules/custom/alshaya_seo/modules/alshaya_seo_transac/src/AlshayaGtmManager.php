@@ -567,7 +567,7 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['taxonomy_term'])) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
             $term = $currentRoute['route_params']['taxonomy_term'];
-            $routeIdentifier .= ':' . $term->getVocabularyId();
+            $routeIdentifier .= ':' . $term->bundle();
           }
           break;
 
@@ -635,7 +635,7 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['taxonomy_term'])) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
             $term = $currentRoute['route_params']['taxonomy_term'];
-            $routeIdentifier .= ':' . $term->getVocabularyId();
+            $routeIdentifier .= ':' . $term->bundle();
           }
           break;
       }

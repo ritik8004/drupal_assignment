@@ -787,7 +787,7 @@ function _alshaya_master_get_recursive_child_terms($tid) {
   $terms = [];
   if (($taxonomy_term = Term::load($tid)) instanceof TermInterface) {
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id(), NULL, FALSE);
+    $term_items = $storage->loadTree($taxonomy_term->bundle(), $taxonomy_term->id(), NULL, FALSE);
     $terms[] = $taxonomy_term->id();
     if (!empty($term_items)) {
       // Loop to get children term names.

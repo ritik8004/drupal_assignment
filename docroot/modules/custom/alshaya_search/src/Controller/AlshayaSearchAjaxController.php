@@ -251,7 +251,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       if (!isset($term)) {
         $term = $this->currentRouteMatch->getParameter('taxonomy_term');
       }
-      $vocabId = $term->getVocabularyId();
+      $vocabId = $term->bundle();
       if ($vocabId === 'acq_product_category') {
         $is_plp_page = TRUE;
         return $term;

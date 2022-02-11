@@ -22,7 +22,7 @@ function alshaya_product_views_query_alter(ViewExecutable $view, QueryPluginBase
     $term = \Drupal::request()->attributes->get('taxonomy_term');
 
     // Remove content for product category page.
-    if ($term->getVocabularyId() == 'acq_product_category') {
+    if ($term->bundle() == 'acq_product_category') {
       foreach ($query->where as &$condition_group) {
         foreach ($condition_group['conditions'] as &$condition) {
           if ($condition['field'] == 'taxonomy_index.tid = :taxonomy_index_tid') {
@@ -51,7 +51,7 @@ function alshaya_product_views_pre_execute(ViewExecutable $view) {
     $term = \Drupal::request()->attributes->get('taxonomy_term');
 
     // Remove feeds for product category page.
-    if ($term->getVocabularyId() == 'acq_product_category') {
+    if ($term->bundle() == 'acq_product_category') {
       unset($view->feedIcons);
     }
   }
