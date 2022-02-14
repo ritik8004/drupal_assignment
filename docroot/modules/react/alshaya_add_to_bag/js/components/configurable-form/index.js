@@ -333,12 +333,7 @@ export default class ConfigurableForm extends React.Component {
           option_id: configurableAttributes[key].id,
           option_value: formAttributeValues[key],
         };
-
-        // Skipping the psudo attributes.
-        if (drupalSettings.psudo_attribute === undefined
-          || drupalSettings.psudo_attribute !== option.option_id) {
-          options.push(option);
-        }
+        options.push(option);
       });
     }
 

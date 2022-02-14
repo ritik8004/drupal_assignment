@@ -46,6 +46,9 @@ class AlshayaSearchAlgoliaSetupCommands extends DrushCommands {
       'field_category_name',
       'lhn_category',
       'promotion_nid',
+      // We need filterOnly SKU facet field in algolia product list index
+      // for the wishlist page for sorting products list.
+      'filterOnly(sku)',
     ];
 
     foreach ($facets as $facet) {
