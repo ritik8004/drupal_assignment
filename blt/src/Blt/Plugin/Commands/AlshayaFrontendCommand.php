@@ -169,6 +169,7 @@ class AlshayaFrontendCommand extends BltTasks {
       $tasks->exec($fullCommand);
     }
 
+    $tasks->stopOnFail();
     return $tasks->run();
   }
 
@@ -218,8 +219,7 @@ class AlshayaFrontendCommand extends BltTasks {
       ? 'npm run build:dev'
       : 'npm run build';
 
-    $tasks = $this->taskParallelExec();
-    $tasks->waitInterval(1);
+    $tasks = $this->taskExecStack();
     $docroot = $this->getConfigValue('docroot');
 
     $ignore_dirs = ['node_modules', 'alshaya_react_test'];
@@ -235,10 +235,10 @@ class AlshayaFrontendCommand extends BltTasks {
         }
       }
 
-      $this->say($dir);
-      $tasks->process("cd $dir; $command");
+      $tasks->exec("cd $dir; $command");
     }
 
+    $tasks->stopOnFail();
     return $tasks->run();
   }
 
@@ -298,6 +298,7 @@ class AlshayaFrontendCommand extends BltTasks {
       $tasks->exec("cd $theme_dir; npm run lint");
     }
 
+    $tasks->stopOnFail();
     return $tasks->run();
   }
 
@@ -321,6 +322,7 @@ class AlshayaFrontendCommand extends BltTasks {
     $tasks = $this->taskExecStack();
     $tasks->stopOnFail();
     $tasks->exec("cd $dir; npm run lint");
+    $tasks->stopOnFail();
     return $tasks->run();
   }
 
@@ -354,6 +356,7 @@ class AlshayaFrontendCommand extends BltTasks {
       }
     }
 
+    $tasks->stopOnFail();
     $result = $tasks->run();
     return $result;
   }
