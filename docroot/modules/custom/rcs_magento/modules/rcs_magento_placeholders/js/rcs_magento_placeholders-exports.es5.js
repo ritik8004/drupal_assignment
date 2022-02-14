@@ -164,21 +164,23 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'navigation_menu':
-      // @todo To optimize the multiple category API call.
       // Early return if the root category is undefined.
-      if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined') {
+      if (typeof params.category_id === 'undefined') {
         return null;
       }
 
       // Prepare request parameters.
       // Fetch categories for navigation menu using categories api.
-      request.data = prepareQuery(`{categories(filters: { ids: { eq: "${drupalSettings.alshayaRcs.navigationMenu.rootCategory}"}})
+      request.data = prepareQuery(`{categories(filters: { ids: { eq: "${params.category_id}"}})
         ${rcsPhGraphqlQuery.navigationMenu}
       }`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
-      if (response !== null && Array.isArray(response.data.categories.items[0].children)) {
+      if (response !== null
+        && Array.isArray(response.data.categories.items)
+        && response.data.categories.items.length > 0
+      ) {
         // Get children for root category.
         result = response.data.categories.items[0].children;
       }

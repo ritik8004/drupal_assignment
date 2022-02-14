@@ -252,6 +252,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           '#attributes' => [
             'id' => 'rcs-ph-navigation_menu',
             'data-rcs-dependency' => 'none',
+            'data-param-category_id' => $alshaya_rcs_main_menu_settings->get('root_category'),
           ],
         ],
       ],
@@ -260,7 +261,6 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         'drupalSettings' => [
           'alshayaRcs' => [
             'navigationMenu' => [
-              'rootCategory' => $alshaya_rcs_main_menu_settings->get('root_category'),
               'menuMaxDepth' => $menu_max_depth,
               'maxNbCol' => $max_nb_col > 0 ? $max_nb_col : 6,
               'idealMaxColLength' => $ideal_max_col_length > 0 ? $ideal_max_col_length : 10,
