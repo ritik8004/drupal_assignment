@@ -5,6 +5,8 @@
  * Install, update and uninstall hooks for the Lightning Extender subprofile.
  */
 
+use Drupal\Core\File\FileSystemInterface;
+
 /**
  * Implements hook_update_N().
  *
@@ -258,7 +260,7 @@ function alshaya_update_8001() {
 function alshaya_install() {
   // Prerequisite for google_tag module.
   $uri = "public://google_tag";
-  \Drupal::service('file_system')->prepareDirectory($uri, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY);
+  \Drupal::service('file_system')->prepareDirectory($uri, FileSystemInterface::CREATE_DIRECTORY);
 
   // Remove all roles created by Lightning.
   $coreRoles = [
