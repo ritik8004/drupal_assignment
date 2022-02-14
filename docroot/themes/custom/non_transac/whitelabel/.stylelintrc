@@ -1,6 +1,10 @@
 {
-  "extends": "stylelint-config-standard",
+  "customSyntax": "postcss-scss",
+  "extends": "stylelint-config-standard-scss",
   "rules": {
-    "at-rule-no-unknown": null
+    "at-rule-no-unknown": null,
+    "no-duplicate-selectors": true,
+    "selector-class-pattern": false,
+    "no-descending-specificity": false
   }
 }

@@ -51,12 +51,10 @@ class AlshayaFrontendCommand extends BltTasks {
    * @aliases setup-themes
    */
   public function setupThemes() {
-    $tasks = $this->taskParallelExec();
-    foreach (self::$themeTypes as $theme_type) {
-      $dir = $this->getConfigValue('docroot') . '/themes/custom/' . $theme_type;
-      $tasks->process("cd $dir; npm install");
-    }
-    return $tasks->run();
+    $dir = $this->getConfigValue('docroot') . '/themes/custom';
+    $task = $this->taskExec("cd $dir; npm install --unsafe-perm=true");
+
+    return $task->run();
   }
 
   /**
