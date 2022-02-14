@@ -32,7 +32,7 @@ const ProductCategoryTeaser = ({
   const labels = [];
   if (attribute.product_labels.length > 0) {
     attribute.product_labels.forEach((label) => {
-      label.push({
+      labels.push({
         image: {
           url: label.image,
           alt: label.text,
