@@ -91,7 +91,7 @@ class WishlistShare extends React.Component {
 
           // Update the wishlist share link in state to open the popup.
           this.setState({
-            wishlistShareLink: Drupal.url.toAbsolute(`wishlist/share?data=${encodedShareUrl}`),
+            wishlistShareLink: Drupal.url.toAbsolute(`/wishlist/share?data=${encodedShareUrl}`),
           });
         }
       }
