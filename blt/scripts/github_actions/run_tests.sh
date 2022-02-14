@@ -3,7 +3,7 @@
 set -e
 
 # Setup site.
-blt validate:all
+blt validate
 
 blt setup:settings --define environment=ci --no-interaction --verbose
 blt setup:hash-salt --define environment=ci --no-interaction --verbose
