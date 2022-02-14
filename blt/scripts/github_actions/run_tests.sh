@@ -2,9 +2,14 @@
 
 set -e
 
-# Setup site.
-blt validate
+# Run tests.
+blt validate:composer
+blt validate:php
+blt validate:phpcs
+blt validate:yaml
+blt validate:twig
 
+# Setup site.
 blt setup:settings --define environment=ci --no-interaction --verbose
 blt setup:hash-salt --define environment=ci --no-interaction --verbose
 blt setup:drupal:install --define environment=ci --no-interaction --verbose
