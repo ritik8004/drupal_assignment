@@ -22,7 +22,7 @@ drupal_build_composer_project: false
 # projects own `composer.json` successfully.
 drupal_build_composer: false
 drupal_composer_path: false
-composer_version: 1.10.20
+composer_version: 2.2.6
 drupal_composer_install_dir: "/var/www/alshaya"
 drupal_core_path: "/var/www/alshaya/docroot"
 ssh_home: /var/www/alshaya

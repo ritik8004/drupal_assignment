@@ -102,8 +102,7 @@ jobs:
       - name: Run Composer install
         run: |
           composer self-update
-          composer self-update --1
-          composer global require hirak/prestissimo
+          composer self-update --2
           composer validate --no-check-all --ansi
           composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
