@@ -727,6 +727,7 @@ class AlshayaPromotionsManager {
         $order = $promotion->get('field_acq_promotion_sort_order')->getString();
         $subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
         $promotion_data = $promotion->get('field_acq_promotion_data')->getString();
+        // phpcs:ignore
         $promotion_data = unserialize($promotion_data);
         $threshold_price = $this->getPromotionThresholdPrice($promotion_data);
 
@@ -827,6 +828,7 @@ class AlshayaPromotionsManager {
 
               // Get Promotion Percentage.
               $promotion_data = $promotion->get('field_acq_promotion_data')->getString();
+              // phpcs:ignore
               $promotion_data = unserialize($promotion_data);
               if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
                 $data['couponDiscount'] = $promotion_data['discount'];

@@ -1297,7 +1297,7 @@ class AlshayaGtmManager {
       $cart_items_rr[] = [
         'id' => $item['sku'],
         'price' => (float) $item['price'],
-        'qnt' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
+        'qnt' => $item['qty'] ?? $item['ordered'],
       ];
     }
 
@@ -1336,7 +1336,7 @@ class AlshayaGtmManager {
       $cart_items_flock[] = [
         'id' => $item['sku'],
         'price' => (float) $item['price'],
-        'count' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
+        'count' => $item['qty'] ?? $item['ordered'],
         'title' => $item['name'],
         'image' => $sku_media_url,
       ];

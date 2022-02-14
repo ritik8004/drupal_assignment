@@ -104,7 +104,7 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     // Maintaining the weight.
     $weight = 0;
     foreach ($options as $id => $title) {
-      $option = isset($default_order[$id]) ? $default_order[$id] : 0;
+      $option = $default_order[$id] ?? 0;
       $element[$id]['#attributes']['class'][] = 'draggable';
       $element[$id]['#weight'] = $weight;
 

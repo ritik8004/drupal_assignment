@@ -108,6 +108,7 @@ class UserCommunicationPreference extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, UserInterface $user = NULL) {
     if ($config = $this->config->get('my_account_enabled_links')) {
+      // phpcs:ignore
       $config = unserialize($config);
       if (empty($config['communication_preference'])) {
         throw new AccessDeniedHttpException();

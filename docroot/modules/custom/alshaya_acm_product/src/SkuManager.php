@@ -1053,6 +1053,7 @@ class SkuManager {
           foreach ($free_gift_skus as $free_gift_sku) {
             $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
           }
+          // phpcs:ignore
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           foreach ($data['condition']['conditions'][0]['conditions'] ?? [] as $condition) {
@@ -1079,6 +1080,7 @@ class SkuManager {
           if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
             $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
           }
+          // phpcs:ignore
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           $promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue();
@@ -1354,6 +1356,7 @@ class SkuManager {
    */
   protected function getSkuLabel(SKU $sku_entity, $parent = FALSE) {
     if ($labels = $sku_entity->get('attr_labels')->getString()) {
+      // phpcs:ignore
       $labels_data = unserialize($labels);
       if (!empty($labels_data) && is_array($labels_data)) {
         return $labels_data;
@@ -2427,6 +2430,7 @@ class SkuManager {
   public function getLabelFromParentSku(SKUInterface $sku, $attr_code) {
     $parent_sku = $this->getParentSkuBySku($sku);
     if ($parent_sku instanceof SKUInterface) {
+      // phpcs:ignore
       $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
       foreach ($configurables as $field) {
         if (in_array($attr_code, $field)) {
@@ -3806,6 +3810,7 @@ class SkuManager {
 
     $attributes = [];
     if ($attrs = $parent_sku->get('field_configurable_attributes')->first()) {
+      // phpcs:ignore
       $configurable_attributes = unserialize($attrs->getString());
       if (!empty($configurable_attributes)) {
         foreach ($configurable_attributes as $attribute) {

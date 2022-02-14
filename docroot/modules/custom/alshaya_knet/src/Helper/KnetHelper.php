@@ -530,7 +530,7 @@ class KnetHelper {
     // need to explode this. Example - 'paymentId=123&amt=4545'.
     $decrypted_data = array_filter(explode('&', $en_dec->decrypt($input['trandata'], $terminal_resource_key)));
     array_walk($decrypted_data, function ($val, $key) use (&$output) {
-      list($key, $value) = explode('=', $val);
+      [$key, $value] = explode('=', $val);
       $output[$key] = $value;
     });
 

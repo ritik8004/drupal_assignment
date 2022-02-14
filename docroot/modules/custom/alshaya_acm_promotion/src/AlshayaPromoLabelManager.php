@@ -383,6 +383,7 @@ class AlshayaPromoLabelManager {
             $promoDisplay['coupon_code'] = $coupon_code;
           }
 
+          // phpcs:ignore
           $data = unserialize($promotion->get('field_acq_promotion_data')->getString());
           foreach ($data['condition']['conditions'][0]['conditions'] ?? [] as $condition) {
             if ($condition['attribute'] === 'quote_item_qty') {
@@ -478,6 +479,7 @@ class AlshayaPromoLabelManager {
     }
 
     $promotion_subtype = $promotion->get('field_acq_promotion_action')->getString();
+    // phpcs:ignore
     $promotion_data = unserialize($promotion->get('field_acq_promotion_data')->getString());
 
     if (!empty($promotion_subtype) && isset($promotion_data['step']) && isset($promotion_data['discount'])) {

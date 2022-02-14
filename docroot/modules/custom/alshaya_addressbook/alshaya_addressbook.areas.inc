@@ -213,5 +213,5 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Um Al-Aish', 'ar' => 'أم العيش'];
   $areas['kw'][] = ['en' => 'Subaiya', 'ar' => 'الصبية'];
 
-  return isset($areas[$country_code]) ? $areas[$country_code] : [];
+  return $areas[$country_code] ?? [];
 }

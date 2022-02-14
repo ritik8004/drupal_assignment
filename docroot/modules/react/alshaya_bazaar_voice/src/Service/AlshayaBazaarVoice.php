@@ -763,8 +763,7 @@ class AlshayaBazaarVoice {
       ],
       'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
       'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),
-      'hide_fields_write_review' => isset($category_based_config['hide_fields_write_review'])
-      ? $category_based_config['hide_fields_write_review'] : [],
+      'hide_fields_write_review' => $category_based_config['hide_fields_write_review'] ?? [],
     ];
     $settings['bazaar_voice'] = array_merge($settings['bazaar_voice'], $basic_configs);
 

@@ -660,8 +660,8 @@ class AlshayaSearchApiQueryExecute {
    * block/config system for sorting.
    */
   public static function sort(array $a, array $b) {
-    $a_weight = isset($a['weight']) ? $a['weight'] : 0;
-    $b_weight = isset($b['weight']) ? $b['weight'] : 0;
+    $a_weight = $a['weight'] ?? 0;
+    $b_weight = $b['weight'] ?? 0;
     if ($a_weight == $b_weight) {
       $a_label = $a['label'];
       $b_label = $b['label'];

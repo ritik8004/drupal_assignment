@@ -24,6 +24,7 @@ function alshaya_hm_images_update_8013() {
     foreach ($skus as $sku) {
       try {
         $sku_entity = SKU::loadFromSku($sku);
+        // phpcs:ignore
         $assets = unserialize($sku_entity->get('attr_assets')->first()->getString());
         foreach ($assets as &$asset) {
           // Unset fid and uri.

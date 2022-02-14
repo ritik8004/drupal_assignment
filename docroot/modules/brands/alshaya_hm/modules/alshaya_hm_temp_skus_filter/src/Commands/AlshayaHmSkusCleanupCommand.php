@@ -214,8 +214,10 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
   protected function processSku($item, $context) {
     // SKUs with DescriptiveStillLife Images. Process only if its multipack
     // attribute is set to FALSE for all images.
+    // phpcs:disable
     if ((!empty($attr_assets__value = $item->attr_assets__value)) &&
       (!empty($assets_data  = unserialize($attr_assets__value)))) {
+      // phpcs:enable
       // Set default to delete all SKUs with DescriptiveStillLife image.
       $skip_sku = FALSE;
 

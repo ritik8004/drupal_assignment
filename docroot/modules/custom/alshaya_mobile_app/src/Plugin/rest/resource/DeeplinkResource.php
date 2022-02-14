@@ -155,7 +155,7 @@ class DeeplinkResource extends ResourceBase {
       // Which further needs to be parsed and "keywords" needs to be added
       // back to query string array to generate complete search deep link.
       $parse = parse_url($alias);
-      list($key, $value) = explode('=', $parse['query']);
+      [$key, $value] = explode('=', $parse['query']);
       $query_string_array = array_merge($query_string_array, [$key => $value]);
       unset($query_string_array['url']);
       unset($query_string_array['_format']);

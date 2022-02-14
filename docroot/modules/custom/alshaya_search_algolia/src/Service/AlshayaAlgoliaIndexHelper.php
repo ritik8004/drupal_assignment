@@ -518,7 +518,7 @@ class AlshayaAlgoliaIndexHelper {
     $langcode = $object['search_api_language'];
 
     foreach ($facets as $key => $facet_alias) {
-      $field_key = isset($field_map[$key]) ? $field_map[$key] : $key;
+      $field_key = $field_map[$key] ?? $key;
 
       if (empty($object[$field_key])) {
         continue;

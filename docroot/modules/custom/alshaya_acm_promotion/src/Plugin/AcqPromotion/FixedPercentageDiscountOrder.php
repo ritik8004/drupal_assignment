@@ -69,6 +69,7 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
   public function getInactiveLabel() {
     $label = parent::getInactiveLabel();
     $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
+    // phpcs:ignore
     $promotion_data = unserialize($promotion_data);
 
     // Override label to include coupon if threshold has reached.
@@ -104,6 +105,7 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
   private function checkThresholdReached(array $promotion_data = NULL) {
     if (is_null($promotion_data)) {
       $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
+      // phpcs:ignore
       $promotion_data = unserialize($promotion_data);
     }
 
@@ -180,6 +182,7 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
 
       $label = '<div class="promotion-coupon-code available" data-coupon-code="' . $coupon . '">' . $coupon . '</div>';
       $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
+      // phpcs:ignore
       $promotion_data = unserialize($promotion_data);
 
       if (!empty($promotion_data) && !empty($promotion_data['discount'])) {

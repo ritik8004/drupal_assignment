@@ -80,7 +80,7 @@ function alshaya_social_form_alshaya_user_settings_alter(array &$form, FormState
     $form['social']['networks'][$network['id']] = [
       '#type' => 'checkbox',
       '#title' => $network['social_network'],
-      '#default_value' => isset($networks_status[$network['id']]) ? $networks_status[$network['id']] : FALSE,
+      '#default_value' => $networks_status[$network['id']] ?? FALSE,
     ];
   }
 

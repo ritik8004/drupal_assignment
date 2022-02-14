@@ -98,7 +98,7 @@ class AlshayaStaticTexts extends ResourceBase {
     $options = ['filters' => ['context' => self::CONTEXT_STATIC_TEXTS]];
     $static_texts = $this->localeStorage->getTranslations(['language' => $this->languageManager->getCurrentLanguage()->getId()], $options);
     foreach ($static_texts as $string) {
-      list(, $static_texts_key) = explode(self::CONTEXT_KEY_SEPARATOR, $string->getValues(['context'])['context']);
+      [, $static_texts_key] = explode(self::CONTEXT_KEY_SEPARATOR, $string->getValues(['context'])['context']);
       // Prepare response data.
       $response_data[] = [
         'machine_name' => $static_texts_key,

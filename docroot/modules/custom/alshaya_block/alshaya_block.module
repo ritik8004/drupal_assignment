@@ -132,7 +132,7 @@ function alshaya_block_set_blocks_node_visibility(array $block_params) {
         // Add bundles for visibility.
         $block_visibility = [
           'bundles' => $visibility_nodes,
-          'negate' => isset($param['negate']) ? $param['negate'] : FALSE,
+          'negate' => $param['negate'] ?? FALSE,
         ] + $visibility;
 
         $block->setVisibilityConfig('entity_bundle:node', $block_visibility);

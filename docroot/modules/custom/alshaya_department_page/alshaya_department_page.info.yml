@@ -1,5 +1,6 @@
 name: 'Department Page'
 type: module
+description: 'Handles alshaya department page related functionalities'
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:

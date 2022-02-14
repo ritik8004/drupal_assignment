@@ -113,7 +113,7 @@ class AlshayaMyWishlistController extends ControllerBase {
     if ($context == 'share') {
       // Get the sharing code if available with query string.
       $data = json_decode(base64_decode($request->query->get('data')));
-      $settings['sharedCode'] = isset($data->sharedCode) ? $data->sharedCode : '';
+      $settings['sharedCode'] = $data->sharedCode ?? '';
     }
 
     $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());

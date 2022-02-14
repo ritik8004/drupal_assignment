@@ -79,6 +79,7 @@ function alshaya_color_split_acq_sku_configurable_product_configurations_alter(a
       continue;
     }
 
+    // phpcs:ignore
     $variant_configurations = unserialize($variant->get('field_configurable_attributes')->getString());
 
     foreach ($variant_configurations as $variant_configurable) {

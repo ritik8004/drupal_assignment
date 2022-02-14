@@ -1,5 +1,6 @@
 name: 'Alshaya contact'
 type: module
+description: 'Manages user contact related functionality'
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:

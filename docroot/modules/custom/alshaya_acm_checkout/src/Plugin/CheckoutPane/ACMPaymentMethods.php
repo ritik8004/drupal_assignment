@@ -299,7 +299,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
    */
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $values = $form_state->getValue($pane_form['#parents']);
-    $payment_method = isset($values['payment_options']) ? $values['payment_options'] : NULL;
+    $payment_method = $values['payment_options'] ?? NULL;
     if ($payment_method) {
       // Setting the payment method in the ajax callback is too late, but
       // validation runs before the ajax method is called, so we can get the

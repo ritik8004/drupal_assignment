@@ -35,6 +35,7 @@ function alshaya_aura_react_update_8001() {
 function alshaya_aura_react_install() {
   // Enable My Loyalty Club link in the menu.
   $config = \Drupal::configFactory()->getEditable('alshaya_user.settings');
+  // phpcs:ignore
   $alshaya_loyalty_club = unserialize($config->get('my_account_enabled_links'));
   $alshaya_loyalty_club['alshaya_loyalty_club'] = 'alshaya_loyalty_club';
   $config->set('my_account_enabled_links', serialize($alshaya_loyalty_club));

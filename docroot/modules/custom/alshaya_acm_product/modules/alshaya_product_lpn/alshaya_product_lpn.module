@@ -96,6 +96,7 @@ function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$childre
     if (empty($season_code_values[$child_lpn_key])) {
       // We will need to do this once for every parent to ensure we consider
       // different season codes available in same size of different colors.
+      // phpcs:ignore
       $configurations = unserialize($parent->get('field_configurable_attributes')->getString());
       foreach ($configurations as $configuration) {
         if ($lpn_attribute == $configuration['code']) {

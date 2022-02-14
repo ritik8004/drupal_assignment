@@ -1,5 +1,6 @@
 name: 'Alshaya Furnitures Free Design Services'
 type: module
+description: 'Handles free design services functionality for furniture for alshaya transac brands'
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:

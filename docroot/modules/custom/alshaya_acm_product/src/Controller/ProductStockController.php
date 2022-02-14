@@ -147,7 +147,7 @@ class ProductStockController extends ControllerBase {
           new AddToCartFormSubmitEvent($entity, $return, $variant ?? NULL)
         );
 
-        $parent_sku = isset($data['selected_parent_sku']) ? $data['selected_parent_sku'] : $variant_sku;
+        $parent_sku = $data['selected_parent_sku'] ?? $variant_sku;
 
         $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [
           $parent_sku,

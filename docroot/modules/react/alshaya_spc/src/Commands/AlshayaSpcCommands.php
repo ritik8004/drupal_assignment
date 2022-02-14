@@ -90,6 +90,7 @@ class AlshayaSpcCommands extends DrushCommands {
     $query->orderBy('timestamp', 'DESC');
     $payments = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     foreach ($payments as $payment) {
+      // phpcs:ignore
       $data = unserialize($payment['data']);
       $type = $data['payment_type'] ?? '';
       if (empty($type)) {

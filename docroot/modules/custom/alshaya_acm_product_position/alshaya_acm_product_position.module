@@ -37,7 +37,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
 
     // Get default sort option, first one from available sorted sort options.
     $default_sort = reset($sort_options);
-    list ($default_sort_key, $default_sort_order) = explode(' ', $default_sort);
+    [$default_sort_key, $default_sort_order] = explode(' ', $default_sort);
 
     // Prepare flag to check if default sort option is sort by position or not.
     $default_sort_is_nid = ($default_sort_key == 'nid');
@@ -347,9 +347,11 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
 
   $config = \Drupal::config('alshaya_acm_product_position.settings');
   // Get the sort options and arrange it by weight.
+  // phpcs:disable
   $sort_options = !empty($taxonomy_term->get('field_sorting_order')->getString())
     ? unserialize($taxonomy_term->get('field_sorting_order')->getString())
     : $config->get('sort_options');
+  // phpcs:enable
 
   AlshayaPlpSortSettingsForm::arrangeOptionsByWeight(
     $form['sort_options_wrapper']['sort_options'],
@@ -380,9 +382,11 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
   ];
 
   // Get the sort options and arrange it by weight.
+  // phpcs:disable
   $labels = !empty($taxonomy_term->get('field_sort_options_labels')->getString())
     ? unserialize($taxonomy_term->get('field_sort_options_labels')->getString())
     : \Drupal::service('alshaya_acm_product_position.sort_labels')->rawSortOptionsLabels();
+  // phpcs:enable
 
   foreach ($labels as $key => $title) {
     $form['sort_options_label_wrapper']['sort_options_label'][$key]['plain_text'] = [

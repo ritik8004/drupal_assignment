@@ -1675,7 +1675,7 @@ function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term,
   $query_string = !empty($query_string) ? $query_string : [];
   if (!empty($anchor) && !empty($anchor->first())) {
     foreach (explode(',', $anchor->first()->getString()) as $string) {
-      list($key, $value) = explode('=', trim($string));
+      [$key, $value] = explode('=', trim($string));
       $query_string[trim($key)] = trim($value);
     }
   }

@@ -98,7 +98,7 @@ class KnetController extends ControllerBase {
       }
     }
 
-    $quote_id = isset($data['udf3']) ? $data['udf3'] : '';
+    $quote_id = $data['udf3'] ?? '';
     try {
       if (empty($quote_id)) {
         throw new \Exception();

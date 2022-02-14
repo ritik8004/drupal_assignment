@@ -269,9 +269,7 @@ class AlshayaAcmCommands extends DrushCommands {
               }
 
               // Use specific config if it exists, use default one otherwise.
-              $value = isset($magentos[$mdc][$country_code][$key][$lang])
-                ? $magentos[$mdc][$country_code][$key][$lang]
-                : $magentos['default'][$country_code][$key][$lang];
+              $value = $magentos[$mdc][$country_code][$key][$lang] ?? $magentos['default'][$country_code][$key][$lang];
 
               $config->set($key, $value)->save();
 
@@ -498,6 +496,7 @@ class AlshayaAcmCommands extends DrushCommands {
 
       // Prepare fid array.
       foreach ($result as $key => $rs) {
+        // phpcs:ignore
         $media_data = unserialize($rs->media__value);
         foreach ($media_data as $data) {
           if (isset($data['fid'])) {

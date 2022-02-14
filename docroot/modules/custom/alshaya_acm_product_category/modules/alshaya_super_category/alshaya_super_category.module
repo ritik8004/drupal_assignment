@@ -729,7 +729,7 @@ function alshaya_super_category_preprocess_html(&$variables) {
       $term_label = $term_object->getName();
     }
     else {
-      $term_label = isset($term['label']) ? $term['label'] : '';
+      $term_label = $term['label'] ?? '';
     }
 
     if (!empty($term)) {

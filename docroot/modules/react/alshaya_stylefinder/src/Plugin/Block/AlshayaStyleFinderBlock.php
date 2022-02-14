@@ -108,7 +108,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
       '#title' => $this->t('DY Strategy Id'),
       '#required' => TRUE,
       '#description' => $this->t('Dynamic Yield Strategy Id. Required for product recommendations.'),
-      '#default_value' => isset($config['dy_strategy_id']) ? $config['dy_strategy_id'] : '',
+      '#default_value' => $config['dy_strategy_id'] ?? '',
     ];
 
     return $form;

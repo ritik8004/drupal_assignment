@@ -179,6 +179,7 @@ class AlshayaPlpSortOptionsBase {
     if ($sorting_options == 'override'
         && $sorting_options = $taxonomy_term->get(self::SORT_OPTIONS_SETTINGS[$type]['value'])->getString()
     ) {
+      // phpcs:ignore
       return unserialize($sorting_options);
     }
     elseif ($sorting_options == 'inherit_category') {

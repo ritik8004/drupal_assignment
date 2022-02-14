@@ -118,7 +118,7 @@ class AlshayaProductListDrushCommands extends DrushCommands {
     }
 
     // Prepare set of attribute values.
-    $results = array_slice($results, isset($context['sandbox']['current']) ? $context['sandbox']['current'] : 0, 10);
+    $results = array_slice($results, $context['sandbox']['current'] ?? 0, 10);
     $set_attribute_values = [];
     foreach ($results as $result) {
       $context['results'][] = $result;

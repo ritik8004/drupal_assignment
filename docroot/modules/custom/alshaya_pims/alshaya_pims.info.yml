@@ -1,5 +1,6 @@
 name: 'Alshaya PIMS'
 type: module
+description: 'Manages images received from PIMS for Alshaya'
 core_version_requirement: ^8.8.0 || ^9
 dependencies:
   - alshaya_acm_product:alshaya_acm_product

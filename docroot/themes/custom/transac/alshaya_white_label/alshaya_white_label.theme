@@ -235,7 +235,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
           }
 
           // If mobile videos are not set, use desktop videos on mobile.
-          $mobileVideos = isset($mobileVideos) ? $mobileVideos : $desktopVideos;
+          $mobileVideos = $mobileVideos ?? $desktopVideos;
 
           $variables['#attached']['drupalSettings']['desktopVideos'] = $desktopVideos;
           $variables['#attached']['drupalSettings']['mobileVideos'] = $mobileVideos;
@@ -1612,8 +1612,8 @@ function _alshaya_white_label_get_banner_margin_override($mobile_margin, $deskto
   if (isset($desktop_tablet_margin_value) || isset($mobile_margin_value)) {
     $selector_override = 'c-promo__item__override';
     $style_tag = '';
-    $style_tag .= isset($mobile_margin_value) ? $mobile_margin_value : NULL;
-    $style_tag .= isset($desktop_tablet_margin_value) ? $desktop_tablet_margin_value : NULL;
+    $style_tag .= $mobile_margin_value ?? NULL;
+    $style_tag .= $desktop_tablet_margin_value ?? NULL;
     return [
       'style_tag' => $style_tag,
       'selector_class' => [

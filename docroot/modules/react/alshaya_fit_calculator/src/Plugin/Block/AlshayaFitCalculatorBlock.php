@@ -91,7 +91,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
       '#type' => 'textarea',
       '#title' => $this->t('Values'),
       '#description' => $this->t('Json array to calculate the size.'),
-      '#default_value' => isset($config['calculator_values']) ? $config['calculator_values'] : '',
+      '#default_value' => $config['calculator_values'] ?? '',
     ];
 
     // URL field for autocomplete from content type static_html.
@@ -114,7 +114,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
         'main-form' => $this->t('Advanced-page'),
         'size-guide-calculator' => $this->t('Size guide modal'),
       ],
-      '#default_value' => isset($config['measurement_field']) ? $config['measurement_field'] : 'main-form',
+      '#default_value' => $config['measurement_field'] ?? 'main-form',
     ];
 
     $form['plp_page'] = [
