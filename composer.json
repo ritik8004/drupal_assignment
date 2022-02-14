@@ -303,8 +303,7 @@
                 "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
             },
             "drupal/pathauto": {
-                "Improvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch",
-                "TypeError: Argument 5 passed to AliasUniquifier::__construct()": "https://www.drupal.org/files/issues/2021-02-15/3131460-15.patch"
+                "Improvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"
             },
             "drupal/google_tag": {
                 "Cache content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2020-11-18/3092193-18.patch"
