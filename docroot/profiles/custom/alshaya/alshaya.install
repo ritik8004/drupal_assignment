@@ -258,7 +258,7 @@ function alshaya_update_8001() {
 function alshaya_install() {
   // Prerequisite for google_tag module.
   $uri = "public://google_tag";
-  file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
+  \Drupal::service('file_system')->prepareDirectory($uri, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY);
 
   // Remove all roles created by Lightning.
   $coreRoles = [
