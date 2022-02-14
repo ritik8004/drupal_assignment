@@ -52,6 +52,10 @@
             <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
+          {% if content.tabby %}
+            <div class="tabby mobile-only-hide"> {{ content.tabby }} </div>
+          {% endif %}
+
           <div class="promotion-discount-wrapper">
             <div class="price--discount discount-{{ content.price_block_identifier }}">
               {% if content.price_block['#discount'] %}
@@ -85,6 +89,11 @@
         {% endif %}
 
         <div class="basic-details-wrapper">
+          {% if content.tabby %}
+            <div class="tabby mobile-only-show">
+              <div class="tabby-widget" id="tabby-promo-pdp-mobile"></div>
+            </div>
+          {% endif %}
           <div class="field field--name-field-skus field--type-sku field--label-hidden field__items">
             <div class="field field--name-field-skus field--type-sku field--label-hidden field__item">
               <article>

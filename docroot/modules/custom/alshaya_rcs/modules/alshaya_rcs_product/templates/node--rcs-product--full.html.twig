@@ -45,6 +45,10 @@ set classes = [
             <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
+          {% if content.tabby %}
+            <div class="tabby"> {{ content.tabby }} </div>
+          {% endif %}
+
           <div class="promotions promotions-full-view-mode">#rcs.product._self|promotions#</div>
 
           <div class="vat-text">#rcs.product._self|vat_text#</div>
