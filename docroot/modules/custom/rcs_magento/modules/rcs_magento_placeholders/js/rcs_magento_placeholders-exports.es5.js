@@ -234,7 +234,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     // Get the product data for the given sku.
-    case 'product':
+    case 'product_by_sku':
       // Build query.
       const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
       const filterValue = operator === 'in' ? JSON.stringify(params.sku) : `"${params.sku}"`;

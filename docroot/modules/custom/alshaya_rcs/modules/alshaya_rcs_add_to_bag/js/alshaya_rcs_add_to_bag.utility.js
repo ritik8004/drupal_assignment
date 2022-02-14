@@ -16,7 +16,7 @@
 
     // The product will be fetched and saved in static storage.
     var productInfo = {};
-    var response = await globalThis.rcsPhCommerceBackend.getData('product', {sku: mainSKU});
+    var response = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU});
     if (response && response.length > 0) {
       var product = response[0];
       RcsPhStaticStorage.set('product_' + product.sku, product);
