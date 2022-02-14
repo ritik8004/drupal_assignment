@@ -28,7 +28,10 @@
             "*": "dist"
         },
         "sort-packages": true,
-        "platform": {"php": "7.4"}
+        "platform": {"php": "7.4"},
+        "allow-plugins": {
+            "symfony/flex": true
+        }
     },
     "autoload": {
         "psr-4": {
