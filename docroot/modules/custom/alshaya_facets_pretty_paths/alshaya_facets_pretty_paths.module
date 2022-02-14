@@ -358,7 +358,6 @@ function alshaya_facets_pretty_paths_taxonomy_term_update(TermInterface $term) {
 
     $langcode = $term->language()->getId();
     $facet_item_value = $term->getName();
-
     $pretty_paths_helper->encodeFacetUrlComponents(
       AlshayaAlgoliaIndexHelper::FACET_SOURCE,
       $facet_alias,
