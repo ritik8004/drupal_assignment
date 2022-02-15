@@ -121,7 +121,7 @@ function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, E
       $build['short_desc'] = $return['short_desc'];
     }
   }
-  if (($entity->bundle() == 'rcs_product')) {
+  if ($entity->bundle() == 'rcs_product') {
     $build['#attached']['library'][] = 'alshaya_cos_transac/product';
   }
 }
