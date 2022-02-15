@@ -67,14 +67,3 @@ function alshaya_i18n_install() {
     ->set('transliterate', FALSE)
     ->save();
 }
-
-/**
- * Implements hook_modules_installed().
- */
-function alshaya_i18n_modules_installed($modules) {
-  // Apply entity updates to ensure the taxonomy fields related to translation
-  // are created.
-  if (in_array('alshaya_i18n', $modules)) {
-    \Drupal::service("entity.definition_update_manager")->applyUpdates();
-  }
-}
