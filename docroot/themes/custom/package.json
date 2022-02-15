@@ -1,10 +1,10 @@
 {
-  "name": "custom_themes",
+  "name": "alshaya_custom_themes",
   "version": "0.1.0",
-  "description": "Front-end build tools for custom themes.",
+  "description": "Front-end build tools for custom themes of Alshaya.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/acquia-pso/cog.git"
+    "url": "https://github.com/acquia-pso/alshaya.git"
   },
   "devDependencies": {
     "breakpoint-sass": "^2.7.1",
