@@ -37,7 +37,6 @@ function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$queries) {
   array_push(
     $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
     'size',
-    'assets_swatch',
   );
 }
 
