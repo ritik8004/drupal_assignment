@@ -134,7 +134,6 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
    * @param \Drupal\locale\LocaleConfigManager $locale_config_manager
    *   The locale configuration manager.
    */
-   */
   public function __construct(StateInterface $state,
                               ConfigFactoryInterface $configFactory,
                               ModuleInstallerInterface $moduleInstaller,
