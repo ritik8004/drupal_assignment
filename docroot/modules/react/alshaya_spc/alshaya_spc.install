@@ -13,6 +13,21 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_update().
+ *
+ * Add alshaya_spc config for order_id_fallback.
+ */
+function alshaya_spc_update_8024() {
+  // Add alshaya_spc.settings config.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_spc.settings'],
+    'alshaya_spc',
+    'install'
+  );
+}
+
+/**
  * Implements hook_update_N().
  *
  * Add separate configs for same day and express delivery config.
@@ -265,7 +280,7 @@ function alshaya_spc_update_8011() {
   $checkoutcom_upapi_fawry->setName('فوري');
   $checkoutcom_upapi_fawry->save();
 
-  // Disable new fawry method by default
+  // Disable new fawry method by default.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
   $data = $config->get('exclude_payment_methods');
   $data['checkout_com_upapi_fawry'] = 'checkout_com_upapi_fawry';

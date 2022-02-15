@@ -1,0 +1,238 @@
+.egift-my-account {
+  margin-top: 1.3125rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 1.5625rem;
+  }
+
+  .loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 15rem;
+
+    .loader-icon {
+      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      padding-#{$left}: 2.5rem;
+      background-size: contain;
+      color: $spc-loader-text;
+      min-width: 2rem;
+      min-height: 2rem;
+      font-size: 1.125rem;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.egift-card-linked-wrapper {
+  max-width: 46.75rem;
+  border: 1px solid $egift-linked-card-border;
+  padding: 1rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 1.5625rem;
+    padding: 1.5rem;
+  }
+
+  .egift-card-linked-wrapper-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .egift-linked-title-balance-wrapper {
+    flex: 1;
+    padding: 0 1.25rem;
+
+    @include breakpoint($tablet) {
+      padding: 0 0.625rem;
+    }
+  }
+
+  .egift-linked-thumbnail {
+    width: 3.625rem;
+    line-height: 0;
+
+    @include breakpoint($tablet) {
+      width: 5.3125rem;
+    }
+  }
+
+  .egift-linked-title {
+    font-size: 1rem;
+    line-height: 1.125rem;
+    color: $egift-linked-card-dark-text;
+
+    @include breakpoint($tablet) {
+      font-size: 1.25rem;
+      line-height: normal;
+    }
+  }
+
+  .egift-linked-balance {
+    display: flex;
+    font-size: 0.8125rem;
+    line-height: 1.125rem;
+    color: $egift-linked-card-dark-text;
+
+    @include breakpoint($tablet) {
+      font-size: 1rem;
+    }
+
+    .price-wrapper {
+      margin-#{$left}: 0.1875rem;
+
+      .price-amount {
+        margin-#{$left}: 0.1875rem;
+      }
+    }
+  }
+
+  .egift-card-remove {
+    border: none;
+    font-size: 0;
+    position: relative;
+    background: 0 0;
+    padding: 0;
+  }
+
+  .egift-linked-card-number-wrapper,
+  .egift-linked-expires-wrapper,
+  .egift-linked-card-type-wrapper {
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
+  }
+
+  .egift-card-linked-wrapper-bottom {
+    @include breakpoint($tablet) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.125rem;
+    }
+
+    .egift-linked-card-number-wrapper {
+      display: flex;
+      flex-direction: column;
+
+      .egift-linked-card-number-value {
+        border: none;
+
+        html[lang=ar] & {
+          direction: ltr;
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  .egift-light-text {
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+    color: $egift-linked-card-light-text;
+
+    @include breakpoint($tablet) {
+      font-size: 0.6875rem;
+    }
+  }
+
+  .egift-dark-text {
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+    color: $egift-linked-card-dark-text;
+
+    @include breakpoint($tablet) {
+      font-size: 0.8125rem;
+    }
+  }
+
+  .action-buttons {
+    button[type="button"] {
+      &.egift-topup-btn {
+        margin-bottom: 0;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          margin-top: 1.5rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          min-width: 6rem;
+        }
+      }
+    }
+  }
+
+  .egift-unlink-card-confirm-overlay {
+    .egift-unlink-card-confirm-content {
+      width: 20rem !important;
+
+      @include breakpoint($tablet) {
+        width: 28rem !important;
+      }
+    }
+
+    .modal {
+      padding: 1.875rem;
+
+      @include breakpoint($tablet) {
+        padding: 1.25rem;
+      }
+
+      .confirm-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        margin-top: 2.25rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 2.5625rem;
+        }
+      }
+
+      button.egift-card-remove-confirm-yes,
+      button.egift-card-remove-confirm-no {
+        border-radius: 0.125rem;
+        border: unset;
+        height: 2.5rem;
+        padding: 0 1.25rem;
+        width: 11.875rem;
+        text-transform: lowercase;
+      }
+
+      button.egift-card-remove-confirm-yes {
+        background: $wishlist-button-bg;
+        color: $wishlist-button-txt;
+
+        &:hover {
+          background: $wishlist-button-bg-hover;
+          opacity: 0.75;
+        }
+      }
+
+      button.egift-card-remove-confirm-no {
+        color: $wishlist-button-bg;
+        border: 1px solid $wishlist-basket-button-border;
+        background: $wishlist-basket-button-bg;
+        margin-#{$left}: 1rem;
+      }
+    }
+
+    .close {
+      position: absolute;
+      #{$right}: 0;
+      top: 0;
+      font-size: 0;
+      background: $wishlist-basket-modal-close-bg;
+      cursor: pointer;
+
+      @include icon(close, before) {
+        font-size: 2rem;
+        color: $wishlist-basket-modal-close;
+      }
+    }
+  }
+}

@@ -173,7 +173,7 @@ const PlpApp = ({
             </ConditionalView>
             <Filters
               indexName={indexName}
-              limit={4}
+              limit={drupalSettings.algoliaSearch.topFacetsLimit}
               pageType="listing"
               callback={(callerProps) => callback(callerProps)}
             />

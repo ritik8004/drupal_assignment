@@ -7,7 +7,6 @@
 
 use Drupal\alshaya_user\Plugin\Block\MyAccountLinks;
 use Drupal\alshaya_aura_react\Constants\AuraStatus;
-use Drupal\user\Entity\User;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Url;
@@ -172,8 +171,7 @@ function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings,
   // with order summary for order confirmation page.
   if (isset($order['extension']['aura_payment_value'])) {
     $settings['order_details']['totals']['paidWithAura'] = $order['extension']['aura_payment_value'] ?? 0;
-    $settings['order_details']['totals']['balancePayable']
-     = $order['base_grand_total'] - $order['extension']['aura_payment_value'];
+    $settings['order_details']['totals']['balancePayable'] = $order['base_grand_total'] - $order['extension']['aura_payment_value'];
   }
 }
 

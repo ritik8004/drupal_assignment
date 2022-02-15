@@ -7,11 +7,8 @@
 
 use Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter\SkuGalleryFormatter;
 use Drupal\block\Entity\Block;
-use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -78,6 +75,46 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function alshaya_acm_product_category_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  $config = \Drupal::config('alshaya_acm_product_category.settings');
+  if (!$config->get('all_categories_department_page')) {
+    return;
+  }
+
+  if ($view->id() === 'product_category_level_3') {
+    // We want to allow creation creation of page upto 3 level.
+    if ($display_id === 'entity_reference_1') {
+      $handler = $view->getHandler($display_id, 'filter', 'depth_level');
+      $handler['operator'] = '<=';
+      $handler['value']['value'] = 4;
+      $view->setHandler($display_id, 'filter', 'depth_level', $handler);
+    }
+    // Allow creation of page for the category even if 'include in menu'
+    // is not enabled.
+    elseif ($display_id === 'block_1') {
+      $view->removeHandler($display_id, 'filter', 'field_category_include_menu_value');
+    }
+  }
+  // Display categories in LHN comes under L1 any visiting category.
+  elseif ($view->id() === 'product_category_level_2_3' && $display_id === 'block_2') {
+    /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+    $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+    $tid = $product_category_tree->getDepartmentPageCategoryIdFromRoute();
+    // Get term storage.
+    $term_storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
+    $term = $term_storage->load($tid);
+    if ($term instanceof TermInterface) {
+      // Get l1 category.
+      $l1_term = $product_category_tree->getL1Category($term);
+
+      $args = [$l1_term->id()];
+    }
+  }
 }
 
 /**
@@ -257,6 +294,9 @@ function alshaya_acm_product_category_acq_sku_product_node_alter(NodeInterface $
  */
 function alshaya_acm_product_category_taxonomy_term_insert(TermInterface $term) {
   if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
+    $skuCategoryMapHelper = \Drupal::service('alshaya_acm_product_category.mapping_manager');
+    $skuCategoryMapHelper->mapSkuCategory($term);
+
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
   }
 }
@@ -293,7 +333,12 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     // If translation is available, we check the fields.
     else {
       $old_term = $term->original->getTranslation($langcode);
-      $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name', 'field_show_in_lhn'];
+      $fields_to_check = [
+        'field_commerce_status',
+        'field_category_include_menu',
+        'name',
+        'field_show_in_lhn',
+      ];
 
       foreach ($fields_to_check as $field) {
         if ($term->get($field)->getString() != $old_term->get($field)->getString()) {
@@ -480,6 +525,7 @@ function alshaya_acm_product_category_views_pre_build(ViewExecutable $view) {
       $view->setItemsPerPage(0);
 
       // Remove show_on_load to avoid any extra processing.
+      // @codingStandardsIgnoreLine
       unset($_GET['show_on_load']);
       \Drupal::request()->query->remove('show_on_load');
     }
@@ -580,7 +626,7 @@ function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $conte
     // Remove shop- as prefix from url if true.
     $is_remove_shop_prefix = $term->get('field_remove_shop_prefix')->getString();
     if ($is_remove_shop_prefix) {
-      if (strpos($alias, 'shop-') !== false) {
+      if (strpos($alias, 'shop-') !== FALSE) {
         $alias = str_replace('shop-', '', $alias);
       }
       return;
@@ -667,7 +713,7 @@ function alshaya_acm_product_category_block_access(Block $block, $operation, Acc
   if ($operation == 'view' && $block->id() == 'categoryfacetplp') {
     $route = \Drupal::routeMatch();
     if ($route->getRouteName() == 'entity.taxonomy_term.canonical') {
-      /* @var \Drupal\taxonomy\Entity\Term $term */
+      /** @var \Drupal\taxonomy\Entity\Term $term */
       $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
 
       if (empty($term)) {

@@ -168,6 +168,12 @@ class AuraFormLinkCard extends React.Component {
       chosenCountryCode,
     } = this.state;
 
+    // Just return from here if form is not active.
+    const { formActive } = this.props;
+    if (!formActive) {
+      return;
+    }
+
     const userInput = getUserInput(`${linkCardOption}Checkout`);
 
     if (hasValue(userInput)) {
@@ -212,6 +218,10 @@ class AuraFormLinkCard extends React.Component {
       mobile,
     } = this.state;
 
+    const { formActive } = this.props;
+    // Active class based on form active props.
+    const active = formActive ? 'active' : 'in-active';
+
     return (
       <>
         <AuraFormLinkCardOptions
@@ -219,7 +229,7 @@ class AuraFormLinkCard extends React.Component {
           selectOptionCallback={this.selectOption}
           cardNumber={cardNumber}
         />
-        <div className="spc-aura-link-card-form-content">
+        <div className={`spc-aura-link-card-form-content ${active}`}>
           <div className="spc-aura-link-card-wrapper">
             <div className="form-items">
               <ConditionalView condition={linkCardOption === 'email'}>
@@ -237,6 +247,7 @@ class AuraFormLinkCard extends React.Component {
               <button
                 type="submit"
                 className="spc-aura-link-card-submit spc-aura-button"
+                disabled={!formActive}
                 onClick={() => this.addCard()}
               >
                 { getStringMessage('checkout_apply') }

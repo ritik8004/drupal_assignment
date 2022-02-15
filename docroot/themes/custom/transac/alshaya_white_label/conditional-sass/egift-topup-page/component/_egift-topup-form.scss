@@ -1,0 +1,116 @@
+#egift-topup-wrapper {
+  .card-details {
+    margin: 1.0625rem 0 1.5rem;
+
+    html[lang=en] & {
+      letter-spacing: 0.65px;
+    }
+
+    .egift-linked-card-balance {
+      margin-bottom: 0.5rem;
+      color: $egift-black-text;
+
+      &-label {
+        margin-#{$right}: 0.3125rem;
+      }
+
+      .price-amount {
+        padding-#{$left}: 0.1875rem;
+      }
+
+      span {
+        display: inline-block;
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+
+        input {
+          border: none;
+
+          html[lang=ar] & {
+            direction: ltr;
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+
+  .subtitle-text {
+    @include breakpoint($tablet) {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .card-details-label {
+    margin-bottom: 1.625rem;
+  }
+
+  .egift-topup-card-number {
+    margin-bottom: 2.1875rem;
+    margin-top: 0.625rem;
+  }
+
+  .egift-input-textfield-wrapper {
+    @include breakpoint($upto-desktop) {
+      width: 100%;
+    }
+  }
+
+  .egift-for-field ~ .egift-input-textfield-wrapper {
+    .egift-topup-card-number {
+      margin-top: 2.1875rem;
+    }
+  }
+
+  .egift-open-amount-wrapper {
+    margin-bottom: 2rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 2.25rem;
+    }
+  }
+
+  .action-buttons {
+    button {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+
+      &[disabled] {
+        border-color: $egift-purchase-inactive-step-text;
+        background: $egift-purchase-inactive-step-text;
+      }
+    }
+
+    .error {
+      @include breakpoint($tablet) {
+        width: 100%;
+      }
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 15rem;
+
+    .loader-icon {
+      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      padding-#{$left}: 2.5rem;
+      background-size: contain;
+      color: $spc-loader-text;
+      min-width: 2rem;
+      min-height: 2rem;
+      font-size: 1.125rem;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .error {
+    &:empty {
+      padding: 0 !important;
+    }
+  }
+}

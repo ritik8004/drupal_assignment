@@ -9,7 +9,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 
-
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
@@ -106,7 +105,7 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
   // which they should be displayed.
   $return['description'][] = $description;
 
-  /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+  /** @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
   $product_helper = \Drupal::service('alshaya_acm_product.helper');
   $short_desc = $product_helper->createShortDescription($description['value']['#markup']);
   $return['short_desc']['value'] = strip_tags($short_desc['html']);

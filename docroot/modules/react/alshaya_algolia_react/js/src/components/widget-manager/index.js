@@ -10,21 +10,27 @@ import StarRatingFilter from '../algolia/widgets/StarRatingFilter';
 import DeliveryTypeFilter from '../algolia/widgets/DeliveryTypeFilter';
 import ConditionalView from '../../../common/components/conditional-view';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { getBackToPlpPageIndex } from '../../utils/indexUtils';
 
 const WidgetManager = React.memo((props) => {
   const
     {
-      facet: filter, itemCount, facet: { name },
+      facet: filter, itemCount, facet: { name }, pageType,
     } = props;
 
   let currentWidget = '';
   let className = '';
+  let plpSortIndex = null;
   switch (filter.widget.type) {
     case 'sort_by':
+      // If page type is search then default sort index is taken from filter.
+      if (pageType !== 'search') {
+        plpSortIndex = getBackToPlpPageIndex();
+      }
       currentWidget = (
         <SortByList
           name={name}
-          defaultRefinement={filter.widget.items[0].value}
+          defaultRefinement={plpSortIndex || filter.widget.items[0].value}
           items={filter.widget.items}
         />
       );
@@ -87,6 +93,8 @@ const WidgetManager = React.memo((props) => {
             facetValues={filter.facet_values}
             attribute={filter.identifier}
             itemCount={itemCount}
+            sameDayValue={filter.same_value}
+            expressDeliveryValue={filter.express_value}
           />
         </ConditionalView>
       );

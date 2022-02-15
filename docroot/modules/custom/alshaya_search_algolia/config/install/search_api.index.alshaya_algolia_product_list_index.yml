@@ -15,6 +15,14 @@ name: 'Alshaya Algolia Product List Index'
 description: ''
 read_only: false
 field_settings:
+  created:
+    label: 'Authored on'
+    datasource_id: 'entity:node'
+    property_path: created
+    type: date
+    dependencies:
+      module:
+        - node
   nid:
     label: ID
     datasource_id: 'entity:node'

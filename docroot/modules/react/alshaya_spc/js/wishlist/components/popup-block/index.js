@@ -15,11 +15,11 @@ import dispatchCustomEvent from '../../../../../js/utilities/events';
 export default class WishlistPopupBlock extends React.Component {
   addToWishlist = (addToWishlist) => {
     const {
-      sku, title, closeWishlistModal,
+      sku, title, options, closeWishlistModal,
     } = this.props;
     // If user responds as yes, move item to wishlist and remove cart item.
     // Else close the popup and continue to remove cart item.
-    const productInfo = { sku, title };
+    const productInfo = { sku, title, options };
     if (addToWishlist) {
       // Add product to the wishlist. For guest users it'll store in local
       // storage and for logged in user this will store in backend using API
@@ -33,6 +33,7 @@ export default class WishlistPopupBlock extends React.Component {
           dispatchCustomEvent('productAddedToWishlist', {
             productInfo,
             addedInWishList: true,
+            removeFromCart: false,
           });
 
           // If user is logged in we need to update the products from

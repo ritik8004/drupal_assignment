@@ -398,6 +398,11 @@ function _alshaya_aura_react_translations() {
         'ar' => 'عند الضغط على إرسال، أنت تقر بأنك قرأت ووافقت على',
       ],
     ],
+    'v3' => [
+      'You can only redeem full pending balance or use other payment method.' => [
+        'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
+      ],
+    ],
   ];
 }
 

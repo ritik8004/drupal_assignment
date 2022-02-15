@@ -233,6 +233,18 @@
           display: inline-block;
           margin-#{$right}: 0.1875rem;
         }
+
+        .spc-cart-product-attribute-value {
+          input {
+            border: none;
+            background: $spc-cart-product-attribute-input;
+
+            html[lang=ar] & {
+              direction: ltr;
+              text-align: right;
+            }
+          }
+        }
       }
 
       .product-flag {

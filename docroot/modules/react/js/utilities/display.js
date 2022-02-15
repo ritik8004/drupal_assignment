@@ -73,6 +73,16 @@ const isMaxSaleQtyEnabled = () => {
   return false;
 };
 
+/**
+ * Return the current view of device.
+ *
+ * @returns boolean
+ *   If the device is desktop or not.
+ */
+const isDesktop = () => (
+  window.innerWidth > 1023
+);
+
 export {
   isDisplayConfigurableBoxes,
   isProductBuyable,
@@ -80,4 +90,5 @@ export {
   getQuantityDropdownValues,
   isHideMaxSaleMsg,
   isMaxSaleQtyEnabled,
+  isDesktop,
 };

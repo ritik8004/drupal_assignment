@@ -24,7 +24,7 @@ body.wishlist-enabled {
       span {
         display: block;
 
-        &:last-child {
+        &:last-child:not(.content--form) {
           color: $wishlist-header-notification-span;
         }
       }
@@ -188,10 +188,18 @@ body.wishlist-enabled {
     }
   }
 
-  @include breakpoint($upto-desktop) {
-    &.no-sticky-algolia-search-bar {
-      .block-alshaya-algolia-react-autocomplete.show-algolia-search-bar {
+  &.no-sticky-algolia-search-bar {
+    .block-alshaya-algolia-react-autocomplete.show-algolia-search-bar {
+      @include breakpoint($upto-desktop) {
         z-index: 2;
+      }
+    }
+
+    &.hide-header {
+      .block-alshaya-algolia-react-autocomplete.show-algolia-search-bar {
+        @include breakpoint($only-mobile) {
+          z-index: 15;
+        }
       }
     }
   }
@@ -214,6 +222,39 @@ body.wishlist-enabled {
         text-align: $right;
         flex-grow: 1;
       }
+    }
+  }
+
+  &.supermenu {
+    header {
+      .region__header {
+        @include breakpoint($desktop) {
+          .block-alshaya-wishlist {
+            flex-grow: unset;
+          }
+
+          > .block-system-branding-block {
+            width: auto;
+            flex-grow: 1;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    &.hide-header:not(.menu--open) {
+      #wishlist-header-wrapper {
+        z-index: 14;
+
+        .wishlist-notification {
+          top: 2.75rem;
+        }
+      }
+    }
+
+    &.hide-header.Sticky-algolia-search.header-sticky-filter {
+      top: 2.5rem;
     }
   }
 }

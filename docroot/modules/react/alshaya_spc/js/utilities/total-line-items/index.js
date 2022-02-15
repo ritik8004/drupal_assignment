@@ -13,6 +13,8 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import Tabby from '../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../js/tabby/components';
+import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import EgiftCheckoutOrderSummary from '../../egift-card/components/egift-checkout-order-summary';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -81,7 +83,12 @@ class TotalLineItems extends React.Component {
   };
 
   render() {
-    const { totals, isCartPage, collectionCharge } = this.props;
+    const {
+      totals,
+      isCartPage,
+      context,
+      collectionCharge,
+    } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
@@ -160,6 +167,12 @@ class TotalLineItems extends React.Component {
 
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
+          <ConditionalView condition={isEgiftCardEnabled()}>
+            <EgiftCheckoutOrderSummary
+              totals={totals}
+              context={context}
+            />
+          </ConditionalView>
           <div className="delivery-vat">
             <ConditionalView condition={shippingAmount === null}>
               <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
@@ -172,6 +185,7 @@ class TotalLineItems extends React.Component {
               totals={totals}
               dontShowVatText={dontShowVatText}
               shippingAmount={shippingAmount}
+              context={context}
             />
           </ConditionalView>
           {postpay}
