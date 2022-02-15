@@ -1012,7 +1012,7 @@ function alshaya_transac_install() {
   }
 
   // Set alshaya_white_label as the default theme.
-  \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'alshaya_white_label')->save();
 
   // Remove redundant drupal core themes.
   $theme_handler = \Drupal::service('theme_handler');

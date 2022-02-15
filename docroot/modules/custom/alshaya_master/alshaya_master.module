@@ -855,7 +855,7 @@ function _alshaya_master_initialize_amp($theme_name) {
   \Drupal::service('module_installer')->install(['alshaya_amp']);
 
   // Enable and set default amp theme.
-  \Drupal::service('theme_handler')->install([$theme_name], TRUE);
+  \Drupal::service('theme_installer')->install([$theme_name], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', $theme_name)->save();
 
   // Get the current theme settings.
@@ -881,8 +881,8 @@ function _alshaya_master_initialize_amp($theme_name) {
  */
 function _alshaya_master_initialize_brand_theme($brand_theme) {
   // Enable and set brand theme as default theme.
-  \Drupal::service('theme_handler')->install([$brand_theme], TRUE);
-  \Drupal::service('theme_handler')->setDefault($brand_theme);
+  \Drupal::service('theme_installer')->install([$brand_theme], TRUE);
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', $brand_theme)->save();
 
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();

@@ -22,6 +22,6 @@ function alshaya_amp_update_8301() {
  */
 function alshaya_amp_install() {
   // Enable and set default amp theme.
-  \Drupal::service('theme_handler')->install(['alshaya_amp_white_label'], TRUE);
+  \Drupal::service('theme_installer')->install(['alshaya_amp_white_label'], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_white_label')->save();
 }

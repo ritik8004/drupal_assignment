@@ -22,8 +22,8 @@ function alshaya_vs_non_transac_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_vs_non_transac', 'inc', 'alshaya_vs_non_transac.content');
 
   // Enable and set victoria_secret as default theme.
-  \Drupal::service('theme_handler')->install(['victoria_secret'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('victoria_secret');
+  \Drupal::service('theme_installer')->install(['victoria_secret'], TRUE);
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'victoria_secret')->save();
 
   // Disable some default blocks provided by whitelabel that we
   // don't want on victoria_secret.
@@ -81,6 +81,6 @@ function alshaya_vs_non_transac_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
-  \Drupal::service('theme_handler')->install(['alshaya_amp_victoria_secret'], TRUE);
+  \Drupal::service('theme_installer')->install(['alshaya_amp_victoria_secret'], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_victoria_secret')->save();
 }
