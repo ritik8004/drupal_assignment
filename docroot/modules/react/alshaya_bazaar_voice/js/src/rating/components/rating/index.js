@@ -4,10 +4,13 @@ import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/bv-auth-confirmation';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import ConditionalView from '../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getProductReviewStats } from '../../../utilities/user_util';
+import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
+
+const userDetails = getUserDetails();
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -52,7 +55,12 @@ export default class Rating extends React.Component {
     if (bazaarVoiceSettings.reviews === undefined) {
       return null;
     }
-    const { childClickHandler } = this.props;
+    const {
+      childClickHandler,
+      isNewPdpLayout,
+    } = this.props;
+
+    const newPDP = (isNewPdpLayout === undefined) ? false : isNewPdpLayout;
 
     // Reviews data is emtpy.
     if (reviewsData === '') {
@@ -73,9 +81,17 @@ export default class Rating extends React.Component {
     }
     return (
       <div className="inline-rating">
-        <div className="aggregate-rating">
-          <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
-        </div>
+        <ConditionalView condition={newPDP}>
+          <div className="aggregate-rating">
+            <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
+          </div>
+        </ConditionalView>
+        <ConditionalView condition={!newPDP}>
+          <WriteReviewButton
+            reviewedByCurrentUser={userDetails.productReview !== null}
+            newPdp={newPDP}
+          />
+        </ConditionalView>
       </div>
     );
   }

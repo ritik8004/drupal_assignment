@@ -54,7 +54,7 @@ const PpdRatingsReviews = (props) => {
   trackPassiveAnalytics();
 
   return (
-    <Rating childClickHandler={openRatingsReviewPanel} />
+    <Rating childClickHandler={openRatingsReviewPanel} isNewPdpLayout="true" />
   );
 };
 
