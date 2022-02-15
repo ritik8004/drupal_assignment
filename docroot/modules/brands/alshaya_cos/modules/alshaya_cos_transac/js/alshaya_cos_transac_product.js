@@ -2,7 +2,7 @@
  * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
 (function main() {
-  // Event listener to update the data layer object with the proper category
+  // Event listener to update the data layer object with the proper product
   // data.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty.
