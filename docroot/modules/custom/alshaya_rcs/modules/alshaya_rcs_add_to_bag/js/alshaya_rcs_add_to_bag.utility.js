@@ -97,7 +97,8 @@
       });
     });
 
-    // Set size guide.
+    // Display size guide information in product configurable drawer.
+    // @see _alshaya_acm_product_get_size_guide_info()
     const sizeGuide = document.querySelector('.rcs-templates--size-guide');
     var link = sizeGuide.innerHTML;
     var sizeAttr = sizeGuide.getAttribute("data-attributes");
