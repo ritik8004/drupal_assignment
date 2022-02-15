@@ -89,10 +89,12 @@ class WishlistShare extends React.Component {
             sharedUserName: drupalSettings.userDetails.userName || null,
           }));
 
+          // Prepare the absolute link of wishlist share page for the
+          // current logged in customer.
+          const wishlistShareLink = Drupal.url.toAbsolute(Drupal.url(`wishlist/share?data=${encodedShareUrl}`));
+
           // Update the wishlist share link in state to open the popup.
-          this.setState({
-            wishlistShareLink: Drupal.url.toAbsolute(`wishlist/share?data=${encodedShareUrl}`),
-          });
+          this.setState({ wishlistShareLink });
         }
       }
     });

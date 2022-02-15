@@ -135,7 +135,7 @@ jobs:
         uses: actions/setup-node@v2
         if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
         with:
-          node-version: "8.17.0"
+          node-version: "14.19.0"
 
       - name: Install Gulp
         if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}

@@ -1,0 +1,9 @@
+alshaya_msclarity:
+  version: 1.x
+  header: true
+  js:
+    js/alshaya_msclarity.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/drupalSettings

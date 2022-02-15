@@ -237,7 +237,7 @@ jQuery.fn.select2Option = function (options) {
 Drupal.alshaya_color_images_generate_swatch_markup = function (currentOption, select, option_id, status, selectIndex) {
 
   var configurable_color_attribute = 'article_castor_id';
-  if (drupalSettings.hasOwnProperty('sku_configurable_color_attribute')
+  if (typeof drupalSettings.sku_configurable_color_attribute !== 'undefined'
     && drupalSettings.sku_configurable_color_attribute.length !== 0) {
     configurable_color_attribute = drupalSettings.sku_configurable_color_attribute;
   }
@@ -247,8 +247,8 @@ Drupal.alshaya_color_images_generate_swatch_markup = function (currentOption, se
   configurable_color_attribute = 'edit-configurables-' + configurable_color_attribute;
   if ((select.attr('data-drupal-selector') === configurable_color_attribute) ||
     (select.attr('data-drupal-selector') === 'edit-variants-in-group') &&
-    (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
-    (drupalSettings.sku_configurable_options_color.hasOwnProperty(option_id))) {
+    (typeof drupalSettings.sku_configurable_options_color !== 'undefined') &&
+    (typeof drupalSettings.sku_configurable_options_color[option_id] !== 'undefined')) {
     var sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
     var swatch_type = sku_configurable_options_color[option_id].swatch_type;
     var color_label = sku_configurable_options_color[option_id].display_label;

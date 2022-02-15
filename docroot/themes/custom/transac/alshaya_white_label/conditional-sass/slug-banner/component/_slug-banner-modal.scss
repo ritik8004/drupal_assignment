@@ -17,12 +17,12 @@
   overflow: hidden;
   z-index: 1000;
 
-  @include slug-modal-padding();
+  @include slug-modal-padding;
 
   .path--user & {
     width: 100% !important;
 
-    @include slug-modal-padding();
+    @include slug-modal-padding;
   }
 
   #drupal-modal {
@@ -80,6 +80,6 @@
 
 .slug-banner-modal-link.use-ajax {
   + .ajax-progress-throbber {
-    @include fullPageLoader();
+    @include fullPageLoader;
   }
 }

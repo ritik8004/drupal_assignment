@@ -3,12 +3,12 @@
   .popup-overlay {
     .popup-content {
       .spc-deliver-button {
-        @include btn();
+        @include btn;
       }
 
       .spc-address-form-actions {
         .spc-address-form-submit {
-          @include btn();
+          @include btn;
         }
       }
     }
