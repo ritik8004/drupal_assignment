@@ -14,7 +14,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\lightning_core\ConfigHelper;
-use Drupal\locale\Locale;
+use Drupal\locale\LocaleConfigManager;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Drush\Commands\DrushCommands;
@@ -102,6 +102,13 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
   protected $installProfile;
 
   /**
+   * The locale configuration manager.
+   *
+   * @var \Drupal\locale\LocaleConfigManager
+   */
+  protected $localeConfigManager;
+
+  /**
    * AlshayaMasterCommands constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -124,6 +131,9 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
    *   Date Formatter.
    * @param string $install_profile
    *   The install profile.
+   * @param \Drupal\locale\LocaleConfigManager $locale_config_manager
+   *   The locale configuration manager.
+   */
    */
   public function __construct(StateInterface $state,
                               ConfigFactoryInterface $configFactory,
@@ -134,7 +144,8 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
                               EntityTypeManagerInterface $entityTypeManager,
                               ModuleExtensionList $module_extension_list,
                               DateFormatter $date_formatter,
-                              $install_profile) {
+                              $install_profile,
+                              LocaleConfigManager $locale_config_manager) {
     $this->state = $state;
     $this->configFactory = $configFactory;
     $this->moduleInstaller = $moduleInstaller;
@@ -145,6 +156,7 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
     $this->moduleExtensionList = $module_extension_list;
     $this->dateFormatter = $date_formatter;
     $this->installProfile = $install_profile;
+    $this->localeConfigManager = $locale_config_manager;
   }
 
   /**
@@ -227,13 +239,13 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
           $names = ConfigHelper::forModule($brand_module)->optional()->listAll();
 
           // Update config translations from string translations.
-          Locale::config()->updateConfigTranslations($names, $langcodes);
+          $this->localeConfigManager->updateConfigTranslations($names, $langcodes);
 
           // Get all config names available in current profile.
           $names = ConfigHelper::forModule($this->installProfile)->optional()->listAll();
 
           // Update config translations from string translations.
-          Locale::config()->updateConfigTranslations($names, $langcodes);
+          $this->localeConfigManager->updateConfigTranslations($names, $langcodes);
         }
         else {
           $this->output()->writeln(dt("Brand module @brand_module can't be enabled because the site is already configured with @existing_brand_module.",

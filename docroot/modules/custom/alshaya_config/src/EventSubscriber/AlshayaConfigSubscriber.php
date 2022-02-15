@@ -15,7 +15,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\language\Config\LanguageConfigOverrideCrudEvent;
 use Drupal\language\Config\LanguageConfigOverrideEvents;
-use Drupal\locale\Locale;
+use Drupal\locale\LocaleConfigManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -70,6 +70,12 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
+  /**
+   * The locale configuration manager.
+   *
+   * @var \Drupal\locale\LocaleConfigManager
+   */
+  protected $localeConfigManager;
 
   /**
    * Constructs a new AlshayaConfigSubscriber object.
@@ -86,19 +92,23 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   User account object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger factory.
+   * @param \Drupal\locale\LocaleConfigManager $locale_config_manager
+   *   The locale configuration manager.
    */
   public function __construct(ModuleHandlerInterface $moduleHandler,
                               StorageInterface $configStorage,
                               ConfigFactoryInterface $configFactory,
                               AlshayaArrayUtils $alshaya_array_utils,
                               AccountProxyInterface $account,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              LoggerChannelFactoryInterface $logger_factory,
+                              LocaleConfigManager $locale_config_manager) {
     $this->moduleHandler = $moduleHandler;
     $this->configStorage = $configStorage;
     $this->configFactory = $configFactory;
     $this->alshayaArrayUtils = $alshaya_array_utils;
     $this->account = $account;
     $this->logger = $logger_factory->get('alshaya_config');
+    $this->localeConfigManager = $locale_config_manager;
   }
 
   /**
@@ -118,7 +128,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   Response event Object.
    */
   public function onConfigSave(ConfigCrudEvent $event) {
-    if (static::$processingOnLanguageConfigOverrideSave || Locale::config()->isUpdatingTranslationsFromLocale()) {
+    if (static::$processingOnLanguageConfigOverrideSave || $this->localeConfigManager->isUpdatingTranslationsFromLocale()) {
       return;
     }
 

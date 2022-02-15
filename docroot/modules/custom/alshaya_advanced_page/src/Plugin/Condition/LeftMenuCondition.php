@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Condition(
  *   id = "left_menu_condition",
  *   label = @Translation("Left menu block condition"),
- *   context = {
+ *   context_definitions = {
  *     "node" = @ContextDefinition(
  *        "entity:node",
  *        label = @Translation("node")
