@@ -20,6 +20,7 @@ import PriceElement from '../../../utilities/special-price/PriceElement';
 import Loading from '../../../../../js/utilities/loading';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -216,6 +217,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               this.setState({
                 setChecked: true,
               });
+              // Dispatch linked egift redeemed for GTM.
+              dispatchCustomEvent('egiftLinkedCardRedeemed', { status: 'linked' });
             } else {
               logger.error('Empty Response in eGiftRedemption for linked card. Action: @action CardNumber: @cardNumber Response: @response', {
                 '@action': 'set_points',
@@ -285,6 +288,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               apiErrorMessage: '',
               setChecked: false,
             });
+            // Dispatch unlink egift redeemed for GTM.
+            dispatchCustomEvent('egiftLinkedCardRedeemed', { status: 'unlinked' });
           } else {
             logger.error('Empty Response while calling the cancel eGiftRedemption. Action: @action, CardNumber: @cardNumber, Response: @response', {
               '@action': postData.redeem_points.action,

@@ -30,6 +30,24 @@
     dataLayer.push(data);
   };
 
+  /**
+   * Helper function to check if cart contains only virtual products.
+   *
+   * @param {object} cartData
+   *   The cart data object.
+   */
+  Drupal.alshayaSeoSpc.cartContainsOnlyVirtualProducts = function (cartData) {
+    // Flag to check if all products are virtual.
+    let allVirtual = true;
+    Object.keys(cartData.items).forEach((key) => {
+      if (!(cartData.items[key]['isEgiftCard'] || cartData.items[key]['isTopUp'])) {
+        allVirtual = false;
+      }
+    });
+
+    return allVirtual;
+  };
+
   Drupal.alshayaSeoSpc.pushStoreData = function (cart) {
     if (cart.shipping.type !== 'click_and_collect' || !cart.shipping.storeInfo) {
       return;
@@ -107,6 +125,8 @@
           data.deliveryOption === 'Home Delivery' ? 'Home Delivery' : 'Click & Collect',
           2
         );
+      } else if (Drupal.alshayaSeoSpc.cartContainsOnlyVirtualProducts(cartData)) {
+        Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Virtual eGift Card', 2);
       }
     }
 
@@ -149,6 +169,13 @@
 
   document.addEventListener('orderPaymentMethod', function (e) {
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(e.detail.payment_method, 3);
+  });
+
+  document.addEventListener('egiftLinkedCardRedeemed', function (e) {
+    dataLayer.push({
+      event: 'Pay using eGift Card',
+      status: e.detail.status,
+    });
   });
 
   document.addEventListener('storeSelected', function (e) {
