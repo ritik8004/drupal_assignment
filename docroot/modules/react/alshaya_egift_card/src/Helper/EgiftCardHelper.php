@@ -102,4 +102,46 @@ class EgiftCardHelper {
     return !empty($allow_saved_card);
   }
 
+  /**
+   * Helper to check if order item is having virtual items.
+   *
+   * @param array $order
+   *   The order array.
+   *
+   * @return array
+   *   An array containing the status of virtual items.
+   */
+  public function orderItemsVirtual(array $order) {
+    // Return if items are missing
+    if (!array_key_exists('items', $order)) {
+      return [];
+    }
+    // Flag to keep track of egift and normal items.
+    $allVirtualItems = TRUE;
+    $normalItemsExists = FALSE;
+    $virtualItemsExists = FALSE;
+    $isTopup = FALSE;
+    // Traverse all the items and check the product type.
+    foreach($order['items'] as $key => $value) {
+      if (!$value['is_virtual']) {
+        $allVirtualItems = TRUE;
+        $normalItemsExists = TRUE;
+      } else {
+        $virtualItemsExists = TRUE;
+      }
+    }
+    // Check if order item is a topup item.
+    if (array_key_exists('extension', $order)
+      && array_key_exists('topup_card_number', $order['extension'])) {
+      $isTopup = TRUE;
+    }
+
+    return [
+      'allVirtualItems' => $allVirtualItems,
+      'normalItemsExists' => $normalItemsExists,
+      'virtualItemsExists' => $virtualItemsExists,
+      'topUpItem' => $isTopup,
+    ];
+  }
+
 }

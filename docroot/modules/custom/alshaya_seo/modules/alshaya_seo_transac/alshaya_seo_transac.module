@@ -277,6 +277,34 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           'products' => array_values($attributes['products']),
         ],
       ];
+      // Set the egift variable in datalayer if egift or topup is present in the
+      // cart.
+      $egift_helper = \Drupal::service('alshaya_egift_card.egift_card_helper');
+      // Proceed only if egift is enabled.
+      if ($egift_helper->isEgiftCardEnabled() && $order) {
+        $item_status = $egift_helper->orderItemsVirtual($order);
+        // Flag to store the egift type.
+        $egift_type = '';
+        // Set the egift status.
+        if ($item_status) {
+          if ($item_status['topUpItem']) {
+            $egift_type = 'topup';
+          }
+          elseif ($item_status['allVirtualItems']
+            && $item_status['normalItemsExists'] == FALSE) {
+            $egift_type = 'full';
+          }
+          elseif ($item_status['normalItemsExists']
+            && $item_status['virtualItemsExists']
+            && $item_status['allVirtualItems'] == FALSE) {
+            $egift_type = 'partial';
+          }
+        }
+        // Add egift card only if type is available.
+        if ($egift_type) {
+          $data_layer['isEgiftCard'] = $egift_type;
+        }
+      }
     }
 
     // Generic handling of page type for user pages.
