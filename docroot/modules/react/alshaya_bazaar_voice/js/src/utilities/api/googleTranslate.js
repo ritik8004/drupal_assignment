@@ -69,6 +69,8 @@ export function getTranslateLang(tranlateStatus, contentLocale) {
  * @param {*} str
  */
 function encodeSpecialChars(str) {
+  // Added encoded value for below to fix google translation issues.
+  // Below were not supported by encodeURI().
   const symbols = {
     '@': '%40',
     '&amp;': '%26',
