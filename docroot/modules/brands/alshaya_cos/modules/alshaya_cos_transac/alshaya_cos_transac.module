@@ -11,55 +11,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\acq_commerce\SKUInterface;
 
 /**
- * Implements hook_module_implements_alter().
- */
-function alshaya_cos_transac_module_implements_alter(&$implementations, $hook) {
-  // Make sure the hook on the brand overrides runs last.
-  if ($hook == 'rcs_handlebars_templates_alter') {
-    $group = $implementations['alshaya_cos_transac'];
-    unset($implementations['alshaya_cos_transac']);
-    $implementations['alshaya_cos_transac'] = $group;
-  }
-}
-
-/**
- * Implements hook_rcs_placeholders_graphql_query_alter().
- */
-function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$queries) {
-  array_push(
-    $queries['products']['items'],
-    'style_code',
-    'composition',
-    'washing_instructions',
-    'article_warning'
-  );
-
-  array_push(
-    $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
-    'size',
-  );
-}
-
-/**
- * Implements hook_rcs_handlebars_templates_alter().
- */
-function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity) {
-  if (!$entity || $entity->bundle() !== 'rcs_product') {
-    return;
-  }
-
-  $templates['product.block.description'] = 'alshaya_cos_transac';
-  $templates['product.block.description_details'] = 'alshaya_cos_transac';
-
-  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
-  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  if ($sku_manager->getPdpLayout($entity) == 'pdp-magazine') {
-    $templates['product.block.short_description.pdp-magazine'] = "alshaya_cos_transac";
-  }
-}
-
-/**
  * Implements hook_preprocess_template().
  */
 function alshaya_cos_transac_preprocess_product_zoom(&$vars) {
@@ -119,9 +70,6 @@ function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, E
       $build['description'] = $return['description'];
       $build['short_desc'] = $return['short_desc'];
     }
-  }
-  if ($entity->bundle() == 'rcs_product') {
-    $build['#attached']['library'][] = 'alshaya_cos_transac/product';
   }
 }
 

@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_cos_transac_rcs.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enables the alshaya_media_assets module.
+ */
+function alshaya_cos_transac_update_8002() {
+  \Drupal::service('module_installer')->install(['alshaya_media_assets']);
+}
