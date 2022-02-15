@@ -123,3 +123,38 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/country-switcher/country-switcher.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/country-switcher/country-switcher.ltr.css
+
+  alshaya_white_label/egift-common:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/egift-common/egift-common.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/egift-common/egift-common.ltr.css
+
+  alshaya_white_label/egift-purchase-page:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css
+
+  alshaya_white_label/egift-topup-page:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css
+
+  alshaya_white_label/egift-myaccount:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css
+
+  alshaya_white_label/egift-card-checkout:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css
+
+  alshaya_white_label/egift-card-checkout-confirmation:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css
+
+  alshaya_white_label/egift-landing-page:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css
