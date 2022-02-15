@@ -2,7 +2,7 @@ id: acquia_search_server
 name: 'Acquia Search Local Solr server'
 description: ''
 status: true
-backend: search_api_solr_multilingual
+backend: search_api_solr
 backend_config:
   autocorrect_spell: true
   autocorrect_suggest_words: true
@@ -28,5 +28,5 @@ backend_config:
     http_method: AUTO
 dependencies:
   module:
-    - search_api_solr_multilingual
+    - search_api_solr
 langcode: en
