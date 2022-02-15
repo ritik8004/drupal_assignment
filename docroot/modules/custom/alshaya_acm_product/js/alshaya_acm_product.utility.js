@@ -74,7 +74,7 @@
     // Rules are added in CF to disable caching for urls having the following
     // query string.
     // The query string is added since same APIs are used by MAPP also.
-    return await $.ajax({
+    return $.ajax({
       url: Drupal.url(`rest/v1/product-status/${btoa(sku)}`),
       data: { _cf_cache_bypass: '1' }
     }).then(function (response) {
