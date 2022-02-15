@@ -65,7 +65,7 @@
       }
 
       a {
-        @include promo-default-button();
+        @include promo-default-button;
       }
     }
   }

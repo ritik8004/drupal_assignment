@@ -118,7 +118,7 @@
           outline: none;
           margin-top: 0.875rem;
 
-          @include linkBtnDimensions();
+          @include linkBtnDimensions;
 
           @include breakpoint($upto-desktop) {
             width: 15.9375rem;
@@ -131,7 +131,7 @@
           }
 
           > div.btn {
-            @include linkCardBtn();
+            @include linkCardBtn;
           }
         }
 
@@ -207,8 +207,8 @@
     }
 
     div.link-your-card {
-      @include linkBtnDimensions();
-      @include linkCardBtn();
+      @include linkBtnDimensions;
+      @include linkCardBtn;
 
       margin-top: 1.25rem;
 

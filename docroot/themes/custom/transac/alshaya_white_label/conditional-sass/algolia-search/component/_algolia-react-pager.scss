@@ -4,7 +4,6 @@
     // Prevent chrome from interfering with preserving user scroll position.
     // This happens when user clicks load more. Chrome preserves the scroll position of load more
     // button even after new items are loaded.
-    //
     // This will stop that behaviour and ensures the page shows new element hence preserving user's
     // scroll position.
     overflow-anchor: none;

@@ -337,7 +337,7 @@
       gestureHandling: map.settings.google_map_settings.gestureHandling
     });
 
-    if (!Drupal.geolocation.hasOwnProperty('maps')) {
+    if (typeof Drupal.geolocation['maps'] === 'undefined') {
       Drupal.geolocation.maps = [];
     }
 

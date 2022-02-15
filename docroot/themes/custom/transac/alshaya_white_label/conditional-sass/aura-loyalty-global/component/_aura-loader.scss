@@ -120,7 +120,7 @@
           pointer-events: none;
           user-select: none;
 
-          @include fullPageTransparentOverlay();
+          @include fullPageTransparentOverlay;
         }
       }
     }

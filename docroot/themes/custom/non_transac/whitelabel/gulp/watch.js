@@ -5,7 +5,15 @@ module.exports = function (gulp, config, bs) {
     bs.init(config.browserSync);
 
     gulp.watch(
-      [config.styles.source, config.scripts.source],
+      config.styles.source,
+      gulp.series(
+        gulp.parallel('styles-lint'),
+        gulp.parallel('styles')
+      )
+    );
+
+    gulp.watch(
+      config.scripts.source,
       gulp.series(
         gulp.parallel('styles-lint', 'scripts-lint'),
         gulp.parallel('styles', 'scripts')
@@ -13,7 +21,7 @@ module.exports = function (gulp, config, bs) {
     );
 
     gulp.watch(
-      [config.patternlab.source],
+      config.patternlab.source,
       gulp.series('patternlab')
     );
   });
