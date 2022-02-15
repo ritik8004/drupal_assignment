@@ -78,7 +78,7 @@
 }
 
 .view-product-item__sharethis {
-  @include u-center--horizontal-vertcal();
+  @include u-center--horizontal-vertcal;
 
   display: none;
   text-align: center;
