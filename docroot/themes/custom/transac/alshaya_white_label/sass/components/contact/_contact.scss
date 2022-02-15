@@ -48,10 +48,8 @@
       @include placeholder-label;
     }
 
-    input[type="text"]:focus ~ label:last-of-type,
     textarea:focus ~ label:last-of-type,
     input:focus ~ label:last-of-type,
-    textarea:focus ~ label:last-of-type,
     .active-label:last-of-type,
     input:visited ~ label:last-of-type,
     input:not(:focus):valid ~ label:not(.error),

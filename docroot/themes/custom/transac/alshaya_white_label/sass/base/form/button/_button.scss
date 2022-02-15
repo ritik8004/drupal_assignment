@@ -34,13 +34,11 @@
 
 .button-wide {
   @extend %button-wide;
-
   @include link-ripple;
 }
 
 .brand-button {
   @extend %button-brand;
-
   @include link-ripple;
 }
 

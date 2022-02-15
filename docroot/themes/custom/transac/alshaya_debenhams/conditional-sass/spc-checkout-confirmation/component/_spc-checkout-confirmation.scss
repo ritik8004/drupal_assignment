@@ -5,7 +5,7 @@
 
   .spc-pre-content {
     .spc-checkout-confirmation-print-button {
-      @include btn();
+      @include btn;
 
       @include breakpoint($only-mobile) {
         width: 12.5rem;
@@ -15,7 +15,7 @@
 
   .checkout-link a {
     @include breakpoint($only-mobile) {
-      @include button-brand();
+      @include button-brand;
     }
   }
 }

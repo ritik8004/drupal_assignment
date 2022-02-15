@@ -301,7 +301,7 @@
 
   .campaign-plp-style-1-modal-link.use-ajax {
     + .ajax-progress-throbber {
-      @include fullPageLoader();
+      @include fullPageLoader;
     }
   }
 
