@@ -5,7 +5,7 @@
   .region__menu-primary {
     @include breakpoint($desktop) {
       float: $left;
-      width: 40%;
+      width: 35%;
     }
 
     .menu--one__list {
