@@ -4,7 +4,6 @@
  */
 
 (function ($) {
-  'use strict';
 
   $.fn.updateLanguageSwitcherLinkQuery = function (langcode, query, pretty_filters) {
     $('.' + langcode + ' a.language-link').each(function () {

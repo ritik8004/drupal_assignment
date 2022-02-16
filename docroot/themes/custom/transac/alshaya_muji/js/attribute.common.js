@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * JS for converting select list for size to unformatted list on PDP pages.

@@ -1,5 +1,4 @@
 (function (Drupal) {
-  'use strict';
 
   Drupal.logViaDataDog = function (severity, message, context) {
     try {

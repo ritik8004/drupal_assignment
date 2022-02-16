@@ -6,7 +6,6 @@
 /* global isRTL */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {

@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
   Drupal.behaviors.rePositionSuperMenuJS = {
     attach: function () {
       setTimeout(function rePositionSuperMenu() {

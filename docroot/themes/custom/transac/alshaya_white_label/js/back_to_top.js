@@ -6,7 +6,6 @@
 /* global debounce */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.backToTop = {
     attach: function () {

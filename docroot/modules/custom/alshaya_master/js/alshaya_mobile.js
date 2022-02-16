@@ -9,7 +9,6 @@
 Drupal.alshayaMobileNumber = Drupal.alshayaMobileNumber || {};
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.alshayaMobileNumber = {
     attach: function (context, settings) {

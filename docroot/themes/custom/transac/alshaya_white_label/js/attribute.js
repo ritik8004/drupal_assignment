@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   var group_wrapper;
   var group_anchor_wrapper;

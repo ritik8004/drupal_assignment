@@ -3,7 +3,6 @@
  * All Filters Panel & Facets JS file.
  */
 (function ($, Drupal) {
-  'use strict';
 
   // Variable for sale item index in category search filter
   var sale_index = null;
