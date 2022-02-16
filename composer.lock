@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "325cd78c27328fa1d58ab8c47c2c29d3",
+    "content-hash": "c7ea7fc693796b52630919ba13430ac3",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -12685,18 +12685,10 @@
                         "message": "Covered by Drupal's security advisory policy"
                     }
                 },
-<<<<<<< HEAD
-                "branch-alias": {
-                    "dev-8.x-1.x": "1.x-dev"
-                },
-                "patches_applied": {
-                    "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch"
-=======
                 "drush": {
                     "services": {
                         "drush.services.yml": "^9"
                     }
->>>>>>> 0971feec40 (CORE-33371: SOLR Search changes.)
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
