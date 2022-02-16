@@ -57,10 +57,10 @@ export default class Rating extends React.Component {
     }
     const {
       childClickHandler,
-      isNewPdpLayout,
+      renderLinkDirectly,
     } = this.props;
 
-    const newPDP = (isNewPdpLayout === undefined) ? false : isNewPdpLayout;
+    const newPDP = renderLinkDirectly || false;
 
     // Reviews data is emtpy.
     if (reviewsData === '') {
