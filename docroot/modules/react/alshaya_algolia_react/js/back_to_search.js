@@ -4,7 +4,6 @@
  */
 
 (function ($) {
-  'use strict';
 
   Drupal.processBackToSearch = function () {
     // On page load, apply filter/sort if any.

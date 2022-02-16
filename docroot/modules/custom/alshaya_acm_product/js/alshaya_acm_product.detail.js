@@ -1,5 +1,4 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   // The threshold for how far you should reach before loading related products.
   var scrollThreshold = 200;

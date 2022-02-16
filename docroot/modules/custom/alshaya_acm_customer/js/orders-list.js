@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   var $pager = null;
 
@@ -24,7 +23,8 @@
         });
 
         // Set the filter to value as in URL.
-        var filter = $.url('?filter');
+        var parsedUrl = new URL(window.location.href);
+        var filter = parsedUrl.searchParams.get("filter");
         if (filter !== undefined) {
           $(this).find('select#edit-filter').val(filter);
         }

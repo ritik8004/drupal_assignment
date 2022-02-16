@@ -4,7 +4,6 @@
  */
 
 (function ($) {
-  'use strict';
 
   // Mobile Language Toggle
   // Language Settings In Mobile View.

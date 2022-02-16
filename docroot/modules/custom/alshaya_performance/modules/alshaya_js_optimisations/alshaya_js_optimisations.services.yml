@@ -1,0 +1,8 @@
+services:
+  asset.js.collection_grouper:
+    class: Drupal\alshaya_js_optimisations\Asset\PerformanceJsCollectionGrouper
+  alshaya_js_optimisations.helper:
+    class: Drupal\alshaya_js_optimisations\AlshayaJsOptimisationHelper
+    arguments:
+      - '@config.factory'
+      - '@library.dependency_resolver'

@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.alshayaSeoPdpMagazineV2Gtm = Drupal.alshayaSeoPdpMagazineV2Gtm || {};
 

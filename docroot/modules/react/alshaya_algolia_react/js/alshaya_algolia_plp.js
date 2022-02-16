@@ -3,7 +3,6 @@
  * PLP All Filters Panel & Facets JS file.
  */
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.alshayaAlgoliaReactPLP = {
     attach: function (context, settings) {

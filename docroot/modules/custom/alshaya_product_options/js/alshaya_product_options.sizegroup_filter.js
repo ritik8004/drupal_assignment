@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.sizegroupFilter = {
     // Opens the selected grand parent filter value using

@@ -6,7 +6,6 @@
 /* global isRTL */
 
 (function ($, Drupal) {
-  'use strict';
 
   function applyRtl(ocObject, options) {
     if (isRTL()) {
