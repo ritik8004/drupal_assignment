@@ -3,12 +3,3 @@ description: Enables RCS for COS.
 type: module
 core: 8.x
 core_version_requirement: ^8 || ^9
-dependencies:
-  - alshaya_rcs_product:alshaya_rcs_product
-  - alshaya_rcs_promotion:alshaya_rcs_promotion
-  - alshaya_rcs_listing:alshaya_rcs_listing
-  - alshaya_rcs_main_menu:alshaya_rcs_main_menu
-  - alshaya_rcs_magazine:alshaya_rcs_magazine
-  - alshaya_media_assets:alshaya_media_assets
-  - alshaya_rcs_seo:alshaya_rcs_seo
-  - alshaya_rcs_color_split:alshaya_rcs_color_split

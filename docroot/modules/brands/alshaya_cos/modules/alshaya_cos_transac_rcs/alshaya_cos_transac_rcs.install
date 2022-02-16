@@ -6,10 +6,20 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Enables the alshaya_media_assets module.
+ * Implements hook_install().
  */
-function alshaya_cos_transac_update_8002() {
-  \Drupal::service('module_installer')->install(['alshaya_media_assets']);
+function alshaya_cos_transac_rcs_install() {
+  // We install modules in this way instead of specifying them as dependencies
+  // in the info.yml file is because of the reason that new site installation
+  // fails because of specifying the dependencies.
+  \Drupal::service('module_installer')->install([
+    'alshaya_rcs_product',
+    'alshaya_rcs_promotion',
+    'alshaya_rcs_listing',
+    'alshaya_rcs_main_menu',
+    'alshaya_rcs_magazine',
+    'alshaya_media_assets',
+    'alshaya_rcs_seo',
+    'alshaya_rcs_color_split',
+  ]);
 }
