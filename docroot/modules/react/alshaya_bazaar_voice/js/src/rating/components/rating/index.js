@@ -60,7 +60,7 @@ export default class Rating extends React.Component {
       renderLinkDirectly,
     } = this.props;
 
-    const newPDP = renderLinkDirectly || false;
+    const renderLink = renderLinkDirectly || false;
 
     // Reviews data is emtpy.
     if (reviewsData === '') {
@@ -81,15 +81,15 @@ export default class Rating extends React.Component {
     }
     return (
       <div className="inline-rating">
-        <ConditionalView condition={newPDP}>
+        <ConditionalView condition={renderLink}>
           <div className="aggregate-rating">
             <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
           </div>
         </ConditionalView>
-        <ConditionalView condition={!newPDP}>
+        <ConditionalView condition={!renderLink}>
           <WriteReviewButton
             reviewedByCurrentUser={userDetails.productReview !== null}
-            newPdp={newPDP}
+            newPdp={renderLink}
           />
         </ConditionalView>
       </div>
