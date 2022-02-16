@@ -23,3 +23,14 @@ function alshaya_cos_transac_rcs_install() {
     'alshaya_rcs_color_split',
   ]);
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_cos_transac_rcs_uninstall() {
+  // Uninstall all RCS modules and media assets module.
+  \Drupal::service('module_installer')->uninstall([
+    'rcs_placeholders',
+    'alshaya_media_assets',
+  ]);
+}
