@@ -31,6 +31,7 @@ services:
       - '@metatag.token'
       - '@alshaya_acm_product.price_helper'
       - '@alshaya_acm_product.sku_images_helper'
+      - '@alshaya_seo_transac.gtm_manager'
 
   alshaya_feed.product_delta_feed:
     class: Drupal\alshaya_feed\AlshayaProductDeltaFeedHelper
