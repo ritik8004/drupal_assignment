@@ -162,8 +162,6 @@ class AlshayaFeedSkuInfoHelper {
    *   The SKU price helper service.
    * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
    *   SKU images helper.
-   * @param \Drupal\alshaya_seo_transac\AlshayaGtmManager $alshayaGtmManager
-   *   GTM manager.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -178,8 +176,7 @@ class AlshayaFeedSkuInfoHelper {
     MetatagManager $metaTagManager,
     MetatagToken $token,
     SkuPriceHelper $sku_price_helper,
-    SkuImagesHelper $sku_images_helper,
-    AlshayaGtmManager $alshayaGtmManager
+    SkuImagesHelper $sku_images_helper
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -197,6 +194,15 @@ class AlshayaFeedSkuInfoHelper {
     $this->tokenService = $token;
     $this->skuPriceHelper = $sku_price_helper;
     $this->skuImagesHelper = $sku_images_helper;
+  }
+
+  /**
+   * Set Injection for Gtm manager.
+   *
+   * @param \Drupal\alshaya_seo_transac\AlshayaGtmManager $alshayaGtmManager
+   *   Gtm manager.
+   */
+  public function setGtmManager(AlshayaGtmManager $alshayaGtmManager) {
     $this->gtmManager = $alshayaGtmManager;
   }
 
