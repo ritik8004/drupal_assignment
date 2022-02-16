@@ -213,12 +213,7 @@ class WishlistButton extends React.Component {
           option_id: configurableCombinations.configurables[key].attribute_id,
           option_value: configurableCombinations.bySku[variantSelected][key],
         };
-
-        // Skipping the psudo attributes.
-        if (drupalSettings.psudo_attribute === undefined
-          || drupalSettings.psudo_attribute !== option.option_id) {
-          options.push(option);
-        }
+        options.push(option);
       });
       this.setState({ options });
     }
