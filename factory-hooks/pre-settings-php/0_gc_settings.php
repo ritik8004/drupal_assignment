@@ -1,3 +1,4 @@
+<?php
 // Match the value from core.services.yml.
 ini_set('session.gc_maxlifetime', 2000000);
 
