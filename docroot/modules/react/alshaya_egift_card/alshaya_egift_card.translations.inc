@@ -267,7 +267,7 @@ function _alshaya_egift_card_translations() {
         'ar' => ' بطاقة الهدية الإلكترونية الخاصة بي',
         'context' => 'egift',
       ],
-      'Balanace:' => [
+      'Balance:' => [
         'ar' => 'الرصيد:',
         'context' => 'egift',
       ],
