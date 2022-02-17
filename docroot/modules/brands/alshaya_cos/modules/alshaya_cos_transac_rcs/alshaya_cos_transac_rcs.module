@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Module file with hooks specific to COS brand.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_cos_transac_rcs_module_implements_alter(&$implementations, $hook) {
+  // Make sure the hook on the brand overrides runs last.
+  if ($hook == 'rcs_handlebars_templates_alter') {
+    $group = $implementations['alshaya_cos_transac_rcs'];
+    unset($implementations['alshaya_cos_transac_rcs']);
+    $implementations['alshaya_cos_transac_rcs'] = $group;
+  }
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query_alter().
+ */
+function alshaya_cos_transac_rcs_rcs_placeholders_graphql_query_alter(&$queries) {
+  array_push(
+    $queries['products']['items'],
+    'style_code',
+    'composition',
+    'washing_instructions',
+    'article_warning'
+  );
+
+  array_push(
+    $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
+    'size',
+  );
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates_alter().
+ */
+function alshaya_cos_transac_rcs_rcs_handlebars_templates_alter(&$templates, $entity) {
+  if (!$entity || $entity->bundle() !== 'rcs_product') {
+    return;
+  }
+
+  $templates['product.block.description'] = 'alshaya_cos_transac_rcs';
+  $templates['product.block.description_details'] = 'alshaya_cos_transac_rcs';
+
+  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  if ($sku_manager->getPdpLayout($entity) == 'pdp-magazine') {
+    $templates['product.block.short_description.pdp-magazine'] = "alshaya_cos_transac_rcs";
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_cos_transac_rcs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'rcs_product') {
+    $build['#attached']['library'][] = 'alshaya_cos_transac_rcs/product';
+  }
+}
