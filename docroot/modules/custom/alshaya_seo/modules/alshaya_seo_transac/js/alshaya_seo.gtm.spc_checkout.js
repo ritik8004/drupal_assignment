@@ -183,10 +183,10 @@
 
   document.addEventListener('egiftCardRedeemed', function (e) {
     dataLayer.push({
-      name: 'egift_card',
-      category: 'egift_card',
-      action: `egift_card_${e.detail.action}`,
-      label: e.detail.label,
+      event: 'egift_card',
+      eventCategory: 'egift_card',
+      eventAction: `egift_card_${e.detail.action}`,
+      eventLabel: e.detail.label,
     });
   });
 
