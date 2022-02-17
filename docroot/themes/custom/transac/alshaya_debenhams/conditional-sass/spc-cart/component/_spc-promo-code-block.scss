@@ -1,13 +1,12 @@
 .spc-promo-code-block {
   #promo-code {
     font-size: 0.875rem;
-    border: 1px solid $spc-promo-code-border;
+    border: 1px solid $spc-promo-code-border !important;
     font-family: $dh-light;
     height: 2.625rem;
     width: calc(100% - 7.25rem);
 
     .error {
-      border-width: 1px !important;
       border-#{$right}: 0 !important;
     }
 
@@ -37,5 +36,13 @@
     margin-#{$left}: 1rem;
     vertical-align: middle;
     padding: 0;
+
+    &:disabled {
+      &:hover {
+        background: $primary_empty_btn;
+        border: 2px solid $primary_empty_btn_border;
+        transition: none;
+      }
+    }
   }
 }
