@@ -85,7 +85,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
     'uat' => 'uat',
     'pprod' => 'prod',
     'live' => 'prod',
-    'local' => 'qa',
+    'local' => 'uat',
     'travis' => 'qa'
   ];
 

@@ -103,9 +103,7 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
     $form['egift_card_configuration']['allow_saved_credit_cards_for_topup'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow authenticated user to use saved credit card for top-up purchase.'),
-      '#default_value' => !empty($config->get('allow_saved_credit_cards_for_topup'))
-        ? $config->get('allow_saved_credit_cards_for_topup')
-        : FALSE,
+      '#default_value' => !empty($config->get('allow_saved_credit_cards_for_topup')),
     ];
 
     return parent::buildForm($form, $form_state);

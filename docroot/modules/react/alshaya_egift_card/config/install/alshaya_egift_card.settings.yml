@@ -7,4 +7,5 @@ textarea_maxlength: 200
 # Config to set the expiration time for the topup quote local storage item.
 # The value here should be in mins.
 topup_quote_expiration: 30
-allow_saved_credit_cards_for_topup: false # Allow authenticated user to use saved credit cards.
+# Allow authenticated user to use saved credit cards.
+allow_saved_credit_cards_for_topup: false

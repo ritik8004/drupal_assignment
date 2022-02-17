@@ -99,7 +99,7 @@ class EgiftCardHelper {
    */
   public function getAllowSavedCCForTopUp() {
     $allow_saved_card = $this->configFactory->get('alshaya_egift_card.settings')->get('allow_saved_credit_cards_for_topup');
-    return !empty($allow_saved_card) ? $allow_saved_card : FALSE;
+    return !empty($allow_saved_card);
   }
 
 }
