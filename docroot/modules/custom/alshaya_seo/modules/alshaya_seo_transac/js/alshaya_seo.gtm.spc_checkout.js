@@ -171,10 +171,12 @@
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(e.detail.payment_method, 3);
   });
 
-  document.addEventListener('egiftLinkedCardRedeemed', function (e) {
+  document.addEventListener('egiftCardRedeemed', function (e) {
     dataLayer.push({
-      event: 'Pay using eGift Card',
-      status: e.detail.status,
+      name: 'egift_card',
+      category: 'egift_card',
+      action: `egift_card_${e.detail.action}`,
+      label: e.detail.label,
     });
   });
 
