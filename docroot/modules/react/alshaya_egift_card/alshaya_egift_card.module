@@ -22,6 +22,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     'notSupportedPaymentMethods' => array_filter($egiftCard_settings->getNotSupportedPaymentMethods(), function($method) {
       return $method !== '0';
     }),
+    'allowSavedCreditCardForTopup' => $egiftCard_settings->getAllowSavedCCForTopUp(),
   ];
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
   // Add the egift related settings only if egift feature is enabled.
