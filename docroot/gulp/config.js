@@ -46,6 +46,9 @@ const blackList = [
   // @todo For now we blacklist these RCS modules to make V3 work. We shall
   // work on making them compatible as part of the ticket
   // https://alshayagroup.atlassian.net/browse/CORE-38754.
+  "modules/custom/rcs_handlebars/js/**",
+  "modules/custom/rcs_magento/js/**",
+  "modules/custom/rcs_magento/modules/rcs_magento_placeholders/js/**",
   "modules/custom/rcs_placeholders/js/**",
   "modules/custom/alshaya_rcs/**",
 ];
