@@ -600,7 +600,7 @@ export const allowSavedCcForTopUp = () => {
   // By default allow saved credit cards.
   let allowSavedCard = true;
   const topUpQuote = getTopUpQuote();
-  if (typeof topUpQuote !== 'undefined' && hasValue(topUpQuote)) {
+  if (hasValue(topUpQuote)) {
     // If top-up quote then get from settings.
     allowSavedCard = drupalSettings.egiftCard.allowSavedCreditCardForTopup;
   }
