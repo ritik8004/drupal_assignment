@@ -130,6 +130,7 @@ class EgiftCardHelper {
    */
   public function getEgiftRedemptionTypeFromOrder(array $order) {
     $egiftRedeemType = '';
+    $payment_info = '';
     // Proceed only if payment info is available.
     if (array_key_exists('payment_additional_info', $order['extension'])) {
       foreach ($order['extension']['payment_additional_info'] as $payment_item) {
