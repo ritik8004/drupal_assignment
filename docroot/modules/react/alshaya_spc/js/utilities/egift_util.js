@@ -589,3 +589,20 @@ export const removeRedemptionOnCartUpdate = async (cart) => {
     updatePriceSummaryBlock();
   }
 };
+
+/**
+ * Check if saved card is allowed for top-up quote.
+ *
+ * @returns {boolean}
+ *   True or false setting.
+ */
+export const allowSavedCcForTopUp = () => {
+  // By default allow saved credit cards.
+  let allowSavedCard = true;
+  const topUpQuote = getTopUpQuote();
+  if (typeof topUpQuote !== 'undefined' && hasValue(topUpQuote)) {
+    // If top-up quote then get from settings.
+    allowSavedCard = drupalSettings.egiftCard.allowSavedCreditCardForTopup;
+  }
+  return allowSavedCard;
+};

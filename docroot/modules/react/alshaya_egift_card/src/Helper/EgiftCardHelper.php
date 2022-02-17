@@ -92,4 +92,14 @@ class EgiftCardHelper {
     return $this->configFactory->get('alshaya_egift_card.settings')->get('topup_quote_expiration');
   }
 
+  /**
+   * Helper to get configuration to allow saved cc for top-up.
+   *
+   * @return array|false|mixed
+   */
+  public function getAllowSavedCCForTopUp() {
+    $allow_saved_card = $this->configFactory->get('alshaya_egift_card.settings')->get('allow_saved_credit_cards_for_topup');
+    return !empty($allow_saved_card) ? $allow_saved_card : FALSE;
+  }
+
 }
