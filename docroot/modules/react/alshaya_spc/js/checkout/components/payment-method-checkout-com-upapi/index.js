@@ -15,6 +15,7 @@ import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
 import WithModal from '../with-modal';
 import { CheckoutComUpapiContext } from '../../../context/CheckoutComUpapi';
+import { allowSavedCcForTopUp } from '../../../utilities/egift_util';
 
 class PaymentMethodCheckoutComUpapi extends React.Component {
   static contextType = CheckoutComUpapiContext;
@@ -212,10 +213,10 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
 
     return (
       <>
-        <ConditionalView condition={selectedCard === 'new' && tokenizedCard === ''}>
+        <ConditionalView condition={(selectedCard === 'new' && tokenizedCard === '') || allowSavedCcForTopUp() === false}>
           {newCard}
         </ConditionalView>
-        <ConditionalView condition={tokenizedCard !== ''}>
+        <ConditionalView condition={tokenizedCard !== '' && allowSavedCcForTopUp()}>
           <WithModal modalStatusKey="creditCardList">
             {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
               <>
