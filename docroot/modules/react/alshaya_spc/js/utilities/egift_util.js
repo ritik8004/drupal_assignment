@@ -591,7 +591,7 @@ export const removeRedemptionOnCartUpdate = async (cart) => {
 };
 
 /**
- * Check if saved card is allowed for top-up quote.
+ * Check if top-up quote and get the settings for allow saved credit card.
  *
  * @returns {boolean}
  *   True or false setting.
