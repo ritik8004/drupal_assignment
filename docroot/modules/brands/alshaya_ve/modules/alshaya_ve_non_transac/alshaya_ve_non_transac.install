@@ -11,17 +11,16 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Updated config changes after upgrade from SOLR 4 tp 7.
+ * Updated config changes after upgrade of search api solr.
  */
 function alshaya_ve_non_transac_update_8004() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
       'search_api.index.non_transac_acquia_solr_search_index',
-      'views.view.non_transac_acquia_index_search',
     ],
     'alshaya_ve_non_transac',
-    'optional'
+    'optional',
   );
 }
 
