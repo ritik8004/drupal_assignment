@@ -125,6 +125,7 @@ class EgiftCardLinked extends React.Component {
                 className="egift-card-remove"
               >
                 <TrashIconSVG />
+                <span className="egift-ulink-text">Unlink</span>
               </button>
               )}
             modal
