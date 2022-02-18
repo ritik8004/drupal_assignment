@@ -185,7 +185,7 @@
     dataLayer.push({
       event: 'egift_card',
       eventCategory: 'egift_card',
-      eventAction: `egift_card_${e.detail.action}`,
+      eventAction: `egift_${e.detail.action}`,
       eventLabel: e.detail.label,
     });
   });
