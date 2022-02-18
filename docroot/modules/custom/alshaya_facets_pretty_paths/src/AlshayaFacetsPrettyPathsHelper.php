@@ -186,13 +186,11 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Raw element value.
    * @param string|null $langcode
    *   The language code.
-   * @param string|null $alias_value
-   *   Pass url alias value if available.
    *
    * @return string
    *   Encoded element.
    */
-  public function encodeFacetUrlComponents(string $source, string $facet_alias, $value, string $langcode = NULL, $alias_value = NULL) {
+  public function encodeFacetUrlComponents(string $source, string $facet_alias, $value, string $langcode = NULL) {
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$facet_alias];
 
     if ($attribute_code === 'field_category') {
@@ -210,9 +208,6 @@ class AlshayaFacetsPrettyPathsHelper {
 
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
     $encoded = $value;
-    if ($alias_value) {
-      $encoded = $alias_value;
-    }
 
     $entity_type = 'term';
 
