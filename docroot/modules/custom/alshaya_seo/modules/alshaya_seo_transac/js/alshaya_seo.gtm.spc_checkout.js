@@ -174,9 +174,15 @@
       var totals = window.spcStaticStorage.cart_raw.totals;
       // If some amount is paid via egift then hps_redeemed_amount will be
       // present.
-      if (totals && totals.extension_attributes.hps_redeemed_amount > 0) {
+      if (totals
+        && totals.extension_attributes.hps_redeemed_amount > 0
+        && payment_method != 'hps_payment') {
         payment_method = [payment_method, 'egiftcard'].join('_');
       }
+    }
+    // Change hps_payment to egift_card.
+    if (payment_method == 'hps_payment') {
+      payment_method = 'egiftcard';
     }
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(payment_method, 3);
   });

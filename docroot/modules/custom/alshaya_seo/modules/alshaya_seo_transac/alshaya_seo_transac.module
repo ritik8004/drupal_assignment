@@ -315,12 +315,12 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           }
           // Change hps_payment to egift Card.
           if ($data_layer['paymentOption'] == 'hps_payment') {
-            $data_layer['paymentOption'] = 'egift_card';
+            $data_layer['paymentOption'] = 'egiftcard';
           }
           elseif ($egift_helper->partialPaymentDoneByEgiftCard($order)) {
             $data_layer['paymentOption'] = [
               $data_layer['paymentOption'],
-              'egift_card',
+              'egiftcard',
             ];
             // If some amount is paid via egift then add multiple payment
             // methods separated by _ in GTM.
