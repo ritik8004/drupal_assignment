@@ -135,7 +135,7 @@ export default class RedeemEgiftCard extends React.Component {
                     // Dispatch egift guest redemption verification for GTM.
                     dispatchCustomEvent('egiftCardRedeemed', {
                       label: 'egift_verification',
-                      action: 'guest',
+                      action: 'card_redemption',
                     });
                   });
                 }
@@ -204,7 +204,7 @@ export default class RedeemEgiftCard extends React.Component {
         // Dispatch egift guest redemption interaction for GTM.
         dispatchCustomEvent('egiftCardRedeemed', {
           label: 'egift_interaction',
-          action: 'guest',
+          action: 'card_redemption',
         });
       } else if (isValidResponseWithFalseResult(response)) {
         result = {
@@ -255,7 +255,7 @@ export default class RedeemEgiftCard extends React.Component {
       // Dispatch egift guest redemption removed for GTM.
       dispatchCustomEvent('egiftCardRedeemed', {
         label: 'egift_remove',
-        action: 'guest',
+        action: 'card_redemption',
       });
     }
 

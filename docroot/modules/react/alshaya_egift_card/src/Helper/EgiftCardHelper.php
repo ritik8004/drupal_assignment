@@ -112,11 +112,7 @@ class EgiftCardHelper {
    *   Return TRUE is payment is done by egift card else FALSE.
    */
   public function partialPaymentDoneByEgiftCard(array $order) {
-    if (array_key_exists('hps_redeemed_amount', $order['extension'])) {
-      return TRUE;
-    }
-
-    return FALSE;
+    return array_key_exists('hps_redeemed_amount', $order['extension']);
   }
 
   /**

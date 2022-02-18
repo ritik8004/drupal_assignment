@@ -279,50 +279,53 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       ];
       // Set the egift variable in datalayer if egift or topup is present in the
       // cart.
-      $egift_helper = \Drupal::service('alshaya_egift_card.egift_card_helper');
-      // Proceed only if egift is enabled.
-      if ($egift_helper->isEgiftCardEnabled() && $order) {
-        $item_status = $egift_helper->orderItemsVirtual($order);
-        // Flag to store the egift type.
-        $egift_type = 'no';
-        // Set the egift status.
-        if ($item_status) {
-          if ($item_status['topUpItem']) {
-            $egift_type = 'topup';
+      $egift_helper = NULL;
+      if (\Drupal::hasService('alshaya_egift_card.egift_card_helper')) {
+        $egift_helper = \Drupal::service('alshaya_egift_card.egift_card_helper');
+        // Proceed only if egift is enabled.
+        if ($egift_helper->isEgiftCardEnabled() && $order) {
+          $item_status = $egift_helper->orderItemsVirtual($order);
+          // Flag to store the egift type.
+          $egift_type = 'no';
+          // Set the egift status.
+          if ($item_status) {
+            if ($item_status['topUpItem']) {
+              $egift_type = 'topup';
+            }
+            elseif ($item_status['allVirtualItems']
+              && $item_status['normalItemsExists'] == FALSE) {
+              $egift_type = 'full';
+            }
+            elseif ($item_status['normalItemsExists']
+              && $item_status['virtualItemsExists']
+              && $item_status['allVirtualItems'] == FALSE) {
+              $egift_type = 'partial';
+            }
           }
-          elseif ($item_status['allVirtualItems']
-            && $item_status['normalItemsExists'] == FALSE) {
-            $egift_type = 'full';
+          // Add egift card type in the data.
+          $data_layer['isEgiftCard'] = $egift_type;
+          // Add the egift redeem amount if exists.
+          if (array_key_exists('hps_redeemed_amount', $order['extension'])) {
+            $data_layer['redeem_egift_card_value'] = $order['extension']['hps_redeemed_amount'];
           }
-          elseif ($item_status['normalItemsExists']
-            && $item_status['virtualItemsExists']
-            && $item_status['allVirtualItems'] == FALSE) {
-            $egift_type = 'partial';
+          // Add the egift redeem type if exists.
+          $egift_redeem_type = $egift_helper->getEgiftRedemptionTypeFromOrder($order);
+          if ($egift_redeem_type) {
+            $data_layer['egift_redeem_type'] = $egift_redeem_type;
           }
-        }
-        // Add egift card type in the data.
-        $data_layer['isEgiftCard'] = $egift_type;
-        // Add the egift redeem amount if exists.
-        if (array_key_exists('hps_redeemed_amount', $order['extension'])) {
-          $data_layer['redeem_egift_card_value'] = $order['extension']['hps_redeemed_amount'];
-        }
-        // Add the egift redeem type if exists.
-        $egift_redeem_type = $egift_helper->getEgiftRedemptionTypeFromOrder($order);
-        if ($egift_redeem_type) {
-          $data_layer['egift_redeem_type'] = $egift_redeem_type;
-        }
-        // Change hps_payment to egift Card.
-        if ($data_layer['paymentOption'] == 'hps_payment') {
-          $data_layer['paymentOption'] = 'egift_card';
-        }
-        elseif ($egift_helper->partialPaymentDoneByEgiftCard($order)) {
-          $data_layer['paymentOption'] = [
-            $data_layer['paymentOption'],
-            'egift_card',
-          ];
-          // If some amount is paid via egift then add multiple payment methods
-          // separated by _ in GTM.
-          $data_layer['paymentOption'] = implode('_', $data_layer['paymentOption']);
+          // Change hps_payment to egift Card.
+          if ($data_layer['paymentOption'] == 'hps_payment') {
+            $data_layer['paymentOption'] = 'egift_card';
+          }
+          elseif ($egift_helper->partialPaymentDoneByEgiftCard($order)) {
+            $data_layer['paymentOption'] = [
+              $data_layer['paymentOption'],
+              'egift_card',
+            ];
+            // If some amount is paid via egift then add multiple payment
+            // methods separated by _ in GTM.
+            $data_layer['paymentOption'] = implode('_', $data_layer['paymentOption']);
+          }
         }
       }
     }

@@ -220,7 +220,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               // Dispatch linked egift redeemed for GTM.
               dispatchCustomEvent('egiftCardRedeemed', {
                 label: 'checked',
-                action: 'linked',
+                action: 'linked_card_redemption',
               });
             } else {
               logger.error('Empty Response in eGiftRedemption for linked card. Action: @action CardNumber: @cardNumber Response: @response', {
@@ -294,7 +294,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             // Dispatch unlink egift redeemed for GTM.
             dispatchCustomEvent('egiftCardRedeemed', {
               label: 'unchecked',
-              action: 'linked',
+              action: 'linked_card_redemption',
             });
           } else {
             logger.error('Empty Response while calling the cancel eGiftRedemption. Action: @action, CardNumber: @cardNumber, Response: @response', {

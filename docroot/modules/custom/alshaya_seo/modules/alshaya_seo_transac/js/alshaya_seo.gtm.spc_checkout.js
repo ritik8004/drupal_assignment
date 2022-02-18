@@ -170,7 +170,7 @@
   document.addEventListener('orderPaymentMethod', function (e) {
     var payment_method = e.detail.payment_method;
     // Get the cart data to check if some payment is done via E-Gift card.
-    if (drupalSettings.egiftCard && drupalSettings.egiftCard.enabled) {
+    if (drupalSettings.hasOwnProperty('egiftCard') && drupalSettings.egiftCard.enabled) {
       var totals = window.spcStaticStorage.cart_raw.totals;
       // If some amount is paid via egift then hps_redeemed_amount will be
       // present.
