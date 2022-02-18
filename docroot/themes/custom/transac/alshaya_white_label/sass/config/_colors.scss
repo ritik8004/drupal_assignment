@@ -317,7 +317,7 @@ $primary_form_input: $black;
 $formitem_label: $greyish;
 $formitem_input: $black;
 
-//Buttons.
+// Buttons.
 $primary_btn_bg: $pumpkin-orange;
 $primary_btn_text: $white-five;
 $primary_empty_btn: $black;
@@ -614,7 +614,7 @@ $promo_panel_label_bg: $white-five;
 $promo_panel_label: $black;
 $promo_panel_label_icon: $marine-blue-two;
 
-//3. Footer
+// 3. Footer
 $footer_bg: $white-five;
 $footer_border_top: $peacock-blue;
 $footer_title_h3: $marine-blue-two;
@@ -631,12 +631,12 @@ $social-icons-bg: $white-five;
 $social_links: $marine-blue-two;
 $social_links_hover: transparent;
 
-//1. Copyright
+// 1. Copyright
 $copyright_footer_bg: $white-four;
 $copyright_footer_text: $black;
 $copyright_footer_paragraph: $grey-ash;
 
-//7. Newsletter-signup
+// 7. Newsletter-signup
 $newsletter_submit_btn: $marine-blue-two;
 $newsletter_success: $windows-blue;
 
@@ -757,7 +757,7 @@ $pdp_size_option_border: $marine-blue;
 $pdp_size_option_text: $marine-blue;
 $pdp_size_option_selected_text: $white-five;
 $pdp_size_option_selected_bg: $marine-blue;
-$pdp_size_option_text_hover : $white-five;
+$pdp_size_option_text_hover: $white-five;
 $pdp_sidebar_label: $marine-blue;
 $pdp_sidebar_link: $windows-blue;
 $pdp_desc_wrapper: $white-five;
@@ -1038,7 +1038,7 @@ $address_book_delete_cancel: #3381d0;
 $address_book_delete_close: $black;
 $address_area_select: $grey-ash;
 
-//My Account pages
+// My Account pages.
 $user_account_wrapper_light: $grey-ash;
 $password_tooltip_list: $grey-ash;
 $user_nav_link: $marine-blue-two;
@@ -1068,10 +1068,10 @@ $my_account_nav_active: $marine-blue;
 $my_account_nav_hover: $content_link_color;
 $user_form_layout_divider_color: $white;
 
-//block-myaccountneedhelp
+// block-myaccountneedhelp
 $myaccountneedhelp_text: $windows-blue;
 
-//block-youllbeableto
+// block-youllbeableto
 $user_block_link: $cerulean-two;
 
 // joinclubblock
@@ -1095,7 +1095,7 @@ $payment_card_text: $black;
 $payment_card_error: $red-error;
 $payment_card_expired_notice: $mothercare-black;
 
-//Address book
+// Address book
 $address_pp_delete_closebtn: $white;
 
 // Basket
@@ -1286,7 +1286,7 @@ $lhn_sticky-filter-background: $white-five;
 $lhn_sticky-header-shadow: rgba(0, 0, 0, 0.24);
 $lhn_sticky-header-desktop-shadow: rgba(26, 26, 26, 0.1);
 
-//Algolia search bar.
+// Algolia search bar.
 $algolia-input-text: $marine-blue-two;
 $algolia-input-placeholder-text: $grey-ash;
 $algolia-input-border: $white;
@@ -1554,10 +1554,10 @@ $appointment-store-text: $black;
 $appointment-store-list-border: $_appointment-light-gray;
 $appointment-store-distance-text: $grey-light;
 $appointment-map-store-name: $_appointment-darkish-blue;
-$appointment-register-btn-bg :$_appointment-sky-blue;
+$appointment-register-btn-bg: $_appointment-sky-blue;
 $appointment-checkout-btn: $_appointment-darkish-blue;
 $appointment-register-border: $_appointment-darkish-blue;
-$appointment-checkout-btn-bg :$_appointment-light-blue;
+$appointment-checkout-btn-bg: $_appointment-light-blue;
 $appointment-timeslot-text: $black;
 $appointment-calendar-date-text: $_appointment-darkish-blue;
 $appointment-calendar-date-border: $_appointment-darkish-blue;
@@ -2083,7 +2083,7 @@ $egift-purchase-radio-label: $mothercare-black;
 $egift-edit-amount-modal-content-bg: $white-smoke-light;
 $egift-edit-amount-modal-subtitle: $egift-disabled-gray2;
 
-//eGift balance check
+// eGift balance check.
 $egift-input-label: $grey-light;
 $egift-balance-sidebar-bg: $white-smoke-light;
 $egift-balance-close-icon: $mothercare-black;
@@ -2149,6 +2149,7 @@ $egift-black-text: $mothercare-black;
 
 // eGift Checkout.
 $egift-checkout-info: $_spc-billing-help;
+$egift-checkout-card-number: $spc-product-attributes;
 
 // Redeem eGift.
 $egift-redeem-form-subtitle: $egift-disabled-gray2;

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Rating from '../../../../../alshaya_bazaar_voice/js/src/rating/components/rating';
 import ReviewSummary from '../../../../../alshaya_bazaar_voice/js/src/reviews/components/review-summary';
 import { isOpenWriteReviewForm } from '../../../../../alshaya_bazaar_voice/js/src/utilities/user_util';
+import { trackPassiveAnalytics } from '../../../../../alshaya_bazaar_voice/js/src/utilities/analytics';
 
 const PpdRatingsReviews = (props) => {
   const {
@@ -49,8 +50,11 @@ const PpdRatingsReviews = (props) => {
   },
   []);
 
+  // Track passive impression for dynamic layout on pdp.
+  trackPassiveAnalytics();
+
   return (
-    <Rating childClickHandler={openRatingsReviewPanel} />
+    <Rating childClickHandler={openRatingsReviewPanel} renderLinkDirectly="true" />
   );
 };
 

@@ -30,7 +30,7 @@
   }
 
   .promo-submit {
-    @include btn();
+    @include btn;
 
     width: 6rem;
     height: 2.625rem;

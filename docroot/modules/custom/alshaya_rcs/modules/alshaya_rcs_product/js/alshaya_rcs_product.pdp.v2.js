@@ -582,99 +582,6 @@ window.commerceBackend.cleanCssIdentifier = function (identifier) {
   return cleanedIdentifier.toLowerCase();
 }
 
-/**
- * Gets the siblings and parent of the given sku.
- *
- * @param {string} sku
- *   The given sku.
- *
- * @returns
- *   An object containing the product skus in the keys and the product entities
- * in the values.
- * If sku is simple and is the main product, then sku is returned.
- * If sku is simple a child product, then all the siblings and parent are
- * returned.
- * If sku is configurable, then the sku and its children are returned.
- */
-function getSkuSiblingsAndParent(sku) {
-  const allProducts = window.commerceBackend.getProductData(null, null, false);
-  const data = {};
-
-  Object.keys(allProducts).forEach(function eachMainProduct(mainProductSku) {
-    const mainProduct = allProducts[mainProductSku];
-
-    if (mainProduct.sku === sku) {
-      data[sku] = mainProduct;
-      if (mainProduct.type_id === 'configurable') {
-        mainProduct.variants.forEach(function eachVariantProduct(variant) {
-          data[variant.product.sku] = variant.product;
-        });
-      }
-    }
-    else {
-      if (mainProduct.type_id === 'configurable') {
-        mainProduct.variants.forEach(function eachVariantProduct(variant) {
-          if (variant.product.sku === sku) {
-            data[mainProduct.sku] = mainProduct;
-            mainProduct.variants.forEach(function eachVariantProduct(variant) {
-              data[variant.product.sku] = variant.product;
-            });
-          }
-        });
-      }
-    }
-  });
-
-  return data;
-}
-
-/**
- * Gets the labels data for the given product ID.
- *
- * @param sku
- *   The sku value.
- *
- * @returns object
- *   The labels data for the given product ID.
- */
-async function getProductLabelsData (sku) {
-  if (typeof staticDataStore.labels === 'undefined') {
-    staticDataStore.labels = {};
-    staticDataStore.labels[sku] = null;
-  }
-
-  if (staticDataStore.labels[sku]) {
-    return staticDataStore.labels[sku];
-  }
-
-  const products = getSkuSiblingsAndParent(sku);
-  const productIds = {};
-  Object.keys(products).forEach(function (sku) {
-    staticDataStore.labels[sku] = [];
-    productIds[products[sku].id] = sku;
-  });
-
-  const labels = await globalThis.rcsPhCommerceBackend.getData(
-    'labels',
-    { productIds: Object.keys(productIds) },
-    null,
-    drupalSettings.path.currentLanguage,
-    ''
-  );
-
-  if (Array.isArray(labels) && labels.length) {
-    labels.forEach(function (productLabels) {
-      if (!productLabels.items.length) {
-        return;
-      }
-      const productId = productLabels.items[0].product_id;
-      const sku = productIds[productId];
-      staticDataStore.labels[sku] = productLabels.items;
-    });
-  }
-
-  return staticDataStore.labels[sku];
-}
 
 /**
  * Get the labels data for the selected SKU.
@@ -687,7 +594,7 @@ async function getProductLabelsData (sku) {
  *   The main sku for the product being displayed.
  */
 function renderProductLabels(product, sku, mainSku) {
-  getProductLabelsData(mainSku).then(function (labelsData) {
+  window.commerceBackend.getProductLabelsData(mainSku).then(function (labelsData) {
     globalThis.rcsPhRenderingEngine.render(
       drupalSettings,
       'product-labels',
@@ -815,21 +722,23 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
     return staticDataStore.configurableColorData[sku];
   }
 
-  const colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
-  const isSupportsMultipleColor = Drupal.hasValue(colorAttributeConfig.configurable_color_attribute);
-  const configColorAttribute = colorAttributeConfig.configurable_color_attribute;
+  var colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
+  var supportsMultipleColor = Drupal.hasValue(colorAttributeConfig.support_multiple_attributes);
+  var data = {};
+  var rawProductData = window.commerceBackend.getProductData(sku, false, false);
+  var productType = rawProductData.type_id;
 
-  if (isSupportsMultipleColor) {
-    const colorLabelAttribute = colorAttributeConfig.configurable_color_label_attribute.replace('attr_', '');
-    const colorCodeAttribute = colorAttributeConfig.configurable_color_code_attribute.replace('attr_', '');
+  if (supportsMultipleColor && productType === 'configurable') {
+    var configColorAttribute = colorAttributeConfig.configurable_color_attribute;
+    var combinations = window.commerceBackend.getConfigurableCombinations(sku);
+    var colorLabelAttribute = colorAttributeConfig.configurable_color_label_attribute.replace('attr_', '');
+    var colorCodeAttribute = colorAttributeConfig.configurable_color_code_attribute.replace('attr_', '');
     // Translate color attribute option values to the rgb color values &
     // expose the same in Drupal settings to javascript.
-    const combinations = window.commerceBackend.getConfigurableCombinations(sku);
-    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
-    const configurableOptions = rawProductData.configurable_options;
+    var configurableOptions = rawProductData.configurable_options;
 
-    const variants = {};
-    const skuConfigurableOptionsColor = {};
+    var variants = {};
+    var skuConfigurableOptionsColor = {};
 
     // Do this mapping for easy access.
     rawProductData.variants.forEach(function (variant) {
@@ -840,7 +749,7 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
       option.values.forEach(function (value) {
         if (Drupal.hasValue(combinations.attribute_sku[configColorAttribute][value.value_index])) {
           combinations.attribute_sku[configColorAttribute][value.value_index].forEach(function (variantSku) {
-            const colorOptionsList = {
+            var colorOptionsList = {
               display_label: window.commerceBackend.getAttributeValueLabel(option.attribute_code, variants[variantSku].product[colorLabelAttribute]),
               swatch_type: 'RGB',
               display_value: variants[variantSku].product[colorCodeAttribute],
@@ -860,12 +769,13 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
           });
         }
       });
+
+      data = {
+        sku_configurable_options_color: skuConfigurableOptionsColor,
+        sku_configurable_color_attribute: configColorAttribute,
+      }
     });
 
-    const data = {
-      sku_configurable_options_color: skuConfigurableOptionsColor,
-      sku_configurable_color_attribute: configColorAttribute,
-    }
     staticDataStore.configurableColorData[sku] = data;
 
     return data;

@@ -51,12 +51,10 @@ class AlshayaFrontendCommand extends BltTasks {
    * @aliases setup-themes
    */
   public function setupThemes() {
-    $tasks = $this->taskParallelExec();
-    foreach (self::$themeTypes as $theme_type) {
-      $dir = $this->getConfigValue('docroot') . '/themes/custom/' . $theme_type;
-      $tasks->process("cd $dir; npm install");
-    }
-    return $tasks->run();
+    $dir = $this->getConfigValue('docroot') . '/themes/custom';
+    $task = $this->taskExec("cd $dir; npm install --unsafe-perm=true");
+
+    return $task->run();
   }
 
   /**
@@ -161,18 +159,15 @@ class AlshayaFrontendCommand extends BltTasks {
 
     $command = 'cd %s; npm run build';
 
-    // Execute in sequence in local.
-    $tasks = getenv('LANDO')
-      ? $this->taskExecStack()
-      : $this->taskParallelExec();
+    // Execute in sequence to see errors if any.
+    $tasks = $this->taskExecStack();
 
     foreach ($themes ?? [] as $theme) {
       $fullCommand = sprintf($command, $theme);
-      getenv('LANDO')
-        ? $tasks->exec($fullCommand)
-        : $tasks->process($fullCommand);
+      $tasks->exec($fullCommand);
     }
 
+    $tasks->stopOnFail();
     return $tasks->run();
   }
 
@@ -222,8 +217,7 @@ class AlshayaFrontendCommand extends BltTasks {
       ? 'npm run build:dev'
       : 'npm run build';
 
-    $tasks = $this->taskParallelExec();
-    $tasks->waitInterval(1);
+    $tasks = $this->taskExecStack();
     $docroot = $this->getConfigValue('docroot');
 
     $ignore_dirs = ['node_modules', 'alshaya_react_test'];
@@ -239,10 +233,10 @@ class AlshayaFrontendCommand extends BltTasks {
         }
       }
 
-      $this->say($dir);
-      $tasks->process("cd $dir; $command");
+      $tasks->exec("cd $dir; $command");
     }
 
+    $tasks->stopOnFail();
     return $tasks->run();
   }
 
@@ -302,6 +296,7 @@ class AlshayaFrontendCommand extends BltTasks {
       $tasks->exec("cd $theme_dir; npm run lint");
     }
 
+    $tasks->stopOnFail();
     return $tasks->run();
   }
 
@@ -325,6 +320,7 @@ class AlshayaFrontendCommand extends BltTasks {
     $tasks = $this->taskExecStack();
     $tasks->stopOnFail();
     $tasks->exec("cd $dir; npm run lint");
+    $tasks->stopOnFail();
     return $tasks->run();
   }
 
@@ -358,6 +354,7 @@ class AlshayaFrontendCommand extends BltTasks {
       }
     }
 
+    $tasks->stopOnFail();
     $result = $tasks->run();
     return $result;
   }

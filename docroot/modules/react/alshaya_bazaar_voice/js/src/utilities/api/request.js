@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import BVStaticStorage from '../bvStaticStorage';
-import hasValue from '../../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 function getBvUrl(bazaarVoiceSettings) {
   return bazaarVoiceSettings.reviews.bazaar_voice.endpoint;
@@ -21,12 +21,13 @@ function getLocale(bazaarVoiceSettings) {
 
 export function getbazaarVoiceSettings(productId = undefined) {
   const settings = [];
-  const productInfo = window.commerceBackend.getProductData(productId);
+  let productInfo = window.commerceBackend.getProductData(productId);
 
-  if (typeof productId !== 'undefined' && Object.keys(productInfo).length > 0) {
+  if (typeof productId !== 'undefined' && productInfo !== null) {
     settings.productid = productId;
     settings.reviews = productInfo.alshaya_bazaar_voice;
   } else {
+    productInfo = window.commerceBackend.getProductData(null, 'productInfo');
     Object.entries(productInfo).forEach(([key]) => {
       settings.productid = key;
       settings.reviews = productInfo[key].alshaya_bazaar_voice;

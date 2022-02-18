@@ -164,27 +164,25 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'navigation_menu':
-      // @todo To optimize the multiple category API call.
       // Early return if the root category is undefined.
-      if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined') {
+      if (typeof params.category_id === 'undefined') {
         return null;
       }
 
       // Prepare request parameters.
-      // @todo: we are using 'category' API for now which is going to be
-      // deprecated, but only available API to support both 2.3 and 2.4
-      // magento version, so as suggested we are using this for now but
-      // need to change this when this got deprecated in coming magento
-      // version and replace it with 'categoryList' magento API.
-      request.data = prepareQuery(`{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory})
+      // Fetch categories for navigation menu using categories api.
+      request.data = prepareQuery(`{categories(filters: { ids: { eq: "${params.category_id}"}})
         ${rcsPhGraphqlQuery.navigationMenu}
       }`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
-      if (response !== null) {
-        // Skip the default category data always.
-        result = response.data.category.children[0].children;
+      if (response !== null
+        && Array.isArray(response.data.categories.items)
+        && response.data.categories.items.length > 0
+      ) {
+        // Get children for root category.
+        result = response.data.categories.items[0].children;
       }
       break;
 
@@ -231,6 +229,17 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
     case 'order_teaser':
       // @todo To use graphql query to get the order details.
+      break;
+
+    // Get the product data for the given sku.
+    case 'product_by_sku':
+      // Build query.
+      const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
+      const filterValue = operator === 'in' ? JSON.stringify(params.sku) : `"${params.sku}"`;
+      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: ${filterValue} }}) ${rcsPhGraphqlQuery.products}}`);
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
       break;
 
     default:

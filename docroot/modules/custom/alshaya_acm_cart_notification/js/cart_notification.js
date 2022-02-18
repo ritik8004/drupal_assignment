@@ -300,12 +300,12 @@
 
       if (window.RcsEventManager) {
         $document
-          .once("rcs-event-loaders")
+          .once('rcs-event-loaders')
           .each(() => {
-            window.RcsEventManager.addListener("startLoader", () => {
+            window.RcsEventManager.addListener('startLoader', () => {
               Drupal.cartNotification.spinner_start();
             });
-            window.RcsEventManager.addListener("stopLoader", () => {
+            window.RcsEventManager.addListener('stopLoader', () => {
               Drupal.cartNotification.spinner_stop();
             });
           });

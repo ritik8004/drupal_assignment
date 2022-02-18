@@ -91,6 +91,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
         'data-param-get-data' => 'false',
         'class' => ['block-alshaya-category-lhn-block'],
         'data-param-entity-to-get' => 'navigation_menu',
+        'data-param-category_id' => $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category'),
       ],
     ];
 

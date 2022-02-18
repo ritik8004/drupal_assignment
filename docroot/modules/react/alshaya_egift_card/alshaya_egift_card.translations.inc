@@ -265,8 +265,9 @@ function _alshaya_egift_card_translations() {
       ],
       'eGift Card' => [
         'ar' => ' بطاقة الهدية الإلكترونية الخاصة بي',
+        'context' => 'egift',
       ],
-      'Balanace:' => [
+      'Balance:' => [
         'ar' => 'الرصيد:',
         'context' => 'egift',
       ],
@@ -398,6 +399,10 @@ function _alshaya_egift_card_translations() {
       ],
       'Please pay full amount via Egift card or use other payment method.' => [
         'ar' => 'يرجى دفع المبلغ بالكامل عبر بطاقة الهدايا الإلكترونية أو استخدام طريقة دفع أخرى.',
+        'context' => 'egift',
+      ],
+      'My eGift Card' => [
+        'ar' => 'بطاقة الهدية الإلكترونية الخاصة بي',
         'context' => 'egift',
       ]
     ],

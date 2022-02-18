@@ -234,9 +234,104 @@
     var prices = {
       price : formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value) : product.price_range.maximum_price.regular_price.value,
       finalPrice: formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value) : product.price_range.maximum_price.final_price.value,
+      percent_off: product.price_range.maximum_price.discount.percent_off,
     };
     return prices;
   };
+
+  /**
+   * Gets the siblings and parent of the given sku.
+   *
+   * @param {string} sku
+   *   The given sku.
+   *
+   * @returns
+   *   An object containing the product skus in the keys and the product entities
+   * in the values.
+   * If sku is simple and is the main product, then sku is returned.
+   * If sku is simple a child product, then all the siblings and parent are
+   * returned.
+   * If sku is configurable, then the sku and its children are returned.
+   */
+  function getSkuSiblingsAndParent(sku) {
+    const allProducts = window.commerceBackend.getProductData(null, null, false);
+    const data = {};
+
+    Object.keys(allProducts).forEach(function eachMainProduct(mainProductSku) {
+      const mainProduct = allProducts[mainProductSku];
+
+      if (mainProduct.sku === sku) {
+        data[sku] = mainProduct;
+        if (mainProduct.type_id === 'configurable') {
+          mainProduct.variants.forEach(function eachVariantProduct(variant) {
+            data[variant.product.sku] = variant.product;
+          });
+        }
+      }
+      else {
+        if (mainProduct.type_id === 'configurable') {
+          mainProduct.variants.forEach(function eachVariantProduct(variant) {
+            if (variant.product.sku === sku) {
+              data[mainProduct.sku] = mainProduct;
+              mainProduct.variants.forEach(function eachVariantProduct(variant) {
+                data[variant.product.sku] = variant.product;
+              });
+            }
+          });
+        }
+      }
+    });
+
+    return data;
+  }
+
+  /**
+   * Gets the labels data for the given product ID.
+   *
+   * @param sku
+   *   The sku value.
+   *
+   * @returns object
+   *   The labels data for the given product ID.
+   */
+  window.commerceBackend.getProductLabelsData = async function  (sku) {
+    if (typeof staticDataStore.labels === 'undefined') {
+      staticDataStore.labels = {};
+      staticDataStore.labels[sku] = null;
+    }
+
+    if (staticDataStore.labels[sku]) {
+      return staticDataStore.labels[sku];
+    }
+
+    const products = getSkuSiblingsAndParent(sku);
+    const productIds = {};
+    Object.keys(products).forEach(function (sku) {
+      staticDataStore.labels[sku] = [];
+      productIds[products[sku].id] = sku;
+    });
+
+    const labels = await globalThis.rcsPhCommerceBackend.getData(
+      'labels',
+      { productIds: Object.keys(productIds) },
+      null,
+      drupalSettings.path.currentLanguage,
+      ''
+    );
+
+    if (Array.isArray(labels) && labels.length) {
+      labels.forEach(function (productLabels) {
+        if (!productLabels.items.length) {
+          return;
+        }
+        const productId = productLabels.items[0].product_id;
+        const sku = productIds[productId];
+        staticDataStore.labels[sku] = productLabels.items;
+      });
+    }
+
+    return staticDataStore.labels[sku];
+  }
 
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {

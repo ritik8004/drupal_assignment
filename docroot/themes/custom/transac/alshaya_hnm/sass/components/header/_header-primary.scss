@@ -1,7 +1,15 @@
-/*
-	SITE HEADER - BRANDING
-*/
+@mixin menuListItem {
+  @include arabic-letter-spacing;
 
+  border-bottom: none;
+  font-family: $hnm-regular;
+  text-transform: capitalize;
+  color: $hnm-black-four;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+}
+
+// SITE HEADER - BRANDING.
 header {
   .c-header__region {
     background: $default_background_color;
@@ -789,18 +797,11 @@ header {
   }
 
   .menu__list-item {
-    @include arabic-letter-spacing;
-
-    border-bottom: none;
-    font-family: $hnm-regular;
-    text-transform: capitalize;
-    color: $hnm-black-four;
-    font-size: 0.875rem;
-    letter-spacing: 1px;
+    @include menuListItem;
   }
 
   .back--link {
-    @extend .menu__list-item;
+    @include menuListItem;
 
     font-family: $hnm-bold;
   }

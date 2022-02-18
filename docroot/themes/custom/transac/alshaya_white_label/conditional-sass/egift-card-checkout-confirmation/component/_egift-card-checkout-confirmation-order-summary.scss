@@ -12,6 +12,20 @@
         width: 8.9rem;
       }
     }
+
+    .spc-cart-product-attribute-value {
+      input {
+        border: none;
+        background: transparent;
+        direction: ltr !important;
+        text-align: $left;
+
+        @include breakpoint($only-mobile) {
+          -webkit-text-fill-color: $egift-checkout-card-number;
+          opacity: 1;
+        }
+      }
+    }
   }
 
   .egift-order-summary {
