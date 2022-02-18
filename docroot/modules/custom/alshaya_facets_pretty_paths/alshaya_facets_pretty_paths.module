@@ -331,13 +331,12 @@ function alshaya_facets_pretty_paths_taxonomy_term_insert(TermInterface $term) {
     }
 
     $langcode = $term->language()->getId();
-    $facet_item_value = $term->getName();
 
     // Insert facet alias.
     $pretty_paths_helper->encodeFacetUrlComponents(
       AlshayaAlgoliaIndexHelper::FACET_SOURCE,
       $facet_alias,
-      $facet_item_value,
+      $term->getName(),
       $langcode
     );
   }
@@ -357,11 +356,10 @@ function alshaya_facets_pretty_paths_taxonomy_term_update(TermInterface $term) {
     }
 
     $langcode = $term->language()->getId();
-    $facet_item_value = $term->getName();
     $pretty_paths_helper->encodeFacetUrlComponents(
       AlshayaAlgoliaIndexHelper::FACET_SOURCE,
       $facet_alias,
-      $facet_item_value,
+      $term->getName(),
       $langcode
     );
 
@@ -383,10 +381,9 @@ function alshaya_facets_pretty_paths_taxonomy_term_delete(TermInterface $term) {
     // Delete facet alias.
     foreach ($term->getTranslationLanguages() as $langcode => $language) {
       $term_translation = $term->getTranslation($langcode);
-      $facet_item_value = $term_translation->getName();
 
       $query = $database->delete('facets_pretty_path')
-        ->condition('value', $facet_item_value, '=')
+        ->condition('value', $term_translation->getName(), '=')
         ->condition('facet_alias', $facet_alias, '=')
         ->condition('language', $langcode, '=')
         ->execute();
