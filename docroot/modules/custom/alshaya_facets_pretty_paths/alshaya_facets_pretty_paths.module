@@ -332,20 +332,13 @@ function alshaya_facets_pretty_paths_taxonomy_term_insert(TermInterface $term) {
 
     $langcode = $term->language()->getId();
     $facet_item_value = $term->getName();
-    $facet_alias_value = $term->getName();
-    // Use en translation for pretty path.
-    if ($langcode != 'en' && $term->hasTranslation('en')) {
-      $term_en = $term->getTranslation('en');
-      $facet_alias_value = $term_en->getName();
-    }
 
     // Insert facet alias.
     $pretty_paths_helper->encodeFacetUrlComponents(
       AlshayaAlgoliaIndexHelper::FACET_SOURCE,
       $facet_alias,
       $facet_item_value,
-      $langcode,
-      $facet_alias_value,
+      $langcode
     );
   }
 }
@@ -365,19 +358,12 @@ function alshaya_facets_pretty_paths_taxonomy_term_update(TermInterface $term) {
 
     $langcode = $term->language()->getId();
     $facet_item_value = $term->getName();
-    $facet_alias_value = $term->getName();
-    // Use en translation for pretty path.
-    if ($langcode != 'en' && $term->hasTranslation('en')) {
-      $term_en = $term->getTranslation('en');
-      $facet_alias_value = $term_en->getName();
-    }
 
     $pretty_paths_helper->encodeFacetUrlComponents(
       AlshayaAlgoliaIndexHelper::FACET_SOURCE,
       $facet_alias,
       $facet_item_value,
-      $langcode,
-      $facet_alias_value,
+      $langcode
     );
 
   }
