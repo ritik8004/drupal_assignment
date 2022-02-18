@@ -16,7 +16,7 @@
         "claviska/jquery-minicolors": "^2.2",
         "drupal/acquia_connector": "^3.0",
         "drupal/acquia_purge": "^1.1",
-        "drupal/acquia_search": "^2.1",
+        "drupal/acquia_search": "^3.0",
         "drupal/acsf": "^2.47.0",
         "drupal/address": "^1.9",
         "drupal/admin_toolbar": "^3.0",
@@ -91,8 +91,7 @@
         "drupal/s3fs": "^3.0@beta",
         "drupal/search_api_algolia": "^3.0@beta",
         "drupal/search_api_autocomplete": "^1.0",
-        "drupal/search_api_solr": "^1.11",
-        "drupal/search_api_solr_multilingual": "^1.3",
+        "drupal/search_api_solr_multilingual": "^3",
         "drupal/search_api_spellcheck": "^3.0@beta",
         "drupal/seckit": "^2.0",
         "drupal/sessions_expire": "^1.0",
@@ -212,13 +211,6 @@
         "patches": {
             "drupal/webform": {
                 "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
-            },
-            "drupal/search_api_solr": {
-                "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch"
-            },
-            "drupal/search_api_solr_multilingual": {
-                "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
-                "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
             },
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
