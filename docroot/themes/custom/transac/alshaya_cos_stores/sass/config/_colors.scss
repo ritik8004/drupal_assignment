@@ -384,6 +384,9 @@ $plp_all_filter_button_color: $primary_btn_bg;
 
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $_plp_cta_hover;
+$plp-quick-view-product-size-active-bg: transparent;
+$plp-quick-view-product-size-border-hover: $bright-gray;
+$plp-quick-view-product-size-text-active: $eerie-black;
 
 // Dynamic Promotions.
 $promo_dynamic_label_bg: $eerie-black;
@@ -472,3 +475,11 @@ $wishlist-oos: $blood;
 
 // Country Switcher
 $country-switcher-label-mobile: $black-two;
+
+// eGift Landing page
+$egift-accordion-active-title: $black;
+
+// eGift purchase page
+$egift-amount-list-border: $bright-gray;
+$egift-amount-list-text: $eerie-black;
+$egift-card-list-border: $eerie-black;
