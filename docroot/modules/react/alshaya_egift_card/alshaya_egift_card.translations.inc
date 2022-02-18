@@ -408,10 +408,6 @@ function _alshaya_egift_card_translations() {
       'Remove' => [
         'ar' => 'إزالة',
         'context' => 'egift',
-      ],
-      'Please enter a valid amount.' => [
-        'ar' => 'يرجى إدخال مبلغ صحيح.',
-        'context' => 'egift',
       ]
     ],
   ];
