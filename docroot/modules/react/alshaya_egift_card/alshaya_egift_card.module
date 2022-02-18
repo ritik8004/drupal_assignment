@@ -55,7 +55,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     ];
     $build['#strings'][] = [
       'key' => 'egift_valid_amount',
-      'value' => t('Please enter a valid amount.', [], [
+      'value' => t('Please enter a valid amount', [], [
         'context' => 'egift'
       ]),
     ];
