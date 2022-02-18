@@ -1,0 +1,15 @@
+#egift-card-purchase-wrapper {
+  .egift-list-wrapper {
+    ul {
+      li {
+        &.active {
+          border-color: $egift-card-list-border;
+        }
+
+        &:hover {
+          border-color: $egift-card-list-border;
+        }
+      }
+    }
+  }
+}
