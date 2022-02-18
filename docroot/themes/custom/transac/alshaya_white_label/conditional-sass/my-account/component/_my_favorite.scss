@@ -12,13 +12,31 @@
     .c-products-list {
       &.product-small {
         .c-products__item {
+          @include breakpoint($tablet) {
+            width: calc(100% / 2 - 1.797% + 1.797% / 2 - 0.01px);
+          }
+
           @include breakpoint($desktop) {
             width: calc(100% / 3 - 1.797% + 1.797% / 3 - 0.01px);
           }
         }
 
-        &:nth-of-type(3n+1) {
-          @include breakpoint($desktop) {
+        @include breakpoint($tablet) {
+          .c-products__item:nth-of-type(3n+1) {
+            margin-#{$left}: 1.797%;
+          }
+
+          .c-products__item:nth-of-type(2n+1) {
+            margin-#{$left}: 0;
+          }
+        }
+
+        @include breakpoint($desktop) {
+          .c-products__item:nth-of-type(4n+1) {
+            margin-#{$left}: 1.797%;
+          }
+
+          .c-products__item:nth-of-type(3n+1) {
             margin-#{$left}: 0;
           }
         }
