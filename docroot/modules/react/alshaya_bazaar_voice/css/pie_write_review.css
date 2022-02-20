@@ -1,0 +1,5 @@
+@media(min-width:0) and (max-width:767px) {
+	.bv-checkbox-container input[type=checkbox]~label:before {
+    display: none;
+	}
+}
