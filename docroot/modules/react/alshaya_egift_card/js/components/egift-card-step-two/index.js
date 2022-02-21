@@ -105,6 +105,7 @@ export default class EgiftCardStepTwo extends React.Component {
                     id="egiftFor-myself"
                     value="self"
                     onChange={(e) => this.handleChange(e)}
+                    defaultChecked={!showMessageField}
                   />
                   <label htmlFor="egiftFor-myself">
                     {Drupal.t('Myself', {}, { context: 'egift' })}
