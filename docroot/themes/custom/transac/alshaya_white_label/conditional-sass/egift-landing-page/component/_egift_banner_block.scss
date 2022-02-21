@@ -101,12 +101,21 @@
           color: $primary_btn_bg;
           border: 1px solid $primary_btn_bg;
           max-width: none;
+
+          &:hover {
+            background: $plp-secondary-cta-hover-bg;
+          }
         }
 
         &:last-child {
           a {
             background-color: $primary_btn_bg;
             color: $primary_btn_text;
+
+            &:hover {
+              background: $plp-primary-cta-hover-bg;
+              border-color: $plp-primary-cta-hover-bg;
+            }
           }
 
           @include breakpoint($only-mobile) {
