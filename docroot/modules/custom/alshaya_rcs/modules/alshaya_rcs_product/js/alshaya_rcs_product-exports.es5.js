@@ -265,21 +265,8 @@ exports.render = function render(
       };
 
       // Express delivery.
-      let product = entity;
-
-      // If the product has variants, get the express delivery options from the first variant.
-      const combinations = window.commerceBackend.getConfigurableCombinations(entity.sku);
-      if (combinations) {
-        entity.variants.forEach(function (v, i) {
-          if (v.product.sku === combinations.firstChild) {
-            // Use delivery information from this variant.
-            product = v.product;
-          }
-        });
-      }
-
-      drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
-        if (option.status && product[option.id]) {
+     drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
+        if (option.status && entity[option.id]) {
           option.class = 'active';
         }
         else {
@@ -289,7 +276,7 @@ exports.render = function render(
       });
 
       // Same day delivery.
-      if (product.same_day_delivery) {
+      if (entity.same_day_delivery) {
         deliveryInfo.sameDayDelivery = drupalSettings.alshayaRcs.pdp.sameDayDelivery;
       }
 

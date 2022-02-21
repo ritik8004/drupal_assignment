@@ -316,10 +316,7 @@ function getVariantsInfo(product) {
       freeGiftPromotion: [],
       url: getProductUrls(variantInfo.url_key),
       gtm_price: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
-      deliveryOptions: {
-        express_delivery: { status: variantInfo.express_delivery ? 'active' : 'in-active' },
-        same_day_delivery: { status: variantInfo.same_day_delivery ? 'active' : 'in-active' },
-      },
+      deliveryOptions: variantInfo.deliveryOptions,
     }
 
     // Set max sale quantity data.
@@ -380,10 +377,6 @@ function processProduct(product) {
       // We get only enabled products in the API.
       status: 1,
       in_stock: product.stock_status === 'IN_STOCK',
-    },
-    deliveryOptions: {
-      express_delivery: { status: product.express_delivery ? 'active' : 'in-active' },
-      same_day_delivery: { status: product.same_day_delivery ? 'active' : 'in-active' },
     },
   };
 
