@@ -83,7 +83,7 @@
         max_sale_qty: variantData.stock_data.max_sale_qty,
         stock: {
           qty: variantData.stock_data.qty,
-          status: (variantData.stock_status == "IN_STOCK") ? true : false,
+          status: (variantData.stock_status === "IN_STOCK") ? true : false,
         }
       });
     });
