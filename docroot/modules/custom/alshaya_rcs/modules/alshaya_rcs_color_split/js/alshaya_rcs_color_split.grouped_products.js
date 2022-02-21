@@ -86,8 +86,16 @@
         variant.product.url_key = styleProduct.url_key;
         // Variants will inherit delivery options from their parent sku.
         variant.product.deliveryOptions = {
-          express_delivery: { status: styleProduct.express_delivery ? 'active' : 'in-active' },
-          same_day_delivery: { status: styleProduct.same_day_delivery ? 'active' : 'in-active' },
+          express_delivery: {
+            status: (Drupal.hasValue(styleProduct.express_delivery) && styleProduct.express_delivery)
+              ? 'active'
+              : 'in-active'
+          },
+          same_day_delivery: {
+            status: (Drupal.hasValue(styleProduct.same_day_delivery) && styleProduct.express_delivery)
+              ? 'active'
+              : 'in-active'
+          },
         };
 
         if (!processedColors.includes(variant.product.color)) {
