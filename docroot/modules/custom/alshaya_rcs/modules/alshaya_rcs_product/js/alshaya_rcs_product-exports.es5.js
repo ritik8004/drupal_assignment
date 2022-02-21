@@ -209,7 +209,11 @@ function getChildSkuFromAttribute(sku, attribute, option_id) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
 
   if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
-    console.log(`No combination available for attribute ${attribute} and option ${option_id} for SKU ${sku}`);
+    Drupal.alshayaLogger('debug', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
+      '@attribute': attribute,
+      '@option_id': option_id,
+      '@sku': sku
+    });
     return null;
   }
 
@@ -457,7 +461,9 @@ exports.render = function render(
       break;
 
     default:
-      console.log(`Placeholder ${placeholder} not supported for render.`);
+      Drupal.alshayaLogger('debug', 'Placeholder @placeholder not supported for render.', {
+        '@placeholder': placeholder
+      });
       break;
   }
 
@@ -786,7 +792,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     default:
-      console.log(`Unknown JS filter ${filter}.`)
+      Drupal.alshayaLogger('debug', 'Unknown JS filter @filter.', {'@filter': filter})
   }
 
   return value;

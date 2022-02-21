@@ -69,7 +69,7 @@
             rcsPhApplyDrupalJs(modalContext);
           },
           function () {
-            console.log('Could not fetch data!');
+            Drupal.alshayaLogger('debug', 'Could not fetch data!');
           });
 
         return false;
