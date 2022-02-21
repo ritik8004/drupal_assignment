@@ -37,3 +37,8 @@ iovation:
     js/assets/iovation-loader.js: { attributes: { defer: true } }
   dependencies:
     - bazaar_voice/bazaar_voice
+
+pie_write_review:
+  css:
+    theme:
+      css/pie_write_review.css: {}
