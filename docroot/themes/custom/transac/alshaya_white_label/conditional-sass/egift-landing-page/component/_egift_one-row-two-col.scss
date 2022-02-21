@@ -63,6 +63,10 @@
               border-width: 0.0625rem;
               background: transparent;
               border: 1px solid $primary_btn_bg;
+
+              &:hover {
+                background: $plp-secondary-cta-hover-bg;
+              }
             }
           }
         }
@@ -96,6 +100,10 @@
             color: $primary_btn_bg;
             position: relative;
             border: 1px solid $primary_btn_bg;
+
+            &:hover {
+              background: $plp-secondary-cta-hover-bg;
+            }
 
             .field--name-field-button-link {
               width: 100%;

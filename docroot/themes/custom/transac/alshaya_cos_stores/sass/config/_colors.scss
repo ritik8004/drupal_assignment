@@ -22,6 +22,7 @@ $blue-cola: #007fdb;
 $bright-blue: #2182d5;
 $teal: #26a69a;
 $_plp_cta_hover: #333;
+$_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
 
 // Global elements.
 $primary_text: $eerie-black;
@@ -387,6 +388,7 @@ $plp-primary-cta-hover-bg: $_plp_cta_hover;
 $plp-quick-view-product-size-active-bg: transparent;
 $plp-quick-view-product-size-border-hover: $bright-gray;
 $plp-quick-view-product-size-text-active: $eerie-black;
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
 
 // Dynamic Promotions.
 $promo_dynamic_label_bg: $eerie-black;
@@ -478,6 +480,7 @@ $country-switcher-label-mobile: $black-two;
 
 // eGift Landing page
 $egift-accordion-active-title: $black;
+$egift-banner-bg: $bright-gray;
 
 // eGift purchase page
 $egift-amount-list-border: $bright-gray;
