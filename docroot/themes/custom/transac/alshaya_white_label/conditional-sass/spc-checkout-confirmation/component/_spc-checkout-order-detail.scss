@@ -22,6 +22,8 @@
     .spc-value {
       color: $spc-checkout-payment-method-desc;
       text-align: $right;
+      max-width: 60%;
+      overflow-wrap: break-word;
 
       &.phone-number {
         html[lang=ar] & {
