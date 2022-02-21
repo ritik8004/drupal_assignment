@@ -1081,6 +1081,11 @@ const productRecommendationsSuffix = 'pr-';
     if (position) {
       product.position = position;
     }
+    // For PLP pages use Datalayer attribute.
+    if ((product.list !== undefined && product.list.indexOf('PLP') > -1)
+      || (listName !== undefined && listName.indexOf('PLP') > -1)) {
+      product.list = listName = 'PLP|' + drupalSettings.dataLayerAttachment.list;
+    }
 
     var data = {
       event: 'productClick',
@@ -1279,7 +1284,8 @@ const productRecommendationsSuffix = 'pr-';
         if ($(this).isElementInViewPort(0, 10)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-          impression.list = listName;
+          // Using Datalayer attribute for PLP.
+          impression.list = (listName.indexOf('PLP') > -1) ? 'PLP|' + drupalSettings.dataLayerAttachment.list : listName;
           impression.position = position;
           // Keep variant empty for impression pages. Populated only post add to cart action.
           impression.variant = '';
@@ -1309,6 +1315,11 @@ const productRecommendationsSuffix = 'pr-';
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';
+    // For PLP pages use Datalayer attribute.
+    if ((product.list !== undefined && product.list.indexOf('PLP') > -1)
+      || (listName !== undefined && listName.indexOf('PLP') > -1)) {
+      product.list = listName = 'PLP|' + drupalSettings.dataLayerAttachment.list;
+    }
 
     var data = {
       event: 'productDetailView',
