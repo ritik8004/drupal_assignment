@@ -45,6 +45,14 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
     return;
   }
 
+  if (_alshaya_seo_process_gtm()) {
+    $page['#attached']['drupalSettings']['add_to_bag']['gtm_product_push'] = TRUE;
+    $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
+  }
+  else {
+    $page['#attached']['drupalSettings']['add_to_bag']['gtm_product_push'] = FALSE;
+  }
+
   // Get the product's info expiration time in local storage.
   // Default to zero i.e. disable the local storage.
   $productinfo_local_storage_expiration = \Drupal::service('alshaya_add_to_bag.helper')->getProductInfoLocalStorageExpiration();
