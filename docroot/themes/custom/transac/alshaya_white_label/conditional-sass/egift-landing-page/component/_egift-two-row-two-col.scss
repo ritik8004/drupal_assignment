@@ -35,6 +35,16 @@
         margin-bottom: 3.375rem;
       }
     }
+
+    &.field__items {
+      @include breakpoint($tablet) {
+        padding: 0 1.75rem;
+      }
+
+      @include breakpoint($desktop) {
+        padding: 0 3rem;
+      }
+    }
   }
 
   .paragraph--type--image-title-subtitle {
