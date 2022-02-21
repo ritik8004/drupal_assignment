@@ -1,0 +1,26 @@
+
+.egift-landing-page {
+  .paragraph--type--_-row-2-col {
+    .field--name-field-1-row-2-col {
+      .field--name-field-1-row-2-col {
+        .check-balance-wrapper {
+          #check-balance-button {
+            & > button {
+              color: $primary_brand_button;
+              border-color: $primary_brand_button;
+              border-radius: 1.3125rem;
+            }
+          }
+        }
+
+        .paragraph--type--image-title-subtitle {
+          & > .field--name-field-button-link {
+            color: $primary_brand_button;
+            border-color: $primary_brand_button;
+            border-radius: 1.3125rem;
+          }
+        }
+      }
+    }
+  }
+}
