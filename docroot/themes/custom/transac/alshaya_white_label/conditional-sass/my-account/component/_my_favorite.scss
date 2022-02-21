@@ -12,7 +12,7 @@
     .c-products-list {
       &.product-small {
         .c-products__item {
-          @include breakpoint($tablet) {
+          @include breakpoint($only-tablet) {
             width: calc(100% / 2 - 1.797% + 1.797% / 2 - 0.01px);
           }
 
@@ -21,7 +21,7 @@
           }
         }
 
-        @include breakpoint($tablet) {
+        @include breakpoint($only-tablet) {
           .c-products__item:nth-of-type(3n+1) {
             margin-#{$left}: 1.797%;
           }
