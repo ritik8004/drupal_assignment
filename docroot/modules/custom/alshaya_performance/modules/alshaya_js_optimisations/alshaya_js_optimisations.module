@@ -68,6 +68,9 @@ function alshaya_js_optimisations_library_info_alter(&$libraries, $extension) {
         $attributes['defer'] = TRUE;
       }
 
+      // Aggregate asset libraries with attributes.
+      $library_config['perf-preprocess'] = $library_config['preprocess'] ?? TRUE;
+
       $library_config['attributes'] = $attributes;
       $library_item['js'][$path] = $library_config;
     }
@@ -113,7 +116,7 @@ function alshaya_js_optimisations_js_alter(&$javascripts) {
 
     // Enforce load on footer and aggregation on all local scripts.
     if ($status_critical_js) {
-      $value['preprocess'] = TRUE;
+      $value['preprocess'] = $value['perf-preprocess'];
       $value['scope'] = 'footer';
     }
 
