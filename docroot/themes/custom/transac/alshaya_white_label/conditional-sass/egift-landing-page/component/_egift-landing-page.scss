@@ -17,4 +17,11 @@
       border-top: 1px solid $egift-purchase-page-border;
     }
   }
+
+  .page-standard,
+  .node--type-advanced-page {
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+    }
+  }
 }
