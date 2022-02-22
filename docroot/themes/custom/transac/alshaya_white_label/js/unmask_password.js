@@ -16,7 +16,7 @@
         }
       });
 
-      $('.unmask-password').on('click', function () {
+      $('.unmask-password', context).once('unmaskPassword').on('click', function () {
         var $input = $(this).parent().find('.form-text:first');
         if ($input.attr('type') === 'password') {
           $input.attr('type', 'text').addClass('password-visible-input');
