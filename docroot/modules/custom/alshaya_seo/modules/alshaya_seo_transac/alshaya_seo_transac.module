@@ -73,6 +73,15 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       );
     }
 
+    // Add GTM events for Wishlist.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_wishlist')) {
+      $route_match = \Drupal::routeMatch();
+      if ($route_match->getRouteName() == 'alshaya_wishlist.users_wishlist'
+        || $route_match->getRouteName() == 'alshaya_wishlist.user_account_wishlist') {
+        $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_algolia_wishlist';
+      }
+    }
+
     // Settings from the setting form for the module.
     $seo_transac_settings = \Drupal::config('alshaya_seo_transac.settings');
     $page['#attached']['drupalSettings']['gtm']['productImpressionDefaultItemsInQueue'] = $seo_transac_settings->get('product_impressions_default_items_in_queue');

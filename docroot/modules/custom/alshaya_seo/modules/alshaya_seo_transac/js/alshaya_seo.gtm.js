@@ -1239,6 +1239,22 @@
       // Setting timer event.
       productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
     }
+    else if (eventType === 'wishlist-results-updated') {
+      // Using concat instead of assignment since plp-results-updated event gets
+      // triggered both on page load and clicking on load more button.
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
+      if (productImpressionsTimer === null ) {
+        // This is for page load where we push default number of items i.e. 4.
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionDefaultItemsInQueue));
+      }
+      else {
+        // This is when clicked on load more where we push existing items in
+        // productImpressions and newly added items from load more.
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+      }
+      // Setting timer event.
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
+    }
     else {
       // This is for cases like scroll/carousel events.
       // Add new impressions to the global productImpressions.
@@ -1287,7 +1303,7 @@
         }
         // On page load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'load' || eventType === 'plp-results-updated') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
+        if ((eventType === 'load' || eventType === 'plp-results-updated' || eventType === 'wishlist-results-updated') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
           // This is to break out from the .each() function.
           return false;
         }
