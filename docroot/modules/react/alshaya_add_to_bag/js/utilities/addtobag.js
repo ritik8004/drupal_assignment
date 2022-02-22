@@ -104,7 +104,7 @@ export const triggerUpdateCart = (requestData) => {
  * Helper function to check if GTM Product push condition is enabled.
  */
 export const isGtmProductPushEnabled = () => {
-  if (typeof drupalSettings.add_to_bag !== 'undefined') {
+  if (Drupal.hasValue(drupalSettings.add_to_bag)) {
     return drupalSettings.add_to_bag.gtm_product_push;
   }
 

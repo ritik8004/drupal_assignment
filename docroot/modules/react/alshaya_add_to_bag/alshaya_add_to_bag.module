@@ -45,12 +45,10 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
     return;
   }
 
+  $page['#attached']['drupalSettings']['add_to_bag']['gtm_product_push'] = FALSE;
   if (_alshaya_seo_process_gtm()) {
     $page['#attached']['drupalSettings']['add_to_bag']['gtm_product_push'] = TRUE;
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
-  }
-  else {
-    $page['#attached']['drupalSettings']['add_to_bag']['gtm_product_push'] = FALSE;
   }
 
   // Get the product's info expiration time in local storage.
