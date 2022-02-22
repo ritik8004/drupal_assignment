@@ -37,7 +37,14 @@
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
+    ul.menu--one__list {
+      text-align: center;
+      padding: 0 calc((100% - 77rem) / 2);
+    }
+
     li.menu--one__list-item {
+      display: inline-block;
+
       a.menu--one__link {
         display: block;
         border-top: 2px solid transparent !important;
@@ -110,8 +117,8 @@
     &:not(.megamenu-inline-layout) {
       li.menu--one__list-item {
         ul.menu--two__list {
-          #{$left}: 1.6875rem;
-          max-width: 77rem;
+          #{$left}: 1.375rem;
+          max-width: 74.25rem;
         }
       }
     }

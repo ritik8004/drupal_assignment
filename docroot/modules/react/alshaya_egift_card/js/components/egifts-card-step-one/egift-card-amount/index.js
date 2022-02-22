@@ -8,7 +8,9 @@ import ConditionalView
  * Show list of egift card selectable amounts from api.
  */
 const EgiftCardAmount = (props) => {
-  const { selected, handleAmountSelect, myAccountLabel } = props;
+  const {
+    selected, handleAmountSelect, myAccountLabel, field,
+  } = props;
 
   const labelOption = typeof myAccountLabel !== 'undefined' ? myAccountLabel : false;
 
@@ -23,10 +25,10 @@ const EgiftCardAmount = (props) => {
     });
 
     // Empty open amount field and unlock
-    const openAmountInput = document.getElementById('open-amount');
+    const openAmountInput = field.current;
     if (openAmountInput !== null) {
       openAmountInput.value = '';
-      openAmountInput.removeAttribute('disabled');
+      openAmountInput.removeAttribute('readOnly');
       // Remove any error message from open amount.
       document.getElementById('open-amount-error').innerHTML = '';
     }
@@ -73,7 +75,11 @@ const EgiftCardAmount = (props) => {
       <ul>
         {listItems}
       </ul>
-      <EgiftCardOpenAmountField selected={selected} handleAmountSelect={handleAmountSelect} />
+      <EgiftCardOpenAmountField
+        selected={selected}
+        handleAmountSelect={handleAmountSelect}
+        field={field}
+      />
     </div>
   );
 };

@@ -17,7 +17,6 @@ dependencies:
   - lightning:lightning_core
   - drupal:node
   - search_api_autocomplete:search_api_autocomplete
-  - search_api_solr_multilingual:search_api_solr_multilingual
   - search_api_spellcheck:search_api_spellcheck
   - drupal:system
   - drupal:taxonomy
