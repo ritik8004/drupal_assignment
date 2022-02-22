@@ -31,7 +31,8 @@
 @font-face {
   font-family: "Tajawal-Bold";
   src:
-    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tajawal-Bold.ttf");
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -40,7 +41,8 @@
 @font-face {
   font-family: "Tajawal-Regular";
   src:
-  url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tajawal-Regular.ttf");
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

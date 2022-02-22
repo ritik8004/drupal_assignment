@@ -34,8 +34,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 @font-face {
   font-family: "Tajawal-Bold";
   src:
-    local("Tajawal Bold"),
-    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.ttf");
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -44,8 +44,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 @font-face {
   font-family: "Tajawal-Regular";
   src:
-    local("Tajawal"),
-    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.ttf");
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
