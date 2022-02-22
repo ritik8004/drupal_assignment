@@ -32,22 +32,20 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 }
 
 @font-face {
-  font-family: "Tahoma-Bold";
+  font-family: "Tajawal-Bold";
   src:
-    local("Tahoma Bold"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Tahoma";
+  font-family: "Tajawal-Regular";
   src:
-    local("Tahoma"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

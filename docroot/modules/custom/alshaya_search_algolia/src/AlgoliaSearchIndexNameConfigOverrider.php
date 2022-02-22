@@ -38,7 +38,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
 
     // Do not apply any overrides till the site is completely installed.
     if ($this->state->get('alshaya_master_post_drupal_install') !== 'done') {
-      return;
+      return $overrides;
     }
 
     if (!empty($overrides)) {
