@@ -209,7 +209,7 @@ function getChildSkuFromAttribute(sku, attribute, option_id) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
 
   if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
-    Drupal.alshayaLogger('debug', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
+    Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
       '@attribute': attribute,
       '@option_id': option_id,
       '@sku': sku
