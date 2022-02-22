@@ -8,6 +8,9 @@ export default class EgiftCardsListStepOne extends React.Component {
   constructor(props) {
     super(props);
 
+    // Set ref for openAmount field.
+    this.ref = React.createRef();
+
     this.state = {
       items: props.items,
       selectedItem: props.items[0],
@@ -42,6 +45,11 @@ export default class EgiftCardsListStepOne extends React.Component {
       for (let i = 0; i < amountElements.length; i++) {
         amountElements[i].classList.remove('active');
       }
+    }
+
+    // Remove readonly from open amount field.
+    if (this.ref.current !== null) {
+      this.ref.current.removeAttribute('readOnly');
     }
 
     // Get all egift card items.
@@ -79,6 +87,7 @@ export default class EgiftCardsListStepOne extends React.Component {
               selected={selectedItem}
               handleAmountSelect={handleAmountSelect}
               myAccountLabel={false}
+              field={this.ref}
             />
             <input type="hidden" name="egift-sku" value={selectedItem.sku} />
           </div>

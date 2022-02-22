@@ -112,12 +112,12 @@ export default class EgiftCardOpenAmountField extends React.Component {
       });
 
       // Lock open amount input field.
-      element.disabled = true;
+      element.readOnly = true;
     }
   }
 
   render() {
-    const { selected } = this.props;
+    const { selected, field } = this.props;
     const { openAmountMessage, actionDisable, openAmountInputDisabled } = this.state;
 
     // Get all egift card attributes.
@@ -137,6 +137,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
       <div className="egift-open-amount-wrapper">
         <div className="egift-input-textfield-item">
           <input
+            ref={field}
             id="open-amount"
             className="egift-open-amount-field"
             name="egift-open-amount"
@@ -146,7 +147,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
             onFocus={() => this.handleErrorMessage()}
             onKeyPress={this.handleKeypress}
             onChange={this.handleChange}
-            disabled={openAmountInputDisabled}
+            readOnly={openAmountInputDisabled}
             onBlur={(e) => this.handleEvent(e)}
           />
           <label>{Drupal.t('Enter amount', {}, { context: 'egift' })}</label>

@@ -1,0 +1,9 @@
+.product-drawer-content-wrapper {
+  .config-form-addtobag-button {
+    &.add-to-bag-loader {
+      &.tick {
+        color: $plp-quick-view-product-text;
+      }
+    }
+  }
+}
