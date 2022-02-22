@@ -29,20 +29,20 @@
 }
 
 @font-face {
-  font-family: "Tajawal-Bold";
+  font-family: "Tahoma-Bold";
   src:
-    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff") format("woff");
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tahoma-Bold.woff2") format("woff2"),
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tahoma-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Tajawal-Regular";
+  font-family: "Tahoma";
   src:
-    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff") format("woff");
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tahoma.woff2") format("woff2"),
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tahoma.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
