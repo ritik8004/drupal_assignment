@@ -53,6 +53,12 @@
   .egift-topup-card-number {
     margin-bottom: 2.1875rem;
     margin-top: 0.625rem;
+
+    input.focus {
+      & + .error {
+        position: absolute;
+      }
+    }
   }
 
   .egift-input-textfield-wrapper {
