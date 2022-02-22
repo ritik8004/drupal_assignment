@@ -269,14 +269,15 @@ exports.render = function render(
       };
 
       // Express delivery.
-      drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
-        if (option.status === 1 && entity[option.id] === 1) {
-          deliveryInfo.expressDelivery.push(option);
-        }
+     drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
+        option.class = (option.status && Drupal.hasValue(entity[option.id]))
+          ? 'active'
+          : 'in-active';
+        deliveryInfo.expressDelivery.push(option);
       });
 
       // Same day delivery.
-      if (entity.same_day_delivery === 1) {
+      if (Drupal.hasValue(entity.same_day_delivery)) {
         deliveryInfo.sameDayDelivery = drupalSettings.alshayaRcs.pdp.sameDayDelivery;
       }
 
