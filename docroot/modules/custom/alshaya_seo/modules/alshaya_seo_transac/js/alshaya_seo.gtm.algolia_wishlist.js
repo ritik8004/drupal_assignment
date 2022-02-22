@@ -3,8 +3,7 @@
  * JS code to integrate wishlist with GTM for Algolia.
  */
 
-(function ($, Drupal, dataLayer, debounce, drupalSettings) {
-
+(function ($, Drupal, debounce, drupalSettings) {
   Drupal.behaviors.algoliaWishlist = {
     attach: function (context, settings) {
       // Add product impression event with wishlist listing page.
@@ -25,4 +24,4 @@
       }, 500));
     }
   };
-})(jQuery, Drupal, dataLayer, Drupal.debounce, drupalSettings);
+})(jQuery, Drupal, Drupal.debounce, drupalSettings);

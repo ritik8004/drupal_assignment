@@ -73,7 +73,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       );
     }
 
-    // Add GTM events for Wishlist.
+    // Add GTM library for My Wishlist pages to track productImpression.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_wishlist')) {
       $route_match = \Drupal::routeMatch();
       if ($route_match->getRouteName() == 'alshaya_wishlist.users_wishlist'

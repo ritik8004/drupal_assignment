@@ -1240,7 +1240,7 @@
       productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
     }
     else if (eventType === 'wishlist-results-updated') {
-      // Using concat instead of assignment since plp-results-updated event gets
+      // Using concat instead of assignment since wishlist-results-updated event gets
       // triggered both on page load and clicking on load more button.
       productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
       if (productImpressionsTimer === null ) {
