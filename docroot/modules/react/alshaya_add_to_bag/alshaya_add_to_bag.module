@@ -41,11 +41,11 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   $add_to_bag_altered_feature_status = &drupal_static('add_to_bag_altered_feature_status', $add_to_bag_feature_status);
   \Drupal::moduleHandler()->alter('alshaya_add_to_bag_feature_status', $add_to_bag_altered_feature_status);
 
+  $page['#attached']['drupalSettings']['add_to_bag']['gtm_product_push'] = FALSE;
   if (!$add_to_bag_altered_feature_status) {
     return;
   }
 
-  $page['#attached']['drupalSettings']['add_to_bag']['gtm_product_push'] = FALSE;
   if (_alshaya_seo_process_gtm()) {
     $page['#attached']['drupalSettings']['add_to_bag']['gtm_product_push'] = TRUE;
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
