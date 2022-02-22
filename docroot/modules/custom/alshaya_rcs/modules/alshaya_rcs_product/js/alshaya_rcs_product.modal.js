@@ -69,7 +69,7 @@
             rcsPhApplyDrupalJs(modalContext);
           },
           function () {
-            console.log('Could not fetch data!');
+            Drupal.alshayaLogger('error', 'Could not fetch data for product recommendation!');
           });
 
         return false;
