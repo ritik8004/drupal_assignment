@@ -266,14 +266,14 @@ exports.render = function render(
 
       // Express delivery.
      drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
-        option.class = (option.status && Drupal.hasValue(entity[option.id]) && entity[option.id])
+        option.class = (option.status && Drupal.hasValue(entity[option.id]))
           ? 'active'
           : 'in-active';
         deliveryInfo.expressDelivery.push(option);
       });
 
       // Same day delivery.
-      if (Drupal.hasValue(entity.same_day_delivery) && entity.same_day_delivery) {
+      if (Drupal.hasValue(entity.same_day_delivery)) {
         deliveryInfo.sameDayDelivery = drupalSettings.alshayaRcs.pdp.sameDayDelivery;
       }
 
