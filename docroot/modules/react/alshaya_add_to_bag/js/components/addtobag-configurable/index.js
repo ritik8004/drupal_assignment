@@ -4,7 +4,7 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import { isProductBuyable } from '../../../../js/utilities/display';
 import NotBuyableButton from '../buttons/not-buyable';
 import ConfigurableProductDrawer from '../configurable-drawer';
-import { addProductInfoInStorage, triggerCartTextNotification } from '../../utilities/addtobag';
+import { isGtmProductPushEnabled, addProductInfoInStorage, triggerCartTextNotification } from '../../utilities/addtobag';
 import getStringMessage from '../../../../js/utilities/strings';
 
 export default class AddToBagConfigurable extends React.Component {
@@ -81,7 +81,9 @@ export default class AddToBagConfigurable extends React.Component {
 
     // Trigger Product Details View GTM push.
     // Sending parameter 'yes' for quick view.
-    Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'), document.querySelector('body').getAttribute('gtm-list-name'), 'yes');
+    if (isGtmProductPushEnabled()) {
+      Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'), document.querySelector('body').getAttribute('gtm-list-name'), 'yes');
+    }
 
     this.setState({
       drawerStatus: nextStatus,
