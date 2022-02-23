@@ -1,0 +1,19 @@
+.configurable-product-form-wrapper {
+  .gallery-wrapper {
+    .slick-slider {
+      .slick-arrow {
+        bottom: -0.75rem;
+      }
+    }
+
+    .slick-dots {
+      li {
+        button {
+          &::before {
+            line-height: 0.5;
+          }
+        }
+      }
+    }
+  }
+}
