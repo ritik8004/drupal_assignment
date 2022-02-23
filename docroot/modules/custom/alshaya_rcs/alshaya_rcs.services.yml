@@ -8,3 +8,8 @@ services:
     class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexNameConfigOverrider
     tags:
       - { name: config.factory.override, priority: -1 }
+
+  alshaya_rcs.algolia_index_type_override:
+    class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexCrudStatusConfigOverrider
+    tags:
+      - { name: config.factory.override, priority: -1 }
