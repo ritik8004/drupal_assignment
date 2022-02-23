@@ -9,19 +9,9 @@
       }
 
       html[lang="ar"] & {
-        .close {
-          left: -0.7rem;
-        }
-
-        @include breakpoint($only-mobile) {
+        @include breakpoint($tablet) {
           .close {
-            left: 0;
-          }
-
-          @include breakpoint($tablet) {
-            .close {
-              left: 0;
-            }
+            left: -0.7rem;
           }
         }
       }
