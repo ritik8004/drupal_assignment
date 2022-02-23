@@ -600,3 +600,74 @@ export const removeDiffFromWishlist = (productsObj) => {
     });
   }
 };
+
+/**
+ *
+ * @param {object} productData
+ *  An object of product's data attributes.
+ * @param {string} action
+ *  Action context, can be add/remove (Default is add).
+ */
+export const pushWishlistSeoGtmData = (productData, action = 'add') => {
+  if (productData.element === null) {
+    logger.warning('Error in pushing data to GTM. productData: @productData.', {
+      '@productData': JSON.stringify(productData),
+    });
+    return;
+  }
+
+  // Prepare and push product's variables to GTM using dataLayer.
+  if (typeof Drupal.alshaya_seo_gtm_get_product_values !== 'undefined'
+    && typeof Drupal.alshayaSeoGtmPushAddToWishlist !== 'undefined') {
+    // Check the context, if cart page, prepare product data.
+    if (typeof productData.context !== 'undefined'
+      && typeof productData.variant !== 'undefined'
+      && productData.context === 'cart') {
+      // For the cart page get product info from storage.
+      const key = `product:${drupalSettings.path.currentLanguage}:${productData.variant}`;
+      const productInfo = Drupal.getItemFromLocalStorage(key);
+      if (productInfo !== null
+        && typeof Drupal.alshayaSeoSpc.gtmProduct !== 'undefined') {
+        const product = Drupal.alshayaSeoSpc.gtmProduct(productInfo, 1);
+        // For the cart page we only perform add to wishlist action.
+        Drupal.alshayaSeoGtmPushAddToWishlist(product);
+      }
+      return;
+    }
+
+    // For the PLP, PDP and Modal contexts.
+    // Get the seo GTM product values.
+    let gtmProduct = productData.element.closest('[gtm-type="gtm-product-link"]');
+    // The product drawer is coming in page end in DOM,
+    // so element.closest is not right selector when quick view is open.
+    if (gtmProduct === null) {
+      gtmProduct = document.querySelector(`article[data-sku="${productData.element.getAttribute('data-sku')}"]`);
+    }
+    const product = Drupal.alshaya_seo_gtm_get_product_values(
+      gtmProduct,
+    );
+
+    // Set the product quantity.
+    product.quantity = 1;
+
+    // Set product variant to the selected variant.
+    if (product.dimension2 !== 'simple' && typeof productData.sku !== 'undefined') {
+      product.variant = productData.sku;
+    } else {
+      product.variant = product.id;
+    }
+
+    // Check if the action and call the relevant GTM functions.
+    switch (action) {
+      case 'remove': {
+        // Push removeFromWishlist event to datalayer.
+        Drupal.alshayaSeoGtmPushRemoveFromWishlist(product);
+        break;
+      }
+
+      default:
+        // Push addToWishlist event to datalayer as detaul action.
+        Drupal.alshayaSeoGtmPushAddToWishlist(product);
+    }
+  }
+};

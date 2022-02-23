@@ -29,6 +29,14 @@ gtm_algolia_plp:
     - alshaya_seo_transac/gtm
     - core/drupal.debounce
 
+gtm_algolia_wishlist:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.algolia_wishlist.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal.debounce
+
 checkout_login:
   version: 1.x
   js:

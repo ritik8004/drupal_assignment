@@ -22,4 +22,10 @@
     }
   };
 
+  // Trigger events when Algolia finishes loading wishlist results.
+  Drupal.algoliaReactWishlist = Drupal.algoliaReactWishlist || {};
+  Drupal.algoliaReactWishlist.triggerResultsUpdatedEvent = function (results) {
+    $('#my-wishlist').trigger('wishlist-results-updated', [results]);
+  };
+
 })(jQuery, Drupal);
