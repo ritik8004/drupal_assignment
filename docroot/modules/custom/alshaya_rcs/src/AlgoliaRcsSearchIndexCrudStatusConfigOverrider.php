@@ -36,7 +36,7 @@ class AlgoliaRcsSearchIndexCrudStatusConfigOverrider implements ConfigFactoryOve
    * {@inheritdoc}
    */
   public function getCacheSuffix() {
-    return 'AlgoliaIndexNameConfigOverrider';
+    return 'AlgoliaRcsSearchIndexCrudStatusConfigOverrider';
   }
 
   /**
@@ -50,9 +50,7 @@ class AlgoliaRcsSearchIndexCrudStatusConfigOverrider implements ConfigFactoryOve
    * {@inheritdoc}
    */
   public function getCacheableMetadata($name) {
-    $metadata = new CacheableMetadata();
-    $metadata->setCacheContexts(['languages:language_interface']);
-    return $metadata;
+    return new CacheableMetadata();
   }
 
 }
