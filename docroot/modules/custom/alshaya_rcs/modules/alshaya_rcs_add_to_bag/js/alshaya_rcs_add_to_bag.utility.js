@@ -77,8 +77,8 @@
         cart_image: variantData.media_cart,
         media: {images: variantData.media},
         product_labels: labels,
-        original_price: prices.price,
-        final_price: prices.finalPrice,
+        original_price: prices.price.toString(),
+        final_price: prices.finalPrice.toString(),
         discount_percentage: prices.percent_off,
         max_sale_qty: variantData.stock_data.max_sale_qty,
         stock: {
