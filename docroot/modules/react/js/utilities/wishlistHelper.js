@@ -190,6 +190,15 @@ export const addWishListInfoInStorage = (wishListData, strgKey = null) => {
     ? getWishlistInfoStorageExpirationForGuest()
     : getWishlistInfoStorageExpirationForLoggedIn();
 
+  // Check for the empty object and remove item from storage.
+  if (typeof wishListData === 'object'
+    && Object.keys(wishListData).length === 0) {
+    Drupal.removeItemFromLocalStorage(
+      hasValue(strgKey) ? strgKey : getWishListStorageKey(),
+    );
+    return;
+  }
+
   // Store data to local storage.
   Drupal.addItemInLocalStorage(
     hasValue(strgKey) ? strgKey : getWishListStorageKey(),
