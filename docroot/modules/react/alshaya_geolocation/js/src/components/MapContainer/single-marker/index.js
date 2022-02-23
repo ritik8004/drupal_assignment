@@ -36,5 +36,5 @@ export class SingleMarker extends React.Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyBL9faHw5s_vO1sUalcbQv05dzce_71fUY',
+  apiKey: drupalSettings.alshaya_geolocation.api_key,
 })(SingleMarker);

@@ -48,12 +48,12 @@ export class ListItem extends React.Component {
               <div className="hours--wrapper selector--hours">
                 <div>
                   <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
-                    Opening Hours
+                    {Drupal.t('Opening Hours')}
                   </div>
                   <div className="open--hours">
                     {specificPlace.store_hours.map((item) => (
                       <div key={item.code}>
-                        <span className="key-value-key">{item.label}</span>
+                        <span className="key-value-key">{Drupal.t(`${item.label}`)}</span>
                         <span className="key-value-value">{item.value}</span>
                       </div>
                     ))}
@@ -61,7 +61,7 @@ export class ListItem extends React.Component {
                 </div>
               </div>
               <div className="view-on--map">
-                <a onClick={() => this.getDirection(specificPlace)}>Get directions</a>
+                <a onClick={() => this.getDirection(specificPlace)}>{Drupal.t('Get directions')}</a>
               </div>
               <div className="get--directions">
                 <div>
@@ -69,10 +69,10 @@ export class ListItem extends React.Component {
                     className="device__desktop"
                     onClick={() => this.getDirection(specificPlace)}
                   >
-                    Get directions
+                    {Drupal.t('Get directions')}
                   </a>
                   <a className="device__tablet" onClick={() => this.getDirection(specificPlace)}>
-                    Get directions
+                    {Drupal.t('Get directions')}
                   </a>
                 </div>
               </div>

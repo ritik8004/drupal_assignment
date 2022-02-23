@@ -16,3 +16,15 @@ function alshaya_geolocation_geolocation_google_maps_parameters() {
     'language' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
   ];
 }
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_geolocation_preprocess_page(&$variables) {
+  $config = \Drupal::config('geolocation.settings');
+  $api_key = $config->get('google_map_api_key');
+  $regional_config = \Drupal::config('system.date');
+  $regional = $regional_config->get('country.default');
+  $variables['#attached']['drupalSettings']['alshaya_geolocation']['api_key'] = $api_key;
+  $variables['#attached']['drupalSettings']['alshaya_geolocation']['regional'] = $regional;
+}

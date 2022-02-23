@@ -17,16 +17,19 @@ export default class AutocompleteSearch extends React.Component {
 
   render() {
     const { searchStores } = this.props;
+    const apiKey = drupalSettings.alshaya_geolocation.api_key;
+    const { regional } = drupalSettings.alshaya_geolocation;
     return (
       <>
         <Autocomplete
-          apiKey="AIzaSyBL9faHw5s_vO1sUalcbQv05dzce_71fUY"
+          apiKey={apiKey}
           onPlaceSelected={(place) => {
             searchStores(place);
           }}
+          placeholder={Drupal.t('Enter a location')}
           options={{
             types: ['(regions)'],
-            componentRestrictions: { country: 'kw' },
+            componentRestrictions: { country: regional },
           }}
         />
       </>

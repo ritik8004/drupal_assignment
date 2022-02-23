@@ -27,17 +27,17 @@ export class InfoPopUp extends React.Component {
         <div className="scroll-fix">
           <div className="location-content">
             <div className="views-field views-field-title">
-              <span className="field-content">{selectedPlace.name}</span>
+              <span className="field-content">{Drupal.t(`${selectedPlace.name}`)}</span>
             </div>
             <div className="views-field views-field-field-store-address">
               <div className="field-content">
                 {selectedPlace.address.map((item) => (
                   <div key={item.code}>
                     <div className="address--line1">
-                      {item.code === 'address_building_segment' ? item.value : null}
+                      {item.code === 'address_building_segment' ? <span>{Drupal.t(`${item.value}`)}</span> : null}
                     </div>
                     <div className="address--line2">
-                      {item.code === 'street' ? item.value : null}
+                      {item.code === 'street' ? <span>{Drupal.t(`${item.value}`)}</span> : null}
                     </div>
                   </div>
                 ))}
@@ -48,13 +48,13 @@ export class InfoPopUp extends React.Component {
                 <div className="hours--wrapper selector--hours">
                   <div>
                     <div className={open ? 'hours--label open' : 'hours--label open'} onClick={this.toggleOpenClass}>
-                      Opening Hours
+                      {Drupal.t('Opening Hours')}
                     </div>
                     <div className="open--hours">
                       {selectedPlace.openHours.map((item) => (
                         <div key={item.code}>
                           <div>
-                            <span className="key-value-key">{item.label}</span>
+                            <span className="key-value-key">{Drupal.t(`${item.label}`)}</span>
                             <span className="key-value-value">{item.value}</span>
                           </div>
                         </div>
@@ -68,10 +68,10 @@ export class InfoPopUp extends React.Component {
                       className="device__desktop"
                       onClick={(store) => this.getDirection(store)}
                     >
-                      Get directions
+                      {Drupal.t('Get directions')}
                     </a>
                     <a className="device__tablet" onClick={(store) => this.getDirection(store)}>
-                      Get directions
+                      {Drupal.t('Get directions')}
                     </a>
                   </div>
                 </div>

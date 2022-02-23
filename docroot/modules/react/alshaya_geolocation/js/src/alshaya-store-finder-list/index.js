@@ -1,24 +1,22 @@
 import React from 'react';
+import {
+  Map, Marker, InfoWindow, GoogleApiWrapper,
+} from 'google-maps-react';
 import AutocompleteSearch from '../components/autocomplete-search';
-// eslint-disable-next-line import/no-named-as-default,import/no-cycle
-import SingleMarker from '../components/MapContainer/single-marker';
-// eslint-disable-next-line import/no-named-as-default
-import MultipeMarker from '../components/MapContainer/multiple-marker';
-// eslint-disable-next-line import/no-named-as-default
-import ListItem from '../components/ListItem';
+import { InfoPopUp } from '../components/MapContainer/InfoPopup';
 
-export class StoreFinder extends React.Component {
+export class StoreFinderList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       stores: [],
       count: 1,
-      showSpecificPlace: false,
-      showListingView: true,
-      showMapView: false,
-      specificPlace: {},
+      activeMarker: {},
+      selectedPlace: {},
+      showingInfoWindow: false,
       center: {},
       zoom: 10,
+      open: false,
     };
   }
 
@@ -1393,17 +1391,37 @@ export class StoreFinder extends React.Component {
       },
       total_count: 14,
     };
-    const sorter1 = (a, b) => (a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1);
-    stores.items.sort(sorter1);
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const currentLocation = { lat: +params.latitude, lng: +params.longitude };
+    // eslint-disable-next-line array-callback-return,consistent-return
+    const nearbyStores = stores.items.filter((store) => {
+      const otherLocation = { lat: +store.latitude, lng: +store.longitude };
+      const distance = this.getDistanceBetween(currentLocation, otherLocation);
+      if (distance < 5) {
+        return store;
+      }
+    });
+    const sorter = (a, b) => (a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1);
+    nearbyStores.sort(sorter);
     const prevState = this.state;
     this.setState(
       {
         ...prevState,
-        stores: stores.items,
-        count: stores.total_count,
-        center: { lat: stores.items[0].latitude, lng: stores.items[0].longitude },
+        stores: nearbyStores,
+        count: nearbyStores.length,
+        center: { lat: +params.latitude, lng: +params.longitude },
       },
     );
+  }
+
+  onMarkerClick = (props, marker) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      activeMarker: marker,
+      selectedPlace: props,
+      showingInfoWindow: true,
+    }));
   }
 
   showSpecificPlace = (id) => {
@@ -1418,47 +1436,33 @@ export class StoreFinder extends React.Component {
       specificPlace: specificPlace[0],
       showingInfoWindow: false,
       activeMarker: null,
+      zoom: 15,
+      center: { lat: specificPlace[0].latitude, lng: specificPlace[0].longitude },
     });
   }
 
-  hideSpecificPlace = () => {
-    const btn = document.querySelector('.gm-ui-hover-effect');
-    if (btn) {
-      btn.click();
+  onInfoWindowClose = () => this.setState({
+    activeMarker: null,
+    showingInfoWindow: false,
+  });
+
+  onMapClicked = () => {
+    const { showingInfoWindow } = this.state;
+    if (showingInfoWindow) {
+      this.setState({
+        activeMarker: null,
+        showingInfoWindow: false,
+      });
     }
-    this.setState({
-      showSpecificPlace: false,
-      specificPlace: {},
-      showingInfoWindow: false,
-      activeMarker: null,
-    });
-  }
-
-  showListingView = () => {
-    window.location.href = '/store-finder/';
-  }
-
-  showMapView = () => {
-    this.setState({
-      showListingView: false,
-      showMapView: true,
-    });
-  }
+  };
 
   searchStores = (place) => {
     const currentLocation = JSON.parse(JSON.stringify(place.geometry.location));
     const { stores } = this.state;
-    // eslint-disable-next-line array-callback-return,consistent-return
-    const nearbyStores = stores.filter((store) => {
-      const otherLocation = { lat: +store.latitude, lng: +store.longitude };
-      const distance = this.getDistanceBetween(currentLocation, otherLocation);
-      if (distance < 5) {
-        return store;
-      }
-    });
+    const nearbyStores = this.nearByStores(stores, currentLocation);
     const prevState = this.state;
     this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-    window.location.href = `/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+    window.location.href = `store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
   }
 
   findNearMe = () => {
@@ -1471,6 +1475,15 @@ export class StoreFinder extends React.Component {
   success = (position) => {
     const currentLocation = { lat: position.coords.longitude, lng: position.coords.latitude };
     const { stores } = this.state;
+    const nearbyStores = this.nearByStores(stores, currentLocation);
+    if (nearbyStores.length > 0) {
+      const prevState = this.state;
+      this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
+      window.location.href = `store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+    }
+  }
+
+  nearByStores = (stores, currentLocation) => {
     // eslint-disable-next-line array-callback-return,consistent-return
     const nearbyStores = stores.filter((store) => {
       const otherLocation = { lat: +store.latitude, lng: +store.longitude };
@@ -1479,14 +1492,10 @@ export class StoreFinder extends React.Component {
         return store;
       }
     });
-    if (nearbyStores.length > 0) {
-      const prevState = this.state;
-      this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-      window.location.href = `/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
-    }
+    return nearbyStores;
   }
 
-  fail = () => 'Could not obtain location.';
+  fail = () => 'Could not obtain location.'
 
   getDistanceBetween = (location1, location2) => {
     // The math module contains a function
@@ -1513,74 +1522,142 @@ export class StoreFinder extends React.Component {
   }
 
   showAllStores = () => {
-    window.location.href = '/store-finder/';
+    window.location.href = 'store-finder/';
+  }
+
+  toggleOpenClass = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      open: !prevState.open,
+    }));
+  }
+
+  getDirection = (store) => {
+    window.open(`https://www.google.com/maps/dir/Current+Location/${store.latitude},${store.longitude}`, '_blank');
   }
 
   render() {
     const {
       stores,
-      showSpecificPlace,
-      specificPlace,
+      showingInfoWindow,
+      activeMarker,
+      selectedPlace,
       center,
-      showListingView,
-      showMapView,
+      open,
       zoom,
     } = this.state;
-
     return (
       <>
         <div className="l-container">
-          {showSpecificPlace
-            ? (
-              <div>
-                <div onClick={this.findNearMe}>Near Me</div>
-                <AutocompleteSearch searchStores={(place) => this.searchStores(place)} />
-                <div onClick={this.showAllStores}>List all H&M stores</div>
-              </div>
-            ) : (
-              <div>
-                <div onClick={this.findNearMe}>Near Me</div>
-                <AutocompleteSearch searchStores={(place) => this.searchStores(place)} />
-                <div onClick={this.showListingView}>Show Listing View</div>
-                <div onClick={this.showMapView}>Show Map View</div>
-              </div>
-            ) }
+          <div onClick={this.findNearMe}>{Drupal.t('Near me')}</div>
+          <AutocompleteSearch searchStores={(place) => this.searchStores(place)} />
+          <div onClick={this.showAllStores}>{Drupal.t('List all the stores')}</div>
         </div>
-        {showSpecificPlace
-          ? (
-            <div className="individual--store">
-              <div className="view-content">
-                <div className="list-view-locator">
-                  <div className="back-link">
-                    <a href="#" onClick={this.hideSpecificPlace}>Back</a>
+        {stores.length > 0
+        && (
+        <div className="l-container">
+          <div>
+            <div>{Drupal.t('select a store to see details')}</div>
+            {stores.map((store) => (
+              <div key={store.id}>
+                <div>
+                  <a className="row-title" onClick={() => this.showSpecificPlace(store.id)}>
+                    <span>{Drupal.t(`${store.store_name}`)}</span>
+                  </a>
+                  <div className="views-row">
+                    <div className="views-field-field-store-address">
+                      <div className="field-content">
+                        <div className="address--line2">
+                          {store.address.map((item) => (
+                            <div key={item.code}>
+                              {item.code === 'address_building_segment' ? <span>{Drupal.t(`${item.label}`)}</span> : null}
+                              {item.code === 'street' ? <span>{item.value}</span> : null}
+                            </div>
+                          ))}
+                        </div>
+                        <div className="field field--name-field-store-phone field--type-string field--label-hidden field__item">
+                          {store.store_phone}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="views-field-field-store-open-hours">
+                      <div className="field-content">
+                        <div className="hours--wrapper selector--hours">
+                          <div>
+                            <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
+                              {Drupal.t('Opening Hours')}
+                            </div>
+                            <div className="open--hours">
+                              {store.store_hours.map((item) => (
+                                <div key={item.code}>
+                                  <span className="key-value-key">{Drupal.t(`${item.label}`)}</span>
+                                  <span className="key-value-value">{item.value}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="view-on--map">
+                          <a onClick={() => this.getDirection(store)}>{Drupal.t('Get directions')}</a>
+                        </div>
+                        <div className="get--directions">
+                          <div>
+                            <a
+                              className="device__desktop"
+                              onClick={() => this.getDirection(store)}
+                            >
+                              {Drupal.t('Get directions')}
+                            </a>
+                            <a className="device__tablet" onClick={() => this.getDirection(store)}>
+                              {Drupal.t('Get directions')}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <ListItem specificPlace={specificPlace} />
                 </div>
               </div>
-              <SingleMarker store={specificPlace} center={center} />
-            </div>
-          )
-          : (
-            <div className="l-container">
-              {showListingView
-              && (
-                <div>
-                  <div>select a store to see details</div>
-                  {stores.map((store) => (
-                    <div key={store.id}>
-                      <a onClick={() => this.showSpecificPlace(store.id)}>{store.store_name}</a>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {showMapView
-              && (
-                <MultipeMarker center={center} zoom={zoom} stores={stores} />
-              )}
-            </div>
-          )}
+            ))}
+          </div>
+          <Map
+            /* eslint-disable-next-line react/destructuring-assignment */
+            google={this.props.google}
+            style={{ width: '100%', height: '100%', position: 'relative' }}
+            className="map"
+            initialCenter={center}
+            center={center}
+            zoom={zoom}
+          >
+            {stores.map((store, index) => (
+              <Marker
+                onClick={this.onMarkerClick}
+                label={(index + 1).toString()}
+                z-index={(index + 1).toString()}
+                key={store.id}
+                title={store.store_name}
+                name={store.store_name}
+                openHours={store.store_hours}
+                position={{ lat: store.latitude, lng: store.longitude }}
+                address={store.address}
+              />
+            ))}
+            {showingInfoWindow && (
+            <InfoWindow
+              marker={activeMarker}
+              onClose={this.onInfoWindowClose}
+              visible={showingInfoWindow}
+            >
+              <InfoPopUp selectedPlace={selectedPlace} />
+            </InfoWindow>
+            )}
+          </Map>
+        </div>
+        )}
       </>
     );
   }
 }
-export default StoreFinder;
+export default GoogleApiWrapper({
+  apiKey: drupalSettings.alshaya_geolocation.api_key,
+})(StoreFinderList);

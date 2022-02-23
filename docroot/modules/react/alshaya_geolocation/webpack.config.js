@@ -3,14 +3,15 @@ var buildPath = '/modules/react/alshaya_geolocation/dist/';
 
 var config = {
   entry: {
-    store_finder: './js/store-finder',
-    store_finder_list: './js/store-finder-list',
+    store_finder: './js/src/store-finder.js',
+    store_finder_list: './js/src/store-finder-list.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
     publicPath: buildPath,
-    chunkFilename: "[id].chunk.[chunkhash].js",
+    chunkFilename: '[id].chunk.[chunkhash].js',
+    jsonpFunction: 'jsonpAlsGl',
   },
   devServer: {
     contentBase: './',
