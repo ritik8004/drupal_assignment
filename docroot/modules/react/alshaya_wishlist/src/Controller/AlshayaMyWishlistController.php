@@ -13,6 +13,7 @@ use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig;
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 use Drupal\Core\Utility\Token;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * AlshayaMyWishlistController for wishlist page.
@@ -56,6 +57,13 @@ class AlshayaMyWishlistController extends ControllerBase {
   protected $tokenManager;
 
   /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
    * AlshayaMyWishlistController constructor.
    *
    * @param \Drupal\alshaya_wishlist\Helper\WishListHelper $wishlist_helper
@@ -68,19 +76,23 @@ class AlshayaMyWishlistController extends ControllerBase {
    *   Algolia React Config Helper.
    * @param \Drupal\Core\Utility\Token $token_manager
    *   Token manager.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   Current user object.
    */
   public function __construct(
     WishListHelper $wishlist_helper,
     ConfigFactoryInterface $config_factory,
     ModuleHandlerInterface $module_handler,
     AlshayaAlgoliaReactConfig $algolia_config_helper,
-    Token $token_manager
+    Token $token_manager,
+    AccountInterface $current_user
   ) {
     $this->wishListHelper = $wishlist_helper;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->algoliaConfigHelper = $algolia_config_helper;
     $this->tokenManager = $token_manager;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -92,7 +104,8 @@ class AlshayaMyWishlistController extends ControllerBase {
       $container->get('config.factory'),
       $container->get('module_handler'),
       $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
-      $container->get('token')
+      $container->get('token'),
+      $container->get('current_user'),
     );
   }
 
@@ -170,6 +183,18 @@ class AlshayaMyWishlistController extends ControllerBase {
    */
   public function checkAccess() {
     return AccessResult::allowedIf($this->wishListHelper->isWishListEnabled());
+  }
+
+  /**
+   * Helper method to check access for authenticate users.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   Return access result object.
+   */
+  public function checkAuthenticateUser() {
+    // Only logged-in users will be able to access my wishlist page if enabled.
+    return AccessResult::allowedIf($this->wishListHelper->isWishListEnabled()
+      && $this->currentUser->isAuthenticated());
   }
 
 }
