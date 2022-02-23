@@ -367,7 +367,8 @@ export default class CartItem extends React.Component {
                 <WishlistContainer
                   context="cart"
                   position="cart-item"
-                  sku={parentSKU || sku}
+                  skuCode={parentSKU || sku}
+                  sku={sku}
                   title={title}
                   options={attributeOptions}
                   format="text"
