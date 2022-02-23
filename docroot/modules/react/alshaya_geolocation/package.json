@@ -1,0 +1,14 @@
+{
+  "name": "alshaya_geolocation",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:dev": "../node_modules/.bin/webpack --mode=development",
+    "build": "../node_modules/.bin/webpack",
+    "watch": "../node_modules/.bin/webpack --watch"
+  },
+  "dependencies": {
+    "google-maps-react": "^2.0.6",
+    "react-google-autocomplete": "^2.6.1"
+  }
+}

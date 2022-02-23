@@ -89,7 +89,7 @@
     $("input[name='geolocation_geocoder_google_places_api_state']").val(stateValue);
 
     if (!$.isEmptyObject(coords)) {
-      // Show progress bar on store-finder page.
+      // Show progress bar on alshaya-store-finder page.
       if (!$('[data-drupal-selector="edit-list-view"]').hasClass('hidden')) {
         var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
         $('body').after(progress_element);

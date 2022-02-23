@@ -13,3 +13,17 @@ places-api.googleplacesapi:
   dependencies:
     - geolocation/geolocation.geocoder
     - alshaya_geolocation/places-api-autocomplete
+
+alshaya-store-finder:
+  version: 1.x
+  js:
+    dist/store_finder.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
+alshaya-store-finder-list:
+  version: 1.x
+  js:
+    dist/store_finder_list.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
