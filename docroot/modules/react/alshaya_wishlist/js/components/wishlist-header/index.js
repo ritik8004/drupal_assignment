@@ -103,6 +103,9 @@ export default class WishlistHeader extends React.Component {
           || (wishListData === null
           || (typeof wishListData === 'object'
           && Object.keys(wishListData).length === 0))) {
+          // First clean the existing data in storage.
+          addWishListInfoInStorage({});
+
           // Load wishlist information from the magento backend, if wishlist
           // data is empty in local storage for authenticate users. First check
           // if wishlist is available for the customer in backend.
