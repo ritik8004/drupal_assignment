@@ -24,4 +24,18 @@
       margin-top: 0;
     }
   }
+
+  .c-breadcrumb {
+    ol {
+      @include breakpoint($only-tablet) {
+        background: $breadcrumb_bg;
+      }
+    }
+  }
+
+  .c-department {
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+    }
+  }
 }

@@ -21,6 +21,7 @@ function alshaya_ve_non_transac_update_8004() {
     ],
     'alshaya_ve_non_transac',
     'optional',
+    AlshayaConfigManager::MODE_REPLACE
   );
 }
 
