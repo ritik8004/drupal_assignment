@@ -46,7 +46,7 @@
    *   The parent SKU value if exists.
    */
   window.commerceBackend.updateGallery = async function (product, layout, productGallery, sku, parentSku) {
-    const mainSku = typeof parentSku !== 'undefined' ? parentSku : sku;
+    const mainSku = parentSku || sku;
     const productData = window.commerceBackend.getProductData(mainSku, null, false);
     const viewMode = product.parents('.entity--type-node').attr('data-vmode');
 
