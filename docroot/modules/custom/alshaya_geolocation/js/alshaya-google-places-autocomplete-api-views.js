@@ -76,7 +76,7 @@
   };
 
   // Set the places details to lat and lng.
-  Drupal.alshayaClickCollectPlacesApi.storePlacesDetails = function (context, coords, field) {
+  Drupal.alshayaClickCollectPlacesApi.storePlacesDetails = function (coords, field) {
     var elementId = $(field).data('source-identifier');
     var lat = (typeof coords.lat !== 'undefined') ? coords.lat : '';
     var lng = (typeof coords.lng !== 'undefined') ? coords.lng : '';

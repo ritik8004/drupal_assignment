@@ -1,0 +1,3 @@
+.bv-checkbox-container input[type=checkbox]~label:before {
+	display: none;
+}

@@ -116,7 +116,7 @@
     if ((typeof e.detail.pageType !== 'undefined' && e.detail.pageType !== 'product')
       || typeof e.detail.result === 'undefined'
       || (typeof e.detail.placeholder !=='undefined'
-           &&  !(['product', 'product-recommendation', 'field_magazine_shop_the_story'].includes(e.detail.placeholder))
+           &&  !(['product_by_sku', 'product-recommendation', 'field_magazine_shop_the_story'].includes(e.detail.placeholder))
          )
       ) {
       return;

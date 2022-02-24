@@ -8,18 +8,38 @@ import {
   addProductToWishList,
   getWishlistLabel,
   getWishlistFromBackend,
+  pushWishlistSeoGtmData,
 } from '../../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export default class WishlistPopupBlock extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // Store reference to the main contiainer.
+    this.buttonContainerRef = React.createRef();
+  }
+
   addToWishlist = (addToWishlist) => {
     const {
-      sku, title, options, closeWishlistModal,
+      sku,
+      title,
+      options,
+      closeWishlistModal,
+      variant,
     } = this.props;
     // If user responds as yes, move item to wishlist and remove cart item.
     // Else close the popup and continue to remove cart item.
-    const productInfo = { sku, title, options };
+    const productInfo = {
+      sku,
+      variant,
+      context: 'cart',
+      title,
+      options,
+      element: this.buttonContainerRef.current,
+    };
+
     if (addToWishlist) {
       // Add product to the wishlist. For guest users it'll store in local
       // storage and for logged in user this will store in backend using API
@@ -27,6 +47,9 @@ export default class WishlistPopupBlock extends React.Component {
       addProductToWishList(productInfo).then((response) => {
         if (typeof response.data.status !== 'undefined'
           && response.data.status) {
+          // Push product values to GTM.
+          pushWishlistSeoGtmData(productInfo);
+
           // Prepare and dispatch an event when product added to the storage
           // so other components like wishlist header can listen and do the
           // needful.
@@ -106,6 +129,7 @@ export default class WishlistPopupBlock extends React.Component {
                 id="wishlist-yes"
                 type="button"
                 onClick={() => this.addToWishlist(true)}
+                ref={this.buttonContainerRef}
               >
                 {Drupal.t('Yes, move to @wishlist_label', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
               </button>

@@ -11,6 +11,7 @@ gtm:
     - alshaya_master/jquery_is_in_viewport
     - alshaya_master/local_storage_manager
     - alshaya_white_label/slider_banner
+    - datalayer/datapush
 
 gtm_algolia:
   version: 1.x
@@ -24,6 +25,14 @@ gtm_algolia_plp:
   version: 1.x
   js:
     js/alshaya_seo.gtm.algolia_plp.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal.debounce
+
+gtm_algolia_wishlist:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.algolia_wishlist.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
     - core/drupal.debounce

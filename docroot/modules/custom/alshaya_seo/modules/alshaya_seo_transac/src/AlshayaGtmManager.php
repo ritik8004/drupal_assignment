@@ -86,6 +86,8 @@ class AlshayaGtmManager {
     'user.page' => 'user page',
     'user.reset' => 'user reset page',
     'user.reset.form' => 'user reset page',
+    'alshaya_wishlist.users_wishlist' => 'wishlist page',
+    'alshaya_wishlist.user_account_wishlist' => 'wishlist page',
   ];
 
   /**
@@ -101,6 +103,8 @@ class AlshayaGtmManager {
     'acq_cart.cart' => 'CartPage',
     'alshaya_master.home' => 'HP-ProductCarrousel',
     'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',
+    'alshaya_wishlist.users_wishlist' => 'Wishlist',
+    'alshaya_wishlist.user_account_wishlist' => 'Wishlist',
   ];
 
   /**

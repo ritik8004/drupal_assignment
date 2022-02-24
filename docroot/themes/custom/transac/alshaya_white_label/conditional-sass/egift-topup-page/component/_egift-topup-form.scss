@@ -25,6 +25,7 @@
 
         input {
           border: none;
+          background: transparent;
 
           @include breakpoint($only-mobile) {
             -webkit-text-fill-color: $egift-black-text;
@@ -53,6 +54,12 @@
   .egift-topup-card-number {
     margin-bottom: 2.1875rem;
     margin-top: 0.625rem;
+
+    input.focus {
+      & + .error {
+        position: absolute;
+      }
+    }
   }
 
   .egift-input-textfield-wrapper {

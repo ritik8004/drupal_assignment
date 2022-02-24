@@ -77,7 +77,13 @@
       font-family: $dh-semibold;
       font-size: 0.875rem;
       margin-top: 0;
-      line-height: 0.75;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      line-height: 1;
+      max-height: 0.875rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     @include breakpoint($desktop) {

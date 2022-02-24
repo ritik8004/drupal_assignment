@@ -101,6 +101,17 @@ export const triggerUpdateCart = (requestData) => {
 };
 
 /**
+ * Helper function to check if GTM Product push condition is enabled.
+ */
+export const isGtmProductPushEnabled = () => {
+  if (Drupal.hasValue(drupalSettings.add_to_bag)) {
+    return drupalSettings.add_to_bag.gtm_product_push;
+  }
+
+  return false;
+};
+
+/**
  * Helper function to check if max sale quantity condition is enabled.
  */
 export const isMaxSaleQtyEnabled = () => {

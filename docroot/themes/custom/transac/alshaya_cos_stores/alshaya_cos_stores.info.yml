@@ -154,3 +154,38 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/country-switcher/country-switcher.ltr.css: css/conditional-sass/country-switcher/country-switcher.ltr.css
+
+  alshaya_white_label/egift-common:
+    css:
+      theme:
+        css/conditional-sass/egift-common/egift-common.ltr.css: css/conditional-sass/egift-common/egift-common.ltr.css
+
+  alshaya_white_label/egift-purchase-page:
+    css:
+      theme:
+        css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css: css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css
+
+  alshaya_white_label/egift-topup-page:
+    css:
+      theme:
+        css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css: css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css
+
+  alshaya_white_label/egift-card-checkout:
+    css:
+      theme:
+        css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css
+
+  alshaya_white_label/egift-landing-page:
+    css:
+      theme:
+        css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css: css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css
+
+  alshaya_white_label/egift-myaccount:
+    css:
+      theme:
+        css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css: css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css
+
+  alshaya_white_label/egift-card-checkout-confirmation:
+    css:
+      theme:
+        css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css
