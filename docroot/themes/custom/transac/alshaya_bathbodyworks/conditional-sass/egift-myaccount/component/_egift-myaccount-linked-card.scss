@@ -17,3 +17,8 @@
   }
 }
 
+.egift-my-account {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.3125rem;
+  }
+}
