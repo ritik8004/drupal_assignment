@@ -22,7 +22,7 @@ class NotificationMessage extends React.Component {
      && message !== null) {
       this.setState({ message });
     }
-  };
+  }
 
   render() {
     const { message } = this.state;
