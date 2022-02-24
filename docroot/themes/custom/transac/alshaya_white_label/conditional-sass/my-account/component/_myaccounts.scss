@@ -33,6 +33,10 @@
         color: $my_account_nav_hover;
         text-decoration: underline;
       }
+
+      &.my-account-egift-card {
+        text-transform: inherit;
+      }
     }
   }
 
