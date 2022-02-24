@@ -308,24 +308,20 @@ exports.render = function render(
         };
       }
 
-      const hdEnabled = isProductAvailableForHomeDelivery(entity);
-      if (hdEnabled) {
-        const skuSddEnabled = isProductAvailableForSameDayDelivery(entity);
-        const skuEdEnabled = isProductAvailableForExpressDelivery(entity);
-        if (drupalSettings.expressDelivery.enabled && (skuSddEnabled || skuEdEnabled)) {
-          // Express delivery options.
-          deliveryOptions.hd = {
-            type: 'express_delivery',
-            title: Drupal.t('Delivery Options'),
-            subtitle: Drupal.t('Explore the delivery options applicable to your area.'),
-          }
-        }
-        else {
-          // Standard delivery options.
-          deliveryOptions.hd = drupalSettings.alshaya_home_delivery;
-          deliveryOptions.hd.type = 'standard_delivery';
+      if (drupalSettings.expressDelivery.enabled) {
+        // Express delivery options.
+        deliveryOptions.hd = {
+          type: 'express_delivery',
+          title: Drupal.t('Delivery Options'),
+          subtitle: Drupal.t('Explore the delivery options applicable to your area.'),
         }
       }
+      else {
+        // Standard delivery options.
+        deliveryOptions.hd = drupalSettings.alshaya_home_delivery;
+        deliveryOptions.hd.type = 'standard_delivery';
+      }
+
       html += handlebarsRenderer.render('product.delivery_options', deliveryOptions);
       break;
 
