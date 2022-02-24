@@ -116,14 +116,20 @@ class AlshayaRcsProductHelper {
     $query->condition('nfd.status', NodeInterface::PUBLISHED);
     $query->condition('nfd.type', self::SOURCE_CONTENT_TYPE_ID);
 
+    $pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    if (!empty($pdp_layout)) {
+      // Ignore products with brand level pdp layout.
+      $query->condition('nfspl.field_select_pdp_layout_value', $pdp_layout, '!=');
+    }
+
     $nodes = $query->distinct()->execute()->fetchAll();
+
+    print_r($nodes);
 
     // Do not process if no nodes are found.
     if (empty($nodes)) {
       return;
     }
-
-    $config = $this->configFactory->get('rcs_placeholders.settings');
 
     // Migrate rcs content type.
     foreach ($nodes as $node) {
@@ -145,20 +151,19 @@ class AlshayaRcsProductHelper {
         // Get slug field value from old node alias.
         $slug = $this->aliasManager->getAliasByPath('/node/' . $node_data->id());
 
-        // Remove the path prefix from alias before setting as slug value.
-        $slug = ltrim($slug, '/' . $config->get('product.path_prefix'));
         $rcs_node->get('field_product_slug')->setValue($slug);
 
         // Save the new node object in rcs content type.
         $rcs_node->save();
 
         // Check if the translations exists for arabic language.
-        if ($node_data->hasTranslation($langcode)) {
+        $languages = $node_data->getTranslationLanguages(FALSE);
+        foreach ($languages as $language) {
           // Get node translation.
-          $node_translation_data = $node_data->getTranslation('ar');
+          $node_translation_data = $node_data->getTranslation($language->getId());
 
           // Add translation to the new node.
-          $rcs_node = $rcs_node->addTranslation('ar', ['title' => $node_translation_data->getTitle()]);
+          $rcs_node = $rcs_node->addTranslation($language->getId(), ['title' => $node_translation_data->getTitle()]);
           $rcs_node->save();
         }
       }
