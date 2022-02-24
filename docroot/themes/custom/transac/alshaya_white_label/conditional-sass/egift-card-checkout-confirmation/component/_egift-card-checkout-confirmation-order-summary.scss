@@ -24,6 +24,11 @@
           max-width: 10rem;
         }
 
+        @media print {
+          max-width: 7.5rem;
+          font-size: 0.6875rem;
+        }
+
         @include breakpoint($only-mobile) {
           -webkit-text-fill-color: $egift-checkout-card-number;
           opacity: 1;
