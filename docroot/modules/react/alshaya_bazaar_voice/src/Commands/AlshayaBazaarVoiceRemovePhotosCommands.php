@@ -110,7 +110,7 @@ class AlshayaBazaarVoiceRemovePhotosCommands extends DrushCommands {
     $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
     $alshaya_bazaar_voice->deletePhotos($photos);
 
-    $context['message'] = dt('Deleted items for @count out of @total.', [
+    $context['message'] = dt('[BV Photos] Deleted photos for @count out of @total.', [
       '@count' => $context['results']['count'],
       '@total' => $context['results']['total'],
     ]);
@@ -140,7 +140,7 @@ class AlshayaBazaarVoiceRemovePhotosCommands extends DrushCommands {
         ]);
       }
       else {
-        $logger->notice(t('[BV Photos] No photo to delete.'));
+        $logger->notice(t('[BV Photos] No photos to delete.'));
       }
     }
     else {
