@@ -263,7 +263,7 @@
     const hideMaxLimitMsg = drupalSettings.alshayaRcs.hide_max_qty_limit_message;
     let message = '';
 
-    if (Drupal.hasValue(maxSaleQty) && maxSaleQty > 0 && !hideMaxLimitMsg) {
+    if (Drupal.hasValue(maxSaleQty) && !hideMaxLimitMsg) {
         message = handlebarsRenderer.render('product.order_quantity_limit', {
         message: Drupal.t('Limited to @max_sale_qty per customer', {'@max_sale_qty': maxSaleQty}),
         limit_reached: false,
