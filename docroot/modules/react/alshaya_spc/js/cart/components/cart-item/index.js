@@ -377,7 +377,8 @@ export default class CartItem extends React.Component {
               {/* When user clicks on delete, pop shown asking if product added to wishlist. */}
               <ConditionalView condition={showWishlistPopup}>
                 <WishlistPopupBlock
-                  sku={parentSKU}
+                  sku={parentSKU || sku}
+                  variant={sku}
                   title={title}
                   itemImage={cartImage}
                   options={attributeOptions}
