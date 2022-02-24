@@ -34,7 +34,7 @@ module.exports = {
     axios: true,
     _: true,
   },
-  parser: '@babel/eslint-parser',
+  parser: "babel-eslint",
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
