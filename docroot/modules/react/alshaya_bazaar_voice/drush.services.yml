@@ -6,3 +6,9 @@ services:
       - '@alshaya_bazaar_voice.service'
     tags:
       - { name: drush.command }
+  alshaya_bazaar_voice.remove_photos_commands:
+    class: Drupal\alshaya_bazaar_voice\Commands\AlshayaBazaarVoiceRemovePhotosCommands
+    arguments:
+      - '@alshaya_bazaar_voice.service'
+    tags:
+      - { name: drush.command }

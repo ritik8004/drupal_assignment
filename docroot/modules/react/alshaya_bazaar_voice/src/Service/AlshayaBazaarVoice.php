@@ -7,6 +7,8 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\Core\File\Exception\FileException;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\node\NodeInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -16,6 +18,7 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\File\FileSystemInterface;
 
 /**
  * Provides integration with BazaarVoice.
@@ -95,6 +98,20 @@ class AlshayaBazaarVoice {
   protected $moduleHandler;
 
   /**
+   * File system object.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
+   * The logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected $logger;
+
+  /**
    * BazaarVoiceApiWrapper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -117,6 +134,10 @@ class AlshayaBazaarVoice {
    *   Request stack.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module Handler service object.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The filesystem service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger factory.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
@@ -127,7 +148,9 @@ class AlshayaBazaarVoice {
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_images_manager,
                               RequestStack $request_stack,
-                              ModuleHandlerInterface $moduleHandler) {
+                              ModuleHandlerInterface $moduleHandler,
+                              FileSystemInterface $file_system,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->connection = $connection;
@@ -138,6 +161,8 @@ class AlshayaBazaarVoice {
     $this->skuImagesManager = $sku_images_manager;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->moduleHandler = $moduleHandler;
+    $this->fileSystem = $file_system;
+    $this->logger = $logger_factory->get('alshaya_bazaar_voice');
   }
 
   /**
@@ -318,6 +343,35 @@ class AlshayaBazaarVoice {
     }
 
     return NULL;
+  }
+
+  /**
+   * Get list of photos stored for temporarily purpose.
+   *
+   * @return array
+   *   list of photos.
+   */
+  public function getUploadedPhotos() {
+    $directory_path = $this->fileSystem->realpath('public://review_photo_temp_upload');
+    $photos = glob($directory_path . '/*');
+
+    return $photos;
+  }
+
+  /**
+   * Delete photos stored in folder temporarily.
+   */
+  public function deletePhotos($photos) {
+    foreach ($photos as $photo) {
+      try {
+        if (is_file($photo)) {
+          $this->fileSystem->unlink($photo);
+        }
+      }
+      catch (FileException $e) {
+        $this->logger->error($e->getMessage());
+      }
+    }
   }
 
   /**
