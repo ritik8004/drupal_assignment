@@ -55,11 +55,12 @@ class AlshayaBazaarVoiceRemovePhotosCommands extends DrushCommands {
     $batch = [
       'finished' => [__CLASS__, 'batchFinish'],
       'title' => dt('Fetching list of photos'),
-      'init_message' => dt('Starting deleting photos...'),
+      'init_message' => dt('Starting to delete photos...'),
       'progress_message' => dt('Completed @current step of @total.'),
-      'error_message' => dt('encountered error while deleting photos.'),
+      'error_message' => dt('Encountered error while deleting photos.'),
     ];
 
+    // Fetch all photo urls from <review_photo_temp_upload> folder.
     $photos = $this->alshayaBazaarVoice->getUploadedPhotos();
 
     $batch['operations'][] = [[__CLASS__, 'batchStart'], [count($photos)]];
@@ -133,13 +134,13 @@ class AlshayaBazaarVoiceRemovePhotosCommands extends DrushCommands {
         $time_end = microtime(TRUE);
         $execution_time = ($time_end - $results['timestart']) / 60;
 
-        $logger->notice('Total @count items processed in time: @time.', [
+        $logger->notice('[BV Photos] Total @count photos deleted in time: @time.', [
           '@count' => $results['count'],
           '@time' => $execution_time,
         ]);
       }
       else {
-        $logger->notice(t('No item to process.'));
+        $logger->notice(t('[BV Photos] No photo to delete.'));
       }
     }
     else {
