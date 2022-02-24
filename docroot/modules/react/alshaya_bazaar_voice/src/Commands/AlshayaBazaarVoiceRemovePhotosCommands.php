@@ -145,7 +145,7 @@ class AlshayaBazaarVoiceRemovePhotosCommands extends DrushCommands {
     }
     else {
       $error_operation = reset($operations);
-      $logger->error('An error occurred while processing @operation with arguments : @args', [
+      $logger->error('[BV Photos] An error occurred while processing @operation with arguments : @args', [
         '@operation' => $error_operation[0],
         '@args' => print_r($error_operation[0], TRUE),
       ]);
