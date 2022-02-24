@@ -4,12 +4,20 @@
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --mode=development",
+    "preinstall": "npx npm-force-resolutions",
     "build": "webpack --mode=development",
     "watch": "webpack --watch --mode=development",
     "build:gulp": "gulp",
     "lint": "eslint",
     "lint-fix": "eslint --fix",
     "test": "jest"
+  },
+  "resolutions": {
+    "glob-parent": "^6.0.2",
+    "lodash": "^4.17.21",
+    "minimist": "^1.2.0",
+    "tar": "4.4.19",
+    "braces": "2.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
