@@ -8,7 +8,7 @@
 /**
  * Fix issue with solr field type.
  */
-function alshaya_ve_non_transac_post_update_8004() {
+function alshaya_post_update_8014() {
   // Apply entity update as it is not working through search api solr.
   $change_list = \Drupal::entityDefinitionUpdateManager()->getChangeList();
   if (isset($change_list['solr_field_type'])) {
