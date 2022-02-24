@@ -142,3 +142,11 @@
     }
   }
 }
+
+body[class*="-egift-card"] {
+  #block-page-title {
+    h1.c-page-title {
+      text-transform: inherit;
+    }
+  }
+}
