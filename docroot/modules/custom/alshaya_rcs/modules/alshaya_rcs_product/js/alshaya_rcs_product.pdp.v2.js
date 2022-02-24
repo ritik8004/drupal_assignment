@@ -1,4 +1,4 @@
-(function (jQuery){
+(function ($){
   /**
    * Global variable which will contain acq_product related data/methods among
    * other things.
@@ -9,7 +9,7 @@
    * Get the labels data for the selected SKU.
    *
    * @param {object} product
-   *   The product wrapper jquery object.
+   *   The product wrapper jQuery object.
    * @param {string} sku
    *   The sku for which labels is to be retreived.
    * @param {string} mainSku
@@ -96,14 +96,14 @@
     // executes completely in one flow.
     renderProductLabels(product, sku, mainSku);
 
-    if (jQuery(product).find('.gallery-wrapper').length > 0) {
+    if ($(product).find('.gallery-wrapper').length > 0) {
       // Since matchback products are also inside main PDP, when we change the variant
       // of the main PDP we'll get multiple .gallery-wrapper, so we are taking only the
       // first one which will be of main PDP to update main PDP gallery only.
-      jQuery(product).find('.gallery-wrapper').first().replaceWith(gallery);
+      $(product).find('.gallery-wrapper').first().replaceWith(gallery);
     }
     else {
-      jQuery(product).find('#product-zoom-container').replaceWith(gallery);
+      $(product).find('#product-zoom-container').replaceWith(gallery);
     }
 
     if (layout === 'pdp-magazine') {
@@ -117,13 +117,13 @@
       // Hide the thumbnails till JS is applied.
       // We use opacity through a class on parent to ensure JS get's applied
       // properly and heights are calculated properly.
-      jQuery('#product-zoom-container', product).addClass('whiteout');
+      $('#product-zoom-container', product).addClass('whiteout');
       setTimeout(function () {
         Drupal.behaviors.alshaya_product_zoom.attach(document);
         Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
 
         // Show thumbnails again.
-        jQuery('#product-zoom-container', product).removeClass('whiteout');
+        $('#product-zoom-container', product).removeClass('whiteout');
       }, 1);
     }
   };
