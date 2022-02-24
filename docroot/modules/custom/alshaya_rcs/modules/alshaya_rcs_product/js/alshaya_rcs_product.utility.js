@@ -651,7 +651,6 @@
     }
   }
 
-
   /**
    * Fetch the product data from backend.
    *
