@@ -811,9 +811,12 @@ const productRecommendationsSuffix = 'pr-';
       // If list variable is set in cookie, retrieve it.
       if ($.cookie('product-list') !== undefined) {
         var listValues = JSON.parse($.cookie('product-list'));
-        if (listValues[productData.id]) {
-          productData.list = listValues[productData.id]
-        }
+        productData.list = (listValues[productData.id] === 'Search Results Page')
+          // For SRP, use list value 'Search Result Page'.
+          ? listValues[productData.id]
+          // For all other pages, use gtm-list-name html attribute.
+          // Except in PDP, to define full path from PLP.
+          : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
       }
     }
     catch (error) {
@@ -1075,16 +1078,11 @@ const productRecommendationsSuffix = 'pr-';
     if ($.cookie('product-list') !== undefined) {
       listValues = JSON.parse($.cookie('product-list'));
     }
-    listValues[product.id] = listName;
+    listValues[product.id] = product.list = listName;
     $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
     product.variant = '';
     if (position) {
       product.position = position;
-    }
-    // For PLP pages use Datalayer attribute.
-    if ((product.list !== undefined && product.list.indexOf('PLP') > -1)
-      || (listName !== undefined && listName.indexOf('PLP') > -1)) {
-      product.list = listName = 'PLP|' + drupalSettings.dataLayerAttachment.list;
     }
 
     var data = {
@@ -1284,8 +1282,7 @@ const productRecommendationsSuffix = 'pr-';
         if ($(this).isElementInViewPort(0, 10)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-          // Using Datalayer attribute for PLP.
-          impression.list = (listName.indexOf('PLP') > -1) ? 'PLP|' + drupalSettings.dataLayerAttachment.list : listName;
+          impression.list = listName;
           impression.position = position;
           // Keep variant empty for impression pages. Populated only post add to cart action.
           impression.variant = '';
@@ -1315,11 +1312,6 @@ const productRecommendationsSuffix = 'pr-';
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';
-    // For PLP pages use Datalayer attribute.
-    if ((product.list !== undefined && product.list.indexOf('PLP') > -1)
-      || (listName !== undefined && listName.indexOf('PLP') > -1)) {
-      product.list = listName = 'PLP|' + drupalSettings.dataLayerAttachment.list;
-    }
 
     var data = {
       event: 'productDetailView',
