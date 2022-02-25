@@ -28,7 +28,13 @@ import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
-import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
+import {
+  getAllowedPaymentMethodCode,
+  isEgiftRedemptionDone,
+  isEgiftUnsupportedPaymentMethod,
+  isFullPaymentDoneByEgift,
+  virtualProductNotSupportedPaymentMethod,
+} from '../../../utilities/egift_util';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -192,7 +198,8 @@ export default class PaymentMethods extends React.Component {
 
       // Select first payment method by default.
       const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
-      this.changePaymentMethod(sortedMethods[0].code);
+      const paymentMethodCode = getAllowedPaymentMethodCode(sortedMethods, cart);
+      this.changePaymentMethod(paymentMethodCode);
     }
   };
 
@@ -279,6 +286,11 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
+    // Check if payment method not supported.
+    if (isEgiftCardEnabled() && virtualProductNotSupportedPaymentMethod(method, cart)) {
+      return;
+    }
+
     // Allow change payment method only if it's allowed for egift.
     if (isEgiftCardEnabled()
       && isEgiftUnsupportedPaymentMethod(method)
@@ -344,6 +356,7 @@ export default class PaymentMethods extends React.Component {
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
+    console.log(cart.cart);
     const activePaymentMethods = Object.values(this.getPaymentMethods(active))
       .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
@@ -359,6 +372,10 @@ export default class PaymentMethods extends React.Component {
       // not supported with Aura.
       if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
         disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
+      }
+
+      if (isEgiftCardEnabled()) {
+        disablePaymentMethod = virtualProductNotSupportedPaymentMethod(method.code, cart);
       }
 
       // Disable the payment method that are not supported by egift.
@@ -377,7 +394,7 @@ export default class PaymentMethods extends React.Component {
         key={method.code}
         method={method}
         animationOffset={animationOffset}
-        {...((isAuraEnabled() || (isEgiftCardEnabled() && egiftRedeemed))
+        {...((isAuraEnabled() || (isEgiftCardEnabled()))
           && disablePaymentMethod
           && { disablePaymentMethod }
         )}

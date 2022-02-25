@@ -284,6 +284,27 @@ export const isEgiftUnsupportedPaymentMethod = (paymentMethod) => {
   return paymentMethod in notSupportedPaymentMethods;
 };
 
+export const virtualProductNotSupportedPaymentMethod = (paymentMethod, cart) => {
+  const { notSupportedPaymentMethods } = drupalSettings.egiftCard;
+  if (!cartContainsAnyVirtualProduct(cart.cart)) {
+    return false;
+  }
+
+  return paymentMethod in notSupportedPaymentMethods;
+};
+
+export const getAllowedPaymentMethodCode = (sortedMethods, cart) => {
+  let paymentMethodCode = null;
+  if (isEgiftCardEnabled()) {
+    sortedMethods.forEach((method) => {
+      if (!virtualProductNotSupportedPaymentMethod(method.code, cart)) {
+        paymentMethodCode = method.code;
+      }
+    });
+  }
+  return hasValue(paymentMethodCode) ? paymentMethodCode : sortedMethods[0].code;
+};
+
 /**
  * Checks if the full payment is done by egift or not.
  *
