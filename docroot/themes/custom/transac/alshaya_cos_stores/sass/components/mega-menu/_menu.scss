@@ -29,13 +29,13 @@
 
         &:nth-child(2) {
           a {
-            padding-#{$left}: 0 !important;
+            padding-#{$left}: 0;
           }
         }
 
         &:last-child {
           a {
-            padding-#{$right}: 0 !important;
+            padding-#{$right}: 0;
           }
         }
 
