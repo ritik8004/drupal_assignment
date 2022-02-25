@@ -69,7 +69,9 @@
           <div class="vat-text">#rcs.product._self|vat_text#</div>
         </div>
 
-        <div id="rcs-ph-delivery-info-block"></div>
+        {% if express_delivery_enabled is defined and express_delivery_enabled %}
+          <div id="rcs-ph-delivery-info-block"></div>
+        {% endif %}
 
         {% if content.delivery_link is not empty %}
           <div class="delivery">
