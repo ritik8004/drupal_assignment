@@ -170,7 +170,7 @@
 
     {% if page.footer_primary %}
       {% block primary_footer %}
-        {# {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %} #}
+        {% include '@alshaya_white_label/partial/footer-primary.html.twig' %}
       <!-- /footer-primary -->
       {% endblock %}
     {% endif %}
