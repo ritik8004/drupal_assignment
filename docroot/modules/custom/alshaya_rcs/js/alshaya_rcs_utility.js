@@ -7,17 +7,17 @@ rcsGetEnrichedCategories = () => {
   if (enrichedData) {
     return enrichedData;
   }
-  else {
-    jQuery.ajax({
-      url: Drupal.url('rest/v2/categories'),
-      async: false,
-      success: function (data) {
-        // Store the value in static storage.
-        RcsPhStaticStorage.set('enriched_categories', data);
-        enrichedData = data;
-      }
-    });
-  }
+
+  jQuery.ajax({
+    url: Drupal.url('rest/v2/categories'),
+    async: false,
+    success: function (data) {
+      // Store the value in static storage.
+      RcsPhStaticStorage.set('enriched_categories', data);
+      enrichedData = data;
+    }
+  });
+
   return enrichedData;
 }
 
