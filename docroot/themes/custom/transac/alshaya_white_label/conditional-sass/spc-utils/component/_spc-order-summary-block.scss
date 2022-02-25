@@ -65,6 +65,15 @@
       align-items: center;
     }
 
+    .paid-with-egift {
+      & + .value {
+        @media print {
+          min-width: 6.25rem;
+          text-align: $right;
+        }
+      }
+    }
+
     .discount-total {
       color: $spc-order-summary-discount-text;
       position: relative;
