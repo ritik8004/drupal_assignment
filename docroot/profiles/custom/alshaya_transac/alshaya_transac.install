@@ -19,7 +19,7 @@ use Drupal\user\Entity\Role;
  *
  * Uninstall amp contrib and custom modules.
  */
-function alshaya_transac_update_8137() {
+function alshaya_transac_update_8138() {
   // Remove alshaya_amp themes.
   $theme_handler = \Drupal::service('theme_handler');
   // Remove alshaya_amp_hnm theme.
@@ -51,6 +51,17 @@ function alshaya_transac_update_8137() {
   // Remove amp module.
   if ($module_handler->moduleExists('amp')) {
     \Drupal::service('module_installer')->uninstall(['amp']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.11.2] Installs alshaya_js_optimisations module if it is not enabled.
+ */
+function alshaya_transac_update_8137() {
+  if (!(\Drupal::moduleHandler()->moduleExists('alshaya_js_optimisations'))) {
+    \Drupal::service('module_installer')->install(['alshaya_js_optimisations']);
   }
 }
 
