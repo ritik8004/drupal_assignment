@@ -5,7 +5,7 @@ dependencies:
 id: acquia_search_server
 name: 'Acquia Search Local Solr server'
 description: ''
-status: true
+status: false
 backend: search_api_solr
 backend_config:
   autocorrect_spell: true
