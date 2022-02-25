@@ -10,7 +10,7 @@
  *
  * Uninstalls track_js and alshaya_track_js modules.
  */
-function alshaya_update_8014() {
+function alshaya_update_8015() {
   if ((\Drupal::moduleHandler()->moduleExists('track_js'))) {
     \Drupal::service('module_installer')->uninstall(['track_js']);
   }
@@ -19,6 +19,18 @@ function alshaya_update_8014() {
   }
   if ((\Drupal::moduleHandler()->moduleExists('google_page_speed'))) {
     \Drupal::service('module_installer')->uninstall(['google_page_speed']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable search api server default server.
+ */
+function alshaya_update_8014() {
+  $index = \Drupal::configFactory()->getEditable('search_api.server.acquia_search_server');
+  if ($index->get('status')) {
+    $index->set('status', FALSE)->save();
   }
 }
 
