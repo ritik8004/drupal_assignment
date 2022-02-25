@@ -39,6 +39,17 @@ function alshaya_rcs_promotion_install() {
       }
     }
   }
+
+  // Delete all acq_promotion nodes from the system.
+  $acq_promotion_nodes = \Drupal::entityQuery('node')
+    ->condition('type', 'acq_promotion')
+    ->execute();
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  foreach (array_chunk($acq_promotion_nodes, 10) as $nids) {
+    $nodes = $node_storage->loadMultiple($nids);
+    $node_storage->delete($nodes);
+  }
+  \Drupal::logger('alshaya_rcs_promotion')->notice('All promotion terms deleted from the system.');
 }
 
 /**

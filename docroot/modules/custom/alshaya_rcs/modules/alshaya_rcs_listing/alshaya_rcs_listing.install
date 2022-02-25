@@ -95,6 +95,27 @@ function alshaya_rcs_listing_install() {
   ];
 
   batch_set($batch);
+
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  // Delete all product category terms from the system.
+  $acq_product_category_tids = \Drupal::entityQuery('taxonomy_term')
+    ->condition('vid', 'acq_product_category')
+    ->execute();
+  foreach (array_chunk($acq_product_category_tids, 10) as $tids) {
+    $terms = $term_storage->loadMultiple($tids);
+    $term_storage->delete($terms);
+  }
+  \Drupal::logger('alshaya_rcs_listing')->notice('All product category terms deleted from the system.');
+
+  // Delete all product option terms from the system.
+  $acq_product_option_tids = \Drupal::entityQuery('taxonomy_term')
+    ->condition('vid', 'sku_product_option')
+    ->execute();
+  foreach (array_chunk($acq_product_option_tids, 10) as $tids) {
+    $terms = $term_storage->loadMultiple($tids);
+    $term_storage->delete($terms);
+  }
+  \Drupal::logger('alshaya_rcs_listing')->notice('All product option terms deleted from the system.');
 }
 
 /**
