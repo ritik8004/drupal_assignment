@@ -470,6 +470,8 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
+  // @todo Remove this theme and rcs-product-teaser.html.twig temlate.
+  // @todo Use handlebars with rcs-product-teaser.handlebars template.
   $product_teaser = [
     '#theme' => 'rcs_product_teaser',
   ];
