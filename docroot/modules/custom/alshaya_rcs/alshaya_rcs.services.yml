@@ -1,10 +1,5 @@
 services:
-  alshaya_rcs.algolia_index_name_override:
-    class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexNameConfigOverrider
-    tags:
-      - { name: config.factory.override, priority: -1 }
-
-  alshaya_rcs.algolia_index_crud_status_override:
-    class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexCrudStatusConfigOverrider
+  alshaya_rcs.algolia_index_config_override:
+    class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexConfigOverrider
     tags:
       - { name: config.factory.override, priority: -1 }
