@@ -4,6 +4,7 @@ import {
   getCartIdFromStorage,
   isUserAuthenticated,
   removeCartIdFromStorage,
+  isRequestFromSocialAuthPopup,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
 import {
@@ -574,6 +575,13 @@ const clearInvalidCart = () => {
  *   A promise object containing the cart or null.
  */
 const getCart = async (force = false) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return null;
+  }
+
   if (!force && window.commerceBackend.getRawCartDataFromStorage() !== null) {
     return { data: window.commerceBackend.getRawCartDataFromStorage() };
   }
@@ -826,6 +834,13 @@ const preUpdateValidation = async (request) => {
  *   A promise object with cart data.
  */
 const updateCart = async (postData) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return false;
+  }
+
   const data = { ...postData };
   const cartId = window.commerceBackend.getCartId();
 

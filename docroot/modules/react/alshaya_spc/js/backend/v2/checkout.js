@@ -16,6 +16,7 @@ import {
   getApiEndpoint,
   isUserAuthenticated,
   getIp,
+  isRequestFromSocialAuthPopup,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
 import cartActions from '../../utilities/cart_actions';
@@ -227,6 +228,13 @@ const processLastOrder = (orderData) => {
  *   Customer last order or null.
  */
 const getLastOrder = async (customerId, force = false) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return {};
+  }
+
   const staticOrder = StaticStorage.get('last_order');
   if (!force && staticOrder !== null) {
     return staticOrder;
@@ -401,6 +409,13 @@ const getStoreInfo = async (storeInformation) => {
  *   The list of stores.
  */
 const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return [];
+  }
+
   const cartId = window.commerceBackend.getCartId();
 
   // If cart not available in session, log the error and return empty array.
@@ -2092,6 +2107,13 @@ const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
  *   A promise object.
  */
 window.commerceBackend.placeOrder = async (data) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return false;
+  }
+
   const cart = await getCart(true);
   if (!hasValue(cart) || !hasValue(cart.data)) {
     return false;
