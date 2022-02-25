@@ -307,27 +307,23 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['delivery_in_only_city_text'] = $product_settings->get('delivery_in_only_city_text');
 
   // PDP Express Delivery.
-  /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
-  $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
-  if ($deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
-    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-    $delivery_options_order = $express_delivery_config->get('delivery_options_order');
-    $delivery_options = [];
-    foreach ($delivery_options_order as $option) {
-      $delivery_options[] = [
-        'status' => $express_delivery_config->get($option . '_status'),
-        'id' => $option,
-        // @codingStandardsIgnoreLine
-        'label' => t($express_delivery_config->get($option . '_label'),
-          [],
-          ['context' => $option . '_label']
-        ),
-      ];
-    }
-    $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
-    $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['expressDelivery'] = $delivery_options;
-    $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+  $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+  $delivery_options = [];
+  foreach ($delivery_options_order as $option) {
+    $delivery_options[] = [
+      'status' => $express_delivery_config->get($option . '_status'),
+      'id' => $option,
+      // @codingStandardsIgnoreLine
+      'label' => t($express_delivery_config->get($option . '_label'),
+        [],
+        ['context' => $option . '_label']
+      ),
+    ];
   }
+  $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['expressDelivery'] = $delivery_options;
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
 
   // Address fields configs for Delivery options side drawer.
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
@@ -1029,7 +1025,7 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
  * Implements hook_preprocess_node().
  */
 function alshaya_rcs_product_preprocess_node(&$variables) {
-  if (in_array($variables['node']->bundle(), ['rcs_product'])) {
+  if ($variables['node']->bundle() == 'rcs_product') {
     /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
     $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
     if ($deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
