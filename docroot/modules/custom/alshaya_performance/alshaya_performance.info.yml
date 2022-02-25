@@ -11,4 +11,3 @@ dependencies:
   - sessions_expire:sessions_expire
   - cache_tags_cleanup:cache_tags_cleanup
   - alshaya_config:alshaya_config
-  - alshaya_js_optimisations:alshaya_js_optimisations
