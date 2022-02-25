@@ -284,16 +284,15 @@ exports.render = function render(
 
       if (drupalSettings.expressDelivery.enabled) {
         // Express delivery options.
-        deliveryOptions.hd = {
-          type: 'express_delivery',
+        deliveryOptions.express_delivery = {
           title: Drupal.t('Delivery Options'),
           subtitle: Drupal.t('Explore the delivery options applicable to your area.'),
+          title_class: 'delivery_options',
         }
       }
       else {
         // Standard delivery options.
-        deliveryOptions.hd = drupalSettings.alshaya_home_delivery;
-        deliveryOptions.hd.type = 'standard_delivery';
+        deliveryOptions.home_delivery = drupalSettings.alshaya_home_delivery;
       }
 
       html += handlebarsRenderer.render('product.delivery_options', deliveryOptions);

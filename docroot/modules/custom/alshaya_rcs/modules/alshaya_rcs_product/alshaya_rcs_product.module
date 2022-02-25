@@ -850,6 +850,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'product.delivery_options' => 'alshaya_rcs_product',
     'product.delivery_option_cnc' => 'alshaya_rcs_product',
     'product.delivery_option_hd' => 'alshaya_rcs_product',
+    'product.delivery_option_ed' => 'alshaya_rcs_product',
     'gallery.product.product_zoom' => 'alshaya_rcs_product',
     'gallery.product.product_labels' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_default_gallery' => 'alshaya_rcs_product',
