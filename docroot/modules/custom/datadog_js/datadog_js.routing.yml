@@ -2,6 +2,6 @@ datadog_js.settings:
   path: '/admin/config/system/datadog-js/settings'
   defaults:
     _form: '\Drupal\datadog_js\Form\DataDogJsSettingsForm'
-    _title: 'DataDogJS Settings'
+    _title: 'Datadog Settings'
   requirements:
     _permission: 'administer site configuration'

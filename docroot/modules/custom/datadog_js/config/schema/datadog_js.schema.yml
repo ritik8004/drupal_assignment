@@ -1,16 +1,25 @@
 datadog_js.settings:
   type: config_object
-  label: 'DataDogJS settings'
+  label: 'Datadog settings'
   mapping:
     library:
       type: string
-      label: 'DataDogJS Library'
+      label: 'Datadog Log Library'
     token:
       type: string
-      label: 'DataDogJS Token'
-    site:
+      label: 'Datadog Log Client Token'
+    application:
       type: string
-      label: 'DataDogJS Site'
+      label: 'Datadog Site'
     admin_pages:
       type: string
       label: 'Track the errors on admin pages or not'
+    rum_library:
+      type: string
+      label: 'Datadog RUM Library'
+    rum_application_id:
+      type: string
+      label: 'Datadog RUM Application ID'
+    rum_client_token:
+      type: string
+      label: 'Datadog RUM Client Token'
