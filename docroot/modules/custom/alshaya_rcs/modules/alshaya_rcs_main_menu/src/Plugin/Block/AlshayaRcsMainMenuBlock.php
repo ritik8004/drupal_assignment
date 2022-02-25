@@ -33,7 +33,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
   protected $moduleHandler;
 
   /**
-   * AlshayaMegaMenuBlock constructor.
+   * AlshayaRcsMainMenuBlock constructor.
    *
    * @param array $configuration
    *   The configuration.
