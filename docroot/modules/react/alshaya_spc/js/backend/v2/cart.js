@@ -10,6 +10,7 @@ import {
   getCartIdFromStorage,
   isUserAuthenticated,
   removeCartIdFromStorage,
+  isRequestFromSocialAuthPopup,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
 import cartActions from '../../utilities/cart_actions';
@@ -155,6 +156,13 @@ window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
  *   A promise object.
  */
 window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return null;
+  }
+
   let requestMethod = null;
   let requestUrl = null;
   let itemData = null;
@@ -388,6 +396,13 @@ window.commerceBackend.refreshCart = async (data) => {
  *   The cart id or null.
  */
 window.commerceBackend.createCart = async () => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return null;
+  }
+
   // Remove cart_id from storage.
   removeCartIdFromStorage();
 
@@ -422,6 +437,12 @@ window.commerceBackend.createCart = async () => {
 };
 
 window.commerceBackend.associateCartToCustomer = async (pageType) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return;
+  }
   // If user is not logged in, no further processing required.
   // We are not suppose to call associated cart for customer if user is doing
   // topup.
