@@ -5,6 +5,8 @@
  * Module file for RCS Seo.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_library_info_alter().
  */
@@ -40,5 +42,33 @@ function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
     // loaded later, thus causing issues.
     // Hence we follow this approach.
     array_unshift($attachments['#attached']['library'], 'alshaya_rcs_seo/order_confirmation');
+  }
+}
+
+/**
+ * Implements hook_simple_sitemap_links_alter().
+ */
+function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_variant) {
+  if ($sitemap_variant === 'default') {
+    // Add the MDC sitemap URL if domain replacement configuration is not set.
+    global $base_url;
+    $variant_links = [];
+    // Prepare the sitemap domain URL.
+    $api_settings = Settings::get('alshaya_api.settings');
+    $sitemap_domain_url = $api_settings['magento_host'];
+    // Change the sitemap domain based on config value.
+    $sitemap_domain = \Drupal::config('alshaya_rcs_seo.settings')->get('sitemap_domain_to_use') ?? NULL;
+    if ($sitemap_domain && $sitemap_domain == 'drupal') {
+      $sitemap_domain_url = $base_url;
+    }
+    // @todo To change the MDC sitemap URL.
+    $url = $sitemap_domain_url . '/media/sitemap/kwt_en/sitemap.xml';
+    $variant_links[] = [
+      'url' => $url,
+      'priority' => '0.5',
+    ];
+    if (!empty($variant_links)) {
+      $links = array_merge($variant_links, $links);
+    }
   }
 }
