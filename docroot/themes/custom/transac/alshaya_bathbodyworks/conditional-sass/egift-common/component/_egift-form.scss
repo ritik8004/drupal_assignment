@@ -1,0 +1,5 @@
+.egifts-form-wrapper {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 2.5625rem;
+  }
+}
