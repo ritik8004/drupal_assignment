@@ -367,7 +367,8 @@ export default class CartItem extends React.Component {
                 <WishlistContainer
                   context="cart"
                   position="cart-item"
-                  sku={parentSKU || sku}
+                  skuCode={parentSKU || sku}
+                  sku={sku}
                   title={title}
                   options={attributeOptions}
                   format="text"
@@ -376,7 +377,8 @@ export default class CartItem extends React.Component {
               {/* When user clicks on delete, pop shown asking if product added to wishlist. */}
               <ConditionalView condition={showWishlistPopup}>
                 <WishlistPopupBlock
-                  sku={parentSKU}
+                  sku={parentSKU || sku}
+                  variant={sku}
                   title={title}
                   itemImage={cartImage}
                   options={attributeOptions}
