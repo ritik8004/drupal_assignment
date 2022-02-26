@@ -8,6 +8,7 @@ dependencies:
   - drupal:color
   - pcb:pcb_memcache
   - drupal:syslog
+  - alshaya_js_optimisations:alshaya_js_optimisations
 
 themes:
   - alshaya_white_label
