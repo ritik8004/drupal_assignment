@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Configure Alshaya Rcs Seo settings.
+ * Configure Alshaya RCS SEO settings.
  */
 class AlshayaRcsSeoConfigForm extends ConfigFormBase {
 
@@ -66,11 +66,10 @@ class AlshayaRcsSeoConfigForm extends ConfigFormBase {
       '#type' => 'select',
       '#required' => TRUE,
       '#options' => [
-        '' => $this->t('Select'),
         'drupal' => $this->t('Drupal'),
         'magento' => $this->t('Magento'),
       ],
-      '#default_value' => $config->get('sitemap_domain_to_use') ?? NULL,
+      '#default_value' => $config->get('sitemap_domain_to_use') ?? 'drupal',
       '#title' => $this->t('Sitemap domain to use'),
       '#description' => $this->t('Select the domain that you want to use in the sitemap.')
     ];
