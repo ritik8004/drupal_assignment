@@ -249,7 +249,9 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
         : false),
     );
     if (attributeValueFromSku) {
-      skuAttributesOptionData[attributeCode] = attributeValueFromSku.option_value;
+      skuAttributesOptionData[attributeCode] = (typeof attributeValueFromSku.value !== 'undefined')
+        ? attributeValueFromSku.value
+        : attributeValueFromSku.option_value;
     }
   });
 
