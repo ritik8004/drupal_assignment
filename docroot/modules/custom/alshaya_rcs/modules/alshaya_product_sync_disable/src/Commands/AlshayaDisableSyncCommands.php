@@ -10,6 +10,9 @@ use Consolidation\AnnotatedCommand\CommandData;
  */
 class AlshayaDisableSyncCommands extends DrushCommands {
 
+  /**
+   * Overidden drush commands.
+   */
   const OVERRIDE_COMMANDS = [
     "alshaya_acm_product:listing-split-products",
     "alshaya_acm:offline-product-sync",
