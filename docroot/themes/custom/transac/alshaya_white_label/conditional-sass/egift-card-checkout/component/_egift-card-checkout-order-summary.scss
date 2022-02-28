@@ -41,11 +41,8 @@
           input {
             border: none;
             background: transparent;
-
-            @include breakpoint($only-mobile) {
-              -webkit-text-fill-color: $egift-checkout-card-number;
-              opacity: 1;
-            }
+            -webkit-text-fill-color: $egift-checkout-card-number;
+            opacity: 1;
 
             html[lang=ar] & {
               direction: ltr;
