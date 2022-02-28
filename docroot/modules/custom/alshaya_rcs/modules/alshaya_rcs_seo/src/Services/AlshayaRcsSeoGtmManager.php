@@ -64,4 +64,22 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
     return $product_datalayer_attributes;
   }
 
+  /**
+   * Helper function to fetch page-specific datalayer attributes.
+   */
+  public function fetchPageSpecificAttributes($page_type, $current_route) {
+    $page_dl_attributes = [];
+    switch ($page_type) {
+      case 'product detail page':
+        // We prepare these values directly on the front end. So we set them
+        // empty here.
+        $page_dl_attributes = [];
+        break;
+
+      default:
+        $page_dl_attributes = parent::fetchPageSpecificAttributes($page_type, $current_route);
+    }
+
+    return $page_dl_attributes;
+  }
 }

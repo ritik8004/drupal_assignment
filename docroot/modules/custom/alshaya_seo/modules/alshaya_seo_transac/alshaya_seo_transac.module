@@ -23,7 +23,7 @@ use Drupal\views\ViewExecutable;
  */
 function alshaya_seo_transac_preprocess_html(&$variables) {
   if (_alshaya_seo_process_gtm()) {
-    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $routeInfo = $gtm_manager->getGtmContainer();
     $variables['attributes']['gtm-currency'] = $gtm_manager->getGtmCurrency();
@@ -36,12 +36,7 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
     // Appending full list path to gtm-list-name attribute.
     if (isset($routeInfo['route_params']['node']) || isset($routeInfo['route_params']['taxonomy_term'])) {
       $superCategoryLabel = NULL;
-      try {
-        $pageAttributes = $gtm_manager->fetchPageSpecificAttributes($variables['attributes']['gtm-container'], $routeInfo);
-      }
-      catch (\Exception $e) {
-        $pageAttributes = [];
-      }
+      $pageAttributes = $gtm_manager->fetchPageSpecificAttributes($variables['attributes']['gtm-container'], $routeInfo);
       // Fetching super category label only if enabled.
       if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
         $superCategory = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
