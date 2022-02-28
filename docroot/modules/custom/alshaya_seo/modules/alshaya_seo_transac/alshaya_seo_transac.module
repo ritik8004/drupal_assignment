@@ -23,7 +23,7 @@ use Drupal\views\ViewExecutable;
  */
 function alshaya_seo_transac_preprocess_html(&$variables) {
   if (_alshaya_seo_process_gtm()) {
-    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $routeInfo = $gtm_manager->getGtmContainer();
     $variables['attributes']['gtm-currency'] = $gtm_manager->getGtmCurrency();
