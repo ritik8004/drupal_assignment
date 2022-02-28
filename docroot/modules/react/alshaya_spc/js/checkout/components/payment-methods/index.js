@@ -183,7 +183,8 @@ export default class PaymentMethods extends React.Component {
       // Select previously selected method if available.
       if (cart.cart.payment.method !== undefined
         && cart.cart.payment.method !== null
-        && paymentMethods[cart.cart.payment.method] !== undefined) {
+        && paymentMethods[cart.cart.payment.method] !== undefined
+        && !virtualProductNotSupportedPaymentMethod(cart.cart.payment.method, cart)) {
         this.changePaymentMethod(cart.cart.payment.method);
         return;
       }
@@ -191,7 +192,8 @@ export default class PaymentMethods extends React.Component {
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
         && cart.cart.payment.default !== null
-        && paymentMethods[cart.cart.payment.default] !== undefined) {
+        && paymentMethods[cart.cart.payment.default] !== undefined
+        && !virtualProductNotSupportedPaymentMethod(cart.cart.payment.method, cart)) {
         this.changePaymentMethod(cart.cart.payment.default);
         return;
       }
