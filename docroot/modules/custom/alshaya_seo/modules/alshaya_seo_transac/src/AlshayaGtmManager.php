@@ -1369,6 +1369,7 @@ class AlshayaGtmManager {
     return array_filter([
       'departmentName' => implode('|', $terms),
       'departmentId' => current($term_ids),
+      'list' => implode('|', $terms),
       'listingName' => end($terms),
       'listingId' => end($term_ids),
       'majorCategory' => array_shift($terms) ?: '',
