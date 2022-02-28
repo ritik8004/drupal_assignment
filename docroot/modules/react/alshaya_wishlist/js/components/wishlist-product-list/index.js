@@ -29,7 +29,8 @@ class WishlistProductList extends React.Component {
     let wishListItemsCount = 0;
     // If the current page is not a shared wishlist page. We
     // get wishlist data from the local storage.
-    if (!isShareWishlistPage()) {
+    // Also, if the user if anonymous, always load data from local storage.
+    if (!isShareWishlistPage() && isAnonymousUser()) {
       // Get the wishlist items.
       wishListItems = getWishListData() || {};
       wishListItemsCount = Object.keys(wishListItems).length;
