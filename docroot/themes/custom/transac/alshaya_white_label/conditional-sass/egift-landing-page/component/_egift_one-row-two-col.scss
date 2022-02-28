@@ -50,6 +50,10 @@
             min-height: 3.5rem;
             line-height: 1.54rem;
 
+            html[lang="ar"] & {
+              min-height: 5rem;
+            }
+
             @include breakpoint($only-mobile) {
               min-height: 4.5rem;
             }
@@ -84,6 +88,10 @@
             display: inline-block;
             min-height: 3.5rem;
             line-height: 1.54rem;
+
+            html[lang="ar"] & {
+              min-height: 5rem;
+            }
 
             @include breakpoint($only-mobile) {
               min-height: 4.5rem;
