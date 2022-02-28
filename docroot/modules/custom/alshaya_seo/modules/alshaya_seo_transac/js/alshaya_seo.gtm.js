@@ -810,9 +810,12 @@
       // If list variable is set in cookie, retrieve it.
       if ($.cookie('product-list') !== undefined) {
         var listValues = JSON.parse($.cookie('product-list'));
-        if (listValues[productData.id]) {
-          productData.list = listValues[productData.id]
-        }
+        productData.list = (listValues[productData.id] === 'Search Results Page')
+          // For SRP, use list value 'Search Result Page'.
+          ? listValues[productData.id]
+          // For all other pages, use gtm-list-name html attribute.
+          // Except in PDP, to define full path from PLP.
+          : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
       }
     }
     catch (error) {
@@ -1074,7 +1077,7 @@
     if ($.cookie('product-list') !== undefined) {
       listValues = JSON.parse($.cookie('product-list'));
     }
-    listValues[product.id] = listName;
+    listValues[product.id] = product.list = listName;
     $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
     product.variant = '';
     if (position) {

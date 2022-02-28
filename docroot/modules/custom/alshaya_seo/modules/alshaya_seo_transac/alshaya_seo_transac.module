@@ -25,13 +25,35 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
   if (_alshaya_seo_process_gtm()) {
     /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+    $routeInfo = $gtm_manager->getGtmContainer();
     $variables['attributes']['gtm-currency'] = $gtm_manager->getGtmCurrency();
-    $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
-    $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($gtm_manager->getGtmContainer());
+    $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($routeInfo);
+    $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($routeInfo);
     if ($variables['attributes']['gtm-list-name'] == 'PDP' || $variables['attributes']['gtm-list-name'] == 'CartPage') {
       $variables['attributes']['gtm-list-name'] = $variables['attributes']['gtm-list-name'] . '-placeholder';
     }
-    \Drupal::moduleHandler()->invokeAll('gtm_list_name_alter', [&$variables['attributes']['gtm-list-name']]);
+
+    // Appending full list path to gtm-list-name attribute.
+    if (isset($routeInfo['route_params']['node']) || isset($routeInfo['route_params']['taxonomy_term'])) {
+      $superCategoryLabel = NULL;
+      $pageAttributes = $gtm_manager->fetchPageSpecificAttributes($variables['attributes']['gtm-container'], $routeInfo);
+      // Fetching super category label only if enabled.
+      if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+        $superCategory = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+        $superCategoryLabel = isset($superCategory['label']) ? '|' . $superCategory['label'] : NULL;
+      }
+      if (empty($variables['attributes']['gtm-list-name'])) {
+        // Appending super category label only when gtm-list-name attribute is
+        // empty. For other brands except VS super category is null.
+        $variables['attributes']['gtm-list-name'] = AlshayaGtmManager::LIST_GTM_MAPPING['alshaya_master.home'] . $superCategoryLabel;
+      }
+      else {
+        // Appending datalayer alter list attribute to gtm-list-name in all
+        // other scenarios.
+        $pageAttributes = isset($pageAttributes['list']) ? '|' . $pageAttributes['list'] : $superCategoryLabel;
+        $variables['attributes']['gtm-list-name'] = $variables['attributes']['gtm-list-name'] . $pageAttributes;
+      }
+    }
   }
 }
 
