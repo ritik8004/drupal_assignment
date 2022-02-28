@@ -50,9 +50,6 @@ function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
  */
 function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_variant) {
   if ($sitemap_variant === 'default') {
-    // Add the MDC sitemap URL if domain replacement configuration is not set.
-    global $base_url;
-    $variant_links = [];
     // Change the sitemap domain based on config value.
     $sitemap_domain = \Drupal::config('alshaya_rcs_seo.settings')->get('sitemap_domain_to_use') ?? 'drupal';
     switch ($sitemap_domain) {
@@ -62,9 +59,12 @@ function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_vari
         break;
 
       default:
+        global $base_url;
         $sitemap_domain_url = $base_url;
         break;
     }
+
+    $variant_links = [];
 
     // @todo To change the MDC sitemap URL.
     $url = $sitemap_domain_url . '/media/sitemap/kwt_en/sitemap.xml';
