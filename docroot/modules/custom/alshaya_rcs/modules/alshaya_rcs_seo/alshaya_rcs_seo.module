@@ -53,22 +53,26 @@ function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_vari
     // Add the MDC sitemap URL if domain replacement configuration is not set.
     global $base_url;
     $variant_links = [];
-    // Prepare the sitemap domain URL.
-    $api_settings = Settings::get('alshaya_api.settings');
-    $sitemap_domain_url = $api_settings['magento_host'];
     // Change the sitemap domain based on config value.
-    $sitemap_domain = \Drupal::config('alshaya_rcs_seo.settings')->get('sitemap_domain_to_use') ?? NULL;
-    if ($sitemap_domain && $sitemap_domain == 'drupal') {
-      $sitemap_domain_url = $base_url;
+    $sitemap_domain = \Drupal::config('alshaya_rcs_seo.settings')->get('sitemap_domain_to_use') ?? 'drupal';
+    switch ($sitemap_domain) {
+      case 'magento':
+        // Prepare the sitemap domain URL.
+        $sitemap_domain_url = Settings::get('alshaya_api.settings')['magento_host'];
+        break;
+
+      default:
+        $sitemap_domain_url = $base_url;
+        break;
     }
+
     // @todo To change the MDC sitemap URL.
     $url = $sitemap_domain_url . '/media/sitemap/kwt_en/sitemap.xml';
     $variant_links[] = [
       'url' => $url,
       'priority' => '0.5',
     ];
-    if (!empty($variant_links)) {
-      $links = array_merge($variant_links, $links);
-    }
+
+    $links = array_merge($variant_links, $links);
   }
 }
