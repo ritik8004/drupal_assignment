@@ -36,7 +36,12 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
     // Appending full list path to gtm-list-name attribute.
     if (isset($routeInfo['route_params']['node']) || isset($routeInfo['route_params']['taxonomy_term'])) {
       $superCategoryLabel = NULL;
-      $pageAttributes = $gtm_manager->fetchPageSpecificAttributes($variables['attributes']['gtm-container'], $routeInfo);
+      try {
+        $pageAttributes = $gtm_manager->fetchPageSpecificAttributes($variables['attributes']['gtm-container'], $routeInfo);
+      }
+      catch (\Exception $e) {
+        $pageAttributes = [];
+      }
       // Fetching super category label only if enabled.
       if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
         $superCategory = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
