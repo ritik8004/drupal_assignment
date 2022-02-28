@@ -242,6 +242,10 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
       && attributeData.values.length > 0) {
       skuAttributesOptionData[attributeCode] = attributeData.values[0].value;
     }
+    // For the anonymous customers option's id key in product options object is
+    // `option_id` but for authenticate customers this key is `id` only. So
+    // while searching we need to put conditions with both the key and if either
+    // one is matched, we need to process that attribute further.
     const attributeValueFromSku = skuData.options.find(
       (option) => ((option.option_id === attributeData.id
         || option.id === attributeData.id)
@@ -249,6 +253,8 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
         : false),
     );
     if (attributeValueFromSku) {
+      // For authenticate customers we get the option value with the object key
+      // `value' but for anonymous customers we have this in `option_value`.
       skuAttributesOptionData[attributeCode] = (typeof attributeValueFromSku.value !== 'undefined')
         ? attributeValueFromSku.value
         : attributeValueFromSku.option_value;
