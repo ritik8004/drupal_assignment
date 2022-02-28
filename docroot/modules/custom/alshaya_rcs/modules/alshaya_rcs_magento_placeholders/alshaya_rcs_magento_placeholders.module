@@ -13,10 +13,20 @@ use Drupal\Core\Site\Settings;
 function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachments) {
   $api_settings = Settings::get('alshaya_api.settings');
 
+  // We proxy the requests via cloudflare, so we use the current domain as is
+  // without any language suffix so HTTP_HOST is enough.
   $attachments['#attached']['drupalSettings']['rcs']['commerceBackend']['baseUrl'] = 'https://' . $_SERVER['HTTP_HOST'];
+  // List of environments to use proxy in from Settings.
+  $environments_to_use_proxy = Settings::get('environments_to_use_proxy', [
+    'local',
+    'dev',
+    'dev2',
+    'dev3',
+    'qa2',
+  ]);
 
-  // Use proxy on local env as here we don't have Cloudflare.
-  if (Settings::get('env') === 'local') {
+  // Use proxy on only specific environments.
+  if (in_array(Settings::get('env_name'), $environments_to_use_proxy)) {
     $attachments['#attached']['drupalSettings']['rcs']['commerceBackend']['baseUrl'] = '/proxy/?url=' . $api_settings['magento_host'];
   }
 
