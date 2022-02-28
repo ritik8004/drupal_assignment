@@ -954,10 +954,13 @@ class AlshayaGtmManager {
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
     $current_user_id = $this->currentUser->id();
+
     // For guest fetching the phone number from shipping details.
     $phone_number = $order['shipping']['address']['telephone'];
+
+    $customer_id = 0;
+
     $is_customer = alshaya_acm_customer_is_customer($this->currentUser);
-    $orders_count = $customer_id = 0;
     if ($is_customer) {
       $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
       $customer_id = $current_user->get('acq_customer_id')->getString();
@@ -966,6 +969,11 @@ class AlshayaGtmManager {
         $phone_number = $current_user->get('field_mobile_number')->getValue()[0]['value'];
       }
     }
+    else {
+      // For guest user too we want to know if user has placed multiple orders.
+      $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
