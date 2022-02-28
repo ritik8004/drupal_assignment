@@ -20,7 +20,7 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
    *
    * @var \Drupal\Core\Routing\RouteMatchInterface
    */
-  private $routeMatch;
+  protected $routeMatch;
 
   /**
    * The module handler service.
