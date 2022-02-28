@@ -27,32 +27,6 @@ function isProductAvailableForClickAndCollect(entity) {
 }
 
 /**
- * Check if the provided product is available for Same day delivery.
- *
- * @param entity
- *   The entity.
- *
- * @return {Boolean}
- *   True if SDD is available, otherwise false.
- */
-function isProductAvailableForSameDayDelivery(entity) {
-  return entity.same_day_delivery === 1;
-}
-
-/**
- * Check if the provided product is available for Express delivery.
- *
- * @param entity
- *   The entity.
- *
- * @return {Boolean}
- *   True if ED is available, otherwise false.
- */
-function isProductAvailableForExpressDelivery(entity) {
-  return entity.express_delivery === 1;
-}
-
-/**
  * Check if the product is buyable.
  *
  * @param {object} entity
@@ -308,24 +282,19 @@ exports.render = function render(
         };
       }
 
-      const hdEnabled = isProductAvailableForHomeDelivery(entity);
-      if (hdEnabled) {
-        const skuSddEnabled = isProductAvailableForSameDayDelivery(entity);
-        const skuEdEnabled = isProductAvailableForExpressDelivery(entity);
-        if (drupalSettings.expressDelivery.enabled && (skuSddEnabled || skuEdEnabled)) {
-          // Express delivery options.
-          deliveryOptions.hd = {
-            type: 'express_delivery',
-            title: Drupal.t('Delivery Options'),
-            subtitle: Drupal.t('Explore the delivery options applicable to your area.'),
-          }
-        }
-        else {
-          // Standard delivery options.
-          deliveryOptions.hd = drupalSettings.alshaya_home_delivery;
-          deliveryOptions.hd.type = 'standard_delivery';
+      if (drupalSettings.expressDelivery.enabled) {
+        // Express delivery options.
+        deliveryOptions.express_delivery = {
+          title: Drupal.t('Delivery Options'),
+          subtitle: Drupal.t('Explore the delivery options applicable to your area.'),
+          title_class: 'delivery_options',
         }
       }
+      else {
+        // Standard delivery options.
+        deliveryOptions.home_delivery = drupalSettings.alshaya_home_delivery;
+      }
+
       html += handlebarsRenderer.render('product.delivery_options', deliveryOptions);
       break;
 

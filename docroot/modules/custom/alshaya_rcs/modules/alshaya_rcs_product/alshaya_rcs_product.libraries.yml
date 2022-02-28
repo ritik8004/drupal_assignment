@@ -10,9 +10,12 @@ rcs_product_info:
   js:
     js/alshaya_rcs_product.pdp.v2.js: {}
   dependencies:
+    - core/jquery
     - rcs_handlebars/main
     - rcs_placeholders/helpers
     - alshaya_rcs_product/main
+    # This library's JS is dynamically replaced with V3 JS.
+    - alshaya_acm_product/product_utility
 
 schema_org:
   js:
@@ -64,6 +67,11 @@ product.delivery_option_hd:
   version: 1.x
   js:
     templates/rcs-pdp-delivery-option-home-delivery.handlebars: {}
+
+product.delivery_option_ed:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-option-express-delivery.handlebars: {}
 
 product.block.price:
   version: 1.x
