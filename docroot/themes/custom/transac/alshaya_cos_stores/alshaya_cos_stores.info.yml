@@ -189,3 +189,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css
+
+  alshaya_white_label/checkout-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css
+
+  alshaya_white_label/checkout-confirmation-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css
