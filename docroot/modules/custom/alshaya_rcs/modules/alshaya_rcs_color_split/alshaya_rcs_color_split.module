@@ -22,7 +22,7 @@ function _alshaya_rcs_color_split_attach_info(array &$attachments) {
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');
   // Add the cache tags for the color split config.
   $color_split_config = \Drupal::config('alshaya_color_split.settings');
-  $attachments['#cache'] = ['tags' => []];
+  $attachments['#cache'] = empty($attachments['#cache']) ? ['tags' => []] : $attachments['#cache'];
   $attachments['#cache']['tags'] = array_merge($attachments['#cache']['tags'], $color_split_config->getCacheTags());
 }
 
