@@ -284,6 +284,10 @@ export const isEgiftUnsupportedPaymentMethod = (paymentMethod) => {
   return paymentMethod in notSupportedPaymentMethods;
 };
 
+/**
+ * Checks if payment method is not supported
+ * if virtual product present in cart.
+ */
 export const virtualProductNotSupportedPaymentMethod = (paymentMethod, cart) => {
   const { notSupportedPaymentMethods } = drupalSettings.egiftCard;
   if (!cartContainsAnyVirtualProduct(cart.cart)) {
@@ -293,14 +297,18 @@ export const virtualProductNotSupportedPaymentMethod = (paymentMethod, cart) => 
   return paymentMethod in notSupportedPaymentMethods;
 };
 
+/**
+ * Get next allowed payment method when virtual product is present.
+ */
 export const getAllowedPaymentMethodCode = (sortedMethods, cart) => {
   let paymentMethodCode = null;
   if (isEgiftCardEnabled()) {
-    sortedMethods.forEach((method) => {
-      if (!virtualProductNotSupportedPaymentMethod(method.code, cart)) {
-        paymentMethodCode = method.code;
+    for (let i = 0; i <= sortedMethods.length; i++) {
+      if (!virtualProductNotSupportedPaymentMethod(sortedMethods[i].code, cart)) {
+        paymentMethodCode = sortedMethods[i].code;
+        break;
       }
-    });
+    }
   }
   return hasValue(paymentMethodCode) ? paymentMethodCode : sortedMethods[0].code;
 };
