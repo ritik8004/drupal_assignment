@@ -203,7 +203,8 @@ export default class PaymentMethods extends React.Component {
       // Select first payment method by default.
       const paymentMethodCode = getNextAllowedPaymentMethodCode(paymentMethods, cart);
       this.changePaymentMethod(paymentMethodCode);
-    } else {
+    } else if (cartContainsAnyVirtualProduct(cart.cart)
+        && isEgiftUnsupportedPaymentMethod(cart.cart.payment.default)) {
       // check if virtual product in cart and unsupported payment method,
       // then get next payment method.
       const paymentMethodCode = getNextAllowedPaymentMethodCode(paymentMethods, cart);
