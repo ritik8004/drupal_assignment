@@ -11,7 +11,7 @@ const EgiftOrderSummaryItem = (props) => {
         <span className="spc-egift-label spc-label">{Drupal.t('eGift card to:', {}, { context: 'egift' })}</span>
         <span className="spc-value spc-egift-value-wrapper">
           <span className="spc-egift-value spc-egift-mail-value">
-            {orderDetails.giftCardRecieptEmail.join(' , ')}
+            {orderDetails.giftCardRecieptEmail.join(', ')}
           </span>
           <span className="spc-egift-value">
             {Drupal.t('eGift card will be sent immediately', {}, { context: 'egift' })}
