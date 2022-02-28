@@ -243,7 +243,10 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
       skuAttributesOptionData[attributeCode] = attributeData.values[0].value;
     }
     const attributeValueFromSku = skuData.options.find(
-      (option) => ((option.option_id === attributeData.id) ? option : false),
+      (option) => ((option.option_id === attributeData.id
+        || option.id === attributeData.id)
+        ? option
+        : false),
     );
     if (attributeValueFromSku) {
       skuAttributesOptionData[attributeCode] = attributeValueFromSku.option_value;
