@@ -1080,20 +1080,15 @@ class AlshayaGtmManager {
         break;
 
       case 'product listing page':
-        // Call V2 attribute function if RCS Listing module is enabled.
-        if ($this->moduleHandler->moduleExists('alshaya_rcs_listing')) {
-          $page_dl_attributes = $this->fetchV2DepartmentAttributes();
+        $taxonomy_term = $current_route['route_params']['taxonomy_term'];
+        $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+        foreach ($taxonomy_parents as $taxonomy_parent) {
+          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, $this->languageManager->getCurrentLanguage()->getId());
+          /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
+          $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
         }
-        else {
-          $taxonomy_term = $current_route['route_params']['taxonomy_term'];
-          $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
-          foreach ($taxonomy_parents as $taxonomy_parent) {
-            $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, $this->languageManager->getCurrentLanguage()->getId());
-            $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
-          }
 
-          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
-        }
+        $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
         break;
 
       case 'advanced page':
@@ -1112,12 +1107,6 @@ class AlshayaGtmManager {
 
             $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
           }
-        }
-        // Call V2 attribute function for department page if the rcs main menu
-        // module is enabled.
-        elseif ($this->moduleHandler->moduleExists('alshaya_rcs_main_menu')
-         && $department_node->get('field_use_as_department_page')->getString() == 1) {
-          $page_dl_attributes = $this->fetchV2DepartmentAttributes();
         }
         break;
 
@@ -1305,21 +1294,6 @@ class AlshayaGtmManager {
       'minorCategory' => array_shift($terms) ?: '',
       'subCategory' => array_shift($terms) ?: '',
     ]);
-  }
-
-  /**
-   * Helper function to get department specific V2 attributes.
-   */
-  public function fetchV2DepartmentAttributes() {
-    return [
-      'departmentName' => '#rcs.category.departmentName#',
-      'departmentId' => '#rcs.category.departmentId#',
-      'listingName' => '#rcs.category.name#',
-      'listingId' => '#rcs.category.id#',
-      'majorCategory' => '#rcs.category.majorCategory#',
-      'minorCategory' => '#rcs.category.minorCategory#',
-      'subCategory' => '#rcs.category.subCategory#',
-    ];
   }
 
   /**

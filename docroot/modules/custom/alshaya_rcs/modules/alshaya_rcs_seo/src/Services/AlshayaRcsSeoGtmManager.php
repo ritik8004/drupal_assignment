@@ -137,4 +137,56 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
     return $attributes;
   }
 
+  /**
+   * Helper function to get department specific V2 attributes.
+   */
+  public function fetchV2DepartmentAttributes() {
+    return [
+      'departmentName' => '#rcs.category.departmentName#',
+      'departmentId' => '#rcs.category.departmentId#',
+      'listingName' => '#rcs.category.name#',
+      'listingId' => '#rcs.category.id#',
+      'majorCategory' => '#rcs.category.majorCategory#',
+      'minorCategory' => '#rcs.category.minorCategory#',
+      'subCategory' => '#rcs.category.subCategory#',
+    ];
+  }
+
+  /**
+   * Helper function to fetch page-specific datalayer attributes.
+   */
+  public function fetchPageSpecificAttributes($page_type, $current_route) {
+    $page_dl_attributes = [];
+    switch ($page_type) {
+      case 'product listing page':
+        // Call V2 attribute function if RCS Listing module is enabled.
+        if ($this->moduleHandler->moduleExists('alshaya_rcs_listing')) {
+          $page_dl_attributes = $this->fetchV2DepartmentAttributes();
+        }
+        else {
+          $page_dl_attributes = parent::fetchPageSpecificAttributes($page_type, $current_route);
+        }
+        break;
+
+        case 'department page':
+          $department_node = $current_route['route_params']['node'];
+          // Call V2 attribute function for department page if the rcs main menu
+          // module is enabled.
+          if ($this->moduleHandler->moduleExists('alshaya_rcs_main_menu')
+            && $department_node->get('field_use_as_department_page')->getString() == 1
+          ) {
+            $page_dl_attributes = $this->fetchV2DepartmentAttributes();
+          }
+          else {
+            $page_dl_attributes = parent::fetchPageSpecificAttributes($page_type, $current_route);
+          }
+          break;
+
+      default:
+        $page_dl_attributes = parent::fetchPageSpecificAttributes($page_type, $current_route);
+    }
+
+    return $page_dl_attributes;
+  }
+
 }
