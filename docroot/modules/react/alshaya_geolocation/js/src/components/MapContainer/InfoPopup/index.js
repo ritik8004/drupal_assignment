@@ -27,17 +27,17 @@ export class InfoPopUp extends React.Component {
         <div className="scroll-fix">
           <div className="location-content">
             <div className="views-field views-field-title">
-              <span className="field-content">{Drupal.t(`${selectedPlace.name}`)}</span>
+              <span className="field-content">{selectedPlace.name}</span>
             </div>
             <div className="views-field views-field-field-store-address">
               <div className="field-content">
                 {selectedPlace.address.map((item) => (
                   <div key={item.code}>
                     <div className="address--line1">
-                      {item.code === 'address_building_segment' ? <span>{Drupal.t(`${item.value}`)}</span> : null}
+                      {item.code === 'address_building_segment' ? <span>{item.value}</span> : null}
                     </div>
                     <div className="address--line2">
-                      {item.code === 'street' ? <span>{Drupal.t(`${item.value}`)}</span> : null}
+                      {item.code === 'street' ? <span>{item.value}</span> : null}
                     </div>
                   </div>
                 ))}
@@ -54,7 +54,7 @@ export class InfoPopUp extends React.Component {
                       {selectedPlace.openHours.map((item) => (
                         <div key={item.code}>
                           <div>
-                            <span className="key-value-key">{Drupal.t(`${item.label}`)}</span>
+                            <span className="key-value-key">{item.label}</span>
                             <span className="key-value-value">{item.value}</span>
                           </div>
                         </div>

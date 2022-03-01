@@ -53,7 +53,7 @@ export class ListItem extends React.Component {
                   <div className="open--hours">
                     {specificPlace.store_hours.map((item) => (
                       <div key={item.code}>
-                        <span className="key-value-key">{Drupal.t(`${item.label}`)}</span>
+                        <span className="key-value-key">{item.label}</span>
                         <span className="key-value-value">{item.value}</span>
                       </div>
                     ))}

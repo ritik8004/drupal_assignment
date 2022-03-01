@@ -10,12 +10,12 @@ export class SingleMarker extends React.Component {
   }
 
   render() {
+    const { google } = this.props;
     const { store, center } = this.props;
     return (
       <>
         <Map
-          /* eslint-disable-next-line react/destructuring-assignment */
-          google={this.props.google}
+          google={google}
           initialCenter={{ lat: store.latitude, lng: store.longitude }}
           center={center}
           className="map map--store"

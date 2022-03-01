@@ -1,11 +1,8 @@
 import React from 'react';
 import AutocompleteSearch from '../components/autocomplete-search';
-// eslint-disable-next-line import/no-named-as-default,import/no-cycle
-import SingleMarker from '../components/MapContainer/single-marker';
-// eslint-disable-next-line import/no-named-as-default
-import MultipeMarker from '../components/MapContainer/multiple-marker';
-// eslint-disable-next-line import/no-named-as-default
-import ListItem from '../components/ListItem';
+import SingleMarkerMap from '../components/MapContainer/single-marker';
+import MultipeMarkerMap from '../components/MapContainer/multiple-marker';
+import { ListItem } from '../components/ListItem';
 
 export class StoreFinder extends React.Component {
   constructor(props) {
@@ -1394,8 +1391,8 @@ export class StoreFinder extends React.Component {
       },
       total_count: 14,
     };
-    const sorter1 = (a, b) => (a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1);
-    stores.items.sort(sorter1);
+    const storeSort = (a, b) => (a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1);
+    stores.items.sort(storeSort);
     const prevState = this.state;
     this.setState(
       {
@@ -1405,8 +1402,8 @@ export class StoreFinder extends React.Component {
         center: { lat: stores.items[0].latitude, lng: stores.items[0].longitude },
       },
       () => {
-        // eslint-disable-next-line react/destructuring-assignment,react/no-access-state-in-setstate
-        const obj = this.state.stores.reduce((acc, c) => {
+        const currentState = this.state;
+        const obj = currentState.stores.reduce((acc, c) => {
           const letter = c.store_name[0];
           acc[letter] = (acc[letter] || []).concat({ id: c.id, store_name: c.store_name });
           return acc;
@@ -1460,7 +1457,6 @@ export class StoreFinder extends React.Component {
   searchStores = (place) => {
     const currentLocation = JSON.parse(JSON.stringify(place.geometry.location));
     const { stores } = this.state;
-    // eslint-disable-next-line array-callback-return,consistent-return
     const nearbyStores = this.nearByStores(stores, currentLocation);
     const prevState = this.state;
     this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
@@ -1477,7 +1473,6 @@ export class StoreFinder extends React.Component {
   success = (position) => {
     const currentLocation = { lat: position.coords.longitude, lng: position.coords.latitude };
     const { stores } = this.state;
-    // eslint-disable-next-line array-callback-return,consistent-return
     const nearbyStores = this.nearByStores(stores, currentLocation);
     if (nearbyStores.length > 0) {
       const prevState = this.state;
@@ -1489,13 +1484,10 @@ export class StoreFinder extends React.Component {
   fail = () => 'Could not obtain location.';
 
   nearByStores = (stores, currentLocation) => {
-    // eslint-disable-next-line array-callback-return,consistent-return
     const nearbyStores = stores.filter((store) => {
       const otherLocation = { lat: +store.latitude, lng: +store.longitude };
       const distance = this.getDistanceBetween(currentLocation, otherLocation);
-      if (distance < 5) {
-        return store;
-      }
+      return (distance < 5) ? store : null;
     });
     return nearbyStores;
   }
@@ -1570,7 +1562,9 @@ export class StoreFinder extends React.Component {
                   <ListItem specificPlace={specificPlace} />
                 </div>
               </div>
-              <SingleMarker store={specificPlace} center={center} />
+              <div className="view-content" style={{ height: '500px' }}>
+                <SingleMarkerMap store={specificPlace} center={center} />
+              </div>
             </div>
           )
           : (
@@ -1578,24 +1572,31 @@ export class StoreFinder extends React.Component {
               {showListingView
               && (
                 <div>
-                  <div>select a store to see details</div>
-                  {/* eslint-disable-next-line no-unused-vars */}
-                  {Object.keys(groupedStores).map(([keyItem]) => (
-                    <div key={keyItem}>
-                      <div>{keyItem}</div>
-                      <div>
-                        {groupedStores[keyItem].map((item) => (
-                          // eslint-disable-next-line max-len
-                          <div key={item.id} onClick={() => this.showSpecificPlace(item.id)}>{item.store_name}</div>
-                        ))}
+                  <div className="view-content">
+                    <div>select a store to see details</div>
+                    {Object.keys(groupedStores).map(([keyItem]) => (
+                      <div key={keyItem}>
+                        <div>{keyItem}</div>
+                        <div>
+                          {groupedStores[keyItem].map((item) => (
+                            <div
+                              key={item.id}
+                              onClick={() => this.showSpecificPlace(item.id)}
+                            >
+                              {item.store_name}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               )}
               {showMapView
               && (
-                <MultipeMarker center={center} zoom={zoom} stores={stores} />
+                <div className="view-content" style={{ height: '500px' }}>
+                  <MultipeMarkerMap center={center} zoom={zoom} stores={stores} />
+                </div>
               )}
             </div>
           )}

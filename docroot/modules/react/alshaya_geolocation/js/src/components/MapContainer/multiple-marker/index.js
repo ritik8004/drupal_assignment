@@ -2,8 +2,7 @@ import React from 'react';
 import {
   Map, Marker, InfoWindow, GoogleApiWrapper,
 } from 'google-maps-react';
-// eslint-disable-next-line import/no-named-as-default
-import InfoPopUp from '../InfoPopup';
+import { InfoPopUp } from '../InfoPopup';
 
 export class MultipeMarker extends React.Component {
   constructor(props) {
@@ -50,11 +49,11 @@ export class MultipeMarker extends React.Component {
       newCenter,
       zoom,
     } = this.state;
+    const { google } = this.props;
     const { center, stores } = this.props;
     return (
       <Map
-        /* eslint-disable-next-line react/destructuring-assignment */
-        google={this.props.google}
+        google={google}
         style={{ width: '100%', height: '100%', position: 'relative' }}
         className="map"
         initialCenter={center}

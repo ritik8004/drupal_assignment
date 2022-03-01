@@ -1,6 +1,9 @@
 import React from 'react';
 import {
-  Map, Marker, InfoWindow, GoogleApiWrapper,
+  Map,
+  Marker,
+  InfoWindow,
+  GoogleApiWrapper,
 } from 'google-maps-react';
 import AutocompleteSearch from '../components/autocomplete-search';
 import { InfoPopUp } from '../components/MapContainer/InfoPopup';
@@ -1394,13 +1397,10 @@ export class StoreFinderList extends React.Component {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
     const currentLocation = { lat: +params.latitude, lng: +params.longitude };
-    // eslint-disable-next-line array-callback-return,consistent-return
     const nearbyStores = stores.items.filter((store) => {
       const otherLocation = { lat: +store.latitude, lng: +store.longitude };
       const distance = this.getDistanceBetween(currentLocation, otherLocation);
-      if (distance < 5) {
-        return store;
-      }
+      return (distance < 5) ? store : null;
     });
     const sorter = (a, b) => (a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1);
     nearbyStores.sort(sorter);
@@ -1408,9 +1408,12 @@ export class StoreFinderList extends React.Component {
     this.setState(
       {
         ...prevState,
-        stores: nearbyStores,
-        count: nearbyStores.length,
-        center: { lat: +params.latitude, lng: +params.longitude },
+        stores: nearbyStores.length > 0 ? nearbyStores : stores.items,
+        count: nearbyStores.length > 0 ? nearbyStores.length : stores.items.length,
+        center: {
+          lat: +params.latitude ? +params.latitude : stores.items[0].latitude,
+          lng: +params.longitude ? +params.longitude : stores.items[0].longitude,
+        },
       },
     );
   }
@@ -1462,7 +1465,7 @@ export class StoreFinderList extends React.Component {
     const nearbyStores = this.nearByStores(stores, currentLocation);
     const prevState = this.state;
     this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-    window.location.href = `store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+    window.location.href = `/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
   }
 
   findNearMe = () => {
@@ -1479,18 +1482,15 @@ export class StoreFinderList extends React.Component {
     if (nearbyStores.length > 0) {
       const prevState = this.state;
       this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-      window.location.href = `store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+      window.location.href = `/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
     }
   }
 
   nearByStores = (stores, currentLocation) => {
-    // eslint-disable-next-line array-callback-return,consistent-return
     const nearbyStores = stores.filter((store) => {
       const otherLocation = { lat: +store.latitude, lng: +store.longitude };
       const distance = this.getDistanceBetween(currentLocation, otherLocation);
-      if (distance < 5) {
-        return store;
-      }
+      return (distance < 5) ? store : null;
     });
     return nearbyStores;
   }
@@ -1522,7 +1522,7 @@ export class StoreFinderList extends React.Component {
   }
 
   showAllStores = () => {
-    window.location.href = 'store-finder/';
+    window.location.href = '/store-finder/';
   }
 
   toggleOpenClass = () => {
@@ -1546,6 +1546,7 @@ export class StoreFinderList extends React.Component {
       open,
       zoom,
     } = this.state;
+    const { google } = this.props;
     return (
       <>
         <div className="l-container">
@@ -1562,7 +1563,7 @@ export class StoreFinderList extends React.Component {
               <div key={store.id}>
                 <div>
                   <a className="row-title" onClick={() => this.showSpecificPlace(store.id)}>
-                    <span>{Drupal.t(`${store.store_name}`)}</span>
+                    <span>{store.store_name}</span>
                   </a>
                   <div className="views-row">
                     <div className="views-field-field-store-address">
@@ -1570,7 +1571,7 @@ export class StoreFinderList extends React.Component {
                         <div className="address--line2">
                           {store.address.map((item) => (
                             <div key={item.code}>
-                              {item.code === 'address_building_segment' ? <span>{Drupal.t(`${item.label}`)}</span> : null}
+                              {item.code === 'address_building_segment' ? <span>{item.label}</span> : null}
                               {item.code === 'street' ? <span>{item.value}</span> : null}
                             </div>
                           ))}
@@ -1590,7 +1591,7 @@ export class StoreFinderList extends React.Component {
                             <div className="open--hours">
                               {store.store_hours.map((item) => (
                                 <div key={item.code}>
-                                  <span className="key-value-key">{Drupal.t(`${item.label}`)}</span>
+                                  <span className="key-value-key">{item.label}</span>
                                   <span className="key-value-value">{item.value}</span>
                                 </div>
                               ))}
@@ -1620,38 +1621,39 @@ export class StoreFinderList extends React.Component {
               </div>
             ))}
           </div>
-          <Map
-            /* eslint-disable-next-line react/destructuring-assignment */
-            google={this.props.google}
-            style={{ width: '100%', height: '100%', position: 'relative' }}
-            className="map"
-            initialCenter={center}
-            center={center}
-            zoom={zoom}
-          >
-            {stores.map((store, index) => (
-              <Marker
-                onClick={this.onMarkerClick}
-                label={(index + 1).toString()}
-                z-index={(index + 1).toString()}
-                key={store.id}
-                title={store.store_name}
-                name={store.store_name}
-                openHours={store.store_hours}
-                position={{ lat: store.latitude, lng: store.longitude }}
-                address={store.address}
-              />
-            ))}
-            {showingInfoWindow && (
-            <InfoWindow
-              marker={activeMarker}
-              onClose={this.onInfoWindowClose}
-              visible={showingInfoWindow}
+          <div className="view-content" style={{ height: '500px' }}>
+            <Map
+              google={google}
+              style={{ width: '100%', height: '100%', position: 'relative' }}
+              className="map"
+              initialCenter={center}
+              center={center}
+              zoom={zoom}
             >
-              <InfoPopUp selectedPlace={selectedPlace} />
-            </InfoWindow>
-            )}
-          </Map>
+              {stores.map((store, index) => (
+                <Marker
+                  onClick={this.onMarkerClick}
+                  label={(index + 1).toString()}
+                  z-index={(index + 1).toString()}
+                  key={store.id}
+                  title={store.store_name}
+                  name={store.store_name}
+                  openHours={store.store_hours}
+                  position={{ lat: store.latitude, lng: store.longitude }}
+                  address={store.address}
+                />
+              ))}
+              {showingInfoWindow && (
+              <InfoWindow
+                marker={activeMarker}
+                onClose={this.onInfoWindowClose}
+                visible={showingInfoWindow}
+              >
+                <InfoPopUp selectedPlace={selectedPlace} />
+              </InfoWindow>
+              )}
+            </Map>
+          </div>
         </div>
         )}
       </>
