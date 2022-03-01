@@ -1,0 +1,56 @@
+body[class*="-order"]:not(.rcs-loaded) {
+  .c-order-list {
+    #block-content {
+      .subtitle {
+        color: $no-color;
+        border: 0;
+        margin-bottom: 0.625rem;
+
+        @include plain-loader;
+      }
+
+      .order-list-wrapper-container {
+        height: 16rem;
+        border: 0;
+
+        @include text-block-loader;
+
+        & > * {
+          visibility: hidden;
+        }
+      }
+
+      .order-search-form {
+        height: 0;
+
+        @include plain-loader;
+
+        & > * {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+}
+
+body.path--user:not(.rcs-loaded) {
+  .block-alshaya-user-recent-orders {
+    .subtitle,
+    .show-all {
+      color: $no-color;
+      margin-bottom: 0.625rem;
+
+      @include plain-loader;
+    }
+
+    .recent__orders--list {
+      height: 16rem;
+
+      @include text-block-loader;
+
+      & > * {
+        visibility: hidden;
+      }
+    }
+  }
+}
