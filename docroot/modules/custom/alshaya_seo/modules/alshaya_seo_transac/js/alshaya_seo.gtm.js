@@ -1320,10 +1320,8 @@
    *
    * @param {object} productContext
    *   The jQuery HTML object containing GTM attributes for the product.
-   * @param {string} quickView
-   *   The value to add .
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName, quickView = '') {
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';
@@ -1333,24 +1331,13 @@
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
         detail: {
+          actionField: {
+            list: product.list
+          },
           products: [product]
         }
       }
     };
-    if (quickView) {
-      data = {
-        event: 'productDetailView',
-        ecommerce: {
-          currencyCode: drupalSettings.gtm.currency,
-          detail: {
-            actionField: {
-              list: listName
-            },
-            products: [product]
-          }
-        }
-      };
-    }
 
     dataLayer.push(data);
   }
