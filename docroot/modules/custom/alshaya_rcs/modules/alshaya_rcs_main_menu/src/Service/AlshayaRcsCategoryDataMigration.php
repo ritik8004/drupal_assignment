@@ -218,7 +218,7 @@ class AlshayaRcsCategoryDataMigration {
         $rcs_term->get('field_category_slug')->setValue($term_slug);
 
         // Check if the translations exists for arabic language.
-        if ($acq_term_data->hasTranslation($langcode)) {
+        if ($acq_term_data->hasTranslation('ar')) {
           // Load the translation object.
           $acq_term_data = $acq_term_data->getTranslation('ar');
 
@@ -232,13 +232,13 @@ class AlshayaRcsCategoryDataMigration {
             ->setValue($acq_term_data->get('field_term_font_color')->getValue());
 
           // Delete the ACM Category item before creating the RCS Category.
-          $acq_term->delete();
+          $acq_term_data->delete();
           // Save the translations.
           $rcs_term->save();
         }
 
         // Delete the ACM Category item before creating the RCS Category.
-        $acq_term->delete();
+        $acq_term_data->delete();
         // Save the new term object in rcs category.
         $rcs_term->save();
       }
