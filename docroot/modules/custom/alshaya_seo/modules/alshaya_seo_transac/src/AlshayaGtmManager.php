@@ -1074,7 +1074,7 @@ class AlshayaGtmManager {
         $taxonomy_term = $current_route['route_params']['taxonomy_term'];
         $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
         foreach ($taxonomy_parents as $taxonomy_parent) {
-          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, $this->languageManager->getCurrentLanguage()->getId());
+          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
           $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
         }
 
