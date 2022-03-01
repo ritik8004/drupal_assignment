@@ -27,14 +27,10 @@ class WishlistProductList extends React.Component {
     super(props);
     let wishListItems = {};
     let wishListItemsCount = 0;
-    // If the current page is not a shared wishlist page and
-    // forceLoadWishlistFromBackend settings should be undefined or false.
-    // This configuration is only available for authenticated customers. So
-    // for anonymous it will always load from local storage and for authenticate
-    // customers it'll check for the configurations and load via local storage
-    // or after the wishlist items fetched from the backend.
-    if (!isShareWishlistPage()
-      && !hasValue(drupalSettings.wishlist.config.forceLoadWishlistFromBackend)) {
+    // If the current page is not a shared wishlist page. We
+    // get wishlist data from the local storage.
+    // Also, if the user if anonymous, always load data from local storage.
+    if (!isShareWishlistPage() && isAnonymousUser()) {
       // Get the wishlist items.
       wishListItems = getWishListData() || {};
       wishListItemsCount = Object.keys(wishListItems).length;
