@@ -28,6 +28,7 @@ $white: #fff;
 $dark-sand: #ac8e54;
 $_plp_cta_hover: #0b3d6f;
 $_plp_secondary_cta_hover: rgba(0, 73, 144, 0.1);
+$_egift_landing_page_banner_bg: #e1f0fd;
 
 // Global elements.
 $primary_text: $black-two;
@@ -600,3 +601,6 @@ $spc-cart-delivery-popup-search-border: $black-two;
 
 // Country Switcher
 $country-switcher-label-mobile: $black-two;
+
+// eGift Landing page
+$egift-banner-bg: $_egift_landing_page_banner_bg;

@@ -127,6 +127,7 @@ export default class EgiftCardPurchase extends React.Component {
     // Empty open amount field.
     if (document.getElementById('open-amount') !== null) {
       document.getElementById('open-amount').value = '';
+      document.getElementById('open-amount').removeAttribute('readonly');
     }
 
     // Redirect user to checkout if action button checkout is clicked.

@@ -1,0 +1,18 @@
+.egifts-form-wrapper {
+  .egift-open-amount-wrapper {
+    button {
+      background: $primary_brand_button;
+      border-color: $primary_brand_button;
+      border-radius: 1.3125rem;
+    }
+  }
+
+  .action-buttons {
+    button[type="submit"],
+    button[type="button"]:not(.my-topup-cancel-btn) {
+      background: $primary_brand_button;
+      border-color: $primary_brand_button;
+      border-radius: 1.3125rem;
+    }
+  }
+}

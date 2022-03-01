@@ -119,6 +119,12 @@
 
       .egift-linked-card-number-value {
         border: none;
+        background: transparent;
+
+        @include breakpoint($only-mobile) {
+          -webkit-text-fill-color: $egift-black-text;
+          opacity: 1;
+        }
 
         html[lang=ar] & {
           direction: ltr;

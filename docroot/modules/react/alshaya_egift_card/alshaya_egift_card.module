@@ -22,6 +22,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     'notSupportedPaymentMethods' => array_filter($egiftCard_settings->getNotSupportedPaymentMethods(), function($method) {
       return $method !== '0';
     }),
+    'allowSavedCreditCardForTopup' => $egiftCard_settings->getAllowSavedCCForTopUp(),
   ];
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
   // Add the egift related settings only if egift feature is enabled.
@@ -54,7 +55,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     ];
     $build['#strings'][] = [
       'key' => 'egift_valid_amount',
-      'value' => t('Please enter a valid amount.', [], [
+      'value' => t('Please enter a valid amount', [], [
         'context' => 'egift'
       ]),
     ];
@@ -286,6 +287,7 @@ function alshaya_egift_card_alshaya_spc_order_details_settings_alter(&$settings,
       $settings['order_details']['items'][$itemKey]['isTopUp'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->is_topup ?? FALSE;
       $settings['order_details']['items'][$itemKey]['topupCardNumber'] = $order['extension']['topup_card_number'] ?? 0;
       // For egift topup card set topupRecieptEmail to show in order confirmation summary.
+      $settings['order_details']['topUpRecieptEmail'] = $order['extension']['topup_recipientemail'] ?? '';
       $settings['order_details']['isTopUp'] = json_decode($order['extension']['alshaya_order_type']['additional_data'])->is_topup ?? FALSE;
     }
     if (isset($item['egiftOptions']['hps_giftcard_recipient_email'])) {

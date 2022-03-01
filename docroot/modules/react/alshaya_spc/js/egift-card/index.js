@@ -132,6 +132,11 @@ export default class RedeemEgiftCard extends React.Component {
                     this.setState({ codeValidated: response.data.response_type, codeSent: false });
                     // Remove the loader once state is updated.
                     removeFullScreenLoader();
+                    // Dispatch egift guest redemption verification for GTM.
+                    dispatchCustomEvent('egiftCardRedeemed', {
+                      label: 'egift_verification',
+                      action: 'card_redemption',
+                    });
                   });
                 }
               }
@@ -196,6 +201,11 @@ export default class RedeemEgiftCard extends React.Component {
           egiftEmail: response.data.email,
           egiftCardNumber: response.data.card_number,
         });
+        // Dispatch egift guest redemption interaction for GTM.
+        dispatchCustomEvent('egiftCardRedeemed', {
+          label: 'egift_interaction',
+          action: 'card_redemption',
+        });
       } else if (isValidResponseWithFalseResult(response)) {
         result = {
           error: true,
@@ -242,6 +252,11 @@ export default class RedeemEgiftCard extends React.Component {
       });
       // Update the cart total.
       updatePriceSummaryBlock(refreshCart);
+      // Dispatch egift guest redemption removed for GTM.
+      dispatchCustomEvent('egiftCardRedeemed', {
+        label: 'egift_remove',
+        action: 'card_redemption',
+      });
     }
 
     return response;

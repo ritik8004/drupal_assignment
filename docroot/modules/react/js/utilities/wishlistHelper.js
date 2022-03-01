@@ -100,12 +100,7 @@ export const getAttributeOptionsForWishlist = (configurableCombinations, skuItem
         option_id: configurableCombinations[skuItemCode].configurables[key].attribute_id,
         option_value: configurableCombinations[skuItemCode].bySku[variant][key],
       };
-
-      // Skipping the psudo attributes.
-      if (drupalSettings.psudo_attribute === undefined
-        || drupalSettings.psudo_attribute !== option.option_id) {
-        options.push(option);
-      }
+      options.push(option);
     });
   }
   return options;
@@ -195,6 +190,15 @@ export const addWishListInfoInStorage = (wishListData, strgKey = null) => {
     ? getWishlistInfoStorageExpirationForGuest()
     : getWishlistInfoStorageExpirationForLoggedIn();
 
+  // Check for the empty object and remove item from storage.
+  if (typeof wishListData === 'object'
+    && Object.keys(wishListData).length === 0) {
+    Drupal.removeItemFromLocalStorage(
+      hasValue(strgKey) ? strgKey : getWishListStorageKey(),
+    );
+    return;
+  }
+
   // Store data to local storage.
   Drupal.addItemInLocalStorage(
     hasValue(strgKey) ? strgKey : getWishListStorageKey(),
@@ -233,15 +237,27 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
   Object.keys(configurableAttributes).forEach((attributeCode) => {
     const attributeData = configurableAttributes[attributeCode];
     if (typeof attributeData.is_pseudo_attribute !== 'undefined'
-      && attributeData.is_pseudo_attribute) {
+      && attributeData.is_pseudo_attribute
+      && typeof attributeData.values !== 'undefined'
+      && attributeData.values.length > 0) {
       skuAttributesOptionData[attributeCode] = attributeData.values[0].value;
-      return;
     }
+    // For the anonymous customers option's id key in product options object is
+    // `option_id` but for authenticate customers this key is `id` only. So
+    // while searching we need to put conditions with both the key and if either
+    // one is matched, we need to process that attribute further.
     const attributeValueFromSku = skuData.options.find(
-      (option) => ((option.option_id === attributeData.id) ? option : false),
+      (option) => ((option.option_id === attributeData.id
+        || option.id === attributeData.id)
+        ? option
+        : false),
     );
     if (attributeValueFromSku) {
-      skuAttributesOptionData[attributeCode] = attributeValueFromSku.option_value;
+      // For authenticate customers we get the option value with the object key
+      // `value' but for anonymous customers we have this in `option_value`.
+      skuAttributesOptionData[attributeCode] = (typeof attributeValueFromSku.value !== 'undefined')
+        ? attributeValueFromSku.value
+        : attributeValueFromSku.option_value;
     }
   });
 
@@ -602,5 +618,76 @@ export const removeDiffFromWishlist = (productsObj) => {
         });
       }
     });
+  }
+};
+
+/**
+ *
+ * @param {object} productData
+ *  An object of product's data attributes.
+ * @param {string} action
+ *  Action context, can be add/remove (Default is add).
+ */
+export const pushWishlistSeoGtmData = (productData, action = 'add') => {
+  if (productData.element === null) {
+    logger.warning('Error in pushing data to GTM. productData: @productData.', {
+      '@productData': JSON.stringify(productData),
+    });
+    return;
+  }
+
+  // Prepare and push product's variables to GTM using dataLayer.
+  if (typeof Drupal.alshaya_seo_gtm_get_product_values !== 'undefined'
+    && typeof Drupal.alshayaSeoGtmPushAddToWishlist !== 'undefined') {
+    // Check the context, if cart page, prepare product data.
+    if (typeof productData.context !== 'undefined'
+      && typeof productData.variant !== 'undefined'
+      && productData.context === 'cart') {
+      // For the cart page get product info from storage.
+      const key = `product:${drupalSettings.path.currentLanguage}:${productData.variant}`;
+      const productInfo = Drupal.getItemFromLocalStorage(key);
+      if (productInfo !== null
+        && typeof Drupal.alshayaSeoSpc.gtmProduct !== 'undefined') {
+        const product = Drupal.alshayaSeoSpc.gtmProduct(productInfo, 1);
+        // For the cart page we only perform add to wishlist action.
+        Drupal.alshayaSeoGtmPushAddToWishlist(product);
+      }
+      return;
+    }
+
+    // For the PLP, PDP and Modal contexts.
+    // Get the seo GTM product values.
+    let gtmProduct = productData.element.closest('[gtm-type="gtm-product-link"]');
+    // The product drawer is coming in page end in DOM,
+    // so element.closest is not right selector when quick view is open.
+    if (gtmProduct === null) {
+      gtmProduct = document.querySelector(`article[data-sku="${productData.element.getAttribute('data-sku')}"]`);
+    }
+    const product = Drupal.alshaya_seo_gtm_get_product_values(
+      gtmProduct,
+    );
+
+    // Set the product quantity.
+    product.quantity = 1;
+
+    // Set product variant to the selected variant.
+    if (product.dimension2 !== 'simple' && typeof productData.sku !== 'undefined') {
+      product.variant = productData.sku;
+    } else {
+      product.variant = product.id;
+    }
+
+    // Check if the action and call the relevant GTM functions.
+    switch (action) {
+      case 'remove': {
+        // Push removeFromWishlist event to datalayer.
+        Drupal.alshayaSeoGtmPushRemoveFromWishlist(product);
+        break;
+      }
+
+      default:
+        // Push addToWishlist event to datalayer as detaul action.
+        Drupal.alshayaSeoGtmPushAddToWishlist(product);
+    }
   }
 };

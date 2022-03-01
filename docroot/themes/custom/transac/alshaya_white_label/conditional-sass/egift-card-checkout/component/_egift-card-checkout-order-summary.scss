@@ -1,6 +1,7 @@
 .spc-order-summary-block {
   .spc-product-attributes {
     .egift-cart-message-value {
+      direction: ltr;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
@@ -30,6 +31,30 @@
 
     .spc-aura-checkout-rewards-block {
       padding-bottom: 2.5rem;
+    }
+  }
+
+  .product-content {
+    .product-item {
+      .spc-product-attributes {
+        .spc-cart-product-attribute-value {
+          input {
+            border: none;
+            background: transparent;
+
+            @include breakpoint($only-mobile) {
+              -webkit-text-fill-color: $egift-checkout-card-number;
+              opacity: 1;
+            }
+
+            html[lang=ar] & {
+              direction: ltr;
+              text-align: right;
+              max-width: 10rem;
+            }
+          }
+        }
+      }
     }
   }
 }

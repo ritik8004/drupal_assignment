@@ -23,3 +23,10 @@ wishlist_add_to_cart:
   dependencies:
     - core/jquery
     - core/jquery.once
+
+wishlist_gtm:
+  version: 1.x
+  js:
+    assets/js/wishlist_gtm.js: {}
+  dependencies:
+    - core/jquery

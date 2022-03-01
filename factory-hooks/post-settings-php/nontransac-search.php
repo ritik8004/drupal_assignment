@@ -18,6 +18,7 @@ elseif (getenv('TRAVIS') || getenv('CI_BUILD_ID')) {
 }
 
 if (in_array($env, ['local', 'travis'])) {
+  $config['search_api.server.non_transac_acquia_search_server']['backend_config']['connector'] = 'standard';
   $config['search_api.server.non_transac_acquia_search_server']['name'] = 'Local SOLR Server';
   $config['search_api.server.non_transac_acquia_search_server']['backend_config']['connector_config']['host'] = 'localhost';
   $config['search_api.server.non_transac_acquia_search_server']['backend_config']['connector_config']['port'] = '8983';

@@ -83,6 +83,8 @@ class AlshayaGtmManager {
     'user.page' => 'user page',
     'user.reset' => 'user reset page',
     'user.reset.form' => 'user reset page',
+    'alshaya_wishlist.users_wishlist' => 'wishlist page',
+    'alshaya_wishlist.user_account_wishlist' => 'wishlist page',
   ];
 
   /**
@@ -96,6 +98,8 @@ class AlshayaGtmManager {
     'acq_cart.cart' => 'CartPage',
     'alshaya_master.home' => 'HP-ProductCarrousel',
     'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',
+    'alshaya_wishlist.users_wishlist' => 'Wishlist',
+    'alshaya_wishlist.user_account_wishlist' => 'Wishlist',
   ];
 
   /**
@@ -893,6 +897,20 @@ class AlshayaGtmManager {
         continue;
       }
 
+      // If its a virtual product i.e egift card or egift topup.
+      if ($item['type'] === 'virtual') {
+        $products[$item['item_id']] = [
+          'name' => $item['name'],
+          'id' => $item['item_id'],
+          'price' => $item['price'],
+          'variant' => $item['sku'],
+          'dimension2' => $item['type'],
+          'dimension4' => 1,
+          'quantity' => $item['ordered'],
+        ];
+        continue;
+      }
+
       $product = $this->fetchSkuAtttributes($item['sku']);
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
@@ -1201,6 +1219,10 @@ class AlshayaGtmManager {
 
           if ($product_node instanceof NodeInterface) {
             $productStyleCode[] = $this->skuManager->getSkuForNode($product_node);
+          }
+          // If its a virtual product i.e egift card or egift topup.
+          if ($orderItem['type'] === 'virtual') {
+            $productStyleCode[] = $orderItem['item_id'];
           }
         }
 

@@ -65,6 +65,15 @@
       align-items: center;
     }
 
+    .paid-with-egift {
+      & + .value {
+        @media print {
+          min-width: 6.25rem;
+          text-align: $right;
+        }
+      }
+    }
+
     .discount-total {
       color: $spc-order-summary-discount-text;
       position: relative;
@@ -232,18 +241,6 @@
         .spc-cart-product-attribute-label {
           display: inline-block;
           margin-#{$right}: 0.1875rem;
-        }
-
-        .spc-cart-product-attribute-value {
-          input {
-            border: none;
-            background: $spc-cart-product-attribute-input;
-
-            html[lang=ar] & {
-              direction: ltr;
-              text-align: right;
-            }
-          }
         }
       }
 
