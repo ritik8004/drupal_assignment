@@ -28,15 +28,7 @@
           product,
         },
       );
-    }).catch(e => {
-      Drupal.alshayaLogger(
-        "error",
-        "Error while fetching Product Labels - @error",
-        {
-          "@error": 'status :' + e.status + ', message :' + e.responseText,
-        }
-      );
-  });
+    });
   }
 
   /**
