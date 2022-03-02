@@ -43,6 +43,7 @@ exports.normalize = function normalize(
       url: null,
       text: data.name,
       data_url: data.url_path,
+      id: data.id,
     });
 
     return normalized;
@@ -54,6 +55,7 @@ exports.normalize = function normalize(
       url: data.breadcrumbs[i].category_url_path,
       text: data.breadcrumbs[i].category_name,
       data_url: data.breadcrumbs[i].category_url_path,
+      id: data.breadcrumbs[i].category_id,
     });
   });
 
@@ -62,6 +64,7 @@ exports.normalize = function normalize(
     url: null,
     text: data.name,
     data_url: data.url_path,
+    id: data.id,
   });
 
   return normalized;

@@ -28,7 +28,7 @@
       data.magentoProductID = entity.id;
 
       // Set categories.
-      let categories = getCategoriesAndDepartment(entity);
+      let categories = getCategoriesAndDepartment(entity, e.detail.type);
       for (let prop in categories) {
         data[prop] = categories[prop];
       }
@@ -37,6 +37,14 @@
       data.productColor = '';
       data.productRating = '';
       data.productReview = '';
+    } else if (e.detail.type === 'category') {
+      // Assign product GTM variables.
+      var data = e.detail.data();
+      // Set categories.
+      let categories = getCategoriesAndDepartment(e.detail.page_entity, e.detail.type);
+      for (let prop in categories) {
+        data[prop] = categories[prop];
+      }
     }
   });
 
@@ -46,10 +54,12 @@
    *
    * @param {object} entity
    *   The product entity object.
+   * @param {string} type
+   *   The string key of pageType.
    * @returns
    *   {object} Category and department data.
    */
-  function getCategoriesAndDepartment(entity) {
+  function getCategoriesAndDepartment(entity, type) {
     var categories = {
       subcategory : '',
       minorCategory: '',
@@ -58,32 +68,33 @@
       listingId: '',
       departmentId: '',
       departmentName: '',
+      list: '',
     };
 
     // Get categories from breadcrumb.
     var breadcrumbs = renderRcsBreadcrumb.normalize(entity);
+    var breadcrumbTitles = [];
     if (Array.isArray(breadcrumbs)) {
       // Remove the product from breadcrumb.
-      breadcrumbs.pop();
+      if (type === 'product') {
+        breadcrumbs.pop();
+      }
       // Get the department name.
       for (let i = 0; i < breadcrumbs.length;  i++) {
-        if (categories.departmentName === '') {
-          categories.departmentName = breadcrumbs[i].text;
-        }
-        else {
-          categories.departmentName += '|' + breadcrumbs[i].text;
-        }
+        // Store the breadcrumb titles.
+        breadcrumbTitles.push(breadcrumbs[i].text);
       }
+      categories.departmentName = breadcrumbTitles.join('|'),
       categories.departmentId = breadcrumbs[0].id;
-      categories.majorCategory = breadcrumbs[0].text;
-      categories.minorCategory = breadcrumbs[1].text;
-      if (typeof breadcrumbs[2] !== 'undefined') {
-        categories.subcategory = breadcrumbs[2].text;
-      }
+      categories.list = breadcrumbTitles.join('|');
       // Lowest category as listing category.
       var listing_category = breadcrumbs.pop();
-      categories.listingId = listing_category.text;
-      categories.listingName = listing_category.id;
+      categories.listingName = listing_category.text;
+      categories.listingId = listing_category.id;
+
+      categories.majorCategory = breadcrumbTitles.shift();
+      categories.minorCategory = breadcrumbTitles.shift();
+      categories.subcategory = breadcrumbTitles.shift();
     }
 
     return categories;
