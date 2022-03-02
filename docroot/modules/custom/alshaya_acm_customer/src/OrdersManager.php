@@ -233,12 +233,19 @@ class OrdersManager {
     try {
       $query = $this->getOrdersQuery('customer_id', $customer_id);
 
+      // @todo Create config if required.
+      $page_size = 10;
+
+      // Query page size.
+      $query['searchCriteria']['pageSize'] = $page_size;
+
+      $endpoint = 'orders';
       $request_options = [
         'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
       ];
 
-      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-      $result = json_decode($response ?? [], TRUE);
+      $result = $this->apiWrapper->invokeApiWithPageLimit($endpoint, $request_options, $page_size, [], $query);
+
       $orders = $result['items'] ?? [];
       foreach ($orders as $key => $order) {
         // Allow other modules to alter order details.

@@ -316,22 +316,18 @@ class AlshayaApiWrapper {
       'condition_type' => 'eq',
     ];
 
-    $endpoint = 'storeLocator/search?';
-    $endpoint .= $this->prepareFilterUrl($filters);
+    // @todo Create config if required.
+    $page_size = 10;
 
+    // Filter page size.
+    $filters['page_size'] = $page_size;
+
+    $endpoint = 'storeLocator/search?';
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('store_search'),
     ];
 
-    $response = $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
-
-    $stores = NULL;
-
-    if ($response && is_string($response)) {
-      $stores = json_decode($response, TRUE);
-    }
-
-    return $stores;
+    return $this->invokeApiWithPageLimit($endpoint, $request_options, $page_size, $filters);
   }
 
   /**
@@ -695,24 +691,65 @@ class AlshayaApiWrapper {
       'condition_type' => 'eq',
     ];
 
-    $endpoint = 'deliverymatrix/address-locations/search?';
-    $endpoint .= $this->prepareFilterUrl($filters);
+    // @todo Create config if required.
+    $page_size = 10;
 
+    // Filter page size.
+    $filters['page_size'] = $page_size;
+
+    $endpoint = 'deliverymatrix/address-locations/search?';
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('dm_search'),
     ];
 
-    $response = $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+    return $this->invokeApiWithPageLimit($endpoint, $request_options, $page_size, $filters);
+  }
 
-    if ($response && is_string($response)) {
-      $locations = json_decode($response, TRUE);
+  /**
+   * Function to invoke APIs with page limit.
+   *
+   * @param string $endpoint
+   *   The API endpoint.
+   * @param array $request_options
+   *   Request Options.
+   * @param int $page_size
+   *   Page size/limit of the API.
+   * @param array $filters
+   *   Filters array.
+   * @param array $data
+   *   Data to send to API.
+   *
+   * @return array
+   *   Array of items from API.
+   */
+  public function invokeApiWithPageLimit(string $endpoint, array $request_options, int $page_size, array $filters = [], array $data = []) {
+    $current_page = 1;
+    $all_items = [];
 
-      if ($locations && is_array($locations)) {
-        return $locations;
+    do {
+      if ($filters) {
+        $filters['current_page'] = $current_page++;
+        $endpoint .= $this->prepareFilterUrl($filters);
       }
-    }
 
-    return [];
+      if ($data) {
+        $data['searchCriteria']['current_page'] = $current_page++;
+      }
+
+      $response = $this->invokeApi($endpoint, $data, 'GET', FALSE, $request_options);
+
+      if ($response && is_string($response)) {
+        $response_array = json_decode($response, TRUE);
+
+        if ($response_array && is_array($response_array) && !empty($response_array['items'])) {
+          $all_items['items'] = array_merge($all_items['items'] ?? [], $response_array['items']);
+        }
+      }
+      $no_of_pages = $no_of_pages ?? ceil($response_array['total_count'] / $page_size);
+
+    } while ($current_page <= $no_of_pages);
+
+    return $all_items;
   }
 
   /**
@@ -779,6 +816,11 @@ class AlshayaApiWrapper {
     $url = '';
 
     foreach ($filters as $index => $filter) {
+      if (!is_array($filter)) {
+        $url .= $base . '[' . $index . ']=' . $filter . '&';
+        continue;
+      }
+
       foreach ($filter as $key => $value) {
         // Prepared string like below.
         // searchCriteria[filter_groups][0][filters][0][field]=field
