@@ -86,7 +86,9 @@
         variant.product.url_key = styleProduct.url_key;
         // Variants will inherit delivery options from their parent sku.
         variant.product.deliveryOptions = {};
-        if (Drupal.hasValue(drupalSettings.expressDelivery.enabled)) {
+        if (Drupal.hasValue(drupalSettings.expressDelivery)
+          && Drupal.hasValue(drupalSettings.expressDelivery.enabled)
+        ) {
           variant.product.deliveryOptions = {
             express_delivery: {
               status: (Drupal.hasValue(styleProduct.express_delivery) && Drupal.hasValue(drupalSettings.expressDelivery.express_delivery))
