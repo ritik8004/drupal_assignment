@@ -1,0 +1,7 @@
+.spc-checkout-payment-options .payment-method {
+  &.in-active {
+    .payment-method-top-panel {
+      opacity: 0.2;
+    }
+  }
+}
