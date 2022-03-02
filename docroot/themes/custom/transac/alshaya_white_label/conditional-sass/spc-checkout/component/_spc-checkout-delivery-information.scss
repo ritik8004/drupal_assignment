@@ -71,7 +71,15 @@
       }
 
       .store-name {
-        padding-#{$right}: 7.5rem;
+        max-width: 12.5rem;
+
+        @include breakpoint($tablet) {
+          max-width: 14.5rem;
+        }
+
+        @include breakpoint($desktop) {
+          max-width: 22.5rem;
+        }
       }
 
       .delivery-name,
