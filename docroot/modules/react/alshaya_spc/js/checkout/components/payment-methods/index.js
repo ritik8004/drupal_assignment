@@ -7,6 +7,7 @@ import PaymentMethod from '../payment-method';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   isDeliveryTypeSameAsInCart,
+  getNextAllowedPaymentMethodCode,
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
@@ -30,7 +31,6 @@ import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
 import {
   cartContainsAnyVirtualProduct,
-  getNextAllowedPaymentMethodCode,
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
   isFullPaymentDoneByEgift,
@@ -176,6 +176,9 @@ export default class PaymentMethods extends React.Component {
 
     const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
 
+    // Get flag if cart has virtual products.
+    const cartHasVirtualProducts = cartContainsAnyVirtualProduct(cart.cart);
+
     if (cart.cart.payment.method === undefined
       || paymentMethods[cart.cart.payment.method] === undefined
       || paymentDiv === null
@@ -184,7 +187,9 @@ export default class PaymentMethods extends React.Component {
       if (cart.cart.payment.method !== undefined
         && cart.cart.payment.method !== null
         && paymentMethods[cart.cart.payment.method] !== undefined
-        && !(cartContainsAnyVirtualProduct(cart.cart)
+        // Check if cart contains virtual product,
+        // and cart payment method is not supported by eGift.
+        && !(cartHasVirtualProducts
           && isEgiftUnsupportedPaymentMethod(cart.cart.payment.method))) {
         this.changePaymentMethod(cart.cart.payment.method);
         return;
@@ -194,7 +199,9 @@ export default class PaymentMethods extends React.Component {
       if (cart.cart.payment.default !== undefined
         && cart.cart.payment.default !== null
         && paymentMethods[cart.cart.payment.default] !== undefined
-        && !(cartContainsAnyVirtualProduct(cart.cart)
+        // Check if cart contains virtual product,
+        // and default payment method is not supported by eGift.
+        && !(cartHasVirtualProducts
           && isEgiftUnsupportedPaymentMethod(cart.cart.payment.default))) {
         this.changePaymentMethod(cart.cart.payment.default);
         return;
@@ -203,7 +210,7 @@ export default class PaymentMethods extends React.Component {
       // Select first payment method by default.
       const paymentMethodCode = getNextAllowedPaymentMethodCode(paymentMethods, cart);
       this.changePaymentMethod(paymentMethodCode);
-    } else if (cartContainsAnyVirtualProduct(cart.cart)
+    } else if (cartHasVirtualProducts
         && isEgiftUnsupportedPaymentMethod(cart.cart.payment.method)) {
       // check if virtual product in cart and unsupported payment method,
       // then get next payment method.

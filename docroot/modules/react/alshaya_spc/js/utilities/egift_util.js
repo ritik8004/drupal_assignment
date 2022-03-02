@@ -285,24 +285,6 @@ export const isEgiftUnsupportedPaymentMethod = (paymentMethod) => {
 };
 
 /**
- * Get next allowed payment method when virtual product is present.
- */
-export const getNextAllowedPaymentMethodCode = (paymentMethods, cart) => {
-  const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
-  let paymentMethodCode = null;
-  if (isEgiftCardEnabled()) {
-    for (let i = 0; i <= sortedMethods.length; i++) {
-      if (cartContainsAnyVirtualProduct(cart.cart)
-        && !isEgiftUnsupportedPaymentMethod(sortedMethods[i].code)) {
-        paymentMethodCode = sortedMethods[i].code;
-        break;
-      }
-    }
-  }
-  return hasValue(paymentMethodCode) ? paymentMethodCode : sortedMethods[0].code;
-};
-
-/**
  * Checks if the full payment is done by egift or not.
  *
  * @param {object} cart
