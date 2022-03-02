@@ -3,8 +3,12 @@ import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
-import { cartContainsOnlyVirtualProduct } from './egift_util';
+import {
+  cartContainsAnyVirtualProduct,
+  cartContainsOnlyVirtualProduct, isEgiftUnsupportedPaymentMethod,
+} from './egift_util';
 import { addPaymentMethodInCart } from './update_cart';
+import { isEgiftCardEnabled } from '../../../js/utilities/util';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -710,4 +714,23 @@ export const updatePaymentAndPlaceOrder = (paymentMethod) => {
       Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
     });
   }
+};
+
+/**
+ * Get next allowed payment method when virtual product is present.
+ */
+export const getNextAllowedPaymentMethodCode = (paymentMethods, cart) => {
+  const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
+  const cartHasVirtualProduct = cartContainsAnyVirtualProduct(cart.cart);
+  let paymentMethodCode = null;
+  if (isEgiftCardEnabled()) {
+    for (let i = 0; i <= sortedMethods.length; i++) {
+      if (cartHasVirtualProduct
+        && !isEgiftUnsupportedPaymentMethod(sortedMethods[i].code)) {
+        paymentMethodCode = sortedMethods[i].code;
+        break;
+      }
+    }
+  }
+  return hasValue(paymentMethodCode) ? paymentMethodCode : sortedMethods[0].code;
 };
