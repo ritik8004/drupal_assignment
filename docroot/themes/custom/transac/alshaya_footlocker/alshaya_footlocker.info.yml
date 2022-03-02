@@ -185,8 +185,3 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css
-
-  alshaya_white_label/slick_css:
-    css:
-      theme:
-        vendor/css/slick.css: vendor/css/slick.css
