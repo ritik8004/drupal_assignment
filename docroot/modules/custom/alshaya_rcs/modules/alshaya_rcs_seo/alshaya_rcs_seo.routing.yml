@@ -1,0 +1,7 @@
+alshaya_rcs_seo.seo_cofig_form:
+  path: '/admin/config/rcs-seo-configuration'
+  defaults:
+    _form: '\Drupal\alshaya_rcs_seo\Form\AlshayaRcsSeoConfigForm'
+    _title: 'RCS Seo Configuration'
+  requirements:
+    _permission: 'administer site configurations'

@@ -168,19 +168,25 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
         }
         break;
 
-        case 'department page':
-          $department_node = $current_route['route_params']['node'];
-          // Call V2 attribute function for department page if the rcs main menu
-          // module is enabled.
-          if ($this->moduleHandler->moduleExists('alshaya_rcs_main_menu')
-            && $department_node->get('field_use_as_department_page')->getString() == 1
-          ) {
-            $page_dl_attributes = $this->fetchV2DepartmentAttributes();
-          }
-          else {
-            $page_dl_attributes = parent::fetchPageSpecificAttributes($page_type, $current_route);
-          }
-          break;
+      case 'department page':
+        $department_node = $current_route['route_params']['node'];
+        // Call V2 attribute function for department page if the rcs main menu
+        // module is enabled.
+        if ($this->moduleHandler->moduleExists('alshaya_rcs_main_menu')
+          && $department_node->get('field_use_as_department_page')->getString() == 1
+        ) {
+          $page_dl_attributes = $this->fetchV2DepartmentAttributes();
+        }
+        else {
+          $page_dl_attributes = parent::fetchPageSpecificAttributes($page_type, $current_route);
+        }
+        break;
+
+      case 'product detail page':
+        // We prepare these values directly on the front end. So we set them
+        // empty here.
+        $page_dl_attributes = [];
+        break;
 
       default:
         $page_dl_attributes = parent::fetchPageSpecificAttributes($page_type, $current_route);
