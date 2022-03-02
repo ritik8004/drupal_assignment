@@ -70,6 +70,10 @@
         margin-bottom: 0.3125rem;
       }
 
+      .store-name {
+        padding-#{$right}: 7.5rem;
+      }
+
       .delivery-name,
       .delivery-address {
         width: calc(100% - 7.1875rem);
