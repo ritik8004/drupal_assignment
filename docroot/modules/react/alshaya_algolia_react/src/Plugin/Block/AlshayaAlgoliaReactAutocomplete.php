@@ -135,7 +135,6 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
-    $algoliaSearch['pageSubType'] = self::PAGE_TYPE;
 
     // Check express day option avialble or not and add drupal settings.
     $express_status = [
