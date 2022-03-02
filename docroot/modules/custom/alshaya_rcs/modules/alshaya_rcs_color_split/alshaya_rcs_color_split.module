@@ -72,6 +72,18 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
     AlshayaColorSplitConfig::get('attribute_code_color_id'),
     $color_code_attribute,
   );
+
+  // For the main product, we send a minimal request to get the style code.
+  // After getting the style code, we call the API to fetch the products with
+  // the same style and at that step we receive the complete product objects
+  // which includes the main product.
+  $queries['color_split_product'] = [
+    'total_count',
+    'items' => [
+      'style_code',
+      'sku',
+    ],
+  ];
 }
 
 /**

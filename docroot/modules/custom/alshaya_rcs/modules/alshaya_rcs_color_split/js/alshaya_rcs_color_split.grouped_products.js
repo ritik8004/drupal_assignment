@@ -25,15 +25,29 @@
     }
 
     // The original object will also be modified in this process.
-    const mainProduct = e.detail.result;
+    var mainProduct = e.detail.result;
 
     // Get the products with the same style.
     var styleProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('products-in-style', { styleCode: mainProduct.style_code });
 
-    // If there are no products with the same style, then no further processing
-    // required.
-    if (!styleProducts.length) {
-      return;
+    // Get the main product entity from the style products list.
+    for (var index = 0; index < styleProducts.length; index++) {
+      if (styleProducts[index].sku === mainProduct.sku) {
+        try {
+          // Deep clone the object received in the response.
+          mainProduct = JSON.parse(JSON.stringify(styleProducts[index]));
+          // The object in the event only contains minimal data.
+          // So we replace that with the actual product object containing all
+          // the required data.
+          e.detail.result = mainProduct;
+          break;
+        } catch (error) {
+          Drupal.alshayaLogger('error', 'Could not parse product data for SKU @sku', {
+            '@sku': mainProduct.sku,
+          });
+          return;
+        }
+      }
     }
 
     // This will hold the configugrable options for the main product keyed by
