@@ -7,6 +7,7 @@ import PaymentMethod from '../payment-method';
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   isDeliveryTypeSameAsInCart,
+  getNextAllowedPaymentMethodCode,
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
@@ -16,8 +17,24 @@ import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import isAuraEnabled, { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import {
+  isFullPaymentDoneByAura,
+  isPaymentMethodSetAsAura,
+  isUnsupportedPaymentMethod,
+} from '../../../aura-loyalty/components/utilities/checkout_helper';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
+import {
+  cartContainsAnyVirtualProduct,
+  isEgiftRedemptionDone,
+  isEgiftUnsupportedPaymentMethod,
+  isFullPaymentDoneByEgift,
+} from '../../../utilities/egift_util';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -102,6 +119,12 @@ export default class PaymentMethods extends React.Component {
       return false;
     }
 
+    // We disable the other payment methods when full payment is done by aura points
+    // and payment method is set as `aura_payment`.
+    if (isAuraEnabled() && isPaymentMethodSetAsAura(cart)) {
+      return false;
+    }
+
     if (isDeliveryTypeSameAsInCart(cart)) {
       if (Postpay.isPostpayEnabled() && Postpay.isAvailable(this) == null) {
         return false;
@@ -112,20 +135,50 @@ export default class PaymentMethods extends React.Component {
   };
 
   selectDefault = () => {
+    const { cart } = this.props;
+
+    // If full payment is being done by aura then we change payment method to `aura_payment`.
+    if (isAuraEnabled() && isFullPaymentDoneByAura(cart)) {
+      this.changePaymentMethod('aura_payment');
+      return;
+    }
+    // Just return from here is full payment is done by egift card.
+    if (isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart)) {
+      return;
+    }
+
     if (!(this.isActive())) {
       return;
     }
 
-    const paymentMethods = this.getPaymentMethods(true);
+    const allPaymentMethods = this.getPaymentMethods(true);
+    const { postpayAvailable } = this.state;
+
+    // Prepare object containing only the methods available for use.
+    const paymentMethods = {};
+    Object.keys(allPaymentMethods).forEach((key) => {
+      // If status is set and disabled, do not use the method.
+      if (hasValue(allPaymentMethods[key].status) && allPaymentMethods[key].status === 'disabled') {
+        return;
+      }
+
+      // If postpay is not available remove from available methods list.
+      if (key === 'postpay' && !postpayAvailable[cart.cart.cart_total]) {
+        return;
+      }
+
+      paymentMethods[key] = allPaymentMethods[key];
+    });
 
     if (Object.keys(paymentMethods).length === 0) {
       return;
     }
 
-    const { postpayAvailable } = this.state;
-    const { cart } = this.props;
-
     const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
+
+    // Get flag if cart has virtual products.
+    const cartHasVirtualProducts = cartContainsAnyVirtualProduct(cart.cart);
+
     if (cart.cart.payment.method === undefined
       || paymentMethods[cart.cart.payment.method] === undefined
       || paymentDiv === null
@@ -133,30 +186,36 @@ export default class PaymentMethods extends React.Component {
       // Select previously selected method if available.
       if (cart.cart.payment.method !== undefined
         && cart.cart.payment.method !== null
-        && paymentMethods[cart.cart.payment.method] !== undefined) {
-        // For PostPay there is additional check required on frontend, it is
-        // available for order amount within specific limit only.
-        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay') {
-          this.changePaymentMethod(cart.cart.payment.method);
-          return;
-        }
+        && paymentMethods[cart.cart.payment.method] !== undefined
+        // Check if cart contains virtual product,
+        // and cart payment method is supported by eGift.
+        && !(cartHasVirtualProducts
+          && isEgiftUnsupportedPaymentMethod(cart.cart.payment.method))) {
+        this.changePaymentMethod(cart.cart.payment.method);
+        return;
       }
 
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
         && cart.cart.payment.default !== null
-        && paymentMethods[cart.cart.payment.default] !== undefined) {
-        // For PostPay there is additional check required on frontend, it is
-        // available for order amount within specific limit only.
-        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay') {
-          this.changePaymentMethod(cart.cart.payment.default);
-          return;
-        }
+        && paymentMethods[cart.cart.payment.default] !== undefined
+        // Check if cart contains virtual product,
+        // and default payment method is supported by eGift.
+        && !(cartHasVirtualProducts
+          && isEgiftUnsupportedPaymentMethod(cart.cart.payment.default))) {
+        this.changePaymentMethod(cart.cart.payment.default);
+        return;
       }
 
       // Select first payment method by default.
-      const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
-      this.changePaymentMethod(sortedMethods[0].code);
+      const paymentMethodCode = getNextAllowedPaymentMethodCode(paymentMethods, cart);
+      this.changePaymentMethod(paymentMethodCode);
+    } else if (cartHasVirtualProducts
+        && isEgiftUnsupportedPaymentMethod(cart.cart.payment.method)) {
+      // check if virtual product in cart and unsupported payment method,
+      // then get next payment method.
+      const paymentMethodCode = getNextAllowedPaymentMethodCode(paymentMethods, cart);
+      this.changePaymentMethod(paymentMethodCode);
     }
   };
 
@@ -179,6 +238,11 @@ export default class PaymentMethods extends React.Component {
           }
 
           if (method.code === 'postpay' && !Postpay.isAvailable(this)) {
+            return;
+          }
+
+          if (method.code === 'tabby'
+            && (!Tabby.isAvailable() || !Tabby.productAvailable(this))) {
             return;
           }
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
@@ -206,12 +270,12 @@ export default class PaymentMethods extends React.Component {
     const methodIdentifer = `${method}:${cartData.cart.cart_id}`;
 
     // If we have already triggered once for the method and cart do nothing.
-    const lastSelectedMethodIdentifier = localStorage.getItem('last_selected_payment');
+    const lastSelectedMethodIdentifier = Drupal.getItemFromLocalStorage('last_selected_payment');
     if (paymentDiv.checked && lastSelectedMethodIdentifier === methodIdentifer) {
       return;
     }
 
-    localStorage.setItem('last_selected_payment', methodIdentifer);
+    Drupal.addItemInLocalStorage('last_selected_payment', methodIdentifer);
 
     paymentDiv.checked = true;
 
@@ -227,6 +291,23 @@ export default class PaymentMethods extends React.Component {
     const { cart, refreshCart } = this.props;
 
     if (!this.isActive()) {
+      return;
+    }
+
+    // If aura enabled and aura points redeemed then do not allow
+    // to select any payment method that is unsupported with aura.
+    if (isAuraEnabled()
+      && cart.cart.totals.paidWithAura > 0
+      && isUnsupportedPaymentMethod(method)) {
+      return;
+    }
+
+    // Allow change payment method only if it's allowed for egift,
+    // If virtual product is present in cart or user has redeem a card.
+    if (isEgiftCardEnabled()
+      && isEgiftUnsupportedPaymentMethod(method)
+      && (cartContainsAnyVirtualProduct(cart.cart)
+        || isEgiftRedemptionDone(cart.cart, cart.cart.totals.egiftRedemptionType))) {
       return;
     }
 
@@ -283,6 +364,8 @@ export default class PaymentMethods extends React.Component {
 
   render = () => {
     const methods = [];
+    let disablePaymentMethod = '';
+    let egiftRedeemed = false;
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
@@ -290,7 +373,25 @@ export default class PaymentMethods extends React.Component {
       .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
 
+    // Check if egift card is already redeemed with linked or guest.
+    if (isEgiftCardEnabled()) {
+      egiftRedeemed = isEgiftRedemptionDone(cart.cart, cart.cart.totals.egiftRedemptionType);
+    }
+
     Object.entries(activePaymentMethods).forEach(([, method], index) => {
+      // If aura enabled and customer is paying some amount of the order
+      // using aura points then disable the payment methods that are
+      // not supported with Aura.
+      if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
+        disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
+      }
+
+      // If cart contains virtual product or user redeeming gift card, then
+      // disable the payment method that are not supported by egift.
+      if (isEgiftCardEnabled() && (cartContainsAnyVirtualProduct(cart.cart) || egiftRedeemed)) {
+        disablePaymentMethod = isEgiftUnsupportedPaymentMethod(method.code);
+      }
+
       this.paymentMethodRefs[method.code] = React.createRef();
       const animationOffset = animationInterval * index;
       methods.push(<PaymentMethod
@@ -302,15 +403,28 @@ export default class PaymentMethods extends React.Component {
         key={method.code}
         method={method}
         animationOffset={animationOffset}
+        {...((isAuraEnabled() || (isEgiftCardEnabled()))
+          && disablePaymentMethod
+          && { disablePaymentMethod }
+        )}
       />);
     });
 
     const activeClass = active ? 'active' : 'in-active';
 
+    // Change the payment wrapper active class based on the egift full payment.
+    const wrapperActiveClass = isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart) ? 'active' : activeClass;
+
     return (
-      <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
+      <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${wrapperActiveClass}`} style={{ animationDelay: '0.4s' }}>
+        <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
+        <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated()}>
+          <PaymentMethodLinkedEgiftCard
+            cart={cart}
+            refreshCart={refreshCart}
+          />
+        </ConditionalView>
         <ConditionalView condition={Object.keys(methods).length > 0}>
-          <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>
         </ConditionalView>
       </div>

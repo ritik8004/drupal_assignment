@@ -1,0 +1,41 @@
+.egift-landing-page.nodetype--advanced_page {
+  .block-page-title-block,
+  .c-content__container,
+  .c-content__banner {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.5rem;
+      padding-#{$right}: 1.5rem;
+    }
+  }
+
+  #block-page-title {
+    display: none;
+  }
+
+  .field--name-field-promo-blocks {
+    &.c-accordion-delivery-option-parent {
+      border-top: 1px solid $egift-purchase-page-border;
+    }
+  }
+
+  .page-standard,
+  .node--type-advanced-page {
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+    }
+  }
+
+  .c-breadcrumb {
+    ol {
+      @include breakpoint($only-tablet) {
+        background: $breadcrumb_bg;
+      }
+    }
+  }
+
+  .c-department {
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+    }
+  }
+}

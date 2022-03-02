@@ -1,5 +1,6 @@
 import React from 'react';
-import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { getAreaFieldKey, getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 
 const AvailableAreaItems = ({
   attr, value, parentId, isStandardDelivery,
@@ -9,9 +10,10 @@ const AvailableAreaItems = ({
   const samedayDeliveryClass = isSameDayDelivery ? 'active' : 'disabled';
   const expressDeliveryClass = isExpressDelivery ? 'active' : 'disabled';
   const currentArea = getDeliveryAreaStorage();
+  const areaFieldKey = getAreaFieldKey();
   let activeClass = 'in-active';
-  if (currentArea !== null) {
-    if (parseInt(currentArea.value.area, 10) === attr) {
+  if (currentArea !== null && areaFieldKey !== null) {
+    if (parseInt(currentArea.value[areaFieldKey], 10) === parseInt(attr, 10)) {
       activeClass = 'active';
     }
   }
@@ -26,9 +28,15 @@ const AvailableAreaItems = ({
         <div className="area-select-list-container">
           <div className="area-select-name">{value}</div>
           <div className="area-delect-delivery-type">
-            <span className={`area-select-standard-delivery ${standardDeliveryClass}`}>{isStandardDelivery}</span>
-            <span className={`area-select-sameday-delivery ${samedayDeliveryClass}`}>{isSameDayDelivery}</span>
-            <span className={`area-select-express-delivery ${expressDeliveryClass}`}>{isExpressDelivery}</span>
+            <ConditionalView condition={isStandardDelivery !== null}>
+              <span className={`area-select-standard-delivery ${standardDeliveryClass}`}>{isStandardDelivery}</span>
+            </ConditionalView>
+            <ConditionalView condition={isSameDayDelivery !== null}>
+              <span className={`area-select-sameday-delivery ${samedayDeliveryClass}`}>{isSameDayDelivery}</span>
+            </ConditionalView>
+            <ConditionalView condition={isExpressDelivery !== null}>
+              <span className={`area-select-express-delivery ${expressDeliveryClass}`}>{isExpressDelivery}</span>
+            </ConditionalView>
           </div>
         </div>
       </span>

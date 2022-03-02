@@ -1,0 +1,93 @@
+.block-views-blockmagazine-articles-homepage-block {
+  .more-link {
+    padding: 0.25rem 0 1.375rem;
+
+    a {
+      font-size: 0.875rem;
+      border-bottom: 1px solid $magazine-article-primary-color;
+    }
+  }
+
+  .magazine-block-container {
+    @include container(64.5rem);
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 0.9735rem;
+  }
+
+  > h3 {
+    font-size: 1.5rem;
+    text-transform: unset;
+    font-weight: normal;
+  }
+
+  .field--name-field-magazine-homepage-image {
+    img {
+      width: 100%;
+    }
+  }
+
+  .views-row {
+    width: calc(91% / 3);
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+
+    &:nth-child(2) {
+      @include breakpoint($tablet) {
+        margin: 0 4.5%;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      border-bottom: 0;
+    }
+
+    .field--name-field-magazine-category,
+    h3,
+    .read-more {
+      @include breakpoint($tablet) {
+        padding: 0;
+      }
+    }
+
+    .field--name-field-magazine-category {
+      font-size: 0.75rem;
+      margin-top: 0.75rem;
+      letter-spacing: normal;
+      text-align: $left;
+    }
+
+    h3 {
+      text-align: $left;
+      font-weight: normal;
+      margin-top: 0.625rem;
+      margin-bottom: 0.625rem;
+      height: auto;
+
+      &::after {
+        display: none;
+
+        html[lang=ar] & {
+          display: none;
+        }
+      }
+    }
+
+    .read-more {
+      text-align: $left;
+
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+
+      span {
+        font-weight: normal;
+        font-size: 0.875rem;
+        text-transform: lowercase;
+      }
+    }
+  }
+}

@@ -1,4 +1,7 @@
 library: 'https://www.datadoghq-browser-agent.com/datadog-logs.js'
 token: ''
-site: 'datadoghq.eu'
+application: 'datadoghq.eu'
 admin_pages: 'hidden'
+rum_library: 'https://www.datadoghq-browser-agent.com/datadog-rum-v4.js'
+rum_application_id: ''
+rum_client_token: ''

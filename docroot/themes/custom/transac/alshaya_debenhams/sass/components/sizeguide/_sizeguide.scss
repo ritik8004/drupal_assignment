@@ -1,0 +1,18 @@
+.size-guide-form-and-link-wrapper {
+  position: relative;
+
+  .size-guide-link {
+    font-size: 1rem;
+    text-decoration: underline;
+    font-family: $dh-light;
+    top: 0;
+
+    @include breakpoint($only-mobile) {
+      top: -0.75rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      z-index: 1;
+    }
+  }
+}

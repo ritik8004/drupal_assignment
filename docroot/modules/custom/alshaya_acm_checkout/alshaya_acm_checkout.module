@@ -5,12 +5,9 @@
  * Contains general hooks and alters.
  */
 
-use Drupal\acq_cart\CartInterface;
-use Drupal\alshaya_acm_checkout\Plugin\CheckoutPane\Analytics;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 
@@ -249,7 +246,10 @@ function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = '
   }
 
   // Invalid value for region, we log warning and return empty string.
-  \Drupal::logger('alshaya_acm_checkout')->warning('Invalid region @region passed for country code @country_code', ['@region' => $region, '@country_code' => $country_code]);
+  \Drupal::logger('alshaya_acm_checkout')->warning('Invalid region @region passed for country code @country_code', [
+    '@region' => $region,
+    '@country_code' => $country_code,
+  ]);
 
   return '';
 }

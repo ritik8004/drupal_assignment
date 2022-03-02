@@ -5,7 +5,7 @@ namespace Drupal\alshaya_search\EventSubscriber;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Solarium\Core\Event\Events;
-use Solarium\Core\Event\PreExecute as PreExecuteEvent;
+use Drupal\search_api_solr\Solarium\EventDispatcher\EventProxy;
 
 /**
  * Class Alshaya Search Autocomplete Param.
@@ -40,10 +40,10 @@ class AlshayaSearchAutocompleteParam implements EventSubscriberInterface {
   /**
    * Event handler to add the language in field query for auto complete.
    *
-   * @param \Solarium\Core\Event\PreExecute $event
+   * @param \Drupal\search_api_solr\Solarium\EventDispatcher\EventProxy $event
    *   Event object.
    */
-  public function onPreExecute(PreExecuteEvent $event) {
+  public function onPreExecute(EventProxy $event) {
     $query = $event->getQuery();
     $options = $query->getOptions();
     // Only for the auto complete as auto complete uses the term component.

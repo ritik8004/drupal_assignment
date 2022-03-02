@@ -1,4 +1,4 @@
-@javascript @appointment @mobile @bpaeuat
+@javascript @appointment @mobile
 Feature: Test Boots functionality
 
   Background:

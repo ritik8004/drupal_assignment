@@ -1,0 +1,426 @@
+#my-wishlist {
+  .empty-message {
+    text-align: center;
+    padding-top: 4.375rem;
+
+    .actions {
+      padding-top: 1.25rem;
+      padding-bottom: 10.625rem;
+
+      a {
+        width: 11.5rem;
+        height: 2.5rem;
+        display: inline-block;
+        padding: 0.375rem 0;
+        border-radius: 0.1875rem;
+        background: $wishlist-button-bg;
+        color: $wishlist-button-txt;
+        font-family: $alshaya-bold;
+        line-height: 1.5;
+
+        &:hover {
+          background-color: $my-wishlist-share-modal-hover-bg;
+          opacity: 0.75;
+        }
+      }
+    }
+  }
+
+  #plp-hits {
+    padding-top: 1.25rem;
+
+    @include breakpoint($tablet) {
+      padding-top: 2.5rem;
+    }
+
+    .view-content {
+      display: flex;
+      flex-wrap: wrap;
+
+      .field--type-sku {
+        flex-grow: 1;
+      }
+    }
+  }
+
+  .addtobag-config-button {
+    background-color: $wishlist-button-bg;
+    border: none;
+    color: $wishlist-button-txt;
+    margin: 1.5rem 0 0;
+    width: 100%;
+    border-radius: 0.125rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0.5rem;
+    }
+  }
+
+  .addtobag-config-button-container {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+
+    @include breakpoint($tablet) {
+      margin-left: 1.25rem;
+      margin-right: 1.25rem;
+    }
+  }
+
+  .oos-text-container {
+    .oos-text {
+      margin: 1.5rem 0 0;
+      width: 100%;
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+      font-family: $alshaya-bold;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: $wishlist-oos;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid $wishlist-oos-border;
+      cursor: pointer;
+    }
+  }
+
+  .addtobag-button {
+    border-radius: 0.125rem;
+
+    &::before {
+      content: '';
+    }
+  }
+
+  .addtobag-config-button,
+  .addtobag-button {
+    &:hover {
+      background-color: $plp-primary-cta-hover-bg;
+    }
+  }
+
+  .wishlist-link {
+    padding-top: 0.625rem;
+    color: $wishlist-oos;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .product-frame.product-element-alignment {
+    .in-wishlist {
+      .wishlist-link {
+        margin-left: 1.25rem;
+        margin-right: 1.25rem;
+      }
+    }
+  }
+}
+
+.notification-container {
+  font-size: 0.8125rem;
+  font-family: $alshaya-bold;
+  background: $my-wishlist-message-bg;
+  padding: 1rem 1.25rem;
+  padding-#{$left}: 0.5rem;
+  color: $my-wishlist-message-txt;
+
+  .notification-message {
+    display: flex;
+    align-items: center;
+
+    @include icon(warning, before) {
+      font-size: 2rem;
+      margin-#{$right}: 0.5rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 1.25rem 0.5rem;
+  }
+}
+
+.login-message + .notification-container {
+  margin-top: 1.25rem;
+}
+
+#wishlist-share {
+  font-size: 0.8125rem;
+  color: $wishlist-share-text;
+
+  @include breakpoint($only-mobile) {
+    width: 100%;
+    text-align: $right;
+    padding-bottom: 0.9375rem;
+  }
+
+  > button {
+    background: unset;
+    border: none;
+    display: flex;
+    align-items: center;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: auto;
+    }
+
+    .icon {
+      padding-#{$left}: 0.3125rem;
+      background: url('#{$base_theme_img_directory_path}/icons/wishlist-share.svg') no-repeat;
+      width: 2rem;
+      height: 2rem;
+      display: block;
+    }
+  }
+
+  .text {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.path--wishlist {
+  #block-page-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include breakpoint($only-mobile) {
+      flex-direction: column;
+      margin: 0 1.25rem;
+      width: auto !important;
+
+      .c-page-title {
+        font-size: 1.25rem !important;
+        padding-bottom: 0.4375rem;
+        margin: 0;
+        line-height: normal !important;
+        width: 100%;
+        border-bottom: 1px solid $my-wishlist-page-title-border;
+        margin-top: 0.75rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      border-bottom: 1px solid $my-wishlist-page-title-border;
+      padding-bottom: 0.1875rem;
+    }
+  }
+
+  #my-wishlist,
+  .product-drawer-container {
+    .login-message {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8125rem;
+      font-family: $alshaya-bold;
+      background: $my-wishlist-message-bg;
+      padding: 1rem 1.25rem;
+      padding-#{$left}: 0.5rem;
+      color: $my-wishlist-message-txt;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$right}: 0.9375rem;
+        margin: 0 0.5rem;
+      }
+
+      @include breakpoint($upto-desktop) {
+        flex-direction: column;
+      }
+
+      .text {
+        display: flex;
+        align-items: center;
+
+        @include icon(infomation, before) {
+          font-size: 2rem;
+          margin-#{$right}: 0.5rem;
+        }
+      }
+
+      .actions {
+        @include breakpoint($only-mobile) {
+          margin-#{$left}: 2.5rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          padding-top: 0.9375rem;
+        }
+
+        a {
+          display: inline-block;
+          border: 1px solid $my-wishlist-message-txt;
+          color: $my-wishlist-message-txt;
+          padding: 0.375rem 0;
+          width: 8.125rem;
+          text-align: center;
+          border-radius: 0.1875rem;
+
+          @include breakpoint($only-mobile) {
+            width: 8.5rem;
+          }
+
+          &:hover {
+            border-color: $my-wishlist-message-bg;
+            background: $my-wishlist-message-txt;
+            color: $my-wishlist-message-bg;
+          }
+
+          &:nth-child(2) {
+            margin-#{$left}: 1.25rem;
+
+            @include breakpoint($only-mobile) {
+              margin-#{$left}: 1.375rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .product-drawer-container {
+    .login-message {
+      flex-direction: column;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$right}: 1.25rem;
+        margin: 0;
+      }
+
+      .actions {
+        @include breakpoint($desktop) {
+          margin-#{$left}: 0.9375rem;
+          margin-top: 1.25rem;
+        }
+
+        a {
+          @include breakpoint($only-mobile) {
+            width: 7.75rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.wishlist-share-popup-container {
+  .wishlist-share-content {
+    width: 19.3125rem !important;
+
+    @include breakpoint($tablet) {
+      width: 28rem !important;
+    }
+  }
+
+  .wishlist-share-popup-block {
+    padding: 1.5625rem 1.25rem;
+    padding-bottom: 1.25rem;
+    position: relative;
+
+    .close-modal {
+      position: absolute;
+      #{$right}: -0.375rem;
+      top: -0.375rem;
+      font-size: 0;
+
+      @include icon(close, before) {
+        background-color: $wishlist-basket-modal-close-bg;
+        color: $wishlist-basket-modal-close;
+        font-size: 2rem;
+        cursor: pointer;
+      }
+    }
+
+    .header {
+      font-size: 1.125rem;
+      border-bottom: 0.0625rem solid $my-wishlist-share-modal-border;
+      padding-bottom: 0.4375rem;
+      font-family: $alshaya-bold;
+      text-align: $left;
+      color: $my-wishlist-share-modal-header;
+    }
+
+    .content {
+      font-size: 1rem;
+      padding-top: 1.0625rem;
+      text-align: center;
+      line-height: 1.56;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      button {
+        display: inline-block;
+        width: 11.875rem;
+        height: 2.5rem;
+        border-radius: 0.125rem;
+        font-family: $alshaya-bold;
+
+        &.email-share-link {
+          border: none;
+          background-color: $wishlist-button-bg;
+          color: $wishlist-button-txt;
+          margin-top: 1.5625rem;
+          margin-bottom: 1.25rem;
+
+          &:hover {
+            background-color: $my-wishlist-share-modal-hover-bg;
+            opacity: 0.75;
+          }
+        }
+
+        &.copy-share-link {
+          border: 1px solid $wishlist-button-bg;
+          background-color: $wishlist-button-txt;
+        }
+      }
+
+      .link-copied {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 15rem;
+
+  .loader-icon {
+    background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+    padding-#{$left}: 2.5rem;
+    background-size: contain;
+    color: $spc-loader-text;
+    min-width: 2rem;
+    min-height: 2rem;
+    font-size: 1.125rem;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.c-plp {
+  #my-wishlist {
+    .wishlist-button-wrapper.wishlist-loader {
+      &.loading {
+        min-height: 1.8125rem;
+        position: inherit;
+        height: auto;
+        width: auto;
+
+        .wishlist-link {
+          font-size: 0;
+        }
+      }
+    }
+  }
+}

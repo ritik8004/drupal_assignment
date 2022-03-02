@@ -1,0 +1,15 @@
+#my-wishlist {
+  .addtobag-config-button {
+    border-radius: 0;
+
+    &:hover {
+      color: $plp-primary-cta-hover-text;
+    }
+  }
+
+  .wishlist-button-wrapper {
+    .wishlist-link {
+      text-align: center;
+    }
+  }
+}

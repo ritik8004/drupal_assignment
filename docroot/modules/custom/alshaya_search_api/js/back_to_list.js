@@ -4,7 +4,6 @@
  */
 
 (function ($) {
-  'use strict';
 
   var replaceState;
 
@@ -36,24 +35,10 @@
   });
 
   /**
-   * Get the storage values.
-   *
-   * @returns {null}
-   */
-  function getStorageValues() {
-    var value = localStorage.getItem(window.location.pathname);
-    if (typeof value !== 'undefined' && value !== null) {
-      return JSON.parse(value);
-    }
-
-    return null;
-  }
-
-  /**
    * Scroll to the appropriate product.
    */
   function scrollToProduct() {
-    var storage_value = getStorageValues();
+    var storage_value = Drupal.getItemFromLocalStorage(window.location.pathname);
     var first_visible_product = $('.views-infinite-scroll-content-wrapper article[data-nid="' + storage_value.nid + '"]:visible:first');
 
     if ((typeof first_visible_product === 'undefined') || !(first_visible_product.length)) {
@@ -75,7 +60,7 @@
    */
   function adjustGridView() {
     // Get storage values.
-    var storage_value = getStorageValues();
+    var storage_value = Drupal.getItemFromLocalStorage(window.location.pathname);
     // Prepare grid type class as per storage value.
     var grid_class_remove = storage_value.grid_type == 'small' ? 'large' : 'small';
     $('.c-products-list').removeClass('product-' + grid_class_remove);
@@ -86,13 +71,13 @@
     // Remove the grid_type property once applied when back from list
     // so that on next page load, default behavior is used.
     delete storage_value.grid_type;
-    localStorage.setItem(window.location.pathname, JSON.stringify(storage_value));
+    Drupal.addItemInLocalStorage(window.location.pathname, storage_value);
   }
 
   Drupal.processBackToList = function () {
     // On page load, apply filter/sort if any.
     $('html').once('back-to-list').each(function () {
-      var storage_value = getStorageValues();
+      var storage_value = Drupal.getItemFromLocalStorage(window.location.pathname);
       if (typeof storage_value !== 'undefined' && storage_value !== null) {
         // To adjust the grid view mode.
         if (typeof storage_value.grid_type !== 'undefined') {
@@ -120,7 +105,7 @@
         };
 
         // As local storage only supports string key/value pair.
-        localStorage.setItem(window.location.pathname, JSON.stringify(storage_details));
+        Drupal.addItemInLocalStorage(window.location.pathname, storage_details);
       });
     }
   };

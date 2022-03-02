@@ -27,10 +27,8 @@ Feature: Test the adding address to existing user account
       | field_address[0][address][dependent_locality]        | {building}    |
       | field_address[0][address][locality]                  | {locality}    |
       | field_address[0][address][address_line2]             | {floor}       |
-      | field_address[0][address][sorting_code]              | {landmark}    |
-      | field_address[0][address][postal_code]               | {postal_code} |
     And I press "op"
     When I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 

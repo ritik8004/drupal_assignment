@@ -1,0 +1,482 @@
+$black: #000;
+$black-two: #333;
+$charcoal: #222;
+$dark-grey: #444;
+$mid-grey: #727272;
+$pale-grey: #eee;
+$spanish-grey: #979a9c;
+$grey: #ddd;
+$light-grey: #f5f5f5;
+$white: #fff;
+$sale-red: #dc0925;
+$anti-flash-white: #f2f2f2;
+$medium-sky-blue: #7be7d8;
+$aquq: #b0f1e8;
+$green: #00ac8d;
+$promo-blue: #1989ff;
+$lemon: #faef98;
+$_spc-discount-text: $sale-red;
+$_spc-radio-filled: $charcoal;
+$_spc-area-panel-placeholder: $anti-flash-white;
+$_spc-billing-help: $promo-blue;
+$_spc-cart-alert: $sale-red;
+$_spc-warning-bg: $lemon;
+$_egift_landing_page_banner_bg: #ffffae;
+
+// Global elements.
+$primary_text: $charcoal;
+$primary_link: $black;
+$content_pagetitle: $charcoal;
+$content_pagetitle_border: $pale-grey;
+$primary_link-hover: $mid-grey;
+$primary_link-active: $black;
+$primary_border: $pale-grey;
+$content_link_color: $mid-grey;
+$secondary_link: $mid-grey;
+
+// Form elements.
+$primary_form_selector_border: $grey;
+$primary_form_selector: $charcoal;
+$primary_form_link: $black;
+$primary_form_input_text: $charcoal;
+$primary_input_label: $charcoal;
+$primary_input_border: $grey;
+$primary_input_disabled: $pale-grey;
+$primary_input_focus_border: $grey;
+$primary_input_inline_error: $sale-red;
+
+// Form Items
+$formitem_label: $charcoal;
+
+//Buttons.
+$primary_btn_bg: $white;
+$primary_btn_hover_bg: $aquq;
+$primary_btn_hover_border: $aquq;
+$primary_empty_btn: $white;
+$primary_btn_text: $charcoal;
+$primary_brand_button_text: $charcoal;
+$primary_empty_btn_border: $medium-sky-blue;
+$primary_brand_button: $medium-sky-blue;
+$primary_button_disabled: $pale-grey;
+$complete_btn_bg: $green;
+
+// Checkbox & Radio.
+$primary_checkbox_empty: $grey;
+$primary_checkbox_filled: $black;
+$primary_radiobtn_label: $charcoal;
+$primary_radiobtn_empty: $grey;
+$primary_radiobtn_filled: $black;
+
+// Dropdown.
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_border: $grey;
+$primary_dropdown_option_hover: $pale-grey;
+$primary_dropdown_option_border: $grey;
+$primary_dropdown_option_disbled: $spanish-grey;
+$primary_dropdown_arrow_icon: $charcoal;
+$primary_dropdown_text: $charcoal;
+
+// Titles.
+$page_title: $charcoal;
+$block_title: $charcoal;
+$title: $charcoal;
+$sub_title: $charcoal;
+$user_sidebar_block_title: $charcoal;
+
+// Footer
+$footer_border_top: $primary_border;
+$footer_title_h3: $black;
+$primary_footer_input_label: $charcoal;
+$footer_link_mobile: $black;
+$footer_link: $black;
+$footer_link_hover: $black;
+$footer_subscribe_btn_border: $medium-sky-blue;
+$newsletter_submit_btn: $white;
+$lang_switch_firsttime_bg: $charcoal;
+$newsletter_success: $green;
+
+// Copyright
+$copyright_footer_bg: $pale-grey;
+$copyright_footer_paragraph: $charcoal;
+$copyright_footer_text: $charcoal;
+
+// Language Switcher
+$lang_switch: $charcoal;
+$lang_switch_active: $charcoal;
+
+// Accordion
+$accordion_border: $pale-grey;
+$accordion_sub_title: $charcoal;
+$accordion_title: $charcoal;
+
+// Header.
+$header_border: $pale-grey;
+$header_search_active_bg: $white;
+$header_mobile_menu_close_bg: $charcoal;
+$header_toggle_sign_active_tab: $black;
+$header_toggle_sign_default: $light-grey;
+$header_my_account_h3_title: $charcoal;
+$header_my_account_icon: $charcoal;
+
+// Header secondary: ie: top header.
+$header_secondary_bg: $pale-grey;
+$header_secondary_bg_upto_desk: $white;
+$header_secondary_menu_link_mobile: $charcoal;
+$header_secondary_menu_link: $charcoal;
+$header_mobile_menu_arrow: $charcoal;
+$header_c_menu_text: $charcoal;
+
+// Homepage Slider
+$hp_slider_dots: $dark-grey;
+$instagram_dots_default: $white;
+$instagram_dots_default_border: $dark-grey;
+
+//Algolia search bar.
+$algolia-input-text: $charcoal;
+$algolia-input-placeholder-text: $mid-grey;
+$algolia-auto-complete-border: $pale-grey;
+$algolia-auto-complete-mobile-border: $pale-grey;
+$algolia-auto-complete-border-bottom: $black;
+$algolia-search-clear-text-icon: $charcoal;
+$algolia-trending-title-text: $charcoal;
+$algolia-trending-title-border: $pale-grey;
+$algolia-react-progressbar-fill: $charcoal;
+$algolia-react-search-page-title: $charcoal;
+$algolia-react-sidebar-label-color: $charcoal;
+$algolia-suggestion-text: $mid-grey;
+$algolia-auto-suggest-border: $pale-grey;
+$algolia-react-progressbar-text: $charcoal;
+$algolia-react-progressbar: $pale-grey;
+$algolia_react-facet-item-color: $charcoal;
+$algolia_sticky-header-shadow: $pale-grey;
+
+// Contact Page
+$webform_contact_legend: $charcoal;
+$webform_contact_dropdown_disable_text: $charcoal;
+
+// Checkout Click & collect.
+$checkout_cc_store_address_mobile_border: $grey;
+
+// Social Auth
+$social-network-text: $charcoal;
+$social-auth-bg: $white;
+$social-auth-bg-hover: $pale-grey;
+$social_auth_login_button_border: $charcoal;
+$user_login_sub_text: $charcoal;
+$user_login_link_btn_text: $charcoal;
+$user_login_section_title: $charcoal;
+$user_account_nav: $black;
+
+// User Form
+$user_field_link: $mid-grey;
+$user_form_text: $charcoal;
+$my_account_nav: $charcoal;
+$my_account_nav_active: $black;
+$my_account_nav_hover: $black;
+$user_form_layout_divider_color: $pale-grey;
+
+// Store finder page.
+// Store finder header form.
+$store_finder_header_desktop: $charcoal;
+$store_finder_subheader: $charcoal;
+$store_finder_backbtn: $white;
+$store_finder_icon: $charcoal;
+$store_finder_text: $charcoal;
+$store_finder_border_hover: $medium-sky-blue;
+$store_finder_search_label: $charcoal;
+$store_finder_search_input: $grey;
+$store_finder_search_input_mobile_border: $grey;
+$store_finder_search_input_border: $grey;
+$store_finder_btn_act_hover_state: $medium-sky-blue;
+$store_finder_individual_list_view: $white;
+$store_finder_individual_hour_border: $grey;
+$store_finder_search_results_tile_link: $charcoal;
+$store_finder_search_results_hour_label: $charcoal;
+$store_finder_search_results_tile_icon: $charcoal;
+$store_finder_search_results_hour_icon_open: $charcoal;
+
+// Store finder gloassary.
+$store_finder_glossary_alphabet: $charcoal;
+$store_finder_glossary_text: $charcoal;
+$store_finder_glossary_icon: $charcoal;
+$store_finder_glossary_text_hover: $charcoal;
+$store_finder_glossary_text_border: $grey;
+$store_finder_glossary_border: $grey;
+
+// Breadcrumb.
+$breadcrumb_bg: $anti-flash-white;
+$breadcrumb_link: $black-two;
+$breadcrumb_link_hover: $black-two;
+$breadcrumb_link_active: $mid-grey;
+
+// 404
+$maintenance_container_bg: $white;
+$maintenance_container_border: $white;
+$maintenance_container_border_top: $white;
+$maintenance_body_bg: $white;
+$maintenance_link: $light-grey;
+
+// Mega menu.
+$mm_body_overlay: rgba(0, 0, 0, 0.5);
+$mm_l1_border: $pale-grey;
+$mm_l1_desktop-border: $pale-grey;
+$mm_l1_link: $charcoal;
+$mm_l1_link_hover: $charcoal;
+$mm_l1_link_active_border: $medium-sky-blue;
+$mm_l2_link: $black;
+$mm_l2_link_hover: $charcoal;
+$mm_l3_link: $mid-grey;
+$mm_l3_link_mobile: $black;
+$mm_highlight_label: $charcoal;
+$mm_highlight_title: $charcoal;
+$mm_highlight_description: $charcoal;
+$mm_l3_link_hover: $charcoal;
+
+// Product detail page.
+$pdp_product_special_price_text: $sale-red;
+$pdp_product_discount_price: $sale-red;
+$pdp_product_price: $charcoal;
+$pdp_product_discount_text: $sale-red;
+$pdp_size_option_selected_text: $charcoal;
+$pdp_size_option_selected_bg: $white;
+$pdp_size_option_border: $pale-grey;
+$pdp_size_option_text: $charcoal;
+$pdp_swatch_selected_border: $charcoal;
+$pdp_cc_btn_border: $medium-sky-blue;
+$pdp_cc_btn_bg: $white;
+$pdp_accordion_title: $charcoal;
+$pdp_title_section_border: $pale-grey;
+$pdp_skus_border: $pale-grey;
+$gallery_arrows_border: $charcoal;
+$pdp_sidebar_label: $charcoal;
+$pdp_sidebar_link: $charcoal;
+$free-gifts-modal-product-item-code: $spanish-grey;
+$pdp_product_itemcode: $spanish-grey;
+$pdp_size_selected_text: $charcoal;
+$pdp_size_option_border: $grey;
+$pdp_size_selected_border: $spanish-grey;
+$pdp_size_option_hover_bg: $light-grey;
+$pdp_cc_storefinder_input: $charcoal;
+$pdp_cc_btn_text: $charcoal;
+$pdp_desc_wrapper_border: $charcoal;
+$pdp_desc_wrapper_close_bg: $charcoal;
+$pdp_sizeguide_link: $charcoal;
+$pdp_product_special_price: $sale-red;
+$pdp_white_color_attribute_border: $spanish-grey;
+$pdp_gallery_img_bg: $light-grey;
+$pdp_disable_variant_bg: $anti-flash-white;
+$pdp_disable_variant_text: $spanish-grey;
+$pdp_gallery_img_modal_bg: rgba(0, 0, 0, 0.5);
+$pdp_cc_other_stores: $black;
+$pdp_cc_storefinder_link: $black;
+$pdp_all_stores_modal_close_bg: $charcoal;
+$pdp_all_stores_modal_list_name: $charcoal;
+$pdp_all_stores_modal_border: $grey;
+$pdp_gallery_img_modal_bg: rgba(0, 0, 0, 0.5);
+// SPC
+$spc-cart-background: $light-grey;
+$spc-empty-text: $charcoal;
+$spc-checkout_section_title: $black;
+$spc-product-title: $charcoal;
+$spc-product-price: $charcoal;
+$spc-product-attributes: $mid-grey;
+$spc-promo-code-error: $sale-red;
+$spc-promo-code-success: $green;
+$spc-select-border: $grey;
+$spc-totals-line-item-color: $charcoal;
+$spc-order-total-suffix-text: $mid-grey;
+$spc-promo-code-placeholder-text: $charcoal;
+$spc-promo-code-border: $grey;
+$spc-promo-code-close-icon: $charcoal;
+$spc-cart-promo-code-submit-enabled: $white;
+$spc-order-summary-product-area-bg: $pale-grey;
+$spc-checkout-delivery-method-txt: $charcoal;
+$spc-deliver-button: $white;
+$spc-delivery-customer-info-highlight: $charcoal;
+$spc-delivery-info-text: $charcoal;
+$spc-checkout-payment-method-txt: $black;
+$spc-cc-placeholder: $mid-grey;
+$spc-deliver-button: $black;
+$spc-tooltip-bg: $white;
+$spc-tooltip-text: $dark-grey;
+$spc-tooltip-border: $dark-grey;
+$spc_tooltip_icon: $dark-grey;
+$spc_tooltip_icon_border: $dark-grey;
+$spc-deliver-button: $white;
+$spc-cnc-store-search-icon: $charcoal;
+$spc-cnc-toggle-bg-active: $charcoal;
+$spc-cnc-toggle-bg: $white;
+$spc-checkout-success-message-background: $green;
+$spc-promotion-link: $sale-red;
+$spc-cart-item-alert: $promo-blue;
+$spc-checkout-error-message-background: $sale-red;
+$spc-order-summary-discount-text: $charcoal;
+$spc-checkout-header-border: $pale-grey;
+$spc-checkout-page-title-border: $spanish-grey;
+$spc-checkout-radio-filled: $charcoal;
+$spc-checkout-delivery-method-txt: $mid-grey;
+$spc-delivery-customer-info-highlight: $charcoal;
+$spc-delivery-info-text: $charcoal;
+$spc-delivery-info-separator: $grey;
+$spc-carrier-title: $dark-grey;
+$spc-carrier-price: $charcoal;
+$spc-method-title: $mid-grey;
+$spc-checkout-payment-method-desc: $charcoal;
+$spc-checkout-order-detail-label: $charcoal;
+$spc-cnc-store-item-text-impress: $charcoal;
+
+// Checkout Global.
+$checkout_section_titles: $charcoal;
+$checkout_login_link_text: $charcoal;
+$checkout_login_submit_button_background: $white;
+$checkout_guest_button_border: $medium-sky-blue;
+$checkout_guest_button_txt: $charcoal;
+$checkout_footer_border-top: $grey;
+$checkout_footer_txt: $dark-grey;
+$checkout_header_border-bottom: $grey;
+$checkout_footer_light_txt: $dark-grey;
+
+// cart
+$minicart_notification_border: $charcoal;
+$minicart_notification_shadow: $light-grey;
+$minicart_notification_text: $mid-grey;
+$minicart_notification_product_title: $charcoal;
+$minicart_notification_btn_bg: $white;
+$cart_notification_arrow_bg: $white;
+$primary_minicart_quantity_bg: $medium-sky-blue;
+$minicart_notification_btn_text: $charcoal;
+$primary_minicart_text: $charcoal;
+$primary_minicart_quantity_text: $charcoal;
+$basket_fixed_percentage_inactive_header_promo_bg: $medium-sky-blue;
+$basket_fixed_percentage_inactive_header_promo_txt: $charcoal;
+$basket_active_promotion_icon: $charcoal;
+$basket_available_code: $medium-sky-blue;
+
+// Address form.
+$address_form_radio: $charcoal;
+$address_button_border: $grey;
+$address_button_text: $charcoal;
+$address_book_delete_cancel: $charcoal;
+$address_book_delete_close: $black;
+$address_pp_delete_closebtn: $black;
+$address_book_delete_close_icon: $white;
+
+// My Account pages
+$my_account_mobile_back_link: $black;
+$password_tooltip_list: $charcoal;
+$user_nav_link: $black;
+$user_nav_mobile_link: $black;
+$user_nav_mobile_title2: $charcoal;
+$user_order_list_text: $charcoal;
+$user_order_list_dark: $charcoal;
+$windows-blue: $black;
+$block_acm_customer_txt: $black;
+$user_order_list_status_btn_text: $white;
+
+// User Form
+$user_field_link: $charcoal;
+$user_form_text: $charcoal;
+$my_account_nav: $charcoal;
+$my_account_nav_active: $black;
+$my_account_nav_hover: $black;
+$user_form_layout_divider_color: $grey;
+
+// VAT text
+$vat: $spanish-grey;
+$vat_dark: $pale-grey;
+
+// Product listing page and search page.
+$plp_filter_active_tick: $charcoal;
+$plp_facet_clear_text: $charcoal;
+$plp_selected_filter_label_text: $black;
+$plp_facet_filter_bg: $medium-sky-blue;
+$plp_facet_filter_link: $charcoal;
+$plp_facet_summary_filter_icon: $charcoal;
+$plp_all_filter_filter_arrow: $charcoal;
+$plp_filter_icon: $charcoal;
+$plp_filter_selected_text: $charcoal;
+$plp_clear_all_text_disabled: $mid-grey;
+$plp_search_count: $mid-grey;
+$plp_clear_all_btn_border: $medium-sky-blue;
+
+// PLP Product tile.
+$plp_tile_product_title: $charcoal;
+$plp_tile_product_title_hover: $charcoal;
+$plp_tile_product_special_price: $sale-red;
+$plp_tite_product_promo_text: $sale-red;
+$plp_tile_product_text: $charcoal;
+
+// PLP Filter bar.
+$plp_filterbar_clearall_border: $medium-sky-blue;
+$plp_filterbar_clearall_text: $charcoal;
+$plp_grid_active_color: $charcoal;
+
+// PLP All filter colors
+$plp_all_filter_title: $page_title;
+$plp_clear_all_btn_disabled: $mid-grey;
+$plp_clear_all_btn_text: $charcoal;
+$plp_all_filter_button_color: $primary_btn_bg;
+$plp_all_filter_close_btn: $charcoal;
+$plp_mobile_separator: $pale-grey;
+
+// PLP LHN block.
+$lhn_l2: $black;
+$lhn_l3: $black;
+$lhn_l4: $black;
+$lhn_sticky-header-shadow: $pale-grey;
+
+// Modal
+$modal_close_bg: $charcoal;
+$modal_close_text: $white;
+
+// Back to top
+$btt_bg: $light-grey;
+$btt_text: $charcoal;
+$btt_border: $grey;
+
+// PLP frame.
+$frame_promo: $sale-red;
+$plp-frame-promo-subtitle: $charcoal;
+
+// PLP promotion V2
+$plp-popup-title: $charcoal;
+$plp-popup_header_border: $grey;
+
+// Option list filter.
+$attribute-filter-block-title: $charcoal;
+$option-list-search-placeholder-text: $charcoal;
+$option-list-search-icon-color: $charcoal;
+$option-list-search-icon-bg: transparent;
+$options-list-autocomplete-form-border: $grey;
+$attribute-filter-name-list-text: $black;
+$attribute-detail-link-text: $charcoal;
+$attribute-detail-link-background: $medium-sky-blue;
+$option-brand-logo-border: $pale-grey;
+$options-page-description: $black;
+$options-page-title: $black;
+$divider-text: $black;
+$attribute-description-text: $black;
+$options-list-heading-group-border: $grey;
+$attribute-search-placeholder-text: $black;
+
+// PLP add to cart.
+$plp-primary-cta-hover-bg: $medium-sky-blue;
+$plp-secondary-cta-hover-bg: $medium-sky-blue;
+$plp-quick-view-product-size-active-bg: $white;
+$plp-quick-view-product-size-text-active: $charcoal;
+$plp-quick-view-product-size-border-hover: $grey;
+$plp-quick-view-product-size-text: $charcoal;
+$plp-quick-view-product-size-border: $spanish-grey;
+$plp-quick-view-product-size-hover-bg: $light-grey;
+$plp-quick-view-product-size-active-border: $spanish-grey;
+$plp-quick-view-product-size-text-disabled: $spanish-grey;
+$plp-quick-view-product-group-size-active: $white;
+$plp_quick_color_variant_hover_border: $black-two;
+$plp-quick-view-product-text: $white;
+
+// eGift landing page.
+$egift-accordion-active-title: $black-two;
+$egift-banner-bg: $_egift_landing_page_banner_bg;
+
+// eGift purchase page.
+$egift-active-amount-card-border: $black-two;

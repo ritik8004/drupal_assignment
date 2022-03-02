@@ -116,7 +116,10 @@ function alshaya_i18n_update_context(array $strings) {
 
       if ($target = $locale_storage->findString($conditions)) {
         // Update translation source entry.
-        $target->setValues(['context' => $context, 'version' => \Drupal::VERSION]);
+        $target->setValues([
+          'context' => $context,
+          'version' => \Drupal::VERSION,
+        ]);
         $target->save();
       }
     }
@@ -184,10 +187,8 @@ function alshaya_i18n_css_alter(&$css, $assets) {
   }
 
   foreach ($css as $name => $data) {
-    if (strpos($name, '.ltr.') && isset($data['data'])) {
-      $data['data'] = str_replace('.ltr.', '.rtl.', $data['data']);
-      $css[str_replace('.ltr.', '.rtl.', $name)] = $data;
-      unset($css[$name]);
+    if (isset($data['data']) && strpos($data['data'], '.ltr.')) {
+      $css[$name]['data'] = str_replace('.ltr.', '.rtl.', $data['data']);
     }
   }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Alshaya BazaarVoice Controller.
@@ -123,6 +124,46 @@ class AlshayaBazaarVoiceController extends ControllerBase {
     // Add user review of current product in user settings.
     $reviewStatsData = $this->alshayaBazaarVoice->getProductReviewStatistics($productId);
     return new JsonResponse(!empty($reviewStatsData) ? reset($reviewStatsData) : []);
+  }
+
+  /**
+   * Returns write a revivew form coming from Bazaarvoice.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function pieWriteReviewContainer(Request $request) {
+    $bvaction = $request->query->get('bvaction');
+    $bvproductId = $request->query->get('bvproductId');
+
+    if (empty($bvaction) || empty($bvproductId)) {
+      throw new NotFoundHttpException();
+    }
+
+    $bvPageType = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'bv:pageType',
+        'content' => 'container',
+      ],
+    ];
+    $robots = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'robots',
+        'content' => 'noindex, nofollow',
+      ],
+    ];
+
+    $build['#attached']['html_head'][] = [$robots, 'robots'];
+    $build['#attached']['html_head'][] = [$bvPageType, 'bv:pageType'];
+    $build['#attached']['library'][] = 'bazaar_voice/bazaar_voice';
+    $build['#attached']['library'][] = 'alshaya_bazaar_voice/pie_write_review';
+
+    return $build;
   }
 
 }

@@ -1,0 +1,272 @@
+header {
+  .c-header__region {
+    max-width: 74rem;
+
+    @include breakpoint($only-mobile) {
+      height: 3rem;
+
+      html[lang=ar] & {
+        height: 3.4375rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      padding: 1.5625rem 0 0.8125rem;
+    }
+  }
+
+  .region__header {
+    .block-system-branding-block {
+      .site-brand-home {
+        min-width: 12.5rem;
+      }
+    }
+  }
+}
+
+.site-brand-home {
+  a {
+    min-width: 12.5rem;
+
+    @include breakpoint($upto-desktop) {
+      min-width: 8.25rem;
+      max-width: 8.25rem;
+      margin-#{$left}: 3rem;
+      margin-top: 0.5625rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        margin-top: 0.8125rem;
+      }
+    }
+  }
+
+  img {
+    .block-system-branding-block & {
+      html[lang=ar] & {
+        width: auto;
+        margin-top: 0;
+        height: auto;
+
+        @include breakpoint($upto-desktop) {
+          max-width: 8.25rem;
+        }
+      }
+    }
+  }
+}
+
+.block-cart-mini-block,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  .cart-link-total {
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: -0.9375rem;
+      padding-#{$right}: 0;
+    }
+  }
+
+  .cart-link {
+    background-position: center $right;
+    margin-bottom: 0.6875rem;
+    #{$left}: 1.0625rem;
+
+    @include breakpoint($upto-desktop) {
+      background-size: 72%;
+      top: 0.6875rem;
+      #{$left}: -0.6875rem;
+
+      html[lang=ar] & {
+        right: 0;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        right: -0.5rem;
+      }
+    }
+
+    html[lang=ar] & {
+      background-position: center left;
+    }
+
+    html[lang=ar] & {
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .quantity {
+    #{$left}: 0;
+    bottom: -0.4375rem;
+    padding-top: 0.125rem;
+
+    @include breakpoint($only-mobile) {
+      #{$left}: -0.1875rem;
+      bottom: -0.75rem;
+    }
+  }
+}
+
+.c-menu-primary {
+  .mobile--menu {
+    @include breakpoint($upto-desktop) {
+      padding: 0.3125rem;
+      position: absolute;
+      font-size: 0;
+      margin-#{$left}: 1.25rem;
+      top: 2rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0.5625rem;
+      top: 1.3125rem;
+    }
+
+    &::before {
+      @include breakpoint($upto-desktop) {
+        height: 1.125rem;
+        width: 1.25rem;
+        margin-#{$right}: 0;
+      }
+    }
+  }
+
+  .block-system-menublock {
+    li {
+      position: static;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    top: 0.8rem;
+  }
+
+  @include breakpoint($upto-desktop) {
+    a {
+      text-transform: capitalize;
+    }
+
+    .mobile--search {
+      padding: 0.3125rem;
+      display: block;
+      font-size: 0;
+      position: absolute;
+      top: 0.6rem;
+      #{$left}: 4rem;
+
+      @include icon_img('#{$dh_theme_img_directory_path}/icons/search.svg', 2rem, 2rem);
+
+      &::before {
+        @include breakpoint($only-mobile) {
+          height: 1.75rem;
+          width: 1.75rem;
+        }
+      }
+    }
+
+    .store {
+      font-size: 0;
+      position: absolute;
+      #{$right}: 10%;
+      top: 1.75rem;
+      padding: 0.625rem;
+      margin: 0;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .store {
+      #{$right}: 17%;
+      top: 1.25rem;
+
+      html[lang=ar] & {
+        left: 14.5%;
+      }
+    }
+  }
+
+  .store {
+    @include breakpoint($upto-desktop) {
+      padding: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    @include icon_img('#{$dh_theme_img_directory_path}/icons/store-finder.svg', 2rem, 2rem);
+
+    &::before {
+      content: '';
+      #{$left}: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-#{$right}: 0;
+      top: 0;
+
+      html[lang=ar] & {
+        @include breakpoint($only-mobile) {
+          #{$left}: 0;
+        }
+      }
+
+      @include breakpoint($tablet) {
+        font-size: 1.75rem;
+      }
+    }
+  }
+
+  .mobile--search {
+    @include breakpoint($upto-desktop) {
+      top: 1.125rem;
+      #{$right}: 14%;
+      #{$left}: inherit;
+    }
+
+    @include breakpoint($only-mobile) {
+      top: 0.9375rem;
+      #{$right}: 24.5%;
+      margin-#{$right}: 0;
+      width: 2rem;
+
+      html[lang=ar] & {
+        top: 1rem;
+        left: 22%;
+      }
+    }
+  }
+
+  li .mobile--search {
+    &::before {
+      @include breakpoint($only-mobile) {
+        font-size: 0;
+        width: 1.75rem;
+        height: 1.75rem;
+        margin-#{$right}: 0;
+        top: -0.125rem;
+        #{$left}: -0.8125rem;
+        background-size: 68%;
+      }
+    }
+  }
+
+  li .store {
+    &:hover {
+      background: none;
+    }
+  }
+}
+
+body {
+  .branding__menu {
+    @include breakpoint($only-tablet) {
+      height: 4.5rem;
+    }
+  }
+}

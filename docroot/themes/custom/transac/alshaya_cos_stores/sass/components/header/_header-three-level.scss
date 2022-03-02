@@ -8,6 +8,12 @@
       .menu--two__list-item {
         > .menu-two__link-wrapper {
           max-width: 12rem;
+
+          a {
+            &:hover {
+              opacity: 0.6;
+            }
+          }
         }
       }
     }

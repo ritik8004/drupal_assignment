@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_tabby_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() != 'acq_product') {
+    return;
+  }
+
+  // Need processing only for products with Full, Modal, Matchback view mode.
+  if (in_array($view_mode, ['full', 'modal', 'matchback'])) {
+    /** @var \Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper $alshayaTabbyHelper */
+    $alshayaTabbyHelper = \Drupal::service('alshaya_tabby.widget_helper');
+    $alshayaTabbyHelper->getTabbyPaymentBuild($build);
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_tabby_alshaya_spc_cart_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper $alshayaTabbyHelper */
+  $alshayaTabbyHelper = \Drupal::service('alshaya_tabby.widget_helper');
+  $alshayaTabbyHelper->getTabbyPaymentBuild($build, 'cart');
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
+ */
+function alshaya_tabby_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
+  if (!empty($order['payment']) && $order['payment']['method'] === 'tabby') {
+    // Attach library to show logo on confirmation page.
+    $build['#attached']['library'][] = 'alshaya_tabby/tabby_integration';
+  }
+}

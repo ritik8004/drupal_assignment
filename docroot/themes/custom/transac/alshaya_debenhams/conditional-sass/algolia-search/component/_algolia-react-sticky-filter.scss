@@ -1,0 +1,25 @@
+#alshaya-algolia-search,
+.block-alshaya-algolia-react-plp,
+.block-alshaya-algolia-react-promotion,
+.block-alshaya-algolia-react-product-list {
+  .filter-fixed-top {
+    .show-all-filters-algolia {
+      &.empty-category {
+        @include breakpoint($only-mobile) {
+          border-top: 1px solid $plp_mobile_separator;
+        }
+      }
+    }
+
+    .block-facet-blockcategory-facet-search,
+    .block-facet-blockcategory-facet-plp {
+      @include breakpoint($only-mobile) {
+        top: 3.375rem;
+
+        html[lang=ar] & {
+          top: 3.8125rem;
+        }
+      }
+    }
+  }
+}

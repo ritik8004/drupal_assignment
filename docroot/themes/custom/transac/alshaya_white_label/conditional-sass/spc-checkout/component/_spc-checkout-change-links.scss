@@ -1,6 +1,9 @@
 .spc-address-form-edit-link,
 .spc-change-address-link,
-.spc-add-new-card-btn {
+.spc-add-new-card-btn,
+.egift-verify-code-redeem-submit-btn .egift-button,
+.egift-get-code-redeem-submit-btn .egift-button,
+.remove-egift-card button {
   position: absolute;
   #{$right}: 0;
   top: 0;

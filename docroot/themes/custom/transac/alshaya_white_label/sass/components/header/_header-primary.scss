@@ -2,6 +2,29 @@
   --menuTiming: 250ms;
 }
 
+@mixin menu__list-item {
+  border-bottom: 1px solid $mm_l1_border;
+  margin-#{$left}: 0.625rem;
+  margin-#{$right}: 0.625rem;
+  font-family: $alshaya-bold;
+  font-weight: normal;
+  color: $mm_l2_link;
+  display: block;
+  font-size: 12px;
+  padding: 0;
+  text-transform: lowercase;
+
+  a {
+    padding: 1rem 0;
+    padding-bottom: 0.9375rem;
+    padding-#{$right}: 1.4rem;
+  }
+
+  &.hide-on-mobile {
+    display: none !important;
+  }
+}
+
 @include breakpoint($desktop) {
   .no--desktop,
   .toggle--sign.no--desktop {
@@ -108,6 +131,22 @@ header {
     > div {
       display: table-cell;
       vertical-align: middle;
+    }
+
+    @include breakpoint($desktop) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      > div {
+        display: block;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      > div {
+        width: 33.33%;
+      }
     }
 
     .block-views-exposed-filter-blocksearch-page {
@@ -1204,30 +1243,11 @@ header {
   }
 
   .menu__list-item {
-    border-bottom: 1px solid $mm_l1_border;
-    margin-#{$left}: 0.625rem;
-    margin-#{$right}: 0.625rem;
-    font-family: $alshaya-bold;
-    font-weight: normal;
-    color: $mm_l2_link;
-    display: block;
-    font-size: 12px;
-    padding: 0;
-    text-transform: lowercase;
-
-    a {
-      padding: 1rem 0;
-      padding-bottom: 0.9375rem;
-      padding-#{$right}: 1.4rem;
-    }
-
-    &.hide-on-mobile {
-      display: none !important;
-    }
+    @include menu__list-item;
   }
 
   .back--link {
-    @extend .menu__list-item;
+    @include menu__list-item;
 
     padding: 1rem 0;
     padding-#{$right}: 0.25rem;
@@ -1550,7 +1570,7 @@ header {
   }
 }
 
-//Highlights fix
+// Highlights fix.
 .highlighted {
   @media only screen and (min-device-width: 1195px) and (max-device-width: 1275px) {
     max-width: 10.5rem;
@@ -1749,6 +1769,45 @@ html {
     .c-menu-primary {
       .hamburger--menu {
         padding: 0.625rem 0.5rem;
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .supermenu {
+    header {
+      .region__header {
+        position: relative;
+      }
+
+      &.c-header {
+        .c-header__region {
+          padding-bottom: 0.4rem;
+        }
+      }
+    }
+
+    .block-system-branding-block {
+      .site-brand-home {
+        .logo {
+          position: absolute;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          top: 50%;
+
+          img {
+            vertical-align: middle;
+          }
+
+          picture {
+            vertical-align: middle;
+
+            img {
+              vertical-align: baseline;
+            }
+          }
+        }
       }
     }
   }

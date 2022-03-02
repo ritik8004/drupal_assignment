@@ -1,0 +1,13 @@
+.spc-empty-container {
+  .spc-shopping-link {
+    a {
+      @include btn;
+
+      border-radius: 2rem;
+    }
+  }
+
+  .spc-empty-text {
+    font-family: $alshaya-thin;
+  }
+}

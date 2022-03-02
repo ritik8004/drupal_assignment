@@ -1,0 +1,20 @@
+.checkout_com_egift_linked_card,
+.redeem-egift-card-content {
+  .popup-content {
+    .egift-amount-update-wrapper {
+      .egift-button {
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  .popup-overlay {
+    .popup-content {
+      html[lang=ar] & {
+        @include breakpoint($tablet) {
+          max-width: 25.5rem;
+        }
+      }
+    }
+  }
+}

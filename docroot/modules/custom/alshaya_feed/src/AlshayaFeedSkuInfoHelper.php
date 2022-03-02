@@ -20,7 +20,6 @@ use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\metatag\MetatagToken;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 
 /**
@@ -120,6 +119,13 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuPriceHelper;
 
   /**
+   * SKU images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -146,6 +152,8 @@ class AlshayaFeedSkuInfoHelper {
    *   The MetatagToken object.
    * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $sku_price_helper
    *   The SKU price helper service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   SKU images helper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -159,7 +167,8 @@ class AlshayaFeedSkuInfoHelper {
     ConfigFactoryInterface $config_factory,
     MetatagManager $metaTagManager,
     MetatagToken $token,
-    SkuPriceHelper $sku_price_helper
+    SkuPriceHelper $sku_price_helper,
+    SkuImagesHelper $sku_images_helper
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -176,6 +185,7 @@ class AlshayaFeedSkuInfoHelper {
     $this->metaTagManager = $metaTagManager;
     $this->tokenService = $token;
     $this->skuPriceHelper = $sku_price_helper;
+    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -309,6 +319,9 @@ class AlshayaFeedSkuInfoHelper {
             'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
             'url' => $this->skuInfoHelper->getEntityUrl($node) . '?selected=' . $child->id(),
           ];
+          // Allow other modules to add/alter variant info.
+          $this->moduleHandler->alter('alshaya_feed_variant_info', $variant, $child);
+
           $product[$lang][] = array_merge($parentProduct, $variant);
         }
 
@@ -388,14 +401,12 @@ class AlshayaFeedSkuInfoHelper {
       return [];
     }
 
-    $image_style_plp = ImageStyle::load(SkuImagesHelper::STYLE_PRODUCT_LISTING);
-
-    $images = array_map(function ($image) use ($image_style_plp) {
+    $images = array_map(function ($image) {
       if (!empty($image['drupal_uri'])) {
         return [
           'label' => $image['label'],
           'url' => file_create_url($image['drupal_uri']),
-          'url_product_listing' => $image_style_plp->buildUrl($image['drupal_uri']),
+          'url_product_listing' => $this->skuImagesHelper->getImageStyleUrl($image, SkuImagesHelper::STYLE_PRODUCT_LISTING),
         ];
       }
     }, $media_items['media_items']['images']);

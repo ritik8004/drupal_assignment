@@ -57,13 +57,13 @@
           {% if thumbs.type == 'youtube' %}
             <li class="mobilegallery__thumbnails__video youtube">
               <div class="mobileplayer-wrapper">
-                <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                <iframe class="mobileplayer" src="{{ thumbs.url }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
               </div>
             </li>
           {% elseif thumbs.type == 'vimeo' %}
             <li class="mobilegallery__thumbnails__video vimeo">
               <div class="mobileplayer-wrapper">
-                <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                <iframe class="mobileplayer" src="{{ thumbs.url }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
               </div>
             </li>
           {% elseif thumbs.type == 'video' %}
@@ -98,6 +98,16 @@
       <div class="magazine__gallery--container">
         <div class="magazine-product-description">
           <div class="magazine-swatch-placeholder"></div>
+          {# Delivery options will load if express delivery enabled. #}
+          {% if delivery_options %}
+            <div class="express-delivery mobile {{ express_delivery_class }}">
+              {% for key,delivery_option in delivery_options %}
+                <div class="express-delivery-text {{ key }} {{ delivery_option.status }}">
+                  <span>{{ delivery_option.label }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
       </div>
     {% endblock %}

@@ -15,6 +15,35 @@ header {
       @include breakpoint($desktop) {
         width: 60%;
         margin: 0;
+
+        ul.menu--one__list {
+          padding-#{$left}: 1.75rem;
+        }
+
+        li.menu--one__list-item {
+          margin-#{$right}: 0.625rem;
+
+          html[lang="ar"] & {
+            float: right;
+          }
+
+          html[lang="en"] & {
+            float: left;
+          }
+
+          &:last-child {
+            margin-#{$right}: 0;
+          }
+
+          .menu__link {
+            font-size: 0.9375rem;
+            letter-spacing: 0.025rem;
+          }
+
+          .menu--one__link {
+            width: fit-content;
+          }
+        }
       }
     }
 
@@ -85,6 +114,10 @@ header {
     @include breakpoint($desktop) {
       display: inline-flex;
       width: 4.375rem;
+
+      .alias--cart-login & {
+        width: 6rem;
+      }
     }
 
     @include breakpoint($only-tablet) {

@@ -1,0 +1,15 @@
+.spc-address-list-member-content {
+  .address-list-content {
+    .spc-checkout-address-list {
+      .spc-address-tile {
+        .spc-address-tile-actions {
+          .spc-address-btns {
+            > button {
+              @include btn;
+            }
+          }
+        }
+      }
+    }
+  }
+}

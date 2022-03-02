@@ -1,0 +1,151 @@
+name: Alshaya Debenhams
+type: theme
+description: 'Theme for Debenhams.'
+core: 8.x
+core_version_requirement: ^8 || ^9
+base theme: alshaya_white_label
+alshaya_theme_type: transac
+
+regions:
+  menu_primary: 'Menu Primary'
+  menu_secondary: 'Menu Secondary'
+  header: Header
+  pre_content: 'Pre content'
+  breadcrumb: Breadcrumb
+  hero_content: 'Hero Content'
+  highlighted: 'Highlight Content'
+  content: Content
+  sidebar_first: 'Sidebar first'
+  sidebar_second: 'Sidebar second'
+  post_content: 'Post content'
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - alshaya_debenhams/global_styles
+
+libraries-override:
+  alshaya_white_label/ltr_print_styles:
+    css:
+      theme:
+        css/ltr-print.css: css/ltr-print.css
+
+  alshaya_white_label/rtl_print_styles:
+    css:
+      theme:
+        css/rtl-print.css: css/rtl-print.css
+
+  alshaya_white_label/font-face:
+    css:
+      theme:
+        css/conditional-sass/font-face/font-face.ltr.css: css/conditional-sass/font-face/font-face.ltr.css
+
+  alshaya_white_label/algolia_search:
+    css:
+      theme:
+        css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css
+
+  alshaya_white_label/contact:
+    css:
+      theme:
+        css/conditional-sass/contact-us/contact-us.ltr.css: css/conditional-sass/contact-us/contact-us.ltr.css
+
+  alshaya_white_label/store_finder:
+    css:
+      theme:
+        css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
+
+  alshaya_white_label/spc-utils:
+    css:
+      theme:
+        css/conditional-sass/spc-utils/spc-utils.ltr.css: css/conditional-sass/spc-utils/spc-utils.ltr.css
+
+  alshaya_white_label/my-account:
+      css:
+        theme:
+          css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/spc-cart:
+    css:
+      theme:
+        css/conditional-sass/spc-cart/spc-cart.ltr.css: css/conditional-sass/spc-cart/spc-cart.ltr.css
+
+  alshaya_white_label/tooltip:
+    css:
+      theme:
+        css/conditional-sass/tooltip/tooltip.ltr.css: css/conditional-sass/tooltip/tooltip.ltr.css
+
+  alshaya_white_label/spc-login:
+    css:
+      theme:
+        css/conditional-sass/spc-login/spc-login.ltr.css: css/conditional-sass/spc-login/spc-login.ltr.css
+
+  alshaya_white_label/spc-checkout:
+    css:
+      theme:
+        css/conditional-sass/spc-checkout/spc-checkout.ltr.css: css/conditional-sass/spc-checkout/spc-checkout.ltr.css
+
+  alshaya_white_label/spc-checkout-confirmation:
+    css:
+      theme:
+        css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css: css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css
+
+  alshaya_white_label/plp-frame-options:
+    css:
+      theme:
+        css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css
+
+  alshaya_white_label/sitemap:
+    css:
+      theme:
+        css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css
+
+  alshaya_white_label/optionlist_filter:
+    css:
+      theme:
+        css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css: css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css
+
+  alshaya_white_label/aura-loyalty-global:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
+
+  alshaya_white_label/plp-add-to-cart:
+    css:
+      theme:
+        css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css
+
+  alshaya_white_label/egift-common:
+    css:
+      theme:
+        css/conditional-sass/egift-common/egift-common.ltr.css: css/conditional-sass/egift-common/egift-common.ltr.css
+
+  alshaya_white_label/egift-purchase-page:
+    css:
+      theme:
+        css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css: css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css
+
+  alshaya_white_label/egift-topup-page:
+    css:
+      theme:
+        css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css: css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css
+
+  alshaya_white_label/egift-card-checkout:
+    css:
+      theme:
+        css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css
+
+  alshaya_white_label/egift-landing-page:
+    css:
+      theme:
+        css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css: css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css
+
+  alshaya_white_label/egift-myaccount:
+    css:
+      theme:
+        css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css: css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css
+
+  alshaya_white_label/egift-card-checkout-confirmation:
+    css:
+      theme:
+        css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css

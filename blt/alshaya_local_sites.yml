@@ -130,7 +130,7 @@ sites:
     module: alshaya_kz
     type: alshaya_transac_lite
     country: kw
-  venontransacme:
+  venontransac:
     module: alshaya_ve
     type: alshaya_non_transac
     country: kw
@@ -190,6 +190,10 @@ sites:
     module: alshaya_bp
     type: alshaya_transac
     country: eg
+  bpqa:
+    module: alshaya_qa
+    type: alshaya_transac
+    country: qa
   pbkkw:
     module: alshaya_pbk
     type: alshaya_transac
@@ -222,6 +226,10 @@ sites:
     module: alshaya_mu
     type: alshaya_transac
     country: eg
+  muqa:
+    module: alshaya_mu
+    type: alshaya_transac
+    country: qa
   tbskw:
     module: alshaya_tbs
     type: alshaya_transac
@@ -238,6 +246,14 @@ sites:
     module: alshaya_tbs
     type: alshaya_transac
     country: eg
+  tbsbh:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: bh
+  tbsqa:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: qa
   coskw:
     module: alshaya_cos
     type: alshaya_transac
@@ -262,3 +278,31 @@ sites:
     module: alshaya_cos
     type: alshaya_transac
     country: qa
+  dhkw:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: kw
+  dhsa:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: sa
+  dhae:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: ae
+  dheg:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: eg
+  dhbh:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: bh
+  dhqa:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: qa
+  dhjo:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: jo

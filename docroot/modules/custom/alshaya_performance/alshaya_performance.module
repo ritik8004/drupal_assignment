@@ -158,6 +158,12 @@ function alshaya_performance_flush_frontend_caches($include_twig = FALSE) {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_performance_page_attachments_alter(array &$attachments) {
+  // No preloads if param present.
+  $preload_param = \Drupal::request()->get('preload');
+  if (isset($preload_param) && $preload_param == 0) {
+    return;
+  }
+
   $preload = [];
 
   \Drupal::moduleHandler()->alter('alshaya_performance_preload', $preload);
@@ -177,12 +183,12 @@ function alshaya_performance_page_attachments_alter(array &$attachments) {
     ];
 
     // Only add `crossorigin` attribute when needed.
-    if(isset($item['crossorigin'])) {
+    if (isset($item['crossorigin'])) {
       $preload_render['#attributes']['crossorigin'] = $item['crossorigin'];
     }
 
     // Only add `type` attribute when needed.
-    if(isset($item['type'])) {
+    if (isset($item['type'])) {
       $preload_render['#attributes']['type'] = $item['type'];
     }
 
@@ -212,5 +218,69 @@ function alshaya_performance_js_settings_alter(&$settings, AttachedAssetsInterfa
   $get = \Drupal::request()->query->all();
   if (isset($get['cacheable'])) {
     unset($settings['user']);
+  }
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function alshaya_performance_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  // Unset external Js for the Performance check up.
+  $external = \Drupal::request()->get('external');
+  if (isset($external) && $external == 0) {
+    foreach ($javascript as $path => $file) {
+      if ($file['type'] === "external") {
+        unset($javascript[$path]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_css_alter().
+ */
+function alshaya_performance_css_alter(&$css, AttachedAssetsInterface $assets) {
+  // Unset external CSS for the Performance check up.
+  $external = \Drupal::request()->get('external');
+  if (isset($external) && $external == 0) {
+    foreach ($css as $path => $file) {
+      if ($file['type'] === "external") {
+        unset($css[$path]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_performance_library_info_alter(&$libraries, $extension) {
+  // Add defer to the sharethis libraries.
+  if ($extension === "sharethis") {
+    foreach ($libraries as $library => $library_item) {
+      if (empty($library_item['js'])) {
+        continue;
+      }
+      $local_js = FALSE;
+      foreach ($library_item['js'] as $path => $library_config) {
+        $attributes = !empty($library_config['attributes']) ? $library_config['attributes'] : [];
+        $attributes['defer'] = TRUE;
+        $library_item['js'][$path]['attributes'] = $attributes;
+        if (isset($library_item['js'][$path]['type']) && $library_item['js'][$path]['type'] !== "external") {
+          $local_js = TRUE;
+        }
+      }
+      if ($local_js) {
+        $dependencies = !empty($library_item['dependencies']) ? $library_item['dependencies'] : [];
+        $library_item['dependencies'] = array_merge(
+          $dependencies,
+          [
+            'sharethis/sharethispickerexternalbuttons',
+            'sharethis/sharethispickerexternalbuttonsws',
+          ]
+        );
+      }
+      $libraries[$library] = $library_item;
+    }
   }
 }

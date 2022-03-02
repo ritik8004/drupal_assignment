@@ -44,88 +44,97 @@ $logger->notice('@process process has begun.', [
 
 $algolia_options = [
   'attributesToRetrieve' => [
+    'objectID',
     'nid',
+    'sku',
   ],
-  'hitsPerPage' => 1000,
-  'page' => 0,
 ];
 
-$days = $extra[1] ?? 60;
-$days = is_numeric($days) ? $days : 60;
-$time = strtotime("-$days days");
-
-$algolia_options['numericFilters'] = 'changed<' . $time;
-
-$actual_indexes = [];
+$indexes = [];
 foreach (['en', 'ar'] as $lang) {
-  $actual_index_name = implode('_', [
-    $index_name,
-    $lang,
-  ]);
-
-  $replica_index_name = implode('_', [
-    $actual_index_name,
-    'changed_asc',
-  ]);
-
-  $indexes[$actual_index_name] = $replica_index_name;
+  $indexes[$lang] = implode('_', [$index_name, $lang]);
 }
+$indexes['product_list'] = implode('_', [$index_name, 'product_list']);
 
-foreach ($indexes as $actual_index_name => $replica_index_name) {
-  $replica = $client->initIndex($replica_index_name);
-  $actual = $client->initIndex($actual_index_name);
-
-  $logger->notice('Finding entries with changed older then @days in index @index', [
-    '@index' => $replica->getIndexName(),
-    '@days' => $days,
+foreach ($indexes as $type => $index_name) {
+  $logger->notice('Browsing all entries in index @index', [
+    '@index' => $index_name,
   ]);
 
-  $page = 0;
-  $results = $replica->search('', $algolia_options);
+  try {
+    $index = $client->initIndex($index_name);
+    $results = $index->browseObjects($algolia_options);
+  }
+  catch (\Exception $e) {
+    $logger->warning('Failed to load or get results for index: @index. Exception: @message.', [
+      '@index' => $index_name,
+      '@message' => $e->getMessage(),
+    ]);
+    continue;
+  }
 
-  $nids = array_column($results['hits'], 'nid');
-  if (empty($nids)) {
-    $logger->notice('No items found in the index @index with changed before @days days.', [
-      '@index' => $replica->getIndexName(),
-      '@days' => $days,
+  $data_in_algolia = [];
+  foreach ($results as $row) {
+    $data_in_algolia[$row['objectID']] = $type === 'product_list'
+      ? $row['sku']
+      : $row['nid'];
+  }
+
+  $data_in_algolia = array_filter($data_in_algolia);
+
+  if (empty($data_in_algolia)) {
+    $logger->notice('No items found in the index @index.', [
+      '@index' => $index->getIndexName(),
     ]);
 
     continue;
   }
 
   // Verify skus do not exist in Drupal.
-  $query = \Drupal::database()->select('node_field_data', 'nfd');
-  $query->condition('nid', $nids, 'IN');
-  $query->addField('nfd', 'nid');
-  $nids_available_in_system = $query->execute()->fetchCol();
+  $query = \Drupal::database()->select('node__field_skus', 'nfs');
 
-  $nids_to_remove = array_diff($nids, $nids_available_in_system);
-  if (empty($nids_to_remove)) {
-    $logger->notice('All data is legitimate in the index @index with changed before @days days.', [
-      '@index' => $replica->getIndexName(),
-      '@days' => $days,
+  if ($type === 'product_list') {
+    $query->condition('field_skus_value', $data_in_algolia, 'IN');
+    $query->addField('nfs', 'field_skus_value', 'sku');
+  }
+  else {
+    $query->condition('entity_id', $data_in_algolia, 'IN');
+    $query->addField('nfs', 'entity_id', 'nid');
+  }
+
+  $data_available_in_system = $query->execute()->fetchCol();
+
+  $data_to_remove = array_diff($data_in_algolia, array_filter($data_available_in_system));
+  if (empty($data_to_remove)) {
+    $logger->notice('All data is legitimate in the index @index.', [
+      '@index' => $index->getIndexName(),
     ]);
+
     continue;
   }
 
-  $logger->notice('NIDs that are in Algolia index @index but not in database: count @count, nids: @nids', [
-    '@index' => $replica->getIndexName(),
-    '@count' => count($nids_to_remove),
-    '@nids' => implode(',', $nids_to_remove),
+  $logger->notice('Products that are in Algolia index @index but not in database: count @count, IDs: @ids', [
+    '@index' => $index->getIndexName(),
+    '@count' => count($data_to_remove),
+    '@ids' => implode(', ', $data_to_remove),
   ]);
 
-  foreach ($nids_to_remove as $nid) {
-    $pos = array_search($nid, $nids);
-    $object_id = $results['hits'][$pos]['objectID'];
+  if ($operation === 'delete') {
+    $object_ids = [];
 
-    if ($operation === 'delete') {
-      $actual->deleteObject($object_id);
-
-      $logger->warning('Removed entry with objectId @object_id from index @index', [
-        '@index' => $actual->getIndexName(),
-        '@object_id' => $object_id,
-      ]);
+    $algolia_object_ids = array_flip($data_in_algolia);
+    foreach ($data_to_remove as $id) {
+      $object_ids[] = $algolia_object_ids[$id];
     }
+
+    $response = $index->deleteObjects($object_ids);
+    $response->wait();
+
+    $logger->warning('Removed entries from index @index, objectIDs: @objectIDs, Response: @response.', [
+      '@index' => $index->getIndexName(),
+      '@objectIDs' => implode(', ', $object_ids),
+      '@response' => json_encode($response->getBody()),
+    ]);
   }
 }
 

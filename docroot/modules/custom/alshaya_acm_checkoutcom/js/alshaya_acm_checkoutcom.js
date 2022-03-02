@@ -3,7 +3,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   Drupal.behaviors.AlshayaCheckoutCom = {
     attach: function (context, settings) {

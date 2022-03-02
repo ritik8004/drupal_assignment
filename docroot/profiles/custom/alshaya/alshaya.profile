@@ -28,7 +28,7 @@ function alshaya_form_install_configure_form_alter(&$form, FormStateInterface $f
 function alshaya_is_env_prod() {
   $env = Settings::get('env') ?: 'local';
 
-  // @TODO: Find a better way to check if env is prod.
+  // @todo Find a better way to check if env is prod.
   return preg_match('/\d{2}(live|update)/', $env);
 }
 
@@ -56,6 +56,8 @@ function alshaya_final_common_install_task($profile) {
   if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     $additional_modules[] = 'shield';
     $additional_modules[] = 'acquia_purge';
+    $additional_modules[] = 'purge_drush';
+    $additional_modules[] = 'purge_queuer_coretags';
   }
 
   foreach ($additional_modules as $module) {
@@ -81,7 +83,10 @@ function alshaya_final_common_install_task($profile) {
       ->save();
   }
 
-  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed_final_task', [$profile, $_alshaya_modules_installed]);
+  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed_final_task', [
+    $profile,
+    $_alshaya_modules_installed,
+  ]);
 
   // Delete basic page content type, we don't need this in Alshaya.
   $node_type = NodeType::load('page');

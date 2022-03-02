@@ -63,21 +63,37 @@ header.c-header {
           display: block;
         }
 
-        img {
-          @include breakpoint($only-tablet) {
-            html[lang=ar] & {
-              width: auto !important;
-            }
-          }
-
-          @include breakpoint($desktop) {
-            width: 100%;
-          }
-        }
-
         &.logo {
           @include breakpoint($only-mobile) {
             margin-top: 1.0625rem;
+          }
+
+          img {
+            width: 10.63rem;
+            height: 1.57rem;
+
+            @include breakpoint($tablet) {
+              width: 17.57rem;
+              height: 2.6rem;
+            }
+
+            @include breakpoint($desktop) {
+              width: 18.19rem;
+              height: 2.69rem;
+            }
+
+            html[lang="ar"] & {
+              height: 2.5rem;
+
+              @include breakpoint($tablet) {
+                width: 16rem;
+                height: 3.75rem;
+              }
+
+              @include breakpoint($desktop) {
+                height: 4.27rem;
+              }
+            }
           }
         }
       }
@@ -115,7 +131,14 @@ header.c-header {
         html[lang=ar] & {
           top: 0.125rem;
           margin-top: 0;
+          margin-bottom: 0.8875rem;
         }
+      }
+    }
+
+    #mini-cart-wrapper {
+      @include breakpoint($only-tablet) {
+        height: 3.5rem;
       }
     }
   }
@@ -228,6 +251,18 @@ body {
         ul.menu--two__list {
           box-shadow: 0 0.1875rem 0.3125rem 0 $PBK_box_shadow_gray;
           border: 1px solid $mm_l2_border;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .supermenu {
+    .site-brand-home {
+      .logo {
+        img {
+          vertical-align: baseline;
         }
       }
     }

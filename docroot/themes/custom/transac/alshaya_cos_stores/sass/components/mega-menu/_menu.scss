@@ -1,3 +1,16 @@
+@mixin menuListItem {
+  margin-#{$left}: 0;
+  margin-#{$right}: 0;
+  padding-#{$left}: 0.625rem;
+  padding-#{$right}: 0.625rem;
+  text-transform: uppercase;
+
+  .menu--two__list & {
+    padding-#{$left}: 0;
+    padding-#{$right}: 0;
+  }
+}
+
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     ul {
@@ -72,6 +85,14 @@
         width: 50%;
       }
     }
+
+    .menu--active & {
+      #{$left}: -0.0625rem;
+
+      html[lang=ar] & {
+        right: 0;
+      }
+    }
   }
 
   .mobile--close {
@@ -88,19 +109,10 @@
   }
 
   .menu__list-item {
-    margin-#{$left}: 0;
-    margin-#{$right}: 0;
-    padding-#{$left}: 0.625rem;
-    padding-#{$right}: 0.625rem;
-    text-transform: uppercase;
-
-    .menu--two__list & {
-      padding-#{$left}: 0;
-      padding-#{$right}: 0;
-    }
+    @include menuListItem;
   }
 
   .back--link {
-    @extend .menu__list-item;
+    @include menuListItem;
   }
 }

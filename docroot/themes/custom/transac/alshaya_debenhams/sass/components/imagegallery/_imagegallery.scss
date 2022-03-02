@@ -1,0 +1,40 @@
+.mobilegallery {
+  #product-image-gallery-mobile {
+    button.slick-arrow {
+      display: none !important;
+    }
+
+    .slick-track,
+    li.slick-slide {
+      min-height: 50vh;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .nodetype--acq_product {
+    .ui-dialog.dialog-product-image-gallery-container {
+      background: $pdp_gallery_img_modal_bg;
+      padding: 2rem 0;
+
+      .ui-dialog-titlebar {
+        width: 80%;
+      }
+    }
+  }
+
+  #product-full-screen-gallery-container {
+    width: 60% !important;
+    background: $gallery_bg;
+    margin: 0 auto;
+    padding: 0;
+
+    .slick-prev {
+      left: 20%;
+    }
+
+    .slick-next {
+      right: 20%;
+    }
+  }
+}

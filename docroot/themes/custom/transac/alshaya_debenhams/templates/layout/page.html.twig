@@ -1,0 +1,7 @@
+{% extends '@alshaya_white_label/layout/page.html.twig' %}
+{% block primary_footer %}
+  {% if page.footer_primary %}
+      {% include directory ~ '/templates/partial/footer-primary.html.twig' %}
+    <!-- /footer-primary -->
+  {% endif %}
+{% endblock %}

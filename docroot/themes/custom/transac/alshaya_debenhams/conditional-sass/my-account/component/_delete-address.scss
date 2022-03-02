@@ -1,0 +1,33 @@
+.path--user {
+  .ui-dialog-title {
+    width: 90%;
+  }
+
+  .profile-address-book-delete-form,
+  .payment-card-delete-form {
+    .dialog-cancel {
+      font-weight: normal;
+    }
+
+    .button--primary {
+      text-transform: uppercase;
+    }
+  }
+
+  .ui-dialog {
+    .ui-button {
+      font-weight: normal;
+    }
+  }
+
+  .ui-dialog .ui-dialog-titlebar-close {
+    font-size: 1.125rem;
+    height: 2.125rem;
+    width: 2rem;
+
+    &::after {
+      padding: 0.3125rem 0.625rem;
+      color: $address_book_delete_close_icon;
+    }
+  }
+}

@@ -24,6 +24,30 @@
     .sub-total {
       margin-bottom: 0;
     }
+
+    .sub-totals {
+      padding-bottom: 0.625rem;
+    }
+
+    .hero-totals-wrapper {
+      padding: 1.25rem 0;
+      border-top: 1px solid $spc-order-summary-hero-total-border;
+
+      .hero-total:only-child {
+        padding-bottom: 0;
+      }
+
+      .aura-order-summary {
+        .hero-total.aura-hero-total {
+          padding-bottom: 0;
+
+          .vat-text {
+            font-size: 0.875rem;
+            color: $spc-order-total-suffix-text;
+          }
+        }
+      }
+    }
   }
 
   .total-line-item {
@@ -39,6 +63,15 @@
       display: inline-flex;
       height: auto;
       align-items: center;
+    }
+
+    .paid-with-egift {
+      & + .value {
+        @media print {
+          min-width: 6.25rem;
+          text-align: $right;
+        }
+      }
     }
 
     .discount-total {
@@ -61,24 +94,37 @@
     border-top: 1px solid $spc-order-summary-hero-total-border;
     padding: 1.25rem 0;
 
-    .total-line-item {
+    & > .total-line-item {
       font-family: $alshaya-bold;
-      margin-bottom: 0;
     }
 
-    .delivery-vat {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      html[lang=ar] & {
-        line-height: 1.5;
+    .aura-hero-total {
+      .total-line-item {
+        font-family: $alshaya-bold;
+        margin-bottom: 0;
       }
+    }
 
-      span {
-        font-size: 0.875rem;
-        color: $spc-order-total-suffix-text;
+    .aura-order-summary {
+      .hero-total {
+        padding: 0;
+        border-top: 0;
       }
+    }
+  }
+
+  .delivery-vat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    html[lang=ar] & {
+      line-height: 1.5;
+    }
+
+    span {
+      font-size: 0.875rem;
+      color: $spc-order-total-suffix-text;
     }
   }
 
@@ -191,6 +237,11 @@
         margin-top: 1rem;
         font-size: 0.75rem;
         color: $spc-product-attributes;
+
+        .spc-cart-product-attribute-label {
+          display: inline-block;
+          margin-#{$right}: 0.1875rem;
+        }
       }
 
       .product-flag {

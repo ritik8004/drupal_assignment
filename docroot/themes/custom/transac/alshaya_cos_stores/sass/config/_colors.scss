@@ -20,6 +20,9 @@ $green: #39b54a;
 $jungle-green: #26a69a;
 $blue-cola: #007fdb;
 $bright-blue: #2182d5;
+$teal: #26a69a;
+$_plp_cta_hover: #333;
+$_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
 
 // Global elements.
 $primary_text: $eerie-black;
@@ -300,6 +303,9 @@ $minicart_notification_btn_bg: $outer-space;
 $minicart_notification_product_title: $eerie-black;
 $cart_notification_arrow_bg: $white;
 
+// Messages and Errors
+$default_msg_bg: $teal;
+
 // SPC
 $spc-cart-background: $gray-light;
 $spc-empty-text: $eerie-black;
@@ -314,6 +320,7 @@ $spc-totals-line-item-color: $outer-space;
 $spc-order-total-suffix-text: $brownish-grey;
 $spc-promo-code-placeholder-text: $silver-gray;
 $spc-promo-code-border: $warm-grey-two;
+$spc-promo-code-close-icon: $eerie-black;
 $spc-cart-promo-code-submit-enabled: $white;
 $spc-order-summary-product-area-bg: $bright-gray;
 $spc-checkout-delivery-method-txt: $brownish-grey;
@@ -330,6 +337,10 @@ $spc-tooltip-border: $outer-space;
 $spc_tooltip_icon: $outer-space;
 $spc_tooltip_icon_border: $outer-space;
 $spc-deliver-button: $outer-space;
+$spc-cnc-store-search-icon: $eerie-black;
+$spc-cnc-toggle-bg-active: $eerie-black;
+$spc-cnc-toggle-bg: $white;
+$spc-checkout-success-message-background: $teal;
 
 // Checkout Global.
 $checkout_section_titles: $eerie-black;
@@ -372,6 +383,13 @@ $plp_clear_all_btn_disabled: $bright-gray;
 $plp_clear_all_btn_text: $outer-space;
 $plp_all_filter_button_color: $primary_btn_bg;
 
+// PLP add to cart.
+$plp-primary-cta-hover-bg: $_plp_cta_hover;
+$plp-quick-view-product-size-active-bg: transparent;
+$plp-quick-view-product-size-border-hover: $bright-gray;
+$plp-quick-view-product-size-text-active: $eerie-black;
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+
 // Dynamic Promotions.
 $promo_dynamic_label_bg: $eerie-black;
 $promo_dynamic_label_txt: $eerie-black;
@@ -397,6 +415,8 @@ $magazine-article-read-more-bg-color: $white;
 $magazine-article-title: $black-two;
 $magazine-article-link-hover: $brownish-grey;
 $magazine-article-back-to-feed: $outer-space;
+$magazine-homepage-block-bg: $white;
+$magazine-article-primary-color: $outer-space;
 
 // Product detail page.
 $pdp_product_special_price_text: $blood;
@@ -418,12 +438,51 @@ $pdp_sidebar_link: $outer-space;
 
 // PDP Magazine layput
 $colour-swatches-show-list-button: $eerie-black;
+$colour-swatches-simple-effect-bg: $white;
 $size-tray-empty-btn-text: $outer-space;
 $size-tray-empty-btn-border: $bright-gray;
 $pdp_sizeguide_link: $eerie-black;
-$colour-swatches-simple-effect-bg: $gray-light;
 $sharethis-icon-bg: $white;
 $sharethis-label-color: $eerie-black;
 
 // Promo Blocks.
 $promo_block_border: $bright-gray;
+
+// Express delivery
+$spc-cart-delivery-popup-title: $eerie-black;
+$sameday-express-delivery-drawer-text: $eerie-black;
+$sameday-express-delivery-drawer-cross: $eerie-black;
+$express-delivery-menu-list-border: $eerie-black;
+$spc-select-text: $eerie-black;
+$sameday-express-delivery-drawer-btn: $outer-space;
+$spc-cart-delivery-popup-search-border: $eerie-black;
+$spc-cart-delivery-tags: $eerie-black;
+$spc-cart-delivery-area-select: $eerie-black;
+
+// Wishlist
+$wishlist-header-notification-border: $eerie-black;
+$wishlist-button-border: $eerie-black;
+$wishlist-header-notification-text: $eerie-black;
+$wishlist-header-notification-span: $dark-gray;
+$wishlist-header-login-message: $eerie-black;
+$wishlist-button-bg: $primary_btn_bg;
+$wishlist-button-bg-hover: $primary_btn_bg;
+$wishlist-button-register-txt: $outer-space;
+$wishlist-basket-modal-close-bg: $outer-space;
+$wishlist-share-text: $eerie-black;
+$my-wishlist-share-modal-hover-bg: $primary_btn_bg;
+$my-wishlist-share-modal-header: $eerie-black;
+$wishlist-pdp-button-selected-txt: $outer-space;
+$wishlist-oos: $blood;
+
+// Country Switcher
+$country-switcher-label-mobile: $black-two;
+
+// eGift Landing page
+$egift-accordion-active-title: $black;
+$egift-banner-bg: $bright-gray;
+
+// eGift purchase page
+$egift-amount-list-border: $bright-gray;
+$egift-amount-list-text: $eerie-black;
+$egift-card-list-border: $eerie-black;

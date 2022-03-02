@@ -11,6 +11,29 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Updating alshaya_algolia_index and alshaya_algolia_product_list_index
+ * to add created field.
+ */
+function alshaya_search_algolia_update_8011() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Adding fields in search_api index.
+  $manager->updateConfigs(
+    [
+      'search_api.index.alshaya_algolia_index',
+      'search_api.index.alshaya_algolia_product_list_index',
+    ],
+    'alshaya_search_algolia',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+
+  // Re-index items.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-indexing items for updating promotion_nid.
  */
 function alshaya_search_algolia_update_8010() {
@@ -41,7 +64,8 @@ function alshaya_search_algolia_update_8008() {
  * Implements hook_update_N().
  *
  * Create new search api index alshaya_algolia_product_list_index
- * language suffix configuration update for alshaya_algolia_index and acquia_search_index
+ * language suffix configuration update for alshaya_algolia_index
+ * and acquia_search_index.
  */
 function alshaya_search_algolia_update_8007() {
   // Create new index.
@@ -157,11 +181,6 @@ function alshaya_search_algolia_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
-
-  // Installing module here, alshaya_algolia_react has a dependency on
-  // this (alshaya_search_algolia) module. to avoid recursion not adding
-  // alshaya_algolia_react as dependency in this module.
-  \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
 
   // Enable lhn filters.
   \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings')

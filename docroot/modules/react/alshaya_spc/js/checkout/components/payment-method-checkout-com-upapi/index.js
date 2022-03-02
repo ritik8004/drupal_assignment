@@ -10,12 +10,12 @@ import ConditionalView from '../../../common/components/conditional-view';
 import SavedCardsList from './components/SavedCardsList';
 import NewCard from './components/NewCard';
 import SelectedCard from './components/SelectedCard';
-import { setStorageInfo } from '../../../utilities/storage';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
 import WithModal from '../with-modal';
 import { CheckoutComUpapiContext } from '../../../context/CheckoutComUpapi';
+import { allowSavedCcForTopUp } from '../../../utilities/egift_util';
 
 class PaymentMethodCheckoutComUpapi extends React.Component {
   static contextType = CheckoutComUpapiContext;
@@ -175,7 +175,10 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
     const { updateState } = this.context;
     updateState(obj);
     if (({}).hasOwnProperty.call(obj, 'selectedCard')) {
-      setStorageInfo(obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard, 'spc_selected_card');
+      Drupal.addItemInLocalStorage(
+        'spc_selected_card',
+        obj.selectedCard === 'new' ? 'new' : obj.tokenizedCard,
+      );
     }
 
     dispatchCustomEvent('refreshCompletePurchaseSection', {});
@@ -210,10 +213,10 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
 
     return (
       <>
-        <ConditionalView condition={selectedCard === 'new' && tokenizedCard === ''}>
+        <ConditionalView condition={(selectedCard === 'new' && tokenizedCard === '') || allowSavedCcForTopUp() === false}>
           {newCard}
         </ConditionalView>
-        <ConditionalView condition={tokenizedCard !== ''}>
+        <ConditionalView condition={tokenizedCard !== '' && allowSavedCcForTopUp()}>
           <WithModal modalStatusKey="creditCardList">
             {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
               <>

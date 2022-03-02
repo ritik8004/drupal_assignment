@@ -28,6 +28,7 @@ $white: #fff;
 $dark-sand: #ac8e54;
 $_plp_cta_hover: #0b3d6f;
 $_plp_secondary_cta_hover: rgba(0, 73, 144, 0.1);
+$_egift_landing_page_banner_bg: #e1f0fd;
 
 // Global elements.
 $primary_text: $black-two;
@@ -576,3 +577,30 @@ $rr-form-head-row-border: $drakish-blue;
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $_plp_cta_hover;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+
+// Wishlist
+$wishlist-header-notification-border: $drakish-blue;
+$wishlist-button-bg: $primary_btn_bg;
+$wishlist-button-border: $primary_btn_bg;
+$wishlist-button-bg-hover: $primary_btn_bg;
+$wishlist-header-notification-text: $black-two;
+$wishlist-header-notification-span: $drakish-blue;
+$wishlist-header-login-message: $black-two;
+$wishlist-button-register-txt: $black-two;
+$wishlist-basket-modal-close-bg: $drakish-blue;
+$wishlist-oos: $error-red;
+$my-wishlist-message-txt: $white;
+$my-wishlist-message-bg: $dark-pink;
+$wishlist-share-text: $black-two;
+$my-wishlist-share-modal-header: $drakish-blue;
+$my-wishlist-share-modal-hover-bg: $primary_btn_bg;
+
+// Express delivery
+$sameday-express-delivery-drawer-btn: $primary_btn_bg;
+$spc-cart-delivery-popup-search-border: $black-two;
+
+// Country Switcher
+$country-switcher-label-mobile: $black-two;
+
+// eGift Landing page
+$egift-banner-bg: $_egift_landing_page_banner_bg;

@@ -1,6 +1,10 @@
 header {
   .block-cart-mini-block,
   .block-alshaya-react-mini-cart {
+    @include breakpoint($only-mobile) {
+      width: 25%;
+    }
+
     .quantity {
       font-size: 0.75rem;
     }

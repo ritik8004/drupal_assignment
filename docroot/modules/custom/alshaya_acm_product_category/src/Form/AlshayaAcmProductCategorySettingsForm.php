@@ -70,6 +70,8 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       ->set('grouping_page_header_style', $form_state->getValue('grouping_page_header_style'))
       ->set('enable_auto_sale_categorisation', $form_state->getValue('enable_auto_sale_categorisation'))
       ->set('enable_lhn_tree_search', $form_state->getValue('enable_lhn_tree_search'))
+      ->set('all_categories_department_page', $form_state->getValue('all_categories_department_page'))
+
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -157,6 +159,13 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
         'center_aligned' => $this->t('Center Aligned'),
       ],
       '#default_value' => $config->get('grouping_page_header_style'),
+    ];
+
+    $form['all_categories_department_page'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow all categories under department page.'),
+      '#description' => $this->t('Allow all the levels of categories can be used under department page.'),
+      '#default_value' => $config->get('all_categories_department_page'),
     ];
 
     return parent::buildForm($form, $form_state);

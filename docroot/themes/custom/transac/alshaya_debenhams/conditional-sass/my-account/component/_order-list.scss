@@ -1,0 +1,87 @@
+.no--orders {
+  font-weight: normal;
+}
+
+.block-alshaya-acm-customer {
+  & > {
+    .no--orders {
+      & + a {
+        @include btn;
+      }
+    }
+
+    .edit-account {
+      @include btn;
+
+      top: -5.75rem;
+    }
+  }
+}
+
+.cancel-item {
+  a {
+    font-size: 1rem;
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-actions {
+    @include icon_img('#{$dh_theme_img_directory_path}/icons/search.svg', 2.1875rem, 2.1875rem, after);
+
+    &::after {
+      border-#{$left}: 0;
+    }
+  }
+
+  .form-text {
+    border-#{$right}: 0;
+  }
+
+  .form-type-select {
+    @include breakpoint($desktop) {
+      @include select-wrapper(14.625rem);
+
+      .select2-container {
+        @include select2-style(11.625rem);
+      }
+
+      &::after {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      width: 49%;
+    }
+
+    select {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      border: 1px solid $order_search_form_border;
+    }
+  }
+}
+
+.recent__orders--list {
+  .toggle--icon .icon-ic_dropdown-expand {
+    font-size: 1.875rem;
+    position: absolute;
+    #{$right}: 3.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @include breakpoint($tablet) {
+      #{$right}: 0.875rem;
+    }
+
+    @include breakpoint($desktop) {
+      #{$right}: 1.5rem;
+    }
+
+    @include icon(chevrondown, before) {
+      font-size: 1.75rem;
+      display: block;
+    }
+  }
+}

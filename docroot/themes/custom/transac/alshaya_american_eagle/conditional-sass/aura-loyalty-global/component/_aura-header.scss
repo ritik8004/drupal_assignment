@@ -1,0 +1,12 @@
+body.aura-enabled {
+  .c-menu-secondary {
+    nav li a,
+    a.stores-finder,
+    a.language-link,
+    a.join-aura,
+    ul.menu li,
+    ul.links li {
+      height: 1.5rem;
+    }
+  }
+}

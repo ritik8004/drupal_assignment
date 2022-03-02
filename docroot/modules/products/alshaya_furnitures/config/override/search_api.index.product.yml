@@ -9,6 +9,16 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_delivery_ways:
+    label: 'SKUs » SKU Reference » Different Delivery Types'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_delivery_ways'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   attr_feature_lhn:
     label: 'SKUs » SKU Reference » Features'
     datasource_id: 'entity:node'

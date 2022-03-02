@@ -2,11 +2,13 @@ name: 'Alshaya Transactional profile'
 description: 'An installation profile for Alshaya sites including transactional features.'
 type: profile
 core: '8.x'
+core_version_requirement: ^8 || ^9
 dependencies:
   - acsf:acsf
   - drupal:color
   - pcb:pcb_memcache
   - drupal:syslog
+  - alshaya_js_optimisations:alshaya_js_optimisations
 
 themes:
   - alshaya_white_label

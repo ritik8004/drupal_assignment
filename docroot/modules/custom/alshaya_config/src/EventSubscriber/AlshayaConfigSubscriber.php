@@ -123,6 +123,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     }
 
     $config = $event->getConfig();
+    $original_config = $config->getOriginal();
     $config_name = $config->getName();
     $data = $config->getRawData();
     $override_deletions = [];
@@ -143,18 +144,18 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     $this->moduleHandler->alter('alshaya_config_save', $data, $config_name);
 
     // Do nothing if original and new configs are same.
-    if (json_encode($original_data) == json_encode($data)) {
-      return;
+    if (json_encode($original_data) != json_encode($data)) {
+      // Re-write the config to make sure the overrides are not lost.
+      $this->configStorage->write($config->getName(), $data);
+      Cache::invalidateTags($config->getCacheTags());
+      $this->configFactory->reset($config_name);
     }
 
-    // Re-write the config to make sure the overrides are not lost.
-    $this->configStorage->write($config->getName(), $data);
-    Cache::invalidateTags($config->getCacheTags());
-    $this->configFactory->reset($config_name);
-
     // Log the config changes.
-    if ($this->configFactory->get('alshaya_config.settings')->get('log_config_changes')) {
-      $this->logConfigChanges($config_name, $config->getOriginal(), $data);
+    if ($this->configFactory->get('alshaya_config.settings')->get('log_config_changes')
+      && json_encode($data) != json_encode($original_config)
+    ) {
+      $this->logConfigChanges($config_name, $original_config, $data);
     }
   }
 
@@ -170,6 +171,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     }
 
     $config = $event->getLanguageConfigOverride();
+    $original_config = $config->getOriginal();
     $config_name = $config->getName();
 
     $data_modified = FALSE;
@@ -213,6 +215,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
       }
     }
 
+    $new_config = $config->get();
     if ($data_modified) {
       // Re-write the config to make sure the overrides are not lost.
       Cache::invalidateTags($config->getCacheTags());
@@ -226,6 +229,12 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
         ]);
       }
     }
+
+    // Log the config changes.
+    if ($data_modified || json_encode($original_config) != json_encode($new_config)) {
+      $this->logConfigChanges($config_name, $original_config, $new_config);
+    }
+
   }
 
   /**

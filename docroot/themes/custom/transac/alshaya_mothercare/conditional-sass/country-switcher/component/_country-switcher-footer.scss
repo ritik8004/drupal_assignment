@@ -1,0 +1,8 @@
+#block-countryswitcher {
+  font-size: 0.6875rem;
+  color: $country-switcher-label;
+
+  @include breakpoint($tablet) {
+    padding-bottom: 2.25rem;
+  }
+}

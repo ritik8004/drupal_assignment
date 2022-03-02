@@ -1,7 +1,6 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import Popup from 'reactjs-popup';
-import _findIndex from 'lodash/findIndex';
 import Loading from '../../../utilities/loading';
 import ClickCollectContainer from '../click-collect';
 import { cleanMobileNumber, removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
@@ -81,7 +80,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
       && (cartSelectedStore.code !== selectedStore.code);
 
     if (storeList.length > 0
-      && _findIndex(storeList, { code: selectedStore.code }) > -1
+      && _.findIndex(storeList, { code: selectedStore.code }) > -1
       && !fetchAgain) {
       return;
     }

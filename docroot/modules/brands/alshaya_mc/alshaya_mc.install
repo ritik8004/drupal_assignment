@@ -23,7 +23,7 @@ function alshaya_mc_update_8321() {
   );
   \Drupal::service('acq_sku.fields_manager')->addFields();
 
-  // Adding fields in search_api index
+  // Adding fields in search_api index.
   $manager->updateConfigs(
     ['search_api.index.product'],
     'alshaya_product',
@@ -456,9 +456,6 @@ function alshaya_mc_install() {
 
   // Create default content for mothercare.
   alshaya_mc_create_default_content();
-
-  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
-  _alshaya_master_initialize_amp('alshaya_amp_mothercare');
 
   $strings = [
     'seo_brand_name' => [

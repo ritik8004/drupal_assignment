@@ -1,0 +1,178 @@
+.loyalty-club-details-wrapper {
+  .title {
+    font-size: 1.625rem;
+    font-family: $aura-bold;
+    padding: 1.5rem 0;
+    margin-top: 2rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 1.25rem 0;
+    }
+
+    .title-1 {
+      color: $aura-loyalty-club-title-1;
+      padding-#{$right}: 0.3125rem;
+    }
+
+    .title-2 {
+      color: $aura-loyalty-club-title-2;
+    }
+  }
+
+  .aura-loyalty-benefits-row {
+    display: grid;
+    grid-template-columns: 19rem 1fr 1fr 1fr;
+    height: 4.5625rem;
+    font-family: $aura-regular;
+    color: $aura-loyalty-club-normal-text;
+    font-size: 1.125rem;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      grid-template-columns: 11rem 1fr 1fr 1fr;
+    }
+
+    @include breakpoint($only-mobile) {
+      grid-template-columns: 9rem 1fr 1fr 1fr;
+    }
+
+    .row-desktop {
+      @include breakpoint($upto-desktop) {
+        display: none !important;
+      }
+    }
+
+    .row-mobile {
+      justify-content: flex-start !important;
+      padding-#{$left}: 1rem;
+
+      @include breakpoint($tablet) {
+        padding-#{$left}: 1.875rem;
+      }
+
+      @include breakpoint($desktop) {
+        display: none !important;
+      }
+    }
+
+    &.header {
+      border-top: 1px solid $aura-loyalty-club-border;
+
+      > div {
+        &:nth-child(2),
+        &:nth-child(3),
+        &:nth-child(4) {
+          font-family: $aura-bold;
+          font-size: 2rem;
+
+          @include breakpoint($only-tablet) {
+            font-size: 1.5rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+
+    &.item-bold {
+      > div {
+        &:nth-child(2),
+        &:nth-child(3),
+        &:nth-child(4) {
+          font-family: $aura-bold;
+        }
+      }
+    }
+
+    > div:first-child {
+      display: flex;
+      align-items: center;
+      padding-#{$left}: 1.875rem;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 1rem;
+      }
+    }
+
+    &.normal > div,
+    &.item-bold > div {
+      &:nth-child(2),
+      &:nth-child(3),
+      &:nth-child(4) {
+        @include breakpoint($only-mobile) {
+          padding: 0 1rem;
+          text-align: center;
+        }
+      }
+    }
+
+    > div:not(:first-child) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &:not(.normal) > div {
+      &:nth-child(3) {
+        color: $aura-loyalty-club-hello-text;
+      }
+
+      &:nth-child(4) {
+        color: $aura-loyalty-club-stars-text;
+      }
+
+      &:nth-child(5) {
+        color: $aura-loyalty-club-vip-text;
+      }
+    }
+
+    &:nth-child(odd) {
+      background: $aura-loyalty-club-odd-row;
+    }
+
+    &:nth-child(even) {
+      background: $aura-loyalty-club-even-row;
+    }
+
+    .star-icon,
+    .tick-icon {
+      display: flex;
+      align-items: center;
+    }
+
+    .star-icon {
+      @include icon('ratingfull') {
+        display: block;
+        height: 1.5rem;
+        width: 1.5rem;
+        font-size: 1.5rem;
+
+        @include breakpoint($upto-desktop) {
+          height: 1.125rem;
+          width: 1.125rem;
+          font-size: 1.125rem;
+        }
+      }
+    }
+
+    .tick-icon {
+      @include icon('check') {
+        display: block;
+        width: 3.375rem;
+        height: 3.375rem;
+        font-size: 3.375rem;
+
+        @include breakpoint($upto-desktop) {
+          width: 2.375rem;
+          height: 2.375rem;
+          font-size: 2.375rem;
+        }
+      }
+    }
+  }
+}

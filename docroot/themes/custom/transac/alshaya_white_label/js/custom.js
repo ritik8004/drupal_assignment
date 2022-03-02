@@ -6,7 +6,6 @@
 /* global debounce */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   Drupal.customGlobal = Drupal.customGlobal || {};
 
@@ -171,6 +170,16 @@
         Drupal.customGlobal.modalClasses('product-quick-view', 'pdp-modal-overlay');
       });
 
+      $(window).once('dialogOpened').on('dialog:aftercreate', function (e) {
+        if ($('#aura-pdp-modal').length) {
+          Drupal.dispatchModalOpenCloseEvent('auraProductModalOpened');
+        }
+      });
+
+      $(window).once('dialogClosed').on('dialog:afterclose', function (e) {
+        Drupal.dispatchModalOpenCloseEvent('auraProductModalClosed');
+      });
+
       $('.size-guide-link').on('click', function () {
         Drupal.customGlobal.modalClasses('size-guide', 'sizeguide-modal-overlay');
         setTimeout(function () {
@@ -294,6 +303,17 @@
           placeOurBrandsBlock();
         }, 200));
       }
+    }
+  };
+
+  Drupal.dispatchModalOpenCloseEvent = function (eventName) {
+    // Dispatch a custom event when modal is opened/closed to listen in AURA react app.
+    if (typeof (drupalSettings.aura) !== 'undefined' && drupalSettings.aura.enabled === true) {
+      var event = new CustomEvent(eventName, {
+        bubbles: true,
+        detail: true
+      });
+      document.dispatchEvent(event);
     }
   };
 

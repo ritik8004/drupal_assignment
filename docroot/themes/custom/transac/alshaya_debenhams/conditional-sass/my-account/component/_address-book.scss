@@ -1,0 +1,36 @@
+.address {
+  .address--primary {
+    letter-spacing: 0;
+  }
+
+  &-book-address {
+    .form-type-select {
+      &::after {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.c-address-book {
+  .block-system > a {
+    top: -0.75rem;
+
+    @include breakpoint($tablet) {
+      text-transform: uppercase;
+    }
+  }
+
+  .address--content {
+    font-weight: normal;
+  }
+}
+
+.c-address-book .block-system > a,
+.path--user .button--primary,
+.block-alshaya-acm-customer > .no--orders + a {
+  @include btn;
+
+  padding: 0.75rem 1.5rem 0.375rem;
+}

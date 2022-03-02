@@ -1,7 +1,15 @@
-/*
-	SITE HEADER - BRANDING
-*/
+@mixin menuListItem {
+  @include arabic-letter-spacing;
 
+  border-bottom: none;
+  font-family: $hnm-regular;
+  text-transform: capitalize;
+  color: $hnm-black-four;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+}
+
+// SITE HEADER - BRANDING.
 header {
   .c-header__region {
     background: $default_background_color;
@@ -95,6 +103,22 @@ header {
           width: 7.5rem;
           background-color: transparent;
           font-size: 0.875rem;
+        }
+      }
+    }
+
+    .block-system-branding-block {
+      .site-brand-home {
+        .logo {
+          img {
+            width: 2.5rem;
+            height: 1.66rem;
+
+            @include breakpoint($desktop) {
+              width: 4.25rem;
+              height: 2.77rem;
+            }
+          }
         }
       }
     }
@@ -773,18 +797,11 @@ header {
   }
 
   .menu__list-item {
-    @include arabic-letter-spacing;
-
-    border-bottom: none;
-    font-family: $hnm-regular;
-    text-transform: capitalize;
-    color: $hnm-black-four;
-    font-size: 0.875rem;
-    letter-spacing: 1px;
+    @include menuListItem;
   }
 
   .back--link {
-    @extend .menu__list-item;
+    @include menuListItem;
 
     font-family: $hnm-bold;
   }
@@ -1013,8 +1030,6 @@ html[lang=ar] {
   .block-system-branding-block {
     .site-brand-home {
       img {
-        width: auto;
-        height: auto;
         margin-top: 0;
         max-width: 100%;
       }

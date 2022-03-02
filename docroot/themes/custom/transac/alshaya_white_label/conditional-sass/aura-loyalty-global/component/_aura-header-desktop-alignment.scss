@@ -1,0 +1,32 @@
+body.aura-enabled {
+  // This is only needed in desktop to align all blocks in same.
+  @include breakpoint($desktop) {
+    .region__menu-secondary {
+      > div,
+      > nav {
+        line-height: 1;
+        height: 1.5rem;
+      }
+
+      #block-account-menu a {
+        line-height: 1;
+      }
+
+      #block-welcomeuser h3 {
+        height: 100%;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .aura-header-waiting-wrapper {
+        .spc-loading-container {
+          height: 1.5rem;
+
+          .spc-loader {
+            background-position: center !important;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   var getProductDataRequests = {};
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};
@@ -10,14 +9,11 @@
 
   Drupal.alshayaSpc.getCartData = function () {
     // @todo find better way to get this using commerceBackend.
-    var cart_data = localStorage.getItem('cart_data');
-    if (cart_data) {
-      cart_data = JSON.parse(cart_data);
-      if (cart_data && cart_data.cart !== undefined) {
-        cart_data = cart_data.cart;
-        if (cart_data.cart_id !== null) {
-          return cart_data;
-        }
+    var cart_data = Drupal.getItemFromLocalStorage('cart_data');
+    if (cart_data && cart_data.cart !== undefined) {
+      cart_data = cart_data.cart;
+      if (cart_data.cart_id !== null) {
+        return cart_data;
       }
     }
 
@@ -50,15 +46,13 @@
     var data = null;
 
     try {
-      data = JSON.parse(localStorage.getItem(key));
+      data = Drupal.getItemFromLocalStorage(key);
     }
     catch (e) {
       // Do nothing, we will use PDP API to get the info again.
     }
 
-    var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
-    var currentTime = new Date().getTime();
-    if (data !== null && ((currentTime - data.created) < expireTime)) {
+    if (data) {
       try {
         callback(data, extraData);
       }
@@ -159,7 +153,7 @@
     // This is to avoid the situation where a child product have more than one
     // Parent products. In this case it will fetch the product name and id of
     // the parent product from the local storage.
-    var localStorageData = JSON.parse(localStorage.getItem(key));
+    var localStorageData = Drupal.getItemFromLocalStorage(key);
     if (localStorageData != null && localStorageData.gtmAttributes !== undefined) {
       data.gtmAttributes.id = localStorageData.gtmAttributes.id ? localStorageData.gtmAttributes.id : data.gtmAttributes.id;
       data.gtmAttributes.name = localStorageData.gtmAttributes.name ? localStorageData.gtmAttributes.name : data.gtmAttributes.name;
@@ -182,10 +176,14 @@
       'maxSaleQtyParent': data.maxSaleQtyParent,
       'gtmAttributes': data.gtmAttributes,
       'isNonRefundable': data.isNonRefundable,
-      'created': new Date().getTime(),
     };
 
-    localStorage.setItem(key, JSON.stringify(productData));
+    // Add product data in local storage with expiration time.
+    Drupal.addItemInLocalStorage(
+      key,
+      productData,
+      parseInt(drupalSettings.alshaya_spc.productExpirationTime) * 60,
+    );
 
     // Return as well if required for re-use.
     return data;
@@ -291,5 +289,27 @@
 
     return analytics;
   };
+
+  /**
+   * Provides extra DataDog contexts.
+   */
+  document.addEventListener('dataDogContextAlter', (e) => {
+    const context = e.detail;
+    // These variables should be considered as helpers for troubleshooting but
+    // may in some cases not be accurate.
+    const uid = drupalSettings.userDetails.customerId;
+    if (uid) {
+      context.cCustomerId = uid;
+    }
+
+    const cartId = window.commerceBackend.getCartId();
+    if (cartId) {
+      context.cCartId = cartId;
+      const cartData = Drupal.alshayaSpc.getCartData();
+      if (cartData && typeof cartData.cart_id_int !== 'undefined') {
+        context.cCartIdInt = cartData.cart_id_int;
+      }
+    }
+  });
 
 })(jQuery, Drupal);

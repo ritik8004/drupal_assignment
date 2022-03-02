@@ -1,0 +1,91 @@
+.egift-notlinked-wrapper {
+  .egift-notlinked-title {
+    font-size: 1rem;
+    line-height: 1.125rem;
+    margin-bottom: 0.5rem;
+    color: $egift-linked-card-dark-text;
+
+    @include breakpoint($tablet) {
+      margin-top: 2.125rem;
+    }
+  }
+
+  .egift-link-card-text {
+    font-size: 0.8125rem;
+    line-height: 1.125rem;
+    margin-bottom: 0.75rem;
+    color: $egift-linked-card-dark-text;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .egift-link-card-instruction,
+  .egift-resend-message {
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: $egift-not-link-gray-text;
+    margin-bottom: 0.5rem;
+  }
+
+  .egift-input-textfield-item {
+    margin-top: 1.875rem;
+
+    @include breakpoint($tablet) {
+      max-width: 24rem;
+    }
+  }
+
+  .egift-resend-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    margin-top: 0.75rem;
+
+    @include breakpoint($tablet) {
+      max-width: 24rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      flex-direction: column;
+    }
+
+    &__left {
+      margin-#{$right}: 3.375rem;
+    }
+
+    &__right {
+      @include breakpoint($only-mobile) {
+        margin-top: 1rem;
+      }
+    }
+
+    .egift-light-text {
+      color: $egift-not-link-gray-text;
+      margin-#{$right}: 0.3125rem;
+    }
+
+    .egift-resend-code-text,
+    .egift-change-card-text {
+      cursor: pointer;
+    }
+  }
+
+  .egifts-form-wrapper {
+    padding: 0;
+  }
+
+  .action-buttons {
+    button[type="submit"] {
+      margin-top: 2.5rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-top: 1.5rem;
+      }
+    }
+  }
+}

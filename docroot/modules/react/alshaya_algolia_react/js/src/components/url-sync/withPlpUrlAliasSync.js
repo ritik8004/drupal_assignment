@@ -7,6 +7,7 @@ import {
   showLoader,
 } from '../../utils';
 import { getFacetStorage, asyncFacetValuesRequest } from '../../utils/requests';
+import { productListIndexStatus } from '../../utils/indexUtils';
 
 const history = createBrowserHistory();
 
@@ -19,7 +20,9 @@ const multiRangeFilters = () => {
     const results = [];
     Object.entries(filters).forEach(([key, value]) => {
       if (value.widget.type === 'range_checkbox') {
-        results[key] = parseInt(value.widget.config.granularity, 10);
+        const { currentLanguage } = drupalSettings.path;
+        const facetKey = productListIndexStatus() ? `${key}.${currentLanguage}` : key;
+        results[facetKey] = parseInt(value.widget.config.granularity, 10);
       }
     });
     multiRangeFilters.cache = { results };
@@ -59,7 +62,9 @@ const swatchFiltersList = () => {
     const results = [];
     Object.entries(filters).forEach(([key, value]) => {
       if (value.widget.type === 'swatch_list') {
-        results[key] = value.alias;
+        const { currentLanguage } = drupalSettings.path;
+        const facetKey = productListIndexStatus() ? `${key}.${currentLanguage}` : key;
+        results[facetKey] = value.alias;
       }
     });
     swatchFiltersList.cache = { results };
@@ -164,7 +169,6 @@ const withPlpUrlAliasSync = (
 
     this.pageSubType = pageSubType;
     this.categoryFieldName = 'lhn_category';
-    this.categoryFieldFacet = `${this.categoryFieldName}.lvl0`;
     this.state = {
       searchState: {
         multiRange: {},
@@ -248,6 +252,7 @@ const withPlpUrlAliasSync = (
 
     const apiRequests = [];
     filters.forEach((element) => {
+      const elementKey = element.key.split('.').shift();
       const facetAlias = facetFieldAlias(element.key, 'alias', pageType);
 
       // Range filters (e.g "price") requires values separated by colon(:)
@@ -266,7 +271,7 @@ const withPlpUrlAliasSync = (
       // into: {attr_age_group: ['Bieber Purpose Tour'], attr_size: ['1-2M'] }
       // Try to get the alias from local storage if exists.
       // const facetValues = getFacetStorage(facetAlias, true);
-      if (!filterList.refinementList[element.key] && !hierarchyFilters[element.key]) {
+      if (!filterList.refinementList[elementKey] && !hierarchyFilters[elementKey]) {
         let facetKey = element.key;
 
         if (typeof swatchFilters[element.key] !== 'undefined') {
@@ -285,21 +290,31 @@ const withPlpUrlAliasSync = (
         return;
       }
 
-      if (hierarchyFilters[element.key] && element.key === 'field_category') {
+      if (hierarchyFilters[elementKey] && elementKey === 'field_category') {
         if (!filterList.hierarchicalMenu) {
           filterList.hierarchicalMenu = {};
         }
+
+        let categoryFieldFacet = `${this.categoryFieldName}.lvl0`;
+
+        if (productListIndexStatus()) {
+          const { currentLanguage } = drupalSettings.path;
+          categoryFieldFacet = (this.categoryFieldName === 'lhn_category')
+            ? `${this.categoryFieldName}.${currentLanguage}.lvl0`
+            : `${this.categoryFieldName}.en.lvl0`;
+        }
+
         const hierarchyValue = element.values.slice(0, 1);
-        filterList.hierarchicalMenu[this.categoryFieldFacet] = hierarchyValue;
+        filterList.hierarchicalMenu[categoryFieldFacet] = hierarchyValue;
         const {
           replacedValues: hreplacedValues,
           makeApiRequest: hmakeApiRequest,
         } = convertAliasToFilterValues(element.key, facetAlias, hierarchyValue, 'hierarchicalMenu');
+
         if (!hmakeApiRequest && hreplacedValues.length > 0) {
-          filterList.hierarchicalMenu[this.categoryFieldFacet] = hreplacedValues;
-        }
-        if (hmakeApiRequest) {
-          apiRequests[facetAlias] = this.categoryFieldFacet;
+          filterList.hierarchicalMenu[categoryFieldFacet] = hreplacedValues;
+        } else if (hmakeApiRequest) {
+          apiRequests[facetAlias] = categoryFieldFacet;
         }
       }
     });

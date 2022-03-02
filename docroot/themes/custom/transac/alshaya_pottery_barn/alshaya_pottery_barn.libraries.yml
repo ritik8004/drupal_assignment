@@ -12,3 +12,8 @@ rtl_styles:
   css:
     theme:
       css/rtl.css: {}
+
+fonts:
+  css:
+    theme:
+      '//fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Open+Sans:wght@300;400;600;700&subset=arabic&display=swap': { type: external }

@@ -17,12 +17,15 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
  */
 function alshaya_spc_alshaya_stores_finder_store_update_alter(&$node, array $store) {
-  // Set value in `field_store_type` to denote if it's a store or a collection point.
+  // Set value in `field_store_type` to denote if it's a store or a
+  // collection point.
   if (isset($store['pudo_service'])) {
     $node->get('field_store_type')->setValue($store['pudo_service']);
   }
@@ -30,7 +33,6 @@ function alshaya_spc_alshaya_stores_finder_store_update_alter(&$node, array $sto
 
 /**
  * Implements hook_alshaya_spc_checkout_build_alter().
- * Add cnc collection point feature related data.
  */
 function alshaya_spc_alshaya_spc_checkout_build_alter(array &$build) {
   $config = \Drupal::config('alshaya_spc.collection_points');
@@ -180,7 +182,7 @@ function alshaya_spc_alshaya_acm_product_light_product_data_alter(SKU $sku, arra
 function _alshaya_spc_get_address_fields() {
   $fields = [];
 
-  /* @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
   $alshaya_addressbook_settings = \Drupal::config('alshaya_addressbook.settings');
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
@@ -294,8 +296,17 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // without any language suffix so HTTP_HOST is enough.
   $page['#attached']['drupalSettings']['cart']['url'] = 'https://' . $_SERVER['HTTP_HOST'];
 
-  // Use proxy on local env as here we don't have Cloudflare.
-  if (Settings::get('env') === 'local') {
+  // List of environments to use proxy in from Settings.
+  $environments_to_use_proxy = Settings::get('environments_to_use_proxy', [
+    'local',
+    'dev',
+    'dev2',
+    'dev3',
+    'qa2',
+  ]);
+
+  // Use proxy on only specific environments.
+  if (in_array(Settings::get('env_name'), $environments_to_use_proxy)) {
     $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];
   }
 
@@ -304,6 +315,9 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   $page['#attached']['drupalSettings']['cart']['retryMaxAttempts'] = Settings::get('alshaya_checkout_settings')['max_native_update_attempts'] ?? 10;
   $page['#attached']['drupalSettings']['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
+
+  $checkout_settings = Settings::get('alshaya_checkout_settings');
+  $page['#attached']['drupalSettings']['cart']['doubleCheckEnabled'] = $checkout_settings['place_order_double_check_after_exception'];
 }
 
 /**
@@ -317,18 +331,43 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
 
   // Load the customer id from account if it is customer account.
   if ($current_user->isAuthenticated() && alshaya_acm_customer_is_customer($current_user)) {
+    /** @var \Drupal\user\Entity\User $user */
     $user = \Drupal::entityTypeManager()
       ->getStorage('user')
       ->load($current_user->id());
 
-    $settings['userDetails']['customerId']= (int) $user->get('acq_customer_id')->getString();
+    $customerId = (int) $user->get('acq_customer_id')->getString();
+    $settings['userDetails']['customerId'] = $customerId;
 
     // For V2, add user token to drupalSettings for direct backend calls.
     if (\Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion() == 2) {
-      $settings['userDetails']['customerToken'] = \Drupal::service('alshaya_spc.customer_helper')
-        ->getCustomerTokenBySocialDetail(
-          $user->get('mail')->getString()
-        );
+      /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper */
+      $customer_helper = \Drupal::service('alshaya_spc.customer_helper');
+      $customerToken = $customer_helper->getCustomerToken();
+      // Try to fetch the customer token again if empty.
+      if (empty($customerToken)) {
+        \Drupal::logger('alshaya_spc')
+          ->warning('Fetching token for customerId:@customer_id userId:@user_id using loadCustomerTokenForSocialAccount as token was not available', [
+            '@customer_id' => $customerId,
+            '@user_id' => $current_user->id(),
+          ]);
+        $customer_helper->loadCustomerTokenForSocialAccount($user->getEmail());
+        $customerToken = $customer_helper->getCustomerToken();
+
+        // If the token is still empty, log it and logout the user.
+        if (empty($customerToken)) {
+          // Adding logger for empty token.
+          \Drupal::logger('alshaya_spc')->error('Customer token is empty for the customerId:@customer_id userId:@user_id', [
+            '@customer_id' => $customerId,
+            '@user_id' => $current_user->id(),
+          ]);
+          $response = new RedirectResponse(Url::fromRoute('user.logout')->toString());
+          $response->send();
+          exit;
+        }
+      }
+
+      $settings['userDetails']['customerToken'] = $customerToken;
     }
   }
 }
@@ -370,10 +409,12 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   }
   $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
 
+  /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
+  $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
   // Return if express delivery feature is disabled.
   // And product is not buyable.
   // Otherwise show express delivery options.
-  if (!($express_delivery_config->get('status')) || !(alshaya_acm_product_is_buyable($sku))) {
+  if (!($deliveryOptionsHelper->ifSddEdFeatureEnabled()) || !(alshaya_acm_product_is_buyable($sku))) {
     return;
   }
   // Adding address related configs to load area list block.
@@ -383,8 +424,10 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
     'deliveryOptionsOrder' => $express_delivery_config->get('delivery_options_order'),
   ];
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
-  $build['#attached']['drupalSettings']['alshaya_spc']['address_fields'] = _alshaya_spc_get_address_fields();
-
+  $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
+  $store_finder_settings = \Drupal::config('alshaya_stores_finder.settings');
+  $build['#attached']['drupalSettings']['areaBlockFormPlaceholder'] = $store_finder_settings->get('store_search_placeholder');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $store_finder_settings->getCacheTags());
   $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
@@ -400,11 +443,9 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   }
   // Injecting express delivery component only to old pdp layouts.
   // New PDP will directly call delivery options component.
-  if ($product_pdp_layout !== 'magazine_v2') {
-    $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
-  } else {
-    $build['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v2';
-  }
+  $build['#attached']['library'][] = $product_pdp_layout !== 'magazine_v2'
+    ? 'alshaya_spc/express_delivery'
+    : 'alshaya_spc/commerce_backend.cart.v2';
 
   unset($build['home_delivery']);
 }

@@ -1,0 +1,15 @@
+.spc-section-billing-address {
+  .spc-billing-address-wrapper {
+    .spc-billing-bottom-panel {
+      .spc-billing-meta {
+        .spc-billing-name {
+          font-family: $alshaya-thin;
+        }
+      }
+
+      .spc-billing-change {
+        @include btn;
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+.loyalty-club-tabs {
+  text-align: center;
+  overflow-y: auto;
+  margin: 3.75rem 0 3.125rem;
+
+  @include breakpoint($only-mobile) {
+    white-space: nowrap;
+    text-align: $left;
+    margin: 3.125rem 0;
+  }
+
+  .loyalty-tab {
+    margin: 0 0.9375rem;
+    min-width: 10.5rem;
+    padding: 0 2.0625rem;
+    height: 2.875rem;
+    border-radius: 1.75rem;
+    border: solid 1px $aura-loyalty-tab-border;
+    background-color: $aura-loyalty-tab-bg;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $aura-regular;
+    letter-spacing: 0.71px;
+    color: $aura-loyalty-tab-color;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &.active {
+      background-image: $aura-loyalty-tab-active;
+      font-family: $aura-bold;
+      color: $aura-loyalty-tab-bg;
+      pointer-events: none;
+    }
+  }
+}
+
+.loyalty-club-tabs + .loyalty-club-tabs-content {
+  > div {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+}

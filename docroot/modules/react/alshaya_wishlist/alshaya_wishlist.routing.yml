@@ -1,0 +1,32 @@
+alshaya_wishlist.alshaya_wishlist_config:
+  path: '/admin/config/alshaya/wishlist'
+  defaults:
+    _form: '\Drupal\alshaya_wishlist\Form\AlshayaWishlistConfigForm'
+    _title: 'Alshaya Wishlist Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+
+alshaya_wishlist.users_wishlist:
+  path: '/wishlist/{context}'
+  defaults:
+    _controller: '\Drupal\alshaya_wishlist\Controller\AlshayaMyWishlistController::wishList'
+    _title_callback: '\Drupal\alshaya_wishlist\Controller\AlshayaMyWishlistController::getWishListTitle'
+    context: 'mine'
+  requirements:
+    # Show page if wishlist feature is enabled.
+    _custom_access: '\Drupal\alshaya_wishlist\Controller\AlshayaMyWishlistController::checkAccess'
+    _permission: 'access content'
+
+alshaya_wishlist.user_account_wishlist:
+  path: '/user/{user}/wishlist'
+  defaults:
+    _controller: '\Drupal\alshaya_wishlist\Controller\AlshayaMyWishlistController::wishList'
+    _title_callback: '\Drupal\alshaya_wishlist\Controller\AlshayaMyWishlistController::getWishListTitle'
+    context: 'mine'
+  requirements:
+    _custom_access: '\Drupal\alshaya_wishlist\Controller\AlshayaMyWishlistController::checkAuthenticateUser'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user

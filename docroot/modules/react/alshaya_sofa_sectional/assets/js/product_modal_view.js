@@ -1,13 +1,7 @@
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.productModalView = {
     attach: function (context) {
-      // Dispatch event on modal load each time to perform action on load.
-      // Like we are rendering Sofa form on modal load event.
-      var productModalViewEvent = new CustomEvent('onModalLoad', { bubbles: true });
-      document.dispatchEvent(productModalViewEvent);
-
       // On modal load, check if sofa sectional form classes are present
       // and add initial price range block and render gallery without
       // any default SKU selection.

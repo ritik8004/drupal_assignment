@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, dataLayer, debounce, drupalSettings) {
-  'use strict';
 
   var searchQuery = [];
   var initNoOfResults = null;
@@ -27,8 +26,17 @@
       });
     }
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_algolia_product_impression, $('#alshaya-algolia-search'), drupalSettings, event);
+
+    $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
+      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_algolia_product_impression, $('#alshaya-algolia-search'), drupalSettings, event);
+    }, 500));
+
+    var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val();
+    if (!currentsearch) {
+      return;
+    }
+    currentsearch = currentsearch.trim();
     // Avoid triggering again for each page.
-    var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
     if (_.indexOf(searchQuery, currentsearch) < 0 && initNoOfResults !== noOfResult) {
       // Store all search queries in a temp array, so we don't trigger
       // event twice for the same keyword, while user repeats the search query
@@ -45,9 +53,6 @@
       });
     }
 
-    $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
-      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_algolia_product_impression, $('#alshaya-algolia-search'), drupalSettings, event);
-    }, 500));
   }, drupalSettings.gtm.algolia_trigger_ga_after));
 
   Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function (context, eventType) {

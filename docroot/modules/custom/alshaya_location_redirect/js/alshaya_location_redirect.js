@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings) {
-  'use strict';
 
   // Whether to perform a redirect.
   var redirect = false;
@@ -13,7 +12,7 @@
   var storage_key = 'alshaya_location';
 
   // Check if user location already exists in an existing local storage item.
-  var user_location = localStorage.getItem(storage_key);
+  var user_location = Drupal.getItemFromLocalStorage(storage_key);
 
   // Mapping to countries.
   if (drupalSettings.alshaya_location_redirect.mapping) {
@@ -56,7 +55,7 @@
     });
 
     // Add the user location to local storage.
-    localStorage.setItem(storage_key, user_location);
+    Drupal.addItemInLocalStorage(storage_key, user_location);
 
     if (user_location === 'xx') {
       // Did not receive a valid country to redirect to.

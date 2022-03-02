@@ -1,31 +1,44 @@
 rating:
   js:
-    dist/rating.bundle.js: {}
+    dist/rating.bundle.js: { attributes: { defer: true } }
   dependencies:
     - alshaya_react/react
+    - bazaar_voice/bazaar_voice
 
 reviews:
   js:
-    dist/reviews.bundle.js: {}
+    dist/reviews.bundle.js: { attributes: { defer: true } }
   dependencies:
     - alshaya_react/react
+    - bazaar_voice/bazaar_voice
 
 myaccount:
   js:
-    dist/myaccount.bundle.js: {}
+    dist/myaccount.bundle.js: { attributes: { defer: true } }
   dependencies:
     - alshaya_react/react
+    - bazaar_voice/bazaar_voice
 
 myorders:
   js:
-    dist/myorders.bundle.js: {}
+    dist/myorders.bundle.js: { attributes: { defer: true } }
   dependencies:
     - alshaya_react/react
+    - bazaar_voice/bazaar_voice
 
 bvpixel_tracking:
   js:
-    js/assets/bvpixel-tracking.js: {}
+    js/assets/bvpixel-tracking.js: { attributes: { defer: true } }
+  dependencies:
+    - bazaar_voice/bazaar_voice
 
 iovation:
   js:
-    js/assets/iovation-loader.js: {}
+    js/assets/iovation-loader.js: { attributes: { defer: true } }
+  dependencies:
+    - bazaar_voice/bazaar_voice
+
+pie_write_review:
+  css:
+    theme:
+      css/pie_write_review.css: {}

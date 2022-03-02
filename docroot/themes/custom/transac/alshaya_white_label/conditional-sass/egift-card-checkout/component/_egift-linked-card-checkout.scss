@@ -1,0 +1,137 @@
+.payment-method-checkout_com_egift_linked_card {
+  input[type=checkbox] ~ label {
+    font-size: 0.875rem;
+
+    &::before {
+      position: absolute;
+      #{$left}: 0.9375rem;
+      top: 1.25rem;
+      font-size: 1.25rem;
+    }
+  }
+
+  input[type=checkbox]:checked ~ label::before {
+    content: '';
+    background: url('#{$base_theme_img_directory_path}/icons/checkbox-filled.svg') no-repeat;
+    height: 2.5rem;
+    width: 2.5rem;
+    #{$left}: 0.3125rem;
+    top: 0.625rem;
+  }
+
+  .checkbox-label {
+    color: $spc-checkout-payment-method-txt;
+    width: auto;
+    display: inline;
+    align-items: center;
+
+    @include breakpoint($upto-desktop) {
+      display: block;
+    }
+
+    .spc-payment-method-desc {
+      color: $spc-checkout-payment-method-desc;
+      padding-#{$left}: 0.3125rem;
+      display: inline-flex;
+      align-items: center;
+
+      @include breakpoint($upto-desktop) {
+        padding-#{$left}: 0;
+      }
+    }
+  }
+
+  .edit-egift-payment-amount {
+    font-family: $alshaya-bold;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    display: inline-block;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .payment-method-bottom-panel {
+    padding-#{$right}: 1.25rem;
+    padding-bottom: 1.25rem;
+    padding-#{$left}: 3rem;
+    margin-top: -0.625rem;
+
+    @include breakpoint($tablet) {
+      max-width: 27rem;
+    }
+
+    .desc-content {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      margin: 0.625rem 0;
+      color: $egift-checkout-info;
+    }
+  }
+
+  .error {
+    display: block;
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+
+    &.linked-card-payment-error {
+      margin-top: -0.625rem;
+      padding-#{$right}: 1.25rem;
+      padding-#{$left}: 3rem;
+      padding-bottom: 1rem;
+
+      &:empty {
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+
+  &.payment-method {
+    .payment-method-top-panel {
+      align-items: flex-start;
+
+      svg {
+        margin-top: 1rem;
+      }
+    }
+  }
+
+  &.in-active {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0);
+      z-index: 3;
+    }
+
+    .payment-method-top-panel {
+      opacity: 0.2;
+      pointer-events: none;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.5rem;
+
+    .loader-icon {
+      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      padding-#{$left}: 2.5rem;
+      background-size: contain;
+      color: $spc-loader-text;
+      min-width: 2rem;
+      min-height: 2rem;
+      font-size: 1.125rem;
+      display: flex;
+      align-items: center;
+    }
+  }
+}

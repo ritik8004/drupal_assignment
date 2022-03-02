@@ -5,8 +5,6 @@
 
 (function ($, Drupal) {
 
-  'use strict';
-
   var autocomplete;
 
   /**
@@ -142,7 +140,7 @@
     var term = autocomplete.extractLastTerm(request.term);
 
     // Check if the term is already cached.
-    if (autocomplete.cache[elementId].hasOwnProperty(term)) {
+    if (typeof autocomplete.cache[elementId][term] !== 'undefined') {
       showSuggestions(autocomplete.cache[elementId][term]);
     }
     else {

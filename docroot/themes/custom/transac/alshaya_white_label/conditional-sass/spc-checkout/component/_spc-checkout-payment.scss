@@ -11,14 +11,19 @@
       min-height: 3.25rem;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      padding-#{$left}: 3rem;
+      justify-content: space-between;
       padding-#{$right}: 1.25rem;
       position: relative;
 
+      .payment-method-label-wrapper {
+        .radio-label {
+          display: inline;
+        }
+      }
+
       .radio-label {
         color: $spc-checkout-payment-method-txt;
-        width: 100%;
+        width: auto;
         display: flex;
         align-items: center;
 

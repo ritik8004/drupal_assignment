@@ -943,14 +943,16 @@ class AlshayaAlgoliaIndexHelper {
    *
    * @param string|array $attributes
    *   The name of the attribute.
+   * @param string $index_name
+   *   The name of the algolia index to add attribute for.
    *
    * @throws \Exception
    *   If attribute is already present in the index, then exception is thrown.
    */
-  public function addCustomFacetToIndex($attributes) {
+  public function addCustomFacetToIndex($attributes, $index_name = '') {
     $attributes = is_array($attributes) ? $attributes : [$attributes];
     /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
-    $indexNames = $this->getAlgoliaIndexNames();
+    $indexNames = !empty($index_name) ? [$index_name] : $this->getAlgoliaIndexNames();
     foreach ($indexNames as $indexName) {
       $search_api_index = 'search_api.index.' . $indexName;
       // @todo If an entity field is to be added, the function should be modified
@@ -1041,79 +1043,77 @@ class AlshayaAlgoliaIndexHelper {
       $client = SearchClient::create($backend_config['application_id'], $backend_config['api_key']);
       $index_names = $this->getAlgoliaIndexNames();
 
+      // List of indices to process.
+      $indices = [];
+
       foreach ($index_names as $index) {
-        $search_api_index = 'search_api.index.' . $index;
-        $index_name = $this->configFactory->get($search_api_index)->get('options.algolia_index_name');
+        $index_config = $this->configFactory->get('search_api.index.' . $index);
+        $index_name = $index_config->get('options.algolia_index_name');
+
         // Get value for algolia_index_apply_suffix in search Api backend.
-        $algolia_index_apply_suffix = $this->configFactory->get($search_api_index)->get('options.algolia_index_apply_suffix');
+        $algolia_index_apply_suffix = $index_config->get('options.algolia_index_apply_suffix');
+
+        // Search page.
         if ($algolia_index_apply_suffix == 1) {
           foreach ($this->languageManager->getLanguages() as $language) {
-            $name = $index_name . '_' . $language->getId();
-            $index = $client->initIndex($name);
-            $settings = $index->getSettings();
-            unset($settings['replicas']);
-            $ranking = $settings['ranking'];
-
-            foreach ($sorts as $sort) {
-              $replica = $name . '_' . implode('_', $sort);
-              $settings['replicas'][] = $replica;
-            }
-            $index->setSettings($settings, [
-              'forwardToReplicas' => TRUE,
-            ]);
-            foreach ($sorts as $sort) {
-              $replica = $name . '_' . implode('_', $sort);
-              $replica_index = $client->initIndex($replica);
-              $replica_settings = $replica_index->getSettings();
-              $replica_settings['ranking'] = [
-                'desc(stock)',
-                $sort['direction'] . '(' . $sort['field'] . ')',
-              ];
-              // Allow other modules to add/alter ranking & sorting options.
-              $this->moduleHandler->alter('alshaya_search_algolia_ranking_sorting', $replica_settings, $sort, $ranking);
-              $replica_settings['ranking'] = $replica_settings['ranking'] + $ranking;
-
-              $replica_index->setSettings($replica_settings, [
-                'forwardToReplicas' => TRUE,
-              ]);
-            }
+            $indices[] = $index_name . '_' . $language->getId();
           }
         }
+        // Algolia V2.
         else {
-          $index = $client->initIndex($index_name);
-          $settings = $index->getSettings();
-          $ranking = $settings['ranking'];
-          unset($settings['replicas']);
-          foreach ($sorts as $sort) {
-            foreach ($this->languageManager->getLanguages() as $language) {
-              $replica = $index_name . '_' . $language->getId() . '_' . implode('_', $sort);
-              $settings['replicas'][] = $replica;
-            }
-          }
-          $index->setSettings($settings, [
-            'forwardToReplicas' => TRUE,
-          ]);
-          foreach ($sorts as $sort) {
-            foreach ($this->languageManager->getLanguages() as $language) {
-              $replica = $index_name . '_' . $language->getId() . '_' . implode('_', $sort);
-              $replica_index = $client->initIndex($replica);
-              $replica_settings = $replica_index->getSettings();
-              $replica_settings['ranking'] = [
-                'desc(stock)',
-                $sort['direction'] . '(' . $sort['field'] . '.' . $language->getId() . ')',
-              ];
-              // Allow other modules to add/alter ranking & sorting options.
-              $this->moduleHandler->alter('alshaya_search_algolia_ranking_sorting', $replica_settings, $sort, $ranking);
-              $replica_settings['ranking'] = $replica_settings['ranking'] + $ranking;
-
-              $replica_index->setSettings($replica_settings, [
-                'forwardToReplicas' => TRUE,
-              ]);
-            }
-          }
+          $indices[] = $index_name;
         }
       }
-      sleep(3);
+
+      // Update the replicas for all the indices.
+      foreach ($indices as $index_name) {
+        $new_replicas = [];
+
+        // Prepare new replicas array based on updated config.
+        foreach ($sorts as $sort) {
+          $replica = $index_name . '_' . implode('_', $sort);
+          $new_replicas[] = $replica;
+        }
+
+        $index = $client->initIndex($index_name);
+        $settings = $index->getSettings();
+
+        // Do nothing if old and new replicas are same.
+        if ($new_replicas === $settings['replicas']) {
+          $this->logger->notice('Not updating index replicas as they are already same for index: @index.', [
+            '@index' => $index_name,
+          ]);
+
+          continue;
+        }
+
+        $this->logger->notice('Updating index replicas for index: @index, Replicas: @replicas.', [
+          '@index' => $index_name,
+          '@replicas' => implode(',', $new_replicas),
+        ]);
+
+        $settings['replicas'] = $new_replicas;
+        $response = $index->setSettings($settings, ['forwardToReplicas' => FALSE]);
+        $response->wait();
+
+        $ranking = $settings['ranking'];
+        foreach ($sorts as $sort) {
+          $replica = $index_name . '_' . implode('_', $sort);
+          $replica_index = $client->initIndex($replica);
+          $replica_settings = $replica_index->getSettings();
+          $replica_settings['ranking'] = [
+            'desc(stock)',
+            $sort['direction'] . '(' . $sort['field'] . ')',
+          ];
+
+          // Allow other modules to add/alter ranking & sorting options.
+          $this->moduleHandler->alter('alshaya_search_algolia_ranking_sorting', $replica_settings, $sort, $ranking);
+
+          $replica_settings['ranking'] = $replica_settings['ranking'] + $ranking;
+          $response = $replica_index->setSettings($replica_settings, ['forwardToReplicas' => FALSE]);
+          $response->wait();
+        }
+      }
     }
     catch (\Exception $e) {
       $this->logger->warning('Error occurred while creating replica index: %message', [

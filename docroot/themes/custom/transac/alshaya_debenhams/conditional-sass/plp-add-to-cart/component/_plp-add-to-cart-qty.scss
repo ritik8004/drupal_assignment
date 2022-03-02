@@ -1,0 +1,32 @@
+.qty-sel {
+  &-btn--down,
+  &-btn--up {
+    background: $primary_brand_button;
+  }
+}
+
+.path--user {
+  .qty-sel-btn--down,
+  .qty-sel-btn--up {
+    background: $primary_brand_button;
+
+    &:hover {
+      background: $primary_btn_hover_bg;
+    }
+  }
+}
+
+.qty-sel-btn {
+  &:hover {
+    background: $primary_btn_hover_bg;
+  }
+}
+
+.qty-text-wrapper {
+  font-size: 0.875rem;
+  text-align: center;
+
+  html[lang=ar] & {
+    font-size: 0.75rem;
+  }
+}

@@ -6,7 +6,7 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_white_lab
 $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/imgs';
 
 /**
-  * ALIGNMENT
+ * ALIGNMENT
  */
 @mixin u-center {
   position: absolute;
@@ -33,9 +33,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 @mixin u-visibility($state, $important: false) {
   @if $important {
     display: $state !important;
-  }
-
-  @else {
+  } @else {
     display: $state;
   }
 }
@@ -207,7 +205,7 @@ body {
   display: block; /* Fallback for non-webkit */
   font-size: $font-size;
   line-height: $line-height;
-  height: $font-size*$lines*$line-height;  /* Fallback for non-webkit */
+  height: $font-size * $lines * $line-height;  /* Fallback for non-webkit */
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -320,7 +318,6 @@ body {
     user-select: none;
 
     @content;
-
     @include fullPageTransparentOverlay($pseudo-element);
   }
 }
@@ -336,7 +333,7 @@ body {
   }
 }
 
-@mixin arabic-line-height ($value) {
+@mixin arabic-line-height($value) {
   html[lang='ar'] & {
     line-height: $value;
   }
@@ -357,7 +354,7 @@ body {
 // here the parent class (empty-stars) should have position relative.
 // Child class (histogram-data) should call the @mixin tooltip
 // .empty-stars:hover .histogram-data we have to call tooltip-display
-@mixin tooltip ($width) {
+@mixin tooltip($width) {
   width: $width;
   position: absolute;
   #{$left}: 0%;
@@ -379,13 +376,23 @@ body {
   @content;
 }
 
-@mixin tooltip-display () {
+@mixin tooltip-display() {
   visibility: visible;
   opacity: 1;
 }
 
+// Force ltr on a element in arabic.
+@mixin force-ltr {
+  html[lang=ar] & {
+    direction: ltr;
+    display: inline-block;
+
+    @content;
+  }
+}
+
 // RR thumbnail image container style
-@mixin bv-photo-upload-container () {
+@mixin bv-photo-upload-container {
   border: 0;
   background: $rr-thumbnail-img-bg;
   box-sizing: border-box;
@@ -404,7 +411,7 @@ body {
 }
 
 // RR thumbnail image style for my reviews, PDP and write a review form.
-@mixin bv-photo-upload-image () {
+@mixin bv-photo-upload-image {
   height: 100%;
   width: 100%;
   object-fit: contain;
@@ -540,7 +547,7 @@ body {
   }
 }
 
-//Country Select style
+// Country Select style.
 @mixin country-select {
   border: none;
   height: auto;
@@ -558,7 +565,7 @@ body {
   }
 }
 
-//Mobile input style
+// Mobile input style.
 @mixin mobile-input-style {
   display: flex;
   align-items: flex-end;
@@ -629,7 +636,7 @@ body {
   }
 }
 
-//Mobile number input style
+// Mobile number input style.
 @mixin mobile-number-input-style {
   border: none !important;
 
@@ -646,4 +653,3 @@ body {
     direction: ltr;
   }
 }
-

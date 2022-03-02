@@ -33,8 +33,6 @@
   }
 
   #express-delivery-options {
-    border-bottom: 1px solid $pdp-delivery-section-border;
-
     .is-open {
       .express-delivery-title-wrapper {
         &::after {
@@ -51,7 +49,6 @@
     border-top: 0;
     position: relative;
     letter-spacing: 0.0625rem;
-    margin-bottom: 0.3125rem;
 
     &.ui-state-active {
       .c-accordion__title {
@@ -73,6 +70,7 @@
 
   .express-delivery-title {
     font-size: 0.875rem;
+    letter-spacing: normal;
   }
 
   .card-icon-svg {
@@ -84,7 +82,7 @@
     font-size: 0.75rem;
     color: $pdp-delivery-section-subtitle;
     line-height: 1.2;
-    margin-top: -0.25rem;
+    margin-top: 0;
     margin-#{$right}: 2.5rem;
     margin-bottom: 0;
   }
@@ -96,7 +94,6 @@
   .select-area-popup-wrapper {
     .spc-checkout-section-title {
       font-family: $alshaya-bold;
-      text-transform: capitalize;
       font-size: 1.125rem;
 
       @include breakpoint($only-mobile) {
@@ -212,6 +209,7 @@
       height: 1.5rem;
       display: inline-block;
       margin-#{$right}: 0.625rem;
+      min-width: 1.5rem;
 
       @include breakpoint($only-tablet) {
         margin-#{$right}: 0.3125rem;

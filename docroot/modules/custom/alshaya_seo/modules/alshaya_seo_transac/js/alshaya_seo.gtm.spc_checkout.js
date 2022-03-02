@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, dataLayer) {
-  'use strict';
 
   Drupal.alshayaSeoSpc = Drupal.alshayaSeoSpc || {};
 
@@ -28,6 +27,24 @@
     };
 
     dataLayer.push(data);
+  };
+
+  /**
+   * Helper function to check if cart contains only virtual products.
+   *
+   * @param {object} cartData
+   *   The cart data object.
+   */
+  Drupal.alshayaSeoSpc.cartContainsOnlyVirtualProducts = function (cartData) {
+    // Flag to check if all products are virtual.
+    let allVirtual = true;
+    Object.keys(cartData.items).forEach((key) => {
+      if (!(cartData.items[key]['isEgiftCard'] || cartData.items[key]['isTopUp'])) {
+        allVirtual = false;
+      }
+    });
+
+    return allVirtual;
   };
 
   Drupal.alshayaSeoSpc.pushStoreData = function (cart) {
@@ -107,6 +124,8 @@
           data.deliveryOption === 'Home Delivery' ? 'Home Delivery' : 'Click & Collect',
           2
         );
+      } else if (Drupal.alshayaSeoSpc.cartContainsOnlyVirtualProducts(cartData)) {
+        Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Virtual eGift Card', 2);
       }
     }
 
@@ -148,7 +167,32 @@
   });
 
   document.addEventListener('orderPaymentMethod', function (e) {
-    Drupal.alshayaSeoSpc.gtmPushCheckoutOption(e.detail.payment_method, 3);
+    var payment_method = e.detail.payment_method;
+    // Get the cart data to check if some payment is done via E-Gift card.
+    if (drupalSettings.hasOwnProperty('egiftCard') && drupalSettings.egiftCard.enabled) {
+      var totals = window.spcStaticStorage.cart_raw.totals;
+      // If some amount is paid via egift then hps_redeemed_amount will be
+      // present.
+      if (totals
+        && totals.extension_attributes.hps_redeemed_amount > 0
+        && payment_method != 'hps_payment') {
+        payment_method = [payment_method, 'egiftcard'].join('_');
+      }
+    }
+    // Change hps_payment to egift_card.
+    if (payment_method == 'hps_payment') {
+      payment_method = 'egiftcard';
+    }
+    Drupal.alshayaSeoSpc.gtmPushCheckoutOption(payment_method, 3);
+  });
+
+  document.addEventListener('egiftCardRedeemed', function (e) {
+    dataLayer.push({
+      event: 'egift_card',
+      eventCategory: 'egift_card',
+      eventAction: `egift_${e.detail.action}`,
+      eventLabel: e.detail.label,
+    });
   });
 
   document.addEventListener('storeSelected', function (e) {

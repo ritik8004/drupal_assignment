@@ -1,0 +1,30 @@
+.subtitle {
+  font-family: $dh-Juana-semibold;
+  // color: $sub_title;
+  // font-size: 1rem;
+  // text-transform: unset;
+  // padding-bottom: 0.5625rem;
+  // margin-bottom: 0;
+}
+
+%page-title {
+  text-transform: unset;
+  font-family: $dh-Juana-black;
+  font-weight: normal;
+  color: $page_title;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 0;
+
+  @include breakpoint($mobile) {
+    font-size: 1.25rem;
+  }
+
+  @include breakpoint($tablet) {
+    font-size: 1.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    font-size: 2.25rem;
+  }
+}

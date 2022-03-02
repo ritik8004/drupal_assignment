@@ -622,7 +622,38 @@ $spc-cart-free-gifts-link: $PB_grey_one;
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $PB_black_one;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+$plp-quick-view-product-size-active-bg: $_black_two;
+$plp-quick-view-product-size-border-hover: $_black_two;
 
 // Sofa and sectional.
 $sofa-sectional-title: $_black_two;
 $sofa-sectional-select-border: $_black_two;
+
+// Express delivery.
+$pdp-delivery-section-subtitle: $PB_grey_two;
+$sameday-express-delivery-drawer-btn: $primary_btn_bg;
+$spc-cart-delivery-popup-search-border: $_black_two;
+$sameday-express-delivery-drawer-cross: $_black_two;
+
+// Wishlist
+$wishlist-header-notification-border: $_black_two;
+$wishlist-button-border: $_black_two;
+$wishlist-header-notification-text: $PB_grey_one;
+$wishlist-header-notification-span: $_black_two;
+$wishlist-header-login-message: $PB_grey_one;
+$wishlist-button-bg: $primary_btn_bg;
+$wishlist-button-bg-hover: $primary_btn_bg;
+$wishlist-button-register-txt: $_black_two;
+$wishlist-basket-modal-close-bg: $_black_two;
+$wishlist-share-text: $_black_two;
+$my-wishlist-share-modal-hover-bg: $primary_btn_bg;
+$wishlist-oos: $PB_deep_red;
+$my-wishlist-share-modal-header: $_black_two;
+
+// Country Switcher
+$country-switcher-label: $PB_grey_one;
+
+// eGift Landing page
+$egift-primary-text: $_black_two;
+$egift-accordion-active-title: $_black_two;
+$egift-banner-bg: $_gray_five;

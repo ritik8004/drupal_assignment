@@ -1,0 +1,211 @@
+.c-plp {
+  .region__content {
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar-productlist,
+    .block-facets-summary-blockfilter-bar {
+      .filter-list-label {
+        font-size: 0.8125rem;
+        font-family: $dh-light;
+        text-transform: capitalize;
+      }
+
+      ul {
+        li {
+          a {
+            span {
+              &.facet-item__value {
+                border-radius: 1.3125rem 0 0 1.3125rem;
+                text-transform: capitalize;
+                font-family: $dh-light;
+                padding-top: 0.125rem;
+
+                html[lang=ar] & {
+                  border-radius: 0 1.3125rem 1.3125rem 0;
+                }
+              }
+
+              &.js-facet-deactivate {
+                border-radius: 0 1.3125rem 1.3125rem 0;
+
+                html[lang=ar] & {
+                  border-radius: 1.3125rem 0 0 1.3125rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .block-page-title-block {
+      &.mobile {
+        h1 {
+          @include breakpoint($only-mobile) {
+            padding: 1.375rem 0;
+          }
+        }
+      }
+    }
+  }
+
+  .c-products__item {
+    font-size: 0.875rem;
+    text-align: $left;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.8125rem;
+    }
+
+    .field--name-name,
+    .listing-brand-name,
+    .special-price-block {
+      padding: 0 0.9375rem;
+
+      @include breakpoint($only-mobile) {
+        padding: 0;
+        padding-#{$left}: 0.8125rem;
+      }
+    }
+
+    .field--name-name,
+    .listing-brand-name {
+      letter-spacing: 1.12px;
+    }
+
+    .listing-brand-name {
+      font-family: $dh-semibold;
+      font-size: 0.875rem;
+      margin-top: 0;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      line-height: 1;
+      max-height: 0.875rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    @include breakpoint($desktop) {
+      &:hover {
+        article::after {
+          display: none;
+        }
+
+        .field--name-name {
+          a {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+    .promotions {
+      .sku-promotion-item {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+
+  .c-products-list {
+    &.product-small {
+      .alshaya_search_gallery {
+        border: 1px solid $primary_border;
+        margin-bottom: 2.25rem;
+
+        @include breakpoint($only-mobile) {
+          height: 16rem;
+          margin-bottom: 1.625rem;
+        }
+
+        @include breakpoint($desktop) {
+          height: 20.75rem;
+        }
+
+        .alshaya_search_mainimage {
+          @include breakpoint($only-tablet) {
+            height: 21.5rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            height: 16rem;
+          }
+        }
+      }
+    }
+
+    &.product-large {
+      .alshaya_search_gallery {
+        border: 1px solid $primary_border;
+        margin-bottom: 2.25rem;
+
+        @include breakpoint($only-mobile) {
+          height: 33.4375rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          height: 32.375rem;
+        }
+
+        @include breakpoint($desktop) {
+          height: 28.25rem;
+        }
+      }
+    }
+
+    &.view-search,
+    &.view-algolia-plp {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0.5rem;
+        padding-#{$right}: 0.5rem;
+      }
+    }
+  }
+}
+
+#top-results,
+.c-plp {
+  .swatches {
+    padding: 0 0.875rem;
+    display: flex;
+    align-items: center;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
+
+    & > a {
+      .swatch-block {
+        display: block;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin: 0 0.1875rem;
+
+        img {
+          border-radius: 50%;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .swatch-more-link {
+      margin-#{$left}: 0.625rem;
+      margin-top: 0.125rem;
+    }
+  }
+}
+
+.price--discount {
+  @include breakpoint($tablet) {
+    font-size: 0.875rem;
+  }
+}
+
+.node--view-mode-search-result {
+  .has--special--price {
+    @include breakpoint($only-mobile) {
+      display: inline-block;
+    }
+  }
+}

@@ -2,7 +2,13 @@ import axios from 'axios';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
-import hasValue from '../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
+import {
+  cartContainsAnyVirtualProduct,
+  cartContainsOnlyVirtualProduct, isEgiftUnsupportedPaymentMethod,
+} from './egift_util';
+import { addPaymentMethodInCart } from './update_cart';
+import { isEgiftCardEnabled } from '../../../js/utilities/util';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -169,7 +175,7 @@ export const placeOrder = (paymentMethod) => {
  * user billing shipping same or not.
  */
 export const isBillingSameAsShippingInStorage = () => {
-  const same = localStorage.getItem('billing_shipping_same');
+  const same = Drupal.getItemFromLocalStorage('billing_shipping_same');
   return (same === null || same === 'true');
 };
 
@@ -185,7 +191,7 @@ export const removeBillingFlagFromStorage = (cart) => {
   if (cart.cart !== undefined
     && (cart.cart.billing_address === null
       || cart.cart.billing_address.city === 'NONE')) {
-    localStorage.removeItem('billing_shipping_same');
+    Drupal.removeItemFromLocalStorage('billing_shipping_same');
   }
 };
 
@@ -198,7 +204,7 @@ export const setBillingFlagInStorage = (cart) => {
   if (cart.cart_id !== undefined
     && cart.shipping.type === 'home_delivery'
     && isBillingSameAsShippingInStorage()) {
-    localStorage.setItem('billing_shipping_same', true);
+    Drupal.addItemInLocalStorage('billing_shipping_same', true);
   }
 };
 
@@ -412,6 +418,10 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
         ? 'cart/login'
         : 'checkout';
 
+      // Dispatch an event when user is moving to checkout page by
+      // clicking on `continue to checkout` link.
+      dispatchCustomEvent('continueToCheckoutFromCart', { cartResult });
+
       // Redirect to next page.
       window.location.href = Drupal.url(continueCheckoutLink);
       return;
@@ -455,11 +465,13 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
   // If items count we get from MDC update and what in
   // local storage different, we show message on top.
   if (sameNumberOfItems === false) {
+    const errmsg = 'Sorry, one or more products in your basket are no longer available and were removed from your basket.';
     // Dispatch event for error to show.
     dispatchCustomEvent('spcCartMessageUpdate', {
       type: 'error',
-      message: Drupal.t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'),
+      message: Drupal.t('@errmsg', { '@errmsg': errmsg }),
     });
+    Drupal.logJavascriptError('continue to checkout', errmsg, GTM_CONSTANTS.CART_ERRORS);
     return;
   }
 
@@ -506,6 +518,22 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   }
 
   return false;
+};
+
+/**
+ * Determines if shipping method is set in cart.
+ *
+ * @param {object} cart
+ *   The cart object.
+ */
+export const isShippingMethodSet = (cart) => {
+  // Set this as true if egift card is enabled and only virtual product is added
+  // in the cart.
+  if (cartContainsOnlyVirtualProduct(cart.cart)) {
+    return true;
+  }
+
+  return cart.cart.shipping.method !== null;
 };
 
 /**
@@ -652,3 +680,59 @@ export const binValidation = (bin) => {
  * Helper to get cnc store limit config.
  */
 export const getCnCStoresLimit = () => drupalSettings.cnc_stores_limit || 0;
+
+/**
+ * Update payment method and then place order.
+ *
+ * @param {string} paymentMethod
+ *   The paymentMethod using which user is placing order.
+ */
+export const updatePaymentAndPlaceOrder = (paymentMethod) => {
+  const analytics = Drupal.alshayaSpc.getGAData();
+
+  const data = {
+    payment: {
+      method: paymentMethod,
+      additional_data: {},
+      analytics,
+    },
+  };
+
+  const cartUpdate = addPaymentMethodInCart('update payment', data);
+  if (cartUpdate instanceof Promise) {
+    cartUpdate.then((result) => {
+      if (!result) {
+        // Remove loader in case of error.
+        removeFullScreenLoader();
+
+        dispatchCustomEvent('spcCheckoutMessageUpdate', {
+          type: 'error',
+          message: drupalSettings.global_error_message,
+        });
+      } else {
+        placeOrder(paymentMethod);
+      }
+    }).catch((error) => {
+      Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+    });
+  }
+};
+
+/**
+ * Get next allowed payment method when virtual product is present.
+ */
+export const getNextAllowedPaymentMethodCode = (paymentMethods, cart) => {
+  const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
+  const cartHasVirtualProduct = cartContainsAnyVirtualProduct(cart.cart);
+  let paymentMethodCode = null;
+  if (isEgiftCardEnabled()) {
+    for (let i = 0; i <= sortedMethods.length; i++) {
+      if (cartHasVirtualProduct
+        && !isEgiftUnsupportedPaymentMethod(sortedMethods[i].code)) {
+        paymentMethodCode = sortedMethods[i].code;
+        break;
+      }
+    }
+  }
+  return hasValue(paymentMethodCode) ? paymentMethodCode : sortedMethods[0].code;
+};

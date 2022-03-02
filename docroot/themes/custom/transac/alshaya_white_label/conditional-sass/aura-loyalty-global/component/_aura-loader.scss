@@ -1,0 +1,128 @@
+#block-myaccountsaurablock,
+#block-aurarewardsheader,
+#aura-mobile-header-shop,
+#username-points-wrapper-mobile-menu,
+#aura-pdp,
+#my-accounts-aura-mobile,
+#my-loyalty-club,
+.aura-myaccount-waiting-wrapper,
+.aura-progressbar-wrapper-loading {
+  .spc-loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+
+    .spc-loader {
+      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      padding-#{$left}: 2.5rem;
+      background-size: contain;
+      color: $spc-loader-text;
+      min-width: 2rem;
+      min-height: 2rem;
+      font-size: 1.125rem;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.aura-myaccount-waiting-wrapper,
+.aura-progressbar-wrapper-loading {
+  .spc-loading-container {
+    min-height: 3rem;
+  }
+}
+
+.not-you-wrapper {
+  .error-placeholder:not(:empty) {
+    color: $aura-my-account-error-text;
+    font-size: 0.875rem;
+    font-family: $aura-regular;
+    background: $aura-my-account-error-bg;
+    border-radius: 0.125rem;
+    padding: 0.125rem 0.5rem;
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: 1.875rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      margin-top: 1rem;
+
+      + .not-you {
+        margin-top: 1rem !important;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.link-card-wrapper,
+.not-you-wrapper {
+  &.loading {
+    position: relative;
+
+    > .link-your-card,
+    > .not-you {
+      visibility: hidden;
+    }
+
+    .link-card-loader-placeholder,
+    .not-you-loader-placeholder {
+      color: transparent;
+      background: transparent url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+      background-size: contain;
+      // Prevent clicks and selection.
+      pointer-events: none;
+      user-select: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      #{$left}: 50%;
+
+      html[lang=ar] & {
+        transform: translateY(-50%) translateX(50%);
+      }
+    }
+  }
+}
+
+.reward-activity.loading {
+  position: relative;
+
+  &::before {
+    content: '';
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: $_white_five_alpha_80 url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+    z-index: 1;
+    position: absolute;
+    background-size: 8%;
+  }
+}
+
+.spc-aura-cart-rewards-block,
+.spc-aura-checkout-rewards-block {
+  .block-content.registered-user-unlinked-card .actions,
+  .block-content.registered-user-unlinked-card {
+    .spc-aura-unlink-card-wrapper {
+      &.link-card-wrapper.loading {
+        button.spc-aura-link-card-submit {
+          color: transparent;
+          background: url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+          background-size: 2rem;
+          // Prevent clicks and selection.
+          pointer-events: none;
+          user-select: none;
+
+          @include fullPageTransparentOverlay;
+        }
+      }
+    }
+  }
+}

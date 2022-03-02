@@ -1,0 +1,25 @@
+.egift-landing-page {
+  .popup-content.egift-balance-check-content {
+    .egift-balance-check-form {
+      .egift-button {
+        text-transform: uppercase;
+      }
+
+      html[lang="ar"] & {
+        @include breakpoint($tablet) {
+          .egift-code-wrapper {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+
+    .egift-balance-response {
+      .egift-topup-btn-wrapper {
+        button {
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}

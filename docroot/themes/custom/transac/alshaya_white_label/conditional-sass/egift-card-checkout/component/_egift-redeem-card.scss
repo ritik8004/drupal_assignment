@@ -1,0 +1,287 @@
+.redeem-egift-card {
+  background: $spc-checkout-payment-method-bg;
+  margin-top: 1.5rem;
+
+  .redeem-egift-card-content {
+    display: none;
+    padding: 0.5rem 1.5rem 1.875rem;
+
+    @include breakpoint($tablet) {
+      padding-top: 0.9375rem;
+      padding-bottom: 2rem;
+    }
+
+    .egift-header-title {
+      font-family: $alshaya-bold;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      margin-bottom: 0.5625rem;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 0.1875rem;
+      }
+    }
+
+    .egift-header-subtitle {
+      font-size: 0.8125rem;
+      line-height: 1.25rem;
+      color: $egift-redeem-form-subtitle;
+    }
+
+    .egift-redeem-get-code-form,
+    .egift-validate-form {
+      position: relative;
+      margin-top: 1.625rem;
+
+      @include breakpoint($tablet) {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2.125rem;
+      }
+
+      .spc-type-textfield {
+        width: 100%;
+
+        @include breakpoint($tablet) {
+          max-width: 13.375rem;
+        }
+
+        @include breakpoint($desktop) {
+          max-width: 20rem;
+        }
+
+        &.egift-type-text {
+          margin-bottom: 0;
+        }
+      }
+
+      .egift-button {
+        background: transparent;
+        top: -0.59375rem;
+        bottom: 0;
+
+        @include breakpoint($only-mobile) {
+          position: static;
+          margin-top: 1.75rem;
+        }
+      }
+    }
+
+    .egift-validate-form {
+      .spc-type-textfield.card-number-wrapper {
+        margin-bottom: 2.375rem;
+      }
+
+      .egift-resend-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+        margin-top: 0.75rem;
+
+        @include breakpoint($tablet) {
+          max-width: 24rem;
+        }
+
+        &__left {
+          margin-#{$right}: 3.375rem;
+        }
+
+        .egift-light-text {
+          color: $egift-not-link-gray-text;
+          margin-#{$right}: 0.3125rem;
+        }
+
+        .egift-resend-code-text,
+        .egift-change-card-text {
+          cursor: pointer;
+        }
+      }
+
+      .egift-verify-code-redeem-submit-btn {
+        .egift-button {
+          top: 3.34375rem;
+        }
+      }
+    }
+
+    .egift-type-email {
+      margin-bottom: 0;
+    }
+
+    .egift-redeem-edit-amount {
+      font-family: $alshaya-bold;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      display: inline-block;
+      margin-top: 0.375rem;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .error {
+      &:empty {
+        padding: 0 !important;
+      }
+    }
+  }
+
+  .redeem-egift-card-header-container {
+    min-height: 3.25rem;
+    display: flex;
+    align-items: center;
+    padding-#{$left}: 1.25rem;
+    position: relative;
+
+    &.active {
+      & + .redeem-egift-card-content {
+        display: block;
+      }
+    }
+
+    &.in-active {
+      opacity: 0.2;
+      pointer-events: none;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0);
+        z-index: 3;
+      }
+    }
+
+    &.has-validated-code {
+      .accordion-icon {
+        display: none;
+      }
+    }
+  }
+
+  .redeem-egift-card-header-label {
+    padding: 1.25rem 1.5rem;
+    line-height: 1.25rem;
+  }
+
+  .egift-redeem-applied-amount-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include breakpoint($desktop) {
+      margin-top: -0.625rem;
+    }
+
+    .price-wrapper {
+      display: inline-block;
+    }
+
+    .egift-header-wrapper {
+      @include breakpoint($tablet) {
+        max-width: 20rem;
+      }
+    }
+
+    .remove-egift-card {
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 2.1875rem;
+      }
+    }
+  }
+
+  .full-redeemed {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    margin: 1.5rem 0 0;
+    color: $egift-checkout-info;
+    padding-#{$left}: 2rem !important;
+    position: relative;
+
+    @include icon('infomation') {
+      width: 1.25rem;
+      height: 1.25rem;
+      color: $aura-item-upgrade-highlight;
+      display: inline-flex;
+      font-size: 1.5rem;
+      position: absolute;
+      #{$left}: -0.25rem;
+      top: 0;
+    }
+  }
+
+  .accordion-icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+
+    @include icon('chevrondown') {
+      font-size: 2rem;
+      position: absolute;
+      top: 50%;
+      #{$right}: 0.875rem;
+      transform: translateY(-50%);
+      transition: transform 0.125s ease-in-out;
+    }
+  }
+
+  .remove-egift-card {
+    button {
+      position: static;
+      background: none;
+    }
+  }
+
+  .egift-redeem-link-card-wrapper {
+    font-size: 0.875rem;
+    color: $spc-checkout-payment-saved-card-text;
+    margin-top: 1.25rem;
+
+    label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      line-height: 1.25;
+
+      @include breakpoint($tablet) {
+        max-width: 19.875rem;
+      }
+
+      &::before {
+        margin-#{$right}: 0.625rem;
+        font-size: 1.25rem;
+        color: $spc-checkout-radio-empty;
+      }
+    }
+
+    input[type=checkbox]:checked ~ label::before {
+      color: $spc-checkout-radio-filled;
+    }
+
+    .error {
+      display: block;
+      font-size: 0.75rem;
+      color: $primary_input_inline_error;
+      padding-top: 0.25rem;
+    }
+  }
+
+  .error {
+    display: block;
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+
+    &.egift-remove-redeem-card-error {
+      margin-top: 0.625rem;
+
+      &:empty {
+        margin: 0;
+      }
+    }
+  }
+}

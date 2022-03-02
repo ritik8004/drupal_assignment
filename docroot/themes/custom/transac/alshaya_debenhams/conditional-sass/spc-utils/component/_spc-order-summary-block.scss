@@ -1,0 +1,15 @@
+.spc-order-summary-block {
+  .hero-total {
+    & > .total-line-item {
+      font-family: $dh-semibold;
+    }
+  }
+
+  .product-content {
+    .product-item {
+      .spc-product-attributes {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}

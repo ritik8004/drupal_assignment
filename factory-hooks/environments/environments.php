@@ -14,11 +14,10 @@
 function alshaya_get_site_environment() {
   $env = 'local';
 
-  $ah_env = getenv('AH_SITE_ENVIRONMENT');
-  if ($ah_env && $ah_env !== 'ide') {
-    $env = $ah_env;
+  if (getenv('AH_SITE_GROUP') && getenv('AH_SITE_ENVIRONMENT')) {
+    $env = getenv('AH_SITE_ENVIRONMENT');
   }
-  elseif (getenv('TRAVIS') || getenv('CI_BUILD_ID')) {
+  elseif (getenv('TRAVIS') || getenv('CI') || getenv('GITHUB_ACTIONS')) {
     $env = 'travis';
   }
 

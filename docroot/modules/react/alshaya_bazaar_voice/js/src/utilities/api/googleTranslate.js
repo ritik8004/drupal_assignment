@@ -64,6 +64,27 @@ export function getTranslateLang(tranlateStatus, contentLocale) {
 }
 
 /**
+ * Replace special chars with encoded value.
+ *
+ * @param {*} str
+ */
+function encodeSpecialChars(str) {
+  // Added encoded value for below to fix google translation issues.
+  // Below were not supported by encodeURI().
+  const symbols = {
+    '@': '%40',
+    '&amp;': '%26',
+    '*': '%2A',
+    '+': '%2B',
+    '/': '%2F',
+    '&lt;': '%3C',
+    '&gt;': '%3E',
+  };
+
+  return str.replace(/([@*+/]|&(amp|lt|gt);)/g, (m) => symbols[m]);
+}
+
+/**
  * Store the reviews/comments data to local storage.
  *
  * @param {*} tranlateStatus
@@ -113,9 +134,9 @@ export function renderTranslatedReview(reviewId, tranlateStatus, contentLocale, 
 
   const lang = getTranslateLang(tranlateStatus, contentLocale);
 
-  let params = `&q=${encodeURI(reviewData.title)}`;
+  let params = `&q=${encodeSpecialChars(encodeURI(reviewData.title))}`;
   params += `&q=${encodeURI(reviewData.date)}`;
-  params += `&q=${encodeURI(reviewData.text)}`;
+  params += `&q=${encodeSpecialChars(encodeURI(reviewData.text))}`;
 
   showFullScreenLoader();
   // Get the translated contents for reviews.
@@ -176,7 +197,7 @@ export function renderTranslatedComment(commentId, tranlateStatus, contentLocale
   const lang = getTranslateLang(tranlateStatus, contentLocale);
 
   let params = `&q=${encodeURI(commentData.date)}`;
-  params += `&q=${encodeURI(commentData.text)}`;
+  params += `&q=${encodeSpecialChars(encodeURI(commentData.text))}`;
 
   showFullScreenLoader();
   // Get the translated contents for reviews.

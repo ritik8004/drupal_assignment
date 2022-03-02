@@ -32,20 +32,20 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 }
 
 @font-face {
-  font-family: "Tahoma-Bold";
+  font-family: "Tajawal-Bold";
   src:
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Tahoma";
+  font-family: "Tajawal-Regular";
   src:
-    url("#{$base_theme_fonts_directory_path}/Tahoma.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tajawal-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -54,7 +54,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 // DY fonts.
 @font-face {
   font-family: "GE_SS_Two_Light";
-  src: url("#{$base_theme_fonts_directory_path}/GE_SS_Two_Light.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/GE_SS_Two_Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GE_SS_Two_Light.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -62,7 +64,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "GESSTwoMedium";
-  src: url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.otf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.otf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -70,7 +74,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Ginger-bold-webfont";
-  src: url("#{$base_theme_fonts_directory_path}/Ginger-bold-webfont.ttf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Ginger-bold-webfont.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Ginger-bold-webfont.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -78,7 +84,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Ginger-light-webfont";
-  src: url("#{$base_theme_fonts_directory_path}/Ginger-light-webfont.ttf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Ginger-light-webfont.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Ginger-light-webfont.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -86,7 +94,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Ginger-regular-webfont";
-  src: url("#{$base_theme_fonts_directory_path}/Ginger-regular-webfont.ttf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Ginger-regular-webfont.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Ginger-regular-webfont.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -94,7 +104,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Ginger-thin-webfont";
-  src: url("#{$base_theme_fonts_directory_path}/Ginger-thin-webfont.ttf");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Ginger-thin-webfont.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Ginger-thin-webfont.ttf");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

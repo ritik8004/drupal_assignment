@@ -91,3 +91,23 @@
     background: $plp-secondary-cta-hover-bg;
   }
 }
+
+.path--user {
+  .is-not-buyable,
+  .addtobag-config-button {
+    background: $spc-checkout-delivery-method-bg;
+    border: 1px solid $primary_btn_bg;
+
+    &:hover {
+      background: $plp-secondary-cta-hover-bg;
+    }
+  }
+
+  .addtobag-button {
+    background: $primary_btn_bg;
+
+    &:hover {
+      background: $plp-primary-cta-hover-bg;
+    }
+  }
+}

@@ -1,0 +1,114 @@
+.c-menu-secondary {
+  text-transform: unset;
+  text-align: center;
+
+  @include breakpoint($upto-desktop) {
+    text-align: $left;
+    width: 86.375%;
+  }
+
+  li {
+    height: 2rem;
+
+    @include breakpoint($upto-desktop) {
+      height: 2.875rem;
+      margin-#{$left}: 0;
+      margin-#{$right}: 0;
+      padding-#{$left}: 1.25rem;
+      padding-#{$right}: 1.25rem;
+
+      &::after {
+        font-size: 1.625rem;
+        #{$right}: 0.9375rem;
+        font-weight: bold;
+      }
+    }
+  }
+
+  a {
+    font-size: 0.875rem;
+    padding-top: 0.6875rem;
+    padding-bottom: 0.625rem;
+    color: $mm_l3_link_mobile;
+
+    @include breakpoint($desktop) {
+      height: auto;
+      font-size: 0.75rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      height: 2.875rem;
+      line-height: 2;
+    }
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  .block-language-blocklanguage-interface {
+    .en a {
+      html[lang=ar] & {
+        font-family: $dh-regular;
+      }
+    }
+  }
+
+  .region__menu-secondary,
+  ul {
+    @include breakpoint($desktop) {
+      height: 2rem;
+    }
+  }
+}
+
+.c-my-account-nav {
+  width: 86.5%;
+
+  li {
+    &::after {
+      font-size: 1.625rem;
+      margin-top: -1.25rem;
+      #{$right}: 1.125rem;
+      font-weight: bold;
+    }
+  }
+
+  li,
+  h3 {
+    padding: 0.875rem 1.25rem;
+    margin: 0;
+    text-transform: capitalize;
+    font-size: 0.875rem;
+  }
+}
+
+body {
+  @include breakpoint($only-mobile) {
+    margin-top: 3.375rem;
+  }
+
+  @include breakpoint($upto-desktop) {
+    html[lang=ar] & {
+      margin-top: 3.75rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 4.5rem;
+  }
+}
+
+.menu__in {
+  @include breakpoint($upto-desktop) {
+    #{$right}: 0.75rem;
+  }
+
+  &::after {
+    @include breakpoint($upto-desktop) {
+      font-size: 1.625rem;
+      font-weight: bold;
+    }
+  }
+}

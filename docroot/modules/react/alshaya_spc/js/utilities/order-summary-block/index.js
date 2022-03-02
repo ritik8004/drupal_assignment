@@ -9,7 +9,7 @@ import {
   removeFullScreenLoader,
 } from '../checkout_util';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Click handler for `continue checkout`.
@@ -85,6 +85,7 @@ const OrderSummaryBlock = ({
         <TotalLineItems
           totals={totals}
           isCartPage={showCheckoutButton}
+          context={context}
           {...(collectionPointsEnabled()
             && hasValue(collectionCharge)
             && { collectionCharge }

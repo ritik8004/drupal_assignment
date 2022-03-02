@@ -1,0 +1,5 @@
+pdp_pretty_path_detail:
+  js:
+    js/alshaya_pdp_pretty_path.detail.js: {}
+  dependencies:
+    - alshaya_acm_product/product_detail

@@ -1,0 +1,39 @@
+#hits,
+#plp-hits {
+  .chrome & {
+    @include breakpoint($desktop) {
+      padding-top: 3.125rem;
+      border-top: 1px solid $primary_border;
+    }
+  }
+
+  .js-pager__items.pager {
+    li.pager__item {
+      button {
+        height: 2.5rem;
+        width: 15.625rem;
+        border-radius: 1.375rem;
+        font-family: $alshaya-thin;
+        font-size: 1rem;
+        background: $primary_brand_button;
+        line-height: 2.7;
+      }
+    }
+
+    .progressbar-container {
+      height: 0.375rem;
+      width: 15.625rem;
+      border-radius: 0;
+      margin-bottom: 2rem;
+
+      .progressbar-progress {
+        border-radius: 0;
+      }
+    }
+
+    .ais-Stats-text {
+      font-size: 0.875rem;
+      letter-spacing: normal;
+    }
+  }
+}

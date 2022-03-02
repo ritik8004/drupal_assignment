@@ -12,10 +12,11 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 $app_id = '6TOQSJY0O6';
 $app_secret_admin = '';
 
-$brands = [
-  'bbwkw',
-  'bbwsa',
-  'bbwae',
+$sites = [
+  'vskw',
+  'vssa',
+  'vsae',
+  'vsqa'
 ];
 
 $envs = [
@@ -31,11 +32,11 @@ global $migrate_index;
 
 // To be set to TRUE when we are moving indices from one Algolia app to
 // another.
-$migrate_index = TRUE;
+$migrate_index = FALSE;
 
 foreach ($envs as $env) {
-  foreach ($brands as $brand) {
-    $prefix = $env . '_' . $brand;
+  foreach ($sites as $site) {
+    $prefix = $env . '_' . $site;
     try {
       algolia_create_index($app_id, $app_secret_admin, NULL, $prefix);
     }
@@ -45,6 +46,8 @@ foreach ($envs as $env) {
     }
   }
 }
+
+exit;
 
 // Settings for live app.
 $app_id_new = '';

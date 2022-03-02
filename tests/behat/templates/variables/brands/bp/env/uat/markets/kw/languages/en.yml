@@ -16,6 +16,7 @@ variables:
   customer_Companion2lastName: 'Schruur'
   customer_Companion2dob: '2030/12/21'
   boots_ar_store_location: 'الرياض'
+  language_spc_knet_option: 'عيديتي [KNET]'
   collection_filter: ''
   sort_filter: 'sort by'
   price_filter: ''

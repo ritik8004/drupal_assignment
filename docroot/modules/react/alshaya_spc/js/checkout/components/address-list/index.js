@@ -14,6 +14,11 @@ import getStringMessage from '../../../utilities/strings';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import Loading from '../../../utilities/loading';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 
 export default class AddressList extends React.Component {
   isComponentMounted = false;
@@ -74,6 +79,18 @@ export default class AddressList extends React.Component {
     }
   };
 
+  /**
+   * Callback to check if we need to open new address modal.
+   * @todo Revisit code to check if Modal(addNewAddress) inside
+   * Modal(hdInfo) scenario can be better implemented.
+   */
+  newAddressButtonRef = (el) => {
+    if (hasValue(el)) {
+      // Manually triggering click on new address button to open the modal.
+      el.click();
+    }
+  }
+
   render() {
     const { addressList } = this.state;
     // If no address list available.
@@ -82,10 +99,25 @@ export default class AddressList extends React.Component {
     }
 
     const {
-      cart, closeModal, headingText, showEditButton, type, formContext, areaUpdated,
+      cart,
+      closeModal,
+      headingText,
+      showEditButton,
+      type,
+      formContext,
+      areaUpdated,
+      isExpressDeliveryAvailable,
     } = this.props;
 
+    const processNewAddressForAddressChange = isExpressDeliveryEnabled() && areaUpdated;
+    const isExpressDeliveryAvailableOnCheckout = isExpressDeliveryEnabled()
+      && areaUpdated
+      && isExpressDeliveryAvailable;
+
     const addressItem = [];
+    // Get Selected Area.
+    const areaSelected = processNewAddressForAddressChange ? getDeliveryAreaStorage() : '';
+    let isAddressSelected = false;
     Object.entries(addressList).forEach(([key, address]) => {
       const addressData = (type === 'billing')
         ? cart.cart.billing_address
@@ -97,6 +129,13 @@ export default class AddressList extends React.Component {
         && addressData.customer_address_id.toString() === address.address_mdc_id) {
         isSelected = true;
       }
+      // Mark address not selected if area is updated
+      if (processNewAddressForAddressChange
+        && areaSelected.area !== 'undefined'
+        && (areaSelected.area !== address.administrative_area)) {
+        isSelected = false;
+      }
+      isAddressSelected = isSelected;
       addressItem.push(
         <AddressItem
           isSelected={isSelected}
@@ -112,12 +151,27 @@ export default class AddressList extends React.Component {
       );
     });
 
+    // Show New Address form on if Area is updated,
+    // And updated area is not available in Address List.
+    let showNewAddressForm = false;
+    showNewAddressForm = (processNewAddressForAddressChange && !isAddressSelected);
+
+    // Get Default Value fromm Form.
     const defaultVal = {
       static: {
         fullname: `${window.drupalSettings.user_name.fname} ${window.drupalSettings.user_name.lname}`,
         telephone: drupalSettings.user_name.mobile,
       },
     };
+    if (showNewAddressForm && areaSelected !== 'undefined') {
+      Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
+        if (val.visible === true) {
+          if (key === 'administrative_area' || key === 'area_parent') {
+            defaultVal[val.key] = areaSelected !== null ? areaSelected.value[val.key] : '';
+          }
+        }
+      });
+    }
 
     return (
       <>
@@ -129,18 +183,36 @@ export default class AddressList extends React.Component {
           <WithModal modalStatusKey="addNewAddress">
             {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
               <>
-                <div className="spc-add-new-address-btn" onClick={() => triggerOpenModal(2)}>
+                <div
+                  className="spc-add-new-address-btn"
+                  onClick={() => triggerOpenModal(2)}
+                  {...(processNewAddressForAddressChange
+                    && showNewAddressForm
+                    && { ref: this.newAddressButtonRef }
+                  )}
+                >
                   {getStringMessage('add_new_address')}
                 </div>
-                <Popup className="spc-address-list-new-address" open={isModalOpen} closeOnDocumentClick={false} closeOnEscape={false}>
+                <Popup
+                  className="spc-address-list-new-address"
+                  open={isModalOpen}
+                  closeOnDocumentClick={false}
+                  closeOnEscape={false}
+                >
                   <AddressForm
                     closeModal={triggerCloseModal}
-                    showEmail={false}
+                    // Show email id field in case of egift card is enabled,
+                    // cart contains only virtual products and anonymous user.
+                    showEmail={
+                      !isUserAuthenticated()
+                      && cartContainsOnlyVirtualProduct(cart.cart)
+                    }
                     show_prefered
                     default_val={defaultVal}
                     headingText={headingText}
                     processAddress={this.processAddress}
                     formContext={formContext}
+                    isExpressDeliveryAvailable={isExpressDeliveryAvailableOnCheckout}
                   />
                 </Popup>
               </>

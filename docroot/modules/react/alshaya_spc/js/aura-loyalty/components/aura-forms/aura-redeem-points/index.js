@@ -1,0 +1,345 @@
+import React from 'react';
+import AuraRedeemPointsTextField from '../aura-redeem-textfield';
+import ConditionalView from '../../../../common/components/conditional-view';
+import {
+  getPointToPrice,
+  showError,
+  removeError,
+} from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import getStringMessage from '../../../../utilities/strings';
+import { redeemAuraPoints, isUnsupportedPaymentMethod } from '../../utilities/checkout_helper';
+import {
+  getUserDetails,
+  getPointToPriceRatio,
+  getAuraConfig,
+} from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import dispatchCustomEvent from '../../../../utilities/events';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { isEgiftCardEnabled } from '../../../../../../js/utilities/util';
+
+class AuraFormRedeemPoints extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      enableSubmit: false,
+      money: null,
+      points: null,
+      auraTransaction: false,
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
+    // Event listener for any change in payment methods section.
+    // On payment method update, we recalculate and prefill redemption section.
+    document.addEventListener('refreshCompletePurchaseSection', this.updatePointsAndMoney, false);
+    // Event listener on delivery information update to remove redeemed points.
+    document.addEventListener('refreshCartOnAddress', this.undoRedeemPoints, false);
+    // Event listener on CnC store selection.
+    document.addEventListener('storeSelected', this.undoRedeemPoints, false);
+    // Event listener on shiping method update to remove redeemed Amount.
+    document.addEventListener('changeShippingMethod', this.undoRedeemPoints);
+
+    const { totals } = this.props;
+
+    // If amount paid with aura is undefined or null, we calculate and
+    // refill redemption input elements and return.
+    if (totals.paidWithAura === undefined || totals.paidWithAura === null) {
+      this.updatePointsAndMoney();
+      return;
+    }
+
+    this.setState({
+      money: totals.paidWithAura,
+      points: Math.round(totals.paidWithAura * getPointToPriceRatio()),
+      auraTransaction: true,
+    });
+    // Add a class for FE purposes.
+    document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
+  }
+
+  // Set points and money in state to prefill redemption input elements.
+  updatePointsAndMoney = () => {
+    removeError('spc-aura-link-api-response-message');
+    const { totals } = this.props;
+
+    // If amount paid with aura is not present in cart totals, we calculate
+    // points and money to refill redemption input elements.
+    if (totals.paidWithAura === undefined || totals.paidWithAura === null) {
+      const pointsToPrefill = this.redemptionLimit();
+
+      if (pointsToPrefill === 0) {
+        return;
+      }
+
+      this.setState({
+        money: getPointToPrice(pointsToPrefill),
+        points: pointsToPrefill,
+        enableSubmit: true,
+      });
+    }
+  }
+
+  // Minimum of total points in user account and order total value
+  // in points is the redemption limit.
+  redemptionLimit = () => {
+    const { totals, pointsInAccount } = this.props;
+    const { base_grand_total: grandTotal } = totals;
+    const grandTotalPoints = Math.round(grandTotal * getPointToPriceRatio());
+
+    const pointsAllowedToRedeem = (pointsInAccount < grandTotalPoints)
+      ? pointsInAccount
+      : grandTotalPoints;
+
+    return pointsAllowedToRedeem;
+  }
+
+  handleRedeemPointsEvent = (data) => {
+    const { stateValues, action } = data.detail;
+
+    if (Object.keys(stateValues).length === 0 || stateValues.error) {
+      showError('spc-aura-link-api-response-message', stateValues.message);
+      // Reset redemption input fields to initial value.
+      this.resetInputs();
+      return;
+    }
+
+    const { totals } = this.props;
+    let cartTotals = totals;
+
+    if (action === 'set points') {
+      // Add aura details in totals.
+      cartTotals = { ...cartTotals, ...stateValues };
+
+      stateValues.auraTransaction = true;
+      // Add a class for FE purposes.
+      document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
+    } else if (action === 'remove points') {
+      // Reset redemption input fields to initial value.
+      this.resetInputs();
+
+      // Remove all aura related keys from totals if present.
+      Object.entries(stateValues).forEach(([key]) => {
+        // Don't remove totalBalancePayable attribute as this will be used in
+        // egift to check remaining balance.
+        if (key !== 'totalBalancePayable') {
+          delete cartTotals[key];
+        } else {
+          cartTotals.totalBalancePayable = stateValues.totalBalancePayable;
+        }
+      });
+
+      // Remove class.
+      document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.remove('redeemed');
+    }
+
+    this.setState({
+      ...stateValues,
+    });
+
+    // Dispatch an event to update totals in cart object.
+    dispatchCustomEvent('updateTotalsInCart', { totals: cartTotals });
+  };
+
+  convertPointsToMoney = (e) => {
+    removeError('spc-aura-link-api-response-message');
+
+    // Disable submit button if no points in input box.
+    if (e.target.value.length < 1) {
+      this.setState({
+        points: null,
+        money: null,
+        enableSubmit: false,
+      });
+      return;
+    }
+
+    // Convert to money.
+    if (e.target.value > 0) {
+      this.setState({
+        points: parseInt(e.target.value, 10),
+        money: getPointToPrice(e.target.value),
+        enableSubmit: true,
+      });
+    }
+  };
+
+  redeemPoints = () => {
+    removeError('spc-aura-link-api-response-message');
+    const { isoCurrencyCode } = getAuraConfig();
+    const { points, money } = this.state;
+    const { cardNumber, totals, pointsInAccount } = this.props;
+
+    if (points === null) {
+      showError('spc-aura-link-api-response-message', getStringMessage('form_error_empty_points'));
+      return;
+    }
+
+    const maxPointsToRedeem = this.redemptionLimit();
+    const {
+      base_grand_total: grandTotal,
+      egiftRedeemedAmount,
+      totalBalancePayable,
+    } = totals;
+
+    const grandTotalPoints = Math.round(grandTotal * getPointToPriceRatio());
+    const balancePayablePoints = totalBalancePayable > 0
+      ? Math.round(totalBalancePayable * getPointToPriceRatio())
+      : null;
+    const pointsInInt = parseInt(points, 10);
+    let errorMsg = '';
+
+    if (pointsInInt > grandTotalPoints) {
+      errorMsg = getStringMessage('points_exceed_order_total');
+      // Check if some amount is already redeemed using egift, if YES then
+      // check if AURA points are equal to the remaining balance.
+    } else if (isEgiftCardEnabled()
+      && hasValue(egiftRedeemedAmount)
+      && egiftRedeemedAmount > 0
+      && ((pointsInInt !== balancePayablePoints))) {
+      errorMsg = Drupal.t('You can only redeem full pending balance or use other payment method.');
+    } else if (pointsInInt > parseInt(pointsInAccount, 10)) {
+      errorMsg = `${getStringMessage('you_can_redeem_maximum')} ${maxPointsToRedeem} ${getStringMessage('points')}`;
+    }
+
+    if (errorMsg !== '') {
+      showError('spc-aura-link-api-response-message', errorMsg);
+      return;
+    }
+
+    // Call API to redeem aura points.
+    const data = {
+      action: 'set points',
+      userId: getUserDetails().id || 0,
+      redeemPoints: points,
+      moneyValue: money,
+      currencyCode: isoCurrencyCode,
+      cardNumber,
+    };
+    showFullScreenLoader();
+    redeemAuraPoints(data);
+  };
+
+  undoRedeemPoints = () => {
+    removeError('spc-aura-link-api-response-message');
+    const { cardNumber } = this.props;
+    // Call API to undo redeem aura points.
+    const data = {
+      action: 'remove points',
+      userId: getUserDetails().id || 0,
+      cardNumber,
+    };
+    showFullScreenLoader();
+    redeemAuraPoints(data);
+  }
+
+  // Reset redemption input fields to initial value.
+  resetInputs = () => {
+    this.setState({
+      auraTransaction: false,
+      enableSubmit: false,
+      points: null,
+      money: null,
+    });
+    // We clear input values from the form elements.
+    const input = document.querySelector('.spc-aura-redeem-points-form-wrapper .form-items input.spc-aura-redeem-field-points');
+    input.value = '';
+  }
+
+  getPointsRedeemedMessage = () => {
+    const {
+      points,
+      money,
+      auraTransaction,
+    } = this.state;
+
+    if (!auraTransaction || points === null || money === null) {
+      return null;
+    }
+
+    return [
+      <span key="points" className="spc-aura-highlight">{`${points} ${getStringMessage('points')}`}</span>,
+      <span key="redeemed" className="spc-aura-redeem-text">{`${getStringMessage('have_been_redeemed')}`}</span>,
+    ];
+  }
+
+  render() {
+    const {
+      enableSubmit,
+      money,
+      points,
+      auraTransaction,
+    } = this.state;
+
+    const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
+    const { totals, paymentMethodInCart, formActive } = this.props;
+    let paymentNotSupported = isUnsupportedPaymentMethod(paymentMethodInCart);
+
+    // Disable Aura payment method if cart contains any virtual product.
+    if (!formActive) {
+      paymentNotSupported = true;
+    }
+
+    return (
+      <div className={paymentNotSupported
+        ? 'spc-aura-redeem-points-form-wrapper in-active'
+        : 'spc-aura-redeem-points-form-wrapper'}
+      >
+        <span className="label">{ getStringMessage('checkout_use_your_points') }</span>
+        <div className="form-items">
+          <div className="inputs">
+            <ConditionalView condition={!auraTransaction}>
+              <AuraRedeemPointsTextField
+                name="spc-aura-redeem-field-points"
+                placeholder="0"
+                onChangeCallback={this.convertPointsToMoney}
+                value={points}
+                disabled={paymentNotSupported}
+              />
+              <span className="spc-aura-redeem-points-separator">=</span>
+              <AuraRedeemPointsTextField
+                name="spc-aura-redeem-field-amount"
+                placeholder={`${currencyCode} 0.000`}
+                money={money}
+                currencyCode={currencyCode}
+                type="money"
+              />
+            </ConditionalView>
+            <ConditionalView condition={auraTransaction}>
+              {this.getPointsRedeemedMessage()}
+            </ConditionalView>
+          </div>
+          <ConditionalView condition={!auraTransaction}>
+            <button
+              type="submit"
+              className="spc-aura-redeem-form-submit spc-aura-button"
+              onClick={() => this.redeemPoints()}
+              disabled={(paymentNotSupported)
+                ? true
+                : !enableSubmit}
+            >
+              { getStringMessage('checkout_use_points') }
+            </button>
+          </ConditionalView>
+          <ConditionalView condition={auraTransaction}>
+            <button
+              type="submit"
+              className="spc-aura-redeem-form-submit spc-aura-button"
+              onClick={() => this.undoRedeemPoints()}
+            >
+              { getStringMessage('remove') }
+            </button>
+          </ConditionalView>
+        </div>
+        <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
+        {totals.balancePayable <= 0
+          && <span id="payment-method-aura_payment" />}
+        {paymentNotSupported && paymentMethodInCart === 'cashondelivery'
+          && <div className="spc-aura-cod-disabled-message">{Drupal.t('Aura points can not be redeemed with cash on delivery.')}</div>}
+      </div>
+    );
+  }
+}
+
+export default AuraFormRedeemPoints;

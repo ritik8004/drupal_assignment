@@ -35,6 +35,10 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
       {% endif %}
 
+      {% if content.tabby %}
+        <div class="tabby"> {{ content.tabby }} </div>
+      {% endif %}
+
         {% if content.promotions %}
           <div class="promotions">
             {{ content.promotions }}
@@ -51,6 +55,11 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
           <span class="field__label">{{ 'Item Code'|t }}:</span>
           <span class="field__value">{{ content.item_code }}</span>
         </div>
+
+        {% if aura_enabled is defined and aura_enabled %}
+          <div id="aura-pdp-modal"></div>
+        {% endif %}
+
       </div>
 
       <div class="content__main {{ image_slider_position_pdp }}">
@@ -58,6 +67,9 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
           {{ content.gallery }}
         {% else %}
           <div id="product-zoom-container"></div>
+        {% endif %}
+        {% if content.wishlist_enabled %}
+          {{ content.wishlist_enabled }}
         {% endif %}
       </div>
 

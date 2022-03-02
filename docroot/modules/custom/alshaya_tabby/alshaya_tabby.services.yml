@@ -1,0 +1,21 @@
+services:
+  cache.tabby:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [ tabby ]
+
+  alshaya_tabby.api_helper:
+    class: Drupal\alshaya_tabby\AlshayaTabbyApiHelper
+    arguments:
+      - '@alshaya_api.api'
+      - '@cache.tabby'
+      - '@logger.factory'
+
+  alshaya_tabby.widget_helper:
+    class: Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper
+    arguments:
+      - '@alshaya_tabby.api_helper'
+      - '@config.factory'
+      - '@logger.factory'

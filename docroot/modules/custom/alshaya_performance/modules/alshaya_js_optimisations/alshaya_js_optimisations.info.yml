@@ -1,0 +1,7 @@
+name: 'Alshaya JavaScript Performance Optimisations'
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+configure: alshaya_js_optimisations.settings
+package: Alshaya Performance
+description: 'Contains all code related to JS performance improvements.'

@@ -7,6 +7,11 @@
     {% else %}
       <div id="product-zoom-container"></div>
     {% endif %}
+    {% if content.wishlist_enabled %}
+    <div class="wishlist-pdp-wrapper mobile-only">
+      {{ content.wishlist_enabled }}
+    </div>
+    {% endif %}
   </div>
 {% endblock %}
 {% block contentSidebar %}
@@ -40,6 +45,10 @@
             <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
+          {% if content.tabby %}
+            <div class="tabby mobile-only-hide"> {{ content.tabby }} </div>
+          {% endif %}
+
           <div class="promotion-discount-wrapper">
             <div class="price--discount discount-{{ content.price_block_identifier }}">
               {% if content.price_block['#discount'] %}
@@ -66,7 +75,7 @@
               </div>
             {% endfor %}
           </div>
-        {% elseif content.same_day_delivery_text and content.delivery_options is not defined and content.delivery_options is not empty %}
+        {% elseif content.same_day_delivery_text and content.delivery_options is empty %}
           <div class="same-day-delivery">
             <div class="same-day-content">
               <p>{{ content.same_day_delivery_text }}</p>
@@ -85,13 +94,32 @@
           </div>
         {% endif %}
 
+        {% if aura_enabled is defined and aura_enabled %}
+          {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+          <div id="aura-pdp"></div>
+        {% endif %}
+
+        {% if content.postpay %}
+          {{ attach_library('alshaya_white_label/postpay-pdp') }}
+          <div class="postpay"> {{ content.postpay }} </div>
+        {% endif %}
+
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
+
+        {% if aura_enabled is defined and aura_enabled %}
+          <div id="aura-pdp"></div>
+        {% endif %}
 
         {% if content.reviews_rating %}
           {{content.reviews_rating}}
         {% endif %}
 
         <div class="basic-details-wrapper">
+          {% if content.tabby %}
+            <div class="tabby mobile-only-show">
+              <div class="tabby-widget" id="tabby-promo-pdp-mobile"></div>
+            </div>
+          {% endif %}
           {{ content.field_skus }}
           <div class="modal-share-this">
             <span class="share-icon">{{  'Share'|t }}</span>
@@ -101,6 +129,11 @@
               {{ content.sharethis }}
             </div>
           </div>
+          {% if content.wishlist_enabled %}
+          <div class="wishlist-pdp-wrapper desktop-only">
+            {{ content.wishlist_enabled }}
+          </div>
+          {% endif %}
           {% if quantity_limit_enabled == true %}
             <div class="order-quantity-limit-message"></div>
           {% endif %}

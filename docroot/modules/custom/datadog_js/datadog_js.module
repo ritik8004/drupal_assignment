@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Module file for DataDogJS.
+ * Module file for Datadog.
  */
 
 use Drupal\Core\Cache\Cache;
@@ -14,7 +14,6 @@ use Drupal\Core\Site\Settings;
  */
 function datadog_js_page_attachments(array &$attachments) {
   $settings = \Drupal::config('datadog_js.settings');
-  $token = $settings->get('token');
 
   $cache_tags = $attachments['#cache']['tags'] ?? [];
   $attachments['#cache']['tags'] = Cache::mergeTags(
@@ -22,8 +21,9 @@ function datadog_js_page_attachments(array &$attachments) {
     $cache_tags
   );
 
-  // Do nothing if token not set.
-  if (empty($token)) {
+  // Ignoring the cross origin script if qparam external is set to 0.
+  $external = \Drupal::request()->get('external');
+  if (isset($external) && $external == 0) {
     return;
   }
 
@@ -34,40 +34,69 @@ function datadog_js_page_attachments(array &$attachments) {
     return;
   }
 
-  $attachments['#attached']['library'][] = 'datadog_js/logger';
-
   global $_acsf_site_name;
+  $site = $settings->get('application');
+  $env = Settings::get('env_name');
 
-  $config = [];
-  $config['clientToken'] = $token;
-  $config['service'] = $_acsf_site_name;
-  $config['env'] = Settings::get('env_name');
+  // Datadog RUM initialisation.
+  $rum_config = [];
+  $rum_token = $settings->get('rum_client_token');
+  $rum_library = $settings->get('rum_library');
+  $rum_app_id = $settings->get('rum_application_id');
 
-  $application = $settings->get('application');
-  if (!empty($application)) {
-    $config['site'] = $application;
+  if (
+    !empty($rum_token) &&
+    !empty($rum_library) &&
+    !empty($rum_app_id)
+  ) {
+    $rum_config['applicationId'] = $rum_app_id;
+    $rum_config['clientToken'] = $rum_token;
+    $rum_config['site'] = $site;
+    $rum_config['service'] = $_acsf_site_name;
+    $rum_config['env'] = $env;
+
+    $attachments['#attached']['html_head'][] = [
+      [
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#value' => Markup::create('!function(h,o,u,n,d){h=h[d]=h[d]||{q:[],onReady:function(c){h.q.push(c)}},(d=o.createElement(u)).async=1,d.src=n,(n=o.getElementsByTagName(u)[0]).parentNode.insertBefore(d,n)}(window,document,"script","' . $rum_library . '","DD_RUM"),DD_RUM.onReady((function(){DD_RUM.init(' . json_encode($rum_config) . ')}));'),
+      ],
+      'datadog_rum',
+    ];
   }
 
-  $init_script = [
-    [
-      '#type' => 'html_tag',
-      '#tag' => 'script',
-      '#value' => Markup::create('window.DD_LOGS && DD_LOGS.init(' . json_encode($config) . ');'),
-    ],
-    'datadog_js_init',
-  ];
+  // Datadog Logs initialisation.
+  $log_config = [];
+  $log_token = $settings->get('token');
+  $log_library = $settings->get('library');
 
-  $library_script = [
-    [
-      '#tag' => 'script',
-      '#attributes' => [
-        'src' => $settings->get('library'),
-        'crossorigin' => TRUE,
+  if (!empty($log_token) && !empty($log_library)) {
+    $log_config['clientToken'] = $log_token;
+    $log_config['site'] = $site;
+    $log_config['service'] = $_acsf_site_name;
+    $log_config['env'] = $env;
+    $log_script = [
+      [
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#attributes' => [
+          'src' => $log_library,
+          'crossorigin' => TRUE,
+        ],
       ],
-    ],
-    'datadog_js_library',
-  ];
+      'datadog_js_library',
+    ];
+    $log_markup = [
+      [
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#value' => Markup::create('window.DD_LOGS && DD_LOGS.init(' . json_encode($log_config) . ');'),
+      ],
+      'datadog_js_init',
+    ];
+    $attachments['#attached']['html_head'][] = $log_script;
+    $attachments['#attached']['html_head'][] = $log_markup;
+    $attachments['#attached']['library'][] = 'datadog_js/logger';
+  }
 
-  array_unshift($attachments['#attached']['html_head'], $init_script);
-  array_unshift($attachments['#attached']['html_head'], $library_script);
 }

@@ -12,12 +12,15 @@
   .attribute-wrapper_size {
     @include breakpoint($only-mobile) {
       float: none;
+    }
+  }
 
-      + .alshaya-select-wrapper {
-        float: none;
-        margin-#{$left}: 0;
-        margin-top: 1.25rem;
-      }
+  .attribute-wrapper + .alshaya-select-wrapper {
+    @include breakpoint($only-mobile) {
+      float: none;
+      margin-#{$left}: 0;
+      margin-top: 1.25rem;
+      width: 5rem;
     }
   }
 }

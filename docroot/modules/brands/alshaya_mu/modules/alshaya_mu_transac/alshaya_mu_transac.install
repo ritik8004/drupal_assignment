@@ -10,6 +10,41 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Override `attribute_weights and sortable_options`.
+ */
+function alshaya_mu_transac_update_8008() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['acq_sku.configurable_form_settings'],
+    'acq_sku'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.9.0] Fix the Cardinality for color field in SKU entity.
+ */
+function alshaya_mu_transac_update_8007() {
+  // It seems the way we handle the fields in acq_sku.base_field_additions,
+  // overrides don't work well for the Cardinality
+  // Cardinality for Color is still set to -1 but it expected to be 1.
+  // Fixing it here.
+  $base_definition = \Drupal::entityDefinitionUpdateManager()->getFieldStorageDefinition('attr_color', 'acq_sku');
+  if ($base_definition->getCardinality() != 1) {
+    $base_definition->setCardinality(1);
+    \Drupal::entityDefinitionUpdateManager()->updateFieldStorageDefinition($base_definition);
+
+    $entity_type = \Drupal::entityTypeManager()->getDefinition('acq_sku');
+    \Drupal::entityDefinitionUpdateManager()->installEntityType($entity_type);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update type string => text_long for spec_en.
  * Migrate existing attribute data to the new ones.
  */
@@ -25,7 +60,8 @@ function alshaya_mu_transac_update_8006() {
 /**
  * Implements hook_update_N().
  *
- * [6.4.0] Add field for new attribute `season_code` and enable `alshaya_product_lpn`.
+ * [6.4.0] Add field for new attribute `season_code` and
+ * enable `alshaya_product_lpn`.
  */
 function alshaya_mu_transac_update_8005() {
   $manager = \Drupal::service('alshaya_config.manager');
@@ -43,7 +79,8 @@ function alshaya_mu_transac_update_8005() {
 /**
  * Implements hook_update_N().
  *
- * Set image_thumb_gallery => false to use single image gallery on listing pages.
+ * Set image_thumb_gallery => false to use single image gallery on
+ * listing pages.
  */
 function alshaya_mu_transac_update_8004() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */

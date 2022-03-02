@@ -1,0 +1,11 @@
+.spc-checkout {
+  .checkout-link {
+    @include breakpoint($only-mobile) {
+      box-shadow: none;
+
+      a {
+        @include button-brand;
+      }
+    }
+  }
+}

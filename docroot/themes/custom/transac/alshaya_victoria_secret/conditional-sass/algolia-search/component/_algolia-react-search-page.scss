@@ -29,6 +29,18 @@
           }
         }
       }
+
+      #attr_product_collection {
+        ul {
+          li.facet-item {
+            &.is-active {
+              .facet-item__value {
+                padding-#{$right}: 1.5rem;
+              }
+            }
+          }
+        }
+      }
     }
 
     .filter__inner {
@@ -65,6 +77,19 @@ html[lang=ar] {
               padding-right: 0.625rem;
             }
           }
+        }
+      }
+    }
+  }
+}
+
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
+  .c-facet {
+    .listing-inline-star {
+      .star-ratings-wrapper {
+        .inline-star {
+          top: 0.375rem;
         }
       }
     }

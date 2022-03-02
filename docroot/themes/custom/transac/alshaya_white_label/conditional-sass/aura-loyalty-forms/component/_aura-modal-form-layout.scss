@@ -1,0 +1,137 @@
+.popup-overlay.aura-modal-form {
+  .popup-content.aura-modal-form {
+    padding: 0 !important;
+    color: $aura-form-otp-text;
+    max-width: 23.4375rem;
+    background: $aura-form-otp-background !important;
+
+    @include breakpoint($only-mobile) {
+      width: 100% !important;
+      max-width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    .aura-modal-header {
+      height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-family: $aura-regular;
+      color: $aura-form-modal-title;
+      background: $aura-form-modal-section-bg;
+      box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.625rem;
+
+      .spc-checkout-section-title {
+        font-family: inherit;
+        font-size: inherit;
+        margin: 0;
+        color: inherit;
+      }
+
+      .close {
+        position: absolute;
+        #{$right}: 0.1875rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        @include icon('close') {
+          font-size: 3rem;
+          width: 3rem;
+          height: 3rem;
+          color: $aura-form-modal-title;
+        }
+      }
+    }
+
+    .aura-modal-form {
+      background: $aura-form-modal-section-bg;
+
+      .aura-modal-form-items {
+        font-family: $aura-regular;
+        text-align: $left;
+        padding: 1.25rem;
+      }
+
+      .aura-modal-form-actions {
+        padding-bottom: 1.5rem;
+        border-top: 0.625rem solid $aura-form-otp-background;
+
+        .aura-modal-form-submit {
+          height: 2.875rem;
+          border-radius: 1.75rem;
+          background-image: $aura-modal-submit;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $aura-form-modal-section-bg;
+          margin: 1.25rem 1.25rem 0;
+          cursor: pointer;
+          font-family: $aura-bold;
+          font-size: 1rem;
+          letter-spacing: 0.71px;
+        }
+      }
+    }
+
+    .aura-guest-user-link-card-otp-form {
+      @include breakpoint($only-mobile) {
+        height: 100%;
+
+        .aura-modal-form {
+          height: calc(100% - 3.5rem);
+        }
+      }
+    }
+  }
+}
+
+.aura-otp-form,
+.aura-new-user-form,
+.aura-guest-user-link-card-otp-form {
+  @include breakpoint($only-mobile) {
+    .aura-modal-form {
+      height: calc(100vh - 3.5rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background: $aura-form-otp-background !important;
+    }
+
+    .aura-modal-form-items,
+    .aura-modal-form-actions {
+      border-top: none;
+      background: $aura-form-modal-section-bg;
+    }
+
+    .aura-form-messages-container:not(:empty) {
+      padding: 0;
+    }
+  }
+}
+
+// iOS - Safari.
+@include breakpoint($only-mobile) {
+  body.aura-enabled.safari {
+    #block-alshayamainmenu.aura-header-modal-open {
+      ul.menu__list.menu--one__list {
+        width: 100vw;
+        top: 0;
+        overflow: auto;
+
+        #aura-mobile-header-shop {
+          .popup-overlay.aura-modal-form {
+            &.otp-modal-overlay {
+              top: 0 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}

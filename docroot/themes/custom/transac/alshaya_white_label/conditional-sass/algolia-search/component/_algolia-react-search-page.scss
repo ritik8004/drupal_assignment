@@ -177,6 +177,8 @@
           }
 
           &.is-active {
+            #{$right}: 0;
+
             .facet-item__value {
               @include icon(checkboxfull) {
                 color: $primary_checkbox_filled;
@@ -240,10 +242,45 @@
       }
 
       ul {
-        .facet-item {
-          .listing-inline-star {
-            .rating-label {
-              width: 17%;
+        .listing-inline-star {
+          .rating-label {
+            width: auto;
+          }
+        }
+      }
+    }
+
+    ul {
+      width: max-content;
+      max-width: 18.75rem;
+
+      li.facet-item {
+        padding-#{$right}: 1.125rem;
+
+        &.is-active {
+          #{$right}: 0 !important;
+        }
+
+        .facet-item__value {
+          align-items: flex-start;
+        }
+
+        .facet-item__label {
+          &::before {
+            min-width: 1.5rem;
+            top: 0.125rem;
+            position: relative;
+          }
+        }
+      }
+    }
+
+    #attr_delivery_ways {
+      ul {
+        li.facet-item {
+          &.is-active {
+            .facet-item__value {
+              padding-#{$right}: 1.5rem;
             }
           }
         }

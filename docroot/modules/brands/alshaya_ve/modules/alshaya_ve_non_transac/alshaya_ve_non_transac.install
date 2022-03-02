@@ -11,6 +11,23 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Updated config changes after upgrade of search api solr.
+ */
+function alshaya_ve_non_transac_update_8004() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'search_api.index.non_transac_acquia_solr_search_index',
+    ],
+    'alshaya_ve_non_transac',
+    'optional',
+    AlshayaConfigManager::MODE_REPLACE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update search placeholder.
  */
 function alshaya_ve_non_transac_update_8003() {
@@ -35,7 +52,10 @@ function alshaya_ve_non_transac_update_8003() {
 function alshaya_ve_non_transac_update_8002() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['search_api.index.non_transac_acquia_solr_search_index', 'views.view.non_transac_acquia_index_search'],
+    [
+      'search_api.index.non_transac_acquia_solr_search_index',
+      'views.view.non_transac_acquia_index_search',
+    ],
     'alshaya_ve_non_transac',
     'optional'
   );
@@ -136,22 +156,6 @@ function alshaya_ve_non_transac_install() {
   if (isset($_ENV['AH_SITE_NAME'])) {
     \Drupal::service('module_installer')->install(['acquia_search']);
   }
-
-  // Save overridden configs.
-  _alshaya_config_save_overridden_configs('alshaya_ve_non_transac');
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs(
-      ['views.view.stores_finder'],
-      'alshaya_ve_non_transac',
-      'override',
-      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
-    );
-
-  // Create secondary menu.
-  alshaya_config_install_configs(['system.menu.secondary-menu', 'block.block.secondarymenu'], 'alshaya_ve_non_transac');
-
-  // Enable customer_support & customer_subscribe block.
-  alshaya_config_install_configs(['block.block.customersubscribe', 'block.block.customersupport'], 'alshaya_ve_non_transac');
 
   // Disable default search.
   \Drupal::service('module_installer')->uninstall(['search']);

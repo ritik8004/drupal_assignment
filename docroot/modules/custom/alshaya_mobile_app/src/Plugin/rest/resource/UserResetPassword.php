@@ -11,7 +11,6 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\user\UserInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
-use http\Exception\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -151,7 +150,8 @@ class UserResetPassword extends ResourceBase {
       || empty($data['timestamp'])
       || empty($data['user_id'])
       || empty($new_password)) {
-      throw new InvalidArgumentException();
+      $this->logger->warning('Data missing for reset password api call. Data received: @data', ['@data' => json_encode($data)]);
+      return $this->mobileAppUtility->sendStatusResponse($this->t('Information missing for required details.'));
     }
 
     $user = $this->entityTypeManager->getStorage('user')->load($data['user_id']);
@@ -221,11 +221,6 @@ class UserResetPassword extends ResourceBase {
   protected function validateNewPassword(UserInterface $user, string $new_password) {
     $errors = [];
 
-    $user_context_values = [];
-    $user_context_values['mail'] = $user->getEmail();
-    $user_context_values['name'] = $user->getAccountName();
-    $user_context_values['uid'] = $user->id();
-
     $policies = $this->getApplicablePolicies($user->getRoles());
 
     /** @var \Drupal\password_policy\Entity\PasswordPolicy $policy */
@@ -236,7 +231,7 @@ class UserResetPassword extends ResourceBase {
         $plugin = $this->passwordPolicyManager->createInstance($constraint['id'], $constraint);
 
         // Execute validation.
-        $validation = $plugin->validate($new_password, $user_context_values);
+        $validation = $plugin->validate($new_password, $user);
         if (!$validation->isValid()) {
           $errors[] = (string) $validation->getErrorMessage();
         }

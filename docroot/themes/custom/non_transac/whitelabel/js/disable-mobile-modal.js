@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   if ($(window).width() < 768) {
     if (navigator.userAgent.match(/Mobi/)) {

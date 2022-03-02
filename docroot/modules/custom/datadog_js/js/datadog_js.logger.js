@@ -1,5 +1,4 @@
 (function (Drupal) {
-  'use strict';
 
   Drupal.logViaDataDog = function (severity, message, context) {
     try {
@@ -12,7 +11,14 @@
 
       context.logSource = 'drupal_module';
 
-      // Get the status from supported list of status of DataDog.
+      // Let other modules alter contexts.
+      document.dispatchEvent(new CustomEvent('dataDogContextAlter', {
+          bubbles: true,
+          detail: context,
+        })
+      );
+
+      // Get the status from supported list of status of Datadog.
       var status = 'debug';
 
       switch (severity) {

@@ -5,127 +5,133 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
+        "php": ">=7.4",
         "acquia/acsf-tools": "dev-10.x-dev",
-        "acquia/blt": "^9.0.0",
+        "acquia/blt": "^11.0.0",
         "acquia/http-hmac-php": "~3.2",
         "acquia/lightning": "~4.1.11",
         "aws/aws-sdk-php": "^3.138",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
         "claviska/jquery-minicolors": "^2.2",
-        "drupal/acquia_connector": "^1.9.0",
-        "drupal/acquia_purge": "^1.0@beta",
+        "drupal/acquia_connector": "^3.0",
+        "drupal/acquia_purge": "^1.1",
+        "drupal/acquia_search": "^3.0",
         "drupal/acsf": "^2.47.0",
-        "drupal/address": "^1.0-rc4",
+        "drupal/address": "^1.9",
+        "drupal/admin_toolbar": "^3.0",
         "drupal/adminimal_theme": "^1.3",
-        "drupal/advagg": "^4.1",
         "drupal/allowed_formats": "^1.1",
-        "drupal/amp": "^1.0",
-        "drupal/amptheme": "^1.0",
+        "drupal/amp": "^3.5",
+        "drupal/amptheme": "^3.0",
         "drupal/autologout": "^1.0",
-        "drupal/back_to_top": "1.x-dev",
-        "drupal/better_exposed_filters": "3.x-dev",
-        "drupal/block_content_machine_name": "^1.5",
+        "drupal/back_to_top": "^1.1",
+        "drupal/better_exposed_filters": "^5.0",
         "drupal/block_field": "^1.0@alpha",
         "drupal/captcha": "^1.0@beta",
         "drupal/change_pwd_page": "^1.0@beta",
         "drupal/ckeditor_font": "^1.0",
-        "drupal/clientside_validation": "^1.0-rc4",
-        "drupal/components": "^1.0",
+        "drupal/clientside_validation": "^3.0@RC",
+        "drupal/cog": "^1.0.0",
+        "drupal/components": "^2.4",
         "drupal/conditional_fields": "^4.0@alpha",
         "drupal/config_rewrite": "^1.4",
+        "drupal/config_update": "^1.7",
         "drupal/core": "^8.8.12",
         "drupal/core-composer-scaffold": "^8.8.10",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
-        "drupal/default_content": "^1.0@alpha",
+        "drupal/default_content": "^2.0@alpha",
         "drupal/email_registration": "^1.0",
-        "drupal/endroid_qr_code": "^1.1",
-        "drupal/external_hreflang": "1.x-dev",
-        "drupal/facets": "1.0-alpha11",
+        "drupal/endroid_qr_code": "^3.0",
+        "drupal/entity_embed": "^1.2",
+        "drupal/external_hreflang": "^1.0",
+        "drupal/facets": "^1.8",
         "drupal/field_group": "^3.0@beta",
         "drupal/form_options_attributes": "^1.0",
-        "drupal/geolocation": "^1.10",
+        "drupal/geolocation": "^1.12",
         "drupal/google_tag": "1.x-dev",
         "drupal/image_style_quality": "1.x-dev",
-        "drupal/imagemagick": "^2.3",
+        "drupal/imagemagick": "^3.2",
         "drupal/jquery_minicolors": "^1.2",
-        "drupal/kashmir": "^1.1",
+        "drupal/kashmir": "^1.11",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/link_attributes": "^1.5",
         "drupal/mailsystem": "^4.1",
-        "drupal/media_entity": "^1.8",
-        "drupal/media_entity_actions": "1.x-dev",
+        "drupal/media_entity_actions": "^2.0@alpha",
+        "drupal/memcache": "^2.3",
         "drupal/memory_limit_policy": "1.x-dev",
         "drupal/menu_admin_per_menu": "^1.0@RC",
         "drupal/menu_item_extras": "^2.15",
         "drupal/menu_link_attributes": "^1.0@beta",
-        "drupal/menu_link_modal": "^1.3",
+        "drupal/menu_link_modal": "^2.0",
         "drupal/metatag": "^1.8",
-        "drupal/migrate_plus": "^2.0",
-        "drupal/migrate_source_csv": "^2.0",
-        "drupal/migrate_tools": "^2.0",
-        "drupal/mimemail": "1.x-dev",
-        "drupal/mobile_app_links": "1.x-dev",
-        "drupal/mobile_number": "^1.0@alpha",
+        "drupal/migrate_plus": "^5.1",
+        "drupal/migrate_source_csv": "^3.4",
+        "drupal/migrate_tools": "^5.0",
+        "drupal/mimemail": "^1.0@alpha",
+        "drupal/mobile_app_links": "^1.2",
+        "drupal/mobile_number": "^2.0@alpha",
         "drupal/paragraphs": "^1.6",
         "drupal/password_policy": "^3.0",
         "drupal/path_redirect_import": "^1.0@beta",
         "drupal/pathauto": "^1.6",
-        "drupal/pcb": "^1.0",
-        "drupal/profile": "^1.0@alpha",
+        "drupal/pcb": "^2.3",
+        "drupal/profile": "^1.3",
         "drupal/queue_unique": "^2.0",
-        "drupal/r4032login": "1.x-dev",
-        "drupal/recaptcha": "^2.3",
+        "drupal/r4032login": "^2.1",
+        "drupal/recaptcha": "^3.0",
         "drupal/redirect": "^1.0@alpha",
         "drupal/replicate": "^1.0",
         "drupal/replicate_ui": "^1.0",
-        "drupal/restrict_role_login_by_ip": "^1.0",
+        "drupal/restrict_role_login_by_ip": "^2.0",
         "drupal/restui": "^1.13",
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
-        "drupal/s3fs": "^3.0@alpha",
+        "drupal/s3fs": "^3.0@beta",
         "drupal/search_api_algolia": "^3.0@beta",
         "drupal/search_api_autocomplete": "^1.0",
-        "drupal/search_api_solr": "^1.0-rc3",
-        "drupal/search_api_solr_multilingual": "^1.0@beta",
-        "drupal/search_api_spellcheck": "dev-8.x-1.x",
-        "drupal/seckit": "^1.2",
-        "drupal/sessions_expire": "1.0.x-dev",
+        "drupal/search_api_solr_multilingual": "^3",
+        "drupal/search_api_spellcheck": "^3.0@beta",
+        "drupal/seckit": "^2.0",
+        "drupal/sessions_expire": "^1.0",
         "drupal/sharethis": "^2.0@beta",
+        "drupal/shield": "^1.0.0",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "^3.2",
         "drupal/sms": "^1.1",
-        "drupal/social_api": "2.x-dev",
-        "drupal/social_auth": "^2.0",
-        "drupal/social_auth_facebook": "^2.0",
-        "drupal/social_auth_google": "^2.0",
+        "drupal/social_api": "^3.0",
+        "drupal/social_auth": "^3.0",
+        "drupal/social_auth_facebook": "^3.0",
+        "drupal/social_auth_google": "^3.0",
         "drupal/stage_file_proxy": "^1.0@RC",
         "drupal/svg_image": "^1.9",
-        "drupal/taxonomy_access_fix": "^2.1",
-        "drupal/taxonomy_term_depth": "^2.0",
-        "drupal/twig_tweak": "^1.8",
+        "drupal/taxonomy_access_fix": "^3.1",
+        "drupal/taxonomy_term_depth": "^2.5",
+        "drupal/twig_tweak": "^2.9",
         "drupal/user_registrationpassword": "^1.0",
         "drupal/video_embed_field": "^2.0",
         "drupal/views_ajax_get": "1.x-dev#3055c44",
         "drupal/views_block_filter_block": "^1.0@beta",
-        "drupal/views_field_view": "1.0-beta2",
+        "drupal/views_field_view": "^1.0@beta",
         "drupal/viewsreference": "^1.0",
-        "drupal/webform": "^5.22",
+        "drupal/webform": "^6.0",
         "drupal/webform_rest": "^2.0",
         "drush/drush": "^9.0.0",
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
-        "jqueryvalidate/jqueryvalidate": "~1.0",
+        "jquery-validation/jquery-validation": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
+        "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "springimport/magento2-api-v1": "^1.0",
-        "symfony/lock": "4.3.*",
-        "php": ">=7.4"
+        "symfony/lock": "4.3.*"
     },
     "require-dev": {
+        "acquia/blt-require-dev": "11.x-dev",
+        "acquia/drupal-spec-tool": "^2.0",
         "drupal/console": "^1.8",
         "drupal/core-dev": "^8.8.11",
-        "drupal/devel": "^2.0.0",
+        "drupal/devel": "^4.1",
         "geerlingguy/drupal-vm": "^5.2.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "mglaman/drupal-check": "^1.1"
@@ -135,10 +141,10 @@
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
-        "jqueryvalidate": {
+        "jquery-validation": {
             "type": "package",
             "package": {
-                "name": "jqueryvalidate/jqueryvalidate",
+                "name": "jquery-validation/jquery-validation",
                 "version": "1.17.0",
                 "type": "drupal-library",
                 "dist": {
@@ -206,43 +212,11 @@
             "drupal/webform": {
                 "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
             },
-            "drupal/search_api_solr": {
-                "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch"
-            },
-            "drupal/search_api_solr_multilingual": {
-                "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
-                "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch",
-                "Disable field type check on Acquia Search": "patches/search_api_solr_multilingual--disable-field-type-check.patch"
-            },
-            "drupal/search_api_spellcheck": {
-                "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
-            },
-            "drupal/acquia_connector": {
-                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2020-05-04/acquia_connector-2871721-29.patch",
-                "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
-            },
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
             },
-            "drupal/facets": {
-                "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
-                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
-                "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
-                "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
-                "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
-                "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
-                "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch",
-                "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch",
-                "CORE-8843 Fixes the issue when li no direct child of ul for facet summary": "patches/facets/custom-fix-li-CORE-8843.patch",
-                "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch",
-                "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
-                "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2020-02-12/3095601-8.patch",
-                "CORE-16705 Resolve undefined index" : "https://www.drupal.org/files/issues/2020-04-15/undefined-index-settings-3127730-1.patch",
-                "CORE-25698 improve performance": "patches/facets/CORE-25698_facets_WidgetPluginBase.patch",
-                "Fix Facets Summary Block Deriver definitions getter": "https://www.drupal.org/files/issues/2018-07-17/facets-summary_block_deriver_fix-2986243-02.patch"
-            },
-            "drupal/better_exposed_filter": {
-                "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
+            "drupal/better_exposed_filters": {
+                "Version 5 should enable jQuery dependencies": "https://www.drupal.org/files/issues/2021-12-24/enable_dependencies-3193305-5.patch"
             },
             "drupal/core": {
                 "Showing taxonomy value in default language only after using in contextual filter in views": "https://www.drupal.org/files/issues/2020-09-26/3084138-16.patch",
@@ -266,23 +240,25 @@
                 "Config set - drush config:set for other than default collections raises exception": "https://www.drupal.org/files/issues/2019-08-20/drush_cset_for_other_than_default_collections-3011276-6.patch",
                 "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
                 "CORE-6691 - Add traces to module handler code": "patches/core/traces_for_module_implements_cache.patch",
-                "CORE-6525 - Add autofix for missing block plugin issue" : "patches/core/autofix-block-plugin-cache-clear-issue.patch",
+                "CORE-6525 - Add autofix for missing block plugin issue": "patches/core/autofix-block-plugin-cache-clear-issue.patch",
                 "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                 "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch",
                 "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
                 "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
                 "CORE-8488 - Add log trace for 500 error" : "patches/core/missing-handler-check-cache.patch",
                 "CORE-24231 - Adding log trace for 500 error on user login page" : "patches/core/traces-for-form-error.patch",
+                "CORE-26181 - Drupal alters SVG fill path with broken base url and breaks SVG CSS": "https://www.drupal.org/files/issues/2020-11-04/2362643-72.patch",
                 "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
                 "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
                 "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch",
                 "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch",
                 "CORE-34870 - Log JS and CSS aggregated files creation": "patches/core/logs_for_aggregated_css_and_js_dump.patch",
-                "Add cache buster to aggregated JS files": "https://git.drupalcode.org/issue/drupal-3243296/-/merge_requests/1.patch?v=1"
+                "Add cache buster to aggregated JS files": "https://git.drupalcode.org/issue/drupal-3243296/-/merge_requests/1.patch?v=1",
+                "Add getoriginal method for languageConfigOverride": "https://www.drupal.org/files/issues/2021-11-10/getOriginal-method-for-languageConfigOverride-3248728-3.patch",
+                "Allow having separate CSS files for RTL": "patches/core/rtl_styles.patch",
+                "Issue 2685749: Add a Machine Name widget to core.": "https://www.drupal.org/files/issues/2020-10-01/2685749-85.patch"
             },
             "drupal/mobile_number": {
-                "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
-                "Fix more notices": "patches/mobile_number/2978729-custom.patch",
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
             },
             "drupal/redirect": {
@@ -292,36 +268,14 @@
                 "Do not add extra cache tags": "https://www.drupal.org/files/issues/2019-09-11/3080626-2.patch",
                 "Avoid initialising subject in ResourceServer constructor": "https://www.drupal.org/files/issues/2019-11-01/3091689-2.patch"
             },
-            "drupal/simple_sitemap": {
-                "Index Sitemap": "https://www.drupal.org/files/issues/2021-09-21/simple_sitemap_index_configuration_settings.patch"
-            },
-            "drupal/password_policy": {
-                "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",
-                "Cron expire date format and timezone is incorrect, leads to infinite password resets.": "https://www.drupal.org/files/issues/cron_expire_date_format-2860671-7.patch",
-                "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2933746-3.patch",
-                "Remove 'bypass password policies' permission": "https://www.drupal.org/files/issues/password_policy-2862906-2.patch"
-            },
             "drupal/change_pwd_page": {
                 "Integration with password_policy": "https://www.drupal.org/files/issues/2933747-4.patch"
-            },
-            "drupal/sharethis": {
-                "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/2018-11-21/an_alter_required_for-2900290-18.patch",
-                "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
-            },
-            "drupal/recaptcha": {
-                "modal support": "https://www.drupal.org/files/issues/2019-04-17/recaptcha-ajax-2493183-172.patch"
             },
             "drupal/wbm2cm": {
                 "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
             },
-            "drupal/media_entity": {
-                "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
-            },
             "drupal/views_infinite_scroll": {
                 "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
-            },
-            "drupal/clientside_validation": {
-                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2019-05-08/cv-validate-ajax-2952233-12.patch"
             },
             "drupal/restrict_role_login_by_ip": {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch",
@@ -338,45 +292,12 @@
             "drupal/purge": {
                 "Port purge_drush commands to Drush 9": "https://www.drupal.org/files/issues/2921309-17-port-purge-drush-9.patch"
             },
-            "drupal/taxonomy_access_fix": {
-                "Admin vocabulary list routes visible": "https://www.drupal.org/files/issues/2018-08-17/incorrect_list_perms-2993452-0.patch"
-            },
-            "drupal/autologout": {
-                "Translate configuration": "https://www.drupal.org/files/issues/2018-08-20/2843675-8-autologout-translate-config.patch"
-            },
             "drupal/entity_reference_revisions": {
                 "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
-            },
-            "drupal/memcache": {
-                "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
             "drupal/pathauto": {
                 "Improvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch",
                 "TypeError: Argument 5 passed to AliasUniquifier::__construct()": "https://www.drupal.org/files/issues/2021-02-15/3131460-15.patch"
-            },
-            "drupal/r4032login": {
-                "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2020-04-27/2941064-38-complete.patch"
-            },
-            "drupal/shield": {
-                "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
-            },
-            "drupal/social_auth": {
-                "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch",
-                "throws Allowed memory size of xxx bytes exhausted": "https://www.drupal.org/files/issues/2020-07-02/3156154-10.patch",
-                "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch",
-                "Creation of an unnecessary cache tag entry for each social auth entity": "https://www.drupal.org/files/issues/2020-11-20/3183636-4.patch"
-            },
-            "drupal/social_auth_google": {
-                "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-05-06/500-error-on-google-auth-3133754-3.patch"
-            },
-            "drupal/social_auth_facebook": {
-                "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-11-23/social_auth_facebook-IdentityProviderException_better_handling-3178401-6.patch"
-            },
-            "sensiolabs-de/deprecation-detector": {
-                "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
-            },
-            "drupal/acquia_purge": {
-                "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2019-07-08/3066449-5.patch"
             },
             "drupal/google_tag": {
                 "Cache content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2020-11-18/3092193-18.patch"
@@ -397,6 +318,27 @@
             },
             "drupal/metatag": {
                 "Metatags' current language through the language manager doesn't work (Decoupled Drupal)": "https://www.drupal.org/files/issues/2021-08-03/metatag-3077442-6.patch"
+            },
+            "drupal/conditional_fields": {
+                "Removing unnecessary module_load_include call": "https://www.drupal.org/files/issues/2021-09-17/Removing_unnecessary_module_load_include_call-change_3236355-1.patch"
+            },
+            "drupal/entity_embed": {
+                "Adding defaultTheme to Test case": "https://www.drupal.org/files/issues/2021-09-21/adding_defultTheme_in_testcase-3238298-1.patch"
+            },
+            "drupal/simple_sitemap": {
+                "Index Sitemap": "https://www.drupal.org/files/issues/2021-09-21/simple_sitemap_index_configuration_settings.patch"
+            },
+            "drupal/password_policy": {
+                "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2022-02-16/change_pwd_page_integration-2933746-10.patch"
+            },
+            "drupal/recaptcha": {
+                "Ajax support / Use behaviors": "https://www.drupal.org/files/issues/2021-06-03/recaptcha-ajax-2493183-225.patch"
+            },
+            "drupal/datalayer": {
+                "Trigger an event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
+            },
+            "drupal/acquia_purge": {
+                "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2022-01-06/3066449-12.patch"
             }
         },
         "installer-paths": {
@@ -430,20 +372,6 @@
                 "type:drupal-drush"
             ]
         },
-        "merge-plugin": {
-            "require": [
-                "blt/composer.required.json",
-                "blt/composer.suggested.json"
-            ],
-            "include": [
-                "blt/composer.overrides.json"
-            ],
-            "merge-extra": true,
-            "merge-extra-deep": true,
-            "merge-scripts": true,
-            "replace": false,
-            "ignore-duplicates": true
-        },
         "installer-types": [
             "bower-asset",
             "npm-asset",
@@ -455,12 +383,25 @@
         },
         "drupal-scaffold": {
             "locations": {
-                "web-root": "docroot/"
+                "web-root": "./docroot"
             },
             "allowed-packages": [
                 "drupal/core"
-            ]
-        }
+            ],
+            "file-mapping": {
+                "[web-root]/sites/default/default.services.yml": {
+                    "mode": "replace",
+                    "path": "docroot/core/assets/scaffold/files/default.services.yml",
+                    "overwrite": false
+                },
+                "[web-root]/sites/default/default.settings.php": {
+                    "mode": "replace",
+                    "path": "docroot/core/assets/scaffold/files/default.settings.php",
+                    "overwrite": false
+                }
+            }
+        },
+        "composer-exit-on-patch-failure": true
     },
     "scripts": {
         "blt-alias": "blt blt:init:shell-alias -y --ansi",
@@ -481,16 +422,16 @@
             "cd docroot && patch -p1 <../patches/development-services-twig.patch"
         ],
         "nuke": [
-            "rm -rf vendor composer.lock",
-            "@composer clearcache",
-            "@composer install"
+            "rm -rf vendor composer.lock docroot/core docroot/modules/contrib docroot/profiles/contrib docroot/themes/contrib",
+            "@composer clearcache --ansi",
+            "@composer install --ansi"
         ],
         "install-phantomjs": [
             "rm -rf vendor/bin/phantomjs",
             "PhantomInstaller\\Installer::installPhantomJS"
         ],
-        "post-install-cmd": [
-            "cd docroot/proxy && composer install"
+        "build-middlewares": [
+            "bash blt/scripts/middleware-build.sh ."
         ]
     },
     "config": {
@@ -499,5 +440,10 @@
         },
         "sort-packages": true,
         "discard-changes": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Alshaya\\": "blt/src/"
+        }
     }
 }

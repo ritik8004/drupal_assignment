@@ -17,6 +17,7 @@ variables:
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
   np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  language_spc_knet_option: 'عيديتي [KNET]'
   np_plp_language_store: 'أبو ظبي'
   create_account: 'create an account'
   sign_in: 'Sign in'

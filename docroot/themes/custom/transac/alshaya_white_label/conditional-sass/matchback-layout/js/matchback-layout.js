@@ -6,7 +6,6 @@
 /* global isRTL */
 
 (function ($, Drupal) {
-  'use strict';
 
   // Matchback slick options
   var optionMatchback = {

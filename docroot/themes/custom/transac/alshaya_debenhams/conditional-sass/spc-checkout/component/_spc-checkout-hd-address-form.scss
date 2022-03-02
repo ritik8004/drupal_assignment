@@ -1,0 +1,16 @@
+.spc-checkout-delivery-information,
+.spc-section-billing-address {
+  .popup-overlay {
+    .popup-content {
+      .spc-deliver-button {
+        @include btn;
+      }
+
+      .spc-address-form-actions {
+        .spc-address-form-submit {
+          @include btn;
+        }
+      }
+    }
+  }
+}

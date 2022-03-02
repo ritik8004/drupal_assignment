@@ -1,0 +1,24 @@
+alshaya_egift_card.settings:
+  type: config_object
+  label: 'Alshaya egift card settings'
+  mapping:
+    egift_card_enabled:
+      type: boolean
+      label: 'Config to enable/disable egift card'
+    payment_methods_not_supported:
+      label: 'Not supported payment methods for eGift cards.'
+      type: sequence
+      sequence:
+        type: string
+    topup_terms_conditions_text:
+      type: text_format
+      label: 'Topup: Terms and conditions block text'
+    textarea_maxlength:
+      type: integer
+      label: 'Maximum length of allowed characters allowed'
+    topup_quote_expiration:
+      type: integer
+      label: 'Expiration time for the topup quote local storage item'
+    allow_saved_credit_cards_for_topup:
+      type: boolean
+      label: 'Allow authenticated user to use saved credit cards.'

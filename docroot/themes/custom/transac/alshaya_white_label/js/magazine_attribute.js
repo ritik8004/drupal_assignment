@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * Js to convert to select2Option to transform into boxes from select list.
@@ -255,7 +254,7 @@
   // then on selection of attribute product should add to basket directly.
   $(document).ajaxComplete(function (event, xhr, settings) {
     if (($(window).width() < 768)
-      && (settings.hasOwnProperty('extraData'))
+      && (typeof settings['extraData'] !== 'undefined')
       && ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))
       && $('body').hasClass('open-tray-without-selection')
     ) {

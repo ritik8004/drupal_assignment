@@ -1,0 +1,48 @@
+.spc-promo-code-block {
+  #promo-code {
+    font-size: 0.875rem;
+    border: 1px solid $spc-promo-code-border !important;
+    font-family: $dh-light;
+    height: 2.625rem;
+    width: calc(100% - 7.25rem);
+
+    .error {
+      border-#{$right}: 0 !important;
+    }
+
+    &::placeholder {
+      color: $spc-promo-code-placeholder-text;
+    }
+  }
+
+  .promo-remove {
+    height: 2.625rem;
+
+    &.active {
+      &::after {
+        color: $spc-promo-code-close-icon;
+        top: 0.3125rem;
+        position: absolute;
+        left: -0.5rem;
+      }
+    }
+  }
+
+  .promo-submit {
+    @include btn;
+
+    width: 6rem;
+    height: 2.625rem;
+    margin-#{$left}: 1rem;
+    vertical-align: middle;
+    padding: 0;
+
+    &:disabled {
+      &:hover {
+        background: $primary_empty_btn;
+        border: 2px solid $primary_empty_btn_border;
+        transition: none;
+      }
+    }
+  }
+}

@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   var group_wrapper;
   var group_anchor_wrapper;
@@ -35,11 +34,9 @@
       }
 
       // Loop through all alternates to add anchor and dropdown for each.
-      for (var i in alternates) {
-        if (alternates.hasOwnProperty(i)) {
-          Drupal.processAlternateForGroupedSelected(that, i, alternates[i]);
-        }
-      }
+      Object.keys(alternates).forEach(function (i) {
+        Drupal.processAlternateForGroupedSelected(that, i, alternates[i]);
+      });
 
       if (typeof group_selected[$(this).attr('name')] !== 'undefined') {
         group_wrapper.find('.' + group_selected[$(this).attr('name')]).addClass('active');

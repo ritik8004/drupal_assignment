@@ -1,0 +1,5 @@
+wishlist_label: 'المنتجات المفضلة'
+email_subject: 'لقد قام صديقك بمشاركة [alshaya_wishlist:wishlist_label] الخاصة به'
+email_template:
+  value: "مرحبا,\r\n\r\nاضغط على الرابط أدناه للتعرف على المنتجات الموجودة في [alshaya_wishlist:wishlist_label] الخاصة بي.\r\n\r\n[alshaya_wishlist:wishlist_share_url]\r\n\r\nمع أطيب التمنيات."
+  format: 'mail_text'

@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.logViaTrackJs = function (message) {
     try {

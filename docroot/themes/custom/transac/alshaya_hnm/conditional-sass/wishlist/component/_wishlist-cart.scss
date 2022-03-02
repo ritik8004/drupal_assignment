@@ -1,0 +1,19 @@
+#spc-cart {
+  .wishlist-popup-container {
+    .wishlist-popup-block {
+      button#wishlist-yes {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    .close-modal {
+      padding: 0.5rem;
+
+      &::before {
+        font-size: 1rem;
+      }
+    }
+  }
+}

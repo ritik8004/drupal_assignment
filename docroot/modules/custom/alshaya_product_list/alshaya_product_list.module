@@ -93,7 +93,17 @@ function alshaya_product_list_acq_sku_base_fields_updated(array $fields, $op = '
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']], $index->status());
+        // Prepare overrides data for the facet.
+        $overrides['name'] = $field['label'];
+
+        // If widget data is present in fields array, include that in overrides
+        // to ensure correct widget information is added while creating facets.
+        if (isset($field['widget'])) {
+          foreach ($field['widget'] as $key => $widget) {
+            $overrides['widget'][$key] = $widget;
+          }
+        }
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, $overrides, $index->status());
       }
       break;
 
@@ -200,20 +210,29 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
     $attribute = 'attr_' . $term_attribute_code;
     $attribute_value = $term->getName();
     try {
-      $properties = [
-        'field_attribute_name' => $attribute,
-        'field_attribute_value' => $attribute_value,
-        'type' => 'product_list',
-      ];
-      $entities = \Drupal::entityTypeManager()->getStorage('node')
-        ->loadByProperties($properties);
-      $node = array_shift($entities);
-      // If node exists, we create or we skip.
+      // Check if node exists with attribute value or its translation.
+      foreach ($term->getTranslationLanguages() as $language) {
+        $term_translation = $term->getTranslation($language->getId());
+        $properties = [
+          'field_attribute_name' => $attribute,
+          'field_attribute_value' => $term_translation->getName(),
+          'type' => 'product_list',
+        ];
+        $entities = \Drupal::entityTypeManager()->getStorage('node')
+          ->loadByProperties($properties);
+        $node = !empty($entities) ? array_shift($entities) : NULL;
+        if ($node instanceof Node) {
+          break;
+        }
+      }
+      // If node does not exists, we create a node.
+      // If node exists, we create the translation node.
+      // If node translation exists, we skip.
       if (!($node instanceof Node)) {
         $node = Node::create([
           // The node entity bundle.
           'type' => 'product_list',
-          'langcode' => 'en',
+          'langcode' => $term->language()->getId(),
           // The user ID.
           'uid' => 1,
           'title' => $attribute_value,
@@ -225,10 +244,11 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
           ],
         ]);
         $node->save();
-
-        // Creating the translation if langcode not passed.
+      }
+      elseif (!($node->hasTranslation($term->language()->getId()))) {
         /** @var \Drupal\node\NodeInterface $node_translation */
-        $node_translation = $node->addTranslation('ar');
+        $node_translation = $node->addTranslation($term->language()->getId());
+        $attribute_value = $term->getName();
         $node_translation->setOwnerId(1);
         $node_translation->setTitle($attribute_value);
         $node_translation->set('field_attribute_name', $attribute);
@@ -290,8 +310,10 @@ function alshaya_product_list_options_list_resource_response_alter(&$data) {
               $lancode = explode('/', $term['url'])[1];
               $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key][$term_key]['lhn_status'] = $mobile_app_utility->getProductListLhnStatus($term['url'], $lancode);
             }
-          } else {
-            // Here $term_list is actually a single term since there is no grouping.
+          }
+          else {
+            // Here $term_list is actually a single term since
+            // there is no grouping.
             $lancode = explode('/', $term_list['url'])[1];
             $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key]['lhn_status'] = $mobile_app_utility->getProductListLhnStatus($term_list['url'], $lancode);
           }
@@ -301,7 +323,7 @@ function alshaya_product_list_options_list_resource_response_alter(&$data) {
     $alshaya_product_list_helper = \Drupal::service('alshaya_product_list.page_helper');
     $vocab_list = $alshaya_product_list_helper->getVocabListLhnBlock();
     $terms = reset($vocab_list);
-    if($terms && $lancode){
+    if ($terms && $lancode) {
       $productCategoryHelper = \Drupal::service('alshaya_acm_product_category.helper');
       $category_tree = $productCategoryHelper->productCategoryBuild('alshaya_product_list_lhn_block', $terms, $lancode, 'product_list');
       $data['lhn_tree'] = $mobile_app_utility->excludeUnusedKeysMobile($category_tree['#lhn_cat_tree']);
@@ -317,7 +339,7 @@ function alshaya_product_list_options_list_resource_response_alter(&$data) {
 /**
  * Implements hook_algolia_react_option_list_information().
  */
-function alshaya_product_list_algolia_react_option_list_information_alter( $query_type, &$page_type, &$page_sub_type) {
+function alshaya_product_list_algolia_react_option_list_information_alter($query_type, &$page_type, &$page_sub_type) {
   if ($query_type === 'optionlist') {
     $page_type = AlshayaAlgoliaReactProductList::PAGE_TYPE;
     $page_sub_type = AlshayaAlgoliaReactProductList::PAGE_SUB_TYPE;

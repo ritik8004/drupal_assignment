@@ -5,4 +5,14 @@
       text-transform: capitalize;
     }
   }
+
+  .product-content {
+    .product-item {
+      .spc-product-attributes {
+        html[lang=ar] & {
+          line-height: normal;
+        }
+      }
+    }
+  }
 }

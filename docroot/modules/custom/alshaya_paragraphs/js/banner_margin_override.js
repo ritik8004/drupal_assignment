@@ -4,8 +4,6 @@
  */
 
  (function ($, Drupal) {
-   'use strict';
-
    Drupal.behaviors.bannerMarginOverride = {
      attach: function (context, settings) {
        $('.node--type-advanced-page .c-promo__item__override', context).once('bannermargin').each(function () {

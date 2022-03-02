@@ -11,6 +11,10 @@ use Drupal\taxonomy\TermInterface;
  * Implements hook_page_attachments().
  */
 function alshaya_dynamic_yield_page_attachments(array &$page) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
   $page['#attached']['library'][] = 'alshaya_dynamic_yield/alshaya_dynamic_yield.product_modal';
 }
 

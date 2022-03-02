@@ -1,0 +1,50 @@
+.product-drawer {
+  &-header-wrapper {
+    label {
+      font-family: $alshaya-thin;
+      font-size: 1.25rem;
+    }
+  }
+
+  &-content-wrapper {
+    .content--item-code {
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .product-details-wrapper {
+      .size-guide-link {
+        font-size: 1rem;
+        text-decoration: underline;
+
+        @include breakpoint($desktop) {
+          top: 0;
+        }
+      }
+    }
+
+    .config-form-addtobag-button {
+      @include button-brand;
+
+      &:hover {
+        background: $primary_brand_button;
+        border: 0;
+      }
+    }
+
+    .pdp-link {
+      a {
+        padding-top: 0.25rem;
+      }
+    }
+
+    .product-title {
+      font-size: 1.5625rem;
+      padding-bottom: 0.25rem;
+    }
+
+    .price {
+      font-size: 1rem;
+    }
+  }
+}

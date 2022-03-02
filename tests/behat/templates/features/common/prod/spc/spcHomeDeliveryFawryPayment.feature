@@ -26,21 +26,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | spc-area-select-selected-city | {region_option} |
-      | spc-area-select-selected      | {city_option}   |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
@@ -75,20 +61,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | spc-area-select-selected-city | {language_region_option} |
-      | spc-area-select-selected      | {language_city_option}   |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
+    And I add the billing address on checkout page
     And I wait 50 seconds
     And I wait for the page to load
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
@@ -124,20 +97,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | spc-area-select-selected-city | {language_region_option} |
-      | spc-area-select-selected      | {language_city_option}   |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    Then I click jQuery "#address-form-action #save-address" element on page
+    And I add the billing address on checkout page
     And I wait 50 seconds
     And I wait for the page to load
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page

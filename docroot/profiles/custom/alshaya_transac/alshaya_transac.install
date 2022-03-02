@@ -17,6 +17,57 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_n().
  *
+ * Uninstall amp contrib and custom modules.
+ */
+function alshaya_transac_update_8138() {
+  // Remove alshaya_amp themes.
+  $theme_handler = \Drupal::service('theme_handler');
+  // Remove alshaya_amp_hnm theme.
+  if ($theme_handler->themeExists('alshaya_amp_hnm')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_hnm']);
+  }
+  // Remove alshaya_amp_mothercare theme.
+  if ($theme_handler->themeExists('alshaya_amp_mothercare')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_mothercare']);
+  }
+  // Remove alshaya_amp_pottery_barn theme.
+  if ($theme_handler->themeExists('alshaya_amp_pottery_barn')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_pottery_barn']);
+  }
+  // Remove alshaya_amp_victoria_secret theme.
+  if ($theme_handler->themeExists('alshaya_amp_victoria_secret')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_victoria_secret']);
+  }
+  // Remove alshaya_amp_white_label theme.
+  if ($theme_handler->themeExists('alshaya_amp_white_label')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_white_label']);
+  }
+  // Remove amptheme theme.
+  if ($theme_handler->themeExists('amptheme')) {
+    \Drupal::service('theme_installer')->uninstall(['amptheme']);
+  }
+  // Remove am contrib and custom modules.
+  $module_handler = \Drupal::service('module_handler');
+  // Remove amp module.
+  if ($module_handler->moduleExists('amp')) {
+    \Drupal::service('module_installer')->uninstall(['amp']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.11.2] Installs alshaya_js_optimisations module if it is not enabled.
+ */
+function alshaya_transac_update_8137() {
+  if (!(\Drupal::moduleHandler()->moduleExists('alshaya_js_optimisations'))) {
+    \Drupal::service('module_installer')->install(['alshaya_js_optimisations']);
+  }
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * [6.4.0] Uninstall redundant drupal core themes.
  */
 function alshaya_transac_update_8136() {
@@ -47,8 +98,7 @@ function alshaya_transac_update_8135() {
  *
  * [6.1.0] Uninstall the unused KNET module and disable the knet plugins.
  */
-function alshaya_transac_update_8134()
-{
+function alshaya_transac_update_8134() {
   // Disabling these modules for transac profile only, as these modules are
   // still in use by some non-transac sites.
   \Drupal::service('module_installer')->uninstall(['alshaya_acm_knet']);
@@ -61,7 +111,7 @@ function alshaya_transac_update_8134()
   $configManager->updateConfigs(
     [
       'rest.resource.knet_finalize_request',
-      'rest.resource.knet_init_request'
+      'rest.resource.knet_init_request',
     ],
     'alshaya_mobile_app',
     'optional'
@@ -149,7 +199,7 @@ function alshaya_transac_update_8129() {
     'block.block.sociallinks',
     'block.block.copyright',
   ];
-  /* @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     $blocks,
@@ -288,7 +338,7 @@ function alshaya_transac_update_8121() {
  * of sort.
  */
 function alshaya_transac_update_8120() {
-  /* @var \Drupal\alshaya_config\AlshayaConfigManager $manager*/
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager*/
   $manager = \Drupal::service('alshaya_config.manager');
   // New category facet/facet_summary for plp.
   $manager->updateConfigs(['facets.facet.category_facet_plp'], 'alshaya_product', 'optional');
@@ -341,7 +391,7 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
   $all_content_region_blocks = \Drupal::entityTypeManager()->getStorage('block')
     ->loadByProperties(['region' => 'content', 'theme' => $active_theme]);
 
-  /* @var \Drupal\facets\FacetInterface[] $facets */
+  /** @var \Drupal\facets\FacetInterface[] $facets */
   $facets = \Drupal::service('facets.manager')->getEnabledFacets();
   $facet_blocks = [];
   if (!empty($facets)) {
@@ -935,6 +985,7 @@ function alshaya_transac_install() {
     'alshaya_spc',
     'alshaya_pdp_layouts',
     'alshaya_acm_dashboard',
+    'datadog_js',
   ];
 
   // Add 10 MB per module we are going to enable above.
@@ -953,7 +1004,10 @@ function alshaya_transac_install() {
   }
 
   // Invoke a hook to let other modules know that profile installation is done.
-  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya_transac', $modules]);
+  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', [
+    'alshaya_transac',
+    $modules,
+  ]);
 
   if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
     // Configure ShareThis defaults.
@@ -992,8 +1046,8 @@ function alshaya_transac_install() {
 
   // Set trigger field value in back_to_top settings.
   \Drupal::configFactory()->getEditable('back_to_top.settings')
-  ->set('back_to_top_button_trigger', 650)
-  ->save();
+    ->set('back_to_top_button_trigger', 650)
+    ->save();
 }
 
 /**

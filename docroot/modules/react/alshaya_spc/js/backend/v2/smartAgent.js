@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 const getAgentDataForExtension = () => {
   try {

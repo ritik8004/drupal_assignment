@@ -1,0 +1,280 @@
+.aura-card-linked-verified-wrapper {
+  // Aura Tier 3 = VIP gradient.
+  &.aura-level-Tier3 {
+    .aura-card-linked-verified-wrapper-content {
+      &::before {
+        background-image: $aura-myaccount-vip;
+
+        html[lang=ar] & {
+          background-image: $aura-myaccount-vip-ar;
+        }
+
+        @include breakpoint($upto-desktop) {
+          background-image: $aura-myaccount-vip-mobile;
+
+          html[lang=ar] & {
+            background-image: $aura-myaccount-vip-mobile-ar;
+          }
+        }
+      }
+
+      &::after {
+        mix-blend-mode: color-dodge;
+      }
+    }
+
+    .aura-user-avatar {
+      &:not(:empty) {
+        background-color: $aura-myaccount-user-dp-vip !important;
+      }
+    }
+  }
+
+  &.aura-level-Tier2 {
+    .aura-card-linked-verified-wrapper-content {
+      &::before {
+        background-image: $aura-myaccount-star;
+
+        html[lang=ar] & {
+          background-image: $aura-myaccount-star-ar;
+        }
+
+        @include breakpoint($upto-desktop) {
+          background-image: $aura-myaccount-star-mobile;
+
+          html[lang=ar] & {
+            background-image: $aura-myaccount-star-mobile-ar;
+          }
+        }
+      }
+
+      &::after {
+        background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop-50.svg');
+        mix-blend-mode: darken;
+
+        @include breakpoint($upto-desktop) {
+          background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile-50.svg');
+        }
+      }
+    }
+
+    .aura-user-avatar {
+      &:not(:empty) {
+        background-color: $aura-myaccount-user-dp-star !important;
+      }
+    }
+  }
+
+  .aura-card-linked-verified-wrapper-content {
+    position: relative;
+    border-radius: 0.625rem;
+
+    &::after {
+      content: '';
+      background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop.svg');
+      background-repeat: no-repeat;
+      background-size: 27.9375rem;
+      background-position: -10.625rem -8.125rem;
+      position: absolute;
+      top: 0;
+      #{$left}: 0;
+      width: 21.875rem;
+      height: 100%;
+      z-index: -1;
+
+      html[lang=ar] & {
+        transform: scaleX(-1);
+      }
+
+      @include breakpoint($upto-desktop) {
+        background-size: 28.125rem;
+        background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile.svg');
+        background-position-y: -8.1875rem;
+        background-position-x: calc(50% - 3rem);
+        width: 100%;
+        height: 100%;
+        #{$left}: 50%;
+        transform: translateX(-50%);
+
+        html[lang=ar] & {
+          transform: translateX(50%) scaleX(-1);
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      height: 12.5625rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      padding: 3.125rem 0;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      #{$left}: 0;
+      width: 100%;
+      height: 100%;
+      background-image: $aura-loyalty-club-verified-user;
+      border-radius: 0.625rem;
+      z-index: -1;
+
+      html[lang=ar] & {
+        background-image: $aura-loyalty-club-verified-user-ar;
+      }
+
+      @include breakpoint($upto-desktop) {
+        background-image: $aura-loyalty-club-verified-user-mobile;
+
+        html[lang=ar] & {
+          background-image: $aura-loyalty-club-verified-user-mobile-ar;
+        }
+      }
+    }
+  }
+
+  .aura-card-linked-verified-description {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding-#{$right}: 3.125rem;
+    padding-top: 4rem;
+    font-family: $aura-regular;
+
+    @include breakpoint($upto-desktop) {
+      padding: 0;
+      flex-direction: column;
+
+      > div {
+        margin-#{$left}: 0;
+        margin-top: 1.25rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      > div:not(:first-child) {
+        margin-#{$left}: 1.25rem;
+      }
+    }
+
+    .aura-tier,
+    .aura-points,
+    .aura-points-on-hold {
+      text-align: center;
+
+      label {
+        color: $aura-loyalty-club-verified-user-banner-text;
+        font-size: 0.875rem;
+        display: block;
+        margin-bottom: 0.625rem;
+      }
+
+      .aura-blend {
+        font-family: $aura-bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 9.375rem;
+        height: 2.875rem;
+        position: relative;
+        color: $aura-loyalty-club-verified-user-banner-text;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          opacity: 0.2;
+          mix-blend-mode: screen;
+          border-radius: 1.75rem;
+          background-color: $aura-loyalty-club-verified-user-blend;
+        }
+      }
+    }
+  }
+
+  .aura-logo {
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    top: 3.125rem;
+    #{$left}: 3.125rem;
+
+    @include breakpoint($upto-desktop) {
+      flex-direction: column;
+      position: relative;
+      top: 0;
+      #{$left}: 0;
+    }
+
+    .aura-user-avatar {
+      &:not(:empty) {
+        border: solid 2px $aura-loyalty-user-avatar-text;
+        background-color: $aura-loyalty-user-avatar-bg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $aura-loyalty-user-avatar-text;
+        font-size: 2.875rem;
+        font-family: $aura-regular;
+        width: 6.3125rem;
+        height: 6.3125rem;
+        border-radius: 50%;
+
+        @include breakpoint($upto-desktop) {
+          margin-bottom: 1.25rem;
+        }
+      }
+
+      &:empty {
+        @include breakpoint($desktop) {
+          height: 6.3125rem;
+        }
+      }
+    }
+
+    .aura-user-name {
+      font-size: 1.625rem;
+      font-family: $aura-bold;
+      color: $aura-loyalty-club-verified-user-banner-text;
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: 1.875rem;
+      }
+
+      .aura-card-number {
+        font-size: 1rem;
+        font-family: $aura-regular;
+        display: flex;
+        flex-direction: column;
+
+        input:disabled {
+          padding: 0;
+          background: none;
+          border: none;
+          width: 9.5625rem;
+
+          @include force-ltr;
+        }
+      }
+
+      @include breakpoint($upto-desktop) {
+        text-align: center;
+
+        .aura-card-number {
+          flex-direction: row;
+
+          > span:first-child {
+            margin-#{$right}: 0.625rem;
+          }
+        }
+      }
+    }
+  }
+}

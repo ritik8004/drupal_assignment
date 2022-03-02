@@ -96,6 +96,7 @@ export default class SofaSectionalForm extends React.Component {
     const { sku, formAttributeValues } = this.state;
     const { productInfo, configurableCombinations } = drupalSettings;
     const combinationsHierarchy = configurableCombinations[sku].combinations;
+    const { configurables } = configurableCombinations[sku];
 
     // Update the attribute value in this temporary array.
     formAttributeValues[attributeName] = attributeValue.toString();
@@ -116,6 +117,16 @@ export default class SofaSectionalForm extends React.Component {
     // cup_size still says selected as c. But it's not available
     // for 32 and hence we need to update the selected combination.
     Object.keys(formAttributeValues).forEach((attribute) => {
+      // Assign the first available child selection to respective filter.
+      // Example:
+      // parent = size:13  child = color=[red, blue]
+      // Blue will be selected.
+      // parents of the changed filters will remain as same.
+      if (typeof attributesAndValues[attribute] !== 'undefined'
+        && attribute !== attributeName) {
+        formAttributeValues[attribute] = configurables[attribute].values[0].value_id;
+      }
+
       if (typeof attributesAndValues[attribute] !== 'undefined'
         && !attributesAndValues[attribute].includes(formAttributeValues[attribute])) {
         [formAttributeValues[attribute]] = attributesAndValues[attribute];

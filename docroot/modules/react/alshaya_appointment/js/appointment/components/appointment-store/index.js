@@ -4,7 +4,6 @@ import _findIndex from 'lodash/findIndex';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import StoreList from './components/store-list';
 import { getLocationAccess } from '../../../utilities/helper';
-import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import Loading from '../../../utilities/loading';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
@@ -25,7 +24,7 @@ import AppointmentSelection from '../appointment-selection';
 import ConditionalView from '../../../common/components/conditional-view';
 
 const StoreMap = React.lazy(async () => {
-  const localStorageValues = getStorageInfo();
+  const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
   window.fetchStore = (localStorageValues.storeList && localStorageValues.storeList.length !== 0) ? 'finished' : window.fetchStore;
 
   // Wait for fetchstore request to finish, before
@@ -54,7 +53,7 @@ export default class AppointmentStore extends React.Component {
     this.searchplaceInput = null;
     this.nearMeBtn = null;
     const { openSelectedStore } = this.props;
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = Drupal.getItemFromLocalStorage('appointment_data');
 
     if (localStorageValues) {
       const { latitude, longitude } = drupalSettings.alshaya_appointment.store_finder;
@@ -169,10 +168,14 @@ export default class AppointmentStore extends React.Component {
     this.setState({
       selectedStoreItem: store,
     });
-    // Save selected store in localStorage.
-    const localStorage = getStorageInfo();
-    localStorage.selectedStoreItem = store;
-    setStorageInfo(localStorage);
+    // Save selected store in local storage.
+    const appointmentData = Drupal.getItemFromLocalStorage('appointment_data');
+    appointmentData.selectedStoreItem = store;
+    Drupal.addItemInLocalStorage(
+      'appointment_data',
+      appointmentData,
+      drupalSettings.alshaya_appointment.local_storage_expire * 60,
+    );
 
     // Update step.
     const { handleSubmit } = this.props;
@@ -186,11 +189,15 @@ export default class AppointmentStore extends React.Component {
       storeList,
       locationAccess: (accessStatus !== null) ? accessStatus : prevState.locationAccess,
     }));
-    // Update localStorage.
-    const localStorage = getStorageInfo();
-    localStorage.refCoords = refCoords;
-    localStorage.storeList = storeList;
-    setStorageInfo(localStorage);
+    // Update local storage.
+    const appointmentData = Drupal.getItemFromLocalStorage('appointment_data');
+    appointmentData.refCoords = refCoords;
+    appointmentData.storeList = storeList;
+    Drupal.addItemInLocalStorage(
+      'appointment_data',
+      appointmentData,
+      drupalSettings.alshaya_appointment.local_storage_expire * 60,
+    );
   }
 
   showOutsideCountryError = (status) => {

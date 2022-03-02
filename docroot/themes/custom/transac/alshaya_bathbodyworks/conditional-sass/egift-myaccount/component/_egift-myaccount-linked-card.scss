@@ -1,0 +1,24 @@
+.egift-card-linked-wrapper {
+  .egift-unlink-card-confirm-overlay {
+    .egift-unlink-card-confirm-content {
+      button.egift-card-remove-confirm-yes,
+      button.egift-card-remove-confirm-no {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .egift-card-linked-wrapper-bottom {
+    .egift-linked-card-number-wrapper {
+      .egift-linked-card-number-value {
+        min-width: 9rem;
+      }
+    }
+  }
+}
+
+.egift-my-account {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 2.5625rem;
+  }
+}

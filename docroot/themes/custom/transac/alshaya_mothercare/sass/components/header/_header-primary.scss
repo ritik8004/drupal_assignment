@@ -15,4 +15,40 @@
       }
     }
   }
+
+  .block-system-branding-block {
+    .site-brand-home {
+      .logo {
+        img {
+          width: 9.85rem;
+          height: 1.5rem;
+
+          @include breakpoint($tablet) {
+            width: 13rem;
+            height: 1.98rem;
+          }
+
+          @include breakpoint($desktop) {
+            width: 15.57rem;
+            height: 2.37rem;
+          }
+
+          html[lang="ar"] & {
+            width: 8.13rem;
+            height: 2.54rem;
+
+            @include breakpoint($tablet) {
+              width: 11.94rem;
+              height: 3.75rem;
+            }
+
+            @include breakpoint($desktop) {
+              width: 12.94rem;
+              height: 4.05rem;
+            }
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,0 +1,38 @@
+.user__order--detail.recent__orders--list {
+  .order-total-column {
+    padding-#{$left}: 0;
+
+    .order-total-wrapper {
+      float: $left;
+    }
+
+    .aura-points {
+      float: $left;
+      display: inline-block;
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 3rem;
+      }
+
+      .points-earned,
+      .points-redeemed {
+        font-size: 0.75rem;
+
+        span:first-child {
+          min-width: 6rem;
+          display: inline-block;
+          line-height: 1.4;
+          margin-#{$right}: 1.125rem;
+        }
+      }
+    }
+
+    &.toggle--icon .icon-ic_chevrondown {
+      #{$right}: 0.25rem;
+    }
+
+    &.toggle--icon.has-aura-points {
+      width: 38%;
+    }
+  }
+}

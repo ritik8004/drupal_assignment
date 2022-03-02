@@ -59,7 +59,8 @@ class CompleteBenefitPayPayment extends React.Component {
     if (!scriptExists) {
       const inAppScript = document.createElement('script');
       inAppScript.async = true;
-      inAppScript.src = '/modules/react/alshaya_spc/assets/js/benefit_pay_in_app.min.js';
+      const { environment } = drupalSettings.order_details.payment;
+      inAppScript.src = `/modules/react/alshaya_spc/assets/js/${environment}/benefit_pay_in_app.min.js`;
       inAppScript.id = 'benefit-pay-in-app';
       document.body.appendChild(inAppScript);
       inAppScript.onload = () => {
@@ -67,7 +68,7 @@ class CompleteBenefitPayPayment extends React.Component {
         // We only want to auto open payment modal once so checking
         // `benefit_pay_modal_auto_opened` from storage to check if this is user's
         // first visit of confirmation page or user is reloading the page.
-        if (typeof window.InApp !== 'undefined' && !localStorage.getItem('benefit_pay_modal_auto_opened')) {
+        if (typeof window.InApp !== 'undefined' && !Drupal.getItemFromLocalStorage('benefit_pay_modal_auto_opened')) {
           this.openInAppModal();
         }
       };
@@ -85,7 +86,7 @@ class CompleteBenefitPayPayment extends React.Component {
       this.errorCallback,
     );
     // Save that benefit pay modal was auto opened once.
-    localStorage.setItem('benefit_pay_modal_auto_opened', true);
+    Drupal.addItemInLocalStorage('benefit_pay_modal_auto_opened', true);
   }
 
   render() {
