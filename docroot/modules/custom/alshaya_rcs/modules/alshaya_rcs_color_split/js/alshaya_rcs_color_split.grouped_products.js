@@ -18,14 +18,17 @@
 
   // Add the styled products.
   RcsEventManager.addListener('rcsUpdateResults', function getProductsInStyle(e) {
-    // Return if result is empty.
-    if (!Drupal.hasValue(e.detail.result)
-      || !Drupal.hasValue(e.detail.result.style_code)) {
+
+    var mainProduct = {};
+    if (Drupal.hasValue(e.detail.result) && Drupal.hasValue(e.detail.result.style_code)) {
+      mainProduct = e.detail.result;
+    }
+    if (Drupal.hasValue(e.detail.result[0]) && Drupal.hasValue(e.detail.result[0].style_code)) {
+      mainProduct = e.detail.result[0];
+    }
+    if (!mainProduct) {
       return;
     }
-
-    // The original object will also be modified in this process.
-    var mainProduct = e.detail.result;
 
     // Get the products with the same style.
     var styleProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('products-in-style', { styleCode: mainProduct.style_code });

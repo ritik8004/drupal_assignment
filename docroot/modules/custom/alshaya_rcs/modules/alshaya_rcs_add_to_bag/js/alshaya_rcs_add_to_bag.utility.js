@@ -1,4 +1,5 @@
 (function (Drupal) {
+  window.commerceBackend = window.commerceBackend || {};
 
    /**
    * Return product info from backend.
@@ -111,11 +112,13 @@
     // Set configurable attributes.
     productInfo.configurable_attributes = [];
     product.configurable_options.forEach(function (option) {
+      let attribute_id = parseInt(atob(option.attribute_uid), 10);
       productInfo.configurable_attributes[option.attribute_code] = {
-        id: parseInt(atob(option.attribute_uid), 10),
+        id: attribute_id,
         label: option.label,
         position: option.position,
         is_swatch: false,
+        is_pseudo_attribute: (attribute_id === drupalSettings.psudo_attribute) ? true : false,
         values: option.values.map(function (option_value) {
           return {
             label: option_value.store_label,
