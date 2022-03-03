@@ -22,5 +22,8 @@
       "Alshaya\\BehatContexts\\": "src/bootstrap/Drupal",
       "Alshaya\\BehatBuild\\": "src/Process"
     }
+  },
+  "require": {
+    "dennisdigital/behat-gtm": "dev-master"
   }
 }
