@@ -1331,13 +1331,20 @@
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
         detail: {
-          actionField: {
-            list: product.list
-          },
           products: [product]
         }
       }
     };
+
+    // Adding PLP specific GTM list attribute.
+    if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1) {
+      data.ecommerce.detail = {
+        actionField: {
+          list: product.list
+        },
+        ...data.ecommerce.detail
+      };
+    }
 
     dataLayer.push(data);
   }
