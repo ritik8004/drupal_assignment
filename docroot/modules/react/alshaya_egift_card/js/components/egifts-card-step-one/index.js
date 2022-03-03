@@ -49,7 +49,8 @@ export default class EgiftCardsListStepOne extends React.Component {
 
     // Remove readonly from open amount field.
     if (this.ref.current !== null) {
-      this.ref.current.removeAttribute('readOnly');
+      this.ref.current.querySelector('input').removeAttribute('readOnly');
+      this.ref.current.querySelector('button').disabled = true;
     }
 
     // Get all egift card items.
