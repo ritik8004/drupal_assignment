@@ -689,6 +689,16 @@ rcs-algolia-plp:
     theme:
       css/conditional-sass/rcs-algolia-plp/rcs-algolia-plp.ltr.css: {}
 
+rcs-order-listing:
+  css:
+    theme:
+      css/conditional-sass/rcs-order-listing/rcs-order-listing.ltr.css: {}
+
+rcs-order-details:
+  css:
+    theme:
+      css/conditional-sass/rcs-order-details/rcs-order-details.ltr.css: {}
+
 country-switcher:
   css:
     theme:
