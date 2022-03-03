@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a 'Olapic Block' Block.
@@ -195,6 +196,30 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
         ],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    $cache_tags = parent::getCacheTags();
+    // Rebuild olapic block when PDP page changes.
+    if ($node = $this->routeMatch->getParameter('node') && $node instanceof NodeInterface
+      && $node->bundle() === 'acq_product') {
+      $cache_tags = Cache::mergeTags(parent::getCacheTags(), ['node:' . $node->id()]);
+    }
+
+    return $cache_tags;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    // Vary based on route.
+    return Cache::mergeContexts(parent::getCacheContexts(), [
+      'route',
+    ]);
   }
 
 }
