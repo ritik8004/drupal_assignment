@@ -1,6 +1,6 @@
 # INTRODUCTION
 Purpose of this module is to allow tracking JS errors via
-DataDog service.
+Datadog service.
 
 * Project page: coming soon
 

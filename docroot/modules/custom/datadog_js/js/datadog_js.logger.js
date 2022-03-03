@@ -1,5 +1,4 @@
 (function (Drupal) {
-  'use strict';
 
   Drupal.logViaDataDog = function (severity, message, context) {
     try {
@@ -19,7 +18,7 @@
         })
       );
 
-      // Get the status from supported list of status of DataDog.
+      // Get the status from supported list of status of Datadog.
       var status = 'debug';
 
       switch (severity) {

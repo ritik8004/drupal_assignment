@@ -4,7 +4,6 @@
  */
 
 (function () {
-  'use strict';
 
   var BrowserDetect = {
     init: function () {

@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.privilege_card_number = {
     attach: function (context, settings) {
@@ -106,7 +105,7 @@
               collapsible: true,
               active: active
             });
-          });
+          }});
         };
 
         $.fn.cartladdastop = function (element) {
