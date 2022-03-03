@@ -2401,14 +2401,9 @@ class SkuManager {
         // option data using that. For example `color_label` attribute code is
         // used for `article_castor_id` attribute code and we will found that
         // attribute only in configurable_attributes array of product_tree.
-        if (!empty($configurableFieldReplacements)
-          && isset($configurableFieldReplacements[$code])) {
-          $raw_options = $this->getConfigurableRawAttributesData($sku, $configurableFieldReplacements[$code]['display_configurable_for']);
-        }
-        else {
-          // Else we will use the actual attribute code to get the options data.
-          $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
-        }
+        $code = !empty($configurableFieldReplacements)
+          && isset($configurableFieldReplacements[$code]) ? $configurableFieldReplacements[$code]['display_configurable_for'] : $code;
+        $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
 
         $configurableFieldValues[$fieldKey] = [
           'attribute_id' => $fieldKey,
