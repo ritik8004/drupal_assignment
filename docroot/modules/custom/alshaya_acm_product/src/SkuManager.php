@@ -2396,7 +2396,19 @@ class SkuManager {
         }
 
         // Get raw attributes values for configurable options.
-        $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
+        // Check if this attribute code is replaced earlier and fetch the actual
+        // attribute code from `display_configurable_for` field and get the raw
+        // option data using that. For example `color_label` attribute code is
+        // used for `article_castor_id` attribute code and we will found that
+        // attribute only in configurable_attributes array of product_tree.
+        if (!empty($configurableFieldReplacements)
+          && isset($configurableFieldReplacements[$code])) {
+          $raw_options = $this->getConfigurableRawAttributesData($sku, $configurableFieldReplacements[$code]['display_configurable_for']);
+        }
+        else {
+          // Else we will use the actual attribute code to get the options data.
+          $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
+        }
 
         $configurableFieldValues[$fieldKey] = [
           'attribute_id' => $fieldKey,
