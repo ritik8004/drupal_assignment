@@ -1055,37 +1055,63 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
     value: drupalSettings.country_code,
     condition_type: 'eq',
   };
-
   filters.push(countryFilters);
+
+  // @todo Create config if required.
+  const pageSize = 1000;
+
+  let currentPage = 1;
+  let responseData = [];
+  let noOfPages = '';
+  const preparedFilterData = prepareFilterData(filters);
+
+  // Filter page size.
+  preparedFilterData['searchCriteria[page_size]'] = pageSize;
+
   const url = '/V1/deliverymatrix/address-locations/search';
 
-  try {
-    // Associate cart to customer.
-    const response = await callMagentoApi(url, 'GET', prepareFilterData(filters));
+  do {
+    // Filter current page.
+    preparedFilterData['searchCriteria[current_page]'] = currentPage;
 
-    if (hasValue(response.data.error) && response.data.error) {
-      logger.error('Error in getting shipping methods for cart. Error: @message', {
-        '@message': response.data.error_message,
+    try {
+      // Get locations for delivery matrix.
+      const response = await callMagentoApi(url, 'GET', preparedFilterData);
+
+      if (hasValue(response.data.error) && response.data.error) {
+        logger.error('Error in getting locations for delivery matrix. Error: @message', {
+          '@message': response.data.error_message,
+        });
+
+        return getFormattedError(response.data.error_code, response.data.error_message);
+      }
+
+      if (!hasValue(response.data)) {
+        const message = 'Got empty response while getting locations for delivery matrix.';
+        logger.notice(message);
+
+        return getFormattedError(600, message);
+      }
+
+      if (!hasValue(responseData)) {
+        responseData = response.data;
+      } else {
+        // Merging response items from all the pages of the API call.
+        responseData.items = [...responseData.items, ...response.data.items];
+      }
+
+      noOfPages = hasValue(noOfPages)
+        ? noOfPages
+        : Math.ceil(response.data.total_count / pageSize);
+      currentPage += 1;
+    } catch (error) {
+      logger.error('Error occurred while fetching governates data. Message: @message.', {
+        '@message': error.message,
       });
-
-      return getFormattedError(response.data.error_code, response.data.error_message);
     }
+  } while (currentPage <= noOfPages);
 
-    if (!hasValue(response.data)) {
-      const message = 'Got empty response while getting shipping methods.';
-      logger.notice(message);
-
-      return getFormattedError(600, message);
-    }
-
-    return response.data;
-  } catch (error) {
-    logger.error('Error occurred while fetching governates data. Message: @message.', {
-      '@message': error.message,
-    });
-  }
-
-  return null;
+  return responseData;
 };
 
 /**

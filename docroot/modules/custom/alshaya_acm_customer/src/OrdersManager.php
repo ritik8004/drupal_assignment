@@ -234,7 +234,7 @@ class OrdersManager {
       $query = $this->getOrdersQuery('customer_id', $customer_id);
 
       // @todo Create config if required.
-      $page_size = 10;
+      $page_size = 100;
 
       // Query page size.
       $query['searchCriteria']['pageSize'] = $page_size;

@@ -317,7 +317,7 @@ class AlshayaApiWrapper {
     ];
 
     // @todo Create config if required.
-    $page_size = 10;
+    $page_size = 1000;
 
     // Filter page size.
     $filters['page_size'] = $page_size;
@@ -692,7 +692,7 @@ class AlshayaApiWrapper {
     ];
 
     // @todo Create config if required.
-    $page_size = 10;
+    $page_size = 1000;
 
     // Filter page size.
     $filters['page_size'] = $page_size;
@@ -727,11 +727,13 @@ class AlshayaApiWrapper {
     $all_items = [];
 
     do {
+      // If filters are present then prepare filter url.
       if ($filters) {
         $filters['current_page'] = $current_page++;
         $endpoint .= $this->prepareFilterUrl($filters);
       }
 
+      // If data is present, add current page number to it.
       if ($data) {
         $data['searchCriteria']['current_page'] = $current_page++;
       }
@@ -741,6 +743,7 @@ class AlshayaApiWrapper {
       if ($response && is_string($response)) {
         $response_array = json_decode($response, TRUE);
 
+        // Merging response items from all the pages of the API call.
         if ($response_array && is_array($response_array) && !empty($response_array['items'])) {
           $all_items['items'] = array_merge($all_items['items'] ?? [], $response_array['items']);
         }
