@@ -124,8 +124,6 @@ class AlshayaRcsProductHelper {
 
     $nodes = $query->distinct()->execute()->fetchAll();
 
-    print_r($nodes);
-
     // Do not process if no nodes are found.
     if (empty($nodes)) {
       return;
@@ -153,19 +151,28 @@ class AlshayaRcsProductHelper {
 
         $rcs_node->get('field_product_slug')->setValue($slug);
 
-        // Save the new node object in rcs content type.
-        $rcs_node->save();
-
         // Check if the translations exists for arabic language.
         $languages = $node_data->getTranslationLanguages(FALSE);
         foreach ($languages as $language) {
+          if (!$node_data->hasTranslation($language->getId())) {
+            continue;
+          }
+
           // Get node translation.
           $node_translation_data = $node_data->getTranslation($language->getId());
 
           // Add translation to the new node.
-          $rcs_node = $rcs_node->addTranslation($language->getId(), ['title' => $node_translation_data->getTitle()]);
-          $rcs_node->save();
+          $rcs_node = $rcs_node->addTranslation($language->getId(), [
+            'title' => $node_translation_data->getTitle(),
+            'field_select_pdp_layout' => $node_translation_data->get('field_select_pdp_layout')->getValue(),
+          ]);
         }
+
+        // Delete product node.
+        $node_data->delete();
+
+        // Save the new node object in rcs content type.
+        $rcs_node->save();
       }
       catch (\Exception $exception) {
         $this->logger->error('Error while migrating nodes to RCS content type. message:@message', [
