@@ -30,7 +30,7 @@ export function getUserBazaarVoiceSettings() {
 export function getUserDetails(productId = undefined) {
   const settings = {};
 
-  if (drupalSettings.bazaarvoiceUserDetails !== undefined) {
+  if (productId !== '' && drupalSettings.bazaarvoiceUserDetails !== undefined) {
     settings.user = drupalSettings.bazaarvoiceUserDetails;
     if (productId !== undefined && Object.keys(drupalSettings.productInfo[productId]).length > 0) {
       settings.productReview = drupalSettings.productInfo[productId].productReview;
