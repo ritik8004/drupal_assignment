@@ -204,8 +204,7 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
   public function getCacheTags() {
     $cache_tags = parent::getCacheTags();
     // Rebuild olapic block when PDP page changes.
-    if ($node = $this->routeMatch->getParameter('node') && $node instanceof NodeInterface
-      && $node->bundle() === 'acq_product') {
+    if ($node = $this->routeMatch->getParameter('node') && $node instanceof NodeInterface) {
       $cache_tags = Cache::mergeTags(parent::getCacheTags(), ['node:' . $node->id()]);
     }
 
