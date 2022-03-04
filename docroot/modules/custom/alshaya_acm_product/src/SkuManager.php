@@ -3855,7 +3855,7 @@ class SkuManager {
    * @return array
    *   Return sanitized version sku
    */
-  public function getSanitizedSku(string $skuId) {
+  public function getSanitizedSku($skuId) {
     if (empty($skuId)) {
       return NULL;
     }
