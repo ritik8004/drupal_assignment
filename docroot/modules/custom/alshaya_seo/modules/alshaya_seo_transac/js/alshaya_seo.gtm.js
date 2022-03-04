@@ -1336,8 +1336,8 @@
       }
     };
 
-    // Adding PLP specific GTM list attribute.
-    if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1) {
+    // Adding PLP/SRP specific GTM list attribute.
+    if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1 || $('#alshaya-algolia-search').is(":visible")) {
       data.ecommerce.detail = {
         actionField: {
           list: product.list
@@ -1363,14 +1363,24 @@
     product.metric2 = product.price * product.quantity;
 
     var productData = {
-      event: 'addToCart',
-      ecommerce: {
-        currencyCode: drupalSettings.gtm.currency,
-        add: {
-          products: [
-            product
-          ]
-        }
+      event: 'addToCart'
+    };
+
+    // Adding SRP specific GTM list attribute.
+    if ($('#alshaya-algolia-search').is(":visible")) {
+      productData.eventAction = 'Add to Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1) {
+      productData.eventAction = 'Add to Cart on Listing';
+    }
+
+    productData.ecommerce = {
+      currencyCode: drupalSettings.gtm.currency,
+      add: {
+        products: [
+          product
+        ]
       }
     };
 
@@ -1391,14 +1401,24 @@
     product.metric2 = -1 * product.quantity * product.price;
 
     var productData = {
-      event: 'removeFromCart',
-      ecommerce: {
-        currencyCode: drupalSettings.gtm.currency,
-        remove: {
-          products: [
-            product
-          ]
-        }
+      event: 'removeFromCart'
+    };
+
+    // Adding SRP specific GTM list attribute.
+    if ($('#alshaya-algolia-search').is(":visible")) {
+      productData.eventAction = 'Remove from Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1) {
+      productData.eventAction = 'Remove from Cart on Listing';
+    }
+
+    productData.ecommerce = {
+      currencyCode: drupalSettings.gtm.currency,
+      remove: {
+        products: [
+          product
+        ]
       }
     };
 
