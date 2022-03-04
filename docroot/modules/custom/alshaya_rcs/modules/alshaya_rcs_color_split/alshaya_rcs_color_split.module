@@ -169,10 +169,6 @@ function alshaya_rcs_color_split_alshaya_rcs_product_product_options_to_query(ar
  * Implements hook_page_attachments_alter().
  */
 function alshaya_rcs_color_split_page_attachments_alter(array &$page) {
-  $add_to_bag_altered_feature_status = &drupal_static('add_to_bag_altered_feature_status');
-  if (!$add_to_bag_altered_feature_status) {
-    return;
-  }
 
   // Added color attributes to the page for add to bag feature.
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
@@ -190,7 +186,8 @@ function alshaya_rcs_color_split_library_info_alter(&$libraries, $extension) {
     return;
   }
 
-  // Add color split dependency for add to bag feature.
+  // Add color split dependency to the overidden add to bag utility library.
+  // @see alshaya_rcs_add_to_bag_library_info_alter()
   if ($extension === 'alshaya_acm_product') {
     $self_module_path = drupal_get_path('module', 'alshaya_rcs_add_to_bag');
     if (isset($libraries['add_to_bag_utility'])) {
