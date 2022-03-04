@@ -169,7 +169,6 @@ function alshaya_rcs_color_split_alshaya_rcs_product_product_options_to_query(ar
  * Implements hook_page_attachments_alter().
  */
 function alshaya_rcs_color_split_page_attachments_alter(array &$page) {
-
   // Added color attributes to the page for add to bag feature.
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $page['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');

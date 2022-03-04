@@ -17,10 +17,9 @@
 
     // The product will be fetched and saved in static storage.
     var productInfo = {};
-    var response = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU});
-    if (response && response.length > 0) {
-      var product = response[0];
-      RcsPhStaticStorage.set('product_data_' + product.sku, product);
+    var product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU});
+    if (Drupal.hasValue(product.sku)) {
+      RcsPhStaticStorage.set('product_' + product.sku, product);
       // Get product labels.
       let labels = [];
       var productLabels = await window.commerceBackend.getProductLabelsData(mainSKU);
