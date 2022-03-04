@@ -15,6 +15,12 @@
   var pageEntity = null;
   const classRcsLoaded = 'rcs-loaded';
 
+  // Process the block placeholders. This is async process, the rendering engine
+  // is responsible for the entire processing and replacement.
+  // As these blocks do not have any dependency on rcs entities, these can run
+  // even before the document ready event happens.
+  $("[id^=rcs-ph-][data-rcs-dependency='none']").once('rcs-ph-process').each(eachBlockPh);
+
   $(document).ready(function ready() {
     if (
       !drupalSettings.rcsProcessed &&
@@ -22,11 +28,6 @@
       typeof globalThis.rcsPhRenderingEngine !== 'undefined'
     ) {
       globalThis.rcs_ph_context = 'browser';
-
-      // Process the block placeholders. This is async process, the
-      // rendering engine is responsible of the entire processing and
-      // replacement.
-      $("[id^=rcs-ph-][data-rcs-dependency='none']").once('rcs-ph-process').each(eachBlockPh);
 
       // Retrieve overall page details if needed.
       globalThis.rcsPhCommerceBackend
