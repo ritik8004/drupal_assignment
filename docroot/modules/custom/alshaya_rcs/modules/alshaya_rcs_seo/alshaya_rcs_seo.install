@@ -9,6 +9,16 @@
  * Implements hook_install().
  */
 function alshaya_rcs_seo_install() {
+  // We install modules in this way instead of specifying them as dependencies
+  // in the info.yml file is because of the reason that new site installation
+  // fails because of specifying the dependencies.
+  // We need alshaya_rcs_listing to be enabled because the migration code of
+  // acm_product_category to rcs_category is written in alshaya_rcs_listing and
+  // that should be executed before we do sitemap generation for rcs.
+  \Drupal::service('module_installer')->install([
+    'alshaya_rcs_listing',
+  ]);
+
   $generator = \Drupal::service('simple_sitemap.generator');
   // Remove the acq_product_category from sitemap indexing.
   $generator->removeBundleSettings('taxonomy_term', 'acq_product_category');
