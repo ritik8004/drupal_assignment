@@ -24,21 +24,20 @@
         data.productOldPrice = (prices.price !== entity.gtm_attributes.price) ? prices.price : '';
 
         // Get product image.
-        let image = window.commerceBackend.getFirstImage(entity);
+        var image = window.commerceBackend.getFirstImage(entity);
         data.productPictureURL = image.url;
         data.magentoProductID = entity.id;
 
         // Set categories.
         var categories = getCategoriesAndDepartment(entity, e.detail.type);
-        for (let prop in categories) {
-          data[prop] = categories[prop];
-        }
+        data = Object.assign(data, categories);
 
         // @todo To be done in CORE-37241.
         data.productColor = '';
         data.productRating = '';
         data.productReview = '';
         break;
+
       case 'category':
         // Assign product GTM variables.
         var data = e.detail.data();
