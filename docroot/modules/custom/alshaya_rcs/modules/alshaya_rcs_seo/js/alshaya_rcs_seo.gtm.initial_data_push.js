@@ -8,43 +8,44 @@
 
   // Load product details into initial Data layer.
   document.addEventListener('alterInitialDataLayerData', (e) => {
-    if (e.detail.type === 'product') {
-      var entity = e.detail.page_entity;
-      // Assign product GTM variables.
-      var data = e.detail.data();
-      data.productSKU = (entity.type_id === 'configurable') ? '' : entity.style_code;
-      data.productStyleCode = entity.style_code;
-      data.pageType = 'product detail page';
-      data.stockStatus = (entity.stock_status === 'IN_STOCK') ? 'in stock' : 'out of stock';
-      data.productName = entity.name;
-      data.productBrand = entity.gtm_attributes.brand;
-      data.productPrice = entity.gtm_attributes.price;
-      const prices = window.commerceBackend.getPrices(entity, false);
-      data.productOldPrice = (prices.price !== entity.gtm_attributes.price) ? prices.price : '';
+    switch (e.detail.type) {
+      case 'product':
+        var entity = e.detail.page_entity;
+        // Assign product GTM variables.
+        var data = e.detail.data();
+        data.productSKU = (entity.type_id === 'configurable') ? '' : entity.style_code;
+        data.productStyleCode = entity.style_code;
+        data.pageType = 'product detail page';
+        data.stockStatus = (entity.stock_status === 'IN_STOCK') ? 'in stock' : 'out of stock';
+        data.productName = entity.name;
+        data.productBrand = entity.gtm_attributes.brand;
+        data.productPrice = entity.gtm_attributes.price;
+        const prices = window.commerceBackend.getPrices(entity, false);
+        data.productOldPrice = (prices.price !== entity.gtm_attributes.price) ? prices.price : '';
 
-      // Get product image.
-      let image = window.commerceBackend.getFirstImage(entity);
-      data.productPictureURL = image.url;
-      data.magentoProductID = entity.id;
+        // Get product image.
+        let image = window.commerceBackend.getFirstImage(entity);
+        data.productPictureURL = image.url;
+        data.magentoProductID = entity.id;
 
-      // Set categories.
-      let categories = getCategoriesAndDepartment(entity, e.detail.type);
-      for (let prop in categories) {
-        data[prop] = categories[prop];
-      }
+        // Set categories.
+        var categories = getCategoriesAndDepartment(entity, e.detail.type);
+        for (let prop in categories) {
+          data[prop] = categories[prop];
+        }
 
-      // @todo To be done in CORE-37241.
-      data.productColor = '';
-      data.productRating = '';
-      data.productReview = '';
-    } else if (e.detail.type === 'category') {
-      // Assign product GTM variables.
-      var data = e.detail.data();
-      // Set categories.
-      let categories = getCategoriesAndDepartment(e.detail.page_entity, e.detail.type);
-      for (let prop in categories) {
-        data[prop] = categories[prop];
-      }
+        // @todo To be done in CORE-37241.
+        data.productColor = '';
+        data.productRating = '';
+        data.productReview = '';
+        break;
+      case 'category':
+        // Assign product GTM variables.
+        var data = e.detail.data();
+        // Set categories.
+        var categories = getCategoriesAndDepartment(e.detail.page_entity, e.detail.type);
+        data = Object.assign(data, categories);
+        break;
     }
   });
 
