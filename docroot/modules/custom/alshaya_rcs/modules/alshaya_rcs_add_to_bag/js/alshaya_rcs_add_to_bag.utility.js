@@ -118,7 +118,7 @@
         label: option.label,
         position: option.position,
         is_swatch: false,
-        is_pseudo_attribute: (attribute_id === drupalSettings.psudo_attribute) ? true : false,
+        is_pseudo_attribute: (attribute_id === drupalSettings.psudo_attribute),
         values: option.values.map(function (option_value) {
           return {
             label: option_value.store_label,

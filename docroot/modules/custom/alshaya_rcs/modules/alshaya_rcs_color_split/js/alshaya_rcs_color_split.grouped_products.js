@@ -18,7 +18,6 @@
 
   // Add the styled products.
   RcsEventManager.addListener('rcsUpdateResults', function getProductsInStyle(e) {
-
     var mainProduct = {};
     if (Drupal.hasValue(e.detail.result) && Drupal.hasValue(e.detail.result.style_code)) {
       mainProduct = e.detail.result;
