@@ -391,76 +391,6 @@ class AlshayaGtmManager {
   }
 
   /**
-   * Helper function to prepare attributes for RCS product.
-   *
-   * @param \Drupal\node\Entity\Node $rcs_product
-   *   Node object for which we want to get the attributes prepared.
-   * @param string $view_mode
-   *   View mode in which we trying to render the product.
-   *
-   * @return array
-   *   Array of attributes to be exposed to GTM.
-   */
-  public function fetchRcsProductGtmAttributes(Node $rcs_product, string $view_mode) {
-    static $gtm_container = NULL;
-    $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-
-    if (!isset($gtm_container)) {
-      $gtm_container = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
-    }
-
-    if ($rcs_product->hasTranslation('en')) {
-      $rcs_product = $rcs_product->getTranslation('en');
-    }
-
-    $attributes['gtm-type'] = 'gtm-product-link';
-    $attributes['gtm-container'] = $gtm_container;
-    $attributes['gtm-view-mode'] = $view_mode;
-
-    // Product specific attributes will be added in front end.
-    $attributes['gtm-category'] = '#rcs.product.gtm_attributes.category#';
-    $attributes['gtm-name'] = '#rcs.product.name#';
-    $attributes['gtm-product-sku'] = '#rcs.product._self|sku#';
-    $attributes['gtm-product-sku-class-identifier'] = '#rcs.product._self|sku-clean#';
-    $attributes['gtm-sku-type'] = '#rcs.product._self|sku-type#';
-    $attributes['gtm-main-sku'] = '#rcs.product._self|sku#';
-
-    // Dimension1 & 2 correspond to size & color.
-    // Should stay blank unless added to cart.
-    if (!in_array('dimension1', $gtm_disabled_vars)) {
-      $attributes['gtm-dimension1'] = '#rcs.product.gtm_attributes.dimension1#';
-    }
-    if (!in_array('dimension5', $gtm_disabled_vars)) {
-      $attributes['gtm-dimension5'] = '#rcs.product.gtm_attributes.dimension5#';
-    }
-    if (!in_array('dimension6', $gtm_disabled_vars)) {
-      $attributes['gtm-dimension6'] = '#rcs.product.gtm_attributes.dimension6#';
-    }
-
-    if (!in_array('brand', $gtm_disabled_vars)) {
-      $attributes['gtm-brand'] = '#rcs.product.gtm_attributes.brand#';
-    }
-
-    // @todo Check if image not available, it should have the value:
-    // 'image not available'.
-    $attributes['gtm-dimension4'] = '#rcs.product.gtm_attributes.dimension4#';
-
-    // This contains the formatted price with proper decimals.
-    $attributes['gtm-price'] = '#rcs.product._self|gtm-price#';
-
-    // Contains the count of the media items.
-    $attributes['gtm-dimension3'] = '#rcs.product.gtm_attributes.dimension3#';
-
-    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
-      [
-        &$rcs_product,
-        &$attributes,
-      ]
-    );
-    return $attributes;
-  }
-
-  /**
    * Helper function to fetch attributes on SKU.
    *
    * @param string $skuId
@@ -1158,20 +1088,15 @@ class AlshayaGtmManager {
         break;
 
       case 'product listing page':
-        // Call V2 attribute function if RCS Listing module is enabled.
-        if ($this->moduleHandler->moduleExists('alshaya_rcs_listing')) {
-          $page_dl_attributes = $this->fetchV2DepartmentAttributes();
+        $taxonomy_term = $current_route['route_params']['taxonomy_term'];
+        $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+        foreach ($taxonomy_parents as $taxonomy_parent) {
+          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
+          /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
+          $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
         }
-        else {
-          $taxonomy_term = $current_route['route_params']['taxonomy_term'];
-          $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
-          foreach ($taxonomy_parents as $taxonomy_parent) {
-            $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
-            $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
-          }
 
-          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
-        }
+        $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
         break;
 
       case 'advanced page':
@@ -1190,12 +1115,6 @@ class AlshayaGtmManager {
 
             $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
           }
-        }
-        // Call V2 attribute function for department page if the rcs main menu
-        // module is enabled.
-        elseif ($this->moduleHandler->moduleExists('alshaya_rcs_main_menu')
-         && $department_node->get('field_use_as_department_page')->getString() == 1) {
-          $page_dl_attributes = $this->fetchV2DepartmentAttributes();
         }
         break;
 
@@ -1384,21 +1303,6 @@ class AlshayaGtmManager {
       'minorCategory' => array_shift($terms) ?: '',
       'subCategory' => array_shift($terms) ?: '',
     ]);
-  }
-
-  /**
-   * Helper function to get department specific V2 attributes.
-   */
-  public function fetchV2DepartmentAttributes() {
-    return [
-      'departmentName' => '#rcs.category.departmentName#',
-      'departmentId' => '#rcs.category.departmentId#',
-      'listingName' => '#rcs.category.name#',
-      'listingId' => '#rcs.category.id#',
-      'majorCategory' => '#rcs.category.majorCategory#',
-      'minorCategory' => '#rcs.category.minorCategory#',
-      'subCategory' => '#rcs.category.subCategory#',
-    ];
   }
 
   /**

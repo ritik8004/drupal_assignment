@@ -15,15 +15,6 @@ use Drupal\facets\Entity\Facet;
 use Drupal\user\Entity\Role;
 
 /**
- * Implements hook_update_N().
- *
- * Install config_rewrite module.
- */
-function alshaya_transac_update_8139() {
-  \Drupal::service('module_installer')->install(['config_rewrite']);
-}
-
-/**
  * Implements hook_update_n().
  *
  * Uninstall amp contrib and custom modules.

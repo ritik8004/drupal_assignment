@@ -18,7 +18,6 @@ class AlshayaRcsPromotionDescription extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-
     return [
       'inside' => [
         '#type' => 'container',
