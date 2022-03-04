@@ -253,8 +253,10 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
       $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
       $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
       $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
-      $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $sanitized_parent_sku;
-      $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs, $item);
+      if (!empty($sanitized_parent_sku)) {
+        $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $sanitized_parent_sku;
+        $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs, $item);
+      }
     }
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
   }

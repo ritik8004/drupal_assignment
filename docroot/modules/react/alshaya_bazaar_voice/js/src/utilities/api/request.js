@@ -150,7 +150,7 @@ export async function getProductReviewForCurrrentUser(productIdentifier) {
 export async function getUserDetails(productId = undefined) {
   const settings = {};
 
-  if (typeof drupalSettings.bazaarvoiceUserDetails !== 'undefined') {
+  if (productId !== '' && typeof drupalSettings.bazaarvoiceUserDetails !== 'undefined') {
     settings.user = drupalSettings.bazaarvoiceUserDetails;
     settings.productReview = await getProductReviewForCurrrentUser(productId);
   }
