@@ -19,6 +19,11 @@ class AlshayaDisableSyncCommands extends DrushCommands {
     "alshaya_acm:sync-products",
     "alshaya_acm_product:listing-aggregate-products",
     "alshaya:generate:attribute:nodes",
+    "acq_promotion:sync-promotions",
+    "acq_promotion:sync-and-process-promotions",
+    "acq_sku:sync-products",
+    "acq_sku:sync-categories",
+    "acq_sku:sync-products-test",
   ];
 
   /**
@@ -30,7 +35,7 @@ class AlshayaDisableSyncCommands extends DrushCommands {
     // Get the current drush cmd and check if its overidden.
     $command = $commandData->annotationData()->get('command');
     if (in_array($command, self::OVERRIDE_COMMANDS)) {
-      throw new \Exception('Use of this command is not allowed in Alshaya V3. Product Sync are automatically done from MDC');
+      throw new \Exception('Use of this command is not allowed in Alshaya V3. Syncs are automatically done from MDC.');
     }
   }
 
