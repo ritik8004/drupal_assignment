@@ -1057,9 +1057,7 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
   };
   filters.push(countryFilters);
 
-  // @todo Create config if required.
   const pageSize = 1000;
-
   let currentPage = 1;
   let responseData = [];
   let noOfPages = '';
@@ -1075,7 +1073,7 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
     preparedFilterData['searchCriteria[current_page]'] = currentPage;
 
     try {
-      // Get locations for delivery matrix.
+      // eslint-disable-next-line no-await-in-loop
       const response = await callMagentoApi(url, 'GET', preparedFilterData);
 
       if (hasValue(response.data.error) && response.data.error) {

@@ -316,7 +316,6 @@ class AlshayaApiWrapper {
       'condition_type' => 'eq',
     ];
 
-    // @todo Create config if required.
     $page_size = 1000;
 
     // Filter page size.
@@ -691,7 +690,6 @@ class AlshayaApiWrapper {
       'condition_type' => 'eq',
     ];
 
-    // @todo Create config if required.
     $page_size = 1000;
 
     // Filter page size.
