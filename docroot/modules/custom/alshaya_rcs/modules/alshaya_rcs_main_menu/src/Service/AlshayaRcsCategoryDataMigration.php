@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Path\AliasManager;
+use Drupal\path_alias\AliasManager;
 
 /**
  * Service provides data migration functions in rcs_category taxonomy.
