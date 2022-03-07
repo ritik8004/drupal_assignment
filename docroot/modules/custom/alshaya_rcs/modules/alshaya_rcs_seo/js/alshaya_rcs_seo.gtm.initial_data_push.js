@@ -61,7 +61,7 @@
    */
   function getCategoriesAndDepartment(entity, type) {
     var categories = {
-      subcategory : '',
+      subCategory : '',
       minorCategory: '',
       majorCategory: '',
       listingName: '',
@@ -94,7 +94,7 @@
 
       categories.majorCategory = breadcrumbTitles.shift();
       categories.minorCategory = breadcrumbTitles.shift();
-      categories.subcategory = breadcrumbTitles.shift();
+      categories.subCategory = breadcrumbTitles.shift();
     }
 
     return categories;
