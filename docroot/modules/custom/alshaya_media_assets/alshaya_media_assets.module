@@ -41,5 +41,7 @@ function alshaya_media_assets_page_attachments(&$attachments) {
   if (\Drupal::service('router.admin_context')->isAdminRoute()) {
     return;
   }
+  // @todo Add the library to individual render arrays of pages rather than
+  // adding it in a generalized way like this.
   $attachments['#attached']['library'][] = 'alshaya_media_assets/rcs_product_images';
 }
