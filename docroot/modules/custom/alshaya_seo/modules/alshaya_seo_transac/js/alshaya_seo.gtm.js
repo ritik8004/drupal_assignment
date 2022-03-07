@@ -1316,14 +1316,33 @@
   };
 
   /**
+   * Function to check if current page is search page.
+   *
+   * @return {boolean}
+   *
+   */
+  function isPageTypeSearch() {
+    return $('#alshaya-algolia-search').is(":visible");
+  }
+
+  /**
+   * Function to check if current page is listing page.
+   *
+   * @return {boolean}
+   *
+   */
+  function isPageTypeListing() {
+    return ($('body').attr('gtm-list-name').indexOf('PLP') !== -1
+      || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1);
+  }
+
+  /**
    * Function to push product detail view event to data layer.
    *
    * @param {object} productContext
    *   The jQuery HTML object containing GTM attributes for the product.
-   * @param {string} quickView
-   *   The value to add .
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName, quickView = '') {
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';
@@ -1337,18 +1356,14 @@
         }
       }
     };
-    if (quickView) {
-      data = {
-        event: 'productDetailView',
-        ecommerce: {
-          currencyCode: drupalSettings.gtm.currency,
-          detail: {
-            actionField: {
-              list: listName
-            },
-            products: [product]
-          }
-        }
+
+    // Adding PLP/SRP specific GTM list attribute.
+    if (isPageTypeSearch() || isPageTypeListing()) {
+      data.ecommerce.detail = {
+        actionField: {
+          list: product.list
+        },
+        ...data.ecommerce.detail
       };
     }
 
@@ -1369,14 +1384,24 @@
     product.metric2 = product.price * product.quantity;
 
     var productData = {
-      event: 'addToCart',
-      ecommerce: {
-        currencyCode: drupalSettings.gtm.currency,
-        add: {
-          products: [
-            product
-          ]
-        }
+      event: 'addToCart'
+    };
+
+    // Adding SRP specific GTM list attribute.
+    if (isPageTypeSearch()) {
+      productData.eventAction = 'Add to Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if (isPageTypeListing()) {
+      productData.eventAction = 'Add to Cart on Listing';
+    }
+
+    productData.ecommerce = {
+      currencyCode: drupalSettings.gtm.currency,
+      add: {
+        products: [
+          product
+        ]
       }
     };
 
@@ -1397,14 +1422,24 @@
     product.metric2 = -1 * product.quantity * product.price;
 
     var productData = {
-      event: 'removeFromCart',
-      ecommerce: {
-        currencyCode: drupalSettings.gtm.currency,
-        remove: {
-          products: [
-            product
-          ]
-        }
+      event: 'removeFromCart'
+    };
+
+    // Adding SRP specific GTM list attribute.
+    if (isPageTypeSearch()) {
+      productData.eventAction = 'Remove from Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if (isPageTypeListing()) {
+      productData.eventAction = 'Remove from Cart on Listing';
+    }
+
+    productData.ecommerce = {
+      currencyCode: drupalSettings.gtm.currency,
+      remove: {
+        products: [
+          product
+        ]
       }
     };
 
