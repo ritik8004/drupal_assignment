@@ -85,14 +85,13 @@ jobs:
           bash $SCRIPT_DIR/setup_env.sh
           bash $SCRIPT_DIR/setup_mysql.sh
 
-      # @todo check if this really works or we need one step per directory
-      - uses: actions/cache@v2
+      - name: Install Node
+        uses: actions/setup-node@v2
         with:
-          path: |
-            "${{ steps.npm-cache-dir.outputs.dir }}"
-            ~/.npm
-            ~/.nvm
-          key: ${{ runner.os }}-node
+          node-version: "14.19.0"
+
+      - name: Install CLI for working with YAML files
+        run: npm install -g yaml-cli
 
       - name: Run Tests
         run: bash $SCRIPT_DIR/run_tests_non_transac.sh
