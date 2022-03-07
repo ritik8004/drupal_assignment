@@ -88,7 +88,7 @@ class AlshayaRcsCategoryDataMigration {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name', 'description__value', 'langcode']);
+    $query->fields('tfd', ['tid', 'name', 'langcode']);
 
     // For the `Term background color`.
     $query->leftJoin('taxonomy_term__field_term_background_color', 'ttbc', 'ttbc.entity_id = tfd.tid AND ttbc.langcode = tfd.langcode');
@@ -116,8 +116,14 @@ class AlshayaRcsCategoryDataMigration {
     // For the `Highlights paragraphs`.
     $query->leftJoin('taxonomy_term__field_main_menu_highlight', 'ttmmh', 'ttmmh.entity_id = tfd.tid');
 
+    // For the `Remove term in breadcrumb`.
+    $query->leftJoin('taxonomy_term__field_remove_term_in_breadcrumb', 'ttrtb', 'ttrtb.entity_id = tfd.tid');
+
+    // For the `Display as clickable link`.
+    $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdacl', 'ttdacl.entity_id = tfd.tid');
+
     // Create a OR condition group, so if any of the above fields has
-    // an overidden values, we need to fetch and clone them.
+    // an overridden values, we need to fetch and clone them.
     $orCondGroup = $query->orConditionGroup();
     $orCondGroup->isNotNull('ttbc.field_term_background_color_value');
     $orCondGroup->isNotNull('ttfc.field_term_font_color_value');
@@ -128,12 +134,14 @@ class AlshayaRcsCategoryDataMigration {
     $orCondGroup->condition('in_mobile.field_include_in_mobile_tablet_value', '0');
     $orCondGroup->condition('mtr.field_move_to_right_value', '1');
     $orCondGroup->condition('ttotl.field_override_target_link_value', '1');
+    $orCondGroup->condition('ttrtb.field_remove_term_in_breadcrumb_value', '1');
+    $orCondGroup->condition('ttdacl.field_display_as_clickable_link_value', '0');
     $query->condition($orCondGroup);
 
     $query->condition('tfd.langcode', $langcode);
     $query->condition('tfd.vid', self::SOURCE_VOCABULARY_ID);
 
-    // Get the terms statisfying the above conditions.
+    // Get the terms satisfying the above conditions.
     $terms = $query->distinct()->execute()->fetchAll();
 
     // Do not process if no terms are found.
@@ -204,6 +212,14 @@ class AlshayaRcsCategoryDataMigration {
         // Add override_target_link field value from the old term.
         $override_target_link = $acq_term_data->get('field_override_target_link')->getString();
         $rcs_term->get('field_override_target_link')->setValue($override_target_link);
+
+        // Add remove_term_in_breadcrumb field value from the old term.
+        $remove_term_breadcrumb = $acq_term_data->get('field_remove_term_in_breadcrumb')->getString();
+        $rcs_term->get('field_remove_term_in_breadcrumb')->setValue($remove_term_breadcrumb);
+
+        // Add display_as_clickable_link field value from the old term.
+        $display_as_clickable = $acq_term_data->get('field_display_as_clickable_link')->getString();
+        $rcs_term->get('field_display_as_clickable_link')->setValue($display_as_clickable);
 
         // Add target_link field value from the old term,
         // override_target_link field flag is true.
