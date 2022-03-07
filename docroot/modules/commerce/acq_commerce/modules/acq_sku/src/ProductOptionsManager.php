@@ -164,7 +164,7 @@ class ProductOptionsManager {
 
     // Update the term if already available.
     if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, NULL, FALSE)) {
-      $save_term = $force_save ? TRUE : FALSE;
+      $save_term = $force_save;
 
       // Save term even if weight changes.
       if ($term->getWeight() != $weight) {
