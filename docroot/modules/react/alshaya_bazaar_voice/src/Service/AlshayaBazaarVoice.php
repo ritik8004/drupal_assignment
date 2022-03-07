@@ -874,14 +874,25 @@ class AlshayaBazaarVoice {
    * @param string $sku_id
    *   Sku id.
    *
-   * @return string
-   *   return parent sku id.
+   * @return string|null
+   *   return parent sku id|NULL.
    */
   public function checkParentSku($sku_id) {
+    // Return parent sku if current sku is child sku.
     $parent_sku = $this->skuManager->getParentSkuBySku($sku_id);
     if ($parent_sku !== NULL && $parent_sku instanceof SKUInterface) {
       return $parent_sku->getSku();
     }
+    // Do not allow write a review for child sku.
+    $sku_entity = $sku_id instanceof SKU ? $sku_id : SKU::loadFromSku($sku_id);
+    if (!empty($sku_entity)) {
+      $color = $sku_entity->get('attr_color')->getString();
+      $size = $sku_entity->get('attr_size')->getString();
+      if (!empty($color) && !empty($size)) {
+        return NULL;
+      }
+    }
+
     return $sku_id;
   }
 

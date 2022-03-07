@@ -170,7 +170,7 @@
 
       // Close mobile menu when clicked outside the menu.
       var mobileMenu = $('.main--menu', context);
-      $('body').once().click(function (e) {
+      $('body').once('mobile-menu-close').click(function (e) {
         if (mobileMenu.hasClass('menu--active') && e.target === $('.menu--active')[0]) {
           $('.mobile--close').trigger('click');
         }

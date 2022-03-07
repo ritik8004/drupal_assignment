@@ -30,6 +30,28 @@
       min-height: 58rem;
     }
   }
+
+  &__sidebar {
+    .ui-accordion-header:not(.ui-accordion-header-active) {
+      .c-accordion__title {
+        &::after {
+          background: url(#{$brand_theme_img_directory_path}/icons/plus-icon.svg) no-repeat;
+          width: 0.75rem;
+          height: 0.75rem;
+        }
+      }
+    }
+
+    .click-collect {
+      .ui-accordion-header:not(.ui-accordion-header-active) {
+        &::after {
+          background: url(#{$brand_theme_img_directory_path}/icons/plus-icon.svg) no-repeat;
+          width: 0.75rem;
+          height: 0.75rem;
+        }
+      }
+    }
+  }
 }
 
 .select2Option {

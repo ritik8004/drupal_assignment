@@ -106,7 +106,6 @@ function alshaya_rcs_main_menu_preprocess_page(&$variables) {
       // Add description placeholder for the advanced page.
       $variables['category_term_description'] = '#rcs.category.description#';
       $variables['#attached']['library'][] = 'alshaya_white_label/rcs-ph-term-description';
-      $variables['#attached']['library'][] = 'alshaya_rcs_listing/helpers';
     }
   }
 }

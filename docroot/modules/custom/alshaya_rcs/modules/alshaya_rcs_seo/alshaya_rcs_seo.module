@@ -15,7 +15,7 @@ function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
     return;
   }
 
-  $new_source = "/" . drupal_get_path('module', 'alshaya_rcs_seo') . "/js/datapush.js";
+  $new_source = '/' . drupal_get_path('module', 'alshaya_rcs_seo') . '/js/datapush.js';
   $options = $libraries['datapush']['js']['js/datapush.js'];
   unset($libraries['datapush']['js']['js/datapush.js']);
   $libraries['datapush']['js'][$new_source] = $options;

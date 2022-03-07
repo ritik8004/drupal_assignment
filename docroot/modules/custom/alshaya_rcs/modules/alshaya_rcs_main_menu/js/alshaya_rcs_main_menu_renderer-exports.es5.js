@@ -11,12 +11,9 @@ exports.render = function render(
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
     let enrichmentData = rcsGetEnrichedCategories();
-    let menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
-
-    // Get the L1 menu list element.
-    if (navigationType === 'shop_by_block') {
-      menuListLevel1Ele = innerHtmlObj.find('div.c-footer-menu');
-    }
+    let menuListLevel1Ele = navigationType === 'shop_by_block'
+      ? innerHtmlObj.find('div.c-footer-menu')
+      : innerHtmlObj.find('.menu__list.menu--one__list');
 
     // Filter category menu items if include_in_menu flag true.
     inputs = filterAvailableItems(inputs);
@@ -62,8 +59,17 @@ exports.render = function render(
         }
         level1 = level1.children[0];
       }
-      if (navigationType === 'shop_by_block') {
-        menuHtml += getShopByMarkup(
+
+      menuHtml = navigationType === 'shop_by_block'
+        ? menuHtml + getShopByMarkup(
+          level1,
+          1,
+          innerHtmlObj,
+          settings,
+          enrichmentData,
+          isSuperCategoryEnabled,
+        )
+        : menuHtml + getMenuMarkup(
           level1,
           1,
           innerHtmlObj,
@@ -71,16 +77,6 @@ exports.render = function render(
           enrichmentData,
           isSuperCategoryEnabled,
         );
-      } else {
-        menuHtml += getMenuMarkup(
-          level1,
-          1,
-          innerHtmlObj,
-          settings,
-          enrichmentData,
-          isSuperCategoryEnabled,
-        );
-      }
     });
 
     // Remove the placeholders markup.

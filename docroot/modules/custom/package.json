@@ -4,7 +4,7 @@
   "description": "Modules extend your site functionality beyond Drupal core.",
   "private": "true",
   "scripts": {
-    "build": "node_modules/.bin/webpack",
+    "build": "node_modules/.bin/webpack --mode=production",
     "build:dev": "node_modules/.bin/webpack --mode=development",
     "test": "jest"
   },

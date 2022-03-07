@@ -131,12 +131,7 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
     (\Drupal::languageManager()->getCurrentLanguage()->getId() === $entity->language()->getId())) {
     /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-    if ($bundle === 'rcs_product') {
-      $product_node = $gtm_manager->fetchRcsProductGtmAttributes($entity, $view_mode);
-    }
-    else {
-      $product_node = $gtm_manager->fetchProductGtmAttributes($entity, $view_mode);
-    }
+    $product_node = $gtm_manager->fetchProductGtmAttributes($entity, $view_mode);
     $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($product_node);
   }
 }

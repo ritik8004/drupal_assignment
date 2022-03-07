@@ -19,6 +19,7 @@ import {
 import Promotions from '../promotions';
 import { checkExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo,
@@ -34,7 +35,10 @@ const Teaser = ({
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
 
-  if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
+  if (drupalSettings.plp_attributes
+    && drupalSettings.plp_attributes.length > 0
+    && hasValue(hit.collection_labels)
+  ) {
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
       let collectionLabelValue = hit.collection_labels[plpAttributes[i]];

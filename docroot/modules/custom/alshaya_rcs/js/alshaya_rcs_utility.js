@@ -7,34 +7,18 @@ rcsGetEnrichedCategories = () => {
   if (enrichedData) {
     return enrichedData;
   }
-  else {
-    jQuery.ajax({
-      url: Drupal.url('rest/v2/categories'),
-      async: false,
-      success: function (data) {
-        // Store the value in static storage.
-        RcsPhStaticStorage.set('enriched_categories', data);
-        enrichedData = data;
-      }
-    });
-  }
-  return enrichedData;
-}
 
-/**
- * Dispatches custom events
- *
- * @param eventName
- *   The name of the custom event.
- * @param eventDetail
- *   The object containing the custom event details.
- */
-dispatchRcsCustomEvent = (eventName, eventDetail) => {
-  const event = new CustomEvent(eventName, {
-    bubbles: true,
-    detail: eventDetail,
+  jQuery.ajax({
+    url: Drupal.url('rest/v2/categories'),
+    async: false,
+    success: function (data) {
+      // Store the value in static storage.
+      RcsPhStaticStorage.set('enriched_categories', data);
+      enrichedData = data;
+    }
   });
-  document.dispatchEvent(event);
+
+  return enrichedData;
 }
 
 // Link between RCS errors and Datadog.

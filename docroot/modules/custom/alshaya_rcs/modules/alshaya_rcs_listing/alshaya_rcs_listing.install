@@ -7,6 +7,7 @@
 
 use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Get list of blocks which needs to be enabled/disabled.
@@ -59,6 +60,78 @@ function alshaya_rcs_listing_install() {
 
   // Migrate data.
   alshaya_rcs_listing_migrate_field_carousel_slug();
+
+  // Migrate the enriched terms from the acq_product_category taxonomy.
+  \Drupal::service('alshaya_rcs_main_menu.category_data_migration')
+    ->processProductCategoryMigration();
+
+  // Initiate the batch process to update the advanced page node with proper
+  // category slug.
+  $batch = [
+    'title' => 'Update advanced pages',
+    'operations' => [
+      ['_alshaya_rcs_listing_advance_page_batch_operation', []],
+    ],
+    'init' => t('Starting processing of advance page node update'),
+    'file' => drupal_get_path('module', 'alshaya_rcs_listing') . '/alshaya_rcs_listing.install',
+    'error_message' => t('An error occurred during processing'),
+  ];
+
+  batch_set($batch);
+}
+
+/**
+ * Batch function to migrate the product category term to category slug.
+ */
+function _alshaya_rcs_listing_advance_page_batch_operation(&$sandbox) {
+  // Bulk update all the advanced page node with the product category.
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'advanced_page')
+    ->execute();
+  // Use the sandbox to store the information needed to track progression.
+  if (!isset($sandbox['current'])) {
+    $sandbox['current'] = 0;
+    $sandbox['max'] = count($nids);
+  }
+
+  // Process nodes by groups of 10.
+  $limit = 10;
+  $result = array_slice($nids, $sandbox['current'], $limit);
+  foreach ($result as $nid) {
+    $entity_storage = \Drupal::entityTypeManager()->getStorage('node');
+    $entity = $entity_storage->load($nid);
+    // Load different translated versions of the node.
+    foreach ($entity->getTranslationLanguages() as $langcode => $language) {
+      $translated_node = $entity->getTranslation($langcode);
+      // Update advanced page category slug with product category.
+      $product_category_id = $translated_node->get('field_product_category')->getString();
+      if ($product_category_id) {
+        $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($product_category_id);
+        // Proceed only if the term object is present.
+        if ($term instanceof TermInterface) {
+          $path = $term->get('path');
+          if (!$path->isEmpty()) {
+            // Remove forward slash if present.
+            $alias = $path->alias;
+            if ($alias && $alias[0] == '/') {
+              $alias = substr($alias, 1);
+            }
+            $entity->set('field_category_slug', $alias);
+            $entity->save();
+          }
+        }
+      }
+    }
+
+    // Update our progress information.
+    $sandbox['current']++;
+  }
+
+  $sandbox['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['current'] / $sandbox['max']);
+
+  if ($sandbox['#finished'] >= 1) {
+    return 'Product category migration to category slug is finished.';
+  }
 }
 
 /**
@@ -82,6 +155,10 @@ function alshaya_rcs_listing_uninstall() {
   foreach ($configs as $name) {
     Drupal::configFactory()->getEditable($name)->delete();
   }
+
+  // Rollback the enriched terms from the acq_product_category taxonomy.
+  \Drupal::service('alshaya_rcs_main_menu.category_data_migration')
+    ->rollbackProductCategoryMigration();
 }
 
 /**

@@ -76,9 +76,12 @@ exports.getEntity = async function getEntity(langcode) {
     case 'product':
       // Remove .html suffix from the full path.
       let prodUrlKey = urlKey.replace('.html', '');
+      const query = typeof rcsPhGraphqlQuery.color_split_product !== 'undefined'
+        ? rcsPhGraphqlQuery.color_split_product
+        : rcsPhGraphqlQuery.products;
 
       // Compress the query.
-      request.data = prepareQuery(`{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products} }`);
+      request.data = prepareQuery(`{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${query} }`);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -301,7 +304,10 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
       // Build query.
       const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
       const filterValue = operator === 'in' ? JSON.stringify(params.sku) : `"${params.sku}"`;
-      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: ${filterValue} }}) ${rcsPhGraphqlQuery.products}}`);
+      const query = typeof rcsPhGraphqlQuery.color_split_product !== 'undefined'
+        ? rcsPhGraphqlQuery.color_split_product
+        : rcsPhGraphqlQuery.products;
+      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: ${filterValue} }}) ${query}}`);
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
 

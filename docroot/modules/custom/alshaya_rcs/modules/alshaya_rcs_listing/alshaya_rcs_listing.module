@@ -50,7 +50,6 @@ function alshaya_rcs_listing_preprocess_page(&$variables) {
 
       // Taking the sidebar visibility check from config for PLP.
       $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
-      $variables['#attached']['library'][] = 'alshaya_rcs_listing/helpers';
     }
   }
 }

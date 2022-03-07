@@ -11,6 +11,7 @@ default:
                 - Drupal\DrupalExtension\Context\MinkContext
                 - Drupal\DrupalExtension\Context\DrupalContext
                 - Drupal\DrupalExtension\Context\MessageContext
+                - DennisDigital\Behat\Gtm\Context\GtmContext
                 - emuse\BehatHTMLFormatter\Context\ScreenshotContext:
                       screenshotDir: '%paths.base%/build/html/behat/assets/screenshots'
     formatters:

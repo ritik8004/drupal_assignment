@@ -20,7 +20,7 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
    *
    * @var \Drupal\Core\Routing\RouteMatchInterface
    */
-  private $routeMatch;
+  protected $routeMatch;
 
   /**
    * The module handler service.
@@ -66,6 +66,7 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
     // If _department_page_node option is there for V2 then prepare the URL here
     // only otherwise the module will throw route not found exception.
     if ($this->moduleHandler->moduleExists('alshaya_rcs_main_menu')
+      && !empty($route)
       && $route->hasOption('_department_page_node')) {
       $url = Url::fromRoute('entity.node.canonical', [
         'node' => $route->getOption('_department_page_node'),

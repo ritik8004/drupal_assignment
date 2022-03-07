@@ -97,7 +97,7 @@ class AlshayaSpcOrderHelper {
    *
    * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
    */
-  private $skuInfoHelper;
+  protected $skuInfoHelper;
 
   /**
    * Language manager.
@@ -324,30 +324,6 @@ class AlshayaSpcOrderHelper {
   }
 
   /**
-   * Fetches SKU details required for order confirmation page with V2 backend.
-   *
-   * @return array
-   *   The response containing required SKU data.
-   */
-  private function getSkuDetailsV2(array $item) {
-    $parent_sku = $item['product_type'] === 'configurable'
-      ? $item['extension_attributes']['parent_product_sku']
-      : NULL;
-
-    return [
-      'sku' => $item['sku'],
-      'parentSKU' => $parent_sku,
-      'product_type' => $item['product_type'],
-      'freeItem' => ($item['price_incl_tax'] == 0),
-      'title' => $item['name'],
-      'finalPrice' => $this->skuInfoHelper->formatPriceDisplay((float) $item['price']),
-      'id' => $item['item_id'],
-      // Added quantity of product for checkout olapic pixel.
-      'qtyOrdered' => $item['qty_ordered'],
-    ];
-  }
-
-  /**
    * Responds to GET requests.
    *
    * Returns available delivery method data.
@@ -356,10 +332,6 @@ class AlshayaSpcOrderHelper {
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(array $item) {
-    if ($this->spcHelper->getCommerceBackendVersion() == 2) {
-      return $this->getSkuDetailsV2($item);
-    }
-
     // We will use this as flag in React to avoid reading from local storage
     // and also avoid doing API call.
     $data['prepared'] = TRUE;

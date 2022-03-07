@@ -33,7 +33,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
   protected $moduleHandler;
 
   /**
-   * AlshayaMegaMenuBlock constructor.
+   * AlshayaRcsMainMenuBlock constructor.
    *
    * @param array $configuration
    *   The configuration.
@@ -75,6 +75,8 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       'label' => '#rcs.menuItem.name#',
     ];
 
+    // @todo Use handlebars template for this. Ticket:
+    // https://alshayagroup.atlassian.net/browse/CORE-39361.
     // Prepare a static term array with placeholders
     // for all the possible combinations.
     $term_data = [

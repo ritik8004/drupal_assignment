@@ -117,6 +117,7 @@
       }
       switch (listName) {
         case 'promotion':
+        case 'plp':
         case 'product_option_list':
           var data = {
             event: eventName,
