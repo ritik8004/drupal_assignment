@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\path_alias\AliasManager;
+use Drupal\path_alias\AliasManagerInterface;
 
 /**
  * Service provides data migration functions in rcs_category taxonomy.
@@ -48,11 +48,11 @@ class AlshayaRcsCategoryDataMigration {
   protected $connection;
 
   /**
-   * Drupal path alias manager.
+   * The path alias manager.
    *
-   * @var \Drupal\Core\Path\AliasManager
+   * @var \Drupal\path_alias\AliasManagerInterface
    */
-  protected $pathAliasManager;
+  protected $aliasManager;
 
   /**
    * Constructs a new AlshayaRcsCategoryDataMigration instance.
@@ -65,19 +65,19 @@ class AlshayaRcsCategoryDataMigration {
    *   The language manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection manager.
-   * @param \Drupal\Core\Path\AliasManager $pathalias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
                               Connection $connection,
-                              AliasManager $pathalias_manager) {
+                              AliasManagerInterface $alias_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->connection = $connection;
-    $this->pathAliasManager = $pathalias_manager;
+    $this->aliasManager = $alias_manager;
   }
 
   /**
@@ -229,7 +229,7 @@ class AlshayaRcsCategoryDataMigration {
         }
 
         // Add category_slug field value from the old term path alias.
-        $term_slug = $this->pathAliasManager->getAliasByPath('/taxonomy/term/' . $acq_term->tid);
+        $term_slug = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $acq_term->tid);
         $term_slug = ltrim($term_slug, '/');
         $rcs_term->get('field_category_slug')->setValue($term_slug);
 
