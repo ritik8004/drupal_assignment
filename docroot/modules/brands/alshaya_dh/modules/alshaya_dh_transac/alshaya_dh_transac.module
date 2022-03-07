@@ -123,3 +123,44 @@ function alshaya_dh_transac_gtm_product_attributes_alter($product, array &$attri
     $attributes['gtm-brand'] = $sku->get('attr_brand_name')->getString();
   }
 }
+
+/**
+ * Implements hook_alshaya_performance_preload_alter().
+ */
+function alshaya_dh_transac_alshaya_performance_preload_alter(array &$preload) {
+  $site_preloads = [
+    'en' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Bold.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+    ],
+    'ar' => [
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Regular.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+      [
+        'as' => 'font',
+        'href' => '/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Bold.woff2',
+        'crossorigin' => 'crossorigin',
+        'type' => 'font/woff2',
+      ],
+    ],
+  ];
+  // Preloading fonts here.
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($site_preloads[$language])) {
+    $preload = array_merge($site_preloads[$language], $preload);
+  }
+}
