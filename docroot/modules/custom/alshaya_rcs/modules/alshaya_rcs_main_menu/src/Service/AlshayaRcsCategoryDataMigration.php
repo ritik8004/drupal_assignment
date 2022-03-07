@@ -217,25 +217,24 @@ class AlshayaRcsCategoryDataMigration {
         $term_slug = ltrim($term_slug, '/');
         $rcs_term->get('field_category_slug')->setValue($term_slug);
 
-        // Check if the translations exists for arabic language.
-        if ($acq_term_data->hasTranslation('ar')) {
-          // Load the translation object.
-          $acq_term_data = $acq_term_data->getTranslation('ar');
+        // Check if the translations exists for other available languages.
+        foreach ($this->languageManager->getLanguages() as $language_code => $language) {
+          if ($language_code != $langcode && $acq_term_data->hasTranslation($language_code)) {
+            // Load the translation object.
+            $acq_term_data = $acq_term_data->getTranslation($language_code);
 
-          // Add translation in the new term.
-          $rcs_term = $rcs_term->addTranslation('ar', ['name' => $acq_term_data->name]);
+            // Add translation in the new term.
+            $rcs_term = $rcs_term->addTranslation($language_code, ['name' => $acq_term_data->name]);
 
-          $rcs_term->get('field_term_background_color')
-            ->setValue($acq_term_data->get('field_term_background_color')->getValue());
+            $rcs_term->get('field_term_background_color')
+              ->setValue($acq_term_data->get('field_term_background_color')->getValue());
 
-          $rcs_term->get('field_term_font_color')
-            ->setValue($acq_term_data->get('field_term_font_color')->getValue());
+            $rcs_term->get('field_term_font_color')
+              ->setValue($acq_term_data->get('field_term_font_color')->getValue());
 
-          // Delete the ACQ Category item before creating the RCS Category.
-          $acq_term_data->delete();
-
-          // Save the translations.
-          $rcs_term->save();
+            // Save the translations.
+            $rcs_term->save();
+          }
         }
 
         // Delete the ACM Category item before creating the RCS Category.
