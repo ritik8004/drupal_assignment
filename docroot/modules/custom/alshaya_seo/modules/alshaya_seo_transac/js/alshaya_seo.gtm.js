@@ -1337,7 +1337,10 @@
     };
 
     // Adding PLP/SRP specific GTM list attribute.
-    if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1 || $('#alshaya-algolia-search').is(":visible")) {
+    if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1
+      || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1
+      || $('#alshaya-algolia-search').is(":visible")
+    ) {
       data.ecommerce.detail = {
         actionField: {
           list: product.list
@@ -1371,7 +1374,7 @@
       productData.eventAction = 'Add to Cart on Search';
     }
     // Adding PLP specific GTM list attribute.
-    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1) {
+    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1 || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1) {
       productData.eventAction = 'Add to Cart on Listing';
     }
 
@@ -1409,7 +1412,7 @@
       productData.eventAction = 'Remove from Cart on Search';
     }
     // Adding PLP specific GTM list attribute.
-    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1) {
+    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1 || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1) {
       productData.eventAction = 'Remove from Cart on Listing';
     }
 
