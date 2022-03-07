@@ -1316,6 +1316,26 @@
   };
 
   /**
+   * Function to check if current page is listing/search page.
+   *
+   * @return {string}
+   *
+   */
+  Drupal.alshayaCheckPageType = function () {
+    var pageType = '';
+    if ($('#alshaya-algolia-search').is(":visible")) {
+      pageType = 'Search';
+    }
+    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1
+      || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1
+    ) {
+      pageType = 'Listing';
+    }
+
+    return pageType;
+  }
+
+  /**
    * Function to push product detail view event to data layer.
    *
    * @param {object} productContext
@@ -1336,11 +1356,8 @@
       }
     };
 
-    // Adding PLP/SRP specific GTM list attribute.
-    if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1
-      || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1
-      || $('#alshaya-algolia-search').is(":visible")
-    ) {
+    // Check if current page is search/listing page.
+    if (Drupal.alshayaCheckPageType()) {
       data.ecommerce.detail = {
         actionField: {
           list: product.list
@@ -1369,13 +1386,11 @@
       event: 'addToCart'
     };
 
-    // Adding SRP specific GTM list attribute.
-    if ($('#alshaya-algolia-search').is(":visible")) {
-      productData.eventAction = 'Add to Cart on Search';
-    }
-    // Adding PLP specific GTM list attribute.
-    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1 || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1) {
-      productData.eventAction = 'Add to Cart on Listing';
+    var pageType = Drupal.alshayaCheckPageType();
+    // Check if current page is search/listing page.
+    // Then add PLP/SRP specific GTM attributes.
+    if (pageType) {
+      productData.eventAction = 'Add to Cart on ' + pageType;
     }
 
     productData.ecommerce = {
@@ -1407,13 +1422,11 @@
       event: 'removeFromCart'
     };
 
-    // Adding SRP specific GTM list attribute.
-    if ($('#alshaya-algolia-search').is(":visible")) {
-      productData.eventAction = 'Remove from Cart on Search';
-    }
-    // Adding PLP specific GTM list attribute.
-    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1 || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1) {
-      productData.eventAction = 'Remove from Cart on Listing';
+    var pageType = Drupal.alshayaCheckPageType();
+    // Check if current page is search/listing page.
+    // Then add PLP/SRP specific GTM attributes.
+    if (pageType) {
+      productData.eventAction = 'Remove from Cart on ' + pageType;
     }
 
     productData.ecommerce = {
