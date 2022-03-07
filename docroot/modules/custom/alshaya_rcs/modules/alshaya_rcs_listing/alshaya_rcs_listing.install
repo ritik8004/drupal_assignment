@@ -130,7 +130,7 @@ function _alshaya_rcs_listing_advance_page_batch_operation(&$sandbox) {
   $sandbox['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['current'] / $sandbox['max']);
 
   if ($sandbox['#finished'] >= 1) {
-    return t('Product category migration to category slug is finished.');
+    return 'Product category migration to category slug is finished.';
   }
 }
 

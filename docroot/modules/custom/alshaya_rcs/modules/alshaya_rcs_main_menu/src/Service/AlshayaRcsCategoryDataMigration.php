@@ -231,8 +231,9 @@ class AlshayaRcsCategoryDataMigration {
           $rcs_term->get('field_term_font_color')
             ->setValue($acq_term_data->get('field_term_font_color')->getValue());
 
-          // Delete the ACM Category item before creating the RCS Category.
+          // Delete the ACQ Category item before creating the RCS Category.
           $acq_term_data->delete();
+
           // Save the translations.
           $rcs_term->save();
         }
