@@ -462,11 +462,14 @@ class SKU extends ContentEntityBase implements SKUInterface {
   /**
    * Function to return first image from media files for a SKU.
    *
+   * @param bool $download_media
+   *   Whether to download media or not.
+   *
    * @return array
    *   Array of media files.
    */
-  public function getThumbnail() {
-    $media = $this->getMedia();
+  public function getThumbnail($download_media = TRUE) {
+    $media = $this->getMedia($download_media);
 
     // We loop through all the media items and return the first image.
     foreach ($media as $media_item) {
