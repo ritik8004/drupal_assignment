@@ -1316,23 +1316,24 @@
   };
 
   /**
-   * Function to check if current page is listing/search page.
+   * Function to check if current page is search page.
    *
-   * @return {string}
+   * @return {boolean}
    *
    */
-  Drupal.alshayaCheckPageType = function () {
-    var pageType = '';
-    if ($('#alshaya-algolia-search').is(":visible")) {
-      pageType = 'Search';
-    }
-    else if ($('body').attr('gtm-list-name').indexOf('PLP') !== -1
-      || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1
-    ) {
-      pageType = 'Listing';
-    }
+  function isPageTypeSearch() {
+    return $('#alshaya-algolia-search').is(":visible");
+  }
 
-    return pageType;
+  /**
+   * Function to check if current page is listing page.
+   *
+   * @return {boolean}
+   *
+   */
+  function isPageTypeListing() {
+    return ($('body').attr('gtm-list-name').indexOf('PLP') !== -1
+      || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1);
   }
 
   /**
@@ -1356,8 +1357,8 @@
       }
     };
 
-    // Check if current page is search/listing page.
-    if (Drupal.alshayaCheckPageType()) {
+    // Adding PLP/SRP specific GTM list attribute.
+    if (isPageTypeSearch() || isPageTypeListing()) {
       data.ecommerce.detail = {
         actionField: {
           list: product.list
@@ -1386,11 +1387,13 @@
       event: 'addToCart'
     };
 
-    var pageType = Drupal.alshayaCheckPageType();
-    // Check if current page is search/listing page.
-    // Then add PLP/SRP specific GTM attributes.
-    if (pageType) {
-      productData.eventAction = 'Add to Cart on ' + pageType;
+    // Adding SRP specific GTM list attribute.
+    if (isPageTypeSearch()) {
+      productData.eventAction = 'Add to Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if (isPageTypeListing()) {
+      productData.eventAction = 'Add to Cart on Listing';
     }
 
     productData.ecommerce = {
@@ -1422,11 +1425,13 @@
       event: 'removeFromCart'
     };
 
-    var pageType = Drupal.alshayaCheckPageType();
-    // Check if current page is search/listing page.
-    // Then add PLP/SRP specific GTM attributes.
-    if (pageType) {
-      productData.eventAction = 'Remove from Cart on ' + pageType;
+    // Adding SRP specific GTM list attribute.
+    if (isPageTypeSearch()) {
+      productData.eventAction = 'Remove from Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if (isPageTypeListing()) {
+      productData.eventAction = 'Remove from Cart on Listing';
     }
 
     productData.ecommerce = {
