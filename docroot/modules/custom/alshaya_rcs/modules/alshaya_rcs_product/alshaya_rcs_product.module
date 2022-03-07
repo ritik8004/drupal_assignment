@@ -549,8 +549,12 @@ function template_preprocess_rcs_not_buyable_product(&$variables) {
     ':find_store' => $find_store_url,
   ]);
 
-  $variables['not_buyable_message'] = $product_settings->get('not_buyable_message.value');
-  $variables['not_buyable_help_text'] = $not_buyable_help_text;
+  $variables['not_buyable_message'] = [
+    '#markup' => $product_settings->get('not_buyable_message.value'),
+  ];
+  $variables['not_buyable_help_text'] = [
+    '#markup' => $not_buyable_help_text,
+  ];
 }
 
 /**

@@ -111,9 +111,10 @@
     $.fn.cartNotificationScroll(true);
   }
 
+  var $document = $(document);
+
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-      var $document = $(document);
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
         var productData = e.detail.productData;
         Drupal.cartNotification.triggerNotification(productData);
