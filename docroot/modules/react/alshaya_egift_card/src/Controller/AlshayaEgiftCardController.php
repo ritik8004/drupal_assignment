@@ -4,6 +4,7 @@ namespace Drupal\alshaya_egift_card\Controller;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -145,7 +146,7 @@ class AlshayaEgiftCardController extends ControllerBase {
       $url->setOptions(['query' => ['destination' => $destination->toString()]]);
     }
 
-    $response = new RedirectResponse($url->toString());
+    $response = new LocalRedirectResponse($url->toString());
     $response->send();
   }
 
