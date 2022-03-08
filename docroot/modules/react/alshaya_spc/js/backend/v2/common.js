@@ -19,7 +19,7 @@ import {
 import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import isAuraEnabled from '../../../../js/utilities/helper';
-import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
@@ -276,8 +276,10 @@ const staticProductStatus = [];
  *
  * @param {Promise<string|null>} sku
  *  The sku for which the status is required.
+ * @param {string} parentSKU
+ *  The parent sku value.
  */
-const getProductStatus = async (sku) => {
+const getProductStatus = async (sku, parentSKU) => {
   if (typeof sku === 'undefined' || !sku) {
     return null;
   }
@@ -287,16 +289,7 @@ const getProductStatus = async (sku) => {
     return staticProductStatus[sku];
   }
 
-  // Bypass CloudFlare to get fresh stock data.
-  // Rules are added in CF to disable caching for urls having the following
-  // query string.
-  // The query string is added since same APIs are used by MAPP also.
-  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', { _cf_cache_bypass: '1' });
-  if (!hasValue(response) || !hasValue(response.data) || hasValue(response.data.error)) {
-    staticProductStatus[sku] = null;
-  } else {
-    staticProductStatus[sku] = response.data;
-  }
+  staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku, parentSKU);
 
   return staticProductStatus[sku];
 };
@@ -427,6 +420,11 @@ const getProcessedCartData = async (cartData) => {
     data.items = {};
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
+      const hasParentSku = hasValue(item.extension_attributes)
+        && hasValue(item.extension_attributes.parent_product_sku);
+      const parentSKU = (item.product_type === 'configurable' && hasParentSku)
+        ? item.extension_attributes.parent_product_sku
+        : null;
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
@@ -447,6 +445,7 @@ const getProcessedCartData = async (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
+        parentSKU,
         isEgiftCard,
       };
 
@@ -456,7 +455,7 @@ const getProcessedCartData = async (cartData) => {
       if ((spcPageType === 'cart' || spcPageType === 'checkout') && !isEgiftCard) {
         // Suppressing the lint error for now.
         // eslint-disable-next-line no-await-in-loop
-        const stockInfo = await getProductStatus(item.sku);
+        const stockInfo = await getProductStatus(item.sku, parentSKU);
 
         // Do not show the products which are not available in
         // system but only available in cart.

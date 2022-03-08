@@ -290,6 +290,11 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
           $build['recent_order'][] = [
             '#theme' => 'user_recent_order',
             '#order' => $order,
+            '#attached' => [
+              'library' => [
+                'alshaya_white_label/rcs-order-listing',
+              ],
+            ],
           ];
         }
         // Allow other modules to update recent order build.

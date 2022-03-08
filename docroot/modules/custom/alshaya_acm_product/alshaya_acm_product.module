@@ -548,6 +548,8 @@ function alshaya_acm_product_node_delete(NodeInterface $node) {
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (($entity->bundle() == 'acq_product')) {
+    $build['#attached']['library'][] = 'alshaya_acm_product/acq_product_info';
+
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
@@ -1626,7 +1628,10 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
     if ($route->getRouteName() == 'entity.node.canonical') {
       /** @var \Drupal\node\Entity\Node $node */
       $node = $route->getParameter('node');
-      return AccessResult::forbiddenIf($node->bundle() == 'acq_product');
+      return AccessResult::forbiddenIf(in_array($node->bundle(), [
+        'acq_product',
+        'rcs_product',
+      ]));
     }
   }
 }

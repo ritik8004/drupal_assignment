@@ -22,7 +22,8 @@
   }
 
   .field--name-field-magazine-date,
-  .magazine-shop-the-story__label {
+  .magazine-shop-the-story__label,
+  .field-magazine-shop-the-story__label {
     border-bottom: none;
 
     time,
@@ -311,7 +312,8 @@ body {
     padding-bottom: 1.25rem;
   }
 
-  .magazine-shop-the-story__label {
+  .magazine-shop-the-story__label,
+  .field-magazine-shop-the-story__label {
     margin-top: 3rem;
 
     .label-separator {

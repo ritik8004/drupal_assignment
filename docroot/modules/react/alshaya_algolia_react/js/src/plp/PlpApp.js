@@ -39,7 +39,15 @@ const getBackToPlpPage = (pageType) => {
  * Render search results elements facets, filters and sorting etc.
  */
 const PlpApp = ({
-  searchState, createURL, onSearchStateChange, pageType,
+  searchState,
+  createURL,
+  onSearchStateChange,
+  pageType,
+  hierarchy: defaultCategoryFilter,
+  level: nestedLevel,
+  ruleContext,
+  categoryField,
+  promotionNodeId,
 }) => {
   const plpCategoryRef = useRef();
   const allFiltersRef = useRef();
@@ -48,16 +56,17 @@ const PlpApp = ({
     itemsPerPage,
     filterOos,
     pageSubType,
-    hierarchy: defaultCategoryFilter,
     hierarchy_lhn: lhnCategoryFilter,
-    category_field: categoryField,
-    level: nestedLevel,
     max_category_tree_depth: categoryDepth,
-    promotionNodeId,
-    ruleContext,
     subCategories,
     categoryFacetEnabled,
   } = drupalSettings.algoliaSearch;
+
+  // Split ruleContext into array of strings.
+  let context = [];
+  if (ruleContext !== undefined && ruleContext.length > 0) {
+    context = ruleContext.split(',');
+  }
 
   const { indexName } = drupalSettings.algoliaSearch.listing;
 
@@ -154,7 +163,7 @@ const PlpApp = ({
         clickAnalytics
         hitsPerPage={groupEnabled ? 1000 : itemsPerPage}
         filters={finalFilter}
-        ruleContexts={ruleContext}
+        ruleContexts={context}
         optionalFilters={optionalFilter}
       />
       <PlpStickyFilter

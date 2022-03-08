@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - rcs_placeholders
+    - system
+  theme:
+    - alshaya_white_label
+id: rcs_placeholders_breadcrumb
+theme: alshaya_white_label
+region: breadcrumb
+weight: 0
+provider: null
+plugin: rcs_ph_breadcrumb
+settings:
+  id: rcs_ph_breadcrumb
+  label: 'RCS Placeholders breadcrumb'
+  provider: rcs_placeholders
+  label_display: '0'
+visibility:
+  rcs_context:
+    id: rcs_context
+    use_rcs_context: 1
+    negate: 0
+    context_mapping: {}

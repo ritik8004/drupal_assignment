@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function rcs_magento_placeholders_page_attachments_alter(array &$attachments) {
+  // Add 404 redirect url.
+  // @see \Drupal\Core\EventSubscriber\CustomPageExceptionHtmlSubscriber.
+  $configured_404_page = \Drupal::configFactory()->get('system.site')->get('page.404');
+  if (!empty($configured_404_page)) {
+    $configured_404_page = \Drupal::service('path_alias.manager')->getAliasByPath($configured_404_page);
+    $configured_404_page = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . $configured_404_page;
+  }
+  else {
+    // @see \Drupal\Core\EventSubscriber\DefaultExceptionHtmlSubscriber.
+    $configured_404_page = Url::fromRoute('system.404')->toString();
+  }
+
+  $attachments['#attached']['drupalSettings']['rcs']['404Page'] = $configured_404_page;
+}

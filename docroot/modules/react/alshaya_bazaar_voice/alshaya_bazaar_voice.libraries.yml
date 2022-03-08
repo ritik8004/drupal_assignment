@@ -38,6 +38,28 @@ iovation:
   dependencies:
     - bazaar_voice/bazaar_voice
 
+reviewsV2:
+  js:
+    dist/reviewsV2.bundle.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - alshaya_react/react
+    - alshaya_acm_product/rcs_product_info
+    - bazaar_voice/bazaar_voice
+
+ratingV2:
+  js:
+    dist/ratingV2.bundle.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - alshaya_react/react
+    - alshaya_acm_product/rcs_product_info
+    - bazaar_voice/bazaar_voice
+
 pie_write_review:
   css:
     theme:

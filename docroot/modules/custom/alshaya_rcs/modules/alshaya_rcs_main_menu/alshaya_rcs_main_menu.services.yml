@@ -1,0 +1,19 @@
+services:
+  alshaya_rcs_main_menu.rcs_category_helper:
+    class: Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@renderer'
+      - '@language_manager'
+      - '@path_alias.manager'
+      - '@cache.data'
+      - '@database'
+  alshaya_rcs_main_menu.category_data_migration:
+    class: Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@language_manager'
+      - '@database'
+      - '@path.alias_manager'

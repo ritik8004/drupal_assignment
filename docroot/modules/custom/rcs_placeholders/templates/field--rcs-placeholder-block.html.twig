@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Theme override for a field.
+ *
+ * See docblock in docroot/core/themes/classy/templates/field/field.html.twig
+ */
+#}
+{%
+  set classes = [
+  'rcs',
+  'field',
+  'field--name-' ~ field_name|clean_class,
+  'field--type-' ~ field_type|clean_class,
+  'field--label-' ~ label_display,
+  label_display == 'inline' ? 'clearfix',
+]
+%}
+{%
+  set title_classes = [
+  'field__label',
+  field_name|clean_class  ~ '__label',
+  label_display == 'visually_hidden' ? 'visually-hidden',
+]
+%}
+{%
+  set field_id = field_name
+%}
+<div{{ attributes.addClass(classes) }}>
+  <div{{ title_attributes.addClass(title_classes) }}>
+    <span class="label-separator"> {{ label }} </span>
+  </div>
+  <div id="rcs-ph-{{ field_id }}" {{ content_attributes }}></div>
+</div>

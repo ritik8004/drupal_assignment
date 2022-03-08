@@ -94,7 +94,7 @@
   }
 
   // Push Filter event to GTM.
-  $('body').once('bind-facet-item-click').on('click','.facet-item', function (event) {
+  $('#alshaya-algolia-search').once('bind-facet-item-click').on('click','.facet-item', function (event) {
     // To get page type for listing pages.
     // Search page does not have the pageSubType key in drupalSettings.
     var listName = drupalSettings.algoliaSearch.pageSubType ? drupalSettings.algoliaSearch.pageSubType : drupalSettings.path.currentPath;
@@ -116,21 +116,22 @@
         eventName = 'sort';
       }
       switch (listName) {
-        case 'search':
-          var data = {
-            event: eventName,
-            siteSection: 'search results',
-            filterType: facetTitle,
-            filterValue: selectedText,
-          };
-          break;
-
         case 'promotion':
         case 'plp':
         case 'product_option_list':
           var data = {
             event: eventName,
             siteSection: section,
+            filterType: facetTitle,
+            filterValue: selectedText,
+          };
+          break;
+
+        case 'search':
+        default:
+          var data = {
+            event: eventName,
+            siteSection: 'search results',
             filterType: facetTitle,
             filterValue: selectedText,
           };

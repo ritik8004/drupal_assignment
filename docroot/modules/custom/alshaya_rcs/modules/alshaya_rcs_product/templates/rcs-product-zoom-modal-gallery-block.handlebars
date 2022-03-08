@@ -1,0 +1,29 @@
+<div id="product-full-screen-gallery-container" style="display: none;">
+  <div class="imagegallery__wrapper thumbnail-count-{{data.root.thumbnails.length}}">
+    <div class="yt-vi-container cloudzoom__video_modal"></div>
+    <ul id="product-full-screen-gallery">
+      {{!-- As per new design we dont show videos in full screen modal galleries. --}}
+      {{#each data.root.thumbnails}}
+        {{#if (and
+              (ne this.type "youtube")
+              (ne this.type "vimeo")
+              (ne this.type "video"))
+          }}
+              <li>
+                <a
+                  href="{{this.fullurl}}"
+                  class="imagegallery__thumbnails__image a-gallery"
+                >
+                  <img
+                    loading="lazy"
+                    src="{{this.fullurl}}"
+                    alt="{{this.label}}"
+                    title="{{this.label}}"
+                  />
+                </a>
+              </li>
+        {{/if}}
+      {{/each}}
+    </ul>
+  </div>
+</div>

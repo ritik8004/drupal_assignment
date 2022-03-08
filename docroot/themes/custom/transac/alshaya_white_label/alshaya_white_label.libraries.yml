@@ -634,6 +634,71 @@ tabby:
     theme:
       css/conditional-sass/tabby/tabby.ltr.css: {}
 
+rcs-alshaya-magazine:
+  css:
+    theme:
+      css/conditional-sass/rcs-alshaya-magazine/rcs-alshaya-magazine.ltr.css: {}
+
+rcs-ph-breadcrumb:
+  css:
+    theme:
+      css/conditional-sass/rcs-ph-breadcrumb/rcs-ph-breadcrumb.ltr.css: {}
+
+rcs-ph-lhn-block:
+  css:
+    theme:
+      css/conditional-sass/rcs-ph-lhn-block/rcs-ph-lhn-block.ltr.css: {}
+
+rcs-ph-navigation-menu:
+  css:
+    theme:
+      css/conditional-sass/rcs-ph-navigation-menu/rcs-ph-navigation-menu.ltr.css: {}
+
+rcs-ph-plp-mobile-menu:
+  css:
+    theme:
+      css/conditional-sass/rcs-ph-plp-mobile-menu/rcs-ph-plp-mobile-menu.ltr.css: {}
+
+rcs-ph-promotional-banner:
+  css:
+    theme:
+      css/conditional-sass/rcs-ph-promotional-banner/rcs-ph-promotional-banner.ltr.css: {}
+
+rcs-ph-term-description:
+  css:
+    theme:
+      css/conditional-sass/rcs-ph-term-description/rcs-ph-term-description.ltr.css: {}
+
+rcs-placeholders:
+  css:
+    theme:
+      css/conditional-sass/rcs-placeholders/rcs-placeholders.ltr.css: {}
+
+rcs-product-related:
+  css:
+    theme:
+      css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css: {}
+
+rcs-shop-by-block:
+  css:
+    theme:
+      css/conditional-sass/rcs-shop-by-block/rcs-shop-by-block.ltr.css: {}
+
+rcs-algolia-plp:
+  css:
+    theme:
+      css/conditional-sass/rcs-algolia-plp/rcs-algolia-plp.ltr.css: {}
+
+rcs-order-listing:
+  css:
+    theme:
+      css/conditional-sass/rcs-order-listing/rcs-order-listing.ltr.css: {}
+
+rcs-order-details:
+  css:
+    theme:
+      css/conditional-sass/rcs-order-details/rcs-order-details.ltr.css: {}
+
 country-switcher:
   css:
     theme:

@@ -1,0 +1,194 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Drupal\taxonomy\Entity\Term;
+use Drupal\node\Entity\Node;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\Core\Url;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Implements hook_install().
+ *
+ * Create the placeholder category term, product node and main menu links.
+ */
+function rcs_placeholders_install() {
+  // This will be used for creating entity translations. Since we are creating
+  // the dafault language separately, we unset it from the array.
+  $languages = \Drupal::languageManager()->getLanguages();
+  $default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+  unset($languages[$default_langcode]);
+
+  $config = \Drupal::service('config.factory')->getEditable('rcs_placeholders.settings');
+
+  // Placeholder category term.
+  $term = Term::create([
+    'parent' => [],
+    'name' => '#rcs.category.name#',
+    'vid' => 'rcs_category',
+  ]);
+  $term->save();
+
+  foreach ($languages as $langcode => $language) {
+    $translated_term = $term->addTranslation($langcode, [
+      'name' => '#rcs.category.name#',
+    ]);
+    $translated_term->save();
+  }
+
+  $config->set('category.placeholder_tid', $term->id())->save();
+
+  // Placeholder product node.
+  $node = Node::create([
+    'type' => 'rcs_product',
+    'title' => '#rcs.product.name#',
+  ]);
+  $node->save();
+
+  foreach ($languages as $langcode => $language) {
+    $translated_node = $node->addTranslation($langcode, [
+      'title' => '#rcs.product.name#',
+    ]);
+    $translated_node->save();
+  }
+
+  $config->set('product.placeholder_nid', $node->id())->save();
+
+  // Placeholder promotion node.
+  $node = Node::create([
+    'type' => 'rcs_promotion',
+    'title' => '#rcs.promotion.name#',
+  ]);
+  $node->save();
+
+  foreach ($languages as $langcode => $language) {
+    $translated_node = $node->addTranslation($langcode, [
+      'title' => '#rcs.promotion.name#',
+    ]);
+    $translated_node->save();
+  }
+
+  $config->set('promotion.placeholder_nid', $node->id())->save();
+
+
+  // Placeholder main menu items (depth 1 to 3).
+  $level1 = MenuLinkContent::create([
+    'menu_name' => 'rcs-navigation',
+    'title' => '#title',
+    'link' => ['uri' => Url::fromUserInput('#link')->toUriString()],
+    'expanded' => TRUE,
+  ]);
+  $level1->save();
+
+  $level2 = MenuLinkContent::create([
+    'menu_name' => 'rcs-navigation',
+    'title' => '#title',
+    'link' => ['uri' => Url::fromUserInput('#link')->toUriString()],
+    'expanded' => TRUE,
+    'parent' => 'menu_link_content:' . $level1->uuid(),
+  ]);
+  $level2->save();
+
+  $level3 = MenuLinkContent::create([
+    'menu_name' => 'rcs-navigation',
+    'title' => '#title',
+    'link' => ['uri' => Url::fromUserInput('#link')->toUriString()],
+    'expanded' => TRUE,
+    'parent' => 'menu_link_content:' . $level2->uuid(),
+  ]);
+  $level3->save();
+
+  // Add index for product slug field.
+  $index = 'node__field_product_slug';
+  $data = [
+    'table' => 'node__field_product_slug',
+    'fields' => [
+      'field_product_slug_value',
+    ],
+    'spec' => [
+      'fields' => [
+        'field_product_slug_value' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
+  \Drupal::database()
+    ->schema()
+    ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+
+  // Add index for category slug field.
+  $index = 'taxonomy_term__field_category_slug';
+  $data = [
+    'table' => 'taxonomy_term__field_category_slug',
+    'fields' => [
+      'field_category_slug_value',
+    ],
+    'spec' => [
+      'fields' => [
+        'field_category_slug_value' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
+  \Drupal::database()
+    ->schema()
+    ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function rcs_placeholders_uninstall() {
+  // Delete node fields.
+  $field_names = ['field_product_slug', 'field_metatags'];
+  foreach ($field_names as $field_name) {
+    $field = FieldConfig::loadByName('node', 'rcs_product', $field_name);
+    if (!empty($field)) {
+      $field->delete();
+    }
+    $field_storage = FieldStorageConfig::loadByName('node', $field_name);
+    if (!empty($field_storage)) {
+      $field_storage->delete();
+    }
+  }
+
+  // Delete taxonomy fields.
+  $field_names = ['field_category_slug', 'field_metatags'];
+  foreach ($field_names as $field_name) {
+    $field = FieldConfig::loadByName('taxonomy_term', 'rcs_category', $field_name);
+    if (!empty($field)) {
+      $field->delete();
+    }
+    $field_storage = FieldStorageConfig::loadByName('taxonomy_term', $field_name);
+    if (!empty($field_storage)) {
+      $field_storage->delete();
+    }
+  }
+
+  // Remove module configs.
+  $config_ids = [
+    'metatag.metatag_defaults.node__rcs_product',
+    'metatag.metatag_defaults.taxonomy_term__rcs_category',
+    'metatag.settings',
+    'node.type.rcs_promotion',
+    'pathauto.pattern.rcs_category',
+    'pathauto.pattern.rcs_product',
+    'pathauto.pattern.rcs_promotion',
+    'system.menu.rcs-navigation',
+  ];
+  foreach ($config_ids as $config_id) {
+    $config = \Drupal::service('config.factory')->getEditable($config_id);
+    $config->delete();
+  }
+}

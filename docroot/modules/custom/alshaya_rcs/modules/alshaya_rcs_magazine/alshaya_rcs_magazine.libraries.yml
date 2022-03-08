@@ -1,0 +1,7 @@
+main:
+  version: 1.x
+  js:
+    js/alshaya_rcs_magazine.js: {}
+  dependencies:
+    - core/jquery
+    - rcs_placeholders/helpers

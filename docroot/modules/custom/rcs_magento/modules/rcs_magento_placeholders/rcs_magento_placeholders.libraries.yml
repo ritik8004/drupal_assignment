@@ -1,0 +1,7 @@
+rcs_magento_placeholders:
+  js:
+    dist/rcs_magento_placeholders.bundle.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - rcs_magento/backend

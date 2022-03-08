@@ -4,7 +4,7 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import { isProductBuyable } from '../../../../js/utilities/display';
 import NotBuyableButton from '../buttons/not-buyable';
 import ConfigurableProductDrawer from '../configurable-drawer';
-import { getProductInfo, addProductInfoInStorage, triggerCartTextNotification } from '../../utilities/addtobag';
+import { addProductInfoInStorage, triggerCartTextNotification } from '../../utilities/addtobag';
 import getStringMessage from '../../../../js/utilities/strings';
 
 export default class AddToBagConfigurable extends React.Component {
@@ -36,7 +36,8 @@ export default class AddToBagConfigurable extends React.Component {
     btn.classList.toggle('add-to-bag-loader');
 
     // Get product's information for drawer.
-    const productInfoData = getProductInfo(sku);
+    const productInfoData = window.commerceBackend.getProductDataAddToBagListing(sku);
+
     if (productInfoData instanceof Promise) {
       productInfoData.then((response) => {
         // Remove the loader class from button container.

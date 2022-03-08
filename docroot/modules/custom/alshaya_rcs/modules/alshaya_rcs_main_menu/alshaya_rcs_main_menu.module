@@ -1,0 +1,246 @@
+<?php
+
+/**
+ * @file
+ * Constains hooks and alters for Alshaya Rcs Main Menu.
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_main_menu_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_rcs_dp_app_navigation' => [
+      'template' => 'alshaya-rcs-dp-app-navigation',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Check for given path, department page exists.
+ *
+ * Check for given path, department page exists. If department page exists
+ * then return that department page node id or return false.
+ *
+ * @param string $path
+ *   The current route path.
+ *
+ * @return int|bool
+ *   Department page node id or false.
+ */
+function alshaya_rcs_main_menu_is_department_page(string $path) {
+  return \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->isDepartmentPage($path);
+}
+
+/**
+ * Helper function to fetch list of department pages.
+ *
+ * @return array
+ *   Nids of department pages keyed by slug.
+ */
+function alshaya_rcs_main_menu_get_department_pages() {
+  return \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->getDepartmentPages();
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_rcs_main_menu_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'node_advanced_page_form' || $form_id == 'node_advanced_page_edit_form') {
+    $form['field_category_slug']['#states'] = [
+      'visible' => [
+        ':input[name="field_use_as_department_page[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_category_slug']['widget'][0]['value']['#states'] = [
+      'required' => [
+        ':input[name="field_use_as_department_page[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    // Remove the validate function for product category and also make this
+    // field non required.
+    $form['field_product_category']['#access'] = FALSE;
+    unset($form['field_product_category']['widget']['#states']['required']);
+    $form['#validate'] = array_diff($form['#validate'], ['alshaya_advanced_page_node_form_validate']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function alshaya_rcs_main_menu_preprocess_page_title(&$variables) {
+  $routematch = \Drupal::routeMatch();
+  if ($routematch->getRouteName() == 'entity.node.canonical') {
+    $node = $routematch->getParameter('node');
+    if ($node->bundle() == 'advanced_page') {
+      $is_department_page = $node->get('field_use_as_department_page')->getString();
+      // Proceed only if the page is getting used as department page.
+      if ($is_department_page) {
+        // Change the title of the department node.
+        $variables['title'] = [
+          '#markup' => '#rcs.category.name#',
+        ];
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_rcs_main_menu_preprocess_page(&$variables) {
+  $routematch = \Drupal::routeMatch();
+  if ($routematch->getRouteName() == 'entity.node.canonical') {
+    $node = $routematch->getParameter('node');
+    if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString()) {
+      // Add description placeholder for the advanced page.
+      $variables['category_term_description'] = '#rcs.category.description#';
+      $variables['#attached']['library'][] = 'alshaya_white_label/rcs-ph-term-description';
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_rcs_main_menu_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() != 'advanced_page') {
+    return;
+  }
+
+  /** @var \Drupal\node\NodeInterface $node */
+  $is_department_page = $entity->get('field_use_as_department_page')->getString();
+  // Proceed only if the page is getting used as department page.
+  if ($is_department_page) {
+    $category_slug = $entity->get('field_category_slug')->getString();
+    // Redirect only if there is value in category slug.
+    if ($category_slug) {
+      $request = \Drupal::requestStack()->getCurrentRequest();
+      $lang_code = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      // Prepare the proper URL from the category slug.
+      $url = "/$lang_code/$category_slug/";
+      if ($request->getPathInfo() == $url) {
+        // We are already on term alias, no redirects required.
+        return;
+      }
+      // When trying to access advanced page (department page) directly via
+      // node alias we should redirect it to category slug.
+      $response = new RedirectResponse($url, 301);
+      $response->send();
+      exit;
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_rcs_main_menu_node_presave(EntityInterface $entity) {
+  if ($entity->getType() == 'advanced_page') {
+    // Unset the category slug if department page is unchecked.
+    if ($entity->get('field_use_as_department_page')->getString() == 0) {
+      unset($entity->field_category_slug);
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ */
+function alshaya_rcs_main_menu_node_insert(EntityInterface $node) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString() == 1) {
+    _alshaya_rcs_main_menu_invalidate_enriched_term_cache($node);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for node entities.
+ */
+function alshaya_rcs_main_menu_node_update(EntityInterface $node) {
+  if ($node->bundle() == 'advanced_page'
+    && ($node->get('field_use_as_department_page')->getString() == 1
+      || $node->original->get('field_use_as_department_page')->getString() == 1)
+  ) {
+    _alshaya_rcs_main_menu_invalidate_enriched_term_cache($node);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for node entities.
+ */
+function alshaya_rcs_main_menu_node_delete(EntityInterface $node) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString() == 1) {
+    _alshaya_rcs_main_menu_invalidate_enriched_term_cache($node);
+  }
+}
+
+/**
+ * Invalidate enriched term cache tags.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $node
+ *   Product node object.
+ */
+function _alshaya_rcs_main_menu_invalidate_enriched_term_cache(EntityInterface $node) {
+  $path_processor = \Drupal::service('Drupal\rcs_placeholders\Service\RcsPhPathProcessor');
+  $category_slug = $node->get('field_category_slug')->getString();
+  // Proceed only if category slug is present.
+  if ($category_slug) {
+    $term = $path_processor->getEnrichedEntity('category', $category_slug);
+    if ($term instanceof TermInterface) {
+      Cache::invalidateTags($term->getCacheTags());
+    }
+  }
+  // Invalidate the default RCS Term tags.
+  $default_term_id = \Drupal::config('rcs_placeholders.settings')->get('category.placeholder_tid');
+  Cache::invalidateTags(['taxonomy_term:' . $default_term_id]);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block templates.
+ */
+function alshaya_rcs_main_menu_preprocess_block(&$variables) {
+  if ($variables['plugin_id'] == 'alshaya_rcs_dp_app_navigation') {
+    $variables['attributes']['class'][] = 'block-alshaya-dp-navigation-link';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function alshaya_rcs_main_menu_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  // Add template suggestion based on machine name.
+  if (array_key_exists('#id', $variables['elements'])) {
+    switch ($variables['elements']['#id']) {
+      case 'alshayarcsshopby':
+        $suggestions[] = 'block__shopby';
+        break;
+    }
+  }
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query().
+ */
+function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
+  $query_fields = [];
+  $rcs_main_menu_config = \Drupal::config('alshaya_rcs_main_menu.settings');
+  $menu_max_depth = $rcs_main_menu_config->get('menu_max_depth');
+
+  $query_fields['navigationMenu'] = \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')
+    ->getRcsCategoryMenuQuery($menu_max_depth);
+  $query_fields['#cache']['tags'] = $rcs_main_menu_config->getCacheTags();
+
+  return $query_fields;
+}

@@ -25,10 +25,10 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const prepareRequest = (elements, fieldsConfig, productId) => {
+export const prepareRequest = async (elements, fieldsConfig, productId) => {
   let params = '';
   const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-  const userDetails = getUserDetails(productId);
+  const userDetails = await getUserDetails(productId);
   const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
