@@ -28,6 +28,8 @@
           product,
         },
       );
+    }).catch(function(e) {
+      Drupal.alshayaLogger('error', 'Failed to fetch Product Labels.', 'error');
     });
   }
 
