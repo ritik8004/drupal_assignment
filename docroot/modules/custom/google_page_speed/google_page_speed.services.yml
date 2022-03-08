@@ -1,4 +1,0 @@
-services:
-  google_page_speed.gps_insights:
-    class: Drupal\google_page_speed\Service\GpsInsightsWrapper
-    arguments: ['@database', '@datetime.time']
