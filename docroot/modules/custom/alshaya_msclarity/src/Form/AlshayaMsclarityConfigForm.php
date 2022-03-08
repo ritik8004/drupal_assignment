@@ -106,6 +106,14 @@ class AlshayaMsclarityConfigForm extends ConfigFormBase {
       '#collapsed' => TRUE,
     ];
 
+    $form['visibility']['page_vis_settings']['roles'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Roles'),
+      '#group' => 'advanced',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    ];
+
     $options = [
       $this->t('Every page except the listed pages'),
       $this->t('The listed pages only'),
@@ -116,6 +124,28 @@ class AlshayaMsclarityConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('pages_vis_settings.msclarity_visibility_pages'),
       '#required' => TRUE,
       '#title' => $this->t('Add tracking to specific pages'),
+    ];
+
+    $form['visibility']['page_vis_settings']['roles']['msclarity_visibility_roles'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Add tracking for specific roles'),
+      '#options' => [
+        $this->t('Add to the selected roles only'),
+        $this->t('Add to every role except the selected ones'),
+      ],
+      '#default_value' => $config->get('roles_vis_settings.msclarity_visibility_roles'),
+    ];
+    $role_options = [];
+    $user_roles = user_roles();
+    foreach ($user_roles as $role) {
+      $role_options[$role->id()] = $role->label();
+    }
+    $default_roles = $config->get('roles_vis_settings.msclarity_roles');
+    $form['visibility']['page_vis_settings']['roles']['msclarity_roles'] = [
+      '#type' => 'checkboxes',
+      '#options' => $role_options,
+      '#default_value' => $default_roles ?? [],
+      '#title' => $this->t('Allow tracking for the roles'),
     ];
 
     $form['visibility']['page_vis_settings']['pages']['msclarity_pages'] = [

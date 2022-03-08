@@ -22,8 +22,10 @@ function alshaya_msclarity_page_attachments_alter(array &$page) {
   $config = \Drupal::config('alshaya_msclarity.settings');
   // Attach the alshaya_msclarity js on page.
   if (_alshaya_msclarity_visibility_pages()) {
-    $page['#attached']['library'][] = 'alshaya_msclarity/alshaya_msclarity';
-    $page['#attached']['drupalSettings']['alshaya_msclarity']['msclarity_id'] = $config->get('msclarity_id.msclarity_id');
+    if (_alshaya_msclarity_visibility_roles()) {
+      $page['#attached']['library'][] = 'alshaya_msclarity/alshaya_msclarity';
+      $page['#attached']['drupalSettings']['alshaya_msclarity']['msclarity_id'] = $config->get('msclarity_id.msclarity_id');
+    }
   }
 }
 
@@ -37,7 +39,6 @@ function _alshaya_msclarity_visibility_pages() {
 
     $visibility = $config->get('pages_vis_settings.msclarity_visibility_pages');
     $setting_pages = $config->get('pages_vis_settings.msclarity_pages');
-
     // Match path if necessary.
     if (!empty($setting_pages)) {
       // Convert path to lowercase. This allows comparison of the same path.
@@ -68,4 +69,37 @@ function _alshaya_msclarity_visibility_pages() {
     }
   }
   return $page_match;
+}
+
+/**
+ * Based on visibility setting this function returns TRUE.
+ */
+function _alshaya_msclarity_visibility_roles() {
+  $current_user = \Drupal::currentUser();
+  $user_roles = $current_user->getRoles();
+  $config = \Drupal::config('alshaya_msclarity.settings');
+  $visibility = $config->get('roles_vis_settings.msclarity_visibility_roles');
+  $roles = [];
+  $enabled = TRUE;
+  if (!empty($config->get('roles_vis_settings.msclarity_roles'))) {
+    $roles = array_values(array_filter($config->get('roles_vis_settings.msclarity_roles')));
+  }
+  if ($visibility == 0 && !empty($roles)) {
+    if (!empty(array_intersect($roles, $user_roles))) {
+      $enabled = TRUE;
+    }
+    else {
+      $enabled = FALSE;
+    }
+  }
+  elseif ($visibility == 1 && !empty($roles)) {
+    if (!empty(array_intersect($roles, $user_roles))) {
+      $enabled = FALSE;
+    }
+    else {
+      $enabled = TRUE;
+    }
+  }
+
+  return $enabled;
 }
