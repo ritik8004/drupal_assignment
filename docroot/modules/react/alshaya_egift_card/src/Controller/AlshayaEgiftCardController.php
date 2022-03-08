@@ -11,7 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
 use Drupal\Core\Session\AccountInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Alshaya Egift Cards Controller.
