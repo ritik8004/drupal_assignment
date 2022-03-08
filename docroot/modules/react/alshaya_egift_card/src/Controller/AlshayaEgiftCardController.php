@@ -5,10 +5,12 @@ namespace Drupal\alshaya_egift_card\Controller;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
 use Drupal\Core\Session\AccountInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Alshaya Egift Cards Controller.
@@ -120,6 +122,29 @@ class AlshayaEgiftCardController extends ControllerBase {
 
   function getUserEgiftPageTitle() {
     return $this->t('eGift Card', [], ['context' => 'egift']);
+  }
+
+  /**
+   * Link card page redirects user to login or eGift card page in my-account.
+   */
+  function linkCard() {
+    if (!$this->egiftCardHelper->isEgiftCardEnabled()) {
+      // If egift not enabled then redirect to /user page.
+      $url = Url::fromRoute('user.page');
+    }
+    else if ($this->currentUser()->isAuthenticated()) {
+      // If authenticated user then redirect to egift card page in my account.
+      $url = Url::fromRoute('alshaya_egift_card.my_egift_card', ['user' => $this->currentUser->id()]);
+    }
+    else {
+      // If anonymous user then redirect to user/login with destination param.
+      $url = Url::fromRoute('user.login');
+      $destination = Url::fromRoute('alshaya_egift_card.link-egift');
+      $url->setOptions(['query' => ['destination' => $destination->toString()]]);
+    }
+
+    $response = new RedirectResponse($url->toString());
+    $response->send();
   }
 
 }
