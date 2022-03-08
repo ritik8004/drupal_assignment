@@ -264,7 +264,7 @@ header.c-header {
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: 16%;
-        margin-top: -0.875rem;
+        margin-top: -0.5rem;
         background-position: 0 0.125rem;
 
         html[lang=ar] & {
@@ -275,7 +275,6 @@ header.c-header {
       @include breakpoint($only-mobile) {
         height: 2rem;
         width: 2rem;
-        margin-#{$right}: -0.3125rem;
         margin-top: 0.9375rem;
 
         html[lang=ar] & {
@@ -345,6 +344,7 @@ header.c-header {
     }
 
     @include breakpoint($only-tablet) {
+      height: 3rem;
       margin-top: 0.6875rem;
       padding-#{$left}: 1.5rem;
     }
@@ -541,6 +541,10 @@ header {
       top: 1.1875rem;
       font-size: 0;
       margin-#{$left}: 0.8125rem;
+
+      @include breakpoint($only-tablet) {
+        top: 0.6rem;
+      }
 
       &::before {
         margin-#{$right}: 0;
@@ -892,8 +896,8 @@ header {
       height: 1.563rem;
       font-size: 2.5rem;
       position: absolute;
-      top: -0.3125rem;
-      #{$left}: -0.125rem;
+      top: 0;
+      #{$left}: 0;
       color: $header_mobile_menu_close;
     }
   }

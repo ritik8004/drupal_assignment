@@ -1,0 +1,347 @@
+.branding__menu .block-alshaya-search {
+  @include breakpoint($upto-tablet) {
+    display: none;
+  }
+
+  @include breakpoint($only-tablet) {
+    display: none !important;
+
+    &.show-search {
+      display: block !important;
+    }
+  }
+}
+
+ header {
+  .region__header .block-views-exposed-filter-blocksearch-page {
+    top: 0.5rem;
+
+    @include breakpoint($upto-desktop) {
+      z-index: 8;
+      bottom: auto;
+      top: 5.3125rem;
+      position: absolute;
+    }
+
+    @include breakpoint($only-mobile) {
+      position: fixed;
+    }
+
+    html[lang="ar"] & {
+      @include breakpoint($upto-tablet) {
+        top: 5.3rem;
+      }
+    }
+  }
+
+  .block-cart-mini-block .cart-link,
+  .block-alshaya-react-mini-cart .cart-link {
+    @include breakpoint($upto-desktop) {
+      display: block;
+      margin: 0;
+      text-align: center;
+      width: 100%;
+      height: 2.5rem;
+      background-size: 2.125rem;
+
+      html[lang="ar"] & {
+        margin-top: 0;
+      }
+    }
+
+    @include breakpoint($upto-tablet) {
+      height: 2.625rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      background-position: center;
+    }
+  }
+
+  .c-header__region {
+    @include breakpoint($upto-desktop) {
+      margin: 0;
+      padding-bottom: 0;
+      height: auto;
+
+      html[lang="ar"] & {
+        height: auto;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      padding-top: 2rem;
+
+      html[lang="ar"] & {
+        padding-top: 1.625rem;
+        padding-bottom: 2.5rem;
+      }
+    }
+  }
+
+  .views-exposed-form-search-page {
+    @include breakpoint($upto-desktop) {
+      width: 100%;
+      border: 0.5rem solid $header_search_border_mobile;
+    }
+  }
+
+  #mini-cart-wrapper {
+    @include breakpoint($desktop) {
+      height: 2.25rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      float: none;
+      margin: 0;
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .logged-in .mobile--close,
+  .mobile--close {
+    top: 2.8125rem;
+  }
+
+  .logged-in .toggle--sign,
+  .toggle--sign {
+    top: 2.8125rem;
+  }
+
+  .main--menu {
+    top: 5.625rem;
+    z-index: 15;
+
+    ul {
+      width: 100%;
+    }
+  }
+
+  .main--menu ul.menu--one__list,
+  .c-menu-secondary {
+    top: 5.7rem;
+
+    a {
+      text-transform: uppercase;
+      font-size: 0.875rem;
+    }
+  }
+
+  .main--menu ul.menu--one__list {
+    padding-bottom: 6.0625rem;
+
+    .menu__link {
+      text-transform: uppercase;
+      font-size: 0.875rem;
+    }
+  }
+
+  .menu__list-item,
+  .back--link {
+    text-transform: uppercase;
+    font-size: 0.875rem;
+
+    a {
+      padding-bottom: 0.875rem;
+    }
+  }
+
+  .menu__in::after {
+    font-size: 1.5rem;
+  }
+
+  .menu__back {
+    height: 0.8125rem;
+
+    html[lang="ar"] & {
+      transform: rotate(180deg);
+    }
+  }
+
+  .toggle--sign {
+    .one,
+    .one.shop {
+      text-transform: uppercase;
+      padding-top: 1.1rem;
+      padding-bottom: 1.1rem;
+      font-size: 0.75rem;
+    }
+
+    .one {
+      width: 50.5%;
+      padding: 1.1rem 0.5rem;
+    }
+
+    .one.shop {
+      width: 49.5%;
+    }
+  }
+
+  body {
+    margin-top: 5.5rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: 5.4375rem;
+    }
+
+    &:not(.no-sticky-algolia-search-bar) {
+      .branding__menu {
+        box-shadow: none;
+      }
+    }
+
+    html[lang="ar"] & {
+      margin-top: 5.5rem;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 5.4375rem;
+      }
+    }
+  }
+
+  .block-alshaya-super-category-menu {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+
+    @include breakpoint($only-mobile) {
+      position: fixed;
+    }
+  }
+
+  .menu--mobile-navigation {
+    width: 75%;
+    top: 2.875rem;
+    background-color: $header_mobile_menu_bg;
+  }
+
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
+    #{$right}: 0;
+    z-index: 1;
+    text-align: center;
+    background-color: $header_mobile_menu_bg;
+  }
+
+  .mobile--close {
+    .menu--active & {
+      #{$left}: 20rem;
+    }
+
+    top: 2.8125rem;
+    height: 2.8125rem;
+    width: 2.8125rem;
+    padding-top: 0.5rem;
+  }
+
+  .c-menu-secondary,
+  .toggle--sign,
+  .main--menu ul.menu--one__list {
+    width: 16.875rem;
+  }
+
+  .c-my-account-nav {
+    width: 16.875rem !important;
+  }
+ }
+
+.c-menu-secondary,
+.toggle--sign,
+.main--menu ul.menu--one__list {
+  @include breakpoint($only-mobile) {
+    width: calc(100% - 2.8125rem);
+  }
+}
+
+.toggle--sign {
+  .shop,
+  .account {
+    @include breakpoint($only-tablet) {
+      html[lang="ar"] & {
+        padding: 0 0.25rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.logged-in {
+  .toggle--sign {
+    .account {
+      @include breakpoint($only-tablet) {
+        html[lang="ar"] & {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.c-my-account-nav {
+  @include breakpoint($only-mobile) {
+    width: calc(100% - 2.8125rem) !important;
+  }
+
+  @include breakpoint($upto-desktop) {
+    top: 5.7rem;
+  }
+
+  h3 {
+    @include breakpoint($upto-desktop) {
+      text-transform: uppercase;
+    }
+  }
+
+  li::after {
+    @include breakpoint($upto-desktop) {
+      font-size: 1.5rem;
+      #{$right}: -0.1875rem;
+    }
+  }
+}
+
+.menu--active .mobile--close {
+  @include breakpoint($only-mobile) {
+    #{$left}: calc(100% - 2.8125rem);
+  }
+}
+
+ .branding__menu {
+   .c-header__region .block-system-branding-block {
+
+    .site-brand-home {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+
+      img {
+        @include breakpoint($desktop) {
+          max-width: 18.75rem;
+          margin: auto;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  &.navbar-fixed-top {
+    @include breakpoint($upto-desktop) {
+      position: static;
+    }
+  }
+ }
+
+.mobile--overlay {
+  .c-menu-primary .region__menu-primary .menu--mobile-navigation {
+    z-index: 5;
+  }
+
+  #block-cartminiblock,
+  .block-alshaya-react-mini-cart {
+    z-index: 4;
+  }
+}
