@@ -33,6 +33,7 @@ class AlgoliaRcsSearchIndexConfigOverrider implements ConfigFactoryOverrideInter
     // Make indices read-only.
     $overrides['search_api.index.alshaya_algolia_index']['read_only'] = TRUE;
     $overrides['search_api.index.acquia_search_index']['read_only'] = TRUE;
+    $overrides['search_api.index.alshaya_algolia_product_list_index']['read_only'] = TRUE;
 
     return $overrides;
   }
