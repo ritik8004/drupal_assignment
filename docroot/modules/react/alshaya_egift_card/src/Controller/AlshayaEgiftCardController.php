@@ -125,7 +125,9 @@ class AlshayaEgiftCardController extends ControllerBase {
   }
 
   /**
-   * Link card page redirects user to login or eGift card page in my-account.
+   * Redirects the user to my-account e-gift page if logged-in.
+   * Redirects the user to login page and then my-account e-gift page after login if user is anonymous.
+   * If e-Gift feature is disabled, redirect to `/user`.
    */
   function linkCard() {
     if (!$this->egiftCardHelper->isEgiftCardEnabled()) {
