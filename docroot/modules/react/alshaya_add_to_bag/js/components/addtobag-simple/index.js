@@ -186,6 +186,9 @@ export default class AddToBagSimple extends React.Component {
       notify = false;
     }
 
+    // Trigger Product Details View GTM push.
+    Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'));
+
     this.handleCartOperation(e, cartQty, prevQty, cartAction, notify);
   };
 
