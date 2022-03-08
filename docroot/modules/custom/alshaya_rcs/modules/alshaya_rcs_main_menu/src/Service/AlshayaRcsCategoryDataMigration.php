@@ -88,7 +88,7 @@ class AlshayaRcsCategoryDataMigration {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name', 'langcode']);
+    $query->fields('tfd', ['tid', 'name']);
 
     // For the `Term background color`.
     $query->leftJoin('taxonomy_term__field_term_background_color', 'ttbc', 'ttbc.entity_id = tfd.tid AND ttbc.langcode = tfd.langcode');
