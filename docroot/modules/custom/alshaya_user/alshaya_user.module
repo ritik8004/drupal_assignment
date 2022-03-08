@@ -250,6 +250,7 @@ function alshaya_user_preprocess_menu(&$variables) {
 function alshaya_user_block_build_alter(array &$build, BlockPluginInterface $block) {
   if ($block->getPluginId() == 'system_menu_block:account') {
     $build['#cache']['contexts'][] = 'route';
+    $build['#cache']['max-age'] = 0;
   }
 }
 
@@ -552,8 +553,8 @@ function alshaya_user_link_alter(&$variables) {
     return;
   }
   elseif ($url->isRouted() && $url->getRouteName() == 'user.logout') {
-    $path = \Drupal::service('path.current')->getPath();
-    $variables['options']['query']['destination'] = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . \Drupal::service('path.alias_manager')->getAliasByPath($path);
+    // Getting raw uri as categories and products are not saved in V3.
+    $variables['options']['query']['destination'] = \Drupal::request()->getRequestUri();
   }
 }
 
