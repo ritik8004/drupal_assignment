@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { StoreFinderList } from './alshaya-store-finder-list';
+import StoreFinderListPage from './alshaya-store-finder-list';
 
 ReactDOM.render(
-  <StoreFinderList />,
+  <StoreFinderListPage />,
   document.getElementById('store-finder-list-wrapper'),
 );

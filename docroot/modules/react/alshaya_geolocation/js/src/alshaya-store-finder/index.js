@@ -1531,7 +1531,9 @@ export class StoreFinder extends React.Component {
       zoom,
       groupedStores,
     } = this.state;
-
+    const seperate = Math.ceil(Object.keys(groupedStores).length / 2);
+    const firstColumn = Object.entries(groupedStores).slice(0, seperate);
+    const secondColumn = Object.entries(groupedStores).slice(seperate);
     return (
       <>
         <div className="l-container">
@@ -1574,21 +1576,45 @@ export class StoreFinder extends React.Component {
                 <div>
                   <div className="view-content">
                     <div>select a store to see details</div>
-                    {Object.keys(groupedStores).map(([keyItem]) => (
-                      <div key={keyItem}>
-                        <div>{keyItem}</div>
-                        <div>
-                          {groupedStores[keyItem].map((item) => (
-                            <div
-                              key={item.id}
-                              onClick={() => this.showSpecificPlace(item.id)}
-                            >
-                              {item.store_name}
+                    <div className="warpper">
+                      <div className="col-1">
+                        {firstColumn.map((value) => (
+                          <div key={value[0]}>
+                            <div>{value[0]}</div>
+                            <div>
+                              {value[1].map((item) => (
+                                <div
+                                  key={item.id}
+                                  onClick={() => this.showSpecificPlace(item.id)}
+                                >
+                                  {item.store_name}
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                      {secondColumn
+                      && (
+                      <div className="col-2">
+                        {secondColumn.map((value) => (
+                          <div key={value[0]}>
+                            <div>{value[0]}</div>
+                            <div>
+                              {value[1].map((item) => (
+                                <div
+                                  key={item.id}
+                                  onClick={() => this.showSpecificPlace(item.id)}
+                                >
+                                  {item.store_name}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
