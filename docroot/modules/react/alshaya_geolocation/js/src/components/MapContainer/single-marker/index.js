@@ -18,7 +18,6 @@ export class SingleMarker extends React.Component {
           google={google}
           initialCenter={{ lat: store.latitude, lng: store.longitude }}
           center={center}
-          className="map map--store"
           zoom={15}
         >
           <Marker

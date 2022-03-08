@@ -172,60 +172,111 @@ export class StoreFinder extends React.Component {
     const seperate = Math.ceil(Object.keys(groupedStores).length / 2);
     const firstColumn = Object.entries(groupedStores).slice(0, seperate);
     const secondColumn = Object.entries(groupedStores).slice(seperate);
+    const listViewActive = showListingView ? ' active' : '';
+    const mapViewActive = showMapView ? ' active' : '';
+
     return (
       <>
-        <div className="l-container">
-          {showSpecificPlace
-            ? (
-              <div>
-                <div onClick={this.findNearMe}>{Drupal.t('Near me')}</div>
-                <AutocompleteSearch placeholder={Drupal.t('Enter a location')} searchStores={(place) => this.searchStores(place)} />
-                <div onClick={this.showAllStores}>{Drupal.t('List all H&M stores')}</div>
+        <div className="path--store-finder">
+          <div className="c-content__region">
+            <div className="region region__content clearfix">
+              <div className="views-exposed-form">
+                {showSpecificPlace
+                  ? (
+                    <div>
+                      <a className="current-location block-store-finder-form__current-location" onClick={this.findNearMe}>{Drupal.t('Near me')}</a>
+                      <div className="store-finder--wrapper block-store-finder-form__form__wrapper">
+                        <div className="label--location block-store-finder-form__form__label">
+                          <div className="block-store-finder-form__form__label__wrapper icon-search">
+                            {Drupal.t('Find stores near')}
+                          </div>
+                        </div>
+                        <div className="input--wrapper block-store-finder-form__input__wrapper">
+                          <div className="form-item-geolocation-geocoder-google-places-api">
+                            <AutocompleteSearch
+                              searchStores={(place) => this.searchStores(place)}
+                            />
+                          </div>
+                          <div class="block-store-finder-form__input__submit__wrapper icon-search form-actions js-form-wrapper form-wrapper">
+                            <button class="block-store-finder-form__input__submit button js-form-submit form-submit">
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <a className="back-to-glossary" onClick={this.showAllStores}>{Drupal.t('List of all H&M stores')}</a>
+                    </div>
+                  ) : (
+                    <div>
+                      <a className="current-location block-store-finder-form__current-location" onClick={this.findNearMe}>{Drupal.t('Near me')}</a>
+                      <div className="store-finder--wrapper block-store-finder-form__form__wrapper">
+                        <div className="label--location block-store-finder-form__form__label">
+                          <div className="block-store-finder-form__form__label__wrapper icon-search">
+                            {Drupal.t('Find stores near')}
+                          </div>
+                        </div>
+                        <div className="input--wrapper block-store-finder-form__input__wrapper">
+                          <div className="form-item-geolocation-geocoder-google-places-api">
+                            <AutocompleteSearch searchStores={(place) => this.searchStores(place)} className="geolocation-geocoder-google-places-api" />
+                          </div>
+                          <div class="block-store-finder-form__input__submit__wrapper icon-search form-actions js-form-wrapper form-wrapper">
+                            <button class="block-store-finder-form__input__submit button js-form-submit form-submit">
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <a className={`list-view-link icon-list${listViewActive}`} onClick={this.showListingView}>{Drupal.t('List View')}</a>
+                      <a className={`map-view-link icon-map${mapViewActive}`} onClick={this.showMapView}>{Drupal.t('Map View')}</a>
+                    </div>
+                  ) }
               </div>
-            ) : (
-              <div>
-                <div onClick={this.findNearMe}>{Drupal.t('Near me')}</div>
-                <AutocompleteSearch placeholder={Drupal.t('Enter a location')} searchStores={(place) => this.searchStores(place)} />
-                <div onClick={this.showListingView}>{Drupal.t('Show Listing View')}</div>
-                <div onClick={this.showMapView}>{Drupal.t('Show Map View')}</div>
-              </div>
-            ) }
-        </div>
-        {showSpecificPlace
-          ? (
-            <div className="individual--store">
-              <div className="view-content">
-                <div className="list-view-locator">
-                  <div className="back-link">
-                    <a href="#" onClick={this.hideSpecificPlace}>Back</a>
+              {showSpecificPlace
+                ? (
+                  <div>
+                  <div className="view-stores-finder view-display-id-page_2">
+                    <div className="individual--store">
+                      <div className="view-content">
+                        <div className="list-view-locator">
+                          <div className="back-link">
+                            <a href="#" onClick={this.hideSpecificPlace}>Back</a>
+                          </div>
+                          <ListItem specificPlace={specificPlace} />
+                        </div>
+                      </div>
+                      <div className="map--store">
+                        <div className="geolocation-google-map">
+                          <SingleMarkerMap store={specificPlace} center={center} />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <ListItem specificPlace={specificPlace} />
+              <div className="view-content">
+                <div className="geolocation-common-map-container">
+                  <div className="geolocation-common-map-locations">
+                    <SingleMarkerMap store={specificPlace} center={center} />
+                  </div>
                 </div>
               </div>
-              <div className="view-content" style={{ height: '500px' }}>
-                <SingleMarkerMap store={specificPlace} center={center} />
               </div>
-            </div>
           )
           : (
             <div className="l-container">
               {showListingView
               && (
-                <div>
+                <div className="view-stores-finder view-display-id-page_2">
+                <div className="view-header">select a store to see details</div>
                   <div className="view-content">
-                    <div>select a store to see details</div>
-                    <div className="warpper">
-                      <div className="col-1">
+                      <div className="c-side c-side-1">
                         {firstColumn.map((value) => (
-                          <div key={value[0]}>
-                            <div>{value[0]}</div>
-                            <div>
+                          <div className="by--alphabet" key={value[0]}>
+                            <h3>{value[0]}</h3>
+                            <div className="rows">
                               {value[1].map((item) => (
                                 <div
                                   key={item.id}
                                   onClick={() => this.showSpecificPlace(item.id)}
                                 >
-                                  {item.store_name}
+                                  <a>{item.store_name}</a>
                                 </div>
                               ))}
                             </div>
@@ -234,17 +285,17 @@ export class StoreFinder extends React.Component {
                       </div>
                       {secondColumn
                       && (
-                      <div className="col-2">
+                      <div className="c-side c-side-2">
                         {secondColumn.map((value) => (
-                          <div key={value[0]}>
-                            <div>{value[0]}</div>
-                            <div>
+                          <div className="by--alphabet" key={value[0]}>
+                            <h3>{value[0]}</h3>
+                            <div className="rows">
                               {value[1].map((item) => (
                                 <div
                                   key={item.id}
                                   onClick={() => this.showSpecificPlace(item.id)}
                                 >
-                                  {item.store_name}
+                                  <a>{item.store_name}</a>
                                 </div>
                               ))}
                             </div>
@@ -252,18 +303,14 @@ export class StoreFinder extends React.Component {
                         ))}
                       </div>
                       )}
-                    </div>
                   </div>
                 </div>
-              )}
-              {showMapView
-              && (
-                <div className="view-content" style={{ height: '500px' }}>
-                  <MultipeMarkerMap center={center} zoom={zoom} stores={stores} />
-                </div>
-              )}
+                )}
             </div>
           )}
+          </div>
+        </div>
+        </div>
       </>
     );
   }

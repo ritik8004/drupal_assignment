@@ -52,6 +52,8 @@
   .geolocation-common-map-container,
   .geolocation-google-map {
     height: 39rem !important;
+    position: relative;
+    width: 100%;
 
     @include breakpoint($desktop) {
       height: 51rem !important;
@@ -253,6 +255,7 @@
 
   .current-location,
   .cc-near-me {
+    cursor: pointer;
     @include breakpoint($only-tablet) {
       #{$left}: 0;
       padding-#{$left}: 2.125rem !important;
@@ -304,6 +307,7 @@
   }
 
   .map-view-link {
+    cursor: pointer;
     margin-#{$left}: -1px;
     padding: 0.675rem 0;
 
@@ -333,6 +337,7 @@
 
   .list-view-link {
     padding: 0.85rem 0;
+    cursor: pointer;
 
     @include breakpoint($desktop) {
       text-indent: -0.4rem;
@@ -382,6 +387,7 @@
         font-family: $alshaya-thin;
       }
     }
+
 
     @include breakpoint($tablet) {
       height: 2.9375rem;
@@ -523,6 +529,7 @@
       }
 
       a {
+        cursor: pointer;
         color: $store_finder_glossary_text;
 
         &:hover {

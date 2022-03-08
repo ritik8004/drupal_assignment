@@ -24,6 +24,7 @@ class AlshayaStoreFinderController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_geolocation/alshaya-store-finder',
+          'alshaya_white_label/store_finder',
         ],
         'drupalSettings' => [
           'cnc' => [
@@ -44,6 +45,7 @@ class AlshayaStoreFinderController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_geolocation/alshaya-store-finder-list',
+          'alshaya_white_label/store_finder',
         ],
         'drupalSettings' => [
           'cnc' => [
