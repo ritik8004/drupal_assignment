@@ -62,28 +62,70 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
   // Remove the "attr_" prefix.
   $color_code_attribute = str_replace('attr_', '', $color_code_attribute);
 
+  $product_query_outer_key = key($queries['products']['query']);
+  $product_query_key = key($queries['products']['query'][$product_query_outer_key]);
+
   array_push(
-    $queries['products']['items'],
+    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items'],
     'style_code',
   );
 
   array_push(
-    $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
+    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['... on ConfigurableProduct']['variants']['product'],
     AlshayaColorSplitConfig::get('attribute_code_color_id'),
     $color_code_attribute,
   );
 
-  // For the main product, we send a minimal request to get the style code.
-  // After getting the style code, we call the API to fetch the products with
-  // the same style and at that step we receive the complete product objects
-  // which includes the main product.
-  $queries['color_split_product'] = [
-    'total_count',
-    'items' => [
-      'style_code',
-      'sku',
+  /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
+  $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
+  $url_key = $rcs_product_helper->getProductUrlKey();
+
+  $queries['styled_products'] = [
+    'query' => [
+      'query($styleCode: String)' => [
+        'products(filter: {style_code: {match: $styleCode}})' => $queries['products']['query'][$product_query_outer_key][$product_query_key],
+      ],
+    ],
+    'variables' => [
+      'styleCode' => NULL,
     ],
   ];
+
+  if ($rcs_product_helper->isRcsPdp()) {
+    // For the main product, we send a minimal request to get the style code.
+    // After getting the style code, we call the API to fetch the products with
+    // the same style and at that step we receive the complete product objects
+    // which includes the main product.
+    $queries['pdp_product'] = [
+      'query' => [
+        'query($url: String, $attributes: [AttributeInput!]!)' => [
+          'products(filter: {url_key: {eq: $url}})' => [
+            'total_count',
+            'items' => [
+              'style_code',
+              'sku',
+            ],
+          ],
+          'customAttributeMetadata(attributes: $attributes)' => [
+            'items' => [
+              'attribute_code',
+              'attribute_options' => [
+                'label',
+                'value',
+              ],
+            ],
+          ],
+        ],
+      ],
+      'variables' => [
+        'url' => $url_key,
+        'attributes' => [
+          ["attribute_code" => "color", "entity_type" => "4"],
+          ["attribute_code" => "size", "entity_type" => "4"],
+        ],
+      ],
+    ];
+  }
 }
 
 /**

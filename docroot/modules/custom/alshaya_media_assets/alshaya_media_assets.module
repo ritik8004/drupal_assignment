@@ -9,27 +9,30 @@
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
 function alshaya_media_assets_rcs_placeholders_graphql_query_alter(&$queries) {
+  $product_query_outer_key = key($queries['products']['query']);
+  $product_query_key = key($queries['products']['query'][$product_query_outer_key]);
+
   array_push(
-    $queries['products']['items'],
+    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items'],
     'asset_type',
   );
 
   array_push(
-    $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
+    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['... on ConfigurableProduct']['variants']['product'],
     'assets_swatch',
     'assets_pdp',
     'assets_cart',
   );
 
   // Query for teaser assets for product recommendations.
-  if (isset($queries['products']['items']['upsell_products'])) {
-    $queries['products']['items']['upsell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
+  if (isset($queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['upsell_products'])) {
+    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['upsell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
   }
-  if (isset($queries['products']['items']['related_products'])) {
-    $queries['products']['items']['related_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
+  if (isset($queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['related_products'])) {
+    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['related_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
   }
-  if (isset($queries['products']['items']['crosssell_products'])) {
-    $queries['products']['items']['crosssell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
+  if (isset($queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['crosssell_products'])) {
+    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['crosssell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
   }
 }
 

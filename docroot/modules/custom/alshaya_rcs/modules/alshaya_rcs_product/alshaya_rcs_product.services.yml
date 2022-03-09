@@ -25,3 +25,8 @@ services:
       - '@alshaya_acm_product.sku_images_helper'
       - '@alshaya_spc.helper'
       - '@alshaya_acm_product.delivery_options_helper'
+
+  alshaya_rcs_product.helper:
+    class: \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper
+    arguments:
+      - '@current_route_match'

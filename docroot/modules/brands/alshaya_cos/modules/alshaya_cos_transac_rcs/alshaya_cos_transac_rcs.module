@@ -24,15 +24,18 @@ function alshaya_cos_transac_rcs_module_implements_alter(&$implementations, $hoo
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
 function alshaya_cos_transac_rcs_rcs_placeholders_graphql_query_alter(&$queries) {
+  $product_query_outer_key = key($queries['products']['query']);
+  $product_query_key = key($queries['products']['query'][$product_query_outer_key]);
+
   array_push(
-    $queries['products']['items'],
+    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items'],
     'composition',
     'washing_instructions',
     'article_warning'
   );
 
   array_push(
-    $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
+    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['... on ConfigurableProduct']['variants']['product'],
     'size',
   );
 }
