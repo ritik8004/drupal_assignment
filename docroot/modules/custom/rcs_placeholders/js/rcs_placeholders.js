@@ -1,7 +1,7 @@
 /**
  * Identify the RCS placeholders in the page.
  * Call the commerce backend to get the some data to put in the placeholder.
- * Cal the search backend to get some data to put in the placeholder.
+ * Call the search backend to get some data to put in the placeholder.
  * Call the rendering engine to generate the HTML markup.
  *
  * For this to work, rcsPhCommerceBackend, rcsPhSearchEngine and
@@ -97,6 +97,8 @@
 
           // Add class to remove loader styles after RCS info is filled.
           $('.rcs-page').addClass(classRcsLoaded);
+        }).catch(function(e) {
+          Drupal.alshayaLogger('error', 'Failed to fetch Page Entity.', 'error');
         });
     }
   });
@@ -192,6 +194,8 @@
 
         // Add class to remove loader styles on RCS Placeholders.
         $(this).addClass(classRcsLoaded);
+      }).catch(function(e) {
+        Drupal.alshayaLogger('error', 'Failed to fetch Page Entity.', 'error');
       });
   }
 
