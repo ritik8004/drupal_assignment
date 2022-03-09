@@ -185,113 +185,147 @@ export class StoreFinderList extends React.Component {
     const { google } = this.props;
     return (
       <>
-        <div className="l-container">
-          <div onClick={this.findNearMe}>{Drupal.t('Near me')}</div>
-          <AutocompleteSearch placeholder={Drupal.t('Enter a location')} searchStores={(place) => this.searchStores(place)} />
-          <div onClick={this.showAllStores}>{Drupal.t('List all the stores')}</div>
-        </div>
-        {stores.length > 0
-        && (
-        <div className="l-container">
-          <div>
-            <div>{Drupal.t('select a store to see details')}</div>
-            {stores.map((store) => (
-              <div key={store.id}>
+        <div className="c-content">
+          <div className="c-content__region">
+            <div className="region region__content clearfix">
+              <div className="views-exposed-form">
                 <div>
-                  <a className="row-title" onClick={() => this.showSpecificPlace(store.id)}>
-                    <span>{store.store_name}</span>
-                  </a>
-                  <div className="views-row">
-                    <div className="views-field-field-store-address">
-                      <div className="field-content">
-                        <div className="address--line2">
-                          {store.address.map((item) => (
-                            <div key={item.code}>
-                              {item.code === 'address_building_segment' ? <span>{item.label}</span> : null}
-                              {item.code === 'street' ? <span>{item.value}</span> : null}
-                            </div>
-                          ))}
-                        </div>
-                        <div className="field field--name-field-store-phone field--type-string field--label-hidden field__item">
-                          {store.store_phone}
-                        </div>
+                  <a className="current-location block-store-finder-form__current-location" onClick={this.findNearMe}>{Drupal.t('Near me')}</a>
+                  <div className="store-finder--wrapper block-store-finder-form__form__wrapper">
+                    <div className="label--location block-store-finder-form__form__label">
+                      <div className="block-store-finder-form__form__label__wrapper icon-search">
+                        {Drupal.t('Find stores near')}
                       </div>
                     </div>
-                    <div className="views-field-field-store-open-hours">
-                      <div className="field-content">
-                        <div className="hours--wrapper selector--hours">
-                          <div>
-                            <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
-                              {Drupal.t('Opening Hours')}
-                            </div>
-                            <div className="open--hours">
-                              {store.store_hours.map((item) => (
-                                <div key={item.code}>
-                                  <span className="key-value-key">{item.label}</span>
-                                  <span className="key-value-value">{item.value}</span>
+                    <div className="input--wrapper block-store-finder-form__input__wrapper">
+                      <div className="form-item-geolocation-geocoder-google-places-api">
+                        <AutocompleteSearch searchStores={(place) => this.searchStores(place)} />
+                        <div className="c-input__bar" />
+                      </div>
+                      <div className="block-store-finder-form__input__submit__wrapper icon-search form-actions js-form-wrapper form-wrapper" id="edit-actions--2">
+                        <button className="block-store-finder-form__input__submit button js-form-submit form-submit" id="edit-submit-stores-finder--2" type="button" />
+                      </div>
+                    </div>
+                  </div>
+                  <a className="back-to-glossary" onClick={this.showAllStores}>{Drupal.t('List of all H&M the stores')}</a>
+                </div>
+              </div>
+              {stores.length > 0
+              && (
+              <div className="views-element-container">
+                <div className="view-stores-finder view-id-stores_finder view-display-id-page_1">
+                  <div className="view-header" />
+                  <div className="view-content">
+                    {stores.map((store, index) => (
+                      <div key={store.id}>
+                        <div className="list-view-locator">
+                          <div className="store-row--counter">{(index + 1)}</div>
+                          <div className="mobile-only-back-to-glossary">
+                            <a href="/store-finder">Back</a>
+                          </div>
+                          <a className="row-title" onClick={() => this.showSpecificPlace(store.id)}>
+                            <span>{store.store_name}</span>
+                          </a>
+                          <div className="views-row">
+                            <div className="views-field-field-store-address">
+                              <div className="field-content">
+                                <div className="address--line2">
+                                  {store.address.map((item) => (
+                                    <div key={item.code}>
+                                      {item.code === 'address_building_segment' ? <span>{item.label}</span> : null}
+                                      {item.code === 'street' ? <span>{item.value}</span> : null}
+                                    </div>
+                                  ))}
                                 </div>
-                              ))}
+                                <div className="field field--name-field-store-phone field--type-string field--label-hidden field__item">
+                                  {store.store_phone}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="views-field-field-store-open-hours">
+                              <div className="field-content">
+                                <div className="hours--wrapper selector--hours">
+                                  <div>
+                                    <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
+                                      {Drupal.t('Opening Hours')}
+                                    </div>
+                                    <div className="open--hours">
+                                      {store.store_hours.map((item) => (
+                                        <div key={item.code}>
+                                          <span className="key-value-key">{item.label}</span>
+                                          <span className="key-value-value">{item.value}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="view-on--map">
+                                  <a onClick={() => this.getDirection(store)}>{Drupal.t('Get directions')}</a>
+                                </div>
+                                <div className="get--directions">
+                                  <div>
+                                    <a
+                                      className="device__desktop"
+                                      onClick={() => this.getDirection(store)}
+                                    >
+                                      {Drupal.t('Get directions')}
+                                    </a>
+                                    <a className="device__tablet" onClick={() => this.getDirection(store)}>
+                                      {Drupal.t('Get directions')}
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div className="view-on--map">
-                          <a onClick={() => this.getDirection(store)}>{Drupal.t('Get directions')}</a>
-                        </div>
-                        <div className="get--directions">
-                          <div>
-                            <a
-                              className="device__desktop"
-                              onClick={() => this.getDirection(store)}
-                            >
-                              {Drupal.t('Get directions')}
-                            </a>
-                            <a className="device__tablet" onClick={() => this.getDirection(store)}>
-                              {Drupal.t('Get directions')}
-                            </a>
-                          </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="attachment attachment-after">
+                    <div className="views-element-container">
+                      <div className="view-stores-finder view-id-stores_finder view-display-id-attachment_1">
+                        <div className="geolocation-common-map-container">
+                          <Map
+                            google={google}
+                            className="map"
+                            initialCenter={center}
+                            center={center}
+                            zoom={zoom}
+                          >
+                            {stores.map((store, index) => (
+                              <Marker
+                                onClick={this.onMarkerClick}
+                                label={(index + 1).toString()}
+                                z-index={(index + 1).toString()}
+                                key={store.id}
+                                title={store.store_name}
+                                name={store.store_name}
+                                openHours={store.store_hours}
+                                position={{ lat: store.latitude, lng: store.longitude }}
+                                address={store.address}
+                              />
+                            ))}
+                            {showingInfoWindow && (
+                              <InfoWindow
+                                marker={activeMarker}
+                                onClose={this.onInfoWindowClose}
+                                visible={showingInfoWindow}
+                              >
+                                <InfoPopUp selectedPlace={selectedPlace} />
+                              </InfoWindow>
+                            )}
+                          </Map>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-          <div className="view-content" style={{ height: '500px' }}>
-            <Map
-              google={google}
-              style={{ width: '100%', height: '100%', position: 'relative' }}
-              className="map"
-              initialCenter={center}
-              center={center}
-              zoom={zoom}
-            >
-              {stores.map((store, index) => (
-                <Marker
-                  onClick={this.onMarkerClick}
-                  label={(index + 1).toString()}
-                  z-index={(index + 1).toString()}
-                  key={store.id}
-                  title={store.store_name}
-                  name={store.store_name}
-                  openHours={store.store_hours}
-                  position={{ lat: store.latitude, lng: store.longitude }}
-                  address={store.address}
-                />
-              ))}
-              {showingInfoWindow && (
-              <InfoWindow
-                marker={activeMarker}
-                onClose={this.onInfoWindowClose}
-                visible={showingInfoWindow}
-              >
-                <InfoPopUp selectedPlace={selectedPlace} />
-              </InfoWindow>
               )}
-            </Map>
+            </div>
           </div>
         </div>
-        )}
       </>
     );
   }

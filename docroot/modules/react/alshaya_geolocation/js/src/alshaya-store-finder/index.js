@@ -196,10 +196,10 @@ export class StoreFinder extends React.Component {
                             <AutocompleteSearch
                               searchStores={(place) => this.searchStores(place)}
                             />
+                            <div className="c-input__bar" />
                           </div>
-                          <div class="block-store-finder-form__input__submit__wrapper icon-search form-actions js-form-wrapper form-wrapper">
-                            <button class="block-store-finder-form__input__submit button js-form-submit form-submit">
-                            </button>
+                          <div className="block-store-finder-form__input__submit__wrapper icon-search form-actions js-form-wrapper form-wrapper" id="edit-actions--2">
+                            <button className="block-store-finder-form__input__submit button js-form-submit form-submit" id="edit-submit-stores-finder--2" type="button" />
                           </div>
                         </div>
                       </div>
@@ -216,100 +216,103 @@ export class StoreFinder extends React.Component {
                         </div>
                         <div className="input--wrapper block-store-finder-form__input__wrapper">
                           <div className="form-item-geolocation-geocoder-google-places-api">
-                            <AutocompleteSearch searchStores={(place) => this.searchStores(place)} className="geolocation-geocoder-google-places-api" />
+                            <AutocompleteSearch
+                              searchStores={(place) => this.searchStores(place)}
+                            />
+                            <div className="c-input__bar" />
                           </div>
-                          <div class="block-store-finder-form__input__submit__wrapper icon-search form-actions js-form-wrapper form-wrapper">
-                            <button class="block-store-finder-form__input__submit button js-form-submit form-submit">
-                            </button>
+                          <div className="block-store-finder-form__input__submit__wrapper icon-search form-actions js-form-wrapper form-wrapper" id="edit-actions--2">
+                            <button className="block-store-finder-form__input__submit button js-form-submit form-submit" id="edit-submit-stores-finder--2" type="button" />
                           </div>
                         </div>
                       </div>
                       <a className={`list-view-link icon-list${listViewActive}`} onClick={this.showListingView}>{Drupal.t('List View')}</a>
                       <a className={`map-view-link icon-map${mapViewActive}`} onClick={this.showMapView}>{Drupal.t('Map View')}</a>
                     </div>
-                  ) }
+                  )}
               </div>
               {showSpecificPlace
                 ? (
                   <div>
-                  <div className="view-stores-finder view-display-id-page_2">
-                    <div className="individual--store">
-                      <div className="view-content">
-                        <div className="list-view-locator">
-                          <div className="back-link">
-                            <a href="#" onClick={this.hideSpecificPlace}>Back</a>
+                    <div className="view-stores-finder view-display-id-page_2">
+                      <div className="individual--store">
+                        <div className="view-content">
+                          <div className="list-view-locator">
+                            <div className="back-link">
+                              <a href="#" onClick={this.hideSpecificPlace}>Back</a>
+                            </div>
+                            <ListItem specificPlace={specificPlace} />
                           </div>
-                          <ListItem specificPlace={specificPlace} />
                         </div>
-                      </div>
-                      <div className="map--store">
-                        <div className="geolocation-google-map">
-                          <SingleMarkerMap store={specificPlace} center={center} />
+                        <div className="map--store">
+                          <div className="geolocation-google-map">
+                            <SingleMarkerMap store={specificPlace} center={center} />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <ListItem specificPlace={specificPlace} />
-              <div className="view-content">
-                <div className="geolocation-common-map-container">
-                  <div className="geolocation-common-map-locations">
-                    <SingleMarkerMap store={specificPlace} center={center} />
-                  </div>
-                </div>
-              </div>
-              </div>
-          )
-          : (
-            <div className="l-container">
-              {showListingView
-              && (
-                <div className="view-stores-finder view-display-id-page_2">
-                <div className="view-header">select a store to see details</div>
-                  <div className="view-content">
-                      <div className="c-side c-side-1">
-                        {firstColumn.map((value) => (
-                          <div className="by--alphabet" key={value[0]}>
-                            <h3>{value[0]}</h3>
-                            <div className="rows">
-                              {value[1].map((item) => (
-                                <div
-                                  key={item.id}
-                                  onClick={() => this.showSpecificPlace(item.id)}
-                                >
-                                  <a>{item.store_name}</a>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      {secondColumn
+                ) : (
+                  <div className="l-container">
+                    {showListingView
                       && (
-                      <div className="c-side c-side-2">
-                        {secondColumn.map((value) => (
-                          <div className="by--alphabet" key={value[0]}>
-                            <h3>{value[0]}</h3>
-                            <div className="rows">
-                              {value[1].map((item) => (
-                                <div
-                                  key={item.id}
-                                  onClick={() => this.showSpecificPlace(item.id)}
-                                >
-                                  <a>{item.store_name}</a>
+                      <div className="view-stores-finder view-display-id-page_2">
+                        <div className="view-header">select a store to see details</div>
+                        <div className="view-content">
+                          <div className="c-side c-side-1">
+                            {firstColumn.map((value) => (
+                              <div className="by--alphabet" key={value[0]}>
+                                <h3>{value[0]}</h3>
+                                <div className="rows">
+                                  {value[1].map((item) => (
+                                    <div
+                                      key={item.id}
+                                      onClick={() => this.showSpecificPlace(item.id)}
+                                    >
+                                      <a>{item.store_name}</a>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          {secondColumn
+                          && (
+                            <div className="c-side c-side-2">
+                              {secondColumn.map((value) => (
+                                <div className="by--alphabet" key={value[0]}>
+                                  <h3>{value[0]}</h3>
+                                  <div className="rows">
+                                    {value[1].map((item) => (
+                                      <div
+                                        key={item.id}
+                                        onClick={() => this.showSpecificPlace(item.id)}
+                                      >
+                                        <a>{item.store_name}</a>
+                                      </div>
+                                    ))}
+                                  </div>
                                 </div>
                               ))}
                             </div>
-                          </div>
-                        ))}
+                          )}
+                        </div>
                       </div>
                       )}
+                    {showMapView
+                      && (
+                        <div className="view-content">
+                          <div className="geolocation-common-map-container">
+                            <div className="geolocation-common-map-locations">
+                              <MultipeMarkerMap center={center} zoom={zoom} stores={stores} />
+                            </div>
+                          </div>
+                        </div>
+                      )}
                   </div>
-                </div>
                 )}
             </div>
-          )}
           </div>
-        </div>
         </div>
       </>
     );

@@ -46,20 +46,18 @@ export class InfoPopUp extends React.Component {
             <div className="views-field views-field-field-store-open-hours">
               <div className="field-content">
                 <div className="hours--wrapper selector--hours">
-                  <div>
-                    <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
-                      {Drupal.t('Opening Hours')}
-                    </div>
-                    <div className="open--hours">
-                      {selectedPlace.openHours.map((item) => (
-                        <div key={item.code}>
-                          <div>
-                            <span className="key-value-key">{item.label}</span>
-                            <span className="key-value-value">{item.value}</span>
-                          </div>
+                  <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
+                    {Drupal.t('Opening Hours')}
+                  </div>
+                  <div className="open--hours">
+                    {selectedPlace.openHours.map((item) => (
+                      <div key={item.code}>
+                        <div>
+                          <span className="key-value-key">{item.label}</span>
+                          <span className="key-value-value">{item.value}</span>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className="get--directions">
