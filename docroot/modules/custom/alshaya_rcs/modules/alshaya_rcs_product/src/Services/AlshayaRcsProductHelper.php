@@ -140,6 +140,7 @@ class AlshayaRcsProductHelper {
         $rcs_node = $this->nodeStorage->create([
           'type' => self::RCS_CONTENT_TYPE_ID,
           'title' => $node_data->getTitle(),
+          'status' => NodeInterface::PUBLISHED,
           'langcode' => $langcode,
         ]);
 
