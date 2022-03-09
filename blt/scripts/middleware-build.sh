@@ -5,13 +5,6 @@ set -ev
 
 deployDir="$1"
 
-echo "Building SPC middleware."
-
-cd "$deployDir/docroot/middleware"
-composer validate --no-check-all --ansi
-composer install --no-interaction
-cd "-"
-
 echo "Building Appointment middleware."
 
 cd "$deployDir/docroot/appointment"
