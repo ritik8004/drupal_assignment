@@ -6,6 +6,7 @@ import EgiftCheckBalanceStepTwo from '../egift-check-balance-step-two';
 import { sendOtp } from '../../../../../js/utilities/egiftCardHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
+import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 
 export default class EgiftCheckBalanceStepOne extends React.Component {
   constructor(props) {
@@ -87,6 +88,11 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
   };
 
   render = () => {
+    if (!isEgiftCardEnabled()) {
+      // Do not show popup if eGift is not enabled.
+      return (null);
+    }
+
     const { egiftCardNumber } = this.props;
     const {
       closeModal, open, initialStep, stepChange,

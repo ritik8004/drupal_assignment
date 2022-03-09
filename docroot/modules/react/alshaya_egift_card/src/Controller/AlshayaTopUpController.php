@@ -3,6 +3,8 @@
 namespace Drupal\alshaya_egift_card\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Routing\LocalRedirectResponse;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
 
@@ -48,7 +50,8 @@ class AlshayaTopUpController extends ControllerBase {
   public function topupcard() {
     $eGift_status = $this->egiftCardHelper->isEgiftCardEnabled();
     if (!$eGift_status) {
-      return '';
+      $response = new LocalRedirectResponse(Url::fromRoute('<front>')->toString());
+      $response->send();
     }
     return [
       '#theme' => 'egift_topup_page',
