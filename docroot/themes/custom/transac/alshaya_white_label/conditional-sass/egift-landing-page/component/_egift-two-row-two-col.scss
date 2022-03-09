@@ -80,9 +80,11 @@
       font-family: $alshaya-bold;
       color: $egift-landing-page-sub-block-title;
       margin-bottom: 0.25rem;
+      letter-spacing: 0.04rem;
 
       @include breakpoint($tablet) {
         font-size: 1rem;
+        letter-spacing: 0.05rem;
       }
     }
 
