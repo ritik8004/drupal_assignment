@@ -59,7 +59,7 @@ command-hooks:
     command: 'vendor/bin/blt alshayafe:setup && vendor/bin/blt js:setup && vendor/bin/blt alshayafe:setup-uglify'
   frontend-assets:
     dir: '${repo.root}'
-    command: 'vendor/bin/blt alshayafe:build-all-themes && bash blt/scripts/github_actions/react-build.sh ${docroot} && vendor/bin/blt js:build && vendor/bin/blt alshayafe:build-uglify'
+    command: 'bash blt/scripts/github_actions/frontend-build.sh ${docroot} && bash blt/scripts/github_actions/react-build.sh ${docroot} && vendor/bin/blt js:build && vendor/bin/blt alshayafe:build-uglify'
   pre-config-import:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
