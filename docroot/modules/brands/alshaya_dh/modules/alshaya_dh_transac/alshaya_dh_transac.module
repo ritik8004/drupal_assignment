@@ -138,7 +138,7 @@ function alshaya_dh_transac_alshaya_performance_preload_alter(array &$preload) {
       ],
       [
         'as' => 'font',
-        'href' => '/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Bold.woff2',
+        'href' => '/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Medium.woff2',
         'crossorigin' => 'crossorigin',
         'type' => 'font/woff2',
       ],
@@ -152,7 +152,7 @@ function alshaya_dh_transac_alshaya_performance_preload_alter(array &$preload) {
       ],
       [
         'as' => 'font',
-        'href' => '/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Bold.woff2',
+        'href' => '/themes/custom/transac/alshaya_debenhams/fonts/Tajawal-Medium.woff2',
         'crossorigin' => 'crossorigin',
         'type' => 'font/woff2',
       ],
