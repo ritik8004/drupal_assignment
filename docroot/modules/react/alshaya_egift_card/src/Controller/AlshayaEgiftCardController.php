@@ -4,7 +4,9 @@ namespace Drupal\alshaya_egift_card\Controller;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
@@ -93,6 +95,12 @@ class AlshayaEgiftCardController extends ControllerBase {
    *   Markup for eGift card purchase react app.
    */
   public function eGiftCardPurchase():array {
+    if (!$this->egiftCardHelper->isEgiftCardEnabled()) {
+      // Redirect to homepage if egift is not enabled.
+      $response = new LocalRedirectResponse(Url::fromRoute('<front>')->toString());
+      $response->send();
+    }
+
     $config = $this->config('alshaya_egift_card.settings');
 
     $build = [
