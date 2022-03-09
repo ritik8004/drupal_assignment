@@ -95,6 +95,12 @@ class AlshayaEgiftCardController extends ControllerBase {
    *   Markup for eGift card purchase react app.
    */
   public function eGiftCardPurchase():array {
+    if (!$this->egiftCardHelper->isEgiftCardEnabled()) {
+      // Redirect to homepage if egift is not enabled.
+      $response = new LocalRedirectResponse(Url::fromRoute('<front>')->toString());
+      $response->send();
+    }
+
     $config = $this->config('alshaya_egift_card.settings');
 
     $build = [
