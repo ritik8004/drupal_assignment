@@ -33,3 +33,10 @@ alshaya_egift_card.my_egift_card:
     parameters:
       user:
         type: entity:user
+
+alshaya_egift_card.link-egift:
+  path: '/link-egift'
+  defaults:
+    _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::linkCard'
+  requirements:
+    _permission: 'access content'

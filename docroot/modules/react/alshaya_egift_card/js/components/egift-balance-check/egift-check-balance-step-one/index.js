@@ -24,7 +24,8 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
 
   // Handling validation for egift card number.
   handleValidation = (e) => {
-    const { value: egiftCardNumber } = e.target.elements.egift_card_number;
+    const { value } = e.target.elements.egift_card_number;
+    const egiftCardNumber = value.trim();
     let errors = false;
     let message = '';
     // Egift card number validation.
