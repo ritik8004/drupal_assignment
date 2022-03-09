@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # This file runs during the frontend build.
 
-set -e
+set -ev
 
 docrootDir="$1"
 diff=""
@@ -13,7 +13,7 @@ if [[ $GITHUB_ACTIONS == "true" ]]; then
   log=$(git log -n 1)
 
   # Pattern for Merge commit.
-  re="Merge: ([abcdef0-9]{7,8}) ([abcdef0-9]{7,8})"
+  re="Merge: ([abcdef0-9]{7,10}) ([abcdef0-9]{7,10})"
 
   if [[ $log =~ $re ]]; then
     # Get a list of updated files in this merge commit.
@@ -96,10 +96,12 @@ if [[ $GITHUB_ACTIONS == "true" ]]; then
   else
     # Build all modules if could not differentiate changed
     # files in merge commit.
+    echo "\nCould not differentiate change in react modules. Building all react modules...\n"
     vendor/bin/blt alshayafe:build-react
   fi
 else
   # Build all modules if outside of Github Actions.
+  echo "\nOutside of github actions. Building all react modules...\n"
   vendor/bin/blt alshayafe:build-react
 fi
 
