@@ -1,0 +1,11 @@
+name: Alshaya RCS Product
+type: module
+description: Alshaya implementation of RCS Product. Check RCS module.
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_rcs_magento_placeholders:alshaya_rcs_magento_placeholders
+  - rcs_handlebars:rcs_handlebars
+  - alshaya_acm_product:alshaya_acm_product
+  - alshaya_spc:alshaya_spc
+  - alshaya_custom:alshaya_custom

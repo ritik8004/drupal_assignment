@@ -4,6 +4,18 @@
   var scrollThreshold = 200;
 
   /**
+   * Checks if the PDP is RCS PDP or not.
+   *
+   * @returns {Boolean}
+   *  true page is RCS PDP else false.
+   */
+  function isRcsPdp() {
+    return typeof rcsPhGetPageType === 'function'
+      ? (rcsPhGetPageType() === 'product') ? true : false
+      : false;
+  }
+
+  /**
    * All custom js for product detail page.
    *
    * @type {Drupal~behavior}
@@ -13,6 +25,13 @@
    */
   Drupal.behaviors.alshayaAcmProductPdp = {
     attach: function (context, settings) {
+
+      var node = $('.entity--type-node', context).not('[data-sku *= "#"]');
+      if (node.length === 0) {
+        return;
+      }
+
+      var skuBaseForm = $('.sku-base-form', node);
 
       // Disable sharing and deliver blocks for OOS.
       $('.product-out-of-stock').once('page-load').each(function () {
@@ -36,7 +55,9 @@
             }
           });
         }
-        Drupal.getRelatedProductPosition();
+        if (!isRcsPdp()) {
+          Drupal.getRelatedProductPosition();
+        }
       });
 
       // Trigger matchback color change on main product color change.
@@ -44,7 +65,7 @@
         var selected = $(this).val();
         var sku = $(this).parents('form').attr('data-sku');
         var productKey = Drupal.getProductKeyForProductViewMode('full');
-        var variantInfo = drupalSettings[productKey][sku];
+        var variantInfo = window.commerceBackend.getProductData(sku, productKey);
         // Use swatch value to update query param from pretty path.
         if (variantInfo.swatch_param !== undefined) {
           Drupal.getSelectedProductFromSwatch(sku, selected, productKey);
@@ -82,10 +103,10 @@
         });
       });
 
-      $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
+      $('.form-select[data-configurable-code]', skuBaseForm).once('bind-js').on('change', function () {
         var form = $(this).parents('form');
         var sku = $(form).attr('data-sku');
-        var combinations = drupalSettings.configurableCombinations[sku];
+        var combinations = window.commerceBackend.getConfigurableCombinations(sku);
         var code = $(this).attr('data-configurable-code');
         var selected = $(this).val();
 
@@ -115,7 +136,7 @@
         }
       });
 
-      $('.sku-base-form').once('load').each(function () {
+      skuBaseForm.once('load').each(function () {
         var sku = $(this).attr('data-sku');
         var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
         var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
@@ -123,15 +144,18 @@
         // Fill the view mode form field.
         $(this).parents('article.entity--type-node[data-vmode="' + viewMode + '"]').find('.product-view-mode').val(viewMode);
 
-        if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
+        var productData = window.commerceBackend.getProductData(sku, productKey);
+        if (!productData) {
           return;
         }
 
         // On form load set order qty limit message.
         Drupal.disableLimitExceededProducts(sku, sku);
 
-        var node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
+        node = $(this).parents('article.entity--type-node:first');
+        if (productData.type === 'simple') {
+          window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, productData.sku);
+        }
 
         // Dispatch event on modal load each time to perform action on load.
         // We need to load wishlist component first before we set product data.
@@ -144,7 +168,7 @@
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
-          var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+          var variantInfo = productData.variants[variant];
           var parentSku = variantInfo.parent_sku;
           var title = variantInfo.cart_title;
 
@@ -172,16 +196,16 @@
             return;
           }
 
-          $('.price-block-' + drupalSettings[productKey][sku].identifier, node).html(variantInfo.price);
+          $('.price-block-' + productData.identifier, node).html(variantInfo.price);
 
           if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
-            Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
+            window.commerceBackend.updateGallery(node, productData.layout, productData.gallery);
           }
           else if (viewMode === 'matchback_mobile' && $(window).width() < 768) {
             Drupal.updateMatchbackMobileImage(node, variantInfo['matchback_teaser_image']);
           }
           else {
-            Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, variantInfo.gallery);
+            window.commerceBackend.updateGallery(node, productData.layout, variantInfo.gallery, variantInfo.sku, sku);
           }
           // On variant change, disable/enable Add to bag, quantity dropdown
           // and show message based on value in drupalSettings.
@@ -212,16 +236,17 @@
           }
         });
 
-        if (drupalSettings[productKey][sku]['variants']) {
-          var variants = drupalSettings[productKey][sku]['variants'];
+        if (typeof productData.variants !== 'undefined') {
+          var variants = productData.variants;
 
           // Use first child provided in settings if available.
           // Use the first variant otherwise.
-          var selectedSku = (typeof drupalSettings.configurableCombinations[sku]['firstChild'] === 'undefined')
+          var configurableCombinations = window.commerceBackend.getConfigurableCombinations(sku);
+          var selectedSku = (typeof configurableCombinations.firstChild === 'undefined')
             ? Object.keys(variants)[0]
-            : drupalSettings.configurableCombinations[sku]['firstChild'];
+            : configurableCombinations.firstChild;
 
-          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, drupalSettings[productKey][sku]);
+          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, productData);
 
           if (selectedSkuFromQueryParam !== '') {
             selectedSku = selectedSkuFromQueryParam;
@@ -238,7 +263,7 @@
           }
 
           var firstAttribute = $('.form-select[data-configurable-code]:first', this);
-          var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
+          var firstAttributeValue = configurableCombinations['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
           $(firstAttribute).removeProp('selected').removeAttr('selected');
           $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
           $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
@@ -250,18 +275,21 @@
         var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
         var productKey = Drupal.getProductKeyForProductViewMode($(this).parents('article.entity--type-node').attr('data-vmode'));
 
-        if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
+        var productData = window.commerceBackend.getProductData(sku, productKey);
+        if (!productData) {
           return;
         }
 
         var node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
+        window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, sku);
       });
 
-      // Add related products on pdp on load and scroll.
-      $(window).once('updateRelatedProductsLoad').on('load scroll', function () {
-        Drupal.getRelatedProductPosition();
-      });
+      if (!isRcsPdp()) {
+        // Add related products on pdp on load and scroll.
+        $(window).once('updateRelatedProductsLoad').on('load scroll', function () {
+          Drupal.getRelatedProductPosition();
+        });
+      }
 
       // Add 'each' with price on change of quantity if matchback is enabled.
       if ($('.price-suffix-matchback').length) {
@@ -326,53 +354,12 @@
     }
   };
 
-  Drupal.updateGallery = function (product, layout, gallery) {
-    if (gallery === '' || gallery === null) {
-      return;
-    }
-
-    if ($(product).find('.gallery-wrapper').length > 0) {
-      // Since matchback products are also inside main PDP, when we change the variant
-      // of the main PDP we'll get multiple .gallery-wrapper, so we are taking only the
-      // first one which will be of main PDP to update main PDP gallery only.
-      $(product).find('.gallery-wrapper').first().replaceWith(gallery);
-    }
-    else {
-      $(product).find('#product-zoom-container').replaceWith(gallery);
-    }
-
-    // COS claasic gallery for magazine layout.
-    if (layout === 'pdp-magazine' && drupalSettings.pdp_gallery_type == 'classic') {
-      layout = 'pdp';
-    }
-    if (layout === 'pdp-magazine') {
-      // Set timeout so that original behavior attachment is not affected.
-      setTimeout(function () {
-        Drupal.behaviors.magazine_gallery.attach(document);
-        Drupal.behaviors.pdpVideoPlayer.attach(document);
-      }, 1);
-    }
-    else {
-      // Hide the thumbnails till JS is applied.
-      // We use opacity through a class on parent to ensure JS get's applied
-      // properly and heights are calculated properly.
-      $('#product-zoom-container', product).addClass('whiteout');
-      setTimeout(function () {
-        Drupal.behaviors.alshaya_product_zoom.attach(document);
-        Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
-
-        // Show thumbnails again.
-        $('#product-zoom-container', product).removeClass('whiteout');
-      }, 1);
-    }
-  };
-
   Drupal.refreshConfigurables = function (form, selectedCode, selectedValue) {
     var sku = ($(form).parents('article.entity--type-node:first').length > 0)
       ? $(form).parents('article.entity--type-node:first').attr('data-sku')
       : $(form).attr('data-sku');
 
-    var combinations = drupalSettings.configurableCombinations[sku]['combinations'];
+    var combinations = window.commerceBackend.getConfigurableCombinations(sku)['combinations'];
 
     var selectedValues = Drupal.getSelectedValues(form);
     for (var code in selectedValues) {
@@ -440,11 +427,13 @@
     var sku = $(form).attr('data-sku');
     var viewMode = $(form).parents('article.entity--type-node:first').attr('data-vmode')
     var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, drupalSettings[productKey][sku]);
+    var productData = window.commerceBackend.getProductData(sku, productKey);
+    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, productData);
+    var combinations = window.commerceBackend.getConfigurableCombinations(sku);
 
     if (selectedSku) {
       $(select).removeProp('selected').removeAttr('selected');
-      var attributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][selectedCode];
+      var attributeValue = combinations.bySku[selectedSku][selectedCode];
       var attributeOption = select.find('option[value="' + attributeValue + '"]');
 
       if (attributeOption) {
@@ -531,12 +520,14 @@
       var orderLimitMobileMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
       var viewMode = selectedInput.parents('article.entity--type-node').attr('data-vmode');
       var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-      var parentInfo = typeof drupalSettings[productKey][sku] !== "undefined" ? drupalSettings[productKey][sku] : '';
+      var productData = window.commerceBackend.getProductData(sku, productKey);
+
+      var parentInfo = productData !== null ? productData : '';
       // At parent level, sku and selected will be same.
-      var variantInfo = (typeof drupalSettings[productKey][sku] !== "undefined"
-        && typeof drupalSettings[productKey][sku]['variants'] !== "undefined"
+      var variantInfo = (productData !== null
+        && typeof productData['variants'] !== "undefined"
         && sku !== selected)
-        ? drupalSettings[productKey][sku]['variants'][selected] : '';
+        ? productData['variants'][selected] : '';
 
       var variantToDisableSelector = selectedInput.closest('.sku-base-form');
       var orderLimitExceeded = false;

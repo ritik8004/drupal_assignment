@@ -119,8 +119,16 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   /**
    * {@inheritdoc}
    */
-  public function getTemplateName(array &$suggestions) {
-    $suggestions[] = 'node__acq_product__full_magazine_v2';
+  public function getTemplateName(array &$suggestions, string $bundle) {
+    switch ($bundle) {
+      case 'rcs_product':
+        $suggestions[] = 'node__rcs_product__full_magazine_v2';
+        break;
+
+      default:
+        $suggestions[] = 'node__acq_product__full_magazine_v2';
+        break;
+    }
   }
 
   /**

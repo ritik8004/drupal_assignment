@@ -20,7 +20,7 @@ import {
   isString,
   isNumber,
 } from '../../../../js/utilities/conditionsUtility';
-import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
+import { callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import { getExceptionMessageType } from '../../../../js/utilities/error';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
@@ -83,29 +83,6 @@ const returnExistingCartWithError = (code, message) => ({
     error_message: message,
     response_message: [message, 'error'],
   },
-});
-
-/**
- * Triggers the stock refresh process for the provided skus.
- *
- * @param {object} data
- *   Data containing sku and stock quantity information.
- *
- * @returns {Promise<object>}
- */
-const triggerStockRefresh = (data) => callDrupalApi(
-  '/spc/checkout-event',
-  'POST',
-  {
-    form_params: {
-      action: 'refresh stock',
-      skus_quantity: data,
-    },
-  },
-).catch((error) => {
-  logger.error('Error occurred while triggering checkout event refresh stock. Message: @message', {
-    '@message': error.message,
-  });
 });
 
 /**
@@ -298,9 +275,9 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
     const exceptionType = getExceptionMessageType(response.data.error_message);
     if (exceptionType === 'OOS') {
-      await triggerStockRefresh({ [sku]: 0 });
+      await window.commerceBackend.triggerStockRefresh({ [sku]: 0 });
     } else if (exceptionType === 'not_enough') {
-      await triggerStockRefresh({ [sku]: quantity });
+      await window.commerceBackend.triggerStockRefresh({ [sku]: quantity });
     }
 
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);

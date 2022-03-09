@@ -1,0 +1,5 @@
+alshaya_rcs_seo.seo_cofig_form:
+  route_name: alshaya_rcs_seo.seo_cofig_form
+  title: 'Alshaya RCS Seo settings'
+  description: 'Configure Alshaya RCS Seo settings.'
+  parent: alshaya_master.alshaya_admin

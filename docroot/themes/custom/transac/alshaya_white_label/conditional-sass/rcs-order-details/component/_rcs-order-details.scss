@@ -1,0 +1,38 @@
+body[class*="-order-"]:not(.rcs-loaded) {
+  .order-detail {
+    .print--button {
+      color: $no-color;
+      height: 0;
+
+      @include plain-loader;
+
+      & > * {
+        visibility: hidden;
+      }
+    }
+
+    #block-page-title {
+      border: 0;
+    }
+
+    #rcs-ph-order_teaser {
+      height: 24rem;
+      overflow: hidden;
+
+      .user__order--detail {
+        border: 0;
+
+        @include text-block-loader;
+
+        & > * {
+          visibility: hidden;
+        }
+
+        .delivery-details-row,
+        .order-item-row {
+          border: 0;
+        }
+      }
+    }
+  }
+}

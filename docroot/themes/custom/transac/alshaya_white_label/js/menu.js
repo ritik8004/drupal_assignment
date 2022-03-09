@@ -19,8 +19,17 @@
     setMenuWidth();
   });
 
+  // Scan for rcs menu.
+  var rcsMenuSelector = '#block-alshayarcsmainmenu #rcs-ph-navigation_menu';
+  var pageHasRcsMenu = $(rcsMenuSelector).length;
+
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
+      // For RCS Menu, do not proceed until it is completely loaded.
+      if (pageHasRcsMenu && !$(rcsMenuSelector).hasClass('rcs-loaded')) {
+        return;
+      }
+
       $('html').once('setMenuWidth').each(function () {
         setMenuWidth();
       });
@@ -160,8 +169,8 @@
       });
 
       // Close mobile menu when clicked outside the menu.
-      var mobileMenu = $('.main--menu');
-      $('body', context).once().click(function (e) {
+      var mobileMenu = $('.main--menu', context);
+      $('body').once('mobile-menu-close').click(function (e) {
         if (mobileMenu.hasClass('menu--active') && e.target === $('.menu--active')[0]) {
           $('.mobile--close').trigger('click');
         }

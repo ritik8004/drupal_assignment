@@ -75,7 +75,9 @@ class AlshayaDpNavigationLinks extends BlockBase implements ContainerFactoryPlug
     // If department page, only then process further.
     if ($node instanceof NodeInterface) {
       // If term id is attached with node.
-      if ($tid = $node->get('field_product_category')->first()->getString()) {
+      $tid = $node->get('field_product_category')->first();
+      if ($tid) {
+        $tid = $tid->getString();
         // Get category tree data.
         $category_tree = $this->categoryTree->getCategoryTreeCached();
         if (isset($category_tree[$tid])) {

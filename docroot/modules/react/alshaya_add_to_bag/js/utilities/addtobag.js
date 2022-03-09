@@ -1,4 +1,3 @@
-import axios from 'axios';
 import logger from '../../../js/utilities/logger';
 
 /**
@@ -102,6 +101,17 @@ export const triggerUpdateCart = (requestData) => {
 };
 
 /**
+ * Helper function to check if GTM Product push condition is enabled.
+ */
+export const isGtmProductPushEnabled = () => {
+  if (Drupal.hasValue(drupalSettings.add_to_bag)) {
+    return drupalSettings.add_to_bag.gtm_product_push;
+  }
+
+  return false;
+};
+
+/**
  * Helper function to check if max sale quantity condition is enabled.
  */
 export const isMaxSaleQtyEnabled = () => {
@@ -129,8 +139,8 @@ export const isHideMaxSaleMsg = () => {
  * @returns array
  *  The array of hidden form attribute names.
  */
-export const getHiddenFormAttributes = () => (typeof drupalSettings.add_to_bag.hidden_form_attributes !== 'undefined'
-  ? drupalSettings.add_to_bag.hidden_form_attributes
+export const getHiddenFormAttributes = () => (typeof drupalSettings.hidden_form_attributes !== 'undefined'
+  ? drupalSettings.hidden_form_attributes
   : []);
 
 /**
@@ -431,17 +441,6 @@ export const getProductinfoLocalStorageExpiration = () => (typeof drupalSettings
 export const getProductInfoStorageKey = (sku) => (`productinfo:${btoa(sku)}:${drupalSettings.path.currentLanguage}`);
 
 /**
- * Remove product information from the local storage.
- *
- * @param {string} sku
- */
-export const removeProductInfoInStorage = (sku) => {
-  // Get local storage key for the product.
-  const storageKey = getProductInfoStorageKey(sku);
-  Drupal.removeItemFromLocalStorage(storageKey);
-};
-
-/**
  * Add product's information in the local storage for given sku.
  *
  * @param {object} productData
@@ -459,81 +458,6 @@ export const addProductInfoInStorage = (productData, sku) => {
     productData,
     getProductinfoLocalStorageExpiration(),
   );
-};
-
-/**
- * Return the product's info available in local storage.
- * Return null if product's info in local storage is expired.
- *
- * @param {string} sku
- *  Sku of the product.
- *
- * @returns {object}
- *  An object of product's information.
- */
-export const productInfoAvailableInStorage = (sku) => {
-  // Get local storage key for the product.
-  const storageKey = getProductInfoStorageKey(sku);
-
-  // Get data from local storage.
-  const productInfo = Drupal.getItemFromLocalStorage(storageKey);
-
-  // If data is not available in storage, we flag it to check/fetch from api.
-  if (productInfo && !productInfo.title) {
-    return null;
-  }
-
-  return productInfo;
-};
-
-/**
- * Get the product information if available in local storage. If not,
- * fetch the information from the API and return a promise object.
- *
- * @param {string} sku
- *  Sku of the product to get information for.
- *
- * @returns {object}
- *  An object of the product's information.
- */
-export const getProductInfo = (sku) => {
-  // Return null if the sku is undefined or null.
-  if (typeof sku === 'undefined' || sku === null) {
-    removeProductInfoInStorage(sku);
-    return new Promise((resolve) => {
-      resolve(null);
-    });
-  }
-
-  // Check and return if product info available in storage and not expired.
-  const productInfo = productInfoAvailableInStorage(sku);
-
-  // Return product info if available in storage.
-  if (productInfo !== null) {
-    // Return a promise object always.
-    return new Promise((resolve) => {
-      resolve(productInfo);
-    });
-  }
-
-  // If product's info isn't available, fetch via api.
-  // Prepare the product info api url.
-  const apiUrl = Drupal.url(`rest/v1/product-info/${btoa(sku)}`);
-
-  return axios.get(apiUrl).then((response) => {
-    if (typeof response !== 'object') {
-      removeProductInfoInStorage(sku);
-      return new Promise((resolve) => {
-        resolve(null);
-      });
-    }
-
-    return response.data;
-  }).catch((error) => {
-    // Processing of error here.
-    Drupal.logJavascriptError('Failed to fetch product data.', error, 'product_info_resource');
-    return error;
-  });
 };
 
 export const isMaxSaleQtyReached = (selectedVariant, productData) => {

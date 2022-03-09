@@ -159,7 +159,9 @@ function alshaya_seo_page_attachments(array &$attachments) {
     ];
   $attachments['#attached']['html_head'][] = [$gkg_script, 'gkg_data'];
   // Adding Product schema for PDP.
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_seo_transac')) {
+  // For rcs_product type, we process the schema in the rcs code.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_seo_transac')
+    && $content_type !== 'rcs_product') {
     $product_schema_data = _alshaya_seo_transac_pdp_rich_snippet();
     // Allow other modules to update the schema data and page attachments.
     \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);

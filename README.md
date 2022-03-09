@@ -42,7 +42,7 @@ Any code merged into upstream branch is automatically back-merged.
 
 ### Local git repository
 
-Each developer uses a fork of the main repository for his developments and
+Each developer uses a fork of the main repository for their developments and
 creates Pull Requests (PRs) against the main repository when he is ready.
 
 To prepare your local env:

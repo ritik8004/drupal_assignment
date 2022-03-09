@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_rcs_magazine_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if (($entity->bundle() == 'magazine_article')) {
+    $build['#attached']['library'][] = 'alshaya_rcs_magazine/main';
+    $build['#attached']['library'][] = 'alshaya_white_label/rcs-alshaya-magazine';
+  }
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates_alter().
+ */
+function alshaya_rcs_magazine_rcs_handlebars_templates_alter(&$templates, $entity) {
+  if (!$entity || $entity->bundle() !== 'magazine_article') {
+    return;
+  }
+
+  $templates['product.teaser'] = 'alshaya_rcs_product';
+  $templates['product.block.price'] = 'alshaya_rcs_product';
+  $templates['product.block.price.item'] = 'alshaya_rcs_product';
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query().
+ */
+function alshaya_rcs_magazine_rcs_placeholders_graphql_query() {
+  $query_fields = [];
+
+  $query_fields['magazine_shop_the_story'] = [
+    'total_count',
+    'items' => [
+      'sku',
+      'type_id',
+      'name',
+      'url_key',
+      'end_user_url',
+      'assets_teaser',
+      'price_range' => [
+        'maximum_price' => [
+          'regular_price' => [
+            'value',
+          ],
+          'final_price' => [
+            'value',
+          ],
+          'discount' => [
+            'percent_off',
+          ],
+        ],
+      ],
+      '... on ConfigurableProduct' => [
+        'variants' => [
+          'product' => [
+            'type_id',
+            'assets_teaser',
+          ],
+        ],
+      ],
+      'promotions' => [
+        'type',
+        'label',
+        'url',
+      ],
+    ],
+  ];
+
+  return $query_fields;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_rcs_magazine_preprocess_field__rcs_placeholder_block(&$variables) {
+  if ($variables['field_name'] === 'field_magazine_shop_the_story') {
+    $product_display_settings = \Drupal::configFactory()->get('alshaya_acm_product.display_settings');
+    $variables['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
+    $variables['#cache']['tags'] = $variables['#cache']['tags'] ?? [];
+    $variables['#cache']['tags'] = array_merge($variables['#cache']['tags'], $product_display_settings->getCacheTags());
+  }
+}

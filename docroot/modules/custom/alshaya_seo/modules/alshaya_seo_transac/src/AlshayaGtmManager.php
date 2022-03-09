@@ -61,10 +61,13 @@ class AlshayaGtmManager {
     'alshaya_master.home' => 'home page',
     'entity.taxonomy_term.canonical' => 'taxonomy term',
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
+    'entity.taxonomy_term.canonical:rcs_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
+    'entity.node.canonical:rcs_product' => 'product detail page',
     'entity.node.canonical:advanced_page' => 'advanced page',
     'entity.node.canonical:department_page' => 'department page',
     'entity.node.canonical:acq_promotion' => 'promotion page',
+    'entity.node.canonical:rcs_promotion' => 'promotion page',
     'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
     'system.404' => 'page not found',
@@ -93,7 +96,9 @@ class AlshayaGtmManager {
   const LIST_GTM_MAPPING = [
     'view.search.page' => 'Search Results Page',
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
+    'entity.taxonomy_term.canonical:rcs_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
+    'entity.node.canonical:rcs_product' => 'PDP',
     'entity.node.canonical:acq_promotion' => 'Promotion',
     'acq_cart.cart' => 'CartPage',
     'alshaya_master.home' => 'HP-ProductCarrousel',
@@ -379,7 +384,6 @@ class AlshayaGtmManager {
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
-    $attributes['gtm-cart-value'] = '';
 
     $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
     $attributes = array_merge($attributes, $skuAttributes);
@@ -393,13 +397,15 @@ class AlshayaGtmManager {
    *   Identifier of the product variant on SKU entity.
    * @param \Drupal\acq_commerce\SKUInterface|null $child
    *   The child sku object or null.
+   * @param string|null $parentSku
+   *   Parent product SKU value.
    *
    * @return array
    *   Attributes on sku to be exposed to GTM.
    *
    * @throws \InvalidArgumentException
    */
-  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL) {
+  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL, $parentSku = NULL) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
@@ -911,7 +917,10 @@ class AlshayaGtmManager {
         continue;
       }
 
-      $product = $this->fetchSkuAtttributes($item['sku']);
+      $product = $item['product_type'] === 'configurable'
+        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'])
+        : $this->fetchSkuAtttributes($item['sku']);
+
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
       }
@@ -1083,6 +1092,7 @@ class AlshayaGtmManager {
         $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
         foreach ($taxonomy_parents as $taxonomy_parent) {
           $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
+          /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
           $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
         }
 
@@ -1092,7 +1102,8 @@ class AlshayaGtmManager {
       case 'advanced page':
       case 'department page':
         $department_node = $current_route['route_params']['node'];
-        if ($department_node->get('field_use_as_department_page')->value == 1) {
+        if ($department_node->get('field_use_as_department_page')->value == 1
+          && $department_node->get('field_product_category')->target_id) {
           $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')
             ->load($department_node->get('field_product_category')->target_id);
           if (!empty($taxonomy_term)) {

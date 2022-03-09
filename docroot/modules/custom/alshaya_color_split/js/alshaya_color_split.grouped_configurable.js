@@ -14,10 +14,11 @@
         var node = $(this).parents('article.entity--type-node:first');
         var sku = $(this).attr('data-sku');
         var productKey = (node.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        var productInfo = window.commerceBackend.getProductData(sku, productKey);
+        if (productInfo === null) {
           return;
         }
-        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        var variantInfo = productInfo.variants[variant];
 
         // We can have mix of color split and normal products.
         // Avoid processing further if we have a product which is normal but

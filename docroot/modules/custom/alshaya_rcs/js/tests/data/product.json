@@ -1,0 +1,89 @@
+{
+  "sku": "Q022992665",
+  "name": "Hello Beautiful Ultra Shea Body Cream",
+  "url_key": "hello-beautiful-ultra-shea-body-cream-q022992665",
+  "category_ids_in_admin": [
+    "3",
+    "25",
+    "10",
+    "18"
+  ],
+  "categories": [
+    {
+      "id": 3,
+      "name": "Body Care",
+      "include_in_menu": 1,
+      "level": 2,
+      "url_path": "body-care",
+      "breadcrumbs": null
+    },
+    {
+      "id": 25,
+      "name": "test hand care",
+      "include_in_menu": 0,
+      "level": 4,
+      "url_path": "hand-soaps/hand-care/test-hand-care",
+      "breadcrumbs": [
+        {
+          "category_id": 5,
+          "category_name": "Hand Soaps",
+          "category_level": 2,
+          "category_url_key": "hand-soaps",
+          "category_url_path": "hand-soaps"
+        },
+        {
+          "category_id": 11,
+          "category_name": "hand care",
+          "category_level": 3,
+          "category_url_key": "hand-care",
+          "category_url_path": "hand-soaps/hand-care"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "New Arrivals",
+      "include_in_menu": 0,
+      "level": 3,
+      "url_path": "body-care/new-arrivals",
+      "breadcrumbs": [
+        {
+          "category_id": 3,
+          "category_name": "Body Care",
+          "category_level": 2,
+          "category_url_key": "body-care",
+          "category_url_path": "body-care"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Travel Size",
+      "include_in_menu": 1,
+      "level": 4,
+      "url_path": "body-care/shop-all-body-care/travel-size",
+      "breadcrumbs": [
+        {
+          "category_id": 3,
+          "category_name": "Body Care",
+          "category_level": 2,
+          "category_url_key": "body-care",
+          "category_url_path": "body-care"
+        },
+        {
+          "category_id": 6,
+          "category_name": "Test Shop All Body Care",
+          "category_level": 3,
+          "category_url_key": "shop-all-body-care",
+          "category_url_path": "body-care/shop-all-body-care"
+        }
+      ]
+    }
+  ],
+  "description": {
+    "html": "Infused with luxuriously rich Shea Butter, our Ultra Shea Body Cream provides 24 hours of nourishing moisture. With soothing Aloe Butter, pampering Cocoa Butter and more Shea than ever before, our non-greasy formula melts into skin to provide beautiful fragrance and all day, all night hydration."
+  },
+  "short_description": {
+    "html": "Infused with luxuriously rich Shea Butter, our Ultra Shea Body Cream provides 24 hours of nourishing moisture. With soothing Aloe Butter, pampering Cocoa Butter and more Shea than ever before, our non-greasy formula melts into skin to provide beautiful fragrance and all day, all night hydration."
+  }
+}

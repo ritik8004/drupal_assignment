@@ -2,7 +2,7 @@ diff --git a/.htaccess b/.htaccess
 index 83cb71a04..9fc946b67 100644
 --- a/.htaccess
 +++ b/.htaccess
-@@ -111,6 +111,21 @@ AddEncoding gzip svgz
+@@ -111,6 +111,23 @@ AddEncoding gzip svgz
    # uncomment the following:
    # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
    # RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
@@ -18,6 +18,8 @@ index 83cb71a04..9fc946b67 100644
 +  RewriteCond %{HTTP_HOST} !\.cloud$ [NC]
 +  # Don't redirect on all *.hm.com domains.
 +  RewriteCond %{HTTP_HOST} !\.hm\.com$ [NC]
++  # Don't redirect on all *.boots.com domains.
++  RewriteCond %{HTTP_HOST} !\.boots\.com$ [NC]
 +  # Don't redirect on all *.cosstores.com domains.
 +  RewriteCond %{HTTP_HOST} !\.cosstores\.com$ [NC]
 +  RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

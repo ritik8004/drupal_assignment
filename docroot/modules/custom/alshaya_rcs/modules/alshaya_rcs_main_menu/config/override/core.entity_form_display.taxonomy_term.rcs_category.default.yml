@@ -1,0 +1,349 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.rcs_category.field_category_slug
+    - field.field.taxonomy_term.rcs_category.field_display_as_clickable_link
+    - field.field.taxonomy_term.rcs_category.field_icon
+    - field.field.taxonomy_term.rcs_category.field_include_in_desktop
+    - field.field.taxonomy_term.rcs_category.field_include_in_mobile_tablet
+    - field.field.taxonomy_term.rcs_category.field_logo_active_image
+    - field.field.taxonomy_term.rcs_category.field_logo_header_image
+    - field.field.taxonomy_term.rcs_category.field_logo_inactive_image
+    - field.field.taxonomy_term.rcs_category.field_main_menu_highlight
+    - field.field.taxonomy_term.rcs_category.field_move_to_right
+    - field.field.taxonomy_term.rcs_category.field_override_target_link
+    - field.field.taxonomy_term.rcs_category.field_remove_term_in_breadcrumb
+    - field.field.taxonomy_term.rcs_category.field_target_link
+    - field.field.taxonomy_term.rcs_category.field_term_background_color
+    - field.field.taxonomy_term.rcs_category.field_term_font_color
+    - image.style.thumbnail
+    - taxonomy.vocabulary.rcs_category
+  module:
+    - field_group
+    - jquery_minicolors
+    - link
+    - paragraphs
+    - path
+    - svg_image
+    - text
+third_party_settings:
+  field_group:
+    group_taxonomy_tabs:
+      children:
+        - group_configuration
+        - group_mega_menu_content
+        - group_super_category_logos
+      parent_name: ''
+      weight: 0
+      format_type: tabs
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        direction: horizontal
+      label: 'Taxonomy Tabs'
+    group_configuration:
+      children:
+        - field_remove_term_in_breadcrumb
+        - name
+        - langcode
+        - description
+        - path
+        - field_category_slug
+      parent_name: group_taxonomy_tabs
+      weight: 17
+      format_type: tab
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        formatter: closed
+        required_fields: true
+      label: Configuration
+    group_mega_menu_content:
+      children:
+        - group_link_url
+        - group_link_visibility
+        - group_promo_block
+        - group_menu_item_colors
+      parent_name: group_taxonomy_tabs
+      weight: 18
+      format_type: tab
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        formatter: closed
+        required_fields: true
+      label: 'Mega menu content'
+    group_link_url:
+      children:
+        - field_override_target_link
+        - field_target_link
+        - field_display_as_clickable_link
+      parent_name: group_mega_menu_content
+      weight: 20
+      format_type: details
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        open: true
+        required_fields: true
+      label: 'Link URL'
+    group_link_visibility:
+      children:
+        - field_icon
+        - field_include_in_desktop
+        - field_include_in_mobile_tablet
+        - field_move_to_right
+      parent_name: group_mega_menu_content
+      weight: 21
+      format_type: details
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        open: true
+        required_fields: true
+      label: 'Link visibility'
+    group_promo_block:
+      children:
+        - field_main_menu_highlight
+      parent_name: group_mega_menu_content
+      weight: 22
+      format_type: details
+      region: content
+      format_settings:
+        description: ''
+        required_fields: true
+        id: ''
+        classes: ''
+        open: false
+      label: 'Promo Block'
+    group_menu_item_colors:
+      children:
+        - field_term_background_color
+        - field_term_font_color
+      parent_name: group_mega_menu_content
+      weight: 23
+      format_type: details
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        open: false
+        required_fields: true
+      label: 'Menu item colors'
+    group_super_category_logos:
+      children:
+        - field_logo_inactive_image
+        - field_logo_active_image
+        - field_logo_header_image
+      parent_name: group_taxonomy_tabs
+      weight: 19
+      format_type: tab
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        formatter: closed
+        required_fields: true
+      label: 'Super Category Logos'
+_core:
+  default_config_hash: c4GyBSHQqBHt2RYCuq_4lPymn750N2iDBvRXgHmc_XE
+id: taxonomy_term.rcs_category.default
+targetEntityType: taxonomy_term
+bundle: rcs_category
+mode: default
+content:
+  description:
+    type: text_textarea
+    weight: 19
+    region: content
+    settings:
+      placeholder: ''
+      rows: 5
+    third_party_settings: {  }
+  field_category_slug:
+    type: string_textfield
+    weight: 21
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_display_as_clickable_link:
+    weight: 6
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_icon:
+    type: image_image
+    weight: 13
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_include_in_desktop:
+    weight: 14
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_include_in_mobile_tablet:
+    weight: 15
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_logo_active_image:
+    type: image_image
+    weight: 27
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_logo_header_image:
+    type: image_image
+    weight: 28
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_logo_inactive_image:
+    type: image_image
+    weight: 26
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_main_menu_highlight:
+    weight: 12
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    type: entity_reference_paragraphs
+    region: content
+  field_move_to_right:
+    weight: 16
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_override_target_link:
+    weight: 7
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_remove_term_in_breadcrumb:
+    weight: 16
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_target_link:
+    weight: 8
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_term_background_color:
+    weight: 14
+    settings:
+      size: '60'
+      placeholder: ''
+      control: hue
+      format: hex
+      opacity: 0
+      swatches: ''
+      position: 'bottom left'
+      theme: default
+      animation_speed: 50
+      animation_easing: swing
+      change_delay: 0
+      letter_case: lowercase
+      show_speed: 100
+      hide_speed: 100
+      keywords: ''
+      inline: 0
+    third_party_settings: {  }
+    type: jquery_minicolors_widget
+    region: content
+  field_term_font_color:
+    weight: 15
+    settings:
+      size: '60'
+      placeholder: ''
+      control: hue
+      format: hex
+      opacity: 0
+      swatches: ''
+      position: 'bottom left'
+      theme: default
+      animation_speed: 50
+      animation_easing: swing
+      change_delay: 0
+      letter_case: lowercase
+      show_speed: 100
+      hide_speed: 100
+      keywords: ''
+      inline: 0
+    third_party_settings: {  }
+    type: jquery_minicolors_widget
+    region: content
+  langcode:
+    type: language_select
+    weight: 18
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 17
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 20
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 4
+    region: content
+    third_party_settings: {  }
+hidden: {  }

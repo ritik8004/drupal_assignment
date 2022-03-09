@@ -46,14 +46,19 @@ class AlshayaProductOptionsCommands extends DrushCommands {
    *
    * @command alshaya_product_options:sync-options
    *
+   * @option force-save
+   *   Force update pretty path facets.
+   *
    * @aliases aacspo,sync-options,alshaya-sync-commerce-product-options
    *
    * @usage drush sync-options
    *   Sync options for all product attributes.
+   * @usage sync-options ----force-save
+   *   Sync options for all product attributes and creates non-existing facets.
    */
-  public function syncProductOptions() {
+  public function syncProductOptions(array $options = ['force-save' => FALSE]) {
     $this->output->writeln('Alshaya - Synchronizing all commerce product options, please wait...');
-    $this->productOptionshelper->synchronizeProductOptions();
+    $this->productOptionshelper->synchronizeProductOptions($options['force-save']);
     $this->output->writeln('Sync completed.');
   }
 

@@ -19,6 +19,12 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview: '',
       buttonClass: 'write_review',
       validateCurrentEmail: false,
+      userDetails: {
+        user: {
+          userId: 0,
+          userEmail: null,
+        },
+      },
     };
   }
 
@@ -38,16 +44,19 @@ export default class WriteReviewButton extends React.Component {
         buttonClass: 'pie_notification',
       });
     }
-    if (params.get('userToken') !== null) {
-      const currentEmail = getEmailFromTokenParams(params);
-      const userDetails = getUserDetails(productId);
-      if (userDetails.user.userId !== 0 && userDetails.user.emailId !== currentEmail) {
-        this.setState({
-          validateCurrentEmail: true,
-          buttonClass: 'pie_notification',
-        });
+
+    getUserDetails(productId).then((userDetails) => {
+      if (params.get('userToken') !== null) {
+        const currentEmail = getEmailFromTokenParams(params);
+        if (userDetails.user.userId !== 0 && userDetails.user.emailId !== currentEmail) {
+          this.setState({
+            validateCurrentEmail: true,
+            buttonClass: 'pie_notification',
+          });
+        }
       }
-    }
+      this.setState({ userDetails });
+    });
   }
 
   openModal = (e) => {
@@ -107,7 +116,7 @@ export default class WriteReviewButton extends React.Component {
       reviewedByCurrentUser, productId, context, newPdp,
     } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-    const userDetails = getUserDetails(productId);
+    const { userDetails } = this.state;
     if (userDetails && Object.keys(userDetails).length !== 0) {
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
       if (userDetails.user.userId === 0

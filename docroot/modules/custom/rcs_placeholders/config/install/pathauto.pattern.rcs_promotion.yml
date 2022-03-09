@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: rcs_promotion
+label: 'RCS Promotion'
+type: 'canonical_entities:node'
+pattern: '[rcs:promotion-path-prefix]/[node:title]'
+selection_criteria:
+  3cf49b13-9b70-4b2b-ab2b-2f10033cc18f:
+    id: node_type
+    bundles:
+      rcs_promotion: rcs_promotion
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 3cf49b13-9b70-4b2b-ab2b-2f10033cc18f
+selection_logic: and
+weight: -5
+relationships: {  }

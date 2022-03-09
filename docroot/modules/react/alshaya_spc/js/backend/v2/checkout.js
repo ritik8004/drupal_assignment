@@ -87,16 +87,23 @@ const getCncStatusForCart = async (data) => {
   // Process items.
   for (let i = 0; i < data.cart.items.length; i++) {
     const item = data.cart.items[i];
-    // We should ideally have ony one call to an endpoint and pass
-    // The list of items. This look could happen in the backend.
-    // Suppressing the lint error for now.
 
     // Skip product status check if egift is enabled and is virtual product.
     if (isEgiftCardEnabled() && cartItemIsVirtual(item)) {
       return true;
     }
+
+    // We should ideally have ony one call to an endpoint and pass
+    // The list of items. This look could happen in the backend.
+    // Suppressing the lint error for now.
+    const hasParentSku = hasValue(item.extension_attributes)
+      && hasValue(item.extension_attributes.parent_product_sku);
+    const parentSKU = (item.product_type === 'configurable' && hasParentSku)
+      ? item.extension_attributes.parent_product_sku
+      : null;
+
     // eslint-disable-next-line no-await-in-loop
-    const productStatus = await getProductStatus(item.sku);
+    const productStatus = await getProductStatus(item.sku, parentSKU);
     if (hasValue(productStatus)
       && isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
     ) {
