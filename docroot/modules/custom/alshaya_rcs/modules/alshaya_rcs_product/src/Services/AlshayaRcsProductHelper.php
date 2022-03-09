@@ -106,7 +106,7 @@ class AlshayaRcsProductHelper {
     $langcode = $this->languageManager->getDefaultLanguage()->getId();
 
     $query = $this->connection->select('node_field_data', 'nfd');
-    $query->fields('nfd', ['nid', 'title', 'langcode']);
+    $query->fields('nfd', ['nid']);
 
     // Join pdp layout field table to select only those nodes
     // that have value in select pdp layout field.
