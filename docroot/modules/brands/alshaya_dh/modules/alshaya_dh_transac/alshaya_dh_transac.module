@@ -136,12 +136,6 @@ function alshaya_dh_transac_alshaya_performance_preload_alter(array &$preload) {
         'crossorigin' => 'crossorigin',
         'type' => 'font/woff2',
       ],
-      [
-        'as' => 'font',
-        'href' => '/themes/custom/transac/alshaya_debenhams/fonts/SofiaPro-Medium.woff2',
-        'crossorigin' => 'crossorigin',
-        'type' => 'font/woff2',
-      ],
     ],
     'ar' => [
       [
