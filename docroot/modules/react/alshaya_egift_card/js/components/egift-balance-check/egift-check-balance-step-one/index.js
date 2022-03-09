@@ -88,7 +88,7 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
   };
 
   render = () => {
-    if (isEgiftCardEnabled()) {
+    if (!isEgiftCardEnabled()) {
       // Do not show popup if eGift is not enabled.
       return (null);
     }
