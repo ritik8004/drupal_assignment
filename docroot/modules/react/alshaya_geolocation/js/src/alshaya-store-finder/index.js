@@ -183,7 +183,7 @@ export class StoreFinder extends React.Component {
               <div className="views-exposed-form">
                 {showSpecificPlace
                   ? (
-                    <div>
+                    <div className="form--inline clearfix">
                       <a className="current-location block-store-finder-form__current-location" onClick={this.findNearMe}>{Drupal.t('Near me')}</a>
                       <div className="store-finder--wrapper block-store-finder-form__form__wrapper">
                         <div className="label--location block-store-finder-form__form__label">
@@ -206,7 +206,7 @@ export class StoreFinder extends React.Component {
                       <a className="back-to-glossary" onClick={this.showAllStores}>{Drupal.t('List of all H&M stores')}</a>
                     </div>
                   ) : (
-                    <div>
+                    <div className="form--inline clearfix">
                       <a className="current-location block-store-finder-form__current-location" onClick={this.findNearMe}>{Drupal.t('Near me')}</a>
                       <div className="store-finder--wrapper block-store-finder-form__form__wrapper">
                         <div className="label--location block-store-finder-form__form__label">
@@ -253,10 +253,10 @@ export class StoreFinder extends React.Component {
                     </div>
                   </div>
                 ) : (
-                  <div className="l-container">
+                  <div className="view-stores-finder view-display-id-page_2">
                     {showListingView
                       && (
-                      <div className="view-stores-finder view-display-id-page_2">
+                      <div>
                         <div className="view-header">select a store to see details</div>
                         <div className="view-content">
                           <div className="c-side c-side-1">
@@ -301,13 +301,11 @@ export class StoreFinder extends React.Component {
                       )}
                     {showMapView
                       && (
-                        <div className="view-content">
-                          <div className="geolocation-common-map-container">
-                            <div className="geolocation-common-map-locations">
-                              <MultipeMarkerMap center={center} zoom={zoom} stores={stores} />
-                            </div>
-                          </div>
+                      <div className="geolocation-common-map-container">
+                        <div className="geolocation-common-map-locations">
+                          <MultipeMarkerMap center={center} zoom={zoom} stores={stores} />
                         </div>
+                      </div>
                       )}
                   </div>
                 )}

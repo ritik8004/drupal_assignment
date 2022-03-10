@@ -54,8 +54,6 @@ export class MultipeMarker extends React.Component {
     return (
       <Map
         google={google}
-        style={{ width: '100%', height: '100%', position: 'relative' }}
-        className="map"
         initialCenter={center}
         center={newCenter}
         zoom={zoom}

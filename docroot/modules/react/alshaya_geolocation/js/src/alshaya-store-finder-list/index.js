@@ -189,7 +189,7 @@ export class StoreFinderList extends React.Component {
           <div className="c-content__region">
             <div className="region region__content clearfix">
               <div className="views-exposed-form">
-                <div>
+                <div className="form--inline clearfix">
                   <a className="current-location block-store-finder-form__current-location" onClick={this.findNearMe}>{Drupal.t('Near me')}</a>
                   <div className="store-finder--wrapper block-store-finder-form__form__wrapper">
                     <div className="label--location block-store-finder-form__form__label">
@@ -288,7 +288,6 @@ export class StoreFinderList extends React.Component {
                         <div className="geolocation-common-map-container">
                           <Map
                             google={google}
-                            className="map"
                             initialCenter={center}
                             center={center}
                             zoom={zoom}
