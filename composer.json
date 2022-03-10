@@ -342,6 +342,9 @@
             },
             "drupal/config_rewrite": {
                 "Configuration Rewrite module conflicts with s3fs module": "https://www.drupal.org/files/issues/2021-07-20/3203786-4.patch"
+            },
+            "drupal/sharethis": {
+                "Optimise library of sharethis module": "https://www.drupal.org/files/issues/2022-03-10/optimise-libraries-3268825-5.patch"
             }
         },
         "installer-paths": {
