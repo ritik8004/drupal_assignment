@@ -6,7 +6,7 @@ dependencies:
 id: rcs_product
 label: 'RCS Product'
 type: 'canonical_entities:node'
-pattern: '[rcs:product-path-prefix][node:field_product_slug:value]'
+pattern: '[node:field_product_slug:value]'
 selection_criteria:
   3adecea9-af7b-4b6b-9faa-bd568615c10e:
     id: node_type
