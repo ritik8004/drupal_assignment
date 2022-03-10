@@ -5,6 +5,7 @@ var config = {
   entry: {
     store_finder: './js/src/store-finder.js',
     store_finder_list: './js/src/store-finder-list.js',
+    store_click_collect_list: './js/src/store-click-collect-list.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

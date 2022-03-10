@@ -5,6 +5,10 @@
  * Module file.
  */
 
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
 /**
  * Implements hook_geolocation_google_maps_parameters().
  */
@@ -27,4 +31,35 @@ function alshaya_geolocation_preprocess_page(&$variables) {
   $regional = $regional_config->get('country.default');
   $variables['#attached']['drupalSettings']['alshaya_geolocation']['api_key'] = $api_key;
   $variables['#attached']['drupalSettings']['alshaya_geolocation']['regional'] = $regional;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_geolocation_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if ($entity->bundle() == 'acq_product' && $build['#view_mode'] == 'full') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if (empty($sku_entity)) {
+      return;
+    }
+
+    // Display delivery options only if product is buyable.
+    if (!alshaya_acm_product_is_buyable($sku_entity)) {
+      return;
+    }
+
+    $build['click_and_collect'] = [
+      '#markup' => '<div id="pdp-store-click-collect-list"></div>',
+      '#attached' => [
+        'library' => [
+          'alshaya_geolocation/alshaya-store-click-collect-list',
+        ],
+      ],
+    ];
+
+  }
 }

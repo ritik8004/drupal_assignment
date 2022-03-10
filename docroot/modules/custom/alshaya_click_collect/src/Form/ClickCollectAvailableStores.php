@@ -5,7 +5,6 @@ namespace Drupal\alshaya_click_collect\Form;
 use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\geolocation\GoogleMapsDisplayTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -13,7 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ClickCollectAvailableStores extends FormBase {
 
-  use GoogleMapsDisplayTrait;
   /**
    * The action plugin manager.
    *
@@ -94,7 +92,7 @@ class ClickCollectAvailableStores extends FormBase {
       'library' => ['alshaya_click_collect/click-and-collect.pdp'],
       'drupalSettings' => [
         'geolocation' => [
-          'google_map_url' => $this->getGoogleMapsApiUrl(),
+          // 'google_map_url' => \Drupal::service('plugin.manager.geolocation.mapprovider')->getMapProvider('google_maps')->getGoogleMapsApiUrl(),
         ],
         'alshaya_acm' => ['storeFinder' => TRUE],
         'alshaya_click_collect' => ['searchForm' => TRUE],

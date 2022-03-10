@@ -110,31 +110,6 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
     // Here we just show static text, we will get stores info using ajax.
     // We need lat/lon info of user to get stores.
     $store_form = \Drupal::formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
-    $build['click_and_collect'] = [
-      '#theme' => 'pdp_click_collect_default',
-      '#state' => $state ? 'enabled' : 'disabled',
-      '#sku' => $sku,
-      '#type' => $sku_entity->bundle(),
-      '#title' => $config['title'],
-      '#title_price' => alshaya_acm_price_get_formatted_price($config['title_price']),
-      '#subtitle' => $state ? $config['subtitle'] : $config['unavailable'],
-      '#help_text' => $config['help_text'],
-      '#select_option_text' => $config['select_option_text'],
-      '#available_at_title' => '',
-      '#store_finder_form' => render($store_form),
-      '#attached' => [
-        'drupalSettings' => [
-          'alshaya_click_collect' => [
-            'pdp' => ['ajax_call' => FALSE],
-            // Default site country to limit autocomplete result.
-            'country' => _alshaya_custom_get_site_level_country_code(),
-          ],
-        ],
-        'library' => [
-          'alshaya_click_collect/click-and-collect.pdp',
-        ],
-      ],
-    ];
   }
 }
 

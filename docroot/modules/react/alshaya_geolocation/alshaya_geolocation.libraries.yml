@@ -27,3 +27,10 @@ alshaya-store-finder-list:
     dist/store_finder_list.bundle.js: { }
   dependencies:
     - alshaya_react/react
+
+alshaya-store-click-collect-list:
+  version: 1.x
+  js:
+    dist/store_click_collect_list.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
