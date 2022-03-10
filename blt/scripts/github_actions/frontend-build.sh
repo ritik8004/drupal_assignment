@@ -15,6 +15,12 @@ if [[ $GITHUB_ACTIONS == "true" ]]; then
   # Pattern for Merge commit.
   re="Merge: ([abcdef0-9]{7,10}) ([abcdef0-9]{7,10})"
 
+  # Adding debugging echo. To be removed after fixing.
+  currBranch=$(git rev-parse --abbrev-ref HEAD)
+  echo "Current branch: $currBranch"
+  echo "Next, last merge commit details should be shown."
+  echo "$log"
+
   # Check if last commit was a merge commit.
   if [[ $log =~ $re ]]; then
     # Get a list of updated files in this merge commit.
