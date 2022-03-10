@@ -772,34 +772,32 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ],
   ];
 
-  $product_and_custom_attributes_query = $product_query + $product_options_query;
-
+  // The query to fetch products.
   $query_fields['products'] = [
     'query' => [
-      'query($url: String, $attributes: [AttributeInput!]!)' => $product_and_custom_attributes_query,
+      'query($url: String)' => $product_query,
     ],
-    'variables' => $product_query_variables + $product_options_variables,
+    'variables' => $product_query_variables,
   ];
 
+  // Add the query fields for the product recommendations.
   $product_query_outer_key = key($query_fields['products']['query']);
   $product_query_key = key($query_fields['products']['query'][$product_query_outer_key]);
-
   $recommended_product_settings = \Drupal::config('alshaya_acm.settings');
   // Add query for upsell products if display setting is true.
   if ($recommended_product_settings->get('display_upsell')) {
     $query_fields['products']['query'][$product_query_outer_key][$product_query_key]['items']['upsell_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
   }
-
   // Add query for related products if display setting is true.
   if ($recommended_product_settings->get('display_related')) {
     $query_fields['products']['query'][$product_query_outer_key][$product_query_key]['items']['related_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
   }
-
   // Add query for crosssell products if display setting is true.
   if ($recommended_product_settings->get('display_crosssell')) {
     $query_fields['products']['query'][$product_query_outer_key][$product_query_key]['items']['crosssell_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
   }
 
+  // The query to fetch the product options data like color, size labels.
   $query_fields['product_options'] = [
     'query' => [
       'query($attributes: [AttributeInput!]!)' => $product_options_query,
@@ -809,7 +807,16 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
 
   // Make sure this happens in the end.
   if ($rcs_product_helper->isRcsPdp()) {
-    $query_fields['pdp_product'] = $query_fields['products'];
+    // Here we are doing a combined query for product data and product option
+    // data.
+    $product_and_custom_attributes_query = $product_query + $product_options_query;
+    $query_fields['pdp_product'] = [
+      'query' => [
+        'query($url: String, $attributes: [AttributeInput!]!)' => $product_and_custom_attributes_query,
+      ],
+      'variables' => $product_query_variables + $product_options_variables,
+    ];
+    // This is the query for displaying the product on the pdp modal.
     $query_fields['product_recommendations'] = [
       'query' => [
         'query($url: String)' => $product_and_custom_attributes_query,
