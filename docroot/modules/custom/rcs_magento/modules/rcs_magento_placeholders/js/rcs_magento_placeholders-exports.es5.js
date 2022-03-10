@@ -211,16 +211,10 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'labels':
-        request.data = prepareQuery(`{
-            amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
-              items{
-                image
-                name
-                position
-                product_id
-              }
-            }
-          }`);
+      let productLabelVariables = JSON.parse(rcsPhGraphqlQuery.product_labels.variables);
+      productLabelVariables.productIds = params.productIds;
+      productLabelVariables = JSON.stringify(productLabelVariables);
+      request.data = prepareQuery(rcsPhGraphqlQuery.product_labels.query, productLabelVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.amLabelProvider;

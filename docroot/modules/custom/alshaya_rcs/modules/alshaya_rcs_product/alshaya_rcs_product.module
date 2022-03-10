@@ -656,6 +656,25 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ];
   }
 
+  // Query for product labels.
+  $query_fields['product_labels'] = [
+    'query' => [
+      'query($productIds: [Int])' => [
+        'amLabelProvider(productIds: $productIds, mode: PRODUCT)' => [
+          'items' => [
+            'image',
+            'name',
+            'position',
+            'product_id',
+          ],
+        ],
+      ],
+    ],
+    'variables' => [
+      'productIds' => NULL,
+    ],
+  ];
+
   return $query_fields;
 }
 
