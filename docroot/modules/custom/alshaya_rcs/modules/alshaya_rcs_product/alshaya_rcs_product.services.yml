@@ -30,3 +30,5 @@ services:
     class: \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper
     arguments:
       - '@current_route_match'
+      - '@config.factory'
+      - '@module_handler'

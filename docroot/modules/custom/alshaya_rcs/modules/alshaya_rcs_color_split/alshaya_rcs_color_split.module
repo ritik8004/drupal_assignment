@@ -56,25 +56,9 @@ function alshaya_rcs_color_split_page_attachments(array &$attachments) {
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
 function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries) {
-  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  // Get hex value of color.
-  $color_code_attribute = $display_settings->get('color_attribute_config')['configurable_color_code_attribute'];
-  // Remove the "attr_" prefix.
-  $color_code_attribute = str_replace('attr_', '', $color_code_attribute);
-
-  $product_query_outer_key = key($queries['products']['query']);
-  $product_query_key = key($queries['products']['query'][$product_query_outer_key]);
-
-  array_push(
-    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items'],
-    'style_code',
-  );
-
-  array_push(
-    $queries['products']['query'][$product_query_outer_key][$product_query_key]['items']['... on ConfigurableProduct']['variants']['product'],
-    AlshayaColorSplitConfig::get('attribute_code_color_id'),
-    $color_code_attribute,
-  );
+  /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
+  $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
+  $product_query_body = $rcs_product_helper->getProductQueryFields();
 
   /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
   $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
@@ -83,7 +67,7 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
   $queries['styled_products'] = [
     'query' => [
       'query($styleCode: String)' => [
-        'products(filter: {style_code: {match: $styleCode}})' => $queries['products']['query'][$product_query_outer_key][$product_query_key],
+        'products(filter: {style_code: {match: $styleCode}})' => $product_query_body,
       ],
     ],
     'variables' => [
@@ -96,6 +80,7 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
     // After getting the style code, we call the API to fetch the products with
     // the same style and at that step we receive the complete product objects
     // which includes the main product.
+    // So we override the pdp product query.
     $queries['pdp_product'] = [
       'query' => [
         'query($url: String, $attributes: [AttributeInput!]!)' => [
@@ -126,6 +111,23 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
       ],
     ];
   }
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_rcs_color_split_alshaya_rcs_product_query_fields_alter(array &$fields) {
+  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  // Get hex value of color.
+  $color_code_attribute = $display_settings->get('color_attribute_config')['configurable_color_code_attribute'];
+  // Remove the "attr_" prefix.
+  $color_code_attribute = str_replace('attr_', '', $color_code_attribute);
+
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    AlshayaColorSplitConfig::get('attribute_code_color_id'),
+    $color_code_attribute,
+  );
 }
 
 /**
