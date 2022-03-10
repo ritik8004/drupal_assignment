@@ -23,11 +23,11 @@ export default class EgiftCardOpenAmountField extends React.Component {
     if (openAmount !== '') {
       // Remove any error message.
       document.getElementById('open-amount-error').innerHTML = '';
-    }
 
-    this.setState({
-      actionDisable: openAmount === '',
-    });
+      // Enable action button.
+      const { field } = this.props;
+      field.current.querySelector('button').disabled = false;
+    }
   }
 
   handleEvent = (e) => {
@@ -134,10 +134,9 @@ export default class EgiftCardOpenAmountField extends React.Component {
     }
 
     return (
-      <div className="egift-open-amount-wrapper">
+      <div className="egift-open-amount-wrapper" ref={field}>
         <div className="egift-input-textfield-item">
           <input
-            ref={field}
             id="open-amount"
             className="egift-open-amount-field"
             name="egift-open-amount"
@@ -155,7 +154,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
             { drupalSettings.alshaya_spc.currency_config.currency_code }
           </span>
         </div>
-        <button type="button" onClick={this.handleSubmit} disabled={actionDisable} />
+        <button className="open-amount-btn" type="button" onClick={this.handleSubmit} disabled={actionDisable} />
         <div className="error egift-error" id="open-amount-error">
           { openAmountMessage }
         </div>
