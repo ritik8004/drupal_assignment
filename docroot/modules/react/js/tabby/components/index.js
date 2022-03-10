@@ -2,9 +2,14 @@ import React from 'react';
 
 const TabbyWidget = (props) => {
   const {
-    classNames, mobileOnly, pageType, id,
+    classNames, mobileOnly, pageType, id, amount,
   } = props;
-  const { tabby: tabbyConfig, path } = window.drupalSettings;
+
+  const {
+    tabby: tabbyConfig,
+    path,
+    alshaya_spc: spcConfig,
+  } = window.drupalSettings;
 
   switch (pageType) {
     case 'pdp':
@@ -22,7 +27,14 @@ const TabbyWidget = (props) => {
       );
     case 'checkout':
       return (
-        <button type="button" className={classNames} data-tabby-info-alshaya="installments" data-tabby-language={path.currentLanguage} />
+        <button
+          type="button"
+          className={classNames}
+          data-tabby-info-alshaya="installments"
+          data-tabby-language={path.currentLanguage}
+          data-tabby-price={amount}
+          data-tabby-currency={spcConfig.currency_config.currency_code}
+        />
       );
     default:
       return null;
