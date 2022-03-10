@@ -188,7 +188,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
         && cartContainsAnyVirtualProduct(cart.cart)
         && cart.cart.totals.base_grand_total > egiftCardActualBalance)) {
         this.setState({
-          apiErrorMessage: Drupal.t('The egift card balance is not sufficient to pay remaining amount, Please use another payment method.', {}, { context: 'egift' }),
+          apiErrorMessage: Drupal.t('The eGift card balance is not sufficient to pay remaining amount, Please use another payment method.', {}, { context: 'egift' }),
         });
         return;
       }
@@ -428,13 +428,13 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               <label htmlFor="link-egift-card" className="checkbox-sim checkbox-label egift-link-card-label">
                 <ConditionalView condition={isEgiftCardExpired}>
                   {
-                    Drupal.t('Pay using egift card (Card is expired)', {}, { context: 'egift' })
+                    Drupal.t('Pay using eGift card (Card is expired)', {}, { context: 'egift' })
                   }
                 </ConditionalView>
 
                 <ConditionalView condition={!isEgiftCardExpired}>
                   {
-                    Drupal.t('Pay using egift card', {}, { context: 'egift' })
+                    Drupal.t('Pay using eGift card', {}, { context: 'egift' })
                   }
                   <div className="spc-payment-method-desc">
                     <div className="desc-content">

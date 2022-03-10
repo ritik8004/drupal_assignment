@@ -275,7 +275,7 @@ export default class EgiftTopPurchase extends React.Component {
                     className="btn"
                     disabled={disableSubmit}
                   >
-                    {Drupal.t('Top-up', {}, { context: 'egift' })}
+                    {Drupal.t('Top up', {}, { context: 'egift' })}
                   </button>
                 </div>
               </div>
