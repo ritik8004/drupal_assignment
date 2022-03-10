@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-set -e
+set -ev
 
 # Setup site.
 
-yaml-cli update:value blt/blt.yml project.profile.name 'alshaya_non_transac'
+yaml set blt/blt.yml project.profile.name alshaya_non_transac
 
 blt setup:settings --define environment=ci --no-interaction --verbose
 blt setup:hash-salt --define environment=ci --no-interaction --verbose
