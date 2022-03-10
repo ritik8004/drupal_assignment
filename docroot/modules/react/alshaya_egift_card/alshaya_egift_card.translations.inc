@@ -347,7 +347,7 @@ function _alshaya_egift_card_translations() {
       'eGift card will be sent immediately' => [
         'ar' => ' سيتم إرسال بطاقة الهدايا الإلكترونية على الفور',
       ],
-      'Top up To:' => [
+      'Top up to:' => [
         'ar' => ' تعبئة الرصيد لـ:',
       ],
       'Top up amount will reflect immediately in card' => [
