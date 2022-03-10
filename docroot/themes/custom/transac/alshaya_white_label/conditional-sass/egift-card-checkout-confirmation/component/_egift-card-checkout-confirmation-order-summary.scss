@@ -65,4 +65,13 @@
       color: $spc-checkout-order-detail-label;
     }
   }
+
+  .spc-order-summary-item {
+    .spc-label {
+      &.spc-topup-label,
+      &.spc-egift-label {
+        text-transform: initial;
+      }
+    }
+  }
 }
