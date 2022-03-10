@@ -46,7 +46,8 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
   // Handle the form submit.
   handleSubmit = (e) => {
     e.preventDefault();
-    const { value: cardNumber } = e.target.elements.egift_card_number;
+    const { value } = e.target.elements.egift_card_number;
+    const cardNumber = value.trim();
     const { initialStep, stepChange } = this.props;
 
     let OtpResponse = {};
