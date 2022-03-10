@@ -61,7 +61,9 @@ class ArrayGraphQL {
     }
 
     $fields['query'] = self::replaceChars($fields['query']);
-    $fields['variables'] = json_encode($fields['variables']);
+    $fields['variables'] = empty($fields['variables'])
+      ? []
+      : json_encode($fields['variables']);
 
     return $fields;
   }

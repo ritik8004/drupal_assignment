@@ -56,7 +56,7 @@ function prepareQuery(query, variables) {
   // Encode to valid uri format.
   data.query = encodeURIComponent(global.rcsQueryCompressor(data.query))
 
-  return typeof data.variables !== 'undefined' || !data.variables
+  return typeof data.variables !== 'undefined'
     ? `query=${data.query}&variables=${data.variables}`
     : `query=${data.query}`;
 }
@@ -119,7 +119,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     case 'promotion':
       // Build query.
-      request.data = prepareQuery(`{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`);
+      request.data = prepareQuery(rcsPhGraphqlQuery.promotions.query, rcsPhGraphqlQuery.promotions.variables);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -348,20 +348,21 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
       break;
 
     case 'dynamic-promotion-label':
-      request.data = prepareQuery(`{${params.queryType}(
-            ${params.queryProductSku}
-            context: "web"
-            ${params.queryProductViewMode}
-            cart: {
-              ${params.queryCartAttr}
-              items: [
-                ${params.cartInfo}
-              ]
-            }
-          )
-            ${params.queryBody}
-          }`
-        );
+      request.data = prepareQuery(`{
+        {${params.queryType}(
+          ${params.queryProductSku}
+          context: "web"
+          ${params.queryProductViewMode}
+          cart: {
+            ${params.queryCartAttr}
+            items: [
+              ${params.cartInfo}
+            ]
+          }
+        )
+          ${params.queryBody}
+        }
+      }`);
       result = rcsCommerceBackend.invokeApiSynchronous(request);
       break;
 
