@@ -93,9 +93,8 @@ exports.getEntity = async function getEntity(langcode) {
 
         // Store options data in static storage.
         response.data.customAttributeMetadata.items.forEach(function eachOption(option) {
-          const attributeCode = option.attributeCode;
-          const staticKey = `product_options_${option.attributeCode}`;
-          RcsPhStaticStorage.set(staticKey, response.data.customAttributeMetadata.items[attributeCode]);
+          const staticKey = `product_options_${option.attribute_code}`;
+          RcsPhStaticStorage.set(staticKey, {data: {customAttributeMetadata: {items: [option]}}});
         });
       }
       else {
