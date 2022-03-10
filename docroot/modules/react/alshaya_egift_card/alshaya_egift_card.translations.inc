@@ -343,15 +343,19 @@ function _alshaya_egift_card_translations() {
       ],
       'eGift card to:' => [
         'ar' => ' بطاقة الهدايا الإلكترونية لـ:',
+        'context' => 'egift',
       ],
       'eGift card will be sent immediately' => [
         'ar' => ' سيتم إرسال بطاقة الهدايا الإلكترونية على الفور',
+        'context' => 'egift',
       ],
       'Top up to:' => [
         'ar' => ' تعبئة الرصيد لـ:',
+        'context' => 'egift',
       ],
       'Top up amount will reflect immediately in card' => [
         'ar' => ' سيتم إضافة مبلغ التعبئة على الفور في البطاقة',
+        'context' => 'egift',
       ],
       'Please enter recipient name' => [
         'ar' => 'يرجى إدخال اسم صحيح',
