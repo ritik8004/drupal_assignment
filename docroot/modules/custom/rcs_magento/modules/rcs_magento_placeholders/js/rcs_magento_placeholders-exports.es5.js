@@ -196,7 +196,10 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'field_magazine_shop_the_story':
-      request.data = prepareQuery(`{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.magazine_shop_the_story}}`);
+      let productQueryVariables = JSON.parse(rcsPhGraphqlQuery.magazine_shop_the_story.variables);
+      productQueryVariables.skus = JSON.parse(params.skus);
+      productQueryVariables = JSON.stringify(productQueryVariables);
+      request.data = prepareQuery(rcsPhGraphqlQuery.magazine_shop_the_story.query, productQueryVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.

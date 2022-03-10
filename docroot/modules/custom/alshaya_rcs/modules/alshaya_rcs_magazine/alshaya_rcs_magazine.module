@@ -38,40 +38,49 @@ function alshaya_rcs_magazine_rcs_placeholders_graphql_query() {
   $query_fields = [];
 
   $query_fields['magazine_shop_the_story'] = [
-    'total_count',
-    'items' => [
-      'sku',
-      'type_id',
-      'name',
-      'url_key',
-      'end_user_url',
-      'assets_teaser',
-      'price_range' => [
-        'maximum_price' => [
-          'regular_price' => [
-            'value',
-          ],
-          'final_price' => [
-            'value',
-          ],
-          'discount' => [
-            'percent_off',
-          ],
-        ],
-      ],
-      '... on ConfigurableProduct' => [
-        'variants' => [
-          'product' => [
+    'query' => [
+      'query($skus: [String])' => [
+        'products(filter: {sku: {in: $skus}})' => [
+          'total_count',
+          'items' => [
+            'sku',
             'type_id',
+            'name',
+            'url_key',
+            'end_user_url',
             'assets_teaser',
+            'price_range' => [
+              'maximum_price' => [
+                'regular_price' => [
+                  'value',
+                ],
+                'final_price' => [
+                  'value',
+                ],
+                'discount' => [
+                  'percent_off',
+                ],
+              ],
+            ],
+            '... on ConfigurableProduct' => [
+              'variants' => [
+                'product' => [
+                  'type_id',
+                  'assets_teaser',
+                ],
+              ],
+            ],
+            'promotions' => [
+              'type',
+              'label',
+              'url',
+            ],
           ],
         ],
       ],
-      'promotions' => [
-        'type',
-        'label',
-        'url',
-      ],
+    ],
+    'variables' => [
+      'skus' => NULL,
     ],
   ];
 
