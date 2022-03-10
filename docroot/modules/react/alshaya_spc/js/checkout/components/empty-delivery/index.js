@@ -13,7 +13,7 @@ import {
   showFullScreenLoader,
   getCnCStoresLimit,
 } from '../../../utilities/checkout_util';
-// import ClickCollectContainer from '../click-collect';
+import ClickCollectContainer from '../click-collect';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import createFetcher from '../../../utilities/api/fetcher';
 import { fetchClicknCollectStores } from '../../../utilities/api/requests';
@@ -27,7 +27,6 @@ import {
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import StoreClickCollectMap from '../../../../../alshaya_geolocation/js/src/alshaya-store-click-collect';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -188,7 +187,7 @@ export default class EmptyDeliveryText extends React.Component {
 
   openModal = (callback) => {
     callback();
-    // this.cncEvent();
+    this.cncEvent();
   }
 
   closeModal = (callback) => {
@@ -297,10 +296,9 @@ export default class EmptyDeliveryText extends React.Component {
             >
               {deliveryType === 'click_and_collect'
                 ? (
-                  <StoreClickCollectMap closeModal={() => this.closeModal(triggerCloseModal)} />
-                  // <ClickCollectContainer
-                  //   closeModal={() => this.closeModal(triggerCloseModal)}
-                  // />
+                  <ClickCollectContainer
+                    closeModal={() => this.closeModal(triggerCloseModal)}
+                  />
                 )
                 : (
                   <React.Suspense fallback={<Loading />}>
