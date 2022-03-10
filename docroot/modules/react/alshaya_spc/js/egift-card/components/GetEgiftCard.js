@@ -12,21 +12,22 @@ import {
 // Validation function.
 const handleEgiftDetailValidation = (e, props) => {
   let errors = false;
-  const { egift_card_number: egiftCardNumber } = e.target.elements;
+  const { egift_card_number: cardNumber } = e.target.elements;
+  const egiftCardNumber = cardNumber.value.trim();
   const { cart: cartData, redemptionDisabled } = props;
   // Don't do anything if redemption is disabled.
   if (redemptionDisabled) {
     return errors;
   }
   // Egift card number validation.
-  if (egiftCardNumber.value.length === 0) {
+  if (egiftCardNumber.length === 0) {
     document.getElementById('egift_card_number_error').innerHTML = getStringMessage('form_egift_card_number');
     errors = true;
-  } else if (!egiftCardNumber.value.match(/^[a-z0-9A-Z]+$/i)) {
+  } else if (!egiftCardNumber.match(/^[a-z0-9A-Z]+$/i)) {
     // Check if the card number is valid or not.
     document.getElementById('egift_card_number_error').innerHTML = getStringMessage('egift_valid_card_number');
     errors = true;
-  } else if (selfCardTopup(cartData, egiftCardNumber.value)) {
+  } else if (selfCardTopup(cartData, egiftCardNumber)) {
     document.getElementById('egift_card_number_error').innerHTML = Drupal.t('You cannot redeem the same card which you\'re trying to topup.', {}, { context: 'egift' });
     errors = true;
   } else {
@@ -50,7 +51,7 @@ const handleSubmit = async (e, props) => {
   if (valid) {
     const { getCode } = props;
     const { egift_card_number: egiftCardNumber } = e.target.elements;
-    const result = await getCode(egiftCardNumber.value);
+    const result = await getCode(egiftCardNumber.value.trim());
     // Display inline error message if OTP is not sent.
     if (result.error) {
       document.getElementById('egift_card_number_error').innerHTML = result.message;

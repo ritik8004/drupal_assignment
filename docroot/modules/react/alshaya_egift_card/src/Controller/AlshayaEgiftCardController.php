@@ -4,7 +4,9 @@ namespace Drupal\alshaya_egift_card\Controller;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
@@ -93,6 +95,12 @@ class AlshayaEgiftCardController extends ControllerBase {
    *   Markup for eGift card purchase react app.
    */
   public function eGiftCardPurchase():array {
+    if (!$this->egiftCardHelper->isEgiftCardEnabled()) {
+      // Redirect to homepage if egift is not enabled.
+      $response = new LocalRedirectResponse(Url::fromRoute('<front>')->toString());
+      $response->send();
+    }
+
     $config = $this->config('alshaya_egift_card.settings');
 
     $build = [
@@ -120,6 +128,31 @@ class AlshayaEgiftCardController extends ControllerBase {
 
   function getUserEgiftPageTitle() {
     return $this->t('eGift Card', [], ['context' => 'egift']);
+  }
+
+  /**
+   * Redirects the user to my-account e-gift page if logged-in.
+   * Redirects the user to login page and then my-account e-gift page after login if user is anonymous.
+   * If e-Gift feature is disabled, redirect to `/user`.
+   */
+  function linkCard() {
+    if (!$this->egiftCardHelper->isEgiftCardEnabled()) {
+      // If egift not enabled then redirect to /user page.
+      $url = Url::fromRoute('user.page');
+    }
+    else if ($this->currentUser()->isAuthenticated()) {
+      // If authenticated user then redirect to egift card page in my account.
+      $url = Url::fromRoute('alshaya_egift_card.my_egift_card', ['user' => $this->currentUser->id()]);
+    }
+    else {
+      // If anonymous user then redirect to user/login with destination param.
+      $url = Url::fromRoute('user.login');
+      $destination = Url::fromRoute('alshaya_egift_card.link-egift');
+      $url->setOptions(['query' => ['destination' => $destination->toString()]]);
+    }
+
+    $response = new LocalRedirectResponse($url->toString());
+    $response->send();
   }
 
 }

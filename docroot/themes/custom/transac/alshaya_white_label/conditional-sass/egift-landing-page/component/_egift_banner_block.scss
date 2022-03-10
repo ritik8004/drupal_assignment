@@ -1,5 +1,5 @@
 @mixin egift-btn {
-  height: 3.25rem;
+  height: 3rem;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -58,7 +58,8 @@
     .field--name-field-title {
       font-size: 1.75rem;
       font-family: $alshaya-bold;
-      margin-bottom: 1rem;
+      margin-bottom: 1.125rem;
+      line-height: 2.5rem;
 
       @include breakpoint($only-mobile) {
         font-size: 1.5rem;
@@ -66,8 +67,8 @@
     }
 
     .field--name-field-sub-title {
-      font-size: 0.9rem;
-      line-height: 1.54;
+      font-size: 0.8125rem;
+      line-height: 1.25rem;
 
       @include breakpoint($tablet) {
         margin-bottom: 1.5rem;
@@ -105,6 +106,8 @@
           color: $primary_btn_bg;
           border: 1px solid $primary_btn_bg;
           max-width: none;
+          line-height: 1rem;
+          letter-spacing: 0.0625rem;
 
           &:hover {
             background: $plp-secondary-cta-hover-bg;

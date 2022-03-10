@@ -15,6 +15,10 @@
   .field--name-field-promo-blocks {
     &.c-accordion-delivery-option-parent {
       border-top: 1px solid $egift-purchase-page-border;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 5rem;
+      }
     }
   }
 
