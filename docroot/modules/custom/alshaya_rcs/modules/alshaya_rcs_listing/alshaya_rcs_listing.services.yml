@@ -1,0 +1,5 @@
+services:
+  alshaya_rcs_listing.helper:
+    class: \Drupal\alshaya_rcs_listing\Services\AlshayaRcsListingHelper
+    arguments:
+      - '@current_route_match'

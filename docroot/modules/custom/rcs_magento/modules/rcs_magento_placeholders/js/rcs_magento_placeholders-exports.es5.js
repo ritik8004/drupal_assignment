@@ -105,7 +105,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     case 'category':
       // Build query.
-      request.data = prepareQuery(`{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`);
+      request.data = prepareQuery(rcsPhGraphqlQuery.categories.query, rcsPhGraphqlQuery.categories.variables);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
