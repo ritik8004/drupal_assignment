@@ -207,7 +207,7 @@ function _alshaya_egift_card_translations() {
         'ar' => ' الرصيد المتوفر:',
         'context' => 'egift',
       ],
-      'Paid With eGift card' => [
+      'Paid With eGift Card' => [
         'ar' => ' مدفوعة عبر بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
@@ -341,7 +341,7 @@ function _alshaya_egift_card_translations() {
       'Top up eGift card' => [
         'ar' => 'قم بتعبئة بطاقة الهدايا الإلكترونية',
       ],
-      'eGift card to:' => [
+      'eGift Card To:' => [
         'ar' => ' بطاقة الهدايا الإلكترونية لـ:',
         'context' => 'egift',
       ],

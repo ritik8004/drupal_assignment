@@ -27,7 +27,7 @@ const EgiftCheckoutOrderSummary = (props) => {
     <div className="egift-order-summary">
       <TotalLineItem
         name="paid-with-egift"
-        title={Drupal.t('Paid With eGift card', {}, { context: 'egift' })}
+        title={Drupal.t('Paid With eGift Card', {}, { context: 'egift' })}
         value={egiftRedeemedAmount}
       />
       <ConditionalView condition={!hasValue(totals.paidWithAura)}>

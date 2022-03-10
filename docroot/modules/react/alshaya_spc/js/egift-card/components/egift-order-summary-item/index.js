@@ -8,7 +8,7 @@ const EgiftOrderSummaryItem = (props) => {
   if (orderDetails.giftCardRecieptEmail !== undefined) {
     return (
       <div className="spc-order-summary-item order-summary-item fadeInUp redeem">
-        <span className="spc-egift-label spc-label">{Drupal.t('eGift card to:', {}, { context: 'egift' })}</span>
+        <span className="spc-egift-label spc-label">{Drupal.t('eGift Card To:', {}, { context: 'egift' })}</span>
         <span className="spc-value spc-egift-value-wrapper">
           <span className="spc-egift-value spc-egift-mail-value">
             {orderDetails.giftCardRecieptEmail.join(', ')}
