@@ -245,7 +245,7 @@ export default class CompletePurchase extends React.Component {
       && !isFullPaymentDoneByEgift(cart.cart)) {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
-        message: Drupal.t('Please pay full amount via Egift card or use other payment method.', {}, { context: 'egift' }),
+        message: Drupal.t('Please pay full amount via eGift card or use other payment method.', {}, { context: 'egift' }),
       });
       return false;
     }

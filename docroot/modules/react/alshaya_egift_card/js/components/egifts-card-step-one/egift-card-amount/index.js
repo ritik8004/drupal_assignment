@@ -66,7 +66,7 @@ const EgiftCardAmount = (props) => {
       <ConditionalView condition={labelOption}>
         <div className="egift-card-amount-list-title subtitle-text">
           {
-            Drupal.t('Choose Top-up Amount (@currencyCode)', {
+            Drupal.t('Choose Top up Amount (@currencyCode)', {
               '@currencyCode': getCurrencyCode(),
             }, { context: 'egift' })
           }

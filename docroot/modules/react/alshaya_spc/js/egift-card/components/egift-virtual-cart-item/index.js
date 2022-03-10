@@ -125,7 +125,7 @@ export default class CartVirtualItem extends React.Component {
             <div className="spc-product-title-price">
               <div className="spc-product-title egift-product-title">
                 <ConditionalView condition={hasValue(isTopUp)}>
-                  {Drupal.t('eGift Card Top-up', {}, { context: 'egift' })}
+                  {Drupal.t('eGift Card Top up', {}, { context: 'egift' })}
                 </ConditionalView>
                 <ConditionalView condition={!hasValue(isTopUp)}>
                   {Drupal.t('Alshaya eGift card', {}, { context: 'egift' })}
