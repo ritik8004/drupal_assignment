@@ -71,7 +71,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'بطاقة الشايع للهدايا الإلكترونية',
         'context' => 'egift',
       ],
-      'eGift Card Top-up' => [
+      'eGift Card Top up' => [
         'ar' => 'تعبئة بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
@@ -199,7 +199,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'يجب أن يكون مبلغ الاسترداد بقيمة أقل أو مساوية لقيمة حقيبة التسوق',
         'context' => 'egift',
       ],
-      'Pay using egift card' => [
+      'Pay using eGift card' => [
         'ar' => ' الدفع باستخدام بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
@@ -207,7 +207,7 @@ function _alshaya_egift_card_translations() {
         'ar' => ' الرصيد المتوفر:',
         'context' => 'egift',
       ],
-      'Paid With eGift card' => [
+      'Paid With eGift Card' => [
         'ar' => ' مدفوعة عبر بطاقة الهدايا الإلكترونية',
         'context' => 'egift',
       ],
@@ -219,11 +219,11 @@ function _alshaya_egift_card_translations() {
         'ar' => 'المبلغ المدفوع',
         'context' => 'egift',
       ],
-      'Pay using egift card (Remaining Balance: @currencyCode @amount)' => [
+      'Pay using eGift card (Remaining Balance: @currencyCode @amount)' => [
         'ar' => ' الدفع باستخدام بطاقة الهدايا الإلكترونية (الرصيد المتبقي: @currencyCode @amount)',
         'context' => 'egift',
       ],
-      'Pay using egift card (Card is expired)' => [
+      'Pay using eGift card (Card is expired)' => [
         'ar' => ' الدفع باستخدام بطاقة الهدايا الإلكترونية (البطاقة منتهية الصلاحية)',
         'context' => 'egift',
       ],
@@ -235,11 +235,11 @@ function _alshaya_egift_card_translations() {
         'ar' => ' استخدم طريقة دفع أخرى لإتمام الشراء',
         'context' => 'egift',
       ],
-      'Top-up' => [
+      'Top up' => [
         'ar' => 'اشحن رصيد',
         'context' => 'egift',
       ],
-      'Top-up for' => [
+      'Top up for' => [
         'ar' => ' اشحن رصيد لـ',
         'context' => 'egift',
       ],
@@ -338,20 +338,24 @@ function _alshaya_egift_card_translations() {
       'Buy Alshaya eGift Card' => [
         'ar' => 'شراء بطاقة هدايا الشايع الإلكترونية لشحن رصيدك',
       ],
-      'Top-up eGift card' => [
+      'Top up eGift card' => [
         'ar' => 'قم بتعبئة بطاقة الهدايا الإلكترونية',
       ],
-      'eGift card to:' => [
+      'eGift Card To:' => [
         'ar' => ' بطاقة الهدايا الإلكترونية لـ:',
+        'context' => 'egift',
       ],
       'eGift card will be sent immediately' => [
         'ar' => ' سيتم إرسال بطاقة الهدايا الإلكترونية على الفور',
+        'context' => 'egift',
       ],
-      'Top-up to:' => [
+      'Top up to:' => [
         'ar' => ' تعبئة الرصيد لـ:',
+        'context' => 'egift',
       ],
-      'Top-up amount will reflect immediately in card' => [
+      'Top up amount will reflect immediately in card' => [
         'ar' => ' سيتم إضافة مبلغ التعبئة على الفور في البطاقة',
+        'context' => 'egift',
       ],
       'Please enter recipient name' => [
         'ar' => 'يرجى إدخال اسم صحيح',
@@ -369,7 +373,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'قم بتعديل المبلغ',
         'context' => 'egift',
       ],
-      'Choose Top-up Amount (@currencyCode)' => [
+      'Choose Top up Amount (@currencyCode)' => [
         'ar' => '(@currencyCode) اختر مبلغ التعبئة',
         'context' => 'egift',
       ],
@@ -385,7 +389,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'إدخال المبلغ',
         'context' => 'egift',
       ],
-      'The egift card balance is not sufficient to pay remaining amount, Please use another payment method.' => [
+      'The eGift card balance is not sufficient to pay remaining amount, Please use another payment method.' => [
         'ar' => 'رصيد بطاقة الهدايا الإلكترونية غير كافي لدفع المبلغ المتبقي، يرجى استخدام وسيلة دفع أخرى',
         'context' => 'egift',
       ],
@@ -397,7 +401,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
         'context' => 'egift',
       ],
-      'Please pay full amount via Egift card or use other payment method.' => [
+      'Please pay full amount via eGift card or use other payment method.' => [
         'ar' => 'يرجى دفع المبلغ بالكامل عبر بطاقة الهدايا الإلكترونية أو استخدام طريقة دفع أخرى.',
         'context' => 'egift',
       ],
