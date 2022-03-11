@@ -243,3 +243,14 @@
     }
   }
 }
+
+.path--user {
+  .c-breadcrumb {
+    li {
+      a.egift-brdcrb-nav {
+        text-transform: initial;
+      }
+    }
+  }
+}
+
