@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\path_alias\AliasManagerInterface;
+use Drupal\Core\Queue\QueueFactory;
 
 /**
  * Service provides data migration functions in rcs_category taxonomy.
@@ -48,11 +48,11 @@ class AlshayaRcsCategoryDataMigration {
   protected $connection;
 
   /**
-   * The path alias manager.
+   * The queue service.
    *
-   * @var \Drupal\path_alias\AliasManagerInterface
+   * @var \Drupal\Core\Queue\QueueFactory
    */
-  protected $aliasManager;
+  protected $queueFactory;
 
   /**
    * Constructs a new AlshayaRcsCategoryDataMigration instance.
@@ -65,19 +65,19 @@ class AlshayaRcsCategoryDataMigration {
    *   The language manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection manager.
-   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
-   *   The path alias manager.
+   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
+   *   The queue service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
                               Connection $connection,
-                              AliasManagerInterface $alias_manager) {
+                              QueueFactory $queue_factory) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->connection = $connection;
-    $this->aliasManager = $alias_manager;
+    $this->queueFactory = $queue_factory;
   }
 
   /**
@@ -143,120 +143,12 @@ class AlshayaRcsCategoryDataMigration {
 
     // Get the terms satisfying the above conditions.
     $terms = $query->distinct()->execute()->fetchAll();
-
     // Do not process if no terms are found.
     if (!empty($terms)) {
-      foreach ($terms as $acq_term) {
-        // Load the product category term object.
-        $acq_term_data = $this->entityTypeManager->getStorage('taxonomy_term')->load($acq_term->tid);
-
-        // Create a new rcs category term object.
-        $rcs_term = $this->entityTypeManager->getStorage('taxonomy_term')->create([
-          'vid' => self::TARGET_VOCABULARY_ID,
-          'name' => $acq_term->name,
-          'langcode' => $langcode,
-        ]);
-
-        // Add include_in_desktop field value from the old term.
-        $rcs_term->get('field_include_in_desktop')
-          ->setValue($acq_term_data->get('field_include_in_desktop')->getValue());
-
-        // Add include_in_mobile_tablet field value from the old term.
-        $rcs_term->get('field_include_in_mobile_tablet')
-          ->setValue($acq_term_data->get('field_include_in_mobile_tablet')->getValue());
-
-        // Add term_background_color field value from the old term.
-        $rcs_term->get('field_term_background_color')
-          ->setValue($acq_term_data->get('field_term_background_color')->getValue());
-
-        // Add term_font_color field value from the old term.
-        $rcs_term->get('field_term_font_color')
-          ->setValue($acq_term_data->get('field_term_font_color')->getValue());
-
-        // Add icon field value from the old term.
-        $rcs_term->get('field_icon')
-          ->setValue($acq_term_data->get('field_icon')->getValue());
-
-        // Add main_menu_highlight field value from the old term.
-        $main_menu_highlights = $acq_term_data->get('field_main_menu_highlight')->getValue();
-        if (!empty($main_menu_highlights)) {
-          $rcs_term_paragraphs = [];
-          foreach ($main_menu_highlights as $highlight) {
-            // Load source paragraph entity.
-            $source_paragraphs = $this->entityTypeManager->getStorage('paragraph')->load($highlight['target_id']);
-
-            // Create a duplicate of the sourced entity.
-            $cloned_paragraphs = $source_paragraphs->createDuplicate();
-
-            // Save the new paragraph entity.
-            $cloned_paragraphs->save();
-
-            // Add target and revision id to value array for the rcs term.
-            $rcs_term_paragraphs[] = [
-              'target_id' => $cloned_paragraphs->id(),
-              'target_revision_id' => $cloned_paragraphs->getRevisionId(),
-            ];
-          }
-
-          // Attach highlights with rcs term if available.
-          if (!empty($rcs_term_paragraphs)) {
-            $rcs_term->get('field_main_menu_highlight')
-              ->setValue($rcs_term_paragraphs);
-          }
-        }
-
-        // Add move_to_right field value from the old term.
-        $rcs_term->get('field_move_to_right')
-          ->setValue($acq_term_data->get('field_move_to_right')->getValue());
-
-        // Add override_target_link field value from the old term.
-        $override_target_link = $acq_term_data->get('field_override_target_link')->getString();
-        $rcs_term->get('field_override_target_link')->setValue($override_target_link);
-
-        // Add remove_term_in_breadcrumb field value from the old term.
-        $remove_term_breadcrumb = $acq_term_data->get('field_remove_term_in_breadcrumb')->getString();
-        $rcs_term->get('field_remove_term_in_breadcrumb')->setValue($remove_term_breadcrumb);
-
-        // Add display_as_clickable_link field value from the old term.
-        $display_as_clickable = $acq_term_data->get('field_display_as_clickable_link')->getString();
-        $rcs_term->get('field_display_as_clickable_link')->setValue($display_as_clickable);
-
-        // Add target_link field value from the old term,
-        // override_target_link field flag is true.
-        if ($override_target_link == "1") {
-          $rcs_term->get('field_target_link')
-            ->setValue($acq_term_data->get('field_target_link')->getValue());
-        }
-
-        // Add category_slug field value from the old term path alias.
-        $term_slug = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $acq_term->tid);
-        $term_slug = ltrim($term_slug, '/');
-        $rcs_term->get('field_category_slug')->setValue($term_slug);
-
-        // Check if the translations exists for other available languages.
-        foreach ($this->languageManager->getLanguages() as $language_code => $language) {
-          if ($language_code != $langcode && $acq_term_data->hasTranslation($language_code)) {
-            // Load the translation object.
-            $acq_term_data = $acq_term_data->getTranslation($language_code);
-
-            // Add translation in the new term.
-            $rcs_term = $rcs_term->addTranslation($language_code, ['name' => $acq_term_data->name]);
-
-            $rcs_term->get('field_term_background_color')
-              ->setValue($acq_term_data->get('field_term_background_color')->getValue());
-
-            $rcs_term->get('field_term_font_color')
-              ->setValue($acq_term_data->get('field_term_font_color')->getValue());
-
-            // Save the translations.
-            $rcs_term->save();
-          }
-        }
-
-        // Delete the ACM Category item before creating the RCS Category.
-        $acq_term_data->delete();
-        // Save the new term object in rcs category.
-        $rcs_term->save();
+      // Instantiate queue worker to create rcs category terms.
+      $queue = $this->queueFactory->get('process_rcs_category');
+      foreach ($terms as $term) {
+        $queue->createItem($term);
       }
     }
   }
@@ -279,10 +171,9 @@ class AlshayaRcsCategoryDataMigration {
     if (empty($terms)) {
       return NULL;
     }
-
-    foreach ($terms as $term_id) {
-      $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id)->delete();
-    }
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $terms = $term_storage->loadMultiple($terms);
+    $term_storage->delete($terms);
   }
 
 }

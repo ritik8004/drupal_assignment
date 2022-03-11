@@ -16,4 +16,4 @@ services:
       - '@config.factory'
       - '@language_manager'
       - '@database'
-      - '@path_alias.manager'
+      - '@queue'
