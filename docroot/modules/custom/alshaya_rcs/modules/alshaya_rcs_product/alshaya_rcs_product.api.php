@@ -15,11 +15,11 @@ function hook_alshaya_rcs_product_order_build_alter(array &$build) {
 }
 
 /**
- * Allows modules to alter the fields of the graphql product query.
+ * Allows modules to alter the fields of the graphql product query fields.
  *
  * @param array $fields
  *   The graphql product query fields.
  */
-function alshaya_rcs_product_query_fields_alter(array &$fields) {
+function hook_alshaya_rcs_product_query_fields_alter(array &$fields) {
   array_push($fields['items'], 'style_code');
 }
