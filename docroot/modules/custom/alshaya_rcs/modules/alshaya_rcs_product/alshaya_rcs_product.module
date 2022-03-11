@@ -885,29 +885,44 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
  */
 function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
   $self_module_path = drupal_get_path('module', 'alshaya_rcs_product');
-  // Alter the product utility library to replace the base JS file with the
-  // utility file provided by this module.
-  if ($extension === 'alshaya_acm_product' && isset($libraries['product_utility'])) {
-    foreach ($libraries['product_utility']['js'] as $source => $options) {
-      if ($source === 'js/alshaya_acm_product.utility.js') {
-        unset($libraries['product_utility']['js'][$source]);
-        $libraries['product_utility']['js']["/$self_module_path/js/alshaya_rcs_product.utility.js"] = $options;
-        $libraries['product_utility']['dependencies'] = [
-          'core/drupal',
-          'alshaya_master/common_functions',
-          'alshaya_rcs_product/main',
-        ];
 
-        break;
+  if ($extension === 'alshaya_acm_product') {
+    if (isset($libraries['product_utility'])) {
+      // Alter the product utility library to replace the base JS file with the
+      // utility file provided by this module.
+      foreach ($libraries['product_utility']['js'] as $source => $options) {
+        if ($source === 'js/alshaya_acm_product.utility.js') {
+          unset($libraries['product_utility']['js'][$source]);
+          $libraries['product_utility']['js']["/$self_module_path/js/alshaya_rcs_product.utility.js"] = $options;
+          $libraries['product_utility']['dependencies'] = [
+            'core/drupal',
+            'alshaya_master/common_functions',
+            'alshaya_rcs_product/main',
+          ];
+
+          break;
+        }
       }
     }
+
+    if (isset($libraries['acq_product_info'])) {
+      // Replace the product info JS with new version.
+      // Add new JS with same options.
+      $libraries['acq_product_info']['js']["/$self_module_path/js/alshaya_rcs_product.pdp.v2.js"] = $libraries['acq_product_info']['js']['js/alshaya_acm_product.pdp.v1.js'];
+
+      // Update the dependencies with the ones from library - rcs_product_info.
+      $definitions = \Drupal::service('library.discovery')->getLibrariesByExtension('alshaya_rcs_product');
+      $libraries['acq_product_info']['dependencies'] = $definitions['rcs_product_info']['dependencies'];
+
+      // Remove the old JS file.
+      unset($libraries['acq_product_info']['js']['js/alshaya_acm_product.pdp.v1.js']);
+    }
   }
-  // Alter the order print library to replace the base JS file with the order
-  // print file provided by this module.
-  if ($extension === 'alshaya_acm_customer'
+  elseif ($extension === 'alshaya_acm_customer'
     && isset($libraries['order_print'])
     && isset($libraries['order_print']['js']['js/order-print.js'])) {
-
+    // Alter the order print library to replace the base JS file with the order
+    // print file provided by this module.
     $options = $libraries['order_print']['js']['js/order-print.js'];
     unset($libraries['order_print']['js']['js/order-print.js']);
     $self_module_path = drupal_get_path('module', 'alshaya_rcs_product');
@@ -916,23 +931,26 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       'rcs_magento_placeholders/rcs_magento_placeholders',
     ];
   }
-  // Replace DY library.
-  elseif ($extension === 'alshaya_dynamic_yield' && isset($libraries['alshaya_dynamic_yield.product_modal'])) {
+  elseif ($extension === 'alshaya_dynamic_yield'
+    && isset($libraries['alshaya_dynamic_yield.product_modal'])) {
+    // Replace DY library.
     $options = $libraries['alshaya_dynamic_yield.product_modal']['js']['js/alshaya_dynamic_yield.product_modal.js'];
     unset($libraries['alshaya_dynamic_yield.product_modal']['js']['js/alshaya_dynamic_yield.product_modal.js']);
     $libraries['alshaya_dynamic_yield.product_modal']['js']["/$self_module_path/js/alshaya_rcs_product.modal.js"] = $options;
     $libraries['alshaya_dynamic_yield.product_modal']['dependencies'][] = 'alshaya_acm_cart_notification/cart_notification_js';
     $libraries['alshaya_dynamic_yield.product_modal']['dependencies'][] = 'rcs_placeholders/helpers';
   }
-  // Replace AURA PDP library with RCS supported one.
-  elseif ($extension === 'alshaya_aura_react' && isset($libraries['alshaya_aura_pdp'])) {
+  elseif ($extension === 'alshaya_aura_react'
+    && isset($libraries['alshaya_aura_pdp'])) {
+    // Replace AURA PDP library with RCS supported one.
     $options = $libraries['alshaya_aura_pdp']['js']['dist/pdp.bundle.js'];
     unset($libraries['alshaya_aura_pdp']['js']['dist/pdp.bundle.js']);
     $aura_module_path = drupal_get_path('module', 'alshaya_aura_react');
     $libraries['alshaya_aura_pdp']['js']["/$aura_module_path/dist/pdpRcs.bundle.js"] = $options;
   }
-  // Replace Alshaya SPC Express Delivery library with RCS supported one.
-  elseif ($extension === 'alshaya_spc' && isset($libraries['express_delivery'])) {
+  elseif ($extension === 'alshaya_spc'
+    && isset($libraries['express_delivery'])) {
+    // Replace Alshaya SPC Express Delivery library with RCS supported one.
     $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
     unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
     $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
