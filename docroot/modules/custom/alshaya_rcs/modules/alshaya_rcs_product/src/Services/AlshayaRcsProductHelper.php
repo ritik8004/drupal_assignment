@@ -58,7 +58,7 @@ class AlshayaRcsProductHelper {
    */
   protected $moduleHandler;
 
-  /*
+  /**
    * The language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
