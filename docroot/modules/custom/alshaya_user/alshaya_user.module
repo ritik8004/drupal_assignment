@@ -249,7 +249,7 @@ function alshaya_user_preprocess_menu(&$variables) {
  */
 function alshaya_user_block_build_alter(array &$build, BlockPluginInterface $block) {
   if ($block->getPluginId() == 'system_menu_block:account') {
-    $build['#cache']['contexts'][] = 'route';
+    $build['#cache']['contexts'][] = 'url.path';
   }
 }
 
