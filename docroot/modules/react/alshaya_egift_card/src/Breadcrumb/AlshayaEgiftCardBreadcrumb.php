@@ -30,8 +30,8 @@ class AlshayaEgiftCardBreadcrumb implements BreadcrumbBuilderInterface {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
     // @todo update route form config.
-    $breadcrumb->addLink(Link::createFromRoute($this->t('Egift Card', [], ['context' => 'breadcrumb']), '<front>'));
-    $breadcrumb->addLink(Link::createFromRoute($this->t('Buy eGift Card', [], ['context' => 'breadcrumb']), 'alshaya_egift_card.egift_card_purchase'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('eGift Card', [], ['context' => 'egift']), '<front>', [], ['attributes' => ['class' => ['egifts']]]));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Buy eGift Card', [], ['context' => 'egift']), 'alshaya_egift_card.egift_card_purchase', [], ['attributes' => ['class' => ['egifts']]]));
     $breadcrumb->addCacheableDependency(['url.path']);
     return $breadcrumb;
   }
