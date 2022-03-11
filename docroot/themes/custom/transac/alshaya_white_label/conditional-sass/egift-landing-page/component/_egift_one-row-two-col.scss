@@ -136,6 +136,7 @@
             display: inline-block;
             line-height: 1rem;
             letter-spacing: 0.0625rem;
+            text-transform: initial;
 
             &:hover {
               background: $plp-secondary-cta-hover-bg;

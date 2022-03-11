@@ -42,4 +42,14 @@
       margin-top: 0;
     }
   }
+
+  .egift-landing-page {
+    #block-breadcrumbs {
+      li:nth-child(2) {
+        a {
+          text-transform: initial;
+        }
+      }
+    }
+  }
 }
