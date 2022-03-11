@@ -1,4 +1,9 @@
 .super-category-enabled {
+  .c-header__wrapper--inner {
+    max-width: 80.25rem;
+    margin: 0 auto;
+  }
+
   .c-menu-primary {
     display: block;
     height: auto;
@@ -9,9 +14,58 @@
         width: 35%;
       }
 
-      .menu--one__list {
-        .menu--one__link {
-          font-size: 0;
+      .block-alshaya-super-category-menu  {
+        .menu--one__list {
+          @include breakpoint($desktop) {
+            height: 3.68rem;
+          }
+          
+          .menu--one__link {
+            font-size: 0;
+
+            @include breakpoint($desktop) {
+              padding: 1.24rem 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .c-menu-secondary {
+
+    a {
+      @include breakpoint($desktop) {
+        padding: 1.31rem 1.438rem;
+        height: 3.68rem;
+      }
+    }
+
+    li {
+      @include breakpoint($desktop) {
+        height: 3.68rem;
+        vertical-align: middle;
+      }
+    }
+
+    .menu--account, 
+    .block-alshaya-stores-finder,
+    .block-language-blocklanguage-interface {
+      @include breakpoint($desktop) {
+        height: 3.68rem;
+      }
+    }
+
+    .block-language-blocklanguage-interface {
+      @include breakpoint($desktop) {
+        height: 3.68rem;
+      }
+        
+      .ar, .en {
+        a {
+          @include breakpoint($desktop) {
+            height: 3.68rem;
+          }
         }
       }
     }
@@ -30,16 +84,16 @@
     .brand-american-eagle,
     .brand-aerie {
       img {
-        height: 1.625rem;
+        height: 1.25rem;
       }
     }
 
     .brand-american-eagle img {
-      width: 3.4375rem;
+      width: 10.313rem;
     }
 
     .brand-aerie img {
-      width: 2.5rem;
+      width: 3.3125rem;
     }
   }
 

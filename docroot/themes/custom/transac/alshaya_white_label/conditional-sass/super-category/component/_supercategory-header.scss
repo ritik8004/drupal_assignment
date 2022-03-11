@@ -1,4 +1,4 @@
-.super-category-enabled {
+.super-category-american-eagle {
   .branding__menu .block-alshaya-search {
     @include breakpoint($upto-tablet) {
       display: none;
@@ -379,6 +379,10 @@
 
   .c-menu-primary {
     .mobile--menu {
+      @include breakpoint($only-mobile) {
+        z-index: 13;;
+      }
+
       @include breakpoint($only-tablet) {
         top: 0.6rem !important;
       }
@@ -402,8 +406,10 @@
 
   .block-alshaya-algolia-react-autocomplete {
     #alshaya-algolia-autocomplete {
-      width: 18.75rem;
-      padding: 0;
+      @include breakpoint($desktop) {
+        width: 18.75rem;
+        padding: 0;
+      }
     }
   }
 
