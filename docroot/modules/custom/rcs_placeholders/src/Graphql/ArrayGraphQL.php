@@ -10,7 +10,7 @@ namespace Drupal\rcs_placeholders\Graphql;
 class ArrayGraphQL {
 
   /**
-   * Perform character replacement in graphql.
+   * Perform character replacement and converts array to graphql query string.
    *
    * @param array $fields
    *   Array to perform the character replacement on.
@@ -18,7 +18,7 @@ class ArrayGraphQL {
    * @return string
    *   The string with the replaced characters.
    */
-  private static function replaceChars(array $fields) {
+  private static function convertToGraphqlQuery(array $fields) {
     // Convert array to json.
     $fields = json_encode($fields, JSON_PRETTY_PRINT);
 
@@ -60,10 +60,12 @@ class ArrayGraphQL {
       return [];
     }
 
-    $fields['query'] = self::replaceChars($fields['query']);
-    $fields['variables'] = empty($fields['variables'])
-      ? []
-      : json_encode($fields['variables']);
+    // Here we convert the array query to a graphql string.
+    $fields['query'] = self::convertToGraphqlQuery($fields['query']);
+    // We let the variables to be passed as objects so that they can be
+    // altered in the javascript side for dynamic parameters that may not be
+    // known in the backend.
+    $fields['variables'] = $fields['variables'] ?? [];
 
     return $fields;
   }

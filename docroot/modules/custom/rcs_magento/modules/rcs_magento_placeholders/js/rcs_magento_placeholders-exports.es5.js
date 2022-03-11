@@ -46,7 +46,8 @@ async function handleNoItemsInResponse(request, urlKey) {
  *   The compressed and URL safe string.
  */
 function prepareQuery(query, variables) {
-  var data = {
+  let graphqlQuery = null;
+  const data = {
     query: query,
     variables: variables,
   };
@@ -54,11 +55,17 @@ function prepareQuery(query, variables) {
   // Remove extra enclosing {}.
   data.query = data.query.slice(1, -1);
   // Encode to valid uri format.
-  data.query = encodeURIComponent(global.rcsQueryCompressor(data.query))
+  data.query = encodeURIComponent(global.rcsQueryCompressor(data.query));
 
-  return typeof data.variables !== 'undefined'
-    ? `query=${data.query}&variables=${data.variables}`
-    : `query=${data.query}`;
+  if (typeof data.variables !== 'undefined') {
+    data.variables = JSON.stringify(data.variables);
+    graphqlQuery = `query=${data.query}&variables=${data.variables}`;
+  }
+  else {
+    graphqlQuery = `query=${data.query}`;
+  }
+
+  return graphqlQuery;
 }
 
 exports.getEntity = async function getEntity(langcode) {
@@ -196,9 +203,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'field_magazine_shop_the_story':
-      let productQueryVariables = JSON.parse(rcsPhGraphqlQuery.magazine_shop_the_story.variables);
+      let productQueryVariables = rcsPhGraphqlQuery.magazine_shop_the_story.variables;
       productQueryVariables.skus = JSON.parse(params.skus);
-      productQueryVariables = JSON.stringify(productQueryVariables);
       request.data = prepareQuery(rcsPhGraphqlQuery.magazine_shop_the_story.query, productQueryVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
@@ -214,9 +220,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'labels':
-      let productLabelVariables = JSON.parse(rcsPhGraphqlQuery.product_labels.variables);
+      let productLabelVariables = rcsPhGraphqlQuery.product_labels.variables;
       productLabelVariables.productIds = params.productIds;
-      productLabelVariables = JSON.stringify(productLabelVariables);
       request.data = prepareQuery(rcsPhGraphqlQuery.product_labels.query, productLabelVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
@@ -240,9 +245,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
     // Get the product data for the given sku.
     case 'product_by_sku':
       // Build query.
-      let productBySkuVariables = JSON.parse(rcsPhGraphqlQuery.product_by_sku.variables);
+      let productBySkuVariables = rcsPhGraphqlQuery.product_by_sku.variables;
       productBySkuVariables.sku = params.sku;
-      productBySkuVariables = JSON.stringify(productBySkuVariables);
       request.data = prepareQuery(rcsPhGraphqlQuery.product_by_sku.query, productBySkuVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
@@ -297,9 +301,8 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
   switch (placeholder) {
     case 'products-in-style':
-      let variables = JSON.parse(rcsPhGraphqlQuery.styled_products.variables);
+      let variables = rcsPhGraphqlQuery.styled_products.variables;
       variables.styleCode = params.styleCode;
-      variables = JSON.stringify(variables);
 
       request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
       response = rcsCommerceBackend.invokeApiSynchronous(request);
@@ -309,9 +312,8 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
     // Get the product data for the given sku.
     case 'single_product_by_sku':
       // Build query.
-      let singleProductQueryVariables = JSON.parse(rcsPhGraphqlQuery.single_product_by_sku.variables);
+      let singleProductQueryVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
       singleProductQueryVariables.sku = params.sku;
-      singleProductQueryVariables = JSON.stringify(singleProductQueryVariables);
 
       request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
 
@@ -331,9 +333,8 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
     // Get the product data for the given sku.
     case 'multiple_products_by_sku':
       // Build query.
-      let multipleProductQueryVariables = JSON.parse(rcsPhGraphqlQuery.multiple_products_by_sku.variables);
+      let multipleProductQueryVariables = rcsPhGraphqlQuery.multiple_products_by_sku.variables;
       multipleProductQueryVariables.skus = params.sku;
-      multipleProductQueryVariables = JSON.stringify(multipleProductQueryVariables);
 
       request.data = prepareQuery(rcsPhGraphqlQuery.multiple_products_by_sku.query, multipleProductQueryVariables);
 
