@@ -415,6 +415,9 @@
                 heightDiff = mainBottom - sideBarTop;
                 sidebarWrapper.addClass('contain');
                 sidebarWrapper.css('top', heightDiff + 'px');
+                $('.c-accordion__title').on('click', function () {
+                  sidebarWrapper.css('top', 'auto');
+                });
               }
             }
 
