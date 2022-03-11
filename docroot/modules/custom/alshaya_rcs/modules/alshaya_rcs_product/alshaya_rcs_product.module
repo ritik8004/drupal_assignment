@@ -588,6 +588,19 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
   $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
   $product_query_fields = $rcs_product_helper->getProductQueryFields();
 
+  // @todo Use this for add to bag feature now. Later remove to use
+  // single_product_by_sku.
+  $query_fields['product_by_sku'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $product_query_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
+
   // The query to fetch a single product by using the sku value as filter.
   $query_fields['single_product_by_sku'] = [
     'query' => [
@@ -599,10 +612,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'sku' => NULL,
     ],
   ];
-
-  // @todo Use this for add to bag feature now. Later remove to use
-  // single_product_by_sku.
-  $query_fields['product_by_sku'] = $query_fields['single_product_by_sku'];
 
   // The query to fetch multiple products by using the sku value as filter.
   $query_fields['multiple_products_by_sku'] = [

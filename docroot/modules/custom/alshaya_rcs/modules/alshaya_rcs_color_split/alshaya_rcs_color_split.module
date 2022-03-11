@@ -72,6 +72,14 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
     ],
   ];
 
+  $color_split_product_query_fields = [
+    'total_count',
+    'items' => [
+      'style_code',
+      'sku',
+    ],
+  ];
+
   if ($rcs_product_helper->isRcsPdp()) {
     // For the main product, we send a minimal request to get the style code.
     // After getting the style code, we call the API to fetch the products with
@@ -81,13 +89,7 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
     $queries['pdp_product'] = [
       'query' => [
         'query($url: String, $attributes: [AttributeInput!]!)' => [
-          'products(filter: {url_key: {eq: $url}})' => [
-            'total_count',
-            'items' => [
-              'style_code',
-              'sku',
-            ],
-          ],
+          'products(filter: {url_key: {eq: $url}})' => $color_split_product_query_fields,
           'customAttributeMetadata(attributes: $attributes)' => $rcs_product_helper->getProductOptionsQueryFields(),
         ],
       ],
@@ -97,6 +99,30 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
       ],
     ];
   }
+
+  // Alter this query.
+  $queries['single_product_by_sku'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $color_split_product_query_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
+
+  // Alter this query.
+  $queries['multiple_products_by_sku'] = [
+    'query' => [
+      'query($skus: [String])' => [
+        'products(filter: {sku: {in: $skus}})' => $color_split_product_query_fields,
+      ],
+    ],
+    'variables' => [
+      'skus' => NULL,
+    ],
+  ];
 }
 
 /**
