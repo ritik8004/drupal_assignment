@@ -43,11 +43,11 @@ class CheckoutComUpapiContextProvider extends React.Component {
 
   hasTokenizedCards = () => {
     const { tokenize, tokenizedCards } = drupalSettings.checkoutComUpapi;
-    // Additional condition to check if saved card can be used for Topup.
     return (
       drupalSettings.user.uid > 0
       && tokenize
       && Object.keys(tokenizedCards).length > 0
+      // Condition to not use existing card for egift topup.
       && allowSavedCcForTopUp()
     );
   };
