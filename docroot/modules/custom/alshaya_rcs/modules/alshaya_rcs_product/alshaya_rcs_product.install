@@ -23,6 +23,10 @@ function alshaya_rcs_product_install() {
   if (\Drupal::moduleHandler()->moduleExists('bazaar_voice')) {
     _alshaya_rcs_product_change_bv_routes_list();
   }
+
+  // Migrate prodct nodes to RCS content type for enrichment.
+  \Drupal::service('alshaya_rcs_product.product_helper')
+    ->processProductMigrationToRcsCt();
 }
 
 /**
@@ -55,4 +59,8 @@ function alshaya_rcs_product_uninstall() {
     $bv_routes_list = implode(PHP_EOL, $bv_routes_list);
     $bv_config->set('bv_routes_list', $bv_routes_list)->save();
   }
+
+  // Rollback nodes from RCS content type.
+  \Drupal::service('alshaya_rcs_product.product_helper')
+    ->rollbackProductMigration();
 }

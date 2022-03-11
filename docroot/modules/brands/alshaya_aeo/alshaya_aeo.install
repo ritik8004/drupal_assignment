@@ -8,6 +8,29 @@
 /**
  * Implements hook_update_N().
  *
+ * Enable super category feature for AEO.
+ */
+function alshaya_aeo_update_8003() {
+  // Enable super category feature and menu block with config factory.
+  /** @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
+  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
+  $super_category_feature->enableSuperCategory();
+
+  // Remove sub brand logo as we are using super category as a feature.
+  $config = \Drupal::configFactory()->getEditable('alshaya_master.settings');
+  $config->set('sub_brand_logo_img', '');
+  $config->set('sub_brand_logo_link', '');
+  $config->save();
+
+  // Change branding block weight as per the design.
+  $config = \Drupal::configFactory()->getEditable('block.block.branding');
+  $config->set('weight', -20);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update English AE logo for mobile.
  */
 function alshaya_aeo_update_8002() {

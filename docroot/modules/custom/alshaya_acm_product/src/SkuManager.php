@@ -2407,7 +2407,7 @@ class SkuManager {
 
         $configurableFieldValues[$fieldKey] = [
           'attribute_id' => $fieldKey,
-          'label' => $this->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
+          'label' => $this->getLabelFromParentSku($sku, $code) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
           'value' => $sku->get($fieldKey)->getString(),
@@ -2436,7 +2436,7 @@ class SkuManager {
     if ($parent_sku instanceof SKUInterface) {
       $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
       foreach ($configurables as $field) {
-        if (in_array($attr_code, $field)) {
+        if ($attr_code == $field['code']) {
           return $field['label'];
         }
       }
