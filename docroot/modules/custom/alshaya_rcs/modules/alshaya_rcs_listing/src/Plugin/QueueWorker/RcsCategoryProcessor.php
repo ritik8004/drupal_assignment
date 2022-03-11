@@ -20,6 +20,7 @@ use Drupal\Core\Entity\EntityInterface;
  */
 class RcsCategoryProcessor extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
+  // Source and Target Vocabulary.
   const TARGET_VOCABULARY_ID = 'rcs_category';
   const SOURCE_VOCABULARY_ID = 'acq_product_category';
 
