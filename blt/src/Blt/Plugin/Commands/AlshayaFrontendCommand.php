@@ -3,6 +3,7 @@
 namespace Alshaya\Blt\Plugin\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
+use Acquia\Blt\Robo\Exceptions\BltException;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -138,7 +139,7 @@ class AlshayaFrontendCommand extends BltTasks {
    * @description Build styles for all the themes of a particular type.
    */
   public function buildThemesOfType(string $type) {
-    $ignoredDirs = ['alshaya_example_subtheme', 'node_modules'];
+    $ignoredDirs = ['alshaya_example_subtheme', 'node_modules', 'gulp-tasks'];
 
     if (!in_array($type, self::$themeTypes)) {
       throw new \InvalidArgumentException('Type should be one of ' . implode(' / ', self::$themeTypes));
@@ -157,18 +158,74 @@ class AlshayaFrontendCommand extends BltTasks {
       }
     }
 
-    $command = 'cd %s; npm run build';
-
     // Execute in sequence to see errors if any.
     $tasks = $this->taskExecStack();
 
-    foreach ($themes ?? [] as $theme) {
-      $fullCommand = sprintf($command, $theme);
-      $tasks->exec($fullCommand);
+    foreach ($themes ?? [] as $themeName => $themePath) {
+      $build = FALSE;
+      // Checking if build is needed when inside github actions and push event
+      // is triggered. We build all themes in case of tag creation or we are
+      // outside github actions.
+      if (getenv('GITHUB_ACTIONS') == 'true' && getenv('GITHUB_EVENT_NAME') == 'push') {
+        $themeChanges = getenv('CHANGED_THEME_FILES');
+        // Build if theme is changed and tracked in CHANGED_THEME_FILES
+        // env variable.
+        if (strpos($themeChanges, $type . '/' . $themeName) > 0) {
+          $build = TRUE;
+        }
+        // Build all transac themes if alshaya_white_label themes changed.
+        elseif ($type == 'transac' && strpos($themeChanges, 'transac/alshaya_white_label') > 0) {
+          $build = TRUE;
+        }
+        // Build all non-transac themes if white_label themes changed.
+        elseif ($type == 'non_transac' && strpos($themeChanges, 'transac/whitelabel') > 0) {
+          $build = TRUE;
+        }
+
+        // Else copy from acquia repo if build is not needed.
+        if ($build === FALSE) {
+          $cssFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $themePath);
+          $cssToDir = $themePath;
+          // Building folder paths for copying.
+          // In non_transac themes css is inside /dist folder.
+          if ($type === 'non_transac') {
+            $cssFromDir .= '/dist';
+            // Only in whitelabel theme css is inside /components/dist folder.
+            if (strpos($themePath, 'whitelabel') > 0) {
+              $cssFromDir = str_replace('/dist', '/components/dist', $themePath);
+              $cssToDir .= '/components';
+            }
+          }
+          // In transac and transac_lite theme css is inside /css folder.
+          else {
+            $cssFromDir .= '/css';
+          }
+        }
+      }
+      // Build all themes since outside of github actions or a tag is pushed.
+      else {
+        $build = TRUE;
+      }
+
+      // Build theme css.
+      if ($build) {
+        $fullBuildCommand = sprintf('cd %s; npm run build', $themePath);
+        $tasks->exec($fullBuildCommand);
+      }
+      // Copy theme css.
+      else {
+        $this->say("Copying unchanged " . $themeName . "theme from " . $cssFromDir . "to " . $cssToDir);
+        $result = $this->taskCopyDir([$cssFromDir => $cssToDir])
+          ->overwrite(TRUE)
+          ->run();
+        if (!$result->wasSuccessful()) {
+          throw new BltException("Unable to copy css files from cloud.");
+        }
+      }
     }
 
     $tasks->stopOnFail();
-    return $tasks->run();
+    return $tasks->getCommand() ? $tasks->run() : 0;
   }
 
   /**
