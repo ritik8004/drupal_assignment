@@ -6,6 +6,12 @@
       a {
         text-transform: uppercase;
       }
+
+      &:nth-child(2) {
+        a {
+          text-transform: initial;
+        }
+      }
     }
   }
 
