@@ -621,14 +621,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     'products(filter: {url_key: {eq: $url}})' => $product_query_fields,
   ];
 
-  // The query to fetch products.
-  $query_fields['products'] = [
-    'query' => [
-      'query($url: String)' => $product_query_by_url_key,
-    ],
-    'variables' => ['url' => $url_key],
-  ];
-
   $product_options_query = $rcs_product_helper->getProductOptionsQuery();
   // The query to fetch the product options data like color, size labels.
   $query_fields['product_options'] = [
