@@ -94,13 +94,16 @@
 
     button[type="button"] {
       margin-bottom: 0;
-      text-transform: initial;
     }
 
     .action-topup {
       @include breakpoint($only-mobile) {
         width: 100%;
         order: 2;
+      }
+
+      button[type="button"] {
+        text-transform: initial;
       }
     }
 
