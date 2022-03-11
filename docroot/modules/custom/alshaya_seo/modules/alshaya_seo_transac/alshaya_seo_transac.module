@@ -261,6 +261,13 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
   // trigger events from javascript (alshaya_seo.gtm.spc_checkout.js).
   $routes_to_exclude = ['alshaya_spc.checkout', 'acq_cart.cart'];
   if (in_array($current_route['route_name'], $routes_to_exclude)) {
+    if (isset($data_layer['country'])) {
+      // Datalayer contrib module sends country code for country value.
+      // Altering to full country name. Ex: AE -> United Arab Emirates.
+      $data_layer['country'] = function_exists('_alshaya_country_get_site_level_country_name')
+        ? _alshaya_country_get_site_level_country_name()
+        : $data_layer['country'];
+    }
     return;
   }
   try {
