@@ -1,8 +1,9 @@
 egift_card_enabled: true # Config to enable/disable egift card feature.
 payment_methods_not_supported:
   cashondelivery: cashondelivery
+  checkout_com_upapi_fawry: checkout_com_upapi_fawry
 topup_terms_conditions_text:
-  value: '<ol><li>Top-up can be done only for Active E-Gift Cards</li><li>Minimum Top-up amount is 5 [alshaya_seo:currency]</li><li>Top-up will extend your validity by additional 3 months</li></ol>'
+  value: '<ol><li>Top up can be done only for Active eGift Cards</li><li>Minimum Top up amount is 5 [alshaya_seo:currency]</li><li>Top up will extend your validity by additional 3 months</li></ol>'
   format: rich_text
 textarea_maxlength: 200
 # Config to set the expiration time for the topup quote local storage item.

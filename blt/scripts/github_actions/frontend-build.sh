@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # This file runs during the frontend build.
 
-set -e
+set -ev
 
 docrootDir="$1"
 diff=""
@@ -13,7 +13,13 @@ if [[ $GITHUB_ACTIONS == "true" ]]; then
   log=$(git log -n 1)
 
   # Pattern for Merge commit.
-  re="Merge: ([abcdef0-9]{7,8}) ([abcdef0-9]{7,8})"
+  re="Merge: ([abcdef0-9]{7,10}) ([abcdef0-9]{7,10})"
+
+  # Adding debugging echo. To be removed after fixing.
+  currBranch=$(git rev-parse --abbrev-ref HEAD)
+  echo "Current branch: $currBranch"
+  echo "Next, last merge commit details should be shown."
+  echo "$log"
 
   # Check if last commit was a merge commit.
   if [[ $log =~ $re ]]; then
@@ -133,9 +139,11 @@ if [[ $GITHUB_ACTIONS == "true" ]]; then
   else
     # Build all themes if could not differentiate changed
     # files in merge commit.
+    echo "\nCould not differentiate change in themes. Building all themes...\n"
     vendor/bin/blt alshayafe:build-all-themes
   fi
 else
   # Build all themes if outside of Github Actions.
+  echo "\nOutside of github actions. Building all themes...\n"
   vendor/bin/blt alshayafe:build-all-themes
 fi
