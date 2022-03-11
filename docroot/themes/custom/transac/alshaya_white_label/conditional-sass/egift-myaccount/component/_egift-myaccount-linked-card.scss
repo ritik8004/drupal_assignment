@@ -158,6 +158,7 @@
     button[type="button"] {
       &.egift-topup-btn {
         margin-bottom: 0;
+        text-transform: initial;
 
         @include breakpoint($only-mobile) {
           width: 100%;
