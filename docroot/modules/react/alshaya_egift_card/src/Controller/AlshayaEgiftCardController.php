@@ -152,6 +152,9 @@ class AlshayaEgiftCardController extends ControllerBase {
     }
 
     $response = new LocalRedirectResponse($url->toString());
+    $cacheableMetadata = $response->getCacheableMetadata();
+    $cacheableMetadata->addCacheContexts(['user']);
+    $response->addCacheableDependency($cacheableMetadata);
     $response->send();
   }
 
