@@ -643,13 +643,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       ],
       'variables' => $product_and_custom_attributes_variables,
     ];
-    // This is the query for displaying the recommended product on the modal.
-    $query_fields['product_recommendations'] = [
-      'query' => [
-        'query($url: String)' => $product_and_custom_attributes_query,
-      ],
-      'variables' => $product_and_custom_attributes_variables,
-    ];
   }
 
   // Query for product labels.
@@ -672,62 +665,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
   ];
 
   return $query_fields;
-}
-
-/**
- * Get field query for recommended products.
- *
- * @return array
- *   Fields array.
- */
-function _alshaya_rcs_product_get_recommended_product_field_query() {
-  return [
-    'sku',
-    'id',
-    'name',
-    'type_id',
-    'url_key',
-    'is_buyable',
-    'stock_status',
-    'price_range' => [
-      'maximum_price' => [
-        'regular_price' => [
-          'value',
-        ],
-        'final_price' => [
-          'value',
-        ],
-        'discount' => [
-          'percent_off',
-        ],
-      ],
-    ],
-    'media_gallery' => [
-      'url',
-      'label',
-      '... on ProductVideo' => [
-        'video_content' => [
-          'media_type',
-          'video_provider',
-          'video_url',
-          'video_title',
-          'video_description',
-          'video_metadata',
-        ],
-      ],
-    ],
-    'gtm_attributes' => [
-      'id',
-      'name',
-      'variant',
-      'price',
-      'brand',
-      'category',
-      'dimension2',
-      'dimension3',
-      'dimension4',
-    ],
-  ];
 }
 
 /**

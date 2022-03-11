@@ -84,6 +84,62 @@ class AlshayaRcsProductHelper {
   }
 
   /**
+   * Get the field query for recommended products.
+   *
+   * @return array
+   *   Fields array.
+   */
+  private function getRecommendedProductFieldQuery() {
+    return [
+      'sku',
+      'id',
+      'name',
+      'type_id',
+      'url_key',
+      'is_buyable',
+      'stock_status',
+      'price_range' => [
+        'maximum_price' => [
+          'regular_price' => [
+            'value',
+          ],
+          'final_price' => [
+            'value',
+          ],
+          'discount' => [
+            'percent_off',
+          ],
+        ],
+      ],
+      'media_gallery' => [
+        'url',
+        'label',
+        '... on ProductVideo' => [
+          'video_content' => [
+            'media_type',
+            'video_provider',
+            'video_url',
+            'video_title',
+            'video_description',
+            'video_metadata',
+          ],
+        ],
+      ],
+      'gtm_attributes' => [
+        'id',
+        'name',
+        'variant',
+        'price',
+        'brand',
+        'category',
+        'dimension2',
+        'dimension3',
+        'dimension4',
+      ],
+    ];
+  }
+
+  /**
    * Returns the basic fields needed to be added to the product graphql query.
    *
    * @return array
@@ -262,15 +318,15 @@ class AlshayaRcsProductHelper {
     $recommended_product_settings = $this->configFactory->get('alshaya_acm.settings');
     // Add query for upsell products if display setting is true.
     if ($recommended_product_settings->get('display_upsell')) {
-      $fields['items']['upsell_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
+      $fields['items']['upsell_products'] = $this->getRecommendedProductFieldQuery();
     }
     // Add query for related products if display setting is true.
     if ($recommended_product_settings->get('display_related')) {
-      $fields['items']['related_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
+      $fields['items']['related_products'] = $this->getRecommendedProductFieldQuery();
     }
     // Add query for crosssell products if display setting is true.
     if ($recommended_product_settings->get('display_crosssell')) {
-      $fields['items']['crosssell_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
+      $fields['items']['crosssell_products'] = $this->getRecommendedProductFieldQuery();
     }
 
     $this->moduleHandler->alter('alshaya_rcs_product_query_fields', $fields);
