@@ -61,3 +61,11 @@ function alshaya_cos_transac_rcs_node_view(array &$build, EntityInterface $entit
     $build['#attached']['library'][] = 'alshaya_cos_transac_rcs/product';
   }
 }
+
+/**
+ * Implements hook_alshaya_rcs_product_product_options_to_query().
+ */
+function alshaya_cos_transac_rcs_alshaya_rcs_product_product_options_to_query(array $options) {
+  array_push($options, ["attribute_code" => "size", "entity_type" => "4"]);
+  return $options;
+}

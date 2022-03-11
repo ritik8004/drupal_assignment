@@ -342,26 +342,31 @@ class AlshayaRcsProductHelper {
    * @return array
    *   The product options query and variables data.
    */
-  public function getProductOptionsQuery() {
+  public function getProductOptionsQueryFields() {
     return [
-      'query' => [
-        'customAttributeMetadata(attributes: $attributes)' => [
-          'items' => [
-            'attribute_code',
-            'attribute_options' => [
-              'label',
-              'value',
-            ],
-          ],
-        ],
-      ],
-      'variables' => [
-        'attributes' => [
-          ["attribute_code" => "color", "entity_type" => "4"],
-          ["attribute_code" => "size", "entity_type" => "4"],
+      'items' => [
+        'attribute_code',
+        'attribute_options' => [
+          'label',
+          'value',
         ],
       ],
     ];
+  }
+
+  /**
+   * Returns the main query and variables getting product options data.
+   *
+   * @return array
+   *   The product options query and variables data.
+   */
+  public function getProductOptionsQueryVariables() {
+    $options = &drupal_static(__METHOD__, []);
+    if (!empty($options)) {
+      return $options;
+    }
+    $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query', [$options]);
+    return $options;
   }
 
 }

@@ -88,23 +88,12 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
               'sku',
             ],
           ],
-          'customAttributeMetadata(attributes: $attributes)' => [
-            'items' => [
-              'attribute_code',
-              'attribute_options' => [
-                'label',
-                'value',
-              ],
-            ],
-          ],
+          'customAttributeMetadata(attributes: $attributes)' => $rcs_product_helper->getProductOptionsQueryFields(),
         ],
       ],
       'variables' => [
         'url' => $url_key,
-        'attributes' => [
-          ["attribute_code" => "color", "entity_type" => "4"],
-          ["attribute_code" => "size", "entity_type" => "4"],
-        ],
+        'attributes' => $rcs_product_helper->getProductOptionsQueryVariables(),
       ],
     ];
   }
@@ -140,4 +129,12 @@ function alshaya_rcs_color_split_node_view(array &$build, EntityInterface $entit
   // in backend.
   $build['#attached']['library'][] = 'alshaya_color_split/grouped_simple';
   $build['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_product_options_to_query().
+ */
+function alshaya_rcs_color_split_alshaya_rcs_product_product_options_to_query(array $options) {
+  array_push($options, ["attribute_code" => "color", "entity_type" => "4"]);
+  return $options;
 }
