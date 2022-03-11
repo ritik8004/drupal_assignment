@@ -59,9 +59,6 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
   /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
   $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
   $product_query_body = $rcs_product_helper->getProductQueryFields();
-
-  /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
-  $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
   $url_key = $rcs_product_helper->getProductUrlKey();
 
   $queries['styled_products'] = [
