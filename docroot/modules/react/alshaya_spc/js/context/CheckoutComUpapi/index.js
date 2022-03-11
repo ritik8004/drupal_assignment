@@ -1,4 +1,5 @@
 import React from 'react';
+import { allowSavedCcForTopUp } from '../../utilities/egift_util';
 
 export const CheckoutComUpapiContext = React.createContext();
 
@@ -42,7 +43,13 @@ class CheckoutComUpapiContextProvider extends React.Component {
 
   hasTokenizedCards = () => {
     const { tokenize, tokenizedCards } = drupalSettings.checkoutComUpapi;
-    return (drupalSettings.user.uid > 0 && tokenize && Object.keys(tokenizedCards).length > 0);
+    return (
+      drupalSettings.user.uid > 0
+      && tokenize
+      && Object.keys(tokenizedCards).length > 0
+      // Condition to not use existing card for egift topup.
+      && allowSavedCcForTopUp()
+    );
   };
 
   updateState = (newState) => {

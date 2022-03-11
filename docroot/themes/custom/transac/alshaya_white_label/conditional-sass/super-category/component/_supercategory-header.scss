@@ -1,6 +1,6 @@
-.super-category-american-eagle {
+.super-category-enabled {
   .branding__menu .block-alshaya-search {
-    @include breakpoint($upto-tablet) {
+    @include breakpoint($only-mobile) {
       display: none;
     }
 
@@ -37,6 +37,10 @@
 
     .block-cart-mini-block .cart-link,
     .block-alshaya-react-mini-cart .cart-link {
+      @include breakpoint($upto-tablet) {
+        height: 2.625rem;
+      }
+
       @include breakpoint($upto-desktop) {
         display: block;
         margin: 0;
@@ -44,18 +48,11 @@
         width: 100%;
         height: 2.5rem;
         background-size: 2.125rem;
+        background-position: center;
 
         html[lang="ar"] & {
           margin-top: 0;
         }
-      }
-
-      @include breakpoint($upto-tablet) {
-        height: 2.625rem;
-      }
-
-      @include breakpoint($upto-desktop) {
-        background-position: center;
       }
     }
 
@@ -88,13 +85,13 @@
     }
 
     #mini-cart-wrapper {
-      @include breakpoint($desktop) {
-        height: 2.25rem;
-      }
-
       @include breakpoint($upto-desktop) {
         float: none;
         margin: 0;
+      }
+
+      @include breakpoint($desktop) {
+        height: 2.25rem;
       }
     }
   }
@@ -107,7 +104,7 @@
 
     .logged-in .toggle--sign,
     .toggle--sign {
-      top: 2.8125rem;
+      top: 3.8125rem;
     }
 
     .main--menu {
@@ -121,35 +118,18 @@
 
     .main--menu ul.menu--one__list,
     .c-menu-secondary {
-      top: 5.7rem;
-
-      a {
-        text-transform: uppercase;
-        font-size: 0.875rem;
-      }
+      top: 6.7rem;
     }
 
     .main--menu ul.menu--one__list {
       padding-bottom: 6.0625rem;
-
-      .menu__link {
-        text-transform: uppercase;
-        font-size: 0.875rem;
-      }
     }
 
     .menu__list-item,
     .back--link {
-      text-transform: uppercase;
-      font-size: 0.875rem;
-
       a {
         padding-bottom: 0.875rem;
       }
-    }
-
-    .menu__in::after {
-      font-size: 1.5rem;
     }
 
     .menu__back {
@@ -163,10 +143,8 @@
     .toggle--sign {
       .one,
       .one.shop {
-        text-transform: uppercase;
         padding-top: 1.1rem;
         padding-bottom: 1.1rem;
-        font-size: 0.75rem;
       }
 
       .one {
@@ -291,21 +269,16 @@
       top: 5.7rem;
     }
 
-    h3 {
-      @include breakpoint($upto-desktop) {
-        text-transform: uppercase;
-      }
-    }
-
     li::after {
       @include breakpoint($upto-desktop) {
-        font-size: 1.5rem;
         #{$right}: -0.1875rem;
       }
     }
   }
 
   .menu--active .mobile--close {
+    top: 6.7rem;
+
     @include breakpoint($only-mobile) {
       #{$left}: calc(100% - 2.8125rem);
     }
@@ -363,7 +336,7 @@
       .acq-mini-cart {
         .cart-link {
           @include breakpoint($only-tablet) {
-            margin-top: -0.5rem;
+            margin-top: 0;
             margin-#{$left}: 0;
           }
         }
@@ -379,12 +352,9 @@
 
   .c-menu-primary {
     .mobile--menu {
-      @include breakpoint($only-mobile) {
-        z-index: 13;;
-      }
-
-      @include breakpoint($only-tablet) {
-        top: 0.6rem !important;
+      @include breakpoint($upto-desktop) {
+        z-index: 11;
+        top: 1.5rem;
       }
     }
   }
@@ -392,7 +362,7 @@
   .menu--active {
     .mobile--close {
       @include breakpoint($only-tablet) {
-        left: 20rem;
+        #{$left}: 17rem;
       }
 
       span {
@@ -420,6 +390,26 @@
           max-width: 21.875rem;
           margin: auto;
           text-align: center;
+        }
+      }
+    }
+  }
+
+  &.menu--open {
+    #block-alshayaalgoliareactautocomplete {
+      @include breakpoint($upto-desktop) {
+        visibility: hidden !important;
+      }
+    }
+  }
+
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .site-brand-home {
+        a {
+          @include breakpoint($desktop) {
+            width: 10rem;
+          }
         }
       }
     }
