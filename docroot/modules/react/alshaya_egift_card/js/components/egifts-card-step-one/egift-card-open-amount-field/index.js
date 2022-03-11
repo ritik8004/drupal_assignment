@@ -6,8 +6,12 @@ export default class EgiftCardOpenAmountField extends React.Component {
     this.state = {
       openAmountMessage: '',
       openAmountInputDisabled: false, // Enable field by default.
-      actionDisable: true, // Disable open amount submit by default.
     };
+  }
+
+  componentDidMount() {
+    const { field } = this.props;
+    field.current.querySelector('button').disabled = true;
   }
 
   /**
@@ -23,11 +27,11 @@ export default class EgiftCardOpenAmountField extends React.Component {
     if (openAmount !== '') {
       // Remove any error message.
       document.getElementById('open-amount-error').innerHTML = '';
-    }
 
-    this.setState({
-      actionDisable: openAmount === '',
-    });
+      // Enable action button.
+      const { field } = this.props;
+      field.current.querySelector('button').disabled = false;
+    }
   }
 
   handleEvent = (e) => {
@@ -118,7 +122,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
 
   render() {
     const { selected, field } = this.props;
-    const { openAmountMessage, actionDisable, openAmountInputDisabled } = this.state;
+    const { openAmountMessage, openAmountInputDisabled } = this.state;
 
     // Get all egift card attributes.
     const attributes = selected.custom_attributes;
@@ -134,10 +138,9 @@ export default class EgiftCardOpenAmountField extends React.Component {
     }
 
     return (
-      <div className="egift-open-amount-wrapper">
+      <div className="egift-open-amount-wrapper" ref={field}>
         <div className="egift-input-textfield-item">
           <input
-            ref={field}
             id="open-amount"
             className="egift-open-amount-field"
             name="egift-open-amount"
@@ -155,7 +158,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
             { drupalSettings.alshaya_spc.currency_config.currency_code }
           </span>
         </div>
-        <button type="button" onClick={this.handleSubmit} disabled={actionDisable} />
+        <button className="open-amount-btn" type="button" onClick={this.handleSubmit} />
         <div className="error egift-error" id="open-amount-error">
           { openAmountMessage }
         </div>

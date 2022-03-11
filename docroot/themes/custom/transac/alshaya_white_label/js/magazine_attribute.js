@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   /**
    * Js to convert to select2Option to transform into boxes from select list.
@@ -416,6 +415,9 @@
                 heightDiff = mainBottom - sideBarTop;
                 sidebarWrapper.addClass('contain');
                 sidebarWrapper.css('top', heightDiff + 'px');
+                $('.c-accordion__title').on('click', function () {
+                  sidebarWrapper.css('top', 'auto');
+                });
               }
             }
 

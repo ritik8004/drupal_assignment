@@ -9,13 +9,14 @@
  * Implements hook_alshaya_performance_preload_alter().
  */
 function alshaya_pbk_transac_alshaya_performance_preload_alter(array &$preload) {
-  $themeHandler = \Drupal::service('theme_handler');
-  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
-  $fonts_directory_path = '/' . $themePath . '/fonts';
-
+  // Preloading font from alshaya_pottery_barn theme.
   $preload[] = [
     'as' => 'style',
-    'href' => $fonts_directory_path . '/alshaya-icons.woff2?12add',
+    'href' => '//fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Open+Sans:wght@300;400;600;700&subset=arabic&display=swap',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => '/themes/custom/transac/alshaya_pottery_barn/fonts/alshaya-icons.woff2?3ajdht',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];

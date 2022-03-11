@@ -3,14 +3,16 @@
     display: block;
 
     .field--name-field-group-title {
-      margin: 2.5rem 0;
+      margin: 5rem 0 2.5rem;
       font-size: 1.75rem;
       font-family: $alshaya-bold;
       text-align: center;
+      line-height: 2.5rem;
 
       @include breakpoint($only-mobile) {
         font-size: 1.25rem;
         line-height: 1.4;
+        margin: 3.5rem 0 2rem;
       }
     }
 
@@ -35,24 +37,22 @@
       font-size: 0.813rem;
       text-transform: none;
       color: $egift-accordion-title;
-      padding: 1rem 2.5rem 1rem 1.5rem;
-      line-height: normal;
       height: auto;
+      line-height: 1.25rem;
+      letter-spacing: 0.65px;
+      padding: 0.9375rem 0;
+      padding-#{$right}: 2.5rem;
+      padding-#{$left}: 1.5rem;
 
       @include breakpoint($only-mobile) {
+        padding: 1.25rem 0;
+        padding-#{$right}: 2.5rem;
         padding-#{$left}: 1rem;
-      }
-
-      html[lang=ar] & {
-        padding: 1rem 1.5rem 1rem 2.5rem;
-
-        @include breakpoint($only-mobile) {
-          padding-right: 1rem;
-        }
+        line-height: 1rem;
       }
 
       @include icon(chevrondown, after) {
-        #{$right}: 0.9375rem;
+        #{$right}: 1.5rem;
         top: 1.5rem;
         font-size: 1.5rem;
         color: $egift-accordion-title;
@@ -60,7 +60,7 @@
 
       &::after {
         @include breakpoint($only-mobile) {
-          #{$right}: 0.625rem;
+          #{$right}: 0.875rem;
         }
       }
 
@@ -75,7 +75,7 @@
           top: 0.6rem;
 
           @include breakpoint($only-mobile) {
-            #{$right}: 0.625rem;
+            #{$right}: 0.875rem;
           }
         }
 
@@ -89,19 +89,14 @@
       ul {
         margin: 0;
         list-style-type: none;
-        padding: 0 2.5rem 1rem 1.5rem;
-        line-height: normal;
+        padding-bottom: 2.1875rem;
+        padding-#{$right}: 2.5rem;
+        padding-#{$left}: 1.5rem;
+        line-height: 1.25rem;
 
         @include breakpoint($only-mobile) {
           padding-#{$left}: 1rem;
-        }
-
-        html[lang=ar] & {
-          padding: 0 1.5rem 1rem 2.5rem;
-
-          @include breakpoint($only-mobile) {
-            padding-right: 1rem;
-          }
+          padding-bottom: 1.5rem;
         }
       }
 

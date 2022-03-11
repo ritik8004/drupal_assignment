@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   // Feature only needed for desktop and if megamenu is present.
   if ($(window).width() > 1023 && $('.block-alshaya-main-menu').length) {

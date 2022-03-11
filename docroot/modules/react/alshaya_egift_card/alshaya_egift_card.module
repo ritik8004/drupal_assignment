@@ -164,7 +164,7 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
   $item = reset($order['items']);
   if ($item['is_virtual']) {
     $build['#order']['name'] = $item['sku'] == 'giftcard_topup'
-      ? t('eGift Card Top-up', [], ['context' => 'egift'])
+      ? t('eGift Card Top up', [], ['context' => 'egift'])
       : t('Alshaya eGift card', [], ['context' => 'egift']);
   }
 
@@ -180,7 +180,7 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
     // Show eGift card image and options from order details.
     if ($product['is_virtual']) {
       $product['name'] = $product['sku'] == 'giftcard_topup'
-        ? t('eGift Card Top-up', [], ['context' => 'egift'])
+        ? t('eGift Card Top up', [], ['context' => 'egift'])
         : t('Alshaya eGift card', [], ['context' => 'egift']);
 
       // Get virtual product image.
@@ -239,7 +239,7 @@ function alshaya_egift_card_alshaya_acm_customer_recent_order_build_alter(array 
       if ($item['is_virtual']) {
         // Set eGift card product name.
         $item['name'] = $item['sku'] == 'giftcard_topup'
-          ? t('eGift Card Top-up', [], ['context' => 'egift'])
+          ? t('eGift Card Top up', [], ['context' => 'egift'])
           : t('Alshaya eGift card', [], ['context' => 'egift']);
         // Set image from order response.
         $item['image'] = [
@@ -330,7 +330,7 @@ function alshaya_egift_card_alshaya_acm_customer_update_order_summary_alter(arra
   // We will display the name of first order item.
   $item = reset($order['items']);
   if ($item['is_virtual']) {
-    $orderRow['name'] = $item['sku'] == 'giftcard_topup' ? t('eGift Card Top-up', [], ['context' => 'egift']) : t('Alshaya eGift card', [],  ['context' => 'egift']);
+    $orderRow['name'] = $item['sku'] == 'giftcard_topup' ? t('eGift Card Top up', [], ['context' => 'egift']) : t('Alshaya eGift card', [],  ['context' => 'egift']);
   }
 }
 

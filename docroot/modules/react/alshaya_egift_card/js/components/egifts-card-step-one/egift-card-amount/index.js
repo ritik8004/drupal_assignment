@@ -25,12 +25,14 @@ const EgiftCardAmount = (props) => {
     });
 
     // Empty open amount field and unlock
-    const openAmountInput = field.current;
+    const openAmountInput = field.current.querySelector('input');
+    const openAmountButton = field.current.querySelector('button');
     if (openAmountInput !== null) {
       openAmountInput.value = '';
       openAmountInput.removeAttribute('readOnly');
       // Remove any error message from open amount.
       document.getElementById('open-amount-error').innerHTML = '';
+      openAmountButton.disabled = true;
     }
 
     // Set target as element as active.
@@ -66,7 +68,7 @@ const EgiftCardAmount = (props) => {
       <ConditionalView condition={labelOption}>
         <div className="egift-card-amount-list-title subtitle-text">
           {
-            Drupal.t('Choose Top-up Amount (@currencyCode)', {
+            Drupal.t('Choose Top up Amount (@currencyCode)', {
               '@currencyCode': getCurrencyCode(),
             }, { context: 'egift' })
           }

@@ -6,7 +6,6 @@
 /* global debounce, dataLayer */
 
 (function ($, Drupal) {
-  'use strict';
 
   var css = document.createElement('style');
   css.type = 'text/css';

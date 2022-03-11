@@ -1,5 +1,4 @@
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.productModalView = {
     attach: function (context) {

@@ -12,7 +12,6 @@
       }
 
       .egift-cart-message-value {
-        direction: ltr;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
@@ -51,6 +50,13 @@
   .egift-order-summary {
     .total-line-item:nth-child(1) {
       color: $pdp_product_special_price_text;
+    }
+  }
+
+  .total-line-item,
+  .hero-total .total-line-item {
+    > span:first-child.paid-with-egift {
+      text-transform: initial;
     }
   }
 }

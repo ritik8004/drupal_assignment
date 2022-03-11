@@ -1,5 +1,4 @@
 (function ($) {
-  'use strict';
 
   var cookie_options = {path: '/', expires: 30, secure: true};
   var language = $.cookie('alshaya_lang');

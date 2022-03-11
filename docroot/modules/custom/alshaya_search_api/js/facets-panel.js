@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
 
   Drupal.behaviors.facetPanel = {
     attach: function (context, settings) {

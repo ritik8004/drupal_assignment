@@ -4,7 +4,6 @@
  */
 
 (function ($) {
-  'use strict';
 
   var replaceState;
 
@@ -106,7 +105,7 @@
         };
 
         // As local storage only supports string key/value pair.
-        Drupal.addItemInLocalStorage(window.location.pathname, storage_value);
+        Drupal.addItemInLocalStorage(window.location.pathname, storage_details);
       });
     }
   };

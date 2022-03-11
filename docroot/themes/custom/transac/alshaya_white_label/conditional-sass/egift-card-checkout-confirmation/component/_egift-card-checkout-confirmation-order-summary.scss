@@ -19,6 +19,8 @@
         background: transparent;
         direction: ltr !important;
         text-align: $left;
+        -webkit-text-fill-color: $egift-checkout-card-number;
+        opacity: 1;
 
         html[lang=ar] & {
           max-width: 10rem;
@@ -28,11 +30,6 @@
           max-width: 7.5rem;
           font-size: 0.6875rem;
         }
-
-        @include breakpoint($only-mobile) {
-          -webkit-text-fill-color: $egift-checkout-card-number;
-          opacity: 1;
-        }
       }
     }
   }
@@ -40,6 +37,13 @@
   .egift-order-summary {
     .total-line-item:nth-child(1) {
       color: $pdp_product_special_price_text;
+    }
+  }
+
+  .total-line-item,
+  .hero-total .total-line-item {
+    > span:first-child.paid-with-egift {
+      text-transform: initial;
     }
   }
 }
@@ -66,6 +70,15 @@
       font-weight: normal;
       margin-bottom: 0.3125rem;
       color: $spc-checkout-order-detail-label;
+    }
+  }
+
+  .spc-order-summary-item {
+    .spc-label {
+      &.spc-topup-label,
+      &.spc-egift-label {
+        text-transform: initial;
+      }
     }
   }
 }

@@ -9,7 +9,6 @@
 Drupal.alshayaFormError = Drupal.alshayaFormError || {};
 
 (function ($, Drupal) {
-'use strict';
 
   // Focus on first error.
   $.fn.firstErrorFocus = function (arg, scroll) {
