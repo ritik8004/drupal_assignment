@@ -9,22 +9,30 @@ ignoredDirs=( "alshaya_example_subtheme" "node_modules" "gulp-tasks")
 
 # Determine if we are on Github Actions.
 if [[ $GITHUB_ACTIONS == "true" ]]; then
-  # Fetch the last commit from git log.
-  log=$(git log -n 1)
+
+  # Fetch the last commit SHA from git log.
+  commitHash=$(git rev-parse HEAD)
+
+  # Fetch parents for the commit hash.
+  parents=$(git show --no-patch --format="%P" ${commitHash})
 
   # Pattern for Merge commit.
-  re="Merge: ([abcdef0-9]{7,10}) ([abcdef0-9]{7,10})"
+  re="([a-f0-9]{40}) ([a-f0-9]{40})"
 
   # Adding debugging echo. To be removed after fixing.
   currBranch=$(git rev-parse --abbrev-ref HEAD)
   echo "Current branch: $currBranch"
   echo "Next, last merge commit details should be shown."
-  echo "$log"
+  echo "Current commit hash $commitHash"
+  echo "Parents of current hash $parents"
 
   # Check if last commit was a merge commit.
-  if [[ $log =~ $re ]]; then
+  if [[ $parents =~ $re ]]; then
+
     # Get a list of updated files in this merge commit.
-    diff=$(git diff ${BASH_REMATCH[1]} ${BASH_REMATCH[2]} --name-only)
+    diff=$(git log -m -1 --name-only --pretty="format:" ${commitHash})
+    echo "File changes are..."
+    echo "$diff"
 
     # Looping through theme types (transac, non-transac etc.)
     for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
