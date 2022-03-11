@@ -600,10 +600,14 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ],
   ];
 
+  // @todo Use this for add to bag feature now. Later remove to use
+  // single_product_by_sku.
+  $query_fields['product_by_sku'] = $query_fields['single_product_by_sku'];
+
   // The query to fetch multiple products by using the sku value as filter.
   $query_fields['multiple_products_by_sku'] = [
     'query' => [
-      'query($sku: [String])' => [
+      'query($skus: [String])' => [
         'products(filter: {sku: {in: $skus}})' => $product_query_fields,
       ],
     ],

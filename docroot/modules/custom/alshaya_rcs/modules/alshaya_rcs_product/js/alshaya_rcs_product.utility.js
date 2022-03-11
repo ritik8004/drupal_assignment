@@ -667,7 +667,7 @@
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('single_product_by_sku', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
   };
@@ -732,7 +732,7 @@
 
     // Fetch the product data for the given skus which also saves them to the
     // static storage.
-    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: skuValues, op: 'in'});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('multiple_products_by_sku', {sku: skuValues});
 
     // Now store the product data to local storage.
     Object.entries(skus).forEach(function ([ parentSku, sku ]) {

@@ -123,6 +123,8 @@ function alshaya_rcs_color_split_alshaya_rcs_product_query_fields_alter(array &$
   // Remove the "attr_" prefix.
   $color_code_attribute = str_replace('attr_', '', $color_code_attribute);
 
+  array_push($fields['items'], 'style_code');
+
   array_push(
     $fields['items']['... on ConfigurableProduct']['variants']['product'],
     AlshayaColorSplitConfig::get('attribute_code_color_id'),
