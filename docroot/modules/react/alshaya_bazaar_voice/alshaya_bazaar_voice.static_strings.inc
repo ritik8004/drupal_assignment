@@ -314,5 +314,9 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'invalid_pie_user_details',
       'value' => t('Please login with the email address used to purchase this product to write a review.'),
     ],
+    [
+      'key' => 'text_input_lang_error',
+      'value' => t('Please use a valid language.'),
+    ],
   ];
 }
