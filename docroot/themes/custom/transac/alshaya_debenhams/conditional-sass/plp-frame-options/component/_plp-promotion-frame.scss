@@ -1,6 +1,7 @@
 #alshaya-algolia-search,
 #alshaya-algolia-plp,
-#top-results {
+#top-results,
+#my-wishlist {
   .c-products__item.promotion-frame {
     .sku-promotion-text--ellipse {
       border: 0;
@@ -12,6 +13,12 @@
       .promotions {
         margin: 0.5rem 1rem;
         justify-content: flex-start;
+      }
+    }
+
+    .addtobag-button-container {
+      @include breakpoint($only-mobile) {
+        margin-top: 1rem;
       }
     }
   }
