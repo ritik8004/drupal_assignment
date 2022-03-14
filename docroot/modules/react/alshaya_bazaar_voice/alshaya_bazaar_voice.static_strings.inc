@@ -316,7 +316,7 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'text_input_lang_error',
-      'value' => t('Please use a valid language.'),
+      'value' => t('Please complete your review in the same language as your selected view to proceed.'),
     ],
   ];
 }
