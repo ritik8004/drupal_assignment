@@ -47,7 +47,7 @@ export class InfoPopUp extends React.Component {
               <div className="field-content">
                 <div className="hours--wrapper selector--hours">
                   <div>
-                    <div className={open ? 'hours--label open' : 'hours--label open'} onClick={this.toggleOpenClass}>
+                    <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
                       {Drupal.t('Opening Hours')}
                     </div>
                     <div className="open--hours">
@@ -66,11 +66,11 @@ export class InfoPopUp extends React.Component {
                   <div>
                     <a
                       className="device__desktop"
-                      onClick={(store) => this.getDirection(store)}
+                      onClick={(item) => this.getDirection(item)}
                     >
                       {Drupal.t('Get directions')}
                     </a>
-                    <a className="device__tablet" onClick={(store) => this.getDirection(store)}>
+                    <a className="device__tablet" onClick={(item) => this.getDirection(item)}>
                       {Drupal.t('Get directions')}
                     </a>
                   </div>

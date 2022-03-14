@@ -17,3 +17,25 @@ function alshaya_geolocation_update_8001() {
     drupal_flush_all_caches();
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enables geolocation_google_maps module and update API key.
+ */
+function alshaya_geolocation_update_8002() {
+  // Install module if not installed.
+  if (!\Drupal::service('module_handler')->moduleExists('geolocation_google_maps')) {
+    \Drupal::service('module_installer')->install(['geolocation_google_maps']);
+  }
+  // Install the latest map API key.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['geolocation_google_maps.settings'],
+    'alshaya_geolocation',
+    'optional'
+  );
+  // Delete storefinder view.
+  \Drupal::service('config.factory')->getEditable('views.view.stores_finder')->delete();
+  drupal_flush_all_caches();
+}

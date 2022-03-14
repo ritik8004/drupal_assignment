@@ -346,7 +346,7 @@ class AlshayaSpcController extends ControllerBase {
 
     $spc_cnc_config = $this->config('alshaya_spc.click_n_collect');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
-    $geolocation_config = $this->config('geolocation.settings');
+    $geolocation_config = $this->config('geolocation_google_maps.settings');
     $collection_points_config = $this->config('alshaya_spc.collection_points');
 
     $cache_tags = Cache::mergeTags(
