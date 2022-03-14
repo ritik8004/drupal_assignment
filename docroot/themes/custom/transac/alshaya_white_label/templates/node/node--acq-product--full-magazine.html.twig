@@ -138,6 +138,12 @@
             <div class="order-quantity-limit-message"></div>
           {% endif %}
         </div>
+
+        {% if content.skuNoteligibleForOnlineReturn is defined and content.skuNoteligibleForOnlineReturn %}
+          <div class="online-returns-not-eligibile-message">
+            {{ 'Not eligible for Return'|t }}
+          </div>
+        {% endif %}
       </div>
     {% endblock %}
 

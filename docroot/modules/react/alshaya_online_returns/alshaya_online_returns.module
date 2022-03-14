@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Contains alshaya_online_returns.module.
+ */
+
+use Drupal\acq_commerce\SKUInterface;
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_online_returns_preprocess_node(&$variables) {
+  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
+    $variables['online_returns_enabled'] = \Drupal::service('alshaya_online_returns.online_returns_helper')->isOnlineReturnsEnabled();
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_online_returns_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  if (!$onlineReturnsHelper->isOnlineReturnsEnabled() && $context !== 'pdp') {
+    return;
+  }
+
+  // @todo Cross-check this once actual data is received from MDC.
+  $build['skuNoteligibleForOnlineReturn']['#markup'] = !$onlineReturnsHelper->isSkuReturnable($sku);
+}
