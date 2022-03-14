@@ -69,8 +69,14 @@ export default class EgiftCardOpenAmountField extends React.Component {
    * Check if number is positive integer.
    */
   isAmount = (str) => {
-    const n = Math.floor(Number(str));
-    return n !== Infinity && String(n) === str && n >= 0;
+    const n = Number(str);
+    // If not valid number like string or anything.
+    if (Number.isNaN(n)) {
+      return false;
+    }
+
+    // Checks if number greater than 0 and integer.
+    return n > 0 && Number.isInteger(n);
   };
 
   /**
