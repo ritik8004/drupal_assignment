@@ -264,6 +264,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
     $build['bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   }
   $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
+  $build['#attached']['library'][] = 'alshaya_acm_product/acq_product_info';
 }
 
 /**
@@ -297,6 +298,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   }
   $build['#bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
+  $build['#attached']['library'][] = 'alshaya_acm_product/acq_product_info';
 }
 
 /**
