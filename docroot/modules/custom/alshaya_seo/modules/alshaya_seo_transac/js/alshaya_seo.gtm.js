@@ -1334,8 +1334,9 @@
    *
    */
   function isPageTypeListing() {
-    return ($('body').attr('gtm-list-name').indexOf('PLP') !== -1
-      || $('body').attr('gtm-list-name').indexOf('Promotion') !== -1);
+    var gtmList = $('body').attr('gtm-list-name');
+    return gtmList !== undefined
+      && (gtmList.indexOf('PLP') !== -1 || gtmList.indexOf('Promotion') !== -1);
   }
 
   /**
