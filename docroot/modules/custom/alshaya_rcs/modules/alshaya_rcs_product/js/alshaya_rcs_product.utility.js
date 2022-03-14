@@ -982,8 +982,8 @@
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty.
-    if (typeof e.detail.result === 'undefined'
-      || typeof e.detail.result.promotions === 'undefined') {
+    if (!Drupal.hasValue(e.detail.result)
+      || !Drupal.hasValue(e.detail.result.promotions)) {
       return null;
     }
 

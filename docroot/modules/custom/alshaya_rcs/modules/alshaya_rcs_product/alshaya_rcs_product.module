@@ -1035,12 +1035,13 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
         'id' => 'rcs-ph-order_teaser',
         'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
         'data-param-item-skus' => Json::encode(array_unique($itemSkus)),
+        'data-rcs-dependency' => 'none',
       ],
     ],
   ];
 
   // Attach the color split config in the build array using alter hook.
-  \Drupal::moduleHandler()->alter('alshaya_rcs_product_order_build_alter', $build);
+  \Drupal::moduleHandler()->alter('alshaya_rcs_product_order_build', $build);
   _alshaya_rcs_product_get_product_image_config($build);
   _alshaya_rcs_product_get_cnc_config($build);
 
