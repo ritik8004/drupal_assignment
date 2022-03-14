@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Popup from 'reactjs-popup';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import {
   addShippingInCart, removeFullScreenLoader,
@@ -10,6 +10,7 @@ import {
 } from '../../../utilities/address_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import OrderBookingCalendar from '../order-booking/calendar';
 
 export default class ShippingMethod extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class ShippingMethod extends React.Component {
     const { selected } = this.props;
     this.state = {
       selectedOption: selected,
+      isModalOpen: false,
     };
   }
 
@@ -135,9 +137,85 @@ export default class ShippingMethod extends React.Component {
     }
   };
 
+  /**
+   * Array of available_time_slots from get time slot API.
+   *
+   * @returns {array}
+   *  Array of time slots object with date.
+   */
+  getHFDBookingTimeSlots = () => (
+    // Value of available_time_slots from get time slot API.
+    // @todo: need to make it dynamic when APIs are available.
+    [
+      {
+        appointment_date: '2022-02-27',
+        appointment_slots: [
+          {
+            start_time: '8:00 AM',
+            end_time: '9:00 AM',
+            appointment_date_time: '2022-02-27T08:00:00.000Z',
+            resource_external_id: 'MorningShiftZone1KSA',
+          },
+          {
+            start_time: '3:00 PM',
+            end_time: '4:00 PM',
+            appointment_date_time: '2022-02-27T15:00:00.000Z',
+            resource_external_id: 'EveningShiftZone1KSA',
+          },
+        ],
+      },
+      {
+        appointment_date: '2022-02-28',
+        appointment_slots: [
+          {
+            start_time: '8:00 AM',
+            end_time: '9:00 AM',
+            appointment_date_time: '2022-02-28T08:00:00.000Z',
+            resource_external_id: 'MorningShiftZone1KSA',
+          },
+        ],
+      },
+      {
+        appointment_date: '2022-03-01',
+        appointment_slots: [
+          {
+            start_time: '8:00 AM',
+            end_time: '9:00 AM',
+            appointment_date_time: '2022-03-01T08:00:00.000Z',
+            resource_external_id: 'MorningShiftZone1KSA',
+          },
+          {
+            start_time: '1:00 PM',
+            end_time: '2:00 PM',
+            appointment_date_time: '2022-03-01T08:00:00.000Z',
+            resource_external_id: 'AfernoonShiftZone1KSA',
+          },
+        ],
+      },
+    ]
+  );
+
+  /**
+   * Open delivery schedule calendar popup.
+   */
+  openScheduleDeliveryModal = () => {
+    this.setState({
+      isModalOpen: true,
+    });
+  };
+
+  /**
+   * Close delivery schedule calendar popup.
+   */
+  closeScheduleDeliveryModal = () => {
+    this.setState({
+      isModalOpen: false,
+    });
+  };
+
   render() {
     const { method } = this.props;
-    const { selectedOption } = this.state;
+    const { selectedOption, isModalOpen } = this.state;
     const methodClass = method.available ? 'active' : 'disabled';
     let price = Drupal.t('FREE');
     if (method.amount > 0) {
@@ -157,6 +235,33 @@ export default class ShippingMethod extends React.Component {
         <label className="radio-sim radio-label">
           <span className="carrier-title">{method.carrier_title}</span>
           <span className="method-title">{method.method_title}</span>
+          {/**
+           * @todo: Need to change this while working on checkout page till
+           * line number 262.
+           */}
+          <span
+            className="method-text"
+            onClick={() => this.openScheduleDeliveryModal()}
+          >
+            {Drupal.t('Change Schedule')}
+          </span>
+          <Popup
+            className="schedule-delivery-calendar-popup"
+            open={isModalOpen}
+            closeOnDocumentClick={false}
+            closeOnEscape={false}
+          >
+            <>
+              {/**
+               * @todo: Change the selectDate with first slot held.
+               */}
+              <OrderBookingCalendar
+                selectDate="2022-02-27T08:00:00.000Z"
+                bookingSlots={this.getHFDBookingTimeSlots()}
+                closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
+              />
+            </>
+          </Popup>
           <span className="spc-price">{price}</span>
         </label>
         <ConditionalView condition={!method.available}>
