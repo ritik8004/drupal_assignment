@@ -44,7 +44,15 @@ var config = {
             '@babel/react',{
               'plugins': ['@babel/plugin-proposal-class-properties']}]
         }
-      }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(woff|woff2|ttf|otf|eot|svg|gif)$/,
+        use: ['file-loader'],
+      },
     ]
   }
 };
