@@ -1,6 +1,4 @@
 import React from 'react';
-import Popup from 'reactjs-popup';
-import PriceElement from '../../../utilities/special-price/PriceElement';
 import {
   addShippingInCart, removeFullScreenLoader,
   showFullScreenLoader,
@@ -8,9 +6,8 @@ import {
 import {
   prepareAddressDataForShipping,
 } from '../../../utilities/address_util';
-import ConditionalView from '../../../common/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import OrderBookingCalendar from '../order-booking/calendar';
+import ShippingMethodCommon from './components/Common';
 
 export default class ShippingMethod extends React.Component {
   constructor(props) {
@@ -18,7 +15,6 @@ export default class ShippingMethod extends React.Component {
     const { selected } = this.props;
     this.state = {
       selectedOption: selected,
-      isModalOpen: false,
     };
   }
 
@@ -137,39 +133,10 @@ export default class ShippingMethod extends React.Component {
     }
   };
 
-  /**
-   * Open delivery schedule calendar popup.
-   */
-  openScheduleDeliveryModal = () => {
-    /**
-     * @todo: Before opening the booking modal popup, we need to fetch the
-     * available booking dates and slots from the backend API and pass in props.
-     * It can be done later when doing the API intergrations. We need to be sure
-     * to open the modal only when API returns proper response with data else
-     * do nothing to avoid any impact on the checkout process.
-     */
-    this.setState({
-      isModalOpen: true,
-    });
-  };
-
-  /**
-   * Close delivery schedule calendar popup.
-   */
-  closeScheduleDeliveryModal = () => {
-    this.setState({
-      isModalOpen: false,
-    });
-  };
-
   render() {
-    const { method } = this.props;
-    const { selectedOption, isModalOpen } = this.state;
+    const { method, cart } = this.props;
+    const { selectedOption } = this.state;
     const methodClass = method.available ? 'active' : 'disabled';
-    let price = Drupal.t('FREE');
-    if (method.amount > 0) {
-      price = <PriceElement amount={method.amount} />;
-    }
     return (
       <div className={`shipping-method ${methodClass}`} onClick={() => this.changeShippingMethod(method)}>
         <input
@@ -181,40 +148,11 @@ export default class ShippingMethod extends React.Component {
           name="shipping-method"
         />
 
-        <label className="radio-sim radio-label">
-          <span className="carrier-title">{method.carrier_title}</span>
-          <span className="method-title">{method.method_title}</span>
-          {/**
-           * @todo: Need to change this while working on checkout page till
-           * line number 262.
-           */}
-          <span
-            className="method-text"
-            onClick={() => this.openScheduleDeliveryModal()}
-          >
-            {Drupal.t('Change Schedule')}
-          </span>
-          <Popup
-            className="schedule-delivery-calendar-popup"
-            open={isModalOpen}
-            closeOnDocumentClick={false}
-            closeOnEscape={false}
-          >
-            <>
-              {/**
-               * @todo: Change the selectDate with first slot held.
-               */}
-              <OrderBookingCalendar
-                selectedDate="2022-02-27T08:00:00.000Z"
-                closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
-              />
-            </>
-          </Popup>
-          <span className="spc-price">{price}</span>
-        </label>
-        <ConditionalView condition={!method.available}>
-          <div className="method-error-message">{method.error_message}</div>
-        </ConditionalView>
+        <ShippingMethodCommon
+          cart={cart}
+          method={method}
+          selected={selectedOption === method.method_code}
+        />
       </div>
     );
   }
