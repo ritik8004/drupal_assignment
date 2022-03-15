@@ -183,7 +183,7 @@ export default class OrderBookingCalendar extends React.Component {
     // the calendar.
     if (typeof bookingSlots !== 'undefined'
       && bookingSlots.length > 0) {
-      const lastSlotIndex = parseInt(bookingSlots.length) - 1;
+      const lastSlotIndex = parseInt(bookingSlots.length, 10) - 1;
       return new Date(bookingSlots[lastSlotIndex].appointment_date);
     }
 
@@ -315,13 +315,17 @@ export default class OrderBookingCalendar extends React.Component {
                   onClick={() => ((drupalSettings.path.currentLanguage === 'en')
                     ? this.decreaseMonth()
                     : this.increaseMonth())}
-                >{'<'}</span>
+                >
+                  {'<'}
+                </span>
                 <span
                   className="datepicker-month-right"
                   onClick={() => ((drupalSettings.path.currentLanguage === 'en')
                     ? this.increaseMonth()
                     : this.decreaseMonth())}
-                >{'>'}</span>
+                >
+                  {'>'}
+                </span>
               </div>
             </Swipeable>
             <div className="timeslots-selection-wrapper" dir={dir}>
