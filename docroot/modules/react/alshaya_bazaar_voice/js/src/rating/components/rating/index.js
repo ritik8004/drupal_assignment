@@ -61,6 +61,7 @@ export default class Rating extends React.Component {
     } = this.props;
 
     const renderLink = renderLinkDirectly || false;
+    const reviewedByCurrentUser = userDetails.productReview || false;
 
     // Reviews data is emtpy.
     if (reviewsData === '') {
@@ -79,6 +80,7 @@ export default class Rating extends React.Component {
         </div>
       );
     }
+
     return (
       <div className="inline-rating">
         <ConditionalView condition={renderLink}>
@@ -88,7 +90,7 @@ export default class Rating extends React.Component {
         </ConditionalView>
         <ConditionalView condition={!renderLink}>
           <WriteReviewButton
-            reviewedByCurrentUser={userDetails.productReview !== null}
+            reviewedByCurrentUser={reviewedByCurrentUser}
             newPdp={renderLink}
           />
         </ConditionalView>
