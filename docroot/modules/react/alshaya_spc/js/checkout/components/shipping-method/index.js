@@ -138,67 +138,16 @@ export default class ShippingMethod extends React.Component {
   };
 
   /**
-   * Array of available_time_slots from get time slot API.
-   *
-   * @returns {array}
-   *  Array of time slots object with date.
-   */
-  getHFDBookingTimeSlots = () => (
-    // Value of available_time_slots from get time slot API.
-    // @todo: need to make it dynamic when APIs are available.
-    [
-      {
-        appointment_date: '2022-02-27',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-02-27T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-          {
-            start_time: '3:00 PM',
-            end_time: '4:00 PM',
-            appointment_date_time: '2022-02-27T15:00:00.000Z',
-            resource_external_id: 'EveningShiftZone1KSA',
-          },
-        ],
-      },
-      {
-        appointment_date: '2022-02-28',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-02-28T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-        ],
-      },
-      {
-        appointment_date: '2022-03-01',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-03-01T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-          {
-            start_time: '1:00 PM',
-            end_time: '2:00 PM',
-            appointment_date_time: '2022-03-01T08:00:00.000Z',
-            resource_external_id: 'AfernoonShiftZone1KSA',
-          },
-        ],
-      },
-    ]
-  );
-
-  /**
    * Open delivery schedule calendar popup.
    */
   openScheduleDeliveryModal = () => {
+    /**
+     * @todo: Before opening the booking modal popup, we need to fetch the
+     * available booking dates and slots from the backend API and pass in props.
+     * It can be done later when doing the API intergrations. We need to be sure
+     * to open the modal only when API returns proper response with data else
+     * do nothing to avoid any impact on the checkout process.
+     */
     this.setState({
       isModalOpen: true,
     });
@@ -256,8 +205,7 @@ export default class ShippingMethod extends React.Component {
                * @todo: Change the selectDate with first slot held.
                */}
               <OrderBookingCalendar
-                selectDate="2022-02-27T08:00:00.000Z"
-                bookingSlots={this.getHFDBookingTimeSlots()}
+                selectedDate="2022-02-27T08:00:00.000Z"
                 closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
               />
             </>

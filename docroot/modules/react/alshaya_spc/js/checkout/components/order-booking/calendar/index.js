@@ -9,18 +9,84 @@ import ar from '../../../../../../node_modules/date-fns/locale/ar-SA';
 export default class OrderBookingCalendar extends React.Component {
   constructor(props) {
     super(props);
-    const { selectDate } = this.props;
+    const { selectedDate } = this.props;
 
     this.state = {
-      selectDate: new Date(selectDate),
-      setOpenDate: new Date(selectDate),
-      orderBookingDates: this.getOrderBookingDates(),
-      orderBookingTimeSlots: this.getTimeSlotsForDate(selectDate),
+      // selectedDate is used for keeping the current selected booking date in
+      // calendar. This will change upon users selection/change of the date
+      // from calendar. We will always receive this from parent component.
+      selectedDate: new Date(selectedDate),
+      // setOpenDate is used to keep the first opening date in state and will
+      // change only with swipe actions to change the month.
+      setOpenDate: new Date(selectedDate),
+      // This variable keep the available time slots for the current selected
+      // date in calendar and will change on each available booking date change.
+      availableTimeSlots: this.getTimeSlotsForDate(selectedDate),
     };
   }
 
   /**
-   * Return date format to be used in calendar.
+   * Array of available_time_slots from get time slot API. We will get this
+   * in props once the API integration is done.
+   *
+   * @returns {array}
+   *  Array of time slots object with date.
+   */
+  getHFDBookingTimeSlots = () => (
+    // Value of available_time_slots from get time slot API.
+    // @todo: need to make it dynamic when APIs are available.
+    [
+      {
+        appointment_date: '2022-02-27',
+        appointment_slots: [
+          {
+            start_time: '8:00 AM',
+            end_time: '9:00 AM',
+            appointment_date_time: '2022-02-27T08:00:00.000Z',
+            resource_external_id: 'MorningShiftZone1KSA',
+          },
+          {
+            start_time: '3:00 PM',
+            end_time: '4:00 PM',
+            appointment_date_time: '2022-02-27T15:00:00.000Z',
+            resource_external_id: 'EveningShiftZone1KSA',
+          },
+        ],
+      },
+      {
+        appointment_date: '2022-02-28',
+        appointment_slots: [
+          {
+            start_time: '8:00 AM',
+            end_time: '9:00 AM',
+            appointment_date_time: '2022-02-28T08:00:00.000Z',
+            resource_external_id: 'MorningShiftZone1KSA',
+          },
+        ],
+      },
+      {
+        appointment_date: '2022-03-01',
+        appointment_slots: [
+          {
+            start_time: '8:00 AM',
+            end_time: '9:00 AM',
+            appointment_date_time: '2022-03-01T08:00:00.000Z',
+            resource_external_id: 'MorningShiftZone1KSA',
+          },
+          {
+            start_time: '1:00 PM',
+            end_time: '2:00 PM',
+            appointment_date_time: '2022-03-01T08:00:00.000Z',
+            resource_external_id: 'AfernoonShiftZone1KSA',
+          },
+        ],
+      },
+    ]
+  );
+
+  /**
+   * Date format to be used for parsing the dates and used in data manipulation.
+   * For ex we are using date format to match the two dates in below functions.
    *
    * @returns {string}
    *  String date format.
@@ -30,10 +96,10 @@ export default class OrderBookingCalendar extends React.Component {
   /**
    * Set the calendar date and get time slots for selected date.
    */
-  datePickerChanged = (date) => {
+  onDateChanged = (date) => {
     this.setState({
-      selectDate: new Date(date),
-      orderBookingTimeSlots: this.getTimeSlotsForDate(date),
+      selectedDate: new Date(date),
+      availableTimeSlots: this.getTimeSlotsForDate(date),
     });
   };
 
@@ -51,27 +117,21 @@ export default class OrderBookingCalendar extends React.Component {
     });
   };
 
-  handleMonthChange = (monthBeingViewed) => {
-    this.setState({
-      setOpenDate: new Date(moment(monthBeingViewed)),
-    });
-  };
-
   /**
    * Prepare a array of date slots objects to show in calendar.
    *
    * @returns {array}
    *  Array of available date slots.
    */
-  getOrderBookingDates = () => {
-    let orderBookingDates = [];
-    const { bookingSlots } = this.props;
+  getAvailableBookingDates = () => {
+    let bookingDates = [];
+    const bookingSlots = this.getHFDBookingTimeSlots();
     if (typeof bookingSlots !== 'undefined' && bookingSlots.length > 0) {
-      orderBookingDates = bookingSlots.map((daySlot) => (
+      bookingDates = bookingSlots.map((daySlot) => (
         new Date(daySlot.appointment_date)
       ));
     }
-    return orderBookingDates;
+    return bookingDates;
   };
 
   /**
@@ -85,39 +145,41 @@ export default class OrderBookingCalendar extends React.Component {
    */
   getTimeSlotsForDate = (date) => {
     let timeSlotsForDate = [];
-    const { bookingSlots } = this.props;
-    bookingSlots.forEach((daySlot) => {
-      // Get the time slots if the given date is matched.
-      if (moment(date).format(this.getDateFormat())
-        === moment(daySlot.appointment_date).format(this.getDateFormat())) {
-        timeSlotsForDate = daySlot.appointment_slots;
-      }
-    });
+    const bookingSlots = this.getHFDBookingTimeSlots();
+    if (typeof bookingSlots !== 'undefined' && bookingSlots.length > 0) {
+      bookingSlots.forEach((daySlot) => {
+        // Get the time slots if the given date is matched.
+        if (moment(date).format(this.getDateFormat())
+          === moment(daySlot.appointment_date).format(this.getDateFormat())) {
+          timeSlotsForDate = daySlot.appointment_slots;
+        }
+      });
+    }
     return timeSlotsForDate;
   };
 
   render() {
     const {
-      selectDate,
+      selectedDate,
       setOpenDate,
-      orderBookingDates,
-      orderBookingTimeSlots,
+      availableTimeSlots,
     } = this.state;
     const { closeScheduleDeliveryModal } = this.props;
 
-    // Set language for datepicker translation.
+    // Set language for datepicker translation. Default to english. If it's not
+    // english then change to arabic.
+    registerLocale('en', en);
     if (drupalSettings.path.currentLanguage !== 'en') {
       registerLocale('ar', ar);
-    } else {
-      registerLocale('en', en);
     }
+
     // Set wrapper element direction for arabic.
     const dir = (drupalSettings.path.currentLanguage !== 'en') ? 'rtl' : 'ltr';
 
     // Prepare time slots list items for the current selected date in calendar.
     let timeSlotListItems = null;
-    if (orderBookingTimeSlots.length > 0) {
-      timeSlotListItems = orderBookingTimeSlots.map((timeSlot) => {
+    if (availableTimeSlots.length > 0) {
+      timeSlotListItems = availableTimeSlots.map((timeSlot) => {
         let element = null;
         element = (
           <li
@@ -136,7 +198,7 @@ export default class OrderBookingCalendar extends React.Component {
         <div className="schedule-delivery-datepicker__wrapper">
           <div className="schedule-delivery-datepicker__header">
             <span className="popup-heading">
-              {Drupal.t('Schedule Your Delivery')}
+              {Drupal.t('Schedule Your Delivery', {}, { context: 'online booking' })}
             </span>
             <span
               className="popup-close-icon"
@@ -163,6 +225,11 @@ export default class OrderBookingCalendar extends React.Component {
                     <>
                       <div className="datepicker-heading">{Drupal.t('Delivery Date')}</div>
                       <div className="datepicker-month-calendar-sides">
+                        {/**
+                         * Customise the calendar header to show previous,
+                         * current and next months name in the header with
+                         * actions to switch month previous and next.
+                         */}
                         <span
                           className="month-calendar-sides previous"
                           onClick={decreaseMonth}
@@ -183,19 +250,18 @@ export default class OrderBookingCalendar extends React.Component {
                       </div>
                     </>
                   )}
-                  selected={selectDate}
+                  selected={selectedDate}
                   inline
-                  onSelect={(date) => this.datePickerChanged(date)}
+                  onSelect={(date) => this.onDateChanged(date)}
                   locale={(drupalSettings.path.currentLanguage !== 'en') ? 'ar' : 'en'}
                   openToDate={setOpenDate}
-                  onMonthChange={this.handleMonthChange}
                   disabledKeyboardNavigation
-                  includeDates={orderBookingDates}
+                  includeDates={this.getAvailableBookingDates()}
                 />
               </div>
             </Swipeable>
             <div className="timeslots-selection-wrapper" dir={dir}>
-              <div className="timeslots-selection-heading">{Drupal.t('Delivery Time')}</div>
+              <div className="timeslots-selection-heading">{Drupal.t('Delivery Time', {}, { context: 'online booking' })}</div>
               <div className="timeslots-selection-options">
                 <ul className="timeslots-options-list">{timeSlotListItems}</ul>
               </div>
@@ -206,7 +272,7 @@ export default class OrderBookingCalendar extends React.Component {
               type="button"
               className="schedule-delivery-datepicker-submit"
             >
-              {Drupal.t('Apply Date & Time')}
+              {Drupal.t('Apply Date & Time', {}, { context: 'online booking' })}
             </button>
           </div>
         </div>
