@@ -756,18 +756,19 @@
       return staticDataStore['attrLabels'][attrName][attrValue];
     }
 
-    const response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option', { attributeCode: attrName });
-    allOptionsForAttribute = {};
-
+    const response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
     // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata.items[0].attribute_options.forEach(function (option) {
-      allOptionsForAttribute[option.value] = option.label;
+    response.data.customAttributeMetadata.items.forEach(function (option) {
+      allOptionsForAttribute = {};
+      option.attribute_options.forEach(function (optionValue) {
+        allOptionsForAttribute[optionValue.value] = optionValue.label;
+      })
+      // Set to static storage.
+      staticDataStore['attrLabels'][option.attribute_code] = allOptionsForAttribute;
     });
 
-    // Set to static storage.
-    staticDataStore['attrLabels'][attrName] = allOptionsForAttribute;
-
-    return allOptionsForAttribute[attrValue];
+    // Return the label.
+    return staticDataStore['attrLabels'][attrName][attrValue];
   };
 
   /**

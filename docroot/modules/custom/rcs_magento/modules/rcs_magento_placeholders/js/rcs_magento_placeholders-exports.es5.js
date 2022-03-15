@@ -96,13 +96,10 @@ exports.getEntity = async function getEntity(langcode) {
       if (response && response.data.products.total_count) {
         // Store product data in static storage.
         result = response.data.products.items[0];
+        // Set product data to static storage.
         RcsPhStaticStorage.set('product_' + result.sku, result);
-
-        // Store options data in static storage.
-        response.data.customAttributeMetadata.items.forEach(function eachOption(option) {
-          const staticKey = `product_options_${option.attribute_code}`;
-          RcsPhStaticStorage.set(staticKey, {data: {customAttributeMetadata: {items: [option]}}});
-        });
+        // Set product options data to static storage.
+        RcsPhStaticStorage.set('product_options', {data: {customAttributeMetadata: response.data.customAttributeMetadata}});
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -354,7 +351,7 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
       break;
 
     case 'product-option':
-      const staticKey = `product_options_${params.attributeCode}`;
+      const staticKey = `product_options`;
       const staticOption = RcsPhStaticStorage.get(staticKey);
 
       if (staticOption !== null) {
