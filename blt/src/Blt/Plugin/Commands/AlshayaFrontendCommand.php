@@ -233,11 +233,64 @@ class AlshayaFrontendCommand extends BltTasks {
         }
       }
 
-      $tasks->exec("cd $dir; $command");
+      $build = FALSE;
+      // Checking if build is needed when inside GitHub actions and push event
+      // is triggered. We build all react modules in case of tag creation, or
+      // we are outside GitHub actions.
+      if (getenv('GITHUB_ACTIONS') == 'true' && getenv('GITHUB_EVENT_NAME') == 'push') {
+        $reactChanges = getenv('CHANGED_REACT_FILES');
+        // Build if change in common (modules/react/js) folder.
+        if (strpos($reactChanges, 'modules/react/js') > 0) {
+          $build = TRUE;
+        }
+        // Build if theme is changed and tracked in CHANGED_REACT_FILES
+        // env variable.
+        elseif (strpos($reactChanges, 'react/' . $file->getRelativePath()) > 0) {
+          $build = TRUE;
+        }
+
+        // Build if dependent react module has some changes.
+        $dependencyFile = $dir . "/react_dependencies.txt";
+        if ($build === FALSE && file_exists($dependencyFile)) {
+          $dependencies = explode(PHP_EOL, file_get_contents($dependencyFile));
+          foreach ($dependencies as $dependency) {
+            if (strpos($reactChanges, $dependency) > 0) {
+              $build = TRUE;
+              break;
+            }
+          }
+        }
+
+        // Else copy from acquia repo if build is not needed.
+        if ($build === FALSE) {
+          $reactFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $dir) . '/dist';
+          $reactToDir = $dir;
+        }
+      }
+      // Build all react modules since outside of github actions
+      // or a tag is pushed.
+      else {
+        $build = TRUE;
+      }
+
+      // Build react files.
+      if ($build) {
+        $tasks->exec("cd $dir; $command");
+      }
+      // Copy react files.
+      else {
+        $this->say("Copying unchanged " . $file->getRelativePath() . "react module from " . $reactFromDir . "to " . $reactToDir);
+        $result = $this->taskCopyDir([$reactFromDir => $reactToDir])
+          ->overwrite(TRUE)
+          ->run();
+        if (!$result->wasSuccessful()) {
+          throw new BltException("Unable to copy react files from cloud.");
+        }
+      }
     }
 
     $tasks->stopOnFail();
-    return $tasks->run();
+    return $tasks->getCommand() ? $tasks->run() : 0;
   }
 
   /**
