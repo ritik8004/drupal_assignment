@@ -184,7 +184,8 @@ export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
           }
         } else if (id === 'reviewtext'
           || id === 'usernickname'
-          || id === 'useremail') {
+          || id === 'useremail'
+          || id === 'title') {
           if (id === 'reviewtext' || id === 'usernickname') {
             if (elements[id].value.length < fieldsConfig[key]['#minlength']) {
               document.getElementById(`${id}-error`).classList.add('error');
@@ -195,8 +196,16 @@ export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
             document.getElementById(`${id}-error`).classList.add('error');
             isError = true;
           }
+          if (id === 'title' && !validateInputLang(elements[id].value)) {
+            document.getElementById(`${id}-error`).classList.add('error');
+            isError = true;
+          }
+          if (id === 'reviewtext' && !validateInputLang(elements[id].value)) {
+            document.getElementById(`${id}-error`).classList.add('error');
+            isError = true;
+          }
           if (!isError) {
-            document.getElementById(`${id}-error`).classList.remove('error');
+            document.getElementById(`${id}-error`).innerHTML = '';
           }
         } else {
           if (groupType === 'textfield'
