@@ -13,6 +13,8 @@
   }
 }
 
+  
+
 // Layout of the detail page
 .nodetype--acq_product {
   .region__content {
@@ -1367,7 +1369,6 @@
     }
   }
 }
-
 .click-collect-all-stores {
   &.inline-modal-wrapper {
     display: none;
@@ -1392,7 +1393,9 @@
       }
     }
 
+
     @include breakpoint($only-mobile) {
+      display: block;
       .close-inline-modal,
       .all-stores-info,
       .available_store {

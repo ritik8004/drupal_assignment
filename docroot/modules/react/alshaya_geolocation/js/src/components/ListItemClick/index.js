@@ -7,31 +7,28 @@ export class ListItemClick extends React.Component {
   }
 
   render() {
-    const { specificPlace } = this.props;
+    const {
+      specificPlace,
+      isPopup,
+    } = this.props;
     return (
-      <div>
-        <div className="row-title">
-          <span>
-            {specificPlace.store_name}
-          </span>
+      <div className={isPopup ? 'store-info-wrap' : ''}>
+        <div className="store-name">
+          {specificPlace.store_name}
         </div>
-        <div className="views-row">
-          <div className="views-field-field-store-address">
-            <div className="field-content">
-              <div className="address--line2">
-                {specificPlace.address.map((item) => (
-                  <div key={item.code}>
-                    {item.code === 'address_building_segment' ? item.value : null}
-                    {item.code === 'street' ? <span>{item.value}</span> : null}
-                  </div>
-                ))}
+        <div className="store-address">
+          <div className="address--line2">
+            {specificPlace.address.map((item) => (
+              <div key={item.code}>
+                {item.code === 'street' ? <span>{item.value}</span> : null}
+                {item.code === 'address_building_segment' ? item.value : null}
               </div>
-              <div className="field field--name-field-available">
-                {Drupal.t('Collect from store in ')}
-                {specificPlace.sts_delivery_time_label}
-              </div>
-            </div>
+            ))}
           </div>
+        </div>
+        <div className="store-delivery-time">
+          {Drupal.t('Collect from store in ')}
+          <em>{specificPlace.sts_delivery_time_label}</em>
         </div>
       </div>
     );

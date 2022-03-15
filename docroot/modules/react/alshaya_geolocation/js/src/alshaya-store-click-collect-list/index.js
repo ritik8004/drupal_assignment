@@ -1,6 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
-import Popup from 'reactjs-popup';
+import { ClickCollectPopup } from '../components/store-click-collect-popup';
 import AutocompleteSearch from '../components/autocomplete-search';
 import { ListItemClick } from '../components/ListItemClick';
 
@@ -19,7 +19,10 @@ export class StoreClickCollectList extends React.Component {
       open: false,
       showAutomcomplete: true,
       area: '',
+      isModalOpen: false,
     };
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
@@ -94,101 +97,110 @@ export class StoreClickCollectList extends React.Component {
     return (c * r);
   }
 
+  openModal() {
+    this.setState({ isModalOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isModalOpen: false });
+  }
+
   render() {
     const {
       stores,
       showListingView,
-      open,
       area,
       showAutomcomplete,
       active,
+      isModalOpen,
     } = this.state;
     const shorts = stores.slice(0, 2);
     const cncLabels = drupalSettings.cac;
     return (
       <>
-        <div className="views-content">
-
-          <div id="pdp-stores-container" className="click-collect">
-            <h3 className="c-accordion__title" onClick={() => this.toggleClass()}>
-              <span className="pdp-stores-container">{cncLabels.title}</span>
-              <span claclassNamess="subtitle">{cncLabels.subtitle}</span>
-            </h3>
-            <div className={active ? 'active' : 'hidden'}>
-              <div>{cncLabels.help_text}</div>
-              {showAutomcomplete
-                ? (
-                  <div>
-                    <div>{Drupal.t('Check in-store availability')}</div>
-                    <AutocompleteSearch placeholder={Drupal.t('Enter a location')} searchStores={(place) => this.searchStores(place)} />
+        <div className="delivery-options-wrapper">
+          <div className="field__content">
+            <div className="click-collect c-accordion-delivery-options ui-accordion ui-widget ui-helper-reset">
+              <h3 className="c-accordion__title ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons location-js-initiated ui-accordion-header-active" onClick={() => this.toggleClass()}>
+                <span className="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s">{cncLabels.title}</span>
+                <span className="subtitle">{cncLabels.subtitle}</span>
+              </h3>
+              <div className="c-accordion_content ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content">
+                <div className={active ? 'active' : ''}>
+                  <div className="click-collect-empty-selection" />
+                  <div className="click-collect-form">
+                    <div className="text">
+                      <p>
+                        {Drupal.t('This service is ')}
+                        <strong>{Drupal.t('free')}</strong>
+                        {Drupal.t(' of charge.')}
+                      </p>
+                      <div>{cncLabels.help_text}</div>
+                      {showAutomcomplete
+                        ? (
+                          <div className="store-finder-form-wrapper">
+                            <div id="search-store" className="search-store">
+                              <form className="alshaya-stores-available-stores">
+                                <span className="label">{Drupal.t('Check in-store availability')}</span>
+                                <div>
+                                  <AutocompleteSearch
+                                    placeholder={Drupal.t('Enter a location')}
+                                    searchStores={(place) => this.searchStores(place)}
+                                  />
+                                  <button className="search-stores-button" type="button">search stores</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        )
+                        : (
+                          <div className="available_store">
+                            <div className="available-store-text">
+                              <span className="store-available-at-title">
+                                {Drupal.t('Available at ')}
+                                {stores.length}
+                                {Drupal.t(' stores near ')}
+                              </span>
+                              <div className="google-store-location">{area.formatted_address}</div>
+                              <div className="change-location-link" onClick={() => this.setState({ showAutomcomplete: true })}>{Drupal.t(' change')}</div>
+                            </div>
+                          </div>
+                        )}
+                    </div>
                   </div>
-                )
-                : (
-                  <div>
-                    <span>
-                      {Drupal.t('Available at ')}
-                      {stores.length}
-                      {Drupal.t(' stores near ')}
-                      {area.formatted_address}
-                    </span>
-                    <span onClick={() => this.setState({ showAutomcomplete: true })}>
-                      <b>{Drupal.t('Change')}</b>
-                    </span>
-                  </div>
-                )}
-              {showListingView
-              && (
-                <div className="view-content">
-                  <div id="click-and-collect-list-view">
-                    <ul>
-                      {Object.keys(shorts).map(([keyItem]) => (
-                        <li>
-                          <span
-                            key={shorts[keyItem].id}
-                            className="select-store"
-                          >
-                            <ListItemClick specificPlace={shorts[keyItem]} />
-                          </span>
-                        </li>
-                      ))}
-                      {(stores.length > 2
+                  {showListingView
+                  && (
+                    <div className="click-collect-top-stores">
+                      <div id="click-and-collect-list-view">
+                        <ul>
+                          {shorts.map((store, index) => (
+                            <li>
+                              <span key={store.id} className="select-store">
+                                <div className="store-sequence">{(index) + 1}</div>
+                                <ListItemClick specificPlace={store} isPopup />
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      {(stores.length > 3
                       && (
-                        <li>
-                          <button type="button" onClick={() => this.setState({ open: true })}>
-                            {Drupal.t('Other stores nearby')}
-                          </button>
-                        </li>
+                        <div className="other-stores-link" onClick={this.openModal}>
+                          {Drupal.t('Other stores nearby')}
+                        </div>
                       ))}
-                    </ul>
-                  </div>
+                    </div>
+                  )}
                 </div>
-              )}
-              <Popup
-                className="area-popups"
-                open={open}
-                closeOnEscape={false}
-              >
-                <button type="button" onClick={() => this.setState({ open: false })}>X</button>
-                <div>
-                  <ul>
-                    {Object.keys(stores).map(([keyItem]) => (
-                      <li>
-                        <span
-                          key={stores[keyItem].id}
-                          className="select-store"
-                        >
-                          <ListItemClick specificPlace={stores[keyItem]} />
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Popup>
-
+              </div>
+              <ClickCollectPopup
+                stores={stores}
+                isOpen={isModalOpen}
+                onClose={this.closeModal}
+              />
             </div>
           </div>
         </div>
-
       </>
     );
   }

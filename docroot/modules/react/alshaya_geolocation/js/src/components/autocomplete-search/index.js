@@ -27,10 +27,12 @@ export default class AutocompleteSearch extends React.Component {
         <Autocomplete
           apiKey={apiKey}
           id="edit-geolocation-geocoder-google-places-api"
+          className="store-location-input"
           onPlaceSelected={(place) => {
             searchStores(place);
           }}
           placeholder={placeholder}
+          type="text"
           options={{
             types: ['(regions)'],
             componentRestrictions: { country: regional },
