@@ -126,6 +126,21 @@ export default class EgiftCardOpenAmountField extends React.Component {
     }
   }
 
+  /**
+   * Block user from pasting e (exponential) into open amount field.
+   */
+  handlePaste = (e) => {
+    // Get data from clipboard.
+    const clipboardData = e.clipboardData || window.clipboardData;
+    const pastedData = clipboardData.getData('Text').toUpperCase();
+
+    // Prevent user from pasting e (exponential) in input field.
+    if (pastedData.indexOf('E') > -1) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }
+
   render() {
     const { selected, field } = this.props;
     const { openAmountMessage, openAmountInputDisabled } = this.state;
@@ -155,6 +170,8 @@ export default class EgiftCardOpenAmountField extends React.Component {
             max={eGiftCardAttributes.amount_open_to_hps.value}
             onFocus={() => this.handleErrorMessage()}
             onKeyPress={this.handleKeypress}
+            onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
+            onPaste={(e) => this.handlePaste(e)}
             onChange={this.handleChange}
             readOnly={openAmountInputDisabled}
             onBlur={(e) => this.handleEvent(e)}
