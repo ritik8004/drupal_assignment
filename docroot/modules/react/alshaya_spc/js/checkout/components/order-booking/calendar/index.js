@@ -94,14 +94,14 @@ export default class OrderBookingCalendar extends React.Component {
     });
   };
 
-  swipedLeft = () => {
+  onSwipedLeft = () => {
     const { setOpenDate } = this.state;
     this.setState({
       setOpenDate: new Date(moment(setOpenDate).add(1, 'month')),
     });
   };
 
-  swipedRight = () => {
+  onSwipedRight = () => {
     const { setOpenDate } = this.state;
     this.setState({
       setOpenDate: new Date(moment(setOpenDate).subtract(1, 'month')),
@@ -201,8 +201,8 @@ export default class OrderBookingCalendar extends React.Component {
           </div>
           <div className="schedule-delivery-datepicker__main">
             <Swipeable
-              onSwipedLeft={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.swipedLeft() : this.swipedRight())}
-              onSwipedRight={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.swipedRight() : this.swipedLeft())}
+              onSwipedLeft={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.onSwipedLeft() : this.onSwipedRight())}
+              onSwipedRight={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.onSwipedRight() : this.onSwipedLeft())}
               preventDefaultTouchmoveEvent
             >
               <div className="datetime-picker-wrapper" dir={dir}>
