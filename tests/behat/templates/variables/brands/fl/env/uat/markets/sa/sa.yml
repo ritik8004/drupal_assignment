@@ -1,9 +1,9 @@
 variables:
   url_product_page: 'buy-adidas-nmd-r1-grade-school-shoes-white-grey-white.html'
-  product_listing_page_url: '/shop-men/'
-  spc_product_listing_page: '/shop-men/'
+  product_listing_page_url: '/shop-men/shoes/running/'
+  spc_product_listing_page: '/shop-men/shoes/running/'
   spc_pdp_page: 'buy-adidas-adicolor-3-stripes-mens-t-shirt-white-black-white.html'
-  spc_basket_page: '/shop-men/'
+  spc_basket_page: '/shop-men/shoes/running/'
   new_checkout_enabled: TRUE
   np_plp_product_page: '/buy-adidas-originals-3-pack-trefoil-crew-socks-black-white.html/'
   np_plp_page: '/shop-default-category/collections/'
