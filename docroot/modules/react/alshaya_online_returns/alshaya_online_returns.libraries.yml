@@ -1,0 +1,7 @@
+alshaya_online_returns_pdp:
+  js:
+    dist/pdp.bundle.js: {}
+    # assets/js/productHelper.js: {}
+  dependencies:
+    - alshaya_react/react
+    # - alshaya_acm_product/product_utility

@@ -12,20 +12,50 @@ use Drupal\acq_commerce\SKUInterface;
  */
 function alshaya_online_returns_preprocess_node(&$variables) {
   if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
-    $variables['online_returns_enabled'] = \Drupal::service('alshaya_online_returns.online_returns_helper')->isOnlineReturnsEnabled();
+    $variables['online_returns_status'] = \Drupal::service('alshaya_online_returns.online_returns_helper')->isOnlineReturnsEnabled();
   }
 }
 
 /**
- * Implements hook_alshaya_acm_product_build_alter().
+ * Implements hook_page_attachments_alter().
  */
-function alshaya_online_returns_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
-  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+function alshaya_online_returns_page_attachments_alter(array &$page) {
+  $online_returns_helper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+  $config['enabled'] = $online_returns_helper->isOnlineReturnsEnabled();
+  $page['#cache']['tags'] = array_merge(
+        $page['#cache']['tags'] ?? [],
+        \Drupal::config('alshaya_online_returns.settings')->getCacheTags()
+  );
 
-  if (!$onlineReturnsHelper->isOnlineReturnsEnabled() && $context !== 'pdp') {
+  // Do not proceed if Online returns is not enabled.
+  if ($config['enabled'] !== TRUE) {
     return;
   }
 
-  // @todo Cross-check this once actual data is received from MDC.
-  $build['skuNoteligibleForOnlineReturn']['#markup'] = !$onlineReturnsHelper->isSkuReturnable($sku);
+  $page['#attached']['drupalSettings']['onlineReturns'] = $config;
+
+  $current_route = \Drupal::routeMatch();
+  $current_route_name = $current_route->getRouteName();
+
+  if ($current_route_name === 'entity.node.canonical'
+    && in_array($current_route->getParameter('node')->bundle(), [
+      'rcs_product',
+      'acq_product',
+    ])
+  ) {
+    $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_pdp';
+  }
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_online_returns_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  // Do not process further if feature is disabled.
+  if (!$onlineReturnsHelper->isOnlineReturnsEnabled()) {
+    return;
+  }
+  $variant['eligibleForReturn'] = $onlineReturnsHelper->isSkuReturnable($child);
 }

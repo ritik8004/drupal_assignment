@@ -139,10 +139,8 @@
           {% endif %}
         </div>
 
-        {% if content.skuNoteligibleForOnlineReturn is defined and content.skuNoteligibleForOnlineReturn %}
-          <div class="online-returns-not-eligibile-message">
-            {{ 'Not eligible for Return'|t }}
-          </div>
+        {% if online_returns_status is defined and online_returns_status %}
+          <div id="online-returns-not-eligibile-message"></div>
         {% endif %}
       </div>
     {% endblock %}

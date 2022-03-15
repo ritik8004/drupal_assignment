@@ -182,6 +182,9 @@
                 sku: parentSku,
                 variantSelected: selected,
                 title,
+                ...(drupalSettings.onlineReturns !== undefined
+                  && drupalSettings.onlineReturns.enabled
+                  && { eligibleForReturn: variantInfo.eligibleForReturn }),
               }
             }
           });
