@@ -256,6 +256,7 @@
   .current-location,
   .cc-near-me {
     cursor: pointer;
+
     @include breakpoint($only-tablet) {
       #{$left}: 0;
       padding-#{$left}: 2.125rem !important;
@@ -387,7 +388,6 @@
         font-family: $alshaya-thin;
       }
     }
-
 
     @include breakpoint($tablet) {
       height: 2.9375rem;
@@ -1107,7 +1107,8 @@
     background-image: url(#{$base_theme_loader_img_directory_path});
   }
 
-  #views-exposed-form-stores-finder-page-1, .c-content__region .views-exposed-form {
+  #views-exposed-form-stores-finder-page-1,
+  .c-content__region .views-exposed-form {
     @include breakpoint($only-mobile) {
       margin-bottom: 1rem;
     }

@@ -17,7 +17,7 @@ export class ClickCollectPopup extends React.Component {
 
     return (
       <div className={isOpen ? 'click-collect-modal-wrapper click-collect-modal-wrapper-open' : 'click-collect-modal-wrapper'}>
-        <div className="click-collect-all-stores inline-modal-wrapper desc-open" id="click-collect-all-stores">
+        <div className="click-collect-all-stores inline-modal-wrapper desc-open modal-wrapper-mobile" id="click-collect-all-stores">
           <span className="close-inline-modal" onClick={onClose} />
           <div className="all-stores-info">
             <h3>{Drupal.t('Click & Collect')}</h3>
