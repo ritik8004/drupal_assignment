@@ -12,6 +12,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class Product Options Helper.
@@ -93,6 +94,13 @@ class ProductOptionsHelper {
   protected $logger;
 
   /**
+   * Module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * List of options synced.
    *
    * @var array
@@ -122,6 +130,8 @@ class ProductOptionsHelper {
    *   Config Factory.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module services.
    */
   public function __construct(SKUFieldsManager $sku_fields_manager,
                               I18nHelper $i18n_helper,
@@ -132,7 +142,8 @@ class ProductOptionsHelper {
                               Connection $connection,
                               CacheBackendInterface $cache,
                               ConfigFactoryInterface $config_factory,
-                              LoggerChannelInterface $logger) {
+                              LoggerChannelInterface $logger,
+                              ModuleHandlerInterface $module_handler) {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->i18nHelper = $i18n_helper;
     $this->productOptionsManager = $product_options_manager;
@@ -143,6 +154,7 @@ class ProductOptionsHelper {
     $this->cache = $cache;
     $this->configFactory = $config_factory;
     $this->logger = $logger;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -210,6 +222,11 @@ class ProductOptionsHelper {
       // For now we have many fields in sku_base_fields which are not
       // available in all brands.
       return;
+    }
+
+    // Allow other modules to alter options.
+    if ($attribute) {
+      $this->moduleHandler->alter('attribute_options', $attribute);
     }
 
     if (empty($attribute) || empty($attribute['options'])) {
