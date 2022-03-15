@@ -130,12 +130,7 @@ export class StoreClickCollectList extends React.Component {
                   <div className="click-collect-empty-selection" />
                   <div className="click-collect-form">
                     <div className="text">
-                      <p>
-                        {Drupal.t('This service is ')}
-                        <strong>{Drupal.t('free')}</strong>
-                        {Drupal.t(' of charge.')}
-                      </p>
-                      <div>{cncLabels.help_text}</div>
+                      <p>{cncLabels.help_text}</p>
                       {showAutomcomplete
                         ? (
                           <div className="store-finder-form-wrapper">
