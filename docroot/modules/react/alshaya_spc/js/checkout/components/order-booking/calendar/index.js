@@ -85,15 +85,6 @@ export default class OrderBookingCalendar extends React.Component {
   );
 
   /**
-   * Date format to be used for parsing the dates and used in data manipulation.
-   * For ex we are using date format to match the two dates in below functions.
-   *
-   * @returns {string}
-   *  String date format.
-   */
-  getDateFormat = () => ('YYYY-MM-DD');
-
-  /**
    * Set the calendar date and get time slots for selected date.
    */
   onDateChanged = (date) => {
@@ -145,12 +136,13 @@ export default class OrderBookingCalendar extends React.Component {
    */
   getTimeSlotsForDate = (date) => {
     let timeSlotsForDate = [];
+    const dateFormat = 'YYYY-MM-DD';
     const bookingSlots = this.getHFDBookingTimeSlots();
     if (typeof bookingSlots !== 'undefined' && bookingSlots.length > 0) {
       bookingSlots.forEach((daySlot) => {
         // Get the time slots if the given date is matched.
-        if (moment(date).format(this.getDateFormat())
-          === moment(daySlot.appointment_date).format(this.getDateFormat())) {
+        if (moment(date).format(dateFormat)
+          === moment(daySlot.appointment_date).format(dateFormat)) {
           timeSlotsForDate = daySlot.appointment_slots;
         }
       });
