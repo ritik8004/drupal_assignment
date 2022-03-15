@@ -54,29 +54,29 @@ export default class OrderBookingCalendar extends React.Component {
         ],
       },
       {
-        appointment_date: '2022-02-28',
+        appointment_date: '2022-03-14',
         appointment_slots: [
           {
             start_time: '8:00 AM',
             end_time: '9:00 AM',
-            appointment_date_time: '2022-02-28T08:00:00.000Z',
+            appointment_date_time: '2022-03-14T08:00:00.000Z',
             resource_external_id: 'MorningShiftZone1KSA',
           },
         ],
       },
       {
-        appointment_date: '2022-03-01',
+        appointment_date: '2022-04-01',
         appointment_slots: [
           {
             start_time: '8:00 AM',
             end_time: '9:00 AM',
-            appointment_date_time: '2022-03-01T08:00:00.000Z',
+            appointment_date_time: '2022-04-01T08:00:00.000Z',
             resource_external_id: 'MorningShiftZone1KSA',
           },
           {
             start_time: '1:00 PM',
             end_time: '2:00 PM',
-            appointment_date_time: '2022-03-01T08:00:00.000Z',
+            appointment_date_time: '2022-04-01T08:00:00.000Z',
             resource_external_id: 'AfernoonShiftZone1KSA',
           },
         ],
@@ -94,14 +94,22 @@ export default class OrderBookingCalendar extends React.Component {
     });
   };
 
-  onSwipedLeft = () => {
+  /**
+   * Increase the month showing in the calendar by changing the open date
+   * to next month.
+   */
+  increaseMonth = () => {
     const { setOpenDate } = this.state;
     this.setState({
       setOpenDate: new Date(moment(setOpenDate).add(1, 'month')),
     });
   };
 
-  onSwipedRight = () => {
+  /**
+   * Decrease the month showing in the calendar by changing the open date
+   * to previous month.
+   */
+  decreaseMonth = () => {
     const { setOpenDate } = this.state;
     this.setState({
       setOpenDate: new Date(moment(setOpenDate).subtract(1, 'month')),
@@ -148,6 +156,50 @@ export default class OrderBookingCalendar extends React.Component {
       });
     }
     return timeSlotsForDate;
+  };
+
+  /**
+   * Get minimum date boundry for booking calendar.
+   */
+  getMinDate = () => {
+    const bookingSlots = this.getHFDBookingTimeSlots();
+    // First date from the available booking slots is the minimum date for
+    // the calendar.
+    if (typeof bookingSlots !== 'undefined'
+      && bookingSlots.length > 0) {
+      return new Date(bookingSlots[0].appointment_date);
+    }
+
+    // If no booking slots are available then return today's date.
+    return new Date();
+  };
+
+  /**
+   * Get maximum date boundry for booking calendar.
+   */
+  getMaxDate = () => {
+    const bookingSlots = this.getHFDBookingTimeSlots();
+    // Last date from the available booking slots is the maximum date for
+    // the calendar.
+    if (typeof bookingSlots !== 'undefined'
+      && bookingSlots.length > 0) {
+      const lastSlotIndex = parseInt(bookingSlots.length) - 1;
+      return new Date(bookingSlots[lastSlotIndex].appointment_date);
+    }
+
+    // If no booking slots are available then return today's date.
+    return new Date();
+  };
+
+  /**
+   * Change the month in state on change in calendar to sync custom functions.
+   *
+   * @param {string} monthBeingViewed
+   */
+  onMonthChange = (monthBeingViewed) => {
+    this.setState({
+      setOpenDate: new Date(moment(monthBeingViewed)),
+    });
   };
 
   render() {
@@ -201,8 +253,8 @@ export default class OrderBookingCalendar extends React.Component {
           </div>
           <div className="schedule-delivery-datepicker__main">
             <Swipeable
-              onSwipedLeft={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.onSwipedLeft() : this.onSwipedRight())}
-              onSwipedRight={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.onSwipedRight() : this.onSwipedLeft())}
+              onSwipedLeft={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.increaseMonth() : this.decreaseMonth())}
+              onSwipedRight={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.decreaseMonth() : this.increaseMonth())}
               preventDefaultTouchmoveEvent
             >
               <div className="datetime-picker-wrapper" dir={dir}>
@@ -243,13 +295,33 @@ export default class OrderBookingCalendar extends React.Component {
                     </>
                   )}
                   selected={selectedDate}
+                  minDate={this.getMinDate()}
+                  maxDate={this.getMaxDate()}
                   inline
                   onSelect={(date) => this.onDateChanged(date)}
+                  onMonthChange={this.onMonthChange}
                   locale={(drupalSettings.path.currentLanguage !== 'en') ? 'ar' : 'en'}
                   openToDate={setOpenDate}
                   disabledKeyboardNavigation
                   includeDates={this.getAvailableBookingDates()}
                 />
+                {/**
+                 * Add two arrow icons for controlling the months increase
+                 * and decrease action.
+                 * @todo: FE to change the icons as per design.
+                 */}
+                <span
+                  className="datepicker-month-left"
+                  onClick={() => ((drupalSettings.path.currentLanguage === 'en')
+                    ? this.decreaseMonth()
+                    : this.increaseMonth())}
+                >{'<'}</span>
+                <span
+                  className="datepicker-month-right"
+                  onClick={() => ((drupalSettings.path.currentLanguage === 'en')
+                    ? this.increaseMonth()
+                    : this.decreaseMonth())}
+                >{'>'}</span>
               </div>
             </Swipeable>
             <div className="timeslots-selection-wrapper" dir={dir}>
