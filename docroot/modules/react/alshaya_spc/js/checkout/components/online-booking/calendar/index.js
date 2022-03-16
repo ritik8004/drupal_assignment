@@ -6,7 +6,7 @@ import { Swipeable } from 'react-swipeable';
 import en from '../../../../../../node_modules/date-fns/locale/en-US';
 import ar from '../../../../../../node_modules/date-fns/locale/ar-SA';
 
-export default class OrderBookingCalendar extends React.Component {
+export default class OnlineBookingCalendar extends React.Component {
   constructor(props) {
     super(props);
     const { selectedDate } = this.props;
