@@ -650,9 +650,13 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         /** @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper $deliveryOptionsHelper */
         $deliveryOptionsHelper = \Drupal::service('alshaya_acm_product.delivery_options_helper');
         $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
+        $bigTickectProduct = FALSE;
+        if ($sku_entity->hasField('attr_white_glove_delivery')) {
+          $bigTickectProduct = (bool) $sku_entity->get('attr_white_glove_delivery')->getString();
+        }
         // Check if express delivery feature enabled and product buyable.
         $build['delivery_options'] = [];
-        if ($deliveryOptionsHelper->ifSddEdFeatureEnabled() && (alshaya_acm_product_is_buyable($sku_entity))) {
+        if ($deliveryOptionsHelper->ifSddEdFeatureEnabled() && (alshaya_acm_product_is_buyable($sku_entity)) && !$bigTickectProduct) {
           $build['express_delivery'] = [
             '#theme' => 'pdp_express_delivery_option',
             '#title' => t('Delivery Options'),
