@@ -109,7 +109,7 @@ export function getLanguageCode() {
 export async function getProductReviewForCurrrentUser(productIdentifier) {
   const bazaarVoiceSettings = getbazaarVoiceSettings();
   const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
-  const userId = drupalSettings.user.uid;
+  const userId = drupalSettings.userDetails.userID;
   const staticStorageKey = `${userId}_${productId}`;
   let productReviewData = BVStaticStorage.get(staticStorageKey);
 
