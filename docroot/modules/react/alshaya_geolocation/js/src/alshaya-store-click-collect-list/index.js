@@ -24,7 +24,7 @@ export class StoreClickCollectList extends React.Component {
 
   componentDidMount() {
     // This will be replace with MDC data api call.
-    const apiUrl = '/alshaya-locations/stores-list';
+    const { apiUrl } = drupalSettings.cnc;
     Axios.get(apiUrl).then((response) => {
       const stores = response.data;
       const prevState = this.state;

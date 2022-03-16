@@ -13,12 +13,22 @@ class AlshayaStoreFinderController extends ControllerBase {
    * Store Finder controller.
    */
   public function store() {
+
+    $api_url = '/alshaya-locations/stores-list';
+    if (drupal_get_profile() == 'alshaya_non_transac') {
+      $api_url = '/alshaya-locations/local';
+    }
     return [
       '#type' => 'markup',
       '#markup' => '<div id="store-finder-wrapper"></div>',
       '#attached' => [
         'library' => [
           'alshaya_geolocation/alshaya-store-finder',
+        ],
+        'drupalSettings' => [
+          'cnc' => [
+            'apiUrl' => $api_url,
+          ],
         ],
       ],
     ];
@@ -34,6 +44,11 @@ class AlshayaStoreFinderController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_geolocation/alshaya-store-finder-list',
+        ],
+        'drupalSettings' => [
+          'cnc' => [
+            'apiUrl' => $api_url,
+          ],
         ],
       ],
     ];
