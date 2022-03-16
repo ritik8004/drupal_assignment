@@ -49,7 +49,6 @@ export const getOnlineBookingApiEndpoint = (action) => {
  *   Returns the promise object.
  */
 export const getBookingDetailByConfirmationNumber = async (confirmationNumber) => {
-  let bookingDetails = {};
   const response = await callMagentoApi(getOnlineBookingApiEndpoint('checkBookingStatus'), 'POST', {
     hold_confirmation_number: confirmationNumber,
   });
@@ -58,49 +57,58 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
   // Success = true scenario.
   response.data = {
     success: true,
-    appointment_date: '2022-02-27',
-    start_time: '8:00 AM',
-    end_time: '9:00 AM',
-    appointment_date_time: '2022-02-27T08: 00: 00.000Z',
-    resource_external_id: 'MorningShiftZone1KSA',
-    hold_confirmation_number: 'G2Z7Y67B',
+    appointment_details: {
+      appointment_date: '2022-02-27',
+      start_time: '8:00 AM',
+      end_time: '9:00 AM',
+      appointment_date_time: '2022-02-27T08: 00: 00.000Z',
+      resource_external_id: 'MorningShiftZone1KSA',
+      hold_confirmation_number: 'G2Z7Y67B',
+    },
   };
   // Success = false scenario.
   /* response.data = {
     success: false,
     error_message: 'The appointment already expired, Please select time slot again',
+    appointment_details: {
+      appointment_date: '2022-02-27',
+      start_time: '8:00 AM',
+      end_time: '9:00 AM',
+      appointment_date_time: '2022-02-27T08: 00: 00.000Z',
+      resource_external_id: 'MorningShiftZone1KSA',
+      hold_confirmation_number: 'G2Z7Y67B',
+    },
   }; */
 
-  if (hasValue(response.data.error) && response.data.error) {
+  if (!hasValue(response.data)
+    || (hasValue(response.data.error) && response.data.error)) {
     logger.warning('Online Booking: Error occurred while fetching booking details from confirmation number @confirmation, API Response: @response.', {
       '@confirmation': confirmationNumber,
       '@response': JSON.stringify(response.data),
     });
     return {
       success: false,
-      message: getDefaultErrorMessage(),
+      error_message: getDefaultErrorMessage(),
+      appointment_details: {},
     };
   }
-
-  if (hasValue(response.data) && hasValue(response.data.success)) {
-    bookingDetails = response.data.appointment_details;
-    bookingDetails.success = true;
-  } else {
-    bookingDetails = {
-      success: false,
-      message: response.data.error_message,
-    };
+  // If booking is successful add confirmation number in result.
+  if (hasValue(response.data.success)) {
+    response.data.appointment_details.confirmation_number = confirmationNumber;
   }
-  return bookingDetails;
+  return response.data;
 };
 
 /**
  * Gets order booking response from magento api endpoint.
  *
+ * @param {boolean} existingBooking
+ *   Is booking available.
+ *
  * @returns {object}
  *   Returns the promise object.
  */
-export const getAvailableBookingSlots = async () => {
+export const getAvailableBookingSlots = async (existingBooking = false) => {
   const response = await callMagentoApi(getOnlineBookingApiEndpoint('getAvailableBookingSlots'), 'GET');
   // @todo: Remove mock response after API integration.
   // Success = true scenario.
@@ -158,20 +166,30 @@ export const getAvailableBookingSlots = async () => {
   /* response.data = {
     success: false,
     error_message: 'Something went wrong, unable to get available time slots',
+    available_time_slots: {},
   }; */
 
-  if (hasValue(response.data) && hasValue(response.data.success)) {
-    if (hasValue(response.data.available_time_slots)) {
-      return {
-        success: true,
-        availableSlots: response.data.available_time_slots,
-      };
-    }
-  }
-  if (hasValue(response.data.error) && response.data.error) {
+  if (!hasValue(response.data)
+    || (hasValue(response.data.error) && response.data.error)) {
     logger.warning('Online Booking: Error occurred while fetching available booking slots @confirmation, API Response: @response.', {
       '@response': JSON.stringify(response.data),
     });
+
+    // If booking is available then we need to show error message.
+    // return success = false with generic error message.
+    if (existingBooking) {
+      return {
+        success: false,
+        error_message: getDefaultErrorMessage(),
+        available_time_slots: {},
+      };
+    }
+    return response.data;
+  }
+
+  // If call do not contain existing booking, then we will consider as error.
+  if (!existingBooking && !hasValue(response.data.success)) {
+    response.data.error = true;
   }
 
   return response.data;
@@ -187,7 +205,6 @@ export const getAvailableBookingSlots = async () => {
  *   Returns the promise object.
  */
 export const holdBookingSlot = async (params) => {
-  let holdBookingDetails = {};
   const response = await callMagentoApi(getOnlineBookingApiEndpoint('holdBookingSlot'), 'POST', params);
   // @todo: Remove mock response after API integration.
   // Success = true scenario.
@@ -200,11 +217,13 @@ export const holdBookingSlot = async (params) => {
   // Success = false scenario.
   /* response.data = {
     success: false,
+    hold_appointment: {},
     error_message: 'Something went wrong,
      unable to Hold Appointment. Please select different time slot',
   }; */
 
-  if (hasValue(response.data.error) && response.data.error) {
+  if (!hasValue(response.data)
+    || (hasValue(response.data.error) && response.data.error)) {
     logger.warning('Online Booking: Error occurred while holding booking slot API Response: @response, API Params: @params', {
       '@response': JSON.stringify(response.data),
       '@params': JSON.stringify(params),
@@ -214,26 +233,27 @@ export const holdBookingSlot = async (params) => {
       return {
         success: false,
         error_message: getDefaultErrorMessage(),
+        hold_appointment: {},
       };
     }
     return {
       error: true,
       error_message: getDefaultErrorMessage(),
+      hold_appointment: {},
     };
   }
 
-  // Check if API returns success response.
-  holdBookingDetails = response.data;
-  if (hasValue(response.data) && hasValue(response.data.success)) {
-    holdBookingDetails = {
-      success: true,
-      confirmation_number: response.data.hold_appointment.confirmation_number,
-    };
-  } else if (!hasValue(params.existing_hold_confirmation_number)) {
-    holdBookingDetails = {
-      error: true,
-      error_message: getDefaultErrorMessage(),
-    };
+  // If the success is false, then check for existing confirmation number.
+  // if params have existing confirmation number then we will
+  if (!hasValue(response.data.success)) {
+    if (!hasValue(params.existing_hold_confirmation_number)) {
+      return {
+        error: true,
+        error_message: getDefaultErrorMessage(),
+        hold_appointment: {},
+      };
+    }
   }
-  return holdBookingDetails;
+
+  return response.data;
 };

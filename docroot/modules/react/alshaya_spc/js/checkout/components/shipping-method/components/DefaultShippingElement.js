@@ -1,5 +1,5 @@
 import React from 'react';
-import ConditionalView from '../../../../common/components/conditional-view';
+import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 
 /**
  * Return the default shipping element.

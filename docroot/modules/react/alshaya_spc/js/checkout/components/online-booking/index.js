@@ -1,5 +1,6 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import parse from 'html-react-parser';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import
 {
@@ -10,7 +11,7 @@ import
 import Loading from '../../../utilities/loading';
 import DefaultShippingElement from '../shipping-method/components/DefaultShippingElement';
 import OnlineBookingCalendar from './calendar';
-import ConditionalView from '../../../common/components/conditional-view';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 export default class OnlineBooking extends React.Component {
   constructor(props) {
@@ -23,15 +24,21 @@ export default class OnlineBooking extends React.Component {
       wait: true,
       // isModalOpen used to check if calendar popup is open.
       isModalOpen: false,
+      // availableSlots holds all the slots available for booking.
+      availableSlots: {},
     };
   }
 
   componentDidMount = async () => {
     const { cart } = this.props;
     let result = { error: true };
+    let availableSlots = {};
+    // We need to show online booking component only if home delivery method
+    // is selected and shipping methods are available in cart.
     if (this.checkHomeDelivery(cart) && hasValue(cart.cart.shipping.methods)) {
-      result = await getAvailableBookingSlots();
+      result = await getAvailableBookingSlots(hasValue(cart.confirmation_number));
       if (!hasValue(result.error)) {
+        availableSlots = result.available_time_slots;
         // Check if the cart is having confirmation number.
         if (hasValue(cart.confirmation_number)) {
           result = await getBookingDetailByConfirmationNumber(cart.confirmation_number);
@@ -41,19 +48,23 @@ export default class OnlineBooking extends React.Component {
           // In this case, we fetch all the available slots
           // for the booking and reserve/hold the first available slot from this list.
           // If we have first slot available, we will hold that one.
-          const [availableSlot] = result.availableSlots;
+          const [availableSlot] = result.available_time_slots;
           const [firstSlot] = availableSlot.appointment_slots;
           if (hasValue(firstSlot)) {
             const params = {
               resource_external_id: firstSlot.resource_external_id,
               appointment_date_time: firstSlot.appointment_date_time,
             };
+            // Hold the first slot for user for first time.
             result = await holdBookingSlot(params);
-            if (hasValue(result.success)) {
+            if (hasValue(result.success) && result.success) {
               result = {
-                ...firstSlot,
-                ...result,
-                appointment_date: availableSlot.appointment_date,
+                success: true,
+                appointment_details: {
+                  ...firstSlot,
+                  confirmation_number: result.hold_appointment.confirmation_number,
+                  appointment_date: availableSlot.appointment_date,
+                },
               };
             }
           }
@@ -62,7 +73,7 @@ export default class OnlineBooking extends React.Component {
     }
 
     // Set booking Details response and wait to false.
-    this.setState({ bookingDetails: result, wait: false });
+    this.setState({ bookingDetails: result, availableSlots, wait: false });
   }
 
   /**
@@ -109,12 +120,14 @@ export default class OnlineBooking extends React.Component {
       wait,
       bookingDetails,
       isModalOpen,
+      availableSlots,
     } = this.state;
-    const { price, method } = this.props;
 
     if (wait) {
       return <Loading />;
     }
+
+    const { price, method } = this.props;
 
     // If there is a failure during the API call, we will render the existing component.
     if (bookingDetails.error) {
@@ -126,39 +139,87 @@ export default class OnlineBooking extends React.Component {
         <div className="online-booking">
           <label className="radio-sim radio-label">
             <span className="carrier-title">{Drupal.t('Delivery Schedule', {}, { context: 'online_booking' })}</span>
-            <span className="online-booking-title">{Drupal.t('All items in cart are delivered on your preferred date', {}, { context: 'online_booking' })}</span>
-            <span className="available-delivery">
-              {Drupal.t('Earliest available delivery on @appointment_date between @start_time - @end_time', {
-                '@appointment_date': bookingDetails.appointment_date,
-                '@start_time': bookingDetails.start_time,
-                '@end_time': bookingDetails.end_time,
-              }, { context: 'online_booking' })}
-            </span>
-            <span className="change-delivery-schedule"><a href="#" onClick={() => this.openScheduleDeliveryModal()}>{Drupal.t('Change Delivery Schedule', {}, { context: 'online_booking' })}</a></span>
-            <Popup
-              className="schedule-delivery-calendar-popup"
-              open={isModalOpen}
-              closeOnDocumentClick={false}
-              closeOnEscape={false}
+            <ConditionalView condition={hasValue(bookingDetails.appointment_details)}>
+              <span className="online-booking-title">
+                {
+                  Drupal.t(
+                    'All items in cart are delivered on your preferred date',
+                    {}, { context: 'online_booking' },
+                  )
+                }
+              </span>
+              <span className="available-delivery">
+                {
+                  parse(
+                    Drupal.t(
+                      'Earliest available delivery on @appointment_date between !time_slot',
+                      {
+                        '@appointment_date': bookingDetails.appointment_details.appointment_date,
+                        '!time_slot': `<b>${bookingDetails.appointment_details.start_time} - ${bookingDetails.appointment_details.end_time}</b>`,
+                      }, { context: 'online_booking' },
+                    ),
+                  )
+                }
+              </span>
+              <span className="change-delivery-schedule">
+                <a href="#" onClick={() => this.openScheduleDeliveryModal()}>
+                  {Drupal.t('Change Delivery Schedule', {}, { context: 'online_booking' })}
+                </a>
+              </span>
+              <Popup
+                className="schedule-delivery-calendar-popup"
+                open={isModalOpen}
+                closeOnDocumentClick={false}
+                closeOnEscape={false}
+              >
+                <>
+                  {/**
+                   * @todo: Change the selectDate with first slot held.
+                   */}
+                  <OnlineBookingCalendar
+                    selectedDate={bookingDetails.appointment_details.appointment_date}
+                    closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
+                    bookingDetails={bookingDetails}
+                    availableSlots={availableSlots}
+                  />
+                </>
+              </Popup>
+              <ConditionalView condition={bookingDetails.success}>
+                <span className="hold-delivery">
+                  {
+                    parse(
+                      Drupal.t(
+                        'We will hold this delivery schedule for next !time',
+                        {
+                          '!time': '<b>2 hours</b>',
+                        }, { context: 'online_booking' },
+                      ),
+                    )
+                  }
+                </span>
+              </ConditionalView>
+              <ConditionalView condition={!bookingDetails.success}>
+                <span className="booking-error-message">{bookingDetails.error_message}</span>
+              </ConditionalView>
+              <span className="hold-notification">
+                {
+                  parse(
+                    Drupal.t(
+                      'Once the order is placed, changes are not allowed !time before the selected schedule.',
+                      {
+                        '!time': '<b>three days</b>',
+                      }, { context: 'online_booking' },
+                    ),
+                  )
+                }
+              </span>
+            </ConditionalView>
+            <ConditionalView condition={
+              !hasValue(bookingDetails.appointment_details) && !bookingDetails.success
+            }
             >
-              <>
-                {/**
-                 * @todo: Change the selectDate with first slot held.
-                 */}
-                <OnlineBookingCalendar
-                  selectedDate={bookingDetails.appointment_date}
-                  closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
-                  bookingDetails={bookingDetails}
-                />
-              </>
-            </Popup>
-            <ConditionalView condition={bookingDetails.success}>
-              <span className="hold-delivery">{Drupal.t('We will hold this delivery schedule for next 2 hours', {}, { context: 'online_booking' })}</span>
+              <span className="booking-error-message">{bookingDetails.error_message}</span>
             </ConditionalView>
-            <ConditionalView condition={!bookingDetails.success}>
-              <span className="booking-error-message">{bookingDetails.message}</span>
-            </ConditionalView>
-            <span className="hold-notification">{Drupal.t('Once the order is placed, changes are not allowed three days before the selected schedule.', {}, { context: 'online_booking' })}</span>
             <span className="spc-price">{price}</span>
           </label>
         </div>
