@@ -240,21 +240,21 @@ class AlshayaFrontendCommand extends BltTasks {
       if (getenv('GITHUB_ACTIONS') == 'true' && getenv('GITHUB_EVENT_NAME') == 'push') {
         $reactChanges = getenv('CHANGED_REACT_FILES');
         // Build if change in common (modules/react/js) folder.
-        if (strpos($reactChanges, 'modules/react/js') > 0) {
+        if (strpos($reactChanges, 'modules/react/js') > -1) {
           $build = TRUE;
         }
         // Build if theme is changed and tracked in CHANGED_REACT_FILES
         // env variable.
-        elseif (strpos($reactChanges, 'react/' . $file->getRelativePath()) > 0) {
+        elseif (strpos($reactChanges, 'react/' . $file->getRelativePath()) > -1) {
           $build = TRUE;
         }
 
         // Build if dependent react module has some changes.
-        $dependencyFile = $dir . "/react_dependencies.txt";
+        $dependencyFile = $dir . '/react_dependencies.txt';
         if ($build === FALSE && file_exists($dependencyFile)) {
           $dependencies = explode(PHP_EOL, file_get_contents($dependencyFile));
           foreach ($dependencies as $dependency) {
-            if (strpos($reactChanges, $dependency) > 0) {
+            if (strpos($reactChanges, $dependency) > -1) {
               $build = TRUE;
               break;
             }
@@ -265,6 +265,16 @@ class AlshayaFrontendCommand extends BltTasks {
         if ($build === FALSE) {
           $reactFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $dir) . '/dist';
           $reactToDir = $dir;
+
+          // Copy step.
+          $this->say('Copying unchanged ' . $file->getRelativePath() . ' react module from ' . $reactFromDir . ' to ' . $reactToDir);
+          $result = $this->taskCopyDir([$reactFromDir => $reactToDir])
+            ->overwrite(TRUE)
+            ->run();
+          if (!$result->wasSuccessful()) {
+            $this->say('Unable to copy react files from cloud. Building react module ' . $file->getRelativePath());
+            $build = TRUE;
+          }
         }
       }
       // Build all react modules since outside of github actions
@@ -276,16 +286,6 @@ class AlshayaFrontendCommand extends BltTasks {
       // Build react files.
       if ($build) {
         $tasks->exec("cd $dir; $command");
-      }
-      // Copy react files.
-      else {
-        $this->say("Copying unchanged " . $file->getRelativePath() . "react module from " . $reactFromDir . "to " . $reactToDir);
-        $result = $this->taskCopyDir([$reactFromDir => $reactToDir])
-          ->overwrite(TRUE)
-          ->run();
-        if (!$result->wasSuccessful()) {
-          throw new BltException("Unable to copy react files from cloud.");
-        }
       }
     }
 
