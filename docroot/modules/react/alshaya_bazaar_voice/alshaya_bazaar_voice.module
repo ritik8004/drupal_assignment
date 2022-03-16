@@ -381,7 +381,7 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if (!$entity->bundle() === 'rcs_product') {
+  if ($entity->bundle() !== 'rcs_product') {
     return;
   }
 
