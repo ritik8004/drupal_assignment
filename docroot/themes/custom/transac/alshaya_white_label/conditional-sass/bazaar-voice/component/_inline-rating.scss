@@ -38,6 +38,7 @@
 
     .write-review-button {
       text-decoration: underline;
+      cursor: pointer;
 
       &:hover {
         color: inherit;
