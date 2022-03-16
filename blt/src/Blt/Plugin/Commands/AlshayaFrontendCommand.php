@@ -3,7 +3,6 @@
 namespace Alshaya\Blt\Plugin\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
-use Acquia\Blt\Robo\Exceptions\BltException;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -170,15 +169,15 @@ class AlshayaFrontendCommand extends BltTasks {
         $themeChanges = getenv('CHANGED_THEME_FILES');
         // Build if theme is changed and tracked in CHANGED_THEME_FILES
         // env variable.
-        if (strpos($themeChanges, $type . '/' . $themeName) > 0) {
+        if (strpos($themeChanges, $type . '/' . $themeName) > -1) {
           $build = TRUE;
         }
         // Build all transac themes if alshaya_white_label themes changed.
-        elseif ($type == 'transac' && strpos($themeChanges, 'transac/alshaya_white_label') > 0) {
+        elseif ($type == 'transac' && strpos($themeChanges, 'transac/alshaya_white_label') > -1) {
           $build = TRUE;
         }
         // Build all non-transac themes if white_label themes changed.
-        elseif ($type == 'non_transac' && strpos($themeChanges, 'transac/whitelabel') > 0) {
+        elseif ($type == 'non_transac' && strpos($themeChanges, 'transac/whitelabel') > -1) {
           $build = TRUE;
         }
 
@@ -191,7 +190,7 @@ class AlshayaFrontendCommand extends BltTasks {
           if ($type === 'non_transac') {
             $cssFromDir .= '/dist';
             // Only in whitelabel theme css is inside /components/dist folder.
-            if (strpos($themePath, 'whitelabel') > 0) {
+            if (strpos($themePath, 'whitelabel') > -1) {
               $cssFromDir = str_replace('/dist', '/components/dist', $themePath);
               $cssToDir .= '/components';
             }
@@ -199,6 +198,17 @@ class AlshayaFrontendCommand extends BltTasks {
           // In transac and transac_lite theme css is inside /css folder.
           else {
             $cssFromDir .= '/css';
+          }
+
+          // Copy step.
+          $this->say("Copying unchanged " . $themeName . " theme from " . $cssFromDir . " to " . $cssToDir);
+          $result = $this->taskCopyDir([$cssFromDir => $cssToDir])
+            ->overwrite(TRUE)
+            ->run();
+          // If copying failed preparing for build.
+          if (!$result->wasSuccessful()) {
+            $this->say("Unable to copy css files from cloud. Building theme " . $themeName);
+            $build = TRUE;
           }
         }
       }
@@ -211,16 +221,6 @@ class AlshayaFrontendCommand extends BltTasks {
       if ($build) {
         $fullBuildCommand = sprintf('cd %s; npm run build', $themePath);
         $tasks->exec($fullBuildCommand);
-      }
-      // Copy theme css.
-      else {
-        $this->say("Copying unchanged " . $themeName . "theme from " . $cssFromDir . "to " . $cssToDir);
-        $result = $this->taskCopyDir([$cssFromDir => $cssToDir])
-          ->overwrite(TRUE)
-          ->run();
-        if (!$result->wasSuccessful()) {
-          throw new BltException("Unable to copy css files from cloud.");
-        }
       }
     }
 
