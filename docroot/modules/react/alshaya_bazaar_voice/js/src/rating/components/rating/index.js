@@ -10,14 +10,13 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import { getProductReviewStats } from '../../../utilities/user_util';
 import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
 
-const userDetails = getUserDetails();
-
 export default class Rating extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       reviewsData: '',
       bazaarVoiceSettings: getbazaarVoiceSettings(),
+      userDetails: null,
     };
   }
 
@@ -38,6 +37,10 @@ export default class Rating extends React.Component {
         }
       });
     }
+
+    getUserDetails().then((userDetails) => {
+      this.setState({ userDetails });
+    });
   }
 
   clickHandler = (e, callbackFn) => {
@@ -50,7 +53,7 @@ export default class Rating extends React.Component {
   }
 
   render() {
-    const { reviewsData, bazaarVoiceSettings } = this.state;
+    const { reviewsData, bazaarVoiceSettings, userDetails } = this.state;
     // Return empty if reviews settings unavailable.
     if (bazaarVoiceSettings.reviews === undefined) {
       return null;
