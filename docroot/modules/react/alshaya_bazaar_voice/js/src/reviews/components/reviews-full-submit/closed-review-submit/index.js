@@ -6,14 +6,18 @@ import { setStorageInfo } from '../../../../utilities/storage';
 const ClosedReviewSubmit = ({
   destination,
 }) => {
-  // Enable write review popup onload.
-  setStorageInfo(true, 'openPopup');
+  function onClick() {
+    // Enable write review popup onload.
+    setStorageInfo(true, 'openPopup');
+  }
+
   return (
     <div className="button-wrapper">
       <a
         id="closed-review-submit"
         className="write-review-button"
         href={`/${getLanguageCode()}/user/login?destination=${destination}&openPopup=true`}
+        onClick={() => { onClick(); }}
       >
         {getStringMessage('write_a_review')}
       </a>
