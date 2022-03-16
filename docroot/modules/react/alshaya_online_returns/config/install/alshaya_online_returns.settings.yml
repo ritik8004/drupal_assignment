@@ -1,1 +1,1 @@
-online_returns_enabled: true # Config to enable/disable Online Returns feature.
+status: true # Config to enable/disable Online Returns feature.

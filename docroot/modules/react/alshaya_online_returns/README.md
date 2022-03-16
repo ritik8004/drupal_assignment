@@ -2,5 +2,5 @@
 
 ## Configurations
 
-* After `alshaya_online_returns module` is enabled, use config `online_returns_enabled` to enable/disable the feature.
+* After `alshaya_online_returns module` is enabled, use config `status` to enable/disable the feature.
 
