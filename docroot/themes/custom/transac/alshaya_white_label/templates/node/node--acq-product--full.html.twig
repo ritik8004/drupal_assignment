@@ -133,6 +133,10 @@ set classes = [
               {% endif %}
             </div>
 
+            {% if online_returns_status is defined and online_returns_status %}
+              <div id="online-returns-not-eligibile-message"></div>
+            {% endif %}
+
             {% block shortDescBlock %}
               <div class="short-description-wrapper">
                 <div class="content--short-description">

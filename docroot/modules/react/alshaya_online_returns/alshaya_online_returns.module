@@ -59,3 +59,19 @@ function alshaya_online_returns_sku_variant_info_alter(array &$variant, SKUInter
   }
   $variant['eligibleForReturn'] = $onlineReturnsHelper->isSkuReturnable($child);
 }
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_online_returns_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  // Do not process further if feature is disabled.
+  if (!$onlineReturnsHelper->isOnlineReturnsEnabled()) {
+    return;
+  }
+
+  if (isset($build['#attached']['drupalSettings']['productInfo'][$sku->getSku()])) {
+    $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['eligibleForReturn'] = $onlineReturnsHelper->isSkuReturnable($sku);
+  }
+}
