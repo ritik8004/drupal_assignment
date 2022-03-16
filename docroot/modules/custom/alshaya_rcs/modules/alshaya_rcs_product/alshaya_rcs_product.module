@@ -997,6 +997,7 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
   }
   // Attaching order library.
   $build['#attached']['library'][] = 'alshaya_rcs_product/product.order';
+  $build['#attached']['library'][] = 'alshaya_white_label/rcs-order-listing';
 }
 
 /**
