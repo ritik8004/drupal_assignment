@@ -39,12 +39,19 @@ function alshaya_mc_update_8322() {
 
   // Add label translation for ar language.
   $blocks = [
-    'alshayaproducttype',
-    'promoalshayaproducttype',
-    'plpalshayaproducttype',
-    'productlistalshayaproducttype',
+    'alshayaproducttype' => 'gender',
+    'promoalshayaproducttype' => 'promogender',
+    'plpalshayaproducttype' => 'plpgender',
   ];
-  foreach ($blocks as $facet_block_id) {
+  foreach ($blocks as $facet_block_id => $price_filter_block_id) {
+    // Place product type block after gender block.
+    $facet_block = Block::load($facet_block_id);
+    $price_filter_block = Block::load($price_filter_block_id);
+    if (($facet_block instanceof BlockInterface) && ($price_filter_block instanceof BlockInterface)) {
+      $facet_block->setWeight(($price_filter_block->getWeight()) + 1);
+      $facet_block->save();
+    }
+
     // Add string translation for the block label.
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.' . $facet_block_id)
       ->set('settings.label', 'نوع المنتج')
