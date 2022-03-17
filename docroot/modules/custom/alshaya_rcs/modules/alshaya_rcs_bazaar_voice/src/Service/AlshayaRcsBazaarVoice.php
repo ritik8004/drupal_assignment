@@ -15,9 +15,9 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
   public function getProductBazaarVoiceDetails($sku, array $basic_configs, array $item = []) {
     $settings = [];
 
-    // Get avalable sorting options from config.
+    // Get available sorting options from config.
     $sorting_options = $this->getSortingOptions();
-    // Get avalable BazaarVoice error messages from config.
+    // Get available BazaarVoice error messages from config.
     $bv_error_messages = $this->getBazaarVoiceErrorMessages();
     // Get the filter options to be rendered on review summary.
     $filter_options = $this->getPdpFilterOptions();
@@ -65,19 +65,7 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
       'Limit_Reviews' => $pdp_reviews_seo_limit,
     ];
     $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/products.json', $extra_params);
-
-    if (empty($request)) {
-      return;
-    }
-
-    $request_options['query'] = $request['query'];
-
-    // For RCS product, we do not have the product id avaialble on page load.
-    // So we send this dummy value which is replaced in JS.
-    // Also, the API request is done in JS.
-    if ($product_id === 'SKU_VAL') {
-      return $request;
-    }
+    return $request;
   }
 
 }
