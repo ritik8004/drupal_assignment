@@ -1,4 +1,5 @@
 import React from 'react';
+import NotEligibleForReturn from '../not-eligible-for-return';
 
 class OnlineReturnsPDP extends React.Component {
   constructor(props) {
@@ -37,11 +38,7 @@ class OnlineReturnsPDP extends React.Component {
       return null;
     }
 
-    return (
-      <span>
-        { Drupal.t('Not eligible for Return') }
-      </span>
-    );
+    return <NotEligibleForReturn/>
   }
 }
 
