@@ -125,19 +125,17 @@ export default class OrderBookingCalendar extends React.Component {
   changeMonthDisplay = (action = 'increase') => {
     const { setOpenDate } = this.state;
 
+    // For increasing month current display month shouldn't be same as the min
+    // date boundry month. We shouldn't allow increasing month beyond min date.
+    if (action === 'increase'
+      && moment(setOpenDate).isSame(this.getMinMaxDateForCalendar('max'), 'month')) {
+      return;
+    }
+
     // For decreasing month current display month shouldn't be same as the min
     // date boundry month. We shouldn't allow decreasing month beyond min date.
     if (action === 'decrease'
       && moment(setOpenDate).isSame(this.getMinMaxDateForCalendar(), 'month')) {
-      return;
-    }
-
-    // For increasing month current display month shouldn't be same as the min
-    // date boundry month. We shouldn't allow increasing month beyond min date.
-    if (moment(setOpenDate).isSame(
-      this.getMinMaxDateForCalendar('max'),
-      'month',
-    )) {
       return;
     }
 
