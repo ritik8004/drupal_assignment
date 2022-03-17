@@ -28,6 +28,12 @@ function alshaya_egift_card_install() {
       $block->setVisibilityConfig('request_path', $visibility['request_path']);
       $block->save();
     }
+    $breadcrumb_url_string_topup = PHP_EOL . '/' . Url::fromRoute('alshaya_egift_card.topup_card', [])->getInternalPath();
+    if (isset($visibility['request_path']['pages']) && !stripos($visibility['request_path']['pages'], $breadcrumb_url_string_topup)) {
+      $visibility['request_path']['pages'] = $visibility['request_path']['pages'] . $breadcrumb_url_string_topup;
+      $block->setVisibilityConfig('request_path', $visibility['request_path']);
+      $block->save();
+    }
   } else {
     \Drupal::logger('alshaya_egift_card')->notice('Breadcrumb block is missing or not configured properly.');
   }
