@@ -125,7 +125,7 @@ export class StoreFinder extends React.Component {
     const nearbyStores = stores.filter((store) => {
       const otherLocation = { lat: +store.latitude, lng: +store.longitude };
       const distance = this.getDistanceBetween(currentLocation, otherLocation);
-      return (distance < 5) ? store : null;
+      return (distance < drupalSettings.cac.search_proximity_radius) ? store : null;
     });
     return nearbyStores;
   }
@@ -195,6 +195,7 @@ export class StoreFinder extends React.Component {
                           <div className="form-item-geolocation-geocoder-google-places-api">
                             <AutocompleteSearch
                               searchStores={(place) => this.searchStores(place)}
+                              placeholder={drupalSettings.cac.store_search_placeholder}
                             />
                             <div className="c-input__bar" />
                           </div>
@@ -203,7 +204,7 @@ export class StoreFinder extends React.Component {
                           </div>
                         </div>
                       </div>
-                      <a className="back-to-glossary" onClick={this.showAllStores}>{Drupal.t('List of all H&M stores')}</a>
+                      <a className="back-to-glossary" onClick={this.showAllStores}>{drupalSettings.cac.store_list_label}</a>
                     </div>
                   ) : (
                     <div className="form--inline clearfix">
@@ -218,6 +219,7 @@ export class StoreFinder extends React.Component {
                           <div className="form-item-geolocation-geocoder-google-places-api">
                             <AutocompleteSearch
                               searchStores={(place) => this.searchStores(place)}
+                              placeholder={drupalSettings.cac.store_search_placeholder}
                             />
                             <div className="c-input__bar" />
                           </div>

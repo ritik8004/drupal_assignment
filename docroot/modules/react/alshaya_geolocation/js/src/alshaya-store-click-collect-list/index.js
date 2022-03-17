@@ -141,7 +141,7 @@ export class StoreClickCollectList extends React.Component {
                                 <span className="label">{Drupal.t('Check in-store availability')}</span>
                                 <div>
                                   <AutocompleteSearch
-                                    placeholder={Drupal.t('Enter a location')}
+                                    placeholder={drupalSettings.cac.store_search_placeholder}
                                     searchStores={(place) => this.searchStores(place)}
                                   />
                                   <button className="search-stores-button" type="button">search stores</button>
