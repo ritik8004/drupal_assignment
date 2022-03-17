@@ -36,7 +36,7 @@
     const apiUri = '/data/reviews.json';
     const params = `&include=Authors,Products&filter=authorid:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
     const response = window.alshayaBazaarVoice.fetchAPIData(apiUri, params).then((result) => {
-      if (!hasValue(result.error) && hasValue(result.data)) {
+      if (!Drupal.hasValue(result.error) && Drupal.hasValue(result.data)) {
         if (result.data.Results.length > 0) {
           const products = result.data.Results;
           Object.keys(products).forEach((i) => {

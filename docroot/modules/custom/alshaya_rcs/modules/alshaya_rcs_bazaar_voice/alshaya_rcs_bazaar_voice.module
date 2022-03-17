@@ -13,7 +13,7 @@ use Drupal\Core\Entity\EntityInterface;
  */
 function alshaya_rcs_bazaar_voice_preprocess_node(&$variables) {
   if ($variables['node']->bundle() === 'rcs_product') {
-    /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
+    /** @var \Drupal\alshaya_rcs_bazaar_voice\Service\AlshayaRcsBazaarVoice $alshayaBazaarVoice */
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
     // Add bazaar voice related strings.
     $variables['bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
@@ -25,7 +25,7 @@ function alshaya_rcs_bazaar_voice_preprocess_node(&$variables) {
  */
 function alshaya_rcs_bazaar_voice_page_attachments_schema_data_alter(array &$attachments, array &$product_schema_data) {
   $route_match = \Drupal::routeMatch();
-  /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
+  /** @var \Drupal\alshaya_rcs_bazaar_voice\Service\AlshayaRcsBazaarVoice $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
 
   if ($route_match->getRouteName() == 'entity.node.canonical') {
@@ -52,7 +52,7 @@ function alshaya_rcs_bazaar_voice_node_view(array &$build, EntityInterface $enti
     return;
   }
 
-  /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshaya_bazaar_voice */
+  /** @var \Drupal\alshaya_rcs_bazaar_voice\Service\AlshayaRcsBazaarVoice $alshaya_bazaar_voice */
   $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
   $basic_configs = $alshaya_bazaar_voice->getBasicConfigurations();
   // Disable BazaarVoice Rating and Review in PDP
@@ -61,7 +61,7 @@ function alshaya_rcs_bazaar_voice_node_view(array &$build, EntityInterface $enti
     return;
   }
 
-  $settings = $alshaya_bazaar_voice->getRcsProductBazaarVoiceDetails($basic_configs);
+  $settings = $alshaya_bazaar_voice->getProductBazaarVoiceDetails(NULL, $basic_configs);
 
   // Get the current pdp layout.
   $product_pdp_layout = \Drupal::service('alshaya_acm_product.skumanager')->getPdpLayout($entity);
