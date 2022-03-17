@@ -9,7 +9,13 @@ import ar from '../../../../../../node_modules/date-fns/locale/ar-SA';
 export default class OnlineBookingCalendar extends React.Component {
   constructor(props) {
     super(props);
-    const { selectedDate } = this.props;
+    const { bookingDetails } = this.props;
+
+    // Get the current booking date from the provided booking details else
+    // consider the current date.
+    const selectedDate = typeof bookingDetails.appointment_date !== 'undefined'
+      ? new Date(bookingDetails.appointment_date)
+      : new Date();
 
     this.state = {
       // selectedDate is used for keeping the current selected booking date in
@@ -22,99 +28,19 @@ export default class OnlineBookingCalendar extends React.Component {
       // This variable keep the available time slots for the current selected
       // date in calendar and will change on each available booking date change.
       availableTimeSlots: this.getTimeSlotsForDate(selectedDate),
+      // Set the current time slot identifier in the state. This will update
+      // everytime when customer change the timeslot from the list of available
+      // time slots.
+      selectedTimeSlot: typeof bookingDetails.resource_external_id !== 'undefined'
+        ? bookingDetails.resource_external_id
+        : null,
+      // This state is used to enable or disable apply/submit button in
+      // calendar after selecting a different timeslot. This is to force
+      // customer selecting a time slot below. If the default is selected,
+      // button will still remain in disable state.
+      disableApplyBtn: true,
     };
   }
-
-  /**
-   * Array of available_time_slots from get time slot API. We will get this
-   * in props once the API integration is done.
-   *
-   * @returns {array}
-   *  Array of time slots object with date.
-   */
-  getHFDBookingTimeSlots = () => (
-    // Value of available_time_slots from get time slot API.
-    // @todo: need to make it dynamic when APIs are available.
-    [
-      {
-        appointment_date: '2022-02-27',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-02-27T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-          {
-            start_time: '3:00 PM',
-            end_time: '4:00 PM',
-            appointment_date_time: '2022-02-27T15:00:00.000Z',
-            resource_external_id: 'EveningShiftZone1KSA',
-          },
-        ],
-      },
-      {
-        appointment_date: '2022-03-14',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-03-14T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-        ],
-      },
-      {
-        appointment_date: '2022-04-01',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-04-01T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-          {
-            start_time: '1:00 PM',
-            end_time: '2:00 PM',
-            appointment_date_time: '2022-04-01T08:00:00.000Z',
-            resource_external_id: 'AfernoonShiftZone1KSA',
-          },
-        ],
-      },
-    ]
-  );
-
-  /**
-   * Set the calendar date and get time slots for selected date.
-   */
-  onDateChanged = (date) => {
-    this.setState({
-      selectedDate: new Date(date),
-      availableTimeSlots: this.getTimeSlotsForDate(date),
-    });
-  };
-
-  /**
-   * Increase the month showing in the calendar by changing the open date
-   * to next month.
-   */
-  increaseMonth = () => {
-    const { setOpenDate } = this.state;
-    this.setState({
-      setOpenDate: new Date(moment(setOpenDate).add(1, 'month')),
-    });
-  };
-
-  /**
-   * Decrease the month showing in the calendar by changing the open date
-   * to previous month.
-   */
-  decreaseMonth = () => {
-    const { setOpenDate } = this.state;
-    this.setState({
-      setOpenDate: new Date(moment(setOpenDate).subtract(1, 'month')),
-    });
-  };
 
   /**
    * Prepare a array of date slots objects to show in calendar.
@@ -123,10 +49,11 @@ export default class OnlineBookingCalendar extends React.Component {
    *  Array of available date slots.
    */
   getAvailableBookingDates = () => {
+    // Get all available booking slots from the props.
+    const { availableSlots } = this.props;
     let bookingDates = [];
-    const bookingSlots = this.getHFDBookingTimeSlots();
-    if (typeof bookingSlots !== 'undefined' && bookingSlots.length > 0) {
-      bookingDates = bookingSlots.map((daySlot) => (
+    if (typeof availableSlots !== 'undefined' && availableSlots.length > 0) {
+      bookingDates = availableSlots.map((daySlot) => (
         new Date(daySlot.appointment_date)
       ));
     }
@@ -143,11 +70,12 @@ export default class OnlineBookingCalendar extends React.Component {
    *  Array of time slots for the given date.
    */
   getTimeSlotsForDate = (date) => {
+    // Get all available booking slots from the props.
+    const { availableSlots } = this.props;
     let timeSlotsForDate = [];
     const dateFormat = 'YYYY-MM-DD';
-    const bookingSlots = this.getHFDBookingTimeSlots();
-    if (typeof bookingSlots !== 'undefined' && bookingSlots.length > 0) {
-      bookingSlots.forEach((daySlot) => {
+    if (typeof availableSlots !== 'undefined' && availableSlots.length > 0) {
+      availableSlots.forEach((daySlot) => {
         // Get the time slots if the given date is matched.
         if (moment(date).format(dateFormat)
           === moment(daySlot.appointment_date).format(dateFormat)) {
@@ -159,40 +87,28 @@ export default class OnlineBookingCalendar extends React.Component {
   };
 
   /**
-   * Get minimum date boundry for booking calendar.
+   * Set the calendar date and get time slots for selected date.
    */
-  getMinDate = () => {
-    const bookingSlots = this.getHFDBookingTimeSlots();
-    // First date from the available booking slots is the minimum date for
-    // the calendar.
-    if (typeof bookingSlots !== 'undefined'
-      && bookingSlots.length > 0) {
-      return new Date(bookingSlots[0].appointment_date);
-    }
-
-    // If no booking slots are available then return today's date.
-    return new Date();
-  };
-
-  /**
-   * Get maximum date boundry for booking calendar.
-   */
-  getMaxDate = () => {
-    const bookingSlots = this.getHFDBookingTimeSlots();
-    // Last date from the available booking slots is the maximum date for
-    // the calendar.
-    if (typeof bookingSlots !== 'undefined'
-      && bookingSlots.length > 0) {
-      const lastSlotIndex = parseInt(bookingSlots.length, 10) - 1;
-      return new Date(bookingSlots[lastSlotIndex].appointment_date);
-    }
-
-    // If no booking slots are available then return today's date.
-    return new Date();
+  onDateChanged = (date) => {
+    const { bookingDetails } = this.props;
+    this.setState({
+      selectedDate: new Date(date),
+      // Get the available time slots for the new date.
+      availableTimeSlots: this.getTimeSlotsForDate(date),
+      // Reset the time slot identifier everytime date is changed.
+      selectedTimeSlot: typeof bookingDetails.resource_external_id !== 'undefined'
+        ? bookingDetails.resource_external_id
+        : null,
+      // Disable apply/submit button when date changed. This is to force
+      // customer selecting a time slot below. If the default is selected,
+      // button will still remain in disable state.
+      disableApplyBtn: true,
+    });
   };
 
   /**
    * Change the month in state on change in calendar to sync custom functions.
+   * This is a react datepicker month change handler.
    *
    * @param {string} monthBeingViewed
    */
@@ -202,11 +118,94 @@ export default class OnlineBookingCalendar extends React.Component {
     });
   };
 
+  /**
+   * Change the current month to either next or previous month based on the
+   * action. Default to increase month and `decrease` action will reduce month.
+   */
+  changeMonthDisplay = (action = 'increase') => {
+    const { setOpenDate } = this.state;
+
+    // For increasing month current display month shouldn't be same as the min
+    // date boundry month. We shouldn't allow increasing month beyond min date.
+    if (action === 'increase'
+      && moment(setOpenDate).isSame(this.getMinMaxDateForCalendar('max'), 'month')) {
+      return;
+    }
+
+    // For decreasing month current display month shouldn't be same as the min
+    // date boundry month. We shouldn't allow decreasing month beyond min date.
+    if (action === 'decrease'
+      && moment(setOpenDate).isSame(this.getMinMaxDateForCalendar(), 'month')) {
+      return;
+    }
+
+    // For default action increase the month display, we will set the open date
+    // of next month and for the decreae the month display we will set the open
+    // date to the previous month.
+    this.setState({
+      setOpenDate: (action === 'decrease')
+        ? new Date(moment(setOpenDate).subtract(1, 'month'))
+        : new Date(moment(setOpenDate).add(1, 'month')),
+    });
+  };
+
+  /**
+   * Get the minimun and maximun date boundries for the calendar. Default this
+   * will return the minimum date boundry. `max` parameter will return the max
+   * date boundry.
+   */
+  getMinMaxDateForCalendar = (boundry = 'min') => {
+    // Get all available booking slots from the props.
+    const { availableSlots } = this.props;
+
+    // First check if we have booking slots are available at all.
+    if (typeof availableSlots !== 'undefined'
+      && availableSlots.length > 0) {
+      // Last date from the available booking slots is the maximum date for
+      // the calendar.
+      if (boundry === 'max') {
+        const lastSlotIndex = parseInt(availableSlots.length, 10) - 1;
+        return new Date(availableSlots[lastSlotIndex].appointment_date);
+      }
+
+      // First date from the available booking slots is the minimum date for
+      // the calendar.
+      return new Date(availableSlots[0].appointment_date);
+    }
+
+    // If no booking slots are available then return today's date.
+    return new Date();
+  };
+
+  /**
+   * This is to change the apply button state when user selects a specific
+   * time slot by clicking it.
+   *
+   * @param {string} timeSlotExtId
+   *  Selected time slot resource external ID.
+   */
+  onTimeSlotChange = (timeSlotExtId) => {
+    const { bookingDetails } = this.props;
+
+    // If selected time slot is different then allow customer to use apply
+    // button and change the schedule.
+    this.setState({
+      // Change the selected time slot ID with the clicked time slot ID.
+      selectedTimeSlot: timeSlotExtId,
+      // Check if the selected time slot is similar to current booking details,
+      // and keep apply button disabled.
+      disableApplyBtn: (typeof bookingDetails.resource_external_id !== 'undefined'
+        && bookingDetails.resource_external_id === timeSlotExtId),
+    });
+  };
+
   render() {
     const {
       selectedDate,
       setOpenDate,
       availableTimeSlots,
+      selectedTimeSlot,
+      disableApplyBtn,
     } = this.state;
     const { closeScheduleDeliveryModal } = this.props;
 
@@ -224,11 +223,18 @@ export default class OnlineBookingCalendar extends React.Component {
     let timeSlotListItems = null;
     if (availableTimeSlots.length > 0) {
       timeSlotListItems = availableTimeSlots.map((timeSlot) => {
+        const className = (timeSlot.resource_external_id
+          === selectedTimeSlot)
+          ? 'booking-slot selected'
+          : 'booking-slot';
+
         let element = null;
         element = (
           <li
             key={timeSlot.resource_external_id}
             value={timeSlot.resource_external_id}
+            className={className}
+            onClick={() => this.onTimeSlotChange(timeSlot.resource_external_id)}
           >
             {`${timeSlot.start_time} - ${timeSlot.end_time}`}
           </li>
@@ -242,7 +248,11 @@ export default class OnlineBookingCalendar extends React.Component {
         <div className="schedule-delivery-datepicker__wrapper">
           <div className="schedule-delivery-datepicker__header">
             <span className="popup-heading">
-              {Drupal.t('Schedule Your Delivery', {}, { context: 'online booking' })}
+              {Drupal.t(
+                'Schedule Your Delivery',
+                {},
+                { context: 'online_booking' },
+              )}
             </span>
             <span
               className="popup-close-icon"
@@ -253,21 +263,19 @@ export default class OnlineBookingCalendar extends React.Component {
           </div>
           <div className="schedule-delivery-datepicker__main">
             <Swipeable
-              onSwipedLeft={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.increaseMonth() : this.decreaseMonth())}
-              onSwipedRight={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.decreaseMonth() : this.increaseMonth())}
+              onSwipedLeft={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.changeMonthDisplay() : this.changeMonthDisplay('decrease'))}
+              onSwipedRight={() => (((drupalSettings.path.currentLanguage === 'en')) ? this.changeMonthDisplay('decrease') : this.changeMonthDisplay())}
               preventDefaultTouchmoveEvent
             >
               <div className="datetime-picker-wrapper" dir={dir}>
                 <DatePicker
                   renderCustomHeader={({
                     date,
-                    decreaseMonth,
-                    increaseMonth,
                     prevMonthButtonDisabled,
                     nextMonthButtonDisabled,
                   }) => (
                     <>
-                      <div className="datepicker-heading">{Drupal.t('Delivery Date')}</div>
+                      <div className="datepicker-heading">{Drupal.t('Delivery Date', {}, { context: 'online_booking' })}</div>
                       <div className="datepicker-month-calendar-sides">
                         {/**
                          * Customise the calendar header to show previous,
@@ -276,7 +284,6 @@ export default class OnlineBookingCalendar extends React.Component {
                          */}
                         <span
                           className="month-calendar-sides previous"
-                          onClick={decreaseMonth}
                           disabled={prevMonthButtonDisabled}
                         >
                           {moment(date).subtract('1', 'month').format('MMMM')}
@@ -286,7 +293,6 @@ export default class OnlineBookingCalendar extends React.Component {
                         </span>
                         <span
                           className="month-calendar-sides next"
-                          onClick={increaseMonth}
                           disabled={nextMonthButtonDisabled}
                         >
                           {moment(date).add('1', 'month').format('MMMM')}
@@ -295,8 +301,8 @@ export default class OnlineBookingCalendar extends React.Component {
                     </>
                   )}
                   selected={selectedDate}
-                  minDate={this.getMinDate()}
-                  maxDate={this.getMaxDate()}
+                  minDate={this.getMinMaxDateForCalendar()}
+                  maxDate={this.getMinMaxDateForCalendar('max')}
                   inline
                   onSelect={(date) => this.onDateChanged(date)}
                   onMonthChange={this.onMonthChange}
@@ -313,23 +319,31 @@ export default class OnlineBookingCalendar extends React.Component {
                 <span
                   className="datepicker-month-left"
                   onClick={() => ((drupalSettings.path.currentLanguage === 'en')
-                    ? this.decreaseMonth()
-                    : this.increaseMonth())}
+                    ? this.changeMonthDisplay('decrease')
+                    : this.changeMonthDisplay())}
+                  disabled={moment(setOpenDate).isSame(
+                    this.getMinMaxDateForCalendar(),
+                    'month',
+                  )}
                 >
                   {'<'}
                 </span>
                 <span
                   className="datepicker-month-right"
                   onClick={() => ((drupalSettings.path.currentLanguage === 'en')
-                    ? this.increaseMonth()
-                    : this.decreaseMonth())}
+                    ? this.changeMonthDisplay()
+                    : this.changeMonthDisplay('decrease'))}
+                  disabled={moment(setOpenDate).isSame(
+                    this.getMinMaxDateForCalendar('max'),
+                    'month',
+                  )}
                 >
                   {'>'}
                 </span>
               </div>
             </Swipeable>
             <div className="timeslots-selection-wrapper" dir={dir}>
-              <div className="timeslots-selection-heading">{Drupal.t('Delivery Time', {}, { context: 'online booking' })}</div>
+              <div className="timeslots-selection-heading">{Drupal.t('Delivery Time', {}, { context: 'online_booking' })}</div>
               <div className="timeslots-selection-options">
                 <ul className="timeslots-options-list">{timeSlotListItems}</ul>
               </div>
@@ -339,8 +353,9 @@ export default class OnlineBookingCalendar extends React.Component {
             <button
               type="button"
               className="schedule-delivery-datepicker-submit"
+              disabled={disableApplyBtn}
             >
-              {Drupal.t('Apply Date & Time', {}, { context: 'online booking' })}
+              {Drupal.t('Apply Date & Time', {}, { context: 'online_booking' })}
             </button>
           </div>
         </div>
