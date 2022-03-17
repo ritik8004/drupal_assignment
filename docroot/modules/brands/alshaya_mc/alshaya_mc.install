@@ -37,7 +37,6 @@ function alshaya_mc_update_8322() {
     AlshayaConfigManager::MODE_RESAVE
   );
 
-  // Add label translation for ar language.
   $blocks = [
     'alshayaproducttype' => 'gender',
     'promoalshayaproducttype' => 'promogender',
@@ -57,9 +56,6 @@ function alshaya_mc_update_8322() {
       ->set('settings.label', 'نوع المنتج')
       ->save();
   }
-
-  // Re-indexing all the products.
-  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
