@@ -10,32 +10,62 @@ namespace Drupal\rcs_placeholders\Graphql;
 class ArrayGraphQL {
 
   /**
-   * Converts the arrays.
+   * Perform character replacement and converts array to graphql query string.
    *
    * @param array $fields
-   *   The array of fields.
+   *   Array to perform the character replacement on.
    *
    * @return string
-   *   The formatted string.
+   *   The string with the replaced characters.
    */
-  public static function convert(array $fields): string {
-    // Recursive remove field duplicates.
-    $fields = self::removeDuplicates($fields);
-
+  private static function convertToGraphqlQuery(array $fields) {
     // Convert array to json.
     $fields = json_encode($fields, JSON_PRETTY_PRINT);
 
     // Remove array indexes.
     $fields = preg_replace('~"\d+":\s~', '', $fields);
 
-    // Remove quotes, colons and commas (Original code doesn't remove commas).
-    $fields = str_replace(['"', ':', ','], '', $fields);
+    // Remove colons except inside `()`, i.e. filters, variables etc.
+    $fields = preg_replace('/:(?!.*?\\))/', '', $fields);
 
-    // Replace square brackets to curly brackets.
-    $fields = str_replace(['[', ']'], ['{', '}'], $fields);
+    // Remove [ except inside `()`, i.e. filters, variables etc.
+    $fields = preg_replace('/\[(?!.*?\\))/', '{', $fields);
+
+    // Remove ] except inside `()`, i.e. filters, variables etc.
+    $fields = preg_replace('/\](?!.*?\\))/', '}', $fields);
+
+    // Remove quotes and commas (Original code doesn't remove commas).
+    $fields = str_replace(['"', ','], '', $fields);
 
     // Compress (Original code doesn't include this).
     $fields = preg_replace("/(\r?\n?\s+)/", ' ', $fields);
+
+    return $fields;
+  }
+
+  /**
+   * Converts the arrays.
+   *
+   * @param array $fields
+   *   The array of fields.
+   *
+   * @return array
+   *   The formatted string.
+   */
+  public static function convert(array $fields): array {
+    // Recursive remove field duplicates.
+    $fields = self::removeDuplicates($fields);
+
+    if (!isset($fields['query'])) {
+      return [];
+    }
+
+    // Here we convert the array query to a graphql string.
+    $fields['query'] = self::convertToGraphqlQuery($fields['query']);
+    // We let the variables to be passed as objects so that they can be
+    // altered in the javascript side for dynamic parameters that may not be
+    // known in the backend.
+    $fields['variables'] = $fields['variables'] ?? [];
 
     return $fields;
   }
@@ -74,7 +104,7 @@ class ArrayGraphQL {
           // Original code uses a custom exception.
           throw new \Exception('Associative array values should be non-empty arrays', 2);
         }
-        $array[$key] = self::removeDuplicates($value);
+        $array[$key] = $key !== 'variables' ? self::removeDuplicates($value) : $value;
       }
     }
     return $array;

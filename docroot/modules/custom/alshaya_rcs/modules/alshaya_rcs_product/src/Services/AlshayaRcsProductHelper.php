@@ -3,6 +3,9 @@
 namespace Drupal\alshaya_rcs_product\Services;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -11,7 +14,7 @@ use Drupal\Core\Path\AliasManager;
 use Drupal\node\NodeInterface;
 
 /**
- * Class Alshaya Rcs Product Helper.
+ * Contains helper methods rcs product.
  *
  * @package Drupal\alshaya_rcs_product\Services
  */
@@ -28,6 +31,13 @@ class AlshayaRcsProductHelper {
   const SOURCE_CONTENT_TYPE_ID = 'acq_product';
 
   /**
+   * Route match service.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $currentRouteMatch;
+
+  /**
    * Node Storage.
    *
    * @var \Drupal\node\NodeStorageInterface
@@ -40,6 +50,13 @@ class AlshayaRcsProductHelper {
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
+
+  /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * The language manager.
@@ -70,12 +87,16 @@ class AlshayaRcsProductHelper {
   protected $logger;
 
   /**
-   * Constructs a new AlshayaRcsCategoryHelper instance.
+   * Class constructor.
    *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $current_route_match
+   *   Route match service..
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
-   * @param \Drupal\Core\Entity\ConfigFactoryInterface $config_factory
-   *   Config Factory.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Path\AliasManager $alias_manager
@@ -85,18 +106,340 @@ class AlshayaRcsProductHelper {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger factory.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager,
-                              ConfigFactoryInterface $config_factory,
-                              LanguageManagerInterface $language_manager,
-                              AliasManager $alias_manager,
-                              Connection $connection,
-                              LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(
+    RouteMatchInterface $current_route_match,
+    ConfigFactoryInterface $config_factory,
+    ModuleHandlerInterface $module_handler,
+    EntityTypeManagerInterface $entity_type_manager,
+    LanguageManagerInterface $language_manager,
+    AliasManager $alias_manager,
+    Connection $connection,
+    LoggerChannelFactoryInterface $logger_factory
+  ) {
+    $this->currentRouteMatch = $current_route_match;
+    $this->configFactory = $config_factory;
+    $this->moduleHandler = $module_handler;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
     $this->connection = $connection;
     $this->logger = $logger_factory->get('alshaya_rcs_product');
+  }
+
+  /**
+   * Returns the URL key for the product for use in graphql requests.
+   *
+   * @return string
+   *   The product url key.
+   */
+  public function getProductUrlKey() {
+    $url_key = RcsPhPathProcessor::getFullPath(TRUE);
+    return str_replace('.html', '', $url_key);
+  }
+
+  /**
+   * Returns if ppage is RCS PDP or not.
+   *
+   * @return bool
+   *   If page is RCS PDP or not.
+   */
+  public function isRcsPdp() {
+    foreach ($this->currentRouteMatch->getParameters() as $route_parameter) {
+      if ($route_parameter instanceof NodeInterface) {
+        if ($route_parameter->bundle() === 'rcs_product') {
+          return TRUE;
+        }
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Get the field query for recommended products.
+   *
+   * @return array
+   *   Fields array.
+   */
+  private function getRecommendedProductFieldQuery() {
+    return [
+      'sku',
+      'id',
+      'name',
+      'type_id',
+      'url_key',
+      'is_buyable',
+      'stock_status',
+      'price_range' => [
+        'maximum_price' => [
+          'regular_price' => [
+            'value',
+          ],
+          'final_price' => [
+            'value',
+          ],
+          'discount' => [
+            'percent_off',
+          ],
+        ],
+      ],
+      'media_gallery' => [
+        'url',
+        'label',
+        '... on ProductVideo' => [
+          'video_content' => [
+            'media_type',
+            'video_provider',
+            'video_url',
+            'video_title',
+            'video_description',
+            'video_metadata',
+          ],
+        ],
+      ],
+      'gtm_attributes' => [
+        'id',
+        'name',
+        'variant',
+        'price',
+        'brand',
+        'category',
+        'dimension2',
+        'dimension3',
+        'dimension4',
+      ],
+    ];
+  }
+
+  /**
+   * Returns the basic fields needed to be added to the product graphql query.
+   *
+   * @return array
+   *   The product query fields.
+   */
+  public function getProductQueryFields() {
+    $static = &drupal_static(__METHOD__, []);
+    if (!empty($static)) {
+      return $static;
+    }
+
+    // The main query fields for the product query.
+    $fields = [
+      'total_count',
+      'items' => [
+        'sku',
+        'id',
+        'type_id',
+        'name',
+        'description' => [
+          'html',
+        ],
+        'url_key',
+        'is_buyable',
+        'stock_status',
+        'express_delivery',
+        'same_day_delivery',
+        'ship_to_store',
+        'reserve_and_collect',
+        'price_range' => [
+          'maximum_price' => [
+            'regular_price' => [
+              'value',
+            ],
+            'final_price' => [
+              'value',
+            ],
+            'discount' => [
+              'percent_off',
+            ],
+          ],
+        ],
+        'brand_logo_data' => [
+          'url',
+          'alt',
+          'title',
+        ],
+        'media_gallery' => [
+          'url',
+          'label',
+          '... on ProductVideo' => [
+            'video_content' => [
+              'media_type',
+              'video_provider',
+              'video_url',
+              'video_title',
+              'video_description',
+              'video_metadata',
+            ],
+          ],
+        ],
+        'gtm_attributes' => [
+          'id',
+          'name',
+          'variant',
+          'price',
+          'brand',
+          'category',
+          'dimension2',
+          'dimension3',
+          'dimension4',
+        ],
+        'meta_title',
+        'meta_description',
+        'meta_keyword',
+        'og_meta_title',
+        'og_meta_description',
+        'stock_data' => [
+          'max_sale_qty',
+          'qty',
+        ],
+        'promotions' => [
+          'context',
+          'url',
+          'label',
+          'type',
+        ],
+        '... on ConfigurableProduct' => [
+          'configurable_options' => [
+            'attribute_uid',
+            'label',
+            'position',
+            'attribute_code',
+            'values' => [
+              'value_index',
+              'store_label',
+            ],
+          ],
+          'variants' => [
+            'product' => [
+              'id',
+              'sku',
+              'meta_title',
+              'stock_status',
+              'express_delivery',
+              'same_day_delivery',
+              'ship_to_store',
+              'reserve_and_collect',
+              'attribute_set_id',
+              'swatch_data' => [
+                'swatch_type',
+              ],
+              'price_range' => [
+                'maximum_price' => [
+                  'regular_price' => [
+                    'value',
+                  ],
+                  'final_price' => [
+                    'value',
+                  ],
+                  'discount' => [
+                    'percent_off',
+                  ],
+                ],
+              ],
+              'is_returnable',
+              'stock_data' => [
+                'qty',
+                'max_sale_qty',
+              ],
+              'media_gallery' => [
+                'url',
+                'label',
+                '... on ProductImage' => [
+                  'url',
+                  'label',
+                ],
+                '... on ProductVideo' => [
+                  'video_content' => [
+                    'media_type',
+                    'video_provider',
+                    'video_url',
+                    'video_title',
+                    'video_description',
+                    'video_metadata',
+                  ],
+                ],
+              ],
+            ],
+            'attributes' => [
+              'label',
+              'code',
+              'value_index',
+            ],
+          ],
+        ],
+        'category_ids_in_admin',
+        'categories' => [
+          'id',
+          'name',
+          'level',
+          'url_path',
+          'include_in_menu',
+          'breadcrumbs' => [
+            'category_name',
+            'category_id',
+            'category_level',
+            'category_url_key',
+            'category_url_path',
+          ],
+        ],
+      ],
+    ];
+
+    // Add the recommended products fields to the main query body.
+    $recommended_product_settings = $this->configFactory->get('alshaya_acm.settings');
+    // Add query for upsell products if display setting is true.
+    if ($recommended_product_settings->get('display_upsell')) {
+      $fields['items']['upsell_products'] = $this->getRecommendedProductFieldQuery();
+    }
+    // Add query for related products if display setting is true.
+    if ($recommended_product_settings->get('display_related')) {
+      $fields['items']['related_products'] = $this->getRecommendedProductFieldQuery();
+    }
+    // Add query for crosssell products if display setting is true.
+    if ($recommended_product_settings->get('display_crosssell')) {
+      $fields['items']['crosssell_products'] = $this->getRecommendedProductFieldQuery();
+    }
+
+    $this->moduleHandler->alter('alshaya_rcs_product_query_fields', $fields);
+
+    $static = $fields;
+
+    return $static;
+  }
+
+  /**
+   * Returns the main query and variables getting product options data.
+   *
+   * @return array
+   *   The product options query and variables data.
+   */
+  public function getProductOptionsQueryFields() {
+    return [
+      'items' => [
+        'attribute_code',
+        'attribute_options' => [
+          'label',
+          'value',
+        ],
+      ],
+    ];
+  }
+
+  /**
+   * Returns the main query and variables getting product options data.
+   *
+   * @return array
+   *   The product options query and variables data.
+   */
+  public function getProductOptionsQueryVariables() {
+    $options = &drupal_static(__METHOD__, []);
+    if (!empty($options)) {
+      return $options;
+    }
+    $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query', [$options]);
+    return $options;
   }
 
   /**
