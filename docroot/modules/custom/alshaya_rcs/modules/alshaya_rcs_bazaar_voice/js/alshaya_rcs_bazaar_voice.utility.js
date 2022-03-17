@@ -1,6 +1,8 @@
-(function (drupalSettings, BVStaticStorage) {
+(function (drupalSettings) {
     // Initialize the global object.
   window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
+
+  var staticStorage = {};
 
   /**
    * Returns a review for the user for the current/mentioned product.
@@ -16,7 +18,9 @@
     const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
     const userId = drupalSettings.userDetails.userID;
     const staticStorageKey = `${userId}_${productId}`;
-    let productReviewData = BVStaticStorage.get(staticStorageKey);
+    let productReviewData = Drupal.hasValue(staticStorage[staticStorageKey])
+      ? staticStorage[staticStorageKey]
+      : null;
 
     if (productReviewData instanceof Promise) {
       return productReviewData;
@@ -51,7 +55,7 @@
       // return.
       const staticData = !productReviewData ? 0 : JSON.stringify(productReviewData);
       // Store the value statically so that it can be reused.
-      BVStaticStorage.set(staticStorageKey, staticData);
+      staticStorage[staticStorageKey] = staticData;
       // Return the product review data.
       return productReviewData;
     });
@@ -62,7 +66,7 @@
     // if the promise is not resolved, we return the same promise above so that
     // when it gets resolved both the calling functions are able to use the same
     // result instead of making multiple network requests for the same data.
-    BVStaticStorage.set(staticStorageKey, response);
+    staticStorage[staticStorageKey] = response;
     return response;
   }
-})(drupalSettings, bazaarVoiceStaticStorage);
+})(drupalSettings);
