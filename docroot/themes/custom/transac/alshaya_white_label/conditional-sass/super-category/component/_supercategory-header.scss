@@ -157,7 +157,7 @@
       }
     }
 
-    body {
+    & {
       margin-top: 5.5rem;
 
       @include breakpoint($only-tablet) {
@@ -319,10 +319,11 @@
     }
   }
 
-  body.wishlist-enabled {
+  &.wishlist-enabled {
     #wishlist-header-wrapper {
-      @include breakpoint($only-tablet) {
-        top: 0.25rem;
+      @include breakpoint($only-mobile) {
+        top: 5rem;
+        right: 2.5rem;
       }
     }
   }
