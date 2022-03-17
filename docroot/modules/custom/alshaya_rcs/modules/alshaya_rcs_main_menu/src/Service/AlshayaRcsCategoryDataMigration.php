@@ -22,6 +22,11 @@ class AlshayaRcsCategoryDataMigration {
   const SOURCE_VOCABULARY_ID = 'acq_product_category';
 
   /**
+   * Batch size.
+   */
+  const BATCH_SIZE = 50;
+
+  /**
    * The entity type manager service.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -147,34 +152,81 @@ class AlshayaRcsCategoryDataMigration {
     $terms = $query->distinct()->execute()->fetchAll();
     // Do not process if no terms are found.
     if (!empty($terms)) {
-
-      $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-      $delete_acq_terms = [];
-      $acq_term_mapping = [];
-      foreach ($terms as $term) {
-        // Load the product category term object.
-        $acq_term_data = $term_storage->load($term->tid);
-        if ($acq_term_data instanceof EntityInterface) {
-          $rcs_term = $this->createRcsCategory($acq_term_data);
-          // Create parent terms.
-          if (!empty($acq_term_data->parent->getString())) {
-            $pid = $this->createParentRcsCategory($acq_term_data->parent->getString(), $acq_term_mapping);
-            if ($pid) {
-              $rcs_term->set('parent', $pid);
-            }
-          }
-
-          $delete_acq_terms[$term->tid] = $acq_term_data;
-          $rcs_term->save();
-          // Save term mapping to get rcs parent terms.
-          $acq_term_mapping[$term->tid] = $rcs_term->id();
-        }
-        else {
-          throw new \Exception('Product category term not found.');
-        }
+      // Set batch operations to migrate terms.
+      $operations = [];
+      foreach (array_chunk($terms, self::BATCH_SIZE) as $term_chunk) {
+        $operations[] = [
+          [__CLASS__, 'batchProcess'],
+          [$term_chunk],
+        ];
       }
-      // Delete ACM category items.
-      $term_storage->delete($delete_acq_terms);
+      $batch = [
+        'title' => dt('Migrating enriched Product Category'),
+        'init_message' => dt('Starting processing rcs category...'),
+        'operations' => $operations,
+        'error_message' => dt('Unexpected error while migrating enriched ACM Categories.'),
+        'finished' => [__CLASS__, 'batchFinished'],
+      ];
+      batch_set($batch);
+    }
+  }
+
+  /**
+   * Batch operation to create rcs category terms.
+   *
+   * @param array $terms
+   *   Current Chunk of terms to be processed.
+   * @param mixed|array $context
+   *   The batch current context.
+   */
+  public static function batchProcess(array $terms, &$context) {
+    if (empty($context['sandbox'])) {
+      $context['sandbox']['progress'] = 0;
+    }
+    if (!isset($context['results']['acq_term_mapping'])) {
+      $context['results']['acq_term_mapping'] = [];
+    }
+    $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    foreach ($terms as $term) {
+      // Load the product category term object.
+      $acq_term_data = $term_storage->load($term->tid);
+      if ($acq_term_data instanceof EntityInterface) {
+        $rcs_term = self::createRcsCategory($acq_term_data);
+        // Create parent terms.
+        if (!empty($acq_term_data->parent->getString())) {
+          $pid = self::createParentRcsCategory($acq_term_data->parent->getString(), $context['results']['acq_term_mapping']);
+          if ($pid) {
+            $rcs_term->set('parent', $pid);
+          }
+        }
+
+        $rcs_term->save();
+        // Save term mapping to get rcs parent terms.
+        $context['results']['acq_term_mapping'][$term->tid] = $rcs_term->id();
+        $context['results']['delete_acq_terms'][$acq_term_data->id()] = $acq_term_data;
+        $context['sandbox']['progress']++;
+      }
+      else {
+        throw new \Exception('Product category term not found.');
+      }
+    }
+    $context['message'] = dt('Processed @progress RCS Category terms: ', ['@progress' => $context['sandbox']['progress']]);
+
+  }
+
+  /**
+   * Deletes Product category terms after migration is complete.
+   *
+   * @param bool $success
+   *   Indicate that the batch API tasks were all completed successfully.
+   * @param array $results
+   *   An array of all the results that were updated in operations.
+   * @param array $operations
+   *   A list of all the operations that had not been completed by batch API.
+   */
+  public static function batchFinished($success, array $results, array $operations) {
+    if ($success) {
+      \Drupal::entityTypeManager()->getStorage('taxonomy_term')->delete($results['delete_acq_terms']);
     }
   }
 
@@ -189,19 +241,19 @@ class AlshayaRcsCategoryDataMigration {
    * @return string
    *   Returns RCS Category parent term id.
    */
-  private function createParentRcsCategory($tid, array &$acq_term_mapping) {
+  protected static function createParentRcsCategory($tid, array &$acq_term_mapping) {
     // Already saved so return parent tid.
     if (!empty($acq_term_mapping[$tid])) {
       return $acq_term_mapping[$tid];
     }
-    $acq_term_data = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
+    $acq_term_data = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
 
     // Recursively create parent term.
     if (!empty($acq_term_data->parent->getString())) {
-      $pid = $this->createParentRcsCategory($acq_term_data->parent->getString(), $acq_term_mapping);
+      $pid = self::createParentRcsCategory($acq_term_data->parent->getString(), $acq_term_mapping);
     }
 
-    $rcs_term = $this->createRcsCategory($acq_term_data);
+    $rcs_term = self::createRcsCategory($acq_term_data);
     if ($pid) {
       $rcs_term->set('parent', $pid);
     }
@@ -220,11 +272,13 @@ class AlshayaRcsCategoryDataMigration {
    * @return TermInterface
    *   Returns RCS Category term.
    */
-  private function createRcsCategory($acq_term_data) {
+  protected static function createRcsCategory($acq_term_data) {
     // Get the current language.
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $paragraph_storage = $this->entityTypeManager->getStorage('paragraph');
+    $language_manager = \Drupal::service('language_manager');
+    $langcode = $language_manager->getCurrentLanguage()->getId();
+    $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+    $alias_manager = \Drupal::service('path_alias.manager');
 
     // Create a new rcs category term object.
     $rcs_term = $term_storage->create([
@@ -304,12 +358,12 @@ class AlshayaRcsCategoryDataMigration {
     }
 
     // Add category_slug field value from the old term path alias.
-    $term_slug = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $acq_term->tid);
+    $term_slug = $alias_manager->getAliasByPath('/taxonomy/term/' . $acq_term->tid);
     $term_slug = ltrim($term_slug, '/');
     $rcs_term->get('field_category_slug')->setValue($term_slug);
 
     // Check if the translations exists for other available languages.
-    foreach ($this->languageManager->getLanguages() as $language_code => $language) {
+    foreach ($language_manager->getLanguages() as $language_code => $language) {
       if ($language_code != $langcode && $acq_term_data->hasTranslation($language_code)) {
         // Load the translation object.
         $acq_term_data = $acq_term_data->getTranslation($language_code);
