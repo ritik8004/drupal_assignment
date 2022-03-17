@@ -102,9 +102,7 @@ class CartSelectOption extends React.Component {
             data: {
               sku: parentSkuSelected,
               viewMode: 'full',
-              ...(drupalSettings.onlineReturns !== undefined
-                && drupalSettings.onlineReturns.enabled
-                && { eligibleForReturn: variantInfo.eligibleForReturn }),
+              eligibleForReturn: variantInfo.eligibleForReturn,
             },
           },
         });

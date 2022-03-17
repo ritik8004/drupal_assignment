@@ -38,7 +38,7 @@ class OnlineReturnsPDP extends React.Component {
       return null;
     }
 
-    return <NotEligibleForReturn/>
+    return <NotEligibleForReturn />;
   }
 }
 
