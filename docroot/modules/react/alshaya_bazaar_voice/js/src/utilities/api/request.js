@@ -109,32 +109,30 @@ export function getLanguageCode() {
 export async function getProductReviewForCurrrentUser(productIdentifier) {
   const bazaarVoiceSettings = getbazaarVoiceSettings();
   const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
-  const userId = drupalSettings.userDetails.userID;
+  const userId = bazaarVoiceSettings.reviews.customer_id;
   const staticStorageKey = `${userId}_${productId}`;
   let productReviewData = BVStaticStorage.get(staticStorageKey);
 
   if (productReviewData instanceof Promise) {
     return productReviewData;
   }
+
   if (productReviewData) {
     return JSON.parse(productReviewData);
-  }
-  if (productReviewData === 0) {
-    return null;
   }
 
   // Get review data from BazaarVoice based on available parameters.
   const apiUri = '/data/reviews.json';
-  const params = `&include=Authors,Products&filter=AuthorId:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
+  const params = `&include=Authors,Products&filter=authorid:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
   const response = fetchAPIData(apiUri, params).then((result) => {
     if (!hasValue(result.error) && hasValue(result.data)) {
       if (result.data.Results.length > 0) {
-        const products = result.data.Includes.Products;
-        Object.keys(products).forEach((sku) => {
-          if (sku === productId) {
+        const products = result.data.Results;
+        Object.keys(products).forEach((i) => {
+          if (products[i].ProductId === productId) {
             productReviewData = {
-              review_data: products[sku],
-              user_rating: products[sku].Rating,
+              review_data: products[i],
+              user_rating: products[i].Rating,
             };
           }
         });
@@ -144,11 +142,16 @@ export async function getProductReviewForCurrrentUser(productIdentifier) {
     // differentiate between empty storage and 0 reviews.
     // When we fetch from static storage later, we convert 0 back to NULL and
     // return.
-    const staticData = !productReviewData ? 0 : JSON.stringify(productReviewData);
+    const staticData = (productReviewData) ? JSON.stringify(productReviewData) : 0;
     // Store the value statically so that it can be reused.
     BVStaticStorage.set(staticStorageKey, staticData);
+
     // Return the product review data.
-    return productReviewData;
+    if (staticData) {
+      return JSON.parse(staticData);
+    }
+
+    return staticData;
   });
 
   // As ratings and review-summary components are calling this function at
