@@ -162,10 +162,16 @@ class AlshayaFrontendCommand extends BltTasks {
 
     foreach ($themes ?? [] as $themeName => $themePath) {
       $build = FALSE;
-      // Checking if build is needed when inside github actions and push event
-      // is triggered. We build all themes in case of tag creation or we are
-      // outside github actions.
-      if (getenv('GITHUB_ACTIONS') == 'true' && getenv('GITHUB_EVENT_NAME') == 'push') {
+      // Copy cloud code only if
+      // - we are inside github actions
+      // - github push event has been triggered
+      // - we have some file changes at least
+      // - 'BUILD REQUEST' comment is not present in merge commit message.
+      if (getenv('GITHUB_ACTIONS') == 'true'
+        && getenv('GITHUB_EVENT_NAME') == 'push'
+        && !empty(getenv('CHANGED_ALL_FILES'))
+        && strpos(getenv('COMMIT_MESSAGE'), 'BUILD REQUEST') === FALSE
+      ) {
         $themeChanges = getenv('CHANGED_THEME_FILES');
         // Build if theme is changed and tracked in CHANGED_THEME_FILES
         // env variable.
@@ -201,18 +207,23 @@ class AlshayaFrontendCommand extends BltTasks {
           }
 
           // Copy step.
-          $this->say("Copying unchanged " . $themeName . " theme from " . $cssFromDir . " to " . $cssToDir);
+          $this->say('Copying unchanged ' . $themeName . ' theme from ' . $cssFromDir . ' to ' . $cssToDir);
           $result = $this->taskCopyDir([$cssFromDir => $cssToDir])
             ->overwrite(TRUE)
             ->run();
           // If copying failed preparing for build.
           if (!$result->wasSuccessful()) {
-            $this->say("Unable to copy css files from cloud. Building theme " . $themeName);
+            $this->say('Unable to copy css files from cloud. Building theme ' . $themeName);
             $build = TRUE;
           }
         }
       }
-      // Build all themes since outside of github actions or a tag is pushed.
+      // Build everything if
+      // - we are outside github actions
+      // - github create event has been triggered with tag push
+      // - it is an empty commit
+      // - reviewer requested a force build by commenting 'BUILD REQUEST'
+      //   in merge commit message.
       else {
         $build = TRUE;
       }

@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     # Map a step output to a job output
     outputs:
+      all: ${{ steps.changes.outputs.all }}
       themes: ${{ steps.changes.outputs.themes }}
       react: ${{ steps.changes.outputs.react }}
     steps:
@@ -27,12 +28,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
       - name: Get changed files
         id: changes
         # Set outputs using the command.
         run: |
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | xargs)"
           echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
           echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
 
@@ -66,6 +68,8 @@ jobs:
           echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
           echo "CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }}" >> $GITHUB_ENV
           echo "CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }}" >> $GITHUB_ENV
+          echo "CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.all }}" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGE=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v2
