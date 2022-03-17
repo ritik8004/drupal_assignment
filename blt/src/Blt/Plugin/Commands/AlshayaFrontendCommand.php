@@ -234,10 +234,16 @@ class AlshayaFrontendCommand extends BltTasks {
       }
 
       $build = FALSE;
-      // Checking if build is needed when inside GitHub actions and push event
-      // is triggered. We build all react modules in case of tag creation, or
-      // we are outside GitHub actions.
-      if (getenv('GITHUB_ACTIONS') == 'true' && getenv('GITHUB_EVENT_NAME') == 'push') {
+      // Copy cloud code only if
+      // - we are inside github actions
+      // - github push event has been triggered
+      // - we have some file changes at least
+      // - 'BUILD REQUEST' comment is not present in merge commit message.
+      if (getenv('GITHUB_ACTIONS') == 'true'
+        && getenv('GITHUB_EVENT_NAME') == 'push'
+        && !empty(getenv('CHANGED_ALL_FILES'))
+        && strpos(getenv('COMMIT_MESSAGE'), 'BUILD REQUEST') === FALSE
+      ) {
         $reactChanges = getenv('CHANGED_REACT_FILES');
         // Build if change in common (modules/react/js) folder.
         if (strpos($reactChanges, 'modules/react/js') > -1) {
@@ -277,8 +283,12 @@ class AlshayaFrontendCommand extends BltTasks {
           }
         }
       }
-      // Build all react modules since outside of github actions
-      // or a tag is pushed.
+      // Build everything if
+      // - we are outside github actions
+      // - github create event has been triggered with tag push
+      // - it is an empty commit
+      // - reviewer requested a force build by commenting 'BUILD REQUEST'
+      //   in merge commit message.
       else {
         $build = TRUE;
       }
