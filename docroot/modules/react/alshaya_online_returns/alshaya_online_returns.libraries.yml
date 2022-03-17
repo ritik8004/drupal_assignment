@@ -1,0 +1,5 @@
+alshaya_online_returns_pdp:
+  js:
+    dist/pdp.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

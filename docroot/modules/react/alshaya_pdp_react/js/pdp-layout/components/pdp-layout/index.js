@@ -26,6 +26,8 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import PdpExpressDelivery from '../pdp-express-delivery';
 import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
+import OnlineReturnsPDP from '../../../../../alshaya_online_returns/js/components/online-returns-pdp';
+import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -304,6 +306,9 @@ const PdpLayout = () => {
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />
+          <ConditionalView condition={isOnlineReturnsEnabled()}>
+            <OnlineReturnsPDP />
+          </ConditionalView>
           <ConditionalView
             condition={isExpressDeliveryEnabled()
             && isProductBuyable && !bigTickectProduct}

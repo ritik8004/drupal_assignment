@@ -182,6 +182,7 @@
                 sku: parentSku,
                 variantSelected: selected,
                 title,
+                eligibleForReturn: variantInfo.eligibleForReturn,
               }
             }
           });

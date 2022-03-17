@@ -102,6 +102,7 @@ class CartSelectOption extends React.Component {
             data: {
               sku: parentSkuSelected,
               viewMode: 'full',
+              eligibleForReturn: variantInfo.eligibleForReturn,
             },
           },
         });
