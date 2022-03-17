@@ -19,12 +19,7 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview: '',
       buttonClass: 'write_review',
       validateCurrentEmail: false,
-      userDetails: {
-        user: {
-          userId: 0,
-          userEmail: null,
-        },
-      },
+      userDetails: null,
     };
   }
 
