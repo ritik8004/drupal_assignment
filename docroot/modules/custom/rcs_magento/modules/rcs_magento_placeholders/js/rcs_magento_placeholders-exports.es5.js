@@ -87,7 +87,7 @@ exports.getEntity = async function getEntity(langcode) {
       response = await rcsCommerceBackend.invokeApi(request);
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
-        RcsPhStaticStorage.set('product_' + result.sku, result);
+        RcsPhStaticStorage.set('product_data_' + result.sku, result);
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -226,7 +226,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
-      RcsPhStaticStorage.set('product_' + result.sku, result);
+      RcsPhStaticStorage.set('product_data_' + result.sku, result);
 
       break;
 

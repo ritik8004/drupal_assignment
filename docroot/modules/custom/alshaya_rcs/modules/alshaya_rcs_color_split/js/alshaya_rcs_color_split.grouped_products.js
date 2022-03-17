@@ -163,6 +163,6 @@
       return (optionA.position > optionB.position) - (optionA.position < optionB.position);
     });
 
-    RcsPhStaticStorage.set('product_' + mainProduct.sku, mainProduct);
+    RcsPhStaticStorage.set('product_data_' + mainProduct.sku, mainProduct);
   }, 100);
 })();
