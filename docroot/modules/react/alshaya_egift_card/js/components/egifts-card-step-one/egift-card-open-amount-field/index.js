@@ -11,7 +11,9 @@ export default class EgiftCardOpenAmountField extends React.Component {
 
   componentDidMount() {
     const { field } = this.props;
-    field.current.querySelector('button').disabled = true;
+    if (field.current !== null) {
+      field.current.querySelector('button').disabled = true;
+    }
   }
 
   /**

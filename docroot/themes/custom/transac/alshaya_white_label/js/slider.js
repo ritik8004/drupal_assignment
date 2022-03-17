@@ -47,9 +47,9 @@
         useTransform: false
       };
 
-      var paragraphBanner = $('.paragraph-banner');
-      var bannerPanelFieldItem = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content > .field__item');
-      var bannerSliderContainer = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content');
+      var paragraphBanner = $('.paragraph-banner', context).once('initiate-slick');
+      var bannerPanelFieldItem = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content > .field__item', context).once('initiate-slick');
+      var bannerSliderContainer = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content', context).once('initiate-slick');
 
       applyBannerRtl(paragraphBanner, options);
       var promoPanelOptions = {

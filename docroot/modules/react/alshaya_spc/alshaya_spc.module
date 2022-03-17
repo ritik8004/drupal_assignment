@@ -423,6 +423,13 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   // Return if express delivery feature is disabled.
   // And product is not buyable.
   // Otherwise show express delivery options.
+  // Big tickect product.
+  if ($sku->hasField('attr_white_glove_delivery')) {
+    $bigTickectProduct = (bool) $sku->get('attr_white_glove_delivery')->getString();
+    if ($bigTickectProduct) {
+      return;
+    }
+  }
   if (!($deliveryOptionsHelper->ifSddEdFeatureEnabled()) || !(alshaya_acm_product_is_buyable($sku))) {
     return;
   }
