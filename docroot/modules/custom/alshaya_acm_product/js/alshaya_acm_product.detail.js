@@ -269,6 +269,27 @@
           $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
           $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
         }
+
+        // Trigger an event on SKU base form load.
+        var data = {
+          sku: sku,
+          variantSelected: $('[name="selected_variant_sku"]').val() || $('form.sku-base-form').attr('variantselected'),
+        };
+
+        // If Online Returns feature is enabled, add eligibleForReturn to event.
+        if (drupalSettings.onlineReturns !== undefined
+          && drupalSettings.onlineReturns.enabled) {
+          if (productData.type === 'simple') {
+            data.eligibleForReturn = productData.eligibleForReturn;
+          } else {
+            data.eligibleForReturn = data.variantSelected
+              ? productData.variants[data.variantSelected].eligibleForReturn
+              : true;
+          }
+        }
+
+        var skuBaseFormLoadedEvent = new CustomEvent('onSkuBaseFormLoad', { bubbles: true, detail: { data: data }});
+        document.dispatchEvent(skuBaseFormLoadedEvent);
       });
 
       // Show images for oos product on PDP.
