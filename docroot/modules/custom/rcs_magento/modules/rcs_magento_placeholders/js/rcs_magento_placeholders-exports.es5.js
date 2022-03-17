@@ -94,10 +94,9 @@ exports.getEntity = async function getEntity(langcode) {
       response = await rcsCommerceBackend.invokeApi(request);
 
       if (response && response.data.products.total_count) {
-        // Store product data in static storage.
         result = response.data.products.items[0];
-        // Set product data to static storage.
-        RcsPhStaticStorage.set('product_' + result.sku, result);
+        // Store product data in static storage.
+        RcsPhStaticStorage.set('product_data_' + result.sku, result);
         // Set product options data to static storage.
         RcsPhStaticStorage.set('product_options', {data: {customAttributeMetadata: response.data.customAttributeMetadata}});
       }
@@ -233,7 +232,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
-      RcsPhStaticStorage.set('product_' + result.sku, result);
+      RcsPhStaticStorage.set('product_data_' + result.sku, result);
 
       break;
 
