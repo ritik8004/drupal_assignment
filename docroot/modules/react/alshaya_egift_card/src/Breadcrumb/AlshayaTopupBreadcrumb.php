@@ -31,7 +31,7 @@ class AlshayaTopupBreadcrumb implements BreadcrumbBuilderInterface {
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
     // @todo update route form config.
     $breadcrumb->addLink(Link::createFromRoute($this->t('eGift Card', [], ['context' => 'egift']), '<front>', [], ['attributes' => ['class' => ['egift-brdcrb-nav']]]));
-    $breadcrumb->addLink(Link::createFromRoute($this->t('Top up eGift card', [], ['context' => 'egift']), 'alshaya_egift_card.topup_card', [], ['attributes' => ['class' => ['egift-brdcrb-nav']]]));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Top up eGift card', []), 'alshaya_egift_card.topup_card', [], ['attributes' => ['class' => ['egift-brdcrb-nav']]]));
     $breadcrumb->addCacheableDependency(['url.path']);
     return $breadcrumb;
   }
