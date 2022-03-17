@@ -817,6 +817,7 @@ class AlshayaBazaarVoice {
       ],
       'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
       'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),
+      'customer_id' => alshaya_acm_customer_is_customer($this->currentUser, TRUE),
       'hide_fields_write_review' => isset($category_based_config['hide_fields_write_review'])
       ? $category_based_config['hide_fields_write_review'] : [],
     ];
@@ -859,6 +860,7 @@ class AlshayaBazaarVoice {
       ],
       'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
       'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),
+      'customer_id' => alshaya_acm_customer_is_customer($this->currentUser, TRUE),
       // @todo Add category overrides. Check getProductBazaarVoiceDetails().
       'hide_fields_write_review' => [],
       'myaccount_reviews_limit' => $config->get('myaccount_reviews_limit'),
@@ -912,7 +914,7 @@ class AlshayaBazaarVoice {
     $myaccount_reviews_limit = $config->get('myaccount_reviews_limit');
     $customer_id = alshaya_acm_customer_is_customer($this->currentUser, TRUE);
     $extra_params = [
-      'filter' => 'AuthorId:' . $customer_id,
+      'filter' => 'authorid:' . $customer_id,
       'Include' => 'Authors,Products',
       'stats' => 'Reviews',
       'Limit' => $myaccount_reviews_limit,

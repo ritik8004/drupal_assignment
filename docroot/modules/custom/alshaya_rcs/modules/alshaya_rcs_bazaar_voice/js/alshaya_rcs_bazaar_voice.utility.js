@@ -16,7 +16,7 @@
   window.alshayaBazaarVoice.getProductReviewForCurrrentUser = async function getProductReviewForCurrrentUser(productIdentifier) {
     const bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings();
     const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
-    const userId = drupalSettings.userDetails.userID;
+    const userId = bazaarVoiceSettings.reviews.customer_id;
     const staticStorageKey = `${userId}_${productId}`;
     let productReviewData = Drupal.hasValue(staticStorage[staticStorageKey])
       ? staticStorage[staticStorageKey]
@@ -34,16 +34,16 @@
 
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/reviews.json';
-    const params = `&include=Authors,Products&filter=AuthorId:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
+    const params = `&include=Authors,Products&filter=authorid:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
     const response = window.alshayaBazaarVoice.fetchAPIData(apiUri, params).then((result) => {
-      if (!Drupal.hasValue(result.error) && Drupal.hasValue(result.data)) {
+      if (!hasValue(result.error) && hasValue(result.data)) {
         if (result.data.Results.length > 0) {
-          const products = result.data.Includes.Products;
-          Object.keys(products).forEach((sku) => {
-            if (sku === productId) {
+          const products = result.data.Results;
+          Object.keys(products).forEach((i) => {
+            if (products[i].ProductId === productId) {
               productReviewData = {
-                review_data: products[sku],
-                user_rating: products[sku].Rating,
+                review_data: products[i],
+                user_rating: products[i].Rating,
               };
             }
           });

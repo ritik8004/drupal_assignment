@@ -35,9 +35,11 @@ export default class RecentOrders extends React.Component {
       reviewData,
       userDetails,
     } = this.state;
+
     if (userDetails && Object.keys(userDetails).length === 0) {
       return null;
     }
+
     return (
       <>
         <ConditionalView condition={reviewData === ''}>
