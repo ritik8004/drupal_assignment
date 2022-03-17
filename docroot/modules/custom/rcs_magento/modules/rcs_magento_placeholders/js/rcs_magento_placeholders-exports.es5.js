@@ -45,12 +45,27 @@ async function handleNoItemsInResponse(request, urlKey) {
  * @returns {string}
  *   The compressed and URL safe string.
  */
-function prepareQuery(data) {
-  // Remove unnecessary characters.
-  let query = global.rcsQueryCompressor(data);
+function prepareQuery(query, variables) {
+  let graphqlQuery = null;
+  const data = {
+    query: query,
+    variables: variables,
+  };
+
+  // Remove extra enclosing {}.
+  data.query = data.query.slice(1, -1);
   // Encode to valid uri format.
-  query = encodeURIComponent(query);
-  return `query=${query}`;
+  data.query = encodeURIComponent(global.rcsQueryCompressor(data.query));
+
+  if (typeof data.variables !== 'undefined') {
+    data.variables = JSON.stringify(data.variables);
+    graphqlQuery = `query=${data.query}&variables=${data.variables}`;
+  }
+  else {
+    graphqlQuery = `query=${data.query}`;
+  }
+
+  return graphqlQuery;
 }
 
 exports.getEntity = async function getEntity(langcode) {
@@ -74,20 +89,16 @@ exports.getEntity = async function getEntity(langcode) {
 
   switch (pageType) {
     case 'product':
-      // Remove .html suffix from the full path.
-      let prodUrlKey = urlKey.replace('.html', '');
-      const query = typeof rcsPhGraphqlQuery.color_split_product !== 'undefined'
-        ? rcsPhGraphqlQuery.color_split_product
-        : rcsPhGraphqlQuery.products;
-
-      // Compress the query.
-      request.data = prepareQuery(`{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${query} }`);
-
+      request.data = prepareQuery(rcsPhGraphqlQuery.pdp_product.query, rcsPhGraphqlQuery.pdp_product.variables);
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
+
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
+        // Store product data in static storage.
         RcsPhStaticStorage.set('product_data_' + result.sku, result);
+        // Set product options data to static storage.
+        RcsPhStaticStorage.set('product_options', {data: {customAttributeMetadata: response.data.customAttributeMetadata}});
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -96,7 +107,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     case 'category':
       // Build query.
-      request.data = prepareQuery(`{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`);
+      request.data = prepareQuery(rcsPhGraphqlQuery.categories.query, rcsPhGraphqlQuery.categories.variables);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -110,7 +121,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     case 'promotion':
       // Build query.
-      request.data = prepareQuery(`{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`);
+      request.data = prepareQuery(rcsPhGraphqlQuery.promotions.query, rcsPhGraphqlQuery.promotions.variables);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -174,9 +185,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
       // Prepare request parameters.
       // Fetch categories for navigation menu using categories api.
-      request.data = prepareQuery(`{categories(filters: { ids: { eq: "${params.category_id}"}})
-        ${rcsPhGraphqlQuery.navigationMenu}
-      }`);
+      request.data = prepareQuery(rcsPhGraphqlQuery.navigationMenu.query, rcsPhGraphqlQuery.navigationMenu.variables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
@@ -190,7 +199,9 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'field_magazine_shop_the_story':
-      request.data = prepareQuery(`{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.magazine_shop_the_story}}`);
+      let productQueryVariables = rcsPhGraphqlQuery.magazine_shop_the_story.variables;
+      productQueryVariables.skus = JSON.parse(params.skus);
+      request.data = prepareQuery(rcsPhGraphqlQuery.magazine_shop_the_story.query, productQueryVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
@@ -205,24 +216,19 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'labels':
-        request.data = prepareQuery(`{
-            amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
-              items{
-                image
-                name
-                position
-                product_id
-              }
-            }
-          }`);
+      let productLabelVariables = rcsPhGraphqlQuery.product_labels.variables;
+      productLabelVariables.productIds = params.productIds;
+      request.data = prepareQuery(rcsPhGraphqlQuery.product_labels.query, productLabelVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.amLabelProvider;
       break;
 
     case 'product-recommendation':
+      let prVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
+      prVariables.sku = params.sku;
       // @TODO Review this query to use only fields that are required for the display.
-      request.data = prepareQuery(`{ products(filter: { sku: { eq: "${params.sku}" }}) ${rcsPhGraphqlQuery.products}}`);
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, prVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
@@ -237,9 +243,9 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
     // Get the product data for the given sku.
     case 'product_by_sku':
       // Build query.
-      const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
-      const filterValue = operator === 'in' ? JSON.stringify(params.sku) : `"${params.sku}"`;
-      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: ${filterValue} }}) ${rcsPhGraphqlQuery.products}}`);
+      let productBySkuVariables = rcsPhGraphqlQuery.product_by_sku.variables;
+      productBySkuVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.product_by_sku.query, productBySkuVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items;
@@ -293,21 +299,42 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
   switch (placeholder) {
     case 'products-in-style':
-      request.data = prepareQuery(`{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`);
+      let variables = rcsPhGraphqlQuery.styled_products.variables;
+      variables.styleCode = params.styleCode;
 
+      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
       response = rcsCommerceBackend.invokeApiSynchronous(request);
       result = response.data.products.items;
       break;
 
     // Get the product data for the given sku.
-    case 'product':
+    case 'single_product_by_sku':
       // Build query.
-      const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
-      const filterValue = operator === 'in' ? JSON.stringify(params.sku) : `"${params.sku}"`;
-      const query = typeof rcsPhGraphqlQuery.color_split_product !== 'undefined'
-        ? rcsPhGraphqlQuery.color_split_product
-        : rcsPhGraphqlQuery.products;
-      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: ${filterValue} }}) ${query}}`);
+      let singleProductQueryVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
+      singleProductQueryVariables.sku = params.sku;
+
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
+
+      response = rcsCommerceBackend.invokeApiSynchronous(request);
+
+      if (response && response.data.products.total_count) {
+        response.data.products.items.forEach(function (product) {
+          RcsEventManager.fire('rcsUpdateResults', {
+            detail: {
+              result: product,
+            }
+          });
+        });
+      }
+      break;
+
+    // Get the product data for the given sku.
+    case 'multiple_products_by_sku':
+      // Build query.
+      let multipleProductQueryVariables = rcsPhGraphqlQuery.multiple_products_by_sku.variables;
+      multipleProductQueryVariables.skus = params.sku;
+
+      request.data = prepareQuery(rcsPhGraphqlQuery.multiple_products_by_sku.query, multipleProductQueryVariables);
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
 
@@ -323,14 +350,14 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
       break;
 
     case 'product-option':
-      const staticKey = `product_options_${params.attributeCode}`;
+      const staticKey = `product_options`;
       const staticOption = RcsPhStaticStorage.get(staticKey);
 
       if (staticOption !== null) {
         return staticOption;
       }
 
-      request.data = prepareQuery(`{ customAttributeMetadata(attributes: { entity_type: "4", attribute_code: "${params.attributeCode}" }) ${rcsPhGraphqlQuery.product_options}}`);
+      request.data = prepareQuery(rcsPhGraphqlQuery.product_options.query, rcsPhGraphqlQuery.product_options.variables);
 
       result = rcsCommerceBackend.invokeApiSynchronous(request);
 
@@ -338,20 +365,21 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
       break;
 
     case 'dynamic-promotion-label':
-      request.data = prepareQuery(`{${params.queryType}(
-            ${params.queryProductSku}
-            context: "web"
-            ${params.queryProductViewMode}
-            cart: {
-              ${params.queryCartAttr}
-              items: [
-                ${params.cartInfo}
-              ]
-            }
-          )
-            ${params.queryBody}
-          }`
-        );
+      request.data = prepareQuery(`{
+        {${params.queryType}(
+          ${params.queryProductSku}
+          context: "web"
+          ${params.queryProductViewMode}
+          cart: {
+            ${params.queryCartAttr}
+            items: [
+              ${params.cartInfo}
+            ]
+          }
+        )
+          ${params.queryBody}
+        }
+      }`);
       result = rcsCommerceBackend.invokeApiSynchronous(request);
       break;
 
