@@ -2673,15 +2673,19 @@ JS;
     $page = $this->getSession()->getPage();
     $element = $page->find('css', '#add-to-cart-main');
     $element2 = $page->find('css', "[id^='edit-add-to-cart-']");
+    $element3 = $page->find('css', "[id^='addtobag-button-']");
     if ($element !== NULL) {
       $element->click();
     }
     elseif ($element2 !== NULL) {
       $element2->click();
     }
-    else {
-      throw new \Exception(sprintf('Add to cart button not found.'));
+    elseif ($element3 !== NULL) {
+      $element3->click();
     }
+    else {
+        throw new \Exception(sprintf('Add to cart button not found.'));
+      }
   }
 
   /**
@@ -2925,4 +2929,41 @@ JS;
     $this->iWaitSeconds('20');
   }
 
+  /**
+   * @Given /^I should see the Wishlist icon$/
+   */
+  public function iShouldSeeTheWishlistIcon() {
+    $wishlist_icon = $this->getSession()->evaluateScript('return jQuery(\'.wishlist-button-wrapper .wishlist-icon\').length');
+    if ($wishlist_icon == 0) {
+      throw new \RuntimeException('Unable to find wishlist icon.');
+    }
+  }
+
+  /**
+   * @When /^I click on the Wishlist icon$/
+   */
+  public function iClickOnTheWishlistIcon()
+  {
+    $session = $this->getSession();
+    $session->executeScript('jQuery(\'.wishlist-button-wrapper .wishlist-icon\').first().click()');
+    $this->iWaitSeconds('5');
+
+    // Check if wishlist icon is active by checking the class "in-wishlist".
+    $in_wishlist_wrapper = $session->evaluateScript('return jQuery(".in-wishlist.wishlist-button-wrapper").length');
+    if ($in_wishlist_wrapper == 0) {
+      throw new \RuntimeException('Unable to click on the wishlist icon.');
+    }
+  }
+
+  /**
+   * @Then /^I should see the Wishlist icon active$/
+   */
+  public function iShouldSeeTheWishlistIconActive() {
+    // Check if wishlist icon on header is active by checking the class "wishlist-active".
+    $wishlist_active = $this->getSession()->evaluateScript('return jQuery(".wishlist-header .wishlist-active").length');
+
+    if ($wishlist_active == 0) {
+      throw new \RuntimeException('Wishlist icon is inactive.');
+    }
+  }
 }

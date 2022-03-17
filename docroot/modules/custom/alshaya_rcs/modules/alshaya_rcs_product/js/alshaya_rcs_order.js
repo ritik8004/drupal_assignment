@@ -1,4 +1,3 @@
-// Link between RCS errors and Datadog.
 (function main(Drupal) {
   // Event listener to update the the order listing and order detail results.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {

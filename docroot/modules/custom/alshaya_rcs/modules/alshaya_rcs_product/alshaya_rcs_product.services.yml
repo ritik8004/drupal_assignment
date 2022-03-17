@@ -25,11 +25,14 @@ services:
       - '@alshaya_acm_product.sku_images_helper'
       - '@alshaya_spc.helper'
       - '@alshaya_acm_product.delivery_options_helper'
-  alshaya_rcs_product.rcs_product_helper:
-    class: Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper
+
+  alshaya_rcs_product.helper:
+    class: \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper
     arguments:
-      - '@entity_type.manager'
+      - '@current_route_match'
       - '@config.factory'
+      - '@module_handler'
+      - '@entity_type.manager'
       - '@language_manager'
       - '@path_alias.manager'
       - '@database'

@@ -17,6 +17,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -422,6 +423,13 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   // Return if express delivery feature is disabled.
   // And product is not buyable.
   // Otherwise show express delivery options.
+  // Big tickect product.
+  if ($sku->hasField('attr_white_glove_delivery')) {
+    $bigTickectProduct = (bool) $sku->get('attr_white_glove_delivery')->getString();
+    if ($bigTickectProduct) {
+      return;
+    }
+  }
   if (!($deliveryOptionsHelper->ifSddEdFeatureEnabled()) || !(alshaya_acm_product_is_buyable($sku))) {
     return;
   }
@@ -456,4 +464,18 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
     : 'alshaya_spc/commerce_backend.cart.v2';
 
   unset($build['home_delivery']);
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_order_build_alter().
+ */
+function alshaya_spc_alshaya_rcs_product_order_build_alter(&$build) {
+  $currency_config = \Drupal::config('acq_commerce.currency');
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $currency_config->getCacheTags());
+
+  $build['#attached']['drupalSettings']['alshaya_spc']['currency_config'] = [
+    'currency_code' => $currency_config->get('currency_code'),
+    'currency_code_position' => $currency_config->get('currency_code_position'),
+    'decimal_points' => $currency_config->get('decimal_points'),
+  ];
 }

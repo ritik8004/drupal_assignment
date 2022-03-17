@@ -98,6 +98,9 @@ function alshaya_acm_product_category_views_pre_view(ViewExecutable $view, $disp
     // is not enabled.
     elseif ($display_id === 'block_1') {
       $view->removeHandler($display_id, 'filter', 'field_category_include_menu_value');
+      $handler['operator'] = '=';
+      $handler['value']['value'] = 1;
+      $view->addHandler($display_id, 'filter', 'taxonomy_term__field_show_in_lhn', 'field_show_in_lhn_value', $handler);
     }
   }
   // Display categories in LHN comes under L1 any visiting category.
