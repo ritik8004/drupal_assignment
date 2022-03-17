@@ -16,7 +16,7 @@
       if (typeof productId !== 'undefined' && Object.keys(drupalSettings.productInfo[productId]).length > 0) {
         return drupalSettings.productInfo[productId].productReview;
       }
-      if (drupalSettings.bazaarvoiceUserDetails.productReview !== undefined) {
+      if (typeof drupalSettings.bazaarvoiceUserDetails.productReview !== undefined) {
         return drupalSettings.bazaarvoiceUserDetails.productReview;
       }
     }

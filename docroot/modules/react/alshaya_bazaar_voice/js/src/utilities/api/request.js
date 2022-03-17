@@ -1,6 +1,8 @@
 import Axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 
+window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
+
 function getBvUrl(bazaarVoiceSettings) {
   return bazaarVoiceSettings.reviews.bazaar_voice.endpoint;
 }
