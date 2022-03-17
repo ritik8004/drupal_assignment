@@ -188,10 +188,10 @@
 
       // Change the query type and body based on the type of the request.
       let queryType = 'promoDynamicLabelProduct';
-      let queryBody = rcsPhGraphqlQuery.product_dynamic_promotions;
+      let queryBody = rcsPhGraphqlQuery.product_dynamic_promotions.query;
       if (type === 'cart') {
         queryType = 'promoDynamicLabelCart';
-        queryBody = rcsPhGraphqlQuery.cart_dynamic_promotions;
+        queryBody = rcsPhGraphqlQuery.cart_dynamic_promotions.query;
       }
 
       response = globalThis.rcsPhCommerceBackend.getDataSynchronous('dynamic-promotion-label', {

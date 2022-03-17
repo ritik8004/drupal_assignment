@@ -72,34 +72,47 @@ function alshaya_rcs_listing_theme_suggestions_page_alter(array &$suggestions, a
 function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
   $query_fields = [];
 
+  /** @var \Drupal\alshaya_rcs_listing\Services\AlshayaRcsListingHelper $rcs_listing_helper */
+  $rcs_listing_helper = \Drupal::service('alshaya_rcs_listing.helper');
+  $url_key = $rcs_listing_helper->getListingUrlKey();
+
   $query_fields['categories'] = [
-    'total_count',
-    'items' => [
-      'id',
-      'name',
-      'level',
-      'url_path',
-      'description',
-      'meta_title',
-      'meta_keyword',
-      'meta_description',
-      'image',
-      'promo_banner_for_mobile',
-      'promotion_banner_mobile',
-      'promotion_banner',
-      'children' => [
-        'id',
-        'name',
-        'url_path',
-        'category_quick_link_plp_mob',
+    'query' => [
+      'query($urlKey: String)' => [
+        'categories(filters: { url_path: { eq: $urlKey }})' => [
+          'total_count',
+          'items' => [
+            'id',
+            'name',
+            'level',
+            'url_path',
+            'description',
+            'meta_title',
+            'meta_keyword',
+            'meta_description',
+            'image',
+            'promo_banner_for_mobile',
+            'promotion_banner_mobile',
+            'promotion_banner',
+            'children' => [
+              'id',
+              'name',
+              'url_path',
+              'category_quick_link_plp_mob',
+            ],
+            'breadcrumbs' => [
+              'category_id',
+              'category_name',
+              'category_level',
+              'category_url_key',
+              'category_url_path',
+            ],
+          ],
+        ],
       ],
-      'breadcrumbs' => [
-        'category_id',
-        'category_name',
-        'category_level',
-        'category_url_key',
-        'category_url_path',
-      ],
+    ],
+    'variables' => [
+      'urlKey' => $url_key,
     ],
   ];
 
