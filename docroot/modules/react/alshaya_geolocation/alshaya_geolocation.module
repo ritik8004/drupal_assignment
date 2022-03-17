@@ -63,11 +63,18 @@ function alshaya_geolocation_node_view_alter(array &$build, EntityInterface $ent
     // Click and collect availability for given sku.
     $state = alshaya_acm_product_available_click_collect($sku);
 
+    // Set api url.
+    $api_url = '/alshaya-locations/stores-list';
+    if (drupal_get_profile() == 'alshaya_non_transac') {
+      $api_url = '/alshaya-locations/local';
+    }
+
     $build['click_and_collect'] = [
       '#markup' => '<div id="pdp-store-click-collect-list"></div>',
       '#attached' => [
         'drupalSettings' => [
           'cac' => [
+            'apiUrl' => $api_url,
             'state' => $state ? 'enabled' : 'disabled',
             'sku' => $sku,
             'type' => $sku_entity->bundle(),

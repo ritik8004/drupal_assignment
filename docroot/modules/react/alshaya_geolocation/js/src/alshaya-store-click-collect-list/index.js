@@ -9,6 +9,7 @@ export class StoreClickCollectList extends React.Component {
     super(props);
     this.state = {
       stores: [],
+      results: [],
       count: 1,
       showListingView: false,
       specificPlace: {},
@@ -27,7 +28,7 @@ export class StoreClickCollectList extends React.Component {
 
   componentDidMount() {
     // This will be replace with MDC data api call.
-    const { apiUrl } = drupalSettings.cnc;
+    const { apiUrl } = drupalSettings.cac;
     Axios.get(apiUrl).then((response) => {
       const stores = response.data;
       const prevState = this.state;
@@ -35,6 +36,7 @@ export class StoreClickCollectList extends React.Component {
         {
           ...prevState,
           stores: stores.items,
+          results: stores.items,
           count: stores.total_count,
           center: { lat: stores.items[0].latitude, lng: stores.items[0].longitude },
         },
@@ -56,7 +58,7 @@ export class StoreClickCollectList extends React.Component {
       this.setState({
         ...prevState,
         area: place,
-        stores: nearbyStores,
+        results: nearbyStores,
         count: nearbyStores.length,
         showListingView: true,
         showAutomcomplete: false,
@@ -108,6 +110,7 @@ export class StoreClickCollectList extends React.Component {
   render() {
     const {
       stores,
+      results,
       showListingView,
       area,
       showAutomcomplete,
@@ -153,7 +156,7 @@ export class StoreClickCollectList extends React.Component {
                             <div className="available-store-text">
                               <span className="store-available-at-title">
                                 {Drupal.t('Available at ')}
-                                {stores.length}
+                                {results.length}
                                 {Drupal.t(' stores near ')}
                               </span>
                               <div className="google-store-location">{area.formatted_address}</div>
@@ -178,7 +181,7 @@ export class StoreClickCollectList extends React.Component {
                           ))}
                         </ul>
                       </div>
-                      {(stores.length > 3
+                      {(results.length > 3
                       && (
                         <div className="other-stores-link" onClick={this.openModal}>
                           {Drupal.t('Other stores nearby')}
@@ -189,7 +192,7 @@ export class StoreClickCollectList extends React.Component {
                 </div>
               </div>
               <ClickCollectPopup
-                stores={stores}
+                stores={results}
                 isOpen={isModalOpen}
                 onClose={this.closeModal}
               />

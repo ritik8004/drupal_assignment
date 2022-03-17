@@ -26,7 +26,7 @@ export class StoreFinderList extends React.Component {
 
   componentDidMount() {
     // This will be replace with MDC data api call.
-    const { apiUrl } = drupalSettings.cnc;
+    const { apiUrl } = drupalSettings.cac;
     Axios.get(apiUrl).then((response) => {
       const stores = response.data;
       const urlSearchParams = new URLSearchParams(window.location.search);
