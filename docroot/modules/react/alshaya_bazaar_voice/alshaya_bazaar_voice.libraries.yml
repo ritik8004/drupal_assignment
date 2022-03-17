@@ -71,6 +71,8 @@ pie_write_review:
     theme:
       css/pie_write_review.css: {}
 
+# This library's JS is dynamically overridden when RCS is enabled.
+# See alshaya_rcs_bazaar_voice module.
 utility:
   js:
     js/assets/alshaya_bazaar_voice.utility.js: {}

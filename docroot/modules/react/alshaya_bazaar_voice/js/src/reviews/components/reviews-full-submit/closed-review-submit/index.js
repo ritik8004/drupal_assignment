@@ -7,7 +7,10 @@ const ClosedReviewSubmit = ({
   destination,
 }) => {
   function onClick() {
-    // Enable write review popup onload.
+    // When user is getting redirected to the login page, at that point we set
+    // this to true.
+    // After the user logs in, sees the popup and closes it, then this value
+    // will be false.
     setStorageInfo(true, 'openPopup');
   }
 
