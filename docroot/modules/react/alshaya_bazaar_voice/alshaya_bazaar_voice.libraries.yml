@@ -4,6 +4,7 @@ rating:
   dependencies:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice
+    - alshaya_bazaar_voice/utility
 
 reviews:
   js:
@@ -11,6 +12,7 @@ reviews:
   dependencies:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice
+    - alshaya_bazaar_voice/utility
 
 myaccount:
   js:
@@ -18,6 +20,7 @@ myaccount:
   dependencies:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice
+    - alshaya_bazaar_voice/utility
 
 myorders:
   js:
@@ -25,6 +28,7 @@ myorders:
   dependencies:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice
+    - alshaya_bazaar_voice/utility
 
 bvpixel_tracking:
   js:
@@ -48,6 +52,7 @@ reviewsV2:
     - alshaya_react/react
     - alshaya_acm_product/rcs_product_info
     - bazaar_voice/bazaar_voice
+    - alshaya_bazaar_voice/utility
 
 ratingV2:
   js:
@@ -59,8 +64,15 @@ ratingV2:
     - alshaya_react/react
     - alshaya_acm_product/rcs_product_info
     - bazaar_voice/bazaar_voice
+    - alshaya_bazaar_voice/utility
 
 pie_write_review:
   css:
     theme:
       css/pie_write_review.css: {}
+
+utility:
+  js:
+    js/assets/alshaya_bazaar_voice.utility.js: {}
+  dependencies:
+    - core/drupalSettings
