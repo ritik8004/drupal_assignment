@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import OnlineReturnsPDP from './components/online-returns-pdp';
 import isOnlineReturnsEnabled from '../../js/utilities/onlineReturnsHelper';
 
-if (isOnlineReturnsEnabled() && document.querySelector('#online-returns-not-eligibile-message')) {
+if (isOnlineReturnsEnabled() && document.querySelector('#online-returns-pdp')) {
   ReactDOM.render(
     <OnlineReturnsPDP />,
-    document.querySelector('#online-returns-not-eligibile-message'),
+    document.querySelector('#online-returns-pdp'),
   );
 }
