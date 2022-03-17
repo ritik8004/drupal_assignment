@@ -109,7 +109,6 @@ export class StoreClickCollectList extends React.Component {
 
   render() {
     const {
-      stores,
       results,
       showListingView,
       area,
@@ -117,7 +116,7 @@ export class StoreClickCollectList extends React.Component {
       active,
       isModalOpen,
     } = this.state;
-    const shorts = stores.slice(0, 2);
+    const shorts = results.slice(0, 2);
     const cncLabels = drupalSettings.cac;
     return (
       <>

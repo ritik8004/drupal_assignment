@@ -37,6 +37,10 @@ function alshaya_geolocation_update_8002() {
     if (!\Drupal::service('module_handler')->moduleExists('alshaya_locations_api')) {
       \Drupal::service('module_installer')->install(['alshaya_locations_api']);
     }
+    // Set geolocation map settings.
+    $config = $config_factory->getEditable('geolocation.settings');
+    $fields = $config->getRawData();
+    $config_factory->getEditable('geolocation_google_maps.settings')->setData($fields)->save();
     // Delete storefinder view.
     $config_factory->getEditable('views.view.stores_finder')->delete();
     drupal_flush_all_caches();
