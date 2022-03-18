@@ -180,16 +180,23 @@ class AlshayaRcsCategoryDataMigration {
    *   The batch current context.
    */
   public static function batchProcess(array $terms, &$context) {
+    // Set progess counter to zero.
     if (empty($context['sandbox'])) {
       $context['sandbox']['progress'] = 0;
     }
+    // Store Product category and RCS category term mapping to get parent terms.
     if (!isset($context['results']['acq_term_mapping'])) {
       $context['results']['acq_term_mapping'] = [];
     }
+
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $language_manager = \Drupal::service('language_manager');
+    $langcode = $language_manager->getCurrentLanguage()->getId();
+    $entity_repository = \Drupal::service('entity.repository');
     foreach ($terms as $term) {
       // Load the product category term object.
       $acq_term_data = $term_storage->load($term->tid);
+      $acq_term_data = $entity_repository->getTranslationFromContext($acq_term_data, $langcode);
       if ($acq_term_data instanceof EntityInterface) {
         $rcs_term = self::createRcsCategory($acq_term_data);
         // Create parent terms.
@@ -210,8 +217,8 @@ class AlshayaRcsCategoryDataMigration {
         throw new \Exception('Product category term not found.');
       }
     }
-    $context['message'] = dt('Processed @progress RCS Category terms: ', ['@progress' => $context['sandbox']['progress']]);
 
+    $context['message'] = dt('Processed @progress RCS Category terms.', ['@progress' => $context['sandbox']['progress']]);
   }
 
   /**
@@ -226,6 +233,7 @@ class AlshayaRcsCategoryDataMigration {
    */
   public static function batchFinished($success, array $results, array $operations) {
     if ($success) {
+      // Delete product category terms that have been migrated.
       \Drupal::entityTypeManager()->getStorage('taxonomy_term')->delete($results['delete_acq_terms']);
     }
   }
@@ -246,7 +254,10 @@ class AlshayaRcsCategoryDataMigration {
     if (!empty($acq_term_mapping[$tid])) {
       return $acq_term_mapping[$tid];
     }
+    $language_manager = \Drupal::service('language_manager');
+    $langcode = $language_manager->getCurrentLanguage()->getId();
     $acq_term_data = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
+    $acq_term_data = \Drupal::service('entity.repository')->getTranslationFromContext($acq_term_data, $langcode);
 
     // Recursively create parent term.
     if (!empty($acq_term_data->parent->getString())) {
@@ -366,19 +377,19 @@ class AlshayaRcsCategoryDataMigration {
     foreach ($language_manager->getLanguages() as $language_code => $language) {
       if ($language_code != $langcode && $acq_term_data->hasTranslation($language_code)) {
         // Load the translation object.
-        $acq_term_data = $acq_term_data->getTranslation($language_code);
+        $acq_term_data_trans = $acq_term_data->getTranslation($language_code);
 
         // Add translation in the new term.
-        $rcs_term = $rcs_term->addTranslation($language_code, ['name' => $acq_term_data->name]);
+        $rcs_term_trans = $rcs_term->addTranslation($language_code, ['name' => $acq_term_data_trans->name]);
 
-        $rcs_term->get('field_term_background_color')
-          ->setValue($acq_term_data->get('field_term_background_color')->getValue());
+        $rcs_term_trans->get('field_term_background_color')
+          ->setValue($acq_term_data_trans->get('field_term_background_color')->getValue());
 
-        $rcs_term->get('field_term_font_color')
-          ->setValue($acq_term_data->get('field_term_font_color')->getValue());
+        $rcs_term_trans->get('field_term_font_color')
+          ->setValue($acq_term_data_trans->get('field_term_font_color')->getValue());
 
         // Save the translations.
-        $rcs_term->save();
+        $rcs_term_trans->save();
       }
     }
 
