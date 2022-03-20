@@ -24,19 +24,26 @@ export class ListItem extends React.Component {
     const { open } = this.state;
     return (
       <div className="store-info-wrap">
-        <div className="store-name">{specificPlace.store_name}</div>
-        <div className="store-address">
-          <div className="address--line2">
+        <span className="retinal-enabled-yes">
+          <div className="field__wrapper field-store-retina-photography" />
+        </span>
+        <div className="store-name row-title individual-store-title"><span>{specificPlace.store_name}</span></div>
+        <div className="views-row">
+          <div className="store-address views-field-field-store-address">
             {specificPlace.address.map((item) => (
-              <div key={item.code}>
-                {item.code === 'address_building_segment' ? item.value : null}
-                {item.code === 'street' ? <span>{item.value}</span> : null}
+              <div className="store-field-content field-content">
+                <div className="address--line2">
+                  <div key={item.code} className="field__wrapper field-store-address">
+                    {item.code === 'address_building_segment' ? item.value : null}
+                    {item.code === 'street' ? <span>{item.value}</span> : null}
+                  </div>
+                  <div className="field__wrapper field-store-phone">
+                    {specificPlace.store_phone}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
-        </div>
-        <div className="field field--name-field-store-phone field--type-string field--label-hidden field__item">
-          {specificPlace.store_phone}
         </div>
         <div className="views-field-field-store-open-hours">
           <div className="field-content">

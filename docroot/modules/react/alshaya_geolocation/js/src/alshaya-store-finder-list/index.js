@@ -178,7 +178,7 @@ export class StoreFinderList extends React.Component {
         <div className="c-content">
           <div className="c-content__region">
             <div className="region region__content clearfix">
-              <div className="views-exposed-form">
+              <div className="views-exposed-form stores-finder-exposed-form current-view block-store-finder-form">
                 <div className="form--inline clearfix">
                   <a className="current-location block-store-finder-form__current-location" onClick={this.findNearMe}>{Drupal.t('Near me')}</a>
                   <div className="store-finder--wrapper block-store-finder-form__form__wrapper">
@@ -188,7 +188,7 @@ export class StoreFinderList extends React.Component {
                       </div>
                     </div>
                     <div className="input--wrapper block-store-finder-form__input__wrapper">
-                      <div className="form-item-geolocation-geocoder-google-places-api">
+                      <div className="form-item-geolocation-geocoder-google-places-api input__inner-container">
                         <AutocompleteSearch searchStores={(place) => this.searchStores(place)} />
                         <div className="c-input__bar" />
                       </div>
@@ -197,7 +197,7 @@ export class StoreFinderList extends React.Component {
                       </div>
                     </div>
                   </div>
-                  <a className="back-to-glossary" onClick={this.showAllStores}>{Drupal.t('List of all H&M the stores')}</a>
+                  <a className="back-to-glossary store-list-back-to-glossary" onClick={this.showAllStores}>{Drupal.t('List of all H&M the stores')}</a>
                 </div>
               </div>
               {stores.length > 0
@@ -205,16 +205,16 @@ export class StoreFinderList extends React.Component {
               <div className="views-element-container">
                 <div className="view-stores-finder view-id-stores_finder view-display-id-page_1">
                   <div className="view-header" />
-                  <div className="view-content">
+                  <div className="view-content list-store--detail">
                     {stores.map((store, index) => (
                       <div key={store.id}>
                         <div className="list-view-locator">
                           <div className="store-row--counter">{(index + 1)}</div>
-                          <div className="mobile-only-back-to-glossary">
+                          <div className="mobile-only-back-to-glossary store-back-to-glossary">
                             <a href="/store-finder">Back</a>
                           </div>
                           <a className="row-title" onClick={() => this.showSpecificPlace(store.id)}>
-                            <span>{store.store_name}</span>
+                            <span className="row-title-store-name">{store.store_name}</span>
                           </a>
                           <div className="views-row">
                             <div className="views-field-field-store-address">
@@ -272,7 +272,7 @@ export class StoreFinderList extends React.Component {
                       </div>
                     ))}
                   </div>
-                  <div className="attachment attachment-after">
+                  <div className="attachment attachment-after store--map">
                     <div className="views-element-container">
                       <div className="view-stores-finder view-id-stores_finder view-display-id-attachment_1">
                         <div className="geolocation-common-map-container">
@@ -307,6 +307,11 @@ export class StoreFinderList extends React.Component {
                           </Map>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                  <div className="view-footer">
+                    <div className="load-more-button">
+                      <a href="">Load More</a>
                     </div>
                   </div>
                 </div>

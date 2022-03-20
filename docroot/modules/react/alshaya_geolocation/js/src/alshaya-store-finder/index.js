@@ -180,7 +180,7 @@ export class StoreFinder extends React.Component {
         <div className="path--store-finder">
           <div className="c-content__region">
             <div className="region region__content clearfix">
-              <div className="views-exposed-form">
+              <div className="views-exposed-form stores-finder-exposed-form current-view block-store-finder-form">
                 {showSpecificPlace
                   ? (
                     <div className="form--inline clearfix">
@@ -192,7 +192,7 @@ export class StoreFinder extends React.Component {
                           </div>
                         </div>
                         <div className="input--wrapper block-store-finder-form__input__wrapper">
-                          <div className="form-item-geolocation-geocoder-google-places-api">
+                          <div className="form-item-geolocation-geocoder-google-places-api input__inner-container">
                             <AutocompleteSearch
                               searchStores={(place) => this.searchStores(place)}
                               placeholder={drupalSettings.storeLabels.search_placeholder}
@@ -204,7 +204,7 @@ export class StoreFinder extends React.Component {
                           </div>
                         </div>
                       </div>
-                      <a className="back-to-glossary" onClick={this.showAllStores}>{drupalSettings.storeLabels.store_list_label}</a>
+                      <a className="back-to-glossary store-list-back-to-glossary" onClick={this.showAllStores}>{drupalSettings.storeLabels.store_list_label}</a>
                     </div>
                   ) : (
                     <div className="form--inline clearfix">
@@ -216,7 +216,7 @@ export class StoreFinder extends React.Component {
                           </div>
                         </div>
                         <div className="input--wrapper block-store-finder-form__input__wrapper">
-                          <div className="form-item-geolocation-geocoder-google-places-api">
+                          <div className="form-item-geolocation-geocoder-google-places-api input__inner-container">
                             <AutocompleteSearch
                               searchStores={(place) => this.searchStores(place)}
                               placeholder={drupalSettings.storeLabels.search_placeholder}
@@ -228,14 +228,14 @@ export class StoreFinder extends React.Component {
                           </div>
                         </div>
                       </div>
-                      <a className={`list-view-link icon-list${listViewActive}`} onClick={this.showListingView}>{Drupal.t('List View')}</a>
-                      <a className={`map-view-link icon-map${mapViewActive}`} onClick={this.showMapView}>{Drupal.t('Map View')}</a>
+                      <a className={`list-view-link block-store-finder-form__list-view icon-list${listViewActive}`} onClick={this.showListingView}>{Drupal.t('List View')}</a>
+                      <a className={`map-view-link block-store-finder-form__list-view icon-map${mapViewActive}`} onClick={this.showMapView}>{Drupal.t('Map View')}</a>
                     </div>
                   )}
               </div>
               {showSpecificPlace
                 ? (
-                  <div>
+                  <div className="views-element-container">
                     <div className="view-stores-finder view-display-id-page_2">
                       <div className="individual--store">
                         <div className="view-content">
@@ -255,40 +255,23 @@ export class StoreFinder extends React.Component {
                     </div>
                   </div>
                 ) : (
-                  <div className="view-stores-finder view-display-id-page_2">
-                    {showListingView
-                      && (
-                      <div>
-                        <div className="view-header">select a store to see details</div>
-                        <div className="view-content">
-                          <div className="c-side c-side-1">
-                            {firstColumn.map((value) => (
-                              <div className="by--alphabet" key={value[0]}>
-                                <h3>{value[0]}</h3>
-                                <div className="rows">
-                                  {value[1].map((item) => (
-                                    <div
-                                      key={item.id}
-                                      onClick={() => this.showSpecificPlace(item.id)}
-                                    >
-                                      <a>{item.store_name}</a>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          {secondColumn
-                          && (
-                            <div className="c-side c-side-2">
-                              {secondColumn.map((value) => (
-                                <div className="by--alphabet" key={value[0]}>
+                  <div className="views-element-container">
+                    <div className="view-stores-finder view-display-id-page_2">
+                      {showListingView
+                        && (
+                        <div>
+                          <div className="view-header">select a store to see details</div>
+                          <div className="view-content view-store-finder--list__columns">
+                            <div className="c-side c-side-1 view-store-finder--list__column--1">
+                              {firstColumn.map((value) => (
+                                <div className="by--alphabet view-store-finder--list__alphabet" key={value[0]}>
                                   <h3>{value[0]}</h3>
-                                  <div className="rows">
+                                  <div className="rows views-view-unformatted__rows">
                                     {value[1].map((item) => (
                                       <div
                                         key={item.id}
                                         onClick={() => this.showSpecificPlace(item.id)}
+                                        className="view-store-finder--list__alphabet__item"
                                       >
                                         <a>{item.store_name}</a>
                                       </div>
@@ -297,18 +280,39 @@ export class StoreFinder extends React.Component {
                                 </div>
                               ))}
                             </div>
-                          )}
+                            {secondColumn
+                            && (
+                              <div className="c-side c-side-2 view-store-finder--list__column--2">
+                                {secondColumn.map((value) => (
+                                  <div className="by--alphabet view-store-finder--list__alphabet" key={value[0]}>
+                                    <h3>{value[0]}</h3>
+                                    <div className="rows views-view-unformatted__rows">
+                                      {value[1].map((item) => (
+                                        <div
+                                          key={item.id}
+                                          onClick={() => this.showSpecificPlace(item.id)}
+                                          className="view-store-finder--list__alphabet__item"
+                                        >
+                                          <a>{item.store_name}</a>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      )}
-                    {showMapView
-                      && (
-                      <div className="geolocation-common-map-container">
-                        <div className="geolocation-common-map-locations">
-                          <MultipeMarkerMap center={center} zoom={zoom} stores={stores} />
+                        )}
+                      {showMapView
+                        && (
+                        <div className="geolocation-common-map-container">
+                          <div className="geolocation-common-map-locations">
+                            <MultipeMarkerMap center={center} zoom={zoom} stores={stores} />
+                          </div>
                         </div>
-                      </div>
-                      )}
+                        )}
+                    </div>
                   </div>
                 )}
             </div>

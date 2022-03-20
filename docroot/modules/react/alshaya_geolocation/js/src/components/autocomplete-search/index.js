@@ -27,7 +27,7 @@ export default class AutocompleteSearch extends React.Component {
         <Autocomplete
           apiKey={apiKey}
           id="edit-geolocation-geocoder-google-places-api"
-          className="store-location-input"
+          className="store-location-input pac-target-input geolocation-views-filter-geocoder geolocation-geocoder-google-places-api block-store-finder-form__input__text"
           onPlaceSelected={(place) => {
             searchStores(place);
           }}

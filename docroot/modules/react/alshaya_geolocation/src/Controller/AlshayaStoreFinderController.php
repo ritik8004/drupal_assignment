@@ -51,6 +51,15 @@ class AlshayaStoreFinderController extends ControllerBase {
       $labels['apiUrl'] = '/alshaya-locations/local';
       $library = [
         'alshaya_geolocation/alshaya-store-finder',
+        'whitelabel/view-store-list-locator',
+        'whitelabel/views-unformatted-store-finder-glossary',
+        'whitelabel/block-store-finder-form',
+        'whitelabel/views-store-finder-glossary',
+        'whitelabel/field-store-open-hours',
+        'whitelabel/node-individual-store',
+        'whitelabel/block-footer-store',
+        'whitelabel/block-header-store',
+        'whitelabel/view-store-finder-list',
       ];
     }
     return [
@@ -81,6 +90,15 @@ class AlshayaStoreFinderController extends ControllerBase {
       $labels['apiUrl'] = '/alshaya-locations/local';
       $library = [
         'alshaya_geolocation/alshaya-store-finder-list',
+        'whitelabel/view-store-list-locator',
+        'whitelabel/view-store-finder-list',
+        'whitelabel/field-store-open-hours',
+        'whitelabel/block-store-finder-form',
+        'whitelabel/views-unformatted-store-finder-glossary',
+        'whitelabel/views-store-finder-glossary',
+        'whitelabel/node-individual-store',
+        'whitelabel/block-footer-store',
+        'whitelabel/block-header-store',
       ];
     }
     return [
