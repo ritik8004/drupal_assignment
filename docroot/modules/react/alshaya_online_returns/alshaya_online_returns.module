@@ -44,6 +44,8 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
     ])
   ) {
     $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_pdp';
+    // Attach the theming library.
+    $page['#attached']['library'][] = 'alshaya_white_label/online-returns';
   }
 }
 

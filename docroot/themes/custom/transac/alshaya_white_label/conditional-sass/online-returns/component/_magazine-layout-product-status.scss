@@ -1,0 +1,31 @@
+body.magazine-layout {
+  div[id*="online-returns-pdp-"] {
+    font-size: 1rem;
+    line-height: 1.75rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+
+    @include icon(infomation, before) {
+      font-size: 2rem;
+    }
+
+    span {
+      padding-#{$left}: 0.625rem;
+    }
+
+    &.desktop-only {
+      display: none;
+
+      @include breakpoint($tablet) {
+        display: flex;
+      }
+    }
+
+    &.mobile-only {
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+  }
+}
