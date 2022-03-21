@@ -10,24 +10,21 @@ export default class RecentOrders extends React.Component {
     this.state = {
       rating: '',
       reviewData: '',
-      userDetails: {
-        productReview: null,
-      },
+      userDetails: null,
     };
   }
 
   componentDidMount() {
     const { productId } = this.props;
-    getUserDetails(productId).then((result) => {
-      this.setState({ userDetails: result }, () => {
-        const { userDetails } = this.state;
-        if (userDetails.productReview !== null && userDetails.productReview !== 0) {
-          this.setState({
-            rating: userDetails.productReview.user_rating,
-            reviewData: userDetails.productReview.review_data,
-          });
-        }
-      });
+    getUserDetails(productId).then((userDetails) => {
+      if (userDetails && Object.keys(userDetails).length !== 0
+        && userDetails.productReview !== null) {
+        this.setState({
+          userDetails,
+          rating: userDetails.productReview.user_rating,
+          reviewData: userDetails.productReview.review_data,
+        });
+      }
     });
   }
 
@@ -39,7 +36,7 @@ export default class RecentOrders extends React.Component {
       userDetails,
     } = this.state;
 
-    if (userDetails.productReview === null) {
+    if (userDetails && Object.keys(userDetails).length === 0) {
       return null;
     }
 

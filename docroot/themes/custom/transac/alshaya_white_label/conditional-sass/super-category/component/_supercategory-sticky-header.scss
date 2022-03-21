@@ -21,7 +21,7 @@
   }
 
   .c-menu-primary .region__menu-primary #block-mobilenavigation {
-    z-index: 11;
+    position: fixed;
 
     ul {
       z-index: 10;

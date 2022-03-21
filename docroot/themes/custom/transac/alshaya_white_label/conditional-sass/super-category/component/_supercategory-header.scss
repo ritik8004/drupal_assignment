@@ -1,18 +1,4 @@
 .super-category-enabled {
-  .branding__menu .block-alshaya-search {
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
-
-    @include breakpoint($only-tablet) {
-      display: none !important;
-
-      &.show-search {
-        display: block !important;
-      }
-    }
-  }
-
   header {
     .region__header .block-views-exposed-filter-blocksearch-page {
       top: 0.5rem;
@@ -37,10 +23,6 @@
 
     .block-cart-mini-block .cart-link,
     .block-alshaya-react-mini-cart .cart-link {
-      @include breakpoint($upto-tablet) {
-        height: 2.625rem;
-      }
-
       @include breakpoint($upto-desktop) {
         display: block;
         margin: 0;
@@ -53,6 +35,10 @@
         html[lang="ar"] & {
           margin-top: 0;
         }
+      }
+
+      @include breakpoint($only-mobile) {
+        height: 2.625rem;
       }
     }
 
@@ -201,7 +187,6 @@
       #{$right}: 0;
       z-index: 1;
       text-align: center;
-      background-color: $header_mobile_menu_bg;
     }
 
     .mobile--close {
@@ -248,18 +233,6 @@
     }
   }
 
-  .logged-in {
-    .toggle--sign {
-      .account {
-        @include breakpoint($only-tablet) {
-          html[lang="ar"] & {
-            display: none;
-          }
-        }
-      }
-    }
-  }
-
   .c-my-account-nav {
     @include breakpoint($only-mobile) {
       width: calc(100% - 2.8125rem) !important;
@@ -277,7 +250,7 @@
   }
 
   .menu--active .mobile--close {
-    top: 6.7rem;
+    top: 3.9rem;
 
     @include breakpoint($only-mobile) {
       #{$left}: calc(100% - 2.8125rem);
@@ -285,6 +258,10 @@
   }
 
   .branding__menu {
+    @include breakpoint($upto-desktop) {
+      height: auto;
+    }
+
     .c-header__region .block-system-branding-block {
       .site-brand-home {
         @include breakpoint($upto-desktop) {
@@ -321,9 +298,13 @@
 
   &.wishlist-enabled {
     #wishlist-header-wrapper {
-      @include breakpoint($only-mobile) {
-        top: 5rem;
-        right: 2.5rem;
+      @include breakpoint($upto-desktop) {
+        top: 4.75rem;
+        #{$right}: 2.5rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        top: 4rem;
       }
     }
   }
@@ -332,6 +313,12 @@
         SITE HEADER - MOBILE VIEW
     */
   header.c-header {
+    .region__header > div {
+      @include breakpoint($only-tablet) {
+        width: auto;
+      }
+    }
+
     .block-cart-mini-block,
     .block-alshaya-react-mini-cart {
       .acq-mini-cart {
@@ -345,8 +332,8 @@
     }
 
     .c-header__region {
-      @include breakpoint($only-tablet) {
-        height: 3rem;
+      @include breakpoint($upto-desktop) {
+        height: auto;
       }
     }
   }
@@ -363,7 +350,7 @@
   .menu--active {
     .mobile--close {
       @include breakpoint($only-tablet) {
-        #{$left}: 17rem;
+        #{$left}: 20rem;
       }
 
       span {

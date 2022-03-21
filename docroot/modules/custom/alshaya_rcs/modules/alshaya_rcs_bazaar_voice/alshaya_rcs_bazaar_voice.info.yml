@@ -1,0 +1,8 @@
+name: Alshaya RCS BazaarVoice
+type: module
+description: 'Provides RCS integration with Alshaya BazaarVoice.'
+package: 'Alshaya'
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_bazaar_voice:alshaya_bazaar_voice

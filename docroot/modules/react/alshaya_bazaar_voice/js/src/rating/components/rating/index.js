@@ -16,7 +16,9 @@ export default class Rating extends React.Component {
     this.state = {
       reviewsData: '',
       bazaarVoiceSettings: getbazaarVoiceSettings(),
-      userDetails: null,
+      userDetails: {
+        productReview: null,
+      },
     };
   }
 

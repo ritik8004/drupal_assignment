@@ -70,7 +70,7 @@
       var allStorageData = RcsPhStaticStorage.getAll();
       var productData = {};
       Object.keys(allStorageData).forEach(function (key) {
-        if (key.startsWith('product_')) {
+        if (key.startsWith('product_data_')) {
           if (typeof processed === 'undefined' || processed) {
             productData[allStorageData[key].sku] = processProduct(allStorageData[key]);
           }
@@ -83,7 +83,7 @@
       return productData;
     }
 
-    var product = RcsPhStaticStorage.get('product_' + sku);
+    var product = RcsPhStaticStorage.get('product_data_' + sku);
     if (product) {
       if (typeof processed === 'undefined' || processed) {
         return processProduct(product);
