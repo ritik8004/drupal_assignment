@@ -44,9 +44,11 @@ const PpdRatingsReviews = (props) => {
 
   useEffect(() => {
     // To open write a review on page load.
-    if (isOpenWriteReviewForm()) {
-      getPanelData(openModal());
-    }
+    isOpenWriteReviewForm().then((status) => {
+      if (status) {
+        getPanelData(openModal());
+      }
+    });
   },
   []);
 
