@@ -1,4 +1,4 @@
-egift_card_enabled: true # Config to enable/disable egift card feature.
+egift_card_enabled: false # Config to enable/disable egift card feature.
 payment_methods_not_supported:
   cashondelivery: cashondelivery
   checkout_com_upapi_fawry: checkout_com_upapi_fawry

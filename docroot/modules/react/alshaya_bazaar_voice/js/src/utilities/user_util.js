@@ -42,8 +42,8 @@ export const getProductReviewStats = (productId) => {
  *
  * @returns {boolean}
  */
-export const isOpenWriteReviewForm = (productId) => {
-  const userDetails = getUserDetails(productId);
+export const isOpenWriteReviewForm = async (productId) => {
+  const userDetails = await getUserDetails(productId);
   const query = new URLSearchParams(document.referrer);
   const openPopup = query.get('openPopup');
   if (userDetails.user !== undefined

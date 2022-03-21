@@ -70,7 +70,7 @@
       var allStorageData = RcsPhStaticStorage.getAll();
       var productData = {};
       Object.keys(allStorageData).forEach(function (key) {
-        if (key.startsWith('product_')) {
+        if (key.startsWith('product_data_')) {
           if (typeof processed === 'undefined' || processed) {
             productData[allStorageData[key].sku] = processProduct(allStorageData[key]);
           }
@@ -83,7 +83,7 @@
       return productData;
     }
 
-    var product = RcsPhStaticStorage.get('product_' + sku);
+    var product = RcsPhStaticStorage.get('product_data_' + sku);
     if (product) {
       if (typeof processed === 'undefined' || processed) {
         return processProduct(product);
@@ -667,7 +667,7 @@
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('single_product_by_sku', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
   };
@@ -732,7 +732,7 @@
 
     // Fetch the product data for the given skus which also saves them to the
     // static storage.
-    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: skuValues, op: 'in'});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('multiple_products_by_sku', {sku: skuValues});
 
     // Now store the product data to local storage.
     Object.entries(skus).forEach(function ([ parentSku, sku ]) {
@@ -756,18 +756,19 @@
       return staticDataStore['attrLabels'][attrName][attrValue];
     }
 
-    const response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option', { attributeCode: attrName });
-    allOptionsForAttribute = {};
-
+    const response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
     // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata.items[0].attribute_options.forEach(function (option) {
-      allOptionsForAttribute[option.value] = option.label;
+    response.data.customAttributeMetadata.items.forEach(function (option) {
+      allOptionsForAttribute = {};
+      option.attribute_options.forEach(function (optionValue) {
+        allOptionsForAttribute[optionValue.value] = optionValue.label;
+      })
+      // Set to static storage.
+      staticDataStore['attrLabels'][option.attribute_code] = allOptionsForAttribute;
     });
 
-    // Set to static storage.
-    staticDataStore['attrLabels'][attrName] = allOptionsForAttribute;
-
-    return allOptionsForAttribute[attrValue];
+    // Return the label.
+    return staticDataStore['attrLabels'][attrName][attrValue];
   };
 
   /**
