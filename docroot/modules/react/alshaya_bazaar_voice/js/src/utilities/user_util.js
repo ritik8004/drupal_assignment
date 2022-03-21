@@ -42,25 +42,25 @@ export const getProductReviewStats = (productId) => {
  *
  * @returns {boolean}
  */
-export const isOpenWriteReviewForm = async (productId) => {
-  const userDetails = await getUserDetails(productId);
-  const query = new URLSearchParams(document.referrer);
-  const openPopup = query.get('openPopup');
-  if (userDetails.user !== undefined
-    && userDetails.user.userId > 0
-    && getStorageInfo('openPopup')
-    && openPopup !== null
-    && userDetails.productReview !== undefined
-    && userDetails.productReview === null) {
-    return true;
-  }
-  const path = decodeURIComponent(window.location.search);
-  const params = new URLSearchParams(path);
-  if ((params.get('messageType') === 'PIE' || params.get('messageType') === 'PIE_FOLLOWUP') && params.get('userToken') !== null) {
-    return true;
-  }
-  return false;
-};
+export const isOpenWriteReviewForm = (productId) => getUserDetails(productId)
+  .then((userDetails) => {
+    const query = new URLSearchParams(document.referrer);
+    const openPopup = query.get('openPopup');
+    if (userDetails.user !== undefined
+      && userDetails.user.userId > 0
+      && getStorageInfo('openPopup')
+      && openPopup !== null
+      && userDetails.productReview !== undefined
+      && userDetails.productReview === null) {
+      return true;
+    }
+    const path = decodeURIComponent(window.location.search);
+    const params = new URLSearchParams(path);
+    if ((params.get('messageType') === 'PIE' || params.get('messageType') === 'PIE_FOLLOWUP') && params.get('userToken') !== null) {
+      return true;
+    }
+    return false;
+  });
 
 export const getEmailFromTokenParams = (params) => {
   let emailAddress = '';
