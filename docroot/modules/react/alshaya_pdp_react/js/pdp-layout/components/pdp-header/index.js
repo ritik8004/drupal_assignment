@@ -38,6 +38,14 @@ export default class PdpHeader extends React.PureComponent {
       backArrow = previousLink;
     }
 
+    // Add Disable class to back button, if
+    // url is from new browser, or
+    // previous url's domain is not same
+    let disableClass = '';
+    if (previousLink === '' || backArrow === '') {
+      disableClass = 'disabled';
+    }
+
     backArrow = (e) => {
       e.preventDefault();
       // following browser back behaviour.
@@ -47,7 +55,7 @@ export default class PdpHeader extends React.PureComponent {
     return (
       <div className="magv2-header-wrapper">
         <ConditionalView condition={window.innerWidth < 768}>
-          <a className="back-button" href="#" onClick={(e) => backArrow(e)} />
+          <a className={`back-button ${disableClass}`} href="#" onClick={(e) => backArrow(e)} />
           <PdpInfo
             title={title}
             finalPrice={finalPrice}
