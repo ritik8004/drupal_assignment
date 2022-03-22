@@ -26,7 +26,7 @@ export class StoreFinderList extends React.Component {
 
   componentDidMount() {
     // This will be replace with MDC data api call.
-    const { apiUrl } = drupalSettings.cac;
+    const { apiUrl } = drupalSettings.storeLabels;
     Axios.get(apiUrl).then((response) => {
       const stores = response.data;
       const urlSearchParams = new URLSearchParams(window.location.search);
@@ -84,16 +84,6 @@ export class StoreFinderList extends React.Component {
     activeMarker: null,
     showingInfoWindow: false,
   });
-
-  onMapClicked = () => {
-    const { showingInfoWindow } = this.state;
-    if (showingInfoWindow) {
-      this.setState({
-        activeMarker: null,
-        showingInfoWindow: false,
-      });
-    }
-  };
 
   searchStores = (place) => {
     const currentLocation = JSON.parse(JSON.stringify(place.geometry.location));

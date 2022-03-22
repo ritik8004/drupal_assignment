@@ -4,7 +4,7 @@ namespace Drupal\alshaya_geolocation\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\alshaya_geolocation\AlshayaStoreUtility;
 
 /**
  * Alshaya Top Up Controller.
@@ -14,32 +14,32 @@ class AlshayaStoreFinderController extends ControllerBase {
   /**
    * Config object.
    *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * @var \Drupal\alshaya_geolocation\AlshayaStoreUtility
    */
-  protected $configFactory;
+  protected $storeUtility;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('config.factory'));
+    return new static($container->get('alshaya_geolocation.store_utility'));
   }
 
   /**
    * AlshayaStoreFinder constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   * @param \Drupal\alshaya_geolocation\AlshayaStoreUtility $storeUtility
    *   Config object.
    */
-  public function __construct(ConfigFactoryInterface $configFactory) {
-    $this->configFactory = $configFactory;
+  public function __construct(AlshayaStoreUtility $storeUtility) {
+    $this->storeUtility = $storeUtility;
   }
 
   /**
    * Store Finder controller.
    */
   public function store() {
-    $labels = $this->storeLabels();
+    $labels = $this->storeUtility->storeLabels();
     // For transac.
     $labels['apiUrl'] = '/alshaya-locations/stores-list';
     $library = [
@@ -59,7 +59,7 @@ class AlshayaStoreFinderController extends ControllerBase {
       '#attached' => [
         'library' => $library,
         'drupalSettings' => [
-          'cac' => $labels,
+          'storeLabels' => $labels,
         ],
       ],
     ];
@@ -69,7 +69,7 @@ class AlshayaStoreFinderController extends ControllerBase {
    * Store finder list controller.
    */
   public function storeList() {
-    $labels = $this->storeLabels();
+    $labels = $this->storeUtility->storeLabels();
     // For transac.
     $labels['apiUrl'] = '/alshaya-locations/stores-list';
     $library = [
@@ -89,22 +89,10 @@ class AlshayaStoreFinderController extends ControllerBase {
       '#attached' => [
         'library' => $library,
         'drupalSettings' => [
-          'cac' => $labels,
+          'storeLabels' => $labels,
         ],
       ],
     ];
-  }
-
-  /**
-   * Store finder list labels.
-   */
-  public function storeLabels() {
-    $labels = [];
-    $config = $this->configFactory->getEditable('alshaya_stores_finder.settings');
-    $labels['search_proximity_radius'] = $config->get('search_proximity_radius');
-    $labels['store_list_label'] = $config->get('store_list_label');
-    $labels['store_search_placeholder'] = $config->get('store_search_placeholder');
-    return $labels;
   }
 
 }

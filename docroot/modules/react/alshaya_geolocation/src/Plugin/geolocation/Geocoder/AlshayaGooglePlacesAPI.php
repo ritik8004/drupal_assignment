@@ -6,6 +6,9 @@ use GuzzleHttp\Exception\RequestException;
 use Drupal\Component\Serialization\Json;
 use Drupal\geolocation\GeocoderBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\geolocation\MapProviderManager;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides the Google Places API.
@@ -18,7 +21,65 @@ use Drupal\Core\Form\FormStateInterface;
  *   boundaryCapable = true,
  * )
  */
-class AlshayaGooglePlacesAPI extends GeocoderBase {
+class AlshayaGooglePlacesAPI extends GeocoderBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * Map provider object.
+   *
+   * @var \Drupal\geolocation\MapProviderManager
+   */
+  protected $mapProvider;
+
+  /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * AlshayaGooglePlacesAPI Constructor.
+   *
+   * @param array $configuration
+   *   Config array.
+   * @param string $plugin_id
+   *   Plugin id string.
+   * @param mixed $plugin_definition
+   *   Plugin object.
+   * @param \Drupal\geolocation\MapProviderManager $mapProvider
+   *   Map provider object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config object.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MapProviderManager $mapProvider, ConfigFactoryInterface $configFactory) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->mapProvider = $mapProvider;
+    $this->configFactory = $configFactory;
+  }
+
+  /**
+   * AlshayaGooglePlacesAPI create method.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   Containerinterface object.
+   * @param array $configuration
+   *   Configuration array.
+   * @param string $plugin_id
+   *   Plugin id string.
+   * @param mixed $plugin_definition
+   *   Plugin object.
+   *
+   * @return static
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('plugin.manager.geolocation.mapprovider'),
+      $container->get('config.factory')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -82,7 +143,7 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
    * {@inheritdoc}
    */
   public function formAttachGeocoder(array &$render_array, $element_name) {
-    $render_array['#attached']['drupalSettings']['geolocation']['google_map_url'] = \Drupal::service('plugin.manager.geolocation.mapprovider')->getMapProvider('google_maps')->getGoogleMapsApiUrl();
+    $render_array['#attached']['drupalSettings']['geolocation']['google_map_url'] = $this->mapProvider->getMapProvider('google_maps')->getGoogleMapsApiUrl();
 
     $render_array['geolocation_geocoder_google_places_api'] = [
       '#type' => 'textfield',
@@ -198,7 +259,7 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
     }
     $request_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' . $address;
 
-    $config = \Drupal::config('geolocation_google_maps.settings');
+    $config = $this->configFactory->get('geolocation_google_maps.settings');
 
     if (!empty($config->get('google_map_api_key'))) {
       $request_url .= '&key=' . $config->get('google_map_api_key');

@@ -43,6 +43,6 @@ function alshaya_geolocation_update_8002() {
     $config_factory->getEditable('geolocation_google_maps.settings')->setData($fields)->save();
     // Delete storefinder view.
     $config_factory->getEditable('views.view.stores_finder')->delete();
-    drupal_flush_all_caches();
+    \Drupal::logger('alshaya_geolocation')->warning('Deleting the Store Finder view.');
   }
 }

@@ -70,7 +70,7 @@ class AlshayaLocationsController extends ControllerBase {
    */
   public function stores($data = NULL) {
     // Mock file read for now.
-    $file = file_get_contents("https://hmkw.alshaya.lndo.site/modules/react/alshaya_geolocation/file/mockdata.json");
+    $file = file_get_contents("https://cos-qa.store.alshaya.com/kwt_en/rest/V1/storeLocator/search?searchCriteria%5Bfilter_groups%5D%5B0%5D%5Bfilters%5D%5B0%5D%5Bfield%5D=status&searchCriteria%5Bfilter_groups%5D%5B0%5D%5Bfilters%5D%5B0%5D%5Bvalue%5D=1");
     return new JsonResponse(json_decode($file));
   }
 

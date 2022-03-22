@@ -79,11 +79,11 @@
       data: { _cf_cache_bypass: '1' }
     }).then(function (response) {
       let stock = null;
-      if (!Drupal.hasValue(response) || Drupal.hasValue(response.error)) {
-        // Do nothing.
-      } else {
+      // if (!Drupal.hasValue(response) || Drupal.hasValue(response.error)) {
+      //   // Do nothing.
+      // } else {
         stock = response;
-      }
+      // }
 
       return stock;
     });

@@ -73,7 +73,7 @@ function alshaya_geolocation_node_view_alter(array &$build, EntityInterface $ent
       '#markup' => '<div id="pdp-store-click-collect-list"></div>',
       '#attached' => [
         'drupalSettings' => [
-          'cac' => [
+          'storeLabels' => [
             'apiUrl' => $api_url,
             'state' => $state ? 'enabled' : 'disabled',
             'sku' => $sku,

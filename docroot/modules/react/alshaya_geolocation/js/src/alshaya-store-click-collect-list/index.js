@@ -28,7 +28,7 @@ export class StoreClickCollectList extends React.Component {
 
   componentDidMount() {
     // This will be replace with MDC data api call.
-    const { apiUrl } = drupalSettings.cac;
+    const { apiUrl } = drupalSettings.storeLabels;
     Axios.get(apiUrl).then((response) => {
       const stores = response.data;
       const prevState = this.state;
@@ -117,7 +117,7 @@ export class StoreClickCollectList extends React.Component {
       isModalOpen,
     } = this.state;
     const shorts = results.slice(0, 2);
-    const cncLabels = drupalSettings.cac;
+    const cncLabels = drupalSettings.storeLabels;
     return (
       <>
         <div className="delivery-options-wrapper">
@@ -141,7 +141,7 @@ export class StoreClickCollectList extends React.Component {
                                 <span className="label">{Drupal.t('Check in-store availability')}</span>
                                 <div>
                                   <AutocompleteSearch
-                                    placeholder={drupalSettings.cac.store_search_placeholder}
+                                    placeholder={drupalSettings.storeLabels.search_placeholder}
                                     searchStores={(place) => this.searchStores(place)}
                                   />
                                   <button className="search-stores-button" type="button">search stores</button>

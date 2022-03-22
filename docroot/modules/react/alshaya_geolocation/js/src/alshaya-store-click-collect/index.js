@@ -1655,11 +1655,6 @@ export class StoreClickCollect extends React.Component {
                     <SectionTitle>{getStringMessage(getCnCModalContactSubtitle())}</SectionTitle>
                     <div className="store-details-wrapper">
                       <ListItemClick specificPlace={selectedLocation} />
-                      {/* <SelectedStore
-                        store={selectedStore}
-                        open={detailForm}
-                        closePanel={this.sendLocation(false)}
-                      /> */}
                       {collectionPointsEnabled() === true
                       && (
                         <div className="spc-cnc-selected-store-pudo-info">
