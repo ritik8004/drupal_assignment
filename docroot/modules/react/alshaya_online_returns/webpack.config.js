@@ -4,6 +4,7 @@ var buildPath = '/modules/react/alshaya_online_returns/dist/';
 var config = {
   entry: {
     pdp: './js/pdp',
+    my_accounts: './js/my-accounts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

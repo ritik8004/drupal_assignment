@@ -3,7 +3,7 @@
 {% set aura_class = order.aura_enabled ? 'has-aura-points' %}
 
 <table class="user__order--detail recent__orders--list">
-  <tbody class="recent__orders--body">
+  <tbody class="recent__orders--body" data-order-id="{{order.id}}">
     <tr class="order-summary-row">
       <td class="order-transaction">
         <div class="light tablet-light">{{ 'Order ID' | t }}</div>
@@ -65,6 +65,20 @@
         <div class="icon-ic_chevrondown"></div>
         </td>
     </tr>
+
+    {% if order.online_returns_status is defined and order.online_returns_status %}
+      <tr class="order-item-row">
+        <td colspan="5">
+          <div id="online-returns-eligibility-window"></div>
+        </td>
+      </tr>
+
+      <tr class="order-item-row">
+        <td colspan="5">
+          <div>{{ "Delivered Items"|t }}</div>
+        </td>
+      </tr>
+    {% endif %}
 
     {% for item in order.items %}
       {{ _self.order_item(item, false) }}

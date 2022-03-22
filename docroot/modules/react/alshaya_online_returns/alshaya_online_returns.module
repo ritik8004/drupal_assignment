@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_preprocess_node().
@@ -45,6 +46,9 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
   ) {
     $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_pdp';
   }
+  elseif ($current_route_name === 'entity.user.canonical') {
+    $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_my_accounts';
+  }
 }
 
 /**
@@ -73,5 +77,33 @@ function alshaya_online_returns_alshaya_acm_product_build_alter(&$build, SKUInte
 
   if (isset($build['#attached']['drupalSettings']['productInfo'][$sku->getSku()])) {
     $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['eligibleForReturn'] = $onlineReturnsHelper->isSkuReturnable($sku);
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_online_returns_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  $build['#cache']['tags'] = Cache::mergeTags(
+    $build['#cache']['tags'] ?? [],
+    ['config:alshaya_online_returns.settings']
+  );
+
+  $onlineReturnsStatus = \Drupal::service('alshaya_online_returns.online_returns_helper')->isOnlineReturnsEnabled();
+
+  // Do not process further if feature is disabled.
+  if (!$onlineReturnsStatus) {
+    return;
+  }
+
+  foreach ($build['recent_order'] as $key => $order) {
+    $build['recent_order'][$key]['#order']['online_returns_status'] = $onlineReturnsStatus;
+
+    // Hard coding is_return_eligible and return_exipiration
+    // till we start getting actual values from MDC APIs.
+    $order['#order']['extension']['is_return_eligible'] = TRUE;
+    $order['#order']['extension']['return_exipiration'] = '2021-07-26 11:54:27';
+
+    $build['#attached']['drupalSettings']['onlineReturns']['recentOrders'][$order['#order']['id']] = $order['#order'];
   }
 }
