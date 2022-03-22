@@ -45,6 +45,7 @@ class AlshayaStoreFinderController extends ControllerBase {
     $library = [
       'alshaya_geolocation/alshaya-store-finder',
       'alshaya_white_label/store_finder',
+      'alshaya_geolocation/marker-dropdown',
     ];
     // For non-transac.
     if (drupal_get_profile() == 'alshaya_non_transac') {
@@ -84,6 +85,7 @@ class AlshayaStoreFinderController extends ControllerBase {
     $library = [
       'alshaya_geolocation/alshaya-store-finder-list',
       'alshaya_white_label/store_finder',
+      'alshaya_geolocation/marker-dropdown',
     ];
     // For non-transac.
     if (drupal_get_profile() == 'alshaya_non_transac') {

@@ -34,3 +34,7 @@ alshaya-store-click-collect-list:
     dist/store_click_collect_list.bundle.js: { }
   dependencies:
     - alshaya_react/react
+
+marker-dropdown:
+  js:
+    js/marker-dropdown.js: {}

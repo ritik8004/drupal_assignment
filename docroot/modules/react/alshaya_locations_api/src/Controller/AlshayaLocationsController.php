@@ -8,6 +8,7 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class Alshaya Locations Controller.
@@ -36,6 +37,13 @@ class AlshayaLocationsController extends ControllerBase {
   protected $languageManager;
 
   /**
+   * The lconfigfactory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AlshayaLocationsController constructor.
    *
    * @param \Drupal\Core\Entity\Query\QueryFactory $entityQuery
@@ -44,11 +52,14 @@ class AlshayaLocationsController extends ControllerBase {
    *   EntityTypeManagerInterface service object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   LanguageManagerInterface service object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config object.
    */
-  public function __construct(QueryFactory $entityQuery, EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager) {
+  public function __construct(QueryFactory $entityQuery, EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager, ConfigFactoryInterface $configFactory) {
     $this->entityQuery = $entityQuery;
     $this->entityTypeManager = $entityTypeManager;
     $this->languageManager = $languageManager;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -59,6 +70,7 @@ class AlshayaLocationsController extends ControllerBase {
       $container->get('entity.query'),
       $container->get('entity_type.manager'),
       $container->get('language_manager'),
+      $container->get('config.factory'),
     );
   }
 
@@ -70,7 +82,11 @@ class AlshayaLocationsController extends ControllerBase {
    */
   public function stores($data = NULL) {
     // Mock file read for now.
-    $file = file_get_contents("https://cos-qa.store.alshaya.com/kwt_en/rest/V1/storeLocator/search?searchCriteria%5Bfilter_groups%5D%5B0%5D%5Bfilters%5D%5B0%5D%5Bfield%5D=status&searchCriteria%5Bfilter_groups%5D%5B0%5D%5Bfilters%5D%5B0%5D%5Bvalue%5D=1");
+    // $domain = $this->configFactory->get('alshaya_stores_finder.settings');.
+    $domain = "https://cos-qa.store.alshaya.com/kwt_en/rest/V1/";
+    $url = $this->configFactory->get('alshaya_stores_finder.settings')->get('filter_path');
+    $url = rtrim($domain, "/") . $url;
+    $file = file_get_contents($url);
     return new JsonResponse(json_decode($file));
   }
 

@@ -21,6 +21,8 @@ export class StoreFinderList extends React.Component {
       center: {},
       zoom: 10,
       open: false,
+      loadmore: true,
+      page: 10,
     };
   }
 
@@ -49,6 +51,8 @@ export class StoreFinderList extends React.Component {
             lat: +params.latitude ? +params.latitude : stores.items[0].latitude,
             lng: +params.longitude ? +params.longitude : stores.items[0].longitude,
           },
+          loadmore: true,
+          page: 10,
         },
       );
     });
@@ -158,6 +162,21 @@ export class StoreFinderList extends React.Component {
     }));
   }
 
+  loadMore = () => {
+    const {
+      stores,
+      page,
+    } = this.state;
+    if (stores.length < page) {
+      this.setState({
+        loadmore: false,
+      });
+    }
+    this.setState({
+      page: (page + 10),
+    });
+  }
+
   getDirection = (store) => {
     window.open(`https://www.google.com/maps/dir/Current+Location/${store.latitude},${store.longitude}`, '_blank');
   }
@@ -171,6 +190,8 @@ export class StoreFinderList extends React.Component {
       center,
       open,
       zoom,
+      page,
+      loadmore,
     } = this.state;
     const { google } = this.props;
     return (
@@ -207,7 +228,7 @@ export class StoreFinderList extends React.Component {
                   <div className="view-header" />
                   <div className="view-content list-store--detail">
                     {stores.map((store, index) => (
-                      <div key={store.id}>
+                      <div key={store.id} className={index < page ? 'show' : 'hide'}>
                         <div className="list-view-locator">
                           <div className="store-row--counter">{(index + 1)}</div>
                           <div className="mobile-only-back-to-glossary store-back-to-glossary">
@@ -309,11 +330,14 @@ export class StoreFinderList extends React.Component {
                       </div>
                     </div>
                   </div>
-                  <div className="view-footer">
-                    <div className="load-more-button">
-                      <a href="">Load More</a>
+                  {loadmore
+                  && (
+                    <div className="view-footer">
+                      <div className="load-more-button">
+                        <a href="#" onClick={this.loadMore}>Load More</a>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
               )}

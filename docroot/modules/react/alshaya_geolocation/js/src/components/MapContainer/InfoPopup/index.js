@@ -8,15 +8,9 @@ export class InfoPopUp extends React.Component {
     };
   }
 
-  toggleOpenClass = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      open: !prevState.open,
-    }));
-  }
-
   getDirection = (store) => {
-    window.open(`https://www.google.com/maps/dir/Current+Location/${store.latitude},${store.longitude}`, '_blank');
+    const { position } = store;
+    return `https://www.google.com/maps/dir/Current+Location/${position.lat},${position.lng}`;
   }
 
   render() {
@@ -43,10 +37,10 @@ export class InfoPopUp extends React.Component {
                 ))}
               </div>
             </div>
-            <div className="views-field views-field-field-store-open-hours">
+            <div className="views-field views-field-field-store-open-hours marker-hours">
               <div className="field-content">
                 <div className="hours--wrapper selector--hours">
-                  <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
+                  <div className={open ? 'hours--label open' : 'hours--label'}>
                     {Drupal.t('Opening Hours')}
                   </div>
                   <div className="open--hours">
@@ -64,11 +58,11 @@ export class InfoPopUp extends React.Component {
                   <div>
                     <a
                       className="device__desktop"
-                      onClick={(item) => this.getDirection(item)}
+                      href={this.getDirection(selectedPlace)}
                     >
                       {Drupal.t('Get directions')}
                     </a>
-                    <a className="device__tablet" onClick={(item) => this.getDirection(item)}>
+                    <a className="device__tablet" href={this.getDirection(selectedPlace)}>
                       {Drupal.t('Get directions')}
                     </a>
                   </div>
