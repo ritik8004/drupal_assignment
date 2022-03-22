@@ -4,6 +4,9 @@ import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
 import DescriptionContent from '../pdp-desc-popup-content';
 import ProductDetailSVG from '../../../svg-component/product-detail-svg';
+import OnlineReturnsPDP from '../../../../../alshaya_online_returns/js/components/online-returns-pdp';
+import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 const PpdDescription = (props) => {
   const {
@@ -49,6 +52,12 @@ const PpdDescription = (props) => {
       <div className="magv2-desc-readmore-link" onClick={() => getPanelData(openModal())}>
         {Drupal.t('Read more')}
       </div>
+
+      <ConditionalView condition={isOnlineReturnsEnabled()}>
+        <div className="online-returns-pdp">
+          <OnlineReturnsPDP />
+        </div>
+      </ConditionalView>
     </div>
   );
 };

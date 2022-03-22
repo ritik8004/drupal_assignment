@@ -1,6 +1,8 @@
-body.magazine-layout {
-  div[id*="online-returns-pdp-"] {
+body.nodetype--acq_product {
+  div[id*="online-returns-pdp"],
+  .online-returns-pdp {
     font-size: 1rem;
+    font-family: $alshaya-bold;
     line-height: 1.75rem;
     margin-bottom: 1.25rem;
     display: flex;
@@ -25,6 +27,18 @@ body.magazine-layout {
     &.mobile-only {
       @include breakpoint($tablet) {
         display: none;
+      }
+    }
+  }
+
+  &.magazine-layout-v2 {
+    .online-returns-pdp {
+      margin-top: 1.25rem;
+      margin-bottom: 0;
+
+      &::before {
+        font-size: 1.75rem;
+        color: $new-pdp-blue;
       }
     }
   }
