@@ -709,6 +709,11 @@
     const cartData = Drupal.alshayaSpc.getCartData();
     const skus = {};
 
+    // Do not proceed for empty cart.
+    if (!(cartData && Drupal.hasValue(cartData.items))) {
+      return;
+    }
+
     Object.values(cartData.items).forEach(function (item) {
       const sku = item.sku;
       if (!Drupal.hasValue(data[sku])) {
