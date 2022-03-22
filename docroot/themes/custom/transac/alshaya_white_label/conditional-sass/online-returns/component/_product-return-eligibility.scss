@@ -1,7 +1,7 @@
 body.nodetype--acq_product {
   div[id*="online-returns-pdp"],
   .online-returns-pdp {
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-family: $alshaya-bold;
     line-height: 1.75rem;
     margin-bottom: 1.25rem;
@@ -9,7 +9,15 @@ body.nodetype--acq_product {
     align-items: center;
 
     @include icon(infomation, before) {
-      font-size: 2rem;
+      font-size: 1.25rem;
+    }
+
+    @include breakpoint($tablet) {
+      font-size: 1rem;
+
+      &::before {
+        font-size: 1.75rem;
+      }
     }
 
     span {
@@ -35,10 +43,11 @@ body.nodetype--acq_product {
     .online-returns-pdp {
       margin-top: 1.25rem;
       margin-bottom: 0;
+      font-size: 1rem;
 
       &::before {
-        font-size: 1.75rem;
         color: $new-pdp-blue;
+        font-size: 1.75rem;
       }
     }
   }
