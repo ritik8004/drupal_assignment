@@ -5,6 +5,7 @@ import moment from 'moment-timezone';
 import { Swipeable } from 'react-swipeable';
 import en from '../../../../../../node_modules/date-fns/locale/en-US';
 import ar from '../../../../../../node_modules/date-fns/locale/ar-SA';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 export default class OnlineBookingCalendar extends React.Component {
   constructor(props) {
@@ -184,7 +185,8 @@ export default class OnlineBookingCalendar extends React.Component {
    * @param {string} timeSlotExtId
    *  Selected time slot resource external ID.
    */
-  onTimeSlotChange = (timeSlotExtId) => {
+  onTimeSlotChange = (e, timeSlotExtId) => {
+    e.preventDefault();
     const { bookingDetails } = this.props;
 
     // If selected time slot is different then allow customer to use apply
@@ -197,6 +199,38 @@ export default class OnlineBookingCalendar extends React.Component {
       disableApplyBtn: (typeof bookingDetails.resource_external_id !== 'undefined'
         && bookingDetails.resource_external_id === timeSlotExtId),
     });
+  };
+
+  /**
+   * This is to handle the apply button action with selected time slot.
+   */
+  onApplyTimeSlot = (e) => {
+    // Prevent default click handlers.
+    e.preventDefault();
+
+    // Check for the callback in props and trigger it with the params.
+    const { callback } = this.props;
+    if (typeof callback !== 'undefined') {
+      const {
+        selectedDate,
+        selectedTimeSlot,
+        availableTimeSlots,
+      } = this.state;
+
+      // Get the seleccted booking slot details.
+      const selectedTimeSlotDetails = availableTimeSlots.find(
+        (timeSlot) => timeSlot.resource_external_id === selectedTimeSlot,
+      );
+
+      // Trigger callback function for the parent component to do the necessary
+      // actions/operations with selected time slot details.
+      if (hasValue(selectedTimeSlotDetails)) {
+        callback(
+          moment(selectedDate).format('YYYY-MM-DD'),
+          selectedTimeSlotDetails,
+        );
+      }
+    }
   };
 
   render() {
@@ -234,7 +268,10 @@ export default class OnlineBookingCalendar extends React.Component {
             key={timeSlot.resource_external_id}
             value={timeSlot.resource_external_id}
             className={className}
-            onClick={() => this.onTimeSlotChange(timeSlot.resource_external_id)}
+            onClick={(e) => this.onTimeSlotChange(
+              e,
+              timeSlot.resource_external_id,
+            )}
           >
             {`${timeSlot.start_time} - ${timeSlot.end_time}`}
           </li>
@@ -310,6 +347,7 @@ export default class OnlineBookingCalendar extends React.Component {
                   openToDate={setOpenDate}
                   disabledKeyboardNavigation
                   includeDates={this.getAvailableBookingDates()}
+                  formatWeekDay={(nameOfDay) => nameOfDay.substr(0, 3)}
                 />
                 {/**
                  * Add two arrow icons for controlling the months increase
@@ -354,6 +392,7 @@ export default class OnlineBookingCalendar extends React.Component {
               type="button"
               className="schedule-delivery-datepicker-submit"
               disabled={disableApplyBtn}
+              onClick={(e) => this.onApplyTimeSlot(e)}
             >
               {Drupal.t('Apply Date & Time', {}, { context: 'online_booking' })}
             </button>
