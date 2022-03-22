@@ -155,7 +155,7 @@ class AlshayaRcsCategoryDataMigration {
       foreach (array_chunk($terms, $batch_size) as $term_chunk) {
         $operations[] = [
           [__CLASS__, 'batchProcess'],
-          [$term_chunk],
+          [$term_chunk, $batch_size],
         ];
       }
       $batch = [
@@ -174,10 +174,12 @@ class AlshayaRcsCategoryDataMigration {
    *
    * @param array $terms
    *   Current Chunk of terms to be processed.
+   * @param int $batch_size
+   *   Batch size.
    * @param mixed|array $context
    *   The batch current context.
    */
-  public static function batchProcess(array $terms, &$context) {
+  public static function batchProcess(array $terms, int $batch_size, &$context) {
     // Initialize progess counter to zero.
     if (empty($context['sandbox'])) {
       $context['sandbox']['progress'] = 0;
@@ -185,6 +187,7 @@ class AlshayaRcsCategoryDataMigration {
     // Store Product category and RCS category term mapping to get parent terms.
     if (!isset($context['results']['acq_term_mapping'])) {
       $context['results']['acq_term_mapping'] = [];
+      $context['results']['batch_size'] = $batch_size;
     }
 
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
@@ -230,9 +233,14 @@ class AlshayaRcsCategoryDataMigration {
    *   A list of all the operations that had not been completed by batch API.
    */
   public static function batchFinished($success, array $results, array $operations) {
+    $logger = \Drupal::logger('alshaya_rcs_category');
     if ($success) {
       // Delete product category terms that have been migrated.
-      \Drupal::entityTypeManager()->getStorage('taxonomy_term')->delete($results['delete_acq_terms']);
+      $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+      foreach (array_chunk($results['delete_acq_terms'], $results['batch_size']) as $acq_delete_terms) {
+        $term_storage->delete($acq_delete_terms);
+        $logger->notice('@count acq product categories deleted successfully.', ['@count' => count($acq_delete_terms)]);
+      }
     }
   }
 
