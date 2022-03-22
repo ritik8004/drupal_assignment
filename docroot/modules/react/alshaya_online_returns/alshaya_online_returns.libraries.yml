@@ -3,3 +3,9 @@ alshaya_online_returns_pdp:
     dist/pdp.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_return_requests:
+  js:
+    dist/returnrequest.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
