@@ -18,6 +18,11 @@
         }
       }
     }
+    
+    .back-button,
+    .cart-link {
+      border: 1px solid $magv2-icon-bg-border;
+    }
   }
 }
 
