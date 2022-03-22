@@ -20,9 +20,10 @@ export default class EgiftTopupFor extends React.Component {
    */
   handleChange = (e) => {
     const eGiftFor = e.target.value;
+    const { handleImage } = this.props;
     this.setState({
       optionGiftForSelf: (eGiftFor === 'self'),
-    });
+    }, () => handleImage(eGiftFor));
   };
 
   handleEvent = (e) => {
