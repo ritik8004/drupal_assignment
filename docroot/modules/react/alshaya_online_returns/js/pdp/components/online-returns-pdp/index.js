@@ -11,10 +11,12 @@ class OnlineReturnsPDP extends React.Component {
 
   componentDidMount() {
     document.addEventListener('onSkuVariantSelect', this.updateState, false);
+    document.addEventListener('onSkuBaseFormLoad', this.updateState, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('onSkuVariantSelect', this.updateState, false);
+    document.removeEventListener('onSkuBaseFormLoad', this.updateState, false);
   }
 
   updateState = (variantDetails) => {

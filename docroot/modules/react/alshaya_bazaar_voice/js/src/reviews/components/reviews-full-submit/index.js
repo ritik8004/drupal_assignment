@@ -19,23 +19,18 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview: '',
       buttonClass: 'write_review',
       validateCurrentEmail: false,
-      userDetails: {
-        user: {
-          userId: 0,
-          userEmail: null,
-        },
-      },
+      userDetails: null,
     };
   }
 
   componentDidMount() {
     const { productId, reviewedByCurrentUser } = this.props;
     // To open write a review on page load.
-    if (isOpenWriteReviewForm(productId)) {
+    isOpenWriteReviewForm(productId).then((status) => {
       this.setState({
-        isModelOpen: true,
+        isModelOpen: status,
       });
-    }
+    });
 
     const path = decodeURIComponent(window.location.search);
     const params = new URLSearchParams(path);
@@ -46,16 +41,17 @@ export default class WriteReviewButton extends React.Component {
     }
 
     getUserDetails(productId).then((userDetails) => {
+      let data = {};
       if (params.get('userToken') !== null) {
         const currentEmail = getEmailFromTokenParams(params);
         if (userDetails.user.userId !== 0 && userDetails.user.emailId !== currentEmail) {
-          this.setState({
+          data = {
             validateCurrentEmail: true,
             buttonClass: 'pie_notification',
-          });
+          };
         }
       }
-      this.setState({ userDetails });
+      this.setState({ ...data, ...{ userDetails } });
     });
   }
 
@@ -111,12 +107,12 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview,
       buttonClass,
       validateCurrentEmail,
+      userDetails,
     } = this.state;
     const {
       reviewedByCurrentUser, productId, context, newPdp,
     } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-    const { userDetails } = this.state;
     if (userDetails && Object.keys(userDetails).length !== 0) {
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
       if (userDetails.user.userId === 0

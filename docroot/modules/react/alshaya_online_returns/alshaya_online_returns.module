@@ -23,8 +23,8 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
   $online_returns_helper = \Drupal::service('alshaya_online_returns.online_returns_helper');
   $config['enabled'] = $online_returns_helper->isOnlineReturnsEnabled();
   $page['#cache']['tags'] = array_merge(
-        $page['#cache']['tags'] ?? [],
-        \Drupal::config('alshaya_online_returns.settings')->getCacheTags()
+    $page['#cache']['tags'] ?? [],
+    \Drupal::config('alshaya_online_returns.settings')->getCacheTags()
   );
 
   // Do not proceed if Online returns is not enabled.
@@ -44,6 +44,8 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
     ])
   ) {
     $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_pdp';
+    // Attach the theming library.
+    $page['#attached']['library'][] = 'alshaya_white_label/online-returns';
   }
 }
 
@@ -58,4 +60,20 @@ function alshaya_online_returns_sku_variant_info_alter(array &$variant, SKUInter
     return;
   }
   $variant['eligibleForReturn'] = $onlineReturnsHelper->isSkuReturnable($child);
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_online_returns_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  // Do not process further if feature is disabled.
+  if (!$onlineReturnsHelper->isOnlineReturnsEnabled()) {
+    return;
+  }
+
+  if (isset($build['#attached']['drupalSettings']['productInfo'][$sku->getSku()])) {
+    $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['eligibleForReturn'] = $onlineReturnsHelper->isSkuReturnable($sku);
+  }
 }

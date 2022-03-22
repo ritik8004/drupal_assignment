@@ -56,34 +56,92 @@ function alshaya_rcs_color_split_page_attachments(array &$attachments) {
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
 function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries) {
-  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  // Get hex value of color.
-  $color_code_attribute = $display_settings->get('color_attribute_config')['configurable_color_code_attribute'];
-  // Remove the "attr_" prefix.
-  $color_code_attribute = str_replace('attr_', '', $color_code_attribute);
+  /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
+  $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
+  $product_query_body = $rcs_product_helper->getProductQueryFields();
+  $url_key = $rcs_product_helper->getProductUrlKey();
 
-  array_push(
-    $queries['products']['items'],
-    'style_code',
-  );
+  $queries['styled_products'] = [
+    'query' => [
+      'query($styleCode: String)' => [
+        'products(filter: {style_code: {match: $styleCode}})' => $product_query_body,
+      ],
+    ],
+    'variables' => [
+      'styleCode' => NULL,
+    ],
+  ];
 
-  array_push(
-    $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
-    AlshayaColorSplitConfig::get('attribute_code_color_id'),
-    $color_code_attribute,
-  );
-
-  // For the main product, we send a minimal request to get the style code.
-  // After getting the style code, we call the API to fetch the products with
-  // the same style and at that step we receive the complete product objects
-  // which includes the main product.
-  $queries['color_split_product'] = [
+  $color_split_product_query_fields = [
     'total_count',
     'items' => [
       'style_code',
       'sku',
     ],
   ];
+
+  if ($rcs_product_helper->isRcsPdp()) {
+    // For the main product, we send a minimal request to get the style code.
+    // After getting the style code, we call the API to fetch the products with
+    // the same style and at that step we receive the complete product objects
+    // which includes the main product.
+    // So we override the pdp product query.
+    $queries['pdp_product'] = [
+      'query' => [
+        'query($url: String, $attributes: [AttributeInput!]!)' => [
+          'products(filter: {url_key: {eq: $url}})' => $color_split_product_query_fields,
+          'customAttributeMetadata(attributes: $attributes)' => $rcs_product_helper->getProductOptionsQueryFields(),
+        ],
+      ],
+      'variables' => [
+        'url' => $url_key,
+        'attributes' => $rcs_product_helper->getProductOptionsQueryVariables(),
+      ],
+    ];
+  }
+
+  // Alter this query.
+  $queries['single_product_by_sku'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $color_split_product_query_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
+
+  // Alter this query.
+  $queries['multiple_products_by_sku'] = [
+    'query' => [
+      'query($skus: [String])' => [
+        'products(filter: {sku: {in: $skus}})' => $color_split_product_query_fields,
+      ],
+    ],
+    'variables' => [
+      'skus' => NULL,
+    ],
+  ];
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_rcs_color_split_alshaya_rcs_product_query_fields_alter(array &$fields) {
+  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  // Get hex value of color.
+  $color_code_attribute = $display_settings->get('color_attribute_config')['configurable_color_code_attribute'];
+  // Remove the "attr_" prefix.
+  $color_code_attribute = str_replace('attr_', '', $color_code_attribute);
+
+  array_push($fields['items'], 'style_code');
+
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    AlshayaColorSplitConfig::get('attribute_code_color_id'),
+    $color_code_attribute,
+  );
 }
 
 /**
@@ -97,4 +155,12 @@ function alshaya_rcs_color_split_node_view(array &$build, EntityInterface $entit
   // in backend.
   $build['#attached']['library'][] = 'alshaya_color_split/grouped_simple';
   $build['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_product_options_to_query().
+ */
+function alshaya_rcs_color_split_alshaya_rcs_product_product_options_to_query(array $options) {
+  array_push($options, ["attribute_code" => "color", "entity_type" => "4"]);
+  return $options;
 }

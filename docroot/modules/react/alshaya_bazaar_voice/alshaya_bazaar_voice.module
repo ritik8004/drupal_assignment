@@ -7,8 +7,6 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\block\Entity\Block;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 
@@ -49,7 +47,11 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
     $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
 
-    if ($product_pdp_layout !== 'magazine_v2') {
+
+    if ($product_pdp_layout === 'magazine_v2') {
+      $build['#attached']['library'][] = 'alshaya_bazaar_voice/utility';
+    }
+    else {
       $build['#attached']['library'][] = 'alshaya_bazaar_voice/rating';
       $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
     }
@@ -224,7 +226,7 @@ function alshaya_bazaar_voice_algolia_react_common_configs_alter(&$response) {
  * Implements hook_preprocess_node().
  */
 function alshaya_bazaar_voice_preprocess_node(&$variables) {
-  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
+  if ($variables['node']->bundle() === 'acq_product') {
     /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
     // Add bazaar voice related strings.
@@ -264,7 +266,6 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
     $build['bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   }
   $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
-  $build['#attached']['library'][] = 'alshaya_acm_product/acq_product_info';
 }
 
 /**
@@ -298,7 +299,6 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   }
   $build['#bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
-  $build['#attached']['library'][] = 'alshaya_acm_product/acq_product_info';
 }
 
 /**
@@ -369,45 +369,5 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
         }
       }
     }
-    elseif ($bundle === 'rcs_product') {
-      // Get the request parameters with a placeholder SKU value.
-      $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics('SKU_VAL');
-      $attachments['#attached']['drupalSettings']['alshaya_bazaar_voice']['product_review_schema_request_data'] = $productReviewStats;
-    }
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view().
- */
-function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() !== 'rcs_product') {
-    return;
-  }
-
-  /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshaya_bazaar_voice */
-  $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
-  $basic_configs = $alshaya_bazaar_voice->getBasicConfigurations();
-  // Disable BazaarVoice Rating and Review in PDP
-  // if checkbox is checked in bazaarVoice Settings Form.
-  if ($basic_configs['pdp_rating_reviews']) {
-    return;
-  }
-
-  $settings = $alshaya_bazaar_voice->getRcsProductBazaarVoiceDetails($basic_configs);
-
-  // Get the current pdp layout.
-  $product_pdp_layout = \Drupal::service('alshaya_acm_product.skumanager')->getPdpLayout($entity);
-
-  $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
-  $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
-
-  if ($product_pdp_layout !== 'magazine_v2') {
-    $build['#attached']['library'][] = 'alshaya_bazaar_voice/ratingV2';
-    $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviewsV2';
-  }
-
-  $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
-  $build['#cache']['contexts'][] = 'url.query_args:bv_authtoken';
-  $build['#attached']['drupalSettings']['alshaya_bazaar_voice'] = $settings;
 }

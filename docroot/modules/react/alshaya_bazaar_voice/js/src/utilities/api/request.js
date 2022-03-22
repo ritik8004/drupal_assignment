@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
-import BVStaticStorage from '../bvStaticStorage';
-import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+
+window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
 
 function getBvUrl(bazaarVoiceSettings) {
   return bazaarVoiceSettings.reviews.bazaar_voice.endpoint;
@@ -19,7 +19,7 @@ function getLocale(bazaarVoiceSettings) {
   return `&locale=${bazaarVoiceSettings.reviews.bazaar_voice.locale}`;
 }
 
-export function getbazaarVoiceSettings(productId = undefined) {
+function getbazaarVoiceSettings(productId = undefined) {
   const settings = [];
   let productInfo = window.commerceBackend.getProductData(productId);
 
@@ -36,7 +36,10 @@ export function getbazaarVoiceSettings(productId = undefined) {
   return settings;
 }
 
-export function getUserBazaarVoiceSettings() {
+// @todo Find a better way to do this in V3.
+window.alshayaBazaarVoice.getbazaarVoiceSettings = getbazaarVoiceSettings;
+
+function getUserBazaarVoiceSettings() {
   const settings = [];
   if (drupalSettings.userInfo) {
     settings.reviews = drupalSettings.userInfo;
@@ -44,7 +47,7 @@ export function getUserBazaarVoiceSettings() {
   return settings;
 }
 
-export function fetchAPIData(apiUri, params, context = '') {
+function fetchAPIData(apiUri, params, context = '') {
   const bazaarVoiceSettings = context === 'user' ? getUserBazaarVoiceSettings() : getbazaarVoiceSettings();
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
@@ -59,7 +62,10 @@ export function fetchAPIData(apiUri, params, context = '') {
     });
 }
 
-export function postAPIData(apiUri, params, productId = undefined) {
+// @todo Find a better way to do this in V3.
+window.alshayaBazaarVoice.fetchAPIData = fetchAPIData;
+
+function postAPIData(apiUri, params, productId = undefined) {
   const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}`;
 
@@ -78,7 +84,7 @@ export function postAPIData(apiUri, params, productId = undefined) {
     });
 }
 
-export function postAPIPhoto(apiUri, params) {
+function postAPIPhoto(apiUri, params) {
   const bazaarVoiceSettings = getbazaarVoiceSettings();
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
@@ -93,75 +99,8 @@ export function postAPIPhoto(apiUri, params) {
     });
 }
 
-export function getLanguageCode() {
+function getLanguageCode() {
   return drupalSettings.path.currentLanguage;
-}
-
-/**
- * Returns a review for the user for the current/mentioned product.
- *
- * (optional) @param {string} productIdentifier
- *   The sku value for the product.
- *
- * @returns {Object}
- *   The product review data.
- */
-export async function getProductReviewForCurrrentUser(productIdentifier) {
-  const bazaarVoiceSettings = getbazaarVoiceSettings();
-  const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
-  const userId = bazaarVoiceSettings.reviews.customer_id;
-  const staticStorageKey = `${userId}_${productId}`;
-  let productReviewData = BVStaticStorage.get(staticStorageKey);
-
-  if (productReviewData instanceof Promise) {
-    return productReviewData;
-  }
-
-  if (productReviewData) {
-    return JSON.parse(productReviewData);
-  }
-
-  // Get review data from BazaarVoice based on available parameters.
-  const apiUri = '/data/reviews.json';
-  const params = `&include=Authors,Products&filter=authorid:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
-  const response = fetchAPIData(apiUri, params).then((result) => {
-    if (!hasValue(result.error) && hasValue(result.data)) {
-      if (result.data.Results.length > 0) {
-        const products = result.data.Results;
-        Object.keys(products).forEach((i) => {
-          if (products[i].ProductId === productId) {
-            productReviewData = {
-              review_data: products[i],
-              user_rating: products[i].Rating,
-            };
-          }
-        });
-      }
-    }
-    // In case there are no reviews, store 0 instead of NULL in order to
-    // differentiate between empty storage and 0 reviews.
-    // When we fetch from static storage later, we convert 0 back to NULL and
-    // return.
-    const staticData = (productReviewData) ? JSON.stringify(productReviewData) : 0;
-    // Store the value statically so that it can be reused.
-    BVStaticStorage.set(staticStorageKey, staticData);
-
-    // Return the product review data.
-    if (staticData) {
-      return JSON.parse(staticData);
-    }
-
-    return staticData;
-  });
-
-  // As ratings and review-summary components are calling this function at
-  // around the same time, we store the promise "result" into the static key the
-  // first time this function is called. The 2nd time this function is called,
-  // if the promise is not resolved, we return the same promise above so that
-  // when it gets resolved both the calling functions are able to use the same
-  // result instead of making multiple network requests for the same data.
-  BVStaticStorage.set(staticStorageKey, response);
-  return response;
 }
 
 export async function getUserDetails(productId = undefined) {
@@ -169,13 +108,15 @@ export async function getUserDetails(productId = undefined) {
 
   if (productId !== '' && typeof drupalSettings.bazaarvoiceUserDetails !== 'undefined') {
     settings.user = drupalSettings.bazaarvoiceUserDetails;
-    settings.productReview = await getProductReviewForCurrrentUser(productId);
+    settings.productReview = await window.alshayaBazaarVoice.getProductReviewForCurrrentUser(
+      productId,
+    );
   }
 
   return settings;
 }
 
-export function doRequest(url) {
+function doRequest(url) {
   return Axios.get(url)
     .then((response) => {
       dispatchCustomEvent('showMessage', { data: response });
@@ -187,7 +128,7 @@ export function doRequest(url) {
     });
 }
 
-export function postRequest(url, data) {
+function postRequest(url, data) {
   return Axios.post(url, data)
     .then((response) => {
       dispatchCustomEvent('showMessage', { data: response });
@@ -199,11 +140,13 @@ export function postRequest(url, data) {
     });
 }
 
-export default {
+export {
   getLanguageCode,
   doRequest,
   postRequest,
   fetchAPIData,
   postAPIData,
   postAPIPhoto,
+  getbazaarVoiceSettings,
+  getUserBazaarVoiceSettings,
 };
