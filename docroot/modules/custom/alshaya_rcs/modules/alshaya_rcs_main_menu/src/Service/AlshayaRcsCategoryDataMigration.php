@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Path\AliasManagerInterface;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Service provides data migration functions in rcs_category taxonomy.
@@ -20,11 +20,6 @@ class AlshayaRcsCategoryDataMigration {
   // Source and Target Vocabulary.
   const TARGET_VOCABULARY_ID = 'rcs_category';
   const SOURCE_VOCABULARY_ID = 'acq_product_category';
-
-  /**
-   * Batch size.
-   */
-  const BATCH_SIZE = 50;
 
   /**
    * The entity type manager service.
@@ -89,8 +84,11 @@ class AlshayaRcsCategoryDataMigration {
 
   /**
    * Process term data migration from acq_product_category taxonomy.
+   *
+   * @param int $batch_size
+   *   Limits the number of rcs category processed per batch.
    */
-  public function processProductCategoryMigration() {
+  public function processProductCategoryMigration(int $batch_size) {
     // Get the current language.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
@@ -154,7 +152,7 @@ class AlshayaRcsCategoryDataMigration {
     if (!empty($terms)) {
       // Set batch operations to migrate terms.
       $operations = [];
-      foreach (array_chunk($terms, self::BATCH_SIZE) as $term_chunk) {
+      foreach (array_chunk($terms, $batch_size) as $term_chunk) {
         $operations[] = [
           [__CLASS__, 'batchProcess'],
           [$term_chunk],
@@ -180,7 +178,7 @@ class AlshayaRcsCategoryDataMigration {
    *   The batch current context.
    */
   public static function batchProcess(array $terms, &$context) {
-    // Set progess counter to zero.
+    // Initialize progess counter to zero.
     if (empty($context['sandbox'])) {
       $context['sandbox']['progress'] = 0;
     }
@@ -192,16 +190,16 @@ class AlshayaRcsCategoryDataMigration {
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     $language_manager = \Drupal::service('language_manager');
     $langcode = $language_manager->getCurrentLanguage()->getId();
-    $entity_repository = \Drupal::service('entity.repository');
     foreach ($terms as $term) {
       // Load the product category term object.
       $acq_term_data = $term_storage->load($term->tid);
-      $acq_term_data = $entity_repository->getTranslationFromContext($acq_term_data, $langcode);
-      if ($acq_term_data instanceof EntityInterface) {
-        $rcs_term = self::createRcsCategory($acq_term_data);
+      $is_default_lang = ($acq_term_data->language()->getId() == $langcode);
+      $acq_term_data = $is_default_lang ? $acq_term_data : $acq_term_data->getTranslation($langcode);
+      if ($acq_term_data instanceof TermInterface) {
+        $rcs_term = self::createRcsCategory($acq_term_data, $langcode);
         // Create parent terms.
         if (!empty($acq_term_data->parent->getString())) {
-          $pid = self::createParentRcsCategory($acq_term_data->parent->getString(), $context['results']['acq_term_mapping']);
+          $pid = self::createParentRcsCategory($acq_term_data->parent->getString(), $context['results']['acq_term_mapping'], $langcode);
           if ($pid) {
             $rcs_term->set('parent', $pid);
           }
@@ -245,48 +243,51 @@ class AlshayaRcsCategoryDataMigration {
    *   Parent product category term id.
    * @param array $acq_term_mapping
    *   Mapping between ACM and RCS ids.
+   * @param string $langcode
+   *   Default language code.
    *
    * @return string
    *   Returns RCS Category parent term id.
    */
-  protected static function createParentRcsCategory($tid, array &$acq_term_mapping) {
-    // Already saved so return parent tid.
+  private static function createParentRcsCategory(int $tid, array &$acq_term_mapping, string $langcode) {
+    // Already saved so return parent rcs category tid.
     if (!empty($acq_term_mapping[$tid])) {
       return $acq_term_mapping[$tid];
     }
-    $language_manager = \Drupal::service('language_manager');
-    $langcode = $language_manager->getCurrentLanguage()->getId();
-    $acq_term_data = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
-    $acq_term_data = \Drupal::service('entity.repository')->getTranslationFromContext($acq_term_data, $langcode);
+    // Load parent product category.
+    $acq_parent_term_data = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
+    $is_default_lang = ($acq_parent_term_data->language()->getId() == $langcode);
+    $acq_parent_term_data = $is_default_lang ? $acq_parent_term_data : $acq_parent_term_data->getTranslation($langcode);
 
     // Recursively create parent term.
-    if (!empty($acq_term_data->parent->getString())) {
-      $pid = self::createParentRcsCategory($acq_term_data->parent->getString(), $acq_term_mapping);
+    if (!empty($acq_parent_term_data->parent->getString())) {
+      $pid = self::createParentRcsCategory($acq_parent_term_data->parent->getString(), $acq_term_mapping, $langcode);
     }
 
-    $rcs_term = self::createRcsCategory($acq_term_data);
+    $rcs_parent_term = self::createRcsCategory($acq_parent_term_data, $langcode);
     if ($pid) {
-      $rcs_term->set('parent', $pid);
+      $rcs_parent_term->set('parent', $pid);
     }
-    $rcs_term->save();
+    $rcs_parent_term->save();
     // Save parent term in mapping.
-    $acq_term_mapping[$tid] = $rcs_term->id();
-    return $rcs_term->id();
+    $acq_term_mapping[$tid] = $rcs_parent_term->id();
+    return $rcs_parent_term->id();
   }
 
   /**
    * Create RCS Category terms.
    *
-   * @param object $acq_term_data
+   * @param Drupal\taxonomy\TermInterface $acq_term_data
    *   Product category result set object.
+   * @param string $langcode
+   *   Default language code.
    *
-   * @return TermInterface
+   * @return Drupal\taxonomy\TermInterface
    *   Returns RCS Category term.
    */
-  protected static function createRcsCategory($acq_term_data) {
+  private static function createRcsCategory(TermInterface $acq_term_data, string $langcode) {
     // Get the current language.
     $language_manager = \Drupal::service('language_manager');
-    $langcode = $language_manager->getCurrentLanguage()->getId();
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
     $alias_manager = \Drupal::service('path_alias.manager');
