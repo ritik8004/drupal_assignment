@@ -110,6 +110,11 @@
         width: 2.125rem;
         color: $magv2-mobile-back-arrow;
       }
+
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
     }
 
     .magv2-compact-detail-wrapper,
