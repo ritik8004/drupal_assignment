@@ -10,7 +10,7 @@ const HeroImage = (props) => {
 
   // @todo handle cards without image.
   const image = {
-    url: getImageUrl(customAttributes, 'image'),
+    url: typeof item.url !== 'undefined' ? item.url : getImageUrl(customAttributes, 'image'),
     title: item.name,
     alt: item.name,
   };
