@@ -154,3 +154,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css
+
+  alshaya_white_label/online-returns:
+    css:
+      theme:
+        css/conditional-sass/online-returns/online-returns.ltr.css: css/conditional-sass/online-returns/online-returns.ltr.css
