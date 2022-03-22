@@ -72,7 +72,7 @@
 
       productInfo.variants.push({
         sku: variantData.sku,
-        parent_sku: product.sku,
+        parent_sku: variantData.parent_sku,
         cart_title: product.name,
         cart_image: variantData.media_cart,
         media: {images: variantData.media},
