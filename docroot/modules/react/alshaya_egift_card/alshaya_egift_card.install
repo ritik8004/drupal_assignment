@@ -11,7 +11,7 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
- * Allow breadcrumb on egift topup page.
+ * Allow breadcrumb on egift topup page & Update Unlink translation.
  */
 function alshaya_egift_card_update_8001() {
   $block = \Drupal::service('entity_type.manager')->getStorage('block')->load('breadcrumbs');
@@ -25,6 +25,11 @@ function alshaya_egift_card_update_8001() {
     }
   } else {
     \Drupal::logger('alshaya_egift_card')->notice('Breadcrumb block is missing or not configured properly.');
+  }
+
+  module_load_include('inc', 'alshaya_egift_card', 'alshaya_egift_card.translations');
+  if ($translations = _alshaya_egift_card_get_translations('v2')) {
+    alshaya_i18n_save_translations($translations);
   }
 }
 

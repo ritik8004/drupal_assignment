@@ -95,6 +95,18 @@
     position: relative;
     background: 0 0;
     padding: 0;
+    display: flex;
+    align-items: center;
+
+    .egift-ulink-text {
+      font-size: 0.75rem;
+      text-decoration: underline;
+      margin-#{$left}: 0.25rem;
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
   }
 
   .egift-linked-card-number-wrapper,
