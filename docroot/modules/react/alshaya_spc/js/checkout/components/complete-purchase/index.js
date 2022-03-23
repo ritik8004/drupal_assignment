@@ -17,6 +17,8 @@ import {
 } from '../../../utilities/egift_util';
 import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import isAuraEnabled from '../../../../../js/utilities/helper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { validateOnlineBooking } from '../../../../../js/utilities/onlineBookingHelper';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -106,6 +108,18 @@ export default class CompletePurchase extends React.Component {
 
     const checkoutButton = e.target.parentNode;
     checkoutButton.classList.add('in-active');
+
+    // Check if the cart is having online booking confirmation number.
+    // Validate the order booking is expired and show error accordingly.
+    if (hasValue(cart.confirmation_number)) {
+      // Check if the hold appointment for user is valid.
+      const result = await validateOnlineBooking(cart.confirmation_number);
+      // Check if success return false,
+      if (!hasValue(result)) {
+        checkoutButton.classList.remove('in-active');
+        return;
+      }
+    }
 
     try {
       const validated = (isPseudoPaymentMedthod === false)
