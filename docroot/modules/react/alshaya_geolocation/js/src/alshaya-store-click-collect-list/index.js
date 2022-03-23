@@ -1,5 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
+import Parser from 'html-react-parser';
 import { ClickCollectPopup } from '../components/store-click-collect-popup';
 import AutocompleteSearch from '../components/autocomplete-search';
 import { ListItemClick } from '../components/ListItemClick';
@@ -100,7 +101,7 @@ export class StoreClickCollectList extends React.Component {
                   <div className="click-collect-empty-selection" />
                   <div className="click-collect-form">
                     <div className="text">
-                      <p>{cncLabels.help_text}</p>
+                      <div>{Parser(cncLabels.help_text)}</div>
                       {showAutomcomplete
                         ? (
                           <div className="store-finder-form-wrapper">
@@ -159,7 +160,10 @@ export class StoreClickCollectList extends React.Component {
                 </div>
               </div>
               <ClickCollectPopup
+                labels={cncLabels}
                 stores={results}
+                results={results.length}
+                address={area.formatted_address}
                 isOpen={isModalOpen}
                 onClose={this.closeModal}
               />

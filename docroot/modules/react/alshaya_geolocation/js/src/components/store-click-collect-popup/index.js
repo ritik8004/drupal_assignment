@@ -1,4 +1,5 @@
 import React from 'react';
+import Parser from 'html-react-parser';
 import { ListItemClick } from '../ListItemClick';
 
 export class ClickCollectPopup extends React.Component {
@@ -13,6 +14,9 @@ export class ClickCollectPopup extends React.Component {
       stores,
       isOpen,
       onClose,
+      results,
+      address,
+      labels,
     } = this.props;
 
     return (
@@ -20,23 +24,21 @@ export class ClickCollectPopup extends React.Component {
         <div className="click-collect-all-stores inline-modal-wrapper desc-open modal-wrapper-mobile" id="click-collect-all-stores">
           <span className="close-inline-modal" onClick={onClose} />
           <div className="all-stores-info">
-            <h3>{Drupal.t('Click & Collect')}</h3>
+            <h3>{labels.title}</h3>
           </div>
           <div className="text">
-            <p>
-              {Drupal.t('This service is')}
-              <strong>{Drupal.t('free')}</strong>
-              {Drupal.t('of charge.')}
-            </p>
+            <div>{Parser(labels.help_text)}</div>
             <div className="available_store">
               <div className="available-store-text">
-                <span className="store-available-at-title">{Drupal.t('Available at 12 stores near')}</span>
-                <div className="google-store-location">{Drupal.t('7WPM+3M Rabia, Kuwait')}</div>
-                <div className="change-location" />
-                <div className="change-location-link">{Drupal.t('change')}</div>
+                <span className="store-available-at-title">
+                  {Drupal.t('Available at ')}
+                  {results}
+                  {Drupal.t(' stores near ')}
+                </span>
+                <div className="google-store-location">{address}</div>
               </div>
             </div>
-            <p>{Drupal.t('Order now & collect from a store of your choice')}</p>
+            <p>{labels.subtitle}</p>
             <div className="store-finder-form-wrapper">
               <div id="all-stores-search-store" className="search-store" />
             </div>
