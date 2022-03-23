@@ -5,6 +5,7 @@ var config = {
   entry: {
     pdp: './js/pdp',
     returnrequest: './js/returnrequest',
+    my_accounts: './js/my-accounts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
