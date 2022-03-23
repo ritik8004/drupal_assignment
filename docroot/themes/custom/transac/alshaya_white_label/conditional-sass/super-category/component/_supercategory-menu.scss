@@ -1,0 +1,634 @@
+.super-category-enabled {
+  .c-header__wrapper--inner {
+    max-width: 80.25rem;
+    margin: 0 auto;
+  }
+
+  .c-menu-primary {
+    display: block;
+    height: auto;
+
+    .region__menu-primary {
+      @include breakpoint($desktop) {
+        float: $left;
+        width: 35%;
+      }
+
+      .block-alshaya-super-category-menu {
+        .menu--one__list {
+          height: 3.75rem;
+
+          li {
+            height: 3.75rem;
+          }
+
+          .menu--one__link {
+            padding: 1.24rem 1rem;
+            height: 3.75rem;
+            line-height: 1.375rem;
+          }
+        }
+      }
+    }
+  }
+
+  .c-menu-secondary {
+    a {
+      @include breakpoint($desktop) {
+        padding: 1.31rem 1.438rem;
+        height: 3.68rem;
+      }
+    }
+
+    li {
+      @include breakpoint($desktop) {
+        height: 3.68rem;
+        vertical-align: middle;
+      }
+    }
+
+    .menu--account,
+    .block-alshaya-stores-finder,
+    .block-language-blocklanguage-interface {
+      @include breakpoint($desktop) {
+        height: 3.68rem;
+      }
+    }
+
+    .block-language-blocklanguage-interface {
+      @include breakpoint($desktop) {
+        height: 3.68rem;
+      }
+
+      .ar,
+      .en {
+        a {
+          @include breakpoint($desktop) {
+            height: 3.68rem;
+          }
+        }
+      }
+    }
+  }
+
+  .block-alshaya-super-category {
+    .menu--one__list {
+      .menu--one__link {
+        @include breakpoint($only-tablet) {
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+
+    .brand-american-eagle,
+    .brand-aerie {
+      img {
+        height: 1.25rem;
+      }
+    }
+
+    .brand-american-eagle img {
+      width: 10.313rem;
+    }
+
+    .brand-aerie img {
+      width: 3.3125rem;
+    }
+  }
+
+  .header--wrapper.show-overlay {
+    .menu--mobile-navigation {
+      border-bottom-color: $header_mobile_menu_overlay !important;
+    }
+
+    &::before {
+      z-index: 11 !important;
+    }
+
+    .menu--mobile-navigation,
+    .block-alshaya-super-category-menu {
+      @include breakpoint($only-tablet) {
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          left: 0;
+          background-color: $header_mobile_menu_overlay !important;
+          z-index: 1 !important;
+          transition: none !important;
+          opacity: 1 !important;
+        }
+      }
+    }
+  }
+
+  .branding__menu.show-overlay {
+    .block-cart-mini-block,
+    .block-alshaya-react-mini-cart {
+      @include breakpoint($only-tablet) {
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          left: 0;
+          background-color: $header_mobile_menu_overlay !important;
+          z-index: 1 !important;
+          transition: none !important;
+          opacity: 1 !important;
+        }
+      }
+
+      border-bottom-color: $header_mobile_menu_overlay !important;
+    }
+  }
+
+  .super-category-aerie {
+    .filter-fixed-top {
+      .sticky-filter-wrapper {
+        .site-brand-home {
+          a {
+            width: 5rem;
+            margin-top: 0.3125rem;
+          }
+        }
+      }
+    }
+  }
+
+  .block-alshaya-super-category-menu {
+    .main--menu {
+      ul.menu--one__list {
+        @include breakpoint($upto-desktop) {
+          display: flex !important;
+          height: 3.75rem;
+          padding: 0;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  &body:not(.no-sticky-algolia-search-bar) {
+    .block-alshaya-super-category-menu {
+      @include breakpoint($upto-desktop) {
+        position: absolute !important;
+      }
+    }
+  }
+
+  &:not(.no-sticky-algolia-search-bar) {
+    @include breakpoint($upto-desktop) {
+      margin-top: 8.5rem;
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($upto-desktop) {
+        padding: 0;
+      }
+    }
+
+    .block-alshaya-super-category-menu,
+    .menu--mobile-navigation,
+    #block-cartminiblock,
+    .block-alshaya-react-mini-cart {
+      @include breakpoint($upto-desktop) {
+        position: absolute !important;
+      }
+    }
+
+    header {
+      .c-header__region {
+        @include breakpoint($upto-desktop) {
+          height: auto;
+        }
+      }
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete {
+    .algolia-search-back-icon {
+      @include breakpoint($upto-desktop) {
+        #{$left}: 0;
+        top: 0.25rem;
+
+        @include icon(arrow-#{$left}) {
+          font-size: 2.25rem;
+          position: absolute;
+          #{$left}: 0.4375rem;
+          top: 0;
+        }
+      }
+    }
+  }
+
+  // Specific to frontpage.
+  &.frontpage {
+    .branding__menu {
+      @include breakpoint($upto-desktop) {
+        border-bottom: none;
+      }
+    }
+
+    .page-standard {
+      &.c-front {
+        @include breakpoint($upto-desktop) {
+          margin-top: 1rem;
+        }
+      }
+    }
+
+    @include breakpoint($upto-desktop) {
+      .c-menu-primary {
+        .menu--mobile-navigation {
+          width: 100%;
+
+          ul {
+            li {
+              &:nth-child(2) {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .store {
+          #{$right}: 2rem;
+          top: 1.2rem;
+        }
+      }
+
+      header {
+        .block-cart-mini-block,
+        .block-alshaya-react-mini-cart {
+          width: auto;
+          top: 3.7rem;
+          #{$right}: 1rem;
+          background: transparent;
+        }
+      }
+    }
+
+    &:not(.no-sticky-algolia-search-bar) {
+      @include breakpoint($only-tablet) {
+        margin-top: 8.775rem;
+      }
+    }
+  }
+
+  &.no-sticky-algolia-search-bar {
+    .block-alshaya-algolia-react-autocomplete {
+      &.show-algolia-search-bar {
+        @include breakpoint($upto-desktop) {
+          z-index: 13;
+        }
+      }
+    }
+
+    &:not(.frontpage) {
+      .block-alshaya-algolia-react-autocomplete {
+        &.show-algolia-search-bar {
+          @include breakpoint($upto-desktop) {
+            visibility: visible;
+            top: 0;
+          }
+        }
+      }
+    }
+  }
+
+  &:not(.frontpage) {
+    .branding__menu {
+      @include breakpoint($upto-desktop) {
+        border-bottom: none;
+      }
+
+      .block-alshaya-algolia-react-autocomplete {
+        @include breakpoint($upto-desktop) {
+          visibility: hidden;
+          top: 3.125rem;
+          padding: 0;
+          box-shadow: none;
+        }
+      }
+
+      #block-alshayareactcartminicartblock {
+        @include breakpoint($upto-desktop) {
+          top: 4rem;
+          position: absolute;
+          #{$right}: 1rem;
+        }
+      }
+    }
+
+    &.hide-minimalistic-header {
+      .branding__menu {
+        z-index: 10;
+
+        @include breakpoint($upto-desktop) {
+          height: 3.7rem;
+        }
+
+        #block-alshayareactcartminicartblock {
+          top: 3rem;
+        }
+
+        #wishlist-header-wrapper {
+          top: 1.2rem !important;
+        }
+      }
+
+      .c-menu-primary {
+        .region__menu-primary {
+          .menu--mobile-navigation {
+            position: fixed;
+            width: 100%;
+            z-index: 11;
+          }
+        }
+
+        .mobile--menu,
+        .mobile--search {
+          @include breakpoint($upto-desktop) {
+            top: 1rem;
+          }
+        }
+
+        .store {
+          top: 0.5rem;
+        }
+      }
+    }
+
+    .c-menu-primary {
+      .mobile--menu,
+      .mobile--search {
+        @include breakpoint($upto-desktop) {
+          top: 2rem;
+        }
+      }
+
+      .store {
+        top: 4.5rem;
+        z-index: 12;
+      }
+    }
+
+    &.menu--open {
+      .c-menu-primary {
+        .mobile--menu,
+        .mobile--search,
+        .store {
+          @include breakpoint($upto-desktop) {
+            z-index: 10;
+          }
+        }
+      }
+    }
+
+    .page-standard {
+      &.l-container {
+        @include breakpoint($upto-desktop) {
+          margin-top: 2.5rem;
+        }
+      }
+    }
+
+    &.hide-header {
+      @include breakpoint($upto-desktop) {
+        margin-top: 2.375rem;
+      }
+
+      .block-alshaya-algolia-react-autocomplete {
+        &.focused {
+          .algolia-search-back-icon {
+            visibility: hidden;
+          }
+
+          &.show-algolia-search-bar {
+            .algolia-search-back-icon {
+              visibility: visible;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    html[lang="ar"] {
+      .block-alshaya-algolia-react-autocomplete {
+        top: 5.625rem;
+        padding: 0;
+      }
+
+      &:not(.no-sticky-algolia-search-bar) {
+        margin-top: 9rem;
+      }
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete {
+    @include breakpoint($only-mobile) {
+      padding: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      bottom: auto;
+      visibility: hidden;
+
+      &.show-algolia-search-bar {
+        visibility: visible;
+      }
+    }
+
+    @include breakpoint($upto-tablet) {
+      top: 6.625rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 6rem;
+    }
+
+    .algolia-search-cleartext-icon {
+      top: 0.25rem;
+      #{$right}: 0.5rem;
+
+      @include breakpoint($only-tablet) {
+        top: 1.6rem !important;
+        #{$right}: 1rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        top: 1.2rem !important;
+        #{$right}: 0 !important;
+      }
+    }
+
+    &.clear-icon {
+      #alshaya-algolia-autocomplete .react-autosuggest__input {
+        padding-#{$right}: 2.5rem !important;
+
+        @include breakpoint($tablet) {
+          padding-#{$right}: 3.4rem !important;
+        }
+
+        @include breakpoint($desktop) {
+          padding-#{$right}: 2rem !important;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        &.show-algolia-search-bar {
+          .algolia-search-cleartext-icon {
+            opacity: 1;
+            visibility: visible;
+          }
+        }
+      }
+    }
+
+    #alshaya-algolia-autocomplete {
+      width: 100%;
+      padding: 0;
+
+      @include breakpoint($desktop) {
+        width: 12.5rem;
+        height: 2.375rem;
+      }
+
+      @include breakpoint($upto-desktop) {
+        z-index: 14;
+      }
+
+      & > div {
+        height: 100%;
+      }
+
+      .react-autosuggest__input {
+        border-radius: 0;
+        padding: 0.4375rem;
+        height: 3.375rem;
+
+        @include breakpoint($only-mobile) {
+          margin: 0;
+          width: 100%;
+          padding-#{$left}: 3rem !important;
+          border-width: 0 0 0.0625rem !important;
+          height: 2.875rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          padding-#{$left}: 2rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          line-height: 1.25rem;
+        }
+
+        @include breakpoint($desktop) {
+          padding-#{$left}: 2rem;
+          height: 2.375rem;
+        }
+
+        &::placeholder {
+          line-height: 1.4375rem;
+          color: $algolia-input-placeholder-text;
+        }
+      }
+
+      .react-autosuggest__container {
+        &::after {
+          @include breakpoint($only-mobile) {
+            top: 0;
+            #{$right}: unset;
+            #{$left}: 0.25rem;
+            opacity: 1;
+            transition: opacity 0.2s;
+          }
+
+          @include breakpoint($tablet) {
+            content: none;
+          }
+        }
+
+        @include icon(search, before) {
+          height: auto;
+          width: 1.5625rem;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          #{$left}: 0.5rem;
+          font-size: 1.25rem;
+          border-radius: 0;
+
+          @include breakpoint($only-tablet) {
+            #{$right}: auto;
+            font-size: 1.75rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            content: none;
+          }
+        }
+
+        .trending-title {
+          color: $algolia-trending-title-text;
+          padding: 0.625rem !important;
+        }
+
+        .react-autosuggest__suggestion {
+          cursor: pointer;
+
+          .aa-suggestion {
+            &:hover {
+              background-color: $algolia-search-suggestion-hover-bg;
+            }
+
+            .suggested-text {
+              padding: 0.625rem !important;
+            }
+          }
+        }
+      }
+
+      .react-autosuggest__suggestions-container {
+        &--open {
+          border-radius: 0;
+
+          @include breakpoint($only-tablet) {
+            border: none;
+            border-bottom: 1px solid $algolia-auto-complete-border;
+          }
+
+          @include breakpoint($desktop) {
+            border: 1px solid $algolia-auto-complete-border;
+          }
+        }
+      }
+    }
+
+    &.focused {
+      #alshaya-algolia-autocomplete {
+        .react-autosuggest__container {
+          @include breakpoint($upto-desktop) {
+            &::before,
+            &::after {
+              opacity: 0;
+            }
+          }
+
+          .react-autosuggest__input {
+            @include breakpoint($only-tablet) {
+              padding-#{$left}: 0.7rem !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
