@@ -314,7 +314,12 @@ class AlshayaRcsCategoryDataMigration {
 
         // Add translation in the new term.
         $rcs_term_trans = $rcs_term->addTranslation($language_code, ['name' => $acq_term_data_trans->name]);
-        self::enrichRcsTerm($acq_term_data_trans, $rcs_term_trans);
+
+        $rcs_term_trans->get('field_term_background_color')
+          ->setValue($acq_term_data_trans->get('field_term_background_color')->getValue());
+
+        $rcs_term_trans->get('field_term_font_color')
+          ->setValue($acq_term_data_trans->get('field_term_font_color')->getValue());
 
         // Save the translations.
         $rcs_term_trans->save();
