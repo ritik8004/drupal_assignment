@@ -180,9 +180,9 @@ class AlshayaRcsCategoryDataMigration {
    *   The batch current context.
    */
   public static function batchProcess(array $terms, int $batch_size, &$context) {
-    // Initialize progess counter to zero.
+    // Initialized term count to zero.
     if (empty($context['sandbox'])) {
-      $context['sandbox']['progress'] = 0;
+      $context['sandbox']['term_count'] = 0;
     }
     // Store Product category and RCS category term mapping to get parent terms.
     if (!isset($context['results']['acq_term_mapping'])) {
@@ -211,14 +211,14 @@ class AlshayaRcsCategoryDataMigration {
         // Save term mapping to get rcs parent terms.
         $context['results']['acq_term_mapping'][$term->tid] = $rcs_term->id();
         $context['results']['delete_acq_terms'][$acq_term_data->id()] = $acq_term_data;
-        $context['sandbox']['progress']++;
+        $context['sandbox']['term_count']++;
       }
       else {
         throw new \Exception('Product category term not found.');
       }
     }
 
-    $context['message'] = dt('Processed @progress RCS Category terms.', ['@progress' => $context['sandbox']['progress']]);
+    $context['message'] = dt('Processed @term_count RCS Category terms.', ['@term_count' => $context['sandbox']['term_count']]);
   }
 
   /**
