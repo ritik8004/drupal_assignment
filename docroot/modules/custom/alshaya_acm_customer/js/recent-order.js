@@ -31,6 +31,17 @@
           listOrder.not($ub).hide();
           $ub.parent().toggleClass('open--accordion');
           listOrder.not($ub).parent().removeClass('open--accordion');
+
+          // Trigger an event when order is viewed.
+          var recentOrderViewEvent = new CustomEvent('onRecentOrderView', {
+            bubbles: true,
+            detail: {
+              data: {
+                orderId: $ub.parent().attr('data-order-id'),
+              }
+            }
+          });
+          document.dispatchEvent(recentOrderViewEvent);
         });
 
         $(cancelLink).once('expand-cancel-link').on('click', function (e) {
