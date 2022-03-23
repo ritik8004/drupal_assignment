@@ -2,7 +2,6 @@ import { isUserAuthenticated } from './helper';
 import logger from './logger';
 import { callMagentoApi } from './requestHelper';
 import { hasValue } from './conditionsUtility';
-import { getDefaultErrorMessage } from './error';
 
 /**
  * Gets magento api endpoint by user role.
@@ -89,7 +88,7 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
     });
     return {
       success: false,
-      error_message: getDefaultErrorMessage(),
+      error_message: response.data.error_message,
     };
   }
 
@@ -184,7 +183,7 @@ export const getAvailableBookingSlots = async (existingBooking = false) => {
     return {
       success: false,
       api_error: true,
-      error_message: getDefaultErrorMessage(),
+      error_message: response.data.error_message,
     };
   }
 
@@ -229,7 +228,6 @@ export const holdBookingSlot = async (params) => {
   // Default error response if success is false.
   const errorResponse = {
     success: false,
-    error_message: getDefaultErrorMessage(),
   };
 
   // Handle the error response from API in case of internal error.

@@ -197,9 +197,12 @@ export default class OnlineBooking extends React.Component {
 
     return (
       <>
-        <div className="online-booking">
+        <div id="online-booking">
           <label className="radio-sim radio-label">
             <span className="carrier-title">{Drupal.t('Delivery Schedule', {}, { context: 'online_booking' })}</span>
+            {/**
+             * Validate bookingDetails have data, otherwise display the internal error message.
+             */}
             { hasValue(bookingDetails.appointment_details) && (
               <>
                 <span className="online-booking-title">
@@ -258,6 +261,9 @@ export default class OnlineBooking extends React.Component {
                     }
                   </span>
                 </ConditionalView>
+                {/**
+                 * Placeholder to display the error message when api return success false.
+                 */}
                 <ConditionalView condition={!bookingDetails.success}>
                   <span className="booking-error-message">{bookingDetails.error_message}</span>
                 </ConditionalView>
@@ -273,8 +279,18 @@ export default class OnlineBooking extends React.Component {
                 </span>
               </>
             )}
+            {/**
+             * Placeholder to display the default internal error message.
+             */}
             <ConditionalView condition={!hasValue(bookingDetails.success)}>
-              <span className="booking-error-message">{bookingDetails.error_message}</span>
+              <span className="booking-error-message">
+                {
+                  Drupal.t(
+                    'Online booking: Sorry, something went wrong. Please try again later.',
+                    {}, { context: 'online_booking' },
+                  )
+                }
+              </span>
             </ConditionalView>
             <span className="spc-price">{price}</span>
           </label>
