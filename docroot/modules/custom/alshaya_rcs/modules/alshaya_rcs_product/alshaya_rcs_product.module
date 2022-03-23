@@ -975,7 +975,7 @@ function alshaya_rcs_product_attribute_options_alter(array &$attribute) {
     $attribute_code = $attribute['attribute_code'];
     $settings = Settings::get('alshaya_api.settings');
 
-    $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '",is_array:1){attribute_code store_id attribute_values}}';
+    $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '",is_array:1){attribute_code store_id attribute_values{key,value}}}';
     // Magento URL to get the product option attributes.
     $request_url = $settings['magento_host'] . '/graphql&query=' . $query;
 
@@ -995,20 +995,26 @@ function alshaya_rcs_product_attribute_options_alter(array &$attribute) {
       $request_url = \Drupal::request()->getSchemeAndHttpHost() . '/proxy/?url=' . $request_url;
     }
 
-    $response = Json::decode(\Drupal::httpClient()->get($request_url, [
-      'headers' => [
-        'store' => Settings::get('magento_lang_prefix')[$current_language],
-      ],
-    ])->getBody());
+    $response = NULL;
+    try {
+      $response = Json::decode(\Drupal::httpClient()->get($request_url, [
+        'headers' => [
+          'store' => Settings::get('magento_lang_prefix')[$current_language],
+        ],
+      ])->getBody());
+    }
+    catch (\Exception $e) {
+      watchdog_exception('alshaya_rcs_product', $e);
+    }
     // Extract the product options if available.
     if ($response
       && $response['data']['attributeValueResolver']
       && $response['data']['attributeValueResolver']['attribute_values']) {
-      foreach ($response['data']['attributeValueResolver']['attribute_values'] as $key => $value) {
+      foreach ($response['data']['attributeValueResolver']['attribute_values'] as $value) {
+        // Map the key and value with the proper option label and value.
         $attribute['options'][] = [
-          'label' => $value,
-          // @todo To change the value based on the API response once available.
-          'value' => $key,
+          'label' => $value['value'],
+          'value' => $value['key'],
         ];
       }
     }
