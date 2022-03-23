@@ -53,6 +53,37 @@
       });
     }
 
+    // Push Filter event to GTM.
+    $('.show-algolia-result').once('bind-facet-item-click').on('click','.facet-item', function () {
+      if (!$(this).hasClass('is-active')) {
+        var selectedText = '';
+        var eventName = '';
+        var facetTitle = $(this).attr('datadrupalfacetlabel');
+        if ($(this).find('span.facet-item__value').length > 0) {
+          selectedText = $(this).find('span.facet-item__value span.facet-item__label').html();
+          if (selectedText === undefined) {
+            selectedText = $(this).find('span.facet-item__value').contents().eq(0).text();
+            facetTitle = 'Category';
+          }
+          // For rating filter.
+          if (facetTitle === 'Rating') {
+            selectedText = $(this).find('span.facet-item__value div.listing-inline-star div.rating-label').html();
+          }
+          eventName = 'filter';
+        }
+        else {
+          selectedText = $(this).find('a.facet-item__value').html();
+          eventName = 'sort';
+        }
+        dataLayer.push({
+          event: eventName,
+          siteSection: 'search results',
+          filterType: facetTitle,
+          filterValue: selectedText,
+        });
+      }
+    });
+
   }, drupalSettings.gtm.algolia_trigger_ga_after));
 
   Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function (context, eventType) {
@@ -92,53 +123,5 @@
 
     return searchImpressions;
   }
-
-  // Push Filter event to GTM.
-  $('#alshaya-algolia-search').once('bind-facet-item-click').on('click','.facet-item', function (event) {
-    // To get page type for listing pages.
-    // Search page does not have the pageSubType key in drupalSettings.
-    var listName = drupalSettings.algoliaSearch.pageSubType ? drupalSettings.algoliaSearch.pageSubType : drupalSettings.path.currentPath;
-    var section = $('h1.c-page-title', $('#block-page-title')).text().toLowerCase().trim();
-    if (!$(this).hasClass('is-active')) {
-      var selectedText = '';
-      var eventName = '';
-      var facetTitle = $(this).attr('datadrupalfacetlabel');
-      if ($(this).find('span.facet-item__value').length > 0) {
-        selectedText = $(this).find('span.facet-item__value span.facet-item__label').html();
-        // For rating filter.
-        if (facetTitle === 'Rating') {
-          selectedText = $(this).find('span.facet-item__value div.listing-inline-star div.rating-label').html();
-        }
-        eventName = 'filter';
-      }
-      else {
-        selectedText = $(this).find('a.facet-item__value').html();
-        eventName = 'sort';
-      }
-      switch (listName) {
-        case 'promotion':
-        case 'plp':
-        case 'product_option_list':
-          var data = {
-            event: eventName,
-            siteSection: section,
-            filterType: facetTitle,
-            filterValue: selectedText,
-          };
-          break;
-
-        case 'search':
-        default:
-          var data = {
-            event: eventName,
-            siteSection: 'search results',
-            filterType: facetTitle,
-            filterValue: selectedText,
-          };
-          break;
-      }
-      dataLayer.push(data);
-    }
-  });
 
 })(jQuery, Drupal, dataLayer, Drupal.debounce, drupalSettings);

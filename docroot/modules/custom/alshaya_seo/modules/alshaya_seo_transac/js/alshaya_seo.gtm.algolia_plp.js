@@ -25,7 +25,7 @@
   };
 
   // Push Filter event to GTM.
-  $('#alshaya-algolia-plp').once('bind-facet-item-click').on('click','.facet-item', function (event) {
+  $('#alshaya-algolia-plp').once('bind-facet-item-click').on('click','.facet-item', function () {
     var section = $('body').attr('gtm-list-name');
     if (section.indexOf('PLP') > -1) {
       section = $('h1.c-page-title', $('#block-page-title')).text().toLowerCase().trim();
@@ -37,6 +37,10 @@
       var facetTitle = $(this).attr('datadrupalfacetlabel');
       if ($(this).find('span.facet-item__value').length > 0) {
         selectedText = $(this).find('span.facet-item__value span.facet-item__label').html();
+        if (selectedText === undefined) {
+          selectedText = facetTitle;
+          facetTitle = 'Category';
+        }
         // For rating filter.
         if (facetTitle === 'Rating') {
           selectedText = $(this).find('span.facet-item__value div.listing-inline-star div.rating-label').html();
