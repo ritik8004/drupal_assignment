@@ -414,6 +414,12 @@ function _alshaya_egift_card_translations() {
         'context' => 'egift',
       ]
     ],
+    'v2' => [
+      'Unlink' => [
+        'ar' => 'مختلف',
+        'context' => 'egift',
+      ]
+    ]
   ];
 
   return $strings;
