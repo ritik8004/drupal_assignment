@@ -7,7 +7,7 @@
   document.addEventListener('alterInitialDynamicYield', (e) => {
     // Alter the DY recommendationContext.
     if (e.detail.type === 'category') {
-      e.detail.data().recommendationContext['type'] = 'CATEGORY';
+      e.detail.data.recommendationContext['type'] = 'CATEGORY';
       var category = e.detail.page_entity;
       // Get the list of of all the ancestors.
       // @see ProductCategoryDyPageTypeEventSubscriber
@@ -21,7 +21,7 @@
       if (category) {
         data.push(category.name);
       }
-      e.detail.data().recommendationContext['data'] = data;
+      e.detail.data.recommendationContext['data'] = data;
     }
   });
 })();

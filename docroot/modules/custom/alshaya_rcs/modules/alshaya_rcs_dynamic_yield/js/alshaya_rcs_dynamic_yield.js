@@ -9,7 +9,7 @@
   window.DY = window.DY || [];
   var initialDyData = window.DY;
   if (rcsPhGetPageType() === null) {
-    var alterInitialDYData = new CustomEvent('alterInitialDynamicYield', { detail: { data: () => initialDyData } });
+    var alterInitialDYData = new CustomEvent('alterInitialDynamicYield', { detail: { data: initialDyData } });
     document.dispatchEvent(alterInitialDYData);
     window.DY = initialDyData;
   }
@@ -18,7 +18,7 @@
     RcsEventManager.addListener('alshayaPageEntityLoaded', function (e) {
       var alterInitialDyData = new CustomEvent('alterInitialDynamicYield', {
         detail: {
-          data: () => initialDyData,
+          data: initialDyData,
           page_entity: e.detail.entity,
           type: e.detail.pageType,
         }
@@ -30,7 +30,9 @@
 
   Drupal.behaviors.alshayaRcsDynamicYield = {
     attach: function () {
-      if ($('body').hasClass('rcs-loaded') && drupalSettings.dynamicYield.sourceId) {
+      if ($('body').hasClass('rcs-loaded')
+        && !($('body').hasClass('rcs-dy-loaded'))
+        && drupalSettings.dynamicYield.sourceId) {
         // Add DY dynamic and static script in header.
         var script = document.createElement('script');
         script.src = '//cdn-eu.dynamicyield.com/api/' + drupalSettings.dynamicYield.sourceId + '/api_dynamic.js';
@@ -39,6 +41,10 @@
         script = document.createElement('script');
         script.src = '//cdn-eu.dynamicyield.com/api/' + drupalSettings.dynamicYield.sourceId + '/api_static.js';
         document.head.appendChild(script);
+
+        // Add the rcs-dy-loaded class to make sure that scripts are not getting
+        // added multiple times.
+        $('body').addClass('rcs-dy-loaded');
       }
     }
   };

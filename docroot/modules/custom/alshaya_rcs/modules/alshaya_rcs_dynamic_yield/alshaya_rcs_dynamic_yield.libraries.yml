@@ -4,3 +4,4 @@ rcs_dynamic_yield:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - rcs_placeholders/helpers
