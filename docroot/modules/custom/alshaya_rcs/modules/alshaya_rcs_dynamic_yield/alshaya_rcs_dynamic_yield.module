@@ -6,7 +6,7 @@
  */
 
 /**
- * Implements hook_page_attachments().
+ * Implements hook_page_attachments_alter().
  */
 function alshaya_rcs_dynamic_yield_page_attachments_alter(array &$attachments) {
   if (array_key_exists('html_head', $attachments['#attached'])) {
