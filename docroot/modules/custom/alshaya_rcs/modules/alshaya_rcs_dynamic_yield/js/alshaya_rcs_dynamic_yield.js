@@ -31,7 +31,7 @@
   Drupal.behaviors.alshayaRcsDynamicYield = {
     attach: function () {
       if ($('body').hasClass('rcs-loaded')
-        && !($('body').hasClass('rcs-dy-loaded'))
+        && $('body').data('dyloaded') === undefined
         && drupalSettings.dynamicYield.sourceId) {
         // Add DY dynamic and static script in header.
         var script = document.createElement('script');
@@ -42,9 +42,9 @@
         script.src = '//cdn-eu.dynamicyield.com/api/' + drupalSettings.dynamicYield.sourceId + '/api_static.js';
         document.head.appendChild(script);
 
-        // Add the rcs-dy-loaded class to make sure that scripts are not getting
+        // Add the dyloaded data to make sure that scripts are not getting
         // added multiple times.
-        $('body').addClass('rcs-dy-loaded');
+        $('body').data('dyloaded', true);
       }
     }
   };
