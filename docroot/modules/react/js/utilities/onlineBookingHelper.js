@@ -58,10 +58,10 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
   response.data = {
     success: true,
     appointment_details: {
-      appointment_date: '2022-02-27',
+      appointment_date: '2022-05-27',
       start_time: '8:00 AM',
       end_time: '9:00 AM',
-      appointment_date_time: '2022-02-27T08: 00: 00.000Z',
+      appointment_date_time: '2022-05-27T08: 00: 00.000Z',
       resource_external_id: 'MorningShiftZone1KSA',
       hold_confirmation_number: 'G2Z7Y67B',
     },
@@ -122,46 +122,46 @@ export const getAvailableBookingSlots = async (existingBooking = false) => {
     success: true,
     available_time_slots: [
       {
-        appointment_date: '2022-02-27',
+        appointment_date: '2022-05-27',
         appointment_slots: [
           {
             start_time: '8:00 AM',
             end_time: '9:00 AM',
-            appointment_date_time: '2022-02-27T08:00:00.000Z',
+            appointment_date_time: '2022-05-27T08:00:00.000Z',
             resource_external_id: 'MorningShiftZone1KSA',
           },
           {
             start_time: '3:00 PM',
             end_time: '4:00 PM',
-            appointment_date_time: '2022-02-27T15:00:00.000Z',
+            appointment_date_time: '2022-05-27T15:00:00.000Z',
             resource_external_id: 'EveningShiftZone1KSA',
           },
         ],
       },
       {
-        appointment_date: '2022-02-28',
+        appointment_date: '2022-06-28',
         appointment_slots: [
           {
             start_time: '8:00 AM',
             end_time: '9:00 AM',
-            appointment_date_time: '2022-02-28T08:00:00.000Z',
+            appointment_date_time: '2022-06-28T08:00:00.000Z',
             resource_external_id: 'MorningShiftZone1KSA',
           },
         ],
       },
       {
-        appointment_date: '2022-03-01',
+        appointment_date: '2022-07-01',
         appointment_slots: [
           {
             start_time: '8:00 AM',
             end_time: '9:00 AM',
-            appointment_date_time: '2022-03-01T08:00:00.000Z',
+            appointment_date_time: '2022-07-01T08:00:00.000Z',
             resource_external_id: 'MorningShiftZone1KSA',
           },
           {
             start_time: '1:00 PM',
             end_time: '2:00 PM',
-            appointment_date_time: '2022-03-01T08:00:00.000Z',
+            appointment_date_time: '2022-07-01T08:00:00.000Z',
             resource_external_id: 'AfernoonShiftZone1KSA',
           },
         ],

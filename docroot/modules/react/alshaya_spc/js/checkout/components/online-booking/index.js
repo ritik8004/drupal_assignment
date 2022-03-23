@@ -24,6 +24,9 @@ export default class OnlineBooking extends React.Component {
       wait: true,
       // isModalOpen used to check if calendar popup is open.
       isModalOpen: false,
+      // This will hold all the available booking slots received from the
+      // backend API, default to empty.
+      availableSlots: [],
     };
   }
 
@@ -87,19 +90,21 @@ export default class OnlineBooking extends React.Component {
   }
 
   /**
-   * Open delivery schedule calendar popup.
+   * Get all available booking slots and open delivery schedule calendar popup.
    */
-  openScheduleDeliveryModal = () => {
-    /**
-     * @todo: Before opening the booking modal popup, we need to fetch the
-     * available booking dates and slots from the backend API and pass in props.
-     * It can be done later when doing the API intergrations. We need to be sure
-     * to open the modal only when API returns proper response with data else
-     * do nothing to avoid any impact on the checkout process.
-     */
-    this.setState({
-      isModalOpen: true,
-    });
+  openScheduleDeliveryModal = async () => {
+    // Update the isModalOpen to true for opening the popup.
+    const stateToUpdate = { isModalOpen: true };
+
+    // Get all available slots from the backend via API and set in the states,
+    // if API returns success.
+    const result = await getAvailableBookingSlots();
+    if (hasValue(result.success)) {
+      stateToUpdate.availableSlots = result.available_time_slots;
+
+      // Update state with the available data.
+      this.setState(stateToUpdate);
+    }
   };
 
   /**
@@ -111,11 +116,72 @@ export default class OnlineBooking extends React.Component {
     });
   };
 
+  /**
+   * Booking schedule update handlers for the calendar popup.
+   */
+  handleScheduleDeliveryChangeInModal = async (
+    appointmentDate,
+    selectedScheduleDetails,
+  ) => {
+    // Close the popup and return if both params are not defined/empty.
+    if (!hasValue(appointmentDate) || !hasValue(selectedScheduleDetails)) {
+      this.closeScheduleDeliveryModal();
+      return;
+    }
+
+    // Get the current booking details from the state.
+    const { bookingDetails } = this.state;
+
+    // If not existing booking details found we won't do anything as per
+    // assumption first time slot will be hold on page load and calendar
+    // will open only after that.
+    if (hasValue(bookingDetails.appointment_details)
+      && !hasValue(bookingDetails.appointment_details.confirmation_number)
+    ) {
+      this.closeScheduleDeliveryModal();
+      return;
+    }
+
+    // If new booking schedule is similar to the existing schedule, we don't
+    // have to perform any action.
+    if (hasValue(bookingDetails.appointment_details)
+      && hasValue(bookingDetails.appointment_details.resource_external_id)
+      && selectedScheduleDetails.resource_external_id
+      === bookingDetails.appointment_details.resource_external_id) {
+      this.closeScheduleDeliveryModal();
+      return;
+    }
+
+    // Preparing the params for holding the appoitment.
+    const params = {
+      resource_external_id: selectedScheduleDetails.resource_external_id,
+      appointment_date_time: selectedScheduleDetails.appointment_date_time,
+      existing_hold_confirmation_number: bookingDetails.appointment_details.confirmation_number,
+    };
+
+    // Hold the new slot for the user, overridding the existing slot.
+    let result = await holdBookingSlot(params);
+    if (hasValue(result.success)) {
+      result = {
+        success: true,
+        appointment_details: {
+          ...selectedScheduleDetails,
+          confirmation_number: result.hold_appointment.confirmation_number,
+          appointment_date: appointmentDate,
+        },
+      };
+    }
+
+    // Set booking Details response and clost the modal.
+    this.setState({ bookingDetails: result, isModalOpen: false });
+  };
+
   render() {
     const {
       wait,
       bookingDetails,
       isModalOpen,
+      availableSlots,
     } = this.state;
 
     if (wait) {
@@ -173,9 +239,10 @@ export default class OnlineBooking extends React.Component {
                      * @todo: Change the selectDate with first slot held.
                      */}
                     <OnlineBookingCalendar
-                      selectedDate={bookingDetails.appointment_details.appointment_date}
-                      closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
+                      availableSlots={availableSlots}
                       bookingDetails={bookingDetails.appointment_details}
+                      closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
+                      callback={this.handleScheduleDeliveryChangeInModal}
                     />
                   </>
                 </Popup>
