@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { ClickCollectPopup } from '../components/store-click-collect-popup';
 import AutocompleteSearch from '../components/autocomplete-search';
 import { ListItemClick } from '../components/ListItemClick';
+import { nearByStores } from '../utility';
 
 export class StoreClickCollectList extends React.Component {
   constructor(props) {
@@ -53,7 +54,7 @@ export class StoreClickCollectList extends React.Component {
     if (place.geometry !== undefined) {
       const currentLocation = JSON.parse(JSON.stringify(place.geometry.location));
       const { stores } = this.state;
-      const nearbyStores = this.nearByStores(stores, currentLocation);
+      const nearbyStores = nearByStores(stores, currentLocation);
       const prevState = this.state;
       this.setState({
         ...prevState,
@@ -64,39 +65,6 @@ export class StoreClickCollectList extends React.Component {
         showAutomcomplete: false,
       });
     }
-  }
-
-  nearByStores = (stores, currentLocation) => {
-    const nearbyStores = stores.filter((store) => {
-      const otherLocation = { lat: +store.latitude, lng: +store.longitude };
-      const distance = this.getDistanceBetween(currentLocation, otherLocation);
-      return (distance < 5) ? store : null;
-    });
-    return nearbyStores;
-  }
-
-  getDistanceBetween = (location1, location2) => {
-    // The math module contains a function
-    // named toRadians which converts from
-    // degrees to radians.
-
-    const lon1 = (parseInt((location1.lng), 10) * Math.PI) / 180;
-    const lon2 = (parseInt((location2.lng), 10) * Math.PI) / 180;
-    const lat1 = (parseInt((location1.lat), 10) * Math.PI) / 180;
-    const lat2 = (parseInt((location1.lat), 10) * Math.PI) / 180;
-
-    // Haversine formula
-    const dlon = lon2 - lon1;
-    const dlat = lat2 - lat1;
-    const a = (Math.sin(dlat / 2) ** 2)
-      + Math.cos(lat1) * Math.cos(lat2)
-      * (Math.sin(dlon / 2) ** 2);
-
-    const c = 2 * Math.asin(Math.sqrt(a));
-    // Radius of earth in kilometers.
-    const r = 6371;
-    // calculate the result
-    return (c * r);
   }
 
   openModal() {

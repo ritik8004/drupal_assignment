@@ -14,6 +14,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\geolocation\MapProviderManager;
 use Drupal\user\UserStorageInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 
 /**
  * Provides the delivery CnC pane for members.
@@ -51,6 +52,13 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
   protected $userStorage;
 
   /**
+   * Current account object.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $account;
+
+  /**
    * MemberDeliveryCollect constructor.
    *
    * @param array $configuration
@@ -63,11 +71,14 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    *   Map provider object.
    * @param \Drupal\user\UserStorageInterface $user_storage
    *   User storage.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account
+   *   User account.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, MapProviderManager $mapProvider, UserStorageInterface $user_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MapProviderManager $mapProvider, UserStorageInterface $user_storage, AccountProxyInterface $account) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->mapProvider = $mapProvider;
     $this->userStorage = $user_storage;
+    $this->account = $account;
   }
 
   /**
@@ -90,7 +101,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       $plugin_id,
       $plugin_definition,
       $container->get('plugin.manager.geolocation.mapprovider'),
-      $container->get('entity_type.manager')->getStorage('user')
+      $container->get('entity_type.manager')->getStorage('user'),
+      $container->get('current_user')
     );
   }
 
@@ -98,8 +110,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    * {@inheritdoc}
    */
   public function isVisible() {
-    return \Drupal::currentUser()->isAuthenticated()
-      && alshaya_acm_customer_is_customer(\Drupal::currentUser())
+    return $this->account->isAuthenticated()
+      && alshaya_acm_customer_is_customer($this->account)
       && $this->getClickAndCollectAvailability();
   }
 
@@ -156,7 +168,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     if (empty($default_mobile)) {
       // Check once in customer profile.
-      $account = $this->userStorage->load(\Drupal::currentUser()->id());
+      $account = $this->userStorage->load($this->account->id());
 
       if ($account_phone = $account->get('field_mobile_number')->getValue()) {
         $default_mobile = $account_phone[0]['value'];
@@ -399,7 +411,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     // Adding first and last name from custom info.
     /** @var \Drupal\user\Entity\User $account */
-    $account = $this->userStorage->load(\Drupal::currentUser()->id());
+    $account = $this->userStorage->load($this->account->id());
     $address['firstname'] = $account->get('field_first_name')->getString();
     $address['lastname'] = $account->get('field_last_name')->getString();
 

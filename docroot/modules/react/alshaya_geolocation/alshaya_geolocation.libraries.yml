@@ -6,14 +6,6 @@ places-api-autocomplete:
     - core/underscore
     - geolocation_google_maps/geocoder.googlegeocodingapi
 
-# Geolocation views filter geocoder function.
-places-api.googleplacesapi:
-  js:
-    js/alshaya-google-places-autocomplete-api-views.js: {}
-  dependencies:
-    - geolocation/geolocation.geocoder
-    - alshaya_geolocation/places-api-autocomplete
-
 alshaya-store-finder:
   version: 1.x
   js:

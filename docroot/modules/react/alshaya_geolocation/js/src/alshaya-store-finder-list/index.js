@@ -8,6 +8,10 @@ import {
 } from 'google-maps-react';
 import AutocompleteSearch from '../components/autocomplete-search';
 import { InfoPopUp } from '../components/MapContainer/InfoPopup';
+import {
+  nearByStores,
+  getDistanceBetween,
+} from '../utility';
 
 export class StoreFinderList extends React.Component {
   constructor(props) {
@@ -36,7 +40,7 @@ export class StoreFinderList extends React.Component {
       const currentLocation = { lat: +params.latitude, lng: +params.longitude };
       const nearbyStores = stores.items.filter((store) => {
         const otherLocation = { lat: +store.latitude, lng: +store.longitude };
-        const distance = this.getDistanceBetween(currentLocation, otherLocation);
+        const distance = getDistanceBetween(currentLocation, otherLocation);
         return (distance < 5) ? store : null;
       });
       const sorter = (a, b) => (a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1);
@@ -52,7 +56,7 @@ export class StoreFinderList extends React.Component {
             lng: +params.longitude ? +params.longitude : stores.items[0].longitude,
           },
           loadmore: true,
-          page: 10,
+          page: drupalSettings.storeLabels.load_more_item_limit,
         },
       );
     });
@@ -92,7 +96,7 @@ export class StoreFinderList extends React.Component {
   searchStores = (place) => {
     const currentLocation = JSON.parse(JSON.stringify(place.geometry.location));
     const { stores } = this.state;
-    const nearbyStores = this.nearByStores(stores, currentLocation);
+    const nearbyStores = nearByStores(stores, currentLocation);
     const prevState = this.state;
     this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
     window.location.href = `/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
@@ -108,7 +112,7 @@ export class StoreFinderList extends React.Component {
   success = (position) => {
     const currentLocation = { lat: position.coords.longitude, lng: position.coords.latitude };
     const { stores } = this.state;
-    const nearbyStores = this.nearByStores(stores, currentLocation);
+    const nearbyStores = nearByStores(stores, currentLocation);
     if (nearbyStores.length > 0) {
       const prevState = this.state;
       this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
@@ -116,40 +120,7 @@ export class StoreFinderList extends React.Component {
     }
   }
 
-  nearByStores = (stores, currentLocation) => {
-    const nearbyStores = stores.filter((store) => {
-      const otherLocation = { lat: +store.latitude, lng: +store.longitude };
-      const distance = this.getDistanceBetween(currentLocation, otherLocation);
-      return (distance < 5) ? store : null;
-    });
-    return nearbyStores;
-  }
-
   fail = () => 'Could not obtain location.'
-
-  getDistanceBetween = (location1, location2) => {
-    // The math module contains a function
-    // named toRadians which converts from
-    // degrees to radians.
-
-    const lon1 = (parseInt((location1.lng), 10) * Math.PI) / 180;
-    const lon2 = (parseInt((location2.lng), 10) * Math.PI) / 180;
-    const lat1 = (parseInt((location1.lat), 10) * Math.PI) / 180;
-    const lat2 = (parseInt((location1.lat), 10) * Math.PI) / 180;
-
-    // Haversine formula
-    const dlon = lon2 - lon1;
-    const dlat = lat2 - lat1;
-    const a = (Math.sin(dlat / 2) ** 2)
-      + Math.cos(lat1) * Math.cos(lat2)
-      * (Math.sin(dlon / 2) ** 2);
-
-    const c = 2 * Math.asin(Math.sqrt(a));
-    // Radius of earth in kilometers.
-    const r = 6371;
-    // calculate the result
-    return (c * r);
-  }
 
   showAllStores = () => {
     window.location.href = '/store-finder/';
@@ -173,7 +144,7 @@ export class StoreFinderList extends React.Component {
       });
     }
     this.setState({
-      page: (page + 10),
+      page: (page + drupalSettings.storeLabels.load_more_item_limit),
     });
   }
 
@@ -242,10 +213,10 @@ export class StoreFinderList extends React.Component {
                               <div className="field-content">
                                 <div className="address--line2">
                                   {store.address.map((item) => (
-                                    <div key={item.code}>
+                                    <>
                                       {item.code === 'address_building_segment' ? <span>{item.label}</span> : null}
                                       {item.code === 'street' ? <span>{item.value}</span> : null}
-                                    </div>
+                                    </>
                                   ))}
                                 </div>
                                 <div className="field field--name-field-store-phone field--type-string field--label-hidden field__item">
@@ -334,7 +305,7 @@ export class StoreFinderList extends React.Component {
                   && (
                     <div className="view-footer">
                       <div className="load-more-button">
-                        <a href="#" onClick={this.loadMore}>Load More</a>
+                        <a onClick={this.loadMore}>{Drupal.t('Load More')}</a>
                       </div>
                     </div>
                   )}

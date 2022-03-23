@@ -35,6 +35,7 @@ class AlshayaStoreUtility {
     $labels['search_proximity_radius'] = $config->get('search_proximity_radius');
     $labels['store_list_label'] = $config->get('store_list_label');
     $labels['search_placeholder'] = $config->get('store_search_placeholder');
+    $labels['load_more_item_limit'] = $config->get('load_more_item_limit');
     return $labels;
   }
 
