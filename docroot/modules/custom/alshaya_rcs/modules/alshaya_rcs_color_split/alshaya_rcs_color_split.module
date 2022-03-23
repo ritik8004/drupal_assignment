@@ -23,7 +23,7 @@ function _alshaya_rcs_color_split_attach_info(array &$attachments) {
   // Add the cache tags for the color split config.
   $color_split_config = \Drupal::config('alshaya_color_split.settings');
   $attachments['#cache'] = empty($attachments['#cache']) ? ['tags' => []] : $attachments['#cache'];
-  $attachments['#cache']['tags'] = array_merge($attachments['#cache']['tags'], $color_split_config->getCacheTags());
+  $attachments['#cache']['tags'] = array_merge($attachments['#cache']['tags'] ?? [], $color_split_config->getCacheTags());
 }
 
 /**
