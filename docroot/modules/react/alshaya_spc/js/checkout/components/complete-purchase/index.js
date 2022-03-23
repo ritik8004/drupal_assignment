@@ -18,7 +18,7 @@ import {
 import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import isAuraEnabled from '../../../../../js/utilities/helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { validateOnlineBooking } from '../../../../../js/utilities/onlineBookingHelper';
+import { getBookingDetailByConfirmationNumber } from '../../../../../js/utilities/onlineBookingHelper';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -110,13 +110,17 @@ export default class CompletePurchase extends React.Component {
     checkoutButton.classList.add('in-active');
 
     // Check if the cart is having online booking confirmation number.
-    // Validate the order booking is expired and show error accordingly.
+    // Validate the booking is expired and show error accordingly.
     if (hasValue(cart.confirmation_number)) {
       // Check if the hold appointment for user is valid.
-      const result = await validateOnlineBooking(cart.confirmation_number);
+      const bookingDetails = await getBookingDetailByConfirmationNumber(cart.confirmation_number);
       // Check if success return false,
-      if (!hasValue(result)) {
+      if (!hasValue(bookingDetails.success)) {
+        this.handleOnlineBookingErrorMessage(bookingDetails.error_message);
+        // Activate place order button.
         checkoutButton.classList.remove('in-active');
+        // Scroll the user to delivery information section.
+        smoothScrollTo('.spc-checkout-delivery-information');
         return;
       }
     }
@@ -272,6 +276,33 @@ export default class CompletePurchase extends React.Component {
 
     return false;
   };
+
+  /**
+   * Handle rendering of online booking error message.
+   *
+   * @param {string} errorMessage
+   *  Error message to display.
+   */
+  handleOnlineBookingErrorMessage = (errorMessage) => {
+    // As we need to show error message just above the hold notification element,
+    // we need to create span element using error message which needs to show.
+    const holdDelivery = document.querySelector('#online-booking .hold-delivery');
+    // Remove hold delivery element.
+    if (hasValue(holdDelivery)) {
+      holdDelivery.remove();
+    }
+    let errorElement = document.getElementsByClassName('booking-error-message');
+    // Check if the element is already exists, use the same for error.
+    if (errorElement.length === 0) {
+      errorElement = document.createElement('span');
+      errorElement.className = 'booking-error-message';
+      errorElement.innerHTML = errorMessage;
+      const holdNotification = document.querySelector('#online-booking .hold-notification');
+      holdNotification.parentNode.insertBefore(errorElement, holdNotification);
+    } else {
+      errorElement[0].innerHTML = errorMessage;
+    }
+  }
 
   render() {
     const { cart } = this.props;

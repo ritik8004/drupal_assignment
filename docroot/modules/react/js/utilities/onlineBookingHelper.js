@@ -2,15 +2,6 @@ import { isUserAuthenticated } from './helper';
 import logger from './logger';
 import { callMagentoApi } from './requestHelper';
 import { hasValue } from './conditionsUtility';
-import { smoothScrollTo } from '../../alshaya_spc/js/utilities/smoothScroll';
-
-/**
- * Get default error message for online booking.
- *
- * @return string
- *   Default error message.
- */
-const getDefaultBookingErrorMessage = () => Drupal.t('Sorry, something went wrong while booking. Please try again later.');
 
 /**
  * Gets magento api endpoint by user role.
@@ -97,7 +88,7 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
     });
     return {
       success: false,
-      error_message: getDefaultBookingErrorMessage(),
+      error_message: response.data.error_message,
     };
   }
 
@@ -192,7 +183,7 @@ export const getAvailableBookingSlots = async (existingBooking = false) => {
     return {
       success: false,
       api_error: true,
-      error_message: getDefaultBookingErrorMessage(),
+      error_message: response.data.error_message,
     };
   }
 
@@ -237,7 +228,6 @@ export const holdBookingSlot = async (params) => {
   // Default error response if success is false.
   const errorResponse = {
     success: false,
-    error_message: getDefaultBookingErrorMessage(),
   };
 
   // Handle the error response from API in case of internal error.
@@ -269,41 +259,4 @@ export const holdBookingSlot = async (params) => {
   }
 
   return response.data;
-};
-
-/**
- * Validate booking while placing the order.
- * Show error on failure.
- *
- * @param {object} confirmationNumber
- *   The booking connfirmation number.
- */
-export const validateOnlineBooking = async (confirmationNumber) => {
-  // Check if the hold appointment for user is valid.
-  const result = await getBookingDetailByConfirmationNumber(confirmationNumber);
-  // Check if success return false,
-  if (!hasValue(result.success)) {
-    // As we need to show error message just above the hold notification element,
-    // we need to create span element using error message which needs to show.
-    const holdDelivery = document.querySelector('#online-booking .hold-delivery');
-    // Remove hold delivery element.
-    if (hasValue(holdDelivery)) {
-      holdDelivery.remove();
-    }
-    let errorElement = document.getElementsByClassName('booking-error-message');
-    // Check if the element is already exists.
-    if (errorElement.length === 0) {
-      errorElement = document.createElement('span');
-      errorElement.className = 'booking-error-message';
-      errorElement.innerHTML = result.error_message;
-      const holdNotification = document.querySelector('#online-booking .hold-notification');
-      holdNotification.parentNode.insertBefore(errorElement, holdNotification);
-    } else {
-      errorElement[0].innerHTML = result.error_message;
-    }
-    // Scroll the user to delivery information section.
-    smoothScrollTo('.spc-checkout-delivery-information');
-    return false;
-  }
-  return true;
 };

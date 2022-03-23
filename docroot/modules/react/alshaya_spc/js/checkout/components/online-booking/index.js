@@ -216,7 +216,14 @@ export default class OnlineBooking extends React.Component {
              * Placeholder to display the default internal error message.
              */}
             <ConditionalView condition={!hasValue(bookingDetails.success)}>
-              <span className="booking-error-message">{bookingDetails.error_message}</span>
+              <span className="booking-error-message">
+                {
+                  Drupal.t(
+                    'Online booking: Sorry, something went wrong. Please try again later.',
+                    {}, { context: 'online_booking' },
+                  )
+                }
+              </span>
             </ConditionalView>
             <span className="spc-price">{price}</span>
           </label>
