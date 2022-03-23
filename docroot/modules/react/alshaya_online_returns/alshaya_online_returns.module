@@ -51,6 +51,9 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
   elseif ($current_route_name === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_my_accounts';
   }
+  elseif ($current_route_name === 'alshaya_acm_customer.orders_detail') {
+    $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_order_details';
+  }
 }
 
 /**
@@ -90,8 +93,8 @@ function alshaya_online_returns_alshaya_acm_customer_recent_order_build_alter(ar
     $build['#cache']['tags'] ?? [],
     ['config:alshaya_online_returns.settings']
   );
-
-  $onlineReturnsStatus = \Drupal::service('alshaya_online_returns.online_returns_helper')->isOnlineReturnsEnabled();
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+  $onlineReturnsStatus = $onlineReturnsHelper->isOnlineReturnsEnabled();
 
   // Do not process further if feature is disabled.
   if (!$onlineReturnsStatus) {
@@ -103,9 +106,33 @@ function alshaya_online_returns_alshaya_acm_customer_recent_order_build_alter(ar
 
     // @todo Remove hard coded is_return_eligible and return_exipiration
     // when we start getting actual values from MDC APIs.
-    $order['#order']['extension']['is_return_eligible'] = FALSE;
-    $order['#order']['extension']['return_exipiration'] = '2021-07-26 11:54:27';
+    $order['#order']['extension']['is_return_eligible'] = TRUE;
+    $order['#order']['extension']['return_exipiration'] = '2022-07-26 11:54:27';
 
-    $build['#attached']['drupalSettings']['onlineReturns']['recentOrders'][$order['#order']['id']] = $order['#order'];
+    $build['#attached']['drupalSettings']['onlineReturns']['recentOrders'][$order['#order']['id']] = $onlineReturnsHelper->prepareOrderData($order['#order']);
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  $build['#cache']['tags'] = Cache::mergeTags(
+    $build['#cache']['tags'] ?? [],
+    ['config:alshaya_online_returns.settings']
+  );
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+  $build['#order']['online_returns_status'] = $onlineReturnsHelper->isOnlineReturnsEnabled();
+
+  // Do not process further if feature is disabled.
+  if (!$build['#order']['online_returns_status']) {
+    return;
+  }
+
+  // @todo Remove hard coded is_return_eligible and return_exipiration
+  // when we start getting actual values from MDC APIs.
+  $order['extension']['is_return_eligible'] = TRUE;
+  $order['extension']['return_exipiration'] = '2022-07-26 11:54:27';
+
+  $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
 }

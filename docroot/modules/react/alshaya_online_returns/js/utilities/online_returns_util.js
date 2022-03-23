@@ -7,10 +7,8 @@ function isReturnEligible(orderId) {
   let returnEligible = true;
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
-    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].extension)
-    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId].extension, 'is_return_eligible')) {
-    returnEligible = drupalSettings.onlineReturns.recentOrders[orderId]
-      .extension.is_return_eligible;
+    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId], 'isReturnEligible')) {
+    returnEligible = drupalSettings.onlineReturns.recentOrders[orderId].isReturnEligible;
   }
 
   return returnEligible;
@@ -23,11 +21,8 @@ function getReturnExipiration(orderId) {
   let returnExipiration = true;
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
-    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].extension)
-    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId].extension, 'return_exipiration')) {
-    returnExipiration = new Date(
-      drupalSettings.onlineReturns.recentOrders[orderId].extension.return_exipiration,
-    );
+    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId], 'returnExipiration')) {
+    returnExipiration = drupalSettings.onlineReturns.recentOrders[orderId].returnExipiration;
   }
 
   return returnExipiration;
@@ -40,11 +35,8 @@ function getOrderType(orderId) {
   let orderType = '';
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
-    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].shipping)
-    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].shipping.extension_attributes)
-    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId].shipping.extension_attributes, 'click_and_collect_type')) {
-    orderType = drupalSettings.onlineReturns.recentOrders[orderId]
-      .shipping.extension_attributes.click_and_collect_type;
+    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId], 'orderType')) {
+    orderType = drupalSettings.onlineReturns.recentOrders[orderId].orderType;
   }
 
   return orderType;
@@ -57,12 +49,11 @@ function getPaymentMethod(orderId) {
   let paymentMethod = null;
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
-    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].extension)
-    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId].extension, 'payment_additional_info')) {
-    paymentMethod = drupalSettings.onlineReturns.recentOrders[orderId].extension.payment_additional_info.filter((obj) => obj.key === 'method_title').shift();
+    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId], 'paymentMethod')) {
+    paymentMethod = drupalSettings.onlineReturns.recentOrders[orderId].paymentMethod;
   }
 
-  return paymentMethod.value;
+  return paymentMethod;
 }
 
 /**
@@ -79,7 +70,7 @@ function formatDate(date) {
 /**
  * Utility function to get return request url.
  */
-function getReturnRequest(orderId) {
+function getReturnRequestUrl(orderId) {
   const url = Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}/return`);
   return url;
 }
@@ -104,13 +95,21 @@ function getReturnWindowOpenMessage(date) {
   return message;
 }
 
+/**
+ * Helper function to check if return window is closed.
+ */
+function isReturnWindowClosed(date) {
+  return (new Date(date) < new Date());
+}
+
 export {
   isReturnEligible,
   getReturnExipiration,
   getOrderType,
   getPaymentMethod,
   formatDate,
-  getReturnRequest,
+  getReturnRequestUrl,
   getReturnWindowClosedMessage,
   getReturnWindowOpenMessage,
+  isReturnWindowClosed,
 };

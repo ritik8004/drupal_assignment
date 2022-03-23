@@ -1,18 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReturnWindow from '../return-window';
-import ReturnAtStore from '../return-at-store';
-import ReturnAction from '../return-action';
 import {
   isReturnEligible,
   getReturnExipiration,
   getOrderType,
   getPaymentMethod,
-  getReturnRequest,
-  getReturnWindowClosedMessage,
-  getReturnWindowOpenMessage,
 } from '../../utilities/online_returns_util';
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import ReturnEligibilityMessage from '../../common/return-eligibility-message';
 
 class OnlineReturnsEligibility extends React.Component {
   componentDidMount() {
@@ -45,54 +39,17 @@ class OnlineReturnsEligibility extends React.Component {
     return null;
   };
 
-  /**
-   * Click event handler for the Return Items button.
-   */
-  handleOnClick = () => {
-    const { orderId } = this.props;
-    window.location.href = getReturnRequest(orderId);
-  }
-
   render() {
     const { orderId } = this.props;
 
-    if (!hasValue(orderId)) {
-      return null;
-    }
-
-    const returnExipiration = getReturnExipiration(orderId);
-    const paymentMethod = getPaymentMethod(orderId);
-
-    if (returnExipiration > new Date()) {
-      return <ReturnWindow message={getReturnWindowClosedMessage(returnExipiration)} />;
-    }
-
-    if (isReturnEligible(orderId)) {
-      return (
-        <>
-          <ReturnWindow message={getReturnWindowOpenMessage(returnExipiration)} />
-          <ReturnAction handleOnClick={this.handleOnClick} />
-          <ReturnAtStore />
-        </>
-      );
-    }
-
-    if (getOrderType(orderId) === 'ship_to_store') {
-      return (
-        <>
-          <ReturnWindow message={getReturnWindowOpenMessage(returnExipiration)} />
-          <ReturnAction returnType="Click and Collect" />
-          <ReturnAtStore returnType="Click and Collect" />
-        </>
-      );
-    }
-
     return (
-      <>
-        <ReturnWindow message={getReturnWindowOpenMessage(returnExipiration)} />
-        <ReturnAction returnType={paymentMethod} />
-        <ReturnAtStore returnType={paymentMethod} />
-      </>
+      <ReturnEligibilityMessage
+        orderId={orderId}
+        isReturnEligible={isReturnEligible(orderId)}
+        returnExipiration={getReturnExipiration(orderId)}
+        paymentMethod={getPaymentMethod(orderId)}
+        orderType={getOrderType(orderId)}
+      />
     );
   }
 }

@@ -75,6 +75,20 @@
       </td>
     </tr>
 
+    {% if order.online_returns_status is defined and order.online_returns_status %}
+      <tr class="order-item-row">
+        <td colspan="5">
+          <div id="online-returns-eligibility-window"></div>
+        </td>
+      </tr>
+
+      <tr class="order-item-row">
+        <td colspan="5">
+          <div>{{ "Delivered Items"|t }}</div>
+        </td>
+      </tr>
+    {% endif %}
+
     {% for item in order.items %}
       {{ _self.order_item(item, false) }}
     {% endfor %}
