@@ -1,0 +1,362 @@
+.spc-checkout-delivery-information {
+  font-family: $alshaya-bold;
+  font-weight: normal;
+
+  .popup-overlay {
+    .popup-content {
+      width: 100% !important;
+      max-width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border: none !important;
+      padding: 0 !important;
+      background: $modal_bg;
+
+      .fadeInUp {
+        animation: none !important;
+      }
+
+      @include breakpoint($only-mobile) {
+        position: absolute !important;
+        overflow-y: auto !important;
+        height: auto;
+        bottom: 0;
+      }
+
+      &.overlay::before {
+        content: "";
+        background: $header_mobile_menu_overlay;
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+      }
+
+      @include breakpoint($desktop) {
+        height: auto;
+        max-width: 29.56rem;
+      }
+
+      @include breakpoint($tablet) {
+        height: auto;
+        max-width: 29.56rem;
+      }
+
+      .close {
+        cursor: pointer;
+        position: absolute;
+        #{$right}: 0.188rem;
+        color: transparent;
+        top: 0.25rem;
+
+        @include icon("close") {
+          font-size: 2.875rem;
+          width: 2rem;
+          height: 2rem;
+          color: $spc-checkout-close-icon;
+        }
+
+        @include breakpoint($only-mobile) {
+          z-index: 3;
+          position: absolute;
+          top: 0.25rem;
+        }
+      }
+    }
+  }
+
+  .schedule-delivery-calendar-popup-overlay {
+    background: $header_mobile_menu_overlay;
+  }
+
+  .schedule-delivery-datepicker-submit {
+    background: $primary_btn_bg;
+    height: 3.25rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    border: none;
+    color: $primary_btn_text;
+    font-family: $alshaya-bold;
+    font-weight: normal;
+    font-size: 1rem;
+    padding: 0 1rem;
+    letter-spacing: 0.071rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      margin: 0 1.125rem;
+    }
+
+    &.in-active {
+      position: relative;
+      cursor: default;
+
+      @include breakpoint($tablet) {
+        pointer-events: none;
+      }
+
+      button {
+        pointer-events: none;
+        user-select: none;
+      }
+
+      button:disabled {
+        pointer-events: none;
+        user-select: none;
+
+        @include breakpoint($only-mobile) {
+          opacity: 0.3;
+        }
+      }
+
+      &::before {
+        content: "";
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: $_white_five_alpha_80;
+        z-index: 3;
+        pointer-events: none;
+        position: absolute;
+      }
+    }
+  }
+
+  .schedule-delivery-datepicker__wrapper {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: $alshaya-thin;
+
+    .schedule-delivery-datepicker__header {
+      display: flex;
+      flex-direction: row;
+      padding: 1rem 0 0.938rem;
+      width: 100%;
+      justify-content: center;
+
+      .popup-heading {
+        font-family: $alshaya-bold;
+        font-size: 1.25rem;
+        text-align: center;
+        color: $checkout_section_titles;
+        height: 1.563rem;
+      }
+    }
+
+    .schedule-delivery-datepicker__main {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: center;
+      border-top: 0.063rem solid $spc-order-summary-hero-total-border;
+      padding: 0;
+
+      .datetime-picker-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        .datepicker-month-left {
+          display: flex;
+          align-self: center;
+
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
+
+          span {
+            display: block;
+            width: inherit;
+
+            @include icon(chevron#{$left}, after) {
+              position: relative;
+              display: inline-block;
+              color: $spc-checkout-area-panel-back-icon;
+              font-size: 2.875rem;
+              top: 4.35rem;
+              width: 3rem;
+              height: 3rem;
+              cursor: pointer;
+            }
+          }
+        }
+
+        .true {
+          span {
+            @include icon(chevron#{$left}, after) {
+              color: $returned_btn_bg;
+              cursor: default;
+            }
+          }
+        }
+
+        .datepicker-month-right {
+          display: flex;
+          align-self: center;
+
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
+
+          span {
+            display: block;
+            width: inherit;
+
+            @include icon(chevron#{$right}, after) {
+              position: relative;
+              display: inline-block;
+              color: $spc-checkout-area-panel-back-icon;
+              font-size: 2.875rem;
+              top: 4.35rem;
+              width: 3rem;
+              height: 3rem;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      .react-datepicker {
+        font-size: 1rem;
+        display: flex;
+        justify-content: center;
+        border: none;
+        margin-top: 2.5rem;
+        font-family: inherit;
+
+        .react-datepicker__header {
+          background: none;
+          border: none;
+          padding: 0;
+
+          .datepicker-heading {
+            text-align: $left;
+            margin-bottom: 0.625rem;
+          }
+
+          .datepicker-month-select {
+            border-top: 0.063rem solid $spc-order-summary-hero-total-border;
+            border-bottom: 0.063rem solid $spc-order-summary-hero-total-border;
+            padding: 0.563rem 0.4rem 0.625rem 0.4rem;
+
+            .datepicker-month-calendar-sides {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+
+              .month-calendar-sides {
+                font-size: 0.75rem;
+                border: none;
+                background: none;
+              }
+
+              .disabled {
+                color: $returned_btn_bg;
+              }
+            }
+
+            .month-calendar-datepicker.current {
+              font-size: 1rem;
+              font-family: inherit;
+              background: none;
+              border: none;
+            }
+          }
+        }
+
+        .react-datepicker__day-name {
+          width: 2.5rem;
+          padding: 0.5rem 0.688rem;
+          border-radius: 0;
+          line-height: normal;
+          font-size: 0.875rem;
+          font-weight: 300;
+          margin: 0 0.166rem;
+        }
+
+        .react-datepicker__day {
+          width: 2.5rem;
+          padding: 0.625rem;
+          border-radius: 0;
+          line-height: normal;
+          font-size: 1rem;
+          font-weight: bold;
+
+          :hover {
+            border-radius: 0;
+          }
+
+          :active {
+            border-radius: 0;
+          }
+        }
+
+        .react-datepicker__day--selected {
+          background-color: $primary_input_focus_border;
+          border-radius: 0;
+        }
+      }
+    }
+
+    .timeslots-selection-wrapper {
+      padding: 2.5rem 4.563rem;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+
+      .timeslots-selection-heading {
+        font-size: 1rem;
+        font-family: inherit;
+        color: $checkout_section_titles;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1rem;
+        }
+      }
+
+      .timeslots-selection-options {
+        margin-top: 1.25rem;
+
+        .timeslots-options-list {
+          display: flex;
+          flex-direction: row;
+          gap: 0.438rem;
+
+          .timeslots-options-list-item {
+            font-size: 0.875rem;
+            border: 0.063rem solid $checkout_default_address_border;
+            color: $checkout_section_titles;
+            width: 10rem;
+            height: 2rem;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            cursor: pointer;
+          }
+
+          .active {
+            background-color: $primary_btn_bg;
+            color: $modal_bg;
+          }
+        }
+      }
+    }
+
+    .schedule-delivery-datepicker__footer {
+      padding: 1.25rem 0;
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: center;
+      border-top: 0.063rem solid $spc-order-summary-hero-total-border;
+    }
+  }
+}
