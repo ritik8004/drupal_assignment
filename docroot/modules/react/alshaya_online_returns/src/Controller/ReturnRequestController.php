@@ -79,7 +79,7 @@ class ReturnRequestController extends ControllerBase {
   }
 
   /**
-   * Controller function for order print.
+   * Controller function for return request.
    *
    * @param \Drupal\user\UserInterface $user
    *   User object for which the orders detail page is being viewed.
@@ -90,10 +90,6 @@ class ReturnRequestController extends ControllerBase {
    *   Build array.
    */
   public function orderReturn(UserInterface $user, $order_id) {
-
-    $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_pdp';
-    $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
-
     $config['enabled'] = $this->onlineReturnsHelper->isOnlineReturnsEnabled();
     $build['#cache']['tags'] = array_merge(
       $build['#cache']['tags'] ?? [],
@@ -102,7 +98,7 @@ class ReturnRequestController extends ControllerBase {
 
     // Do not proceed if Online returns is not enabled.
     if ($config['enabled'] !== TRUE) {
-      return NULL;
+      return;
     }
 
     $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
@@ -112,7 +108,7 @@ class ReturnRequestController extends ControllerBase {
     $orders = alshaya_acm_customer_get_user_orders($customer_id);
 
     if (empty($orders)) {
-      return NULL;
+      return;
     }
 
     // Get the current order detail to build return page.
@@ -150,6 +146,7 @@ class ReturnRequestController extends ControllerBase {
 
     // Attach library for return page react component.
     $build['#markup'] = '<div id="return-request"></div>';
+    $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
     $build['#attached']['drupalSettings'] = [
       'onlineReturns' => $config,
       'orderDetails' => $orderDetails,
