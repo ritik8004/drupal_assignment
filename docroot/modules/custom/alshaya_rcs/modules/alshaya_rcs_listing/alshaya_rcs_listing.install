@@ -61,10 +61,6 @@ function alshaya_rcs_listing_install() {
   // Migrate data.
   alshaya_rcs_listing_migrate_field_carousel_slug();
 
-  // Migrate the enriched terms from the acq_product_category taxonomy.
-  \Drupal::service('alshaya_rcs_main_menu.category_data_migration')
-    ->processProductCategoryMigration();
-
   // Initiate the batch process to update the advanced page node with proper
   // category slug.
   $batch = [
