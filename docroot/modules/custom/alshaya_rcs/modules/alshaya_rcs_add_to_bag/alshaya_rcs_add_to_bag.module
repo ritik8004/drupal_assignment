@@ -47,6 +47,7 @@ function alshaya_rcs_add_to_bag_page_attachments_alter(array &$page) {
   ];
   if (!in_array($current_route_name, $checkout_routes)) {
     $page['#attached']['library'][] = 'alshaya_acm_product/add_to_bag_utility';
+    $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
     // Get click and collect settings on search and listing page.
     $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
     $page['#attached']['drupalSettings']['alshaya_click_collect'] = [

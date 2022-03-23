@@ -8,6 +8,7 @@
 use Drupal\alshaya_color_split\AlshayaColorSplitConfig;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Attach required information around color split.
@@ -18,13 +19,15 @@ use Drupal\Core\Entity\EntityInterface;
 function _alshaya_rcs_color_split_attach_info(array &$attachments) {
   $attachments['#attached']['library'][] = 'alshaya_rcs_color_split/rcs_grouped_products';
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  $page['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');
+  $attachments['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');
   // Add the cache tags for the color split config.
   $color_split_config = \Drupal::config('alshaya_color_split.settings');
   $attachments['#cache'] = empty($attachments['#cache']) ? ['tags' => []] : $attachments['#cache'];
-  $attachments['#cache']['tags'] = array_merge($attachments['#cache']['tags'] ?? [], $color_split_config->getCacheTags());
+  $tags = Cache::mergeTags($attachments['#cache']['tags'], $color_split_config->getCacheTags());
+  $tags = Cache::mergeTags($tags, $product_display_settings->getCacheTags());
+  $attachments['#cache']['tags'] = $tags;
 }
 
 /**
@@ -47,6 +50,7 @@ function alshaya_rcs_color_split_page_attachments(array &$attachments) {
     'acq_cart.cart',
     'alshaya_spc.checkout',
     'alshaya_spc.checkout.confirmation',
+    'alshaya_algolia_react.search',
   ])) {
     return;
   }
