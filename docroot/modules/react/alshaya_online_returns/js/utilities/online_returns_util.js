@@ -68,16 +68,12 @@ function getPaymentMethod(orderId) {
 /**
  * Utility function to format date.
  */
-function formatDate(date, type) {
-  // eg. 02 Feb 2021
-  if (type === 'DD-Mon-YYYY') {
-    return new Date(date).toLocaleString(
-      drupalSettings.path.currentLanguage,
-      { day: '2-digit', month: 'short', year: 'numeric' },
-    );
-  }
-
-  return date;
+function formatDate(date) {
+  // eg. 02-Feb-2021
+  return new Date(date).toLocaleString(
+    drupalSettings.path.currentLanguage,
+    { day: '2-digit', month: 'short', year: 'numeric' },
+  );
 }
 
 /**
@@ -88,6 +84,26 @@ function getReturnRequest(orderId) {
   return url;
 }
 
+/**
+ * Utility function to get return window closed message.
+ */
+function getReturnWindowClosedMessage(date) {
+  const message = Drupal.t('Return window closed on @date', {
+    '@date': formatDate(date),
+  });
+  return message;
+}
+
+/**
+ * Utility function to get return window open message.
+ */
+function getReturnWindowOpenMessage(date) {
+  const message = Drupal.t('You have untill @date to return the items', {
+    '@date': formatDate(date),
+  });
+  return message;
+}
+
 export {
   isReturnEligible,
   getReturnExipiration,
@@ -95,4 +111,6 @@ export {
   getPaymentMethod,
   formatDate,
   getReturnRequest,
+  getReturnWindowClosedMessage,
+  getReturnWindowOpenMessage,
 };

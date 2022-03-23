@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom';
 import ReturnWindow from '../return-window';
 import ReturnAtStore from '../return-at-store';
 import ReturnAction from '../return-action';
-import ReturnWindowClosed from '../return-window-closed';
 import {
   isReturnEligible,
   getReturnExipiration,
   getOrderType,
   getPaymentMethod,
   getReturnRequest,
+  getReturnWindowClosedMessage,
+  getReturnWindowOpenMessage,
 } from '../../utilities/online_returns_util';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
@@ -63,13 +64,13 @@ class OnlineReturnsEligibility extends React.Component {
     const paymentMethod = getPaymentMethod(orderId);
 
     if (returnExipiration > new Date()) {
-      return <ReturnWindowClosed date={returnExipiration} />;
+      return <ReturnWindow message={getReturnWindowClosedMessage(returnExipiration)} />;
     }
 
     if (isReturnEligible(orderId)) {
       return (
         <>
-          <ReturnWindow date={returnExipiration} />
+          <ReturnWindow message={getReturnWindowOpenMessage(returnExipiration)} />
           <ReturnAction handleOnClick={this.handleOnClick} />
           <ReturnAtStore />
         </>
@@ -79,7 +80,7 @@ class OnlineReturnsEligibility extends React.Component {
     if (getOrderType(orderId) === 'ship_to_store') {
       return (
         <>
-          <ReturnWindow date={returnExipiration} />
+          <ReturnWindow message={getReturnWindowOpenMessage(returnExipiration)} />
           <ReturnAction returnType="Click and Collect" />
           <ReturnAtStore returnType="Click and Collect" />
         </>
@@ -88,7 +89,7 @@ class OnlineReturnsEligibility extends React.Component {
 
     return (
       <>
-        <ReturnWindow date={returnExipiration} />
+        <ReturnWindow message={getReturnWindowOpenMessage(returnExipiration)} />
         <ReturnAction returnType={paymentMethod} />
         <ReturnAtStore returnType={paymentMethod} />
       </>

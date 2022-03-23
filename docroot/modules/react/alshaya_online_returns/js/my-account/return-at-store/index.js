@@ -4,24 +4,10 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 const ReturnAtStore = (props) => {
   const { returnType } = props;
 
-  if (hasValue(returnType)) {
-    return (
-      <>
-        <span>
-          { Drupal.t('Search for a nearby store') }
-        </span>
-        <a href={Drupal.url('store-finder')} className="find-stores">
-          { Drupal.t('Find Stores') }
-        </a>
-      </>
-    );
-  }
-
+  const message = hasValue(returnType) ? Drupal.t('Search for a nearby store') : Drupal.t('Or return directly at any one of our stores');
   return (
     <>
-      <span>
-        { Drupal.t('Or return directly at any one of our stores') }
-      </span>
+      <span>{ message }</span>
       <a href={Drupal.url('store-finder')} className="find-stores">
         { Drupal.t('Find Stores') }
       </a>
