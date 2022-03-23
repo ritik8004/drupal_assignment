@@ -196,8 +196,7 @@ class AlshayaRcsCategoryDataMigration {
     foreach ($terms as $term) {
       // Load the product category term object.
       $acq_term_data = $term_storage->load($term->tid);
-      $is_default_lang = ($acq_term_data->language()->getId() == $langcode);
-      $acq_term_data = $is_default_lang ? $acq_term_data : $acq_term_data->getTranslation($langcode);
+      $acq_term_data = ($acq_term_data->language()->getId() == $langcode) ? $acq_term_data : $acq_term_data->getTranslation($langcode);
       if ($acq_term_data instanceof TermInterface) {
         $rcs_term = self::createRcsCategory($acq_term_data, $langcode);
         // Create parent terms.
@@ -264,8 +263,7 @@ class AlshayaRcsCategoryDataMigration {
     }
     // Load parent product category.
     $acq_parent_term_data = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
-    $is_default_lang = ($acq_parent_term_data->language()->getId() == $langcode);
-    $acq_parent_term_data = $is_default_lang ? $acq_parent_term_data : $acq_parent_term_data->getTranslation($langcode);
+    $acq_parent_term_data = ($acq_parent_term_data->language()->getId() == $langcode) ? $acq_parent_term_data : $acq_parent_term_data->getTranslation($langcode);
 
     // Recursively create parent term.
     if (!empty($acq_parent_term_data->parent->getString())) {
@@ -285,12 +283,12 @@ class AlshayaRcsCategoryDataMigration {
   /**
    * Create RCS Category terms.
    *
-   * @param Drupal\taxonomy\TermInterface $acq_term_data
+   * @param \Drupal\taxonomy\TermInterface $acq_term_data
    *   Product category result set object.
    * @param string $langcode
    *   Default language code.
    *
-   * @return Drupal\taxonomy\TermInterface
+   * @return \Drupal\taxonomy\TermInterface
    *   Returns RCS Category term.
    */
   private static function createRcsCategory(TermInterface $acq_term_data, string $langcode) {
@@ -331,9 +329,9 @@ class AlshayaRcsCategoryDataMigration {
   /**
    * Enriches the rcs category term fields.
    *
-   * @param Drupal\taxonomy\TermInterface $acq_term_data
+   * @param \Drupal\taxonomy\TermInterface $acq_term_data
    *   Product category term.
-   * @param Drupal\taxonomy\TermInterface $rcs_term
+   * @param \Drupal\taxonomy\TermInterface $rcs_term
    *   RCS category term.
    */
   private static function enrichRcsTerm(TermInterface $acq_term_data, TermInterface &$rcs_term) {
