@@ -4,6 +4,7 @@ var buildPath = '/modules/react/alshaya_online_returns/dist/';
 var config = {
   entry: {
     pdp: './js/pdp',
+    returnrequest: './js/returnrequest',
     my_accounts: './js/my-accounts',
   },
   output: {

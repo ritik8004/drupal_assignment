@@ -1,0 +1,9 @@
+alshaya_online_returns.return_request:
+  path: '/user/{user}/order/{order_id}/return'
+  defaults:
+    _controller: '\Drupal\alshaya_online_returns\Controller\ReturnRequestController::orderReturn'
+    _title: 'Return Request'
+  requirements:
+    _custom_access: '\Drupal\acq_customer\Controller\CustomerController::checkAccess'
+  options:
+    user: \d+
