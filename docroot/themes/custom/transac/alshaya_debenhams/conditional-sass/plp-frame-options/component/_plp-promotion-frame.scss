@@ -13,6 +13,10 @@
       .promotions {
         margin: 0.5rem 1rem;
         justify-content: flex-start;
+
+        @include breakpoint($only-mobile) {
+          margin: 0.5rem 0.875rem;
+        }
       }
     }
 

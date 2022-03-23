@@ -1,0 +1,39 @@
+.user-wishlist {
+  &.c-plp {
+    .block-page-title-block {
+      #wishlist-share {
+        button {
+          &.email-share-link {
+            @include btn();
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+
+          &.copy-share-link {
+            @include button-brand();
+
+            &:hover {
+              border: 0;
+            }
+          }
+        }
+      }
+
+      h1.c-page-title {
+        font-size: 2.25rem;
+      }
+    }
+
+    #my-wishlist {
+      #plp-hits {
+        border: 0;
+
+        @include breakpoint($only-mobile) {
+          padding-top: 5rem;
+        }
+      }
+    }
+  }
+}

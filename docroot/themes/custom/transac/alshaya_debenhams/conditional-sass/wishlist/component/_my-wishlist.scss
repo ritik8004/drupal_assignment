@@ -1,0 +1,89 @@
+#my-wishlist {
+  .empty-message {
+    .actions {
+      a {
+        @include btn();
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .addtobag-button {
+    @include button-brand();
+
+    &:hover {
+      border: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .addtobag-config-button {
+    @include button-brand();
+
+    &:hover {
+      border: 0;
+    }
+  }
+
+  .oos-text-container {
+    margin: 0 1rem;
+
+    .oos-text {
+      cursor: auto;
+    }
+  }
+
+  .product-frame.product-element-alignment {
+    .in-wishlist {
+      .wishlist-link {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+#wishlist-share {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 0;
+  }
+}
+
+.path--wishlist {
+  #block-page-title {
+    @include breakpoint($only-mobile) {
+      margin: 0 0.5rem;
+    }
+  }
+}
+
+.user-wishlist.c-plp,
+.wishlist-share-popup-container {
+  .wishlist-share-popup-block {
+    .actions {
+      button {
+        &.email-share-link {
+          @include btn();
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+
+        &.copy-share-link {
+          @include button-brand();
+
+          &:hover {
+            border: 0;
+          }
+        }
+      }
+    }
+  }
+}
