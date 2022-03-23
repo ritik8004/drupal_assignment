@@ -297,8 +297,6 @@ class AlshayaRcsCategoryDataMigration {
     // Get the current language.
     $language_manager = \Drupal::service('language_manager');
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
-    $alias_manager = \Drupal::service('path_alias.manager');
 
     // Create a new rcs category term object.
     $rcs_term = $term_storage->create([
@@ -306,6 +304,41 @@ class AlshayaRcsCategoryDataMigration {
       'name' => $acq_term_data->name,
       'langcode' => $langcode,
     ]);
+
+    // Copy enriched values from product category term.
+    self::enrichRcsTerm($acq_term_data, $rcs_term);
+
+    // Check if the translations exists for other available languages.
+    foreach ($language_manager->getLanguages() as $language_code => $language) {
+      if ($language_code != $langcode && $acq_term_data->hasTranslation($language_code)) {
+        // Load the translation object.
+        $acq_term_data_trans = $acq_term_data->getTranslation($language_code);
+
+        // Add translation in the new term.
+        $rcs_term_trans = $rcs_term->addTranslation($language_code, ['name' => $acq_term_data_trans->name]);
+        self::enrichRcsTerm($acq_term_data_trans, $rcs_term_trans);
+
+        // Save the translations.
+        $rcs_term_trans->save();
+      }
+    }
+
+    // Save the new term depth.
+    $rcs_term->depth = $acq_term_data->depth_level->getString();
+    return $rcs_term;
+  }
+
+  /**
+   * Enriches the rcs category term fields.
+   *
+   * @param Drupal\taxonomy\TermInterface $acq_term_data
+   *   Product category term.
+   * @param Drupal\taxonomy\TermInterface $rcs_term
+   *   RCS category term.
+   */
+  private static function enrichRcsTerm(TermInterface $acq_term_data, TermInterface &$rcs_term) {
+    $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+    $alias_manager = \Drupal::service('path_alias.manager');
     // Add include_in_desktop field value from the old term.
     $rcs_term->get('field_include_in_desktop')
       ->setValue($acq_term_data->get('field_include_in_desktop')->getValue());
@@ -325,7 +358,6 @@ class AlshayaRcsCategoryDataMigration {
     // Add icon field value from the old term.
     $rcs_term->get('field_icon')
       ->setValue($acq_term_data->get('field_icon')->getValue());
-
     // Add main_menu_highlight field value from the old term.
     $main_menu_highlights = $acq_term_data->get('field_main_menu_highlight')->getValue();
     if (!empty($main_menu_highlights)) {
@@ -381,30 +413,6 @@ class AlshayaRcsCategoryDataMigration {
     $term_slug = $alias_manager->getAliasByPath('/taxonomy/term/' . $acq_term->tid);
     $term_slug = ltrim($term_slug, '/');
     $rcs_term->get('field_category_slug')->setValue($term_slug);
-
-    // Check if the translations exists for other available languages.
-    foreach ($language_manager->getLanguages() as $language_code => $language) {
-      if ($language_code != $langcode && $acq_term_data->hasTranslation($language_code)) {
-        // Load the translation object.
-        $acq_term_data_trans = $acq_term_data->getTranslation($language_code);
-
-        // Add translation in the new term.
-        $rcs_term_trans = $rcs_term->addTranslation($language_code, ['name' => $acq_term_data_trans->name]);
-
-        $rcs_term_trans->get('field_term_background_color')
-          ->setValue($acq_term_data_trans->get('field_term_background_color')->getValue());
-
-        $rcs_term_trans->get('field_term_font_color')
-          ->setValue($acq_term_data_trans->get('field_term_font_color')->getValue());
-
-        // Save the translations.
-        $rcs_term_trans->save();
-      }
-    }
-
-    // Save the new term depth.
-    $rcs_term->depth = $acq_term_data->depth_level->getString();
-    return $rcs_term;
   }
 
   /**
