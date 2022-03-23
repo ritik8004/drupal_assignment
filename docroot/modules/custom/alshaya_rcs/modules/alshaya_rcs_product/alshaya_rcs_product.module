@@ -204,6 +204,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
   // Attach promotion label js.
   $build['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
+  // Attach product dynamic yield js.
+  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_dynamic_yield';
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());

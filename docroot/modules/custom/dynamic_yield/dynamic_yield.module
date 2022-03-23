@@ -68,6 +68,8 @@ function dynamic_yield_page_attachments(array &$page) {
     // Allow other module to alter the DY context.
     \Drupal::moduleHandler()->alter('dynamic_yield_context', $context['lng']);
     $page['#attached']['drupalSettings']['dynamicYield']['lng'] = $context['lng'];
+    // Add the source id in the drupal Settings.
+    $page['#attached']['drupalSettings']['dynamicYield']['sourceId'] = \Drupal::config('dynamic_yield.settings')->get('section_id') ?? '';
     $js = PHP_EOL . 'window.DY = window.DY || {};' . PHP_EOL;
     $js = $js . 'DY.recommendationContext = ' . Json::encode($context) . ';' . PHP_EOL;
     $context_script = [[

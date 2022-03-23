@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_rcs_dynamic_yield_page_attachments_alter(array &$attachments) {
+  if (array_key_exists('html_head', $attachments['#attached'])) {
+    // Unset the DY dpath and spath script.
+    foreach ($attachments['#attached']['html_head'] as $key => $value) {
+      if (count($value) > 1 && in_array($value[1], ['dpath', 'spath'])) {
+        unset($attachments['#attached']['html_head'][$key]);
+      }
+    }
+  }
+  // Attach the rcs dynamic yield library.
+  $attachments['#attached']['library'][] = 'alshaya_rcs_dynamic_yield/rcs_dynamic_yield';
+}
