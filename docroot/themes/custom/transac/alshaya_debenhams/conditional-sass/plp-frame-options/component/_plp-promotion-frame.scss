@@ -27,3 +27,14 @@
     }
   }
 }
+
+#my-wishlist {
+  .c-products__item.promotion-frame {
+    .addtobag-button-container,
+    .addtobag-config-button-container {
+      @include breakpoint($only-mobile) {
+        margin: 1.5rem 0.75rem 0;
+      }
+    }
+  }
+}

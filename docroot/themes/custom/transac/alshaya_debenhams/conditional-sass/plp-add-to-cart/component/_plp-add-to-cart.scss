@@ -14,7 +14,9 @@
 .addtobag-config-button {
   @include btn();
 
-  margin-#{$left}: 1rem;
+  @include breakpoint($tablet) {
+    margin-#{$left}: 1rem;
+  }
 }
 
 .addtobag-button,

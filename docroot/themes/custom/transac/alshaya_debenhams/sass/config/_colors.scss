@@ -22,6 +22,7 @@ $_spc-billing-help: $promo-blue;
 $_spc-cart-alert: $sale-red;
 $_spc-warning-bg: $lemon;
 $_egift_landing_page_banner_bg: #ffffae;
+$sky_blue: #93cdff;
 
 // Global elements.
 $primary_text: $charcoal;
@@ -486,3 +487,6 @@ $wishlist-header-notification-border: $charcoal;
 $wishlist-button-bg: $primary_btn_bg;
 $wishlist-button-txt: $primary_btn_text;
 $wishlist-button-border: $medium-sky-blue;
+
+// same day delivery
+$pdp_product_same_day_btn_border: $sky_blue;
