@@ -179,9 +179,10 @@ export default class CompletePurchase extends React.Component {
       return false;
     }
 
-    // Disabled if there is still some error left in payment form.
+    // Disabled if there is still some error left in payment form
+    // except for hps payment method error.
     if (document.getElementById('spc-payment-methods') === null
-      || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
+      || document.getElementById('spc-payment-methods').querySelectorAll('.error:not(.linked-card-payment-error)').length > 0) {
       // Bypass the payment method error check if the full payment is done by
       // egift car or full payment is done by Egift + AURA.
       if (!((isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart))
