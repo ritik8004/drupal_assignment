@@ -54,7 +54,7 @@ class AlshayaStoreFinderController extends ControllerBase {
       '#type' => 'markup',
       '#markup' => '<div id="store-finder-wrapper"></div>',
       '#attached' => [
-        'library' => $library,
+        'library' => $libraries,
         'drupalSettings' => [
           'storeLabels' => $labels,
         ],
@@ -81,7 +81,7 @@ class AlshayaStoreFinderController extends ControllerBase {
       '#type' => 'markup',
       '#markup' => '<div id="store-finder-list-wrapper"></div>',
       '#attached' => [
-        'library' => $library,
+        'library' => $libraries,
         'drupalSettings' => [
           'storeLabels' => $labels,
         ],
