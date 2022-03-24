@@ -37,6 +37,7 @@ export default class OnlineBooking extends React.Component {
     // is selected and shipping methods are available in cart.
     if (this.checkHomeDelivery(cart) && hasValue(cart.cart.shipping.methods)) {
       // Check if the cart is having confirmation number.
+      cart.confirmation_number = 'G2Z7Y67B'
       if (hasValue(cart.confirmation_number)) {
         result = await getBookingDetailByConfirmationNumber(cart.confirmation_number);
       } else {
@@ -195,15 +196,16 @@ export default class OnlineBooking extends React.Component {
              */}
             { hasValue(bookingDetails.appointment_details) && (
               <>
-                <span className="online-booking-title">
+                <div className="online-booking-title">
                   {
                     Drupal.t(
                       'All items in cart are delivered on your preferred date',
                       {}, { context: 'online_booking' },
                     )
                   }
-                </span>
-                <span className="available-delivery">
+                </div>
+                <div>
+                <div className="available-delivery">
                   {
                     parse(
                       Drupal.t(
@@ -215,12 +217,13 @@ export default class OnlineBooking extends React.Component {
                       ),
                     )
                   }
-                </span>
-                <span className="change-delivery-schedule">
+                </div>
+                <div className="change-delivery-schedule">
                   <a href="#" onClick={() => this.openScheduleDeliveryModal()}>
                     {Drupal.t('Change Delivery Schedule', {}, { context: 'online_booking' })}
                   </a>
-                </span>
+                </div>
+                </div>
                 <Popup
                   className="schedule-delivery-calendar-popup"
                   open={isModalOpen}
@@ -237,10 +240,11 @@ export default class OnlineBooking extends React.Component {
                       closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
                       callback={this.handleScheduleDeliveryChangeInModal}
                     />
+      
                   </>
                 </Popup>
                 <ConditionalView condition={bookingDetails.success}>
-                  <span className="hold-delivery">
+                  <div className="hold-delivery">
                     {
                       parse(
                         Drupal.t(
@@ -249,15 +253,15 @@ export default class OnlineBooking extends React.Component {
                         ),
                       )
                     }
-                  </span>
+                  </div>
                 </ConditionalView>
                 {/**
                  * Placeholder to display the error message when api return success false.
                  */}
                 <ConditionalView condition={!bookingDetails.success}>
-                  <span className="booking-error-message">{bookingDetails.error_message}</span>
+                  <div className="booking-error-message">{bookingDetails.error_message}</div>
                 </ConditionalView>
-                <span className="hold-notification">
+                <div className="hold-notification">
                   {
                     parse(
                       Drupal.t(
@@ -266,21 +270,21 @@ export default class OnlineBooking extends React.Component {
                       ),
                     )
                   }
-                </span>
+                </div>
               </>
             )}
             {/**
              * Placeholder to display the default internal error message.
              */}
             <ConditionalView condition={!hasValue(bookingDetails.success)}>
-              <span className="booking-error-message">
+              <div className="booking-error-message">
                 {
                   Drupal.t(
                     'Online booking: Sorry, something went wrong. Please try again later.',
                     {}, { context: 'online_booking' },
                   )
                 }
-              </span>
+              </div>
             </ConditionalView>
             <span className="spc-price">{price}</span>
           </label>
