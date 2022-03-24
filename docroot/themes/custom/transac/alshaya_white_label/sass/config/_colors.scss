@@ -286,6 +286,8 @@ $_sofa-section-grey: #d9d9d9;
 $_sofa-section-grey2: #1a1a1a;
 $_sofa-section-brown: #866347;
 $white-six: #f9f9f9;
+$light-green: #39b54a;
+$dark-green: #007522;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -2155,3 +2157,11 @@ $egift-checkout-card-number: $spc-product-attributes;
 
 // Redeem eGift.
 $egift-redeem-form-subtitle: $egift-disabled-gray2;
+
+// Online Returns
+$online-return-eligibility-message-bg: $light-green;
+$online-return-eligibility-message-txt: $white-five;
+$online-return-eligibility-button-txt: $brownish-grey;
+$online-return-eligibility-button-box-shadow: $dark-green;
+$online-return-eligibility-button-hover: $white-three;
+$online-return-window-closed-bg: $new-pdp-blue;

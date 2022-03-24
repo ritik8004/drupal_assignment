@@ -5,6 +5,7 @@ import {
   getReturnExpiration,
   getOrderType,
   getPaymentMethod,
+  isReturnWindowClosed,
 } from '../../utilities/online_returns_util';
 import ReturnEligibilityMessage from '../../common/return-eligibility-message';
 
@@ -30,6 +31,11 @@ class OnlineReturnsEligibility extends React.Component {
     // Render component for the selected order.
     const selector = document.querySelector(`*[data-order-id="${data.orderId}"] #online-returns-eligibility-window`);
     if (selector) {
+      // Check if return window closed and add return-window-closed class.
+      if (isReturnWindowClosed(getReturnExpiration(data.orderId))) {
+        document.querySelector(`*[data-order-id="${data.orderId}"] #online-returns-eligibility-window`).classList.add('return-window-closed');
+      }
+
       ReactDOM.render(
         <OnlineReturnsEligibility orderId={data.orderId} />,
         selector,

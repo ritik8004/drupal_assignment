@@ -9,9 +9,10 @@ const ReturnAction = (props) => {
 
   if (hasValue(returnType)) {
     return (
-      <span>
-        { Drupal.t('@type orders can only be returned at stores', { '@type': returnType }) }
-      </span>
+      <div className="return-message">
+        <span>{ `(${Drupal.t('@type', { '@type': returnType })}` }</span>
+        <span>{ `${Drupal.t('orders can only be returned at stores')})` }</span>
+      </div>
     );
   }
 
