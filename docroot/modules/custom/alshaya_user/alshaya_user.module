@@ -531,7 +531,10 @@ function alshaya_user_mail_alter(&$message) {
     $language_manager->setConfigOverrideLanguage($original_language);
 
     // Alter the header from information according to user preferred language.
-    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8') . ' <' . $message['from'] . '>';
+    // Using iconv_mime_encode() to encode site name to UTF-8 format.
+    // Adding line-length upto 500 characters to avoid newline character.
+    $encodedSiteName = iconv_mime_encode('From', $sitename, ['line-length' => 500]);
+    $message['from'] = str_replace('From: ', '', $encodedSiteName) . ' <' . $message['from'] . '>';
     $message['headers']['From'] = $message['headers']['Sender'] = $message['from'];
   }
 

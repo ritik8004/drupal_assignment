@@ -182,6 +182,14 @@ set classes = [
               </div>
             {% endblock %}
 
+            {% if online_returns_status is defined and online_returns_status %}
+              <div id="online-returns-pdp-desktop" class="desktop-only"></div>
+            {% endif %}
+
+            {% if online_returns_status is defined and online_returns_status %}
+              <div id="online-returns-pdp-mobile" class="mobile-only"></div>
+            {% endif %}
+
             {% block descBlock %}
               <div class="description-wrapper">
                 <div class="content--description">

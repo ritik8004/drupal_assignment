@@ -30,6 +30,8 @@ export default class EgiftTopPurchase extends React.Component {
       amountSet: 0, // Amount select by user.
       linkedCardNumber: null, // User linked card number.
       linkedCardBalance: null, // User linked card balance.
+      linkedCardImage: null, // Card number image.
+      eGiftFor: 'other', // Flag to switch heroImage.
       disableSubmit: true, // Flag to enable / disable top-up submit button.
       displayFormError: '', // Display form errors.
       cardNumberError: '', // Display card number error.
@@ -77,6 +79,12 @@ export default class EgiftTopPurchase extends React.Component {
             linkedCardNumber: response.data.card_number !== null ? response.data.card_number : null,
             linkedCardBalance:
               response.data.current_balance !== null ? response.data.current_balance : null,
+            linkedCardImage: {
+              url: response.data.card_image,
+              title: response.data.card_type,
+              alt: response.data.card_type,
+            },
+            eGiftFor: 'self',
           });
         }
       });
@@ -226,6 +234,12 @@ export default class EgiftTopPurchase extends React.Component {
     return true;
   };
 
+  handleImage = (eGiftForOption) => {
+    this.setState({
+      eGiftFor: eGiftForOption,
+    });
+  };
+
   render() {
     const {
       topUpCard,
@@ -233,6 +247,8 @@ export default class EgiftTopPurchase extends React.Component {
       disableSubmit,
       linkedCardNumber,
       linkedCardBalance,
+      linkedCardImage,
+      eGiftFor,
       displayFormError,
       cardNumberError,
     } = this.state;
@@ -250,17 +266,20 @@ export default class EgiftTopPurchase extends React.Component {
       );
     }
 
+    const heroImage = (eGiftFor === 'self') ? linkedCardImage : topUpCard;
+
     return (
       <div className="egifts-form-wrapper">
         <form onSubmit={this.handleSubmit} className="egift-form">
           <ConditionalView condition={wait === true}>
             <div className="step-wrapper step-one-wrapper fadeInUp">
-              <HeroImage item={topUpCard} />
+              <HeroImage item={heroImage} />
               <div className="egift-topup-fields-wrapper">
                 <EgiftTopupFor
                   linkedCardNumber={linkedCardNumber}
                   linkedCardBalance={linkedCardBalance}
                   cardNumberError={cardNumberError}
+                  handleImage={this.handleImage}
                 />
                 <EgiftCardAmount
                   selected={topUpCard}
