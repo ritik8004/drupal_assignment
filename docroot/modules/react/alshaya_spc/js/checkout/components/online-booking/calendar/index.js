@@ -187,7 +187,9 @@ export default class OnlineBookingCalendar extends React.Component {
    */
   onTimeSlotChange = (e, timeSlotExtId) => {
     e.preventDefault();
+    const { selectedDate } = this.state;
     const { bookingDetails } = this.props;
+    const dateFormat = 'YYYY-MM-DD';
 
     // If selected time slot is different then allow customer to use apply
     // button and change the schedule.
@@ -197,7 +199,10 @@ export default class OnlineBookingCalendar extends React.Component {
       // Check if the selected time slot is similar to current booking details,
       // and keep apply button disabled.
       disableApplyBtn: (typeof bookingDetails.resource_external_id !== 'undefined'
-        && bookingDetails.resource_external_id === timeSlotExtId),
+        && typeof bookingDetails.appointment_date !== 'undefined'
+        && bookingDetails.resource_external_id === timeSlotExtId)
+        && (moment(selectedDate).format(dateFormat)
+        === moment(bookingDetails.appointment_date).format(dateFormat)),
     });
   };
 

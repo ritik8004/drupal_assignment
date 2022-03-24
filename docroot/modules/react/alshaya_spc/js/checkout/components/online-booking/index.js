@@ -142,16 +142,6 @@ export default class OnlineBooking extends React.Component {
       return;
     }
 
-    // If new booking schedule is similar to the existing schedule, we don't
-    // have to perform any action.
-    if (hasValue(bookingDetails.appointment_details)
-      && hasValue(bookingDetails.appointment_details.resource_external_id)
-      && selectedScheduleDetails.resource_external_id
-      === bookingDetails.appointment_details.resource_external_id) {
-      this.closeScheduleDeliveryModal();
-      return;
-    }
-
     // Preparing the params for holding the appoitment.
     const params = {
       resource_external_id: selectedScheduleDetails.resource_external_id,
