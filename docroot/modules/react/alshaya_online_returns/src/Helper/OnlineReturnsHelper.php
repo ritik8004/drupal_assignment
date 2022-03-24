@@ -65,12 +65,13 @@ class OnlineReturnsHelper {
    *   Processed order data for online returns.
    */
   public function prepareOrderData(array $order) {
-    $paymentMethod = reset(array_filter(
+    $paymentMethodDetails = array_filter(
       $order['extension']['payment_additional_info'],
       function ($method) {
         return $method['key'] === 'method_title';
       }
-    ));
+    );
+    $paymentMethod = reset($paymentMethodDetails);
 
     return [
       'orderId' => $order['increment_id'],
