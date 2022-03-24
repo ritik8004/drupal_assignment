@@ -304,10 +304,10 @@ export default class OnlineBookingCalendar extends React.Component {
             >
               <div className="datetime-picker-wrapper" dir={dir}>
                 <div
-                  className={`datepicker-month-left ${moment(setOpenDate).isSame(
+                  className={moment(setOpenDate).isSame(
                     this.getMinMaxDateForCalendar(),
                     'month',
-                  )}`}
+                  ) ? 'datepicker-month-left disabled' : 'datepicker-month-left'}
                   onClick={() => ((drupalSettings.path.currentLanguage === 'en')
                     ? this.changeMonthDisplay('decrease')
                     : this.changeMonthDisplay())}
@@ -343,7 +343,7 @@ export default class OnlineBookingCalendar extends React.Component {
                             {moment(date).format('MMMM YYYY')}
                           </span>
                           <span
-                            className="month-calendar-sides next"
+                            className={nextMonthButtonDisabled ? 'month-calendar-sides next disabled' : 'month-calendar-sides next'}
                             disabled={nextMonthButtonDisabled}
                           >
                             {moment(date).add('1', 'month').format('MMMM')}
@@ -367,11 +367,13 @@ export default class OnlineBookingCalendar extends React.Component {
                 {/**
                  * Add two arrow icons for controlling the months increase
                  * and decrease action.
-                 * @todo: FE to change the icons as per design.
                  */}
 
                 <div
-                  className="datepicker-month-right"
+                  className={moment(setOpenDate).isSame(
+                    this.getMinMaxDateForCalendar('max'),
+                    'month',
+                  ) ? 'datepicker-month-right disabled-right' : 'datepicker-month-right'}
                   onClick={() => ((drupalSettings.path.currentLanguage === 'en')
                     ? this.changeMonthDisplay()
                     : this.changeMonthDisplay('decrease'))}
@@ -388,13 +390,17 @@ export default class OnlineBookingCalendar extends React.Component {
           <div className="timeslots-selection-wrapper" dir={dir}>
             <div className="timeslots-selection-heading">{Drupal.t('Delivery Time', {}, { context: 'online_booking' })}</div>
             <div className="timeslots-selection-options">
-              <div className="timeslots-options-list">{timeSlotListItems}</div>
+              <div className="timeslots-options-list">
+                <div className="timeslots-options-list-items">
+                  {timeSlotListItems}
+                </div>
+              </div>
             </div>
           </div>
           <div className="schedule-delivery-datepicker__footer">
             <button
               type="button"
-              className="schedule-delivery-datepicker-submit"
+              className={disableApplyBtn ? 'schedule-delivery-datepicker-submit disabled-btn' : 'schedule-delivery-datepicker-submit'}
               disabled={disableApplyBtn}
               onClick={(e) => this.onApplyTimeSlot(e)}
             >
