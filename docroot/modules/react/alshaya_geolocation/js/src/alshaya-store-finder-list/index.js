@@ -189,7 +189,7 @@ export class StoreFinderList extends React.Component {
                       </div>
                     </div>
                   </div>
-                  <a className="back-to-glossary store-list-back-to-glossary" onClick={this.showAllStores}>{Drupal.t('List of all H&M the stores')}</a>
+                  <a className="back-to-glossary store-list-back-to-glossary" onClick={this.showAllStores}>{drupalSettings.storeLabels.store_list_label}</a>
                 </div>
               </div>
               {stores.length > 0
