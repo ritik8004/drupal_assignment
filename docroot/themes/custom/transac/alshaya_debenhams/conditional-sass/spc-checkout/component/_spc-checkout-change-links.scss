@@ -1,5 +1,24 @@
 .spc-address-form-edit-link,
 .spc-change-address-link,
-.spc-add-new-card-btn {
-  @include btn;
+.spc-add-new-card-btn,
+.egift-verify-code-redeem-submit-btn .egift-button,
+.egift-get-code-redeem-submit-btn .egift-button,
+.remove-egift-card button {
+  @include btn();
+}
+
+.egift-verify-code-redeem-submit-btn .egift-button,
+.egift-get-code-redeem-submit-btn .egift-button,
+.remove-egift-card button {
+  &:hover {
+    background: $primary_btn_hover_bg !important;
+  }
+
+  html[lang=ar] & {
+    padding: 0.625rem 0.75rem 0.375rem;
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.75rem;
+    }
+  }
 }
