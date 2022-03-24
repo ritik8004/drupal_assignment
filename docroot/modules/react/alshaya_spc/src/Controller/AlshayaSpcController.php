@@ -604,6 +604,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
           'alshaya_spc/dynamic_promotion_label',
+          'alshaya_white_label/online-booking',
         ],
         'drupalSettings' => [
           'cnc_enabled' => $cnc_enabled,

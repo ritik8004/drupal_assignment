@@ -259,12 +259,12 @@ export default class OnlineBookingCalendar extends React.Component {
       timeSlotListItems = availableTimeSlots.map((timeSlot) => {
         const className = (timeSlot.resource_external_id
           === selectedTimeSlot)
-          ? 'booking-slot selected'
-          : 'booking-slot';
+          ? 'timeslots-options-list-item active'
+          : 'timeslots-options-list-item';
 
         let element = null;
         element = (
-          <li
+          <div
             key={timeSlot.resource_external_id}
             value={timeSlot.resource_external_id}
             className={className}
@@ -274,7 +274,7 @@ export default class OnlineBookingCalendar extends React.Component {
             )}
           >
             {`${timeSlot.start_time} - ${timeSlot.end_time}`}
-          </li>
+          </div>
         );
         return element;
       });
@@ -284,19 +284,17 @@ export default class OnlineBookingCalendar extends React.Component {
       <>
         <div className="schedule-delivery-datepicker__wrapper">
           <div className="schedule-delivery-datepicker__header">
-            <span className="popup-heading">
+            <div className="popup-heading">
               {Drupal.t(
                 'Schedule Your Delivery',
                 {},
                 { context: 'online_booking' },
               )}
-            </span>
-            <span
-              className="popup-close-icon"
+            </div>
+            <div
+              className="close"
               onClick={() => closeScheduleDeliveryModal()}
-            >
-              {Drupal.t('close')}
-            </span>
+            />
           </div>
           <div className="schedule-delivery-datepicker__main">
             <Swipeable
@@ -305,6 +303,21 @@ export default class OnlineBookingCalendar extends React.Component {
               preventDefaultTouchmoveEvent
             >
               <div className="datetime-picker-wrapper" dir={dir}>
+                <div
+                  className={moment(setOpenDate).isSame(
+                    this.getMinMaxDateForCalendar(),
+                    'month',
+                  ) ? 'datepicker-month-left disabled' : 'datepicker-month-left'}
+                  onClick={() => ((drupalSettings.path.currentLanguage === 'en')
+                    ? this.changeMonthDisplay('decrease')
+                    : this.changeMonthDisplay())}
+                  disabled={moment(setOpenDate).isSame(
+                    this.getMinMaxDateForCalendar(),
+                    'month',
+                  )}
+                >
+                  <span />
+                </div>
                 <DatePicker
                   renderCustomHeader={({
                     date,
@@ -313,27 +326,29 @@ export default class OnlineBookingCalendar extends React.Component {
                   }) => (
                     <>
                       <div className="datepicker-heading">{Drupal.t('Delivery Date', {}, { context: 'online_booking' })}</div>
-                      <div className="datepicker-month-calendar-sides">
-                        {/**
-                         * Customise the calendar header to show previous,
-                         * current and next months name in the header with
-                         * actions to switch month previous and next.
-                         */}
-                        <span
-                          className="month-calendar-sides previous"
-                          disabled={prevMonthButtonDisabled}
-                        >
-                          {moment(date).subtract('1', 'month').format('MMMM')}
-                        </span>
-                        <span className="month-calendar-datepicker current">
-                          {moment(date).format('MMMM YYYY')}
-                        </span>
-                        <span
-                          className="month-calendar-sides next"
-                          disabled={nextMonthButtonDisabled}
-                        >
-                          {moment(date).add('1', 'month').format('MMMM')}
-                        </span>
+                      <div className="datepicker-month-select">
+                        <div className="datepicker-month-calendar-sides">
+                          {/**
+                           * Customise the calendar header to show previous,
+                           * current and next months name in the header with
+                           * actions to switch month previous and next.
+                           */}
+                          <span
+                            className={prevMonthButtonDisabled ? 'month-calendar-sides previous disabled' : 'month-calendar-sides previous'}
+                            disabled={prevMonthButtonDisabled}
+                          >
+                            {moment(date).subtract('1', 'month').format('MMMM')}
+                          </span>
+                          <span className="month-calendar-datepicker current">
+                            {moment(date).format('MMMM YYYY')}
+                          </span>
+                          <span
+                            className={nextMonthButtonDisabled ? 'month-calendar-sides next disabled' : 'month-calendar-sides next'}
+                            disabled={nextMonthButtonDisabled}
+                          >
+                            {moment(date).add('1', 'month').format('MMMM')}
+                          </span>
+                        </div>
                       </div>
                     </>
                   )}
@@ -352,22 +367,13 @@ export default class OnlineBookingCalendar extends React.Component {
                 {/**
                  * Add two arrow icons for controlling the months increase
                  * and decrease action.
-                 * @todo: FE to change the icons as per design.
                  */}
-                <span
-                  className="datepicker-month-left"
-                  onClick={() => ((drupalSettings.path.currentLanguage === 'en')
-                    ? this.changeMonthDisplay('decrease')
-                    : this.changeMonthDisplay())}
-                  disabled={moment(setOpenDate).isSame(
-                    this.getMinMaxDateForCalendar(),
+
+                <div
+                  className={moment(setOpenDate).isSame(
+                    this.getMinMaxDateForCalendar('max'),
                     'month',
-                  )}
-                >
-                  {'<'}
-                </span>
-                <span
-                  className="datepicker-month-right"
+                  ) ? 'datepicker-month-right disabled-right' : 'datepicker-month-right'}
                   onClick={() => ((drupalSettings.path.currentLanguage === 'en')
                     ? this.changeMonthDisplay()
                     : this.changeMonthDisplay('decrease'))}
@@ -376,21 +382,25 @@ export default class OnlineBookingCalendar extends React.Component {
                     'month',
                   )}
                 >
-                  {'>'}
-                </span>
+                  <span />
+                </div>
               </div>
             </Swipeable>
-            <div className="timeslots-selection-wrapper" dir={dir}>
-              <div className="timeslots-selection-heading">{Drupal.t('Delivery Time', {}, { context: 'online_booking' })}</div>
-              <div className="timeslots-selection-options">
-                <ul className="timeslots-options-list">{timeSlotListItems}</ul>
+          </div>
+          <div className="timeslots-selection-wrapper" dir={dir}>
+            <div className="timeslots-selection-heading">{Drupal.t('Delivery Time', {}, { context: 'online_booking' })}</div>
+            <div className="timeslots-selection-options">
+              <div className="timeslots-options-list">
+                <div className="timeslots-options-list-items">
+                  {timeSlotListItems}
+                </div>
               </div>
             </div>
           </div>
           <div className="schedule-delivery-datepicker__footer">
             <button
               type="button"
-              className="schedule-delivery-datepicker-submit"
+              className={disableApplyBtn ? 'schedule-delivery-datepicker-submit disabled-btn' : 'schedule-delivery-datepicker-submit'}
               disabled={disableApplyBtn}
               onClick={(e) => this.onApplyTimeSlot(e)}
             >
