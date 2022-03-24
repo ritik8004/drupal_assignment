@@ -21,6 +21,10 @@ function alshaya_rcs_add_to_bag_library_info_alter(&$libraries, $extension) {
         'rcs_magento_placeholders/rcs_magento_placeholders',
         'alshaya_master/common_functions',
       ];
+      // Get color swatch in product drawer.
+      if (\Drupal::service('module_handler')->moduleExists('alshaya_rcs_color_split')) {
+        $libraries['add_to_bag_utility']['dependencies'][] = 'alshaya_rcs_color_split/rcs_grouped_products';
+      }
     }
   }
 }
@@ -43,6 +47,7 @@ function alshaya_rcs_add_to_bag_page_attachments_alter(array &$page) {
   ];
   if (!in_array($current_route_name, $checkout_routes)) {
     $page['#attached']['library'][] = 'alshaya_acm_product/add_to_bag_utility';
+    $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
     // Get click and collect settings on search and listing page.
     $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
     $page['#attached']['drupalSettings']['alshaya_click_collect'] = [

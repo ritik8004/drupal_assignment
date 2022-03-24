@@ -23,7 +23,6 @@
       || !Drupal.hasValue(e.detail.result.style_code)) {
       return;
     }
-
     // The original object will also be modified in this process.
     var mainProduct = e.detail.result;
 
