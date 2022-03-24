@@ -9,6 +9,11 @@
 
   Drupal.behaviors.menuDynamicLayout = {
     attach: function (context, settings) {
+      // Return if the placeholders text there in code.
+      if ($('.menu__list-item:contains(#rcs.menuItem.name#)').length > 0) {
+        return;
+      }
+
       var winWidth = $(window).width();
 
       $('.menu--one__list-item').once().on('mouseover', function () {

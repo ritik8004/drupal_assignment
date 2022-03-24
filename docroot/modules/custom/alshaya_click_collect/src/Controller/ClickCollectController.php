@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_click_collect\Controller;
 
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_click_collect\Ajax\ClickCollectStoresCommand;
 use Drupal\alshaya_click_collect\Ajax\StoreDisplayFillCommand;
@@ -307,29 +306,28 @@ class ClickCollectController extends ControllerBase {
   public function getProductStores($sku, $lat, $lon, $limit = 3) {
     $all_stores = $top_three = [];
 
-    if (SKU::loadFromSku($sku)) {
-      if ($stores = $this->getSkuStores($sku, $lat, $lon)) {
-        $top_three = [];
-        $top_three['#theme'] = 'pdp_click_collect_top_stores';
-        $top_three['#stores'] = array_slice($stores, 0, $limit);
-        $top_three['#has_more'] = count($stores) > $limit ? $this->t('Other stores nearby') : '';
-        $top_three['#available_at_title'] = $this->t('Available at @count stores near', [
-          '@count' => count($stores),
-        ]);
+    $stores = $this->getSkuStores($sku, $lat, $lon);
+    if ($stores) {
+      $top_three = [];
+      $top_three['#theme'] = 'pdp_click_collect_top_stores';
+      $top_three['#stores'] = array_slice($stores, 0, $limit);
+      $top_three['#has_more'] = count($stores) > $limit ? $this->t('Other stores nearby') : '';
+      $top_three['#available_at_title'] = $this->t('Available at @count stores near', [
+        '@count' => count($stores),
+      ]);
 
-        $store_form = $this->formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
-        $config = $this->configFactory->get('alshaya_click_collect.settings');
-        $all_stores = [];
-        $all_stores['#theme'] = 'pdp_click_collect_all_stores';
-        $all_stores['#stores'] = $stores;
-        $all_stores['#title'] = $config->get('pdp_click_collect_title');
-        $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
-        $all_stores['#available_at_title'] = $this->t('Available at @count stores near', [
-          '@count' => count($stores),
-        ]);
-        $all_stores['#store_finder_form'] = render($store_form);
-        $all_stores['#help_text'] = $config->get('pdp_click_collect_help_text.value');
-      }
+      $store_form = $this->formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
+      $config = $this->configFactory->get('alshaya_click_collect.settings');
+      $all_stores = [];
+      $all_stores['#theme'] = 'pdp_click_collect_all_stores';
+      $all_stores['#stores'] = $stores;
+      $all_stores['#title'] = $config->get('pdp_click_collect_title');
+      $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
+      $all_stores['#available_at_title'] = $this->t('Available at @count stores near', [
+        '@count' => count($stores),
+      ]);
+      $all_stores['#store_finder_form'] = render($store_form);
+      $all_stores['#help_text'] = $config->get('pdp_click_collect_help_text.value');
     }
 
     return ['top_three' => $top_three, 'all_stores' => $all_stores];

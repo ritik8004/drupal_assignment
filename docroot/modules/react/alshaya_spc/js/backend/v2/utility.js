@@ -182,6 +182,19 @@ const getIp = () => Axios({ url: 'https://www.cloudflare.com/cdn-cgi/trace' })
     }).filter((value) => value != null)[0];
   });
 
+/**
+ * Check If request is from SocialAuth Popup
+ *
+ * @returns {boolean}
+ *   True request is from socialAuth Popup.
+ */
+const isRequestFromSocialAuthPopup = () => {
+  if (window.name === 'ConnectWithSocialAuth') {
+    return true;
+  }
+  return false;
+};
+
 /* eslint-disable import/prefer-default-export */
 export {
   getApiEndpoint,
@@ -189,4 +202,5 @@ export {
   getIp,
   getCartIdFromStorage,
   removeCartIdFromStorage,
+  isRequestFromSocialAuthPopup,
 };

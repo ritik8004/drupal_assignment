@@ -2626,41 +2626,7 @@ JS;
           $this->iWaitSeconds('20');
         }
       } else {
-        $script = <<<JS
-        jQuery(".spc-address-form-guest-overlay input#fullname").val("Test User");
-        jQuery(".spc-address-form-guest-overlay input[name=\"email\"]").val("user@test.com");
-        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
-        var value = "55667788";
-        if (maxlength == 9) {
-            value = value + "9";
-        }
-        jQuery("input[name=\"mobile\"]").val(value);
-        jQuery(".spc-address-form-guest-overlay input#locality").val("Block 1");
-        jQuery(".spc-address-form-guest-overlay input#address_line1").val("Street A");
-        jQuery(".spc-address-form-guest-overlay input#dependent_locality").val("Building B");
-        jQuery(".spc-address-form-guest-overlay input#address_line2").val("Floor C");
-JS;
-        $session->executeScript($script);
-        $city = $page->find('css', '#spc-area-select-selected-city');
-        if ($city !== null) {
-          $city->click();
-          $this->iWaitSeconds('5');
-          $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
-          $area_value = $this->getSession()->evaluateScript('return jQuery(\'#spc-area-select-selected\').text()');
-          if ($area_value == 'Select Area' or 'Choose a region') {
-            $page->find('css', '#spc-area-select-selected')->click();
-            $this->iWaitSeconds('5');
-            $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
-          }
-        }
-        else {
-          $page->find('css', '#spc-area-select-selected')->click();
-          $this->iWaitSeconds('5');
-          $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
-        }
-        $page->find('css', 'button#save-address')->click();
-        $this->iWaitForAjaxToFinish();
-        $this->iWaitSeconds('20');
+        $this->fillFormAndSubmit($session, $page);
       }
     }
     $this->theElementShouldExist('.delivery-information-preview');
@@ -2707,15 +2673,19 @@ JS;
     $page = $this->getSession()->getPage();
     $element = $page->find('css', '#add-to-cart-main');
     $element2 = $page->find('css', "[id^='edit-add-to-cart-']");
+    $element3 = $page->find('css', "[id^='addtobag-button-']");
     if ($element !== NULL) {
       $element->click();
     }
     elseif ($element2 !== NULL) {
       $element2->click();
     }
-    else {
-      throw new \Exception(sprintf('Add to cart button not found.'));
+    elseif ($element3 !== NULL) {
+      $element3->click();
     }
+    else {
+        throw new \Exception(sprintf('Add to cart button not found.'));
+      }
   }
 
   /**
@@ -2788,7 +2758,7 @@ JS;
     $knet_expiration = $page->find('css', '#cardExpdate .col:nth-child(2) select:first-child');
     if ($knet_expiration != null) {
       $this->getSession()->executeScript("jQuery('#debitMonthSelect').val(9)");
-      $this->getSession()->executeScript("jQuery('#debitYearSelect').val(2021)");
+      $this->getSession()->executeScript("jQuery('#debitYearSelect').val(2025)");
       $this->iWaitSeconds('20');
     }
     else {
@@ -2894,4 +2864,106 @@ JS;
 
   }
 
+  /**
+   * @Given /^I add the billing address on checkout page$/
+   */
+  public function iAddTheBillingAddressOnCheckoutPage() {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $top_panel = $page->find('css', '.spc-billing-top-panel');
+    if ($top_panel != null) {
+      $text = $session->evaluateScript('return jQuery(".spc-billing-top-panel").text()');
+      if ($text == 'please add your billing address.') {
+        $session->executeScript('jQuery(\'.spc-billing-top-panel\').click()');
+        $this->iWaitSeconds('5');
+        $this->fillFormAndSubmit($session, $page, TRUE);
+      }
+    }
+  }
+
+  /**
+   * Fills billing information form and submit.
+   * @param $session
+   * @param $page
+   * @param $billing_address
+   */
+  public function fillFormAndSubmit($session, $page, $billing_address = FALSE) {
+    $script = <<<JS
+        jQuery(".spc-address-form-guest-overlay input#fullname").val("Test User");
+        jQuery(".spc-address-form-guest-overlay input[name=\"email\"]").val("user@test.com");
+        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
+        var country_code = jQuery(".country-code").text();
+        var value = "55667788";
+        if (maxlength == 9) {
+            value = value + "9";
+        }
+        if (country_code == '+20') {
+            value = "1255557111";
+        }
+        jQuery("input[name=\"mobile\"]").val(value);
+        jQuery(".spc-address-form-guest-overlay input#locality").val("Block 1");
+        jQuery(".spc-address-form-guest-overlay input#address_line1").val("Street A");
+        jQuery(".spc-address-form-guest-overlay input#dependent_locality").val("Building B");
+        jQuery(".spc-address-form-guest-overlay input#address_line2").val("Floor C");
+JS;
+    $session->executeScript($script);
+    $city = $page->find('css', '#spc-area-select-selected-city');
+    if ($city !== null) {
+      $city->click();
+      $this->iWaitSeconds('5');
+      $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+      $area_value = $this->getSession()->evaluateScript('return jQuery(\'#spc-area-select-selected\').text()');
+      if ($area_value == 'Select Area' or 'Choose a region') {
+        $page->find('css', '#spc-area-select-selected')->click();
+        $this->iWaitSeconds('5');
+        $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+      }
+    }
+    else {
+      $page->find('css', '#spc-area-select-selected')->click();
+      $this->iWaitSeconds('5');
+      $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+    }
+    $page->find('css', 'button#save-address')->click();
+    $this->iWaitForAjaxToFinish();
+    $this->iWaitSeconds('20');
+  }
+
+  /**
+   * @Given /^I should see the Wishlist icon$/
+   */
+  public function iShouldSeeTheWishlistIcon() {
+    $wishlist_icon = $this->getSession()->evaluateScript('return jQuery(\'.wishlist-button-wrapper .wishlist-icon\').length');
+    if ($wishlist_icon == 0) {
+      throw new \RuntimeException('Unable to find wishlist icon.');
+    }
+  }
+
+  /**
+   * @When /^I click on the Wishlist icon$/
+   */
+  public function iClickOnTheWishlistIcon()
+  {
+    $session = $this->getSession();
+    $session->executeScript('jQuery(\'.wishlist-button-wrapper .wishlist-icon\').first().click()');
+    $this->iWaitSeconds('5');
+
+    // Check if wishlist icon is active by checking the class "in-wishlist".
+    $in_wishlist_wrapper = $session->evaluateScript('return jQuery(".in-wishlist.wishlist-button-wrapper").length');
+    if ($in_wishlist_wrapper == 0) {
+      throw new \RuntimeException('Unable to click on the wishlist icon.');
+    }
+  }
+
+  /**
+   * @Then /^I should see the Wishlist icon active$/
+   */
+  public function iShouldSeeTheWishlistIconActive() {
+    // Check if wishlist icon on header is active by checking the class "wishlist-active".
+    $wishlist_active = $this->getSession()->evaluateScript('return jQuery(".wishlist-header .wishlist-active").length');
+
+    if ($wishlist_active == 0) {
+      throw new \RuntimeException('Wishlist icon is inactive.');
+    }
+  }
 }

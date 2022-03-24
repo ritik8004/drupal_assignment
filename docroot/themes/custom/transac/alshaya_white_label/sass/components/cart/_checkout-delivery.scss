@@ -9,7 +9,7 @@
 #block-sizefacetblock,
 #drupal-modal .basic-details-wrapper {
   .ajax-progress-throbber {
-    @include fullPageLoader();
+    @include fullPageLoader;
   }
 }
 

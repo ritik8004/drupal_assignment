@@ -234,8 +234,6 @@ body {
         font-size: 0.75rem;
         color: $plp_promotion_link;
         display: inline-block;
-        margin-left: 0.125rem;
-        margin-right: 0.125rem;
       }
     }
   }
@@ -267,6 +265,7 @@ body {
 .nodetype--magazine_article,
 .path--magazine {
   .field--name-field-magazine-date,
+  .field-magazine-shop-the-story__label,
   .magazine-shop-the-story__label {
     display: block;
     margin: 0 0 1.25rem;
@@ -287,7 +286,8 @@ body {
     }
   }
 
-  .magazine-shop-the-story__label {
+  .magazine-shop-the-story__label,
+  .field-magazine-shop-the-story__label {
     margin-bottom: 2.125rem;
   }
 

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - ctools
+    - taxonomy
+id: rcs_category
+label: 'RCS Category'
+type: 'canonical_entities:taxonomy_term'
+pattern: '[rcs:category-path-prefix][term:field_category_slug:value]'
+selection_criteria:
+  c8707e90-32f5-4231-a14c-f22008daa0ee:
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      rcs_category: rcs_category
+    negate: false
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    uuid: c8707e90-32f5-4231-a14c-f22008daa0ee
+selection_logic: and
+weight: -5
+relationships: {  }

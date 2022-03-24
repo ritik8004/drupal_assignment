@@ -13,12 +13,12 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function alshaya_bnpl_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   // Need processing only for products with Full view mode.
-  if ($entity->bundle() != 'acq_product') {
+  if (!in_array($entity->bundle(), ['acq_product', 'rcs_product'])) {
     return;
   }
 
   if (in_array($view_mode, ['full', 'modal', 'matchback'])) {
-    /** @var \Drupal\alshaya_bnpl\AlshayaBnplWidgetHelper $bnplWidgetHelper */
+    /** @var \Drupal\alshaya_bnpl\Helper\AlshayaBnplWidgetHelper $bnplWidgetHelper */
     $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
     $bnplWidgetHelper->getBnplBuild($build, 'pdp');
   }

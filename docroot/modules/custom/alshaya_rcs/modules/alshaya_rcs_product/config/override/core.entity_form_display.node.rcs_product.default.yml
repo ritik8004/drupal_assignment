@@ -1,0 +1,10 @@
+dependencies:
+  config:
+    - field.field.node.rcs_product.field_select_pdp_layout
+content:
+  field_select_pdp_layout:
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content

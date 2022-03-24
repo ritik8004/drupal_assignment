@@ -1,16 +1,16 @@
 import React from 'react';
 import TextareaAutosize from 'react-autosize-textarea';
-import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
-import { getLanguageCode, getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
+import {
+  getLanguageCode, getbazaarVoiceSettings, getUserDetails, postAPIData,
+} from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
-import { validEmailRegex } from '../../../utilities/write_review_util';
+import { validateInputLang, validEmailRegex } from '../../../utilities/write_review_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
-const bazaarVoiceSettings = getbazaarVoiceSettings();
-const userDetails = getUserDetails();
+let bazaarVoiceSettings = null;
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -22,13 +22,28 @@ class ReviewCommentForm extends React.Component {
       commentbox: '',
       nickname: '',
       submissionTime: '',
+      userDetails: {
+        user: {
+          userId: 0,
+          userEmail: null,
+        },
+      },
     };
+    bazaarVoiceSettings = getbazaarVoiceSettings();
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount = () => {
+    getUserDetails().then((result) => {
+      this.setState({ userDetails: result });
+    });
   }
 
   showCommentForm = () => {
     const { ReviewId } = this.props;
-    const { commentbox, nickname, email } = this.state;
+    const {
+      commentbox, nickname, email, userDetails,
+    } = this.state;
     const commentTncUri = `/${getLanguageCode()}/${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
@@ -68,7 +83,7 @@ class ReviewCommentForm extends React.Component {
                   maxLength="25"
                   onChange={this.handleNicknameChange}
                   className="form-input"
-                  defaultValue={nickname}
+                  defaultValue={decodeURIComponent(nickname)}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${nickname ? 'active-label' : ''}`}>
@@ -125,6 +140,7 @@ class ReviewCommentForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { ReviewId } = this.props;
+    const { userDetails } = this.state;
     const isError = processFormDetails(e, ReviewId);
     if (!isError) {
       const { commentbox, nickname, email } = this.state;
@@ -232,7 +248,10 @@ class ReviewCommentForm extends React.Component {
 
   handleCommentboxChange = (e) => {
     const label = getStringMessage('comment');
-    if (e.target.value.length > 0 && e.target.value.length < e.target.minLength) {
+    if (e.target.value.length > 0 && !validateInputLang(e.target.value)) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('text_input_lang_error');
+      document.getElementById(`${e.target.id}`).classList.add('error');
+    } else if (e.target.value.length > 0 && e.target.value.length < e.target.minLength) {
       document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label });
       document.getElementById(`${e.target.id}`).classList.add('error');
     } else if (e.target.value.length === 0) {
@@ -247,7 +266,7 @@ class ReviewCommentForm extends React.Component {
 
   render() {
     const { ReviewId } = this.props;
-    const { showCommentForm, showCommentSubmission } = this.state;
+    const { showCommentForm, showCommentSubmission, userDetails } = this.state;
     const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
     let emailValue = userDetails.user.emailId;
     let nicknameValue = '';

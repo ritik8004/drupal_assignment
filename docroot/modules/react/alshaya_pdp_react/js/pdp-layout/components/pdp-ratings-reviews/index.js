@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Rating from '../../../../../alshaya_bazaar_voice/js/src/rating/components/rating';
 import ReviewSummary from '../../../../../alshaya_bazaar_voice/js/src/reviews/components/review-summary';
 import { isOpenWriteReviewForm } from '../../../../../alshaya_bazaar_voice/js/src/utilities/user_util';
+import { trackPassiveAnalytics } from '../../../../../alshaya_bazaar_voice/js/src/utilities/analytics';
 
 const PpdRatingsReviews = (props) => {
   const {
@@ -43,14 +44,19 @@ const PpdRatingsReviews = (props) => {
 
   useEffect(() => {
     // To open write a review on page load.
-    if (isOpenWriteReviewForm()) {
-      getPanelData(openModal());
-    }
+    isOpenWriteReviewForm().then((status) => {
+      if (status) {
+        getPanelData(openModal());
+      }
+    });
   },
   []);
 
+  // Track passive impression for dynamic layout on pdp.
+  trackPassiveAnalytics();
+
   return (
-    <Rating childClickHandler={openRatingsReviewPanel} />
+    <Rating childClickHandler={openRatingsReviewPanel} renderLinkDirectly="true" />
   );
 };
 

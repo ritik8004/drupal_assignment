@@ -104,7 +104,7 @@ body.sub-brand-logo {
     }
 
     #block-alshayareactcartminicartblock {
-      @include placeMiniCart();
+      @include placeMiniCart;
     }
 
     &.frontpage {
@@ -128,7 +128,7 @@ body.sub-brand-logo {
 
   &.frontpage .c-menu-primary .menu--mobile-navigation ul.menu {
     @include breakpoint($only-mobile) {
-      @include resetMenuStyles();
+      @include resetMenuStyles;
 
       width: 66.66%;
 
@@ -146,7 +146,7 @@ body.sub-brand-logo {
   &:not(.frontpage) {
     @include breakpoint($only-mobile) {
       .menu--mobile-navigation ul {
-        @include resetMenuStyles();
+        @include resetMenuStyles;
       }
 
       &:not(.alias--cart-login) {
@@ -159,7 +159,7 @@ body.sub-brand-logo {
         width: 75%;
 
         ul.menu {
-          @include resetMenuStyles();
+          @include resetMenuStyles;
 
           top: 0;
           width: 100%;
@@ -235,7 +235,7 @@ body.sub-brand-logo {
           }
         }
 
-        @include aerieSeparator();
+        @include aerieSeparator;
       }
     }
   }
@@ -296,7 +296,7 @@ body.sub-brand-logo {
           padding-#{$left}: 0.625rem;
           position: relative;
 
-          @include aerieSeparator();
+          @include aerieSeparator;
         }
 
         a.logo {

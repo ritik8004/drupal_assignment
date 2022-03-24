@@ -3,5 +3,5 @@ variables:
   product_listing_page_url: '/shop-home-fragrance/featured/white-barn-shop/'
   spc_product_listing_page: '/shop-home-fragrance/featured/white-barn-shop/'
   spc_basket_page: '/shop-home-fragrance/featured/white-barn-shop/'
-  spc_pdp_page: 'buy-sweater-weather-3-wick-candle.html'
+  spc_pdp_page: '/buy-sun-drenched-linen-3-wick-candle.html/'
   spc_promotion_listing_page: '/shop-hand-soaps-sanitizers/hand-sanitizers/pocketbac-hand-sanitizers/'

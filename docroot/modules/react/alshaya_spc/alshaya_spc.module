@@ -17,6 +17,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -290,7 +291,8 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   $api_settings = Settings::get('alshaya_api.settings');
   $store_settings = Settings::get('magento_lang_prefix');
-  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $language_manager = \Drupal::languageManager();
+  $current_language = $language_manager->getCurrentLanguage()->getId();
 
   // We proxy the requests via cloudflare, so we use the current domain as is
   // without any language suffix so HTTP_HOST is enough.
@@ -318,6 +320,13 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   $checkout_settings = Settings::get('alshaya_checkout_settings');
   $page['#attached']['drupalSettings']['cart']['doubleCheckEnabled'] = $checkout_settings['place_order_double_check_after_exception'];
+
+  $languages = $language_manager->getLanguages();
+  $page['#attached']['drupalSettings']['alshayaSpc']['languages'] = array_keys($languages);
+
+  // Add product settings.
+  $product_config = \Drupal::config('alshaya_acm_product.settings');
+  $page['#attached']['drupalSettings']['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
 }
 
 /**
@@ -414,6 +423,13 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   // Return if express delivery feature is disabled.
   // And product is not buyable.
   // Otherwise show express delivery options.
+  // Big tickect product.
+  if ($sku->hasField('attr_white_glove_delivery')) {
+    $bigTickectProduct = (bool) $sku->get('attr_white_glove_delivery')->getString();
+    if ($bigTickectProduct) {
+      return;
+    }
+  }
   if (!($deliveryOptionsHelper->ifSddEdFeatureEnabled()) || !(alshaya_acm_product_is_buyable($sku))) {
     return;
   }
@@ -448,4 +464,18 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
     : 'alshaya_spc/commerce_backend.cart.v2';
 
   unset($build['home_delivery']);
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_order_build_alter().
+ */
+function alshaya_spc_alshaya_rcs_product_order_build_alter(&$build) {
+  $currency_config = \Drupal::config('acq_commerce.currency');
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $currency_config->getCacheTags());
+
+  $build['#attached']['drupalSettings']['alshaya_spc']['currency_config'] = [
+    'currency_code' => $currency_config->get('currency_code'),
+    'currency_code_position' => $currency_config->get('currency_code_position'),
+    'decimal_points' => $currency_config->get('decimal_points'),
+  ];
 }

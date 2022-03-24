@@ -1,0 +1,21 @@
+helpers:
+  version: 1.x
+  js:
+    js/rcs_placeholders.static_storage.js: { }
+    js/rcs_placeholders-exports.js: { }
+    js/eventManager.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+
+rcs_placeholders:
+  version: 1.x
+  js:
+    js/rcs_placeholders.js: {}
+  css:
+    base:
+      css/rcs_placeholders.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - rcs_placeholders/helpers

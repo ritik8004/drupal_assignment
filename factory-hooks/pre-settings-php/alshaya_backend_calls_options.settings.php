@@ -117,6 +117,15 @@ $settings['alshaya_backend_calls_options'] = [
     'get_categories' => [
       'timeout' => 300,
     ],
+    'checkoutcom_config' => [
+      'timeout' => 30,
+    ],
+    'get_saved_card' => [
+      'timeout' => 30,
+    ],
+    'delete_saved_card' => [
+      'timeout' => 30,
+    ],
   ],
   'appointment_booking' => [
     'default' => [

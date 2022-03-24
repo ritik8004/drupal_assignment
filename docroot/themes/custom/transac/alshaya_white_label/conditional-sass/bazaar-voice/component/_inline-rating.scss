@@ -27,3 +27,22 @@
     color: $rr-write-review-link-txt;
   }
 }
+
+.inline-rating {
+  .button-wrapper {
+    margin-top: 1rem;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0.5rem;
+    }
+
+    .write-review-button {
+      text-decoration: underline;
+      cursor: pointer;
+
+      &:hover {
+        color: inherit;
+      }
+    }
+  }
+}

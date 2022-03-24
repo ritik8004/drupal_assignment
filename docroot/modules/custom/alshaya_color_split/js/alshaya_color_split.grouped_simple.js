@@ -15,7 +15,9 @@
         var sku = $(node).attr('data-sku');
         var viewMode = $(node).attr('data-vmode');
         var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        var productInfo = window.commerceBackend.getProductData(sku, productKey);
+
+        if (productInfo === null) {
           return;
         }
 
@@ -25,7 +27,7 @@
 
         $('[name="selected_variant_sku"]', node).val($(this).val());
 
-        var variantInfo = drupalSettings[productKey][sku]['group'][$(this).val()];
+        var variantInfo = productInfo['group'][$(this).val()];
         Drupal.updateGallery(node, variantInfo.layout,variantInfo.gallery);
 
         // Trigger event for other modules to hook into.

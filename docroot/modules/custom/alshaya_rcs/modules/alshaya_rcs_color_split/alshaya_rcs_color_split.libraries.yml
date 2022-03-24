@@ -1,0 +1,6 @@
+rcs_grouped_products:
+  version: 1.x
+  js:
+    js/alshaya_rcs_color_split.grouped_products.js: {}
+  dependencies:
+    - rcs_placeholders/helpers

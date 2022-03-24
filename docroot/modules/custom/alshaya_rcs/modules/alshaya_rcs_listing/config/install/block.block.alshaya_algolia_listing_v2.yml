@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_rcs_listing
+  theme:
+    - alshaya_white_label
+id: alshaya_algolia_listing_v2
+theme: alshaya_white_label
+region: content
+weight: 9
+provider: null
+plugin: alshaya_algolia_listing_v2
+settings:
+  id: alshaya_algolia_listing_v2
+  label: 'Alshaya Algolia Listing V2'
+  provider: alshaya_rcs_listing
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: '/taxonomy/term/*'
+    negate: false
+    context_mapping: {  }

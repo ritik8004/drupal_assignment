@@ -51,6 +51,14 @@ plp:
     - alshaya_algolia_react/algolia_common
     - core/jquery.once
 
+plpv2:
+  js:
+    dist/plpv2.js: {}
+    js/alshaya_algolia_plp.js: {}
+  dependencies:
+    - core/drupalSettings
+    - alshaya_algolia_react/algolia_common
+
 product_category_carousel:
   js:
     dist/productCategoryCarousel.js: {}

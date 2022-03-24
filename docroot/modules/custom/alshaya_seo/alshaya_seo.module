@@ -6,6 +6,7 @@
  */
 
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
+use Drupal\alshaya_seo\Services\UrlHelper;
 use Drupal\alshaya_user\Plugin\Block\MyAccountLinks;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityInterface;
@@ -158,7 +159,9 @@ function alshaya_seo_page_attachments(array &$attachments) {
     ];
   $attachments['#attached']['html_head'][] = [$gkg_script, 'gkg_data'];
   // Adding Product schema for PDP.
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_seo_transac')) {
+  // For rcs_product type, we process the schema in the rcs code.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_seo_transac')
+    && $content_type !== 'rcs_product') {
     $product_schema_data = _alshaya_seo_transac_pdp_rich_snippet();
     // Allow other modules to update the schema data and page attachments.
     \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
@@ -518,4 +521,12 @@ function alshaya_seo_node_update(EntityInterface $node) {
     $node_translation = $node->getTranslation('ar');
     \Drupal::service('pathauto.generator')->createEntityAlias($node_translation, 'update');
   }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function alshaya_seo_pathauto_alias_alter(&$alias, array &$context) {
+  // Replace special characters from the path.
+  $alias = strtr($alias, UrlHelper::SPECIAL_CHARACTERS_MAP);
 }

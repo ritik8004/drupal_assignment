@@ -13,6 +13,6 @@ use Drupal\Core\Render\BubbleableMetadata;
 function alshaya_kw_tokens_alter(array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata) {
   if ($context['type'] == 'alshaya_seo' && isset($context['tokens']['cities'])) {
     $token_service = \Drupal::token();
-    $replacements['[alshaya_seo:cities]'] = $token_service->replace('[alshaya_seo:city1]');
+    $replacements['[alshaya_seo:cities]'] = $token_service->replace('[alshaya_seo:city1]', $context['data'], $context['options']);
   }
 }

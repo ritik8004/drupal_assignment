@@ -12,7 +12,7 @@
    */
   Drupal.select2OptionConvert = function (context) {
     if ($(window).width() < 768) {
-      $('#configurable_ajax').addClass('visually-hidden');
+      $('#configurable_ajax', context).addClass('visually-hidden');
     }
     // Hide the dropdowns when user resizes window and is now in desktop mode.
     $('.form-item-configurable-select').addClass('visually-hidden');
@@ -254,7 +254,7 @@
   // then on selection of attribute product should add to basket directly.
   $(document).ajaxComplete(function (event, xhr, settings) {
     if (($(window).width() < 768)
-      && (settings.hasOwnProperty('extraData'))
+      && (typeof settings['extraData'] !== 'undefined')
       && ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))
       && $('body').hasClass('open-tray-without-selection')
     ) {

@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Module file for Alshaya RCS.
+ */
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'rcs_placeholders' && isset($libraries['rcs_placeholders'])) {
+    $libraries['rcs_placeholders']['dependencies'][] = 'alshaya_white_label/rcs-placeholders';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block templates.
+ */
+function alshaya_rcs_preprocess_block(&$variables) {
+  $rcs_library = '';
+
+  // Attach CSS theming to RCS blocks via asset libraries.
+  switch ($variables['base_plugin_id']) {
+    case 'rcs_ph_navigation_menu':
+      $rcs_library = 'alshaya_white_label/rcs-ph-navigation-menu';
+      break;
+
+    case 'rcs_ph_breadcrumb':
+      $rcs_library = 'alshaya_white_label/rcs-ph-breadcrumb';
+      break;
+  }
+
+  if (!empty($rcs_library)) {
+    // Preserve any existing library attachments.
+    if (!isset($variables['#attached']['library'])) {
+      $variables['#attached']['library'] = [];
+    }
+    $variables['#attached']['library'][] = $rcs_library;
+  }
+}

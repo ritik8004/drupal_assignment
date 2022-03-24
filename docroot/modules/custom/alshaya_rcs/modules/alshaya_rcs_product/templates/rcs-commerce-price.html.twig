@@ -1,0 +1,13 @@
+<div class="price" data-decimal-points="{{ decimal_points }}">
+  {% if currency_code_position == 'before' %}
+    <span class="price-currency suffix">{{ currency_format }}</span>
+  {% endif %}
+  <span class="price-amount"><div class="replacement"></div></span>
+  {% if currency_code_position != 'before' %}
+    <span class="price-currency suffix">{{ currency_format }}</span>
+  {% endif %}
+  {% if append_each_to_price %}
+    <span class="price-suffix-matchback hidden"> {% trans %}each{% endtrans %}</span>
+  {% endif %}
+</div>
+

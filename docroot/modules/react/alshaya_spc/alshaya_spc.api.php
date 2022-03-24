@@ -67,5 +67,17 @@ function hook_alshaya_spc_checkout_login_build_alter(array &$build) {
 }
 
 /**
+ * Alter the build for the checkout confirmation page.
+ *
+ * @param array $build
+ *   Checkout confirmation page build data.
+ * @param array $order
+ *   Order data.
+ */
+function hook_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
+  $build['#attached']['drupalSettings']['item_code_label'] = 'Item Code';
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

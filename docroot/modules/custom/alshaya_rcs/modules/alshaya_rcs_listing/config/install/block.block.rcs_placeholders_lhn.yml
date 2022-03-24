@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_rcs_listing
+    - system
+  theme:
+    - alshaya_white_label
+id: rcs_placeholders_lhn
+theme: alshaya_white_label
+region: sidebar_first
+weight: 0
+provider: null
+plugin: rcs_ph_lhn
+settings:
+  id: rcs_ph_lhn
+  label: 'RCS Placeholders LHN'
+  provider: alshaya_rcs_listing
+  label_display: '0'
+visibility:
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      rcs_category: rcs_category
+    negate: false
+    context_mapping:
+      taxonomy_term: '@alshaya_custom.term_route_context:taxonomy_term'

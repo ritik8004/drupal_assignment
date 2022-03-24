@@ -4,6 +4,7 @@ import {
   getCartIdFromStorage,
   isUserAuthenticated,
   removeCartIdFromStorage,
+  isRequestFromSocialAuthPopup,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
 import {
@@ -18,7 +19,7 @@ import {
 import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import isAuraEnabled from '../../../../js/utilities/helper';
-import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
@@ -275,8 +276,10 @@ const staticProductStatus = [];
  *
  * @param {Promise<string|null>} sku
  *  The sku for which the status is required.
+ * @param {string} parentSKU
+ *  The parent sku value.
  */
-const getProductStatus = async (sku) => {
+const getProductStatus = async (sku, parentSKU) => {
   if (typeof sku === 'undefined' || !sku) {
     return null;
   }
@@ -286,16 +289,7 @@ const getProductStatus = async (sku) => {
     return staticProductStatus[sku];
   }
 
-  // Bypass CloudFlare to get fresh stock data.
-  // Rules are added in CF to disable caching for urls having the following
-  // query string.
-  // The query string is added since same APIs are used by MAPP also.
-  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', { _cf_cache_bypass: '1' });
-  if (!hasValue(response) || !hasValue(response.data) || hasValue(response.data.error)) {
-    staticProductStatus[sku] = null;
-  } else {
-    staticProductStatus[sku] = response.data;
-  }
+  staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku, parentSKU);
 
   return staticProductStatus[sku];
 };
@@ -426,6 +420,11 @@ const getProcessedCartData = async (cartData) => {
     data.items = {};
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
+      const hasParentSku = hasValue(item.extension_attributes)
+        && hasValue(item.extension_attributes.parent_product_sku);
+      const parentSKU = (item.product_type === 'configurable' && hasParentSku)
+        ? item.extension_attributes.parent_product_sku
+        : null;
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
@@ -446,6 +445,7 @@ const getProcessedCartData = async (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
+        parentSKU,
         isEgiftCard,
       };
 
@@ -455,7 +455,7 @@ const getProcessedCartData = async (cartData) => {
       if ((spcPageType === 'cart' || spcPageType === 'checkout') && !isEgiftCard) {
         // Suppressing the lint error for now.
         // eslint-disable-next-line no-await-in-loop
-        const stockInfo = await getProductStatus(item.sku);
+        const stockInfo = await getProductStatus(item.sku, parentSKU);
 
         // Do not show the products which are not available in
         // system but only available in cart.
@@ -575,6 +575,13 @@ const clearInvalidCart = () => {
  *   A promise object containing the cart or null.
  */
 const getCart = async (force = false) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return null;
+  }
+
   if (!force && window.commerceBackend.getRawCartDataFromStorage() !== null) {
     return { data: window.commerceBackend.getRawCartDataFromStorage() };
   }
@@ -827,6 +834,13 @@ const preUpdateValidation = async (request) => {
  *   A promise object with cart data.
  */
 const updateCart = async (postData) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return false;
+  }
+
   const data = { ...postData };
   const cartId = window.commerceBackend.getCartId();
 
@@ -976,7 +990,7 @@ const getFormattedError = (code, message) => ({
 });
 
 /**
- * Helper function to prepare filter url query string.
+ * Helper function to prepare the data.
  *
  * @param array $filters
  *   Array containing all filters, must contain field and value, can contain
@@ -986,23 +1000,22 @@ const getFormattedError = (code, message) => ({
  * @param int $group_id
  *   Filter group id, mostly 0.
  *
- * @return string
- *   Prepared URL query string.
+ * @return object
+ *   Prepared data.
  */
-const prepareFilterUrl = (filters, base = 'searchCriteria', groupId = 0) => {
-  let url = '';
+const prepareFilterData = (filters, base = 'searchCriteria', groupId = 0) => {
+  const data = {};
 
   filters.forEach((filter, index) => {
     Object.keys(filter).forEach((key) => {
       // Prepared string like below.
       // searchCriteria[filter_groups][0][filters][0][field]=field
       // This is how Magento search criteria in APIs work.
-      url = url.concat(`${base}[filter_groups][${groupId}][filters][${index}][${key}]=${filter[key]}`);
-      url = url.concat('&');
+      data[`${base}[filter_groups][${groupId}][filters][${index}][${key}]`] = filter[key];
     });
   });
 
-  return url;
+  return data;
 };
 
 /**
@@ -1041,39 +1054,61 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
     value: drupalSettings.country_code,
     condition_type: 'eq',
   };
-
   filters.push(countryFilters);
-  // @todo pending cofirmation from MDC on using api call for each click.
-  let url = '/V1/deliverymatrix/address-locations/search?';
-  const params = prepareFilterUrl(filters);
-  url = url.concat(params);
-  try {
-    // Associate cart to customer.
-    const response = await callMagentoApi(url, 'GET', {});
 
-    if (hasValue(response.data.error) && response.data.error) {
-      logger.error('Error in getting shipping methods for cart. Error: @message', {
-        '@message': response.data.error_message,
+  const pageSize = 1000;
+  let currentPage = 1;
+  let responseData = [];
+  let noOfPages = '';
+  const preparedFilterData = prepareFilterData(filters);
+
+  // Filter page size.
+  preparedFilterData['searchCriteria[page_size]'] = pageSize;
+
+  const url = '/V1/deliverymatrix/address-locations/search';
+
+  do {
+    // Filter current page.
+    preparedFilterData['searchCriteria[current_page]'] = currentPage;
+
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const response = await callMagentoApi(url, 'GET', preparedFilterData);
+
+      if (hasValue(response.data.error) && response.data.error) {
+        logger.error('Error in getting locations for delivery matrix. Error: @message', {
+          '@message': response.data.error_message,
+        });
+
+        return getFormattedError(response.data.error_code, response.data.error_message);
+      }
+
+      if (!hasValue(response.data)) {
+        const message = 'Got empty response while getting locations for delivery matrix.';
+        logger.notice(message);
+
+        return getFormattedError(600, message);
+      }
+
+      if (!hasValue(responseData)) {
+        responseData = response.data;
+      } else {
+        // Merging response items from all the pages of the API call.
+        responseData.items = [...responseData.items, ...response.data.items];
+      }
+
+      noOfPages = hasValue(noOfPages)
+        ? noOfPages
+        : Math.ceil(response.data.total_count / pageSize);
+      currentPage += 1;
+    } catch (error) {
+      logger.error('Error occurred while fetching governates data. Message: @message.', {
+        '@message': error.message,
       });
-
-      return getFormattedError(response.data.error_code, response.data.error_message);
     }
+  } while (currentPage <= noOfPages);
 
-    if (!hasValue(response.data)) {
-      const message = 'Got empty response while getting shipping methods.';
-      logger.notice(message);
-
-      return getFormattedError(600, message);
-    }
-
-    return response.data;
-  } catch (error) {
-    logger.error('Error occurred while fetching governates data. Message: @message.', {
-      '@message': error.message,
-    });
-  }
-
-  return null;
+  return responseData;
 };
 
 /**
@@ -1230,6 +1265,5 @@ export {
   isCartHasOosItem,
   getProductStatus,
   getLocations,
-  prepareFilterUrl,
   getProductShippingMethods,
 };

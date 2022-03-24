@@ -18,6 +18,11 @@
         }
       }
     }
+
+    .back-button,
+    .cart-link {
+      border: 1px solid $magv2-icon-bg-border;
+    }
   }
 }
 
@@ -39,6 +44,12 @@
         width: auto;
         height: auto;
       }
+    }
+  }
+
+  body.magazine-layout-v2 {
+    &.nodetype--acq_product {
+      margin-top: 2rem;
     }
   }
 }

@@ -1,0 +1,79 @@
+{{'Handlebars template for product teaser, see docroot/themes/custom/transac/alshaya_hnm/templates/node/node--acq-product--teaser.html.twig'}}
+<div class="field__items">
+  {{#each data as | item |}}
+  <div class="field__item">
+    <article data-sku="{{ sku }}" role="article" about="{{ url }}" data-vmode="teaser">
+      <a class="above-mobile-block product-link" href="{{ url }}">
+        <div class="image-label-wrapper">
+          {{#if image }}
+            <img src="{{ image }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+          {{/if}}
+          <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
+          </div>
+        </div>
+
+        <h2 class="c-products__item__label">
+          <span>{{ name }}</span>
+        </h2>
+
+        <div class="price-block price-block-{{ sku }}">
+          {{{render 'product.block.price' price_details }}}
+        </div>
+      </a>
+
+      {{#if promotions }}
+      <div class="promotions above-mobile-block">
+        {{#each promotions as | promotion |}}
+          <a href="/{{ ../lang_code }}/{{ url }}" hreflang="{{ ../lang_code }}">{{ label }}</a><br>
+        {{/each}}
+      </div>
+      {{/if}}
+
+      <table class="mobile--only--sell {{ show_cart_form }}">
+        <tbody>
+        <tr>
+          <td class="sell--image">
+            {{#if image }}
+              <a href="{{ url }}" rel="bookmark">
+                <img src="{{ image }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+              </a>
+            {{/if}}
+            <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="sell--description">
+            <h2 class="c-products__item__label">
+              <a href="{{ url }}" rel="bookmark"><span>{{ name }}</span></a>
+            </h2>
+            <div class="price-block price-block-{{ sku }}">
+              {{{render 'product.block.price' price_details }}}
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="sell-sku">
+            <div class="field--name-field-skus">
+              <article data-skuid=""></article>
+            </div>
+          </td>
+        </tr>
+
+        {{#if promotions }}
+        <tr>
+          <td colspan="2" class="sell-promotions promotions">
+            {{#each promotions as | promotion |}}
+            <a href="/{{ ../lang_code }}/{{ url }}" hreflang="{{ ../lang_code }}">{{ label }}</a><br>
+            {{/each}}
+          </td>
+        </tr>
+        {{/if}}
+        </tbody>
+      </table>
+    </article>
+  </div>
+  {{/each}}
+</div>

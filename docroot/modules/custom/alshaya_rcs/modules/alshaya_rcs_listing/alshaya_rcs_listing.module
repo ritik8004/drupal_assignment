@@ -1,0 +1,143 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_listing_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_rcs_lhn_tree' => [
+      'template' => 'alshaya-rcs-lhn',
+      'variables' => [
+        'lhn_cat_tree' => NULL,
+      ],
+    ],
+    'alshaya_rcs_promotional_banner' => [
+      'template' => 'alshaya-rcs-promotional-banner',
+      'variables' => [
+        'fields' => NULL,
+      ],
+    ],
+    'alshaya_rcs_plp_mobile_menu' => [
+      'template' => 'alshaya-rcs-plp-mobile-menu',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_rcs_listing_preprocess_page(&$variables) {
+  // Initialising the variable to check the sidebar visibilty.
+  // This will be disable by default.
+  $variables['enable_lhn_tree'] = 0;
+
+  $routematch = \Drupal::routeMatch();
+  if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $routematch->getParameter('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      // Add description placeholder for mobile view.
+      $variables['category_term_name'] = $term->getName();
+      $variables['category_term_description'] = '#rcs.category.description#';
+      $variables['#attached']['library'][] = 'alshaya_white_label/rcs-ph-term-description';
+
+      // Taking the sidebar visibility check from config for PLP.
+      $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function alshaya_rcs_listing_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $suggestions[] = 'page__plp';
+    }
+  }
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query().
+ */
+function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
+  $query_fields = [];
+
+  /** @var \Drupal\alshaya_rcs_listing\Services\AlshayaRcsListingHelper $rcs_listing_helper */
+  $rcs_listing_helper = \Drupal::service('alshaya_rcs_listing.helper');
+  $url_key = $rcs_listing_helper->getListingUrlKey();
+
+  $query_fields['categories'] = [
+    'query' => [
+      'query($urlKey: String)' => [
+        'categories(filters: { url_path: { eq: $urlKey }})' => [
+          'total_count',
+          'items' => [
+            'id',
+            'name',
+            'level',
+            'url_path',
+            'description',
+            'meta_title',
+            'meta_keyword',
+            'meta_description',
+            'image',
+            'promo_banner_for_mobile',
+            'promotion_banner_mobile',
+            'promotion_banner',
+            'children' => [
+              'id',
+              'name',
+              'url_path',
+              'category_quick_link_plp_mob',
+            ],
+            'breadcrumbs' => [
+              'category_id',
+              'category_name',
+              'category_level',
+              'category_url_key',
+              'category_url_path',
+            ],
+          ],
+        ],
+      ],
+    ],
+    'variables' => [
+      'urlKey' => $url_key,
+    ],
+  ];
+
+  return $query_fields;
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function alshaya_rcs_listing_field_widget_entity_reference_paragraphs_form_alter(&$element, &$form_state, $context) {
+  if ($element['#paragraph_type'] == 'product_carousel_category'
+    && isset($element['subform']['field_category_carousel'])
+    && isset($element['subform']['field_category_carousel_slug'])) {
+    // Hide the entity reference field when the text field is present on the
+    // form.
+    $element['subform']['field_category_carousel']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_rcs_placeholders_processor_path_alter().
+ */
+function alshaya_rcs_listing_rcs_placeholders_processor_path_alter(string &$path) {
+  // Remove the facets params based of the /-- prefix.
+  if (stripos($path, '/--', 0) !== FALSE) {
+    $path = substr($path, 0, stripos($path, '/--'));
+  }
+}

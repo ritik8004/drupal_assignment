@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_category_slug
+    - taxonomy.vocabulary.rcs_category
+id: taxonomy_term.rcs_category.field_category_slug
+field_name: field_category_slug
+entity_type: taxonomy_term
+bundle: rcs_category
+label: Slug
+description: 'Every slug must be unique across a project, but a product can have the same slug for different languages. Allowed are alphabetic, numeric, underscore (_) and hyphen (-) characters. Maximum size is 256.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

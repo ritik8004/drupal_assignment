@@ -50,7 +50,8 @@ const ReviewDescription = ({
           { reviewDescriptionData.ReviewText && (
             <ConditionalView
               condition={enableTranslation
-              && reviewDescriptionData.ReviewText.length < charsLimit}
+              && reviewDescriptionData.ReviewText.length < charsLimit
+              && contentLocale !== getLanguageCode()}
             >
               <TranslateByGoogle id={reviewId} contentLocale={contentLocale} contentType="review" />
             </ConditionalView>

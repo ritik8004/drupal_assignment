@@ -1,0 +1,134 @@
+main:
+  js:
+    dist/alshaya_rcs_product.bundle.js: {}
+  dependencies:
+    - rcs_magento_placeholders/rcs_magento_placeholders
+    - alshaya_rcs_magento_placeholders/main
+
+rcs_product_info:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product.pdp.v2.js: {}
+  dependencies:
+    - core/jquery
+    - rcs_handlebars/main
+    - rcs_placeholders/helpers
+    - alshaya_rcs_product/main
+    # This library's JS is dynamically replaced with V3 JS.
+    - alshaya_acm_product/product_utility
+
+schema_org:
+  js:
+    js/alshaya_rcs_product.schema_org.js: {}
+  dependencies:
+    - rcs_placeholders/helpers
+
+product.block.description:
+  version: 1.x
+  js:
+    templates/rcs-product-description-block.handlebars: {}
+
+product.block.short_description.pdp:
+  version: 1.x
+  js:
+    templates/rcs-product-short-description-block.handlebars: {}
+
+product.block.short_description.pdp-magazine:
+  version: 1.x
+  js:
+    templates/rcs-product-short-description-full-magazine-block.handlebars: {}
+
+product.order_quantity_limit:
+  version: 1.x
+  js:
+    templates/rcs-product-order-quantity-limit.handlebars: {}
+
+product.promotions:
+  version: 1.x
+  js:
+    templates/rcs-product-promotions.handlebars: {}
+
+product.delivery_info:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-info-block.handlebars: {}
+
+product.delivery_options:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-options.handlebars: {}
+
+product.delivery_option_cnc:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-option-click-and-collect.handlebars: {}
+
+product.delivery_option_hd:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-option-home-delivery.handlebars: {}
+
+product.delivery_option_ed:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-option-express-delivery.handlebars: {}
+
+product.block.price:
+  version: 1.x
+  js:
+    templates/rcs-product-price-block.handlebars: {}
+
+product.teaser:
+  version: 1.x
+  js:
+    templates/rcs-product-teaser.handlebars: {}
+
+product.block.price.item:
+  version: 1.x
+  js:
+    templates/rcs-product-price-item-block.handlebars: {}
+
+gallery.product.product_zoom:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom.handlebars: {}
+
+gallery.product.product_labels:
+  version: 1.x
+  js:
+    templates/rcs-product-labels.handlebars: {}
+
+gallery.product.block.product_zoom_default_gallery:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom-default-gallery-block.handlebars: {}
+
+gallery.product.block.product_zoom_mobile_gallery:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom-mobile-gallery-block.handlebars: {}
+
+gallery.product.block.product_zoom_modal_gallery:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom-modal-gallery-block.handlebars: {}
+
+gallery.product.block.product_zoom_magazine_gallery:
+  version: 1.x
+  js:
+    templates/rcs-product-zoom-magazine-gallery-block.handlebars: {}
+
+product.order:
+  version: 1.x
+  js:
+    js/alshaya_rcs_order.js: {}
+  dependencies:
+    - rcs_magento_placeholders/rcs_magento_placeholders
+
+rcs_product_modal:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product.modal.js: {}
+  dependencies:
+    - alshaya_spc/add_to_cart
+    - alshaya_acm_cart_notification/cart_notification_js
