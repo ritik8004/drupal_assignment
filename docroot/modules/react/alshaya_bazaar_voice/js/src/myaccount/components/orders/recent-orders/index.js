@@ -42,7 +42,7 @@ export default class RecentOrders extends React.Component {
 
     return (
       <>
-        <ConditionalView condition={reviewData === ''}>
+        <ConditionalView condition={reviewData === '' && productId !== ''}>
           <WriteReviewButton
             reviewedByCurrentUser={false}
             productId={productId}
