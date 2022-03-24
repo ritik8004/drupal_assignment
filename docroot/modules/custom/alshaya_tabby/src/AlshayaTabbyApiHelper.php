@@ -83,10 +83,15 @@ class AlshayaTabbyApiHelper {
       $configs = $cache->data;
     }
     else {
+      $request_options = [
+        'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('tabby_config'),
+      ];
       $response = $this->apiWrapper->invokeApi(
         'tabby/config',
         [],
-        'GET'
+        'GET',
+        FALSE,
+        $request_options
       );
 
       $configs = Json::decode($response);
