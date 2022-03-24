@@ -139,6 +139,7 @@ class ReturnItemDetails extends React.Component {
         </div>
         <ConditionalView condition={isChecked}>
           <div className="return-reasons-row">
+            <div className="return-reason-label">{ Drupal.t('Reason for Return') }</div>
             <Select
               classNamePrefix="reasonsSelect"
               className="return-reasons-select"
@@ -149,6 +150,7 @@ class ReturnItemDetails extends React.Component {
             />
           </div>
           <div className="return-qty-row">
+            <div className="return-reason-label">{ Drupal.t('Select quantity') }</div>
             <Select
               classNamePrefix="qtySelect"
               className="return-qty-select"
