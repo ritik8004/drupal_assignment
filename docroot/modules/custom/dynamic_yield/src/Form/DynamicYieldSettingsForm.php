@@ -44,6 +44,17 @@ class DynamicYieldSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('section_id'),
     ];
 
+    $form['basic_settings']['dy_injection'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Dynamic yield script injection type'),
+      '#options' => [
+        'backend' => $this->t('Backend'),
+        'frontend' => $this->t('Frontend'),
+      ],
+      '#required' => TRUE,
+      '#default_value' => $config->get('dy_injection') ?? 'backend',
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -55,6 +66,7 @@ class DynamicYieldSettingsForm extends ConfigFormBase {
 
     $this->config('dynamic_yield.settings')
       ->set('section_id', $values['section_id'])
+      ->set('dy_injection', $values['dy_injection'])
       ->save();
 
     parent::submitForm($form, $form_state);

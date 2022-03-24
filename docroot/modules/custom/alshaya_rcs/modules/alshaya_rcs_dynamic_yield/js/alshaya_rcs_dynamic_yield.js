@@ -3,8 +3,7 @@
  * Push initial data to dynamic yield.
  */
 
-(function ($, Drupal, drupalSettings) {
-  'use strict';
+(function ($, Drupal) {
 
   window.DY = window.DY || [];
   var initialDyData = window.DY;
@@ -28,25 +27,12 @@
     });
   }
 
-  Drupal.behaviors.alshayaRcsDynamicYield = {
-    attach: function () {
-      if ($('body').hasClass('rcs-loaded')
-        && $('body').data('dyloaded') === undefined
-        && drupalSettings.dynamicYield.sourceId) {
-        // Add DY dynamic and static script in header.
-        var script = document.createElement('script');
-        script.src = '//cdn-eu.dynamicyield.com/api/' + drupalSettings.dynamicYield.sourceId + '/api_dynamic.js';
-        document.head.appendChild(script);
-        // DY script for static script.
-        script = document.createElement('script');
-        script.src = '//cdn-eu.dynamicyield.com/api/' + drupalSettings.dynamicYield.sourceId + '/api_static.js';
-        document.head.appendChild(script);
-
-        // Add the dyloaded data to make sure that scripts are not getting
-        // added multiple times.
-        $('body').data('dyloaded', true);
-      }
+  // Override the dynamic yield script injection.
+  $.fn.DYscriptInjection = function () {
+    if ($('body').hasClass('rcs-loaded')
+      && $('body').data('dyloaded') === undefined) {
+      $.fn.DYscript();
     }
-  };
+  }
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal);

@@ -27,3 +27,6 @@ dynamic_yield.settings:
           api_key:
             type: string
             label: 'API Key'
+    dy_injection:
+      type: string
+      label: 'DY Script injection type'
