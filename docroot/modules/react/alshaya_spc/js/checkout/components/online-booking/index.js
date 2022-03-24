@@ -37,7 +37,6 @@ export default class OnlineBooking extends React.Component {
     // is selected and shipping methods are available in cart.
     if (this.checkHomeDelivery(cart) && hasValue(cart.cart.shipping.methods)) {
       // Check if the cart is having confirmation number.
-      cart.confirmation_number = 'G2Z7Y67B'
       if (hasValue(cart.confirmation_number)) {
         result = await getBookingDetailByConfirmationNumber(cart.confirmation_number);
       } else {
@@ -188,7 +187,7 @@ export default class OnlineBooking extends React.Component {
 
     return (
       <>
-        <div id="online-booking">
+        <div id="online-booking" className="online-booking">
           <label className="radio-sim radio-label">
             <span className="carrier-title">{Drupal.t('Delivery Schedule', {}, { context: 'online_booking' })}</span>
             {/**
@@ -196,7 +195,7 @@ export default class OnlineBooking extends React.Component {
              */}
             { hasValue(bookingDetails.appointment_details) && (
               <>
-                <div className="online-booking-title">
+                <div className="online-booking__title">
                   {
                     Drupal.t(
                       'All items in cart are delivered on your preferred date',
@@ -204,25 +203,25 @@ export default class OnlineBooking extends React.Component {
                     )
                   }
                 </div>
-                <div>
-                <div className="available-delivery">
-                  {
-                    parse(
-                      Drupal.t(
-                        'Earliest available delivery on @appointment_date between !time_slot',
-                        {
-                          '@appointment_date': bookingDetails.appointment_details.appointment_date,
-                          '!time_slot': `<b>${bookingDetails.appointment_details.start_time} - ${bookingDetails.appointment_details.end_time}</b>`,
-                        }, { context: 'online_booking' },
-                      ),
-                    )
-                  }
-                </div>
-                <div className="change-delivery-schedule">
-                  <a href="#" onClick={() => this.openScheduleDeliveryModal()}>
-                    {Drupal.t('Change Delivery Schedule', {}, { context: 'online_booking' })}
-                  </a>
-                </div>
+                <div className="online-booking__delivery">
+                  <div className="online-booking__available-delivery">
+                    {
+                      parse(
+                        Drupal.t(
+                          'Earliest available delivery on <div class="online-booking__available-delivery-block">!appointment_date between !time_slot</div>',
+                          {
+                            '!appointment_date': `<div class="online-booking__available-delivery-date">${bookingDetails.appointment_details.appointment_date}</div>`,
+                            '!time_slot': `<div class="online-booking__available-delivery-time">${bookingDetails.appointment_details.start_time} - ${bookingDetails.appointment_details.end_time}</div>`,
+                          }, { context: 'online_booking' },
+                        ),
+                      )
+                    }
+                  </div>
+                  <div className="online-booking__change-delivery-schedule">
+                    <a href="#" onClick={() => this.openScheduleDeliveryModal()}>
+                      {Drupal.t('Change Delivery Schedule', {}, { context: 'online_booking' })}
+                    </a>
+                  </div>
                 </div>
                 <Popup
                   className="schedule-delivery-calendar-popup"
@@ -240,11 +239,10 @@ export default class OnlineBooking extends React.Component {
                       closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
                       callback={this.handleScheduleDeliveryChangeInModal}
                     />
-      
                   </>
                 </Popup>
                 <ConditionalView condition={bookingDetails.success}>
-                  <div className="hold-delivery">
+                  <div className="online-booking__hold-delivery">
                     {
                       parse(
                         Drupal.t(
@@ -259,13 +257,13 @@ export default class OnlineBooking extends React.Component {
                  * Placeholder to display the error message when api return success false.
                  */}
                 <ConditionalView condition={!bookingDetails.success}>
-                  <div className="booking-error-message">{bookingDetails.error_message}</div>
+                  <div className="online-booking__error-message">{bookingDetails.error_message}</div>
                 </ConditionalView>
-                <div className="hold-notification">
+                <div className="online-booking__hold-notification">
                   {
                     parse(
                       Drupal.t(
-                        'Once the order is placed, changes are not allowed <b>three days</b> before the selected schedule.',
+                        '<button type="button" class="online-booking__hold-notification-icon"></button>Once the order is placed, changes are not allowed <b>three days</b> before the selected schedule.',
                         {}, { context: 'online_booking' },
                       ),
                     )
@@ -277,7 +275,7 @@ export default class OnlineBooking extends React.Component {
              * Placeholder to display the default internal error message.
              */}
             <ConditionalView condition={!hasValue(bookingDetails.success)}>
-              <div className="booking-error-message">
+              <div className="online-booking__error-message">
                 {
                   Drupal.t(
                     'Online booking: Sorry, something went wrong. Please try again later.',

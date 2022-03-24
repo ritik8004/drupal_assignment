@@ -7,10 +7,11 @@
       width: 100% !important;
       max-width: 100%;
       height: 100%;
-      overflow: hidden;
       border: none !important;
       padding: 0 !important;
       background: $modal_bg;
+      max-height: 100%;
+      overflow: auto;
 
       .fadeInUp {
         animation: none !important;
@@ -51,6 +52,7 @@
         #{$right}: 0.188rem;
         color: transparent;
         top: 0.25rem;
+        height: 3.125rem;
 
         @include icon("close") {
           font-size: 2.875rem;
@@ -193,6 +195,15 @@
           }
         }
 
+        .disabled {
+          span {
+            @include icon(chevron#{$left}, after) {
+              color: $returned_btn_bg;
+              cursor: default;
+            }
+          }
+        }
+
         .datepicker-month-right {
           display: flex;
           align-self: center;
@@ -294,11 +305,13 @@
           font-size: 1rem;
           font-weight: bold;
 
-          :hover {
+          &:hover {
             border-radius: 0;
+            background-color: $primary_input_focus_border;
+            color: $primary_bg;
           }
 
-          :active {
+          &:active {
             border-radius: 0;
           }
         }
@@ -306,6 +319,13 @@
         .react-datepicker__day--selected {
           background-color: $primary_input_focus_border;
           border-radius: 0;
+        }
+
+        .react-datepicker__day--disabled {
+          &:hover {
+            background: none;
+            color: $checkout_tab_disabled_text;
+          }
         }
       }
     }
