@@ -1,10 +1,11 @@
 import React from 'react';
 import ReturnOrderSummary from '../return-order-summary';
 import ReturnItemsListing from '../return-items-listing';
+import { getOrderDetailsForReturnRequest } from '../../../utilities/return_request_util';
 
 const ReturnRequest = () => {
-  const { orderDetails } = drupalSettings;
-  if (!orderDetails) {
+  const orderDetails = getOrderDetailsForReturnRequest();
+  if (orderDetails === null) {
     return null;
   }
   return (

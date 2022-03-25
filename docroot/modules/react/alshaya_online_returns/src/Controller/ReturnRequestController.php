@@ -150,12 +150,39 @@ class ReturnRequestController extends ControllerBase {
       }
     }
 
+    // Gets return configuration api response.
+    // @todo api code to be written to fetch return config.
+    $returnConfig = [
+      'return_period' => 14,
+      'pickup_charges' => 5,
+      'return_reasons' => [
+        [
+          'id' => 10,
+          'label' => 'Item is Damaged',
+        ],
+        [
+          'id' => 11,
+          'label' => 'Wrong color',
+        ],
+      ],
+      'resolutions' => [
+        [
+          'id' => 10,
+          'label' => 'refund',
+        ],
+        [
+          'id' => 11,
+          'label' => 'exchange',
+        ],
+      ],
+    ];
+
     // Attach library for return page react component.
     $build['#markup'] = '<div id="return-request"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
-    $build['#attached']['drupalSettings'] = [
-      'onlineReturns' => $config,
+    $build['#attached']['drupalSettings']['returnRequest'] = [
       'orderDetails' => $orderDetails,
+      'returnConfig' => $returnConfig,
     ];
     return $build;
   }

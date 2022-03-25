@@ -104,38 +104,6 @@ function getReturnWindowOpenMessage(date) {
   return message;
 }
 
-function getReturnsConfigurationDetails() {
-  // @todo: Call magento api to get returns configuration.
-  const response = {
-    return_period: 14,
-    pickup_charges: 5,
-    return_reasons: [
-      {
-        id: 10,
-        label: 'Item is Damaged',
-      },
-      {
-        id: 11,
-        label: 'Wrong color',
-      },
-    ],
-    resolutions: [
-      {
-        id: 10,
-        label: 'refund',
-      },
-      {
-        id: 11,
-        label: 'exchange',
-      },
-    ],
-  };
-
-  // Return response to perform necessary operation
-  // from where this function called.
-  return response;
-}
-
 export {
   isReturnEligible,
   getReturnExipiration,
@@ -145,5 +113,4 @@ export {
   getReturnRequest,
   getReturnWindowClosedMessage,
   getReturnWindowOpenMessage,
-  getReturnsConfigurationDetails,
 };

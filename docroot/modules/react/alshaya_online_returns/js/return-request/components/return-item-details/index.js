@@ -1,8 +1,13 @@
 import React from 'react';
-import parse from 'html-react-parser';
 import Select from 'react-select';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
-import { getReturnsConfigurationDetails } from '../../../utilities/online_returns_util';
+import {
+  getDefaultValueForReturnReasons,
+  getReturnConfigurationDetails,
+  getDefaultValueForQtyDropdown,
+  populateQtyDropDownList,
+} from '../../../utilities/return_request_util';
+import ReturnIndividualItem from '../return-individual-item';
 
 class ReturnItemDetails extends React.Component {
   constructor(props) {
@@ -10,34 +15,11 @@ class ReturnItemDetails extends React.Component {
     super(props);
     this.state = {
       isChecked: false,
-      returnReasons: null,
-      reasonsDefault: [{
-        value: 0,
-        label: Drupal.t('Choose a reason'),
-      }],
-      defaultQtyOptions: [{
-        value: 1,
-        label: 1,
-      }],
+      returnReasons: getReturnConfigurationDetails(),
+      reasonsDefault: getDefaultValueForReturnReasons(),
+      defaultQtyOptions: getDefaultValueForQtyDropdown(),
+      qtyOptions: populateQtyDropDownList(props.item.qty_ordered),
     };
-  }
-
-  componentDidMount() {
-    // Get returns configurations to fetch return reasons.
-    const options = [];
-    const response = getReturnsConfigurationDetails();
-    if (response !== null && response.return_reasons) {
-      // Populate options list for return reasons.
-      response.return_reasons.forEach((reason) => {
-        options.push({
-          value: reason.id,
-          label: reason.label,
-        });
-      });
-      this.setState({
-        returnReasons: options,
-      });
-    }
   }
 
   /**
@@ -53,10 +35,10 @@ class ReturnItemDetails extends React.Component {
    * To handle on change activity for reasons select list.
    */
   handleReasonsSelect = (selectedOption) => {
-    if (selectedOption.value) {
+    if (selectedOption.id && selectedOption.label) {
       this.setState({
         reasonsDefault: [{
-          value: selectedOption.value,
+          value: selectedOption.id,
           label: selectedOption.label,
         }],
       });
@@ -67,7 +49,7 @@ class ReturnItemDetails extends React.Component {
    * To handle on change activity for quantity select list.
    */
   handleQtySelect = (selectedOption) => {
-    if (selectedOption.value) {
+    if (selectedOption.value && selectedOption.label) {
       this.setState({
         defaultQtyOptions: [{
           value: selectedOption.value,
@@ -79,18 +61,9 @@ class ReturnItemDetails extends React.Component {
 
   render() {
     const {
-      isChecked, returnReasons, reasonsDefault, defaultQtyOptions,
+      isChecked, returnReasons, reasonsDefault, defaultQtyOptions, qtyOptions,
     } = this.state;
     const { item } = this.props;
-    const qtyOptions = [];
-    // Populate quanntity options for item quantities.
-    for (let index = 1; index <= item.qty_ordered; index++) {
-      qtyOptions.push({
-        value: index,
-        label: index,
-      });
-    }
-
     return (
       <div className="items-tabel">
         <div className="order-item-row">
@@ -104,38 +77,9 @@ class ReturnItemDetails extends React.Component {
               />
             </div>
           </ConditionalView>
-          {item.image_data
-              && (
-              <div className="order-item-image">
-                <div className="image-data-wrapper">
-                  <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
-                </div>
-              </div>
-              )}
-          <div className="order__details--summary order__details--description">
-            <div className="item-name">{ item.name }</div>
-            {item.attributes && Object.keys(item.attributes).map((attribute) => (
-              <div key={item.attributes[attribute].label} className="attribute-detail">
-                { item.attributes[attribute].label }
-                :
-                { item.attributes[attribute].value }
-              </div>
-            ))}
-            <div className="item-code">
-              {Drupal.t('Item code')}
-              :
-              { item.sku }
-            </div>
-            <div className="item-quantity">
-              {Drupal.t('Quantity')}
-              :
-              { item.ordered }
-            </div>
-          </div>
-          <div className="item-price">
-            <div className="light">{Drupal.t('Unit Price')}</div>
-            <span className="currency-code dark prefix">{ parse(item.price) }</span>
-          </div>
+          <ReturnIndividualItem
+            item={item}
+          />
         </div>
         <ConditionalView condition={isChecked}>
           <div className="return-reasons-row">
