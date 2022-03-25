@@ -50,6 +50,24 @@
   body.magazine-layout-v2 {
     &.nodetype--acq_product {
       margin-top: 2rem;
+
+      &.super-category-enabled {
+        .block-alshaya-super-category-menu {
+          display: none;
+        }
+
+        .menu--mobile-navigation {
+          display: none;
+        }
+      }
+
+      &.super-category-enabled:not(.frontpage) {
+        .page-standard {
+          &.l-container {
+            margin-top: 0;
+          }
+        }
+      }
     }
   }
 }
