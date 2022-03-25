@@ -177,6 +177,15 @@ export default class EgiftCardPurchase extends React.Component {
       document.getElementById('email-error').classList.remove('error');
     }
 
+    // If user is loggedin and  has selected freinds and family,
+    // senderName and senderEmail should be of loggedin users.
+    let senderName = name;
+    let senderEmail = email;
+    if (drupalSettings.userDetails.customerId > 0 && data.get('egift-for') === 'friends') {
+      senderName = drupalSettings.userDetails.userName;
+      senderEmail = drupalSettings.userDetails.userEmailID;
+    }
+
     // Get egift card amount.
     const amount = data.get('egift-amount');
     // Validate amount selected.
@@ -222,9 +231,9 @@ export default class EgiftCardPurchase extends React.Component {
         extension_attributes: {
           hps_giftcard_item_option: {
             hps_giftcard_amount: 'custom',
-            hps_giftcard_sender_name: name,
+            hps_giftcard_sender_name: senderName,
             hps_giftcard_recipient_name: name,
-            hps_giftcard_sender_email: email,
+            hps_giftcard_sender_email: senderEmail,
             hps_giftcard_recipient_email: email,
             hps_custom_giftcard_amount: amount,
             hps_giftcard_message: typeof data.get('egift-message') !== 'undefined' ? data.get('egift-message') : '',
