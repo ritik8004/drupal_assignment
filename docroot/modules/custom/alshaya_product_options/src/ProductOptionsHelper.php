@@ -226,7 +226,7 @@ class ProductOptionsHelper {
 
     // Allow other modules to alter options.
     if ($attribute) {
-      $this->moduleHandler->alter('attribute_options', $attribute);
+      $this->moduleHandler->alter('product_attribute_options', $attribute);
     }
 
     if (empty($attribute) || empty($attribute['options'])) {

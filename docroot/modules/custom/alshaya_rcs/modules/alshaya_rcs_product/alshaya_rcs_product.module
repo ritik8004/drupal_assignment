@@ -966,57 +966,60 @@ function _alshaya_rcs_product_get_cnc_config(array &$build) {
 }
 
 /**
- * Implements hook_attribute_options_alter().
+ * Implements hook_product_attribute_options_alter().
  */
-function alshaya_rcs_product_attribute_options_alter(array &$attribute) {
-  // Alter the options only if field type is textarea or text.
-  if ($attribute && in_array($attribute['frontend_input'], ['text', 'textarea'])) {
-    // Invoke GraphQL API and get the options list.
-    $attribute_code = $attribute['attribute_code'];
-    $settings = Settings::get('alshaya_api.settings');
+function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) {
+  // Return from here if input type is not textarea or text.
+  if ($attribute && !in_array($attribute['frontend_input'], ['text', 'textarea'])) {
+    return;
+  }
+  // Invoke GraphQL API and get the options list.
+  $attribute_code = $attribute['attribute_code'];
+  $settings = Settings::get('alshaya_api.settings');
 
-    $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '",is_array:1){attribute_code store_id attribute_values{key,value}}}';
-    // Magento URL to get the product option attributes.
-    $request_url = $settings['magento_host'] . '/graphql&query=' . $query;
+  $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '",is_array:1){attribute_code store_id attribute_values{key,value}}}';
+  // Magento URL to get the product option attributes.
+  $request_url = $settings['magento_host'] . '/graphql&query=' . $query;
 
-    // List of environments to use proxy in from Settings.
-    $environments_to_use_proxy = Settings::get('environments_to_use_proxy', [
-      'local',
-      'dev',
-      'dev2',
-      'dev3',
-      'qa2',
+  // List of environments to use proxy in from Settings.
+  $environments_to_use_proxy = Settings::get('environments_to_use_proxy', [
+    'local',
+    'dev',
+    'dev2',
+    'dev3',
+    'qa2',
+  ]);
+  // Use proxy on only specific environments.
+  if (in_array(Settings::get('env_name'), $environments_to_use_proxy)) {
+    $current_language = \Drupal::languageManager()
+      ->getCurrentLanguage()
+      ->getId();
+    $request_url = \Drupal::request()->getSchemeAndHttpHost() . '/proxy/?url=' . $request_url;
+  }
+
+  $response = NULL;
+  try {
+    $response = Json::decode(\Drupal::httpClient()->get($request_url, [
+      'headers' => [
+        'store' => Settings::get('magento_lang_prefix')[$current_language],
+      ],
+    ])->getBody());
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_rcs_product')->notice('Error while processing attributeValueResolver. Error: @message', [
+      '@message' => $e->getMessage(),
     ]);
-    // Use proxy on only specific environments.
-    if (in_array(Settings::get('env_name'), $environments_to_use_proxy)) {
-      $current_language = \Drupal::languageManager()
-        ->getCurrentLanguage()
-        ->getId();
-      $request_url = \Drupal::request()->getSchemeAndHttpHost() . '/proxy/?url=' . $request_url;
-    }
-
-    $response = NULL;
-    try {
-      $response = Json::decode(\Drupal::httpClient()->get($request_url, [
-        'headers' => [
-          'store' => Settings::get('magento_lang_prefix')[$current_language],
-        ],
-      ])->getBody());
-    }
-    catch (\Exception $e) {
-      watchdog_exception('alshaya_rcs_product', $e);
-    }
-    // Extract the product options if available.
-    if ($response
-      && $response['data']['attributeValueResolver']
-      && $response['data']['attributeValueResolver']['attribute_values']) {
-      foreach ($response['data']['attributeValueResolver']['attribute_values'] as $value) {
-        // Map the key and value with the proper option label and value.
-        $attribute['options'][] = [
-          'label' => $value['value'],
-          'value' => $value['key'],
-        ];
-      }
+  }
+  // Extract the product options if available.
+  if ($response
+    && $response['data']['attributeValueResolver']
+    && $response['data']['attributeValueResolver']['attribute_values']) {
+    foreach ($response['data']['attributeValueResolver']['attribute_values'] as $value) {
+      // Map the key and value with the proper option label and value.
+      $attribute['options'][] = [
+        'label' => $value['value'],
+        'value' => $value['key'],
+      ];
     }
   }
 }

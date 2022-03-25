@@ -27,7 +27,7 @@ function hook_alshaya_search_filter_link_alter(string &$link, array &$data) {
  * @param array $attribute
  *   Array of product options attribute.
  */
-function hook_attribute_options_alter(array &$attribute) {
+function hook_product_attribute_options_alter(array &$attribute) {
 }
 
 /**
