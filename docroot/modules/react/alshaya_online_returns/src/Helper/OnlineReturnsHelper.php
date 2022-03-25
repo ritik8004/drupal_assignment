@@ -55,4 +55,31 @@ class OnlineReturnsHelper {
     return ($is_returnable !== '') ? (bool) $is_returnable : TRUE;
   }
 
+  /**
+   * Wrapper function to prepare order data.
+   *
+   * @param array $order
+   *   Order details array.
+   *
+   * @return array
+   *   Processed order data for online returns.
+   */
+  public function prepareOrderData(array $order) {
+    $paymentMethodDetails = array_filter(
+      $order['extension']['payment_additional_info'],
+      function ($method) {
+        return $method['key'] === 'method_title';
+      }
+    );
+    $paymentMethod = reset($paymentMethodDetails);
+
+    return [
+      'orderId' => $order['increment_id'],
+      'orderType' => $order['shipping']['extension_attributes']['click_and_collect_type'] ?? '',
+      'paymentMethod' => $paymentMethod ? $paymentMethod['value'] : '',
+      'isReturnEligible' => $order['extension']['is_return_eligible'] ?? TRUE,
+      'returnExipiration' => $order['extension']['return_exipiration'] ?? '',
+    ];
+  }
+
 }
