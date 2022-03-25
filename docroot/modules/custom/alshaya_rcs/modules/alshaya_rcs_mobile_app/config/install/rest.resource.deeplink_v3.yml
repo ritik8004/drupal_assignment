@@ -3,6 +3,7 @@ status: true
 dependencies:
   module:
     - serialization
+    - alshaya_mobile_app
     - simple_oauth
 id: deeplink_v3
 plugin_id: deeplink_v3
