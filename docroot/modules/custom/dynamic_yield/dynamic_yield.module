@@ -30,7 +30,7 @@ function dynamic_yield_page_attachments(array &$page) {
   if (!(\Drupal::service('router.admin_context')->isAdminRoute()) && $dynamic_yield->getSectionId()) {
     // Add DY script tags to header.
     // Based on the type of dy script injection, add the script.
-    if (\Drupal::config('dynamic_yield.settings')->get('dy_injection') === 'backend') {
+    if (\Drupal::config('dynamic_yield.settings')->get('dy_script_init') === 'automatic') {
       $static_script = [[
         '#tag' => 'script',
         '#attributes' => [
@@ -49,9 +49,6 @@ function dynamic_yield_page_attachments(array &$page) {
         'dpath',
       ];
       array_unshift($page['#attached']['html_head'], $dynamic_script);
-    }
-    else {
-      $page['#attached']['library'][] = 'dynamic_yield/dynamic_yield.script_injection';
     }
 
     // Dispatch the DyPageType event to set the context.

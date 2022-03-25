@@ -3,7 +3,7 @@
  * Push initial data to dynamic yield.
  */
 
-(function ($, Drupal) {
+(function (Drupal) {
 
   window.DY = window.DY || [];
   var initialDyData = window.DY;
@@ -11,6 +11,8 @@
     var alterInitialDYData = new CustomEvent('alterInitialDynamicYield', { detail: { data: initialDyData } });
     document.dispatchEvent(alterInitialDYData);
     window.DY = initialDyData;
+    // Attach the DY script.
+    Drupal.attachDyScriptToHead();
   }
   else {
     // Load initial dynamic yeild data after RCS page entity is loaded.
@@ -24,15 +26,9 @@
       });
       document.dispatchEvent(alterInitialDyData);
       window.DY = initialDyData;
+      // Attach the DY script.
+      Drupal.attachDyScriptToHead();
     });
   }
 
-  // Override the dynamic yield script injection.
-  $.fn.DYscriptInjection = function () {
-    if ($('body').hasClass('rcs-loaded')
-      && $('body').data('dyloaded') === undefined) {
-      $.fn.DYscript();
-    }
-  }
-
-})(jQuery, Drupal);
+})(Drupal);

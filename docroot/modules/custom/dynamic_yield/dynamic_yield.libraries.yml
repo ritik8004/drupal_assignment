@@ -11,3 +11,4 @@ dynamic_yield.script_injection:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - core/jquery.once

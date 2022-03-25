@@ -5,3 +5,4 @@ rcs_dynamic_yield:
     - core/jquery
     - core/drupalSettings
     - rcs_placeholders/helpers
+    - dynamic_yield/dynamic_yield.script_injection
