@@ -1,6 +1,6 @@
 /**
  * @file
- * P  ush initial data to data layer.
+ * Push initial data to data layer.
  */
 
 (function (drupalSettings) {
