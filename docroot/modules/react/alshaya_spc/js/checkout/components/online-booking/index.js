@@ -260,10 +260,11 @@ export default class OnlineBooking extends React.Component {
                   <div className="online-booking__error-message">{bookingDetails.error_message}</div>
                 </ConditionalView>
                 <div className="online-booking__hold-notification">
+                  <button type="button" className="online-booking__hold-notification-icon" />
                   {
                     parse(
                       Drupal.t(
-                        '<button type="button" class="online-booking__hold-notification-icon"></button>Once the order is placed, changes are not allowed <b>three days</b> before the selected schedule.',
+                        'Once the order is placed, changes are not allowed <b>three days</b> before the selected schedule.',
                         {}, { context: 'online_booking' },
                       ),
                     )
