@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - serialization
+    - simple_oauth
+id: deeplink_v3
+plugin_id: deeplink_v3
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie
