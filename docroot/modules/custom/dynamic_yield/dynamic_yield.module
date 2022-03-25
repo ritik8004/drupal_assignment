@@ -30,7 +30,8 @@ function dynamic_yield_page_attachments(array &$page) {
   if (!(\Drupal::service('router.admin_context')->isAdminRoute()) && $dynamic_yield->getSectionId()) {
     // Add DY script tags to header.
     // Based on the type of dy script injection, add the script.
-    if (\Drupal::config('dynamic_yield.settings')->get('dy_script_init') === 'automatic') {
+    $dy_script_init = \Drupal::config('dynamic_yield.settings')->get('dy_script_init');
+    if ($dy_script_init === 'automatic') {
       $static_script = [[
         '#tag' => 'script',
         '#attributes' => [
