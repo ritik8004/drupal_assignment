@@ -12,6 +12,8 @@ use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Return request controller to prepare data for return request page.
@@ -47,6 +49,20 @@ class ReturnRequestController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
+   * Alshaya Online Returns API Helper.
+   *
+   * @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper
+   */
+  protected $onlineReturnsApiHelper;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * ReturnRequestController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -57,15 +73,23 @@ class ReturnRequestController extends ControllerBase {
    *   Alshaya online returns helper.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
+   * @param \Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper $online_returns_api_helper
+   *   Alshaya online returns helper.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleHandlerInterface $module_handler,
                               OnlineReturnsHelper $online_returns_helper,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              OnlineReturnsApiHelper $online_returns_api_helper,
+                              LanguageManagerInterface $language_manager) {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->onlineReturnsHelper = $online_returns_helper;
     $this->entityTypeManager = $entity_type_manager;
+    $this->onlineReturnsApiHelper = $online_returns_api_helper;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -77,6 +101,8 @@ class ReturnRequestController extends ControllerBase {
       $container->get('module_handler'),
       $container->get('alshaya_online_returns.online_returns_helper'),
       $container->get('entity_type.manager'),
+      $container->get('alshaya_online_returns.online_returns_api_helper'),
+      $container->get('language_manager'),
     );
   }
 
@@ -100,7 +126,7 @@ class ReturnRequestController extends ControllerBase {
 
     // Do not proceed if Online returns is not enabled.
     if ($config['enabled'] !== TRUE) {
-      return;
+      throw new \Exception('Online Returns feature not enabled.');
     }
 
     $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
@@ -110,7 +136,7 @@ class ReturnRequestController extends ControllerBase {
     $orders = alshaya_acm_customer_get_user_orders($customer_id);
 
     if (empty($orders)) {
-      return;
+      throw new NotFoundHttpException();
     }
 
     // Get the current order detail to build return page.
@@ -150,32 +176,10 @@ class ReturnRequestController extends ControllerBase {
       }
     }
 
-    // Gets return configuration api response.
-    // @todo api code to be written to fetch return config.
-    $returnConfig = [
-      'return_period' => 14,
-      'pickup_charges' => 5,
-      'return_reasons' => [
-        [
-          'id' => 10,
-          'label' => 'Item is Damaged',
-        ],
-        [
-          'id' => 11,
-          'label' => 'Wrong color',
-        ],
-      ],
-      'resolutions' => [
-        [
-          'id' => 10,
-          'label' => 'refund',
-        ],
-        [
-          'id' => 11,
-          'label' => 'exchange',
-        ],
-      ],
-    ];
+    // Get return configurations.
+    $returnConfig = $this->onlineReturnsApiHelper->getReturnsApiConfig(
+      $this->languageManager->getCurrentLanguage()->getId(),
+    );
 
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-online-return-request"></div>';
