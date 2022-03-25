@@ -3,7 +3,7 @@
  * Event Listener to alter dynamicYield.
  */
 
-(function () {
+(function (Drupal) {
   document.addEventListener('alterInitialDynamicYield', (e) => {
     // Alter the DY recommendationContext.
     if (e.detail.type === 'category') {
@@ -12,7 +12,7 @@
       // Get the list of of all the ancestors.
       // @see ProductCategoryDyPageTypeEventSubscriber
       var data = [];
-      if (category.breadcrumbs.length > 0) {
+      if (Drupal.hasValue(category.breadcrumbs)) {
         category.breadcrumbs.forEach(item => {
           data.push(item.category_name);
         });
@@ -24,4 +24,4 @@
       e.detail.data.recommendationContext['data'] = data;
     }
   });
-})();
+})(Drupal);
