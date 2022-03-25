@@ -51,9 +51,6 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
   elseif ($current_route_name === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_my_accounts';
   }
-  elseif ($current_route_name === 'alshaya_acm_customer.orders_detail') {
-    $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_order_details';
-  }
 }
 
 /**
@@ -135,4 +132,5 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
   $order['extension']['return_exipiration'] = '2022-07-26 11:54:27';
 
   $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
+  $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_order_details';
 }
