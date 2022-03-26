@@ -14,62 +14,47 @@ function getOrderDetailsForReturnRequest() {
 }
 
 /**
-   * Utility function to get return reasosn configurations.
-   */
-function getReturnConfigurationDetails() {
-  let returnConfig = null;
+ * Utility function to get return reason options.
+ */
+function getReturnReasons() {
+  // Setting default value for return reasons
+  const returnReasons = [
+    { id: 0, label: Drupal.t('Choose a reason') },
+  ];
   if (hasValue(drupalSettings.returnRequest)
-      && hasValue(drupalSettings.returnRequest.returnConfig)
-      && hasValue(drupalSettings.returnRequest.returnConfig.return_reasons)) {
-    returnConfig = drupalSettings.returnRequest.returnConfig.return_reasons;
+    && hasValue(drupalSettings.returnRequest.returnConfig)
+    && hasValue(drupalSettings.returnRequest.returnConfig.return_reasons)) {
+    // Populate reasons values from return reasons api call.
+    const reasonsList = drupalSettings.returnRequest.returnConfig.return_reasons;
+    Object.keys(reasonsList).forEach((key) => {
+      returnReasons.push({
+        value: reasonsList[key].id,
+        label: reasonsList[key].label,
+      });
+    });
   }
 
-  return returnConfig;
+  return returnReasons;
 }
 
 /**
-   * Utility function to get default value for reasons select list.
-   */
-function getDefaultValueForReturnReasons() {
-  const defaultReasons = [{
-    value: 0,
-    label: Drupal.t('Choose a reason'),
-  }];
-
-  return defaultReasons[0];
-}
-
-/**
-   * Utility function to get default value for quantity select list.
-   */
-function getDefaultValueForQtyDropdown() {
-  const defaultQtyOptions = [{
-    value: 1,
-    label: 1,
-  }];
-
-  return defaultQtyOptions;
-}
-
-/**
-   * Utility function to pre-populate quantity select list.
-   */
-function populateQtyDropDownList(itemQuantity) {
+ * Utility function to get values for quantity options.
+ */
+function getQuantityOptions(itemQtyOrdered) {
   const qtyOptions = [];
-  // Populate quanntity options for item quantities.
-  for (let index = 1; index <= itemQuantity; index++) {
-    qtyOptions.push({
-      value: index,
-      label: index,
-    });
+  if (itemQtyOrdered) {
+    for (let i = 1; i <= itemQtyOrdered; i++) {
+      qtyOptions.push({
+        value: i,
+        label: i,
+      });
+    }
   }
   return qtyOptions;
 }
 
 export {
-  getReturnConfigurationDetails,
-  getDefaultValueForReturnReasons,
-  getDefaultValueForQtyDropdown,
-  populateQtyDropDownList,
+  getReturnReasons,
+  getQuantityOptions,
   getOrderDetailsForReturnRequest,
 };
