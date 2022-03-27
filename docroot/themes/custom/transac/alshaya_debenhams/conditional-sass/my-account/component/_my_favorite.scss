@@ -4,7 +4,7 @@
       #wishlist-share {
         button {
           &.email-share-link {
-            @include btn();
+            @include btn;
 
             &:hover {
               opacity: 1;
@@ -12,7 +12,7 @@
           }
 
           &.copy-share-link {
-            @include button-brand();
+            @include button-brand;
 
             &:hover {
               border: 0;

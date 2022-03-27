@@ -21,7 +21,7 @@ body.wishlist-enabled {
     .actions {
       a {
         &.sign-in {
-          @include btn();
+          @include btn;
 
           &:hover {
             opacity: 1;
@@ -29,7 +29,7 @@ body.wishlist-enabled {
         }
 
         &.register {
-          @include button-brand();
+          @include button-brand;
 
           &:hover {
             color: $primary_btn_text;

@@ -2,7 +2,7 @@
   .empty-message {
     .actions {
       a {
-        @include btn();
+        @include btn;
 
         &:hover {
           opacity: 1;
@@ -12,7 +12,7 @@
   }
 
   .addtobag-button {
-    @include button-brand();
+    @include button-brand;
 
     &:hover {
       border: 0;
@@ -24,7 +24,7 @@
   }
 
   .addtobag-config-button {
-    @include button-brand();
+    @include button-brand;
 
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
@@ -113,7 +113,7 @@
     .actions {
       button {
         &.email-share-link {
-          @include btn();
+          @include btn;
 
           &:hover {
             opacity: 1;
@@ -121,7 +121,7 @@
         }
 
         &.copy-share-link {
-          @include button-brand();
+          @include button-brand;
 
           &:hover {
             border: 0;
