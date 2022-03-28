@@ -11,6 +11,7 @@ services:
       - '@logger.factory'
       - '@cache.online_returns_api_config'
       - '@language_manager'
+      - '@alshaya_api.mdc_helper'
 
   cache.online_returns_api_config:
     class: Drupal\Core\Cache\CacheBackendInterface
