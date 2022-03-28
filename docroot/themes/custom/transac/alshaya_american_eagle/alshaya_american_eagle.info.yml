@@ -161,3 +161,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/country-switcher/country-switcher.ltr.css: css/conditional-sass/country-switcher/country-switcher.ltr.css
+
+  alshaya_white_label/super-category:
+    css:
+      theme:
+        css/conditional-sass/super-category/super-category.ltr.css: css/conditional-sass/super-category/super-category.ltr.css

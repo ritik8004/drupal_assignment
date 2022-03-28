@@ -483,7 +483,6 @@ display:
         filter_groups: false
       displays:
         page_1: page_1
-        page_2: page_2
       sorts:
         field_latitude_longitude_proximity:
           proximity_field: field_latitude_longitude_proximity

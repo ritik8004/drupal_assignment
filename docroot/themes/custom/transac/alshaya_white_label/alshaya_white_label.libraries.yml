@@ -762,3 +762,8 @@ online-returns:
   css:
     theme:
       css/conditional-sass/online-returns/online-returns.ltr.css: {}
+
+super-category:
+  css:
+    theme:
+      css/conditional-sass/super-category/super-category.ltr.css: {}

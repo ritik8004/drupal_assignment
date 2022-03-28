@@ -29,10 +29,6 @@ export default class EgiftCardOpenAmountField extends React.Component {
     if (openAmount !== '') {
       // Remove any error message.
       document.getElementById('open-amount-error').innerHTML = '';
-
-      // Enable action button.
-      const { field } = this.props;
-      field.current.querySelector('button').disabled = false;
     }
   }
 
@@ -61,6 +57,12 @@ export default class EgiftCardOpenAmountField extends React.Component {
    * Trigger submit when user clicks enter on open amount field.
    */
   handleKeypress = (e) => {
+    // Enable action button.
+    const { field } = this.props;
+    if (field.current !== null) {
+      field.current.querySelector('button').disabled = false;
+    }
+
     // It triggers by pressing the enter key
     if (e.key === 'Enter') {
       this.handleSubmit(e);
