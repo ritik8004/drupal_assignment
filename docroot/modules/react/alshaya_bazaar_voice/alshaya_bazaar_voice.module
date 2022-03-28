@@ -17,7 +17,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
   if ($context !== 'pdp') {
     return;
   }
-  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
 
@@ -47,7 +47,11 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
     $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
 
-    if ($product_pdp_layout !== 'magazine_v2') {
+
+    if ($product_pdp_layout === 'magazine_v2') {
+      $build['#attached']['library'][] = 'alshaya_bazaar_voice/utility';
+    }
+    else {
       $build['#attached']['library'][] = 'alshaya_bazaar_voice/rating';
       $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
     }
@@ -223,9 +227,9 @@ function alshaya_bazaar_voice_algolia_react_common_configs_alter(&$response) {
  */
 function alshaya_bazaar_voice_preprocess_node(&$variables) {
   if ($variables['node']->bundle() === 'acq_product') {
-    /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+    /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
-    // Add bazaavoice related strings.
+    // Add bazaar voice related strings.
     $variables['bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   }
 }
@@ -234,7 +238,7 @@ function alshaya_bazaar_voice_preprocess_node(&$variables) {
  * Implements hook_alshaya_acm_customer_build_product_details_alter().
  */
 function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(array &$build) {
-  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
@@ -251,8 +255,10 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
       $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
       $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
       $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
-      $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $sanitized_parent_sku;
-      $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs, $item);
+      if (!empty($sanitized_parent_sku)) {
+        $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $sanitized_parent_sku;
+        $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs, $item);
+      }
     }
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
   }
@@ -266,7 +272,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
  * Implements hook_alshaya_acm_customer_orders_details_build_alter().
  */
 function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
-  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
@@ -304,14 +310,18 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
 
   if ($route_match->getRouteName() == 'entity.node.canonical') {
     /** @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
+    if (!$node) {
+      return;
+    }
+    $bundle = $node->getType();
     // If 'product' node.
-    if ($node && $node->getType() == 'acq_product') {
+    if ($bundle == 'acq_product') {
       $sku = $skuManager->getSkuForNode($node);
       // Get sanitized sku.
       $sanitized_sku = $skuManager->getSanitizedSku($sku);

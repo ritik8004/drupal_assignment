@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_select_pdp_layout
+    - node.type.rcs_product
+  module:
+    - options
+  enforced:
+    module:
+      - alshaya_rcs_product
+id: node.rcs_product.field_select_pdp_layout
+field_name: field_select_pdp_layout
+entity_type: node
+bundle: rcs_product
+label: 'Select PDP Layout'
+description: ''
+required: false
+translatable: false
+skip_translation_check: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

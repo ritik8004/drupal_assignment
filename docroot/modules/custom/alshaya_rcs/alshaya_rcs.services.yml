@@ -1,0 +1,5 @@
+services:
+  alshaya_rcs.algolia_index_config_override:
+    class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexConfigOverrider
+    tags:
+      - { name: config.factory.override, priority: -1 }

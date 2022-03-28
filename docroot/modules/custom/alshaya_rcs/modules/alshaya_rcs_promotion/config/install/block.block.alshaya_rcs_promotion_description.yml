@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_rcs_promotion
+  theme:
+    - alshaya_white_label
+id: alshaya_rcs_promotion_description
+theme: alshaya_white_label
+region: content
+weight: 0
+provider: null
+plugin: alshaya_rcs_promotion_description
+settings:
+  id: alshaya_rcs_promotion_description
+  label: 'Alshaya Rcs Promotion Description'
+  provider: alshaya_rcs_promotion
+  label_display: '0'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      rcs_promotion: rcs_promotion
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

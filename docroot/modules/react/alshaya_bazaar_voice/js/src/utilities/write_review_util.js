@@ -1,4 +1,4 @@
-import { getbazaarVoiceSettings, getUserDetails } from './api/request';
+import { getbazaarVoiceSettings, getLanguageCode, getUserDetails } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
 import { getStorageInfo } from './storage';
 import { smoothScrollTo } from './smoothScroll';
@@ -11,6 +11,34 @@ export const validEmailRegex = RegExp(
   // eslint-disable-next-line
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
 );
+
+/**
+ * Check wether current input text language is RTL/LTR.
+ */
+export const checkRTL = (s) => {
+  let langCode = 'ar';
+  const ltrChars = 'A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02B8\u0300-\u0590\u0800-\u1FFF \u2C00-\uFB1C\uFDFE-\uFE6F\uFEFD-\uFFFF';
+  const rtlChars = '\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC';
+  // eslint-disable-next-line
+  const rtlDirCheck = RegExp(`^[^${ltrChars}]*[${rtlChars}]`);
+
+  if (!rtlDirCheck.test(s)) {
+    langCode = 'en';
+  }
+
+  return langCode;
+};
+
+/**
+ * Check for the valid language.
+ */
+export const validateInputLang = (s) => {
+  if (getLanguageCode() === checkRTL(s)) {
+    return true;
+  }
+
+  return false;
+};
 
 export const getArraysIntersection = (currentOptions, options) => currentOptions.filter((n) => {
   if (options.find((element) => element.value === n.value) !== undefined) {
@@ -25,10 +53,10 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const prepareRequest = (elements, fieldsConfig, productId) => {
+export const prepareRequest = async (elements, fieldsConfig, productId) => {
   let params = '';
   const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-  const userDetails = getUserDetails(productId);
+  const userDetails = await getUserDetails(productId);
   const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
@@ -156,7 +184,8 @@ export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
           }
         } else if (id === 'reviewtext'
           || id === 'usernickname'
-          || id === 'useremail') {
+          || id === 'useremail'
+          || id === 'title') {
           if (id === 'reviewtext' || id === 'usernickname') {
             if (elements[id].value.length < fieldsConfig[key]['#minlength']) {
               document.getElementById(`${id}-error`).classList.add('error');
@@ -167,8 +196,16 @@ export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
             document.getElementById(`${id}-error`).classList.add('error');
             isError = true;
           }
+          if (id === 'title' && !validateInputLang(elements[id].value)) {
+            document.getElementById(`${id}-error`).classList.add('error');
+            isError = true;
+          }
+          if (id === 'reviewtext' && !validateInputLang(elements[id].value)) {
+            document.getElementById(`${id}-error`).classList.add('error');
+            isError = true;
+          }
           if (!isError) {
-            document.getElementById(`${id}-error`).classList.remove('error');
+            document.getElementById(`${id}-error`).innerHTML = '';
           }
         } else {
           if (groupType === 'textfield'

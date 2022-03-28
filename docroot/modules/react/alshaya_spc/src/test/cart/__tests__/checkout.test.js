@@ -540,21 +540,23 @@ describe('Checkout', () => {
       });
 
       it('With CNC Enabled', async () => {
-        axios.mockResolvedValue({ data: productStatus });
+        jest
+          .spyOn(window.commerceBackend, 'getProductStatus')
+          .mockImplementation(() => { return { data: productStatus } });
 
         const result = await getCncStatusForCart(cartData);
         expect(result).toEqual(true);
       });
 
       it('With CNC Disabled', async () => {
-        axios.mockResolvedValue({
-          data: {
+        jest
+          .spyOn(window.commerceBackend, 'getProductStatus')
+          .mockImplementation(() => { return {
             cnc_enabled: false,
             in_stock: true,
             max_sale_qty: 0,
             stock: 978,
-          },
-        });
+          }});
 
         const data = {
           cart: {
@@ -580,11 +582,13 @@ describe('Checkout', () => {
       });
 
       it('With SKU', async () => {
-        axios.mockResolvedValue({ data: productStatus });
         const getProductStatus = utilsRewire.__get__('getProductStatus');
+        jest
+          .spyOn(window.commerceBackend, 'getProductStatus')
+          .mockImplementation(() => { return productStatus });
+
         const result = await getProductStatus('WZBOWZ777');
         expect(result).toEqual(productStatus);
-        expect(axios).toHaveBeenCalled();
       });
     });
 

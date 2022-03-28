@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_rcs_product.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_product_install() {
+  // Configure ShareThis widget for the RCS content type.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    $share_this_config = \Drupal::configFactory()->getEditable('sharethis.settings');
+    // Only enable sharethis for RCS content type if it is enabled for
+    // Product content type.
+    if (in_array('acq_product', $share_this_config->get('node_types'))) {
+      $share_this_config->set('node_types.rcs_product', 'rcs_product');
+      $share_this_config->save();
+    }
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('bazaar_voice')) {
+    _alshaya_rcs_product_change_bv_routes_list();
+  }
+
+  // Migrate prodct nodes to RCS content type for enrichment.
+  \Drupal::service('alshaya_rcs_product.helper')
+    ->processProductMigrationToRcsCt();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_rcs_product_uninstall() {
+  // Configure ShareThis widget for the RCS content type.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    $share_this_config = \Drupal::configFactory()->getEditable('sharethis.settings');
+    // Only enable sharethis for RCS content type if it is enabled for
+    // Product content type.
+    if (in_array('acq_product', $share_this_config->get('node_types'))) {
+      $share_this_config_raw = $share_this_config->getRawData();
+      unset($share_this_config_raw['node_types']['rcs_product']);
+      $share_this_config->setData($share_this_config_raw);
+      $share_this_config->save();
+    }
+  }
+
+  // Remove rcs_product from the BV routes list.
+  if (\Drupal::moduleHandler()->moduleExists('bazaar_voice')) {
+    $bv_config = \Drupal::configFactory()->getEditable('bazaar_voice.settings');
+    $bv_routes_list = $bv_config->get('bv_routes_list');
+    $bv_routes_list = array_map('trim', explode(PHP_EOL, $bv_routes_list));
+    $key = array_search('entity.node.canonical:rcs_product', $bv_routes_list);
+    if ($key !== FALSE) {
+      unset($bv_routes_list[$key]);
+      $bv_routes_list = array_values($bv_routes_list);
+    }
+    $bv_routes_list = implode(PHP_EOL, $bv_routes_list);
+    $bv_config->set('bv_routes_list', $bv_routes_list)->save();
+  }
+
+  // Rollback nodes from RCS content type.
+  \Drupal::service('alshaya_rcs_product.helper')
+    ->rollbackProductMigration();
+}

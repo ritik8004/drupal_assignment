@@ -1,9 +1,9 @@
 variables:
-  spc_product_listing_page: '/shop-clothing/newborn/newborn-boys/'
-  spc_basket_page: '/shop-clothing/newborn/newborn-boys/'
-  product_listing_page_url: '/shop-clothing/newborn/newborn-boys/'
-  spc_promotion_listing_page: '/buy-boboli-satin-bermuda-shorts-stretch-for-baby-boy.html/'
+  spc_product_listing_page: '/shop-toys/building-sets-blocks/outdoor-toys/'
+  spc_basket_page: '/shop-toys/building-sets-blocks/outdoor-toys/'
+  product_listing_page_url: '/shop-toys/building-sets-blocks/outdoor-toys/'
+  spc_promotion_listing_page: '/buy-shark-t-shirts-3-pack.html/'
   np_plp_product_page: '/buy-mummy-and-daddy-bear-romper.html/'
-  np_plp_page: '/shop-clothing/newborn/newborn-girls/dresses/'
-  spc_pdp_page: 'buy-mummy-and-daddy-bear-romper.html'
+  np_plp_page: '/shop-toys/building-sets-blocks/outdoor-toys/'
+  spc_pdp_page: '/buy-shark-t-shirts-3-pack.html/'
   new_pdp_enabled: TRUE

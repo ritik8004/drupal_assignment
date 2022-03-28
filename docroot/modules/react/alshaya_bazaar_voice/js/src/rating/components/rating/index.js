@@ -4,10 +4,11 @@ import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/bv-auth-confirmation';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import ConditionalView from '../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getProductReviewStats } from '../../../utilities/user_util';
+import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -15,6 +16,9 @@ export default class Rating extends React.Component {
     this.state = {
       reviewsData: '',
       bazaarVoiceSettings: getbazaarVoiceSettings(),
+      userDetails: {
+        productReview: null,
+      },
     };
   }
 
@@ -35,6 +39,10 @@ export default class Rating extends React.Component {
         }
       });
     }
+
+    getUserDetails().then((userDetails) => {
+      this.setState({ userDetails });
+    });
   }
 
   clickHandler = (e, callbackFn) => {
@@ -47,12 +55,18 @@ export default class Rating extends React.Component {
   }
 
   render() {
-    const { reviewsData, bazaarVoiceSettings } = this.state;
+    const { reviewsData, bazaarVoiceSettings, userDetails } = this.state;
     // Return empty if reviews settings unavailable.
     if (bazaarVoiceSettings.reviews === undefined) {
       return null;
     }
-    const { childClickHandler } = this.props;
+    const {
+      childClickHandler,
+      renderLinkDirectly,
+    } = this.props;
+
+    const renderLink = renderLinkDirectly || false;
+    const reviewedByCurrentUser = userDetails.productReview || false;
 
     // Reviews data is emtpy.
     if (reviewsData === '') {
@@ -68,14 +82,27 @@ export default class Rating extends React.Component {
           <ConditionalView condition={bazaarVoiceSettings.reviews.bv_auth_token !== null}>
             <BvAuthConfirmation bvAuthToken={bazaarVoiceSettings.reviews.bv_auth_token} />
           </ConditionalView>
+          <WriteReviewButton
+            reviewedByCurrentUser={reviewedByCurrentUser}
+            newPdp={renderLink}
+          />
         </div>
       );
     }
+
     return (
       <div className="inline-rating">
-        <div className="aggregate-rating">
-          <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
-        </div>
+        <ConditionalView condition={renderLink}>
+          <div className="aggregate-rating">
+            <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
+          </div>
+        </ConditionalView>
+        <ConditionalView condition={!renderLink}>
+          <WriteReviewButton
+            reviewedByCurrentUser={reviewedByCurrentUser}
+            newPdp={renderLink}
+          />
+        </ConditionalView>
       </div>
     );
   }

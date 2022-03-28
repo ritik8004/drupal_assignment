@@ -317,7 +317,7 @@
       <div class="dark">{{ product.name }}</div>
 
       {% for attribute in product.attributes %}
-        <div>
+        <div class="attr-wrapper">
           {% trans %}
           {{ attribute.label }}: {{ attribute.value }}
           {% endtrans %}

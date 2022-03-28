@@ -1,3 +1,18 @@
+@mixin menuListItem {
+  margin-#{$left}: 0;
+  margin-#{$right}: 0;
+  padding-#{$left}: 1.25rem;
+  padding-#{$right}: 1.25rem;
+  font-family: $alshaya-thin;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+
+  .menu--two__list & {
+    padding-#{$left}: 0;
+    padding-#{$right}: 0;
+  }
+}
+
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     max-width: 77rem;
@@ -203,22 +218,11 @@
   }
 
   .menu__list-item {
-    margin-#{$left}: 0;
-    margin-#{$right}: 0;
-    padding-#{$left}: 1.25rem;
-    padding-#{$right}: 1.25rem;
-    font-family: $alshaya-thin;
-    font-size: 0.875rem;
-    text-transform: capitalize;
-
-    .menu--two__list & {
-      padding-#{$left}: 0;
-      padding-#{$right}: 0;
-    }
+    @include menuListItem;
   }
 
   .back--link {
-    @extend .menu__list-item;
+    @include menuListItem;
 
     padding: 0.875rem 0;
   }

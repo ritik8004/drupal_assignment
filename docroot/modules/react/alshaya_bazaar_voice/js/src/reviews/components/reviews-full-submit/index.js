@@ -19,17 +19,18 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview: '',
       buttonClass: 'write_review',
       validateCurrentEmail: false,
+      userDetails: null,
     };
   }
 
   componentDidMount() {
     const { productId, reviewedByCurrentUser } = this.props;
     // To open write a review on page load.
-    if (isOpenWriteReviewForm(productId)) {
+    isOpenWriteReviewForm(productId).then((status) => {
       this.setState({
-        isModelOpen: true,
+        isModelOpen: status,
       });
-    }
+    });
 
     const path = decodeURIComponent(window.location.search);
     const params = new URLSearchParams(path);
@@ -38,16 +39,20 @@ export default class WriteReviewButton extends React.Component {
         buttonClass: 'pie_notification',
       });
     }
-    if (params.get('userToken') !== null) {
-      const currentEmail = getEmailFromTokenParams(params);
-      const userDetails = getUserDetails(productId);
-      if (userDetails.user.userId !== 0 && userDetails.user.emailId !== currentEmail) {
-        this.setState({
-          validateCurrentEmail: true,
-          buttonClass: 'pie_notification',
-        });
+
+    getUserDetails(productId).then((userDetails) => {
+      let data = {};
+      if (params.get('userToken') !== null) {
+        const currentEmail = getEmailFromTokenParams(params);
+        if (userDetails.user.userId !== 0 && userDetails.user.emailId !== currentEmail) {
+          data = {
+            validateCurrentEmail: true,
+            buttonClass: 'pie_notification',
+          };
+        }
       }
-    }
+      this.setState({ ...data, ...{ userDetails } });
+    });
   }
 
   openModal = (e) => {
@@ -102,12 +107,12 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview,
       buttonClass,
       validateCurrentEmail,
+      userDetails,
     } = this.state;
     const {
       reviewedByCurrentUser, productId, context, newPdp,
     } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-    const userDetails = getUserDetails(productId);
     if (userDetails && Object.keys(userDetails).length !== 0) {
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
       if (userDetails.user.userId === 0

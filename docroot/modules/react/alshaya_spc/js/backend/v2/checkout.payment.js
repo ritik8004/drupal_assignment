@@ -1,5 +1,8 @@
 import { getCart } from './common';
-import { getApiEndpoint } from './utility';
+import {
+  getApiEndpoint,
+  isRequestFromSocialAuthPopup,
+} from './utility';
 import logger from '../../../../js/utilities/logger';
 import StaticStorage from './staticStorage';
 import { addPaymentMethodInCart } from '../../utilities/update_cart';
@@ -17,6 +20,13 @@ window.commerceBackend = window.commerceBackend || {};
  *   The method list if available.
  */
 const getPaymentMethods = async () => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return null;
+  }
+
   const cart = await getCart();
 
   if (!hasValue(cart) || !hasValue(cart.data) || hasValue(cart.data.error)) {
@@ -63,6 +73,13 @@ const getPaymentMethods = async () => {
  *   Payment method set on cart.
  */
 const getPaymentMethodSetOnCart = async () => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return null;
+  }
+
   const cached = StaticStorage.get('payment_method');
   if (hasValue(cached)) {
     return cached;

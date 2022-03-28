@@ -157,28 +157,6 @@ function alshaya_ve_non_transac_install() {
     \Drupal::service('module_installer')->install(['acquia_search']);
   }
 
-  // Save overridden configs.
-  _alshaya_config_save_overridden_configs('alshaya_ve_non_transac');
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs(
-      ['views.view.stores_finder'],
-      'alshaya_ve_non_transac',
-      'override',
-      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
-    );
-
-  // Create secondary menu.
-  alshaya_config_install_configs(
-    ['system.menu.secondary-menu', 'block.block.secondarymenu'],
-    'alshaya_ve_non_transac'
-  );
-
-  // Enable customer_support & customer_subscribe block.
-  alshaya_config_install_configs(
-    ['block.block.customersubscribe', 'block.block.customersupport'],
-    'alshaya_ve_non_transac'
-  );
-
   // Disable default search.
   \Drupal::service('module_installer')->uninstall(['search']);
 

@@ -1,0 +1,14 @@
+renderer:
+  js:
+    dist/alshaya_rcs_promotion_renderer.bundle.js: {}
+  dependencies:
+    - alshaya_rcs_magento_placeholders/main
+    - rcs_magento_placeholders/rcs_magento_placeholders
+
+helpers:
+  version: 1.x
+  js:
+    js/alshaya_rcs_promotion_utility.js: { }
+  dependencies:
+    - core/jquery
+    - rcs_placeholders/helpers

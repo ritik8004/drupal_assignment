@@ -1,6 +1,5 @@
 import React from 'react';
 import DynamicDot from '../dynamic-dot';
-import getStringMessage from '../../../../../../js/utilities/strings';
 import ConditionalView from '../../../common/components/conditional-view';
 
 const IndividualReviewSlider = ({
@@ -18,15 +17,13 @@ const IndividualReviewSlider = ({
             <div className="slider-header">
               <span>
                 {sliderData[item].Label}
-                :
-                {' '}
               </span>
               <span className="slider-header-label">
-                {
-                  !(sliderData[item].ValueLabel) === true
-                    ? getStringMessage('true_to_size')
-                    : sliderData[item].ValueLabel
-                }
+                <ConditionalView condition={sliderData[item].ValueLabel !== undefined}>
+                  :
+                  {' '}
+                  {sliderData[item].ValueLabel}
+                </ConditionalView>
               </span>
             </div>
             <div className="display-slider">

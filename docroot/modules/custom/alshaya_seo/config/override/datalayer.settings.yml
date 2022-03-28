@@ -42,7 +42,7 @@ entity_type: entityType
 entity_bundle: entityBundle
 entity_identifier: entityId
 group_key: groupLabel
-drupal_language: drupalLanguage
-drupal_country: drupalCountry
+drupal_language: language
+drupal_country: country
 site_name: siteName
 key_replacements: {  }

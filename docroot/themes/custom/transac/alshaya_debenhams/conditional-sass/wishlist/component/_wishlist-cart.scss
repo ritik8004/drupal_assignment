@@ -1,0 +1,30 @@
+#spc-cart {
+  .wishlist-popup-container {
+    .wishlist-popup-block {
+      button#wishlist-yes {
+        @include button-brand;
+
+        font-size: 0.875rem;
+
+        &:hover {
+          border: 0;
+        }
+      }
+
+      button#wishlist-no {
+        @include btn;
+
+        font-size: 0.875rem;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    .close-modal {
+      #{$right}: -0.0625rem;
+      top: -0.0625rem;
+    }
+  }
+}

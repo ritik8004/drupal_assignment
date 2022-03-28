@@ -185,7 +185,7 @@
       article {
         > .ajax-progress-throbber {
           .throbber {
-            @include throbberLoader();
+            @include throbberLoader;
           }
         }
       }
@@ -252,7 +252,7 @@
 
     .ajax-progress-throbber {
       .throbber {
-        @include throbberLoader();
+        @include throbberLoader;
       }
     }
 
@@ -581,10 +581,10 @@
   .ajax-progress-throbber {
     display: block !important;
 
-    @include fullPageLoader();
+    @include fullPageLoader;
 
     .throbber {
-      @include throbberLoader();
+      @include throbberLoader;
     }
   }
 
@@ -592,10 +592,10 @@
     .ajax-progress-throbber {
       display: block !important;
 
-      @include fullPageLoader();
+      @include fullPageLoader;
 
       .throbber {
-        @include throbberLoader();
+        @include throbberLoader;
       }
     }
   }
@@ -703,10 +703,10 @@
       display: block !important;
 
       @include breakpoint($only-mobile) {
-        @include fullPageLoader();
+        @include fullPageLoader;
 
         .throbber {
-          @include throbberLoader();
+          @include throbberLoader;
         }
       }
 

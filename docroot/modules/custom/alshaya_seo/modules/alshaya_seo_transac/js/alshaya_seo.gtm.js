@@ -20,11 +20,13 @@
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+      $('body').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', '.sku-base-form', function (event, variant, code) {
         var product = $(this).closest('[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
         var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        var productInfo = window.commerceBackend.getProductData(sku, productKey);
+
+        if (typeof productInfo === 'undefined' || !productInfo) {
           return;
         }
 
@@ -32,7 +34,7 @@
         if ((typeof event.detail !== 'undefined') && (typeof event.detail.variant !== 'undefined')) {
           variant = event.detail.variant;
         }
-        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        var variantInfo = productInfo['variants'][variant];
         // Return if variant data not available.
         if (typeof variantInfo === 'undefined') {
           return;
@@ -810,9 +812,12 @@
       // If list variable is set in cookie, retrieve it.
       if ($.cookie('product-list') !== undefined) {
         var listValues = JSON.parse($.cookie('product-list'));
-        if (listValues[productData.id]) {
-          productData.list = listValues[productData.id]
-        }
+        productData.list = (listValues[productData.id] === 'Search Results Page')
+          // For SRP, use list value 'Search Result Page'.
+          ? listValues[productData.id]
+          // For all other pages, use gtm-list-name html attribute.
+          // Except in PDP, to define full path from PLP.
+          : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
       }
     }
     catch (error) {
@@ -1074,7 +1079,7 @@
     if ($.cookie('product-list') !== undefined) {
       listValues = JSON.parse($.cookie('product-list'));
     }
-    listValues[product.id] = listName;
+    listValues[product.id] = product.list = listName;
     $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
     product.variant = '';
     if (position) {
@@ -1313,14 +1318,34 @@
   };
 
   /**
+   * Function to check if current page is search page.
+   *
+   * @return {boolean}
+   *
+   */
+  function isPageTypeSearch() {
+    return $('#alshaya-algolia-search').is(":visible");
+  }
+
+  /**
+   * Function to check if current page is listing page.
+   *
+   * @return {boolean}
+   *
+   */
+  function isPageTypeListing() {
+    var gtmList = $('body').attr('gtm-list-name');
+    return gtmList !== undefined
+      && (gtmList.indexOf('PLP') !== -1 || gtmList.indexOf('Promotion') !== -1);
+  }
+
+  /**
    * Function to push product detail view event to data layer.
    *
    * @param {object} productContext
    *   The jQuery HTML object containing GTM attributes for the product.
-   * @param {string} quickView
-   *   The value to add .
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName, quickView = '') {
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';
@@ -1334,18 +1359,14 @@
         }
       }
     };
-    if (quickView) {
-      data = {
-        event: 'productDetailView',
-        ecommerce: {
-          currencyCode: drupalSettings.gtm.currency,
-          detail: {
-            actionField: {
-              list: listName
-            },
-            products: [product]
-          }
-        }
+
+    // Adding PLP/SRP specific GTM list attribute.
+    if (isPageTypeSearch() || isPageTypeListing()) {
+      data.ecommerce.detail = {
+        actionField: {
+          list: product.list
+        },
+        ...data.ecommerce.detail
       };
     }
 
@@ -1366,14 +1387,24 @@
     product.metric2 = product.price * product.quantity;
 
     var productData = {
-      event: 'addToCart',
-      ecommerce: {
-        currencyCode: drupalSettings.gtm.currency,
-        add: {
-          products: [
-            product
-          ]
-        }
+      event: 'addToCart'
+    };
+
+    // Adding SRP specific GTM list attribute.
+    if (isPageTypeSearch()) {
+      productData.eventAction = 'Add to Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if (isPageTypeListing()) {
+      productData.eventAction = 'Add to Cart on Listing';
+    }
+
+    productData.ecommerce = {
+      currencyCode: drupalSettings.gtm.currency,
+      add: {
+        products: [
+          product
+        ]
       }
     };
 
@@ -1394,14 +1425,24 @@
     product.metric2 = -1 * product.quantity * product.price;
 
     var productData = {
-      event: 'removeFromCart',
-      ecommerce: {
-        currencyCode: drupalSettings.gtm.currency,
-        remove: {
-          products: [
-            product
-          ]
-        }
+      event: 'removeFromCart'
+    };
+
+    // Adding SRP specific GTM list attribute.
+    if (isPageTypeSearch()) {
+      productData.eventAction = 'Remove from Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if (isPageTypeListing()) {
+      productData.eventAction = 'Remove from Cart on Listing';
+    }
+
+    productData.ecommerce = {
+      currencyCode: drupalSettings.gtm.currency,
+      remove: {
+        products: [
+          product
+        ]
       }
     };
 

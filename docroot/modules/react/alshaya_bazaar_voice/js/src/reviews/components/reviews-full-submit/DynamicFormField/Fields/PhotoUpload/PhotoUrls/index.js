@@ -1,6 +1,5 @@
 import React from 'react';
-import { postAPIPhoto } from '../../../../../../../utilities/api/apiData';
-import { postRequest } from '../../../../../../../utilities/api/request';
+import { postAPIPhoto, postRequest } from '../../../../../../../utilities/api/request';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,

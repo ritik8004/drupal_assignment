@@ -1,5 +1,5 @@
 import React from 'react';
-import { postAPIData } from '../../../utilities/api/apiData';
+import { postAPIData } from '../../../utilities/api/request';
 import {
   updateStorageInfo,
 } from '../../../utilities/storage';

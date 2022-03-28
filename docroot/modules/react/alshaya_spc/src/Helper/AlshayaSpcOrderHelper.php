@@ -97,7 +97,7 @@ class AlshayaSpcOrderHelper {
    *
    * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
    */
-  private $skuInfoHelper;
+  protected $skuInfoHelper;
 
   /**
    * Language manager.
@@ -170,6 +170,13 @@ class AlshayaSpcOrderHelper {
   protected $skuImagesHelper;
 
   /**
+   * Spc helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
    * Delivery Options helper.
    *
    * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
@@ -214,7 +221,9 @@ class AlshayaSpcOrderHelper {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
    * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
-   *   Sku imagese helper.
+   *   Sku images helper.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   Spc helper service.
    * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
    *   Delivery Options Helper.
    */
@@ -236,6 +245,7 @@ class AlshayaSpcOrderHelper {
                               StoresFinderUtility $store_finder,
                               RendererInterface $renderer,
                               SkuImagesHelper $images_helper,
+                              AlshayaSpcHelper $spc_helper,
                               DeliveryOptionsHelper $delivery_options_helper) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
@@ -255,6 +265,7 @@ class AlshayaSpcOrderHelper {
     $this->storeFinder = $store_finder;
     $this->renderer = $renderer;
     $this->skuImagesHelper = $images_helper;
+    $this->spcHelper = $spc_helper;
     $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 

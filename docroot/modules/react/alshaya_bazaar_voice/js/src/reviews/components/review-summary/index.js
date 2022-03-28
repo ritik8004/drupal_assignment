@@ -3,7 +3,6 @@ import ConditionalView from '../../../common/components/conditional-view';
 import ReviewInformation from '../review-info';
 import ReviewDescription from '../review-desc';
 import ReviewHistogram from '../review-histogram';
-import { fetchAPIData } from '../../../utilities/api/apiData';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import ReviewSorting from '../review-sorting';
@@ -13,7 +12,7 @@ import EmptyMessage from '../../../utilities/empty-message';
 import ReviewRatingsFilter from '../review-ratings-filter';
 import PostReviewMessage from '../reviews-full-submit/post-review-message';
 import Pagination from '../review-pagination';
-import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
+import { getbazaarVoiceSettings, getUserDetails, fetchAPIData } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
@@ -21,14 +20,14 @@ import { createUserStorage } from '../../../utilities/user_util';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { trackPassiveAnalytics, trackFeaturedAnalytics, trackContentImpression } from '../../../utilities/analytics';
 
-const bazaarVoiceSettings = getbazaarVoiceSettings();
-const userDetails = getUserDetails();
+let bazaarVoiceSettings = null;
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
 
   constructor(props) {
     super(props);
+    bazaarVoiceSettings = getbazaarVoiceSettings();
     this.state = {
       reviewsSummary: '',
       reviewsProduct: '',
@@ -48,6 +47,9 @@ export default class ReviewSummary extends React.Component {
       analyticsState: false,
       loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
       paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
+      userDetails: {
+        productReview: null,
+      },
     };
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
@@ -59,14 +61,19 @@ export default class ReviewSummary extends React.Component {
    * Get Review results and product statistical data.
    */
   componentDidMount() {
-    this.isComponentMounted = true;
-    // Listen to the review post event.
+    getUserDetails().then((result) => {
+      this.setState({ userDetails: result }, () => {
+        const { userDetails } = this.state;
+        this.isComponentMounted = true;
+        // Listen to the review post event.
+        if (userDetails && Object.keys(userDetails).length !== 0) {
+          createUserStorage(userDetails.user.userId, userDetails.user.emailId);
+          this.getReviews();
+        }
+      });
+    });
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-    if (userDetails && Object.keys(userDetails).length !== 0) {
-      createUserStorage(userDetails.user.userId, userDetails.user.emailId);
-      this.getReviews();
-    }
   }
 
   componentWillUnmount() {
@@ -388,6 +395,7 @@ export default class ReviewSummary extends React.Component {
       currentPage,
       numberOfPages,
       loadMoreLimit,
+      userDetails,
     } = this.state;
     const {
       isNewPdpLayout,

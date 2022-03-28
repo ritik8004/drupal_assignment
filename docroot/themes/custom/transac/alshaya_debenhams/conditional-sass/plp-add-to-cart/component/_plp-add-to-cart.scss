@@ -1,5 +1,5 @@
 .addtobag-button {
-  @include button-brand();
+  @include button-brand;
 
   font-family: $dh-semibold;
 }
@@ -12,9 +12,11 @@
 
 .is-not-buyable,
 .addtobag-config-button {
-  @include btn();
+  @include btn;
 
-  margin-#{$left}: 1rem;
+  @include breakpoint($tablet) {
+    margin-#{$left}: 1rem;
+  }
 }
 
 .addtobag-button,

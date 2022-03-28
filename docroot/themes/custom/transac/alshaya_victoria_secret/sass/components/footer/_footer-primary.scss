@@ -276,7 +276,7 @@
 }
 
 .page-standard {
-  &:not('.checkout') {
+  &:not(.checkout) {
     padding-bottom: 3.5rem;
   }
 

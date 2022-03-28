@@ -1,0 +1,20 @@
+<div id="pdp-home-delivery" class="{{ title_class }} c-accordion-delivery-options">
+  <h3 class="c-accordion__title">
+  {{#if title }}
+    {{ title }}
+    <span class="subtitle">{{ subtitle }}</span>
+  {{/if}}
+  </h3>
+  <div class="c-accordion_content">
+    <div class="delivery-option-content">
+      <div class="delivery-option-title">
+        {{#if standard_title }}
+          {{ standard_title }}
+        {{/if}}
+        {{#if standard_subtitle }}
+        <span>{{ standard_subtitle }}</span>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

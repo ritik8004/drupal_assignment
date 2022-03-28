@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: rcs_product
+label: 'RCS Product'
+type: 'canonical_entities:node'
+pattern: '[node:field_product_slug:value]'
+selection_criteria:
+  3adecea9-af7b-4b6b-9faa-bd568615c10e:
+    id: node_type
+    bundles:
+      rcs_product: rcs_product
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 3adecea9-af7b-4b6b-9faa-bd568615c10e
+selection_logic: and
+weight: -5
+relationships: {  }

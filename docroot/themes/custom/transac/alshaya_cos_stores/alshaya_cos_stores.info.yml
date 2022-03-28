@@ -115,6 +115,36 @@ libraries-override:
       theme:
         css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css
 
+  alshaya_white_label/rcs-alshaya-magazine:
+    css:
+      theme:
+        css/conditional-sass/rcs-alshaya-magazine/rcs-alshaya-magazine.ltr.css: css/conditional-sass/rcs-alshaya-magazine/rcs-alshaya-magazine.ltr.css
+
+  alshaya_white_label/rcs-ph-lhn-block:
+    css:
+      theme:
+        css/conditional-sass/rcs-ph-lhn-block/rcs-ph-lhn-block.ltr.css: css/conditional-sass/rcs-ph-lhn-block/rcs-ph-lhn-block.ltr.css
+
+  alshaya_white_label/rcs-ph-promotional-banner:
+    css:
+      theme:
+        css/conditional-sass/rcs-ph-promotional-banner/rcs-ph-promotional-banner.ltr.css: css/conditional-sass/rcs-ph-promotional-banner/rcs-ph-promotional-banner.ltr.css
+
+  alshaya_white_label/rcs-placeholders:
+    css:
+      theme:
+        css/conditional-sass/rcs-placeholders/rcs-placeholders.ltr.css: css/conditional-sass/rcs-placeholders/rcs-placeholders.ltr.css
+
+  alshaya_white_label/rcs-product-related:
+    css:
+      theme:
+        css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css: css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css
+
+  alshaya_white_label/rcs-algolia-plp:
+    css:
+      theme:
+        css/conditional-sass/rcs-algolia-plp/rcs-algolia-plp.ltr.css: css/conditional-sass/rcs-algolia-plp/rcs-algolia-plp.ltr.css
+
   alshaya_white_label/wishlist:
     css:
       theme:
@@ -159,3 +189,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css
+
+  alshaya_white_label/checkout-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css
+
+  alshaya_white_label/checkout-confirmation-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css

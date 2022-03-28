@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function rcs_handlebars_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  $entity_types = [
+    'node',
+    'taxonomy_term',
+  ];
+  if (!in_array($entity->getEntityType()->id(), $entity_types)) {
+    return;
+  }
+
+  \Drupal::service('rcs_handlebars.service')->attachLibraries($build, $entity);
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function rcs_handlebars_library_info_alter(&$libraries, $extension) {
+  \Drupal::service('rcs_handlebars.service')->libraryInfoAlter($libraries, $extension);
+}

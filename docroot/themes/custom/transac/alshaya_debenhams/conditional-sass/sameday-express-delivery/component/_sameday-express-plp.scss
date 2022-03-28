@@ -1,0 +1,21 @@
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
+  .c-products__item {
+    .express_delivery {
+      font-family: inherit;
+      padding-top: 0.3125rem;
+    }
+
+    &.product-element-alignment {
+      .express_delivery {
+        @include breakpoint($tablet) {
+          margin: 0.5rem 1rem 0;
+        }
+
+        html[lang=ar] & {
+          padding-top: 0.5rem;
+        }
+      }
+    }
+  }
+}

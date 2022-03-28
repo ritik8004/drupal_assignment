@@ -1,0 +1,14 @@
+{# @todo Check for condition where add to bag is disabled. #}
+{# .sku-base-form-template will be changed to sku-base-form in JS. #}
+<form class="sku-base-form-template visually-hidden" data-sku="#rcs.product_add_to_cart._self|sku#" data-cleaned-sku="#rcs.product_add_to_cart._self|sku-clean#" data-sku-type="#rcs.product_add_to_cart._self|sku-type#">
+  <div class="errors-container error-container-#rcs.product_add_to_cart._self|sku# js-form-wrapper form-wrapper" data-drupal-selector="edit-errors-container" data-msg-required="Please enter your This field." id="edit-errors-container"></div>
+  <div id="configurable_ajax" class="configurable-wrapper-#rcs.product_add_to_cart._self|sku# js-form-wrapper form-wrapper" data-drupal-selector="edit-ajax" data-msg-required="Please enter your This field."></div>
+  <span class="quantity-#rcs.product_add_to_cart._self|sku#">
+    <div class="js-form-item form-item js-form-type-select form-type-select js-form-item-quantity form-item-quantity">
+      <select name="quantity" class="edit-quantity form-select"></select>
+    </div>
+  </span>
+  <button name="add_to_cart_#rcs.product_add_to_cart._self|sku#" id="edit-add-to-cart-#rcs.product._self|sku#" class='cv-validate-before-ajax edit-add-to-cart add-to-cart-button ladda-button' data-twig-suggestion="addtocart" type="submit">{{ "add to cart" | t }}</button>
+  <input class="selected-variant-sku selected-variant-sku-#rcs.product_add_to_cart._self|sku-clean#" data-drupal-selector="edit-selected-variant-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_variant_sku" value="#rcs.product_add_to_cart._self|sku#">
+  <input class="selected-parent-sku" data-drupal-selector="edit-selected-parent-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_parent_sku" value="#rcs.product_add_to_cart._self|sku#">
+</form>

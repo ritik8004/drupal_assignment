@@ -39,7 +39,15 @@ const getBackToPlpPage = (pageType) => {
  * Render search results elements facets, filters and sorting etc.
  */
 const PlpApp = ({
-  searchState, createURL, onSearchStateChange, pageType,
+  searchState,
+  createURL,
+  onSearchStateChange,
+  pageType,
+  hierarchy: defaultCategoryFilter,
+  level: nestedLevel,
+  ruleContext,
+  categoryField,
+  promotionNodeId,
 }) => {
   const plpCategoryRef = useRef();
   const allFiltersRef = useRef();
@@ -48,15 +56,17 @@ const PlpApp = ({
     itemsPerPage,
     filterOos,
     pageSubType,
-    hierarchy: defaultCategoryFilter,
-    category_field: categoryField,
-    level: nestedLevel,
+    hierarchy_lhn: lhnCategoryFilter,
     max_category_tree_depth: categoryDepth,
-    promotionNodeId,
-    ruleContext,
     subCategories,
     categoryFacetEnabled,
   } = drupalSettings.algoliaSearch;
+
+  // Split ruleContext into array of strings.
+  let context = [];
+  if (ruleContext !== undefined && ruleContext.length > 0) {
+    context = ruleContext.split(',');
+  }
 
   const { indexName } = drupalSettings.algoliaSearch.listing;
 
@@ -126,10 +136,11 @@ const PlpApp = ({
     && pageSubType === 'plp'
     && categoryFacetEnabled
     && nestedLevel < parseInt(categoryDepth, 10) + 1)) {
+    const { currentLanguage } = drupalSettings.path;
     for (let i = 0; i <= nestedLevel; i++) {
       if (productListIndexStatus()) {
         // Set default EN category filter in product list index for VM.
-        categoryFieldAttributes.push(`lhn_category.en.lvl${i}`);
+        categoryFieldAttributes.push(`lhn_category.${currentLanguage}.lvl${i}`);
       } else {
         categoryFieldAttributes.push(`lhn_category.lvl${i}`);
       }
@@ -152,7 +163,7 @@ const PlpApp = ({
         clickAnalytics
         hitsPerPage={groupEnabled ? 1000 : itemsPerPage}
         filters={finalFilter}
-        ruleContexts={ruleContext}
+        ruleContexts={context}
         optionalFilters={optionalFilter}
       />
       <PlpStickyFilter
@@ -183,7 +194,7 @@ const PlpApp = ({
                 <h3 className="c-facet__title c-accordion__title c-collapse__title plp-category-facet-title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                 <PLPHierarchicalMenu
                   attributes={categoryFieldAttributes}
-                  rootPath={defaultCategoryFilter}
+                  rootPath={lhnCategoryFilter}
                   facetLevel={1}
                   ref={plpCategoryRef}
                   showParentLevel={false}
