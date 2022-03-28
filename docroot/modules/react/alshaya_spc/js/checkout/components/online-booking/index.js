@@ -7,6 +7,8 @@ import
   getBookingDetailByConfirmationNumber,
   getAvailableBookingSlots,
   holdBookingSlot,
+  setHideOnlineBooking,
+  hideOnlineBooking,
 } from '../../../../../js/utilities/onlineBookingHelper';
 import Loading from '../../../../../js/utilities/loading';
 import DefaultShippingElement from '../shipping-method/components/DefaultShippingElement';
@@ -31,11 +33,14 @@ export default class OnlineBooking extends React.Component {
   }
 
   componentDidMount = async () => {
+    document.addEventListener('onShippingAddressUpdate', this.onShippingAddressUpdate, false);
     const { cart } = this.props;
     let result = { api_error: true };
     // We need to show online booking component only if home delivery method
-    // is selected and shipping methods are available in cart.
-    if (this.checkHomeDelivery(cart) && hasValue(cart.cart.shipping.methods)) {
+    // is selected and shipping methods are available in cart and valid for user.
+    if (!hideOnlineBooking()
+      && this.checkHomeDelivery(cart)
+      && hasValue(cart.cart.shipping.methods)) {
       // Check if the cart is having confirmation number.
       if (hasValue(cart.confirmation_number)) {
         result = await getBookingDetailByConfirmationNumber(cart.confirmation_number);
@@ -68,11 +73,23 @@ export default class OnlineBooking extends React.Component {
             }
           }
         }
+        // Check if the booking is not successful.
+        // Set status to online booking as false.
+        if (!hasValue(result.success)) {
+          setHideOnlineBooking(true);
+        }
       }
     }
 
     // Set booking Details response and wait to false.
     this.setState({ bookingDetails: result, wait: false });
+  }
+
+  /**
+   * Reset show-online-booking storage.
+   */
+  onShippingAddressUpdate = () => {
+    setHideOnlineBooking(false);
   }
 
   /**

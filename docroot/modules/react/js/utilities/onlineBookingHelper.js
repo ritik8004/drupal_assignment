@@ -360,3 +360,26 @@ export const holdBookingSlot = async (params) => {
 
   return response.data;
 };
+
+/**
+ * Decide whether to show online booking for user or not.
+ *
+ * While fetching the slots or holding the appointment date from MDC.
+ * If any internal error occurred while calling API
+ * We need to bypass the online booking for user as user
+ * has not seen the online booking screen when user first visited the checkout page.
+ */
+export const hideOnlineBooking = () => hasValue(Drupal.getItemFromLocalStorage('hide-online-booking'));
+
+/**
+ * Store status of online booking for user.
+ *
+ * @param {boolean} status
+ *   Set status of online booking for user.
+ */
+export const setHideOnlineBooking = (status = true) => {
+  Drupal.removeItemFromLocalStorage('hide-online-booking');
+  if (hasValue(status)) {
+    Drupal.addItemInLocalStorage('hide-online-booking', status);
+  }
+};
