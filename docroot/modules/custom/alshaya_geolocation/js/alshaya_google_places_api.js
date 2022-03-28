@@ -165,7 +165,7 @@
         }
         else if ($.isArray(callbacks) && !$.isEmptyObject(coords)) {
           callbacks.forEach(function (callback) {
-            callback.call(null, coords, field, restriction, $trigger);
+            callback.call(this, null, coords, field, restriction, $trigger);
           });
         }
       }
