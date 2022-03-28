@@ -10,8 +10,8 @@
    *  true page is RCS PDP else false.
    */
   function isRcsPdp() {
-    return typeof rcsPhGetPageType === 'function'
-      ? (rcsPhGetPageType() === 'product') ? true : false
+    return typeof globalThis.rcsPhGetPageType === 'function'
+      ? (globalThis.rcsPhGetPageType() === 'product') ? true : false
       : false;
   }
 

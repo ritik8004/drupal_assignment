@@ -101,7 +101,7 @@
       schemaOrgProductData = JSON.stringify(schemaOrgProductData, null, '\t');
 
       // Replace any entity placeholders.
-      rcsPhReplaceEntityPh(schemaOrgProductData, 'product', RcsPhStaticStorage.get('product_data_' + pageMainSku), drupalSettings.path.currentLanguage)
+      globalThis.rcsPhReplaceEntityPh(schemaOrgProductData, 'product', globalThis.RcsPhStaticStorage.get('product_data_' + pageMainSku), drupalSettings.path.currentLanguage)
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
