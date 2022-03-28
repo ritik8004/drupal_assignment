@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_theme().
@@ -962,4 +963,46 @@ function _alshaya_rcs_product_get_cnc_config(array &$build) {
   $cnc_settings = _get_cnc_settings();
   $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
   $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
+}
+
+/**
+ * Implements hook_product_attribute_options_alter().
+ */
+function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) {
+  // Return from here if input type is not textarea or text.
+  if ($attribute && !in_array($attribute['frontend_input'], ['text', 'textarea'])) {
+    return;
+  }
+  // Invoke GraphQL API and get the options list.
+  $attribute_code = $attribute['attribute_code'];
+  $settings = Settings::get('alshaya_api.settings');
+
+  $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '",is_array:1){attribute_code store_id attribute_values{key,value}}}';
+  // Magento URL to get the product option attributes.
+  $request_url = $settings['magento_host'] . '/graphql?query=' . $query;
+
+  try {
+    $response = Json::decode(\Drupal::httpClient()->get($request_url, [
+      'headers' => [
+        'store' => Settings::get('magento_lang_prefix')[$current_language],
+      ],
+    ])->getBody());
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_rcs_product')->notice('Error while processing attributeValueResolver. Error: @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+  // Extract the product options if available.
+  if (isset($response)
+    && $response['data']['attributeValueResolver']
+    && $response['data']['attributeValueResolver']['attribute_values']) {
+    foreach ($response['data']['attributeValueResolver']['attribute_values'] as $value) {
+      // Map the key and value with the proper option label and value.
+      $attribute['options'][] = [
+        'label' => $value['value'],
+        'value' => $value['key'],
+      ];
+    }
+  }
 }
