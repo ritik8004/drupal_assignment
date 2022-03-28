@@ -159,6 +159,7 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
   if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
     return;
   }
+
   // Set order name if first item is virtual product.
   $item = reset($order['items']);
   if ($item['is_virtual']) {
@@ -166,6 +167,7 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
       ? t('eGift Card Top up', [], ['context' => 'egift'])
       : t('Alshaya eGift card', [], ['context' => 'egift']);
   }
+
   // Update Payment method name for hps payment.
   if ($build["#order_details"]["payment_method"] === 'hps_payment') {
     $build["#order_details"]["payment_method"] = t('eGift Card', [], ['context' => 'egift']);
