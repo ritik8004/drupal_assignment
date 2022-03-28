@@ -7,7 +7,7 @@ function isReturnEligible(orderId) {
   let returnEligible = true;
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
-    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId], 'isReturnEligible')) {
+    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].isReturnEligible)) {
     returnEligible = drupalSettings.onlineReturns.recentOrders[orderId].isReturnEligible;
   }
 
@@ -17,15 +17,15 @@ function isReturnEligible(orderId) {
 /**
  * Helper function to get return expiration.
  */
-function getReturnExipiration(orderId) {
-  let returnExipiration = true;
+function getReturnExpiration(orderId) {
+  let returnExpiration = true;
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
-    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId], 'returnExipiration')) {
-    returnExipiration = drupalSettings.onlineReturns.recentOrders[orderId].returnExipiration;
+    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].returnExpiration)) {
+    returnExpiration = drupalSettings.onlineReturns.recentOrders[orderId].returnExpiration;
   }
 
-  return returnExipiration;
+  return returnExpiration;
 }
 
 /**
@@ -35,7 +35,7 @@ function getOrderType(orderId) {
   let orderType = '';
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
-    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId], 'orderType')) {
+    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].orderType)) {
     orderType = drupalSettings.onlineReturns.recentOrders[orderId].orderType;
   }
 
@@ -49,7 +49,7 @@ function getPaymentMethod(orderId) {
   let paymentMethod = null;
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
-    && ({}).hasOwnProperty.call(drupalSettings.onlineReturns.recentOrders[orderId], 'paymentMethod')) {
+    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].paymentMethod)) {
     paymentMethod = drupalSettings.onlineReturns.recentOrders[orderId].paymentMethod;
   }
 
@@ -104,7 +104,7 @@ function isReturnWindowClosed(date) {
 
 export {
   isReturnEligible,
-  getReturnExipiration,
+  getReturnExpiration,
   getOrderType,
   getPaymentMethod,
   formatDate,

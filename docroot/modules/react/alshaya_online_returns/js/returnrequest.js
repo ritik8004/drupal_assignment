@@ -4,5 +4,5 @@ import ReturnRequest from './return-request/components/return-request';
 
 ReactDOM.render(
   <ReturnRequest />,
-  document.querySelector('#return-request'),
+  document.querySelector('#alshaya-online-return-request'),
 );

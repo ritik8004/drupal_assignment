@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {
   isReturnEligible,
-  getReturnExipiration,
+  getReturnExpiration,
   getOrderType,
   getPaymentMethod,
 } from '../../utilities/online_returns_util';
@@ -46,7 +46,7 @@ class OnlineReturnsEligibility extends React.Component {
       <ReturnEligibilityMessage
         orderId={orderId}
         isReturnEligible={isReturnEligible(orderId)}
-        returnExipiration={getReturnExipiration(orderId)}
+        returnExpiration={getReturnExpiration(orderId)}
         paymentMethod={getPaymentMethod(orderId)}
         orderType={getOrderType(orderId)}
       />
