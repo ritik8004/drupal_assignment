@@ -10,7 +10,7 @@ exports.render = function render(
   // Proceed only if entity is present.
   if (breadcrumbs !== null) {
     // Get the enrichment data. It's a sync call.
-    let enrichmentData = rcsGetEnrichedCategories();
+    let enrichmentData = globalThis.rcsGetEnrichedCategories();
 
     let breadcrumbHtml = '';
 
@@ -79,7 +79,7 @@ const getBreadcrumbMarkup = function (breadcrumb, innerHtmlObj, settings) {
 
       // Apply the replacement on all the elements containing the
       // placeholder.
-      breadcrumbItemHtml = rcsReplaceAll(breadcrumbItemHtml, fieldPh, entityFieldValue);
+      breadcrumbItemHtml = globalThis.rcsReplaceAll(breadcrumbItemHtml, fieldPh, entityFieldValue);
     });
 
   return breadcrumbItemHtml;
