@@ -72,8 +72,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             // Current Time stamp to check for expiry.
             const currentTime = Math.floor(Date.now() / 1000);
 
-            // IF 0 balance card then no need to proceed further.
-            if (currentBalance === 0) {
+            // IF 0 balance or balance in negative card then no need to proceed further.
+            if (currentBalance <= 0) {
               this.setState({
                 egiftCardActualBalance: currentBalance,
                 egiftLinkedCardNumber: result.data.card_number,
@@ -155,6 +155,32 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
     // Event listener on shiping method update to remove redeemed Amount.
     document.addEventListener('changeShippingMethod', this.handleRemoveCard);
+    // Event listener on dom click to remove link card payment error.
+    document.addEventListener('click', this.handleRemoveError, false);
+  }
+
+  /**
+   * Remove api error when user moves away from hps payment method.
+   */
+  handleRemoveError = (e) => {
+    // Do nothing if user click hps payment.
+    if (e.target.classList.contains('payment-method-label-wrapper')
+      || e.target.id === 'link-egift-card'
+      || e.target.classList.contains('egift-link-card-label')) {
+      return;
+    }
+
+    const { apiErrorMessage } = this.state;
+    // Do not unset api error message if already empty.
+    if (apiErrorMessage === '') {
+      return;
+    }
+
+    // Remove api error message if user has
+    // clicked away from payment method.
+    this.setState({
+      apiErrorMessage: '',
+    });
   }
 
   openModal = (e) => {

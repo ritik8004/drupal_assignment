@@ -15,9 +15,32 @@ defaults:
     shell: bash
 
 jobs:
+  changedfiles:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      all: ${{ steps.changes.outputs.all }}
+      themes: ${{ steps.changes.outputs.themes }}
+      react: ${{ steps.changes.outputs.react }}
+    steps:
+      # Make sure we have some code to diff.
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changes
+        # Set outputs using the command.
+        run: |
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | xargs)"
+          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
+          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
+
   deploy:
     name: Deploy
     runs-on: ubuntu-18.04
+    needs: changedfiles
     if: ${{ github.event_name == 'push' || github.event_name == 'create' }}
 
     container:
@@ -42,6 +65,9 @@ jobs:
           echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
           echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
           echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
+          echo "CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }}" >> $GITHUB_ENV
+          echo "CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }}" >> $GITHUB_ENV
+          echo "CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.all }}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v2

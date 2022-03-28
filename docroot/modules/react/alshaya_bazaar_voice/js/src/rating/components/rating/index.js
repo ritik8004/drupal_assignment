@@ -82,6 +82,10 @@ export default class Rating extends React.Component {
           <ConditionalView condition={bazaarVoiceSettings.reviews.bv_auth_token !== null}>
             <BvAuthConfirmation bvAuthToken={bazaarVoiceSettings.reviews.bv_auth_token} />
           </ConditionalView>
+          <WriteReviewButton
+            reviewedByCurrentUser={reviewedByCurrentUser}
+            newPdp={renderLink}
+          />
         </div>
       );
     }

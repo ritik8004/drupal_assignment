@@ -248,7 +248,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       request.data = prepareQuery(rcsPhGraphqlQuery.product_by_sku.query, productBySkuVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
-      result = response.data.products.items;
+      result = response.data.products.items[0];
       break;
 
     default:
