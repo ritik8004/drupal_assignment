@@ -2,7 +2,7 @@
   .wishlist-popup-container {
     .wishlist-popup-block {
       button#wishlist-yes {
-        @include button-brand();
+        @include button-brand;
 
         font-size: 0.875rem;
 
@@ -12,7 +12,7 @@
       }
 
       button#wishlist-no {
-        @include btn();
+        @include btn;
 
         font-size: 0.875rem;
 

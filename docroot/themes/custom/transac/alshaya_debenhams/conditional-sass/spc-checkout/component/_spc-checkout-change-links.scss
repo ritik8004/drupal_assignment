@@ -4,7 +4,7 @@
 .egift-verify-code-redeem-submit-btn .egift-button,
 .egift-get-code-redeem-submit-btn .egift-button,
 .remove-egift-card button {
-  @include btn();
+  @include btn;
 }
 
 .egift-verify-code-redeem-submit-btn .egift-button,
