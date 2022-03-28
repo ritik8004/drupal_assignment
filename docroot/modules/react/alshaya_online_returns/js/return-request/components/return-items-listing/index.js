@@ -17,9 +17,9 @@ class ReturnItemsListing extends React.Component {
    * continue button will be enabled.
    */
   handleSelectedReason = (selectedReason) => {
-    if (selectedReason.value !== 0) {
+    if (selectedReason) {
       this.setState({
-        btnDisabled: false,
+        btnDisabled: selectedReason.value === 0,
       });
     }
   }
@@ -45,7 +45,7 @@ class ReturnItemsListing extends React.Component {
     const { btnDisabled, itemsSelected } = this.state;
     const { products } = this.props;
     // If no item is selected, button remains disabled.
-    const selected = !(itemsSelected.length === 0 || btnDisabled);
+    const btnState = !!((itemsSelected.length === 0 || btnDisabled));
     return (
       <div className="products-list-wrapper">
         <div className="select-items-label">
@@ -61,7 +61,7 @@ class ReturnItemsListing extends React.Component {
           </div>
         ))}
         <div className="continue-button-wrapper">
-          <button type="button" btnDisabled={selected}>
+          <button type="button" disabled={btnState}>
             <span className="continue-button-label">{Drupal.t('Continue')}</span>
           </button>
         </div>

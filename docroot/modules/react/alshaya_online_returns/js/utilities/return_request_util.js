@@ -19,7 +19,7 @@ function getOrderDetailsForReturnRequest() {
 function getReturnReasons() {
   // Setting default value for return reasons
   const returnReasons = [
-    { id: 0, label: Drupal.t('Choose a reason') },
+    { value: 0, label: Drupal.t('Choose a reason') },
   ];
   if (hasValue(drupalSettings.returnRequest)
     && hasValue(drupalSettings.returnRequest.returnConfig)
