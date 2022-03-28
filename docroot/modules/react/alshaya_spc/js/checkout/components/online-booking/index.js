@@ -8,7 +8,7 @@ import
   getAvailableBookingSlots,
   holdBookingSlot,
   setHideOnlineBooking,
-  hideOnlineBooking,
+  getHideOnlineBooking,
 } from '../../../../../js/utilities/onlineBookingHelper';
 import Loading from '../../../../../js/utilities/loading';
 import DefaultShippingElement from '../shipping-method/components/DefaultShippingElement';
@@ -33,15 +33,30 @@ export default class OnlineBooking extends React.Component {
   }
 
   componentDidMount = async () => {
+    // Add event listener to validate booking when user place order.
+    document.addEventListener('validateOnlineBookingPurchase', this.validateOnlineBookingPurchase, false);
+    // Add event listener for shipping address change,
+    // We need to reset the online booking storage and fetch details.
     document.addEventListener('onShippingAddressUpdate', this.onShippingAddressUpdate, false);
+    await this.updateBookingDetails();
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('validateOnlineBookingPurchase', this.validateOnlineBookingPurchase, false);
+    document.removeEventListener('onShippingAddressUpdate', this.onShippingAddressUpdate, false);
+  }
+
+  updateBookingDetails = async () => {
     const { cart } = this.props;
     let result = { api_error: true };
     // We need to show online booking component only if home delivery method
     // is selected and shipping methods are available in cart and valid for user.
-    if (!hideOnlineBooking()
+    if (!getHideOnlineBooking()
       && this.checkHomeDelivery(cart)
       && hasValue(cart.cart.shipping.methods)) {
-      // Check if the cart is having confirmation number.
+      // Check if the cart is having confirmation number,
+      // this means user has already reserved some slot earlier and
+      // thus now we need to show the info of that slot only.
       if (hasValue(cart.confirmation_number)) {
         result = await getBookingDetailByConfirmationNumber(cart.confirmation_number);
       } else {
@@ -88,8 +103,22 @@ export default class OnlineBooking extends React.Component {
   /**
    * Reset show-online-booking storage.
    */
-  onShippingAddressUpdate = () => {
+  onShippingAddressUpdate = async () => {
     setHideOnlineBooking(false);
+    // Update online booking component to fetch
+    // details again in case there is no error.
+    this.setState({ wait: true });
+    await this.updateBookingDetails();
+  }
+
+  /**
+   * Handle online booking error on place order.
+   */
+  validateOnlineBookingPurchase = (e) => {
+    const { bookingDetails } = e.detail;
+    // Set booking Details to show inline error when there is some error
+    // while fetching booking details.
+    this.setState({ bookingDetails });
   }
 
   /**
@@ -111,8 +140,11 @@ export default class OnlineBooking extends React.Component {
    */
   openScheduleDeliveryModal = async () => {
     // Update the isModalOpen to true for opening the popup.
+    const elem = document.getElementById('online-booking')
+      .getElementsByClassName('online-booking__change-delivery-schedule')[0];
     const stateToUpdate = { isModalOpen: true };
-
+    // Add loading on Change Delivery Schedule link.
+    elem.classList.add('loading');
     // Get all available slots from the backend via API and set in the states,
     // if API returns success.
     const result = await getAvailableBookingSlots();
@@ -121,6 +153,8 @@ export default class OnlineBooking extends React.Component {
 
       // Update state with the available data.
       this.setState(stateToUpdate);
+      // Remove loading on Change Delivery Schedule link.
+      elem.classList.remove('loading');
     }
   };
 
@@ -234,10 +268,8 @@ export default class OnlineBooking extends React.Component {
                       )
                     }
                   </div>
-                  <div className="online-booking__change-delivery-schedule">
-                    <a href="#" onClick={() => this.openScheduleDeliveryModal()}>
-                      {Drupal.t('Change Delivery Schedule', {}, { context: 'online_booking' })}
-                    </a>
+                  <div className="online-booking__change-delivery-schedule" onClick={() => this.openScheduleDeliveryModal()}>
+                    {Drupal.t('Change Delivery Schedule', {}, { context: 'online_booking' })}
                   </div>
                 </div>
                 <Popup
@@ -247,9 +279,6 @@ export default class OnlineBooking extends React.Component {
                   closeOnEscape={false}
                 >
                   <>
-                    {/**
-                     * @todo: Change the selectDate with first slot held.
-                     */}
                     <OnlineBookingCalendar
                       availableSlots={availableSlots}
                       bookingDetails={bookingDetails.appointment_details}
@@ -292,7 +321,9 @@ export default class OnlineBooking extends React.Component {
             {/**
              * Placeholder to display the default internal error message.
              */}
-            <ConditionalView condition={!hasValue(bookingDetails.success)}>
+            <ConditionalView condition={!hasValue(bookingDetails.appointment_details)
+            && !hasValue(bookingDetails.success)}
+            >
               <div className="online-booking__error-message">
                 {
                   Drupal.t(

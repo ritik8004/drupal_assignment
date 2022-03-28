@@ -16,16 +16,19 @@ export const getOnlineBookingApiEndpoint = (action) => {
   let endpoint = '';
   const cartId = window.commerceBackend.getCartId();
   switch (action) {
+    // Endpoint to check get status of appointment hold for user.
     case 'checkBookingStatus':
-      endpoint = '/V1/hfdbooking/check-hold-appointment-status'; // Endpoint to get appointment status, same for both.
+      endpoint = '/V1/hfdbooking/check-hold-appointment-status';
       break;
 
+    // Endpoint to get all available time slots for the address.
     case 'getAvailableBookingSlots':
       endpoint = isUserAuthenticated()
         ? '/V1/hfdbooking/mine/available-time-slots'
         : `/V1/hfdbooking/${cartId}/available-time-slots`;
       break;
 
+    // Endpoint to hold the time slot for online booking.
     case 'holdBookingSlot':
       endpoint = isUserAuthenticated()
         ? '/V1/hfdbooking/mine/hold-appointment'
@@ -106,7 +109,7 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
 };
 
 /**
- * Gets order booking response from magento api endpoint.
+ * Get available time slots based on the address.
  *
  * @param {object} existingBooking
  *   Whether API call is made for existing booking.
@@ -369,7 +372,7 @@ export const holdBookingSlot = async (params) => {
  * We need to bypass the online booking for user as user
  * has not seen the online booking screen when user first visited the checkout page.
  */
-export const hideOnlineBooking = () => hasValue(Drupal.getItemFromLocalStorage('hide-online-booking'));
+export const getHideOnlineBooking = () => hasValue(Drupal.getItemFromLocalStorage('hide_online_booking'));
 
 /**
  * Store status of online booking for user.
@@ -378,8 +381,8 @@ export const hideOnlineBooking = () => hasValue(Drupal.getItemFromLocalStorage('
  *   Set status of online booking for user.
  */
 export const setHideOnlineBooking = (status = true) => {
-  Drupal.removeItemFromLocalStorage('hide-online-booking');
+  Drupal.removeItemFromLocalStorage('hide_online_booking');
   if (hasValue(status)) {
-    Drupal.addItemInLocalStorage('hide-online-booking', status);
+    Drupal.addItemInLocalStorage('hide_online_booking', status);
   }
 };
