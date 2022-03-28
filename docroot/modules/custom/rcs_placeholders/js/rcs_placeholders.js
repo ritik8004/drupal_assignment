@@ -83,7 +83,7 @@
           }
 
           // Re-attach all behaviors.
-          rcsPhApplyDrupalJs(document);
+          globalThis.rcsPhApplyDrupalJs(document);
 
           // RCS Entity Loaded.
           if (pageType) {
@@ -178,7 +178,7 @@
             // code in the behaviors knows that replacement has been completed.
             $(this).addClass(classRcsLoaded);
             // Re-attach all behaviors.
-            rcsPhApplyDrupalJs($(this).parent()[0]);
+            globalThis.rcsPhApplyDrupalJs($(this).parent()[0]);
             return;
           } catch (error) {
             Drupal.alshayaLogger(

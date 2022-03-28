@@ -117,7 +117,7 @@ const replaceIndividualPlaceHolder = function (itemHtml, entity, data, settings)
       // Apply the replacement on all the elements containing the
       // placeholder. We filter to keep only the child element
       // and not the parent ones.
-      itemHtml = rcsReplaceAll(itemHtml, fieldPh, entityFieldValue);
+      itemHtml = globalThis.rcsReplaceAll(itemHtml, fieldPh, entityFieldValue);
     });
 
   return itemHtml;

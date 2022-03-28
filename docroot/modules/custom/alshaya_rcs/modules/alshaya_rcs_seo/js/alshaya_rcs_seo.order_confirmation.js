@@ -27,7 +27,7 @@
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          productGtmData = rcsReplaceAll(productGtmData, fieldPh, entityFieldValue);
+          productGtmData = globalThis.rcsReplaceAll(productGtmData, fieldPh, entityFieldValue);
         });
 
       productGtmData = JSON.parse(productGtmData);

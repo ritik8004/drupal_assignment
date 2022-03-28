@@ -67,7 +67,7 @@
    */
   window.commerceBackend.getProductData = function (sku, productKey, processed) {
     if (typeof sku === 'undefined' || !sku) {
-      var allStorageData = RcsPhStaticStorage.getAll();
+      var allStorageData = globalThis.RcsPhStaticStorage.getAll();
       var productData = {};
       Object.keys(allStorageData).forEach(function (key) {
         if (key.startsWith('product_data_')) {
@@ -83,7 +83,7 @@
       return productData;
     }
 
-    var product = RcsPhStaticStorage.get('product_data_' + sku);
+    var product = globalThis.RcsPhStaticStorage.get('product_data_' + sku);
     if (product) {
       if (typeof processed === 'undefined' || processed) {
         return processProduct(product);
