@@ -173,7 +173,7 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
     $build["#order_details"]["payment_method"] = t('eGift Card', [], ['context' => 'egift']);
   }
   // For multiple payment and if some amount is paid via egift then add eGift Card payment.
-  if ($build["#order_details"]["payment_method_code"] !== 'hps_payment' && isset($order['extension']['hps_redeemed_amount'])) {
+  if ($build["#order_details"]["payment_method_code"] !== 'hps_payment' && isset($order['extension']['hps_redeemed_amount']) && $order['extension']['hps_redeemed_amount'] > 0) {
     $build["#order_details"]["payment_method"] .= ', ' . t('eGift Card', [], ['context' => 'egift']);
   }
   // Update virtual product details.
