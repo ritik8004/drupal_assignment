@@ -62,6 +62,19 @@ export default class EgiftCardStepTwo extends React.Component {
     }
   }
 
+  /**
+   * Show translated email HTML5 validation error.
+   */
+  emailValidate = (e) => {
+    // Get target element.
+    const ele = e.target;
+    if (typeof ele !== 'undefined' && ele.validity.typeMismatch) {
+      ele.setCustomValidity(Drupal.t('Please enter valid email address', {}, { context: 'egift' }));
+    } else {
+      ele.setCustomValidity('');
+    }
+  }
+
   render() {
     const { showMessageField, egiftMessage, textAreaCount } = this.state;
     const { activate } = this.props;
@@ -132,6 +145,7 @@ export default class EgiftCardStepTwo extends React.Component {
                   <input
                     type="email"
                     name="egift-recipient-email"
+                    onChange={(e) => this.emailValidate(e)}
                     onBlur={(e) => this.handleEvent(e)}
                   />
                   <div className="c-input__bar" />
