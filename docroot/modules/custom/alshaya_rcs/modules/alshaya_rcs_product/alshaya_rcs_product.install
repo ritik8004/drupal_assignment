@@ -25,7 +25,7 @@ function alshaya_rcs_product_install() {
   }
 
   // Migrate prodct nodes to RCS content type for enrichment.
-  \Drupal::service('alshaya_rcs_product.product_helper')
+  \Drupal::service('alshaya_rcs_product.helper')
     ->processProductMigrationToRcsCt();
 }
 
@@ -61,6 +61,6 @@ function alshaya_rcs_product_uninstall() {
   }
 
   // Rollback nodes from RCS content type.
-  \Drupal::service('alshaya_rcs_product.product_helper')
+  \Drupal::service('alshaya_rcs_product.helper')
     ->rollbackProductMigration();
 }
