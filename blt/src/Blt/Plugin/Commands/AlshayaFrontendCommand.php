@@ -306,11 +306,71 @@ class AlshayaFrontendCommand extends BltTasks {
         }
       }
 
-      $tasks->exec("cd $dir; $command");
+      $build = FALSE;
+      // Copy cloud code only if
+      // - we are inside github actions
+      // - github push event has been triggered
+      // - we have some file changes at least.
+      if (getenv('GITHUB_ACTIONS') == 'true'
+        && getenv('GITHUB_EVENT_NAME') == 'push'
+        && !empty(getenv('CHANGED_ALL_FILES'))
+      ) {
+        $reactChanges = getenv('CHANGED_REACT_FILES');
+        // Build if change in common (modules/react/js) folder.
+        if (strpos($reactChanges, 'modules/react/js') > -1) {
+          $build = TRUE;
+        }
+        // Build if theme is changed and tracked in CHANGED_REACT_FILES
+        // env variable.
+        elseif (strpos($reactChanges, 'react/' . $file->getRelativePath()) > -1) {
+          $build = TRUE;
+        }
+
+        // Build if dependent react module has some changes.
+        $dependencyFile = $dir . 'react_dependencies.txt';
+        if ($build === FALSE && file_exists($dependencyFile)) {
+          $dependencies = explode(PHP_EOL, file_get_contents($dependencyFile));
+          foreach ($dependencies as $dependency) {
+            if ($dependency && strpos($reactChanges, $dependency) > -1) {
+              $build = TRUE;
+              break;
+            }
+          }
+        }
+
+        // Else copy from acquia repo if build is not needed.
+        if ($build === FALSE) {
+          $reactFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $dir) . 'dist';
+          $reactToDir = $dir . 'dist';
+
+          // Copy step.
+          $this->say('Copying unchanged ' . $file->getRelativePath() . ' react module from ' . $reactFromDir . ' to ' . $reactToDir);
+          $result = $this->taskCopyDir([$reactFromDir => $reactToDir])
+            ->overwrite(TRUE)
+            ->run();
+          if (!$result->wasSuccessful()) {
+            $this->say('Unable to copy react files from cloud. Building react module ' . $file->getRelativePath());
+            $build = TRUE;
+          }
+        }
+      }
+      // Build everything if
+      // - we are outside github actions
+      // - github create event has been triggered with tag push
+      // - it is an empty commit
+      //   in merge commit message.
+      else {
+        $build = TRUE;
+      }
+
+      // Build react files.
+      if ($build) {
+        $tasks->exec("cd $dir; $command");
+      }
     }
 
     $tasks->stopOnFail();
-    return $tasks->run();
+    return $tasks->getCommand() ? $tasks->run() : 0;
   }
 
   /**
