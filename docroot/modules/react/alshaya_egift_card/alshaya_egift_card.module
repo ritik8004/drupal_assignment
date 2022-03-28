@@ -163,8 +163,8 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
   $item = reset($order['items']);
   if ($item['is_virtual']) {
     $build['#order']['name'] = $item['sku'] == 'giftcard_topup'
-      ? t('eGift Card Top ups', [], ['context' => 'egift'])
-      : t('Alshaya eGift cards', [], ['context' => 'egift']);
+      ? t('eGift Card Top up', [], ['context' => 'egift'])
+      : t('Alshaya eGift card', [], ['context' => 'egift']);
   }
   // Update Payment method name for hps payment.
   if ($build["#order_details"]["payment_method"] === 'hps_payment') {
@@ -181,8 +181,8 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
     // Show eGift card image and options from order details.
     if ($product['is_virtual']) {
       $product['name'] = $product['sku'] == 'giftcard_topup'
-        ? t('eGift Card Top ups', [], ['context' => 'egift'])
-        : t('Alshaya eGift cards', [], ['context' => 'egift']);
+        ? t('eGift Card Top up', [], ['context' => 'egift'])
+        : t('Alshaya eGift card', [], ['context' => 'egift']);
 
       // Get virtual product image.
       $product['image'] = [
