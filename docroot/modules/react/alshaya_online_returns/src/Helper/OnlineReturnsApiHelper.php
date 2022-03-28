@@ -7,6 +7,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\alshaya_api\Helper\MagentoApiHelper;
 
 /**
  * Helper class for Online Returns APIs.
@@ -44,6 +45,13 @@ class OnlineReturnsApiHelper {
   protected $languageManager;
 
   /**
+   * The mdc helper.
+   *
+   * @var \Drupal\alshaya_api\Helper\MagentoApiHelper
+   */
+  protected $mdcHelper;
+
+  /**
    * OnlineReturnsApiHelper constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
@@ -54,17 +62,21 @@ class OnlineReturnsApiHelper {
    *   Cache backend service for aura_api_config.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
+   *   The magento api helper.
    */
   public function __construct(
     AlshayaApiWrapper $api_wrapper,
     LoggerChannelFactoryInterface $logger_factory,
     CacheBackendInterface $cache,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    MagentoApiHelper $mdc_helper
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('alshaya_online_returns');
     $this->cache = $cache;
     $this->languageManager = $language_manager;
+    $this->mdcHelper = $mdc_helper;
   }
 
   /**
@@ -88,8 +100,11 @@ class OnlineReturnsApiHelper {
       $resetStoreContext = TRUE;
     }
 
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('online_returns_config'),
+    ];
     $endpoint = 'returnsconfig';
-    $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
+    $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
     // @todo Remove hard coded API response.
     $configs = [
