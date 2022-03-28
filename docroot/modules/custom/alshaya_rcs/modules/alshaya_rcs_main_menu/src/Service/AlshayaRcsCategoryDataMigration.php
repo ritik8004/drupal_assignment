@@ -194,6 +194,10 @@ class AlshayaRcsCategoryDataMigration {
     $language_manager = \Drupal::service('language_manager');
     $langcode = $language_manager->getCurrentLanguage()->getId();
     foreach ($terms as $term) {
+      // Check if RCS Category is already created.
+      if (!empty($context['results']['acq_term_mapping'][$term->tid])) {
+        continue;
+      }
       // Load the product category term object.
       $acq_term_data = $term_storage->load($term->tid);
       $acq_term_data = ($acq_term_data->language()->getId() == $langcode) ? $acq_term_data : $acq_term_data->getTranslation($langcode);
