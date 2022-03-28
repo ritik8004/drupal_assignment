@@ -119,7 +119,7 @@ class AlshayaFrontendCommand extends BltTasks {
   public function buildStyles() {
     foreach (self::$themeTypes as $type) {
       $result = $this->buildThemesOfType($type);
-      if ($result->getExitCode() !== 0) {
+      if ($result !== 0) {
         return 1;
       }
     }
@@ -138,6 +138,7 @@ class AlshayaFrontendCommand extends BltTasks {
    * @description Build styles for all the themes of a particular type.
    */
   public function buildThemesOfType(string $type) {
+    $exitCode = 0;
     $ignoredDirs = ['alshaya_example_subtheme', 'node_modules', 'gulp-tasks'];
 
     if (!in_array($type, self::$themeTypes)) {
@@ -233,7 +234,11 @@ class AlshayaFrontendCommand extends BltTasks {
     }
 
     $tasks->stopOnFail();
-    return $tasks->getCommand() ? $tasks->run() : 0;
+    if ($tasks->getCommand()) {
+      $runTasks = $tasks->run();
+      $exitCode = $runTasks->getExitCode();
+    }
+    return $exitCode;
   }
 
   /**
