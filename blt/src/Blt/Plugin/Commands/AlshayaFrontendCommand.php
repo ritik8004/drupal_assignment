@@ -237,12 +237,10 @@ class AlshayaFrontendCommand extends BltTasks {
       // Copy cloud code only if
       // - we are inside github actions
       // - github push event has been triggered
-      // - we have some file changes at least
-      // - 'BUILD REQUEST' comment is not present in merge commit message.
+      // - we have some file changes at least.
       if (getenv('GITHUB_ACTIONS') == 'true'
         && getenv('GITHUB_EVENT_NAME') == 'push'
         && !empty(getenv('CHANGED_ALL_FILES'))
-        && strpos(getenv('COMMIT_MESSAGE'), 'BUILD REQUEST') === FALSE
       ) {
         $reactChanges = getenv('CHANGED_REACT_FILES');
         // Build if change in common (modules/react/js) folder.
@@ -256,11 +254,11 @@ class AlshayaFrontendCommand extends BltTasks {
         }
 
         // Build if dependent react module has some changes.
-        $dependencyFile = $dir . '/react_dependencies.txt';
+        $dependencyFile = $dir . 'react_dependencies.txt';
         if ($build === FALSE && file_exists($dependencyFile)) {
           $dependencies = explode(PHP_EOL, file_get_contents($dependencyFile));
           foreach ($dependencies as $dependency) {
-            if (strpos($reactChanges, $dependency) > -1) {
+            if ($dependency && strpos($reactChanges, $dependency) > -1) {
               $build = TRUE;
               break;
             }
@@ -269,8 +267,8 @@ class AlshayaFrontendCommand extends BltTasks {
 
         // Else copy from acquia repo if build is not needed.
         if ($build === FALSE) {
-          $reactFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $dir) . '/dist';
-          $reactToDir = $dir;
+          $reactFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $dir) . 'dist';
+          $reactToDir = $dir . 'dist';
 
           // Copy step.
           $this->say('Copying unchanged ' . $file->getRelativePath() . ' react module from ' . $reactFromDir . ' to ' . $reactToDir);
@@ -287,7 +285,6 @@ class AlshayaFrontendCommand extends BltTasks {
       // - we are outside github actions
       // - github create event has been triggered with tag push
       // - it is an empty commit
-      // - reviewer requested a force build by commenting 'BUILD REQUEST'
       //   in merge commit message.
       else {
         $build = TRUE;
