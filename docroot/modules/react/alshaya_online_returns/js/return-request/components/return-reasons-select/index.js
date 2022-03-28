@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 
 const ReturnReasonsSelect = ({
-  returnReasons,
+  returnReasons, handleSelectedReason,
 }) => (
   <>
     <div className="return-qty-row">
@@ -12,6 +12,7 @@ const ReturnReasonsSelect = ({
         className="return-qty-select"
         options={returnReasons}
         defaultValue={returnReasons[0]}
+        onChange={handleSelectedReason}
       />
     </div>
   </>

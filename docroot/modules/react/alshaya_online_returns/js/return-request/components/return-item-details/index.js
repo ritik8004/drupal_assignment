@@ -24,6 +24,9 @@ class ReturnItemDetails extends React.Component {
    * This handles click on item return checkbox.
    */
   handleItemReturn = (e) => {
+    const { processSelectedItems, item } = this.props;
+    processSelectedItems(e.target.checked, item);
+    // If checkbox is checked, we show reason and quantity dropdowns.
     this.setState({
       isChecked: e.target.checked,
     });
@@ -33,7 +36,7 @@ class ReturnItemDetails extends React.Component {
     const {
       isChecked, returnReasons, qtyOptions,
     } = this.state;
-    const { item } = this.props;
+    const { item, handleSelectedReason } = this.props;
     return (
       <div className="items-tabel">
         <div className="order-item-row">
@@ -54,6 +57,7 @@ class ReturnItemDetails extends React.Component {
         <ConditionalView condition={isChecked}>
           <ReturnReasonsSelect
             returnReasons={returnReasons}
+            handleSelectedReason={handleSelectedReason}
           />
           <ReturnQuantitySelect
             qtyOptions={qtyOptions}
