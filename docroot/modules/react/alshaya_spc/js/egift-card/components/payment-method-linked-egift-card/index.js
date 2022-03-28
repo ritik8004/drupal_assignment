@@ -72,8 +72,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             // Current Time stamp to check for expiry.
             const currentTime = Math.floor(Date.now() / 1000);
 
-            // IF 0 balance card then no need to proceed further.
-            if (currentBalance === 0) {
+            // IF 0 balance or balance in negative card then no need to proceed further.
+            if (currentBalance <= 0) {
               this.setState({
                 egiftCardActualBalance: currentBalance,
                 egiftLinkedCardNumber: result.data.card_number,
