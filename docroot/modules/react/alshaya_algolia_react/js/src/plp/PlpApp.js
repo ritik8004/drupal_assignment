@@ -96,7 +96,7 @@ const PlpApp = ({
         // Add language suffix to the filter attribute eg: field_category_name.en.lvl2.
         if (productListIndexStatus()) {
           if (subCategoryField !== undefined && subCategoryField.indexOf('.') > -1) {
-            subCategoryField.replace('.', `.${currentLanguage}.`);
+            subCategoryField = subCategoryField.replace('.', `.${currentLanguage}.`);
           } else {
             subCategoryField = `${subCategoryField}.${currentLanguage}`;
           }
