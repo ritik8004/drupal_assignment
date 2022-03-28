@@ -17,20 +17,14 @@ const ReturnIndividualItem = ({
       <div className="item-name">{ item.name }</div>
       {item.attributes && Object.keys(item.attributes).map((attribute) => (
         <div key={item.attributes[attribute].label} className="attribute-detail">
-          { item.attributes[attribute].label }
-          :
-          { item.attributes[attribute].value }
+          { Drupal.t('@attrLabel: @attrValue', { '@attrLabel': item.attributes[attribute].label, '@attrValue': item.attributes[attribute].value }) }
         </div>
       ))}
       <div className="item-code">
-        {Drupal.t('Item code')}
-        :
-        { item.sku }
+        { Drupal.t('Item Code: @sku', { '@sku': item.sku }) }
       </div>
       <div className="item-quantity">
-        {Drupal.t('Quantity')}
-        :
-        { item.ordered }
+        { Drupal.t('Quantity: @quantity', { '@quantity': item.ordered }) }
       </div>
     </div>
     <div className="item-price">
