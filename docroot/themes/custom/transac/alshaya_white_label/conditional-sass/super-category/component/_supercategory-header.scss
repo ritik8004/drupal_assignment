@@ -402,4 +402,34 @@
       }
     }
   }
+
+  &.magazine-layout-v2 {
+    &.nodetype--acq_product {
+      @include breakpoint($only-mobile) {
+        margin-top: 2rem;
+      }
+
+      .block-alshaya-super-category-menu {
+        @include breakpoint($only-mobile) {
+          display: none;
+        }
+      }
+
+      .menu--mobile-navigation {
+        @include breakpoint($only-mobile) {
+          display: none;
+        }
+      }
+    }
+
+    &:not(.frontpage) {
+      .page-standard {
+        &.l-container {
+          @include breakpoint($only-mobile) {
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
 }
