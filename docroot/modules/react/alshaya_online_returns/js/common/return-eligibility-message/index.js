@@ -20,7 +20,7 @@ class ReturnEligibilityMessage extends React.Component {
     const {
       orderId,
       isReturnEligible,
-      returnExipiration,
+      returnExpiration,
       paymentMethod,
       orderType,
     } = this.props;
@@ -29,14 +29,14 @@ class ReturnEligibilityMessage extends React.Component {
       return null;
     }
 
-    if (isReturnWindowClosed(returnExipiration)) {
-      return <ReturnWindow message={getReturnWindowClosedMessage(returnExipiration)} />;
+    if (isReturnWindowClosed(returnExpiration)) {
+      return <ReturnWindow message={getReturnWindowClosedMessage(returnExpiration)} />;
     }
 
     if (isReturnEligible) {
       return (
         <>
-          <ReturnWindow message={getReturnWindowOpenMessage(returnExipiration)} />
+          <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
           <ReturnAction handleOnClick={this.handleOnClick} />
           <ReturnAtStore />
         </>
@@ -46,7 +46,7 @@ class ReturnEligibilityMessage extends React.Component {
     if (orderType === 'ship_to_store') {
       return (
         <>
-          <ReturnWindow message={getReturnWindowOpenMessage(returnExipiration)} />
+          <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
           <ReturnAction returnType="Click and Collect" />
           <ReturnAtStore returnType="Click and Collect" />
         </>
@@ -55,7 +55,7 @@ class ReturnEligibilityMessage extends React.Component {
 
     return (
       <>
-        <ReturnWindow message={getReturnWindowOpenMessage(returnExipiration)} />
+        <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
         <ReturnAction returnType={paymentMethod} />
         <ReturnAtStore returnType={paymentMethod} />
       </>

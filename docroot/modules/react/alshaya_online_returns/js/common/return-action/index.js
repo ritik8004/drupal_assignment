@@ -10,7 +10,7 @@ const ReturnAction = (props) => {
   if (hasValue(returnType)) {
     return (
       <span>
-        { `${returnType} ${Drupal.t('orders can only be returned at stores')}` }
+        { Drupal.t('@type orders can only be returned at stores', { '@type': returnType }) }
       </span>
     );
   }

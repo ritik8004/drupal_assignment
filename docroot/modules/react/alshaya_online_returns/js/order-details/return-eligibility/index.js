@@ -6,7 +6,7 @@ const ReturnEligibility = () => {
     onlineReturns: {
       orderId,
       isReturnEligible,
-      returnExipiration,
+      returnExpiration,
       paymentMethod,
       orderType,
     },
@@ -16,7 +16,7 @@ const ReturnEligibility = () => {
     <ReturnEligibilityMessage
       orderId={orderId}
       isReturnEligible={isReturnEligible}
-      returnExipiration={returnExipiration}
+      returnExpiration={returnExpiration}
       paymentMethod={paymentMethod}
       orderType={orderType}
     />
