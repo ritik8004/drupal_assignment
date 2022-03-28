@@ -159,20 +159,21 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
   if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
     return;
   }
-
   // Set order name if first item is virtual product.
   $item = reset($order['items']);
   if ($item['is_virtual']) {
     $build['#order']['name'] = $item['sku'] == 'giftcard_topup'
-      ? t('eGift Card Top up', [], ['context' => 'egift'])
-      : t('Alshaya eGift card', [], ['context' => 'egift']);
+      ? t('eGift Card Top ups', [], ['context' => 'egift'])
+      : t('Alshaya eGift cards', [], ['context' => 'egift']);
   }
-
   // Update Payment method name for hps payment.
   if ($build["#order_details"]["payment_method"] === 'hps_payment') {
     $build["#order_details"]["payment_method"] = t('eGift Card', [], ['context' => 'egift']);
   }
-
+  // For multiple payment and if some amount is paid via egift then add eGift Card payment.
+  if ($build["#order_details"]["payment_method_code"] !== 'hps_payment' && isset($order['extension']['hps_redeemed_amount'])) {
+    $build["#order_details"]["payment_method"] .= ', ' . t('eGift Card', [], ['context' => 'egift']);
+  }
   // Update virtual product details.
   foreach ($build['#products'] as $key => &$product) {
     $style = $product['name'];
@@ -180,8 +181,8 @@ function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(arra
     // Show eGift card image and options from order details.
     if ($product['is_virtual']) {
       $product['name'] = $product['sku'] == 'giftcard_topup'
-        ? t('eGift Card Top up', [], ['context' => 'egift'])
-        : t('Alshaya eGift card', [], ['context' => 'egift']);
+        ? t('eGift Card Top ups', [], ['context' => 'egift'])
+        : t('Alshaya eGift cards', [], ['context' => 'egift']);
 
       // Get virtual product image.
       $product['image'] = [
