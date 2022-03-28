@@ -165,12 +165,10 @@ class AlshayaFrontendCommand extends BltTasks {
       // Copy cloud code only if
       // - we are inside github actions
       // - github push event has been triggered
-      // - we have some file changes at least
-      // - 'BUILD REQUEST' comment is not present in merge commit message.
+      // - we have some file changes at least.
       if (getenv('GITHUB_ACTIONS') == 'true'
         && getenv('GITHUB_EVENT_NAME') == 'push'
         && !empty(getenv('CHANGED_ALL_FILES'))
-        && strpos(getenv('COMMIT_MESSAGE'), 'BUILD REQUEST') === FALSE
       ) {
         $themeChanges = getenv('CHANGED_THEME_FILES');
         // Build if theme is changed and tracked in CHANGED_THEME_FILES
@@ -222,7 +220,6 @@ class AlshayaFrontendCommand extends BltTasks {
       // - we are outside github actions
       // - github create event has been triggered with tag push
       // - it is an empty commit
-      // - reviewer requested a force build by commenting 'BUILD REQUEST'
       //   in merge commit message.
       else {
         $build = TRUE;
