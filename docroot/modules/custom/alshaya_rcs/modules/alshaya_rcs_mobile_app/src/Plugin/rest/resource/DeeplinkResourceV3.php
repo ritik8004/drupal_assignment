@@ -14,6 +14,8 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Routing\RequestContext;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Provides a resource to get deeplink in v3.
@@ -43,6 +45,13 @@ class DeeplinkResourceV3 extends DeeplinkResource {
   protected $pathValidator;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * DeeplinkResource constructor.
    *
    * @param array $configuration
@@ -69,6 +78,8 @@ class DeeplinkResourceV3 extends DeeplinkResource {
    *   The configuration factory service.
    * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
    *   The path validator service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
   public function __construct(
     array $configuration,
@@ -82,11 +93,13 @@ class DeeplinkResourceV3 extends DeeplinkResource {
     RequestStack $request_stack,
     RequestContext $request_context,
     ConfigFactoryInterface $config,
-    PathValidatorInterface $path_validator
+    PathValidatorInterface $path_validator,
+    EntityTypeManagerInterface $entity_type_manager
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger, $language_manager, $alias_manager, $mobile_app_utility, $request_stack, $request_context);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger, $language_manager, $alias_manager, $mobile_app_utility, $request_stack, $request_context, $entity_type_manager);
     $this->configFactory = $config;
     $this->pathValidator = $path_validator;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -105,7 +118,8 @@ class DeeplinkResourceV3 extends DeeplinkResource {
       $container->get('request_stack'),
       $container->get('router.request_context'),
       $container->get('config.factory'),
-      $container->get('path.validator')
+      $container->get('path.validator'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -178,10 +192,13 @@ class DeeplinkResourceV3 extends DeeplinkResource {
       elseif ($route_name == 'entity.node.canonical') {
         // Check if its PDP route.
         $options = $url_object->getRouteParameters();
-        // Get the placeholder rcs product node from config.
-        $entity_id = $rcs_placeholder_settings->get('product.placeholder_nid');
-        if ($options['node'] == $entity_id) {
-          return TRUE;
+        $node = $this->entityTypeManager->getStorage('node')->load($options['node']);
+        if ($node instanceof NodeInterface && $node->bundle() == 'rcs_product') {
+          // Get the placeholder rcs product node from config.
+          $entity_id = $rcs_placeholder_settings->get('product.placeholder_nid');
+          if ($options['node'] == $entity_id) {
+            return TRUE;
+          }
         }
       }
     }
