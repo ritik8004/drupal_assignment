@@ -16,6 +16,18 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * New configuration 'show_size_guide_on_pdp_page'.
+ */
+function alshaya_acm_product_update_8079() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('alshaya_acm_product.pdp_modal_links');
+  $config->set('show_size_guide_on_pdp_page', 0);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.9.0] Add the config value for the brand name display in plp.
  */
 function alshaya_acm_product_update_8078() {

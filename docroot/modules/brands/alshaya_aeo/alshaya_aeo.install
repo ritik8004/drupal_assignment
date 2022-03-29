@@ -8,6 +8,18 @@
 /**
  * Implements hook_update_N().
  *
+ * Enable Show size guide on PDP page for AEO.
+ */
+function alshaya_aeo_update_8004() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('alshaya_acm_product.pdp_modal_links');
+  $config->set('show_size_guide_on_pdp_page', 1);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable super category feature for AEO.
  */
 function alshaya_aeo_update_8003() {
