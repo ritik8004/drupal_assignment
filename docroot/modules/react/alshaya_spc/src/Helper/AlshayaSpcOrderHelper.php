@@ -563,6 +563,41 @@ class AlshayaSpcOrderHelper {
         break;
     }
 
+    // Process HFD online booking information if available with order.
+    if (isset($order['hfd_booking_information'])) {
+      // First check if the order is eligible for the HFD booking or not.
+      $is_hfd_booking_order = $order['hfd_booking_information']['is_hfd_booking_order'] ?? FALSE;
+      $hfd_booking_info_processed = [
+        'isHfdBookingOrder' => $is_hfd_booking_order,
+      ];
+
+      // If the order is HFD booking order, process further.
+      if ($is_hfd_booking_order) {
+        // Check if the appointment is booked with order or failed. To confirm
+        // this we will check if the 'appointment_date' and 'start_time' are
+        // available of not. If 'appointment_date' and 'start_time' values are
+        // available, we will process to display booking details on FE.
+        if (!empty($order['hfd_booking_information']['appointment_date'])
+          && !empty($order['hfd_booking_information']['start_time'])) {
+          $hfd_booking_info_processed['hfdBookingInfo'] = $this->t('<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>', [
+            '@appointment_date' => $order['hfd_booking_information']['appointment_date'],
+            '@start_time' => $order['hfd_booking_information']['start_time'],
+            '@end_time' => $order['hfd_booking_information']['end_time'],
+          ]);
+        }
+        else {
+          // If the order is HFD order, i.e. 'is_hfd_booking_order' is set to
+          // true and 'appointment_date' isn't available, it means there were
+          // some errors in appointment booking during the order placement. We
+          // need to show an error message to customer in this case.
+          $hfd_booking_info_processed['hfdBookingInfo'] = $this->t('There was some error while booking. Please contact to customer care.');
+        }
+      }
+
+      // Add the processed HFD booking details with orderDetails.
+      $orderDetails['hfd_booking_information'] = $hfd_booking_info_processed;
+    }
+
     return $orderDetails;
   }
 
