@@ -123,4 +123,3 @@ services:
       - '@config.factory'
       - '@alshaya_acm_product_category.page'
       - '@entity_type.manager'
-
