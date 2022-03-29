@@ -16,6 +16,11 @@ import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isDesktop } from '../../../../js/utilities/display';
 
+/**
+ * Flag used to check if backend api for wishlist items is already called.
+ */
+window.loadWishListFromBackend = window.loadWishListFromBackend || false;
+
 export default class WishlistHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -110,6 +115,8 @@ export default class WishlistHeader extends React.Component {
           // data is empty in local storage for authenticate users. First check
           // if wishlist is available for the customer in backend.
           this.loadWishlistFromBackend();
+          // Get wishlist count after backend success then update header.
+          document.addEventListener('getWishlistFromBackendSuccess', this.updateWishListHeader);
         }
       }
     }
@@ -127,9 +134,26 @@ export default class WishlistHeader extends React.Component {
   }
 
   /**
+   * Get wishlist count and update wishlist header.
+   */
+  updateWishListHeader = (e) => {
+    const { wishListItemCount } = e.detail;
+    if (wishListItemCount > 0) {
+      this.setState({ wishListItemCount });
+    }
+  }
+
+  /**
    * Helper function to load wishlist information from the magento backend.
    */
   loadWishlistFromBackend = () => {
+    // Since wishlist-header component is called more than once
+    // as it is also used for sticky header, we only call API once
+    // and use getWishlistFromBackendSuccess event to update header component.
+    if (window.loadWishListFromBackend) {
+      return;
+    }
+    window.loadWishListFromBackend = true;
     getWishlistFromBackend().then((response) => {
       if (hasValue(response.data.items)) {
         const wishListItems = {};
@@ -151,13 +175,18 @@ export default class WishlistHeader extends React.Component {
         // Update the wishlist header icon color state
         // if we have product available in wishlist.
         const wishListItemCount = Object.keys(wishListItems).length;
-        if (wishListItemCount > 0) {
+        /* if (wishListItemCount > 0) {
           this.setState({ wishListItemCount });
-        }
+        } */
 
         // Dispatch an event for other modules to know
         // that wishlist data is available in storage.
-        const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', { bubbles: true });
+        const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', {
+          bubbles: true,
+          detail: {
+            wishListItemCount,
+          },
+        });
         document.dispatchEvent(getWishlistFromBackendSuccess);
       }
     });
