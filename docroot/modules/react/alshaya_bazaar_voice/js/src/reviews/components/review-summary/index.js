@@ -399,6 +399,7 @@ export default class ReviewSummary extends React.Component {
     } = this.state;
     const {
       isNewPdpLayout,
+      isWriteReview,
     } = this.props;
 
     let newPdp = isNewPdpLayout;
@@ -423,6 +424,7 @@ export default class ReviewSummary extends React.Component {
                 <WriteReviewButton
                   reviewedByCurrentUser={userDetails.productReview !== null}
                   newPdp={newPdp}
+                  isWriteReview={isWriteReview || false}
                 />
               </div>
             </div>
@@ -442,6 +444,7 @@ export default class ReviewSummary extends React.Component {
               overallSummary={reviewsProduct}
               isNewPdpLayout={isNewPdpLayout}
               reviewedByCurrentUser={userDetails.productReview !== null}
+              isWriteReview={isWriteReview || false}
             />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>
