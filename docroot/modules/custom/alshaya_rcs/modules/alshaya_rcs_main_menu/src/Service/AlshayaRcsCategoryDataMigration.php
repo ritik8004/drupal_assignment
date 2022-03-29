@@ -87,8 +87,10 @@ class AlshayaRcsCategoryDataMigration {
    *
    * @param int $batch_size
    *   Limits the number of rcs category processed per batch.
+   * @param bool $execute_batch
+   *   Check if batch process can be executed.
    */
-  public function processProductCategoryMigration(int $batch_size) {
+  public function processProductCategoryMigration(int $batch_size, $execute_batch = TRUE) {
     // Get the current language.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
@@ -148,6 +150,10 @@ class AlshayaRcsCategoryDataMigration {
 
     // Get the terms satisfying the above conditions.
     $terms = $query->distinct()->execute()->fetchAll();
+    if (!$execute_batch) {
+      return $terms;
+    }
+
     // Do not process if no terms are found.
     if (!empty($terms)) {
       // Set batch operations to migrate terms.
