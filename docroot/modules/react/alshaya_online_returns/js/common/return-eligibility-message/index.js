@@ -30,15 +30,18 @@ class ReturnEligibilityMessage extends React.Component {
     }
 
     if (isReturnWindowClosed(returnExpiration)) {
+      document.querySelector('#online-returns-eligibility-window').classList.add('return-window-closed');
       return <ReturnWindow message={getReturnWindowClosedMessage(returnExpiration)} />;
     }
 
     if (isReturnEligible) {
       return (
         <>
-          <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
-          <ReturnAction handleOnClick={this.handleOnClick} />
-          <ReturnAtStore />
+          <div>
+            <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
+            <ReturnAction handleOnClick={this.handleOnClick} />
+          </div>
+          <ReturnAtStore returnButtonclass="return-button-enabled" />
         </>
       );
     }
@@ -46,8 +49,10 @@ class ReturnEligibilityMessage extends React.Component {
     if (orderType === 'ship_to_store') {
       return (
         <>
-          <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
-          <ReturnAction returnType="Click and Collect" />
+          <div>
+            <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
+            <ReturnAction returnType="Click and Collect" />
+          </div>
           <ReturnAtStore returnType="Click and Collect" />
         </>
       );
@@ -55,8 +60,10 @@ class ReturnEligibilityMessage extends React.Component {
 
     return (
       <>
-        <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
-        <ReturnAction returnType={paymentMethod} />
+        <div>
+          <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
+          <ReturnAction returnType={paymentMethod} />
+        </div>
         <ReturnAtStore returnType={paymentMethod} />
       </>
     );
