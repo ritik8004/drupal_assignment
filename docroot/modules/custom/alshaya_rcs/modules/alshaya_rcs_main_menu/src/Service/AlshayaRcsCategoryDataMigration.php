@@ -150,6 +150,7 @@ class AlshayaRcsCategoryDataMigration {
 
     // Get the terms satisfying the above conditions.
     $terms = $query->distinct()->execute()->fetchAll();
+    // Batch set in install hook.
     if (!$execute_batch) {
       return $terms;
     }
