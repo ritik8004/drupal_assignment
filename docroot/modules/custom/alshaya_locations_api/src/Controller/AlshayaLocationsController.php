@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 
 /**
  * Class Alshaya Locations Controller.
@@ -44,6 +45,13 @@ class AlshayaLocationsController extends ControllerBase {
   protected $configFactory;
 
   /**
+   * The Api wrapper.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $alshayaApi;
+
+  /**
    * AlshayaLocationsController constructor.
    *
    * @param \Drupal\Core\Entity\Query\QueryFactory $entityQuery
@@ -54,12 +62,15 @@ class AlshayaLocationsController extends ControllerBase {
    *   LanguageManagerInterface service object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config object.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshayaApi
+   *   Config object.
    */
-  public function __construct(QueryFactory $entityQuery, EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager, ConfigFactoryInterface $configFactory) {
+  public function __construct(QueryFactory $entityQuery, EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager, ConfigFactoryInterface $configFactory, AlshayaApiWrapper $alshayaApi) {
     $this->entityQuery = $entityQuery;
     $this->entityTypeManager = $entityTypeManager;
     $this->languageManager = $languageManager;
     $this->configFactory = $configFactory;
+    $this->alshayaApi = $alshayaApi;
   }
 
   /**
@@ -71,6 +82,7 @@ class AlshayaLocationsController extends ControllerBase {
       $container->get('entity_type.manager'),
       $container->get('language_manager'),
       $container->get('config.factory'),
+      $container->get('alshaya_api.api'),
     );
   }
 
@@ -82,12 +94,10 @@ class AlshayaLocationsController extends ControllerBase {
    */
   public function stores($data = NULL) {
     // Mock file read for now.
-    // $domain = $this->configFactory->get('alshaya_stores_finder.settings');.
-    $domain = "https://cos-qa.store.alshaya.com/kwt_en/rest/V1/";
-    $url = $this->configFactory->get('alshaya_stores_finder.settings')->get('filter_path');
-    $url = rtrim($domain, "/") . $url;
-    $file = file_get_contents($url);
-    return new JsonResponse(json_decode($file));
+    $url = ltrim($this->configFactory->get('alshaya_stores_finder.settings')->get('filter_path'), '/');
+    $result = $this->alshayaApi->invokeApi($url, [], 'GET');
+
+    return new JsonResponse(json_decode($result));
   }
 
   /**
