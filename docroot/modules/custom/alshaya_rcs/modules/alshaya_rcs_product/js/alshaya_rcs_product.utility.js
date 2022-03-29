@@ -761,10 +761,10 @@
       return staticDataStore['attrLabels'][attrName][attrValue];
     }
 
-    const response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
+    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
     // Process the data to extract what we require and format it into an object.
     response.data.customAttributeMetadata.items.forEach(function (option) {
-      allOptionsForAttribute = {};
+      var allOptionsForAttribute = {};
       option.attribute_options.forEach(function (optionValue) {
         allOptionsForAttribute[optionValue.value] = optionValue.label;
       })
