@@ -13,7 +13,7 @@ const ShippingMethodCommon = ({ cart, method, selected }) => {
   // Check if the order booking feature is enabled.
   if (selected
     && hasValue(method.extension_attributes)
-    && hasValue(method.extension_attributes.eligible_for_hfd_booking)) {
+    && hasValue(method.extension_attributes.is_eligible_for_hfd_booking)) {
     return <OnlineBooking cart={cart} price={price} method={method} />;
   }
 

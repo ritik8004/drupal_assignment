@@ -52,7 +52,7 @@ export const getOnlineBookingApiEndpoint = (action) => {
  */
 export const getBookingDetailByConfirmationNumber = async (confirmationNumber) => {
   const response = await callMagentoApi(getOnlineBookingApiEndpoint('checkBookingStatus'), 'POST', {
-    hold_confirmation_number: confirmationNumber,
+    confirmationNumber,
   });
 
   // Handle the error response from API in case of internal error.
@@ -69,9 +69,7 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
   }
 
   // If booking is successful add confirmation number in result.
-  if (hasValue(response.data.success)) {
-    response.data.appointment_details.confirmation_number = confirmationNumber;
-  } else {
+  if (!hasValue(response.data.success)) {
     logger.warning('Online Booking: Api returns success false while fetching booking details from confirmation number @confirmationNumber, API Response: @response', {
       '@confirmationNumber': confirmationNumber,
       '@response': JSON.stringify(response.data),
