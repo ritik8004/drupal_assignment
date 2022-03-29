@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
+use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
  * Class Alshaya Spc Order Helper.
@@ -184,6 +185,13 @@ class AlshayaSpcOrderHelper {
   protected $deliveryOptionsHelper;
 
   /**
+   * Drupal\Core\Session\AccountProxy definition.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -226,6 +234,8 @@ class AlshayaSpcOrderHelper {
    *   Spc helper service.
    * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
    *   Delivery Options Helper.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -246,7 +256,8 @@ class AlshayaSpcOrderHelper {
                               RendererInterface $renderer,
                               SkuImagesHelper $images_helper,
                               AlshayaSpcHelper $spc_helper,
-                              DeliveryOptionsHelper $delivery_options_helper) {
+                              DeliveryOptionsHelper $delivery_options_helper,
+                              DateFormatterInterface $date_formatter) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -267,6 +278,7 @@ class AlshayaSpcOrderHelper {
     $this->skuImagesHelper = $images_helper;
     $this->spcHelper = $spc_helper;
     $this->deliveryOptionsHelper = $delivery_options_helper;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -580,7 +592,11 @@ class AlshayaSpcOrderHelper {
         if (!empty($order['hfd_booking_information']['appointment_date'])
           && !empty($order['hfd_booking_information']['start_time'])) {
           $hfd_booking_info_processed['hfdBookingInfo'] = $this->t('<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>', [
-            '@appointment_date' => $order['hfd_booking_information']['appointment_date'],
+            '@appointment_date' => $this->dateFormatter->format(
+              strtotime($order['hfd_booking_information']['appointment_date']),
+              'online_booking',
+              'd-M-Y',
+            ),
             '@start_time' => $order['hfd_booking_information']['start_time'],
             '@end_time' => $order['hfd_booking_information']['end_time'],
           ]);
