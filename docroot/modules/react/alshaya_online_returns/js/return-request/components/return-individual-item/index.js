@@ -8,8 +8,7 @@ const ReturnIndividualItem = ({
   const eligibleClass = item.is_returnable ? 'return-eligible' : 'in-eligible';
   return (
     <div className="order-item-detail">
-      {item.image_data
-        && (
+      <ConditionalView condition={item.image_data}>
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass}`}>
             <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
@@ -18,7 +17,7 @@ const ReturnIndividualItem = ({
             </ConditionalView>
           </div>
         </div>
-        )}
+      </ConditionalView>
       <div className="order__details--summary order__details--description">
         <div className="item-name">{ item.name }</div>
         {item.attributes && Object.keys(item.attributes).map((attribute) => (
