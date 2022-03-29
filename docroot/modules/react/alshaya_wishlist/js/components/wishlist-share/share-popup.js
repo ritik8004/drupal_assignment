@@ -94,7 +94,7 @@ export default class SharePopup extends React.Component {
             </a>
             <div className="header">{getStringMessage('share_your_list', { '@wishlist_label': getWishlistLabel() })}</div>
             <div className="content">
-              {Drupal.t('Share all your @wishlist_label with friends and family.', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
+              {getStringMessage('share_your_list_text', { '@wishlist_label': getWishlistLabel() })}
             </div>
             <div className="actions">
               <button
