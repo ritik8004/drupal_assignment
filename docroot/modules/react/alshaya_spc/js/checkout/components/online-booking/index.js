@@ -38,12 +38,16 @@ export default class OnlineBooking extends React.Component {
     // Add event listener for shipping address change,
     // We need to reset the online booking storage and fetch details.
     document.addEventListener('onShippingAddressUpdate', this.onShippingAddressUpdate, false);
+    // Add event listener for place order.
+    // We need to reset the online booking storage.
+    document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
     await this.updateBookingDetails();
   }
 
   componentWillUnmount() {
     document.removeEventListener('validateOnlineBookingPurchase', this.validateOnlineBookingPurchase, false);
     document.removeEventListener('onShippingAddressUpdate', this.onShippingAddressUpdate, false);
+    document.removeEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
   }
 
   updateBookingDetails = async () => {
@@ -110,6 +114,10 @@ export default class OnlineBooking extends React.Component {
     this.setState({ wait: true });
     await this.updateBookingDetails();
   }
+
+  handlePlaceOrderEvent = () => {
+    setHideOnlineBooking(false);
+  };
 
   /**
    * Handle online booking error on place order.
