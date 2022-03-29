@@ -4,6 +4,7 @@ namespace Drupal\bazaar_voice\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class BazaarVoice filter Settings Form.
@@ -40,6 +41,24 @@ class ReviewFilterSettingsForm extends ConfigFormBase {
     ];
 
     return parent::buildForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
+
+    if (empty($form_state->getValue('pdp_filter_options'))) {
+      return;
+    }
+
+    try {
+      Yaml::parse($form_state->getValue('pdp_filter_options'));
+    }
+    catch (\Exception $e) {
+      $form_state->setErrorByName('pdp_filter_options', $e->getMessage());
+    }
   }
 
   /**

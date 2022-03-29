@@ -20,7 +20,9 @@ const multiRangeFilters = () => {
     const results = [];
     Object.entries(filters).forEach(([key, value]) => {
       if (value.widget.type === 'range_checkbox') {
-        results[key] = parseInt(value.widget.config.granularity, 10);
+        const { currentLanguage } = drupalSettings.path;
+        const facetKey = productListIndexStatus() ? `${key}.${currentLanguage}` : key;
+        results[facetKey] = parseInt(value.widget.config.granularity, 10);
       }
     });
     multiRangeFilters.cache = { results };
@@ -60,7 +62,9 @@ const swatchFiltersList = () => {
     const results = [];
     Object.entries(filters).forEach(([key, value]) => {
       if (value.widget.type === 'swatch_list') {
-        results[key] = value.alias;
+        const { currentLanguage } = drupalSettings.path;
+        const facetKey = productListIndexStatus() ? `${key}.${currentLanguage}` : key;
+        results[facetKey] = value.alias;
       }
     });
     swatchFiltersList.cache = { results };
@@ -294,7 +298,10 @@ const withPlpUrlAliasSync = (
         let categoryFieldFacet = `${this.categoryFieldName}.lvl0`;
 
         if (productListIndexStatus()) {
-          categoryFieldFacet = `${this.categoryFieldName}.en.lvl0`;
+          const { currentLanguage } = drupalSettings.path;
+          categoryFieldFacet = (this.categoryFieldName === 'lhn_category')
+            ? `${this.categoryFieldName}.${currentLanguage}.lvl0`
+            : `${this.categoryFieldName}.en.lvl0`;
         }
 
         const hierarchyValue = element.values.slice(0, 1);

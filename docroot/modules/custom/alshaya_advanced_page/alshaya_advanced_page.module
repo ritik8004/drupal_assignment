@@ -237,7 +237,11 @@ function _alshaya_advanced_page_get_node_title($node) {
   }
 
   // Get the product category for current department page.
-  $tid = $node->get('field_product_category')->first()->target_id;
+  $tid = $node->get('field_product_category')->first();
+  if (is_null($tid)) {
+    return '';
+  }
+  $tid = $tid->target_id;
   // Load the term object.
   $term = Term::load($tid);
 
@@ -373,7 +377,8 @@ function alshaya_advanced_page_block_access(Block $block, $operation, AccountInt
   // been tricked into thinking the department page as a term page.
   if (strpos($block_plugin, 'facet_block:') !== FALSE
     || ($block_plugin === 'views_block:alshaya_product_list-block_1')
-    || ($block_plugin === 'alshaya_algolia_react_plp')
+    || ($block_plugin === 'alshaya_algolia_react_plp'
+    || ($block_plugin === 'alshaya_algolia_listing_v2'))
   ) {
     // Not show block for department page.
     $route_object = \Drupal::routeMatch()->getRouteObject();
@@ -390,7 +395,9 @@ function alshaya_advanced_page_block_access(Block $block, $operation, AccountInt
 function alshaya_advanced_page_node_insert(EntityInterface $node) {
   if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
     $term = $node->get('field_product_category')->entity;
-    Cache::invalidateTags(['term:' . $term->id()]);
+    if ($term instanceof TermInterface) {
+      Cache::invalidateTags(['term:' . $term->id()]);
+    }
   }
 }
 
@@ -407,7 +414,9 @@ function alshaya_advanced_page_node_update(EntityInterface $node) {
     ? $node->original->get('field_product_category')->entity
     : $node->get('field_product_category')->entity;
 
-    Cache::invalidateTags(['term:' . $term->id()]);
+    if ($term instanceof TermInterface) {
+      Cache::invalidateTags(['term:' . $term->id()]);
+    }
   }
 }
 

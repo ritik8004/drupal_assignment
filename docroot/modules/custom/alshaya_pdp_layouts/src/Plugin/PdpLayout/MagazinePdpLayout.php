@@ -15,8 +15,16 @@ class MagazinePdpLayout extends PdpLayoutBase {
   /**
    * {@inheritdoc}
    */
-  public function getTemplateName(array &$suggestions) {
-    $suggestions[] = 'node__acq_product__full_magazine';
+  public function getTemplateName(array &$suggestions, string $bundle) {
+    switch ($bundle) {
+      case 'rcs_product':
+        $suggestions[] = 'node__rcs_product__full_magazine';
+        break;
+
+      default:
+        $suggestions[] = 'node__acq_product__full_magazine';
+        break;
+    }
   }
 
   /**

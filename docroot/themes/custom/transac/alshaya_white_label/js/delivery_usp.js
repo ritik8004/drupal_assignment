@@ -20,7 +20,7 @@
           if (isRTL()) {
             $('.paragraph_usp_delivery.paragraph-id--' + key + ' .field--name-field-usp-text.field__items').attr('dir', 'rtl');
             $('.paragraph_usp_delivery.paragraph-id--' + key + ' .field--name-field-usp-text.field__items').slick(
-                $.extend({}, delivery_options, {rtl: true})
+              $.extend({}, delivery_options, {rtl: true})
             );
           }
           else {

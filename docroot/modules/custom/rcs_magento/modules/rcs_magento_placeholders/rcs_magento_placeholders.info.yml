@@ -1,0 +1,9 @@
+name: RCS Magento Placeholders
+type: module
+description: Provides replacement content for RCS placeholders.
+core: 8.x
+core_version_requirement: ^8 || ^9
+
+dependencies:
+  - rcs_placeholders:rcs_placeholders
+  - rcs_magento:rcs_magento

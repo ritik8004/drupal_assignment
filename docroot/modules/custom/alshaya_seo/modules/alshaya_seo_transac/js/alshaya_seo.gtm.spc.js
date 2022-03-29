@@ -104,6 +104,7 @@
             qty: product.qty,
             finalPrice: product.finalPrice,
             cartDataLayer: Object.assign({}, cartDataLayer),
+            parentSKU: product.parentSKU,
           });
         });
       }
@@ -171,7 +172,8 @@
         },
         {
         qty: product.qty,
-        finalPrice: product.finalPrice
+        finalPrice: product.finalPrice,
+        parentSKU: product.parentSKU,
       });
     });
   };

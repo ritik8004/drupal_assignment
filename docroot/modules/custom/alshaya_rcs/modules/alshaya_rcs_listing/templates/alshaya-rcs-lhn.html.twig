@@ -1,0 +1,18 @@
+{% if lhn_cat_tree %}
+  {{ attach_library('alshaya_white_label/rcs-ph-lhn-block') }}
+  <ul>
+    {% for link in lhn_cat_tree %}
+      {#Show category and tree only when `lhn` is enabled.#}
+      {% if link.lhn == 1 %}
+        <li>
+          {% if link.clickable == 0 %}
+            {# If not clickable link. #}
+            <span class="lhn-{{ link.depth }} #rcs.lhn.active#">{{ link.label }}</span>
+          {% else %}
+            <a href="{{ link.url }}" class = "lhn-{{ link.depth }} #rcs.lhn.active#">{{ link.label }}</a>
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}

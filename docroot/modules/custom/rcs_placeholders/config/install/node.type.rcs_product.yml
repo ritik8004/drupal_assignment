@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - rcs_placeholders
+name: 'RCS Product'
+type: rcs_product
+description: 'Stores enrichment of remote commerce products.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true

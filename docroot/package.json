@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "description": "JavaScript Uglification builds.",
   "devDependencies": {
-    "@babel/core": "^7.16.7",
-    "@babel/plugin-proposal-decorators": "^7.16.7",
+    "@babel/core": "^7.17.0",
+    "@babel/plugin-proposal-decorators": "^7.17.0",
     "@babel/plugin-transform-react-constant-elements": "^7.16.7",
     "@babel/plugin-transform-react-inline-elements": "^7.16.7",
-    "@babel/preset-env": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators": "^6.24.1",
     "browserslist": "^4.16.3",
-    "del": "2.2.x",
+    "del": "^5.x",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-if": "^3.0.0",
@@ -26,6 +26,10 @@
   "private": true,
   "scripts": {
     "uninstall-tools": "rm -r node_modules",
-    "build": "node_modules/gulp/bin/gulp.js performance-build"
+    "build": "node_modules/gulp/bin/gulp.js performance-build",
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "resolutions": {
+    "glob-parent": "^6.0.2"
   }
 }

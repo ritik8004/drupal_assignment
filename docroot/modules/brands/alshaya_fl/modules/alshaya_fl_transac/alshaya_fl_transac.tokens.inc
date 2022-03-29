@@ -44,7 +44,8 @@ function alshaya_fl_transac_tokens($type, $tokens, array $data, array $options, 
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $sku = SKU::loadFromSku($skuManager->getSkuForNode($node), $node->language()->getId());
+  $langcode = $node->language()->getId();
+  $sku = SKU::loadFromSku($skuManager->getSkuForNode($node), $langcode);
   if (!($sku instanceof SKU)) {
     return $replacements;
   }
@@ -52,7 +53,7 @@ function alshaya_fl_transac_tokens($type, $tokens, array $data, array $options, 
   foreach ($tokens as $key => $token) {
     if ($key === 'product_material_text') {
       $material = $sku->get('attr_material')->getString();
-      $replacements[$token] = !empty($material) ? t('made by @material', ['@material' => $material]) : '';
+      $replacements[$token] = !empty($material) ? t('made by @material', ['@material' => $material], ['langcode' => $langcode]) : '';
     }
     elseif ($key === 'product_color_text') {
       $color = '';
@@ -69,7 +70,7 @@ function alshaya_fl_transac_tokens($type, $tokens, array $data, array $options, 
         }
       }
 
-      $replacements[$token] = $color ? t('with @color color', ['@color' => $color]) : '';
+      $replacements[$token] = $color ? t('with @color color', ['@color' => $color], ['langcode' => $langcode]) : '';
     }
   }
 

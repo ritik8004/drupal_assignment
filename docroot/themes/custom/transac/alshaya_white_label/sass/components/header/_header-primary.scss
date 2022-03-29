@@ -2,6 +2,29 @@
   --menuTiming: 250ms;
 }
 
+@mixin menu__list-item {
+  border-bottom: 1px solid $mm_l1_border;
+  margin-#{$left}: 0.625rem;
+  margin-#{$right}: 0.625rem;
+  font-family: $alshaya-bold;
+  font-weight: normal;
+  color: $mm_l2_link;
+  display: block;
+  font-size: 12px;
+  padding: 0;
+  text-transform: lowercase;
+
+  a {
+    padding: 1rem 0;
+    padding-bottom: 0.9375rem;
+    padding-#{$right}: 1.4rem;
+  }
+
+  &.hide-on-mobile {
+    display: none !important;
+  }
+}
+
 @include breakpoint($desktop) {
   .no--desktop,
   .toggle--sign.no--desktop {
@@ -1220,30 +1243,11 @@ header {
   }
 
   .menu__list-item {
-    border-bottom: 1px solid $mm_l1_border;
-    margin-#{$left}: 0.625rem;
-    margin-#{$right}: 0.625rem;
-    font-family: $alshaya-bold;
-    font-weight: normal;
-    color: $mm_l2_link;
-    display: block;
-    font-size: 12px;
-    padding: 0;
-    text-transform: lowercase;
-
-    a {
-      padding: 1rem 0;
-      padding-bottom: 0.9375rem;
-      padding-#{$right}: 1.4rem;
-    }
-
-    &.hide-on-mobile {
-      display: none !important;
-    }
+    @include menu__list-item;
   }
 
   .back--link {
-    @extend .menu__list-item;
+    @include menu__list-item;
 
     padding: 1rem 0;
     padding-#{$right}: 0.25rem;
@@ -1566,7 +1570,7 @@ header {
   }
 }
 
-//Highlights fix
+// Highlights fix.
 .highlighted {
   @media only screen and (min-device-width: 1195px) and (max-device-width: 1275px) {
     max-width: 10.5rem;

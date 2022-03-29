@@ -54,7 +54,7 @@
         });
 
         // PDP page quantity field, also works in crosssell, upsell modal views.
-        $('.form-item-quantity .form-select').once('select2select').select2({
+        $('.sku-base-form .form-item-quantity .form-select').once('select2select').select2({
           minimumResultsForSearch: -1
         });
 

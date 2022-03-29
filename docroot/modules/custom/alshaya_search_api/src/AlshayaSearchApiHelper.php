@@ -120,7 +120,7 @@ class AlshayaSearchApiHelper {
         ->getStorage('search_api_index')
         ->load($index_name);
 
-      $status[$index_name] = $index->status() && !($index->isReadOnly());
+      $status[$index_name] = $index->status();
     }
 
     return $status[$index_name];

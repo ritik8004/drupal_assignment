@@ -22,7 +22,7 @@
         }
 
         .throbber {
-          @include throbberLoader();
+          @include throbberLoader;
         }
 
         @include breakpoint($only-mobile) {

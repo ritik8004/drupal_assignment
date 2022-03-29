@@ -1,0 +1,192 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.rcs_category.field_category_slug
+    - field.field.taxonomy_term.rcs_category.field_display_as_clickable_link
+    - field.field.taxonomy_term.rcs_category.field_icon
+    - field.field.taxonomy_term.rcs_category.field_include_in_desktop
+    - field.field.taxonomy_term.rcs_category.field_include_in_mobile_tablet
+    - field.field.taxonomy_term.rcs_category.field_logo_active_image
+    - field.field.taxonomy_term.rcs_category.field_logo_header_image
+    - field.field.taxonomy_term.rcs_category.field_logo_inactive_image
+    - field.field.taxonomy_term.rcs_category.field_main_menu_highlight
+    - field.field.taxonomy_term.rcs_category.field_move_to_right
+    - field.field.taxonomy_term.rcs_category.field_override_target_link
+    - field.field.taxonomy_term.rcs_category.field_remove_term_in_breadcrumb
+    - field.field.taxonomy_term.rcs_category.field_target_link
+    - field.field.taxonomy_term.rcs_category.field_term_background_color
+    - field.field.taxonomy_term.rcs_category.field_term_font_color
+    - taxonomy.vocabulary.rcs_category
+  module:
+    - entity_reference_revisions
+    - link
+    - svg_image
+    - text
+_core:
+  default_config_hash: YmNCYOFaKU_njYbnz0V6muQwDdw8KZWxuBqYQql0giI
+id: taxonomy_term.rcs_category.default
+targetEntityType: taxonomy_term
+bundle: rcs_category
+mode: default
+content:
+  description:
+    label: hidden
+    type: text_default
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_display_as_clickable_link:
+    weight: 11
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_icon:
+    weight: 7
+    label: above
+    settings:
+      svg_attributes:
+        width: ''
+        height: ''
+      svg_render_as_image: true
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_include_in_desktop:
+    weight: 3
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_include_in_mobile_tablet:
+    weight: 4
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_logo_active_image:
+    weight: 12
+    label: above
+    settings:
+      svg_attributes:
+        width: ''
+        height: ''
+      svg_render_as_image: true
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_logo_header_image:
+    weight: 13
+    label: above
+    settings:
+      svg_attributes:
+        width: ''
+        height: ''
+      svg_render_as_image: true
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_logo_inactive_image:
+    weight: 14
+    label: above
+    settings:
+      svg_attributes:
+        width: ''
+        height: ''
+      svg_render_as_image: true
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_main_menu_highlight:
+    weight: 6
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    type: entity_reference_revisions_entity_view
+    region: content
+  field_move_to_right:
+    weight: 5
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_override_target_link:
+    weight: 1
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_remove_term_in_breadcrumb:
+    weight: 10
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_target_link:
+    weight: 2
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_term_background_color:
+    weight: 8
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_term_font_color:
+    weight: 9
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden:
+  field_category_slug: true
+  langcode: true
+  search_api_excerpt: true

@@ -1,0 +1,8 @@
+rcs_dynamic_yield:
+  js:
+    js/alshaya_rcs_dynamic_yield.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - rcs_placeholders/helpers
+    - dynamic_yield/dynamic_yield.script_injection

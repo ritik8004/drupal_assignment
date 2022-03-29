@@ -1,0 +1,12 @@
+.rcs-page:not(.rcs-loaded) {
+  [id^="rcs-ph"] .field,
+  h1:not(.site-brand-home) {
+    color: $no-color;
+
+    & > * {
+      visibility: hidden;
+    }
+
+    @include plain-loader;
+  }
+}

@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Module file for RCS Seo.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
+  if ($extension !== 'datalayer') {
+    return;
+  }
+
+  $new_source = '/' . drupal_get_path('module', 'alshaya_rcs_seo') . '/js/datapush.js';
+  $options = $libraries['datapush']['js']['js/datapush.js'];
+  unset($libraries['datapush']['js']['js/datapush.js']);
+  $libraries['datapush']['js'][$new_source] = $options;
+
+  $libraries['datapush']['dependencies'] = [
+    'rcs_placeholders/helpers',
+    'alshaya_rcs_seo/alshaya_rcs_product_seo',
+  ];
+
+  // Load it in the footer as the files which contain the event handlers will
+  // be loaded in the footer only.
+  unset($libraries['datapush']['header']);
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'alshaya_spc.checkout.confirmation') {
+    // This adds the library to the top of the array and above the
+    // datalayer/datapush library.
+    // If we put the weight=-1 for this, then the library dependencies are
+    // loaded later, thus causing issues.
+    // Hence we follow this approach.
+    array_unshift($attachments['#attached']['library'], 'alshaya_rcs_seo/order_confirmation');
+  }
+}
+
+/**
+ * Implements hook_simple_sitemap_links_alter().
+ */
+function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_variant) {
+  if ($sitemap_variant === 'default') {
+    // Change the sitemap domain based on config value.
+    $sitemap_domain = \Drupal::config('alshaya_rcs_seo.settings')->get('sitemap_domain_to_use') ?? 'drupal';
+    switch ($sitemap_domain) {
+      case 'magento':
+        // Prepare the sitemap domain URL.
+        $sitemap_domain_url = Settings::get('alshaya_api.settings')['magento_host'];
+        break;
+
+      default:
+        global $base_url;
+        $sitemap_domain_url = $base_url;
+        break;
+    }
+
+    $variant_links = [];
+    $country_code = _alshaya_custom_get_site_level_country_code();
+    $url = $sitemap_domain_url . '/media/sitemap/' . strtolower($country_code) . '/sitemap.xml';
+    $variant_links[] = [
+      'url' => $url,
+      'priority' => '0.5',
+    ];
+
+    $links = array_merge($variant_links, $links);
+  }
+}

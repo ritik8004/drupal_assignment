@@ -42,8 +42,28 @@
       dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime) * 1000);
     }
 
-    // Store data in the local storage with the expiry time.
-    localStorage.setItem(storageKey, JSON.stringify(dataToStore));
+    try {
+      // Store data in the local storage with the expiry time.
+      localStorage.setItem(storageKey, JSON.stringify(dataToStore));
+    }
+    catch (e) {
+      if (e.name === 'QuotaExceededError') {
+        // Log quota exceeded error in datadog and set flag.
+        if (sessionStorage.getItem('_quotaExceededErrorLogged') !== '1') {
+          let localKeys = Object.keys(localStorage);
+          let _lsTotal=0, totalSize;
+          $.each(localKeys, function (index, value) {
+            _lsTotal += ((localStorage[value].length + value.length)* 2);
+          });
+          totalSize = (_lsTotal / 1024).toFixed(2) + " KB";
+          // Logging error message and size used in local storage.
+          Drupal.alshayaLogger('error', e.message + ' Total size in localStorage: ' + totalSize, localKeys);
+          sessionStorage.setItem('_quotaExceededErrorLogged', '1');
+        }
+      } else {
+        Drupal.alshayaLogger('error', e.message);
+      }
+    }
 
     // Return true as an indication of values stored successfully.
     return true;

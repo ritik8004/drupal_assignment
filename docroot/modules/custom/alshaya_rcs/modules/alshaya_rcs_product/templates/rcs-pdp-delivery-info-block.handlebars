@@ -1,0 +1,22 @@
+{{#if expressDelivery.length }}
+  <div class="express-delivery desktop {{ express_delivery_class }}">
+    {{#each expressDelivery}}
+      <div class="express-delivery-text {{ this.id }} {{ this.class }}">
+        <span>{{ this.label }}</span>
+      </div>
+    {{/each}}
+  </div>
+{{else if sameDayDelivery.text }}
+  <div class="same-day-delivery">
+    <div class="same-day-content">
+      <p>{{ sameDayDelivery.text }}</p>
+      {{#if sameDayDelivery.sub_text }}
+        <p>{{ sameDayDelivery.sub_text }}</p>
+      {{/if}}
+    </div>
+  </div>
+{{else if delivery_in_only_city_text }}
+  <div class="delivery-in-only-city">
+    <p>{{ delivery_in_only_city_text }}</p>
+  </div>
+{{/if}}

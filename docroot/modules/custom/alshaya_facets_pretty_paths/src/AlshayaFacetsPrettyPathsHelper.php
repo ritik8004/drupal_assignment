@@ -697,4 +697,27 @@ class AlshayaFacetsPrettyPathsHelper {
     $facet->save();
   }
 
+  /**
+   * Get facet alias for product attribute code.
+   *
+   * @param string $attribute_code
+   *   Product option attribute code.
+   *
+   * @return string
+   *   Facet url alias.
+   */
+  public function getFacetAlias($attribute_code) {
+    $facets_alias_mapping = &drupal_static(__FUNCTION__, []);
+
+    if (empty($facets_alias_mapping)) {
+      $facets = $this->facetManager->getFacetsByFacetSourceId('search_api:views_page__search__page');
+      $facets_alias_mapping = [];
+      foreach ($facets as $facet) {
+        $facets_alias_mapping[$facet->id()] = $facet->getUrlAlias();
+      }
+    }
+
+    return $facets_alias_mapping[$attribute_code];
+  }
+
 }

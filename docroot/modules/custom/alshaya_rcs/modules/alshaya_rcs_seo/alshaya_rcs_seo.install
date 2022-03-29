@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Functions around module install.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_seo_install() {
+  // alshaya_rcs_listing should be installed before this and it's done as a part
+  // of alshaya_cos_transac_rcs.
+  // @see alshaya_cos_transac_rcs.install
+  $generator = \Drupal::service('simple_sitemap.generator');
+  // Remove the acq_product_category from sitemap indexing.
+  $generator->removeBundleSettings('taxonomy_term', 'acq_product_category');
+  // Reindex the sitemap items.
+  $generator->generateSitemap();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_rcs_seo_uninstall() {
+  $generator = \Drupal::service('simple_sitemap.generator');
+  // Add the acq_product_category from sitemap indexing.
+  $generator->setBundleSettings('taxonomy_term', 'acq_product_category');
+  // Reindex the sitemap items.
+  $generator->generateSitemap();
+}

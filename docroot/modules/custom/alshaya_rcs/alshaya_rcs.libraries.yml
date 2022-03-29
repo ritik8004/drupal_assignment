@@ -1,0 +1,5 @@
+utility:
+  js:
+    js/alshaya_rcs_utility.js: {}
+  dependencies:
+    - core/jquery

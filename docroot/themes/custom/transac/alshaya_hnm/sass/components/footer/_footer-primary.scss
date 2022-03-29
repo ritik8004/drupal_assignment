@@ -466,7 +466,6 @@
 
   .form-submit {
     @extend %btn;
-
     @include arabic-letter-spacing;
 
     font-family: $hnm-bold;

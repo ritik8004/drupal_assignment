@@ -8,4 +8,32 @@ body.wishlist-enabled {
       top: 0.75rem;
     }
   }
+
+  @include breakpoint($only-mobile) {
+    &.sub-brand-logo {
+      #wishlist-header-wrapper {
+        top: 4.65rem;
+        #{$right}: 9rem;
+      }
+
+      .wishlist-header {
+        padding-#{$right}: 0;
+      }
+
+      .wishlist-notification {
+        #{$right}: -6rem;
+      }
+
+      &.frontpage {
+        #wishlist-header-wrapper {
+          #{$right}: calc(50% - 2.5%);
+          z-index: 5;
+
+          .wishlist-notification {
+            #{$right}: -9rem;
+          }
+        }
+      }
+    }
+  }
 }

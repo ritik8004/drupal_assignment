@@ -26,8 +26,17 @@
       });
     }
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_algolia_product_impression, $('#alshaya-algolia-search'), drupalSettings, event);
+
+    $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
+      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_algolia_product_impression, $('#alshaya-algolia-search'), drupalSettings, event);
+    }, 500));
+
+    var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val();
+    if (!currentsearch) {
+      return;
+    }
+    currentsearch = currentsearch.trim();
     // Avoid triggering again for each page.
-    var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
     if (_.indexOf(searchQuery, currentsearch) < 0 && initNoOfResults !== noOfResult) {
       // Store all search queries in a temp array, so we don't trigger
       // event twice for the same keyword, while user repeats the search query
@@ -44,9 +53,6 @@
       });
     }
 
-    $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
-      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_algolia_product_impression, $('#alshaya-algolia-search'), drupalSettings, event);
-    }, 500));
   }, drupalSettings.gtm.algolia_trigger_ga_after));
 
   Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function (context, eventType) {
@@ -88,7 +94,7 @@
   }
 
   // Push Filter event to GTM.
-  $('body').once('bind-facet-item-click').on('click','.facet-item', function (event) {
+  $('#alshaya-algolia-search').once('bind-facet-item-click').on('click','.facet-item', function (event) {
     // To get page type for listing pages.
     // Search page does not have the pageSubType key in drupalSettings.
     var listName = drupalSettings.algoliaSearch.pageSubType ? drupalSettings.algoliaSearch.pageSubType : drupalSettings.path.currentPath;
@@ -110,20 +116,22 @@
         eventName = 'sort';
       }
       switch (listName) {
-        case 'search':
+        case 'promotion':
+        case 'plp':
+        case 'product_option_list':
           var data = {
             event: eventName,
-            siteSection: 'search results',
+            siteSection: section,
             filterType: facetTitle,
             filterValue: selectedText,
           };
           break;
 
-        case 'promotion':
-        case 'product_option_list':
+        case 'search':
+        default:
           var data = {
             event: eventName,
-            siteSection: section,
+            siteSection: 'search results',
             filterType: facetTitle,
             filterValue: selectedText,
           };

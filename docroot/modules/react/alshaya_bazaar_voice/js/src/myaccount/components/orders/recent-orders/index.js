@@ -10,33 +10,39 @@ export default class RecentOrders extends React.Component {
     this.state = {
       rating: '',
       reviewData: '',
+      userDetails: null,
     };
   }
 
   componentDidMount() {
     const { productId } = this.props;
-    const userDetails = getUserDetails(productId);
-    if (userDetails && Object.keys(userDetails).length !== 0
-      && userDetails.productReview !== null) {
-      this.setState({
-        rating: userDetails.productReview.user_rating,
-        reviewData: userDetails.productReview.review_data,
-      });
-    }
+    getUserDetails(productId).then((userDetails) => {
+      if (userDetails && Object.keys(userDetails).length !== 0
+        && userDetails.productReview !== null) {
+        this.setState({
+          userDetails,
+          rating: userDetails.productReview.user_rating,
+          reviewData: userDetails.productReview.review_data,
+        });
+      }
+    });
   }
 
   render() {
     const { productId } = this.props;
-    const userDetails = getUserDetails(productId);
     const {
-      rating, reviewData,
+      rating,
+      reviewData,
+      userDetails,
     } = this.state;
+
     if (userDetails && Object.keys(userDetails).length === 0) {
       return null;
     }
+
     return (
       <>
-        <ConditionalView condition={reviewData === ''}>
+        <ConditionalView condition={reviewData === '' && productId !== ''}>
           <WriteReviewButton
             reviewedByCurrentUser={false}
             productId={productId}

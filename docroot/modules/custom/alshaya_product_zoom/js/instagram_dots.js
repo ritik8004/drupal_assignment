@@ -18,18 +18,20 @@
   Drupal.behaviors.pdpInstagranDots = {
     attach: function (context, settings) {
       // Slick Selector.
-      var slickSlider = $('#product-image-gallery-mobile, #product-image-gallery-mob, #product-full-screen-gallery', context);
+      var slickSlider = $('#product-image-gallery-mobile, #product-image-gallery-mob, #product-full-screen-gallery', $('.entity--type-node', context));
 
       // After slider is loaded, add a wrapper for dots.
       // We need a wrapper with fixed width and overflow hidden.
-      slickSlider.on('init', function (event, slick) {
+      slickSlider.once('i-dots').on('init', function (event, slick) {
         Drupal.behaviors.pdpInstagranDots.initialSetup($(this));
       });
 
       // Before change fires before any slides are changed.
       // So nextSlide is soon to be currentSlide.
       // currentSlide is the one which is visible when user scrolls.
-      Drupal.behaviors.pdpInstagranDots.attachBeforeChange(slickSlider);
+      if (slickSlider.length) {
+        Drupal.behaviors.pdpInstagranDots.attachBeforeChange(slickSlider);
+      }
     }
   };
 
@@ -37,7 +39,7 @@
    * Add before change event.
    */
   Drupal.behaviors.pdpInstagranDots.attachBeforeChange = function (slickSlider) {
-    slickSlider.once().on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+    slickSlider.once('i-dots').on('beforeChange', function (event, slick, currentSlide, nextSlide) {
       // We do instagram dots only if we are above the limit.
       // Else, let the slider function as is, no changes.
       var totalCount = $(this).find('.slick-dots li').length;
@@ -144,7 +146,7 @@
       }, 500);
     }
     // Sync dots.
-    var mainPDPGallery = $('#product-image-gallery-mobile');
+    var mainPDPGallery = $('.entity--type-node #product-image-gallery-mobile');
     // If it is just a single image, then no need of sync.
     if (mainPDPGallery.find('.slick-slide').length === 1) {
       return;
