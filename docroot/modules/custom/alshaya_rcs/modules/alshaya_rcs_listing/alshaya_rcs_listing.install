@@ -58,6 +58,27 @@ function alshaya_rcs_listing_install() {
     }
   }
 
+  // Fetch acq product category enriched terms.
+  $terms = \Drupal::service('alshaya_rcs_main_menu.category_data_migration')->processProductCategoryMigration(30, FALSE);
+  if (!empty($terms)) {
+    // Set batch operations to migrate terms.
+    $operations = [];
+    foreach (array_chunk($terms, 30) as $term_chunk) {
+      $operations[] = [
+        'Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration::batchProcess',
+        [$term_chunk, 30],
+      ];
+    }
+    $batch = [
+      'title' => dt('Migrating enriched Product Category'),
+      'init_message' => dt('Starting processing rcs category...'),
+      'operations' => $operations,
+      'error_message' => dt('Unexpected error while migrating enriched ACM Categories.'),
+      'finished' => ['Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration::batchFinished'],
+    ];
+    batch_set($batch);
+  }
+
   // Migrate data.
   alshaya_rcs_listing_migrate_field_carousel_slug();
 
