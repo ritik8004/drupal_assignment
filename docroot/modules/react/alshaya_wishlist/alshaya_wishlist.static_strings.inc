@@ -34,5 +34,9 @@ function _alshaya_wishlist_strings() {
       'key' => 'share_your_list',
       'value' => t('Share Your List', [], ['context' => 'wishlist']),
     ],
+    [
+      'key' => 'share_your_list_text',
+      'value' => t('Share all your @wishlist_label with friends and family.', [], ['context' => 'wishlist']),
+    ],
   ];
 }
