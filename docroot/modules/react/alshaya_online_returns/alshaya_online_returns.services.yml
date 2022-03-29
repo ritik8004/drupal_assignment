@@ -3,3 +3,19 @@ services:
     class: Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper
     arguments:
       - '@config.factory'
+
+  alshaya_online_returns.online_returns_api_helper:
+    class: Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper
+    arguments:
+      - '@alshaya_api.api'
+      - '@logger.factory'
+      - '@cache.online_returns_api_config'
+      - '@language_manager'
+      - '@alshaya_api.mdc_helper'
+
+  cache.online_returns_api_config:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [online_returns_api_config]

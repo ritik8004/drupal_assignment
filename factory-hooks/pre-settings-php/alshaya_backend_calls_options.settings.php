@@ -126,6 +126,9 @@ $settings['alshaya_backend_calls_options'] = [
     'delete_saved_card' => [
       'timeout' => 30,
     ],
+    'online_returns_config' => [
+      'timeout' => 10,
+    ],
   ],
   'appointment_booking' => [
     'default' => [

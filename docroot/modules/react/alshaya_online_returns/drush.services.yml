@@ -1,0 +1,9 @@
+services:
+  alshaya_online_returns.commands:
+    class: Drupal\alshaya_online_returns\Commands\OnlineReturnCommands
+    arguments:
+      - '@alshaya_online_returns.online_returns_api_helper'
+      - '@language_manager'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command }
