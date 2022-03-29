@@ -5,6 +5,8 @@
  * Module file for Alshaya RCS.
  */
 
+use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
+
 /**
  * Implements hook_library_info_alter().
  */
@@ -38,4 +40,26 @@ function alshaya_rcs_preprocess_block(&$variables) {
     }
     $variables['#attached']['library'][] = $rcs_library;
   }
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query().
+ */
+function alshaya_rcs_rcs_placeholders_graphql_query() {
+  $query_fields = [];
+  $query_fields['urlResolver'] = [
+    'query' => [
+      'query($url: String!)' => [
+        'urlResolver(url:$url)' => [
+          'redirectCode',
+          'relative_url',
+        ],
+      ],
+    ],
+    'variables' => [
+      'url' => RcsPhPathProcessor::getFullPath(),
+    ],
+  ];
+
+  return $query_fields;
 }
