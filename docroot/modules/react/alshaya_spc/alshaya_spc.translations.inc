@@ -542,7 +542,11 @@ function _alshaya_spc_translations() {
       'context' => 'online_booking',
     ],
     '<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>' => [
-      'ar' => '',
+      'ar' => '<b>@appointment_date<b> بين <b>@start_time</b> - <b>@end_time</b>',
+      'context' => 'online_booking',
+    ],
+    'Online booking: Sorry, something went wrong. Please try again later.' => [
+      'ar' => 'الحجز الإلكتروني: عذراً، لقد حدث خطأ ما. يرجى إعادة المحاولة لاحقاً.',
       'context' => 'online_booking',
     ],
   ];
