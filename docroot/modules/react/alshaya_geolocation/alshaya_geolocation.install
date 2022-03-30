@@ -48,7 +48,7 @@ function alshaya_geolocation_update_8002() {
     \Drupal::logger('alshaya_geolocation')->warning('Deleting the Store Finder view.');
     // Set MDC path.
     $store_config = $config_factory->getEditable('alshaya_stores_finder.settings');
-    $store_config->set('filter_path', "/storeLocator/search?searchCriteria[filter_groups][0][filters][0][field]=status&searchCriteria[filter_groups][0][filters][0][value]=1");
+    $store_config->set('filter_path', "storeLocator/search?searchCriteria[filter_groups][0][filters][0][field]=status&searchCriteria[filter_groups][0][filters][0][value]=1");
     $store_config->save();
   }
 }

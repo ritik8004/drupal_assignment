@@ -35,30 +35,32 @@ export class StoreFinderList extends React.Component {
     const { apiUrl } = drupalSettings.storeLabels;
     Axios.get(apiUrl).then((response) => {
       const stores = response.data;
-      const urlSearchParams = new URLSearchParams(window.location.search);
-      const params = Object.fromEntries(urlSearchParams.entries());
-      const currentLocation = { lat: +params.latitude, lng: +params.longitude };
-      const nearbyStores = stores.items.filter((store) => {
-        const otherLocation = { lat: +store.latitude, lng: +store.longitude };
-        const distance = getDistanceBetween(currentLocation, otherLocation);
-        return (distance < 5) ? store : null;
-      });
-      const sorter = (a, b) => (a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1);
-      nearbyStores.sort(sorter);
-      const prevState = this.state;
-      this.setState(
-        {
-          ...prevState,
-          stores: nearbyStores.length > 0 ? nearbyStores : stores.items,
-          count: nearbyStores.length > 0 ? nearbyStores.length : stores.items.length,
-          center: {
-            lat: +params.latitude ? +params.latitude : stores.items[0].latitude,
-            lng: +params.longitude ? +params.longitude : stores.items[0].longitude,
+      if (Object.keys(stores).length !== 0) {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const currentLocation = { lat: +params.latitude, lng: +params.longitude };
+        const nearbyStores = stores.items.filter((store) => {
+          const otherLocation = { lat: +store.latitude, lng: +store.longitude };
+          const distance = getDistanceBetween(currentLocation, otherLocation);
+          return (distance < 5) ? store : null;
+        });
+        const sorter = (a, b) => (a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1);
+        nearbyStores.sort(sorter);
+        const prevState = this.state;
+        this.setState(
+          {
+            ...prevState,
+            stores: nearbyStores.length > 0 ? nearbyStores : stores.items,
+            count: nearbyStores.length > 0 ? nearbyStores.length : stores.items.length,
+            center: {
+              lat: +params.latitude ? +params.latitude : stores.items[0].latitude,
+              lng: +params.longitude ? +params.longitude : stores.items[0].longitude,
+            },
+            loadmore: true,
+            page: drupalSettings.storeLabels.load_more_item_limit,
           },
-          loadmore: true,
-          page: drupalSettings.storeLabels.load_more_item_limit,
-        },
-      );
+        );
+      }
     });
   }
 
@@ -138,14 +140,14 @@ export class StoreFinderList extends React.Component {
       stores,
       page,
     } = this.state;
-    if (stores.length < page) {
+    this.setState({
+      page: (page + drupalSettings.storeLabels.load_more_item_limit),
+    });
+    if (stores.length < (page + drupalSettings.storeLabels.load_more_item_limit)) {
       this.setState({
         loadmore: false,
       });
     }
-    this.setState({
-      page: (page + drupalSettings.storeLabels.load_more_item_limit),
-    });
   }
 
   getDirection = (store) => {
@@ -199,7 +201,7 @@ export class StoreFinderList extends React.Component {
                   <div className="view-header" />
                   <div className="view-content list-store--detail">
                     {stores.map((store, index) => (
-                      <div key={store.id} className={index < page ? 'show' : 'hide'}>
+                      <div key={store.id} className={index < page ? 'show' : 'hidden'}>
                         <div className="list-view-locator">
                           <div className="store-row--counter">{(index + 1)}</div>
                           <div className="mobile-only-back-to-glossary store-back-to-glossary">

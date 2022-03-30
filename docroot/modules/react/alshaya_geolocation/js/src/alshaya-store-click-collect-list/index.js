@@ -33,16 +33,18 @@ export class StoreClickCollectList extends React.Component {
     const { apiUrl } = drupalSettings.storeLabels;
     Axios.get(apiUrl).then((response) => {
       const stores = response.data;
-      const prevState = this.state;
-      this.setState(
-        {
-          ...prevState,
-          stores: stores.items,
-          results: stores.items,
-          count: stores.total_count,
-          center: { lat: stores.items[0].latitude, lng: stores.items[0].longitude },
-        },
-      );
+      if (Object.keys(stores).length !== 0) {
+        const prevState = this.state;
+        this.setState(
+          {
+            ...prevState,
+            stores: stores.items,
+            results: stores.items,
+            count: stores.total_count,
+            center: { lat: stores.items[0].latitude, lng: stores.items[0].longitude },
+          },
+        );
+      }
     });
   }
 

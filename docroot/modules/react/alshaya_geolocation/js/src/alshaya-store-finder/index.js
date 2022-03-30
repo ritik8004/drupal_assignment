@@ -27,30 +27,32 @@ export class StoreFinder extends React.Component {
     const { apiUrl } = drupalSettings.storeLabels;
     Axios.get(apiUrl).then((response) => {
       const stores = response.data;
-      const storeSort = (a, b) => (
-        a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1
-      );
-      stores.items.sort(storeSort);
-      const prevState = this.state;
-      this.setState(
-        {
-          ...prevState,
-          stores: stores.items,
-          count: stores.total_count,
-          center: { lat: stores.items[0].latitude, lng: stores.items[0].longitude },
-        },
-        () => {
-          const currentState = this.state;
-          const obj = currentState.stores.reduce((acc, c) => {
-            const letter = c.store_name[0];
-            acc[letter] = (acc[letter] || []).concat({ id: c.id, store_name: c.store_name });
-            return acc;
-          }, {});
-          this.setState({
-            groupedStores: obj,
-          });
-        },
-      );
+      if (Object.keys(stores).length !== 0) {
+        const storeSort = (a, b) => (
+          a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1
+        );
+        stores.items.sort(storeSort);
+        const prevState = this.state;
+        this.setState(
+          {
+            ...prevState,
+            stores: stores.items,
+            count: stores.total_count,
+            center: { lat: stores.items[0].latitude, lng: stores.items[0].longitude },
+          },
+          () => {
+            const currentState = this.state;
+            const obj = currentState.stores.reduce((acc, c) => {
+              const letter = c.store_name[0];
+              acc[letter] = (acc[letter] || []).concat({ id: c.id, store_name: c.store_name });
+              return acc;
+            }, {});
+            this.setState({
+              groupedStores: obj,
+            });
+          },
+        );
+      }
     });
   }
 
