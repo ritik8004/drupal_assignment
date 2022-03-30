@@ -73,19 +73,20 @@ export default class OnlineBooking extends React.Component {
         // for the booking and reserve/hold the first available slot from this list.
         // If we have first slot available, we will hold that one.
         result = await getAvailableBookingSlots();
-        if (hasValue(result.success)) {
+        if (hasValue(result.status)) {
           const [availableSlot] = result.hfd_time_slots_details;
           const [firstSlot] = availableSlot.appointment_slots;
           if (hasValue(firstSlot)) {
             const params = {
               resource_external_id: firstSlot.resource_external_id,
               appointment_slot_time: firstSlot.appointment_slot_time,
+              appointment_length_time: firstSlot.appointment_length_time,
             };
             // Hold the first slot for user for first time.
             result = await holdBookingSlot(params);
-            if (hasValue(result.success)) {
+            if (hasValue(result.status)) {
               result = {
-                success: true,
+                status: true,
                 hfd_appointment_details: {
                   ...firstSlot,
                   hold_confirmation_number: result.hfd_appointment_details.hold_confirmation_number,
@@ -97,7 +98,7 @@ export default class OnlineBooking extends React.Component {
         }
         // Check if the booking is not successful.
         // Set status to online booking as false.
-        if (!hasValue(result.success)) {
+        if (!hasValue(result.status)) {
           setHideOnlineBooking(true);
         }
       }
@@ -157,9 +158,9 @@ export default class OnlineBooking extends React.Component {
     // Add loading on Change Delivery Schedule link.
     elem.classList.add('loading');
     // Get all available slots from the backend via API and set in the states,
-    // if API returns success.
+    // if API returns status.
     const result = await getAvailableBookingSlots();
-    if (hasValue(result.success)) {
+    if (hasValue(result.status)) {
       stateToUpdate.availableSlots = result.hfd_time_slots_details;
 
       // Update state with the available data.
@@ -208,15 +209,16 @@ export default class OnlineBooking extends React.Component {
     const params = {
       resource_external_id: selectedScheduleDetails.resource_external_id,
       appointment_slot_time: selectedScheduleDetails.appointment_slot_time,
+      appointment_length_time: selectedScheduleDetails.appointment_length_time,
       existing_hold_confirmation_number:
       bookingDetails.hfd_appointment_details.hold_confirmation_number,
     };
 
-    // Hold the new slot for the user, overridding the existing slot.
+    // Hold the new slot for the user, overriding the existing slot.
     let result = await holdBookingSlot(params);
-    if (hasValue(result.success)) {
+    if (hasValue(result.status)) {
       result = {
-        success: true,
+        status: true,
         hfd_appointment_details: {
           ...selectedScheduleDetails,
           hold_confirmation_number: result.hfd_appointment_details.hold_confirmation_number,
@@ -299,7 +301,7 @@ export default class OnlineBooking extends React.Component {
                     />
                   </>
                 </Popup>
-                <ConditionalView condition={bookingDetails.success}>
+                <ConditionalView condition={bookingDetails.status}>
                   <div className="online-booking__hold-delivery">
                     {
                       parse(
@@ -314,7 +316,7 @@ export default class OnlineBooking extends React.Component {
                 {/**
                  * Placeholder to display the error message when api return success false.
                  */}
-                <ConditionalView condition={!bookingDetails.success}>
+                <ConditionalView condition={!bookingDetails.status}>
                   <div className="online-booking__error-message">{bookingDetails.error_message}</div>
                 </ConditionalView>
                 <div className="online-booking__hold-notification">
@@ -334,7 +336,7 @@ export default class OnlineBooking extends React.Component {
              * Placeholder to display the default internal error message.
              */}
             <ConditionalView condition={!hasValue(bookingDetails.hfd_appointment_details)
-            && !hasValue(bookingDetails.success)}
+            && !hasValue(bookingDetails.status)}
             >
               <div className="online-booking__error-message">
                 {
