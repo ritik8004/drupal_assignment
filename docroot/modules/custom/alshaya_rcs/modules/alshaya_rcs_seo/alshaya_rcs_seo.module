@@ -73,5 +73,14 @@ function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_vari
     ];
 
     $links = array_merge($variant_links, $links);
+
+    // Unset the image-sitemap from the default sitemap variant.
+    $endsWith = '/image-sitemap';
+    $len = strlen($endsWith);
+    foreach ($links as $key => $value) {
+      if (substr($value['url'], -$len) === $endsWith) {
+        unset($links[$key]);
+      }
+    }
   }
 }
