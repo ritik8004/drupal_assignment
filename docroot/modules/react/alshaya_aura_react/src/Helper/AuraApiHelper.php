@@ -115,8 +115,17 @@ class AuraApiHelper {
         $resetStoreContext = TRUE;
       }
 
+      $request_options = [
+        'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('aura_dictionary_config'),
+      ];
       $endpoint = 'customers/apcDicData/' . $value;
-      $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
+      $response = $this->apiWrapper->invokeApi(
+        $endpoint,
+        [],
+        'GET',
+        FALSE,
+        $request_options
+      );
       $response = is_string($response) ? Json::decode($response) : $response;
 
       // Restore the store context langcode.
