@@ -18,7 +18,9 @@ export const getOnlineBookingApiEndpoint = (action) => {
   switch (action) {
     // Endpoint to check get status of appointment hold for user.
     case 'checkBookingStatus':
-      endpoint = '/V1/hfdbooking/check-hold-appointment-status';
+      endpoint = isUserAuthenticated()
+        ? '/V1/hfdbooking/mine/check-hold-appointment-status'
+        : `/V1/hfdbooking/${cartId}/check-hold-appointment-status`;
       break;
 
     // Endpoint to get all available time slots for the address.
