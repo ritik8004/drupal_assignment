@@ -85,7 +85,7 @@
   @include breakpoint($upto-desktop) {
     .logged-in .mobile--close,
     .mobile--close {
-      top: 2.8125rem;
+      top: 3.9rem;
     }
 
     .logged-in .toggle--sign,
@@ -194,7 +194,7 @@
         #{$left}: 20rem;
       }
 
-      top: 2.8125rem;
+      top: 3.9rem;
       height: 2.8125rem;
       width: 2.8125rem;
       padding-top: 0.5rem;
@@ -304,7 +304,7 @@
       }
 
       @include breakpoint($only-tablet) {
-        top: 4rem;
+        top: 4.25rem;
       }
     }
   }
@@ -341,7 +341,6 @@
   .c-menu-primary {
     .mobile--menu {
       @include breakpoint($upto-desktop) {
-        z-index: 11;
         top: 1.5rem;
       }
     }
@@ -367,6 +366,12 @@
       @include breakpoint($desktop) {
         width: 18.75rem;
         padding: 0;
+      }
+
+      .react-autosuggest__input {
+        @include breakpoint($only-tablet) {
+          height: 3.124rem;
+        }
       }
     }
   }
@@ -400,6 +405,21 @@
           }
         }
       }
+    }
+  }
+
+  &.path--cart {
+    .spc-pre-content-sticky {
+      @include breakpoint($upto-desktop) {
+        margin-top: 1.5rem;
+      }
+    }
+  }
+
+  .block-system-breadcrumb-block {
+    @include breakpoint($only-tablet) {
+      position: relative;
+      top: 2rem;
     }
   }
 
