@@ -24,7 +24,6 @@ export default class EgiftCardsListStepOne extends React.Component {
   handleEgiftSelect = (id) => {
     // Reset error message to empty.
     if (document.getElementById('open-amount-error') !== null) {
-      // Remove any error message.
       document.getElementById('open-amount-error').innerHTML = '';
     }
 
