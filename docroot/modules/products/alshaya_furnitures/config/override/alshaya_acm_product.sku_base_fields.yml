@@ -62,3 +62,6 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+  big_ticket:
+    label: 'Big Ticket'
+    type: 'string'

@@ -8,6 +8,20 @@
 /**
  * Implements hook_update_N().
  *
+ * Install new SKU field - big_ticket.
+ */
+function alshaya_furnitures_update_8007() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.11.0]Place secondary menu in sub header.
  */
 function alshaya_furnitures_update_8006() {
