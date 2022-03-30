@@ -23,7 +23,9 @@ export default class EgiftCardsListStepOne extends React.Component {
    */
   handleEgiftSelect = (id) => {
     // Reset error message to empty.
-    document.getElementById('open-amount-error').innerHTML = '';
+    if (document.getElementById('open-amount-error') !== null) {
+      document.getElementById('open-amount-error').innerHTML = '';
+    }
 
     if (document.getElementById('textarea-count')) {
       // Reset count on textarea.
