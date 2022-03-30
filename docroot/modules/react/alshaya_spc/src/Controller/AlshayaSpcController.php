@@ -805,7 +805,7 @@ class AlshayaSpcController extends ControllerBase {
 
     // Add HFD order booking information in drupal settings if available.
     if (isset($orderDetails['hfd_booking_information'])) {
-      $settings['order_details']['hfdBookingInformation'] = $orderDetails['hfd_booking_information'];
+      $settings['order_details']['deliveryBookingInformation'] = $orderDetails['hfd_booking_information'];
     }
 
     $cache_tags = [];
