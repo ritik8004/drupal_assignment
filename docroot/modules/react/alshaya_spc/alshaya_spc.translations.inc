@@ -481,10 +481,6 @@ function _alshaya_spc_translations() {
 
   // Strings related to `Online Booking` feature.
   $strings['v13'] = [
-    'Delivery Date and Time' => [
-      'ar' => 'تاريخ وموعد التوصيل:',
-      'context' => 'online_booking',
-    ],
     'Contact customer care (+965 55667788) to change the delivery schedule' => [
       'ar' => 'يرجى التواصل مع رقم خدمة الزبائن (+965 55667788) لتغيير موعد التوصيل',
       'context' => 'online_booking',
@@ -542,7 +538,7 @@ function _alshaya_spc_translations() {
       'context' => 'online_booking',
     ],
     'Delivery Date & Time' => [
-      'ar' => '',
+      'ar' => 'تاريخ وموعد التوصيل',
       'context' => 'online_booking',
     ],
     '<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>' => [
