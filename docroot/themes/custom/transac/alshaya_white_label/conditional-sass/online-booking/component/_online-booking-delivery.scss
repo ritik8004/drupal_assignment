@@ -36,14 +36,13 @@
   }
 
   &__change-delivery-schedule {
-    a {
-      color: $checkout_order_details_label;
-      font-size: 0.875rem;
-      font-weight: bold;
+    color: $checkout_order_details_label;
+    font-size: 0.875rem;
+    font-weight: bold;
+    cursor: pointer;
 
-      &:hover {
-        color: $checkout_order_details_label;
-      }
+    &:hover {
+      color: $checkout_order_details_label;
     }
   }
 

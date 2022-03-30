@@ -116,7 +116,9 @@ export default class CompletePurchase extends React.Component {
       const bookingDetails = await getBookingDetailByConfirmationNumber(cart.confirmation_number);
       // Check if success return false,
       if (!hasValue(bookingDetails.success)) {
-        this.handleOnlineBookingErrorMessage(bookingDetails.error_message);
+        dispatchCustomEvent('validateOnlineBookingPurchase', {
+          bookingDetails,
+        });
         // Activate place order button.
         checkoutButton.classList.remove('in-active');
         // Scroll the user to delivery information section.
@@ -277,33 +279,6 @@ export default class CompletePurchase extends React.Component {
 
     return false;
   };
-
-  /**
-   * Handle rendering of online booking error message.
-   *
-   * @param {string} errorMessage
-   *  Error message to display.
-   */
-  handleOnlineBookingErrorMessage = (errorMessage) => {
-    // As we need to show error message just above the hold notification element,
-    // we need to create span element using error message which needs to show.
-    const holdDelivery = document.querySelector('#online-booking .hold-delivery');
-    // Remove hold delivery element.
-    if (hasValue(holdDelivery)) {
-      holdDelivery.remove();
-    }
-    let errorElement = document.getElementsByClassName('booking-error-message');
-    // Check if the element is already exists, use the same for error.
-    if (errorElement.length === 0) {
-      errorElement = document.createElement('span');
-      errorElement.className = 'booking-error-message';
-      errorElement.innerHTML = errorMessage;
-      const holdNotification = document.querySelector('#online-booking .hold-notification');
-      holdNotification.parentNode.insertBefore(errorElement, holdNotification);
-    } else {
-      errorElement[0].innerHTML = errorMessage;
-    }
-  }
 
   render() {
     const { cart } = this.props;
