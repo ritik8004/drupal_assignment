@@ -214,7 +214,6 @@
     .algolia-search-back-icon {
       @include breakpoint($upto-desktop) {
         #{$left}: 0;
-        top: 0.25rem;
 
         @include icon(arrow-#{$left}) {
           font-size: 2.25rem;
@@ -236,8 +235,12 @@
 
     &.wishlist-enabled {
       #wishlist-header-wrapper {
-        @include breakpoint($upto-desktop) {
-          top: 4.75rem;
+        @include breakpoint($only-mobile) {
+          top: 4.6rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 3.8rem;
         }
       }
     }
@@ -245,7 +248,7 @@
     .page-standard {
       &.c-front {
         @include breakpoint($upto-desktop) {
-          margin-top: 1rem;
+          margin-top: 1.5rem;
         }
       }
     }
@@ -304,6 +307,18 @@
             visibility: visible;
             top: 0;
           }
+
+          .algolia-search-back-icon {
+            @include breakpoint($upto-desktop) {
+              visibility: visible;
+            }
+          }
+        }
+
+        .algolia-search-back-icon {
+          @include breakpoint($upto-desktop) {
+            visibility: hidden;
+          }
         }
       }
     }
@@ -347,6 +362,16 @@
 
         #wishlist-header-wrapper {
           top: 1.2rem !important;
+        }
+      }
+
+      &.search-enabled {
+        .c-menu-primary {
+          .region__menu-primary {
+            .menu--mobile-navigation {
+              z-index: 10;
+            }
+          }
         }
       }
 
@@ -511,12 +536,6 @@
             &::before,
             &::after {
               opacity: 0;
-            }
-          }
-
-          .react-autosuggest__input {
-            @include breakpoint($only-tablet) {
-              padding-#{$left}: 0.7rem !important;
             }
           }
         }
