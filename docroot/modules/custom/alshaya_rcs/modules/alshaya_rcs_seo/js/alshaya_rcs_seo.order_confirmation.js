@@ -37,6 +37,11 @@
       // Update the array with the product gtm data having the placeholders
       // replaced.
       products[index] = productGtmData;
+
+      // Fill in the data for productStyleCode.
+      if (eventData['productStyleCode'][productData.gtmAttributes.id] === undefined) {
+        eventData['productStyleCode'].push(productData.gtmAttributes.id);
+      }
     });
   });
 })(jQuery);
