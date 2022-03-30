@@ -1,17 +1,10 @@
 .online-booking {
-  font-family: $alshaya-thin;
   color: $checkout_section_titles;
 
   &__title,
   &__hold-delivery {
     font-size: 0.875rem;
     line-height: 1.29;
-  }
-
-  &__title {
-    @include breakpoint($only-mobile) {
-      width: 50%;
-    }
   }
 
   &__available-delivery {
@@ -92,5 +85,43 @@
       vertical-align: middle;
       margin-#{$right}: 0.46875rem;
     }
+  }
+}
+
+.loading {
+  color: transparent !important;
+  background: transparent url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+  background-size: contain;
+  // Prevent clicks and selection.
+  pointer-events: none;
+  user-select: none;
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  #{$left}: 50%;
+
+  html[lang=ar] & {
+    transform: translateY(-50%) translateX(50%);
+  }
+}
+
+.delivery-block-loading {
+  color: transparent;
+  background: transparent url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+  background-size: contain;
+  // Prevent clicks and selection.
+  pointer-events: none;
+  user-select: none;
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  top: 70%;
+  transform: translateY(-50%) translateX(-50%);
+  #{$left}: 50%;
+
+  html[lang=ar] & {
+    transform: translateY(-50%) translateX(50%);
   }
 }
