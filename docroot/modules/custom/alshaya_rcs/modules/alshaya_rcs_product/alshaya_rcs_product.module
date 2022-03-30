@@ -969,8 +969,12 @@ function _alshaya_rcs_product_get_cnc_config(array &$build) {
  * Implements hook_product_attribute_options_alter().
  */
 function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) {
-  $skuBaseFieldDefination = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
+  // Return from here if input type is not textarea or text.
+  if ($attribute && !in_array($attribute['frontend_input'], ['text', 'textarea'])) {
+    return;
+  }
 
+  $skuBaseFieldDefination = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   // Filter attributes fields having facets set as 1.
   $skuBaseFieldDefination = array_filter($skuBaseFieldDefination, function ($field) {
     return ($field['parent'] == 'attributes' && in_array('facet', $field) && $field['facet'] == 1);
