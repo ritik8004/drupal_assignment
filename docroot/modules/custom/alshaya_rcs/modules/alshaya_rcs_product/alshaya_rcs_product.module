@@ -969,15 +969,28 @@ function _alshaya_rcs_product_get_cnc_config(array &$build) {
  * Implements hook_product_attribute_options_alter().
  */
 function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) {
-  // Return from here if input type is not textarea or text.
-  if ($attribute && !in_array($attribute['frontend_input'], ['text', 'textarea'])) {
+  $skuBaseFieldDefination = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
+
+  // Filter attributes fields having facets set as 1.
+  $skuBaseFieldDefination = array_filter($skuBaseFieldDefination, function ($field) {
+    return ($field['parent'] == 'attributes' && in_array('facet', $field) && $field['facet'] == 1);
+  });
+  $attributes_used_as_facets = array_keys($skuBaseFieldDefination);
+
+  // Return from here if attribute code is other than materials or brands.
+  if ($attribute && !in_array($attribute['attribute_code'], $attributes_used_as_facets)) {
     return;
   }
   // Invoke GraphQL API and get the options list.
   $attribute_code = $attribute['attribute_code'];
   $settings = Settings::get('alshaya_api.settings');
 
-  $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '",is_array:1){attribute_code store_id attribute_values{key,value}}}';
+  // In Array attribute will only be added for materials attribute code.
+  $is_array = '';
+  if ($attribute_code === 'materials') {
+    $is_array = ',is_array:1';
+  }
+  $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '"' . $is_array . '){attribute_code store_id attribute_values{key,value}}}';
   // Magento URL to get the product option attributes.
   $request_url = $settings['magento_host'] . '/graphql?query=' . $query;
 
