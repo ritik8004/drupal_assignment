@@ -26,7 +26,7 @@ class WishlistProductList extends React.Component {
   constructor(props) {
     super(props);
     let wishListItems = {};
-    let wishListItemsCount = 0;
+    let wishListItemsCount = null;
     // If the current page is not a shared wishlist page and
     // forceLoadWishlistFromBackend settings should be undefined or false.
     // This configuration is only available for authenticated customers. So
@@ -186,7 +186,7 @@ class WishlistProductList extends React.Component {
     // Render empty wishlist component.
     // Check for wishlist data loaded via api if logged in user.
     // If anonymous user, check if wishlist item count is 0.
-    if (wishListItemsCount === 0) {
+    if (wishListItemsCount === 0 && wishListItemsCount !== null) {
       return PageEmptyMessage(
         getStringMessage('empty_wishlist', { '@wishlist_label': getWishlistLabel() }),
         'wishlist',
