@@ -7,7 +7,7 @@
   'use strict';
 
   // Load product details into initial Data layer.
-  document.addEventListener('alterInitialDataLayerData', (e) => {
+  document.addEventListener('dataLayerDataAlter', (e) => {
     switch (e.detail.type) {
       case 'product':
         var entity = e.detail.page_entity;
