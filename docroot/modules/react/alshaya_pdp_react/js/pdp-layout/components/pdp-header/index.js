@@ -38,24 +38,34 @@ export default class PdpHeader extends React.PureComponent {
       backArrow = previousLink;
     }
 
-    // Add Disable class to back button, if
-    // url is from new browser, or
-    // previous url's domain is not same
-    let disableClass = '';
-    if (previousLink === '' || backArrow === '') {
-      disableClass = 'disabled';
+    let backToHomeClass = '';
+    if (previousLink === '') {
+      backToHomeClass = 'back-to-home';
+    }
+
+    // Fetch langcode for current url.
+    const pathArray = window.location.pathname.split('/');
+    if (pathArray[0] === '') {
+      // Remove initial empty index.
+      pathArray.splice(0, 1);
     }
 
     backArrow = (e) => {
       e.preventDefault();
-      // following browser back behaviour.
-      window.history.back();
+      if (previousLink === '') {
+        // Redirect to home page
+        window.location.href = `${window.location.origin}/${pathArray[0]}`;
+      } else {
+        // following browser back behaviour.
+        window.history.back();
+      }
+      return false;
     };
 
     return (
       <div className="magv2-header-wrapper">
         <ConditionalView condition={window.innerWidth < 768}>
-          <a className={`back-button ${disableClass}`} href="#" onClick={(e) => backArrow(e)} />
+          <a className={`back-button ${backToHomeClass}`} href="#" onClick={(e) => backArrow(e)} />
           <PdpInfo
             title={title}
             finalPrice={finalPrice}

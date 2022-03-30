@@ -75,9 +75,7 @@
           .magv2-header-wrapper {
             .back-button,
             .cart-link {
-              @include breakpoint($only-mobile) {
-                border: none;
-              }
+              border: none;
             }
           }
         }

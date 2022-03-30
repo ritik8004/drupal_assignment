@@ -8,6 +8,8 @@ import { smoothScrollToActiveSwatch } from '../../../../../../js/utilities/smoot
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import isAuraEnabled from '../../../../../../js/utilities/helper';
 import { isProductBuyable } from '../../../../../../js/utilities/display';
+import SizeGuide from '../size-guide';
+import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -200,6 +202,15 @@ class ConfigurableProductForm extends React.Component {
     return label;
   }
 
+  // Returns true if showSizeGuideOnPdpPage is enabled.
+  showSizeGuideOnPdpPage = () => {
+    const { showSizeGuideOnPdpPage } = drupalSettings;
+    if (showSizeGuideOnPdpPage) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     const {
       configurableCombinations,
@@ -226,7 +237,6 @@ class ConfigurableProductForm extends React.Component {
     );
 
     const id = `add-to-cart-${context}`;
-
     return (
       <form action="#" className="sku-base-form" method="post" id={`pdp-add-to-cart-form-${context}`} parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
         <div id="add-to-cart-error" className="error" />
@@ -251,6 +261,18 @@ class ConfigurableProductForm extends React.Component {
             />
           </div>
         ))}
+        <ConditionalView condition={this.showSizeGuideOnPdpPage()}>
+          <div className="size-guide-on-pdp">
+            {Object.keys(configurables).map((key) => {
+              if (/size/.test(key) && attributeAvailable) {
+                return (
+                  <SizeGuide attrId={key} />
+                );
+              }
+              return null;
+            })}
+          </div>
+        </ConditionalView>
         {Object.keys(configurables).map((key) => {
           if (/size/.test(key) && attributeAvailable) {
             const label = this.buttonLabel(key);
