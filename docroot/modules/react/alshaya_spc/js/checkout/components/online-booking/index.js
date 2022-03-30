@@ -1,6 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import parse from 'html-react-parser';
+import moment from 'moment-timezone';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import
 {
@@ -61,8 +62,10 @@ export default class OnlineBooking extends React.Component {
       // Check if the cart is having confirmation number,
       // this means user has already reserved some slot earlier and
       // thus now we need to show the info of that slot only.
-      if (hasValue(cart.confirmation_number)) {
-        result = await getBookingDetailByConfirmationNumber(cart.confirmation_number);
+      if (hasValue(cart.extension_attributes)
+        && hasValue(cart.extension_attributes.hfd_hold_confirmation_number)) {
+        const confirmationNumber = cart.extension_attributes.hfd_hold_confirmation_number;
+        result = await getBookingDetailByConfirmationNumber(confirmationNumber);
       } else {
         // If confirmation number is not there in basket,
         // this means user hadn't reserved any slot earlier.
@@ -71,21 +74,21 @@ export default class OnlineBooking extends React.Component {
         // If we have first slot available, we will hold that one.
         result = await getAvailableBookingSlots();
         if (hasValue(result.success)) {
-          const [availableSlot] = result.available_time_slots;
+          const [availableSlot] = result.hfd_time_slots_details;
           const [firstSlot] = availableSlot.appointment_slots;
           if (hasValue(firstSlot)) {
             const params = {
               resource_external_id: firstSlot.resource_external_id,
-              appointment_date_time: firstSlot.appointment_date_time,
+              appointment_slot_time: firstSlot.appointment_slot_time,
             };
             // Hold the first slot for user for first time.
             result = await holdBookingSlot(params);
             if (hasValue(result.success)) {
               result = {
                 success: true,
-                appointment_details: {
+                hfd_appointment_details: {
                   ...firstSlot,
-                  confirmation_number: result.hold_appointment.confirmation_number,
+                  hold_confirmation_number: result.hfd_appointment_details.hold_confirmation_number,
                   appointment_date: availableSlot.appointment_date,
                 },
               };
@@ -157,7 +160,7 @@ export default class OnlineBooking extends React.Component {
     // if API returns success.
     const result = await getAvailableBookingSlots();
     if (hasValue(result.success)) {
-      stateToUpdate.availableSlots = result.available_time_slots;
+      stateToUpdate.availableSlots = result.hfd_time_slots_details;
 
       // Update state with the available data.
       this.setState(stateToUpdate);
@@ -194,8 +197,8 @@ export default class OnlineBooking extends React.Component {
     // If not existing booking details found we won't do anything as per
     // assumption first time slot will be hold on page load and calendar
     // will open only after that.
-    if (hasValue(bookingDetails.appointment_details)
-      && !hasValue(bookingDetails.appointment_details.confirmation_number)
+    if (hasValue(bookingDetails.hfd_appointment_details)
+      && !hasValue(bookingDetails.hfd_appointment_details.hold_confirmation_number)
     ) {
       this.closeScheduleDeliveryModal();
       return;
@@ -204,8 +207,9 @@ export default class OnlineBooking extends React.Component {
     // Preparing the params for holding the appoitment.
     const params = {
       resource_external_id: selectedScheduleDetails.resource_external_id,
-      appointment_date_time: selectedScheduleDetails.appointment_date_time,
-      existing_hold_confirmation_number: bookingDetails.appointment_details.confirmation_number,
+      appointment_slot_time: selectedScheduleDetails.appointment_slot_time,
+      existing_hold_confirmation_number:
+      bookingDetails.hfd_appointment_details.hold_confirmation_number,
     };
 
     // Hold the new slot for the user, overridding the existing slot.
@@ -213,10 +217,10 @@ export default class OnlineBooking extends React.Component {
     if (hasValue(result.success)) {
       result = {
         success: true,
-        appointment_details: {
+        hfd_appointment_details: {
           ...selectedScheduleDetails,
-          confirmation_number: result.hold_appointment.confirmation_number,
-          appointment_date: appointmentDate,
+          hold_confirmation_number: result.hfd_appointment_details.hold_confirmation_number,
+          appointment_date: result.hfd_appointment_details.appointment_date,
         },
       };
     }
@@ -252,7 +256,7 @@ export default class OnlineBooking extends React.Component {
             {/**
              * Validate bookingDetails have data, otherwise display the internal error message.
              */}
-            { hasValue(bookingDetails.appointment_details) && (
+            { hasValue(bookingDetails.hfd_appointment_details) && (
               <>
                 <div className="online-booking__title">
                   {
@@ -269,8 +273,8 @@ export default class OnlineBooking extends React.Component {
                         Drupal.t(
                           'Earliest available delivery on <div class="online-booking__available-delivery-block">!appointment_date between !time_slot</div>',
                           {
-                            '!appointment_date': `<div class="online-booking__available-delivery-date">${bookingDetails.appointment_details.appointment_date}</div>`,
-                            '!time_slot': `<div class="online-booking__available-delivery-time">${bookingDetails.appointment_details.start_time} - ${bookingDetails.appointment_details.end_time}</div>`,
+                            '!appointment_date': `<div class="online-booking__available-delivery-date">${moment(bookingDetails.hfd_appointment_details.appointment_date).format('YYYY-MMM-DD')}</div>`,
+                            '!time_slot': `<div class="online-booking__available-delivery-time">${bookingDetails.hfd_appointment_details.start_time} - ${bookingDetails.hfd_appointment_details.end_time}</div>`,
                           }, { context: 'online_booking' },
                         ),
                       )
@@ -289,7 +293,7 @@ export default class OnlineBooking extends React.Component {
                   <>
                     <OnlineBookingCalendar
                       availableSlots={availableSlots}
-                      bookingDetails={bookingDetails.appointment_details}
+                      bookingDetails={bookingDetails.hfd_appointment_details}
                       closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
                       callback={this.handleScheduleDeliveryChangeInModal}
                     />
@@ -329,7 +333,7 @@ export default class OnlineBooking extends React.Component {
             {/**
              * Placeholder to display the default internal error message.
              */}
-            <ConditionalView condition={!hasValue(bookingDetails.appointment_details)
+            <ConditionalView condition={!hasValue(bookingDetails.hfd_appointment_details)
             && !hasValue(bookingDetails.success)}
             >
               <div className="online-booking__error-message">

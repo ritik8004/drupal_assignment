@@ -52,36 +52,8 @@ export const getOnlineBookingApiEndpoint = (action) => {
  */
 export const getBookingDetailByConfirmationNumber = async (confirmationNumber) => {
   const response = await callMagentoApi(getOnlineBookingApiEndpoint('checkBookingStatus'), 'POST', {
-    hold_confirmation_number: confirmationNumber,
+    confirmationNumber,
   });
-
-  // @todo: Remove mock response after API integration.
-  // Success = true scenario.
-  response.data = {
-    success: true,
-    appointment_details: {
-      appointment_date: '2022-05-27',
-      start_time: '8:00 AM',
-      end_time: '9:00 AM',
-      appointment_date_time: '2022-05-27T08: 00: 00.000Z',
-      resource_external_id: 'MorningShiftZone1KSA',
-      hold_confirmation_number: 'G2Z7Y67B',
-    },
-  };
-
-  // Success = false scenario.
-  /* response.data = {
-    success: false,
-    error_message: 'The appointment already expired, Please select time slot again',
-    appointment_details: {
-      appointment_date: '2022-02-27',
-      start_time: '8:00 AM',
-      end_time: '9:00 AM',
-      appointment_date_time: '2022-02-27T08: 00: 00.000Z',
-      resource_external_id: 'MorningShiftZone1KSA',
-      hold_confirmation_number: 'G2Z7Y67B',
-    },
-  }; */
 
   // Handle the error response from API in case of internal error.
   if (!hasValue(response.data)
@@ -97,9 +69,7 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
   }
 
   // If booking is successful add confirmation number in result.
-  if (hasValue(response.data.success)) {
-    response.data.appointment_details.confirmation_number = confirmationNumber;
-  } else {
+  if (!hasValue(response.data.success)) {
     logger.warning('Online Booking: Api returns success false while fetching booking details from confirmation number @confirmationNumber, API Response: @response', {
       '@confirmationNumber': confirmationNumber,
       '@response': JSON.stringify(response.data),
@@ -119,164 +89,6 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
  */
 export const getAvailableBookingSlots = async (existingBooking = false) => {
   const response = await callMagentoApi(getOnlineBookingApiEndpoint('getAvailableBookingSlots'), 'GET');
-  // @todo: Remove mock response after API integration.
-  // Success = true scenario.
-  response.data = {
-    success: true,
-    available_time_slots: [
-      {
-        appointment_date: '2022-05-27',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-05-27T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-          {
-            start_time: '3:00 PM',
-            end_time: '4:00 PM',
-            appointment_date_time: '2022-05-27T15:00:00.000Z',
-            resource_external_id: 'EveningShiftZone1KSA',
-          },
-        ],
-      },
-      {
-        appointment_date: '2022-06-04',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-06-04T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-          {
-            start_time: '9:30 AM',
-            end_time: '10:30 AM',
-            appointment_date_time: '2022-06-04T09:30:00.000Z',
-            resource_external_id: 'EveningShiftZone2KSA',
-          },
-          {
-            start_time: '10:30 AM',
-            end_time: '11:00 AM',
-            appointment_date_time: '2022-06-04T10:30:00.000Z',
-            resource_external_id: 'MorningShiftZone3KSA',
-          },
-          {
-            start_time: '11:00 AM',
-            end_time: '11:30 AM',
-            appointment_date_time: '2022-06-04T11:00:00.000Z',
-            resource_external_id: 'EveningShiftZone4KSA',
-          },
-          {
-            start_time: '12:00 PM',
-            end_time: '12:30 PM',
-            appointment_date_time: '2022-06-04T12:00:00.000Z',
-            resource_external_id: 'MorningShiftZone5KSA',
-          },
-          {
-            start_time: '12:30 PM',
-            end_time: '01:00 PM',
-            appointment_date_time: '2022-06-04T12:30:00.000Z',
-            resource_external_id: 'EveningShiftZone6KSA',
-          },
-          {
-            start_time: '02:00 PM',
-            end_time: '04:00 PM',
-            appointment_date_time: '2022-06-04T14:00:00.000Z',
-            resource_external_id: 'MorningShiftZone7KSA',
-          },
-        ],
-      },
-      {
-        appointment_date: '2022-06-15',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-06-15T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-          {
-            start_time: '10:00 AM',
-            end_time: '12:00 PM',
-            appointment_date_time: '2022-06-15T10:00:00.000Z',
-            resource_external_id: 'MorningShiftZone3KSA',
-          },
-          {
-            start_time: '02:00 PM',
-            end_time: '4:00 PM',
-            appointment_date_time: '2022-06-15T14:00:00.000Z',
-            resource_external_id: 'EveningShiftZone4KSA',
-          },
-        ],
-      },
-      {
-        appointment_date: '2022-06-28',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-06-28T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-        ],
-      },
-      {
-        appointment_date: '2022-07-01',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-07-01T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-          {
-            start_time: '1:00 PM',
-            end_time: '2:00 PM',
-            appointment_date_time: '2022-07-01T08:00:00.000Z',
-            resource_external_id: 'AfernoonShiftZone1KSA',
-          },
-        ],
-      },
-      {
-        appointment_date: '2022-07-15',
-        appointment_slots: [
-          {
-            start_time: '8:00 AM',
-            end_time: '9:00 AM',
-            appointment_date_time: '2022-07-15T08:00:00.000Z',
-            resource_external_id: 'MorningShiftZone1KSA',
-          },
-          {
-            start_time: '11:00 AM',
-            end_time: '12:00 PM',
-            appointment_date_time: '2022-07-15T11:00:00.000Z',
-            resource_external_id: 'AfernoonShiftZone2KSA',
-          },
-          {
-            start_time: '1:00 PM',
-            end_time: '2:00 PM',
-            appointment_date_time: '2022-07-15T13:00:00.000Z',
-            resource_external_id: 'AfernoonShiftZone3KSA',
-          },
-          {
-            start_time: '02:00 PM',
-            end_time: '03:00 PM',
-            appointment_date_time: '2022-07-15T14:00:00.000Z',
-            resource_external_id: 'MorningShiftZone4KSA',
-          },
-        ],
-      },
-    ],
-  };
-  // Success = false scenario.
-  /* response.data = {
-    success: false,
-    error_message: 'Something went wrong, unable to get available time slots',
-    available_time_slots: {},
-  }; */
-
   // Handle the error response from API in case of internal error.
   if (!hasValue(response.data)
     || (hasValue(response.data.error) && response.data.error)) {
@@ -312,22 +124,6 @@ export const getAvailableBookingSlots = async (existingBooking = false) => {
  */
 export const holdBookingSlot = async (params) => {
   const response = await callMagentoApi(getOnlineBookingApiEndpoint('holdBookingSlot'), 'POST', params);
-  // @todo: Remove mock response after API integration.
-  // Success = true scenario.
-  response.data = {
-    success: true,
-    hold_appointment: {
-      confirmation_number: 'G2Z7Y67B',
-    },
-  };
-  // Success = false scenario.
-  /* response.data = {
-    success: false,
-    hold_appointment: {},
-    error_message: 'Something went wrong,
-     unable to Hold Appointment. Please select different time slot',
-  }; */
-
   // Default error response if success is false.
   const errorResponse = {
     success: false,
