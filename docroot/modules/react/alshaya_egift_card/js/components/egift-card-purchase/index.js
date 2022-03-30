@@ -196,7 +196,9 @@ export default class EgiftCardPurchase extends React.Component {
     // Get open amount input element.
     const element = document.getElementById('open-amount');
     // Get open amount value.
-    const openAmount = element.value;
+    const openAmount = (element !== null) ? element.value : '';
+
+    // const openAmount = element.value;
     if (openAmount !== '') {
       // Min and Max value allowed for open amount.
       const amountFrom = parseFloat(element.getAttribute('min'));
