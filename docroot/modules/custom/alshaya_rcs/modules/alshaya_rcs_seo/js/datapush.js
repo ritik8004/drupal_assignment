@@ -6,11 +6,9 @@
 (function ($) {
   'use strict';
 
-  window.dataLayer = window.dataLayer || [];
-
   Drupal.behaviors.alshayaRcsSeo = {
     attach: function () {
-      $('body').once('alshayaRcsSeo').each(function () {;
+      $('body').once('alshayaRcsSeo').each(function () {
         var dataLayerAttachment = drupalSettings.dataLayerAttachment;
         if (globalThis.rcsPhGetPageType() === null) {
           var event = new CustomEvent('dataLayerDataAlter', {
