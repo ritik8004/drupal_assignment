@@ -117,6 +117,11 @@ trait Orders {
     $order['shipping']['address']['extension'] = $order['shipping']['address']['extension_attributes'] ?? [];
     unset($order['shipping']['address']['extension_attributes']);
 
+    // HFD Online Booking Information.
+    if (isset($order['extension']['hfd_booking_information'])) {
+      $order['hfd_booking_information'] = $order['extension']['hfd_booking_information'];
+    }
+
     // Billing.
     $order['billing'] = $order['billing_address'];
     $order['billing']['customer_id'] = $order['customer_id'] ?? '';

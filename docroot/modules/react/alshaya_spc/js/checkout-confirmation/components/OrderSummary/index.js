@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import parse from 'html-react-parser';
 import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
 import AuraEarnOrderSummaryItem
@@ -14,6 +15,7 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import EgiftOrderSummaryItem from '../../../egift-card/components/egift-order-summary-item';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -164,6 +166,11 @@ const OrderSummary = (props) => {
     };
   }
 
+  // Get the HFD order booing informaion from the drupal settings if available.
+  const hfdBooking = hasValue(drupalSettings.order_details.hfdBookingInformation)
+    ? drupalSettings.order_details.hfdBookingInformation
+    : false;
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
@@ -242,6 +249,11 @@ const OrderSummary = (props) => {
           <OrderSummaryItem context={context} label={Drupal.t('Payment method')} value={methodIcon || method} />
           <ConditionalView condition={showDeliverySummary}>
             <OrderSummaryItem context={context} label={Drupal.t('delivery type')} value={deliveryType} />
+            {/** Show HFD booking order information if available. */}
+            {hasValue(hfdBooking.isHfdBookingOrder)
+              && (
+                <OrderSummaryItem context={context} label={Drupal.t('Delivery Date & Time')} value={parse(hfdBooking.hfdBookingInfo)} />
+              )}
             <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
           </ConditionalView>
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
