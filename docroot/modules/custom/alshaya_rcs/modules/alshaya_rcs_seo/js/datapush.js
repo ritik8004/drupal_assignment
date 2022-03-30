@@ -13,7 +13,8 @@
         if (globalThis.rcsPhGetPageType() === null) {
           var event = new CustomEvent('dataLayerDataAlter', {
             detail: {
-              data: () => dataLayerAttachment }
+              data: () => dataLayerAttachment
+            }
           });
           document.dispatchEvent(event);
           window.dataLayer.push(dataLayerAttachment);
