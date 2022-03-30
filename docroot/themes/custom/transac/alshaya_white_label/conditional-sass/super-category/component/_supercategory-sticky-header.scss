@@ -58,3 +58,13 @@
     }
   }
 }
+
+.super-category-enabled {
+  &.header-sticky-filter {
+    .menu--mobile-navigation {
+      @include breakpoint($only-tablet) {
+        visibility: hidden;
+      }
+    }
+  }
+}
