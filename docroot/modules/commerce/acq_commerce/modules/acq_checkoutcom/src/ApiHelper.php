@@ -206,10 +206,15 @@ class ApiHelper {
     $cache = $reset ? NULL : $this->cache->get($cache_key);
 
     if (empty($cache) || empty($cache->data)) {
+      $request_options = [
+        'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('checkoutcom_config'),
+      ];
       $response = $this->apiWrapper->invokeApi(
         'checkoutcom/getConfig',
         [],
-        'GET'
+        'GET',
+        FALSE,
+        $request_options
       );
       $configs = Json::decode($response);
 
@@ -265,10 +270,15 @@ class ApiHelper {
     }
 
     $customer_id = $user->get('acq_customer_id')->getString();
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('checkoutcom_token_list'),
+    ];
     $response = $this->apiWrapper->invokeApi(
       "checkoutcom/getTokenList/?customer_id=$customer_id",
       [],
-      'GET'
+      'GET',
+      FALSE,
+      $request_options
     );
     $response = Json::decode($response);
 
@@ -379,10 +389,15 @@ class ApiHelper {
   public function deleteCustomerCard(UserInterface $user, string $public_hash) {
     $customer_id = $user->get('acq_customer_id')->getString();
     $public_hash = $this->deocodePublicHash($public_hash);
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('checkoutcom_token_delete'),
+    ];
     $response = $this->apiWrapper->invokeApi(
       "checkoutcom/deleteTokenByCustomerIdAndHash/$public_hash/customerId/$customer_id",
       [],
-      'DELETE'
+      'DELETE',
+      FALSE,
+      $request_options
     );
 
     return Json::decode($response);

@@ -85,10 +85,15 @@ class AlshayaBnplAPIHelper {
       $configs = $cache->data;
     }
     else {
+      $request_options = [
+        'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('postpay_config'),
+      ];
       $response = $this->apiWrapper->invokeApi(
         'postpay/config',
         [],
-        'GET'
+        'GET',
+        FALSE,
+        $request_options
       );
 
       $configs = Json::decode($response);
