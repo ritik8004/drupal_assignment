@@ -7,14 +7,10 @@
  *   The url key.
  */
 async function handleNoItemsInResponse(request, urlKey) {
-  request.data = prepareQuery(`{urlResolver(url: "${urlKey}") {
-      redirectCode
-      relative_url
-    }}`
-  );
+  request.data = prepareQuery(rcsPhGraphqlQuery.urlResolver.query, rcsPhGraphqlQuery.urlResolver.variables);
 
   let response = await rcsCommerceBackend.invokeApi(request);
-  let rcs404 = `${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`;
+  let rcs404 = `${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`;
 
   if (response.data.urlResolver === null) {
     return rcsRedirectToPage(rcs404);
@@ -69,7 +65,7 @@ function prepareQuery(query, variables) {
 }
 
 exports.getEntity = async function getEntity(langcode) {
-  const pageType = rcsPhGetPageType();
+  const pageType = globalThis.rcsPhGetPageType();
   if (!pageType) {
     return;
   }
@@ -96,9 +92,9 @@ exports.getEntity = async function getEntity(langcode) {
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
         // Store product data in static storage.
-        RcsPhStaticStorage.set('product_data_' + result.sku, result);
+        globalThis.RcsPhStaticStorage.set('product_data_' + result.sku, result);
         // Set product options data to static storage.
-        RcsPhStaticStorage.set('product_options', {data: {customAttributeMetadata: response.data.customAttributeMetadata}});
+        globalThis.RcsPhStaticStorage.set('product_options', {data: {customAttributeMetadata: response.data.customAttributeMetadata}});
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -129,7 +125,7 @@ exports.getEntity = async function getEntity(langcode) {
         result = response.data.promotionUrlResolver;
       }
       if (!result || (typeof result.title !== 'string')) {
-        rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`);
+        globalThis.rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`);
       }
       break;
 
@@ -232,7 +228,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
-      RcsPhStaticStorage.set('product_data_' + result.sku, result);
+      globalThis.RcsPhStaticStorage.set('product_data_' + result.sku, result);
 
       break;
 
@@ -248,7 +244,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       request.data = prepareQuery(rcsPhGraphqlQuery.product_by_sku.query, productBySkuVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
-      result = response.data.products.items;
+      result = response.data.products.items[0];
       break;
 
     default:
@@ -351,7 +347,7 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
     case 'product-option':
       const staticKey = `product_options`;
-      const staticOption = RcsPhStaticStorage.get(staticKey);
+      const staticOption = globalThis.RcsPhStaticStorage.get(staticKey);
 
       if (staticOption !== null) {
         return staticOption;
@@ -361,7 +357,7 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
       result = rcsCommerceBackend.invokeApiSynchronous(request);
 
-      RcsPhStaticStorage.set(staticKey, result);
+      globalThis.RcsPhStaticStorage.set(staticKey, result);
       break;
 
     case 'dynamic-promotion-label':

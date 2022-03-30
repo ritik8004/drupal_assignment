@@ -29,24 +29,28 @@ function dynamic_yield_page_attachments(array &$page) {
 
   if (!(\Drupal::service('router.admin_context')->isAdminRoute()) && $dynamic_yield->getSectionId()) {
     // Add DY script tags to header.
-    $static_script = [[
-      '#tag' => 'script',
-      '#attributes' => [
-        'src' => $dynamic_yield->getDynamicYieldStaticScriptCode(),
+    // Based on the type of dy script injection, add the script.
+    $dy_script_init = \Drupal::config('dynamic_yield.settings')->get('dy_script_init');
+    if ($dy_script_init === 'automatic') {
+      $static_script = [[
+        '#tag' => 'script',
+        '#attributes' => [
+          'src' => $dynamic_yield->getDynamicYieldStaticScriptCode(),
+        ],
       ],
-    ],
-      'spath',
-    ];
-    array_unshift($page['#attached']['html_head'], $static_script);
-    $dynamic_script = [[
-      '#tag' => 'script',
-      '#attributes' => [
-        'src' => $dynamic_yield->getDynamicYieldDynamicScriptCode(),
+        'spath',
+      ];
+      array_unshift($page['#attached']['html_head'], $static_script);
+      $dynamic_script = [[
+        '#tag' => 'script',
+        '#attributes' => [
+          'src' => $dynamic_yield->getDynamicYieldDynamicScriptCode(),
+        ],
       ],
-    ],
-      'dpath',
-    ];
-    array_unshift($page['#attached']['html_head'], $dynamic_script);
+        'dpath',
+      ];
+      array_unshift($page['#attached']['html_head'], $dynamic_script);
+    }
 
     // Dispatch the DyPageType event to set the context.
     $event = new DyPageType();
@@ -68,6 +72,8 @@ function dynamic_yield_page_attachments(array &$page) {
     // Allow other module to alter the DY context.
     \Drupal::moduleHandler()->alter('dynamic_yield_context', $context['lng']);
     $page['#attached']['drupalSettings']['dynamicYield']['lng'] = $context['lng'];
+    // Add the source id in the drupal Settings.
+    $page['#attached']['drupalSettings']['dynamicYield']['sourceId'] = \Drupal::config('dynamic_yield.settings')->get('section_id') ?? '';
     $js = PHP_EOL . 'window.DY = window.DY || {};' . PHP_EOL;
     $js = $js . 'DY.recommendationContext = ' . Json::encode($context) . ';' . PHP_EOL;
     $context_script = [[

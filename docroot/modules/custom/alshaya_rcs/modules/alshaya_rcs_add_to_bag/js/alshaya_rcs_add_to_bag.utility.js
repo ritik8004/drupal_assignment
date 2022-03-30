@@ -1,4 +1,5 @@
 (function (Drupal) {
+  window.commerceBackend = window.commerceBackend || {};
 
    /**
    * Return product info from backend.
@@ -16,10 +17,9 @@
 
     // The product will be fetched and saved in static storage.
     var productInfo = {};
-    var response = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU});
-    if (response && response.length > 0) {
-      var product = response[0];
-      RcsPhStaticStorage.set('product_data_' + product.sku, product);
+    var product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU});
+    if (Drupal.hasValue(product.sku)) {
+      globalThis.RcsPhStaticStorage.set('product_data_' + product.sku, product);
       // Get product labels.
       let labels = [];
       var productLabels = await window.commerceBackend.getProductLabelsData(mainSKU);
@@ -72,7 +72,7 @@
 
       productInfo.variants.push({
         sku: variantData.sku,
-        parent_sku: product.sku,
+        parent_sku: variantData.parent_sku,
         cart_title: product.name,
         cart_image: variantData.media_cart,
         media: {images: variantData.media},
@@ -111,11 +111,13 @@
     // Set configurable attributes.
     productInfo.configurable_attributes = [];
     product.configurable_options.forEach(function (option) {
+      let attribute_id = parseInt(atob(option.attribute_uid), 10);
       productInfo.configurable_attributes[option.attribute_code] = {
-        id: parseInt(atob(option.attribute_uid), 10),
+        id: attribute_id,
         label: option.label,
         position: option.position,
         is_swatch: false,
+        is_pseudo_attribute: (attribute_id === drupalSettings.psudo_attribute),
         values: option.values.map(function (option_value) {
           return {
             label: option_value.store_label,

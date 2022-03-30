@@ -23,7 +23,6 @@
       || !Drupal.hasValue(e.detail.result.style_code)) {
       return;
     }
-
     // The original object will also be modified in this process.
     var mainProduct = e.detail.result;
 
@@ -163,6 +162,6 @@
       return (optionA.position > optionB.position) - (optionA.position < optionB.position);
     });
 
-    RcsPhStaticStorage.set('product_data_' + mainProduct.sku, mainProduct);
+    globalThis.RcsPhStaticStorage.set('product_data_' + mainProduct.sku, mainProduct);
   }, 100);
 })();

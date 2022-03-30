@@ -1360,16 +1360,6 @@
       }
     };
 
-    // Adding PLP/SRP specific GTM list attribute.
-    if (isPageTypeSearch() || isPageTypeListing()) {
-      data.ecommerce.detail = {
-        actionField: {
-          list: product.list
-        },
-        ...data.ecommerce.detail
-      };
-    }
-
     dataLayer.push(data);
   }
 

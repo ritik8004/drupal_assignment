@@ -471,7 +471,7 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
  */
 function alshaya_spc_alshaya_rcs_product_order_build_alter(&$build) {
   $currency_config = \Drupal::config('acq_commerce.currency');
-  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $currency_config->getCacheTags());
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $currency_config->getCacheTags());
 
   $build['#attached']['drupalSettings']['alshaya_spc']['currency_config'] = [
     'currency_code' => $currency_config->get('currency_code'),

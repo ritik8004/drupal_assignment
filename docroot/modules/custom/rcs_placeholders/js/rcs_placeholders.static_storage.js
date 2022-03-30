@@ -1,27 +1,26 @@
-window.rcsPhStaticStorage = window.rcsPhStaticStorage || {};
+globalThis.RcsPhStaticStorage = {};
+const rcsPhStaticStorage = {};
 
-const RcsPhStaticStorage = {};
-
-RcsPhStaticStorage.get = (key) => {
-  if (typeof window.rcsPhStaticStorage[key] === 'undefined') {
+globalThis.RcsPhStaticStorage.get = (key) => {
+  if (typeof rcsPhStaticStorage[key] === 'undefined') {
     return null;
   }
 
-  return window.rcsPhStaticStorage[key];
+  return rcsPhStaticStorage[key];
 };
 
-RcsPhStaticStorage.getAll = () => {
-  return window.rcsPhStaticStorage;
+globalThis.RcsPhStaticStorage.getAll = () => {
+  return rcsPhStaticStorage;
 };
 
-RcsPhStaticStorage.set = (key, value) => {
-  window.rcsPhStaticStorage[key] = value;
+globalThis.RcsPhStaticStorage.set = (key, value) => {
+  rcsPhStaticStorage[key] = value;
 };
 
-RcsPhStaticStorage.remove = (key) => {
-  window.rcsPhStaticStorage[key] = null;
+globalThis.RcsPhStaticStorage.remove = (key) => {
+  rcsPhStaticStorage[key] = null;
 };
 
-RcsPhStaticStorage.clear = () => {
-  window.rcsPhStaticStorage = {};
+globalThis.RcsPhStaticStorage.clear = () => {
+  rcsPhStaticStorage = {};
 };

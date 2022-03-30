@@ -6,6 +6,9 @@ dependencies:
     - node.type.rcs_product
   module:
     - options
+  enforced:
+    module:
+      - alshaya_rcs_product
 id: node.rcs_product.field_select_pdp_layout
 field_name: field_select_pdp_layout
 entity_type: node

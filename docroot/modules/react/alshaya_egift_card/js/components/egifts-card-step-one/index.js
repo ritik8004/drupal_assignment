@@ -17,21 +17,14 @@ export default class EgiftCardsListStepOne extends React.Component {
     };
   }
 
-  /**
-   * Reset step 2 fields when user selects different egift card.
-   */
-  resetStepTwo() {
-    const { handleAmountSelect } = this.props;
-    handleAmountSelect(false, 0);
-  }
 
   /**
    * Handle egift card select from list.
    */
   handleEgiftSelect = (id) => {
-    if (document.getElementById('egift-purchase-form')) {
-      // Reset values.
-      document.getElementById('egift-purchase-form').reset();
+    // Reset error message to empty.
+    if (document.getElementById('open-amount-error') !== null) {
+      document.getElementById('open-amount-error').innerHTML = '';
     }
 
     if (document.getElementById('textarea-count')) {
@@ -62,7 +55,7 @@ export default class EgiftCardsListStepOne extends React.Component {
       if (item.id === id) {
         this.setState({
           selectedItem: item,
-        }, () => this.resetStepTwo());
+        });
       }
     });
   }

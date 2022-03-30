@@ -67,7 +67,7 @@
    */
   window.commerceBackend.getProductData = function (sku, productKey, processed) {
     if (typeof sku === 'undefined' || !sku) {
-      var allStorageData = RcsPhStaticStorage.getAll();
+      var allStorageData = globalThis.RcsPhStaticStorage.getAll();
       var productData = {};
       Object.keys(allStorageData).forEach(function (key) {
         if (key.startsWith('product_data_')) {
@@ -83,7 +83,7 @@
       return productData;
     }
 
-    var product = RcsPhStaticStorage.get('product_data_' + sku);
+    var product = globalThis.RcsPhStaticStorage.get('product_data_' + sku);
     if (product) {
       if (typeof processed === 'undefined' || processed) {
         return processProduct(product);
@@ -709,6 +709,11 @@
     const cartData = Drupal.alshayaSpc.getCartData();
     const skus = {};
 
+    // Do not proceed for empty cart.
+    if (!(cartData && Drupal.hasValue(cartData.items))) {
+      return;
+    }
+
     Object.values(cartData.items).forEach(function (item) {
       const sku = item.sku;
       if (!Drupal.hasValue(data[sku])) {
@@ -756,10 +761,10 @@
       return staticDataStore['attrLabels'][attrName][attrValue];
     }
 
-    const response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
+    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
     // Process the data to extract what we require and format it into an object.
     response.data.customAttributeMetadata.items.forEach(function (option) {
-      allOptionsForAttribute = {};
+      var allOptionsForAttribute = {};
       option.attribute_options.forEach(function (optionValue) {
         allOptionsForAttribute[optionValue.value] = optionValue.label;
       })
@@ -982,24 +987,27 @@
 
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
-    // Return if result is empty.
+    // Return if result is empty or event data is not for product.
     if (!Drupal.hasValue(e.detail.result)
-      || !Drupal.hasValue(e.detail.result.promotions)) {
+      || !Drupal.hasValue(e.detail.result.sku)) {
       return null;
     }
 
-    const promotions = e.detail.result.promotions;
-    // Update the promotions attribute based on the requirement.
-    promotions.forEach((promotion, index) => {
-      promotions[index] = {
-        promo_web_url: promotion.url,
-        text: promotion.label,
-        context: promotion.context,
-        type: promotion.type,
-      }
-    });
-    e.detail.result.promotions = promotions;
+    var promotionVal = [];
+    if (Drupal.hasValue(e.detail.result.promotions)) {
+      var promotions = e.detail.result.promotions;
+      // Update the promotions attribute based on the requirement.
+      promotions.forEach((promotion, index) => {
+        promotionVal[index] = {
+          promo_web_url: promotion.url,
+          text: promotion.label,
+          context: promotion.context,
+          type: promotion.type,
+        }
+      });
+    }
 
+    e.detail.result.promotions = promotionVal;
   });
 
 })(Drupal, drupalSettings);

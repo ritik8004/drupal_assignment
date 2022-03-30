@@ -18,6 +18,12 @@
         }
       }
     }
+
+    .back-button,
+    .cart-link {
+      border: 1px solid $magv2-icon-bg-border;
+      padding: 0.313rem;
+    }
   }
 }
 
@@ -49,6 +55,29 @@
       .quantity {
         @include breakpoint($only-mobile) {
           top: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+.magazine-layout-v2 {
+  &.hide-minimalistic-header {
+    &.no-sticky-algolia-search-bar {
+      .block-alshaya-react-mini-cart {
+        @include breakpoint($only-mobile) {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      .magv2-header {
+        &.magv2-pdp-sticky-header {
+          .magv2-header-wrapper {
+            .back-button,
+            .cart-link {
+              border: none;
+            }
+          }
         }
       }
     }

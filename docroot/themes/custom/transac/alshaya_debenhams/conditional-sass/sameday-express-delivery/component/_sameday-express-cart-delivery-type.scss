@@ -1,0 +1,15 @@
+.alias--cart {
+  .sku-cart-delivery-methods {
+    .cart-shipping-method {
+      &.active {
+        &.standard,
+        &.sameday,
+        &.express {
+          .carrier-title {
+            padding-top: 0.3125rem;
+          }
+        }
+      }
+    }
+  }
+}

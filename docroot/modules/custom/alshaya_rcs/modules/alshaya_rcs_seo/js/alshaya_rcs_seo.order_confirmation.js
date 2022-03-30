@@ -27,7 +27,7 @@
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          productGtmData = rcsReplaceAll(productGtmData, fieldPh, entityFieldValue);
+          productGtmData = globalThis.rcsReplaceAll(productGtmData, fieldPh, entityFieldValue);
         });
 
       productGtmData = JSON.parse(productGtmData);
@@ -37,6 +37,11 @@
       // Update the array with the product gtm data having the placeholders
       // replaced.
       products[index] = productGtmData;
+
+      // Fill in the data for productStyleCode.
+      if (eventData['productStyleCode'][productData.gtmAttributes.id] === undefined) {
+        eventData['productStyleCode'].push(productData.gtmAttributes.id);
+      }
     });
   });
 })(jQuery);
