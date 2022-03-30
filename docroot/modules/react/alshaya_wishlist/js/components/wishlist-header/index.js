@@ -138,6 +138,8 @@ export default class WishlistHeader extends React.Component {
    */
   updateWishListHeader = (e) => {
     const { wishListItemCount } = e.detail;
+    // Update the wishlist header icon color state
+    // if we have product available in wishlist.
     if (wishListItemCount > 0) {
       this.setState({ wishListItemCount });
     }
@@ -172,12 +174,8 @@ export default class WishlistHeader extends React.Component {
         // Save back to storage.
         addWishListInfoInStorage(wishListItems);
 
-        // Update the wishlist header icon color state
-        // if we have product available in wishlist.
+        // Get wishlist item count.
         const wishListItemCount = Object.keys(wishListItems).length;
-        /* if (wishListItemCount > 0) {
-          this.setState({ wishListItemCount });
-        } */
 
         // Dispatch an event for other modules to know
         // that wishlist data is available in storage.
