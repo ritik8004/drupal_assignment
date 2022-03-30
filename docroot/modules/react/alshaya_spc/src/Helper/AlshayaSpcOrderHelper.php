@@ -577,23 +577,23 @@ class AlshayaSpcOrderHelper {
 
     // Process HFD online booking information if available and if the order is
     // eligible for the HFD booking.
-    if (isset($order['hfd_booking_information'])
-      && isset($order['hfd_booking_information']['is_hfd_booking_order'])
-      && $order['hfd_booking_information']['is_hfd_booking_order']) {
+    if (isset($order['online_booking_information'])
+      && isset($order['online_booking_information']['is_hfd_booking_order'])
+      && $order['online_booking_information']['is_hfd_booking_order']) {
       // Check if the appointment is booked with order or failed. To confirm
       // this we will check if the 'appointment_date' and 'start_time' are
       // available of not. If 'appointment_date' and 'start_time' values are
       // available, we will process to display booking details on FE.
-      if (!empty($order['hfd_booking_information']['appointment_date'])
-        && !empty($order['hfd_booking_information']['start_time'])) {
-        $orderDetails['hfd_booking_information'] = $this->t('<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>', [
+      if (!empty($order['online_booking_information']['appointment_date'])
+        && !empty($order['online_booking_information']['start_time'])) {
+        $orderDetails['online_booking_information'] = $this->t('<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>', [
           '@appointment_date' => $this->dateFormatter->format(
-            strtotime($order['hfd_booking_information']['appointment_date']),
+            strtotime($order['online_booking_information']['appointment_date']),
             'online_booking',
             'd-M-Y',
           ),
-          '@start_time' => $order['hfd_booking_information']['start_time'],
-          '@end_time' => $order['hfd_booking_information']['end_time'],
+          '@start_time' => $order['online_booking_information']['start_time'],
+          '@end_time' => $order['online_booking_information']['end_time'],
         ],
         [
           'context' => 'online_booking',
@@ -605,7 +605,7 @@ class AlshayaSpcOrderHelper {
         // true and 'appointment_date' isn't available, it means there were
         // some errors in appointment booking during the order placement. We
         // need to show an error message to customer in this case.
-        $orderDetails['hfd_booking_information'] = $this->t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
+        $orderDetails['online_booking_information'] = $this->t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
       }
     }
 

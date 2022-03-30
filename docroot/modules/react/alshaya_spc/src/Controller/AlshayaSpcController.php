@@ -803,9 +803,9 @@ class AlshayaSpcController extends ControllerBase {
       $settings['order_details']['payment']['benefitpaySecretKey'] = $checkoutcomConfig['benefit_pay_secret_key'];
     }
 
-    // Add HFD order booking information in drupal settings if available.
-    if (isset($orderDetails['hfd_booking_information'])) {
-      $settings['order_details']['deliveryBookingInformation'] = $orderDetails['hfd_booking_information'];
+    // Add online order booking information in drupal settings if available.
+    if (isset($orderDetails['online_booking_information'])) {
+      $settings['order_details']['onliineBookingInformation'] = $orderDetails['online_booking_information'];
     }
 
     $cache_tags = [];
