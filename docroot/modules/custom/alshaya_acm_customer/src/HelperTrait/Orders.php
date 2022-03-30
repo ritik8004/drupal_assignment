@@ -117,9 +117,14 @@ trait Orders {
     $order['shipping']['address']['extension'] = $order['shipping']['address']['extension_attributes'] ?? [];
     unset($order['shipping']['address']['extension_attributes']);
 
-    // HFD Online Booking Information.
-    if (isset($order['extension']['hfd_booking_information'])) {
-      $order['hfd_booking_information'] = $order['extension']['hfd_booking_information'];
+    // Online Booking Information.
+    // Pass information further if the order is eligible for online booking.
+    // These details are used in order helper to process data and display
+    // information on front-end.
+    if (isset($order['extension']['hfd_booking_information'])
+      && isset($order['extension']['hfd_booking_information']['is_hfd_booking_order'])
+      && $order['extension']['hfd_booking_information']['is_hfd_booking_order']) {
+      $order['online_booking_information'] = $order['extension']['hfd_booking_information'];
     }
 
     // Billing.
