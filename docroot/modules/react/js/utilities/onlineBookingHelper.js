@@ -63,13 +63,13 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
       '@response': JSON.stringify(response.data),
     });
     return {
-      success: false,
+      status: false,
       error_message: response.data.error_message,
     };
   }
 
   // If booking is successful add confirmation number in result.
-  if (!hasValue(response.data.success)) {
+  if (!hasValue(response.data.status)) {
     logger.warning('Online Booking: Api returns success false while fetching booking details from confirmation number @confirmationNumber, API Response: @response', {
       '@confirmationNumber': confirmationNumber,
       '@response': JSON.stringify(response.data),
@@ -92,19 +92,19 @@ export const getAvailableBookingSlots = async (existingBooking = false) => {
   // Handle the error response from API in case of internal error.
   if (!hasValue(response.data)
     || (hasValue(response.data.error) && response.data.error)) {
-    logger.warning('Online Booking: Error occurred while fetching available booking slots @confirmation, API Response: @response.', {
+    logger.warning('Online Booking: Error occurred while fetching available booking slots, API Response: @response.', {
       '@response': JSON.stringify(response.data),
     });
     return {
-      success: false,
+      status: false,
       api_error: true,
       error_message: response.data.error_message,
     };
   }
 
   // If its a new booking, set api_error to true to not to show error message.
-  if (!existingBooking && !hasValue(response.data.success)) {
-    logger.warning('Online Booking: Api returns success false while fetching available booking slots Response: @response, API Params: @params', {
+  if (!existingBooking && !hasValue(response.data.status)) {
+    logger.warning('Online Booking: Api returns success false while fetching available booking slots Response: @response', {
       '@response': JSON.stringify(response.data),
     });
     response.data.api_error = true;
@@ -123,10 +123,13 @@ export const getAvailableBookingSlots = async (existingBooking = false) => {
  *   Returns the promise object.
  */
 export const holdBookingSlot = async (params) => {
-  const response = await callMagentoApi(getOnlineBookingApiEndpoint('holdBookingSlot'), 'POST', params);
+  const appointmentDetails = {
+    appointmentDetails: params,
+  };
+  const response = await callMagentoApi(getOnlineBookingApiEndpoint('holdBookingSlot'), 'POST', appointmentDetails);
   // Default error response if success is false.
   const errorResponse = {
-    success: false,
+    status: false,
   };
 
   // Handle the error response from API in case of internal error.
@@ -146,7 +149,7 @@ export const holdBookingSlot = async (params) => {
 
   // If the success is false and its not existing booking.
   // then return the response with api_error.
-  if (!hasValue(response.data.success)) {
+  if (!hasValue(response.data.status)) {
     logger.warning('Online Booking: Api returns success false while holding booking slot API Response: @response, API Params: @params', {
       '@response': JSON.stringify(response.data),
       '@params': JSON.stringify(params),
