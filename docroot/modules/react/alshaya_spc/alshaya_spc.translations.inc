@@ -479,6 +479,78 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to `Online Booking` feature.
+  $strings['v13'] = [
+    'Delivery Date and Time' => [
+      'ar' => 'تاريخ وموعد التوصيل:',
+      'context' => 'online_booking',
+    ],
+    'Contact customer care (+965 55667788) to change the delivery schedule' => [
+      'ar' => 'يرجى التواصل مع رقم خدمة الزبائن (+965 55667788) لتغيير موعد التوصيل',
+      'context' => 'online_booking',
+    ],
+    'Changes are not allowed three days before the selected schedule' => [
+      'ar' => 'يُمنع إجراء أيّ تغييرات قبل موعد التوصيل المحدد بثلاثة أيام',
+      'context' => 'online_booking',
+    ],
+    'Home Delivery: Your order is scheduled on @date between @from_time - @to_time to the below delivery address' => [
+      'ar' => 'التوصيل المنزلي: سيتم توصيل طلبيتك بتاريخ @date في الفترة ما بين الساعة @from_time إلى @to_time لعنوان التوصيل أدناه.',
+      'context' => 'online_booking',
+    ],
+    'Schedule Your Delivery' => [
+      'ar' => 'حدد موعد التوصيل',
+      'context' => 'online_booking',
+    ],
+    'Delivery Date' => [
+      'ar' => 'تاريخ التوصيل',
+      'context' => 'online_booking',
+    ],
+    'Delivery Time' => [
+      'ar' => 'وقت التوصيل',
+      'context' => 'online_booking',
+    ],
+    'Apply Date & Time' => [
+      'ar' => 'أضف الوقت والتاريخ',
+      'context' => 'online_booking',
+    ],
+    'Delivery Schedule' => [
+      'ar' => 'موعد التوصيل',
+      'context' => 'online_booking',
+    ],
+    'All items in cart are delivered on your preferred date' => [
+      'ar' => 'سيتم توصيل جميع المنتجات في عربة التسوق حسب تاريخك المفضل',
+      'context' => 'online_booking',
+    ],
+    'Earliest available delivery on !appointment_date between !time_slot' => [
+      'ar' => 'أقرب موعد توصيل متوفر بتاريخ !appointment_date في الساعة !time_slot',
+      'context' => 'online_booking',
+    ],
+    'Change Delivery Schedule' => [
+      'ar' => 'تغيير موعد التوصيل',
+      'context' => 'online_booking',
+    ],
+    'We will hold this delivery schedule for next <b>2 hours</b>' => [
+      'ar' => 'سنحتفظ بموعد التوصيل خلال <b>الساعتين </b> القادمتين',
+      'context' => 'online_booking',
+    ],
+    'Once the order is placed, changes are not allowed <b>three days</b> before the selected schedule.' => [
+      'ar' => 'بمجرد إتمام الطلبية، يُمنع إجراء أيّ تغييرات قبل موعد التوصيل المحدد <b> بثلاثة أيام</b>',
+      'context' => 'online_booking',
+    ],
+    'There was some error while booking. Please contact to customer care' => [
+      'ar' => '',
+      'context' => 'online_booking',
+    ],
+    'Delivery Date & Time' => [
+      'ar' => '',
+      'context' => 'online_booking',
+    ],
+    '<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>' => [
+      'ar' => '',
+      'context' => 'online_booking',
+    ],
+  ];
+
   return $strings;
 }
 
