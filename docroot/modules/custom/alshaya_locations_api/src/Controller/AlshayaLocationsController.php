@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\alshaya_api\Helper\MagentoApiHelper;
 
 /**
  * Class Alshaya Locations Controller.
@@ -52,6 +53,13 @@ class AlshayaLocationsController extends ControllerBase {
   protected $alshayaApi;
 
   /**
+   * The mdc helper.
+   *
+   * @var \Drupal\alshaya_api\Helper\MagentoApiHelper
+   */
+  protected $mdcHelper;
+
+  /**
    * AlshayaLocationsController constructor.
    *
    * @param \Drupal\Core\Entity\Query\QueryFactory $entityQuery
@@ -64,13 +72,16 @@ class AlshayaLocationsController extends ControllerBase {
    *   Config object.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshayaApi
    *   Config object.
+   * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
+   *   The magento api helper.
    */
-  public function __construct(QueryFactory $entityQuery, EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager, ConfigFactoryInterface $configFactory, AlshayaApiWrapper $alshayaApi) {
+  public function __construct(QueryFactory $entityQuery, EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager, ConfigFactoryInterface $configFactory, AlshayaApiWrapper $alshayaApi, MagentoApiHelper $mdc_helper) {
     $this->entityQuery = $entityQuery;
     $this->entityTypeManager = $entityTypeManager;
     $this->languageManager = $languageManager;
     $this->configFactory = $configFactory;
     $this->alshayaApi = $alshayaApi;
+    $this->mdcHelper = $mdc_helper;
   }
 
   /**
@@ -83,6 +94,7 @@ class AlshayaLocationsController extends ControllerBase {
       $container->get('language_manager'),
       $container->get('config.factory'),
       $container->get('alshaya_api.api'),
+      $container->get('alshaya_api.mdc_helper'),
     );
   }
 
@@ -94,8 +106,11 @@ class AlshayaLocationsController extends ControllerBase {
    */
   public function stores($data = NULL) {
     // Mock file read for now.
-    $url = ltrim($this->configFactory->get('alshaya_stores_finder.settings')->get('filter_path'), '/');
-    $result = $this->alshayaApi->invokeApi($url, [], 'GET');
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('store_search'),
+    ];
+    $endpoint = ltrim($this->configFactory->get('alshaya_stores_finder.settings')->get('filter_path'), '/');
+    $result = $this->alshayaApi->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
     return new JsonResponse(json_decode($result));
   }
