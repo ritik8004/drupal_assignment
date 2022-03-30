@@ -5,6 +5,9 @@ alshaya_acm_product.pdp_modal_links:
     size_guide_enabled:
       type: integer
       label: 'Enable Size Guide'
+    show_size_guide_on_pdp_page:
+      type: integer
+      label: 'Show Size Guide directly on PDP Page'
     size_guide_modal_content_node:
       type: integer
       label: 'Size guide content node'

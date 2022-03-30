@@ -710,8 +710,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           // Condition to check if size guide
           // is enabled for any attribute.
           if (isset($size_guide['link'])) {
+            $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
             $build['#attached']['drupalSettings']['isSizeGuideEnabled'] = TRUE;
             $build['#attached']['drupalSettings']['sizeGuide'] = $size_guide;
+            $build['#attached']['drupalSettings']['showSizeGuideOnPdpPage'] = $config->get('show_size_guide_on_pdp_page');
           }
         }
       }
