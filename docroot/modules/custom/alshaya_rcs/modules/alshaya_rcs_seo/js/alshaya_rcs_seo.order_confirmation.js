@@ -1,5 +1,5 @@
 (function orderConfirmation($) {
-  document.addEventListener('dataLayerDataAlter', (e) => {
+  document.addEventListener('dataLayerContentAlter', (e) => {
     // Check if purchase success event is triggered.
     var eventData = e.detail.data();
     if (eventData.event !== 'purchaseSuccess') {

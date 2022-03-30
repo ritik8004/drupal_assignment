@@ -4,7 +4,7 @@
  */
 
 (function () {
-  document.addEventListener('dataLayerDataAlter', (e) => {
+  document.addEventListener('dataLayerContentAlter', (e) => {
     // @todo Below code is duplicate from window.commerceBackend.getCartId().
     // which can be replaced with the function While refactoring.
 
