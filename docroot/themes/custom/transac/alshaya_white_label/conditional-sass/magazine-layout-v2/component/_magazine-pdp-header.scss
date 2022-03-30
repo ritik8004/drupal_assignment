@@ -110,6 +110,19 @@
         width: 2.125rem;
         color: $magv2-mobile-back-arrow;
       }
+
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+
+      &.back-to-home {
+        &::after {
+          content: '';
+          background: url(/themes/custom/transac/alshaya_white_label/imgs/icons/home.svg) center no-repeat;
+          transform: rotate(0deg);
+        }
+      }
     }
 
     .magv2-compact-detail-wrapper,
