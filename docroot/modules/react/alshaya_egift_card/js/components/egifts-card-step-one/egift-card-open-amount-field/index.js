@@ -157,8 +157,12 @@ export default class EgiftCardOpenAmountField extends React.Component {
     });
 
     // Don't show open amount field if allow_open_amount_hps attribute
-    // from api response for card item is 0.
-    if (eGiftCardAttributes.allow_open_amount_hps.value === '0') {
+    // from api response for card item is 0,
+    // or if allow_open_amount_hps is set 1 and any of amount_open_from_hps or amount_open_to_hps,
+    // is not set.
+    if (eGiftCardAttributes.allow_open_amount_hps.value === '0'
+      || typeof eGiftCardAttributes.amount_open_from_hps === 'undefined'
+      || typeof eGiftCardAttributes.amount_open_to_hps === 'undefined') {
       return null;
     }
 
