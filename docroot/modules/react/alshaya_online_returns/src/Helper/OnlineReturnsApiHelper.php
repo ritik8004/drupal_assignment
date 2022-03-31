@@ -104,9 +104,13 @@ class OnlineReturnsApiHelper {
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('online_returns_config'),
     ];
+    $configs = [];
     $endpoint = 'returnsconfig';
     $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
-    $configs = is_string($response) ? Json::decode($response) : $response;
+
+    if ($response && is_string($response)) {
+      $configs = Json::decode($response);
+    }
 
     // Restore the store context langcode.
     if ($resetStoreContext) {
@@ -114,8 +118,9 @@ class OnlineReturnsApiHelper {
     }
 
     if (empty($configs)) {
-      $this->logger->error('No data found for api: @api.', [
+      $this->logger->error('No data found for api: @api. Response: @response', [
         '@api' => $endpoint,
+        '@response' => Json::encode($response),
       ]);
     }
 
