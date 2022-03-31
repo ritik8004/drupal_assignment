@@ -981,7 +981,8 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   });
   $attributes_used_as_facets = array_keys($skuBaseFieldDefination);
 
-  // Return from here if attribute code is other than materials or brands.
+  // Return from here if attribute code is other than sku base fields which are
+  // marked to be use as facets.
   if ($attribute && !in_array($attribute['attribute_code'], $attributes_used_as_facets)) {
     return;
   }
@@ -991,6 +992,7 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
 
   // In Array attribute will only be added for materials attribute code.
   $is_array = '';
+  // @todo To make this a config to get the list of attribute code.
   if ($attribute_code === 'materials') {
     $is_array = ',is_array:1';
   }
