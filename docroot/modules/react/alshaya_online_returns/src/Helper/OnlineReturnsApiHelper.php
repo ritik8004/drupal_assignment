@@ -8,6 +8,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_api\Helper\MagentoApiHelper;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Helper class for Online Returns APIs.
@@ -103,34 +104,13 @@ class OnlineReturnsApiHelper {
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('online_returns_config'),
     ];
+    $configs = [];
     $endpoint = 'returnsconfig';
     $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
-    // @todo Remove hard coded API response.
-    $configs = [
-      'return_period' => 14,
-      'pickup_charges' => 5,
-      'return_reasons' => [
-        [
-          'id' => 10,
-          'label' => 'Item is Damaged',
-        ],
-        [
-          'id' => 11,
-          'label' => 'Wrong color',
-        ],
-      ],
-      'resolutions' => [
-        [
-          'id' => 10,
-          'label' => 'refund',
-        ],
-        [
-          'id' => 11,
-          'label' => 'exchange',
-        ],
-      ],
-    ];
+    if ($response && is_string($response)) {
+      $configs = Json::decode($response);
+    }
 
     // Restore the store context langcode.
     if ($resetStoreContext) {
@@ -138,8 +118,9 @@ class OnlineReturnsApiHelper {
     }
 
     if (empty($configs)) {
-      $this->logger->error('No data found for api: @api.', [
+      $this->logger->error('No data found for api: @api. Response: @response', [
         '@api' => $endpoint,
+        '@response' => Json::encode($response),
       ]);
     }
 
