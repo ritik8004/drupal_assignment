@@ -487,6 +487,7 @@ function alshaya_acm_customer_get_barcode($order) {
  */
 function alshaya_acm_customer_build_order_detail(array $order) {
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
   $products = [];
   $cancelled_products = [];
 
