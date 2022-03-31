@@ -98,11 +98,11 @@ const ProductCategoryCarouselWrapper = ({ slug }) => {
   );
 };
 
-const alshayaCategoryCarousel = jQuery('.alshaya-product-category-carousel');
-alshayaCategoryCarousel.each((key, item) => {
-  const { slug, sectionTitle } = jQuery(item).data();
+const alshayaCategoryCarousel = document.getElementsByClassName('alshaya-product-category-carousel');
+for (let i = 0; i < alshayaCategoryCarousel.length; i++) {
+  const { slug, sectionTitle } = alshayaCategoryCarousel[i].dataset;
   ReactDOM.render(
     <ProductCategoryCarouselWrapper slug={slug} sectionTitle={sectionTitle} />,
-    item,
+    alshayaCategoryCarousel[i],
   );
-});
+}

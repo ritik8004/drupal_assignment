@@ -119,6 +119,27 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
     ],
   ];
 
+  // Query to get the parents of a category.
+  $query_fields['category_parents'] = [
+    'query' => [
+      'query($urlPath: String)' => [
+        'categoryList(filters: {url_path: {eq: $urlPath}})' => [
+          'uid',
+          'name',
+          'breadcrumbs' => [
+            'category_name',
+            'category_level',
+            'category_url_key',
+            'category_url_path',
+          ],
+        ],
+      ],
+    ],
+    'variables' => [
+      'urlPath' => NULL,
+    ],
+  ];
+
   return $query_fields;
 }
 
