@@ -250,37 +250,3 @@ function alshaya_performance_css_alter(&$css, AttachedAssetsInterface $assets) {
     }
   }
 }
-
-/**
- * Implements hook_library_info_alter().
- */
-function alshaya_performance_library_info_alter(&$libraries, $extension) {
-  // Add defer to the sharethis libraries.
-  if ($extension === "sharethis") {
-    foreach ($libraries as $library => $library_item) {
-      if (empty($library_item['js'])) {
-        continue;
-      }
-      $local_js = FALSE;
-      foreach ($library_item['js'] as $path => $library_config) {
-        $attributes = !empty($library_config['attributes']) ? $library_config['attributes'] : [];
-        $attributes['defer'] = TRUE;
-        $library_item['js'][$path]['attributes'] = $attributes;
-        if (isset($library_item['js'][$path]['type']) && $library_item['js'][$path]['type'] !== "external") {
-          $local_js = TRUE;
-        }
-      }
-      if ($local_js) {
-        $dependencies = !empty($library_item['dependencies']) ? $library_item['dependencies'] : [];
-        $library_item['dependencies'] = array_merge(
-          $dependencies,
-          [
-            'sharethis/sharethispickerexternalbuttons',
-            'sharethis/sharethispickerexternalbuttonsws',
-          ]
-        );
-      }
-      $libraries[$library] = $library_item;
-    }
-  }
-}
