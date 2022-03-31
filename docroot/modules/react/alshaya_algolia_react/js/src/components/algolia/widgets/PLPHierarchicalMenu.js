@@ -19,6 +19,7 @@ const PLPHierarchicalMenu = ({
           href={`#${createURL(item.value)}`}
           data-level={facetLevel}
           className={`facet-item ${item.isRefined ? 'is-active ' : ''}`}
+          datadrupalfacetlabel={item.label}
           onClick={(event) => {
             event.preventDefault();
             refine(item.value);
