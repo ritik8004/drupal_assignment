@@ -66,7 +66,10 @@ export default class AddToBagConfigurable extends React.Component {
         // Store info in storage.
         addProductInfoInStorage(response, sku);
       }).catch((error) => {
-        Drupal.alshayaLogger('error', 'Failed to fetch Product Info. @error', { '@error': error });
+        Drupal.alshayaLogger('error', 'Failed to fetch Product Info for sku @sku. Error @error.', {
+          '@sku': (typeof sku !== 'undefined') ? sku : '',
+          '@error': error,
+        });
       });
     }
   }
