@@ -34,14 +34,6 @@
       @include breakpoint($only-tablet) {
         background: $breadcrumb_bg;
       }
-
-      li:last-of-type {
-        a {
-          span {
-            text-transform: initial;
-          }
-        }
-      }
     }
   }
 
@@ -51,12 +43,10 @@
     }
   }
 
-  .egift-landing-page {
-    #block-breadcrumbs {
-      li:nth-child(2) {
-        a {
-          text-transform: initial;
-        }
+  #block-breadcrumbs {
+    li:nth-child(2) {
+      a {
+        text-transform: initial;
       }
     }
   }
