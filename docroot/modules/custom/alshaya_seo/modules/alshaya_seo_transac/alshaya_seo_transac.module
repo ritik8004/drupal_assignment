@@ -268,6 +268,9 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
         ? _alshaya_country_get_site_level_country_name()
         : $data_layer['country'];
     }
+    if (isset($data_layer['language'])) {
+      $data_layer['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
     return;
   }
   try {
