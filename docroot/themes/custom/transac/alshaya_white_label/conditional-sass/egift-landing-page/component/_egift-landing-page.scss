@@ -34,6 +34,14 @@
       @include breakpoint($only-tablet) {
         background: $breadcrumb_bg;
       }
+
+      li:last-of-type {
+        a {
+          span {
+            text-transform: initial;
+          }
+        }
+      }
     }
   }
 
