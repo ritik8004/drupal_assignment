@@ -335,7 +335,7 @@
                 "Ajax support / Use behaviors": "https://www.drupal.org/files/issues/2021-06-03/recaptcha-ajax-2493183-225.patch"
             },
             "drupal/datalayer": {
-                "Trigger an event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
+                "Trigger an event before data push": "https://www.drupal.org/files/issues/2022-03-30/3249444-trigger-an-event-before-data-push-5.patch"
             },
             "drupal/acquia_purge": {
                 "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2022-01-06/3066449-12.patch"

@@ -2,8 +2,8 @@
  * Fetch the enriched data from the storage if present or call API.
  * @return {object} Object of enriched data.
  */
-rcsGetEnrichedCategories = () => {
-  let enrichedData = RcsPhStaticStorage.get('enriched_categories');
+globalThis.rcsGetEnrichedCategories = () => {
+  let enrichedData = globalThis.RcsPhStaticStorage.get('enriched_categories');
   if (enrichedData) {
     return enrichedData;
   }
@@ -13,7 +13,7 @@ rcsGetEnrichedCategories = () => {
     async: false,
     success: function (data) {
       // Store the value in static storage.
-      RcsPhStaticStorage.set('enriched_categories', data);
+      globalThis.RcsPhStaticStorage.set('enriched_categories', data);
       enrichedData = data;
     }
   });

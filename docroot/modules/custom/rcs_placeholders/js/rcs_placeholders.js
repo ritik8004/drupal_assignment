@@ -83,7 +83,7 @@
           }
 
           // Re-attach all behaviors.
-          rcsPhApplyDrupalJs(document);
+          globalThis.rcsPhApplyDrupalJs(document);
 
           // RCS Entity Loaded.
           if (pageType) {
@@ -98,7 +98,10 @@
           // Add class to remove loader styles after RCS info is filled.
           $('.rcs-page').addClass(classRcsLoaded);
         }).catch(function(e) {
-          Drupal.alshayaLogger('error', 'Failed to fetch Page Entity.', 'error');
+          Drupal.alshayaLogger('error', 'Failed to fetch Page Entity @entity. Message @message.', {
+            '@entity': (typeof pageEntity !== 'undefined') ? pageEntity : {},
+            '@message': e.message,
+          });
         });
     }
   });
@@ -178,7 +181,7 @@
             // code in the behaviors knows that replacement has been completed.
             $(this).addClass(classRcsLoaded);
             // Re-attach all behaviors.
-            rcsPhApplyDrupalJs($(this).parent()[0]);
+            globalThis.rcsPhApplyDrupalJs($(this).parent()[0]);
             return;
           } catch (error) {
             Drupal.alshayaLogger(
@@ -195,7 +198,11 @@
         // Add class to remove loader styles on RCS Placeholders.
         $(this).addClass(classRcsLoaded);
       }).catch(function(e) {
-        Drupal.alshayaLogger('error', 'Failed to fetch Page Entity.', 'error');
+        Drupal.alshayaLogger('error', 'Failed to fetch Page Entity @entity. Message @message.', {
+          '@entity': (typeof pageEntity !== 'undefined' && pageEntity !== null) ? pageEntity : {},
+          '@entityToGet': (typeof entityToGet !== 'undefined' && entityToGet !== null) ? entityToGet : '',
+          '@message': e.message,
+        });
       });
   }
 

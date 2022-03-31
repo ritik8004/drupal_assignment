@@ -122,3 +122,19 @@ product.order:
   version: 1.x
   js:
     js/alshaya_rcs_order.js: {}
+  dependencies:
+    - rcs_magento_placeholders/rcs_magento_placeholders
+
+rcs_product_modal:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product.modal.js: {}
+  dependencies:
+    - alshaya_spc/add_to_cart
+    - alshaya_acm_cart_notification/cart_notification_js
+
+rcs_product_dynamic_yield:
+  js:
+    js/alshaya_rcs_product_dy.js: {}
+  dependencies:
+    - rcs_magento_placeholders/rcs_magento_placeholders

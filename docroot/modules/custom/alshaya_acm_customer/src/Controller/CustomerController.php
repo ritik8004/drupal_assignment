@@ -225,7 +225,6 @@ class CustomerController extends ControllerBase {
       $build['#attached'] = [
         'library' => [
           'alshaya_acm_customer/orders-list',
-          'alshaya_white_label/rcs-order-listing',
         ],
       ];
     }

@@ -21,7 +21,7 @@ exports.render = function render(
     // Remove the placeholder li elements.
     innerHtmlObj.find('li').remove();
     // @todo Handle special base where we separate URL by - instead of /.
-    const firstLevelTermUrl = rcsWindowLocation().pathname.match(`\/${settings.path.currentLanguage}\/(.*?)\/(.*?)$`);
+    const firstLevelTermUrl = globalThis.rcsWindowLocation().pathname.match(`\/${settings.path.currentLanguage}\/(.*?)\/(.*?)$`);
     if (firstLevelTermUrl) {
       inputs = inputs.filter((input) => {
         return input.url_path == firstLevelTermUrl[1];
@@ -36,7 +36,7 @@ exports.render = function render(
       });
 
       // Get the enrichment data. It's a sync call.
-      let enrichmentData = rcsGetEnrichedCategories();
+      let enrichmentData = globalThis.rcsGetEnrichedCategories();
       innerHtmlObj.find('ul').append(buildLhnHtml('', tempInputs, clickable, unclickable, settings, enrichmentData));
     }
   }
@@ -119,7 +119,7 @@ const replaceLhnPlaceHolders = function (item, itemHtml, settings) {
   item.level -= 1;
 
   // Add active class based on current path.
-  if (rcsWindowLocation().pathname == item.url_path) {
+  if (globalThis.rcsWindowLocation().pathname == item.url_path) {
     item.active = 'active';
   }
   const clonedElement = jQuery('<li>' + itemHtml + '</li>');
@@ -134,7 +134,7 @@ const replaceLhnPlaceHolders = function (item, itemHtml, settings) {
       // Apply the replacement on all the elements containing the
       // placeholder. We filter to keep only the child element
       // and not the parent ones.
-      itemHtml = rcsReplaceAll(itemHtml, fieldPh, entityFieldValue);
+      itemHtml = globalThis.rcsReplaceAll(itemHtml, fieldPh, entityFieldValue);
     });
 
   return itemHtml;

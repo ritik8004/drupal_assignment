@@ -75,7 +75,7 @@ export const triggerUpdateCart = (requestData) => {
     quantity: requestData.qty,
     cart_id: requestData.cartId,
     options: requestData.options,
-    variant: (typeof requestData.variant !== 'undefined') ? requestData.variant : requestData.sku,
+    variant_sku: (typeof requestData.variant !== 'undefined') ? requestData.variant : requestData.sku,
   };
 
   // Call update cart api function.

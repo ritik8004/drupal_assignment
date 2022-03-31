@@ -39,6 +39,13 @@
       color: $pdp_product_special_price_text;
     }
   }
+
+  .total-line-item,
+  .hero-total .total-line-item {
+    > span:first-child.paid-with-egift {
+      text-transform: initial;
+    }
+  }
 }
 
 .spc-order-summary-order-preview,
@@ -63,6 +70,15 @@
       font-weight: normal;
       margin-bottom: 0.3125rem;
       color: $spc-checkout-order-detail-label;
+    }
+  }
+
+  .spc-order-summary-item {
+    .spc-label {
+      &.spc-topup-label,
+      &.spc-egift-label {
+        text-transform: initial;
+      }
     }
   }
 }

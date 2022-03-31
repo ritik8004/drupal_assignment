@@ -15,7 +15,6 @@ git:
     - 'alshaya3bis@svn-5975.enterprise-g1.hosting.acquia.com:alshaya3bis.git'
     - 'alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git'
     - 'alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git'
-    - 'alshaya6tmp2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya6tmp2.git'
     - 'alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git'
   hooks:
     pre-push: false
@@ -59,7 +58,7 @@ command-hooks:
     command: 'vendor/bin/blt alshayafe:setup && vendor/bin/blt js:setup && vendor/bin/blt alshayafe:setup-uglify'
   frontend-assets:
     dir: '${repo.root}'
-    command: 'bash blt/scripts/github_actions/frontend-build.sh ${docroot} && bash blt/scripts/github_actions/react-build.sh ${docroot} && vendor/bin/blt js:build && vendor/bin/blt alshayafe:build-uglify'
+    command: 'vendor/bin/blt alshayafe:build-all-themes && vendor/bin/blt alshayafe:build-react && vendor/bin/blt js:build && vendor/bin/blt alshayafe:build-uglify'
   pre-config-import:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''

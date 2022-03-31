@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_rcs_dynamic_yield_page_attachments(array &$attachment) {
+  $dy_script_init = \Drupal::config('dynamic_yield.settings')->get('dy_script_init');
+  // Attach the library only if the manual DY injection is selected.
+  if ($dy_script_init === 'manual') {
+    $attachment['#attached']['library'][] = 'alshaya_rcs_dynamic_yield/rcs_dynamic_yield';
+  }
+}

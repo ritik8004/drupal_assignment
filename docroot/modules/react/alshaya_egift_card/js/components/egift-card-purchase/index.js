@@ -177,6 +177,15 @@ export default class EgiftCardPurchase extends React.Component {
       document.getElementById('email-error').classList.remove('error');
     }
 
+    // If user is loggedin and  has selected freinds and family,
+    // senderName and senderEmail should be of loggedin users.
+    let senderName = name;
+    let senderEmail = email;
+    if (drupalSettings.userDetails.customerId > 0 && data.get('egift-for') === 'friends') {
+      senderName = drupalSettings.userDetails.userName;
+      senderEmail = drupalSettings.userDetails.userEmailID;
+    }
+
     // Get egift card amount.
     const amount = data.get('egift-amount');
     // Validate amount selected.
@@ -184,6 +193,30 @@ export default class EgiftCardPurchase extends React.Component {
       this.handleAmountSelect(false, 0);
     }
 
+    // Get open amount input element.
+    const element = document.getElementById('open-amount');
+    // Get open amount value.
+    const openAmount = (element !== null) ? element.value : '';
+    if (openAmount !== '') {
+      // Min and Max value allowed for open amount.
+      const amountFrom = parseFloat(element.getAttribute('min'));
+      const amountTo = parseFloat(element.getAttribute('max'));
+
+      // on submit compare if user input for open amount lies in the allowed range.
+      if (parseFloat(openAmount) < amountFrom || parseFloat(openAmount) > amountTo) {
+        document.getElementById('open-amount-error').innerHTML = Drupal.t('Please enter amount in the range of @amountFrom to @amountTo', {
+          '@amountFrom': amountFrom,
+          '@amountTo': amountTo,
+        }, { context: 'egift' });
+        isError = true;
+      }
+    }
+    // on submit check if user input for open amount or amount list,
+    // is not selected after switching the card.
+    if (document.querySelectorAll('.item-amount.active').length === 0 && openAmount === '') {
+      document.getElementById('open-amount-error').innerHTML = Drupal.t('Please enter amount or select from above.', {}, { context: 'egift' });
+      isError = true;
+    }
     if (isError) {
       removeFullScreenLoader();
       return;
@@ -198,9 +231,9 @@ export default class EgiftCardPurchase extends React.Component {
         extension_attributes: {
           hps_giftcard_item_option: {
             hps_giftcard_amount: 'custom',
-            hps_giftcard_sender_name: name,
+            hps_giftcard_sender_name: senderName,
             hps_giftcard_recipient_name: name,
-            hps_giftcard_sender_email: email,
+            hps_giftcard_sender_email: senderEmail,
             hps_giftcard_recipient_email: email,
             hps_custom_giftcard_amount: amount,
             hps_giftcard_message: typeof data.get('egift-message') !== 'undefined' ? data.get('egift-message') : '',
@@ -299,6 +332,7 @@ export default class EgiftCardPurchase extends React.Component {
               onSubmit={this.handleSubmit}
               className="egift-form fadeInUp"
               id="egift-purchase-form"
+              noValidate
             >
               <div
                 ref={this.errorElementRef}

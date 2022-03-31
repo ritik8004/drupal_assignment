@@ -42,7 +42,7 @@ const DynamicFormField = (props) => {
       }
     } else if (fieldProperty.id === 'usernickname' && userStorage !== null) {
       if (userStorage.nickname !== undefined) {
-        fieldProperty.default_value = userStorage.nickname;
+        fieldProperty.default_value = decodeURIComponent(userStorage.nickname);
       }
     }
   }

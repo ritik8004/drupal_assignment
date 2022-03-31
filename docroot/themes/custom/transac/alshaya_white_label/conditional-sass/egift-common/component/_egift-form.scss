@@ -43,6 +43,9 @@
 
     .egift-error {
       flex: 0 0 100%;
+      font-size: 0.75rem;
+      color: $primary_input_inline_error;
+      padding-top: 0.3125rem;
     }
 
     .open-amount-currency {

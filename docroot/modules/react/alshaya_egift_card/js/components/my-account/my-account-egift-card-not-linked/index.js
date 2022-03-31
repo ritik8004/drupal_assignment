@@ -112,7 +112,7 @@ class EgiftCardNotLinked extends React.Component {
     this.clearErrors();
     // Get form data.
     const data = new FormData(e.target);
-    const cardNumber = data.get('egift-card-number');
+    const cardNumber = data.get('egift-card-number').trim();
 
     // Validate Card number.
     if (cardNumber === '') {

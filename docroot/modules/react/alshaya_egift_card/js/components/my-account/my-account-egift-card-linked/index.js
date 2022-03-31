@@ -125,6 +125,9 @@ class EgiftCardLinked extends React.Component {
                 className="egift-card-remove"
               >
                 <TrashIconSVG />
+                <span className="egift-ulink-text">
+                  {Drupal.t('Unlink', {}, { context: 'egift' })}
+                </span>
               </button>
               )}
             modal

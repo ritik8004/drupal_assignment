@@ -19,23 +19,18 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview: '',
       buttonClass: 'write_review',
       validateCurrentEmail: false,
-      userDetails: {
-        user: {
-          userId: 0,
-          userEmail: null,
-        },
-      },
+      userDetails: null,
     };
   }
 
   componentDidMount() {
     const { productId, reviewedByCurrentUser } = this.props;
     // To open write a review on page load.
-    if (isOpenWriteReviewForm(productId)) {
+    isOpenWriteReviewForm(productId).then((status) => {
       this.setState({
-        isModelOpen: true,
+        isModelOpen: status,
       });
-    }
+    });
 
     const path = decodeURIComponent(window.location.search);
     const params = new URLSearchParams(path);
@@ -46,16 +41,17 @@ export default class WriteReviewButton extends React.Component {
     }
 
     getUserDetails(productId).then((userDetails) => {
+      let data = {};
       if (params.get('userToken') !== null) {
         const currentEmail = getEmailFromTokenParams(params);
         if (userDetails.user.userId !== 0 && userDetails.user.emailId !== currentEmail) {
-          this.setState({
+          data = {
             validateCurrentEmail: true,
             buttonClass: 'pie_notification',
-          });
+          };
         }
       }
-      this.setState({ userDetails });
+      this.setState({ ...data, ...{ userDetails } });
     });
   }
 
@@ -79,13 +75,17 @@ export default class WriteReviewButton extends React.Component {
   closeModal = (e) => {
     e.preventDefault();
     document.body.classList.remove('open-form-modal');
-    const { context } = this.props;
+    const { context, isWriteReview, newPdp } = this.props;
 
     this.setState({
       isModelOpen: false,
     });
     // Disable write review popup onload.
     setStorageInfo(false, 'openPopup');
+
+    if (isWriteReview && newPdp) {
+      document.querySelector('body').classList.remove('ratings-reviews-overlay', 'open-form-modal');
+    }
 
     if (e.detail.HasErrors !== undefined && !e.detail.HasErrors) {
       if (context !== 'myaccount') {
@@ -111,12 +111,17 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview,
       buttonClass,
       validateCurrentEmail,
+      userDetails,
     } = this.state;
     const {
-      reviewedByCurrentUser, productId, context, newPdp,
+      reviewedByCurrentUser,
+      productId,
+      context,
+      newPdp,
+      isWriteReview,
+      isInline,
     } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-    const { userDetails } = this.state;
     if (userDetails && Object.keys(userDetails).length !== 0) {
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
       if (userDetails.user.userId === 0
@@ -136,7 +141,7 @@ export default class WriteReviewButton extends React.Component {
               {getStringMessage('write_a_review')}
             </div>
             <Popup
-              open={isModelOpen}
+              open={isWriteReview || isModelOpen}
               className={buttonClass}
               closeOnDocumentClick={false}
               closeOnEscape={false}
@@ -156,6 +161,7 @@ export default class WriteReviewButton extends React.Component {
                     productId={productId}
                     context={context}
                     newPdp={newPdp}
+                    isWriteReview={isWriteReview}
                   />
                 </ConditionalView>
               </>
@@ -174,7 +180,9 @@ export default class WriteReviewButton extends React.Component {
                 <div className="title-block">
                   <a className="close-modal" onClick={(e) => this.closeModal(e)} />
                 </div>
-                <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
+                <ConditionalView condition={!isInline}>
+                  <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
+                </ConditionalView>
               </div>
             </>
           </Popup>
@@ -202,7 +210,9 @@ export default class WriteReviewButton extends React.Component {
               {getStringMessage('write_a_review')}
             </div>
           </div>
-          <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
+          <ConditionalView condition={!isInline}>
+            <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
+          </ConditionalView>
         </ConditionalView>
       </>
     );

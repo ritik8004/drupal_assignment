@@ -10,7 +10,7 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
-    let enrichmentData = rcsGetEnrichedCategories();
+    let enrichmentData = globalThis.rcsGetEnrichedCategories();
     let menuListLevel1Ele = navigationType === 'shop_by_block'
       ? innerHtmlObj.find('div.c-footer-menu')
       : innerHtmlObj.find('.menu__list.menu--one__list');
@@ -28,7 +28,7 @@ exports.render = function render(
     const isSuperCategoryEnabled = (typeof settings.superCategory) != "undefined";
     // Proceed only if superCategory is enabled.
     if (isSuperCategoryEnabled) {
-      let activeSuperCategory = rcsWindowLocation().pathname.split('/')[2];
+      let activeSuperCategory = globalThis.rcsWindowLocation().pathname.split('/')[2];
       // Check if the active super category is valid or not.
       let validSuperCategory = false;
       inputs.forEach((item) => {
@@ -353,7 +353,7 @@ const navRcsReplacePh = function (phElement, entity, markupId) {
       const entityFieldValue = r[1];
       // Apply the replacement on all the elements containing the
       // placeholder.
-      menuItemHtml = rcsReplaceAll(menuItemHtml, fieldPh, entityFieldValue);
+      menuItemHtml = globalThis.rcsReplaceAll(menuItemHtml, fieldPh, entityFieldValue);
     });
 
   return menuItemHtml;

@@ -8,7 +8,7 @@ echo "Deployed branches:"
 echo $deployed_branches
 echo
 
-repos="alshaya@svn-5975.enterprise-g1.hosting.acquia.com:alshaya.git alshaya2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya2.git alshaya3bis@svn-5975.enterprise-g1.hosting.acquia.com:alshaya3bis.git alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git alshaya6tmp2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya6tmp2.git alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git"
+repos="alshaya@svn-5975.enterprise-g1.hosting.acquia.com:alshaya.git alshaya2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya2.git alshaya3bis@svn-5975.enterprise-g1.hosting.acquia.com:alshaya3bis.git alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git"
 for repo in $repos ; do
   to_delete=""
   refs=$(git ls-remote -h $repo | grep -o -E "refs/heads/.*-build$")

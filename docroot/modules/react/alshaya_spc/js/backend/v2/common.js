@@ -494,7 +494,7 @@ const getProcessedCartData = async (cartData) => {
           if (typeof item.extension_attributes.egift_options !== 'undefined') {
             data.items[itemKey].egiftOptions = item.extension_attributes.egift_options;
           }
-          if (typeof item.extension_attributes.product_media !== 'undefined') {
+          if (typeof item.extension_attributes.product_media[0] !== 'undefined') {
             data.items[itemKey].media = item.extension_attributes.product_media[0].file;
           }
 

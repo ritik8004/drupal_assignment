@@ -1,0 +1,71 @@
+field_settings:
+  attr_material:
+    label: 'Material'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_material
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_pattern:
+    label: 'Pattern'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_pattern
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_category_taxonomy:
+    label: 'Category Taxonomy'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_category_taxonomy
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_style_taxonomy:
+    label: 'Style'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_style_taxonomy
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_brand_name:
+    label: 'Brand'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_brand_name
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_gender:
+    label: 'Gender'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_gender
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_age_group:
+    label: 'Age Group'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_age_group
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku

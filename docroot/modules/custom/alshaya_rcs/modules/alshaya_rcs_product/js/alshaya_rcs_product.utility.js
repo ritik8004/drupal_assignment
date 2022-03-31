@@ -67,10 +67,10 @@
    */
   window.commerceBackend.getProductData = function (sku, productKey, processed) {
     if (typeof sku === 'undefined' || !sku) {
-      var allStorageData = RcsPhStaticStorage.getAll();
+      var allStorageData = globalThis.RcsPhStaticStorage.getAll();
       var productData = {};
       Object.keys(allStorageData).forEach(function (key) {
-        if (key.startsWith('product_')) {
+        if (key.startsWith('product_data_')) {
           if (typeof processed === 'undefined' || processed) {
             productData[allStorageData[key].sku] = processProduct(allStorageData[key]);
           }
@@ -83,7 +83,7 @@
       return productData;
     }
 
-    var product = RcsPhStaticStorage.get('product_' + sku);
+    var product = globalThis.RcsPhStaticStorage.get('product_data_' + sku);
     if (product) {
       if (typeof processed === 'undefined' || processed) {
         return processProduct(product);
@@ -667,7 +667,7 @@
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('single_product_by_sku', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
   };
@@ -709,6 +709,11 @@
     const cartData = Drupal.alshayaSpc.getCartData();
     const skus = {};
 
+    // Do not proceed for empty cart.
+    if (!(cartData && Drupal.hasValue(cartData.items))) {
+      return;
+    }
+
     Object.values(cartData.items).forEach(function (item) {
       const sku = item.sku;
       if (!Drupal.hasValue(data[sku])) {
@@ -732,7 +737,7 @@
 
     // Fetch the product data for the given skus which also saves them to the
     // static storage.
-    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: skuValues, op: 'in'});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('multiple_products_by_sku', {sku: skuValues});
 
     // Now store the product data to local storage.
     Object.entries(skus).forEach(function ([ parentSku, sku ]) {
@@ -756,18 +761,19 @@
       return staticDataStore['attrLabels'][attrName][attrValue];
     }
 
-    const response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option', { attributeCode: attrName });
-    allOptionsForAttribute = {};
-
+    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
     // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata.items[0].attribute_options.forEach(function (option) {
-      allOptionsForAttribute[option.value] = option.label;
+    response.data.customAttributeMetadata.items.forEach(function (option) {
+      var allOptionsForAttribute = {};
+      option.attribute_options.forEach(function (optionValue) {
+        allOptionsForAttribute[optionValue.value] = optionValue.label;
+      })
+      // Set to static storage.
+      staticDataStore['attrLabels'][option.attribute_code] = allOptionsForAttribute;
     });
 
-    // Set to static storage.
-    staticDataStore['attrLabels'][attrName] = allOptionsForAttribute;
-
-    return allOptionsForAttribute[attrValue];
+    // Return the label.
+    return staticDataStore['attrLabels'][attrName][attrValue];
   };
 
   /**
@@ -981,24 +987,27 @@
 
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
-    // Return if result is empty.
-    if (typeof e.detail.result === 'undefined'
-      || typeof e.detail.result.promotions === 'undefined') {
+    // Return if result is empty or event data is not for product.
+    if (!Drupal.hasValue(e.detail.result)
+      || !Drupal.hasValue(e.detail.result.sku)) {
       return null;
     }
 
-    const promotions = e.detail.result.promotions;
-    // Update the promotions attribute based on the requirement.
-    promotions.forEach((promotion, index) => {
-      promotions[index] = {
-        promo_web_url: promotion.url,
-        text: promotion.label,
-        context: promotion.context,
-        type: promotion.type,
-      }
-    });
-    e.detail.result.promotions = promotions;
+    var promotionVal = [];
+    if (Drupal.hasValue(e.detail.result.promotions)) {
+      var promotions = e.detail.result.promotions;
+      // Update the promotions attribute based on the requirement.
+      promotions.forEach((promotion, index) => {
+        promotionVal[index] = {
+          promo_web_url: promotion.url,
+          text: promotion.label,
+          context: promotion.context,
+          type: promotion.type,
+        }
+      });
+    }
 
+    e.detail.result.promotions = promotionVal;
   });
 
 })(Drupal, drupalSettings);

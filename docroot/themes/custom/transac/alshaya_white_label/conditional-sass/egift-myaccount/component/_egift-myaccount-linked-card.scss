@@ -95,6 +95,18 @@
     position: relative;
     background: 0 0;
     padding: 0;
+    display: flex;
+    align-items: center;
+
+    .egift-ulink-text {
+      font-size: 0.75rem;
+      text-decoration: underline;
+      margin-#{$left}: 0.25rem;
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
   }
 
   .egift-linked-card-number-wrapper,
@@ -158,6 +170,7 @@
     button[type="button"] {
       &.egift-topup-btn {
         margin-bottom: 0;
+        text-transform: initial;
 
         @include breakpoint($only-mobile) {
           width: 100%;
@@ -242,3 +255,14 @@
     }
   }
 }
+
+.path--user {
+  .c-breadcrumb {
+    li {
+      a.egift-brdcrb-nav {
+        text-transform: initial;
+      }
+    }
+  }
+}
+

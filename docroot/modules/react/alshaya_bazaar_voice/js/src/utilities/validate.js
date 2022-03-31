@@ -1,5 +1,5 @@
 import getStringMessage from '../../../../js/utilities/strings';
-import { validEmailRegex } from './write_review_util';
+import { validateInputLang, validEmailRegex } from './write_review_util';
 import { getbazaarVoiceSettings } from './api/request';
 
 /**
@@ -41,6 +41,12 @@ export const processFormDetails = (e, ReviewId) => {
   const targetElementCommentbox = e.target.elements.commentbox;
   const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_box_min_length;
   if (targetElementCommentbox.value.length > 0
+    && !validateInputLang(targetElementCommentbox.value)) {
+    document.getElementById(`${targetElementCommentbox.id}`).classList.add('error');
+    document.getElementById(`${targetElementCommentbox.id}-error`).innerHTML = getStringMessage('text_input_lang_error');
+    document.getElementById(`${targetElementCommentbox.id}-error`).classList.add('error');
+    isError = true;
+  } else if (targetElementCommentbox.value.length > 0
     && targetElementCommentbox.value.length < commentMinLength) {
     const commentlabel = getStringMessage('comment');
     document.getElementById(`${targetElementCommentbox.id}`).classList.add('error');

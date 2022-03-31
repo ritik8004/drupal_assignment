@@ -6,8 +6,14 @@ export default class EgiftCardOpenAmountField extends React.Component {
     this.state = {
       openAmountMessage: '',
       openAmountInputDisabled: false, // Enable field by default.
-      actionDisable: true, // Disable open amount submit by default.
     };
+  }
+
+  componentDidMount() {
+    const { field } = this.props;
+    if (field.current !== null) {
+      field.current.querySelector('button').disabled = true;
+    }
   }
 
   /**
@@ -23,10 +29,6 @@ export default class EgiftCardOpenAmountField extends React.Component {
     if (openAmount !== '') {
       // Remove any error message.
       document.getElementById('open-amount-error').innerHTML = '';
-
-      // Enable action button.
-      const { field } = this.props;
-      field.current.querySelector('button').disabled = false;
     }
   }
 
@@ -55,6 +57,12 @@ export default class EgiftCardOpenAmountField extends React.Component {
    * Trigger submit when user clicks enter on open amount field.
    */
   handleKeypress = (e) => {
+    // Enable action button.
+    const { field } = this.props;
+    if (field.current !== null) {
+      field.current.querySelector('button').disabled = false;
+    }
+
     // It triggers by pressing the enter key
     if (e.key === 'Enter') {
       this.handleSubmit(e);
@@ -65,8 +73,14 @@ export default class EgiftCardOpenAmountField extends React.Component {
    * Check if number is positive integer.
    */
   isAmount = (str) => {
-    const n = Math.floor(Number(str));
-    return n !== Infinity && String(n) === str && n >= 0;
+    const n = Number(str);
+    // If not valid number like string or anything.
+    if (Number.isNaN(n)) {
+      return false;
+    }
+
+    // Checks if number greater than 0 and integer.
+    return n > 0 && Number.isInteger(n);
   };
 
   /**
@@ -116,9 +130,24 @@ export default class EgiftCardOpenAmountField extends React.Component {
     }
   }
 
+  /**
+   * Block user from pasting e (exponential) into open amount field.
+   */
+  handlePaste = (e) => {
+    // Get data from clipboard.
+    const clipboardData = e.clipboardData || window.clipboardData;
+    const pastedData = clipboardData.getData('Text').toUpperCase();
+
+    // Prevent user from pasting e (exponential) in input field.
+    if (pastedData.indexOf('E') > -1) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }
+
   render() {
     const { selected, field } = this.props;
-    const { openAmountMessage, actionDisable, openAmountInputDisabled } = this.state;
+    const { openAmountMessage, openAmountInputDisabled } = this.state;
 
     // Get all egift card attributes.
     const attributes = selected.custom_attributes;
@@ -128,8 +157,12 @@ export default class EgiftCardOpenAmountField extends React.Component {
     });
 
     // Don't show open amount field if allow_open_amount_hps attribute
-    // from api response for card item is 0.
-    if (eGiftCardAttributes.allow_open_amount_hps.value === '0') {
+    // from api response for card item is 0,
+    // or if allow_open_amount_hps is set 1 and any of amount_open_from_hps or amount_open_to_hps,
+    // is not set.
+    if (eGiftCardAttributes.allow_open_amount_hps.value === '0'
+      || typeof eGiftCardAttributes.amount_open_from_hps === 'undefined'
+      || typeof eGiftCardAttributes.amount_open_to_hps === 'undefined') {
       return null;
     }
 
@@ -145,6 +178,8 @@ export default class EgiftCardOpenAmountField extends React.Component {
             max={eGiftCardAttributes.amount_open_to_hps.value}
             onFocus={() => this.handleErrorMessage()}
             onKeyPress={this.handleKeypress}
+            onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
+            onPaste={(e) => this.handlePaste(e)}
             onChange={this.handleChange}
             readOnly={openAmountInputDisabled}
             onBlur={(e) => this.handleEvent(e)}
@@ -154,7 +189,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
             { drupalSettings.alshaya_spc.currency_config.currency_code }
           </span>
         </div>
-        <button className="open-amount-btn" type="button" onClick={this.handleSubmit} disabled={actionDisable} />
+        <button className="open-amount-btn" type="button" onClick={this.handleSubmit} />
         <div className="error egift-error" id="open-amount-error">
           { openAmountMessage }
         </div>

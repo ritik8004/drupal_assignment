@@ -18,7 +18,7 @@ const PpdRatingsReviews = (props) => {
     Drupal.addItemInLocalStorage('openPopup', false);
   };
 
-  const openModal = () => {
+  const openModal = (isWriteReview) => {
     // to make sure that markup is present in DOM.
     setTimeout(() => {
       document.querySelector('body').classList.add('ratings-reviews-overlay');
@@ -31,22 +31,29 @@ const PpdRatingsReviews = (props) => {
             <div className="magv2-ratings-reviews-popup-title">{Drupal.t('Ratings & Reviews')}</div>
           </div>
           <div className="magv2-ratings-reviews-popup-content-wrapper">
-            <ReviewSummary isNewPdpLayout="true" />
+            <ReviewSummary isNewPdpLayout="true" isWriteReview={isWriteReview} />
           </div>
         </div>
       </div>
     );
   };
 
-  const openRatingsReviewPanel = () => {
-    getPanelData(openModal());
+  const openRatingsReviewPanel = (e, form) => {
+    e.preventDefault();
+    if (form === 'write_review') {
+      getPanelData(openModal(true));
+    } else {
+      getPanelData(openModal(false));
+    }
   };
 
   useEffect(() => {
     // To open write a review on page load.
-    if (isOpenWriteReviewForm()) {
-      getPanelData(openModal());
-    }
+    isOpenWriteReviewForm().then((status) => {
+      if (status) {
+        getPanelData(openModal());
+      }
+    });
   },
   []);
 

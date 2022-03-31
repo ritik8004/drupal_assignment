@@ -101,6 +101,10 @@
         width: 100%;
         order: 2;
       }
+
+      button[type="button"] {
+        text-transform: initial;
+      }
     }
 
     .action-cancel {

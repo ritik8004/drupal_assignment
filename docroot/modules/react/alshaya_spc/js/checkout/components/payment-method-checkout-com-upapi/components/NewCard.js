@@ -9,6 +9,7 @@ import getStringMessage from '../../../../utilities/strings';
 import { handleValidationMessage } from '../../../../utilities/form_item_helper';
 import { CheckoutComUpapiContext } from '../../../../context/CheckoutComUpapi';
 import { getBinValidationConfig, binValidation } from '../../../../utilities/checkout_util';
+import { allowSavedCcForTopUp } from '../../../../utilities/egift_util';
 
 class NewCard extends React.Component {
   static contextType = CheckoutComUpapiContext;
@@ -232,7 +233,7 @@ class NewCard extends React.Component {
           </ConditionalView>
         </div>
 
-        <ConditionalView condition={drupalSettings.user.uid > 0}>
+        <ConditionalView condition={drupalSettings.user.uid > 0 && allowSavedCcForTopUp()}>
           <ConditionalView condition={drupalSettings.checkoutComUpapi.tokenize === true}>
             <div className="spc-payment-save-card">
               <input type="checkbox" value={1} id="payment-card-save" name="save_card" />

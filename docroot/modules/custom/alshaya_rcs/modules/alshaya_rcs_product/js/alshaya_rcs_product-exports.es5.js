@@ -131,13 +131,13 @@ function getProductRecommendation(products, sectionTitle) {
   products.forEach((product, index) => {
     related.find('.owl-carousel').append('<div id="row' + index + '" class="views-row"/>');
     related.find('#row' + index).append(productTeaser);
-    const attributes = rcsPhGetSetting('placeholderAttributes');
+    const attributes = globalThis.rcsPhGetSetting('placeholderAttributes');
     finalMarkup = related.html();
     rcsPhReplaceEntityPh(finalMarkup, 'product_teaser', product, drupalSettings.path.currentLanguage)
       .forEach(function eachReplacement(r) {
         const fieldPh = r[0];
         const entityFieldValue = r[1];
-        finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
+        finalMarkup = globalThis.rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
       });
     related.html(finalMarkup);
   });
@@ -649,7 +649,7 @@ exports.computePhFilters = function (input, filter) {
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          finalHtml = rcsReplaceAll(finalHtml, fieldPh, entityFieldValue);
+          finalHtml = globalThis.rcsReplaceAll(finalHtml, fieldPh, entityFieldValue);
         });
 
       value = finalHtml;

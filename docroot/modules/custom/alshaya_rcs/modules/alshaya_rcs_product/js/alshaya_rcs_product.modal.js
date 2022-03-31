@@ -44,7 +44,7 @@
               .forEach(function eachReplacement(r) {
                 const fieldPh = r[0];
                 const entityFieldValue = r[1];
-                finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
+                finalMarkup = globalThis.rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
               });
             content.html(finalMarkup);
 
@@ -66,7 +66,7 @@
 
             // Call behaviours with modal context.
             var modalContext = $('.pdp-modal-box');
-            rcsPhApplyDrupalJs(modalContext);
+            globalThis.rcsPhApplyDrupalJs(modalContext);
           },
           function () {
             Drupal.alshayaLogger('error', 'Could not fetch data for product recommendation!');

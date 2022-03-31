@@ -386,6 +386,10 @@
             width: 2.5rem;
             top: 0;
             bottom: 0;
+
+            html[lang='ar'] & {
+              transform: rotateY(180deg);
+            }
           }
 
           .slick-prev {

@@ -1,0 +1,70 @@
+@include breakpoint($upto-desktop) {
+  .block-alshaya-super-category-menu {
+    height: 2.875rem;
+    transition: height 0.4s;
+
+    .hide-minimalistic-header.no-sticky-algolia-search-bar & {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+  .c-menu-primary .region__menu-primary .menu--mobile-navigation,
+  #block-cartminiblock,
+  .block-alshaya-react-mini-cart {
+    transition: transform 0.4s, -webkit-transform 0.4s;
+    transform: none;
+
+    .hide-minimalistic-header.no-sticky-algolia-search-bar & {
+      transform: translate3d(0, -2.875rem, 0);
+    }
+  }
+
+  .c-menu-primary .region__menu-primary #block-mobilenavigation {
+    position: fixed;
+    width: 100%;
+
+    ul {
+      z-index: 10;
+    }
+  }
+
+  &.hide-minimalistic-header.no-sticky-algolia-search-bar {
+    margin-top: 3.75rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 3.375rem;
+    }
+
+    .toggle--sign,
+    .mobile--close {
+      top: 3.75rem;
+    }
+
+    &.logged-in {
+      .toggle--sign {
+        top: 3.75rem;
+      }
+    }
+  }
+
+  .c-plp {
+    #block-subcategoryblock {
+      top: -3.125rem !important;
+
+      &.mobile-sticky-sub-category {
+        transform: translateY(8.8125rem);
+      }
+    }
+  }
+}
+
+.super-category-enabled {
+  &.header-sticky-filter {
+    .menu--mobile-navigation {
+      @include breakpoint($only-tablet) {
+        visibility: hidden;
+      }
+    }
+  }
+}

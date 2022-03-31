@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cabd0a90c2038ac1a04ea39bb965b069",
+    "content-hash": "b960987a13e1ab787a1c12c949dcb41e",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -648,7 +648,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -6076,7 +6076,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Trigger an event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
+                    "Trigger an event before data push": "https://www.drupal.org/files/issues/2022-03-30/3249444-trigger-an-event-before-data-push-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12973,9 +12973,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "8.x-2.0-beta5",
                     "datestamp": "1592286577",

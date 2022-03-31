@@ -65,14 +65,22 @@ function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_vari
     }
 
     $variant_links = [];
-
-    // @todo To change the MDC sitemap URL.
-    $url = $sitemap_domain_url . '/media/sitemap/kwt_en/sitemap.xml';
+    $country_code = _alshaya_custom_get_site_level_country_code();
+    $url = $sitemap_domain_url . '/media/sitemap/' . strtolower($country_code) . '/sitemap.xml';
     $variant_links[] = [
       'url' => $url,
       'priority' => '0.5',
     ];
 
     $links = array_merge($variant_links, $links);
+
+    // Unset the image-sitemap from the default sitemap variant.
+    $endsWith = '/image-sitemap';
+    $len = strlen($endsWith);
+    foreach ($links as $key => $value) {
+      if (substr($value['url'], -$len) === $endsWith) {
+        unset($links[$key]);
+      }
+    }
   }
 }

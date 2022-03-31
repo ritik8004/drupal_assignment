@@ -82,6 +82,7 @@ const PdpLayout = () => {
     deliveryOptions,
     expressDeliveryClass,
     isProductBuyable,
+    bigTickectProduct,
   } = productValues;
 
   const emptyRes = (
@@ -303,10 +304,13 @@ const PdpLayout = () => {
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />
-          <ConditionalView condition={isExpressDeliveryEnabled() && isProductBuyable}>
+          <ConditionalView
+            condition={isExpressDeliveryEnabled()
+            && isProductBuyable && !bigTickectProduct}
+          >
             <PdpExpressDelivery />
           </ConditionalView>
-          <ConditionalView condition={!isExpressDeliveryEnabled()}>
+          <ConditionalView condition={!isExpressDeliveryEnabled() || bigTickectProduct}>
             <PdpStandardDelivery />
           </ConditionalView>
           {stockStatus ? (

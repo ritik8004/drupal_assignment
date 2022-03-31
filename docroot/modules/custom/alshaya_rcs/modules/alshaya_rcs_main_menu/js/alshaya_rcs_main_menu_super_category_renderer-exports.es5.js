@@ -11,7 +11,7 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
-    let enrichmentData = rcsGetEnrichedCategories();
+    let enrichmentData = globalThis.rcsGetEnrichedCategories();
 
     // Sort the remaining category menu items by position in asc order.
     inputs.sort(function (a, b) {
@@ -24,7 +24,7 @@ exports.render = function render(
     // Add active class based on the current active page else make first
     // element as default active.
     // Get the active super category.
-    let activeSuperCategory = rcsWindowLocation().pathname.split('/')[2];
+    let activeSuperCategory = globalThis.rcsWindowLocation().pathname.split('/')[2];
     // Check if the current page is a valid super category or not.
     let validSuperCategory = false;
     inputs.forEach((item) => {
@@ -112,7 +112,7 @@ const replaceSuperCategoryPlaceHolders = function (item, itemHtml, settings, enr
       // Apply the replacement on all the elements containing the
       // placeholder. We filter to keep only the child element
       // and not the parent ones.
-      itemHtml = rcsReplaceAll(itemHtml, fieldPh, entityFieldValue);
+      itemHtml = globalThis.rcsReplaceAll(itemHtml, fieldPh, entityFieldValue);
     });
 
   return itemHtml;

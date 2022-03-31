@@ -1,0 +1,63 @@
+.user-wishlist {
+  &.c-plp {
+    .block-page-title-block {
+      #wishlist-share {
+        button {
+          &.email-share-link {
+            @include btn;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+
+          &.copy-share-link {
+            @include button-brand;
+
+            &:hover {
+              border: 0;
+            }
+          }
+        }
+      }
+
+      h1.c-page-title {
+        font-size: 2.25rem;
+
+        @include breakpoint($only-tablet) {
+          font-size: 1.75rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          font-size: 1.25rem;
+          border-bottom: 0;
+        }
+      }
+
+      .back-link {
+        &::before {
+          @include breakpoint($only-mobile) {
+            top: 0.1875rem;
+            #{$left}: 0;
+
+            html[lang=ar] & {
+              top: 0;
+            }
+          }
+        }
+      }
+    }
+
+    #my-wishlist {
+      #plp-hits {
+        border: 0;
+
+        @include breakpoint($only-mobile) {
+          padding-top: 2.5rem;
+          padding-#{$left}: 0;
+          padding-#{$right}: 0;
+        }
+      }
+    }
+  }
+}

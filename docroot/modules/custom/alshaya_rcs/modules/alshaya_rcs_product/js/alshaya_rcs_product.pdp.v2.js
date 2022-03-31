@@ -29,7 +29,10 @@
         },
       );
     }).catch(function(e) {
-      Drupal.alshayaLogger('error', 'Failed to fetch Product Labels.', 'error');
+      Drupal.alshayaLogger('error', 'Failed to fetch Product Labels for sku @sku. Message @message.', {
+        '@sku': sku,
+        '@message': e.message,
+      });
     });
   }
 
@@ -52,17 +55,6 @@
     const productData = window.commerceBackend.getProductData(mainSku, null, false);
     const viewMode = product.parents('.entity--type-node').attr('data-vmode');
 
-    if (typeof parentSku === 'undefined') {
-      rawProduct = productData;
-    }
-    else {
-      Object.values(productData.variants).forEach(function (productVariant) {
-        if (sku === productVariant.product.sku) {
-          rawProduct = productVariant.product;
-        }
-      });
-    }
-
     // Maps gallery value from backend to the appropriate filter.
     let galleryType = null;
     switch (drupalSettings.alshayaRcs.pdpLayout) {
@@ -81,7 +73,6 @@
           sku,
         },
         { },
-        // rawProduct,
         productData,
         drupalSettings.path.currentLanguage,
         null,

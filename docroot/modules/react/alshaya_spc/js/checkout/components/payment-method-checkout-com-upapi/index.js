@@ -145,10 +145,14 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
     const { selectedCard } = this.context;
     const { finalisePayment } = this.props;
 
-    // Set udf3 again here to send it for api request.
-    const saveCard = (selectedCard === 'new' && drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
-      ? 1
-      : 0;
+    // If saved card for topup is false set this as 0.
+    let saveCard = 0;
+    if (allowSavedCcForTopUp()) {
+      // Set udf3 again here to send it for api request.
+      saveCard = (selectedCard === 'new' && drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+        ? 1
+        : 0;
+    }
 
     const paymentData = {
       payment: {

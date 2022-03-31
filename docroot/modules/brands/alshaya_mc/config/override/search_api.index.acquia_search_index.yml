@@ -9,3 +9,13 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_alshaya_product_type:
+    label: 'Product Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_alshaya_product_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku

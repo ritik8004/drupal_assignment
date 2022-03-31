@@ -1,0 +1,15 @@
+.wishlist-icon {
+  width: 1rem;
+}
+
+.wishlist-button-wrapper {
+  padding-#{$left}: 1rem;
+
+  .spc-cart-items & {
+    padding-#{$left}: 0;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-#{$left}: 0.875rem;
+  }
+}

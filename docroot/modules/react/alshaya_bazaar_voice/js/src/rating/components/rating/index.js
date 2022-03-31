@@ -10,14 +10,15 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import { getProductReviewStats } from '../../../utilities/user_util';
 import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
 
-const userDetails = getUserDetails();
-
 export default class Rating extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       reviewsData: '',
       bazaarVoiceSettings: getbazaarVoiceSettings(),
+      userDetails: {
+        productReview: null,
+      },
     };
   }
 
@@ -38,6 +39,10 @@ export default class Rating extends React.Component {
         }
       });
     }
+
+    getUserDetails().then((userDetails) => {
+      this.setState({ userDetails });
+    });
   }
 
   clickHandler = (e, callbackFn) => {
@@ -45,12 +50,13 @@ export default class Rating extends React.Component {
       smoothScrollTo(e, '#reviews-section');
     } else {
       e.preventDefault();
-      callbackFn(e);
+      callbackFn(e, 'write_review');
     }
   }
 
   render() {
-    const { reviewsData, bazaarVoiceSettings } = this.state;
+    const { reviewsData, bazaarVoiceSettings, userDetails } = this.state;
+
     // Return empty if reviews settings unavailable.
     if (bazaarVoiceSettings.reviews === undefined) {
       return null;
@@ -61,35 +67,51 @@ export default class Rating extends React.Component {
     } = this.props;
 
     const renderLink = renderLinkDirectly || false;
+    const reviewedByCurrentUser = userDetails.productReview || false;
+    const isInline = true;
 
     // Reviews data is emtpy.
     if (reviewsData === '') {
       return null;
     }
 
-    if (reviewsData !== undefined
-      && reviewsData !== ''
-      && reviewsData.TotalReviewCount > 0) {
-      return (
-        <div className="rating-wrapper">
+    return (
+      <div className="rating-wrapper">
+        <ConditionalView condition={reviewsData !== undefined
+          && reviewsData !== '' && reviewsData.TotalReviewCount > 0}
+        >
           <InlineRating childClickHandler={childClickHandler} reviewsData={reviewsData} />
           <ConditionalView condition={bazaarVoiceSettings.reviews.bv_auth_token !== null}>
             <BvAuthConfirmation bvAuthToken={bazaarVoiceSettings.reviews.bv_auth_token} />
           </ConditionalView>
-        </div>
-      );
-    }
-    return (
-      <div className="inline-rating">
-        <ConditionalView condition={renderLink}>
+        </ConditionalView>
+
+        <ConditionalView condition={renderLink
+          && userDetails.user.userId > 0 && !reviewedByCurrentUser}
+        >
           <div className="aggregate-rating">
             <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
           </div>
         </ConditionalView>
+
+        <ConditionalView condition={userDetails.user.userId === 0 && renderLink}>
+          <WriteReviewButton
+            reviewedByCurrentUser={reviewedByCurrentUser}
+            newPdp={renderLink}
+            isInline={isInline}
+          />
+        </ConditionalView>
+        <ConditionalView condition={reviewedByCurrentUser && renderLink}>
+          <WriteReviewButton
+            reviewedByCurrentUser={reviewedByCurrentUser}
+            newPdp={renderLink}
+            isInline={isInline}
+          />
+        </ConditionalView>
         <ConditionalView condition={!renderLink}>
           <WriteReviewButton
-            reviewedByCurrentUser={userDetails.productReview !== null}
-            newPdp={renderLink}
+            reviewedByCurrentUser={reviewedByCurrentUser}
+            isInline={isInline}
           />
         </ConditionalView>
       </div>

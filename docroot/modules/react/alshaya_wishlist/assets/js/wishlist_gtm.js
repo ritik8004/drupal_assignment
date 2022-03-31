@@ -27,7 +27,7 @@
       event: 'addToWishlist',
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
-        add: {
+        wishlist: {
           products: [
             product
           ]

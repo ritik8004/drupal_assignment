@@ -757,3 +757,8 @@ egift-card-checkout-confirmation:
   css:
     theme:
       css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: {}
+
+super-category:
+  css:
+    theme:
+      css/conditional-sass/super-category/super-category.ltr.css: {}

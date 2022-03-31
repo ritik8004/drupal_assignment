@@ -1,28 +1,39 @@
 /**
  * @file
- * P  ush initial data to data layer.
+ * Push initial data to data layer.
  */
 
-(function (drupalSettings) {
-  window.dataLayer = window.dataLayer || [];
-  var dataLayerAttachment = drupalSettings.dataLayerAttachment;
-  if (rcsPhGetPageType() === null) {
-    var alterInitialDataLayerData = new CustomEvent('alterInitialDataLayerData', {detail: { data: () => dataLayerAttachment }});
-    document.dispatchEvent(alterInitialDataLayerData);
-    window.dataLayer.push(dataLayerAttachment);
-  }
-  else {
-    // Load initial GTM data after RCS page entity is loaded.
-    RcsEventManager.addListener('alshayaPageEntityLoaded', function(e) {
-      var alterInitialDataLayerData = new CustomEvent('alterInitialDataLayerData', {
-        detail: {
-          data: () => dataLayerAttachment,
-          page_entity : e.detail.entity,
-          type :  e.detail.pageType,
+(function ($) {
+  'use strict';
+
+  Drupal.behaviors.alshayaRcsSeo = {
+    attach: function () {
+      $('body').once('alshayaRcsSeo').each(function () {
+        var dataLayerContent = drupalSettings.dataLayerContent;
+        if (globalThis.rcsPhGetPageType() === null) {
+          var event = new CustomEvent('dataLayerContentAlter', {
+            detail: {
+              data: () => dataLayerContent
+            }
+          });
+          document.dispatchEvent(event);
+          window.dataLayer.push(dataLayerContent);
+        }
+        else {
+          // Load initial GTM data after RCS page entity is loaded.
+          RcsEventManager.addListener('alshayaPageEntityLoaded', function(e) {
+            var event = new CustomEvent('dataLayerContentAlter', {
+              detail: {
+                data: () => dataLayerContent,
+                page_entity : e.detail.entity,
+                type : e.detail.pageType,
+              }
+            });
+            document.dispatchEvent(event);
+            window.dataLayer.push(dataLayerContent);
+          });
         }
       });
-      document.dispatchEvent(alterInitialDataLayerData);
-      window.dataLayer.push(dataLayerAttachment);
-    });
+    }
   }
-})(drupalSettings);
+})(jQuery);

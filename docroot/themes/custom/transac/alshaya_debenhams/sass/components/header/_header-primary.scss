@@ -230,8 +230,8 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      top: 0.9375rem;
-      #{$right}: 24.5%;
+      top: 0.875rem;
+      #{$right}: 23%;
       margin-#{$right}: 0;
       width: 2rem;
 
@@ -249,7 +249,7 @@ header {
         width: 1.75rem;
         height: 1.75rem;
         margin-#{$right}: 0;
-        top: -0.125rem;
+        top: -0.25rem;
         #{$left}: -0.8125rem;
         background-size: 68%;
       }

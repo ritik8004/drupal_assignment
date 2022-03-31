@@ -92,6 +92,10 @@
         border-color: $egift-purchase-inactive-step-text;
         background: $egift-purchase-inactive-step-text;
       }
+
+      &.btn {
+        text-transform: initial;
+      }
     }
 
     .error {

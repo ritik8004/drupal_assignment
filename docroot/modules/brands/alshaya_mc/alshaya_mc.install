@@ -11,6 +11,54 @@ use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
 
 /**
+ * Installing new product type facet.
+ */
+function alshaya_mc_update_8322() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Adding fields in search_api index.
+  $manager->updateConfigs(
+    ['search_api.index.product'],
+    'alshaya_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+  $manager->updateConfigs(
+    ['search_api.index.acquia_search_index'],
+    'alshaya_search',
+    'optional',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+
+  $blocks = [
+    'alshayaproducttype' => 'gender',
+    'promoalshayaproducttype' => 'promogender',
+    'plpalshayaproducttype' => 'plpgender',
+  ];
+  foreach ($blocks as $facet_block_id => $price_filter_block_id) {
+    // Place product type block after gender block.
+    $facet_block = Block::load($facet_block_id);
+    $price_filter_block = Block::load($price_filter_block_id);
+    if (($facet_block instanceof BlockInterface) && ($price_filter_block instanceof BlockInterface)) {
+      $facet_block->setWeight(($price_filter_block->getWeight()) + 1);
+      $facet_block->save();
+    }
+
+    // Add string translation for the block label.
+    \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.' . $facet_block_id)
+      ->set('settings.label', 'نوع المنتج')
+      ->save();
+  }
+}
+
+/**
  * Installing new gender filter.
  */
 function alshaya_mc_update_8321() {

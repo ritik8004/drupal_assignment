@@ -20,9 +20,10 @@ export default class EgiftTopupFor extends React.Component {
    */
   handleChange = (e) => {
     const eGiftFor = e.target.value;
+    const { handleImage } = this.props;
     this.setState({
       optionGiftForSelf: (eGiftFor === 'self'),
-    });
+    }, () => handleImage(eGiftFor));
   };
 
   handleEvent = (e) => {
@@ -49,7 +50,7 @@ export default class EgiftTopupFor extends React.Component {
         <ConditionalView condition={isUserAuthenticated() === true && linkedCardNumber !== null}>
           <div className="egift-for-field">
             <div className="egift-purchase-input-title subtitle-text">
-              {Drupal.t('Top-up for', {}, { context: 'egift' })}
+              {Drupal.t('Top up for', {}, { context: 'egift' })}
             </div>
             <div className="egift-input-field-wrapper">
               <div className="egift-input-field-item">
