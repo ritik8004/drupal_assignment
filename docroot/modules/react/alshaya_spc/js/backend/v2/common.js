@@ -371,6 +371,13 @@ const getProcessedCartData = async (cartData) => {
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
   }
 
+  // Check if online booking is enabled and have confirmation number.
+  if (hasValue(cartData.cart.extension_attributes)
+    && hasValue(cartData.cart.extension_attributes.hfd_hold_confirmation_number)) {
+    data.hfd_hold_confirmation_number = cartData
+      .cart.extension_attributes.hfd_hold_confirmation_number;
+  }
+
   // If egift card enabled, add the hps_redeemed_amount
   // add hps_redemption_type to cart.
   if (isEgiftCardEnabled()) {

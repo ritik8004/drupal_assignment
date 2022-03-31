@@ -62,10 +62,8 @@ export default class OnlineBooking extends React.Component {
       // Check if the cart is having confirmation number,
       // this means user has already reserved some slot earlier and
       // thus now we need to show the info of that slot only.
-      if (hasValue(cart.extension_attributes)
-        && hasValue(cart.extension_attributes.hfd_hold_confirmation_number)) {
-        const confirmationNumber = cart.extension_attributes.hfd_hold_confirmation_number;
-        result = await getBookingDetailByConfirmationNumber(confirmationNumber);
+      if (hasValue(cart.cart.hfd_hold_confirmation_number)) {
+        result = await getBookingDetailByConfirmationNumber(cart.cart.hfd_hold_confirmation_number);
       } else {
         // If confirmation number is not there in basket,
         // this means user hadn't reserved any slot earlier.
@@ -275,7 +273,7 @@ export default class OnlineBooking extends React.Component {
                         Drupal.t(
                           'Earliest available delivery on !appointment_date between !time_slot',
                           {
-                            '!appointment_date': `<div class="online-booking__available-delivery-date">${moment(bookingDetails.hfd_appointment_details.appointment_date).format('YYYY-MMM-DD')}</div>`,
+                            '!appointment_date': `<div class="online-booking__available-delivery-date">${moment(bookingDetails.hfd_appointment_details.appointment_date).format('DD-MMM-YYYY')}</div>`,
                             '!time_slot': `<div class="online-booking__available-delivery-time">${bookingDetails.hfd_appointment_details.start_time} - ${bookingDetails.hfd_appointment_details.end_time}</div>`,
                           }, { context: 'online_booking' },
                         ),
