@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e270ebcfb1b42967e5558d05ac2e0561",
+    "content-hash": "b960987a13e1ab787a1c12c949dcb41e",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -12801,12 +12801,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "8.x-3.0-beta1",
-                    "datestamp": "1605436873",
+                    "datestamp": "1640512021",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -12976,9 +12973,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "8.x-2.0-beta5",
                     "datestamp": "1592286577",
@@ -12986,6 +12980,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Optimise library of sharethis module": "https://www.drupal.org/files/issues/2022-03-10/optimise-libraries-3268825-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -16112,12 +16109,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Promise\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
