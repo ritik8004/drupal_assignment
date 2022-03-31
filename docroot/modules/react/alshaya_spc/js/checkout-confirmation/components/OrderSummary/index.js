@@ -167,10 +167,10 @@ const OrderSummary = (props) => {
   }
 
   // Get the HFD order booing informaion from the drupal settings if available.
-  const onliineBookingInformation = hasValue(
-    drupalSettings.order_details.onliineBookingInformation,
+  const onlineBookingInformation = hasValue(
+    drupalSettings.order_details.onlineBookingInformation,
   )
-    ? drupalSettings.order_details.onliineBookingInformation
+    ? drupalSettings.order_details.onlineBookingInformation
     : false;
 
   return (
@@ -252,14 +252,13 @@ const OrderSummary = (props) => {
           <ConditionalView condition={showDeliverySummary}>
             <OrderSummaryItem context={context} label={Drupal.t('delivery type')} value={deliveryType} />
             {/** Show HFD booking order information if available. */}
-            {hasValue(onliineBookingInformation)
-              && (
+            <ConditionalView condition={onlineBookingInformation}>
               <OrderSummaryItem
                 context={context}
                 label={Drupal.t('Delivery Date & Time', {}, { context: 'online_booking' })}
-                value={parse(onliineBookingInformation)}
+                value={parse(onlineBookingInformation)}
               />
-              )}
+            </ConditionalView>
             <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
           </ConditionalView>
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />

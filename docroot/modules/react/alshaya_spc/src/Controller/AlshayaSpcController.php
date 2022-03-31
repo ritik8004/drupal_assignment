@@ -604,7 +604,6 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
           'alshaya_spc/dynamic_promotion_label',
-          'alshaya_white_label/online-booking',
         ],
         'drupalSettings' => [
           'cnc_enabled' => $cnc_enabled,
@@ -805,7 +804,7 @@ class AlshayaSpcController extends ControllerBase {
 
     // Add online order booking information in drupal settings if available.
     if (isset($orderDetails['online_booking_information'])) {
-      $settings['order_details']['onliineBookingInformation'] = $orderDetails['online_booking_information'];
+      $settings['order_details']['onlineBookingInformation'] = $orderDetails['online_booking_information'];
     }
 
     $cache_tags = [];

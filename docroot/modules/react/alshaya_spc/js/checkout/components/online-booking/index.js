@@ -78,7 +78,6 @@ export default class OnlineBooking extends React.Component {
               resource_external_id: firstSlot.resource_external_id,
               appointment_slot_time: firstSlot.appointment_slot_time,
               appointment_length_time: firstSlot.appointment_length_time,
-              existing_hold_confirmation_number: null,
             };
             // Hold the first slot for user for first time.
             result = await holdBookingSlot(params);
@@ -152,20 +151,20 @@ export default class OnlineBooking extends React.Component {
     // Update the isModalOpen to true for opening the popup.
     const elem = document.getElementById('online-booking')
       .getElementsByClassName('online-booking__change-delivery-schedule')[0];
-    const stateToUpdate = { isModalOpen: true };
     // Add loading on Change Delivery Schedule link.
     elem.classList.add('loading');
     // Get all available slots from the backend via API and set in the states,
     // if API returns status.
     const result = await getAvailableBookingSlots();
     if (hasValue(result.status)) {
-      stateToUpdate.availableSlots = result.hfd_time_slots_details;
-
       // Update state with the available data.
-      this.setState(stateToUpdate);
-      // Remove loading on Change Delivery Schedule link.
-      elem.classList.remove('loading');
+      this.setState({
+        isModalOpen: true,
+        availableSlots: result.hfd_time_slots_details,
+      });
     }
+    // Remove loading on Change Delivery Schedule link.
+    elem.classList.remove('loading');
   };
 
   /**
@@ -180,7 +179,7 @@ export default class OnlineBooking extends React.Component {
   /**
    * Booking schedule update handlers for the calendar popup.
    */
-  handleScheduleDeliveryChangeInModal = async (
+  updateScheduleDeliveryChangeInModal = async (
     appointmentDate,
     selectedScheduleDetails,
   ) => {
@@ -307,7 +306,7 @@ export default class OnlineBooking extends React.Component {
                       availableSlots={availableSlots}
                       bookingDetails={bookingDetails.hfd_appointment_details}
                       closeScheduleDeliveryModal={this.closeScheduleDeliveryModal}
-                      callback={this.handleScheduleDeliveryChangeInModal}
+                      callback={this.updateScheduleDeliveryChangeInModal}
                     />
                   </>
                 </Popup>
