@@ -186,7 +186,9 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   }
 
   $orderRow['cancelled_items_count'] = $order['cancelled_items_count'];
-  $orderRow['refund_text'] = \Drupal::service('alshaya_acm_customer.orders_manager')->getRefundText($order['payment']['method']);
+  $orderRow['refund_text'] = ($order['cancelled_items_count'] > 0)
+                               ? \Drupal::service('alshaya_acm_customer.orders_manager')->getRefundText($order['payment']['method'])
+                               : NULL;
 
   // Invoke the alter hook to allow all modules to modify order details.
   \Drupal::moduleHandler()->alter('alshaya_acm_customer_update_order_summary', $order, $orderRow);
