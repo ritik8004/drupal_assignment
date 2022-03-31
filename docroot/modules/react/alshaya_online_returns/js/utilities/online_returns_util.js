@@ -61,7 +61,7 @@ function getPaymentMethod(orderId) {
  */
 function formatDate(date) {
   // eg. 02-Feb-2021
-  return new Date(date).toLocaleString(
+  return new Date(date.replace(/ /g, 'T')).toLocaleString(
     drupalSettings.path.currentLanguage,
     { day: '2-digit', month: 'short', year: 'numeric' },
   );

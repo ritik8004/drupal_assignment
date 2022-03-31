@@ -4,21 +4,39 @@ import ReturnItemsListing from '../return-items-listing';
 import { getOrderDetailsForReturnRequest } from '../../../utilities/return_request_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
-const ReturnRequest = () => {
-  const orderDetails = getOrderDetailsForReturnRequest();
-  if (!hasValue(orderDetails)) {
-    return null;
+class ReturnRequest extends React.Component {
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.warnUser, false);
+    window.addEventListener('pagehide', this.warnUser, false);
   }
-  return (
-    <div className="return-requests-wrapper">
-      <ReturnOrderSummary
-        orderDetails={orderDetails}
-      />
-      <ReturnItemsListing
-        products={orderDetails['#products']}
-      />
-    </div>
-  );
-};
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.warnUser, false);
+    window.removeEventListener('pagehide', this.warnUser, false);
+  }
+
+  warnUser = (e) => {
+    e.preventDefault();
+    e.returnValue = '';
+  };
+
+  render() {
+    const orderDetails = getOrderDetailsForReturnRequest();
+    if (!hasValue(orderDetails)) {
+      return null;
+    }
+
+    return (
+      <div className="return-requests-wrapper">
+        <ReturnOrderSummary
+          orderDetails={orderDetails}
+        />
+        <ReturnItemsListing
+          products={orderDetails['#products']}
+        />
+      </div>
+    );
+  }
+}
 
 export default ReturnRequest;
