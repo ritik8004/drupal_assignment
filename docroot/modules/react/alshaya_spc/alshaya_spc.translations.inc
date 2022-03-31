@@ -533,8 +533,8 @@ function _alshaya_spc_translations() {
       'ar' => 'بمجرد إتمام الطلبية، يُمنع إجراء أيّ تغييرات قبل موعد التوصيل المحدد <b> بثلاثة أيام</b>',
       'context' => 'online_booking',
     ],
-    'There was some error while booking. Please contact to customer care' => [
-      'ar' => '',
+    'There was some error while booking. Please contact to customer care.' => [
+      'ar' => 'حدث خطأ أثناء الحجز. يرجى التواصل مع خدمة الزبائن.',
       'context' => 'online_booking',
     ],
     'Delivery Date & Time' => [
