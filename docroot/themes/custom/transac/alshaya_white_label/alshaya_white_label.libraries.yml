@@ -762,3 +762,8 @@ super-category:
   css:
     theme:
       css/conditional-sass/super-category/super-category.ltr.css: {}
+
+online-booking:
+  css:
+    theme:
+      css/conditional-sass/online-booking/online-booking.ltr.css: {}
