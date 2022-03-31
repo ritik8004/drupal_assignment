@@ -17,6 +17,7 @@ class ReturnRequest extends React.Component {
 
   warnUser = (e) => {
     e.preventDefault();
+    // Chrome needs this.
     e.returnValue = '';
   };
 
