@@ -51,6 +51,7 @@ services:
       - '@alshaya_acm_product.sku_images_helper'
       - '@alshaya_spc.helper'
       - '@alshaya_acm_product.delivery_options_helper'
+      - '@date.formatter'
 
   alshaya_spc.stock_helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper
