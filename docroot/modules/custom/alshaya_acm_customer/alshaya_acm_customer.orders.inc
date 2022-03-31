@@ -186,9 +186,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   }
 
   $orderRow['cancelled_items_count'] = $order['cancelled_items_count'];
-  $orderRow['refund_text'] = ($order['cancelled_items_count'] > 0)
-                               ? \Drupal::service('alshaya_acm_customer.orders_manager')->getRefundText($order['payment']['method'])
-                               : NULL;
+  $orderRow['refund_text'] = \Drupal::service('alshaya_acm_customer.orders_manager')->getRefundText($order['payment']['method']);
 
   // Invoke the alter hook to allow all modules to modify order details.
   \Drupal::moduleHandler()->alter('alshaya_acm_customer_update_order_summary', $order, $orderRow);
@@ -296,6 +294,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $shipping_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address);
     $shipping_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
 
+    $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+    $onlineReturnsStatus = $onlineReturnsHelper->isOnlineReturnsEnabled();
+
+    // Add delivery address raw data for return request page.
+    if ($onlineReturnsStatus) {
+      $orderDetails['delivery_address_raw'] = $shipping_address_array;
+    }
     $delivery_address = [
       '#theme' => 'alshaya_address',
       '#address' => $shipping_address_array,
@@ -345,6 +350,20 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   // Add transaction & payment details to confirmation data in case of KNET.
   foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
     $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
+  }
+
+  // Preparing card details for checkout_com_upapi method.
+  // @todo To prepare data for all payment methods.
+  // Refer DIG-3519 for more info.
+  if ($onlineReturnsStatus) {
+    if ($order['payment']['method'] === 'checkout_com_upapi') {
+      $payment_data = [
+        'card_type' => $payment_info['card_type'],
+        'card_number' => $payment_info['last4'],
+        'card_scheme' => $payment_info['scheme'],
+      ];
+      $orderDetails['paymentDetails']['checkout_com_upapi'] = $payment_data;
+    }
   }
 
   switch ($order['payment']['method']) {
@@ -466,7 +485,6 @@ function alshaya_acm_customer_get_barcode($order) {
  */
 function alshaya_acm_customer_build_order_detail(array $order) {
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
   $products = [];
   $cancelled_products = [];
 

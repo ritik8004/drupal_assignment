@@ -53,8 +53,37 @@ function getQuantityOptions(itemQtyOrdered) {
   return qtyOptions;
 }
 
+/**
+ * Utility function to get delivery address data from order details.
+ */
+function getDeliveryAddress(orderDetails) {
+  let deliveryAddress = {};
+  if (hasValue(orderDetails)
+    && hasValue(orderDetails['#order_details'])
+    && hasValue(orderDetails['#order_details'].delivery_address_raw)) {
+    deliveryAddress = orderDetails['#order_details'].delivery_address_raw;
+  }
+  return deliveryAddress;
+}
+
+/**
+ * Utility function to get payment data from order details.
+ */
+function getPaymentDetails(orderDetails) {
+  let paymentDetails = {};
+  if (hasValue(orderDetails)
+    && hasValue(orderDetails['#order_details'])
+    && hasValue(orderDetails['#order_details'].paymentDetails)) {
+    paymentDetails = orderDetails['#order_details'].paymentDetails;
+  }
+  return paymentDetails;
+}
+
+
 export {
   getReturnReasons,
   getQuantityOptions,
   getOrderDetailsForReturnRequest,
+  getDeliveryAddress,
+  getPaymentDetails,
 };

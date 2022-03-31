@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const ReturnIndividualItem = ({
   item,
@@ -8,16 +9,19 @@ const ReturnIndividualItem = ({
   const eligibleClass = item.is_returnable ? 'return-eligible' : 'in-eligible';
   return (
     <div className="order-item-detail">
-      <ConditionalView condition={item.image_data}>
+      {item.image_data
+      && (
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass}`}>
-            <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
+            <ConditionalView condition={hasValue(item.image_data.url)}>
+              <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
+            </ConditionalView>
             <ConditionalView condition={!item.is_returnable}>
               <div className="not-eligible-label">{ Drupal.t('Not eligible for return') }</div>
             </ConditionalView>
           </div>
         </div>
-      </ConditionalView>
+      )}
       <div className="order__details--summary order__details--description">
         <div className="item-name">{ item.name }</div>
         {item.attributes && Object.keys(item.attributes).map((attribute) => (
