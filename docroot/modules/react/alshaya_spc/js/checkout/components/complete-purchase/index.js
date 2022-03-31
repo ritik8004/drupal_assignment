@@ -17,6 +17,8 @@ import {
 } from '../../../utilities/egift_util';
 import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import isAuraEnabled from '../../../../../js/utilities/helper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getBookingDetailByConfirmationNumber } from '../../../../../js/utilities/onlineBookingHelper';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -106,6 +108,25 @@ export default class CompletePurchase extends React.Component {
 
     const checkoutButton = e.target.parentNode;
     checkoutButton.classList.add('in-active');
+
+    // Check if the cart is having online booking confirmation number.
+    // Validate the booking is expired and show error accordingly.
+    if (hasValue(cart.cart.hfd_hold_confirmation_number)) {
+      // Check if the hold appointment for user is valid.
+      const bookingDetails = await
+      getBookingDetailByConfirmationNumber(cart.cart.hfd_hold_confirmation_number);
+      // Check if success return false,
+      if (!hasValue(bookingDetails.status) && bookingDetails.error_code === 0) {
+        dispatchCustomEvent('validateOnlineBookingPurchase', {
+          bookingDetails,
+        });
+        // Activate place order button.
+        checkoutButton.classList.remove('in-active');
+        // Scroll the user to delivery information section.
+        smoothScrollTo('.spc-checkout-delivery-information');
+        return;
+      }
+    }
 
     try {
       const validated = (isPseudoPaymentMedthod === false)
