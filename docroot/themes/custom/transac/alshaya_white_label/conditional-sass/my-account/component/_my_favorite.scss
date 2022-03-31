@@ -70,12 +70,6 @@
 
       .back-link {
         min-width: 9.375rem;
-
-        &::before {
-          @include breakpoint($only-mobile) {
-            top: 40%;
-          }
-        }
       }
 
       h1 {

@@ -107,7 +107,7 @@
       @include icon(arrowup, before) {
         position: absolute;
         #{$left}: -0.5rem;
-        top: 0.3125rem;
+        top: 0;
         font-size: 2.125rem;
         transform: rotate(270deg);
 
