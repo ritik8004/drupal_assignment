@@ -5,11 +5,11 @@ namespace Drupal\alshaya_rcs_listing\Service;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryCarouselHelper as ProductCategoryCarouselHelperOriginal;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Url;
 
 /**
  * Product category carousel helper service.
@@ -129,7 +129,7 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
       return array_merge($carousel, $accordion_content);
     }
 
-    $slug = $this->getSlug();
+    $slug = Html::escape($this->getSlug());
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $category_url = "/$langcode/$slug/";
 
@@ -168,12 +168,13 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
       $carousel['attributes']['class'][] = 'has-view-all-link';
 
       $carousel['content']['view_all'] = [
-        '#title' => $view_all_text,
-        '#type' => 'link',
+        '#type' => 'html_tag',
+        '#tag' => 'a',
         '#attributes' => [
+          'href' => $category_url,
           'class' => ['category-carousel-view-all'],
         ],
-        '#url' => Url::fromUserInput($category_url),
+        '#value' => $view_all_text,
       ];
     }
 
