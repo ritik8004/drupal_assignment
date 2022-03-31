@@ -127,21 +127,21 @@ export default class OnlineBookingCalendar extends React.Component {
     const { setOpenDate } = this.state;
 
     // For increasing month current display month shouldn't be same as the min
-    // date boundry month. We shouldn't allow increasing month beyond min date.
+    // date boundary month. We shouldn't allow increasing month beyond min date.
     if (action === 'increase'
       && moment(setOpenDate).isSame(this.getMinMaxDateForCalendar('max'), 'month')) {
       return;
     }
 
     // For decreasing month current display month shouldn't be same as the min
-    // date boundry month. We shouldn't allow decreasing month beyond min date.
+    // date boundary month. We shouldn't allow decreasing month beyond min date.
     if (action === 'decrease'
       && moment(setOpenDate).isSame(this.getMinMaxDateForCalendar(), 'month')) {
       return;
     }
 
     // For default action increase the month display, we will set the open date
-    // of next month and for the decreae the month display we will set the open
+    // of next month and for the decrease the month display we will set the open
     // date to the previous month.
     this.setState({
       setOpenDate: (action === 'decrease')
@@ -202,7 +202,7 @@ export default class OnlineBookingCalendar extends React.Component {
         && typeof bookingDetails.appointment_date !== 'undefined'
         && bookingDetails.resource_external_id === timeSlotExtId)
         && (moment(selectedDate).format(dateFormat)
-        === moment(bookingDetails.appointment_date).format(dateFormat)),
+          === moment(bookingDetails.appointment_date).format(dateFormat)),
     });
   };
 
@@ -251,19 +251,18 @@ export default class OnlineBookingCalendar extends React.Component {
     // Set language for datepicker translation. Default to english. If it's not
     // english then change to arabic.
     registerLocale('en', en);
+    let dir = 'ltr';
     if (drupalSettings.path.currentLanguage !== 'en') {
       registerLocale('ar', ar);
+      // Set wrapper element direction for arabic.
+      dir = 'rtl';
     }
-
-    // Set wrapper element direction for arabic.
-    const dir = (drupalSettings.path.currentLanguage !== 'en') ? 'rtl' : 'ltr';
 
     // Prepare time slots list items for the current selected date in calendar.
     let timeSlotListItems = null;
     if (availableTimeSlots.length > 0) {
       timeSlotListItems = availableTimeSlots.map((timeSlot) => {
-        const className = (timeSlot.resource_external_id
-          === selectedTimeSlot)
+        const className = (timeSlot.resource_external_id === selectedTimeSlot)
           ? 'timeslots-options-list-item active'
           : 'timeslots-options-list-item';
 
@@ -283,6 +282,24 @@ export default class OnlineBookingCalendar extends React.Component {
         );
         return element;
       });
+    }
+
+    // Add datepicker class depend on date count.
+    let datepickerMonthLeft = 'datepicker-month-left';
+    let datepickerMonthRight = 'datepicker-month-right';
+    if (moment(setOpenDate).isSame(this.getMinMaxDateForCalendar(), 'month')) {
+      datepickerMonthLeft = 'datepicker-month-left disabled';
+    }
+    if (moment(setOpenDate).isSame(this.getMinMaxDateForCalendar('max'), 'month')) {
+      datepickerMonthRight = 'datepicker-month-right disabled-right';
+    }
+
+    // Set action to increase for english depending on arrow.
+    let monthDisplayActionLeft = 'increase';
+    let monthDisplayActionRight = 'decrease';
+    if (drupalSettings.path.currentLanguage === 'en') {
+      monthDisplayActionLeft = 'decrease';
+      monthDisplayActionRight = 'increase';
     }
 
     return (
@@ -309,13 +326,8 @@ export default class OnlineBookingCalendar extends React.Component {
             >
               <div className="datetime-picker-wrapper" dir={dir}>
                 <div
-                  className={moment(setOpenDate).isSame(
-                    this.getMinMaxDateForCalendar(),
-                    'month',
-                  ) ? 'datepicker-month-left disabled' : 'datepicker-month-left'}
-                  onClick={() => ((drupalSettings.path.currentLanguage === 'en')
-                    ? this.changeMonthDisplay('decrease')
-                    : this.changeMonthDisplay())}
+                  className={datepickerMonthLeft}
+                  onClick={() => this.changeMonthDisplay(monthDisplayActionLeft)}
                   disabled={moment(setOpenDate).isSame(
                     this.getMinMaxDateForCalendar(),
                     'month',
@@ -363,7 +375,7 @@ export default class OnlineBookingCalendar extends React.Component {
                   inline
                   onSelect={(date) => this.onDateChanged(date)}
                   onMonthChange={this.onMonthChange}
-                  locale={(drupalSettings.path.currentLanguage !== 'en') ? 'ar' : 'en'}
+                  locale={drupalSettings.path.currentLanguage}
                   openToDate={setOpenDate}
                   disabledKeyboardNavigation
                   includeDates={this.getAvailableBookingDates()}
@@ -375,13 +387,8 @@ export default class OnlineBookingCalendar extends React.Component {
                  */}
 
                 <div
-                  className={moment(setOpenDate).isSame(
-                    this.getMinMaxDateForCalendar('max'),
-                    'month',
-                  ) ? 'datepicker-month-right disabled-right' : 'datepicker-month-right'}
-                  onClick={() => ((drupalSettings.path.currentLanguage === 'en')
-                    ? this.changeMonthDisplay()
-                    : this.changeMonthDisplay('decrease'))}
+                  className={datepickerMonthRight}
+                  onClick={() => this.changeMonthDisplay(monthDisplayActionRight)}
                   disabled={moment(setOpenDate).isSame(
                     this.getMinMaxDateForCalendar('max'),
                     'month',
