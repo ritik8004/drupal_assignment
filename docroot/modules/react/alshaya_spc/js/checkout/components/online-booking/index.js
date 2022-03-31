@@ -238,7 +238,11 @@ export default class OnlineBooking extends React.Component {
     } = this.state;
 
     if (wait) {
-      return <Loading />;
+      return (
+        <div className="delivery-block-loading">
+          <Loading />
+        </div>
+      );
     }
 
     const { price, method } = this.props;
