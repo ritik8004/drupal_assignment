@@ -65,7 +65,9 @@ class OnlineReturnsHelper {
    *   SKU is big ticket or not.
    */
   public function isSkuBigTicket(SKUInterface $sku_entity) {
-    $is_big_ticket = $sku_entity->get('attr_big_ticket')->getString();
+    $is_big_ticket = $sku_entity->hasField('attr_big_ticket')
+      ? $sku_entity->get('attr_big_ticket')->getString()
+      : FALSE;
     return ($is_big_ticket !== '') ? (bool) $is_big_ticket : FALSE;
   }
 
