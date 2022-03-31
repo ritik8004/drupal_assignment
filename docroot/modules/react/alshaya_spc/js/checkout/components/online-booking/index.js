@@ -3,13 +3,12 @@ import Popup from 'reactjs-popup';
 import parse from 'html-react-parser';
 import moment from 'moment-timezone';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import
-{
-  getBookingDetailByConfirmationNumber,
+import {
   getAvailableBookingSlots,
+  getBookingDetailByConfirmationNumber,
+  getHideOnlineBooking,
   holdBookingSlot,
   setHideOnlineBooking,
-  getHideOnlineBooking,
 } from '../../../../../js/utilities/onlineBookingHelper';
 import Loading from '../../../../../js/utilities/loading';
 import DefaultShippingElement from '../shipping-method/components/DefaultShippingElement';
@@ -79,6 +78,7 @@ export default class OnlineBooking extends React.Component {
               resource_external_id: firstSlot.resource_external_id,
               appointment_slot_time: firstSlot.appointment_slot_time,
               appointment_length_time: firstSlot.appointment_length_time,
+              existing_hold_confirmation_number: null,
             };
             // Hold the first slot for user for first time.
             result = await holdBookingSlot(params);
@@ -203,7 +203,7 @@ export default class OnlineBooking extends React.Component {
       return;
     }
 
-    // Preparing the params for holding the appoitment.
+    // Preparing the params for holding the appointment.
     const params = {
       resource_external_id: selectedScheduleDetails.resource_external_id,
       appointment_slot_time: selectedScheduleDetails.appointment_slot_time,
@@ -223,9 +223,17 @@ export default class OnlineBooking extends React.Component {
           appointment_date: result.hfd_appointment_details.appointment_date,
         },
       };
+      // Dispatch custom event for change in confirmation number.
+      if (result.hfd_appointment_details.hold_confirmation_number
+        !== bookingDetails.hfd_appointment_details.hold_confirmation_number) {
+        const { cart, refreshCart } = this.props;
+        cart.cart.hfd_hold_confirmation_number = result
+          .hfd_appointment_details.hold_confirmation_number;
+        refreshCart(cart);
+      }
     }
 
-    // Set booking Details response and clost the modal.
+    // Set booking Details response and close the modal.
     this.setState({ bookingDetails: result, isModalOpen: false });
   };
 

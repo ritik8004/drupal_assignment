@@ -4,7 +4,9 @@ import PriceElement from '../../../../utilities/special-price/PriceElement';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import DefaultShippingElement from './DefaultShippingElement';
 
-const ShippingMethodCommon = ({ cart, method, selected }) => {
+const ShippingMethodCommon = ({
+  cart, refreshCart, method, selected,
+}) => {
   let price = Drupal.t('FREE');
   if (method.amount > 0) {
     price = <PriceElement amount={method.amount} />;
@@ -14,7 +16,7 @@ const ShippingMethodCommon = ({ cart, method, selected }) => {
   if (selected
     && hasValue(method.extension_attributes)
     && hasValue(method.extension_attributes.is_eligible_for_hfd_booking)) {
-    return <OnlineBooking cart={cart} price={price} method={method} />;
+    return <OnlineBooking cart={cart} refreshCart={refreshCart} price={price} method={method} />;
   }
 
   return <DefaultShippingElement method={method} price={price} />;
