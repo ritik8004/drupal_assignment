@@ -107,4 +107,14 @@
     {% endfor %}
   </up_sell>
   {% endif %}
+  {% if product.gtm %}
+  <gtm>
+    {% for key, value in product.gtm %}
+      <gtm_attributes>
+        <label>{{ key }}</label>
+        <value>{{ value }}</value>
+      </gtm_attributes>
+    {% endfor %}
+  </gtm>
+  {% endif %}
 </product>
