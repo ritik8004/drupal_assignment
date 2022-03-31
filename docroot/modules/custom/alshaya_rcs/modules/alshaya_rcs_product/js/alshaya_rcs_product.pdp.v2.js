@@ -29,7 +29,10 @@
         },
       );
     }).catch(function(e) {
-      Drupal.alshayaLogger('error', 'Failed to fetch Product Labels.', 'error');
+      Drupal.alshayaLogger('error', 'Failed to fetch Product Labels for sku @sku. Message @message.', {
+        '@sku': sku,
+        '@message': e.message,
+      });
     });
   }
 
