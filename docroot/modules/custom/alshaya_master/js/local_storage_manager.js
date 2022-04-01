@@ -23,6 +23,7 @@
     // Return if data to store is not provided, or
     // the local storage key is not set, of
     // storage expiry time is zero.
+    // @todo check if we should allow storing null values
     if (!storageKey || (storageData === null)) {
       return false;
     }
@@ -44,6 +45,9 @@
 
     try {
       // Store data in the local storage with the expiry time.
+      // Safari sets the quota to 0 bytes in private mode, unlike other browsers
+      // which allow storage in private mode using separate data containers.
+      // We need to make sure to always catch possible exception from setItem().
       localStorage.setItem(storageKey, JSON.stringify(dataToStore));
     }
     catch (e) {
@@ -74,9 +78,6 @@
    *
    * @param {string} storageKey
    *  Local storage key to remove associated data.
-   *
-   * @returns {boolean}
-   *  true/false based on the action performed.
    */
   Drupal.removeItemFromLocalStorage = function (storageKey) {
     localStorage.removeItem(storageKey)
@@ -97,17 +98,32 @@
   Drupal.getItemFromLocalStorage = function (storageKey) {
     // Return is item not found in the storage with the provided key.
     let storageItem = localStorage.getItem(storageKey);
-    if (!storageItem) {
-      return null;
-    }
 
     try {
       // If item is available parse the info to JSON object.
       storageItem = JSON.parse(storageItem);
     }
     catch (error) {
-      // If JSON parse failed we return string.
-      return storageItem;
+      // @todo check if should be null or NaN.
+      if (storageItem === "NaN") {
+        return null;
+      }
+
+      // Return strings as is.
+      if (typeof storageItem === 'string') {
+        return storageItem;
+      }
+
+      // Unknown reason.
+      Drupal.alshayaLogger('warning', 'Drupal.getItemFromLocalStorage failed to fetch the data for @key.', {
+        '@key': storageKey,
+      });
+
+      return null;
+    }
+
+    if (storageItem == null) {
+      return null;
     }
 
     // Check if the storage items data isn't expired. For that,
