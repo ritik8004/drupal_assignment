@@ -10,6 +10,18 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Configure map marker on checkout for CnC.
+ */
+function alshaya_mu_transac_update_8009() {
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_mu/images/mu-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_mu/images/mu-pin-inactive.svg')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Override `attribute_weights and sortable_options`.
  */
 function alshaya_mu_transac_update_8008() {
@@ -179,6 +191,11 @@ function alshaya_mu_transac_install() {
     alshaya_stores_finder_set_default_marker_icon('alshaya_mu_transac');
   }
 
+  // Configure map marker on checkout for CnC.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_mu/images/mu-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_mu/images/mu-pin-inactive.svg')
+    ->save();
   // Add string translations.
   $strings = [
     'our company' => [
