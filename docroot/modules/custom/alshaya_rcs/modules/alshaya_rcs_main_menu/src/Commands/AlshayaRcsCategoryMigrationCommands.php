@@ -10,7 +10,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 /**
  * Alshaya RCS Category Migrate Commands class.
  */
-class AlshayaRcsCategoryCommands extends DrushCommands {
+class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
 
   /**
    * Entity query.
@@ -104,7 +104,7 @@ class AlshayaRcsCategoryCommands extends DrushCommands {
    */
   public static function acqProductCategoryTermsDeletionFinished($success, $results, $operations) {
     if ($success) {
-      $message = t('Batch processs completed successfully.');
+      $message = 'Batch processs completed successfully.';
     }
     else {
       $error_operation = reset($operations);
@@ -123,8 +123,10 @@ class AlshayaRcsCategoryCommands extends DrushCommands {
    *
    * @usage alshaya_rcs_listing:delete-acq-product-category-terms
    *   Deletes all acq category terms.
+   * @usage alshaya_rcs_listing:delete-acq-product-category-terms --batch-size 50
+   *   Deletes all acq category terms and sets batch size to 50.
    */
-  public function deleteAcqProductCategoryTermsBatch() {
+  public function deleteAcqProductCategoryTermsBatch(array $options = ['batch-size' => NULL]) {
     $this->logger->notice('Starting batch process to delete acq category terms.');
     // Delete all product category terms from the system.
     $acq_product_category_tids = $this->entityQuery
@@ -136,12 +138,19 @@ class AlshayaRcsCategoryCommands extends DrushCommands {
       $this->logger->notice('There are no terms to delete! Exiting!');
       return;
     }
+    else {
+      $this->logger->notice(dt('There are @count term entities to delete!', [
+        '@count' => $terms_to_delete,
+      ]));
+    }
 
     $batch = [
       'title' => 'Delete product category terms',
+      'finished' => [__CLASS__, 'acqProductCategoryTermsDeletionFinished'],
     ];
 
-    foreach (array_chunk($acq_product_category_tids, 20) as $chunk) {
+    $batch_size = $options['batch-size'] ?? 20;
+    foreach (array_chunk($acq_product_category_tids, $batch_size) as $chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'deleteAcqProductCategoryTerms'],
         [$chunk, count($acq_product_category_tids)],

@@ -27,26 +27,6 @@ function alshaya_rcs_product_install() {
   // Migrate prodct nodes to RCS content type for enrichment.
   \Drupal::service('alshaya_rcs_product.helper')
     ->processProductMigrationToRcsCt();
-
-  // Delete all acq_product nodes from the system.
-  $acq_product_nodes = \Drupal::entityQuery('node')
-    ->condition('type', 'acq_product')
-    ->execute();
-  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-  foreach (array_chunk($acq_product_nodes, 10) as $nids) {
-    $nodes = $node_storage->loadMultiple($nids);
-    $node_storage->delete($nodes);
-  }
-  \Drupal::logger('alshaya_rcs_product')->notice('All product nodes are deleted from the system.');
-
-  // Delete all sku entities from the system.
-  $acq_skus = \Drupal::entityQuery('acq_sku')->execute();
-  $acq_sku_storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
-  foreach (array_chunk($acq_skus, 10) as $skus) {
-    $acq_sku_entities = $acq_sku_storage->loadMultiple($skus);
-    $acq_sku_storage->delete($acq_sku_entities);
-  }
-  \Drupal::logger('alshaya_rcs_product')->notice('All SKU entities are deleted from the system.');
 }
 
 /**

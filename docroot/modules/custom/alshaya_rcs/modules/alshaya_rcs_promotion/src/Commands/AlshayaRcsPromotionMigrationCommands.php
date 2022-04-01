@@ -7,9 +7,9 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
- * Alshaya RCS Promotion Commands class.
+ * Class to help with migration of acq promotion to rcs promotion nodes.
  */
-class AlshayaRcsPromotionCommands extends DrushCommands {
+class AlshayaRcsPromotionMigrationCommands extends DrushCommands {
 
   /**
    * Entity query.
@@ -87,12 +87,15 @@ class AlshayaRcsPromotionCommands extends DrushCommands {
    * Deletes all acq promotion nodes from the system.
    *
    * @command alshaya_rcs_promotion:delete-acq-promotion-nodes
-   * @aliases arppromonodes
+   * @aliases arpdelpromonodes
    *
    * @usage alshaya_rcs_promotion:delete-acq-promotion_nodes
    *   Deletes all acq promotion nodes.
+   *
+   * @usage alshaya_rcs_promotion:delete-acq-promotion_nodes --batch-size 50
+   *   Deletes all acq promotion nodes and sets batch size to 50.
    */
-  public function deleteAcqPromotionNodesBatch() {
+  public function deleteAcqPromotionNodesBatch(array $options = ['batch-size' => NULL]) {
     $this->logger->notice('Starting batch process to delete acq promotion nodes.');
     // Delete all acq_promotion nodes from the system.
     $acq_promotion_nids = $this->nodeQuery
@@ -116,7 +119,8 @@ class AlshayaRcsPromotionCommands extends DrushCommands {
       'finished' => [__CLASS__, 'acqPromotionNodesDeletionFinished'],
     ];
 
-    foreach (array_chunk($acq_promotion_nids, 20) as $chunk) {
+    $batch_size = $options['batch-size'] ?? 20;
+    foreach (array_chunk($acq_promotion_nids, $batch_size) as $chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'deleteAcqPromotionNodes'],
         [$chunk, count($acq_promotion_nids)],
