@@ -17,8 +17,10 @@ class ReturnRequest extends React.Component {
 
   warnUser = (e) => {
     e.preventDefault();
-    // Chrome needs this.
-    e.returnValue = '';
+    const confirmationMessage = "If you're are trying to leave the Online Returns page, please note, any changes made will be lost.";
+
+    e.returnValue = confirmationMessage;
+    return confirmationMessage;
   };
 
   render() {
