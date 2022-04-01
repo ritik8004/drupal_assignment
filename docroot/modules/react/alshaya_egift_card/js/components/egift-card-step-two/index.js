@@ -73,6 +73,8 @@ export default class EgiftCardStepTwo extends React.Component {
     } else {
       ele.setCustomValidity('');
     }
+
+    return true;
   }
 
   render() {
@@ -147,6 +149,9 @@ export default class EgiftCardStepTwo extends React.Component {
                     name="egift-recipient-email"
                     onChange={(e) => this.emailValidate(e)}
                     onBlur={(e) => this.handleEvent(e)}
+                    onInvalid={() => {
+                      this.setCustomValidity(Drupal.t('Please enter valid email address', {}, { context: 'egift' }));
+                    }}
                   />
                   <div className="c-input__bar" />
                   <label>{Drupal.t('Email*', {}, { context: 'egift' })}</label>
