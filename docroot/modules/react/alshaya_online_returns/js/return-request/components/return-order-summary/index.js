@@ -12,24 +12,26 @@ const ReturnOrderSummary = ({
   return (
     <div className="order-details-wrapper">
       <div className="order-summary-row">
-        <div className="order-transaction">
-          <div className="light tablet-light">{ Drupal.t('Order ID') }</div>
-          <div className="dark">{orderDetails['#order'].orderId}</div>
-          <div className="light order--date--time">{ orderDetails['#order'].orderDate }</div>
-        </div>
-        <div className="order-quantity">
-          <div className="dark order--items">{ itemNames.join(',') }</div>
-          <div className="light">
-            <div className="item-count">
-              { Drupal.t('Total:') }
-              {itemNames.length}
-              {' '}
-              { itemNames.length > 1 ? Drupal.t('items') : Drupal.t('item') }
+        <div className="order-summary-details">
+          <div className="order-transaction">
+            <div className="light tablet-light font-small">{ Drupal.t('Order ID') }</div>
+            <div className="dark">{orderDetails['#order'].orderId}</div>
+            <div className="light order--date--time font-small">{ orderDetails['#order'].orderDate }</div>
+          </div>
+          <div className="order-quantity">
+            <div className="dark order--items">{ itemNames.join(',') }</div>
+            <div className="light">
+              <div className="item-count">
+                { Drupal.t('Total:') }
+                {itemNames.length}
+                {' '}
+                { itemNames.length > 1 ? Drupal.t('items') : Drupal.t('item') }
+              </div>
             </div>
           </div>
         </div>
         <div className="order-status">
-          <div className="button">{ orderDetails['#order'].status.text }</div>
+          <div className={`button ${orderDetails['#order'].status.class}`}>{ orderDetails['#order'].status.text }</div>
         </div>
         <div className="order-total-column">
           <div className="order-total-wrapper">

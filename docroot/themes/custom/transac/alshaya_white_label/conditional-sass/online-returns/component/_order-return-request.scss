@@ -1,0 +1,189 @@
+.return-requests-wrapper {
+  line-height: 1;
+  font-size: 0.75rem;
+
+  @include breakpoint($desktop) {
+    font-size: 0.875rem;
+  }
+
+  .products-list-wrapper {
+    .select-items-label {
+      font-size: 1rem;
+      text-transform: uppercase;
+      padding: 0.875rem 2rem;
+      background: $online-return-label-bg;
+      color: $online-return-label-txt;
+      margin-top: 1rem;
+      line-height: 1.22;
+      position: relative;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 1.5rem;
+      }
+
+      .select-items-header {
+        @include icon(chevrondown, before) {
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          color: $online-return-label-txt;
+          #{$right}: 0.875rem;
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .items-table {
+      .order-item-row {
+        display: flex;
+        border-bottom: 1px solid $content_pagetitle_border;
+        background: $online-return-detail-bg;
+
+        .order-item-checkbox {
+          flex-basis: 1.25rem;
+          margin-#{$left}: 1rem;
+          display: flex;
+          justify-content: center;
+          padding-top: 3.75rem;
+
+          @include breakpoint($tablet) {
+            padding-top: 0;
+            align-items: center;
+          }
+
+          @include breakpoint($desktop) {
+            flex-basis: 3.125rem;
+            margin-#{$left}: 1.125rem;
+          }
+
+          .return_item_checkbox {
+            @include icon(checkboxempty) {
+              font-size: 1.5rem;
+              cursor: pointer;
+            }
+
+            &.is-checked {
+              @include icon(checkboxfull) {
+                color: $primary_checkbox_filled;
+              }
+            }
+          }
+        }
+
+        .order-item-detail {
+          display: flex;
+        }
+
+        .order-item-image {
+          padding: 1.5rem;
+
+          @include breakpoint($desktop) {
+            padding-#{$left}: 1.5625rem;
+            padding-#{$right}: 3.125rem;
+          }
+
+          .image-data-wrapper {
+            max-width: 7.125rem;
+            position: relative;
+
+            &.in-eligible {
+              img {
+                opacity: 0.5;
+              }
+
+              .not-eligible-label {
+                position: absolute;
+                top: 50%;
+                #{$left}: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 0.6875rem;
+                background-color: $online-return-ineligible-label-bg;
+                padding: 0.25rem 0.3125rem;
+                width: 7.75rem;
+                font-family: $alshaya-bold;
+                color: $online-return-eligibility-message-txt;
+                height: 1.25rem;
+              }
+            }
+          }
+        }
+
+        .order__details--wrapper {
+          display: flex;
+          flex-direction: column;
+
+          @include breakpoint($tablet) {
+            flex-direction: row;
+          }
+        }
+
+        .order__details--summary {
+          flex-basis: auto;
+          padding: 1.5rem;
+          padding-bottom: 1.25rem;
+
+          @include breakpoint($tablet) {
+            flex-basis: 9.6875rem;
+            padding-bottom: 1.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$right}: 3.125rem;
+            padding-#{$left}: 3.125rem;
+          }
+        }
+
+        .item-price {
+          padding: 1.5rem;
+          padding-top: 1.25rem;
+
+          @include breakpoint($tablet) {
+            padding-top: 1.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$right}: 3.125rem;
+            padding-#{$left}: 3.125rem;
+          }
+        }
+
+        .total-price {
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
+
+          @include breakpoint($tablet) {
+            padding: 1.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$right}: 3.125rem;
+            padding-#{$left}: 3.125rem;
+          }
+        }
+
+        .item-price,
+        .total-price {
+          flex-basis: auto;
+
+          @include breakpoint($tablet) {
+            flex-basis: 12.5rem;
+          }
+
+          .price {
+            margin-bottom: 0.3125rem;
+          }
+        }
+
+        .image-data-wrapper,
+        .order__details--summary,
+        .item-price,
+        .total-price {
+          > div {
+            margin-bottom: 0.3125rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -185,6 +185,7 @@ class ReturnRequestController extends ControllerBase {
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-online-return-request"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
+    $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
     $build['#attached']['drupalSettings']['returnRequest'] = [
       'orderDetails' => $orderDetails,
       'returnConfig' => $returnConfig,
