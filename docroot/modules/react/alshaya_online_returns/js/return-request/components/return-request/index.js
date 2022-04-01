@@ -17,7 +17,11 @@ class ReturnRequest extends React.Component {
 
   warnUser = (e) => {
     e.preventDefault();
-    const confirmationMessage = Drupal.t("If you're are trying to leave the Online Returns page, please note, any changes made will be lost.");
+    const confirmationMessage = Drupal.t(
+      "If you're trying to leave the Online Returns page, please note, any changes made will be lost.",
+      {},
+      { context: 'online_returns' },
+    );
 
     e.returnValue = confirmationMessage;
     return confirmationMessage;
