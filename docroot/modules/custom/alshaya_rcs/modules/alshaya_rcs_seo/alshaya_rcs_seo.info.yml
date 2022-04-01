@@ -6,3 +6,4 @@ core_version_requirement: ^8 || ^9
 dependencies:
   - rcs_placeholders:rcs_placeholders
   - alshaya_rcs_listing:alshaya_rcs_listing
+  - simple_sitemap:simple_sitemap
