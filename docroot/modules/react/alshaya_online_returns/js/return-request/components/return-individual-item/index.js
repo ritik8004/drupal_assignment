@@ -17,7 +17,7 @@ const ReturnIndividualItem = ({
               <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
             </ConditionalView>
             <ConditionalView condition={!item.is_returnable}>
-              <div className="not-eligible-label">{ Drupal.t('Not eligible for return') }</div>
+              <div className="not-eligible-label">{ Drupal.t('Not eligible for return', {}, { context: 'online_returns' }) }</div>
             </ConditionalView>
           </div>
         </div>
@@ -26,18 +26,18 @@ const ReturnIndividualItem = ({
         <div className="item-name">{ item.name }</div>
         {item.attributes && Object.keys(item.attributes).map((attribute) => (
           <div key={item.attributes[attribute].label} className="attribute-detail">
-            { Drupal.t('@attrLabel: @attrValue', { '@attrLabel': item.attributes[attribute].label, '@attrValue': item.attributes[attribute].value }) }
+            { Drupal.t('@attrLabel: @attrValue', { '@attrLabel': item.attributes[attribute].label, '@attrValue': item.attributes[attribute].value }, {}, { context: 'online_returns' }) }
           </div>
         ))}
         <div className="item-code">
-          { Drupal.t('Item Code: @sku', { '@sku': item.sku }) }
+          { Drupal.t('Item Code: @sku', { '@sku': item.sku }, {}, { context: 'online_returns' }) }
         </div>
         <div className="item-quantity">
-          { Drupal.t('Quantity: @quantity', { '@quantity': item.ordered }) }
+          { Drupal.t('Quantity: @quantity', { '@quantity': item.ordered }, {}, { context: 'online_returns' }) }
         </div>
       </div>
       <div className="item-price">
-        <div className="light">{Drupal.t('Unit Price')}</div>
+        <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
         <span className="currency-code dark prefix">{ parse(item.price) }</span>
       </div>
     </div>

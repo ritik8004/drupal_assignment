@@ -33,7 +33,7 @@ const ReturnOrderSummary = ({
         </div>
         <div className="order-total-column">
           <div className="order-total-wrapper">
-            <div className="light">{ Drupal.t('Order Total') }</div>
+            <div className="light">{ Drupal.t('Order Total', {}, { context: 'online_returns' }) }</div>
             <div className="dark">{parse(orderDetails['#order'].total)}</div>
           </div>
         </div>

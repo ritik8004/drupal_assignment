@@ -19,7 +19,7 @@ class ReturnRefundDetails extends React.Component {
     const { paymentInfo, address } = this.state;
     return (
       <div className="refund-details-wrapper">
-        <div className="refund-detail-label">{ Drupal.t('Return and refund details') }</div>
+        <div className="refund-detail-label">{ Drupal.t('Return and refund details', {}, { context: 'online_returns' }) }</div>
         <ReturnRefundMethod
           paymentDetails={paymentInfo}
         />

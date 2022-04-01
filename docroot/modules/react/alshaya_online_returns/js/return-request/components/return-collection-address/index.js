@@ -31,15 +31,15 @@ const ReturnCollectionAddress = ({
     <>
       <div className="return-address-wrapper">
         <div className="return-address-title">
-          { Drupal.t('Return Collection Address') }
+          { Drupal.t('Return Collection Address', {}, { context: 'online_returns' }) }
         </div>
         <div className="return-address-desc">
-          { Drupal.t('Last used address and phone number will be applied.') }
+          { Drupal.t('Last used address and phone number will be applied.', {}, { context: 'online_returns' }) }
         </div>
         <div className="return-address-details">
           <ConditionalView condition={hasValue(shippingAddress.given_name)}>
             <div className="customer-name">
-              { Drupal.t('@first_name: @last_name', { '@first_name': shippingAddress.given_name, '@last_name': shippingAddress.family_name }) }
+              { Drupal.t('@first_name: @last_name', { '@first_name': shippingAddress.given_name, '@last_name': shippingAddress.family_name }, {}, { context: 'online_returns' }) }
             </div>
           </ConditionalView>
           <div className="spc-address-fields">{addressData.join(', ')}</div>

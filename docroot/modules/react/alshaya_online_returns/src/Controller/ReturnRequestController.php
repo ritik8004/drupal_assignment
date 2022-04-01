@@ -179,18 +179,16 @@ class ReturnRequestController extends ControllerBase {
     // Check if complete payment done via egift.
     // For multiple payment and if some amount is paid via egift
     // then also include eGift Card payment in payment details.
-    if ($this->egiftCardHelper->isEgiftCardEnabled()) {
-      if ($orderDetails['#order_details']['payment_method'] === 'hps_payment'
-        || ($orderDetails['#order_details']['payment_method_code'] !== 'hps_payment'
-        && isset($order['extension']['hps_redeemed_amount'])
-        && $order['extension']['hps_redeemed_amount'] > 0 && isset($order['extension']['hps_redemption_card_number']))) {
-        $egift_data = [
-          'card_type' => $this->t('eGift Card', [], ['context' => 'egift']),
-          'card_number' => substr($order['extension']['hps_redemption_card_number'], -4),
-          'card_scheme' => 'egift',
-        ];
-        $orderDetails['#order_details']['paymentDetails']['egift'] = $egift_data;
-      }
+    if ($orderDetails['#order_details']['payment_method'] === 'hps_payment'
+      || ($orderDetails['#order_details']['payment_method_code'] !== 'hps_payment'
+      && isset($order['extension']['hps_redeemed_amount'])
+      && $order['extension']['hps_redeemed_amount'] > 0 && isset($order['extension']['hps_redemption_card_number']))) {
+      $egift_data = [
+        'card_type' => $this->t('eGift Card', [], ['context' => 'egift']),
+        'card_number' => substr($order['extension']['hps_redemption_card_number'], -4),
+        'payment_type' => 'egift',
+      ];
+      $orderDetails['#order_details']['paymentDetails']['egift'] = $egift_data;
     }
 
     // Get display image for each product.

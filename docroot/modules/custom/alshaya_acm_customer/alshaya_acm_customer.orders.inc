@@ -296,13 +296,9 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $shipping_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address);
     $shipping_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
 
-    $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
-    $onlineReturnsStatus = $onlineReturnsHelper->isOnlineReturnsEnabled();
 
     // Add delivery address raw data for return request page.
-    if ($onlineReturnsStatus) {
-      $orderDetails['delivery_address_raw'] = $shipping_address_array;
-    }
+    $orderDetails['delivery_address_raw'] = $shipping_address_array;
     $delivery_address = [
       '#theme' => 'alshaya_address',
       '#address' => $shipping_address_array,
@@ -357,15 +353,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   // Preparing card details for checkout_com_upapi method.
   // @todo To prepare data for all payment methods.
   // Refer DIG-3519 for more info.
-  if ($onlineReturnsStatus) {
-    if ($order['payment']['method'] === 'checkout_com_upapi') {
-      $payment_data = [
-        'card_type' => $payment_info['card_type'],
-        'card_number' => $payment_info['last4'],
-        'card_scheme' => $payment_info['scheme'],
-      ];
-      $orderDetails['paymentDetails']['checkout_com_upapi'] = $payment_data;
-    }
+  if ($order['payment']['method'] === 'checkout_com_upapi') {
+    $payment_data = [
+      'card_type' => $payment_info['card_type'],
+      'card_number' => $payment_info['last4'],
+      'payment_type' => $payment_info['scheme'],
+    ];
+    $orderDetails['paymentDetails']['checkout_com_upapi'] = $payment_data;
   }
 
   switch ($order['payment']['method']) {
