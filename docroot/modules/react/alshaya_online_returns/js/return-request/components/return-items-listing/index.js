@@ -49,7 +49,7 @@ class ReturnItemsListing extends React.Component {
     return (
       <div className="products-list-wrapper">
         <div className="select-items-label">
-          <div className="select-items-header">{ Drupal.t('Select items to return') }</div>
+          <div className="select-items-header">{ Drupal.t('1. Select items to return') }</div>
         </div>
         {products.map((item) => (
           <div key={item.name} className="item-list-wrapper">

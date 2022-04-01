@@ -1,0 +1,30 @@
+.return-requests-wrapper {
+  .products-list-wrapper {
+    .items-table {
+      .order-item-row {
+        .order-item-checkbox {
+          .return_item_checkbox {
+            @include icon(check-box-empty) {
+              font-size: 1.3125rem;
+              color: $primary_checkbox_empty;
+            }
+
+            &.is-checked {
+              @include icon(check-box-filled) {
+                color: $primary_checkbox_filled;
+              }
+            }
+          }
+        }
+
+        .order-item-image {
+          .image-data-wrapper.in-eligible {
+            .not-eligible-label {
+              font-family: $hnm-demibold;
+            }
+          }
+        }
+      }
+    }
+  }
+}
