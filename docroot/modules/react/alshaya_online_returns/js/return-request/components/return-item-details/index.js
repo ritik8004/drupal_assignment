@@ -3,6 +3,7 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import {
   getReturnReasons,
   getQuantityOptions,
+  addCheckboxToReturnItem,
 } from '../../../utilities/return_request_util';
 import ReturnIndividualItem from '../return-individual-item';
 import ReturnQuantitySelect from '../return-quantity-select';
@@ -40,7 +41,7 @@ class ReturnItemDetails extends React.Component {
     return (
       <div className="items-tabel">
         <div className="order-item-row">
-          <ConditionalView condition={item.is_returnable}>
+          <ConditionalView condition={addCheckboxToReturnItem(item)}>
             <div className="order-item-checkbox">
               <input
                 type="checkbox"

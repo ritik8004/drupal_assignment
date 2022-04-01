@@ -56,6 +56,22 @@ class OnlineReturnsHelper {
   }
 
   /**
+   * Wrapper function to check if SKU is a big ticket item.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku_entity
+   *   SKU entity object.
+   *
+   * @return bool
+   *   SKU is big ticket or not.
+   */
+  public function isSkuBigTicket(SKUInterface $sku_entity) {
+    $is_big_ticket = $sku_entity->hasField('attr_big_ticket')
+      ? $sku_entity->get('attr_big_ticket')->getString()
+      : FALSE;
+    return !empty($is_big_ticket);
+  }
+
+  /**
    * Wrapper function to prepare order data.
    *
    * @param array $order

@@ -79,6 +79,18 @@ function getPaymentDetails(orderDetails) {
   return paymentDetails;
 }
 
+/**
+ * Utility function to check whether to add checkbox to return item or not.
+ */
+function addCheckboxToReturnItem(item) {
+  let addCheckbox = true;
+  if (!hasValue(item.is_returnable)
+    || hasValue(item.is_big_ticket)) {
+    addCheckbox = false;
+  }
+
+  return addCheckbox;
+}
 
 export {
   getReturnReasons,
@@ -86,4 +98,5 @@ export {
   getOrderDetailsForReturnRequest,
   getDeliveryAddress,
   getPaymentDetails,
+  addCheckboxToReturnItem,
 };

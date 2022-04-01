@@ -3,7 +3,7 @@
 {% set aura_class = order.aura_enabled ? 'has-aura-points' %}
 
 <table class="user__order--detail recent__orders--list">
-  <tbody class="recent__orders--body">
+  <tbody class="recent__orders--body" data-order-id="{{order.id}}">
     <tr class="order-summary-row">
       <td class="order-transaction">
         <div class="light tablet-light">{{ 'Order ID' | t }}</div>
