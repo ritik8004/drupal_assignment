@@ -247,6 +247,15 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       result = response.data.products.items[0];
       break;
 
+    case 'cart_items_stock':
+      let cartItemsStockVariables = rcsPhGraphqlQuery.cart_items_stock.variables;
+      cartItemsStockVariables.cartId = params.cartId;
+      request.data = prepareQuery(rcsPhGraphqlQuery.cart_items_stock.query, cartItemsStockVariables);
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data;
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
