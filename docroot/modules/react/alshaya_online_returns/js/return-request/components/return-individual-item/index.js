@@ -8,6 +8,9 @@ const ReturnIndividualItem = ({
   const eligibleClass = item.is_returnable ? 'return-eligible' : 'in-eligible';
   return (
     <div className="order-item-detail">
+      <ConditionalView condition={item.is_big_ticket}>
+        <span>{Drupal.t('Large Item')}</span>
+      </ConditionalView>
       <ConditionalView condition={item.image_data}>
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass}`}>
@@ -36,6 +39,9 @@ const ReturnIndividualItem = ({
         <div className="light">{Drupal.t('Unit Price')}</div>
         <span className="currency-code dark prefix">{ parse(item.price) }</span>
       </div>
+      <ConditionalView condition={item.is_big_ticket}>
+        <span>{Drupal.t('Kindly contact customer care for initiating online returns for Large Items')}</span>
+      </ConditionalView>
     </div>
   );
 };

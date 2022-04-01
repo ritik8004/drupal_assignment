@@ -173,6 +173,7 @@ class ReturnRequestController extends ControllerBase {
       $sku = SKU::loadFromSku($item['sku']);
       if ($sku instanceof SKUInterface) {
         $orderDetails['#products'][$key]['is_returnable'] = $this->onlineReturnsHelper->isSkuReturnable($sku);
+        $orderDetails['#products'][$key]['is_big_ticket'] = $this->onlineReturnsHelper->isSkuBigTicket($sku);
       }
     }
 
