@@ -418,7 +418,15 @@ function _alshaya_egift_card_translations() {
       'Unlink' => [
         'ar' => 'مختلف',
         'context' => 'egift',
-      ]
+      ],
+      'eGift Card' => [
+        'ar' => 'بطاقة الهدايا',
+        'context' => 'egift',
+      ],
+      'Buy eGift Card' => [
+        'ar' => 'اشترِ بطاقة الهدايا',
+        'context' => 'egift',
+      ],
     ]
   ];
 
