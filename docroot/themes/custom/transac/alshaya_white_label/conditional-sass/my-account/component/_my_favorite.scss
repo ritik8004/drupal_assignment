@@ -93,14 +93,12 @@
         }
 
         button {
-          @extend %button-wide;
-
-          @include breakpoint($only-mobile) {
-            width: 100%;
+          .text {
+            width: 3.5rem;
           }
 
-          .icon {
-            display: none;
+          @include breakpoint($only-mobile) {
+            width: auto;
           }
         }
       }
