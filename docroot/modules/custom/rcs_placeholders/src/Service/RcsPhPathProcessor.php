@@ -174,7 +174,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
       self::$processedPaths[$rcs_path_to_check] = '/node/' . $config->get('product.placeholder_nid');
 
-      $product = $config->get('product.enrichment') ? $this->getEnrichedEntity('product', self::$entityPath) : NULL;
+      $product = $config->get('product.enrichment') ? $this->getEnrichedEntity('product', $rcs_path_to_check) : NULL;
       if (isset($product)) {
         self::$entityData = $product->toArray();
         self::$processedPaths[$rcs_path_to_check] = '/node/' . $product->id();
