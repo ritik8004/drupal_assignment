@@ -965,6 +965,9 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   // Set shipping methods.
   if (hasValue(updated.data) && hasValue(updated.data.shipping)
     && hasValue(shippingMethods)) {
+    // Set shipping address updated to true.
+    // that can be used in components to check if the shipping is updated or not.
+    updated.data.shipping.updated = true;
     updated.data.shipping.methods = shippingMethods;
   }
 
@@ -1290,7 +1293,6 @@ window.commerceBackend.addBillingMethod = async (data) => {
     '@data': JSON.stringify(billingInfo),
     '@address': JSON.stringify(billingData),
   });
-
 
   const cart = await updateBilling(billingData);
 

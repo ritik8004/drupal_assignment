@@ -58,9 +58,10 @@ export default class OnlineBooking extends React.Component {
     if (!getHideOnlineBooking()
       && this.checkHomeDelivery(cart)
       && hasValue(cart.cart.shipping.methods)) {
-      // Check if the user have address before.
-      const newBooking = this.isExistingAddressNewBooking(cart);
-      if (newBooking) {
+      // Check if the user have added shipping address before.
+      // and now user is adding new shipping address on checkout page.
+      // We need to add new booking for the same.
+      if (this.isExistingAddressNewBooking(cart)) {
         await this.onShippingAddressUpdate();
         return;
       }
@@ -176,9 +177,9 @@ export default class OnlineBooking extends React.Component {
   }
 
   /**
-   * Check if the cart has address before.
+   * Check if the shipping is updated in cart.
    */
-  isExistingAddressNewBooking = (cart) => !hasValue(cart.cart.shipping_address_exists);
+  isExistingAddressNewBooking = (cart) => hasValue(cart.cart.shipping_updated);
 
   /**
    * Get all available booking slots and open delivery schedule calendar popup.

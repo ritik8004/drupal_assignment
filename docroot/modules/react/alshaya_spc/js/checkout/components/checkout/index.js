@@ -144,9 +144,6 @@ export default class Checkout extends React.Component {
       return;
     }
 
-    // Set shipping address flag if exists;
-    cart.shipping_address_exists = hasValue(result.shipping.address);
-
     // Set default as user selection for handling conditions.
     cart.delivery_type = result.shipping.type;
 
