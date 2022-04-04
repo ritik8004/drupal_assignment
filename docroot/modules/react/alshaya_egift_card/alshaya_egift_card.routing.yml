@@ -18,7 +18,7 @@ alshaya_egift_card.egift_card_purchase:
   path: '/egift-card/purchase'
   defaults:
     _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::eGiftCardPurchase'
-    _title: 'Buy Alshaya eGift Card'
+    _title_callback: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::egiftPageTitle'
   requirements:
     _access: 'TRUE'
 
