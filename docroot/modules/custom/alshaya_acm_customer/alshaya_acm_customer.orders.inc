@@ -549,6 +549,52 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   }
   else {
     $build['#delivery_detail_notice'] = !$order['is_virtual'] ? t('Your order will be delivered at the following address') : NULL;
+
+    // Prepare online booking information block for my-account order details
+    // page.
+    // Process online booking information if available and if the order is
+    // eligible for the online booking.
+    if (isset($order['online_booking_information'])
+      && isset($order['online_booking_information']['is_hfd_booking_order'])
+      && $order['online_booking_information']['is_hfd_booking_order']) {
+      // Check if the appointment is booked with order or failed. To confirm
+      // this we will check if the 'appointment_date' and 'start_time' are
+      // available of not. If 'appointment_date' and 'start_time' values are
+      // available, we will process to display booking details on FE.
+      if (!empty($order['online_booking_information']['appointment_date'])
+        && !empty($order['online_booking_information']['start_time'])) {
+        $build['#online_booking_notice'] = t('Home Delivery: Your order is scheduled on @appointment_date between @start_time - @end_time to the below delivery address.', [
+          '@appointment_date' => \Drupal::service('date.formatter')->format(
+            strtotime($order['online_booking_information']['appointment_date']),
+            'online_booking',
+            'd-M-Y',
+          ),
+          '@start_time' => $order['online_booking_information']['start_time'],
+          '@end_time' => $order['online_booking_information']['end_time'],
+        ],
+        [
+          'context' => 'online_booking',
+        ]
+        );
+
+        // Add a new line separator for contact customer care message to change
+        // the schedule.
+        $build['#online_booking_notice'] .= "\r\n";
+        $build['#online_booking_notice'] .= t('Contact customer care (+965 55667788) to change the delivery schedule.', [], ['context' => 'online_booking']);
+
+        // Add a new line separator for another message to inform the time limit
+        // of changing the delivery schedule.
+        $build['#online_booking_notice'] .= "\r\n";
+        $build['#online_booking_notice'] .= t('Changes are not allowed three days before the selected schedule.', [], ['context' => 'online_booking']);
+      }
+      else {
+        // If the order is HFD order, i.e. 'is_hfd_booking_order' is set to
+        // true and 'appointment_date' isn't available, it means there were
+        // some errors in appointment booking during the order placement. We
+        // need to show an error message to customer in this case.
+        $build['#online_booking_notice'] = t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
+      }
+    }
   }
 
   return $build;

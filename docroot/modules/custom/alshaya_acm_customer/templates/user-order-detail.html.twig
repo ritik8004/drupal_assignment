@@ -111,6 +111,15 @@
         {% endif %}
       </tr>
 
+      {% if online_booking_notice %}
+      <tr class="online-booking-details-row">
+        <td colspan="5">
+          <span class="icon-ic_infomation"></span>
+          <div class="online-booking-details">{{ online_booking_notice|nl2br }}</div>
+        </td>
+      </tr>
+      {% endif %}
+
       {% if delivery_detail_notice %}
       <tr class="delivery-details-row">
         {% block deliveryInformationIcon %}
