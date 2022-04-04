@@ -131,6 +131,13 @@ class AlshayaEgiftCardController extends ControllerBase {
   }
 
   /**
+   * Egift card purchase page title.
+   */
+  function egiftPageTitle() {
+    return $this->t('Buy eGift Card', [], ['context' => 'egift']);
+  }
+
+  /**
    * Redirects the user to my-account e-gift page if logged-in.
    * Redirects the user to login page and then my-account e-gift page after login if user is anonymous.
    * If e-Gift feature is disabled, redirect to `/user`.
