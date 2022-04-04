@@ -121,11 +121,10 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
       $this->logger->notice('There are no product nodes to delete! Exiting!');
       return;
     }
-    else {
-      $this->logger->notice(dt('There are @count product nodes to delete!', [
-        '@count' => $nodes_to_delete,
-      ]));
-    }
+
+    $this->logger->notice(dt('There are @count product nodes to delete!', [
+      '@count' => $nodes_to_delete,
+    ]));
 
     $batch = [
       'title' => 'Delete acq product nodes',
@@ -166,11 +165,10 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
       $this->logger->notice('There are no sku entities to delete! Exiting!');
       return;
     }
-    else {
-      $this->logger->notice(dt('There are @count sku entities to delete!', [
-        '@count' => $skus_to_delete,
-      ]));
-    }
+
+    $this->logger->notice(dt('There are @count sku entities to delete!', [
+      '@count' => $skus_to_delete,
+    ]));
 
     $batch = [
       'title' => 'Delete acq sku entities',
