@@ -1,0 +1,17 @@
+.spc-cart-items {
+  .spc-cart-item {
+    &.egift-cart-item {
+      .egift-cart-message-value {
+        html[lang=ar] & {
+          height: 1.25rem;
+        }
+      }
+
+      .spc-cart-product-attribute-value {
+        html[lang=ar] & {
+          margin-top: 0.1875rem;
+        }
+      }
+    }
+  }
+}
