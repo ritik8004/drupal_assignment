@@ -283,10 +283,6 @@ function _alshaya_egift_card_translations() {
         'ar' => ' نوع البطاقة',
         'context' => 'egift',
       ],
-      'Top up' => [
-        'ar' => 'اشحن رصيد',
-        'context' => 'egift',
-      ],
       'Link eGift card to account' => [
         'ar' => 'ربط بطاقة الهدايا الإلكترونية الخاصة بي',
         'context' => 'egift',
