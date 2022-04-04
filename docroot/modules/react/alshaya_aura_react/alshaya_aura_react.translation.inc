@@ -377,18 +377,6 @@ function _alshaya_aura_react_translations() {
       'To see your offers and rewards, visit your AURA MENA app or' => [
         'ar' => 'لمعرفة العروض والمكافآت الخاصة بك، قم بزيارة تطبيق أورا أو',
       ],
-      'To earn and spend points while you shop and enjoy exclusive benefits.' => [
-        'ar' => 'لكسب النقاط وإنفاقها أثناء التسوق والاستمتاع بمزايا حصرية.',
-      ],
-      'Know more' => [
-        'ar' => 'تعرف أكثر',
-      ],
-      ' about Aura.' => [
-        'ar' => ' حول الهالة.',
-      ],
-      'Already a member?' => [
-        'ar' => 'عضوا فعلا؟',
-      ],
     ],
     'v2' => [
       'You are here' => [
@@ -407,6 +395,20 @@ function _alshaya_aura_react_translations() {
     'v3' => [
       'You can only redeem full pending balance or use other payment method.' => [
         'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
+      ],
+    ],
+    'v4' => [
+      'To earn and spend points while you shop and enjoy exclusive benefits.' => [
+        'ar' => 'لكسب النقاط وإنفاقها أثناء التسوق والاستمتاع بمزايا حصرية.',
+      ],
+      'Know more' => [
+        'ar' => 'تعرف أكثر',
+      ],
+      ' about Aura.' => [
+        'ar' => ' حول الهالة.',
+      ],
+      'Already a member?' => [
+        'ar' => 'عضوا فعلا؟',
       ],
     ],
   ];

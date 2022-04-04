@@ -105,7 +105,7 @@ class SignUpHeader extends React.Component {
                 </a>
               </span>
               <span>
-                {Drupal.t(' about Aura.')}
+                {Drupal.t('about Aura.')}
               </span>
             </div>
             <div className="aura-popup-footer">
