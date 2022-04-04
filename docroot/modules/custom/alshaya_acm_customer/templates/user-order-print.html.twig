@@ -55,6 +55,36 @@
 
 <table class="user__order--detail order--print">
   <tbody>
+    {% if online_booking_notice %}
+      <tr class="online-booking-details-row">
+        <td colspan="5">
+          <span class="icon-ic_infomation"></span>
+          <div class="online-booking-details">
+            {% if online_booking_notice.booking_info is defined %}
+              <span class="booking-info">
+                {{ online_booking_notice.booking_info }}
+              </span>
+            {% endif %}
+            {% if online_booking_notice.customer_care_info is defined %}
+              <span class="customer-care-info">
+                {{ online_booking_notice.customer_care_info }}
+              </span>
+            {% endif %}
+            {% if online_booking_notice.update_booking_info is defined %}
+              <span class="update-booking-info">
+                {{ online_booking_notice.update_booking_info }}
+              </span>
+            {% endif %}
+            {% if online_booking_notice.booking_error is defined %}
+              <span class="booking-error">
+                {{ online_booking_notice.booking_error }}
+              </span>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+    {% endif %}
+
     <tr class="order-details-row">
       <td class="order__user--info">
         {% if order_details.type == 'cc' %}

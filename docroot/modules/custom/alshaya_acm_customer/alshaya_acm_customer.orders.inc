@@ -563,7 +563,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       // available, we will process to display booking details on FE.
       if (!empty($order['online_booking_information']['appointment_date'])
         && !empty($order['online_booking_information']['start_time'])) {
-        $build['#online_booking_notice'] = t('Home Delivery: Your order is scheduled on @appointment_date between @start_time - @end_time to the below delivery address.', [
+        $build['#online_booking_notice']['booking_info'] = t('Home Delivery: Your order is scheduled on @appointment_date between @start_time - @end_time to the below delivery address.', [
           '@appointment_date' => \Drupal::service('date.formatter')->format(
             strtotime($order['online_booking_information']['appointment_date']),
             'online_booking',
@@ -579,20 +579,18 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
         // Add a new line separator for contact customer care message to change
         // the schedule.
-        $build['#online_booking_notice'] .= "\r\n";
-        $build['#online_booking_notice'] .= t('Contact customer care (+965 55667788) to change the delivery schedule.', [], ['context' => 'online_booking']);
+        $build['#online_booking_notice']['customer_care_info'] = t('Contact customer care (+965 55667788) to change the delivery schedule.', [], ['context' => 'online_booking']);
 
         // Add a new line separator for another message to inform the time limit
         // of changing the delivery schedule.
-        $build['#online_booking_notice'] .= "\r\n";
-        $build['#online_booking_notice'] .= t('Changes are not allowed three days before the selected schedule.', [], ['context' => 'online_booking']);
+        $build['#online_booking_notice']['update_booking_info'] = t('Changes are not allowed three days before the selected schedule.', [], ['context' => 'online_booking']);
       }
       else {
         // If the order is HFD order, i.e. 'is_hfd_booking_order' is set to
         // true and 'appointment_date' isn't available, it means there were
         // some errors in appointment booking during the order placement. We
         // need to show an error message to customer in this case.
-        $build['#online_booking_notice'] = t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
+        $build['#online_booking_notice']['booking_error'] = t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
       }
     }
   }
