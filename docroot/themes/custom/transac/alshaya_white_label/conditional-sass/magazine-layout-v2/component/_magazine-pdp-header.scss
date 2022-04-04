@@ -119,7 +119,7 @@
       &.back-to-home {
         &::after {
           content: '';
-          background: url(/themes/custom/transac/alshaya_white_label/imgs/icons/home.svg) center no-repeat;
+          background: url('#{$base_theme_img_directory_path}/icons/home.svg') center no-repeat;
           transform: rotate(0deg);
         }
       }

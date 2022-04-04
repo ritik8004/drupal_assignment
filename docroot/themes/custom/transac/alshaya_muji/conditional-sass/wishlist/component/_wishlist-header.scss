@@ -1,8 +1,12 @@
 body.wishlist-enabled {
   #wishlist-header-wrapper {
     @include breakpoint($upto-desktop) {
-      top: 0.9375rem;
+      top: 0.65rem;
       #{$right}: 2.125rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 0.5rem;
     }
   }
 }
