@@ -108,7 +108,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
     }
     else {
       $error_operation = reset($operations);
-      $message = t('An error occurred while processing %error_operation.', [
+      $message = dt('An error occurred while processing %error_operation.', [
         '%error_operation' => $error_operation[0],
       ]);
     }

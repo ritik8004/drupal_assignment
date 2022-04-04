@@ -86,7 +86,7 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
    */
   public static function deleteEntitiesFinished($success, $results, $operations) {
     if ($success) {
-      $message = t('Batch processs completed successfully.');
+      $message = 'Batch processs completed successfully.';
     }
     else {
       $error_operation = reset($operations);

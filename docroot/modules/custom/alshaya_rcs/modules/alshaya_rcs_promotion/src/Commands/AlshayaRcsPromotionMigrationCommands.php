@@ -72,7 +72,7 @@ class AlshayaRcsPromotionMigrationCommands extends DrushCommands {
    */
   public static function acqPromotionNodesDeletionFinished($success, $results, $operations) {
     if ($success) {
-      $message = t('Batch processs completed successfully.');
+      $message = dt('Batch processs completed successfully.');
     }
     else {
       $error_operation = reset($operations);
