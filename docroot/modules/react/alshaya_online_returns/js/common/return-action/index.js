@@ -10,8 +10,8 @@ const ReturnAction = (props) => {
   if (hasValue(returnType)) {
     return (
       <div className="return-message">
-        <span>{ `(${Drupal.t('@type', { '@type': returnType })}` }</span>
-        <span>{ `${Drupal.t('orders can only be returned at stores')})` }</span>
+        <span>{ `(${Drupal.t('@type', { '@type': returnType }, { context: 'online_returns' })}` }</span>
+        <span>{ `${Drupal.t('orders can only be returned at stores', {}, { context: 'online_returns' })})` }</span>
       </div>
     );
   }
@@ -24,7 +24,7 @@ const ReturnAction = (props) => {
         type="button"
         onClick={handleOnClick}
       >
-        { Drupal.t('Return Items Online') }
+        { Drupal.t('Return Items Online', {}, { context: 'online_returns' }) }
       </button>
     </>
   );

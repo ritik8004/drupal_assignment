@@ -49,7 +49,7 @@ class ReturnItemsListing extends React.Component {
     return (
       <div className="products-list-wrapper">
         <div className="select-items-label">
-          <div className="select-items-header">{ Drupal.t('1. Select items to return') }</div>
+          <div className="select-items-header">{ Drupal.t('1. Select items to return', {}, { context: 'online_returns' }) }</div>
         </div>
         {products.map((item) => (
           <div key={item.name} className="item-list-wrapper">
@@ -62,7 +62,7 @@ class ReturnItemsListing extends React.Component {
         ))}
         <div className="continue-button-wrapper">
           <button type="button" disabled={btnState}>
-            <span className="continue-button-label">{Drupal.t('Continue')}</span>
+            <span className="continue-button-label">{Drupal.t('Continue', {}, { context: 'online_returns' })}</span>
           </button>
         </div>
       </div>
