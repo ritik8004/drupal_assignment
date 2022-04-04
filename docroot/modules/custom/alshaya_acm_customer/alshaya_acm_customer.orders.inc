@@ -563,14 +563,14 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       // available, we will process to display booking details on FE.
       if (!empty($order['online_booking_information']['appointment_date'])
         && !empty($order['online_booking_information']['start_time'])) {
-        $build['#online_booking_notice']['booking_info'] = t('Home Delivery: Your order is scheduled on @appointment_date between @start_time - @end_time to the below delivery address.', [
-          '@appointment_date' => \Drupal::service('date.formatter')->format(
+        $build['#online_booking_notice']['booking_info'] = t('Home Delivery: Your order is scheduled on @date between @from_time - @to_time to the below delivery address.', [
+          '@date' => \Drupal::service('date.formatter')->format(
             strtotime($order['online_booking_information']['appointment_date']),
             'online_booking',
             'd-M-Y',
           ),
-          '@start_time' => $order['online_booking_information']['start_time'],
-          '@end_time' => $order['online_booking_information']['end_time'],
+          '@from_time' => $order['online_booking_information']['start_time'],
+          '@to_time' => $order['online_booking_information']['end_time'],
         ],
         [
           'context' => 'online_booking',
