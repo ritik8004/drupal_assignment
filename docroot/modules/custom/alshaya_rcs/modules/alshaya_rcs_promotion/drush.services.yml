@@ -1,0 +1,8 @@
+services:
+  alshaya_rcs_promotion.migration_commands:
+    class: Drupal\alshaya_rcs_promotion\Commands\AlshayaRcsPromotionMigrationCommands
+    arguments:
+      - '@entity_type.manager'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command }
