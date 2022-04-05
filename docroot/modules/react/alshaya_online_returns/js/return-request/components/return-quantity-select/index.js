@@ -6,7 +6,7 @@ const ReturnQuantitySelect = ({
 }) => (
   <>
     <div className="return-reasons-row">
-      <div className="return-reason-label">{ Drupal.t('Reason for Return') }</div>
+      <div className="return-reason-label">{ Drupal.t('Reason for Return', {}, { context: 'online_returns' }) }</div>
       <Select
         classNamePrefix="reasonsSelect"
         className="return-reasons-select"

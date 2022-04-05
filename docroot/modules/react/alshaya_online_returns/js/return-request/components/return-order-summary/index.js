@@ -14,7 +14,7 @@ const ReturnOrderSummary = ({
       <div className="order-summary-row">
         <div className="order-summary-details">
           <div className="order-transaction">
-            <div className="light tablet-light font-small">{ Drupal.t('Order ID') }</div>
+            <div className="light tablet-light font-small">{ Drupal.t('Order ID', {}, { context: 'online_returns' }) }</div>
             <div className="dark">{orderDetails['#order'].orderId}</div>
             <div className="light order--date--time font-small">{ orderDetails['#order'].orderDate }</div>
           </div>
@@ -22,10 +22,12 @@ const ReturnOrderSummary = ({
             <div className="dark order--items">{ itemNames.join(',') }</div>
             <div className="light">
               <div className="item-count">
-                { Drupal.t('Total:') }
+                { Drupal.t('Total:', {}, { context: 'online_returns' }) }
                 {itemNames.length}
                 {' '}
-                { itemNames.length > 1 ? Drupal.t('items') : Drupal.t('item') }
+                { itemNames.length > 1
+                  ? Drupal.t('items', {}, { context: 'online_returns' })
+                  : Drupal.t('item', {}, { context: 'online_returns' }) }
               </div>
             </div>
           </div>
@@ -35,7 +37,7 @@ const ReturnOrderSummary = ({
         </div>
         <div className="order-total-column">
           <div className="order-total-wrapper">
-            <div className="light">{ Drupal.t('Order Total') }</div>
+            <div className="light">{ Drupal.t('Order Total', {}, { context: 'online_returns' }) }</div>
             <div className="dark">{parse(orderDetails['#order'].total)}</div>
           </div>
         </div>
