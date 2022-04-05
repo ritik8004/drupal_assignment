@@ -5,7 +5,7 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import DefaultShippingElement from './DefaultShippingElement';
 
 const ShippingMethodCommon = ({
-  cart, refreshCart, method, selected, shippingUpdated,
+  cart, refreshCart, method, selected, shippingInfoUpdated,
 }) => {
   let price = Drupal.t('FREE');
   if (method.amount > 0) {
@@ -22,7 +22,7 @@ const ShippingMethodCommon = ({
         refreshCart={refreshCart}
         price={price}
         method={method}
-        shippingUpdated={shippingUpdated}
+        shippingInfoUpdated={shippingInfoUpdated}
       />
     );
   }

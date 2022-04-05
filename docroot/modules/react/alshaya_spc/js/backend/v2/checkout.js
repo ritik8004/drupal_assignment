@@ -757,9 +757,10 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
     cart = await updateBilling(params.shipping.shipping_address);
   }
 
-  // Trigger event on shipping update, so that
-  // other components take necessary action if required.
-  dispatchCustomEvent('onAddShippingInfoCallback', cart);
+  // Trigger event on every shipping address update,
+  // as this is the final place where shipping is updated.
+  // Components can use this event to do action when shipping address is updated in cart.
+  dispatchCustomEvent('onAddShippingInfoUpdate', cart);
 
   return cart;
 };

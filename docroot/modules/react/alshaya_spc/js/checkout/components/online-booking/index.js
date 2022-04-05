@@ -37,7 +37,7 @@ export default class OnlineBooking extends React.Component {
     document.addEventListener('validateOnlineBookingPurchase', this.validateOnlineBookingPurchase, false);
     // Add event listener for shipping address change,
     // We need to reset the online booking storage and fetch details.
-    document.addEventListener('onAddShippingInfoCallback', this.onShippingAddressUpdate, false);
+    document.addEventListener('onAddShippingInfoUpdate', this.onShippingAddressUpdate, false);
     // Add event listener for place order.
     // We need to reset the online booking storage.
     document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
@@ -51,7 +51,7 @@ export default class OnlineBooking extends React.Component {
   }
 
   updateBookingDetails = async () => {
-    const { cart, shippingUpdated } = this.props;
+    const { cart, shippingInfoUpdated } = this.props;
     let result = { api_error: true };
     // We need to show online booking component only if home delivery method
     // is selected and shipping methods are available in cart and valid for user.
@@ -61,7 +61,7 @@ export default class OnlineBooking extends React.Component {
       // Check if the user have added shipping address before.
       // and now user is adding new shipping address on checkout page.
       // We need to add new booking for the same.
-      if (hasValue(shippingUpdated)) {
+      if (hasValue(shippingInfoUpdated)) {
         await this.onShippingAddressUpdate();
         return;
       }
@@ -76,7 +76,7 @@ export default class OnlineBooking extends React.Component {
         // In this case, we fetch all the available slots
         // for the booking and reserve/hold the first available slot from this list.
         // If we have first slot available, we will hold that one.
-        result = await this.bookNewOnlineBookingSlot();
+        result = await this.holdOnlineBookingSlot();
         // Check if the booking is not successful.
         // Set status to online booking as false.
         if (!hasValue(result.status)) {
@@ -88,7 +88,10 @@ export default class OnlineBooking extends React.Component {
     this.setState({ bookingDetails: result, wait: false });
   }
 
-  bookNewOnlineBookingSlot = async () => {
+  /**
+   * Hold new online booking slot for user.
+   */
+  holdOnlineBookingSlot = async () => {
     let result = { api_error: true, status: false };
     // Get all available slots for booking.
     const availableSlots = await getAvailableBookingSlots();
@@ -131,7 +134,7 @@ export default class OnlineBooking extends React.Component {
     setHideOnlineBooking(false);
     const { cart } = this.props;
     // Always book new slot for shipping address update.
-    let result = await this.bookNewOnlineBookingSlot();
+    let result = await this.holdOnlineBookingSlot();
     // If any failure then check if cart have confirmation number.
     if (!hasValue(result.status) && hasValue(cart.cart.hfd_hold_confirmation_number)) {
       result = await getBookingDetailByConfirmationNumber(cart.cart.hfd_hold_confirmation_number);
