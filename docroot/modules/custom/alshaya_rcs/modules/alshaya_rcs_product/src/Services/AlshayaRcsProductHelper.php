@@ -492,6 +492,8 @@ class AlshayaRcsProductHelper {
 
         // Get slug field value from old node alias.
         $slug = $this->aliasManager->getAliasByPath('/node/' . $node_data->id());
+        // Trimout the front and back slashes.
+        $slug = trim($slug, '/');
 
         $rcs_node->get('field_product_slug')->setValue($slug);
 
