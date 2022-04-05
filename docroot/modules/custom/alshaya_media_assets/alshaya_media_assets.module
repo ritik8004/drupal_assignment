@@ -9,8 +9,6 @@
  * Implements hook_alshaya_rcs_product_query_fields_alter().
  */
 function alshaya_media_assets_alshaya_rcs_product_query_fields_alter(array &$fields) {
-  array_push($fields['items'], 'asset_type');
-
   array_push(
     $fields['items']['... on ConfigurableProduct']['variants']['product'],
     'assets_swatch',
