@@ -46,6 +46,7 @@ import {
 } from '../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -756,6 +757,11 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
     cart = await updateBilling(params.shipping.shipping_address);
   }
 
+  // Trigger event on every shipping address update,
+  // as this is the final place where shipping is updated.
+  // Components can use this event to do action when shipping address is updated in cart.
+  dispatchCustomEvent('onAddShippingInfoUpdate', cart);
+
   return cart;
 };
 
@@ -1290,7 +1296,6 @@ window.commerceBackend.addBillingMethod = async (data) => {
     '@data': JSON.stringify(billingInfo),
     '@address': JSON.stringify(billingData),
   });
-
 
   const cart = await updateBilling(billingData);
 

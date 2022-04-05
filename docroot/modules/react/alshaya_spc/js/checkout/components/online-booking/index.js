@@ -37,7 +37,7 @@ export default class OnlineBooking extends React.Component {
     document.addEventListener('validateOnlineBookingPurchase', this.validateOnlineBookingPurchase, false);
     // Add event listener for shipping address change,
     // We need to reset the online booking storage and fetch details.
-    document.addEventListener('onShippingAddressUpdate', this.onShippingAddressUpdate, false);
+    document.addEventListener('onAddShippingInfoUpdate', this.onShippingAddressUpdate, false);
     // Add event listener for place order.
     // We need to reset the online booking storage.
     document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
@@ -46,18 +46,25 @@ export default class OnlineBooking extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('validateOnlineBookingPurchase', this.validateOnlineBookingPurchase, false);
-    document.removeEventListener('onShippingAddressUpdate', this.onShippingAddressUpdate, false);
+    document.removeEventListener('onAddShippingInfoCallback', this.onShippingAddressUpdate, false);
     document.removeEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
   }
 
   updateBookingDetails = async () => {
-    const { cart } = this.props;
+    const { cart, shippingInfoUpdated } = this.props;
     let result = { api_error: true };
     // We need to show online booking component only if home delivery method
     // is selected and shipping methods are available in cart and valid for user.
     if (!getHideOnlineBooking()
       && this.checkHomeDelivery(cart)
       && hasValue(cart.cart.shipping.methods)) {
+      // Check if the user have added shipping address before.
+      // and now user is adding new shipping address on checkout page.
+      // We need to add new booking for the same.
+      if (hasValue(shippingInfoUpdated)) {
+        await this.onShippingAddressUpdate();
+        return;
+      }
       // Check if the cart is having confirmation number,
       // this means user has already reserved some slot earlier and
       // thus now we need to show the info of that slot only.
@@ -69,30 +76,7 @@ export default class OnlineBooking extends React.Component {
         // In this case, we fetch all the available slots
         // for the booking and reserve/hold the first available slot from this list.
         // If we have first slot available, we will hold that one.
-        result = await getAvailableBookingSlots();
-        if (hasValue(result.status)) {
-          const [availableSlot] = result.hfd_time_slots_details;
-          const [firstSlot] = availableSlot.appointment_slots;
-          if (hasValue(firstSlot)) {
-            const params = {
-              resource_external_id: firstSlot.resource_external_id,
-              appointment_slot_time: firstSlot.appointment_slot_time,
-              appointment_length_time: firstSlot.appointment_length_time,
-            };
-            // Hold the first slot for user for first time.
-            result = await holdBookingSlot(params);
-            if (hasValue(result.status)) {
-              result = {
-                status: true,
-                hfd_appointment_details: {
-                  ...firstSlot,
-                  hold_confirmation_number: result.hfd_appointment_details.hold_confirmation_number,
-                  appointment_date: availableSlot.appointment_date,
-                },
-              };
-            }
-          }
-        }
+        result = await this.holdOnlineBookingSlot();
         // Check if the booking is not successful.
         // Set status to online booking as false.
         if (!hasValue(result.status)) {
@@ -100,20 +84,71 @@ export default class OnlineBooking extends React.Component {
         }
       }
     }
-
     // Set booking Details response and wait to false.
     this.setState({ bookingDetails: result, wait: false });
   }
 
   /**
-   * Reset show-online-booking storage.
+   * Hold new online booking slot for user.
+   */
+  holdOnlineBookingSlot = async () => {
+    let result = { api_error: true, status: false };
+    // Get all available slots for booking.
+    const availableSlots = await getAvailableBookingSlots();
+    if (hasValue(availableSlots.status)) {
+      const [availableSlot] = availableSlots.hfd_time_slots_details;
+      const [firstSlot] = availableSlot.appointment_slots;
+      if (hasValue(firstSlot)) {
+        const params = {
+          resource_external_id: firstSlot.resource_external_id,
+          appointment_slot_time: firstSlot.appointment_slot_time,
+          appointment_length_time: firstSlot.appointment_length_time,
+        };
+        // Hold the first slot for user for first time.
+        result = await holdBookingSlot(params);
+        if (hasValue(result.status)) {
+          result = {
+            status: true,
+            hfd_appointment_details: {
+              ...firstSlot,
+              hold_confirmation_number: result.hfd_appointment_details.hold_confirmation_number,
+              appointment_date: availableSlot.appointment_date,
+            },
+          };
+          const { cart, refreshCart } = this.props;
+          cart.cart.hfd_hold_confirmation_number = result
+            .hfd_appointment_details.hold_confirmation_number;
+          refreshCart(cart);
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Reset show-online-booking storage and book the new slot.
    */
   onShippingAddressUpdate = async () => {
+    // Add loader until API details are fetched.
+    this.setState({ wait: true });
     setHideOnlineBooking(false);
+    const { cart } = this.props;
+    // Always book new slot for shipping address update.
+    let result = await this.holdOnlineBookingSlot();
+    // If any failure then check if cart have confirmation number.
+    if (!hasValue(result.status) && hasValue(cart.cart.hfd_hold_confirmation_number)) {
+      result = await getBookingDetailByConfirmationNumber(cart.cart.hfd_hold_confirmation_number);
+    }
+
+    // If we do not get successful result,
+    // we will hide online booking.
+    if (!hasValue(result.status)) {
+      setHideOnlineBooking(true);
+    }
+
     // Update online booking component to fetch
     // details again in case there is no error.
-    this.setState({ wait: true });
-    await this.updateBookingDetails();
+    this.setState({ bookingDetails: result, wait: false });
   }
 
   handlePlaceOrderEvent = () => {
