@@ -1,5 +1,7 @@
 import React from 'react';
 import ReturnItemDetails from '../return-item-details';
+import { createReturnRequest } from '../../../utilities/return_api_helper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class ReturnItemsListing extends React.Component {
   constructor(props) {
@@ -41,6 +43,48 @@ class ReturnItemsListing extends React.Component {
     }
   }
 
+  /**
+   * Process return request submit.
+   */
+  handleReturnSubmit = () => {
+    const { btnDisabled } = this.state;
+
+    if (!btnDisabled) {
+      this.createReturnRequest();
+    }
+  }
+
+  /**
+   * Create return request.
+   */
+  createReturnRequest = async () => {
+    const { itemsSelected } = this.state;
+
+    // @todo: Hard coding selected reasons and quantity for now.
+    itemsSelected.map((item) => {
+      const data = { ...item };
+      data.qty_requested = 2;
+      data.resolution = 2009;
+      data.reason = 2014;
+      return data;
+    });
+
+    const requestData = {
+      uid: drupalSettings.user.uid,
+      itemsSelected,
+    };
+    const returnRequest = await createReturnRequest(requestData);
+
+    if (hasValue(returnRequest.error)) {
+      // @todo: Handle error display.
+      return;
+    }
+
+    // On success, redirect to return confirmation page.
+    // @todo: Update return confirmation URL.
+    window.location.href = Drupal.url('/');
+  }
+
   render() {
     const { btnDisabled, itemsSelected } = this.state;
     const { products } = this.props;
@@ -61,7 +105,11 @@ class ReturnItemsListing extends React.Component {
           </div>
         ))}
         <div className="continue-button-wrapper">
-          <button type="button" disabled={btnState}>
+          <button
+            type="button"
+            disabled={btnState}
+            onClick={this.handleReturnSubmit}
+          >
             <span className="continue-button-label">{Drupal.t('Continue', {}, { context: 'online_returns' })}</span>
           </button>
         </div>
