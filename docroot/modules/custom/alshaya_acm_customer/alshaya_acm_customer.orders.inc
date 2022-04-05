@@ -296,7 +296,6 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $shipping_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address);
     $shipping_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
 
-
     // Add delivery address raw data for return request page.
     $orderDetails['delivery_address_raw'] = $shipping_address_array;
     $delivery_address = [
@@ -350,18 +349,6 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
   }
 
-  // Preparing card details for checkout_com_upapi method.
-  // @todo To prepare data for all payment methods.
-  // Refer DIG-3519 for more info.
-  if ($order['payment']['method'] === 'checkout_com_upapi') {
-    $payment_data = [
-      'card_type' => $payment_info['card_type'],
-      'card_number' => $payment_info['last4'],
-      'payment_type' => $payment_info['scheme'],
-    ];
-    $orderDetails['paymentDetails']['checkout_com_upapi'] = $payment_data;
-  }
-
   switch ($order['payment']['method']) {
     case 'knet':
       $orderDetails['payment']['transactionId'] = $payment_info['transaction_id'];
@@ -402,6 +389,17 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
 
       break;
+
+    case 'checkout_com_upapi':
+      // Preparing card details for checkout_com_upapi method.
+      // @todo To prepare data for all payment methods.
+      // Refer DIG-3519 for more info.
+      $payment_data = [
+        'card_type' => $payment_info['card_type'],
+        'card_number' => $payment_info['last4'],
+        'payment_type' => $payment_info['scheme'],
+      ];
+      $orderDetails['paymentDetails']['checkout_com_upapi'] = $payment_data;
   }
 
   return $orderDetails;

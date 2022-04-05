@@ -29,7 +29,7 @@ const ReturnOrderSummary = ({
           </div>
         </div>
         <div className="order-status">
-          <div className={`button ${orderDetails['#order'].status.class}`}>{ orderDetails['#order'].status.text }</div>
+          <div className="button">{ orderDetails['#order'].status.text }</div>
         </div>
         <div className="order-total-column">
           <div className="order-total-wrapper">

@@ -12,12 +12,10 @@ const ReturnIndividualItem = ({
       <ConditionalView condition={item.is_big_ticket}>
         <span>{Drupal.t('Large Item')}</span>
       </ConditionalView>
-      <ConditionalView condition={item.image_data}>
+      <ConditionalView condition={hasValue(item.image_data) && hasValue(item.image_data.url)}>
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass}`}>
-            <ConditionalView condition={hasValue(item.image_data.url)}>
-              <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
-            </ConditionalView>
+            <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
             <ConditionalView condition={!item.is_returnable}>
               <div className="not-eligible-label">{ Drupal.t('Not eligible for return', {}, { context: 'online_returns' }) }</div>
             </ConditionalView>
@@ -41,6 +39,10 @@ const ReturnIndividualItem = ({
       <div className="item-price">
         <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
         <span className="currency-code dark prefix">{ parse(item.price) }</span>
+      </div>
+      <div className="item-total-price">
+        <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
+        <span className="dark">{ parse(item.total) }</span>
       </div>
       <ConditionalView condition={item.is_big_ticket}>
         <span>{Drupal.t('Kindly contact customer care for initiating online returns for Large Items')}</span>
