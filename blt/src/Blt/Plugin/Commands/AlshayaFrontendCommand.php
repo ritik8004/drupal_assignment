@@ -472,6 +472,9 @@ class AlshayaFrontendCommand extends BltTasks {
     // Validate utility files.
     $tasks->exec("cd $reactDir; npm run lint $reactDir/js/");
 
+    // Run Jest tests.
+    $tasks->exec("cd $reactDir; npm test");
+
     foreach (new \DirectoryIterator($reactDir) as $subDir) {
       if ($subDir->isDir()
         && strpos($subDir->getBasename(), '.') === FALSE
