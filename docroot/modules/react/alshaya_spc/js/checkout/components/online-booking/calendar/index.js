@@ -44,6 +44,14 @@ export default class OnlineBookingCalendar extends React.Component {
   }
 
   /**
+   * Function returns a date format used for conditional processing of dates.
+   *
+   * @returns {string}
+   *  A date format for processing dates.
+   */
+  dateFormat = () => 'YYYY-MM-DD';
+
+  /**
    * Prepare a array of date slots objects to show in calendar.
    *
    * @returns {array}
@@ -74,12 +82,11 @@ export default class OnlineBookingCalendar extends React.Component {
     // Get all available booking slots from the props.
     const { availableSlots } = this.props;
     let timeSlotsForDate = [];
-    const dateFormat = 'YYYY-MM-DD';
     if (typeof availableSlots !== 'undefined' && availableSlots.length > 0) {
       availableSlots.forEach((daySlot) => {
         // Get the time slots if the given date is matched.
-        if (moment(date).format(dateFormat)
-          === moment(daySlot.appointment_date).format(dateFormat)) {
+        if (moment(date).format(this.dateFormat())
+          === moment(daySlot.appointment_date).format(this.dateFormat())) {
           timeSlotsForDate = daySlot.appointment_slots;
         }
       });
@@ -189,7 +196,6 @@ export default class OnlineBookingCalendar extends React.Component {
     e.preventDefault();
     const { selectedDate } = this.state;
     const { bookingDetails } = this.props;
-    const dateFormat = 'YYYY-MM-DD';
 
     // If selected time slot is different then allow customer to use apply
     // button and change the schedule.
@@ -201,8 +207,8 @@ export default class OnlineBookingCalendar extends React.Component {
       disableApplyBtn: (typeof bookingDetails.resource_external_id !== 'undefined'
         && typeof bookingDetails.appointment_date !== 'undefined'
         && bookingDetails.resource_external_id === timeSlotExtId)
-        && (moment(selectedDate).format(dateFormat)
-          === moment(bookingDetails.appointment_date).format(dateFormat)),
+        && (moment(selectedDate).format(this.dateFormat())
+          === moment(bookingDetails.appointment_date).format(this.dateFormat())),
     });
   };
 
@@ -231,7 +237,7 @@ export default class OnlineBookingCalendar extends React.Component {
       // actions/operations with selected time slot details.
       if (hasValue(selectedTimeSlotDetails)) {
         callback(
-          moment(selectedDate).format('YYYY-MM-DD'),
+          moment(selectedDate).format(this.dateFormat()),
           selectedTimeSlotDetails,
         );
       }
@@ -246,7 +252,7 @@ export default class OnlineBookingCalendar extends React.Component {
       selectedTimeSlot,
       disableApplyBtn,
     } = this.state;
-    const { closeScheduleDeliveryModal } = this.props;
+    const { closeScheduleDeliveryModal, bookingDetails } = this.props;
 
     // Set language for datepicker translation. Default to english. If it's not
     // english then change to arabic.
@@ -262,7 +268,10 @@ export default class OnlineBookingCalendar extends React.Component {
     let timeSlotListItems = null;
     if (availableTimeSlots.length > 0) {
       timeSlotListItems = availableTimeSlots.map((timeSlot) => {
-        const className = (timeSlot.resource_external_id === selectedTimeSlot)
+        const className = (timeSlot.resource_external_id === selectedTimeSlot
+          && typeof bookingDetails.appointment_date !== 'undefined'
+          && moment(selectedDate).format(this.dateFormat())
+            === moment(bookingDetails.appointment_date).format(this.dateFormat()))
           ? 'timeslots-options-list-item active'
           : 'timeslots-options-list-item';
 
@@ -294,14 +303,6 @@ export default class OnlineBookingCalendar extends React.Component {
       datepickerMonthRight = 'datepicker-month-right disabled-right';
     }
 
-    // Set action to increase for english depending on arrow.
-    let monthDisplayActionLeft = 'increase';
-    let monthDisplayActionRight = 'decrease';
-    if (drupalSettings.path.currentLanguage === 'en') {
-      monthDisplayActionLeft = 'decrease';
-      monthDisplayActionRight = 'increase';
-    }
-
     return (
       <>
         <div className="schedule-delivery-datepicker__wrapper">
@@ -327,7 +328,7 @@ export default class OnlineBookingCalendar extends React.Component {
               <div className="datetime-picker-wrapper" dir={dir}>
                 <div
                   className={datepickerMonthLeft}
-                  onClick={() => this.changeMonthDisplay(monthDisplayActionLeft)}
+                  onClick={() => this.changeMonthDisplay('decrease')}
                   disabled={moment(setOpenDate).isSame(
                     this.getMinMaxDateForCalendar(),
                     'month',
@@ -354,16 +355,16 @@ export default class OnlineBookingCalendar extends React.Component {
                             className={prevMonthButtonDisabled ? 'month-calendar-sides previous disabled' : 'month-calendar-sides previous'}
                             disabled={prevMonthButtonDisabled}
                           >
-                            {moment(date).subtract('1', 'month').format('MMMM')}
+                            {moment(date).subtract('1', 'month').locale(drupalSettings.path.currentLanguage).format('MMMM')}
                           </span>
                           <span className="month-calendar-datepicker current">
-                            {moment(date).format('MMMM YYYY')}
+                            {moment(date).locale(drupalSettings.path.currentLanguage).format('MMMM YYYY')}
                           </span>
                           <span
                             className={nextMonthButtonDisabled ? 'month-calendar-sides next disabled' : 'month-calendar-sides next'}
                             disabled={nextMonthButtonDisabled}
                           >
-                            {moment(date).add('1', 'month').format('MMMM')}
+                            {moment(date).add('1', 'month').locale(drupalSettings.path.currentLanguage).format('MMMM')}
                           </span>
                         </div>
                       </div>
@@ -388,7 +389,7 @@ export default class OnlineBookingCalendar extends React.Component {
 
                 <div
                   className={datepickerMonthRight}
-                  onClick={() => this.changeMonthDisplay(monthDisplayActionRight)}
+                  onClick={() => this.changeMonthDisplay()}
                   disabled={moment(setOpenDate).isSame(
                     this.getMinMaxDateForCalendar('max'),
                     'month',
