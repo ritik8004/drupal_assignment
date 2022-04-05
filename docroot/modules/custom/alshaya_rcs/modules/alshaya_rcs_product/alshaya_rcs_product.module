@@ -102,6 +102,28 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
 /**
  * Implements hook_page_attachments().
  */
+function alshaya_rcs_product_page_attachments(array &$attachments) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
+  // Alter the attachments for the schema metadata.
+  // We pass empty array as a variable here in order to avoid PHP error.
+  $product_schema_data = [];
+  \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
+  // Add the library which adds adds the schema script tag.
+  $attachments['#attached']['library'][] = 'alshaya_rcs_product/schema_org';
+
+  // Add the library for processing the media data.
+  // For assets data, this library is replaced by the assets processing
+  // library in alshaya_media_assets module.
+  $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_images';
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
 function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
   // Ignore admin paths.
   if (\Drupal::service('router.admin_context')->isAdminRoute()) {
