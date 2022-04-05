@@ -1,5 +1,4 @@
 import React from 'react';
-import SectionTitle from '../../../utilities/section-title';
 import ConditionalView from '../../../common/components/conditional-view';
 import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { getAllAuraStatus, getUserDetails } from '../../../../../alshaya_aura_react/js/utilities/helper';
@@ -142,17 +141,6 @@ class AuraCheckoutRewards extends React.Component {
     );
   };
 
-  getSectionTitle = (allAuraStatus, loyaltyStatus) => {
-    if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
-      || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
-      return [
-        getStringMessage('checkout_aura_block_title'),
-        <span key="aura-checkout-title">{` ${getStringMessage('checkout_optional')}`}</span>,
-      ];
-    }
-    return getStringMessage('checkout_aura_block_title');
-  };
-
   isActive = () => {
     const allAuraStatus = getAllAuraStatus();
     const { loyaltyStatus } = this.state;
@@ -207,7 +195,6 @@ class AuraCheckoutRewards extends React.Component {
     if (wait) {
       return (
         <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }}>
-          <SectionTitle>{ this.getSectionTitle(allAuraStatus, loyaltyStatus) }</SectionTitle>
           <Loading />
         </div>
       );
@@ -215,7 +202,6 @@ class AuraCheckoutRewards extends React.Component {
 
     return (
       <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }}>
-        <SectionTitle>{ this.getSectionTitle(allAuraStatus, loyaltyStatus) }</SectionTitle>
 
         {/* Guest */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
