@@ -18,6 +18,10 @@
       display: inline-block;
     }
 
+    &-slot {
+      display: inline;
+    }
+
     @include breakpoint($only-mobile) {
       display: flex;
       flex-direction: column;
