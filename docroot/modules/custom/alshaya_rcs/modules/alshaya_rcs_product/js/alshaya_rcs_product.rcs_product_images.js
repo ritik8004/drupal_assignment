@@ -1,6 +1,6 @@
 /**
  * Listens to the 'rcsUpdateResults' event and updates the result object
- * with media data.
+ * with assets data.
  */
  (function () {
   /**
@@ -82,29 +82,27 @@
    *   Recommended product object.
    */
   function setProductRecommendationsMediaConfigurable(recommendedProduct) {
-    if (Array.isArray(recommendedProduct.variants) && recommendedProduct.variants.length !== 0) {
-      recommendedProduct.variants.forEach(function setRecommendedProductImage(variant) {
-        variant.product.media_teaser = null;
-        try {
-          mediaData = JSON.parse(variant.product.assets_teaser);
-          mediaData.every(function setTeaserMedia(media) {
-            variant.product.media_teaser = media.styles.product_teaser;
-            // We do this so that we are able to detect in getSkuForGallery
-            // that the variant has media.
-            variant.product.media = variant.product.media_teaser;
-            // Break as there is only 1 teaser image expected.
-            return false;
-          });
-        }
-        catch (e) {
-          Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
-            '@type': type,
-            '@sku': variant.product.sku,
-            '@message': e.message,
-          });
-        }
-      });
-    }
+    recommendedProduct.variants.forEach(function setRecommendedProductMedia(variant) {
+      variant.product.media_teaser = null;
+      try {
+        mediaData = JSON.parse(variant.product.assets_teaser);
+        mediaData.every(function setTeaserMedia(media) {
+          variant.product.media_teaser = media.styles.product_teaser;
+          // We do this so that we are able to detect in getSkuForGallery
+          // that the variant has media.
+          variant.product.media = variant.product.media_teaser;
+          // Break as there is only 1 teaser image expected.
+          return false;
+        });
+      }
+      catch (e) {
+        Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
+          '@type': type,
+          '@sku': variant.product.sku,
+          '@message': e.message,
+        });
+      }
+    });
   }
 
   /**
@@ -150,7 +148,7 @@
     if ((typeof e.detail.pageType !== 'undefined' && e.detail.pageType !== 'product')
       || typeof e.detail.result === 'undefined'
       || (typeof e.detail.placeholder !=='undefined'
-           &&  !(['product_by_sku', 'product-recommendation', 'field_magazine_shop_the_story'].includes(e.detail.placeholder))
+           &&  !(['product-recommendation', 'field_magazine_shop_the_story'].includes(e.detail.placeholder))
          )
       ) {
       return;
