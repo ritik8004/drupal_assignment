@@ -70,6 +70,12 @@
 
       .back-link {
         min-width: 9.375rem;
+
+        &::before {
+          @include breakpoint($only-mobile) {
+            top: 0;
+          }
+        }
       }
 
       h1 {
@@ -80,6 +86,7 @@
           @include breakpoint($only-mobile) {
             padding-bottom: 0;
             margin-bottom: 0;
+            border-bottom: none;
           }
         }
       }

@@ -258,6 +258,7 @@
     @include breakpoint($only-mobile) {
       padding-bottom: 0.5rem;
       margin-bottom: 0.75rem;
+      border-bottom: 1px solid $content_pagetitle_border;
     }
   }
 
