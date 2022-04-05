@@ -175,7 +175,6 @@ class ReturnRequestController extends ControllerBase {
     $order = $orders[$order_index];
     $orderDetails = alshaya_acm_customer_build_order_detail($order);
 
-    // Check if egift feature is enabled.
     // Check if complete payment done via egift.
     // For multiple payment and if some amount is paid via egift
     // then also include eGift Card payment in payment details.
