@@ -109,11 +109,6 @@
       storageItem = JSON.parse(storageItem);
     }
     catch (error) {
-      // @todo check if should be null or NaN.
-      if (storageItem === "NaN") {
-        return null;
-      }
-
       // Return strings as is.
       if (typeof storageItem === 'string') {
         return storageItem;

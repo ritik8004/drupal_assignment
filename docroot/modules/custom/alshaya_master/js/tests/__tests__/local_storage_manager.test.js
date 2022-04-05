@@ -20,8 +20,7 @@ describe('Local Store Manager', () => {
 
       timer( async () => {
         await Drupal.runLocalStorageCleaner();
-        // @todo check if should be "NaN"
-        expect(Drupal.getItemFromLocalStorage('foo_nan')).toEqual(null);
+        expect(Drupal.getItemFromLocalStorage('foo_nan')).toEqual('NaN');
         expect(Drupal.getItemFromLocalStorage('foo_null')).toEqual(null);
         expect(Drupal.getItemFromLocalStorage('foo_array')).toEqual('foo');
         expect(Drupal.getItemFromLocalStorage('foo_int')).toEqual(1);
@@ -52,13 +51,6 @@ describe('Local Store Manager', () => {
       // @todo check we should allow storing null values
       Drupal.addItemInLocalStorage('foo', null, 1);
       const val = Drupal.getItemFromLocalStorage('foo');
-      expect(val).toEqual(null);
-    });
-
-    it('With NaN value', () => {
-      Drupal.addItemInLocalStorage('foo', NaN, 1);
-      const val = Drupal.getItemFromLocalStorage('foo');
-      // @todo check if should be "NaN"
       expect(val).toEqual(null);
     });
 
@@ -126,7 +118,7 @@ describe('Local Store Manager', () => {
     it('With NaN value', () => {
       localStorage.setItem('foo', NaN);
       const val = Drupal.getItemFromLocalStorage('foo');
-      expect(val).toEqual(null);
+      expect(val).toEqual('NaN');
     });
 
     it('With integer value', () => {
