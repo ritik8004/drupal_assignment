@@ -2,7 +2,7 @@ import React from 'react';
 
 import ShippingMethod from '../shipping-method';
 
-const ShippingMethods = ({ cart, refreshCart }) => {
+const ShippingMethods = ({ cart, refreshCart, shippingUpdated }) => {
   if (!cart.cart.shipping.methods) {
     return null;
   }
@@ -28,6 +28,7 @@ const ShippingMethods = ({ cart, refreshCart }) => {
     }
 
     methods.push(<ShippingMethod
+      shippingUpdated={shippingUpdated}
       selected={selected}
       key={key}
       method={method}

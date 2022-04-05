@@ -46,6 +46,7 @@ import {
 } from '../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -756,6 +757,10 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
     cart = await updateBilling(params.shipping.shipping_address);
   }
 
+  // Trigger event on shipping update, so that
+  // other components take necessary action if required.
+  dispatchCustomEvent('onAddShippingInfoCallback', cart);
+
   return cart;
 };
 
@@ -965,9 +970,6 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   // Set shipping methods.
   if (hasValue(updated.data) && hasValue(updated.data.shipping)
     && hasValue(shippingMethods)) {
-    // Set shipping address updated to true.
-    // that can be used in components to check if the shipping is updated or not.
-    updated.data.shipping.updated = true;
     updated.data.shipping.methods = shippingMethods;
   }
 

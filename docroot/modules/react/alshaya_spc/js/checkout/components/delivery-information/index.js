@@ -40,8 +40,12 @@ export default class DeliveryInformation extends React.Component {
   };
 
   render() {
-    const { cart, refreshCart, isExpressDeliveryAvailable } = this.props;
-
+    const {
+      cart,
+      refreshCart,
+      isExpressDeliveryAvailable,
+      shippingUpdated,
+    } = this.props;
     let title = '';
     if (cart.delivery_type !== undefined) {
       if (cart.delivery_type === 'click_and_collect') {
@@ -71,6 +75,7 @@ export default class DeliveryInformation extends React.Component {
     } else if (deliveryType === 'home_delivery') {
       deliveryComponent = (
         <HomeDeliveryInfo
+          shippingUpdated={shippingUpdated}
           cart={cart}
           refreshCart={refreshCart}
           isExpressDeliveryAvailable={isExpressDeliveryAvailable}

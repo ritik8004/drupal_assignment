@@ -54,6 +54,7 @@ export default class Checkout extends React.Component {
       errorSuccessMessage: null,
       isPostpayInitialised: false,
       isExpressDeliveryAvailable: false,
+      shippingUpdated: false,
     };
   }
 
@@ -130,10 +131,17 @@ export default class Checkout extends React.Component {
     document.addEventListener('alshayaPostpayInit', () => {
       this.setState({ isPostpayInitialised: true });
     });
+    document.addEventListener('onAddShippingInfoCallback', this.onAddShippingInfoCallback, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
+    document.removeEventListener('onAddShippingInfoCallback', this.onAddShippingInfoCallback, false);
+  }
+
+  // Set shippingUpdated to true on shipping address update in cart.
+  onAddShippingInfoCallback = () => {
+    this.setState({ shippingUpdated: true });
   }
 
   processCheckout = (result) => {
@@ -304,6 +312,7 @@ export default class Checkout extends React.Component {
       messageType,
       isPostpayInitialised,
       isExpressDeliveryAvailable,
+      shippingUpdated,
     } = this.state;
     // While page loads and all info available.
 
@@ -350,6 +359,7 @@ export default class Checkout extends React.Component {
               <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
               <ClicknCollectContextProvider cart={cart}>
                 <DeliveryInformation
+                  shippingUpdated={shippingUpdated}
                   refreshCart={this.refreshCart}
                   cart={cart}
                   isExpressDeliveryAvailable={isExpressDeliveryAvailable}

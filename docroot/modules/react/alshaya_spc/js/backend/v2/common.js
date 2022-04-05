@@ -399,12 +399,6 @@ const getProcessedCartData = async (cartData) => {
     }
   }
 
-  // Check if the shipping updated flag is set,
-  // lets set it in shipping so that it can be used everywhere.
-  if (hasValue(cartData.shipping) && hasValue(cartData.shipping.updated)) {
-    data.shipping_updated = cartData.shipping.updated;
-  }
-
   if (!hasValue(cartData.shipping) || !hasValue(cartData.shipping.method)) {
     // We use null to show "Excluding Delivery".
     data.totals.shipping_incl_tax = null;

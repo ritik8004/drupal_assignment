@@ -37,7 +37,7 @@ export default class OnlineBooking extends React.Component {
     document.addEventListener('validateOnlineBookingPurchase', this.validateOnlineBookingPurchase, false);
     // Add event listener for shipping address change,
     // We need to reset the online booking storage and fetch details.
-    document.addEventListener('onShippingAddressUpdate', this.onShippingAddressUpdate, false);
+    document.addEventListener('onAddShippingInfoCallback', this.onShippingAddressUpdate, false);
     // Add event listener for place order.
     // We need to reset the online booking storage.
     document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
@@ -46,12 +46,12 @@ export default class OnlineBooking extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('validateOnlineBookingPurchase', this.validateOnlineBookingPurchase, false);
-    document.removeEventListener('onShippingAddressUpdate', this.onShippingAddressUpdate, false);
+    document.removeEventListener('onAddShippingInfoCallback', this.onShippingAddressUpdate, false);
     document.removeEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
   }
 
   updateBookingDetails = async () => {
-    const { cart } = this.props;
+    const { cart, shippingUpdated } = this.props;
     let result = { api_error: true };
     // We need to show online booking component only if home delivery method
     // is selected and shipping methods are available in cart and valid for user.
@@ -61,7 +61,7 @@ export default class OnlineBooking extends React.Component {
       // Check if the user have added shipping address before.
       // and now user is adding new shipping address on checkout page.
       // We need to add new booking for the same.
-      if (this.isExistingAddressNewBooking(cart)) {
+      if (hasValue(shippingUpdated)) {
         await this.onShippingAddressUpdate();
         return;
       }
@@ -175,11 +175,6 @@ export default class OnlineBooking extends React.Component {
     }
     return type === 'home_delivery';
   }
-
-  /**
-   * Check if the shipping is updated in cart.
-   */
-  isExistingAddressNewBooking = (cart) => hasValue(cart.cart.shipping_updated);
 
   /**
    * Get all available booking slots and open delivery schedule calendar popup.

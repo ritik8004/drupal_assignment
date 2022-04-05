@@ -96,6 +96,7 @@ export default class HomeDeliveryInfo extends React.Component {
       cart: cartVal,
       refreshCart,
       isExpressDeliveryAvailable,
+      shippingUpdated,
     } = this.props;
     const { areaUpdated } = this.state;
     const addressData = [];
@@ -163,6 +164,7 @@ export default class HomeDeliveryInfo extends React.Component {
         </WithModal>
         <div className="spc-delivery-shipping-methods">
           <ShippingMethods
+            shippingUpdated={shippingUpdated}
             cart={cartVal}
             refreshCart={refreshCart}
           />

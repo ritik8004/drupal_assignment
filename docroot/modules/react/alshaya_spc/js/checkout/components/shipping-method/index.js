@@ -134,7 +134,12 @@ export default class ShippingMethod extends React.Component {
   };
 
   render() {
-    const { method, cart, refreshCart } = this.props;
+    const {
+      method,
+      cart,
+      refreshCart,
+      shippingUpdated,
+    } = this.props;
     const { selectedOption } = this.state;
     const methodClass = method.available ? 'active' : 'disabled';
     return (
@@ -149,6 +154,7 @@ export default class ShippingMethod extends React.Component {
         />
 
         <ShippingMethodCommon
+          shippingUpdated={shippingUpdated}
           cart={cart}
           refreshCart={refreshCart}
           method={method}
