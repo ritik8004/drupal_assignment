@@ -63,10 +63,15 @@
     font-size: 1rem;
     line-height: 1.125rem;
     color: $egift-linked-card-dark-text;
+    margin-bottom: 0.5rem;
 
     @include breakpoint($tablet) {
       font-size: 1.25rem;
       line-height: normal;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
     }
   }
 
