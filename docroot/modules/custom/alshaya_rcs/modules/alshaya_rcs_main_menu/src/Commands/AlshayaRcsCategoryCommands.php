@@ -36,7 +36,6 @@ class AlshayaRcsCategoryCommands extends DrushCommands {
   public function migrateRcsCategory($options = ['batch_size' => 50]) {
     // Set rcs category migrate batch.
     $this->alshayaCategoryMigrate->processProductCategoryMigration($options['batch_size']);
-    drush_backend_batch_process();
     $this->logger()->success(dt('RCS Category migration completed.'));
   }
 

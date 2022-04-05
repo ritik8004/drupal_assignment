@@ -316,7 +316,13 @@ class MobileAppUtility {
             $return = $this->pageDeepLink($department_node, 'advanced');
           }
           else {
-            $return = 'category/' . $object->id() . '/product-list';
+            $redirect_link = $this->getRedirectedTermDeeplink($object->id());
+            if ($redirect_link) {
+              $return = $redirect_link;
+            }
+            else {
+              $return = 'category/' . $object->id() . '/product-list';
+            }
           }
           break;
       }
@@ -329,7 +335,13 @@ class MobileAppUtility {
         $return = $this->pageDeepLink($department_node, 'advanced');
       }
       else {
-        $return = 'category/' . $object->tid . '/product-list';
+        $redirect_link = $this->getRedirectedTermDeeplink($object->tid);
+        if ($redirect_link) {
+          $return = $redirect_link;
+        }
+        else {
+          $return = 'category/' . $object->tid . '/product-list';
+        }
       }
     }
     elseif ($object instanceof NodeInterface) {

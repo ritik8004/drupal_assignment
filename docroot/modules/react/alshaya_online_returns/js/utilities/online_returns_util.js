@@ -79,9 +79,9 @@ function getReturnRequestUrl(orderId) {
  * Utility function to get return window closed message.
  */
 function getReturnWindowClosedMessage(date) {
-  const message = Drupal.t('Return window closed on @date', {
-    '@date': formatDate(date),
-  });
+  const message = Drupal.t('Return window closed on @date',
+    { '@date': formatDate(date) },
+    { context: 'online_returns' });
   return message;
 }
 
@@ -89,9 +89,9 @@ function getReturnWindowClosedMessage(date) {
  * Utility function to get return window open message.
  */
 function getReturnWindowOpenMessage(date) {
-  const message = Drupal.t('You have untill @date to return the items', {
-    '@date': formatDate(date),
-  });
+  const message = Drupal.t('You have untill @date to return the items',
+    { '@date': formatDate(date) },
+    { context: 'online_returns' });
   return message;
 }
 

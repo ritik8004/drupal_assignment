@@ -24,12 +24,14 @@ class ReturnItemDetails extends React.Component {
   /**
    * This handles click on item return checkbox.
    */
-  handleItemReturn = (e) => {
+  handleItemReturn = () => {
     const { processSelectedItems, item } = this.props;
-    processSelectedItems(e.target.checked, item);
+    const { isChecked } = this.state;
+
+    processSelectedItems(!isChecked, item);
     // If checkbox is checked, we show reason and quantity dropdowns.
     this.setState({
-      isChecked: e.target.checked,
+      isChecked: !isChecked,
     });
   };
 
@@ -38,19 +40,18 @@ class ReturnItemDetails extends React.Component {
       isChecked, returnReasons, qtyOptions,
     } = this.state;
     const { item, handleSelectedReason } = this.props;
+    const checkedClass = isChecked ? 'is-checked' : '';
     return (
-      <div className="items-tabel">
+      <div className="items-table">
         <div className="order-item-row">
-          <ConditionalView condition={addCheckboxToReturnItem(item)}>
-            <div className="order-item-checkbox">
-              <input
-                type="checkbox"
-                id="return-item-checkbox"
-                name="return_item_checkbox"
-                onChange={this.handleItemReturn}
+          <div className="order-item-checkbox">
+            <ConditionalView condition={addCheckboxToReturnItem(item)}>
+              <span
+                className={`return_item_checkbox ${checkedClass}`}
+                onClick={this.handleItemReturn}
               />
-            </div>
-          </ConditionalView>
+            </ConditionalView>
+          </div>
           <ReturnIndividualItem
             item={item}
           />

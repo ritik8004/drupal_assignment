@@ -7,6 +7,7 @@ on:
       - qa
       - uat
       - master
+      - develop-online-returns
   create:
     tags:
 

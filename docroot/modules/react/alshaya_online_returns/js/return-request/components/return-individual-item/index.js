@@ -10,42 +10,44 @@ const ReturnIndividualItem = ({
   return (
     <div className="order-item-detail">
       <ConditionalView condition={item.is_big_ticket}>
-        <span>{Drupal.t('Large Item')}</span>
+        <span>{Drupal.t('Large Item', {}, { context: 'online_returns' })}</span>
       </ConditionalView>
       <ConditionalView condition={hasValue(item.image_data) && hasValue(item.image_data.url)}>
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass}`}>
             <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
             <ConditionalView condition={!item.is_returnable}>
-              <div className="not-eligible-label">{ Drupal.t('Not eligible for return', {}, { context: 'online_returns' }) }</div>
+              <div className="not-eligible-label">{ Drupal.t('Not eligible for Return', {}, { context: 'online_returns' }) }</div>
             </ConditionalView>
           </div>
         </div>
       </ConditionalView>
-      <div className="order__details--summary order__details--description">
-        <div className="item-name">{ item.name }</div>
-        {item.attributes && Object.keys(item.attributes).map((attribute) => (
-          <div key={item.attributes[attribute].label} className="attribute-detail">
-            { Drupal.t('@attrLabel: @attrValue', { '@attrLabel': item.attributes[attribute].label, '@attrValue': item.attributes[attribute].value }, {}, { context: 'online_returns' }) }
+      <div className="order__details--wrapper">
+        <div className="order__details--summary order__details--description">
+          <div className="item-name dark">{ item.name }</div>
+          {item.attributes && Object.keys(item.attributes).map((attribute) => (
+            <div key={item.attributes[attribute].label} className="attribute-detail light">
+              { Drupal.t('@attrLabel: @attrValue', { '@attrLabel': item.attributes[attribute].label, '@attrValue': item.attributes[attribute].value }) }
+            </div>
+          ))}
+          <div className="item-code light">
+            { Drupal.t('Item Code: @sku', { '@sku': item.sku }, { context: 'online_returns' }) }
           </div>
-        ))}
-        <div className="item-code">
-          { Drupal.t('Item Code: @sku', { '@sku': item.sku }, {}, { context: 'online_returns' }) }
+          <div className="item-quantity light">
+            { Drupal.t('Quantity: @quantity', { '@quantity': item.ordered }, { context: 'online_returns' }) }
+          </div>
         </div>
-        <div className="item-quantity">
-          { Drupal.t('Quantity: @quantity', { '@quantity': item.ordered }, {}, { context: 'online_returns' }) }
+        <div className="item-price">
+          <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
+          <span className="currency-code dark prefix">{ parse(item.price) }</span>
         </div>
-      </div>
-      <div className="item-price">
-        <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
-        <span className="currency-code dark prefix">{ parse(item.price) }</span>
-      </div>
-      <div className="item-total-price">
-        <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
-        <span className="dark">{ parse(item.total) }</span>
+        <div className="item-total-price">
+          <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
+          <span className="dark">{ parse(item.total) }</span>
+        </div>
       </div>
       <ConditionalView condition={item.is_big_ticket}>
-        <span>{Drupal.t('Kindly contact customer care for initiating online returns for Large Items')}</span>
+        <span>{Drupal.t('Kindly contact customer care for initiating online returns for Large Items', {}, { context: 'online_returns' })}</span>
       </ConditionalView>
     </div>
   );
