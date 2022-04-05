@@ -86,7 +86,7 @@
       recommendedProduct.variants.forEach(function setRecommendedProductImage(variant) {
         variant.product.media_teaser = null;
         try {
-          mediaData = JSON.parse(variant.product.assets_teaser);
+          var mediaData = JSON.parse(variant.product.assets_teaser);
           mediaData.every(function setTeaserMedia(media) {
             variant.product.media_teaser = media.styles.product_teaser;
             // We do this so that we are able to detect in getSkuForGallery
