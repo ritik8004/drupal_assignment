@@ -22,7 +22,7 @@ body.wishlist-enabled {
 
   #wishlist-header-wrapper {
     @include breakpoint($only-mobile) {
-      top: 1rem;
+      top: 0.75rem;
       #{$right}: 2.125rem;
     }
 

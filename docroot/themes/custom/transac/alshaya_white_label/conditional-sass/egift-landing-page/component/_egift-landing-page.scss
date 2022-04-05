@@ -43,12 +43,10 @@
     }
   }
 
-  .egift-landing-page {
-    #block-breadcrumbs {
-      li:nth-child(2) {
-        a {
-          text-transform: initial;
-        }
+  #block-breadcrumbs {
+    li:nth-child(2) {
+      a {
+        text-transform: initial;
       }
     }
   }

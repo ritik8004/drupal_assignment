@@ -23,19 +23,13 @@ export default class EgiftCardsListStepOne extends React.Component {
    */
   handleEgiftSelect = (id) => {
     // Reset error message to empty.
-    document.getElementById('open-amount-error').innerHTML = '';
+    if (document.getElementById('open-amount-error') !== null) {
+      document.getElementById('open-amount-error').innerHTML = '';
+    }
 
     if (document.getElementById('textarea-count')) {
       // Reset count on textarea.
       document.getElementById('textarea-count').innerHTML = getTextAreaMaxLength();
-    }
-
-    // Remove active class from previous card amount.
-    const amountElements = document.getElementsByClassName('item-amount');
-    if (typeof amountElements !== 'undefined' && amountElements !== null) {
-      for (let i = 0; i < amountElements.length; i++) {
-        amountElements[i].classList.remove('active');
-      }
     }
 
     // Remove readonly from open amount field.
