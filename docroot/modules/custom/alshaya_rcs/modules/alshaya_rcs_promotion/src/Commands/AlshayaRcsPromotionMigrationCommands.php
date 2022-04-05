@@ -23,7 +23,7 @@ class AlshayaRcsPromotionMigrationCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected $logger;
+  protected $drupalLogger;
 
   /**
    * AlshayaRcsPromotionCommands constructor.
@@ -38,7 +38,7 @@ class AlshayaRcsPromotionMigrationCommands extends DrushCommands {
     LoggerChannelFactoryInterface $logger_factory
   ) {
     $this->nodeQuery = $entity_type_manager->getStorage('node')->getQuery();
-    $this->logger = $logger_factory->get('alshaya_rcs_promotion');
+    $this->drupalLogger = $logger_factory->get('alshaya_rcs_promotion');
   }
 
   /**
@@ -96,7 +96,7 @@ class AlshayaRcsPromotionMigrationCommands extends DrushCommands {
    *   Deletes all acq promotion nodes and sets batch size to 50.
    */
   public function deleteAcqPromotionNodesBatch(array $options = ['batch-size' => NULL]) {
-    $this->logger->notice('Starting batch process to delete acq promotion nodes.');
+    $this->drupalLogger->notice('Starting batch process to delete acq promotion nodes.');
     // Delete all acq_promotion nodes from the system.
     $acq_promotion_nids = $this->nodeQuery
       ->condition('type', 'acq_promotion')
@@ -105,11 +105,11 @@ class AlshayaRcsPromotionMigrationCommands extends DrushCommands {
     $nodes_to_delete = count($acq_promotion_nids);
 
     if (!$nodes_to_delete) {
-      $this->logger->notice('There are no promotion nodes to delete! Exiting!');
+      $this->drupalLogger->notice('There are no promotion nodes to delete! Exiting!');
       return;
     }
     else {
-      $this->logger->notice(dt('There are @count promotion nodes to delete!', [
+      $this->drupalLogger->notice(dt('There are @count promotion nodes to delete!', [
         '@count' => $nodes_to_delete,
       ]));
     }

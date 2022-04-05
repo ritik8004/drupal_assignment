@@ -31,7 +31,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected $logger;
+  protected $drupalLogger;
 
   /**
    * AlshayaRcsCategoryCommands constructor.
@@ -51,7 +51,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
     $this->alshayaCategoryMigrate = $alshaya_category_migrate;
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->entityQuery = $this->termStorage->getQuery();
-    $this->logger = $logger_factory->get('alshaya_rcs_listing');
+    $this->drupalLogger = $logger_factory->get('alshaya_rcs_listing');
   }
 
   /**
@@ -70,7 +70,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
   public function migrateRcsCategory($options = ['batch_size' => 50]) {
     // Set rcs category migrate batch.
     $this->alshayaCategoryMigrate->processProductCategoryMigration($options['batch_size']);
-    $this->logger()->success(dt('RCS Category migration completed.'));
+    $this->drupalLogger->notice(dt('RCS Category migration completed.'));
   }
 
   /**
@@ -127,7 +127,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
    *   Deletes all acq category terms and sets batch size to 50.
    */
   public function deleteAcqProductCategoryTermsBatch(array $options = ['batch-size' => NULL]) {
-    $this->logger->notice('Starting batch process to delete acq category terms.');
+    $this->drupalLogger->notice('Starting batch process to delete acq category terms.');
     // Delete all product category terms from the system.
     $acq_product_category_tids = $this->entityQuery
       ->condition('vid', 'acq_product_category')
@@ -135,11 +135,11 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
     $terms_to_delete = count($acq_product_category_tids);
 
     if (!$terms_to_delete) {
-      $this->logger->notice('There are no terms to delete! Exiting!');
+      $this->drupalLogger->notice('There are no terms to delete! Exiting!');
       return;
     }
     else {
-      $this->logger->notice(dt('There are @count term entities to delete!', [
+      $this->drupalLogger->notice(dt('There are @count term entities to delete!', [
         '@count' => $terms_to_delete,
       ]));
     }

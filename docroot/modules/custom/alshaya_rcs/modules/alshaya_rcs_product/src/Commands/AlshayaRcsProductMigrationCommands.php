@@ -30,7 +30,7 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected $logger;
+  protected $drupalLogger;
 
   /**
    * AlshayaRcsProductCommands constructor.
@@ -46,7 +46,7 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
   ) {
     $this->nodeQuery = $entity_type_manager->getStorage('node')->getQuery();
     $this->skuQuery = $entity_type_manager->getStorage('acq_sku')->getQuery();
-    $this->logger = $logger_factory->get('alshaya_rcs_product');
+    $this->drupalLogger = $logger_factory->get('alshaya_rcs_product');
   }
 
   /**
@@ -109,7 +109,7 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
    *   Deletes all acq product nodes and sets batch size to 50.
    */
   public function deleteAcqProductNodesBatch(array $options = ['batch-size' => NULL]) {
-    $this->logger->notice('Starting batch process to delete acq product nodes.');
+    $this->drupalLogger->notice('Starting batch process to delete acq product nodes.');
     // Delete all acq_product nodes from the system.
     $acq_product_nids = $this->nodeQuery
       ->condition('type', 'acq_product')
@@ -118,11 +118,11 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
     $nodes_to_delete = count($acq_product_nids);
 
     if (!$nodes_to_delete) {
-      $this->logger->notice('There are no product nodes to delete! Exiting!');
+      $this->drupalLogger->notice('There are no product nodes to delete! Exiting!');
       return;
     }
 
-    $this->logger->notice(dt('There are @count product nodes to delete!', [
+    $this->drupalLogger->notice(dt('There are @count product nodes to delete!', [
       '@count' => $nodes_to_delete,
     ]));
 
@@ -155,18 +155,18 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
    *   Deletes all acq sku entities and sets batch size to 50.
    */
   public function deleteAcqSkusBatch(array $options = ['batch-size' => NULL]) {
-    $this->logger->notice('Starting batch process to delete acq sku entities.');
+    $this->drupalLogger->notice('Starting batch process to delete acq sku entities.');
     // Delete all acq_sku nodes from the system.
     $acq_sku_ids = $this->skuQuery->execute();
     // Delete all product nodes from the system.
     $skus_to_delete = count($acq_sku_ids);
 
     if (!$skus_to_delete) {
-      $this->logger->notice('There are no sku entities to delete! Exiting!');
+      $this->drupalLogger->notice('There are no sku entities to delete! Exiting!');
       return;
     }
 
-    $this->logger->notice(dt('There are @count sku entities to delete!', [
+    $this->drupalLogger->notice(dt('There are @count sku entities to delete!', [
       '@count' => $skus_to_delete,
     ]));
 
