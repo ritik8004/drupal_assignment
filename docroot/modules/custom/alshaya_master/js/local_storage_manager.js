@@ -20,11 +20,16 @@
     storageKey,
     storageData = null,
     expireAfterTime = null) {
-    // Return if data to store is not provided, or
-    // the local storage key is not set, of
-    // storage expiry time is zero.
-    // @todo check if we should allow storing null values
-    if (!storageKey || (storageData === null)) {
+
+    // Return false when key is not provided.
+    if (!storageKey) {
+      return false;
+    }
+
+    // Return false when data is not provided.
+    if (storageData === null) {
+      // Delete any existing data when data provided is null.
+      Drupal.removeItemFromLocalStorage(storageKey);
       return false;
     }
 
