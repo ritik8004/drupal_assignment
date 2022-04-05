@@ -58,6 +58,7 @@
     input.focus {
       & + .error {
         position: absolute;
+        line-height: 1.4;
       }
     }
   }
@@ -128,5 +129,17 @@
     &:empty {
       padding: 0 !important;
     }
+  }
+
+  input.focus {
+    #card-number-error {
+      &:empty {
+        margin-top: -0.5rem !important;
+      }
+    }
+  }
+
+  .egift-card-amount-list-title {
+    padding-top: 0.5rem;
   }
 }

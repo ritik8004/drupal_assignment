@@ -252,13 +252,14 @@ const OrderSummary = (props) => {
           <ConditionalView condition={showDeliverySummary}>
             <OrderSummaryItem context={context} label={Drupal.t('delivery type')} value={deliveryType} />
             {/** Show HFD booking order information if available. */}
-            <ConditionalView condition={onlineBookingInformation}>
+            {onlineBookingInformation
+            && (
               <OrderSummaryItem
                 context={context}
                 label={Drupal.t('Delivery Date & Time', {}, { context: 'online_booking' })}
                 value={parse(onlineBookingInformation)}
               />
-            </ConditionalView>
+            )}
             <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
           </ConditionalView>
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
