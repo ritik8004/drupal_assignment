@@ -14,6 +14,8 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
+use Drupal\address\Repository\CountryRepository;
 
 /**
  * Return request controller to prepare data for return request page.
@@ -63,6 +65,20 @@ class ReturnRequestController extends ControllerBase {
   protected $languageManager;
 
   /**
+   * Egiftcard Helper service object.
+   *
+   * @var \Drupal\alshaya_egift_card\Helper\EgiftCardHelper
+   */
+  protected $egiftCardHelper;
+
+  /**
+   * Address Country Repository service object.
+   *
+   * @var \Drupal\address\Repository\CountryRepository
+   */
+  protected $addressCountryRepository;
+
+  /**
    * ReturnRequestController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -77,19 +93,27 @@ class ReturnRequestController extends ControllerBase {
    *   Alshaya online returns helper.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\alshaya_egift_card\Helper\EgiftCardHelper $egiftCardHelper
+   *   The egift card helper service.
+   * @param \Drupal\address\Repository\CountryRepository $address_country_repository
+   *   Address Country Repository service object.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleHandlerInterface $module_handler,
                               OnlineReturnsHelper $online_returns_helper,
                               EntityTypeManagerInterface $entity_type_manager,
                               OnlineReturnsApiHelper $online_returns_api_helper,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              EgiftCardHelper $egiftCardHelper,
+                              CountryRepository $address_country_repository) {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->onlineReturnsHelper = $online_returns_helper;
     $this->entityTypeManager = $entity_type_manager;
     $this->onlineReturnsApiHelper = $online_returns_api_helper;
     $this->languageManager = $language_manager;
+    $this->egiftCardHelper = $egiftCardHelper;
+    $this->addressCountryRepository = $address_country_repository;
   }
 
   /**
@@ -103,6 +127,8 @@ class ReturnRequestController extends ControllerBase {
       $container->get('entity_type.manager'),
       $container->get('alshaya_online_returns.online_returns_api_helper'),
       $container->get('language_manager'),
+      $container->get('alshaya_egift_card.egift_card_helper'),
+      $container->get('address.country_repository'),
     );
   }
 
@@ -149,6 +175,21 @@ class ReturnRequestController extends ControllerBase {
     $order = $orders[$order_index];
     $orderDetails = alshaya_acm_customer_build_order_detail($order);
 
+    // Check if complete payment done via egift.
+    // For multiple payment and if some amount is paid via egift
+    // then also include eGift Card payment in payment details.
+    if ($orderDetails['#order_details']['payment_method'] === 'hps_payment'
+      || ($orderDetails['#order_details']['payment_method_code'] !== 'hps_payment'
+      && isset($order['extension']['hps_redeemed_amount'])
+      && $order['extension']['hps_redeemed_amount'] > 0 && isset($order['extension']['hps_redemption_card_number']))) {
+      $egift_data = [
+        'card_type' => $this->t('eGift Card', [], ['context' => 'egift']),
+        'card_number' => substr($order['extension']['hps_redemption_card_number'], -4),
+        'payment_type' => 'egift',
+      ];
+      $orderDetails['#order_details']['paymentDetails']['egift'] = $egift_data;
+    }
+
     // Get display image for each product.
     // Connverting image url to renderable drupal url.
     foreach ($orderDetails['#products'] as $key => $item) {
@@ -181,6 +222,16 @@ class ReturnRequestController extends ControllerBase {
     $returnConfig = $this->onlineReturnsApiHelper->getReturnsApiConfig(
       $this->languageManager->getCurrentLanguage()->getId(),
     );
+
+    // Adding address fields configuration to display user address details.
+    $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
+
+    // Adding country label to display country along with address.
+    $country_list = $this->addressCountryRepository->getList();
+    $country_label = _alshaya_custom_get_site_level_country_code();
+    if (isset($country_label) && !empty($country_list)) {
+      $orderDetails['#order_details']['delivery_address_raw']['country_label'] = $country_list[$country_label];
+    }
 
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-online-return-request"></div>';

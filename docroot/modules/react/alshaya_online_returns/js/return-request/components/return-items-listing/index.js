@@ -52,7 +52,7 @@ class ReturnItemsListing extends React.Component {
           <div className="select-items-header">{ Drupal.t('1. Select items to return', {}, { context: 'online_returns' }) }</div>
         </div>
         {products.map((item) => (
-          <div key={item.name} className="item-list-wrapper">
+          <div key={item.sku} className="item-list-wrapper">
             <ReturnItemDetails
               item={item}
               handleSelectedReason={this.handleSelectedReason}

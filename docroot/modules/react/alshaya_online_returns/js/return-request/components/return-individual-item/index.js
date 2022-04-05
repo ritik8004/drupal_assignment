@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const ReturnIndividualItem = ({
   item,
@@ -11,7 +12,7 @@ const ReturnIndividualItem = ({
       <ConditionalView condition={item.is_big_ticket}>
         <span>{Drupal.t('Large Item', {}, { context: 'online_returns' })}</span>
       </ConditionalView>
-      <ConditionalView condition={item.image_data}>
+      <ConditionalView condition={hasValue(item.image_data) && hasValue(item.image_data.url)}>
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass}`}>
             <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
@@ -39,6 +40,10 @@ const ReturnIndividualItem = ({
         <div className="item-price">
           <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
           <span className="currency-code dark prefix">{ parse(item.price) }</span>
+        </div>
+        <div className="item-total-price">
+          <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
+          <span className="dark">{ parse(item.total) }</span>
         </div>
       </div>
       <ConditionalView condition={item.is_big_ticket}>
