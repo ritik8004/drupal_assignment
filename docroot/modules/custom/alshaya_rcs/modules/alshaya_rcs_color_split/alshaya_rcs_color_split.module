@@ -70,7 +70,7 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
   $queries['styled_products'] = [
     'query' => [
       'query($styleCode: String)' => [
-        'products(filter: {style_code: {match: $styleCode}})' => $product_query_body,
+        'products(filter: {style_code: {eq: $styleCode}})' => $product_query_body,
       ],
     ],
     'variables' => [
