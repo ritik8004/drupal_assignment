@@ -1,5 +1,5 @@
 .wishlist-icon {
-  background: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty.svg') no-repeat;
+  background: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty-icon.svg?adsas') no-repeat;
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -15,6 +15,6 @@
 .in-wishlist,
 .wishlist-link.wishlist-active {
   .wishlist-icon {
-    background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
+    background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled-icon.svg?adsas');
   }
 }

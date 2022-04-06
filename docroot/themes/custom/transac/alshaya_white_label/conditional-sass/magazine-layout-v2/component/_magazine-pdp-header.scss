@@ -311,18 +311,6 @@
   }
 }
 
-html[lang=ar] {
-  .magv2-header {
-    .magv2-header-wrapper {
-      .back-button {
-        &::after {
-          transform: rotate(90deg);
-        }
-      }
-    }
-  }
-}
-
 .magv2-pdp-sticky-header {
   @include breakpoint($only-mobile) {
     box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);

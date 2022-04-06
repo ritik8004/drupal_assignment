@@ -61,6 +61,24 @@ function hook_alshaya_acm_product_light_product_data_alter(\Drupal\acq_sku\Entit
 }
 
 /**
+ * Alter Gift product data.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU object.
+ * @param array $data
+ *   Gift product data that needs to be altered.
+ * @param mixed $type
+ *   Type of product - `light` or `full`.
+ *
+ * @see \Drupal\alshaya_acm_product\Service\SkuInfoHelper::getLightProduct()
+ * @see \Drupal\alshaya_acm_product\Plugin\rest\resource\ProductResource::getSkuData()
+ */
+function hook_alshaya_acm_product_gift_product_data_alter(\Drupal\acq_sku\Entity\SKU $sku, array &$data, $type) {
+  $test_data = [];
+  $data['test'] = $test_data;
+}
+
+/**
  * Allow other modules to alter media items array for products.
  *
  * @param array $media
