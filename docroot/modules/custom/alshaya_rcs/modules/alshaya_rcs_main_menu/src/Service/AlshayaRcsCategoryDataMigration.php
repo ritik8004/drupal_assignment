@@ -226,7 +226,6 @@ class AlshayaRcsCategoryDataMigration {
         ]);
         $path_alias_storage->delete($aliases);
         $rcs_term->save();
-
         // Save term mapping to get rcs parent terms.
         $context['results']['acq_term_mapping'][$term->tid] = $rcs_term->id();
         $context['results']['delete_acq_terms'][$acq_term_data->id()] = $acq_term_data;
@@ -321,7 +320,6 @@ class AlshayaRcsCategoryDataMigration {
     // Get the current language.
     $language_manager = \Drupal::service('language_manager');
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $alias_storage = \Drupal::service('path.alias_storage');
 
     // Create a new rcs category term object.
     $rcs_term = $term_storage->create([
