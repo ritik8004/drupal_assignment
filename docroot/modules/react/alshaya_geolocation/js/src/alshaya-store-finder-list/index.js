@@ -13,7 +13,7 @@ import {
   getDistanceBetween,
 } from '../utility';
 
-export class StoreFinderList extends React.Component {
+export class StoreFinderList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -247,17 +247,15 @@ export class StoreFinderList extends React.Component {
                                   <a onClick={() => this.getDirection(store)}>{Drupal.t('Get directions')}</a>
                                 </div>
                                 <div className="get--directions">
-                                  <div>
-                                    <a
-                                      className="device__desktop"
-                                      onClick={() => this.getDirection(store)}
-                                    >
-                                      {Drupal.t('Get directions')}
-                                    </a>
-                                    <a className="device__tablet" onClick={() => this.getDirection(store)}>
-                                      {Drupal.t('Get directions')}
-                                    </a>
-                                  </div>
+                                  <a
+                                    className="device__desktop"
+                                    onClick={() => this.getDirection(store)}
+                                  >
+                                    {Drupal.t('Get directions')}
+                                  </a>
+                                  <a className="device__tablet" onClick={() => this.getDirection(store)}>
+                                    {Drupal.t('Get directions')}
+                                  </a>
                                 </div>
                               </div>
                             </div>

@@ -6,7 +6,7 @@ import AutocompleteSearch from '../components/autocomplete-search';
 import { ListItemClick } from '../components/ListItemClick';
 import { nearByStores } from '../utility';
 
-export class StoreClickCollectList extends React.Component {
+export class StoreClickCollectList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {

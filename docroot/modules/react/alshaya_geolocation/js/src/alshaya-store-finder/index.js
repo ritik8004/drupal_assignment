@@ -6,7 +6,7 @@ import MultipeMarkerMap from '../components/MapContainer/multiple-marker';
 import { ListItem } from '../components/ListItem';
 import { nearByStores } from '../utility';
 
-export class StoreFinder extends React.Component {
+export class StoreFinder extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -130,6 +130,28 @@ export class StoreFinder extends React.Component {
     window.location.href = '/store-finder/';
   }
 
+  listLocation = (value) => {
+    if (value[0] !== 'undefined') {
+      return (
+        <div className="by--alphabet view-store-finder--list__alphabet" key={value[0]}>
+          <h3>{value[0]}</h3>
+          <div className="rows views-view-unformatted__rows">
+            {value[1].map((item) => (
+              <div
+                key={item.id}
+                onClick={() => this.showSpecificPlace(item.id)}
+                className="view-store-finder--list__alphabet__item"
+              >
+                <a>{item.store_name}</a>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    return '';
+  }
+
   render() {
     const {
       stores,
@@ -236,40 +258,14 @@ export class StoreFinder extends React.Component {
                           <div className="view-content view-store-finder--list__columns">
                             <div className="c-side c-side-1 view-store-finder--list__column--1">
                               {firstColumn.map((value) => (
-                                <div className="by--alphabet view-store-finder--list__alphabet" key={value[0]}>
-                                  <h3>{value[0]}</h3>
-                                  <div className="rows views-view-unformatted__rows">
-                                    {value[1].map((item) => (
-                                      <div
-                                        key={item.id}
-                                        onClick={() => this.showSpecificPlace(item.id)}
-                                        className="view-store-finder--list__alphabet__item"
-                                      >
-                                        <a>{item.store_name}</a>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
+                                this.listLocation(value)
                               ))}
                             </div>
                             {secondColumn
                             && (
                               <div className="c-side c-side-2 view-store-finder--list__column--2">
                                 {secondColumn.map((value) => (
-                                  <div className="by--alphabet view-store-finder--list__alphabet" key={value[0]}>
-                                    <h3>{value[0]}</h3>
-                                    <div className="rows views-view-unformatted__rows">
-                                      {value[1].map((item) => (
-                                        <div
-                                          key={item.id}
-                                          onClick={() => this.showSpecificPlace(item.id)}
-                                          className="view-store-finder--list__alphabet__item"
-                                        >
-                                          <a>{item.store_name}</a>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
+                                  this.listLocation(value)
                                 ))}
                               </div>
                             )}

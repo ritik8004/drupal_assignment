@@ -121,7 +121,7 @@ class AlshayaLocationsController extends ControllerBase {
    * @return object
    *   Click and collect for site.
    */
-  public function local($data = NULL) {
+  public function getLocalStores($data = NULL) {
     $languageId = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->entityQuery->get('node');
     $query->condition('status', 1);

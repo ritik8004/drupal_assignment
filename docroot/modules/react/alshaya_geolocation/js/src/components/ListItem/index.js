@@ -50,18 +50,16 @@ export class ListItem extends React.Component {
         <div className="views-field-field-store-open-hours">
           <div className="field-content">
             <div className="hours--wrapper selector--hours">
-              <div>
-                <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
-                  {Drupal.t('Opening Hours')}
-                </div>
-                <div className="open--hours">
-                  {specificPlace.store_hours.map((item) => (
-                    <div key={item.code}>
-                      <span className="key-value-key">{item.label}</span>
-                      <span className="key-value-value">{item.value}</span>
-                    </div>
-                  ))}
-                </div>
+              <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
+                {Drupal.t('Opening Hours')}
+              </div>
+              <div className="open--hours">
+                {specificPlace.store_hours.map((item) => (
+                  <div key={item.code}>
+                    <span className="key-value-key">{item.label}</span>
+                    <span className="key-value-value">{item.value}</span>
+                  </div>
+                ))}
               </div>
             </div>
             <div className="view-on--map">

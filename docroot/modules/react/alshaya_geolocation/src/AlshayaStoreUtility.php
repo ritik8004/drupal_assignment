@@ -48,15 +48,13 @@ class AlshayaStoreUtility {
    * Store finder list labels.
    */
   public function storeLibraries($transac = TRUE) {
-    $libraries = [];
     if ($transac) {
-      $libraries = [
+      return [
         'alshaya_white_label/store_finder',
         'alshaya_geolocation/marker-dropdown',
       ];
-      return $libraries;
     }
-    $libraries = [
+    return [
       'whitelabel/view-store-list-locator',
       'whitelabel/views-unformatted-store-finder-glossary',
       'whitelabel/block-store-finder-form',
@@ -67,7 +65,6 @@ class AlshayaStoreUtility {
       'whitelabel/block-header-store',
       'whitelabel/view-store-finder-list',
     ];
-    return $libraries;
   }
 
 }

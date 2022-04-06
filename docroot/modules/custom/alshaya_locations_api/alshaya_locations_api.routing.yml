@@ -9,7 +9,7 @@ alshaya_locations_api.stores:
 alshaya_locations_api.local:
   path: '/alshaya-locations/local'
   defaults:
-    _controller: '\Drupal\alshaya_locations_api\Controller\AlshayaLocationsController::local'
+    _controller: '\Drupal\alshaya_locations_api\Controller\AlshayaLocationsController::getLocalStores'
     _title: 'Store Locations'
   requirements:
     # All user should able to access search page.

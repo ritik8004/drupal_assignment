@@ -46,26 +46,22 @@ export class InfoPopUp extends React.Component {
                   <div className="open--hours">
                     {selectedPlace.openHours.map((item) => (
                       <div key={item.code}>
-                        <div>
-                          <span className="key-value-key">{item.label}</span>
-                          <span className="key-value-value">{item.value}</span>
-                        </div>
+                        <span className="key-value-key">{item.label}</span>
+                        <span className="key-value-value">{item.value}</span>
                       </div>
                     ))}
                   </div>
                 </div>
                 <div className="get--directions">
-                  <div>
-                    <a
-                      className="device__desktop"
-                      href={this.getDirection(selectedPlace)}
-                    >
-                      {Drupal.t('Get directions')}
-                    </a>
-                    <a className="device__tablet" href={this.getDirection(selectedPlace)}>
-                      {Drupal.t('Get directions')}
-                    </a>
-                  </div>
+                  <a
+                    className="device__desktop"
+                    href={this.getDirection(selectedPlace)}
+                  >
+                    {Drupal.t('Get directions')}
+                  </a>
+                  <a className="device__tablet" href={this.getDirection(selectedPlace)}>
+                    {Drupal.t('Get directions')}
+                  </a>
                 </div>
               </div>
             </div>
