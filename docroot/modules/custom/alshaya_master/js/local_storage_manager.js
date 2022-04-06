@@ -50,9 +50,6 @@
 
     try {
       // Store data in the local storage with the expiry time.
-      // Safari sets the quota to 0 bytes in private mode, unlike other browsers
-      // which allow storage in private mode using separate data containers.
-      // We need to make sure to always catch possible exception from setItem().
       localStorage.setItem(storageKey, JSON.stringify(dataToStore));
     }
     catch (e) {
