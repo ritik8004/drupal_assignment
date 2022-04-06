@@ -9,12 +9,17 @@
 
   &__available-delivery {
     font-size: 0.875rem;
+    line-height: 1.5rem;
 
     &-time,
     &-date {
       font-size: 1rem;
       font-weight: bold;
       display: inline-block;
+    }
+
+    &-slot {
+      display: inline;
     }
 
     @include breakpoint($only-mobile) {
