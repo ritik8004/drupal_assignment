@@ -143,7 +143,7 @@ export default class EgiftTopPurchase extends React.Component {
     const egiftCardFor = data.get('egift-for') !== null ? data.get('egift-for') : 'other';
     // If card for options is self then get linked-card-number from state
     // else get card-number from field.
-    const cardNumber = egiftCardFor === 'self' ? linkedCardNumber : data.get('card_number');
+    const cardNumber = egiftCardFor === 'self' ? linkedCardNumber : data.get('card_number').trim();
 
     if (cardNumber === '') {
       document.getElementById('card-number-error').innerHTML = Drupal.t('Please enter an eGift card number.', {}, { context: 'egift' });
