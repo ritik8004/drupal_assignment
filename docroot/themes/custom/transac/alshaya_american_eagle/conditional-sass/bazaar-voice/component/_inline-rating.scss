@@ -12,6 +12,18 @@
 
     .button-wrapper {
       margin-#{$left}: 0;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0;
+      }
+    }
+
+    .inline-rating {
+      + .button-wrapper {
+        @include breakpoint($only-mobile) {
+          padding: 0 0.5rem 0.75rem;
+        }
+      }
     }
   }
 }
