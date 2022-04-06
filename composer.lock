@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b960987a13e1ab787a1c12c949dcb41e",
+    "content-hash": "84e25ce45e88fa3950709718b7e16d30",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -4132,9 +4132,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "8.x-1.3",
                     "datestamp": "1592909219",
@@ -4152,6 +4149,10 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
+                },
+                {
+                    "name": "nord102",
+                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -10222,17 +10223,17 @@
         },
         {
             "name": "drupal/mobile_app_links",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/mobile_app_links.git",
-                "reference": "8.x-1.2"
+                "reference": "8.x-1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/mobile_app_links-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "6238e05d364a8a0490dabac685dedfecb3e61343"
+                "url": "https://ftp.drupal.org/files/projects/mobile_app_links-8.x-1.3.zip",
+                "reference": "8.x-1.3",
+                "shasum": "15d56a1113bef61ba558f20ede2369e36b661718"
             },
             "require": {
                 "drupal/core": "^8.7||^9.0",
@@ -10241,8 +10242,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1642999336",
+                    "version": "8.x-1.3",
+                    "datestamp": "1649163737",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14771,7 +14772,7 @@
             "extra": {
                 "drupal": {
                     "version": "6.0.4",
-                    "datestamp": "1624461046",
+                    "datestamp": "1629907247",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -15201,6 +15202,10 @@
                 "validation",
                 "validator"
             ],
+            "support": {
+                "issues": "https://github.com/egulias/EmailValidator/issues",
+                "source": "https://github.com/egulias/EmailValidator/tree/2.1.25"
+            },
             "funding": [
                 {
                     "url": "https://github.com/egulias",
@@ -16112,12 +16117,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Promise\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -24460,6 +24465,9 @@
                 }
             ],
             "description": "Mink driver for controlling chrome without selenium",
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/3255077/issues"
+            },
             "time": "2021-04-25T06:49:32+00:00"
         },
         {
@@ -25382,6 +25390,10 @@
                 }
             ],
             "description": "Behat 3 JUnit xml formatter",
+            "support": {
+                "issues": "https://github.com/j-arnaiz/behat-junit-formatter/issues",
+                "source": "https://github.com/j-arnaiz/behat-junit-formatter/tree/master"
+            },
             "time": "2016-01-26T17:05:07+00:00"
         },
         {
@@ -27428,6 +27440,10 @@
                 }
             ],
             "description": "WebSocket client and server",
+            "support": {
+                "issues": "https://github.com/Textalk/websocket-php/issues",
+                "source": "https://github.com/Textalk/websocket-php/tree/1.5.5"
+            },
             "time": "2021-08-07T10:21:40+00:00"
         },
         {
