@@ -209,7 +209,6 @@ class AlshayaRcsCategoryDataMigration {
       }
       // Load the product category term object.
       $acq_term_data = $term_storage->load($term->tid);
-
       $acq_term_data = ($acq_term_data->language()->getId() == $langcode) ? $acq_term_data : $acq_term_data->getTranslation($langcode);
       if ($acq_term_data instanceof TermInterface) {
         $rcs_term = self::createRcsCategory($acq_term_data, $langcode);
