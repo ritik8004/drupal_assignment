@@ -1,0 +1,108 @@
+name: Back-merge
+
+on: push
+
+jobs:
+  matrix:
+    name: Generate the matrix
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - id: set-matrix
+        run: |
+          if [ "$GITHUB_REF_NAME" == 'master' ];  then
+            branch='"uat"'
+          elif [ "$GITHUB_REF_NAME" == 'uat' ];  then
+            branch='"test"'
+          elif [ "$GITHUB_REF_NAME" == 'test' ];  then
+            branch='"develop"'
+          fi
+
+          branches=()
+          eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/remotes/origin/)"
+          for b in "${branches[@]}"; do
+            b="${b/refs\/remotes\/origin\//}"
+            if [[ "$b" == *-build ]]; then
+              continue
+            fi
+
+            if [[ "$b" == $GITHUB_REF_NAME-* || "$b" == features/$GITHUB_REF_NAME || "$b" == features/$GITHUB_REF_NAME-* ]]; then
+              branch+=", \"$b\""
+            fi
+          done
+
+          if [[ "$branch" == ", "* ]]; then
+            branch=${branch:2}
+          fi
+
+          matrix='{ "branch" : ['
+          matrix+=$branch
+          matrix+='] }'
+          echo $matrix
+          echo "::set-output name=matrix::$matrix"
+
+          if [[ "$branch" == "" ]]; then
+            echo "::set-output name=empty_matrix::true"
+          else
+            echo "::set-output name=empty_matrix::false"
+          fi
+
+
+  backmerge:
+    needs: matrix
+    if: needs.matrix.outputs.empty_matrix == 'false'
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout ${{ matrix.branch }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ matrix.branch }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --local user.name '${{ secrets.BOT_USERNAME }}'
+          git config --local user.email '${{ secrets.BOT_EMAIL }}'
+
+      - name: Back-merge ${{ github.ref_name }} into ${{ matrix.branch }}
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: ${{ github.ref_name }}
+          target_branch: ${{ matrix.branch }}
+          github_token: ${{ github.token }}
+          message: 'Back-merge ${{ github.ref_name }} into ${{ matrix.branch }}'
+
+      # @TODO: Get the conflicting files so it can be listed in the Slack message.
+      #- name: Get the conflicting files
+      #  if: ${{ failure() }}
+      #  run: |
+      #    echo "diff=$(git diff --name-only --diff-filter=U origin/${{ matrix.branch }} origin/${{ github.ref_name }})" >> $GITHUB_ENV
+      #    echo "${{ env.diff }}"
+
+      - name: Send Slack notification in case of failure
+        if: ${{ failure() }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              text: `Impossible to back-merge <https://github.com/${{ github.repository }}/compare/${{ matrix.branch }}...${{ github.ref_name }}?expand=1|*${{ github.ref_name }}* into *${{ matrix.branch }}*>.`
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
