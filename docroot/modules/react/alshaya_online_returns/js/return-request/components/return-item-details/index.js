@@ -55,16 +55,16 @@ class ReturnItemDetails extends React.Component {
           <ReturnIndividualItem
             item={item}
           />
+          <ConditionalView condition={isChecked}>
+            <ReturnReasonsSelect
+              returnReasons={returnReasons}
+              handleSelectedReason={handleSelectedReason}
+            />
+            <ReturnQuantitySelect
+              qtyOptions={qtyOptions}
+            />
+          </ConditionalView>
         </div>
-        <ConditionalView condition={isChecked}>
-          <ReturnReasonsSelect
-            returnReasons={returnReasons}
-            handleSelectedReason={handleSelectedReason}
-          />
-          <ReturnQuantitySelect
-            qtyOptions={qtyOptions}
-          />
-        </ConditionalView>
       </div>
     );
   }
