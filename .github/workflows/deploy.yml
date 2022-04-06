@@ -8,7 +8,7 @@ on:
       - uat
       - master
       - develop-online-returns
-  create
+  create:
 
 defaults:
   run:
