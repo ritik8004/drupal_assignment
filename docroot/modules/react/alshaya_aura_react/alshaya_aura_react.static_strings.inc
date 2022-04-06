@@ -278,5 +278,9 @@ function _alshaya_aura_static_strings() {
       'key' => 'checkout_already_member_question_tooltip',
       'value' => t('Add your mobile number, Aura account number or email address below to link this purchase.'),
     ],
+    [
+      'key' => 'points_to_earn_with_purchase',
+      'value' => t('points with this purchase.'),
+    ],
   ];
 }
