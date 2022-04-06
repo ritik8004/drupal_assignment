@@ -42,7 +42,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-18.04
     needs: changedfiles
-    if: ${{ github.event_name == 'push' || github.event_name == 'create' }}
+    if: ${{ github.repository_owner == 'acquia-pso' && (github.event_name == 'push' || github.event_name == 'create') }}
 
     container:
       image: devwithlando/php:7.4-fpm-4
