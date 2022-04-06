@@ -660,5 +660,64 @@ body.ratings-reviews-overlay {
         }
       }
     }
+
+    .write-review {
+      text-decoration: underline;
+      font-size: 0.875rem;
+      color: $rr-write-review-link-txt;
+    }
+  }
+
+  .rating-wrapper {
+    display: flex;
+
+    .inline-rating,
+    .button-wrapper {
+      align-self: center;
+    }
+
+    .inline-rating {
+      + .button-wrapper {
+        margin-#{$left}: 1rem;
+        padding: 0 0 1.125rem;
+      }
+    }
+
+    .button-wrapper {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0.5rem;
+      }
+    }
+  }
+
+  .write-review-button {
+    text-decoration: underline;
+    font-size: 0.875rem;
+    color: $rr-write-review-link-txt;
+  }
+
+  .inline-rating {
+    .button-wrapper {
+      margin-top: 1rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0.5rem;
+      }
+
+      .write-review-button {
+        text-decoration: underline;
+        cursor: pointer;
+
+        &:hover {
+          color: inherit;
+        }
+      }
+    }
+  }
+
+  .express-delivery {
+    + .rating-wrapper {
+        margin-top: 0.875rem;
+    }
   }
 }

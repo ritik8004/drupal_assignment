@@ -9,5 +9,9 @@
 #reviews-rating {
   .rating-wrapper {
     justify-content: center;
+
+    .button-wrapper {
+      margin-#{$left}: 0;
+    }
   }
 }
