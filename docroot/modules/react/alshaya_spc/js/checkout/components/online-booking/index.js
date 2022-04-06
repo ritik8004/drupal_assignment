@@ -319,8 +319,8 @@ export default class OnlineBooking extends React.Component {
                         Drupal.t(
                           'Earliest available delivery on !appointment_date between !time_slot',
                           {
-                            '!appointment_date': `<div class="online-booking__available-delivery-date">${moment(bookingDetails.hfd_appointment_details.appointment_date).format('DD-MMM-YYYY')}</div>`,
-                            '!time_slot': `<div class="online-booking__available-delivery-time">${bookingDetails.hfd_appointment_details.start_time} - ${bookingDetails.hfd_appointment_details.end_time}</div>`,
+                            '!appointment_date': `<div class="online-booking__available-delivery-slot"><div class="online-booking__available-delivery-date">${moment(bookingDetails.hfd_appointment_details.appointment_date).format('DD-MMM-YYYY')}</div>`,
+                            '!time_slot': `<div class="online-booking__available-delivery-time">${bookingDetails.hfd_appointment_details.start_time} - ${bookingDetails.hfd_appointment_details.end_time}</div></div>`,
                           }, { context: 'online_booking' },
                         ),
                       )
