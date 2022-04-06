@@ -48,8 +48,10 @@ class ReturnItemsListing extends React.Component {
    */
   handleReturnSubmit = () => {
     const { btnDisabled } = this.state;
+    const { handleReturnRequestSubmit } = this.props;
 
     if (!btnDisabled) {
+      handleReturnRequestSubmit();
       this.createReturnRequest();
     }
   }
@@ -61,17 +63,16 @@ class ReturnItemsListing extends React.Component {
     const { itemsSelected } = this.state;
 
     // @todo: Hard coding selected reasons and quantity for now.
-    itemsSelected.map((item) => {
+    const items = itemsSelected.map((item) => {
       const data = { ...item };
-      data.qty_requested = 2;
+      data.qty_requested = 1;
       data.resolution = 2009;
       data.reason = 2014;
       return data;
     });
 
     const requestData = {
-      uid: drupalSettings.user.uid,
-      itemsSelected,
+      itemsSelected: items,
     };
     const returnRequest = await createReturnRequest(requestData);
 

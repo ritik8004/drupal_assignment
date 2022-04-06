@@ -6,6 +6,13 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ReturnRefundDetails from '../return-refund-details';
 
 class ReturnRequest extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isReturnRequestSubmit: false,
+    };
+  }
+
   componentDidMount() {
     window.addEventListener('beforeunload', this.warnUser, false);
     window.addEventListener('pagehide', this.warnUser, false);
@@ -16,7 +23,19 @@ class ReturnRequest extends React.Component {
     window.removeEventListener('pagehide', this.warnUser, false);
   }
 
+  handleReturnRequestSubmit = () => {
+    this.setState({
+      isReturnRequestSubmit: true,
+    });
+  }
+
   warnUser = (e) => {
+    const { isReturnRequestSubmit } = this.state;
+
+    if (isReturnRequestSubmit) {
+      return null;
+    }
+
     e.preventDefault();
     const confirmationMessage = Drupal.t(
       "If you're trying to leave the Online Returns page, please note, any changes made will be lost.",
@@ -41,6 +60,7 @@ class ReturnRequest extends React.Component {
         />
         <ReturnItemsListing
           products={orderDetails['#products']}
+          handleReturnRequestSubmit={this.handleReturnRequestSubmit}
         />
         <ReturnRefundDetails
           orderDetails={orderDetails}

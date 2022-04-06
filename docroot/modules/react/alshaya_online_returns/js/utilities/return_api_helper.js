@@ -67,25 +67,17 @@ const createReturnRequest = async (rawData) => {
     return { data };
   }
 
-  const { customerId } = drupalSettings.userDetails;
   // Get user details from session.
+  const { customerId } = drupalSettings.userDetails;
   const { uid } = drupalSettings.user;
 
   // Check if we have user in session.
   if (!hasValue(customerId) || uid === 0) {
-    logger.error('Error while trying to create a return request. No user available in session. User id from request: @uid.', {
-      '@uid': rawData.uid,
+    logger.error('Error while trying to create a return request. No user available in session. User id: @user_id. Customer id: @customer_id.', {
+      '@user_id': uid,
+      '@customer_id': customerId,
     });
-    return getErrorResponse('No user available in session', 404);
-  }
-
-  // Check if uid in the request matches the one in session.
-  if (uid !== rawData.uid) {
-    logger.error('Error while trying to create a return request. User id in request doesn\'t match the one in session. User id from request: @req_uid. User id in session: @session_uid.', {
-      '@req_uid': rawData.uid,
-      '@session_uid': uid,
-    });
-    return getErrorResponse("User id in request doesn't match the one in session.", 404);
+    return getErrorResponse('No user available in session', 403);
   }
 
   data.rmaDataObject.customer_id = customerId;
@@ -99,10 +91,7 @@ const createReturnRequest = async (rawData) => {
       return response.data;
     }
 
-    return {
-      status: true,
-      data: response,
-    };
+    return response;
   });
 };
 
