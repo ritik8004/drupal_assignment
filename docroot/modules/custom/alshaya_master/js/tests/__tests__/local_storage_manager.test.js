@@ -46,14 +46,6 @@ describe('Local Store Manager', () => {
       expect(val).toEqual('bar');
     });
 
-    it('With null value', () => {
-      Drupal.addItemInLocalStorage('foo', 'bar', 1);
-      // @todo check we should allow storing null values
-      Drupal.addItemInLocalStorage('foo', null, 1);
-      const val = Drupal.getItemFromLocalStorage('foo');
-      expect(val).toEqual(null);
-    });
-
     it('With integer value', () => {
       Drupal.addItemInLocalStorage('foo', 0, 1);
       const val = Drupal.getItemFromLocalStorage('foo');
