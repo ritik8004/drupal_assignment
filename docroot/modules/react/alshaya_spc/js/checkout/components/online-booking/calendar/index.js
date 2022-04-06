@@ -31,9 +31,10 @@ export default class OnlineBookingCalendar extends React.Component {
       availableTimeSlots: this.getTimeSlotsForDate(selectedDate),
       // Set the current time slot identifier in the state. This will update
       // everytime when customer change the timeslot from the list of available
-      // time slots.
-      selectedTimeSlot: typeof bookingDetails.resource_external_id !== 'undefined'
-        ? bookingDetails.resource_external_id
+      // time slots. We are using 'appointment_slot_time' key as a unique
+      // identifier for the time slots.
+      selectedTimeSlot: typeof bookingDetails.appointment_slot_time !== 'undefined'
+        ? bookingDetails.appointment_slot_time
         : null,
       // This state is used to enable or disable apply/submit button in
       // calendar after selecting a different timeslot. This is to force
@@ -104,8 +105,8 @@ export default class OnlineBookingCalendar extends React.Component {
       // Get the available time slots for the new date.
       availableTimeSlots: this.getTimeSlotsForDate(date),
       // Reset the time slot identifier everytime date is changed.
-      selectedTimeSlot: typeof bookingDetails.resource_external_id !== 'undefined'
-        ? bookingDetails.resource_external_id
+      selectedTimeSlot: typeof bookingDetails.appointment_slot_time !== 'undefined'
+        ? bookingDetails.appointment_slot_time
         : null,
       // Disable apply/submit button when date changed. This is to force
       // customer selecting a time slot below. If the default is selected,
@@ -190,11 +191,10 @@ export default class OnlineBookingCalendar extends React.Component {
    * time slot by clicking it.
    *
    * @param {string} timeSlotExtId
-   *  Selected time slot resource external ID.
+   *  Selected time slot appointment_slot_time value as unique ID.
    */
   onTimeSlotChange = (e, timeSlotExtId) => {
     e.preventDefault();
-    const { selectedDate } = this.state;
     const { bookingDetails } = this.props;
 
     // If selected time slot is different then allow customer to use apply
@@ -204,11 +204,7 @@ export default class OnlineBookingCalendar extends React.Component {
       selectedTimeSlot: timeSlotExtId,
       // Check if the selected time slot is similar to current booking details,
       // and keep apply button disabled.
-      disableApplyBtn: (typeof bookingDetails.resource_external_id !== 'undefined'
-        && typeof bookingDetails.appointment_date !== 'undefined'
-        && bookingDetails.resource_external_id === timeSlotExtId)
-        && (moment(selectedDate).format(this.dateFormat())
-          === moment(bookingDetails.appointment_date).format(this.dateFormat())),
+      disableApplyBtn: (bookingDetails.appointment_slot_time === timeSlotExtId),
     });
   };
 
@@ -230,7 +226,7 @@ export default class OnlineBookingCalendar extends React.Component {
 
       // Get the seleccted booking slot details.
       const selectedTimeSlotDetails = availableTimeSlots.find(
-        (timeSlot) => timeSlot.resource_external_id === selectedTimeSlot,
+        (timeSlot) => timeSlot.appointment_slot_time === selectedTimeSlot,
       );
 
       // Trigger callback function for the parent component to do the necessary
@@ -252,7 +248,7 @@ export default class OnlineBookingCalendar extends React.Component {
       selectedTimeSlot,
       disableApplyBtn,
     } = this.state;
-    const { closeScheduleDeliveryModal, bookingDetails } = this.props;
+    const { closeScheduleDeliveryModal } = this.props;
 
     // Set language for datepicker translation. Default to english. If it's not
     // english then change to arabic.
@@ -268,10 +264,7 @@ export default class OnlineBookingCalendar extends React.Component {
     let timeSlotListItems = null;
     if (availableTimeSlots.length > 0) {
       timeSlotListItems = availableTimeSlots.map((timeSlot) => {
-        const className = (timeSlot.resource_external_id === selectedTimeSlot
-          && typeof bookingDetails.appointment_date !== 'undefined'
-          && moment(selectedDate).format(this.dateFormat())
-            === moment(bookingDetails.appointment_date).format(this.dateFormat()))
+        const className = (timeSlot.appointment_slot_time === selectedTimeSlot)
           ? 'timeslots-options-list-item active'
           : 'timeslots-options-list-item';
 
@@ -279,11 +272,10 @@ export default class OnlineBookingCalendar extends React.Component {
         element = (
           <div
             key={timeSlot.resource_external_id}
-            value={timeSlot.resource_external_id}
             className={className}
             onClick={(e) => this.onTimeSlotChange(
               e,
-              timeSlot.resource_external_id,
+              timeSlot.appointment_slot_time,
             )}
           >
             {`${timeSlot.start_time} - ${timeSlot.end_time}`}

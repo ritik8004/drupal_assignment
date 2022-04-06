@@ -334,7 +334,6 @@ export default class OnlineBooking extends React.Component {
                   className="schedule-delivery-calendar-popup"
                   open={isModalOpen}
                   closeOnDocumentClick={false}
-                  closeOnEscape={false}
                 >
                   <>
                     <OnlineBookingCalendar
