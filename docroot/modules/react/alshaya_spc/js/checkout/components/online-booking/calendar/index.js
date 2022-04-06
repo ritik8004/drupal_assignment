@@ -31,10 +31,13 @@ export default class OnlineBookingCalendar extends React.Component {
       availableTimeSlots: this.getTimeSlotsForDate(selectedDate),
       // Set the current time slot identifier in the state. This will update
       // everytime when customer change the timeslot from the list of available
-      // time slots. We are using 'appointment_slot_time' key as a unique
-      // identifier for the time slots.
-      selectedTimeSlot: typeof bookingDetails.appointment_slot_time !== 'undefined'
-        ? bookingDetails.appointment_slot_time
+      // time slots. We are using combination of 'appointment_slot_time' and
+      // 'start_time' key as a unique identifier for the time slot.
+      selectedTimeSlot: typeof bookingDetails.appointment_date !== 'undefined'
+        ? this.getSelectedTimeSlotKey(
+          bookingDetails.appointment_date,
+          bookingDetails.start_time,
+        )
         : null,
       // This state is used to enable or disable apply/submit button in
       // calendar after selecting a different timeslot. This is to force
@@ -51,6 +54,22 @@ export default class OnlineBookingCalendar extends React.Component {
    *  A date format for processing dates.
    */
   dateFormat = () => 'YYYY-MM-DD';
+
+  /**
+   * This function creates a unique timeslot identifier with the combination
+   * of given date and start time of the booking.
+   *
+   * @param {string} date
+   *  Provide the booking date in string format.
+   * @param {string} startTime
+   *  Provide the start time of the booking slot in string format.
+   *
+   * @returns {string}
+   *  A unique identifier for the time slot based on given values.
+   */
+  getSelectedTimeSlotKey = (date, startTime) => (
+    `${moment(date).format(this.dateFormat())}${startTime}`
+  );
 
   /**
    * Prepare a array of date slots objects to show in calendar.
@@ -105,8 +124,11 @@ export default class OnlineBookingCalendar extends React.Component {
       // Get the available time slots for the new date.
       availableTimeSlots: this.getTimeSlotsForDate(date),
       // Reset the time slot identifier everytime date is changed.
-      selectedTimeSlot: typeof bookingDetails.appointment_slot_time !== 'undefined'
-        ? bookingDetails.appointment_slot_time
+      selectedTimeSlot: typeof bookingDetails.appointment_date !== 'undefined'
+        ? this.getSelectedTimeSlotKey(
+          bookingDetails.appointment_date,
+          bookingDetails.start_time,
+        )
         : null,
       // Disable apply/submit button when date changed. This is to force
       // customer selecting a time slot below. If the default is selected,
@@ -190,21 +212,30 @@ export default class OnlineBookingCalendar extends React.Component {
    * This is to change the apply button state when user selects a specific
    * time slot by clicking it.
    *
-   * @param {string} timeSlotExtId
-   *  Selected time slot appointment_slot_time value as unique ID.
+   * @param {string} startTime
+   *  Selected time slot start_time value as to generate unique identifier.
    */
-  onTimeSlotChange = (e, timeSlotExtId) => {
+  onTimeSlotChange = (e, startTime) => {
     e.preventDefault();
     const { bookingDetails } = this.props;
+    const { selectedDate } = this.state;
 
+    // Get time slot based on the available date and start time.
+    const selectedTimeSlot = this.getSelectedTimeSlotKey(
+      selectedDate,
+      startTime,
+    );
     // If selected time slot is different then allow customer to use apply
     // button and change the schedule.
     this.setState({
       // Change the selected time slot ID with the clicked time slot ID.
-      selectedTimeSlot: timeSlotExtId,
+      selectedTimeSlot,
       // Check if the selected time slot is similar to current booking details,
       // and keep apply button disabled.
-      disableApplyBtn: (bookingDetails.appointment_slot_time === timeSlotExtId),
+      disableApplyBtn: (this.getSelectedTimeSlotKey(
+        bookingDetails.appointment_date,
+        bookingDetails.start_time,
+      ) === selectedTimeSlot),
     });
   };
 
@@ -226,7 +257,10 @@ export default class OnlineBookingCalendar extends React.Component {
 
       // Get the seleccted booking slot details.
       const selectedTimeSlotDetails = availableTimeSlots.find(
-        (timeSlot) => timeSlot.appointment_slot_time === selectedTimeSlot,
+        (timeSlot) => this.getSelectedTimeSlotKey(
+          selectedDate,
+          timeSlot.start_time,
+        ) === selectedTimeSlot,
       );
 
       // Trigger callback function for the parent component to do the necessary
@@ -264,18 +298,21 @@ export default class OnlineBookingCalendar extends React.Component {
     let timeSlotListItems = null;
     if (availableTimeSlots.length > 0) {
       timeSlotListItems = availableTimeSlots.map((timeSlot) => {
-        const className = (timeSlot.appointment_slot_time === selectedTimeSlot)
+        const className = (this.getSelectedTimeSlotKey(
+          selectedDate,
+          timeSlot.start_time,
+        ) === selectedTimeSlot)
           ? 'timeslots-options-list-item active'
           : 'timeslots-options-list-item';
 
         let element = null;
         element = (
           <div
-            key={timeSlot.resource_external_id}
+            key={timeSlot.appointment_slot_time}
             className={className}
             onClick={(e) => this.onTimeSlotChange(
               e,
-              timeSlot.appointment_slot_time,
+              timeSlot.start_time,
             )}
           >
             {`${timeSlot.start_time} - ${timeSlot.end_time}`}
