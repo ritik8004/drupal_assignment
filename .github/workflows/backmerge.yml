@@ -1,29 +1,91 @@
+# This workflow takes care of doing automatic back-merge when a branch is updated.
+#
+# Configuration:
+#   - Secrets:
+#       - BOT_TOKEN:
+#         Because of a limitation when using repository's GITHUB_TOKEN in workflow, a personal access token is needed.
+#         See https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
+#
+#       - BOT_USERNAME:
+#         The Github's username which should be used to perform the back-merge commits.
+#
+#       - BOT_EMAIL:
+#         The Github's email which should be used to perform the back-merge commits.
+#
+#       - SLACK_WEBHOOK_URL:
+#         The Slack's webhook url to report the back-merge failure. Reporting will be skipped if it is not set.
+#
+# Jobs:
+#   - Validate:
+#       Mainly because of a limitation which makes impossible to use secrets variable in jobs/steps if conditions.
+#       It checks if secrets are properly configured to avoid late failure.
+#
+#   - Generate the matrix:
+#       From the updated branch's name, it determines in which branches the code needs to be back-merged.
+#
+#   - Back-merge:
+#       It back-merge the updated branch into the selected branch. Selected branches are determined by the matrix.
+#
+
 name: Back-merge
 
 on: push
 
 jobs:
+  validate:
+    name: Validate workflow req.
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      valid_req: ${{ steps.validate-req.outputs.valid_req }}
+      valid_slack: ${{ steps.validate-slack.outputs.valid_slack }}
+
+    steps:
+      - name: Check for mandatory secrets
+        id: validate-req
+        run: |
+          if [[ "${{ secrets.BOT_TOKEN }}" != '' ]];  then
+            echo "::set-output name=valid_req::true"
+          else
+            echo "::set-output name=valid_req::false"
+          fi
+
+      - name: Check for Slack secrets
+        id: validate-slack
+        run: |
+          if [[ "${{ secrets.SLACK_WEBHOOK_URL }}" != '' ]];  then
+            echo "::set-output name=valid_slack::true"
+          else
+            echo "::set-output name=valid_slack::false"
+          fi
+
   matrix:
     name: Generate the matrix
+
+    needs: validate
+    if: needs.validate.outputs.valid_req == 'true'
 
     runs-on: ubuntu-latest
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      empty_matrix: ${{ steps.set-matrix.outputs.empty_matrix }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          token: ${{ secrets.BOT_TOKEN }}
 
       - id: set-matrix
         run: |
           if [ "$GITHUB_REF_NAME" == 'master' ];  then
             branch='"uat"'
           elif [ "$GITHUB_REF_NAME" == 'uat' ];  then
-            branch='"test"'
-          elif [ "$GITHUB_REF_NAME" == 'test' ];  then
+            branch='"qa"'
+          elif [ "$GITHUB_REF_NAME" == 'qa' ];  then
             branch='"develop"'
           fi
 
@@ -73,20 +135,21 @@ jobs:
         with:
           ref: ${{ matrix.branch }}
           fetch-depth: 0
+          token: ${{ secrets.BOT_TOKEN }}
 
       - name: Configure Git
         run: |
           git config --local user.name '${{ secrets.BOT_USERNAME }}'
           git config --local user.email '${{ secrets.BOT_EMAIL }}'
 
-      - name: Back-merge ${{ github.ref_name }} into ${{ matrix.branch }}
+      - name: Backmerge ${{ github.ref_name }} into ${{ matrix.branch }}
         uses: devmasx/merge-branch@master
         with:
           type: now
           from_branch: ${{ github.ref_name }}
           target_branch: ${{ matrix.branch }}
-          github_token: ${{ github.token }}
-          message: 'Back-merge ${{ github.ref_name }} into ${{ matrix.branch }}'
+          github_token: ${{ secrets.BOT_TOKEN }}
+          message: '[BOT] Backmerge ${{ github.ref_name }} into ${{ matrix.branch }}'
 
       # @TODO: Get the conflicting files so it can be listed in the Slack message.
       #- name: Get the conflicting files
@@ -96,7 +159,7 @@ jobs:
       #    echo "${{ env.diff }}"
 
       - name: Send Slack notification in case of failure
-        if: ${{ failure() }}
+        if: ${{ failure() && needs.validate.outputs.valid_slack == 'true' }}
         uses: 8398a7/action-slack@v3
         with:
           status: custom
