@@ -440,14 +440,13 @@ export default class OnlineBookingCalendar extends React.Component {
             </div>
           </div>
           <div className="schedule-delivery-datepicker__footer">
-            <button
-              type="button"
+            <a
               className={disableApplyBtn ? 'schedule-delivery-datepicker-submit disabled-btn' : 'schedule-delivery-datepicker-submit'}
               disabled={disableApplyBtn}
               onClick={(e) => this.onApplyTimeSlot(e)}
             >
               {Drupal.t('Apply Date & Time', {}, { context: 'online_booking' })}
-            </button>
+            </a>
           </div>
         </div>
       </>
