@@ -12,7 +12,7 @@ const ReturnIndividualItem = ({
       <ConditionalView condition={item.is_big_ticket}>
         <span>{Drupal.t('Large Item', {}, { context: 'online_returns' })}</span>
       </ConditionalView>
-      <ConditionalView condition={hasValue(item.image_data) && hasValue(item.image_data.url)}>
+      <ConditionalView condition={(hasValue(item.image_data) && hasValue(item.image_data.url))}>
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass}`}>
             <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
