@@ -322,7 +322,7 @@ export default class OnlineBookingCalendar extends React.Component {
       });
     }
 
-    // Add datepicker class depend on date count.
+    // Add datepicker class depend on date selected.
     let datepickerMonthLeft = 'datepicker-month-left';
     let datepickerMonthRight = 'datepicker-month-right';
     if (moment(setOpenDate).isSame(this.getMinMaxDateForCalendar(), 'month')) {
