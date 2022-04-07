@@ -19,6 +19,8 @@
 
       @include breakpoint($only-mobile) {
         padding-#{$left}: 1.5rem;
+        margin-#{$left}: -0.5rem;
+        margin-#{$right}: -0.5rem;
       }
 
       .select-items-header {
@@ -29,18 +31,49 @@
           color: $online-return-label-txt;
           #{$right}: 0.875rem;
           font-size: 0.9rem;
+
+          html[lang=ar] & {
+            left: 2.25rem;
+          }
         }
       }
     }
 
     .items-table {
+      border-bottom: 1px solid $content_pagetitle_border;
+      margin-bottom: 0.625rem;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 0;
+      }
+
       .order-item-row {
-        display: flex;
-        border-bottom: 1px solid $content_pagetitle_border;
+        display: grid;
+        grid-template:
+          "a b c" auto
+          "d d d" auto
+          "e e ." / 2.3125rem 8.875rem auto;
         background: $online-return-detail-bg;
+        border-bottom: 1px solid $content_pagetitle_border;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        @include breakpoint($tablet) {
+          grid-template:
+            "a b c d" auto
+            "e f g h" auto / 2.3125rem 8.6875rem auto 6.875rem;
+        }
+
+        @include breakpoint($desktop) {
+          grid-template:
+            "a b c d" auto
+            "e f g h" auto / 4.15625rem 11.8125rem auto 13.4375rem;
+        }
 
         .order-item-checkbox {
-          flex-basis: 1.25rem;
+          grid-area: a;
           margin-#{$left}: 1rem;
           display: flex;
           justify-content: center;
@@ -52,7 +85,6 @@
           }
 
           @include breakpoint($desktop) {
-            flex-basis: 3.125rem;
             margin-#{$left}: 1.125rem;
           }
 
@@ -76,6 +108,7 @@
 
         .order-item-image {
           padding: 1.5rem;
+          grid-area: b;
 
           @include breakpoint($desktop) {
             padding-#{$left}: 1.5625rem;
@@ -110,6 +143,7 @@
 
         .order__details--wrapper {
           display: flex;
+          grid-area: c;
           flex-direction: column;
 
           @include breakpoint($tablet) {
@@ -147,7 +181,9 @@
           }
         }
 
-        .total-price {
+        .item-total-price {
+          grid-area: d;
+
           @include breakpoint($only-mobile) {
             display: none;
           }
@@ -163,7 +199,7 @@
         }
 
         .item-price,
-        .total-price {
+        .item-total-price {
           flex-basis: auto;
 
           @include breakpoint($tablet) {
@@ -178,10 +214,59 @@
         .image-data-wrapper,
         .order__details--summary,
         .item-price,
-        .total-price {
+        .item-total-price {
           > div {
             margin-bottom: 0.3125rem;
           }
+        }
+      }
+    }
+  }
+
+  .continue-button-wrapper {
+    padding: 0.9375rem 0;
+    background: $online-return-request-button-bg;
+    border-bottom: 1px solid $content_pagetitle_border;
+    border-top: 1px solid $content_pagetitle_border;
+    margin-#{$left}: -0.5rem;
+    margin-#{$right}: -0.5rem;
+    margin-bottom: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 0;
+      margin-#{$right}: 0;
+      border-top: 0;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    button {
+      background: none;
+      padding: 0 0.5rem;
+      width: 100%;
+
+      @include breakpoint($tablet) {
+        width: 8.75rem;
+        margin-#{$right}: 3.75rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$right}: 0.75rem;
+      }
+
+      span {
+        background: $online-return-steps-label-bg;
+        color: $online-return-steps-label-txt;
+        padding: 0.6875rem 0;
+        font-size: 0.875rem;
+        line-height: 1.125rem;
+        display: block;
+        font-family: $alshaya-bold;
+      }
+
+      &[disabled] {
+        span {
+          background: $content_pagetitle_border;
         }
       }
     }
