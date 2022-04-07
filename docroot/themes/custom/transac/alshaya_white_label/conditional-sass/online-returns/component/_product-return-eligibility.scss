@@ -8,20 +8,24 @@ body.nodetype--acq_product {
     display: flex;
     align-items: center;
 
-    @include icon(infomation, before) {
-      font-size: 1.25rem;
-    }
-
     @include breakpoint($tablet) {
       font-size: 1rem;
-
-      &::before {
-        font-size: 1.75rem;
-      }
     }
 
     span {
-      padding-#{$left}: 0.625rem;
+      display: flex;
+      align-items: center;
+
+      @include icon(infomation, before) {
+        font-size: 1.25rem;
+        padding-#{$right}: 0.625rem;
+      }
+
+      @include breakpoint($tablet) {
+        &::before {
+          font-size: 1.75rem;
+        }
+      }
     }
 
     &.desktop-only {
