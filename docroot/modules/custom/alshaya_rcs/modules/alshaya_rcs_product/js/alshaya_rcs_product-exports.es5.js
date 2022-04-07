@@ -605,7 +605,14 @@ exports.computePhFilters = function (input, filter) {
           // Add a disabled option which will be used as the label for the option.
           let selectOption = jQuery('<option></option>');
           let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
-          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(text);
+          // For season code attribute, the default value will be the first
+          // valid available option.
+          if (option.attribute_code === 'season_code' && option.values.length > 0) {
+            selectOption.attr({ disabled: 'disabled' }).text(text);
+          }
+          else {
+            selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
+          }
           configurableOptionsList.append(selectOption);
 
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
@@ -618,10 +625,16 @@ exports.computePhFilters = function (input, filter) {
           }
 
           // Add the option values.
-          option.values.forEach((value) => {
+          option.values.forEach((value, key) => {
             selectOption = jQuery('<option></option>');
             const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
-            selectOption.attr({value: value.value_index}).text(label);
+            // Select the first season code option by default.
+            if (option.attribute_code === 'season_code' && key === 0) {
+              selectOption.attr({ selected: 'selected', value: value.value_index }).text(label);
+            }
+            else {
+              selectOption.attr({ value: value.value_index }).text(label);
+            }
             configurableOptionsList.append(selectOption);
 
             if (optionIsSwatch) {
