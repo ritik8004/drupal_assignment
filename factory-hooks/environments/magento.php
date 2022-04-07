@@ -264,6 +264,7 @@ $magentos = [
   ],
   'tbs_test' => [
     'url' => 'https://tbs-qa.store.alshaya.com',
+    'algolia_env' => 'tbs_qa',
     'magento_secrets' => [
       'consumer_key' => 'jgfegi5yv3h42vluf00i498g58x55s0l',
       'consumer_secret' => 'ymjszfarzko8d4b3mg3achu0o2uqrnmb',
