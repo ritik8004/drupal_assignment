@@ -115,7 +115,7 @@
       <tr class="online-booking-details-row">
         <td colspan="5">
           <span class="icon-ic_infomation"></span>
-          <div class="online-booking-details">
+          <span class="online-booking-details">
             {% if online_booking_notice.booking_info is defined %}
               <span class="booking-info">
                 {{ online_booking_notice.booking_info }}
@@ -136,7 +136,7 @@
                 {{ online_booking_notice.booking_error }}
               </span>
             {% endif %}
-          </div>
+            </span>
         </td>
       </tr>
       {% endif %}
