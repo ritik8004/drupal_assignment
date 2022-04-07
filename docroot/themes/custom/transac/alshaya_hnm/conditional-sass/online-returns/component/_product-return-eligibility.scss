@@ -3,8 +3,10 @@ body.magazine-layout {
     font-family: $hnm-demibold;
     font-size: 1rem;
 
-    &::before {
-      font-size: 2rem;
+    span {
+      &::before {
+        font-size: 2rem;
+      }
     }
   }
 }
