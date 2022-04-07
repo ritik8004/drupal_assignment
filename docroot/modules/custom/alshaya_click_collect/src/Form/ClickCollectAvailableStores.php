@@ -5,15 +5,14 @@ namespace Drupal\alshaya_click_collect\Form;
 use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\geolocation\GoogleMapsDisplayTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\geolocation\MapProviderManager;
 
 /**
  * Provides a configuration form for configurable actions.
  */
 class ClickCollectAvailableStores extends FormBase {
 
-  use GoogleMapsDisplayTrait;
   /**
    * The action plugin manager.
    *
@@ -22,13 +21,23 @@ class ClickCollectAvailableStores extends FormBase {
   protected $storeFinder;
 
   /**
+   * The map provider.
+   *
+   * @var \Drupal\geolocation\MapProviderManager
+   */
+  protected $mapProvider;
+
+  /**
    * Constructs a new ActionAdminManageForm.
    *
    * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storeFinder
    *   The action plugin manager.
+   * @param \Drupal\geolocation\MapProviderManager $mapProvider
+   *   The map provider.
    */
-  public function __construct(StoresFinderUtility $storeFinder) {
+  public function __construct(StoresFinderUtility $storeFinder, MapProviderManager $mapProvider) {
     $this->storeFinder = $storeFinder;
+    $this->mapProvider = $mapProvider;
   }
 
   /**
@@ -36,7 +45,8 @@ class ClickCollectAvailableStores extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_stores_finder_transac.utility')
+      $container->get('alshaya_stores_finder_transac.utility'),
+      $container->get('plugin.manager.geolocation.mapprovider')
     );
   }
 
@@ -94,7 +104,7 @@ class ClickCollectAvailableStores extends FormBase {
       'library' => ['alshaya_click_collect/click-and-collect.pdp'],
       'drupalSettings' => [
         'geolocation' => [
-          'google_map_url' => $this->getGoogleMapsApiUrl(),
+          'google_map_url' => $this->mapProvider->getMapProvider('google_maps')->getGoogleMapsApiUrl(),
         ],
         'alshaya_acm' => ['storeFinder' => TRUE],
         'alshaya_click_collect' => ['searchForm' => TRUE],

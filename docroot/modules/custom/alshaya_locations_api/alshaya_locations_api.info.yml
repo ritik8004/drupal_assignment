@@ -1,0 +1,6 @@
+name: 'Alshaya Locations API'
+type: module
+description: 'Provides an API that allows to connect with a 3rd party Store Locator API'
+package: 'Alshaya'
+core: 8.x
+core_version_requirement: ^8 || ^9
