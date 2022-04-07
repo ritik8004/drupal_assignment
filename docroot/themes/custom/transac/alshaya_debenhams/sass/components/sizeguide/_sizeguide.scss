@@ -1,15 +1,18 @@
-.size-guide-link {
-  font-size: 1rem;
-  text-decoration: underline;
-  font-family: $dh-light;
-  top: 5.4375rem;
+.size-guide-form-and-link-wrapper {
+  position: relative;
 
-  @include breakpoint($only-mobile) {
-    top: 6rem;
-  }
+  .size-guide-link {
+    font-size: 1rem;
+    text-decoration: underline;
+    font-family: $dh-light;
+    top: 0;
 
-  @include breakpoint($only-tablet) {
-    top: 4.875rem;
-    z-index: 1;
+    @include breakpoint($only-mobile) {
+      top: -0.75rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      z-index: 1;
+    }
   }
 }

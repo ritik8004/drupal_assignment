@@ -111,6 +111,36 @@
         {% endif %}
       </tr>
 
+      {% if online_booking_notice %}
+      <tr class="online-booking-details-row">
+        <td colspan="5">
+          <span class="icon-ic_infomation"></span>
+          <span class="online-booking-details">
+            {% if online_booking_notice.booking_info is defined %}
+              <span class="booking-info">
+                {{ online_booking_notice.booking_info }}
+              </span>
+            {% endif %}
+            {% if online_booking_notice.customer_care_info is defined %}
+              <span class="customer-care-info">
+                {{ online_booking_notice.customer_care_info }}
+              </span>
+            {% endif %}
+            {% if online_booking_notice.update_booking_info is defined %}
+              <span class="update-booking-info">
+                {{ online_booking_notice.update_booking_info }}
+              </span>
+            {% endif %}
+            {% if online_booking_notice.booking_error is defined %}
+              <span class="booking-error">
+                {{ online_booking_notice.booking_error }}
+              </span>
+            {% endif %}
+            </span>
+        </td>
+      </tr>
+      {% endif %}
+
       {% if delivery_detail_notice %}
       <tr class="delivery-details-row">
         {% block deliveryInformationIcon %}
@@ -384,7 +414,7 @@
       <div class="dark">{{ product.name }}</div>
       {% if product.attributes is not empty %}
         {% for attribute in product.attributes %}
-          <div class="light">
+          <div class="light attr-wrapper">
             {% trans %}
               {{ attribute.label }}: {{ attribute.value }}
             {% endtrans %}

@@ -1,0 +1,5 @@
+services:
+  alshaya_rcs_promotion.helper:
+    class: \Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper
+    arguments:
+      - '@current_route_match'

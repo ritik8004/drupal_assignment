@@ -1,4 +1,4 @@
-import { postAPIData } from './api/apiData';
+import { postAPIData } from './api/request';
 import {
   updateStorageInfo, getStorageInfo,
 } from './storage';

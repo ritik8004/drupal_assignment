@@ -2,8 +2,11 @@
 
 namespace Drupal\alshaya_options_list;
 
+use Algolia\AlgoliaSearch\Exceptions\NotFoundException;
+use Algolia\AlgoliaSearch\Exceptions\UnreachableException;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\file\Entity\File;
 use Drupal\Core\Url;
@@ -21,6 +24,8 @@ use Drupal\search_api\Entity\Index;
  * Helper functions for alshaya_options_list.
  */
 class AlshayaOptionsListHelper {
+
+  use LoggerChannelTrait;
 
   /**
    * Options page cache tag.
@@ -331,7 +336,18 @@ class AlshayaOptionsListHelper {
     $query->range(0, 1);
 
     // Execute the search.
-    $results = $query->execute();
+    try {
+      $results = $query->execute();
+    }
+    catch (NotFoundException $e) {
+      // Ignore Algolia Not Found exception here, might be pending setup.
+      return [];
+    }
+    catch (UnreachableException $e) {
+      // Ignore Algolia Unreachable exception here, just add into logs.
+      $this->getLogger('AlshayaOptionsListHelper')->warning($e->getMessage());
+      return [];
+    }
 
     // Set the facet results data in static.
     $raw_facet_results = $results->getExtraData('search_api_facets');

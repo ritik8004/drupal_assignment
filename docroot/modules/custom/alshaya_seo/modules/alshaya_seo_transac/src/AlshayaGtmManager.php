@@ -61,10 +61,13 @@ class AlshayaGtmManager {
     'alshaya_master.home' => 'home page',
     'entity.taxonomy_term.canonical' => 'taxonomy term',
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
+    'entity.taxonomy_term.canonical:rcs_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
+    'entity.node.canonical:rcs_product' => 'product detail page',
     'entity.node.canonical:advanced_page' => 'advanced page',
     'entity.node.canonical:department_page' => 'department page',
     'entity.node.canonical:acq_promotion' => 'promotion page',
+    'entity.node.canonical:rcs_promotion' => 'promotion page',
     'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
     'system.404' => 'page not found',
@@ -75,7 +78,7 @@ class AlshayaGtmManager {
     'alshaya_spc.checkout' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
     'alshaya_spc.checkout.confirmation' => 'purchase confirmation page',
-    'view.stores_finder.page_2' => 'store finder',
+    'alshaya_geolocation.store_finder' => 'store finder',
     'view.stores_finder.page_1' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
     'user.pass' => 'user password page',
@@ -83,6 +86,8 @@ class AlshayaGtmManager {
     'user.page' => 'user page',
     'user.reset' => 'user reset page',
     'user.reset.form' => 'user reset page',
+    'alshaya_wishlist.users_wishlist' => 'wishlist page',
+    'alshaya_wishlist.user_account_wishlist' => 'wishlist page',
   ];
 
   /**
@@ -91,11 +96,15 @@ class AlshayaGtmManager {
   const LIST_GTM_MAPPING = [
     'view.search.page' => 'Search Results Page',
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
+    'entity.taxonomy_term.canonical:rcs_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
+    'entity.node.canonical:rcs_product' => 'PDP',
     'entity.node.canonical:acq_promotion' => 'Promotion',
     'acq_cart.cart' => 'CartPage',
     'alshaya_master.home' => 'HP-ProductCarrousel',
     'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',
+    'alshaya_wishlist.users_wishlist' => 'Wishlist',
+    'alshaya_wishlist.user_account_wishlist' => 'Wishlist',
   ];
 
   /**
@@ -375,10 +384,59 @@ class AlshayaGtmManager {
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
-    $attributes['gtm-cart-value'] = '';
 
     $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
     $attributes = array_merge($attributes, $skuAttributes);
+    return $attributes;
+  }
+
+  /**
+   * Helper function to prepare attributes for a gift product.
+   *
+   * @param string $view_mode
+   *   View mode in which we trying to render the product.
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The sku object.
+   *
+   * @return array
+   *   Array of attributes to be exposed to GTM.
+   */
+  public function fetchGiftGtmAttributes($view_mode, SKUInterface $sku) {
+    static $gtm_container = NULL;
+
+    if (!isset($gtm_container)) {
+      $gtm_container = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
+    }
+    $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
+
+    $attributes['gtm-name'] = trim($sku->label());
+    $attributes['gtm-main-sku'] = $sku->getSku();
+    $attributes['gtm-product-sku-class-identifier'] = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+    $attributes['gtm-sku-type'] = $sku->bundle();
+    $attributes['gtm-price'] = 0;
+    if (!in_array('dimension1', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension1'] = $sku->get('attribute_set')->getString();
+    }
+
+    if (!in_array('dimension5', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
+    }
+
+    if (!in_array('dimension6', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension6'] = $sku->get('attr_size')->getString();
+    }
+
+    if (!in_array('brand', $gtm_disabled_vars)) {
+      // Site name.
+      $gtm_brand = $this->configFactory->get('system.site')->getOriginal('name', FALSE);
+      $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
+      if ($sku->hasField('attr_brand')) {
+        $attributes['gtm-brand'] = $sku->get('attr_brand')->getString() ?: $gtm_brand;
+      }
+    }
+    $attributes['gtm-container'] = $gtm_container;
+    $attributes['gtm-view-mode'] = $view_mode;
+
     return $attributes;
   }
 
@@ -389,13 +447,15 @@ class AlshayaGtmManager {
    *   Identifier of the product variant on SKU entity.
    * @param \Drupal\acq_commerce\SKUInterface|null $child
    *   The child sku object or null.
+   * @param string|null $parentSku
+   *   Parent product SKU value.
    *
    * @return array
    *   Attributes on sku to be exposed to GTM.
    *
    * @throws \InvalidArgumentException
    */
-  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL) {
+  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL, $parentSku = NULL) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
@@ -907,7 +967,10 @@ class AlshayaGtmManager {
         continue;
       }
 
-      $product = $this->fetchSkuAtttributes($item['sku']);
+      $product = $item['product_type'] === 'configurable'
+        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'])
+        : $this->fetchSkuAtttributes($item['sku']);
+
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
       }
@@ -950,10 +1013,13 @@ class AlshayaGtmManager {
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
     $current_user_id = $this->currentUser->id();
+
     // For guest fetching the phone number from shipping details.
     $phone_number = $order['shipping']['address']['telephone'];
+
+    $customer_id = 0;
+
     $is_customer = alshaya_acm_customer_is_customer($this->currentUser);
-    $orders_count = $customer_id = 0;
     if ($is_customer) {
       $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
       $customer_id = $current_user->get('acq_customer_id')->getString();
@@ -962,6 +1028,11 @@ class AlshayaGtmManager {
         $phone_number = $current_user->get('field_mobile_number')->getValue()[0]['value'];
       }
     }
+    else {
+      // For guest user too we want to know if user has placed multiple orders.
+      $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
@@ -1070,7 +1141,8 @@ class AlshayaGtmManager {
         $taxonomy_term = $current_route['route_params']['taxonomy_term'];
         $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
         foreach ($taxonomy_parents as $taxonomy_parent) {
-          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, $this->languageManager->getCurrentLanguage()->getId());
+          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
+          /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
           $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
         }
 
@@ -1080,7 +1152,8 @@ class AlshayaGtmManager {
       case 'advanced page':
       case 'department page':
         $department_node = $current_route['route_params']['node'];
-        if ($department_node->get('field_use_as_department_page')->value == 1) {
+        if ($department_node->get('field_use_as_department_page')->value == 1
+          && $department_node->get('field_product_category')->target_id) {
           $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')
             ->load($department_node->get('field_product_category')->target_id);
           if (!empty($taxonomy_term)) {
@@ -1273,6 +1346,7 @@ class AlshayaGtmManager {
     return array_filter([
       'departmentName' => implode('|', $terms),
       'departmentId' => current($term_ids),
+      'list' => implode('|', $terms),
       'listingName' => end($terms),
       'listingId' => end($term_ids),
       'majorCategory' => array_shift($terms) ?: '',

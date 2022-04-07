@@ -21,6 +21,9 @@ export default class MyEgiftTopUp extends React.Component {
       disableSubmit: true,
       displayFormError: '', // Show top-up submit errors.
     };
+
+    // Set ref for openAmount field.
+    this.ref = React.createRef();
   }
 
   async componentDidMount() {
@@ -141,6 +144,7 @@ export default class MyEgiftTopUp extends React.Component {
             selected={topUpCard}
             handleAmountSelect={this.handleAmountSelect}
             myAccountLabel
+            field={this.ref}
           />
           <div className="action-buttons">
             <div id="my-topup-error" className="error form-error">{displayFormError}</div>

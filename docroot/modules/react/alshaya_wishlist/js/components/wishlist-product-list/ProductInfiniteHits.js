@@ -48,6 +48,11 @@ const ProductInfiniteHits = connectInfiniteHits(({
         removeDiffFromWishlist(hits);
       }
 
+      if (hits.length > 0) {
+        // Trigger gtm event one time, only when search we have search results.
+        Drupal.algoliaReactWishlist.triggerResultsUpdatedEvent(hits);
+      }
+
       // Remove loader after pagination results updated.
       removeFullScreenLoader();
     }, [hits],

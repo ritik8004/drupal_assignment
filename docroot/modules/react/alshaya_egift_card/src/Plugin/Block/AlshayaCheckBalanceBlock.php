@@ -123,10 +123,6 @@ class AlshayaCheckBalanceBlock extends BlockBase implements ContainerFactoryPlug
    * {@inheritdoc}
    */
   public function build() {
-    $eGift_status = $this->egiftCardHelper->isEgiftCardEnabled();
-    if (!$eGift_status) {
-      return '';
-    }
     return [
       '#theme' => 'egift_balance_check_block',
       '#block_title' => $this->configuration['block_title'],

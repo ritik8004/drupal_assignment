@@ -15,6 +15,7 @@
     .product-details-wrapper {
       .size-guide-link {
         font-size: 1rem;
+        text-decoration: underline;
 
         @include breakpoint($desktop) {
           top: 0;

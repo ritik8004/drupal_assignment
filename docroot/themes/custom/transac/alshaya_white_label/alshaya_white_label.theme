@@ -78,7 +78,12 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $current_route = \Drupal::routeMatch();
 
   // Add class for products that have magazine layout.
-  if ($current_route->getRouteName() == 'entity.node.canonical' && $current_route->getParameter('node')->bundle() == 'acq_product') {
+  if ($current_route->getRouteName() == 'entity.node.canonical'
+    && in_array($current_route->getParameter('node')->bundle(), [
+      'acq_product',
+      'rcs_product',
+    ])
+  ) {
     $node = \Drupal::request()->attributes->get('node');
     if ($node instanceof NodeInterface) {
       $acm_settings = \Drupal::config('alshaya_acm.settings');
@@ -183,7 +188,9 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
   // Initialising the variable to check the sidebar visibilty.
   // This will be disable by default.
-  $variables['enable_lhn_tree'] = 0;
+  if (!array_key_exists('enable_lhn_tree', $variables)) {
+    $variables['enable_lhn_tree'] = 0;
+  }
 
   // Attach the plp search js library to PLP page.
   if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
@@ -252,19 +259,22 @@ function alshaya_white_label_preprocess_page(&$variables) {
   }
 
   if ($node_bundle == 'advanced_page' && $variables['node']->get('field_use_as_department_page')->value == 1) {
-    $term_id = $variables['node']->get('field_product_category')->first()->target_id;
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    // Load the term object.
-    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_id);
-    // Get translated taxonomy term based on language.
-    if ($term instanceof TermInterface) {
-      $term_trans = \Drupal::service('entity.repository')
-        ->getTranslationFromContext($term, $langcode);
-      // Add term description in variables to be printed in page--department.
-      $description = $term_trans->getDescription();
-      if (isset($description)) {
-        $variables['category_term_name'] = $term_trans->getName();
-        $variables['category_term_description'] = $description;
+    $term_id = $variables['node']->get('field_product_category')->first();
+    if ($term_id) {
+      $term_id = $term_id->target_id;
+      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      // Load the term object.
+      $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_id);
+      // Get translated taxonomy term based on language.
+      if ($term instanceof TermInterface) {
+        $term_trans = \Drupal::service('entity.repository')
+          ->getTranslationFromContext($term, $langcode);
+        // Add term description in variables to be printed in page--department.
+        $description = $term_trans->getDescription();
+        if (isset($description)) {
+          $variables['category_term_name'] = $term_trans->getName();
+          $variables['category_term_description'] = $description;
+        }
       }
     }
   }
@@ -401,7 +411,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
     }
   }
 
-  if ($variables['plugin_id'] == 'alshaya_main_menu') {
+  if ($variables['plugin_id'] == 'alshaya_main_menu' || $variables['plugin_id'] == 'alshaya_rcs_main_menu') {
     $mega_menu_display = \Drupal::config('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
     if ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_INLINE_LAYOUT) {
       $variables['attributes']['class'][] = 'megamenu-inline-layout';
@@ -417,7 +427,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/super-menu';
   }
 
-  if ($variables['plugin_id'] == 'alshaya_dp_navigation_link') {
+  if ($variables['plugin_id'] == 'alshaya_dp_navigation_link' || $variables['plugin_id'] == 'alshaya_rcs_dp_app_navigation') {
     $variables['#attached']['library'][] = 'alshaya_white_label/app-navigation-links';
   }
 
@@ -583,7 +593,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     // Hide the node title on product list/search page.
     $variables['label'] = NULL;
   }
-  elseif ($variables['node']->bundle() === 'acq_product') {
+  elseif (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
     $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
     // Add class for enabling hover effect on PDP.
     if ($product_display_settings->get('color_swatches_hover')) {
@@ -905,13 +915,14 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
     if (\Drupal::service('path.matcher')->isFrontPage() && $node->getType() == 'advanced_page') {
       $suggestions[] = 'node__advanced_page_front';
     }
-    elseif ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
+    elseif ($variables['elements']['#view_mode'] == 'full'
+      && in_array($node->getType(), ['rcs_product', 'acq_product'])) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
       $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
       $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
-      $pdp_plugin->getTemplateName($suggestions);
+      $pdp_plugin->getTemplateName($suggestions, $node->getType());
     }
   }
 }

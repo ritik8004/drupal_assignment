@@ -16,6 +16,7 @@ import {
   getApiEndpoint,
   isUserAuthenticated,
   getIp,
+  isRequestFromSocialAuthPopup,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
 import cartActions from '../../utilities/cart_actions';
@@ -45,6 +46,7 @@ import {
 } from '../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -86,16 +88,23 @@ const getCncStatusForCart = async (data) => {
   // Process items.
   for (let i = 0; i < data.cart.items.length; i++) {
     const item = data.cart.items[i];
-    // We should ideally have ony one call to an endpoint and pass
-    // The list of items. This look could happen in the backend.
-    // Suppressing the lint error for now.
 
     // Skip product status check if egift is enabled and is virtual product.
     if (isEgiftCardEnabled() && cartItemIsVirtual(item)) {
       return true;
     }
+
+    // We should ideally have ony one call to an endpoint and pass
+    // The list of items. This look could happen in the backend.
+    // Suppressing the lint error for now.
+    const hasParentSku = hasValue(item.extension_attributes)
+      && hasValue(item.extension_attributes.parent_product_sku);
+    const parentSKU = (item.product_type === 'configurable' && hasParentSku)
+      ? item.extension_attributes.parent_product_sku
+      : null;
+
     // eslint-disable-next-line no-await-in-loop
-    const productStatus = await getProductStatus(item.sku);
+    const productStatus = await getProductStatus(item.sku, parentSKU);
     if (hasValue(productStatus)
       && isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
     ) {
@@ -220,6 +229,13 @@ const processLastOrder = (orderData) => {
  *   Customer last order or null.
  */
 const getLastOrder = async (customerId, force = false) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return {};
+  }
+
   const staticOrder = StaticStorage.get('last_order');
   if (!force && staticOrder !== null) {
     return staticOrder;
@@ -394,6 +410,13 @@ const getStoreInfo = async (storeInformation) => {
  *   The list of stores.
  */
 const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return [];
+  }
+
   const cartId = window.commerceBackend.getCartId();
 
   // If cart not available in session, log the error and return empty array.
@@ -733,6 +756,11 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
       || cartData.billing_address.city === 'NONE')) {
     cart = await updateBilling(params.shipping.shipping_address);
   }
+
+  // Trigger event on every shipping address update,
+  // as this is the final place where shipping is updated.
+  // Components can use this event to do action when shipping address is updated in cart.
+  dispatchCustomEvent('onAddShippingInfoUpdate', cart);
 
   return cart;
 };
@@ -1268,7 +1296,6 @@ window.commerceBackend.addBillingMethod = async (data) => {
     '@data': JSON.stringify(billingInfo),
     '@address': JSON.stringify(billingData),
   });
-
 
   const cart = await updateBilling(billingData);
 
@@ -2085,6 +2112,13 @@ const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
  *   A promise object.
  */
 window.commerceBackend.placeOrder = async (data) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return false;
+  }
+
   const cart = await getCart(true);
   if (!hasValue(cart) || !hasValue(cart.data)) {
     return false;

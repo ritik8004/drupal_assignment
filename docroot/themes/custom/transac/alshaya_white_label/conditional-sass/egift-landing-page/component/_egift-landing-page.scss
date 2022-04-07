@@ -15,6 +15,39 @@
   .field--name-field-promo-blocks {
     &.c-accordion-delivery-option-parent {
       border-top: 1px solid $egift-purchase-page-border;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 5rem;
+      }
+    }
+  }
+
+  .page-standard,
+  .node--type-advanced-page {
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+    }
+  }
+
+  .c-breadcrumb {
+    ol {
+      @include breakpoint($only-tablet) {
+        background: $breadcrumb_bg;
+      }
+    }
+  }
+
+  .c-department {
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+    }
+  }
+
+  #block-breadcrumbs {
+    li:nth-child(2) {
+      a {
+        text-transform: initial;
+      }
     }
   }
 }

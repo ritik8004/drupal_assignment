@@ -8,7 +8,9 @@ import ConditionalView
  * Show list of egift card selectable amounts from api.
  */
 const EgiftCardAmount = (props) => {
-  const { selected, handleAmountSelect, myAccountLabel } = props;
+  const {
+    selected, handleAmountSelect, myAccountLabel, field,
+  } = props;
 
   const labelOption = typeof myAccountLabel !== 'undefined' ? myAccountLabel : false;
 
@@ -23,12 +25,14 @@ const EgiftCardAmount = (props) => {
     });
 
     // Empty open amount field and unlock
-    const openAmountInput = document.getElementById('open-amount');
+    const openAmountInput = (field.current !== null) ? field.current.querySelector('input') : null;
+    const openAmountButton = (field.current !== null) ? field.current.querySelector('button') : null;
     if (openAmountInput !== null) {
       openAmountInput.value = '';
-      openAmountInput.removeAttribute('disabled');
+      openAmountInput.removeAttribute('readOnly');
       // Remove any error message from open amount.
       document.getElementById('open-amount-error').innerHTML = '';
+      openAmountButton.disabled = true;
     }
 
     // Set target as element as active.
@@ -64,7 +68,7 @@ const EgiftCardAmount = (props) => {
       <ConditionalView condition={labelOption}>
         <div className="egift-card-amount-list-title subtitle-text">
           {
-            Drupal.t('Choose Top-up Amount (@currencyCode)', {
+            Drupal.t('Choose Top up Amount (@currencyCode)', {
               '@currencyCode': getCurrencyCode(),
             }, { context: 'egift' })
           }
@@ -73,7 +77,11 @@ const EgiftCardAmount = (props) => {
       <ul>
         {listItems}
       </ul>
-      <EgiftCardOpenAmountField selected={selected} handleAmountSelect={handleAmountSelect} />
+      <EgiftCardOpenAmountField
+        selected={selected}
+        handleAmountSelect={handleAmountSelect}
+        field={field}
+      />
     </div>
   );
 };

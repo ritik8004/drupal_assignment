@@ -219,6 +219,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart',
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
+          'alshaya_spc/dynamic_promotion_label',
           'alshaya_acm_promotion/basket_labels_manager',
           'alshaya_white_label/free_gifts',
         ],
@@ -345,7 +346,7 @@ class AlshayaSpcController extends ControllerBase {
 
     $spc_cnc_config = $this->config('alshaya_spc.click_n_collect');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
-    $geolocation_config = $this->config('geolocation.settings');
+    $geolocation_config = $this->config('geolocation_google_maps.settings');
     $collection_points_config = $this->config('alshaya_spc.collection_points');
 
     $cache_tags = Cache::mergeTags(
@@ -602,6 +603,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/commerce_backend.checkout.v' . $backend_version,
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
+          'alshaya_spc/dynamic_promotion_label',
         ],
         'drupalSettings' => [
           'cnc_enabled' => $cnc_enabled,
@@ -798,6 +800,11 @@ class AlshayaSpcController extends ControllerBase {
       $settings['order_details']['payment']['benefitpayMerchantId'] = $checkoutcomConfig['benefit_pay_merchant_id'];
       $settings['order_details']['payment']['benefitpayAppId'] = $checkoutcomConfig['benefit_pay_app_id'];
       $settings['order_details']['payment']['benefitpaySecretKey'] = $checkoutcomConfig['benefit_pay_secret_key'];
+    }
+
+    // Add online order booking information in drupal settings if available.
+    if (isset($orderDetails['online_booking_information'])) {
+      $settings['order_details']['onlineBookingInformation'] = $orderDetails['online_booking_information'];
     }
 
     $cache_tags = [];
@@ -1036,7 +1043,6 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['delivery_in_only_city_key'] = (int) $product_config->get('delivery_in_only_city_key');
 
     // Time we get from configuration is in minutes.
-    $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
     $settings['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
     $settings['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
 

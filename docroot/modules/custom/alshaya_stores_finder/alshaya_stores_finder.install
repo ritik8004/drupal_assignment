@@ -11,6 +11,22 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Removes unnecessary view attachment from store finder glossary view.
+ */
+function alshaya_stores_finder_update_8112() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['views.view.stores_finder'],
+    'alshaya_stores_finder',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add store type field in store content type and update store finder view.
  */
 function alshaya_stores_finder_update_8111() {
@@ -168,7 +184,7 @@ function alshaya_stores_finder_update_8103() {
  * Update the Google Map API Key.
  */
 function alshaya_stores_finder_update_8102() {
-  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
+  $config = \Drupal::service('config.factory')->getEditable('geolocation_google_maps.settings');
   $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
   $config->save();
 }
@@ -196,8 +212,8 @@ function alshaya_stores_finder_update_8003() {
  */
 function alshaya_stores_finder_install() {
   // Set default google map api key.
-  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
-  $geolocation_settings = Settings::get('geolocation.settings');
+  $config = \Drupal::service('config.factory')->getEditable('geolocation_google_maps.settings');
+  $geolocation_settings = Settings::get('geolocation_google_maps.settings');
 
   foreach ($geolocation_settings as $key => $value) {
     $config->set($key, $value);

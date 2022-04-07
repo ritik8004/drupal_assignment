@@ -1,5 +1,8 @@
 import md5 from 'md5';
-import { getApiEndpoint } from './utility';
+import {
+  getApiEndpoint,
+  isRequestFromSocialAuthPopup,
+} from './utility';
 import logger from '../../../../js/utilities/logger';
 import { getFormattedError } from './common';
 import StaticStorage from './staticStorage';
@@ -127,6 +130,13 @@ const formatShippingEstimatesAddress = (address) => {
  *   HD Shipping methods or error.
  */
 const getHomeDeliveryShippingMethods = async (data) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return getFormattedError(600, 'fetching shipping methods on socialAuth popup is not allowed');
+  }
+
   if (!hasValue(data.country_id)) {
     logger.error('Error in getting shipping methods for HD as country id not available. Data: @data', {
       '@data': JSON.stringify(data),

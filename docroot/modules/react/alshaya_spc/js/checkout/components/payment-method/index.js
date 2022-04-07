@@ -238,6 +238,7 @@ export default class PaymentMethod extends React.Component {
                 <TabbyWidget
                   pageType="checkout"
                   classNames="installment-popup"
+                  amount={cart.cart.totals.base_grand_total}
                 />
               </ConditionalView>
             </div>

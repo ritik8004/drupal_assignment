@@ -19,6 +19,7 @@ import {
 import Promotions from '../promotions';
 import { checkExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo,
@@ -34,7 +35,10 @@ const Teaser = ({
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
 
-  if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
+  if (drupalSettings.plp_attributes
+    && drupalSettings.plp_attributes.length > 0
+    && hasValue(hit.collection_labels)
+  ) {
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
       let collectionLabelValue = hit.collection_labels[plpAttributes[i]];
@@ -71,11 +75,36 @@ const Teaser = ({
     } else {
       attribute[key] = value;
     }
+    // Update URL to relative URL to avoid host mismatch issue.
+    if (key === 'url') {
+      // Check if the URL is an absolute URL or not.
+      const isAbsolute = (attribute.url.indexOf('://') > 0 || attribute.url.indexOf('//') === 0);
+      if (isAbsolute) {
+        attribute[key] = new URL(attribute.url).pathname;
+      } else {
+        attribute[key] = attribute.url[0] !== '/' ? `/${attribute.url}` : attribute.url;
+      }
+    }
   });
   // Skip if there is no value for current language.
   if (attribute.title === undefined) {
     return null;
   }
+  const labels = [];
+  if (attribute.product_labels.length > 0) {
+    attribute.product_labels.forEach((label) => {
+      labels.push({
+        image: {
+          url: label.image,
+          alt: label.text,
+          title: label.text,
+          styles: label.styles,
+        },
+        position: label.position,
+      });
+    });
+  }
+
 
   let teaserClass = 'c-products__item views-row';
   if (isProductFrameEnabled()) {
@@ -147,7 +176,7 @@ const Teaser = ({
 
               media={hit.media}
               title={attribute.title}
-              labels={attribute.product_labels}
+              labels={labels}
               sku={hit.sku}
               initSlider={initSlider}
               setSlider={setSlider}

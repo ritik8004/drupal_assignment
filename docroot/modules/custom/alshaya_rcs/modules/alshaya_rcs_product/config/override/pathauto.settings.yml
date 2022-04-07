@@ -1,0 +1,5 @@
+punctuation:
+  # Adding period punctuation because while generating the alias for RCS product
+  # dot (period) is getting removed but it's required (.html), So we have added
+  # this config here which basically means `No action (do not replace)`.
+  period: 2

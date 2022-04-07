@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_rcs_listing
+  theme:
+    - alshaya_white_label
+id: alshaya_rcs_promotional_banner
+theme: alshaya_white_label
+region: highlighted
+weight: 0
+provider: null
+plugin: rcs_promotional_banner
+settings:
+  id: rcs_promotional_banner
+  label: 'Alshaya RCS Promotional Banner'
+  provider: alshaya_rcs_listing
+  label_display: '0'
+visibility:
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      rcs_category: rcs_category
+    negate: false
+    context_mapping:
+      taxonomy_term: '@alshaya_custom.term_route_context:taxonomy_term'

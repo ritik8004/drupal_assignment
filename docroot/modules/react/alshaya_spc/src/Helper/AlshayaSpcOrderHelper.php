@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
+use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
  * Class Alshaya Spc Order Helper.
@@ -97,7 +98,7 @@ class AlshayaSpcOrderHelper {
    *
    * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
    */
-  private $skuInfoHelper;
+  protected $skuInfoHelper;
 
   /**
    * Language manager.
@@ -170,11 +171,25 @@ class AlshayaSpcOrderHelper {
   protected $skuImagesHelper;
 
   /**
+   * Spc helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
    * Delivery Options helper.
    *
    * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
    */
   protected $deliveryOptionsHelper;
+
+  /**
+   * Date time formatter interface.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
 
   /**
    * AlshayaSpcCustomerHelper constructor.
@@ -214,9 +229,13 @@ class AlshayaSpcOrderHelper {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
    * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
-   *   Sku imagese helper.
+   *   Sku images helper.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   Spc helper service.
    * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
    *   Delivery Options Helper.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -236,7 +255,9 @@ class AlshayaSpcOrderHelper {
                               StoresFinderUtility $store_finder,
                               RendererInterface $renderer,
                               SkuImagesHelper $images_helper,
-                              DeliveryOptionsHelper $delivery_options_helper) {
+                              AlshayaSpcHelper $spc_helper,
+                              DeliveryOptionsHelper $delivery_options_helper,
+                              DateFormatterInterface $date_formatter) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -255,7 +276,9 @@ class AlshayaSpcOrderHelper {
     $this->storeFinder = $store_finder;
     $this->renderer = $renderer;
     $this->skuImagesHelper = $images_helper;
+    $this->spcHelper = $spc_helper;
     $this->deliveryOptionsHelper = $delivery_options_helper;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -550,6 +573,40 @@ class AlshayaSpcOrderHelper {
         $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'] ?? '';
 
         break;
+    }
+
+    // Process HFD online booking information if available and if the order is
+    // eligible for the HFD booking.
+    if (isset($order['online_booking_information'])
+      && isset($order['online_booking_information']['is_hfd_booking_order'])
+      && $order['online_booking_information']['is_hfd_booking_order']) {
+      // Check if the appointment is booked with order or failed. To confirm
+      // this we will check if the 'appointment_date' and 'start_time' are
+      // available of not. If 'appointment_date' and 'start_time' values are
+      // available, we will process to display booking details on FE.
+      if (!empty($order['online_booking_information']['appointment_date'])
+        && !empty($order['online_booking_information']['start_time'])) {
+        $orderDetails['online_booking_information'] = $this->t('<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>', [
+          '@appointment_date' => $this->dateFormatter->format(
+            strtotime($order['online_booking_information']['appointment_date']),
+            'online_booking',
+            'd-M-Y',
+          ),
+          '@start_time' => $order['online_booking_information']['start_time'],
+          '@end_time' => $order['online_booking_information']['end_time'],
+        ],
+        [
+          'context' => 'online_booking',
+        ]
+        );
+      }
+      else {
+        // If the order is HFD order, i.e. 'is_hfd_booking_order' is set to
+        // true and 'appointment_date' isn't available, it means there were
+        // some errors in appointment booking during the order placement. We
+        // need to show an error message to customer in this case.
+        $orderDetails['online_booking_information'] = $this->t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
+      }
     }
 
     return $orderDetails;

@@ -1,14 +1,29 @@
 (function ($, Drupal) {
+  // Flag to check if Postpay is initialized or not.
+  var postpayInitialized = false;
+  // Updates the flag variable once Postpay is initialized.
+  document.addEventListener('alshayaPostpayInit', () => {
+    postpayInitialized = true;
+
+    // We trigger Drupal behavior here so that in case Postpay was initialized
+    // after the behaviors are finished executing, then this will take care of
+    // executing the behavior code again.
+    Drupal.behaviors.postpayPDP.attach(document);
+  });
+
   Drupal.behaviors.postpayPDP = {
     attach: function (context, settings) {
-      document.addEventListener('alshayaPostpayInit', () => {
-        $('.sku-base-form').each(function () {
-          setPostpayWidgetAmount(this);
-        });
+      if (!postpayInitialized) {
+        return;
+      }
 
-        $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
-          setPostpayWidgetAmount(this, variant, event);
-        });
+      var skuBaseForm = $('.sku-base-form', context).not('[data-sku *= "#"]');
+      skuBaseForm.once('postpay-pdp-initial').each(function () {
+        setPostpayWidgetAmount(this);
+      });
+
+      skuBaseForm.once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+        setPostpayWidgetAmount(this, variant, event);
       });
     }
   };
@@ -17,9 +32,12 @@
     var product = $(element).closest('[gtm-type="gtm-product-link"]');
     var sku = $(element).attr('data-sku');
     var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-    if (typeof drupalSettings[productKey][sku] === 'undefined') {
+    var productData = window.commerceBackend.getProductData(sku, productKey);
+
+    if (productData === null) {
       return;
     }
+
     if (typeof event !== 'undefined') {
       // We get variant details in event object for magazine v2 layout.
       if ((typeof event.detail !== 'undefined') && (typeof event.detail.variant !== 'undefined')) {
@@ -37,9 +55,11 @@
         }
       }
     }
-    var variantPrice = (drupalSettings[productKey][sku]['type'] != 'simple') ?
-      drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :
-      drupalSettings[productKey][sku]['gtm_attributes']['price'];
+    // @todo Check this works for all kinds of products:
+    // simple, simple grouped, configurable, configurable grouped and matchback.
+    var variantPrice = (productData.type != 'simple') ?
+      productData['variants'][variant]['gtm_price'] :
+      productData.gtm_attributes.price;
 
     // No need to add a condition to check if the amount is changed, Postpay
     // takes care of that.

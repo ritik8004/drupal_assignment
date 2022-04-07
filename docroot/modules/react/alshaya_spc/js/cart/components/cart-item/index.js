@@ -47,7 +47,7 @@ export default class CartItem extends React.Component {
     // Skip the get product data for virtual product ( This is applicable
     // when egift card module is enabled and cart item is virtual.)
     if (!(isEgiftCardEnabled() && cartItemIsVirtual(item))) {
-      Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+      Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback, item.parentSKU);
     }
 
     if (isWishlistEnabled()) {
@@ -367,7 +367,8 @@ export default class CartItem extends React.Component {
                 <WishlistContainer
                   context="cart"
                   position="cart-item"
-                  sku={parentSKU || sku}
+                  skuCode={parentSKU || sku}
+                  sku={sku}
                   title={title}
                   options={attributeOptions}
                   format="text"
@@ -376,7 +377,8 @@ export default class CartItem extends React.Component {
               {/* When user clicks on delete, pop shown asking if product added to wishlist. */}
               <ConditionalView condition={showWishlistPopup}>
                 <WishlistPopupBlock
-                  sku={parentSKU}
+                  sku={parentSKU || sku}
+                  variant={sku}
                   title={title}
                   itemImage={cartImage}
                   options={attributeOptions}

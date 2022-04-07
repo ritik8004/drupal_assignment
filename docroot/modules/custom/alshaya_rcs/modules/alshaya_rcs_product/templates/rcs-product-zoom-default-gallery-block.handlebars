@@ -1,0 +1,72 @@
+<div class="cloudzoom thumbnail-count-{{data.root.thumbnails.length}}">
+  <div class="cloudzoom__herocontainer">
+    <div id="cloud-zoom-wrap" class="cloudzoom__image">
+      <div class="img-wrap" data-scale="2">
+        <img
+          data-zoom-url="{{data.root.mainImage.zoomurl}}"
+          loading="lazy"
+          src="{{data.root.mainImage.mediumurl}}"
+          alt="{{data.root.mainImage.label}}"
+          title="{{data.root.mainImage.label}}"
+        />
+      </div>
+    </div>
+    <div class="yt-vi-container cloudzoom__video_main"></div>
+    <div class="product-labels"></div>
+  </div>
+  <div class="cloudzoom__thumbnails">
+    <ul id="lightSlider" class="{{data.root.pager_flag}}">
+      {{#each data.root.thumbnails}}
+        {{#if (eq this.type "youtube")}}
+          <li data-iframe="{{this.url}}" class="cloudzoom__thumbnails__video youtube">
+            <img
+              width="{{this.width}}"
+              loading="lazy"
+              height="{{this.height}}"
+              src="{{this.thumburl}}"
+              alt="{{this.video_desc}}"
+              title="{{this.video_title}}"
+            />
+          </li>
+        {{else if (eq this.type "vimeo")}}
+          <li data-iframe="{{this.url}}" class="cloudzoom__thumbnails__video vimeo">
+            <img
+              width="{{this.width}}"
+              loading="lazy"
+              height="{{this.height}}"
+              src="{{this.thumburl}}"
+              alt="{{this.video_desc}}"
+              title="{{this.video_title}}"
+            />
+          </li>
+        {{else if (eq this.type "video")}}
+          <li class="cloudzoom__thumbnails__video pdp-video">
+            <button class="pdp-video-close"></button>
+            <video class="gallery-video" loading="lazy" muted="muted" loop>
+              <source src="{{data.root.lazy_load_placeholder}}" data-src="{{this.url}}" />
+              {{t "Your browser does not support the video tag."}}
+            </video>
+            <div class="pdp-video-controls">
+              <div class="control" title="{{t "Play/Pause Video"}}"></div>
+            </div>
+          </li>
+        {{else}}
+          <li>
+            <a
+              data-zoom-url="{{this.zoomurl}}"
+              href="{{this.mediumurl}}"
+              class="cloud-zoom-gallery cloudzoom__thumbnails__image"
+            >
+              <img
+                loading="lazy"
+                src="{{this.thumburl}}"
+                alt="{{this.label}}"
+                title="{{this.label}}"
+              />
+            </a>
+          </li>
+        {{/if}}
+      {{/each}}
+    </ul>
+  </div>
+</div>

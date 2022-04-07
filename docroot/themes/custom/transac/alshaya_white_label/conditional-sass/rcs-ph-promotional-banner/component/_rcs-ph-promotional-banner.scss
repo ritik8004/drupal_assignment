@@ -1,0 +1,8 @@
+.page-type-promotion:not(.rcs-loaded) #alshaya-algolia-plp,
+#rcs-ph-promotional_banner:not(.rcs-loaded) {
+  @include plain-loader;
+
+  & > * {
+    visibility: hidden;
+  }
+}

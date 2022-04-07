@@ -285,6 +285,7 @@ $_frame_promo_red: #c03;
 $_sofa-section-grey: #d9d9d9;
 $_sofa-section-grey2: #1a1a1a;
 $_sofa-section-brown: #866347;
+$white-six: #f9f9f9;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -534,6 +535,8 @@ $header_mobile_menu_active: $white-five;
 $header_mobile_menu_close_bg: $white-five;
 $header_mobile_menu_close: $black;
 $header_mobile_menu_overlay: rgba(0, 0, 0, 0.6);
+$header_mobile_menu_bg: $white_five;
+$header_mobile_border: $white-smoke-light;
 
 // Branding menu mobile.
 $header_branding_shadow: $greyish;
@@ -2063,6 +2066,12 @@ $sofa-sectional-active-border: $_sofa-section-grey2;
 $sofa-sectional-disabled-clear-option-text: $primary_text;
 $sofa-sectional-disabled-clear-option-border: $light-greyish;
 $sofa-sectional-select-border: $new-pdp-blue;
+
+// RCS Loaders.
+$no-color: transparent;
+$loader-gradient-1: $white;
+$loader-gradient-2: $_screeching_white;
+$loader-text-ph: $white-six;
 
 // eGift purchase page.
 $egift-purchase-page-border: $warm-grey-two;

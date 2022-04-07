@@ -1,0 +1,10 @@
+name: Alshaya RCS Promotion
+type: module
+description: Alshaya implementation of RCS Promotion. Check RCS module.
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - rcs_magento_placeholders:rcs_magento_placeholders
+  - alshaya_algolia_react:alshaya_algolia_react
+  - alshaya_rcs_magento_placeholders:alshaya_rcs_magento_placeholders
+  - alshaya_acm_promotion:alshaya_acm_promotion

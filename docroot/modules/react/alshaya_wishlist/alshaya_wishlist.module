@@ -82,6 +82,8 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   $page['#attached']['library'][] = 'alshaya_white_label/wishlist';
   // Add custom js library to handle add to cart action for wishlist.
   $page['#attached']['library'][] = 'alshaya_wishlist/wishlist_add_to_cart';
+  // Add custom js library to handle gtm push events for wishlist.
+  $page['#attached']['library'][] = 'alshaya_wishlist/wishlist_gtm';
 
   // Check if one time user login identification cookie is set
   // and add a drupal settings in wishlist for enable merging.

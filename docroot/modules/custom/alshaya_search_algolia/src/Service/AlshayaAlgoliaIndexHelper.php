@@ -877,7 +877,11 @@ class AlshayaAlgoliaIndexHelper {
       // Check if color swatch is enabled and image url exist.
       if ($index_product_image_url && !empty($swatch['image_url'])) {
         $child = SKU::loadFromSku($swatch['child_sku_code']);
-        $swatch_product_image = $child->getThumbnail();
+
+        // Let's never download images here, we should always download when
+        // preparing gallery which is done before this.
+        $swatch_product_image = $child->getThumbnail(FALSE);
+
         // If we have image for the product.
         if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
           $url = file_create_url($swatch_product_image['file']->getFileUri());

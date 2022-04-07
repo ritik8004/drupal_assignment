@@ -1,0 +1,38 @@
+{{'see docroot/modules/custom/alshaya_acm_product/src/Service/SkuPriceHelper.php' }}
+<div class="special-price-block">
+  {{#if (eq display_mode 'simple') }}
+
+    {{#if (and regular_price final_price) }}
+
+      {{#if (gte final_price.value regular_price.value) }}
+        <div class="simple-price--wrapper price-wrapper price">
+          {{{render 'product.block.price.item' regular_price }}}
+        </div>
+      {{else }}
+        <div class="has--special--price">
+          {{{render 'product.block.price.item' regular_price }}}
+        </div>
+        <div class="special--price">
+          {{{render 'product.block.price.item' final_price }}}
+        </div>
+        {{#if discount.percent_off }}
+          <div class="price--discount">
+              ({{t 'Save @discount%' discount=discount.percent_off }})
+          </div>
+        {{/if}}
+      {{/if}}
+
+    {{else }}
+
+      {{#if final_price }}
+        <div class="simple-price--wrapper price-wrapper price">
+          {{{render 'product.block.price.item' final_price }}}
+        </div>
+      {{/if}}
+
+    {{/if}}
+
+  {{else}}
+    {{'@todo Use price range fields from GraphQl'}}
+  {{/if}}
+</div>

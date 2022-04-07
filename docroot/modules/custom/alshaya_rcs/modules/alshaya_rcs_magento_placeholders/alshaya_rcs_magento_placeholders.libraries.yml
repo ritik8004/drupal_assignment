@@ -1,0 +1,6 @@
+main:
+  js:
+    dist/alshaya_rcs_magento_placeholders.bundle.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

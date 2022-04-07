@@ -23,7 +23,7 @@ function alshaya_product_lpn_page_attachments(array &$page) {
     'lpn_attribute' => $lpn_attribute,
   ];
 
-  $page['#attached']['drupalSettings']['add_to_bag']['hidden_form_attributes'][] = $config->get('lpn_attribute');
+  $page['#attached']['drupalSettings']['hidden_form_attributes'][] = $config->get('lpn_attribute');
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $config->getCacheTags());
 }
 
@@ -200,4 +200,15 @@ function _alshaya_product_lpn_compare_season_codes(array $season_codes, $code_id
   }
 
   return $flag;
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_product_options_to_query().
+ */
+function alshaya_product_lpn_alshaya_rcs_product_product_options_to_query(array $options) {
+  array_push($options,
+    ['attribute_code' => 'season_code', 'entity_type' => '4'],
+  );
+
+  return $options;
 }

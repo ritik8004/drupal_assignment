@@ -161,6 +161,7 @@ class AlshayaBazaarVoiceController extends ControllerBase {
     $build['#attached']['html_head'][] = [$robots, 'robots'];
     $build['#attached']['html_head'][] = [$bvPageType, 'bv:pageType'];
     $build['#attached']['library'][] = 'bazaar_voice/bazaar_voice';
+    $build['#attached']['library'][] = 'alshaya_bazaar_voice/pie_write_review';
 
     return $build;
   }

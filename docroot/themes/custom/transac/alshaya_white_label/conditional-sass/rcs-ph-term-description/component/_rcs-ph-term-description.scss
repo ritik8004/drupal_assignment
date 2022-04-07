@@ -1,0 +1,10 @@
+.rcs-page:not(.rcs-loaded) .c-page-title__description,
+.rcs-page:not(.rcs-loaded) .c-content__region .term-description-mobile-only.c-page-title__description {
+  width: auto;
+
+  & > * {
+    visibility: hidden;
+  }
+
+  @include plain-loader;
+}

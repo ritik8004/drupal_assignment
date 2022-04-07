@@ -1,7 +1,0 @@
-administer google_page_speed configuration:
-  title: 'Administer google_page_speed configuration'
-  description: 'Allows user to configure google page speed configurations.'
-
-access google_page_speed url scores:
-  title: 'Access Google PageSpeed Url scores'
-  description: 'Allows user/client to fetch score data stored in database.'

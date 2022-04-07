@@ -14,7 +14,10 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() == 'acq_product') {
+  if (($entity->bundle() == 'rcs_product')) {
+    $build['#attached']['library'][] = 'alshaya_tbs_transac/product';
+  }
+  elseif ($entity->bundle() == 'acq_product') {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $skuManager->getSkuForNode($entity);
@@ -308,4 +311,11 @@ function alshaya_tbs_transac_alshaya_performance_preload_alter(array &$preload) 
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query_alter().
+ */
+function alshaya_tbs_transac_rcs_placeholders_graphql_query_alter(&$query_fields) {
+  $query_fields['products']['items']['short_description'] = ['html'];
 }

@@ -146,7 +146,7 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
       if ($parents = \Drupal::service('alshaya_acm_product.category_helper')->getBreadcrumbTermList($term_list)) {
         foreach ($parents as $term) {
           if ($term instanceof TermInterface) {
-            $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+            $term = \Drupal::service('entity.repository')->getTranslationFromContext($term, $node->language()->getId());
             $replacements[$tokens['category_names']] = $term->getName();
             break;
           }
@@ -157,6 +157,9 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
   elseif ($type == 'alshaya_seo') {
     $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
+    $translation_options = [
+      'langcode' => $options['langcode'] ?? $current_langcode,
+    ];
     $seo_config = \Drupal::config('alshaya_seo_transac.meta_variables');
     $token_service = \Drupal::token();
 
@@ -189,7 +192,7 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
       // Find the desired token by name.
       switch ($name) {
         case 'brand_name':
-          $brand_name = (string) t('seo_brand_name');
+          $brand_name = (string) t('seo_brand_name', [], $translation_options);
 
           // Invoke the alter hook to allow all modules to set brand.
           \Drupal::moduleHandler()->alter('alshaya_seo_brandname', $brand_name);
@@ -203,7 +206,7 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
           $replacements[$original] = (string) t('Free Delivery on orders over @currency_code @min_amount', [
             '@currency_code' => $currency_code,
             '@min_amount' => $min_amount,
-          ]);
+          ], $translation_options);
           break;
 
         case 'usp2':
@@ -215,24 +218,24 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
           break;
 
         case 'country':
-          $replacements[$original] = (string) t('seo_country');
+          $replacements[$original] = (string) t('seo_country', [], $translation_options);
           break;
 
         case 'city1':
           // Show empty string if translation not available.
-          $value = (string) t('seo_city1');
+          $value = (string) t('seo_city1', [], $translation_options);
           $replacements[$original] = $value == 'seo_city1' ? '' : $value;
           break;
 
         case 'city1_keyword':
-          $value = (string) t('seo_city1');
+          $value = (string) t('seo_city1', [], $translation_options);
           $replacement = '';
 
           if ($value && $value !== 'seo_city1') {
             $replacement = (string) t('@title in @city', [
               '@title' => !empty($data['node']) ? $data['node']->label() : '',
               '@city' => $value,
-            ]);
+            ], $translation_options);
 
             $replacement = $replacement . ',';
           }
@@ -242,19 +245,19 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
 
         case 'city2':
           // Show empty string if translation not available.
-          $value = (string) t('seo_city2');
+          $value = (string) t('seo_city2', [], $translation_options);
           $replacements[$original] = $value == 'seo_city2' ? '' : $value;
           break;
 
         case 'city2_keyword':
-          $value = (string) t('seo_city2');
+          $value = (string) t('seo_city2', [], $translation_options);
           $replacement = '';
 
           if ($value && $value !== 'seo_city2') {
             $replacement = (string) t('@title in @city', [
               '@title' => !empty($data['node']) ? $data['node']->label() : '',
               '@city' => $value,
-            ]);
+            ], $translation_options);
 
             $replacement = $replacement . ',';
           }
@@ -264,8 +267,8 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
 
         case 'cities':
           $cities = [
-            $token_service->replace('[alshaya_seo:city1]'),
-            $token_service->replace('[alshaya_seo:city2]'),
+            $token_service->replace('[alshaya_seo:city1]', ['term' => $category_term], $translation_options),
+            $token_service->replace('[alshaya_seo:city2]', ['term' => $category_term], $translation_options),
           ];
 
           $replacements[$original] = implode(', ', array_filter($cities));
@@ -273,47 +276,47 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
 
         case 'term_cities':
           $cities = array_filter([
-            $token_service->replace('[alshaya_seo:city1]'),
-            $token_service->replace('[alshaya_seo:city2]'),
+            $token_service->replace('[alshaya_seo:city1]', ['term' => $category_term], $translation_options),
+            $token_service->replace('[alshaya_seo:city2]', ['term' => $category_term], $translation_options),
           ]);
 
           foreach ($cities as &$city) {
             if (isset($sale) && $sale === TRUE) {
-              $city = (string) t('[term:name] sale in @city', ['@city' => $city]);
+              $city = (string) t('[term:name] sale in @city', ['@city' => $city], $translation_options);
             }
             else {
-              $city = (string) t('Shop [term:name] in @city', ['@city' => $city]);
+              $city = (string) t('Shop [term:name] in @city', ['@city' => $city], $translation_options);
             }
           }
 
           $cities = implode(', ', array_filter($cities));
-          $replacements[$original] = $token_service->replace($cities, ['term' => $category_term]);
+          $replacements[$original] = $token_service->replace($cities, ['term' => $category_term], $translation_options);
           break;
 
         case 'term_name':
           $is_l1 = $categoryManager->isCategoryL1($category_term);
 
           if (isset($sale) && $sale === TRUE) {
-            $prefix_token = (string) t('alshaya_seo_sale_title_prefix');
+            $prefix_token = (string) t('alshaya_seo_sale_title_prefix', [], $translation_options);
             $prefix = ($prefix_token == 'alshaya_seo_sale_title_prefix')
               ? ''
-              : $token_service->replace($prefix_token, ['term' => $category_term]);
+              : $token_service->replace($prefix_token, ['term' => $category_term], $translation_options);
 
-            $suffix_token = (string) t('alshaya_seo_sale_title_suffix');
+            $suffix_token = (string) t('alshaya_seo_sale_title_suffix', [], $translation_options);
             $suffix = ($suffix_token == 'alshaya_seo_sale_title_suffix')
               ? ''
-              : $token_service->replace($suffix_token, ['term' => $category_term]);
+              : $token_service->replace($suffix_token, ['term' => $category_term], $translation_options);
           }
           else {
-            $prefix = t('Shop');
+            $prefix = t('Shop', [], $translation_options);
 
             $suffix_token = $is_l1
-              ? t('Collection Online')
+              ? t('Collection Online', [], $translation_options)
               : t('Collection for @parent Online', [
                 '@parent' => $categoryManager->getL1Category($category_term)->label(),
-              ]);
+              ], $translation_options);
 
-            $suffix = $token_service->replace((string) $suffix_token, ['term' => $category_term]);
+            $suffix = $token_service->replace((string) $suffix_token, ['term' => $category_term], $translation_options);
           }
 
           $replacements[$original] = implode(' ', array_filter([
@@ -326,45 +329,45 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
 
         case 'text_before_cod':
           if (isset($sale) && $sale === TRUE) {
-            $value = (string) t('alshaya_seo_sale_text_before_cod');
-            $replacements[$original] = $value == 'alshaya_seo_sale_text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_sale_text_before_cod', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_sale_text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           else {
-            $value = (string) t('alshaya_seo_text_before_cod');
-            $replacements[$original] = $value == 'alshaya_seo_text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_text_before_cod', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           break;
 
         case 'sno_suffix':
           if (isset($sale) && $sale === TRUE) {
-            $value = (string) t('alshaya_seo_sale_sno_suffix');
-            $replacements[$original] = $value == 'alshaya_seo_sale_sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_sale_sno_suffix', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_sale_sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           else {
-            $value = (string) t('alshaya_seo_sno_suffix');
-            $replacements[$original] = $value == 'alshaya_seo_sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_sno_suffix', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           break;
 
         case 'desc_start':
           if (isset($sale) && $sale === TRUE) {
-            $value = (string) t('alshaya_seo_sale_desc_start');
-            $replacements[$original] = $value == 'alshaya_seo_sale_desc_start' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_sale_desc_start', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_sale_desc_start' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           else {
-            $value = (string) t('alshaya_seo_desc_start');
-            $replacements[$original] = $value == 'alshaya_seo_desc_start' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_desc_start', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_desc_start' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           break;
 
         case 'title_sub_suffix':
           if (isset($sale) && $sale === TRUE) {
-            $value = (string) t('alshaya_seo_sale_title_sub_suffix');
-            $replacements[$original] = $value == 'alshaya_seo_sale_title_sub_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_sale_title_sub_suffix', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_sale_title_sub_suffix' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           else {
-            $value = (string) t('alshaya_seo_title_sub_suffix');
-            $replacements[$original] = $value == 'alshaya_seo_title_sub_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_title_sub_suffix', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_title_sub_suffix' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           break;
 
@@ -389,23 +392,23 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
           break;
 
         case 'desc_free_delivery_n_cod':
-          $value = (string) t('alshaya_seo_desc_free_delivery_n_cod');
+          $value = (string) t('alshaya_seo_desc_free_delivery_n_cod', [], $translation_options);
           $replacements[$original] = $value == 'alshaya_seo_desc_free_delivery_n_cod' ? '' : $value;
           break;
 
         case 'top_category':
-          $value = (string) t('alshaya_seo_top_category');
-          $replacements[$original] = $value == 'alshaya_seo_top_category' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          $value = (string) t('alshaya_seo_top_category', [], $translation_options);
+          $replacements[$original] = $value == 'alshaya_seo_top_category' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           break;
 
         case 'keywords':
           if (isset($sale) && $sale === TRUE) {
-            $value = (string) t('alshaya_seo_sale_keywords');
-            $replacements[$original] = $value == 'alshaya_seo_sale_keywords' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_sale_keywords', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_sale_keywords' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           else {
-            $value = (string) t('alshaya_seo_keywords');
-            $replacements[$original] = $value == 'alshaya_seo_keywords' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = (string) t('alshaya_seo_keywords', [], $translation_options);
+            $replacements[$original] = $value == 'alshaya_seo_keywords' ? '' : $token_service->replace($value, ['term' => $category_term], $translation_options);
           }
           break;
 

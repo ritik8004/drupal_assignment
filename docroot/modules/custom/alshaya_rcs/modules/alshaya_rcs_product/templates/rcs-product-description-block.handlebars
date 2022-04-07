@@ -1,0 +1,30 @@
+<div class="content--description">
+  <span class="close"></span>
+  <h2 class="field__label">{{t 'Product Description' }}</h2>
+  <div class="field__content">
+    {{#if html }}
+      <div class="desc-wrapper">
+        {{#if label }}
+          <div class="desc-label">
+            {{ label }}
+          </div>
+        {{/if}}
+        <div class="desc-value">
+          {{{ html }}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if legal_notice.status }}
+      <div class="legal-notice desc-wrapper">
+        <div class="desc-label">
+          {{ legal_notice.label }}
+        </div>
+        <div class="desc-value">
+          {{{ legal_notice.summary }}}
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</div>
+<div class="gradient-holder"></div>

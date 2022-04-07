@@ -13,7 +13,7 @@
   <!-- Set ignore extensions. -->
   <!-- @see https://www.drupal.org/node/2867601#comment-12075633 -->
   <arg name="extensions" value="php,module,inc,install,test,profile,theme,info,txt,md,yml"/>
-  <arg name="ignore" value="*.css,*.md,*.txt,*.png,*.gif,*.jpeg,*.jpg,*.svg,*.min.js"/>
+  <arg name="ignore" value="*.css,*.md,*.txt,*.png,*.gif,*.jpeg,*.jpg,*.svg,*.min.js,*.js"/>
 
   <!-- Use colors in output. -->
   <arg name="colors"/>
@@ -230,12 +230,12 @@
 
   <exclude-pattern>*/behat</exclude-pattern>
   <exclude-pattern>*/node_modules</exclude-pattern>
+  <exclude-pattern>*/dist/*.js</exclude-pattern>
+  <exclude-pattern>*/assets/js</exclude-pattern>
   <exclude-pattern>*/vendor</exclude-pattern>
   <exclude-pattern>docroot/modules/react/*/*.js</exclude-pattern>
   <exclude-pattern>docroot/modules/react/*/js</exclude-pattern>
-  <exclude-pattern>docroot/modules/react/*/dist</exclude-pattern>
   <exclude-pattern>docroot/modules/react/*/assets/js</exclude-pattern>
-  <exclude-pattern>docroot/modules/react/*/node_modules</exclude-pattern>
   <exclude-pattern>docroot/modules/react/*/modules/*/js</exclude-pattern>
   <exclude-pattern>docroot/modules/react/js</exclude-pattern>
   <exclude-pattern>docroot/modules/react/node_modules</exclude-pattern>

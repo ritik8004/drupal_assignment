@@ -1,0 +1,6 @@
+{{#if promotions }}
+  {{#each promotions}}
+    <a href="{{ this.link }}" hreflang="{{ this.hreflang }}">{{this.label}}</a>
+  {{/each}}
+  <div class="promotions-dynamic-label sku-{{ sku }} hidden mobile-only-dynamic-promotion"></div>
+{{/if}}

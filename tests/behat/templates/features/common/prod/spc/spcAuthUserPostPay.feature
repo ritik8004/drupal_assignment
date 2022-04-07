@@ -1,4 +1,4 @@
-@javascript @auth @PostPay @homeDelivery @vsaeprod
+@javascript @auth @PostPay @homeDelivery @vsaeprod @flaeprod
 Feature: SPC Checkout Home Delivery using Installments with PostPay method for Authenticated user
 
   Background:

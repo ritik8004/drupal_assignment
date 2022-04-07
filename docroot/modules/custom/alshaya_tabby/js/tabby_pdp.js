@@ -15,7 +15,9 @@
     var product = $(element).closest('[gtm-type="gtm-product-link"]');
     var sku = $(element).attr('data-sku');
     var productKey = (product.attr('data-vmode') === 'matchback') ? 'matchback' : 'productInfo';
-    if (typeof drupalSettings[productKey][sku] === 'undefined') {
+    var productData = window.commerceBackend.getProductData(sku, productKey, true);
+
+    if (productData === null) {
       return;
     }
     if (typeof event !== 'undefined') {
@@ -35,9 +37,9 @@
         }
       }
     }
-    var variantPrice = (drupalSettings[productKey][sku]['type'] !== 'simple') ?
-      drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :
-      drupalSettings[productKey][sku]['gtm_attributes']['price'];
+    var variantPrice = (productData['type'] !== 'simple') ?
+      productData['variants'][variant]['gtm_price'] :
+      productData['gtm_attributes']['price'];
 
     // Check if the amount is invalid.
     if (typeof variantPrice === 'undefined' || !(variantPrice)) {

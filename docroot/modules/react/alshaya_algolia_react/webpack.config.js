@@ -9,6 +9,7 @@ var config = {
   entry: {
     autocomplete: './js/src/SearchIndex.js',
     plp: './js/src/PlpIndex.js',
+    plpv2: './js/src/PlpV2Index.js',
     productCategoryCarousel: './js/src/ProductCategoryCarousel.js',
   },
   mode: 'production',
@@ -17,6 +18,7 @@ var config = {
     filename: '[name].js',
     publicPath: buildPath,
     chunkFilename: "[name]-[chunkhash].js",
+    jsonpFunction: "jsonpAlsAlg",
   },
   devServer: {
     contentBase: './',

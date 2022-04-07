@@ -20,6 +20,7 @@ import PriceElement from '../../../utilities/special-price/PriceElement';
 import Loading from '../../../../../js/utilities/loading';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -71,8 +72,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             // Current Time stamp to check for expiry.
             const currentTime = Math.floor(Date.now() / 1000);
 
-            // IF 0 balance card then no need to proceed further.
-            if (currentBalance === 0) {
+            // IF 0 balance or balance in negative card then no need to proceed further.
+            if (currentBalance <= 0) {
               this.setState({
                 egiftCardActualBalance: currentBalance,
                 egiftLinkedCardNumber: result.data.card_number,
@@ -154,6 +155,32 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
     // Event listener on shiping method update to remove redeemed Amount.
     document.addEventListener('changeShippingMethod', this.handleRemoveCard);
+    // Event listener on dom click to remove link card payment error.
+    document.addEventListener('click', this.handleRemoveError, false);
+  }
+
+  /**
+   * Remove api error when user moves away from hps payment method.
+   */
+  handleRemoveError = (e) => {
+    // Do nothing if user click hps payment.
+    if (e.target.classList.contains('payment-method-label-wrapper')
+      || e.target.id === 'link-egift-card'
+      || e.target.classList.contains('egift-link-card-label')) {
+      return;
+    }
+
+    const { apiErrorMessage } = this.state;
+    // Do not unset api error message if already empty.
+    if (apiErrorMessage === '') {
+      return;
+    }
+
+    // Remove api error message if user has
+    // clicked away from payment method.
+    this.setState({
+      apiErrorMessage: '',
+    });
   }
 
   openModal = (e) => {
@@ -187,7 +214,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
         && cartContainsAnyVirtualProduct(cart.cart)
         && cart.cart.totals.base_grand_total > egiftCardActualBalance)) {
         this.setState({
-          apiErrorMessage: Drupal.t('The egift card balance is not sufficient to pay remaining amount, Please use another payment method.', {}, { context: 'egift' }),
+          apiErrorMessage: Drupal.t('The eGift card balance is not sufficient to pay remaining amount, Please use another payment method.', {}, { context: 'egift' }),
         });
         return;
       }
@@ -215,6 +242,11 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               // Set checkbox status to checked as redemption was successfull.
               this.setState({
                 setChecked: true,
+              });
+              // Dispatch linked egift redeemed for GTM.
+              dispatchCustomEvent('egiftCardRedeemed', {
+                label: 'checked',
+                action: 'linked_card_redemption',
               });
             } else {
               logger.error('Empty Response in eGiftRedemption for linked card. Action: @action CardNumber: @cardNumber Response: @response', {
@@ -284,6 +316,11 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               eGiftbalancePayable: 0,
               apiErrorMessage: '',
               setChecked: false,
+            });
+            // Dispatch unlink egift redeemed for GTM.
+            dispatchCustomEvent('egiftCardRedeemed', {
+              label: 'unchecked',
+              action: 'linked_card_redemption',
             });
           } else {
             logger.error('Empty Response while calling the cancel eGiftRedemption. Action: @action, CardNumber: @cardNumber, Response: @response', {
@@ -417,13 +454,13 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               <label htmlFor="link-egift-card" className="checkbox-sim checkbox-label egift-link-card-label">
                 <ConditionalView condition={isEgiftCardExpired}>
                   {
-                    Drupal.t('Pay using egift card (Card is expired)', {}, { context: 'egift' })
+                    Drupal.t('Pay using eGift card (Card is expired)', {}, { context: 'egift' })
                   }
                 </ConditionalView>
 
                 <ConditionalView condition={!isEgiftCardExpired}>
                   {
-                    Drupal.t('Pay using egift card', {}, { context: 'egift' })
+                    Drupal.t('Pay using eGift card', {}, { context: 'egift' })
                   }
                   <div className="spc-payment-method-desc">
                     <div className="desc-content">

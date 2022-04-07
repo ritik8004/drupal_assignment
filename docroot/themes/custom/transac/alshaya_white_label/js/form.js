@@ -41,6 +41,7 @@
         '.c-content textarea'
       ];
 
+      inputFields = inputFields.join(', ');
       // Move input-bar adjacent to the input field for material design effect to work.
       $(inputFields).each(function () {
         $(this).on('focusout focus', function () {

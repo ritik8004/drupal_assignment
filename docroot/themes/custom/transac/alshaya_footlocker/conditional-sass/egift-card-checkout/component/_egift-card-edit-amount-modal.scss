@@ -7,4 +7,14 @@
       }
     }
   }
+
+  .popup-overlay {
+    .popup-content {
+      html[lang=ar] & {
+        @include breakpoint($tablet) {
+          max-width: 25.5rem;
+        }
+      }
+    }
+  }
 }

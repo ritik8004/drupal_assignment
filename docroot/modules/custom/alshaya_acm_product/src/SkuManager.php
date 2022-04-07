@@ -2399,11 +2399,18 @@ class SkuManager {
         }
 
         // Get raw attributes values for configurable options.
+        // Check if this attribute code is replaced earlier and fetch the actual
+        // attribute code from `display_configurable_for` field and get the raw
+        // option data using that. For example `color_label` attribute code is
+        // used for `article_castor_id` attribute code and we will found that
+        // attribute only in configurable_attributes array of product_tree.
+        $code = !empty($configurableFieldReplacements)
+          && isset($configurableFieldReplacements[$code]) ? $configurableFieldReplacements[$code]['display_configurable_for'] : $code;
         $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
 
         $configurableFieldValues[$fieldKey] = [
           'attribute_id' => $fieldKey,
-          'label' => $this->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
+          'label' => $this->getLabelFromParentSku($sku, $code) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
           'value' => $sku->get($fieldKey)->getString(),
@@ -2433,7 +2440,7 @@ class SkuManager {
       // phpcs:ignore
       $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
       foreach ($configurables as $field) {
-        if (in_array($attr_code, $field)) {
+        if ($attr_code == $field['code']) {
           return $field['label'];
         }
       }
@@ -2891,7 +2898,8 @@ class SkuManager {
     }
 
     // If we don't have product node, let's just return default.
-    if (!($entity instanceof NodeInterface) || $entity->bundle() !== 'acq_product') {
+    if (!($entity instanceof NodeInterface)
+      || !in_array($entity->bundle(), ['acq_product', 'rcs_product'])) {
       return $this->getContextFromLayoutKey($context, $static['default']);
     }
 
@@ -2910,7 +2918,7 @@ class SkuManager {
     }
 
     // The layout has been overriden at category level.
-    elseif (($term_list = $entity->get('field_category')->getValue())) {
+    elseif (($entity->hasField('field_category')) && ($term_list = $entity->get('field_category')->getValue())) {
       $terms = array_column($term_list, 'target_id');
       $applied_layout = $this->getPdpLayoutFromCategories($terms);
       if ($applied_layout != NULL) {
@@ -3859,7 +3867,7 @@ class SkuManager {
    * @return array
    *   Return sanitized version sku
    */
-  public function getSanitizedSku(string $skuId) {
+  public function getSanitizedSku($skuId) {
     if (empty($skuId)) {
       return NULL;
     }

@@ -7,12 +7,15 @@ var config = {
     reviews: './js/src/reviews',
     myaccount: './js/src/myaccount',
     myorders: './js/src/myorders',
+    reviewsV2: './js/src/reviewsV2',
+    ratingV2: './js/src/ratingV2',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
     publicPath: buildPath,
     chunkFilename: "[id].chunk.[chunkhash].js",
+    jsonpFunction: "jsonpAlsBv",
   },
   devServer: {
     contentBase: './',

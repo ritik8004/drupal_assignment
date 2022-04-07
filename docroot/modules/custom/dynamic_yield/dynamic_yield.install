@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for dynamic_yield module.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating dynamic yield configuration.
+ */
+function dynamic_yield_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['dynamic_yield.settings'],
+    'dynamic_yield',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}

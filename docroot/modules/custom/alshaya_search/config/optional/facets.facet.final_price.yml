@@ -33,6 +33,12 @@ hard_limit: 0
 exclude: false
 only_visible_when_facet_source_is_visible: false
 processor_configs:
+  granularity_item:
+    processor_id: granularity_item
+    weights:
+      build: 35
+    settings:
+      granularity: 5
   raw_value_widget_order:
     processor_id: raw_value_widget_order
     weights:

@@ -1,0 +1,169 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables: @see node.html.twig.
+ *
+ * @see template_preprocess_node()
+ *
+ * @todo Remove the id attribute (or make it a class), because if that gets
+ *   rendered twice on a page this is invalid CSS for example: two lists
+ *   in different view modes.
+ *
+ * @ingroup themeable
+ */
+#}
+{% extends '@alshaya_rcs_product/node--rcs-product--full.html.twig' %}
+{% set attributes = attributes.addClass('magazine-layout-node') %}
+{% block mainContent %}
+  <div class="content__main">
+    {% if content.gallery is not null %}
+      {{ content.gallery }}
+    {% else %}
+      <div id="product-zoom-container"></div>
+    {% endif %}
+  </div>
+{% endblock %}
+{% block contentSidebar %}
+  <div class="content-sidebar-wrapper">
+    {% block titleBlock %}
+      <div class="content__title_wrapper">
+        {% if quantity_limit_enabled == true %}
+          <div class="order-quantity-limit-message mobile-only"></div>
+        {% endif %}
+        <div>#rcs.product._self|brand_logo#</div>
+
+        {% block productBrand %}
+        {% endblock %}
+
+        <h1><span>#rcs.product.name#</span></h1>
+
+        {% block pricePrefix %}
+        {% endblock %}
+
+        <div class="info-wrapper">
+          <div class="price-block {{ content.price_block_identifier }}">
+            #rcs.product._self|price#
+          </div>
+
+          {% if content.postpay %}
+            {{ attach_library('alshaya_white_label/postpay-pdp') }}
+            <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
+          {% endif %}
+
+          {% if content.tabby %}
+            <div class="tabby mobile-only-hide"> {{ content.tabby }} </div>
+          {% endif %}
+
+          <div class="promotion-discount-wrapper">
+            <div class="price--discount discount-{{ content.price_block_identifier }}">
+              {% if content.price_block['#discount'] %}
+                ({{ content.price_block['#discount'] }})
+              {% endif %}
+            </div>
+
+            <div class="promotions promotions-full-view-mode">#rcs.product._self|promotions#</div>
+          </div>
+
+          <div class="vat-text">#rcs.product._self|vat_text#</div>
+        </div>
+
+        {% if express_delivery_enabled is defined and express_delivery_enabled %}
+          <div id="rcs-ph-delivery-info-block"></div>
+        {% endif %}
+
+        {% if content.delivery_link is not empty %}
+          <div class="delivery">
+            {{ content.delivery_link }}
+          </div>
+        {% endif %}
+
+        <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
+
+        {% if aura_enabled is defined and aura_enabled %}
+          {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+          <div id="aura-pdp"></div>
+        {% endif %}
+
+        {% if content.reviews_rating %}
+          {{content.reviews_rating}}
+        {% endif %}
+
+        <div class="basic-details-wrapper">
+          {% if content.tabby %}
+            <div class="tabby mobile-only-show">
+              <div class="tabby-widget" id="tabby-promo-pdp-mobile"></div>
+            </div>
+          {% endif %}
+          <div class="field field--name-field-skus field--type-sku field--label-hidden field__items">
+            <div class="field field--name-field-skus field--type-sku field--label-hidden field__item">
+              <article>
+                <div class="field field--name-sku field--type-string field--label-above">
+                  <div class="field__label">SKU</div>
+                  <div class="field__item">#rcs.product._self|sku#</div>
+                </div>
+                <div>#rcs.product._self|add_to_cart#</div>
+              </article>
+            </div>
+          </div>
+          <div class="modal-share-this">
+            <span class="share-icon">{{  'Share'|t }}</span>
+            <div class="sharethis-container">
+              <span class="close-icon"></span>
+              <div class="sharethis-label">{{ 'Share'|t }}</div>
+              {{ content.sharethis }}
+            </div>
+          </div>
+          {% if quantity_limit_enabled == true %}
+            <div class="order-quantity-limit-message"></div>
+          {% endif %}
+        </div>
+      </div>
+    {% endblock %}
+
+    {% block pdpSidebar %}
+      <div class="content__sidebar">
+
+        {% block sizeVolume %}
+        {% endblock %}
+
+        <div class="mobile-content-wrapper">
+          {% block shortDescBlock %}
+            <div class="short-description-wrapper">
+              #rcs.product._self|short_description#
+            </div>
+          {% endblock %}
+
+          {% block descBlock %}
+          {% endblock %}
+
+          {% block afterDescription %}
+          {% endblock %}
+
+          <div id="rcs-ph-delivery-options"></div>
+
+        </div>
+
+        {% include '@alshaya_rcs_product/mobile-product-related.html.twig' %}
+
+      </div>
+    {% endblock %}
+  </div>
+<div class="size-tray">
+    <div class="size-tray-content">
+      <div class="size-tray-buttons"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block desktopCS %}
+  {% include '@alshaya_rcs_product/product-related.html.twig' %}
+{% endblock %}
+
+{% block reviewsSection %}
+  {% if content.reviews_section %}
+    {{content.reviews_section}}
+  {% endif %}
+{% endblock %}
+

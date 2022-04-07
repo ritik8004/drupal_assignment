@@ -1,0 +1,19 @@
+services:
+  alshaya_rcs_bazaar_voice.service:
+    class: Drupal\alshaya_rcs_bazaar_voice\Service\AlshayaRcsBazaarVoice
+    public: false
+    decorates: alshaya_bazaar_voice.service
+    decoration_priority: 1
+    arguments:
+      - '@config.factory'
+      - '@entity.manager'
+      - '@database'
+      - '@alshaya_bazaar_voice.api_helper'
+      - '@current_user'
+      - '@entity.repository'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@request_stack'
+      - '@module_handler'
+      - '@file_system'
+      - '@logger.factory'

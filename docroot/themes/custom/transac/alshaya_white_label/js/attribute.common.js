@@ -40,22 +40,29 @@
 
   Drupal.behaviors.configurableAttributeBoxes = {
     attach: function (context, settings) {
-      $('.form-item-configurable-swatch').once('configurableAttributeBoxes').parent().addClass('configurable-swatch');
-      $('.form-item-configurable-select').once('configurableAttributeBoxes').parent().addClass('configurable-select');
+      var form = $('.sku-base-form', context).not('[data-sku *= "#"]');
+      if (form.length === 0) {
+        return;
+      }
+
+      $('.form-item-configurable-swatch', form).once('configurableAttributeBoxes').parent().addClass('configurable-swatch');
+      $('.form-item-configurable-select', form).once('configurableAttributeBoxes').parent().addClass('configurable-select');
 
       // Show mobile slider only on mobile resolution.
-      Drupal.select2OptionConvert();
+      Drupal.select2OptionConvert(context);
 
       // Trigger event for other scripts to act after select options conversion
       // is completed.
-      $('.sku-base-form.visually-hidden').trigger('select-to-option-conversion-completed');
+      if (form.hasClass('visually-hidden')) {
+        form.trigger('select-to-option-conversion-completed');
+      }
 
       $(window).on('resize', function (e) {
-        Drupal.select2OptionConvert();
+        Drupal.select2OptionConvert(context);
       });
 
       if ($(window).width() <= drupalSettings.show_configurable_boxes_after) {
-        $('.form-item-configurable-select, .form-item-configurable-swatch').once('configurableAttributeBoxes').on('change', function () {
+        $('.form-item-configurable-select, .form-item-configurable-swatch', form).once('configurableAttributeBoxes').on('change', function () {
           $(this).closest('form').find('div.error, label.error, span.error').remove();
         });
       }

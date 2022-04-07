@@ -1,0 +1,21 @@
+langcode: en
+dependencies:
+  config:
+    - field.field.node.advanced_page.field_category_slug
+third_party_settings:
+  field_group:
+    group_department_page_settings:
+      children:
+        - field_use_as_department_page
+        - field_category_slug
+        - field_product_category
+        - field_show_left_menu
+content:
+  field_category_slug:
+    weight: 8
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content

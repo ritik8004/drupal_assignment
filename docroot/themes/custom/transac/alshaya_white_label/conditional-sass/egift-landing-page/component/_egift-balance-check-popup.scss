@@ -36,6 +36,10 @@
     padding: 0 !important;
     border: none !important;
 
+    html[lang=ar] & {
+      max-width: 25.5rem !important;
+    }
+
     @include breakpoint($only-mobile) {
       max-width: none !important;
       position: absolute !important;

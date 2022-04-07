@@ -11,6 +11,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add translation for You may also like with context.
+ */
+function alshaya_master_update_8051() {
+  $strings = [
+    'You may also like' => [
+      'ar' => 'قد يعجبك أيضاً',
+      'context' => 'alshaya_static_text|pdp_upsell_title',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install Alshaya Msclarity module.
  */
 function alshaya_master_update_8050() {
@@ -1468,6 +1483,10 @@ function alshaya_master_install() {
     ],
     'You may also like' => [
       'ar' => 'قد يعجبك أيضاً',
+    ],
+    'You may also like' => [
+      'ar' => 'قد يعجبك أيضاً',
+      'context' => 'alshaya_static_text|pdp_upsell_title',
     ],
     'Related' => [
       'ar' => 'ذات صلة',

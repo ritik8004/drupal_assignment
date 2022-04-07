@@ -27,7 +27,7 @@
       }
 
       // Modal view for mobile when clicking on PDP image on mobile.
-      $('#product-full-screen-gallery-container', context).once('js-event').each(function () {
+      $('.acq-content-product #product-full-screen-gallery-container', context).once('js-event').each(function () {
         var element = $(this);
         var dialogsettings = {
           autoOpen: true,
@@ -52,6 +52,9 @@
             var gallery = $('#product-full-screen-gallery-container.ui-dialog-content #product-full-screen-gallery');
             if (!gallery.hasClass('slick-initialized')) {
               // Slick Slider initialisation.
+              if (typeof Drupal.blazy !== 'undefined') {
+                Drupal.blazy.revalidate();
+              }
               applyRtl(gallery, slickModalOptions);
               // Sync dots on startup.
               Drupal.behaviors.pdpInstagranDots.syncDots(gallery, currentmobSlide, false);

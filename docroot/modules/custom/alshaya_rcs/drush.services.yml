@@ -1,0 +1,5 @@
+services:
+  alshaya_rcs.commands:
+    class: \Drupal\alshaya_rcs\Commands\AlshayaDisableSyncCommands
+    tags:
+      - { name: drush.command }

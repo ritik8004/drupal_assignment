@@ -46,11 +46,6 @@ for env in $envs ; do
   curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
   echo "$env: $curr_branch"
 
-  # Get branch deployed on Stack 6.
-  vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=10" -u ${username}:${api_key} --max-time 30)
-  curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
-  echo "$env: $curr_branch"
-
   # Get branch deployed on Stack 7.
   vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=11" -u ${username}:${api_key} --max-time 30)
   curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')

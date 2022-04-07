@@ -1,0 +1,12 @@
+dependencies:
+  config:
+    - field.field.paragraph.product_carousel_category.field_category_carousel_slug
+content:
+  field_category_carousel_slug:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }

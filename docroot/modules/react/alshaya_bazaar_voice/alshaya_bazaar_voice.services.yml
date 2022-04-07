@@ -18,3 +18,5 @@ services:
       - '@alshaya_acm_product.sku_images_manager'
       - '@request_stack'
       - '@module_handler'
+      - '@file_system'
+      - '@logger.factory'

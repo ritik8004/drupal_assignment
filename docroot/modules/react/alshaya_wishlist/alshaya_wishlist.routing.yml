@@ -24,7 +24,7 @@ alshaya_wishlist.user_account_wishlist:
     _title_callback: '\Drupal\alshaya_wishlist\Controller\AlshayaMyWishlistController::getWishListTitle'
     context: 'mine'
   requirements:
-    _custom_access: '\Drupal\alshaya_wishlist\Controller\AlshayaMyWishlistController::checkAccess'
+    _custom_access: '\Drupal\alshaya_wishlist\Controller\AlshayaMyWishlistController::checkAuthenticateUser'
     user: \d+
   options:
     parameters:

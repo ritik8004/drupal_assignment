@@ -409,7 +409,12 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $data['cart_combinations'] = $data['cart_combinations'] ?: new \stdClass();
     }
 
-    if (!$this->skuManager->isSkuFreeGift($sku)) {
+    if ($this->skuManager->isSkuFreeGift($sku)) {
+      // Allow other modules to alter light product data.
+      $type = 'full';
+      $this->moduleHandler->alter('alshaya_acm_product_gift_product_data', $sku, $data, $type);
+    }
+    else {
       // Allow other modules to alter light product data.
       $type = 'full';
       $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);

@@ -135,6 +135,8 @@ AddOutputFilterByType DEFLATE application/x-font-ttf
   RewriteCond %{HTTP_HOST} !\.cloud$ [NC]
   # Don't redirect on all *.hm.com domains.
   RewriteCond %{HTTP_HOST} !\.hm\.com$ [NC]
+  # Don't redirect on all *.boots.com domains.
+  RewriteCond %{HTTP_HOST} !\.boots\.com$ [NC]
   # Don't redirect on all *.cosstores.com domains.
   RewriteCond %{HTTP_HOST} !\.cosstores\.com$ [NC]
   RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

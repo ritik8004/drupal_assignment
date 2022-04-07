@@ -1,0 +1,7 @@
+product:
+  version: 1.x
+  js:
+    js/alshaya_tbs_transac_product.js: {}
+  dependencies:
+    - core/jquery
+    - rcs_placeholders/helpers

@@ -1,0 +1,5 @@
+alshaya_msclarity_config:settings:
+  route_name: alshaya_msclarity_config.settings
+  title: 'Alshaya MsClarity Configuration'
+  description: 'Configure the settings for Alshaya MsClarity.'
+  parent: alshaya_master.alshaya_admin

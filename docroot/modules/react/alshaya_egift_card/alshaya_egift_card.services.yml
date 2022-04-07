@@ -15,3 +15,8 @@ services:
       - '@current_user'
     tags:
       - { name: breadcrumb_builder, priority: 100 }
+
+  alshaya_egift_card.egift_topup_list_breadcrumb:
+    class: Drupal\alshaya_egift_card\Breadcrumb\AlshayaTopupBreadcrumb
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }

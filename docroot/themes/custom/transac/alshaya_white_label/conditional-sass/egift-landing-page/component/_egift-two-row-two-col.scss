@@ -35,6 +35,16 @@
         margin-bottom: 3.375rem;
       }
     }
+
+    &.field__items {
+      @include breakpoint($tablet) {
+        padding: 0 1.75rem;
+      }
+
+      @include breakpoint($desktop) {
+        padding: 0 3rem;
+      }
+    }
   }
 
   .paragraph--type--image-title-subtitle {
@@ -70,9 +80,11 @@
       font-family: $alshaya-bold;
       color: $egift-landing-page-sub-block-title;
       margin-bottom: 0.25rem;
+      letter-spacing: 0.04rem;
 
       @include breakpoint($tablet) {
         font-size: 1rem;
+        letter-spacing: 0.05rem;
       }
     }
 

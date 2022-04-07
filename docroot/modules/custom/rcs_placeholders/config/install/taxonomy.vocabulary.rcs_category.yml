@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - rcs_placeholders
+name: RCS Category
+vid: rcs_category
+description: 'Stores enrichment of remote commerce categories.'
+hierarchy: 0
+weight: 0

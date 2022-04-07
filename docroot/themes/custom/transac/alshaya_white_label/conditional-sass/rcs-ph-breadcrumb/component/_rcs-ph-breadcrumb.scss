@@ -1,0 +1,17 @@
+#rcs-ph-breadcrumb:not(.rcs-loaded) ol {
+  @include breakpoint($tablet) {
+    display: flex;
+
+    & li {
+      width: 4rem;
+      margin-#{$right}: 0.25rem;
+
+      &::after,
+      & > * {
+        visibility: hidden;
+      }
+
+      @include plain-loader;
+    }
+  }
+}

@@ -87,3 +87,42 @@ $border-default: 0.0625rem solid $promo_block_border;
 
   @content;
 }
+
+@mixin fullPageLoader() {
+  position: fixed !important;
+  width: 100% !important;
+  height: 100%;
+  top: 0 !important;
+  #{$left}: 0 !important;
+  background: $primary_full_page_overlay_bg;
+  z-index: 9999;
+  visibility: visible;
+
+  @content;
+
+  .message {
+    display: none;
+  }
+
+  .throbber {
+    background: unset !important;
+
+    &::after {
+      content: '';
+      border: 0.4375rem solid $warm-grey-two;
+      border-top: 0.4375rem solid $eerie-black;
+      border-radius: 50%;
+      width: 4rem;
+      height: 4rem;
+      animation: spin 0.75s linear infinite;
+      position: absolute;
+      #{$left}: 50%;
+      top: 50%;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}

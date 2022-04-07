@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.rcs_product.body
+    - field.field.node.rcs_product.field_metatags
+    - field.field.node.rcs_product.field_product_slug
+    - node.type.rcs_product
+  module:
+    - user
+id: node.rcs_product.teaser
+targetEntityType: node
+bundle: rcs_product
+mode: teaser
+content:
+  links:
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  body: true
+  field_metatags: true
+  field_product_slug: true

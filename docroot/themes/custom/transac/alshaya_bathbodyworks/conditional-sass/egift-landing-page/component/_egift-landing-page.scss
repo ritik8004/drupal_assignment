@@ -6,6 +6,23 @@
       a {
         text-transform: uppercase;
       }
+
+      &:nth-child(2) {
+        a {
+          text-transform: initial;
+        }
+      }
+    }
+  }
+
+  &.safari {
+    .c-content {
+      .c-input__bar::before,
+      .c-input__bar::after {
+        html[lang='ar'] & {
+          top: -0.313rem;
+        }
+      }
     }
   }
 }

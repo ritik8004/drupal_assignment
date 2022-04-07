@@ -25,6 +25,7 @@
 
         input {
           border: none;
+          background: transparent;
 
           @include breakpoint($only-mobile) {
             -webkit-text-fill-color: $egift-black-text;
@@ -53,6 +54,13 @@
   .egift-topup-card-number {
     margin-bottom: 2.1875rem;
     margin-top: 0.625rem;
+
+    input.focus {
+      & + .error {
+        position: absolute;
+        line-height: 1.4;
+      }
+    }
   }
 
   .egift-input-textfield-wrapper {
@@ -84,6 +92,10 @@
       &[disabled] {
         border-color: $egift-purchase-inactive-step-text;
         background: $egift-purchase-inactive-step-text;
+      }
+
+      &.btn {
+        text-transform: initial;
       }
     }
 
@@ -117,5 +129,17 @@
     &:empty {
       padding: 0 !important;
     }
+  }
+
+  input.focus {
+    #card-number-error {
+      &:empty {
+        margin-top: -0.5rem !important;
+      }
+    }
+  }
+
+  .egift-card-amount-list-title {
+    padding-top: 0.5rem;
   }
 }

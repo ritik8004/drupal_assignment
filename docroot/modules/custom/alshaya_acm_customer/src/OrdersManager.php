@@ -232,13 +232,18 @@ class OrdersManager {
 
     try {
       $query = $this->getOrdersQuery('customer_id', $customer_id);
+      $page_size = 100;
 
+      // Query page size.
+      $query['searchCriteria']['pageSize'] = $page_size;
+
+      $endpoint = 'orders';
       $request_options = [
         'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
       ];
 
-      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-      $result = json_decode($response ?? [], TRUE);
+      $result = $this->apiWrapper->invokeApiWithPageLimit($endpoint, $request_options, $page_size, [], $query);
+
       $orders = $result['items'] ?? [];
       foreach ($orders as $key => $order) {
         // Allow other modules to alter order details.
@@ -381,6 +386,32 @@ class OrdersManager {
     }
 
     return $this->t('The refund for cancelled items will be made to your account within 14 working days if you have paid for your order.');
+  }
+
+  /**
+   * Get orders count by Customer E-Mail.
+   *
+   * We need only count for some cases like GTM and count won't change like
+   * orders so we store them permanently.
+   *
+   * @param string $customer_email
+   *   Customer E-Mail.
+   *
+   * @return int
+   *   Orders count.
+   */
+  public function getOrdersCountByCustomerMail(string $customer_email) {
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
+    ];
+
+    $query = $this->getOrdersQuery('customer_email', $customer_email);
+    $query['searchCriteria']['pageSize'] = 1;
+    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
+
+    $result = json_decode($response ?? [], TRUE);
+
+    return $result['total_count'] ?? 0;
   }
 
 }

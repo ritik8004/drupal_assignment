@@ -1,0 +1,14 @@
+#spc-checkout {
+  .spc-checkout-payment-options {
+    .payment-method-tabby {
+      .payment-method-top-panel {
+        .installment-popup {
+          @include icon(infomation, after) {
+            font-size: 1.25rem;
+            top: -0.1875rem;
+          }
+        }
+      }
+    }
+  }
+}

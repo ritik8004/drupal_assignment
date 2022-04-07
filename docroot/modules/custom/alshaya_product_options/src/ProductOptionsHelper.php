@@ -12,6 +12,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class Product Options Helper.
@@ -93,6 +94,13 @@ class ProductOptionsHelper {
   protected $logger;
 
   /**
+   * Module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * List of options synced.
    *
    * @var array
@@ -122,6 +130,8 @@ class ProductOptionsHelper {
    *   Config Factory.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module services.
    */
   public function __construct(SKUFieldsManager $sku_fields_manager,
                               I18nHelper $i18n_helper,
@@ -132,7 +142,8 @@ class ProductOptionsHelper {
                               Connection $connection,
                               CacheBackendInterface $cache,
                               ConfigFactoryInterface $config_factory,
-                              LoggerChannelInterface $logger) {
+                              LoggerChannelInterface $logger,
+                              ModuleHandlerInterface $module_handler) {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->i18nHelper = $i18n_helper;
     $this->productOptionsManager = $product_options_manager;
@@ -143,12 +154,16 @@ class ProductOptionsHelper {
     $this->cache = $cache;
     $this->configFactory = $config_factory;
     $this->logger = $logger;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
    * Synchronize all product options.
+   *
+   * @param bool $force_save
+   *   Force update pretty path facets.
    */
-  public function synchronizeProductOptions() {
+  public function synchronizeProductOptions($force_save = FALSE) {
     $this->logger->debug('Sync for all product attribute options started.');
     $fields = $this->skuFieldsManager->getFieldAdditions();
 
@@ -168,7 +183,7 @@ class ProductOptionsHelper {
 
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       foreach ($sync_options as $attribute_code) {
-        $this->syncProductOption($attribute_code, $langcode);
+        $this->syncProductOption($attribute_code, $langcode, $force_save);
       }
     }
 
@@ -187,8 +202,10 @@ class ProductOptionsHelper {
    *   Attribute code.
    * @param string $langcode
    *   Language code.
+   * @param bool $force_save
+   *   Force update pretty path facets.
    */
-  public function syncProductOption($attribute_code, $langcode) {
+  public function syncProductOption($attribute_code, $langcode, $force_save = FALSE) {
     $this->apiWrapper->updateStoreContext($langcode);
 
     $this->logger->debug('Sync for product attribute options started of attribute @attribute_code in language @langcode.', [
@@ -205,6 +222,11 @@ class ProductOptionsHelper {
       // For now we have many fields in sku_base_fields which are not
       // available in all brands.
       return;
+    }
+
+    // Allow other modules to alter options.
+    if ($attribute) {
+      $this->moduleHandler->alter('product_attribute_options', $attribute);
     }
 
     if (empty($attribute) || empty($attribute['options'])) {
@@ -228,7 +250,8 @@ class ProductOptionsHelper {
         $option['label'],
         $attribute['attribute_id'],
         $attribute['attribute_code'],
-        $weight++
+        $weight++,
+        $force_save
       );
 
       if (empty($term)) {

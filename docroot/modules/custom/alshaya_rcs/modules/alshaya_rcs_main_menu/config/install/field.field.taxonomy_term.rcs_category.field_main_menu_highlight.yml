@@ -1,0 +1,106 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_main_menu_highlight
+    - paragraphs.paragraphs_type.main_menu_highlight
+    - paragraphs.paragraphs_type.text_links
+    - taxonomy.vocabulary.rcs_category
+  enforced:
+    module:
+      - alshaya_rcs_main_menu
+      - entity_reference_revisions
+id: taxonomy_term.rcs_category.field_main_menu_highlight
+field_name: field_main_menu_highlight
+entity_type: taxonomy_term
+bundle: rcs_category
+label: 'Promo block'
+description: ''
+required: false
+translatable: false
+skip_translation_check: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      main_menu_highlight: main_menu_highlight
+      text_links: text_links
+    target_bundles_drag_drop:
+      main_menu_highlight:
+        enabled: true
+        weight: 9
+      1_row_1_col:
+        weight: 10
+        enabled: false
+      1_row_1st_col_2_row_2nd_col:
+        weight: 11
+        enabled: false
+      1_row_3_col:
+        weight: 12
+        enabled: false
+      banner:
+        weight: 13
+        enabled: false
+      banner_full_width:
+        weight: 14
+        enabled: false
+      promo_block:
+        weight: 15
+        enabled: false
+      related_info_one_column:
+        weight: 16
+        enabled: false
+      1_row_1_col_dept:
+        weight: 27
+        enabled: false
+      1_row_2_col:
+        weight: 28
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 29
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 30
+        enabled: false
+      1_row_2_col_dept:
+        weight: 31
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 33
+        enabled: false
+      1_row_3_col_dept:
+        weight: 34
+        enabled: false
+      1_row_3_col_text:
+        weight: 35
+        enabled: false
+      block_reference:
+        weight: 38
+        enabled: false
+      image_title_subtitle:
+        enabled: false
+        weight: 39
+      offers_bordered:
+        weight: 41
+        enabled: false
+      promo_block_button:
+        weight: 43
+        enabled: false
+      promo_block_text:
+        weight: 44
+        enabled: false
+      title_textarea:
+        weight: 46
+        enabled: false
+      video:
+        weight: 47
+        enabled: false
+      views_reference:
+        weight: 48
+        enabled: false
+      text_links:
+        enabled: true
+        weight: 53
+field_type: entity_reference_revisions

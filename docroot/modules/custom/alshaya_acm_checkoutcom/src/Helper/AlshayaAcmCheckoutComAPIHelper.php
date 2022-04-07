@@ -11,6 +11,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\alshaya_api\Helper\MagentoApiHelper;
 
 /**
  * Api helper for checkout.com upapi.
@@ -64,6 +65,13 @@ class AlshayaAcmCheckoutComAPIHelper {
   protected $entityTypeManager;
 
   /**
+   * The mdc helper.
+   *
+   * @var \Drupal\alshaya_api\Helper\MagentoApiHelper
+   */
+  protected $mdcHelper;
+
+  /**
    * AlshayaAcmCheckoutComAPIHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -76,19 +84,23 @@ class AlshayaAcmCheckoutComAPIHelper {
    *   Api wrapper.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend checkout_com.
+   * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
+   *   The magento api helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     EntityTypeManagerInterface $entity_type_manager,
     AccountProxyInterface $account_proxy,
     AlshayaApiWrapper $api_wrapper,
-    CacheBackendInterface $cache
+    CacheBackendInterface $cache,
+    MagentoApiHelper $mdc_helper
   ) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $account_proxy;
     $this->apiWrapper = $api_wrapper;
     $this->cache = $cache;
+    $this->mdcHelper = $mdc_helper;
 
     $this->logger = $this->getLogger('AlshayaAcmCheckoutComAPIHelper');
   }
@@ -122,10 +134,16 @@ class AlshayaAcmCheckoutComAPIHelper {
       $configs = $cache->data;
     }
     else {
+      $request_options = [
+        'timeout' => $this->mdcHelper->getPhpTimeout('checkoutcom_config'),
+      ];
+
       $response = $this->apiWrapper->invokeApi(
         'checkoutcomupapi/config',
         [],
-        'GET'
+        'GET',
+        FALSE,
+        $request_options
       );
 
       $configs = Json::decode($response);
@@ -195,7 +213,11 @@ class AlshayaAcmCheckoutComAPIHelper {
 
     $allowed_cards_mapping = Settings::get('checkout_com_upapi_accepted_cards_mapping', []);
 
-    $response = $this->apiWrapper->invokeApi($endpoint, $data, 'GET');
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('get_saved_card'),
+    ];
+
+    $response = $this->apiWrapper->invokeApi($endpoint, $data, 'GET', FALSE, $request_options);
     $response = is_string($response) ? Json::decode($response) : $response;
 
     $items = $response['items'] ?? [];
@@ -242,7 +264,11 @@ class AlshayaAcmCheckoutComAPIHelper {
       $this->getCustomerId()
     );
 
-    $response = $this->apiWrapper->invokeApi($endpoint, [], 'DELETE');
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('delete_saved_card'),
+    ];
+
+    $response = $this->apiWrapper->invokeApi($endpoint, [], 'DELETE', FALSE, $request_options);
 
     // Invalidate cache for the user to ensure fresh data is displayed.
     Cache::invalidateTags(['user:' . $this->currentUser->id()]);

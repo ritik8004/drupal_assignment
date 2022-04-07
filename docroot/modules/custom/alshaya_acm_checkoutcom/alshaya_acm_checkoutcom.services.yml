@@ -19,3 +19,4 @@ services:
       - '@current_user'
       - '@alshaya_api.api'
       - '@cache.checkout_com'
+      - '@alshaya_api.mdc_helper'

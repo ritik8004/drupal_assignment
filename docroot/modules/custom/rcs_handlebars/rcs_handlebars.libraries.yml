@@ -1,0 +1,3 @@
+main:
+  js:
+    dist/rcs_handlebars.bundle.js: {}

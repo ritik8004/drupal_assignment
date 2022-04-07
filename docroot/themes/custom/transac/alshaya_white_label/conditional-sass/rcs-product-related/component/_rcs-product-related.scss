@@ -1,0 +1,21 @@
+.page-type-product:not(.rcs-loaded) .content__main .gallery-wrapper,
+.rcs-templates--rcs-product-zoom #product-zoom-container:not(.product-zoom-processed),
+.content__main #product-zoom-container:not(.product-zoom-processed) {
+  @include plain-loader;
+
+  & > * {
+    visibility: hidden;
+  }
+}
+
+#rcs-ph-upsell-products:not(.rcs-loaded),
+#rcs-ph-related-products:not(.rcs-loaded),
+#rcs-ph-crosssell-products:not(.rcs-loaded),
+.page-type-product:not(.rcs-loaded) .content__title_wrapper,
+.page-type-product:not(.rcs-loaded) .content__sidebar {
+  @include text-block-loader;
+
+  & > * {
+    visibility: hidden;
+  }
+}

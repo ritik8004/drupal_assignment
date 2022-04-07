@@ -12,12 +12,16 @@ var config = {
     backend_cart_v2: './js/backend/v2/cart.js',
     backend_checkout_v1: './js/backend/v1/checkout.js',
     backend_checkout_v2: './js/backend/v2/checkout.js',
+    dynamic_promotion_label: './js/promotions-dynamic-labels.js',
+    // This is dynamically added in alshaya_rcs_product_library_info_alter().
+    PdpRcsExpressDelivery: './js/PdpRcsExpressDelivery',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
     publicPath: buildPath,
     chunkFilename: "[id].chunk.[chunkhash].js",
+    jsonpFunction: "jsonpAlsSpc",
   },
   devServer: {
     contentBase: './',
@@ -40,7 +44,16 @@ var config = {
             '@babel/react',{
               'plugins': ['@babel/plugin-proposal-class-properties']}]
         }
-      }
+      },
+      // Added below rules for parsing react datepicker css in components.
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(woff|woff2|ttf|otf|eot|svg|gif)$/,
+        use: ['file-loader'],
+      },
     ]
   }
 };

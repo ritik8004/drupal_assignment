@@ -1,0 +1,9 @@
+entity_type_groups:
+  node:
+    rcs_product:
+      basic: basic
+      advanced: advanced
+  taxonomy_term:
+    rcs_category:
+      basic: basic
+      advanced: advanced

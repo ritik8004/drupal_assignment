@@ -53,7 +53,7 @@
 
             @include breakpoint($tablet) {
               &::after {
-                background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
+                background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled-icon.svg?adsas');
               }
             }
           }
@@ -85,7 +85,7 @@
             background: unset;
 
             &::after {
-              background: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty.svg') no-repeat;
+              background: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty-icon.svg?adsas') no-repeat;
               background-size: contain;
               width: 1.125rem;
               height: 1.125rem;

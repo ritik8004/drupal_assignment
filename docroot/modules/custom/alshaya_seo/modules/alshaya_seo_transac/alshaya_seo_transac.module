@@ -23,15 +23,37 @@ use Drupal\views\ViewExecutable;
  */
 function alshaya_seo_transac_preprocess_html(&$variables) {
   if (_alshaya_seo_process_gtm()) {
-    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+    $routeInfo = $gtm_manager->getGtmContainer();
     $variables['attributes']['gtm-currency'] = $gtm_manager->getGtmCurrency();
-    $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
-    $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($gtm_manager->getGtmContainer());
+    $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($routeInfo);
+    $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($routeInfo);
     if ($variables['attributes']['gtm-list-name'] == 'PDP' || $variables['attributes']['gtm-list-name'] == 'CartPage') {
       $variables['attributes']['gtm-list-name'] = $variables['attributes']['gtm-list-name'] . '-placeholder';
     }
-    \Drupal::moduleHandler()->invokeAll('gtm_list_name_alter', [&$variables['attributes']['gtm-list-name']]);
+
+    // Appending full list path to gtm-list-name attribute.
+    if (isset($routeInfo['route_params']['node']) || isset($routeInfo['route_params']['taxonomy_term'])) {
+      $superCategoryLabel = NULL;
+      $pageAttributes = $gtm_manager->fetchPageSpecificAttributes($variables['attributes']['gtm-container'], $routeInfo);
+      // Fetching super category label only if enabled.
+      if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+        $superCategory = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+        $superCategoryLabel = isset($superCategory['label']) ? '|' . $superCategory['label'] : NULL;
+      }
+      if (empty($variables['attributes']['gtm-list-name'])) {
+        // Appending super category label only when gtm-list-name attribute is
+        // empty. For other brands except VS super category is null.
+        $variables['attributes']['gtm-list-name'] = AlshayaGtmManager::LIST_GTM_MAPPING['alshaya_master.home'] . $superCategoryLabel;
+      }
+      else {
+        // Appending datalayer alter list attribute to gtm-list-name in all
+        // other scenarios.
+        $pageAttributes = isset($pageAttributes['list']) ? '|' . $pageAttributes['list'] : $superCategoryLabel;
+        $variables['attributes']['gtm-list-name'] = $variables['attributes']['gtm-list-name'] . $pageAttributes;
+      }
+    }
   }
 }
 
@@ -73,6 +95,15 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       );
     }
 
+    // Add GTM library for My Wishlist pages to track productImpression.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_wishlist')) {
+      $route_match = \Drupal::routeMatch();
+      if ($route_match->getRouteName() == 'alshaya_wishlist.users_wishlist'
+        || $route_match->getRouteName() == 'alshaya_wishlist.user_account_wishlist') {
+        $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_algolia_wishlist';
+      }
+    }
+
     // Settings from the setting form for the module.
     $seo_transac_settings = \Drupal::config('alshaya_seo_transac.settings');
     $page['#attached']['drupalSettings']['gtm']['productImpressionDefaultItemsInQueue'] = $seo_transac_settings->get('product_impressions_default_items_in_queue');
@@ -94,10 +125,11 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
   $view_mode = $variables['view_mode'];
   /** @var \Drupal\node\Entity\Node $entity */
   $entity = $variables['node'];
+  $bundle = $entity->bundle();
 
-  if (($entity->bundle() === 'acq_product') &&
+  if (in_array($bundle, ['acq_product', 'rcs_product']) &&
     (\Drupal::languageManager()->getCurrentLanguage()->getId() === $entity->language()->getId())) {
-    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $alshayaGtmManager */
+    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $product_node = $gtm_manager->fetchProductGtmAttributes($entity, $view_mode);
     $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($product_node);
@@ -132,50 +164,69 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
   if ($route_match->getRouteName() == 'entity.node.canonical') {
     /** @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
-    // If 'product' node.
-    if ($node && $node->getType() == 'acq_product') {
-      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    if (!$node) {
+      return $snippet;
+    }
 
-      $sku_id = $skuManager->getSkuForNode($node);
-      if ($sku_id) {
-        $sku_entity = SKU::loadFromSku($sku_id);
+    $node_bundle = $node->getType();
 
-        if (empty($sku_entity)) {
-          return [];
+    if (in_array($node_bundle, ['acq_product', 'rcs_product'])) {
+      // Prepare rich snippet.
+      $snippet['@context'] = 'http://schema.org';
+      $snippet['@type'] = 'Product';
+      $snippet['description'] = _alshaya_seo_get_node_meta_description();
+      // @todo Change this once brand field is available.
+      $snippet['brand'] = [
+        '@type' => 'Thing',
+        'name' => \Drupal::config('system.site')->get('name'),
+      ];
+
+      // If 'product' node.
+      if ($node_bundle == 'acq_product') {
+        /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+        $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+        $sku_id = $skuManager->getSkuForNode($node);
+        if ($sku_id) {
+          $sku_entity = SKU::loadFromSku($sku_id);
+
+          if (empty($sku_entity)) {
+            return [];
+          }
+
+          $product_title = "";
+          $product_image = $skuImagesManager->getFirstImageUrl($sku_entity, TRUE);
+          $currency = $gtm_manager->getGtmCurrency();
+
+          // If sku name is available.
+          if ($sku_entity->get('name')) {
+            $product_title = $sku_entity->get('name')->getString();
+          }
+
+          $min_prices = $skuManager->getMinPrices($sku_entity);
+          $final_price = (float) $min_prices['final_price'];
+          $availability = $skuManager->isProductInStock($sku_entity);
+
+          $snippet['name'] = $product_title;
+          $snippet['image'] = $product_image;
+          $snippet['sku'] = $sku_id;
+          $snippet['offers'] = [
+            '@type' => "Offer",
+            'priceCurrency' => $currency,
+            'price' => $final_price,
+            'availability' => ($availability === TRUE) ? "http://schema.org/InStock" : "http://schema.org/OutOfStock",
+          ];
         }
-
-        $product_title = "";
-        $product_image = $skuImagesManager->getFirstImageUrl($sku_entity, TRUE);
-        $product_description = _alshaya_seo_get_node_meta_description();
-        $currency = $gtm_manager->getGtmCurrency();
-
-        // If sku name is available.
-        if ($sku_entity->get('name')) {
-          $product_title = $sku_entity->get('name')->getString();
-        }
-
-        $min_prices = $skuManager->getMinPrices($sku_entity);
-        $final_price = (float) $min_prices['final_price'];
-        $availability = $skuManager->isProductInStock($sku_entity);
-
-        // Prepare rich snippet.
-        $snippet['@context'] = 'http://schema.org';
-        $snippet['@type'] = 'Product';
-        $snippet['name'] = $product_title;
-        $snippet['description'] = $product_description;
-        $snippet['image'] = $product_image;
-        $snippet['sku'] = $sku_id;
-        // @todo Change this once brand field is available.
-        $snippet['brand'] = [
-          '@type' => 'Thing',
-          'name' => \Drupal::config('system.site')->get('name'),
-        ];
+      }
+      elseif ($node_bundle == 'rcs_product') {
+        $snippet['name'] = '#rcs.product.name#';
+        $snippet['image'] = '#rcs.product._self|first_image#';
+        $snippet['sku'] = '#rcs.product.sku#';
         $snippet['offers'] = [
           '@type' => "Offer",
-          'priceCurrency' => $currency,
-          'price' => $final_price,
-          'availability' => ($availability === TRUE) ? "http://schema.org/InStock" : "http://schema.org/OutOfStock",
+          'priceCurrency' => $gtm_manager->getGtmCurrency(),
+          'price' => '#rcs.product._self|final_price#',
+          'availability' => '#rcs.product._self|schema_stock#',
         ];
       }
     }
@@ -210,6 +261,16 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
   // trigger events from javascript (alshaya_seo.gtm.spc_checkout.js).
   $routes_to_exclude = ['alshaya_spc.checkout', 'acq_cart.cart'];
   if (in_array($current_route['route_name'], $routes_to_exclude)) {
+    if (isset($data_layer['country'])) {
+      // Datalayer contrib module sends country code for country value.
+      // Altering to full country name. Ex: AE -> United Arab Emirates.
+      $data_layer['country'] = function_exists('_alshaya_country_get_site_level_country_name')
+        ? _alshaya_country_get_site_level_country_name()
+        : $data_layer['country'];
+    }
+    if (isset($data_layer['language'])) {
+      $data_layer['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
     return;
   }
   try {
@@ -277,6 +338,57 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           'products' => array_values($attributes['products']),
         ],
       ];
+      // Set the egift variable in datalayer if egift or topup is present in the
+      // cart.
+      $egift_helper = NULL;
+      if (\Drupal::hasService('alshaya_egift_card.egift_card_helper')) {
+        $egift_helper = \Drupal::service('alshaya_egift_card.egift_card_helper');
+        // Proceed only if egift is enabled.
+        if ($egift_helper->isEgiftCardEnabled() && $order) {
+          $item_status = $egift_helper->orderItemsVirtual($order);
+          // Flag to store the egift type.
+          $egift_type = 'no';
+          // Set the egift status.
+          if ($item_status) {
+            if ($item_status['topUpItem']) {
+              $egift_type = 'topup';
+            }
+            elseif ($item_status['allVirtualItems']
+              && $item_status['normalItemsExists'] == FALSE) {
+              $egift_type = 'full';
+            }
+            elseif ($item_status['normalItemsExists']
+              && $item_status['virtualItemsExists']
+              && $item_status['allVirtualItems'] == FALSE) {
+              $egift_type = 'partial';
+            }
+          }
+          // Add egift card type in the data.
+          $data_layer['isEgiftCard'] = $egift_type;
+          // Add the egift redeem amount if exists.
+          if (array_key_exists('hps_redeemed_amount', $order['extension'])) {
+            $data_layer['redeem_egift_card_value'] = $order['extension']['hps_redeemed_amount'];
+          }
+          // Add the egift redeem type if exists.
+          $egift_redeem_type = $egift_helper->getEgiftRedemptionTypeFromOrder($order);
+          if ($egift_redeem_type) {
+            $data_layer['egift_redeem_type'] = $egift_redeem_type;
+          }
+          // Change hps_payment to egift Card.
+          if ($data_layer['paymentOption'] == 'hps_payment') {
+            $data_layer['paymentOption'] = 'egiftcard';
+          }
+          elseif ($egift_helper->partialPaymentDoneByEgiftCard($order)) {
+            $data_layer['paymentOption'] = [
+              $data_layer['paymentOption'],
+              'egiftcard',
+            ];
+            // If some amount is paid via egift then add multiple payment
+            // methods separated by _ in GTM.
+            $data_layer['paymentOption'] = implode('_', $data_layer['paymentOption']);
+          }
+        }
+      }
     }
 
     // Generic handling of page type for user pages.
@@ -599,6 +711,15 @@ function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $s
 }
 
 /**
+ * Implements hook_alshaya_acm_product_gift_product_data_alter().
+ */
+function alshaya_seo_transac_alshaya_acm_product_gift_product_data_alter(SKU $sku, array &$data, $type) {
+  $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+  $attributes = $gtmManager->fetchGiftGtmAttributes('full', $sku);
+  $data['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
+}
+
+/**
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_seo_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
@@ -680,7 +801,8 @@ function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter
  * Implements hook_block_view_alter().
  */
 function alshaya_seo_transac_block_view_alter(array &$build, BlockPluginInterface $block) {
-  if ($block->getPluginId() == 'alshaya_algolia_react_plp') {
+  if ($block->getPluginId() == 'alshaya_algolia_react_plp'
+    || $block->getPluginId() == 'alshaya_algolia_listing_v2') {
     $build['#pre_render'][] = '_alshaya_seo_transac_alshaya_algolia_react_plp_prerender';
   }
 }
@@ -723,5 +845,10 @@ function _alshaya_seo_transac_datalayer_user_id($uid) {
  * Implements hook_alshaya_mobile_app_skus_product_list_data_alter().
  */
 function alshaya_seo_transac_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
-  alshaya_seo_transac_alshaya_acm_product_light_product_data_alter($sku, $data, 'full');
+  if (\Drupal::service('alshaya_acm_product.skumanager')->isSkuFreeGift($sku)) {
+    alshaya_seo_transac_alshaya_acm_product_gift_product_data_alter($sku, $data, 'full');
+  }
+  else {
+    alshaya_seo_transac_alshaya_acm_product_light_product_data_alter($sku, $data, 'full');
+  }
 }

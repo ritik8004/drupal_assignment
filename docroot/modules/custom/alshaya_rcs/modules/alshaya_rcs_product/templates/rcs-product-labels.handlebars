@@ -1,0 +1,32 @@
+{{#*inline "getLabels"}}
+  <div class="labels-container {{ positionClass }}">
+    {{#each position as |item|}}
+      <div class="label">
+        <img src="{{item.url}}" loading="lazy" alt="{{item.name}}" title="{{item.name}}"/>
+      </div>
+    {{/each}}
+  </div>
+{{/inline}}
+
+<div
+  class="labels-wrapper"
+  data-type="{{ labels.type }}"
+  data-sku="{{ labels.sku }}"
+  data-main-sku="{{ labels.mainSku }}"
+>
+  {{#if labels.topRight}}
+    {{> getLabels position=labels.topRight positionClass="top-right"}}
+  {{/if}}
+
+  {{#if labels.topLeft}}
+    {{> getLabels position=labels.topLeft positionClass="top-left"}}
+  {{/if}}
+
+  {{#if labels.bottomLeft}}
+    {{> getLabels position=labels.bottomLeft positionClass="bottom-left"}}
+  {{/if}}
+
+  {{#if labels.bottomRight}}
+    {{> getLabels position=labels.bottomRight positionClass="bottom-right"}}
+  {{/if}}
+</div>

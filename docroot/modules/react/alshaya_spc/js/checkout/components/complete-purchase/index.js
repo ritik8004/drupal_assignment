@@ -17,6 +17,8 @@ import {
 } from '../../../utilities/egift_util';
 import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import isAuraEnabled from '../../../../../js/utilities/helper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getBookingDetailByConfirmationNumber } from '../../../../../js/utilities/onlineBookingHelper';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -107,6 +109,25 @@ export default class CompletePurchase extends React.Component {
     const checkoutButton = e.target.parentNode;
     checkoutButton.classList.add('in-active');
 
+    // Check if the cart is having online booking confirmation number.
+    // Validate the booking is expired and show error accordingly.
+    if (hasValue(cart.cart.hfd_hold_confirmation_number)) {
+      // Check if the hold appointment for user is valid.
+      const bookingDetails = await
+      getBookingDetailByConfirmationNumber(cart.cart.hfd_hold_confirmation_number);
+      // Check if success return false,
+      if (!hasValue(bookingDetails.status) && bookingDetails.error_code === 0) {
+        dispatchCustomEvent('validateOnlineBookingPurchase', {
+          bookingDetails,
+        });
+        // Activate place order button.
+        checkoutButton.classList.remove('in-active');
+        // Scroll the user to delivery information section.
+        smoothScrollTo('.spc-checkout-delivery-information');
+        return;
+      }
+    }
+
     try {
       const validated = (isPseudoPaymentMedthod === false)
         ? await validateBeforePlaceOrder()
@@ -179,9 +200,10 @@ export default class CompletePurchase extends React.Component {
       return false;
     }
 
-    // Disabled if there is still some error left in payment form.
+    // Disabled if there is still some error left in payment form
+    // except for hps payment method error.
     if (document.getElementById('spc-payment-methods') === null
-      || document.getElementById('spc-payment-methods').querySelectorAll('.error').length > 0) {
+      || document.getElementById('spc-payment-methods').querySelectorAll('.error:not(.linked-card-payment-error)').length > 0) {
       // Bypass the payment method error check if the full payment is done by
       // egift car or full payment is done by Egift + AURA.
       if (!((isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart))
@@ -245,7 +267,7 @@ export default class CompletePurchase extends React.Component {
       && !isFullPaymentDoneByEgift(cart.cart)) {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
-        message: Drupal.t('Please pay full amount via Egift card or use other payment method.', {}, { context: 'egift' }),
+        message: Drupal.t('Please pay full amount via eGift card or use other payment method.', {}, { context: 'egift' }),
       });
       return false;
     }
