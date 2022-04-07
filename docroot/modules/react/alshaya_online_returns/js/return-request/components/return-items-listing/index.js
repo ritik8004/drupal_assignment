@@ -67,12 +67,6 @@ class ReturnItemsListing extends React.Component {
    * accordion is collapsed.
    */
   disableRefundComponent = () => {
-    const { open } = this.state;
-    if (!open) {
-      this.setState({
-        open: true,
-      });
-    }
     this.updateRefundAccordion(false);
   };
 
@@ -86,9 +80,6 @@ class ReturnItemsListing extends React.Component {
     // When user clicks continue button, disable the item
     // details accordion and enable refund accordion.
     this.updateRefundAccordion(open);
-    this.setState({
-      open: !open,
-    });
 
     if (!btnDisabled) {
       handleReturnRequestSubmit();
@@ -100,6 +91,10 @@ class ReturnItemsListing extends React.Component {
    * Update accordion state of refund details component.
    */
   updateRefundAccordion = (accordionState) => {
+    this.setState({
+      open: !accordionState,
+    });
+
     dispatchCustomEvent('updateRefundAccordionState', accordionState);
   }
 
