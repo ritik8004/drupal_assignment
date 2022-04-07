@@ -118,6 +118,11 @@ gallery.product.block.product_zoom_magazine_gallery:
   js:
     templates/rcs-product-zoom-magazine-gallery-block.handlebars: {}
 
+gallery.product.product_gallery_magazine:
+  version: 1.x
+  js:
+    templates/rcs-product-gallery-magazine.handlebars: {}
+
 product.order:
   version: 1.x
   js:

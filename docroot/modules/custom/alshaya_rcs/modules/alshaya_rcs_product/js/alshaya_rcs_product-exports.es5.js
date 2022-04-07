@@ -332,6 +332,7 @@ exports.render = function render(
       break;
 
     case 'classic-gallery':
+    case 'magazine-gallery':
       let mediaCollection = {
         gallery: [],
         zoom: [],
@@ -346,8 +347,12 @@ exports.render = function render(
             if (variant.product.sku !== params.sku) {
               return;
             }
-            variant.product.media.forEach(function (variantMedia) {
+            const length = variant.product.media.length;
+            variant.product.media.forEach(function (variantMedia, i) {
               mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+                index: i + 1,
+                length: length,
+                last: (i + 1 === length) ? 'last' : '',
                 type: 'image',
                 thumburl: variantMedia.thumbnails,
                 mediumurl: variantMedia.medium,
@@ -372,6 +377,8 @@ exports.render = function render(
       }
 
       const data = {
+        description: entity.description.html,
+        description_details: '@todo description details',
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
@@ -385,7 +392,11 @@ exports.render = function render(
         pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
       }
 
-      html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      if (placeholder === 'classic-gallery') {
+        html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      } else {
+        html += handlebarsRenderer.render('gallery.product.product_gallery_magazine', data);
+      }
       break;
 
     case 'product-labels':
