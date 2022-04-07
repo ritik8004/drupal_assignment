@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="19px" height="11px" viewBox="0 0 19 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>2B9DE39D-AA3D-44AA-8B7D-6E952C0BE5AB</title>
+    <g id="New-Aura-Copy" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="M-Guest-Home-Page-Menu---Colapsed" transform="translate(-265.000000, -401.000000)" fill-rule="nonzero" stroke="#1B1B1B" stroke-width="2.10000014">
+            <g id="LP/Aura-component_Mobile" transform="translate(20.000000, 380.000000)">
+                <g id="ic_chevronleft" transform="translate(254.500000, 27.000000) rotate(-90.000000) translate(-254.500000, -27.000000) translate(250.500000, 19.500000)">
+                    <g id="Group" transform="translate(4.000000, 7.500000) rotate(-180.000000) translate(-4.000000, -7.500000) ">
+                        <line x1="0.0625" y1="0.0625" x2="7.5" y2="7.5" id="Line-2"></line>
+                        <line x1="0.5" y1="7.5" x2="7.9375" y2="14.9375" id="Line-2" transform="translate(4.000000, 11.000000) rotate(90.000000) translate(-4.000000, -11.000000) "></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

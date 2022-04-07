@@ -202,7 +202,6 @@ body.aura-enabled {
 
   .aura-popup-body {
     margin-bottom: 1rem;
-    text-align: center;
     color: $aura-loyalty-activity-txt;
     text-align: #{$left};
     line-height: 1.125rem;
@@ -261,7 +260,8 @@ body.aura-enabled {
       color: $aura-header-popup-learn-more-link;
       cursor: pointer;
       font-size: 0.75rem;
-      line-height: 1.125rem;
+      line-height: 1.438rem;
+      font-family: $aura-caption-regular;
     }
 
     .already-member {
@@ -269,7 +269,8 @@ body.aura-enabled {
         color: $aura-header-popup-learn-more-link;
         cursor: pointer;
         font-size: 0.75rem;
-        line-height: 1.125rem;
+        line-height: 1.438rem;
+        font-family: $aura-caption-regular;
       }
     }
 
