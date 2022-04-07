@@ -42,6 +42,10 @@
   }
 }
 
+.view-display-id-page_2 .geolocation-common-map-container {
+  position: relative;
+}
+
 .view-store-finder--list__column--1,
 .view-store-finder--list__column--2 {
   @include breakpoint($above-palm) {
