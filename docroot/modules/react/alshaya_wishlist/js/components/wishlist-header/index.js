@@ -97,6 +97,9 @@ export default class WishlistHeader extends React.Component {
           ).then((response) => {
             if (typeof response.data.status !== 'undefined'
               && response.data.status) {
+              // Override flag if set by sticky header
+              // as items should be refreshed after added from guest list.
+              window.loadWishListFromBackend = false;
               this.loadWishlistFromBackend();
             }
           });

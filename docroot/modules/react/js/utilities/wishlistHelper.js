@@ -380,6 +380,9 @@ export const addRemoveWishlistItemsInBackend = async (data, action) => {
           },
         ],
       };
+      // Set the flag for API call so the sticky header
+      // component does not request again.
+      window.loadWishListFromBackend = true;
       break;
     }
 
