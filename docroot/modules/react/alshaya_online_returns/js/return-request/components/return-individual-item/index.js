@@ -8,11 +8,11 @@ const ReturnIndividualItem = ({
 }) => {
   const eligibleClass = item.is_returnable ? 'return-eligible' : 'in-eligible';
   return (
-    <div className="order-item-detail">
+    <>
       <ConditionalView condition={item.is_big_ticket}>
         <span>{Drupal.t('Large Item', {}, { context: 'online_returns' })}</span>
       </ConditionalView>
-      <ConditionalView condition={hasValue(item.image_data) && hasValue(item.image_data.url)}>
+      <ConditionalView condition={(hasValue(item.image_data) && hasValue(item.image_data.url))}>
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass}`}>
             <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
@@ -41,15 +41,15 @@ const ReturnIndividualItem = ({
           <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
           <span className="currency-code dark prefix">{ parse(item.price) }</span>
         </div>
-        <div className="item-total-price">
-          <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
-          <span className="dark">{ parse(item.total) }</span>
-        </div>
+      </div>
+      <div className="item-total-price">
+        <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
+        <span className="dark">{ parse(item.total) }</span>
       </div>
       <ConditionalView condition={item.is_big_ticket}>
         <span>{Drupal.t('Kindly contact customer care for initiating online returns for Large Items', {}, { context: 'online_returns' })}</span>
       </ConditionalView>
-    </div>
+    </>
   );
 };
 

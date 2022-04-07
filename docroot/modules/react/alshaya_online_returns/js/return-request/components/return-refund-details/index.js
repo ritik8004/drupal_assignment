@@ -1,4 +1,5 @@
 import React from 'react';
+import Collapsible from 'react-collapsible';
 import ReturnRefundMethod from '../return-refund-method';
 import ReturnAmountWrapper from '../refund-amount-wrapper';
 import ReturnCollectionDetails from '../return-collection-details';
@@ -12,22 +13,47 @@ class ReturnRefundDetails extends React.Component {
     this.state = {
       address: getDeliveryAddress(orderDetails),
       paymentInfo: getPaymentDetails(orderDetails),
+      open: false,
     };
   }
 
+  componentDidMount = () => {
+    document.addEventListener('updateRefundAccordionState', this.updateRefundAccordionState, false);
+  };
+
+  /**
+   * Method to update react state of refund accordion.
+   */
+  updateRefundAccordionState = (event) => {
+    this.setState({
+      open: event.detail,
+    });
+  };
+
+  /**
+   * Display the refund details accordion trigger component.
+   * On click of this component, refund details div will open.
+   */
+  refundDetailsHeader = () => (
+    <div className="refund-detail-label">
+      <div className="refund-detail-header">{ Drupal.t('Return and refund details', {}, { context: 'online_returns' }) }</div>
+    </div>
+  );
+
   render() {
-    const { paymentInfo, address } = this.state;
+    const { paymentInfo, address, open } = this.state;
     return (
       <div className="refund-details-wrapper">
-        <div className="refund-detail-label">{ Drupal.t('Return and refund details', {}, { context: 'online_returns' }) }</div>
-        <ReturnRefundMethod
-          paymentDetails={paymentInfo}
-        />
-        <ReturnAmountWrapper />
-        <ReturnCollectionDetails />
-        <ReturnCollectionAddress
-          shippingAddress={address}
-        />
+        <Collapsible trigger={this.refundDetailsHeader()} open={open} triggerDisabled={!open}>
+          <ReturnRefundMethod
+            paymentDetails={paymentInfo}
+          />
+          <ReturnAmountWrapper />
+          <ReturnCollectionDetails />
+          <ReturnCollectionAddress
+            shippingAddress={address}
+          />
+        </Collapsible>
       </div>
     );
   }

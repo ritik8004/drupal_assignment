@@ -132,14 +132,8 @@ export default class OnlineBooking extends React.Component {
     // Add loader until API details are fetched.
     this.setState({ wait: true });
     setHideOnlineBooking(false);
-    const { cart } = this.props;
     // Always book new slot for shipping address update.
-    let result = await this.holdOnlineBookingSlot();
-    // If any failure then check if cart have confirmation number.
-    if (!hasValue(result.status) && hasValue(cart.cart.hfd_hold_confirmation_number)) {
-      result = await getBookingDetailByConfirmationNumber(cart.cart.hfd_hold_confirmation_number);
-    }
-
+    const result = await this.holdOnlineBookingSlot();
     // If we do not get successful result,
     // we will hide online booking.
     if (!hasValue(result.status)) {
@@ -334,7 +328,6 @@ export default class OnlineBooking extends React.Component {
                   className="schedule-delivery-calendar-popup"
                   open={isModalOpen}
                   closeOnDocumentClick={false}
-                  closeOnEscape={false}
                 >
                   <>
                     <OnlineBookingCalendar
