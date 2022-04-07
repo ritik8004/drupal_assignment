@@ -109,6 +109,10 @@
         transform: rotate(-90deg);
         width: 2.125rem;
         color: $magv2-mobile-back-arrow;
+
+        html[lang=ar] & {
+          transform: rotate(90deg);
+        }
       }
 
       &.disabled {
