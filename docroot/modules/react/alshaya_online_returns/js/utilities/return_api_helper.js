@@ -57,8 +57,8 @@ const prepareReturnRequestData = (data) => {
   return processedData;
 };
 
-const createReturnRequest = async (rawData) => {
-  const data = prepareReturnRequestData(rawData.itemsSelected);
+const createReturnRequest = async (itemsSelected) => {
+  const data = prepareReturnRequestData(itemsSelected);
 
   if (hasValue(data.error)) {
     logger.error('Error while trying to prepare return request data. Data: @data.', {

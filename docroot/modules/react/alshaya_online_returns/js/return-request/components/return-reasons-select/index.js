@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 
 const ReturnReasonsSelect = ({
-  returnReasons, handleSelectedReason,
+  returnReasons, handleSelectedReason, sku,
 }) => (
   <>
     <div className="return-reasons-row">
@@ -12,7 +12,7 @@ const ReturnReasonsSelect = ({
         className="return-reasons-select"
         options={returnReasons}
         defaultValue={returnReasons[0]}
-        onChange={handleSelectedReason}
+        onChange={(selectedOption) => handleSelectedReason(selectedOption, sku)}
         isSearchable={false}
       />
     </div>

@@ -92,6 +92,34 @@ function addCheckboxToReturnItem(item) {
   return addCheckbox;
 }
 
+/**
+ * Utility function to get return resolutions.
+ */
+function getReturnResolutions() {
+  let resolutions = [];
+  if (hasValue(drupalSettings.returnRequest)
+    && hasValue(drupalSettings.returnRequest.returnConfig)
+    && hasValue(drupalSettings.returnRequest.returnConfig.resolutions)) {
+    resolutions = drupalSettings.returnRequest.returnConfig.resolutions;
+  }
+
+  return resolutions;
+}
+
+/**
+ * Utility function to get default return resolution.
+ */
+function getDefaultResolutionId() {
+  let defaultResolution = null;
+  const resolutions = getReturnResolutions();
+
+  if (hasValue(resolutions)) {
+    defaultResolution = resolutions.filter((resolution) => resolution.label === 'Refund');
+  }
+
+  return hasValue(defaultResolution) ? defaultResolution.shift().id : '';
+}
+
 export {
   getReturnReasons,
   getQuantityOptions,
@@ -99,4 +127,5 @@ export {
   getDeliveryAddress,
   getPaymentDetails,
   addCheckboxToReturnItem,
+  getDefaultResolutionId,
 };

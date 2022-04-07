@@ -39,7 +39,7 @@ class ReturnItemDetails extends React.Component {
     const {
       isChecked, returnReasons, qtyOptions,
     } = this.state;
-    const { item, handleSelectedReason } = this.props;
+    const { item, handleSelectedReason, handleSelectedQuantity } = this.props;
     const checkedClass = isChecked ? 'is-checked' : '';
     return (
       <div className="items-table">
@@ -59,9 +59,12 @@ class ReturnItemDetails extends React.Component {
             <ReturnReasonsSelect
               returnReasons={returnReasons}
               handleSelectedReason={handleSelectedReason}
+              sku={item.sku}
             />
             <ReturnQuantitySelect
               qtyOptions={qtyOptions}
+              handleSelectedQuantity={handleSelectedQuantity}
+              sku={item.sku}
             />
           </ConditionalView>
         </div>
