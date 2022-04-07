@@ -734,7 +734,7 @@
       @include breakpoint($only-mobile) {
         padding-top: 1rem;
         padding-bottom: 2.125rem;
-        padding-#{left}: 3.125rem;
+        padding-#{$left}: 3.125rem;
       }
 
       .icon-ic_infomation {
