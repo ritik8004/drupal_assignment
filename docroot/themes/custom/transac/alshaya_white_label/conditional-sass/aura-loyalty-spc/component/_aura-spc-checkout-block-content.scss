@@ -122,7 +122,8 @@
     color: $aura-spc-checkout-text-content;
 
     &.guest-user,
-    &.registered-user-unlinked-card {
+    &.registered-user-unlinked-card,
+    &.points-to-earn-with-the-purchase {
       > div {
         @include defaultBlockStyles;
       }
@@ -140,6 +141,42 @@
         color: $aura-spc-checkout-highlight;
         font-family: $aura-bold;
         font-weight: normal;
+      }
+    }
+
+    &.points-to-earn-with-the-purchase {
+      .points-to-earn-text {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        line-height: 1.125rem;
+        border-radius: 0;
+        flex-wrap: wrap;
+
+        @include breakpoint($upto-desktop) {
+          display: inline-block;
+          line-height: 1.75rem;
+          width: 100%;
+        }
+
+        .points-to-earn-count {
+          color: $aura-spc-checkout-highlight;
+          font-family: $aura-bold;
+        }
+
+        .join-aura {
+          position: relative;
+          top: 0.25rem;
+
+          @include breakpoint($upto-desktop) {
+            top: 0.5rem;
+          }
+
+          svg {
+            max-height: 1.563rem;
+            width: auto;
+          }
+        }
       }
     }
 
@@ -310,6 +347,14 @@
       color: $aura-spc-cod-disabled-text;
       margin-top: 0.75rem;
       font-size: 0.75rem;
+    }
+  }
+}
+
+#spc-checkout {
+  .spc-content {
+    .spc-aura-checkout-rewards-block {
+      padding-top: 0.4rem !important;
     }
   }
 }
