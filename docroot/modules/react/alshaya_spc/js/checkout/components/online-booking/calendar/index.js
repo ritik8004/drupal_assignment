@@ -387,7 +387,7 @@ export default class OnlineBookingCalendar extends React.Component {
                             {moment(date).subtract('1', 'month').locale(drupalSettings.path.currentLanguage).format('MMMM')}
                           </span>
                           <span className="month-calendar-datepicker current">
-                            {moment(date).locale(drupalSettings.path.currentLanguage).format('MMMM YYYY')}
+                            {`${moment(date).locale(drupalSettings.path.currentLanguage).format('MMMM')} ${moment(date).format('YYYY')}`}
                           </span>
                           <span
                             className={nextMonthButtonDisabled ? 'month-calendar-sides next disabled' : 'month-calendar-sides next'}
