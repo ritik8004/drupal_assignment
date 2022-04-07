@@ -32,10 +32,9 @@ export default class EgiftCardsListStepOne extends React.Component {
       document.getElementById('textarea-count').innerHTML = getTextAreaMaxLength();
     }
 
-    // Remove readonly from open amount field.
+    // Remove readonly from open amount field on eGift Select.
     if (this.ref.current !== null) {
       this.ref.current.querySelector('input').removeAttribute('readOnly');
-      this.ref.current.querySelector('button').disabled = true;
     }
 
     // Get all egift card items.

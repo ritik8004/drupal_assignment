@@ -109,6 +109,10 @@
         transform: rotate(-90deg);
         width: 2.125rem;
         color: $magv2-mobile-back-arrow;
+
+        html[lang=ar] & {
+          transform: rotate(90deg);
+        }
       }
 
       &.disabled {
@@ -121,6 +125,10 @@
           content: '';
           background: url('#{$base_theme_img_directory_path}/icons/home.svg') center no-repeat;
           transform: rotate(0deg);
+
+          html[lang=ar] & {
+            transform: rotate(0deg);
+          }
         }
       }
     }
