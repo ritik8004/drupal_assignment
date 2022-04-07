@@ -38,6 +38,7 @@
     font-size: 0.875rem;
     font-weight: bold;
     cursor: pointer;
+    padding: 0.5rem 0;
 
     &:hover {
       color: $checkout_order_details_label;
@@ -96,7 +97,12 @@
 .loading {
   @include throbberLoader;
 
-  padding: 0;
+  padding-left: 0;
+  padding-right: 0;
+
+  @include breakpoint($only-mobile) {
+    background-position: 57% 50% !important;
+  }
 }
 
 .delivery-block-loading {
