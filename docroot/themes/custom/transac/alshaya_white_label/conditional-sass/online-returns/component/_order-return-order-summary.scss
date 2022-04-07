@@ -5,6 +5,7 @@
       background: $online-return-bg;
       font-size: 0.75rem;
       align-items: baseline;
+      border-bottom: 1px solid $content_pagetitle_border;
 
       @include breakpoint($tablet) {
         align-items: center;

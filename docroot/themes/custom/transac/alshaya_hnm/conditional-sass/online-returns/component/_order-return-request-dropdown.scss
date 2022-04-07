@@ -1,0 +1,19 @@
+.return-requests-wrapper {
+  .return-reasons-select,
+  .return-qty-select {
+    .reasonsSelect__control,
+    .qtySelect__control {
+      .reasonsSelect__dropdown-indicator,
+      .qtySelect__dropdown-indicator {
+        &::before {
+          font-size: 0.525rem;
+        }
+      }
+    }
+
+    .reasonsSelect__menu,
+    .qtySelect__menu {
+      z-index: 5;
+    }
+  }
+}

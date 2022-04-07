@@ -5,13 +5,14 @@ const ReturnQuantitySelect = ({
   qtyOptions,
 }) => (
   <>
-    <div className="return-reasons-row">
-      <div className="return-reason-label">{ Drupal.t('Reason for Return', {}, { context: 'online_returns' }) }</div>
+    <div className="return-qty-row">
+      <div className="return-reason-label dark">{ Drupal.t('Select quantity', {}, { context: 'online_returns' }) }</div>
       <Select
-        classNamePrefix="reasonsSelect"
-        className="return-reasons-select"
+        classNamePrefix="qtySelect"
+        className="return-qty-select"
         options={qtyOptions}
         defaultValue={qtyOptions[0]}
+        isSearchable={false}
       />
     </div>
   </>

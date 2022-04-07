@@ -2,6 +2,8 @@ import React from 'react';
 import Collapsible from 'react-collapsible';
 import ReturnItemDetails from '../return-item-details';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
+import { createReturnRequest } from '../../../utilities/return_api_helper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class ReturnItemsListing extends React.Component {
   constructor(props) {
@@ -61,17 +63,6 @@ class ReturnItemsListing extends React.Component {
   );
 
   /**
-   * When user clicks continue button, disable the item
-   * details accordion and enable refund accordion.
-   */
-  continueToRefundComponent = (open) => {
-    dispatchCustomEvent('updateRefundAccordionState', open);
-    this.setState({
-      open: !open,
-    });
-  }
-
-  /**
    * When item details accordion is opened, refund
    * accordion is collapsed.
    */
@@ -84,6 +75,56 @@ class ReturnItemsListing extends React.Component {
     }
     dispatchCustomEvent('updateRefundAccordionState', false);
   };
+
+  /**
+   * Process return request submit.
+   */
+  handleReturnSubmit = () => {
+    const { btnDisabled, open } = this.state;
+    const { handleReturnRequestSubmit } = this.props;
+
+    // When user clicks continue button, disable the item
+    // details accordion and enable refund accordion.
+    dispatchCustomEvent('updateRefundAccordionState', open);
+    this.setState({
+      open: !open,
+    });
+
+    if (!btnDisabled) {
+      handleReturnRequestSubmit();
+      this.createReturnRequest();
+    }
+  }
+
+  /**
+   * Create return request.
+   */
+  createReturnRequest = async () => {
+    const { itemsSelected } = this.state;
+
+    // @todo: Hard coding selected reasons and quantity for now.
+    const items = itemsSelected.map((item) => {
+      const data = { ...item };
+      data.qty_requested = 1;
+      data.resolution = 2009;
+      data.reason = 2014;
+      return data;
+    });
+
+    const requestData = {
+      itemsSelected: items,
+    };
+    const returnRequest = await createReturnRequest(requestData);
+
+    if (hasValue(returnRequest.error)) {
+      // @todo: Handle error display.
+      return;
+    }
+
+    // On success, redirect to return confirmation page.
+    // @todo: Update return confirmation URL.
+    window.location.href = Drupal.url('/');
+  }
 
   render() {
     const { btnDisabled, itemsSelected, open } = this.state;
@@ -107,7 +148,11 @@ class ReturnItemsListing extends React.Component {
             </div>
           ))}
           <div className="continue-button-wrapper">
-            <button type="button" onClick={() => this.continueToRefundComponent(open)} disabled={btnState}>
+            <button
+              type="button"
+              disabled={btnState}
+              onClick={this.handleReturnSubmit}
+            >
               <span className="continue-button-label">{Drupal.t('Continue', {}, { context: 'online_returns' })}</span>
             </button>
           </div>
