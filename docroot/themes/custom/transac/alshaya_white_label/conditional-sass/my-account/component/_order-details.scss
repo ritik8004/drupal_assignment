@@ -732,15 +732,17 @@
       background-color: $_order_limit_txt;
 
       @include breakpoint($only-mobile) {
-        padding: 1rem 1rem 2.125rem 3.125rem;
+        padding-top: 1rem;
+        padding-bottom: 2.125rem;
+        padding-#{left}: 3.125rem;
       }
 
       .icon-ic_infomation {
         font-size: 1.5rem;
         vertical-align: middle;
         position: absolute;
-        #{$left}: 8px;
-        margin-top: 3px;
+        #{$left}: 0.5rem;
+        margin-top: 0.1875rem;
 
         @include breakpoint($only-mobile) {
           margin-top: 0;
