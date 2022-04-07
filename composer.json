@@ -42,8 +42,8 @@
         "drupal/conditional_fields": "^4.0@alpha",
         "drupal/config_rewrite": "^1.4",
         "drupal/config_update": "^1.7",
-        "drupal/core": "9.2.12",
-        "drupal/core-composer-scaffold": "9.2.12",
+        "drupal/core": "9.2.16",
+        "drupal/core-composer-scaffold": "9.2.16",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
         "drupal/default_content": "^2.0@alpha",
@@ -136,7 +136,7 @@
         "acquia/blt-phpcs": "^1.0",
         "acquia/drupal-spec-tool": "^4.1",
         "drupal/console": "^1.8",
-        "drupal/core-dev": "9.2.12",
+        "drupal/core-dev": "9.2.16",
         "drupal/devel": "^4.1",
         "geerlingguy/drupal-vm": "^5.2.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
@@ -345,6 +345,9 @@
             },
             "drupal/sharethis": {
                 "Optimise library of sharethis module": "https://www.drupal.org/files/issues/2022-03-10/optimise-libraries-3268825-5.patch"
+            },
+            "acquia/lightning": {
+                "Fix for drush updb failure during lightning upgrade": "https://www.drupal.org/files/issues/2022-04-07/3274101-2.patch"
             }
         },
         "installer-paths": {
