@@ -39,10 +39,9 @@ export default class PdpHeader extends React.PureComponent {
     }
 
     let backToHomeClass = '';
-    if (previousLink === '') {
+    if (previousLink === '' || currentUrl === previousLink) {
       backToHomeClass = 'back-to-home';
     }
-
     // Fetch langcode for current url.
     const pathArray = window.location.pathname.split('/');
     if (pathArray[0] === '') {
@@ -52,7 +51,7 @@ export default class PdpHeader extends React.PureComponent {
 
     backArrow = (e) => {
       e.preventDefault();
-      if (previousLink === '') {
+      if (previousLink === '' || currentUrl === previousLink) {
         // Redirect to home page
         window.location.href = `${window.location.origin}/${pathArray[0]}`;
       } else {
