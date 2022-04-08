@@ -42,7 +42,7 @@ function alshaya_non_transac_update_8105() {
  */
 function alshaya_non_transac_update_8104() {
   if (\Drupal::service('theme_handler')->themeExists('whitelabel_non_transac')) {
-    \Drupal::service('theme_handler')->uninstall(['whitelabel_non_transac'], TRUE);
+    \Drupal::service('theme_installer')->uninstall(['whitelabel_non_transac'], TRUE);
   }
 }
 
@@ -137,7 +137,7 @@ function alshaya_non_transac_install() {
     \Drupal::service('module_installer')->install(['acquia_connector']);
   }
   // Set whitelabel as the default theme.
-  \Drupal::service('theme_handler')->setDefault('whitelabel');
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'whitelabel')->save();
 
   // Set registration to administrator only.
   $config = \Drupal::configFactory()->getEditable('user.settings');

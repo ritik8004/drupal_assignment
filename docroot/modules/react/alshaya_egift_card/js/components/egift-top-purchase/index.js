@@ -84,7 +84,9 @@ export default class EgiftTopPurchase extends React.Component {
               title: response.data.card_type,
               alt: response.data.card_type,
             },
-            eGiftFor: 'self',
+            // if linked card show linked card topup image for my card option,
+            // show default topup image for no linked card and other option.
+            eGiftFor: response.data.card_number !== null ? 'self' : 'other',
           });
         }
       });

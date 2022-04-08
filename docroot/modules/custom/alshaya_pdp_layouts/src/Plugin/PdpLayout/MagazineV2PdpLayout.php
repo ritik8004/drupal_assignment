@@ -411,7 +411,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
     $cncFeatureStatus = $cc_config->get('feature_status') ?? 'enabled';
     $cnc_enabled = $cncFeatureStatus === 'enabled';
-    $geolocation_config = $this->configFactory->get('geolocation.settings');
+    $geolocation_config = $this->configFactory->get('geolocation_google_maps.settings');
     $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
     $vars['#attached']['drupalSettings']['clickNCollect']['cncEnabled'] = $cnc_enabled;
     $vars['#attached']['drupalSettings']['clickNCollect']['cncSubtitleAvailable'] = $cc_config->get('checkout_click_collect_available');

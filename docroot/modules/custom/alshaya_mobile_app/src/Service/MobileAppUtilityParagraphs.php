@@ -377,7 +377,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         ],
       ];
     }
-    return isset($items[$entity_type][$bundle]) ? $items[$entity_type][$bundle] : [];
+    return $items[$entity_type][$bundle] ?? [];
   }
 
   /**
@@ -874,7 +874,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $this->cacheTags[] = 'block';
     $this->cacheTags[] = 'block_content_view';
     $results = array_map(function ($item) {
-      list($entity_type, $uuid) = explode(':', $item['plugin_id']);
+      [$entity_type, $uuid] = explode(':', $item['plugin_id']);
       if ($entity_type == 'block_content') {
         $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
         $block = reset($block);

@@ -927,6 +927,10 @@ class MobileAppUtility {
       // process/find the redirect for same url more than once in a request.
       if (empty($this->redirects[$langcode][$url])) {
         $redirect = $this->redirectRepository->findMatchingRedirect($url, [], $langcode);
+        // We check url without forward slash as there are few without slash.
+        if (!$redirect) {
+          $redirect = $this->redirectRepository->findMatchingRedirect(rtrim($url, '/'), [], $langcode);
+        }
         $redirect_url = $redirect
           ? $redirect->getRedirectUrl()->toString(TRUE)->getGeneratedUrl()
           : $url;

@@ -88,6 +88,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     }
 
     $entity = $event->getSku();
+    // phpcs:ignore
     $assets = unserialize($entity->get('attr_assets')->getString()) ?? [];
 
     foreach ($assets as $asset) {

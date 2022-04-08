@@ -339,35 +339,43 @@ exports.render = function render(
         thumbnails: [],
       };
 
-      switch (drupalSettings.alshayaRcs.useParentImages) {
-        case 'never':
-          // Get the images from the variants.
-          entity.variants.forEach(function (variant) {
-            // Only fetch media for the selected variant.
-            if (variant.product.sku !== params.sku) {
-              return;
-            }
-            variant.product.media.forEach(function (variantMedia, i) {
-              mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
-                index: i,
-                last: (i + 1 === length) ? 'last' : '',
-                type: 'image',
-                alt: entity.name, //@todo should this come from graphql for each image?
-                title: entity.name,
-                thumburl: variantMedia.thumbnails,
-                mediumurl: variantMedia.medium,
-                zoomurl: variantMedia.zoom,
-                fullurl: variantMedia.url,
-              });
+      if (entity.type_id === 'configurable') {
+        const skuForGallery = params.sku;
+        // Fetch the media for the gallery sku.
+        entity.variants.every(function (variant) {
+          if (variant.product.sku !== skuForGallery) {
+            // Continue with the loop.
+            return true;
+          }
+          variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia) {
+            mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+              index: i,
+              type: 'image',
+              alt: entity.name, //@todo should this come from graphql for each image?
+              title: entity.name,
+              thumburl: variantMedia.thumbnails,
+              mediumurl: variantMedia.medium,
+              zoomurl: variantMedia.zoom,
+              fullurl: variantMedia.url,
+              last: (i + 1 === length) ? 'last' : '',
             });
-            // Break from the loop.
-            return false;
           });
-          break;
-
-        default:
-          // @todo Add default case when working on other brands.
-          break;
+        });
+      }
+      else {
+        entity.media.forEach(function setEntityThumbnails(entityMedia) {
+          mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+            index: i,
+            type: 'image',
+            alt: entity.name, //@todo should this come from graphql for each image?
+            title: entity.name,
+            thumburl: entityMedia.thumbnails,
+            mediumurl: entityMedia.medium,
+            zoomurl: entityMedia.zoom,
+            fullurl: entityMedia.url,
+            last: (i + 1 === length) ? 'last' : '',
+          });
+        });
       }
 
       // If no media, return;
