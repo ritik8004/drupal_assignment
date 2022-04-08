@@ -338,31 +338,36 @@ exports.render = function render(
         thumbnails: [],
       };
 
-      switch (drupalSettings.alshayaRcs.useParentImages) {
-        case 'never':
-          // Get the images from the variants.
-          entity.variants.forEach(function (variant) {
-            // Only fetch media for the selected variant.
-            if (variant.product.sku !== params.sku) {
-              return;
-            }
-            variant.product.media.forEach(function (variantMedia) {
-              mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
-                type: 'image',
-                thumburl: variantMedia.thumbnails,
-                mediumurl: variantMedia.medium,
-                zoomurl: variantMedia.zoom,
-                fullurl: variantMedia.url,
-              });
+      if (entity.type_id === 'configurable') {
+        const skuForGallery = params.sku;
+        // Fetch the media for the gallery sku.
+        entity.variants.every(function (variant) {
+          if (variant.product.sku !== skuForGallery) {
+            return;
+          }
+          variant.product.media.forEach(function (variantMedia) {
+            mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+              type: 'image',
+              thumburl: variantMedia.thumbnails,
+              mediumurl: variantMedia.medium,
+              zoomurl: variantMedia.zoom,
+              fullurl: variantMedia.url,
             });
-            // Break from the loop.
-            return false;
           });
-          break;
-
-        default:
-          // @todo Add default case when working on other brands.
-          break;
+          // Break from the loop.
+          return false;
+        });
+      }
+      else {
+        entity.media.forEach(function (variantMedia) {
+          mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+            type: 'image',
+            thumburl: variantMedia.thumbnails,
+            mediumurl: variantMedia.medium,
+            zoomurl: variantMedia.zoom,
+            fullurl: variantMedia.url,
+          });
+        });
       }
 
       // If no media, return;
