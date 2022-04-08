@@ -15,9 +15,11 @@
     product.variants.forEach(function eachVariant(variant) {
       variant.product.media = [];
       variant.product.media_teaser = '';
+      variant.product.hasMedia = false;
 
       try {
         if (Drupal.hasValue(variant.product.assets_pdp)) {
+          variant.product.hasMedia = true;
           mediaData = JSON.parse(variant.product.assets_pdp);
           mediaData.forEach(function setGalleryMedia(media) {
             variant.product.media.push({
@@ -58,9 +60,6 @@
           mediaData = JSON.parse(variant.product.assets_teaser);
           mediaData.every(function setTeaserMedia(media) {
             variant.product.media_teaser = media.styles.product_teaser;
-            // We do this so that we are able to detect in getSkuForGallery
-            // that the variant has media.
-            variant.product.media = variant.product.media_teaser;
             // Break as there is only 1 teaser image expected.
             return false;
           });
@@ -87,14 +86,17 @@
         variant.product.media_teaser = null;
         try {
           var mediaData = JSON.parse(variant.product.assets_teaser);
-          mediaData.every(function setTeaserMedia(media) {
-            variant.product.media_teaser = media.styles.product_teaser;
-            // We do this so that we are able to detect in getSkuForGallery
-            // that the variant has media.
-            variant.product.media = variant.product.media_teaser;
-            // Break as there is only 1 teaser image expected.
-            return false;
-          });
+          if (Drupal.hasValue(mediaData)) {
+            variant.product.hasMedia = true;
+            mediaData.every(function setTeaserMedia(media) {
+              variant.product.media_teaser = media.styles.product_teaser;
+              // We do this so that we are able to detect in getSkuForGallery
+              // that the variant has media.
+              variant.product.media = variant.product.media_teaser;
+              // Break as there is only 1 teaser image expected.
+              return false;
+            });
+          }
         }
         catch (e) {
           Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
