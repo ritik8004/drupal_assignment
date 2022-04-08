@@ -6,6 +6,7 @@ import { Swipeable } from 'react-swipeable';
 import en from '../../../../../../node_modules/date-fns/locale/en-US';
 import ar from '../../../../../../node_modules/date-fns/locale/ar-SA';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { getTranslatedTime } from '../../../../../../js/utilities/onlineBookingHelper';
 
 export default class OnlineBookingCalendar extends React.Component {
   constructor(props) {
@@ -315,7 +316,7 @@ export default class OnlineBookingCalendar extends React.Component {
               timeSlot.start_time,
             )}
           >
-            {`${timeSlot.start_time} - ${timeSlot.end_time}`}
+            {`${getTranslatedTime(timeSlot.start_time)} - ${getTranslatedTime(timeSlot.end_time)}`}
           </div>
         );
         return element;
