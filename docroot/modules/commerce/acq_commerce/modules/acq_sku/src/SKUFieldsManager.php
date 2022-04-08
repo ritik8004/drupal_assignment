@@ -453,7 +453,7 @@ class SKUFieldsManager {
       throw new \RuntimeException('Field type not defined yet, please contact TA.');
     }
 
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     $fieldDefinition->setLabel(new TranslatableMarkup($field_info['label']));
 
     // Update cardinality with default value if empty.
