@@ -4,6 +4,7 @@ import ReturnItemDetails from '../return-item-details';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { createReturnRequest } from '../../../utilities/return_api_helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getDefaultResolutionId } from '../../../utilities/return_request_util';
 
 class ReturnItemsListing extends React.Component {
   constructor(props) {
@@ -27,10 +28,42 @@ class ReturnItemsListing extends React.Component {
    * If any reason is selected by customer
    * continue button will be enabled.
    */
-  handleSelectedReason = (selectedReason) => {
+  handleSelectedReason = (selectedReason, sku) => {
     if (selectedReason) {
+      const { itemsSelected } = this.state;
+
+      const items = itemsSelected.map((item) => {
+        const data = { ...item };
+        if (data.sku === sku) {
+          data.reason = selectedReason.value;
+        }
+        return data;
+      });
+
       this.setState({
         btnDisabled: selectedReason.value === 0,
+        itemsSelected: items,
+      });
+    }
+  }
+
+  /**
+   * Update selected quantity in state.
+   */
+  handleSelectedQuantity = (selectedQuantity, sku) => {
+    if (selectedQuantity) {
+      const { itemsSelected } = this.state;
+
+      const items = itemsSelected.map((item) => {
+        const data = { ...item };
+        if (data.sku === sku) {
+          data.qty_requested = selectedQuantity.value;
+        }
+        return data;
+      });
+
+      this.setState({
+        itemsSelected: items,
       });
     }
   }
@@ -41,8 +74,14 @@ class ReturnItemsListing extends React.Component {
    */
   processSelectedItems = (checked, item) => {
     if (checked) {
+      const itemDetails = item;
+
+      // Add default quantity and resolution.
+      itemDetails.qty_requested = 1;
+      itemDetails.resolution = getDefaultResolutionId();
+
       this.setState((prevState) => ({
-        itemsSelected: [...prevState.itemsSelected, item],
+        itemsSelected: [...prevState.itemsSelected, itemDetails],
         btnDisabled: true,
       }));
     } else {
@@ -103,20 +142,7 @@ class ReturnItemsListing extends React.Component {
    */
   createReturnRequest = async () => {
     const { itemsSelected } = this.state;
-
-    // @todo: Hard coding selected reasons and quantity for now.
-    const items = itemsSelected.map((item) => {
-      const data = { ...item };
-      data.qty_requested = 1;
-      data.resolution = 2009;
-      data.reason = 2014;
-      return data;
-    });
-
-    const requestData = {
-      itemsSelected: items,
-    };
-    const returnRequest = await createReturnRequest(requestData);
+    const returnRequest = await createReturnRequest(itemsSelected);
 
     if (hasValue(returnRequest.error)) {
       // @todo: Handle error display.
@@ -146,6 +172,7 @@ class ReturnItemsListing extends React.Component {
                 item={item}
                 handleSelectedReason={this.handleSelectedReason}
                 processSelectedItems={this.processSelectedItems}
+                handleSelectedQuantity={this.handleSelectedQuantity}
               />
             </div>
           ))}
