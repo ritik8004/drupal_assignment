@@ -451,6 +451,12 @@
 
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
+      // Prepare the attributes variable to have key value pair.
+      let attributes = [];
+      variants.attributes.forEach((item) => {
+        attributes[item['code']] = item['value_index'];
+      });
+
       const variantSku = product.sku;
       let attributeVal = null;
 
@@ -458,7 +464,13 @@
         attributeVal = product[configurableCodes[i]];
 
         if (typeof attributeVal === 'undefined') {
-          return;
+          // Validate if the configurable code is available in attributes list.
+          if (typeof attributes[configurableCodes[i]] === 'undefined') {
+            return;
+          }
+          else {
+            attributeVal = attributes[configurableCodes[i]];
+          }
         }
 
         combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'

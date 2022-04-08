@@ -569,11 +569,6 @@ exports.computePhFilters = function (input, filter) {
           : [];
 
         configurableOptions.forEach((option) => {
-          // Skip the addition of season_code if lpn configuration is not set.
-          if (Drupal.hasValue(drupalSettings.lpn)
-            && drupalSettings.lpn.lpn_attribute === 'season_code') {
-            return;
-          }
           // Get the field wrapper div.
           const optionsListWrapper = jQuery('.rcs-templates--form_element_select').clone().children();
           // The list containing the options.
@@ -610,16 +605,7 @@ exports.computePhFilters = function (input, filter) {
           // Add a disabled option which will be used as the label for the option.
           let selectOption = jQuery('<option></option>');
           let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
-          // For season code attribute, the default value will be the first
-          // valid available option.
-          if (Drupal.hasValue(drupalSettings.lpn)
-            && option.attribute_code === drupalSettings.lpn.lpn_attribute.replace('attr_', '')
-            && option.values.length > 0) {
-            selectOption.attr({ disabled: 'disabled' }).text(text);
-          }
-          else {
-            selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
-          }
+          selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
           configurableOptionsList.append(selectOption);
 
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
@@ -632,18 +618,10 @@ exports.computePhFilters = function (input, filter) {
           }
 
           // Add the option values.
-          option.values.forEach((value, key) => {
+          option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
             const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
-            // Select the first season code option by default.
-            if (Drupal.hasValue(drupalSettings.lpn)
-              && option.attribute_code === drupalSettings.lpn.lpn_attribute.replace('attr_', '')
-              && key === 0) {
-              selectOption.attr({ selected: 'selected', value: value.value_index }).text(label);
-            }
-            else {
-              selectOption.attr({ value: value.value_index }).text(label);
-            }
+            selectOption.attr({ value: value.value_index }).text(label);
             configurableOptionsList.append(selectOption);
 
             if (optionIsSwatch) {
