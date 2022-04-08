@@ -107,10 +107,9 @@
     color: $black;
   }
 
-  .individual-store-title:hover
-  {
+  .individual-store-title:hover {
     color: $marvel-red;
-    
+
     &::after {
       color: $marvel-red;
     }
