@@ -263,6 +263,7 @@ class AlshayaRcsProductHelper {
         'media_gallery' => [
           'url',
           'label',
+          'styles',
           '... on ProductVideo' => [
             'video_content' => [
               'media_type',
@@ -346,6 +347,7 @@ class AlshayaRcsProductHelper {
               'media_gallery' => [
                 'url',
                 'label',
+                'styles',
                 '... on ProductImage' => [
                   'url',
                   'label',
