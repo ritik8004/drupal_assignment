@@ -538,15 +538,23 @@ function _alshaya_spc_translations() {
       'context' => 'online_booking',
     ],
     'Delivery Date & Time' => [
-      'ar' => 'تاريخ وموعد التوصيل',
+      'ar' => 'وقت وتاريخ التوصيل',
       'context' => 'online_booking',
     ],
     '<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>' => [
-      'ar' => '<b>@appointment_date<b> بين <b>@start_time</b> - <b>@end_time</b>',
+      'ar' => '<b>@appointment_date</b> بين <b>@start_time</b> - <b>@end_time</b>',
       'context' => 'online_booking',
     ],
     'Online booking: Sorry, something went wrong. Please try again later.' => [
       'ar' => 'الحجز الإلكتروني: عذراً، لقد حدث خطأ ما. يرجى إعادة المحاولة لاحقاً.',
+      'context' => 'online_booking',
+    ],
+    'AM' => [
+      'ar' => 'صباحاً',
+      'context' => 'online_booking',
+    ],
+    'PM' => [
+      'ar' => 'مساءً',
       'context' => 'online_booking',
     ],
   ];

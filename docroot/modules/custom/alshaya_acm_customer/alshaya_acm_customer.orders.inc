@@ -563,21 +563,43 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       // available, we will process to display booking details on FE.
       if (!empty($order['online_booking_information']['appointment_date'])
         && !empty($order['online_booking_information']['start_time'])) {
-        // For the translations of AM and PM in star and end time of booking.
+        // For the translations of AM and PM in start and end time of booking.
         // We assume time will always be in format of '10:00 AM' or '11:00 PM',
         // having a space as delimitor. We will translate the AM/PM from the
         // exploded array and implode it again with translated string.
         $start_time = $order['online_booking_information']['start_time'];
-        $start_time_array = explode(' ', $start_time);
-        if (count($start_time_array) > 1) {
-          $start_time_array[1] = t('@ampm', ['@ampm' => $start_time_array[1]]);
-          $start_time = implode(' ', $start_time_array);
-        }
         $end_time = $order['online_booking_information']['end_time'];
-        $end_time_array = explode(' ', $end_time);
-        if (count($end_time_array) > 1) {
-          $end_time_array[1] = t('@ampm', ['@ampm' => $end_time_array[1]]);
-          $end_time = implode(' ', $end_time_array);
+
+        // If the current language is not the english, we will fetch and update
+        // translations.
+        $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        if ($current_language !== 'en') {
+          // We can't use the variables in t function so need to fetch the AM/PM
+          // translations from the storage directly.
+          $storage = \Drupal::service('locale.storage');
+
+          // Translation for AM/PM in start time.
+          $start_time_array = explode(' ', $start_time);
+          if (count($start_time_array) > 1) {
+            $string = $storage->getTranslations([
+              'source' => $start_time_array[1],
+              'language' => $current_language,
+              'context' => 'online_booking',
+            ]);
+            $start_time_array[1] = (!empty($string)) ? $string[0]->getString() : $start_time_array[1];
+            $start_time = implode(' ', $start_time_array);
+          }
+          // Translation for AM/PM in end time.
+          $end_time_array = explode(' ', $end_time);
+          if (count($end_time_array) > 1) {
+            $string = $storage->getTranslations([
+              'source' => $end_time_array[1],
+              'language' => $current_language,
+              'context' => 'online_booking',
+            ]);
+            $end_time_array[1] = (!empty($string)) ? $string[0]->getString() : $end_time_array[1];
+            $end_time = implode(' ', $end_time_array);
+          }
         }
 
         $build['#online_booking_notice']['booking_info'] = t('Home Delivery: Your order is scheduled on @date between @from_time - @to_time to the below delivery address.', [
