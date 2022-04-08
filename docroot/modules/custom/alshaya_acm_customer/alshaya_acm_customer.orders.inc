@@ -128,6 +128,19 @@ function alshaya_acm_customer_get_order_status(array $order) {
 }
 
 /**
+ * Get order state that can be processing, canceled, closed, complete.
+ *
+ * @param array $order
+ *   Item array.
+ *
+ * @return string
+ *   State of the order.
+ */
+function alshaya_acm_customer_get_order_state(array $order) {
+  return $order['state'] ?? NULL;
+}
+
+/**
  * Get total number of items in order.
  *
  * @param array $order
@@ -556,7 +569,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     // eligible for the online booking.
     if (isset($order['online_booking_information'])
       && isset($order['online_booking_information']['is_hfd_booking_order'])
-      && $order['online_booking_information']['is_hfd_booking_order']) {
+      && $order['online_booking_information']['is_hfd_booking_order']
+      && alshaya_acm_customer_get_order_state($order) === 'processing') {
       // Check if the appointment is booked with order or failed. To confirm
       // this we will check if the 'appointment_date' and 'start_time' are
       // available of not. If 'appointment_date' and 'start_time' values are
