@@ -441,6 +441,12 @@
         ],
         "build-middlewares": [
             "bash blt/scripts/middleware-build.sh ."
+        ],
+        "post-install-cmd": [
+            "@build-middlewares"
+        ],
+        "post-update-cmd": [
+            "@build-middlewares"
         ]
     },
     "config": {
