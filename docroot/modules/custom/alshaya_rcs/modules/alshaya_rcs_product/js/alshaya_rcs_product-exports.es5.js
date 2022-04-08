@@ -346,7 +346,7 @@ exports.render = function render(
             // Continue with the loop.
             return true;
           }
-          variant.product.media.forEach(function (variantMedia) {
+          variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia) {
             mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
               type: 'image',
               thumburl: variantMedia.thumbnails,
@@ -358,13 +358,13 @@ exports.render = function render(
         });
       }
       else {
-        entity.media.forEach(function (variantMedia) {
+        entity.media.forEach(function setEntityThumbnails(entityMedia) {
           mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
             type: 'image',
-            thumburl: variantMedia.thumbnails,
-            mediumurl: variantMedia.medium,
-            zoomurl: variantMedia.zoom,
-            fullurl: variantMedia.url,
+            thumburl: entityMedia.thumbnails,
+            mediumurl: entityMedia.medium,
+            zoomurl: entityMedia.zoom,
+            fullurl: entityMedia.url,
           });
         });
       }
