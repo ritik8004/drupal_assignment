@@ -9,6 +9,7 @@ import {
   getHideOnlineBooking,
   holdBookingSlot,
   setHideOnlineBooking,
+  getTranslatedTime,
 } from '../../../../../js/utilities/onlineBookingHelper';
 import Loading from '../../../../../js/utilities/loading';
 import DefaultShippingElement from '../shipping-method/components/DefaultShippingElement';
@@ -318,7 +319,7 @@ export default class OnlineBooking extends React.Component {
                             ${moment(bookingDetails.hfd_appointment_details.appointment_date).locale(drupalSettings.path.currentLanguage).format('MMM')}-
                             ${moment(bookingDetails.hfd_appointment_details.appointment_date).format('YYYY')}
                             </div>`,
-                            '!time_slot': `<div class="online-booking__available-delivery-time">${bookingDetails.hfd_appointment_details.start_time} - ${bookingDetails.hfd_appointment_details.end_time}</div></div>`,
+                            '!time_slot': `<div class="online-booking__available-delivery-time">${getTranslatedTime(bookingDetails.hfd_appointment_details.start_time)} - ${getTranslatedTime(bookingDetails.hfd_appointment_details.end_time)}</div></div>`,
                           }, { context: 'online_booking' },
                         ),
                       )
