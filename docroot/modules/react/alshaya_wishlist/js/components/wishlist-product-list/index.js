@@ -26,7 +26,7 @@ class WishlistProductList extends React.Component {
   constructor(props) {
     super(props);
     let wishListItems = {};
-    let wishListItemsCount = null;
+    let wishListItemsCount = 0;
     // If the current page is not a shared wishlist page and
     // forceLoadWishlistFromBackend settings should be undefined or false.
     // This configuration is only available for authenticated customers. So
@@ -90,8 +90,8 @@ class WishlistProductList extends React.Component {
       document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
     }
     // For wishlist page, data will always be available in storage.
-    // So, we should stop the loader after data has loaded from storage.
-    if (!isShareWishlistPage()) {
+    // So for guest user, we should stop the loader after data has loaded from storage.
+    if (!isShareWishlistPage() && isAnonymousUser()) {
       this.setState({
         wait: false,
       });
@@ -144,6 +144,7 @@ class WishlistProductList extends React.Component {
     this.setState({
       filters,
       wishListItemsCount,
+      wait: false,
     });
   };
 
@@ -186,7 +187,7 @@ class WishlistProductList extends React.Component {
     // Render empty wishlist component.
     // Check for wishlist data loaded via api if logged in user.
     // If anonymous user, check if wishlist item count is 0.
-    if (wishListItemsCount === 0 && wishListItemsCount !== null) {
+    if (wishListItemsCount === 0) {
       return PageEmptyMessage(
         getStringMessage('empty_wishlist', { '@wishlist_label': getWishlistLabel() }),
         'wishlist',
