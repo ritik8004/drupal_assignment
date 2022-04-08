@@ -343,7 +343,8 @@ exports.render = function render(
         // Fetch the media for the gallery sku.
         entity.variants.every(function (variant) {
           if (variant.product.sku !== skuForGallery) {
-            return;
+            // Continue with the loop.
+            return true;
           }
           variant.product.media.forEach(function (variantMedia) {
             mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
@@ -354,8 +355,6 @@ exports.render = function render(
               fullurl: variantMedia.url,
             });
           });
-          // Break from the loop.
-          return false;
         });
       }
       else {
