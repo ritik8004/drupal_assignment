@@ -550,11 +550,11 @@ function _alshaya_spc_translations() {
       'context' => 'online_booking',
     ],
     'AM' => [
-      'ar' => 'صباحاً',
+      'ar' => 'ص',
       'context' => 'online_booking',
     ],
     'PM' => [
-      'ar' => 'مساءً',
+      'ar' => 'م',
       'context' => 'online_booking',
     ],
   ];
