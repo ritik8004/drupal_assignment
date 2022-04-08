@@ -2,6 +2,7 @@ import { isUserAuthenticated } from './helper';
 import logger from './logger';
 import { callMagentoApi } from './requestHelper';
 import { hasValue } from './conditionsUtility';
+import getStringMessage from './strings';
 
 /**
  * Gets magento api endpoint by user role.
@@ -212,9 +213,9 @@ export const getTranslatedTime = (time = null) => {
   const timeArray = time.split(' ');
   // Check if the split array has more then one index item in array. We will
   // assume the 2nd item in the array will be AM/PM string as per time format.
-  if (timeArray.length > 1) {
+  if (timeArray.length > 1 && typeof timeArray[1] === 'string') {
     // Translate the second item and re-assign in array on same position.
-    timeArray[1] = Drupal.t(timeArray[1], {}, { context: 'online_booking' });
+    timeArray[1] = getStringMessage(`online_booking_${timeArray[1].toLowerCase()}`);
     // Return time with translated data to show on FE.
     return timeArray.join(' ');
   }
