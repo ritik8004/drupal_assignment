@@ -187,3 +187,38 @@ export const setHideOnlineBooking = (status = true) => {
     Drupal.addItemInLocalStorage('hide_online_booking', status);
   }
 };
+
+/**
+ * Return the given time with translation of AM/PM string in that. Assuming
+ * given time will follow the format like '10:00 AM' or '11:00 PM' strictly.
+ *
+ * @param {string} translatedTime
+ *   Return the translated time.
+ */
+export const getTranslatedTime = (time = null) => {
+  // Return if no time string provided.
+  if (!time) {
+    return null;
+  }
+
+  // We only have to tranlate if current language is not english. So while it
+  // is english return the time string we received without any change assuming
+  // the default language is english.
+  if (drupalSettings.path.currentLanguage === 'en') {
+    return time;
+  }
+
+  // Split the time by space to get AM/PM string separately.
+  const timeArray = time.split(' ');
+  // Check if the split array has more then one index item in array. We will
+  // assume the 2nd item in the array will be AM/PM string as per time format.
+  if (timeArray.length > 1) {
+    // Translate the second item and re-assign in array on same position.
+    timeArray[1] = Drupal.t(timeArray[1], {}, { context: 'online_booking' });
+    // Return time with translated data to show on FE.
+    return timeArray.join(' ');
+  }
+
+  // Return time as received.
+  return time;
+};
