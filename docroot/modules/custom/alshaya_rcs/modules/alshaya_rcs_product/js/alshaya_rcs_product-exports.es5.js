@@ -350,10 +350,11 @@ exports.render = function render(
             const length = variant.product.media.length;
             variant.product.media.forEach(function (variantMedia, i) {
               mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
-                index: i + 1,
-                length: length,
+                index: i,
                 last: (i + 1 === length) ? 'last' : '',
                 type: 'image',
+                alt: entity.name, //@todo should this come from graphql for each image?
+                title: entity.name,
                 thumburl: variantMedia.thumbnails,
                 mediumurl: variantMedia.medium,
                 zoomurl: variantMedia.zoom,
@@ -378,11 +379,10 @@ exports.render = function render(
 
       const data = {
         description: entity.description.html,
-        description_details: '@todo description details',
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
-          label: entity.name,
+          label: entity.name, //@todo should this come from graphql for each image?
         },
         pager_flag: (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryLimit[params.galleryLimit])
           ? 'pager-yes'
