@@ -12,8 +12,8 @@ function alshaya_d_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_d', 'inc', 'alshaya_d.content');
 
   // Enable and set debenhams as default theme.
-  \Drupal::service('theme_handler')->install(['debenhams'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('debenhams');
+  \Drupal::service('theme_installer')->install(['debenhams'], TRUE);
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'debenhams')->save();
 
   // Disable some default blocks provided by whitelabel that we
   // don't want on debenhams.

@@ -1,7 +1,7 @@
 To be able to use the php scripts in this folder you need to create a settings.php file in the same folder with the following content:
 ```
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 /**
  * @file

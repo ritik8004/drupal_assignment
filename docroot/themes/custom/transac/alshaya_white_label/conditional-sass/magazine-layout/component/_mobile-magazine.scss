@@ -503,3 +503,11 @@
     }
   }
 }
+
+.click-collect-modal-wrapper {
+  display: none;
+}
+
+.click-collect-modal-wrapper.click-collect-modal-wrapper-open {
+  display: block;
+}

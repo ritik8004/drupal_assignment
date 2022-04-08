@@ -188,7 +188,7 @@ class AlshayaFrontendCommand extends BltTasks {
 
         // Else copy from acquia repo if build is not needed.
         if ($build === FALSE) {
-          $cssFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $themePath);
+          $cssFromDir = str_replace('docroot', 'docroot/../tmp/blt-deploy/docroot', $themePath);
           // Building folder paths for copying.
           // In non_transac themes css is inside /dist folder.
           if ($type === 'non_transac') {
@@ -340,7 +340,7 @@ class AlshayaFrontendCommand extends BltTasks {
 
         // Else copy from acquia repo if build is not needed.
         if ($build === FALSE) {
-          $reactFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $dir) . 'dist';
+          $reactFromDir = str_replace('docroot', 'docroot/../tmp/blt-deploy/docroot', $dir) . 'dist';
           $reactToDir = $dir . 'dist';
 
           // Copy step.

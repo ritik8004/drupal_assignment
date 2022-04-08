@@ -71,14 +71,14 @@ class AlshayaBrandListHelper {
    * Get Logo Attribute.
    */
   public static function getLogoAttribute() {
-    return isset(Settings::get('brand_logo_block')['logo_attribute']) ? Settings::get('brand_logo_block')['logo_attribute'] : '';
+    return Settings::get('brand_logo_block')['logo_attribute'] ?? '';
   }
 
   /**
    * Get Brand Attribute.
    */
   public static function getBrandAttribute() {
-    return isset(Settings::get('brand_logo_block')['brand_attribute']) ? Settings::get('brand_logo_block')['brand_attribute'] : '';
+    return Settings::get('brand_logo_block')['brand_attribute'] ?? '';
   }
 
 }
