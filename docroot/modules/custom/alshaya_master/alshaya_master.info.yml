@@ -29,3 +29,4 @@ dependencies:
   - alshaya_contact:alshaya_contact
   - seckit:seckit
   - pcb:pcb_memcache
+  - drupal:locale

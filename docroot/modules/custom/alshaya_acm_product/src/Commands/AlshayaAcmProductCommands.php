@@ -649,6 +649,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
         continue;
       }
 
+      // phpcs:ignore
       $assets = unserialize($sku->get($field)->getString());
 
       foreach ($assets ?? [] as $asset) {
@@ -900,6 +901,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
         // Get media data for the sku.
         $media_data = $sku_data->get('media')->getString();
         if (!empty($media_data)) {
+          // phpcs:ignore
           $media_data = unserialize($media_data);
           foreach ($media_data as $data) {
             if (isset($data['fid'])) {

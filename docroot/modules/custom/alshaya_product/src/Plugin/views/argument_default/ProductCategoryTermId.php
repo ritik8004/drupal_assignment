@@ -115,7 +115,7 @@ class ProductCategoryTermId extends ArgumentDefaultPluginBase implements Cacheab
           }
           else {
             $storage = $this->entityManager->getStorage('taxonomy_term');
-            $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id());
+            $term_items = $storage->loadTree($taxonomy_term->bundle(), $taxonomy_term->id());
 
             // Get the array of term ids from tree.
             $terms = $term_items ? array_column($term_items, 'tid') : [];

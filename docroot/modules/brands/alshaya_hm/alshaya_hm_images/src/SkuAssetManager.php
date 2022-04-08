@@ -251,6 +251,7 @@ class SkuAssetManager {
    * @throws \Exception
    */
   public function getAssets(SKU $sku) {
+    // phpcs:ignore
     $assets = unserialize($sku->get('attr_assets')->getString());
 
     if (!is_array($assets) || empty($assets)) {
@@ -658,6 +659,7 @@ class SkuAssetManager {
     $assets_data = $skuEntity->get('attr_assets')->getValue();
 
     if ($assets_data && isset($assets_data[0], $assets_data[0]['value'])) {
+      // phpcs:ignore
       $unserialized_assets = unserialize($assets_data[0]['value']);
 
       if ($unserialized_assets) {
@@ -886,12 +888,8 @@ class SkuAssetManager {
               }
             }
 
-            $a_multi_pack = isset($a['Data']['IsMultiPack'])
-              ? $a['Data']['IsMultiPack']
-              : NULL;
-            $b_multi_pack = isset($b['Data']['IsMultiPack'])
-              ? $b['Data']['IsMultiPack']
-              : NULL;
+            $a_multi_pack = $a['Data']['IsMultiPack'] ?? NULL;
+            $b_multi_pack = $b['Data']['IsMultiPack'] ?? NULL;
             if ($a_multi_pack != $b_multi_pack) {
               return $a_multi_pack === 'true' ? -1 : 1;
             }

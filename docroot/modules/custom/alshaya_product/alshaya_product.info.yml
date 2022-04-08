@@ -1,5 +1,6 @@
 name: 'Alshaya product'
 type: module
+description: 'Manages product content type and related functionalities for ALshaya'
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:

@@ -8,3 +8,4 @@ configure: alshaya_config.settings
 
 dependencies:
   - syslog:syslog
+  - drupal:locale

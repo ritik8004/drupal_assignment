@@ -12,8 +12,8 @@ function alshaya_bbw_non_transac_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_bbw_non_transac', 'inc', 'alshaya_bbw_non_transac.content');
 
   // Enable and set bath_body_works as default theme.
-  \Drupal::service('theme_handler')->install(['bath_body_works'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('bath_body_works');
+  \Drupal::service('theme_installer')->install(['bath_body_works'], TRUE);
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'bath_body_works')->save();
 
   // Disable some default blocks provided by whitelabel that we
   // don't want on bath_body_works.
