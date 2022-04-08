@@ -4,7 +4,7 @@
  */
  (function () {
   /**
-   * Sets the configurable product media data in the main product object.
+   * Sets the simple product media data in the main product object.
    *
    * @param {Object} product
    *   Product object.
@@ -15,7 +15,7 @@
     product.hasMedia = false;
     if (Drupal.hasValue(product.media_gallery)) {
       // We do this so that we are able to detect in getSkuForGallery
-      // that the variant has media.
+      // that the entity has media.
       product.hasMedia = true;
       mediaData = product.media_gallery;
       mediaData.forEach(function setGalleryMedia(media) {
