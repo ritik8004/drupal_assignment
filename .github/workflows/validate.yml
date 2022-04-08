@@ -111,9 +111,6 @@ jobs:
           ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
           ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
 
-      - name: Build all middleware
-        run: bash ${GITHUB_WORKSPACE}/blt/scripts/middleware-build.sh "${GITHUB_WORKSPACE}"
-
       - name: Cache dependencies installed with Composer
         id: composer-cache
         run: |
