@@ -7,16 +7,17 @@ const ReturnIndividualItem = ({
   item,
 }) => {
   const eligibleClass = item.is_returnable ? 'return-eligible' : 'in-eligible';
+  const bigTicketClass = item.is_big_ticket ? 'big-ticket-item' : '';
   return (
     <>
-      <ConditionalView condition={item.is_big_ticket}>
-        <span>{Drupal.t('Large Item', {}, { context: 'online_returns' })}</span>
-      </ConditionalView>
-      <ConditionalView condition={(hasValue(item.image_data) && hasValue(item.image_data.url))}>
+      <ConditionalView condition={hasValue(item.image_data) && hasValue(item.image_data.url)}>
         <div className="order-item-image">
-          <div className={`image-data-wrapper ${eligibleClass}`}>
+          <div className={`image-data-wrapper ${eligibleClass} ${bigTicketClass}`}>
             <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
-            <ConditionalView condition={!item.is_returnable}>
+            <ConditionalView condition={item.is_big_ticket}>
+              <div className="big-ticket-item-label">{Drupal.t('Big Ticket Item', {}, { context: 'online_returns' })}</div>
+            </ConditionalView>
+            <ConditionalView condition={!item.is_big_ticket && !item.is_returnable}>
               <div className="not-eligible-label">{ Drupal.t('Not eligible for Return', {}, { context: 'online_returns' }) }</div>
             </ConditionalView>
           </div>
@@ -47,7 +48,7 @@ const ReturnIndividualItem = ({
         <span className="dark">{ parse(item.total) }</span>
       </div>
       <ConditionalView condition={item.is_big_ticket}>
-        <span>{Drupal.t('Kindly contact customer care for initiating online returns for Large Items', {}, { context: 'online_returns' })}</span>
+        <div className="big-ticket-wrapper">{Drupal.t('Kindly contact customer care for initiating the online returns for Big Ticket Items.', {}, { context: 'online_returns' })}</div>
       </ConditionalView>
     </>
   );

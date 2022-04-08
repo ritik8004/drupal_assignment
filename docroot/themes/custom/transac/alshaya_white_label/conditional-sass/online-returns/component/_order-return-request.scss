@@ -69,7 +69,7 @@
         @include breakpoint($desktop) {
           grid-template:
             "a b c d" auto
-            "e f g h" auto / 4.15625rem 11.8125rem auto 13.4375rem;
+            "e f g h" auto / 5.15625rem 10.8125rem auto 12.4375rem;
         }
 
         .order-item-checkbox {
@@ -119,23 +119,38 @@
             max-width: 7.125rem;
             position: relative;
 
-            &.in-eligible {
+            &.in-eligible,
+            &.big-ticket-item {
               img {
                 opacity: 0.5;
               }
 
-              .not-eligible-label {
+              .not-eligible-label,
+              .big-ticket-item-label {
                 position: absolute;
                 top: 50%;
                 #{$left}: 50%;
                 transform: translate(-50%, -50%);
                 font-size: 0.6875rem;
-                background-color: $online-return-ineligible-label-bg;
                 padding: 0.25rem 0.3125rem;
-                width: 7.75rem;
+                width: 7.125rem;
                 font-family: $alshaya-bold;
-                color: $online-return-eligibility-message-txt;
                 height: 1.25rem;
+                text-align: center;
+              }
+            }
+
+            &.in-eligible {
+              .not-eligible-label {
+                background-color: $online-return-ineligible-label-bg;
+                color: $online-return-eligibility-message-txt;
+              }
+            }
+
+            &.big-ticket-item {
+              .big-ticket-item-label {
+                background-color: $online-return-big-ticket-label-bg;
+                color: $online-return-big-ticket-label-txt;
               }
             }
           }
@@ -176,7 +191,7 @@
           }
 
           @include breakpoint($desktop) {
-            padding-#{$right}: 3.125rem;
+            padding-#{$right}: 0.5rem;
             padding-#{$left}: 3.125rem;
           }
         }
@@ -202,12 +217,20 @@
         .item-total-price {
           flex-basis: auto;
 
+          .price {
+            margin-bottom: 0.3125rem;
+          }
+        }
+
+        .item-total-price {
           @include breakpoint($tablet) {
             flex-basis: 12.5rem;
           }
+        }
 
-          .price {
-            margin-bottom: 0.3125rem;
+        .item-price {
+          @include breakpoint($tablet) {
+            flex-basis: 13.5rem;
           }
         }
 
@@ -217,6 +240,27 @@
         .item-total-price {
           > div {
             margin-bottom: 0.3125rem;
+          }
+        }
+
+        .big-ticket-wrapper {
+          grid-area: d;
+          margin-top: 0;
+          font-size: 0.75rem;
+          line-height: 1rem;
+          margin-bottom: 1.875rem;
+          color: $online-return-big-ticket-label-bg;
+          font-family: $alshaya-thin;
+
+          @include breakpoint($tablet) {
+            padding-#{$left}: 1.5rem;
+            margin-top: -2.25rem;
+            grid-area: g;
+            font-family: $alshaya-bold;
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$left}: 3.125rem;
           }
         }
       }
