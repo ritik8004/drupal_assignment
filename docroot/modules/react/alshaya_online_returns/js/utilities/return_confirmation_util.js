@@ -12,4 +12,16 @@ function getOrderDetailsForReturnConfirmation() {
   return orderDetails;
 }
 
-export default getOrderDetailsForReturnConfirmation;
+function getReturnIdFromUrl() {
+  const { search } = window.location;
+  const params = new URLSearchParams(search);
+  if (hasValue(params) && hasValue(params.get('returnId'))) {
+    return params.get('returnId');
+  }
+  return null;
+}
+
+export {
+  getReturnIdFromUrl,
+  getOrderDetailsForReturnConfirmation,
+};
