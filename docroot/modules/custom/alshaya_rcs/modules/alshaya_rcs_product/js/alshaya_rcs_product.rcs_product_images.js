@@ -3,6 +3,63 @@
  * with assets data.
  */
  (function () {
+
+  /**
+   * Processes and returns an object containing media for given sku.
+   *
+   * @param {object} media
+   *   Product media field object.
+   * @param {string} sku
+   *   SKU value.
+   *
+   * @returns {object}
+   *   Processed product media object.
+   */
+  function getProcessedProductMedia(media, sku) {
+    var processedMedia = {};
+    try {
+      var productMediaStyles = JSON.parse(media.styles);
+      processedMedia = {
+        // @todo Add type of asset when dealing with video etc.
+        url: media.url,
+        medium: productMediaStyles.product_zoom_medium_606x504,
+        zoom: productMediaStyles.product_zoom_large_800x800,
+        thumbnails: productMediaStyles.pdp_gallery_thumbnail,
+        teaser: productMediaStyles.product_teaser,
+      }
+    } catch (e) {
+      Drupal.alshayaLogger('error', 'Error occurred while parsing media for sku @sku : @message', {
+        '@sku': sku,
+        '@message': e.message,
+      });
+    }
+    return processedMedia;
+  }
+
+  /**
+   * Sets the simple product media data in the main product object.
+   *
+   * @param {Object} product
+   *   Product object.
+   */
+  function setProductMediaSimple(product) {
+    // Temporary store for media data.
+    var mediaData = {};
+    product.hasMedia = false;
+    if (Drupal.hasValue(product.media_gallery)) {
+      // We do this so that we are able to detect in getSkuForGallery
+      // that the entity has media.
+      product.hasMedia = true;
+      mediaData = product.media_gallery;
+      mediaData.forEach(function setGalleryMedia(media) {
+        var productMedia = getProcessedProductMedia(media, product.sku);
+        if (Drupal.hasValue(productMedia)) {
+          product.media.push(productMedia);
+        }
+      });
+    }
+  }
+
   /**
    * Sets the configurable product media data in the main product object.
    *
@@ -11,23 +68,38 @@
    */
   function setProductMediaConfigurable(product) {
     // Temporary store for media data.
-    let mediaData = {};
+    var mediaData = {};
+    product.hasMedia = false;
+    if (Drupal.hasValue(product.media_gallery)) {
+      // We do this so that we are able to detect in getSkuForGallery
+      // that the variant has media.
+      product.hasMedia = true;
+      mediaData = product.media_gallery;
+      mediaData.forEach(function setGalleryMedia(media) {
+        var productMedia = getProcessedProductMedia(media, product.sku);
+        if (Drupal.hasValue(productMedia)) {
+          product.media.push(productMedia);
+        }
+      });
+    }
+
     product.variants.forEach(function eachVariant(variant) {
       variant.product.media = [];
       variant.product.media_teaser = '';
+      // We do this so that we are able to detect in getSkuForGallery
+      // that the variant has media.
+      variant.product.hasMedia = false;
+      var variantHasMedia = Drupal.hasValue(variant.product.media_gallery);
 
       try {
-        if (Drupal.hasValue(variant.product.assets_pdp)) {
-          mediaData = JSON.parse(variant.product.assets_pdp);
+        if (variantHasMedia) {
+        variant.product.hasMedia = true;
+        mediaData = variant.product.media_gallery;
           mediaData.forEach(function setGalleryMedia(media) {
-            variant.product.media.push({
-              // @todo Add type of asset when dealing with video etc.
-              url: media.url,
-              medium: media.styles.product_zoom_medium_606x504,
-              zoom: media.styles.product_zoom_large_800x800,
-              thumbnails: media.styles.pdp_gallery_thumbnail,
-              teaser: media.styles.product_teaser,
-            });
+            var productMedia = getProcessedProductMedia(media, variant.product.sku);
+            if (Drupal.hasValue(productMedia)) {
+              variant.product.media.push(productMedia);
+            }
           });
         }
       }
@@ -40,9 +112,9 @@
 
       try {
         variant.product.media_cart = null;
-        if (Drupal.hasValue(variant.product.assets_cart)) {
-          mediaData = JSON.parse(variant.product.assets_cart);
-          variant.product.media_cart = mediaData[0].styles.cart_thumbnail;
+        if (variantHasMedia) {
+          var variantMediaStyles = JSON.parse(variant.product.media_gallery[0].styles);
+          variant.product.media_cart = variantMediaStyles.cart_thumbnail;
         }
       }
       catch (e) {
@@ -54,13 +126,11 @@
 
       try {
         variant.product.media_teaser = null;
-        if (Drupal.hasValue(variant.product.assets_teaser)) {
-          mediaData = JSON.parse(variant.product.assets_teaser);
+        if (variantHasMedia) {
+          mediaData = variant.product.media_gallery;
           mediaData.every(function setTeaserMedia(media) {
-            variant.product.media_teaser = media.styles.product_teaser;
-            // We do this so that we are able to detect in getSkuForGallery
-            // that the variant has media.
-            variant.product.media = variant.product.media_teaser;
+            var variantMediaStyles = JSON.parse(media.styles);
+            variant.product.media_teaser = variantMediaStyles.product_teaser;
             // Break as there is only 1 teaser image expected.
             return false;
           });
@@ -90,7 +160,7 @@
           variant.product.media_teaser = media.styles.product_teaser;
           // We do this so that we are able to detect in getSkuForGallery
           // that the variant has media.
-          variant.product.media = variant.product.media_teaser;
+          variant.product.hasMedia = true;
           // Break as there is only 1 teaser image expected.
           return false;
         });
@@ -135,6 +205,9 @@
     if (product.type_id === 'configurable') {
       setProductMediaConfigurable(product);
     }
+    else {
+      setProductMediaSimple(product);
+    }
 
     setProductRecommendationsMedia(product);
   }
@@ -154,7 +227,7 @@
       return;
     }
 
-    let products = e.detail.result;
+    var products = e.detail.result;
 
     // Check if it is an array of products, for eg. for magazine article
     // carousel we get an array of products here.
