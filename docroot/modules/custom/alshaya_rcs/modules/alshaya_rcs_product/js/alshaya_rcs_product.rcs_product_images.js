@@ -3,6 +3,39 @@
  * with assets data.
  */
  (function () {
+
+  /**
+   * Processes and returns an object containing media for given sku.
+   *
+   * @param {object} media
+   *   Product media field object.
+   * @param {string} sku
+   *   SKU value.
+   *
+   * @returns {object}
+   *   Processed product media object.
+   */
+  function getProcessedProductMedia(media, sku) {
+    var processedMedia = {};
+    try {
+      var productMediaStyles = JSON.parse(media.styles);
+      processedMedia = {
+        // @todo Add type of asset when dealing with video etc.
+        url: media.url,
+        medium: productMediaStyles.product_zoom_medium_606x504,
+        zoom: productMediaStyles.product_zoom_large_800x800,
+        thumbnails: productMediaStyles.pdp_gallery_thumbnail,
+        teaser: productMediaStyles.product_teaser,
+      }
+    } catch (e) {
+      Drupal.alshayaLogger('error', 'Error occurred while parsing media for sku @sku : @message', {
+        '@sku': sku,
+        '@message': e.message,
+      });
+    }
+    return processedMedia;
+  }
+
   /**
    * Sets the simple product media data in the main product object.
    *
@@ -19,15 +52,10 @@
       product.hasMedia = true;
       mediaData = product.media_gallery;
       mediaData.forEach(function setGalleryMedia(media) {
-        var productMediaStyles = JSON.parse(media.styles);
-        product.media.push({
-          // @todo Add type of asset when dealing with video etc.
-          url: media.url,
-          medium: productMediaStyles.product_zoom_medium_606x504,
-          zoom: productMediaStyles.product_zoom_large_800x800,
-          thumbnails: productMediaStyles.pdp_gallery_thumbnail,
-          teaser: productMediaStyles.product_teaser,
-        });
+        var productMedia = getProcessedProductMedia(media, product.sku);
+        if (Drupal.hasValue(productMedia)) {
+          product.media.push(productMedia);
+        }
       });
     }
   }
@@ -48,15 +76,10 @@
       product.hasMedia = true;
       mediaData = product.media_gallery;
       mediaData.forEach(function setGalleryMedia(media) {
-        var productMediaStyles = JSON.parse(media.styles);
-        product.media.push({
-          // @todo Add type of asset when dealing with video etc.
-          url: media.url,
-          medium: productMediaStyles.product_zoom_medium_606x504,
-          zoom: productMediaStyles.product_zoom_large_800x800,
-          thumbnails: productMediaStyles.pdp_gallery_thumbnail,
-          teaser: productMediaStyles.product_teaser,
-        });
+        var productMedia = getProcessedProductMedia(media, product.sku);
+        if (Drupal.hasValue(productMedia)) {
+          product.media.push(productMedia);
+        }
       });
     }
 
@@ -73,15 +96,10 @@
         variant.product.hasMedia = true;
         mediaData = variant.product.media_gallery;
           mediaData.forEach(function setGalleryMedia(media) {
-            var variantMediaStyles = JSON.parse(media.styles);
-            variant.product.media.push({
-              // @todo Add type of asset when dealing with video etc.
-              url: media.url,
-              medium: variantMediaStyles.product_zoom_medium_606x504,
-              zoom: variantMediaStyles.product_zoom_large_800x800,
-              thumbnails: variantMediaStyles.pdp_gallery_thumbnail,
-              teaser: variantMediaStyles.product_teaser,
-            });
+            var productMedia = getProcessedProductMedia(media, variant.product.sku);
+            if (Drupal.hasValue(productMedia)) {
+              variant.product.media.push(productMedia);
+            }
           });
         }
       }
