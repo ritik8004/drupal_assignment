@@ -18,9 +18,11 @@ use Drupal\image\Entity\ImageStyle;
 function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
   // Process assets data & create attributes which are needed for sorting
   // the assets while displaying them.
+  // phpcs:disable
   $existing_assets = !empty($existing_data['attr_assets'])
     ? unserialize($existing_data['attr_assets'][0]['value'])
     : [];
+  // phpcs:enable
 
   $sku->get('attr_assets')->setValue(_alshaya_hm_images_acq_sku_process_assets($product, $existing_assets));
 }

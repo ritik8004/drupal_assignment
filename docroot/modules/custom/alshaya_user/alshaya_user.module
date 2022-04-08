@@ -139,7 +139,7 @@ function alshaya_valid_full_name(&$element, FormStateInterface $form_state, &$co
   $full_name_error = TRUE;
   if ($full_name = array_map('trim', explode(' ', $value))) {
     if (count($full_name) > 1) {
-      list($first_name, $last_name) = alshaya_user_first_name_last_name($value);
+      [$first_name, $last_name] = alshaya_user_first_name_last_name($value);
       $full_name_error = empty($first_name) || empty($last_name);
     }
   }

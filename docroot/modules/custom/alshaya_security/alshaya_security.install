@@ -34,7 +34,7 @@ function alshaya_security_install() {
   $timeout = 1200;
 
   if ($settings = Settings::get('autologout.settings')) {
-    $timeout = isset($settings['timeout']) ? $settings['timeout'] : $timeout;
+    $timeout = $settings['timeout'] ?? $timeout;
   }
 
   // Configure defaults for autologout.
