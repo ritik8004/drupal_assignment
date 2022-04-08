@@ -27,7 +27,6 @@ class ReturnConfirmation extends React.Component {
           orderId={orderDetails['#order'].orderId}
         />
         <ReturnSuccessMessage />
-
       </div>
     );
   }

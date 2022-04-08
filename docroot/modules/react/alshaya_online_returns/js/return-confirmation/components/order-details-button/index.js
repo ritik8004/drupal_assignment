@@ -7,12 +7,11 @@ const OrderDetailsButton = ({
   if (orderId && hasValue(drupalSettings.user)
     && drupalSettings.user.isCustomer) {
     const { uid } = drupalSettings.user;
-    const { baseUrl, pathPrefix } = drupalSettings.path;
     return (
       <>
         <div className="order-details-button-wrapper">
           <a
-            href={`${baseUrl}${pathPrefix}user/${uid}/order/${orderId}`}
+            href={Drupal.url(`user/${uid}/order/${orderId}`)}
             className="order-detail"
           >
             {Drupal.t('Go to order details', {}, { context: 'online_returns' })}
