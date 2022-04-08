@@ -347,7 +347,6 @@ exports.render = function render(
             if (variant.product.sku !== params.sku) {
               return;
             }
-            const length = variant.product.media.length;
             variant.product.media.forEach(function (variantMedia, i) {
               mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
                 index: i,
