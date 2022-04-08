@@ -90,13 +90,13 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
 
     // @todo Below is just an example of type variable. It is not fully
     // functional as of now.
-    //  @codingStandardsIgnoreStart
+    //  phpcs:disable
     //  $config['home_banner'] = [
     //   'type' => 'variable',
     //   'description' => t('Show the home page hero banner'),
     //   'default_value' => empty($storedConfig->get('home_banner')) ? 0 : 1,
     // ];
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
 
     // Config to enable AND operator on Search and PLP pages.
     if ($this->moduleHandler->moduleExists('alshaya_search')) {

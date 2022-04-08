@@ -97,6 +97,15 @@ export default class WishlistHeader extends React.Component {
           ).then((response) => {
             if (typeof response.data.status !== 'undefined'
               && response.data.status) {
+              // Wishlist header component is called in two different places,
+              // header and sticky header. The header component calls
+              // add remove wish list items to merge guest wishlist products
+              // and loadWishlistFromBackend. Before merging items,
+              // sticky header calls loadWishlistFromBackend in below else
+              // condition. Hence the flag is set to stop sticky header from
+              // loading wishlist items before merge. Here we override flag as
+              // items should be refreshed after merged from guest list.
+              window.loadWishListFromBackend = false;
               this.loadWishlistFromBackend();
             }
           });

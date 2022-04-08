@@ -12,8 +12,8 @@ function alshaya_bb_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_bb', 'inc', 'alshaya_bb.content');
 
   // Enable and set bouchon_bakery as default theme.
-  \Drupal::service('theme_handler')->install(['bouchon_bakery'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('bouchon_bakery');
+  \Drupal::service('theme_installer')->install(['bouchon_bakery'], TRUE);
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'bouchon_bakery')->save();
 
   // Disable some default blocks provided by whitelabel that we
   // don't want on bouchon_bakery.

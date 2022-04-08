@@ -26,6 +26,7 @@ services:
       - '@alshaya_spc.helper'
       - '@alshaya_acm_product.delivery_options_helper'
       - '@date.formatter'
+      - '@locale.storage'
 
   alshaya_rcs_product.helper:
     class: \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper

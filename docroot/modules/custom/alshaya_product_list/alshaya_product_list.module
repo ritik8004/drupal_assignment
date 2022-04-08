@@ -47,7 +47,7 @@ function alshaya_product_list_search_api_db_query_alter(SelectInterface &$db_que
       // Remove last `/` from url.
       $view_url_data = rtrim($view_url_data, '/');
       // Get alias in case view url data is like `/node/1212/`.
-      $alias = \Drupal::service('path.alias_manager')->getAliasByPath($view_url_data);
+      $alias = \Drupal::service('path_alias.manager')->getAliasByPath($view_url_data);
       if ($source_path = \Drupal::service('path.alias_storage')->lookupPathSource($alias, $current_language)) {
         // Source path will be like - `/node/1212/` and we need only id.
         $nid = explode('/', $source_path)[2];
@@ -148,7 +148,7 @@ function alshaya_product_list_alshaya_search_filter_link_alter(&$link, array &$d
   // If node exist for the given attribute code and value.
   if (!empty($attributes[$data['attribute_code']][$data['attribute_value']])) {
     $nid = $attributes[$data['attribute_code']][$data['attribute_value']];
-    $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $nid);
+    $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $nid);
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $data['append_value'] = FALSE;
     $link = '/' . $langcode . $alias;

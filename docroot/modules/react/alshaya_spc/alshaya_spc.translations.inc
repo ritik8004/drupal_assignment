@@ -481,15 +481,15 @@ function _alshaya_spc_translations() {
 
   // Strings related to `Online Booking` feature.
   $strings['v13'] = [
-    'Contact customer care (+965 55667788) to change the delivery schedule' => [
-      'ar' => 'يرجى التواصل مع رقم خدمة الزبائن (+965 55667788) لتغيير موعد التوصيل',
+    'Contact customer care (+965 55667788) to change the delivery schedule.' => [
+      'ar' => 'يرجى التواصل مع رقم خدمة الزبائن (+965 55667788) لتغيير موعد التوصيل.',
       'context' => 'online_booking',
     ],
-    'Changes are not allowed three days before the selected schedule' => [
-      'ar' => 'يُمنع إجراء أيّ تغييرات قبل موعد التوصيل المحدد بثلاثة أيام',
+    'Changes are not allowed three days before the selected schedule.' => [
+      'ar' => 'يُمنع إجراء أيّ تغييرات قبل موعد التوصيل المحدد بثلاثة أيام.',
       'context' => 'online_booking',
     ],
-    'Home Delivery: Your order is scheduled on @date between @from_time - @to_time to the below delivery address' => [
+    'Home Delivery: Your order is scheduled on @date between @from_time - @to_time to the below delivery address.' => [
       'ar' => 'التوصيل المنزلي: سيتم توصيل طلبيتك بتاريخ @date في الفترة ما بين الساعة @from_time إلى @to_time لعنوان التوصيل أدناه.',
       'context' => 'online_booking',
     ],
@@ -538,15 +538,23 @@ function _alshaya_spc_translations() {
       'context' => 'online_booking',
     ],
     'Delivery Date & Time' => [
-      'ar' => 'تاريخ وموعد التوصيل',
+      'ar' => 'وقت وتاريخ التوصيل',
       'context' => 'online_booking',
     ],
     '<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>' => [
-      'ar' => '<b>@appointment_date<b> بين <b>@start_time</b> - <b>@end_time</b>',
+      'ar' => '<b>@appointment_date</b> بين <b>@start_time</b> - <b>@end_time</b>',
       'context' => 'online_booking',
     ],
     'Online booking: Sorry, something went wrong. Please try again later.' => [
       'ar' => 'الحجز الإلكتروني: عذراً، لقد حدث خطأ ما. يرجى إعادة المحاولة لاحقاً.',
+      'context' => 'online_booking',
+    ],
+    'AM' => [
+      'ar' => 'ص',
+      'context' => 'online_booking',
+    ],
+    'PM' => [
+      'ar' => 'م',
       'context' => 'online_booking',
     ],
   ];

@@ -1,0 +1,5 @@
+punctuation:
+  # Adding slash punctuation because while generating the alias for RCS category
+  # slash is getting replaced by the separator, So we have added this config
+  # which basically means `No action (do not replace)`.
+  slash: 2
