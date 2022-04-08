@@ -589,6 +589,16 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Do you want to change your current Delivery Area from @currentAreaLabel to @storageAreaLabel?', [], ['context' => 'delivery_area']),
     ];
 
+    // Adding translation strings for the online booking start and end time.
+    $strings[] = [
+      'key' => 'online_booking_am',
+      'value' => $this->t('AM', [], ['context' => 'online_booking']),
+    ];
+    $strings[] = [
+      'key' => 'online_booking_pm',
+      'value' => $this->t('PM', [], ['context' => 'online_booking']),
+    ];
+
     $backend_version = $this->spcHelper->getCommerceBackendVersion();
 
     $build = [
