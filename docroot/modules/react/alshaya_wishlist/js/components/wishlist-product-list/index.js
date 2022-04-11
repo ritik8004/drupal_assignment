@@ -90,8 +90,8 @@ class WishlistProductList extends React.Component {
       document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
     }
     // For wishlist page, data will always be available in storage.
-    // So, we should stop the loader after data has loaded from storage.
-    if (!isShareWishlistPage()) {
+    // So for guest user, we should stop the loader after data has loaded from storage.
+    if (!isShareWishlistPage() && isAnonymousUser()) {
       this.setState({
         wait: false,
       });
@@ -144,6 +144,7 @@ class WishlistProductList extends React.Component {
     this.setState({
       filters,
       wishListItemsCount,
+      wait: false,
     });
   };
 
