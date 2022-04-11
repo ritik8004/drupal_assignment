@@ -282,5 +282,13 @@ function _alshaya_aura_static_strings() {
       'key' => 'points_to_earn_with_purchase',
       'value' => t('points with this purchase.'),
     ],
+    [
+      'key' => 'redeem',
+      'value' => t('Redeem'),
+    ],
+    [
+      'key' => 'checkout_aura_points_with_purchase',
+      'value' => t('Aura points with this purchase.'),
+    ],
   ];
 }

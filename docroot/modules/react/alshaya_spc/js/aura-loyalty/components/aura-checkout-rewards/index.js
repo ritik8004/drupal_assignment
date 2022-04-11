@@ -2,8 +2,6 @@ import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
 import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { getAllAuraStatus, getUserDetails } from '../../../../../alshaya_aura_react/js/utilities/helper';
-import AuraLinkedVerifiedCheckout from './components/linked-verified-checkout';
-import AuraLinkedNotVerifiedCheckout from './components/linked-not-verified-checkout';
 import AuraPointsToEarnedWithPurchase from './components/rewards-points-earned-with-purchase';
 import Loading from '../../../utilities/loading';
 import {
@@ -18,6 +16,7 @@ import {
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import { cartContainsAnyVirtualProduct } from '../../../utilities/egift_util';
+import AuraLinkedCheckout from './components/aura-card';
 
 
 class AuraCheckoutRewards extends React.Component {
@@ -214,8 +213,10 @@ class AuraCheckoutRewards extends React.Component {
         </ConditionalView>
 
         {/* Registered User - Linked Card */}
-        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
-          <AuraLinkedVerifiedCheckout
+        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED
+        || loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}
+        >
+          <AuraLinkedCheckout
             pointsInAccount={points}
             pointsToEarn={auraPointsToEarn}
             expiringPoints={expiringPoints}
@@ -224,15 +225,7 @@ class AuraCheckoutRewards extends React.Component {
             totals={cart.cart.totals}
             formActive={formActive}
             paymentMethodInCart={cart.cart.payment.method || ''}
-            wait={waitForPoints}
-          />
-        </ConditionalView>
-
-        {/* Registered User - Linked Card - Pending Enrollment */}
-        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}>
-          <AuraLinkedNotVerifiedCheckout
-            pointsInAccount={points}
-            pointsToEarn={auraPointsToEarn}
+            loyaltyStatus={loyaltyStatus}
             wait={waitForPoints}
           />
         </ConditionalView>
