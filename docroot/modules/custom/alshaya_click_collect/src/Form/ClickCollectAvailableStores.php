@@ -110,7 +110,7 @@ class ClickCollectAvailableStores extends FormBase {
             'google_geocoding_api' => [
               'componentRestrictions' => ['country' => $site_country],
             ],
-          ]
+          ],
         ],
         'alshaya_acm' => ['storeFinder' => TRUE],
         'alshaya_click_collect' => ['searchForm' => TRUE],
