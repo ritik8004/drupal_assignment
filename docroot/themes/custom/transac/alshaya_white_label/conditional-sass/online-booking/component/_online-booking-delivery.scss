@@ -35,7 +35,7 @@
   }
 
   &__change-delivery-schedule {
-    color: $_spc-change-delivery-schedule;
+    color: $_online-booking-change-delivery-schedule;
     font-size: 0.875rem;
     font-weight: bold;
     cursor: pointer;
@@ -100,6 +100,10 @@
       cursor: default;
     }
   }
+
+  .carrier-title {
+    font-weight: bold;
+  }
 }
 
 .loading {
@@ -119,4 +123,8 @@
 
   padding: 0;
   height: 2rem;
+}
+
+.delivery-name {
+  font-weight: 600;
 }
