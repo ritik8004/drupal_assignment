@@ -65,7 +65,7 @@ function alshaya_geolocation_node_view_alter(array &$build, EntityInterface $ent
 
     // Set api url.
     $api_url = '/alshaya-locations/stores-list';
-    if (drupal_get_profile() == 'alshaya_non_transac') {
+    if (\Drupal::installProfile() == 'alshaya_non_transac') {
       $api_url = '/alshaya-locations/local';
     }
 
