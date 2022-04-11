@@ -18,10 +18,20 @@
         }
 
         .order-item-image {
-          .image-data-wrapper.in-eligible {
-            .not-eligible-label {
-              font-family: $hnm-demibold;
+          .image-data-wrapper {
+            &.in-eligible,
+            &.big-ticket-item {
+              .big-ticket-item-label,
+              .not-eligible-label {
+                font-family: $hnm-demibold;
+              }
             }
+          }
+        }
+
+        .big-ticket-wrapper {
+          @include breakpoint($tablet) {
+            font-family: $hnm-demibold;
           }
         }
       }
