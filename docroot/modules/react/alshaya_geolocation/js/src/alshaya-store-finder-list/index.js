@@ -26,7 +26,6 @@ export class StoreFinderList extends React.PureComponent {
       showingInfoWindow: false,
       center: {},
       zoom: 10,
-      open: false,
       loadmore: true,
       page: 10,
     };
@@ -130,11 +129,9 @@ export class StoreFinderList extends React.PureComponent {
     window.location.href = '/store-finder/';
   }
 
-  toggleOpenClass = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      open: !prevState.open,
-    }));
+  toggleOpenClass = (storeId) => {
+    const element = document.getElementById(`hours--label-${storeId}`);
+    element.classList.toggle('open');
   }
 
   loadMore = () => {
@@ -163,7 +160,6 @@ export class StoreFinderList extends React.PureComponent {
       activeMarker,
       selectedPlace,
       center,
-      open,
       zoom,
       page,
       loadmore,
@@ -234,7 +230,7 @@ export class StoreFinderList extends React.PureComponent {
                               <div className="field-content">
                                 <div className="hours--wrapper selector--hours">
                                   <div>
-                                    <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
+                                    <div id={`hours--label-${store.id}`} className="hours--label" onClick={() => this.toggleOpenClass(store.id)}>
                                       {Drupal.t('Opening Hours')}
                                     </div>
                                     <div className="open--hours">
