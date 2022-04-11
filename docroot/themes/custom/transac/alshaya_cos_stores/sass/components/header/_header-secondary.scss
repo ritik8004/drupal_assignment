@@ -1,6 +1,7 @@
 .c-menu-secondary {
   text-transform: uppercase;
   text-align: center;
+  height: 2rem;
 
   @include breakpoint($upto-desktop) {
     text-align: $left;
