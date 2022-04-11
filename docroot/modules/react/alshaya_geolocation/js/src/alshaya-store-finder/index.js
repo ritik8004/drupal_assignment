@@ -5,6 +5,8 @@ import SingleMarkerMap from '../components/MapContainer/single-marker';
 import MultipeMarkerMap from '../components/MapContainer/multiple-marker';
 import { ListItem } from '../components/ListItem';
 import { nearByStores } from '../utility';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export class StoreFinder extends React.PureComponent {
   constructor(props) {
@@ -136,15 +138,17 @@ export class StoreFinder extends React.PureComponent {
         <div className="by--alphabet view-store-finder--list__alphabet" key={value[0]}>
           <h3>{value[0]}</h3>
           <div className="rows views-view-unformatted__rows">
-            {value[1].map((item) => (
-              <div
-                key={item.id}
-                onClick={() => this.showSpecificPlace(item.id)}
-                className="view-store-finder--list__alphabet__item"
-              >
-                <a>{item.store_name}</a>
-              </div>
-            ))}
+            <ConditionalView condition={hasValue(value[1])}>
+              {value[1].map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => this.showSpecificPlace(item.id)}
+                  className="view-store-finder--list__alphabet__item"
+                >
+                  <a>{item.store_name}</a>
+                </div>
+              ))}
+            </ConditionalView>
           </div>
         </div>
       );

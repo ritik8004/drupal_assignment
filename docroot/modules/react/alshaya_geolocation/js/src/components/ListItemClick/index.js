@@ -1,4 +1,6 @@
 import React from 'react';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export class ListItemClick extends React.Component {
   constructor(props) {
@@ -18,12 +20,14 @@ export class ListItemClick extends React.Component {
         </div>
         <div className="store-address">
           <div className="address--line2">
-            {specificPlace.address.map((item) => (
-              <div key={item.code}>
-                {item.code === 'street' ? <span>{item.value}</span> : null}
-                {item.code === 'address_building_segment' ? item.value : null}
-              </div>
-            ))}
+            <ConditionalView condition={hasValue(specificPlace.address)}>
+              {specificPlace.address.map((item) => (
+                <div key={item.code}>
+                  {item.code === 'street' ? <span>{item.value}</span> : null}
+                  {item.code === 'address_building_segment' ? item.value : null}
+                </div>
+              ))}
+            </ConditionalView>
           </div>
         </div>
         <div className="store-delivery-time">

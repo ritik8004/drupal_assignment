@@ -12,6 +12,8 @@ import {
   nearByStores,
   getDistanceBetween,
 } from '../utility';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export class StoreFinderList extends React.PureComponent {
   constructor(props) {
@@ -214,12 +216,14 @@ export class StoreFinderList extends React.PureComponent {
                             <div className="views-field-field-store-address">
                               <div className="field-content">
                                 <div className="address--line2">
-                                  {store.address.map((item) => (
-                                    <>
-                                      {item.code === 'address_building_segment' ? <span>{item.label}</span> : null}
-                                      {item.code === 'street' ? <span>{item.value}</span> : null}
-                                    </>
-                                  ))}
+                                  <ConditionalView condition={hasValue(store.address)}>
+                                    {store.address.map((item) => (
+                                      <>
+                                        {item.code === 'address_building_segment' ? <span>{item.label}</span> : null}
+                                        {item.code === 'street' ? <span>{item.value}</span> : null}
+                                      </>
+                                    ))}
+                                  </ConditionalView>
                                 </div>
                                 <div className="field field--name-field-store-phone field--type-string field--label-hidden field__item">
                                   {store.store_phone}
@@ -234,12 +238,14 @@ export class StoreFinderList extends React.PureComponent {
                                       {Drupal.t('Opening Hours')}
                                     </div>
                                     <div className="open--hours">
-                                      {store.store_hours.map((item) => (
-                                        <div key={item.code}>
-                                          <span className="key-value-key">{item.label}</span>
-                                          <span className="key-value-value">{item.value}</span>
-                                        </div>
-                                      ))}
+                                      <ConditionalView condition={hasValue(store.store_hours)}>
+                                        {store.store_hours.map((item) => (
+                                          <div key={item.code}>
+                                            <span className="key-value-key">{item.label}</span>
+                                            <span className="key-value-value">{item.value}</span>
+                                          </div>
+                                        ))}
+                                      </ConditionalView>
                                     </div>
                                   </div>
                                 </div>

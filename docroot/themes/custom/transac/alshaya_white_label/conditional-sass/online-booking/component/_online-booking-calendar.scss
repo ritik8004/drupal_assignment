@@ -12,6 +12,7 @@
       background: $modal_bg;
       max-height: 100%;
       overflow: auto;
+      overflow-y: overlay;
 
       .fadeInUp {
         animation: none !important;
@@ -314,6 +315,11 @@
             color: $primary_bg;
           }
 
+          &:focus {
+            outline: none;
+            border: none;
+          }
+
           &:active {
             border-radius: 0;
           }
@@ -323,12 +329,22 @@
           background-color: $primary_btn_bg;
           border-radius: 0;
           border: none;
+
+          &:focus {
+            outline: none;
+            border: none;
+          }
         }
 
         .react-datepicker__day--disabled {
           &:hover {
             background: none;
             color: $checkout_tab_disabled_text;
+            border: none;
+          }
+
+          &:focus {
+            outline: none;
             border: none;
           }
         }
