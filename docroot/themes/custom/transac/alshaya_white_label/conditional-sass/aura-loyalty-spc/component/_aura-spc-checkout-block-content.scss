@@ -162,7 +162,7 @@
         .points-to-earn-count {
           color: $aura-spc-checkout-highlight;
           font-family: $aura-bold;
-          
+
           @include breakpoint($tablet) {
             margin-#{$left}: 0.3rem;
           }
