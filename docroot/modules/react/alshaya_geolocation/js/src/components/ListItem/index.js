@@ -1,4 +1,6 @@
 import React from 'react';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export class ListItem extends React.Component {
   constructor(props) {
@@ -33,12 +35,17 @@ export class ListItem extends React.Component {
             <div className="store-field-content field-content">
               <div className="address--line2">
                 <div className="field__wrapper field-store-address">
-                  {specificPlace.address.map((item) => (
+                  {typeof specificPlace.address !== 'undefined'
+                  && (
                     <>
-                      {item.code === 'address_building_segment' ? <span>{item.value}</span> : null}
-                      {item.code === 'street' ? <span>{item.value}</span> : null}
+                      {specificPlace.address.map((item) => (
+                        <>
+                          {item.code === 'address_building_segment' ? <span>{item.value}</span> : null}
+                          {item.code === 'street' ? <span>{item.value}</span> : null}
+                        </>
+                      ))}
                     </>
-                  ))}
+                  )}
                 </div>
                 <div className="field__wrapper field-store-phone">
                   {specificPlace.store_phone}
@@ -54,12 +61,14 @@ export class ListItem extends React.Component {
                 {Drupal.t('Opening Hours')}
               </div>
               <div className="open--hours">
-                {specificPlace.store_hours.map((item) => (
-                  <div key={item.code}>
-                    <span className="key-value-key">{item.label}</span>
-                    <span className="key-value-value">{item.value}</span>
-                  </div>
-                ))}
+                <ConditionalView condition={hasValue(specificPlace.store_hours)}>
+                  {specificPlace.store_hours.map((item) => (
+                    <div key={item.code}>
+                      <span className="key-value-key">{item.label}</span>
+                      <span className="key-value-value">{item.value}</span>
+                    </div>
+                  ))}
+                </ConditionalView>
               </div>
             </div>
             <div className="view-on--map">

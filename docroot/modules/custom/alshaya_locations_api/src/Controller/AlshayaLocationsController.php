@@ -4,7 +4,6 @@ namespace Drupal\alshaya_locations_api\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -16,13 +15,6 @@ use Drupal\alshaya_api\Helper\MagentoApiHelper;
  * Class Alshaya Locations Controller.
  */
 class AlshayaLocationsController extends ControllerBase {
-
-  /**
-   * QueryFactory service object.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  protected $entityQuery;
 
   /**
    * The entity type manager.
@@ -62,8 +54,6 @@ class AlshayaLocationsController extends ControllerBase {
   /**
    * AlshayaLocationsController constructor.
    *
-   * @param \Drupal\Core\Entity\Query\QueryFactory $entityQuery
-   *   QueryFactory service object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   EntityTypeManagerInterface service object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
@@ -75,8 +65,7 @@ class AlshayaLocationsController extends ControllerBase {
    * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
    *   The magento api helper.
    */
-  public function __construct(QueryFactory $entityQuery, EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager, ConfigFactoryInterface $configFactory, AlshayaApiWrapper $alshayaApi, MagentoApiHelper $mdc_helper) {
-    $this->entityQuery = $entityQuery;
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager, ConfigFactoryInterface $configFactory, AlshayaApiWrapper $alshayaApi, MagentoApiHelper $mdc_helper) {
     $this->entityTypeManager = $entityTypeManager;
     $this->languageManager = $languageManager;
     $this->configFactory = $configFactory;
@@ -89,7 +78,6 @@ class AlshayaLocationsController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.query'),
       $container->get('entity_type.manager'),
       $container->get('language_manager'),
       $container->get('config.factory'),
@@ -105,7 +93,6 @@ class AlshayaLocationsController extends ControllerBase {
    *   Click and collect for site.
    */
   public function stores($data = NULL) {
-    // Mock file read for now.
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('store_search'),
     ];
@@ -123,7 +110,7 @@ class AlshayaLocationsController extends ControllerBase {
    */
   public function getLocalStores($data = NULL) {
     $languageId = $this->languageManager->getCurrentLanguage()->getId();
-    $query = $this->entityQuery->get('node');
+    $query = $this->entityTypeManager->getStorage('node')->getQuery();
     $query->condition('status', 1);
     $query->condition('type', 'store');
     $query->condition('langcode', $languageId);
