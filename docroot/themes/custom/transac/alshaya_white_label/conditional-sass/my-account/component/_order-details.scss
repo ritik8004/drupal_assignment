@@ -281,6 +281,33 @@
         background: $order_detail_delivery_details_row_td_blend;
       }
     }
+
+    .above-mobile,
+    .mobile-only {
+      padding: 0.875rem 2.8125rem;
+      font-size: 14px;
+      color: $_online-booking-delivery-detail;
+      font-weight: normal;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$right}: 1rem;
+      }
+
+      .icon-ic_infomation {
+        font-size: 1.5rem;
+        margin-#{$left}: -0.125rem;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$left}: 0.3125rem;
+          margin-#{$right}: 1rem;
+
+          html[lang=ar] & {
+            margin-#{$right}: 1rem;
+            margin-#{$left}: 0.1875rem;
+          }
+        }
+      }
+    }
   }
 
   .delivery-details-row,
