@@ -1,12 +1,6 @@
 .c-plp {
   .c-products__item {
     .wishlist-icon {
-      @include breakpoint($desktop) {
-        &:hover {
-          background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled-icon.svg?asdsaf');
-        }
-      }
-
       @include breakpoint($only-mobile) {
         top: 1.25rem;
       }
