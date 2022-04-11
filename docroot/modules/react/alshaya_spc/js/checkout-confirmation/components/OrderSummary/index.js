@@ -22,7 +22,7 @@ const OrderSummary = (props) => {
   const orderNumber = drupalSettings.order_details.order_number;
   const mobileNumber = drupalSettings.order_details.mobile_number;
   const deliveryType = drupalSettings.order_details.delivery_type_info.type;
-  const expectedDelivery = drupalSettings.order_details.expected_delivery;
+  let expectedDelivery = drupalSettings.order_details.expected_delivery;
   const itemsCount = drupalSettings.order_details.number_of_items;
 
   const customerAddress = [];
@@ -47,7 +47,6 @@ const OrderSummary = (props) => {
   }
 
   let etaLabel = Drupal.t('expected delivery within');
-  let showExpectedDelivery = true;
   let methodIcon = '';
   const storeAddress = [];
   const storeInfo = drupalSettings.order_details.delivery_type_info.store;
@@ -178,7 +177,7 @@ const OrderSummary = (props) => {
   // when online booking information is available.
   // Online booking will be available only for home delivery.
   if (onlineBookingInformation) {
-    showExpectedDelivery = false;
+    expectedDelivery = false;
   }
 
   return (
@@ -268,7 +267,7 @@ const OrderSummary = (props) => {
                 value={parse(onlineBookingInformation)}
               />
             )}
-            <ConditionalView condition={hasValue(showExpectedDelivery)}>
+            <ConditionalView condition={hasValue(expectedDelivery)}>
               <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
             </ConditionalView>
           </ConditionalView>
