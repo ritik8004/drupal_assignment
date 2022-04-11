@@ -89,8 +89,8 @@ export default class Rating extends React.Component {
         <ConditionalView condition={renderLink
           && userDetails.user.userId > 0 && !reviewedByCurrentUser}
         >
-          <div className="aggregate-rating">
-            <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
+          <div className="button-wrapper">
+            <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review-button" href="#">{getStringMessage('write_a_review')}</a>
           </div>
         </ConditionalView>
 
