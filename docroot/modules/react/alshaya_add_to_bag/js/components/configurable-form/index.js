@@ -345,7 +345,7 @@ export default class ConfigurableForm extends React.Component {
     const wishListSkuOptions = {};
     if (isWishlistEnabled() && isWishlistPage(extraInfo)) {
       const skuData = getWishListDataForSku(sku);
-      const optionsData = (skuData !== null) ? skuData.options : undefined;
+      const { options: optionsData } = skuData || {};
       if (typeof optionsData !== 'undefined' && Object.keys(optionsData).length > 0) {
         optionsData.forEach((element) => {
           Object.assign(wishListSkuOptions, {
