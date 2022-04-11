@@ -112,7 +112,7 @@ class AlshayaRcsProductHelper {
     ModuleHandlerInterface $module_handler,
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
-    AliasManager $alias_manager,
+    AliasManagerInterface $alias_manager,
     Connection $connection,
     LoggerChannelFactoryInterface $logger_factory
   ) {
