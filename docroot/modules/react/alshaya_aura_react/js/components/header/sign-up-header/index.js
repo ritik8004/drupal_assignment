@@ -94,7 +94,7 @@ class SignUpHeader extends React.Component {
               <span>
                 {Drupal.t('To earn and spend points while you shop and enjoy exclusive benefits.')}
               </span>
-              <span>
+              <span className="learn-more-wrapper">
                 <a
                   href={Drupal.url(headerLearnMoreLink)}
                   target="_blank"
