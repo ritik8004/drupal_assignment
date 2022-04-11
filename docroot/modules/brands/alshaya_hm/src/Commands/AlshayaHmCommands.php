@@ -142,7 +142,7 @@ class AlshayaHmCommands extends DrushCommands {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
-    /** @var \Drupal\Core\Path\AliasManager $alias_manager */
+    /** @var \Drupal\path_alias\AliasManager $alias_manager */
     $alias_manager = \Drupal::service('path_alias.manager');
 
     $rows = array_shift($context['sandbox']['result']);
