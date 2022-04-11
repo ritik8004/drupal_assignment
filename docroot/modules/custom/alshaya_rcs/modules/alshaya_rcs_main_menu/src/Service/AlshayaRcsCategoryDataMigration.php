@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -52,7 +52,7 @@ class AlshayaRcsCategoryDataMigration {
   /**
    * Alias manager service.
    *
-   * @var \Drupal\Core\Path\AliasManagerInterface
+   * @var \Drupal\path_alias\AliasManagerInterface
    */
   protected $aliasManager;
 
@@ -67,7 +67,7 @@ class AlshayaRcsCategoryDataMigration {
    *   The language manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection manager.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
