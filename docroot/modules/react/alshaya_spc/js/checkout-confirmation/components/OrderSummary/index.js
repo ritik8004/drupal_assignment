@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import parse from 'html-react-parser';
 import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
 import AuraEarnOrderSummaryItem
@@ -22,7 +21,7 @@ const OrderSummary = (props) => {
   const orderNumber = drupalSettings.order_details.order_number;
   const mobileNumber = drupalSettings.order_details.mobile_number;
   const deliveryType = drupalSettings.order_details.delivery_type_info.type;
-  let expectedDelivery = drupalSettings.order_details.expected_delivery;
+  const expectedDelivery = drupalSettings.order_details.expected_delivery;
   const itemsCount = drupalSettings.order_details.number_of_items;
 
   const customerAddress = [];
@@ -176,9 +175,8 @@ const OrderSummary = (props) => {
   // Hide Expected Delivery within section
   // when online booking information is available.
   // Online booking will be available only for home delivery.
-  if (onlineBookingInformation) {
-    expectedDelivery = false;
-  }
+  // Some comment for the details.
+  const showExpectedDelivery = !onlineBookingInformation;
 
   return (
     <div className="spc-order-summary">
@@ -259,15 +257,15 @@ const OrderSummary = (props) => {
           <ConditionalView condition={showDeliverySummary}>
             <OrderSummaryItem context={context} label={Drupal.t('delivery type')} value={deliveryType} />
             {/** Show HFD booking order information if available. */}
-            {onlineBookingInformation
-            && (
+            <ConditionalView condition={hasValue(onlineBookingInformation)}>
               <OrderSummaryItem
+                type="markup"
                 context={context}
                 label={Drupal.t('Delivery Date & Time', {}, { context: 'online_booking' })}
-                value={parse(onlineBookingInformation)}
+                value={onlineBookingInformation}
               />
-            )}
-            <ConditionalView condition={hasValue(expectedDelivery)}>
+            </ConditionalView>
+            <ConditionalView condition={hasValue(showExpectedDelivery)}>
               <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
             </ConditionalView>
           </ConditionalView>
