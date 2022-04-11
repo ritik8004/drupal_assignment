@@ -3,13 +3,6 @@ import ConditionalView from '../../../../../../js/utilities/components/condition
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 export class InfoPopUp extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false,
-    };
-  }
-
   getDirection = (store) => {
     const { position } = store;
     return `https://www.google.com/maps/dir/Current+Location/${position.lat},${position.lng}`;
@@ -17,7 +10,6 @@ export class InfoPopUp extends React.Component {
 
   render() {
     const { selectedPlace } = this.props;
-    const { open } = this.state;
     return (
       <div>
         <div className="scroll-fix">
@@ -44,7 +36,7 @@ export class InfoPopUp extends React.Component {
             <div className="views-field views-field-field-store-open-hours marker-hours">
               <div className="field-content">
                 <div className="hours--wrapper selector--hours">
-                  <div className={open ? 'hours--label open' : 'hours--label'}>
+                  <div className="hours--label">
                     {Drupal.t('Opening Hours')}
                   </div>
                   <div className="open--hours">

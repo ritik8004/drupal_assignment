@@ -3,18 +3,9 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export class ListItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false,
-    };
-  }
-
-  toggleOpenClass = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      open: !prevState.open,
-    }));
+  toggleOpenClass = (storeId) => {
+    const element = document.getElementById(`hours--label-${storeId}`);
+    element.classList.toggle('open');
   }
 
   getDirection = (store) => {
@@ -23,7 +14,6 @@ export class ListItem extends React.Component {
 
   render() {
     const { specificPlace } = this.props;
-    const { open } = this.state;
     return (
       <div className="store-info-wrap">
         <span className="retinal-enabled-yes">
@@ -57,7 +47,7 @@ export class ListItem extends React.Component {
         <div className="views-field-field-store-open-hours">
           <div className="field-content">
             <div className="hours--wrapper selector--hours">
-              <div className={open ? 'hours--label open' : 'hours--label'} onClick={this.toggleOpenClass}>
+              <div id={`hours--label-${specificPlace.id}`} className="hours--label" onClick={() => this.toggleOpenClass(specificPlace.id)}>
                 {Drupal.t('Opening Hours')}
               </div>
               <div className="open--hours">
