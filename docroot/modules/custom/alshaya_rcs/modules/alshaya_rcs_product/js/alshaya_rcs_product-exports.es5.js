@@ -351,7 +351,7 @@ exports.render = function render(
             mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
               index: i,
               type: 'image',
-              alt: entity.name, //@todo should this come from graphql for each image?
+              alt: entity.name,
               title: entity.name,
               thumburl: variantMedia.thumbnails,
               mediumurl: variantMedia.medium,
@@ -367,7 +367,7 @@ exports.render = function render(
           mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
             index: i,
             type: 'image',
-            alt: entity.name, //@todo should this come from graphql for each image?
+            alt: entity.name,
             title: entity.name,
             thumburl: entityMedia.thumbnails,
             mediumurl: entityMedia.medium,
