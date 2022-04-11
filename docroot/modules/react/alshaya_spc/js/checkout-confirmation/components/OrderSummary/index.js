@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import parse from 'html-react-parser';
 import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
 import AuraEarnOrderSummaryItem
@@ -173,6 +172,12 @@ const OrderSummary = (props) => {
     ? drupalSettings.order_details.onlineBookingInformation
     : false;
 
+  // Hide Expected Delivery within section
+  // when online booking information is available.
+  // Online booking will be available only for home delivery.
+  // Some comment for the details.
+  const showExpectedDelivery = !onlineBookingInformation;
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
@@ -252,15 +257,17 @@ const OrderSummary = (props) => {
           <ConditionalView condition={showDeliverySummary}>
             <OrderSummaryItem context={context} label={Drupal.t('delivery type')} value={deliveryType} />
             {/** Show HFD booking order information if available. */}
-            {onlineBookingInformation
-            && (
+            <ConditionalView condition={hasValue(onlineBookingInformation)}>
               <OrderSummaryItem
+                type="markup"
                 context={context}
                 label={Drupal.t('Delivery Date & Time', {}, { context: 'online_booking' })}
-                value={parse(onlineBookingInformation)}
+                value={onlineBookingInformation}
               />
-            )}
-            <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
+            </ConditionalView>
+            <ConditionalView condition={hasValue(showExpectedDelivery)}>
+              <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
+            </ConditionalView>
           </ConditionalView>
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
         </div>
