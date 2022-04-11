@@ -47,6 +47,7 @@ const OrderSummary = (props) => {
   }
 
   let etaLabel = Drupal.t('expected delivery within');
+  let showExpectedDelivery = true;
   let methodIcon = '';
   const storeAddress = [];
   const storeInfo = drupalSettings.order_details.delivery_type_info.store;
@@ -173,6 +174,13 @@ const OrderSummary = (props) => {
     ? drupalSettings.order_details.onlineBookingInformation
     : false;
 
+  // Hide Expected Delivery within section
+  // when online booking information is available.
+  // Online booking will be available only for home delivery.
+  if (onlineBookingInformation) {
+    showExpectedDelivery = false;
+  }
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
@@ -260,7 +268,9 @@ const OrderSummary = (props) => {
                 value={parse(onlineBookingInformation)}
               />
             )}
-            <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
+            <ConditionalView condition={hasValue(showExpectedDelivery)}>
+              <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
+            </ConditionalView>
           </ConditionalView>
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
         </div>
