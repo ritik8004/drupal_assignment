@@ -10,7 +10,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Path\AliasManager;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -90,7 +90,7 @@ class AlshayaRcsProductHelper {
    * Class constructor.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $current_route_match
-   *   Route match service..
+   *   Route match service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -99,7 +99,7 @@ class AlshayaRcsProductHelper {
    *   The entity type manager service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\Core\Path\AliasManager $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection manager.
