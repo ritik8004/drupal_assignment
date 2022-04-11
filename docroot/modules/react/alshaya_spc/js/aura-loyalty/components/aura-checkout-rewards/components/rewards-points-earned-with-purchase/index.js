@@ -16,14 +16,11 @@ const AuraPointsToEarnedWithPurchase = (props) => {
           <span>
             { getStringMessage('checkout_you_will_earn') }
             {' '}
-            &nbsp;
           </span>
           <span className="points-to-earn-count">{pointsToEarn}</span>
           <span className="join-aura">
-            &nbsp;
             <AuraHeaderIcon />
             {' '}
-            &nbsp;
           </span>
           <span>
             { getStringMessage('points_to_earn_with_purchase') }

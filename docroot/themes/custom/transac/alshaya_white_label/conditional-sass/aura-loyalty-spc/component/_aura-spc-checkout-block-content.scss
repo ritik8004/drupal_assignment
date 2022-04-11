@@ -162,11 +162,16 @@
         .points-to-earn-count {
           color: $aura-spc-checkout-highlight;
           font-family: $aura-bold;
+          
+          @include breakpoint($tablet) {
+            margin-#{$left}: 0.3rem;
+          }
         }
 
         .join-aura {
           position: relative;
           top: 0.25rem;
+          margin: 0 0.3rem;
 
           @include breakpoint($upto-desktop) {
             top: 0.5rem;
