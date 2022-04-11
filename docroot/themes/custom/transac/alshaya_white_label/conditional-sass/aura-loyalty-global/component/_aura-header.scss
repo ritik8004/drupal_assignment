@@ -151,10 +151,6 @@ body.aura-enabled {
       justify-content: space-between;
       margin-bottom: 0.5rem;
 
-      @include breakpoint($upto-desktop) {
-        margin-bottom: 0;
-      }
-
       .aura-header-icon {
         svg {
           max-height: 1.75rem;
@@ -203,12 +199,16 @@ body.aura-enabled {
   .aura-popup-body {
     margin-bottom: 1rem;
     color: $aura-loyalty-activity-txt;
-    text-align: #{$left};
+    text-align: $left;
     line-height: 1.125rem;
     font-size: 0.75rem;
 
     @include breakpoint($desktop) {
       margin-bottom: 0.5rem;
+    }
+
+    .learn-more-wrapper {
+      margin: 0 0.201rem;
     }
 
     p {

@@ -40,18 +40,22 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
   font-display: swap;
 }
 
-// PTSans font.
+// PTSans Caption font.
 @font-face {
   font-family: "PTSans-Caption-Bold";
-  src: url('#{$base_theme_fonts_directory_path}/PTSans-Caption-Bold.ttf') format('truetype');
-  font-weight: normal;
+  src:
+    url('#{$base_theme_fonts_directory_path}/PTSans-Caption-Bold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/PTSans-Caption-Bold.woff') format('woff');
+  font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: "PTSans-Caption-Regular";
-  src: url('#{$base_theme_fonts_directory_path}/PTSans-Caption-Regular.ttf') format('truetype');
+  src:
+    url('#{$base_theme_fonts_directory_path}/PTSans-Caption-Regular.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/PTSans-Caption-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
