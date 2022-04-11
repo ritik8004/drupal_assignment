@@ -342,13 +342,15 @@ export default class ConfigurableForm extends React.Component {
     }
 
     // Get wishlist sku options.
-    const wishListSkuOptions = [];
+    const wishListSkuOptions = {};
     if (isWishlistEnabled() && isWishlistPage(extraInfo)) {
       const skuData = getWishListDataForSku(sku);
       const optionsData = skuData.options;
       if (typeof optionsData !== 'undefined' && Object.keys(optionsData).length > 0) {
         optionsData.forEach((element) => {
-          wishListSkuOptions[element.id] = element.value;
+          Object.assign(wishListSkuOptions, {
+            [element.id]: element.value,
+          });
         });
       }
     }
@@ -360,7 +362,8 @@ export default class ConfigurableForm extends React.Component {
             isSwatch = attribute[1].is_swatch;
             // If wishlistSkuOptions are set then use them for showing
             // the selected variant in drawer.
-            if (wishListSkuOptions !== null && wishListSkuOptions.length > 0) {
+            if (Object.keys(wishListSkuOptions).length > 0
+              && Object.prototype.hasOwnProperty.call(wishListSkuOptions, attribute[1].id)) {
               defaultValue = wishListSkuOptions[attribute[1].id];
             } else {
               defaultValue = formAttributeValues[attribute[0]];
