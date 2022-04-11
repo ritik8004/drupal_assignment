@@ -1,4 +1,6 @@
 import React from 'react';
+import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 export class InfoPopUp extends React.Component {
   constructor(props) {
@@ -25,16 +27,18 @@ export class InfoPopUp extends React.Component {
             </div>
             <div className="views-field views-field-field-store-address">
               <div className="field-content">
-                {selectedPlace.address.map((item) => (
-                  <div key={item.code}>
-                    <div className="address--line1">
-                      {item.code === 'address_building_segment' ? <span>{item.value}</span> : null}
+                <ConditionalView condition={hasValue(selectedPlace.address)}>
+                  {selectedPlace.address.map((item) => (
+                    <div key={item.code}>
+                      <div className="address--line1">
+                        {item.code === 'address_building_segment' ? <span>{item.value}</span> : null}
+                      </div>
+                      <div className="address--line2">
+                        {item.code === 'street' ? <span>{item.value}</span> : null}
+                      </div>
                     </div>
-                    <div className="address--line2">
-                      {item.code === 'street' ? <span>{item.value}</span> : null}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </ConditionalView>
               </div>
             </div>
             <div className="views-field views-field-field-store-open-hours marker-hours">

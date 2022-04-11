@@ -19,10 +19,20 @@ class AlshayaStoreFinderController extends ControllerBase {
   protected $storeUtility;
 
   /**
+   * Current profile.
+   *
+   * @var string
+   */
+  protected $installProfile;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('alshaya_geolocation.store_utility'));
+    return new static(
+      $container->get('alshaya_geolocation.store_utility'),
+      $container->getParameter('install_profile'),
+    );
   }
 
   /**
@@ -30,9 +40,12 @@ class AlshayaStoreFinderController extends ControllerBase {
    *
    * @param \Drupal\alshaya_geolocation\AlshayaStoreUtility $storeUtility
    *   Config object.
+   * @param string $installProfile
+   *   The current installation profile.
    */
-  public function __construct(AlshayaStoreUtility $storeUtility) {
+  public function __construct(AlshayaStoreUtility $storeUtility, $installProfile) {
     $this->storeUtility = $storeUtility;
+    $this->installProfile = $installProfile;
   }
 
   /**
@@ -40,7 +53,7 @@ class AlshayaStoreFinderController extends ControllerBase {
    */
   public function store() {
     // For non-transac.
-    if (drupal_get_profile() == 'alshaya_non_transac') {
+    if ($this->installProfile == 'alshaya_non_transac') {
       $labels = $this->storeUtility->storeLabels(FALSE);
       $libraries = $this->storeUtility->storeLibraries(FALSE);
     }
@@ -67,7 +80,7 @@ class AlshayaStoreFinderController extends ControllerBase {
    */
   public function storeList() {
     // For non-transac.
-    if (drupal_get_profile() == 'alshaya_non_transac') {
+    if ($this->installProfile == 'alshaya_non_transac') {
       $labels = $this->storeUtility->storeLabels(FALSE);
       $libraries = $this->storeUtility->storeLibraries(FALSE);
     }
