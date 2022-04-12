@@ -347,7 +347,7 @@ exports.render = function render(
             // Continue with the loop.
             return true;
           }
-          variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia) {
+          variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia, i) {
             mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
               index: i,
               type: 'image',
@@ -363,7 +363,7 @@ exports.render = function render(
         });
       }
       else {
-        entity.media.forEach(function setEntityThumbnails(entityMedia) {
+        entity.media.forEach(function setEntityThumbnails(entityMedia, i) {
           mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
             index: i,
             type: 'image',
