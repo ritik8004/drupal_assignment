@@ -59,6 +59,7 @@
         "drupal/image_style_quality": "1.x-dev",
         "drupal/imagemagick": "^3.2",
         "drupal/jquery_minicolors": "^1.2",
+        "drupal/jquery_ui_accordion": "^1.1",
         "drupal/kashmir": "^1.11",
         "drupal/key_value_field": "^1.2",
         "drupal/libraries": "^3.0@beta",
@@ -348,6 +349,9 @@
             },
             "acquia/lightning": {
                 "Fix for drush updb failure during lightning upgrade": "https://www.drupal.org/files/issues/2022-04-07/3274101-2.patch"
+            },
+            "drupal/field_group": {
+                "Remove jQuery UI Accordion dependency and warning": "https://www.drupal.org/files/issues/2022-03-01/3154304-11.patch"
             }
         },
         "installer-paths": {
