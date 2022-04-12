@@ -33,15 +33,6 @@ const ProductCategoryCarouselWrapper = ({ slug }) => {
     global.rcsPhCommerceBackend.getData('category_parents_by_path', {
       urlPath: slug,
     }).then((response) => {
-      // If /taxonomy/term/tid page.
-      // if (!term) {
-      //   return {
-      //     'hierarchy': '',
-      //     'level': 0,
-      //     'ruleContext': [],
-      //     'field': '',
-      //   };
-      // }
       const parents = Array.isArray(response.breadcrumbs) ? response.breadcrumbs : [];
       const categoryId = atob(response.uid);
       const hierarchyList = [];
