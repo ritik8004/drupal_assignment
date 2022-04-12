@@ -1,9 +1,9 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
-const ReturnSuccessMessage = ({ returnId }) => {
+const ReturnSuccessMessage = () => {
   const returnInStorage = Drupal.getItemFromLocalStorage('online_return_id');
-  if (hasValue(returnInStorage) && returnId !== returnInStorage) {
+  if (hasValue(returnInStorage)) {
     return (
       <div className="refund-success-message">
         <span className="message-text">

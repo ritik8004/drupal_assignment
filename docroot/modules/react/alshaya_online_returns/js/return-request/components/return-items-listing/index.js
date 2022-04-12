@@ -123,6 +123,10 @@ class ReturnItemsListing extends React.Component {
       return;
     }
 
+    if (hasValue(returnRequest) && hasValue(returnRequest.increment_id)) {
+      Drupal.addItemInLocalStorage('online_return_id', returnRequest.increment_id);
+    }
+
     // On success, redirect to return confirmation page.
     // @todo: Update return confirmation URL.
     window.location.href = Drupal.url('/');

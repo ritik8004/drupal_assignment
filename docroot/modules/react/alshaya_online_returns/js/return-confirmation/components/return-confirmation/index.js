@@ -13,11 +13,6 @@ class ReturnConfirmation extends React.Component {
   }
 
   componentDidMount = () => {
-    const { returnId } = this.state;
-    // Adding return id in storage for confirmation message.
-    if (hasValue(returnId)) {
-      Drupal.addItemInLocalStorage('online_return_id', returnId);
-    }
     // @todo logic to trigger get RMA info api.
   };
 
@@ -32,9 +27,7 @@ class ReturnConfirmation extends React.Component {
         <OrderDetailsButton
           orderId={orderDetails['#order'].orderId}
         />
-        <ReturnSuccessMessage
-          returnId={returnId}
-        />
+        <ReturnSuccessMessage />
       </div>
     );
   }
