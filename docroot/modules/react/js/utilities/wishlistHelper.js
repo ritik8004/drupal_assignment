@@ -380,12 +380,6 @@ export const addRemoveWishlistItemsInBackend = async (data, action) => {
           },
         ],
       };
-      // Wishlist header component is placed in two different blocks header and
-      // sticky header. Header component calls merge items and
-      // loadWishlistFromBackend. To stop sticky header again calling
-      // loadWishlistFromBackend we set the flag here. This is unset after merge
-      // items call is ended.
-      window.loadWishListFromBackend = true;
       break;
     }
 
