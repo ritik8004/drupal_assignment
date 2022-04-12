@@ -62,8 +62,10 @@ export default class AuraLinkedCheckout extends React.Component {
             </div>
             <div className="points-expiring">
               <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
-              {/* TO DO- Below tooltip should be replaced once we have tooltip content. */}
-              <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
+              <ConditionalView condition={expiringPoints !== 0}>
+                {/* TO DO- Below tooltip should be replaced once we have tooltip content. */}
+                <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
+              </ConditionalView>
             </div>
           </div>
           {/* Registered User - Linked Card - Full Enrollment */}
