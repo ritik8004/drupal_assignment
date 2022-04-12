@@ -251,26 +251,18 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       result = response.data.products.items[0];
       break;
 
-    case 'category_parents':
-      let productCategoryParentVariables = rcsPhGraphqlQuery.category_parents.variables;
+    case 'category_parents_by_path':
+      let productCategoryParentVariables = rcsPhGraphqlQuery.category_parents_by_path.variables;
       productCategoryParentVariables.urlPath = params.urlPath;
-      request.data = prepareQuery(rcsPhGraphqlQuery.category_parents.query, productCategoryParentVariables);
+      request.data = prepareQuery(rcsPhGraphqlQuery.category_parents_by_path.query, productCategoryParentVariables);
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.categoryList[0];
       break;
 
-      case 'category_children':
-        request.data = prepareQuery(`{
-          categories(filters: { url_path: { eq: "${params.urlPath}" } }) {
-            items {
-              children {
-                id
-                name
-                url_path
-              }
-            }
-          }
-        }`);
+    case 'category_children_by_path':
+      let productCategoryChildrenVariables = rcsPhGraphqlQuery.category_children_by_path.variables;
+      productCategoryChildrenVariables.urlPath = params.urlPath;
+      request.data = prepareQuery(rcsPhGraphqlQuery.category_children_by_path.query, productCategoryChildrenVariables);
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.categories.items[0];
       break;

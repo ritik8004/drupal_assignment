@@ -60,39 +60,18 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
     $carousel_title = $this->getCarouselTitle();
     $slug = $this->getSlug();
 
-    // Create accordion title link.
-    $accordion_title = [
-      '#type' => 'link',
-      '#title' => $carousel_title,
-      '#url' => $slug,
-    ];
-
-    $link = [];
-    $view_all_text = $this->getViewAllText();
-    if ($view_all_text) {
-      $link = [
-        '#title' => $view_all_text,
-        '#type' => 'link',
-        '#attributes' => [
-          'class' => ['category-accordion-view-all'],
-        ],
-        '#url' => $slug,
-      ];
-    }
-
     // Theme content as accordion.
     $carousel['content']['product_category_carousel'] = [
       '#type' => 'container',
       '#attributes' => [
         'class' => ['alshaya-product-category-carousel-accordion'],
         'data-slug' => $slug,
-        'data-title' => $accordion_title ?? NULL,
+        'data-title' => $carousel_title ?? NULL,
         'data-view-all' => json_encode([
           'text' => $this->getViewAllText(),
           'class' => 'category-accordion-view-all',
         ]),
       ],
-      '#content' => '#rcs.carousel.accordion#',
       '#cache' => [
         'tags' => [
           ProductCategoryTree::CACHE_TAG,

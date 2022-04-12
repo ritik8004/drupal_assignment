@@ -30,7 +30,7 @@ const ProductCategoryCarouselWrapper = ({ slug }) => {
   useEffect(() => {
     const carousel = window.commerceBackend.getCarouselData();
 
-    global.rcsPhCommerceBackend.getData('category_parents', {
+    global.rcsPhCommerceBackend.getData('category_parents_by_path', {
       urlPath: slug,
     }).then((response) => {
       // If /taxonomy/term/tid page.

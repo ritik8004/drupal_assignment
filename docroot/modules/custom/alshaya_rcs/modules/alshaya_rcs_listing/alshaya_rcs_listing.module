@@ -120,7 +120,7 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
   ];
 
   // Query to get the parents of a category.
-  $query_fields['category_parents'] = [
+  $query_fields['category_parents_by_path'] = [
     'query' => [
       'query($urlPath: String)' => [
         'categoryList(filters: {url_path: {eq: $urlPath}})' => [
@@ -141,7 +141,7 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
   ];
 
   // Query to get the children of the given category.
-  $query_fields['category_children'] = [
+  $query_fields['category_children_by_path'] = [
     'query' => [
       'query($urlPath: String)' => [
         'categories(filters: {url_path: {eq: $urlPath}})' => [
