@@ -4,7 +4,15 @@ import ReturnRefundMethod from '../return-refund-method';
 import ReturnAmountWrapper from '../refund-amount-wrapper';
 import ReturnCollectionDetails from '../return-collection-details';
 import ReturnCollectionAddress from '../return-collection-address';
-import { getDeliveryAddress, getPaymentDetails } from '../../../utilities/return_request_util';
+import {
+  getDeliveryAddress,
+  getOrderDetailsForReturnRequest,
+  getPaymentDetails,
+} from '../../../utilities/return_request_util';
+import { createReturnRequest } from '../../../utilities/return_api_helper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getReturnConfirmationUrl } from '../../../utilities/online_returns_util';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class ReturnRefundDetails extends React.Component {
   constructor(props) {
@@ -40,6 +48,40 @@ class ReturnRefundDetails extends React.Component {
     </div>
   );
 
+  /**
+   * Create return request.
+   */
+  createReturnRequest = async () => {
+    const { itemsSelected, handleErrorMessage } = this.props;
+
+    showFullScreenLoader();
+    const returnRequest = await createReturnRequest(itemsSelected);
+    removeFullScreenLoader();
+
+    if (hasValue(returnRequest.error)) {
+      handleErrorMessage(returnRequest.error_message);
+      return;
+    }
+
+    if (hasValue(returnRequest) && hasValue(returnRequest.increment_id)) {
+      Drupal.addItemInLocalStorage('online_return_id', returnRequest.increment_id);
+    }
+
+    // On success, redirect to return confirmation page.
+    const { orderId } = getOrderDetailsForReturnRequest()['#order'];
+    window.location.href = getReturnConfirmationUrl(orderId);
+  }
+
+  /**
+   * Process return request confirmation.
+   */
+  handleReturnConfirmation = () => {
+    const { handleReturnRequestSubmit } = this.props;
+
+    handleReturnRequestSubmit();
+    this.createReturnRequest();
+  }
+
   render() {
     const { paymentInfo, address, open } = this.state;
     return (
@@ -53,6 +95,14 @@ class ReturnRefundDetails extends React.Component {
           <ReturnCollectionAddress
             shippingAddress={address}
           />
+          <div className="confirm-return-button-wrapper">
+            <button
+              type="button"
+              onClick={this.handleReturnConfirmation}
+            >
+              <span className="continue-button-label">{Drupal.t('Confirm Your Return', {}, { context: 'online_returns' })}</span>
+            </button>
+          </div>
         </Collapsible>
       </div>
     );
