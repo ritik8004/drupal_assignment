@@ -4,6 +4,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 const ReturnSuccessMessage = () => {
   const returnInStorage = Drupal.getItemFromLocalStorage('online_return_id');
   if (hasValue(returnInStorage)) {
+    Drupal.removeItemFromLocalStorage('online_return_id');
     return (
       <div className="refund-success-message">
         <span className="message-text">
