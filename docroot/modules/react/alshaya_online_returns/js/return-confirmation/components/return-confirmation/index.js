@@ -13,7 +13,7 @@ class ReturnConfirmation extends React.Component {
   }
 
   componentDidMount = () => {
-    // @todo logic to trigger get RMA info api.
+    // @todo: Write logic to trigger get RMA info api.
   };
 
   render() {
