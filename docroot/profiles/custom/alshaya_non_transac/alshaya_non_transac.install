@@ -11,6 +11,17 @@ use Drupal\user\UserInterface;
 /**
  * Implements hook_update_N().
  *
+ * Installs jquery_ui_accordion module if it is not enabled.
+ */
+function alshaya_non_transac_update_8107() {
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_accordion'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_accordion']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Delete view display configs for paragraphs whose view mode have been deleted.
  */
 function alshaya_non_transac_update_8106() {
