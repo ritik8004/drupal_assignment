@@ -831,7 +831,7 @@ class SkuImagesManager {
 
             $thumbnails[] = [
               'zoomurl' => $image_zoom,
-              'fullurl' => $default_image->url(),
+              'fullurl' => $default_image->createFileUrl(),
               'label' => $sku->label(),
             ];
           }
