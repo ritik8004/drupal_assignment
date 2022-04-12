@@ -33,6 +33,10 @@ const ProductCategoryCarouselWrapper = ({ slug }) => {
     global.rcsPhCommerceBackend.getData('category_parents_by_path', {
       urlPath: slug,
     }).then((response) => {
+      // There might be some error or the slug entered is incorrect.
+      if (!Drupal.hasValue(response)) {
+        setLoaded(true);
+      }
       const parents = Array.isArray(response.breadcrumbs) ? response.breadcrumbs : [];
       const categoryId = atob(response.uid);
       const hierarchyList = [];
