@@ -407,10 +407,12 @@ function _alshaya_aura_react_translations() {
       // To do- translation should be checked once we get it from alshaya.
       'Redeem' => [
         'ar' => 'يسترد',
+        'context' => 'aura',
       ],
       // To do- translation should be checked once we get it from alshaya.
       'Aura points with this purchase.' => [
         'ar' => 'نقاط Aura مع هذا الشراء.',
+        'context' => 'aura',
       ],
     ],
   ];

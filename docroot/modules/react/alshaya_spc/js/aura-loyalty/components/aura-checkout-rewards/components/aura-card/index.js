@@ -5,7 +5,7 @@ import PointsString from '../../../utilities/points-string';
 import AuraFormRedeemPoints from '../../../aura-forms/aura-redeem-points';
 import PointsExpiryMessage from '../../../utilities/points-expiry-message';
 import { getAllAuraStatus } from '../../../../../../../alshaya_aura_react/js/utilities/helper';
-import ConditionalView from '../../../../../common/components/conditional-view';
+import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import ToolTip from '../../../../../utilities/tooltip';
 
