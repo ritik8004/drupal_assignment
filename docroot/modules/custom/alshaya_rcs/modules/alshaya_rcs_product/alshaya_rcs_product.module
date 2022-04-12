@@ -1015,7 +1015,8 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   // In Array attribute will only be added for materials attribute code.
   $is_array = '';
   // @todo To make this a config to get the list of attribute code.
-  if ($attribute_code === 'materials') {
+  $array_attributes = \Drupal::config('alshaya_product_attributes.settings')->get('array_attributes');
+  if (in_array($attribute_code, $array_attributes)) {
     $is_array = ',is_array:1';
   }
   $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '"' . $is_array . '){attribute_code store_id attribute_values{key,value}}}';
