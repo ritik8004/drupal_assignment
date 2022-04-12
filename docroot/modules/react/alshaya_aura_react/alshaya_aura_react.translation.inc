@@ -403,6 +403,18 @@ function _alshaya_aura_react_translations() {
         'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
       ],
     ],
+    'v4' => [
+      // To do- translation should be checked once we get it from alshaya.
+      'Redeem' => [
+        'ar' => 'يسترد',
+        'context' => 'aura',
+      ],
+      // To do- translation should be checked once we get it from alshaya.
+      'Aura points with this purchase.' => [
+        'ar' => 'نقاط Aura مع هذا الشراء.',
+        'context' => 'aura',
+      ],
+    ],
   ];
 }
 
