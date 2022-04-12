@@ -8,7 +8,7 @@ global_styles:
   dependencies:
     - core/jquery
     - core/jquery.once
-    - core/jquery.ui.accordion
+    - jquery_ui_accordion/accordion
     - core/jquery.ui.tabs
     - core/jquery.cookie
     - mobile_number/element

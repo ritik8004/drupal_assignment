@@ -44,7 +44,7 @@ libraries-override:
         assets/vendor/jquery.ui/themes/base/core.css: false
       theme:
         assets/vendor/jquery.ui/themes/base/theme.css: false
-  core/jquery.ui.accordion:
+  jquery_ui_accordion/accordion:
     css:
       component:
         assets/vendor/jquery.ui/themes/base/accordion.css: false
