@@ -149,6 +149,10 @@
         }
 
         .size-guide {
+          @include breakpoint($tablet) {
+            text-align: $right;
+          }
+
           .size-guide-link {
             top: 0;
             color: $magv2-size-guide-link;
@@ -166,6 +170,16 @@
               position: absolute;
               #{$left}: 0;
               top: 0.1875rem;
+            }
+
+            @include breakpoint($tablet) {
+              font-size: 1rem;
+
+              &::before {
+                background: none;
+                width: auto;
+                height: auto;
+              }
             }
           }
         }
