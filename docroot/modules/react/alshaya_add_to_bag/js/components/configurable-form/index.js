@@ -19,11 +19,7 @@ import ErrorMessage from '../error-message';
 import { isDisplayConfigurableBoxes } from '../../../../js/utilities/display';
 import getStringMessage from '../../../../alshaya_spc/js/utilities/strings';
 import WishlistContainer from '../../../../js/utilities/components/wishlist-container';
-import {
-  getWishListDataForSku,
-  isWishlistEnabled,
-  isWishlistPage,
-} from '../../../../js/utilities/wishlistHelper';
+import { isWishlistEnabled, isWishlistPage } from '../../../../js/utilities/wishlistHelper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class ConfigurableForm extends React.Component {
@@ -341,33 +337,12 @@ export default class ConfigurableForm extends React.Component {
       });
     }
 
-    // Get wishlist sku options.
-    const wishListSkuOptions = {};
-    if (isWishlistEnabled() && isWishlistPage(extraInfo)) {
-      const skuData = getWishListDataForSku(sku);
-      const { options: optionsData } = skuData || {};
-      if (typeof optionsData !== 'undefined' && Object.keys(optionsData).length > 0) {
-        optionsData.forEach((element) => {
-          Object.assign(wishListSkuOptions, {
-            [element.id]: element.value,
-          });
-        });
-      }
-    }
-
     return (
       <>
         <form className="sku-form" data-sku={sku} key={sku} ref={this.formRef}>
           {Object.entries(configurableAttributes).map((attribute) => {
             isSwatch = attribute[1].is_swatch;
-            // If wishlistSkuOptions are set then use them for showing
-            // the selected variant in drawer.
-            if (Object.keys(wishListSkuOptions).length > 0
-              && Object.prototype.hasOwnProperty.call(wishListSkuOptions, attribute[1].id)) {
-              defaultValue = wishListSkuOptions[attribute[1].id];
-            } else {
-              defaultValue = formAttributeValues[attribute[0]];
-            }
+            defaultValue = formAttributeValues[attribute[0]];
             isHidden = typeof hiddenAttributes !== 'undefined'
               ? hiddenAttributes.includes(attribute[0])
               : false;

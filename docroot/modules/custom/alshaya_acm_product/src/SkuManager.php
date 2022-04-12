@@ -2415,6 +2415,26 @@ class SkuManager {
           'option_value' => $raw_options['option_value'] ?? '',
         ];
       }
+      else {
+        // If attribute code is not sku field, then its a
+        // configurable form setting hence get raw attributes data for wishlist
+        // product options.
+        $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
+        // Skip if raw options does not have id or value.
+        if (empty($raw_options['option_id']) || empty($raw_options['option_value'])) {
+          continue;
+        }
+        // Keep label and value null as these attributes should not
+        // be shown on cart product attributes and used only for wish-list
+        // selected variant.
+        $configurableFieldValues[$code] = [
+          'attribute_id' => $code,
+          'label' => NULL,
+          'value' => NULL,
+          'option_id' => $raw_options['option_id'] ?? '' ,
+          'option_value' => $raw_options['option_value'] ?? '',
+        ];
+      }
     }
 
     return $configurableFieldValues;

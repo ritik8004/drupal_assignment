@@ -11,6 +11,11 @@ const CheckoutConfigurableOption = (props) => {
     return null;
   }
 
+  // Do not show attributes without value.
+  if (Object.prototype.hasOwnProperty.call(label, 'value') && label.value === null) {
+    return null;
+  }
+
   return (
     <>
       <div className="spc-cart-product-attribute">
