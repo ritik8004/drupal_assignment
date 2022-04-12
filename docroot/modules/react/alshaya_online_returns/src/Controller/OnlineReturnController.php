@@ -192,7 +192,7 @@ class OnlineReturnController extends ControllerBase {
     );
 
     // Invalidate cache for return id query parameter.
-    $build['#cache']['contexts'] = 'url.query_args:returnId';
+    $build['#cache']['contexts'][] = 'url.query_args:returnId';
     // Do not proceed if Online returns is not enabled.
     if ($config['enabled'] !== TRUE) {
       throw new \Exception('Online Returns feature not enabled.');
