@@ -389,7 +389,7 @@ exports.render = function render(
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
-          label: entity.name, //@todo should this come from graphql for each image?
+          label: entity.name,
         },
         pager_flag: (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryLimit[params.galleryLimit])
           ? 'pager-yes'
