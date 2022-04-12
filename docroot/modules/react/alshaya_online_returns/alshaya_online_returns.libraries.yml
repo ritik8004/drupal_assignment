@@ -21,3 +21,9 @@ alshaya_online_returns_order_details:
     dist/order_details.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_return_confirmation:
+  js:
+    dist/returnconfirmation.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

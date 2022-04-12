@@ -18,9 +18,9 @@ use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
 use Drupal\address\Repository\CountryRepository;
 
 /**
- * Return request controller to prepare data for return request page.
+ * Online controller to prepare data for return pages.
  */
-class ReturnRequestController extends ControllerBase {
+class OnlineReturnController extends ControllerBase {
 
   /**
    * The config factory.
@@ -133,7 +133,7 @@ class ReturnRequestController extends ControllerBase {
   }
 
   /**
-   * Controller function for return request.
+   * Controller function for return confirmation.
    *
    * @param \Drupal\user\UserInterface $user
    *   User object for which the orders detail page is being viewed.
@@ -143,7 +143,7 @@ class ReturnRequestController extends ControllerBase {
    * @return array|null
    *   Build array.
    */
-  public function orderReturn(UserInterface $user, $order_id) {
+  public function returnRequest(UserInterface $user, $order_id) {
     $config['enabled'] = $this->onlineReturnsHelper->isOnlineReturnsEnabled();
     $build['#cache']['tags'] = array_merge(
       $build['#cache']['tags'] ?? [],
@@ -154,6 +154,72 @@ class ReturnRequestController extends ControllerBase {
     if ($config['enabled'] !== TRUE) {
       throw new \Exception('Online Returns feature not enabled.');
     }
+
+    $orderDetails = $this->getOrderReturnDetails($user, $order_id);
+
+    // Get return configurations.
+    $returnConfig = $this->onlineReturnsApiHelper->getReturnsApiConfig(
+      $this->languageManager->getCurrentLanguage()->getId(),
+    );
+
+    // Attach library for return page react component.
+    $build['#markup'] = '<div id="alshaya-online-return-request"></div>';
+    $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
+    $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
+    $build['#attached']['drupalSettings']['returnRequest'] = [
+      'orderDetails' => $orderDetails,
+      'returnConfig' => $returnConfig,
+    ];
+    return $build;
+  }
+
+  /**
+   * Controller function for return confirmation.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   User object for which the return request page is being viewed.
+   * @param string $order_id
+   *   Order id to view the detail for.
+   *
+   * @return array|null
+   *   Build array.
+   */
+  public function returnConfirmation(UserInterface $user, $order_id) {
+    $config['enabled'] = $this->onlineReturnsHelper->isOnlineReturnsEnabled();
+    $build['#cache']['tags'] = array_merge(
+      $build['#cache']['tags'] ?? [],
+      $this->configFactory->get('alshaya_online_returns.settings')->getCacheTags()
+    );
+
+    // Invalidate cache for return id query parameter.
+    $build['#cache']['contexts'][] = 'url.query_args:returnId';
+    // Do not proceed if Online returns is not enabled.
+    if ($config['enabled'] !== TRUE) {
+      throw new \Exception('Online Returns feature not enabled.');
+    }
+
+    $orderDetails = $this->getOrderReturnDetails($user, $order_id);
+    // Attach library for return page react component.
+    $build['#markup'] = '<div id="alshaya-return-confirmation"></div>';
+    $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_confirmation';
+    $build['#attached']['drupalSettings']['returnInfo'] = [
+      'orderDetails' => $orderDetails,
+    ];
+    return $build;
+  }
+
+  /**
+   * Controller function for process order details information.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   User object for which the return confirmation page is being viewed.
+   * @param string $order_id
+   *   Order id to view the detail for.
+   *
+   * @return array|null
+   *   Build array.
+   */
+  public function getOrderReturnDetails(UserInterface $user, $order_id) {
 
     $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
@@ -209,8 +275,8 @@ class ReturnRequestController extends ControllerBase {
             'alt' => $item['image']['#attributes']['alt'],
           ];
         }
-        $orderDetails['#products'][$key]['image_data'] = $data;
       }
+      $orderDetails['#products'][$key]['image_data'] = $data ?? NULL;
       $sku = SKU::loadFromSku($item['sku']);
       if ($sku instanceof SKUInterface) {
         $orderDetails['#products'][$key]['is_returnable'] = $this->onlineReturnsHelper->isSkuReturnable($sku);
@@ -218,10 +284,6 @@ class ReturnRequestController extends ControllerBase {
       }
     }
 
-    // Get return configurations.
-    $returnConfig = $this->onlineReturnsApiHelper->getReturnsApiConfig(
-      $this->languageManager->getCurrentLanguage()->getId(),
-    );
 
     // Adding address fields configuration to display user address details.
     $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
@@ -232,16 +294,7 @@ class ReturnRequestController extends ControllerBase {
     if (isset($country_label) && !empty($country_list)) {
       $orderDetails['#order_details']['delivery_address_raw']['country_label'] = $country_list[$country_label];
     }
-
-    // Attach library for return page react component.
-    $build['#markup'] = '<div id="alshaya-online-return-request"></div>';
-    $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
-    $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
-    $build['#attached']['drupalSettings']['returnRequest'] = [
-      'orderDetails' => $orderDetails,
-      'returnConfig' => $returnConfig,
-    ];
-    return $build;
+    return $orderDetails;
   }
 
 }

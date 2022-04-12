@@ -7,6 +7,7 @@ var config = {
     returnrequest: './js/returnrequest',
     my_accounts: './js/my-accounts',
     order_details: './js/order-details',
+    returnconfirmation: './js/return-confirmation',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
