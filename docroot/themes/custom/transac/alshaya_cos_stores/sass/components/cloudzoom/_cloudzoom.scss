@@ -1,6 +1,7 @@
 #lightSlider {
   @include breakpoint($desktop) {
     height: 45rem;
+    list-style: none;
   }
 
   @include breakpoint($only-tablet) {
