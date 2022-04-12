@@ -100,11 +100,17 @@ class ClickCollectAvailableStores extends FormBase {
       '#value' => $this->t('search stores'),
     ];
 
+    $site_country = _alshaya_custom_get_site_level_country_code();
     $form['#attached'] = [
       'library' => ['alshaya_click_collect/click-and-collect.pdp'],
       'drupalSettings' => [
         'geolocation' => [
           'google_map_url' => $this->mapProvider->getMapProvider('google_maps')->getGoogleMapsApiUrl(),
+          'geocoder' => [
+            'google_geocoding_api' => [
+              'componentRestrictions' => ['country' => $site_country],
+            ],
+          ],
         ],
         'alshaya_acm' => ['storeFinder' => TRUE],
         'alshaya_click_collect' => ['searchForm' => TRUE],
