@@ -256,7 +256,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       productCategoryParentVariables.urlPath = params.urlPath;
       request.data = prepareQuery(rcsPhGraphqlQuery.category_parents_by_path.query, productCategoryParentVariables);
       response = await rcsCommerceBackend.invokeApi(request);
-      result = response.data.categoryList[0];
+      result = response.data.categories.items[0];
       break;
 
     case 'category_children_by_path':

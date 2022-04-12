@@ -123,14 +123,16 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
   $query_fields['category_parents_by_path'] = [
     'query' => [
       'query($urlPath: String)' => [
-        'categoryList(filters: {url_path: {eq: $urlPath}})' => [
-          'uid',
-          'name',
-          'breadcrumbs' => [
-            'category_name',
-            'category_level',
-            'category_url_key',
-            'category_url_path',
+        'categories(filters: {url_path: {eq: $urlPath}})' => [
+          'items' => [
+            'uid',
+            'name',
+            'breadcrumbs' => [
+              'category_name',
+              'category_level',
+              'category_url_key',
+              'category_url_path',
+            ],
           ],
         ],
       ],
