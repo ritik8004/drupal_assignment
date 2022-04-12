@@ -191,6 +191,8 @@ class OnlineReturnController extends ControllerBase {
       $this->configFactory->get('alshaya_online_returns.settings')->getCacheTags()
     );
 
+    // Invalidate cache for return id query parameter.
+    $build['#cache']['contexts'] = 'url.query_args:returnId';
     // Do not proceed if Online returns is not enabled.
     if ($config['enabled'] !== TRUE) {
       throw new \Exception('Online Returns feature not enabled.');
