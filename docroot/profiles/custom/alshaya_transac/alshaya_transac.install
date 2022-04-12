@@ -15,6 +15,17 @@ use Drupal\facets\Entity\Facet;
 use Drupal\user\Entity\Role;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Installs jquery_ui_accordion module if it is not enabled.
+ */
+function alshaya_transac_update_8139() {
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_accordion'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_accordion']);
+  }
+}
+
+/**
  * Implements hook_update_n().
  *
  * Uninstall amp contrib and custom modules.

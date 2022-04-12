@@ -12,7 +12,7 @@ global_styles:
   dependencies:
     - core/jquery
     - core/jquery.once
-    - core/jquery.ui.accordion
+    - jquery_ui_accordion/accordion
     - core/jquery.ui.core
     - core/jquery.ui.effects.core
     - core/jquery.ui.tabs
@@ -27,7 +27,7 @@ global_styles:
 detail_polyfill:
   js:
     vendor/js/details-polyfill.js: {attributes: { nomodule: true }}
-    
+
 ltr_styles:
   css:
     theme:

@@ -516,7 +516,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#attached' => [
         'library' => [
           'alshaya_acm/alshaya.acm.js',
-          'core/jquery.ui.accordion',
+          'jquery_ui_accordion/accordion',
         ],
       ],
     ];
