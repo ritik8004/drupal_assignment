@@ -11,7 +11,8 @@ const CheckoutConfigurableOption = (props) => {
     return null;
   }
 
-  // Do not show attributes without value.
+  // The attributes eg: subset_name are configurable but not shown on cart
+  // these are passed with null value and will not be shown.
   if (Object.prototype.hasOwnProperty.call(label, 'value') && label.value === null) {
     return null;
   }
