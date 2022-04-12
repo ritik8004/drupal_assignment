@@ -91,6 +91,12 @@ export default class WishlistHeader extends React.Component {
         // wishlist with api call. Once added successfully, we need to
         // load the latest wishlist information from backend as well.
         if (itemData.length > 0) {
+          // Wishlist header component is placed in two different blocks header and
+          // sticky header. Header component calls merge items and
+          // loadWishlistFromBackend. To stop sticky header again calling
+          // loadWishlistFromBackend we set the flag here. This is unset after merge
+          // items call is ended.
+          window.loadWishListFromBackend = true;
           addRemoveWishlistItemsInBackend(
             itemData,
             'mergeWishlistItems',
