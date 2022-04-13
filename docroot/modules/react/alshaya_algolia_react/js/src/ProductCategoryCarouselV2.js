@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import ConditionalView from '../../../js/utilities/components/conditional-view';
 import ProductCategoryCarousel from './components/product-category-carousel';
 
 const ProductCategoryCarouselWrapper = ({ slug }) => {
-  const [carouselData, setCarouselData] = useState(null);
+  const [carouselData, setCarouselData] = useState({
+    categoryId: null,
+    categoryField: null,
+    hierarchy: null,
+    itemsPerPage: null,
+    ruleContext: null,
+    sectionTitle: null,
+    vatText: null,
+  });
   const [loaded, setLoaded] = useState(false);
 
   /**
@@ -75,21 +84,17 @@ const ProductCategoryCarouselWrapper = ({ slug }) => {
   }, []);
 
   return (
-    <>
-      { loaded
-        ? (
-          <ProductCategoryCarousel
-            categoryId={carouselData.categoryId}
-            categoryField={carouselData.categoryField}
-            hierarchy={carouselData.hierarchy}
-            itemsPerPage={carouselData.itemsPerPage}
-            ruleContext={carouselData.ruleContext}
-            sectionTitle={carouselData.sectionTitle}
-            vatText={carouselData.vatText}
-          />
-        )
-        : (<h2>Loading</h2>) }
-    </>
+    <ConditionalView condition={loaded === true}>
+      <ProductCategoryCarousel
+        categoryId={carouselData.categoryId}
+        categoryField={carouselData.categoryField}
+        hierarchy={carouselData.hierarchy}
+        itemsPerPage={carouselData.itemsPerPage}
+        ruleContext={carouselData.ruleContext}
+        sectionTitle={carouselData.sectionTitle}
+        vatText={carouselData.vatText}
+      />
+    </ConditionalView>
   );
 };
 
