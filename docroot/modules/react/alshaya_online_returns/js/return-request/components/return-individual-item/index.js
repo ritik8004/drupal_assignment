@@ -8,12 +8,19 @@ const ReturnIndividualItem = ({
 }) => {
   const eligibleClass = item.is_returnable ? 'return-eligible' : 'in-eligible';
   const bigTicketClass = item.is_big_ticket ? 'big-ticket-item' : '';
+
+  const {
+    url: imageUrl,
+    alt: imageAlt,
+    title: imageTitle,
+  } = item.image_data || {};
+
   return (
     <>
-      <ConditionalView condition={hasValue(item.image_data) && hasValue(item.image_data.url)}>
+      <ConditionalView condition={hasValue(imageUrl)}>
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass} ${bigTicketClass}`}>
-            <img src={`${item.image_data.url}`} alt={`${item.image_data.alt}`} title={`${item.image_data.title}`} />
+            <img src={`${imageUrl}`} alt={`${imageAlt}`} title={`${imageTitle}`} />
             <ConditionalView condition={item.is_big_ticket}>
               <div className="big-ticket-item-label">{Drupal.t('Big Ticket Item', {}, { context: 'online_returns' })}</div>
             </ConditionalView>
