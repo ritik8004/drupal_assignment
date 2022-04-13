@@ -37,7 +37,9 @@ class MagazinePdpLayout extends PdpLayoutBase {
       $variables['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
       $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
     }
-    $variables['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
+    else {
+      $variables['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
+    }
     $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
     $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
     $variables['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_default';
