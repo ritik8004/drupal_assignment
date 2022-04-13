@@ -737,6 +737,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'product.delivery_option_ed' => 'alshaya_rcs_product',
     'gallery.product.product_zoom' => 'alshaya_rcs_product',
     'gallery.product.product_labels' => 'alshaya_rcs_product',
+    'gallery.product.product_gallery_magazine' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_default_gallery' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_mobile_gallery' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_modal_gallery' => 'alshaya_rcs_product',
