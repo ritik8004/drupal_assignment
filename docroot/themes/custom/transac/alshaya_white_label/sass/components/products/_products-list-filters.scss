@@ -324,10 +324,8 @@ $all-filter-height-desktop: calc(100% - 5.3125rem - 8.25rem);
                 }
 
                 .facet-item__label {
-                  html[lang=ar] & {
-                    display: inline-block;
-                    direction: ltr;
-                  }
+                  display: inline-block;
+                  direction: ltr;
                 }
               }
             }

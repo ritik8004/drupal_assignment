@@ -244,10 +244,8 @@
         }
 
         .spc-cart-product-attribute-value {
-          html[lang=ar] & {
-            display: inline-block;
-            direction: ltr;
-          }
+          display: inline-block;
+          direction: ltr;
         }
       }
 

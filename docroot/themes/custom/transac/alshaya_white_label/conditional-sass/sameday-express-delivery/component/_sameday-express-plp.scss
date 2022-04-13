@@ -40,10 +40,8 @@
         }
 
         .facet-item__label {
-          html[lang=ar] & {
-            display: inline-block;
-            direction: ltr;
-          }
+          display: inline-block;
+          direction: ltr;
         }
       }
 
@@ -70,11 +68,7 @@
       .facet-item__value {
         display: flex;
         align-items: center;
-
-        html[lang=ar] & {
-          display: inline-block;
-          direction: ltr;
-        }
+        direction: ltr;
       }
 
       .facet-item__label {

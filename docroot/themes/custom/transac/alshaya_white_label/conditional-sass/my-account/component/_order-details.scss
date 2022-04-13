@@ -388,10 +388,8 @@
     }
 
     .attr-wrapper {
-      html[lang=ar] & {
-        display: inline-block;
-        direction: ltr;
-      }
+      display: inline-block;
+      direction: ltr;
     }
 
     .blend {
