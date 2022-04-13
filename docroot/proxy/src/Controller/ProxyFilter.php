@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\Config\SystemSettings;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Proxy\Filter\FilterInterface;
@@ -21,13 +22,21 @@ class ProxyFilter implements FilterInterface {
   protected $url;
 
   /**
+   * The System settings.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
+
+  /**
    * ProxyFilter constructor.
    *
    * @param string $url
    *   The url of the endpoint.
    */
-  public function __construct($url) {
+  public function __construct($url, SystemSettings $settings) {
     $this->url = $url;
+    $this->settings = $settings;
   }
 
   /**
@@ -36,6 +45,15 @@ class ProxyFilter implements FilterInterface {
    * @inheritdoc
    */
   public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next) {
+    // Get magento host from settings.
+    $magento_host = $this->settings->getSettings('alshaya_api.settings')['magento_host'];
+
+    // Check if url received by proxy has magento host,
+    // If url is not magento host then return response with 404 code.
+    if (!strstr($this->url, $magento_host)) {
+      return $response->withStatus(404, 'Page not found');
+    }
+
     // Collect arguments from query string.
     $query = $request->getQueryParams();
 
