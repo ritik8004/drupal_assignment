@@ -162,6 +162,9 @@ class OnlineReturnController extends ControllerBase {
       $this->languageManager->getCurrentLanguage()->getId(),
     );
 
+    // Adding address fields configuration to display user address details.
+    $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
+
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-online-return-request"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
@@ -199,11 +202,38 @@ class OnlineReturnController extends ControllerBase {
     }
 
     $orderDetails = $this->getOrderReturnDetails($user, $order_id);
+
+    // Get config for return confirmations page.
+    // This will include what's next section of the page.
+    $returnConfirmationConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
+
+    $confirmationStringsArray = [
+      0 => [
+        'title' => $returnConfirmationConfig->get('row_1_title'),
+        'description' => $returnConfirmationConfig->get('row_1_description'),
+        'icon_class' => $returnConfirmationConfig->get('row_1_icon_text'),
+        'hide_row' => $returnConfirmationConfig->get('row_1_hide_this_row'),
+      ],
+      1 => [
+        'title' => $returnConfirmationConfig->get('row_2_title'),
+        'description' => $returnConfirmationConfig->get('row_2_description'),
+        'icon_class' => $returnConfirmationConfig->get('row_2_icon_text'),
+        'hide_row' => $returnConfirmationConfig->get('row_2_hide_this_row'),
+      ],
+      2 => [
+        'title' => $returnConfirmationConfig->get('row_3_title'),
+        'description' => $returnConfirmationConfig->get('row_3_description'),
+        'icon_class' => $returnConfirmationConfig->get('row_3_icon_text'),
+        'hide_row' => $returnConfirmationConfig->get('row_3_hide_this_row'),
+      ],
+    ];
+
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-return-confirmation"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_confirmation';
     $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
+      'returnConfirmationConfig' => $confirmationStringsArray,
     ];
     return $build;
   }
@@ -257,7 +287,7 @@ class OnlineReturnController extends ControllerBase {
     }
 
     // Get display image for each product.
-    // Connverting image url to renderable drupal url.
+    // Converting image url to renderable drupal url.
     foreach ($orderDetails['#products'] as $key => $item) {
       if (!empty($item['image'])) {
         if ($item['image']['#theme'] == 'image_style') {
@@ -283,10 +313,6 @@ class OnlineReturnController extends ControllerBase {
         $orderDetails['#products'][$key]['is_big_ticket'] = $this->onlineReturnsHelper->isSkuBigTicket($sku);
       }
     }
-
-
-    // Adding address fields configuration to display user address details.
-    $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
 
     // Adding country label to display country along with address.
     $country_list = $this->addressCountryRepository->getList();

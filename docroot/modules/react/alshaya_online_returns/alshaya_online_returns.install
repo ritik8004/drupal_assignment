@@ -10,6 +10,7 @@
  *
  * Install new SKU field for Online Returns.
  * Add alshaya Online Returns translations.
+ * Add return confirmation configurations.
  */
 function alshaya_online_returns_install() {
   // Install new SKU fields for Online Returns.
@@ -25,4 +26,11 @@ function alshaya_online_returns_install() {
   if ($translations = _alshaya_online_returns_get_translations()) {
     alshaya_i18n_save_translations($translations);
   }
+
+  // Add return confirmation configurations.
+  $manager->updateConfigs(
+    ['alshaya_online_returns.return_confirmation'],
+    'alshaya_online_returns',
+    'install'
+  );
 }

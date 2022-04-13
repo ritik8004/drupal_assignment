@@ -1,0 +1,5 @@
+alshaya_online_returns.alshaya_return_confirmation_settings:
+  title: 'Alshaya Return Confirmation Configuration'
+  base_route_name: alshaya_online_returns.alshaya_return_confirmation_settings
+  names:
+    - alshaya_online_returns.return_confirmation

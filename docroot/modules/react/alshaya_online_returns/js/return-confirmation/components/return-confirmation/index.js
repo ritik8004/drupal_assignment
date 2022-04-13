@@ -3,6 +3,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getOrderDetailsForReturnConfirmation, getReturnIdFromUrl } from '../../../utilities/return_confirmation_util';
 import OrderDetailsButton from '../order-details-button';
 import ReturnSuccessMessage from '../return-success-message';
+import WhatsNextSection from '../whats-next-section';
 
 class ReturnConfirmation extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class ReturnConfirmation extends React.Component {
           orderId={orderDetails['#order'].orderId}
         />
         <ReturnSuccessMessage />
+        <WhatsNextSection />
       </div>
     );
   }

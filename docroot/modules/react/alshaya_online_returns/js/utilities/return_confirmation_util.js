@@ -12,6 +12,9 @@ function getOrderDetailsForReturnConfirmation() {
   return orderDetails;
 }
 
+/**
+ * Utility function to get return id for return confirmation page.
+ */
 function getReturnIdFromUrl() {
   const { search } = window.location;
   // todo Encrypting and decrypting of return id.
@@ -22,7 +25,20 @@ function getReturnIdFromUrl() {
   return null;
 }
 
+/**
+ * Utility function to get strings for what's next section.
+ */
+function getReturnConfirmationStrings() {
+  let returnConfirmationStrings = null;
+  if (hasValue(drupalSettings.returnInfo)
+    && hasValue(drupalSettings.returnInfo.returnConfirmationConfig)) {
+    returnConfirmationStrings = drupalSettings.returnInfo.returnConfirmationConfig;
+  }
+  return returnConfirmationStrings;
+}
+
 export {
   getReturnIdFromUrl,
   getOrderDetailsForReturnConfirmation,
+  getReturnConfirmationStrings,
 };
