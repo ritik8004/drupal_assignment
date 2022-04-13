@@ -68,7 +68,7 @@ product_category_carousel:
 
 product_category_carousel_rcs:
   js:
-    dist/productCategoryCarouselV2.js: {}
+    dist/ProductCategoryCarouselRcs.js: {}
   dependencies:
     - core/drupalSettings
 
