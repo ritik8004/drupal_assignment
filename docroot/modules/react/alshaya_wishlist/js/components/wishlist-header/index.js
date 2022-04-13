@@ -172,6 +172,7 @@ export default class WishlistHeader extends React.Component {
     }
     window.loadWishListFromBackend = true;
     getWishlistFromBackend().then((response) => {
+      let wishListItemCount = 0;
       if (hasValue(response.data.items)) {
         const wishListItems = {};
 
@@ -190,18 +191,17 @@ export default class WishlistHeader extends React.Component {
         addWishListInfoInStorage(wishListItems);
 
         // Get wishlist item count.
-        const wishListItemCount = Object.keys(wishListItems).length;
-
-        // Dispatch an event for other modules to know
-        // that wishlist data is available in storage.
-        const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', {
-          bubbles: true,
-          detail: {
-            wishListItemCount,
-          },
-        });
-        document.dispatchEvent(getWishlistFromBackendSuccess);
+        wishListItemCount = Object.keys(wishListItems).length;
       }
+      // Dispatch an event for other modules to know
+      // that wishlist data is available in storage.
+      const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', {
+        bubbles: true,
+        detail: {
+          wishListItemCount,
+        },
+      });
+      document.dispatchEvent(getWishlistFromBackendSuccess);
     });
   };
 
