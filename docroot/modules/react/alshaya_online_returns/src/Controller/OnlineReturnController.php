@@ -14,7 +14,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
 use Drupal\address\Repository\CountryRepository;
 
 /**
@@ -65,13 +64,6 @@ class OnlineReturnController extends ControllerBase {
   protected $languageManager;
 
   /**
-   * Egiftcard Helper service object.
-   *
-   * @var \Drupal\alshaya_egift_card\Helper\EgiftCardHelper
-   */
-  protected $egiftCardHelper;
-
-  /**
    * Address Country Repository service object.
    *
    * @var \Drupal\address\Repository\CountryRepository
@@ -93,8 +85,6 @@ class OnlineReturnController extends ControllerBase {
    *   Alshaya online returns helper.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\alshaya_egift_card\Helper\EgiftCardHelper $egiftCardHelper
-   *   The egift card helper service.
    * @param \Drupal\address\Repository\CountryRepository $address_country_repository
    *   Address Country Repository service object.
    */
@@ -104,7 +94,6 @@ class OnlineReturnController extends ControllerBase {
                               EntityTypeManagerInterface $entity_type_manager,
                               OnlineReturnsApiHelper $online_returns_api_helper,
                               LanguageManagerInterface $language_manager,
-                              EgiftCardHelper $egiftCardHelper,
                               CountryRepository $address_country_repository) {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
@@ -112,7 +101,6 @@ class OnlineReturnController extends ControllerBase {
     $this->entityTypeManager = $entity_type_manager;
     $this->onlineReturnsApiHelper = $online_returns_api_helper;
     $this->languageManager = $language_manager;
-    $this->egiftCardHelper = $egiftCardHelper;
     $this->addressCountryRepository = $address_country_repository;
   }
 
@@ -127,7 +115,6 @@ class OnlineReturnController extends ControllerBase {
       $container->get('entity_type.manager'),
       $container->get('alshaya_online_returns.online_returns_api_helper'),
       $container->get('language_manager'),
-      $container->get('alshaya_egift_card.egift_card_helper'),
       $container->get('address.country_repository'),
     );
   }
@@ -205,35 +192,24 @@ class OnlineReturnController extends ControllerBase {
 
     // Get config for return confirmations page.
     // This will include what's next section of the page.
-    $returnConfirmationConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
-
-    $confirmationStringsArray = [
-      0 => [
-        'title' => $returnConfirmationConfig->get('row_1_title'),
-        'description' => $returnConfirmationConfig->get('row_1_description'),
-        'icon_class' => $returnConfirmationConfig->get('row_1_icon_text'),
-        'hide_row' => $returnConfirmationConfig->get('row_1_hide_this_row'),
+    $returnConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
+    $confirmationStrings = [];
+    for ($i = 1; $i <= 3; $i++) {
+      array_push($confirmationStrings, [
+        'title' => $returnConfig->get('row_' . $i . '_title'),
+        'description' => $returnConfig->get('row_' . $i . '_description'),
+        'icon_class' => $returnConfig->get('row_' . $i . '_icon_text'),
+        'hide_row' => $returnConfig->get('row_' . $i . '_hide_this_row'),
       ],
-      1 => [
-        'title' => $returnConfirmationConfig->get('row_2_title'),
-        'description' => $returnConfirmationConfig->get('row_2_description'),
-        'icon_class' => $returnConfirmationConfig->get('row_2_icon_text'),
-        'hide_row' => $returnConfirmationConfig->get('row_2_hide_this_row'),
-      ],
-      2 => [
-        'title' => $returnConfirmationConfig->get('row_3_title'),
-        'description' => $returnConfirmationConfig->get('row_3_description'),
-        'icon_class' => $returnConfirmationConfig->get('row_3_icon_text'),
-        'hide_row' => $returnConfirmationConfig->get('row_3_hide_this_row'),
-      ],
-    ];
+      );
+    }
 
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-return-confirmation"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_confirmation';
     $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
-      'returnConfirmationConfig' => $confirmationStringsArray,
+      'returnConfirmationConfig' => $confirmationStrings,
     ];
     return $build;
   }
