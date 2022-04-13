@@ -1,0 +1,93 @@
+{{! @todo remove logs }}
+{{log this }}
+{{log entity }}
+<article
+  class="entity--type-node"
+  data-vmode="modal"
+  data-sku="{{ entity.sku }}"
+  gtm-type="gtm-product-link"
+  gtm-category="{{ entity.gtm_attributes.category }}"
+  gtm-container="not defined"
+  gtm-view-mode="modal"
+  gtm-cart-value=""
+  gtm-main-sku="{{ entity.sku }}"
+  gtm-name="{{ entity.name }}"
+  gtm-product-sku=""
+  gtm-product-sku-class-identifier="{{ entity.gtm_attributes.id }}"
+  gtm-sku-type=" {{ entity.type_id }}"
+  gtm-brand="{{ entity.gtm_attributes.brand }}"
+  gtm-dimension4="{{ entity.gtm_attributes.dimension4 }}"
+  gtm-price="{{ entity.gtm_attributes.price }}"
+  gtm-dimension3="{{ entity.gtm_attributes.dimension3 }}"
+  gtm-stock="">
+
+  <div class="acq-content-product-modal">
+    <div class="content__title_wrapper">
+      {{#if entity.brand_logo_data.url }}
+        <div><img loading="lazy" className="sub-brand-logo"
+                  title="{{ entity.brand_logo_data.title }}"
+                  alt="{{ entity.brand_logo_data.alt }}"
+                  src="{{ entity.brand_logo_data.url }}" />
+        </div>
+      {{/if}}
+
+      {{ title_prefix }}
+      {{#unless is_page }}
+        <h2 class="c-products__item__label">{{ entity.name }}</h2>
+      {{/unless}}
+      {{ title_suffix }}
+
+      <div class="price-block price-block-{{ entity.sku }}">
+        {{log price_details}}
+        {{{render 'product.block.price' price_details }}}
+      </div>
+
+      {{! @todo test this }}
+      {{#if content.postpay }}
+        {{! @todo attach_library('alshaya_white_label/postpay-pdp') }}
+        <div class="postpay {{ content.postpay_mode_class }}"> {{ postpay }} </div>
+      {{/if}}
+
+      {{! @todo test this }}
+      {{#if promotions }}
+        <div class="promotions">
+          {{{ promotions }}}
+        </div>
+      {{/if}}
+
+      {{! @todo test this }}
+      {{#if vat_text }}
+        <div class="vat-text">vat_text</div>
+      {{/if}}
+
+      <div class="content--item-code">
+        <span class="field__label">{{t 'Item Code' }}:</span>
+        <span class="field__value">{{ entity.sku }}</span>
+      </div>
+    </div>
+
+    {{! @todo this is not working }}
+    <div class="content__main {{ image_slider_position_pdp }}">
+      <div class="gallery-wrapper"></div>
+    </div>
+
+    <div class="content__sidebar">
+      {{! @todo block sizeVolume }}
+
+      <div class="basic-details-wrapper">
+        <div class="field--name-field-skus">{{{ add_to_cart }}}</div>
+        {{! @todo test this }}
+        {{#if quantity_limit_enabled }}
+          <div class="order-quantity-limit-message"></div>
+        {{/if}}
+      </div>
+
+      {{! @todo test this }}
+      {{#if sku_out_of_stock }}
+        <div class="out-of-stock {{ sku_out_of_stock }}"></div>
+      {{/if}}
+
+      <a class="full-prod-link" href="{{ entity.url_key }}">{{t "View Full Product Details" }}</a>
+    </div>
+  </div>
+</article>
