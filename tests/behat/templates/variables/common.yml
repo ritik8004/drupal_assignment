@@ -2,7 +2,7 @@ variables:
   url_login: '/user/login'
   url_register: '/user/register'
   spc_checkout_card: "4543474002249996"
-  spc_checkout_expiry: "03/22"
+  spc_checkout_expiry: "09/22"
   spc_checkout_cvv: "956"
   spc_Qpay_card: "4215375500883243"
   spc_Qpay_month: "6"
