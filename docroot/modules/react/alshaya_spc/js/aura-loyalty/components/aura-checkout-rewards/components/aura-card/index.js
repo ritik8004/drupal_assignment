@@ -42,42 +42,44 @@ export default class AuraLinkedCheckout extends React.Component {
     const activeClass = active ? 'active' : '';
 
     return (
-      <div className="redeem-aura-points">
-        <div className={`redeem-aura-points-header-container ${activeClass}`} onClick={() => this.changeRedeemAuraAccordionStatus()}>
-          <span>
-            { getStringMessage('redeem') }
-          </span>
-          <span className="join-aura"><AuraHeaderIcon /></span>
-          <span>{ getStringMessage('points') }</span>
-          <span className="accordion-icon" />
-        </div>
-        <div className={`redeem-aura-points-content ${activeClass}`}>
-          <div className="block-content">
-            <div className="current-available-points">
-              <span className="spc-aura-redeem-text">{ getStringMessage('checkout_you_have') }</span>
-              <span className="spc-aura-highlight">
-                <PointsString points={pointsInAccount} />
-                ,
-              </span>
-            </div>
-            <div className="points-expiring">
-              <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
-              <ConditionalView condition={expiringPoints !== 0}>
-                {/* TO DO- Below tooltip should be replaced once we have tooltip content. */}
-                <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
-              </ConditionalView>
-            </div>
+      <div>
+        <div className="redeem-aura-points">
+          <div className={`redeem-aura-points-header-container ${activeClass}`} onClick={() => this.changeRedeemAuraAccordionStatus()}>
+            <span>
+              { getStringMessage('redeem') }
+            </span>
+            <span className="join-aura"><AuraHeaderIcon /></span>
+            <span>{ getStringMessage('points') }</span>
+            <span className="accordion-icon" />
           </div>
-          {/* Registered User - Linked Card - Full Enrollment */}
-          <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
-            <AuraFormRedeemPoints
-              pointsInAccount={pointsInAccount}
-              cardNumber={cardNumber}
-              totals={totals}
-              paymentMethodInCart={paymentMethodInCart}
-              formActive={formActive}
-            />
-          </ConditionalView>
+          <div className={`redeem-aura-points-content ${activeClass}`}>
+            <div className="block-content">
+              <div className="current-available-points">
+                <span className="spc-aura-redeem-text">{ getStringMessage('checkout_you_have') }</span>
+                <span className="spc-aura-highlight">
+                  <PointsString points={pointsInAccount} />
+                  ,
+                </span>
+              </div>
+              <div className="points-expiring">
+                <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
+                <ConditionalView condition={expiringPoints !== 0}>
+                  {/* TO DO- Below tooltip should be replaced once we have tooltip content. */}
+                  <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
+                </ConditionalView>
+              </div>
+            </div>
+            {/* Registered User - Linked Card - Full Enrollment */}
+            <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
+              <AuraFormRedeemPoints
+                pointsInAccount={pointsInAccount}
+                cardNumber={cardNumber}
+                totals={totals}
+                paymentMethodInCart={paymentMethodInCart}
+                formActive={formActive}
+              />
+            </ConditionalView>
+          </div>
         </div>
         <div className="redeem-aura-footer">
           <span className="before-text">{ getStringMessage('checkout_you_will_earn') }</span>

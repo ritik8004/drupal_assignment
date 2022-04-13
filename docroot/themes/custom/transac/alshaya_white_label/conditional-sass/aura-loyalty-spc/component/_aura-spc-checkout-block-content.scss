@@ -10,8 +10,12 @@
 
 .spc-aura-checkout-rewards-block {
   &.in-active {
-    .spc-checkout-section-title {
+    .spc-checkout-section-title,
+    .redeem-aura-points-header-container,
+    .block-content,
+    .redeem-aura-footer {
       opacity: 0.2;
+      pointer-events: none;
     }
 
     .registered-user-linked,
@@ -360,6 +364,149 @@
   .spc-content {
     .spc-aura-checkout-rewards-block {
       padding-top: 0.4rem !important;
+    }
+  }
+}
+
+.spc-aura-checkout-rewards-block {
+  &.active,
+  &.in-active {
+    .redeem-aura-points {
+      margin-top: 1.5rem;
+      background: $aura-spc-checkout-block-bg;
+
+      .redeem-aura-points-header-container {
+        min-height: 3.25rem;
+        display: flex;
+        align-items: center;
+        padding-#{$left}: 1.5rem;
+        position: relative;
+        background: $aura-spc-checkout-block-bg;
+        line-height: 1.25rem;
+        font-size: 1rem;
+        letter-spacing: 0.05rem;
+
+        .join-aura {
+          position: relative;
+          top: 0.25rem;
+          margin: 0 0.3rem;
+
+          svg {
+            max-height: 1.813rem;
+            width: auto;
+          }
+        }
+
+        .accordion-icon {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          flex-grow: 1;
+
+          @include icon('chevrondown') {
+            font-size: 2rem;
+            position: absolute;
+            top: 50%;
+            #{$right}: 0.875rem;
+            transform: translateY(-50%);
+            transition: transform 0.125s ease-in-out;
+          }
+        }
+
+        &.active {
+          .accordion-icon {
+            &::before {
+              transform: rotate(180deg);
+              bottom: 0.625rem;
+            }
+          }
+        }
+      }
+
+      .redeem-aura-points-content {
+        display: none;
+
+        &.active {
+          display: block;
+          padding: 0.5rem 1.5rem 1.5rem;
+          background: $aura-spc-checkout-block-bg;
+
+          @include breakpoint($tablet) {
+            padding-top: 0;
+          }
+        }
+
+        .block-content {
+          background: $aura-spc-checkout-block-bg-gradient;
+          padding: 1.25rem;
+          font-family: $aura-regular;
+          line-height: 1.25rem;
+          font-size: 0.875rem;
+
+          html[lang=ar] & {
+            background: $aura-spc-checkout-block-bg-gradient-ar;
+          }
+
+          @include breakpoint($tablet) {
+            border-radius: 0.625rem;
+          }
+
+          .current-available-points {
+            .spc-aura-highlight {
+              margin: 0 0.15rem;
+            }
+          }
+
+          .points-expiring {
+            .spc-aura-points-expiry-item {
+              background: none;
+              padding: 0;
+              width: auto;
+              display: inline-block;
+
+              &::before {
+                content: '';
+              }
+
+              b {
+                color: $aura-spc-checkout-highlight;
+              }
+            }
+          }
+        }
+
+        .spc-aura-redeem-points-form-wrapper {
+          padding: 1.25rem 0 0;
+        }
+      }
+    }
+
+    .redeem-aura-footer {
+      color: $aura-spc-checkout-highlight;
+      font-family: $aura-bold;
+      font-size: 0.75rem;
+      line-height: 1.125rem;
+      margin-top: 0.5rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 3.5rem;
+        margin-#{$left}: 1rem;
+      }
+
+      &::before {
+        content: '!';
+        color: $aura-spc-checkout-block-bg;
+        background-color: $aura-spc-checkout-highlight;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        padding: 0.05rem 0.45rem;
+        margin-#{$right}: 0.25rem;
+      }
+
+      .points-earned-with-purchase {
+        margin: 0 0.2rem;
+      }
     }
   }
 }
