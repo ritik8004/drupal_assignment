@@ -250,6 +250,12 @@
         @include breakpoint($upto-desktop) {
           margin-top: 1.5rem;
         }
+
+        @include breakpoint($only-mobile) {
+          html[lang="ar"] & {
+            margin-top: 3.5rem;
+          }
+        }
       }
     }
 
@@ -273,7 +279,7 @@
         }
       }
 
-      header {
+      header.c-header {
         .block-cart-mini-block,
         .block-alshaya-react-mini-cart {
           width: auto;
