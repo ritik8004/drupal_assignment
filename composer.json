@@ -339,7 +339,7 @@
                 "Metatags' current language through the language manager doesn't work (Decoupled Drupal)": "https://www.drupal.org/files/issues/2022-02-04/metatag-3077442-10.patch"
             },
             "drupal/simple_oauth": {
-                "Avoid initialising subject in ResourceServer constructor": "https://www.drupal.org/files/issues/2022-02-04/simple_oauth-3091689-7.patch"
+                "Avoid initialising subject in ResourceServer constructor": "https://www.drupal.org/files/issues/2022-04-13/simple_oauth-avoid-initialising-subject-3091689-11.patch"
             },
             "drupal/config_rewrite": {
                 "Configuration Rewrite module conflicts with s3fs module": "https://www.drupal.org/files/issues/2021-07-20/3203786-4.patch"
