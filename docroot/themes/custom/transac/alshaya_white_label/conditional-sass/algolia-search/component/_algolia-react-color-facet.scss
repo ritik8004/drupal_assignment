@@ -38,6 +38,13 @@
               display: inline-block;
               margin-left: 0.5rem;
             }
+
+            .facet-item__label {
+              html[lang=ar] & {
+                display: inline-block;
+                direction: ltr;
+              }
+            }
           }
         }
       }

@@ -120,6 +120,10 @@
                 justify-content: center;
                 height: 2rem;
 
+                html[lang=ar] & {
+                  direction: ltr;
+                }
+
                 div {
                   display: inline;
                 }

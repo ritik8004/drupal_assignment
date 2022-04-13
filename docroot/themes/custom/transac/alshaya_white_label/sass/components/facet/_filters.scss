@@ -35,6 +35,13 @@
           color: $plp_facet_count_number;
           padding-#{$left}: 0.5rem;
         }
+
+        &.facet-item__label {
+          html[lang=ar] & {
+            display: inline-block;
+            direction: ltr;
+          }
+        }
       }
 
       label {
@@ -468,6 +475,13 @@
               .price-type__wrapper,
               .price {
                 display: inline !important;
+              }
+            }
+
+            .facet-item__label {
+              html[lang=ar] & {
+                display: inline-block;
+                direction: ltr;
               }
             }
           }

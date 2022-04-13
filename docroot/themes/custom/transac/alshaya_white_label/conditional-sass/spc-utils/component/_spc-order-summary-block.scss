@@ -242,6 +242,13 @@
           display: inline-block;
           margin-#{$right}: 0.1875rem;
         }
+
+        .spc-cart-product-attribute-value {
+          html[lang=ar] & {
+            display: inline-block;
+            direction: ltr;
+          }
+        }
       }
 
       .product-flag {
