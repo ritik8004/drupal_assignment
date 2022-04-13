@@ -63,8 +63,8 @@ product_category_carousel:
   js:
     dist/productCategoryCarousel.js: {}
   dependencies:
-    # Additional dependencies will be added through library alter hook.
     - core/drupalSettings
+    - alshaya_acm_product_category/product_carousel_utility
 
 product_category_carousel_rcs:
   js:
