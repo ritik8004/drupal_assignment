@@ -72,6 +72,11 @@ window.commerceBackend.updateGallery = function (product, layout, gallery, sku, 
     jQuery(product).find('#product-zoom-container').replaceWith(gallery);
   }
 
+  // COS classic gallery for magazine layout.
+  if (layout === 'pdp-magazine' && drupalSettings.pdp_gallery_type == 'classic') {
+    layout = 'pdp';
+  }
+
   if (layout === 'pdp-magazine') {
     // Set timeout so that original behavior attachment is not affected.
     setTimeout(function () {
