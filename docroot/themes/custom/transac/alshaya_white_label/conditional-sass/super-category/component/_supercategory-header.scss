@@ -49,7 +49,7 @@
         height: auto;
 
         html[lang="ar"] & {
-          height: auto;
+          height: auto !important;
         }
       }
 
@@ -262,6 +262,10 @@
       height: auto;
     }
 
+    @include breakpoint($only-tablet) {
+      height: 0;
+    }
+
     .c-header__region .block-system-branding-block {
       .site-brand-home {
         @include breakpoint($upto-desktop) {
@@ -327,6 +331,12 @@
             margin-top: 0;
             margin-#{$left}: 0;
           }
+
+          .quantity {
+            @include breakpoint($only-tablet) {
+              top: 0.188rem;
+            }
+          }
         }
       }
     }
@@ -362,6 +372,12 @@
   }
 
   .block-alshaya-algolia-react-autocomplete {
+    html[lang="ar"] & {
+      @include breakpoint($only-mobile) {
+        top: 6.725rem;
+      }
+    }
+
     #alshaya-algolia-autocomplete {
       @include breakpoint($desktop) {
         width: 18.75rem;
