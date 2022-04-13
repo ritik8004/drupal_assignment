@@ -2,8 +2,6 @@ import React from 'react';
 import Collapsible from 'react-collapsible';
 import ReturnItemDetails from '../return-item-details';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
-import { createReturnRequest } from '../../../utilities/return_api_helper';
-import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getDefaultResolutionId } from '../../../utilities/return_request_util';
 
 class ReturnItemsListing extends React.Component {
@@ -11,7 +9,6 @@ class ReturnItemsListing extends React.Component {
     super(props);
     this.state = {
       btnDisabled: true,
-      itemsSelected: [],
       open: true,
     };
     this.handleSelectedReason = this.handleSelectedReason.bind(this);
@@ -30,7 +27,7 @@ class ReturnItemsListing extends React.Component {
    */
   handleSelectedReason = (selectedReason, sku) => {
     if (selectedReason) {
-      const { itemsSelected } = this.state;
+      const { handleSelectedItems, itemsSelected } = this.props;
 
       const items = itemsSelected.map((item) => {
         const data = { ...item };
@@ -42,8 +39,9 @@ class ReturnItemsListing extends React.Component {
 
       this.setState({
         btnDisabled: selectedReason.value === 0,
-        itemsSelected: items,
       });
+
+      handleSelectedItems(items);
     }
   }
 
@@ -52,7 +50,7 @@ class ReturnItemsListing extends React.Component {
    */
   handleSelectedQuantity = (selectedQuantity, sku) => {
     if (selectedQuantity) {
-      const { itemsSelected } = this.state;
+      const { handleSelectedItems, itemsSelected } = this.props;
 
       const items = itemsSelected.map((item) => {
         const data = { ...item };
@@ -62,9 +60,7 @@ class ReturnItemsListing extends React.Component {
         return data;
       });
 
-      this.setState({
-        itemsSelected: items,
-      });
+      handleSelectedItems(items);
     }
   }
 
@@ -73,6 +69,8 @@ class ReturnItemsListing extends React.Component {
    * as per item selection.
    */
   processSelectedItems = (checked, item) => {
+    const { handleSelectedItems, itemsSelected } = this.props;
+
     if (checked) {
       const itemDetails = item;
 
@@ -80,14 +78,12 @@ class ReturnItemsListing extends React.Component {
       itemDetails.qty_requested = 1;
       itemDetails.resolution = getDefaultResolutionId();
 
-      this.setState((prevState) => ({
-        itemsSelected: [...prevState.itemsSelected, itemDetails],
+      this.setState({
         btnDisabled: true,
-      }));
+      });
+      handleSelectedItems([...itemsSelected, itemDetails]);
     } else {
-      this.setState((prevState) => ({
-        itemsSelected: prevState.itemsSelected.filter((product) => product.sku !== item.sku),
-      }));
+      handleSelectedItems(itemsSelected.filter((product) => product.sku !== item.sku));
     }
   }
 
@@ -110,20 +106,14 @@ class ReturnItemsListing extends React.Component {
   };
 
   /**
-   * Process return request submit.
+   * Process return request continue.
    */
-  handleReturnSubmit = () => {
-    const { btnDisabled, open } = this.state;
-    const { handleReturnRequestSubmit } = this.props;
+  handleReturnContinue = () => {
+    const { open } = this.state;
 
     // When user clicks continue button, disable the item
     // details accordion and enable refund accordion.
     this.updateRefundAccordion(open);
-
-    if (!btnDisabled) {
-      handleReturnRequestSubmit();
-      this.createReturnRequest();
-    }
   }
 
   /**
@@ -137,30 +127,9 @@ class ReturnItemsListing extends React.Component {
     dispatchCustomEvent('updateRefundAccordionState', accordionState);
   }
 
-  /**
-   * Create return request.
-   */
-  createReturnRequest = async () => {
-    const { itemsSelected } = this.state;
-    const returnRequest = await createReturnRequest(itemsSelected);
-
-    if (hasValue(returnRequest.error)) {
-      // @todo: Handle error display.
-      return;
-    }
-
-    if (hasValue(returnRequest) && hasValue(returnRequest.increment_id)) {
-      Drupal.addItemInLocalStorage('online_return_id', returnRequest.increment_id);
-    }
-
-    // On success, redirect to return confirmation page.
-    // @todo: Update return confirmation URL.
-    window.location.href = Drupal.url('/');
-  }
-
   render() {
-    const { btnDisabled, itemsSelected, open } = this.state;
-    const { products } = this.props;
+    const { btnDisabled, open } = this.state;
+    const { products, itemsSelected } = this.props;
     // If no item is selected, button remains disabled.
     const btnState = !!((itemsSelected.length === 0 || btnDisabled));
     return (
@@ -184,7 +153,7 @@ class ReturnItemsListing extends React.Component {
             <button
               type="button"
               disabled={btnState}
-              onClick={this.handleReturnSubmit}
+              onClick={this.handleReturnContinue}
             >
               <span className="continue-button-label">{Drupal.t('Continue', {}, { context: 'online_returns' })}</span>
             </button>

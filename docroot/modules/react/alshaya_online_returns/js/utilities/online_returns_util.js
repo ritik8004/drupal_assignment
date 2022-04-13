@@ -102,6 +102,14 @@ function isReturnWindowClosed(date) {
   return (new Date(date) < new Date());
 }
 
+/**
+ * Utility function to get return confirmation url.
+ */
+function getReturnConfirmationUrl(orderId) {
+  const url = Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}/return-confirmation`);
+  return url;
+}
+
 export {
   isReturnEligible,
   getReturnExpiration,
@@ -112,4 +120,5 @@ export {
   getReturnWindowClosedMessage,
   getReturnWindowOpenMessage,
   isReturnWindowClosed,
+  getReturnConfirmationUrl,
 };

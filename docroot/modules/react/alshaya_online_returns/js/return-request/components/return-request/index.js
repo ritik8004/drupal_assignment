@@ -4,12 +4,17 @@ import ReturnItemsListing from '../return-items-listing';
 import { getOrderDetailsForReturnRequest } from '../../../utilities/return_request_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ReturnRefundDetails from '../return-refund-details';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import ErrorMessage from '../../../../../js/utilities/components/error-message';
+import smoothScrollTo from '../../../../../js/utilities/components/smooth-scroll';
 
 class ReturnRequest extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isReturnRequestSubmit: false,
+      itemsSelected: [],
+      errorMessage: '',
     };
   }
 
@@ -26,6 +31,13 @@ class ReturnRequest extends React.Component {
   handleReturnRequestSubmit = () => {
     this.setState({
       isReturnRequestSubmit: true,
+      errorMessage: '',
+    });
+  }
+
+  handleSelectedItems = (itemsSelected) => {
+    this.setState({
+      itemsSelected,
     });
   }
 
@@ -47,7 +59,17 @@ class ReturnRequest extends React.Component {
     return confirmationMessage;
   };
 
+  handleErrorMessage = (errorMessage) => {
+    if (hasValue(errorMessage)) {
+      this.setState({ errorMessage });
+      if (document.getElementsByClassName('return-requests-wrapper').length > 0) {
+        smoothScrollTo('.return-requests-wrapper');
+      }
+    }
+  };
+
   render() {
+    const { itemsSelected, errorMessage } = this.state;
     const orderDetails = getOrderDetailsForReturnRequest();
     if (!hasValue(orderDetails)) {
       return null;
@@ -55,15 +77,22 @@ class ReturnRequest extends React.Component {
 
     return (
       <div className="return-requests-wrapper">
+        <ConditionalView condition={hasValue(errorMessage)}>
+          <ErrorMessage message={errorMessage} />
+        </ConditionalView>
         <ReturnOrderSummary
           orderDetails={orderDetails}
         />
         <ReturnItemsListing
           products={orderDetails['#products']}
-          handleReturnRequestSubmit={this.handleReturnRequestSubmit}
+          handleSelectedItems={this.handleSelectedItems}
+          itemsSelected={itemsSelected}
         />
         <ReturnRefundDetails
           orderDetails={orderDetails}
+          handleReturnRequestSubmit={this.handleReturnRequestSubmit}
+          itemsSelected={itemsSelected}
+          handleErrorMessage={this.handleErrorMessage}
         />
       </div>
     );
