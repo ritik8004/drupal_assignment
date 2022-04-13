@@ -784,6 +784,16 @@
         line-height: 1.2858;
         margin: 1rem 0;
       }
+
+      a {
+        color: $white-five;
+
+        &:hover,
+        &:focus,
+        &:active {
+          color: $white-five;
+        }
+      }
     }
 
     .order-print-icon {
