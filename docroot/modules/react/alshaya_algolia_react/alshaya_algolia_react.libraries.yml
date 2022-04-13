@@ -66,7 +66,7 @@ product_category_carousel:
     # Additional dependencies will be added through library alter hook.
     - core/drupalSettings
 
-product_category_carousel_v2:
+product_category_carousel_rcs:
   js:
     dist/productCategoryCarouselV2.js: {}
   dependencies:

@@ -85,7 +85,7 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
         ],
         'library' => [
           'alshaya_white_label/product-category-accordion',
-          'alshaya_algolia_react/product_category_carousel_v2',
+          'alshaya_algolia_react/product_category_carousel_rcs',
           'alshaya_white_label/product_carousel',
         ],
       ],
@@ -136,7 +136,7 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOrigina
           'hp_product_carousel_items' => $settings->get('product_carousel_items_settings.hp_product_carousel_items_number'),
         ],
         'library' => [
-          'alshaya_algolia_react/product_category_carousel_v2',
+          'alshaya_algolia_react/product_category_carousel_rcs',
           'alshaya_white_label/product_carousel',
         ],
       ],
