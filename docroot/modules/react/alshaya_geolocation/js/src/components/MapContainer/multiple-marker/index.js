@@ -77,7 +77,10 @@ export class MultipeMarker extends React.Component {
             onClose={this.onInfoWindowClose}
             visible={showingInfoWindow}
           >
-            <InfoPopUp selectedPlace={selectedPlace} />
+            <InfoPopUp
+              selectedPlace={selectedPlace}
+              storeHours={selectedPlace.store_hours}
+            />
           </InfoWindow>
         )}
       </Map>
