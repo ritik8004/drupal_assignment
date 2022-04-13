@@ -2417,28 +2417,27 @@ class SkuManager {
           'option_id' => $raw_options['option_id'] ?? '' ,
           'option_value' => $raw_options['option_value'] ?? '',
         ];
-
-        // If attribute code is a sku field then skip to next attribute.
-        continue;
       }
-      // If attribute code is not sku field eg: subset_name, then it's a
-      // configurable form setting hence get raw attributes data for wishlist
-      // product options.
-      $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
-      // Skip if raw options does not have id or value.
-      if (empty($raw_options['option_id']) || empty($raw_options['option_value'])) {
-        continue;
+      else {
+        // If attribute code is not sku field eg: subset_name, then it's a
+        // configurable form setting hence get raw attributes data for wishlist
+        // product options.
+        $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
+        // Skip if raw options does not have id or value.
+        if (empty($raw_options['option_id']) || empty($raw_options['option_value'])) {
+          continue;
+        }
+        // Keep label and value null as these attributes eg: subset_name
+        // should not be shown on cart product attributes and used only for
+        // wish-list selected variant.
+        $configurableFieldValues[$code] = [
+          'attribute_id' => $code,
+          'label' => NULL,
+          'value' => NULL,
+          'option_id' => $raw_options['option_id'] ?? '' ,
+          'option_value' => $raw_options['option_value'] ?? '',
+        ];
       }
-      // Keep label and value null as these attributes eg: subset_name
-      // should not be shown on cart product attributes and used only for
-      // wish-list selected variant.
-      $configurableFieldValues[$code] = [
-        'attribute_id' => $code,
-        'label' => NULL,
-        'value' => NULL,
-        'option_id' => $raw_options['option_id'] ?? '' ,
-        'option_value' => $raw_options['option_value'] ?? '',
-      ];
     }
 
     return $configurableFieldValues;
