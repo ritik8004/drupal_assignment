@@ -374,7 +374,8 @@ class SkuAssetManager {
       return $file;
     }
 
-    $url = implode('/', [
+    // Use URL from response if available.
+    $url = $data['url'] ?? implode('/', [
       trim($base_url, '/'),
       trim($pims_directory, '/'),
       trim($data['path'], '/'),
