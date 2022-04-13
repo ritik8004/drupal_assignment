@@ -295,7 +295,6 @@
         sku: variantInfo.sku,
         parent_sku: variantInfo.parent_sku,
         configurableOptions: getVariantConfigurableOptions(product, variant),
-        // @todo Fetch layout dynamically.
         layout: drupalSettings.alshayaRcs.pdpLayout,
         gallery: '',
         stock: {
@@ -358,6 +357,7 @@
       sku: product.sku,
       type: product.type_id,
       gtm_attributes: product.gtm_attributes,
+      layout: drupalSettings.alshayaRcs.pdpLayout,
       gallery: null,
       identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
       cart_image: window.commerceBackend.getCartImage(product),
