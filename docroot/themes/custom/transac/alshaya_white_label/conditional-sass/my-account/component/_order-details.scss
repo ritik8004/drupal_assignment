@@ -281,33 +281,6 @@
         background: $order_detail_delivery_details_row_td_blend;
       }
     }
-
-    .above-mobile,
-    .mobile-only {
-      padding: 0.875rem 2.8125rem;
-      font-size: 0.875rem;
-      color: $_online-booking-delivery-detail;
-      font-weight: normal;
-
-      @include breakpoint($only-mobile) {
-        padding-#{$right}: 1rem;
-      }
-
-      .icon-ic_infomation {
-        font-size: 1.5rem;
-        margin-#{$left}: -0.125rem;
-
-        @include breakpoint($only-mobile) {
-          margin-#{$left}: 0.3125rem;
-          margin-#{$right}: 1rem;
-
-          html[lang=ar] & {
-            margin-#{$right}: 1rem;
-            margin-#{$left}: 0.1875rem;
-          }
-        }
-      }
-    }
   }
 
   .delivery-details-row,
@@ -764,6 +737,10 @@
         padding-#{$left}: 3.125rem;
       }
 
+      .online-booking-details {
+        color: $white-five;
+      }
+
       .icon-ic_infomation {
         font-size: 1.5rem;
         vertical-align: middle;
@@ -797,7 +774,7 @@
     }
 
     .customer-care-info {
-      color: $white-five;
+      color: inherit !important;
       font-size: 0.875rem;
       font-weight: 500;
       line-height: 1.71;
@@ -813,6 +790,36 @@
       #{$left}: 0 !important;
       margin-#{$left}: -1.75rem !important;
       position: relative !important;
+    }
+
+    & + .delivery-details-row {
+      .above-mobile,
+      .mobile-only {
+        padding: 0.875rem 2.8125rem;
+        font-size: 0.875rem;
+        color: $_online-booking-delivery-detail;
+        font-weight: normal;
+
+        @include breakpoint($only-mobile) {
+          padding-#{$right}: 1rem;
+          padding-#{$left}: 3.125rem;
+        }
+
+        .icon-ic_infomation {
+          font-size: 1.5rem;
+          margin-#{$left}: -0.125rem;
+
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: 0;
+            margin-#{$right}: 1rem;
+
+            html[lang=ar] & {
+              margin-#{$right}: 1.0625rem;
+              margin-#{$left}: -0.125rem;
+            }
+          }
+        }
+      }
     }
   }
 }
