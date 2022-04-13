@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_rcs_listing\Service;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
-use Drupal\alshaya_acm_product_category\Service\ProductCategoryCarouselHelper as ProductCategoryCarouselHelperOriginal;
+use Drupal\alshaya_acm_product_category\Service\ProductCategoryCarouselHelper as ProductCategoryCarouselV2;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -14,7 +14,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 /**
  * Product category carousel helper service.
  */
-class ProductCategoryCarouselHelper extends ProductCategoryCarouselHelperOriginal {
+class ProductCategoryCarouselHelper extends ProductCategoryCarouselV2 {
 
   /**
    * Constructs object of ProductCategoryCarouselHelper.
