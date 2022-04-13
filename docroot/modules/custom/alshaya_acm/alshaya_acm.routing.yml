@@ -34,3 +34,13 @@ alshaya_acm.get_acm_cart:
     no_cache: TRUE
   requirements:
     _middleware_request_check: 'TRUE'
+
+# Fix issue with Sync broken post D9 upgrade.
+# @todo Remove this route after the csrftoken url fix in ACM.
+alshaya_acm.csrftoken:
+  path: '/rest/session/token'
+  defaults:
+    _controller: '\Drupal\system\Controller\CsrfTokenController::csrfToken'
+  requirements:
+    # Needs to be accessed by an anonymous user.
+    _access: 'TRUE'
