@@ -36,11 +36,10 @@ function alshaya_cos_transac_rcs_uninstall() {
   ]);
 }
 
-
 /**
  * Implements hook_update_N().
  *
- * Add.
+ * Add set_is_array config to materials attribute.
  */
 function alshaya_cos_transac_rcs_update_9001() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
