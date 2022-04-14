@@ -35,6 +35,11 @@
           color: $plp_facet_count_number;
           padding-#{$left}: 0.5rem;
         }
+
+        &.facet-item__label {
+          display: inline-block;
+          direction: ltr;
+        }
       }
 
       label {
@@ -469,6 +474,11 @@
               .price {
                 display: inline !important;
               }
+            }
+
+            .facet-item__label {
+              display: inline-block;
+              direction: ltr;
             }
           }
 
