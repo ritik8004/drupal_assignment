@@ -688,8 +688,8 @@
     // Product data, containing stock information, is already present in local
     // storage before this function is invoked. So no need to call a separate
     // API to fetch stock status for V2.
-    const product = await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
-    const stock = staticDataStore.cartItemsStock[sku];
+    var product = await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
+    var stock = staticDataStore.cartItemsStock[sku];
 
     return {
       stock: stock.qty,
