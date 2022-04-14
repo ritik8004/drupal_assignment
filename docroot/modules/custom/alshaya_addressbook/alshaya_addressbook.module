@@ -705,7 +705,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     return;
   }
 
-  $view_mode = isset($variables['elements']['#view_mode']) ? $variables['elements']['#view_mode'] : 'default';
+  $view_mode = $variables['elements']['#view_mode'] ?? 'default';
 
   $values = $profile->get('field_address')->getValue();
 

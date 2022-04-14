@@ -32,7 +32,8 @@ class ProxyController {
     $request = ServerRequestFactory::fromGlobals();
 
     // Create a guzzle client.
-    $guzzle = new Client();
+    // Since proxy is used only on non-prod disabling SSL check.
+    $guzzle = new Client(['verify' => false ]);
 
     // Create the proxy instance.
     $proxy = new Proxy(new GuzzleAdapter($guzzle));

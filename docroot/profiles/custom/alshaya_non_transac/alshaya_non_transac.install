@@ -11,6 +11,17 @@ use Drupal\user\UserInterface;
 /**
  * Implements hook_update_N().
  *
+ * Installs jquery_ui_accordion module if it is not enabled.
+ */
+function alshaya_non_transac_update_8107() {
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_accordion'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_accordion']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Delete view display configs for paragraphs whose view mode have been deleted.
  */
 function alshaya_non_transac_update_8106() {
@@ -42,7 +53,7 @@ function alshaya_non_transac_update_8105() {
  */
 function alshaya_non_transac_update_8104() {
   if (\Drupal::service('theme_handler')->themeExists('whitelabel_non_transac')) {
-    \Drupal::service('theme_handler')->uninstall(['whitelabel_non_transac'], TRUE);
+    \Drupal::service('theme_installer')->uninstall(['whitelabel_non_transac'], TRUE);
   }
 }
 
@@ -137,7 +148,7 @@ function alshaya_non_transac_install() {
     \Drupal::service('module_installer')->install(['acquia_connector']);
   }
   // Set whitelabel as the default theme.
-  \Drupal::service('theme_handler')->setDefault('whitelabel');
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'whitelabel')->save();
 
   // Set registration to administrator only.
   $config = \Drupal::configFactory()->getEditable('user.settings');

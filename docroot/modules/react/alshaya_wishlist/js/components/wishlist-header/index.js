@@ -91,12 +91,27 @@ export default class WishlistHeader extends React.Component {
         // wishlist with api call. Once added successfully, we need to
         // load the latest wishlist information from backend as well.
         if (itemData.length > 0) {
+          // Wishlist header component is placed in two different blocks header and
+          // sticky header. Header component calls merge items and
+          // loadWishlistFromBackend. To stop sticky header again calling
+          // loadWishlistFromBackend we set the flag here. This is unset after merge
+          // items call is ended.
+          window.loadWishListFromBackend = true;
           addRemoveWishlistItemsInBackend(
             itemData,
             'mergeWishlistItems',
           ).then((response) => {
             if (typeof response.data.status !== 'undefined'
               && response.data.status) {
+              // Wishlist header component is called in two different places,
+              // header and sticky header. The header component calls
+              // add remove wish list items to merge guest wishlist products
+              // and loadWishlistFromBackend. Before merging items,
+              // sticky header calls loadWishlistFromBackend in below else
+              // condition. Hence the flag is set to stop sticky header from
+              // loading wishlist items before merge. Here we override flag as
+              // items should be refreshed after merged from guest list.
+              window.loadWishListFromBackend = false;
               this.loadWishlistFromBackend();
             }
           });
@@ -157,6 +172,7 @@ export default class WishlistHeader extends React.Component {
     }
     window.loadWishListFromBackend = true;
     getWishlistFromBackend().then((response) => {
+      let wishListItemCount = 0;
       if (hasValue(response.data.items)) {
         const wishListItems = {};
 
@@ -175,18 +191,17 @@ export default class WishlistHeader extends React.Component {
         addWishListInfoInStorage(wishListItems);
 
         // Get wishlist item count.
-        const wishListItemCount = Object.keys(wishListItems).length;
-
-        // Dispatch an event for other modules to know
-        // that wishlist data is available in storage.
-        const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', {
-          bubbles: true,
-          detail: {
-            wishListItemCount,
-          },
-        });
-        document.dispatchEvent(getWishlistFromBackendSuccess);
+        wishListItemCount = Object.keys(wishListItems).length;
       }
+      // Dispatch an event for other modules to know
+      // that wishlist data is available in storage.
+      const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', {
+        bubbles: true,
+        detail: {
+          wishListItemCount,
+        },
+      });
+      document.dispatchEvent(getWishlistFromBackendSuccess);
     });
   };
 

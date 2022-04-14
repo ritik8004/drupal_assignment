@@ -74,9 +74,6 @@
    *
    * @param {string} storageKey
    *  Local storage key to remove associated data.
-   *
-   * @returns {boolean}
-   *  true/false based on the action performed.
    */
   Drupal.removeItemFromLocalStorage = function (storageKey) {
     localStorage.removeItem(storageKey)
@@ -97,17 +94,27 @@
   Drupal.getItemFromLocalStorage = function (storageKey) {
     // Return is item not found in the storage with the provided key.
     let storageItem = localStorage.getItem(storageKey);
-    if (!storageItem) {
-      return null;
-    }
 
     try {
       // If item is available parse the info to JSON object.
       storageItem = JSON.parse(storageItem);
     }
     catch (error) {
-      // If JSON parse failed we return string.
-      return storageItem;
+      // Return strings as is.
+      if (typeof storageItem === 'string') {
+        return storageItem;
+      }
+
+      // Unknown reason.
+      Drupal.alshayaLogger('warning', 'Drupal.getItemFromLocalStorage failed to fetch the data for @key.', {
+        '@key': storageKey,
+      });
+
+      return null;
+    }
+
+    if (storageItem == null) {
+      return null;
     }
 
     // Check if the storage items data isn't expired. For that,

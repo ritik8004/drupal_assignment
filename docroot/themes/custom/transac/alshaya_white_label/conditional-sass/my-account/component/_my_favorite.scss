@@ -66,14 +66,15 @@
         display: flex;
         align-items: center;
         padding-top: 0;
+        justify-content: space-between;
       }
 
       .back-link {
-        min-width: 9.375rem;
+        width: auto;
 
         &::before {
           @include breakpoint($only-mobile) {
-            top: 40%;
+            top: 0;
           }
         }
       }
@@ -86,6 +87,7 @@
           @include breakpoint($only-mobile) {
             padding-bottom: 0;
             margin-bottom: 0;
+            border-bottom: none;
           }
         }
       }
@@ -96,18 +98,6 @@
           position: absolute;
           top: 2.5rem;
           z-index: 10;
-        }
-
-        button {
-          @extend %button-wide;
-
-          @include breakpoint($only-mobile) {
-            width: 100%;
-          }
-
-          .icon {
-            display: none;
-          }
         }
       }
     }

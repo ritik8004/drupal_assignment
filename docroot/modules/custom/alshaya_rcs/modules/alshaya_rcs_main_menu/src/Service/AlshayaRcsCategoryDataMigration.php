@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -52,7 +52,7 @@ class AlshayaRcsCategoryDataMigration {
   /**
    * Alias manager service.
    *
-   * @var \Drupal\Core\Path\AliasManagerInterface
+   * @var \Drupal\path_alias\AliasManagerInterface
    */
   protected $aliasManager;
 
@@ -67,7 +67,7 @@ class AlshayaRcsCategoryDataMigration {
    *   The language manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection manager.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
@@ -199,6 +199,7 @@ class AlshayaRcsCategoryDataMigration {
     }
 
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $path_alias_storage = \Drupal::entityTypeManager()->getStorage('path_alias');
     $language_manager = \Drupal::service('language_manager');
     $langcode = $language_manager->getCurrentLanguage()->getId();
     foreach ($terms as $term) {
@@ -218,7 +219,11 @@ class AlshayaRcsCategoryDataMigration {
             $rcs_term->set('parent', $pid);
           }
         }
-
+        // Delete aliases for acq product category so there is no conflict.
+        $aliases = $path_alias_storage->loadByProperties([
+          'path' => '/taxonomy/term/' . $term->tid,
+        ]);
+        $path_alias_storage->delete($aliases);
         $rcs_term->save();
         // Save term mapping to get rcs parent terms.
         $context['results']['acq_term_mapping'][$term->tid] = $rcs_term->id();
@@ -244,8 +249,8 @@ class AlshayaRcsCategoryDataMigration {
    *   A list of all the operations that had not been completed by batch API.
    */
   public static function batchFinished($success, array $results, array $operations) {
-    $logger = \Drupal::logger('alshaya_rcs_category');
     if ($success) {
+      $logger = \Drupal::logger('alshaya_rcs_category');
       // Delete product category terms that have been migrated.
       $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
       foreach (array_chunk($results['delete_acq_terms'], $results['batch_size']) as $acq_delete_terms) {
@@ -286,6 +291,13 @@ class AlshayaRcsCategoryDataMigration {
     if ($pid) {
       $rcs_parent_term->set('parent', $pid);
     }
+
+    // Delete aliases for acq product category so there is no conflict.
+    $path_alias_storage = \Drupal::entityTypeManager()->getStorage('path_alias');
+    $aliases = $path_alias_storage->loadByProperties([
+      'path' => '/taxonomy/term/' . $tid,
+    ]);
+    $path_alias_storage->delete($aliases);
     $rcs_parent_term->save();
     // Save parent term in mapping.
     $acq_term_mapping[$tid] = $rcs_parent_term->id();
@@ -425,7 +437,7 @@ class AlshayaRcsCategoryDataMigration {
     }
 
     // Add category_slug field value from the old term path alias.
-    $term_slug = $alias_manager->getAliasByPath('/taxonomy/term/' . $acq_term->tid);
+    $term_slug = $alias_manager->getAliasByPath('/taxonomy/term/' . $acq_term_data->id());
     $term_slug = ltrim($term_slug, '/');
     $rcs_term->get('field_category_slug')->setValue($term_slug);
   }

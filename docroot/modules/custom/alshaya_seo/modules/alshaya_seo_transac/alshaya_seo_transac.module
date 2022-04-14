@@ -711,6 +711,15 @@ function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $s
 }
 
 /**
+ * Implements hook_alshaya_acm_product_gift_product_data_alter().
+ */
+function alshaya_seo_transac_alshaya_acm_product_gift_product_data_alter(SKU $sku, array &$data, $type) {
+  $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+  $attributes = $gtmManager->fetchGiftGtmAttributes('full', $sku);
+  $data['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
+}
+
+/**
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_seo_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
@@ -794,19 +803,14 @@ function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter
 function alshaya_seo_transac_block_view_alter(array &$build, BlockPluginInterface $block) {
   if ($block->getPluginId() == 'alshaya_algolia_react_plp'
     || $block->getPluginId() == 'alshaya_algolia_listing_v2') {
-    $build['#pre_render'][] = '_alshaya_seo_transac_alshaya_algolia_react_plp_prerender';
+    $build['#pre_render'][] = function (array $build) {
+      if (!_alshaya_seo_process_gtm()) {
+        return $build;
+      }
+      $build['content']['#attached']['library'][] = 'alshaya_seo_transac/gtm_algolia_plp';
+      return $build;
+    };
   }
-}
-
-/**
- * Pre_render callback for 'alshaya_algolia_react_plp' to attach library.
- */
-function _alshaya_seo_transac_alshaya_algolia_react_plp_prerender(array $build) {
-  if (!_alshaya_seo_process_gtm()) {
-    return $build;
-  }
-  $build['content']['#attached']['library'][] = 'alshaya_seo_transac/gtm_algolia_plp';
-  return $build;
 }
 
 /**
@@ -836,5 +840,10 @@ function _alshaya_seo_transac_datalayer_user_id($uid) {
  * Implements hook_alshaya_mobile_app_skus_product_list_data_alter().
  */
 function alshaya_seo_transac_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
-  alshaya_seo_transac_alshaya_acm_product_light_product_data_alter($sku, $data, 'full');
+  if (\Drupal::service('alshaya_acm_product.skumanager')->isSkuFreeGift($sku)) {
+    alshaya_seo_transac_alshaya_acm_product_gift_product_data_alter($sku, $data, 'full');
+  }
+  else {
+    alshaya_seo_transac_alshaya_acm_product_light_product_data_alter($sku, $data, 'full');
+  }
 }

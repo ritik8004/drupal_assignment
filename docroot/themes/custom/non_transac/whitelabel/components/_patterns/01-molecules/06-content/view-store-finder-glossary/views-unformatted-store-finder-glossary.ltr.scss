@@ -54,6 +54,8 @@
 }
 
 .view-store-finder--list__alphabet__item {
+  cursor: pointer;
+
   @include breakpoint($upto-palm) {
     line-height: 2.875rem;
     height: 2.875rem;
