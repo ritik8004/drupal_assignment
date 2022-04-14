@@ -916,11 +916,11 @@ class AlshayaGtmManager {
     $dimension8 = '';
 
     $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : [];
-    $shipping_info = explode(' - ', $order['shipping_description']);
+    $shipping_info = !empty($order['shipping_description']) ? explode(' - ', $order['shipping_description']) : '';
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $deliveryOption = 'Home Delivery';
-    $deliveryType = $shipping_info[0];
+    $deliveryType = !empty($order['shipping_description']) ? $shipping_info[0] : '';
 
     $shipping_method_name = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
     if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
