@@ -14,7 +14,6 @@ function getOrderDetailsForReturnConfirmation() {
 
 function getReturnIdFromUrl() {
   const { search } = window.location;
-  // @todo: Encrypting and decrypting of return id.
   const params = new URLSearchParams(search);
   if (hasValue(params) && hasValue(params.get('rid'))) {
     return params.get('rid');
