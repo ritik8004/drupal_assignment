@@ -4,4 +4,4 @@ alshaya_optimizely.settings_form:
     _form: '\Drupal\alshaya_optimizely\Form\AlshayaOptimizelySettingsForm'
     _title: 'Optimizely'
   requirements:
-    _permission: 'administer alshaya optimizely'
+    _permission: 'administer site configuration'

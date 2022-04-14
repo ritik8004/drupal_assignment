@@ -16,7 +16,7 @@ function alshaya_optimizely_page_attachments(array &$page) {
     return;
   }
 
-  if (!(\Drupal::service('router.admin_context')->isAdminRoute()) && !empty($projectId)) {
+  if (!(\Drupal::service('router.admin_context')->isAdminRoute())) {
     // Add Optimizely script tags to header.
     $optimizely_script_code = str_replace('{{project_id}}', $projectId, '//cdn.optimizely.com/js/{{project_id}}.js');
 
