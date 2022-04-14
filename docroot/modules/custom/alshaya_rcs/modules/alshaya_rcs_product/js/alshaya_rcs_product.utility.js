@@ -453,7 +453,7 @@
       const product = variant.product;
       // Prepare the attributes variable to have key value pair.
       let attributes = [];
-      variants.attributes.forEach((item) => {
+      variant.attributes.forEach((item) => {
         attributes[item['code']] = item['value_index'];
       });
 
