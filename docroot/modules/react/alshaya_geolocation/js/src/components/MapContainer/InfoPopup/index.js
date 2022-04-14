@@ -1,6 +1,7 @@
 import React from 'react';
-import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
+import AddressHours from '../../AddressHours';
 
 export class InfoPopUp extends React.Component {
   getDirection = (store) => {
@@ -9,7 +10,8 @@ export class InfoPopUp extends React.Component {
   }
 
   render() {
-    const { selectedPlace } = this.props;
+    const { selectedPlace, storeHours } = this.props;
+    const { address } = selectedPlace;
     return (
       <div>
         <div className="scroll-fix">
@@ -19,35 +21,28 @@ export class InfoPopUp extends React.Component {
             </div>
             <div className="views-field views-field-field-store-address">
               <div className="field-content">
-                <ConditionalView condition={hasValue(selectedPlace.address)}>
-                  {selectedPlace.address.map((item) => (
-                    <div key={item.code}>
-                      <div className="address--line1">
-                        {item.code === 'address_building_segment' ? <span>{item.value}</span> : null}
-                      </div>
-                      <div className="address--line2">
-                        {item.code === 'street' ? <span>{item.value}</span> : null}
-                      </div>
-                    </div>
-                  ))}
+                <ConditionalView condition={hasValue(address)}>
+                  <AddressHours
+                    type="addresstext"
+                    address={address}
+                    classname="address--line2"
+                  />
                 </ConditionalView>
               </div>
             </div>
             <div className="views-field views-field-field-store-open-hours marker-hours">
               <div className="field-content">
-                <div className="hours--wrapper selector--hours">
-                  <div className="hours--label">
-                    {Drupal.t('Opening Hours')}
+                <ConditionalView condition={hasValue(storeHours)}>
+                  <div className="hours--wrapper selector--hours">
+                    <div className="hours--label">
+                      {Drupal.t('Opening Hours')}
+                    </div>
+                    <AddressHours
+                      type="hourstext"
+                      storeHours={storeHours}
+                    />
                   </div>
-                  <div className="open--hours">
-                    {selectedPlace.openHours.map((item) => (
-                      <div key={item.code}>
-                        <span className="key-value-key">{item.label}</span>
-                        <span className="key-value-value">{item.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                </ConditionalView>
                 <div className="get--directions">
                   <a
                     className="device__desktop"
