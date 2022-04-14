@@ -5,11 +5,11 @@
  * Contains alshaya_aura_react.module.
  */
 
+use Drupal\alshaya_aura_react\AuraBlockViewBuilder;
 use Drupal\alshaya_user\Plugin\Block\MyAccountLinks;
 use Drupal\alshaya_aura_react\Constants\AuraStatus;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Url;
 use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
 use Drupal\Core\Cache\Cache;
 
@@ -192,45 +192,17 @@ function alshaya_aura_react_block_view_alter(&$build, $block) {
   }
 
   if ($block->getPluginId() === 'alshaya_my_account_links') {
-    $build['#pre_render'][] = '_alshaya_aura_react_my_account_block_pre_render';
+    $build['#pre_render'][] = [
+      AuraBlockViewBuilder::class,
+      'myAccountBlockPreRender',
+    ];
   }
   if ($block->getPluginId() === 'system_menu_block:account') {
-    $build['#pre_render'][] = '_alshaya_aura_react_system_menu_block_account_pre_render';
+    $build['#pre_render'][] = [
+      AuraBlockViewBuilder::class,
+      'systemAccountBlockPreRender',
+    ];
   }
-}
-
-/**
- * Pre render callback for building My Account Links block.
- *
- * @param array $build
- *   The block build array.
- *
- * @return array
- *   The altered block build array.
- */
-function _alshaya_aura_react_my_account_block_pre_render(array $build) {
-  $build['content']['my_account_my_aura_block_root'] = [
-    '#markup' => '<div id="my-accounts-aura-mobile"></div>',
-    '#weight' => -1,
-  ];
-
-  $build['#attributes']['class'][] = 'aura-enabled';
-
-  return $build;
-}
-
-/**
- * Pre render callback for system_menu_block:account block.
- *
- * @param array $build
- *   The block build array.
- *
- * @return array
- *   The altered block build array.
- */
-function _alshaya_aura_react_system_menu_block_account_pre_render(array $build) {
-  $build['content']['#prefix'] = '<div id="aura-mobile-header-signin-register"></div>';
-  return $build;
 }
 
 /**
@@ -246,32 +218,11 @@ function alshaya_aura_react_block_view_page_title_block_alter(&$build, $block) {
 
   // Add edit account link beside page title block.
   if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
-    $build['#pre_render'][] = '_alshaya_aura_react_page_title_pre_render';
+    $build['#pre_render'][] = [
+      AuraBlockViewBuilder::class,
+      'auraPageTitleBlockPreRender',
+    ];
   }
-}
-
-/**
- * Pre render callback for page_title_block block.
- *
- * @param array $build
- *   The block build array.
- *
- * @return array
- *   The altered block build array.
- */
-function _alshaya_aura_react_page_title_pre_render(array $build) {
-  $edit_account = [
-    '#type' => 'link',
-    '#title' => t('edit account details'),
-    '#url' => Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]),
-    '#attributes' => [
-      'class' => ['button', 'button-wide', 'edit-account'],
-    ],
-  ];
-
-  $build['content']['#suffix'] = \Drupal::service('renderer')->render($edit_account);
-
-  return $build;
 }
 
 /**

@@ -98,7 +98,10 @@
           // Add class to remove loader styles after RCS info is filled.
           $('.rcs-page').addClass(classRcsLoaded);
         }).catch(function(e) {
-          Drupal.alshayaLogger('error', 'Failed to fetch Page Entity.', 'error');
+          Drupal.alshayaLogger('error', 'Failed to fetch Page Entity @entity. Message @message.', {
+            '@entity': (typeof pageEntity !== 'undefined') ? pageEntity : {},
+            '@message': e.message,
+          });
         });
     }
   });
@@ -195,7 +198,11 @@
         // Add class to remove loader styles on RCS Placeholders.
         $(this).addClass(classRcsLoaded);
       }).catch(function(e) {
-        Drupal.alshayaLogger('error', 'Failed to fetch Page Entity.', 'error');
+        Drupal.alshayaLogger('error', 'Failed to fetch Page Entity @entity. Message @message.', {
+          '@entity': (typeof pageEntity !== 'undefined' && pageEntity !== null) ? pageEntity : {},
+          '@entityToGet': (typeof entityToGet !== 'undefined' && entityToGet !== null) ? entityToGet : '',
+          '@message': e.message,
+        });
       });
   }
 

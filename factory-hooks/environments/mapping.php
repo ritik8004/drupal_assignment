@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 /**
  * @file
@@ -104,10 +104,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'qa2' => [
         'magento' => 'hm_test',
         'conductor' => 'hmkw_qa2',
-      ],
-      'dev3' => [
-        'magento' => 'hm_giftcard',
-        'conductor' => 'hmkw_dev3',
       ],
     ],
     'hmsa' => [

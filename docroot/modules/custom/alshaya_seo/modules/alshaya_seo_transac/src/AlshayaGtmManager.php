@@ -78,7 +78,7 @@ class AlshayaGtmManager {
     'alshaya_spc.checkout' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
     'alshaya_spc.checkout.confirmation' => 'purchase confirmation page',
-    'view.stores_finder.page_2' => 'store finder',
+    'alshaya_geolocation.store_finder' => 'store finder',
     'view.stores_finder.page_1' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
     'user.pass' => 'user password page',
@@ -391,6 +391,56 @@ class AlshayaGtmManager {
   }
 
   /**
+   * Helper function to prepare attributes for a gift product.
+   *
+   * @param string $view_mode
+   *   View mode in which we trying to render the product.
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The sku object.
+   *
+   * @return array
+   *   Array of attributes to be exposed to GTM.
+   */
+  public function fetchGiftGtmAttributes($view_mode, SKUInterface $sku) {
+    static $gtm_container = NULL;
+
+    if (!isset($gtm_container)) {
+      $gtm_container = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
+    }
+    $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
+
+    $attributes['gtm-name'] = trim($sku->label());
+    $attributes['gtm-main-sku'] = $sku->getSku();
+    $attributes['gtm-product-sku-class-identifier'] = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+    $attributes['gtm-sku-type'] = $sku->bundle();
+    $attributes['gtm-price'] = 0;
+    if (!in_array('dimension1', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension1'] = $sku->get('attribute_set')->getString();
+    }
+
+    if (!in_array('dimension5', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
+    }
+
+    if (!in_array('dimension6', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension6'] = $sku->get('attr_size')->getString();
+    }
+
+    if (!in_array('brand', $gtm_disabled_vars)) {
+      // Site name.
+      $gtm_brand = $this->configFactory->get('system.site')->getOriginal('name', FALSE);
+      $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
+      if ($sku->hasField('attr_brand')) {
+        $attributes['gtm-brand'] = $sku->get('attr_brand')->getString() ?: $gtm_brand;
+      }
+    }
+    $attributes['gtm-container'] = $gtm_container;
+    $attributes['gtm-view-mode'] = $view_mode;
+
+    return $attributes;
+  }
+
+  /**
    * Helper function to fetch attributes on SKU.
    *
    * @param string $skuId
@@ -577,7 +627,7 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['taxonomy_term'])) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
             $term = $currentRoute['route_params']['taxonomy_term'];
-            $routeIdentifier .= ':' . $term->getVocabularyId();
+            $routeIdentifier .= ':' . $term->bundle();
           }
           break;
 
@@ -645,7 +695,7 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['taxonomy_term'])) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
             $term = $currentRoute['route_params']['taxonomy_term'];
-            $routeIdentifier .= ':' . $term->getVocabularyId();
+            $routeIdentifier .= ':' . $term->bundle();
           }
           break;
       }
@@ -1321,7 +1371,7 @@ class AlshayaGtmManager {
       $cart_items_rr[] = [
         'id' => $item['sku'],
         'price' => (float) $item['price'],
-        'qnt' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
+        'qnt' => $item['qty'] ?? $item['ordered'],
       ];
     }
 
@@ -1360,7 +1410,7 @@ class AlshayaGtmManager {
       $cart_items_flock[] = [
         'id' => $item['sku'],
         'price' => (float) $item['price'],
-        'count' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
+        'count' => $item['qty'] ?? $item['ordered'],
         'title' => $item['name'],
         'image' => $sku_media_url,
       ];

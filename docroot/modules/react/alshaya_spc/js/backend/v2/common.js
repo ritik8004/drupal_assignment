@@ -314,8 +314,9 @@ const getProcessedCartData = async (cartData) => {
     return null;
   }
 
+  const cartId = window.commerceBackend.getCartId();
   const data = {
-    cart_id: window.commerceBackend.getCartId(),
+    cart_id: cartId,
     cart_id_int: cartData.cart.id,
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
@@ -371,6 +372,13 @@ const getProcessedCartData = async (cartData) => {
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
   }
 
+  // Check if online booking is enabled and have confirmation number.
+  if (hasValue(cartData.cart.extension_attributes)
+    && hasValue(cartData.cart.extension_attributes.hfd_hold_confirmation_number)) {
+    data.hfd_hold_confirmation_number = cartData
+      .cart.extension_attributes.hfd_hold_confirmation_number;
+  }
+
   // If egift card enabled, add the hps_redeemed_amount
   // add hps_redemption_type to cart.
   if (isEgiftCardEnabled()) {
@@ -418,6 +426,9 @@ const getProcessedCartData = async (cartData) => {
 
   if (typeof cartData.cart.items !== 'undefined' && cartData.cart.items.length > 0) {
     data.items = {};
+    // Call this function to statically store stock data for V3.
+    // For V2, it does nothing.
+    await window.commerceBackend.loadProductStockDataFromCart(cartId);
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
       const hasParentSku = hasValue(item.extension_attributes)

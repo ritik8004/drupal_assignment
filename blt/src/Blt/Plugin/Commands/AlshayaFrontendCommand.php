@@ -119,7 +119,7 @@ class AlshayaFrontendCommand extends BltTasks {
   public function buildStyles() {
     foreach (self::$themeTypes as $type) {
       $result = $this->buildThemesOfType($type);
-      if ($result->getExitCode() !== 0) {
+      if ($result !== 0) {
         return 1;
       }
     }
@@ -138,7 +138,8 @@ class AlshayaFrontendCommand extends BltTasks {
    * @description Build styles for all the themes of a particular type.
    */
   public function buildThemesOfType(string $type) {
-    $ignoredDirs = ['alshaya_example_subtheme', 'node_modules'];
+    $exitCode = 0;
+    $ignoredDirs = ['alshaya_example_subtheme', 'node_modules', 'gulp-tasks'];
 
     if (!in_array($type, self::$themeTypes)) {
       throw new \InvalidArgumentException('Type should be one of ' . implode(' / ', self::$themeTypes));
@@ -157,18 +158,90 @@ class AlshayaFrontendCommand extends BltTasks {
       }
     }
 
-    $command = 'cd %s; npm run build';
-
     // Execute in sequence to see errors if any.
     $tasks = $this->taskExecStack();
 
-    foreach ($themes ?? [] as $theme) {
-      $fullCommand = sprintf($command, $theme);
-      $tasks->exec($fullCommand);
+    foreach ($themes ?? [] as $themeName => $themePath) {
+      $build = FALSE;
+      // Copy cloud code only if
+      // - we are inside github actions
+      // - github push event has been triggered
+      // - we have some file changes at least.
+      if (getenv('GITHUB_ACTIONS') == 'true'
+        && getenv('GITHUB_EVENT_NAME') == 'push'
+        && !empty(getenv('CHANGED_ALL_FILES'))
+      ) {
+        $themeChanges = getenv('CHANGED_THEME_FILES');
+        // Build if theme is changed and tracked in CHANGED_THEME_FILES
+        // env variable.
+        if (strpos($themeChanges, $type . '/' . $themeName) > -1) {
+          $build = TRUE;
+        }
+        // Build all transac themes if alshaya_white_label themes changed.
+        elseif ($type == 'transac' && strpos($themeChanges, 'transac/alshaya_white_label') > -1) {
+          $build = TRUE;
+        }
+        // Build all non-transac themes if white_label themes changed.
+        elseif ($type == 'non_transac' && strpos($themeChanges, 'transac/whitelabel') > -1) {
+          $build = TRUE;
+        }
+
+        // Else copy from acquia repo if build is not needed.
+        if ($build === FALSE) {
+          $cssFromDir = '/tmp/blt-deploy/' . substr($themePath, strpos($themePath, 'docroot'));
+          // Building folder paths for copying.
+          // In non_transac themes css is inside /dist folder.
+          if ($type === 'non_transac') {
+            // Only in whitelabel theme css is inside /components/dist folder.
+            if (strpos($themePath, 'whitelabel') > -1) {
+              $cssFromDir .= '/components/dist';
+              $cssToDir = $themePath . '/components/dist';
+            }
+            else {
+              $cssFromDir .= '/dist';
+              $cssToDir = $themePath . '/dist';
+            }
+          }
+          // In transac and transac_lite theme css is inside /css folder.
+          else {
+            $cssFromDir .= '/css';
+            $cssToDir = $themePath . '/css';
+          }
+
+          // Copy step.
+          $this->say('Copying unchanged ' . $themeName . ' theme from ' . $cssFromDir . ' to ' . $cssToDir);
+          $result = $this->taskCopyDir([$cssFromDir => $cssToDir])
+            ->overwrite(TRUE)
+            ->run();
+          // If copying failed preparing for build.
+          if (!$result->wasSuccessful()) {
+            $this->say('Unable to copy css files from cloud. Building theme ' . $themeName);
+            $build = TRUE;
+          }
+        }
+      }
+      // Build everything if
+      // - we are outside github actions
+      // - github create event has been triggered with tag push
+      // - it is an empty commit
+      //   in merge commit message.
+      else {
+        $build = TRUE;
+      }
+
+      // Build theme css.
+      if ($build) {
+        $fullBuildCommand = sprintf('cd %s; npm run build', $themePath);
+        $tasks->exec($fullBuildCommand);
+      }
     }
 
     $tasks->stopOnFail();
-    return $tasks->run();
+    if ($tasks->getCommand()) {
+      $runTasks = $tasks->run();
+      $exitCode = $runTasks->getExitCode();
+    }
+    return $exitCode;
   }
 
   /**
@@ -233,11 +306,71 @@ class AlshayaFrontendCommand extends BltTasks {
         }
       }
 
-      $tasks->exec("cd $dir; $command");
+      $build = FALSE;
+      // Copy cloud code only if
+      // - we are inside github actions
+      // - github push event has been triggered
+      // - we have some file changes at least.
+      if (getenv('GITHUB_ACTIONS') == 'true'
+        && getenv('GITHUB_EVENT_NAME') == 'push'
+        && !empty(getenv('CHANGED_ALL_FILES'))
+      ) {
+        $reactChanges = getenv('CHANGED_REACT_FILES');
+        // Build if change in common (modules/react/js) folder.
+        if (strpos($reactChanges, 'modules/react/js') > -1) {
+          $build = TRUE;
+        }
+        // Build if theme is changed and tracked in CHANGED_REACT_FILES
+        // env variable.
+        elseif (strpos($reactChanges, 'react/' . $file->getRelativePath()) > -1) {
+          $build = TRUE;
+        }
+
+        // Build if dependent react module has some changes.
+        $dependencyFile = $dir . 'react_dependencies.txt';
+        if ($build === FALSE && file_exists($dependencyFile)) {
+          $dependencies = explode(PHP_EOL, file_get_contents($dependencyFile));
+          foreach ($dependencies as $dependency) {
+            if ($dependency && strpos($reactChanges, $dependency) > -1) {
+              $build = TRUE;
+              break;
+            }
+          }
+        }
+
+        // Else copy from acquia repo if build is not needed.
+        if ($build === FALSE) {
+          $reactFromDir = '/tmp/blt-deploy/' . substr($dir, strpos($dir, 'docroot')) . 'dist';
+          $reactToDir = $dir . 'dist';
+
+          // Copy step.
+          $this->say('Copying unchanged ' . $file->getRelativePath() . ' react module from ' . $reactFromDir . ' to ' . $reactToDir);
+          $result = $this->taskCopyDir([$reactFromDir => $reactToDir])
+            ->overwrite(TRUE)
+            ->run();
+          if (!$result->wasSuccessful()) {
+            $this->say('Unable to copy react files from cloud. Building react module ' . $file->getRelativePath());
+            $build = TRUE;
+          }
+        }
+      }
+      // Build everything if
+      // - we are outside github actions
+      // - github create event has been triggered with tag push
+      // - it is an empty commit
+      //   in merge commit message.
+      else {
+        $build = TRUE;
+      }
+
+      // Build react files.
+      if ($build) {
+        $tasks->exec("cd $dir; $command");
+      }
     }
 
     $tasks->stopOnFail();
-    return $tasks->run();
+    return $tasks->getCommand() ? $tasks->run() : 0;
   }
 
   /**
@@ -338,6 +471,9 @@ class AlshayaFrontendCommand extends BltTasks {
 
     // Validate utility files.
     $tasks->exec("cd $reactDir; npm run lint $reactDir/js/");
+
+    // Run Jest tests.
+    $tasks->exec("cd $reactDir; npm test");
 
     foreach (new \DirectoryIterator($reactDir) as $subDir) {
       if ($subDir->isDir()

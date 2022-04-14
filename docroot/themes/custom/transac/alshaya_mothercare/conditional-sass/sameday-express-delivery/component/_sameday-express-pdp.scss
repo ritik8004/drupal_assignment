@@ -11,4 +11,12 @@
       }
     }
   }
+
+  .express-delivery-text {
+    width: 15.3875rem;
+
+    @include breakpoint($only-tablet) {
+      width: 13.3875rem;
+    }
+  }
 }

@@ -7,7 +7,7 @@
   'use strict';
 
   // Load product details into initial Data layer.
-  document.addEventListener('alterInitialDataLayerData', (e) => {
+  document.addEventListener('dataLayerContentAlter', (e) => {
     switch (e.detail.type) {
       case 'product':
         var entity = e.detail.page_entity;
@@ -74,7 +74,7 @@
     // Get categories from breadcrumb.
     var breadcrumbs = renderRcsBreadcrumb.normalize(entity);
     var breadcrumbTitles = [];
-    if (Array.isArray(breadcrumbs)) {
+    if (Array.isArray(breadcrumbs) && breadcrumbs.length) {
       // Remove the product from breadcrumb.
       if (type === 'product') {
         breadcrumbs.pop();

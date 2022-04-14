@@ -1,5 +1,5 @@
 (function orderConfirmation($) {
-  $(document).on('alterInitialDataLayerData', function alterInitialDataLayerData(e) {
+  document.addEventListener('dataLayerContentAlter', (e) => {
     // Check if purchase success event is triggered.
     var eventData = e.detail.data();
     if (eventData.event !== 'purchaseSuccess') {
@@ -37,6 +37,11 @@
       // Update the array with the product gtm data having the placeholders
       // replaced.
       products[index] = productGtmData;
+
+      // Fill in the data for productStyleCode.
+      if (eventData['productStyleCode'][productData.gtmAttributes.id] === undefined) {
+        eventData['productStyleCode'].push(productData.gtmAttributes.id);
+      }
     });
   });
 })(jQuery);

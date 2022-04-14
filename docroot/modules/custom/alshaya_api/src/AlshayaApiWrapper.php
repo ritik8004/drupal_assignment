@@ -13,9 +13,11 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use GuzzleHttp\TransferStats;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
@@ -253,6 +255,10 @@ class AlshayaApiWrapper {
       $response = $client->request($method, $url, $options);
       $result = $response->getBody()->getContents();
 
+      // Magento sends 401 response due to se error.
+      if ($response->getStatusCode() == 401) {
+        throw new \Exception('Magento send 401 response', 401);
+      }
       // Magento actually down or fatal error.
       if ($response->getStatusCode() >= 500) {
         throw new \Exception('Back-end system is down', APIWrapper::API_DOWN_ERROR_CODE);
@@ -277,6 +283,19 @@ class AlshayaApiWrapper {
     catch (\Exception $e) {
       if ($throw_exception) {
         throw $e;
+      }
+      if ($e->getCode() == 401 && PHP_SAPI !== 'cli') {
+        $result = NULL;
+        $this->logger->error('Exception while updating customer data @data against the api @api. Message: @message.', [
+          '@data' => $data['username'],
+          '@api' => $url,
+          '@message' => $e->getMessage(),
+        ]);
+        user_logout();
+        // We redirect to an user/login path.
+        $response = new LocalRedirectResponse(Url::fromRoute('user.login')->toString());
+        $response->send();
+        return $response;
       }
 
       $result = NULL;
@@ -308,12 +327,14 @@ class AlshayaApiWrapper {
       'field' => 'status',
       'value' => '1',
       'condition_type' => 'eq',
+      'group_id' => 0,
     ];
 
     $filters[] = [
       'field' => 'store_id',
       'value' => Settings::get('store_id')[$langcode],
       'condition_type' => 'eq',
+      'group_id' => 1,
     ];
 
     $page_size = 1000;
@@ -822,11 +843,17 @@ class AlshayaApiWrapper {
         continue;
       }
 
+      $filter_group_id = $filter['group_id'] ?? $group_id;
+
       foreach ($filter as $key => $value) {
+        if ($key === 'group_id') {
+          continue;
+        }
+
         // Prepared string like below.
         // searchCriteria[filter_groups][0][filters][0][field]=field
         // This is how Magento search criteria in APIs work.
-        $url .= $base . '[filter_groups][' . $group_id . '][filters][' . $index . '][' . $key . ']=' . $value;
+        $url .= $base . '[filter_groups][' . $filter_group_id . '][filters][' . $index . '][' . $key . ']=' . $value;
 
         // Add query params separator.
         $url .= '&';

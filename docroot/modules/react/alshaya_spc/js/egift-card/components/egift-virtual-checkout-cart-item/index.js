@@ -50,7 +50,7 @@ class CheckoutVirtualCartItem extends React.Component {
                 {Drupal.t('eGift Card Top up', {}, { context: 'egift' })}
               </ConditionalView>
               <ConditionalView condition={!hasValue(isTopUp)}>
-                {Drupal.t('Alshaya eGift card', {}, { context: 'egift' })}
+                {Drupal.t('eGift Card', {}, { context: 'egift' })}
               </ConditionalView>
             </div>
             <div className="spc-product-price egift-product-price">

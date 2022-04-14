@@ -167,8 +167,8 @@ export default class EgiftCardPurchase extends React.Component {
 
     // Get recipient email.
     const email = data.get('egift-recipient-email').trim();
-    // Validate email.
-    if (email === '') {
+    // Validate email, check if email has @ and with domain after dot.
+    if (email === '' || !(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
       document.getElementById('email-error').innerHTML = Drupal.t('Please enter valid email address', {}, { context: 'egift' });
       document.getElementById('email-error').classList.add('error');
       isError = true;
@@ -196,7 +196,7 @@ export default class EgiftCardPurchase extends React.Component {
     // Get open amount input element.
     const element = document.getElementById('open-amount');
     // Get open amount value.
-    const openAmount = element.value;
+    const openAmount = (element !== null) ? element.value : '';
     if (openAmount !== '') {
       // Min and Max value allowed for open amount.
       const amountFrom = parseFloat(element.getAttribute('min'));

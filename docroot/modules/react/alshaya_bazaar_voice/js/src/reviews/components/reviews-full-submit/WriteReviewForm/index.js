@@ -16,6 +16,7 @@ import { setStorageInfo } from '../../../../utilities/storage';
 import dispatchCustomEvent from '../../../../../../../js/utilities/events';
 import { trackFeaturedAnalytics } from '../../../../utilities/analytics';
 import { createUserStorage } from '../../../../utilities/user_util';
+import PostReviewMessage from '../post-review-message';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -24,6 +25,7 @@ export default class WriteReviewForm extends React.Component {
     super(props);
     this.state = {
       fieldsConfig: '',
+      postReviewData: '',
       userDetails: {
         user: {
           userId: 0,
@@ -125,12 +127,18 @@ export default class WriteReviewForm extends React.Component {
   }
 
   eventListener = (e) => {
-    const { closeModal } = this.props;
+    const { closeModal, isWriteReview, newPdp } = this.props;
     if (!this.isComponentMounted) {
       return;
     }
     if (!e.detail.HasErrors) {
-      closeModal(e);
+      if (newPdp && isWriteReview) {
+        this.setState({
+          postReviewData: e.detail,
+        });
+      } else {
+        closeModal(e);
+      }
     }
   };
 
@@ -158,11 +166,14 @@ export default class WriteReviewForm extends React.Component {
     const {
       closeModal,
       productId,
+      isWriteReview,
+      newPdp,
     } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const {
       fieldsConfig,
       userDetails,
+      postReviewData,
     } = this.state;
 
     Object.entries(fieldsConfig).forEach(
@@ -187,52 +198,59 @@ export default class WriteReviewForm extends React.Component {
             <SectionTitle>{getStringMessage('write_a_review')}</SectionTitle>
             <a className="close-modal" onClick={(e) => closeModal(e)} />
           </div>
-          <BazaarVoiceMessages />
-          <div id="product-block" className="product-block">
-            <div className="product-image-block">
-              <img src={bazaarVoiceSettings.reviews.product.image_url} />
-            </div>
-            <div className="product-title">
-              <span>{bazaarVoiceSettings.reviews.product.title}</span>
-            </div>
-          </div>
-          <div className="write-review-form-sidebar">
-            <ConditionalView condition={dynamicFields.length > 0}>
-              <div className="write-review-form-wrapper">
-                <form className="write-review-form-add" onSubmit={this.handleSubmit} noValidate>
-                  <div className="write-review-fields clearfix">
-                    {dynamicFields}
-                    <input type="hidden" name="blackBox" id="ioBlackBox" />
-                  </div>
-                  <br />
-                  <div className="write-review-form-actions" id="review-form-action">
-                    <button
-                      id="cancel-write-review"
-                      className="write-review-form-cancel"
-                      type="button"
-                      name="cancel"
-                      onClick={(e) => closeModal(e)}
-                    >
-                      {getStringMessage('cancel')}
-                    </button>
-                    <button
-                      id="preview-write-review"
-                      className="write-review-form-preview"
-                      name="submit"
-                      type="submit"
-                    >
-                      {getStringMessage('post_review')}
-                    </button>
-                  </div>
-                  <FormLinks
-                    tnc={getStringMessage('terms_and_condition')}
-                    reviewGuide={getStringMessage('review_guidelines')}
-                    productId={productId}
-                  />
-                </form>
+          <ConditionalView condition={postReviewData !== '' && isWriteReview && newPdp}>
+            <br />
+            <PostReviewMessage postReviewData={postReviewData} />
+          </ConditionalView>
+          <ConditionalView condition={postReviewData === ''}>
+            <BazaarVoiceMessages />
+            <div id="product-block" className="product-block">
+              <div className="product-image-block">
+                <img src={bazaarVoiceSettings.reviews.product.image_url} />
               </div>
-            </ConditionalView>
-          </div>
+              <div className="product-title">
+                <span>{bazaarVoiceSettings.reviews.product.title}</span>
+              </div>
+            </div>
+            <div className="write-review-form-sidebar">
+              <ConditionalView condition={dynamicFields.length > 0}>
+                <div className="write-review-form-wrapper">
+                  <form className="write-review-form-add" onSubmit={this.handleSubmit} noValidate>
+                    <div className="write-review-fields clearfix">
+                      {dynamicFields}
+                      <input type="hidden" name="blackBox" id="ioBlackBox" />
+                    </div>
+                    <br />
+                    <div className="write-review-form-actions" id="review-form-action">
+                      <button
+                        id="cancel-write-review"
+                        className="write-review-form-cancel"
+                        type="button"
+                        name="cancel"
+                        onClick={(e) => closeModal(e)}
+                      >
+                        {getStringMessage('cancel')}
+                      </button>
+                      <button
+                        id="preview-write-review"
+                        className="write-review-form-preview"
+                        name="submit"
+                        type="submit"
+                      >
+                        {getStringMessage('post_review')}
+                      </button>
+                    </div>
+                    <FormLinks
+                      tnc={getStringMessage('terms_and_condition')}
+                      reviewGuide={getStringMessage('review_guidelines')}
+                      productId={productId}
+                    />
+                  </form>
+                </div>
+              </ConditionalView>
+            </div>
+          </ConditionalView>
+
         </div>
       </>
     );

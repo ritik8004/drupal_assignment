@@ -68,6 +68,7 @@
     mainProduct.variants = [];
     // This will store the color values of the styled product.
     const colorAttributeValues = [];
+    const colorAttribute = drupalSettings.alshayaColorSplit.colorAttribute;
 
     styleProducts.forEach(function (styleProduct) {
       // Check if product is in stock.
@@ -95,7 +96,7 @@
       styleProduct.variants.forEach(function (variant) {
         // These values will be used later on.
         variant.product.parent_sku = styleProduct.sku;
-        variant.product.color_attribute = drupalSettings.alshayaColorSplit.colorAttribute;
+        variant.product.color_attribute = colorAttribute;
         variant.product.url_key = styleProduct.url_key;
         // Variants will inherit delivery options from their parent sku.
         variant.product.deliveryOptions = {};
@@ -116,13 +117,13 @@
           };
         }
 
-        if (!processedColors.includes(variant.product.color)) {
-          processedColors.push(variant.product.color);
+        if (!processedColors.includes(variant.product[colorAttribute])) {
+          processedColors.push(variant.product[colorAttribute]);
           // Get the labels for the color attribute.
-          if (Drupal.hasValue(variant.product.color)) {
-            const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product.color);
+          if (Drupal.hasValue(variant.product[colorAttribute])) {
+            const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product[colorAttribute]);
             // Update the array with the color values.
-            colorAttributeValues.push({value_index: variant.product.color, store_label: label});
+            colorAttributeValues.push({value_index: variant.product[colorAttribute], store_label: label});
           }
         }
 
@@ -153,7 +154,7 @@
       attribute_uid: btoa(drupalSettings.psudo_attribute),
       label: drupalSettings.alshayaColorSplit.colorLabel,
       position: -1,
-      attribute_code: drupalSettings.alshayaColorSplit.colorAttribute,
+      attribute_code: colorAttribute,
       values: colorAttributeValues,
     });
 

@@ -7,11 +7,7 @@
  *   The url key.
  */
 async function handleNoItemsInResponse(request, urlKey) {
-  request.data = prepareQuery(`{urlResolver(url: "${urlKey}") {
-      redirectCode
-      relative_url
-    }}`
-  );
+  request.data = prepareQuery(rcsPhGraphqlQuery.urlResolver.query, rcsPhGraphqlQuery.urlResolver.variables);
 
   let response = await rcsCommerceBackend.invokeApi(request);
   let rcs404 = `${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`;
@@ -265,6 +261,14 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       request.data = prepareQuery(rcsPhGraphqlQuery.category_children_by_path.query, productCategoryChildrenVariables);
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.categories.items[0];
+
+    case 'cart_items_stock':
+      let cartItemsStockVariables = rcsPhGraphqlQuery.cart_items_stock.variables;
+      cartItemsStockVariables.cartId = params.cartId;
+      request.data = prepareQuery(rcsPhGraphqlQuery.cart_items_stock.query, cartItemsStockVariables);
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data;
       break;
 
     default:

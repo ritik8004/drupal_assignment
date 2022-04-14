@@ -24,7 +24,7 @@ use Drupal\file\Entity\File;
  */
 function alshaya_white_label_preprocess_html(&$variables) {
   $path = \Drupal::service('path.current')->getPath();
-  $alias = trim(\Drupal::service('path.alias_manager')
+  $alias = trim(\Drupal::service('path_alias.manager')
     ->getAliasByPath($path), '/');
   // Body classes for sidebars.
   if (isset($variables['page']['sidebar_first']) && isset($variables['page']['sidebar_second'])) {
@@ -242,7 +242,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
           }
 
           // If mobile videos are not set, use desktop videos on mobile.
-          $mobileVideos = isset($mobileVideos) ? $mobileVideos : $desktopVideos;
+          $mobileVideos = $mobileVideos ?? $desktopVideos;
 
           $variables['#attached']['drupalSettings']['desktopVideos'] = $desktopVideos;
           $variables['#attached']['drupalSettings']['mobileVideos'] = $mobileVideos;
@@ -736,7 +736,7 @@ function alshaya_white_label_form_node_form_alter(&$form, FormStateInterface $fo
 /**
  * Implements hook_form_alter().
  */
-// @codingStandardsIgnoreLine
+// phpcs:ignore
 function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   switch ($form_id) {
     case "views_exposed_form":
@@ -1501,8 +1501,8 @@ function _alshaya_white_label_get_banner_margin_override($mobile_margin, $deskto
   if (isset($desktop_tablet_margin_value) || isset($mobile_margin_value)) {
     $selector_override = 'c-promo__item__override';
     $style_tag = '';
-    $style_tag .= isset($mobile_margin_value) ? $mobile_margin_value : NULL;
-    $style_tag .= isset($desktop_tablet_margin_value) ? $desktop_tablet_margin_value : NULL;
+    $style_tag .= $mobile_margin_value ?? NULL;
+    $style_tag .= $desktop_tablet_margin_value ?? NULL;
     return [
       'style_tag' => $style_tag,
       'selector_class' => [

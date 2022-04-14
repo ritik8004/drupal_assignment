@@ -121,6 +121,7 @@ exports.render = function render(
     case 'mobile-crosssell-products':
     case 'crosssell-products':
     case 'classic-gallery':
+    case 'magazine-gallery':
     case 'product-labels':
       // Render super category block.
       if (typeof globalThis.renderRcsProduct !== 'undefined') {

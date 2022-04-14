@@ -73,6 +73,14 @@ class StoresFinderConfigForm extends ConfigFormBase {
 
     $config = $this->config('alshaya_stores_finder.settings');
 
+    $form['filter_path'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Path to MDC stores API'),
+      '#default_value' => $config->get('filter_path') ? $config->get('filter_path') : '',
+      '#description' => $this->t('Set the value using drush command: <b>drush cset alshaya_stores_finder.settings filter_path test/url</b>'),
+      '#disabled' => TRUE,
+    ];
+
     $form['stores_finder_page_status'] = [
       '#type' => 'select',
       '#title' => $this->t('Allow user to view and find stores in the stores finder page'),
@@ -215,6 +223,7 @@ class StoresFinderConfigForm extends ConfigFormBase {
     }
 
     $config = $this->config('alshaya_stores_finder.settings');
+    $config->set('filter_path', $form_state->getValue('filter_path'));
     $config->set('stores_finder_page_status', (int) $form_state->getValue('stores_finder_page_status'));
     $config->set('enable_disable_store_finder_search', $form_state->getValue('enable_disable_store_finder_search'));
     $config->set('load_more_item_limit', $form_state->getValue('load_more_item_limit'));
