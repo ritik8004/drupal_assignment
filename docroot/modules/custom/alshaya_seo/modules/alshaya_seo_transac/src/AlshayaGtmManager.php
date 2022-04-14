@@ -956,7 +956,9 @@ class AlshayaGtmManager {
       // If its a virtual product i.e egift card or egift topup.
       if ($item['type'] === 'virtual') {
         $products[$item['item_id']] = [
-          'name' => $item['name'],
+          'name' => ($item['sku'] == 'giftcard_topup')
+          ? 'eGift Card Top up/' . $item['price']
+          : 'eGift Card/' . $item['price'],
           'id' => $item['item_id'],
           'price' => $item['price'],
           'variant' => $item['sku'],
