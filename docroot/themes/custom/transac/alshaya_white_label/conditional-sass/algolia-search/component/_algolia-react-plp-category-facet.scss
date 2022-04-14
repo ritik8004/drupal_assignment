@@ -29,6 +29,11 @@
         padding-#{$left}: 0.2rem;
         direction: ltr;
       }
+
+      &__label {
+        display: inline-block;
+        direction: ltr;
+      }
     }
 
     a.facet-item {
