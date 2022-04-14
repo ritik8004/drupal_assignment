@@ -112,7 +112,7 @@ function getReturnConfirmationUrl(orderId, returnId) {
   // Making returd id more secure with multiple details.
   if (hasValue(userEmailID) && uid !== 0) {
     const secureReturnId = btoa(JSON.stringify({
-      order_id: returnId,
+      return_id: returnId,
       email: userEmailID,
     }));
     const url = Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}/return-confirmation?rid=${secureReturnId}`);
