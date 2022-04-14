@@ -90,6 +90,11 @@ body {
       }
     }
 
+    .attr-wrapper {
+      display: inline-block;
+      direction: ltr;
+    }
+
     td:nth-child(3) {
       padding-#{$left}: 0 !important;
     }
