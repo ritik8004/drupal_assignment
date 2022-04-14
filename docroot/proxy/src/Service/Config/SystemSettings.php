@@ -68,14 +68,6 @@ class SystemSettings {
       $env
     );
 
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_security.php';
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/appointment.php';
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/commerce_backend.php';
-    require_once DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/alshaya_backend_calls_options.settings.php';
-
-    // Include overrides.
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';
-
     $settings['proxy_settings']['country_code'] = $site_country_code['country_code'];
     $this->proxySettings = $settings;
   }
