@@ -213,7 +213,7 @@ export default class EgiftTopPurchase extends React.Component {
         if (typeof response.data.response_type !== 'undefined' && response.data.response_type) {
           // GTM product attributes.
           const productGtm = {
-            name: topUpCard.name,
+            name: `eGift Card Top up/${params.topup.amount}`,
             price: params.topup.amount,
             variant: topUpCard.sku,
             dimension2: topUpCard.type_id,
