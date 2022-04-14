@@ -12,8 +12,7 @@ import {
   nearByStores,
   getDistanceBetween,
 } from '../utility';
-import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import AddressHours from '../components/AddressHours';
 
 export class StoreFinderList extends React.PureComponent {
   constructor(props) {
@@ -211,16 +210,11 @@ export class StoreFinderList extends React.PureComponent {
                           <div className="views-row">
                             <div className="views-field-field-store-address">
                               <div className="field-content">
-                                <div className="address--line2">
-                                  <ConditionalView condition={hasValue(store.address)}>
-                                    {store.address.map((item) => (
-                                      <>
-                                        {item.code === 'address_building_segment' ? <span>{item.label}</span> : null}
-                                        {item.code === 'street' ? <span>{item.value}</span> : null}
-                                      </>
-                                    ))}
-                                  </ConditionalView>
-                                </div>
+                                <AddressHours
+                                  type="addressitem"
+                                  address={store.address}
+                                  classname="address--line2"
+                                />
                                 <div className="field field--name-field-store-phone field--type-string field--label-hidden field__item">
                                   {store.store_phone}
                                 </div>
@@ -228,22 +222,14 @@ export class StoreFinderList extends React.PureComponent {
                             </div>
                             <div className="views-field-field-store-open-hours">
                               <div className="field-content">
-                                <div className="hours--wrapper selector--hours">
-                                  <div>
-                                    <div id={`hours--label-${store.id}`} className="hours--label" onClick={() => this.toggleOpenClass(store.id)}>
-                                      {Drupal.t('Opening Hours')}
-                                    </div>
-                                    <div className="open--hours">
-                                      <ConditionalView condition={hasValue(store.store_hours)}>
-                                        {store.store_hours.map((item) => (
-                                          <div key={item.code}>
-                                            <span className="key-value-key">{item.label}</span>
-                                            <span className="key-value-value">{item.value}</span>
-                                          </div>
-                                        ))}
-                                      </ConditionalView>
-                                    </div>
+                                <div className="hours--wrapper selector--hours2">
+                                  <div id={`hours--label-${store.id}`} className="hours--label" onClick={() => this.toggleOpenClass(store.id)}>
+                                    {Drupal.t('Opening Hours')}
                                   </div>
+                                  <AddressHours
+                                    type="hoursitem"
+                                    storeHours={store.store_hours}
+                                  />
                                 </div>
                                 <div className="view-on--map">
                                   <a onClick={() => this.getDirection(store)}>{Drupal.t('Get directions')}</a>
@@ -295,7 +281,10 @@ export class StoreFinderList extends React.PureComponent {
                                 onClose={this.onInfoWindowClose}
                                 visible={showingInfoWindow}
                               >
-                                <InfoPopUp selectedPlace={selectedPlace} />
+                                <InfoPopUp
+                                  selectedPlace={selectedPlace}
+                                  storeHours={selectedPlace.store_hours}
+                                />
                               </InfoWindow>
                             )}
                           </Map>
