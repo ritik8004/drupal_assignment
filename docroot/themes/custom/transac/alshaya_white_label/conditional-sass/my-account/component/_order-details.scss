@@ -360,6 +360,11 @@
       }
     }
 
+    .attr-wrapper {
+      display: inline-block;
+      direction: ltr;
+    }
+
     .blend {
       @include breakpoint($upto-tablet) {
         vertical-align: bottom;

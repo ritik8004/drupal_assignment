@@ -707,6 +707,46 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ],
   ];
 
+  // Query for fetching stock information for products in cart.
+  $query_fields['cart_items_stock'] = [
+    'query' => [
+      'query ($cartId: String!)' => [
+        'cart(cart_id: $cartId)' => [
+          'items' => [
+            'product' => [
+              'type_id',
+              '...on SimpleProduct' => [
+                // This stock data will be used for simple products.
+                'sku',
+                'stock_data' => [
+                  'qty',
+                  'max_sale_qty',
+                  'max_sale_qty_parent',
+                  'status',
+                ],
+              ],
+            ],
+            // Stock data from here will be used for configurable products.
+            '...on ConfigurableCartItem' => [
+              'configured_variant' => [
+                'sku',
+                'stock_data' => [
+                  'qty',
+                  'max_sale_qty',
+                  'max_sale_qty_parent',
+                  'status',
+                ],
+              ],
+            ],
+          ],
+        ],
+      ],
+    ],
+    'variables' => [
+      'cartId' => NULL,
+    ],
+  ];
+
   return $query_fields;
 }
 
@@ -737,6 +777,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'product.delivery_option_ed' => 'alshaya_rcs_product',
     'gallery.product.product_zoom' => 'alshaya_rcs_product',
     'gallery.product.product_labels' => 'alshaya_rcs_product',
+    'gallery.product.product_gallery_magazine' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_default_gallery' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_mobile_gallery' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_modal_gallery' => 'alshaya_rcs_product',
