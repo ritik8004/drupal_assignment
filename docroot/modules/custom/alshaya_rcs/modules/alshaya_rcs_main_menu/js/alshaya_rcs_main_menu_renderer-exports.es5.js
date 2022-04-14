@@ -302,8 +302,6 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     return;
   }
 
-  // Build menu item path prefix.
-  const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
   // @todo remove this when API return the correct path.
   const levelObjOrgUrlPath = levelObj.url_path;
   // Append category prefix in L2 if super category is enabled.
@@ -314,7 +312,7 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     }
     levelObj.url_path = `/${settings.path.pathPrefix}${urlItems.join('/')}/`;
   } else {
-    levelObj.url_path = `/${menuPathPrefixFull}${levelObjOrgUrlPath}/`;
+    levelObj.url_path = `/${settings.path.pathPrefix}${levelObjOrgUrlPath}/`;
   }
 
   const levelIdentifier = `c-footer-menu__tab`;
