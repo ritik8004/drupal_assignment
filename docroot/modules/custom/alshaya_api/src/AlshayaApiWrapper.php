@@ -284,11 +284,10 @@ class AlshayaApiWrapper {
       if ($throw_exception) {
         throw $e;
       }
-
       if ($e->getCode() == 401 && PHP_SAPI !== 'cli') {
         $result = NULL;
         $this->logger->error('Exception while updating customer data @data against the api @api. Message: @message.', [
-          '@data' => implode(' ', $data),
+          '@data' => $data['username'],
           '@api' => $url,
           '@message' => $e->getMessage(),
         ]);
