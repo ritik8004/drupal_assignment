@@ -68,7 +68,10 @@ class ReturnRefundDetails extends React.Component {
       Drupal.addItemInLocalStorage('online_return_id', returnId);
       // On success, redirect to return confirmation page.
       const { orderId } = getOrderDetailsForReturnRequest()['#order'];
-      window.location.href = getReturnConfirmationUrl(orderId, returnId);
+      const returnUrl = getReturnConfirmationUrl(orderId, returnId);
+      if (hasValue(returnUrl)) {
+        window.location.href = returnUrl;
+      }
     }
   }
 
