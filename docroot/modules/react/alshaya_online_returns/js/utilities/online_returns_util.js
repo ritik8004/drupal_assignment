@@ -105,8 +105,9 @@ function isReturnWindowClosed(date) {
 /**
  * Utility function to get return confirmation url.
  */
-function getReturnConfirmationUrl(orderId) {
-  const url = Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}/return-confirmation`);
+function getReturnConfirmationUrl(orderId, returnId) {
+  const secureReturnId = btoa(returnId);
+  const url = Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}/return-confirmation?rid=${secureReturnId}`);
   return url;
 }
 
