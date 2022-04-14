@@ -24,9 +24,6 @@ function alshaya_cos_transac_rcs_install() {
     'alshaya_pims',
   ]);
 
-  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
-  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
-  $sku_fields_manager->updateFieldMetaInfo('materials', ['set_is_array' => 1]);
 }
 
 /**
