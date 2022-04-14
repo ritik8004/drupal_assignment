@@ -605,7 +605,7 @@ exports.computePhFilters = function (input, filter) {
           // Add a disabled option which will be used as the label for the option.
           let selectOption = jQuery('<option></option>');
           let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
-          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(text);
+          selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
           configurableOptionsList.append(selectOption);
 
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
@@ -621,7 +621,7 @@ exports.computePhFilters = function (input, filter) {
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
             const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
-            selectOption.attr({value: value.value_index}).text(label);
+            selectOption.attr({ value: value.value_index }).text(label);
             configurableOptionsList.append(selectOption);
 
             if (optionIsSwatch) {
