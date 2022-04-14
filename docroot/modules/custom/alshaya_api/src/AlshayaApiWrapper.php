@@ -328,12 +328,14 @@ class AlshayaApiWrapper {
       'field' => 'status',
       'value' => '1',
       'condition_type' => 'eq',
+      'group_id' => 0,
     ];
 
     $filters[] = [
       'field' => 'store_id',
       'value' => Settings::get('store_id')[$langcode],
       'condition_type' => 'eq',
+      'group_id' => 1,
     ];
 
     $page_size = 1000;
@@ -842,11 +844,17 @@ class AlshayaApiWrapper {
         continue;
       }
 
+      $filter_group_id = $filter['group_id'] ?? $group_id;
+
       foreach ($filter as $key => $value) {
+        if ($key === 'group_id') {
+          continue;
+        }
+
         // Prepared string like below.
         // searchCriteria[filter_groups][0][filters][0][field]=field
         // This is how Magento search criteria in APIs work.
-        $url .= $base . '[filter_groups][' . $group_id . '][filters][' . $index . '][' . $key . ']=' . $value;
+        $url .= $base . '[filter_groups][' . $filter_group_id . '][filters][' . $index . '][' . $key . ']=' . $value;
 
         // Add query params separator.
         $url .= '&';
