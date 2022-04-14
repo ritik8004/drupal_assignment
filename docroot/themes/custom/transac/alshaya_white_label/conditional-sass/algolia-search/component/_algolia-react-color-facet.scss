@@ -38,6 +38,11 @@
               display: inline-block;
               margin-left: 0.5rem;
             }
+
+            .facet-item__label {
+              display: inline-block;
+              direction: ltr;
+            }
           }
         }
       }
