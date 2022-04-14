@@ -743,7 +743,7 @@
       }
 
       .online-booking-details {
-        color: $white-five;
+        color: $_online-booking-primary-text;
       }
 
       .icon-ic_infomation {
@@ -761,14 +761,14 @@
       .icon-ic_infomation::before {
         width: 2.125rem;
         height: 2.125rem;
-        color: $white-five;
+        color: $_online-booking-primary-text;
       }
     }
 
     .booking-error,
     .booking-info,
     .update-booking-info {
-      color: $white-five;
+      color: $_online-booking-primary-text;
       font-size: 0.875rem;
       font-weight: 500;
       line-height: 1.71;
@@ -788,6 +788,16 @@
       @include breakpoint($only-mobile) {
         line-height: 1.2858;
         margin: 1rem 0;
+      }
+
+      a {
+        color: $_online-booking-primary-text;
+
+        &:hover,
+        &:focus,
+        &:active {
+          color: $_online-booking-primary-text;
+        }
       }
     }
 
