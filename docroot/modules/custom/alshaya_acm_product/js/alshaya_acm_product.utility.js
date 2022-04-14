@@ -113,4 +113,18 @@
       });
     });
   }
+
+  /**
+   * This function does not have any implementation for V2 since for V2 we
+   * do a call to Drupal to get the stock data.
+   *
+   * @param {string} cartId
+   *   Cart ID value.
+   *
+   * @returns {Promise}
+   *   Returns a promise so that await executes on the calling function.
+   */
+  window.commerceBackend.loadProductStockDataFromCart = function loadProductStockDataFromCart(cartId) {
+    return Promise.resolve(true);
+  }
 })(Drupal, jQuery);
