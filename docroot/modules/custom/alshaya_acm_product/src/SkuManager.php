@@ -1053,6 +1053,7 @@ class SkuManager {
           foreach ($free_gift_skus as $free_gift_sku) {
             $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
           }
+          // phpcs:ignore
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           foreach ($data['condition']['conditions'][0]['conditions'] ?? [] as $condition) {
@@ -1079,6 +1080,7 @@ class SkuManager {
           if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
             $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
           }
+          // phpcs:ignore
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           $promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue();
@@ -1354,6 +1356,7 @@ class SkuManager {
    */
   protected function getSkuLabel(SKU $sku_entity, $parent = FALSE) {
     if ($labels = $sku_entity->get('attr_labels')->getString()) {
+      // phpcs:ignore
       $labels_data = unserialize($labels);
       if (!empty($labels_data) && is_array($labels_data)) {
         return $labels_data;
@@ -2415,6 +2418,26 @@ class SkuManager {
           'option_value' => $raw_options['option_value'] ?? '',
         ];
       }
+      else {
+        // If attribute code is not sku field eg: subset_name, then it's a
+        // configurable form setting hence get raw attributes data for wishlist
+        // product options.
+        $raw_options = $this->getConfigurableRawAttributesData($sku, $code);
+        // Skip if raw options does not have id or value.
+        if (empty($raw_options['option_id']) || empty($raw_options['option_value'])) {
+          continue;
+        }
+        // Keep label and value null as these attributes eg: subset_name
+        // should not be shown on cart product attributes and used only for
+        // wish-list selected variant.
+        $configurableFieldValues[$code] = [
+          'attribute_id' => $code,
+          'label' => NULL,
+          'value' => NULL,
+          'option_id' => $raw_options['option_id'] ?? '' ,
+          'option_value' => $raw_options['option_value'] ?? '',
+        ];
+      }
     }
 
     return $configurableFieldValues;
@@ -2434,6 +2457,7 @@ class SkuManager {
   public function getLabelFromParentSku(SKUInterface $sku, $attr_code) {
     $parent_sku = $this->getParentSkuBySku($sku);
     if ($parent_sku instanceof SKUInterface) {
+      // phpcs:ignore
       $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
       foreach ($configurables as $field) {
         if ($attr_code == $field['code']) {
@@ -3814,6 +3838,7 @@ class SkuManager {
 
     $attributes = [];
     if ($attrs = $parent_sku->get('field_configurable_attributes')->first()) {
+      // phpcs:ignore
       $configurable_attributes = unserialize($attrs->getString());
       if (!empty($configurable_attributes)) {
         foreach ($configurable_attributes as $attribute) {

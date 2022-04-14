@@ -21,7 +21,7 @@ function alshaya_hnm_preprocess_block(&$variables) {
 /**
  * Implements hook_form_alter().
  */
-// @codingStandardsIgnoreLine
+// phpcs:ignore
 function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   switch ($form_id) {
     case "views_exposed_form":

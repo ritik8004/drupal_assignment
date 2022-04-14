@@ -63,8 +63,8 @@ command-hooks:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
   post-deploy-build:
-    dir: '${repo.root}/blt/scripts'
-    command: 'bash middleware-build.sh ${deploy.dir}; bash post-deploy-build.sh ${deploy.dir}'
+    dir: '${docroot}'
+    command: 'echo ''No post-deploy build configured.'''
   post-setup-build:
     dir: '${docroot}'
     command: 'echo ''No post-setup build configured.'''

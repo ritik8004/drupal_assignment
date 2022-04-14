@@ -51,19 +51,18 @@
    *   The parent SKU value if exists.
    */
   window.commerceBackend.updateGallery = async function (product, layout, productGallery, sku, parentSku) {
-    const mainSku = parentSku || sku;
-    const productData = window.commerceBackend.getProductData(mainSku, null, false);
-    const viewMode = product.parents('.entity--type-node').attr('data-vmode');
+    var mainSku = parentSku || sku;
+    var productData = window.commerceBackend.getProductData(mainSku, null, false);
+    var viewMode = product.parents('.entity--type-node').attr('data-vmode');
 
     // Maps gallery value from backend to the appropriate filter.
-    let galleryType = null;
-    switch (drupalSettings.alshayaRcs.pdpLayout) {
-      case 'pdp-magazine':
-        galleryType = drupalSettings.alshayaRcs.pdpGalleryType === 'classic' ? 'classic-gallery' : 'magazine-gallery';
-        break;
+    var galleryType = 'classic-gallery';
+    if (drupalSettings.alshayaRcs.pdpLayout === 'pdp-magazine'
+      && drupalSettings.alshayaRcs.pdpGalleryType !== 'classic') {
+      galleryType = 'magazine-gallery';
     }
 
-    const gallery = globalThis.rcsPhRenderingEngine
+    var gallery = globalThis.rcsPhRenderingEngine
       .render(
         drupalSettings,
         galleryType,
@@ -97,6 +96,11 @@
     }
     else {
       $(product).find('#product-zoom-container').replaceWith(gallery);
+    }
+
+    // COS classic gallery for magazine layout.
+    if (layout === 'pdp-magazine' && drupalSettings.alshayaRcs.pdpGalleryType == 'classic') {
+      layout = 'pdp';
     }
 
     if (layout === 'pdp-magazine') {

@@ -4,7 +4,7 @@
   align-items: center;
 
   @include breakpoint($only-mobile) {
-    padding: 0 0.5rem 1.75rem;
+    padding: 0 0.5rem 0.5rem;
   }
 
   > span {
@@ -57,8 +57,21 @@
       align-self: center;
     }
 
+    .inline-rating {
+      + .button-wrapper {
+        margin-#{$left}: 1rem;
+
+        @include breakpoint($only-mobile) {
+          padding: 0 0.5rem 0.5rem;
+          margin-#{$left}: 0.125rem;
+        }
+      }
+    }
+
     .button-wrapper {
-      margin-#{$left}: 1rem;
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0.5rem;
+      }
     }
   }
 
@@ -66,5 +79,9 @@
     text-decoration: underline;
     font-size: 0.875rem;
     color: $rr-write-review-link-txt;
+
+    &.disabled {
+      opacity: 0.2;
+    }
   }
 }

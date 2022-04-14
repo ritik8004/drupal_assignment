@@ -66,10 +66,11 @@
         display: flex;
         align-items: center;
         padding-top: 0;
+        justify-content: space-between;
       }
 
       .back-link {
-        min-width: 9.375rem;
+        width: auto;
 
         &::before {
           @include breakpoint($only-mobile) {
@@ -97,16 +98,6 @@
           position: absolute;
           top: 2.5rem;
           z-index: 10;
-        }
-
-        button {
-          .text {
-            width: 3.5rem;
-          }
-
-          @include breakpoint($only-mobile) {
-            width: auto;
-          }
         }
       }
     }

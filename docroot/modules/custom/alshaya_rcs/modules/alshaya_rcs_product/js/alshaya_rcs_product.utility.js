@@ -295,7 +295,6 @@
         sku: variantInfo.sku,
         parent_sku: variantInfo.parent_sku,
         configurableOptions: getVariantConfigurableOptions(product, variant),
-        // @todo Fetch layout dynamically.
         layout: drupalSettings.alshayaRcs.pdpLayout,
         gallery: '',
         stock: {
@@ -358,6 +357,7 @@
       sku: product.sku,
       type: product.type_id,
       gtm_attributes: product.gtm_attributes,
+      layout: drupalSettings.alshayaRcs.pdpLayout,
       gallery: null,
       identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
       cart_image: window.commerceBackend.getCartImage(product),
@@ -616,7 +616,9 @@
 
       configurableOptions.forEach(function (option) {
         option.values.forEach(function (value) {
-          if (Drupal.hasValue(combinations.attribute_sku[configColorAttribute][value.value_index])) {
+          if (Drupal.hasValue(combinations.attribute_sku[configColorAttribute]
+            && Drupal.hasValue(combinations.attribute_sku[configColorAttribute][value.value_index]))
+          ) {
             combinations.attribute_sku[configColorAttribute][value.value_index].forEach(function (variantSku) {
               var colorOptionsList = {
                 display_label: window.commerceBackend.getAttributeValueLabel(option.attribute_code, variants[variantSku].product[colorLabelAttribute]),
@@ -763,7 +765,8 @@
 
     var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
     // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata.items.forEach(function (option) {
+    response.data.customAttributeMetadata.items
+    && response.data.customAttributeMetadata.items.forEach(function (option) {
       var allOptionsForAttribute = {};
       option.attribute_options.forEach(function (optionValue) {
         allOptionsForAttribute[optionValue.value] = optionValue.label;
@@ -773,7 +776,9 @@
     });
 
     // Return the label.
-    return staticDataStore['attrLabels'][attrName][attrValue];
+    return Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue])
+      ? staticDataStore['attrLabels'][attrName][attrValue]
+      : '';
   };
 
   /**
@@ -789,7 +794,7 @@
    */
   const getFirstChildWithMedia = function (product) {
     const firstChild = product.variants.find(function (variant) {
-      return Drupal.hasValue(variant.product.media) ? variant.product : false;
+      return Drupal.hasValue(variant.product.hasMedia) ? variant.product : false;
     });
 
     if (Drupal.hasValue(firstChild)) {
@@ -813,11 +818,20 @@
   const getSkuForGallery = function (product) {
     let skuForGallery = product;
     let child = null;
+    let isProductConfigurable = product.type_id === 'configurable';
 
     switch (drupalSettings.alshayaRcs.useParentImages) {
       case 'never':
-        if (product.type_id === 'configurable') {
+        if (isProductConfigurable) {
           child = getFirstChildWithMedia(product);
+        }
+        break;
+
+      case 'always':
+        if (isProductConfigurable) {
+          if (!Drupal.hasValue(product.media_gallery)) {
+            child = getFirstChildWithMedia(product);
+          }
         }
         break;
     }

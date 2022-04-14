@@ -10,6 +10,7 @@
   &__available-delivery {
     font-size: 0.875rem;
     line-height: 1.5rem;
+    color: $label_black;
 
     &-time,
     &-date {
@@ -34,10 +35,12 @@
   }
 
   &__change-delivery-schedule {
-    color: $checkout_order_details_label;
+    color: $_online-booking-change-delivery-schedule;
     font-size: 0.875rem;
     font-weight: bold;
     cursor: pointer;
+    padding: 0.5rem 0;
+    width: fit-content;
 
     &:hover {
       color: $checkout_order_details_label;
@@ -55,6 +58,7 @@
 
   &__hold-delivery {
     margin-bottom: 0.75rem;
+    color: $label_black;
   }
 
   &__error-message {
@@ -74,9 +78,13 @@
         width: 1.063rem;
         height: 1.063rem;
         position: absolute;
-        top: 0;
+        top: -0.0625rem;
         #{$left}: 0;
         bottom: 0.125rem;
+
+        html[lang=ar] & {
+          top: 0;
+        }
       }
 
       flex-grow: 1;
@@ -89,14 +97,25 @@
       display: inline-block;
       vertical-align: middle;
       margin-#{$right}: 0.46875rem;
+      cursor: default;
     }
+  }
+
+  .carrier-title {
+    font-weight: bold;
   }
 }
 
 .loading {
   @include throbberLoader;
 
-  padding: 0;
+  padding-left: 0;
+  padding-right: 0;
+  width: auto;
+
+  @include breakpoint($only-mobile) {
+    background-position: 57% 50% !important;
+  }
 }
 
 .delivery-block-loading {
@@ -104,4 +123,8 @@
 
   padding: 0;
   height: 2rem;
+}
+
+.delivery-name {
+  font-weight: 600;
 }

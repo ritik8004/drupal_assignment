@@ -35,6 +35,7 @@ function alshaya_wishlist_install() {
 
   // Enable My wishlist link in the menu.
   $config = \Drupal::configFactory()->getEditable('alshaya_user.settings');
+  // phpcs:ignore
   $alshaya_wishlist = unserialize($config->get('my_account_enabled_links'));
   $alshaya_wishlist['alshaya_wishlist'] = 'alshaya_wishlist';
   $config->set('my_account_enabled_links', serialize($alshaya_wishlist));

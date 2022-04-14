@@ -153,6 +153,7 @@ class SkuImagesManagerPims extends SkuImagesManager {
       return $static[$static_id];
     }
 
+    // phpcs:ignore
     $media = unserialize($sku->get('media')->getString());
 
     $this->moduleHandler->alter(
