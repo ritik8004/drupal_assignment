@@ -50,7 +50,7 @@ class ProxyFilter implements FilterInterface {
 
     // Check if url received by proxy has magento host,
     // If url is not magento host then return response with 404 code.
-    if (!strstr($this->url, $magento_host)) {
+    if (substr($this->url, 0, strlen($magento_host)) !== $magento_host) {
       return $response->withStatus(404, 'Page not found');
     }
 

@@ -16,7 +16,7 @@ class SystemSettings {
    *
    * @var array
    */
-  protected $appointmentSettings;
+  protected $proxySettings;
 
   /**
    * RequestStack Object.
@@ -76,8 +76,8 @@ class SystemSettings {
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';
 
-    $settings['appointment_settings']['country_code'] = $site_country_code['country_code'];
-    $this->appointmentSettings = $settings;
+    $settings['proxy_settings']['country_code'] = $site_country_code['country_code'];
+    $this->proxySettings = $settings;
   }
 
   /**
@@ -127,7 +127,7 @@ class SystemSettings {
    *   Settings if found.
    */
   public function getSettings(string $key, $default = NULL) {
-    return $this->appointmentSettings[$key] ?? $default;
+    return $this->proxySettings[$key] ?? $default;
   }
 
   /**
