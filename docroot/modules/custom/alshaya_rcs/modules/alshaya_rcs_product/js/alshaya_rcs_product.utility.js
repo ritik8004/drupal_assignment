@@ -1003,6 +1003,9 @@
         return;
       }
       response.cart.items.forEach(function eachCartItem(cartItem) {
+        if (!Drupal.hasValue(cartItem)) {
+          return;
+        }
         if (cartItem.product.type_id === 'configurable') {
           staticDataStore.cartItemsStock[cartItem.configured_variant.sku] =
           cartItem.configured_variant.stock_data;
