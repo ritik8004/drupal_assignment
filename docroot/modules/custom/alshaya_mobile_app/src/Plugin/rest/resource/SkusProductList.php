@@ -28,7 +28,6 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
  *   label = @Translation("SKUs Product List"),
  *   uri_paths = {
  *     "canonical" = "/rest/v1/skus/product-list",
- *      "https://www.drupal.org/link-relations/create" = "/rest/v1/skus/product-list"
  *   }
  * )
  */
