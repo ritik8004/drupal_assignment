@@ -8,7 +8,7 @@ alshaya_online_returns.return_request:
   options:
     user: \d+
 
-alshaya_online_returns.return_confirmationn:
+alshaya_online_returns.return_confirmation:
   path: '/user/{user}/order/{order_id}/return-confirmation'
   defaults:
     _controller: '\Drupal\alshaya_online_returns\Controller\OnlineReturnController::returnConfirmation'
@@ -17,3 +17,11 @@ alshaya_online_returns.return_confirmationn:
     _custom_access: '\Drupal\acq_customer\Controller\CustomerController::checkAccess'
   options:
     user: \d+
+
+alshaya_online_returns.alshaya_return_confirmation_settings:
+  path: '/admin/config/alshaya/return-confirmation'
+  defaults:
+    _form: '\Drupal\alshaya_online_returns\Form\AlshayaReturnConfirmationConfigForm'
+    _title: 'Alshaya Return Confirmation Configuration'
+  requirements:
+    _permission: 'administer site configuration'
