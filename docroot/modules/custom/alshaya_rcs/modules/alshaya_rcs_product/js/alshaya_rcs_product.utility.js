@@ -8,6 +8,7 @@
     cnc_status: {},
     configurableColorData: {},
     attrLabels: {},
+    cartItemsStock: {},
   };
 
   /**
@@ -450,6 +451,12 @@
 
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
+      // Prepare the attributes variable to have key value pair.
+      let attributes = [];
+      variant.attributes.forEach((item) => {
+        attributes[item['code']] = item['value_index'];
+      });
+
       const variantSku = product.sku;
       let attributeVal = null;
 
@@ -457,7 +464,13 @@
         attributeVal = product[configurableCodes[i]];
 
         if (typeof attributeVal === 'undefined') {
-          return;
+          // Validate if the configurable code is available in attributes list.
+          if (typeof attributes[configurableCodes[i]] === 'undefined') {
+            return;
+          }
+          else {
+            attributeVal = attributes[configurableCodes[i]];
+          }
         }
 
         combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'
@@ -689,13 +702,14 @@
     // Product data, containing stock information, is already present in local
     // storage before this function is invoked. So no need to call a separate
     // API to fetch stock status for V2.
-    const product = await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
+    var product = await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
+    var stock = staticDataStore.cartItemsStock[sku];
 
     return {
-      stock: product.stock.qty,
-      in_stock: product.stock.in_stock,
+      stock: stock.qty,
+      in_stock: (stock.status === 'IN_STOCK'),
       cnc_enabled: product.cncEnabled,
-      max_sale_qty: product.maxSaleQty,
+      max_sale_qty: stock.max_sale_qty,
     };
   };
 
@@ -997,6 +1011,36 @@
     }
 
     return staticDataStore.labels[sku];
+  }
+
+  /**
+   * Gets the stock data for cart items.
+   *
+   * @param {string} cartId
+   *   Cart ID value.
+   *
+   * @returns {Promise}
+   *   Returns a promise so that await executes on the calling function.
+   */
+  window.commerceBackend.loadProductStockDataFromCart = function loadProductStockDataFromCart(cartId) {
+    return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }).then(function processStock(response) {
+      // Do not proceed if for some reason there are no cart items.
+      if (!response.cart.items.length) {
+        return;
+      }
+      response.cart.items.forEach(function eachCartItem(cartItem) {
+        if (!Drupal.hasValue(cartItem)) {
+          return;
+        }
+        if (cartItem.product.type_id === 'configurable') {
+          staticDataStore.cartItemsStock[cartItem.configured_variant.sku] =
+          cartItem.configured_variant.stock_data;
+        }
+        else {
+          staticDataStore.cartItemsStock[cartItem.product.sku] = cartItem.product.stock_data;
+        }
+      });
+    });
   }
 
   // Event listener to update static promotion.

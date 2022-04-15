@@ -247,6 +247,30 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       result = response.data.products.items[0];
       break;
 
+    case 'category_parents_by_path':
+      let productCategoryParentVariables = rcsPhGraphqlQuery.category_parents_by_path.variables;
+      productCategoryParentVariables.urlPath = params.urlPath;
+      request.data = prepareQuery(rcsPhGraphqlQuery.category_parents_by_path.query, productCategoryParentVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.categories.items[0];
+      break;
+
+    case 'category_children_by_path':
+      let productCategoryChildrenVariables = rcsPhGraphqlQuery.category_children_by_path.variables;
+      productCategoryChildrenVariables.urlPath = params.urlPath;
+      request.data = prepareQuery(rcsPhGraphqlQuery.category_children_by_path.query, productCategoryChildrenVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.categories.items[0];
+
+    case 'cart_items_stock':
+      let cartItemsStockVariables = rcsPhGraphqlQuery.cart_items_stock.variables;
+      cartItemsStockVariables.cartId = params.cartId;
+      request.data = prepareQuery(rcsPhGraphqlQuery.cart_items_stock.query, cartItemsStockVariables);
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data;
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;

@@ -38,6 +38,11 @@
           margin-#{$right}: 0.5rem;
           margin-#{$left}: 0.625rem;
         }
+
+        .facet-item__label {
+          display: inline-block;
+          direction: ltr;
+        }
       }
 
       &.same_day_delivery {
@@ -63,6 +68,7 @@
       .facet-item__value {
         display: flex;
         align-items: center;
+        direction: ltr;
       }
 
       .facet-item__label {
