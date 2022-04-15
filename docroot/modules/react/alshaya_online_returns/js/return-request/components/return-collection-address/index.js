@@ -31,10 +31,10 @@ const ReturnCollectionAddress = ({
     <>
       <div className="return-address-wrapper">
         <div className="return-address-title">
-          { Drupal.t('Return Collection Address', {}, { context: 'online_returns' }) }
+          { Drupal.t('Pick-up Address', {}, { context: 'online_returns' }) }
         </div>
         <div className="return-address-desc">
-          { Drupal.t('Last used address and phone number will be applied.', {}, { context: 'online_returns' }) }
+          { `(${Drupal.t('Last used address and phone number will be applied', {}, { context: 'online_returns' })})` }
         </div>
         <div className="return-address-details">
           <ConditionalView condition={hasValue(shippingAddress.given_name)}>

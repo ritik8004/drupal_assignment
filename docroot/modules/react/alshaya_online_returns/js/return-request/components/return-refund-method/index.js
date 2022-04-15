@@ -15,9 +15,9 @@ const ReturnRefundMethod = ({
           { Drupal.t('Refund Method', {}, { context: 'online_returns' }) }
         </div>
         <div className="refund-method-listing">
-          <span className="method-listing-label">
+          <div className="method-listing-label">
             { Drupal.t('Your refund will be credited back to the following payment methods.', {}, { context: 'online_returns' }) }
-          </span>
+          </div>
           <div className="method-list-wrapper">
             {Object.keys(paymentDetails).map((method) => (
               <div key={method} className="method-wrapper">
@@ -25,10 +25,23 @@ const ReturnRefundMethod = ({
                   <CardTypeSVG type={paymentDetails[method].payment_type.toLowerCase()} class={`${paymentDetails[method].payment_type.toLowerCase()} is-active`} />
                 </div>
                 <div className="card-detail">
-                  { Drupal.t('@card_type Card ending in @card_number', { '@card_type': paymentDetails[method].card_type, '@card_number': paymentDetails[method].card_number }, {}, { context: 'online_returns' }) }
+                  <span className="payment-type bold-text">
+                    { Drupal.t('@card_type Card', { '@card_type': paymentDetails[method].card_type }, {}, { context: 'online_returns' }) }
+                  </span>
+                  <span>
+                    {' '}
+                    { Drupal.t('ending in', {}, { context: 'online_returns' }) }
+                    {' '}
+                  </span>
+                  <span className="payment-info bold-text">
+                    { Drupal.t('@card_number', { '@card_number': paymentDetails[method].card_number }, {}, { context: 'online_returns' }) }
+                  </span>
                 </div>
               </div>
             ))}
+          </div>
+          <div className="refund-message">
+            { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
           </div>
         </div>
         <div className="refund-message">
