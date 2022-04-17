@@ -20,12 +20,13 @@ function alshaya_optimizely_page_attachments(array &$page) {
     // Add Optimizely script tags to header.
     $optimizely_script_code = str_replace('{{project_id}}', $projectId, '//cdn.optimizely.com/js/{{project_id}}.js');
 
-    $script = [[
-      '#tag' => 'script',
-      '#attributes' => [
-        'src' => $optimizely_script_code,
+    $script = [
+      [
+        '#tag' => 'script',
+        '#attributes' => [
+          'src' => $optimizely_script_code,
+        ],
       ],
-    ],
       'dpath',
     ];
     array_unshift($page['#attached']['html_head'], $script);
