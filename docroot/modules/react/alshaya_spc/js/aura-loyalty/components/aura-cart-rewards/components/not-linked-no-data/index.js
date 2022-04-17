@@ -4,6 +4,9 @@ import { handleSignUp } from '../../../../../../../alshaya_aura_react/js/utiliti
 import SignUpOtpModal from '../../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
 import ToolTip from '../../../../../utilities/tooltip';
 import getStringMessage from '../../../../../utilities/strings';
+import AuraHeaderIcon from '../../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
+import { isUserAuthenticated } from '../../../../../../../js/utilities/helper';
+import ConditionalView from '../../../../../common/components/conditional-view';
 
 class AuraNotLinkedNoData extends React.Component {
   constructor(props) {
@@ -39,22 +42,44 @@ class AuraNotLinkedNoData extends React.Component {
     return (
       <>
         <div className="block-content guest-user">
+          <AuraHeaderIcon />
+          <span className="spc-join-aura-link-wrapper submit">
+            <a
+              className="spc-join-aura-link"
+              onClick={() => this.openOTPModal()}
+            >
+              {getStringMessage('aura_join_aura')}
+            </a>
+          </span>
+          {getStringMessage('aura_or')}
+          <ConditionalView condition={isUserAuthenticated()}>
+            <span className="spc-link-aura-link-wrapper submit">
+              <a
+                className="spc-link-aura-link"
+                /** @todo: We need to change this to open the link aura form. */
+                onClick={() => this.openOTPModal()}
+              >
+                {getStringMessage('aura_link_aura')}
+              </a>
+            </span>
+          </ConditionalView>
+          <ConditionalView condition={!isUserAuthenticated()}>
+            <span className="spc-link-aura-link-wrapper submit">
+              <a
+                className="spc-link-aura-link"
+                /** @todo: We need to change this to open sign in aura form. */
+                onClick={() => this.openOTPModal()}
+              >
+                {getStringMessage('aura_sign_in')}
+              </a>
+            </span>
+          </ConditionalView>
           <PointsToEarnMessage
             pointsToEarn={pointsToEarn}
             loyaltyStatus={loyaltyStatus}
             wait={wait}
           />
-          <div className="actions">
-            <div className="spc-join-aura-link-wrapper submit">
-              <a
-                className="spc-join-aura-link"
-                onClick={() => this.openOTPModal()}
-              >
-                {Drupal.t('Join now')}
-              </a>
-              <ToolTip enable question>{ getStringMessage('checkout_earn_and_redeem_tooltip') }</ToolTip>
-            </div>
-          </div>
+          <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
         </div>
 
         <SignUpOtpModal

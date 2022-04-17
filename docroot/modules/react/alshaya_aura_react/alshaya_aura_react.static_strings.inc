@@ -280,7 +280,27 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_with_this_purchase',
-      'value' => t('with this purchase.'),
+      'value' => t('with this purchase.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_or',
+      'value' => t('or', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_join_aura',
+      'value' => t('Join Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_aura',
+      'value' => t('Link Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_sign_in',
+      'value' => t('Sign in'),
+    ],
+    [
+      'key' => 'cart_to_earn_with_points',
+      'value' => t('to earn @pts points.', [], ['context' => 'aura']),
     ],
   ];
 }

@@ -406,6 +406,23 @@ function _alshaya_aura_react_translations() {
     'v4' => [
       'with this purchase.' => [
         'ar' => 'مع عملية الشراء هذه.',
+        'context' => 'aura',
+      ],
+      'or' => [
+        'ar' => 'أو',
+        'context' => 'aura',
+      ],
+      'Join Aura' => [
+        'ar' => 'انضم إلى أورا',
+        'context' => 'aura',
+      ],
+      'Link Aura' => [
+        'ar' => 'ربط الهالة',
+        'context' => 'aura',
+      ],
+      'to earn @pts points.' => [
+        'ar' => 'لكسب @pts نقطة.',
+        'context' => 'aura',
       ],
     ],
   ];

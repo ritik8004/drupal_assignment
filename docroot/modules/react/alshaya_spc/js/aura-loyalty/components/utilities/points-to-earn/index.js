@@ -10,19 +10,16 @@ import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 const PointsToEarnMessage = (props) => {
   const { pointsToEarn, loyaltyStatus, wait } = props;
   const allAuraStatus = getAllAuraStatus();
-
+  console.log(loyaltyStatus)
   // Guest User & No card.
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
     || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
-    const toEarnMessageP1 = `${getStringMessage('earn')} `;
-    const pointsHighlight = `${pointsToEarn}`;
-    const toEarnMessageP2 = ` ${getStringMessage('reward_points_with_purchase')}`;
-
     return (
       <span className="spc-aura-points-to-earn">
-        { toEarnMessageP1 }
-        <span className="spc-aura-highlight">{ pointsHighlight }</span>
-        { toEarnMessageP2 }
+        {getStringMessage(
+          'cart_to_earn_with_points',
+          { '@pts': pointsToEarn },
+        )}
       </span>
     );
   }
