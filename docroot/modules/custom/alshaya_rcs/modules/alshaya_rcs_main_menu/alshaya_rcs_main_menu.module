@@ -150,14 +150,14 @@ function alshaya_rcs_main_menu_node_presave(EntityInterface $entity) {
     // Unset the category slug if department page is unchecked.
     if ($entity->get('field_use_as_department_page')->getString() == 0) {
       unset($entity->field_category_slug);
-      // Empty out the data available in the product category.
-      // We are doing this category migration, we are migrating the enriched
-      // term with there parent terms as well. And also those parent terms are
-      // not getting deleted from acq_product_category. Hence to make sure that
-      // we do not conflict between the slug value and the product category
-      // value, we are removing any default value for field_product_category.
-      unset($entity->field_product_category);
     }
+    // Empty out the data available in the product category.
+    // We are doing this category migration, we are migrating the enriched
+    // term with there parent terms as well. And also those parent terms are
+    // not getting deleted from acq_product_category. Hence to make sure that
+    // we do not conflict between the slug value and the product category
+    // value, we are removing any default value for field_product_category.
+    unset($entity->field_product_category);
   }
 }
 
