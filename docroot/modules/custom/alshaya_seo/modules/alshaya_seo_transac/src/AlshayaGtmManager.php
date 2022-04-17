@@ -916,11 +916,11 @@ class AlshayaGtmManager {
     $dimension8 = '';
 
     $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : [];
-    $shipping_info = explode(' - ', $order['shipping_description']);
+    $shipping_info = !empty($order['shipping_description']) ? explode(' - ', $order['shipping_description']) : '';
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $deliveryOption = 'Home Delivery';
-    $deliveryType = $shipping_info[0];
+    $deliveryType = !empty($order['shipping_description']) ? $shipping_info[0] : '';
 
     $shipping_method_name = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
     if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
@@ -956,7 +956,9 @@ class AlshayaGtmManager {
       // If its a virtual product i.e egift card or egift topup.
       if ($item['type'] === 'virtual') {
         $products[$item['item_id']] = [
-          'name' => $item['name'],
+          'name' => ($item['sku'] == 'giftcard_topup')
+          ? 'eGift Card Top up/' . $item['price']
+          : 'eGift Card/' . $item['price'],
           'id' => $item['item_id'],
           'price' => $item['price'],
           'variant' => $item['sku'],

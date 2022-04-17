@@ -322,6 +322,11 @@ $all-filter-height-desktop: calc(100% - 5.3125rem - 8.25rem);
                     line-height: 2.9375rem;
                   }
                 }
+
+                .facet-item__label {
+                  display: inline-block;
+                  direction: ltr;
+                }
               }
             }
           }

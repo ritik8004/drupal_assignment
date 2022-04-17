@@ -332,6 +332,7 @@ exports.render = function render(
       break;
 
     case 'classic-gallery':
+    case 'magazine-gallery':
       let mediaCollection = {
         gallery: [],
         zoom: [],
@@ -346,25 +347,33 @@ exports.render = function render(
             // Continue with the loop.
             return true;
           }
-          variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia) {
+          variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia, i) {
             mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+              index: i,
               type: 'image',
+              alt: entity.name,
+              title: entity.name,
               thumburl: variantMedia.thumbnails,
               mediumurl: variantMedia.medium,
               zoomurl: variantMedia.zoom,
               fullurl: variantMedia.url,
+              last: (i + 1 === length) ? 'last' : '',
             });
           });
         });
       }
       else {
-        entity.media.forEach(function setEntityThumbnails(entityMedia) {
+        entity.media.forEach(function setEntityThumbnails(entityMedia, i) {
           mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+            index: i,
             type: 'image',
+            alt: entity.name,
+            title: entity.name,
             thumburl: entityMedia.thumbnails,
             mediumurl: entityMedia.medium,
             zoomurl: entityMedia.zoom,
             fullurl: entityMedia.url,
+            last: (i + 1 === length) ? 'last' : '',
           });
         });
       }
@@ -376,6 +385,7 @@ exports.render = function render(
       }
 
       const data = {
+        description: entity.description.html,
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
@@ -389,7 +399,11 @@ exports.render = function render(
         pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
       }
 
-      html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      if (placeholder === 'classic-gallery') {
+        html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      } else {
+        html += handlebarsRenderer.render('gallery.product.product_gallery_magazine', data);
+      }
       break;
 
     case 'product-labels':
@@ -591,7 +605,7 @@ exports.computePhFilters = function (input, filter) {
           // Add a disabled option which will be used as the label for the option.
           let selectOption = jQuery('<option></option>');
           let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
-          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(text);
+          selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
           configurableOptionsList.append(selectOption);
 
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
@@ -607,7 +621,7 @@ exports.computePhFilters = function (input, filter) {
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
             const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
-            selectOption.attr({value: value.value_index}).text(label);
+            selectOption.attr({ value: value.value_index }).text(label);
             configurableOptionsList.append(selectOption);
 
             if (optionIsSwatch) {

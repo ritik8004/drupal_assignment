@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Optimizely.
+ *
+ * Adds the required Javascript to your site to track the site optimization.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_optimizely_page_attachments(array &$page) {
+  $projectId = \Drupal::config('alshaya_optimizely.settings')->get('project_id');
+  if (empty($projectId)) {
+    return;
+  }
+
+  if (!(\Drupal::service('router.admin_context')->isAdminRoute())) {
+    // Add Optimizely script tags to header.
+    $optimizely_script_code = str_replace('{{project_id}}', $projectId, '//cdn.optimizely.com/js/{{project_id}}.js');
+
+    $page['#attached']['html_head'][] = [[
+      '#tag' => 'script',
+      '#attributes' => [
+        'src' => $optimizely_script_code,
+      ],
+    ],
+      'dpath',
+    ];
+  }
+}

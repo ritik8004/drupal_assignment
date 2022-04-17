@@ -203,3 +203,40 @@ For reference:
   "/app/": "${workspaceFolder}"
 },
 ```
+
+## Notes
+
+### Captcha
+Separate Captcha keys are configured for local, they will work only for
+KW, SA and AE markets (restrictions are there for 50 sites so only some
+are configured).
+
+To register for any site where captcha doesn't work (and you are not looking at
+captcha specific issues), please disable it by adding following code in your
+local settings file.
+
+```php
+$config['captcha.captcha_point.user_register_form']['status'] = FALSE;
+```
+
+### FB Login
+FB Login will work only on following domains. Please use them for any
+investigation.
+
+* aeokw.alshaya.lndo.site
+* bbwkw.alshaya.lndo.site
+* bpkw.alshaya.lndo.site
+* flkw.alshaya.lndo.site
+* hmkw.alshaya.lndo.site
+* mckw.alshaya.lndo.site
+* mukw.alshaya.lndo.site
+* pbkw.alshaya.lndo.site
+* pbkkw.alshaya.lndo.site
+* vskw.alshaya.lndo.site
+* wekw.alshaya.lndo.site
+* tbskw.alshaya.lndo.site
+* coskw.alshaya.lndo.site
+* dhkw.alshaya.lndo.site
+
+### Google Login
+Google login is expected to work in local for all the sites.

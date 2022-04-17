@@ -33,15 +33,25 @@
         color: $my_account_nav_hover;
         text-decoration: underline;
       }
-
-      &.my-account-egift-card {
-        text-transform: inherit;
-      }
     }
   }
 
   .block:first-child {
     margin-top: 0.3rem;
+  }
+
+  .c-sidebar-first__region {
+    .region__sidebar-first {
+      .item-list {
+        .my-account-nav {
+          li {
+            a.my-account-egift-card {
+              text-transform: inherit;
+            }
+          }
+        }
+      }
+    }
   }
 }
 
