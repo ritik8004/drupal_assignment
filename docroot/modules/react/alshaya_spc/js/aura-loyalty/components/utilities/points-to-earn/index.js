@@ -10,7 +10,7 @@ import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 const PointsToEarnMessage = (props) => {
   const { pointsToEarn, loyaltyStatus, wait } = props;
   const allAuraStatus = getAllAuraStatus();
-  console.log(loyaltyStatus)
+
   // Guest User & No card.
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
     || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
