@@ -401,11 +401,11 @@ interface APIWrapperInterface {
   public function productFullSync($skus = '', $page_size = 0, $acm_uuid = '', $categoryId = "");
 
   /**
-   * TODO (malachy): NOT USED. Consider removal.
-   *
    * Gets latest updated products for syncing.
    *
    * Primarily for dev / testing when async API traffic is not possible.
+   *
+   * @todo (malachy) NOT USED Consider removal.
    *
    * @param int $count
    *   Number of products to sync.
@@ -428,14 +428,6 @@ interface APIWrapperInterface {
    *   Failed request exception.
    */
   public function getPaymentToken($method);
-
-  /**
-   * Function to subscribe an email for newsletter.
-   *
-   * @param string $email
-   *   E-Mail to subscribe.
-   */
-  public function subscribeNewsletter($email);
 
   /**
    * Preforms a test call to conductor.
