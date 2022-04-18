@@ -13,9 +13,8 @@ global_styles:
     - core/jquery
     - core/jquery.once
     - jquery_ui_accordion/accordion
-    - core/jquery.ui.core
-    - core/jquery.ui.effects.core
-    - core/jquery.ui.tabs
+    - jquery_ui_effects/core
+    - jquery_ui_tabs/tabs
     - core/jquery.cookie
     - mobile_number/element
     - alshaya_white_label/font-face
@@ -190,7 +189,7 @@ magazine_attribute:
   dependencies:
     - alshaya_white_label/pdp-video-player
     - alshaya_white_label/attribute.common
-    - core/jquery.ui.effects.slide
+    - jquery_ui_effects/slide
     - alshaya_white_label/pdp-additional-attributes
 
 campaign-plp-style-1-video-provider:

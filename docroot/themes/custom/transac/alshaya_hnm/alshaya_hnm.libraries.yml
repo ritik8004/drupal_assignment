@@ -9,7 +9,7 @@ global_styles:
     - core/jquery
     - core/jquery.once
     - jquery_ui_accordion/accordion
-    - core/jquery.ui.tabs
+    - jquery_ui_tabs/tabs
     - core/jquery.cookie
     - mobile_number/element
     - alshaya_white_label/utils
