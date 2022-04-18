@@ -4,7 +4,7 @@
 
     .c-content__primary {
       @include breakpoint($desktop) {
-        max-width: 100%;
+        max-width: 64.125rem;
       }
     }
   }
