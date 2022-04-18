@@ -1,5 +1,4 @@
 import React from 'react';
-import SectionTitle from '../../../utilities/section-title';
 import ConditionalView from '../../../common/components/conditional-view';
 import AuraNotLinkedNoData from './components/not-linked-no-data';
 import AuraLinkedVerified from './components/linked-verified';
@@ -197,7 +196,6 @@ class AuraCartRewards extends React.Component {
     if (wait) {
       return (
         <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: '0.4s' }}>
-          <SectionTitle>{this.getSectionTitle(allAuraStatus, loyaltyStatus)}</SectionTitle>
           <Loading />
         </div>
       );
