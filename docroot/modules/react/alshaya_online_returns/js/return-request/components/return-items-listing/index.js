@@ -98,7 +98,11 @@ class ReturnItemsListing extends React.Component {
       return (
         <div className="select-items-label">
           <span className="select-items-header">{ Drupal.t('1. Select items to return', {}, { context: 'online_returns' }) }</span>
-          <span className="items-count">{ Drupal.t('(@qty @itemsLabel)', { '@qty': products.length, '@itemsLabel': itemsLabel }, { context: 'online_returns' }) }</span>
+          <span className="items-count">
+            {products.length}
+            {' '}
+            {itemsLabel}
+          </span>
         </div>
       );
     }
