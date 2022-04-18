@@ -207,6 +207,7 @@ class OnlineReturnController extends ControllerBase {
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-return-confirmation"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_confirmation';
+    $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
     $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
       'returnConfirmationConfig' => $confirmationStrings,

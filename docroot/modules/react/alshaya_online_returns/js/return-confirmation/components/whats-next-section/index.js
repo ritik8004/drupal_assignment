@@ -17,9 +17,11 @@ const WhatsNextSection = () => {
         {confirmationStrings.map((section) => (
           <div key={section.title} className="item-list-wrapper">
             <ConditionalView condition={section.hide_row}>
-              <div className={`${section.icon_class}}`} />
-              <div className="title">{section.title}</div>
-              <div className="description">{section.description}</div>
+              <div className={`${section.icon_class}`} />
+              <div className="whats-next-content">
+                <div className="title">{section.title}</div>
+                <div className="description">{section.description}</div>
+              </div>
             </ConditionalView>
           </div>
         ))}
