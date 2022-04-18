@@ -18,7 +18,7 @@ function isReturnEligible(orderId) {
  * Helper function to get return expiration.
  */
 function getReturnExpiration(orderId) {
-  let returnExpiration = true;
+  let returnExpiration = '';
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
     && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].returnExpiration)) {
