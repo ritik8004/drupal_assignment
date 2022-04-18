@@ -3,6 +3,7 @@ import Collapsible from 'react-collapsible';
 import ReturnItemDetails from '../return-item-details';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultResolutionId } from '../../../utilities/return_request_util';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class ReturnItemsListing extends React.Component {
   constructor(props) {
@@ -91,11 +92,18 @@ class ReturnItemsListing extends React.Component {
    * Display the return items accordion trigger component.
    * On click of this component, item details div will open.
    */
-  itemListHeader = () => (
-    <div className="select-items-label">
-      <div className="select-items-header">{ Drupal.t('Select items to return', {}, { context: 'online_returns' }) }</div>
-    </div>
-  );
+  itemListHeader = (products) => {
+    if (hasValue(products) && products.length > 0) {
+      const itemsLabel = (products.length === 1) ? 'item' : 'items';
+      return (
+        <div className="select-items-label">
+          <span className="select-items-header">{ Drupal.t('1. Select items to return', {}, { context: 'online_returns' }) }</span>
+          <span className="items-count">{ Drupal.t('(@qty @itemsLabel)', { '@qty': products.length, '@itemsLabel': itemsLabel }, { context: 'online_returns' }) }</span>
+        </div>
+      );
+    }
+    return null;
+  }
 
   /**
    * When item details accordion is opened, refund
@@ -135,7 +143,7 @@ class ReturnItemsListing extends React.Component {
     return (
       <div className="products-list-wrapper">
         <Collapsible
-          trigger={this.itemListHeader()}
+          trigger={this.itemListHeader(products)}
           open={open}
           onOpening={() => this.disableRefundComponent()}
         >

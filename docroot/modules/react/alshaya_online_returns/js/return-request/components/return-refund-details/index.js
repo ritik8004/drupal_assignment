@@ -44,7 +44,7 @@ class ReturnRefundDetails extends React.Component {
    */
   refundDetailsHeader = () => (
     <div className="refund-detail-label">
-      <div className="refund-detail-header">{ Drupal.t('Return and refund details', {}, { context: 'online_returns' }) }</div>
+      <div className="refund-detail-header">{ Drupal.t('2. Return and refund details', {}, { context: 'online_returns' }) }</div>
     </div>
   );
 
