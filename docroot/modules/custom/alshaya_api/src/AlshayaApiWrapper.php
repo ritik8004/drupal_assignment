@@ -1442,10 +1442,12 @@ class AlshayaApiWrapper {
         'timeout' => $this->mdcHelper->getPhpTimeout('subscribe_newsletter'),
       ];
 
-      return $this->invokeApi('newsletter/subscribe', ['email' => $email], 'JSON', TRUE, $request_options);
+      $status = $this->invokeApi('newsletter/subscribe', ['email' => $email], 'JSON', TRUE, $request_options);
+      return json_decode($status, TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while calling newsletter subscribe API.');
+      return ['status' => 0];
     }
   }
 
