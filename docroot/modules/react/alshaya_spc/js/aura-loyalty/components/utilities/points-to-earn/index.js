@@ -1,6 +1,6 @@
 import React from 'react';
 import ToolTip from '../../../../utilities/tooltip';
-import { getAllAuraStatus } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import { getAllAuraStatus, getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import getStringMessage from '../../../../utilities/strings';
 import Loading from '../../../../utilities/loading';
 import AuraHeaderIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
@@ -49,13 +49,39 @@ const PointsToEarnMessage = (props) => {
   if (isUserAuthenticated()
     && (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED
     || loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED)) {
-    const toEarnMessage = `${getStringMessage('cart_page_aura_accrual_label')} `;
-    const pointsHighlight = `${pointsToEarn} ${getStringMessage('pts')}`;
+    const toEarnMessageP1 = `${getStringMessage('earn')} `;
+    const pointsHighlight = `${pointsToEarn} ${getStringMessage('aura')} ${getStringMessage('points_with_dot')}`;
+    const toEarnMessageP2 = ` ${getStringMessage('cart_redeem_points_msg')}`;
+    const {
+      appStoreLink: appleAppStoreLink,
+      googlePlayLink: googlePlayStoreLink,
+    } = getAuraConfig();
+
     return (
-      <span className="spc-aura-points-to-earn">
-        <span>{ toEarnMessage }</span>
-        <span className="spc-aura-highlight">{ wait ? <Loading /> : pointsHighlight }</span>
-      </span>
+      <>
+        <AuraHeaderIcon />
+        <span className="spc-aura-points-to-earn">
+          {toEarnMessageP1}
+          <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
+          {toEarnMessageP2}
+          <a
+            href={appleAppStoreLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {getStringMessage('app_store_link_text')}
+          </a>
+          /
+          <a
+            href={googlePlayStoreLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {getStringMessage('play_store_link_text')}
+          </a>
+          <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
+        </span>
+      </>
     );
   }
 

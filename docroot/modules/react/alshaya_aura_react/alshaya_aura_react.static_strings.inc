@@ -302,5 +302,21 @@ function _alshaya_aura_static_strings() {
       'key' => 'cart_to_earn_with_points',
       'value' => t('to earn @pts points.', [], ['context' => 'aura']),
     ],
+    [
+      'key' => 'points_with_dot',
+      'value' => t('points.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'cart_redeem_points_msg',
+      'value' => t('To redeem points download Aura app.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'app_store_link_text',
+      'value' => t('App Store', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'play_store_link_text',
+      'value' => t('Play Store.', [], ['context' => 'aura']),
+    ],
   ];
 }
