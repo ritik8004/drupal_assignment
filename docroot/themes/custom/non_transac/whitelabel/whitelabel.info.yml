@@ -32,6 +32,21 @@ libraries-override:
       theme:
         assets/vendor/jquery.ui/themes/base/theme.css: false
 
+  core/drupal.autocomplete:
+    css:
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+
+  core/drupal.dialog:
+    css:
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+
+  core/jquery.ui.dialog:
+    css:
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+
   kashmir/ltr:
     css:
       theme:
