@@ -7,3 +7,10 @@ services:
       - '@file_system'
     tags:
       - { name: drush.command }
+  alshaya_acm_promotion.promo_label_config:
+    class: Drupal\alshaya_acm_promotion\Commands\PromotionLabelConfigCommands
+    arguments:
+      - '@alshaya_acm_promotion.api_helper'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command }

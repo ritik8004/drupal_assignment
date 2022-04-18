@@ -500,3 +500,18 @@ function alshaya_acm_promotion_entity_delete(EntityInterface $entity) {
     \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
   }
 }
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_acm_promotion_preprocess_html(&$variables) {
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaAcmPromoLabelAPIHelper $promoLabelAPIHelper */
+  $promoLabelAPIHelper = \Drupal::service('alshaya_acm_promotion.api_helper');
+
+  // Return if promo label config is not set as true.
+  if (!$promoLabelAPIHelper->getPromoLabelApiConfig()) {
+    return;
+  }
+
+  $variables['attributes']['class'][] = 'disable-promo-label';
+}
