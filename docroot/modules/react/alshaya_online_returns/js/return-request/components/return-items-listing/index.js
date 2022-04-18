@@ -94,7 +94,10 @@ class ReturnItemsListing extends React.Component {
    */
   itemListHeader = (products) => {
     if (hasValue(products) && products.length > 0) {
-      const itemsLabel = (products.length === 1) ? 'item' : 'items';
+      const itemsLabel = (products.length === 1)
+        ? Drupal.t('item', {}, { context: 'online_returns' })
+        : Drupal.t('items', {}, { context: 'online_returns' });
+
       return (
         <div className="select-items-label">
           <span className="select-items-header">{ Drupal.t('1. Select items to return', {}, { context: 'online_returns' }) }</span>

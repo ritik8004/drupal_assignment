@@ -55,8 +55,8 @@ function _alshaya_online_returns_translations() {
         'ar' => 'الرقم التعريفي للطلبية',
         'context' => 'online_returns',
       ],
-      'Total:' => [
-        'ar' => 'الإجمالي:',
+      'Total' => [
+        'ar' => 'الإجمالي',
         'context' => 'online_returns',
       ],
       'items' => [
