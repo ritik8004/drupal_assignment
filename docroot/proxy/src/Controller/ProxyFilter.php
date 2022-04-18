@@ -33,6 +33,8 @@ class ProxyFilter implements FilterInterface {
    *
    * @param string $url
    *   The url of the endpoint.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   The settings object.
    */
   public function __construct($url, SystemSettings $settings) {
     $this->url = $url;
