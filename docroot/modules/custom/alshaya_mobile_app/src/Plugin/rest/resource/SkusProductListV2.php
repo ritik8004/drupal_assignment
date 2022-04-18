@@ -10,7 +10,6 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
  *   label = @Translation("SKUs Product List V2"),
  *   uri_paths = {
  *     "canonical" = "/rest/v2/skus/product-list",
- *      "https://www.drupal.org/link-relations/create" = "/rest/v2/skus/product-list"
  *   }
  * )
  */

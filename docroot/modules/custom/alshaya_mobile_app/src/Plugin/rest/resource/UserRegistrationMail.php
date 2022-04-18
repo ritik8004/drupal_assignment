@@ -17,8 +17,7 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
  *   id = "user_registration_mail",
  *   label = @Translation("Alshaya user registration mail"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/user/send-registration-email",
- *     "https://www.drupal.org/link-relations/create" = "/rest/v1/user/send-registration-email"
+ *     "create" = "/rest/v1/user/send-registration-email"
  *   }
  * )
  */
