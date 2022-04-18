@@ -14,12 +14,15 @@ const PointsToEarnMessage = (props) => {
   // Guest User & No card.
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
     || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
+    const toEarnMessageP1 = `${getStringMessage('earn')} `;
+    const pointsHighlight = `${pointsToEarn}`;
+    const toEarnMessageP2 = ` ${getStringMessage('reward_points_with_purchase')}`;
+
     return (
       <span className="spc-aura-points-to-earn">
-        {getStringMessage(
-          'cart_to_earn_with_points',
-          { '@pts': pointsToEarn },
-        )}
+        { toEarnMessageP1 }
+        <span className="spc-aura-highlight">{ pointsHighlight }</span>
+        { toEarnMessageP2 }
       </span>
     );
   }
@@ -35,13 +38,17 @@ const PointsToEarnMessage = (props) => {
 
     return (
       <>
-        <AuraHeaderIcon />
-        <span className="spc-aura-points-to-earn">
-          {toEarnMessageP1}
-          <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
-          {toEarnMessageP2}
-          <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
-        </span>
+        <div className="spc-aura-cart-icon">
+          <AuraHeaderIcon />
+        </div>
+        <div className="spc-aura-cart-content">
+          <span className="spc-aura-points-to-earn">
+            {toEarnMessageP1}
+            <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
+            {toEarnMessageP2}
+            <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
+          </span>
+        </div>
       </>
     );
   }

@@ -42,44 +42,50 @@ class AuraNotLinkedNoData extends React.Component {
     return (
       <>
         <div className="block-content guest-user">
-          <AuraHeaderIcon />
-          <span className="spc-join-aura-link-wrapper submit">
-            <a
-              className="spc-join-aura-link"
-              onClick={() => this.openOTPModal()}
-            >
-              {getStringMessage('aura_join_aura')}
-            </a>
-          </span>
-          {getStringMessage('aura_or')}
-          <ConditionalView condition={isUserAuthenticated()}>
-            <span className="spc-link-aura-link-wrapper submit">
+          <div className="spc-aura-cart-icon">
+            <AuraHeaderIcon />
+          </div>
+          <div className="spc-aura-cart-content">
+            <span className="spc-join-aura-link-wrapper submit">
               <a
-                className="spc-link-aura-link"
-                /** @todo: We need to change this to open the link aura form. */
+                className="spc-join-aura-link"
                 onClick={() => this.openOTPModal()}
               >
-                {getStringMessage('aura_link_aura')}
+                {getStringMessage('aura_join_aura')}
               </a>
             </span>
-          </ConditionalView>
-          <ConditionalView condition={!isUserAuthenticated()}>
-            <span className="spc-link-aura-link-wrapper submit">
-              <a
-                className="spc-link-aura-link"
-                /** @todo: We need to change this to open sign in aura form. */
-                onClick={() => this.openOTPModal()}
-              >
-                {getStringMessage('aura_sign_in')}
-              </a>
-            </span>
-          </ConditionalView>
-          <PointsToEarnMessage
-            pointsToEarn={pointsToEarn}
-            loyaltyStatus={loyaltyStatus}
-            wait={wait}
-          />
-          <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
+            <span className="spc-aura-or-text">{getStringMessage('aura_or')}</span>
+            <ConditionalView condition={isUserAuthenticated()}>
+              <span className="spc-link-aura-link-wrapper submit">
+                <a
+                  className="spc-link-aura-link"
+                  /** @todo: We need to change this to open the link aura form. */
+                  onClick={() => this.openOTPModal()}
+                >
+                  {getStringMessage('aura_link_aura')}
+                </a>
+              </span>
+            </ConditionalView>
+            <ConditionalView condition={!isUserAuthenticated()}>
+              <span className="spc-link-aura-link-wrapper submit">
+                <a
+                  className="spc-link-aura-link"
+                  /** @todo: We need to change this to open sign in aura form. */
+                  onClick={() => this.openOTPModal()}
+                >
+                  {getStringMessage('aura_sign_in')}
+                </a>
+              </span>
+            </ConditionalView>
+            {' '}
+            <br />
+            <PointsToEarnMessage
+              pointsToEarn={pointsToEarn}
+              loyaltyStatus={loyaltyStatus}
+              wait={wait}
+            />
+            <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
+          </div>
         </div>
 
         <SignUpOtpModal
