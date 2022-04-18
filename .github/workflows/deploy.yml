@@ -8,6 +8,7 @@ on:
       - uat
       - master
       - develop-online-returns
+      - develop-new-aura-checkout
   create:
     tags:
 
