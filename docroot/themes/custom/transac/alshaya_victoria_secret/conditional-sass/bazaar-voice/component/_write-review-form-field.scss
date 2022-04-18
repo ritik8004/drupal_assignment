@@ -3,6 +3,10 @@
     button {
       line-height: normal;
       font-family: $alshaya-bold;
+
+      html[lang=ar] & {
+        line-height: unset;
+      }
     }
   }
 }
