@@ -45,20 +45,35 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
 
     $field_rows = $config->get('rows');
 
+    // Preparing row labels for config field rows.
+    $row_labels = [
+      0 => $this->t('first'),
+      1 => $this->t('second'),
+      2 => $this->t('third'),
+    ];
+
     // Rendering form fields for title, description, icon
     // and hide for each row item defined in config.
     foreach ($field_rows as $key => $value) {
       $form['return_confirmation']['rows']['row_' . $key . '_title'] = [
         '#type' => 'textfield',
-        '#title' => $this->t('Title for first row'),
-        '#description' => $this->t('Label for first row in return confirmation page.'),
+        '#title' => $this->t('Title for @row_label row', [
+          '@row_label' => $row_labels[$key],
+        ]),
+        '#description' => $this->t('Label for @row_label row in whats next section.', [
+          '@row_label' => $row_labels[$key],
+        ]),
         '#default_value' => $config->get('rows')[$key]['title'],
       ];
 
       $form['return_confirmation']['rows'][$key]['row_' . $key . '_description'] = [
         '#type' => 'textarea',
-        '#title' => $this->t('Description for first row'),
-        '#description' => $this->t('Description text for first row in return confirmation page.'),
+        '#title' => $this->t('Description for @row_label row', [
+          '@row_label' => $row_labels[$key],
+        ]),
+        '#description' => $this->t('Description text for @row_label row in whats next section.', [
+          '@row_label' => $row_labels[$key],
+        ]),
         '#default_value' => $config->get('rows')[$key]['description'],
       ];
 
@@ -74,7 +89,9 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
         '#type' => 'select',
         '#options' => $hide_options,
         '#title' => $this->t('Hide this row'),
-        '#description' => $this->t('Hide first row from display'),
+        '#description' => $this->t('Hide @row_label row from display', [
+          '@row_label' => $row_labels[$key],
+        ]),
         '#default_value' => $config->get('rows')[$key]['hide_this_row'],
       ];
     }
