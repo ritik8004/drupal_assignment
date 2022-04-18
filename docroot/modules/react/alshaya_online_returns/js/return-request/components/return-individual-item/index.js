@@ -2,6 +2,7 @@ import React from 'react';
 import parse from 'html-react-parser';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import Price from '../../../../../js/utilities/components/price';
 
 const ReturnIndividualItem = ({
   item,
@@ -47,7 +48,10 @@ const ReturnIndividualItem = ({
         </div>
         <div className="item-price">
           <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
-          <span className="currency-code dark prefix">{ parse(item.price) }</span>
+          <Price
+            price={item.original_price.toString()}
+            finalPrice={item.price_incl_tax.toString()}
+          />
         </div>
       </div>
       <div className="item-total-price">
