@@ -7,9 +7,9 @@ const ReturnSuccessMessage = () => {
     Drupal.removeItemFromLocalStorage('online_return_id');
     return (
       <div className="refund-success-message">
-        <span className="message-text">
+        <div className="message-text">
           { Drupal.t('Return request has been successfully placed.', {}, { context: 'online_returns' }) }
-        </span>
+        </div>
       </div>
     );
   }
