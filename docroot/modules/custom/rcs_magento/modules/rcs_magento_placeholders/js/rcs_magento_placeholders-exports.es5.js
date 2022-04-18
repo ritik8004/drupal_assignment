@@ -261,6 +261,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       request.data = prepareQuery(rcsPhGraphqlQuery.category_children_by_path.query, productCategoryChildrenVariables);
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.categories.items[0];
+      break;
 
     case 'cart_items_stock':
       let cartItemsStockVariables = rcsPhGraphqlQuery.cart_items_stock.variables;
