@@ -8,4 +8,17 @@
       text-align: center;
     }
   }
+
+  .express_delivery {
+    font-size: 0.6875rem;
+    padding: 0;
+    border: 0.0625rem solid $plp_express_delivery_tag;
+    margin-top: 0.625rem;
+    display: inline-block;
+    font-family: $alshaya-thin;
+    width: 6rem;
+    height: 1.25rem;
+    text-align: center;
+    line-height: 1.125rem;
+  }
 }
