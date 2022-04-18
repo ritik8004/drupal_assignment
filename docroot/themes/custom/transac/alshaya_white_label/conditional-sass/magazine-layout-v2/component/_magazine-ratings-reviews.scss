@@ -694,6 +694,7 @@ body.ratings-reviews-overlay {
     text-decoration: underline;
     font-size: 0.875rem;
     color: $rr-write-review-link-txt;
+    cursor: pointer;
 
     &.disabled {
       opacity: 0.2;
