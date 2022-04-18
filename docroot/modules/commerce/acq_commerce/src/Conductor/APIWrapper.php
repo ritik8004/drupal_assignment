@@ -326,7 +326,7 @@ class APIWrapper implements APIWrapperInterface {
         ]
       );
 
-      throw new RouteException(__FUNCTION__, 'Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.');
+      throw new RouteException(__FUNCTION__, $this->t('Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.'));
     }
 
     try {
@@ -925,6 +925,32 @@ class APIWrapper implements APIWrapperInterface {
     }
 
     return $result;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function subscribeNewsletter($email) {
+    $versionInClosure = $this->apiVersion;
+    $endpoint = $this->apiVersion . '/agent/newsletter/subscribe';
+
+    $doReq = function ($client, $opt) use ($endpoint, $email, $versionInClosure) {
+      if ($versionInClosure === 'v1') {
+        $opt['form_params']['email'] = $email;
+      }
+      else {
+        $opt['json']['customer']['email'] = $email;
+      }
+
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      return $this->tryAgentRequest($doReq, 'subscribeNewsletter');
+    }
+    catch (ConnectorException $e) {
+      throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
+    }
   }
 
   /**
