@@ -158,8 +158,9 @@
   .netpromoter-option {
     .survey-block {
       display: flex;
-      margin: 2rem;
+      margin: 2rem 0;
       margin-bottom: 1rem;
+      justify-content: space-between;
 
       @include breakpoint($only-mobile) {
         margin: 2rem 0;
@@ -191,16 +192,8 @@
       }
 
       .form-type-radio {
-        margin-#{$right}: 7.5%;
-
-        @include breakpoint($only-mobile) {
-          margin-#{$right}: 1.5%;
-          flex-basis: 9%;
-          text-align: center;
-        }
-
-        @include breakpoint($only-tablet) {
-          margin-#{$right}: 4.5%;
+        &:first-child {
+          margin-#{$right}: 0;
         }
 
         input[type=radio] {
