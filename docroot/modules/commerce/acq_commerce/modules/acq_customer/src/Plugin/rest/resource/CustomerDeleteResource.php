@@ -17,8 +17,7 @@ use Drupal\rest\Plugin\ResourceBase;
  *   id = "acq_customer_delete",
  *   label = @Translation("Acquia Commerce Customer Delete"),
  *   uri_paths = {
- *     "canonical" = "/customer/delete",
- *     "https://www.drupal.org/link-relations/create" = "/customer/delete"
+ *     "create" = "/customer/delete"
  *   }
  * )
  */
