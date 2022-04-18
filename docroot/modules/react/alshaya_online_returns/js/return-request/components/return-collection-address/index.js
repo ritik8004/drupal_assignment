@@ -42,8 +42,8 @@ const ReturnCollectionAddress = ({
               { Drupal.t('@first_name: @last_name', { '@first_name': shippingAddress.given_name, '@last_name': shippingAddress.family_name }, {}, { context: 'online_returns' }) }
             </div>
           </ConditionalView>
-          {addressData.map((adressItem) => (
-            <div className="address-line-content">{adressItem}</div>
+          {addressData.length > 0 && addressData.map((adressItem) => (
+            <div key={adressItem} className="address-line-content">{adressItem}</div>
           ))}
           <div className="spc-phone-number">{shippingAddress.telephone}</div>
         </div>
