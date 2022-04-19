@@ -980,7 +980,7 @@ function alshaya_rcs_product_preprocess_node(&$variables) {
     }
 
     $product_settings = \Drupal::config('alshaya_acm_product.settings');
-    $variables['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'XXXslider-position-' . $product_settings->get('image_slider_position_pdp');
+    $variables['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $product_settings->get('image_slider_position_pdp');
   }
 }
 
