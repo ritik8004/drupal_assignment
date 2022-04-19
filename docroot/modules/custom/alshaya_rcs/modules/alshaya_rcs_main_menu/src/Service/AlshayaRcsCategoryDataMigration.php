@@ -95,7 +95,7 @@ class AlshayaRcsCategoryDataMigration {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name']);
+    $query->fields('tfd', ['tid']);
 
     // For the `Term background color`.
     $query->leftJoin('taxonomy_term__field_term_background_color', 'ttbc', 'ttbc.entity_id = tfd.tid AND ttbc.langcode = tfd.langcode');
@@ -149,20 +149,20 @@ class AlshayaRcsCategoryDataMigration {
     $query->condition('tfd.vid', self::SOURCE_VOCABULARY_ID);
 
     // Get the terms satisfying the above conditions.
-    $terms = $query->distinct()->execute()->fetchAll();
+    $tids = $query->distinct()->execute()->fetchAllKeyed(0, 0);
     // Batch set in install hook.
     if (!$execute_batch) {
-      return $terms;
+      return $tids;
     }
 
     // Do not process if no terms are found.
-    if (!empty($terms)) {
+    if (!empty($tids)) {
       // Set batch operations to migrate terms.
       $operations = [];
-      foreach (array_chunk($terms, $batch_size) as $term_chunk) {
+      foreach (array_chunk($tids, $batch_size) as $tid_chunk) {
         $operations[] = [
           [__CLASS__, 'batchProcess'],
-          [$term_chunk, $batch_size],
+          [$tid_chunk, $batch_size, self::TARGET_VOCABULARY_ID],
         ];
       }
       $batch = [
@@ -178,64 +178,74 @@ class AlshayaRcsCategoryDataMigration {
   }
 
   /**
-   * Batch operation to create rcs category terms.
+   * Batch operation to reinstate  acq terms.
    *
    * @param array $terms
-   *   Current Chunk of terms to be processed.
+   *   Batch of the source terms to be migrated.
    * @param int $batch_size
-   *   Batch size.
+   *   Migrate batch size.
+   * @param string $vid
+   *   Vocabulary Id for the migrated term.
    * @param mixed|array $context
-   *   The batch current context.
+   *   Batch context.
    */
-  public static function batchProcess(array $terms, int $batch_size, &$context) {
+  public static function batchProcess(array $terms, int $batch_size, string $vid, &$context) {
     // Initialized term count to zero.
     if (empty($context['sandbox'])) {
       $context['sandbox']['term_count'] = 0;
     }
+
     // Store Product category and RCS category term mapping to get parent terms.
-    if (!isset($context['results']['acq_term_mapping'])) {
+    if (empty($context['results']['acq_term_mapping'])) {
       $context['results']['acq_term_mapping'] = [];
       $context['results']['batch_size'] = $batch_size;
     }
 
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $path_alias_storage = \Drupal::entityTypeManager()->getStorage('path_alias');
     $language_manager = \Drupal::service('language_manager');
     $langcode = $language_manager->getCurrentLanguage()->getId();
-    foreach ($terms as $term) {
-      // Check if RCS Category is already created.
-      if (!empty($context['results']['acq_term_mapping'][$term->tid])) {
+    $path_alias_storage = \Drupal::entityTypeManager()->getStorage('path_alias');
+
+    foreach ($terms as $tid) {
+      // Check if acq category term already exists.
+      if (!empty($context['results']['acq_term_mapping'][$tid])) {
         continue;
       }
-      // Load the product category term object.
-      $acq_term_data = $term_storage->load($term->tid);
-      $acq_term_data = ($acq_term_data->language()->getId() == $langcode) ? $acq_term_data : $acq_term_data->getTranslation($langcode);
-      if ($acq_term_data instanceof TermInterface) {
-        $rcs_term = self::createRcsCategory($acq_term_data, $langcode);
+
+      $rcs_term = $term_storage->load($tid);
+      if ($rcs_term instanceof TermInterface) {
+        // Create acq category term.
+        $acq_term = self::createCategory($rcs_term, $langcode, $vid);
         // Create parent terms.
-        if (!empty($acq_term_data->parent->getString())) {
-          $pid = self::createParentRcsCategory($acq_term_data->parent->getString(), $context['results']['acq_term_mapping'], $langcode);
+        if (!empty($rcs_term->parent->getString())) {
+          $pid = self::createParentCategory($rcs_term->parent->getString(), $context['results'], $context['sandbox']['term_count'], $langcode, $vid);
           if ($pid) {
-            $rcs_term->set('parent', $pid);
+            $acq_term->set('parent', $pid);
           }
         }
-        // Delete aliases for acq product category so there is no conflict.
+        // Delete rcs path alias so that there is no conflict.
         $aliases = $path_alias_storage->loadByProperties([
-          'path' => '/taxonomy/term/' . $term->tid,
+          'path' => '/taxonomy/term/' . $tid,
         ]);
         $path_alias_storage->delete($aliases);
-        $rcs_term->save();
-        // Save term mapping to get rcs parent terms.
-        $context['results']['acq_term_mapping'][$term->tid] = $rcs_term->id();
-        $context['results']['delete_acq_terms'][$acq_term_data->id()] = $acq_term_data;
+        $acq_term->save();
+        // Set acq term mapping.
+        $context['results']['acq_term_mapping'][$tid] = $acq_term->id();
+        $context['results']['delete_terms'][$rcs_term->id()] = $rcs_term;
         $context['sandbox']['term_count']++;
       }
       else {
         throw new \Exception('Product category term not found.');
       }
     }
-
-    $context['message'] = dt('Processed @term_count RCS Category terms.', ['@term_count' => $context['sandbox']['term_count']]);
+    $category_names = [
+      self::SOURCE_VOCABULARY_ID => 'Product Category',
+      self::TARGET_VOCABULARY_ID => 'RCS Category',
+    ];
+    $context['message'] = dt('Processed @term_count @category_name terms.', [
+      '@term_count' => $context['sandbox']['term_count'],
+      '@category_name' => $category_names[$vid],
+    ]);
   }
 
   /**
@@ -253,43 +263,47 @@ class AlshayaRcsCategoryDataMigration {
       $logger = \Drupal::logger('alshaya_rcs_category');
       // Delete product category terms that have been migrated.
       $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-      foreach (array_chunk($results['delete_acq_terms'], $results['batch_size']) as $acq_delete_terms) {
+      foreach (array_chunk($results['delete_terms'], $results['batch_size']) as $acq_delete_terms) {
         $term_storage->delete($acq_delete_terms);
-        $logger->notice('@count acq product categories deleted successfully.', ['@count' => count($acq_delete_terms)]);
+        $logger->notice('@count source categories deleted successfully.', ['@count' => count($acq_delete_terms)]);
       }
     }
   }
 
   /**
-   * Create Parent RCS Category terms.
+   * Create Parent Category terms.
    *
    * @param int $tid
-   *   Parent product category term id.
-   * @param array $acq_term_mapping
-   *   Mapping between ACM and RCS ids.
+   *   Source category term id.
+   * @param array|null $results
+   *   Batch Context results.
+   * @param int $term_count
+   *   Migrated Term count.
    * @param string $langcode
    *   Default language code.
+   * @param string $vid
+   *   Vocabulary Id for the term migrated.
    *
    * @return string
    *   Returns RCS Category parent term id.
    */
-  private static function createParentRcsCategory(int $tid, array &$acq_term_mapping, string $langcode) {
-    // Already saved so return parent rcs category tid.
-    if (!empty($acq_term_mapping[$tid])) {
-      return $acq_term_mapping[$tid];
+  private static function createParentCategory(int $tid, array &$results = NULL, int &$term_count = NULL, string $langcode, string $vid) {
+    // Already saved so return parent category tid.
+    if (!empty($results['acq_term_mapping'][$tid])) {
+      return $results['acq_term_mapping'][$tid];
     }
     // Load parent product category.
-    $acq_parent_term_data = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
-    $acq_parent_term_data = ($acq_parent_term_data->language()->getId() == $langcode) ? $acq_parent_term_data : $acq_parent_term_data->getTranslation($langcode);
+    $source_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
+    $source_term = ($source_term->language()->getId() == $langcode) ? $source_term : $source_term->getTranslation($langcode);
 
     // Recursively create parent term.
-    if (!empty($acq_parent_term_data->parent->getString())) {
-      $pid = self::createParentRcsCategory($acq_parent_term_data->parent->getString(), $acq_term_mapping, $langcode);
+    if (!empty($source_term->parent->getString())) {
+      $pid = self::createParentCategory($source_term->parent->getString(), $results, $term_count, $langcode, $vid);
     }
 
-    $rcs_parent_term = self::createRcsCategory($acq_parent_term_data, $langcode);
+    $migrate_term = self::createCategory($source_term, $langcode, $vid);
     if ($pid) {
-      $rcs_parent_term->set('parent', $pid);
+      $migrate_term->set('parent', $pid);
     }
 
     // Delete aliases for acq product category so there is no conflict.
@@ -298,95 +312,101 @@ class AlshayaRcsCategoryDataMigration {
       'path' => '/taxonomy/term/' . $tid,
     ]);
     $path_alias_storage->delete($aliases);
-    $rcs_parent_term->save();
+    $migrate_term->save();
+    $term_count++;
     // Save parent term in mapping.
-    $acq_term_mapping[$tid] = $rcs_parent_term->id();
-    return $rcs_parent_term->id();
+    $results['acq_term_mapping'][$tid] = $migrate_term->id();
+    $results['delete_terms'][$source_term->id()] = $source_term;
+    return $migrate_term->id();
   }
 
   /**
    * Create RCS Category terms.
    *
-   * @param \Drupal\taxonomy\TermInterface $acq_term_data
-   *   Product category result set object.
+   * @param \Drupal\taxonomy\TermInterface $source_term
+   *   Source Term to be migrated.
    * @param string $langcode
    *   Default language code.
+   * @param string $vid
+   *   Vocabulary Id of the migrated term.
    *
    * @return \Drupal\taxonomy\TermInterface
    *   Returns RCS Category term.
    */
-  private static function createRcsCategory(TermInterface $acq_term_data, string $langcode) {
+  private static function createCategory(TermInterface $source_term, string $langcode, string $vid) {
     // Get the current language.
     $language_manager = \Drupal::service('language_manager');
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
     // Create a new rcs category term object.
-    $rcs_term = $term_storage->create([
-      'vid' => self::TARGET_VOCABULARY_ID,
-      'name' => $acq_term_data->name,
+    $migrate_term = $term_storage->create([
+      'vid' => $vid,
+      'name' => $source_term->name,
       'langcode' => $langcode,
     ]);
 
     // Copy enriched values from product category term.
-    self::enrichRcsTerm($acq_term_data, $rcs_term);
+    self::enrichTerm($source_term, $migrate_term, $vid);
 
     // Check if the translations exists for other available languages.
     foreach ($language_manager->getLanguages() as $language_code => $language) {
-      if ($language_code != $langcode && $acq_term_data->hasTranslation($language_code)) {
+      if ($language_code != $langcode && $source_term->hasTranslation($language_code)) {
         // Load the translation object.
-        $acq_term_data_trans = $acq_term_data->getTranslation($language_code);
+        $source_term_trans = $source_term->getTranslation($language_code);
 
         // Add translation in the new term.
-        $rcs_term_trans = $rcs_term->addTranslation($language_code, ['name' => $acq_term_data_trans->name]);
+        $migrate_term_trans = $migrate_term->addTranslation($language_code, ['name' => $source_term_trans->name]);
 
-        $rcs_term_trans->get('field_term_background_color')
-          ->setValue($acq_term_data_trans->get('field_term_background_color')->getValue());
+        $migrate_term_trans->get('field_term_background_color')
+          ->setValue($source_term_trans->get('field_term_background_color')->getValue());
 
-        $rcs_term_trans->get('field_term_font_color')
-          ->setValue($acq_term_data_trans->get('field_term_font_color')->getValue());
+        $migrate_term_trans->get('field_term_font_color')
+          ->setValue($source_term_trans->get('field_term_font_color')->getValue());
 
         // Save the translations.
-        $rcs_term_trans->save();
+        $migrate_term_trans->save();
       }
     }
 
     // Save the new term depth.
-    $rcs_term->depth = $acq_term_data->depth_level->getString();
-    return $rcs_term;
+    $migrate_term->depth = $source_term->depth_level->getString();
+    return $migrate_term;
   }
 
   /**
-   * Enriches the rcs category term fields.
+   * Enriches the category term fields.
    *
-   * @param \Drupal\taxonomy\TermInterface $acq_term_data
-   *   Product category term.
-   * @param \Drupal\taxonomy\TermInterface $rcs_term
+   * @param \Drupal\taxonomy\TermInterface $source_term
+   *   The source term.
+   * @param \Drupal\taxonomy\TermInterface $migrate_term
    *   RCS category term.
+   * @param string $vid
+   *   Vocabulary Id of the Migrated term.
    */
-  private static function enrichRcsTerm(TermInterface $acq_term_data, TermInterface &$rcs_term) {
+  private static function enrichTerm(TermInterface $source_term, TermInterface &$migrate_term, string $vid) {
     $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
     $alias_manager = \Drupal::service('path_alias.manager');
     // Add include_in_desktop field value from the old term.
-    $rcs_term->get('field_include_in_desktop')
-      ->setValue($acq_term_data->get('field_include_in_desktop')->getValue());
+    $migrate_term->get('field_include_in_desktop')
+      ->setValue($source_term->get('field_include_in_desktop')->getValue());
 
     // Add include_in_mobile_tablet field value from the old term.
-    $rcs_term->get('field_include_in_mobile_tablet')
-      ->setValue($acq_term_data->get('field_include_in_mobile_tablet')->getValue());
+    $migrate_term->get('field_include_in_mobile_tablet')
+      ->setValue($source_term->get('field_include_in_mobile_tablet')->getValue());
 
     // Add term_background_color field value from the old term.
-    $rcs_term->get('field_term_background_color')
-      ->setValue($acq_term_data->get('field_term_background_color')->getValue());
+    $migrate_term->get('field_term_background_color')
+      ->setValue($source_term->get('field_term_background_color')->getValue());
 
     // Add term_font_color field value from the old term.
-    $rcs_term->get('field_term_font_color')
-      ->setValue($acq_term_data->get('field_term_font_color')->getValue());
+    $migrate_term->get('field_term_font_color')
+      ->setValue($source_term->get('field_term_font_color')->getValue());
 
     // Add icon field value from the old term.
-    $rcs_term->get('field_icon')
-      ->setValue($acq_term_data->get('field_icon')->getValue());
+    $migrate_term->get('field_icon')
+      ->setValue($source_term->get('field_icon')->getValue());
     // Add main_menu_highlight field value from the old term.
-    $main_menu_highlights = $acq_term_data->get('field_main_menu_highlight')->getValue();
+    $main_menu_highlights = $source_term->get('field_main_menu_highlight')->getValue();
     if (!empty($main_menu_highlights)) {
       $rcs_term_paragraphs = [];
       foreach ($main_menu_highlights as $highlight) {
@@ -400,52 +420,57 @@ class AlshayaRcsCategoryDataMigration {
         $cloned_paragraphs->save();
 
         // Add target and revision id to value array for the rcs term.
-        $rcs_term_paragraphs[] = [
+        $migrate_paragraphs[] = [
           'target_id' => $cloned_paragraphs->id(),
           'target_revision_id' => $cloned_paragraphs->getRevisionId(),
         ];
       }
 
-      // Attach highlights with rcs term if available.
+      // Attach highlights migrate_paragraphs rcs term if available.
       if (!empty($rcs_term_paragraphs)) {
-        $rcs_term->get('field_main_menu_highlight')
-          ->setValue($rcs_term_paragraphs);
+        $migrate_term->get('field_main_menu_highlight')
+          ->setValue($migrate_paragraphs);
       }
     }
 
     // Add move_to_right field value from the old term.
-    $rcs_term->get('field_move_to_right')
-      ->setValue($acq_term_data->get('field_move_to_right')->getValue());
+    $migrate_term->get('field_move_to_right')
+      ->setValue($source_term->get('field_move_to_right')->getValue());
 
     // Add override_target_link field value from the old term.
-    $override_target_link = $acq_term_data->get('field_override_target_link')->getString();
-    $rcs_term->get('field_override_target_link')->setValue($override_target_link);
+    $override_target_link = $source_term->get('field_override_target_link')->getString();
+    $migrate_term->get('field_override_target_link')->setValue($override_target_link);
 
     // Add remove_term_in_breadcrumb field value from the old term.
-    $remove_term_breadcrumb = $acq_term_data->get('field_remove_term_in_breadcrumb')->getString();
-    $rcs_term->get('field_remove_term_in_breadcrumb')->setValue($remove_term_breadcrumb);
+    $remove_term_breadcrumb = $source_term->get('field_remove_term_in_breadcrumb')->getString();
+    $migrate_term->get('field_remove_term_in_breadcrumb')->setValue($remove_term_breadcrumb);
 
     // Add display_as_clickable_link field value from the old term.
-    $display_as_clickable = $acq_term_data->get('field_display_as_clickable_link')->getString();
-    $rcs_term->get('field_display_as_clickable_link')->setValue($display_as_clickable);
+    $display_as_clickable = $source_term->get('field_display_as_clickable_link')->getString();
+    $migrate_term->get('field_display_as_clickable_link')->setValue($display_as_clickable);
 
     // Add target_link field value from the old term,
     // override_target_link field flag is true.
     if ($override_target_link == "1") {
-      $rcs_term->get('field_target_link')
-        ->setValue($acq_term_data->get('field_target_link')->getValue());
+      $migrate_term->get('field_target_link')
+        ->setValue($source_term->get('field_target_link')->getValue());
     }
 
-    // Add category_slug field value from the old term path alias.
-    $term_slug = $alias_manager->getAliasByPath('/taxonomy/term/' . $acq_term_data->id());
-    $term_slug = ltrim($term_slug, '/');
-    $rcs_term->get('field_category_slug')->setValue($term_slug);
+    // Add category_slug field value from the old term path alias for rcs path.
+    if ($vid == self::TARGET_VOCABULARY_ID) {
+      $term_slug = $alias_manager->getAliasByPath('/taxonomy/term/' . $source_term->id());
+      $term_slug = ltrim($term_slug, '/');
+      $migrate_term->get('field_category_slug')->setValue($term_slug);
+    }
   }
 
   /**
    * Rollback term data migration from acq_product_category taxonomy.
+   *
+   * @param int $batch_size
+   *   Migrate Batch size.
    */
-  public function rollbackProductCategoryMigration() {
+  public function rollbackProductCategoryMigration(int $batch_size = 50) {
     // Get the placeholder term from config.
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $entity_id = $config->get('category.placeholder_tid');
@@ -454,15 +479,29 @@ class AlshayaRcsCategoryDataMigration {
     $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
     $query->condition('vid', self::TARGET_VOCABULARY_ID);
     $query->condition('tid', $entity_id, '<>');
-    $terms = $query->execute();
+    $tids = $query->execute();
 
-    // Return if none available.
-    if (empty($terms)) {
-      return NULL;
+    // Batch to reinstate acq terms.
+    if (!empty($tids)) {
+      // Set batch operations to migrate terms.
+      $operations = [];
+      foreach (array_chunk($tids, $batch_size) as $tid_chunk) {
+        $operations[] = [
+          [__CLASS__, 'batchProcess'],
+          [$tid_chunk, $batch_size, self::SOURCE_VOCABULARY_ID],
+        ];
+      }
+      $batch = [
+        'title' => dt('Reinstate ACM Categories.'),
+        'init_message' => dt('Starting processing acq category...'),
+        'operations' => $operations,
+        'error_message' => dt('Unexpected error while rollback of enriched ACM Categories.'),
+        'finished' => [__CLASS__, 'batchFinished'],
+      ];
+      batch_set($batch);
+      drush_backend_batch_process();
     }
-    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $terms = $term_storage->loadMultiple($terms);
-    $term_storage->delete($terms);
+
   }
 
 }
