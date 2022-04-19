@@ -43,20 +43,18 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
       'refund' => $this->t('receive refund'),
     ];
 
-    $field_rows = $config->get('rows');
-
-    // Preparing row labels for config field rows.
-    $row_labels = $this->prepareRowLabelsData();
+    // Fetch row labels for config field rows.
+    $row_labels = $this->getRows();
     // Rendering form fields for title, description, icon
     // and hide for each row item defined in config.
-    foreach ($field_rows as $key => $value) {
+    foreach ($row_labels as $key => $label) {
       $form['return_confirmation']['rows']['row_' . $key . '_title'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Title for @row_label row', [
-          '@row_label' => $row_labels[$key],
+          '@row_label' => $label,
         ]),
         '#description' => $this->t('Label for @row_label row in whats next section.', [
-          '@row_label' => $row_labels[$key],
+          '@row_label' => $label,
         ]),
         '#default_value' => $config->get('rows')[$key]['title'],
       ];
@@ -64,10 +62,10 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
       $form['return_confirmation']['rows'][$key]['row_' . $key . '_description'] = [
         '#type' => 'textarea',
         '#title' => $this->t('Description for @row_label row', [
-          '@row_label' => $row_labels[$key],
+          '@row_label' => $label,
         ]),
         '#description' => $this->t('Description text for @row_label row in whats next section.', [
-          '@row_label' => $row_labels[$key],
+          '@row_label' => $label,
         ]),
         '#default_value' => $config->get('rows')[$key]['description'],
       ];
@@ -85,7 +83,7 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
         '#options' => $hide_options,
         '#title' => $this->t('Hide this row'),
         '#description' => $this->t('Hide @row_label row from display', [
-          '@row_label' => $row_labels[$key],
+          '@row_label' => $label,
         ]),
         '#default_value' => $config->get('rows')[$key]['hide_this_row'],
       ];
@@ -99,11 +97,12 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_online_returns.return_confirmation');
-    $field_rows = $config->get('rows');
+    // Fetch row labels for config field rows.
+    $row_labels = $this->getRows();
     // Get all row fields values and map them into an empty array.
     $row_values = $form_state->getValues();
     if (!empty($row_values)) {
-      foreach ($field_rows as $key => $value) {
+      foreach ($row_labels as $key => $value) {
         if (isset($row_values['row_' . $key . '_title'])) {
           $rows[$key]['title'] = $row_values['row_' . $key . '_title'];
         }
@@ -130,14 +129,13 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
    * @return array
    *   Row labels array.
    */
-  public function prepareRowLabelsData() {
+  private function getRows() {
     // Adding key value pair for each row label.
-    $row_labels = [
+    return [
       0 => $this->t('first'),
       1 => $this->t('second'),
       2 => $this->t('third'),
     ];
-    return $row_labels;
   }
 
 }
