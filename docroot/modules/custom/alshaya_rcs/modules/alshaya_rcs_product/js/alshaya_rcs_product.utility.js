@@ -703,7 +703,7 @@
     // storage before this function is invoked. So no need to call a separate
     // API to fetch stock status for V2.
     var product = await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
-    var stock = staticDataStore.cartItemsStock[sku];
+    var stock = await window.commerceBackend.loadProductStockDataFromCart(sku);
 
     return {
       stock: stock.qty,
@@ -1014,15 +1014,29 @@
   }
 
   /**
+   * Clears static cache for stock data.
+   */
+  window.commerceBackend.clearStockStaticCache = function clearStockStaticCache() {
+    staticDataStore.cartItemsStock = {};
+  }
+
+  /**
    * Gets the stock data for cart items.
    *
-   * @param {string} cartId
-   *   Cart ID value.
+   * @param {string} sku
+   *   SKU value for which stock is to be returned.
    *
    * @returns {Promise}
    *   Returns a promise so that await executes on the calling function.
    */
-  window.commerceBackend.loadProductStockDataFromCart = function loadProductStockDataFromCart(cartId) {
+  window.commerceBackend.loadProductStockDataFromCart = async function loadProductStockDataFromCart(sku) {
+    // Load the stock data.
+    var cartId = window.commerceBackend.getCartId();
+    if (Drupal.hasValue(staticDataStore.cartItemsStock[sku])) {
+      return new Promise(function (resolve) {
+        resolve(staticDataStore.cartItemsStock[sku]);
+      });
+    }
     return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }).then(function processStock(response) {
       // Do not proceed if for some reason there are no cart items.
       if (!response.cart.items.length) {
@@ -1040,6 +1054,8 @@
           staticDataStore.cartItemsStock[cartItem.product.sku] = cartItem.product.stock_data;
         }
       });
+
+      return staticDataStore.cartItemsStock[sku];
     });
   }
 

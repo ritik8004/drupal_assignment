@@ -118,13 +118,20 @@
    * This function does not have any implementation for V2 since for V2 we
    * do a call to Drupal to get the stock data.
    *
-   * @param {string} cartId
-   *   Cart ID value.
+   * @param {string} sku
+   *   SKU value for which stock is to be returned.
    *
    * @returns {Promise}
    *   Returns a promise so that await executes on the calling function.
    */
-  window.commerceBackend.loadProductStockDataFromCart = function loadProductStockDataFromCart(cartId) {
+  window.commerceBackend.loadProductStockDataFromCart = async function loadProductStockDataFromCart(sku) {
     return Promise.resolve(true);
+  }
+
+  /**
+   * Function to clear static cache. Has implementation only for V3.
+   */
+  window.commerceBackend.clearStockStaticCache = function clearStockStaticCache() {
+    return null;
   }
 })(Drupal, jQuery);
