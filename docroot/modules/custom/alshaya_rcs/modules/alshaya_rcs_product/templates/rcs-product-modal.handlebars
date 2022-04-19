@@ -42,22 +42,20 @@
         {{{render 'product.block.price' price_details }}}
       </div>
 
-      {{! @todo test this }}
-      {{#if content.postpay }}
-        {{! @todo attach_library('alshaya_white_label/postpay-pdp') }}
-        <div class="postpay {{ content.postpay_mode_class }}"> {{ postpay }} </div>
+      {{! @todo Implement this }}
+      {{#if postpay.postpay_mode_class }}
+        {{! @todo attach library alshaya_white_label/postpay-pdp }}
+        <div class="postpay {{ postpay_mode_class }}"> {{ postpay }} </div>
       {{/if}}
 
-      {{! @todo test this }}
       {{#if promotions }}
         <div class="promotions">
           {{{ promotions }}}
         </div>
       {{/if}}
 
-      {{! @todo test this }}
       {{#if vat_text }}
-        <div class="vat-text">vat_text</div>
+        <div class="vat-text">{{ vat_text }}</div>
       {{/if}}
 
       <div class="content--item-code">
@@ -66,17 +64,21 @@
       </div>
     </div>
 
-    {{! @todo this is not working }}
     <div class="content__main {{ image_slider_position_pdp }}">
       <div class="gallery-wrapper"></div>
     </div>
 
     <div class="content__sidebar">
-      {{! @todo block sizeVolume }}
+      {{#if size_volume }}
+      <div class="content--size-volume">
+        <span class="field__label">{{t 'Size/Volume' }}:</span>
+        {{ size_volume }}
+      </div>
+      {{/if}}
 
       <div class="basic-details-wrapper">
         <div class="field--name-field-skus">{{{ add_to_cart }}}</div>
-        {{! @todo test this }}
+        {{! @todo make sure this is working CORE-40938 }}
         {{#if quantity_limit_enabled }}
           <div class="order-quantity-limit-message"></div>
         {{/if}}

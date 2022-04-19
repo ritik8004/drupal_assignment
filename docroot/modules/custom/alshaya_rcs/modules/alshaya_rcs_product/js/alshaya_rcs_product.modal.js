@@ -50,14 +50,15 @@
                   decimal_points: currencyConfig.decimal_points,
                 },
               },
+              sku_out_of_stock: false, //@todo Review this variable: It is used in few twig templates but never populated
+              size_volume: Drupal.hasValue(entity.size_volume) ? entity.size_volume : '', //@todo This is used on TBS, see alshaya_tbs_transac_node_view()
               vat_text: drupalSettings.vat_text,
-              add_to_cart: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'add_to_cart'),
-              quantity_limit_enabled: drupalSettings.quantity_limit_enabled,
-              sku_out_of_stock: false, //@todo oos
+              quantity_limit_enabled: Drupal.hasValue(drupalSettings.quantity_limit_enabled) ? drupalSettings.quantity_limit_enabled : false,
               image_slider_position_pdp: drupalSettings.alshaya_white_label.image_slider_position_pdp,
+              add_to_cart: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'add_to_cart'),
               promotions: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'promotions'),
               postpay: {
-                postpay_mode_class: '', //@todo drupalSettings.postpay_widget_info.postpay_mode_class
+                postpay_mode_class: '', //@todo Implement postpay
               },
             };
 
