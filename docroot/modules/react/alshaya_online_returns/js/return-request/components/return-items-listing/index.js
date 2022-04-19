@@ -101,7 +101,7 @@ class ReturnItemsListing extends React.Component {
           <span className="select-items-header">{ Drupal.t('1. Select items to return', {}, { context: 'online_returns' }) }</span>
           <span className="items-count">
             {/* @todo: Plural translation not working as expected. */}
-            {Drupal.formatPlural(count, '1 item', '@count items', {}, {'context': 'online_returns'})}
+            {Drupal.formatPlural(count, '1 item', '@count items', {}, { context: 'online_returns' })}
           </span>
         </div>
       );
