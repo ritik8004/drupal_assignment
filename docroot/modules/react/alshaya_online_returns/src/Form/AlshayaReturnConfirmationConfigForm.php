@@ -30,106 +30,64 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_online_returns.return_confirmation');
 
+    // Preparing options for hide options.
     $hide_options = [
-      0 => $this->t('Yes'),
-      1 => $this->t('No'),
+      0 => $this->t('No'),
+      1 => $this->t('Yes'),
     ];
 
+    // Preparing options for icon classes.
     $icon_class_options = [
       'print' => $this->t('print return label'),
       'packitem' => $this->t('pack item'),
       'refund' => $this->t('receive refund'),
     ];
 
-    $form['return_confirmation']['row_1_title'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Title for first row'),
-      '#description' => $this->t('Label for first row in return confirmation page.'),
-      '#default_value' => $config->get('row_1_title'),
-    ];
+    // Fetch row labels for config field rows.
+    $row_labels = $this->getRows();
+    // Rendering form fields for title, description, icon
+    // and hide for each row item defined in config.
+    foreach ($row_labels as $key => $label) {
+      $form['return_confirmation']['rows']['row_' . $key . '_title'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Title for @row_label row', [
+          '@row_label' => $label,
+        ]),
+        '#description' => $this->t('Label for @row_label row in whats next section.', [
+          '@row_label' => $label,
+        ]),
+        '#default_value' => $config->get('rows')[$key]['title'],
+      ];
 
-    $form['return_confirmation']['row_1_description'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Description for first row'),
-      '#description' => $this->t('Description text for first row in return confirmation page.'),
-      '#default_value' => $config->get('row_1_description'),
-    ];
+      $form['return_confirmation']['rows'][$key]['row_' . $key . '_description'] = [
+        '#type' => 'textarea',
+        '#title' => $this->t('Description for @row_label row', [
+          '@row_label' => $label,
+        ]),
+        '#description' => $this->t('Description text for @row_label row in whats next section.', [
+          '@row_label' => $label,
+        ]),
+        '#default_value' => $config->get('rows')[$key]['description'],
+      ];
 
-    $form['return_confirmation']['row_1_icon_text'] = [
-      '#type' => 'select',
-      '#options' => $icon_class_options,
-      '#title' => $this->t('Select corresponding icon text'),
-      '#description' => $this->t('Icon text will be used to display respective icons.'),
-      '#default_value' => $config->get('row_1_icon_text'),
-    ];
+      $form['return_confirmation']['rows'][$key]['row_' . $key . '_icon'] = [
+        '#type' => 'select',
+        '#options' => $icon_class_options,
+        '#title' => $this->t('Select corresponding icon text'),
+        '#description' => $this->t('Icon text will be used to display respective icons.'),
+        '#default_value' => $config->get('rows')[$key]['icon'],
+      ];
 
-    $form['return_confirmation']['row_1_hide_this_row'] = [
-      '#type' => 'select',
-      '#options' => $hide_options,
-      '#title' => $this->t('Hide this row'),
-      '#description' => $this->t('Hide first row from display'),
-      '#default_value' => (int) $config->get('row_1_hide_this_row') ?? 0,
-    ];
-
-    $form['return_confirmation']['row_2_title'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Title for second row'),
-      '#description' => $this->t('Label for second row in return confirmation page.'),
-      '#default_value' => $config->get('row_2_title'),
-    ];
-
-    $form['return_confirmation']['row_2_description'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Description for second row'),
-      '#description' => $this->t('Description text for second row in return confirmation page.'),
-      '#default_value' => $config->get('row_2_description'),
-    ];
-
-    $form['return_confirmation']['row_2_icon_text'] = [
-      '#type' => 'select',
-      '#options' => $icon_class_options,
-      '#title' => $this->t('Select corresponding icon text'),
-      '#description' => $this->t('Icon text will be used to display respective icons.'),
-      '#default_value' => $config->get('row_2_icon_text'),
-    ];
-
-    $form['return_confirmation']['row_2_hide_this_row'] = [
-      '#type' => 'select',
-      '#options' => $hide_options,
-      '#title' => $this->t('Hide this row'),
-      '#description' => $this->t('Hide second row from display'),
-      '#default_value' => (int) $config->get('row_2_hide_this_row') ?? 1,
-    ];
-
-    $form['return_confirmation']['row_3_title'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Title for third row'),
-      '#description' => $this->t('Label for third row in return confirmation page.'),
-      '#default_value' => $config->get('row_3_title'),
-    ];
-
-    $form['return_confirmation']['row_3_description'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Description for third row'),
-      '#description' => $this->t('Description text for third row in return confirmation page.'),
-      '#default_value' => $config->get('row_3_description'),
-    ];
-
-    $form['return_confirmation']['row_3_icon_text'] = [
-      '#type' => 'select',
-      '#options' => $icon_class_options,
-      '#title' => $this->t('Select corresponding icon text'),
-      '#description' => $this->t('Icon text will be used to display respective icons.'),
-      '#default_value' => $config->get('row_3_icon_text'),
-    ];
-
-    $form['return_confirmation']['row_3_hide_this_row'] = [
-      '#type' => 'select',
-      '#options' => $hide_options,
-      '#title' => $this->t('Hide this row'),
-      '#description' => $this->t('Hide third row from display'),
-      '#default_value' => (int) $config->get('row_3_hide_this_row') ?? 1,
-    ];
+      $form['return_confirmation']['rows'][$key]['row_' . $key . '_hide_this_row'] = [
+        '#type' => 'select',
+        '#options' => $hide_options,
+        '#title' => $this->t('Hide this row'),
+        '#description' => $this->t('Hide @row_label row from display', [
+          '@row_label' => $label,
+        ]),
+        '#default_value' => $config->get('rows')[$key]['hide_this_row'],
+      ];
+    }
 
     return parent::buildForm($form, $form_state);
   }
@@ -138,22 +96,46 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('alshaya_online_returns.return_confirmation')
-      ->set('row_1_title', $form_state->getValue('row_1_title'))
-      ->set('row_1_description', $form_state->getValue('row_1_description'))
-      ->set('row_1_icon_text', $form_state->getValue('row_1_icon_text'))
-      ->set('row_1_hide_this_row', $form_state->getValue('row_1_hide_this_row'))
-      ->set('row_2_title', $form_state->getValue('row_2_title'))
-      ->set('row_2_description', $form_state->getValue('row_2_description'))
-      ->set('row_2_icon_text', $form_state->getValue('row_2_icon_text'))
-      ->set('row_2_hide_this_row', $form_state->getValue('row_2_hide_this_row'))
-      ->set('row_3_title', $form_state->getValue('row_3_title'))
-      ->set('row_3_description', $form_state->getValue('row_3_description'))
-      ->set('row_3_icon_text', $form_state->getValue('row_3_icon_text'))
-      ->set('row_3_hide_this_row', $form_state->getValue('row_3_hide_this_row'))
-      ->save();
+    $config = $this->config('alshaya_online_returns.return_confirmation');
+    // Fetch row labels for config field rows.
+    $row_labels = $this->getRows();
+    // Get all row fields values and map them into an empty array.
+    $row_values = $form_state->getValues();
+    if (!empty($row_values)) {
+      foreach ($row_labels as $key => $value) {
+        if (isset($row_values['row_' . $key . '_title'])) {
+          $rows[$key]['title'] = $row_values['row_' . $key . '_title'];
+        }
+        if (isset($row_values['row_' . $key . '_description'])) {
+          $rows[$key]['description'] = $row_values['row_' . $key . '_description'];
+        }
+        if (isset($row_values['row_' . $key . '_icon'])) {
+          $rows[$key]['icon'] = $row_values['row_' . $key . '_icon'];
+        }
+        if (isset($row_values['row_' . $key . '_hide_this_row'])) {
+          $rows[$key]['hide_this_row'] = $row_values['row_' . $key . '_hide_this_row'];
+        }
+      }
+      // Save the row fields array in config.
+      $config->set('rows', $rows)->save();
+    }
 
     parent::submitForm($form, $form_state);
+  }
+
+  /**
+   * Wrapper function to prepare row labels for configuration form.
+   *
+   * @return array
+   *   Row labels array.
+   */
+  private function getRows() {
+    // Adding key value pair for each row label.
+    return [
+      0 => $this->t('first'),
+      1 => $this->t('second'),
+      2 => $this->t('third'),
+    ];
   }
 
 }

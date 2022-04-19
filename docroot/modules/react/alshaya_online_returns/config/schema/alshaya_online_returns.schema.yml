@@ -7,42 +7,24 @@ alshaya_online_returns.settings:
       label: 'Config to enable/disable Online Returns feature'
 
 alshaya_online_returns.return_confirmation:
-  type: config_object
+  type: sequence
   label: 'Return confirmation settings'
-  mapping:
-    row_1_title:
+  sequence:
+    - type: return_whats_next_row
+
+return_whats_next_row:
+  type: mapping
+  label: 'Whats next row'
+  mapping: 
+    title:
       type: label
-      label: 'Title for first row'
-    row_1_description:
+      label: 'Title'
+    description:
       type: text
-      label: 'Description text for first row'
-    row_1_icon_text:
-      type: label
-      label: 'Icon text for first row'
-    row_1_hide_this_row:
-      type: integer
-      label: 'Hide first row from display'
-    row_2_title:
-      type: label
-      label: 'Title for second row'
-    row_2_description:
-      type: text
-      label: 'Description text for second row'
-    row_2_icon_text:
-      type: label
-      label: 'Icon text for second row'
-    row_2_hide_this_row:
-      type: integer
-      label: 'Hide second row from display'
-    row_3_title:
-      type: label
-      label: 'Title for third row'
-    row_3_description:
-      type: text
-      label: 'Description text for third row'
-    row_3_icon_text:
-      type: label
-      label: 'Icon text for third row'
-    row_3_hide_this_row:
-      type: integer
-      label: 'Hide third row from display'
+      label: 'Description'
+    icon:
+      type: string
+      label: 'Icon'
+    hide_this_row:
+      type: boolean
+      label: 'Hide This Row'
