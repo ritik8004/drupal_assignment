@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getReturnConfirmationStrings } from '../../../utilities/return_confirmation_util';
@@ -14,13 +15,13 @@ const WhatsNextSection = () => {
         <div className="whats-next-title">{ Drupal.t("What's next?", {}, { context: 'online_returns' }) }</div>
       </div>
       <div className="whats-next-wrapper">
-        {confirmationStrings.map((section) => (
-          <div key={section.title} className="item-list-wrapper">
-            <ConditionalView condition={section.hide_row}>
-              <div className={`${section.icon_class}`} />
+        {confirmationStrings.map((str) => (
+          <div key={str.icon} className="item-list-wrapper">
+            <ConditionalView condition={str.hide_this_row}>
+              <div className={`${str.icon}`} />
               <div className="whats-next-content">
-                <div className="title">{section.title}</div>
-                <div className="description">{section.description}</div>
+                <div className="title">{str.title}</div>
+                <div className="description">{parse(str.description.value)}</div>
               </div>
             </ConditionalView>
           </div>

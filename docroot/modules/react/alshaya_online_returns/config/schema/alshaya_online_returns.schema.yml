@@ -20,7 +20,7 @@ return_whats_next_row:
       type: label
       label: 'Title'
     description:
-      type: text
+      type: text_format
       label: 'Description'
     icon:
       type: string

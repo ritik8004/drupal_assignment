@@ -30,8 +30,8 @@ function getReturnIdFromUrl() {
 function getReturnConfirmationStrings() {
   let returnConfirmationStrings = null;
   if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.returnConfirmationConfig)) {
-    returnConfirmationStrings = drupalSettings.returnInfo.returnConfirmationConfig;
+    && hasValue(drupalSettings.returnInfo.returnConfirmationStrings)) {
+    returnConfirmationStrings = drupalSettings.returnInfo.returnConfirmationStrings;
   }
   return returnConfirmationStrings;
 }
