@@ -33,8 +33,7 @@ use Symfony\Component\HttpFoundation\Cookie;
  *   id = "share_cart",
  *   label = @Translation("Share Cart"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/share-cart",
- *     "https://www.drupal.org/link-relations/create" = "/rest/v1/share-cart"
+ *     "create" = "/rest/v1/share-cart"
  *   }
  * )
  */
