@@ -112,7 +112,12 @@ class AlshayaAcmPromoLabelAPIHelper {
 
       if (is_bool($configs)) {
         // Cache only if enabled (cache_time set).
-        $this->cache->set($cache_key, $config, strtotime("+${cache_time} minutes"));
+        $this->cache->set($cache_key, $configs, strtotime("+${cache_time} minutes"));
+      }
+      else {
+        $this->logger->error('Invalid response from promo label config api, @response', [
+          '@response' => Json::encode($configs),
+        ]);
       }
     }
 
