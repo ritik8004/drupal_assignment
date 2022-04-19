@@ -37,7 +37,7 @@ class ProxyController {
 
     // Create a guzzle client.
     // Since proxy is used only on non-prod disabling SSL check.
-    $guzzle = new Client(['verify' => false ]);
+    $guzzle = new Client(['verify' => FALSE]);
 
     // Create the proxy instance.
     $proxy = new Proxy(new GuzzleAdapter($guzzle));

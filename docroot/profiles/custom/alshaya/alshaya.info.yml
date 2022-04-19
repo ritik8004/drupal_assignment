@@ -13,6 +13,8 @@ dependencies:
   - drupal:content_translation
   - components:components
   - drupal:dynamic_page_cache
+  - drupal:jquery_ui
+  - drupal:jquery_ui_datepicker
   - drupal:page_cache
   - drupal:language
   - drupal:locale
