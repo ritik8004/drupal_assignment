@@ -5,8 +5,8 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getReturnConfirmationStrings } from '../../../utilities/return_confirmation_util';
 
 const WhatsNextSection = () => {
-  const strings = getReturnConfirmationStrings();
-  if (!hasValue(strings)) {
+  const confirmationStrings = getReturnConfirmationStrings();
+  if (!hasValue(confirmationStrings)) {
     return null;
   }
   return (
@@ -15,7 +15,7 @@ const WhatsNextSection = () => {
         <div className="whats-next-title">{ Drupal.t("What's next?", {}, { context: 'online_returns' }) }</div>
       </div>
       <div className="whats-next-wrapper">
-        {strings.map((str) => (
+        {confirmationStrings.map((str) => (
           <div key={str.icon} className="item-list-wrapper">
             <ConditionalView condition={str.hide_this_row}>
               <div className={`${str.icon}`} />
