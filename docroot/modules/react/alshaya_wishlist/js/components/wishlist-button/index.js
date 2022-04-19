@@ -85,13 +85,40 @@ class WishlistButton extends React.Component {
       // and page loads before.
       document.addEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
     }
+
+    // Updates product wishlist icon status on teaser when drawer is updated.
+    document.addEventListener('productAddedToWishlist', this.updateWishlistButtonStatus);
+    document.addEventListener('productRemovedFromWishlist', this.updateWishlistButtonStatus);
   };
+
+  /**
+   * Updates teaser wishlist icon when product is add / removed
+   * in wishlist from drawer.
+   */
+  updateWishlistButtonStatus = (event) => {
+    const { productInfo, sku } = event.detail || {};
+    const { skuCode } = this.state;
+    if (typeof productInfo !== 'undefined' && productInfo !== null) {
+      // If skuCode matches productinfo sku then product is added.
+      if (skuCode === productInfo.sku) {
+        this.updateWishListStatus(true);
+      }
+    } else if (typeof sku !== 'undefined' && sku !== null) {
+      // If skuCode matches sku from event then product is removed.
+      if (skuCode === sku) {
+        this.updateWishListStatus(false);
+      }
+    }
+  }
 
   componentWillUnmount = () => {
     if (!isAnonymousUser()) {
       // Remove event listener bind in componentDidMount.
       document.removeEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
     }
+
+    document.removeEventListener('productAddedToWishlist', this.updateWishlistButtonStatus);
+    document.removeEventListener('productRemovedFromWishlist', this.updateWishlistButtonStatus);
   };
 
   /**
