@@ -268,7 +268,7 @@ const formatCart = (cartData) => {
  *
  * @type {null}
  */
-const staticProductStatus = [];
+let staticProductStatus = [];
 
 /**
  * Get data related to product status.
@@ -292,6 +292,25 @@ const getProductStatus = async (sku, parentSKU) => {
   staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku, parentSKU);
 
   return staticProductStatus[sku];
+};
+
+/**
+ * Clears static cache for product status data.
+ */
+const clearProductStatusStaticCache = () => {
+  staticProductStatus = [];
+};
+
+/**
+ * Call this function to statically store stock data for V3.
+ * For V2, it does nothing.
+ *
+ * @param {string} cartId
+ *   The cart ID.
+ */
+const loadProductStockDataFromCart = async (cartId) => {
+  await window.commerceBackend.loadProductStockDataFromCart(cartId);
+  clearProductStatusStaticCache();
 };
 
 /**
@@ -426,9 +445,7 @@ const getProcessedCartData = async (cartData) => {
 
   if (typeof cartData.cart.items !== 'undefined' && cartData.cart.items.length > 0) {
     data.items = {};
-    // Call this function to statically store stock data for V3.
-    // For V2, it does nothing.
-    await window.commerceBackend.loadProductStockDataFromCart(cartId);
+    await loadProductStockDataFromCart(cartId);
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
       const hasParentSku = hasValue(item.extension_attributes)
