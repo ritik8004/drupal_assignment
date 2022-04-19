@@ -91,6 +91,16 @@ class WishlistButton extends React.Component {
     document.addEventListener('productRemovedFromWishlist', this.updateWishlistButtonStatus);
   };
 
+  componentWillUnmount = () => {
+    if (!isAnonymousUser()) {
+      // Remove event listener bind in componentDidMount.
+      document.removeEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
+    }
+
+    document.removeEventListener('productAddedToWishlist', this.updateWishlistButtonStatus);
+    document.removeEventListener('productRemovedFromWishlist', this.updateWishlistButtonStatus);
+  };
+
   /**
    * Updates teaser wishlist icon when product is add / removed
    * in wishlist from drawer.
@@ -110,16 +120,6 @@ class WishlistButton extends React.Component {
       }
     }
   }
-
-  componentWillUnmount = () => {
-    if (!isAnonymousUser()) {
-      // Remove event listener bind in componentDidMount.
-      document.removeEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
-    }
-
-    document.removeEventListener('productAddedToWishlist', this.updateWishlistButtonStatus);
-    document.removeEventListener('productRemovedFromWishlist', this.updateWishlistButtonStatus);
-  };
 
   /**
    * Handle item removal from wishlist.
