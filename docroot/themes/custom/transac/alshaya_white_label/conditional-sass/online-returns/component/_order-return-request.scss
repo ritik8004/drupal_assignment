@@ -132,6 +132,11 @@
           @include breakpoint($tablet) {
             flex-direction: row;
           }
+
+          .item-total-price {
+            padding: 1.25rem 1.5rem;
+            padding-bottom: 1.5rem;
+          }
         }
 
         .order__details--summary {
@@ -162,14 +167,21 @@
             padding-#{$right}: 0.5rem;
             padding-#{$left}: 3.125rem;
           }
+
+          .price-block {
+            @include breakpoint($desktop) {
+              display: flex;
+              flex-wrap: wrap;
+
+              .special--price {
+                margin-#{$left}: 0.3125rem;
+              }
+            }
+          }
         }
 
         .item-total-price {
           grid-area: d;
-
-          @include breakpoint($only-mobile) {
-            display: none;
-          }
 
           @include breakpoint($tablet) {
             padding: 1.5rem;
@@ -446,6 +458,9 @@
         padding-#{$left}: 1.5rem;
         margin-#{$left}: -0.5rem;
         margin-#{$right}: -0.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
       }
 
       .select-items-header,
@@ -461,6 +476,14 @@
           html[lang=ar] & {
             left: 2.25rem;
           }
+        }
+      }
+
+      .items-count {
+        text-transform: capitalize;
+
+        @include breakpoint($tablet) {
+          padding-#{$left}: 1rem;
         }
       }
     }
