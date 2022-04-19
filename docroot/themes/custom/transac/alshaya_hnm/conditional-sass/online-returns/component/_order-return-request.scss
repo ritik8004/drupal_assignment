@@ -38,6 +38,14 @@
     }
   }
 
+  .refund-details-wrapper {
+    .return-address-wrapper {
+      .customer-name {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+
   .continue-button-wrapper {
     button {
       span {
