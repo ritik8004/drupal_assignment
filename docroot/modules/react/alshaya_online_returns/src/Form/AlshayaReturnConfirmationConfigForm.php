@@ -60,14 +60,15 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
       ];
 
       $form['return_confirmation']['rows'][$key]['row_' . $key . '_description'] = [
-        '#type' => 'textarea',
+        '#type' => 'text_format',
+        '#format' => 'rich_text',
         '#title' => $this->t('Description for @row_label row', [
           '@row_label' => $label,
         ]),
         '#description' => $this->t('Description text for @row_label row in whats next section.', [
           '@row_label' => $label,
         ]),
-        '#default_value' => $config->get('rows')[$key]['description'],
+        '#default_value' => $config->get('rows')[$key]['description']['value'],
       ];
 
       $form['return_confirmation']['rows'][$key]['row_' . $key . '_icon'] = [
@@ -107,7 +108,8 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
           $rows[$key]['title'] = $row_values['row_' . $key . '_title'];
         }
         if (isset($row_values['row_' . $key . '_description'])) {
-          $rows[$key]['description'] = $row_values['row_' . $key . '_description'];
+          $rows[$key]['description']['value'] = $row_values['row_' . $key . '_description']['value'];
+          $rows[$key]['description']['format'] = 'rich_text';
         }
         if (isset($row_values['row_' . $key . '_icon'])) {
           $rows[$key]['icon'] = $row_values['row_' . $key . '_icon'];
