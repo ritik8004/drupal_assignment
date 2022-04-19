@@ -109,15 +109,22 @@ const PointsToEarnMessage = (props) => {
 
   // Registered User & UnLinked card.
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
-    const toEarnMessageP1 = `${getStringMessage('our_members_will_earn')} `;
-    const pointsHighlight = `${pointsToEarn} ${getStringMessage('points')}`;
-    const toEarnMessageP2 = ` ${getStringMessage('checkout_with_this_purchase')}`;
-
     return (
       <span className="spc-aura-points-to-earn">
-        { toEarnMessageP1 }
-        <span className="spc-aura-highlight">{ pointsHighlight }</span>
-        { toEarnMessageP2 }
+        <AuraHeaderIcon />
+        <span className="spc-link-aura-link-wrapper submit">
+          <a
+            className="spc-link-aura-link"
+            /** @todo: Need to link this with Link Aura popup when ready. */
+          >
+            {getStringMessage('aura_link_aura')}
+          </a>
+        </span>
+        {getStringMessage(
+          'cart_to_earn_with_points',
+          { '@pts': pointsToEarn },
+        )}
+        <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
       </span>
     );
   }
