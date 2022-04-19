@@ -47,10 +47,9 @@ const PointsToEarnMessage = (props) => {
   }
 
   // Registered User & Linked card. This will display when a logged in user has
-  // Aura card signed up irrepective of fully verified or partially verified.
+  // Aura card signed up that is partially verified.
   if (isUserAuthenticated()
-    && (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED
-    || loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED)) {
+    && loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
     const toEarnMessageP1 = `${getStringMessage('earn')} `;
     const pointsHighlight = `${pointsToEarn} ${getStringMessage('aura')} ${getStringMessage('points_with_dot')}`;
     const toEarnMessageP2 = ` ${getStringMessage('cart_redeem_points_msg')}`;
@@ -81,6 +80,27 @@ const PointsToEarnMessage = (props) => {
           >
             {getStringMessage('play_store_link_text')}
           </a>
+          <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
+        </span>
+      </>
+    );
+  }
+
+  // Registered User & Linked card. This will display when a logged in user has
+  // Aura card signed up that is fully verified.
+  if (isUserAuthenticated()
+    && loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
+    const toEarnMessageP1 = `${getStringMessage('earn')} `;
+    const pointsHighlight = `${pointsToEarn} ${getStringMessage('aura')} ${getStringMessage('points')}`;
+    const toEarnMessageP2 = ` ${getStringMessage('cart_with_this_purchase')}`;
+
+    return (
+      <>
+        <AuraHeaderIcon />
+        <span className="spc-aura-points-to-earn">
+          {toEarnMessageP1}
+          <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
+          {toEarnMessageP2}
           <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
         </span>
       </>
