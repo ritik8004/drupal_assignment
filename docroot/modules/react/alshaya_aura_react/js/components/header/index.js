@@ -19,6 +19,7 @@ class Header extends React.Component {
     this.state = {
       wait: true,
       signUpComplete: false,
+      showCongratulations: false,
       isHeaderModalOpen: !!isNotExpandable,
       ...getAuraDetailsDefaultState(),
     };
@@ -68,11 +69,23 @@ class Header extends React.Component {
   updateState = (data) => {
     const { stateValues, clickedNotYou } = data.detail;
     const states = { ...stateValues };
+    const {
+      signUpComplete,
+      isHeaderModalOpen,
+    } = this.state;
 
     if (clickedNotYou) {
       states.clickedNotYou = clickedNotYou;
     }
-
+    if (!(signUpComplete)
+      && !(isHeaderModalOpen)
+      && Drupal.getItemFromLocalStorage(getAuraLocalStorageKey()) !== null
+      && stateValues.signUpComplete
+    ) {
+      this.setState({
+        showCongratulations: true,
+      });
+    }
     if (stateValues.loyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED) {
       states.signUpComplete = true;
     }
@@ -102,6 +115,7 @@ class Header extends React.Component {
       clickedNotYou,
       notYouFailed,
       tier,
+      showCongratulations,
     } = this.state;
 
     const {
@@ -151,6 +165,7 @@ class Header extends React.Component {
         openHeaderModal={this.openHeaderModal}
         isNotExpandable={isNotExpandable}
         signUpComplete={signUpComplete}
+        showCongratulations={showCongratulations}
         clickedNotYou={clickedNotYou}
         notYouFailed={notYouFailed}
         tier={tier}

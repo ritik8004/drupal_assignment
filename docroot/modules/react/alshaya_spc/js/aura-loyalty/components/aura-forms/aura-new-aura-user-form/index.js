@@ -31,7 +31,7 @@ class AuraFormNewAuraUserModal extends React.Component {
     const { signUpTermsAndConditionsLink } = getAuraConfig();
 
     return [
-      <span key="part1">{Drupal.t('By clicking submit, you agree to have read and accepted our')}</span>,
+      <span key="part1">{Drupal.t('By pressing submit, you agree to have read and accepted our')}</span>,
       <a
         key="part2"
         href={signUpTermsAndConditionsLink}
@@ -161,7 +161,7 @@ class AuraFormNewAuraUserModal extends React.Component {
     return (
       <div className="aura-new-user-form">
         <div className="aura-modal-header">
-          <SectionTitle>{Drupal.t('Say hello to Aura')}</SectionTitle>
+          <SectionTitle>{Drupal.t('Join Aura')}</SectionTitle>
           <button type="button" className="close" onClick={() => closeNewUserModal()} />
         </div>
         <div className="aura-modal-form">
@@ -172,12 +172,6 @@ class AuraFormNewAuraUserModal extends React.Component {
                 messageContent={messageContent}
               />
             </div>
-            <AuraMobileNumberField
-              isDisabled
-              name="new-aura-user"
-              countryMobileCode={chosenCountryCode}
-              defaultValue={chosenUserMobile}
-            />
             <TextField
               type="text"
               required
@@ -191,6 +185,12 @@ class AuraFormNewAuraUserModal extends React.Component {
               label={Drupal.t('Email address')}
               defaultValue={email}
             />
+            <AuraMobileNumberField
+              isDisabled
+              name="new-aura-user"
+              countryMobileCode={chosenCountryCode}
+              defaultValue={chosenUserMobile}
+            />
           </div>
           <div className="aura-modal-form-actions">
             <div className="aura-new-user-t-c aura-otp-submit-description">
@@ -198,6 +198,15 @@ class AuraFormNewAuraUserModal extends React.Component {
             </div>
             <div className="aura-modal-form-submit" onClick={() => this.registerUser()}>
               {submitButtonText}
+            </div>
+            <div className="aura-modal-form-footer">
+              <div
+                className="already-a-member-link"
+                // onClick={() => this.openLinkCardModal()}
+              >
+                {/* to do - link already a member popup with https://alshayagroup.atlassian.net/browse/CORE-39965 */}
+                {Drupal.t('Already a member?')}
+              </div>
             </div>
           </div>
         </div>
