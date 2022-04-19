@@ -125,12 +125,6 @@ function _alshaya_aura_react_translations() {
       'Personalised for you.' => [
         'ar' => 'مخصص لك.',
       ],
-      'Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.' => [
-        'ar' => 'أورا هو برنامج المكافآت الجديد يمنحك النقاط عند تسوقك في الأماكن المفضلة ويعطيك فرصة حصرية لتجارب لا مثيل لها.',
-      ],
-      'Learn more' => [
-        'ar' => 'تعرف على المزيد',
-      ],
       'Your Aura card number' => [
         'ar' => 'رقم بطاقة أورا الخاصة بك',
       ],
@@ -413,6 +407,18 @@ function _alshaya_aura_react_translations() {
       'Aura points with this purchase.' => [
         'ar' => 'نقاط Aura مع هذا الشراء.',
         'context' => 'aura',
+      ],
+      'To earn and spend points while you shop and enjoy exclusive benefits.' => [
+        'ar' => 'لكسب النقاط وإنفاقها أثناء التسوق والاستمتاع بمزايا حصرية.',
+      ],
+      'Know more' => [
+        'ar' => 'تعرف أكثر',
+      ],
+      ' about Aura.' => [
+        'ar' => ' حول الهالة.',
+      ],
+      'Already a member?' => [
+        'ar' => 'عضوا فعلا؟',
       ],
     ],
   ];

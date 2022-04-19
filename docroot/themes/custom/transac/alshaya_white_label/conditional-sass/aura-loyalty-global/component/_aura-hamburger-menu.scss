@@ -36,7 +36,7 @@ body.aura-enabled {
         .aura-header-hb-menu-title {
           display: flex;
           align-items: center;
-          padding: 1.25rem;
+          padding: 0.75rem 1.125rem 0.875rem;
           position: relative;
 
           span.preview-text {
@@ -48,40 +48,31 @@ body.aura-enabled {
           }
 
           .join-aura {
+            display: flex;
+
             svg {
-              max-width: 6.25rem;
+              max-height: 1.875rem;
+              width: auto;
               transition: all 0.4s ease-in-out;
             }
           }
         }
 
         .aura-header-hb-menu-expand {
-          background: url('#{$base_theme_img_directory_path}/aura/aura-chevron-shape.svg') center center no-repeat;
+          background: url('#{$base_theme_img_directory_path}/aura/aura-chevron-down-shape.svg') center center no-repeat;
           width: 2rem;
           height: 2rem;
           display: inline-block;
           background-size: initial;
           position: absolute;
-          #{$right}: 1.5rem;
+          #{$right}: 1rem;
           transition: transform 0.3s ease-in-out;
           cursor: pointer;
-          top: 1.625rem;
         }
 
         &.open {
           .aura-header-hb-menu-expand {
             transform: rotate(180deg);
-          }
-
-          .join-aura {
-            svg {
-              max-width: 119px !important;
-              transform: translateX(-4.875rem);
-
-              html[lang=ar] & {
-                transform: translateX(4.875rem);
-              }
-            }
           }
 
           .preview-text {
@@ -93,8 +84,7 @@ body.aura-enabled {
     }
 
     .aura-header-popup-wrapper {
-      font-family: $aura-bold;
-      padding: 0 1.25rem 1.5rem;
+      padding: 0 1.125rem 1.125rem;
     }
   }
 }
