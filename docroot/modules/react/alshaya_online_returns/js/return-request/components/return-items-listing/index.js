@@ -93,15 +93,15 @@ class ReturnItemsListing extends React.Component {
    * On click of this component, item details div will open.
    */
   itemListHeader = (products) => {
-    if (hasValue(products) && products.length > 0) {
-      const itemsLabel = (products.length === 1) ? 'item' : 'items';
+    const count = products.length;
+
+    if (hasValue(products) && count > 0) {
       return (
         <div className="select-items-label">
           <span className="select-items-header">{ Drupal.t('1. Select items to return', {}, { context: 'online_returns' }) }</span>
           <span className="items-count">
-            {products.length}
-            {' '}
-            {itemsLabel}
+            {/* @todo: Plural translation not working as expected. */}
+            {Drupal.formatPlural(count, '1 item', '@count items', {}, { context: 'online_returns' })}
           </span>
         </div>
       );
