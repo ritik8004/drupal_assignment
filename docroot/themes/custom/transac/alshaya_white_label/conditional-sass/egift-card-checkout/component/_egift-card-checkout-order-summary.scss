@@ -54,6 +54,10 @@
               direction: ltr;
               text-align: right;
               max-width: 10rem;
+
+              @include breakpoint($only-mobile) {
+                max-width: 8rem;
+              }
             }
           }
         }
