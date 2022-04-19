@@ -456,7 +456,7 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
  * @return object
  *   Prepared data.
  */
- const prepareFilterData = (filters, base = 'searchCriteria', groupId = 0) => {
+const prepareFilterData = (filters, base = 'searchCriteria', groupId = 0) => {
   const data = {};
 
   filters.forEach((filter, index) => {
