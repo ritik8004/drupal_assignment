@@ -12,7 +12,7 @@ import {
   nearByStores,
   getDistanceBetween,
 } from '../utility';
-import AddressHours from '../components/AddressHours';
+import AddressHoursParent from '../components/AddressHoursParent';
 
 export class StoreFinderList extends React.PureComponent {
   constructor(props) {
@@ -210,7 +210,7 @@ export class StoreFinderList extends React.PureComponent {
                           <div className="views-row">
                             <div className="views-field-field-store-address">
                               <div className="field-content">
-                                <AddressHours
+                                <AddressHoursParent
                                   type="addressitem"
                                   address={store.address}
                                   classname="address--line2"
@@ -226,7 +226,7 @@ export class StoreFinderList extends React.PureComponent {
                                   <div id={`hours--label-${store.id}`} className="hours--label" onClick={() => this.toggleOpenClass(store.id)}>
                                     {Drupal.t('Opening Hours')}
                                   </div>
-                                  <AddressHours
+                                  <AddressHoursParent
                                     type="hoursitem"
                                     storeHours={store.store_hours}
                                   />

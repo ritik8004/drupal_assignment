@@ -679,8 +679,8 @@ function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterf
 
   // Subscribe user to newsletter.
   if (!empty($subscribe['value'])) {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
-    $apiWrapper = \Drupal::service('acq_commerce.api');
+    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $apiWrapper */
+    $apiWrapper = \Drupal::service('alshaya_api.api');
 
     try {
       $apiWrapper->subscribeNewsletter($user->getEmail());

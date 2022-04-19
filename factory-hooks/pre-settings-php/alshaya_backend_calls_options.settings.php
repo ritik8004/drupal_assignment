@@ -141,6 +141,9 @@ $settings['alshaya_backend_calls_options'] = [
     'aura_dictionary_config' => [
       'timeout' => 30,
     ],
+    'subscribe_newsletter' => [
+      'timeout' => 30,
+    ],
   ],
   'appointment_booking' => [
     'default' => [

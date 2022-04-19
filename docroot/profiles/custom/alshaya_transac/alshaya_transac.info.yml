@@ -10,6 +10,8 @@ dependencies:
   - drupal:syslog
   - alshaya_js_optimisations:alshaya_js_optimisations
   - drupal:jquery_ui_accordion
+  - drupal:jquery_ui_tabs
+  - drupal:jquery_ui_effects
 
 themes:
   - alshaya_white_label
