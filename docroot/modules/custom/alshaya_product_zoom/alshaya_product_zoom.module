@@ -52,23 +52,22 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
  */
 function alshaya_product_zoom_preprocess_node(&$variables) {
   if (isset($variables['view_mode'])) {
-
-    // Global slider position.
-    $product_settings = \Drupal::config('alshaya_acm_product.settings');
-    $pdp_image_slider_position = 'slider-position-' . $product_settings->get('image_slider_position_pdp');
-
-    // Check if there are node level overrides.
     if ($variables['view_mode'] == 'full' || $variables['view_mode'] == 'modal') {
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+      // Add PDP slider position config to variable so it is available
+      // in themes.
+      $pdp_image_slider_position = '';
+
       if (isset($variables['node']) && $variables['node']->bundle() === 'acq_product') {
-        $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-        $pdp_image_slider_position = 'slider-position-' . $skuManager->getImageSliderPosition($variables['node']);
+        $pdp_image_slider_position = $skuManager->getImageSliderPosition($variables['node']);
       }
+
+      $variables['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
+
+      // Add PDP slider position config to drupalSettings so we can use it
+      // in JS.
+      $variables['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
     }
-
-    // Add PDP slider position config to variable so it is available in themes.
-    $variables['image_slider_position_pdp'] = $pdp_image_slider_position;
-
-    // Add PDP slider position config to drupalSettings so we can use it in JS.
-    $variables['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = $pdp_image_slider_position;
   }
 }
