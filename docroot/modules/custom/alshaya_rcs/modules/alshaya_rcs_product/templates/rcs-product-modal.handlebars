@@ -1,6 +1,3 @@
-{{! @todo remove logs }}
-{{log this }}
-{{log entity }}
 <article
   class="entity--type-node"
   data-vmode="modal"
@@ -38,7 +35,6 @@
       {{ title_suffix }}
 
       <div class="price-block price-block-{{ entity.sku }}">
-        {{log price_details}}
         {{{render 'product.block.price' price_details }}}
       </div>
 
