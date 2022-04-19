@@ -10,7 +10,7 @@ alshaya_online_returns.return_confirmation:
   type: sequence
   label: 'Return confirmation settings'
   sequence:
-    - type: address_zone_territory
+    - type: return_whats_next_row
 
 return_whats_next_row:
   type: mapping

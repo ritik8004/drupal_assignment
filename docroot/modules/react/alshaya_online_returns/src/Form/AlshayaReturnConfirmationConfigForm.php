@@ -46,12 +46,7 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
     $field_rows = $config->get('rows');
 
     // Preparing row labels for config field rows.
-    $row_labels = [
-      0 => $this->t('first'),
-      1 => $this->t('second'),
-      2 => $this->t('third'),
-    ];
-
+    $row_labels = $this->prepareRowLabelsData();
     // Rendering form fields for title, description, icon
     // and hide for each row item defined in config.
     foreach ($field_rows as $key => $value) {
@@ -109,17 +104,17 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
     $row_values = $form_state->getValues();
     if (!empty($row_values)) {
       foreach ($field_rows as $key => $value) {
-        if (isset($values['row_' . $key . '_title'])) {
-          $rows[$key]['title'] = $form_state->getValue('row_' . $key . '_title');
+        if (isset($row_values['row_' . $key . '_title'])) {
+          $rows[$key]['title'] = $row_values['row_' . $key . '_title'];
         }
-        if (isset($values['row_' . $key . '_description'])) {
-          $rows[$key]['description'] = $form_state->getValue('row_' . $key . '_description');
+        if (isset($row_values['row_' . $key . '_description'])) {
+          $rows[$key]['description'] = $row_values['row_' . $key . '_description'];
         }
-        if (isset($values['row_' . $key . '_icon'])) {
-          $rows[$key]['icon'] = $form_state->getValue('row_' . $key . '_icon');
+        if (isset($row_values['row_' . $key . '_icon'])) {
+          $rows[$key]['icon'] = $row_values['row_' . $key . '_icon'];
         }
-        if (isset($values['row_' . $key . '_hide_this_row'])) {
-          $rows[$key]['hide_this_row'] = $form_state->getValue('row_' . $key . '_hide_this_row');
+        if (isset($row_values['row_' . $key . '_hide_this_row'])) {
+          $rows[$key]['hide_this_row'] = $row_values['row_' . $key . '_hide_this_row'];
         }
       }
       // Save the row fields array in config.
@@ -127,6 +122,22 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
     }
 
     parent::submitForm($form, $form_state);
+  }
+
+  /**
+   * Wrapper function to prepare row labels for configuration form.
+   *
+   * @return array
+   *   Row labels array.
+   */
+  public function prepareRowLabelsData() {
+    // Adding key value pair for each row label.
+    $row_labels = [
+      0 => $this->t('first'),
+      1 => $this->t('second'),
+      2 => $this->t('third'),
+    ];
+    return $row_labels;
   }
 
 }
