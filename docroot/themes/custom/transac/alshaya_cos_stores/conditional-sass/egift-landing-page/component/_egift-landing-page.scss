@@ -12,4 +12,12 @@
       }
     }
   }
+
+  .node--type-advanced-page {
+    .c-content__primary {
+      @include breakpoint($desktop) {
+        max-width: 64.125rem;
+      }
+    }
+  }
 }
