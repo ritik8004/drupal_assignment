@@ -325,6 +325,10 @@
         {% endfor %}
       {% endif %}
 
+      {% if order.online_returns_status is defined and order.online_returns_status %}
+        <tr class="order-item-row" id="online-returned-items"></tr>
+      {% endif %}
+
       <tr class="sub-total-row">
         <td class="desktop-only">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>

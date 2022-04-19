@@ -91,6 +91,8 @@ class OnlineReturnsHelper {
 
     return [
       'orderId' => $order['increment_id'],
+      'orderEntityId' => $order['entity_id'],
+      'orderCustomerId' => $order['customer_id'],
       'orderType' => $order['shipping']['extension_attributes']['click_and_collect_type'] ?? '',
       'paymentMethod' => $paymentMethod ? $paymentMethod['value'] : '',
       'isReturnEligible' => $order['extension']['is_return_eligible'] ?? TRUE,
