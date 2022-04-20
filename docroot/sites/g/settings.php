@@ -135,7 +135,7 @@ if (file_exists('/var/www/site-php')) {
     print 'The website encountered an unexpected error. Please try again later.';
     exit;
   }
-  // todo: this part needs to be rewritten, we might consider removing it
+  // @todo this part needs to be rewritten, we might consider removing it.
   // entirely for the time being.
   if (!class_exists('DrupalFakeCache')) {
     $config['cache_backends'][] = 'includes/cache-install.inc';
@@ -149,7 +149,7 @@ if (file_exists('/var/www/site-php')) {
 
   // This section has been ported from D7 to D8 by mistake; the 'memcache_*'
   // settings are not supposed to be set and the $config changes aren't generic.
-  // todo: reevaluate and possibly remove this.
+  // @todo reevaluate and possibly remove this.
   if (!empty($site_settings['flags']['memcache_enabled']) && !empty($site_settings['memcache_inc'])) {
     $config['cache_backends'][] = $site_settings['memcache_inc'];
     $config['cache_default_class'] = 'MemCacheDrupal';
@@ -164,6 +164,7 @@ if (file_exists('/var/www/site-php')) {
   // site, unless the site is being installed via install.php and the user has
   // the correct token to access it.
   if (PHP_SAPI !== 'cli' && !empty($site_settings['flags']['access_restricted']['enabled'])) {
+    // phpcs:ignore
     $_tmp = !empty($site_settings['flags']['access_restricted']['token']) && !empty($_GET['site_install_token']) && $_GET['site_install_token'] === $site_settings['flags']['access_restricted']['token'];
     if (!$_tmp || $_SERVER['SCRIPT_NAME'] !== $GLOBALS['base_path'] . 'install.php') {
       header($_SERVER['SERVER_PROTOCOL'] . ' 503 Service unavailable');
@@ -224,7 +225,7 @@ if (file_exists('/var/www/site-php')) {
  *   );
  * @endcode
  */
-if (isset($config_directories['vcs'])) {
+if (isset($settings['config_vcs_directory'])) {
   // The hosting settings include file adds a VCS config directory, but this can
   // only work with livedeev enabled.  Livedev is not supported on ACSF, and the
   // addition of this directory breaks site installs, so the VCS config
@@ -240,7 +241,7 @@ if (isset($config_directories['vcs'])) {
     }
 
     if ($_tmp === 'site-install') {
-      unset($config_directories['vcs']);
+      unset($settings['config_vcs_directory']);
     }
   }
 }

@@ -9,8 +9,8 @@
  */
 
 // Set config directories to default location.
-$config_directories['vcs'] = '../config/default';
-$config_directories['sync'] = '../config/default';
+$settings['config_vcs_directory'] = '../config/default';
+$settings['config_sync_directory'] = '../config/default';
 
 use Symfony\Component\Yaml\Yaml;
 
