@@ -588,6 +588,10 @@ export const checkoutAddressProcess = (e) => {
           });
           return;
         }
+        // Push error to GTM events.
+        if (cartResult.is_error) {
+          Drupal.logJavascriptError('checkout-address-save', cartResult.response_message.msg, GTM_CONSTANTS.CHECKOUT_ERRORS);
+        }
         if (typeof cartResult.response_message !== 'undefined'
             && cartResult.response_message.status !== 'success') {
           dispatchCustomEvent('addressPopUpError', {
