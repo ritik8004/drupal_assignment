@@ -31,7 +31,7 @@ class AuraFormNewAuraUserModal extends React.Component {
     const { signUpTermsAndConditionsLink } = getAuraConfig();
 
     return [
-      <span key="part1">{Drupal.t('By pressing submit, you agree to have read and accepted our')}</span>,
+      <span key="part1">{Drupal.t('By pressing submit, you agree to have read and accepted our', {}, { context: 'aura' })}</span>,
       <a
         key="part2"
         href={signUpTermsAndConditionsLink}
@@ -161,7 +161,7 @@ class AuraFormNewAuraUserModal extends React.Component {
     return (
       <div className="aura-new-user-form">
         <div className="aura-modal-header">
-          <SectionTitle>{Drupal.t('Join Aura')}</SectionTitle>
+          <SectionTitle>{Drupal.t('Join Aura', {}, { context: 'aura' })}</SectionTitle>
           <button type="button" className="close" onClick={() => closeNewUserModal()} />
         </div>
         <div className="aura-modal-form">
@@ -205,7 +205,7 @@ class AuraFormNewAuraUserModal extends React.Component {
                 // onClick={() => this.openLinkCardModal()}
               >
                 {/* to do - link already a member popup with https://alshayagroup.atlassian.net/browse/CORE-39965 */}
-                {Drupal.t('Already a member?')}
+                {Drupal.t('Already a member?', {}, { context: 'aura' })}
               </div>
             </div>
           </div>
