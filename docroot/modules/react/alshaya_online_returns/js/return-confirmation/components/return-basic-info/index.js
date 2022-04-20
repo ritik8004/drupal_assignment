@@ -1,5 +1,6 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { formatDateTime } from '../../../utilities/online_returns_util';
 
 const ReturnBasicInfo = ({
   returnData,
@@ -11,7 +12,7 @@ const ReturnBasicInfo = ({
     <div className="return-id-info">
       <span className="return-id-label">{ Drupal.t('Return ID', {}, { context: 'online_returns' }) }</span>
       <span className="return-id-value">{returnData.increment_id}</span>
-      <span className="return-request-date">{returnData.date_requested}</span>
+      <span className="return-request-date">{formatDateTime(returnData.date_requested)}</span>
     </div>
   );
 };

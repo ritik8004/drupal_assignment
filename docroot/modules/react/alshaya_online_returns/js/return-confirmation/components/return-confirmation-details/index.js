@@ -9,7 +9,7 @@ import RefundMethods from '../refund-methods';
 import ReturnBasicInfo from '../return-basic-info';
 import ReturnConfirmationAddress from '../return-confirmation-address';
 
-class ReturnDetailsSection extends React.Component {
+class ReturnConfirmationDetails extends React.Component {
   constructor(props) {
     const { orderDetails } = props;
     super(props);
@@ -59,7 +59,7 @@ class ReturnDetailsSection extends React.Component {
             shippingAddress={address}
           />
           <div className="return-note-text">
-            <div className="return-note-label">{ Drupal.t('Note - You can cancel this return order before 24hrs from the time of pick-up.s', {}, { context: 'online_returns' }) }</div>
+            <div className="return-note-label">{ Drupal.t('Note - You can cancel this return order before 24hrs from the time of pick-up.', {}, { context: 'online_returns' }) }</div>
           </div>
         </div>
         <ReturnedItemsListing
@@ -70,4 +70,4 @@ class ReturnDetailsSection extends React.Component {
   }
 }
 
-export default ReturnDetailsSection;
+export default ReturnConfirmationDetails;

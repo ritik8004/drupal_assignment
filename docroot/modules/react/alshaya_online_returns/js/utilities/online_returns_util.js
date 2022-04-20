@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
@@ -68,11 +69,17 @@ function formatDate(date) {
 }
 
 /**
+ * Utility function to format date time in 30 Nov. 2016 @ 20h55.
+ */
+function formatDateTime(date) {
+  return moment(date).locale(drupalSettings.path.currentLanguage).format('DD MMM YYYY @H[h]mm');
+}
+
+/**
  * Utility function to get return request url.
  */
 function getReturnRequestUrl(orderId) {
-  const url = Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}/return`);
-  return url;
+  return Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}/return`);
 }
 
 /**
@@ -172,4 +179,5 @@ export {
   getReturnConfirmationUrl,
   getOrderDetailsUrl,
   getAdressData,
+  formatDateTime,
 };
