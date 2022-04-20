@@ -85,10 +85,6 @@ class WishlistButton extends React.Component {
       // and page loads before.
       document.addEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
     }
-
-    // Updates product wishlist icon status on teaser when drawer is updated.
-    document.addEventListener('productAddedToWishlist', this.updateWishlistButtonStatus);
-    document.addEventListener('productRemovedFromWishlist', this.updateWishlistButtonStatus);
   };
 
   componentWillUnmount = () => {
@@ -96,30 +92,7 @@ class WishlistButton extends React.Component {
       // Remove event listener bind in componentDidMount.
       document.removeEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
     }
-
-    document.removeEventListener('productAddedToWishlist', this.updateWishlistButtonStatus);
-    document.removeEventListener('productRemovedFromWishlist', this.updateWishlistButtonStatus);
   };
-
-  /**
-   * Updates teaser wishlist icon when product is add / removed
-   * in wishlist from drawer.
-   */
-  updateWishlistButtonStatus = (event) => {
-    const { productInfo, sku } = event.detail || {};
-    const { skuCode } = this.state;
-    if (typeof productInfo !== 'undefined' && productInfo !== null) {
-      // If skuCode matches productinfo sku then product is added.
-      if (skuCode === productInfo.sku) {
-        this.updateWishListStatus(true);
-      }
-    } else if (typeof sku !== 'undefined' && sku !== null) {
-      // If skuCode matches sku from event then product is removed.
-      if (skuCode === sku) {
-        this.updateWishListStatus(false);
-      }
-    }
-  }
 
   /**
    * Handle item removal from wishlist.
@@ -274,10 +247,23 @@ class WishlistButton extends React.Component {
    */
   updateWishListStatus = (status) => {
     const { addedInWishList } = this.state;
+
+    // Get reference of wishlist button in teaser
+    // when user clicks button in drawer.
+    const { wishListButtonRef } = this.props;
+
     if (addedInWishList !== status) {
       this.setState({
         addedInWishList: status,
       });
+
+      // Wish list button reference will be undefined
+      // if it is clicked on teaser and not inside drawer.
+      if (typeof wishListButtonRef !== 'undefined' && wishListButtonRef !== null
+        && Object.prototype.hasOwnProperty.call(wishListButtonRef, 'current')) {
+        // Update the status of wishlist button in teaser.
+        wishListButtonRef.current.updateWishListStatus(status);
+      }
     }
   }
 
