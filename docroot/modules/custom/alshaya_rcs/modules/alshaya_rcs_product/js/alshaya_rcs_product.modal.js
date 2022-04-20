@@ -51,7 +51,7 @@
             // Open modal dailog.
             Drupal.dialog(content, {
               dialogClass: 'pdp-modal-box',
-              resizable: false,
+              autoResize: false,
               closeOnEscape: false,
               width: 'auto',
               title:"do you want to publish this content ?",
