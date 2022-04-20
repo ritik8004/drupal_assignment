@@ -231,6 +231,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   if ($isQuantityLimitEnabled) {
     $build['#attached']['library'][] = 'alshaya_white_label/order-qty-limit';
   }
+  $build['#attached']['drupalSettings']['alshayaRcs']['quantity_limit_enabled'] = $isQuantityLimitEnabled;
 
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',

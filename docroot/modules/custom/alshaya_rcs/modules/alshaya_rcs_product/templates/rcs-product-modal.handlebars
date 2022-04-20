@@ -73,14 +73,12 @@
       {{/if}}
 
       <div class="basic-details-wrapper">
-        <div class="field--name-field-skus">{{{ add_to_cart }}}</div>
-        {{! @todo make sure this is working CORE-40938 }}
+        <div class="field--name-field-skus field__items">{{{ add_to_cart }}}</div>
         {{#if quantity_limit_enabled }}
           <div class="order-quantity-limit-message"></div>
         {{/if}}
       </div>
 
-      {{! @todo test this }}
       {{#if sku_out_of_stock }}
         <div class="out-of-stock {{ sku_out_of_stock }}"></div>
       {{/if}}
