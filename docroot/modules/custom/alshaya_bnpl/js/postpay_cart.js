@@ -18,7 +18,7 @@
     // takes care of that.
     $('.postpay-widget').attr('data-amount', (cart_total * drupalSettings.postpay.currency_multiplier).toFixed(0));
     alshayaPostpayCheckAmount();
-    window.postpay.ui.refresh();
+    window.postpay && window.postpay.ui.refresh();
   });
 
   function alshayaPostpayCheckAmount() {
