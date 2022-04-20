@@ -6,7 +6,7 @@ import ToolTip from '../../../../../utilities/tooltip';
 import getStringMessage from '../../../../../utilities/strings';
 import AuraHeaderIcon from '../../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
 import { isUserAuthenticated } from '../../../../../../../js/utilities/helper';
-import ConditionalView from '../../../../../common/components/conditional-view';
+import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 
 class AuraNotLinkedNoData extends React.Component {
   constructor(props) {
