@@ -180,7 +180,7 @@ class AlshayaRcsCategoryDataMigration {
   /**
    * Batch operation to reinstate  acq terms.
    *
-   * @param array $terms
+   * @param array $tids
    *   Batch of the source terms to be migrated.
    * @param int $batch_size
    *   Migrate batch size.
@@ -189,7 +189,7 @@ class AlshayaRcsCategoryDataMigration {
    * @param mixed|array $context
    *   Batch context.
    */
-  public static function batchProcess(array $terms, int $batch_size, string $vid, &$context) {
+  public static function batchProcess(array $tids, int $batch_size, string $vid, &$context) {
     // Initialized term count to zero.
     if (empty($context['sandbox'])) {
       $context['sandbox']['term_count'] = 0;
@@ -205,22 +205,27 @@ class AlshayaRcsCategoryDataMigration {
     $language_manager = \Drupal::service('language_manager');
     $langcode = $language_manager->getCurrentLanguage()->getId();
     $path_alias_storage = \Drupal::entityTypeManager()->getStorage('path_alias');
+    // ACQ and RCS category vocabularies.
+    $category_names = [
+      self::SOURCE_VOCABULARY_ID => 'Product Category',
+      self::TARGET_VOCABULARY_ID => 'RCS Category',
+    ];
 
-    foreach ($terms as $tid) {
+    foreach ($tids as $tid) {
       // Check if acq category term already exists.
       if (!empty($context['results']['acq_term_mapping'][$tid])) {
         continue;
       }
 
-      $rcs_term = $term_storage->load($tid);
-      if ($rcs_term instanceof TermInterface) {
+      $source_term = $term_storage->load($tid);
+      if ($source_term instanceof TermInterface) {
         // Create acq category term.
-        $acq_term = self::createCategory($rcs_term, $langcode, $vid);
+        $migrate_term = self::createCategory($source_term, $langcode, $vid);
         // Create parent terms.
-        if (!empty($rcs_term->parent->getString())) {
-          $pid = self::createParentCategory($rcs_term->parent->getString(), $context['results'], $context['sandbox']['term_count'], $langcode, $vid);
+        if (!empty($source_term->parent->getString())) {
+          $pid = self::createParentCategory($source_term->parent->getString(), $context['results'], $context['sandbox']['term_count'], $langcode, $vid);
           if ($pid) {
-            $acq_term->set('parent', $pid);
+            $migrate_term->set('parent', $pid);
           }
         }
         // Delete rcs path alias so that there is no conflict.
@@ -228,20 +233,16 @@ class AlshayaRcsCategoryDataMigration {
           'path' => '/taxonomy/term/' . $tid,
         ]);
         $path_alias_storage->delete($aliases);
-        $acq_term->save();
+        $migrate_term->save();
         // Set acq term mapping.
-        $context['results']['acq_term_mapping'][$tid] = $acq_term->id();
-        $context['results']['delete_terms'][$rcs_term->id()] = $rcs_term;
+        $context['results']['acq_term_mapping'][$tid] = $migrate_term->id();
+        $context['results']['delete_terms'][$source_term->id()] = $source_term;
         $context['sandbox']['term_count']++;
       }
       else {
-        throw new \Exception('Product category term not found.');
+        throw new \Exception($category_names[$vid] . ' term not found.');
       }
     }
-    $category_names = [
-      self::SOURCE_VOCABULARY_ID => 'Product Category',
-      self::TARGET_VOCABULARY_ID => 'RCS Category',
-    ];
     $context['message'] = dt('Processed @term_count @category_name terms.', [
       '@term_count' => $context['sandbox']['term_count'],
       '@category_name' => $category_names[$vid],
