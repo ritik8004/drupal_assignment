@@ -119,6 +119,46 @@ function getReturnConfirmationUrl(orderId, returnId) {
   return null;
 }
 
+/**
+ * Utility function to get return confirmation url.
+ */
+function getOrderDetailsUrl(orderId) {
+  // Making returd id more secure with multiple details.
+  if (hasValue(orderId) && drupalSettings.user.uid !== 0) {
+    return Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}`);
+  }
+  return null;
+}
+
+/**
+ * Utility function to get address data.
+ */
+function getAdressData(shippingAddress) {
+  // Making returd id more secure with multiple details.
+  if (!hasValue(drupalSettings.address_fields) || !hasValue(shippingAddress)) {
+    return null;
+  }
+
+  const addressData = [];
+  // Add country label to address item array.
+  if (hasValue(shippingAddress.country_label)) {
+    addressData.push(shippingAddress.country_label);
+  }
+  // Populate address field with each key item.
+  Object.keys(drupalSettings.address_fields).forEach((key) => {
+    if (hasValue(shippingAddress[key])) {
+      let fillVal = shippingAddress[key];
+      if (key === 'administrative_area') {
+        fillVal = shippingAddress.administrative_area_display;
+      } else if (key === 'area_parent') {
+        fillVal = shippingAddress.area_parent_display;
+      }
+      addressData.push(fillVal);
+    }
+  });
+  return addressData;
+}
+
 export {
   isReturnEligible,
   getReturnExpiration,
@@ -130,4 +170,6 @@ export {
   getReturnWindowOpenMessage,
   isReturnWindowClosed,
   getReturnConfirmationUrl,
+  getOrderDetailsUrl,
+  getAdressData,
 };

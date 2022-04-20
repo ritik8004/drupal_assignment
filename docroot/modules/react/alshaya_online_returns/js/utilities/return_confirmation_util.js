@@ -19,9 +19,30 @@ function getReturnIdFromUrl() {
   const { search } = window.location;
   const params = new URLSearchParams(search);
   if (hasValue(params) && hasValue(params.get('rid'))) {
-    return params.get('rid');
+    const returnJsonObj = JSON.parse(atob(params.get('rid')));
+    return returnJsonObj.return_id;
   }
   return null;
+}
+
+/**
+ * Utility function to get details of all the returned items.
+ */
+function getReturnedItems(returnData) {
+  let returnedItems = [];
+  if (hasValue(drupalSettings.returnInfo)
+    && hasValue(drupalSettings.returnInfo.orderDetails)
+    && hasValue(drupalSettings.returnInfo.orderDetails['#products'])) {
+    // Filter out returned items from order details array.
+    const allProducts = drupalSettings.returnInfo.orderDetails['#products'];
+    const returnedItemsRaw = returnData.items;
+    returnedItems = allProducts.filter(
+      (product) => returnedItemsRaw.some(
+        (returnItem) => product.item_id === returnItem.order_item_id,
+      ),
+    );
+  }
+  return returnedItems;
 }
 
 /**
@@ -40,4 +61,5 @@ export {
   getReturnIdFromUrl,
   getOrderDetailsForReturnConfirmation,
   getReturnConfirmationStrings,
+  getReturnedItems,
 };

@@ -64,7 +64,7 @@ class ReturnRefundDetails extends React.Component {
     }
 
     if (hasValue(returnRequest.data) && hasValue(returnRequest.data.increment_id)) {
-      const returnId = returnRequest.data.increment_id;
+      const returnId = returnRequest.data.entity_id;
       Drupal.addItemInLocalStorage('online_return_id', returnId);
       // On success, redirect to return confirmation page.
       const { orderId } = getOrderDetailsForReturnRequest()['#order'];
