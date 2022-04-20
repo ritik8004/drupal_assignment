@@ -501,18 +501,16 @@ class SkuManager {
    *   SKU Entity.
    * @param string $color
    *   Color value to limit the scope of skus to get price.
-   * @param bool $reset
-   *   Flag to reset cache value.
    *
    * @return array
    *   Minimum final price and associated initial price.
    */
-  public function getMinPrices(SKU $sku_entity, string $color = '', $reset = FALSE) {
+  public function getMinPrices(SKU $sku_entity, string $color = '') {
     $cache_key = implode(':', array_filter(['product_price', $color]));
     $cache = $this->productCacheManager->get($sku_entity, $cache_key);
 
     // Do not process the same thing again and again.
-    if (!$reset && is_array($cache)) {
+    if (is_array($cache)) {
       return $cache;
     }
 
