@@ -513,5 +513,5 @@ function alshaya_acm_promotion_preprocess_html(&$variables) {
     return;
   }
 
-  $variables['attributes']['class'][] = 'disable-promo-label';
+  $variables['attributes']['class'][] = 'hide-discount-text';
 }

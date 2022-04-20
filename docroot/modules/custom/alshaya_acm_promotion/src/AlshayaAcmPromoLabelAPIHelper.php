@@ -30,10 +30,10 @@ class AlshayaAcmPromoLabelAPIHelper {
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected $logger;
+  protected $drupalLogger;
 
   /**
-   * Cache backend checkout_com.
+   * Cache backend discount_text.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
@@ -47,12 +47,12 @@ class AlshayaAcmPromoLabelAPIHelper {
   protected $mdcHelper;
 
   /**
-   * AlshayaAcmCheckoutComAPIHelper constructor.
+   * AlshayaAcmPromoLabelAPIHelper constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache backend checkout_com.
+   *   Cache backend discount_text.
    * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
    *   The magento api helper.
    */
@@ -97,7 +97,7 @@ class AlshayaAcmPromoLabelAPIHelper {
     }
     else {
       $request_options = [
-        'timeout' => $this->mdcHelper->getPhpTimeout('promolabel_status'),
+        'timeout' => $this->mdcHelper->getPhpTimeout('discount_text'),
       ];
 
       $response = $this->apiWrapper->invokeApi(
