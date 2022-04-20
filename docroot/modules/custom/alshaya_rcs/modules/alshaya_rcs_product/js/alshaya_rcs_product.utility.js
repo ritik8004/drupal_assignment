@@ -1033,9 +1033,7 @@
     // Load the stock data.
     var cartId = window.commerceBackend.getCartId();
     if (Drupal.hasValue(staticDataStore.cartItemsStock[sku])) {
-      return new Promise(function (resolve) {
-        resolve(staticDataStore.cartItemsStock[sku]);
-      });
+      return staticDataStore.cartItemsStock[sku];
     }
     return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }).then(function processStock(response) {
       // Do not proceed if for some reason there are no cart items.

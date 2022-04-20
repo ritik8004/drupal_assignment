@@ -125,7 +125,7 @@
    *   Returns a promise so that await executes on the calling function.
    */
   window.commerceBackend.loadProductStockDataFromCart = async function loadProductStockDataFromCart(sku) {
-    return Promise.resolve(true);
+    return true;
   }
 
   /**
