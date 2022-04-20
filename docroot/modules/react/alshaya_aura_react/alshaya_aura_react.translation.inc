@@ -420,6 +420,13 @@ function _alshaya_aura_react_translations() {
       'Already a member?' => [
         'ar' => 'عضوا فعلا؟',
       ],
+      'Join or Link' => [
+        'ar' => 'الانضمام أو الارتباط',
+      ],
+      'points.' => [
+        'ar' => 'النقاط.',
+        'context' => 'aura',
+      ],
     ],
   ];
 }

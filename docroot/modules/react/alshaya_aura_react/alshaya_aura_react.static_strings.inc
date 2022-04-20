@@ -293,5 +293,14 @@ function _alshaya_aura_static_strings() {
       'value' => t('Aura points with this purchase.'),
       'context' => 'aura',
     ],
+    [
+      'key' => 'header_aura_join_or_link',
+      'value' => t('Join or Link'),
+      'context' => 'aura',
+    ],
+    [
+      'key' => 'points_with_dot',
+      'value' => t('points.', [], ['context' => 'aura']),
+    ],
   ];
 }

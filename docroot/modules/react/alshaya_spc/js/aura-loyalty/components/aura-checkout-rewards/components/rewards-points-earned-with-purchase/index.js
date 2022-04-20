@@ -3,6 +3,8 @@ import ToolTip from '../../../../../utilities/tooltip';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import AuraHeaderIcon from '../../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
+import { isDesktop } from '../../../../../../../js/utilities/display';
+import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 
 const AuraPointsToEarnedWithPurchase = (props) => {
   const {
@@ -23,7 +25,12 @@ const AuraPointsToEarnedWithPurchase = (props) => {
             {' '}
           </span>
           <span>
-            { getStringMessage('points_to_earn_with_purchase') }
+            <ConditionalView condition={isDesktop()}>
+              {getStringMessage('points_to_earn_with_purchase')}
+            </ConditionalView>
+            <ConditionalView condition={!isDesktop()}>
+              {getStringMessage('points_with_dot')}
+            </ConditionalView>
           </span>
           <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
         </div>
