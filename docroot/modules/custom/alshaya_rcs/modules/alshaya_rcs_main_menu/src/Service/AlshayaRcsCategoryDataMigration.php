@@ -178,7 +178,7 @@ class AlshayaRcsCategoryDataMigration {
   }
 
   /**
-   * Batch operation to reinstate  acq terms.
+   * Batch operation to migrate/rollback category terms.
    *
    * @param array $tids
    *   Batch of the source terms to be migrated.
@@ -250,7 +250,7 @@ class AlshayaRcsCategoryDataMigration {
   }
 
   /**
-   * Deletes Product category terms after migration is complete.
+   * Deletes ACQ/RCS category terms after migration is complete.
    *
    * @param bool $success
    *   Indicate that the batch API tasks were all completed successfully.
@@ -322,7 +322,7 @@ class AlshayaRcsCategoryDataMigration {
   }
 
   /**
-   * Create RCS Category terms.
+   * Create ACQ/RCS Category terms.
    *
    * @param \Drupal\taxonomy\TermInterface $source_term
    *   Source Term to be migrated.
