@@ -68,7 +68,7 @@
             // Open modal.
             Drupal.dialog(elem, {
               dialogClass: 'pdp-modal-box',
-              resizable: false,
+              autoResize: false,
               closeOnEscape: false,
               width: 'auto',
               title: entity.name,

@@ -509,10 +509,10 @@ class SkuManager {
    */
   public function getMinPrices(SKU $sku_entity, string $color = '', $reset = FALSE) {
     $cache_key = implode(':', array_filter(['product_price', $color]));
-    $cache = $this->productCacheManager->get($sku_entity, $cache_key);
+    $cache = $reset ? NULL : $this->productCacheManager->get($sku_entity, $cache_key);
 
     // Do not process the same thing again and again.
-    if (!$reset && is_array($cache)) {
+    if ($cache && is_array($cache)) {
       return $cache;
     }
 
