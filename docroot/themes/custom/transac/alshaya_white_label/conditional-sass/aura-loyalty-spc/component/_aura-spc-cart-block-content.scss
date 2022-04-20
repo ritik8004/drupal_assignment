@@ -154,18 +154,10 @@
   }
 
   .block-content.registered-user-unlinked-card {
-    @include breakpoint($only-mobile) {
-      padding: 0 1.25rem;
-    }
-
-    .spc-aura-points-to-earn {
-      margin-bottom: 1.25rem;
-      display: block;
-      font-family: $aura-regular;
-
-      .spc-aura-highlight {
-        color: #772583;
-        font-family: $aura-bold;
+    .spc-aura-cart-content {
+      .spc-link-aura-link-wrapper {
+        display: block;
+        text-align: $left;
       }
     }
 

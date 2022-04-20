@@ -59,7 +59,7 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                  /** @todo: We need to change this to open the link aura form. */
+                /** @todo: We need to change this to open the link aura form. */
                   onClick={() => this.openOTPModal()}
                 >
                   {getStringMessage('aura_link_aura')}
@@ -70,14 +70,13 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                  /** @todo: We need to change this to open sign in aura form. */
+                /** @todo: We need to change this to open sign in aura form. */
                   onClick={() => this.openOTPModal()}
                 >
                   {getStringMessage('aura_sign_in')}
                 </a>
               </span>
             </ConditionalView>
-            {' '}
             <br />
             <PointsToEarnMessage
               pointsToEarn={pointsToEarn}
