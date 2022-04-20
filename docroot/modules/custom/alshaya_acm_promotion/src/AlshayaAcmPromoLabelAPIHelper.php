@@ -78,13 +78,13 @@ class AlshayaAcmPromoLabelAPIHelper {
    *   Return array of keys.
    */
   public function getPromoLabelApiConfig($reset = FALSE) {
-    static $configs;
+    static $status;
 
-    if (is_bool($configs)) {
-      return $configs;
+    if (is_bool($status)) {
+      return $status;
     }
 
-    $cache_key = 'alshaya_acm_promotion:promo_lable_api_configs';
+    $cache_key = 'alshaya_acm_promotion:promo_lable_api_status';
 
     // Cache time in minutes, set 0 to disable caching.
     $cache_time = (int) Settings::get('alshaya_acm_promotion_label_api_config_cache_time', 5);
@@ -93,11 +93,11 @@ class AlshayaAcmPromoLabelAPIHelper {
     $reset = empty($cache_time) ? TRUE : $reset;
     $cache = $reset ? NULL : $this->cache->get($cache_key);
     if (is_object($cache) && !empty($cache->data)) {
-      $configs = $cache->data;
+      $status = $cache->data;
     }
     else {
       $request_options = [
-        'timeout' => $this->mdcHelper->getPhpTimeout('promolabel_config'),
+        'timeout' => $this->mdcHelper->getPhpTimeout('promolabel_status'),
       ];
 
       $response = $this->apiWrapper->invokeApi(
@@ -108,25 +108,25 @@ class AlshayaAcmPromoLabelAPIHelper {
         $request_options
       );
 
-      $configs = Json::decode($response);
+      $status = Json::decode($response);
 
-      if (is_bool($configs)) {
+      if (is_bool($status)) {
         // Cache only if enabled (cache_time set).
-        $this->cache->set($cache_key, $configs, strtotime("+${cache_time} minutes"));
+        $this->cache->set($cache_key, $status, strtotime("+${cache_time} minutes"));
       }
       else {
         $this->logger->error('Invalid response from promo label config api, @response', [
-          '@response' => Json::encode($configs),
+          '@response' => Json::encode($status),
         ]);
       }
     }
 
     // Try resetting once.
-    if (!is_bool($configs) && !($reset)) {
+    if (!is_bool($status) && !($reset)) {
       return $this->getPromoLabelApiConfig(TRUE);
     }
 
-    return $configs;
+    return $status;
   }
 
 }
