@@ -1,0 +1,32 @@
+#egift-card-purchase-wrapper {
+  .egift-list-wrapper {
+    ul {
+      li {
+        height: 2.6875rem;
+        width: 4.0625rem;
+        margin-#{$right}: 0.8125rem;
+
+        &.active {
+          border: 0.3125rem solid $egift-card-thumbnail-border-active;
+        }
+
+        &:hover {
+          border: 0.3125rem solid $egift-card-thumbnail-border-active;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 3.625rem;
+          height: 2.375rem;
+
+          &.active {
+            border: 0.0625rem solid $egift-card-thumbnail-border-active-mobile;
+          }
+
+          &:hover {
+            border: 0.0625rem solid $egift-card-thumbnail-border-active-mobile;
+          }
+        }
+      }
+    }
+  }
+}
