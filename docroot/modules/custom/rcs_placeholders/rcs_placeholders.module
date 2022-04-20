@@ -390,7 +390,13 @@ function rcs_placeholders_language_switch_links_alter(array &$links, $type, Url 
  * Implements hook_page_bottom().
  */
 function rcs_placeholders_page_bottom(array &$page_bottom) {
-  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+  // Skip some special routes which are marked as admin_route but that
+  // can be accessed by non-admin users as well.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()
+    && !in_array(\Drupal::routeMatch()->getRouteName(), [
+      'change_pwd_page.change_password_form',
+      'entity.user.edit_form',
+    ])) {
     return;
   }
 
