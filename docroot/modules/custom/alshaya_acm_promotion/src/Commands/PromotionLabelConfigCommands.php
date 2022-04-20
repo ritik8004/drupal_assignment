@@ -25,7 +25,7 @@ class PromotionLabelConfigCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
    */
-  protected $logger;
+  protected $drupalLogger;
 
   /**
    * PromotionLabelConfigCommands constructor.
