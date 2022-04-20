@@ -29,13 +29,13 @@ function alshaya_optimizely_page_attachments(array &$page) {
       ],
       'dpath',
     ];
-    array_unshift($page['#attached']['html_head'], $script);
+    $page['#attached']['html_head'][] = $script;
 
     $rel = 'preconnect';
     $tag = 'optimizely_preconnect';
     $preconnect_url = '//cdn.optimizely.com';
     $link_tag = _alshaya_optimizely_get_head_link_tag($rel, $preconnect_url, $tag);
-    array_unshift($page['#attached']['html_head'], $link_tag);
+    $page['#attached']['html_head'][] = $link_tag;
   }
   $page['#cache']['tags'][] = 'config:alshaya_optimizely.settings';
 }
