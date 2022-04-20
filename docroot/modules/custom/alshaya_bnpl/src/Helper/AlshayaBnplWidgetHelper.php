@@ -158,7 +158,6 @@ class AlshayaBnplWidgetHelper {
         break;
 
       case 'checkout':
-        $build['#attached']['library'][] = 'alshaya_bnpl/postpay_sdk';
         $build['#attached']['library'][] = 'alshaya_white_label/postpay-checkout';
         $build['#attached']['drupalSettings']['postpay_widget_info'] = $this->getBnplWidgetInfo('checkout');
         break;
@@ -175,6 +174,7 @@ class AlshayaBnplWidgetHelper {
         $build['#attached']['drupalSettings']['postpay_widget_info'] = $this->getBnplWidgetInfo();
         break;
     }
+    $build['#attached']['library'][] = 'alshaya_bnpl/postpay_sdk';
 
     // This is done to facilitate A/B testing.
     $build['#attached']['drupalSettings']['postpay_widget_info']['postpay_mode_class'] = '';
