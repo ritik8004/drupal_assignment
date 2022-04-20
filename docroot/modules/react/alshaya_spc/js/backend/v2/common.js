@@ -266,9 +266,9 @@ const formatCart = (cartData) => {
 /**
  * Static cache for getProductStatus().
  *
- * @type {null}
+ * @type {object}
  */
-let staticProductStatus = [];
+let staticProductStatus = {};
 
 /**
  * Get data related to product status.
