@@ -130,7 +130,6 @@ function getReturnConfirmationUrl(orderId, returnId) {
  * Utility function to get return confirmation url.
  */
 function getOrderDetailsUrl(orderId) {
-  // Making returd id more secure with multiple details.
   if (hasValue(orderId) && drupalSettings.user.uid !== 0) {
     return Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}`);
   }
@@ -166,6 +165,18 @@ function getAdressData(shippingAddress) {
   return addressData;
 }
 
+/**
+ * Utility function to get order details for return pages.
+ */
+function getOrderDetails() {
+  let orderDetails = null;
+  if (hasValue(drupalSettings.returnInfo)
+    && hasValue(drupalSettings.returnInfo.orderDetails)) {
+    orderDetails = drupalSettings.returnInfo.orderDetails;
+  }
+  return orderDetails;
+}
+
 export {
   isReturnEligible,
   getReturnExpiration,
@@ -180,4 +191,5 @@ export {
   getOrderDetailsUrl,
   getAdressData,
   formatDateTime,
+  getOrderDetails,
 };

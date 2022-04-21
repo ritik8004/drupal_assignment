@@ -1,7 +1,7 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getOrderDetailsUrl } from '../../../utilities/online_returns_util';
-import { getOrderDetailsForReturnConfirmation, getReturnIdFromUrl } from '../../../utilities/return_confirmation_util';
+import { getOrderDetailsUrl, getOrderDetails } from '../../../utilities/online_returns_util';
+import { getReturnIdFromUrl } from '../../../utilities/return_confirmation_util';
 import OrderDetailsButton from '../order-details-button';
 import ReturnConfirmationDetails from '../return-confirmation-details';
 import ReturnSuccessMessage from '../return-success-message';
@@ -12,7 +12,7 @@ class ReturnConfirmation extends React.Component {
     super(props);
     this.state = {
       returnId: getReturnIdFromUrl(),
-      orderDetails: getOrderDetailsForReturnConfirmation(),
+      orderDetails: getOrderDetails(),
     };
   }
 

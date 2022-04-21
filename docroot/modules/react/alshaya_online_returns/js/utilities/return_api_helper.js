@@ -2,7 +2,7 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import logger from '../../../js/utilities/logger';
 import { callMagentoApi } from '../../../js/utilities/requestHelper';
-import { getOrderDetailsForReturnRequest } from './return_request_util';
+import { getOrderDetails } from './online_returns_util';
 
 /**
  * Prepare data to create return request.
@@ -21,7 +21,7 @@ const prepareReturnRequestData = (data) => {
     return getErrorResponse('Request data is required.', 404);
   }
 
-  const orderDetails = getOrderDetailsForReturnRequest();
+  const orderDetails = getOrderDetails();
 
   // Process request data in required format.
   const items = [];

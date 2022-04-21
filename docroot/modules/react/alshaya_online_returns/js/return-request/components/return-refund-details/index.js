@@ -6,12 +6,11 @@ import ReturnCollectionDetails from '../return-collection-details';
 import ReturnCollectionAddress from '../return-collection-address';
 import {
   getDeliveryAddress,
-  getOrderDetailsForReturnRequest,
   getPaymentDetails,
 } from '../../../utilities/return_request_util';
 import { createReturnRequest } from '../../../utilities/return_api_helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getReturnConfirmationUrl } from '../../../utilities/online_returns_util';
+import { getReturnConfirmationUrl, getOrderDetails } from '../../../utilities/online_returns_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class ReturnRefundDetails extends React.Component {
@@ -67,7 +66,7 @@ class ReturnRefundDetails extends React.Component {
       const returnId = returnRequest.data.entity_id;
       Drupal.addItemInLocalStorage('online_return_id', returnId);
       // On success, redirect to return confirmation page.
-      const { orderId } = getOrderDetailsForReturnRequest()['#order'];
+      const { orderId } = getOrderDetails()['#order'];
       const returnUrl = getReturnConfirmationUrl(orderId, returnId);
       if (hasValue(returnUrl)) {
         window.location.href = returnUrl;

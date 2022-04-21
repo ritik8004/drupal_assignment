@@ -8,7 +8,7 @@ const ReturnConfirmationAddress = ({
 }) => {
   const addressData = getAdressData(shippingAddress);
 
-  if (addressData.length === 0) {
+  if (!hasValue(addressData)) {
     return null;
   }
 
@@ -21,10 +21,12 @@ const ReturnConfirmationAddress = ({
         <div className="address-details">
           <ConditionalView condition={hasValue(shippingAddress.given_name)}>
             <div className="customer-name">
-              { Drupal.t('@first_name @last_name', { '@first_name': shippingAddress.given_name, '@last_name': shippingAddress.family_name }, {}, { context: 'online_returns' }) }
+              {shippingAddress.given_name}
+              {' '}
+              {shippingAddress.family_name}
             </div>
           </ConditionalView>
-          {addressData.length > 0 && addressData.map((adressItem) => (
+          {hasValue(addressData) && addressData.map((adressItem) => (
             <div key={adressItem} className="address-line-content">{adressItem}</div>
           ))}
           <div className="phone-number">{shippingAddress.telephone}</div>

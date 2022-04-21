@@ -1,19 +1,6 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
- * Utility function to get order details for return request page.
- */
-function getOrderDetailsForReturnRequest() {
-  let orderDetails = null;
-  if (hasValue(drupalSettings.returnRequest)
-      && hasValue(drupalSettings.returnRequest.orderDetails)) {
-    orderDetails = drupalSettings.returnRequest.orderDetails;
-  }
-
-  return orderDetails;
-}
-
-/**
  * Utility function to get return reason options.
  */
 function getReturnReasons() {
@@ -123,7 +110,6 @@ function getDefaultResolutionId() {
 export {
   getReturnReasons,
   getQuantityOptions,
-  getOrderDetailsForReturnRequest,
   getDeliveryAddress,
   getPaymentDetails,
   addCheckboxToReturnItem,
