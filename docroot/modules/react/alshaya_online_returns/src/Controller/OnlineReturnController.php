@@ -193,6 +193,10 @@ class OnlineReturnController extends ControllerBase {
     // Get config for return confirmations page.
     // This will include what's next section of the page.
     $returnConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
+    $build['#cache']['tags'] = array_merge(
+      $build['#cache']['tags'] ?? [],
+      $this->configFactory->get('alshaya_online_returns.return_confirmation')
+    );
 
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-return-confirmation"></div>';
