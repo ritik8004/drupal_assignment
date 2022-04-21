@@ -156,7 +156,7 @@ class OnlineReturnController extends ControllerBase {
     $build['#markup'] = '<div id="alshaya-online-return-request"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
     $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
-    $build['#attached']['drupalSettings']['returnRequest'] = [
+    $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
       'returnConfig' => $returnConfig,
     ];
@@ -195,8 +195,11 @@ class OnlineReturnController extends ControllerBase {
     $returnConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
     $build['#cache']['tags'] = array_merge(
       $build['#cache']['tags'] ?? [],
-      $this->configFactory->get('alshaya_online_returns.return_confirmation')
+      $this->configFactory->get('alshaya_online_returns.return_confirmation')->getCacheTags()
     );
+
+    // Adding address fields configuration to display user address details.
+    $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
 
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-return-confirmation"></div>';
@@ -205,6 +208,7 @@ class OnlineReturnController extends ControllerBase {
     $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
       'returnConfirmationStrings' => $returnConfig->get('rows'),
+      'dateFormat' => $returnConfig->get('return_date_format'),
     ];
     return $build;
   }

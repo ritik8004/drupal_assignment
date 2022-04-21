@@ -90,6 +90,13 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
       ];
     }
 
+    $form['return_confirmation']['return_date_format'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Return Date format'),
+      '#description' => $this->t('Date format for return info, please note this will be used in JAVASCRIPT.'),
+      '#default_value' => $config->get('return_date_format'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -119,9 +126,11 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
         }
       }
       // Save the row fields array in config.
-      $config->set('rows', $rows)->save();
+      $config->set('rows', $rows);
     }
-
+    // Save date format for return date.
+    $config->set('return_date_format', $form_state->getValue('return_date_format'));
+    $config->save();
     parent::submitForm($form, $form_state);
   }
 

@@ -9,8 +9,15 @@ alshaya_online_returns.settings:
 alshaya_online_returns.return_confirmation:
   type: sequence
   label: 'Return confirmation settings'
-  sequence:
-    - type: return_whats_next_row
+  mapping:
+    return_date_format:
+      type: label
+      label: 'Return Date format'
+    rows:
+      type: sequence
+      label: 'Whats next row'
+      sequence:
+        - type: return_whats_next_row    
 
 return_whats_next_row:
   type: mapping

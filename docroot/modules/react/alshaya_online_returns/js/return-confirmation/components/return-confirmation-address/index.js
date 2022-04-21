@@ -3,7 +3,7 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getAdressData } from '../../../utilities/online_returns_util';
 
-const ReturnCollectionAddress = ({
+const ReturnConfirmationAddress = ({
   shippingAddress,
 }) => {
   const addressData = getAdressData(shippingAddress);
@@ -14,14 +14,11 @@ const ReturnCollectionAddress = ({
 
   return (
     <>
-      <div className="return-address-wrapper">
-        <div className="return-address-title">
-          { Drupal.t('Pick-up Address', {}, { context: 'online_returns' }) }
+      <div className="return-confirmation-address">
+        <div className="address-title">
+          { Drupal.t('Pick-up From', {}, { context: 'online_returns' }) }
         </div>
-        <div className="return-address-desc">
-          { `(${Drupal.t('Last used address and phone number will be applied', {}, { context: 'online_returns' })})` }
-        </div>
-        <div className="return-address-details">
+        <div className="address-details">
           <ConditionalView condition={hasValue(shippingAddress.given_name)}>
             <div className="customer-name">
               {shippingAddress.given_name}
@@ -32,11 +29,11 @@ const ReturnCollectionAddress = ({
           {hasValue(addressData) && addressData.map((adressItem) => (
             <div key={adressItem} className="address-line-content">{adressItem}</div>
           ))}
-          <div className="spc-phone-number">{shippingAddress.telephone}</div>
+          <div className="phone-number">{shippingAddress.telephone}</div>
         </div>
       </div>
     </>
   );
 };
 
-export default ReturnCollectionAddress;
+export default ReturnConfirmationAddress;

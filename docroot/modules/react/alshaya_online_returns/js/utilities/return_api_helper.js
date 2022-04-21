@@ -2,7 +2,7 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import logger from '../../../js/utilities/logger';
 import { callMagentoApi, prepareFilterData } from '../../../js/utilities/requestHelper';
-import { getOrderDetailsForReturnRequest } from './return_request_util';
+import { getOrderDetails } from './online_returns_util';
 
 /**
  * Prepare data to create return request.
@@ -21,7 +21,7 @@ const prepareReturnRequestData = (data) => {
     return getErrorResponse('Request data is required.', 404);
   }
 
-  const orderDetails = getOrderDetailsForReturnRequest();
+  const orderDetails = getOrderDetails();
 
   // Process request data in required format.
   const items = [];
@@ -95,6 +95,51 @@ const createReturnRequest = async (itemsSelected) => {
   });
 };
 
+/**
+ * Get Return details.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object containing return data in case of
+ *   success or an error object in case of failure.
+ */
+const getReturnInfo = (returnId) => {
+  // Get user details from session.
+  const { customerId } = drupalSettings.userDetails;
+  const { uid } = drupalSettings.user;
+
+  // Check if we have user in session.
+  if (!hasValue(customerId) || uid === 0) {
+    logger.error('Error while trying to get return info. No user available in session. User id: @user_id. Customer id: @customer_id.', {
+      '@user_id': uid,
+      '@customer_id': customerId,
+    });
+    return getErrorResponse('No user available in session', 403);
+  }
+
+  const endpoint = `/V1/rma/returns/${returnId}`;
+
+  return callMagentoApi(endpoint, 'GET')
+    .then((response) => {
+      if (hasValue(response.data.error)) {
+        const message = hasValue(response.data.message) ? response.data.message : '';
+        logger.error('Error while trying to fetch return information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+          '@customerId': customerId,
+          '@endpoint': endpoint,
+          '@message': message,
+        });
+        return getErrorResponse(message, 500);
+      }
+      return response;
+    });
+};
+
+/**
+ * Get Return details by order id.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object containing return data in case of
+ *   success or an error object in case of failure.
+ */
 const getReturnsByOrderId = async (orderId) => {
   if (!hasValue(orderId)) {
     logger.error('Order Id is required to get returns for the order.');
@@ -123,5 +168,6 @@ const getReturnsByOrderId = async (orderId) => {
 export {
   createReturnRequest,
   prepareReturnRequestData,
+  getReturnInfo,
   getReturnsByOrderId,
 };

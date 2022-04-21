@@ -1,7 +1,7 @@
 import React from 'react';
 import ReturnOrderSummary from '../return-order-summary';
 import ReturnItemsListing from '../return-items-listing';
-import { getOrderDetailsForReturnRequest } from '../../../utilities/return_request_util';
+import { getOrderDetails } from '../../../utilities/online_returns_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ReturnRefundDetails from '../return-refund-details';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
@@ -70,7 +70,7 @@ class ReturnRequest extends React.Component {
 
   render() {
     const { itemsSelected, errorMessage } = this.state;
-    const orderDetails = getOrderDetailsForReturnRequest();
+    const orderDetails = getOrderDetails();
     const { orderId } = orderDetails['#order'];
     if (!hasValue(orderDetails)) {
       return null;

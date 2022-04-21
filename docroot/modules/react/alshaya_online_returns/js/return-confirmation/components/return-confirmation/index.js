@@ -1,7 +1,9 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getOrderDetailsForReturnConfirmation, getReturnIdFromUrl } from '../../../utilities/return_confirmation_util';
+import { getOrderDetailsUrl, getOrderDetails } from '../../../utilities/online_returns_util';
+import { getReturnIdFromUrl } from '../../../utilities/return_confirmation_util';
 import OrderDetailsButton from '../order-details-button';
+import ReturnConfirmationDetails from '../return-confirmation-details';
 import ReturnSuccessMessage from '../return-success-message';
 import WhatsNextSection from '../whats-next-section';
 
@@ -10,16 +12,23 @@ class ReturnConfirmation extends React.Component {
     super(props);
     this.state = {
       returnId: getReturnIdFromUrl(),
+      orderDetails: getOrderDetails(),
     };
   }
 
   componentDidMount = () => {
-    // @todo: Write logic to trigger get RMA info api.
+    const { returnId, orderDetails } = this.state;
+    // Redirect to order details page if return id is not present in url.
+    if (!hasValue(returnId)) {
+      const orderDetailsUrl = getOrderDetailsUrl(orderDetails['#order'].orderId);
+      if (hasValue(orderDetailsUrl)) {
+        window.location.href = orderDetailsUrl;
+      }
+    }
   };
 
   render() {
-    const { returnId } = this.state;
-    const orderDetails = getOrderDetailsForReturnConfirmation();
+    const { returnId, orderDetails } = this.state;
     if (!hasValue(orderDetails) || !hasValue(returnId)) {
       return null;
     }
@@ -30,6 +39,10 @@ class ReturnConfirmation extends React.Component {
         />
         <ReturnSuccessMessage />
         <WhatsNextSection />
+        <ReturnConfirmationDetails
+          orderDetails={orderDetails}
+          returnId={returnId}
+        />
       </div>
     );
   }

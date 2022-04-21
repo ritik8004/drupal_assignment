@@ -1,19 +1,6 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
- * Utility function to get order details for return request page.
- */
-function getOrderDetailsForReturnRequest() {
-  let orderDetails = null;
-  if (hasValue(drupalSettings.returnRequest)
-      && hasValue(drupalSettings.returnRequest.orderDetails)) {
-    orderDetails = drupalSettings.returnRequest.orderDetails;
-  }
-
-  return orderDetails;
-}
-
-/**
  * Utility function to get return reason options.
  */
 function getReturnReasons() {
@@ -21,11 +8,11 @@ function getReturnReasons() {
   const returnReasons = [
     { value: 0, label: Drupal.t('Choose a reason', {}, { context: 'online_returns' }) },
   ];
-  if (hasValue(drupalSettings.returnRequest)
-    && hasValue(drupalSettings.returnRequest.returnConfig)
-    && hasValue(drupalSettings.returnRequest.returnConfig.return_reasons)) {
+  if (hasValue(drupalSettings.returnInfo)
+    && hasValue(drupalSettings.returnInfo.returnConfig)
+    && hasValue(drupalSettings.returnInfo.returnConfig.return_reasons)) {
     // Populate reasons values from return reasons api call.
-    const reasonsList = drupalSettings.returnRequest.returnConfig.return_reasons;
+    const reasonsList = drupalSettings.returnInfo.returnConfig.return_reasons;
     Object.keys(reasonsList).forEach((key) => {
       returnReasons.push({
         value: reasonsList[key].id,
@@ -97,10 +84,10 @@ function addCheckboxToReturnItem(item) {
  */
 function getReturnResolutions() {
   let resolutions = [];
-  if (hasValue(drupalSettings.returnRequest)
-    && hasValue(drupalSettings.returnRequest.returnConfig)
-    && hasValue(drupalSettings.returnRequest.returnConfig.resolutions)) {
-    resolutions = drupalSettings.returnRequest.returnConfig.resolutions;
+  if (hasValue(drupalSettings.returnInfo)
+    && hasValue(drupalSettings.returnInfo.returnConfig)
+    && hasValue(drupalSettings.returnInfo.returnConfig.resolutions)) {
+    resolutions = drupalSettings.returnInfo.returnConfig.resolutions;
   }
 
   return resolutions;
@@ -123,7 +110,6 @@ function getDefaultResolutionId() {
 export {
   getReturnReasons,
   getQuantityOptions,
-  getOrderDetailsForReturnRequest,
   getDeliveryAddress,
   getPaymentDetails,
   addCheckboxToReturnItem,
