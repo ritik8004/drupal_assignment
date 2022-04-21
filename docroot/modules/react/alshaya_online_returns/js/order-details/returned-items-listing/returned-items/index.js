@@ -19,20 +19,14 @@ const ReturnedItems = ({
     <ConditionalView condition={hasValue(returns)}>
       {returns.map((returnData) => (
         <>
-          <div>Refunded message</div>
+          {/* @todo: Add refunded message here. */}
           <div className="return-id">
-            {Drupal.t('Return ID', {}, { context: 'online_returns' })}
-            {':'}
-            {returnData.returnId}
+            {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnId }, { context: 'online_returns' })}
           </div>
-
           <ConditionalView condition={hasValue(returnData.items)}>
             {returnData.items.map((item) => (
               <div className="item-list-wrapper">
-                <ReturnIndividualItem
-                  key={item.id}
-                  item={item}
-                />
+                <ReturnIndividualItem key={item.id} item={item} />
               </div>
             ))}
           </ConditionalView>
