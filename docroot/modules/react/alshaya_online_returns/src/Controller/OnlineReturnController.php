@@ -193,6 +193,10 @@ class OnlineReturnController extends ControllerBase {
     // Get config for return confirmations page.
     // This will include what's next section of the page.
     $returnConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
+    $build['#cache']['tags'] = array_merge(
+      $build['#cache']['tags'] ?? [],
+      $this->configFactory->get('alshaya_online_returns.return_confirmation')
+    );
 
     // Adding address fields configuration to display user address details.
     $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
