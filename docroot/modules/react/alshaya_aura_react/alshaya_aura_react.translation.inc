@@ -411,6 +411,7 @@ function _alshaya_aura_react_translations() {
       'Already a member?' => [
         'ar' => 'عضوا فعلا؟',
       ],
+      // To do- translation should be checked once we get it from alshaya.
       'You will earn @pts @aura_icon points with this purchase.' => [
         'ar' => 'سوف تكسب @pts @aura_icon نقاط مع هذا الشراء.',
         'context' => 'aura',
