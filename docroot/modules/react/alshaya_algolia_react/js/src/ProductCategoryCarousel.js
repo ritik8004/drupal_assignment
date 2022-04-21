@@ -11,8 +11,17 @@ alshayaCategoryCarousel.each((key, item) => {
     pccId,
   } = jQuery(item).data();
 
+  const carouselData = window.commerceBackend.getCarouselData(pccId);
   ReactDOM.render(
-    <ProductCategoryCarousel categoryId={pccId} />,
+    <ProductCategoryCarousel
+      categoryId={pccId}
+      categoryField={carouselData.category_field}
+      hierarchy={carouselData.hierarchy}
+      itemsPerPage={carouselData.itemsPerPage}
+      ruleContext={carouselData.ruleContext}
+      sectionTitle={carouselData.sectionTitle}
+      vatText={carouselData.vatText}
+    />,
     item,
   );
 });

@@ -55,8 +55,8 @@ function _alshaya_online_returns_translations() {
         'ar' => 'الرقم التعريفي للطلبية',
         'context' => 'online_returns',
       ],
-      'Total:' => [
-        'ar' => 'الإجمالي:',
+      'Total' => [
+        'ar' => 'الإجمالي',
         'context' => 'online_returns',
       ],
       'items' => [
@@ -97,6 +97,14 @@ function _alshaya_online_returns_translations() {
       ],
       "If you're trying to leave the Online Returns page, please note, any changes made will be lost." => [
         'ar' => 'يرجى العلم بأنك ستفقد جميع التغييرات في حال مغادرة صفحة الإرجاع عبر الموقع الإلكتروني',
+        'context' => 'online_returns',
+      ],
+      '1 item' => [
+        'ar' => '1 item AR',
+        'context' => 'online_returns',
+      ],
+      '@count items' => [
+        'ar' => '@count items AR',
         'context' => 'online_returns',
       ],
     ],

@@ -56,6 +56,12 @@ const validateCartResponse = (response) => {
   if (errorCode >= 500) {
     // For OOS error, we redirect to cart page.
     if (errorCode === 506) {
+      // Push OOS errors to GTM.
+      if (drupalSettings.path.currentPath === 'checkout') {
+        Drupal.logJavascriptError('update-cart-item-data', response.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
+      } else if (drupalSettings.path.currentPath === 'cart') {
+        Drupal.logJavascriptError('update-cart-item-data', response.error_message, GTM_CONSTANTS.CART_ERRORS);
+      }
       redirectToCart();
       return false;
     }

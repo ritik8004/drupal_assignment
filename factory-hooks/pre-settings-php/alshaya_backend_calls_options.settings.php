@@ -144,6 +144,9 @@ $settings['alshaya_backend_calls_options'] = [
     'online_returns_config' => [
       'timeout' => 10,
     ],
+    'subscribe_newsletter' => [
+      'timeout' => 30,
+    ],
   ],
   'appointment_booking' => [
     'default' => [

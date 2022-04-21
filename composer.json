@@ -30,7 +30,7 @@
         "drupal/amp": "^3.5",
         "drupal/amptheme": "^3.0",
         "drupal/autologout": "^1.0",
-        "drupal/back_to_top": "^1.1",
+        "drupal/back_to_top": "^2.0",
         "drupal/better_exposed_filters": "^5.0",
         "drupal/block_field": "^1.0@alpha",
         "drupal/captcha": "^1.2",
@@ -60,6 +60,9 @@
         "drupal/imagemagick": "^3.2",
         "drupal/jquery_minicolors": "^1.2",
         "drupal/jquery_ui_accordion": "^1.1",
+        "drupal/jquery_ui_datepicker": "^1.2",
+        "drupal/jquery_ui_effects": "^1.2",
+        "drupal/jquery_ui_tabs": "^1.1",
         "drupal/kashmir": "^1.11",
         "drupal/key_value_field": "^1.2",
         "drupal/libraries": "^3.0@beta",
@@ -262,7 +265,9 @@
                 "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2021-07-01/3063118-10.patch",
                 "CORE-26181 - Drupal alters SVG fill path with broken base url and breaks SVG CSS": "https://www.drupal.org/files/issues/2021-11-04/drupal-9.3.x-fix_broken_svg-2362643-81.patch",
                 "Issue 2685749: Add a Machine Name widget to core": "https://www.drupal.org/files/issues/2022-02-08/2685749-103.patch",
-                "Add views render caching on views ajax requests": "https://www.drupal.org/files/issues/2021-01-19/views-render_caching_ajax_requests-2500313-70-92x.patch"
+                "Add views render caching on views ajax requests": "https://www.drupal.org/files/issues/2021-01-19/views-render_caching_ajax_requests-2500313-70-92x.patch",
+                "Disable CSRF token check for non-CSRF vulnerable authentication providers": "https://www.drupal.org/files/issues/2019-05-17/core-X-CSRF-Token_request_header_check-3055260-3-8.7.1.patch",
+                "jQuery UI library order is incorrect": "https://www.drupal.org/files/issues/2021-07-19/3222107-jquery_ui_weight_fix-11.diff"
             },
             "drupal/mobile_number": {
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
@@ -351,7 +356,11 @@
                 "Fix for drush updb failure during lightning upgrade": "https://www.drupal.org/files/issues/2022-04-07/3274101-2.patch"
             },
             "drupal/field_group": {
-                "Remove jQuery UI Accordion dependency and warning": "https://www.drupal.org/files/issues/2022-03-01/3154304-11.patch"
+                "Remove jQuery UI Accordion dependency and warning": "https://www.drupal.org/files/issues/2022-03-01/3154304-11.patch",
+                "Jquery UI library for blind effect is missing in D9": "https://www.drupal.org/files/issues/2022-04-13/jquery_effects_library-3275144-2.patch"
+            },
+            "drupal/jquery_ui_effects": {
+                "Fix 'jquery_ui_effects/clip' library to use jquery_ui_effects/core as a dependency": "https://www.drupal.org/files/issues/2022-01-17/3258833-2.patch"
             }
         },
         "installer-paths": {

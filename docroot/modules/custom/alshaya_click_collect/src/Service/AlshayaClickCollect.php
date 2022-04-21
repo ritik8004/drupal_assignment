@@ -5,6 +5,7 @@ namespace Drupal\alshaya_click_collect\Service;
 use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class Alshaya Click Collect.
@@ -58,7 +59,12 @@ class AlshayaClickCollect {
     if ($this->getConfig()->get('feature_status') === 'disabled') {
       return [];
     }
+
     $store_info = $this->storesFinderUtility->getMultipleStoresExtraData([$store_code => []]);
+    if (empty($store_info)) {
+      throw new NotFoundHttpException();
+    }
+
     $store_info['rnc_config'] = $this->getConfig()->get('click_collect_rnc');
     return $store_info;
   }

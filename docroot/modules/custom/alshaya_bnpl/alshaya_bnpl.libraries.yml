@@ -16,14 +16,16 @@ postpay_pdp:
   js:
     js/postpay_pdp.js: { }
   dependencies:
-    - alshaya_bnpl/postpay_sdk
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
 
 postpay_cart:
   version: 1.x
   js:
     js/postpay_cart.js: { }
   dependencies:
-    - alshaya_bnpl/postpay_sdk
+    - core/jquery
 
 postpay_mode:
   version: 1.x

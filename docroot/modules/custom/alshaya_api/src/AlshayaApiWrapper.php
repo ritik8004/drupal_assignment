@@ -1427,4 +1427,28 @@ class AlshayaApiWrapper {
     return $this->mdcHelper;
   }
 
+  /**
+   * Function to subscribe an email for newsletter.
+   *
+   * @param string $email
+   *   E-Mail to subscribe.
+   *
+   * @return array
+   *   Array containing status of subscription.
+   */
+  public function subscribeNewsletter(string $email) {
+    try {
+      $request_options = [
+        'timeout' => $this->mdcHelper->getPhpTimeout('subscribe_newsletter'),
+      ];
+
+      $status = $this->invokeApi('newsletter/subscribe', ['email' => $email], 'JSON', TRUE, $request_options);
+      return json_decode($status, TRUE);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while calling newsletter subscribe API.');
+      return ['status' => 0];
+    }
+  }
+
 }

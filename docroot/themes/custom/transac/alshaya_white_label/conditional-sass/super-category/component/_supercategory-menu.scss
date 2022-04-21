@@ -184,6 +184,10 @@
   &:not(.no-sticky-algolia-search-bar) {
     @include breakpoint($upto-desktop) {
       margin-top: 8.5rem;
+
+      &.alias--cart-login {
+        margin-top: 0;
+      }
     }
 
     .block-alshaya-algolia-react-autocomplete {
@@ -433,6 +437,26 @@
       }
     }
 
+    &.alias--cart {
+      .page-standard {
+        &.l-container {
+          @include breakpoint($upto-desktop) {
+            margin-top: 2.5rem !important;
+          }
+        }
+      }
+    }
+
+    &.alias--cart-login {
+      .page-standard {
+        &.l-container {
+          @include breakpoint($upto-desktop) {
+            margin-top: 0;
+          }
+        }
+      }
+    }
+
     .page-standard {
       &.l-container {
         @include breakpoint($upto-desktop) {
@@ -508,7 +532,7 @@
 
       @include breakpoint($desktop) {
         top: 1.2rem !important;
-        #{$right}: 0 !important;
+        #{$right}: 2rem;
       }
     }
 

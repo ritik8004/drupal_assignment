@@ -94,7 +94,7 @@ class OnlineReturnsHelper {
       'orderType' => $order['shipping']['extension_attributes']['click_and_collect_type'] ?? '',
       'paymentMethod' => $paymentMethod ? $paymentMethod['value'] : '',
       'isReturnEligible' => $order['extension']['is_return_eligible'] ?? TRUE,
-      'returnExpiration' => $order['extension']['return_exipiration'] ?? '',
+      'returnExpiration' => $order['extension']['return_expiration'] ?? '',
     ];
   }
 

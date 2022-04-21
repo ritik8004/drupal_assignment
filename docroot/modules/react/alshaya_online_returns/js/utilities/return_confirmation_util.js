@@ -17,10 +17,9 @@ function getOrderDetailsForReturnConfirmation() {
  */
 function getReturnIdFromUrl() {
   const { search } = window.location;
-  // todo Encrypting and decrypting of return id.
   const params = new URLSearchParams(search);
-  if (hasValue(params) && hasValue(params.get('returnId'))) {
-    return params.get('returnId');
+  if (hasValue(params) && hasValue(params.get('rid'))) {
+    return params.get('rid');
   }
   return null;
 }
@@ -31,8 +30,8 @@ function getReturnIdFromUrl() {
 function getReturnConfirmationStrings() {
   let returnConfirmationStrings = null;
   if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.returnConfirmationConfig)) {
-    returnConfirmationStrings = drupalSettings.returnInfo.returnConfirmationConfig;
+    && hasValue(drupalSettings.returnInfo.returnConfirmationStrings)) {
+    returnConfirmationStrings = drupalSettings.returnInfo.returnConfirmationStrings;
   }
   return returnConfirmationStrings;
 }

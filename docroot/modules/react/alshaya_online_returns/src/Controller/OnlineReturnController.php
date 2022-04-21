@@ -193,23 +193,14 @@ class OnlineReturnController extends ControllerBase {
     // Get config for return confirmations page.
     // This will include what's next section of the page.
     $returnConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
-    $confirmationStrings = [];
-    for ($i = 1; $i <= 3; $i++) {
-      array_push($confirmationStrings, [
-        'title' => $returnConfig->get('row_' . $i . '_title'),
-        'description' => $returnConfig->get('row_' . $i . '_description'),
-        'icon_class' => $returnConfig->get('row_' . $i . '_icon_text'),
-        'hide_row' => $returnConfig->get('row_' . $i . '_hide_this_row'),
-      ],
-      );
-    }
 
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-return-confirmation"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_confirmation';
+    $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
     $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
-      'returnConfirmationConfig' => $confirmationStrings,
+      'returnConfirmationStrings' => $returnConfig->get('rows'),
     ];
     return $build;
   }

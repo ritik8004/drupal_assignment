@@ -104,12 +104,12 @@ export default class EgiftCardPurchase extends React.Component {
 
       // GTM product attributes.
       const productGtm = {
-        name: productData.product_name,
+        name: `eGift Card/${productData.price}`,
         price: productData.price,
         variant: productData.sku,
         dimension2: 'virtual',
         dimension4: 1,
-        quantity: productData.quantity,
+        quantity: 1,
         metric2: productData.price,
       };
 

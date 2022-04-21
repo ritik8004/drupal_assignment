@@ -978,6 +978,9 @@ function alshaya_rcs_product_preprocess_node(&$variables) {
     if ($deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
       $variables['express_delivery_enabled'] = TRUE;
     }
+
+    $product_settings = \Drupal::config('alshaya_acm_product.settings');
+    $variables['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $product_settings->get('image_slider_position_pdp');
   }
 }
 
@@ -1056,7 +1059,7 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   // In Array attribute will only be added for materials attribute code.
   $is_array = '';
   // @todo To make this a config to get the list of attribute code.
-  if ($attribute_code === 'materials') {
+  if (!empty($skuBaseFieldDefination[$attribute_code]['set_is_array'])) {
     $is_array = ',is_array:1';
   }
   $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '"' . $is_array . '){attribute_code store_id attribute_values{key,value}}}';

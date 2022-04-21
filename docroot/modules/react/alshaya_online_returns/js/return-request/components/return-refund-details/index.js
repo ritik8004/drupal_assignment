@@ -44,7 +44,7 @@ class ReturnRefundDetails extends React.Component {
    */
   refundDetailsHeader = () => (
     <div className="refund-detail-label">
-      <div className="refund-detail-header">{ Drupal.t('Return and refund details', {}, { context: 'online_returns' }) }</div>
+      <div className="refund-detail-header">{ Drupal.t('2. Return and refund details', {}, { context: 'online_returns' }) }</div>
     </div>
   );
 
@@ -63,13 +63,16 @@ class ReturnRefundDetails extends React.Component {
       return;
     }
 
-    if (hasValue(returnRequest) && hasValue(returnRequest.increment_id)) {
-      Drupal.addItemInLocalStorage('online_return_id', returnRequest.increment_id);
+    if (hasValue(returnRequest.data) && hasValue(returnRequest.data.increment_id)) {
+      const returnId = returnRequest.data.increment_id;
+      Drupal.addItemInLocalStorage('online_return_id', returnId);
+      // On success, redirect to return confirmation page.
+      const { orderId } = getOrderDetailsForReturnRequest()['#order'];
+      const returnUrl = getReturnConfirmationUrl(orderId, returnId);
+      if (hasValue(returnUrl)) {
+        window.location.href = returnUrl;
+      }
     }
-
-    // On success, redirect to return confirmation page.
-    const { orderId } = getOrderDetailsForReturnRequest()['#order'];
-    window.location.href = getReturnConfirmationUrl(orderId);
   }
 
   /**

@@ -71,6 +71,7 @@ class ReturnRequest extends React.Component {
   render() {
     const { itemsSelected, errorMessage } = this.state;
     const orderDetails = getOrderDetailsForReturnRequest();
+    const { orderId } = orderDetails['#order'];
     if (!hasValue(orderDetails)) {
       return null;
     }
@@ -94,6 +95,14 @@ class ReturnRequest extends React.Component {
           itemsSelected={itemsSelected}
           handleErrorMessage={this.handleErrorMessage}
         />
+        <div className="return-request-bottom-page-link">
+          <span>{ Drupal.t("Don't want to return?", {}, { context: 'online_returns' }) }</span>
+          <span>
+            <a href={Drupal.url(`user/${drupalSettings.user.uid}/order/${orderId}`)}>
+              { Drupal.t('Go back to Order Details', {}, { context: 'online_returns' }) }
+            </a>
+          </span>
+        </div>
       </div>
     );
   }
