@@ -208,6 +208,7 @@ class OnlineReturnController extends ControllerBase {
     $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
       'returnConfirmationStrings' => $returnConfig->get('rows'),
+      'dateFormat' => 'DD MMM YYYY @H[h]mm',
     ];
     return $build;
   }

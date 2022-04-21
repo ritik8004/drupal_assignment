@@ -72,7 +72,15 @@ function formatDate(date) {
  * Utility function to format date time in 30 Nov. 2016 @ 20h55.
  */
 function formatDateTime(date) {
-  return moment(date).locale(drupalSettings.path.currentLanguage).format('DD MMM YYYY @H[h]mm');
+  // Setting default value for date format.
+  // It can be changed via config object
+  let dateFormat = 'DD MMM YYYY @H[h]mm';
+  if (hasValue(drupalSettings.returnInfo)
+    && hasValue(drupalSettings.returnInfo.dateFormat)) {
+    dateFormat = drupalSettings.returnInfo.dateFormat;
+    moment(date).locale(drupalSettings.path.currentLanguage).format(dateFormat);
+  }
+  return dateFormat;
 }
 
 /**
