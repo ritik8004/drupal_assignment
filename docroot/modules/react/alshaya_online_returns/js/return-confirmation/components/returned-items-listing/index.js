@@ -13,6 +13,9 @@ const ReturnedItemsListing = ({
 
   return (
     <div className="return-items-wrapper">
+      <div className="return-items-label">
+        <div className="return-items-title">{ Drupal.t('Items to return', {}, { context: 'online_returns' }) }</div>
+      </div>
       {returnedItems.map((item) => (
         <div key={item.sku} className="item-details">
           <ReturnIndividualItem

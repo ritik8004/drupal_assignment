@@ -50,17 +50,19 @@ const ReturnIndividualItem = ({
         <ConditionalView condition={window.innerWidth > 767}>
           <div className="item-price">
             <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
-            <Price
-              price={item.original_price.toString()}
-              finalPrice={item.price_incl_tax.toString()}
-            />
+            <div className="dark">
+              <Price
+                price={item.original_price.toString()}
+                finalPrice={item.price_incl_tax.toString()}
+              />
+            </div>
           </div>
         </ConditionalView>
 
         <ConditionalView condition={window.innerWidth < 768}>
           <div className="item-total-price">
             <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
-            <span>{ parse(item.total) }</span>
+            <span className="dark">{ parse(item.total) }</span>
           </div>
         </ConditionalView>
       </div>
@@ -68,7 +70,7 @@ const ReturnIndividualItem = ({
       <ConditionalView condition={window.innerWidth > 767}>
         <div className="item-total-price">
           <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
-          <span>{ parse(item.total) }</span>
+          <span className="dark">{ parse(item.total) }</span>
         </div>
       </ConditionalView>
 

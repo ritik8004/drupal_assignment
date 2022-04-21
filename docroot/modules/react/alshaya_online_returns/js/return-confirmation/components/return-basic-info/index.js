@@ -12,10 +12,10 @@ const ReturnBasicInfo = ({
   const returnDate = formatDateTime(returnData.date_requested);
   return (
     <div className="return-id-info">
-      <span className="return-id-label">{ Drupal.t('Return ID', {}, { context: 'online_returns' }) }</span>
-      <span className="return-id-value">{returnData.increment_id}</span>
+      <div className="return-id-label light">{ Drupal.t('Return ID', {}, { context: 'online_returns' }) }</div>
+      <div className="return-id-value dark">{returnData.increment_id}</div>
       <ConditionalView condition={hasValue(returnDate)}>
-        <span className="return-request-date">{returnDate}</span>
+        <div className="return-request-date light">{returnDate}</div>
       </ConditionalView>
     </div>
   );

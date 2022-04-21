@@ -10,7 +10,7 @@ const RefundMethods = ({
   return (
     <>
       <div className="refund-method-wrapper">
-        <div className="refund-method-title">
+        <div className="refund-method-title light">
           { Drupal.t('Refund Method', {}, { context: 'online_returns' }) }
         </div>
         <div className="method-list-wrapper">
