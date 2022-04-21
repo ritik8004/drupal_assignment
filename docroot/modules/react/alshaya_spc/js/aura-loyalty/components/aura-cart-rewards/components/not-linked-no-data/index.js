@@ -77,13 +77,14 @@ class AuraNotLinkedNoData extends React.Component {
                 </a>
               </span>
             </ConditionalView>
-            <br />
-            <PointsToEarnMessage
-              pointsToEarn={pointsToEarn}
-              loyaltyStatus={loyaltyStatus}
-              wait={wait}
-            />
-            <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
+            <div>
+              <PointsToEarnMessage
+                pointsToEarn={pointsToEarn}
+                loyaltyStatus={loyaltyStatus}
+                wait={wait}
+              />
+              <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
+            </div>
           </div>
         </div>
 

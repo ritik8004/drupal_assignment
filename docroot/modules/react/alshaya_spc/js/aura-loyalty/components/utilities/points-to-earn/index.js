@@ -14,15 +14,12 @@ const PointsToEarnMessage = (props) => {
   // Guest User & No card.
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
     || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
-    const toEarnMessageP1 = `${getStringMessage('earn')} `;
-    const pointsHighlight = `${pointsToEarn}`;
-    const toEarnMessageP2 = ` ${getStringMessage('reward_points_with_purchase')}`;
-
     return (
       <span className="spc-aura-points-to-earn">
-        { toEarnMessageP1 }
-        <span className="spc-aura-highlight">{ pointsHighlight }</span>
-        { toEarnMessageP2 }
+        {getStringMessage(
+          'cart_to_earn_with_points',
+          { '@pts': pointsToEarn },
+        )}
       </span>
     );
   }
@@ -67,28 +64,38 @@ const PointsToEarnMessage = (props) => {
 
     return (
       <>
-        <AuraHeaderIcon />
-        <span className="spc-aura-points-to-earn">
-          {toEarnMessageP1}
-          <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
-          {toEarnMessageP2}
-          <a
-            href={appleAppStoreLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {getStringMessage('app_store_link_text')}
-          </a>
-          /
-          <a
-            href={googlePlayStoreLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {getStringMessage('play_store_link_text')}
-          </a>
-          <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
-        </span>
+        <div className="spc-aura-cart-icon">
+          <AuraHeaderIcon />
+        </div>
+        <div className="spc-aura-cart-content">
+          <span className="spc-aura-points-to-earn">
+            {toEarnMessageP1}
+            <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
+            <div>
+              {toEarnMessageP2}
+            </div>
+            <div>
+              <a
+                className="spc-link-play-store"
+                href={appleAppStoreLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {getStringMessage('app_store_link_text')}
+              </a>
+              <span className="spc-aura-or-text">/</span>
+              <a
+                className="spc-link-play-store"
+                href={googlePlayStoreLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {getStringMessage('play_store_link_text')}
+              </a>
+              <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
+            </div>
+          </span>
+        </div>
       </>
     );
   }
@@ -103,13 +110,17 @@ const PointsToEarnMessage = (props) => {
 
     return (
       <>
-        <AuraHeaderIcon />
-        <span className="spc-aura-points-to-earn">
-          {toEarnMessageP1}
-          <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
-          {toEarnMessageP2}
-          <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
-        </span>
+        <div className="spc-aura-cart-icon">
+          <AuraHeaderIcon />
+        </div>
+        <div className="spc-aura-cart-content">
+          <span className="spc-aura-points-to-earn">
+            {toEarnMessageP1}
+            <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
+            {toEarnMessageP2}
+            <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
+          </span>
+        </div>
       </>
     );
   }
@@ -117,22 +128,28 @@ const PointsToEarnMessage = (props) => {
   // Registered User & UnLinked card.
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
     return (
-      <span className="spc-aura-points-to-earn">
-        <AuraHeaderIcon />
-        <span className="spc-link-aura-link-wrapper submit">
-          <a
-            className="spc-link-aura-link"
-            /** @todo: Need to link this with Link Aura popup when ready. */
-          >
-            {getStringMessage('aura_link_aura')}
-          </a>
-        </span>
-        {getStringMessage(
-          'cart_to_earn_with_points',
-          { '@pts': pointsToEarn },
-        )}
-        <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
-      </span>
+      <>
+        <div className="spc-aura-cart-icon">
+          <AuraHeaderIcon />
+        </div>
+        <div className="spc-aura-cart-content">
+          <div className="spc-aura-points-to-earn">
+            <span className="spc-link-aura-link-wrapper submit">
+              <a
+                className="spc-link-aura-link"
+                /** @todo: We need to change this to open the link aura form. */
+              >
+                {getStringMessage('aura_link_aura')}
+              </a>
+            </span>
+            {getStringMessage(
+              'cart_to_earn_with_points',
+              { '@pts': pointsToEarn },
+            )}
+            <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
+          </div>
+        </div>
+      </>
     );
   }
 
