@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import { processReturnData } from '../../utilities/order_details_util';
@@ -46,6 +47,17 @@ class ReturnedItemsListing extends React.Component {
     return '';
   };
 
+  getReturnsByType = (type) => {
+    const { returns } = this.state;
+
+    // @todo: Update this code to filter out returns based on type.
+    if (type === 'online') {
+      return returns;
+    }
+
+    return returns;
+  };
+
   render() {
     const { returns } = this.state;
 
@@ -55,11 +67,13 @@ class ReturnedItemsListing extends React.Component {
 
     return (
       <div className="returned-items-wrapper">
-        <ReturnedItems
-          key="online"
-          subTitle={this.getReturnedItemsSubTitle('online')}
-          returns={returns}
-        />
+        <ConditionalView condition={hasValue(this.getReturnsByType('online'))}>
+          <ReturnedItems
+            key="online"
+            subTitle={this.getReturnedItemsSubTitle('online')}
+            returns={returns}
+          />
+        </ConditionalView>
       </div>
     );
   }
