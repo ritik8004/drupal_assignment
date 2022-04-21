@@ -467,10 +467,10 @@ class AlshayaRcsCategoryDataMigration {
   /**
    * Rollback term data migration from acq_product_category taxonomy.
    *
-   * @param int $batch_size
+   * @param int|null $batch_size
    *   Migrate Batch size.
    */
-  public function rollbackProductCategoryMigration(int $batch_size = 50) {
+  public function rollbackProductCategoryMigration($batch_size = 50) {
     // Get the placeholder term from config.
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $entity_id = $config->get('category.placeholder_tid');
