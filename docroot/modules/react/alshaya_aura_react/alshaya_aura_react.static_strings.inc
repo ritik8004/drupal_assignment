@@ -293,5 +293,13 @@ function _alshaya_aura_static_strings() {
       'value' => t('Aura points with this purchase.'),
       'context' => 'aura',
     ],
+    [
+      'key' => 'aura_checkout_reward_points_to_earn_desktop',
+      'value' => t('You will earn @pts @aura_icon points with this purchase.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_checkout_reward_points_to_earn_mobile',
+      'value' => t('You will earn @pts @aura_icon points.', [], ['context' => 'aura']),
+    ],
   ];
 }
