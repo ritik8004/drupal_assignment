@@ -125,7 +125,7 @@ exports.getEntity = async function getEntity(langcode) {
       if (response.data.promotionUrlResolver) {
         result = response.data.promotionUrlResolver;
       }
-
+      // Redirect to 404 page if there is no response.
       if (!result) {
         globalThis.rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`);
       }
@@ -133,7 +133,6 @@ exports.getEntity = async function getEntity(langcode) {
       if(result.title == null) {
         await handleNoItemsInResponse(request, urlKey);
       }
-
       break;
 
     default:
