@@ -65,7 +65,7 @@ class OnlineReturnsHelper {
    */
   public function isSkuReturnable(SKUInterface $sku_entity) {
     $is_returnable = $sku_entity->get('attr_is_returnable')->getString();
-    return ($is_returnable !== '') ? (bool) $is_returnable : TRUE;
+    return !($is_returnable != 1);
   }
 
   /**
