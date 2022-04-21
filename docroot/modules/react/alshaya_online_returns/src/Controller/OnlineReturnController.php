@@ -195,7 +195,7 @@ class OnlineReturnController extends ControllerBase {
     $returnConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
     $build['#cache']['tags'] = array_merge(
       $build['#cache']['tags'] ?? [],
-      $this->configFactory->get('alshaya_online_returns.return_confirmation')
+      $this->configFactory->get('alshaya_online_returns.return_confirmation')->getCacheTags()
     );
 
     // Adding address fields configuration to display user address details.
