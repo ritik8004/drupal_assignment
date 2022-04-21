@@ -27,7 +27,13 @@ function dynamic_yield_page_attachments(array &$page) {
   /** @var \Drupal\dynamic_yield\DynamicYieldService $dynamic_yield */
   $dynamic_yield = \Drupal::service('dynamic_yield.dynamic_yield');
 
-  if (!(\Drupal::service('router.admin_context')->isAdminRoute()) && $dynamic_yield->getSectionId()) {
+  // Skip some special routes which are marked as admin_route but that
+  // can be accessed by non-admin users as well.
+  if ((!(\Drupal::service('router.admin_context')->isAdminRoute())
+    || in_array(\Drupal::routeMatch()->getRouteName(), [
+      'change_pwd_page.change_password_form',
+      'entity.user.edit_form',
+    ])) && $dynamic_yield->getSectionId()) {
     // Add DY script tags to header.
     // Based on the type of dy script injection, add the script.
     $dy_script_init = \Drupal::config('dynamic_yield.settings')->get('dy_script_init');
