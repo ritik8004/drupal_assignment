@@ -73,14 +73,14 @@ function formatDate(date) {
  */
 function formatDateTime(date) {
   // Setting default value for date format.
-  // It can be changed via config object
-  let dateFormat = 'DD MMM YYYY @H[h]mm';
+  // It can be changed via config object.
+  let formattedDate = null;
   if (hasValue(drupalSettings.returnInfo)
     && hasValue(drupalSettings.returnInfo.dateFormat)) {
-    dateFormat = drupalSettings.returnInfo.dateFormat;
-    moment(date).locale(drupalSettings.path.currentLanguage).format(dateFormat);
+    const dateFormat = drupalSettings.returnInfo.dateFormat ? drupalSettings.returnInfo.dateFormat : 'DD MMM YYYY @H[h]mm';
+    formattedDate = moment(date).locale(drupalSettings.path.currentLanguage).format(dateFormat);
   }
-  return dateFormat;
+  return formattedDate;
 }
 
 /**
