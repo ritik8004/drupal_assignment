@@ -93,10 +93,6 @@ class AlshayaAcmPromoLabelAPIHelper {
       // Cache only if enabled.
       $this->cache->set($cache_key, $status);
     }
-    else {
-      // Cache only if not enabled.
-      $this->cache->set($cache_key, FALSE);
-    }
 
     // Try resetting once.
     if ($status !== 'true' && !$reset) {
