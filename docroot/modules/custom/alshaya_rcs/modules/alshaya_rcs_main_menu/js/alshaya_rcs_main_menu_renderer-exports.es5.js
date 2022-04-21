@@ -10,7 +10,7 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
-    let enrichmentData = globalThis.rcsGetEnrichedCategories();
+    let enrichmentData = globalThis.rcsGetEnrichedCategories(globalThis.rcsSetEnrichedCategoriesInStaticStorage);
     let menuListLevel1Ele = navigationType === 'shop_by_block'
       ? innerHtmlObj.find('div.c-footer-menu')
       : innerHtmlObj.find('.menu__list.menu--one__list');
