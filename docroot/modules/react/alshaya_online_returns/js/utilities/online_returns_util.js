@@ -77,7 +77,7 @@ function formatDateTime(date) {
   let formattedDate = null;
   if (hasValue(drupalSettings.returnInfo)
     && hasValue(drupalSettings.returnInfo.dateFormat)) {
-    const dateFormat = drupalSettings.returnInfo.dateFormat ? drupalSettings.returnInfo.dateFormat : 'DD MMM YYYY @H[h]mm';
+    const dateFormat = drupalSettings.returnInfo.dateFormat || 'DD MMM YYYY @h[h]mm';
     formattedDate = moment(date).locale(drupalSettings.path.currentLanguage).format(dateFormat);
   }
   return formattedDate;
@@ -148,7 +148,6 @@ function getOrderDetailsUrl(orderId) {
  * Utility function to get address data.
  */
 function getAdressData(shippingAddress) {
-  // Making returd id more secure with multiple details.
   if (!hasValue(drupalSettings.address_fields) || !hasValue(shippingAddress)) {
     return null;
   }

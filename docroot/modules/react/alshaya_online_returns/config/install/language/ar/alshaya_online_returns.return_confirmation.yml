@@ -1,12 +1,22 @@
-row_1_title: 'Print Return label'
-row_1_description: 'We''ll mail you the return label shortly. You can also print it from your order details page.'
-row_1_icon_text: 'print'
-row_1_hide_this_row: 1
-row_2_title: 'Pack your Item & Return'
-row_2_description: 'We''ll mail you the return label shortly. You can also print it from your order details page.'
-row_2_icon_text: 'packitem'
-row_2_hide_this_row: 1
-row_3_title: 'Receive refund'
-row_3_description: 'Once we recieve the return items we will initiate your refund and the refund will be credited in your account in 3-5 days.'
-row_3_icon_text: 'refund'
-row_3_hide_this_row: 1
+rows:
+  -
+    title: 'Print Return label'
+    description:
+      value: '<p>We''ll mail you the return label shortly.</p><p>You can also print it from your order details page.</p>'
+      format: 'rich_text'
+    icon: 'print'
+    hide_this_row: 0
+  -
+    title: 'Pack your Item & Return'
+    description:
+      value: '<p>We''ll mail you the return label shortly.</p><p>You can also print it from your order details page.</p>'
+      format: 'rich_text'
+    icon: 'packitem'
+    hide_this_row: 0
+  -
+    title: 'Receive refunds'
+    description:
+      value: '<p>Once we recieve the return items we will initiate your refund and the refund will be credited in your account in 3-5 days.</p>'
+      format: 'rich_text'
+    icon: 'refund'
+    hide_this_row: 0
