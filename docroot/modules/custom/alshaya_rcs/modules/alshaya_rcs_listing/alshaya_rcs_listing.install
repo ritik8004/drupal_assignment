@@ -77,7 +77,7 @@ function alshaya_rcs_listing_install() {
   batch_set($batch);
 
   // Fetch acq product category enriched terms.
-  $terms = \Drupal::service('alshaya_rcs_main_menu.category_data_migration')->processProductCategoryMigration(30, FALSE);
+  $terms = \Drupal::service('alshaya_rcs_main_menu.category_data_migration')->processProductCategoryMigration(NULL, FALSE);
   if (!empty($terms)) {
     // Set batch operations to migrate terms.
     $operations = [];

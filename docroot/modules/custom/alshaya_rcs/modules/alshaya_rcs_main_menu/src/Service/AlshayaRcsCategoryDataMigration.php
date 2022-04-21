@@ -10,10 +10,9 @@ use Drupal\path_alias\AliasManagerInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Service provides data migration functions in rcs_category taxonomy.
+ * Service provides migration and rollback functions in rcs_category taxonomy.
  *
- * Service is responsible to migrate the category data
- * from acq_product_category.
+ * Service is responsible to migrate the category data.
  */
 class AlshayaRcsCategoryDataMigration {
 
@@ -85,12 +84,12 @@ class AlshayaRcsCategoryDataMigration {
   /**
    * Process term data migration from acq_product_category taxonomy.
    *
-   * @param int $batch_size
+   * @param int|null $batch_size
    *   Limits the number of rcs category processed per batch.
    * @param bool $execute_batch
    *   Check if batch process can be executed.
    */
-  public function processProductCategoryMigration(int $batch_size, $execute_batch = TRUE) {
+  public function processProductCategoryMigration($batch_size = 30, $execute_batch = TRUE) {
     // Get the current language.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
@@ -181,7 +180,7 @@ class AlshayaRcsCategoryDataMigration {
    * Batch operation to migrate/rollback category terms.
    *
    * @param array $tids
-   *   Batch of the source terms to be migrated.
+   *   Batch of the source tids to be migrated.
    * @param int $batch_size
    *   Migrate batch size.
    * @param string $vid
@@ -212,14 +211,14 @@ class AlshayaRcsCategoryDataMigration {
     ];
 
     foreach ($tids as $tid) {
-      // Check if acq category term already exists.
+      // Check if category term already exists.
       if (!empty($context['results']['acq_term_mapping'][$tid])) {
         continue;
       }
 
       $source_term = $term_storage->load($tid);
       if ($source_term instanceof TermInterface) {
-        // Create acq category term.
+        // Create new migrate category term.
         $migrate_term = self::createCategory($source_term, $langcode, $vid);
         // Create parent terms.
         if (!empty($source_term->parent->getString())) {
@@ -228,13 +227,13 @@ class AlshayaRcsCategoryDataMigration {
             $migrate_term->set('parent', $pid);
           }
         }
-        // Delete rcs path alias so that there is no conflict.
+        // Delete source path alias so that there is no conflict.
         $aliases = $path_alias_storage->loadByProperties([
           'path' => '/taxonomy/term/' . $tid,
         ]);
         $path_alias_storage->delete($aliases);
         $migrate_term->save();
-        // Set acq term mapping.
+        // Set source/migrate term mapping.
         $context['results']['acq_term_mapping'][$tid] = $migrate_term->id();
         $context['results']['delete_terms'][$source_term->id()] = $source_term;
         $context['sandbox']['term_count']++;
@@ -250,7 +249,7 @@ class AlshayaRcsCategoryDataMigration {
   }
 
   /**
-   * Deletes ACQ/RCS category terms after migration is complete.
+   * Deletes source category terms after migration is complete.
    *
    * @param bool $success
    *   Indicate that the batch API tasks were all completed successfully.
@@ -264,9 +263,9 @@ class AlshayaRcsCategoryDataMigration {
       $logger = \Drupal::logger('alshaya_rcs_category');
       // Delete product category terms that have been migrated.
       $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-      foreach (array_chunk($results['delete_terms'], $results['batch_size']) as $acq_delete_terms) {
-        $term_storage->delete($acq_delete_terms);
-        $logger->notice('@count source categories deleted successfully.', ['@count' => count($acq_delete_terms)]);
+      foreach (array_chunk($results['delete_terms'], $results['batch_size']) as $source_terms) {
+        $term_storage->delete($source_terms);
+        $logger->notice('@count source categories deleted successfully.', ['@count' => count($source_terms)]);
       }
     }
   }
@@ -286,7 +285,7 @@ class AlshayaRcsCategoryDataMigration {
    *   Vocabulary Id for the term migrated.
    *
    * @return string
-   *   Returns RCS Category parent term id.
+   *   Returns migrated parent term id.
    */
   private static function createParentCategory(int $tid, array &$results = NULL, int &$term_count = NULL, string $langcode, string $vid) {
     // Already saved so return parent category tid.
@@ -294,35 +293,35 @@ class AlshayaRcsCategoryDataMigration {
       return $results['acq_term_mapping'][$tid];
     }
     // Load parent product category.
-    $source_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
-    $source_term = ($source_term->language()->getId() == $langcode) ? $source_term : $source_term->getTranslation($langcode);
+    $source_parent_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
+    $source_parent_term = ($source_parent_term->language()->getId() == $langcode) ? $source_parent_term : $source_parent_term->getTranslation($langcode);
 
     // Recursively create parent term.
-    if (!empty($source_term->parent->getString())) {
-      $pid = self::createParentCategory($source_term->parent->getString(), $results, $term_count, $langcode, $vid);
+    if (!empty($source_parent_term->parent->getString())) {
+      $pid = self::createParentCategory($source_parent_term->parent->getString(), $results, $term_count, $langcode, $vid);
     }
 
-    $migrate_term = self::createCategory($source_term, $langcode, $vid);
+    $migrate_parent_term = self::createCategory($source_parent_term, $langcode, $vid);
     if ($pid) {
-      $migrate_term->set('parent', $pid);
+      $migrate_parent_term->set('parent', $pid);
     }
 
-    // Delete aliases for acq product category so there is no conflict.
+    // Delete aliases for source product category so there is no conflict.
     $path_alias_storage = \Drupal::entityTypeManager()->getStorage('path_alias');
     $aliases = $path_alias_storage->loadByProperties([
       'path' => '/taxonomy/term/' . $tid,
     ]);
     $path_alias_storage->delete($aliases);
-    $migrate_term->save();
+    $migrate_parent_term->save();
     $term_count++;
     // Save parent term in mapping.
-    $results['acq_term_mapping'][$tid] = $migrate_term->id();
-    $results['delete_terms'][$source_term->id()] = $source_term;
-    return $migrate_term->id();
+    $results['acq_term_mapping'][$tid] = $migrate_parent_term->id();
+    $results['delete_terms'][$source_parent_term->id()] = $source_parent_term;
+    return $migrate_parent_term->id();
   }
 
   /**
-   * Create ACQ/RCS Category terms.
+   * Creates Category terms for migration.
    *
    * @param \Drupal\taxonomy\TermInterface $source_term
    *   Source Term to be migrated.
@@ -332,21 +331,21 @@ class AlshayaRcsCategoryDataMigration {
    *   Vocabulary Id of the migrated term.
    *
    * @return \Drupal\taxonomy\TermInterface
-   *   Returns RCS Category term.
+   *   Returns Migrated term.
    */
   private static function createCategory(TermInterface $source_term, string $langcode, string $vid) {
     // Get the current language.
     $language_manager = \Drupal::service('language_manager');
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
-    // Create a new rcs category term object.
+    // Create a category term object.
     $migrate_term = $term_storage->create([
       'vid' => $vid,
       'name' => $source_term->name,
       'langcode' => $langcode,
     ]);
 
-    // Copy enriched values from product category term.
+    // Copy enriched values from source category term.
     self::enrichTerm($source_term, $migrate_term, $vid);
 
     // Check if the translations exists for other available languages.
@@ -380,7 +379,7 @@ class AlshayaRcsCategoryDataMigration {
    * @param \Drupal\taxonomy\TermInterface $source_term
    *   The source term.
    * @param \Drupal\taxonomy\TermInterface $migrate_term
-   *   RCS category term.
+   *   New migrate term.
    * @param string $vid
    *   Vocabulary Id of the Migrated term.
    */
@@ -409,7 +408,7 @@ class AlshayaRcsCategoryDataMigration {
     // Add main_menu_highlight field value from the old term.
     $main_menu_highlights = $source_term->get('field_main_menu_highlight')->getValue();
     if (!empty($main_menu_highlights)) {
-      $rcs_term_paragraphs = [];
+      $migrate_paragraphs = [];
       foreach ($main_menu_highlights as $highlight) {
         // Load source paragraph entity.
         $source_paragraphs = $paragraph_storage->load($highlight['target_id']);
@@ -428,7 +427,7 @@ class AlshayaRcsCategoryDataMigration {
       }
 
       // Attach highlights migrate_paragraphs rcs term if available.
-      if (!empty($rcs_term_paragraphs)) {
+      if (!empty($migrate_paragraphs)) {
         $migrate_term->get('field_main_menu_highlight')
           ->setValue($migrate_paragraphs);
       }

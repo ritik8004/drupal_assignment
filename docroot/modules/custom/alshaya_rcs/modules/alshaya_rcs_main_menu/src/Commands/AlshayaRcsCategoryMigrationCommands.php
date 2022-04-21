@@ -89,7 +89,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
   public function reinstateAcqTerms($options = ['batch_size' => 50]) {
     // Set acq product category migrate batch.
     $this->alshayaCategoryMigrate->rollbackProductCategoryMigration($options['batch_size']);
-    $this->drupalLogger->notice(dt('ACQ Category terms reinstated.'));
+    $this->drupalLogger->notice('ACQ Category terms reinstated.');
   }
 
   /**
