@@ -34,6 +34,7 @@ class ReturnEligibilityMessage extends React.Component {
       return <ReturnWindow message={getReturnWindowClosedMessage(returnExpiration)} />;
     }
 
+    // isReturnEligible checks if the order is eligible for ONLINE returns.
     if (isReturnEligible) {
       return (
         <>

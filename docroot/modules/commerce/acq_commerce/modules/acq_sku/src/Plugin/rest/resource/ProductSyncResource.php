@@ -840,7 +840,6 @@ class ProductSyncResource extends ResourceBase {
       foreach ($current_media ?? [] as $value) {
         if (!empty($value['fid'])) {
           $current_mapping[$value['value_id']]['fid'] = $value['fid'];
-          $current_mapping[$value['value_id']]['file'] = $value['file'];
         }
       }
     }
@@ -850,7 +849,6 @@ class ProductSyncResource extends ResourceBase {
       foreach ($media as $key => $value) {
         if (isset($current_mapping[$value['value_id']])) {
           $media[$key]['fid'] = $current_mapping[$value['value_id']]['fid'];
-          $media[$key]['file'] = $current_mapping[$value['value_id']]['file'];
           unset($current_mapping[$value['value_id']]);
         }
       }

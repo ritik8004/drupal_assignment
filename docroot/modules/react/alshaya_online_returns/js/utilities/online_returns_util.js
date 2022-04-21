@@ -7,8 +7,7 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 function isReturnEligible(orderId) {
   let returnEligible = true;
   if (hasValue(drupalSettings.onlineReturns)
-    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
-    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].isReturnEligible)) {
+    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])) {
     returnEligible = drupalSettings.onlineReturns.recentOrders[orderId].isReturnEligible;
   }
 

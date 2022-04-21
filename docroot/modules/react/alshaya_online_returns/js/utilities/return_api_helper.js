@@ -1,7 +1,7 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import logger from '../../../js/utilities/logger';
-import { callMagentoApi } from '../../../js/utilities/requestHelper';
+import { callMagentoApi, prepareFilterData } from '../../../js/utilities/requestHelper';
 import { getOrderDetails } from './online_returns_util';
 
 /**
@@ -133,8 +133,41 @@ const getReturnInfo = (returnId) => {
     });
 };
 
+/**
+ * Get Return details by order id.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object containing return data in case of
+ *   success or an error object in case of failure.
+ */
+const getReturnsByOrderId = async (orderId) => {
+  if (!hasValue(orderId)) {
+    logger.error('Order Id is required to get returns for the order.');
+    return getErrorResponse('Order Id is required to get returns for the order.', 400);
+  }
+
+  const filters = {
+    field: 'order_id',
+    value: orderId,
+  };
+  const preparedFilterData = prepareFilterData([filters]);
+
+  return callMagentoApi('/V1/rma/returns', 'GET', preparedFilterData).then((response) => {
+    if (hasValue(response.data.error)) {
+      logger.notice('Error while trying to get returns by order id. Request Data: @data. Message: @message', {
+        '@data': JSON.stringify(preparedFilterData),
+        '@message': response.data.error_message,
+      });
+      return response.data;
+    }
+
+    return response;
+  });
+};
+
 export {
   createReturnRequest,
   prepareReturnRequestData,
   getReturnInfo,
+  getReturnsByOrderId,
 };
