@@ -4,6 +4,8 @@ namespace Drupal\alshaya_online_returns\Helper;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Helper class for Online Returns.
@@ -20,15 +22,26 @@ class OnlineReturnsHelper {
   protected $configFactory;
 
   /**
+   * Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * OnlineReturnsHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    */
   public function __construct(
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     $this->configFactory = $config_factory;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -98,6 +111,45 @@ class OnlineReturnsHelper {
       'isReturnEligible' => $order['extension']['is_return_eligible'] ?? TRUE,
       'returnExpiration' => $order['extension']['return_expiration'] ?? '',
     ];
+  }
+
+  /**
+   * Wrapper function to prepare product data.
+   *
+   * @param array $products
+   *   Products array.
+   *
+   * @return array
+   *   Processed product data.
+   */
+  public function prepareProductsData(array $products) {
+    foreach ($products as $key => $item) {
+      if (!empty($item['image'])) {
+        if ($item['image']['#theme'] == 'image_style') {
+          $image_style = $this->entityTypeManager->getStorage('image_style');
+          $data = [
+            'url' => $image_style->load($item['image']['#style_name'])->buildUrl($item['image']['#uri']),
+            'title' => $item['image']['#title'],
+            'alt' => $item['image']['#alt'],
+          ];
+        }
+        elseif ($item['image']['#theme'] == 'image') {
+          $data = [
+            'url' => $item['image']['#attributes']['src'],
+            'title' => $item['image']['#attributes']['title'],
+            'alt' => $item['image']['#attributes']['alt'],
+          ];
+        }
+      }
+      $products[$key]['image_data'] = $data ?? NULL;
+      $sku = SKU::loadFromSku($item['sku']);
+      if ($sku instanceof SKUInterface) {
+        $products[$key]['is_returnable'] = $this->isSkuReturnable($sku);
+        $products[$key]['is_big_ticket'] = $this->isSkuBigTicket($sku);
+      }
+    }
+
+    return $products;
   }
 
 }

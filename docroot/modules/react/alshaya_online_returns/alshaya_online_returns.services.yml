@@ -3,6 +3,7 @@ services:
     class: Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper
     arguments:
       - '@config.factory'
+      - '@entity_type.manager'
 
   alshaya_online_returns.online_returns_api_helper:
     class: Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper

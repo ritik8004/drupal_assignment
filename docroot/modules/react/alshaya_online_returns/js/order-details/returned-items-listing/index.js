@@ -55,8 +55,11 @@ class ReturnedItemsListing extends React.Component {
 
     return (
       <div className="returned-items-wrapper">
-        <ReturnedItems subTitle={this.getReturnedItemsSubTitle('online')} />
-        <ReturnedItems subTitle={this.getReturnedItemsSubTitle('store')} />
+        <ReturnedItems
+          key="online"
+          subTitle={this.getReturnedItemsSubTitle('online')}
+          returns={returns}
+        />
       </div>
     );
   }

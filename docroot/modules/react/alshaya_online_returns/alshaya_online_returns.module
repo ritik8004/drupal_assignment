@@ -123,6 +123,7 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
   }
 
   $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
+  $build['#attached']['drupalSettings']['onlineReturns']['products'] = $onlineReturnsHelper->prepareProductsData($build["#products"]);
   $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_order_details';
   // Attach the theming library.
   $build['#attached']['library'][] = 'alshaya_white_label/online-returns';

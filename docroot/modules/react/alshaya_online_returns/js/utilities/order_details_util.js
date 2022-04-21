@@ -7,11 +7,13 @@ function processReturnData(returns) {
   const allReturns = [];
 
   returns.forEach((returnItem) => {
-    let itemsData = {};
+    let itemsData = [];
     returnItem.items.forEach((item) => {
-      itemsData = {
-        entityId: item.entity_id,
-      };
+      const productDetails = drupalSettings.onlineReturns.products.find((element) => {
+        return element.item_id === item.order_item_id;
+      });
+
+      itemsData.push(productDetails);
     });
 
     const returnData = {
