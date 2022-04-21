@@ -52,7 +52,7 @@ class PromotionLabelConfigCommands extends DrushCommands {
    */
   public function syncPromoLabelConfig() {
     // Reset magento promo label config cache.
-    $this->apiHelper->getPromoLabelApiConfig(TRUE);
+    $this->apiHelper->hideDiscountedText(TRUE);
     $this->logger->notice('Promo label config info cache reset.');
   }
 

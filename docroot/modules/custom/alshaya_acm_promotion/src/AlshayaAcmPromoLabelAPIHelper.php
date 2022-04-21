@@ -4,9 +4,6 @@ namespace Drupal\alshaya_acm_promotion;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Component\Serialization\Json;
-use Drupal\Core\Logger\LoggerChannelTrait;
-use Drupal\Core\Site\Settings;
 use Drupal\alshaya_api\Helper\MagentoApiHelper;
 
 /**
@@ -16,8 +13,6 @@ use Drupal\alshaya_api\Helper\MagentoApiHelper;
  */
 class AlshayaAcmPromoLabelAPIHelper {
 
-  use LoggerChannelTrait;
-
   /**
    * Api wrapper.
    *
@@ -26,14 +21,7 @@ class AlshayaAcmPromoLabelAPIHelper {
   protected $apiWrapper;
 
   /**
-   * Logger channel.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $drupalLogger;
-
-  /**
-   * Cache backend discount_text.
+   * Cache backend alshaya_acm_promotion.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
@@ -52,7 +40,7 @@ class AlshayaAcmPromoLabelAPIHelper {
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache backend discount_text.
+   *   Cache backend alshaya_acm_promotion.
    * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
    *   The magento api helper.
    */
@@ -64,8 +52,6 @@ class AlshayaAcmPromoLabelAPIHelper {
     $this->apiWrapper = $api_wrapper;
     $this->cache = $cache;
     $this->mdcHelper = $mdc_helper;
-
-    $this->logger = $this->getLogger('AlshayaAcmPromoLabelAPIHelper');
   }
 
   /**
@@ -77,56 +63,47 @@ class AlshayaAcmPromoLabelAPIHelper {
    * @return array|mixed
    *   Return array of keys.
    */
-  public function getPromoLabelApiConfig($reset = FALSE) {
+  public function hideDiscountedText($reset = FALSE) {
     static $status;
 
-    if (is_bool($status)) {
+    if ($status === 'true' && !$reset) {
       return $status;
     }
 
     $cache_key = 'alshaya_acm_promotion:promo_lable_api_status';
-
-    // Cache time in minutes, set 0 to disable caching.
-    $cache_time = (int) Settings::get('alshaya_acm_promotion_label_api_config_cache_time', 5);
-
-    // Disable caching if cache time set to 0 or null in settings.
-    $reset = empty($cache_time) ? TRUE : $reset;
     $cache = $reset ? NULL : $this->cache->get($cache_key);
-    if (is_object($cache) && !empty($cache->data)) {
+    if (is_object($cache) && $cache->data === 'true' && !$reset) {
       $status = $cache->data;
+      return $status;
+    }
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('discount_text'),
+    ];
+
+    $status = $this->apiWrapper->invokeApi(
+      'promotion/get-config',
+      [],
+      'GET',
+      FALSE,
+      $request_options
+    );
+
+    if ($status === 'true') {
+      // Cache only if enabled.
+      $this->cache->set($cache_key, $status);
     }
     else {
-      $request_options = [
-        'timeout' => $this->mdcHelper->getPhpTimeout('discount_text'),
-      ];
-
-      $response = $this->apiWrapper->invokeApi(
-        'promotion/get-config',
-        [],
-        'GET',
-        FALSE,
-        $request_options
-      );
-
-      $status = Json::decode($response);
-
-      if (is_bool($status)) {
-        // Cache only if enabled (cache_time set).
-        $this->cache->set($cache_key, $status, strtotime("+${cache_time} minutes"));
-      }
-      else {
-        $this->logger->error('Invalid response from promo label config api, @response', [
-          '@response' => Json::encode($status),
-        ]);
-      }
+      // Cache only if not enabled.
+      $this->cache->set($cache_key, FALSE);
     }
 
     // Try resetting once.
-    if (!is_bool($status) && !($reset)) {
-      return $this->getPromoLabelApiConfig(TRUE);
+    if ($status !== 'true' && !$reset) {
+      return $this->hideDiscountedText(TRUE);
     }
 
-    return $status;
+    return FALSE;
   }
 
 }
