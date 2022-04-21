@@ -12,12 +12,13 @@ async function handleNoItemsInResponse(request, urlKey) {
   let response = await rcsCommerceBackend.invokeApi(request);
   let rcs404 = `${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`;
 
-  if (response.data.urlResolver === null) {
+  if (response.data.urlResolver === null || response.data.urlResolver.redirectCode == 404) {
     return rcsRedirectToPage(rcs404);
   }
 
   if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
-    return rcsRedirectToPage(response.data.urlResolver.relative_url);
+    let relative_url = response.data.urlResolver.relative_url.startsWith('/') ? response.data.urlResolver.relative_url : `/${drupalSettings.path.currentLanguage}/${response.data.urlResolver.relative_url}`;
+    return rcsRedirectToPage(relative_url);
   }
 
   RcsEventManager.fire('error', {
@@ -124,9 +125,15 @@ exports.getEntity = async function getEntity(langcode) {
       if (response.data.promotionUrlResolver) {
         result = response.data.promotionUrlResolver;
       }
-      if (!result || (typeof result.title !== 'string')) {
+
+      if (!result) {
         globalThis.rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`);
       }
+      // Check if title is null and call UrlResolver for redirection.
+      if(result.title == null) {
+        await handleNoItemsInResponse(request, urlKey);
+      }
+
       break;
 
     default:
