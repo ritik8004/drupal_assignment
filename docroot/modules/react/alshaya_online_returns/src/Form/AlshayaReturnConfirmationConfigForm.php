@@ -93,7 +93,7 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
     $form['return_confirmation']['return_date_format'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Return Date format'),
-      '#description' => $this->t('Date format for return info'),
+      '#description' => $this->t('Date format for return info, please note this will be used in JAVASCRIPT.'),
       '#default_value' => $config->get('return_date_format'),
     ];
 

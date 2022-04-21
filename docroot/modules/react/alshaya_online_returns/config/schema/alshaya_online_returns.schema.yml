@@ -13,7 +13,7 @@ alshaya_online_returns.return_confirmation:
     return_date_format:
       type: label
       label: 'Return Date format'
-    return_whats_next_row:
+    rows:
       type: sequence
       label: 'Whats next row'
       sequence:
