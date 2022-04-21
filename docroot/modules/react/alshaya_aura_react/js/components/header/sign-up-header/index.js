@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import Popup from 'reactjs-popup';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { getAuraConfig } from '../../../utilities/helper';
@@ -92,20 +93,13 @@ class SignUpHeader extends React.Component {
             </div>
             <div className="aura-popup-body">
               <span>
-                {Drupal.t('To earn and spend points while you shop and enjoy exclusive benefits.')}
-              </span>
-              <span className="learn-more-wrapper">
-                <a
-                  href={Drupal.url(headerLearnMoreLink)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="learn-more"
-                >
-                  {Drupal.t('Know more')}
-                </a>
-              </span>
-              <span>
-                {Drupal.t('about Aura.')}
+                {parse(Drupal.t('To earn and spend points while you shop and enjoy exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Know more</a> about Aura.',
+                  {
+                    '@know_more_link': Drupal.url(headerLearnMoreLink),
+                  },
+                  {
+                    context: 'aura',
+                  }))}
               </span>
             </div>
             <div className="aura-popup-footer">

@@ -408,23 +408,19 @@ function _alshaya_aura_react_translations() {
         'ar' => 'نقاط Aura مع هذا الشراء.',
         'context' => 'aura',
       ],
-      'To earn and spend points while you shop and enjoy exclusive benefits.' => [
-        'ar' => 'لكسب النقاط وإنفاقها أثناء التسوق والاستمتاع بمزايا حصرية.',
-      ],
-      'Know more' => [
-        'ar' => 'تعرف أكثر',
-      ],
-      ' about Aura.' => [
-        'ar' => ' حول الهالة.',
-      ],
       'Already a member?' => [
         'ar' => 'عضوا فعلا؟',
       ],
-      'Join or Link' => [
-        'ar' => 'الانضمام أو الارتباط',
+      'You will earn @pts @aura_icon points with this purchase.' => [
+        'ar' => 'سوف تكسب @pts @aura_icon نقاط مع هذا الشراء.',
+        'context' => 'aura',
       ],
-      'points.' => [
-        'ar' => 'النقاط.',
+      'You will earn @pts @aura_icon points.' => [
+        'ar' => 'سوف تكسب aura_icon @pts@ النقاط.',
+        'context' => 'aura',
+      ],
+      'To earn and spend points while you shop and enjoy exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Know more</a> about Aura.' => [
+        'ar' => 'لكسب النقاط وإنفاقها أثناء التسوق والاستمتاع بمزايا حصرية. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">تعرف أكثر</a> حول الهالة.',
         'context' => 'aura',
       ],
     ],
