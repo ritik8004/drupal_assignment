@@ -6,8 +6,6 @@ import SignUpOtpModal from '../sign-up-otp-modal';
 import AuraHeaderIcon from '../../../svg-component/aura-header-icon';
 import AuraFormLinkCardOTPModal
   from '../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
-import getStringMessage from '../../../../../js/utilities/strings';
-import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 
 class SignUpHeader extends React.Component {
   constructor(props) {
@@ -87,9 +85,6 @@ class SignUpHeader extends React.Component {
             <div className="aura-popup-header">
               <div className="desktop-only">
                 <div className="aura-header-icon">
-                  <ConditionalView condition={isUserAuthenticated()}>
-                    {getStringMessage('header_aura_join_or_link')}
-                  </ConditionalView>
                   <AuraHeaderIcon />
                 </div>
                 <button type="button" className="close" onClick={() => this.closeHeaderModal()} />
