@@ -78,12 +78,12 @@ class ReturnRequest extends React.Component {
 
     return (
       <div className="return-requests-wrapper">
-        <ConditionalView condition={hasValue(errorMessage)}>
-          <ErrorMessage message={errorMessage} />
-        </ConditionalView>
         <ReturnOrderSummary
           orderDetails={orderDetails}
         />
+        <ConditionalView condition={hasValue(errorMessage)}>
+          <ErrorMessage message={errorMessage} />
+        </ConditionalView>
         <ReturnItemsListing
           products={orderDetails['#products']}
           handleSelectedItems={this.handleSelectedItems}
