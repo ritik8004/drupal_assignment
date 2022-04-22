@@ -31,6 +31,7 @@
               is_page: false,
               title_prefix: '',
               entity: entity,
+              language: drupalSettings.path.currentLanguage,
               // @todo Create a function as this is also done in alshaya_rcs_magazine.js
               price_details: {
                 display_mode: drupalSettings.alshayaRcs.priceDisplayMode,
