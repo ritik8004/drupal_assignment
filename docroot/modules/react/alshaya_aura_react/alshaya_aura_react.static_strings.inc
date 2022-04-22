@@ -285,12 +285,10 @@ function _alshaya_aura_static_strings() {
     [
       'key' => 'redeem_aura_points_header',
       'value' => t('Redeem @aura_icon points', [], ['context' => 'aura']),
-      'context' => 'aura',
     ],
     [
       'key' => 'checkout_aura_points_with_purchase',
       'value' => t('Aura points with this purchase.', [], ['context' => 'aura']),
-      'context' => 'aura',
     ],
     [
       'key' => 'aura_checkout_reward_points_to_earn',
