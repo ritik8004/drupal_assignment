@@ -19,8 +19,8 @@ async function handleNoItemsInResponse(request, urlKey) {
 
   if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
     let relative_url = response.data.urlResolver.relative_url.startsWith('/')
-    ? response.data.urlResolver.relative_url
-    : `/${drupalSettings.path.currentLanguage}/${response.data.urlResolver.relative_url}`;
+      ? response.data.urlResolver.relative_url
+      : `/${drupalSettings.path.currentLanguage}/${response.data.urlResolver.relative_url}`;
     return rcsRedirectToPage(relative_url);
   }
 
