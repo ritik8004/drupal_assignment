@@ -411,8 +411,13 @@ function _alshaya_aura_react_translations() {
       'Already a member?' => [
         'ar' => 'عضوا فعلا؟',
       ],
+      // To do- translation should be checked once we get it from alshaya.
       'You will earn @pts @aura_icon points with this purchase.' => [
         'ar' => 'سوف تكسب @pts @aura_icon نقاط مع هذا الشراء.',
+        'context' => 'aura',
+      ],
+      'You will earn @pts Aura points with this purchase.' => [
+        'ar' => 'سوف تكسب @pts هالة نقاط مع هذا الشراء.',
         'context' => 'aura',
       ],
       'You will earn @pts @aura_icon points.' => [
@@ -421,6 +426,18 @@ function _alshaya_aura_react_translations() {
       ],
       'To earn and spend points while you shop and enjoy exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Know more</a> about Aura.' => [
         'ar' => 'لكسب النقاط وإنفاقها أثناء التسوق والاستمتاع بمزايا حصرية. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">تعرف أكثر</a> حول الهالة.',
+        'context' => 'aura',
+      ],
+      'Redeem @aura_icon points' => [
+        'ar' => 'يسترد @aura_icon النقاط',
+        'context' => 'aura',
+      ],
+      'You have @pts points,' => [
+        'ar' => 'لديك @pts النقاط,',
+        'context' => 'aura',
+      ],
+      '@pts points will expire by @date.' => [
+        'ar' => '@pts ستنتهي النقاط بحلول @date',
         'context' => 'aura',
       ],
     ],

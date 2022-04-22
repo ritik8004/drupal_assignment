@@ -17,6 +17,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '../../../../../js/utilities/util';
 import { cartContainsAnyVirtualProduct } from '../../../utilities/egift_util';
 import AuraLinkedCheckout from './components/aura-card';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 
 
 class AuraCheckoutRewards extends React.Component {
@@ -202,9 +203,10 @@ class AuraCheckoutRewards extends React.Component {
     return (
       <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }}>
 
-        {/* Guest */}
-        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
-        || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
+        {/* Guest - Show aura section only when card data is available. */}
+        <ConditionalView condition={!isUserAuthenticated()
+          && (loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED
+          || loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED)}
         >
           <AuraPointsToEarnedWithPurchase
             pointsToEarn={auraPointsToEarn}
@@ -213,8 +215,9 @@ class AuraCheckoutRewards extends React.Component {
         </ConditionalView>
 
         {/* Registered User - Linked Card */}
-        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED
-        || loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}
+        <ConditionalView condition={isUserAuthenticated()
+          && (loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED
+        || loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED)}
         >
           <AuraLinkedCheckout
             pointsInAccount={points}
@@ -226,14 +229,6 @@ class AuraCheckoutRewards extends React.Component {
             formActive={formActive}
             paymentMethodInCart={cart.cart.payment.method || ''}
             loyaltyStatus={loyaltyStatus}
-            wait={waitForPoints}
-          />
-        </ConditionalView>
-
-        {/* Registered with Unlinked Loyalty Card */}
-        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA}>
-          <AuraPointsToEarnedWithPurchase
-            pointsToEarn={auraPointsToEarn}
             wait={waitForPoints}
           />
         </ConditionalView>
