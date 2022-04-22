@@ -280,18 +280,21 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'points_to_earn_with_purchase',
-      'value' => t('points with this purchase.'),
-      'context' => 'aura',
+      'value' => t('points with this purchase.', [], ['context' => 'aura']),
     ],
     [
-      'key' => 'redeem',
-      'value' => t('Redeem'),
+      'key' => 'redeem_aura_points_header',
+      'value' => t('Redeem @aura_icon points', [], ['context' => 'aura']),
       'context' => 'aura',
     ],
     [
       'key' => 'checkout_aura_points_with_purchase',
-      'value' => t('Aura points with this purchase.'),
+      'value' => t('Aura points with this purchase.', [], ['context' => 'aura']),
       'context' => 'aura',
+    ],
+    [
+      'key' => 'aura_checkout_reward_points_to_earn',
+      'value' => t('You will earn @pts Aura points with this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_checkout_reward_points_to_earn_desktop',
@@ -300,6 +303,14 @@ function _alshaya_aura_static_strings() {
     [
       'key' => 'aura_checkout_reward_points_to_earn_mobile',
       'value' => t('You will earn @pts @aura_icon points.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'checkout_you_have_pts',
+      'value' => t('You have @pts points,', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'checkout_point_expiry_with_date',
+      'value' => t('@pts points will expire by @date.', [], ['context' => 'aura']),
     ],
   ];
 }
