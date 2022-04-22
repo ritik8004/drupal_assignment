@@ -120,7 +120,7 @@ jobs:
 
 
   backmerge:
-    needs: matrix
+    needs: [matrix, validate]
     if: needs.matrix.outputs.empty_matrix == 'false'
 
     runs-on: ubuntu-latest
