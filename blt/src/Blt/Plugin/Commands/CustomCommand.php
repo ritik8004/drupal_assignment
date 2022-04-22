@@ -390,8 +390,7 @@ class CustomCommand extends BltTasks {
     $config_strategy = $this->getConfigValue('cm.strategy');
 
     if (!$config_strategy != 'none') {
-      $cm_core_key = $this->getConfigValue('cm.core.key');
-      $task->option('config-dir', $this->getConfigValue("cm.core.dirs.$cm_core_key.path"));
+      $task->option('config-dir', $this->getConfigValue("cm.core.dirs.sync.path"));
     }
 
     $result = $task->detectInteractive()->run();

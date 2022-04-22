@@ -130,6 +130,7 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
     $algoliaSearch['pageSubType'] = self::PAGE_SUB_TYPE;
+    $common_config['otherRequiredValues']['libraries'][] = 'alshaya_seo_transac/gtm_algolia_plp';
 
     return [
       'inside' => [

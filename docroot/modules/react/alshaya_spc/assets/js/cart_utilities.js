@@ -2,6 +2,7 @@
 
   var getProductDataRequests = {};
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};
+  window.commerceBackend = window.commerceBackend || {};
 
   Drupal.alshayaSpc.clearCartData = function () {
     window.commerceBackend.removeCartDataFromStorage();

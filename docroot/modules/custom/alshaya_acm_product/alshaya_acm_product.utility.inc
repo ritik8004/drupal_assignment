@@ -125,7 +125,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
         }
 
         $configurableFieldValues[$fieldKey] = [
-          'label' => $skuManager->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
+          'label' => $skuManager->getLabelFromParentSku($sku, $code['code']) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
           'value' => $sku->get($fieldKey)->getString(),

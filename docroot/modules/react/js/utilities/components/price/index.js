@@ -5,8 +5,8 @@ import ConditionalView from '../conditional-view';
 import PriceBlock from './price-block';
 
 const Price = ({ price, finalPrice }) => {
-  const initalPrice = parseFloat(price);
-  const endPrice = parseFloat(finalPrice);
+  const initalPrice = parseFloat(price.replace(',', ''));
+  const endPrice = parseFloat(finalPrice.replace(',', ''));
   const hasDiscount = initalPrice > 0 && endPrice > 0 && endPrice < initalPrice;
   const discount = hasDiscount ? calculateDiscount(initalPrice, endPrice) : 0;
 

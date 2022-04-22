@@ -33,14 +33,15 @@ const PromotionsDynamicLabelsUtil = {
         }
         productLabels[item.sku] = item;
       });
-      // Update the threshold_reached to array if null as we are checking
-      // length.
-      if (!cart_labels.next_eligible.threshold_reached) {
-        response.cart_labels.next_eligible.threshold_reached = [];
-      }
       // Update the response array with the modified one.
       response.products_labels = productLabels;
     }
+
+    // If there is no subsequent eligible promotion, we keep the object empty.
+    if (cart_labels && cart_labels.next_eligible.rule_id === null) {
+      response.cart_labels.next_eligible = {};
+    }
+
     // Fire the event to update dynamic promotion.
     RcsEventManager.fire('applyDynamicPromotions', {
       detail: {

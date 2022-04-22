@@ -27,32 +27,6 @@ function isProductAvailableForClickAndCollect(entity) {
 }
 
 /**
- * Check if the provided product is available for Same day delivery.
- *
- * @param entity
- *   The entity.
- *
- * @return {Boolean}
- *   True if SDD is available, otherwise false.
- */
-function isProductAvailableForSameDayDelivery(entity) {
-  return entity.same_day_delivery === 1;
-}
-
-/**
- * Check if the provided product is available for Express delivery.
- *
- * @param entity
- *   The entity.
- *
- * @return {Boolean}
- *   True if ED is available, otherwise false.
- */
-function isProductAvailableForExpressDelivery(entity) {
-  return entity.express_delivery === 1;
-}
-
-/**
  * Check if the product is buyable.
  *
  * @param {object} entity
@@ -157,13 +131,13 @@ function getProductRecommendation(products, sectionTitle) {
   products.forEach((product, index) => {
     related.find('.owl-carousel').append('<div id="row' + index + '" class="views-row"/>');
     related.find('#row' + index).append(productTeaser);
-    const attributes = rcsPhGetSetting('placeholderAttributes');
+    const attributes = globalThis.rcsPhGetSetting('placeholderAttributes');
     finalMarkup = related.html();
     rcsPhReplaceEntityPh(finalMarkup, 'product_teaser', product, drupalSettings.path.currentLanguage)
       .forEach(function eachReplacement(r) {
         const fieldPh = r[0];
         const entityFieldValue = r[1];
-        finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
+        finalMarkup = globalThis.rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
       });
     related.html(finalMarkup);
   });
@@ -209,7 +183,11 @@ function getChildSkuFromAttribute(sku, attribute, option_id) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
 
   if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
-    console.log(`No combination available for attribute ${attribute} and option ${option_id} for SKU ${sku}`);
+    Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
+      '@attribute': attribute,
+      '@option_id': option_id,
+      '@sku': sku
+    });
     return null;
   }
 
@@ -265,14 +243,15 @@ exports.render = function render(
       };
 
       // Express delivery.
-      drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
-        if (option.status === 1 && entity[option.id] === 1) {
-          deliveryInfo.expressDelivery.push(option);
-        }
+     drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
+        option.class = (option.status && Drupal.hasValue(entity[option.id]))
+          ? 'active'
+          : 'in-active';
+        deliveryInfo.expressDelivery.push(option);
       });
 
       // Same day delivery.
-      if (entity.same_day_delivery === 1) {
+      if (Drupal.hasValue(entity.same_day_delivery)) {
         deliveryInfo.sameDayDelivery = drupalSettings.alshayaRcs.pdp.sameDayDelivery;
       }
 
@@ -303,24 +282,19 @@ exports.render = function render(
         };
       }
 
-      const hdEnabled = isProductAvailableForHomeDelivery(entity);
-      if (hdEnabled) {
-        const skuSddEnabled = isProductAvailableForSameDayDelivery(entity);
-        const skuEdEnabled = isProductAvailableForExpressDelivery(entity);
-        if (drupalSettings.expressDelivery.enabled && (skuSddEnabled || skuEdEnabled)) {
-          // Express delivery options.
-          deliveryOptions.hd = {
-            type: 'express_delivery',
-            title: Drupal.t('Delivery Options'),
-            subtitle: Drupal.t('Explore the delivery options applicable to your area.'),
-          }
-        }
-        else {
-          // Standard delivery options.
-          deliveryOptions.hd = drupalSettings.alshaya_home_delivery;
-          deliveryOptions.hd.type = 'standard_delivery';
+      if (drupalSettings.expressDelivery.enabled) {
+        // Express delivery options.
+        deliveryOptions.express_delivery = {
+          title: Drupal.t('Delivery Options'),
+          subtitle: Drupal.t('Explore the delivery options applicable to your area.'),
+          title_class: 'delivery_options',
         }
       }
+      else {
+        // Standard delivery options.
+        deliveryOptions.home_delivery = drupalSettings.alshaya_home_delivery;
+      }
+
       html += handlebarsRenderer.render('product.delivery_options', deliveryOptions);
       break;
 
@@ -358,37 +332,50 @@ exports.render = function render(
       break;
 
     case 'classic-gallery':
+    case 'magazine-gallery':
       let mediaCollection = {
         gallery: [],
         zoom: [],
         thumbnails: [],
       };
 
-      switch (drupalSettings.alshayaRcs.useParentImages) {
-        case 'never':
-          // Get the images from the variants.
-          entity.variants.forEach(function (variant) {
-            // Only fetch media for the selected variant.
-            if (variant.product.sku !== params.sku) {
-              return;
-            }
-            variant.product.media.forEach(function (variantMedia) {
-              mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
-                type: 'image',
-                thumburl: variantMedia.thumbnails,
-                mediumurl: variantMedia.medium,
-                zoomurl: variantMedia.zoom,
-                fullurl: variantMedia.url,
-              });
+      if (entity.type_id === 'configurable') {
+        const skuForGallery = params.sku;
+        // Fetch the media for the gallery sku.
+        entity.variants.every(function (variant) {
+          if (variant.product.sku !== skuForGallery) {
+            // Continue with the loop.
+            return true;
+          }
+          variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia, i) {
+            mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+              index: i,
+              type: 'image',
+              alt: entity.name,
+              title: entity.name,
+              thumburl: variantMedia.thumbnails,
+              mediumurl: variantMedia.medium,
+              zoomurl: variantMedia.zoom,
+              fullurl: variantMedia.url,
+              last: (i + 1 === length) ? 'last' : '',
             });
-            // Break from the loop.
-            return false;
           });
-          break;
-
-        default:
-          // @todo Add default case when working on other brands.
-          break;
+        });
+      }
+      else {
+        entity.media.forEach(function setEntityThumbnails(entityMedia, i) {
+          mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+            index: i,
+            type: 'image',
+            alt: entity.name,
+            title: entity.name,
+            thumburl: entityMedia.thumbnails,
+            mediumurl: entityMedia.medium,
+            zoomurl: entityMedia.zoom,
+            fullurl: entityMedia.url,
+            last: (i + 1 === length) ? 'last' : '',
+          });
+        });
       }
 
       // If no media, return;
@@ -398,6 +385,7 @@ exports.render = function render(
       }
 
       const data = {
+        description: entity.description.html,
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
@@ -411,7 +399,11 @@ exports.render = function render(
         pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
       }
 
-      html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      if (placeholder === 'classic-gallery') {
+        html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      } else {
+        html += handlebarsRenderer.render('gallery.product.product_gallery_magazine', data);
+      }
       break;
 
     case 'product-labels':
@@ -457,7 +449,9 @@ exports.render = function render(
       break;
 
     default:
-      console.log(`Placeholder ${placeholder} not supported for render.`);
+      Drupal.alshayaLogger('debug', 'Placeholder @placeholder not supported for render.', {
+        '@placeholder': placeholder
+      });
       break;
   }
 
@@ -611,7 +605,7 @@ exports.computePhFilters = function (input, filter) {
           // Add a disabled option which will be used as the label for the option.
           let selectOption = jQuery('<option></option>');
           let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
-          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(text);
+          selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
           configurableOptionsList.append(selectOption);
 
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
@@ -627,7 +621,7 @@ exports.computePhFilters = function (input, filter) {
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
             const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
-            selectOption.attr({value: value.value_index}).text(label);
+            selectOption.attr({ value: value.value_index }).text(label);
             configurableOptionsList.append(selectOption);
 
             if (optionIsSwatch) {
@@ -673,7 +667,7 @@ exports.computePhFilters = function (input, filter) {
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          finalHtml = rcsReplaceAll(finalHtml, fieldPh, entityFieldValue);
+          finalHtml = globalThis.rcsReplaceAll(finalHtml, fieldPh, entityFieldValue);
         });
 
       value = finalHtml;
@@ -786,7 +780,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     default:
-      console.log(`Unknown JS filter ${filter}.`)
+      Drupal.alshayaLogger('debug', 'Unknown JS filter @filter.', {'@filter': filter})
   }
 
   return value;

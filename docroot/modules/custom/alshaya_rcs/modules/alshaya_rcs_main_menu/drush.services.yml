@@ -1,0 +1,9 @@
+services:
+  alshaya_rcs_category_migrate.commands:
+    class: Drupal\alshaya_rcs_main_menu\Commands\AlshayaRcsCategoryMigrationCommands
+    arguments:
+      - '@alshaya_rcs_main_menu.category_data_migration'
+      - '@entity_type.manager'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command }

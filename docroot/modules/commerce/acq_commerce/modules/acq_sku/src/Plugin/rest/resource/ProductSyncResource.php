@@ -32,8 +32,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *   id = "acq_productsync",
  *   label = @Translation("Acquia Commerce Product Sync"),
  *   uri_paths = {
- *     "canonical" = "/productsync",
- *     "https://www.drupal.org/link-relations/create" = "/productsync"
+ *     "create" = "/productsync"
  *   }
  * )
  */
@@ -175,13 +174,13 @@ class ProductSyncResource extends ResourceBase {
    *
    * Handle Conductor posting an array of product / SKU data for update.
    *
-   * @param array $products
+   * @param array $data
    *   Product / SKU Data.
    *
    * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response object.
    */
-  public function post(array $products) {
+  public function post(array $data) {
     /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
     $lock = \Drupal::service('lock.persistent');
 
@@ -197,7 +196,7 @@ class ProductSyncResource extends ResourceBase {
     $debug = $config->get('debug');
     $debug_dir = $config->get('debug_dir');
 
-    foreach ($products as $product) {
+    foreach ($data as $product) {
       try {
         // First check, product needs to have SKU.
         if (!isset($product['sku']) || !strlen($product['sku'])) {
@@ -745,7 +744,7 @@ class ProductSyncResource extends ResourceBase {
 
     // Loop through all the fields we want to read from product data.
     foreach ($additionalFields as $key => $field) {
-      $source = isset($field['source']) ? $field['source'] : $key;
+      $source = $field['source'] ?? $key;
 
       // Field key.
       $field_key = 'attr_' . $key;
@@ -834,14 +833,13 @@ class ProductSyncResource extends ResourceBase {
     }
 
     // Get old files mapped with commerce media value id.
-    $current_media = unserialize($current_value);
+    $current_media = unserialize($current_value, ['allowed_classes' => FALSE]);
     $current_mapping = [];
     // Checks for non-empty value to be used in loop.
     if (!empty($current_media) && is_iterable($current_media)) {
       foreach ($current_media ?? [] as $value) {
         if (!empty($value['fid'])) {
           $current_mapping[$value['value_id']]['fid'] = $value['fid'];
-          $current_mapping[$value['value_id']]['file'] = $value['file'];
         }
       }
     }
@@ -851,7 +849,6 @@ class ProductSyncResource extends ResourceBase {
       foreach ($media as $key => $value) {
         if (isset($current_mapping[$value['value_id']])) {
           $media[$key]['fid'] = $current_mapping[$value['value_id']]['fid'];
-          $media[$key]['file'] = $current_mapping[$value['value_id']]['file'];
           unset($current_mapping[$value['value_id']]);
         }
       }

@@ -4,7 +4,9 @@ import EmptyErrorBoundary from '../empty-error-boundary/EmptyErrorBoundary';
 import AddToBag from '../../../../alshaya_add_to_bag/js/components/addtobag';
 
 function AddToBagContainer(props) {
-  const { productData, isBuyable, extraInfo } = props;
+  const {
+    productData, isBuyable, extraInfo, wishListButtonRef,
+  } = props;
 
   // Return if product data is undefined or empty.
   if (typeof productData === 'undefined' || !productData) {
@@ -26,6 +28,7 @@ function AddToBagContainer(props) {
             productData={productData}
             isBuyable={isBuyable}
             extraInfo={extraInfo || {}}
+            wishListButtonRef={wishListButtonRef}
           />
         </Suspense>
       </EmptyErrorBoundary>

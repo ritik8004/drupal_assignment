@@ -49,7 +49,8 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
   // Handle the form submit.
   handleSubmit = (e) => {
     e.preventDefault();
-    const { value: egiftCardNumber } = e.target.elements.egift_card_number;
+    const { value } = e.target.elements.egift_card_number;
+    const egiftCardNumber = value.trim();
     const { initialStep } = this.state;
 
     // Perform validation.

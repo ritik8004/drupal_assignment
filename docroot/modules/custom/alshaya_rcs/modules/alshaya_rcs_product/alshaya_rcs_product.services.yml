@@ -1,0 +1,41 @@
+services:
+  alshaya_rcs_product.order_helper:
+    class: Drupal\alshaya_rcs_product\Services\AlshayaRcsOrderHelper
+    public: false
+    decorates: alshaya_spc.order_helper
+    decoration_priority: 1
+    arguments:
+      - '@module_handler'
+      - '@alshaya_addressbook.manager'
+      - '@current_user'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@acq_sku.product_info_helper'
+      - '@acq_sku.product_options_manager'
+      - '@alshaya_acm_product.sku_info'
+      - '@language_manager'
+      - '@mobile_number.util'
+      - '@alshaya_acm_checkout.options_manager'
+      - '@address.country_repository'
+      - '@request_stack'
+      - '@alshaya_acm_customer.orders_manager'
+      - '@config.factory'
+      - '@alshaya_stores_finder_transac.utility'
+      - '@renderer'
+      - '@alshaya_acm_product.sku_images_helper'
+      - '@alshaya_spc.helper'
+      - '@alshaya_acm_product.delivery_options_helper'
+      - '@date.formatter'
+      - '@locale.storage'
+
+  alshaya_rcs_product.helper:
+    class: \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper
+    arguments:
+      - '@current_route_match'
+      - '@config.factory'
+      - '@module_handler'
+      - '@entity_type.manager'
+      - '@language_manager'
+      - '@path_alias.manager'
+      - '@database'
+      - '@logger.factory'

@@ -136,6 +136,11 @@
         display: inline-block;
         margin-#{$right}: 0.1875rem;
       }
+
+      .spc-cart-product-attribute-value {
+        display: inline-block;
+        direction: ltr;
+      }
     }
   }
 }

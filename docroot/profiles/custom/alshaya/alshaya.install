@@ -5,12 +5,28 @@
  * Install, update and uninstall hooks for the Lightning Extender subprofile.
  */
 
+use Drupal\Core\File\FileSystemInterface;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Installs jquery_ui and jquery_ui_datepicker modules.
+ */
+function alshaya_update_8016() {
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui']);
+  }
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_datepicker'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_datepicker']);
+  }
+}
+
 /**
  * Implements hook_update_N().
  *
  * Uninstalls track_js and alshaya_track_js modules.
  */
-function alshaya_update_8014() {
+function alshaya_update_8015() {
   if ((\Drupal::moduleHandler()->moduleExists('track_js'))) {
     \Drupal::service('module_installer')->uninstall(['track_js']);
   }
@@ -19,6 +35,18 @@ function alshaya_update_8014() {
   }
   if ((\Drupal::moduleHandler()->moduleExists('google_page_speed'))) {
     \Drupal::service('module_installer')->uninstall(['google_page_speed']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable search api server default server.
+ */
+function alshaya_update_8014() {
+  $index = \Drupal::configFactory()->getEditable('search_api.server.acquia_search_server');
+  if ($index->get('status')) {
+    $index->set('status', FALSE)->save();
   }
 }
 
@@ -258,7 +286,7 @@ function alshaya_update_8001() {
 function alshaya_install() {
   // Prerequisite for google_tag module.
   $uri = "public://google_tag";
-  file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
+  \Drupal::service('file_system')->prepareDirectory($uri, FileSystemInterface::CREATE_DIRECTORY);
 
   // Remove all roles created by Lightning.
   $coreRoles = [

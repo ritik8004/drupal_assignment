@@ -1,0 +1,13 @@
+.egifts-form-wrapper {
+  .egift-card-amount-list-wrapper {
+    li {
+      color: $egift-amount-list-text;
+      border-color: $egift-amount-list-border;
+
+      &.active {
+        box-shadow: inset 0 -2px 0 0 $pdp_swatch_selected_border;
+        border-bottom: 0;
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
 react:
   version: 2
   js:
-    js/react.production.min.js: { preprocess: false, minified: true, weight: -25 }
-    js/react-dom.production.min.js: { preprocess: false, minified: true, weight: -25 }
+    js/react.production.min.js: { minified: true, weight: -25, attributes: { data-group: site-library } }
+    js/react-dom.production.min.js: { minified: true, weight: -25, attributes: { data-group: site-library }  }
   dependencies:
     - core/drupal
     - alshaya_react/react_pollyfill
@@ -21,4 +21,4 @@ react_pollyfill:
 axios:
   version: 1.x
   js:
-    js/axios.min.js: { preprocess: false, minified: true, weight: -25 }
+    js/axios.min.js: { minified: true, weight: -25, attributes: { data-group: site-library }  }

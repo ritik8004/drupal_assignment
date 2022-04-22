@@ -79,19 +79,20 @@
             // GTM product attributes for egift card.
             const productGtm = {
               id: product.id,
-              name: product.product_name,
+              name: [product.title, product.price].join('/'),
               price: product.price,
               variant: product.sku,
               dimension2: 'virtual',
               dimension4: 1,
-              quantity: product.quantity,
+              quantity: 1,
+              category: 'eGift Card',
             };
             cartDataLayer.checkout.products.push(productGtm);
             if (typeof cartDataLayer.cartItemsFlocktory !== 'undefined') {
               const flocktory = {
                 id: product.sku,
                 price: product.price,
-                count: product.qty,
+                count: 1,
                 title: product.title,
                 image: product.media,
               };

@@ -316,7 +316,13 @@ class MobileAppUtility {
             $return = $this->pageDeepLink($department_node, 'advanced');
           }
           else {
-            $return = 'category/' . $object->id() . '/product-list';
+            $redirect_link = $this->getRedirectedTermDeeplink($object->id());
+            if ($redirect_link) {
+              $return = $redirect_link;
+            }
+            else {
+              $return = 'category/' . $object->id() . '/product-list';
+            }
           }
           break;
       }
@@ -329,7 +335,13 @@ class MobileAppUtility {
         $return = $this->pageDeepLink($department_node, 'advanced');
       }
       else {
-        $return = 'category/' . $object->tid . '/product-list';
+        $redirect_link = $this->getRedirectedTermDeeplink($object->tid);
+        if ($redirect_link) {
+          $return = $redirect_link;
+        }
+        else {
+          $return = 'category/' . $object->tid . '/product-list';
+        }
       }
     }
     elseif ($object instanceof NodeInterface) {
@@ -915,6 +927,10 @@ class MobileAppUtility {
       // process/find the redirect for same url more than once in a request.
       if (empty($this->redirects[$langcode][$url])) {
         $redirect = $this->redirectRepository->findMatchingRedirect($url, [], $langcode);
+        // We check url without forward slash as there are few without slash.
+        if (!$redirect) {
+          $redirect = $this->redirectRepository->findMatchingRedirect(rtrim($url, '/'), [], $langcode);
+        }
         $redirect_url = $redirect
           ? $redirect->getRedirectUrl()->toString(TRUE)->getGeneratedUrl()
           : $url;

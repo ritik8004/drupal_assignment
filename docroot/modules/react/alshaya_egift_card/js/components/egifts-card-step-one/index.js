@@ -8,27 +8,23 @@ export default class EgiftCardsListStepOne extends React.Component {
   constructor(props) {
     super(props);
 
+    // Set ref for openAmount field.
+    this.ref = React.createRef();
+
     this.state = {
       items: props.items,
       selectedItem: props.items[0],
     };
   }
 
-  /**
-   * Reset step 2 fields when user selects different egift card.
-   */
-  resetStepTwo() {
-    const { handleAmountSelect } = this.props;
-    handleAmountSelect(false, 0);
-  }
 
   /**
    * Handle egift card select from list.
    */
   handleEgiftSelect = (id) => {
-    if (document.getElementById('egift-purchase-form')) {
-      // Reset values.
-      document.getElementById('egift-purchase-form').reset();
+    // Reset error message to empty.
+    if (document.getElementById('open-amount-error') !== null) {
+      document.getElementById('open-amount-error').innerHTML = '';
     }
 
     if (document.getElementById('textarea-count')) {
@@ -36,12 +32,9 @@ export default class EgiftCardsListStepOne extends React.Component {
       document.getElementById('textarea-count').innerHTML = getTextAreaMaxLength();
     }
 
-    // Remove active class from previous card amount.
-    const amountElements = document.getElementsByClassName('item-amount');
-    if (typeof amountElements !== 'undefined' && amountElements !== null) {
-      for (let i = 0; i < amountElements.length; i++) {
-        amountElements[i].classList.remove('active');
-      }
+    // Remove readonly from open amount field on eGift Select.
+    if (this.ref.current !== null) {
+      this.ref.current.querySelector('input').removeAttribute('readOnly');
     }
 
     // Get all egift card items.
@@ -53,7 +46,7 @@ export default class EgiftCardsListStepOne extends React.Component {
       if (item.id === id) {
         this.setState({
           selectedItem: item,
-        }, () => this.resetStepTwo());
+        });
       }
     });
   }
@@ -79,6 +72,7 @@ export default class EgiftCardsListStepOne extends React.Component {
               selected={selectedItem}
               handleAmountSelect={handleAmountSelect}
               myAccountLabel={false}
+              field={this.ref}
             />
             <input type="hidden" name="egift-sku" value={selectedItem.sku} />
           </div>

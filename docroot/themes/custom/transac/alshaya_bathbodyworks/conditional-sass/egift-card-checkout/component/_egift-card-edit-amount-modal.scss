@@ -7,6 +7,14 @@
       .egift-button {
         text-transform: uppercase;
       }
+
+      html[lang="ar"] & {
+        @include breakpoint($tablet) {
+          .close {
+            left: -0.7rem;
+          }
+        }
+      }
     }
   }
 }

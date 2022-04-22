@@ -17,6 +17,7 @@ var config = {
     filename: '[name].bundle.js',
     publicPath: buildPath,
     chunkFilename: "[id].chunk.[chunkhash].js",
+    jsonpFunction: "jsonpAlsAu",
   },
   devServer: {
     contentBase: './',

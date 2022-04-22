@@ -812,9 +812,12 @@
       // If list variable is set in cookie, retrieve it.
       if ($.cookie('product-list') !== undefined) {
         var listValues = JSON.parse($.cookie('product-list'));
-        if (listValues[productData.id]) {
-          productData.list = listValues[productData.id]
-        }
+        productData.list = (listValues[productData.id] === 'Search Results Page' || $('body').attr('gtm-list-name') === undefined)
+          // For SRP, use list value 'Search Result Page'.
+          ? listValues[productData.id]
+          // For all other pages, use gtm-list-name html attribute.
+          // Except in PDP, to define full path from PLP.
+          : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
       }
     }
     catch (error) {
@@ -1076,7 +1079,7 @@
     if ($.cookie('product-list') !== undefined) {
       listValues = JSON.parse($.cookie('product-list'));
     }
-    listValues[product.id] = listName;
+    listValues[product.id] = product.list = listName;
     $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
     product.variant = '';
     if (position) {
@@ -1241,6 +1244,22 @@
       // Setting timer event.
       productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
     }
+    else if (eventType === 'wishlist-results-updated') {
+      // Using concat instead of assignment since wishlist-results-updated event gets
+      // triggered both on page load and clicking on load more button.
+      productImpressions = productImpressions.concat(prepareImpressionFunction(context, eventType));
+      if (productImpressionsTimer === null ) {
+        // This is for page load where we push default number of items i.e. 4.
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionDefaultItemsInQueue));
+      }
+      else {
+        // This is when clicked on load more where we push existing items in
+        // productImpressions and newly added items from load more.
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, productImpressions.splice(0, drupalSettings.gtm.productImpressionQueueSize));
+      }
+      // Setting timer event.
+      productImpressionsTimer = window.setInterval(Drupal.alshaya_seo_gtm_prepare_and_push_product_impression, drupalSettings.gtm.productImpressionTimer, prepareImpressionFunction, context, settings, {type: 'timer'});
+    }
     else {
       // This is for cases like scroll/carousel events.
       // Add new impressions to the global productImpressions.
@@ -1289,7 +1308,7 @@
         }
         // On page load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'load' || eventType === 'plp-results-updated') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
+        if ((eventType === 'load' || eventType === 'plp-results-updated' || eventType === 'wishlist-results-updated') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
           // This is to break out from the .each() function.
           return false;
         }
@@ -1299,14 +1318,34 @@
   };
 
   /**
+   * Function to check if current page is search page.
+   *
+   * @return {boolean}
+   *
+   */
+  function isPageTypeSearch() {
+    return $('#alshaya-algolia-search').is(":visible");
+  }
+
+  /**
+   * Function to check if current page is listing page.
+   *
+   * @return {boolean}
+   *
+   */
+  function isPageTypeListing() {
+    var gtmList = $('body').attr('gtm-list-name');
+    return gtmList !== undefined
+      && (gtmList.indexOf('PLP') !== -1 || gtmList.indexOf('Promotion') !== -1);
+  }
+
+  /**
    * Function to push product detail view event to data layer.
    *
    * @param {object} productContext
    *   The jQuery HTML object containing GTM attributes for the product.
-   * @param {string} quickView
-   *   The value to add .
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName, quickView = '') {
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';
@@ -1320,20 +1359,6 @@
         }
       }
     };
-    if (quickView) {
-      data = {
-        event: 'productDetailView',
-        ecommerce: {
-          currencyCode: drupalSettings.gtm.currency,
-          detail: {
-            actionField: {
-              list: listName
-            },
-            products: [product]
-          }
-        }
-      };
-    }
 
     dataLayer.push(data);
   }
@@ -1352,14 +1377,24 @@
     product.metric2 = product.price * product.quantity;
 
     var productData = {
-      event: 'addToCart',
-      ecommerce: {
-        currencyCode: drupalSettings.gtm.currency,
-        add: {
-          products: [
-            product
-          ]
-        }
+      event: 'addToCart'
+    };
+
+    // Adding SRP specific GTM list attribute.
+    if (isPageTypeSearch()) {
+      productData.eventAction = 'Add to Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if (isPageTypeListing()) {
+      productData.eventAction = 'Add to Cart on Listing';
+    }
+
+    productData.ecommerce = {
+      currencyCode: drupalSettings.gtm.currency,
+      add: {
+        products: [
+          product
+        ]
       }
     };
 
@@ -1380,14 +1415,24 @@
     product.metric2 = -1 * product.quantity * product.price;
 
     var productData = {
-      event: 'removeFromCart',
-      ecommerce: {
-        currencyCode: drupalSettings.gtm.currency,
-        remove: {
-          products: [
-            product
-          ]
-        }
+      event: 'removeFromCart'
+    };
+
+    // Adding SRP specific GTM list attribute.
+    if (isPageTypeSearch()) {
+      productData.eventAction = 'Remove from Cart on Search';
+    }
+    // Adding PLP specific GTM list attribute.
+    else if (isPageTypeListing()) {
+      productData.eventAction = 'Remove from Cart on Listing';
+    }
+
+    productData.ecommerce = {
+      currencyCode: drupalSettings.gtm.currency,
+      remove: {
+        products: [
+          product
+        ]
       }
     };
 

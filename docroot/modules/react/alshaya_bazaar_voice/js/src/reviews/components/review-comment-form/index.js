@@ -6,7 +6,7 @@ import {
   getLanguageCode, getbazaarVoiceSettings, getUserDetails, postAPIData,
 } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
-import { validEmailRegex } from '../../../utilities/write_review_util';
+import { validateInputLang, validEmailRegex } from '../../../utilities/write_review_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
@@ -83,7 +83,7 @@ class ReviewCommentForm extends React.Component {
                   maxLength="25"
                   onChange={this.handleNicknameChange}
                   className="form-input"
-                  defaultValue={nickname}
+                  defaultValue={decodeURIComponent(nickname)}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${nickname ? 'active-label' : ''}`}>
@@ -248,7 +248,10 @@ class ReviewCommentForm extends React.Component {
 
   handleCommentboxChange = (e) => {
     const label = getStringMessage('comment');
-    if (e.target.value.length > 0 && e.target.value.length < e.target.minLength) {
+    if (e.target.value.length > 0 && !validateInputLang(e.target.value)) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('text_input_lang_error');
+      document.getElementById(`${e.target.id}`).classList.add('error');
+    } else if (e.target.value.length > 0 && e.target.value.length < e.target.minLength) {
       document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label });
       document.getElementById(`${e.target.id}`).classList.add('error');
     } else if (e.target.value.length === 0) {

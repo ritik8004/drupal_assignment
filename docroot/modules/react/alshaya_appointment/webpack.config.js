@@ -11,6 +11,7 @@ var config = {
     filename: '[name].js',
     publicPath: buildPath,
     chunkFilename: "[id].chunk.[chunkhash].js",
+    jsonpFunction: "jsonpAlsAppmnt",
   },
   devServer: {
     contentBase: './',

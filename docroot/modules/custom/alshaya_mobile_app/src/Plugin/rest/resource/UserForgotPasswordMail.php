@@ -17,8 +17,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
  *   id = "user_forgot_password_mail",
  *   label = @Translation("Alshaya user forgot password mail"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/user/forgot-password-email",
- *     "https://www.drupal.org/link-relations/create" = "/rest/v1/user/forgot-password-email"
+ *     "create" = "/rest/v1/user/forgot-password-email"
  *   }
  * )
  */

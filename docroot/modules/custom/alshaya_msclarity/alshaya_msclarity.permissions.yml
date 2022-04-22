@@ -1,0 +1,3 @@
+administer alshaya msclarity config:
+  title: 'Administer Alshaya MsClarity configuration'
+  description: 'Setting MsClarity for current site.'

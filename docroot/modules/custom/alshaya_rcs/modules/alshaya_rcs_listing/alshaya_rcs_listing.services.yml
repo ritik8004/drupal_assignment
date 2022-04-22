@@ -1,0 +1,17 @@
+services:
+  alshaya_rcs_listing.helper:
+    class: \Drupal\alshaya_rcs_listing\Services\AlshayaRcsListingHelper
+    arguments:
+      - '@current_route_match'
+
+  # Decorates alshaya_acm_product_category.carousel_helper.
+  alshaya_rcs_listing.carousel_helper:
+    class: Drupal\alshaya_rcs_listing\Service\ProductCategoryCarouselHelper
+    decorates: alshaya_acm_product_category.carousel_helper
+    public: false
+    decoration_priority: 1
+    arguments:
+      - '@language_manager'
+      - '@config.factory'
+      - '@alshaya_acm_product_category.page'
+      - '@entity_type.manager'

@@ -19,3 +19,6 @@ alshaya_egift_card.settings:
     topup_quote_expiration:
       type: integer
       label: 'Expiration time for the topup quote local storage item'
+    allow_saved_credit_cards_for_topup:
+      type: boolean
+      label: 'Allow authenticated user to use saved credit cards.'

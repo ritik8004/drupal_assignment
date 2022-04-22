@@ -338,7 +338,7 @@ class AlshayaAlgoliaIndexHelper {
 
     // Restore the language manager to it's original language.
     $this->languageManager->setConfigOverrideLanguage($original_language);
-    $prices = $this->skuManager->getMinPrices($sku, $product_color);
+    $prices = $this->skuManager->getMinPrices($sku, $product_color, TRUE);
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
@@ -518,7 +518,7 @@ class AlshayaAlgoliaIndexHelper {
     $langcode = $object['search_api_language'];
 
     foreach ($facets as $key => $facet_alias) {
-      $field_key = isset($field_map[$key]) ? $field_map[$key] : $key;
+      $field_key = $field_map[$key] ?? $key;
 
       if (empty($object[$field_key])) {
         continue;
@@ -641,7 +641,7 @@ class AlshayaAlgoliaIndexHelper {
    * Create term hierarchy to index for Algolia.
    *
    * Prepares the array structure as shown below.
-   * @codingStandardsIgnoreStart
+   * phpcs:disable
    * @code
    * [
    *   [
@@ -678,7 +678,7 @@ class AlshayaAlgoliaIndexHelper {
    *   ]
    * }
    * @endcode
-   * @codingStandardsIgnoreEnd
+   * phpcs:enable
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node object for which we need to prepare hierarchy.
@@ -877,7 +877,11 @@ class AlshayaAlgoliaIndexHelper {
       // Check if color swatch is enabled and image url exist.
       if ($index_product_image_url && !empty($swatch['image_url'])) {
         $child = SKU::loadFromSku($swatch['child_sku_code']);
-        $swatch_product_image = $child->getThumbnail();
+
+        // Let's never download images here, we should always download when
+        // preparing gallery which is done before this.
+        $swatch_product_image = $child->getThumbnail(FALSE);
+
         // If we have image for the product.
         if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
           $url = file_create_url($swatch_product_image['file']->getFileUri());

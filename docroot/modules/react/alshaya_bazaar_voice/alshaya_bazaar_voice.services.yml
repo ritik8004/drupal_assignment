@@ -9,7 +9,7 @@ services:
     class: Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice
     arguments:
       - '@config.factory'
-      - '@entity.manager'
+      - '@entity_type.manager'
       - '@database'
       - '@alshaya_bazaar_voice.api_helper'
       - '@current_user'
@@ -18,3 +18,5 @@ services:
       - '@alshaya_acm_product.sku_images_manager'
       - '@request_stack'
       - '@module_handler'
+      - '@file_system'
+      - '@logger.factory'

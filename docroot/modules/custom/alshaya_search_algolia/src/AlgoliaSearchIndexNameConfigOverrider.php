@@ -6,6 +6,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\State\StateInterface;
 
 /**
  * Class to override the Algolia Index name dynamically.
@@ -13,10 +14,32 @@ use Drupal\Core\Site\Settings;
 class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInterface {
 
   /**
+   * Drupal State Service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
+   * AlgoliaSearchIndexNameConfigOverrider constructor.
+   *
+   * @param \Drupal\Core\State\StateInterface $state
+   *   Drupal State Service.
+   */
+  public function __construct(StateInterface $state) {
+    $this->state = $state;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function loadOverrides($names) {
     static $overrides = [];
+
+    // Do not apply any overrides till the site is completely installed.
+    if ($this->state->get('alshaya_master_post_drupal_install') !== 'done') {
+      return $overrides;
+    }
 
     if (!empty($overrides)) {
       return $overrides;

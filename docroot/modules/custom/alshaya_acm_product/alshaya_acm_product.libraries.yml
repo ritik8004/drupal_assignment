@@ -70,3 +70,13 @@ product_utility:
     js/alshaya_acm_product.utility.js: {}
   dependencies:
     - alshaya_master/common_functions
+
+add_to_bag_utility:
+  version: 1.x
+  js:
+    js/alshaya_acm_add_to_bag.utility.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - alshaya_master/local_storage_manager

@@ -1,0 +1,23 @@
+.egift-landing-page {
+  .popup-content.egift-balance-check-content {
+    .egift-balance-check-form {
+      .egift-button {
+        color: $primary_brand_button;
+        border-color: $primary_brand_button;
+      }
+    }
+
+    .egift-balance-response {
+      .egift-topup-btn-wrapper {
+        button {
+          color: $primary_brand_button;
+          border-color: $primary_brand_button;
+
+          &:last-child {
+            color: $primary_brand_button;
+          }
+        }
+      }
+    }
+  }
+}

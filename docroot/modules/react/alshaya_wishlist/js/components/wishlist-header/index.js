@@ -16,6 +16,11 @@ import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isDesktop } from '../../../../js/utilities/display';
 
+/**
+ * Flag used to check if backend api for wishlist items is already called.
+ */
+window.loadWishListFromBackend = window.loadWishListFromBackend || false;
+
 export default class WishlistHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -86,12 +91,27 @@ export default class WishlistHeader extends React.Component {
         // wishlist with api call. Once added successfully, we need to
         // load the latest wishlist information from backend as well.
         if (itemData.length > 0) {
+          // Wishlist header component is placed in two different blocks header and
+          // sticky header. Header component calls merge items and
+          // loadWishlistFromBackend. To stop sticky header again calling
+          // loadWishlistFromBackend we set the flag here. This is unset after merge
+          // items call is ended.
+          window.loadWishListFromBackend = true;
           addRemoveWishlistItemsInBackend(
             itemData,
             'mergeWishlistItems',
           ).then((response) => {
             if (typeof response.data.status !== 'undefined'
               && response.data.status) {
+              // Wishlist header component is called in two different places,
+              // header and sticky header. The header component calls
+              // add remove wish list items to merge guest wishlist products
+              // and loadWishlistFromBackend. Before merging items,
+              // sticky header calls loadWishlistFromBackend in below else
+              // condition. Hence the flag is set to stop sticky header from
+              // loading wishlist items before merge. Here we override flag as
+              // items should be refreshed after merged from guest list.
+              window.loadWishListFromBackend = false;
               this.loadWishlistFromBackend();
             }
           });
@@ -103,10 +123,15 @@ export default class WishlistHeader extends React.Component {
           || (wishListData === null
           || (typeof wishListData === 'object'
           && Object.keys(wishListData).length === 0))) {
+          // First clean the existing data in storage.
+          addWishListInfoInStorage({});
+
           // Load wishlist information from the magento backend, if wishlist
           // data is empty in local storage for authenticate users. First check
           // if wishlist is available for the customer in backend.
           this.loadWishlistFromBackend();
+          // Get wishlist count after backend success then update header.
+          document.addEventListener('getWishlistFromBackendSuccess', this.updateWishListHeader);
         }
       }
     }
@@ -124,10 +149,30 @@ export default class WishlistHeader extends React.Component {
   }
 
   /**
+   * Get wishlist count and update wishlist header.
+   */
+  updateWishListHeader = (e) => {
+    const { wishListItemCount } = e.detail;
+    // Update the wishlist header icon color state
+    // if we have product available in wishlist.
+    if (wishListItemCount > 0) {
+      this.setState({ wishListItemCount });
+    }
+  }
+
+  /**
    * Helper function to load wishlist information from the magento backend.
    */
   loadWishlistFromBackend = () => {
+    // Since wishlist-header component is called more than once
+    // as it is also used for sticky header, we only call API once
+    // and use getWishlistFromBackendSuccess event to update header component.
+    if (window.loadWishListFromBackend) {
+      return;
+    }
+    window.loadWishListFromBackend = true;
     getWishlistFromBackend().then((response) => {
+      let wishListItemCount = 0;
       if (hasValue(response.data.items)) {
         const wishListItems = {};
 
@@ -145,18 +190,18 @@ export default class WishlistHeader extends React.Component {
         // Save back to storage.
         addWishListInfoInStorage(wishListItems);
 
-        // Update the wishlist header icon color state
-        // if we have product available in wishlist.
-        const wishListItemCount = Object.keys(wishListItems).length;
-        if (wishListItemCount > 0) {
-          this.setState({ wishListItemCount });
-        }
-
-        // Dispatch an event for other modules to know
-        // that wishlist data is available in storage.
-        const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', { bubbles: true });
-        document.dispatchEvent(getWishlistFromBackendSuccess);
+        // Get wishlist item count.
+        wishListItemCount = Object.keys(wishListItems).length;
       }
+      // Dispatch an event for other modules to know
+      // that wishlist data is available in storage.
+      const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', {
+        bubbles: true,
+        detail: {
+          wishListItemCount,
+        },
+      });
+      document.dispatchEvent(getWishlistFromBackendSuccess);
     });
   };
 

@@ -1,0 +1,23 @@
+.egift-landing-page.nodetype--advanced_page {
+  #block-breadcrumbs {
+    li {
+      a {
+        text-transform: uppercase;
+      }
+
+      &:nth-child(2) {
+        a {
+          text-transform: initial;
+        }
+      }
+    }
+  }
+
+  .node--type-advanced-page {
+    .c-content__primary {
+      @include breakpoint($desktop) {
+        max-width: 64.125rem;
+      }
+    }
+  }
+}

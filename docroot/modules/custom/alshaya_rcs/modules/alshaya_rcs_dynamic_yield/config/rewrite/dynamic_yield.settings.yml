@@ -1,0 +1,3 @@
+# Here dy_script_init 'manual' means you will have to manually
+# add the script by calling Drupal.attachDyScriptToHead().
+dy_script_init: 'manual'

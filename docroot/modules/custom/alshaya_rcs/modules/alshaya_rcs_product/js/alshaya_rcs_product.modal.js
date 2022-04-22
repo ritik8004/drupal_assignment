@@ -44,14 +44,14 @@
               .forEach(function eachReplacement(r) {
                 const fieldPh = r[0];
                 const entityFieldValue = r[1];
-                finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
+                finalMarkup = globalThis.rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
               });
             content.html(finalMarkup);
 
             // Open modal dailog.
             Drupal.dialog(content, {
               dialogClass: 'pdp-modal-box',
-              resizable: false,
+              autoResize: false,
               closeOnEscape: false,
               width: 'auto',
               title:"do you want to publish this content ?",
@@ -66,10 +66,10 @@
 
             // Call behaviours with modal context.
             var modalContext = $('.pdp-modal-box');
-            rcsPhApplyDrupalJs(modalContext);
+            globalThis.rcsPhApplyDrupalJs(modalContext);
           },
           function () {
-            console.log('Could not fetch data!');
+            Drupal.alshayaLogger('error', 'Could not fetch data for product recommendation!');
           });
 
         return false;

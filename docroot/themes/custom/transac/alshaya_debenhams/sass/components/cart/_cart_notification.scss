@@ -59,7 +59,7 @@
       font-weight: normal;
 
       a {
-        @include btn();
+        @include btn;
 
         padding: 0.625rem 0 0.375rem;
         line-height: 1.3;

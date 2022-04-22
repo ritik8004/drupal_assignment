@@ -92,4 +92,98 @@ class EgiftCardHelper {
     return $this->configFactory->get('alshaya_egift_card.settings')->get('topup_quote_expiration');
   }
 
+  /**
+   * Helper to get configuration to allow saved cc for top-up.
+   *
+   * @return array|false|mixed
+   */
+  public function getAllowSavedCCForTopUp() {
+    $allow_saved_card = $this->configFactory->get('alshaya_egift_card.settings')->get('allow_saved_credit_cards_for_topup');
+    return !empty($allow_saved_card);
+  }
+
+  /**
+   * Helper to check if payment is done by egift card.
+   *
+   * @param array $order
+   *   The order array.
+   *
+   * @return bool
+   *   Return TRUE is payment is done by egift card else FALSE.
+   */
+  public function partialPaymentDoneByEgiftCard(array $order) {
+    return array_key_exists('hps_redeemed_amount', $order['extension']);
+  }
+
+  /**
+   * Helper to get the egift redemption type from the order.
+   *
+   * @param array $order
+   *   The order array.
+   *
+   * @return string
+   *   A string containing the redemption type.
+   */
+  public function getEgiftRedemptionTypeFromOrder(array $order) {
+    $egiftRedeemType = '';
+    $payment_info = '';
+    // Proceed only if payment info is available.
+    if (array_key_exists('payment_additional_info', $order['extension'])) {
+      foreach ($order['extension']['payment_additional_info'] as $payment_item) {
+        if ($payment_item['key'] == 'hps_redemption') {
+          $payment_info = json_decode($payment_item['value'], TRUE);
+          break;
+        }
+      }
+      // Get the redemption type if payment info is available.
+      if ($payment_info) {
+        $egiftRedeemType = $payment_info['card_type'];
+      }
+    }
+
+    return $egiftRedeemType;
+  }
+
+  /**
+   * Helper to check if order item is having virtual items.
+   *
+   * @param array $order
+   *   The order array.
+   *
+   * @return array
+   *   An array containing the status of virtual items.
+   */
+  public function orderItemsVirtual(array $order) {
+    // Return if items are missing
+    if (!array_key_exists('items', $order)) {
+      return [];
+    }
+    // Flag to keep track of egift and normal items.
+    $allVirtualItems = TRUE;
+    $normalItemsExists = FALSE;
+    $virtualItemsExists = FALSE;
+    $isTopup = FALSE;
+    // Traverse all the items and check the product type.
+    foreach($order['items'] as $key => $value) {
+      if (!$value['is_virtual']) {
+        $allVirtualItems = TRUE;
+        $normalItemsExists = TRUE;
+      } else {
+        $virtualItemsExists = TRUE;
+      }
+    }
+    // Check if order item is a topup item.
+    if (array_key_exists('extension', $order)
+      && array_key_exists('topup_card_number', $order['extension'])) {
+      $isTopup = TRUE;
+    }
+
+    return [
+      'allVirtualItems' => $allVirtualItems,
+      'normalItemsExists' => $normalItemsExists,
+      'virtualItemsExists' => $virtualItemsExists,
+      'topUpItem' => $isTopup,
+    ];
+  }
+
 }

@@ -1,5 +1,9 @@
 <div class="delivery-options-wrapper">
   <div class="product-out-of-stock-layer"></div>
-  {{{render 'product.delivery_option_hd' this.hd }}}
+  {{#if this.express_delivery }}
+    {{{render 'product.delivery_option_ed' this.express_delivery }}}
+  {{else if this.home_delivery }}
+    {{{render 'product.delivery_option_hd' this.home_delivery }}}
+  {{/if}}
   {{{render 'product.delivery_option_cnc' this.cnc }}}
 </div>

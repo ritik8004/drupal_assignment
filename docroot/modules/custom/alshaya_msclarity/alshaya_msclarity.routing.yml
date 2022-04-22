@@ -1,0 +1,7 @@
+alshaya_msclarity_config.settings:
+  path: '/admin/config/alshaya-msclarity/config'
+  defaults:
+    _title: 'Configure Alshaya Msclarity'
+    _form: '\Drupal\alshaya_msclarity\Form\AlshayaMsclarityConfigForm'
+  requirements:
+    _permission: 'administer alshaya msclarity config'

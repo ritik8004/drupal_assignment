@@ -10,9 +10,12 @@ rcs_product_info:
   js:
     js/alshaya_rcs_product.pdp.v2.js: {}
   dependencies:
+    - core/jquery
     - rcs_handlebars/main
     - rcs_placeholders/helpers
     - alshaya_rcs_product/main
+    # This library's JS is dynamically replaced with V3 JS.
+    - alshaya_acm_product/product_utility
 
 schema_org:
   js:
@@ -65,6 +68,11 @@ product.delivery_option_hd:
   js:
     templates/rcs-pdp-delivery-option-home-delivery.handlebars: {}
 
+product.delivery_option_ed:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-option-express-delivery.handlebars: {}
+
 product.block.price:
   version: 1.x
   js:
@@ -110,7 +118,36 @@ gallery.product.block.product_zoom_magazine_gallery:
   js:
     templates/rcs-product-zoom-magazine-gallery-block.handlebars: {}
 
+gallery.product.product_gallery_magazine:
+  version: 1.x
+  js:
+    templates/rcs-product-gallery-magazine.handlebars: {}
+
 product.order:
   version: 1.x
   js:
     js/alshaya_rcs_order.js: {}
+  dependencies:
+    - rcs_magento_placeholders/rcs_magento_placeholders
+
+rcs_product_modal:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product.modal.js: {}
+  dependencies:
+    - alshaya_spc/add_to_cart
+    - alshaya_acm_cart_notification/cart_notification_js
+
+rcs_product_dynamic_yield:
+  js:
+    js/alshaya_rcs_product_dy.js: {}
+  dependencies:
+    - rcs_magento_placeholders/rcs_magento_placeholders
+
+rcs_product_images:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product.rcs_product_images.js: {}
+  dependencies:
+    - core/jquery
+    - rcs_placeholders/helpers

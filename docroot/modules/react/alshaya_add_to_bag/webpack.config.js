@@ -8,7 +8,8 @@ var config = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
     publicPath: buildPath,
-    chunkFilename: "[id].chunk.[chunkhash].js"
+    chunkFilename: "[id].chunk.[chunkhash].js",
+    jsonpFunction: "jsonpAlsATB",
   },
   devServer: {
     contentBase: './',

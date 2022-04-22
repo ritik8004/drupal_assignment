@@ -1,0 +1,155 @@
+#my-wishlist {
+  .empty-message {
+    .actions {
+      a {
+        @include btn;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .addtobag-button {
+    @include button-brand;
+
+    &:hover {
+      border: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .addtobag-config-button {
+    @include button-brand;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+
+    &:hover {
+      border: 0;
+    }
+  }
+
+  .addtobag-config-button-container {
+    @include breakpoint($tablet) {
+      margin-#{$left}: 1rem;
+      margin-#{$right}: 1rem;
+    }
+  }
+
+  .oos-text-container {
+    margin: 0 1rem;
+
+    @include breakpoint($only-mobile) {
+      margin: 0 0.8125rem;
+    }
+
+    .oos-text {
+      cursor: auto;
+      padding-top: 0.625rem;
+    }
+  }
+
+  .product-frame.product-element-alignment {
+    .in-wishlist {
+      .wishlist-link {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+  }
+
+  .express_delivery {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.3125rem;
+    border: 0.0625rem solid $pdp_product_same_day_btn_border;
+    margin: 0.625rem 1rem;
+    display: table;
+    padding-top: 0.3125rem;
+
+    @include breakpoint($only-mobile) {
+      margin: 0.625rem 0.875rem;
+    }
+  }
+
+  #plp-hits {
+    @include breakpoint($tablet) {
+      padding-top: 1rem;
+      border-top: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding-top: 0;
+
+      .logged-out & {
+        padding-top: 1.25rem;
+      }
+    }
+  }
+
+  .wishlist-link {
+    padding-top: 0.875rem;
+  }
+
+  .c-products-list {
+    &.product-small {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: 25.5rem;
+        }
+      }
+    }
+  }
+}
+
+#wishlist-share {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 0;
+  }
+}
+
+.path--wishlist {
+  #block-page-title {
+    @include breakpoint($only-mobile) {
+      margin: 0 0.5rem;
+    }
+  }
+}
+
+.user-wishlist.c-plp,
+.wishlist-share-popup-container {
+  .wishlist-share-popup-block {
+    .actions {
+      button {
+        &.email-share-link {
+          @include btn;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+
+        &.copy-share-link {
+          @include button-brand;
+
+          &:hover {
+            border: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.path--wishlist {
+  #block-page-title {
+    @include breakpoint($tablet) {
+      padding-bottom: 0.5rem;
+    }
+  }
+}

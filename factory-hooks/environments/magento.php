@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 /**
  * List all known Magento environments keyed by environment machine name.
@@ -122,6 +122,33 @@ $magentos = [
       'store_id' => ['en' => 11, 'ar' => 12],
     ],
   ],
+  'cos_test' => [
+    'url' => 'https://integration2-hohc4oi-vlvasu2xupli4.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '4rjkd4e17nu73kpaw9fqpb777vs0sdjr',
+      'consumer_secret' => 'nr4y6ba1xp0uzwpo5c6kpkz5ofsqck91',
+      'access_token' => '0vwpu1xq8ctwxr73mtajoehj4m918mm5',
+      'access_token_secret' => '1vm5ur46psiuecsu07dx4n7qqy29566q',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
   'cos_qa' => [
     'url' => 'https://cos-qa.store.alshaya.com',
     'magento_secrets' => [
@@ -237,6 +264,7 @@ $magentos = [
   ],
   'tbs_test' => [
     'url' => 'https://tbs-qa.store.alshaya.com',
+    'algolia_env' => 'tbs_qa',
     'magento_secrets' => [
       'consumer_key' => 'jgfegi5yv3h42vluf00i498g58x55s0l',
       'consumer_secret' => 'ymjszfarzko8d4b3mg3achu0o2uqrnmb',
@@ -474,8 +502,8 @@ $magentos = [
     'magento_secrets' => [
       'consumer_key' => 'up2nmvc7y2c9k7o1kkk3iruywidhges4',
       'consumer_secret' => 'l3qcpfpjvb8hiy5dnbu4ln63ahr16haj',
-      'access_token' => 'ic28d0o0od00yrbd38kln1hrdvnx8bb5',
-      'access_token_secret' => 'kuec3ssvt14wwo5ojhbmg78xqq1vswgg',
+      'access_token' => 'h5v2yazki8mw0gpk6de21q2d2785tcxs',
+      'access_token_secret' => 'eqpw6e4n5brikv4bkpfltfxcdckysjk3',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 4],

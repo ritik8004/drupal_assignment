@@ -1,7 +1,7 @@
 /**
  * Identify the RCS placeholders in the page.
  * Call the commerce backend to get the some data to put in the placeholder.
- * Cal the search backend to get some data to put in the placeholder.
+ * Call the search backend to get some data to put in the placeholder.
  * Call the rendering engine to generate the HTML markup.
  *
  * For this to work, rcsPhCommerceBackend, rcsPhSearchEngine and
@@ -15,6 +15,12 @@
   var pageEntity = null;
   const classRcsLoaded = 'rcs-loaded';
 
+  // Process the block placeholders. This is async process, the rendering engine
+  // is responsible for the entire processing and replacement.
+  // As these blocks do not have any dependency on rcs entities, these can run
+  // even before the document ready event happens.
+  $("[id^=rcs-ph-][data-rcs-dependency='none']").once('rcs-ph-process').each(eachBlockPh);
+
   $(document).ready(function ready() {
     if (
       !drupalSettings.rcsProcessed &&
@@ -22,11 +28,6 @@
       typeof globalThis.rcsPhRenderingEngine !== 'undefined'
     ) {
       globalThis.rcs_ph_context = 'browser';
-
-      // Process the block placeholders. This is async process, the
-      // rendering engine is responsible of the entire processing and
-      // replacement.
-      $("[id^=rcs-ph-][data-rcs-dependency='none']").once('rcs-ph-process').each(eachBlockPh);
 
       // Retrieve overall page details if needed.
       globalThis.rcsPhCommerceBackend
@@ -82,7 +83,7 @@
           }
 
           // Re-attach all behaviors.
-          rcsPhApplyDrupalJs(document);
+          globalThis.rcsPhApplyDrupalJs(document);
 
           // RCS Entity Loaded.
           if (pageType) {
@@ -96,6 +97,11 @@
 
           // Add class to remove loader styles after RCS info is filled.
           $('.rcs-page').addClass(classRcsLoaded);
+        }).catch(function(e) {
+          Drupal.alshayaLogger('error', 'Failed to fetch Page Entity @entity. Message @message.', {
+            '@entity': (typeof pageEntity !== 'undefined') ? pageEntity : {},
+            '@message': e.message,
+          });
         });
     }
   });
@@ -175,7 +181,7 @@
             // code in the behaviors knows that replacement has been completed.
             $(this).addClass(classRcsLoaded);
             // Re-attach all behaviors.
-            rcsPhApplyDrupalJs($(this).parent()[0]);
+            globalThis.rcsPhApplyDrupalJs($(this).parent()[0]);
             return;
           } catch (error) {
             Drupal.alshayaLogger(
@@ -191,6 +197,12 @@
 
         // Add class to remove loader styles on RCS Placeholders.
         $(this).addClass(classRcsLoaded);
+      }).catch(function(e) {
+        Drupal.alshayaLogger('error', 'Failed to fetch Page Entity @entity. Message @message.', {
+          '@entity': (typeof pageEntity !== 'undefined' && pageEntity !== null) ? pageEntity : {},
+          '@entityToGet': (typeof entityToGet !== 'undefined' && entityToGet !== null) ? entityToGet : '',
+          '@message': e.message,
+        });
       });
   }
 

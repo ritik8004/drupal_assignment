@@ -30,10 +30,15 @@ export default class EgiftTopPurchase extends React.Component {
       amountSet: 0, // Amount select by user.
       linkedCardNumber: null, // User linked card number.
       linkedCardBalance: null, // User linked card balance.
+      linkedCardImage: null, // Card number image.
+      eGiftFor: 'other', // Flag to switch heroImage.
       disableSubmit: true, // Flag to enable / disable top-up submit button.
       displayFormError: '', // Display form errors.
       cardNumberError: '', // Display card number error.
     };
+
+    // Set ref for openAmount field.
+    this.ref = React.createRef();
   }
 
   async componentDidMount() {
@@ -74,6 +79,14 @@ export default class EgiftTopPurchase extends React.Component {
             linkedCardNumber: response.data.card_number !== null ? response.data.card_number : null,
             linkedCardBalance:
               response.data.current_balance !== null ? response.data.current_balance : null,
+            linkedCardImage: {
+              url: response.data.card_image,
+              title: response.data.card_type,
+              alt: response.data.card_type,
+            },
+            // if linked card show linked card topup image for my card option,
+            // show default topup image for no linked card and other option.
+            eGiftFor: response.data.card_number !== null ? 'self' : 'other',
           });
         }
       });
@@ -132,7 +145,7 @@ export default class EgiftTopPurchase extends React.Component {
     const egiftCardFor = data.get('egift-for') !== null ? data.get('egift-for') : 'other';
     // If card for options is self then get linked-card-number from state
     // else get card-number from field.
-    const cardNumber = egiftCardFor === 'self' ? linkedCardNumber : data.get('card_number');
+    const cardNumber = egiftCardFor === 'self' ? linkedCardNumber : data.get('card_number').trim();
 
     if (cardNumber === '') {
       document.getElementById('card-number-error').innerHTML = Drupal.t('Please enter an eGift card number.', {}, { context: 'egift' });
@@ -200,7 +213,7 @@ export default class EgiftTopPurchase extends React.Component {
         if (typeof response.data.response_type !== 'undefined' && response.data.response_type) {
           // GTM product attributes.
           const productGtm = {
-            name: topUpCard.name,
+            name: `${topUpCard.name}/${params.topup.amount}`,
             price: params.topup.amount,
             variant: topUpCard.sku,
             dimension2: topUpCard.type_id,
@@ -223,6 +236,12 @@ export default class EgiftTopPurchase extends React.Component {
     return true;
   };
 
+  handleImage = (eGiftForOption) => {
+    this.setState({
+      eGiftFor: eGiftForOption,
+    });
+  };
+
   render() {
     const {
       topUpCard,
@@ -230,6 +249,8 @@ export default class EgiftTopPurchase extends React.Component {
       disableSubmit,
       linkedCardNumber,
       linkedCardBalance,
+      linkedCardImage,
+      eGiftFor,
       displayFormError,
       cardNumberError,
     } = this.state;
@@ -247,21 +268,25 @@ export default class EgiftTopPurchase extends React.Component {
       );
     }
 
+    const heroImage = (eGiftFor === 'self') ? linkedCardImage : topUpCard;
+
     return (
       <div className="egifts-form-wrapper">
         <form onSubmit={this.handleSubmit} className="egift-form">
           <ConditionalView condition={wait === true}>
             <div className="step-wrapper step-one-wrapper fadeInUp">
-              <HeroImage item={topUpCard} />
+              <HeroImage item={heroImage} />
               <div className="egift-topup-fields-wrapper">
                 <EgiftTopupFor
                   linkedCardNumber={linkedCardNumber}
                   linkedCardBalance={linkedCardBalance}
                   cardNumberError={cardNumberError}
+                  handleImage={this.handleImage}
                 />
                 <EgiftCardAmount
                   selected={topUpCard}
                   handleAmountSelect={this.handleAmountSelect}
+                  field={this.ref}
                 />
                 <div className="action-buttons">
                   <div className="error form-error" id="top-up-error">{displayFormError}</div>
@@ -271,7 +296,7 @@ export default class EgiftTopPurchase extends React.Component {
                     className="btn"
                     disabled={disableSubmit}
                   >
-                    {Drupal.t('Top-up', {}, { context: 'egift' })}
+                    {Drupal.t('Top up', {}, { context: 'egift' })}
                   </button>
                 </div>
               </div>

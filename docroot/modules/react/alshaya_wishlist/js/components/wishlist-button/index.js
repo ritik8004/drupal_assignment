@@ -9,6 +9,7 @@ import {
   getWishlistLabel,
   getWishlistFromBackend,
   removeFromWishlistAfterAddtocart,
+  pushWishlistSeoGtmData,
 } from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
@@ -20,6 +21,10 @@ class WishlistButton extends React.Component {
   constructor(props) {
     super(props);
     const skuCode = props.skuCode ? props.skuCode : props.sku;
+
+    // Store reference to the main contiainer.
+    this.buttonContainerRef = React.createRef();
+
     // Set the products status in state.
     // true: if sku exist in wishlist,
     // false: default, if sku doesn't exist in wishlist.
@@ -99,13 +104,12 @@ class WishlistButton extends React.Component {
     removeProductFromWishList(sku).then((response) => {
       const { context } = this.props;
       if (!hasValue(response)) {
-        // Prepare and dispatch an event when product removed from the storage
-        // so other components like wishlist header can listen and do the
-        // needful.
-        dispatchCustomEvent('productRemovedFromWishlist', {
+        // Push product values to GTM for removeFromWishlist event.
+        pushWishlistSeoGtmData({
           sku,
-          addedInWishList: true,
-        });
+          context,
+          element: this.buttonContainerRef.current,
+        }, 'remove');
 
         // For wishlist page, we remove full loader.
         // For other layouts, we remove inline loader of button.
@@ -114,6 +118,15 @@ class WishlistButton extends React.Component {
         } else {
           removeInlineLoader('.wishlist-loader .loading');
         }
+
+        // Prepare and dispatch an event when product removed from the storage
+        // so other components like wishlist header can listen and do the
+        // needful.
+        dispatchCustomEvent('productRemovedFromWishlist', {
+          sku,
+          addedInWishList: true,
+        });
+
         return;
       }
 
@@ -129,13 +142,12 @@ class WishlistButton extends React.Component {
         // Save back to storage.
         addWishListInfoInStorage(wishListItems);
 
-        // Prepare and dispatch an event when product removed from the storage
-        // so other components like wishlist header can listen and do the
-        // needful.
-        dispatchCustomEvent('productRemovedFromWishlist', {
+        // Push product values to GTM for removeFromWishlist event.
+        pushWishlistSeoGtmData({
           sku,
-          addedInWishList: true,
-        });
+          context,
+          element: this.buttonContainerRef.current,
+        }, 'remove');
 
         // Set the product wishlist status.
         this.updateWishListStatus(false);
@@ -147,6 +159,14 @@ class WishlistButton extends React.Component {
         } else {
           removeInlineLoader('.wishlist-loader .loading');
         }
+
+        // Prepare and dispatch an event when product removed from the storage
+        // so other components like wishlist header can listen and do the
+        // needful.
+        dispatchCustomEvent('productRemovedFromWishlist', {
+          sku,
+          addedInWishList: true,
+        });
       }
     });
   }
@@ -227,10 +247,23 @@ class WishlistButton extends React.Component {
    */
   updateWishListStatus = (status) => {
     const { addedInWishList } = this.state;
+
+    // Get reference of wishlist button in teaser
+    // when user clicks button in drawer.
+    const { wishListButtonRef } = this.props;
+
     if (addedInWishList !== status) {
       this.setState({
         addedInWishList: status,
       });
+
+      // Wish list button reference will be undefined
+      // if it is clicked on teaser and not inside drawer.
+      if (typeof wishListButtonRef !== 'undefined' && wishListButtonRef !== null
+        && Object.prototype.hasOwnProperty.call(wishListButtonRef, 'current')) {
+        // Update the status of wishlist button in teaser.
+        wishListButtonRef.current.updateWishListStatus(status);
+      }
     }
   }
 
@@ -245,7 +278,7 @@ class WishlistButton extends React.Component {
     const {
       addedInWishList, skuCode, options, title,
     } = this.state;
-    const { context } = this.props;
+    const { context, sku } = this.props;
     // We don't need inline loader for buttons on wishlist page.
     if (e.currentTarget.classList.length > 0 && context !== 'wishlist_page') {
       // Adding loader icon to wishlist button.
@@ -268,8 +301,11 @@ class WishlistButton extends React.Component {
     // Prepare the product info to store.
     const productInfo = {
       sku: skuCode,
+      variant: sku,
+      context,
       title,
       options,
+      element: this.buttonContainerRef.current,
     };
 
     // Add product to the wishlist. For guest users it'll store in local
@@ -287,6 +323,9 @@ class WishlistButton extends React.Component {
           addedInWishList: true,
           extraOptions,
         };
+
+        // Push product values to GTM.
+        pushWishlistSeoGtmData(productInfo);
 
         // For anonymous user, we update only storage and wishlist button status.
         // We don't need an api call here.
@@ -443,6 +482,7 @@ class WishlistButton extends React.Component {
       <div
         className={`${wishListButtonClass} wishlist-loader`}
         onClick={(e) => this.toggleWishlist(e)}
+        ref={this.buttonContainerRef}
       >
         <div className={classPrefix}>
           {getStringMessage(buttonTextKey, { '@wishlist_label': getWishlistLabel() })}

@@ -6,12 +6,12 @@
   & > {
     .no--orders {
       & + a {
-        @include btn();
+        @include btn;
       }
     }
 
     .edit-account {
-      @include btn();
+      @include btn;
 
       top: -5.75rem;
     }

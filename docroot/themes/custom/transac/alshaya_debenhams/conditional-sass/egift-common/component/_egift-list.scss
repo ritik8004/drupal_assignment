@@ -1,0 +1,20 @@
+.egifts-form-wrapper {
+  .egift-card-amount-list-wrapper {
+    ul {
+      li {
+        border-color: $plp-quick-view-product-size-border-hover;
+
+        &.active {
+          border-color: $egift-active-amount-card-border;
+        }
+
+        &:not(.active) {
+          &:hover {
+            border-color: $plp-quick-view-product-size-border-hover;
+            background: $plp-quick-view-product-size-hover-bg;
+          }
+        }
+      }
+    }
+  }
+}

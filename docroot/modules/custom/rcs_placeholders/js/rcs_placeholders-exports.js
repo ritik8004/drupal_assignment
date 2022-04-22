@@ -2,7 +2,7 @@
  * Check whether the Javascript code is executed on a browser or on a Node.js server.
  * @return {bool} Whether or not the execution context is browser (in opposition to middleware).
  */
-rcsPhIsBrowserContext = () => {
+globalThis.rcsPhIsBrowserContext = () => {
   if (typeof global !== 'undefined' && global.rcs_ph_context === 'middleware') {
     return false;
   }
@@ -13,7 +13,7 @@ rcsPhIsBrowserContext = () => {
 /**
  * Invoke all required JS to ensure events are properly bound after replacement.
  */
-rcsPhApplyDrupalJs = (context) => {
+globalThis.rcsPhApplyDrupalJs = (context) => {
   if (!(rcsPhIsBrowserContext())) {
     return;
   }
@@ -25,7 +25,7 @@ rcsPhApplyDrupalJs = (context) => {
   }
 }
 
-rcsWindowLocation = () => {
+globalThis.rcsWindowLocation = () => {
   return rcsPhIsBrowserContext()
     ? window.location
     : global.location;
@@ -37,7 +37,7 @@ rcsWindowLocation = () => {
  * @param {string} url
  *   The url to redirect to.
  */
-function rcsRedirectToPage(url) {
+ globalThis.rcsRedirectToPage = (url) => {
   const location = rcsWindowLocation();
   location.href = url;
 }
@@ -57,7 +57,7 @@ if (typeof Drupal.tOriginal === 'undefined') {
   };
 }
 
-rcsHtmlDecode = (input) => {
+globalThis.rcsHtmlDecode = (input) => {
   // For the settings that are read from markup we need to do some special
   // conversion to be able to read them as JSON.
   return input.replace(/\&amp\;/g, '\&')
@@ -67,7 +67,7 @@ rcsHtmlDecode = (input) => {
     .replace(/\&\#39\;/g, '\"');
 }
 
-rcsReplaceAll = (markup, search, replacement) => {
+globalThis.rcsReplaceAll = (markup, search, replacement) => {
   // We can't do a simple replace() as it would only replace the
   // first occurrence in the template. We are using a regex so it
   // it replaces all the occurrences. The placeholder replacement
@@ -86,7 +86,7 @@ rcsReplaceAll = (markup, search, replacement) => {
  * @param {string} key The key for the stored data.
  * @param {string} value The value for the stored data.
  */
-rcsPhStorageSet = (key, value) => {
+globalThis.rcsPhStorageSet = (key, value) => {
   if (rcsPhIsBrowserContext()) {
     localStorage.setItem(key, JSON.stringify(value));
   } else {
@@ -103,7 +103,7 @@ rcsPhStorageSet = (key, value) => {
  * Global variable is used for Node.js server.
  * @param {string} key The key for the stored data.
  */
-rcsPhStorageDel = (key) => {
+globalThis.rcsPhStorageDel = (key) => {
   if (rcsPhIsBrowserContext()) {
     localStorage.removeItem(key);
   } else {
@@ -121,7 +121,7 @@ rcsPhStorageDel = (key) => {
  * @param {string} key The key for the stored data.
  * @return {string|null} The value of the stored data.
  */
-rcsPhStorageGet = (key) => {
+globalThis.rcsPhStorageGet = (key) => {
   let value = null;
   if (rcsPhIsBrowserContext()) {
     const ssValue = JSON.parse(localStorage.getItem(key));
@@ -142,7 +142,7 @@ rcsPhStorageGet = (key) => {
  * @return {Array} An array of [field, value] where field is the text to be
  * replaced, value is the text to replace with.
  */
-rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
+globalThis.rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
   let replacements = [];
 
   const entityPhRegex = new RegExp('\\#rcs.(' + entityType + '\\.[^#]+)\\#', 'g');
@@ -210,15 +210,14 @@ rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
 /**
  * Returns the setting if available or null.
  */
-rcsPhGetSetting = (setting) => {
+globalThis.rcsPhGetSetting = (setting) => {
   return drupalSettings.rcsPhSettings[setting] || null;
 }
 
 /**
  * Gets the page type.
  */
-rcsPhGetPageType = () => typeof drupalSettings.rcsPage !== 'undefined'
-                           && typeof drupalSettings.rcsPage.type !== 'undefined'
-                             ? drupalSettings.rcsPage.type
-                             : null;
-
+globalThis.rcsPhGetPageType = () => typeof drupalSettings.rcsPage !== 'undefined'
+                                      && typeof drupalSettings.rcsPage.type !== 'undefined'
+                                        ? drupalSettings.rcsPage.type
+                                        : null;

@@ -2,7 +2,7 @@
   .multistep-login {
     .form-submit,
     .edit-checkout-as-guest {
-      @include btn();
+      @include btn;
     }
 
     .form-item {

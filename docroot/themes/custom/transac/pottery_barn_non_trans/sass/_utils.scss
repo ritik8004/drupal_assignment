@@ -1,5 +1,5 @@
 /**
-  * ALIGNMENT
+ * ALIGNMENT
  */
 @mixin u-center {
   position: absolute;
@@ -191,7 +191,7 @@
   display: block; /* Fallback for non-webkit */
   font-size: $font-size;
   line-height: $line-height;
-  height: $font-size*$lines*$line-height;  /* Fallback for non-webkit */
+  height: $font-size * $lines * $line-height;  /* Fallback for non-webkit */
   overflow: hidden;
   text-overflow: ellipsis;
 }

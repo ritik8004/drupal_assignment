@@ -81,7 +81,7 @@
 
       &:hover {
         .user-review-info {
-          @include tooltip-display();
+          @include tooltip-display;
 
           margin: 0;
           padding: 0;

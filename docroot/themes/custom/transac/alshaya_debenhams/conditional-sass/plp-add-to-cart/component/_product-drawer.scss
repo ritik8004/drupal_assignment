@@ -15,6 +15,7 @@
     .product-details-wrapper {
       .size-guide-link {
         font-size: 1rem;
+        text-decoration: underline;
 
         @include breakpoint($desktop) {
           top: 0;
@@ -23,7 +24,7 @@
     }
 
     .config-form-addtobag-button {
-      @include button-brand();
+      @include button-brand;
 
       &:hover {
         background: $primary_brand_button;

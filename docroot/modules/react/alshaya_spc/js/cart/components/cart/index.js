@@ -397,7 +397,7 @@ export default class Cart extends React.Component {
 
     if (dynamicPromoLabelsCart !== null) {
       if (dynamicPromoLabelsCart.qualified.length !== 0
-        || dynamicPromoLabelsCart.next_eligible.length !== 0) {
+        || Object.keys(dynamicPromoLabelsCart.next_eligible).length !== 0) {
         preContentActive = 'visible';
       }
     }

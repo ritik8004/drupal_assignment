@@ -33,7 +33,7 @@ function alshaya_furnitures_free_design_services_install() {
   $elements['room']['#title'] = 'الغرفة';
   // We are setting translation itself here but phpcs wants it to be in t().
   // #description values usually have to run through t() for translation.
-  // @codingStandardsIgnoreLine
+  // phpcs:ignore
   $elements['room']['#description'] = '<p>*حدد خيار واحد على الأقل</p>';
   $elements['room']['#options']['Nursery'] = 'حضانة';
   $elements['room']['#options']['Dining Room'] = 'غرفة الطعام';

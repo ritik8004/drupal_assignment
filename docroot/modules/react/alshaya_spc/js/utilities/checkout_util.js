@@ -3,8 +3,12 @@ import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
-import { cartContainsOnlyVirtualProduct } from './egift_util';
+import {
+  cartContainsAnyVirtualProduct,
+  cartContainsOnlyVirtualProduct, isEgiftUnsupportedPaymentMethod,
+} from './egift_util';
 import { addPaymentMethodInCart } from './update_cart';
+import { isEgiftCardEnabled } from '../../../js/utilities/util';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -461,11 +465,13 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
   // If items count we get from MDC update and what in
   // local storage different, we show message on top.
   if (sameNumberOfItems === false) {
+    const errmsg = 'Sorry, one or more products in your basket are no longer available and were removed from your basket.';
     // Dispatch event for error to show.
     dispatchCustomEvent('spcCartMessageUpdate', {
       type: 'error',
-      message: Drupal.t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'),
+      message: Drupal.t('@errmsg', { '@errmsg': errmsg }),
     });
+    Drupal.logJavascriptError('continue to checkout', errmsg, GTM_CONSTANTS.CART_ERRORS);
     return;
   }
 
@@ -710,4 +716,23 @@ export const updatePaymentAndPlaceOrder = (paymentMethod) => {
       Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
     });
   }
+};
+
+/**
+ * Get next allowed payment method when virtual product is present.
+ */
+export const getNextAllowedPaymentMethodCode = (paymentMethods, cart) => {
+  const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
+  const cartHasVirtualProduct = cartContainsAnyVirtualProduct(cart.cart);
+  let paymentMethodCode = null;
+  if (isEgiftCardEnabled()) {
+    for (let i = 0; i <= sortedMethods.length; i++) {
+      if (cartHasVirtualProduct
+        && !isEgiftUnsupportedPaymentMethod(sortedMethods[i].code)) {
+        paymentMethodCode = sortedMethods[i].code;
+        break;
+      }
+    }
+  }
+  return hasValue(paymentMethodCode) ? paymentMethodCode : sortedMethods[0].code;
 };

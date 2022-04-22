@@ -106,7 +106,6 @@ function alshaya_rcs_main_menu_preprocess_page(&$variables) {
       // Add description placeholder for the advanced page.
       $variables['category_term_description'] = '#rcs.category.description#';
       $variables['#attached']['library'][] = 'alshaya_white_label/rcs-ph-term-description';
-      $variables['#attached']['library'][] = 'alshaya_rcs_listing/helpers';
     }
   }
 }
@@ -152,6 +151,13 @@ function alshaya_rcs_main_menu_node_presave(EntityInterface $entity) {
     if ($entity->get('field_use_as_department_page')->getString() == 0) {
       unset($entity->field_category_slug);
     }
+    // Empty out the data available in the product category.
+    // We are doing this category migration, we are migrating the enriched
+    // term with there parent terms as well. And also those parent terms are
+    // not getting deleted from acq_product_category. Hence to make sure that
+    // we do not conflict between the slug value and the product category
+    // value, we are removing any default value for field_product_category.
+    unset($entity->field_product_category);
   }
 }
 
@@ -239,8 +245,17 @@ function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
   $rcs_main_menu_config = \Drupal::config('alshaya_rcs_main_menu.settings');
   $menu_max_depth = $rcs_main_menu_config->get('menu_max_depth');
 
-  $query_fields['navigationMenu'] = \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')
-    ->getRcsCategoryMenuQuery($menu_max_depth);
+  $query_fields['navigationMenu'] = [
+    'query' => [
+      'query($categoryId: String)' => [
+        'categories(filters: { ids: { eq: $categoryId } })'
+        => \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->getRcsCategoryMenuQuery($menu_max_depth),
+      ],
+    ],
+    'variables' => [
+      'categoryId' => $rcs_main_menu_config->get('root_category'),
+    ],
+  ];
   $query_fields['#cache']['tags'] = $rcs_main_menu_config->getCacheTags();
 
   return $query_fields;

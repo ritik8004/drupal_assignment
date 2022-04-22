@@ -153,6 +153,7 @@ class SkuImagesManagerPims extends SkuImagesManager {
       return $static[$static_id];
     }
 
+    // phpcs:ignore
     $media = unserialize($sku->get('media')->getString());
 
     $this->moduleHandler->alter(
@@ -160,6 +161,10 @@ class SkuImagesManagerPims extends SkuImagesManager {
     );
 
     foreach ($media ?? [] as $index => $media_item) {
+      if (isset($media_item['disabled']) && $media_item['disabled'] == 1) {
+        unset($media[$index]);
+        continue;
+      }
       $media_item = !empty($media_item) ? array_filter($media_item) : [];
 
       if (isset($media_item['file'])) {

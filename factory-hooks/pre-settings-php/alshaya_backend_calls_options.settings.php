@@ -117,6 +117,33 @@ $settings['alshaya_backend_calls_options'] = [
     'get_categories' => [
       'timeout' => 300,
     ],
+    'checkoutcom_config' => [
+      'timeout' => 30,
+    ],
+    'get_saved_card' => [
+      'timeout' => 30,
+    ],
+    'delete_saved_card' => [
+      'timeout' => 30,
+    ],
+    'postpay_config' => [
+      'timeout' => 10,
+    ],
+    'tabby_config' => [
+      'timeout' => 10,
+    ],
+    'checkoutcom_token_list' => [
+      'timeout' => 30,
+    ],
+    'checkoutcom_token_delete' => [
+      'timeout' => 30,
+    ],
+    'aura_dictionary_config' => [
+      'timeout' => 30,
+    ],
+    'subscribe_newsletter' => [
+      'timeout' => 30,
+    ],
   ],
   'appointment_booking' => [
     'default' => [

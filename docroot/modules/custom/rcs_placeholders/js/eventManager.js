@@ -20,7 +20,7 @@ var rcsSubscribedEvents = {};
  *
  * Use RcsEventManager.fire() to trigger an event with the given args.
  */
-RcsEventManager = {
+globalThis.RcsEventManager = {
   addListener: function (name, callback, priority) {
     if (typeof priority === 'undefined') {
       // Highest priority will be executed first.

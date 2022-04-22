@@ -23,17 +23,30 @@
       || !Drupal.hasValue(e.detail.result.style_code)) {
       return;
     }
-
     // The original object will also be modified in this process.
-    const mainProduct = e.detail.result;
+    var mainProduct = e.detail.result;
 
     // Get the products with the same style.
     var styleProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('products-in-style', { styleCode: mainProduct.style_code });
 
-    // If there are no products with the same style, then no further processing
-    // required.
-    if (!styleProducts.length) {
-      return;
+    // Get the main product entity from the style products list.
+    for (var index = 0; index < styleProducts.length; index++) {
+      if (styleProducts[index].sku === mainProduct.sku) {
+        try {
+          // Deep clone the object received in the response.
+          mainProduct = JSON.parse(JSON.stringify(styleProducts[index]));
+          // The object in the event only contains minimal data.
+          // So we replace that with the actual product object containing all
+          // the required data.
+          e.detail.result = mainProduct;
+          break;
+        } catch (error) {
+          Drupal.alshayaLogger('error', 'Could not parse product data for SKU @sku', {
+            '@sku': mainProduct.sku,
+          });
+          return;
+        }
+      }
     }
 
     // This will hold the configugrable options for the main product keyed by
@@ -55,6 +68,7 @@
     mainProduct.variants = [];
     // This will store the color values of the styled product.
     const colorAttributeValues = [];
+    const colorAttribute = drupalSettings.alshayaColorSplit.colorAttribute;
 
     styleProducts.forEach(function (styleProduct) {
       // Check if product is in stock.
@@ -82,16 +96,34 @@
       styleProduct.variants.forEach(function (variant) {
         // These values will be used later on.
         variant.product.parent_sku = styleProduct.sku;
-        variant.product.color_attribute = drupalSettings.alshayaColorSplit.colorAttribute;
+        variant.product.color_attribute = colorAttribute;
         variant.product.url_key = styleProduct.url_key;
+        // Variants will inherit delivery options from their parent sku.
+        variant.product.deliveryOptions = {};
+        if (Drupal.hasValue(drupalSettings.expressDelivery)
+          && Drupal.hasValue(drupalSettings.expressDelivery.enabled)
+        ) {
+          variant.product.deliveryOptions = {
+            express_delivery: {
+              status: (Drupal.hasValue(styleProduct.express_delivery) && Drupal.hasValue(drupalSettings.expressDelivery.express_delivery))
+                ? 'active'
+                : 'in-active'
+            },
+            same_day_delivery: {
+              status: (Drupal.hasValue(styleProduct.same_day_delivery) && Drupal.hasValue(drupalSettings.expressDelivery.same_day_delivery))
+                ? 'active'
+                : 'in-active'
+            },
+          };
+        }
 
-        if (!processedColors.includes(variant.product.color)) {
-          processedColors.push(variant.product.color);
+        if (!processedColors.includes(variant.product[colorAttribute])) {
+          processedColors.push(variant.product[colorAttribute]);
           // Get the labels for the color attribute.
-          if (Drupal.hasValue(variant.product.color)) {
-            const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product.color);
+          if (Drupal.hasValue(variant.product[colorAttribute])) {
+            const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product[colorAttribute]);
             // Update the array with the color values.
-            colorAttributeValues.push({value_index: variant.product.color, store_label: label});
+            colorAttributeValues.push({value_index: variant.product[colorAttribute], store_label: label});
           }
         }
 
@@ -122,7 +154,7 @@
       attribute_uid: btoa(drupalSettings.psudo_attribute),
       label: drupalSettings.alshayaColorSplit.colorLabel,
       position: -1,
-      attribute_code: drupalSettings.alshayaColorSplit.colorAttribute,
+      attribute_code: colorAttribute,
       values: colorAttributeValues,
     });
 
@@ -131,6 +163,6 @@
       return (optionA.position > optionB.position) - (optionA.position < optionB.position);
     });
 
-    RcsPhStaticStorage.set('product_' + mainProduct.sku, mainProduct);
+    globalThis.RcsPhStaticStorage.set('product_data_' + mainProduct.sku, mainProduct);
   }, 100);
 })();

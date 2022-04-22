@@ -209,6 +209,7 @@
       height: 1.5rem;
       display: inline-block;
       margin-#{$right}: 0.625rem;
+      min-width: 1.5rem;
 
       @include breakpoint($only-tablet) {
         margin-#{$right}: 0.3125rem;

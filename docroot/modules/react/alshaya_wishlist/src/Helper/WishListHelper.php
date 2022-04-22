@@ -92,25 +92,35 @@ class WishListHelper {
     $config = [
       'localStorageExpirationForGuest' => $alshaya_wishlist_config->get('local_storage_expiration_guest'),
       'localStorageExpirationForLoggedIn' => $alshaya_wishlist_config->get('local_storage_expiration_logged_in'),
-      'forceLoadWishlistFromBackend' => $alshaya_wishlist_config->get('force_load_wishlist_from_backend'),
       'removeAfterAddtocart' => $alshaya_wishlist_config->get('remove_after_addtocart'),
       'enabledShare' => $alshaya_wishlist_config->get('enabled_share'),
-      'shareEmailSubject' => $this->tokenManager->replace($alshaya_wishlist_config->get('email_subject')) ?? '',
-      'shareEmailMessage' => $this->tokenManager->replace($alshaya_wishlist_config->get('email_template.value')) ?? '',
     ];
 
-    // Check for the current language and if it's not english default,
-    // we need to get the overidden configs and update them for a few
-    // specific wishlist configs. This is because for VS and WES we were
-    // not getting the language specific configs and thus it's causing
-    // issues on the my wishlist page for the translations.
-    // @todo this is, however, a temporary fix and we need to find out
-    // the root cause of the problem behind this for VS and WES.
-    $langCode = $this->languageManager->getCurrentLanguage()->getId();
-    if ($langCode !== 'en') {
-      $alshaya_wishlist_config = $this->languageManager->getLanguageConfigOverride($langCode, 'alshaya_wishlist.settings');
+    // These configurations we need only for the logged in customers.
+    if ($this->currentUser->isAuthenticated()) {
+      // We need this setting for authenticate customers only as for anonymous
+      // customers it should only load from local storage and for authenticate
+      // customers either local storage or from magento based on this config.
+      $config['forceLoadWishlistFromBackend'] = $alshaya_wishlist_config->get('force_load_wishlist_from_backend');
+
+      // As wishlist share option only available for authenticate customers
+      // we need these two settings for authenticate customers only.
       $config['shareEmailSubject'] = $this->tokenManager->replace($alshaya_wishlist_config->get('email_subject')) ?? '';
       $config['shareEmailMessage'] = $this->tokenManager->replace($alshaya_wishlist_config->get('email_template.value')) ?? '';
+
+      // Check for the current language and if it's not english default,
+      // we need to get the overidden configs and update them for a few
+      // specific wishlist configs. This is because for VS and WES we were
+      // not getting the language specific configs and thus it's causing
+      // issues on the my wishlist page for the translations.
+      // @todo this is, however, a temporary fix and we need to find out
+      // the root cause of the problem behind this for VS and WES.
+      $langCode = $this->languageManager->getCurrentLanguage()->getId();
+      if ($langCode !== 'en') {
+        $alshaya_wishlist_config = $this->languageManager->getLanguageConfigOverride($langCode, 'alshaya_wishlist.settings');
+        $config['shareEmailSubject'] = $this->tokenManager->replace($alshaya_wishlist_config->get('email_subject')) ?? '';
+        $config['shareEmailMessage'] = $this->tokenManager->replace($alshaya_wishlist_config->get('email_template.value')) ?? '';
+      }
     }
 
     return $config;

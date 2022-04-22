@@ -21,6 +21,8 @@ $_spc-area-panel-placeholder: $anti-flash-white;
 $_spc-billing-help: $promo-blue;
 $_spc-cart-alert: $sale-red;
 $_spc-warning-bg: $lemon;
+$_egift_landing_page_banner_bg: #ffffae;
+$sky_blue: #93cdff;
 
 // Global elements.
 $primary_text: $charcoal;
@@ -470,3 +472,21 @@ $plp-quick-view-product-size-hover-bg: $light-grey;
 $plp-quick-view-product-size-active-border: $spanish-grey;
 $plp-quick-view-product-size-text-disabled: $spanish-grey;
 $plp-quick-view-product-group-size-active: $white;
+$plp_quick_color_variant_hover_border: $black-two;
+$plp-quick-view-product-text: $white;
+
+// eGift landing page.
+$egift-accordion-active-title: $black-two;
+$egift-banner-bg: $_egift_landing_page_banner_bg;
+
+// eGift purchase page.
+$egift-active-amount-card-border: $black-two;
+
+// Wishlist
+$wishlist-header-notification-border: $charcoal;
+$wishlist-button-bg: $primary_btn_bg;
+$wishlist-button-txt: $primary_btn_text;
+$wishlist-button-border: $medium-sky-blue;
+
+// same day delivery
+$pdp_product_same_day_btn_border: $sky_blue;

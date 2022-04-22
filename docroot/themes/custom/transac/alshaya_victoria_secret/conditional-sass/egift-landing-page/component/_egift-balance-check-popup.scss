@@ -4,6 +4,14 @@
       .egift-button {
         text-transform: uppercase;
       }
+
+      html[lang="ar"] & {
+        @include breakpoint($tablet) {
+          .egift-code-wrapper {
+            font-size: 0.8rem;
+          }
+        }
+      }
     }
 
     .egift-balance-response {

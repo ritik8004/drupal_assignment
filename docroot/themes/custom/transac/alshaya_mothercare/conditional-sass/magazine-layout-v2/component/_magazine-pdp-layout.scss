@@ -1,0 +1,12 @@
+.magazine-layout-v2 {
+  .magv2 {
+    &-sidebar {
+      .sharethis-wrapper {
+        &.out-of-stock {
+          margin: 0;
+          padding: 0;
+        }
+      }
+    }
+  }
+}

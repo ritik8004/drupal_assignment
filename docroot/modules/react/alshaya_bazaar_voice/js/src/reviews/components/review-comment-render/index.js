@@ -19,6 +19,7 @@ class ReviewCommentRender extends React.Component {
     const countryCode = bazaarVoiceSettings.reviews.bazaar_voice.country_code;
     const enableTranslation = bazaarVoiceSettings.reviews.bazaar_voice.enable_google_translation;
     const charsLimit = bazaarVoiceSettings.reviews.bazaar_voice.translate_chars_limit;
+    const locale = contentLocale.substring(0, 2);
 
     return (
       <div className="comment-submission-box">
@@ -41,8 +42,11 @@ class ReviewCommentRender extends React.Component {
           )}
         </div>
         { CommentText && (
-          <ConditionalView condition={enableTranslation && CommentText.length < charsLimit}>
-            <TranslateByGoogle id={commentId} contentLocale={contentLocale.substring(0, 2)} contentType="comment" />
+          <ConditionalView condition={enableTranslation
+            && CommentText.length < charsLimit
+            && locale !== getLanguageCode()}
+          >
+            <TranslateByGoogle id={commentId} contentLocale={locale} contentType="comment" />
           </ConditionalView>
         )}
       </div>

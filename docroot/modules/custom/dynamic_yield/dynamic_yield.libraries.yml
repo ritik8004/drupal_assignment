@@ -4,3 +4,11 @@ dynamic_yield.intelligent_tracking:
   dependencies:
     - core/jquery
     - core/jquery.cookie
+
+dynamic_yield.script_injection:
+  js:
+    js/dynamic_yield.script_inject.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - core/jquery.once

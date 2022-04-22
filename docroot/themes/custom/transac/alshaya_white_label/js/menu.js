@@ -20,13 +20,13 @@
   });
 
   // Scan for rcs menu.
-  var $rcsMenu = $('#block-alshayarcsmainmenu #rcs-ph-navigation_menu');
+  var rcsMenuSelector = '#block-alshayarcsmainmenu #rcs-ph-navigation_menu';
+  var pageHasRcsMenu = $(rcsMenuSelector).length;
 
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
-      var isRcsMenu = $(context).children($rcsMenu).length;
-      // For RCS Menu, do not proceed until main menu is completely loaded.
-      if (isRcsMenu && !$rcsMenu.hasClass('rcs-loaded')) {
+      // For RCS Menu, do not proceed until it is completely loaded.
+      if (pageHasRcsMenu && !$(rcsMenuSelector).hasClass('rcs-loaded')) {
         return;
       }
 
@@ -170,7 +170,7 @@
 
       // Close mobile menu when clicked outside the menu.
       var mobileMenu = $('.main--menu', context);
-      $('body').once().click(function (e) {
+      $('body').once('mobile-menu-close').click(function (e) {
         if (mobileMenu.hasClass('menu--active') && e.target === $('.menu--active')[0]) {
           $('.mobile--close').trigger('click');
         }
@@ -266,11 +266,10 @@
             calcMaxHeight = $('.block-alshaya-main-menu').height() + $('.block-alshaya-main-menu').offset().top;
             var maxHeight = menuLevel2.map(function () {
               return $(this).height();
-            })
-                .toArray()
-                .reduce(function (first, second) {
-                  return Math.max(first, second);
-                });
+            }).toArray()
+              .reduce(function (first, second) {
+                return Math.max(first, second);
+              });
 
             menuBackdrop.height(maxHeight);
             menuLevel2.each(function () {

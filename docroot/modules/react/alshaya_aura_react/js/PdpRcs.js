@@ -9,16 +9,19 @@ let componentAttached = false;
 // alshaya_rcs_product.module.
 Drupal.behaviors.auraPdpRcsBehavior = {
   attach: function auraPdpRcs() {
-    const pageLoaded = document.querySelector('.rcs-page.rcs-loaded');
-    if (!componentAttached
-        && pageLoaded
-        && isAuraEnabled()
-        && document.querySelector('#aura-pdp')
+    if (componentAttached
+      || !isAuraEnabled()
+      || document.getElementsByClassName('rcs-page rcs-loaded').length === 0
     ) {
+      return;
+    }
+
+    const auraPdp = document.getElementById('aura-pdp');
+    if (auraPdp) {
       componentAttached = true;
       ReactDOM.render(
         <AuraPDP mode="main" />,
-        document.querySelector('#aura-pdp'),
+        auraPdp,
       );
     }
   },

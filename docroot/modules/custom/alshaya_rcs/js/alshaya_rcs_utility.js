@@ -2,39 +2,53 @@
  * Fetch the enriched data from the storage if present or call API.
  * @return {object} Object of enriched data.
  */
-rcsGetEnrichedCategories = () => {
-  let enrichedData = RcsPhStaticStorage.get('enriched_categories');
+globalThis.rcsGetEnrichedCategories = (callBackFunc = null) => {
+  let enrichedData = globalThis.RcsPhStaticStorage.get('enriched_categories');
   if (enrichedData) {
+    // Execute the callback to perform further action on data.
+    callBackFunc(enrichedData);
     return enrichedData;
   }
-  else {
+
+  // Set the default value of request started if it doesn't exists.
+  if (!Drupal.hasValue(globalThis.RcsPhRestCategory)) {
+    globalThis.RcsPhRestCategory = {
+      requestStarted: false,
+      callBacks: [],
+    }
+  }
+
+  if (Drupal.hasValue(globalThis.RcsPhRestCategory) && !globalThis.RcsPhRestCategory.requestStarted) {
+    // Store the async request status in a global variable.
+    globalThis.RcsPhRestCategory.requestStarted = true;
     jQuery.ajax({
       url: Drupal.url('rest/v2/categories'),
-      async: false,
       success: function (data) {
-        // Store the value in static storage.
-        RcsPhStaticStorage.set('enriched_categories', data);
-        enrichedData = data;
+        // Execute all the register callbacks.
+        if (globalThis.RcsPhRestCategory.callBacks.length > 0) {
+          globalThis.RcsPhRestCategory.callBacks.forEach(callBack => {
+            callBack(data);
+          });
+        }
       }
     });
+    // Register the callback.
+    globalThis.RcsPhRestCategory.callBacks.push(callBackFunc);
   }
-  return enrichedData;
+  else {
+    // Register the callback.
+    globalThis.RcsPhRestCategory.callBacks.push(callBackFunc);
+  }
+
+  return globalThis.RcsPhStaticStorage.get('enriched_categories');
 }
 
 /**
- * Dispatches custom events
- *
- * @param eventName
- *   The name of the custom event.
- * @param eventDetail
- *   The object containing the custom event details.
+ * Returns the data stored in the static storage for enriched categories.
+ * @returns {object} Object of enriched data.
  */
-dispatchRcsCustomEvent = (eventName, eventDetail) => {
-  const event = new CustomEvent(eventName, {
-    bubbles: true,
-    detail: eventDetail,
-  });
-  document.dispatchEvent(event);
+globalThis.rcsSetEnrichedCategoriesInStaticStorage = (data = null) => {
+  globalThis.RcsPhStaticStorage.set('enriched_categories', data);
 }
 
 // Link between RCS errors and Datadog.

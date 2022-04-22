@@ -9,6 +9,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a 'Olapic Block' Block.
@@ -44,6 +47,13 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
   protected $routeMatch;
 
   /**
+   * Sku Manager service.
+   *
+   * @var Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * Constructs an LanguageBlock object.
    *
    * @param array $configuration
@@ -58,12 +68,15 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
    *   The config factory.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route match service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   Sku Manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, RouteMatchInterface $route_match) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, RouteMatchInterface $route_match, SkuManager $skuManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->routeMatch = $route_match;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -76,7 +89,8 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $plugin_definition,
       $container->get('language_manager'),
       $container->get('config.factory'),
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 
@@ -150,6 +164,15 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
     if ($routename == 'entity.node.canonical' && $node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 0) {
       return [];
     }
+    $isPdp = FALSE;
+    // For PDP, we add current page sku as dynamic product id.
+    if ($node instanceof NodeInterface && $node->bundle() == 'acq_product') {
+      $dynamic_product_id = $this->skuManager->getSkuForNode($node);
+      $isPdp = TRUE;
+    }
+    else {
+      $dynamic_product_id = $this->configuration['dynamic_product_id'] ?? '';
+    }
     $lang = $this->languageManager->getCurrentLanguage()->getId();
     $country_code = strtoupper(_alshaya_custom_get_site_level_country_code());
     $data_apikey_field_name = 'olapic_' . $lang . '_data_apikey';
@@ -163,11 +186,15 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
       'development_mode' => $development_mode,
       'lang' => $data_lang,
     ];
+
     return [
       '#theme' => 'olapic_widget',
       '#instance_id' => $data_instance,
       '#div_id' => $this->configuration['div_id'] ?? '',
-      '#dynamic_product_id' => $this->configuration['dynamic_product_id'] ?? '',
+      '#dynamic_product_id' => $dynamic_product_id,
+      '#tag' => ($isPdp) ? 'script' : 'div',
+      '#data_olapic' => ($isPdp) ? 'block-alshayaolapicwidget-2' : '',
+      '#data_apikey' => ($isPdp) ? $olapic_keys['data_apikey'] : '',
       '#attached' => [
         'library' => 'alshaya_olapic/alshaya_olapic_widget',
         'drupalSettings' => [
@@ -175,6 +202,29 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
         ],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    $cache_tags = parent::getCacheTags();
+    // Rebuild olapic block when PDP page changes.
+    if ($node = $this->routeMatch->getParameter('node') && $node instanceof NodeInterface) {
+      $cache_tags = Cache::mergeTags($cache_tags, ['node:' . $node->id()]);
+    }
+
+    return $cache_tags;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    // Vary based on route.
+    return Cache::mergeContexts(parent::getCacheContexts(), [
+      'route',
+    ]);
   }
 
 }

@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class DataDog JS Settings Form.
+ * Class Datadog JS Settings Form.
  *
  * @package Drupal\datadog_js\Form
  */
@@ -33,28 +33,49 @@ class DatadogJsSettingsForm extends ConfigFormBase {
     $config = $this->config('datadog_js.settings');
 
     $form['library'] = [
-      '#title' => $this->t('DataDogJS Library'),
+      '#title' => $this->t('Datadog Logs Library'),
       '#type' => 'textfield',
       '#default_value' => $config->get('library'),
-      '#required' => TRUE,
+      '#description' => $this->t('Required to enable Datadog Logs.'),
     ];
 
     $form['token'] = [
-      '#title' => $this->t('DataDogJS Token'),
+      '#title' => $this->t('Datadog Logs Client Token'),
       '#type' => 'textfield',
       '#default_value' => $config->get('token'),
-      '#description' => $this->t('Keep this empty to disable the feature.'),
+      '#description' => $this->t('Required to enable Datadog Logs.'),
     ];
 
-    $form['site'] = [
-      '#title' => $this->t('DataDogJS Site'),
+    $form['rum_library'] = [
+      '#title' => $this->t('Datadog RUM Library'),
       '#type' => 'textfield',
-      '#default_value' => $config->get('site'),
+      '#default_value' => $config->get('rum_library'),
+      '#description' => $this->t('Required to enable Datadog RUM.'),
+    ];
+
+    $form['rum_application_id'] = [
+      '#title' => $this->t('Datadog RUM Application ID'),
+      '#type' => 'textfield',
+      '#default_value' => $config->get('rum_application_id'),
+      '#description' => $this->t('Required to enable Datadog RUM.'),
+    ];
+
+    $form['rum_client_token'] = [
+      '#title' => $this->t('Datadog RUM Client Token'),
+      '#type' => 'textfield',
+      '#default_value' => $config->get('rum_client_token'),
+      '#description' => $this->t('Required to enable Datadog RUM.'),
+    ];
+
+    $form['application'] = [
+      '#title' => $this->t('Datadog Site'),
+      '#type' => 'textfield',
+      '#default_value' => $config->get('application'),
       '#description' => $this->t('The Datadog site of your organization. US: datadoghq.com, EU: datadoghq.eu.'),
     ];
 
     $form['admin_pages'] = [
-      '#title' => $this->t('DataDog for admin section'),
+      '#title' => $this->t('Datadog for admin section'),
       '#type' => 'select',
       '#options' => [
         'track' => $this->t('Track for admin section too'),
@@ -75,6 +96,9 @@ class DatadogJsSettingsForm extends ConfigFormBase {
     $this->config('datadog_js.settings')
       ->set('library', $values['library'])
       ->set('token', $values['token'])
+      ->set('rum_library', $values['rum_library'])
+      ->set('rum_application_id', $values['rum_application_id'])
+      ->set('rum_client_token', $values['rum_client_token'])
       ->set('application', $values['application'])
       ->set('admin_pages', $values['admin_pages'])
       ->save();

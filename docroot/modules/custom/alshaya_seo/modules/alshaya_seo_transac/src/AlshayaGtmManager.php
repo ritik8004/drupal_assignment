@@ -78,7 +78,7 @@ class AlshayaGtmManager {
     'alshaya_spc.checkout' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
     'alshaya_spc.checkout.confirmation' => 'purchase confirmation page',
-    'view.stores_finder.page_2' => 'store finder',
+    'alshaya_geolocation.store_finder' => 'store finder',
     'view.stores_finder.page_1' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
     'user.pass' => 'user password page',
@@ -86,6 +86,8 @@ class AlshayaGtmManager {
     'user.page' => 'user page',
     'user.reset' => 'user reset page',
     'user.reset.form' => 'user reset page',
+    'alshaya_wishlist.users_wishlist' => 'wishlist page',
+    'alshaya_wishlist.user_account_wishlist' => 'wishlist page',
   ];
 
   /**
@@ -101,6 +103,8 @@ class AlshayaGtmManager {
     'acq_cart.cart' => 'CartPage',
     'alshaya_master.home' => 'HP-ProductCarrousel',
     'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',
+    'alshaya_wishlist.users_wishlist' => 'Wishlist',
+    'alshaya_wishlist.user_account_wishlist' => 'Wishlist',
   ];
 
   /**
@@ -387,72 +391,52 @@ class AlshayaGtmManager {
   }
 
   /**
-   * Helper function to prepare attributes for RCS product.
+   * Helper function to prepare attributes for a gift product.
    *
-   * @param \Drupal\node\Entity\Node $rcs_product
-   *   Node object for which we want to get the attributes prepared.
    * @param string $view_mode
    *   View mode in which we trying to render the product.
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The sku object.
    *
    * @return array
    *   Array of attributes to be exposed to GTM.
    */
-  public function fetchRcsProductGtmAttributes(Node $rcs_product, string $view_mode) {
+  public function fetchGiftGtmAttributes($view_mode, SKUInterface $sku) {
     static $gtm_container = NULL;
-    $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     if (!isset($gtm_container)) {
       $gtm_container = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
     }
+    $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
-    if ($rcs_product->hasTranslation('en')) {
-      $rcs_product = $rcs_product->getTranslation('en');
-    }
-
-    $attributes['gtm-type'] = 'gtm-product-link';
-    $attributes['gtm-container'] = $gtm_container;
-    $attributes['gtm-view-mode'] = $view_mode;
-
-    // Product specific attributes will be added in front end.
-    $attributes['gtm-category'] = '#rcs.product.gtm_attributes.category#';
-    $attributes['gtm-name'] = '#rcs.product.name#';
-    $attributes['gtm-product-sku'] = '#rcs.product._self|sku#';
-    $attributes['gtm-product-sku-class-identifier'] = '#rcs.product._self|sku-clean#';
-    $attributes['gtm-sku-type'] = '#rcs.product._self|sku-type#';
-    $attributes['gtm-main-sku'] = '#rcs.product._self|sku#';
-
-    // Dimension1 & 2 correspond to size & color.
-    // Should stay blank unless added to cart.
+    $attributes['gtm-name'] = trim($sku->label());
+    $attributes['gtm-main-sku'] = $sku->getSku();
+    $attributes['gtm-product-sku-class-identifier'] = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+    $attributes['gtm-sku-type'] = $sku->bundle();
+    $attributes['gtm-price'] = 0;
     if (!in_array('dimension1', $gtm_disabled_vars)) {
-      $attributes['gtm-dimension1'] = '#rcs.product.gtm_attributes.dimension1#';
+      $attributes['gtm-dimension1'] = $sku->get('attribute_set')->getString();
     }
+
     if (!in_array('dimension5', $gtm_disabled_vars)) {
-      $attributes['gtm-dimension5'] = '#rcs.product.gtm_attributes.dimension5#';
+      $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
     }
+
     if (!in_array('dimension6', $gtm_disabled_vars)) {
-      $attributes['gtm-dimension6'] = '#rcs.product.gtm_attributes.dimension6#';
+      $attributes['gtm-dimension6'] = $sku->get('attr_size')->getString();
     }
 
     if (!in_array('brand', $gtm_disabled_vars)) {
-      $attributes['gtm-brand'] = '#rcs.product.gtm_attributes.brand#';
+      // Site name.
+      $gtm_brand = $this->configFactory->get('system.site')->getOriginal('name', FALSE);
+      $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
+      if ($sku->hasField('attr_brand')) {
+        $attributes['gtm-brand'] = $sku->get('attr_brand')->getString() ?: $gtm_brand;
+      }
     }
+    $attributes['gtm-container'] = $gtm_container;
+    $attributes['gtm-view-mode'] = $view_mode;
 
-    // @todo Check if image not available, it should have the value:
-    // 'image not available'.
-    $attributes['gtm-dimension4'] = '#rcs.product.gtm_attributes.dimension4#';
-
-    // This contains the formatted price with proper decimals.
-    $attributes['gtm-price'] = '#rcs.product._self|gtm-price#';
-
-    // Contains the count of the media items.
-    $attributes['gtm-dimension3'] = '#rcs.product.gtm_attributes.dimension3#';
-
-    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
-      [
-        &$rcs_product,
-        &$attributes,
-      ]
-    );
     return $attributes;
   }
 
@@ -643,7 +627,7 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['taxonomy_term'])) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
             $term = $currentRoute['route_params']['taxonomy_term'];
-            $routeIdentifier .= ':' . $term->getVocabularyId();
+            $routeIdentifier .= ':' . $term->bundle();
           }
           break;
 
@@ -711,7 +695,7 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['taxonomy_term'])) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
             $term = $currentRoute['route_params']['taxonomy_term'];
-            $routeIdentifier .= ':' . $term->getVocabularyId();
+            $routeIdentifier .= ':' . $term->bundle();
           }
           break;
       }
@@ -932,11 +916,11 @@ class AlshayaGtmManager {
     $dimension8 = '';
 
     $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : [];
-    $shipping_info = explode(' - ', $order['shipping_description']);
+    $shipping_info = !empty($order['shipping_description']) ? explode(' - ', $order['shipping_description']) : '';
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $deliveryOption = 'Home Delivery';
-    $deliveryType = $shipping_info[0];
+    $deliveryType = !empty($order['shipping_description']) ? $shipping_info[0] : '';
 
     $shipping_method_name = !empty($order['shipping']['method']) ? $order['shipping']['method'] : '';
     if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
@@ -972,13 +956,13 @@ class AlshayaGtmManager {
       // If its a virtual product i.e egift card or egift topup.
       if ($item['type'] === 'virtual') {
         $products[$item['item_id']] = [
-          'name' => $item['name'],
+          'name' => $item['name'] . '/' . $item['price'],
           'id' => $item['item_id'],
           'price' => $item['price'],
           'variant' => $item['sku'],
           'dimension2' => $item['type'],
           'dimension4' => 1,
-          'quantity' => $item['ordered'],
+          'quantity' => 1,
         ];
         continue;
       }
@@ -1029,10 +1013,13 @@ class AlshayaGtmManager {
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
     $current_user_id = $this->currentUser->id();
+
     // For guest fetching the phone number from shipping details.
     $phone_number = $order['shipping']['address']['telephone'];
+
+    $customer_id = 0;
+
     $is_customer = alshaya_acm_customer_is_customer($this->currentUser);
-    $orders_count = $customer_id = 0;
     if ($is_customer) {
       $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
       $customer_id = $current_user->get('acq_customer_id')->getString();
@@ -1041,6 +1028,11 @@ class AlshayaGtmManager {
         $phone_number = $current_user->get('field_mobile_number')->getValue()[0]['value'];
       }
     }
+    else {
+      // For guest user too we want to know if user has placed multiple orders.
+      $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
@@ -1146,20 +1138,15 @@ class AlshayaGtmManager {
         break;
 
       case 'product listing page':
-        // Call V2 attribute function if RCS Listing module is enabled.
-        if ($this->moduleHandler->moduleExists('alshaya_rcs_listing')) {
-          $page_dl_attributes = $this->fetchV2DepartmentAttributes();
+        $taxonomy_term = $current_route['route_params']['taxonomy_term'];
+        $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+        foreach ($taxonomy_parents as $taxonomy_parent) {
+          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
+          /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
+          $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
         }
-        else {
-          $taxonomy_term = $current_route['route_params']['taxonomy_term'];
-          $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
-          foreach ($taxonomy_parents as $taxonomy_parent) {
-            $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, $this->languageManager->getCurrentLanguage()->getId());
-            $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
-          }
 
-          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
-        }
+        $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
         break;
 
       case 'advanced page':
@@ -1178,12 +1165,6 @@ class AlshayaGtmManager {
 
             $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
           }
-        }
-        // Call V2 attribute function for department page if the rcs main menu
-        // module is enabled.
-        elseif ($this->moduleHandler->moduleExists('alshaya_rcs_main_menu')
-         && $department_node->get('field_use_as_department_page')->getString() == 1) {
-          $page_dl_attributes = $this->fetchV2DepartmentAttributes();
         }
         break;
 
@@ -1365,27 +1346,13 @@ class AlshayaGtmManager {
     return array_filter([
       'departmentName' => implode('|', $terms),
       'departmentId' => current($term_ids),
+      'list' => implode('|', $terms),
       'listingName' => end($terms),
       'listingId' => end($term_ids),
       'majorCategory' => array_shift($terms) ?: '',
       'minorCategory' => array_shift($terms) ?: '',
       'subCategory' => array_shift($terms) ?: '',
     ]);
-  }
-
-  /**
-   * Helper function to get department specific V2 attributes.
-   */
-  public function fetchV2DepartmentAttributes() {
-    return [
-      'departmentName' => '#rcs.category.departmentName#',
-      'departmentId' => '#rcs.category.departmentId#',
-      'listingName' => '#rcs.category.name#',
-      'listingId' => '#rcs.category.id#',
-      'majorCategory' => '#rcs.category.majorCategory#',
-      'minorCategory' => '#rcs.category.minorCategory#',
-      'subCategory' => '#rcs.category.subCategory#',
-    ];
   }
 
   /**
@@ -1404,7 +1371,7 @@ class AlshayaGtmManager {
       $cart_items_rr[] = [
         'id' => $item['sku'],
         'price' => (float) $item['price'],
-        'qnt' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
+        'qnt' => $item['qty'] ?? $item['ordered'],
       ];
     }
 
@@ -1443,7 +1410,7 @@ class AlshayaGtmManager {
       $cart_items_flock[] = [
         'id' => $item['sku'],
         'price' => (float) $item['price'],
-        'count' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
+        'count' => $item['qty'] ?? $item['ordered'],
         'title' => $item['name'],
         'image' => $sku_media_url,
       ];

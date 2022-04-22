@@ -11,6 +11,7 @@ var config = {
     plp: './js/src/PlpIndex.js',
     plpv2: './js/src/PlpV2Index.js',
     productCategoryCarousel: './js/src/ProductCategoryCarousel.js',
+    ProductCategoryCarouselRcs: './js/src/ProductCategoryCarouselRcs.js',
   },
   mode: 'production',
   output: {
@@ -18,6 +19,7 @@ var config = {
     filename: '[name].js',
     publicPath: buildPath,
     chunkFilename: "[name]-[chunkhash].js",
+    jsonpFunction: "jsonpAlsAlg",
   },
   devServer: {
     contentBase: './',

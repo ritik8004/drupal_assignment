@@ -137,3 +137,53 @@
     }
   }
 }
+
+.magv2-sidebar {
+  .addtobag-button-wrapper {
+    .pdp-cart-form {
+      .size-guide-on-pdp {
+        margin-bottom: 0.65rem;
+
+        @include breakpoint($only-mobile) {
+          margin-bottom: 0.25rem;
+        }
+
+        .size-guide {
+          @include breakpoint($tablet) {
+            text-align: $right;
+          }
+
+          .size-guide-link {
+            top: 0;
+            color: $magv2-size-guide-link;
+            font-size: 0.75rem;
+            padding-top: 0.625rem;
+            padding-bottom: 1rem;
+            padding-#{$left}: 1.8rem;
+
+            &::before {
+              content: '';
+              background: url('#{$base_theme_img_directory_path}/icons/new-pdp-size-guide-icon.svg') center center no-repeat;
+              width: 1.5625rem;
+              height: 1.5625rem;
+              display: inline-block;
+              position: absolute;
+              #{$left}: 0;
+              top: 0.1875rem;
+            }
+
+            @include breakpoint($tablet) {
+              font-size: 1rem;
+
+              &::before {
+                background: none;
+                width: auto;
+                height: auto;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

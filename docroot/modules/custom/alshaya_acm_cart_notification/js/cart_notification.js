@@ -111,9 +111,10 @@
     $.fn.cartNotificationScroll(true);
   }
 
+  var $document = $(document);
+
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-      var $document = $(document);
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
         var productData = e.detail.productData;
         Drupal.cartNotification.triggerNotification(productData);
@@ -300,12 +301,12 @@
 
       if (window.RcsEventManager) {
         $document
-          .once("rcs-event-loaders")
+          .once('rcs-event-loaders')
           .each(() => {
-            window.RcsEventManager.addListener("startLoader", () => {
+            window.RcsEventManager.addListener('startLoader', () => {
               Drupal.cartNotification.spinner_start();
             });
-            window.RcsEventManager.addListener("stopLoader", () => {
+            window.RcsEventManager.addListener('stopLoader', () => {
               Drupal.cartNotification.spinner_stop();
             });
           });

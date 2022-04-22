@@ -8,15 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Enables the alshaya_media_assets module.
- */
-function alshaya_cos_transac_update_8002() {
-  \Drupal::service('module_installer')->install(['alshaya_media_assets']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Change widget for delivery_ways facets from checkbox
  * to widget "delivery_ways".
  */

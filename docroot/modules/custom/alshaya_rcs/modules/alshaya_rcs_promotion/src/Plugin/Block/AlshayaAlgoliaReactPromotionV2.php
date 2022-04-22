@@ -122,7 +122,6 @@ class AlshayaAlgoliaReactPromotionV2 extends AlshayaAlgoliaReactBlockBase {
   public function getCacheTags() {
     $tags = ['alshaya_acm_product_position.settings'];
     Cache::mergeTags(parent::getCacheTags(), $tags);
-
     return $tags;
   }
 

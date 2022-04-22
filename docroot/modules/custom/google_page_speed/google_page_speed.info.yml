@@ -1,7 +1,0 @@
-name: Google Page Speed integration
-type: module
-description: This module will enable Drupal sites to capture Google page speed data.
-package: Statistics
-core: 8.x
-core_version_requirement: ^8 || ^9
-configure: google_page_speed.config

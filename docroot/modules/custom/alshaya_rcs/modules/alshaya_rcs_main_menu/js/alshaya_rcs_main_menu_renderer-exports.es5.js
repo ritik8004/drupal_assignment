@@ -10,13 +10,10 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
-    let enrichmentData = rcsGetEnrichedCategories();
-    let menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
-
-    // Get the L1 menu list element.
-    if (navigationType === 'shop_by_block') {
-      menuListLevel1Ele = innerHtmlObj.find('div.c-footer-menu');
-    }
+    let enrichmentData = globalThis.rcsGetEnrichedCategories(globalThis.rcsSetEnrichedCategoriesInStaticStorage);
+    let menuListLevel1Ele = navigationType === 'shop_by_block'
+      ? innerHtmlObj.find('div.c-footer-menu')
+      : innerHtmlObj.find('.menu__list.menu--one__list');
 
     // Filter category menu items if include_in_menu flag true.
     inputs = filterAvailableItems(inputs);
@@ -31,7 +28,7 @@ exports.render = function render(
     const isSuperCategoryEnabled = (typeof settings.superCategory) != "undefined";
     // Proceed only if superCategory is enabled.
     if (isSuperCategoryEnabled) {
-      let activeSuperCategory = rcsWindowLocation().pathname.split('/')[2];
+      let activeSuperCategory = globalThis.rcsWindowLocation().pathname.split('/')[2];
       // Check if the active super category is valid or not.
       let validSuperCategory = false;
       inputs.forEach((item) => {
@@ -62,8 +59,17 @@ exports.render = function render(
         }
         level1 = level1.children[0];
       }
-      if (navigationType === 'shop_by_block') {
-        menuHtml += getShopByMarkup(
+
+      menuHtml = navigationType === 'shop_by_block'
+        ? menuHtml + getShopByMarkup(
+          level1,
+          1,
+          innerHtmlObj,
+          settings,
+          enrichmentData,
+          isSuperCategoryEnabled,
+        )
+        : menuHtml + getMenuMarkup(
           level1,
           1,
           innerHtmlObj,
@@ -71,16 +77,6 @@ exports.render = function render(
           enrichmentData,
           isSuperCategoryEnabled,
         );
-      } else {
-        menuHtml += getMenuMarkup(
-          level1,
-          1,
-          innerHtmlObj,
-          settings,
-          enrichmentData,
-          isSuperCategoryEnabled,
-        );
-      }
     });
 
     // Remove the placeholders markup.
@@ -306,8 +302,6 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     return;
   }
 
-  // Build menu item path prefix.
-  const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
   // @todo remove this when API return the correct path.
   const levelObjOrgUrlPath = levelObj.url_path;
   // Append category prefix in L2 if super category is enabled.
@@ -318,7 +312,7 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     }
     levelObj.url_path = `/${settings.path.pathPrefix}${urlItems.join('/')}/`;
   } else {
-    levelObj.url_path = `/${menuPathPrefixFull}${levelObjOrgUrlPath}/`;
+    levelObj.url_path = `/${settings.path.pathPrefix}${levelObjOrgUrlPath}/`;
   }
 
   const levelIdentifier = `c-footer-menu__tab`;
@@ -357,7 +351,7 @@ const navRcsReplacePh = function (phElement, entity, markupId) {
       const entityFieldValue = r[1];
       // Apply the replacement on all the elements containing the
       // placeholder.
-      menuItemHtml = rcsReplaceAll(menuItemHtml, fieldPh, entityFieldValue);
+      menuItemHtml = globalThis.rcsReplaceAll(menuItemHtml, fieldPh, entityFieldValue);
     });
 
   return menuItemHtml;

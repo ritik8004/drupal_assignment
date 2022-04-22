@@ -1,5 +1,0 @@
-google_page_speed.config:
-  title: 'Google Page Speed configurations'
-  route_name: google_page_speed.config
-  parent: system.admin_config_system
-  description: 'Configure google page speed related settings.'

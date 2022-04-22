@@ -1,10 +1,5 @@
 services:
-  alshaya_rcs.feature_status_helper:
-    class: Drupal\alshaya_rcs\Services\AlshayaRcsFeatureStatusHelper
-    arguments:
-      - '@config.factory'
-
-  alshaya_rcs.algolia_index_name_override:
-    class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexNameConfigOverrider
+  alshaya_rcs.algolia_index_config_override:
+    class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexConfigOverrider
     tags:
       - { name: config.factory.override, priority: -1 }

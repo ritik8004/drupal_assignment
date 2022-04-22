@@ -2,7 +2,7 @@ module.exports = function (gulp, config, bs) {
   'use strict';
 
   var utils = require('./_utils');
-  var sass = require('gulp-sass');
+  var sass = require('gulp-sass')(require('node-sass'));
   var sassGlob = require('gulp-sass-glob');
   var postcss = require('gulp-postcss');
   var sourcemaps = require('gulp-sourcemaps');

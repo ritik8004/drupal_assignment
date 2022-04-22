@@ -6,7 +6,7 @@
     .popup-content {
       .spc-add-new-address-btn,
       .spc-modal-add-new-card-btn {
-        @include btn();
+        @include btn;
       }
     }
   }

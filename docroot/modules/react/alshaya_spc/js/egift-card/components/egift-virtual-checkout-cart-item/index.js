@@ -25,7 +25,7 @@ class CheckoutVirtualCartItem extends React.Component {
     } = this.props;
     // Egift card product image.
     const cartImage = {
-      url: (media.length > 0) ? media : undefined,
+      url: (typeof media !== 'undefined' && media !== null && media.length > 0) ? media : undefined,
       alt: title,
       title,
     };
@@ -47,10 +47,10 @@ class CheckoutVirtualCartItem extends React.Component {
           <div className="spc-product-title-price">
             <div className="spc-product-title egift-product-title">
               <ConditionalView condition={hasValue(isTopUp)}>
-                {Drupal.t('eGift Card Top-up', {}, { context: 'egift' })}
+                {Drupal.t('eGift Card Top up', {}, { context: 'egift' })}
               </ConditionalView>
               <ConditionalView condition={!hasValue(isTopUp)}>
-                {Drupal.t('Alshaya eGift card', {}, { context: 'egift' })}
+                {Drupal.t('eGift Card', {}, { context: 'egift' })}
               </ConditionalView>
             </div>
             <div className="spc-product-price egift-product-price">

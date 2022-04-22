@@ -79,10 +79,18 @@
   Drupal.behaviors.alshaya_rcs_schema_org = {
     attach: function (context, settings) {
       var node = $('.entity--type-node').not('[data-sku *= "#"]');
-      var pageMainSku = node.attr('data-sku');
       if (schemaOrgMetadataAdded || !node.length > 0) {
         return;
       }
+
+      var pageMainSku = node.attr('data-sku');
+      var pageEntity = globalThis.RcsPhStaticStorage.get('product_data_' + pageMainSku);
+
+      // Wait for entity to be loaded.
+      if (!Drupal.hasValue(pageEntity)) {
+        return;
+      }
+
       schemaOrgMetadataAdded = true;
 
       // Check if some additional schema data is required from what is already
@@ -101,7 +109,7 @@
       schemaOrgProductData = JSON.stringify(schemaOrgProductData, null, '\t');
 
       // Replace any entity placeholders.
-      rcsPhReplaceEntityPh(schemaOrgProductData, 'product', RcsPhStaticStorage.get('product_' + pageMainSku), drupalSettings.path.currentLanguage)
+      globalThis.rcsPhReplaceEntityPh(schemaOrgProductData, 'product', pageEntity, drupalSettings.path.currentLanguage)
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];

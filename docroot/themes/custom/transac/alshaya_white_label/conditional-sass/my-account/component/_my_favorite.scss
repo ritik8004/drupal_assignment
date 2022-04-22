@@ -1,0 +1,115 @@
+.user-wishlist {
+  &.c-plp {
+    @include breakpoint($desktop) {
+      margin-top: 1rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 0.5rem;
+      padding-#{$right}: 0.5rem;
+    }
+
+    .c-products-list {
+      &.product-small {
+        .c-products__item {
+          @include breakpoint($only-tablet) {
+            width: calc(100% / 2 - 1.797% + 1.797% / 2 - 0.01px);
+          }
+
+          @include breakpoint($desktop) {
+            width: calc(100% / 3 - 1.797% + 1.797% / 3 - 0.01px);
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          .c-products__item:nth-of-type(3n+1) {
+            margin-#{$left}: 1.797%;
+          }
+
+          .c-products__item:nth-of-type(2n+1) {
+            margin-#{$left}: 0;
+          }
+        }
+
+        @include breakpoint($desktop) {
+          .c-products__item:nth-of-type(4n+1) {
+            margin-#{$left}: 1.797%;
+          }
+
+          .c-products__item:nth-of-type(3n+1) {
+            margin-#{$left}: 0;
+          }
+        }
+      }
+    }
+
+    &.l-two--sf {
+      .c-products-list {
+        &.product-small {
+          .alshaya_search_gallery {
+            @include breakpoint($desktop) {
+              height: 27.6rem;
+            }
+          }
+        }
+      }
+
+      .c-sidebar-first {
+        @include breakpoint($only-mobile) {
+          display: none;
+        }
+      }
+    }
+
+    .block-page-title-block {
+      &#block-page-title {
+        display: flex;
+        align-items: center;
+        padding-top: 0;
+        justify-content: space-between;
+      }
+
+      .back-link {
+        width: auto;
+
+        &::before {
+          @include breakpoint($only-mobile) {
+            top: 0;
+          }
+        }
+      }
+
+      h1 {
+        &.c-page-title {
+          font-size: 1.25rem;
+          line-height: inherit;
+
+          @include breakpoint($only-mobile) {
+            padding-bottom: 0;
+            margin-bottom: 0;
+            border-bottom: none;
+          }
+        }
+      }
+
+      #wishlist-share {
+        @include breakpoint($only-mobile) {
+          padding-bottom: 0;
+          position: absolute;
+          top: 2.5rem;
+          z-index: 10;
+        }
+      }
+    }
+
+    #my-wishlist {
+      #plp-hits {
+        padding-top: 0;
+
+        @include breakpoint($only-mobile) {
+          padding-top: 5rem;
+        }
+      }
+    }
+  }
+}

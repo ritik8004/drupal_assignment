@@ -52,6 +52,8 @@
   .geolocation-common-map-container,
   .geolocation-google-map {
     height: 39rem !important;
+    position: relative;
+    width: 100%;
 
     @include breakpoint($desktop) {
       height: 51rem !important;
@@ -253,6 +255,8 @@
 
   .current-location,
   .cc-near-me {
+    cursor: pointer;
+
     @include breakpoint($only-tablet) {
       #{$left}: 0;
       padding-#{$left}: 2.125rem !important;
@@ -304,6 +308,7 @@
   }
 
   .map-view-link {
+    cursor: pointer;
     margin-#{$left}: -1px;
     padding: 0.675rem 0;
 
@@ -333,6 +338,7 @@
 
   .list-view-link {
     padding: 0.85rem 0;
+    cursor: pointer;
 
     @include breakpoint($desktop) {
       text-indent: -0.4rem;
@@ -523,6 +529,7 @@
       }
 
       a {
+        cursor: pointer;
         color: $store_finder_glossary_text;
 
         &:hover {
@@ -1100,7 +1107,8 @@
     background-image: url(#{$base_theme_loader_img_directory_path});
   }
 
-  #views-exposed-form-stores-finder-page-1 {
+  #views-exposed-form-stores-finder-page-1,
+  .c-content__region .views-exposed-form {
     @include breakpoint($only-mobile) {
       margin-bottom: 1rem;
     }

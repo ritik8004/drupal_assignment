@@ -11,7 +11,6 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\user\UserInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
-use http\Exception\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,8 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "user_reset_password",
  *   label = @Translation("Alshaya user reset password"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/user/reset-password",
- *     "https://www.drupal.org/link-relations/create" = "/rest/v1/user/reset-password"
+ *     "create" = "/rest/v1/user/reset-password"
  *   }
  * )
  */
@@ -151,7 +149,8 @@ class UserResetPassword extends ResourceBase {
       || empty($data['timestamp'])
       || empty($data['user_id'])
       || empty($new_password)) {
-      throw new InvalidArgumentException();
+      $this->logger->warning('Data missing for reset password api call. Data received: @data', ['@data' => json_encode($data)]);
+      return $this->mobileAppUtility->sendStatusResponse($this->t('Information missing for required details.'));
     }
 
     $user = $this->entityTypeManager->getStorage('user')->load($data['user_id']);

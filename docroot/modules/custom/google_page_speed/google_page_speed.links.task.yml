@@ -1,4 +1,0 @@
-google_page_speed.config:
-  route_name: google_page_speed.config
-  base_route: google_page_speed.config
-  title: Google PageSpeed Settings

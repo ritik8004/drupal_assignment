@@ -38,25 +38,33 @@ libraries-override:
   core/drupal.autocomplete:
     js:
       misc/autocomplete.js: js/autocomplete.js
+    css:
+      component:
+        assets/vendor/jquery.ui/themes/base/core.css: false
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
   core/jquery.ui:
     css:
       component:
         assets/vendor/jquery.ui/themes/base/core.css: false
       theme:
         assets/vendor/jquery.ui/themes/base/theme.css: false
-  core/jquery.ui.accordion:
+  core/drupal.dialog:
+    css:
+      component:
+        assets/vendor/jquery.ui/themes/base/core.css: false
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+  core/jquery.ui.dialog:
+    css:
+      component:
+        assets/vendor/jquery.ui/themes/base/core.css: false
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+  jquery_ui_accordion/accordion:
     css:
       component:
         assets/vendor/jquery.ui/themes/base/accordion.css: false
-  geolocation/geolocation.commonmap:
-    js:
-      js/geolocation-common-map.js: js/geolocation/alshaya_geolocation_common_map.js
-  geolocation/geolocation.formatter.googlemap:
-    js:
-      js/geolocation-formatter-googlemap.js: js/geolocation/alshaya_geolocation_formatter_googlemap.js
-  geolocation/geolocation.googlemapsapi:
-    js:
-      js/geolocation-google-maps-api.js: js/geolocation/alshaya_geolocation_google_maps_api.js
   views_infinite_scroll/views-infinite-scroll:
     js:
       js/infinite-scroll.js : js/infinite-scroll.js

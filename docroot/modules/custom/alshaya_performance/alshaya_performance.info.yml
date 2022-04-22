@@ -1,8 +1,8 @@
-name: 'Alshaya Performance'
+name: 'Alshaya Performance Optimisations'
 type: module
 core: 8.x
 core_version_requirement: ^8 || ^9
-package: Alshaya
+package: Alshaya Performance
 description: 'Contains all code related to performance improvement.'
 
 dependencies:
@@ -11,4 +11,3 @@ dependencies:
   - sessions_expire:sessions_expire
   - cache_tags_cleanup:cache_tags_cleanup
   - alshaya_config:alshaya_config
-  - alshaya_js_optimisations:alshaya_js_optimisations

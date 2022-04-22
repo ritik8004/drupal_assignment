@@ -1,0 +1,20 @@
+.paragraph_banner_block {
+  .paragraph_banner_buttons {
+    .field--name-field-links {
+      .field--name-field-links {
+        a {
+          color: $primary_brand_button;
+          border-color: $primary_brand_button;
+          border-radius: 1.3125rem;
+        }
+
+        &:last-child {
+          a {
+            background-color: $primary_brand_button;
+            border-radius: 1.3125rem;
+          }
+        }
+      }
+    }
+  }
+}

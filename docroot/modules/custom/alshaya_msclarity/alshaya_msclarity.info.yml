@@ -1,0 +1,6 @@
+name: 'Alshaya MsClarity'
+type: module
+description: 'Provides an integration with MS Clarity.'
+package: Alshaya
+core: 8.x
+core_version_requirement: ^8 || ^9
