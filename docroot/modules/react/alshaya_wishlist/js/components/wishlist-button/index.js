@@ -247,10 +247,23 @@ class WishlistButton extends React.Component {
    */
   updateWishListStatus = (status) => {
     const { addedInWishList } = this.state;
+
+    // Get reference of wishlist button in teaser
+    // when user clicks button in drawer.
+    const { wishListButtonRef } = this.props;
+
     if (addedInWishList !== status) {
       this.setState({
         addedInWishList: status,
       });
+
+      // Wish list button reference will be undefined
+      // if it is clicked on teaser and not inside drawer.
+      if (typeof wishListButtonRef !== 'undefined' && wishListButtonRef !== null
+        && Object.prototype.hasOwnProperty.call(wishListButtonRef, 'current')) {
+        // Update the status of wishlist button in teaser.
+        wishListButtonRef.current.updateWishListStatus(status);
+      }
     }
   }
 

@@ -79,9 +79,7 @@
             // GTM product attributes for egift card.
             const productGtm = {
               id: product.id,
-              name: (product.sku === 'giftcard_topup')
-                ? `eGift Card Top up/${product.price}`
-                : `eGift Card/${product.price}`,
+              name: [product.title, product.price].join('/'),
               price: product.price,
               variant: product.sku,
               dimension2: 'virtual',
@@ -95,7 +93,7 @@
                 id: product.sku,
                 price: product.price,
                 count: 1,
-                title: `eGift Card/${product.price}`,
+                title: product.title,
                 image: product.media,
               };
               cartDataLayer.cartItemsFlocktory.push(flocktory);
