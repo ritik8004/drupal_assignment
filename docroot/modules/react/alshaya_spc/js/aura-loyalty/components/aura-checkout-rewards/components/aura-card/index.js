@@ -13,7 +13,8 @@ export default class AuraLinkedCheckout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: true,
+      // Accordion should be closed by default.
+      active: false,
     };
   }
 

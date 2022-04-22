@@ -202,16 +202,6 @@ class AuraCheckoutRewards extends React.Component {
     return (
       <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }}>
 
-        {/* Guest */}
-        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
-        || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
-        >
-          <AuraPointsToEarnedWithPurchase
-            pointsToEarn={auraPointsToEarn}
-            wait={waitForPoints}
-          />
-        </ConditionalView>
-
         {/* Registered User - Linked Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED
         || loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}
