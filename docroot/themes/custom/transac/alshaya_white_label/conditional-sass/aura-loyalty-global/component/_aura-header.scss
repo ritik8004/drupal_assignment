@@ -207,8 +207,18 @@ body.aura-enabled {
       margin-bottom: 0.5rem;
     }
 
-    .learn-more-wrapper {
-      margin: 0 0.201rem;
+    span {
+      a {
+        display: inline-block;
+        padding: 0.25rem 0;
+        color: inherit;
+        text-decoration: underline;
+        font-size: 0.75rem;
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
     }
 
     p {

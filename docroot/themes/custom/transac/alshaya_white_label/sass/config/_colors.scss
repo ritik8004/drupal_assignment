@@ -233,6 +233,12 @@ $aura-gradient-18: linear-gradient(135deg, rgba(119, 37, 131, 1) 4%, rgba(227, 2
 $aura-gradient-18-ar: linear-gradient(-135deg, rgba(119, 37, 131, 1) 4%, rgba(227, 28, 121, 1) 45%, rgba(239, 192, 110, 1) 100%);
 $aura-gradient-19: linear-gradient(99deg, #feeef3, #f8eaf5);
 $aura-gradient-19-ar: linear-gradient(-99deg, #feeef3, #f8eaf5);
+$aura-gradient-21: linear-gradient(98deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-21-ar: linear-gradient(-98deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-22: linear-gradient(101deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-22-ar: linear-gradient(-101deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-23: linear-gradient(116deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-23-ar: linear-gradient(-116deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
 $aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
 $aura-hello-tier: linear-gradient(140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
 $aura-hello-tier-ar: linear-gradient(-140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
@@ -1762,13 +1768,14 @@ $aura-spc-button-text: $darkish-purple;
 $aura-spc-button-bg: $white-five;
 $aura-spc-cart-unlinked-highlight: $aura-purpleTwo;
 $aura-spc-cart-unlinked-desc: $night-blue;
-$aura-spc-checkout-block-bg-gradient: $aura-gradient-15;
-$aura-spc-checkout-block-bg-gradient-ar: $aura-gradient-15-ar;
+$aura-spc-checkout-block-bg-gradient: $aura-gradient-21;
+$aura-spc-checkout-block-bg-gradient-ar: $aura-gradient-21-ar;
 $aura-spc-cod-disabled-text: $_aura-disabled-desc;
 $aura-spc-cod-disabled-elements: $_aura-disabled;
 $aura-spc-rewards-block-disabled-elements: $grey-gate;
 $aura-header-popup-learn-more-link: $musical-silk;
 $aura-header-popup-footer-text: $dark-night-owl;
+$aura-redeem-pts-cart-header-text: $_gray_222;
 
 // Aura My Account.
 $aura-loyalty-club-title-1: $aura-blue;
@@ -1832,8 +1839,8 @@ $aura-my-account-reward-activity-bg: $_aura-light-blue;
 $aura-my-account-filters-active-bg: $_aura-very-light-pink;
 
 // Aura Header.
-$aura-hb-menu-aura-tooltip: $aura-gradient-17;
-$aura-hb-menu-aura-tooltip-ar: $aura-gradient-17-ar;
+$aura-hb-menu-aura-tooltip: $aura-gradient-22;
+$aura-hb-menu-aura-tooltip-ar: $aura-gradient-22-ar;
 $aura-hb-tooltip-preview-text: $dark-night-owl;
 $aura-header-sign-link: $mothercare-black;
 $aura-header-card-wrapper-text: $white-five;

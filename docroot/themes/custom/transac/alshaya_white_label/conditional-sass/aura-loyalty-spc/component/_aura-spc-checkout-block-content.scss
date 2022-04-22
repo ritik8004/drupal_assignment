@@ -174,7 +174,7 @@
 
         .join-aura {
           position: relative;
-          top: 0.25rem;
+          top: 0.2rem;
           margin: 0 0.3rem;
 
           @include breakpoint($upto-desktop) {
@@ -372,7 +372,6 @@
   &.active,
   &.in-active {
     .redeem-aura-points {
-      margin-top: 1.5rem;
       background: $aura-spc-checkout-block-bg;
 
       .redeem-aura-points-header-container {
@@ -386,9 +385,16 @@
         font-size: 1rem;
         letter-spacing: 0.05rem;
 
+        span {
+          color: $aura-redeem-pts-cart-header-text;
+          letter-spacing: 0.05rem;
+          line-height: 1.25rem;
+          font-size: 1rem;
+        }
+
         .join-aura {
           position: relative;
-          top: 0.25rem;
+          top: 0.15rem;
           margin: 0 0.3rem;
 
           svg {
@@ -402,6 +408,7 @@
           align-items: center;
           justify-content: flex-end;
           flex-grow: 1;
+          cursor: pointer;
 
           @include icon('chevrondown') {
             font-size: 2rem;
@@ -409,7 +416,7 @@
             top: 50%;
             #{$right}: 0.875rem;
             transform: translateY(-50%);
-            transition: transform 0.125s ease-in-out;
+            transition: transform 0.3s ease-in-out;
           }
         }
 
@@ -483,13 +490,15 @@
 
     .redeem-aura-footer {
       color: $aura-spc-checkout-highlight;
-      font-family: $aura-bold;
       font-size: 0.75rem;
       line-height: 1.125rem;
-      margin-top: 0.5rem;
+      margin-top: 0.75rem;
+
+      b {
+        font-family: $aura-bold;
+      }
 
       @include breakpoint($only-mobile) {
-        margin-top: 3.5rem;
         margin-#{$left}: 1rem;
       }
 
