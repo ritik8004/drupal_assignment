@@ -32,6 +32,8 @@ globalThis.rcsGetEnrichedCategories = (callBackFunc = null) => {
         }
       }
     });
+    // Register the callback.
+    globalThis.RcsPhRestCategory.callBacks.push(callBackFunc);
   }
   else {
     // Register the callback.
