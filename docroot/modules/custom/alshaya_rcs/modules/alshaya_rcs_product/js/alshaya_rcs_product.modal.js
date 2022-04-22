@@ -51,7 +51,7 @@
                 },
               },
               sku_out_of_stock: false, //@todo Review this variable: It is used in few twig templates but never populated
-              size_volume: Drupal.hasValue(entity.size_volume) ? entity.size_volume : '', //@todo This is used on TBS, see alshaya_tbs_transac_node_view()
+              size_volume: Drupal.hasValue(entity.size_volume) ? entity.size_volume : '',
               vat_text: drupalSettings.vat_text,
               quantity_limit_enabled: drupalSettings.alshayaRcs.quantity_limit_enabled,
               image_slider_position_pdp: drupalSettings.alshaya_white_label.image_slider_position_pdp,
