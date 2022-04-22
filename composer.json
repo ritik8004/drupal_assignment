@@ -126,13 +126,14 @@
         "drupal/viewsreference": "^1.0",
         "drupal/webform": "6.0.4",
         "drupal/webform_rest": "^2.0",
-        "drush/drush": "^10.2",
+        "drush/drush": "10.6.2",
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
         "jquery-validation/jquery-validation": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "oomphinc/composer-installers-extender": "^2.0",
+        "psy/psysh": "v0.10.12",
         "springimport/magento2-api-v1": "^1.0"
     },
     "require-dev": {
