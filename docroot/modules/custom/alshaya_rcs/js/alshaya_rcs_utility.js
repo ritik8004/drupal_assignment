@@ -12,8 +12,10 @@ globalThis.rcsGetEnrichedCategories = (callBackFunc = null) => {
 
   // Set the default value of request started if it doesn't exists.
   if (!Drupal.hasValue(globalThis.RcsPhRestCategory)) {
-    globalThis.RcsPhStaticStorage.requestStarted = false;
-    globalThis.RcsPhRestCategory.callBacks = [];
+    globalThis.RcsPhRestCategory = {
+      requestStarted: false,
+      callBacks: [],
+    }
   }
 
   if (Drupal.hasValue(globalThis.RcsPhRestCategory) && !globalThis.RcsPhRestCategory.requestStarted) {
