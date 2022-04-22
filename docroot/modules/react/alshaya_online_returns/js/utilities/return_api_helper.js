@@ -165,9 +165,55 @@ const getReturnsByOrderId = async (orderId) => {
   });
 };
 
+/**
+ * Utility function to check if order date has expired.
+ */
+function ifOrderHasExpired(date) {
+  const expiredDate = new Date(date).getTime();
+  const currDate = new Date().getTime();
+
+  if (currDate > expiredDate) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Utility function to validate if return request is valid.
+ */
+async function validateReturnRequest() {
+  const orderDetails = getOrderDetails();
+
+  const returnItems = await getReturnsByOrderId(orderDetails['#order'].orderEntityId);
+
+  // Return false if the api results in some error.
+  if (hasValue(returnItems.error)) {
+    return false;
+  }
+
+  // Return false if return already exists for same order.
+  if (hasValue(returnItems.data.items)) {
+    return false;
+  }
+
+  // Return false if current order is not eligible for return.
+  if (!(orderDetails['#order'].isReturnEligible)) {
+    return false;
+  }
+
+  // Return false if current order has expired for return.
+  if (hasValue(orderDetails['#order'].returnExpiration)
+    && ifOrderHasExpired(orderDetails['#order'].returnExpiration)) {
+    return false;
+  }
+  return true;
+}
+
 export {
   createReturnRequest,
   prepareReturnRequestData,
   getReturnInfo,
   getReturnsByOrderId,
+  validateReturnRequest,
+  ifOrderHasExpired,
 };
