@@ -132,17 +132,12 @@
           @include breakpoint($tablet) {
             flex-direction: row;
           }
-
-          .item-total-price {
-            padding: 1.25rem 1.5rem;
-            padding-bottom: 1.5rem;
-          }
         }
 
         .order__details--summary {
           flex-basis: auto;
           padding: 1.5rem;
-          padding-bottom: 1.25rem;
+          padding-bottom: 0.9375rem;
 
           @include breakpoint($tablet) {
             flex-basis: 9.6875rem;
@@ -182,9 +177,12 @@
 
         .item-total-price {
           grid-area: d;
+          padding: 0.9375rem 1.5rem;
+          padding-bottom: 1.375rem;
 
           @include breakpoint($tablet) {
             padding: 1.5rem;
+            flex-basis: 12.5rem;
           }
 
           @include breakpoint($desktop) {
@@ -199,12 +197,6 @@
 
           .price {
             margin-bottom: 0.3125rem;
-          }
-        }
-
-        .item-total-price {
-          @include breakpoint($tablet) {
-            flex-basis: 12.5rem;
           }
         }
 

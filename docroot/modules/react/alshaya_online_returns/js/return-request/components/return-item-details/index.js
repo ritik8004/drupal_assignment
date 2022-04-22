@@ -52,9 +52,7 @@ class ReturnItemDetails extends React.Component {
               />
             </ConditionalView>
           </div>
-          <ReturnIndividualItem
-            item={item}
-          />
+          <ReturnIndividualItem item={item} />
           <ConditionalView condition={isChecked}>
             <ReturnReasonsSelect
               returnReasons={returnReasons}
