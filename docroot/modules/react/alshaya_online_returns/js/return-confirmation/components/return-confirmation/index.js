@@ -34,9 +34,7 @@ class ReturnConfirmation extends React.Component {
     }
     return (
       <div className="return-confirmation-wrapper">
-        <OrderDetailsButton
-          orderId={orderDetails['#order'].orderId}
-        />
+        <OrderDetailsButton orderId={orderDetails['#order'].orderId} />
         <ReturnSuccessMessage />
         <WhatsNextSection />
         <ReturnConfirmationDetails

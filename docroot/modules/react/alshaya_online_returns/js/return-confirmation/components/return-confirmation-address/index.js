@@ -15,7 +15,7 @@ const ReturnConfirmationAddress = ({
   return (
     <>
       <div className="return-confirmation-address">
-        <div className="address-title">
+        <div className="address-title light">
           { Drupal.t('Pick-up From', {}, { context: 'online_returns' }) }
         </div>
         <div className="address-details">

@@ -197,7 +197,7 @@ AddOutputFilterByType DEFLATE application/x-font-ttf
   # Allow access to simplesaml paths
   RewriteCond %{REQUEST_URI} !^/simplesaml
   # ACSF requirement: allow access to apc_rebuild.php.
-  RewriteCond %{REQUEST_URI} !/sites/g/apc_rebuild\.php$
+  RewriteCond %{REQUEST_URI} !/sites/g/apc_rebuild.php$
   # Deny access to any other PHP files that do not match the rules above.
   # Specifically, disallow autoload.php from being served directly.
   RewriteRule "^(.+/.*|autoload)\.php($|/)" - [F]

@@ -49,15 +49,11 @@ class ReturnConfirmationDetails extends React.Component {
           <div className="return-details-label">
             <div className="return-details-title">{ Drupal.t('Return Details', {}, { context: 'online_returns' }) }</div>
           </div>
-          <ReturnBasicInfo
-            returnData={returnData}
-          />
-          <RefundMethods
-            paymentInfo={paymentInfo}
-          />
-          <ReturnConfirmationAddress
-            shippingAddress={address}
-          />
+          <div className="return-confirmation-detail-wrapper">
+            <ReturnBasicInfo returnData={returnData} />
+            <RefundMethods paymentInfo={paymentInfo} />
+            <ReturnConfirmationAddress shippingAddress={address} />
+          </div>
           <div className="return-note-text">
             <div className="return-note-label">{ Drupal.t('Note - You can cancel this return order before 24hrs from the time of pick-up.', {}, { context: 'online_returns' }) }</div>
           </div>

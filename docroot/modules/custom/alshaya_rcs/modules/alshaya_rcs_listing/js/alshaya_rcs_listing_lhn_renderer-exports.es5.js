@@ -36,7 +36,7 @@ exports.render = function render(
       });
 
       // Get the enrichment data. It's a sync call.
-      let enrichmentData = globalThis.rcsGetEnrichedCategories();
+      let enrichmentData = globalThis.rcsGetEnrichedCategories(globalThis.rcsSetEnrichedCategoriesInStaticStorage);
       innerHtmlObj.find('ul').append(buildLhnHtml('', tempInputs, clickable, unclickable, settings, enrichmentData));
     }
   }
