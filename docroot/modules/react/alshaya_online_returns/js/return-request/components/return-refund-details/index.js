@@ -55,7 +55,6 @@ class ReturnRefundDetails extends React.Component {
 
     showFullScreenLoader();
     const validateRequest = await validateReturnRequest();
-    removeFullScreenLoader();
 
     // If return request invalid, redirect to order details page.
     if (!validateRequest) {
@@ -66,7 +65,6 @@ class ReturnRefundDetails extends React.Component {
       return;
     }
 
-    showFullScreenLoader();
     const returnRequest = await createReturnRequest(itemsSelected);
     removeFullScreenLoader();
 
