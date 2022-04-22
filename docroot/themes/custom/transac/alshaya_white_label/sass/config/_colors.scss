@@ -239,6 +239,8 @@ $aura-gradient-22: linear-gradient(101deg, rgba(227, 28, 121, 0.14), rgba(119, 3
 $aura-gradient-22-ar: linear-gradient(-101deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
 $aura-gradient-23: linear-gradient(116deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
 $aura-gradient-23-ar: linear-gradient(-116deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-24: linear-gradient(99deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-24-ar: linear-gradient(-99deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
 $aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
 $aura-hello-tier: linear-gradient(140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
 $aura-hello-tier-ar: linear-gradient(-140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
@@ -1831,12 +1833,13 @@ $aura-form-modal-section-bg: $white-five;
 $aura-modal-submit: $aura-gradient-radial;
 $aura-form-modal-desc-link: $darkish-purple;
 $aura-my-account-aura-nav-link: $aura-purpleTwo;
-$aura-my-account-nav-mobile-link-bg: $aura-gradient-19;
-$aura-my-account-nav-mobile-link-bg-ar: $aura-gradient-19-ar;
+$aura-my-account-nav-mobile-link-bg: $aura-gradient-24;
+$aura-my-account-nav-mobile-link-bg-ar: $aura-gradient-24-ar;
 $aura-my-account-filters: $_aura_account_txt;
 $aura-my-account-reward-activity: $aura-purpleTwo;
 $aura-my-account-reward-activity-bg: $_aura-light-blue;
 $aura-my-account-filters-active-bg: $_aura-very-light-pink;
+$aura-my-account-aura-nav-link-arrow: $aura-purple;
 
 // Aura Header.
 $aura-hb-menu-aura-tooltip: $aura-gradient-22;
