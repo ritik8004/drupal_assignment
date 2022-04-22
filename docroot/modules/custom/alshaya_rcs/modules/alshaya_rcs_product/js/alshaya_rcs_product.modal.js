@@ -33,7 +33,7 @@
               entity: entity,
               // @todo Create a function as this is also done in alshaya_rcs_magazine.js
               price_details: {
-                display_mode: 'simple',
+                display_mode: drupalSettings.alshayaRcs.priceDisplayMode,
                 discount: {
                   percent_off: Math.round(entity.price_range.maximum_price.discount.percent_off)
                 },
