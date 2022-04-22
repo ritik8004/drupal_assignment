@@ -66,6 +66,7 @@ class ConfigurableProductDrawer extends React.Component {
       productData,
       url,
       extraInfo,
+      wishListButtonRef,
     } = this.props;
     const { selectedVariant } = this.state;
 
@@ -144,6 +145,7 @@ class ConfigurableProductDrawer extends React.Component {
               parentSku={parentSku}
               onItemAddedToCart={this.onItemAddedToCart}
               extraInfo={extraInfo}
+              wishListButtonRef={wishListButtonRef}
             />
             <div className="pdp-link">
               <a href={url}>{getStringMessage('view_full_product_details')}</a>
