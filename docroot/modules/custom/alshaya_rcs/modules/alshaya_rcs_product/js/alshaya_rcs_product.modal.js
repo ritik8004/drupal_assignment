@@ -57,9 +57,7 @@
               image_slider_position_pdp: drupalSettings.alshaya_white_label.image_slider_position_pdp,
               add_to_cart: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'add_to_cart'),
               promotions: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'promotions'),
-              postpay: {
-                postpay_mode_class: '', //@todo Implement postpay
-              },
+              postpay: drupalSettings.postpay_widget_info,
             };
 
             var elem = document.createElement('div');

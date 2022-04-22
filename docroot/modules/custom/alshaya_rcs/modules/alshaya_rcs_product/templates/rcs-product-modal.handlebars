@@ -38,10 +38,15 @@
         {{{render 'product.block.price' price_details }}}
       </div>
 
-      {{! @todo Implement this }}
-      {{#if postpay.postpay_mode_class }}
-        {{! @todo attach library alshaya_white_label/postpay-pdp }}
-        <div class="postpay {{ postpay_mode_class }}"> {{ postpay }} </div>
+      {{#if postpay }}
+        <div class="postpay {{ postpay.class }}">
+          <div class="postpay-widget"
+               data-type="{{ postpay.data-type }}"
+               data-currency="{{ postpay.data-currency }}"
+               data-num-instalments="{{ postpay.data-num-instalments }}"
+               data-locale="{{ postpay.data-locale }}">
+          </div>
+        </div>
       {{/if}}
 
       {{#if promotions }}
