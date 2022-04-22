@@ -89,14 +89,10 @@ class ReturnRefundDetails extends React.Component {
     return (
       <div className="refund-details-wrapper">
         <Collapsible trigger={this.refundDetailsHeader()} open={open} triggerDisabled={!open}>
-          <ReturnRefundMethod
-            paymentDetails={paymentInfo}
-          />
+          <ReturnRefundMethod paymentDetails={paymentInfo} />
           <ReturnAmountWrapper />
           <ReturnCollectionDetails />
-          <ReturnCollectionAddress
-            shippingAddress={address}
-          />
+          <ReturnCollectionAddress shippingAddress={address} />
           <div className="confirm-return-button-wrapper">
             <button
               type="button"

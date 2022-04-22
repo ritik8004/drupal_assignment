@@ -18,9 +18,7 @@ const ReturnedItemsListing = ({
       </div>
       {returnedItems.map((item) => (
         <div key={item.sku} className="item-details">
-          <ReturnIndividualItem
-            item={item}
-          />
+          <ReturnIndividualItem item={item} />
         </div>
       ))}
     </div>
