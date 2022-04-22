@@ -2,7 +2,7 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import logger from '../../../js/utilities/logger';
 import { callMagentoApi, prepareFilterData } from '../../../js/utilities/requestHelper';
-import { getOrderDetails } from './online_returns_util';
+import { getOrderDetails, isReturnWindowClosed } from './online_returns_util';
 
 /**
  * Prepare data to create return request.
@@ -166,19 +166,6 @@ const getReturnsByOrderId = async (orderId) => {
 };
 
 /**
- * Utility function to check if order date has expired.
- */
-function ifOrderHasExpired(date) {
-  const expiredDate = new Date(date).getTime();
-  const currDate = new Date().getTime();
-
-  if (currDate > expiredDate) {
-    return true;
-  }
-  return false;
-}
-
-/**
  * Utility function to validate if return request is valid.
  */
 async function validateReturnRequest() {
@@ -210,7 +197,7 @@ async function validateReturnRequest() {
 
   // Return false if current order has expired for return.
   if (hasValue(orderDetails['#order'].returnExpiration)
-    && ifOrderHasExpired(orderDetails['#order'].returnExpiration)) {
+    && isReturnWindowClosed(orderDetails['#order'].returnExpiration)) {
     logger.notice('Error while trying to create return request. Order: @orderId has expired for return', {
       '@orderId': orderDetails['#order'].orderId,
     });
@@ -225,5 +212,4 @@ export {
   getReturnInfo,
   getReturnsByOrderId,
   validateReturnRequest,
-  ifOrderHasExpired,
 };
