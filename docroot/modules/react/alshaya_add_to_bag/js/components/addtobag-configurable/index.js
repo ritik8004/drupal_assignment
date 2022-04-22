@@ -117,6 +117,7 @@ export default class AddToBagConfigurable extends React.Component {
       // 'extraInfo' is used to pass additional information that
       // we want to use in this component.
       extraInfo,
+      wishListButtonRef,
     } = this.props;
 
     // Early return if product is not buyable.
@@ -154,6 +155,7 @@ export default class AddToBagConfigurable extends React.Component {
               sku={sku}
               url={url}
               extraInfo={extraInfo}
+              wishListButtonRef={wishListButtonRef}
             />,
             document.querySelector('#configurable-drawer'),
           )}
