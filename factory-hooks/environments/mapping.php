@@ -257,6 +257,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'pb_uat',
         'conductor' => 'pbkw_dev2',
       ],
+      'dev3' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbkw_dev3',
+      ],
     ],
     'pbae' => [
       'qa2' => [
