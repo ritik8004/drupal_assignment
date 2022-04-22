@@ -179,6 +179,13 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
         return null;
       }
 
+      const staticKey = placeholder + '_data';
+      const staticNavigationData = globalThis.RcsPhStaticStorage.get(staticKey);
+      // Return the data from static storage if available.
+      if (staticNavigationData !== null) {
+        return staticNavigationData;
+      }
+
       // Prepare request parameters.
       // Fetch categories for navigation menu using categories api.
       request.data = prepareQuery(rcsPhGraphqlQuery.navigationMenu.query, rcsPhGraphqlQuery.navigationMenu.variables);
@@ -191,6 +198,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       ) {
         // Get children for root category.
         result = response.data.categories.items[0].children;
+        // Store category data in static storage.
+        globalThis.RcsPhStaticStorage.set(placeholder + '_data', result);
       }
       break;
 
