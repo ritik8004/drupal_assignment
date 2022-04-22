@@ -52,6 +52,12 @@
         </div>
       {{/if}}
 
+      {{#if tabby }}
+        <div class="tabby mobile-only-hide">
+          <div class="{{ tabby.class }}" id="{{ tabby.id }}"></div>
+        </div>
+      {{/if}}
+
       {{#if promotions }}
         <div class="promotions">
           {{{ promotions }}}
@@ -81,6 +87,12 @@
       {{/if}}
 
       <div class="basic-details-wrapper">
+        {{#if tabby }}
+          <div class="tabby mobile-only-show">
+            <div class="{{ tabby.class }}" id="tabby-promo-pdp-mobile"></div>
+          </div>
+        {{/if}}
+
         <div class="field--name-field-skus field__items">{{{ add_to_cart }}}</div>
         {{#if quantity_limit_enabled }}
           <div class="order-quantity-limit-message"></div>

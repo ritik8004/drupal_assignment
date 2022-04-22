@@ -58,7 +58,8 @@
               image_slider_position_pdp: drupalSettings.alshaya_white_label.image_slider_position_pdp,
               add_to_cart: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'add_to_cart'),
               promotions: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'promotions'),
-              postpay: drupalSettings.postpay_widget_info,
+              postpay: Drupal.hasValue(drupalSettings.postpay_widget_info) ? drupalSettings.postpay_widget_info : {},
+              tabby: Drupal.hasValue(drupalSettings.tabby) ? drupalSettings.tabby.widgetInfo : {},
             };
 
             var elem = document.createElement('div');
