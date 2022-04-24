@@ -509,7 +509,7 @@ function alshaya_acm_promotion_preprocess_html(&$variables) {
   $promoLabelAPIHelper = \Drupal::service('alshaya_acm_promotion.api_helper');
 
   // Return if discounted text is not set as true.
-  if (!$promoLabelAPIHelper->hideDiscountedText()) {
+  if (!$promoLabelAPIHelper->getDiscountTextVisibilityStatus()) {
     return;
   }
 

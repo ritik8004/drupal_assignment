@@ -63,16 +63,16 @@ class AlshayaAcmPromoLabelAPIHelper {
    * @return array|mixed
    *   Return array of keys.
    */
-  public function hideDiscountedText($reset = FALSE) {
+  public function getDiscountTextVisibilityStatus($reset = FALSE) {
     static $status;
 
-    if ($status === 'true' && !$reset) {
+    if (($status === 'true' || $status === 'false') && !$reset) {
       return $status;
     }
 
-    $cache_key = 'alshaya_acm_promotion:promo_lable_api_status';
+    $cache_key = 'alshaya_acm_promotion:promo_label_api_status';
     $cache = $reset ? NULL : $this->cache->get($cache_key);
-    if (is_object($cache) && $cache->data === 'true' && !$reset) {
+    if (is_object($cache) && ($cache->data === 'true' || $cache->data === 'false') && !$reset) {
       $status = $cache->data;
       return $status;
     }
@@ -89,14 +89,14 @@ class AlshayaAcmPromoLabelAPIHelper {
       $request_options
     );
 
-    if ($status === 'true') {
-      // Cache only if enabled.
+    if ($status === 'true' || $status === 'false') {
+      // Cache only if enabled or disabled.
       $this->cache->set($cache_key, $status);
     }
 
     // Try resetting once.
-    if ($status !== 'true' && !$reset) {
-      return $this->hideDiscountedText(TRUE);
+    if (($status !== 'true' || $status !== 'false') && !$reset) {
+      return $this->getDiscountTextVisibilityStatus(TRUE);
     }
 
     return FALSE;
