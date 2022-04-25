@@ -42,14 +42,14 @@ function pushContentToBVAnalytics(content, contentType, productData) {
 /**
  * Helper function to push complete page view to analytics.
  */
-function trackPageView(productData) {
+function trackPageView(productData, productSku) {
   const pageViewData = {
     bvProduct: 'RatingsAndReviews',
     productId: productData.Id,
     brand: productData.Brand.Name,
     type: 'Product',
     categoryId: productData.CategoryId,
-    categoryName: drupalSettings.productInfo[productData.Id].gtm_attributes.category,
+    categoryName: drupalSettings.productInfo[productSku].gtm_attributes.category,
     numReviews: productData.ReviewStatistics.TotalReviewCount,
     avgRating: Math.round(productData.ReviewStatistics.AverageOverallRating * 100) / 100,
     percentRecommended: Math.round((productData.ReviewStatistics.RecommendedCount
@@ -134,11 +134,11 @@ function trackViewedCGC(inViewData, containerId) {
  */
 export function trackPassiveAnalytics() {
   if (drupalSettings.productReviewStats && bvPixelUtility !== null) {
-    const { productData } = drupalSettings.productReviewStats;
+    const { productData, productSku } = drupalSettings.productReviewStats;
     const containerId = 'reviews-section';
 
     // This method communicates data specific to the product page
-    trackPageView(productData);
+    trackPageView(productData, productSku);
 
     // Prepare in view data for track view and CGC events.
     const inViewData = {
