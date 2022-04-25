@@ -88,7 +88,7 @@ class AlshayaAcmPromotionAPIHelper {
       FALSE,
       $request_options
     );
-  
+
     if ($status === 'true' || $status === 'false') {
       // Cache only if enabled or disabled.
       $this->cache->set($cache_key, $status);
