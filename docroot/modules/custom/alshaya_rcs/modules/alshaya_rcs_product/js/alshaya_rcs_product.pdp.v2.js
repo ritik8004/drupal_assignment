@@ -47,8 +47,10 @@
    *   The gallery for the product.
    * @param {string} pageMainSku
    *   Main sku for PDP.
+   * @param {string} selectedSku
+   *   The selected sku value.
    */
-  window.commerceBackend.updateGallery = async function (product, layout, productGallery, pageMainSku) {
+  window.commerceBackend.updateGallery = async function (product, layout, productGallery, pageMainSku, selectedSku) {
     const productData = window.commerceBackend.getProductData(pageMainSku, null, false);
     const viewMode = product.parents('.entity--type-node').attr('data-vmode');
 
@@ -66,8 +68,7 @@
         galleryType,
         {
           galleryLimit: viewMode === 'modal' ? 'modal' : 'others',
-          // The simple SKU.
-          sku,
+          sku: selectedSku,
         },
         { },
         productData,
@@ -84,7 +85,7 @@
     // while the labels are fetched from the API.
     // This causes discrepancy in the flow, since in V1 the updateGallery()
     // executes completely in one flow.
-    renderProductLabels(product, sku, pageMainSku);
+    renderProductLabels(product, selectedSku, pageMainSku);
 
     if ($(product).find('.gallery-wrapper').length > 0) {
       // Since matchback products are also inside main PDP, when we change the variant
