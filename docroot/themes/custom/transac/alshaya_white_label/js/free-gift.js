@@ -120,10 +120,10 @@
 
         var freeGiftWrapper = $(this).closest('article');
         if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
-          window.commerceBackend.updateGallery(freeGiftWrapper, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery, sku);
+          window.commerceBackend.updateGallery(freeGiftWrapper, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery, sku, variantInfo.sku);
         }
         else {
-          window.commerceBackend.updateGallery(freeGiftWrapper, variantInfo.layout, variantInfo.gallery, sku);
+          window.commerceBackend.updateGallery(freeGiftWrapper, variantInfo.layout, variantInfo.gallery, sku, variantInfo.sku);
         }
       });
     }
