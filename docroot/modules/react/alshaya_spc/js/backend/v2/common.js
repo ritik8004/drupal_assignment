@@ -266,9 +266,9 @@ const formatCart = (cartData) => {
 /**
  * Static cache for getProductStatus().
  *
- * @type {null}
+ * @type {object}
  */
-const staticProductStatus = [];
+let staticProductStatus = {};
 
 /**
  * Get data related to product status.
@@ -285,13 +285,20 @@ const getProductStatus = async (sku, parentSKU) => {
   }
 
   // Return from static, if available.
-  if (typeof staticProductStatus[sku] !== 'undefined') {
+  if (Drupal.hasValue(staticProductStatus) && Drupal.hasValue(staticProductStatus[sku])) {
     return staticProductStatus[sku];
   }
 
   staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku, parentSKU);
 
   return staticProductStatus[sku];
+};
+
+/**
+ * Clears static cache for product status data.
+ */
+const clearProductStatusStaticCache = () => {
+  staticProductStatus = {};
 };
 
 /**
@@ -426,9 +433,6 @@ const getProcessedCartData = async (cartData) => {
 
   if (typeof cartData.cart.items !== 'undefined' && cartData.cart.items.length > 0) {
     data.items = {};
-    // Call this function to statically store stock data for V3.
-    // For V2, it does nothing.
-    await window.commerceBackend.loadProductStockDataFromCart(cartId);
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
       const hasParentSku = hasValue(item.extension_attributes)
@@ -1277,4 +1281,5 @@ export {
   getProductStatus,
   getLocations,
   getProductShippingMethods,
+  clearProductStatusStaticCache,
 };

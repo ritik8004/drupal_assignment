@@ -10,6 +10,20 @@ use Drupal\Core\File\FileSystemInterface;
 /**
  * Implements hook_update_N().
  *
+ * Installs jquery_ui and jquery_ui_datepicker modules.
+ */
+function alshaya_update_8016() {
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui']);
+  }
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_datepicker'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_datepicker']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Uninstalls track_js and alshaya_track_js modules.
  */
 function alshaya_update_8015() {

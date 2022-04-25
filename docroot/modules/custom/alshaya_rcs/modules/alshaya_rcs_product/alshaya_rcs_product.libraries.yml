@@ -88,6 +88,11 @@ product.block.price.item:
   js:
     templates/rcs-product-price-item-block.handlebars: {}
 
+product.modal:
+  version: 1.x
+  js:
+    templates/rcs-product-modal.handlebars: {}
+
 gallery.product.product_zoom:
   version: 1.x
   js:

@@ -133,4 +133,17 @@ class SystemSettings {
     return in_array($lang, ['en', 'ar']) ? $lang : 'en';
   }
 
+  /**
+   * Get all Magento URLs.
+   *
+   * @return array
+   *   Magento urls.
+   */
+  public function getAllMagentoUrls() {
+    include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
+    global $magentos;
+
+    return array_column($magentos, 'url');
+  }
+
 }

@@ -79,5 +79,10 @@ function alshaya_geolocation_update_dependencies() {
   $dependencies['alshaya_geolocation'][8003] = [
     'geolocation' => 8201,
   ];
+
+  // Run after lightning profile update.
+  $dependencies['alshaya_geolocation'][8002] = [
+    'lightning' => 8007,
+  ];
   return $dependencies;
 }

@@ -17,6 +17,20 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Installs jquery_ui_accordion, jquery_ui_effects module if it is not enabled.
+ */
+function alshaya_transac_update_8140() {
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_tabs'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_tabs']);
+  }
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_effects'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_effects']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Installs jquery_ui_accordion module if it is not enabled.
  */
 function alshaya_transac_update_8139() {

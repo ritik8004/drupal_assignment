@@ -87,12 +87,6 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     'rcs_product_teaser' => [
       'variables' => [],
     ],
-    'rcs_product_modal' => [
-      'variables' => [],
-    ],
-    'rcs_modal_product_zoom' => [
-      'variables' => [],
-    ],
     'rcs_related_products_wrapper' => [
       'variables' => [],
     ],
@@ -225,6 +219,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
   // Attach library for product recommendations modal.
   $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
+  $build['#attached']['library'][] = 'alshaya_white_label/attribute';
   // Attach promotion label js.
   $build['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
   // Attach product dynamic yield js.
@@ -236,6 +231,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   if ($isQuantityLimitEnabled) {
     $build['#attached']['library'][] = 'alshaya_white_label/order-qty-limit';
   }
+  $build['#attached']['drupalSettings']['alshayaRcs']['quantity_limit_enabled'] = $isQuantityLimitEnabled;
 
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',
@@ -273,6 +269,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['show_configurable_boxes_after'] = $product_display_settings->get('show_configurable_boxes_after');
   $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
   $build['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');
+  $build['#attached']['drupalSettings']['alshayaRcs']['priceDisplayMode'] = $product_display_settings->get('price_display_mode') ?? 'simple';
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_display_settings->getCacheTags());
 
   $build['#attached']['drupalSettings']['alshayaRcs']['default_meta_image'] = \Drupal::token()->replace('[alshaya_seo:meta_image]');
@@ -508,18 +505,6 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     '#value' => render($product_teaser),
     '#attributes' => [
       'class' => 'rcs-templates--product-teaser',
-    ],
-  ];
-
-  $product_modal = [
-    '#theme' => 'rcs_product_modal',
-  ];
-  $variables['rcs_templates']['product_modal'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($product_modal),
-    '#attributes' => [
-      'class' => 'rcs-templates--product-modal',
     ],
   ];
 
@@ -769,6 +754,9 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
   $libraries = [
     'product.block.description' => 'alshaya_rcs_product',
     'product.order_quantity_limit' => 'alshaya_rcs_product',
+    'product.modal' => 'alshaya_rcs_product',
+    'product.block.price' => 'alshaya_rcs_product',
+    'product.block.price.item' => 'alshaya_rcs_product',
     'product.promotions' => 'alshaya_rcs_product',
     'product.delivery_info' => 'alshaya_rcs_product',
     'product.delivery_options' => 'alshaya_rcs_product',
@@ -978,6 +966,9 @@ function alshaya_rcs_product_preprocess_node(&$variables) {
     if ($deliveryOptionsHelper->ifSddEdFeatureEnabled()) {
       $variables['express_delivery_enabled'] = TRUE;
     }
+
+    $product_settings = \Drupal::config('alshaya_acm_product.settings');
+    $variables['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $product_settings->get('image_slider_position_pdp');
   }
 }
 

@@ -292,6 +292,7 @@ export default class ConfigurableForm extends React.Component {
       productData,
       extraInfo,
       parentSku,
+      wishListButtonRef,
     } = this.props;
     const configurableAttributes = productData.configurable_attributes;
     const { formAttributeValues, quantity, errorMessage } = this.state;
@@ -438,6 +439,7 @@ export default class ConfigurableForm extends React.Component {
               format="icon"
               title={productData.title}
               options={options}
+              wishListButtonRef={wishListButtonRef}
             />
           </ConditionalView>
         </form>

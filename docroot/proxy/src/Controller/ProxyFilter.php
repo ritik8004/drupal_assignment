@@ -33,6 +33,8 @@ class ProxyFilter implements FilterInterface {
    *
    * @param string $url
    *   The url of the endpoint.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   The settings object.
    */
   public function __construct($url, SystemSettings $settings) {
     $this->url = $url;
@@ -45,12 +47,20 @@ class ProxyFilter implements FilterInterface {
    * @inheritdoc
    */
   public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next) {
-    // Get magento host from settings.
-    $magento_host = $this->settings->getSettings('alshaya_api.settings')['magento_host'];
+    // Get magento urls from settings.
+    $magento_urls = $this->settings->getAllMagentoUrls();
 
     // Check if url received by proxy has magento host,
-    // If url is not magento host then return response with 404 code.
-    if (substr($this->url, 0, strlen($magento_host)) !== $magento_host) {
+    $has_magento_host = FALSE;
+    foreach ($magento_urls as $magento_url) {
+      if (substr($this->url, 0, strlen($magento_url)) === $magento_url) {
+        $has_magento_host = TRUE;
+        break;
+      }
+    }
+
+    // If url does not have magento host then return response with 404 code.
+    if (!$has_magento_host) {
       return $response->withStatus(404, 'Page not found');
     }
 
