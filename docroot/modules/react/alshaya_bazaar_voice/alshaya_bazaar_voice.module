@@ -330,6 +330,7 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
         $productData = $productReviewStats[$sanitized_sku]['productData'];
         // Adding product data to drupal settings.
         $attachments['#attached']['drupalSettings']['productReviewStats'] = [
+          'productSku' => $sku,
           'productId' => $sanitized_sku,
           'productData' => $productReviewStats[$sanitized_sku]['productData'] ?? NULL,
         ];
