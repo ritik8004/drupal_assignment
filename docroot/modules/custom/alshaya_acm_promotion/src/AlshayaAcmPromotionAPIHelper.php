@@ -7,11 +7,11 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\alshaya_api\Helper\MagentoApiHelper;
 
 /**
- * Api helper for promo label config.
+ * Api helper for promotion config.
  *
  * @package Drupal\alshaya_acm_promotion
  */
-class AlshayaAcmPromoLabelAPIHelper {
+class AlshayaAcmPromotionAPIHelper {
 
   /**
    * Api wrapper.
@@ -35,7 +35,7 @@ class AlshayaAcmPromoLabelAPIHelper {
   protected $mdcHelper;
 
   /**
-   * AlshayaAcmPromoLabelAPIHelper constructor.
+   * AlshayaAcmPromotionAPIHelper constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
@@ -55,7 +55,7 @@ class AlshayaAcmPromoLabelAPIHelper {
   }
 
   /**
-   * Get Promo label config.
+   * Get the discount text visibility status.
    *
    * @param bool $reset
    *   Reset cached data and fetch again.
@@ -70,7 +70,7 @@ class AlshayaAcmPromoLabelAPIHelper {
       return $status;
     }
 
-    $cache_key = 'alshaya_acm_promotion:promo_label_api_status';
+    $cache_key = 'alshaya_acm_promotion:discount_text_visibility_status';
     $cache = $reset ? NULL : $this->cache->get($cache_key);
     if (is_object($cache) && ($cache->data === 'true' || $cache->data === 'false') && !$reset) {
       $status = $cache->data;
@@ -88,14 +88,13 @@ class AlshayaAcmPromoLabelAPIHelper {
       FALSE,
       $request_options
     );
-
+  
     if ($status === 'true' || $status === 'false') {
       // Cache only if enabled or disabled.
       $this->cache->set($cache_key, $status);
     }
-
     // Try resetting once.
-    if (($status !== 'true' || $status !== 'false') && !$reset) {
+    elseif (!$reset) {
       return $this->getDiscountTextVisibilityStatus(TRUE);
     }
 

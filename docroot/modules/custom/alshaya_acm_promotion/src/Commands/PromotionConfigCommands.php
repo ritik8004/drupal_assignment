@@ -2,21 +2,21 @@
 
 namespace Drupal\alshaya_acm_promotion\Commands;
 
-use Drupal\alshaya_acm_promotion\AlshayaAcmPromoLabelAPIHelper;
+use Drupal\alshaya_acm_promotion\AlshayaAcmPromotionAPIHelper;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Provides commands for promo label config.
+ * Provides commands for promotion config.
  *
  * @package Drupal\alshaya_acm_promotion\Commands
  */
-class PromotionLabelConfigCommands extends DrushCommands {
+class PromotionConfigCommands extends DrushCommands {
 
   /**
    * The api helper object.
    *
-   * @var \Drupal\alshaya_acm_promotion\AlshayaAcmPromoLabelAPIHelper
+   * @var \Drupal\alshaya_acm_promotion\AlshayaAcmPromotionAPIHelper
    */
   protected $apiHelper;
 
@@ -28,15 +28,15 @@ class PromotionLabelConfigCommands extends DrushCommands {
   protected $drupalLogger;
 
   /**
-   * PromotionLabelConfigCommands constructor.
+   * PromotionConfigCommands constructor.
    *
-   * @param \Drupal\alshaya_acm_promotion\AlshayaAcmPromoLabelAPIHelper $api_helper
+   * @param \Drupal\alshaya_acm_promotion\AlshayaAcmPromotionAPIHelper $api_helper
    *   Api helper object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory.
    */
   public function __construct(
-    AlshayaAcmPromoLabelAPIHelper $api_helper,
+    AlshayaAcmPromotionAPIHelper $api_helper,
     LoggerChannelFactoryInterface $logger_factory
   ) {
     $this->apiHelper = $api_helper;
@@ -44,16 +44,16 @@ class PromotionLabelConfigCommands extends DrushCommands {
   }
 
   /**
-   * Syncs and resets promo label config cache.
+   * Syncs and resets promo config cache.
    *
-   * @command alshaya_acm_promotion:sync-promo-lable-config
+   * @command alshaya_acm_promotion:sync-promotion-config
    *
-   * @aliases sync-promo-lable-config
+   * @aliases sync-promotion-config
    */
-  public function syncPromoLabelConfig() {
-    // Reset magento promo label config cache.
-    $this->apiHelper->hideDiscountedText(TRUE);
-    $this->logger->notice('Promo label config info cache reset.');
+  public function syncPromotionConfig() {
+    // Reset magento promotion config cache.
+    $this->apiHelper->getDiscountTextVisibilityStatus(TRUE);
+    $this->logger->notice('Promotion config info cache reset.');
   }
 
 }

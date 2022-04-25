@@ -30,7 +30,7 @@ services:
     factory: cache_factory:get
     arguments: [alshaya_acm_promotion]
   alshaya_acm_promotion.api_helper:
-    class: Drupal\alshaya_acm_promotion\AlshayaAcmPromoLabelAPIHelper
+    class: Drupal\alshaya_acm_promotion\AlshayaAcmPromotionAPIHelper
     arguments:
       - '@alshaya_api.api'
       - '@cache.alshaya_acm_promotion'

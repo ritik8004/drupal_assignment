@@ -505,13 +505,11 @@ function alshaya_acm_promotion_entity_delete(EntityInterface $entity) {
  * Implements hook_preprocess_html().
  */
 function alshaya_acm_promotion_preprocess_html(&$variables) {
-  /** @var \Drupal\alshaya_acm_promotion\AlshayaAcmPromoLabelAPIHelper $promoLabelAPIHelper */
-  $promoLabelAPIHelper = \Drupal::service('alshaya_acm_promotion.api_helper');
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaAcmPromotionAPIHelper $AlshayaAcmPromotionAPIHelper */
+  $AlshayaAcmPromotionAPIHelper = \Drupal::service('alshaya_acm_promotion.api_helper');
 
-  // Return if discounted text is not set as true.
-  if (!$promoLabelAPIHelper->getDiscountTextVisibilityStatus()) {
-    return;
+  // Return if discounted text visibility set as true.
+  if ($AlshayaAcmPromotionAPIHelper->getDiscountTextVisibilityStatus() === 'true') {
+    $variables['attributes']['class'][] = 'hide-discount-text';
   }
-
-  $variables['attributes']['class'][] = 'hide-discount-text';
 }
