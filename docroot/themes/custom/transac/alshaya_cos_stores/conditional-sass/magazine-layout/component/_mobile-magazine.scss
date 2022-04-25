@@ -103,7 +103,9 @@
     }
   }
 
-  .horizontal-upell {
-    display: none;
+  .horizontal-upell,
+  .horizontal-related,
+  .horizontal-crossell {
+    margin-bottom: 0;
   }
 }
