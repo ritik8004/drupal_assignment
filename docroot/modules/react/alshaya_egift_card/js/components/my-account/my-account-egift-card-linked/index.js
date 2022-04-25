@@ -2,8 +2,6 @@ import React from 'react';
 import moment from 'moment';
 import Cleave from 'cleave.js/react';
 import Popup from 'reactjs-popup';
-import PriceElement
-  from '../../../../../js/utilities/components/price/price-element';
 import logger from '../../../../../js/utilities/logger';
 import {
   removeFullScreenLoader,
@@ -14,6 +12,8 @@ import ConditionalView
 import MyEgiftTopUp from '../my-egift-top-up';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
+import PriceElement
+  from '../../../../../alshaya_spc/js/utilities/special-price/PriceElement';
 
 class EgiftCardLinked extends React.Component {
   constructor(props) {
@@ -114,7 +114,9 @@ class EgiftCardLinked extends React.Component {
             <div className="egift-linked-title">{Drupal.t('My eGift Card', {}, { context: 'egift' })}</div>
             <div className="egift-linked-balance">
               {Drupal.t('Balance:', {}, { context: 'egift' })}
-              <PriceElement amount={parseFloat(linkedCard.current_balance)} />
+              <PriceElement
+                amount={parseFloat(linkedCard.current_balance)}
+              />
             </div>
           </div>
           <Popup
