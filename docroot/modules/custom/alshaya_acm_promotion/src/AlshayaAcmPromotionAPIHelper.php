@@ -98,7 +98,7 @@ class AlshayaAcmPromotionAPIHelper {
       return $this->getDiscountTextVisibilityStatus(TRUE);
     }
 
-    return FALSE;
+    return $status ?? FALSE;
   }
 
 }
