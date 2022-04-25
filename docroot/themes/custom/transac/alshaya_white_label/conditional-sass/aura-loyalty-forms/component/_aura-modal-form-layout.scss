@@ -207,6 +207,11 @@
 .aura-modal-popup-overlay {
   z-index: 1000 !important;
 
+  @include breakpoint($only-tablet) {
+    width: 100vw;
+    top: -2.9375rem !important;
+  }
+
   .aura-modal-popup-content {
     border-radius: 0.625rem;
 
