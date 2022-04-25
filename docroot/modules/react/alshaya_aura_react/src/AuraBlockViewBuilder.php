@@ -26,6 +26,16 @@ class AuraBlockViewBuilder implements RenderCallbackInterface {
     ];
 
     $build['#attributes']['class'][] = 'aura-enabled';
+    /* Class is added on my aura to manage arrow icon. */
+    if (isset($build['content']['my_account_links'])
+    && isset($build['content']['my_account_links']['#items'])
+    && isset($build['content']['my_account_links']['#items']['alshaya_loyalty_club'])) {
+      $build['content']['my_account_links']['#items']['alshaya_loyalty_club']['#wrapper_attributes'] = [
+        'class' => [
+          'my-aura-link',
+        ],
+      ];
+    }
 
     return $build;
   }
