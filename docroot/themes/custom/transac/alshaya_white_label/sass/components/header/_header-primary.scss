@@ -535,6 +535,10 @@ header {
       padding: 0.9rem 0.875rem 0.664rem 0.625rem;
     }
 
+    a.my-account-egift-card {
+      text-transform: initial;
+    }
+
     .mobile--search {
       &::before {
         margin-#{$right}: 0.3125rem;
