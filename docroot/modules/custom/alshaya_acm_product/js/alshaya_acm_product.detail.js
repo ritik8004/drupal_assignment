@@ -153,9 +153,9 @@
         Drupal.disableLimitExceededProducts(sku, sku);
 
         node = $(this).parents('article.entity--type-node:first');
-        if (productData.type === 'simple') {
-          window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, productData.sku);
-        }
+        // This is used for simple products and for sofa-sectional products
+        // where the variant is not selected on page load.
+        window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, productData.sku);
 
         // Dispatch event on modal load each time to perform action on load.
         // We need to load wishlist component first before we set product data.
@@ -200,13 +200,13 @@
           $('.price-block-' + productData.identifier, node).html(variantInfo.price);
 
           if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
-            window.commerceBackend.updateGallery(node, productData.layout, productData.gallery);
+            window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, sku, variantInfo.sku);
           }
           else if (viewMode === 'matchback_mobile' && $(window).width() < 768) {
             Drupal.updateMatchbackMobileImage(node, variantInfo['matchback_teaser_image']);
           }
           else {
-            window.commerceBackend.updateGallery(node, productData.layout, variantInfo.gallery, sku);
+            window.commerceBackend.updateGallery(node, productData.layout, variantInfo.gallery, sku, variantInfo.sku);
           }
           // On variant change, disable/enable Add to bag, quantity dropdown
           // and show message based on value in drupalSettings.
