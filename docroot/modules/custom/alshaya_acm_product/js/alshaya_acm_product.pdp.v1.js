@@ -54,10 +54,10 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
  *   The gallery for the product.
  * @param {string} pageMainSku
  *   Main sku for PDP.
- * @param {string} parentSku
- *   The parent SKU value if exists.
+ * @param {string} selectedSku
+ *   The selected sku value.
  */
-window.commerceBackend.updateGallery = function (product, layout, gallery, pageMainSku) {
+window.commerceBackend.updateGallery = function (product, layout, gallery, pageMainSku, sku) {
   if (gallery === '' || gallery === null) {
     return;
   }
