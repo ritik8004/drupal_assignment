@@ -30,10 +30,11 @@
           $('.price-block-' + drupalSettings[productKey][sku].identifier, node).html(drupalSettings[productKey][sku].price);
 
           // Update Gallery.
-          Drupal.updateGallery(
+          window.commerceBackend.updateGallery(
             node,
             drupalSettings[productKey][sku].layout,
-            drupalSettings[productKey][sku].gallery
+            drupalSettings[productKey][sku].gallery,
+            sku
           );
         }
       });
