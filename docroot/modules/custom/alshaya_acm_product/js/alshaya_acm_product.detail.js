@@ -206,7 +206,7 @@
             Drupal.updateMatchbackMobileImage(node, variantInfo['matchback_teaser_image']);
           }
           else {
-            window.commerceBackend.updateGallery(node, productData.layout, variantInfo.gallery, variantInfo.sku, sku);
+            window.commerceBackend.updateGallery(node, productData.layout, variantInfo.gallery, sku);
           }
           // On variant change, disable/enable Add to bag, quantity dropdown
           // and show message based on value in drupalSettings.
