@@ -4,7 +4,8 @@ import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import logger from '../../../../../js/utilities/logger';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { sendOtp } from '../../../../../js/utilities/egiftCardHelper';
-import PriceElement from '../../../../../js/utilities/components/price/price-element';
+import PriceElement
+  from '../../../../../alshaya_spc/js/utilities/special-price/PriceElement';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 
