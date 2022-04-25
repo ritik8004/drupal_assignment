@@ -315,6 +315,8 @@
       options = productVariantInfo.configurableOptions;
       maxSaleQty = productVariantInfo.maxSaleQty;
       maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
+      productName = productVariantInfo.cart_title;
+      productImage = productVariantInfo.cart_image;
 
       if (typeof productVariantInfo.url !== 'undefined') {
         var langcode = $('html').attr('lang');
@@ -336,6 +338,8 @@
       }
       maxSaleQty = productVariantInfo.maxSaleQty;
       maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
+      productName = productVariantInfo.cart_title;
+      productImage = productVariantInfo.cart_image;
 
       var langcode = $('html').attr('lang');
       productUrl = productVariantInfo.url[langcode];
