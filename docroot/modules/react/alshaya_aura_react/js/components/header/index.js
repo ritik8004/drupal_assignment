@@ -24,6 +24,7 @@ class Header extends React.Component {
       signUpComplete: false,
       showCongratulations: false,
       isHeaderModalOpen: !!isNotExpandable,
+      guestUserSignedIn: false,
       ...getAuraDetailsDefaultState(),
     };
 
@@ -70,7 +71,8 @@ class Header extends React.Component {
 
   // Event listener callback to update header states.
   updateState = (data) => {
-    const { stateValues, clickedNotYou } = data.detail;
+    const { stateValues, clickedNotYou, guestUserSignedIn } = data.detail;
+    // @todo guestUserSignedIn will be required when we merge join Aura popup.
     const states = { ...stateValues };
 
     if (clickedNotYou) {
