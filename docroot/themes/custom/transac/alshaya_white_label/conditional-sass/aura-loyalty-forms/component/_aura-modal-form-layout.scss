@@ -1,5 +1,7 @@
-.popup-overlay.aura-modal-form {
-  .popup-content.aura-modal-form {
+.popup-overlay.aura-modal-form,
+.aura-modal-popup-overlay {
+  .popup-content.aura-modal-form,
+  .aura-modal-popup-content {
     padding: 0 !important;
     color: $aura-form-otp-text;
     max-width: 23.4375rem;
@@ -79,12 +81,145 @@
       }
     }
 
+    .aura-new-user-form,
+    .aura-congratulations-modal {
+      .aura-modal-header {
+        background: $aura-header-join-now-bg;
+        margin-bottom: 0;
+
+        .spc-checkout-section-title {
+          font-family: $aura-caption-regular;
+        }
+      }
+
+      .aura-modal-body {
+        max-width: 19.5rem;
+        text-align: center;
+        margin: 2rem auto 1.5rem;
+        font-family: $aura-regular;
+        line-height: 1.625rem;
+
+        .congratulations-text {
+          margin-bottom: 2.5rem;
+          color: $aura-header-sign-link;
+
+          @include breakpoint($only-mobile) {
+            margin-bottom: 1.5rem;
+          }
+        }
+
+        .download-text {
+          color: $aura-congratulation-highlight-text;
+        }
+
+        .mobile-only {
+          display: none;
+
+          @include breakpoint($only-mobile) {
+            display: block;
+
+            .app-links {
+              display: flex;
+              justify-content: center;
+              margin-top: 1.25rem;
+
+              a {
+                svg {
+                  max-height: 3.063rem;
+                  width: auto;
+                }
+              }
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+          line-height: 1.375rem;
+          max-width: 17.5rem;
+        }
+      }
+
+      .aura-modal-form {
+        .aura-modal-form-items {
+          padding: 2.5rem 1.25rem;
+        }
+      }
+
+      .aura-modal-form-actions {
+        .aura-new-user-t-c {
+          margin: 2rem;
+          padding: 0;
+          color: $aura-otp-submit-description;
+
+          .t-c-link {
+            display: inline-block;
+
+            &:hover {
+              background-color: transparent;
+            }
+          }
+        }
+
+        .aura-modal-form-submit {
+          color: $aura-join-submit-text;
+          border-image-source: $aura-join-now-submit-bg-src;
+          border-image-slice: 1;
+          background-image: $aura-join-now-submit-button-bg;
+          background-origin: border-box;
+          background-clip: content-box, border-box;
+          border-style: solid;
+          border-width: 2px;
+          margin: 1.25rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          position: absolute;
+          bottom: 0;
+        }
+      }
+
+      .aura-modal-form-footer {
+        text-align: center;
+
+        .already-a-member-link {
+          text-decoration: underline;
+          font-family: $aura-caption-regular;
+          font-size: 0.75rem;
+          color: $aura-header-sign-link;
+          cursor: pointer;
+        }
+      }
+    }
+
     .aura-guest-user-link-card-otp-form {
       @include breakpoint($only-mobile) {
         height: 100%;
 
         .aura-modal-form {
           height: calc(100% - 3.5rem);
+        }
+      }
+    }
+  }
+}
+
+.aura-modal-popup-overlay {
+  z-index: 1000 !important;
+
+  .aura-modal-popup-content {
+    border-radius: 0.625rem;
+
+    @include breakpoint($only-mobile) {
+      width: 21rem !important;
+      height: auto;
+    }
+
+    .aura-congratulations-modal {
+      .aura-modal-header {
+        .spc-checkout-section-title {
+          font-family: $aura-bold;
+          color: $aura-congratulation-highlight-text;
         }
       }
     }
@@ -114,6 +249,7 @@
     }
   }
 }
+
 
 // iOS - Safari.
 @include breakpoint($only-mobile) {
