@@ -2,7 +2,7 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import logger from '../../../js/utilities/logger';
 import { callMagentoApi, prepareFilterData } from '../../../js/utilities/requestHelper';
-import { getOrderDetails, isReturnWindowClosed } from './online_returns_util';
+import { getOrderDetails } from './online_returns_util';
 
 /**
  * Prepare data to create return request.
@@ -168,9 +168,7 @@ const getReturnsByOrderId = async (orderId) => {
 /**
  * Utility function to validate if return request is valid.
  */
-async function validateReturnRequest() {
-  const orderDetails = getOrderDetails();
-
+async function validateReturnRequest(orderDetails) {
   const returnItems = await getReturnsByOrderId(orderDetails['#order'].orderEntityId);
 
   // Return false if the api results in some error.
@@ -195,14 +193,6 @@ async function validateReturnRequest() {
     return false;
   }
 
-  // Return false if current order has expired for return.
-  if (hasValue(orderDetails['#order'].returnExpiration)
-    && isReturnWindowClosed(orderDetails['#order'].returnExpiration)) {
-    logger.notice('Error while trying to create return request. Order: @orderId has expired for return', {
-      '@orderId': orderDetails['#order'].orderId,
-    });
-    return false;
-  }
   return true;
 }
 

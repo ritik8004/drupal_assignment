@@ -113,7 +113,7 @@ function getReturnWindowOpenMessage(date) {
  * Helper function to check if return window is closed.
  */
 function isReturnWindowClosed(date) {
-  return (new Date(date) < new Date());
+  return (new Date(date) > new Date());
 }
 
 /**

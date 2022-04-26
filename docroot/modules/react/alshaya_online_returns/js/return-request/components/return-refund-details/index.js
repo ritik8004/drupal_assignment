@@ -8,9 +8,9 @@ import {
   getDeliveryAddress,
   getPaymentDetails,
 } from '../../../utilities/return_request_util';
-import { createReturnRequest, validateReturnRequest } from '../../../utilities/return_api_helper';
+import { createReturnRequest } from '../../../utilities/return_api_helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getReturnConfirmationUrl, getOrderDetails, getOrderDetailsUrl } from '../../../utilities/online_returns_util';
+import { getReturnConfirmationUrl, getOrderDetails, isReturnWindowClosed } from '../../../utilities/online_returns_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class ReturnRefundDetails extends React.Component {
@@ -54,14 +54,12 @@ class ReturnRefundDetails extends React.Component {
     const { itemsSelected, handleErrorMessage, orderDetails } = this.props;
 
     showFullScreenLoader();
-    const validateRequest = await validateReturnRequest();
 
-    // If return request invalid, redirect to order details page.
-    if (!validateRequest) {
-      const orderDetailsUrl = getOrderDetailsUrl(orderDetails['#order'].orderId);
-      if (hasValue(orderDetailsUrl)) {
-        window.location.href = orderDetailsUrl;
-      }
+    // Return with error message if current order has expired for return.
+    if (hasValue(orderDetails['#order'].returnExpiration)
+      && isReturnWindowClosed(orderDetails['#order'].returnExpiration)) {
+      handleErrorMessage('Sorry, something went wrong. Please try again later.');
+      removeFullScreenLoader();
       return;
     }
 

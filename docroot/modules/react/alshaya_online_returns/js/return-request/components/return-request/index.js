@@ -1,12 +1,14 @@
 import React from 'react';
 import ReturnOrderSummary from '../return-order-summary';
 import ReturnItemsListing from '../return-items-listing';
-import { getOrderDetails } from '../../../utilities/online_returns_util';
+import { getOrderDetails, getOrderDetailsUrl } from '../../../utilities/online_returns_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ReturnRefundDetails from '../return-refund-details';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import ErrorMessage from '../../../../../js/utilities/components/error-message';
 import smoothScrollTo from '../../../../../js/utilities/components/smooth-scroll';
+import { validateReturnRequest } from '../../../utilities/return_api_helper';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class ReturnRequest extends React.Component {
   constructor(props) {
@@ -15,10 +17,31 @@ class ReturnRequest extends React.Component {
       isReturnRequestSubmit: false,
       itemsSelected: [],
       errorMessage: '',
+      orderDetails: getOrderDetails(),
+      wait: true,
     };
   }
 
   componentDidMount() {
+    const { orderDetails } = this.state;
+    showFullScreenLoader();
+    // Validating if current order applicable for return.
+    validateReturnRequest(orderDetails).then((validateRequest) => {
+      // If return request invalid, redirect to order details page.
+      if (!validateRequest) {
+        const orderDetailsUrl = getOrderDetailsUrl(orderDetails['#order'].orderId);
+        if (hasValue(orderDetailsUrl)) {
+          window.location.href = orderDetailsUrl;
+        }
+        return;
+      }
+      this.setState({
+        wait: false,
+      });
+
+      removeFullScreenLoader();
+    });
+
     window.addEventListener('beforeunload', this.warnUser, false);
     window.addEventListener('pagehide', this.warnUser, false);
   }
@@ -42,9 +65,9 @@ class ReturnRequest extends React.Component {
   }
 
   warnUser = (e) => {
-    const { isReturnRequestSubmit } = this.state;
+    const { isReturnRequestSubmit, wait } = this.state;
 
-    if (isReturnRequestSubmit) {
+    if (isReturnRequestSubmit || !wait) {
       return null;
     }
 
@@ -69,10 +92,11 @@ class ReturnRequest extends React.Component {
   };
 
   render() {
-    const { itemsSelected, errorMessage } = this.state;
-    const orderDetails = getOrderDetails();
+    const {
+      itemsSelected, errorMessage, orderDetails, wait,
+    } = this.state;
     const { orderId } = orderDetails['#order'];
-    if (!hasValue(orderDetails)) {
+    if (!hasValue(orderDetails) || wait) {
       return null;
     }
 
