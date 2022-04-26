@@ -4,6 +4,8 @@ import ReturnItemDetails from '../return-item-details';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultResolutionId } from '../../../utilities/return_request_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import Popup from 'reactjs-popup';
+import PromotionsWarningModal from '../promotions-warning-modal';
 
 class ReturnItemsListing extends React.Component {
   constructor(props) {
@@ -11,6 +13,7 @@ class ReturnItemsListing extends React.Component {
     this.state = {
       btnDisabled: true,
       open: true,
+      promotionModalOpen: false,
     };
     this.handleSelectedReason = this.handleSelectedReason.bind(this);
     this.processSelectedItems = this.processSelectedItems.bind(this);
@@ -72,21 +75,60 @@ class ReturnItemsListing extends React.Component {
   processSelectedItems = (checked, item) => {
     const { handleSelectedItems, itemsSelected } = this.props;
 
-    if (checked) {
-      const itemDetails = item;
-
-      // Add default quantity and resolution.
-      itemDetails.qty_requested = 1;
-      itemDetails.resolution = getDefaultResolutionId();
-
+    // Check if any promotion is applied to the item.
+    if (hasValue(item.applied_rule_ids)) {
+      // Display promotions warning modal.
       this.setState({
-        btnDisabled: true,
+        promotionModalOpen: true,
       });
-      handleSelectedItems([...itemsSelected, itemDetails]);
     } else {
-      handleSelectedItems(itemsSelected.filter((product) => product.sku !== item.sku));
+      if (checked) {
+        const itemDetails = item;
+
+        // Add default quantity and resolution.
+        itemDetails.qty_requested = 1;
+        itemDetails.resolution = getDefaultResolutionId();
+
+        // Add is checked attribute.
+        itemDetails.isChecked = checked;
+
+        this.setState({
+          btnDisabled: true,
+        });
+        handleSelectedItems([...itemsSelected, itemDetails]);
+      } else {
+        handleSelectedItems(itemsSelected.filter((product) => product.sku !== item.sku));
+      }
     }
+
   }
+
+  /**
+   * Display promotions warning modal.
+   */
+  showPromotionWarningModal = () => {
+    this.setState({
+      promotionModalOpen: true,
+    });
+  };
+
+  closePromotionsWarningModal = () => {
+    this.setState({
+      promotionModalOpen: false,
+    });
+  };
+
+  handlePromotionContinue = () => {
+    this.setState({
+      open: event.detail,
+    });
+  };
+
+  handlePromotionDeselect = () => {
+    this.setState({
+      checked: false,
+    });
+  };
 
   /**
    * Display the return items accordion trigger component.
@@ -140,7 +182,7 @@ class ReturnItemsListing extends React.Component {
   }
 
   render() {
-    const { btnDisabled, open } = this.state;
+    const { btnDisabled, open, promotionModalOpen } = this.state;
     const { products, itemsSelected } = this.props;
     // If no item is selected, button remains disabled.
     const btnState = !!((itemsSelected.length === 0 || btnDisabled));
@@ -171,6 +213,16 @@ class ReturnItemsListing extends React.Component {
             </button>
           </div>
         </Collapsible>
+        <Popup
+          className="promotions-warning-modal"
+          open={promotionModalOpen}
+          closeOnEscape={false}
+          closeOnDocumentClick={false}
+        >
+          <PromotionsWarningModal
+            closePromotionsWarningModal={this.closePromotionsWarningModal}
+          />
+        </Popup>
       </div>
     );
   }

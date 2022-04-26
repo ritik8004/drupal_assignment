@@ -15,7 +15,7 @@ class ReturnItemDetails extends React.Component {
     super(props);
     const { item: { qty_ordered: qtyOrdered } } = props;
     this.state = {
-      isChecked: false,
+      // isChecked: false,
       returnReasons: getReturnReasons(),
       qtyOptions: getQuantityOptions(qtyOrdered),
     };
@@ -26,34 +26,35 @@ class ReturnItemDetails extends React.Component {
    */
   handleItemReturn = () => {
     const { processSelectedItems, item } = this.props;
-    const { isChecked } = this.state;
+    const { isChecked } = item;
 
     processSelectedItems(!isChecked, item);
-    // If checkbox is checked, we show reason and quantity dropdowns.
-    this.setState({
-      isChecked: !isChecked,
-    });
+    // // If checkbox is checked, we show reason and quantity dropdowns.
+    // this.setState({
+    //   isChecked: !isChecked,
+    // });
   };
 
   render() {
     const {
-      isChecked, returnReasons, qtyOptions,
+      returnReasons, qtyOptions,
     } = this.state;
     const { item, handleSelectedReason, handleSelectedQuantity } = this.props;
-    const checkedClass = isChecked ? 'is-checked' : '';
+    const checkedClass = item.isChecked ? 'is-checked' : '';
     return (
       <div className="items-table">
         <div className="order-item-row">
           <div className="order-item-checkbox">
             <ConditionalView condition={addCheckboxToReturnItem(item)}>
               <span
+                id={item.sku}
                 className={`return_item_checkbox ${checkedClass}`}
                 onClick={this.handleItemReturn}
               />
             </ConditionalView>
           </div>
           <ReturnIndividualItem item={item} />
-          <ConditionalView condition={isChecked}>
+          <ConditionalView condition={item.isChecked}>
             <ReturnReasonsSelect
               returnReasons={returnReasons}
               handleSelectedReason={handleSelectedReason}
