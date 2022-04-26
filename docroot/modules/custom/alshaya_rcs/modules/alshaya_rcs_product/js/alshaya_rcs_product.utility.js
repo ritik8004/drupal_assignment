@@ -9,6 +9,8 @@
     configurableColorData: {},
     attrLabels: {},
     cartItemsStock: {},
+    labels: {},
+    parent: {},
   };
 
   /**
@@ -966,29 +968,59 @@
   }
 
   /**
-   * Gets the labels data for the given product ID.
+   * Gets the parent SKU for the given SKU.
    *
-   * @param sku
-   *   The sku value.
+   * @param {string} mainSku
+   *   The main sku. This will be used to fetch the product data from static
+   *   storage.
+   * @param {string} sku
+   *   SKU value.
    *
-   * @returns object
-   *   The labels data for the given product ID.
+   * @returns {string}
+   *   The parent SKU value.
    */
-  window.commerceBackend.getProductLabelsData = async function  (sku) {
-    if (typeof staticDataStore.labels === 'undefined') {
-      staticDataStore.labels = {};
-      staticDataStore.labels[sku] = null;
+  function getParentSkuBySku(mainSku, sku) {
+    if (Drupal.hasValue(staticDataStore.parent[sku])) {
+      return staticDataStore.parent[sku];
+    }
+    staticDataStore.parent[sku] = null;
+    var productData = window.commerceBackend.getProductData(mainSku);
+    if (Drupal.hasValue(productData.variants)
+      && Drupal.hasValue(productData.variants[sku])
+      && Drupal.hasValue(productData.variants[sku].parent_sku)
+    ) {
+      staticDataStore.parent[sku] = productData.variants[sku].parent_sku;
     }
 
-    if (staticDataStore.labels[sku]) {
-      return staticDataStore.labels[sku];
+    return staticDataStore.parent[sku];
+  }
+
+  /**
+   * Fetches product labels from backend, processes and stores them in storage.
+   *
+   * @param {string} mainSku
+   *   Main sku value.
+   */
+  async function processAllLabels(mainSku) {
+    // If labels have already been fetched for mainSku, they will be available
+    // in static storage. Hence no need to process them again.
+    if (typeof staticDataStore.labels[mainSku] !== 'undefined') {
+      return;
     }
 
-    const products = getSkuSiblingsAndParent(sku);
+    // Fetch the parent and siblings of the product.
+    const products = getSkuSiblingsAndParent(mainSku);
     const productIds = {};
     Object.keys(products).forEach(function (sku) {
       staticDataStore.labels[sku] = [];
       productIds[products[sku].id] = sku;
+    });
+
+    // Fetch all sku values, both for the main product and the styled products.
+    var allProductsData = await window.commerceBackend.getProductData();
+    Object.keys(allProductsData).forEach(function eachProduct(productSku) {
+      staticDataStore.labels[productSku] = [];
+      productIds[allProductsData[productSku].id] = productSku;
     });
 
     const labels = await globalThis.rcsPhCommerceBackend.getData(
@@ -1009,8 +1041,27 @@
         staticDataStore.labels[sku] = productLabels.items;
       });
     }
+  }
 
-    return staticDataStore.labels[sku];
+  /**
+   * Gets the labels data for the given product ID.
+   *
+   * @param mainSku
+   *   The sku value.
+   *
+   * @returns object
+   *   The labels data for the given product ID.
+   */
+  window.commerceBackend.getProductLabelsData = async function getProductLabelsData(mainSku, skuForLabel) {
+    await processAllLabels(mainSku);
+    // If it is a child product not having any label, we display the labels
+    // from the parent.
+    var parentSku = getParentSkuBySku(mainSku, skuForLabel);
+    if (Drupal.hasValue(parentSku)) {
+      Object.assign(staticDataStore.labels[skuForLabel], staticDataStore.labels[parentSku]);
+    }
+
+    return staticDataStore.labels[skuForLabel];
   }
 
   /**

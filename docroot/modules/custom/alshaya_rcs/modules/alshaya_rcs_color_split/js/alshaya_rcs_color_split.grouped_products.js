@@ -71,6 +71,11 @@
     const colorAttribute = drupalSettings.alshayaColorSplit.colorAttribute;
 
     styleProducts.forEach(function (styleProduct) {
+      // Store each product data into static storage so that it can be used in
+      // PLP add to bag to get the parent sku.
+      if (mainProduct.sku !== styleProduct.sku) {
+        globalThis.RcsPhStaticStorage.set('product_data_' + styleProduct.sku, styleProduct);
+      }
       // Check if product is in stock.
 
       // Check if attributes of the product is the same as the main product.
