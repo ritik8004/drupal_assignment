@@ -448,6 +448,7 @@ function _alshaya_aura_react_translations() {
       ],
       "Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase." => [
         'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span> مع عملية الشراء هذه.",
+      ],
       'Congrats!' => [
         'ar' => 'تهاني!',
         'context' => 'aura',
