@@ -461,8 +461,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'لإنفاق نقاطك عبر الإنترنت ، يرجى تنزيل تطبيق Aura المتاح في كل من App Store و Play Store.',
         'context' => 'aura',
       ],
-      'By pressing submit, you agree to have read and accepted our' => [
-        'ar' => 'بالضغط على إرسال ، فإنك توافق على قراءة وقبول',
+      "By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>" => [
+        'ar' => "بالضغط على إرسال ، فإنك توافق على قراءة <a href='@tncLink' target='_blank'> البنود والشروط </a> والموافقة عليها",
         'context' => 'aura',
       ],
       'Join Aura' => [

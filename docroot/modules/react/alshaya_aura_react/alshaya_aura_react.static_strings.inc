@@ -330,5 +330,9 @@ function _alshaya_aura_static_strings() {
       'key' => 'join_aura_congratulations_download_text',
       'value' => t('To spend your points online, please download Aura app available both on App Store and Play Store.', [], ['context' => 'aura']),
     ],
+    [
+      'key' => 'tnc_description_text',
+      'value' => t("By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>", [], ['context' => 'aura']),
+    ],
   ];
 }

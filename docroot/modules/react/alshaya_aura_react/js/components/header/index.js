@@ -72,10 +72,6 @@ class Header extends React.Component {
   updateState = (data) => {
     const { stateValues, clickedNotYou } = data.detail;
     const states = { ...stateValues };
-    const {
-      signUpComplete,
-      isHeaderModalOpen,
-    } = this.state;
 
     if (clickedNotYou) {
       states.clickedNotYou = clickedNotYou;
@@ -108,6 +104,25 @@ class Header extends React.Component {
     this.setState({
       showCongratulations: false,
     });
+  };
+
+  getCongratulationsPopup() {
+    const { showCongratulations } = this.state;
+    return (
+      <Popup
+        className="aura-modal-congratulations"
+        open={showCongratulations}
+        closeOnEscape={false}
+        closeOnDocumentClick={false}
+      >
+        <AuraCongratulationsModal
+          closeCongratulationsModal={() => this.closeCongratulationsModal()}
+          headerText={getStringMessage('join_aura_congratulations_header')}
+          bodyText={getStringMessage('join_aura_congratulations_text')}
+          downloadText={getStringMessage('join_aura_congratulations_download_text')}
+        />
+      </Popup>
+    );
   }
 
   render() {
@@ -121,7 +136,6 @@ class Header extends React.Component {
       clickedNotYou,
       notYouFailed,
       tier,
-      showCongratulations,
     } = this.state;
 
     const {
@@ -159,19 +173,7 @@ class Header extends React.Component {
             notYouFailed={notYouFailed}
             tier={tier}
           />
-          <Popup
-            className="aura-modal-congratulations"
-            open={showCongratulations}
-            closeOnEscape={false}
-            closeOnDocumentClick={false}
-          >
-            <AuraCongratulationsModal
-              closeCongratulationsModal={() => this.closeCongratulationsModal()}
-              headerText={getStringMessage('join_aura_congratulations_header')}
-              bodyText={getStringMessage('join_aura_congratulations_text')}
-              downloadText={getStringMessage('join_aura_congratulations_download_text')}
-            />
-          </Popup>
+          {this.getCongratulationsPopup()}
         </>
       );
     }
@@ -191,19 +193,7 @@ class Header extends React.Component {
           notYouFailed={notYouFailed}
           tier={tier}
         />
-        <Popup
-          className="aura-modal-congratulations"
-          open={showCongratulations}
-          closeOnEscape={false}
-          closeOnDocumentClick={false}
-        >
-          <AuraCongratulationsModal
-            closeCongratulationsModal={() => this.closeCongratulationsModal()}
-            headerText={getStringMessage('join_aura_congratulations_header')}
-            bodyText={getStringMessage('join_aura_congratulations_text')}
-            downloadText={getStringMessage('join_aura_congratulations_download_text')}
-          />
-        </Popup>
+        {this.getCongratulationsPopup()}
       </>
     );
   }

@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
 import AuraMobileNumberField from '../aura-mobile-number-field';
@@ -25,23 +26,6 @@ class AuraFormNewAuraUserModal extends React.Component {
       messageType: null,
       messageContent: null,
     };
-  }
-
-  getNewUserFormDescription = () => {
-    const { signUpTermsAndConditionsLink } = getAuraConfig();
-
-    return [
-      <span key="part1">{Drupal.t('By pressing submit, you agree to have read and accepted our', {}, { context: 'aura' })}</span>,
-      <a
-        key="part2"
-        href={signUpTermsAndConditionsLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="t-c-link"
-      >
-        {Drupal.t('Terms & Conditions')}
-      </a>,
-    ];
   }
 
   getCountryMobileCode = () => {
@@ -92,7 +76,6 @@ class AuraFormNewAuraUserModal extends React.Component {
       email: getElementValueByType('signUpEmail'),
       mobile: `+${this.getCountryMobileCode()}${getElementValueByType('signUpMobile')}`,
     };
-
     const apiData = window.auraBackend.loyaltyClubSignUp(data);
     showFullScreenLoader();
 
@@ -157,6 +140,7 @@ class AuraFormNewAuraUserModal extends React.Component {
     const submitButtonText = Drupal.t('Submit');
 
     const email = getUserDetails().email || '';
+    const { signUpTermsAndConditionsLink } = getAuraConfig();
 
     return (
       <div className="aura-new-user-form">
@@ -194,7 +178,9 @@ class AuraFormNewAuraUserModal extends React.Component {
           </div>
           <div className="aura-modal-form-actions">
             <div className="aura-new-user-t-c aura-otp-submit-description">
-              {this.getNewUserFormDescription()}
+              {parse(getStringMessage('tnc_description_text', {
+                '!tncLink': signUpTermsAndConditionsLink,
+              }))}
             </div>
             <div className="aura-modal-form-submit" onClick={() => this.registerUser()}>
               {submitButtonText}
