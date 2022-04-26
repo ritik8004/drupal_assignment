@@ -176,6 +176,9 @@ async function validateReturnRequest(orderDetails) {
     return false;
   }
 
+  // @todo: Write logic to check for status of returns, we can create
+  // a second return only after first return is finished.
+
   // Return false if return already exists for same order.
   if (hasValue(returnItems.data.items)) {
     logger.notice('Error while trying to create return request. Return request already raised for Order: @orderId', {
