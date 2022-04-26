@@ -272,11 +272,17 @@
           display: none;
         }
 
+        picture {
+          display: flex;
+        }
+
         img {
           @include breakpoint($desktop) {
+            height: rem(28);
             max-width: 18.75rem;
             margin: auto;
             text-align: center;
+            width: auto;
           }
         }
       }
@@ -394,10 +400,19 @@
 
   .block-system-branding-block {
     .site-brand-home {
+      @include breakpoint($desktop) {
+        display: flex;
+        margin: 0 auto;
+        max-width: rem(350);
+      }
+
       a {
         @include breakpoint($desktop) {
-          max-width: 21.875rem;
+          align-items: center;
+          display: inline-flex;
+          height: rem(28);
           margin: auto;
+          max-width: none;
           text-align: center;
           min-width: 4.625rem;
         }
