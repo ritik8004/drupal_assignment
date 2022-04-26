@@ -970,20 +970,27 @@
   /**
    * Gets the parent SKU for the given SKU.
    *
+   * @param {string} mainSku
+   *   The main sku. This will be used to fetch the product data from static
+   *   storage.
    * @param {string} sku
    *   SKU value.
    *
    * @returns {string}
    *   The parent SKU value.
    */
-  var getParentSkuBySku = function getParentSkuBySku(mainSku, sku) {
+  function getParentSkuBySku(mainSku, sku) {
     if (Drupal.hasValue(staticDataStore.parent[sku])) {
       return staticDataStore.parent[sku];
     }
+    staticDataStore.parent[sku] = null;
     var productData = window.commerceBackend.getProductData(mainSku);
-    staticDataStore.parent[sku] = Drupal.hasValue(productData.variants)
-      ? productData.variants[sku].parent_sku
-      : null;
+    if (Drupal.hasValue(productData.variants)
+      && Drupal.hasValue(productData.variants[sku])
+      && Drupal.hasValue(productData.variants[sku].parent_sku)
+    ) {
+      staticDataStore.parent[sku] = productData.variants[sku].parent_sku;
+    }
 
     return staticDataStore.parent[sku];
   }
@@ -994,7 +1001,7 @@
    * @param {string} mainSku
    *   Main sku value.
    */
-  var processAllLabels = async function processAllLabels(mainSku) {
+  async function processAllLabels(mainSku) {
     // If labels have already been fetched for mainSku, they will be available
     // in static storage. Hence no need to process them again.
     if (typeof staticDataStore.labels[mainSku] !== 'undefined') {
@@ -1010,7 +1017,7 @@
     });
 
     // Fetch all sku values, both for the main product and the styled products.
-    var allProductsData = window.commerceBackend.getProductData();
+    var allProductsData = await window.commerceBackend.getProductData();
     Object.keys(allProductsData).forEach(function eachProduct(productSku) {
       staticDataStore.labels[productSku] = [];
       productIds[allProductsData[productSku].id] = productSku;
@@ -1051,7 +1058,7 @@
     // from the parent.
     var parentSku = getParentSkuBySku(mainSku, skuForLabel);
     if (Drupal.hasValue(parentSku)) {
-      staticDataStore.labels[skuForLabel] = staticDataStore.labels[parentSku];
+      Object.assign(staticDataStore.labels[skuForLabel], staticDataStore.labels[parentSku]);
     }
 
     return staticDataStore.labels[skuForLabel];
