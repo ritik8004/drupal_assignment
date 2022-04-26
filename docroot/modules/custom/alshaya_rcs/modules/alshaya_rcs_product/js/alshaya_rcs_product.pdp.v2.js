@@ -13,10 +13,10 @@
    * @param {string} sku
    *   The sku for which labels is to be retreived.
    * @param {string} mainSku
-   *   The main sku for the product being displayed.
+   *   The main sku for the PDP.
    */
   function renderProductLabels(product, sku, mainSku) {
-    window.commerceBackend.getProductLabelsData(mainSku).then(function (labelsData) {
+    window.commerceBackend.getProductLabelsData(mainSku, sku).then(function (labelsData) {
       globalThis.rcsPhRenderingEngine.render(
         drupalSettings,
         'product-labels',
