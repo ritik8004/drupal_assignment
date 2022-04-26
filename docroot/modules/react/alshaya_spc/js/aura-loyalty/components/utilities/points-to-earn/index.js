@@ -1,4 +1,6 @@
 import React from 'react';
+import parse from 'html-react-parser';
+import { renderToString } from 'react-dom/server';
 import ToolTip from '../../../../utilities/tooltip';
 import { getAllAuraStatus, getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import getStringMessage from '../../../../utilities/strings';
@@ -29,10 +31,6 @@ const PointsToEarnMessage = (props) => {
   if (!isUserAuthenticated()
     && (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED
     || loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED)) {
-    const toEarnMessageP1 = `${getStringMessage('earn')} `;
-    const pointsHighlight = `${pointsToEarn} ${getStringMessage('aura')} ${getStringMessage('points')}`;
-    const toEarnMessageP2 = ` ${getStringMessage('cart_with_this_purchase')}`;
-
     return (
       <>
         <div className="spc-aura-cart-icon">
@@ -40,9 +38,11 @@ const PointsToEarnMessage = (props) => {
         </div>
         <div className="spc-aura-cart-content">
           <span className="spc-aura-points-to-earn">
-            {toEarnMessageP1}
-            <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
-            {toEarnMessageP2}
+            {/* We are using !pts as it does not encode the html into string
+            while using this in Drupal t() function. */}
+            {parse(getStringMessage('cart_earn_with_this_purchase', {
+              '!pts': wait ? renderToString(<Loading />) : pointsToEarn,
+            }))}
             <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
           </span>
         </div>
@@ -54,9 +54,6 @@ const PointsToEarnMessage = (props) => {
   // Aura card signed up that is partially verified.
   if (isUserAuthenticated()
     && loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
-    const toEarnMessageP1 = `${getStringMessage('earn')} `;
-    const pointsHighlight = `${pointsToEarn} ${getStringMessage('aura')} ${getStringMessage('points_with_dot')}`;
-    const toEarnMessageP2 = ` ${getStringMessage('cart_redeem_points_msg')}`;
     const {
       appStoreLink: appleAppStoreLink,
       googlePlayLink: googlePlayStoreLink,
@@ -69,11 +66,9 @@ const PointsToEarnMessage = (props) => {
         </div>
         <div className="spc-aura-cart-content">
           <span className="spc-aura-points-to-earn">
-            {toEarnMessageP1}
-            <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
-            <div>
-              {toEarnMessageP2}
-            </div>
+            {parse(getStringMessage('cart_redeem_points_msg', {
+              '!pts': wait ? renderToString(<Loading />) : pointsToEarn,
+            }))}
             <div>
               <a
                 className="spc-link-play-store"
@@ -104,10 +99,6 @@ const PointsToEarnMessage = (props) => {
   // Aura card signed up that is fully verified.
   if (isUserAuthenticated()
     && loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
-    const toEarnMessageP1 = `${getStringMessage('earn')} `;
-    const pointsHighlight = `${pointsToEarn} ${getStringMessage('aura')} ${getStringMessage('points')}`;
-    const toEarnMessageP2 = ` ${getStringMessage('cart_with_this_purchase')}`;
-
     return (
       <>
         <div className="spc-aura-cart-icon">
@@ -115,9 +106,11 @@ const PointsToEarnMessage = (props) => {
         </div>
         <div className="spc-aura-cart-content">
           <span className="spc-aura-points-to-earn">
-            {toEarnMessageP1}
-            <span className="spc-aura-highlight">{wait ? <Loading /> : pointsHighlight}</span>
-            {toEarnMessageP2}
+            {/* We are using !pts as it does not encode the html into string
+            while using this in Drupal t() function. */}
+            {parse(getStringMessage('cart_earn_with_this_purchase', {
+              '!pts': wait ? renderToString(<Loading />) : pointsToEarn,
+            }))}
             <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
           </span>
         </div>

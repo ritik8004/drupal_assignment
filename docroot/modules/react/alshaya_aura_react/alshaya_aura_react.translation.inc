@@ -440,6 +440,16 @@ function _alshaya_aura_react_translations() {
         'ar' => 'متجر اللعب.',
         'context' => 'aura',
       ],
+      // We are using !pts as it does not encode the html into string while
+      // using this in Drupal t() function.
+      "Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app." => [
+        'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span>. لاستبدال النقاط قم بتحميل أورا تطبيق.",
+        'context' => 'aura',
+      ],
+      "Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase." => [
+        'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span> مع عملية الشراء هذه.",
+        'context' => 'aura',
+      ],
     ],
   ];
 }

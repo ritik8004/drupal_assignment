@@ -279,8 +279,8 @@ function _alshaya_aura_static_strings() {
       'value' => t('Add your mobile number, Aura account number or email address below to link this purchase.'),
     ],
     [
-      'key' => 'cart_with_this_purchase',
-      'value' => t('with this purchase.', [], ['context' => 'aura']),
+      'key' => 'cart_earn_with_this_purchase',
+      'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase.", [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_or',
@@ -308,7 +308,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_redeem_points_msg',
-      'value' => t('To redeem points download Aura app.', [], ['context' => 'aura']),
+      'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app.", [], ['context' => 'aura']),
     ],
     [
       'key' => 'app_store_link_text',
