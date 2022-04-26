@@ -107,6 +107,94 @@ function _alshaya_online_returns_translations() {
         'ar' => '@count items AR',
         'context' => 'online_returns',
       ],
+      '2. Return and refund details' => [
+        'ar' => 'تفاصيل الإرجاع ورد الأموال',
+        'context' => 'online_returns',
+      ],
+      'Your refund will be credited back to the following payment methods.' => [
+        'ar' => 'سيتم رد المال إلى وسائل الدفع التالية',
+        'context' => 'online_returns',
+      ],
+      'Refund Method' => [
+        'ar' => 'وسيلة رد المال',
+        'context' => 'online_returns',
+      ],
+      '@card_type Card' => [
+        'ar' => 'بطاقة  @card_type',
+        'context' => 'online_returns',
+      ],
+      'ending in' => [
+        'ar' => 'تنتهي بتاريخ',
+        'context' => 'online_returns',
+      ],
+      'Estimated refund in 3-5 business days after we receive the item' => [
+        'ar' => 'الوقت المقدر لعملية رد المال ما بين 3 – 5 أيام عمل بعد استلام المنتج',
+        'context' => 'online_returns',
+      ],
+      'Refund Amount' => [
+        'ar' => 'المبلغ المسترد',
+        'context' => 'online_returns',
+      ],
+      'Your refund amount will be notified to you through mail once we receive the items in warehouse' => [
+        'ar' => 'سيتم إخطارك بالمبلغ المسترد عبر البريد الإلكتروني بمجرد استلام المنتج في المستودع',
+        'context' => 'online_returns',
+      ],
+      'Pick-up Details' => [
+        'ar' => 'تفاصيل استلام المنتج',
+        'context' => 'online_returns',
+      ],
+      'Your Items to Return will be picked up in 3 - 4 days.' => [
+        'ar' => 'سيتم استلام المنتج المطلوب إرجاعه خلال 3 – 4 أيام',
+        'context' => 'online_returns',
+      ],
+      'Pick-up Address' => [
+        'ar' => 'عنوان الاستلام',
+        'context' => 'online_returns',
+      ],
+      'Last used address and phone number will be applied' => [
+        'ar' => 'آخر عنوان ورقم هاتف تم استخدامهم',
+        'context' => 'online_returns',
+      ],
+      'Confirm Your Return' => [
+        'ar' => 'تأكيد عملية الإرجاع',
+        'context' => 'online_returns',
+      ],
+      'Don\'t want to return?' => [
+        'ar' => 'لا ترغب في الإرجاع؟',
+        'context' => 'online_returns',
+      ],
+      'Go back to Order Details' => [
+        'ar' => 'العودة إلى تفاصيل الطلبية',
+        'context' => 'online_returns',
+      ],
+      'Return Request' => [
+        'ar' => 'طلب الإرجاع',
+        'context' => 'online_returns',
+      ],
+      '@card_type card ending in @card_number' => [
+        'ar' => 'بطاقة @card_type تنتهي في @card_number',
+        'context' => 'online_returns',
+      ],
+      'Return ID' => [
+        'ar' => 'العنوان التعريفي لعملية الإرجاع',
+        'context' => 'online_returns',
+      ],
+      'Pick-up From' => [
+        'ar' => 'الاستلام من',
+        'context' => 'online_returns',
+      ],
+      'Return Details' => [
+        'ar' => 'تفاصيل عملية الإرجاع',
+        'context' => 'online_returns',
+      ],
+      'Note - You can cancel this return order before 24hrs from the time of pick-up.' => [
+        'ar' => 'ملاحظة -  يمكنك إلغاء طلب الإرجاع قبل 24 ساعة من موعد الاستلام',
+        'context' => 'online_returns',
+      ],
+      'Return ID: @return_id' => [
+        'ar' => 'الرقم التعريفي لعملية الإرجاع: @return_id',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 
