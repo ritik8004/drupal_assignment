@@ -278,5 +278,45 @@ function _alshaya_aura_static_strings() {
       'key' => 'checkout_already_member_question_tooltip',
       'value' => t('Add your mobile number, Aura account number or email address below to link this purchase.'),
     ],
+    [
+      'key' => 'cart_earn_with_this_purchase',
+      'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase.", [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_or',
+      'value' => t('or', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_join_aura',
+      'value' => t('Join Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_aura',
+      'value' => t('Link Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_sign_in',
+      'value' => t('Sign in'),
+    ],
+    [
+      'key' => 'cart_to_earn_with_points',
+      'value' => t('to earn @pts points.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'points_with_dot',
+      'value' => t('points.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'cart_redeem_points_msg',
+      'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app.", [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'app_store_link_text',
+      'value' => t('App Store', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'play_store_link_text',
+      'value' => t('Play Store.', [], ['context' => 'aura']),
+    ],
   ];
 }

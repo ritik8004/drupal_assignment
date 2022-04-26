@@ -403,6 +403,54 @@ function _alshaya_aura_react_translations() {
         'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
       ],
     ],
+    'v4' => [
+      'with this purchase.' => [
+        'ar' => 'مع عملية الشراء هذه.',
+        'context' => 'aura',
+      ],
+      'or' => [
+        'ar' => 'أو',
+        'context' => 'aura',
+      ],
+      'Join Aura' => [
+        'ar' => 'انضم إلى أورا',
+        'context' => 'aura',
+      ],
+      'Link Aura' => [
+        'ar' => 'ربط الهالة',
+        'context' => 'aura',
+      ],
+      'to earn @pts points.' => [
+        'ar' => 'لكسب @pts نقطة.',
+        'context' => 'aura',
+      ],
+      'points.' => [
+        'ar' => 'النقاط.',
+        'context' => 'aura',
+      ],
+      'To redeem points download Aura app.' => [
+        'ar' => 'لاستبدال النقاط قم بتحميل أورا تطبيق.',
+        'context' => 'aura',
+      ],
+      'App Store' => [
+        'ar' => 'متجر التطبيقات',
+        'context' => 'aura',
+      ],
+      'Play Store.' => [
+        'ar' => 'متجر اللعب.',
+        'context' => 'aura',
+      ],
+      // We are using !pts as it does not encode the html into string while
+      // using this in Drupal t() function.
+      "Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app." => [
+        'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span>. لاستبدال النقاط قم بتحميل أورا تطبيق.",
+        'context' => 'aura',
+      ],
+      "Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase." => [
+        'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span> مع عملية الشراء هذه.",
+        'context' => 'aura',
+      ],
+    ],
   ];
 }
 
