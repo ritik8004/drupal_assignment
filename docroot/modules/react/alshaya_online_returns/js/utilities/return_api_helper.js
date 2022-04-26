@@ -165,9 +165,44 @@ const getReturnsByOrderId = async (orderId) => {
   });
 };
 
+/**
+ * Utility function to validate if return request is valid.
+ */
+async function validateReturnRequest(orderDetails) {
+  const returnItems = await getReturnsByOrderId(orderDetails['#order'].orderEntityId);
+
+  // Return false if the api results in some error.
+  if (hasValue(returnItems.error)) {
+    return false;
+  }
+
+  // @todo: Write logic to check for status of returns, we can create
+  // a second return only after first return is finished.
+
+  // Return false if return already exists for same order.
+  if (hasValue(returnItems.data.items)) {
+    logger.notice('Error while trying to create return request. Return request already raised for Order: @orderId', {
+      '@data': JSON.stringify(returnItems.data),
+      '@orderId': orderDetails['#order'].orderId,
+    });
+    return false;
+  }
+
+  // Return false if current order is not eligible for return.
+  if (!(orderDetails['#order'].isReturnEligible)) {
+    logger.notice('Error while trying to create return request. Order: @orderId is not eligible for return', {
+      '@orderId': orderDetails['#order'].orderId,
+    });
+    return false;
+  }
+
+  return true;
+}
+
 export {
   createReturnRequest,
   prepareReturnRequestData,
   getReturnInfo,
   getReturnsByOrderId,
+  validateReturnRequest,
 };

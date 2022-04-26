@@ -10,7 +10,7 @@ import {
 } from '../../../utilities/return_request_util';
 import { createReturnRequest } from '../../../utilities/return_api_helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getReturnConfirmationUrl, getOrderDetails } from '../../../utilities/online_returns_util';
+import { getReturnConfirmationUrl, getOrderDetails, isReturnWindowClosed } from '../../../utilities/online_returns_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class ReturnRefundDetails extends React.Component {
@@ -51,9 +51,18 @@ class ReturnRefundDetails extends React.Component {
    * Create return request.
    */
   createReturnRequest = async () => {
-    const { itemsSelected, handleErrorMessage } = this.props;
+    const { itemsSelected, handleErrorMessage, orderDetails } = this.props;
 
     showFullScreenLoader();
+
+    // Return with error message if current order has expired for return.
+    if (hasValue(orderDetails['#order'].returnExpiration)
+      && isReturnWindowClosed(orderDetails['#order'].returnExpiration)) {
+      handleErrorMessage('Sorry, something went wrong. Please try again later.');
+      removeFullScreenLoader();
+      return;
+    }
+
     const returnRequest = await createReturnRequest(itemsSelected);
     removeFullScreenLoader();
 

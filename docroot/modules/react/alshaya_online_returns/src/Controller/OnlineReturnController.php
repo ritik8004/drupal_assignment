@@ -246,6 +246,11 @@ class OnlineReturnController extends ControllerBase {
     $order = $orders[$order_index];
     $orderDetails = alshaya_acm_customer_build_order_detail($order);
 
+    $orderDetails['#order'] = array_merge(
+      $orderDetails['#order'] ?? [],
+      $this->onlineReturnsHelper->prepareOrderData($order)
+    );
+
     // Check if complete payment done via egift.
     // For multiple payment and if some amount is paid via egift
     // then also include eGift Card payment in payment details.
