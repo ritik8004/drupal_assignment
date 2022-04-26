@@ -26,7 +26,7 @@ const ReturnIndividualItem = ({
               <div className="big-ticket-item-label">{Drupal.t('Big Ticket Item', {}, { context: 'online_returns' })}</div>
             </ConditionalView>
             <ConditionalView condition={!item.is_big_ticket && !item.is_returnable}>
-              <div className="not-eligible-label">{ Drupal.t('Not eligible for Return', {}, { context: 'online_returns' }) }</div>
+              <div className="not-eligible-label">{ Drupal.t('Ineligible for return', {}, { context: 'online_returns' }) }</div>
             </ConditionalView>
           </div>
         </div>
