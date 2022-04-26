@@ -817,6 +817,11 @@ $conductors = [
     'hmac_secret' => 'MTU5MWJiODYtNTEwZS00',
     'site_id' => 229,
   ],
+  'flkw_dev3' => [
+    'hmac_id' => '8f0e772d00ee42aba0c67e40c469d450',
+    'hmac_secret' => 'NzEwZDVhZTQtMGVlOC00',
+    'site_id' => 567,
+  ],
   'flkw_qa' => [
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
     'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
