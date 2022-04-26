@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40c903925f8cbed84eabaee2c6f208c5",
+    "content-hash": "39675b4a4b0b7aaa8f5ffa7da9f34918",
     "packages": [
         {
             "name": "acquia/acsf-tools",
-            "version": "dev-10.x-dev",
+            "version": "10.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acsf-tools.git",
-                "reference": "2719ea86ad4bcdd37fb590204f14574741338293"
+                "reference": "a1d62c7da4ceb68df1ce44221a1674052ab5e817"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/2719ea86ad4bcdd37fb590204f14574741338293",
-                "reference": "2719ea86ad4bcdd37fb590204f14574741338293",
+                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/a1d62c7da4ceb68df1ce44221a1674052ab5e817",
+                "reference": "a1d62c7da4ceb68df1ce44221a1674052ab5e817",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +73,7 @@
             "homepage": "https://github.com/acquia/acsf-tools",
             "support": {
                 "issues": "https://github.com/acquia/acsf-tools/issues",
-                "source": "https://github.com/acquia/acsf-tools/tree/10.x-dev"
+                "source": "https://github.com/acquia/acsf-tools/tree/10.1.0"
             },
             "time": "2022-04-11T14:41:50+00:00"
         },
@@ -29709,7 +29709,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "acquia/acsf-tools": 20,
         "acquia/blt-drupal-vm": 20,
         "drupal/block_field": 15,
         "drupal/clientside_validation": 5,

@@ -52,18 +52,12 @@ content:
   machine_name:
     type: machine_name
     weight: -4
+    label: hidden
     settings:
-      source:
-        - info
-        - widget
-        - 0
-        - value
-      exists: block_content_machine_name_existing_block_content_name
-      size: 60
-      placeholder: ''
-      label: ''
-      replace_pattern: ''
-      replace: ''
+      source_field: info
+      disable_on_edit: TRUE
+      replace_pattern: '[^a-z0-9_]+'
+      replace: '_'
     region: content
     third_party_settings: {  }
   translation:

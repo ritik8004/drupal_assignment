@@ -1,0 +1,12 @@
+content:
+  machine_name:
+    type: machine_name
+    weight: -4
+    label: hidden
+    settings:
+      source_field: info
+      disable_on_edit: TRUE
+      replace_pattern: '[^a-z0-9_]+'
+      replace: '_'
+    region: content
+    third_party_settings: { }
