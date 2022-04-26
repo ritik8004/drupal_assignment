@@ -1,0 +1,7 @@
+name: Alshaya Optimizely
+type: module
+description: Provides an integration between Optimizely and Drupal.
+package: Others
+core: 8.x
+core_version_requirement: ^8 || ^9
+configure: alshaya_optimizely.settings_form

@@ -1,0 +1,8 @@
+# Schema for the configuration files of the alshaya optimizely module.
+alshaya_optimizely.settings:
+  type: config_object
+  label: 'Optimizely settings'
+  mapping:
+    project_id:
+      type: int
+      label: 'Project ID'
