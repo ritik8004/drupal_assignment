@@ -424,10 +424,6 @@ function _alshaya_aura_react_translations() {
         'ar' => 'لكسب @pts نقطة.',
         'context' => 'aura',
       ],
-      'points.' => [
-        'ar' => 'النقاط.',
-        'context' => 'aura',
-      ],
       'To redeem points download Aura app.' => [
         'ar' => 'لاستبدال النقاط قم بتحميل أورا تطبيق.',
         'context' => 'aura',

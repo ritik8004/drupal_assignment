@@ -26,7 +26,7 @@ const PointsToEarnMessage = (props) => {
     );
   }
 
-  // Guest user & Linked card. This will display when a guest user has Aura card
+  // This will display when a guest user has Aura card
   // signed up for Aura irrepective of fully verified or partially verified.
   if (!isUserAuthenticated()
     && (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED
@@ -50,7 +50,7 @@ const PointsToEarnMessage = (props) => {
     );
   }
 
-  // Registered User & Linked card. This will display when a logged in user has
+  // This will display when a logged in user has
   // Aura card signed up that is partially verified.
   if (isUserAuthenticated()
     && loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
