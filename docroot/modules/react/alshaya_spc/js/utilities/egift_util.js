@@ -1,5 +1,9 @@
 import React from 'react';
-import { callEgiftApi, getTopUpQuote } from '../../../js/utilities/egiftCardHelper';
+import {
+  allowWholeNumbers,
+  callEgiftApi,
+  getTopUpQuote,
+} from '../../../js/utilities/egiftCardHelper';
 import logger from '../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../js/utilities/events';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
@@ -54,9 +58,21 @@ export const egiftFormElement = ({
     }
   };
 
+  const checkCardNumber = (e) => {
+    const element = e.target;
+    if (element.name === 'egift_card_number') {
+      allowWholeNumbers(e);
+    }
+  };
+
   let focusClass = '';
   if (value !== undefined && value !== '') {
     focusClass += ' focus';
+  }
+
+  let maxLength = '';
+  if (name === 'card_number') {
+    maxLength = 16;
   }
 
   // Separate template based on type.
@@ -107,6 +123,8 @@ export const egiftFormElement = ({
             defaultValue={value}
             disabled={disabled}
             onBlur={(e) => handleEvent(e)}
+            maxLength={maxLength}
+            onInput={(e) => checkCardNumber(e)}
           />
           <div className="c-input__bar" />
           <label>{label}</label>
