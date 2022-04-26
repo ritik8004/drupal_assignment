@@ -148,12 +148,6 @@ class ProductSettings extends ResourceBase {
   public function get() {
     $list = $this->getConfigList();
 
-    // Switch config language.
-    $original_language = $this->languageManager->getConfigOverrideLanguage();
-    $language_id = $this->languageManager->getCurrentLanguage()->getId();
-    $language = $this->languageManager->getLanguage($language_id);
-    $this->languageManager->setConfigOverrideLanguage($language);
-
     // Build an array with config data.
     $data = [];
     foreach (array_keys($list) as $config_name) {
@@ -175,9 +169,6 @@ class ProductSettings extends ResourceBase {
         }
       }
     }
-
-    // Restore original language.
-    $this->languageManager->setConfigOverrideLanguage($original_language);
 
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
