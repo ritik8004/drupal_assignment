@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Url;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -1092,9 +1093,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       'taxonomy_term:' . self::VOCABULARY_ID . ':new',
     ];
 
-    $tree = $this->termStorage->loadTree(self::VOCABULARY_ID, $parent_id, 1, TRUE);
-    foreach ($tree ?? [] as $term) {
+    $tree = $this->termStorage->loadTree(self::VOCABULARY_ID, $parent_id, 1, FALSE);
+    foreach ($tree ?? [] as $term_obj) {
       // Use only the terms which are enabled.
+      $term = Term::load($term_obj->tid);
       if (empty($term->get('field_commerce_status')->getString())) {
         continue;
       }
