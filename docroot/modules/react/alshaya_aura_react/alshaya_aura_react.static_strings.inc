@@ -303,10 +303,6 @@ function _alshaya_aura_static_strings() {
       'value' => t('to earn @pts points.', [], ['context' => 'aura']),
     ],
     [
-      'key' => 'points_with_dot',
-      'value' => t('points.', [], ['context' => 'aura']),
-    ],
-    [
       'key' => 'cart_redeem_points_msg',
       'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app.", [], ['context' => 'aura']),
     ],
