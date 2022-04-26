@@ -1,0 +1,15 @@
+.group-option-wrapper,
+.non-group-option-wrapper {
+  ul {
+    li {
+      .magv2-select-list-wrapper {
+        .magv2-select-list-name {
+          html[lang=ar] & {
+            direction: ltr;
+            display: inline-grid;
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,7 +3,10 @@
     .field--name-field-title {
       padding-top: 0;
       padding-bottom: 0;
-      text-align: center;
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+      }
     }
   }
 }

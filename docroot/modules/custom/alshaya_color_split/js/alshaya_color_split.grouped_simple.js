@@ -28,7 +28,7 @@
         $('[name="selected_variant_sku"]', node).val($(this).val());
 
         var variantInfo = productInfo['group'][$(this).val()];
-        Drupal.updateGallery(node, variantInfo.layout,variantInfo.gallery);
+        window.commerceBackend.updateGallery(node, variantInfo.layout, variantInfo.gallery, sku, variantInfo.sku);
 
         // Trigger event for other modules to hook into.
         $(node).trigger('group-item-selected', [$(this).val()]);

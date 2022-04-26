@@ -4,7 +4,7 @@ import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
 import PriceElement
-  from '../../../../js/utilities/components/price/price-element';
+  from '../../../../alshaya_spc/js/utilities/special-price/PriceElement';
 
 export default class EgiftTopupFor extends React.Component {
   constructor(props) {
