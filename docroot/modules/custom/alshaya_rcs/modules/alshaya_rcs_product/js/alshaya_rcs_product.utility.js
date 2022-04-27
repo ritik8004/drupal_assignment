@@ -1072,18 +1072,6 @@
   }
 
   /**
-   * Renders the add to cart form based on the provided input.
-   *
-   * @param {object} product
-   *   The raw product object.
-   */
-  window.commerceBackend.loadAddToCartForm = async function loadAddToCartForm(product) {
-    const addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
-    // Render the HTML to the div.
-    jQuery('#add_to_cart_form').html(addToCartFormHtml);
-  }
-
-  /**
    * Gets the stock data for cart items.
    *
    * @param {string} sku
