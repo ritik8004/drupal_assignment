@@ -19,7 +19,13 @@ function alshaya_optimizely_page_attachments(array &$page) {
   if (!(\Drupal::service('router.admin_context')->isAdminRoute())) {
     // Add Optimizely script tags to header.
     $optimizely_script_code = str_replace('{{project_id}}', $projectId, '//cdn.optimizely.com/js/{{project_id}}.js');
-
+    // preconnect library url.
+    $rel = 'preconnect';
+    $tag = 'optimizely_preconnect';
+    $preconnect_url = '//cdn.optimizely.com';
+    $link_tag = _alshaya_optimizely_get_head_link_tag($rel, $preconnect_url, $tag);
+    $page['#attached']['html_head'][] = $link_tag;
+    // attach optimizely library url in header.
     $script = [
       [
         '#tag' => 'script',
@@ -27,14 +33,9 @@ function alshaya_optimizely_page_attachments(array &$page) {
           'src' => $optimizely_script_code,
         ],
       ],
+      'optimizely_js_library'
     ];
     $page['#attached']['html_head'][] = $script;
-
-    $rel = 'preconnect';
-    $tag = 'optimizely_preconnect';
-    $preconnect_url = '//cdn.optimizely.com';
-    $link_tag = _alshaya_optimizely_get_head_link_tag($rel, $preconnect_url, $tag);
-    $page['#attached']['html_head'][] = $link_tag;
   }
   $page['#cache']['tags'][] = 'config:alshaya_optimizely.settings';
 }
