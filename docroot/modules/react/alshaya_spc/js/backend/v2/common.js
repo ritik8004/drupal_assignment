@@ -364,18 +364,20 @@ const getProcessedCartData = async (cartData) => {
     if (element.code === 'subtotal_with_discount_incl_tax') {
       data.totals.subtotalWithDiscountInclTax = element.value;
     }
-    // If Egift card is enabled get balance_payable.
-    if (isEgiftCardEnabled() && element.code === 'balance_payable') {
-      data.totals.balancePayable = element.value;
-      // Adding an extra total balance payable attribute, so that we can use
-      // this in egift.
-      // Doing this because while removing AURA points, we remove the Balance
-      // Payable attribute from cart total.
-      data.totals.totalBalancePayable = element.value;
-    }
     // If Aura enabled, add aura related details.
-    if (isAuraEnabled() && element.code === 'aura_payment') {
-      data.totals.paidWithAura = element.value;
+    // If Egift card is enabled get balance_payable.
+    if (isAuraEnabled() || isEgiftCardEnabled()) {
+      if (element.code === 'balance_payable') {
+        data.totals.balancePayable = element.value;
+        // Adding an extra total balance payable attribute, so that we can use
+        // this in egift.
+        // Doing this because while removing AURA points, we remove the Balance
+        // Payable attribute from cart total.
+        data.totals.totalBalancePayable = element.value;
+      }
+      if (element.code === 'aura_payment') {
+        data.totals.paidWithAura = element.value;
+      }
     }
   });
 
