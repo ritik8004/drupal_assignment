@@ -48,6 +48,13 @@ class AuraMyAccountNoLinkedCard extends React.Component {
   };
 
   openLinkCardModal = () => {
+    const { isNewUserModalOpen } = this.state;
+    // Close new user modal if open.
+    if (isNewUserModalOpen) {
+      this.setState({
+        isNewUserModalOpen: false,
+      });
+    }
     this.setState({
       isLinkCardModalOpen: true,
     });
@@ -138,6 +145,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                   chosenCountryCode={chosenCountryCode}
                   chosenUserMobile={chosenUserMobile}
                   closeNewUserModal={() => this.closeNewUserModal()}
+                  openLinkCardModal={() => this.openLinkCardModal()}
                 />
               </Popup>
               <Popup
@@ -150,6 +158,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                   closeLinkCardOTPModal={() => this.closeLinkCardModal()}
                   setChosenCountryCode={this.setChosenCountryCode}
                   chosenCountryCode={chosenCountryCode}
+                  changeFormBasedOnUserAuthentication
                 />
               </Popup>
             </div>

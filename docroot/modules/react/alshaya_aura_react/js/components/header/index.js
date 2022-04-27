@@ -71,8 +71,7 @@ class Header extends React.Component {
 
   // Event listener callback to update header states.
   updateState = (data) => {
-    const { stateValues, clickedNotYou, guestUserSignedIn } = data.detail;
-    // @todo guestUserSignedIn will be required when we merge join Aura popup.
+    const { stateValues, clickedNotYou, showCongratulationsPopup } = data.detail;
     const states = { ...stateValues };
 
     if (clickedNotYou) {
@@ -82,7 +81,12 @@ class Header extends React.Component {
     if (stateValues.loyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED) {
       states.signUpComplete = true;
     }
-    if (states.signUpComplete) {
+
+    // Show congratulations popup if showCongratulationsPopup is not undefined or true.
+    if ((typeof showCongratulationsPopup !== 'undefined')
+      && showCongratulationsPopup
+      && states.signUpComplete
+    ) {
       this.setState({
         showCongratulations: true,
       });

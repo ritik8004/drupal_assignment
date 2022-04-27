@@ -70,19 +70,6 @@ class AuraNotLinkedNoData extends React.Component {
       chosenCountryCode,
     } = this.state;
 
-    // Use text for linkcardpopup based on user authentication.
-    const isUserLoggedIn = isUserAuthenticated();
-    const modalHeaderTitle = isUserLoggedIn
-      ? getStringMessage('link_card_header_logged_in')
-      : getStringMessage('link_card_header_guest');
-    const modalBodyTitle = isUserLoggedIn
-      ? getStringMessage('link_card_body_title_logged_in')
-      : [
-        <span>{getStringMessage('link_card_body_title_guest')}</span>,
-        <span>{getStringMessage('link_card_body_sub_title_guest')}</span>,
-      ];
-    const linkCardWithoutOTP = !isUserLoggedIn;
-
     return (
       <>
         <div className="block-content guest-user">
@@ -113,7 +100,6 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                /** @todo: We need to change this to open sign in aura form. */
                   onClick={() => this.openLinkCardModal()}
                 >
                   {getStringMessage('aura_sign_in')}
@@ -147,9 +133,7 @@ class AuraNotLinkedNoData extends React.Component {
             openOTPModal={() => this.openOTPModal()}
             setChosenCountryCode={this.setChosenCountryCode}
             chosenCountryCode={chosenCountryCode}
-            modalHeaderTitle={modalHeaderTitle}
-            modalBodyTitle={modalBodyTitle}
-            linkCardWithoutOTP={linkCardWithoutOTP}
+            changeFormBasedOnUserAuthentication
             showJoinAuraLink
           />
         </Popup>

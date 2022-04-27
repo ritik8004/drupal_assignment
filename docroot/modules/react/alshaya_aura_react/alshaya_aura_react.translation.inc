@@ -485,6 +485,10 @@ function _alshaya_aura_react_translations() {
         'ar' => 'اربط بطاقتك',
         'context' => 'aura',
       ],
+      'aura_send_OTP' => [
+        'ar' => 'أرسل OTP',
+        'context' => 'aura',
+      ],
     ],
   ];
 }

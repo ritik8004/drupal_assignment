@@ -4,6 +4,8 @@ import AuraFormSignUpOTPModal
   from '../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-otp-modal-form';
 import AuraFormNewAuraUserModal
   from '../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-new-aura-user-form';
+import AuraFormLinkCardOTPModal
+  from '../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
 
 class SignUpOtpModal extends React.Component {
   constructor(props) {
@@ -12,6 +14,7 @@ class SignUpOtpModal extends React.Component {
       isNewUserModalOpen: false,
       chosenCountryCode: null,
       chosenUserMobile: null,
+      isLinkCardModalOpen: false,
     };
   }
 
@@ -47,11 +50,33 @@ class SignUpOtpModal extends React.Component {
     }
   };
 
+  // Opens links card modal.
+  openLinkCardModal = () => {
+    const { isNewUserModalOpen } = this.state;
+    // Close new user modal if open.
+    if (isNewUserModalOpen) {
+      this.setState({
+        isNewUserModalOpen: false,
+      });
+    }
+    this.setState({
+      isLinkCardModalOpen: true,
+    });
+  };
+
+  // closes links card modal.
+  closeLinkCardModal = () => {
+    this.setState({
+      isLinkCardModalOpen: false,
+    });
+  };
+
   render() {
     const {
       isNewUserModalOpen,
       chosenCountryCode,
       chosenUserMobile,
+      isLinkCardModalOpen,
     } = this.state;
 
     const {
@@ -85,6 +110,20 @@ class SignUpOtpModal extends React.Component {
             chosenCountryCode={chosenCountryCode}
             chosenUserMobile={chosenUserMobile}
             closeNewUserModal={() => this.closeNewUserModal()}
+            openLinkCardModal={() => this.openLinkCardModal()}
+          />
+        </Popup>
+        <Popup
+          className="aura-modal-form link-card-otp-modal"
+          open={isLinkCardModalOpen}
+          closeOnEscape={false}
+          closeOnDocumentClick={false}
+        >
+          <AuraFormLinkCardOTPModal
+            closeLinkCardOTPModal={() => this.closeLinkCardModal()}
+            setChosenCountryCode={this.setChosenCountryCode}
+            chosenCountryCode={chosenCountryCode}
+            changeFormBasedOnUserAuthentication
           />
         </Popup>
       </>

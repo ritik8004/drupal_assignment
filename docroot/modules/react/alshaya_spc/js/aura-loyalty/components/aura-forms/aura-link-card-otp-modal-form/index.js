@@ -54,11 +54,13 @@ class AuraFormLinkCardOTPModal extends React.Component {
     document.addEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
   }
 
+  // Adds data to local storage when 'loyaltyDetailsSearchComplete' dispatched.
   handleSearchEvent = (data) => {
     const { stateValues, searchData } = data.detail;
     const { linkCardOption } = this.state;
     const { closeLinkCardOTPModal } = this.props;
 
+    // Show error if any.
     if (stateValues.error) {
       this.setState({
         ...getAuraDetailsDefaultState(),
@@ -93,7 +95,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
       closeLinkCardOTPModal();
       // Dispatch loyaltyStatusUpdated event.
       dispatchCustomEvent('loyaltyStatusUpdated', {
-        guestUserSignedIn: true,
+        showCongratulationsPopup: false,
         stateValues,
       });
     }
@@ -237,15 +239,13 @@ class AuraFormLinkCardOTPModal extends React.Component {
     return description;
   };
 
+  // Adds card to basket.
   addCard = () => {
     this.resetModalMessages();
     const { linkCardOption } = this.state;
     const { chosenCountryCode } = this.props;
     const isValid = validateElementValueByType(linkCardOption, '.aura-modal-form', 'link_card');
     if (!isValid) {
-      return;
-    }
-    if (isUserAuthenticated()) {
       return;
     }
     const selectedElementValue = getElementValueByType(linkCardOption, '.aura-modal-form');
@@ -268,13 +268,10 @@ class AuraFormLinkCardOTPModal extends React.Component {
       closeLinkCardOTPModal,
       setChosenCountryCode,
       openOTPModal,
-    } = this.props;
-    let {
-      linkCardWithoutOTP,
-      modalHeaderTitle,
-      modalBodyTitle,
       showJoinAuraLink,
+      changeFormBasedOnUserAuthentication,
     } = this.props;
+
     const {
       otpRequested,
       messageType,
@@ -285,15 +282,35 @@ class AuraFormLinkCardOTPModal extends React.Component {
       linkCardOption,
     } = this.state;
 
-    // Set Default values if parameter not passed.
-    linkCardWithoutOTP = linkCardWithoutOTP || false;
-    modalHeaderTitle = modalHeaderTitle || getStringMessage('aura_link_your_card');
-    modalBodyTitle = modalBodyTitle || `${Drupal.t('Link card using')}:`;
-    showJoinAuraLink = showJoinAuraLink || false;
+    let linkCardWithoutOTP;
+    let modalHeaderTitle;
+    let modalBodyTitle;
+    const joinAuraLink = typeof showJoinAuraLink !== 'undefined' ? showJoinAuraLink : false;
+    // use default values if changeFormBasedOnUserAuthentication is not defined or false;
+    if ((typeof changeFormBasedOnUserAuthentication === 'undefined')
+      || !changeFormBasedOnUserAuthentication
+    ) {
+      linkCardWithoutOTP = false;
+      modalHeaderTitle = getStringMessage('aura_link_your_card');
+      modalBodyTitle = `${Drupal.t('Link card using')}:`;
+    } else {
+      // Use text for linkcardpopup based on user authentication.
+      const isUserLoggedIn = isUserAuthenticated();
+      modalHeaderTitle = isUserLoggedIn
+        ? getStringMessage('link_card_header_logged_in')
+        : getStringMessage('link_card_header_guest');
+      modalBodyTitle = isUserLoggedIn
+        ? getStringMessage('link_card_body_title_logged_in')
+        : [
+          <span>{getStringMessage('link_card_body_title_guest')}</span>,
+          <span>{getStringMessage('link_card_body_sub_title_guest')}</span>,
+        ];
+      linkCardWithoutOTP = !isUserLoggedIn;
+    }
 
     const submitButtonText = otpRequested
-      ? getStringMessage('aura_send_ont_time_pin')
-      : getStringMessage('aura_link_now');
+      ? getStringMessage('aura_link_now')
+      : getStringMessage('aura_send_OTP');
 
     return (
       <div className="aura-guest-user-link-card-otp-form">
@@ -383,7 +400,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
             </ConditionalView>
           </div>
           {/* Join now link will be visible only if showJoinAuraLink is passed. */}
-          <ConditionalView condition={showJoinAuraLink}>
+          <ConditionalView condition={joinAuraLink}>
             <div className="aura-modal-footer">
               <div className="join-aura" onClick={() => openOTPModal()}>
                 {getStringMessage('aura_join_aura')}

@@ -359,8 +359,8 @@ function _alshaya_aura_static_strings() {
       'value' => t('Link your card', [], ['context' => 'aura']),
     ],
     [
-      'key' => 'aura_send_ont_time_pin',
-      'value' => t('Send one time PIN'),
+      'key' => 'aura_send_OTP',
+      'value' => t('Send OTP', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_link_now',
