@@ -16,10 +16,14 @@
 
       .block-alshaya-super-category-menu {
         .menu--one__list {
-          height: 3.75rem;
+          height: rem(60);
 
           li {
-            height: 3.75rem;
+            height: rem(60);
+
+            @include breakpoint($upto-desktop) {
+              padding: 0;
+            }
           }
 
           .menu--one__link {
