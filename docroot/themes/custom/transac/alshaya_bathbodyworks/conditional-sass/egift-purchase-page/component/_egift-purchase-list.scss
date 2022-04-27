@@ -19,11 +19,11 @@
           height: 2.375rem;
 
           &.active {
-            border: 0.0625rem solid $egift-card-thumbnail-border-active-mobile;
+            border: 0.0625rem solid $egift-card-thumbnail-border-active;
           }
 
           &:hover {
-            border: 0.0625rem solid $egift-card-thumbnail-border-active-mobile;
+            border: 0.0625rem solid $egift-card-thumbnail-border-active;
           }
         }
       }
