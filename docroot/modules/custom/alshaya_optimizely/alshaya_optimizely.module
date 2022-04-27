@@ -27,7 +27,6 @@ function alshaya_optimizely_page_attachments(array &$page) {
           'src' => $optimizely_script_code,
         ],
       ],
-      'dpath',
     ];
     $page['#attached']['html_head'][] = $script;
 
