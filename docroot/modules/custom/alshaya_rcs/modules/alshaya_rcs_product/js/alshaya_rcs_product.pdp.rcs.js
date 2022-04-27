@@ -129,7 +129,7 @@
    * @param {object} product
    *   The raw product object.
    */
-  function loadAddToCartFormOnPdp(product) {
+  async function loadAddToCartFormOnPdp(product) {
     const addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
     // Render the HTML to the div.
     jQuery('#add_to_cart_form').html(addToCartFormHtml);
