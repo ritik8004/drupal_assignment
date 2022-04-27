@@ -1074,11 +1074,11 @@
   /**
    * Renders the add to cart form based on the provided input.
    *
-   * @param {object} input
-   *   The product input object.
+   * @param {object} product
+   *   The raw product object.
    */
-  window.commerceBackend.loadAddToCartForm = function (input) {
-    const addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(input, 'add_to_cart');
+  window.commerceBackend.loadAddToCartForm = async function loadAddToCartForm(product) {
+    const addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
     // Render the HTML to the div.
     jQuery('#add_to_cart_form').html(addToCartFormHtml);
   }
@@ -1144,20 +1144,4 @@
 
     e.detail.result.promotions = promotionVal;
   });
-
-  // Event Listener to peform action post the results are updated.
-  RcsEventManager.addListener('postUpdateResultsAction', (e) => {
-    // Return if result is empty and page type is not product.
-    if (!Drupal.hasValue(e.detail.result)
-      && e.detail.pageType !== 'product') {
-      return null;
-    }
-
-    // Render the add to cart form only if catalogue restructuring is not
-    // enabled.
-    if (!Drupal.hasValue(drupalSettings.alshayaColorSplit)) {
-      window.commerceBackend.loadAddToCartForm(e.detail.result);
-    }
-  });
-
 })(Drupal, drupalSettings);

@@ -170,15 +170,4 @@
 
     globalThis.RcsPhStaticStorage.set('product_data_' + mainProduct.sku, mainProduct);
   }, 100);
-
-  // Event Listener to peform action post the results are updated.
-  RcsEventManager.addListener('postUpdateResultsAction', (e) => {
-    // Return if result is empty and page type is not product.
-    if (!Drupal.hasValue(e.detail.result)
-      && e.detail.pageType !== 'product') {
-      return null;
-    }
-
-    window.commerceBackend.loadAddToCartForm(e.detail.result);
-  });
 })();
