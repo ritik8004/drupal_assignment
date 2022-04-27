@@ -235,6 +235,10 @@ $aura-gradient-18-ar: linear-gradient(-135deg, rgba(119, 37, 131, 1) 4%, rgba(22
 $aura-gradient-19: linear-gradient(99deg, #feeef3, #f8eaf5);
 $aura-gradient-19-ar: linear-gradient(-99deg, #feeef3, #f8eaf5);
 $aura-gradient-20: linear-gradient(110deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-21: linear-gradient(98deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-21-ar: linear-gradient(-98deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-25: linear-gradient(to bottom, #fff, #fff), linear-gradient(98deg, #e71e6e 16%, #662483 85%);
+$aura-gradient-26: linear-gradient(98deg, #e71e6e 16%, #662483 85%);
 $aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
 $aura-hello-tier: linear-gradient(140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
 $aura-hello-tier-ar: linear-gradient(-140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
@@ -1724,7 +1728,8 @@ $aura-spc-checkout-text-content: $_aura_expiry_black;
 $aura-normal-text: $_gray_222;
 $aura-highlight: $aura-purpleTwo;
 $aura-join-link: $aura-gradient-3;
-$aura-join-link-text: $musical-silk;
+$aura-join-link-text: $_aura_dark_purple;
+$aura-join-submit-text: $_aura_dark_purple;
 $aura-join-link-ar: $aura-gradient-3-ar;
 $title-blue: $aura-blue;
 $title-pink: $extreme-blush;
@@ -1772,6 +1777,10 @@ $aura-spc-cod-disabled-elements: $_aura-disabled;
 $aura-spc-rewards-block-disabled-elements: $grey-gate;
 $aura-header-popup-learn-more-link: $musical-silk;
 $aura-header-popup-footer-text: $dark-night-owl;
+$aura-header-join-now-bg: $aura-gradient-21;
+$aura-join-now-submit-button-bg: $aura-gradient-25;
+$aura-join-now-submit-bg-src: $aura-gradient-26;
+$aura-congratulation-highlight-text: $musical-silk;
 
 // Aura My Account.
 $aura-loyalty-club-title-1: $aura-blue;
@@ -1833,6 +1842,7 @@ $aura-my-account-filters: $_aura_account_txt;
 $aura-my-account-reward-activity: $aura-purpleTwo;
 $aura-my-account-reward-activity-bg: $_aura-light-blue;
 $aura-my-account-filters-active-bg: $_aura-very-light-pink;
+$aura-otp-submit-description: $grey-light;
 
 // Aura Header.
 $aura-hb-menu-aura-tooltip: $aura-gradient-17;

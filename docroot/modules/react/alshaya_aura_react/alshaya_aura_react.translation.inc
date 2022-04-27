@@ -444,6 +444,29 @@ function _alshaya_aura_react_translations() {
       ],
       "Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase." => [
         'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span> مع عملية الشراء هذه.",
+      ],
+      'Congrats!' => [
+        'ar' => 'تهاني!',
+        'context' => 'aura',
+      ],
+      'You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store' => [
+        'ar' => 'أنت الآن جزء من نادي Aura الحصري. اكسب نقاطًا أثناء التسوق ، سواء كان ذلك عبر الإنترنت أو في المتجر',
+        'context' => 'aura',
+      ],
+      'To spend your points online, please download Aura app available both on App Store and Play Store.' => [
+        'ar' => 'لإنفاق نقاطك عبر الإنترنت ، يرجى تنزيل تطبيق Aura المتاح في كل من App Store و Play Store.',
+        'context' => 'aura',
+      ],
+      "By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>" => [
+        'ar' => "بالضغط على إرسال ، فإنك توافق على قراءة <a href='@tncLink' target='_blank'> البنود والشروط </a> والموافقة عليها",
+        'context' => 'aura',
+      ],
+      'Join Aura' => [
+        'ar' => 'انضم إلى Aura',
+        'context' => 'aura',
+      ],
+      'Already a member?' => [
+        'ar' => 'عضوا فعلا؟',
         'context' => 'aura',
       ],
     ],

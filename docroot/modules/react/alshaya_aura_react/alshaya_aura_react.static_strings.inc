@@ -314,5 +314,21 @@ function _alshaya_aura_static_strings() {
       'key' => 'play_store_link_text',
       'value' => t('Play Store.', [], ['context' => 'aura']),
     ],
+    [
+      'key' => 'join_aura_congratulations_header',
+      'value' => t('Congrats!', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'join_aura_congratulations_text',
+      'value' => t('You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'join_aura_congratulations_download_text',
+      'value' => t('To spend your points online, please download Aura app available both on App Store and Play Store.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'tnc_description_text',
+      'value' => t("By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>", [], ['context' => 'aura']),
+    ],
   ];
 }
