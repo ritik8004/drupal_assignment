@@ -387,3 +387,11 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
 .ie .site-brand-home a img {
   width: 100%;
 }
+
+// save price enablement
+.hide-discount-text {
+  .price--discount,
+  .magv2-pdp-discount-percentage {
+    display: none !important;
+  }
+}
