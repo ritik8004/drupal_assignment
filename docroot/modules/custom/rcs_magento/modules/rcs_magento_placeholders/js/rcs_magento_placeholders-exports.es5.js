@@ -14,6 +14,8 @@ async function handleNoItemsInResponse(request, urlKey) {
 
   if (response.data.urlResolver === null
     || response.data.urlResolver.redirectCode == 404) {
+    // Hide body so that placeholders are not visible.
+    document.body.classList.add('hidden');
     return rcsRedirectToPage(rcs404);
   }
 
