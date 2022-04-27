@@ -335,6 +335,38 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
   return result;
 };
 
+exports.getDataAsynchronous = function getDataAsynchronous(placeholder, params, callback, entity, langcode) {
+  const request = {
+    uri: '/graphql',
+    method: 'GET',
+    headers: [
+      ['Content-Type', 'application/json'],
+      ['Store', drupalSettings.rcs.commerceBackend.store],
+    ],
+    callback: callback,
+  };
+
+  let response = null;
+  let result = null;
+
+  switch (placeholder) {
+    case 'products-in-style':
+      let variables = rcsPhGraphqlQuery.styled_products.variables;
+      variables.styleCode = params.styleCode;
+
+      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
+      response = rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
+    default:
+      console.log(`Placeholder ${placeholder} not supported for get_data.`);
+      break;
+  }
+
+  return result;
+}
+
 exports.getDataSynchronous = function getDataSynchronous(placeholder, params, entity, langcode) {
   const request = {
     uri: '/graphql',

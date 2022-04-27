@@ -28,7 +28,12 @@ exports.invokeApi = async function (request) {
     // cart_notification.js.
     rcs: true,
     success: function (response) {
-      return response;
+      // Invoke callback if available else return the response.
+      if (request.callback) {
+        request.callback(response);
+      } else {
+        return response;
+      }
     },
     error: function () {
       console.log('Could not fetch data!');

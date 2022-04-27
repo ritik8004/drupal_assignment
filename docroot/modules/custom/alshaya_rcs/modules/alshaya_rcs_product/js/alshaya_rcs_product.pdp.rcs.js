@@ -138,7 +138,7 @@
   async function loadAddToCartFormOnPdp(product) {
     const addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
     // Render the HTML to the div.
-    jQuery('#add_to_cart_form').html(addToCartFormHtml);
+    jQuery('.add_to_cart_form').html(addToCartFormHtml);
   }
 
   // Event Listener to perform action post the results are updated.
