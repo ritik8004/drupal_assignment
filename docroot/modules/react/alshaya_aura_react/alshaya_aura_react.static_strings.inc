@@ -330,5 +330,41 @@ function _alshaya_aura_static_strings() {
       'key' => 'tnc_description_text',
       'value' => t("By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>", [], ['context' => 'aura']),
     ],
+    [
+      'key' => 'link_card_header_guest',
+      'value' => t('Experience Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_header_logged_in',
+      'value' => t('Link Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_title_logged_in',
+      'value' => t('Link your card through', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_title_guest',
+      'value' => t('Are you a member already?', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_sub_title_guest',
+      'value' => t('Enter your details to earn points for this order.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_sub_title_guest',
+      'value' => t('Enter your details to earn points for this order.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_your_card',
+      'value' => t('Link your card', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_send_ont_time_pin',
+      'value' => t('Send one time PIN'),
+    ],
+    [
+      'key' => 'aura_link_now',
+      'value' => t('Link Now'),
+    ],
   ];
 }

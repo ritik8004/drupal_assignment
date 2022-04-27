@@ -461,12 +461,28 @@ function _alshaya_aura_react_translations() {
         'ar' => "بالضغط على إرسال ، فإنك توافق على قراءة <a href='@tncLink' target='_blank'> البنود والشروط </a> والموافقة عليها",
         'context' => 'aura',
       ],
-      'Join Aura' => [
-        'ar' => 'انضم إلى Aura',
-        'context' => 'aura',
-      ],
       'Already a member?' => [
         'ar' => 'عضوا فعلا؟',
+        'context' => 'aura',
+      ],
+      'Experience Aura' => [
+        'ar' => 'جرّب أورا',
+        'context' => 'aura',
+      ],
+      'Link your card through' => [
+        'ar' => 'ربط بطاقتك من خلال',
+        'context' => 'aura',
+      ],
+      'Are you a member already?' => [
+        'ar' => 'هل انت عضو بالفعل؟',
+        'context' => 'aura',
+      ],
+      'Enter your details to earn points for this order.' => [
+        'ar' => 'أدخل التفاصيل الخاصة بك لكسب النقاط لهذا الطلب.',
+        'context' => 'aura',
+      ],
+      'Link your card' => [
+        'ar' => 'اربط بطاقتك',
         'context' => 'aura',
       ],
     ],

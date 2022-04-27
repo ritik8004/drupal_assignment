@@ -32,16 +32,11 @@ import {
 import { handleManualLinkYourCard } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import { processCheckoutCart } from '../../utilities/checkout_helper';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 
 class AuraFormLinkCardOTPModal extends React.Component {
   constructor(props) {
     super(props);
-    const {
-      linkCardWithoutOTP,
-      modalHeaderTitle,
-      modalBodyTitle,
-      showJoinAuraLink,
-    } = props;
     this.state = {
       otpRequested: false,
       messageType: null,
@@ -50,10 +45,6 @@ class AuraFormLinkCardOTPModal extends React.Component {
       email: null,
       mobile: null,
       linkCardOption: 'cardNumber',
-      linkCardWithoutOTP: linkCardWithoutOTP || false,
-      modalHeaderTitle: modalHeaderTitle || Drupal.t('Link your card'),
-      modalBodyTitle: modalBodyTitle || `${Drupal.t('Link card using')}:`,
-      showJoinAuraLink: showJoinAuraLink || false,
     };
   }
 
@@ -94,7 +85,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
         getAuraLocalStorageKey(),
         stateValues,
       );
-      stateValues.loyaltyStatus = parseInt(stateValues.loyaltyStatus);
+      stateValues.loyaltyStatus = Number(stateValues.loyaltyStatus);
       this.setState({
         ...stateValues,
       });
@@ -254,6 +245,9 @@ class AuraFormLinkCardOTPModal extends React.Component {
     if (!isValid) {
       return;
     }
+    if (isUserAuthenticated()) {
+      return;
+    }
     const selectedElementValue = getElementValueByType(linkCardOption, '.aura-modal-form');
     const fieldData = {
       type: linkCardOption,
@@ -275,7 +269,12 @@ class AuraFormLinkCardOTPModal extends React.Component {
       setChosenCountryCode,
       openOTPModal,
     } = this.props;
-
+    let {
+      linkCardWithoutOTP,
+      modalHeaderTitle,
+      modalBodyTitle,
+      showJoinAuraLink,
+    } = this.props;
     const {
       otpRequested,
       messageType,
@@ -284,13 +283,17 @@ class AuraFormLinkCardOTPModal extends React.Component {
       email,
       mobile,
       linkCardOption,
-      linkCardWithoutOTP,
-      modalHeaderTitle,
-      modalBodyTitle,
-      showJoinAuraLink,
     } = this.state;
 
-    const submitButtonText = otpRequested ? Drupal.t('Link Now') : Drupal.t('Send one time PIN');
+    // Set Default values if parameter not passed.
+    linkCardWithoutOTP = linkCardWithoutOTP || false;
+    modalHeaderTitle = modalHeaderTitle || getStringMessage('aura_link_your_card');
+    modalBodyTitle = modalBodyTitle || `${Drupal.t('Link card using')}:`;
+    showJoinAuraLink = showJoinAuraLink || false;
+
+    const submitButtonText = otpRequested
+      ? getStringMessage('aura_send_ont_time_pin')
+      : getStringMessage('aura_link_now');
 
     return (
       <div className="aura-guest-user-link-card-otp-form">
@@ -347,11 +350,14 @@ class AuraFormLinkCardOTPModal extends React.Component {
             </div>
           </div>
           <div className="aura-modal-form-actions">
+            {/* Apply button will only be visible if user is not authenticated. */}
             <ConditionalView condition={linkCardWithoutOTP}>
               <div className="aura-modal-form-submit-without-otp" onClick={() => this.addCard()}>
                 {Drupal.t('Apply')}
               </div>
             </ConditionalView>
+            {/* Apply button will only be visible if user is authenticated, */}
+            {/* and if linkCardWithoutOTP is not passed */}
             <ConditionalView condition={!linkCardWithoutOTP}>
               <div className="aura-new-user-t-c aura-otp-submit-description">
                 {this.getOtpDescription()}
@@ -376,10 +382,11 @@ class AuraFormLinkCardOTPModal extends React.Component {
               </ConditionalView>
             </ConditionalView>
           </div>
+          {/* Join now link will be visible only if showJoinAuraLink is passed. */}
           <ConditionalView condition={showJoinAuraLink}>
             <div className="aura-modal-footer">
               <div className="join-aura" onClick={() => openOTPModal()}>
-                {Drupal.t('Join Aura')}
+                {getStringMessage('aura_join_aura')}
               </div>
             </div>
           </ConditionalView>

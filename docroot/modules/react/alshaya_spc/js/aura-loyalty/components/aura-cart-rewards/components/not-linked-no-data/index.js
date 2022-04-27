@@ -9,6 +9,7 @@ import AuraHeaderIcon from '../../../../../../../alshaya_aura_react/js/svg-compo
 import { isUserAuthenticated } from '../../../../../../../js/utilities/helper';
 import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 import AuraFormLinkCardOTPModal from '../../../aura-forms/aura-link-card-otp-modal-form';
+
 class AuraNotLinkedNoData extends React.Component {
   constructor(props) {
     super(props);
@@ -69,6 +70,19 @@ class AuraNotLinkedNoData extends React.Component {
       chosenCountryCode,
     } = this.state;
 
+    // Use text for linkcardpopup based on user authentication.
+    const isUserLoggedIn = isUserAuthenticated();
+    const modalHeaderTitle = isUserLoggedIn
+      ? getStringMessage('link_card_header_logged_in')
+      : getStringMessage('link_card_header_guest');
+    const modalBodyTitle = isUserLoggedIn
+      ? getStringMessage('link_card_body_title_logged_in')
+      : [
+        <span>{getStringMessage('link_card_body_title_guest')}</span>,
+        <span>{getStringMessage('link_card_body_sub_title_guest')}</span>,
+      ];
+    const linkCardWithoutOTP = !isUserLoggedIn;
+
     return (
       <>
         <div className="block-content guest-user">
@@ -89,8 +103,7 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                /** @todo: We need to change this to open the link aura form. */
-                  onClick={() => this.openOTPModal()}
+                  onClick={() => this.openLinkCardModal()}
                 >
                   {getStringMessage('aura_link_aura')}
                 </a>
@@ -101,7 +114,7 @@ class AuraNotLinkedNoData extends React.Component {
                 <a
                   className="spc-link-aura-link"
                 /** @todo: We need to change this to open sign in aura form. */
-                  onClick={() => this.openOTPModal()}
+                  onClick={() => this.openLinkCardModal()}
                 >
                   {getStringMessage('aura_sign_in')}
                 </a>
@@ -114,16 +127,6 @@ class AuraNotLinkedNoData extends React.Component {
                 wait={wait}
               />
               <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
-            </div>
-            {/* @todo below change is temporary,*/}
-            {/* should be removed while integration with new component.*/}
-            <div className="spc-sign-in-wrapper submit">
-              <a
-                className="spc-sign-in-link"
-                onClick={() => this.openLinkCardModal()}
-              >
-                {Drupal.t('Sign in')}
-              </a>
             </div>
           </div>
         </div>
@@ -144,14 +147,9 @@ class AuraNotLinkedNoData extends React.Component {
             openOTPModal={() => this.openOTPModal()}
             setChosenCountryCode={this.setChosenCountryCode}
             chosenCountryCode={chosenCountryCode}
-            modalHeaderTitle={Drupal.t('Experience Aura')}
-            modalBodyTitle={(
-              <div className="modal-body-title">
-                <span>{Drupal.t('Are you a member already?')}</span>
-                <span>{Drupal.t('Enter your details to earn points for this order.')}</span>
-              </div>
-            )}
-            linkCardWithoutOTP
+            modalHeaderTitle={modalHeaderTitle}
+            modalBodyTitle={modalBodyTitle}
+            linkCardWithoutOTP={linkCardWithoutOTP}
             showJoinAuraLink
           />
         </Popup>
