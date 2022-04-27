@@ -3,7 +3,10 @@ import Popup from 'reactjs-popup';
 import logger from '../../../../../js/utilities/logger';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import EgiftCheckBalanceStepTwo from '../egift-check-balance-step-two';
-import { sendOtp } from '../../../../../js/utilities/egiftCardHelper';
+import {
+  allowWholeNumbers,
+  sendOtp,
+} from '../../../../../js/utilities/egiftCardHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
@@ -136,6 +139,8 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                       className={egiftCardNumber !== '' ? 'card-number focus' : 'card-number'}
                       onBlur={(e) => this.handleEvent(e)}
                       defaultValue={egiftCardNumber}
+                      onInput={(e) => allowWholeNumbers(e)}
+                      maxLength="16"
                     />
                     <div className="c-input__bar" />
                     <label>
