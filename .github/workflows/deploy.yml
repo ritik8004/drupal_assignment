@@ -9,6 +9,7 @@ on:
       - master
       - develop-online-returns
       - develop-new-aura-checkout
+      - develop-new-aura-cart
   create:
     tags:
 
