@@ -5,6 +5,7 @@ import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
 import PriceElement
   from '../../../../alshaya_spc/js/utilities/special-price/PriceElement';
+import { allowWholeNumbers } from '../../../../js/utilities/egiftCardHelper';
 
 export default class EgiftTopupFor extends React.Component {
   constructor(props) {
@@ -122,6 +123,9 @@ export default class EgiftTopupFor extends React.Component {
                 id="card_number"
                 name="card_number"
                 onBlur={(e) => this.handleEvent(e)}
+                onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
+                onInput={(e) => allowWholeNumbers(e)}
+                maxLength="16"
               />
               <div className="error" id="card-number-error">
                 {cardNumberError}
