@@ -153,38 +153,40 @@
         display: flex;
         align-items: center;
         font-size: 1rem;
-        line-height: 1.125rem;
+        line-height: rem(18);
         border-radius: 0;
         flex-wrap: wrap;
+        padding: rem(17) rem(20) rem(18);
 
         @include breakpoint($upto-desktop) {
-          display: inline-block;
-          line-height: 1.75rem;
           width: 100%;
+          line-height: rem(19);
         }
 
         .points-to-earn-count {
-          color: $aura-spc-checkout-highlight;
+          color: $aura-cart-points;
           font-family: $aura-bold;
-
-          @include breakpoint($tablet) {
-            margin-#{$left}: 0.3rem;
-          }
+          margin-#{$left}: 0.3rem;
         }
 
         .join-aura {
           position: relative;
-          top: 0.2rem;
+          top: rem(1.6);
           margin: 0 0.3rem;
+          max-height: rem(25);
 
-          @include breakpoint($upto-desktop) {
-            top: 0.5rem;
+          @include breakpoint($only-mobile) {
+            top: rem(0.8);
           }
 
           svg {
-            max-height: 1.563rem;
+            max-height: rem(25);
             width: auto;
           }
+        }
+
+        .tooltip-anchor {
+          top: rem(-1);
         }
       }
     }
@@ -363,7 +365,7 @@
 #spc-checkout {
   .spc-content {
     .spc-aura-checkout-rewards-block {
-      padding-top: 0.4rem !important;
+      padding-top: rem(5) !important;
     }
   }
 }
@@ -390,11 +392,12 @@
           letter-spacing: 0.05rem;
           line-height: 1.25rem;
           font-size: 1rem;
+          display: flex;
+          align-items: center;
         }
 
         .join-aura {
           position: relative;
-          top: 0.15rem;
           margin: 0 0.3rem;
 
           svg {
@@ -461,6 +464,7 @@
           .current-available-points {
             .spc-aura-highlight {
               margin: 0 0.15rem;
+              color: $aura-highlight;
             }
           }
 
@@ -470,13 +474,14 @@
               padding: 0;
               width: auto;
               display: inline-block;
+              color: $aura-spc-checkout-text-content;
 
               &::before {
                 content: '';
               }
 
               b {
-                color: $aura-spc-checkout-highlight;
+                color: $aura-highlight;
               }
             }
           }
@@ -489,7 +494,7 @@
     }
 
     .redeem-aura-footer {
-      color: $aura-spc-checkout-highlight;
+      color: $aura-checkout-footer-redeem-text;
       font-size: 0.75rem;
       line-height: 1.125rem;
       margin-top: 0.75rem;
@@ -509,8 +514,9 @@
         width: 1rem;
         height: 1rem;
         border-radius: 50%;
-        padding: 0.05rem 0.45rem;
+        padding: rem(3) rem(7);
         margin-#{$right}: 0.25rem;
+        font-size: rem(9);
       }
 
       .points-earned-with-purchase {
