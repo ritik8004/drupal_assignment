@@ -5,6 +5,7 @@ import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
 import PriceElement
   from '../../../../alshaya_spc/js/utilities/special-price/PriceElement';
+import { allowWholeNumbers } from '../../../../js/utilities/egiftCardHelper';
 
 export default class EgiftTopupFor extends React.Component {
   constructor(props) {
