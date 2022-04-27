@@ -165,6 +165,16 @@ class TotalLineItems extends React.Component {
           />
         </ConditionalView>
 
+        <ConditionalView condition={typeof totals.subtotalWithDiscountInclTax !== 'undefined'}>
+          <div className="hero-subtotal-after-discount">
+            <TotalLineItem
+              name="subtotal-with-discount-incl-tax"
+              title={Drupal.t('Subtotal After Discount')}
+              value={totals.subtotalWithDiscountInclTax}
+            />
+          </div>
+        </ConditionalView>
+
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
           <ConditionalView condition={isEgiftCardEnabled()}>
