@@ -498,6 +498,7 @@
       font-size: 0.75rem;
       line-height: 1.125rem;
       margin-top: 0.75rem;
+      margin-#{$left}: rem(20);
 
       b {
         font-family: $aura-bold;
@@ -516,7 +517,11 @@
         border-radius: 50%;
         padding: rem(3) rem(7);
         margin-#{$right}: 0.25rem;
-        font-size: rem(9);
+        font-size: rem(12);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
       }
 
       .points-earned-with-purchase {
