@@ -168,7 +168,7 @@ export default class EgiftCardPurchase extends React.Component {
     // Get recipient email.
     const email = data.get('egift-recipient-email').trim();
     // Validate email, check if email has @ and with domain after dot.
-    if (email === '' || !(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
+    if (email === '' || !(/^\w+([+.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
       document.getElementById('email-error').innerHTML = Drupal.t('Please enter valid email address', {}, { context: 'egift' });
       document.getElementById('email-error').classList.add('error');
       isError = true;
