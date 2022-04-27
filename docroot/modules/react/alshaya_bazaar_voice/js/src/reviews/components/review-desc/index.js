@@ -63,7 +63,7 @@ const ReviewDescription = ({
             tagDimensionsOrder={reviewDescriptionData.TagDimensionsOrder}
           />
           <ConditionalView condition={reviewDescriptionData.Photos
-            && reviewDescriptionData.Photos.length > 0}
+            && reviewDescriptionData.Photos.Sizes.length > 0}
           >
             <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
           </ConditionalView>
