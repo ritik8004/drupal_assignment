@@ -219,6 +219,8 @@ export default class EgiftCardPurchase extends React.Component {
     }
     if (isError) {
       removeFullScreenLoader();
+      // Scroll to error.
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
