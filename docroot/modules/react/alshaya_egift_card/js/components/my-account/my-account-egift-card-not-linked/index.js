@@ -6,7 +6,10 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
-import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
+import {
+  allowWholeNumbers,
+  callEgiftApi,
+} from '../../../../../js/utilities/egiftCardHelper';
 
 class EgiftCardNotLinked extends React.Component {
   constructor(props) {
@@ -227,6 +230,8 @@ class EgiftCardNotLinked extends React.Component {
               className="egift-card-number"
               readOnly={enableVerifyCode}
               onBlur={(e) => this.handleEvent(e)}
+              onInput={(e) => allowWholeNumbers(e)}
+              maxLength="16"
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('eGift Card Number', {}, { context: 'egift' })}</label>
