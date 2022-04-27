@@ -152,6 +152,14 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
+    // Fire another event to perform actions after results are updated.
+    RcsEventManager.fire('postUpdateResultsAction', {
+      detail: {
+        result: updateResult.detail.result,
+        pageType: pageType,
+      }
+    });
+
     return updateResult.detail.result;
   }
 
@@ -299,7 +307,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       RcsEventManager.fire('startLoader');
     }
 
-    // Creating custom event to to perform extra operation and update the result
+    // Creating custom event to perform extra operation and update the result
     // object.
     const updateResult = RcsEventManager.fire('rcsUpdateResults', {
       detail: {
