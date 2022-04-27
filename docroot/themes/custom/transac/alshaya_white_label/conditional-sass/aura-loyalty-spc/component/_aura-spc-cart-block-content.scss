@@ -202,6 +202,18 @@
     }
   }
 
+  .block-content.registered-user-linked-pending-enrollment {
+    .spc-aura-cart-icon {
+      & > svg {
+        max-height: rem(70);
+      }
+    }
+
+    .spc-aura-cart-content {
+      max-width: 65%;
+    }
+  }
+
   .block-content.registered-user-unlinked-card {
     .spc-aura-cart-content {
       .spc-link-aura-link-wrapper {
