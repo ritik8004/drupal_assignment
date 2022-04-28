@@ -59,7 +59,7 @@ class AuraPDP extends React.Component {
         : productInfo[skuCode][priceKey];
 
       // Return price as aura points.
-      return Math.round(price);
+      return getPriceToPoint(price);
     }
 
     // If above details are not there in props, proceed with usual approach to
