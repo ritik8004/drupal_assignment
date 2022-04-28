@@ -60,6 +60,7 @@
               promotions: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'promotions'),
               postpay: Drupal.hasValue(drupalSettings.postpay_widget_info) ? drupalSettings.postpay_widget_info : {},
               tabby: Drupal.hasValue(drupalSettings.tabby) ? drupalSettings.tabby.widgetInfo : {},
+              cleanSku: window.commerceBackend.cleanCssIdentifier(entity.sku),
             };
 
             var elem = document.createElement('div');
