@@ -500,9 +500,9 @@ exports.computePhFilters = function (input, filter) {
       value = input.sku;
       break;
 
-      case 'sku-clean':
-        value = window.commerceBackend.cleanCssIdentifier(input.sku);
-        break;
+    case 'sku-clean':
+      value = window.commerceBackend.cleanCssIdentifier(input.sku);
+      break;
 
     case 'sku-type':
       value = input.type_id;
@@ -777,6 +777,11 @@ exports.computePhFilters = function (input, filter) {
 
       // Render handlebars plugin.
       value = handlebarsRenderer.render(`product.${filter}`, data);
+      break;
+
+    case 'price_block_identifier':
+      const cleanSku = window.commerceBackend.cleanCssIdentifier(input.sku);
+      value = `price-block-${cleanSku}`;
       break;
 
     default:

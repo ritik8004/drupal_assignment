@@ -209,6 +209,7 @@ exports.computePhFilters = function (input, filter) {
     case 'short_description':
     case 'promotions':
     case 'teaser_image':
+    case 'price_block_identifier':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }
