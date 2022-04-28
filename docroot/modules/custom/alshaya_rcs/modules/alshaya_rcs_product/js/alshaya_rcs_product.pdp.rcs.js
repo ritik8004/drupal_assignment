@@ -122,4 +122,27 @@
       }, 1);
     }
   };
+
+  /**
+   * Renders the add to cart form based on the provided input.
+   *
+   * @param {object} product
+   *   The raw product object.
+   */
+  async function loadAddToCartFormOnPdp(product) {
+    const addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
+    // Render the HTML to the div.
+    jQuery('#add_to_cart_form').html(addToCartFormHtml);
+  }
+
+  // Event Listener to perform action post the results are updated.
+  RcsEventManager.addListener('postUpdateResultsAction', function loadAddToCartForm(e) {
+    // Return if result is empty and page type is not product.
+    if (e.detail.pageType !== 'product'
+      || !Drupal.hasValue(e.detail.result)) {
+      return null;
+    }
+
+    loadAddToCartFormOnPdp(e.detail.result);
+  });
 })(jQuery);
