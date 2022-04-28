@@ -1,6 +1,6 @@
 {%
 set classes = [
-'paragraph-t-' ~ paragraph.bundle|replace('_', '-'),
+'paragraph-t-' ~ paragraph.bundle|replace({'_':'-'}),
 view_mode ? 'paragraph-vm-' ~ view_mode,
 ]
 %}
