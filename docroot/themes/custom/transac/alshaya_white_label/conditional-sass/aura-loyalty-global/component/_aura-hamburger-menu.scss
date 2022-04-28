@@ -25,7 +25,7 @@ body.aura-enabled {
       .aura-header-guest-tooltip {
         border-radius: 0.625rem;
         background-image: $aura-hb-menu-aura-tooltip;
-        margin: 1.25rem;
+        margin: rem(20) rem(10);
 
         html[lang=ar] & {
           background-image: $aura-hb-menu-aura-tooltip-ar;
@@ -36,7 +36,7 @@ body.aura-enabled {
         .aura-header-hb-menu-title {
           display: flex;
           align-items: center;
-          padding: 0.75rem 1.125rem 0.875rem;
+          padding: rem(12) rem(20);
           position: relative;
 
           span.preview-text {

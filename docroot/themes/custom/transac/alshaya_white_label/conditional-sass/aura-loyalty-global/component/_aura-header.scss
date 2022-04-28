@@ -63,8 +63,8 @@
     @include breakpoint($desktop) {
       position: absolute;
       width: 100%;
-      min-width: 19.6875rem;
-      padding: 0.75rem 1.125rem 1rem;
+      min-width: rem(282);
+      padding: rem(12) rem(16);
       border-radius: 0.625rem;
       box-shadow: 0 0.125rem 1.25rem 0 rgba(0, 0, 0, 0.24);
       #{$left}: 50%;
@@ -197,23 +197,21 @@ body.aura-enabled {
   }
 
   .aura-popup-body {
-    margin-bottom: 1rem;
+    margin-bottom: rem(8);
     color: $aura-loyalty-activity-txt;
     text-align: $left;
     line-height: 1.125rem;
     font-size: 0.75rem;
 
-    @include breakpoint($desktop) {
-      margin-bottom: 0.5rem;
-    }
-
     span {
       a {
         display: inline-block;
-        padding: 0.25rem 0;
+        padding: rem(1) 0;
         color: inherit;
         text-decoration: underline;
-        font-size: 0.75rem;
+        font-size: rem(12);
+        line-height: rem(18);
+        font-family: $aura-regular;
 
         &:hover {
           background-color: transparent;
