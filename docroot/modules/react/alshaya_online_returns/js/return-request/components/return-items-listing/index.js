@@ -1,10 +1,10 @@
 import React from 'react';
 import Collapsible from 'react-collapsible';
+import Popup from 'reactjs-popup';
 import ReturnItemDetails from '../return-item-details';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultResolutionId } from '../../../utilities/return_request_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import Popup from 'reactjs-popup';
 import PromotionsWarningModal from '../promotions-warning-modal';
 
 class ReturnItemsListing extends React.Component {
@@ -14,6 +14,7 @@ class ReturnItemsListing extends React.Component {
       btnDisabled: true,
       open: true,
       promotionModalOpen: false,
+      ruleId: null,
     };
     this.handleSelectedReason = this.handleSelectedReason.bind(this);
     this.processSelectedItems = this.processSelectedItems.bind(this);
@@ -76,41 +77,30 @@ class ReturnItemsListing extends React.Component {
     const { handleSelectedItems, itemsSelected } = this.props;
 
     // Check if any promotion is applied to the item.
-    if (hasValue(item.applied_rule_ids)) {
+    if (hasValue(item.applied_rule_ids) && checked) {
       // Display promotions warning modal.
       this.setState({
         promotionModalOpen: true,
+        ruleId: item.applied_rule_ids,
       });
+    } else if (checked) {
+      const itemDetails = item;
+
+      // Add default quantity and resolution.
+      itemDetails.qty_requested = 1;
+      itemDetails.resolution = getDefaultResolutionId();
+
+      // Add is checked attribute.
+      itemDetails.isChecked = checked;
+
+      this.setState({
+        btnDisabled: true,
+      });
+      handleSelectedItems([...itemsSelected, itemDetails]);
     } else {
-      if (checked) {
-        const itemDetails = item;
-
-        // Add default quantity and resolution.
-        itemDetails.qty_requested = 1;
-        itemDetails.resolution = getDefaultResolutionId();
-
-        // Add is checked attribute.
-        itemDetails.isChecked = checked;
-
-        this.setState({
-          btnDisabled: true,
-        });
-        handleSelectedItems([...itemsSelected, itemDetails]);
-      } else {
-        handleSelectedItems(itemsSelected.filter((product) => product.sku !== item.sku));
-      }
+      handleSelectedItems(itemsSelected.filter((product) => product.sku !== item.sku));
     }
-
   }
-
-  /**
-   * Display promotions warning modal.
-   */
-  showPromotionWarningModal = () => {
-    this.setState({
-      promotionModalOpen: true,
-    });
-  };
 
   closePromotionsWarningModal = () => {
     this.setState({
@@ -119,14 +109,39 @@ class ReturnItemsListing extends React.Component {
   };
 
   handlePromotionContinue = () => {
+    const { products, handleSelectedItems, itemsSelected } = this.props;
+    const { ruleId } = this.state;
+
+    if (!hasValue(ruleId)) {
+      return;
+    }
+
+    const promotionalItems = [];
+
+    products.forEach((product) => {
+      const productDetails = product;
+
+      if (productDetails.applied_rule_ids === ruleId) {
+        productDetails.qty_requested = 1;
+        productDetails.resolution = getDefaultResolutionId();
+        productDetails.isChecked = true;
+
+        promotionalItems.push(productDetails);
+      }
+    });
+
+    if (hasValue(promotionalItems)) {
+      handleSelectedItems([...itemsSelected, ...promotionalItems]);
+    }
+
     this.setState({
-      open: event.detail,
+      promotionModalOpen: false,
     });
   };
 
   handlePromotionDeselect = () => {
     this.setState({
-      checked: false,
+      promotionModalOpen: false,
     });
   };
 
@@ -221,6 +236,8 @@ class ReturnItemsListing extends React.Component {
         >
           <PromotionsWarningModal
             closePromotionsWarningModal={this.closePromotionsWarningModal}
+            handlePromotionDeselect={this.handlePromotionDeselect}
+            handlePromotionContinue={this.handlePromotionContinue}
           />
         </Popup>
       </div>

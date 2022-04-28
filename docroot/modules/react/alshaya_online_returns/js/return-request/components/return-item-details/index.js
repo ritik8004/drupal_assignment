@@ -15,7 +15,6 @@ class ReturnItemDetails extends React.Component {
     super(props);
     const { item: { qty_ordered: qtyOrdered } } = props;
     this.state = {
-      // isChecked: false,
       returnReasons: getReturnReasons(),
       qtyOptions: getQuantityOptions(qtyOrdered),
     };
@@ -29,10 +28,6 @@ class ReturnItemDetails extends React.Component {
     const { isChecked } = item;
 
     processSelectedItems(!isChecked, item);
-    // // If checkbox is checked, we show reason and quantity dropdowns.
-    // this.setState({
-    //   isChecked: !isChecked,
-    // });
   };
 
   render() {
