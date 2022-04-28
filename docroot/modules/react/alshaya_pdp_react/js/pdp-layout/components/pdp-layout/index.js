@@ -243,9 +243,6 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
-          <ConditionalView condition={isAuraEnabled()}>
-            <AuraPDP mode="main" />
-          </ConditionalView>
           <ConditionalView condition={isExpressDeliveryEnabled()
             && checkProductExpressDeliveryStatus(skuItemCode)}
           >
@@ -290,6 +287,14 @@ const PdpLayout = () => {
               format="link"
               title={title}
               options={options}
+            />
+          </ConditionalView>
+          <ConditionalView condition={isAuraEnabled()}>
+            <AuraPDP
+              mode="main"
+              skuCode={skuItemCode}
+              firstChild={firstChild}
+              productInfo={productInfo}
             />
           </ConditionalView>
           <PdpDescription

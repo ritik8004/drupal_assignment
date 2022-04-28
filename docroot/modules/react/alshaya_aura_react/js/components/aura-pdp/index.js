@@ -7,7 +7,6 @@ import { cartAvailableInStorage } from '../../../../alshaya_spc/js/utilities/get
 import { showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import { redeemAuraPoints } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
 import { getUserDetails } from '../../utilities/helper';
-import getStringMessage from '../../../../js/utilities/strings';
 
 class AuraPDP extends React.Component {
   constructor(props) {
@@ -43,6 +42,28 @@ class AuraPDP extends React.Component {
   };
 
   getInitialProductPoints = (mode) => {
+    const {
+      skuCode,
+      firstChild,
+      productInfo,
+    } = this.props;
+
+    // Check if skuCode, firstChild and productInfo props are provided and
+    // calculate initial product points from that.
+    if (typeof skuCode !== 'undefined'
+      && typeof firstChild !== 'undefined'
+      && typeof productInfo !== 'undefined') {
+      const priceKey = (mode === 'related') ? 'final_price' : 'finalPrice';
+      const price = productInfo[skuCode].variants
+        ? productInfo[skuCode].variants[firstChild][priceKey]
+        : productInfo[skuCode][priceKey];
+
+      // Return price as aura points.
+      return Math.round(price);
+    }
+
+    // If above details are not there in props, proceed with usual approach to
+    // get the data from price amount HTML text block.
     let selector = null;
 
     if (mode === 'main') {
@@ -144,9 +165,10 @@ class AuraPDP extends React.Component {
     if (productPoints !== 0) {
       return (
         <span>
-          {parse(getStringMessage(
-            'pdp_earn_aura_points',
+          {parse(Drupal.t(
+            'Earn <b>@pts Aura points</b> with this purchase.',
             { '@pts': productPoints },
+            { context: 'aura' },
           ))}
         </span>
       );
