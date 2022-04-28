@@ -500,9 +500,9 @@ exports.computePhFilters = function (input, filter) {
       value = input.sku;
       break;
 
-      case 'sku-clean':
-        value = window.commerceBackend.cleanCssIdentifier(input.sku);
-        break;
+    case 'sku-clean':
+      value = window.commerceBackend.cleanCssIdentifier(input.sku);
+      break;
 
     case 'sku-type':
       value = input.type_id;
@@ -557,7 +557,7 @@ exports.computePhFilters = function (input, filter) {
       let configurableOptions = input.configurable_options;
 
       if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
-        const sizeGuide = jQuery('.rcs-templates--size-guide');
+        const sizeGuide = jQuery('.rcs-templates--size-guide').clone();
         let sizeGuideAttributes = [];
         if (sizeGuide.length) {
           sizeGuideAttributes = sizeGuide.attr('data-attributes');
@@ -703,14 +703,13 @@ exports.computePhFilters = function (input, filter) {
 
     case 'brand_logo':
       if (input.brand_logo_data.url !== null) {
-        const image = jQuery('img');
-        image.attr({
-          src: input.brand_logo_data.url,
-          alt: input.brand_logo_data.alt,
-          title: input.brand_logo_data.title,
-        });
-        value = jQuery('.rcs-templates--brand_logo').clone().append(image).html();
+        data = {
+          url : input.brand_logo_data.url,
+          alt : input.brand_logo_data.alt,
+          title : input.brand_logo_data.title,
+        };
       }
+      value = handlebarsRenderer.render(`attribute.brand.logo`, data);
 
       break;
 
@@ -777,6 +776,11 @@ exports.computePhFilters = function (input, filter) {
 
       // Render handlebars plugin.
       value = handlebarsRenderer.render(`product.${filter}`, data);
+      break;
+
+    case 'price_block_identifier':
+      const cleanSku = window.commerceBackend.cleanCssIdentifier(input.sku);
+      value = `price-block-${cleanSku}`;
       break;
 
     default:

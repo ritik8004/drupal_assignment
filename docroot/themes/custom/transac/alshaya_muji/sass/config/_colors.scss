@@ -707,6 +707,13 @@ $egift-banner-bg: $_egift_landing_page_banner_bg;
 
 // PLP add to cart.
 $plp-quick-view-product-size-text-active: $black;
-$plp-quick-view-product-size-active-bg: $pdp_size_option_selected_bg;
-$plp-quick-view-product-size-active-border: $pdp_size_option_selected_border;
-$plp-quick-view-product-size-border-hover: $pdp_size_option_border;
+$plp-quick-view-product-size-active-bg: $wild-sand;
+$plp-quick-view-product-size-active-border: $mujidarkred;
+$plp-quick-view-product-size-border-hover: $mujidarkred;
+$plp_quick_color_variant_hover_border: $black;
+$plp_quick_color_variant_border: $mujidarkred;
+$plp-quick-view-product-size-border:$whisper-dark;
+$plp-quick-view-product-size-text: $black;
+$plp-quick-view-product-size-hover-bg: $white-smoke-light;
+$plp-quick-view-product-size-disabled-border: $whisper-dark;
+$plp-quick-view-product-size-text-disabled: $black;

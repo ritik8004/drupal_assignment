@@ -14,6 +14,8 @@ async function handleNoItemsInResponse(request, urlKey) {
 
   if (response.data.urlResolver === null
     || response.data.urlResolver.redirectCode == 404) {
+    // Hide body so that placeholders are not visible.
+    document.body.classList.add('hidden');
     return rcsRedirectToPage(rcs404);
   }
 
@@ -95,6 +97,7 @@ exports.getEntity = async function getEntity(langcode) {
 
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
+        result.context = 'pdp';
         // Store product data in static storage.
         globalThis.RcsPhStaticStorage.set('product_data_' + result.sku, result);
         // Set product options data to static storage.
@@ -152,6 +155,14 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
+    // Fire another event to perform actions after results are updated.
+    RcsEventManager.fire('postUpdateResultsAction', {
+      detail: {
+        result: updateResult.detail.result,
+        pageType: pageType,
+      }
+    });
+
     return updateResult.detail.result;
   }
 
@@ -171,6 +182,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
   let response = null;
   let result = null;
+  let context = null;
 
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
@@ -243,6 +255,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
+      context = 'modal';
+      result.context = context;
       globalThis.RcsPhStaticStorage.set('product_data_' + result.sku, result);
 
       break;
@@ -299,13 +313,14 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       RcsEventManager.fire('startLoader');
     }
 
-    // Creating custom event to to perform extra operation and update the result
+    // Creating custom event to perform extra operation and update the result
     // object.
     const updateResult = RcsEventManager.fire('rcsUpdateResults', {
       detail: {
         result: result,
         params: params,
         placeholder: placeholder,
+        context,
       }
     });
 

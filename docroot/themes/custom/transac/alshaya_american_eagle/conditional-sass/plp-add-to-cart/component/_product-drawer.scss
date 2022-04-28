@@ -1,0 +1,23 @@
+.product-drawer {
+  &-content-wrapper {
+    .product-details-wrapper {
+      .size-guide-link {
+        font-size: rem(14);
+
+        @include breakpoint($desktop) {
+          top: 0;
+          position: absolute;
+          #{$left}: 80%;
+
+          html[lang=ar] & {
+            right: 72%;
+          }
+        }
+
+        @include breakpoint($upto-desktop) {
+          top: rem(14);
+        }
+      }
+    }
+  }
+}
