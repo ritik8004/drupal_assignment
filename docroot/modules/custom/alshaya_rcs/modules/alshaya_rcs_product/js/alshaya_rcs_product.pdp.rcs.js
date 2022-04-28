@@ -62,8 +62,8 @@
     }
 
     var context = window.commerceBackend.getProductContext(productData);
-    // For HM product modal, we use classic gallery.
-    if (drupalSettings.alshayaRcs.pdpLayout === 'pdp-magazine' && context === 'modal') {
+    // For product modal, we always use classic gallery.
+    if (context === 'modal') {
       galleryType = 'classic-gallery';
     }
 
