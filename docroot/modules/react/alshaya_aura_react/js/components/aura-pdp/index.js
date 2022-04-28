@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import parse from 'html-react-parser';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
 import { getPriceToPoint } from '../../utilities/aura_utils';
 import { cartAvailableInStorage } from '../../../../alshaya_spc/js/utilities/get_cart';
 import { showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import { redeemAuraPoints } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
 import { getUserDetails } from '../../utilities/helper';
+import getStringMessage from '../../../../js/utilities/strings';
 
 class AuraPDP extends React.Component {
   constructor(props) {
@@ -140,11 +142,14 @@ class AuraPDP extends React.Component {
     const { productPoints } = this.state;
 
     if (productPoints !== 0) {
-      return [
-        <span>{`${Drupal.t('Earn')} `}</span>,
-        <b>{productPoints}</b>,
-        <span>{` ${Drupal.t('points with Aura')}`}</span>,
-      ];
+      return (
+        <span>
+          {parse(getStringMessage(
+            'pdp_earn_aura_points',
+            { '@pts': productPoints },
+          ))}
+        </span>
+      );
     }
 
     return <span>{Drupal.t('Earn Aura points')}</span>;

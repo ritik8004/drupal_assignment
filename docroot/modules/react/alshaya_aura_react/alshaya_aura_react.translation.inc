@@ -440,6 +440,10 @@ function _alshaya_aura_react_translations() {
         'ar' => '@pts ستنتهي النقاط بحلول @date',
         'context' => 'aura',
       ],
+      'Earn <b>@pts Aura points</b> with this purchase.' => [
+        'ar' => 'يكسب <b>@pts هالة نقاط</b> مع هذا الشراء.',
+        'context' => 'aura',
+      ],
     ],
   ];
 }
