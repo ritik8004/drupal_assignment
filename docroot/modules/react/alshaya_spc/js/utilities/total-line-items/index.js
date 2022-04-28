@@ -165,10 +165,10 @@ class TotalLineItems extends React.Component {
           />
         </ConditionalView>
 
-        <ConditionalView condition={typeof totals.subtotalWithDiscountInclTax !== 'undefined'}>
+        <ConditionalView condition={hasValue(totals.subtotalWithDiscountInclTax)}>
           <div className="hero-subtotal-after-discount">
             <TotalLineItem
-              name="subtotal-with-discount-incl-tax"
+              name="subtotal-after-discount-incl-tax"
               title={Drupal.t('Subtotal After Discount')}
               value={totals.subtotalWithDiscountInclTax}
             />
