@@ -43,7 +43,7 @@
         {% endblock %}
 
         <div class="info-wrapper">
-          <div class="price-block {{ content.price_block_identifier }}">
+          <div class="price-block #rcs.product._self|price_block_identifier#">
             #rcs.product._self|price#
           </div>
 
@@ -57,7 +57,7 @@
           {% endif %}
 
           <div class="promotion-discount-wrapper">
-            <div class="price--discount discount-{{ content.price_block_identifier }}">
+            <div class="price--discount discount-#rcs.product._self|price_block_identifier#">
               {% if content.price_block['#discount'] %}
                 ({{ content.price_block['#discount'] }})
               {% endif %}

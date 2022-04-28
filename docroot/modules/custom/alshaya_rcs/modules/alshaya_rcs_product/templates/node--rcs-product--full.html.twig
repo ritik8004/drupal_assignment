@@ -36,7 +36,7 @@ set classes = [
           {% block pricePrefix %}
           {% endblock %}
 
-          <div class="price-block price-block-#rcs.product._self|sku-clean#">
+          <div class="price-block #rcs.product._self|price_block_identifier#">
             #rcs.product._self|price#
           </div>
 
