@@ -1,15 +1,28 @@
 import React from 'react';
+import parse from 'html-react-parser';
+import Popup from 'reactjs-popup';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { getAuraConfig } from '../../../utilities/helper';
 import SignUpOtpModal from '../sign-up-otp-modal';
+import AuraHeaderIcon from '../../../svg-component/aura-header-icon';
+import AuraFormLinkCardOTPModal
+  from '../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
 
 class SignUpHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isOTPModalOpen: false,
+      isLinkCardModalOpen: false,
+      chosenCountryCode: null,
     };
   }
+
+  setChosenCountryCode = (code) => {
+    this.setState({
+      chosenCountryCode: code,
+    });
+  };
 
   openOTPModal = () => {
     const { openHeaderModal } = this.props;
@@ -33,9 +46,30 @@ class SignUpHeader extends React.Component {
     }
   };
 
+  openLinkCardModal = () => {
+    const { openHeaderModal } = this.props;
+    openHeaderModal();
+    this.setState({
+      isLinkCardModalOpen: true,
+    });
+  };
+
+  closeLinkCardModal = () => {
+    this.setState({
+      isLinkCardModalOpen: false,
+    });
+  };
+
+  closeHeaderModal = () => {
+    const { openHeaderModal } = this.props;
+    openHeaderModal();
+  };
+
   render() {
     const {
       isOTPModalOpen,
+      isLinkCardModalOpen,
+      chosenCountryCode,
     } = this.state;
 
     const {
@@ -49,27 +83,24 @@ class SignUpHeader extends React.Component {
       <>
         <ConditionalView condition={isHeaderModalOpen && !isNotExpandable}>
           <div className="aura-header-popup-wrapper">
-            <div className="aura-popup-sub-header">
-              <h3>{Drupal.t('Say hello to Aura')}</h3>
-            </div>
             <div className="aura-popup-header">
-              <div className="title title--one">
-                {Drupal.t('Bespoke rewards.')}
-              </div>
-              <div className="title title--two">
-                {Drupal.t('Personalised for you.')}
+              <div className="desktop-only">
+                <div className="aura-header-icon">
+                  <AuraHeaderIcon />
+                </div>
+                <button type="button" className="close" onClick={() => this.closeHeaderModal()} />
               </div>
             </div>
             <div className="aura-popup-body">
-              <p className="desktop-only">{Drupal.t('Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.')}</p>
-              <a
-                href={Drupal.url(headerLearnMoreLink)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="learn-more"
-              >
-                {Drupal.t('Learn more')}
-              </a>
+              <span>
+                {parse(Drupal.t('To earn and spend points while you shop and enjoy exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Know more</a> about Aura.',
+                  {
+                    '@know_more_link': Drupal.url(headerLearnMoreLink),
+                  },
+                  {
+                    context: 'aura',
+                  }))}
+              </span>
             </div>
             <div className="aura-popup-footer">
               <div
@@ -78,9 +109,6 @@ class SignUpHeader extends React.Component {
               >
                 {Drupal.t('Join now')}
               </div>
-              <div className="aura-popup-footer-bottom">
-                <p>{Drupal.t('Already a member? Add your account details at checkout.')}</p>
-              </div>
             </div>
           </div>
         </ConditionalView>
@@ -88,6 +116,18 @@ class SignUpHeader extends React.Component {
           isOTPModalOpen={isOTPModalOpen}
           closeOTPModal={this.closeOTPModal}
         />
+        <Popup
+          className="aura-modal-form link-card-otp-modal"
+          open={isLinkCardModalOpen}
+          closeOnEscape={false}
+          closeOnDocumentClick={false}
+        >
+          <AuraFormLinkCardOTPModal
+            closeLinkCardOTPModal={() => this.closeLinkCardModal()}
+            setChosenCountryCode={this.setChosenCountryCode}
+            chosenCountryCode={chosenCountryCode}
+          />
+        </Popup>
       </>
     );
   }

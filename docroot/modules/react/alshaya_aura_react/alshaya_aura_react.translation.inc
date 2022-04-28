@@ -125,12 +125,6 @@ function _alshaya_aura_react_translations() {
       'Personalised for you.' => [
         'ar' => 'مخصص لك.',
       ],
-      'Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.' => [
-        'ar' => 'أورا هو برنامج المكافآت الجديد يمنحك النقاط عند تسوقك في الأماكن المفضلة ويعطيك فرصة حصرية لتجارب لا مثيل لها.',
-      ],
-      'Learn more' => [
-        'ar' => 'تعرف على المزيد',
-      ],
       'Your Aura card number' => [
         'ar' => 'رقم بطاقة أورا الخاصة بك',
       ],
@@ -401,6 +395,50 @@ function _alshaya_aura_react_translations() {
     'v3' => [
       'You can only redeem full pending balance or use other payment method.' => [
         'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
+      ],
+    ],
+    'v4' => [
+      // To do- translation should be checked once we get it from alshaya.
+      'Redeem' => [
+        'ar' => 'يسترد',
+        'context' => 'aura',
+      ],
+      // To do- translation should be checked once we get it from alshaya.
+      'Aura points with this purchase.' => [
+        'ar' => 'نقاط Aura مع هذا الشراء.',
+        'context' => 'aura',
+      ],
+      'Already a member?' => [
+        'ar' => 'عضوا فعلا؟',
+      ],
+      // To do- translation should be checked once we get it from alshaya.
+      'You will earn @pts @aura_icon points with this purchase.' => [
+        'ar' => 'سوف تكسب @pts @aura_icon نقاط مع هذا الشراء.',
+        'context' => 'aura',
+      ],
+      'You will earn @pts Aura points with this purchase.' => [
+        'ar' => 'سوف تكسب @pts هالة نقاط مع هذا الشراء.',
+        'context' => 'aura',
+      ],
+      'You will earn @pts @aura_icon points.' => [
+        'ar' => 'سوف تكسب aura_icon @pts@ النقاط.',
+        'context' => 'aura',
+      ],
+      'To earn and spend points while you shop and enjoy exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Know more</a> about Aura.' => [
+        'ar' => 'لكسب النقاط وإنفاقها أثناء التسوق والاستمتاع بمزايا حصرية. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">تعرف أكثر</a> حول الهالة.',
+        'context' => 'aura',
+      ],
+      'Redeem @aura_icon points' => [
+        'ar' => 'يسترد @aura_icon النقاط',
+        'context' => 'aura',
+      ],
+      'You have @pts points,' => [
+        'ar' => 'لديك @pts النقاط,',
+        'context' => 'aura',
+      ],
+      '@pts points will expire by @date.' => [
+        'ar' => '@pts ستنتهي النقاط بحلول @date',
+        'context' => 'aura',
       ],
     ],
   ];

@@ -257,9 +257,15 @@ class AuraFormRedeemPoints extends React.Component {
     if (!auraTransaction || points === null || money === null) {
       return null;
     }
-
+    const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
     return [
       <span key="points" className="spc-aura-highlight">{`${points} ${getStringMessage('points')}`}</span>,
+      <span key="worth" className="spc-aura-redeem-text">{ getStringMessage('worth') }</span>,
+      <span key="money" className="spc-aura-highlight">
+        {currencyCode}
+        { }
+        {money}
+      </span>,
       <span key="redeemed" className="spc-aura-redeem-text">{`${getStringMessage('have_been_redeemed')}`}</span>,
     ];
   }
