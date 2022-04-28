@@ -61,6 +61,12 @@
       galleryType = 'magazine-gallery';
     }
 
+    var context = window.commerceBackend.getProductContext(productData);
+    // For HM product modal, we use classic gallery.
+    if (drupalSettings.alshayaRcs.pdpLayout === 'pdp-magazine' && context === 'modal') {
+      galleryType = 'classic-gallery';
+    }
+
     var gallery = globalThis.rcsPhRenderingEngine
       .render(
         drupalSettings,

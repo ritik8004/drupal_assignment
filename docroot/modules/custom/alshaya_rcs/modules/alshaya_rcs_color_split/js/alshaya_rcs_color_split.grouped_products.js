@@ -74,7 +74,7 @@
       // Store each product data into static storage so that it can be used in
       // PLP add to bag to get the parent sku.
       if (mainProduct.sku !== styleProduct.sku) {
-        globalThis.RcsPhStaticStorage.set('product_data_' + styleProduct.sku, styleProduct);
+        window.commerceBackend.setRcsProductToStorage(styleProduct, e.detail.context);
       }
       // Check if product is in stock.
 
@@ -168,6 +168,6 @@
       return (optionA.position > optionB.position) - (optionA.position < optionB.position);
     });
 
-    globalThis.RcsPhStaticStorage.set('product_data_' + mainProduct.sku, mainProduct);
+    window.commerceBackend.setRcsProductToStorage(mainProduct, e.detail.context);
   }, 100);
 })();
