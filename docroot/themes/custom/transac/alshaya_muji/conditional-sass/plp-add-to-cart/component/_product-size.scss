@@ -7,5 +7,29 @@
       width: auto;
     }
   }
-}
 
+  ul {
+    &.attribute-options-list {
+      li {
+        margin-top: rem(12);
+
+        &:hover {
+          background-color: $plp-quick-view-product-size-hover-bg;
+          border-color: $plp-quick-view-product-size-border;
+        }
+
+        &.active {
+          &:hover {
+            border-color: $plp-quick-view-product-size-active-border;
+          }
+        }
+
+        &.disabled {
+          opacity: 0.3;
+          border-color: $plp-quick-view-product-size-disabled-border;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
