@@ -484,16 +484,6 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
-  $brand_logo = ['#theme' => 'rcs_attribute_brand_logo'];
-  $variables['rcs_templates']['brand_logo'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($brand_logo),
-    '#attributes' => [
-      'class' => 'rcs-templates--brand_logo',
-    ],
-  ];
-
   // @todo Remove this theme and rcs-product-teaser.html.twig temlate.
   // @todo Use handlebars with rcs-product-teaser.handlebars template.
   $product_teaser = [
@@ -770,6 +760,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'gallery.product.block.product_zoom_mobile_gallery' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_modal_gallery' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_magazine_gallery' => 'alshaya_rcs_product',
+    'attribute.brand.logo' => 'alshaya_rcs_product',
   ];
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/

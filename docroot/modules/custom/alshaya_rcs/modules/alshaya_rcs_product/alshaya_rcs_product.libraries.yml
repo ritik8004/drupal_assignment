@@ -156,3 +156,8 @@ rcs_product_images:
   dependencies:
     - core/jquery
     - rcs_placeholders/helpers
+
+attribute.brand.logo:
+  version: 1.x
+  js:
+    templates/handlebars/rcs-attribute-brand-logo.handlebars: {}

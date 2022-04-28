@@ -703,14 +703,13 @@ exports.computePhFilters = function (input, filter) {
 
     case 'brand_logo':
       if (input.brand_logo_data.url !== null) {
-        const image = jQuery('img');
-        image.attr({
-          src: input.brand_logo_data.url,
-          alt: input.brand_logo_data.alt,
-          title: input.brand_logo_data.title,
-        });
-        value = jQuery('.rcs-templates--brand_logo').clone().append(image).html();
+        data = {
+          url : input.brand_logo_data.url,
+          alt : input.brand_logo_data.alt,
+          title : input.brand_logo_data.title,
+        };
       }
+      value = handlebarsRenderer.render(`attribute.brand.logo`, data);
 
       break;
 
