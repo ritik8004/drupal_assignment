@@ -216,6 +216,166 @@ function getPdpSwatchImageUrl(product, childSku) {
   return swatchImageUrl;
 }
 
+/**
+ *  Returns the add to cart HTML template.
+ *
+ * @param {object} input
+ *   The raw product object.
+ *
+ * @returns {string}
+ *   The HTML string containing the add to cart form HTML template.
+ */
+function getAddToCartHtml(input) {
+  if (!isProductBuyable(input)) {
+    // Just show the not buyable text and don't show the form.
+    return jQuery('.rcs-templates--not-buyable-product').html();
+  }
+
+  const skuBaseForm = jQuery('.rcs-templates--sku-base-form').clone();
+  skuBaseForm.find('.sku-base-form-template').removeClass('sku-base-form-template').addClass('sku-base-form');
+
+  if (drupalSettings.alshayaRcs.showQuantity) {
+    // @todo Check for how to fetch the max sale quantity.
+    const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
+    const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
+    // Remove the quantity filter.
+    quantityDroprown.html('');
+
+    for (let i = 1; i <= quantity; i++) {
+      if (i === 1) {
+        quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
+        continue;
+      }
+      quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
+    }
+    jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
+  }
+  else {
+    jQuery('.js-form-item-quantity', skuBaseForm).remove();
+  }
+
+
+  // This wrapper will be removed after processing.
+  const tempDivWrapper = jQuery('<div>');
+  let configurableOptions = input.configurable_options;
+
+  if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
+    const sizeGuide = jQuery('.rcs-templates--size-guide');
+    let sizeGuideAttributes = [];
+    if (sizeGuide.length) {
+      sizeGuideAttributes = sizeGuide.attr('data-attributes');
+      sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
+    }
+
+    const hiddenFormAttributes = (typeof drupalSettings.hidden_form_attributes !== 'undefined')
+      ? drupalSettings.hidden_form_attributes
+      : [];
+
+    configurableOptions.forEach((option) => {
+      // Get the field wrapper div.
+      const optionsListWrapper = jQuery('.rcs-templates--form_element_select').clone().children();
+      // The list containing the options.
+      const configurableOptionsList = jQuery('<select></select>');
+      // Get the value to be used in HTML attributes.
+      const formattedAttributeCode = option.attribute_code.replaceAll('_', '-');
+
+      configurableOptionsList.attr({
+        'data-configurable-code': option.attribute_code,
+        // @todo: Find out the correct label for color.
+        'data-default-title': option.label,
+        // @todo: Find out the correct label for color.
+        'data-selected-title': option.label,
+        'data-drupal-selector': `edit-configurables-${formattedAttributeCode}`,
+        id: `edit-configurables-${formattedAttributeCode}`,
+        class: 'form-select required valid',
+        name: `configurables[${option.attribute_code}]`,
+        'aria-require': true,
+        'aria-invalid': false,
+      });
+
+      // Check if the attribute is a swatch attribute.
+      let optionIsSwatch = false;
+      if (drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code)) {
+        optionIsSwatch = true;
+        configurableOptionsList.addClass('form-item-configurable-swatch');
+        optionsListWrapper.addClass('configurable-swatch');
+      }
+      else {
+        configurableOptionsList.addClass('form-item-configurable-select');
+        optionsListWrapper.addClass('configurable-select');
+      }
+
+      // Add a disabled option which will be used as the label for the option.
+      let selectOption = jQuery('<option></option>');
+      let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
+      selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
+      configurableOptionsList.append(selectOption);
+
+      const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
+
+      if (Drupal.hasValue(configurableColorDetails) && optionIsSwatch) {
+        configurableOptionsList.attr({
+          'data-default-title': Drupal.t('Color'),
+          'title': Drupal.t('Color'),
+        });
+      }
+
+      // Add the option values.
+      option.values.forEach((value) => {
+        selectOption = jQuery('<option></option>');
+        const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+        selectOption.attr({ value: value.value_index }).text(label);
+        configurableOptionsList.append(selectOption);
+
+        if (optionIsSwatch) {
+          const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
+          // If configurableColorDetails has value, then we process the
+          // swatch data in
+          // Drupal.alshaya_color_images_generate_swatch_markup().
+          if (childSku !== null && !Drupal.hasValue(configurableColorDetails)) {
+            selectOption.attr({ 'swatch-image': getPdpSwatchImageUrl(input, childSku) });
+          }
+        }
+      });
+
+      if (sizeGuideAttributes.includes(option.attribute_code)) {
+        const sizeGuideLink = sizeGuide.children();
+        const sizeGuideWrapper = jQuery('<div>');
+        sizeGuideWrapper.addClass('size-guide-form-and-link-wrapper');
+        sizeGuideWrapper.append(sizeGuideLink);
+        sizeGuideWrapper.append(optionsListWrapper);
+        // Append to the main wrapper.
+        tempDivWrapper.append(sizeGuideWrapper);
+      }
+      else {
+        // Append to the main wrapper.
+        tempDivWrapper.append(optionsListWrapper);
+      }
+
+      optionsListWrapper.append(configurableOptionsList);
+      // Replace the placeholder class name.
+      optionsListWrapper.attr('class', optionsListWrapper[0].className.replaceAll('ATTRIBUTENAME', formattedAttributeCode));
+      // Hide field if supposed to be hidden.
+      if (hiddenFormAttributes.includes(option.attribute_code)) {
+        optionsListWrapper.addClass('hidden');
+      }
+    });
+
+    // Add the configurable options to the form.
+    jQuery('#configurable_ajax', skuBaseForm).append(tempDivWrapper.children());
+  }
+
+  let finalHtml = skuBaseForm.html();
+  rcsPhReplaceEntityPh(finalHtml, 'product_add_to_cart', input, drupalSettings.path.currentLanguage)
+    .forEach(function eachReplacement(r) {
+      const fieldPh = r[0];
+      const entityFieldValue = r[1];
+      finalHtml = globalThis.rcsReplaceAll(finalHtml, fieldPh, entityFieldValue);
+    });
+
+  return finalHtml;
+}
+
 exports.render = function render(
   settings,
   placeholder,
@@ -520,157 +680,13 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'add_to_cart':
-      value = '';
-
-      if (!isProductBuyable(input)) {
-        // Just show the not buyable text and don't show the form.
-        value = jQuery('.rcs-templates--not-buyable-product').html();
-        break;
+      // Render the add to cart form only if catalogue restructuring is not
+      // enabled.
+      if (!Drupal.hasValue(drupalSettings.alshayaColorSplit)) {
+        value = getAddToCartHtml(input);
+      } else {
+        window.commerceBackend.getProductsInStyle(input, getAddToCartHtml);
       }
-
-      const skuBaseForm = jQuery('.rcs-templates--sku-base-form').clone();
-      skuBaseForm.find('.sku-base-form-template').removeClass('sku-base-form-template').addClass('sku-base-form');
-
-      if (drupalSettings.alshayaRcs.showQuantity) {
-        // @todo Check for how to fetch the max sale quantity.
-        const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
-        const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
-        // Remove the quantity filter.
-        quantityDroprown.html('');
-
-        for (let i = 1; i <= quantity; i++) {
-          if (i === 1) {
-            quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
-            continue;
-          }
-          quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
-        }
-        jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
-      }
-      else {
-        jQuery('.js-form-item-quantity', skuBaseForm).remove();
-      }
-
-
-      // This wrapper will be removed after processing.
-      const tempDivWrapper = jQuery('<div>');
-      let configurableOptions = input.configurable_options;
-
-      if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
-        const sizeGuide = jQuery('.rcs-templates--size-guide').clone();
-        let sizeGuideAttributes = [];
-        if (sizeGuide.length) {
-          sizeGuideAttributes = sizeGuide.attr('data-attributes');
-          sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
-        }
-
-        const hiddenFormAttributes = (typeof drupalSettings.hidden_form_attributes !== 'undefined')
-          ? drupalSettings.hidden_form_attributes
-          : [];
-
-        configurableOptions.forEach((option) => {
-          // Get the field wrapper div.
-          const optionsListWrapper = jQuery('.rcs-templates--form_element_select').clone().children();
-          // The list containing the options.
-          const configurableOptionsList = jQuery('<select></select>');
-          // Get the value to be used in HTML attributes.
-          const formattedAttributeCode = option.attribute_code.replaceAll('_', '-');
-
-          configurableOptionsList.attr({
-            'data-configurable-code': option.attribute_code,
-            // @todo: Find out the correct label for color.
-            'data-default-title': option.label,
-            // @todo: Find out the correct label for color.
-            'data-selected-title': option.label,
-            'data-drupal-selector': `edit-configurables-${formattedAttributeCode}`,
-            id: `edit-configurables-${formattedAttributeCode}`,
-            class: 'form-select required valid',
-            name: `configurables[${option.attribute_code}]`,
-            'aria-require': true,
-            'aria-invalid': false,
-          });
-
-          // Check if the attribute is a swatch attribute.
-          let optionIsSwatch = false;
-          if (drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code)) {
-            optionIsSwatch = true;
-            configurableOptionsList.addClass('form-item-configurable-swatch');
-            optionsListWrapper.addClass('configurable-swatch');
-          }
-          else {
-            configurableOptionsList.addClass('form-item-configurable-select');
-            optionsListWrapper.addClass('configurable-select');
-          }
-
-          // Add a disabled option which will be used as the label for the option.
-          let selectOption = jQuery('<option></option>');
-          let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
-          selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
-          configurableOptionsList.append(selectOption);
-
-          const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
-
-          if (Drupal.hasValue(configurableColorDetails) && optionIsSwatch){
-            configurableOptionsList.attr({
-              'data-default-title': Drupal.t('Color'),
-              'title': Drupal.t('Color'),
-            });
-          }
-
-          // Add the option values.
-          option.values.forEach((value) => {
-            selectOption = jQuery('<option></option>');
-            const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
-            selectOption.attr({ value: value.value_index }).text(label);
-            configurableOptionsList.append(selectOption);
-
-            if (optionIsSwatch) {
-              const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
-              // If configurableColorDetails has value, then we process the
-              // swatch data in
-              // Drupal.alshaya_color_images_generate_swatch_markup().
-              if (childSku !== null && !Drupal.hasValue(configurableColorDetails)) {
-                selectOption.attr({'swatch-image': getPdpSwatchImageUrl(input, childSku)});
-              }
-            }
-          });
-
-          if (sizeGuideAttributes.includes(option.attribute_code)) {
-            const sizeGuideLink = sizeGuide.children();
-            const sizeGuideWrapper = jQuery('<div>');
-            sizeGuideWrapper.addClass('size-guide-form-and-link-wrapper');
-            sizeGuideWrapper.append(sizeGuideLink);
-            sizeGuideWrapper.append(optionsListWrapper);
-            // Append to the main wrapper.
-            tempDivWrapper.append(sizeGuideWrapper);
-          }
-          else {
-            // Append to the main wrapper.
-            tempDivWrapper.append(optionsListWrapper);
-          }
-
-          optionsListWrapper.append(configurableOptionsList);
-          // Replace the placeholder class name.
-          optionsListWrapper.attr('class', optionsListWrapper[0].className.replaceAll('ATTRIBUTENAME', formattedAttributeCode));
-          // Hide field if supposed to be hidden.
-          if (hiddenFormAttributes.includes(option.attribute_code)) {
-            optionsListWrapper.addClass('hidden');
-          }
-        });
-
-        // Add the configurable options to the form.
-        jQuery('#configurable_ajax', skuBaseForm).append(tempDivWrapper.children());
-      }
-
-      let finalHtml = skuBaseForm.html();
-      rcsPhReplaceEntityPh(finalHtml, 'product_add_to_cart', input, drupalSettings.path.currentLanguage)
-        .forEach(function eachReplacement(r) {
-          const fieldPh = r[0];
-          const entityFieldValue = r[1];
-          finalHtml = globalThis.rcsReplaceAll(finalHtml, fieldPh, entityFieldValue);
-        });
-
-      value = finalHtml;
       break;
 
     case 'gtm-price':

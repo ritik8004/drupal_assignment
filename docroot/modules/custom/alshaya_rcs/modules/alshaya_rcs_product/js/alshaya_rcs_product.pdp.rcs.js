@@ -135,20 +135,11 @@
    * @param {object} product
    *   The raw product object.
    */
-  async function loadAddToCartFormOnPdp(product) {
-    const addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
+  window.commerceBackend.loadAddToCartForm = async function loadAddToCartFormOnPdp(product, addToCartRender) {
+    const addToCartFormHtml = addToCartRender(product);
     // Render the HTML to the div.
-    jQuery('.add_to_cart_form').html(addToCartFormHtml);
+    jQuery('.add_to_cart_form[data-sku="' + product.sku + '"]').html(addToCartFormHtml);
+    // Re-attach all behaviors.
+    globalThis.rcsPhApplyDrupalJs(document);
   }
-
-  // Event Listener to perform action post the results are updated.
-  RcsEventManager.addListener('postUpdateResultsAction', function loadAddToCartForm(e) {
-    // Return if result is empty and page type is not product.
-    if (e.detail.pageType !== 'product'
-      || !Drupal.hasValue(e.detail.result)) {
-      return null;
-    }
-
-    loadAddToCartFormOnPdp(e.detail.result);
-  });
 })(jQuery);

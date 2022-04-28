@@ -155,14 +155,6 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
-    // Fire another event to perform actions after results are updated.
-    RcsEventManager.fire('postUpdateResultsAction', {
-      detail: {
-        result: updateResult.detail.result,
-        pageType: pageType,
-      }
-    });
-
     return updateResult.detail.result;
   }
 
@@ -346,25 +338,23 @@ exports.getDataAsynchronous = function getDataAsynchronous(placeholder, params, 
     callback: callback,
   };
 
-  let response = null;
-  let result = null;
-
   switch (placeholder) {
     case 'products-in-style':
       let variables = rcsPhGraphqlQuery.styled_products.variables;
       variables.styleCode = params.styleCode;
 
       request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
-      response = rcsCommerceBackend.invokeApi(request);
-      result = response.data.products.items;
+      const result = rcsCommerceBackend.invokeApi(request);
+      // Return data only if callback is not available.
+      if (!callback) {
+        return result;
+      }
       break;
 
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
   }
-
-  return result;
 }
 
 exports.getDataSynchronous = function getDataSynchronous(placeholder, params, entity, langcode) {
@@ -381,15 +371,6 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
   let result = null;
 
   switch (placeholder) {
-    case 'products-in-style':
-      let variables = rcsPhGraphqlQuery.styled_products.variables;
-      variables.styleCode = params.styleCode;
-
-      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
-      response = rcsCommerceBackend.invokeApiSynchronous(request);
-      result = response.data.products.items;
-      break;
-
     // Get the product data for the given sku.
     case 'single_product_by_sku':
       // Build query.

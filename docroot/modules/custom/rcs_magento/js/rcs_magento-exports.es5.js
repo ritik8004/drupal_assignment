@@ -28,10 +28,10 @@ exports.invokeApi = async function (request) {
     // cart_notification.js.
     rcs: true,
     success: function (response) {
-      // Invoke callback if available else return the response.
       if (request.callback) {
         request.callback(response);
-      } else {
+      }
+      else {
         return response;
       }
     },
