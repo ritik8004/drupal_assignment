@@ -81,9 +81,6 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     'rcs_sku_base_form' => [
       'variables' => [],
     ],
-    'rcs_attribute_brand_logo' => [
-      'variables' => [],
-    ],
     'rcs_product_teaser' => [
       'variables' => [],
     ],
