@@ -539,7 +539,7 @@ exports.computePhFilters = function (input, filter) {
       let configurableOptions = input.configurable_options;
 
       if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
-        const sizeGuide = jQuery('.rcs-templates--size-guide');
+        const sizeGuide = jQuery('.rcs-templates--size-guide').clone();
         let sizeGuideAttributes = [];
         if (sizeGuide.length) {
           sizeGuideAttributes = sizeGuide.attr('data-attributes');
