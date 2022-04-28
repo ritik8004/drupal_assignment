@@ -815,7 +815,7 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     if (isset($libraries['acq_product_info'])) {
       // Replace the product info JS with new version.
       // Add new JS with same options.
-      $libraries['acq_product_info']['js']["/$self_module_path/js/alshaya_rcs_product.pdp.v2.js"] = $libraries['acq_product_info']['js']['js/alshaya_acm_product.pdp.v1.js'];
+      $libraries['acq_product_info']['js']["/$self_module_path/js/alshaya_rcs_product.pdp.rcs.js"] = $libraries['acq_product_info']['js']['js/alshaya_acm_product.pdp.v1.js'];
 
       // Update the dependencies with the ones from library - rcs_product_info.
       $definitions = \Drupal::service('library.discovery')->getLibrariesByExtension('alshaya_rcs_product');

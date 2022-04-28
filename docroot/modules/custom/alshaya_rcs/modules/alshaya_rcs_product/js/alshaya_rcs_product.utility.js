@@ -1132,5 +1132,4 @@
 
     e.detail.result.promotions = promotionVal;
   });
-
 })(Drupal, drupalSettings);

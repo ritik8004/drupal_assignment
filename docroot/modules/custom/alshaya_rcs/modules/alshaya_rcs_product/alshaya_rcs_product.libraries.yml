@@ -8,7 +8,7 @@ main:
 rcs_product_info:
   version: 1.x
   js:
-    js/alshaya_rcs_product.pdp.v2.js: {}
+    js/alshaya_rcs_product.pdp.rcs.js: {}
   dependencies:
     - core/jquery
     - rcs_handlebars/main
