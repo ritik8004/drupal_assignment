@@ -66,8 +66,7 @@ class ReturnRequest extends React.Component {
 
   warnUser = (e) => {
     const { isReturnRequestSubmit, wait } = this.state;
-
-    if (isReturnRequestSubmit || !wait) {
+    if (isReturnRequestSubmit || wait) {
       return null;
     }
 
