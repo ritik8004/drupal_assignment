@@ -61,6 +61,12 @@
       galleryType = 'magazine-gallery';
     }
 
+    var context = window.commerceBackend.getProductContext(productData);
+    // For product modal, we always use classic gallery.
+    if (context === 'modal') {
+      galleryType = 'classic-gallery';
+    }
+
     var gallery = globalThis.rcsPhRenderingEngine
       .render(
         drupalSettings,

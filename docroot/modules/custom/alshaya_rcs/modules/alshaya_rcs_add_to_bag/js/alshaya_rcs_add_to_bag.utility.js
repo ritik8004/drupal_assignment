@@ -19,7 +19,7 @@
     var productInfo = {};
     var product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU});
     if (Drupal.hasValue(product.sku)) {
-      globalThis.RcsPhStaticStorage.set('product_data_' + product.sku, product);
+      window.commerceBackend.setRcsProductToStorage(product, 'plp');
       var productInfo = await processProductInfo(product);
       return productInfo;
     }
