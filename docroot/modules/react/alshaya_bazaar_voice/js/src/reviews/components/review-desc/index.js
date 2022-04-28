@@ -11,6 +11,7 @@ import DisplayStar from '../../../rating/components/stars';
 import ReviewResponseDisplay from '../review-response-display';
 import { getbazaarVoiceSettings, getLanguageCode } from '../../../utilities/api/request';
 import TranslateByGoogle from '../../../common/components/translate-by-google';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const ReviewDescription = ({
   reviewDescriptionData,
@@ -62,8 +63,8 @@ const ReviewDescription = ({
             tagDimensionsData={reviewDescriptionData.TagDimensions}
             tagDimensionsOrder={reviewDescriptionData.TagDimensionsOrder}
           />
-          <ConditionalView condition={reviewDescriptionData.Photos
-            && reviewDescriptionData.Photos.Sizes.length > 0}
+          <ConditionalView condition={hasValue(reviewDescriptionData.Photos)
+            && hasValue(reviewDescriptionData.Photos.Sizes)}
           >
             <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
           </ConditionalView>
