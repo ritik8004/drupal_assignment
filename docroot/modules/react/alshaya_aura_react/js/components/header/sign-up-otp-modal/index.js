@@ -50,25 +50,34 @@ class SignUpOtpModal extends React.Component {
     }
   };
 
-  // Opens links card modal.
-  openLinkCardModal = () => {
-    const { isNewUserModalOpen } = this.state;
-    // Close new user modal if open.
-    if (isNewUserModalOpen) {
+  /**
+   * Toggles Link card Modal visibility based on passed value.
+   *
+   * @param toggle
+   *   True will show the link card Modal.
+   */
+  toggleLinkCardModal = (toggle) => {
+    if (toggle) {
       this.setState({
+        isLinkCardModalOpen: true,
         isNewUserModalOpen: false,
       });
+    } else {
+      this.setState({
+        isLinkCardModalOpen: false,
+      });
     }
-    this.setState({
-      isLinkCardModalOpen: true,
-    });
   };
 
-  // closes links card modal.
-  closeLinkCardModal = () => {
-    this.setState({
-      isLinkCardModalOpen: false,
-    });
+  /**
+   * Opens OTP Modal and Closes Link Modal Popup.
+   */
+  openOTPModal = () => {
+    const {
+      openOTPModal,
+    } = this.props;
+    this.toggleLinkCardModal(false);
+    openOTPModal();
   };
 
   render() {
@@ -110,7 +119,7 @@ class SignUpOtpModal extends React.Component {
             chosenCountryCode={chosenCountryCode}
             chosenUserMobile={chosenUserMobile}
             closeNewUserModal={() => this.closeNewUserModal()}
-            openLinkCardModal={() => this.openLinkCardModal()}
+            openLinkCardModal={() => this.toggleLinkCardModal(true)}
           />
         </Popup>
         <Popup
@@ -120,10 +129,10 @@ class SignUpOtpModal extends React.Component {
           closeOnDocumentClick={false}
         >
           <AuraFormLinkCardOTPModal
-            closeLinkCardOTPModal={() => this.closeLinkCardModal()}
+            closeLinkCardOTPModal={() => this.toggleLinkCardModal(false)}
+            openOTPModal={() => this.openOTPModal()}
             setChosenCountryCode={this.setChosenCountryCode}
             chosenCountryCode={chosenCountryCode}
-            changeFormBasedOnUserAuthentication
           />
         </Popup>
       </>

@@ -351,20 +351,16 @@ function _alshaya_aura_static_strings() {
       'value' => t('Enter your details to earn points for this order.', [], ['context' => 'aura']),
     ],
     [
-      'key' => 'link_card_body_sub_title_guest',
-      'value' => t('Enter your details to earn points for this order.', [], ['context' => 'aura']),
-    ],
-    [
       'key' => 'aura_link_your_card',
       'value' => t('Link your card', [], ['context' => 'aura']),
     ],
     [
-      'key' => 'aura_send_OTP',
+      'key' => 'aura_send_otp',
       'value' => t('Send OTP', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_link_now',
-      'value' => t('Link Now'),
+      'value' => t('Link Now', [], ['context' => 'aura']),
     ],
   ];
 }

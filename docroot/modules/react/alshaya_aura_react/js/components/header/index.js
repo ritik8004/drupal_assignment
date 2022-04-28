@@ -24,7 +24,6 @@ class Header extends React.Component {
       signUpComplete: false,
       showCongratulations: false,
       isHeaderModalOpen: !!isNotExpandable,
-      guestUserSignedIn: false,
       ...getAuraDetailsDefaultState(),
     };
 
@@ -82,7 +81,7 @@ class Header extends React.Component {
       states.signUpComplete = true;
     }
 
-    // Show congratulations popup if showCongratulationsPopup is not undefined or true.
+    // Show congratulations popup only if showCongratulationsPopup is Defined and true.
     if ((typeof showCongratulationsPopup !== 'undefined')
       && showCongratulationsPopup
       && states.signUpComplete

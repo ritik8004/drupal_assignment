@@ -51,21 +51,37 @@ class AuraFormLinkCardOTPModal extends React.Component {
   componentDidMount() {
     const { closeLinkCardOTPModal } = this.props;
     document.addEventListener('loyaltyStatusUpdated', closeLinkCardOTPModal, false);
+    // Event loyaltyDetailsSearchComplete gets dispatched,
+    // When Aura card gets attached with the cart.
+    // We get loyalty details along with this event.
     document.addEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
   }
 
-  // Adds data to local storage when 'loyaltyDetailsSearchComplete' dispatched.
+  /**
+   * Remove the event listener when component gets deleted.
+   */
+  componentWillUnmount() {
+    const { closeLinkCardOTPModal } = this.props;
+    document.removeEventListener('loyaltyStatusUpdated', closeLinkCardOTPModal, false);
+    document.removeEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
+  }
+
+  /**
+   * Adds Aura details to local storage.
+   *
+   * Method gets invoked by 'loyaltyDetailsSearchComplete' Event Listener.
+   */
   handleSearchEvent = (data) => {
     const { stateValues, searchData } = data.detail;
     const { linkCardOption } = this.state;
     const { closeLinkCardOTPModal } = this.props;
 
-    // Show error if any.
     if (stateValues.error) {
       this.setState({
         ...getAuraDetailsDefaultState(),
       });
 
+      // Show Error below the respective html element if there is any.
       showError(
         getInlineErrorSelector(linkCardOption)[linkCardOption],
         getStringMessage(stateValues.error_message),
@@ -74,6 +90,8 @@ class AuraFormLinkCardOTPModal extends React.Component {
     }
 
     if (searchData) {
+      // Fetching cart_id From localstorage.
+      // Below code never gets called for authenticated user.
       const cartId = Drupal.getItemFromLocalStorage('cart_id');
       const dataForStorage = { cartId, ...searchData };
 
@@ -88,14 +106,19 @@ class AuraFormLinkCardOTPModal extends React.Component {
         stateValues,
       );
       stateValues.loyaltyStatus = Number(stateValues.loyaltyStatus);
+      // Set available data into current state.
       this.setState({
         ...stateValues,
       });
-      stateValues.guestUserSignedIn = true;
+
+      // Close link card Otp Modal.
       closeLinkCardOTPModal();
-      // Dispatch loyaltyStatusUpdated event.
+
+      // Dispatch loyaltyStatusUpdated event, as loyalty status updated.
       dispatchCustomEvent('loyaltyStatusUpdated', {
-        showCongratulationsPopup: false,
+        // If showCongratulationsPopup passed true,
+        // It will open congratulations popup.
+        showCongratulationsPopup: true,
         stateValues,
       });
     }
@@ -239,15 +262,19 @@ class AuraFormLinkCardOTPModal extends React.Component {
     return description;
   };
 
-  // Adds card to basket.
+  // Adds Aura Card to cart.
   addCard = () => {
     this.resetModalMessages();
     const { linkCardOption } = this.state;
     const { chosenCountryCode } = this.props;
+
+    // Check if Field contains valid value.
     const isValid = validateElementValueByType(linkCardOption, '.aura-modal-form', 'link_card');
     if (!isValid) {
       return;
     }
+
+    // Format data to send to Set Loyalty card api.
     const selectedElementValue = getElementValueByType(linkCardOption, '.aura-modal-form');
     const fieldData = {
       type: linkCardOption,
@@ -259,6 +286,8 @@ class AuraFormLinkCardOTPModal extends React.Component {
     }
     fieldData.action = 'add';
     showFullScreenLoader();
+
+    // Send fieldData to set loyalty card to current cart.
     processCheckoutCart(fieldData);
   };
 
@@ -268,8 +297,6 @@ class AuraFormLinkCardOTPModal extends React.Component {
       closeLinkCardOTPModal,
       setChosenCountryCode,
       openOTPModal,
-      showJoinAuraLink,
-      changeFormBasedOnUserAuthentication,
     } = this.props;
 
     const {
@@ -282,40 +309,21 @@ class AuraFormLinkCardOTPModal extends React.Component {
       linkCardOption,
     } = this.state;
 
-    let linkCardWithoutOTP;
-    let modalHeaderTitle;
-    let modalBodyTitle;
-    const joinAuraLink = typeof showJoinAuraLink !== 'undefined' ? showJoinAuraLink : false;
-    // use default values if changeFormBasedOnUserAuthentication is not defined or false;
-    if ((typeof changeFormBasedOnUserAuthentication === 'undefined')
-      || !changeFormBasedOnUserAuthentication
-    ) {
-      linkCardWithoutOTP = false;
-      modalHeaderTitle = getStringMessage('aura_link_your_card');
-      modalBodyTitle = `${Drupal.t('Link card using')}:`;
-    } else {
-      // Use text for linkcardpopup based on user authentication.
-      const isUserLoggedIn = isUserAuthenticated();
-      modalHeaderTitle = isUserLoggedIn
-        ? getStringMessage('link_card_header_logged_in')
-        : getStringMessage('link_card_header_guest');
-      modalBodyTitle = isUserLoggedIn
-        ? getStringMessage('link_card_body_title_logged_in')
-        : [
-          <span>{getStringMessage('link_card_body_title_guest')}</span>,
-          <span>{getStringMessage('link_card_body_sub_title_guest')}</span>,
-        ];
-      linkCardWithoutOTP = !isUserLoggedIn;
-    }
-
+    // Get Authentication status in a variable,
+    // As we are using on multiple places.
+    const isUserLoggedIn = isUserAuthenticated();
     const submitButtonText = otpRequested
       ? getStringMessage('aura_link_now')
-      : getStringMessage('aura_send_OTP');
+      : getStringMessage('aura_send_otp');
 
     return (
       <div className="aura-guest-user-link-card-otp-form">
         <div className="aura-modal-header">
-          <SectionTitle>{modalHeaderTitle}</SectionTitle>
+          <SectionTitle>
+            {isUserLoggedIn
+              ? getStringMessage('link_card_header_logged_in')
+              : getStringMessage('link_card_header_guest')}
+          </SectionTitle>
           <button type="button" className="close" onClick={() => closeLinkCardOTPModal()} />
         </div>
         <div className="aura-modal-form">
@@ -326,7 +334,14 @@ class AuraFormLinkCardOTPModal extends React.Component {
                 messageContent={messageContent}
               />
             </div>
-            <div className="linkingoptions-label">{modalBodyTitle}</div>
+            <div className="linkingoptions-label">
+              {isUserLoggedIn
+                ? getStringMessage('link_card_body_title_logged_in')
+                : [
+                  <span>{getStringMessage('link_card_body_title_guest')}</span>,
+                  <span>{getStringMessage('link_card_body_sub_title_guest')}</span>,
+                ]}
+            </div>
             <AuraFormLinkCardOptions
               selectedOption={linkCardOption}
               selectOptionCallback={this.selectOption}
@@ -367,15 +382,15 @@ class AuraFormLinkCardOTPModal extends React.Component {
             </div>
           </div>
           <div className="aura-modal-form-actions">
-            {/* Apply button will only be visible if user is not authenticated. */}
-            <ConditionalView condition={linkCardWithoutOTP}>
+            {/* Apply button will be visible only for guest users. */}
+            <ConditionalView condition={!isUserLoggedIn}>
               <div className="aura-modal-form-submit-without-otp" onClick={() => this.addCard()}>
-                {Drupal.t('Apply')}
+                {/* Clicking on apply button will set card to basket. */}
+                {Drupal.t('Apply', {}, { context: 'aura' })}
               </div>
             </ConditionalView>
-            {/* Apply button will only be visible if user is authenticated, */}
-            {/* and if linkCardWithoutOTP is not passed */}
-            <ConditionalView condition={!linkCardWithoutOTP}>
+            {/* OTP and link now button only be visible for Signed in Users. */}
+            <ConditionalView condition={isUserLoggedIn}>
               <div className="aura-new-user-t-c aura-otp-submit-description">
                 {this.getOtpDescription()}
                 <ConditionalView condition={otpRequested}>
@@ -399,14 +414,11 @@ class AuraFormLinkCardOTPModal extends React.Component {
               </ConditionalView>
             </ConditionalView>
           </div>
-          {/* Join now link will be visible only if showJoinAuraLink is passed. */}
-          <ConditionalView condition={joinAuraLink}>
-            <div className="aura-modal-footer">
-              <div className="join-aura" onClick={() => openOTPModal()}>
-                {getStringMessage('aura_join_aura')}
-              </div>
+          <div className="aura-modal-footer">
+            <div className="join-aura" onClick={() => openOTPModal()}>
+              {getStringMessage('aura_join_aura')}
             </div>
-          </ConditionalView>
+          </div>
         </div>
       </div>
     );

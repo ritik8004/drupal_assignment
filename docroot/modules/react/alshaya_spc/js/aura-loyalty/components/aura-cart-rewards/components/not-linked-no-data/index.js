@@ -20,41 +20,50 @@ class AuraNotLinkedNoData extends React.Component {
     };
   }
 
+  /**
+   * Sets the Country code for Mobile field.
+   */
   setChosenCountryCode = (code) => {
     this.setState({
       chosenCountryCode: code,
     });
   };
 
-  openOTPModal = () => {
-    const { isLinkCardModalOpen } = this.state;
-    // Close link card modal if open.
-    if (isLinkCardModalOpen) {
+  /**
+   * Toggles OTP Modal visibility based on passed value.
+   *
+   * @param toggle
+   *   True will show the OTP Modal.
+   */
+  toggleOTPModal = (toggle) => {
+    if (toggle) {
+      this.setState({
+        isOTPModalOpen: true,
+        isLinkCardModalOpen: false,
+      });
+    } else {
+      this.setState({
+        isOTPModalOpen: false,
+      });
+    }
+  };
+
+  /**
+   * Toggles Link card Modal visibility based on passed value.
+   *
+   * @param toggle
+   *   True will show the link card Modal.
+   */
+  toggleLinkCardModal = (toggle) => {
+    if (toggle) {
+      this.setState({
+        isLinkCardModalOpen: true,
+      });
+    } else {
       this.setState({
         isLinkCardModalOpen: false,
       });
     }
-    this.setState({
-      isOTPModalOpen: true,
-    });
-  };
-
-  closeOTPModal = () => {
-    this.setState({
-      isOTPModalOpen: false,
-    });
-  };
-
-  openLinkCardModal = () => {
-    this.setState({
-      isLinkCardModalOpen: true,
-    });
-  };
-
-  closeLinkCardModal = () => {
-    this.setState({
-      isLinkCardModalOpen: false,
-    });
   };
 
   render() {
@@ -80,7 +89,7 @@ class AuraNotLinkedNoData extends React.Component {
             <span className="spc-join-aura-link-wrapper submit">
               <a
                 className="spc-join-aura-link"
-                onClick={() => this.openOTPModal()}
+                onClick={() => this.toggleOTPModal(true)}
               >
                 {getStringMessage('aura_join_aura')}
               </a>
@@ -90,7 +99,7 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                  onClick={() => this.openLinkCardModal()}
+                  onClick={() => this.toggleLinkCardModal(true)}
                 >
                   {getStringMessage('aura_link_aura')}
                 </a>
@@ -100,7 +109,7 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                  onClick={() => this.openLinkCardModal()}
+                  onClick={() => this.toggleLinkCardModal(true)}
                 >
                   {getStringMessage('aura_sign_in')}
                 </a>
@@ -119,8 +128,9 @@ class AuraNotLinkedNoData extends React.Component {
 
         <SignUpOtpModal
           isOTPModalOpen={isOTPModalOpen}
-          closeOTPModal={this.closeOTPModal}
+          closeOTPModal={() => this.toggleOTPModal(false)}
           handleSignUp={handleSignUp}
+          openOTPModal={() => this.toggleOTPModal(true)}
         />
         <Popup
           className="aura-modal-form link-card-otp-modal"
@@ -129,12 +139,10 @@ class AuraNotLinkedNoData extends React.Component {
           closeOnDocumentClick={false}
         >
           <AuraFormLinkCardOTPModal
-            closeLinkCardOTPModal={() => this.closeLinkCardModal()}
-            openOTPModal={() => this.openOTPModal()}
+            closeLinkCardOTPModal={() => this.toggleLinkCardModal(false)}
+            openOTPModal={() => this.toggleOTPModal(true)}
             setChosenCountryCode={this.setChosenCountryCode}
             chosenCountryCode={chosenCountryCode}
-            changeFormBasedOnUserAuthentication
-            showJoinAuraLink
           />
         </Popup>
       </>

@@ -489,6 +489,14 @@ function _alshaya_aura_react_translations() {
         'ar' => 'أرسل OTP',
         'context' => 'aura',
       ],
+      'Apply' => [
+        'ar' => 'التقديم',
+        'context' => 'aura',
+      ],
+      'Link Now' => [
+        'ar' => 'الربط الآن',
+        'context' => 'aura',
+      ],
     ],
   ];
 }
