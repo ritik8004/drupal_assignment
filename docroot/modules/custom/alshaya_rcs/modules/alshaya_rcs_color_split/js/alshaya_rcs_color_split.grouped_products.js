@@ -22,6 +22,15 @@
     });
   }
 
+  /**
+   *  Updated the main product object with the styled products.
+   *
+   * @param {object} mainProduct
+   *   The raw product object.
+   *
+   * @param {function} getAddToCartHtml
+   *   The add to cart render function.
+   */
   window.commerceBackend.getProductsInStyle = function getProductsInStyle(mainProduct, getAddToCartHtml) {
     // Return if result is empty.
     if (!Drupal.hasValue(mainProduct)
@@ -61,6 +70,8 @@
       });
 
       const mainProductAttributes = getProductConfigurableAttributes(mainProduct);
+      // Get the context from product data.
+      const context = window.commerceBackend.getProductContext(mainProduct);
       // Alter the configurable variants list of the main product.
       // We will re-populate the variants.
       mainProduct.variants = [];
@@ -72,7 +83,7 @@
         // Store each product data into static storage so that it can be used in
         // PLP add to bag to get the parent sku.
         if (mainProduct.sku !== styleProduct.sku) {
-          window.commerceBackend.setRcsProductToStorage(styleProduct, e.detail.context);
+          window.commerceBackend.setRcsProductToStorage(styleProduct, context);
         }
         // Check if product is in stock.
 
@@ -166,14 +177,15 @@
         return (optionA.position > optionB.position) - (optionA.position < optionB.position);
       });
 
+      // Fire 'rcsUpdateResult' with the updated product object, So that we have
+      // the updated product object.
       mainProduct = RcsEventManager.fire('rcsUpdateResults', {
         detail: {
           result: mainProduct,
         }
       });
 
-      // Get the context from product data.
-      var context = window.commerceBackend.getProductContext(mainProduct);
+      mainProduct = mainProduct.detail.result;
 
       window.commerceBackend.setRcsProductToStorage(mainProduct, context);
       // Invoke the add to cart render function.
