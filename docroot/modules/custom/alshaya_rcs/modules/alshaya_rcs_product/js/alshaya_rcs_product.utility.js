@@ -56,6 +56,19 @@
   }
 
   /**
+   * Sets product data to storage.
+   *
+   * @param {object} product
+   *   The raw product object.
+   * @param {string} context
+   *   Context in which the product data was fetched.
+   */
+  window.commerceBackend.setRcsProductToStorage = function setRcsProductToStorage(product, context) {
+    product.context = Drupal.hasValue(context) ? context : null;
+    globalThis.RcsPhStaticStorage.set('product_data_' + product.sku, product);
+  }
+
+  /**
    * Gets the required data for rcs_product.
    *
    * @param {string} sku
@@ -277,6 +290,42 @@
   }
 
   /**
+   * Returns layout value for product.
+   *
+   * @param {object} product
+   *   The processed product object.
+   *
+   * @returns {string}
+   *   The product layout.
+   */
+  function getLayoutFromContext(product) {
+    var layout = drupalSettings.alshayaRcs.pdpLayout;
+    switch (product.context) {
+      case 'magazine':
+        layout = product.context + '-' + layout;
+        break;
+    }
+
+    return layout;
+  }
+
+  /**
+   * Returns the context value for the product.
+   *
+   * @param {object} product
+   *   Processed product object.
+   *
+   * @returns {string}
+   *   Returns the product context value.
+   */
+  function getContext(product) {
+    return product.context;
+  }
+
+  // Expose the function to global level.
+  window.commerceBackend.getProductContext = getContext;
+
+  /**
    * Gets the variants for the given product entity.
    *
    * @param {object} product
@@ -298,7 +347,8 @@
         sku: variantInfo.sku,
         parent_sku: variantInfo.parent_sku,
         configurableOptions: getVariantConfigurableOptions(product, variant),
-        layout: drupalSettings.alshayaRcs.pdpLayout,
+        layout: getLayoutFromContext(product),
+        context: getContext(product),
         gallery: '',
         stock: {
           qty: variantInfo.stock_data.qty,
@@ -360,7 +410,8 @@
       sku: product.sku,
       type: product.type_id,
       gtm_attributes: product.gtm_attributes,
-      layout: drupalSettings.alshayaRcs.pdpLayout,
+      layout: getLayoutFromContext(product),
+      context: getContext(product),
       gallery: null,
       identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
       cart_image: window.commerceBackend.getCartImage(product),
