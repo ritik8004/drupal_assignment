@@ -2,28 +2,28 @@
   .egift-list-wrapper {
     ul {
       li {
-        height: 2.6875rem;
-        width: 4.0625rem;
-        margin-#{$right}: 0.8125rem;
+        height: rem(43);
+        width: rem(65);
+        margin-#{$right}: rem(13);
 
         &.active {
-          border: 0.3125rem solid $egift-card-thumbnail-border-active;
+          border: rem(5) solid $egift-card-thumbnail-border-active;
         }
 
         &:hover {
-          border: 0.3125rem solid $egift-card-thumbnail-border-active;
+          border: rem(5) solid $egift-card-thumbnail-border-active;
         }
 
         @include breakpoint($only-mobile) {
-          width: 3.625rem;
-          height: 2.375rem;
+          width: rem(58);
+          height: rem(38);
 
           &.active {
-            border: 0.0625rem solid $egift-card-thumbnail-border-active;
+            border: rem(1) solid $egift-card-thumbnail-border-active;
           }
 
           &:hover {
-            border: 0.0625rem solid $egift-card-thumbnail-border-active;
+            border: rem(1) solid $egift-card-thumbnail-border-active;
           }
         }
       }
