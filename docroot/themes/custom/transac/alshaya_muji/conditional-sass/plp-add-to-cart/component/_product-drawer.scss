@@ -2,14 +2,28 @@
   &-content-wrapper {
     .product-details-wrapper {
       .size-guide-link {
+        @include breakpoint($upto-desktop) {
+          top: rem(18);
+          #{$left}: 28%;
+        }
+
         @include breakpoint($desktop) {
-          top: 0;
+          top: rem(2);
+          position: absolute;
+          #{$left}: 26%;
+          font-size: rem(14);
+        }
+
+        &::before {
+          content: "|";
+          display: inline-block;
+          margin-#{$right}: rem(16);
         }
       }
 
       .content--item-code {
         @include breakpoint($only-mobile) {
-          margin-bottom: 1rem;
+          margin-bottom: rem(16);
         }
       }
 
