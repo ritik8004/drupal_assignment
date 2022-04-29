@@ -1,0 +1,18 @@
+#egift-topup-wrapper {
+  .action-buttons {
+    button {
+      &.btn {
+        background-color: $egift-myaccount-topup-button;
+        border-color: $egift-myaccount-topup-button;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .egift-open-amount-wrapper {
+    .open-amount-btn {
+      background-color: $egift-myaccount-topup-button;
+      border-color: $egift-myaccount-topup-button;
+    }
+  }
+}
