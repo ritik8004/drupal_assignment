@@ -108,7 +108,7 @@ function _alshaya_online_returns_translations() {
         'context' => 'online_returns',
       ],
       '2. Return and refund details' => [
-        'ar' => 'تفاصيل الإرجاع ورد الأموال',
+        'ar' => '2. تفاصيل الإرجاع ورد الأموال',
         'context' => 'online_returns',
       ],
       'Your refund will be credited back to the following payment methods.' => [
