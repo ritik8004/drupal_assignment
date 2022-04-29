@@ -52,12 +52,12 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
  *   The layout value.
  * @param {string} productGallery
  *   The gallery for the product.
- * @param {string} sku
- *   The sku value.
- * @param {string} parentSku
- *   The parent SKU value if exists.
+ * @param {string} pageMainSku
+ *   Main sku for PDP.
+ * @param {string} selectedSku
+ *   The selected sku value.
  */
-window.commerceBackend.updateGallery = function (product, layout, gallery, sku, parentSku) {
+window.commerceBackend.updateGallery = function (product, layout, gallery, pageMainSku, sku) {
   if (gallery === '' || gallery === null) {
     return;
   }
@@ -70,6 +70,11 @@ window.commerceBackend.updateGallery = function (product, layout, gallery, sku, 
   }
   else {
     jQuery(product).find('#product-zoom-container').replaceWith(gallery);
+  }
+
+  // COS classic gallery for magazine layout.
+  if (layout === 'pdp-magazine' && drupalSettings.pdp_gallery_type == 'classic') {
+    layout = 'pdp';
   }
 
   if (layout === 'pdp-magazine') {

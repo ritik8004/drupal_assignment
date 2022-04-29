@@ -67,6 +67,9 @@ $settings['alshaya_backend_calls_options'] = [
     'cart_remove' => [
       'timeout' => 15,
     ],
+    'discount_text' => [
+      'timeout' => 5,
+    ],
   ],
   'drupal' => [
     'default' => [
@@ -139,6 +142,9 @@ $settings['alshaya_backend_calls_options'] = [
       'timeout' => 30,
     ],
     'aura_dictionary_config' => [
+      'timeout' => 30,
+    ],
+    'subscribe_newsletter' => [
       'timeout' => 30,
     ],
   ],

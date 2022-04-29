@@ -8,7 +8,7 @@ main:
 rcs_product_info:
   version: 1.x
   js:
-    js/alshaya_rcs_product.pdp.v2.js: {}
+    js/alshaya_rcs_product.pdp.rcs.js: {}
   dependencies:
     - core/jquery
     - rcs_handlebars/main
@@ -88,6 +88,11 @@ product.block.price.item:
   js:
     templates/rcs-product-price-item-block.handlebars: {}
 
+product.modal:
+  version: 1.x
+  js:
+    templates/rcs-product-modal.handlebars: {}
+
 gallery.product.product_zoom:
   version: 1.x
   js:
@@ -118,6 +123,11 @@ gallery.product.block.product_zoom_magazine_gallery:
   js:
     templates/rcs-product-zoom-magazine-gallery-block.handlebars: {}
 
+gallery.product.product_gallery_magazine:
+  version: 1.x
+  js:
+    templates/rcs-product-gallery-magazine.handlebars: {}
+
 product.order:
   version: 1.x
   js:
@@ -146,3 +156,8 @@ rcs_product_images:
   dependencies:
     - core/jquery
     - rcs_placeholders/helpers
+
+attribute.brand.logo:
+  version: 1.x
+  js:
+    templates/handlebars/rcs-attribute-brand-logo.handlebars: {}

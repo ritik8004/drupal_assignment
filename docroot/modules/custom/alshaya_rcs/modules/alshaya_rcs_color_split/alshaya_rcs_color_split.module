@@ -86,26 +86,6 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
     ],
   ];
 
-  if ($rcs_product_helper->isRcsPdp()) {
-    // For the main product, we send a minimal request to get the style code.
-    // After getting the style code, we call the API to fetch the products with
-    // the same style and at that step we receive the complete product objects
-    // which includes the main product.
-    // So we override the pdp product query.
-    $queries['pdp_product'] = [
-      'query' => [
-        'query($url: String, $attributes: [AttributeInput!]!)' => [
-          'products(filter: {url_key: {eq: $url}})' => $color_split_product_query_fields,
-          'customAttributeMetadata(attributes: $attributes)' => $rcs_product_helper->getProductOptionsQueryFields(),
-        ],
-      ],
-      'variables' => [
-        'url' => $url_key,
-        'attributes' => $rcs_product_helper->getProductOptionsQueryVariables(),
-      ],
-    ];
-  }
-
   // Alter this query.
   $queries['single_product_by_sku'] = [
     'query' => [

@@ -16,7 +16,7 @@
           <span>{{ name }}</span>
         </h2>
 
-        <div class="price-block price-block-{{ sku }}">
+        <div class="price-block price-block-{{ cleanSku }}">
           {{{render 'product.block.price' price_details }}}
         </div>
       </a>
@@ -48,7 +48,7 @@
             <h2 class="c-products__item__label">
               <a href="{{ url }}" rel="bookmark"><span>{{ name }}</span></a>
             </h2>
-            <div class="price-block price-block-{{ sku }}">
+            <div class="price-block price-block-{{ cleanSku }}">
               {{{render 'product.block.price' price_details }}}
             </div>
           </td>

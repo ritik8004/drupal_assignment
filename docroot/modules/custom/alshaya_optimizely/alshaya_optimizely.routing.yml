@@ -1,0 +1,7 @@
+alshaya_optimizely.settings_form:
+  path: '/admin/config/system/alshaya_optimizely'
+  defaults:
+    _form: '\Drupal\alshaya_optimizely\Form\AlshayaOptimizelySettingsForm'
+    _title: 'Optimizely'
+  requirements:
+    _permission: 'administer site configuration'

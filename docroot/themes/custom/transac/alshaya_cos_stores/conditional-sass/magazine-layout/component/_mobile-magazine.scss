@@ -102,4 +102,18 @@
       width: 52%;
     }
   }
+
+  .horizontal-upell,
+  .horizontal-related,
+  .horizontal-crossell {
+    margin-bottom: 0;
+
+    .view-product-slider {
+      margin-bottom: 0;
+    }
+
+    .subtitle.crossell-title {
+      margin-top: 0;
+    }
+  }
 }

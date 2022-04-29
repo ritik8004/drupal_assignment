@@ -74,6 +74,25 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
   }
 
   /**
+   * Reinstate ACQ Product Category terms.
+   *
+   * @command alshaya-acq-category:migrate
+   *
+   * @aliases acqm,acq-migrate
+   *
+   * @options batch_size
+   *   The number of acq category to migrate per batch.
+   *
+   * @usage drush acqm --batch_size=30
+   *   Reinstate Enriched Product Category from RCS Category terms.
+   */
+  public function reinstateAcqTerms($options = ['batch_size' => 50]) {
+    // Set acq product category migrate batch.
+    $this->alshayaCategoryMigrate->rollbackProductCategoryMigration($options['batch_size']);
+    $this->drupalLogger->notice('ACQ Category terms reinstated.');
+  }
+
+  /**
    * Batch operation for deleting product category terms.
    *
    * @param array $tids

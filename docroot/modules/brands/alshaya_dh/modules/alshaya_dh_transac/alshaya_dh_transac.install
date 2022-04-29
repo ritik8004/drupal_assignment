@@ -11,6 +11,29 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Updates machine_name field in block_content bundles.
+ */
+function alshaya_dh_transac_update_8102() {
+  // Fetching bundles under block_content entity.
+  $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo('block_content');
+  foreach ($bundles as $bundleId => $bundleInfo) {
+    $config = \Drupal::service('config.factory')->getEditable('core.entity_form_display.block_content.' . $bundleId . '.default');
+    $content = $config->get('content');
+    if (!empty($content)) {
+      $content['machine_name']['settings'] = [
+        'source_field' => 'info',
+        'disable_on_edit' => TRUE,
+        'replace_pattern' => '[^a-z0-9_]+',
+        'replace' => '_',
+      ];
+      $config->set('content', $content)->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add dh specific fields to indexes and
  * Add granularity processor to range_checkbox.
  */

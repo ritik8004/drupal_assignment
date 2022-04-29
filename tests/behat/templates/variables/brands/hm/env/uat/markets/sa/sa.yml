@@ -3,5 +3,5 @@ variables:
   product_listing_page_url: "/shop-kids/new-arrivals/baby/"
   spc_product_listing_page: '/shop-kids/new-arrivals/baby/'
   spc_basket_page: '/shop-men/new-arrivals/new-arrival-articles/'
-  spc_pdp_page: 'buy-embroidered-cotton-blouse-white.html'
-  spc_promotion_listing_page: '/buy-embroidered-cotton-blouse-white.html/'
+  spc_pdp_page: 'buy-3-pack-cotton-dresses-dark-blue-hearts.html'
+  spc_promotion_listing_page: '/buy-3-pack-cotton-dresses-dark-blue-hearts.html/'

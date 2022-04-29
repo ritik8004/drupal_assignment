@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Optimizely.
+ *
+ * Adds the required Javascript to your site to track the site optimization.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_optimizely_page_attachments(array &$page) {
+  $projectId = \Drupal::config('alshaya_optimizely.settings')->get('project_id');
+  if (empty($projectId)) {
+    return;
+  }
+
+  if (!(\Drupal::service('router.admin_context')->isAdminRoute())) {
+    // Add Optimizely script tags to header.
+    $optimizely_script_code = str_replace('{{project_id}}', $projectId, '//cdn.optimizely.com/js/{{project_id}}.js');
+    // Add preconnect library url.
+    $rel = 'preconnect';
+    $tag = 'optimizely_preconnect';
+    $preconnect_url = '//cdn.optimizely.com';
+    $link_tag = _alshaya_optimizely_get_head_link_tag($rel, $preconnect_url, $tag);
+    $page['#attached']['html_head'][] = $link_tag;
+    // Attach optimizely library url in header.
+    $script = [
+      [
+        '#tag' => 'script',
+        '#attributes' => [
+          'src' => $optimizely_script_code,
+        ],
+      ],
+      'optimizely_js_library',
+    ];
+    $page['#attached']['html_head'][] = $script;
+  }
+  $page['#cache']['tags'][] = 'config:alshaya_optimizely.settings';
+}
+
+/**
+ * Get prefetch link tags.
+ *
+ * @param string $rel
+ *   Rel attribute.
+ * @param string $href
+ *   Link tag href.
+ * @param string $tag
+ *   HTML head tag for alter.
+ *
+ * @return array
+ *   Link tag array.
+ */
+function _alshaya_optimizely_get_head_link_tag($rel, $href, $tag) {
+  return [
+    [
+      '#tag' => 'link',
+      '#attributes' => [
+        'rel' => $rel,
+        'href' => $href,
+      ],
+    ],
+    $tag,
+  ];
+}

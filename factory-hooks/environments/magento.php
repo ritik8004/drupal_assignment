@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 /**
  * List all known Magento environments keyed by environment machine name.
@@ -264,6 +264,7 @@ $magentos = [
   ],
   'tbs_test' => [
     'url' => 'https://tbs-qa.store.alshaya.com',
+    'algolia_env' => 'tbs_qa',
     'magento_secrets' => [
       'consumer_key' => 'jgfegi5yv3h42vluf00i498g58x55s0l',
       'consumer_secret' => 'ymjszfarzko8d4b3mg3achu0o2uqrnmb',
@@ -1247,33 +1248,6 @@ $magentos = [
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 19],
-    ],
-  ],
-  'fl_apc' => [
-    'url' => 'http://apc-7vc7xgy-z2fi6fmoo7n4a.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'f0er5posi7oc9e2p96195mb20e2hh05q',
-      'consumer_secret' => 'f0h2pwyren0ooppm6ix50705l5iouekj',
-      'access_token' => 'tkkes5bu2l9qn8y3hbaex7x6xbcsfvxr',
-      'access_token_secret' => 'p8e71whrsnx4pdim61wyush1qp5tvqqs',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'bh' => [
-      'store_id' => ['en' => 10, 'ar' => 9],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
   'fl_uat' => [

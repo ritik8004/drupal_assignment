@@ -36,7 +36,7 @@ class AlshayaStoresFinderBreadcrumbBuilder implements BreadcrumbBuilderInterface
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
-    $breadcrumb->addLink(Link::createFromRoute($this->t('Find stores'), 'view.stores_finder.page_2'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Find stores'), 'alshaya_geolocation.store_finder'));
 
     /** @var \Drupal\node\Entity\Node $node */
     if ($node = $route_match->getParameter('node')) {

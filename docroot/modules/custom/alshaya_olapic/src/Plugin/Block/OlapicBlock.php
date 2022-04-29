@@ -169,9 +169,11 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
       return [];
     }
 
+    $isPdp = FALSE;
     // For PDP, we add current page sku as dynamic product id.
     if ($node instanceof NodeInterface && $node->bundle() == 'acq_product') {
       $dynamic_product_id = $this->skuManager->getSkuForNode($node);
+      $isPdp = TRUE;
     }
     else {
       $dynamic_product_id = $this->configuration['dynamic_product_id'] ?? '';
@@ -189,11 +191,15 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
       'development_mode' => $development_mode,
       'lang' => $data_lang,
     ];
+
     return [
       '#theme' => 'olapic_widget',
       '#instance_id' => $data_instance,
       '#div_id' => $this->configuration['div_id'] ?? '',
       '#dynamic_product_id' => $dynamic_product_id,
+      '#tag' => ($isPdp) ? 'script' : 'div',
+      '#data_olapic' => ($isPdp) ? 'block-alshayaolapicwidget-2' : '',
+      '#data_apikey' => ($isPdp) ? $olapic_keys['data_apikey'] : '',
       '#attached' => [
         'library' => 'alshaya_olapic/alshaya_olapic_widget',
         'drupalSettings' => [

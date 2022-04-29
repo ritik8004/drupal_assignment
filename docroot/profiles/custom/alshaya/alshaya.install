@@ -5,6 +5,22 @@
  * Install, update and uninstall hooks for the Lightning Extender subprofile.
  */
 
+use Drupal\Core\File\FileSystemInterface;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Installs jquery_ui and jquery_ui_datepicker modules.
+ */
+function alshaya_update_8016() {
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui']);
+  }
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_datepicker'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_datepicker']);
+  }
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -270,7 +286,7 @@ function alshaya_update_8001() {
 function alshaya_install() {
   // Prerequisite for google_tag module.
   $uri = "public://google_tag";
-  file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
+  \Drupal::service('file_system')->prepareDirectory($uri, FileSystemInterface::CREATE_DIRECTORY);
 
   // Remove all roles created by Lightning.
   $coreRoles = [

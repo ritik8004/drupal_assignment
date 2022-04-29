@@ -73,6 +73,35 @@ export default class EgiftCardStepTwo extends React.Component {
     } else {
       ele.setCustomValidity('');
     }
+
+    return true;
+  }
+
+  /**
+   * Block user from entering emojis in email field.
+   */
+  removeEmojisFromEmail = (e) => {
+    const element = e.target;
+    // Replace emojis and special character except @, +, ., _ is allowed.
+    element.value = element.value.replace(/[^\p{L}\p{N}\p{Z}{+_.@\n}]/gu, '');
+  }
+
+  /**
+   * Block user from entering emojis in name field.
+   */
+  removeEmojisFromName = (e) => {
+    const element = e.target;
+    // Replace emojis and special characters.
+    element.value = element.value.replace(/[^\p{L}\p{Z}{\n}]/gu, '');
+  }
+
+  /**
+   * Block user from entering emojis in text field.
+   */
+  removeEmojisFromText = (e) => {
+    const element = e.target;
+    // Replace emojis and special characters except punctuations.
+    element.value = element.value.replace(/[^\p{L}\p{N}\p{P}\p{Z}\n]/gu, '');
   }
 
   render() {
@@ -136,6 +165,7 @@ export default class EgiftCardStepTwo extends React.Component {
                     type="text"
                     name="egift-recipient-name"
                     onBlur={(e) => this.handleEvent(e)}
+                    onInput={(e) => this.removeEmojisFromName(e)}
                   />
                   <div className="c-input__bar" />
                   <label>{Drupal.t('Name*', {}, { context: 'egift' })}</label>
@@ -147,6 +177,10 @@ export default class EgiftCardStepTwo extends React.Component {
                     name="egift-recipient-email"
                     onChange={(e) => this.emailValidate(e)}
                     onBlur={(e) => this.handleEvent(e)}
+                    onInvalid={(e) => {
+                      e.target.setCustomValidity(Drupal.t('Please enter valid email address', {}, { context: 'egift' }));
+                    }}
+                    onInput={(e) => this.removeEmojisFromEmail(e)}
                   />
                   <div className="c-input__bar" />
                   <label>{Drupal.t('Email*', {}, { context: 'egift' })}</label>
@@ -170,6 +204,7 @@ export default class EgiftCardStepTwo extends React.Component {
                       onBlur={(e) => this.handleEvent(e)}
                       className="form-input"
                       defaultValue={egiftMessage}
+                      onInput={(e) => this.removeEmojisFromText(e)}
                     />
                     <div className="c-input__bar" />
                     <label>{Drupal.t('Message', {}, { context: 'egift' })}</label>

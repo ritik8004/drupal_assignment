@@ -36,7 +36,7 @@ set classes = [
           {% block pricePrefix %}
           {% endblock %}
 
-          <div class="price-block price-block-#rcs.product._self|sku-clean#">
+          <div class="price-block #rcs.product._self|price_block_identifier#">
             #rcs.product._self|price#
           </div>
 
@@ -97,7 +97,7 @@ set classes = [
                     <div class="field__label">SKU</div>
                     <div class="field__item">#rcs.product._self|sku#</div>
                   </div>
-                  <div>#rcs.product._self|add_to_cart#</div>
+                  <div class="add_to_cart_form" data-sku="#rcs.product._self|sku#">#rcs.product._self|add_to_cart#</div>
                 </article>
                 </div>
               </div>

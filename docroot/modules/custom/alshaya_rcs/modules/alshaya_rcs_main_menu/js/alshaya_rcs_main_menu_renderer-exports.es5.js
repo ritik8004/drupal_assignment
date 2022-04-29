@@ -10,7 +10,7 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
-    let enrichmentData = globalThis.rcsGetEnrichedCategories();
+    let enrichmentData = globalThis.rcsGetEnrichedCategories(globalThis.rcsSetEnrichedCategoriesInStaticStorage);
     let menuListLevel1Ele = navigationType === 'shop_by_block'
       ? innerHtmlObj.find('div.c-footer-menu')
       : innerHtmlObj.find('.menu__list.menu--one__list');
@@ -302,8 +302,6 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     return;
   }
 
-  // Build menu item path prefix.
-  const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
   // @todo remove this when API return the correct path.
   const levelObjOrgUrlPath = levelObj.url_path;
   // Append category prefix in L2 if super category is enabled.
@@ -314,7 +312,7 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     }
     levelObj.url_path = `/${settings.path.pathPrefix}${urlItems.join('/')}/`;
   } else {
-    levelObj.url_path = `/${menuPathPrefixFull}${levelObjOrgUrlPath}/`;
+    levelObj.url_path = `/${settings.path.pathPrefix}${levelObjOrgUrlPath}/`;
   }
 
   const levelIdentifier = `c-footer-menu__tab`;

@@ -6,6 +6,7 @@ import { Swipeable } from 'react-swipeable';
 import en from '../../../../../../node_modules/date-fns/locale/en-US';
 import ar from '../../../../../../node_modules/date-fns/locale/ar-SA';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { getTranslatedTime } from '../../../../../../js/utilities/onlineBookingHelper';
 
 export default class OnlineBookingCalendar extends React.Component {
   constructor(props) {
@@ -315,14 +316,14 @@ export default class OnlineBookingCalendar extends React.Component {
               timeSlot.start_time,
             )}
           >
-            {`${timeSlot.start_time} - ${timeSlot.end_time}`}
+            {`${getTranslatedTime(timeSlot.start_time)} - ${getTranslatedTime(timeSlot.end_time)}`}
           </div>
         );
         return element;
       });
     }
 
-    // Add datepicker class depend on date count.
+    // Add datepicker class depend on date selected.
     let datepickerMonthLeft = 'datepicker-month-left';
     let datepickerMonthRight = 'datepicker-month-right';
     if (moment(setOpenDate).isSame(this.getMinMaxDateForCalendar(), 'month')) {
@@ -363,7 +364,7 @@ export default class OnlineBookingCalendar extends React.Component {
                     'month',
                   )}
                 >
-                  <span />
+                  <span>{'<'}</span>
                 </div>
                 <DatePicker
                   renderCustomHeader={({
@@ -387,7 +388,7 @@ export default class OnlineBookingCalendar extends React.Component {
                             {moment(date).subtract('1', 'month').locale(drupalSettings.path.currentLanguage).format('MMMM')}
                           </span>
                           <span className="month-calendar-datepicker current">
-                            {moment(date).locale(drupalSettings.path.currentLanguage).format('MMMM YYYY')}
+                            {`${moment(date).locale(drupalSettings.path.currentLanguage).format('MMMM')} ${moment(date).format('YYYY')}`}
                           </span>
                           <span
                             className={nextMonthButtonDisabled ? 'month-calendar-sides next disabled' : 'month-calendar-sides next'}
@@ -424,7 +425,7 @@ export default class OnlineBookingCalendar extends React.Component {
                     'month',
                   )}
                 >
-                  <span />
+                  <span>{'>'}</span>
                 </div>
               </div>
             </Swipeable>

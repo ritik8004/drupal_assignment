@@ -1922,7 +1922,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iClickJqueryElementOnPage($element)
   {
-    $this->getSession()->executeScript("jQuery('$element').trigger('click');");
+    $this->getSession()->executeScript("document.querySelector('$element').click();");
   }
 
   /**

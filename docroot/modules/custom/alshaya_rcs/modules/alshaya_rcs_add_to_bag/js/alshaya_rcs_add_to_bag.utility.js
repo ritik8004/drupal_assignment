@@ -19,21 +19,8 @@
     var productInfo = {};
     var product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU});
     if (Drupal.hasValue(product.sku)) {
-      globalThis.RcsPhStaticStorage.set('product_data_' + product.sku, product);
-      // Get product labels.
-      let labels = [];
-      var productLabels = await window.commerceBackend.getProductLabelsData(mainSKU);
-      productLabels.forEach(function (label) {
-        labels.push({
-          image: {
-            url: label.image,
-            alt: label.name,
-            title: label.name
-          },
-          position: label.position
-        });
-      });
-      var productInfo = processProductInfo(product, labels);
+      window.commerceBackend.setRcsProductToStorage(product, 'plp');
+      var productInfo = await processProductInfo(product);
       return productInfo;
     }
     else {
@@ -46,17 +33,77 @@
   };
 
   /**
+   * Gets the product labels for the given sku.
+   *
+   * @param {string} mainSku
+   *   The main sku for the product.
+   * @param {string} skuForLabel
+   *   Selected variant sku for which lables are required.
+   *
+   * @returns {object}
+   *   Labels data.
+   */
+  async function getProductLabels(mainSku, skuForLabel) {
+    var labels = await window.commerceBackend.getProductLabelsData(mainSku, skuForLabel);
+    var processedLabels = [];
+    labels.forEach(function (label) {
+      processedLabels.push({
+        image: {
+          url: label.image,
+          alt: label.name,
+          title: label.name
+        },
+        position: label.position
+      });
+    });
+
+    return processedLabels;
+  };
+
+  /**
+   * Processes and returns variant objects from raw data.
+   *
+   * @param {object} product
+   *   Main product object.
+   * @param {object} variantProduct
+   *   Variant product object.
+   *
+   * @returns {object}
+   *   Processed variant object.
+   */
+  async function processVariants(product, variantProduct) {
+    var variantData = variantProduct.product;
+    var prices = window.commerceBackend.getPrices(variantData);
+    var productLabels = await getProductLabels(variantData.parent_sku, variantData.sku);
+
+    return {
+      sku: variantData.sku,
+      parent_sku: variantData.parent_sku,
+      cart_title: product.name,
+      cart_image: variantData.media_cart,
+      media: {images: variantData.media},
+      product_labels: productLabels,
+      original_price: prices.price.toString(),
+      final_price: prices.finalPrice.toString(),
+      discount_percentage: prices.percent_off,
+      max_sale_qty: variantData.stock_data.max_sale_qty,
+      stock: {
+        qty: variantData.stock_data.qty,
+        status: (variantData.stock_status === "IN_STOCK") ? true : false,
+      }
+    }
+  };
+
+  /**
    * Creates product info object from product.
    *
    * @param {object} product
    *   Product object.
-   * @param {array} labels
-   *   Product labels.
    *
    * @returns {object}
    *   The product info object.
    */
-  function processProductInfo(product, labels) {
+  async function processProductInfo(product) {
     var productInfo = {};
     productInfo.title = product.name;
     productInfo.max_sale_qty_parent_enable = false;
@@ -64,29 +111,26 @@
       productInfo.max_sale_qty_parent_enable = true;
     }
 
+    // This makes the API call to fetch the product labels and store them in
+    // static storage.
+    // We will again call this function for each variant, but now it will
+    // fetch from static storage only.
+    await getProductLabels(product.sku, product.sku);
+
     // Process product variants.
     productInfo.variants = [];
-    product.variants.forEach(function (variant) {
-      let variantData = variant.product;
-      let prices = window.commerceBackend.getPrices(variantData);
-
-      productInfo.variants.push({
-        sku: variantData.sku,
-        parent_sku: variantData.parent_sku,
-        cart_title: product.name,
-        cart_image: variantData.media_cart,
-        media: {images: variantData.media},
-        product_labels: labels,
-        original_price: prices.price.toString(),
-        final_price: prices.finalPrice.toString(),
-        discount_percentage: prices.percent_off,
-        max_sale_qty: variantData.stock_data.max_sale_qty,
-        stock: {
-          qty: variantData.stock_data.qty,
-          status: (variantData.stock_status === "IN_STOCK") ? true : false,
-        }
-      });
+    var variantInfoPromises = [];
+    product.variants.forEach(function eachVariant(variant) {
+      variantInfoPromises.push(processVariants(product, variant));
     });
+
+    try {
+      productInfo.variants = await Promise.all(variantInfoPromises);
+    } catch (e) {
+      Drupal.alshayaLogger('error', 'Failed to process variants data for main sku @sku', {
+        '@sku': product.sku,
+      });
+    }
 
     // Set product promotion info.
     productInfo.promotions = [];
