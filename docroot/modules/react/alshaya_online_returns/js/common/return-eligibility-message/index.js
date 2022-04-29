@@ -25,7 +25,7 @@ class ReturnEligibilityMessage extends React.Component {
       orderType,
     } = this.props;
 
-    if (!hasValue(orderId)) {
+    if (!hasValue(orderId) || isReturnEligible === null) {
       return null;
     }
 
@@ -38,7 +38,7 @@ class ReturnEligibilityMessage extends React.Component {
     if (isReturnEligible) {
       return (
         <>
-          <div>
+          <div className="eligibility-message-wrapper">
             <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
             <ReturnAction handleOnClick={this.handleOnClick} />
           </div>
@@ -50,7 +50,7 @@ class ReturnEligibilityMessage extends React.Component {
     if (orderType === 'ship_to_store') {
       return (
         <>
-          <div>
+          <div className="eligibility-message-wrapper">
             <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
             <ReturnAction returnType="Click and Collect" />
           </div>
@@ -61,7 +61,7 @@ class ReturnEligibilityMessage extends React.Component {
 
     return (
       <>
-        <div>
+        <div className="eligibility-message-wrapper">
           <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
           <ReturnAction returnType={paymentMethod} />
         </div>
