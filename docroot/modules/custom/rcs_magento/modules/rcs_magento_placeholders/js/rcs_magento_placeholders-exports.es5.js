@@ -70,6 +70,16 @@ function prepareQuery(query, variables) {
   return graphqlQuery;
 }
 
+/**
+ * Checks if current user is authenticated or not.
+ *
+ * @returns {bool}
+ *   True if user is authenticated, else false.
+ */
+function isUserAuthenticated() {
+  return Boolean(window.drupalSettings.userDetails.customerId);
+}
+
 exports.getEntity = async function getEntity(langcode) {
   const pageType = globalThis.rcsPhGetPageType();
   if (!pageType) {
@@ -296,6 +306,9 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       let cartItemsStockVariables = rcsPhGraphqlQuery.cart_items_stock.variables;
       cartItemsStockVariables.cartId = params.cartId;
       request.data = prepareQuery(rcsPhGraphqlQuery.cart_items_stock.query, cartItemsStockVariables);
+      if (isUserAuthenticated()) {
+        request.headers.push(['Authorization', `Bearer ${window.drupalSettings.userDetails.customerToken}`]);
+      }
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data;
