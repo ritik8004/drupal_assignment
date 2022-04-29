@@ -234,13 +234,14 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
   // { attribute_id: attribute_option_value } format with wishlist
   // storage data so we need to update in desired format to prepare
   // attribute combination to identify the correct variant.
+  let isGroupedProduct = false;
   Object.keys(configurableAttributes).forEach((attributeCode) => {
     const attributeData = configurableAttributes[attributeCode];
     if (typeof attributeData.is_pseudo_attribute !== 'undefined'
       && attributeData.is_pseudo_attribute
       && typeof attributeData.values !== 'undefined'
       && attributeData.values.length > 0) {
-      skuAttributesOptionData[attributeCode] = attributeData.values[0].value;
+      isGroupedProduct = true;
     }
     // For the anonymous customers option's id key in product options object is
     // `option_id` but for authenticate customers this key is `id` only. So
@@ -275,12 +276,45 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
     const [key, value] = data;
     skuAttributeCombination = `${skuAttributeCombination}${key}|${value}||`;
   });
+
   // Check if we have a valid combination string and a variant is available
   // with that key in given product data information. If so return variant sku.
   const configurableCombinations = productData.configurable_combinations;
   if (skuAttributeCombination !== ''
     && typeof configurableCombinations.by_attribute[skuAttributeCombination] !== 'undefined') {
     return configurableCombinations.by_attribute[skuAttributeCombination];
+  }
+
+  if (isGroupedProduct) {
+    const variantsFromOptions = [];
+    let selectedVariant = null;
+    // Get the grouped variant skus from product options.
+    Object.entries(configurableCombinations.by_attribute).forEach((data) => {
+      const [key, value] = data;
+      if (key.indexOf(skuAttributeCombination) !== -1) {
+        variantsFromOptions.push(value);
+      }
+    });
+
+    if (variantsFromOptions.length > 0) {
+      // Get all the variants from the product data.
+      const { variants } = productData;
+      variants.forEach((value) => {
+        // From grouped variants and all variants we want the variant whose
+        // parent is in the wishlist.
+        // Check if parent sku match the sku from wishlist
+        // and check the sku is present in variants from options.
+        if (value.parent_sku === sku && variantsFromOptions.indexOf(value.sku) !== -1) {
+          // Get variant sku whose parent is in wishlist
+          // and sku matches product options.
+          selectedVariant = variantsFromOptions.filter((item) => item === value.sku);
+        }
+      });
+    }
+
+    if (selectedVariant !== null) {
+      return selectedVariant;
+    }
   }
 
   // Return false if we don't find anything.
