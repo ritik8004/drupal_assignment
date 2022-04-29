@@ -364,7 +364,7 @@ export default class OnlineBookingCalendar extends React.Component {
                     'month',
                   )}
                 >
-                  <span />
+                  <span>{'<'}</span>
                 </div>
                 <DatePicker
                   renderCustomHeader={({
@@ -425,7 +425,7 @@ export default class OnlineBookingCalendar extends React.Component {
                     'month',
                   )}
                 >
-                  <span />
+                  <span>{'>'}</span>
                 </div>
               </div>
             </Swipeable>
