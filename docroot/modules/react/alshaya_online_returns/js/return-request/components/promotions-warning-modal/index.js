@@ -19,10 +19,10 @@ const PromotionsWarningModal = ({
       </span>
     </div>
     <div className="cta-wrapper">
-      <button type="button" onClick={handlePromotionContinue} >
+      <button type="button" onClick={handlePromotionContinue}>
         <span className="continue-button-label">{Drupal.t('Continue', {}, { context: 'online_returns' })}</span>
       </button>
-      <button type="button" onClick={handlePromotionDeselect} >
+      <button type="button" onClick={handlePromotionDeselect}>
         <span className="deselect-button-label">{Drupal.t('Deselect this item', {}, { context: 'online_returns' })}</span>
       </button>
     </div>
