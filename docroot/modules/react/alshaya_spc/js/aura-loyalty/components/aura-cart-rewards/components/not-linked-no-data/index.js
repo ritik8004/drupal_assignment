@@ -34,18 +34,13 @@ class AuraNotLinkedNoData extends React.Component {
    *
    * @param toggle
    *   True will show the OTP Modal.
+   *   And will hide Sign in/ Link Now Modal.
    */
   toggleOTPModal = (toggle) => {
-    if (toggle) {
-      this.setState({
-        isOTPModalOpen: true,
-        isLinkCardModalOpen: false,
-      });
-    } else {
-      this.setState({
-        isOTPModalOpen: false,
-      });
-    }
+    this.setState({
+      isOTPModalOpen: toggle,
+      isLinkCardModalOpen: !toggle,
+    });
   };
 
   /**
@@ -55,15 +50,9 @@ class AuraNotLinkedNoData extends React.Component {
    *   True will show the link card Modal.
    */
   toggleLinkCardModal = (toggle) => {
-    if (toggle) {
-      this.setState({
-        isLinkCardModalOpen: true,
-      });
-    } else {
-      this.setState({
-        isLinkCardModalOpen: false,
-      });
-    }
+    this.setState({
+      isLinkCardModalOpen: toggle,
+    });
   };
 
   render() {
@@ -128,7 +117,9 @@ class AuraNotLinkedNoData extends React.Component {
 
         <SignUpOtpModal
           isOTPModalOpen={isOTPModalOpen}
-          closeOTPModal={() => this.toggleOTPModal(false)}
+          closeOTPModal={() => this.setState({
+            isOTPModalOpen: false,
+          })}
           handleSignUp={handleSignUp}
           openOTPModal={() => this.toggleOTPModal(true)}
         />

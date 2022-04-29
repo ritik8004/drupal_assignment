@@ -81,10 +81,9 @@ class Header extends React.Component {
       states.signUpComplete = true;
     }
 
-    // Show congratulations popup only if showCongratulationsPopup is Defined and true.
+    // Show congratulations popup only if showCongratulationsPopup is defined and true.
     if ((typeof showCongratulationsPopup !== 'undefined')
       && showCongratulationsPopup
-      && states.signUpComplete
     ) {
       this.setState({
         showCongratulations: true,

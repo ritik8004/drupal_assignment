@@ -54,29 +54,26 @@ class SignUpOtpModal extends React.Component {
    * Toggles Link card Modal visibility based on passed value.
    *
    * @param toggle
-   *   True will show the link card Modal.
+   *   True will show the Already a member Modal.
+   *   And hide the New user Modal.
    */
   toggleLinkCardModal = (toggle) => {
-    if (toggle) {
-      this.setState({
-        isLinkCardModalOpen: true,
-        isNewUserModalOpen: false,
-      });
-    } else {
-      this.setState({
-        isLinkCardModalOpen: false,
-      });
-    }
+    this.setState({
+      isLinkCardModalOpen: toggle,
+      isNewUserModalOpen: !toggle,
+    });
   };
 
   /**
-   * Opens OTP Modal and Closes Link Modal Popup.
+   * Opens OTP Modal and Closes Already a member Popup.
    */
   openOTPModal = () => {
     const {
       openOTPModal,
     } = this.props;
-    this.toggleLinkCardModal(false);
+    this.setState({
+      isLinkCardModalOpen: false,
+    });
     openOTPModal();
   };
 
@@ -129,7 +126,9 @@ class SignUpOtpModal extends React.Component {
           closeOnDocumentClick={false}
         >
           <AuraFormLinkCardOTPModal
-            closeLinkCardOTPModal={() => this.toggleLinkCardModal(false)}
+            closeLinkCardOTPModal={() => this.setState({
+              isLinkCardModalOpen: false,
+            })}
             openOTPModal={() => this.openOTPModal()}
             setChosenCountryCode={this.setChosenCountryCode}
             chosenCountryCode={chosenCountryCode}

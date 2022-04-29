@@ -33,6 +33,7 @@ import { handleManualLinkYourCard } from '../../../../../../alshaya_aura_react/j
 import { processCheckoutCart } from '../../utilities/checkout_helper';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
+import { getAllAuraStatus } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 
 class AuraFormLinkCardOTPModal extends React.Component {
   constructor(props) {
@@ -51,9 +52,16 @@ class AuraFormLinkCardOTPModal extends React.Component {
   componentDidMount() {
     const { closeLinkCardOTPModal } = this.props;
     document.addEventListener('loyaltyStatusUpdated', closeLinkCardOTPModal, false);
-    // Event loyaltyDetailsSearchComplete gets dispatched,
-    // When Aura card gets attached with the cart.
-    // We get loyalty details along with this event.
+
+    /**
+     * As part of https://alshayagroup.atlassian.net/browse/CORE-39968,
+     * we have provided a popup to guest users to link the aura card with current basket.
+     * Aura account based on provided details(mobile,email,card Number) will be searched,
+     * After which 'loyaltyDetailsSearchComplete' event will be dispatched,
+     * with searched Aura card details.
+     * We have added the eventListener to trigger 'handleSearchEvent' method,
+     * which will show errors if any, or will add aura card details to localStorage.
+     */
     document.addEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
   }
 
@@ -67,21 +75,28 @@ class AuraFormLinkCardOTPModal extends React.Component {
   }
 
   /**
-   * Adds Aura details to local storage.
-   *
    * Method gets invoked by 'loyaltyDetailsSearchComplete' Event Listener.
+   *
+   * Will show respective errors if no account exists with the details provided,
+   * Or add aura card details to local storage if it exists.
    */
   handleSearchEvent = (data) => {
     const { stateValues, searchData } = data.detail;
     const { linkCardOption } = this.state;
     const { closeLinkCardOTPModal } = this.props;
 
+    // Check if there is any error available.
     if (stateValues.error) {
+      // Set state to default if error exists.
       this.setState({
         ...getAuraDetailsDefaultState(),
       });
 
-      // Show Error below the respective html element if there is any.
+      /**
+       * Show error/Validation message below the respective html element if there is any.
+       * For ex, IF there is no aura card linked with provided mobile number.
+       * wrong mobile number message will be shown below mobile field.
+       */
       showError(
         getInlineErrorSelector(linkCardOption)[linkCardOption],
         getStringMessage(stateValues.error_message),
@@ -89,23 +104,23 @@ class AuraFormLinkCardOTPModal extends React.Component {
       return;
     }
 
+    // Proceed only if search data is returned by API.
     if (searchData) {
       // Fetching cart_id From localstorage.
       // Below code never gets called for authenticated user.
       const cartId = Drupal.getItemFromLocalStorage('cart_id');
-      const dataForStorage = { cartId, ...searchData };
+
+      // Don't process further if no cart id is available.
+      if (!cartId) {
+        return;
+      }
 
       // Set aura checkout local storage.
       Drupal.addItemInLocalStorage(
         getAuraCheckoutLocalStorageKey(),
-        dataForStorage,
+        { cartId, ...searchData },
       );
-      // Set aura data local storage.
-      Drupal.addItemInLocalStorage(
-        getAuraLocalStorageKey(),
-        stateValues,
-      );
-      stateValues.loyaltyStatus = Number(stateValues.loyaltyStatus);
+
       // Set available data into current state.
       this.setState({
         ...stateValues,
@@ -114,7 +129,20 @@ class AuraFormLinkCardOTPModal extends React.Component {
       // Close link card Otp Modal.
       closeLinkCardOTPModal();
 
-      // Dispatch loyaltyStatusUpdated event, as loyalty status updated.
+      // Update Loyalty status, Set it to 'APC_LINKED_NOT_VERIFIED',
+      // If not set.
+      stateValues.loyaltyStatus = stateValues.loyaltyStatus
+        ? parseInt(stateValues.loyaltyStatus, 10)
+        : getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
+
+      // Add aura data to local starage.
+      Drupal.addItemInLocalStorage(
+        getAuraLocalStorageKey(),
+        stateValues,
+      );
+
+      // Dispatch loyaltyStatusUpdated Event and send Aura data along with it,
+      // To take further actions such as showing congratulations popup.
       dispatchCustomEvent('loyaltyStatusUpdated', {
         // If showCongratulationsPopup passed true,
         // It will open congratulations popup.

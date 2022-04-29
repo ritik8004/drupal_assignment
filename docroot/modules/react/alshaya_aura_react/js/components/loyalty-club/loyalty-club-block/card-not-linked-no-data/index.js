@@ -36,23 +36,17 @@ class AuraMyAccountNoLinkedCard extends React.Component {
   };
 
   /**
-   * Toggles OTP Modal visibility based on passed value.
+   * Toggles OTP/Join now Modal visibility based on passed value.
    *
    * @param toggle
-   *   True will show the OTP Modal.
+   *   True will show the OTP/Join now Modal.
+   *   And hide the Link card Modal.
    */
   toggleOTPModal = (toggle) => {
-    if (toggle) {
-      this.setState({
-        isOTPModalOpen: true,
-        isLinkCardModalOpen: false,
-        isNewUserModalOpen: false,
-      });
-    } else {
-      this.setState({
-        isOTPModalOpen: false,
-      });
-    }
+    this.setState({
+      isOTPModalOpen: toggle,
+      isLinkCardModalOpen: !toggle,
+    });
   };
 
   /**
@@ -60,19 +54,13 @@ class AuraMyAccountNoLinkedCard extends React.Component {
    *
    * @param toggle
    *   True will show the link card Modal.
+   *   And hide the New User Modal.
    */
   toggleLinkCardModal = (toggle) => {
-    if (toggle) {
-      this.setState({
-        isLinkCardModalOpen: true,
-        isOTPModalOpen: false,
-        isNewUserModalOpen: false,
-      });
-    } else {
-      this.setState({
-        isLinkCardModalOpen: false,
-      });
-    }
+    this.setState({
+      isLinkCardModalOpen: toggle,
+      isNewUserModalOpen: !toggle,
+    });
   };
 
   /**
@@ -82,15 +70,9 @@ class AuraMyAccountNoLinkedCard extends React.Component {
    *   True will show the new user Modal.
    */
   toggleNewUserModal = (toggle) => {
-    if (toggle) {
-      this.setState({
-        isNewUserModalOpen: true,
-      });
-    } else {
-      this.setState({
-        isNewUserModalOpen: false,
-      });
-    }
+    this.setState({
+      isNewUserModalOpen: toggle,
+    });
   };
 
   render() {
@@ -143,7 +125,9 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                 closeOnDocumentClick={false}
               >
                 <AuraFormSignUpOTPModal
-                  closeOTPModal={() => this.toggleOTPModal(false)}
+                  closeOTPModal={() => this.setState({
+                    isOTPModalOpen: false,
+                  })}
                   openNewUserModal={() => this.toggleNewUserModal(true)}
                   setChosenCountryCode={this.setChosenCountryCode}
                   setChosenUserMobile={this.setChosenUserMobile}
@@ -170,7 +154,9 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                 closeOnDocumentClick={false}
               >
                 <AuraFormLinkCardOTPModal
-                  closeLinkCardOTPModal={() => this.toggleLinkCardModal(false)}
+                  closeLinkCardOTPModal={() => this.setState({
+                    isLinkCardModalOpen: false,
+                  })}
                   setChosenCountryCode={this.setChosenCountryCode}
                   chosenCountryCode={chosenCountryCode}
                   openOTPModal={() => this.toggleOTPModal(true)}
