@@ -492,5 +492,11 @@ html[lang=ar] {
         }
       }
     }
+
+    header {
+      .c-header__region {
+        padding-bottom: rem(43);
+      }
+    }
   }
 }
