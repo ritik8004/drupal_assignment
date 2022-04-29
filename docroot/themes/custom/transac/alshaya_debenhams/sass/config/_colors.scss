@@ -21,7 +21,6 @@ $_spc-area-panel-placeholder: $anti-flash-white;
 $_spc-billing-help: $promo-blue;
 $_spc-cart-alert: $sale-red;
 $_spc-warning-bg: $lemon;
-$_egift_landing_page_banner_bg: #ffffae;
 $sky_blue: #93cdff;
 
 // Global elements.
@@ -477,7 +476,9 @@ $plp-quick-view-product-text: $white;
 
 // eGift landing page.
 $egift-accordion-active-title: $black-two;
-$egift-banner-bg: $_egift_landing_page_banner_bg;
+$egift-banner-bg: $anti-flash-white;
+$egift-landing-page-one-row-two-col-box-bg: $anti-flash-white;
+$egift-accordion-bg: $anti-flash-white;
 
 // eGift purchase page.
 $egift-active-amount-card-border: $black-two;

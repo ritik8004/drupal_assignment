@@ -3,18 +3,33 @@
     .field--name-field-links {
       .field--name-field-links {
         a {
-          color: $primary_brand_button;
-          border-color: $primary_brand_button;
-          border-radius: 1.3125rem;
+          @include btn;
+
+          @include breakpoint($only-tablet) {
+            padding: 0.625rem 0.25rem 0.375rem;
+          }
         }
 
         &:last-child {
           a {
-            background-color: $primary_brand_button;
-            border-radius: 1.3125rem;
+            @include button-brand;
+
+            @include breakpoint($only-tablet) {
+              padding: 0.625rem 0.25rem 0.375rem;
+            }
+
+            &:hover {
+              border: 0;
+            }
           }
         }
       }
+    }
+  }
+
+  .paragraph_banner_title_subtitle {
+    .field--name-field-title {
+      font-family: $dh-Juana-bold;
     }
   }
 }
