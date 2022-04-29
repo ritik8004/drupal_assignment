@@ -155,14 +155,6 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
-    // Fire another event to perform actions after results are updated.
-    RcsEventManager.fire('postUpdateResultsAction', {
-      detail: {
-        result: updateResult.detail.result,
-        pageType: pageType,
-      }
-    });
-
     return updateResult.detail.result;
   }
 
@@ -248,10 +240,10 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'product-recommendation':
-      let prVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
+      let prVariables = rcsPhGraphqlQuery.full_product_by_sku.variables;
       prVariables.sku = params.sku;
       // @TODO Review this query to use only fields that are required for the display.
-      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, prVariables);
+      request.data = prepareQuery(rcsPhGraphqlQuery.full_product_by_sku.query, prVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
@@ -335,6 +327,36 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
   return result;
 };
 
+exports.getDataAsynchronous = function getDataAsynchronous(placeholder, params, callback, entity, langcode) {
+  const request = {
+    uri: '/graphql',
+    method: 'GET',
+    headers: [
+      ['Content-Type', 'application/json'],
+      ['Store', drupalSettings.rcs.commerceBackend.store],
+    ],
+    callback: callback,
+  };
+
+  switch (placeholder) {
+    case 'products-in-style':
+      let variables = rcsPhGraphqlQuery.styled_products.variables;
+      variables.styleCode = params.styleCode;
+
+      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
+      const result = rcsCommerceBackend.invokeApi(request);
+      // Return data only if callback is not available.
+      if (!callback) {
+        return result;
+      }
+      break;
+
+    default:
+      console.log(`Placeholder ${placeholder} not supported for get_data.`);
+      break;
+  }
+}
+
 exports.getDataSynchronous = function getDataSynchronous(placeholder, params, entity, langcode) {
   const request = {
     uri: '/graphql',
@@ -349,15 +371,6 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
   let result = null;
 
   switch (placeholder) {
-    case 'products-in-style':
-      let variables = rcsPhGraphqlQuery.styled_products.variables;
-      variables.styleCode = params.styleCode;
-
-      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
-      response = rcsCommerceBackend.invokeApiSynchronous(request);
-      result = response.data.products.items;
-      break;
-
     // Get the product data for the given sku.
     case 'single_product_by_sku':
       // Build query.
