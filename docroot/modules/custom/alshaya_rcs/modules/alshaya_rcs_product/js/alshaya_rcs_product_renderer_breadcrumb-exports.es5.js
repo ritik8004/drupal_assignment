@@ -71,8 +71,8 @@ exports.normalize = function normalize(
       && categories[i].breadcrumbs[0].category_id === rootCategoryId
     ) {
       const depth = categories[i].level;
-      // Find the category with deepest depth.
-      if (depth > max) {
+      // Find the category with deepest depth and breadcrumbs.
+      if (depth > max && categories[i].breadcrumbs !== null) {
         deepestCategory = categories[i];
         max = depth;
       }
