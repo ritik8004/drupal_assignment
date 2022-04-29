@@ -54,7 +54,7 @@ exports.normalize = function normalize(
     } else {
       // If we could not find a top level category, we get it from the breadcrumb
       // on the next category.
-      if (typeof c.breadcrumbs[0].category_id !== 'undefined') {
+      if (Array.isArray(c.breadcrumbs) && typeof c.breadcrumbs[0].category_id !== 'undefined') {
         return rootCategoryId = c.breadcrumbs[0].category_id;
       }
     }
