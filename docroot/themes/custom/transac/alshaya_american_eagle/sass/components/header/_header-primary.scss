@@ -435,10 +435,6 @@ header {
     @include breakpoint($desktop) {
       padding-top: 1.625rem;
       padding-bottom: 1.125rem;
-
-      html[lang=ar] & {
-        padding-bottom: 1.5rem;
-      }
     }
   }
 
