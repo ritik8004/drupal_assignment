@@ -11,12 +11,21 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Implements hook_update_N().
  *
  * Configure map marker on checkout for CnC.
+ * Override `attribute_weights and sortable_options`.
  */
 function alshaya_mu_transac_update_8008() {
   \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
     ->set('map_marker.active', '/modules/brands/alshaya_mu/images/mu-pin-active.svg')
     ->set('map_marker.in_active', '/modules/brands/alshaya_mu/images/mu-pin-inactive.svg')
     ->save();
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['acq_sku.configurable_form_settings'],
+    'acq_sku'
+  );
 }
 
 /**
