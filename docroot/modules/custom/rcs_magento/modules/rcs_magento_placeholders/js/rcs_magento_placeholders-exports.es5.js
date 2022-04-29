@@ -240,10 +240,10 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'product-recommendation':
-      let prVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
+      let prVariables = rcsPhGraphqlQuery.single_product_by_sku_complete.variables;
       prVariables.sku = params.sku;
       // @TODO Review this query to use only fields that are required for the display.
-      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, prVariables);
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku_complete.query, prVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];

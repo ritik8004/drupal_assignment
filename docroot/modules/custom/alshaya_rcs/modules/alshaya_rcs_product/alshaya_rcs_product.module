@@ -612,6 +612,11 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ],
   ];
 
+  // Creating a new query field which will be used for Recommend products on
+  // PDP. `single_product_by_sku` gets overriden by rcs_color_split module but
+  // for PDP recommended product, we will need the non overriden value.
+  $query_fields['single_product_by_sku_complete'] = $query_fields['single_product_by_sku'];
+
   // The query to fetch multiple products by using the sku value as filter.
   $query_fields['multiple_products_by_sku'] = [
     'query' => [

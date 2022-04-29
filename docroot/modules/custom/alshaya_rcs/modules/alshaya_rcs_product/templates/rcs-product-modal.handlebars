@@ -93,7 +93,7 @@
           </div>
         {{/if}}
 
-        <div class="field--name-field-skus field__items">{{{ add_to_cart }}}</div>
+        <div class="field--name-field-skus field__items add_to_cart_form" data-sku="{{ entity.sku }}">{{{ add_to_cart }}}</div>
         {{#if quantity_limit_enabled }}
           <div class="order-quantity-limit-message"></div>
         {{/if}}
