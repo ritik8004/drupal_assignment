@@ -1147,8 +1147,13 @@
     if (Drupal.hasValue(staticDataStore.cartItemsStock[sku])) {
       return staticDataStore.cartItemsStock[sku];
     }
-    return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }).then(function processStock(response) {
-      const cartKey = isUserAuthenticated() ? 'customerCart' : 'cart';
+    var isAuthUser = isUserAuthenticated();
+    var authenticationToken = isUserAuthenticated
+      ? 'Bearer ' + window.drupalSettings.userDetails.customerToken
+      : null;
+
+    return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }, null, null, null, false, authenticationToken).then(function processStock(response) {
+      const cartKey = isAuthUser ? 'customerCart' : 'cart';
       // Do not proceed if for some reason there are no cart items.
       if (!response[cartKey].items.length) {
         return;

@@ -70,16 +70,6 @@ function prepareQuery(query, variables) {
   return graphqlQuery;
 }
 
-/**
- * Checks if current user is authenticated or not.
- *
- * @returns {bool}
- *   True if user is authenticated, else false.
- */
-function isUserAuthenticated() {
-  return Boolean(window.drupalSettings.userDetails.customerId);
-}
-
 exports.getEntity = async function getEntity(langcode) {
   const pageType = globalThis.rcsPhGetPageType();
   if (!pageType) {
@@ -179,7 +169,15 @@ exports.getEntity = async function getEntity(langcode) {
   return result;
 };
 
-exports.getData = async function getData(placeholder, params, entity, langcode, markup, loaderOnUpdates = false) {
+exports.getData = async function getData(
+  placeholder,
+  params,
+  entity,
+  langcode,
+  markup,
+  loaderOnUpdates = false,
+  authorizationToken = null
+) {
   const request = {
     uri: '/graphql',
     method: 'GET',
@@ -189,6 +187,10 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
     ],
     language: langcode,
   };
+
+  if (authorizationToken) {
+    request.headers.push(['Authorization', authorizationToken]);
+  }
 
   let response = null;
   let result = null;
@@ -306,9 +308,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       let cartItemsStockVariables = rcsPhGraphqlQuery.cart_items_stock.variables;
       cartItemsStockVariables.cartId = params.cartId;
       request.data = prepareQuery(rcsPhGraphqlQuery.cart_items_stock.query, cartItemsStockVariables);
-      if (isUserAuthenticated()) {
-        request.headers.push(['Authorization', `Bearer ${window.drupalSettings.userDetails.customerToken}`]);
-      }
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data;
