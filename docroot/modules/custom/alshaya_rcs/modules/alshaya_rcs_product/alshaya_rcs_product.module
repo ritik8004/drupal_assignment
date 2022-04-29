@@ -711,7 +711,7 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ],
   ];
 
-  if ($current_user->isAuthenticated()) {
+  if (alshaya_acm_customer_is_customer($current_user)) {
     // Query for fetching stock information for products in cart for auth users.
     $query_fields['cart_items_stock'] = [
       'query' => [
@@ -736,6 +736,7 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ];
   }
 
+  $query_fields['#cache']['contexts'][] = 'user.roles:anonymous';
   return $query_fields;
 }
 
