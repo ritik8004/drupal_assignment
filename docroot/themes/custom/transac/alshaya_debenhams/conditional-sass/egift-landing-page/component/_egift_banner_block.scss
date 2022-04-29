@@ -6,7 +6,7 @@
           @include btn;
 
           @include breakpoint($only-tablet) {
-            padding: 0.625rem 0.25rem 0.375rem;
+            padding: rem(10) rem(4) rem(6);
           }
         }
 
@@ -15,7 +15,7 @@
             @include button-brand;
 
             @include breakpoint($only-tablet) {
-              padding: 0.625rem 0.25rem 0.375rem;
+              padding: rem(10) rem(4) rem(6);
             }
 
             &:hover {
