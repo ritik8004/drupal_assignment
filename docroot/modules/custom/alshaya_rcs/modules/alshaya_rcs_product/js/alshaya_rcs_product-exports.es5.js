@@ -236,7 +236,7 @@ function getAddToCartHtml(input) {
 
   if (drupalSettings.alshayaRcs.showQuantity) {
     // @todo Check for how to fetch the max sale quantity.
-    const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
+    const quantity = parseInt(input.stock_data.max_sale_qty, 10);
     const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
     // Remove the quantity filter.
     quantityDroprown.html('');
