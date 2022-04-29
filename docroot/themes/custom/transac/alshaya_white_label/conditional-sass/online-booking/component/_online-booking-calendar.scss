@@ -183,6 +183,7 @@
           span {
             display: block;
             width: inherit;
+            font-size: 0;
 
             @include icon(chevron#{$left}, after) {
               position: relative;
@@ -217,6 +218,7 @@
           span {
             display: block;
             width: inherit;
+            font-size: 0;
 
             @include icon(chevron#{$right}, after) {
               position: relative;
