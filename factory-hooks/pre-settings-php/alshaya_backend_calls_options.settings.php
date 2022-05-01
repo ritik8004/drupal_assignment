@@ -67,6 +67,9 @@ $settings['alshaya_backend_calls_options'] = [
     'cart_remove' => [
       'timeout' => 15,
     ],
+    'discount_text' => [
+      'timeout' => 5,
+    ],
   ],
   'drupal' => [
     'default' => [
