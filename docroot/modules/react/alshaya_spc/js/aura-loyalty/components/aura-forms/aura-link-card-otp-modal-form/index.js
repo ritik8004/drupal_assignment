@@ -273,23 +273,6 @@ class AuraFormLinkCardOTPModal extends React.Component {
     });
   };
 
-  getOtpDescription = () => {
-    const {
-      otpRequested,
-    } = this.state;
-
-    let description = '';
-    if (otpRequested) {
-      description = [
-        <span key="part1" className="part">{getStringMessage('otp_send_message')}</span>,
-        <span key="part2" className="part">{getStringMessage('didnt_receive_otp_message')}</span>,
-      ];
-    } else {
-      description = getStringMessage('send_otp_helptext');
-    }
-    return description;
-  };
-
   // Adds Aura Card to cart.
   addCard = () => {
     this.resetModalMessages();
@@ -362,19 +345,33 @@ class AuraFormLinkCardOTPModal extends React.Component {
                 messageContent={messageContent}
               />
             </div>
-            <div className="linkingoptions-label">
-              {isUserLoggedIn
-                ? getStringMessage('link_card_body_title_logged_in')
-                : [
-                  <span>{getStringMessage('link_card_body_title_guest')}</span>,
-                  <span>{getStringMessage('link_card_body_sub_title_guest')}</span>,
-                ]}
-            </div>
-            <AuraFormLinkCardOptions
-              selectedOption={linkCardOption}
-              selectOptionCallback={this.selectOption}
-              cardNumber={cardNumber}
-            />
+            <ConditionalView condition={!otpRequested}>
+              <div className="linkingoptions-label">
+                {isUserLoggedIn
+                  ? getStringMessage('link_card_body_title_logged_in')
+                  : [
+                    <span>{getStringMessage('link_card_body_title_guest')}</span>,
+                    <span>{getStringMessage('link_card_body_sub_title_guest')}</span>,
+                  ]}
+              </div>
+            </ConditionalView>
+            <ConditionalView condition={otpRequested}>
+              <div className="otp-sent-to-mobile-label">
+                <span>
+                  {Drupal.t('OTP has been sent to your phone number', {}, {
+                    context: 'aura',
+                  })}
+                </span>
+                <span>{mobile}</span>
+              </div>
+            </ConditionalView>
+            <ConditionalView condition={!otpRequested}>
+              <AuraFormLinkCardOptions
+                selectedOption={linkCardOption}
+                selectOptionCallback={this.selectOption}
+                cardNumber={cardNumber}
+              />
+            </ConditionalView>
             <div className="spc-aura-link-card-wrapper">
               <div className="form-items">
                 <ConditionalView condition={linkCardOption === 'email'}>
@@ -400,7 +397,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
                     type="text"
                     required={false}
                     name="otp"
-                    label={getStringMessage('otp_label')}
+                    label={getStringMessage('aura_otp_label')}
                   />
                 </ConditionalView>
               </div>
@@ -420,8 +417,8 @@ class AuraFormLinkCardOTPModal extends React.Component {
             {/* OTP and link now button only be visible for Signed in Users. */}
             <ConditionalView condition={isUserLoggedIn}>
               <div className="aura-new-user-t-c aura-otp-submit-description">
-                {this.getOtpDescription()}
                 <ConditionalView condition={otpRequested}>
+                  <span key="part1" className="part">{getStringMessage('didnt_recieve_the_otp_message')}</span>
                   <span
                     className="resend-otp"
                     onClick={() => this.processLinkCardSendOtp()}

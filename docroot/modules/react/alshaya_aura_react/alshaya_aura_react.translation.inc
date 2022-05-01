@@ -458,7 +458,7 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       "By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>" => [
-        'ar' => "بالضغط على إرسال ، فإنك توافق على قراءة <a href='@tncLink' target='_blank'> البنود والشروط </a> والموافقة عليها",
+        'ar' => "بالضغط على إرسال ، فإنك توافق على قراءة <a href='!tncLink' target='_blank'> البنود والشروط </a> والموافقة عليها",
         'context' => 'aura',
       ],
       'Already a member?' => [
@@ -495,6 +495,22 @@ function _alshaya_aura_react_translations() {
       ],
       'Link Now' => [
         'ar' => 'الربط الآن',
+        'context' => 'aura',
+      ],
+      'Didn’t recieve the One Time Pin?' => [
+        'ar' => 'ألم تستلم دبوس الوقت الواحد؟',
+        'context' => 'aura',
+      ],
+      'Aura account number' => [
+        'ar' => 'رقم حساب أورا',
+        'context' => 'aura',
+      ],
+      'OTP has been sent to your phone number' => [
+        'ar' => 'تم إرسال OTP إلى رقم هاتفك',
+        'context' => 'aura',
+      ],
+      'One Time Pin' => [
+        'ar' => 'رمز الاستخدام لمرة واحدة',
         'context' => 'aura',
       ],
     ],
