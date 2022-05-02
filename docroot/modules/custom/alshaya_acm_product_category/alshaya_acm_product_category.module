@@ -54,6 +54,7 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
         'current_term' => NULL,
         'depth_offset' => NULL,
         'current_term_parent_id' => NULL,
+        'path' => NULL,
       ],
     ],
     'alshaya_subcategory_block' => [
