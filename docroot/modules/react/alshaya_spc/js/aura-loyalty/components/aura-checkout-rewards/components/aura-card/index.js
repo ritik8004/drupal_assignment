@@ -37,11 +37,13 @@ export default class AuraLinkedCheckout extends React.Component {
       paymentMethodInCart,
       formActive,
       loyaltyStatus,
+      methodActive,
     } = this.props;
     // Prepare the props based on the state values.
     const { active } = this.state;
     const allAuraStatus = getAllAuraStatus();
-    const activeClass = active ? 'active' : '';
+    // Show accordion expandad, if payment method is active on checkout page.
+    const activeClass = (active && methodActive) ? 'active' : '';
 
     return (
       <div>
