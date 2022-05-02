@@ -234,14 +234,17 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
   // { attribute_id: attribute_option_value } format with wishlist
   // storage data so we need to update in desired format to prepare
   // attribute combination to identify the correct variant.
-  let isGroupedProduct = false;
+  let productWithPsuedoAttribute = false;
   Object.keys(configurableAttributes).forEach((attributeCode) => {
     const attributeData = configurableAttributes[attributeCode];
     if (typeof attributeData.is_pseudo_attribute !== 'undefined'
       && attributeData.is_pseudo_attribute
       && typeof attributeData.values !== 'undefined'
       && attributeData.values.length > 0) {
-      isGroupedProduct = true;
+      // Set a flag if the product has psuedo attribute from product data.
+      // This flag is used to get required variant from combinations of options
+      // ids without psuedo attribute value.
+      productWithPsuedoAttribute = true;
     }
     // For the anonymous customers option's id key in product options object is
     // `option_id` but for authenticate customers this key is `id` only. So
@@ -285,10 +288,18 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
     return configurableCombinations.by_attribute[skuAttributeCombination];
   }
 
-  if (isGroupedProduct) {
+  // For products that have psuedo attribute we don't receive psuedo attribute
+  // value in product options from MDC API for wishlist items. Hence in order to
+  // select sku from remaining option ids. We use the combination without
+  // psuedo attribute. The combination will select more than one child sku. eg:
+  // band_size|183||cup_size|195||: "SX23874087",
+  // band_size|183||cup_size|195||: "SX23875663"
+  // We match the parent sku of above child sku with sku from wishlist
+  // items to select the required variant.
+  if (productWithPsuedoAttribute) {
     const variantsFromOptions = [];
     let selectedVariant = null;
-    // Get the grouped variant skus from product options.
+    // Get the skus from product options combination.
     Object.entries(configurableCombinations.by_attribute).forEach((data) => {
       const [key, value] = data;
       if (key.indexOf(skuAttributeCombination) !== -1) {
@@ -300,7 +311,7 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
       // Get all the variants from the product data.
       const { variants } = productData;
       variants.forEach((value) => {
-        // From grouped variants and all variants we want the variant whose
+        // From sku from combination and all variants we want the variant whose
         // parent is in the wishlist.
         // Check if parent sku match the sku from wishlist
         // and check the sku is present in variants from options.
