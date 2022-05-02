@@ -48,6 +48,19 @@
       border: none;
       border-bottom: 1px solid $primary_input_border;
       padding: 0;
+
+      &.spc-aura-link-card-input-card {
+        height: rem(36);
+        border: 1px solid $aura-spc-textbox-border;
+
+        & ~ label {
+          padding: rem(8);
+        }
+
+        &:focus ~ label {
+          padding: 0;
+        }
+      }
     }
 
     label {

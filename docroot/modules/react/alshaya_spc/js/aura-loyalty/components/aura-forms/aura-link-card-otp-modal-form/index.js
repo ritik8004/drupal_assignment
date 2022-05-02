@@ -219,12 +219,12 @@ class AuraFormLinkCardOTPModal extends React.Component {
             // Once we get a success response that OTP is sent, we update state,
             // to show the otp fields.
             if (result.data.status) {
+              document.querySelector('.aura-form-items-link-card-options').classList.add('disabled');
               this.setState({
                 otpRequested: true,
                 mobile: result.data.mobile || null,
                 cardNumber: result.data.cardNumber || null,
               });
-              document.querySelector('.aura-form-items-link-card-options').classList.add('disabled');
             }
             removeFullScreenLoader();
             return;
@@ -438,11 +438,11 @@ class AuraFormLinkCardOTPModal extends React.Component {
                 </div>
               </ConditionalView>
             </ConditionalView>
-          </div>
-          <div className="aura-modal-footer">
+            <div className="aura-modal-footer">
             <div className="join-aura" onClick={() => openOTPModal()}>
               {getStringMessage('aura_join_aura')}
             </div>
+          </div>
           </div>
         </div>
       </div>

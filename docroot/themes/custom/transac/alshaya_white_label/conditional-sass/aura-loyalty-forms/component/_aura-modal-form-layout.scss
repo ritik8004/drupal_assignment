@@ -16,6 +16,34 @@
       padding: 0 !important;
     }
 
+    &.link-card-otp-modal-content {
+      max-width: rem(412);
+
+      .aura-guest-user-link-card-otp-form {
+        .aura-modal-form {
+          .aura-modal-form-items {
+            padding: rem(24) rem(20);
+
+            .aura-form-items-link-card-options {
+              margin-top: rem(16);
+            }
+          }
+
+          .aura-modal-form-actions {
+            .aura-otp-submit-description {
+              .resend-otp {
+                display: inline-block;
+              }
+            }
+
+            .aura-modal-footer {
+              padding: rem(5) 0;
+            }
+          }
+        }
+      }
+    }
+
     .aura-modal-header {
       height: 3.5rem;
       display: flex;
@@ -64,7 +92,8 @@
         padding-bottom: 1.5rem;
         border-top: 0.625rem solid $aura-form-otp-background;
 
-        .aura-modal-form-submit {
+        .aura-modal-form-submit,
+        .aura-modal-form-submit-without-otp {
           height: 2.875rem;
           border-radius: 1.75rem;
           background-image: $aura-modal-submit;
@@ -82,7 +111,8 @@
     }
 
     .aura-new-user-form,
-    .aura-congratulations-modal {
+    .aura-congratulations-modal,
+    .aura-guest-user-link-card-otp-form {
       .aura-modal-header {
         background: $aura-header-join-now-bg;
         margin-bottom: 0;
@@ -144,6 +174,21 @@
         .aura-modal-form-items {
           padding: 2.5rem 1.25rem;
         }
+
+        .linkingoptions-label,
+        .otp-sent-to-mobile-label {
+          font-family: $aura-bold;
+
+          span {
+            display: inline-block;
+            font-family: $aura-bold;
+          }
+        }
+
+        .otp-sent-to-mobile-label {
+          position: relative;
+          margin-bottom: rem(30);
+        }
       }
 
       .aura-modal-form-actions {
@@ -161,7 +206,8 @@
           }
         }
 
-        .aura-modal-form-submit {
+        .aura-modal-form-submit,
+        .aura-modal-form-submit-without-otp {
           color: $aura-join-submit-text;
           border-image-source: $aura-join-now-submit-bg-src;
           border-image-slice: 1;
@@ -176,13 +222,16 @@
         @include breakpoint($only-mobile) {
           position: absolute;
           bottom: 0;
+          width: 100%;
         }
       }
 
-      .aura-modal-form-footer {
+      .aura-modal-form-footer,
+      .aura-modal-footer {
         text-align: center;
 
-        .already-a-member-link {
+        .already-a-member-link,
+        .join-aura {
           text-decoration: underline;
           font-family: $aura-caption-regular;
           font-size: 0.75rem;
