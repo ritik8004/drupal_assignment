@@ -226,10 +226,12 @@ class AuraCheckoutRewards extends React.Component {
             expiryDate={expiryDate}
             cardNumber={cardNumber}
             totals={cart.cart.totals}
+            // Flag to verify if redeem aura points form is accessible or not.
             formActive={formActive}
             paymentMethodInCart={cart.cart.payment.method || ''}
             loyaltyStatus={loyaltyStatus}
             wait={waitForPoints}
+            // Flag to verify if Aura payment method is accessible or not.
             methodActive={active}
           />
         </ConditionalView>
