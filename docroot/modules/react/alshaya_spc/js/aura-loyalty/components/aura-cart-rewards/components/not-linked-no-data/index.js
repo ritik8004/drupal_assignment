@@ -1,4 +1,5 @@
 import React from 'react';
+import Popup from 'reactjs-popup';
 import PointsToEarnMessage from '../../../utilities/points-to-earn';
 import { handleSignUp } from '../../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SignUpOtpModal from '../../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
@@ -7,24 +8,50 @@ import getStringMessage from '../../../../../utilities/strings';
 import AuraHeaderIcon from '../../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
 import { isUserAuthenticated } from '../../../../../../../js/utilities/helper';
 import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
+import AuraFormLinkCardOTPModal from '../../../aura-forms/aura-link-card-otp-modal-form';
 
 class AuraNotLinkedNoData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isOTPModalOpen: false,
+      isLinkCardModalOpen: false,
+      chosenCountryCode: null,
     };
   }
 
-  openOTPModal = () => {
+  /**
+   * Sets the Country code for Mobile field.
+   */
+  setChosenCountryCode = (code) => {
     this.setState({
-      isOTPModalOpen: true,
+      chosenCountryCode: code,
     });
   };
 
-  closeOTPModal = () => {
+  /**
+   * Toggles OTP Modal visibility based on passed value.
+   *
+   * @param toggle
+   *   True will show the OTP Modal.
+   *   And will hide Sign in/ Link Now Modal.
+   */
+  toggleOTPModal = (toggle) => {
     this.setState({
-      isOTPModalOpen: false,
+      isOTPModalOpen: toggle,
+      isLinkCardModalOpen: !toggle,
+    });
+  };
+
+  /**
+   * Toggles Link card Modal visibility based on passed value.
+   *
+   * @param toggle
+   *   True will show the link card Modal.
+   */
+  toggleLinkCardModal = (toggle) => {
+    this.setState({
+      isLinkCardModalOpen: toggle,
     });
   };
 
@@ -37,6 +64,8 @@ class AuraNotLinkedNoData extends React.Component {
 
     const {
       isOTPModalOpen,
+      isLinkCardModalOpen,
+      chosenCountryCode,
     } = this.state;
 
     return (
@@ -49,7 +78,7 @@ class AuraNotLinkedNoData extends React.Component {
             <span className="spc-join-aura-link-wrapper submit">
               <a
                 className="spc-join-aura-link"
-                onClick={() => this.openOTPModal()}
+                onClick={() => this.toggleOTPModal(true)}
               >
                 {getStringMessage('aura_join_aura')}
               </a>
@@ -59,8 +88,7 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                /** @todo: We need to change this to open the link aura form. */
-                  onClick={() => this.openOTPModal()}
+                  onClick={() => this.toggleLinkCardModal(true)}
                 >
                   {getStringMessage('aura_link_aura')}
                 </a>
@@ -70,8 +98,7 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                /** @todo: We need to change this to open sign in aura form. */
-                  onClick={() => this.openOTPModal()}
+                  onClick={() => this.toggleLinkCardModal(true)}
                 >
                   {getStringMessage('aura_sign_in')}
                 </a>
@@ -90,9 +117,25 @@ class AuraNotLinkedNoData extends React.Component {
 
         <SignUpOtpModal
           isOTPModalOpen={isOTPModalOpen}
-          closeOTPModal={this.closeOTPModal}
+          closeOTPModal={() => this.setState({
+            isOTPModalOpen: false,
+          })}
           handleSignUp={handleSignUp}
+          openOTPModal={() => this.toggleOTPModal(true)}
         />
+        <Popup
+          className="aura-modal-form link-card-otp-modal"
+          open={isLinkCardModalOpen}
+          closeOnEscape={false}
+          closeOnDocumentClick={false}
+        >
+          <AuraFormLinkCardOTPModal
+            closeLinkCardOTPModal={() => this.toggleLinkCardModal(false)}
+            openOTPModal={() => this.toggleOTPModal(true)}
+            setChosenCountryCode={this.setChosenCountryCode}
+            chosenCountryCode={chosenCountryCode}
+          />
+        </Popup>
       </>
     );
   }

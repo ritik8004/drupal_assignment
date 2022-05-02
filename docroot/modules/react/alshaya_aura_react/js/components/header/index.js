@@ -70,7 +70,7 @@ class Header extends React.Component {
 
   // Event listener callback to update header states.
   updateState = (data) => {
-    const { stateValues, clickedNotYou } = data.detail;
+    const { stateValues, clickedNotYou, showCongratulationsPopup } = data.detail;
     const states = { ...stateValues };
 
     if (clickedNotYou) {
@@ -80,7 +80,11 @@ class Header extends React.Component {
     if (stateValues.loyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED) {
       states.signUpComplete = true;
     }
-    if (states.signUpComplete) {
+
+    // Show congratulations popup only if showCongratulationsPopup is defined and true.
+    if ((typeof showCongratulationsPopup !== 'undefined')
+      && showCongratulationsPopup
+    ) {
       this.setState({
         showCongratulations: true,
       });

@@ -130,6 +130,7 @@ class AuraFormNewAuraUserModal extends React.Component {
       closeNewUserModal,
       chosenCountryCode,
       chosenUserMobile,
+      openLinkCardModal,
     } = this.props;
 
     const {
@@ -186,11 +187,7 @@ class AuraFormNewAuraUserModal extends React.Component {
               {submitButtonText}
             </div>
             <div className="aura-modal-form-footer">
-              <div
-                className="already-a-member-link"
-                // onClick={() => this.openLinkCardModal()}
-              >
-                {/* to do - link already a member popup with https://alshayagroup.atlassian.net/browse/CORE-39965 */}
+              <div className="already-a-member-link" onClick={() => openLinkCardModal()}>
                 {Drupal.t('Already a member?', {}, { context: 'aura' })}
               </div>
             </div>
