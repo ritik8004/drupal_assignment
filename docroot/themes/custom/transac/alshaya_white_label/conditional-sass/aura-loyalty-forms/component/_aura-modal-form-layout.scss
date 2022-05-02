@@ -30,6 +30,12 @@
           }
 
           .aura-modal-form-actions {
+            .aura-otp-submit-description {
+              .resend-otp {
+                display: inline-block;
+              }
+            }
+
             .aura-modal-footer {
               padding: rem(5) 0;
             }
@@ -169,13 +175,19 @@
           padding: 2.5rem 1.25rem;
         }
 
-        .linkingoptions-label {
+        .linkingoptions-label,
+        .otp-sent-to-mobile-label {
           font-family: $aura-bold;
 
           span {
             display: inline-block;
             font-family: $aura-bold;
           }
+        }
+
+        .otp-sent-to-mobile-label {
+          position: relative;
+          margin-bottom: rem(30);
         }
       }
 
