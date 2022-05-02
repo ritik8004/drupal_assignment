@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_hm_images;
+namespace Drupal\alshaya_media_assets\Services;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuConfig;
@@ -11,6 +11,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
@@ -19,6 +20,7 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
@@ -29,12 +31,7 @@ use GuzzleHttp\TransferStats;
 /**
  * Sku Asset Manager Class.
  */
-class SkuAssetManager {
-
-  /**
-   * Constant to denote that the current asset has no angle data associated.
-   */
-  const LP_DEFAULT_ANGLE = 'NO_ANGLE';
+class SkuAssetManager implements SkuAssetManagerInterface {
 
   /**
    * Constant for default weight in case no weight has been set via config.
@@ -45,11 +42,6 @@ class SkuAssetManager {
    * Constant for default swatch display type.
    */
   const LP_SWATCH_DEFAULT = 'RGB';
-
-  /**
-   * Constant for RGB swatch display type.
-   */
-  const LP_SWATCH_RGB = 'RGB';
 
   /**
    * The Config factory service.
@@ -171,6 +163,20 @@ class SkuAssetManager {
   protected $fileSystem;
 
   /**
+   * The Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * The Database connection service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -203,6 +209,10 @@ class SkuAssetManager {
    *   Cache for media_file_mapping.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   File system service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager service.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Database service.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -218,7 +228,9 @@ class SkuAssetManager {
                               FileUsageInterface $file_usage,
                               LockBackendInterface $lock,
                               CacheBackendInterface $cache_media_file_mapping,
-                              FileSystemInterface $file_system) {
+                              FileSystemInterface $file_system,
+                              LanguageManagerInterface $language_manager,
+                              Connection $database) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -237,18 +249,12 @@ class SkuAssetManager {
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
     $this->fileSystem = $file_system;
+    $this->languageManager = $language_manager;
+    $this->database = $database;
   }
 
   /**
-   * Get assets for SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   *
-   * @return array
-   *   Get assets for SKU.
-   *
-   * @throws \Exception
+   * {@inheritDoc}
    */
   public function getAssets(SKU $sku) {
     // phpcs:ignore
@@ -641,17 +647,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Utility function to construct CDN url for the asset.
-   *
-   * @param mixed $sku
-   *   SKU text or full entity object.
-   * @param string $page_type
-   *   Page on which the asset needs to be rendered.
-   * @param array $avoid_assets
-   *   (optional) Array of AssetId to avoid.
-   *
-   * @return array
-   *   Array of urls to sku assets.
+   * {@inheritDoc}
    */
   public function getSkuAssets($sku, $page_type, array $avoid_assets = []) {
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
@@ -748,7 +744,7 @@ class SkuAssetManager {
    * @return array
    *   Array of asset attributes.
    */
-  protected function getAssetAttributes(array $asset, $location_image) {
+  private function getAssetAttributes(array $asset, $location_image) {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
@@ -783,7 +779,7 @@ class SkuAssetManager {
    * @return array
    *   Overridden config in context of the category product belongs to.
    */
-  public function overrideConfig($sku, $page_type) {
+  private function overrideConfig($sku, $page_type) {
     // @todo Check and remove this include.
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
@@ -827,17 +823,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to sort based on angles.
-   *
-   * @param string $sku
-   *   SKU code for which the assets needs to be sorted on angles.
-   * @param string $page_type
-   *   Page on which the asset needs to be rendered.
-   * @param array $assets
-   *   Array of mixed asset types.
-   *
-   * @return array
-   *   Array of assets sorted by their asset types & angles.
+   * {@inheritDoc}
    */
   public function sortSkuAssets($sku, $page_type, array $assets) {
     $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
@@ -942,15 +928,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to filter out specific asset types from a list.
-   *
-   * @param array $assets
-   *   Array of assets with mixed asset types.
-   * @param string $asset_type
-   *   Asset type that needs to be filtered out.
-   *
-   * @return array
-   *   Array of assets matching the asset type.
+   * {@inheritDoc}
    */
   public function filterSkuAssetType(array $assets, $asset_type) {
     $filtered_assets = [];
@@ -965,17 +943,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to pull child sku assets.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Parent sku for which we pulling child assets.
-   * @param string $context
-   *   Page on which the asset needs to be rendered.
-   * @param array $avoid_assets
-   *   (optional) Array of AssetId to avoid.
-   *
-   * @return array
-   *   Array of sku child assets.
+   * {@inheritDoc}
    */
   public function getChildSkuAssets(SKU $sku, $context, array $avoid_assets = []) {
     $child_skus = $this->skuManager->getValidChildSkusAsString($sku);
@@ -989,13 +957,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to fetch swatch type for the sku.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Sku for which swatch type needs to be fetched.
-   *
-   * @return string
-   *   Swatch type for the sku.
+   * {@inheritDoc}
    */
   public function getSkuSwatchType(SKU $sku) {
     $swatch_type = self::LP_SWATCH_DEFAULT;
@@ -1018,13 +980,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to fetch list of color options supported by a parent SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Parent sku.
-   *
-   * @return array
-   *   Array of RGB color values keyed by article_castor_id.
+   * {@inheritDoc}
    */
   public function getColorsForSku(SKU $sku) {
     if ($sku->bundle() != 'configurable') {
@@ -1069,15 +1025,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to get assets for a SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Parent Sku.
-   * @param string $page_type
-   *   Type of page.
-   *
-   * @return array|assets
-   *   Array of assets for the SKU.
+   * {@inheritDoc}
    */
   public function getAssetsForSku(SKU $sku, $page_type) {
     $assets = [];
@@ -1099,9 +1047,9 @@ class SkuAssetManager {
    * @return array
    *   Associative array returning color label & code.
    */
-  public function getColorAttributesFromSku($sku_id) {
-    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $query = \Drupal::database()->select('acq_sku_field_data', 'asfd');
+  private function getColorAttributesFromSku($sku_id) {
+    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $query = $this->database->select('acq_sku_field_data', 'asfd');
     $query->fields('asfd', ['attr_color_label', 'attr_rgb_color']);
     $query->condition('id', $sku_id);
     $query->condition('langcode', $current_langcode);
@@ -1141,13 +1089,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to get asset type.
-   *
-   * @param array $asset
-   *   Array of asset details.
-   *
-   * @return string
-   *   Asset type (video/image).
+   * {@inheritDoc}
    */
   public function getAssetType(array $asset) {
     $type = (strpos($asset['Data']['AssetType'], 'MovingMedia') !== FALSE)
@@ -1218,5 +1160,10 @@ class SkuAssetManager {
 
     return $this->httpClient->get($url, $request_options);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSkuSwatch($sku) {}
 
 }

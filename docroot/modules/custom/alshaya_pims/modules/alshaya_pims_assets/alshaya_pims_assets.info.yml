@@ -1,0 +1,8 @@
+name: Alshaya PIMS Assets
+type: module
+description: 'Manages assets data received from PIMS for Alshaya'
+core_version_requirement: ^8.8.0 || ^9
+dependencies:
+  - alshaya_acm_product:alshaya_acm_product
+  - alshaya_media_assets:alshaya_media_assets
+package: Alshaya
