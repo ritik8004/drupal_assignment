@@ -439,10 +439,10 @@ class AuraFormLinkCardOTPModal extends React.Component {
               </ConditionalView>
             </ConditionalView>
             <div className="aura-modal-footer">
-            <div className="join-aura" onClick={() => openOTPModal()}>
-              {getStringMessage('aura_join_aura')}
+              <div className="join-aura" onClick={() => openOTPModal()}>
+                {getStringMessage('aura_join_aura')}
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
