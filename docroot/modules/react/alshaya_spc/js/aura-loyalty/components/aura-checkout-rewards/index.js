@@ -230,6 +230,7 @@ class AuraCheckoutRewards extends React.Component {
             paymentMethodInCart={cart.cart.payment.method || ''}
             loyaltyStatus={loyaltyStatus}
             wait={waitForPoints}
+            methodActive={active}
           />
         </ConditionalView>
       </div>
