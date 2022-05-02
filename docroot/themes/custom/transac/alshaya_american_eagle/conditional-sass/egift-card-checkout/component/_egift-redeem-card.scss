@@ -1,0 +1,18 @@
+.redeem-egift-card {
+  .redeem-egift-card-content {
+    .egift-redeem-get-code-form,
+    .egift-validate-form {
+      .egift-button {
+        color: $egift-card-redeem-button;
+        border: rem(1) solid $egift-card-redeem-button;
+      }
+    }
+  }
+
+  .remove-egift-card {
+    button {
+      color: $egift-card-redeem-button;
+      border: rem(1) solid $egift-card-redeem-button;
+    }
+  }
+}
