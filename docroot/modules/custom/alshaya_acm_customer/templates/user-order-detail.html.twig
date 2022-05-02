@@ -304,6 +304,10 @@
       </tr>
 
       {% if order.online_returns_status is defined and order.online_returns_status %}
+        <tr class="order-item-row" id="online-return-initiated"></tr>
+      {% endif %}
+
+      {% if order.online_returns_status is defined and order.online_returns_status %}
         <tr class="order-item-row">
           <td colspan="5">
             <div>{{ "Delivered Items"|t }}</div>

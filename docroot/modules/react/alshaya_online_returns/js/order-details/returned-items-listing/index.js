@@ -1,40 +1,9 @@
 import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
-import { processReturnData } from '../../utilities/order_details_util';
-import { getReturnsByOrderId } from '../../utilities/return_api_helper';
 import ReturnedItems from './returned-items';
 
 class ReturnedItemsListing extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      returns: null,
-    };
-  }
-
-  componentDidMount() {
-    this.getReturns();
-  }
-
-  /**
-   * Get returns.
-   */
-  getReturns = async () => {
-    const { orderEntityId } = drupalSettings.onlineReturns;
-
-    showFullScreenLoader();
-    const returns = await getReturnsByOrderId(orderEntityId);
-    removeFullScreenLoader();
-
-    if (hasValue(returns) && hasValue(returns.data) && hasValue(returns.data.items)) {
-      this.setState({
-        returns: processReturnData(returns.data.items),
-      });
-    }
-  }
-
   getReturnedItemsSubTitle = (type) => {
     if (type === 'online') {
       return Drupal.t('Online Returns', {}, { context: 'online_returns' });
@@ -48,7 +17,7 @@ class ReturnedItemsListing extends React.Component {
   };
 
   getReturnsByType = (type) => {
-    const { returns } = this.state;
+    const { returns } = this.props;
 
     // @todo: Update this code to filter out returns based on type.
     if (type === 'online') {
@@ -59,7 +28,7 @@ class ReturnedItemsListing extends React.Component {
   };
 
   render() {
-    const { returns } = this.state;
+    const { returns } = this.props;
 
     if (!hasValue(returns)) {
       return null;

@@ -17,7 +17,7 @@ function processReturnData(returns) {
     });
 
     const returnData = {
-      returnId: returnItem.increment_id,
+      returnInfo: returnItem,
       items: itemsData,
     };
 
