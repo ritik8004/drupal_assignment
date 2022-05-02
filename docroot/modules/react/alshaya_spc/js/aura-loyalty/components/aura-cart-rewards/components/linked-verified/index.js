@@ -8,12 +8,21 @@ const AuraLinkedVerified = (props) => {
   } = props;
 
   return (
-    <div className="block-content registered-user-linked">
-      <PointsToEarnMessage pointsToEarn={pointsToEarn} loyaltyStatus={loyaltyStatus} wait={wait} />
-      <div className="actions">
-        <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
+    <>
+      <div className="block-content registered-user-linked">
+        <PointsToEarnMessage
+          pointsToEarn={pointsToEarn}
+          loyaltyStatus={loyaltyStatus}
+          wait={wait}
+        />
       </div>
-    </div>
+      <div className="actions">
+        <PointsExpiryMessage
+          points={expiringPoints}
+          date={expiryDate}
+        />
+      </div>
+    </>
   );
 };
 
