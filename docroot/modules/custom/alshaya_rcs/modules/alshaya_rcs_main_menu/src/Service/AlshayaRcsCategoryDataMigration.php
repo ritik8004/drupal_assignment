@@ -198,6 +198,10 @@ class AlshayaRcsCategoryDataMigration {
     if (empty($context['results']['acq_term_mapping'])) {
       $context['results']['acq_term_mapping'] = [];
       $context['results']['batch_size'] = $batch_size;
+      // Get Commerce id from MDC for Product Category.
+      if ($vid == self::SOURCE_VOCABULARY_ID) {
+        $context['results']['commerce_ids'] = self::getCommerceIdMapping();
+      }
     }
 
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
@@ -232,6 +236,15 @@ class AlshayaRcsCategoryDataMigration {
           'path' => '/taxonomy/term/' . $tid,
         ]);
         $path_alias_storage->delete($aliases);
+        $migrate_term->save();
+        // Set commerce id if we are migrating product category.
+        if ($vid == self::SOURCE_VOCABULARY_ID) {
+          $alias_entity = current($path_alias_storage->loadByProperties(['path' => '/taxonomy/term/' . $migrate_term->id()]));
+          $alias = ltrim($alias_entity->getAlias(), '/');
+          $commerce_id = $context['results']['commerce_ids'][$alias];
+          $migrate_term->set('field_commerce_id', $commerce_id);
+        }
+
         $migrate_term->save();
         // Set source/migrate term mapping.
         $context['results']['acq_term_mapping'][$tid] = $migrate_term->id();
@@ -312,6 +325,15 @@ class AlshayaRcsCategoryDataMigration {
       'path' => '/taxonomy/term/' . $tid,
     ]);
     $path_alias_storage->delete($aliases);
+    $migrate_parent_term->save();
+
+    // Set Commerce id for Product Category.
+    if ($vid == self::SOURCE_VOCABULARY_ID) {
+      $alias_entity = current($path_alias_storage->loadByProperties(['path' => '/taxonomy/term/' . $migrate_parent_term->id()]));
+      $alias = ltrim($alias_entity->getAlias(), '/');
+      $commerce_id = $results['commerce_ids'][$alias];
+      $migrate_parent_term->set('field_commerce_id', $commerce_id);
+    }
     $migrate_parent_term->save();
     $term_count++;
     // Save parent term in mapping.
@@ -502,6 +524,50 @@ class AlshayaRcsCategoryDataMigration {
       drush_backend_batch_process();
     }
 
+  }
+
+  /**
+   * Get commerce id mapping based on url.
+   *
+   * @return array
+   *   Mapping of category url with commerce id.
+   */
+  private static function getCommerceIdMapping() {
+    $language_manager = \Drupal::service('language_manager');
+    $langcode = $language_manager->getCurrentLanguage()->getId();
+    // Get Categories from MDC.
+    $categories = \Drupal::service('alshaya_api.api')->getCategories($langcode);
+    $commerce_ids = array_flip(self::getCategoryIdsMapping($categories));
+    return $commerce_ids;
+  }
+
+  /**
+   * Get commerce ids mapping with url recursively.
+   *
+   * @param array $category
+   *   MDC Category list.
+   *
+   * @return array
+   *   Return commerce id url mapping.
+   */
+  private static function getCategoryIdsMapping(array $category): array {
+    $ids = [];
+    $url_path = '';
+    // Get url path from custom attributes.
+    foreach ($category['custom_attributes'] ?? [] as $attribute) {
+      if ($attribute['attribute_code'] == 'url_path') {
+        $url_path = $attribute['value'];
+      }
+    }
+    if (!empty($url_path)) {
+      $ids[$category['id']] = $url_path;
+    }
+
+    // Recursively get commerce id mappings.
+    foreach ($category['children_data'] ?? [] as $child) {
+      $ids = array_replace($ids, self::getCategoryIdsMapping($child));
+    }
+    return $ids;
   }
 
 }
