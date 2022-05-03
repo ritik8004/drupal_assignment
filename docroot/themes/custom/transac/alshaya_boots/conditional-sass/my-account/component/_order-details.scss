@@ -81,9 +81,41 @@
     }
   }
 
-  .order-transaction + td .dark {
+  .order-transaction + div .dark {
     text-transform: capitalize;
     font-family: $bp-light;
+  }
+
+  .user__order--detail {
+    > div > div {
+      &.above-mobile.blend {
+        .dark {
+          line-height: 1.4;
+        }
+      }
+
+      &.order__user--info {
+        .address--contact {
+          margin-top: rem(20);
+          font-size: rem(12);
+
+          .no-direction {
+            font-size: rem(14);
+            margin-top: rem(8);
+          }
+        }
+      }
+    }
+
+    .surcharge-row {
+      div:first-child {
+        @include breakpoint($only-tablet) {
+          .order-detail & {
+            display: none;
+          }
+        }
+      }
+    }
   }
 }
 

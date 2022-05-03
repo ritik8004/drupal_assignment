@@ -3,6 +3,7 @@
     background: none;
     border-bottom: 0;
 
+    > div,
     td {
       padding: 0 !important;
     }
@@ -174,7 +175,7 @@
 .order-detail {
   .user__order--detail {
     .order-item-row.online-returns-eligibility-message {
-      td {
+      > div {
         @include breakpoint($only-tablet) {
           padding: 0 !important;
         }
