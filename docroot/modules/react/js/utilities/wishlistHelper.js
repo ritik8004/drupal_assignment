@@ -234,13 +234,17 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
   // { attribute_id: attribute_option_value } format with wishlist
   // storage data so we need to update in desired format to prepare
   // attribute combination to identify the correct variant.
+  let productWithPsuedoAttribute = false;
   Object.keys(configurableAttributes).forEach((attributeCode) => {
     const attributeData = configurableAttributes[attributeCode];
     if (typeof attributeData.is_pseudo_attribute !== 'undefined'
       && attributeData.is_pseudo_attribute
       && typeof attributeData.values !== 'undefined'
       && attributeData.values.length > 0) {
-      skuAttributesOptionData[attributeCode] = attributeData.values[0].value;
+      // Set a flag if the product has psuedo attribute from product data.
+      // This flag is used to get required variant from combinations of options
+      // ids without psuedo attribute value.
+      productWithPsuedoAttribute = true;
     }
     // For the anonymous customers option's id key in product options object is
     // `option_id` but for authenticate customers this key is `id` only. So
@@ -275,12 +279,53 @@ export const getFirstChildWithWishlistData = (sku, productData) => {
     const [key, value] = data;
     skuAttributeCombination = `${skuAttributeCombination}${key}|${value}||`;
   });
+
   // Check if we have a valid combination string and a variant is available
   // with that key in given product data information. If so return variant sku.
   const configurableCombinations = productData.configurable_combinations;
   if (skuAttributeCombination !== ''
     && typeof configurableCombinations.by_attribute[skuAttributeCombination] !== 'undefined') {
     return configurableCombinations.by_attribute[skuAttributeCombination];
+  }
+
+  // For products that have psuedo attribute we don't receive psuedo attribute
+  // value in product options from MDC API for wishlist items. Hence in order to
+  // select sku from remaining option ids. We use the combination without
+  // psuedo attribute. The combination will select more than one child sku. eg:
+  // band_size|183||cup_size|195||: "SX23874087",
+  // band_size|183||cup_size|195||: "SX23875663"
+  // We match the parent sku of above child sku with sku from wishlist
+  // items to select the required variant.
+  if (productWithPsuedoAttribute) {
+    const variantsFromOptions = [];
+    let selectedVariant = null;
+    // Get the skus from product options combination.
+    Object.entries(configurableCombinations.by_attribute).forEach((data) => {
+      const [key, value] = data;
+      if (key.indexOf(skuAttributeCombination) !== -1) {
+        variantsFromOptions.push(value);
+      }
+    });
+
+    if (variantsFromOptions.length > 0) {
+      // Get all the variants from the product data.
+      const { variants } = productData;
+      variants.forEach((value) => {
+        // From sku from combination and all variants we want the variant whose
+        // parent is in the wishlist.
+        // Check if parent sku match the sku from wishlist
+        // and check the sku is present in variants from options.
+        if (value.parent_sku === sku && variantsFromOptions.indexOf(value.sku) !== -1) {
+          // Get variant sku whose parent is in wishlist
+          // and sku matches product options.
+          selectedVariant = variantsFromOptions.filter((item) => item === value.sku);
+        }
+      });
+    }
+
+    if (selectedVariant !== null) {
+      return selectedVariant;
+    }
   }
 
   // Return false if we don't find anything.
