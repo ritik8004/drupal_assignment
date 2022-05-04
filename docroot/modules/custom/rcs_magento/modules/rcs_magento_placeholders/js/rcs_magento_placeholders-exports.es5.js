@@ -327,7 +327,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
   return result;
 };
 
-exports.getDataAsynchronous = function getDataAsynchronous(placeholder, params, callback, entity, langcode) {
+exports.getDataAsyncWithCallback = function getDataAsyncWithCallback(placeholder, params, callback, entity, langcode) {
   const request = {
     uri: '/graphql',
     method: 'GET',
