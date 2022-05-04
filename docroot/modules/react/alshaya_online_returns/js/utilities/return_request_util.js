@@ -71,7 +71,7 @@ function getPaymentDetails(orderDetails) {
  */
 function addCheckboxToReturnItem(item) {
   let addCheckbox = true;
-  if (!hasValue(item.is_returnable)
+  if (hasValue(item.is_returnable)
     || hasValue(item.is_big_ticket)) {
     addCheckbox = false;
   }

@@ -287,30 +287,27 @@
           <div class="dark">{{ order_details.payment.paymentId }}</div>
         {% endif %}
 
-          {% if order_details.payment.resultCode %}
-            <div class="label result-code font-small">{{ "Result code"|t }}</div>
-            <div class="dark">{{ order_details.payment.resultCode }}</div>
-          {% endif %}
+        {% if order_details.payment.resultCode %}
+          <div class="label result-code font-small">{{ "Result code"|t }}</div>
+          <div class="dark">{{ order_details.payment.resultCode }}</div>
+        {% endif %}
 
-          {% if order_details.delivery_method %}
-          <div class="label delivery-method font-small">{{ "Delivery method"|t }}</div>
-          <div class="dark">{{ order_details.delivery_method }}</div>
-          {% endif %}
-        </td>
-        <td class="above-mobile empty--cell">&nbsp;</td>
-      </tr>
+        {% if order_details.delivery_method %}
+        <div class="label delivery-method font-small">{{ "Delivery method"|t }}</div>
+        <div class="dark">{{ order_details.delivery_method }}</div>
+        {% endif %}
+      </div>
+      <div class="above-mobile empty--cell">&nbsp;</div>
+    </div>
 
-      {% if order.online_returns_status is defined and order.online_returns_status %}
-        <tr class="order-item-row" id="online-return-initiated"></tr>
-      {% endif %}
-
-      {% if order.online_returns_status is defined and order.online_returns_status %}
-        <tr class="order-item-row">
-          <td colspan="5">
-            <div>{{ "Delivered Items"|t }}</div>
-          </td>
-        </tr>
-      {% endif %}
+    {% if order.online_returns_status is defined and order.online_returns_status %}
+      <div class="order-item-row" id="online-return-initiated"></div>
+      <div class="order-item-row">
+        <div>
+          <div>{{ "Delivered Items"|t }}</div>
+        </div>
+      </div>
+    {% endif %}
 
     {% for product in products %}
       {{ _self.order_item(product, false) }}
