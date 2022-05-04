@@ -143,6 +143,9 @@ class OnlineReturnController extends ControllerBase {
     }
 
     $orderDetails = $this->getOrderReturnDetails($user, $order_id);
+    if ($orderDetails['#order']['orderType'] == 'ship_to_store') {
+      throw new NotFoundHttpException();
+    }
 
     // Get return configurations.
     $returnConfig = $this->onlineReturnsApiHelper->getReturnsApiConfig(

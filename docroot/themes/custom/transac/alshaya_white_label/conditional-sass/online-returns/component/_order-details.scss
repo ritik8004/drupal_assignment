@@ -1,0 +1,26 @@
+.order-detail,
+.block-alshaya-user-recent-orders {
+  .user__order--detail {
+    div.order-item-row.delivered-items,
+    tr.order-item-row.delivered-items {
+      background: $online-return-delivered-items-label-bg;
+
+      > div,
+      td {
+        padding: rem(38) 0 rem(8) !important;
+        font-size: rem(18);
+        line-height: rem(22);
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+
+        @include breakpoint($tablet) {
+          padding-top: rem(30) !important;
+        }
+
+        div {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}

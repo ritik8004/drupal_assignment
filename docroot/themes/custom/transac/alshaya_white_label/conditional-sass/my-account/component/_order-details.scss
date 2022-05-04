@@ -217,7 +217,7 @@
 
   .order-summary-row,
   .order-details-row,
-  .order-item-row:not(.online-returns-eligibility-message),
+  .order-item-row:not(.online-returns-eligibility-message):not(.delivered-items),
   .sub-total-row,
   .delivery-charge-row,
   .surcharge-row,
