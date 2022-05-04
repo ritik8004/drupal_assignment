@@ -736,6 +736,8 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ];
   }
 
+  // We have two variations of the cart query, one for anonymous and one for
+  // authenticated users. So we vary by this context.
   $query_fields['#cache']['contexts'][] = 'user.roles:anonymous';
   return $query_fields;
 }
