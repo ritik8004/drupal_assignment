@@ -529,7 +529,7 @@ class AlshayaRcsCategoryDataMigration {
   }
 
   /**
-   * Get commerce id mapping based on url.
+   * Get commerce id mapping with the category url.
    *
    * @return array
    *   Mapping of category url with commerce id.
@@ -560,6 +560,7 @@ class AlshayaRcsCategoryDataMigration {
     foreach ($category['custom_attributes'] ?? [] as $attribute) {
       if ($attribute['attribute_code'] == 'url_path') {
         $url_path = $attribute['value'];
+        break;
       }
     }
     if (!empty($url_path)) {
