@@ -18,6 +18,8 @@ import {
 } from '../../utilities/link_card_sign_up_modal_helper';
 import { validateElementValueByType } from '../../utilities/validation_helper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
+import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 
 class AuraFormNewAuraUserModal extends React.Component {
   constructor(props) {
@@ -25,7 +27,30 @@ class AuraFormNewAuraUserModal extends React.Component {
     this.state = {
       messageType: null,
       messageContent: null,
+      // Flag to determine if we have to show "Already a member?" link or not.
+      // We only show this link in popup,
+      // - If user is an authenticate
+      // - Guest user has an active cart
+      showAlreadyMember: false,
     };
+  }
+
+  componentDidMount() {
+    // Check if user is authenticated then show "Already a member?" link.
+    if (isUserAuthenticated()) {
+      this.setState({
+        showAlreadyMember: true,
+      });
+    } else {
+      // If user is a guest user and user has cart then show "Already a member?"
+      // link.
+      const userHasCart = window.commerceBackend.getCartId();
+      if (hasValue(userHasCart)) {
+        this.setState({
+          showAlreadyMember: true,
+        });
+      }
+    }
   }
 
   getCountryMobileCode = () => {
@@ -136,6 +161,7 @@ class AuraFormNewAuraUserModal extends React.Component {
     const {
       messageType,
       messageContent,
+      showAlreadyMember,
     } = this.state;
 
     const submitButtonText = Drupal.t('Submit');
@@ -186,11 +212,13 @@ class AuraFormNewAuraUserModal extends React.Component {
             <div className="aura-modal-form-submit" onClick={() => this.registerUser()}>
               {submitButtonText}
             </div>
-            <div className="aura-modal-form-footer">
-              <div className="already-a-member-link" onClick={() => openLinkCardModal()}>
-                {Drupal.t('Already a member?', {}, { context: 'aura' })}
+            <ConditionalView condition={hasValue(showAlreadyMember)}>
+              <div className="aura-modal-form-footer">
+                <div className="already-a-member-link" onClick={() => openLinkCardModal()}>
+                  {Drupal.t('Already a member?', {}, { context: 'aura' })}
+                </div>
               </div>
-            </div>
+            </ConditionalView>
           </div>
         </div>
       </div>
