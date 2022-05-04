@@ -1,0 +1,12 @@
+.order-detail,
+.block-alshaya-user-recent-orders {
+  .user__order--detail {
+    div.order-item-row.delivered-items,
+    tr.order-item-row.delivered-items {
+      > div,
+      td {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}
