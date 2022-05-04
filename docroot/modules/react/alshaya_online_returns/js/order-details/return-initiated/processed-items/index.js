@@ -19,7 +19,7 @@ const ProcessedItems = ({
     <div className="return-processed-items">
       <ConditionalView condition={hasValue(returns)}>
         {returns.map((returnData) => (
-          <div key={returnData.returnInfo.returnId} className="return-items-wrapper">
+          <div key={returnData.returnInfo.increment_id} className="return-items-wrapper">
             <ProcessedItem
               returnData={returnData}
               returnStatus={returnStatus}
