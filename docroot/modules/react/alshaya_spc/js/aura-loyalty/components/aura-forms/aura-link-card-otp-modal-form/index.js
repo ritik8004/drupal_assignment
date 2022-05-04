@@ -219,7 +219,12 @@ class AuraFormLinkCardOTPModal extends React.Component {
             // Once we get a success response that OTP is sent, we update state,
             // to show the otp fields.
             if (result.data.status) {
-              document.querySelector('.aura-form-items-link-card-options').classList.add('disabled');
+              // Disable aura link card options, if available.
+              const cardOptionsLink = document.querySelector('.aura-form-items-link-card-options');
+              if (cardOptionsLink !== null) {
+                cardOptionsLink.classList.add('disabled');
+              }
+
               this.setState({
                 otpRequested: true,
                 mobile: result.data.mobile || null,
