@@ -62,7 +62,7 @@ const PointsToEarnMessage = (props) => {
 
     return (
       <>
-        <div className="spc-aura-cart-icon">
+        <div className="spc-aura-cart-icon vertical-aura-logo">
           <AuraVerticalIcon />
         </div>
         <div className="spc-aura-cart-content">
