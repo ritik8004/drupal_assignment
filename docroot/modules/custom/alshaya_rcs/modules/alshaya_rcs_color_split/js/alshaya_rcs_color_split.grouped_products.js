@@ -39,7 +39,7 @@
     }
 
     // Get the products with the same style.
-    globalThis.rcsPhCommerceBackend.getDataAsyncWithCallback('products-in-style', { styleCode: mainProduct.style_code }, function updateProductInStyle(product) {
+    globalThis.rcsPhCommerceBackend.getDataAsynchronous('products-in-style', { styleCode: mainProduct.style_code }, function updateProductInStyle(product) {
       const styleProducts = product.data.products.items;
       // Get the main product entity from the style products list.
       for (var index = 0; index < styleProducts.length; index++) {

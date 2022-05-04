@@ -260,7 +260,7 @@ function getAddToCartHtml(input) {
   let configurableOptions = input.configurable_options;
 
   if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
-    const sizeGuide = jQuery('.rcs-templates--size-guide').clone();
+    const sizeGuide = jQuery('.rcs-templates--size-guide');
     let sizeGuideAttributes = [];
     if (sizeGuide.length) {
       sizeGuideAttributes = sizeGuide.attr('data-attributes');
