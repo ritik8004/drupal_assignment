@@ -2,11 +2,11 @@
 
 {% block deliveryInformationIcon %}
   {% set informationIcon = "icon-ic_infomation" %}
-  <td colspan="3" class="above-mobile">
+  <div class="above-mobile">
     <span class={{ informationIcon }}></span>
     {{ delivery_detail_notice }}
-  </td>
-  <td colspan="2" class="mobile-only">
+  </div>
+  <div class="mobile-only">
     <span class={{ informationIcon }}></span>{{ delivery_detail_notice }}
-  </td>
+  </div>
 {% endblock %}
