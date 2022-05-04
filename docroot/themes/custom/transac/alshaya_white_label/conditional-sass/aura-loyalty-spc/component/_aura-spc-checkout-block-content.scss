@@ -377,13 +377,13 @@
       background: $aura-spc-checkout-block-bg;
 
       .redeem-aura-points-header-container {
-        min-height: 3.25rem;
+        min-height: rem(60);
         display: flex;
         align-items: center;
-        padding-#{$left}: 1.5rem;
+        padding-#{$left}: rem(20);
         position: relative;
         background: $aura-spc-checkout-block-bg;
-        line-height: 1.25rem;
+        line-height: rem(19);
         font-size: 1rem;
         letter-spacing: 0.05rem;
 
@@ -438,7 +438,7 @@
 
         &.active {
           display: block;
-          padding: 0.5rem 1.5rem 1.5rem;
+          padding: rem(8) rem(20) rem(18);
           background: $aura-spc-checkout-block-bg;
 
           @include breakpoint($tablet) {
@@ -448,7 +448,7 @@
 
         .block-content {
           background: $aura-spc-checkout-block-bg-gradient;
-          padding: 1.25rem;
+          padding: rem(10) rem(20) rem(16);
           font-family: $aura-regular;
           line-height: 1.25rem;
           font-size: 0.875rem;
@@ -516,7 +516,7 @@
         height: 1rem;
         border-radius: 50%;
         padding: rem(3) rem(7);
-        margin-#{$right}: 0.25rem;
+        margin-#{$right}: rem(8);
         font-size: rem(12);
         display: inline-flex;
         align-items: center;
