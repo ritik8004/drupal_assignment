@@ -236,6 +236,7 @@ class AlshayaRcsCategoryDataMigration {
           'path' => '/taxonomy/term/' . $tid,
         ]);
         $path_alias_storage->delete($aliases);
+        // Save term so that path alias is generated and can be used below.
         $migrate_term->save();
         // Set commerce id if we are migrating product category.
         if ($vid == self::SOURCE_VOCABULARY_ID) {
@@ -325,6 +326,7 @@ class AlshayaRcsCategoryDataMigration {
       'path' => '/taxonomy/term/' . $tid,
     ]);
     $path_alias_storage->delete($aliases);
+    // Save term so that path alias is generated and can be used below.
     $migrate_parent_term->save();
 
     // Set Commerce id for Product Category.
