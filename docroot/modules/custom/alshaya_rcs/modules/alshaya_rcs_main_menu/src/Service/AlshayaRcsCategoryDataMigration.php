@@ -531,6 +531,7 @@ class AlshayaRcsCategoryDataMigration {
    *
    * @return array
    *   Mapping of category url with commerce id.
+   *   e.g ['shop-women' => 20, 'shop-men/jeans' => 129]
    */
   private static function getCommerceIdMapping() {
     $language_manager = \Drupal::service('language_manager');
@@ -549,7 +550,6 @@ class AlshayaRcsCategoryDataMigration {
    *
    * @return array
    *   Return commerce id url mapping.
-   *   e.g ['shop-women' => 20, 'shop-men/jeans' => 129]
    */
   private static function getCategoryIdsMapping(array $category) {
     $ids = [];
