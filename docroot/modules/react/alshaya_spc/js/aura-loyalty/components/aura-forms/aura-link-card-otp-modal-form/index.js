@@ -355,8 +355,8 @@ class AuraFormLinkCardOTPModal extends React.Component {
                 {isUserLoggedIn
                   ? getStringMessage('link_card_body_title_logged_in')
                   : [
-                    <span>{getStringMessage('link_card_body_title_guest')}</span>,
-                    <span>{getStringMessage('link_card_body_sub_title_guest')}</span>,
+                    <span key="title">{getStringMessage('link_card_body_title_guest')}</span>,
+                    <span key="sub_title">{getStringMessage('link_card_body_sub_title_guest')}</span>,
                   ]}
               </div>
             </ConditionalView>
