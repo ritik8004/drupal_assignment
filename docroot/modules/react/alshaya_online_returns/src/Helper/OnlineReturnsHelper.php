@@ -102,13 +102,19 @@ class OnlineReturnsHelper {
     );
     $paymentMethod = reset($paymentMethodDetails);
 
+    $return_eligible = $order['extension']['is_return_eligible'];
+    $order_type = $order['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
+    if ($order_type == 'ship_to_store') {
+      $return_eligible = FALSE;
+    }
+
     return [
       'orderId' => $order['increment_id'],
       'orderEntityId' => $order['entity_id'],
       'orderCustomerId' => $order['customer_id'],
-      'orderType' => $order['shipping']['extension_attributes']['click_and_collect_type'] ?? '',
+      'orderType' => $order_type,
       'paymentMethod' => $paymentMethod ? $paymentMethod['value'] : '',
-      'isReturnEligible' => $order['extension']['is_return_eligible'],
+      'isReturnEligible' => $return_eligible,
       'returnExpiration' => $order['extension']['return_expiration'] ?? '',
     ];
   }
