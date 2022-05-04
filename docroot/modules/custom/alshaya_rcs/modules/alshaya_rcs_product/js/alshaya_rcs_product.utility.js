@@ -1148,7 +1148,7 @@
       return staticDataStore.cartItemsStock[sku];
     }
     var isAuthUser = isUserAuthenticated();
-    var authenticationToken = isUserAuthenticated
+    var authenticationToken = isAuthUser
       ? 'Bearer ' + window.drupalSettings.userDetails.customerToken
       : null;
 
