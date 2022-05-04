@@ -549,8 +549,9 @@ class AlshayaRcsCategoryDataMigration {
    *
    * @return array
    *   Return commerce id url mapping.
+   *   e.g ['shop-women' => 20, 'shop-men/jeans' => 129]
    */
-  private static function getCategoryIdsMapping(array $category): array {
+  private static function getCategoryIdsMapping(array $category) {
     $ids = [];
     $url_path = '';
     // Get url path from custom attributes.
