@@ -17,7 +17,7 @@ use Drupal\block\BlockInterface;
 function alshaya_wishlist_update_8001() {
   // Add translations.
   module_load_include('inc', 'alshaya_wishlist', 'alshaya_wishlist.translations');
-  if ($translations = _alshaya_wishlist_translations()) {
+  if ($translations = _alshaya_wishlist_get_translations('v2')) {
     alshaya_i18n_save_translations($translations);
   }
 }
