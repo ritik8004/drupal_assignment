@@ -122,6 +122,14 @@
       }
     }
 
+    div.order-item-row {
+      > div:nth-child(2) {
+        @include breakpoint($only-tablet) {
+          overflow-wrap: break-word;
+        }
+      }
+    }
+
     .sub-total-row,
     .delivery-charge-row,
     .total-row,
@@ -227,7 +235,7 @@
     grid-template: "a b" auto/ rem(187) auto;
 
     @include breakpoint($tablet) {
-      grid-template: "a b c d" auto/ rem(135) auto rem(138) rem(140);
+      grid-template: "a b c d" auto/ rem(135) rem(123) rem(138) rem(140);
     }
 
     @include breakpoint($desktop) {

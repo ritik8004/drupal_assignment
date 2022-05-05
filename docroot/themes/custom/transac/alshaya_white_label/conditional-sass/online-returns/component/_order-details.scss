@@ -24,3 +24,141 @@
     }
   }
 }
+
+.order-detail {
+  .user__order--detail {
+    #online-returned-items {
+      display: block;
+    }
+
+    div.order-item-row {
+      .returned-items-wrapper {
+        padding: 0;
+
+        @include breakpoint($tablet) {
+          padding: 0 !important;
+        }
+      }
+    }
+
+    .returned-items {
+      margin: 0;
+
+      .title-wrapper,
+      .return-id,
+      .item-list-wrapper,
+      .order-item-image,
+      .image-data-wrapper,
+      .order__details--wrapper,
+      .order__details--description,
+      .item-price,
+      .item-total-price {
+        margin: 0;
+      }
+
+      .order-item-image,
+      .order__details--description,
+      .item-price,
+      .item-total-price {
+        padding: rem(22) rem(24);
+
+        @include breakpoint($only-tablet) {
+          padding: rem(22) rem(8) rem(55) rem(16) !important;
+        }
+      }
+
+      .title-wrapper {
+        font-size: rem(18);
+        line-height: rem(22);
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+        padding: rem(38) 0 rem(8);
+        background: $online-return-delivered-items-label-bg;
+        border-bottom: rem(1) solid $online-return-order-detail-border;
+
+        @include breakpoint($only-tablet) {
+          padding-top: rem(30);
+        }
+      }
+
+      .return-id {
+        font-size: rem(12);
+        line-height: rem(16);
+        color: $online-return-refund-grey-txt;
+        padding: rem(4) 0 rem(8);
+        border-bottom: rem(1) solid $online-return-order-detail-border;
+        background: $online-return-delivered-items-label-bg;
+      }
+
+      .item-list-wrapper {
+        display: grid;
+        grid-template: "a b" auto/rem(187) auto;
+
+        @include breakpoint($tablet) {
+          grid-template: "a b c d" auto/rem(135) rem(123) rem(138) rem(140);
+        }
+
+        @include breakpoint($desktop) {
+          grid-template: "a b c d" auto/rem(184) auto rem(169) rem(180);
+        }
+
+        .order-item-image {
+          @include breakpoint($only-mobile) {
+            padding: rem(22) rem(16);
+          }
+        }
+
+        .order__details--wrapper {
+          display: block;
+          grid-area: b;
+          overflow-wrap: break-word;
+
+          @include breakpoint($only-mobile) {
+            padding: rem(22) rem(16);
+          }
+
+          @include breakpoint($desktop) {
+            display: flex;
+          }
+        }
+
+        .order__details--description {
+          @include breakpoint($only-mobile) {
+            padding: 0;
+          }
+
+          @include breakpoint($only-tablet) {
+            padding-bottom: 0 !important;
+          }
+
+          @include breakpoint($desktop) {
+            flex-basis: rem(222);
+          }
+        }
+
+        .item-price {
+          @include breakpoint($only-tablet) {
+            padding-top: 0 !important;
+            margin-top: rem(45);
+          }
+
+          @include breakpoint($desktop) {
+            flex-basis: rem(166);
+            grid-area: c;
+          }
+        }
+
+        .item-total-price {
+          grid-area: c;
+          background: $order_detail_total_tr_row_price_td;
+
+          @include breakpoint($only-mobile) {
+            padding: 0;
+            margin-top: rem(29);
+            background: none;
+          }
+        }
+      }
+    }
+  }
+}

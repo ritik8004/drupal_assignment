@@ -45,6 +45,17 @@
         @include breakpoint($tablet) {
           flex-basis: 16.25rem;
         }
+
+        .order--items {
+          line-height: normal;
+
+          @include breakpoint($only-mobile) {
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: rem(152);
+            text-overflow: ellipsis;
+          }
+        }
       }
 
       .order-total-column {
