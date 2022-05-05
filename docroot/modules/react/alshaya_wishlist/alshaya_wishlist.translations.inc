@@ -110,5 +110,9 @@ function _alshaya_wishlist_translations() {
       'ar' => 'اذهب للتسوق',
       'context' => 'wishlist',
     ],
+    'Some product in your @wishlist_label doesn\'t exist anymore!' => [
+      'ar' => 'بعض المنتجات في قائمة @wishlist_label لم تعد متوفرة',
+      'context' => 'wishlist',
+    ],
   ];
 }
