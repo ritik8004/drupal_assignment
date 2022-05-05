@@ -1,8 +1,13 @@
-(function ($, Drupal) {
+/**
+ * Global variable which will contain acq_product related data/methods among
+ * other things.
+ */
+window.commerceBackend = window.commerceBackend || {};
 
+Drupal.alshayaSpc = Drupal.alshayaSpc || {};
+
+(function ($, Drupal) {
   var getProductDataRequests = {};
-  Drupal.alshayaSpc = Drupal.alshayaSpc || {};
-  window.commerceBackend = window.commerceBackend || {};
 
   Drupal.alshayaSpc.clearCartData = function () {
     window.commerceBackend.removeCartDataFromStorage();

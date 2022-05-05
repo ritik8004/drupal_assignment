@@ -1,9 +1,10 @@
+/**
+ * Global variable which will contain acq_product related data/methods among
+ * other things.
+ */
+window.commerceBackend = window.commerceBackend || {};
+
 (function ($){
-  /**
-   * Global variable which will contain acq_product related data/methods among
-   * other things.
-   */
-  window.commerceBackend = window.commerceBackend || {};
 
   /**
    * Get the labels data for the selected SKU.
