@@ -17,20 +17,18 @@ window.commerceBackend = window.commerceBackend || {};
    * @returns {object}
    *   The product info object.
    */
-  window.commerceBackend.getProductDataAddToBagListing = async function (sku, parentSKU) {
-    var sku = Drupal.hasValue(parentSKU) ? parentSKU : sku;
+  window.commerceBackend.getProductDataAddToBagListing = async function (productSKU, parentSKU) {
+    var sku = Drupal.hasValue(parentSKU) ? parentSKU : productSKU;
     var storageKey = getProductInfoStorageKey(sku);
 
     // Return null if the sku is undefined or null.
     if (typeof sku === 'undefined' || sku === null) {
       Drupal.removeItemFromLocalStorage(storageKey);
-      return new Promise((resolve) => {
-        resolve(null);
-      });
+      return null;
     }
 
     // Check and return if product info available in storage and not expired.
-    const productInfo = Drupal.getItemFromLocalStorage(storageKey);
+    let productInfo = Drupal.getItemFromLocalStorage(storageKey);
 
     // If data is not available in storage, we flag it to check/fetch from api.
     if (productInfo && !productInfo.title) {
@@ -38,9 +36,7 @@ window.commerceBackend = window.commerceBackend || {};
     }
     // Return product info from storage.
     if (productInfo !== null) {
-      return new Promise((resolve) => {
-        resolve(productInfo);
-      });
+      return productInfo;
     }
 
     // Prepare the product info api url.
