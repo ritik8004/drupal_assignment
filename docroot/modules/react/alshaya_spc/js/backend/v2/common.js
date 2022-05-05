@@ -358,10 +358,15 @@ const getProcessedCartData = async (cartData) => {
     data.minicart_total = cartData.totals.base_grand_total;
   }
 
-  // If Aura enabled, add aura related details.
-  // If Egift card is enabled get balance_payable.
-  if (isAuraEnabled() || isEgiftCardEnabled()) {
-    cartData.totals.total_segments.forEach((element) => {
+  // Total segments.
+  cartData.totals.total_segments.forEach((element) => {
+    // If subtotal order total available.
+    if (element.code === 'subtotal_with_discount_incl_tax') {
+      data.totals.subtotalWithDiscountInclTax = element.value;
+    }
+    // If Aura enabled, add aura related details.
+    // If Egift card is enabled get balance_payable.
+    if (isAuraEnabled() || isEgiftCardEnabled()) {
       if (element.code === 'balance_payable') {
         data.totals.balancePayable = element.value;
         // Adding an extra total balance payable attribute, so that we can use
@@ -373,8 +378,9 @@ const getProcessedCartData = async (cartData) => {
       if (element.code === 'aura_payment') {
         data.totals.paidWithAura = element.value;
       }
-    });
-  }
+    }
+  });
+
   if (isAuraEnabled()) {
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
   }
