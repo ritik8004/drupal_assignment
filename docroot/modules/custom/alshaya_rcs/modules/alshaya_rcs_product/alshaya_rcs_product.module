@@ -679,46 +679,66 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ],
   ];
 
-  // Query for fetching stock information for products in cart.
-  $query_fields['cart_items_stock'] = [
-    'query' => [
-      'query ($cartId: String!)' => [
-        'cart(cart_id: $cartId)' => [
-          'items' => [
-            'product' => [
-              'type_id',
-              '...on SimpleProduct' => [
-                // This stock data will be used for simple products.
-                'sku',
-                'stock_data' => [
-                  'qty',
-                  'max_sale_qty',
-                  'max_sale_qty_parent',
-                  'status',
-                ],
-              ],
-            ],
-            // Stock data from here will be used for configurable products.
-            '...on ConfigurableCartItem' => [
-              'configured_variant' => [
-                'sku',
-                'stock_data' => [
-                  'qty',
-                  'max_sale_qty',
-                  'max_sale_qty_parent',
-                  'status',
-                ],
-              ],
-            ],
+  $cart_query = [
+    'items' => [
+      'product' => [
+        'type_id',
+        '...on SimpleProduct' => [
+          // This stock data will be used for simple products.
+          'sku',
+          'stock_data' => [
+            'qty',
+            'max_sale_qty',
+            'max_sale_qty_parent',
+            'status',
+          ],
+        ],
+      ],
+      // Stock data from here will be used for configurable products.
+      '...on ConfigurableCartItem' => [
+        'configured_variant' => [
+          'sku',
+          'stock_data' => [
+            'qty',
+            'max_sale_qty',
+            'max_sale_qty_parent',
+            'status',
           ],
         ],
       ],
     ],
-    'variables' => [
-      'cartId' => NULL,
-    ],
   ];
 
+  /** @var \Drupal\Core\Session\AccountProxy $current_user */
+  $current_user = \Drupal::service('current_user');
+  if (alshaya_acm_customer_is_customer($current_user)) {
+    // Query for fetching stock information for products in cart for auth users.
+    $query_fields['cart_items_stock'] = [
+      'query' => [
+        'query' => [
+          'customerCart' => $cart_query,
+        ],
+      ],
+    ];
+  }
+  else {
+    // Query for fetching stock information for products in cart for anonymous
+    // users.
+    $query_fields['cart_items_stock'] = [
+      'query' => [
+        'query ($cartId: String!)' => [
+          'cart(cart_id: $cartId)' => $cart_query,
+        ],
+      ],
+      'variables' => [
+        'cartId' => NULL,
+      ],
+    ];
+  }
+
+  // We have two variations of the cart query, one for anonymous and one for
+  // authenticated users. So we vary by this context.
+  $query_fields['#cache']['contexts'][] = 'user.roles:anonymous';
   return $query_fields;
 }
 

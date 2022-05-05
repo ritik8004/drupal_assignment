@@ -14,6 +14,16 @@
   };
 
   /**
+   * Checks if current user is authenticated or not.
+   *
+   * @returns {bool}
+   *   True if user is authenticated, else false.
+   */
+  function isUserAuthenticated() {
+    return Boolean(window.drupalSettings.userDetails.customerId);
+  }
+
+  /**
    * Utility function to check if an item is an object or not.
    *
    * @param {mixed} item
@@ -1137,12 +1147,18 @@
     if (Drupal.hasValue(staticDataStore.cartItemsStock[sku])) {
       return staticDataStore.cartItemsStock[sku];
     }
-    return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }).then(function processStock(response) {
+    var isAuthUser = isUserAuthenticated();
+    var authenticationToken = isAuthUser
+      ? 'Bearer ' + window.drupalSettings.userDetails.customerToken
+      : null;
+
+    return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }, null, null, null, false, authenticationToken).then(function processStock(response) {
+      const cartKey = isAuthUser ? 'customerCart' : 'cart';
       // Do not proceed if for some reason there are no cart items.
-      if (!response.cart.items.length) {
+      if (!response[cartKey].items.length) {
         return;
       }
-      response.cart.items.forEach(function eachCartItem(cartItem) {
+      response[cartKey].items.forEach(function eachCartItem(cartItem) {
         if (!Drupal.hasValue(cartItem)) {
           return;
         }

@@ -169,7 +169,15 @@ exports.getEntity = async function getEntity(langcode) {
   return result;
 };
 
-exports.getData = async function getData(placeholder, params, entity, langcode, markup, loaderOnUpdates = false) {
+exports.getData = async function getData(
+  placeholder,
+  params,
+  entity,
+  langcode,
+  markup,
+  loaderOnUpdates = false,
+  authorizationToken = null
+) {
   const request = {
     uri: '/graphql',
     method: 'GET',
@@ -179,6 +187,10 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
     ],
     language: langcode,
   };
+
+  if (authorizationToken) {
+    request.headers.push(['Authorization', authorizationToken]);
+  }
 
   let response = null;
   let result = null;
