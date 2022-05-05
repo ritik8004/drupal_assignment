@@ -1,6 +1,6 @@
 .aura-pdp-points-section {
   padding: rem(8) rem(12) rem(14);
-  margin: rem(36) 0;
+  margin: rem(12) 0 rem(36);
   font-size: rem(14);
   background: $aura-pdp-points-bg;
   color: $aura-pdp-string;
@@ -10,6 +10,12 @@
   border-radius: rem(10);
   line-height: rem(16);
 
+  .new-pdp-magazine-layout &,
+  .magazine-layout &,
+  .magazine-layout-v2 & {
+    margin: rem(36) 0;
+  }
+
   .points-text {
     span {
       color: $aura-cart-points;
@@ -18,6 +24,16 @@
 
   .tooltip-anchor.question {
     max-height: rem(16);
+
+    .tooltip-box {
+      transform: translateX(-75%);
+
+      .new-pdp-magazine-layout &,
+      .magazine-layout &,
+      .magazine-layout-v2 & {
+        transform: translateX(-50%);
+      }
+    }
 
     &::before {
       width: rem(16);
