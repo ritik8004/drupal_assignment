@@ -11,8 +11,9 @@ const ReturnedItems = ({
     <div className="title-wrapper">
       <span>
         {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
-      </span>
-      <span>
+        {' '}
+        {'-'}
+        {' '}
         {subTitle}
       </span>
     </div>
