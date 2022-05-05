@@ -75,6 +75,10 @@ class ReturnItemsListing extends React.Component {
    */
   processSelectedItems = (checked, item) => {
     const { handleSelectedItems, itemsSelected } = this.props;
+    const itemDetails = item;
+
+    // Set checked status.
+    itemDetails.isChecked = checked;
 
     // Check if any promotion is applied to the item.
     if (hasValue(item.applied_rule_ids) && checked) {
@@ -84,21 +88,16 @@ class ReturnItemsListing extends React.Component {
         ruleId: item.applied_rule_ids,
       });
     } else if (checked) {
-      const itemDetails = item;
-
       // Add default quantity and resolution.
       itemDetails.qty_requested = 1;
       itemDetails.resolution = getDefaultResolutionId();
-
-      // Add is checked attribute.
-      itemDetails.isChecked = checked;
 
       this.setState({
         btnDisabled: true,
       });
       handleSelectedItems([...itemsSelected, itemDetails]);
     } else {
-      handleSelectedItems(itemsSelected.filter((product) => product.sku !== item.sku));
+      handleSelectedItems(itemsSelected.filter((product) => product.sku !== itemDetails.sku));
     }
   }
 
