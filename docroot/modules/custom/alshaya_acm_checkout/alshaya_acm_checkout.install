@@ -24,6 +24,10 @@ function alshaya_acm_checkout_update_8014() {
   // Apply pending taxonomy updates.
   $entity_type = $entity_type_manager->getDefinition('taxonomy_term');
   \Drupal::entityDefinitionUpdateManager()->installEntityType($entity_type);
+
+  // Apply pending user entity updates.
+  $entity_type = $entity_type_manager->getDefinition('user');
+  \Drupal::entityDefinitionUpdateManager()->installEntityType($entity_type);
 }
 
 /**
