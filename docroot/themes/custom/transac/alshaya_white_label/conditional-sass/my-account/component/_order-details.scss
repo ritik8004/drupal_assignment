@@ -201,6 +201,26 @@
         margin-top: 0;
       }
     }
+
+    .order-summary-row,
+    .order-details-row,
+    .order-item-row:not(.online-returns-eligibility-message):not(.delivered-items),
+    .sub-total-row,
+    .delivery-charge-row,
+    .surcharge-row,
+    .discount-row,
+    .total-row {
+      display: grid;
+      grid-template: "a b" auto/ rem(187) auto;
+
+      @include breakpoint($tablet) {
+        grid-template: "a b c d" auto/ rem(135) rem(123) rem(138) rem(140);
+      }
+
+      @include breakpoint($desktop) {
+        grid-template: "a b c d e" auto/ rem(184) auto rem(166) rem(169) rem(180);
+      }
+    }
   }
 
   .order-summary-row {
@@ -220,26 +240,6 @@
         flex-direction: column;
         justify-content: center;
       }
-    }
-  }
-
-  .order-summary-row,
-  .order-details-row,
-  .order-item-row:not(.online-returns-eligibility-message):not(.delivered-items),
-  .sub-total-row,
-  .delivery-charge-row,
-  .surcharge-row,
-  .discount-row,
-  .total-row {
-    display: grid;
-    grid-template: "a b" auto/ rem(187) auto;
-
-    @include breakpoint($tablet) {
-      grid-template: "a b c d" auto/ rem(135) rem(123) rem(138) rem(140);
-    }
-
-    @include breakpoint($desktop) {
-      grid-template: "a b c d e" auto/ rem(184) auto rem(166) rem(169) rem(180);
     }
   }
 
