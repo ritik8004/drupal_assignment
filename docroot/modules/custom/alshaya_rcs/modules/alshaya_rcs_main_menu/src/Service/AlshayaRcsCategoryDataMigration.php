@@ -238,9 +238,7 @@ class AlshayaRcsCategoryDataMigration {
         $path_alias_storage->delete($aliases);
         // Set commerce id if we are migrating product category.
         if ($vid == self::SOURCE_VOCABULARY_ID) {
-          $alias = $source_term->get('field_category_slug')->getString();
-          $commerce_id = $context['results']['commerce_ids'][$alias];
-          $migrate_term->set('field_commerce_id', $commerce_id);
+          self::updateCommerceId($source_term, $migrate_term, $context['results']['commerce_ids']);
         }
 
         $migrate_term->save();
@@ -326,9 +324,7 @@ class AlshayaRcsCategoryDataMigration {
 
     // Set Commerce id for Product Category.
     if ($vid == self::SOURCE_VOCABULARY_ID) {
-      $alias = $source_parent_term->get('field_category_slug')->getString();
-      $commerce_id = $results['commerce_ids'][$alias];
-      $migrate_parent_term->set('field_commerce_id', $commerce_id);
+      self::updateCommerceId($source_parent_term, $migrate_parent_term, $context['results']['commerce_ids']);
     }
     $migrate_parent_term->save();
     $term_count++;
@@ -566,6 +562,27 @@ class AlshayaRcsCategoryDataMigration {
       $ids = array_replace($ids, self::getCategoryIdsMapping($child));
     }
     return $ids;
+  }
+
+  /**
+   * Set commerce id for product category.
+   *
+   * @param \Drupal\taxonomy\TermInterface $source_term
+   *   The source term.
+   * @param \Drupal\taxonomy\TermInterface $migrate_term
+   *   New migrate term.
+   * @param array $commerce_ids
+   *   Mapping of category url with commerce id.
+   */
+  private static function updateCommerceId(TermInterface $source_term, TermInterface &$migrate_term, array $commerce_ids) {
+    $alias = $source_term->get('field_category_slug')->getString();
+    if ($alias) {
+      $commerce_id = $commerce_ids[$alias];
+      $migrate_term->set('field_commerce_id', $commerce_id);
+    }
+    else {
+      throw new \Exception('Commerce id not found for ' . $source_term->label());
+    }
   }
 
 }
