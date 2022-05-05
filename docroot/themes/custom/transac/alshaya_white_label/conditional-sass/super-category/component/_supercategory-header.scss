@@ -495,7 +495,9 @@ html[lang=ar] {
 
     header {
       .c-header__region {
-        padding-bottom: rem(43);
+        @include breakpoint($desktop) {
+          padding-bottom: rem(43);
+        }
       }
     }
   }
