@@ -1,12 +1,24 @@
-body.aura-enabled {
-  .c-menu-secondary {
-    nav li a,
-    a.stores-finder,
-    a.language-link,
-    a.join-aura,
-    ul.menu li,
-    ul.links li {
-      height: 1.5rem;
+body {
+  &.aura-enabled {
+    &.super-category-enabled {
+      .region__menu-secondary {
+        & > div,
+        & > nav {
+          height: auto;
+
+          .aura-rewards-wrapper {
+            font-size: unset;
+          }
+        }
+
+        #block-account-menu,
+        #block-alshayastoresfinder {
+          a {
+            align-items: center;
+            display: inline-flex;
+          }
+        }
+      }
     }
   }
 }
