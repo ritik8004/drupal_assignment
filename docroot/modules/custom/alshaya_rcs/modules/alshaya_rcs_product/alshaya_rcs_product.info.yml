@@ -9,3 +9,4 @@ dependencies:
   - alshaya_acm_product:alshaya_acm_product
   - alshaya_spc:alshaya_spc
   - alshaya_custom:alshaya_custom
+  - alshaya_acm_customer:alshaya_acm_customer
