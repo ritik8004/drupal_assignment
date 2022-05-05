@@ -4,6 +4,10 @@ services:
     arguments: ['@current_route_match']
     tags:
       - { name: event_subscriber }
+  alshaya_rcs_seo.route_subscriber:
+    class: Drupal\alshaya_rcs_seo\EventSubscriber\AlshayaRcsSeoRouteSubscriber
+    tags:
+      - { name: event_subscriber }
 
   alshaya_rcs_seo.gtm_manager:
     class: Drupal\alshaya_rcs_seo\Services\AlshayaRcsSeoGtmManager
