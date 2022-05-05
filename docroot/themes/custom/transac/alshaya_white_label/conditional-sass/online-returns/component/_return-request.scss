@@ -411,14 +411,14 @@
     .return-address-wrapper {
       .return-address-desc {
         grid-area: a;
-        margin-bottom: 1.5rem;
-        color: $online-return-refund-grey-txt;
-        font-size: 0.75rem;
-        padding-#{$right}: 6.25rem;
+        margin-bottom: rem(24);
+        color: $online-return-refund-blue-txt;
+        font-size: rem(12);
 
         @include breakpoint($tablet) {
-          margin-top: 1.5rem;
+          margin-top: rem(24);
           margin-bottom: 0;
+          padding-#{$right}: rem(100);
         }
       }
 
