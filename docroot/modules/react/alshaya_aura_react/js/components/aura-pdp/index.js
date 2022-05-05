@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import parse from 'html-react-parser';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
 import { getPriceToPoint } from '../../utilities/aura_utils';
 import { cartAvailableInStorage } from '../../../../alshaya_spc/js/utilities/get_cart';
@@ -41,6 +42,28 @@ class AuraPDP extends React.Component {
   };
 
   getInitialProductPoints = (mode) => {
+    const {
+      skuCode,
+      firstChild,
+      productInfo,
+    } = this.props;
+
+    // Check if skuCode, firstChild and productInfo props are provided and
+    // calculate initial product points from that.
+    if (typeof skuCode !== 'undefined'
+      && typeof firstChild !== 'undefined'
+      && typeof productInfo !== 'undefined') {
+      const priceKey = (mode === 'related') ? 'final_price' : 'finalPrice';
+      const price = productInfo[skuCode].variants
+        ? productInfo[skuCode].variants[firstChild][priceKey]
+        : productInfo[skuCode][priceKey];
+
+      // Return price as aura points.
+      return getPriceToPoint(price);
+    }
+
+    // If above details are not there in props, proceed with usual approach to
+    // get the data from price amount HTML text block.
     let selector = null;
 
     if (mode === 'main') {
@@ -140,11 +163,15 @@ class AuraPDP extends React.Component {
     const { productPoints } = this.state;
 
     if (productPoints !== 0) {
-      return [
-        <span>{`${Drupal.t('Earn')} `}</span>,
-        <b>{productPoints}</b>,
-        <span>{` ${Drupal.t('points with Aura')}`}</span>,
-      ];
+      return (
+        <div className="points-text">
+          {parse(Drupal.t(
+            'Earn <span><b>@pts</b> Aura points</span> with this purchase.',
+            { '@pts': productPoints },
+            { context: 'aura' },
+          ))}
+        </div>
+      );
     }
 
     return <span>{Drupal.t('Earn Aura points')}</span>;
@@ -167,9 +194,7 @@ class AuraPDP extends React.Component {
 
     return (
       <div className="aura-pdp-points-section">
-        <span className="points-text">
-          { this.getPointsText()}
-        </span>
+        { this.getPointsText()}
         <ToolTip enable question>{ this.getToolTipContent() }</ToolTip>
       </div>
     );

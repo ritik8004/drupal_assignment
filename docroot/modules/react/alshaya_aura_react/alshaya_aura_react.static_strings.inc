@@ -310,5 +310,9 @@ function _alshaya_aura_static_strings() {
       'key' => 'checkout_point_expiry_with_date',
       'value' => t('@pts points will expire by @date.', [], ['context' => 'aura']),
     ],
+    [
+      'key' => 'pdp_earn_aura_points',
+      'value' => t('Earn <span><b>@pts</b> Aura points</span> with this purchase.', [], ['context' => 'aura']),
+    ],
   ];
 }
