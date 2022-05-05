@@ -49,7 +49,10 @@ function handleSignUp(auraUserDetails) {
     );
   }
 
-  dispatchCustomEvent('loyaltyStatusUpdated', { stateValues: auraUserData });
+  dispatchCustomEvent('loyaltyStatusUpdated', {
+    showCongratulationsPopup: true,
+    stateValues: auraUserData,
+  });
 }
 
 function updateUsersLoyaltyStatus(cardNumber, link) {
@@ -200,7 +203,10 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
             firstName: firstName || '',
             lastName: lastName || '',
           };
-          dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
+          dispatchCustomEvent('loyaltyStatusUpdated', {
+            showCongratulationsPopup: true,
+            stateValues,
+          });
           removeFullScreenLoader();
           return;
         }
