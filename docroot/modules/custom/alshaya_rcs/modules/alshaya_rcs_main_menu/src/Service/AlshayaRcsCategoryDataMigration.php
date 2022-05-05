@@ -576,7 +576,8 @@ class AlshayaRcsCategoryDataMigration {
    */
   private static function updateCommerceId(TermInterface $source_term, TermInterface &$migrate_term, array $commerce_ids) {
     $alias = $source_term->get('field_category_slug')->getString();
-    if ($alias) {
+    // Get commerce id matching the category url slug.
+    if ($alias && $commerce_ids[$alias]) {
       $commerce_id = $commerce_ids[$alias];
       $migrate_term->set('field_commerce_id', $commerce_id);
     }
