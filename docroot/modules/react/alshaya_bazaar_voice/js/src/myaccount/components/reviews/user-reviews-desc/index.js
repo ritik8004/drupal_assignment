@@ -17,9 +17,7 @@ const UserReviewsDescription = ({
       <div className="review-title">{reviewsIndividualSummary.Title}</div>
       <div className="review-date">{reviewDate}</div>
       <div className="review-text">{reviewsIndividualSummary.ReviewText}</div>
-      <ConditionalView condition={hasValue(reviewsIndividualSummary.Photos)
-        && hasValue(reviewsIndividualSummary.Photos.Sizes)}
-      >
+      <ConditionalView condition={hasValue(reviewsIndividualSummary.Photos)}>
         <ReviewPhotos photoCollection={reviewsIndividualSummary.Photos} />
       </ConditionalView>
     </div>
