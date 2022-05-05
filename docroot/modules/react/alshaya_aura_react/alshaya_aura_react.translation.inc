@@ -408,8 +408,66 @@ function _alshaya_aura_react_translations() {
         'ar' => 'نقاط Aura مع هذا الشراء.',
         'context' => 'aura',
       ],
+      'with this purchase.' => [
+        'ar' => 'مع عملية الشراء هذه.',
+        'context' => 'aura',
+      ],
+      'or' => [
+        'ar' => 'أو',
+        'context' => 'aura',
+      ],
+      'Join Aura' => [
+        'ar' => 'انضم إلى أورا',
+        'context' => 'aura',
+      ],
+      'Link Aura' => [
+        'ar' => 'ربط الهالة',
+        'context' => 'aura',
+      ],
+      'to earn @pts points.' => [
+        'ar' => 'لكسب @pts نقطة.',
+        'context' => 'aura',
+      ],
+      'To redeem points download Aura app.' => [
+        'ar' => 'لاستبدال النقاط قم بتحميل أورا تطبيق.',
+        'context' => 'aura',
+      ],
+      'App Store' => [
+        'ar' => 'متجر التطبيقات',
+        'context' => 'aura',
+      ],
+      'Play Store.' => [
+        'ar' => 'متجر اللعب.',
+        'context' => 'aura',
+      ],
+      // We are using !pts as it does not encode the html into string while
+      // using this in Drupal t() function.
+      "Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app." => [
+        'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span>. لاستبدال النقاط قم بتحميل أورا تطبيق.",
+        'context' => 'aura',
+      ],
+      "Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase." => [
+        'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span> مع عملية الشراء هذه.",
+      ],
+      'Congrats!' => [
+        'ar' => 'تهاني!',
+        'context' => 'aura',
+      ],
+      'You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store' => [
+        'ar' => 'أنت الآن جزء من نادي Aura الحصري. اكسب نقاطًا أثناء التسوق ، سواء كان ذلك عبر الإنترنت أو في المتجر',
+        'context' => 'aura',
+      ],
+      'To spend your points online, please download Aura app available both on App Store and Play Store.' => [
+        'ar' => 'لإنفاق نقاطك عبر الإنترنت ، يرجى تنزيل تطبيق Aura المتاح في كل من App Store و Play Store.',
+        'context' => 'aura',
+      ],
+      "By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>" => [
+        'ar' => "بالضغط على إرسال ، فإنك توافق على قراءة <a href='!tncLink' target='_blank'> البنود والشروط </a> والموافقة عليها",
+        'context' => 'aura',
+      ],
       'Already a member?' => [
         'ar' => 'عضوا فعلا؟',
+        'context' => 'aura',
       ],
       // To do- translation should be checked once we get it from alshaya.
       'You will earn @pts @aura_icon points with this purchase.' => [
@@ -442,6 +500,54 @@ function _alshaya_aura_react_translations() {
       ],
       'Earn <span><b>@pts</b> Aura points</span> with this purchase.' => [
         'ar' => 'يكسب <span><b>@pts</b> هالة نقاط</span> مع هذا الشراء.',
+        'context' => 'aura',
+      ],
+      'Experience Aura' => [
+        'ar' => 'جرّب أورا',
+        'context' => 'aura',
+      ],
+      'Link your card through' => [
+        'ar' => 'ربط بطاقتك من خلال',
+        'context' => 'aura',
+      ],
+      'Are you a member already?' => [
+        'ar' => 'هل انت عضو بالفعل؟',
+        'context' => 'aura',
+      ],
+      'Enter your details to earn points for this order.' => [
+        'ar' => 'أدخل التفاصيل الخاصة بك لكسب النقاط لهذا الطلب.',
+        'context' => 'aura',
+      ],
+      'Link your card' => [
+        'ar' => 'اربط بطاقتك',
+        'context' => 'aura',
+      ],
+      'Send OTP' => [
+        'ar' => 'أرسل OTP',
+        'context' => 'aura',
+      ],
+      'Apply' => [
+        'ar' => 'التقديم',
+        'context' => 'aura',
+      ],
+      'Link Now' => [
+        'ar' => 'الربط الآن',
+        'context' => 'aura',
+      ],
+      'Didn’t recieve the One Time Pin?' => [
+        'ar' => 'ألم تستلم دبوس الوقت الواحد؟',
+        'context' => 'aura',
+      ],
+      'Aura account number' => [
+        'ar' => 'رقم حساب أورا',
+        'context' => 'aura',
+      ],
+      'OTP has been sent to your phone number' => [
+        'ar' => 'تم إرسال OTP إلى رقم هاتفك',
+        'context' => 'aura',
+      ],
+      'One Time Pin' => [
+        'ar' => 'رمز الاستخدام لمرة واحدة',
         'context' => 'aura',
       ],
     ],

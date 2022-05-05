@@ -313,6 +313,100 @@ function _alshaya_aura_static_strings() {
     [
       'key' => 'pdp_earn_aura_points',
       'value' => t('Earn <span><b>@pts</b> Aura points</span> with this purchase.', [], ['context' => 'aura']),
+      'key' => 'cart_earn_with_this_purchase',
+      'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase.", [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_or',
+      'value' => t('or', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_join_aura',
+      'value' => t('Join Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_aura',
+      'value' => t('Link Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_sign_in',
+      'value' => t('Sign in'),
+    ],
+    [
+      'key' => 'cart_to_earn_with_points',
+      'value' => t('to earn @pts points.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'cart_redeem_points_msg',
+      'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app.", [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'app_store_link_text',
+      'value' => t('App Store', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'play_store_link_text',
+      'value' => t('Play Store.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'join_aura_congratulations_header',
+      'value' => t('Congrats!', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'join_aura_congratulations_text',
+      'value' => t('You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'join_aura_congratulations_download_text',
+      'value' => t('To spend your points online, please download Aura app available both on App Store and Play Store.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'tnc_description_text',
+      'value' => t("By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>", [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_header_guest',
+      'value' => t('Experience Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_header_logged_in',
+      'value' => t('Link Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_title_logged_in',
+      'value' => t('Link your card through', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_title_guest',
+      'value' => t('Are you a member already?', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_sub_title_guest',
+      'value' => t('Enter your details to earn points for this order.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_your_card',
+      'value' => t('Link your card', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_send_otp',
+      'value' => t('Send OTP', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_now',
+      'value' => t('Link Now', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'didnt_recieve_the_otp_message',
+      'value' => t('Didn’t recieve the One Time Pin?', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_account_number_label',
+      'value' => t('Aura account number', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_otp_label',
+      'value' => t('One Time Pin', [], ['context' => 'aura']),
     ],
   ];
 }
