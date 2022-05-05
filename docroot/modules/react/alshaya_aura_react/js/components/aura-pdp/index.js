@@ -164,13 +164,13 @@ class AuraPDP extends React.Component {
 
     if (productPoints !== 0) {
       return (
-        <span>
+        <div className="points-text">
           {parse(Drupal.t(
-            'Earn <b>@pts Aura points</b> with this purchase.',
+            'Earn <span><b>@pts</b> Aura points</span> with this purchase.',
             { '@pts': productPoints },
             { context: 'aura' },
           ))}
-        </span>
+        </div>
       );
     }
 
@@ -194,9 +194,7 @@ class AuraPDP extends React.Component {
 
     return (
       <div className="aura-pdp-points-section">
-        <span className="points-text">
-          { this.getPointsText()}
-        </span>
+        { this.getPointsText()}
         <ToolTip enable question>{ this.getToolTipContent() }</ToolTip>
       </div>
     );

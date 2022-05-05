@@ -241,6 +241,8 @@ $aura-gradient-23: linear-gradient(116deg, rgba(227, 28, 121, 0.14), rgba(119, 3
 $aura-gradient-23-ar: linear-gradient(-116deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
 $aura-gradient-24: linear-gradient(99deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
 $aura-gradient-24-ar: linear-gradient(-99deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-25: linear-gradient(97deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
+$aura-gradient-25-ar: linear-gradient(-97deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
 $aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
 $aura-hello-tier: linear-gradient(140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
 $aura-hello-tier-ar: linear-gradient(-140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
@@ -1854,7 +1856,9 @@ $aura-header-card-wrapper-ar: $aura-gradient-18-ar;
 $aura-header-card-body: $dark-night-owl;
 
 // Aura PDP.
-$aura-pdp-string: $aura-purpleTwo;
+$aura-pdp-string: $mothercare-black;
+$aura-pdp-points-bg : $aura-gradient-25;
+$aura-pdp-points-bg-ar: $aura-gradient-25-ar;
 
 // Aura Progress.
 $aura-progress: $_screeching_white;

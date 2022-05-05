@@ -312,7 +312,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'pdp_earn_aura_points',
-      'value' => t('Earn <b>@pts Aura points</b> with this purchase.', [], ['context' => 'aura']),
+      'value' => t('Earn <span><b>@pts</b> Aura points</span> with this purchase.', [], ['context' => 'aura']),
     ],
   ];
 }
