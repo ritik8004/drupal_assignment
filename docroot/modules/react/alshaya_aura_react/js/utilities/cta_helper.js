@@ -117,6 +117,7 @@ function handleNotYou(cardNumber) {
  */
 function handleLinkYourCard(cardNumber) {
   let stateValues = {};
+  let showCongratulations = true;
   removeInlineError('.error-placeholder');
   addInlineLoader('.link-card-wrapper');
   const apiData = updateUsersLoyaltyStatus(cardNumber, 'Y');
@@ -152,9 +153,17 @@ function handleLinkYourCard(cardNumber) {
         stateValues = {
           linkCardFailed: true,
         };
+        // Set showCongratulations to false.
+        // We don't want to show congratulations popup in case if linking is failed.
+        showCongratulations = false;
         showInlineError('.error-placeholder', Drupal.t('Unexpected error occured.'));
       }
-      dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
+
+      // Dispatch loyaltyStatusUpdated as loyalty status is updated.
+      dispatchCustomEvent('loyaltyStatusUpdated', {
+        showCongratulationsPopup: showCongratulations,
+        stateValues,
+      });
       removeInlineLoader('.link-card-wrapper');
     });
   }

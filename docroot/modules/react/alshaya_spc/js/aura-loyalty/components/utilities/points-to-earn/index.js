@@ -119,34 +119,6 @@ const PointsToEarnMessage = (props) => {
     );
   }
 
-  // Registered User & UnLinked card.
-  if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
-    return (
-      <>
-        <div className="spc-aura-cart-icon">
-          <AuraHeaderIcon />
-        </div>
-        <div className="spc-aura-cart-content">
-          <div className="spc-aura-points-to-earn">
-            <span className="spc-link-aura-link-wrapper submit">
-              <a
-                className="spc-link-aura-link"
-                /** @todo: We need to change this to open the link aura form. */
-              >
-                {getStringMessage('aura_link_aura')}
-              </a>
-            </span>
-            {getStringMessage(
-              'cart_to_earn_with_points',
-              { '@pts': pointsToEarn },
-            )}
-            <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
-          </div>
-        </div>
-      </>
-    );
-  }
-
   return (
     <span className="spc-aura-points-to-earn" />
   );
