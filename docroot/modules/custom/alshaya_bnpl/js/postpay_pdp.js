@@ -57,7 +57,7 @@
     }
     // @todo Check this works for all kinds of products:
     // simple, simple grouped, configurable, configurable grouped and matchback.
-    var variantPrice = (productData.type != 'simple') ?
+    var variantPrice = (productData.type != 'simple' && variant) ?
       productData['variants'][variant]['gtm_price'] :
       productData.gtm_attributes.price;
 

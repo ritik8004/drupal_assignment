@@ -37,7 +37,7 @@
         }
       }
     }
-    var variantPrice = (productData['type'] !== 'simple') ?
+    var variantPrice = (productData['type'] !== 'simple' && variant) ?
       productData['variants'][variant]['gtm_price'] :
       productData['gtm_attributes']['price'];
 
