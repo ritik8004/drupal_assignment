@@ -85,6 +85,7 @@
       .item-list-wrapper {
         display: grid;
         grid-template: "a b" auto/rem(187) auto;
+        border-bottom: rem(1) solid $primary_border;
 
         @include breakpoint($tablet) {
           grid-template: "a b c d" auto/rem(135) rem(162) rem(138) rem(140);
@@ -150,6 +151,10 @@
             background: none;
           }
         }
+      }
+
+      .return-items-wrapper {
+        margin-bottom: 0;
       }
     }
   }
