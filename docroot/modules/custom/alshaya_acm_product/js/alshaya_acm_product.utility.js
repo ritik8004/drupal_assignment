@@ -1,5 +1,10 @@
+/**
+ * Global variable which will contain acq_product related data/methods among
+ * other things.
+ */
+window.commerceBackend = window.commerceBackend || {};
+
 (function (Drupal, $) {
-  window.commerceBackend = window.commerceBackend || {};
 
   /**
    * Fetch the product data from backend.
