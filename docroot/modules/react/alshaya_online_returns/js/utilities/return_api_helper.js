@@ -199,10 +199,82 @@ async function validateReturnRequest(orderDetails) {
   return true;
 }
 
+/**
+ * Utility function to prepare request data for cancel return api.
+ */
+function prepareCancelRequestData(returnInfo) {
+  // Process request data in required format.
+  const items = [];
+  const status = 'closed';
+
+  returnInfo.items.forEach((item) => {
+    items.push(
+      {
+        entity_id: item.entity_id,
+        rma_entity_id: item.rma_entity_id,
+        status: item.status,
+        order_item_id: item.order_item_id,
+      },
+    );
+  });
+
+  // Get user details from session.
+  const { customerId } = drupalSettings.userDetails;
+
+  // Check if we have user in session.
+  if (!hasValue(customerId)) {
+    logger.error('Error while trying to cancel a return request. No user available in session. Customer id: @customer_id.', {
+      '@customer_id': customerId,
+    });
+    return getErrorResponse('No user available in session', 403);
+  }
+
+  const requestData = {
+    rmaDataObject: {
+      customer_id: customerId,
+      increment_id: returnInfo.increment_id,
+      entity_id: returnInfo.entity_id,
+      order_id: returnInfo.order_id,
+      status,
+      items,
+    },
+  };
+  return requestData;
+}
+
+/**
+ * Utility function to call api for cancel return request.
+ */
+const cancelReturnRequest = async (returnInfo) => {
+  if (!hasValue(returnInfo)) {
+    logger.error('Error while trying to prepare data for cancel return request. Data: @request_data', {
+      '@request_data': JSON.stringify(returnInfo),
+    });
+    return getErrorResponse('Request data is required.', 404);
+  }
+  const data = prepareCancelRequestData(returnInfo);
+
+  const endpoint = `/V1/rma/returns/${returnInfo.entity_id}`;
+
+  return callMagentoApi(endpoint, 'PUT', data).then((response) => {
+    if (hasValue(response.data.error)) {
+      logger.notice('Error while trying to cancel a return request. Request Data: @data. Message: @message', {
+        '@data': JSON.stringify(data),
+        '@message': response.data.error_message,
+      });
+      return response.data;
+    }
+
+    return response;
+  });
+};
+
 export {
   createReturnRequest,
   prepareReturnRequestData,
   getReturnInfo,
   getReturnsByOrderId,
   validateReturnRequest,
+  prepareCancelRequestData,
+  cancelReturnRequest,
 };
