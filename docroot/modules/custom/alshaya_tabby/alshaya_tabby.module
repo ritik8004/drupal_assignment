@@ -32,13 +32,3 @@ function alshaya_tabby_alshaya_spc_cart_build_alter(array &$build) {
   $alshayaTabbyHelper = \Drupal::service('alshaya_tabby.widget_helper');
   $alshayaTabbyHelper->getTabbyPaymentBuild($build, 'cart');
 }
-
-/**
- * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
- */
-function alshaya_tabby_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
-  if (!empty($order['payment']) && $order['payment']['method'] === 'tabby') {
-    // Attach library to show logo on confirmation page.
-    $build['#attached']['library'][] = 'alshaya_tabby/tabby_integration';
-  }
-}
