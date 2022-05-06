@@ -90,6 +90,11 @@ const babelOptions = {
   ],
 };
 
+// Uglify JS settings.
+const uglifyOptions = {
+  webkit: true
+};
+
 // Final build path settings.
 const _buildBase = "./build";
 const buildPath = {
@@ -105,4 +110,5 @@ module.exports = {
   babelBuildPaths,
   babelOptions,
   buildPath,
+  uglifyOptions,
 };
