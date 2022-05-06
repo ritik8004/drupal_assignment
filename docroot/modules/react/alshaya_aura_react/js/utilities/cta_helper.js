@@ -165,6 +165,7 @@ function handleLinkYourCard(cardNumber) {
         stateValues,
       });
       removeInlineLoader('.link-card-wrapper');
+      removeFullScreenLoader();
     });
   }
 }
