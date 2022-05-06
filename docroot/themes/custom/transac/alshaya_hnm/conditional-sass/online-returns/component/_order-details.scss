@@ -17,6 +17,10 @@
       .title-wrapper {
         font-family: $hnm-demibold;
       }
+
+      .item-list-wrapper {
+        border-bottom: rem(1) solid $white;
+      }
     }
   }
 }
