@@ -588,9 +588,6 @@ class AlshayaRcsCategoryDataMigration {
    */
   private static function updateCommerceId(TermInterface $source_term, TermInterface &$migrate_term, $commerce_ids) {
     $alias = $source_term->get('field_category_slug')->getString();
-    if ($source_term->label() == 'Ladies') {
-      throw new \Exception('Commerce id not found for ' . $source_term->label());
-    }
     // Get commerce id matching the category url slug.
     if ($alias && $commerce_ids[$alias]) {
       $commerce_id = $commerce_ids[$alias];
