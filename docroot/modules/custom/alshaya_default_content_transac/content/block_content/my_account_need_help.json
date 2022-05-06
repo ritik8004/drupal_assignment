@@ -69,6 +69,16 @@
       "lang": "ar"
     }
   ],
+  "machine_name": [
+    {
+      "value": "myaccountneedhelp",
+      "lang": "en"
+    },
+    {
+      "value": "myaccountneedhelp",
+      "lang": "ar"
+    }
+  ],
   "changed": [
     {
       "value": "2017-04-10T05:38:49+00:00",
