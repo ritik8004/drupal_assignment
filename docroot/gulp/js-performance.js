@@ -7,7 +7,7 @@
 
 const jsPerformanceTask = (filterPath, isDev, libraries, config, streams) => {
   const { src, ignore, gulpIf, iife, uglify, dest, sourcemaps } = libraries;
-  const { blackList, babelBuildPaths, buildPath, iifeFiles } = config;
+  const { blackList, babelBuildPaths, buildPath, iifeFiles, uglifyOptions } = config;
   const { babelBuild, iifeBuild } = streams;
 
   let task = src(filterPath, { base: ".", allowEmpty: true }).pipe(
@@ -22,7 +22,7 @@ const jsPerformanceTask = (filterPath, isDev, libraries, config, streams) => {
     .pipe(gulpIf(babelBuildPaths, babelBuild()))
     .pipe(gulpIf(iifeFiles, iife())) // if 'config.excludeStrict' is empty.
     // .pipe(gulpIf(iifeFiles, iifeBuild())) // if 'config.excludeStrict' is not empty.
-    .pipe(uglify());
+    .pipe(uglify(uglifyOptions));
 
   if (isDev) {
     task = task.pipe(sourcemaps.write());
