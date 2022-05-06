@@ -7,7 +7,7 @@
 
 module.exports = function (libraries, config, streams) {
   const { argv, src, ignore, gulpIf, iife, uglify, dest } = libraries;
-  const { blackList, babelBuildPaths, iifeFiles, buildPath } = config;
+  const { blackList, babelBuildPaths, iifeFiles, buildPath, uglifyOptions } = config;
   const { babelBuild, iifeBuild } = streams;
 
   // JS Performance task.
@@ -33,7 +33,7 @@ module.exports = function (libraries, config, streams) {
         .pipe(gulpIf(babelBuildPaths, babelBuild()))
         .pipe(gulpIf(iifeFiles, iife())) // if 'config.excludeStrict' is empty.
         // .pipe(gulpIf(iifeFiles, iifeBuild())) // if 'config.excludeStrict' is not empty.
-        .pipe(uglify())
+        .pipe(uglify(uglifyOptions))
         .pipe(dest(buildPath.base))
     );
   };
