@@ -69,6 +69,16 @@
       "lang": "ar"
     }
   ],
+  "machine_name": [
+    {
+      "value": "onlyexclusive",
+      "lang": "en"
+    },
+    {
+      "value": "onlyexclusive",
+      "lang": "ar"
+    }
+  ],
   "changed": [
     {
       "value": "2017-03-27T19:00:18+00:00",

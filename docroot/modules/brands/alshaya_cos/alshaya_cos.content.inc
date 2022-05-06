@@ -28,6 +28,7 @@ function alshaya_cos_create_copyright_block() {
     'type' => 'basic',
     'langcode' => 'en',
     'id' => 'copyright',
+    'machine_name' => 'copyright',
   ]);
   $block_content->save();
 
