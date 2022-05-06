@@ -19,6 +19,8 @@
   }
 
   .user__order--detail {
+    border-top: none;
+
     .total-row .dark .price {
       color: $black;
       font-family: $hnm-demibold;

@@ -13,10 +13,6 @@
         text-transform: uppercase;
         font-family: $alshaya-bold;
 
-        @include breakpoint($tablet) {
-          padding-top: rem(30) !important;
-        }
-
         div {
           margin-bottom: 0;
         }
@@ -75,10 +71,6 @@
         padding: rem(38) 0 rem(8);
         background: $online-return-delivered-items-label-bg;
         border-bottom: rem(1) solid $online-return-order-detail-border;
-
-        @include breakpoint($only-tablet) {
-          padding-top: rem(30);
-        }
       }
 
       .return-id {
@@ -95,7 +87,7 @@
         grid-template: "a b" auto/rem(187) auto;
 
         @include breakpoint($tablet) {
-          grid-template: "a b c d" auto/rem(135) rem(123) rem(138) rem(140);
+          grid-template: "a b c d" auto/rem(135) rem(162) rem(138) rem(140);
         }
 
         @include breakpoint($desktop) {

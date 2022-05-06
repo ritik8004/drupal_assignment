@@ -107,6 +107,8 @@
   }
 
   .user__order--detail {
+    border-top: none;
+
     div.order-item-row,
     div.order-details-row,
     div.order-summary-row {
@@ -200,6 +202,10 @@
       > .mobile-only {
         margin-top: 0;
       }
+
+      > div.blend {
+        background: $order_detail_order_summary_row_td_blend;
+      }
     }
 
     .order-summary-row,
@@ -214,7 +220,7 @@
       grid-template: "a b" auto/ rem(187) auto;
 
       @include breakpoint($tablet) {
-        grid-template: "a b c d" auto/ rem(135) rem(123) rem(138) rem(140);
+        grid-template: "a b c d" auto/ rem(135) rem(162) rem(138) rem(140);
       }
 
       @include breakpoint($desktop) {
