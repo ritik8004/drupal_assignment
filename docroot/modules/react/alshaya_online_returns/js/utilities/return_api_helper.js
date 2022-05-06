@@ -200,15 +200,9 @@ async function validateReturnRequest(orderDetails) {
 }
 
 /**
- * Utility function to preapre request data for cancel api.
+ * Utility function to prepare request data for cancel return api.
  */
 function prepareCancelRequestData(returnInfo) {
-  if (!hasValue(returnInfo)) {
-    logger.error('Error while trying to prepare data for cancel return request. Data: @request_data', {
-      '@request_data': JSON.stringify(returnInfo),
-    });
-    return getErrorResponse('Request data is required.', 404);
-  }
   // Process request data in required format.
   const items = [];
   const status = 'closed';
@@ -223,8 +217,21 @@ function prepareCancelRequestData(returnInfo) {
       },
     );
   });
+
+  // Get user details from session.
+  const { customerId } = drupalSettings.userDetails;
+
+  // Check if we have user in session.
+  if (!hasValue(customerId)) {
+    logger.error('Error while trying to cancel a return request. No user available in session. Customer id: @customer_id.', {
+      '@customer_id': customerId,
+    });
+    return getErrorResponse('No user available in session', 403);
+  }
+
   const requestData = {
     rmaDataObject: {
+      customer_id: customerId,
       increment_id: returnInfo.increment_id,
       entity_id: returnInfo.entity_id,
       order_id: returnInfo.order_id,
@@ -239,29 +246,13 @@ function prepareCancelRequestData(returnInfo) {
  * Utility function to call api for cancel return request.
  */
 const cancelReturnRequest = async (returnInfo) => {
+  if (!hasValue(returnInfo)) {
+    logger.error('Error while trying to prepare data for cancel return request. Data: @request_data', {
+      '@request_data': JSON.stringify(returnInfo),
+    });
+    return getErrorResponse('Request data is required.', 404);
+  }
   const data = prepareCancelRequestData(returnInfo);
-
-  if (hasValue(data.error)) {
-    logger.error('Error while trying to prepare data for cancel return request. Data: @data.', {
-      '@data': JSON.stringify(data),
-    });
-    return { data };
-  }
-
-  // Get user details from session.
-  const { customerId } = drupalSettings.userDetails;
-  const { uid } = drupalSettings.user;
-
-  // Check if we have user in session.
-  if (!hasValue(customerId) || uid === 0) {
-    logger.error('Error while trying to cancel a return request. No user available in session. User id: @user_id. Customer id: @customer_id.', {
-      '@user_id': uid,
-      '@customer_id': customerId,
-    });
-    return getErrorResponse('No user available in session', 403);
-  }
-
-  data.rmaDataObject.customer_id = customerId;
 
   const endpoint = `/V1/rma/returns/${returnInfo.entity_id}`;
 
