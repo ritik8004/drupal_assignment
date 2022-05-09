@@ -18,8 +18,19 @@ class SignUpCompleteHeader extends React.Component {
       chosenUserMobile: null,
       openNewUserModal: false,
       openLinkCardModal: false,
+      // For the accordion in mobile, default state should be closed. In desktop
+      // we don't have an accordion.
+      active: false,
     };
   }
+
+  /**
+   * Toggle the status of accordion in mobile.
+   */
+  handleAccordionStatus = () => {
+    const { active } = this.state;
+    this.setState({ active: !active });
+  };
 
   /**
    * Set Country code to pass it to new user modal.
@@ -61,6 +72,7 @@ class SignUpCompleteHeader extends React.Component {
       openNewUserModal,
       chosenUserMobile,
       openLinkCardModal,
+      active,
     } = this.state;
 
     const {
@@ -71,17 +83,21 @@ class SignUpCompleteHeader extends React.Component {
     } = this.props;
 
     const { baseUrl, pathPrefix } = drupalSettings.path;
+    const activeClass = active ? 'active' : '';
 
     return (
       <>
         {isHeaderModalOpen
           && (
             <div className="aura-header-popup-wrapper sign-up-complete">
-              <div className="aura-popup-header card-wrapper">
+              <ConditionalView condition={window.innerWidth < 1024}>
+                <div className={`accordion-header ${activeClass}`} onClick={() => this.handleAccordionStatus()}>
+                  <AuraLogo stacked="horizontal" />
+                  <span className="accordion-icon" />
+                </div>
+              </ConditionalView>
+              <div className={`aura-popup-header card-wrapper ${activeClass}`}>
                 <div className="heading-section">
-                  <ConditionalView condition={window.innerWidth < 1024}>
-                    <AuraLogo stacked="horizontal" />
-                  </ConditionalView>
                   <a className="close-icon" onClick={() => openHeaderModal()}>X</a>
                 </div>
                 <div className="content-section">
