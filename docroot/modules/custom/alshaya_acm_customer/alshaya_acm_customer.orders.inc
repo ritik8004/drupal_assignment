@@ -365,10 +365,11 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   // Store payment details.
   $payment_method = $order['payment']['method'];
   $orderDetails['paymentDetails'][$payment_method] = [
-    'card_type' => $orderDetails['payment_method'],
+    'card_type' => t('@card_type Card', ['@card_type' => $orderDetails['payment_method']], ['context' => 'online_returns']),
     'card_number' => '',
     'payment_type' => $payment_method,
   ];
+
   switch ($payment_method) {
     case 'knet':
       $orderDetails['payment']['transactionId'] = $payment_info['transaction_id'];
@@ -416,12 +417,11 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       // Preparing card details for checkout_com_upapi method.
       // @todo To prepare data for all payment methods.
       // Refer DIG-3519 for more info.
-      $payment_data = [
-        'card_type' => $payment_info['card_type'],
-        'card_number' => $payment_info['last4'],
-        'payment_type' => $payment_info['scheme'],
-      ];
-      $orderDetails['paymentDetails']['checkout_com_upapi'] = $payment_data;
+      // Override payment details.
+      $card_type = t('@card_type Card', ['@card_type' => $payment_info['card_type']], ['context' => 'online_returns']);
+      $orderDetails['paymentDetails'][$payment_method]['card_type'] = $card_type;
+      $orderDetails['paymentDetails'][$payment_method]['card_number'] = $payment_info['last4'] ?: '';
+      $orderDetails['paymentDetails'][$payment_method]['payment_type'] = $payment_info['scheme'] ?: '';
       break;
   }
 
