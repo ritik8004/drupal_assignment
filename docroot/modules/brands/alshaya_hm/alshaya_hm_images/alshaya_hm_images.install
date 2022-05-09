@@ -208,10 +208,3 @@ function alshaya_hm_images_update_8001() {
     ->set('weights.cart.STILL_LIFE_FRONT_URL', 5)
     ->save();
 }
-
-/**
- * Install hook.
- */
-function alshaya_hm_images_install() {
-  \Drupal::service('module_installer')->install('alshaya_media_assets');
-}
