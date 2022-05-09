@@ -1,6 +1,5 @@
 import React from 'react';
 import CardTypeSVG from '../../../../../alshaya_spc/js/svg-component/card-type-svg';
-import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const ReturnRefundMethod = ({
@@ -26,21 +25,17 @@ const ReturnRefundMethod = ({
                   <CardTypeSVG type={paymentDetails[method].payment_type.toLowerCase()} class={`${paymentDetails[method].payment_type.toLowerCase()} is-active`} />
                 </div>
                 <div className="card-detail">
-                  <ConditionalView condition={hasValue(paymentDetails[method].card_type)}>
-                    <span className="payment-type bold-text">
-                      { Drupal.t('@card_type', { '@card_type': paymentDetails[method].card_type }, {}, { context: 'online_returns' }) }
-                    </span>
-                  </ConditionalView>
-                  <ConditionalView condition={hasValue(paymentDetails[method].card_number)}>
-                    <span>
-                      {' '}
-                      { Drupal.t('Card ending in', {}, { context: 'online_returns' }) }
-                      {' '}
-                    </span>
-                    <span className="payment-info bold-text">
-                      { Drupal.t('@card_number', { '@card_number': paymentDetails[method].card_number }, {}, { context: 'online_returns' }) }
-                    </span>
-                  </ConditionalView>
+                  <span className="payment-type bold-text">
+                    { Drupal.t('@card_type Card', { '@card_type': paymentDetails[method].card_type }, {}, { context: 'online_returns' }) }
+                  </span>
+                  <span>
+                    {' '}
+                    { Drupal.t('ending in', {}, { context: 'online_returns' }) }
+                    {' '}
+                  </span>
+                  <span className="payment-info bold-text">
+                    { Drupal.t('@card_number', { '@card_number': paymentDetails[method].card_number }, {}, { context: 'online_returns' }) }
+                  </span>
                 </div>
               </div>
             ))}
