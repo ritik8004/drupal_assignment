@@ -3,3 +3,5 @@ type: module
 core: 8.x
 core_version_requirement: ^8 || ^9
 description: 'Assets data processing code for brands like HM and COS.'
+dependencies:
+  - alshaya_acm_product:alshaya_acm_product
