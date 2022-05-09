@@ -2,8 +2,13 @@
 
 namespace Drupal\alshaya_egift_card\Helper;
 
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\node\NodeInterface;
 use Drupal\token\TokenInterface;
 
 /**
@@ -29,6 +34,18 @@ class EgiftCardHelper {
   protected $token;
 
   /**
+   * Entity Query.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cacheBackend;
+
+  /**
    * EgiftCardHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -38,10 +55,14 @@ class EgiftCardHelper {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    TokenInterface $token
+    TokenInterface $token,
+    EntityTypeManagerInterface $entity_type_manager,
+    CacheBackendInterface $cache_backend
   ) {
     $this->configFactory = $config_factory;
     $this->token = $token;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->cacheBackend = $cache_backend;
   }
 
   /**
@@ -184,6 +205,54 @@ class EgiftCardHelper {
       'virtualItemsExists' => $virtualItemsExists,
       'topUpItem' => $isTopup,
     ];
+  }
+
+  /**
+   * Get eGift landing page node.
+   */
+  public function egiftLandingPageNode() {
+    // Set cache id for query result.
+    $cid = 'egift_landing_page.advanced_page.nid';
+
+    // Get data from cache.
+    $cached = $this->cacheBackend->get($cid);
+
+    if ($cached !== FALSE && $cached->valid) {
+      return $cached->data;
+    }
+
+    // Query nids of type advanced_page and field use as landing page
+    // is checked. Use the most recently created published node.
+    $query = $this->entityTypeManager->getStorage('node')
+      ->getQuery()
+      ->condition('type', 'advanced_page')
+      ->condition('field_use_as_egift_landing_page', TRUE)
+      ->condition('status', NodeInterface::PUBLISHED)
+      ->sort('created', 'DESC');
+    $results = $query->execute();
+    $egift_landing_page = reset($results);
+
+
+    // Set query result with egift landing page nid in cache.
+    // This cache tag is invalidated on queue when insert / update / delete
+    // advanced_page node.
+    $this->cacheBackend->set($cid, $egift_landing_page, Cache::PERMANENT, ['node_type:advanced_page']);
+
+    return $egift_landing_page;
+  }
+
+  /**
+   * Gets breadcrumb link for egift pages.
+   */
+  public function getBreadcrumbLink() {
+    $landing_page_node_id = $this->egiftLandingPageNode();
+    if (!empty($landing_page_node_id)) {
+      // If eGift landing page exists then link to landing page
+      return Link::createFromRoute($this->t('eGift Card', [], ['context' => 'egift']), 'entity.node.canonical', ['node' => $landing_page_node_id], ['attributes' => ['class' => ['egift-brdcrb-nav']]]);
+    }
+
+    // If eGift landing page doesn't exist then link to the front page.
+    return Link::createFromRoute($this->t('eGift Card', [], ['context' => 'egift']), '<front>', [], ['attributes' => ['class' => ['egift-brdcrb-nav']]]);
   }
 
 }
