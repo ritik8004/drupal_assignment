@@ -155,9 +155,10 @@ class SignUpCompleteHeader extends React.Component {
       <>
         {isHeaderModalOpen
           && (
-            <div className={`aura-header-popup-wrapper sign-up-complete aura-level-${tierClass}`}>
+            <div className={`aura-header-popup-wrapper sign-up-complete aura-level-${tierClass} ${activeClass}`}>
+              <div className= "aura-header-wrapper-mobile">
               <ConditionalView condition={window.innerWidth < 1024}>
-                <div className={`accordion-header ${activeClass}`} onClick={() => this.handleAccordionStatus()}>
+                <div className={`accordion-header`} onClick={() => this.handleAccordionStatus()}>
                   <AuraLogo stacked="horizontal" />
                   <span className="accordion-icon" />
                 </div>
@@ -176,7 +177,7 @@ class SignUpCompleteHeader extends React.Component {
                         </span>
                       </>
                     )}
-                  <a className="close-icon" onClick={() => openHeaderModal()}>X</a>
+                  <div className="close-icon" onClick={() => openHeaderModal()}></div>
                 </div>
                 <div className="content-section">
                   <div className="title">
@@ -221,6 +222,7 @@ class SignUpCompleteHeader extends React.Component {
                     </div>
                   </ConditionalView>
                 </div>
+              </div>
               </div>
             </div>
           )}

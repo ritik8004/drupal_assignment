@@ -194,6 +194,7 @@ $blueth-truth: #2d68c4;
 $raining-clouds: #858585;
 $_aura-light-blue: #fffbfe;
 $_aura-very-light-pink: rgba(179, 32, 125, 0.1);
+$_light-border-bottom: rgba(255, 255, 255,0.12);
 
 // Aura Gradients.
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
@@ -247,15 +248,17 @@ $aura-gradient-25: linear-gradient(to bottom, #fff, #fff), linear-gradient(98deg
 $aura-gradient-26: linear-gradient(98deg, #e71e6e 16%, #662483 85%);
 $aura-gradient-27: linear-gradient(97deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
 $aura-gradient-27-ar: linear-gradient(-97deg, rgba(227, 28, 121, 0.14), rgba(119, 37, 121, 0.14));
-
 $aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
-$aura-hello-tier: linear-gradient(140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
-$aura-hello-tier-ar: linear-gradient(-140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
-$aura-stars-tier: linear-gradient(146deg, #2d68c4 37%, #481463 107%, #2c0b3d 136%);
-$aura-stars-tier-ar: linear-gradient(-146deg, #2d68c4 37%, #481463 107%, #2c0b3d 136%);
+$aura-hello-tier: linear-gradient(128deg, #efc06e 2%, #e31c79 63%, #772583 102%);
+$aura-hello-tier-ar: linear-gradient(-128deg, #efc06e 2%, #e31c79 63%, #772583 102%);
+$aura-hello-tier-mobile: linear-gradient(104deg, #efc06e 8%, #e31c79 65%, #772583 100%);
+$aura-stars-tier: linear-gradient(121deg, #2d68c4, #481463 70%, #2c0b3d 100%);
+$aura-stars-tier-ar: linear-gradient(-121deg, #2d68c4, #481463 70%, #2c0b3d 100%);
+$aura-stars-tier-mobile: linear-gradient(101deg, #2d68c4, #481463 70%, #2c0b3d 100%);
 $aura-vip-tier: linear-gradient(147deg, #7f2482 8%, #25035a 110%, #160235 166%);
 $aura-vip-tier-ar: linear-gradient(-147deg, #7f2482 8%, #25035a 110%, #160235 166%);
 $aura-progress-hello: linear-gradient(99deg, #efc06e, #e31c79 52%, #772583);
+$aura-vip-tier-mobile: linear-gradient(105deg, #7f2482 8%, #25035a 70%, #160235 100%);
 $aura-progress-hello-ar: linear-gradient(-99deg, #efc06e, #e31c79 52%, #772583);
 $aura-progress-star: linear-gradient(99deg, #2d68c4, #481463 70%, #2c0b3d);
 $aura-progress-star-ar: linear-gradient(-99deg, #2d68c4, #481463 70%, #2c0b3d);
@@ -1864,9 +1867,11 @@ $aura-hb-tooltip-preview-text: $dark-night-owl;
 $aura-header-sign-link: $mothercare-black;
 $aura-header-card-wrapper-text: $white-five;
 $aura-header-card-wrapper-card-number: $grey-light;
-$aura-header-card-wrapper: $aura-gradient-18;
-$aura-header-card-wrapper-ar: $aura-gradient-18-ar;
+$aura-header-card-wrapper: $aura-hello-tier;
+$aura-header-card-wrapper-mobile: $aura-hello-tier-mobile;
+$aura-header-card-wrapper-ar: $aura-hello-tier-ar;
 $aura-header-card-body: $dark-night-owl;
+$aura-accordion-border-bottom: $_light-border-bottom;
 
 // Aura PDP.
 $aura-pdp-string: $mothercare-black;

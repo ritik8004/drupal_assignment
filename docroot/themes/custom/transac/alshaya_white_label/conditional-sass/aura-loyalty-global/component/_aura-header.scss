@@ -77,7 +77,8 @@
       }
 
       &.sign-up-complete {
-        padding: 1.25rem;
+        padding: 0;
+        min-width: rem(298);
 
         .aura-popup-body {
           margin-bottom: 1.25rem;
