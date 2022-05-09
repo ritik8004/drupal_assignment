@@ -102,7 +102,11 @@ class OnlineReturnsHelper {
     );
     $paymentMethod = reset($paymentMethodDetails);
 
-    $return_eligible = $order['extension']['is_return_eligible'];
+    // Check if `is_return_eligible` key exists.
+    $return_eligible = FALSE;
+    if (array_key_exists('is_return_eligible', $order['extension'])) {
+      $return_eligible = $order['extension']['is_return_eligible'];
+    }
     $order_type = $order['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
     if ($order_type == 'ship_to_store') {
       $return_eligible = FALSE;

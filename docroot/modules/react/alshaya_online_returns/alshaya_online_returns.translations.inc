@@ -195,6 +195,25 @@ function _alshaya_online_returns_translations() {
         'ar' => 'الرقم التعريفي لعملية الإرجاع: @return_id',
         'context' => 'online_returns',
       ],
+      'Delivered Items' => [
+        'ar' => 'المنتجات التي تم توصيلها',
+      ],
+      'Online Returns' => [
+        'ar' => 'طلبات الإرجاع أونلاين',
+        'context' => 'online_returns',
+      ],
+      'Returned Items' => [
+        'ar' => 'المنتجات التي تم إرجاعها',
+        'context' => 'online_returns',
+      ],
+      'Rejected Items' => [
+        'ar' => 'المنتجات المرفوضة',
+        'context' => 'online_returns',
+      ],
+      'Store Returns' => [
+        'ar' => 'طلبات الإرجاع عبر المحل',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 
