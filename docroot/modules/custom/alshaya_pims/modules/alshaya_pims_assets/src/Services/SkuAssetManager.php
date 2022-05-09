@@ -1,19 +1,15 @@
 <?php
 
-namespace Drupal\alshaya_cos_images;
+namespace Drupal\alshaya_pims_assets\Services;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
 use Drupal\Core\Config\ConfigFactory;
 
 /**
  * Sku Asset Manager Class.
  */
-class SkuAssetManager {
-
-  /**
-   * Constant to denote that the current asset has no angle data associated.
-   */
-  const LP_DEFAULT_ANGLE = 'NO_ANGLE';
+class SkuAssetManager implements SkuAssetManagerInterface {
 
   /**
    * The Config factory service.
@@ -33,15 +29,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Get assets for SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   *
-   * @return array
-   *   Get assets for SKU.
-   *
-   * @throws \Exception
+   * {@inheritDoc}
    */
   public function getAssets(SKU $sku) {
     $assets = unserialize($sku->get('attr_assets')->getString());
@@ -62,17 +50,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Utility function to construct CDN url for the asset.
-   *
-   * @param mixed $sku
-   *   SKU text or full entity object.
-   * @param string $page_type
-   *   Page on which the asset needs to be rendered.
-   * @param array $avoid_assets
-   *   (optional) Array of AssetId to avoid.
-   *
-   * @return array
-   *   Array of urls to sku assets.
+   * {@inheritDoc}
    */
   public function getSkuAssets($sku, $page_type, array $avoid_assets = []) {
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
@@ -105,13 +83,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to get swatch data.
-   *
-   * @param mixed $sku
-   *   SKU text or full entity object.
-   *
-   * @return string
-   *   Url to sku swatch.
+   * {@inheritDoc}
    */
   public function getSkuSwatch($sku) {
     $swatch = [];
@@ -132,17 +104,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to sort based on angles.
-   *
-   * @param string $sku
-   *   SKU code for which the assets needs to be sorted on angles.
-   * @param string $page_type
-   *   Page on which the asset needs to be rendered.
-   * @param array $assets
-   *   Array of mixed asset types.
-   *
-   * @return array
-   *   Array of assets sorted by their asset types & angles.
+   * {@inheritDoc}
    */
   public function sortSkuAssets($sku, $page_type, array $assets) {
     $alshaya_cos_images_config = $this->configFactory->get('alshaya_cos_images.settings');
@@ -235,15 +197,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to filter out specific asset types from a list.
-   *
-   * @param array $assets
-   *   Array of assets with mixed asset types.
-   * @param string $asset_type
-   *   Asset type that needs to be filtered out.
-   *
-   * @return array
-   *   Array of assets matching the asset type.
+   * {@inheritDoc}
    */
   public function filterSkuAssetType(array $assets, $asset_type) {
     $filtered_assets = [];
@@ -258,17 +212,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to pull child sku assets.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Parent sku for which we pulling child assets.
-   * @param string $context
-   *   Page on which the asset needs to be rendered.
-   * @param array $avoid_assets
-   *   (optional) Array of AssetId to avoid.
-   *
-   * @return array
-   *   Array of sku child assets.
+   * {@inheritDoc}
    */
   public function getChildSkuAssets(SKU $sku, $context, array $avoid_assets = []) {
     $child_skus = $this->skuManager->getValidChildSkusAsString($sku);
@@ -282,15 +226,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to get assets for a SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Parent Sku.
-   * @param string $page_type
-   *   Type of page.
-   *
-   * @return array|assets
-   *   Array of assets for the SKU.
+   * {@inheritDoc}
    */
   public function getAssetsForSku(SKU $sku, $page_type) {
     $assets = [];
@@ -305,13 +241,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to get asset type.
-   *
-   * @param array $asset
-   *   Array of asset details.
-   *
-   * @return string
-   *   Asset type (video/image).
+   * {@inheritDoc}
    */
   public function getAssetType(array $asset) {
     $type = (strpos($asset['Data']['AssetType'], 'MovingMedia') !== FALSE)
@@ -319,6 +249,20 @@ class SkuAssetManager {
       : 'image';
 
     return $type;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getColorsForSku(SKU $sku) {
+    return [];
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSkuSwatchType(SKU $sku) {
+    return '';
   }
 
 }
