@@ -34,16 +34,6 @@ use GuzzleHttp\TransferStats;
 class SkuAssetManager implements SkuAssetManagerInterface {
 
   /**
-   * Constant for default weight in case no weight has been set via config.
-   */
-  const LP_DEFAULT_WEIGHT = 100;
-
-  /**
-   * Constant for default swatch display type.
-   */
-  const LP_SWATCH_DEFAULT = 'RGB';
-
-  /**
    * The Config factory service.
    *
    * @var \Drupal\Core\Config\ConfigFactory

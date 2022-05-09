@@ -20,6 +20,16 @@ interface SkuAssetManagerInterface {
   const LP_SWATCH_RGB = 'RGB';
 
   /**
+   * Constant for default weight in case no weight has been set via config.
+   */
+  const LP_DEFAULT_WEIGHT = 100;
+
+  /**
+   * Constant for default swatch display type.
+   */
+  const LP_SWATCH_DEFAULT = 'RGB';
+
+  /**
    * Get assets for SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
