@@ -410,5 +410,17 @@ function _alshaya_aura_static_strings() {
       'key' => 'aura_otp_label',
       'value' => t('One Time Pin', [], ['context' => 'aura']),
     ],
+    [
+      'key' => 'aura_link_unlinked_card_body_title',
+      'value' => t('@firstName an Aura loyalty card is associate with your email adress. It just a takes one click to link.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_unlinked_card_body_sub_title',
+      'value' => t('Do you want to link now?', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_unlinked_card_field_title',
+      'value' => t('Aura Card Number', [], ['context' => 'aura']),
+    ],
   ];
 }

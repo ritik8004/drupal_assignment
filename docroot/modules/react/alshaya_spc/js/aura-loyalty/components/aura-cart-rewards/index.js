@@ -188,6 +188,7 @@ class AuraCartRewards extends React.Component {
       expiringPoints,
       expiryDate,
       cardNumber,
+      firstName,
       loyaltyStatus,
       auraPointsToEarn,
       waitForPoints,
@@ -240,7 +241,7 @@ class AuraCartRewards extends React.Component {
           <AuraNotLinkedData
             pointsToEarn={auraPointsToEarn}
             cardNumber={cardNumber}
-            loyaltyStatus={loyaltyStatus}
+            firstName={firstName}
             wait={waitForPoints}
           />
         </ConditionalView>
