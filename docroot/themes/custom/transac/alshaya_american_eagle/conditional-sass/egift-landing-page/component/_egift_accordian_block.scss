@@ -16,8 +16,20 @@
       }
 
       &.ui-state-active {
+        font-weight: bold;
+
+        @include icon(chevrondown, after);
+
+        &:hover {
+          &::after {
+            background: unset;
+          }
+        }
+
         &::after {
           background: unset;
+          #{$right}: rem(32);
+          top: 0;
         }
       }
     }
