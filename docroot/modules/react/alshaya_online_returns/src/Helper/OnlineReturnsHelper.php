@@ -103,7 +103,7 @@ class OnlineReturnsHelper {
     $paymentMethod = reset($paymentMethodDetails);
 
     // Check if `is_return_eligible` key exists.
-    $return_eligible = FALSE;
+    $return_eligible = NULL;
     if (array_key_exists('is_return_eligible', $order['extension'])) {
       $return_eligible = $order['extension']['is_return_eligible'];
     }
