@@ -550,6 +550,10 @@ function _alshaya_aura_react_translations() {
         'ar' => 'رمز الاستخدام لمرة واحدة',
         'context' => 'aura',
       ],
+      'Know More' => [
+        'ar' => 'تعرف أكثر',
+        'context' => 'aura',
+      ],
     ],
   ];
 }
