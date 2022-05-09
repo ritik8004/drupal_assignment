@@ -11,7 +11,12 @@
         <div class="language--switcher mobile-only-block">
           {{ page.footer_primary.languageswitcher_2 }}
         </div>
-        {{ page.footer_primary.shopby }}
+        {% if page.footer_primary.alshayarcsshopby is not empty %}
+          {{ page.footer_primary.alshayarcsshopby }}
+        {% endif %}
+        {% if page.footer_primary.shopby is not empty %}
+          {{ page.footer_primary.shopby }}
+        {% endif %}
         {{ page.footer_primary.aboutbrand }}
         {{ page.footer_primary.alshaya_help}}
         <div class="footer_primary-right-block">
@@ -20,7 +25,7 @@
             {{ page.footer_primary.languageswitcher_2 }}
           </div>
 
-          {{ page.footer_primary|without('alshayanewslettersubscription', 'shopby', 'aboutbrand', 'alshaya_help', 'languageswitcher_2') }}
+          {{ page.footer_primary|without('alshayanewslettersubscription', 'shopby', 'alshayarcsshopby', 'aboutbrand', 'alshaya_help', 'languageswitcher_2') }}
         </div>
       </div>
     </div>
