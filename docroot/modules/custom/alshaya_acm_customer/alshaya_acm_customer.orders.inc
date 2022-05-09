@@ -362,7 +362,14 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
   }
 
-  switch ($order['payment']['method']) {
+  // Store payment details.
+  $payment_method = $order['payment']['method'];
+  $orderDetails['paymentDetails'][$payment_method] = [
+    'card_type' => $orderDetails['payment_method'],
+    'card_number' => '',
+    'payment_type' => $payment_method,
+  ];
+  switch ($payment_method) {
     case 'knet':
       $orderDetails['payment']['transactionId'] = $payment_info['transaction_id'];
       $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
@@ -373,11 +380,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       $orderDetails['payment']['transactionId'] = $payment_info['knet_transaction_id'];
       $orderDetails['payment']['paymentId'] = $payment_info['knet_payment_id'];
       $orderDetails['payment']['resultCode'] = $payment_info['knet_result'];
-      $orderDetails['paymentDetails']['checkout_com_upapi_knet'] = [
-        'card_type' => 'Knet',
-        'card_number' => '',
-        'payment_type' => 'knet',
-      ];
+      // Override payment_type.
+      $orderDetails['paymentDetails'][$payment_method]['payment_type'] = 'knet';
       break;
 
     case 'checkout_com_upapi_qpay':
@@ -418,6 +422,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
         'payment_type' => $payment_info['scheme'],
       ];
       $orderDetails['paymentDetails']['checkout_com_upapi'] = $payment_data;
+      break;
   }
 
   return $orderDetails;
