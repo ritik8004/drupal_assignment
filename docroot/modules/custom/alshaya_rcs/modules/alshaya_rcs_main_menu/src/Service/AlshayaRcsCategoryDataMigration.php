@@ -198,6 +198,10 @@ class AlshayaRcsCategoryDataMigration {
     if (empty($context['results']['acq_term_mapping'])) {
       $context['results']['acq_term_mapping'] = [];
       $context['results']['batch_size'] = $batch_size;
+      // Get Commerce id from MDC for Product Category.
+      if ($vid == self::SOURCE_VOCABULARY_ID) {
+        $context['results']['commerce_ids'] = self::getCommerceIdMapping();
+      }
     }
 
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
@@ -232,6 +236,11 @@ class AlshayaRcsCategoryDataMigration {
           'path' => '/taxonomy/term/' . $tid,
         ]);
         $path_alias_storage->delete($aliases);
+        // Set commerce id if we are migrating product category.
+        if ($vid == self::SOURCE_VOCABULARY_ID) {
+          self::updateCommerceId($source_term, $migrate_term, $context['results']['commerce_ids']);
+        }
+
         $migrate_term->save();
         // Set source/migrate term mapping.
         $context['results']['acq_term_mapping'][$tid] = $migrate_term->id();
@@ -292,6 +301,7 @@ class AlshayaRcsCategoryDataMigration {
     if (!empty($results['acq_term_mapping'][$tid])) {
       return $results['acq_term_mapping'][$tid];
     }
+
     // Load parent product category.
     $source_parent_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
     $source_parent_term = ($source_parent_term->language()->getId() == $langcode) ? $source_parent_term : $source_parent_term->getTranslation($langcode);
@@ -312,6 +322,11 @@ class AlshayaRcsCategoryDataMigration {
       'path' => '/taxonomy/term/' . $tid,
     ]);
     $path_alias_storage->delete($aliases);
+
+    // Set Commerce id for Product Category.
+    if ($vid == self::SOURCE_VOCABULARY_ID) {
+      self::updateCommerceId($source_parent_term, $migrate_parent_term, $results['commerce_ids']);
+    }
     $migrate_parent_term->save();
     $term_count++;
     // Save parent term in mapping.
@@ -502,6 +517,78 @@ class AlshayaRcsCategoryDataMigration {
       drush_backend_batch_process();
     }
 
+  }
+
+  /**
+   * Get commerce id mapping with the category url.
+   *
+   * @return array
+   *   Mapping of category url with commerce id.
+   *   e.g ['shop-women' => 20, 'shop-men/jeans' => 129]
+   */
+  private static function getCommerceIdMapping() {
+    $language_manager = \Drupal::service('language_manager');
+    $langcode = $language_manager->getCurrentLanguage()->getId();
+    // Get Categories from MDC.
+    $categories = \Drupal::service('alshaya_api.api')->getCategories($langcode);
+    $commerce_ids = array_flip(self::getCategoryIdsMapping($categories));
+    return $commerce_ids;
+  }
+
+  /**
+   * Get commerce ids mapping with url recursively.
+   *
+   * @param array $category
+   *   MDC Category list.
+   *
+   * @return array
+   *   Return commerce id url mapping.
+   */
+  private static function getCategoryIdsMapping(array $category) {
+    $ids = [];
+    $url_path = '';
+    // Get url path from custom attributes.
+    foreach ($category['custom_attributes'] ?? [] as $attribute) {
+      if ($attribute['attribute_code'] == 'url_path') {
+        $url_path = $attribute['value'];
+        break;
+      }
+    }
+    if (!empty($url_path)) {
+      $ids[$category['id']] = $url_path;
+    }
+
+    // Recursively get commerce id mappings.
+    foreach ($category['children_data'] ?? [] as $child) {
+      $ids = array_replace($ids, self::getCategoryIdsMapping($child));
+    }
+    return $ids;
+  }
+
+  /**
+   * Set commerce id for product category.
+   *
+   * @param \Drupal\taxonomy\TermInterface $source_term
+   *   The source term.
+   * @param \Drupal\taxonomy\TermInterface $migrate_term
+   *   New migrate term.
+   * @param array|null $commerce_ids
+   *   Mapping of category url with commerce id.
+   */
+  private static function updateCommerceId(TermInterface $source_term, TermInterface &$migrate_term, $commerce_ids) {
+    $alias = $source_term->get('field_category_slug')->getString();
+    // Get commerce id matching the category url slug.
+    if (!empty($alias) && $commerce_ids[$alias]) {
+      $commerce_id = $commerce_ids[$alias];
+      $migrate_term->set('field_commerce_id', $commerce_id);
+    }
+    else {
+      $logger = \Drupal::logger('alshaya_rcs_category');
+      $logger->error('Error occured while updating commerce id for term: @label [@slug]', [
+        '@label' => $source_term->label(),
+        '@slug' => $alias,
+      ]);
+    }
   }
 
 }
