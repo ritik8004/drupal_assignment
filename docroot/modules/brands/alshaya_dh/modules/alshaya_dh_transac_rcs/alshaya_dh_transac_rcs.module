@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityInterface;
  * Implements hook_module_implements_alter().
  */
 function alshaya_dh_transac_rcs_module_implements_alter(&$implementations, $hook) {
-  // @todo This code is copied from COS. Please update the code according to DH.
   // Make sure the hook on the brand overrides runs last.
   if ($hook == 'rcs_handlebars_templates_alter') {
     $group = $implementations['alshaya_dh_transac_rcs'];

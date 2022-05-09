@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_cos_images\EventSubscriber;
 
 use Drupal\acq_sku\ProductInfoRequestedEvent;
-use Drupal\alshaya_cos_images\SkuAssetManager;
+use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -19,17 +19,17 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   /**
    * SKU Assets Manager.
    *
-   * @var \Drupal\alshaya_cos_images\SkuAssetManager
+   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface
    */
   private $skuAssetsManager;
 
   /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
-   * @param \Drupal\alshaya_cos_images\SkuAssetManager $sku_assets_manager
+   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_assets_manager
    *   SKU Assets Manager.
    */
-  public function __construct(SkuAssetManager $sku_assets_manager) {
+  public function __construct(SkuAssetManagerInterface $sku_assets_manager) {
     $this->skuAssetsManager = $sku_assets_manager;
   }
 

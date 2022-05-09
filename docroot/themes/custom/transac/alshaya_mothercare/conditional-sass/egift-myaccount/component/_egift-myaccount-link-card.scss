@@ -1,0 +1,16 @@
+.egift-notlinked-wrapper {
+  .action-buttons {
+    button[type=submit] {
+      background: $egift-myaccount-button;
+      text-transform: uppercase;
+      border-color: $egift-myaccount-button;
+    }
+  }
+
+  .egift-resend-wrapper {
+    .egift-resend-code-text,
+    .egift-change-card-text {
+      color: $egift-banner-title;
+    }
+  }
+}

@@ -7,8 +7,8 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
 use Drupal\Core\Block\BlockPluginInterface;
-use Drupal\alshaya_cos_images\SkuAssetManager;
 
 /**
  * Implements hook_acq_sku_product_sku_alter().
@@ -61,7 +61,7 @@ function _alshaya_cos_images_acq_sku_process_assets(array $product, array $exist
 
       $asset_type_parts = (!empty($asset['Data']['AssetType'])) ? explode('/', $asset['Data']['AssetType']) : [];
       $assets[$key]['sortAssetType'] = !empty($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
-      $face_type = SkuAssetManager::LP_DEFAULT_ANGLE;
+      $face_type = SkuAssetManagerInterface::LP_DEFAULT_ANGLE;
 
       if (!empty($asset['Data']['Angle']['Facing']) && !empty($asset['Data']['Angle']['Identifier'])) {
         $face_type = $asset['Data']['Angle']['Facing'] . $asset['Data']['Angle']['Identifier'];
@@ -77,8 +77,8 @@ function _alshaya_cos_images_acq_sku_process_assets(array $product, array $exist
  * Implements hook_alshaya_acm_product_media_items_alter().
  */
 function alshaya_cos_images_alshaya_acm_product_media_items_alter(array &$media, SKU $sku) {
-  /** @var \Drupal\alshaya_cos_images\SkuAssetManager $assetsManager */
-  $assetsManager = \Drupal::service('alshaya_cos_images.skuassetsmanager');
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $assetsManager */
+  $assetsManager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
   $assets = $assetsManager->getAssets($sku);
 
   foreach ($assets ?? [] as $asset) {
@@ -103,8 +103,8 @@ function alshaya_cos_images_block_view_alter(array &$build, BlockPluginInterface
  * Implements hook_alshaya_acm_product_pdp_swath_type_alter().
  */
 function alshaya_cos_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
-  /** @var \Drupal\alshaya_cos_images\SkuAssetManager $sku_asset_manager */
-  $sku_asset_manager = \Drupal::service('alshaya_cos_images.skuassetsmanager');
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_asset_manager */
+  $sku_asset_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
   $swatch = $sku_asset_manager->getSkuSwatch($variant_sku);
 
   if (!empty($swatch)) {
