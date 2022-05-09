@@ -4,10 +4,6 @@ $marine-blue-two: #003971;
 $whisper-dark: #e5e5e5;
 $mc_usp_blue: #eff6fc;
 $prussian_blue: #063971;
-$blue-cyan: #f7fafe;
-$dark_gray: #222;
-$black: #000;
-$cod-gray: #1a1a1a;
 
 $spc-checkout_section_title: $marine-blue;
 
@@ -21,11 +17,11 @@ $magv2-gallery-popup-cross: $marine-blue;
 $menu-chevron: $marine-blue-two;
 
 //eGift
-$egift-banner-bg: $blue-cyan;
-$egift-banner-title: $dark_gray;
-$egift-accordion-active-title: $black;
-$egift-purchase-page-title: $black;
-$egift-card-redeem-button: $black;
+$egift-banner-bg: $_algolia_suggestion_list_bg;
+$egift-banner-title: $_gray_222;
+$egift-accordion-active-title: $mothercare-black;
+$egift-purchase-page-title: $mothercare-black;
+$egift-card-redeem-button: $mothercare-black;
 $egift-myaccount-button: $prussian_blue;
 $egift-myaccount-topup-button: $prussian_blue;
-$egift-check-balance-title: $cod-gray;
+$egift-check-balance-title: $_sofa-section-grey2;
