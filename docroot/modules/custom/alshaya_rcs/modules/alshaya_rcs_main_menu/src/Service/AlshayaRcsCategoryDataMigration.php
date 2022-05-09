@@ -193,7 +193,6 @@ class AlshayaRcsCategoryDataMigration {
     if (empty($context['sandbox'])) {
       $context['sandbox']['term_count'] = 0;
     }
-    $logger = \Drupal::logger('alshaya_rcs_category');
 
     // Store Product category and RCS category term mapping to get parent terms.
     if (empty($context['results']['acq_term_mapping'])) {
@@ -302,7 +301,7 @@ class AlshayaRcsCategoryDataMigration {
     if (!empty($results['acq_term_mapping'][$tid])) {
       return $results['acq_term_mapping'][$tid];
     }
-    $logger = \Drupal::logger('alshaya_rcs_category');
+
     // Load parent product category.
     $source_parent_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
     $source_parent_term = ($source_parent_term->language()->getId() == $langcode) ? $source_parent_term : $source_parent_term->getTranslation($langcode);
