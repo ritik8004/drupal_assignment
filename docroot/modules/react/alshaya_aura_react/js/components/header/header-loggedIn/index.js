@@ -22,6 +22,8 @@ const HeaderLoggedIn = (props) => {
     signUpComplete,
     notYouFailed,
     tier,
+    firstName,
+    lastName,
   } = props;
 
   if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NO_DATA
@@ -86,6 +88,10 @@ const HeaderLoggedIn = (props) => {
           cardNumber={cardNumber}
           noRegisterLinks
           notYouFailed={notYouFailed}
+          tier={tier}
+          firstName={firstName}
+          lastName={lastName}
+          openHeaderModal={openHeaderModal}
         />
       </>
     );

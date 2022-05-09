@@ -140,6 +140,8 @@ class Header extends React.Component {
       clickedNotYou,
       notYouFailed,
       tier,
+      firstName,
+      lastName,
     } = this.state;
 
     const {
@@ -176,6 +178,8 @@ class Header extends React.Component {
             signUpComplete={signUpComplete}
             notYouFailed={notYouFailed}
             tier={tier}
+            firstName={firstName}
+            lastName={lastName}
           />
           {this.getCongratulationsPopup()}
         </>
