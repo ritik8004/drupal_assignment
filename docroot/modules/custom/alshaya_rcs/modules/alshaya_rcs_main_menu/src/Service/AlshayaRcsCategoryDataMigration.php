@@ -578,16 +578,15 @@ class AlshayaRcsCategoryDataMigration {
   private static function updateCommerceId(TermInterface $source_term, TermInterface &$migrate_term, $commerce_ids) {
     $alias = $source_term->get('field_category_slug')->getString();
     // Get commerce id matching the category url slug.
-    if ($alias && $commerce_ids[$alias]) {
+    if (!empty($alias) && $commerce_ids[$alias]) {
       $commerce_id = $commerce_ids[$alias];
       $migrate_term->set('field_commerce_id', $commerce_id);
     }
     else {
       $logger = \Drupal::logger('alshaya_rcs_category');
-      $slug = $source_term->get('field_category_slug')->getString();
       $logger->error('Error occured while updating commerce id for term: @label [@slug]', [
         '@label' => $source_term->label(),
-        '@slug' => $slug,
+        '@slug' => $alias,
       ]);
     }
   }
