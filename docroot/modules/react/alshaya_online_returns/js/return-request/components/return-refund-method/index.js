@@ -34,7 +34,7 @@ const ReturnRefundMethod = ({
                   <ConditionalView condition={hasValue(paymentDetails[method].card_number)}>
                     <span>
                       {' '}
-                      { Drupal.t('ending in', {}, { context: 'online_returns' }) }
+                      { Drupal.t('Card ending in', {}, { context: 'online_returns' }) }
                       {' '}
                     </span>
                     <span className="payment-info bold-text">

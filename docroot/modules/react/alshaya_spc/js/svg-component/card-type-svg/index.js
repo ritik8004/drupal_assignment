@@ -229,13 +229,13 @@ const CardTypeSVG = (props) => {
   if (type === 'qpay') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <defs>
             <rect id="zglsyx5sua" x="0" y="0" width="35" height="22" rx="2.258"/>
           </defs>
           <g fill="none" fill-rule="evenodd">
             <mask id="w29eqremgb" fill="#fff">
-              <use xlink:href="#zglsyx5sua"/>
+              <use xlinkHref="#zglsyx5sua"/>
             </mask>
             <rect stroke="#DADADA" stroke-width=".5" x=".25" y=".25" width="34.5" height="21.5" rx="2.258"/>
             <g mask="url(#w29eqremgb)" fill="#000">
@@ -263,7 +263,7 @@ const CardTypeSVG = (props) => {
   if (type === 'tabby') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <defs>
             <linearGradient x1="0%" y1="49.996%" x2="100.001%" y2="49.996%" id="mejoj7fydc">
               <stop stop-color="#3BFF9D" offset="0%"/>
@@ -273,9 +273,9 @@ const CardTypeSVG = (props) => {
           </defs>
           <g fill="none" fill-rule="evenodd">
             <mask id="cenhyz2n8b" fill="#fff">
-              <use xlink:href="#6nx42swgfa"/>
+              <use xlinkHref="#6nx42swgfa"/>
             </mask>
-            <use fill="#FFF" xlink:href="#6nx42swgfa"/>
+            <use fill="#FFF" xlinkHref="#6nx42swgfa"/>
             <g mask="url(#cenhyz2n8b)">
               <path fill="#FFF" d="M35 21.942H0V0h35z"/>
               <g fill-rule="nonzero">
@@ -294,7 +294,7 @@ const CardTypeSVG = (props) => {
   if (type === 'aura') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <defs>
             <linearGradient x1="0%" y1="36.915%" x2="100%" y2="69.755%" id="0w7a84l6la">
               <stop stop-color="#EFC06E" offset="0%"/>
@@ -312,14 +312,14 @@ const CardTypeSVG = (props) => {
             <rect fill="url(#0w7a84l6la)" width="35" height="22" rx="2"/>
             <g transform="translate(1.957 5.305)">
               <mask id="4yet7w484d" fill="#fff">
-                <use xlink:href="#v38bhjk1ub"/>
+                <use xlinkHref="#v38bhjk1ub"/>
               </mask>
               <path d="M0 5.694c0 3.14 2.586 5.694 5.764 5.694 3.178 0 5.764-2.554 5.764-5.694S8.942 0 5.764 0C2.586 0 0 2.554 0 5.694zm.338 0c0-2.96 2.43-5.36 5.426-5.36 2.997 0 5.427 2.4 5.427 5.36 0 2.96-2.43 5.36-5.427 5.36-2.997 0-5.426-2.4-5.426-5.36zm8.07-3.046-.023.02a.296.296 0 0 0-.021.394c.021.025.044.05.073.067l-.093.079.157.183.466-.393-.156-.184-.138.116a.082.082 0 0 1-.112-.009.078.078 0 0 1 .009-.11l.145-.122-.147-.17-.16.129zm-5.717.466a3.195 3.195 0 0 0-.716 2.026c0 .829.314 1.61.883 2.215.072 0 .246-.132.292-.19a2.88 2.88 0 0 1-.411-3.52c.011-.02.025-.04.04-.064a.358.358 0 0 0-.075-.482l-.013.015zm6.141.224.013.016c.504.598.795 1.339.84 2.14a3.63 3.63 0 0 1-.526 2.117 2.727 2.727 0 0 1-.092.137.356.356 0 0 0 .068.485l.013-.016c.627-.759.94-1.732.883-2.742a3.95 3.95 0 0 0-.92-2.34l-.013-.016-.266.219zM6.236 4.442a1.627 1.627 0 0 0-.687 2.21c.207.385.553.668.976.796.417.127.875.085 1.26-.118.137-.07.263-.161.375-.268a1.927 1.927 0 0 1-.8.804 1.96 1.96 0 0 1-.88.217 1.973 1.973 0 0 1-.853-.183 3.06 3.06 0 0 1-.16-.09.35.35 0 0 0-.466.096c.099.075.2.146.306.208l.114.066c.306.151.645.236.987.244h.076c.342-.003.686-.085.997-.236v.002l.05-.026a.313.313 0 0 0 .01-.006l.018-.01a2.275 2.275 0 0 0 1.067-1.313 2.225 2.225 0 0 0-.076-1.55 1.682 1.682 0 0 0-.077-.164l-.01-.02-.019.01.016-.015-.01-.017a1.666 1.666 0 0 0-1.446-.826c-.26 0-.524.061-.768.189zm.39 2.68a1.297 1.297 0 0 1-.771-.63 1.287 1.287 0 0 1 .544-1.748 1.316 1.316 0 0 1 1.76.521l.027.055.022.045.019.043a1.288 1.288 0 0 1-.603 1.62c-.191.1-.4.151-.61.151-.13 0-.26-.019-.387-.058zm-2.335-1.62a1.89 1.89 0 0 1 .107.903 1.93 1.93 0 0 1-.608 1.182l-.006.005a1.974 1.974 0 0 1-.355.258 1.97 1.97 0 0 1-1.694.088 2.017 2.017 0 0 1-.192-.091c.089.168.186.332.294.488.213.062.434.094.654.094h.075c.341-.012.683-.101.99-.26l.001.003.077-.044c.042-.026.082-.05.12-.076.03-.02.06-.042.09-.064a2.269 2.269 0 0 0 .457-.455 2.298 2.298 0 0 0 .37-.742 2.252 2.252 0 0 0-.207-1.735l-.01-.018a.368.368 0 0 0-.163.464z" fill="url(#uh2b7o2n5c)" mask="url(#4yet7w484d)"/>
             </g>
             <path d="M16.972 11.376h1.59l-.795-1.626-.795 1.626zm-1.646 2.044 2.298-4.71h.286l1.969 4.045-.322.665-.73-1.492H16.7l-.508 1.053a.945.945 0 0 1-.243.308c-.1.083-.2.126-.3.13h-.323zM23.98 11.653a1.92 1.92 0 0 1-.15.743 1.646 1.646 0 0 1-.39.556 1.658 1.658 0 0 1-.59.348c-.23.08-.48.12-.752.12-.277 0-.531-.041-.763-.123a1.678 1.678 0 0 1-.597-.36 1.632 1.632 0 0 1-.39-.573 1.994 1.994 0 0 1-.14-.767V8.71h.608v2.915c0 .403.119.709.355.915.236.206.545.31.927.31s.69-.104.927-.31c.236-.206.354-.512.354-.915V9.4c0-.08.016-.16.047-.239a.825.825 0 0 1 .125-.218.7.7 0 0 1 .183-.162.425.425 0 0 1 .225-.064h.021v2.936zM25.377 10.926h.716c.344 0 .603-.06.777-.178.174-.119.261-.318.261-.598 0-.28-.087-.498-.261-.652-.174-.155-.433-.232-.777-.232h-.716v1.66zm.688.556h-.688v1.247c0 .08-.015.161-.046.242a.844.844 0 0 1-.125.22.703.703 0 0 1-.183.165.421.421 0 0 1-.225.064h-.029V8.71h1.339c.248 0 .473.034.676.1.203.067.376.162.519.285.143.124.254.275.333.453.079.178.118.378.118.602 0 .342-.092.617-.276.826-.183.21-.435.354-.755.435l1.568 2.009h-.737l-1.49-1.938z" fill="#FFF"/>
             <g transform="translate(28.377 8.71)">
               <mask id="28ovif32pf" fill="#fff">
-                <use xlink:href="#zp7cmh8b6e"/>
+                <use xlinkHref="#zp7cmh8b6e"/>
               </mask>
               <path d="M1.646 2.666h1.59L2.44 1.04l-.795 1.626zM0 4.709 2.298 0h.286l1.969 4.045-.322.664-.73-1.492H1.373L.866 4.271a.945.945 0 0 1-.243.308c-.1.082-.2.126-.3.13H0z" fill="#FFF" mask="url(#28ovif32pf)"/>
             </g>
@@ -331,7 +331,7 @@ const CardTypeSVG = (props) => {
   if (type === 'benefit_pay') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35px" height="22px" viewBox="0 0 35 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg width="35px" height="22px" viewBox="0 0 35 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <title>1AF39BCD-E51A-427F-BB06-477D3D022059</title>
           <defs>
             <rect id="path-1" x="0" y="0" width="35" height="22" rx="4"></rect>
@@ -348,7 +348,7 @@ const CardTypeSVG = (props) => {
                     <rect id="Rectangle-4-Copy-38" transform="translate(17.500000, 11.000000) rotate(-180.000000) translate(-17.500000, -11.000000) " x="0" y="0" width="35" height="22"></rect>
                   </g>
                   <mask id="mask-2" fill="white">
-                    <use xlink:href="#path-1"></use>
+                    <use xlinkHref="#path-1"></use>
                   </mask>
                   <rect stroke="#DADADA" stroke-width="0.5" x="0.25" y="0.25" width="34.5" height="21.5" rx="4"></rect>
                   <g id="BBayLogo-Copy-2" mask="url(#mask-2)">
@@ -373,14 +373,14 @@ const CardTypeSVG = (props) => {
   if (type === 'fawry') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <defs>
             <rect id="fbpv8e3bpa" x="0" y="0" width="35" height="22" rx="4"/>
           </defs>
           <g fill="none" fill-rule="evenodd">
             <path d="M35 22H0V0h35z" fill="#FFF"/>
             <mask id="0gxucoh90b" fill="#fff">
-              <use xlink:href="#fbpv8e3bpa"/>
+              <use xlinkHref="#fbpv8e3bpa"/>
             </mask>
             <rect stroke="#DADADA" stroke-width=".5" x=".25" y=".25" width="34.5" height="21.5" rx="4"/>
             <g mask="url(#0gxucoh90b)" fill-rule="nonzero">
