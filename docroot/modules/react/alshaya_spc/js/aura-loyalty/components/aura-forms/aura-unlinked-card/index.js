@@ -39,7 +39,7 @@ class AuraFormUnlinkedCard extends React.Component {
         <div className="aura-modal-body">
           <div className="description">
             {getStringMessage('aura_link_unlinked_card_body_title', {
-              "!firstName": firstName,
+              '@firstName': firstName,
             })}
             <b>{getStringMessage('aura_link_unlinked_card_body_sub_title')}</b>
           </div>
