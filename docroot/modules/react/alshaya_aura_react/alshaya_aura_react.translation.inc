@@ -550,6 +550,18 @@ function _alshaya_aura_react_translations() {
         'ar' => 'رمز الاستخدام لمرة واحدة',
         'context' => 'aura',
       ],
+      '@firstName an Aura loyalty card is associate with your email adress. It just a takes one click to link.' => [
+        'ar' => '@firstName ترتبط بطاقة ولاء Aura بعنوان بريدك الإلكتروني. يستغرق الأمر نقرة واحدة فقط للربط.',
+        'context' => 'aura',
+      ],
+      'Do you want to link now?' => [
+        'ar' => 'هل تريد الارتباط الآن؟',
+        'context' => 'aura',
+      ],
+      'Aura Card Number' => [
+        'ar' => 'رقم بطاقة Aura',
+        'context' => 'aura',
+      ],
     ],
   ];
 }

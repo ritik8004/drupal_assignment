@@ -1,44 +1,85 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import { handleNotYou, handleLinkYourCard } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
+import { handleLinkYourCard } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
+import SectionTitle from '../../../../utilities/section-title';
+import getStringMessage from '../../../../../../js/utilities/strings';
+import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 
-const AuraFormUnlinkedCard = (props) => {
-  const { cardNumber, formActive } = props;
+class AuraFormUnlinkedCard extends React.Component {
+  /**
+   * Helper function to link the unlinked card.
+   */
+  linkYourCard = (cardNumber) => {
+    // Show full screen loader.
+    showFullScreenLoader();
+    // Call handleLinkYourCard method to process further.
+    handleLinkYourCard(cardNumber);
+  }
 
-  return (
-    <div className="spc-aura-unlink-card-wrapper link-card-wrapper">
-      <div className="description">
-        {Drupal.t('An AURA card is already associated with your email address. Link your card in just one click.')}
-        <b>{Drupal.t('Do you want to link now?')}</b>
-      </div>
-      <div className="spc-aura-unlink-card-form-content">
-        <div className="form-items">
-          <Cleave
-            placeholder={Drupal.t('Enter Aura Card Number')}
-            name="spc-aura-link-card-input"
-            className="spc-aura-link-card-input"
-            options={{ creditCard: true }}
-            value={cardNumber}
-            disabled
-          />
+  render() {
+    const {
+      cardNumber,
+      closeLinkOldCardModal,
+      firstName,
+      openOTPModal,
+      openLinkCardModal,
+    } = this.props;
+    return (
+      <div className="spc-aura-unlink-card-wrapper link-card-wrapper">
+        <div className="aura-modal-header">
+          <SectionTitle>
+            {getStringMessage('link_card_header_logged_in')}
+          </SectionTitle>
           <button
-            type="submit"
-            className="spc-aura-link-card-submit spc-aura-button"
-            disabled={!formActive}
-            onClick={() => handleLinkYourCard(cardNumber)}
-          >
-            { Drupal.t('Submit') }
-          </button>
+            type="button"
+            className="close"
+            onClick={() => closeLinkOldCardModal()}
+          />
         </div>
-        <div className="no-link-message">
-          <a onClick={() => handleNotYou(cardNumber)}>
-            {Drupal.t('Not you?')}
-          </a>
+        <div className="aura-modal-body">
+          <div className="description">
+            {getStringMessage('aura_link_unlinked_card_body_title', {
+              '@firstName': firstName,
+            })}
+            <b>{getStringMessage('aura_link_unlinked_card_body_sub_title')}</b>
+          </div>
+          <div className="spc-aura-unlink-card-form-content">
+            <div className="form-items">
+              <label>
+                {getStringMessage('aura_link_unlinked_card_field_title')}
+              </label>
+              <Cleave
+                name="spc-aura-link-card-input"
+                className="spc-aura-link-card-input"
+                options={{ creditCard: true }}
+                value={cardNumber}
+                disabled
+              />
+            </div>
+            <div className="no-link-message">
+              <a href="#" onClick={() => openLinkCardModal()}>
+                {Drupal.t('Not you?')}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="aura-modal-form-actions">
+          <div
+            className="spc-aura-link-card-submit spc-aura-button"
+            onClick={() => this.linkYourCard(cardNumber)}
+          >
+            {Drupal.t('Submit')}
+          </div>
+          <div className="aura-modal-footer">
+            <div className="join-aura" onClick={() => openOTPModal()}>
+              {getStringMessage('aura_join_aura')}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="spc-aura-link-api-response-message" />
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default AuraFormUnlinkedCard;
