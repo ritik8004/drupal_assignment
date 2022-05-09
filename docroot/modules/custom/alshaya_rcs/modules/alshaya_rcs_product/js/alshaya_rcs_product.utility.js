@@ -316,8 +316,8 @@ window.commerceBackend = window.commerceBackend || {};
   function getLayoutFromContext(product) {
     var layout = drupalSettings.alshayaRcs.pdpLayout;
     switch (product.context) {
-      case 'magazine':
-        layout = product.context + '-' + layout;
+      case 'modal':
+        layout = 'pdp-magazine' ? 'modal-magazine' : layout;
         break;
     }
 
