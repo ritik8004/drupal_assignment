@@ -373,6 +373,11 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       $orderDetails['payment']['transactionId'] = $payment_info['knet_transaction_id'];
       $orderDetails['payment']['paymentId'] = $payment_info['knet_payment_id'];
       $orderDetails['payment']['resultCode'] = $payment_info['knet_result'];
+      $orderDetails['paymentDetails']['checkout_com_upapi_knet'] = [
+        'card_type' => 'Knet',
+        'card_number' => '',
+        'payment_type' => 'knet',
+      ];
       break;
 
     case 'checkout_com_upapi_qpay':
