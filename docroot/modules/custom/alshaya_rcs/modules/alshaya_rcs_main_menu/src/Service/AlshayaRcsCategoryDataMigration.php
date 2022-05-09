@@ -243,7 +243,11 @@ class AlshayaRcsCategoryDataMigration {
             self::updateCommerceId($source_term, $migrate_term, $context['results']['commerce_ids']);
           }
           catch (\Exception $e) {
-            $logger->error('Error occured while updating commerce id for term: @label', ['@label' => $source_term->label()]);
+            $slug = $source_term->get('field_category_slug')->getString();
+            $logger->error('Error occured while updating commerce id for term: @label [@slug]', [
+              '@label' => $source_term->label(),
+              '@slug' => $slug,
+            ]);
           }
         }
 
@@ -335,7 +339,11 @@ class AlshayaRcsCategoryDataMigration {
         self::updateCommerceId($source_parent_term, $migrate_parent_term, $results['commerce_ids']);
       }
       catch (\Exception $e) {
-        $logger->error('Error occured while updating commerce id for term: @label', ['@label' => $source_term->label()]);
+        $slug = $source_parent_term->get('field_category_slug')->getString();
+        $logger->error('Error occured while updating commerce id for term: @label [@slug]', [
+          '@label' => $source_parent_term->label(),
+          '@slug' => $slug,
+        ]);
       }
     }
     $migrate_parent_term->save();
