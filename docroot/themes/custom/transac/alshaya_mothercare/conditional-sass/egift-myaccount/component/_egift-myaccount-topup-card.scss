@@ -1,0 +1,26 @@
+#my-egift-card {
+  .my-egift-top-up-wrapper {
+    button[type=button] {
+      background: $egift-myaccount-topup-button;
+      border-color: $egift-myaccount-topup-button;
+      text-transform: uppercase !important;
+    }
+
+    .my-topup-cancel-btn {
+      background: transparent !important;
+      color: $egift-banner-title;
+    }
+  }
+}
+
+.egifts-form-wrapper {
+  .egift-card-amount-list-wrapper {
+    li {
+      &:hover,
+      &.active {
+        background-color: $egift-purchase-page-title;
+        border-color: $egift-banner-title;
+      }
+    }
+  }
+}
