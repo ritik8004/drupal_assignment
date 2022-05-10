@@ -1,5 +1,6 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import CardDetails from '../card-details';
 
 const RefundMethods = ({
   paymentInfo,
@@ -13,17 +14,7 @@ const RefundMethods = ({
         <div className="refund-method-title light">
           { Drupal.t('Refund Method', {}, { context: 'online_returns' }) }
         </div>
-        <div className="method-list-wrapper">
-          {Object.keys(paymentInfo).map((method) => (
-            <div key={method} className="method-wrapper">
-              <div className="card-detail">
-                <span className="payment-type">
-                  { Drupal.t('@card_type card ending in @card_number', { '@card_type': paymentInfo[method].card_type, '@card_number': paymentInfo[method].card_number }) }
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <CardDetails paymentDetails={paymentInfo} />
       </div>
     </>
   );
