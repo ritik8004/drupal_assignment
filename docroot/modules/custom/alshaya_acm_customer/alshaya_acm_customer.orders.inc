@@ -365,7 +365,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   // Store payment details.
   $payment_method = $order['payment']['method'];
   $orderDetails['paymentDetails'][$payment_method] = [
-    'card_type' => t('@card_type Card', ['@card_type' => $orderDetails['payment_method']], ['context' => 'online_returns']),
+    'card_type' => $orderDetails['payment_method'],
     'card_number' => '',
     'payment_type' => $payment_method,
   ];
