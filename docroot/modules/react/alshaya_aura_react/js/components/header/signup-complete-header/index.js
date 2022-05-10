@@ -156,73 +156,73 @@ class SignUpCompleteHeader extends React.Component {
         {isHeaderModalOpen
           && (
             <div className={`aura-header-popup-wrapper sign-up-complete aura-level-${tierClass} ${activeClass}`}>
-              <div className= "aura-header-wrapper-mobile">
-              <ConditionalView condition={window.innerWidth < 1024}>
-                <div className={`accordion-header`} onClick={() => this.handleAccordionStatus()}>
-                  <AuraLogo stacked="horizontal" />
-                  <span className="accordion-icon" />
-                </div>
-              </ConditionalView>
-              <div className={`aura-popup-header card-wrapper ${activeClass}`}>
-                <div className="heading-section">
-                  {hasValue(profileInfo)
-                    && (
-                      <>
-                        <span className="aura-user-name">{profileInfo.profileName}</span>
-                        <span
+              <div className="aura-header-wrapper-mobile">
+                <ConditionalView condition={window.innerWidth < 1024}>
+                  <div className="accordion-header" onClick={() => this.handleAccordionStatus()}>
+                    <AuraLogo stacked="horizontal" />
+                    <span className="accordion-icon" />
+                  </div>
+                </ConditionalView>
+                <div className={`aura-popup-header card-wrapper ${activeClass}`}>
+                  <div className="heading-section">
+                    {hasValue(profileInfo)
+                      && (
+                        <>
+                          <span className="aura-user-name">{profileInfo.profileName}</span>
+                          <span
+                            className="not-you"
+                            onClick={() => this.handleNotYou()}
+                          >
+                            {getNotYouLabel(notYouFailed)}
+                          </span>
+                        </>
+                      )}
+                    <div className="close-icon" onClick={() => openHeaderModal()} />
+                  </div>
+                  <div className="content-section">
+                    <div className="title">
+                      {Drupal.t('Aura account number')}
+                    </div>
+                    <Cleave
+                      name="aura-my-account-link-card"
+                      className="aura-my-account-link-card"
+                      disabled
+                      value={cardNumber}
+                      options={{ blocks: [4, 4, 4, 4] }}
+                    />
+                  </div>
+                  <div className="footer-section">
+                    <div className="know-more-wrapper">
+                      <a href={`${baseUrl}${pathPrefix}user/loyalty-club`}>
+                        {Drupal.t(
+                          'Know More',
+                          {},
+                          { context: 'aura' },
+                        )}
+                      </a>
+                    </div>
+                    <ConditionalView condition={!hasValue(userId)}>
+                      <div className="not-you-wrapper">
+                        <div className="not-you-loader-placeholder" />
+                        <div className="error-placeholder" />
+                        <div
                           className="not-you"
                           onClick={() => this.handleNotYou()}
                         >
                           {getNotYouLabel(notYouFailed)}
-                        </span>
-                      </>
-                    )}
-                  <div className="close-icon" onClick={() => openHeaderModal()}></div>
-                </div>
-                <div className="content-section">
-                  <div className="title">
-                    {Drupal.t('Aura account number')}
-                  </div>
-                  <Cleave
-                    name="aura-my-account-link-card"
-                    className="aura-my-account-link-card"
-                    disabled
-                    value={cardNumber}
-                    options={{ blocks: [4, 4, 4, 4] }}
-                  />
-                </div>
-                <div className="footer-section">
-                  <div className="know-more-wrapper">
-                    <a href={`${baseUrl}${pathPrefix}user/loyalty-club`}>
-                      {Drupal.t(
-                        'Know More',
-                        {},
-                        { context: 'aura' },
-                      )}
-                    </a>
-                  </div>
-                  <ConditionalView condition={!hasValue(userId)}>
-                    <div className="not-you-wrapper">
-                      <div className="not-you-loader-placeholder" />
-                      <div className="error-placeholder" />
-                      <div
-                        className="not-you"
-                        onClick={() => this.handleNotYou()}
-                      >
-                        {getNotYouLabel(notYouFailed)}
+                        </div>
                       </div>
-                    </div>
-                  </ConditionalView>
-                  <ConditionalView condition={hasValue(userId)}>
-                    <div
-                      className="link-aura-link"
-                      onClick={() => this.handleLinkAura()}
-                    >
-                      {getStringMessage('aura_link_aura')}
-                    </div>
-                  </ConditionalView>
+                    </ConditionalView>
+                    <ConditionalView condition={hasValue(userId)}>
+                      <div
+                        className="link-aura-link"
+                        onClick={() => this.handleLinkAura()}
+                      >
+                        {getStringMessage('aura_link_aura')}
+                      </div>
+                    </ConditionalView>
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
           )}
