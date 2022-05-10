@@ -3,8 +3,6 @@
   .user__order--detail {
     div.order-item-row.delivered-items,
     tr.order-item-row.delivered-items {
-      background: $online-return-delivered-items-label-bg;
-
       > div,
       td {
         padding: rem(38) 0 rem(8) !important;
@@ -23,12 +21,14 @@
 
 .order-detail {
   .user__order--detail {
-    #online-returned-items {
+    #online-returned-items,
+    #online-return-initiated {
       display: block;
     }
 
     div.order-item-row {
-      .returned-items-wrapper {
+      .returned-items-wrapper,
+      .return-initiated-items {
         padding: 0;
 
         @include breakpoint($tablet) {
@@ -69,7 +69,6 @@
         text-transform: uppercase;
         font-family: $alshaya-bold;
         padding: rem(38) 0 rem(8);
-        background: $online-return-delivered-items-label-bg;
         border-bottom: rem(1) solid $online-return-order-detail-border;
       }
 
@@ -79,7 +78,6 @@
         color: $online-return-refund-grey-txt;
         padding: rem(4) 0 rem(8);
         border-bottom: rem(1) solid $online-return-order-detail-border;
-        background: $online-return-delivered-items-label-bg;
       }
 
       .item-list-wrapper {
@@ -155,6 +153,43 @@
 
       .return-items-wrapper {
         margin-bottom: 0;
+      }
+    }
+
+    .return-status-header {
+      display: flex;
+      justify-content: space-between;
+      padding: rem(33) 0 rem(12);
+      margin: 0;
+      border-bottom: rem(1) solid $online-return-order-detail-border;
+      flex-direction: column;
+
+      @include breakpoint($tablet) {
+        flex-direction: row;
+      }
+    }
+
+    .cancel-return-button-wrapper {
+      button {
+        padding: rem(11) rem(13);
+        border: rem(1) solid $online-return-cancel-button-border;
+        width: 100%;
+
+        @include breakpoint($tablet) {
+          width: auto;
+        }
+      }
+
+      span {
+        display: flex;
+        align-items: center;
+        text-transform: uppercase;
+        justify-content: center;
+
+        @include icon(close, before) {
+          font-size: rem(16);
+          margin-#{$right}: rem(8);
+        }
       }
     }
   }

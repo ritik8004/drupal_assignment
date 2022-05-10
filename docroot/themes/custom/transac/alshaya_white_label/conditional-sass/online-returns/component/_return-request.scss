@@ -128,6 +128,7 @@
           display: flex;
           grid-area: c;
           flex-direction: column;
+          word-break: break-word;
 
           @include breakpoint($tablet) {
             flex-direction: row;
@@ -146,6 +147,7 @@
           }
 
           @include breakpoint($desktop) {
+            flex-basis: rem(258);
             padding-#{$right}: 3.125rem;
             padding-#{$left}: 3.125rem;
           }
@@ -171,7 +173,7 @@
           @include breakpoint($desktop) {
             padding-#{$right}: 0.5rem;
             padding-#{$left}: 3.125rem;
-            flex-basis: rem(216);
+            flex-basis: rem(208);
           }
 
           .price-block {
