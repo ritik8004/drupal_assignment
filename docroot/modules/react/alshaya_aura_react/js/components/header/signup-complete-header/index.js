@@ -112,6 +112,28 @@ class SignUpCompleteHeader extends React.Component {
     });
   };
 
+  /**
+   * Add or remove 'aura-header-modal-open' from alshayamainmenu block,
+   * if any modal popup is opened or closed. It will open the modal
+   * with full screen width.
+   */
+  toggleMenuBlockToFullWidth = () => {
+    const {
+      openLinkOldCardModal,
+      openOtpModal,
+      openNewUserModal,
+      openLinkCardModal,
+    } = this.state;
+
+    if (document.getElementById('block-alshayamainmenu')) {
+      if (openLinkOldCardModal || openOtpModal || openNewUserModal || openLinkCardModal) {
+        document.getElementById('block-alshayamainmenu').classList.add('aura-header-modal-open');
+      } else {
+        document.getElementById('block-alshayamainmenu').classList.remove('aura-header-modal-open');
+      }
+    }
+  };
+
   render() {
     const {
       openLinkOldCardModal,
@@ -150,6 +172,12 @@ class SignUpCompleteHeader extends React.Component {
       // Assign the current user's card tier level as a class.
       tierClass = tier || tierClass;
     }
+
+    // When page is visited on mobile view, and if any modal is opened,
+    // Below method will add few classes,
+    // So that the modal will cover the full screen width.
+    // Class will be removed when all modal popups are closed.
+    this.toggleMenuBlockToFullWidth();
 
     return (
       <>
