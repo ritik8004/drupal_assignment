@@ -26,7 +26,6 @@ import {
   removeError,
   getElementValue,
   getAuraCheckoutLocalStorageKey,
-  getAuraDetailsDefaultState,
   getAuraLocalStorageKey,
 } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { handleManualLinkYourCard } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
@@ -87,11 +86,6 @@ class AuraFormLinkCardOTPModal extends React.Component {
 
     // Check if there is any error available.
     if (stateValues.error) {
-      // Set state to default if error exists.
-      this.setState({
-        ...getAuraDetailsDefaultState(),
-      });
-
       /**
        * Show error/Validation message below the respective html element if there is any.
        * For ex, IF there is no aura card linked with provided mobile number.
