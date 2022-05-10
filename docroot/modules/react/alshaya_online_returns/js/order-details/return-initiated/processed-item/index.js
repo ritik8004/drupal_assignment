@@ -46,23 +46,27 @@ class ProcessedItem extends React.Component {
             closeCancelReturnModal={this.closeCancelReturnModal}
           />
         </ConditionalView>
-        <div className="return-status">
-          <span className="status-label">{returnStatus}</span>
-          <span className="status-message">{returnMessage}</span>
-        </div>
-        <div className="return-id">
-          {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
-        </div>
-        <ConditionalView condition={cancelBtnState}>
-          <div className="cancel-return-button-wrapper">
-            <button
-              type="button"
-              onClick={this.showCancelReturnPopup}
-            >
-              <span className="cancel-button-label">{Drupal.t('Cancel Return Request', {}, { context: 'online_returns' })}</span>
-            </button>
+        <div className="return-status-header">
+          <div className="return-status-wrapper">
+            <div className="return-status">
+              <span className="status-label">{returnStatus}</span>
+              <span className="status-message">{returnMessage}</span>
+            </div>
+            <div className="return-id">
+              {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
+            </div>
           </div>
-        </ConditionalView>
+          <ConditionalView condition={cancelBtnState}>
+            <div className="cancel-return-button-wrapper">
+              <button
+                type="button"
+                onClick={this.showCancelReturnPopup}
+              >
+                <span className="cancel-button-label">{Drupal.t('Cancel Return Request', {}, { context: 'online_returns' })}</span>
+              </button>
+            </div>
+          </ConditionalView>
+        </div>
         <ConditionalView condition={hasValue(returnData.items)}>
           {returnData.items.map((item) => (
             <div className="item-list-wrapper">
