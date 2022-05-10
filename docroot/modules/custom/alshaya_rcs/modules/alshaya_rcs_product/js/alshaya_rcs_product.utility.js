@@ -352,6 +352,8 @@ window.commerceBackend = window.commerceBackend || {};
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
       const variantSku = variantInfo.sku;
+      const variantParentSku = variantInfo.parent_sku;
+      const variantParentProduct = window.commerceBackend.getProductData(null, null, false)[variantParentSku];
       // @todo Add code for commented keys.
       info[variantSku] = {
         cart_image: window.commerceBackend.getCartImage(variant.product),
@@ -360,7 +362,7 @@ window.commerceBackend = window.commerceBackend || {};
         color_attribute: Drupal.hasValue(variantInfo.color_attribute) ? variantInfo.color_attribute : '',
         color_value: Drupal.hasValue(variantInfo.color) ? variantInfo.color : '',
         sku: variantInfo.sku,
-        parent_sku: variantInfo.parent_sku,
+        parent_sku: variantParentSku,
         configurableOptions: getVariantConfigurableOptions(product, variant),
         layout: getLayoutFromContext(product),
         context: getContext(product),
@@ -389,9 +391,9 @@ window.commerceBackend = window.commerceBackend || {};
       info[variantSku].max_sale_qty_parent = false;
 
       if (isQuantityLimitEnabled()) {
-        let maxSaleQuantity = product.maxSaleQty;
+        let maxSaleQuantity = variantParentProduct.maxSaleQty;
         // If max sale quantity is available at parent level, we use that.
-        if (product.maxSaleQty > 0) {
+        if (variantParentProduct.maxSaleQty > 0) {
           info[variantSku].max_sale_qty_parent = true;
         }
 
