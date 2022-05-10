@@ -69,5 +69,6 @@ local_storage_manager:
     - core/drupal
     - core/jquery
     - core/jquery.once
+    - core/jquery.cookie
     - core/drupalSettings
     - alshaya_master/common_functions
