@@ -1,0 +1,7 @@
+alshaya_hello_member.hello_member_config:
+  path: '/admin/config/alshaya/hello-member'
+  defaults:
+    _form: '\Drupal\alshaya_hello_member\Form\AlshayaHelloMemberSettingsForm'
+    _title: 'Alshaya Hello Member Configurations'
+  requirements:
+    _permission: 'administer site configuration'
