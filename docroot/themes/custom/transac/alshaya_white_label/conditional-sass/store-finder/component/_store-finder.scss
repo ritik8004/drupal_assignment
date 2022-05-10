@@ -638,24 +638,6 @@
       }
     }
 
-    .get--directions {
-      .device__tablet {
-        display: none;
-
-        @include breakpoint($only-tablet) {
-          display: block;
-        }
-      }
-
-      .device__desktop {
-        display: none;
-
-        @include breakpoint($desktop) {
-          display: block;
-        }
-      }
-    }
-
     .lat-lng {
       display: none;
     }
@@ -1370,24 +1352,6 @@
     padding: 0.5rem;
     padding-#{$left}: 0;
     padding-top: 0.5rem;
-  }
-
-  .get--directions {
-    .device__tablet {
-      display: none;
-
-      @include breakpoint($only-tablet) {
-        display: block;
-      }
-    }
-
-    .device__desktop {
-      display: none;
-
-      @include breakpoint($desktop) {
-        display: block;
-      }
-    }
   }
 
   .open--hours {
