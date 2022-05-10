@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import Popup from 'reactjs-popup';
 import { renderToString } from 'react-dom/server';
 import Loading from '../../../../../utilities/loading';
@@ -9,6 +10,8 @@ import AuraFormUnlinkedCard from '../../../aura-forms/aura-unlinked-card';
 import AuraFormSignUpOTPModal from '../../../aura-forms/aura-otp-modal-form';
 import AuraFormNewAuraUserModal from '../../../aura-forms/aura-new-aura-user-form';
 import AuraFormLinkCardOTPModal from '../../../aura-forms/aura-link-card-otp-modal-form';
+import { isUserAuthenticated } from '../../../../../../../js/utilities/helper';
+import { getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 
 class AuraNotLinkedData extends React.Component {
   constructor(props) {
@@ -80,6 +83,33 @@ class AuraNotLinkedData extends React.Component {
       chosenUserMobile,
       openLinkCardModal,
     } = this.state;
+
+    // If an already registered user signed in with it's card for which MDC has
+    // associated account, we receive loyalty status APC_NOT_LINKED_DATA. But
+    // for as a guest user can't perform link aura function so we will show
+    // points to earn message only in this scenario.
+    if (!isUserAuthenticated()) {
+      return (
+        <>
+          <div className="block-content registered-user-linked-pending-enrollment">
+            <div className="spc-aura-cart-icon">
+              <AuraHeaderIcon />
+            </div>
+            <div className="spc-aura-cart-content">
+              <span className="spc-aura-points-to-earn">
+                {/* We are using !pts as it does not encode the html into string
+              while using this in Drupal t() function. */}
+                {parse(getStringMessage('cart_earn_with_this_purchase', {
+                  '!pts': wait ? renderToString(<Loading />) : pointsToEarn,
+                }))}
+                <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
+              </span>
+            </div>
+          </div>
+        </>
+      );
+    }
+
     return (
       <>
         <div className="block-content registered-user-unlinked-card">
