@@ -152,6 +152,7 @@ $egift-disabled-gray2: #707070;
 $egift-titamium-white: #e4e4e4;
 $egift-gray: #979797;
 $cyan-blue: #387fcb;
+$prussian_blue: #063971;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -2088,10 +2089,12 @@ $egift-purchase-inactive-step-text: $_ancestral-water;
 $egift-purchase-disabled-btn-border: $egift-disabled-gray1;
 $egift-purchase-disabled-btn-text: $egift-disabled-gray2;
 $egift-purchase-radio-label: $mothercare-black;
+$egift-purchase-page-title: $mothercare-black;
 
 // eGift card checkout.
 $egift-edit-amount-modal-content-bg: $white-smoke-light;
 $egift-edit-amount-modal-subtitle: $egift-disabled-gray2;
+$egift-card-redeem-button: $mothercare-black;
 
 // eGift balance check.
 $egift-input-label: $grey-light;
@@ -2099,6 +2102,7 @@ $egift-balance-sidebar-bg: $white-smoke-light;
 $egift-balance-close-icon: $mothercare-black;
 $egift-form-input: $mothercare-black;
 $egift-input-border: $primary_input_border;
+$egift-check-balance-title: $_sofa-section-grey2;
 
 // eGift landing page.
 $egift-landing-page-sub-block-title: $mothercare-black;
@@ -2106,11 +2110,14 @@ $egift-landing-page-sub-block-subtitle: $black-two;
 $egift-landing-page-one-row-two-col-box-bg: $egift-titamium-white;
 $egift-button-border: $_gray_222;
 $egift-accordion-title: $mothercare-black;
-$egift-accordion-active-title: $marine-blue;
+$egift-accordion-active-title: $mothercare-black;
 $egift-accordion-content: $black-two;
-$egift-banner-bg: $bleach_white;
+$egift-banner-bg: $_algolia_suggestion_list_bg;
 $egift-breadcrumb-border: $_gray;
 $egift-accordion-bg: $white-four;
+$egift-banner-title: $_gray_222;
+$egift-myaccount-button: $prussian_blue;
+$egift-myaccount-topup-button: $prussian_blue;
 
 // Wishlist
 $wishlist-header-notification-border: $pumpkin-orange;
