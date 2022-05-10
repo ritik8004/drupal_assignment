@@ -412,7 +412,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'aura_link_unlinked_card_body_title',
-      'value' => t('@firstName an Aura loyalty card is associate with your email adress. It just a takes one click to link.', [], ['context' => 'aura']),
+      'value' => t('@firstName an Aura loyalty card is associate with your email address. It just a takes one click to link.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_link_unlinked_card_body_sub_title',
