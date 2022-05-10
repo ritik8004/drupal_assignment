@@ -31,3 +31,6 @@ alshaya_master.settings:
     sub_brand_logo_img:
       type: string
       label: 'Sub brand logo image'
+    cookie_keys:
+      type: string
+      label: 'List of keys to save it cookie when localStorage is absent'
