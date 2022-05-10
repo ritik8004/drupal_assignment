@@ -206,7 +206,8 @@ class AuraCheckoutRewards extends React.Component {
         {/* Guest - Show aura section only when card data is available. */}
         <ConditionalView condition={!isUserAuthenticated()
           && (loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED
-          || loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED)}
+          || loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED
+          || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA)}
         >
           <AuraPointsToEarnedWithPurchase
             pointsToEarn={auraPointsToEarn}
