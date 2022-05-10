@@ -37,7 +37,7 @@ class HelloMemberHelper {
    *   TRUE/FALSE
    */
   public function isHelloMemberEnabled() {
-    return $this->configFactory->get('alshaya_hello_member.settings')->get('hello_member_enabled');
+    return $this->configFactory->get('alshaya_hello_member.settings')->get('enabled');
   }
 
 }

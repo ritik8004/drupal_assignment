@@ -36,7 +36,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
     ];
     $form['hello_member_configuration']['enable_disable_hello_member'] = [
       '#type' => 'checkbox',
-      '#default_value' => $config->get('hello_member_enabled'),
+      '#default_value' => $config->get('enabled'),
       '#title' => $this->t('Enable Hello Member on site.'),
     ];
 
@@ -48,7 +48,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_hello_member.settings')
-      ->set('hello_member_enabled', $form_state->getValue('enable_disable_hello_member'))
+      ->set('enabled', $form_state->getValue('enable_disable_hello_member'))
       ->save();
 
     parent::submitForm($form, $form_state);

@@ -1,1 +1,1 @@
-hello_member_enabled: false # Config to enable/disable hello member feature.
+enabled: false # Config to enable/disable hello member feature.
