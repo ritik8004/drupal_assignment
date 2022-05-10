@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  window.commerceBackend = window.commerceBackend || {};
+
   /**
    * Get the array of configurable attribute codes for the product.
    *
@@ -17,37 +19,17 @@
   }
 
   // Add the styled products.
-  RcsEventManager.addListener('rcsUpdateResults', function getProductsInStyle(e) {
+  window.commerceBackend.getProductsInStyle = async function getProductsInStyle(product) {
     // Return if result is empty.
-    if (!Drupal.hasValue(e.detail.result)
-      || !Drupal.hasValue(e.detail.result.style_code)) {
+    if (!Drupal.hasValue(product)
+      || !Drupal.hasValue(product.style_code)) {
       return;
     }
-    // The original object will also be modified in this process.
-    var mainProduct = e.detail.result;
+
+    var mainProduct = JSON.parse(JSON.stringify(product));
 
     // Get the products with the same style.
-    var styleProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('products-in-style', { styleCode: mainProduct.style_code });
-
-    // Get the main product entity from the style products list.
-    for (var index = 0; index < styleProducts.length; index++) {
-      if (styleProducts[index].sku === mainProduct.sku) {
-        try {
-          // Deep clone the object received in the response.
-          mainProduct = JSON.parse(JSON.stringify(styleProducts[index]));
-          // The object in the event only contains minimal data.
-          // So we replace that with the actual product object containing all
-          // the required data.
-          e.detail.result = mainProduct;
-          break;
-        } catch (error) {
-          Drupal.alshayaLogger('error', 'Could not parse product data for SKU @sku', {
-            '@sku': mainProduct.sku,
-          });
-          return;
-        }
-      }
-    }
+    var styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: mainProduct.style_code });
 
     // This will hold the configugrable options for the main product keyed by
     // the attribute code and then the value index of the options.
@@ -74,7 +56,7 @@
       // Store each product data into static storage so that it can be used in
       // PLP add to bag to get the parent sku.
       if (mainProduct.sku !== styleProduct.sku) {
-        window.commerceBackend.setRcsProductToStorage(styleProduct, e.detail.context);
+        window.commerceBackend.setRcsProductToStorage(styleProduct, mainProduct.context);
       }
       // Check if product is in stock.
 
@@ -168,6 +150,9 @@
       return (optionA.position > optionB.position) - (optionA.position < optionB.position);
     });
 
-    window.commerceBackend.setRcsProductToStorage(mainProduct, e.detail.context);
-  }, 100);
+    window.commerceBackend.setMediaData(mainProduct);
+
+    window.commerceBackend.setRcsProductToStorage(mainProduct, mainProduct.context);
+    return mainProduct;
+  }
 })();

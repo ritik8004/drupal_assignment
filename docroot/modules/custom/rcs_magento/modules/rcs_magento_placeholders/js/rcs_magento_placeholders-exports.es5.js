@@ -313,6 +313,15 @@ exports.getData = async function getData(
       result = response.data;
       break;
 
+    case 'products-in-style':
+      let variables = rcsPhGraphqlQuery.styled_products.variables;
+      variables.styleCode = params.styleCode;
+
+      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
@@ -361,15 +370,6 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
   let result = null;
 
   switch (placeholder) {
-    case 'products-in-style':
-      let variables = rcsPhGraphqlQuery.styled_products.variables;
-      variables.styleCode = params.styleCode;
-
-      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
-      response = rcsCommerceBackend.invokeApiSynchronous(request);
-      result = response.data.products.items;
-      break;
-
     // Get the product data for the given sku.
     case 'single_product_by_sku':
       // Build query.
