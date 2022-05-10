@@ -3,12 +3,3 @@ services:
     class: \Drupal\alshaya_rcs\Commands\AlshayaDisableSyncCommands
     tags:
       - { name: drush.command }
-  alshaya_rcs.translate_commands:
-    class: \Drupal\alshaya_rcs\Commands\AlshayaExportTranslationCommands
-    arguments:
-      - '@file_system'
-      - '@logger.factory'
-      - '@locale.storage'
-      - '@language_manager'
-    tags:
-      - { name: drush.command }

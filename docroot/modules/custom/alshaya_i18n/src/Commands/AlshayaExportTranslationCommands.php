@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_rcs\Commands;
+namespace Drupal\alshaya_i18n\Commands;
 
 use Drush\Commands\DrushCommands;
 use Drupal\Core\File\FileSystemInterface;
