@@ -1,0 +1,54 @@
+.egift-landing-page {
+  .popup-content.egift-balance-check-content {
+    .egift-amount-update-wrapper {
+      .egift-check-bal-title {
+        color: $egift-check-balance-title;
+      }
+    }
+
+    .egift-balance-check-form {
+      .egift-button {
+        @include egift-btn;
+
+        background: $egift-myaccount-button;
+        border-color: $egift-myaccount-button;
+        text-transform: uppercase;
+        font-size: rem(13);
+      }
+
+      .egift-header-wrapper {
+        p {
+          color: $egift-banner-title;
+        }
+      }
+    }
+
+    .egift-balance-response {
+      p {
+        color: $egift-banner-title;
+
+        &.egift-current-balance-text {
+          color: $egift-banner-title;
+        }
+
+        &.egift-price-text {
+          color: $egift-banner-title;
+        }
+      }
+
+      .egift-topup-btn-wrapper {
+        button {
+          background: $egift-myaccount-button;
+          border-color: $egift-myaccount-button;
+          text-transform: uppercase;
+          font-size: rem(13);
+
+          &:last-child {
+            background: transparent;
+            border-color: $egift-card-redeem-button;
+          }
+        }
+      }
+    }
+  }
+}
