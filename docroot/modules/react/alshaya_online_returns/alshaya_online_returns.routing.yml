@@ -3,6 +3,7 @@ alshaya_online_returns.return_request:
   defaults:
     _controller: '\Drupal\alshaya_online_returns\Controller\OnlineReturnController::returnRequest'
     _title: 'Return Request'
+    _title_context: 'online_returns'
   requirements:
     _custom_access: '\Drupal\acq_customer\Controller\CustomerController::checkAccess'
   options:

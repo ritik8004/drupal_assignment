@@ -169,6 +169,7 @@ function _alshaya_online_returns_translations() {
       ],
       'Return Request' => [
         'ar' => 'طلب الإرجاع',
+        'context' => 'online_returns',
       ],
       '@card_type card ending in @card_number' => [
         'ar' => 'بطاقة @card_type تنتهي في @card_number',
