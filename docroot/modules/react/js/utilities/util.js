@@ -58,16 +58,3 @@ export const isFullPaymentDoneByPseudoPaymentMedthods = (cart) => {
 
   return false;
 };
-
-/**
- * Helper function to check if hello member is enabled.
- */
-export const isHelloMemberEnabled = () => {
-  let helloMemberStatus = false;
-  if (typeof drupalSettings.helloMember !== 'undefined'
-    && typeof drupalSettings.helloMember.enabled !== 'undefined') {
-    helloMemberStatus = drupalSettings.helloMember.enabled;
-  }
-
-  return helloMemberStatus;
-};
