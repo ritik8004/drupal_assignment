@@ -135,6 +135,7 @@ class AlshayaExportTranslationCommands extends DrushCommands {
         'Language',
         'Source String',
         'Translation',
+        'Context',
       ];
       // Insert headers as first row.
       fputcsv($file, $headers);
@@ -156,15 +157,10 @@ class AlshayaExportTranslationCommands extends DrushCommands {
   private function getCustomTranslations() {
     $langcodes = $this->languageManager->getLanguages();
     $langcodes_list = array_keys($langcodes);
-    $default_langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // Iterate through all languages.
     $translate_list = [];
     foreach ($langcodes_list as $langcode) {
-      // Do not export default language.
-      if ($langcode == $default_langcode) {
-        continue;
-      }
       $conditions = [
         'language' => $langcode,
         'translated' => TRUE,
@@ -177,6 +173,7 @@ class AlshayaExportTranslationCommands extends DrushCommands {
           'lang' => $langcode,
           'source' => $translation->source,
           'translation' => $translation->translation,
+          'context' => $translation->context,
         ];
       }
     }
