@@ -11,7 +11,7 @@ module.exports = {
     ],
     destination: 'dist/css/',
     options: {
-      outputStyle: 'expanded',
+      outputStyle: 'compressed',
       includePaths: [
         './node_modules'
       ]
@@ -37,7 +37,6 @@ module.exports = {
     dev: 'development'
   },
   autoprefixer: {
-    browsers: ['last 2 versions']
   },
   stylelint: {
     options: {

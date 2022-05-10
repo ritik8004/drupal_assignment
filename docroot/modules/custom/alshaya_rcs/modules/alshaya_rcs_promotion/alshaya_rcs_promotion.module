@@ -1,0 +1,159 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_promotion_theme($existing, $type, $theme, $path) {
+  return [
+    'node__rcs_promotion' => [
+      'variables' => [],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function alshaya_rcs_promotion_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
+    $node = \Drupal::request()->attributes->get('node');
+    if ($node->bundle() == 'rcs_promotion') {
+      $suggestions[] = 'page__plp';
+    }
+  }
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query().
+ */
+function alshaya_rcs_promotion_rcs_placeholders_graphql_query() {
+  $query_fields = [];
+  /** @var \Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper $rcs_promotion_helper */
+  $rcs_promotion_helper = \Drupal::service('alshaya_rcs_promotion.helper');
+  $url_key = $rcs_promotion_helper->getPromotionUrlKey();
+
+  $query_fields['promotions'] = [
+    'query' => [
+      'query($urlKey: String)' => [
+        'promotionUrlResolver(url_key: $urlKey)' => [
+          'id',
+          'title',
+          'description',
+        ],
+      ],
+    ],
+    'variables' => [
+      'urlKey' => $url_key,
+    ],
+  ];
+  // Dynamic promotion query for product (PDP).
+  $query_fields['product_dynamic_promotions'] = [
+    'query' => [
+      'label',
+    ],
+  ];
+  // Dynamic promotion query for Cart.
+  $query_fields['cart_dynamic_promotions'] = [
+    'query' => [
+      'cart_labels' => [
+        'shipping_free',
+        'applied_rules' => [
+          'label',
+          'description',
+        ],
+        'qualified' => [
+          'rule_id',
+          'label',
+          'type',
+        ],
+        'next_eligible' => [
+          'rule_id',
+          'label',
+          'type',
+          'coupon',
+          'couponDiscount',
+          'threshold_reached',
+        ],
+      ],
+      'products_labels' => [
+        'sku',
+        'labels' => [
+          'promotion_nid',
+          'link',
+          'label',
+        ],
+      ],
+    ],
+  ];
+
+  return $query_fields;
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_promotion_library_info_alter(&$libraries, $extension) {
+  // Alter the promotion label library to replace the base JS file with the
+  // promotion label file provided by this module.
+  if (isset($libraries['label_manager']['js']['assets/js/alshaya_promotions_label.js'])) {
+    _alshaya_rcs_promotion_update_library(
+      $libraries,
+      'label_manager',
+      'assets/js/alshaya_promotions_label.js',
+      'js/alshaya_rcs_promotion_label.js',
+      [
+        'rcs_magento_placeholders/rcs_magento_placeholders',
+        'alshaya_rcs_promotion/alshaya_rcs_promotion',
+      ]
+    );
+  }
+  // Alter the dynamic promotion library to replace the base JS file with the
+  // dynamic promotion label file provided by this module.
+  if (isset($libraries['dynamic_promotion_label']['js']['dist/dynamic_promotion_label.bundle.js'])) {
+    _alshaya_rcs_promotion_update_library(
+      $libraries,
+      'dynamic_promotion_label',
+      'dist/dynamic_promotion_label.bundle.js',
+      'js/alshaya_rcs_promotion_dynamic_label.js',
+      [
+        'rcs_magento_placeholders/rcs_magento_placeholders',
+        'alshaya_rcs_promotion/alshaya_rcs_promotion',
+        'alshaya_acm_promotion/label_manager',
+      ]
+    );
+  }
+}
+
+/**
+ * Update library js and dependency.
+ *
+ * @param array $libraries
+ *   An array of libraries.
+ * @param string $existing_library_name
+ *   Name of the existing library.
+ * @param string $existing_js_path
+ *   The path of the existing js file.
+ * @param string $new_js_path
+ *   The path of the new js file.
+ * @param array $dependencies
+ *   An array of library dependencies.
+ */
+function _alshaya_rcs_promotion_update_library(
+  array &$libraries,
+  string $existing_library_name,
+  string $existing_js_path,
+  string $new_js_path,
+  array $dependencies) {
+  // Retain the options of the existing js file.
+  $options = $libraries[$existing_library_name]['js'][$existing_js_path];
+  unset($libraries[$existing_library_name]['js'][$existing_js_path]);
+  $self_module_path = drupal_get_path('module', 'alshaya_rcs_promotion');
+  $libraries[$existing_library_name]['js']["/$self_module_path/$new_js_path"] = $options;
+  // Check if dependency array exists.
+  $libraries[$existing_library_name]['dependencies'] = array_merge($libraries[$existing_library_name]['dependencies'] ?? [], $dependencies);
+}

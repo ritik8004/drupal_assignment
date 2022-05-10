@@ -1,0 +1,4 @@
+# Root category ID setup for store in Magento, default to 1.
+root_category: 2
+# Defining menu depth to fetch from the Magento, default to 3.
+menu_max_depth: 3

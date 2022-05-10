@@ -240,7 +240,9 @@ class AdvancedPageResource extends ResourceBase {
 
     // LHN Data for Departmental page for mobile app.
     if ($node->get('field_use_as_department_page')->getValue()[0]['value'] == 1 && $node->get('field_show_left_menu')->getValue()[0]['value'] == 1) {
-      $response_data['lhn_tree'] = $this->getCategoryData($term->id());
+      if ($term instanceof TermInterface) {
+        $response_data['lhn_tree'] = $this->getCategoryData($term->id());
+      }
     }
 
     foreach ($advanced_page_fields as $field => $field_info) {

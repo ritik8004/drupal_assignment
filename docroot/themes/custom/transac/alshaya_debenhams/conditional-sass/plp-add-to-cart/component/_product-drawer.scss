@@ -24,7 +24,7 @@
     }
 
     .config-form-addtobag-button {
-      @include button-brand();
+      @include button-brand;
 
       &:hover {
         background: $primary_brand_button;

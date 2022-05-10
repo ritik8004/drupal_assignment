@@ -1,0 +1,16 @@
+services:
+  alshaya_acm_promotion.promotion_export_commands:
+    class: Drupal\alshaya_acm_promotion\Commands\PromotionExportCommand
+    arguments:
+      - '@entity_type.manager'
+      - '@language_manager'
+      - '@file_system'
+    tags:
+      - { name: drush.command }
+  alshaya_acm_promotion.promotion_config_commands:
+    class: Drupal\alshaya_acm_promotion\Commands\PromotionConfigCommands
+    arguments:
+      - '@alshaya_acm_promotion.api_helper'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command }

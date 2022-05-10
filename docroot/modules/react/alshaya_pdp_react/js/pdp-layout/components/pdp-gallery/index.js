@@ -43,7 +43,10 @@ export default class PdpGallery extends React.PureComponent {
     const {
       pdpGallery, children, showFullVersion, context, miniFullScreenGallery, animateMobileGallery,
     } = this.props;
-    const images = (pdpGallery && context === 'main') ? pdpGallery.thumbnails : pdpGallery.images;
+    let images;
+    if (pdpGallery) {
+      images = context === 'main' ? pdpGallery.thumbnails : pdpGallery.images;
+    }
 
     const emptyRes = (
       <div>Images not available</div>

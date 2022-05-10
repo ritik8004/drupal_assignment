@@ -49,6 +49,7 @@ alshaya_aura_pdp:
     assets/js/productHelper.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_acm_product/product_utility
 
 # This is compatible with commerce backend version 1.
 aura_backend.v1:

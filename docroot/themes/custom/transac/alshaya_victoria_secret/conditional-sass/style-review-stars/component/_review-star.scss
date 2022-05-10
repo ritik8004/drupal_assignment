@@ -1,0 +1,17 @@
+.star-ratings-wrapper {
+  .inline-star {
+    .icon-ic_ratingfull,
+    .icon-ic_rating {
+      &::before {
+        font-size: 1.5rem;
+      }
+    }
+
+    .star-ratings-front,
+    .star-ratings-back {
+      span {
+        padding: 0;
+      }
+    }
+  }
+}

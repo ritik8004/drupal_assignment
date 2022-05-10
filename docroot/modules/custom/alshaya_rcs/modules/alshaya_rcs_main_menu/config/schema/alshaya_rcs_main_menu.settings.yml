@@ -1,0 +1,12 @@
+# Schema for the configuration files of the alshaya rcs main menu settings.
+
+alshaya_rcs_main_menu.settings:
+  type: config_object
+  label: 'RCS Main menu settings'
+  mapping:
+    root_category:
+      type: integer
+      label: 'Root category ID setup for store in Magento'
+    menu_max_depth:
+      type: integer
+      label: 'Main menu maximum depth'

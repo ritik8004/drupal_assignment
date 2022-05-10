@@ -1,0 +1,6 @@
+name: Alshaya RCS Magento Placeholders
+description: Provides replacement for magento placeholders.
+type: module
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_rcs:alshaya_rcs

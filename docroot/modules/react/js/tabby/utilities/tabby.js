@@ -1,5 +1,8 @@
 import { hasValue } from '../../utilities/conditionsUtility';
-import { getApiEndpoint } from '../../../alshaya_spc/js/backend/v2/utility';
+import {
+  getApiEndpoint,
+  isRequestFromSocialAuthPopup,
+} from '../../../alshaya_spc/js/backend/v2/utility';
 import logger from '../../utilities/logger';
 import StaticStorage from '../../../alshaya_spc/js/backend/v2/staticStorage';
 import { callMagentoApiSynchronous } from '../../utilities/requestHelper';
@@ -11,6 +14,13 @@ const Tabby = {
   isAvailable: () => window.Tabby,
 
   productAvailable: (that) => {
+    // If request is from SocialAuth Popup, restrict further processing.
+    // we don't want magento API calls happen on popup, As this is causing issues
+    // in processing parent pages.
+    if (isRequestFromSocialAuthPopup()) {
+      return false;
+    }
+
     const { cart } = that.props;
     let tabbyStatus = StaticStorage.get('tabbyStatus');
     const total = cart.cart.totals.base_grand_total_without_surcharge;

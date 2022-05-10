@@ -19,6 +19,7 @@ $windows-blue: $black;
 $thunderbird: #b91824;
 $boulder-grey: #7c7c7c;
 $_plp_secondary_cta_hover: rgba(0, 0, 0, 0.1);
+$white_smoke : #f2f2f2;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -650,6 +651,8 @@ $magv2-cart-notification-text: $grey;
 $magv2-cart-notification-title: $black;
 $magv2-cart-notification-btn-bg: $black;
 $magv2-gallery-popup-cross: $black;
+$magv2-icon-bg: $white_smoke;
+$magv2-icon-bg-border: $_plp_secondary_cta_hover;
 
 // Review and Rating
 $rr-histogram-dynamic-bar-bg: $black;
@@ -700,3 +703,11 @@ $country-switcher-label-mobile: $black;
 // Express delivery.
 $pdp-delivery-section-subtitle: $dove-gray;
 $pdp-delivery-section-title: $black;
+
+// PLP add to cart.
+$plp_quick_color_variant_border: $black;
+$plp-quick-view-product-size-border: $black;
+$plp-quick-view-product-size-text: $black;
+$plp-quick-view-product-size-active-bg: $black;
+$plp-quick-view-product-size-border-hover: $black;
+$plp-quick-view-product-size-text-disabled: $grey;

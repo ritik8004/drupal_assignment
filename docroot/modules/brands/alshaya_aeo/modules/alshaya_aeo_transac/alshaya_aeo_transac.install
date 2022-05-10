@@ -10,6 +10,27 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
  * Implements hook_update_N().
+ *
+ * Add translations for super category feature.
+ */
+function alshaya_aeo_transac_update_8006() {
+  $strings = [
+    'alshaya_seo_super_category_prefix' => [
+      'en' => "American Eagle",
+      'ar' => "ﭬيكتوريا سيكريت",
+    ],
+    'alshaya_seo_super_category_prefix @term' => [
+      'en' => "American Eagle @term",
+      'ar' => "ﭬيكتوريا سيكريت @term",
+    ],
+  ];
+
+  // Save translations.
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
  */
 function alshaya_aeo_transac_update_8005() {
   // Set image_thumb_gallery => false to use single image gallery

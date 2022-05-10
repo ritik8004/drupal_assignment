@@ -10,6 +10,7 @@ import {
   getCartIdFromStorage,
   isUserAuthenticated,
   removeCartIdFromStorage,
+  isRequestFromSocialAuthPopup,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
 import cartActions from '../../utilities/cart_actions';
@@ -19,7 +20,7 @@ import {
   isString,
   isNumber,
 } from '../../../../js/utilities/conditionsUtility';
-import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
+import { callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import { getExceptionMessageType } from '../../../../js/utilities/error';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
@@ -85,29 +86,6 @@ const returnExistingCartWithError = (code, message) => ({
 });
 
 /**
- * Triggers the stock refresh process for the provided skus.
- *
- * @param {object} data
- *   Data containing sku and stock quantity information.
- *
- * @returns {Promise<object>}
- */
-const triggerStockRefresh = (data) => callDrupalApi(
-  '/spc/checkout-event',
-  'POST',
-  {
-    form_params: {
-      action: 'refresh stock',
-      skus_quantity: data,
-    },
-  },
-).catch((error) => {
-  logger.error('Error occurred while triggering checkout event refresh stock. Message: @message', {
-    '@message': error.message,
-  });
-});
-
-/**
  * Check if user is anonymous and without cart.
  *
  * @returns bool
@@ -155,6 +133,13 @@ window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
  *   A promise object.
  */
 window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return null;
+  }
+
   let requestMethod = null;
   let requestUrl = null;
   let itemData = null;
@@ -290,9 +275,9 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
     const exceptionType = getExceptionMessageType(response.data.error_message);
     if (exceptionType === 'OOS') {
-      await triggerStockRefresh({ [sku]: 0 });
+      await window.commerceBackend.triggerStockRefresh({ [sku]: 0 });
     } else if (exceptionType === 'not_enough') {
-      await triggerStockRefresh({ [sku]: quantity });
+      await window.commerceBackend.triggerStockRefresh({ [sku]: quantity });
     }
 
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
@@ -388,6 +373,13 @@ window.commerceBackend.refreshCart = async (data) => {
  *   The cart id or null.
  */
 window.commerceBackend.createCart = async () => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return null;
+  }
+
   // Remove cart_id from storage.
   removeCartIdFromStorage();
 
@@ -422,6 +414,12 @@ window.commerceBackend.createCart = async () => {
 };
 
 window.commerceBackend.associateCartToCustomer = async (pageType) => {
+  // If request is from SocialAuth Popup, restrict further processing.
+  // we don't want magento API calls happen on popup, As this is causing issues
+  // in processing parent pages.
+  if (isRequestFromSocialAuthPopup()) {
+    return;
+  }
   // If user is not logged in, no further processing required.
   // We are not suppose to call associated cart for customer if user is doing
   // topup.

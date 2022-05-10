@@ -1,4 +1,4 @@
-@javascript @appointment @mobile @auth @bpaeuat
+@javascript @appointment @mobile @auth
 Feature: Test Boots functionality for Authenticated User on Mobile
 
   Background:

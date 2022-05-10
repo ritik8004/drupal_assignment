@@ -1,0 +1,95 @@
+{{ attach_library('alshaya_white_label/attribute') }}
+
+<article
+    class="entity--type-node"
+    data-vmode="modal"
+    data-sku="#rcs.product_modal._self|sku#"
+    gtm-type="gtm-product-link"
+    gtm-category="#rcs.product_modal.gtm_attributes.category#"
+    gtm-container="not defined"
+    gtm-view-mode="modal"
+    gtm-cart-value=""
+    gtm-main-sku="#rcs.product_modal._self|sku#"
+    gtm-name="#rcs.product_modal.name#"
+    gtm-product-sku=""
+    gtm-product-sku-class-identifier="#rcs.product_modal.gtm_attributes.id#"
+    gtm-sku-type="#rcs.product_modal._self|sku-type#"
+    gtm-brand="#rcs.product_modal.gtm_attributes.brand#"
+    gtm-dimension4="#rcs.product_modal.gtm_attributes.dimension4#"
+    gtm-price="#rcs.product_modal.gtm_attributes.price#"
+    gtm-dimension3="#rcs.product_modal.gtm_attributes.dimension3#"
+    gtm-stock=""
+  >
+  {# The following class will be changed to acq-content-product-modal in JS. #}
+  {# It is added here directly in order to avoid JS detecting multiple classes. #}
+  <div class="acq-content-product-modal-template">
+    <div class="content__title_wrapper">
+
+      {% if content.brand_logo %}
+        <div>#rcs.product_modal._self|brand_logo#</div>
+      {% endif %}
+
+      {% block productBrand %}
+      {% endblock %}
+
+      {{ title_prefix }}
+      {% if not page %}
+        <h2{{ title_attributes.addClass("c-products__item__label") }}>
+          #rcs.product_modal.name#
+        </h2>
+      {% endif %}
+      {{ title_suffix }}
+
+      {% block pricePrefix %}
+      {% endblock %}
+
+      <div class="price-block {{ content.price_block_identifier }}">
+        #rcs.product_modal._self|price#
+      </div>
+
+      {% if content.postpay %}
+        {{ attach_library('alshaya_white_label/postpay-pdp') }}
+        <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
+      {% endif %}
+
+      {% if content.promotions %}
+        <div class="promotions">
+          {{ content.promotions }}
+        </div>
+      {% endif %}
+
+      {% if vat_text %}
+        <div class="vat-text">#rcs.product_modal._self|vat_text#</div>
+      {% endif %}
+
+      <div class="content--item-code">
+        <span class="field__label">{{ 'Item Code'|t }}:</span>
+        #rcs.product_modal._self|sku#
+      </div>
+
+    </div>
+
+    <div class="content__main {{ image_slider_position_pdp }}">
+      <div class="gallery-wrapper"></div>
+    </div>
+
+    <div class="content__sidebar">
+      {% block sizeVolume %}
+      {% endblock %}
+
+      <div class="basic-details-wrapper">
+        <div class="field--name-field-skus">#rcs.product_modal._self|add_to_cart#</div>
+        {% if quantity_limit_enabled == true %}
+          <div class="order-quantity-limit-message"></div>
+        {% endif %}
+      </div>
+
+      {% if sku_out_of_stock %}
+        <div class="out-of-stock {{ sku_out_of_stock }}"></div>
+      {% endif %}
+
+      <a class="full-prod-link" href="#rcs.product_modal._self|url#">{{ "View Full Product Details"|t }}</a>
+
+    </div>
+  </div>
+</article>

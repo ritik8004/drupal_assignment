@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_remove_term_in_breadcrumb
+    - taxonomy.vocabulary.rcs_category
+  enforced:
+    module:
+      - alshaya_rcs_main_menu
+id: taxonomy_term.rcs_category.field_remove_term_in_breadcrumb
+field_name: field_remove_term_in_breadcrumb
+entity_type: taxonomy_term
+bundle: rcs_category
+label: 'Remove term name from breadcrumb'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: '1'
+  off_label: '0'
+field_type: boolean

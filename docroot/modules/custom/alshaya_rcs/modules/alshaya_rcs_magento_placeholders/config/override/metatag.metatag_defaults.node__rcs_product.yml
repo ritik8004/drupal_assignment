@@ -1,0 +1,8 @@
+tags:
+  title: '#rcs.product.meta_title#'
+  description: '#rcs.product.meta_description#'
+  canonical_url: '[site:url]#rcs.product.url_key#.html'
+  keywords: '#rcs.product.meta_keyword#'
+  image_src: '#rcs.product._self|first_image#'
+  og_title: '#rcs.product.og_meta_title#'
+  og_description: '#rcs.product.og_meta_description#'

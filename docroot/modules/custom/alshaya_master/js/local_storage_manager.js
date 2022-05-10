@@ -42,8 +42,28 @@
       dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime) * 1000);
     }
 
-    // Store data in the local storage with the expiry time.
-    localStorage.setItem(storageKey, JSON.stringify(dataToStore));
+    try {
+      // Store data in the local storage with the expiry time.
+      localStorage.setItem(storageKey, JSON.stringify(dataToStore));
+    }
+    catch (e) {
+      if (e.name === 'QuotaExceededError') {
+        // Log quota exceeded error in datadog and set flag.
+        if (sessionStorage.getItem('_quotaExceededErrorLogged') !== '1') {
+          let localKeys = Object.keys(localStorage);
+          let _lsTotal=0, totalSize;
+          $.each(localKeys, function (index, value) {
+            _lsTotal += ((localStorage[value].length + value.length)* 2);
+          });
+          totalSize = (_lsTotal / 1024).toFixed(2) + " KB";
+          // Logging error message and size used in local storage.
+          Drupal.alshayaLogger('error', e.message + ' Total size in localStorage: ' + totalSize, localKeys);
+          sessionStorage.setItem('_quotaExceededErrorLogged', '1');
+        }
+      } else {
+        Drupal.alshayaLogger('error', e.message);
+      }
+    }
 
     // Return true as an indication of values stored successfully.
     return true;
@@ -54,9 +74,6 @@
    *
    * @param {string} storageKey
    *  Local storage key to remove associated data.
-   *
-   * @returns {boolean}
-   *  true/false based on the action performed.
    */
   Drupal.removeItemFromLocalStorage = function (storageKey) {
     localStorage.removeItem(storageKey)
@@ -77,17 +94,27 @@
   Drupal.getItemFromLocalStorage = function (storageKey) {
     // Return is item not found in the storage with the provided key.
     let storageItem = localStorage.getItem(storageKey);
-    if (!storageItem) {
-      return null;
-    }
 
     try {
       // If item is available parse the info to JSON object.
       storageItem = JSON.parse(storageItem);
     }
     catch (error) {
-      // If JSON parse failed we return string.
-      return storageItem;
+      // Return strings as is.
+      if (typeof storageItem === 'string') {
+        return storageItem;
+      }
+
+      // Unknown reason.
+      Drupal.alshayaLogger('warning', 'Drupal.getItemFromLocalStorage failed to fetch the data for @key.', {
+        '@key': storageKey,
+      });
+
+      return null;
+    }
+
+    if (storageItem == null) {
+      return null;
     }
 
     // Check if the storage items data isn't expired. For that,

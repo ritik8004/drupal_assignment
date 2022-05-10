@@ -104,12 +104,12 @@ export default class EgiftCardPurchase extends React.Component {
 
       // GTM product attributes.
       const productGtm = {
-        name: productData.product_name,
+        name: `${productData.product_name}/${productData.price}`,
         price: productData.price,
         variant: productData.sku,
         dimension2: 'virtual',
         dimension4: 1,
-        quantity: productData.quantity,
+        quantity: 1,
         metric2: productData.price,
       };
 
@@ -167,8 +167,8 @@ export default class EgiftCardPurchase extends React.Component {
 
     // Get recipient email.
     const email = data.get('egift-recipient-email').trim();
-    // Validate email.
-    if (email === '') {
+    // Validate email, check if email has @ and with domain after dot.
+    if (email === '' || !(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
       document.getElementById('email-error').innerHTML = Drupal.t('Please enter valid email address', {}, { context: 'egift' });
       document.getElementById('email-error').classList.add('error');
       isError = true;
@@ -193,6 +193,30 @@ export default class EgiftCardPurchase extends React.Component {
       this.handleAmountSelect(false, 0);
     }
 
+    // Get open amount input element.
+    const element = document.getElementById('open-amount');
+    // Get open amount value.
+    const openAmount = (element !== null) ? element.value : '';
+    if (openAmount !== '') {
+      // Min and Max value allowed for open amount.
+      const amountFrom = parseFloat(element.getAttribute('min'));
+      const amountTo = parseFloat(element.getAttribute('max'));
+
+      // on submit compare if user input for open amount lies in the allowed range.
+      if (parseFloat(openAmount) < amountFrom || parseFloat(openAmount) > amountTo) {
+        document.getElementById('open-amount-error').innerHTML = Drupal.t('Please enter amount in the range of @amountFrom to @amountTo', {
+          '@amountFrom': amountFrom,
+          '@amountTo': amountTo,
+        }, { context: 'egift' });
+        isError = true;
+      }
+    }
+    // on submit check if user input for open amount or amount list,
+    // is not selected after switching the card.
+    if (document.querySelectorAll('.item-amount.active').length === 0 && openAmount === '') {
+      document.getElementById('open-amount-error').innerHTML = Drupal.t('Please enter amount or select from above.', {}, { context: 'egift' });
+      isError = true;
+    }
     if (isError) {
       removeFullScreenLoader();
       return;
@@ -308,6 +332,7 @@ export default class EgiftCardPurchase extends React.Component {
               onSubmit={this.handleSubmit}
               className="egift-form fadeInUp"
               id="egift-purchase-form"
+              noValidate
             >
               <div
                 ref={this.errorElementRef}

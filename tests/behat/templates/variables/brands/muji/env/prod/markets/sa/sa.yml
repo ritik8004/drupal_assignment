@@ -1,9 +1,9 @@
 variables:
-  spc_product_listing_page: '/shop-fashion-mens-socks/'
-  spc_basket_page: '/shop-fashion-mens-socks/'
-  spc_pdp_page: 'buy-indian-cotton-jersey-stitch-crew-neck-s-s-t-shirt-white.html'
-  product_listing_page_url: "/shop-fashion-mens-socks/"
-  spc_plp_add_to_cart_single: '/shop-fashion-mens-socks/'
+  spc_product_listing_page: '/shop-fashion-sneakers/'
+  spc_basket_page: '/shop-fashion-sneakers/'
+  spc_pdp_page: '/buy-polyester-2-way-foldable-easy-close-umbrella-53-cm-black-black.html/'
+  product_listing_page_url: "/shop-fashion-sneakers/"
+  spc_plp_add_to_cart_single: '/shop-fashion-sneakers/'
   spc_promotion_listing_page: '//'
-  spc_single_product_detail_page_coupon: 'buy-indian-cotton-jersey-stitch-crew-neck-s-s-t-shirt-white.html'
-  spc_bank_product: '/shop-fashion-mens-socks/'
+  spc_single_product_detail_page_coupon: '/buy-polyester-2-way-foldable-easy-close-umbrella-53-cm-black-black.html/'
+  spc_bank_product: '/shop-fashion-sneakers/'

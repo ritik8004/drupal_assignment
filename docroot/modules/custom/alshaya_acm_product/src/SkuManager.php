@@ -2894,7 +2894,8 @@ class SkuManager {
     }
 
     // If we don't have product node, let's just return default.
-    if (!($entity instanceof NodeInterface) || $entity->bundle() !== 'acq_product') {
+    if (!($entity instanceof NodeInterface)
+      || !in_array($entity->bundle(), ['acq_product', 'rcs_product'])) {
       return $this->getContextFromLayoutKey($context, $static['default']);
     }
 
@@ -2913,7 +2914,7 @@ class SkuManager {
     }
 
     // The layout has been overriden at category level.
-    elseif (($term_list = $entity->get('field_category')->getValue())) {
+    elseif (($entity->hasField('field_category')) && ($term_list = $entity->get('field_category')->getValue())) {
       $terms = array_column($term_list, 'target_id');
       $applied_layout = $this->getPdpLayoutFromCategories($terms);
       if ($applied_layout != NULL) {
@@ -3861,7 +3862,7 @@ class SkuManager {
    * @return array
    *   Return sanitized version sku
    */
-  public function getSanitizedSku(string $skuId) {
+  public function getSanitizedSku($skuId) {
     if (empty($skuId)) {
       return NULL;
     }

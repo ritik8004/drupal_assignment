@@ -31,10 +31,13 @@
           $('.acq-content-product #cloud-zoom-wrap').hide();
         }
 
-        var mobilegallery = $('#product-image-gallery-mobile', context);
+        var mobilegallery = $('.content__main #product-image-gallery-mobile', context);
         mobilegallery.on('afterChange', function (event, slick) {
           // Hide Labels on video slides.
           Drupal.hideProductLabelOnVideo($(this), 'mobilegallery__thumbnails__video', true);
+          if (typeof Drupal.blazy !== 'undefined') {
+            Drupal.blazy.revalidate();
+          }
         });
 
         Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), context);
@@ -81,8 +84,8 @@
             // Handle click on image thumbnails.
             var anchor = $(this).find('a.cloudzoom__thumbnails__image');
             if (anchor !== undefined && anchor.length > 0) {
-              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', anchor.attr('href'));
-              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('data-zoom-url', anchor.attr('data-zoom-url'));
+              $('.content__main #product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', anchor.attr('href'));
+              $('.content__main #product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('data-zoom-url', anchor.attr('data-zoom-url'));
             }
           }
           // Hide Product labels on video slides.
@@ -117,6 +120,9 @@
       if ($(window).width() < 768 && freeGiftsZoomContainer.length > 0 && !freeGiftsZoomContainer.hasClass('free-gifts-product-zoom-processed')) {
         freeGiftsZoomContainer.addClass('free-gifts-product-zoom-processed');
         var mobilegallery = $('#product-image-gallery-mobile', freeGiftsZoomContainer);
+        if (typeof Drupal.blazy !== 'undefined') {
+          Drupal.blazy.revalidate();
+        }
         Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), freeGiftsZoomContainer);
         if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
           // Do initial setup again for slick dots.
@@ -125,9 +131,11 @@
         }
       }
 
-      var modalLightSlider = $('.acq-content-product-modal #lightSlider');
-      if (modalLightSlider.length > 0 && !modalLightSlider.hasClass('product-zoom-processed')) {
-        modalLightSlider.addClass('product-zoom-processed');
+      var $modalZoomContainer = $('.acq-content-product-modal #product-zoom-container:not(.product-zoom-processed)');
+      if ($modalZoomContainer.length > 0) {
+        $modalZoomContainer.addClass('product-zoom-processed');
+
+        var modalLightSlider = $modalZoomContainer.find('#lightSlider');
         Drupal.productZoomApplyRtl(modalLightSlider, Drupal.getSlickOptions('slickCSUSOptions'), context);
 
         $('li a', modalLightSlider).once('bind-js-modal').off('click').on('click', function (e) {
@@ -167,7 +175,7 @@
       pauseVideos($('#product-image-gallery-mob'), 'mob-imagegallery__thumbnails__video');
 
       // Preventing click on image.
-      $('#cloud-zoom-wrap a').once('bind-js').on('click', function (event) {
+      $('.content__main #cloud-zoom-wrap a', context).once('bind-js').on('click', function (event) {
         event.stopPropagation();
         event.preventDefault();
       });
@@ -177,7 +185,7 @@
 
       // Zoom effect on image hover for desktop.
       if ($(window).width() > 1025) {
-        $('#product-zoom-container .img-wrap').each(function () {
+        $('.content__main #product-zoom-container .img-wrap').each(function () {
           $(this).on('mousemove', function (e) {
             $(this).find('.product-image-zoom-placeholder-content').css({
               'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 + '%'
@@ -225,7 +233,7 @@
     toggleProductImageGallery();
   });
 
-  $(document).once('bind-slick-nav').on('click', '#product-zoom-container .slick-prev, #product-zoom-container .slick-next', function () {
+  $(document).once('bind-slick-nav').on('click', '.content__main #product-zoom-container .slick-prev, .content__main #product-zoom-container .slick-next', function () {
     var slider = $(this).closest('.slick-slider');
     setTimeout(function () {
       var currentSlide = slider.find('li.slick-current');
@@ -386,8 +394,11 @@
       currentSlide = $('.slick-current', lightSlider).attr('data-slick-index');
     }
 
-    var gallery = $('#product-full-screen-gallery');
+    var gallery = $('.dialog-product-image-gallery-container #product-full-screen-gallery');
     Drupal.getSlickOptions('slickModalOptions').currentSlide = currentSlide;
+    if (typeof Drupal.blazy !== 'undefined') {
+      Drupal.blazy.revalidate();
+    }
     Drupal.productZoomApplyRtl(gallery, Drupal.getSlickOptions('slickModalOptions'), document);
     // Create Instagram Dots.
     if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {

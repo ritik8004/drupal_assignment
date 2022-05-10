@@ -1,5 +1,5 @@
 variables:
-  spc_product_listing_page: '/shop-new/new-arrivals/fall-collection/'
-  spc_basket_page: '/shop-new/new-arrivals/fall-collection/'
+  spc_product_listing_page: '/shop-new/new-arrivals/holiday/'
+  spc_basket_page: '/shop-new/new-arrivals/holiday/'
   spc_pdp_page: '/buy-disney-mickey-mouse-holiday-quilt-shams.html/'
-  product_listing_page_url: "/shop-new/new-arrivals/fall-collection/"
+  product_listing_page_url: "/shop-new/new-arrivals/holiday/"

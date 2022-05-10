@@ -33,18 +33,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using F
     And the element "div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {region_option} |
-      | spc-area-select-selected      | {city_option}   |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -99,17 +88,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using F
     And the element "div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {language_region_option} |
-      | spc-area-select-selected-city | {language_city_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And I wait for AJAX to finish
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -164,17 +143,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using F
     And the element "div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
-    And I scroll to the ".spc-section-billing-address" element
-    When I add CnC billing address with following:
-      | spc-area-select-selected-city | {language_region_option} |
-      | spc-area-select-selected-city | {language_city_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I add the billing address on checkout page
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish

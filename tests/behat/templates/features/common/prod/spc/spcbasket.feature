@@ -3,9 +3,7 @@ Feature: Test basket page
 
   Background:
     Given I am on "{spc_basket_page}"
-    And I wait 2 seconds
-    Then I scroll to the ".region__highlighted " element
-    And I wait 2 seconds
+    And I wait 5 seconds
 
   @desktop
   Scenario: As a Guest, I should be able to add more quantity

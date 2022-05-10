@@ -13,12 +13,27 @@
       .promotions {
         margin: 0.5rem 1rem;
         justify-content: flex-start;
+
+        @include breakpoint($only-mobile) {
+          margin: 0.5rem 0.875rem;
+        }
       }
     }
 
     .addtobag-button-container {
       @include breakpoint($only-mobile) {
         margin-top: 1rem;
+      }
+    }
+  }
+}
+
+#my-wishlist {
+  .c-products__item.promotion-frame {
+    .addtobag-button-container,
+    .addtobag-config-button-container {
+      @include breakpoint($only-mobile) {
+        margin: 1.5rem 0.75rem 0;
       }
     }
   }

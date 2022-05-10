@@ -1,8 +1,8 @@
 variables:
-  spc_product_listing_page: '/shop-mens/accessories/shoe-care//'
-  spc_basket_page: '/shop-mens/accessories/caps/'
-  spc_pdp_page: 'buy-new-era-space-jam-brooklyn-nets-cap-black.html'
-  product_listing_page_url: '/shop-mens/accessories/caps/'
-  np_plp_product_page: '/buy-new-era-space-jam-brooklyn-nets-cap-black.html/'
-  np_plp_page: '/shop-mens/accessories/caps/'
+  spc_product_listing_page: '/shop-mens/clothing/t-shirts/'
+  spc_basket_page: '/shop-mens/clothing/t-shirts/'
+  spc_pdp_page: 'buy-jordan-boston-celtics-dri-fit-mens-t-shirt-white.html'
+  product_listing_page_url: '/shop-mens/clothing/t-shirts/'
+  np_plp_product_page: '/buy-jordan-boston-celtics-dri-fit-mens-t-shirt-white.html/'
+  np_plp_page: '/shop-mens/clothing/t-shirts/'
   new_pdp_enabled: TRUE

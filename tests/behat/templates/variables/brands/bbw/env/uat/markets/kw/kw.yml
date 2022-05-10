@@ -4,7 +4,7 @@ variables:
   spc_product_listing_page: '/shop-body-care/featured/new-arrivals/'
   spc_pdp_page: 'buy-dark-kiss-bathtub-gift-set-1.html'
   spc_basket_page: '/shop-body-care/featured/new-arrivals/'
-  spc_promotion_listing_page: '/promotion/buy-2-get-1/'
+  spc_promotion_listing_page: '/shop-body-care/body-care-offers/buy-2-get-1-free-beauty-go/'
   spc_single_product_detail_page_coupon: '/buy-dark-kiss-bathtub-gift-set-1.html/'
   spc_multiple_product_detail_page_coupon: '/buy-dark-kiss-bathtub-gift-set-1.html/'
   spc_single_product_detail_page_no_coupon: '/buy-dark-kiss-bathtub-gift-set-1.html/'

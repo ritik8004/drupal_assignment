@@ -33,7 +33,7 @@
    * @param {HTMLElement} $trigger
    *   The element on which the ajax call should trigger.
    */
-  Drupal.AlshayaPlacesAutocomplete = function (field, callbacks, restriction, $trigger) {
+  Drupal.AlshayaPlacesAutocomplete = function (field, callbacks, restriction, $trigger, context) {
     var places_autocomplete = this;
 
     try {
@@ -72,7 +72,7 @@
 
       if ($.isArray(callbacks) && !$.isEmptyObject(places_autocomplete.coords)) {
         callbacks.forEach(function (callback) {
-          callback.call(this, places_autocomplete.coords, field, restriction, $trigger);
+          callback.call(this, context, places_autocomplete.coords, field, restriction, $trigger);
         });
       }
     });
@@ -165,7 +165,7 @@
         }
         else if ($.isArray(callbacks) && !$.isEmptyObject(coords)) {
           callbacks.forEach(function (callback) {
-            callback.call(null, coords, field, restriction, $trigger);
+            callback.call(this, null, coords, field, restriction, $trigger);
           });
         }
       }

@@ -15,7 +15,6 @@ import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stick
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
-import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import AuraCartContainer from '../../../aura-loyalty/components/aura-cart-rewards/aura-cart-container';
@@ -105,7 +104,7 @@ export default class Cart extends React.Component {
         if (cartData instanceof Promise) {
           cartData.then((result) => {
             if (typeof result.error === 'undefined') {
-              PromotionsDynamicLabelsUtil.apply(result);
+              window.dynamicPromotion.apply(result);
             }
           });
         }
@@ -165,6 +164,10 @@ export default class Cart extends React.Component {
 
     // Event handle for Dynamic Promotion available.
     document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
+    // Add RCS Event Listner only is RCS module is enabled.
+    if (Object.prototype.hasOwnProperty.call(drupalSettings, 'rcsPhSettings')) {
+      window.RcsEventManager.addListener('applyDynamicPromotions', this.saveDynamicPromotions);
+    }
 
     // Event to trigger after free gift detail modal open.
     document.addEventListener('openFreeGiftModalEvent', openFreeGiftModal, false);
@@ -394,7 +397,7 @@ export default class Cart extends React.Component {
 
     if (dynamicPromoLabelsCart !== null) {
       if (dynamicPromoLabelsCart.qualified.length !== 0
-        || dynamicPromoLabelsCart.next_eligible.length !== 0) {
+        || Object.keys(dynamicPromoLabelsCart.next_eligible).length !== 0) {
         preContentActive = 'visible';
       }
     }

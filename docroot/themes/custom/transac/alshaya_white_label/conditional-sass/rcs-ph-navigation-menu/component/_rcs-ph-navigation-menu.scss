@@ -1,0 +1,13 @@
+#rcs-ph-navigation_menu:not(.rcs-loaded) li {
+  @include breakpoint($desktop) {
+    width: 6.5rem;
+    display: inline-block;
+    margin-#{$right}: 0.25rem;
+  }
+
+  @include plain-loader;
+
+  & > * {
+    visibility: hidden;
+  }
+}

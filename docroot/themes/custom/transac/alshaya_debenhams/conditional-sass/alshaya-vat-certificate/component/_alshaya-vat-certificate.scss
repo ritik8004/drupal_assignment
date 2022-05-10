@@ -1,0 +1,9 @@
+.block-alshaya-vat-certificate-block {
+  @include breakpoint($tablet) {
+    float: $left;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-top: 0;
+  }
+}

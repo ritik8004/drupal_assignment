@@ -19,17 +19,18 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview: '',
       buttonClass: 'write_review',
       validateCurrentEmail: false,
+      userDetails: null,
     };
   }
 
   componentDidMount() {
     const { productId, reviewedByCurrentUser } = this.props;
     // To open write a review on page load.
-    if (isOpenWriteReviewForm(productId)) {
+    isOpenWriteReviewForm(productId).then((status) => {
       this.setState({
-        isModelOpen: true,
+        isModelOpen: status,
       });
-    }
+    });
 
     const path = decodeURIComponent(window.location.search);
     const params = new URLSearchParams(path);
@@ -38,16 +39,20 @@ export default class WriteReviewButton extends React.Component {
         buttonClass: 'pie_notification',
       });
     }
-    if (params.get('userToken') !== null) {
-      const currentEmail = getEmailFromTokenParams(params);
-      const userDetails = getUserDetails(productId);
-      if (userDetails.user.userId !== 0 && userDetails.user.emailId !== currentEmail) {
-        this.setState({
-          validateCurrentEmail: true,
-          buttonClass: 'pie_notification',
-        });
+
+    getUserDetails(productId).then((userDetails) => {
+      let data = {};
+      if (params.get('userToken') !== null) {
+        const currentEmail = getEmailFromTokenParams(params);
+        if (userDetails.user.userId !== 0 && userDetails.user.emailId !== currentEmail) {
+          data = {
+            validateCurrentEmail: true,
+            buttonClass: 'pie_notification',
+          };
+        }
       }
-    }
+      this.setState({ ...data, ...{ userDetails } });
+    });
   }
 
   openModal = (e) => {
@@ -70,13 +75,17 @@ export default class WriteReviewButton extends React.Component {
   closeModal = (e) => {
     e.preventDefault();
     document.body.classList.remove('open-form-modal');
-    const { context } = this.props;
+    const { context, isWriteReview, newPdp } = this.props;
 
     this.setState({
       isModelOpen: false,
     });
     // Disable write review popup onload.
     setStorageInfo(false, 'openPopup');
+
+    if (isWriteReview && newPdp) {
+      document.querySelector('body').classList.remove('ratings-reviews-overlay', 'open-form-modal');
+    }
 
     if (e.detail.HasErrors !== undefined && !e.detail.HasErrors) {
       if (context !== 'myaccount') {
@@ -102,17 +111,22 @@ export default class WriteReviewButton extends React.Component {
       myAccountReview,
       buttonClass,
       validateCurrentEmail,
+      userDetails,
     } = this.state;
     const {
-      reviewedByCurrentUser, productId, context, newPdp,
+      reviewedByCurrentUser,
+      productId,
+      context,
+      newPdp,
+      isWriteReview,
+      isInline,
     } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-    const userDetails = getUserDetails(productId);
     if (userDetails && Object.keys(userDetails).length !== 0) {
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
       if (userDetails.user.userId === 0
         && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission
-        && userStorage.uasToken === null) {
+        && userStorage && userStorage.uasToken === null) {
         return (
           <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />
         );
@@ -126,31 +140,34 @@ export default class WriteReviewButton extends React.Component {
             <div onClick={(e) => this.openModal(e)} className="write-review-button">
               {getStringMessage('write_a_review')}
             </div>
-            <Popup
-              open={isModelOpen}
-              className={buttonClass}
-              closeOnDocumentClick={false}
-              closeOnEscape={false}
-            >
-              <>
-                <ConditionalView condition={myAccountReview !== ''}>
-                  <div className="write-review-form">
-                    <div className="title-block">
-                      <a className="close-modal" onClick={(e) => this.closeModal(e)} />
+            <ConditionalView condition={!getStorageInfo('openPopup') || (getStorageInfo('openPopup') && typeof isInline === 'undefined')}>
+              <Popup
+                open={isWriteReview || isModelOpen}
+                className={buttonClass}
+                closeOnDocumentClick={false}
+                closeOnEscape={false}
+              >
+                <>
+                  <ConditionalView condition={myAccountReview !== ''}>
+                    <div className="write-review-form">
+                      <div className="title-block">
+                        <a className="close-modal" onClick={(e) => this.closeModal(e)} />
+                      </div>
+                      <PostReviewMessage postReviewData={myAccountReview} />
                     </div>
-                    <PostReviewMessage postReviewData={myAccountReview} />
-                  </div>
-                </ConditionalView>
-                <ConditionalView condition={myAccountReview === '' && !validateCurrentEmail}>
-                  <WriteReviewForm
-                    closeModal={(e) => this.closeModal(e)}
-                    productId={productId}
-                    context={context}
-                    newPdp={newPdp}
-                  />
-                </ConditionalView>
-              </>
-            </Popup>
+                  </ConditionalView>
+                  <ConditionalView condition={myAccountReview === '' && !validateCurrentEmail}>
+                    <WriteReviewForm
+                      closeModal={(e) => this.closeModal(e)}
+                      productId={productId}
+                      context={context}
+                      newPdp={newPdp}
+                      isWriteReview={isWriteReview}
+                    />
+                  </ConditionalView>
+                </>
+              </Popup>
+            </ConditionalView>
           </div>
         </ConditionalView>
         <ConditionalView condition={reviewedByCurrentUser && buttonClass === 'pie_notification'}>
@@ -160,14 +177,14 @@ export default class WriteReviewButton extends React.Component {
             closeOnDocumentClick={false}
             closeOnEscape={false}
           >
-            <>
-              <div className="write-review-form">
-                <div className="title-block">
-                  <a className="close-modal" onClick={(e) => this.closeModal(e)} />
-                </div>
-                <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
+            <div className="write-review-form">
+              <div className="title-block">
+                <a className="close-modal" onClick={(e) => this.closeModal(e)} />
               </div>
-            </>
+              <ConditionalView condition={!isInline}>
+                <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
+              </ConditionalView>
+            </div>
           </Popup>
         </ConditionalView>
         <ConditionalView condition={validateCurrentEmail && buttonClass === 'pie_notification'}>
@@ -177,14 +194,12 @@ export default class WriteReviewButton extends React.Component {
             closeOnDocumentClick={false}
             closeOnEscape={false}
           >
-            <>
-              <div className="write-review-form">
-                <div className="title-block">
-                  <a className="close-modal" onClick={(e) => this.closeModal(e)} />
-                </div>
-                <div className="already-reviewed-text">{getStringMessage('invalid_pie_user_details')}</div>
+            <div className="write-review-form">
+              <div className="title-block">
+                <a className="close-modal" onClick={(e) => this.closeModal(e)} />
               </div>
-            </>
+              <div className="already-reviewed-text">{getStringMessage('invalid_pie_user_details')}</div>
+            </div>
           </Popup>
         </ConditionalView>
         <ConditionalView condition={reviewedByCurrentUser}>
@@ -193,7 +208,9 @@ export default class WriteReviewButton extends React.Component {
               {getStringMessage('write_a_review')}
             </div>
           </div>
-          <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
+          <ConditionalView condition={!isInline}>
+            <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
+          </ConditionalView>
         </ConditionalView>
       </>
     );

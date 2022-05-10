@@ -1,7 +1,7 @@
 variables:
-  url_product_page: '/buy-hope-flowers-tracy-reese-bouquet-floral-organic-crib-fitted-sheet.html/'
-  spc_pdp_page: '/buy-hope-flowers-tracy-reese-bouquet-floral-organic-crib-fitted-sheet.html/'
-  product_listing_page_url: '/shop-new/new-arrivals/fall-collection/'
-  spc_product_listing_page: '/shop-new/new-arrivals/fall-collection/'
-  spc_basket_page: '/shop-new/new-arrivals/fall-collection/'
+  url_product_page: '/buy-organic-naomi-floral-duvet-cover-shams.html/'
+  spc_pdp_page: '/buy-organic-naomi-floral-duvet-cover-shams.html/'
+  product_listing_page_url: '/shop-bedding/kids-bedding/duvet-covers/'
+  spc_product_listing_page: '/shop-bedding/kids-bedding/duvet-covers/'
+  spc_basket_page: '/shop-bedding/kids-bedding/duvet-covers/'
   spc_bank_product: '/shop-furniture/kids-bedroom-furniture/beds/'

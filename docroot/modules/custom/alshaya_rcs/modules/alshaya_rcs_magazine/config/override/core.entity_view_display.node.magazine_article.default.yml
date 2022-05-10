@@ -1,0 +1,4 @@
+content:
+  field_magazine_shop_the_story:
+    type: rcs_sku_field_placeholder
+    settings: {  }

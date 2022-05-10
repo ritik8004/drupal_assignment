@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Module file.
+ * Module file with hooks specific to COS brand.
  */
 
 use Drupal\acq_sku\Entity\SKU;

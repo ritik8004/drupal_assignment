@@ -101,6 +101,10 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     // Sort the form options based on available_sort_options.
     $options = array_replace(array_flip($default_order), $available_sort_options);
 
+    // Get labels from sort labels config.
+    $labels = \Drupal::service('alshaya_acm_product_position.sort_labels')
+      ->getSortOptionsLabels();
+
     // Maintaining the weight.
     $weight = 0;
     foreach ($options as $id => $title) {
@@ -113,8 +117,13 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
         '#default_value' => (bool) $option,
       ];
 
+      // Get available label.
+      $available_label = self::getAvailableLabel($labels, $id);
+
+      // If label is not available default label(title)
+      // Will be treated as label.
       $element[$id]['label'] = [
-        '#plain_text' => $title,
+        '#plain_text' => $available_label ?: $title,
       ];
 
       $element[$id]['weight'] = [
@@ -146,6 +155,31 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       return $a['weight'] < $b['weight'] ? -1 : 1;
     }
     return 0;
+  }
+
+  /**
+   * Returns label by combining all available keys for passed id.
+   */
+  protected static function getAvailableLabel($labels, $id) {
+    $available_label = NULL;
+    if (!empty($labels)) {
+      foreach ($labels as $label_key => $label) {
+        if (strpos($label_key, $id) !== FALSE) {
+          if ($available_label === NULL) {
+            $available_label = $label;
+          }
+          else {
+            // Append label with |, if got more than 1 for given id.
+            // For example- name_1 has to labels available.
+            // name_1 ASC - Name A to Z,
+            // name_1 DESC - Name Z to A,
+            // In this case label will be Name A to Z | Name Z to A.
+            $available_label .= ' | ' . $label;
+          }
+        }
+      }
+    }
+    return $available_label;
   }
 
 }

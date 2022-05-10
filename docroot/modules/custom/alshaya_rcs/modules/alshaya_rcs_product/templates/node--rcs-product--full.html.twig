@@ -1,0 +1,161 @@
+{%
+set classes = [
+  'node',
+  'node--type-' ~ node.bundle|clean_class,
+  view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+]
+%}
+{% set attributes = attributes.addClass(classes) %}
+
+<article data-sku="#rcs.product._self|sku#" data-sku-type="#rcs.product._self|sku-type#" {{ attributes }} {{ gtm_attributes }}>
+  <div class="acq-content-product">
+    {% block mainContent %}
+      <div class="content__main {{ image_slider_position_pdp }}">
+        {# The image gallery and thumnails. #}
+        <div class="gallery-wrapper"></div>
+        {% if quantity_limit_enabled == true %}
+          <div class="order-quantity-limit-message mobile-only"></div>
+        {% endif %}
+
+        {% if show_crosssell_as_matchback == false %}
+          {% include '@alshaya_rcs_product/product-related.html.twig' %}
+        {% endif %}
+      </div>
+    {% endblock %}
+
+    {% block contentSidebar %}
+      {% block titleBlock %}
+        <div class="content__title_wrapper">
+          <div class="field field-brand-logo">#rcs.product._self|brand_logo#</div>
+
+          {% block productBrand %}
+          {% endblock %}
+
+          <h1><span class="field field-product-name">#rcs.product._self|name#</span></h1>
+
+          {% block pricePrefix %}
+          {% endblock %}
+
+          <div class="price-block price-block-#rcs.product._self|sku-clean#">
+            #rcs.product._self|price#
+          </div>
+
+          {% if content.postpay %}
+            {{ attach_library('alshaya_white_label/postpay-pdp') }}
+            <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
+          {% endif %}
+
+          {% if content.tabby %}
+            <div class="tabby"> {{ content.tabby }} </div>
+          {% endif %}
+
+          <div class="promotions promotions-full-view-mode">#rcs.product._self|promotions#</div>
+
+          <div class="vat-text">#rcs.product._self|vat_text#</div>
+
+          {% block itemCode %}
+            <div class="content--item-code">
+              <span class="field__label">{{ 'Item Code'|t }}:</span>
+              <span class="field__value">#rcs.product._self|sku#</span>
+            </div>
+          {% endblock %}
+
+          {% if content.delivery_link is not empty %}
+            <div class="delivery">
+              {{ content.delivery_link }}
+            </div>
+          {% endif %}
+
+          <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
+
+          {% if express_delivery_enabled is defined and express_delivery_enabled %}
+            <div id="rcs-ph-delivery-info-block"></div>
+          {% endif %}
+
+        </div>
+      {% endblock %}
+
+      {% if aura_enabled is defined and aura_enabled %}
+        {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+        <div id="aura-pdp"></div>
+      {% endif %}
+
+      {% block pdpSidebar %}
+        <div class="content__sidebar">
+          {% if content.reviews_rating %}
+            {{content.reviews_rating}}
+          {% endif %}
+          {% block sizeVolume %}
+          {% endblock %}
+
+          <div class="mobile-content-wrapper">
+            <div class="basic-details-wrapper">
+              <div class="field field--name-field-skus field--type-sku field--label-hidden field__items">
+                <div class="field field--name-field-skus field--type-sku field--label-hidden field__item">
+                <article>
+                  <div class="field field--name-sku field--type-string field--label-above">
+                    <div class="field__label">SKU</div>
+                    <div class="field__item">#rcs.product._self|sku#</div>
+                  </div>
+                  <div>#rcs.product._self|add_to_cart#</div>
+                </article>
+                </div>
+              </div>
+              {% if quantity_limit_enabled == true %}
+                <div class="order-quantity-limit-message"></div>
+              {% endif %}
+            </div>
+
+            {% block shortDescBlock %}
+              <div class="short-description-wrapper">
+                #rcs.product._self|short_description#
+              </div>
+            {% endblock %}
+
+            {% block descBlock %}
+              <div class="description-wrapper">
+                #rcs.product._self|description#
+              </div>
+            {% endblock %}
+
+            {{ content.non_refundable }}
+
+            {% block afterDescription %}
+            {% endblock %}
+
+            <div id="rcs-ph-delivery-options"></div>
+
+            {{ content.sharethis }}
+
+          </div>
+
+          {% block productPostContentMobile %}
+          {% endblock %}
+
+          {% include '@alshaya_rcs_product/mobile-product-related.html.twig' %}
+
+        </div>
+      {% endblock %}
+    {% endblock %}
+
+    {% block desktopCS %}
+    {% endblock %}
+
+    {% if show_crosssell_as_matchback == true %}
+      {% include '@alshaya_rcs_product/product-related.html.twig' %}
+    {% endif %}
+
+  </div>
+
+  {% block productPostContent %}
+  {% endblock %}
+
+</article>
+<div id="dy-recommendation"></div>
+
+{% if content.reviews_section %}
+  {% if bazaarvoice_strings %}
+    {{ bazaarvoice_strings }}
+  {% endif %}
+  {{ content.reviews_section }}
+{% endif %}

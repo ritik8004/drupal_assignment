@@ -7,7 +7,7 @@
 
   Drupal.processBackToPLP = function () {
     // On page load, apply filter/sort if any.
-    $('html').once('back-to-list').each(function () {
+    $('#alshaya-algolia-plp').once('back-to-list').each(function () {
       var storageKey = 'plp:' + window.location.pathname;
       var storage_value = Drupal.algolia.getAlgoliaStorageValues(storageKey);
       if (typeof storage_value !== 'undefined' && storage_value !== null) {

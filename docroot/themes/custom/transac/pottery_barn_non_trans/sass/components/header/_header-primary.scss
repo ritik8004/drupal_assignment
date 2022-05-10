@@ -1,3 +1,21 @@
+@mixin menuListItem {
+  border-bottom: 1px solid $white;
+  margin-#{$left}: 0.625rem;
+  margin-#{$right}: 0.625rem;
+  font-family: $alshaya-bold;
+  font-weight: normal;
+  color: $marine-blue;
+  display: block;
+  font-size: 12px;
+  padding: 0;
+
+  a {
+    padding: 1rem 0;
+    padding-bottom: 0.9375rem;
+    padding-#{$right}: 1.4rem;
+  }
+}
+
 @include breakpoint($desktop) {
   .no--desktop,
   .toggle--sign.no--desktop {
@@ -979,25 +997,11 @@ header {
   }
 
   .menu__list-item {
-    border-bottom: 1px solid $white;
-    margin-#{$left}: 0.625rem;
-    margin-#{$right}: 0.625rem;
-    font-family: $alshaya-bold;
-    font-weight: normal;
-    color: $marine-blue;
-    display: block;
-    font-size: 12px;
-    padding: 0;
-
-    a {
-      padding: 1rem 0;
-      padding-bottom: 0.9375rem;
-      padding-#{$right}: 1.4rem;
-    }
+    @include menuListItem;
   }
 
   .back--link {
-    @extend .menu__list-item;
+    @include menuListItem;
 
     padding: 1rem 0;
     padding-#{$right}: 0.25rem;

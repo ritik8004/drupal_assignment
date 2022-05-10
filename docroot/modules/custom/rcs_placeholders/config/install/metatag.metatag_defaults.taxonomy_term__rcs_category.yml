@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+id: taxonomy_term__rcs_category
+label: 'Taxonomy term: RCS Category'
+tags:
+  canonical_url: '[rcs:category-path-prefix]#rcs.category.slug#'
+  description: '#rcs.category.metaDescription#'
+  title: '#rcs.category.metaTitle# | [site:name]'

@@ -89,7 +89,7 @@
     }
 
     .field--name-field-button-link a {
-      @include promo-default-button();
+      @include promo-default-button;
     }
   }
 }
@@ -163,7 +163,7 @@
       }
 
       a {
-        @include promo-default-button();
+        @include promo-default-button;
       }
     }
   }
@@ -172,7 +172,7 @@
 // Right aligned CTA buttons below content blocks [use h5 heading style on wiswig]
 h5 {
   > a {
-    @include promo-default-button();
+    @include promo-default-button;
   }
 }
 
@@ -195,7 +195,7 @@ hr {
   }
 
   .field--name-field-button-link {
-    @include promo-default-button();
+    @include promo-default-button;
   }
 }
 
@@ -237,12 +237,12 @@ hr {
 
   .field--name-field-sub-title {
     @include style-font($alshaya-thin, 1.0625rem, 0.875rem, 0, 0.3125rem);
-    @include apply-border();
+    @include apply-border;
   }
 
   .field--name-field-button-link {
     @include style-font($alshaya-thin, 0.875rem, false, 0, 0.625rem);
-    @include apply-border();
+    @include apply-border;
 
     text-decoration: underline;
   }

@@ -1,10 +1,10 @@
 variables:
   url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  product_listing_page_url: "/shop-hand-soaps-sanitizers/featured/new-arrivals/"
-  spc_product_listing_page: '/shop-hand-soaps-sanitizers/featured/new-arrivals/'
-  spc_basket_page: '/shop-hand-soaps-sanitizers/featured/new-arrivals/'
-  spc_pdp_page: 'buy-strawberry-pound-cake-pocketbac-hand-sanitizers.html'
-  spc_single_product_detail_page_coupon: '/buy-pink-gem-pocketbac-holder.html/'
+  product_listing_page_url: "/#query=fragrance/"
+  spc_product_listing_page: "/#query=fragrance/"
+  spc_basket_page: "/#query=fragrance/"
+  spc_pdp_page: "/buy-margarita-cupcake-fine-fragrance-mist.html/"
+  spc_single_product_detail_page_coupon: '/buy-magic-air-shower-gel.html/'
   spc_multiple_product_detail_page_coupon: '/buy-japanese-cherry-blossom-bath-fizzy.html/'
   spc_single_product_detail_page_no_coupon: '/buy-warm-vanilla-sugar-travel-size-shower-gel.html/'
   spc_multiple_product_detail_page_no_coupon: '/buy-magic-air-travel-size-shower-gel.html/'

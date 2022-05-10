@@ -83,3 +83,7 @@
     }
   }
 }
+
+.sizeguide-modal-overlay .ui-dialog {
+  z-index: 100 !important;
+}

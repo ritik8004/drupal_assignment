@@ -631,7 +631,7 @@
 // Replacing the throbber for delete address form on addressbook
 .profile-address-book-delete-form {
   .ajax-progress-throbber {
-    @include fullPageLoader();
+    @include fullPageLoader;
   }
 }
 

@@ -246,6 +246,14 @@ sites:
     module: alshaya_tbs
     type: alshaya_transac
     country: eg
+  tbsbh:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: bh
+  tbsqa:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: qa
   coskw:
     module: alshaya_cos
     type: alshaya_transac

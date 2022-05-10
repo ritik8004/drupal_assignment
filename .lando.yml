@@ -25,8 +25,9 @@ services:
       - bash /app/.lando/scripts/configure-xhprof.sh
       - apt-get install netcat -y
       - apt-get install vim -y
-    build:
-      - bash /app/.lando/scripts/install-npm.sh
+      - curl -sL https://deb.nodesource.com/setup_14.x | bash -
+      - apt install nodejs -y
+      - npm install -g gulp-cli
     run_as_root:
       # By default disable XDEBUG, we need it enabled to ensure all configurations are loaded.
       # Post this to enable disable lando xdebug-on and lando xdebug-off can be used.
@@ -90,6 +91,12 @@ tooling:
   npm:
     service: appserver
     cmd: npm
+  node:
+    service: appserver
+    cmd: node
+  gulp:
+    service: appserver
+    cmd: gulp
   xdebug-on:
     service: appserver
     description: Enable xdebug for Apache.
@@ -120,11 +127,6 @@ tooling:
     service: appserver
     description: Fix ssh auth sock permission for MacOS users. Lando rebuild fixes the problem as well.
     cmd: "/bin/chgrp www-data /run/host-services/ssh-auth.sock && /bin/chmod g+w /run/host-services/ssh-auth.sock"
-    user: root
-  npm-fix:
-    service: appserver
-    description: Re-install the old / supported npm and node.
-    cmd: "bash /app/.lando/scripts/install-npm.sh"
     user: root
   create-databases:
     service: appserver

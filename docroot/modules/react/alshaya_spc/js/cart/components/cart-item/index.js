@@ -47,7 +47,7 @@ export default class CartItem extends React.Component {
     // Skip the get product data for virtual product ( This is applicable
     // when egift card module is enabled and cart item is virtual.)
     if (!(isEgiftCardEnabled() && cartItemIsVirtual(item))) {
-      Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+      Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback, item.parentSKU);
     }
 
     if (isWishlistEnabled()) {

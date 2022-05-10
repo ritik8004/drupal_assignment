@@ -25,6 +25,13 @@ use Symfony\Component\Yaml\Yaml;
 class AlshayaConfigSubscriber implements EventSubscriberInterface {
 
   /**
+   * Static variable to allow reducing file_exists checks.
+   *
+   * @var array
+   */
+  protected static $modulesWithOverrides = [];
+
+  /**
    * Static flag to avoid recursive execution for event.
    *
    * @var bool
@@ -180,12 +187,6 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     foreach ($this->getModulesWithOverride($override_type) as $module_path) {
       $override_path = $module_path . '/' . $config_name . '.yml';
 
-      $this->log('debug', 'Checking if @override_path exists for @config for type @type.', [
-        '@config' => $config_name,
-        '@override_path' => $override_path,
-        '@type' => $override_type,
-      ]);
-
       // If there is an override, we merge it with the initial config.
       if (file_exists($override_path)) {
         $this->log('notice', 'Overriding @config from @override_path for type @type.', [
@@ -250,19 +251,27 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     $modules = [];
 
     foreach ($this->moduleHandler->getModuleList() as $module) {
-      $override_path = DRUPAL_ROOT . '/' . $module->getPath() . '/config/' . $override_type;
+      $module_name = $module->getName();
 
-      $this->log('debug', 'Checking if @override_path exists.', [
-        '@override_path' => $override_path,
-      ]);
+      // We do the checks all the time to ensure any new enabled module is
+      // also considered.
+      if (isset(self::$modulesWithOverrides[$override_type][$module_name])) {
+        if (!empty(self::$modulesWithOverrides[$override_type][$module_name])) {
+          $modules[$module_name] = self::$modulesWithOverrides[$override_type][$module_name];
+        }
+
+        continue;
+      }
+
+      // Initialize by default.
+      self::$modulesWithOverrides[$override_type][$module_name] = '';
+
+      $override_path = DRUPAL_ROOT . '/' . $module->getPath() . '/config/' . $override_type;
 
       // If there is an override, we merge it with the initial config.
       if (file_exists($override_path)) {
-        $this->log('info', 'Overrides are available at @override_path.', [
-          '@override_path' => $override_path,
-        ]);
-
-        $modules[$module->getName()] = $override_path;
+        $modules[$module_name] = $override_path;
+        self::$modulesWithOverrides[$override_type][$module_name] = $override_path;
       }
     }
 
@@ -285,12 +294,6 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     // We browse all the modules to check for override.
     foreach ($this->getModulesWithOverride($override_type) as $module_path) {
       $override_path = $module_path . '/' . $config_name . '.yml';
-
-      $this->log('debug', 'Checking if @override_path exists for @config for type @type.', [
-        '@config' => $config_name,
-        '@override_path' => $override_path,
-        '@type' => $override_type,
-      ]);
 
       // If there is an override, we merge it with the initial config.
       if (file_exists($override_path)) {

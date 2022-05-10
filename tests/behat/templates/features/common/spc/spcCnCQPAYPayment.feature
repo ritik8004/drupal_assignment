@@ -32,19 +32,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method
     And I scroll to the "#spc-payment-methods" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-methods div.payment-method-checkout_com_upapi_qpay" element on page
     And I wait for AJAX to finish
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {address}       |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -87,19 +75,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method
     And I scroll to the "#spc-payment-methods" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-methods div.payment-method-checkout_com_upapi_qpay" element on page
     And I wait for AJAX to finish
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {address}     |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -145,18 +121,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method
     And I scroll to the "#spc-payment-methods" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi_qpay" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {address}       |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 10 seconds

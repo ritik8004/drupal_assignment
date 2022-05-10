@@ -10,7 +10,7 @@
       font-weight: normal;
 
       .form-submit {
-        @include btn();
+        @include btn;
 
         line-height: normal;
         height: 2.625rem;

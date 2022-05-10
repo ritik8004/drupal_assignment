@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_category_carousel_slug
+    - paragraphs.paragraphs_type.product_carousel_category
+id: paragraph.product_carousel_category.field_category_carousel_slug
+field_name: field_category_carousel_slug
+entity_type: paragraph
+bundle: product_carousel_category
+label: 'Category Slug'
+description: 'The slug must match the slug of a Magento category.'
+required: true
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

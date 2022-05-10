@@ -20,10 +20,11 @@ function alshaya_msclarity_page_attachments_alter(array &$page) {
   }
 
   $config = \Drupal::config('alshaya_msclarity.settings');
+  $msclarity_id = $config->get('msclarity_id.msclarity_id');
   // Attach the alshaya_msclarity js on page.
-  if (_alshaya_msclarity_visibility_pages()) {
+  if ($msclarity_id && _alshaya_msclarity_visibility_pages()) {
     $page['#attached']['library'][] = 'alshaya_msclarity/alshaya_msclarity';
-    $page['#attached']['drupalSettings']['alshaya_msclarity']['msclarity_id'] = $config->get('msclarity_id.msclarity_id');
+    $page['#attached']['drupalSettings']['alshaya_msclarity']['msclarity_id'] = $msclarity_id;
   }
 }
 
@@ -68,4 +69,11 @@ function _alshaya_msclarity_visibility_pages() {
     }
   }
   return $page_match;
+}
+
+/**
+ * Implements hook_alshaya_reset_config_configs_to_reset_alter().
+ */
+function alshaya_msclarity_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  $reset[] = 'alshaya_msclarity.settings';
 }

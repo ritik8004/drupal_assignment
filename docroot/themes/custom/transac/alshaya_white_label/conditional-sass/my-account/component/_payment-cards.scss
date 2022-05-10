@@ -104,7 +104,7 @@
         }
 
         .ajax-progress-throbber {
-          @include fullPageLoader();
+          @include fullPageLoader;
         }
       }
     }
@@ -130,7 +130,7 @@
 .payment-card-delete-form {
   .form-actions {
     .ajax-progress-throbber {
-      @include fullPageLoader();
+      @include fullPageLoader;
     }
   }
 }

@@ -249,7 +249,7 @@ function alshaya_user_preprocess_menu(&$variables) {
  */
 function alshaya_user_block_build_alter(array &$build, BlockPluginInterface $block) {
   if ($block->getPluginId() == 'system_menu_block:account') {
-    $build['#cache']['contexts'][] = 'route';
+    $build['#cache']['contexts'][] = 'url.path';
   }
 }
 
@@ -531,7 +531,10 @@ function alshaya_user_mail_alter(&$message) {
     $language_manager->setConfigOverrideLanguage($original_language);
 
     // Alter the header from information according to user preferred language.
-    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8') . ' <' . $message['from'] . '>';
+    // Using iconv_mime_encode() to encode site name to UTF-8 format.
+    // Adding line-length upto 500 characters to avoid newline character.
+    $encodedSiteName = iconv_mime_encode('From', $sitename, ['line-length' => 500]);
+    $message['from'] = str_replace('From: ', '', $encodedSiteName) . ' <' . $message['from'] . '>';
     $message['headers']['From'] = $message['headers']['Sender'] = $message['from'];
   }
 
@@ -552,8 +555,8 @@ function alshaya_user_link_alter(&$variables) {
     return;
   }
   elseif ($url->isRouted() && $url->getRouteName() == 'user.logout') {
-    $path = \Drupal::service('path.current')->getPath();
-    $variables['options']['query']['destination'] = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . \Drupal::service('path.alias_manager')->getAliasByPath($path);
+    // Getting raw uri as categories and products are not saved in V3.
+    $variables['options']['query']['destination'] = \Drupal::request()->getRequestUri();
   }
 }
 

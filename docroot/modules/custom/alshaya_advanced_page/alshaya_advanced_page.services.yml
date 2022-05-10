@@ -15,5 +15,6 @@ services:
     class: Drupal\alshaya_advanced_page\EventSubscriber\ExternalHreflangGetCurrentUrlEventSubscriber
     arguments:
       - '@current_route_match'
+      - '@module_handler'
     tags:
       - { name: 'event_subscriber' }

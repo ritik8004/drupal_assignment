@@ -36,8 +36,10 @@ class CheckoutCartItem extends React.Component {
     if (isEgiftCardEnabled() && cartItemIsVirtual(item)) {
       return;
     }
+
+    const parentSKU = item.product_type === 'configurable' ? item.parentSKU : null;
     // Key will be like 'product:en:testsku'
-    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback, { parentSKU });
   }
 
   /**

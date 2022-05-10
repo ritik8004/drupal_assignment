@@ -45,7 +45,7 @@ variables:
   mobile_language_class: 'ar'
   language_short: 'ar'
   area_option: 'Al Baraha'
-  city_option: 'Dubai'
+  city_option: 'Abu Dhabi'
   street: 'Street A'
   building: 'Building B'
   locality: ''

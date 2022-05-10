@@ -58,8 +58,10 @@ class PDPModalLinksForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_acm_product.pdp_modal_links');
     $config->set('size_guide_enabled', $form_state->getValue('size_guide_enabled'));
+    $config->set('show_size_guide_on_pdp_page', $form_state->getValue('show_size_guide_on_pdp_page'));
     $config->set('size_guide_modal_content_node', $form_state->getValue('size_guide_modal_content_node'));
     $config->set('delivery_content_node', $form_state->getValue('delivery_content_node'));
+
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -82,6 +84,13 @@ class PDPModalLinksForm extends ConfigFormBase {
       '#title' => $this->t('Enable Size Guide'),
       '#required' => FALSE,
       '#default_value' => $config->get('size_guide_enabled'),
+    ];
+
+    $form['show_size_guide_on_pdp_page'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show Size Guide directly on PDP Page'),
+      '#required' => FALSE,
+      '#default_value' => $config->get('show_size_guide_on_pdp_page'),
     ];
 
     $form['size_guide_modal_content_node'] = [

@@ -3,5 +3,12 @@ services:
     class: \Drupal\alshaya_acm_product_category\Commands\AlshayaAcmProductCategoryDrushCommands
     arguments:
       - '@alshaya_acm_product_category.category_sync_manager'
+      - '@alshaya_acm_product_category.product_category_tree'
+      - '@file_system'
+      - '@entity_type.manager'
+      - '@metatag.manager'
+      - '@metatag.token'
+      - '@logger.factory'
+      - '@language_manager'
     tags:
       - { name: drush.command }

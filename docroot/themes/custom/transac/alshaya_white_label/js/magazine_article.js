@@ -55,12 +55,12 @@
 
       // For tablets and mobile we don't want to apply slickSlider.
       if ($(window).width() > 1023) {
-        shopByStory.each(function () {
+        shopByStory.once('magazine-shop-the-story').each(function () {
           applyRtl($(this), optionsShopByStory);
         });
       }
 
-      magazineHeroBanner.each(function () {
+      magazineHeroBanner.once('magazine-hero-banner').each(function () {
         applyRtl($(this), optionsHeroImageBanner);
       });
     }

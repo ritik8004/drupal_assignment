@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Functions around module install.
+ */
+
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
+
+/**
+ * Get list of blocks which needs to be enabled/disabled.
+ *
+ * @return array
+ *   An array of block ids.
+ */
+function alshaya_rcs_main_menu_get_block_ids() {
+  return [
+    'alshayamainmenu' => 'alshayarcsmainmenu',
+    'supercategorymenu' => 'alshaya_rcs_supercategory_menu',
+    'shopby' => 'alshayarcsshopby',
+  ];
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_main_menu_install() {
+  // Move the rcs navigation block to current theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+
+  // Disable the V1 blocks that are not required.
+  $blocks = alshaya_rcs_main_menu_get_block_ids();
+  foreach ($blocks as $prev_block_id => $new_block_id) {
+    $existing_block_weight = NULL;
+    $prev_block = Block::load($prev_block_id);
+    if ($prev_block instanceof BlockInterface) {
+      // Change the RCS block weight based on the V1 block weight.
+      $existing_block_weight = $prev_block->getWeight();
+      $prev_block->disable()->save();
+      // Load the RCS Block and Change the weight.
+      if ($new_block_id) {
+        $new_block = Block::load($new_block_id);
+        if ($new_block instanceof BlockInterface) {
+          $new_block->setWeight($existing_block_weight);
+          // Update the block region based on the previous block.
+          $new_block->setRegion($prev_block->getRegion());
+          $new_block->save();
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_rcs_main_menu_uninstall() {
+  // Enable the V1 blocks.
+  $blocks = alshaya_rcs_main_menu_get_block_ids();
+  foreach ($blocks as $prev_block_id => $new_block_id) {
+    $block = Block::load($prev_block_id);
+    if ($block instanceof BlockInterface) {
+      $block->enable()->save();
+    }
+  }
+}

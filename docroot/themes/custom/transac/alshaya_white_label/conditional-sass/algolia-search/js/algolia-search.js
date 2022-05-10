@@ -59,8 +59,12 @@
        */
       function showAlgoliaSearchBar() {
         $('.mobile--search').once().on('click', function (e) {
+          $('body').toggleClass('search-enabled');
           algoliaAutocompleteBlock.toggleClass('show-algolia-search-bar');
           algoliaAutocompleteBlock.find('input').trigger('focus');
+        });
+        $('.algolia-search-back-icon').once().on('click', function (e) {
+          $('body').removeClass('search-enabled');
         });
       }
 

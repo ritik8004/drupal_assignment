@@ -119,8 +119,16 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   /**
    * {@inheritdoc}
    */
-  public function getTemplateName(array &$suggestions) {
-    $suggestions[] = 'node__acq_product__full_magazine_v2';
+  public function getTemplateName(array &$suggestions, string $bundle) {
+    switch ($bundle) {
+      case 'rcs_product':
+        $suggestions[] = 'node__rcs_product__full_magazine_v2';
+        break;
+
+      default:
+        $suggestions[] = 'node__acq_product__full_magazine_v2';
+        break;
+    }
   }
 
   /**
@@ -160,7 +168,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     // Get the product's buyable status.
     $is_product_buyable = alshaya_acm_product_is_buyable($sku_entity);
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['is_product_buyable'] = $is_product_buyable;
-
     $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
     $vars['#cache']['tags'] = Cache::mergeTags($vars['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
     // Checking if express delivery enabled.
@@ -172,9 +179,15 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] ? 'active' : 'in-active';
     }
 
+    $bigTickectProduct = FALSE;
+    // Get the product's bidTicket status.
+    if ($sku_entity->hasField('attr_white_glove_delivery')) {
+      $bigTickectProduct = (bool) $sku_entity->get('attr_white_glove_delivery')->getString();
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['bigTickectProduct'] = TRUE;
+    }
     // Set delivery options only if product is buyable.
     // Hide home delivery default options if express delivery enabled.
-    if ($is_product_buyable && !($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) {
+    if (($is_product_buyable && !($this->deliveryOptionsHelper->ifSddEdFeatureEnabled())) || ($is_product_buyable && $bigTickectProduct)) {
       // Check if home delivery is available for this product.
       if (alshaya_acm_product_available_home_delivery($sku)) {
         $home_delivery_config = alshaya_acm_product_get_home_delivery_config();

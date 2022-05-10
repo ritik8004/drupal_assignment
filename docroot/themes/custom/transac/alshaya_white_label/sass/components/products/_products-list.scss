@@ -766,7 +766,7 @@ html[lang=ar] {
     }
 
     .throbber {
-      @include throbberLoader();
+      @include throbberLoader;
 
       background-size: 2.5rem;
       padding: 1rem;

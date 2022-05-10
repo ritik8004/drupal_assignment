@@ -11,6 +11,22 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Removes unnecessary view attachment from store finder glossary view.
+ */
+function alshaya_stores_finder_update_8112() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['views.view.stores_finder'],
+    'alshaya_stores_finder',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add store type field in store content type and update store finder view.
  */
 function alshaya_stores_finder_update_8111() {

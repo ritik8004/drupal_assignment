@@ -1,3 +1,5 @@
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
+
 const _ = require('lodash');
 
 /**
@@ -138,6 +140,11 @@ function hasSuperCategoryFilter() {
  *   Return type value to return. ("alias" or "key")
  */
 function facetFieldAlias(key, returnType, pageType = null) {
+  // Proceed only if key is defined.
+  if (!hasValue(key)) {
+    return key;
+  }
+
   const { filters_alias: filtersAlias } = drupalSettings.algoliaSearch;
   let allFilters = '';
   if (pageType === 'plp') {

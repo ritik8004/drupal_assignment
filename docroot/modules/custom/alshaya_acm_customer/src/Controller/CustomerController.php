@@ -223,7 +223,9 @@ class CustomerController extends ControllerBase {
 
     if (!empty($orderDetails)) {
       $build['#attached'] = [
-        'library' => ['alshaya_acm_customer/orders-list'],
+        'library' => [
+          'alshaya_acm_customer/orders-list',
+        ],
       ];
     }
 

@@ -50,7 +50,7 @@ class AuraHelper {
   /**
    * The api helper object.
    *
-   * @var Drupal\alshaya_aura_react\Helper\AuraApiHelper
+   * @var \Drupal\alshaya_aura_react\Helper\AuraApiHelper
    */
   protected $apiHelper;
 

@@ -220,6 +220,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   let promotions = '';
   let deliveryOptions = null;
   let expressDeliveryClass = '';
+  let bigTickectProduct = false;
   let isProductBuyable = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
@@ -261,6 +262,9 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     promotions = productInfo[skuItemCode].promotionsRaw;
     deliveryOptions = productInfo[skuItemCode].deliveryOptions;
     expressDeliveryClass = productInfo[skuItemCode].expressDeliveryClass;
+    if (productInfo[skuItemCode].bigTickectProduct) {
+      bigTickectProduct = productInfo[skuItemCode].bigTickectProduct;
+    }
     if (productInfo[skuItemCode].type === 'configurable') {
       configurableCombinations = drupalSettings.configurableCombinations;
       if (Object.keys(variants).length > 0) {
@@ -341,6 +345,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     deliveryOptions,
     expressDeliveryClass,
     isProductBuyable,
+    bigTickectProduct,
   };
 };
 

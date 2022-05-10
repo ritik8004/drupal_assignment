@@ -84,7 +84,9 @@ export default class EgiftTopPurchase extends React.Component {
               title: response.data.card_type,
               alt: response.data.card_type,
             },
-            eGiftFor: 'self',
+            // if linked card show linked card topup image for my card option,
+            // show default topup image for no linked card and other option.
+            eGiftFor: response.data.card_number !== null ? 'self' : 'other',
           });
         }
       });
@@ -211,7 +213,7 @@ export default class EgiftTopPurchase extends React.Component {
         if (typeof response.data.response_type !== 'undefined' && response.data.response_type) {
           // GTM product attributes.
           const productGtm = {
-            name: topUpCard.name,
+            name: `${topUpCard.name}/${params.topup.amount}`,
             price: params.topup.amount,
             variant: topUpCard.sku,
             dimension2: topUpCard.type_id,

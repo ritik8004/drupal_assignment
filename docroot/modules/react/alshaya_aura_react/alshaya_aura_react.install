@@ -5,6 +5,23 @@
  * Install file.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update token in loyalty_benefits config.
+ */
+function alshaya_aura_react_update_8003() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_aura_react.loyalty_benefits'],
+    'alshaya_aura_react',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE,
+  );
+}
+
 /**
  * Implements hook_update_N().
  *

@@ -1,0 +1,5 @@
+dependencies:
+  config:
+    - field.field.node.rcs_product.field_select_pdp_layout
+hidden:
+  field_select_pdp_layout: true

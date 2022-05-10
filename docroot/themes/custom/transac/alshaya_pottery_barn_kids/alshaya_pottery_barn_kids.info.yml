@@ -158,3 +158,13 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css
+
+  alshaya_white_label/egift-cart:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/egift-cart/egift-cart.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/egift-cart/egift-cart.ltr.css
+
+  alshaya_white_label/plp-add-to-cart:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css

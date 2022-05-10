@@ -33,6 +33,13 @@ export const drupalSettings = {
   },
 };
 
+// Define a mock implementation here otherwise will get error on running the
+// test about the function not being found.
+// This is most likely because this function is included by Drupal and is not a
+// part of react.
+window.commerceBackend = window.commerceBackend || {};
+window.commerceBackend.getProductStatus = function () {}
+
 // Start copiying functions from alshaya_master/js/local_storage_manager.js
 // to help running the npm tests.
 // Duplicate of function `Drupal.addItemInLocalStorage`.

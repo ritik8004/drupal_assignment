@@ -1,0 +1,6 @@
+langcode: en
+dependencies:
+  config:
+    - field.field.node.advanced_page.field_category_slug
+hidden:
+  field_category_slug: true

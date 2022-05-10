@@ -83,7 +83,4 @@ function alshaya_vs_non_transac_install() {
 
   \Drupal::service('theme_handler')->install(['alshaya_amp_victoria_secret'], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_victoria_secret')->save();
-
-  // Save overridden configs.
-  _alshaya_config_save_overridden_configs('alshaya_vs_non_transac');
 }

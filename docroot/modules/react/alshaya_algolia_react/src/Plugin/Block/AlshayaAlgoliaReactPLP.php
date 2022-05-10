@@ -150,6 +150,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory($lang));
     // Set default EN category filter in product list index for VM.
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $algoliaSearchValues['hierarchy_lhn'] = $algoliaSearchValues['hierarchy'];
       $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory('en'));
     }
     $reactTeaserView = $common_config['commonReactTeaserView'];
@@ -207,13 +208,22 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     }
 
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="alshaya-algolia-plp"></div>',
-      '#attached' => [
-        'library' => $common_config['otherRequiredValues']['libraries'],
-        'drupalSettings' => [
-          'algoliaSearch' => $algoliaSearch,
-          'reactTeaserView' => $reactTeaserView,
+      'inside' => [
+        '#type' => 'html_tag',
+        '#tag' => 'div',
+        '#attributes' => [
+          'id' => 'alshaya-algolia-plp',
+          'data-hierarchy' => $algoliaSearch['hierarchy'] ?? '',
+          'data-level' => $algoliaSearch['level'] ?? '',
+          'data-rule-context' => $algoliaSearch['ruleContext'] ?? [],
+          'data-category-field' => $algoliaSearch['category_field'] ?? '',
+        ],
+        '#attached' => [
+          'library' => $common_config['otherRequiredValues']['libraries'],
+          'drupalSettings' => [
+            'algoliaSearch' => $algoliaSearch,
+            'reactTeaserView' => $reactTeaserView,
+          ],
         ],
       ],
     ];

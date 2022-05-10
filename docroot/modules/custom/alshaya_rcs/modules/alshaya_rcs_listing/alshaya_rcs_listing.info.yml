@@ -1,0 +1,10 @@
+name: Alshaya RCS PLP
+type: module
+description: Alshaya implementation of RCS PLP. Check RCS module.
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_rcs:alshaya_rcs
+  - alshaya_algolia_react:alshaya_algolia_react
+  - alshaya_rcs_magento_placeholders:alshaya_rcs_magento_placeholders
+  - alshaya_rcs_main_menu:alshaya_rcs_main_menu

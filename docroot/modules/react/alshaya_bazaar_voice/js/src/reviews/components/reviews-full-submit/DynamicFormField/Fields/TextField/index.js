@@ -1,5 +1,5 @@
 import React from 'react';
-import { validEmailRegex } from '../../../../../../utilities/write_review_util';
+import { validateInputLang, validEmailRegex } from '../../../../../../utilities/write_review_util';
 import ConditionalView from '../../../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
@@ -16,7 +16,13 @@ class TextField extends React.Component {
     const { label } = this.props;
     const { value, minLength, id } = e.currentTarget;
     let activeClass = 'active-label';
-    if (value.length > 0 && value.length < minLength) {
+    if (value.length > 0
+      && !validateInputLang(value)
+      && id !== 'usernickname'
+      && id !== 'useremail') {
+      document.getElementById(`${id}-error`).innerHTML = getStringMessage('text_input_lang_error');
+      document.getElementById(id).classList.add('error');
+    } else if (value.length > 0 && value.length < minLength) {
       document.getElementById(`${id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': minLength, '%fieldTitle': label });
       document.getElementById(id).classList.add('error');
     } else if (value.length === 0) {

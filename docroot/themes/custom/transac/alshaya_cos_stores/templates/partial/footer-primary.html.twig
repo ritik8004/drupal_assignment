@@ -9,13 +9,20 @@
     {{ page.footer_primary.languageswitcher_2 }}
   </div>
 
-  {{ page.footer_primary|without('alshayanewslettersubscription', 'shopby', 'aboutbrand', 'alshaya_help', 'footerstaticlinks', 'languageswitcher_2', 'sociallinks') }}
+  {{ page.footer_primary|without('alshayanewslettersubscription', 'shopby', 'aboutbrand', 'alshaya_help', 'footerstaticlinks', 'languageswitcher_2', 'sociallinks', 'alshayarcsshopby') }}
 </div>
 
 <div class="footer--menu">
   {% if page.footer_primary.shopby is not empty %}
   <div class="footer--categories">
     {{ page.footer_primary.shopby }}
+  </div>
+  {% endif %}
+
+  {# Place block for RCS Shopby #}
+  {% if page.footer_primary.alshayarcsshopby is not empty %}
+  <div class="footer--categories">
+    {{ page.footer_primary.alshayarcsshopby }}
   </div>
   {% endif %}
 

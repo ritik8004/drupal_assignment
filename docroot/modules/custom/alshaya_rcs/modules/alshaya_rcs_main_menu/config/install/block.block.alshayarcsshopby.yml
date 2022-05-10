@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_rcs_main_menu
+  theme:
+    - alshaya_white_label
+id: alshayarcsshopby
+theme: alshaya_white_label
+region: footer_primary
+weight: -45
+provider: null
+plugin: alshaya_rcs_shop_by_block
+settings:
+  id: alshaya_rcs_shop_by_block
+  label: 'Shop by'
+  provider: alshaya_rcs_main_menu
+  label_display: visible
+visibility: {  }

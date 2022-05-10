@@ -465,11 +465,13 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
   // If items count we get from MDC update and what in
   // local storage different, we show message on top.
   if (sameNumberOfItems === false) {
+    const errmsg = 'Sorry, one or more products in your basket are no longer available and were removed from your basket.';
     // Dispatch event for error to show.
     dispatchCustomEvent('spcCartMessageUpdate', {
       type: 'error',
-      message: Drupal.t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'),
+      message: Drupal.t('@errmsg', { '@errmsg': errmsg }),
     });
+    Drupal.logJavascriptError('continue to checkout', errmsg, GTM_CONSTANTS.CART_ERRORS);
     return;
   }
 

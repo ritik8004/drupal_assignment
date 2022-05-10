@@ -5,7 +5,7 @@
         .spc-address-tile-actions {
           .spc-address-btns {
             > button {
-              @include btn();
+              @include btn;
             }
           }
         }

@@ -1,4 +1,4 @@
-//Error messages
+// Error messages.
 .messages {
   @include breakpoint($mobile) {
     @include container(100%);

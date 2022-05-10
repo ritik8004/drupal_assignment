@@ -25,7 +25,7 @@ class CheckoutVirtualCartItem extends React.Component {
     } = this.props;
     // Egift card product image.
     const cartImage = {
-      url: (media.length > 0) ? media : undefined,
+      url: (typeof media !== 'undefined' && media !== null && media.length > 0) ? media : undefined,
       alt: title,
       title,
     };

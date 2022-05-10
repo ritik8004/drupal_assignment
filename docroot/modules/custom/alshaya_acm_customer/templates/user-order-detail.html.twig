@@ -384,7 +384,7 @@
       <div class="dark">{{ product.name }}</div>
       {% if product.attributes is not empty %}
         {% for attribute in product.attributes %}
-          <div class="light">
+          <div class="light attr-wrapper">
             {% trans %}
               {{ attribute.label }}: {{ attribute.value }}
             {% endtrans %}

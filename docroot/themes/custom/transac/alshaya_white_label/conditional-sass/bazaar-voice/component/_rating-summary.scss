@@ -17,7 +17,7 @@
 
     &:hover {
       .histogram-data {
-        @include tooltip-display();
+        @include tooltip-display;
       }
     }
   }

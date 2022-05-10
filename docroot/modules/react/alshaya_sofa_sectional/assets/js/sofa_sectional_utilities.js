@@ -27,13 +27,16 @@
           var viewMode = targetFormEle.parents('article.entity--type-node').attr('data-vmode');
           var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
           var node = targetFormEle.parents('article.entity--type-node:first');
+          var pageMainSku = node.attr('data-sku');
           $('.price-block-' + drupalSettings[productKey][sku].identifier, node).html(drupalSettings[productKey][sku].price);
 
           // Update Gallery.
-          Drupal.updateGallery(
+          window.commerceBackend.updateGallery(
             node,
             drupalSettings[productKey][sku].layout,
-            drupalSettings[productKey][sku].gallery
+            drupalSettings[productKey][sku].gallery,
+            pageMainSku,
+            sku
           );
         }
       });

@@ -42,7 +42,7 @@ Any code merged into upstream branch is automatically back-merged.
 
 ### Local git repository
 
-Each developer uses a fork of the main repository for his developments and
+Each developer uses a fork of the main repository for their developments and
 creates Pull Requests (PRs) against the main repository when he is ready.
 
 To prepare your local env:
@@ -375,3 +375,13 @@ Download and add [xhprof](https://www.drupal.org/project/xhprof) in docroot/modu
   - vendor/mglaman/drupal-check/drupal-check -d docroot/modules/custom
 * Analysis.
   - vendor/mglaman/drupal-check/drupal-check -a docroot/modules/custom
+
+### General Notes
+#### Issue with accesing cloud urls from Linux Systems
+There is an issue observered when trying to access dev/uat etc website urls from linux systems.
+The issue happens because CloudFlare blocks the request and we see the message `Site can't be reached` in the browser.
+In such a situation, we need to add the following  mapping to the `/etc/hosts` file in the local system and then access the website again (the IP address can be the same for all the domains)
+```
+104.16.65.106	hmkw5-pprod.factory.alshaya.com
+104.16.65.106	weae2-test.factory.alshaya.com
+```

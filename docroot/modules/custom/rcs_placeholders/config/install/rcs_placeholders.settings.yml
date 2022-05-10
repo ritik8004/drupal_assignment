@@ -1,0 +1,28 @@
+category:
+  placeholder_tid:
+  path_prefix: 'shop-'
+  enrichment: false
+  per_page: 12
+  facets:
+    color:
+      label: 'Color'
+      attribute: 'color.label.%langcode'
+    size:
+      label: 'Size'
+      attribute: 'size'
+    designer:
+      label: 'Designer'
+      attribute: 'designer.key'
+  sorts:
+    default:
+      label: 'Recommended'
+    name:
+      label: 'Name'
+      attribute: 'name.%langcode+asc'
+product:
+  placeholder_nid:
+  path_prefix: 'buy-'
+  enrichment: false
+promotion:
+  placeholder_nid:
+  path_prefix: 'promotion'
