@@ -1,0 +1,5 @@
+services:
+  alshaya_hello_member.hello_member_helper:
+    class: Drupal\alshaya_hello_member\Helper\HelloMemberHelper
+    arguments:
+      - '@config.factory'
