@@ -81,21 +81,19 @@ class AlshayaAcmPromotionAPIHelper {
       'timeout' => $this->mdcHelper->getPhpTimeout('discount_text'),
     ];
 
-    $status = $this->apiWrapper->invokeApi(
-      'promotion/get-config',
-      [],
-      'GET',
-      FALSE,
-      $request_options
-    );
+    if ($reset) {
+      $status = $this->apiWrapper->invokeApi(
+        'promotion/get-config',
+        [],
+        'GET',
+        FALSE,
+        $request_options
+      );
 
-    if ($status === 'true' || $status === 'false') {
-      // Cache only if enabled or disabled.
-      $this->cache->set($cache_key, $status);
-    }
-    // Try resetting once.
-    elseif (!$reset) {
-      return $this->getDiscountTextVisibilityStatus(TRUE);
+      if ($status === 'true' || $status === 'false') {
+        // Cache only if enabled or disabled.
+        $this->cache->set($cache_key, $status);
+      }
     }
 
     return $status ?? FALSE;
