@@ -175,7 +175,6 @@
       return;
     }
 
-    let products = e.detail.result;
-    window.commerceBackend.setMediaData(products);
+    window.commerceBackend.setMediaData(e.detail.result);
   }, 10);
 })();
