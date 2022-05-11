@@ -69,31 +69,44 @@ class AlshayaAcmPromotionAPIHelper {
     if (($status === 'true' || $status === 'false') && !$reset) {
       return $status;
     }
+    elseif ($status) {
+      return FALSE;
+    }
 
     $cache_key = 'alshaya_acm_promotion:discount_text_visibility_status';
     $cache = $reset ? NULL : $this->cache->get($cache_key);
+
     if (is_object($cache) && ($cache->data === 'true' || $cache->data === 'false') && !$reset) {
       $status = $cache->data;
       return $status;
+    }
+    elseif (is_object($cache) && $cache->data) {
+      return FALSE;
     }
 
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('discount_text'),
     ];
 
-    if ($reset) {
-      $status = $this->apiWrapper->invokeApi(
-        'promotion/get-config',
-        [],
-        'GET',
-        FALSE,
-        $request_options
-      );
+    $status = $this->apiWrapper->invokeApi(
+      'promotion/get-config',
+      [],
+      'GET',
+      FALSE,
+      $request_options
+    );
 
-      if ($status === 'true' || $status === 'false') {
-        // Cache only if enabled or disabled.
-        $this->cache->set($cache_key, $status);
-      }
+    if ($status === 'true' || $status === 'false') {
+      // Cache only if enabled or disabled.
+      $this->cache->set($cache_key, $status);
+    }
+    elseif ($status) {
+      // Cache if in case of any error message.
+      $this->cache->set($cache_key, json_encode($status));
+    }
+    // Try resetting once.
+    elseif (!$reset) {
+      return $this->getDiscountTextVisibilityStatus(TRUE);
     }
 
     return $status ?? FALSE;
