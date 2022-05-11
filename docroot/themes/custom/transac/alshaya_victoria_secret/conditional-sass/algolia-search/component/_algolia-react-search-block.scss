@@ -69,7 +69,7 @@
     padding: 0;
 
     @include breakpoint($desktop) {
-      width: 12.5rem;
+      width: rem(248);
       height: 2.375rem;
     }
 

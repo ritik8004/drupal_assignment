@@ -1,10 +1,6 @@
 .c-menu-secondary {
   text-transform: none;
 
-  @include breakpoint($desktop) {
-    margin-#{$right}: 2.25rem;
-  }
-
   .menu--account,
   .block-alshaya-stores-finder,
   .block-language-blocklanguage-interface,

@@ -11,6 +11,70 @@
     .menu--one__list {
       .menu--one__link {
         font-size: 0;
+
+        @include breakpoint($only-tablet) {
+          padding: rem(9) rem(10);
+        }
+
+        @include breakpoint ($desktop) {
+          padding: rem(8) rem(24);
+        }
+
+        &.brand-swim {
+          padding-bottom: rem(4);
+
+          @include breakpoint($only-tablet) {
+            padding-bottom: rem(9);
+          }
+
+          @include breakpoint($only-mobile) {
+            padding-bottom: rem(6);
+          }
+        }
+
+        &::after {
+          content: "|";
+          display: flex;
+          color: $header_super_category_menu_divider;
+          font-size: rem(16);
+          margin-top: rem(-23);
+          justify-content: flex-end;
+          position: relative;
+          #{$right}: rem(-27);
+
+          @include breakpoint($only-mobile) {
+            #{$right}: rem(-11);
+          }
+
+          @include breakpoint($only-tablet) {
+            font-size: rem(21);
+            margin-top: 0;
+            #{$right}: rem(-75);
+          }
+        }
+
+        &::before {
+          @include breakpoint($upto-desktop) {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .menu--one__link {
+      &:hover,
+      &.active {
+        border-bottom: rem(3) solid $mm_l1_link_active;
+      }
+    }
+  }
+
+  .block-alshaya-super-category-menu {
+    .menu--one__list li {
+      &:last-child {
+        a::after {
+          display: none;
+        }
       }
     }
   }
@@ -24,6 +88,10 @@
         justify-content: center;
       }
     }
+
+    .c-menu-primary & {
+      display: flex;
+    }
   }
 
   .brand-victorias-secret,
@@ -36,19 +104,21 @@
   }
 
   .brand-victorias-secret img {
-    width: 3.4375rem;
+    width: rem(60);
   }
 
   .brand-pink img {
-    width: 2.5rem;
+    width: rem(34);
   }
 
   .brand-beauty img {
-    width: 3.125rem;
+    width: rem(64);
   }
 
-  .brand-swim img {
-    width: 1.75rem;
+  .brand-swim {
+    img {
+      width: rem(27);
+    }
   }
 }
 
