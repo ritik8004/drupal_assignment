@@ -2,12 +2,12 @@
   .egift-list-wrapper {
     ul {
       li {
-        height: rem(41);
-        width: rem(64);
+        height: rem(36);
+        width: rem(56);
 
-        @include breakpoint($only-mobile) {
-          height: rem(36);
-          width: rem(56);
+        @include breakpoint($desktop) {
+          height: rem(41);
+          width: rem(64);
         }
       }
     }
