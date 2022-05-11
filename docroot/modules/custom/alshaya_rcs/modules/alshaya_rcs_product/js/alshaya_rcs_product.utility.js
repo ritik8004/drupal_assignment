@@ -16,6 +16,8 @@ window.commerceBackend = window.commerceBackend || {};
     cartItemsStock: {},
     labels: {},
     parent: {},
+    configurableCombinations: {},
+    configurables: {},
   };
 
   /**
@@ -187,13 +189,13 @@ window.commerceBackend = window.commerceBackend || {};
    *   The product entity.
    */
   function getConfigurables(product) {
-    const staticKey = product.sku + '_configurables';
+    var sku = product.sku;
 
-    if (typeof staticDataStore[staticKey] !== 'undefined') {
-      return staticDataStore[staticKey];
+    if (typeof staticDataStore.configurables[sku] !== 'undefined') {
+      return staticDataStore.configurables[sku];
     }
 
-    const configurables = {};
+    var configurables = {};
     product.configurable_options.forEach(function (option) {
       configurables[option.attribute_code] = {
         attribute_id: parseInt(atob(option.attribute_uid), 10),
@@ -209,7 +211,7 @@ window.commerceBackend = window.commerceBackend || {};
       };
     });
 
-    staticDataStore[staticKey] = configurables;
+    staticDataStore.configurables[sku] = configurables;
 
     return configurables;
   }
@@ -494,9 +496,8 @@ window.commerceBackend = window.commerceBackend || {};
    *   Returns null if no product is found.
    */
   window.commerceBackend.getConfigurableCombinations = function (sku) {
-    var staticKey = 'product' + sku + '_configurableCombinations';
-    if (typeof staticDataStore[staticKey] !== 'undefined') {
-      return staticDataStore[staticKey];
+    if (typeof staticDataStore.configurableCombinations[sku] !== 'undefined') {
+      return staticDataStore.configurableCombinations[sku];
     }
 
     var productData = window.commerceBackend.getProductData(sku);
@@ -581,7 +582,7 @@ window.commerceBackend = window.commerceBackend || {};
     combinations.bySku = combinations.by_sku;
     combinations.byAttribute = combinations.by_attribute;
 
-    staticDataStore[staticKey] = combinations;
+    staticDataStore.configurableCombinations[sku] = combinations;
 
     return combinations;
   }
@@ -1184,6 +1185,15 @@ window.commerceBackend = window.commerceBackend || {};
 
       return staticDataStore.cartItemsStock[sku];
     });
+  }
+
+  /**
+   * Clears static cache of product data.
+   */
+  window.commerceBackend.resetStaticStoragePostProductUpdate = function resetStaticStoragePostProductUpdate() {
+    staticDataStore.configurableCombinations = {};
+    staticDataStore.configurableColorData = {};
+    staticDataStore.configurables = {};
   }
 
   // Event listener to update static promotion.

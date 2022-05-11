@@ -149,10 +149,13 @@
     mainProduct.configurable_options = mainProduct.configurable_options.sort(function (optionA, optionB) {
       return (optionA.position > optionB.position) - (optionA.position < optionB.position);
     });
-
+    // Process and set the media data for the product.
     window.commerceBackend.setMediaData(mainProduct);
-
+    // Set the processed product to storage.
     window.commerceBackend.setRcsProductToStorage(mainProduct, mainProduct.context);
+    // Reset static cache of product data as we have updated product data here
+    // now.
+    window.commerceBackend.resetStaticStoragePostProductUpdate();
     return mainProduct;
   }
 })();

@@ -5,6 +5,8 @@
 window.commerceBackend = window.commerceBackend || {};
 
 (function ($){
+  // Stores information about initial rendering of gallery.
+  var pdpGalleryRendered = false;
 
   /**
    * Get the labels data for the selected SKU.
@@ -148,4 +150,24 @@ window.commerceBackend = window.commerceBackend || {};
     jQuery('#add_to_cart_form').html(addToCartFormHtml);
     globalThis.rcsPhApplyDrupalJs(document);
   });
+
+  Drupal.behaviors.rcsProductPdpBehavior = {
+    attach: function rcsProductPdpBehavior() {
+      // Once the main product node is ready, we will immediately display the
+      // gallery.
+      var node = $('.entity--type-node[data-vmode="full"]').not('[data-sku *= "#"]');
+      if (!node.length || (node.length && pdpGalleryRendered)) {
+        return;
+      }
+      pdpGalleryRendered = true;
+      var sku = node.attr('data-sku');
+      const productData = window.commerceBackend.getProductData(sku, null, false);
+      if (productData.type_id === 'configurable') {
+        window.commerceBackend.updateGallery(node, productData.layout, '', sku, productData.variants[0].product.sku);
+      }
+      else {
+        window.commerceBackend.updateGallery(node, productData.layout, '', sku);
+      }
+    }
+  }
 })(jQuery);
