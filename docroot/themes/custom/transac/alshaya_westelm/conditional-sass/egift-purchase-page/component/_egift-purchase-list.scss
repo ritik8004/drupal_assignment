@@ -5,9 +5,15 @@
         height: rem(36);
         width: rem(56);
 
-        @include breakpoint($desktop) {
+        @include breakpoint($tablet) {
           height: rem(41);
           width: rem(64);
+        }
+
+        @include breakpoint($only-tablet) {
+          &:nth-child(4n) {
+            margin-top: rem(10);
+          }
         }
       }
     }
