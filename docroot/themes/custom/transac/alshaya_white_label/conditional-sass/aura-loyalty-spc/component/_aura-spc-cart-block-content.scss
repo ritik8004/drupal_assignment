@@ -56,6 +56,7 @@
 
       .spc-aura-or-text {
         margin: 0 0.2rem;
+        color: $aura-normal-text;
       }
 
       .tooltip-anchor {
@@ -81,7 +82,7 @@
     }
 
     .spc-aura-points-to-earn {
-      color: $aura-normal-text;
+      color: $aura-loyalty-pts-to-earn-txt;
 
       .spc-aura-highlight {
         color: $aura-highlight;
