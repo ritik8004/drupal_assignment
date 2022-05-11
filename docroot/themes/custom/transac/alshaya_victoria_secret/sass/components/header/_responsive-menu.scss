@@ -50,7 +50,7 @@ header {
     }
 
     @include breakpoint($upto-tablet) {
-      height: 2.625rem;
+      height: rem(43);
     }
 
     @include breakpoint($upto-desktop) {
@@ -131,6 +131,7 @@ header {
 
   .main--menu ul.menu--one__list {
     padding-bottom: 6.0625rem;
+    background: $header_secondary_bg;
 
     .menu__link {
       text-transform: uppercase;
