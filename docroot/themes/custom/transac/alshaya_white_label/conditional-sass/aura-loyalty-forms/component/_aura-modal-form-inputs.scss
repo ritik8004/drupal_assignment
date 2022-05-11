@@ -23,6 +23,12 @@
     margin-bottom: 1.5rem;
   }
 
+  .spc-aura-mobile-number {
+    & + .spc-type-textfield {
+      margin-top: rem(32);
+    }
+  }
+
   input:disabled {
     background: none;
     opacity: 0.5;
@@ -70,6 +76,8 @@
     input:focus ~ label,
     input.focus ~ label {
       @include aura-placeholder-active;
+
+      padding: 0 !important;
     }
   }
 }
