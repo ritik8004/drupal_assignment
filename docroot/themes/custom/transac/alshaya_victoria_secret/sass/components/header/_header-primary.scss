@@ -14,7 +14,7 @@
     .logo {
       img {
         width: 18.75rem;
-        height: 1.61rem;
+        height: rem(72);
 
         html[lang=ar] & {
           width: 17.94rem;
@@ -110,11 +110,11 @@ header {
   .block-alshaya-react-mini-cart {
     .cart-link {
       background-size: contain;
-      width: 2.125rem;
-      height: 2.125rem;
+      width: rem(20);
+      height: rem(20);
 
       @include breakpoint($desktop) {
-        top: -0.4rem;
+        top: 0;
       }
     }
 
@@ -127,23 +127,21 @@ header {
     }
 
     .quantity {
-      width: 1.25rem;
-      height: 1.25rem;
-      font-family: $vs-bold;
-      font-size: 0.75rem;
-      bottom: -0.45rem;
-      #{$left}: -0.125rem;
-      line-height: 20px;
+      width: rem(14);
+      height: rem(14);
+      bottom: rem(1);
+      #{$left}: rem(24);
+      border-radius: rem(3);
 
       html[lang=ar] & {
         font-family: $vs-bold !important;
       }
 
       @include breakpoint($upto-desktop) {
-        width: 1.125rem;
-        height: 1.125rem;
-        bottom: 0.25rem;
-        #{$left}: -1.5rem;
+        width: rem(14);
+        height: rem(14);
+        bottom: rem(10);
+        #{$left}: rem(42);
         #{$right}: 0;
         margin: 0 auto;
       }
@@ -153,6 +151,7 @@ header {
   .region__header {
     @include breakpoint($desktop) {
       display: flex;
+      padding-top: rem(22);
     }
 
     & > div {
@@ -269,6 +268,27 @@ header {
         padding: 0.625rem 1.5rem;
         height: 2.5rem;
         margin-top: 0;
+        border-top: 2px solid transparent !important;
+
+        &::after {
+          content: '';
+          height: 0.125rem;
+          width: auto;
+          transition: all 0.3s ease-out;
+          margin: 0.625rem auto 0;
+          display: block;
+        }
+      }
+
+      &:hover {
+        a.menu--one__link {
+          border-bottom: 0;
+
+          &::after {
+            background-color: $mm_l1_link_active_border;
+            visibility: visible;
+          }
+        }
       }
 
       &.has-bg-color {
@@ -283,15 +303,6 @@ header {
     }
 
     .active--menu--links {
-      li.menu--one__list-item {
-        &:hover {
-          .menu--one__link {
-            border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
-            color: $mm_l1_link_active;
-          }
-        }
-      }
-
       &:hover {
         li.menu--one__list-item {
           .menu--one__link.active {
@@ -310,6 +321,14 @@ header {
 
     .menu--three__list {
       font-size: 0.875rem;
+    }
+  }
+
+  &:not(.megamenu-inline-layout) {
+    li.menu--one__list-item {
+      ul.menu--two__list {
+        background: $mm_l3_link_bg;
+      }
     }
   }
 }
@@ -352,12 +371,6 @@ header {
     @include breakpoint($upto-desktop) {
       display: table;
       width: 100%;
-    }
-  }
-
-  .mobile--menu::before {
-    @include breakpoint($upto-desktop) {
-      margin-#{$left}: 0.75rem;
     }
   }
 

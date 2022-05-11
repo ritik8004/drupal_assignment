@@ -81,7 +81,7 @@ $sticky-btn: rgba(0, 0, 0, 0.07);
 // VS colors.
 $nero: #232323;
 $vanilla: #fff;
-$brilliant-rose: #ef5f96;
+$brilliant-rose: #f4c6cf;
 $gainsboro: #dadada;
 $ash-triplet: #777;
 $vivid-raspberry: #d91560;
@@ -99,17 +99,20 @@ $dark-pink: #fc45b2;
 $pink-hover:  #d84e82;
 $_plp_secondary_cta_hover: rgba(239, 95, 150, 0.1);
 $_egift_landing_page_banner_bg: #fcf2f6;
-
+$cultured: #f7f7f8;
+$light-orange: #e0dad5;
+$platinum: #e8e3df;
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
 $_grey_two: #f3f3f3;
 $_pink_one: #636363;
 $_grey_three: #e1e1e1;
+$_grey_four: #f5f5f6;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
-$primary_bg: $nero;
+$primary_bg: $_grey_four;
 $body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $content_pagetitle_border: $gainsboro;
@@ -338,10 +341,11 @@ $autocomplete_text: $grey-ash;
 
 // Header.
 $header_bg: $vanilla;
-$header_top_bg: $nero;
+$header_top_bg: $cultured;
 $header_search_block_bg: $vanilla;
 $header_border: $white;
-$header_super_category_bg: $vanilla;
+$header_super_category_bg: $cultured;
+$header_super_category_menu_divider: $light-orange;
 
 // Header mobile search.
 $header_search_border_mobile: $nero;
@@ -378,11 +382,11 @@ $header_mobile_border: $white-smoke-light;
 $header_branding_shadow: $greyish;
 
 // Header secondary: ie: top header.
-$header_secondary_bg: $nero;
+$header_secondary_bg: $cultured;
 $header_secondary_bg_upto_desk: $vanilla;
 $header_secondary_menu_link_mobile: $nero;
-$header_secondary_menu_link: $vanilla;
-$header_secondary_menu_link_hover_bg: $black;
+$header_secondary_menu_link: $nero;
+$header_secondary_menu_link_hover_bg: $white-five;
 $header_secondary_menu_mobile_link: $brilliant-rose;
 $header_secondary_menu_link_mobile_hover_bg: $vanilla;
 
@@ -404,13 +408,13 @@ $mm_l1_link_bg: $brilliant-rose;
 $mm_l1_link_active: $brilliant-rose;
 $mm_l1_link_hover: $black;
 $mm_l1_link_hover_border_to_fill_space: $brilliant-rose;
-$mm_l1_link_active_border: transparent;
+$mm_l1_link_active_border: $brilliant-rose;
 $mm_l2_link: $black;
 $mm_l2_link_hover: $brilliant-rose;
 $mm_l2_p: $brownish-grey;
 $mm_l3_link: $nero;
 $mm_l3_link_2: $peacock-blue; // possible old markup.
-$mm_l3_link_bg: $white-five;
+$mm_l3_link_bg: $cultured;
 $mm_l3_link_hover: $brilliant-rose;
 $mm_highlight_bg: $white-smoke-light;
 $mm_highlight_label: $black;
@@ -420,8 +424,8 @@ $mm_p_a_text: $white-five;
 
 //  Mini Cart.
 $primary_minicart_text: $black;
-$primary_minicart_quantity_text: $white-five;
-$primary_minicart_quantity_bg: $brilliant-rose;
+$primary_minicart_quantity_text: $black;
+$primary_minicart_quantity_bg: $platinum;
 $mobile_continue_shopping_btn_text: $vanilla;
 $mobile_continue_shopping_btn_bg: $brilliant-rose;
 $mobile_continue_shopping_btn_border: $brilliant-rose;
@@ -457,13 +461,13 @@ $promo_panel_label: $nero;
 $promo_panel_label_icon: $brilliant-rose;
 
 //3. Footer
-$footer_bg: $nero;
-$footer_text: $vanilla;
-$footer_border_top: $nero;
+$footer_bg: $_grey_four;
+$footer_text: $mothercare-black;
+$footer_border_top: $_grey_four;
 $primary_footer_input_label: $vanilla;
 $footer_title_h3: $vanilla;
 $footer_link_mobile: $vanilla;
-$footer_link: $vanilla;
+$footer_link: $mothercare-black;
 $footer_link_hover: $brilliant-rose;
 
 // Social links.
@@ -471,7 +475,7 @@ $social_links: $vanilla;
 $social_links_hover: $vanilla;
 
 //1. Copyright
-$copyright_footer_bg: $white-four;
+$copyright_footer_bg: $white-five;
 $copyright_footer_text: $black;
 
 //7. Newsletter-signup
