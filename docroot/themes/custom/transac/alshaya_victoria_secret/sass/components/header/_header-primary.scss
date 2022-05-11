@@ -479,7 +479,7 @@ header {
     font-size: 0;
     position: static;
     margin-top: 0;
-    padding: 0.8rem;
+    padding: rem(14);
   }
 
   .mobile--search,
@@ -577,5 +577,11 @@ html[lang="en"] {
         }
       }
     }
+  }
+}
+
+.menu__list-item {
+  @include breakpoint($upto-desktop) {
+    border-bottom: 0;
   }
 }
