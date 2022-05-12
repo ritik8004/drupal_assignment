@@ -5,10 +5,8 @@
  * Contains install hooks for acq_sku.
  */
 
-use Drupal\node\Entity\Node;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Symfony\Component\Yaml\Yaml;
 
@@ -313,26 +311,6 @@ function acq_sku_update_8001() {
  * Implements hook_install().
  */
 function acq_sku_install() {
-  Node::create([
-    'type' => 'page',
-    'title' => 'Store',
-    'langcode' => 'en',
-    'uid' => '1',
-    'status' => 1,
-    'path' => '/store',
-    'body' => [
-      'value' => '<p>Welcome to our store</p>',
-      'format' => 'rich_text',
-    ],
-  ])->save();
-
-  MenuLinkContent::create([
-    'title' => 'Store',
-    'link' => ['uri' => 'internal:/store'],
-    'menu_name' => 'main',
-    'weight' => 0,
-  ])->save();
-
   foreach (_acq_sku_indexes() as $index => $data) {
     if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
       \Drupal::database()
