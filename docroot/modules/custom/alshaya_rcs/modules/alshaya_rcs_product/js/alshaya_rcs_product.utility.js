@@ -1169,12 +1169,16 @@ window.commerceBackend = window.commerceBackend || {};
         if (!Drupal.hasValue(cartItem)) {
           return;
         }
+        var stockData = null;
         if (cartItem.product.type_id === 'configurable') {
-          staticDataStore.cartItemsStock[cartItem.configured_variant.sku] =
-          cartItem.configured_variant.stock_data;
+          stockData = cartItem.configured_variant.stock_data;
+          stockData.status = cartItem.configured_variant.stock_status;
+          staticDataStore.cartItemsStock[cartItem.configured_variant.sku] = stockData;
         }
         else {
-          staticDataStore.cartItemsStock[cartItem.product.sku] = cartItem.product.stock_data;
+          stockData = cartItem.product.stock_data;
+          stockData.status = cartItem.product.stock_status;
+          staticDataStore.cartItemsStock[cartItem.product.sku] = stockData;
         }
       });
 
