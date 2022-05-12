@@ -40,7 +40,7 @@
     a {
       @include breakpoint($desktop) {
         padding: 1.31rem 1.438rem;
-        height: 3.68rem;
+        height: rem(60);
       }
     }
 
@@ -68,10 +68,16 @@
       .en {
         a {
           @include breakpoint($desktop) {
-            height: 3.68rem;
+            height: rem(60);
           }
         }
       }
+    }
+
+    .region__menu-secondary,
+    ul {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 
