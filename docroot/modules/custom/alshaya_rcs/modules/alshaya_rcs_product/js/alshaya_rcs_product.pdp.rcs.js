@@ -199,6 +199,11 @@ window.commerceBackend = window.commerceBackend || {};
         var node = context.find('.entity--type-node');
         renderGallery(node);
       }
+
+      // Keep the Click and Collect section closed by default since the markup
+      // will not be ready by this stage and the form will be displayed
+      // momentarily.
+      $('#pdp-stores-container .c-accordion_content', node).css({display: 'none'});
     }
   }
 })(jQuery, Drupal, drupalSettings);
