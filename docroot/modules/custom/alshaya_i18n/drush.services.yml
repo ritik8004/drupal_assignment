@@ -6,5 +6,6 @@ services:
       - '@logger.factory'
       - '@locale.storage'
       - '@language_manager'
+      - '@database'
     tags:
       - { name: drush.command }
