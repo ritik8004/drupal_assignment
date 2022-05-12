@@ -8,6 +8,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\File\Exception\FileException;
 use Drupal\locale\StringStorageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Database\Connection;
 
 /**
  * Alshaya Export Translation Commands class.
@@ -57,6 +58,13 @@ class AlshayaExportTranslationCommands extends DrushCommands {
   protected $languageManager;
 
   /**
+   * Database connection service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * AlshayaExportTranslationCommands constructor.
    *
    * @param Drupal\Core\File\FileSystemInterface $file_system
@@ -67,17 +75,21 @@ class AlshayaExportTranslationCommands extends DrushCommands {
    *   Locale string storage.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Database connection service.
    */
   public function __construct(
     FileSystemInterface $file_system,
     LoggerChannelFactoryInterface $logger_factory,
     StringStorageInterface $string_storage,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    Connection $database
   ) {
     $this->fileSystem = $file_system;
     $this->logger = $logger_factory->get('alshaya_rcs_export_translation');
     $this->stringStorage = $string_storage;
     $this->languageManager = $language_manager;
+    $this->database = $database;
   }
 
   /**
@@ -85,11 +97,17 @@ class AlshayaExportTranslationCommands extends DrushCommands {
    *
    * @command alshaya:export-translation
    *
+   * @options all-translations
+   *   Get all user interface translations.
+   *
    * @aliases alshaya:et, aet
    *
    * @usage drush aet
+   *   Get user interface translations which has context.
+   * @usage drush aet --all-translations
+   *   Get all user interface translations with and without context.
    */
-  public function exportTranslationCsv($options = []) {
+  public function exportTranslationCsv($options = ['all-translations' => FALSE]) {
 
     // Create directory for export if it doesn't exists.
     $path = self::PATH;
@@ -105,7 +123,7 @@ class AlshayaExportTranslationCommands extends DrushCommands {
       if ($file_location) {
         $file = fopen($file_location, 'wb+');
         // Insert translations into csv file.
-        $this->insertTranslationsIntoCsv($file);
+        $this->insertTranslationsIntoCsv($file, $options['all-translations']);
         fclose($file);
         $csv_url = file_create_url($file_location);
         $this->output->writeln(dt('Successfully exported translations into csv: @csv_url', ['@csv_url' => $csv_url]));
@@ -121,15 +139,17 @@ class AlshayaExportTranslationCommands extends DrushCommands {
    *
    * @param mixed $file
    *   The csv file resource.
+   * @param bool $all_translations
+   *   Get all translations.
    */
-  private function insertTranslationsIntoCsv($file) {
+  private function insertTranslationsIntoCsv($file, $all_translations) {
     // Check for file resource.
     if (!\is_resource($file)) {
       $this->logger->error('No file resource found.');
       return;
     }
     // Get array of user interface translations.
-    $translation_list = $this->getCustomTranslations();
+    $translation_list = $this->getCustomTranslations($all_translations);
     if (!empty($translation_list)) {
       $headers = [
         'Language',
@@ -151,12 +171,24 @@ class AlshayaExportTranslationCommands extends DrushCommands {
   /**
    * Get rows of translations to be put into csv.
    *
+   * @param bool $all_translations
+   *   Get all translations.
+   *
    * @return array
    *   List of user interface translations.
    */
-  private function getCustomTranslations() {
+  private function getCustomTranslations($all_translations) {
     $langcodes = $this->languageManager->getLanguages();
     $langcodes_list = array_keys($langcodes);
+
+    // Get all translate contexts if all translations drush option is empty.
+    if (!$all_translations) {
+      $query = $this->database->select('locales_source', 's')
+        ->fields('s', ['context'])
+        ->condition('s.context', '', '!=')
+        ->distinct(TRUE);
+      $contexts = $query->execute()->fetchAllKeyed(0, 0);
+    }
 
     // Iterate through all languages.
     $translate_list = [];
@@ -166,6 +198,9 @@ class AlshayaExportTranslationCommands extends DrushCommands {
         'translated' => TRUE,
         'customized' => 1,
       ];
+      if (!$all_translations) {
+        $conditions['context'] = array_values($contexts);
+      }
       // Get all custom translation for language.
       $translations = $this->stringStorage->getTranslations($conditions);
       foreach ($translations as $translation) {
