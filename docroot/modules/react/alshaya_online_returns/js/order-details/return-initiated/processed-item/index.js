@@ -40,12 +40,6 @@ class ProcessedItem extends React.Component {
     // @todo: Items will be listed under specific return statuses.
     return (
       <>
-        <ConditionalView condition={popup}>
-          <CancelReturnPopUp
-            returnInfo={returnData.returnInfo}
-            closeCancelReturnModal={this.closeCancelReturnModal}
-          />
-        </ConditionalView>
         <div className="return-status-header">
           <div className="return-status-wrapper">
             <div className="return-status">
@@ -67,6 +61,12 @@ class ProcessedItem extends React.Component {
             </div>
           </ConditionalView>
         </div>
+        <ConditionalView condition={popup}>
+          <CancelReturnPopUp
+            returnInfo={returnData.returnInfo}
+            closeCancelReturnModal={this.closeCancelReturnModal}
+          />
+        </ConditionalView>
         <ConditionalView condition={hasValue(returnData.items)}>
           {returnData.items.map((item) => (
             <div className="item-list-wrapper">
