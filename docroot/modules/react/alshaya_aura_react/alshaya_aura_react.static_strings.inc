@@ -295,12 +295,8 @@ function _alshaya_aura_static_strings() {
       'value' => t('You will earn @pts Aura points with this purchase.', [], ['context' => 'aura']),
     ],
     [
-      'key' => 'aura_checkout_reward_points_to_earn_desktop',
-      'value' => t('You will earn @pts @aura_icon points with this purchase.', [], ['context' => 'aura']),
-    ],
-    [
-      'key' => 'aura_checkout_reward_points_to_earn_mobile',
-      'value' => t('You will earn @pts @aura_icon points.', [], ['context' => 'aura']),
+      'key' => 'aura_checkout_reward_points_to_earn_guest',
+      'value' => t('Earn @pts points with @aura_icon on this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'checkout_you_have_pts',
@@ -316,7 +312,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_earn_with_this_purchase',
-      'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase.", [], ['context' => 'aura']),
+      'value' => t("Earn <span><b>!pts</b> points with Aura</span> on this purchase.", [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_or',
@@ -352,15 +348,15 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'join_aura_congratulations_header',
-      'value' => t('Congrats!', [], ['context' => 'aura']),
+      'value' => t('Congratulations', [], ['context' => 'aura']),
     ],
     [
       'key' => 'join_aura_congratulations_text',
-      'value' => t('You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store', [], ['context' => 'aura']),
+      'value' => t('You can now start building your Aura. Earn points when you shop online or in-store.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'join_aura_congratulations_download_text',
-      'value' => t('To spend your points online, please download Aura app available both on App Store and Play Store.', [], ['context' => 'aura']),
+      'value' => t('To spend your points, complete your registration on the Aura MENA app, available on the App store and Google Play.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'tnc_description_text',
@@ -368,7 +364,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'link_card_header_guest',
-      'value' => t('Experience Aura', [], ['context' => 'aura']),
+      'value' => t('Earn with Aura', [], ['context' => 'aura']),
     ],
     [
       'key' => 'link_card_header_logged_in',
@@ -380,11 +376,11 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'link_card_body_title_guest',
-      'value' => t('Are you a member already?', [], ['context' => 'aura']),
+      'value' => t('Already a member?', [], ['context' => 'aura']),
     ],
     [
       'key' => 'link_card_body_sub_title_guest',
-      'value' => t('Enter your details to earn points for this order.', [], ['context' => 'aura']),
+      'value' => t('Enter your details to earn points on this order.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_link_your_card',

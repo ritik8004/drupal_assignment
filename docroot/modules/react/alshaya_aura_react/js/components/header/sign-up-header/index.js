@@ -85,6 +85,7 @@ class SignUpHeader extends React.Component {
           <div className="aura-header-popup-wrapper">
             <div className="aura-popup-header">
               <div className="desktop-only">
+                {Drupal.t('Say hello to')}
                 <div className="aura-header-icon">
                   <AuraHeaderIcon />
                 </div>
@@ -93,7 +94,7 @@ class SignUpHeader extends React.Component {
             </div>
             <div className="aura-popup-body">
               <span>
-                {parse(Drupal.t('To earn and spend points while you shop and enjoy exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Know more</a> about Aura.',
+                {parse(Drupal.t('Earn and spend points when you shop at your favourite brands and unlock exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Learn more</a>',
                   {
                     '@know_more_link': Drupal.url(headerLearnMoreLink),
                   },
