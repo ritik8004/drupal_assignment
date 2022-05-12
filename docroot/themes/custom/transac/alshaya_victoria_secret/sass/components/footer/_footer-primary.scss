@@ -302,9 +302,7 @@
     }
   }
 
-  form:not(.alshaya-acm-customer-order-list-search,
-  .alshaya-stores-available-stores,
-  .store-finder-exposed-form) {
+  form:not(.alshaya-acm-customer-order-list-search, .alshaya-stores-available-stores, .store-finder-exposed-form) {
     input[type="email"] {
       color: $footer_input_text;
     }
