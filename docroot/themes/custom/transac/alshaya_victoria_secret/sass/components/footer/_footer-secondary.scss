@@ -5,6 +5,10 @@
 }
 
 .c-footer-secondary {
+  @include breakpoint($only-mobile) {
+    border-top: 1px solid $primary_border;
+  }
+
   .c-footer__copy {
     @include breakpoint($tablet) {
       width: 55%;
