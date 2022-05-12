@@ -536,6 +536,7 @@ header {
     }
 
     .mobile--menu {
+      z-index: 12;
       padding: 0.3125rem;
       position: absolute;
       top: 1.1875rem;
@@ -548,6 +549,7 @@ header {
     }
 
     .mobile--search {
+      z-index: 12;
       padding: 0.3125rem;
       display: block;
       font-size: 0;
@@ -566,6 +568,7 @@ header {
     }
 
     .store {
+      z-index: 14;
       font-size: 0;
       position: absolute;
       #{$right}: 5%;
@@ -796,6 +799,7 @@ header {
   .mobile--overlay {
     .branding__menu {
       border-bottom: 0;
+      z-index: 13;
     }
   }
 
@@ -1060,6 +1064,14 @@ header {
           text-decoration: none;
         }
       }
+    }
+  }
+}
+
+body {
+  &.mobile--overlay {
+    .branding__menu {
+      z-index: 14;
     }
   }
 }
