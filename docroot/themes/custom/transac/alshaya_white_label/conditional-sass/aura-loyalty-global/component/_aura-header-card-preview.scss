@@ -110,8 +110,9 @@
       }
     }
 
-    &.aura-level-Tier1,
-    &.aura-level-no-tier {
+    /* tier wise background on card */
+    &.aura-level-no-tier,
+    &.aura-level-Tier1 {
       .aura-popup-header.card-wrapper,
       .accordion-header {
         background-image: $aura-hello-tier;
