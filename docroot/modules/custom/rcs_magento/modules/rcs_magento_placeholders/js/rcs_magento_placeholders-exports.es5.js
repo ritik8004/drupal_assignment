@@ -260,10 +260,10 @@ exports.getData = async function getData(
       break;
 
     case 'product-recommendation':
-      let prVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
+      let prVariables = rcsPhGraphqlQuery.single_complete_product_by_sku.variables;
       prVariables.sku = params.sku;
       // @TODO Review this query to use only fields that are required for the display.
-      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, prVariables);
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_complete_product_by_sku.query, prVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
@@ -342,6 +342,16 @@ exports.getData = async function getData(
         params: params,
         placeholder: placeholder,
         context,
+      }
+    });
+
+    const pageType = globalThis.rcsPhGetPageType();
+    // Fire another event to perform actions after results are updated.
+    RcsEventManager.fire('postUpdateResultsAction', {
+      detail: {
+        result: updateResult.detail.result,
+        pageType,
+        placeholder,
       }
     });
 

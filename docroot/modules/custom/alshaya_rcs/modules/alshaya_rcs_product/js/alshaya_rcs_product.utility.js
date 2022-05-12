@@ -1086,7 +1086,7 @@ window.commerceBackend = window.commerceBackend || {};
     });
 
     // Fetch all sku values, both for the main product and the styled products.
-    var allProductsData = await window.commerceBackend.getProductData();
+    var allProductsData = window.commerceBackend.getProductData();
     Object.keys(allProductsData).forEach(function eachProduct(productSku) {
       staticDataStore.labels[productSku] = [];
       productIds[allProductsData[productSku].id] = productSku;
@@ -1194,6 +1194,7 @@ window.commerceBackend = window.commerceBackend || {};
     staticDataStore.configurableCombinations = {};
     staticDataStore.configurableColorData = {};
     staticDataStore.configurables = {};
+    staticDataStore.labels = {};
   }
 
   // Event listener to update static promotion.
@@ -1204,9 +1205,17 @@ window.commerceBackend = window.commerceBackend || {};
       return null;
     }
 
+    // Set parent sku value for all the variants.
+    var product = e.detail.result;
+    if (product.type_id === 'configurable') {
+      product.variants.forEach(function eachVariant(variant) {
+        variant.parent_sku = product.sku;
+      });
+    }
+
     var promotionVal = [];
-    if (Drupal.hasValue(e.detail.result.promotions)) {
-      var promotions = e.detail.result.promotions;
+    if (Drupal.hasValue(product.promotions)) {
+      var promotions = product.promotions;
       // Update the promotions attribute based on the requirement.
       promotions.forEach((promotion, index) => {
         promotionVal[index] = {
@@ -1218,6 +1227,6 @@ window.commerceBackend = window.commerceBackend || {};
       });
     }
 
-    e.detail.result.promotions = promotionVal;
+    product.promotions = promotionVal;
   });
 })(Drupal, drupalSettings);

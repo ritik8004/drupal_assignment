@@ -56,7 +56,6 @@
               vat_text: drupalSettings.vat_text,
               quantity_limit_enabled: drupalSettings.alshayaRcs.quantity_limit_enabled,
               image_slider_position_pdp: drupalSettings.alshaya_white_label.image_slider_position_pdp,
-              add_to_cart: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'add_to_cart'),
               promotions: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'promotions'),
               postpay: Drupal.hasValue(drupalSettings.postpay_widget_info) ? drupalSettings.postpay_widget_info : {},
               tabby: Drupal.hasValue(drupalSettings.tabby) ? drupalSettings.tabby.widgetInfo : {},
