@@ -66,29 +66,31 @@ class AlshayaAcmPromotionAPIHelper {
   public function getDiscountTextVisibilityStatus($reset = FALSE) {
     static $status;
 
-    if (($status === 'true' || $status === 'false') && !$reset) {
+    if (!$reset && isset($status)) {
       return $status;
-    }
-    elseif ($status) {
-      return FALSE;
     }
 
     $cache_key = 'alshaya_acm_promotion:discount_text_visibility_status';
     $cache = $reset ? NULL : $this->cache->get($cache_key);
 
-    if (is_object($cache) && ($cache->data === 'true' || $cache->data === 'false') && !$reset) {
+    if (is_object($cache) && isset($cache->data)) {
       $status = $cache->data;
-      return $status;
-    }
-    elseif (is_object($cache) && $cache->data) {
-      return FALSE;
+      if (!$reset) {
+        return $status;
+      }
     }
 
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('discount_text'),
     ];
 
-    $status = $this->apiWrapper->invokeApi(
+    // Set status to false by default if not set already
+    // as that is the default value.
+    $status = $status ?? FALSE;
+
+    // Try to get response from API as either value is not set in cache
+    // or we are asked to reset.
+    $response = $this->apiWrapper->invokeApi(
       'promotion/get-config',
       [],
       'GET',
@@ -96,20 +98,19 @@ class AlshayaAcmPromotionAPIHelper {
       $request_options
     );
 
-    if ($status === 'true' || $status === 'false') {
-      // Cache only if enabled or disabled.
-      $this->cache->set($cache_key, $status);
+    if ($response === 'true' || $response === 'false') {
+      $status = $response;
     }
-    elseif ($status) {
-      // Cache if in case of any error message.
-      $this->cache->set($cache_key, json_encode($status));
-    }
+
+    // Update value in cache.
+    $this->cache->set($cache_key, json_encode($status));
+
     // Try resetting once.
-    elseif (!$reset) {
+    if (!$reset && !isset($status)) {
       return $this->getDiscountTextVisibilityStatus(TRUE);
     }
 
-    return $status ?? FALSE;
+    return $status;
   }
 
 }
