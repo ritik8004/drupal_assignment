@@ -1067,3 +1067,11 @@ header {
     }
   }
 }
+
+body {
+  &.mobile--overlay {
+    .branding__menu {
+      z-index: 14;
+    }
+  }
+}
