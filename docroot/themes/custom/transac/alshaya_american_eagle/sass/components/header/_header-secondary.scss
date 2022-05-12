@@ -108,8 +108,8 @@ body {
     height: 7.91rem;
   }
 
-  @include breakpoint($only-mobile) {
-    height: 3.5rem;
+  @include breakpoint($only-tablet) {
+    height: rem(58);
   }
 }
 
