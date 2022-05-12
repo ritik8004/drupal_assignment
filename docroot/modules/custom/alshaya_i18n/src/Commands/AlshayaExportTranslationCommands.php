@@ -181,6 +181,7 @@ class AlshayaExportTranslationCommands extends DrushCommands {
     $langcodes = $this->languageManager->getLanguages();
     $langcodes_list = array_keys($langcodes);
 
+    // Get all translate contexts if all translations drush option is empty.
     if (!$all_translations) {
       $query = $this->database->select('locales_source', 's')
         ->fields('s', ['context'])
