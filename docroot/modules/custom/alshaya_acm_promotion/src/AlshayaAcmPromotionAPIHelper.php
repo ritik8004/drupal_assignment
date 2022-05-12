@@ -105,11 +105,6 @@ class AlshayaAcmPromotionAPIHelper {
     // Update value in cache.
     $this->cache->set($cache_key, json_encode($status));
 
-    // Try resetting once.
-    if (!$reset && !isset($status)) {
-      return $this->getDiscountTextVisibilityStatus(TRUE);
-    }
-
     return $status;
   }
 
