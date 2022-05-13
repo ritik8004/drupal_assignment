@@ -100,7 +100,7 @@
       }
 
       // On matchback variant change attach slick on matchback gallery and bind click even to open zoom image in modal.
-      $('.sku-base-form').once('matchback-variant').on('variant-selected', function () {
+      $('.sku-base-form', context).once('matchback-variant').on('variant-selected', function () {
         var variantMatchbackSlider = $(this).closest('.cross-sell-product-component-right').siblings('.cross-sell-product-component-left').find('.machbackSlider');
         var zoom_wrap = $(this).closest('.cross-sell-product-component-right').siblings('.cross-sell-product-component-left').find('.imagezoom-wrap')
         zoom_wrap.each(function () {
