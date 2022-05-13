@@ -19,12 +19,12 @@
         if ($(window).width() < 1025) {
           if (isRTL()) {
             $('.paragraph_usp_delivery.paragraph-id--' + key + ' .field--name-field-usp-text.field__items').attr('dir', 'rtl');
-            $('.paragraph_usp_delivery.paragraph-id--' + key + ' .field--name-field-usp-text.field__items').slick(
+            $('.paragraph_usp_delivery.paragraph-id--' + key + ' .field--name-field-usp-text.field__items').once('initiate-slick').slick(
               $.extend({}, delivery_options, {rtl: true})
             );
           }
           else {
-            $('.paragraph_usp_delivery.paragraph-id--' + key + ' .field--name-field-usp-text.field__items').slick(delivery_options);
+            $('.paragraph_usp_delivery.paragraph-id--' + key + ' .field--name-field-usp-text.field__items').once('initiate-slick').slick(delivery_options);
           }
         }
       });

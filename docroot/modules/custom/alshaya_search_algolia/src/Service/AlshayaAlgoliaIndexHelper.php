@@ -1047,8 +1047,11 @@ class AlshayaAlgoliaIndexHelper {
       $client = SearchClient::create($backend_config['application_id'], $backend_config['api_key']);
       $index_names = $this->getAlgoliaIndexNames();
 
-      // List of indices to process.
+      // Below variable will contain names of all main index to process.
       $indices = [];
+
+      // Below variable will contain all new replicas for each main index.
+      $new_replicas = [];
 
       foreach ($index_names as $index) {
         $index_config = $this->configFactory->get('search_api.index.' . $index);
@@ -1060,30 +1063,44 @@ class AlshayaAlgoliaIndexHelper {
         // Search page.
         if ($algolia_index_apply_suffix == 1) {
           foreach ($this->languageManager->getLanguages() as $language) {
-            $indices[] = $index_name . '_' . $language->getId();
+            $final_index_name = $index_name . '_' . $language->getId();
+            $new_replicas[$final_index_name] = [];
+
+            foreach ($sorts as $sort) {
+              $replica = $final_index_name . '_' . implode('_', $sort);
+              $new_replicas[$final_index_name][$replica] = $sort;
+            }
+
+            $indices[] = $final_index_name;
           }
         }
         // Algolia V2.
         else {
+          // For V2, we have only one main index.
           $indices[] = $index_name;
+
+          $new_replicas[$index_name] = [];
+
+          // Replicas still need language suffix.
+          foreach ($this->languageManager->getLanguages() as $language) {
+            $final_index_name = $index_name . '_' . $language->getId();
+            foreach ($sorts as $sort) {
+              $replica = $final_index_name . '_' . implode('_', $sort);
+              $new_replicas[$index_name][$replica] = $sort;
+            }
+          }
         }
       }
 
       // Update the replicas for all the indices.
       foreach ($indices as $index_name) {
-        $new_replicas = [];
-
-        // Prepare new replicas array based on updated config.
-        foreach ($sorts as $sort) {
-          $replica = $index_name . '_' . implode('_', $sort);
-          $new_replicas[] = $replica;
-        }
-
         $index = $client->initIndex($index_name);
         $settings = $index->getSettings();
 
+        $new_replicas_for_index = array_keys($new_replicas[$index_name]);
+
         // Do nothing if old and new replicas are same.
-        if ($new_replicas === $settings['replicas']) {
+        if ($new_replicas_for_index === $settings['replicas']) {
           $this->logger->notice('Not updating index replicas as they are already same for index: @index.', [
             '@index' => $index_name,
           ]);
@@ -1093,16 +1110,17 @@ class AlshayaAlgoliaIndexHelper {
 
         $this->logger->notice('Updating index replicas for index: @index, Replicas: @replicas.', [
           '@index' => $index_name,
-          '@replicas' => implode(',', $new_replicas),
+          '@replicas' => implode(',', $new_replicas_for_index),
         ]);
 
-        $settings['replicas'] = $new_replicas;
+        $settings['replicas'] = $new_replicas_for_index;
         $response = $index->setSettings($settings, ['forwardToReplicas' => FALSE]);
         $response->wait();
 
         $ranking = $settings['ranking'];
-        foreach ($sorts as $sort) {
-          $replica = $index_name . '_' . implode('_', $sort);
+
+        // Update the sort settings for each replica.
+        foreach ($new_replicas[$index_name] as $replica => $sort) {
           $replica_index = $client->initIndex($replica);
           $replica_settings = $replica_index->getSettings();
           $replica_settings['ranking'] = [

@@ -23,6 +23,11 @@
                 margin-left: 0.5rem;
                 position: absolute;
                 right: -0.8rem;
+
+                html[lang=ar] & {
+                  top: 45%;
+                  transform: translateY(-50%);
+                }
               }
             }
           }

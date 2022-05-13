@@ -1,0 +1,12 @@
+.paragraph_banner_block {
+  .paragraph_banner_title_subtitle {
+    .field--name-field-title {
+      padding-top: 0;
+      padding-bottom: 0;
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+      }
+    }
+  }
+}

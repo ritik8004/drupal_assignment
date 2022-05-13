@@ -3,15 +3,15 @@
   .c-products__item {
     .express_delivery {
       font-size: 0.6875rem;
-      padding: 0.125rem 0.3125rem 0.1875rem;
+      padding: 0;
       border: 0.0625rem solid $plp_express_delivery_tag;
       margin-top: 0.625rem;
       display: inline-block;
       font-family: $alshaya-thin;
-
-      html[lang=ar] & {
-        padding: 0.21875rem 0.3125rem;
-      }
+      width: 6rem;
+      height: 1.25rem;
+      text-align: center;
+      line-height: 1.25rem;
     }
 
     &.product-element-alignment {
@@ -38,6 +38,11 @@
           margin-#{$right}: 0.5rem;
           margin-#{$left}: 0.625rem;
         }
+
+        .facet-item__label {
+          display: inline-block;
+          direction: ltr;
+        }
       }
 
       &.same_day_delivery {
@@ -63,6 +68,7 @@
       .facet-item__value {
         display: flex;
         align-items: center;
+        direction: ltr;
       }
 
       .facet-item__label {

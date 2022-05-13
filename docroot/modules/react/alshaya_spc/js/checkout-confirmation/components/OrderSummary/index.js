@@ -14,6 +14,7 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import EgiftOrderSummaryItem from '../../../egift-card/components/egift-order-summary-item';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -164,6 +165,19 @@ const OrderSummary = (props) => {
     };
   }
 
+  // Get the HFD order booing informaion from the drupal settings if available.
+  const onlineBookingInformation = hasValue(
+    drupalSettings.order_details.onlineBookingInformation,
+  )
+    ? drupalSettings.order_details.onlineBookingInformation
+    : false;
+
+  // Hide Expected Delivery within section
+  // when online booking information is available.
+  // Online booking will be available only for home delivery.
+  // Some comment for the details.
+  const showExpectedDelivery = !onlineBookingInformation;
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
@@ -242,7 +256,18 @@ const OrderSummary = (props) => {
           <OrderSummaryItem context={context} label={Drupal.t('Payment method')} value={methodIcon || method} />
           <ConditionalView condition={showDeliverySummary}>
             <OrderSummaryItem context={context} label={Drupal.t('delivery type')} value={deliveryType} />
-            <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
+            {/** Show HFD booking order information if available. */}
+            <ConditionalView condition={hasValue(onlineBookingInformation)}>
+              <OrderSummaryItem
+                type="markup"
+                context={context}
+                label={Drupal.t('Delivery Date & Time', {}, { context: 'online_booking' })}
+                value={onlineBookingInformation}
+              />
+            </ConditionalView>
+            <ConditionalView condition={hasValue(showExpectedDelivery)}>
+              <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
+            </ConditionalView>
           </ConditionalView>
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
         </div>
