@@ -150,11 +150,11 @@ body.aura-enabled {
     .desktop-only {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 0.5rem;
+      margin-bottom: rem(8);
 
       .aura-header-icon {
         svg {
-          max-height: 1.75rem;
+          max-height: rem(28);
           width: auto;
         }
 
@@ -201,8 +201,8 @@ body.aura-enabled {
     margin-bottom: rem(8);
     color: $aura-loyalty-activity-txt;
     text-align: $left;
-    line-height: 1.125rem;
-    font-size: 0.75rem;
+    line-height: rem(18);
+    font-size: rem(12);
 
     span {
       a {
@@ -242,13 +242,13 @@ body.aura-enabled {
     }
 
     a.learn-more {
-      font-size: 0.75rem;
-      line-height: 1.125rem;
+      font-size: rem(12);
+      line-height: rem(18);
       color: $aura-loyalty-activity-txt;
       text-decoration: underline;
 
       @include breakpoint($desktop) {
-        padding: 0.15rem 0 0;
+        padding: rem(3) 0 0;
         display: inline-block;
       }
     }
@@ -268,8 +268,8 @@ body.aura-enabled {
     .join-aura {
       color: $aura-header-popup-learn-more-link;
       cursor: pointer;
-      font-size: 0.75rem;
-      line-height: 1.438rem;
+      font-size: rem(12);
+      line-height: rem(24);
       font-family: $aura-caption-regular;
     }
 
@@ -277,8 +277,8 @@ body.aura-enabled {
       .already-a-member-link {
         color: $aura-header-popup-learn-more-link;
         cursor: pointer;
-        font-size: 0.75rem;
-        line-height: 1.438rem;
+        font-size: rem(12);
+        line-height: rem(24);
         font-family: $aura-caption-regular;
       }
     }
