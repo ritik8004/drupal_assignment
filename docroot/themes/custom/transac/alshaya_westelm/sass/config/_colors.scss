@@ -36,6 +36,8 @@ $WE_light_blue: #e0eaf2;
 $roman_coffee: #81644b;
 $_we_gray_one: #666;
 $_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
+$WE_light_yellow: #f2eee5;
+$WE_metallic_gold: #d4af37;
 
 // Overrides for variables.
 // Global elements.
@@ -672,3 +674,9 @@ $my-wishlist-share-modal-header: $WE_grey_three;
 
 // Express delivery.
 $pdp-delivery-section-subtitle: $WE_grey_two;
+
+//eGift
+$egift-banner-bg: $WE_light_yellow;
+$egift-accordion-active-title: $WE_metallic_gold;
+$egift-myaccount-button: $WE_grey_three;
+$egift-myaccount-topup-button: $WE_grey_three;
