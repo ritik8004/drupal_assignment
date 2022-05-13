@@ -7,6 +7,17 @@
           .checkbalance-description {
             color: $egift-banner-title;
           }
+
+          #check-balance-button {
+            & > button {
+              color: $egift-landing-page-button;
+              border-color: $egift-landing-page-button;
+
+              &:hover {
+                background: $egift-landing-page-button-hover;
+              }
+            }
+          }
         }
 
         .paragraph--type--image-title-subtitle {
@@ -17,6 +28,15 @@
           .field--name-field-description {
             p {
               color: $egift-banner-title;
+            }
+          }
+
+          & > .field--name-field-button-link {
+            color: $egift-landing-page-button;
+            border-color: $egift-landing-page-button;
+
+            &:hover {
+              background: $egift-landing-page-button-hover;
             }
           }
         }
