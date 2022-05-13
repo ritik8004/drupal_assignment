@@ -27,7 +27,7 @@
 
       .my-aura-link {
         &::after {
-          top: 2.875rem;
+          top: rem(46);
           color: $aura-my-account-aura-nav-link-arrow;
           font-weight: 600;
         }
