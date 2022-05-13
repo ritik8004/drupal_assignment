@@ -30,6 +30,13 @@ function alshaya_transac_update_8141() {
   if (\Drupal::service('module_handler')->moduleExists('acquia_search')) {
     \Drupal::service('module_installer')->uninstall(['acquia_search']);
   }
+
+  // Recreate acquia_search_index.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['search_api.index.acquia_search_index'],
+    'alshaya_search',
+    'optional',
+  );
 }
 
 /**
