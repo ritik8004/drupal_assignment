@@ -25,6 +25,15 @@
       #{$right}: 0;
     }
   }
+
+  &::before {
+    @include breakpoint($only-mobile) {
+      html[lang='ar'] & {
+        top: rem(2);
+        bottom: rem(-1);
+      }
+    }
+  }
 }
 
 body.frontpage {
