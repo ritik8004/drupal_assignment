@@ -442,7 +442,7 @@ function _alshaya_aura_react_translations() {
         'ar' => "يكسب <span><b>@pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
         'context' => 'aura',
       ],
-      "Earn <span><b>!pts</b> points with Aura</span> on this purchase." => [
+      "Earn <span><b>@pts</b> points with Aura</span> on this purchase." => [
         'ar' => "اربح <span> <b>! pts </b> من النقاط مع Aura </span> على عملية الشراء هذه.",
       ],
       'Congratulations!' => [
