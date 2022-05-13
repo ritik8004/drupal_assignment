@@ -20,6 +20,7 @@ use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\Core\Database\IntegrityConstraintViolationException;
 
 /**
  * Class Product Sync Resource.
@@ -769,6 +770,19 @@ class ProductSyncResource extends ResourceBase {
           foreach ($value as $val) {
             if ($term = $this->productOptionsManager->loadProductOptionByOptionId($source, $val, $sku->language()->getId())) {
               $attribute_values[] = $term->getName();
+            }
+            else {
+              try {
+                $this->database->insert('product_attribute_options_missing')
+                  ->fields([
+                    'sku' => $sku->sku->value,
+                    'attribute_code' => $source,
+                    'option_id' => $val,
+                    'field_key' => $field_key
+                  ])
+                  ->execute();
+              }
+              catch(IntegrityConstraintViolationException $e) {}
             }
           }
 

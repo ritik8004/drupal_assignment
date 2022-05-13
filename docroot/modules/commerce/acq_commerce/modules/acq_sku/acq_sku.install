@@ -12,6 +12,17 @@ use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Symfony\Component\Yaml\Yaml;
 
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding a custom table "product_attribute_options_missing".
+ */
+function acq_sku_update_8027() {
+  $schema = acq_sku_schema();
+  \Drupal::database()->schema()->createTable('product_attribute_options_missing', $schema['product_attribute_options_missing']);
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -487,6 +498,43 @@ function acq_sku_schema() {
     ],
     'unique keys' => [
       'unique' => ['category_acm_id'],
+    ],
+  ];
+
+  $schema['product_attribute_options_missing'] = [
+    'description' => 'Storing the sku on missing attribute.',
+    'fields' => [
+      'sku' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 20,
+        'default' => '',
+      ],
+      'attribute_code' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 20,
+        'default' => '',
+      ],
+      'option_id' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 20,
+        'default' => '',
+      ],
+      'field_key' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 20,
+        'default' => '',
+      ],
+    ],
+    'unique keys' => [
+      'sku_attribute_code_option_id' => [
+        'sku',
+        'attribute_code',
+        'option_id',
+      ],
     ],
   ];
 
