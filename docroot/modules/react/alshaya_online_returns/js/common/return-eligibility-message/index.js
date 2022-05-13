@@ -37,36 +37,36 @@ class ReturnEligibilityMessage extends React.Component {
     // isReturnEligible checks if the order is eligible for ONLINE returns.
     if (isReturnEligible) {
       return (
-        <>
+        <div className="eligibility-window-container">
           <div className="eligibility-message-wrapper">
             <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
             <ReturnAction handleOnClick={this.handleOnClick} />
           </div>
           <ReturnAtStore returnButtonclass="return-button-enabled" />
-        </>
+        </div>
       );
     }
 
     if (orderType === 'ship_to_store') {
       return (
-        <>
+        <div className="eligibility-window-container">
           <div className="eligibility-message-wrapper">
             <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
             <ReturnAction returnType="Click and Collect" />
           </div>
           <ReturnAtStore returnType="Click and Collect" />
-        </>
+        </div>
       );
     }
 
     return (
-      <>
+      <div className="eligibility-window-container">
         <div className="eligibility-message-wrapper">
           <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
           <ReturnAction returnType={paymentMethod} />
         </div>
         <ReturnAtStore returnType={paymentMethod} />
-      </>
+      </div>
     );
   }
 }
