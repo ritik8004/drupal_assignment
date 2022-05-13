@@ -29,18 +29,23 @@ const ProductCategoryTeaser = ({
     return null;
   }
 
-  const labels = [];
+  let labels = [];
   if (attribute.product_labels.length > 0) {
-    attribute.product_labels.forEach((label) => {
-      labels.push({
-        image: {
-          url: label.image,
-          alt: label.text,
-          title: label.text,
-        },
-        position: label.position,
+    // Check if product labels are in V3 format by checking if image is string.
+    if (typeof attribute.product_labels[0].image === 'string') {
+      attribute.product_labels.forEach((label) => {
+        labels.push({
+          image: {
+            url: label.image,
+            alt: label.text,
+            title: label.text,
+          },
+          position: label.position,
+        });
       });
-    });
+    } else {
+      labels = attribute.product_labels;
+    }
   }
 
   const teaserClass = 'views-row';
