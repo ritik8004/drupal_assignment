@@ -1,7 +1,7 @@
+window.commerceBackend = window.commerceBackend || {};
+
 (function () {
   'use strict';
-
-  window.commerceBackend = window.commerceBackend || {};
 
   /**
    * Get the array of configurable attribute codes for the product.
