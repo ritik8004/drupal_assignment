@@ -74,8 +74,8 @@ function _alshaya_aura_react_translations() {
       'Resend code' => [
         'ar' => 'إعادة إرسال الرمز',
       ],
-      'One time PIN' => [
-        'ar' => 'رمز الاستخدام لمرة واحدة',
+      'OTP' => [
+        'ar' => 'OTP',
       ],
       'Country Code' => [
         'ar' => 'رمز الدولة',
@@ -420,12 +420,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'انضم إلى أورا',
         'context' => 'aura',
       ],
-      'Link Aura' => [
-        'ar' => 'ربط الهالة',
-        'context' => 'aura',
-      ],
-      'to earn @pts points.' => [
-        'ar' => 'لكسب @pts نقطة.',
+      'to earn <b>@pts</b> points on this purchase.' => [
+        'ar' => 'لكسب <b>@pts</b> نقطة على هذا الشراء.',
         'context' => 'aura',
       ],
       'To redeem points download Aura app.' => [
@@ -442,8 +438,8 @@ function _alshaya_aura_react_translations() {
       ],
       // We are using !pts as it does not encode the html into string while
       // using this in Drupal t() function.
-      "Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app." => [
-        'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span>. لاستبدال النقاط قم بتحميل أورا تطبيق.",
+      'Earn <span><b>@pts</b> points with aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.' => [
+        'ar' => "يكسب <span><b>@pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
         'context' => 'aura',
       ],
       "Earn <span><b>!pts</b> points with Aura</span> on this purchase." => [
@@ -506,8 +502,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'اكسب مع Aura',
         'context' => 'aura',
       ],
-      'Link your card through' => [
-        'ar' => 'ربط بطاقتك من خلال',
+      'Link your Aura with' => [
+        'ar' => 'اربط بطاقتك بـ',
         'context' => 'aura',
       ],
       'Enter your details to earn points on this order.' => [
@@ -530,28 +526,28 @@ function _alshaya_aura_react_translations() {
         'ar' => 'الربط الآن',
         'context' => 'aura',
       ],
-      'Didn’t recieve the One Time Pin?' => [
-        'ar' => 'ألم تستلم دبوس الوقت الواحد؟',
+      'Didn’t receive the OTP?' => [
+        'ar' => 'لم تستلم OTP؟',
         'context' => 'aura',
       ],
       'Aura account number' => [
         'ar' => 'رقم حساب أورا',
         'context' => 'aura',
       ],
-      'OTP has been sent to your phone number' => [
-        'ar' => 'تم إرسال OTP إلى رقم هاتفك',
+      'A One Time Password (OTP) has been sent to your mobile number @mobile' => [
+        'ar' => 'تم إرسال كلمة مرور لمرة واحدة (OTP) إلى رقم هاتفك المحمول @mobile',
         'context' => 'aura',
       ],
       'One Time Pin' => [
         'ar' => 'رمز الاستخدام لمرة واحدة',
         'context' => 'aura',
       ],
-      'Know More' => [
-        'ar' => 'تعرف أكثر',
+      'Learn more' => [
+        'ar' => 'يتعلم أكثر',
         'context' => 'aura',
       ],
-      '@firstName an Aura loyalty card is associate with your email address. It just a takes one click to link.' => [
-        'ar' => '@firstName ترتبط بطاقة ولاء Aura بعنوان بريدك الإلكتروني. يستغرق الأمر نقرة واحدة فقط للربط.',
+      'Hi @firstName,<br>An Aura account is associated with your email address. Link your Aura with just one click.' => [
+        'ar' => 'أهلاً @firstName,  <br>حساب Aura مرتبط بعنوان بريدك الإلكتروني. اربط هالتك بنقرة واحدة فقط.',
         'context' => 'aura',
       ],
       'Do you want to link now?' => [
@@ -560,6 +556,14 @@ function _alshaya_aura_react_translations() {
       ],
       'Aura Card Number' => [
         'ar' => 'رقم بطاقة Aura',
+        'context' => 'aura',
+      ],
+      'Link your Aura' => [
+        'ar' => 'ربط الهالة الخاصة بك',
+        'context' => 'aura',
+      ],
+      'Resend' => [
+        'ar' => 'إعادة إرسال',
         'context' => 'aura',
       ],
     ],

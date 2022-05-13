@@ -19,10 +19,10 @@ const PointsToEarnMessage = (props) => {
     || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
     return (
       <span className="spc-aura-points-to-earn">
-        {getStringMessage(
+        {parse(getStringMessage(
           'cart_to_earn_with_points',
           { '@pts': pointsToEarn },
-        )}
+        ))}
       </span>
     );
   }
@@ -68,7 +68,7 @@ const PointsToEarnMessage = (props) => {
         <div className="spc-aura-cart-content">
           <span className="spc-aura-points-to-earn">
             {parse(getStringMessage('cart_redeem_points_msg', {
-              '!pts': wait ? renderToString(<Loading />) : pointsToEarn,
+              '@pts': wait ? renderToString(<Loading />) : pointsToEarn,
             }))}
             <div>
               <a

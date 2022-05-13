@@ -223,7 +223,7 @@ class SignUpCompleteHeader extends React.Component {
                     <div className="know-more-wrapper">
                       <a href={`${baseUrl}${pathPrefix}user/loyalty-club`}>
                         {Drupal.t(
-                          'Know More',
+                          'Learn more',
                           {},
                           { context: 'aura' },
                         )}

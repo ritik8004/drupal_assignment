@@ -331,7 +331,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
         <div className="aura-modal-header">
           <SectionTitle>
             {isUserLoggedIn
-              ? getStringMessage('link_card_header_logged_in')
+              ? getStringMessage('aura_link_aura')
               : getStringMessage('link_card_header_guest')}
           </SectionTitle>
           <button type="button" className="close" onClick={() => closeLinkCardOTPModal()} />
@@ -357,11 +357,10 @@ class AuraFormLinkCardOTPModal extends React.Component {
             <ConditionalView condition={otpRequested}>
               <div className="otp-sent-to-mobile-label">
                 <span>
-                  {Drupal.t('OTP has been sent to your phone number', {}, {
-                    context: 'aura',
+                  {getStringMessage('aura_otp_sent_to_mobile', {
+                    '@mobile': mobile,
                   })}
                 </span>
-                <span>{mobile}</span>
               </div>
             </ConditionalView>
             <ConditionalView condition={!otpRequested}>
@@ -422,7 +421,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
                     className="resend-otp"
                     onClick={() => this.processLinkCardSendOtp()}
                   >
-                    {getStringMessage('resend_code')}
+                    {getStringMessage('aura_resend_code')}
                   </span>
                 </ConditionalView>
               </div>

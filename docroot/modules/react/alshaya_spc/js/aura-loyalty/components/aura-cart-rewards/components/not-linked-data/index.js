@@ -128,10 +128,10 @@ class AuraNotLinkedData extends React.Component {
                   {getStringMessage('aura_link_aura')}
                 </a>
               </span>
-              {getStringMessage(
+              {parse(getStringMessage(
                 'cart_to_earn_with_points',
                 { '@pts': wait ? renderToString(<Loading />) : pointsToEarn },
-              )}
+              ))}
               <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
             </div>
           </div>
