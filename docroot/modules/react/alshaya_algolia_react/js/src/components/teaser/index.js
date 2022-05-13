@@ -92,6 +92,7 @@ const Teaser = ({
   }
   let labels = [];
   if (attribute.product_labels.length > 0) {
+    // Check if product labels are in V3 format by checking if image is string.
     if (typeof attribute.product_labels[0].image === 'string') {
       attribute.product_labels.forEach((label) => {
         labels.push({
