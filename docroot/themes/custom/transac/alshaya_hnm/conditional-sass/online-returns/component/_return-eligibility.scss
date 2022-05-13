@@ -1,7 +1,9 @@
 .user__order--detail {
   .order-item-row.online-returns-eligibility-message {
     #online-returns-eligibility-window {
-      font-family: $hnm-demibold;
+      .eligibility-window-container {
+        font-family: $hnm-demibold;
+      }
 
       .return-message {
         span {
@@ -9,6 +11,10 @@
             font-family: $hnm-regular;
           }
         }
+      }
+
+      &.return-window-closed {
+        font-family: $hnm-demibold;
       }
 
       .find-stores {
