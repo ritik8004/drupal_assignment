@@ -39,8 +39,6 @@ const PointsToEarnMessage = (props) => {
         </div>
         <div className="spc-aura-cart-content">
           <span className="spc-aura-points-to-earn">
-            {/* We are using !pts as it does not encode the html into string
-            while using this in Drupal t() function. */}
             {parse(getStringMessage('cart_earn_with_this_purchase', {
               '@pts': wait ? renderToString(<Loading />) : pointsToEarn,
             }))}

@@ -438,7 +438,7 @@ function _alshaya_aura_react_translations() {
       ],
       // We are using !pts as it does not encode the html into string while
       // using this in Drupal t() function.
-      'Earn <span><b>@pts</b> points with aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.' => [
+      'Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.' => [
         'ar' => "يكسب <span><b>@pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
         'context' => 'aura',
       ],
@@ -465,7 +465,6 @@ function _alshaya_aura_react_translations() {
         'ar' => 'عضوا فعلا؟',
         'context' => 'aura',
       ],
-      // To do- translation should be checked once we get it from alshaya.
       'Earn @pts points with @aura_icon on this purchase.' => [
         'ar' => 'على هذا الشراء. @aura_icon النقاط مع @pts يكسب ',
         'context' => 'aura',
@@ -482,8 +481,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'اربح وأنفق النقاط عندما تتسوق من العلامات التجارية المفضلة لديك وتحصل على مزايا حصرية. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">يتعلم أكثر</a>',
         'context' => 'aura',
       ],
-      'Redeem @aura_icon points' => [
-        'ar' => 'يسترد @aura_icon النقاط',
+      '@aura_icon Redeem your points' => [
+        'ar' => 'استبدل نقاطك @aura_icon',
         'context' => 'aura',
       ],
       'You have @pts points,' => [
@@ -564,6 +563,14 @@ function _alshaya_aura_react_translations() {
       ],
       'Resend' => [
         'ar' => 'إعادة إرسال',
+        'context' => 'aura',
+      ],
+      '<span><b>@points points</b></span> worth <span><b>@currencyCode @money</b></span> have been successfully redeemed for this purchase' => [
+        'ar' => 'نقاط</b></span> قيمة <span><b>@currencyCode @money</b></span> تم استردادها بنجاح لعملية الشراء هذه</b></span> @points<b><span>',
+        'context' => 'aura',
+      ],
+      'Check your points value:' => [
+        'ar' => 'تحقق من قيمة النقاط الخاصة بك:',
         'context' => 'aura',
       ],
     ],

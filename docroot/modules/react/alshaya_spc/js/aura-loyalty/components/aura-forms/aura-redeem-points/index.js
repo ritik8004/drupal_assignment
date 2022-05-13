@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import AuraRedeemPointsTextField from '../aura-redeem-textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
 import {
@@ -258,16 +259,11 @@ class AuraFormRedeemPoints extends React.Component {
       return null;
     }
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
-    return [
-      <span key="points" className="spc-aura-highlight">{`${points} ${getStringMessage('points')}`}</span>,
-      <span key="worth" className="spc-aura-redeem-text">{ getStringMessage('worth') }</span>,
-      <span key="money" className="spc-aura-highlight">
-        {currencyCode}
-        { }
-        {money}
-      </span>,
-      <span key="redeemed" className="spc-aura-redeem-text">{`${getStringMessage('have_been_redeemed')}`}</span>,
-    ];
+    return (parse(getStringMessage('aura_points_redeemed_successfully_msg', {
+      '@points': points,
+      '@currencyCode': currencyCode,
+      '@money': money,
+    })));
   }
 
   render() {

@@ -123,10 +123,6 @@ function _alshaya_aura_static_strings() {
       'value' => t('with this purchase'),
     ],
     [
-      'key' => 'checkout_use_your_points',
-      'value' => t('Use your points'),
-    ],
-    [
       'key' => 'checkout_use_points',
       'value' => t('Use points'),
     ],
@@ -284,7 +280,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'redeem_aura_points_header',
-      'value' => t('Redeem @aura_icon points', [], ['context' => 'aura']),
+      'value' => t('@aura_icon Redeem your points', [], ['context' => 'aura']),
     ],
     [
       'key' => 'checkout_aura_points_with_purchase',
@@ -305,10 +301,6 @@ function _alshaya_aura_static_strings() {
     [
       'key' => 'checkout_point_expiry_with_date',
       'value' => t('@pts points will expire by @date.', [], ['context' => 'aura']),
-    ],
-    [
-      'key' => 'pdp_earn_aura_points',
-      'value' => t('Earn <span><b>@pts</b> Aura points</span> with this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'cart_earn_with_this_purchase',
@@ -336,7 +328,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_redeem_points_msg',
-      'value' => t('Earn <span><b>@pts</b> points with aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.', [], ['context' => 'aura']),
+      'value' => t('Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'app_store_link_text',
@@ -421,6 +413,14 @@ function _alshaya_aura_static_strings() {
     [
       'key' => 'aura_otp_sent_to_mobile',
       'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_points_redeemed_successfully_msg',
+      'value' => t('<span><b>@points points</b></span> worth <span><b>@currencyCode @money</b></span> have been successfully redeemed for this purchase', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'checkout_check_your_points_value',
+      'value' => t('Check your points value:', [], ['context' => 'aura']),
     ],
 
   ];
