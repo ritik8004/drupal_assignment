@@ -90,19 +90,23 @@ const Teaser = ({
   if (attribute.title === undefined) {
     return null;
   }
-  const labels = [];
+  let labels = [];
   if (attribute.product_labels.length > 0) {
-    attribute.product_labels.forEach((label) => {
-      labels.push({
-        image: {
-          url: label.image,
-          alt: label.text,
-          title: label.text,
-          styles: label.styles,
-        },
-        position: label.position,
+    if (typeof attribute.product_labels[0].image === 'string') {
+      attribute.product_labels.forEach((label) => {
+        labels.push({
+          image: {
+            url: label.image,
+            alt: label.text,
+            title: label.text,
+            styles: label.styles,
+          },
+          position: label.position,
+        });
       });
-    });
+    } else {
+      labels = attribute.product_labels;
+    }
   }
 
 
