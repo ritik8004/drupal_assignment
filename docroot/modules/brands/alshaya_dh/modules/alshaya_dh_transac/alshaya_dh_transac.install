@@ -13,7 +13,7 @@ use Drupal\facets\Entity\Facet;
  *
  * Updates machine_name field in block_content bundles.
  */
-function alshaya_dh_transac_update_8102() {
+function alshaya_dh_transac_update_8002() {
   // Fetching bundles under block_content entity.
   $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo('block_content');
   foreach ($bundles as $bundleId => $bundleInfo) {
