@@ -73,7 +73,7 @@ $blue-two: #03295e;
 $blue-three: #032760;
 $faun: #f9f8f6;
 $message-info: #ffee9c;
-$special-price: #b70025;
+$special-price: #af5071;
 $ladda-disabled: #999;
 $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
@@ -101,6 +101,7 @@ $_egift_landing_page_banner_bg: #fcf2f6;
 $cultured: #f7f7f8;
 $light-orange: #e0dad5;
 $platinum: #e8e3df;
+$matterhorn: #4e3844;
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
@@ -112,6 +113,7 @@ $_grey_four: #f5f5f6;
 /* ------- 2. Primary Colors ------- */
 // Global elements.
 $primary_bg: $_grey_four;
+$secondary_bg: $cultured;
 $body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $content_pagetitle_border: $gainsboro;
@@ -140,7 +142,8 @@ $formitem_input: $black;
 
 //Buttons.
 $primary_btn_bg: $brilliant-rose;
-$primary_btn_text: $vanilla;
+$primary_btn_text: $matterhorn;
+$btn_border: $matterhorn;
 $primary_empty_btn: $black;
 $primary_empty_btn_border: $black;
 $primary_brand_button: $brilliant-rose;
@@ -511,7 +514,7 @@ $plp_facet_filter: $brilliant-rose;
 $plp_facet_item_label: $black;
 $plp_facet_filter_bg: transparent;
 $plp_facet_filter_link: $nero;
-$plp_facet_clear_border: $nero;
+$plp_facet_clear_border: $light-orange;
 $plp_facet_clear_border_mobile: $nero;
 $plp_facet_clear_text: $nero;
 $plp_facet_filter_count: $nero;
@@ -529,6 +532,7 @@ $plp_promotion_description: $ash-triplet;
 $plp_facet_filter_count_background: $brilliant-rose;
 $plp-primary-cta-hover-bg: $pink-hover;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+$plp_selected_filter_label_text: $nero;
 
 // PLP Filter bar.
 $plp_filterbar_filter_bg: $nero;
@@ -549,7 +553,7 @@ $plp_tile_product_text: $black;
 $plp_tile_product_title: $black;
 $plp_tile_product_title_hover: $nero;
 $plp_tile_product_price: $black;
-$plp_tile_product_special_price: $red-error;
+$plp_tile_product_special_price: $special-price;
 $plp_tile_product_discount_label: $red-error;
 $plp_tile_product_hover_border: $gainsboro;
 $plp_tile_product_hover_shadow: $whisper-light;
@@ -566,10 +570,10 @@ $plp_pager_link_border: $nero;
 // Product detail page.
 $pdp_product_title: $mothercare-black;
 $pdp_product_price: $mothercare-black;
-$pdp_product_special_price: $red-error;
-$pdp_product_special_price_text: $red-error;
-$pdp_product_discount_price: $red-error;
-$pdp_product_discount_text: $red-error;
+$pdp_product_special_price: $special-price;
+$pdp_product_special_price_text: $special-price;
+$pdp_product_discount_price: $special-price;
+$pdp_product_discount_text: $special-price;
 $pdp_product_itemcode: $ash-triplet;
 $pdp_product_itemcode_border: $gainsboro;
 $pdp_filter_selector_label: $nero;
