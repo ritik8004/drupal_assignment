@@ -18,3 +18,10 @@ services:
     public: false
     class: Drupal\alshaya_master\Decorator\AlshayaFormAjaxResponseBuilder
     arguments: ['@main_content_renderer.ajax', '@current_route_match']
+
+  alshaya_master.alshaya_solr_config_override:
+    class: Drupal\alshaya_master\AlshayaSolrConfigOverrider
+    arguments:
+      - '@state'
+    tags:
+      - { name: config.factory.override, priority: 5 }
