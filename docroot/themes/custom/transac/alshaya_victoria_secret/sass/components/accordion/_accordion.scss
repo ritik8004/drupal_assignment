@@ -1,6 +1,6 @@
 .c-accordion__title,
 .c-collapse__title {
-  @include icon(plus, after)  {
+  @include icon(plus, after) {
     font-size: rem(12);
     font-weight: bold;
   }
