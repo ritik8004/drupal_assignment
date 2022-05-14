@@ -1,0 +1,15 @@
+#spc-cart {
+  .wishlist-popup-container {
+    .wishlist-popup-block {
+      button#wishlist-yes,
+      button#wishlist-no {
+        color: $wishlist-button-txt;
+      }
+    }
+
+    .close-modal {
+      #{$right}: rem(-1);
+      top: rem(-1);
+    }
+  }
+}
