@@ -237,6 +237,12 @@ header {
   }
 }
 
+.static-minicart-wrapper {
+  .cart-link {
+    margin-bottom: rem(-13);
+  }
+}
+
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     .menu--two__list {
