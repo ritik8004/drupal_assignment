@@ -9,7 +9,7 @@
 }
 
 .acq-content-product {
-  .express-delivery-title-wrapper{
+  .express-delivery-title-wrapper {
     &.ui-state-active {
       .c-accordion__title {
         @include icon(minus, after);
