@@ -12,8 +12,19 @@
   .block-facets-summary-blockfilter-bar-promotions,
   .block-facets-summary-blockfilter-bar-plp,
   .block-facets-summary-blockfilter-bar {
+    ul {
+      @include breakpoint($tablet) {
+        width: calc(100% - 7.375rem) !important;
+      }
+    }
+
     .filter-list-label {
       text-transform: capitalize;
+      width: rem(118);
+      justify-content: center;
+      letter-spacing: 1px;
+      margin-top: rem(12);
+      font-size: rem(11);
     }
   }
 }
