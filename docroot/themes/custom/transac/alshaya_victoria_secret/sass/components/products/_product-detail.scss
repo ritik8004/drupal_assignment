@@ -203,13 +203,20 @@
     border-bottom: none;
 
     .sku-base-form button[type="submit"] {
-      border-radius: reem(3);
+      border-radius: rem(3);
       font-family: $vs-bentonsans-medium;
       font-weight: normal;
       font-size: rem(14);
 
       @include breakpoint($desktop) {
         width: 67%;
+      }
+
+      &.fix-button {
+        @include breakpoint($only-mobile) {
+          border-color: $pdp_add_cart_fix_btn_border;
+          border-radius: 0;
+        }
       }
     }
 
