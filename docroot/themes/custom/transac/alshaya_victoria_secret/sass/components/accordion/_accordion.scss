@@ -1,7 +1,15 @@
-.c-accordion__title {
-  text-transform: none;
+.c-accordion__title,
+.c-collapse__title {
+  @include icon(plus, after)  {
+    font-size: rem(12);
+    font-weight: bold;
+  }
 
-  &::after {
-    font-size: 1.5rem;
+  &.ui-state-active,
+  &.active {
+    @include icon(minus, after) {
+      font-size: rem(12);
+      font-weight: bold;
+    }
   }
 }

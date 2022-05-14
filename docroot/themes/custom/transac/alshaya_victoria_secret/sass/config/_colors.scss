@@ -102,6 +102,7 @@ $cultured: #f7f7f8;
 $light-orange: #e0dad5;
 $platinum: #e8e3df;
 $matterhorn: #4e3844;
+$zambezi: #605858;
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
@@ -174,10 +175,10 @@ $primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
 $highlights_subtitle_hover: $brilliant-rose;
 
 // Dropdown.
-$primary_dropdown_bg: $vanilla;
+$primary_dropdown_bg: $cultured;
 $primary_dropdown_arrow_bg: transparent;
 $primary_dropdown_text: $black;
-$primary_dropdown_border: $gainsboro;
+$primary_dropdown_border: $cultured;
 $primary_dropdown_option_hover: $white-four;
 $primary_dropdown_option_border: $white;
 $primary_dropdown_option_disbled: $greyish;
@@ -331,8 +332,8 @@ $hp_slider_dots: $nero;
 $hp_slider_arrows_dark: $nero;
 
 // Sharethis
-$sharethis_icon: $gainsboro;
-$sharethis_icon_hover: $black;
+$sharethis_icon: $mothercare-black;
+$sharethis_icon_hover: $gainsboro;
 
 // Autocomplete
 $autocomplete_bg: $vanilla;
@@ -602,12 +603,13 @@ $pdp_size_option_bg: $black;
 $pdp_size_option_border: $black;
 $pdp_size_option_text: $black;
 $pdp_size_option_selected_text: $black;
-$pdp_size_option_selected_bg: $vanilla;
-$pdp_swatch_disabled: $white;
+$pdp_size_option_selected_bg: $light-orange;
+$pdp_size_option_selected_border: $zambezi;
+$pdp_swatch_disabled: $mothercare-black;
 $pdp_size_option_text_hover : $vanilla;
 $pdp_size_option_bg_hover: $black;
 $pdp_sidebar_label: $mothercare-black;
-$pdp_sidebar_link: $brilliant-rose;
+$pdp_sidebar_link: $matterhorn;
 $pdp_desc_wrapper: $vanilla;
 $pdp_desc_wrapper_border: $black;
 $pdp_desc_wrapper_close_bg: $black;
@@ -1151,7 +1153,7 @@ $fit-calc-size-guide-btn-bg: $brilliant-rose;
 $fit-calc-empty-input: $brilliant-rose;
 $fit-calc-result: $vivid-raspberry;
 $fit-calc-selected-radio: $vivid-raspberry;
-$fit-calc-btn-text: $mothercare-black;
+$fit-calc-btn-text: $matterhorn;
 
 // Quick view size filter.
 $plp-quick-view-product-size-text: $black;
@@ -1209,3 +1211,5 @@ $rr-review-terms-condition: $brilliant-rose;
 $rr-review-summary-btn-color: $brilliant-rose;
 $rr-review-summary-btn-border: $brilliant-rose;
 $rr-recommendation-icon-bg: $brilliant-rose;
+$rr-review-summary-btn-text: $matterhorn;
+$rr-recommendation-icon: $mothercare-black;
