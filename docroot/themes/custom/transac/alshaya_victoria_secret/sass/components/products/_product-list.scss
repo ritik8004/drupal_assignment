@@ -328,17 +328,6 @@
   margin: 0.625rem 0;
 }
 
-.basic-details-wrapper {
-  .field--name-field-skus {
-    .form-item-quantity::after {
-      @include breakpoint($tablet) {
-        font-size: 2rem;
-        #{$right}: 0;
-      }
-    }
-  }
-}
-
 .c-content__highlighted {
   .promo-banner {
     @include breakpoint($only-mobile) {
