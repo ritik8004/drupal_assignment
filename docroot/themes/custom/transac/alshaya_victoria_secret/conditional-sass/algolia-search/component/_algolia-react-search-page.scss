@@ -21,7 +21,7 @@
     .sticky-filter-wrapper {
       .c-collapse-item {
         .c-collapse__title {
-          text-transform: capitalize;
+          text-transform: uppercase;
 
           &::after {
             color: $algolia-react-facet-title;
@@ -90,6 +90,41 @@ html[lang=ar] {
       .star-ratings-wrapper {
         .inline-star {
           top: 0.375rem;
+        }
+      }
+    }
+  }
+}
+
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
+  .block-alshaya-grid-count-block {
+    .grid-buttons {
+      .large-col-grid,
+      .small-col-grid {
+        width: 1.5rem;
+        height: 1.5rem;
+        display: inline-block;
+        margin-#{$left}: 0;
+
+        svg {
+          display: none;
+        }
+      }
+
+      .large-col-grid {
+        background: url('../../../imgs/icons/large-grid-inactive.svg') no-repeat center;
+
+        &.active {
+          background: url('../../../imgs/icons/large-grid-active.svg') no-repeat center;
+        }
+      }
+
+      .small-col-grid {
+        background: url('../../../imgs/icons/small-grid-inactive.svg') no-repeat center;
+
+        &.active {
+          background: url('../../../imgs/icons/small-grid-active.svg') no-repeat center;
         }
       }
     }
