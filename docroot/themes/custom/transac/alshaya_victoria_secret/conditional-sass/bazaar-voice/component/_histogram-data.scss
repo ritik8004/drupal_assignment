@@ -5,6 +5,12 @@
       .no-review-title {
         font-family: $vs-bentonsans-medium;
       }
+
+      .button-wrapper {
+        .write-review-button {
+          border-radius: rem(3);
+        }
+      }
     }
   }
 }

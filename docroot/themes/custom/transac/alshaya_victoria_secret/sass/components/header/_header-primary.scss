@@ -241,6 +241,14 @@ header {
   .cart-link {
     margin-bottom: rem(-13);
   }
+
+  .quantity {
+    bottom: rem(12);
+    #{$left}: rem(23);
+    border-radius: rem(3);
+    width: rem(14);
+    height: rem(14);
+  }
 }
 
 @include breakpoint($desktop) {
