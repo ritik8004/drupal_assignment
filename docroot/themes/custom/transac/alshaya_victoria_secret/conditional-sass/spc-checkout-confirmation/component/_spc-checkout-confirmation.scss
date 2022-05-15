@@ -1,0 +1,10 @@
+#spc-checkout-confirmation {
+  .spc-pre-content {
+    .spc-checkout-confirmation-print-button {
+      &:hover {
+        background: $spc-checkout-btn-hover-bg;
+        color: $spc-deliver-button;
+      }
+    }
+  }
+}
