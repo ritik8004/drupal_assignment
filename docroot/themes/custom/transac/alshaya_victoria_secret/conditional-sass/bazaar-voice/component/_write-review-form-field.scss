@@ -3,6 +3,7 @@
     button {
       line-height: normal;
       font-family: $alshaya-bold;
+      border-radius: rem(3);
 
       html[lang=ar] & {
         line-height: unset;
