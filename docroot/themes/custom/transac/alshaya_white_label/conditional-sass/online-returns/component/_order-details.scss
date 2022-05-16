@@ -27,6 +27,8 @@
           line-height: rem(13);
           color: $order-cancelled-txt;
           background: $order-cancelled-label;
+          padding: rem(4) 0;
+          height: rem(20);
 
           @include breakpoint($tablet) {
             width: rem(120);
