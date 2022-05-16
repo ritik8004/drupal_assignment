@@ -521,6 +521,10 @@ window.commerceBackend = window.commerceBackend || {};
 
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
+      // Don't consider OOS products.
+      if (product.stock_status === 'OUT_OF_STOCK') {
+        return;
+      }
       // Prepare the attributes variable to have key value pair.
       let attributes = [];
       variant.attributes.forEach((item) => {
