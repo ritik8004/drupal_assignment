@@ -1,0 +1,27 @@
+%egift-btn {
+  color: $primary_btn_text;
+  border-color: $btn_border;
+  border-radius: rem(3);
+}
+
+.egift-landing-page {
+  .paragraph--type--_-row-2-col {
+    .field--name-field-1-row-2-col {
+      .field--name-field-1-row-2-col {
+        .check-balance-wrapper {
+          #check-balance-button {
+            & > button {
+              @extend %egift-btn;
+            }
+          }
+        }
+
+        .paragraph--type--image-title-subtitle {
+          & > .field--name-field-button-link {
+            @extend %egift-btn;
+          }
+        }
+      }
+    }
+  }
+}
