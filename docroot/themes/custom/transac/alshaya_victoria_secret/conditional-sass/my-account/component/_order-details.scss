@@ -84,6 +84,12 @@
     @include breakpoint($desktop) {
       border: 0;
     }
+
+    .icon-ic_infomation {
+      line-height: rem(25);
+
+      @include icon(infomation, before);
+    }
   }
 
   .order__user--info .label,

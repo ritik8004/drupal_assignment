@@ -82,6 +82,12 @@
     padding-top: 0.42rem;
     padding-bottom: 0.4rem;
     font-size: 0.875rem;
+
+    .icon-ic_infomation {
+      line-height: rem(25);
+
+      @include icon(infomation, before);
+    }
   }
 
   .product--count {
