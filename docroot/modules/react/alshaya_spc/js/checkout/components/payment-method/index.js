@@ -44,6 +44,12 @@ export default class PaymentMethod extends React.Component {
     setUpapiApplePayCofig();
   }
 
+  componentDidUpdate() {
+    const { cart } = this.props;
+    // Initialize the promo popup for info icon.
+    Drupal.tabbyPromoPopup(cart.cart.totals.base_grand_total);
+  }
+
   validateBeforePlaceOrder = async () => {
     const { method } = this.props;
 
