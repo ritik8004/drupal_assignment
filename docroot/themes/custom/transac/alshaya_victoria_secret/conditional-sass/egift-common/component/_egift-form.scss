@@ -1,0 +1,8 @@
+.egifts-form-wrapper {
+  .action-buttons {
+    button[type="submit"],
+    button[type="button"]:not(.my-topup-cancel-btn) {
+      border-radius: rem(3);
+    }
+  }
+}

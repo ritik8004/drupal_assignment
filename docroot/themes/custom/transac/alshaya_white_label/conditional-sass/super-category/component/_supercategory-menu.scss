@@ -74,10 +74,11 @@
       }
     }
 
-    .region__menu-secondary,
-    ul {
-      display: flex;
-      justify-content: flex-end;
+    .region__menu-secondary {
+      @include breakpoint($desktop) {
+        display: flex;
+        justify-content: flex-end;
+      }
     }
   }
 

@@ -153,6 +153,7 @@ $egift-titamium-white: #e4e4e4;
 $egift-gray: #979797;
 $cyan-blue: #387fcb;
 $prussian_blue: #063971;
+$egift-button-hover: rgba(51, 51, 51, 0.1);
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -2119,6 +2120,8 @@ $egift-accordion-bg: $white-four;
 $egift-banner-title: $_gray_222;
 $egift-myaccount-button: $prussian_blue;
 $egift-myaccount-topup-button: $prussian_blue;
+$egift-landing-page-button: $_gray_222;
+$egift-landing-page-button-hover: $egift-button-hover;
 
 // Wishlist
 $wishlist-header-notification-border: $pumpkin-orange;

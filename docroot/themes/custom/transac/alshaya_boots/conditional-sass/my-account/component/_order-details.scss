@@ -81,8 +81,9 @@
     }
   }
 
-  .order-transaction + div .dark {
-    text-transform: capitalize;
+  .order-transaction + div .dark,
+  .order-transaction + td .dark {
+    text-transform: inherit;
     font-family: $bp-light;
   }
 

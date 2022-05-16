@@ -87,6 +87,16 @@
     .form-submit {
       text-transform: uppercase;
       font-size: 0.875rem;
+      border-radius: rem(3);
+    }
+  }
+
+  .change-pwd-form {
+    .form-submit {
+      background: $primary_btn_bg;
+      border: 0;
+      color: $primary_btn_text;
+      font-size: rem(12);
     }
   }
 

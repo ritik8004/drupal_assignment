@@ -42,3 +42,16 @@
     }
   }
 }
+
+.c-facet.c-accordion,
+.c-facet.c-collapse-item {
+  .c-accordion,
+  .c-collapse {
+    &__title {
+      &::after {
+        font-size: rem(14);
+        font-weight: bold;
+      }
+    }
+  }
+}

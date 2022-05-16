@@ -8,6 +8,13 @@
   }
 }
 
+#cart_notification,
+#static_minicart_notification {
+  @include breakpoint($desktop) {
+    top: rem(41);
+  }
+}
+
 #cart_notification {
   .notification .col-2 a,
   .error .col-2 a {
@@ -15,7 +22,7 @@
   }
 
   @include breakpoint($desktop) {
-    #{$right}: 0.5rem;
+    #{$right}: rem(-8);
   }
 
   @include breakpoint($only-tablet) {
