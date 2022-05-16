@@ -253,8 +253,8 @@ function _alshaya_online_returns_translations() {
         'ar' => 'لا',
         'context' => 'online_returns',
       ],
-      'Return request has been successfully placed' => [
-        'ar' => 'تم تسجيل طلب الارجاع بنجاح',
+      'Return request has been successfully placed.' => [
+        'ar' => '.تم تسجيل طلب الارجاع بنجاح',
         'context' => 'online_returns',
       ],
     ],
