@@ -4,7 +4,22 @@
       button.egift-card-remove-confirm-yes,
       button.egift-card-remove-confirm-no {
         text-transform: uppercase;
+        font-family: $vs-bentonsans-medium;
       }
+
+      button.egift-card-remove-confirm-no {
+        color: $primary_btn_text;
+
+        &:hover {
+          background: $primary_btn_bg;
+          opacity: 0.75;
+        }
+      }
+    }
+
+    .close {
+      #{$right}: rem(-1);
+      top: rem(-1);
     }
   }
 }
