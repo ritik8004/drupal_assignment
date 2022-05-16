@@ -57,11 +57,11 @@ export default class CancelReturnPopUp extends React.Component {
         >
           <div className="cancel-return-popup-block">
             <div className="cancel-return-heading">
-              {Drupal.t('Cancel Return', { context: 'online_returns' })}
+              {Drupal.t('Cancel Return', {}, { context: 'online_returns' })}
             </div>
             <a className="close-modal" onClick={() => this.closeModal()}>Close</a>
             <div className="cancel-return-question">
-              {Drupal.t('Are you sure you would like to cancel this return request?', { context: 'online_returns' })}
+              {Drupal.t('Are you sure you would like to cancel this return request?', {}, { context: 'online_returns' })}
             </div>
             <div className="cancel-return-options">
               <button
