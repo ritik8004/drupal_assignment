@@ -313,7 +313,7 @@
       {{ _self.order_item(product, false) }}
     {% endfor %}
     {% if order.cancelled_items_count > 0 %}
-      <div id="cancelled-items" class="order-item-row">
+      <div id="cancelled-items" class="order-item-row cancelled-items">
         <div>
           <div>{{ "Cancelled Items"|t }}</div>
         </div>

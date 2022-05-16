@@ -2,7 +2,9 @@
 .block-alshaya-user-recent-orders {
   .user__order--detail {
     div.order-item-row.delivered-items,
-    tr.order-item-row.delivered-items {
+    tr.order-item-row.delivered-items,
+    div.order-item-row.cancelled-items,
+    tr.order-item-row.cancelled-items {
       > div,
       td {
         font-family: $hnm-demibold;
