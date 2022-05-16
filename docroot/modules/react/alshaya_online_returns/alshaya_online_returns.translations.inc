@@ -237,6 +237,18 @@ function _alshaya_online_returns_translations() {
       'Session Code' => [
         'ar' => 'أعد إرسال الرمز',
       ],
+      'Cancel Return' => [
+        'ar' => 'إلغاء طلب الإرجاع',
+        'context' => 'online_returns',
+      ],
+      'Are you sure you would like to cancel this return request?' => [
+        'ar' => 'هل أنت متأكد أنك تريد إلغاء طلب الإرجاع هذا؟',
+        'context' => 'online_returns',
+      ],
+      'No' => [
+        'ar' => 'لا',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 
