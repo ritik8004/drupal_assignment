@@ -11,6 +11,14 @@
   @include normal-arabic-letter-spacing;
 }
 
+.addtobag-button {
+  border: 0;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
 .product-drawer-content-wrapper .config-form-addtobag-button {
   border: 0;
 
