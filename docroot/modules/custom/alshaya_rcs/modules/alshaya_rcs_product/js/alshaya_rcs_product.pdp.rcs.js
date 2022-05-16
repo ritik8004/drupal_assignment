@@ -4,7 +4,7 @@
  */
 window.commerceBackend = window.commerceBackend || {};
 
-(function ($){
+(function ($, Drupal, drupalSettings){
 
   /**
    * Get the labels data for the selected SKU.
@@ -52,8 +52,12 @@ window.commerceBackend = window.commerceBackend || {};
    *   The selected sku value.
    */
   window.commerceBackend.updateGallery = async function (product, layout, productGallery, pageMainSku, selectedSku) {
-    const productData = window.commerceBackend.getProductData(pageMainSku, null, false);
-    const viewMode = product.parents('.entity--type-node').attr('data-vmode');
+    var productData = window.commerceBackend.getProductData(pageMainSku, null, false);
+    var skuForGallery = Drupal.hasValue(selectedSku) ? selectedSku : productData.sku;
+    if (product.attr('data-gallery-sku') === skuForGallery) {
+      return;
+    }
+    var viewMode = product.parents('.entity--type-node').attr('data-vmode');
 
     // Maps gallery value from backend to the appropriate filter.
     var galleryType = 'classic-gallery';
@@ -74,7 +78,7 @@ window.commerceBackend = window.commerceBackend || {};
         galleryType,
         {
           galleryLimit: viewMode === 'modal' ? 'modal' : 'others',
-          sku: selectedSku,
+          skuForGallery,
         },
         { },
         productData,
@@ -131,25 +135,78 @@ window.commerceBackend = window.commerceBackend || {};
   };
 
   /**
-   * Renders the add to cart form based on the provided input.
+   * Helper function to render gallery for product.
    *
-   * @param {object} product
-   *   The raw product object.
+   * @param {object} node
+   *   The HTML product element.
    */
-  async function loadAddToCartFormOnPdp(product) {
-    const addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
-    // Render the HTML to the div.
-    jQuery('#add_to_cart_form').html(addToCartFormHtml);
+  function renderGallery(node) {
+    var sku = node.attr('data-sku');
+    const productData = window.commerceBackend.getProductData(sku, null, false);
+    if (productData.type_id === 'configurable') {
+      window.commerceBackend.updateGallery(node, productData.layout, '', sku, productData.variants[0].product.sku);
+    }
+    else {
+      window.commerceBackend.updateGallery(node, productData.layout, '', sku);
+    }
   }
 
   // Event Listener to perform action post the results are updated.
-  RcsEventManager.addListener('postUpdateResultsAction', function loadAddToCartForm(e) {
+  RcsEventManager.addListener('postUpdateResultsAction', async function loadAddToCartForm(e) {
     // Return if result is empty and page type is not product.
     if (e.detail.pageType !== 'product'
-      || !Drupal.hasValue(e.detail.result)) {
+      || !Drupal.hasValue(e.detail.result)
+      || (Drupal.hasValue(e.detail.placeholder) && e.detail.placeholder !== 'product-recommendation')) {
       return null;
     }
 
-    loadAddToCartFormOnPdp(e.detail.result);
+    var mainProduct = e.detail.result;
+    // If color split is enabled, we process the styled products.
+    if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
+      mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
+    }
+
+    var addToCartForm = null;
+    if (Drupal.hasValue(e.detail.placeholder) && e.detail.placeholder === 'product-recommendation') {
+      addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + mainProduct.sku + '"]');
+    }
+    else {
+      addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + mainProduct.sku + '"]');
+    }
+
+    var addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(mainProduct, 'add_to_cart');
+    // Render the HTML to the div.
+    addToCartForm.html(addToCartFormHtml);
+    globalThis.rcsPhApplyDrupalJs(document);
   });
-})(jQuery);
+
+  Drupal.behaviors.rcsProductPdpBehavior = {
+    attach: function rcsProductPdpBehavior(context) {
+      // Once the main product node is ready, we will immediately display the
+      // gallery from the first child. This is so that the user gets a quicker
+      // glimpse of the gallery and does not have to wait for the styled
+      // products data to load. Re-rendering will again happen when the
+      // skubaseform is loaded and on variant-selected event.
+      if (context === document) {
+        var node = $('.entity--type-node[data-vmode="full"]').not('[data-sku *= "#"]');
+        node && node.once('rcs-render-gallery-on-load').each(function rcsRenderGalleryOnLoad() {
+          if (node.length) {
+            renderGallery(node);
+          }
+        });
+      }
+
+      // Keep the Click and Collect section closed by default since the markup
+      // will not be ready by this stage and the form will be displayed
+      // momentarily.
+      $('#pdp-stores-container .c-accordion_content').once('rcs-hide-delivery-options').css({display: 'none'});
+
+      // Check if behavior has been triggered for product modal. If yes, then
+      // immediately render the gallery with the available product data.
+      if (context instanceof jQuery && context.hasClass('pdp-modal-box')) {
+        var node = context.find('.entity--type-node');
+        renderGallery(node);
+      }
+    }
+  }
+})(jQuery, Drupal, drupalSettings);

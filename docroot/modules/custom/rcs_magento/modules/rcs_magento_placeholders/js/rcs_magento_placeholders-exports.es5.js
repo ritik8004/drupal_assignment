@@ -260,10 +260,10 @@ exports.getData = async function getData(
       break;
 
     case 'product-recommendation':
-      let prVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
+      let prVariables = rcsPhGraphqlQuery.single_complete_product_by_sku.variables;
       prVariables.sku = params.sku;
       // @TODO Review this query to use only fields that are required for the display.
-      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, prVariables);
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_complete_product_by_sku.query, prVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
@@ -313,6 +313,15 @@ exports.getData = async function getData(
       result = response.data;
       break;
 
+    case 'products-in-style':
+      let variables = rcsPhGraphqlQuery.styled_products.variables;
+      variables.styleCode = params.styleCode;
+
+      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
@@ -333,6 +342,16 @@ exports.getData = async function getData(
         params: params,
         placeholder: placeholder,
         context,
+      }
+    });
+
+    const pageType = globalThis.rcsPhGetPageType();
+    // Fire another event to perform actions after results are updated.
+    RcsEventManager.fire('postUpdateResultsAction', {
+      detail: {
+        result: updateResult.detail.result,
+        pageType,
+        placeholder,
       }
     });
 
@@ -361,15 +380,6 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
   let result = null;
 
   switch (placeholder) {
-    case 'products-in-style':
-      let variables = rcsPhGraphqlQuery.styled_products.variables;
-      variables.styleCode = params.styleCode;
-
-      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
-      response = rcsCommerceBackend.invokeApiSynchronous(request);
-      result = response.data.products.items;
-      break;
-
     // Get the product data for the given sku.
     case 'single_product_by_sku':
       // Build query.
