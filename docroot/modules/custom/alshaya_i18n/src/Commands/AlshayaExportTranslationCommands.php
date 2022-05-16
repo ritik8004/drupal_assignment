@@ -121,7 +121,14 @@ class AlshayaExportTranslationCommands extends DrushCommands {
     try {
       $file_location = $this->fileSystem->getDestinationFilename($path . self::FILE_NAME_PREFIX . '.csv', FileSystemInterface::EXISTS_REPLACE);
       if ($file_location) {
-        $file = fopen($file_location, 'wb+');
+        // Make the file empty.
+        $file = fopen($file_location, 'r+');
+        if ($file !== FALSE) {
+          ftruncate($file, 0);
+          fclose($file);
+        }
+
+        $file = fopen($file_location, 'a');
         // Insert translations into csv file.
         $this->insertTranslationsIntoCsv($file, $options['all-translations']);
         fclose($file);
