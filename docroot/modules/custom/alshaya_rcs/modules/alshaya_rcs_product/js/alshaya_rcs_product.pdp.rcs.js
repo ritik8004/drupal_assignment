@@ -5,8 +5,6 @@
 window.commerceBackend = window.commerceBackend || {};
 
 (function ($, Drupal, drupalSettings){
-  // Stores information about initial rendering of gallery.
-  var pdpGalleryRendered = false;
 
   /**
    * Get the labels data for the selected SKU.
@@ -54,8 +52,12 @@ window.commerceBackend = window.commerceBackend || {};
    *   The selected sku value.
    */
   window.commerceBackend.updateGallery = async function (product, layout, productGallery, pageMainSku, selectedSku) {
-    const productData = window.commerceBackend.getProductData(pageMainSku, null, false);
-    const viewMode = product.parents('.entity--type-node').attr('data-vmode');
+    var productData = window.commerceBackend.getProductData(pageMainSku, null, false);
+    var skuForGallery = Drupal.hasValue(selectedSku) ? selectedSku : productData.sku;
+    if (product.attr('data-gallery-sku') === skuForGallery) {
+      return;
+    }
+    var viewMode = product.parents('.entity--type-node').attr('data-vmode');
 
     // Maps gallery value from backend to the appropriate filter.
     var galleryType = 'classic-gallery';
@@ -76,7 +78,7 @@ window.commerceBackend = window.commerceBackend || {};
         galleryType,
         {
           galleryLimit: viewMode === 'modal' ? 'modal' : 'others',
-          sku: selectedSku,
+          skuForGallery,
         },
         { },
         productData,
@@ -138,7 +140,7 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {object} node
    *   The HTML product element.
    */
-   function renderGallery(node) {
+  function renderGallery(node) {
     var sku = node.attr('data-sku');
     const productData = window.commerceBackend.getProductData(sku, null, false);
     if (productData.type_id === 'configurable') {
@@ -185,12 +187,17 @@ window.commerceBackend = window.commerceBackend || {};
       // glimpse of the gallery and does not have to wait for the styled
       // products data to load. Re-rendering will again happen when the
       // skubaseform is loaded and on variant-selected event.
-      if (!pdpGalleryRendered) {
+      if (context === document) {
         var node = $('.entity--type-node[data-vmode="full"]').not('[data-sku *= "#"]');
-        if (node.length) {
-          pdpGalleryRendered = true;
-          renderGallery(node);
-        }
+        node.once('rcs-render-gallery-on-load').each(function rcsRenderGalleryOnLoad() {
+          if (node.length) {
+            renderGallery(node);
+          }
+          // Keep the Click and Collect section closed by default since the markup
+          // will not be ready by this stage and the form will be displayed
+          // momentarily.
+          $('#pdp-stores-container .c-accordion_content', node).css({display: 'none'});
+        });
       }
 
       // Check if behavior has been triggered for product modal. If yes, then
@@ -199,11 +206,6 @@ window.commerceBackend = window.commerceBackend || {};
         var node = context.find('.entity--type-node');
         renderGallery(node);
       }
-
-      // Keep the Click and Collect section closed by default since the markup
-      // will not be ready by this stage and the form will be displayed
-      // momentarily.
-      $('#pdp-stores-container .c-accordion_content', node).css({display: 'none'});
     }
   }
 })(jQuery, Drupal, drupalSettings);
