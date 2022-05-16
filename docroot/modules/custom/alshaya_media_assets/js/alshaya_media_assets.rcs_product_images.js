@@ -143,6 +143,23 @@
     setProductRecommendationsMedia(product);
   }
 
+  /**
+   * Sets media data values in provided product object.
+   *
+   * @param {object} products
+   *   The products to set the media data for.
+   */
+  window.commerceBackend.setMediaData = function setProductMediaData(products) {
+    // Check if it is an array of products, for eg. for magazine article
+    // carousel we get an array of products here.
+    if (Array.isArray(products)) {
+      products.forEach(function (product) {setMediaData(product)});
+    }
+    else {
+      setMediaData(products);
+    }
+  }
+
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // We do not want further processing:
     // 1. If page is not a product page
@@ -158,15 +175,6 @@
       return;
     }
 
-    let products = e.detail.result;
-
-    // Check if it is an array of products, for eg. for magazine article
-    // carousel we get an array of products here.
-    if (Array.isArray(products)) {
-      products.forEach(function (product) {setMediaData(product)});
-    }
-    else {
-      setMediaData(products);
-    }
+    window.commerceBackend.setMediaData(e.detail.result);
   }, 10);
 })();
