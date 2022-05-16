@@ -189,16 +189,17 @@ window.commerceBackend = window.commerceBackend || {};
       // skubaseform is loaded and on variant-selected event.
       if (context === document) {
         var node = $('.entity--type-node[data-vmode="full"]').not('[data-sku *= "#"]');
-        node.once('rcs-render-gallery-on-load').each(function rcsRenderGalleryOnLoad() {
+        node && node.once('rcs-render-gallery-on-load').each(function rcsRenderGalleryOnLoad() {
           if (node.length) {
             renderGallery(node);
           }
-          // Keep the Click and Collect section closed by default since the markup
-          // will not be ready by this stage and the form will be displayed
-          // momentarily.
-          $('#pdp-stores-container .c-accordion_content', node).css({display: 'none'});
         });
       }
+
+      // Keep the Click and Collect section closed by default since the markup
+      // will not be ready by this stage and the form will be displayed
+      // momentarily.
+      $('#pdp-stores-container .c-accordion_content').once('rcs-hide-delivery-options').css({display: 'none'});
 
       // Check if behavior has been triggered for product modal. If yes, then
       // immediately render the gallery with the available product data.
