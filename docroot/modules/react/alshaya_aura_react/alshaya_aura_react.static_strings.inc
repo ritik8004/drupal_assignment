@@ -416,7 +416,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'aura_points_redeemed_successfully_msg',
-      'value' => t('<span><b>@points points</b></span> worth <span><b>@currencyCode @money</b></span> have been successfully redeemed for this purchase', [], ['context' => 'aura']),
+      'value' => t('<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase', [], ['context' => 'aura']),
     ],
     [
       'key' => 'checkout_check_your_points_value',

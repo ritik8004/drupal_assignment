@@ -309,7 +309,9 @@ class AuraFormRedeemPoints extends React.Component {
               />
             </ConditionalView>
             <ConditionalView condition={auraTransaction}>
-              {this.getPointsRedeemedMessage()}
+              <div className="successful-redeem-msg">
+                {this.getPointsRedeemedMessage()}
+              </div>
             </ConditionalView>
           </div>
           <ConditionalView condition={!auraTransaction}>

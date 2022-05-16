@@ -565,8 +565,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'إعادة إرسال',
         'context' => 'aura',
       ],
-      '<span><b>@points points</b></span> worth <span><b>@currencyCode @money</b></span> have been successfully redeemed for this purchase' => [
-        'ar' => 'نقاط</b></span> قيمة <span><b>@currencyCode @money</b></span> تم استردادها بنجاح لعملية الشراء هذه</b></span> @points<b><span>',
+      '<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase' => [
+        'ar' => 'قيمة <b>@currencyCode @money</b> تم استردادها بنجاح مقابل عملية الشراء هذه <b>@points points</b>',
         'context' => 'aura',
       ],
       'Check your points value:' => [
