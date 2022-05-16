@@ -214,6 +214,29 @@ function _alshaya_online_returns_translations() {
         'ar' => 'طلبات الإرجاع عبر المحل',
         'context' => 'online_returns',
       ],
+      'Return Confirmation' => [
+        'ar' => 'تأكيد عملية الإرجاع',
+        'context' => 'online_returns',
+      ],
+      'What\'s next?' => [
+        'ar' => 'ما التالي؟',
+        'context' => 'online_returns',
+      ],
+      'Go to order details' => [
+        'ar' => 'الذهاب إلى تفاصيل الطلبية',
+        'context' => 'online_returns',
+      ],
+      'Items to return' => [
+        'ar' => 'المنتجات المطلوب إرجاعها',
+        'context' => 'online_returns',
+      ],
+      'Ineligible for return' => [
+        'ar' => 'قابلة للإرجاع',
+        'context' => 'online_returns',
+      ],
+      'Session Code' => [
+        'ar' => 'أعد إرسال الرمز',
+      ],
     ],
   ];
 
