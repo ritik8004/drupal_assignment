@@ -426,6 +426,7 @@ html[lang=ar] {
     &:not(.alshaya-stores-available-stores) {
       &:not(.store-finder-exposed-form) input[type="email"] {
         border-bottom: 0;
+        padding-#{$left}: rem(8);
       }
     }
   }
