@@ -163,10 +163,10 @@
           line-height: rem(19);
         }
 
-        .points-to-earn-count {
+        span {
           color: $aura-cart-points;
           font-family: $aura-bold;
-          margin-#{$left}: rem(5);
+          margin: 0 rem(4);
         }
 
         .join-aura {
