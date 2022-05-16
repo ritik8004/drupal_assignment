@@ -26,4 +26,34 @@ body.sub-brand-logo {
       }
     }
   }
+
+  @include breakpoint($upto-tablet) {
+    .branding__menu {
+      height: rem(57);
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    #block-alshayareactcartminicartblock {
+      background-color: $header_bg;
+      z-index: 14;
+    }
+
+    &:not(.frontpage) {
+      .menu--mobile-navigation ul {
+        background-color: $header_bg;
+      }
+
+      .c-menu-primary .menu--mobile-navigation {
+        z-index: 14;
+      }
+    }
+
+    &.frontpage {
+      #block-alshayareactcartminicartblock {
+        background: transparent;
+        z-index: 9;
+      }
+    }
+  }
 }
