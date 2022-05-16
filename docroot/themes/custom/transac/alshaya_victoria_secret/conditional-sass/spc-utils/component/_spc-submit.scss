@@ -7,6 +7,15 @@
 
     @include arabic-letter-spacing;
   }
+
+  &:not(.checkout_com_applepay) {
+    height: rem(40);
+    border-radius: rem(3);
+
+    a {
+      font-size: rem(14);
+    }
+  }
 }
 
 .spc-shopping-link {
