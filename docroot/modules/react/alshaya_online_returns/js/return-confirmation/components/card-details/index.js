@@ -19,7 +19,7 @@ const CardDetails = ({
             </div>
             <div className="card-detail">
               <ConditionalView condition={hasValue(paymentDetails[method].card_type)}>
-                <span className="payment-type bold-text">{Drupal.t('@card_type Card', { '@card_type': paymentDetails[method].card_type }, {}, { context: 'online_returns' }) }</span>
+                <span className="payment-type bold-text">{ paymentDetails[method].card_type }</span>
               </ConditionalView>
               <ConditionalView condition={hasValue(paymentDetails[method].card_number)}>
                 <span>
