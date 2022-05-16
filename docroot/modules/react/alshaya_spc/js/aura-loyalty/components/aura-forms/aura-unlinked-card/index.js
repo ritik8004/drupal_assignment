@@ -1,5 +1,6 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
+import parse from 'html-react-parser';
 import { handleLinkYourCard } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SectionTitle from '../../../../utilities/section-title';
 import getStringMessage from '../../../../../../js/utilities/strings';
@@ -21,14 +22,13 @@ class AuraFormUnlinkedCard extends React.Component {
       cardNumber,
       closeLinkOldCardModal,
       firstName,
-      openOTPModal,
       openLinkCardModal,
     } = this.props;
     return (
       <div className="spc-aura-unlink-card-wrapper link-card-wrapper">
         <div className="aura-modal-header">
           <SectionTitle>
-            {getStringMessage('link_card_header_logged_in')}
+            {getStringMessage('aura_link_aura')}
           </SectionTitle>
           <button
             type="button"
@@ -38,9 +38,9 @@ class AuraFormUnlinkedCard extends React.Component {
         </div>
         <div className="aura-modal-body">
           <div className="description">
-            {getStringMessage('aura_link_unlinked_card_body_title', {
+            {parse(getStringMessage('aura_link_unlinked_card_body_title', {
               '@firstName': firstName,
-            })}
+            }))}
             <b>{getStringMessage('aura_link_unlinked_card_body_sub_title')}</b>
           </div>
           <div className="spc-aura-unlink-card-form-content">
@@ -70,11 +70,6 @@ class AuraFormUnlinkedCard extends React.Component {
             onClick={() => this.linkYourCard(cardNumber)}
           >
             {Drupal.t('Submit')}
-          </div>
-          <div className="aura-modal-footer">
-            <div className="join-aura" onClick={() => openOTPModal()}>
-              {getStringMessage('aura_join_aura')}
-            </div>
           </div>
         </div>
       </div>

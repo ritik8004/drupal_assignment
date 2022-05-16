@@ -123,10 +123,6 @@ function _alshaya_aura_static_strings() {
       'value' => t('with this purchase'),
     ],
     [
-      'key' => 'checkout_use_your_points',
-      'value' => t('Use your points'),
-    ],
-    [
       'key' => 'checkout_use_points',
       'value' => t('Use points'),
     ],
@@ -284,7 +280,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'redeem_aura_points_header',
-      'value' => t('Redeem @aura_icon points', [], ['context' => 'aura']),
+      'value' => t('@aura_icon Redeem your points', [], ['context' => 'aura']),
     ],
     [
       'key' => 'checkout_aura_points_with_purchase',
@@ -295,12 +291,8 @@ function _alshaya_aura_static_strings() {
       'value' => t('You will earn @pts Aura points with this purchase.', [], ['context' => 'aura']),
     ],
     [
-      'key' => 'aura_checkout_reward_points_to_earn_desktop',
-      'value' => t('You will earn @pts @aura_icon points with this purchase.', [], ['context' => 'aura']),
-    ],
-    [
-      'key' => 'aura_checkout_reward_points_to_earn_mobile',
-      'value' => t('You will earn @pts @aura_icon points.', [], ['context' => 'aura']),
+      'key' => 'aura_checkout_reward_points_to_earn_guest',
+      'value' => t('Earn @pts points with @aura_icon on this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'checkout_you_have_pts',
@@ -311,12 +303,8 @@ function _alshaya_aura_static_strings() {
       'value' => t('@pts points will expire by @date.', [], ['context' => 'aura']),
     ],
     [
-      'key' => 'pdp_earn_aura_points',
-      'value' => t('Earn <span><b>@pts</b> Aura points</span> with this purchase.', [], ['context' => 'aura']),
-    ],
-    [
       'key' => 'cart_earn_with_this_purchase',
-      'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase.", [], ['context' => 'aura']),
+      'value' => t('Earn <span><b>@pts</b> points with Aura</span> on this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_or',
@@ -328,7 +316,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'aura_link_aura',
-      'value' => t('Link Aura', [], ['context' => 'aura']),
+      'value' => t('Link your Aura', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_sign_in',
@@ -336,11 +324,11 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_to_earn_with_points',
-      'value' => t('to earn @pts points.', [], ['context' => 'aura']),
+      'value' => t('to earn <b>@pts</b> points on this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'cart_redeem_points_msg',
-      'value' => t("Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app.", [], ['context' => 'aura']),
+      'value' => t('Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'app_store_link_text',
@@ -352,15 +340,15 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'join_aura_congratulations_header',
-      'value' => t('Congrats!', [], ['context' => 'aura']),
+      'value' => t('Congratulations', [], ['context' => 'aura']),
     ],
     [
       'key' => 'join_aura_congratulations_text',
-      'value' => t('You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store', [], ['context' => 'aura']),
+      'value' => t('You can now start building your Aura. Earn points when you shop online or in-store.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'join_aura_congratulations_download_text',
-      'value' => t('To spend your points online, please download Aura app available both on App Store and Play Store.', [], ['context' => 'aura']),
+      'value' => t('To spend your points, complete your registration on the Aura MENA app, available on the App store and Google Play.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'tnc_description_text',
@@ -368,23 +356,19 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'link_card_header_guest',
-      'value' => t('Experience Aura', [], ['context' => 'aura']),
-    ],
-    [
-      'key' => 'link_card_header_logged_in',
-      'value' => t('Link Aura', [], ['context' => 'aura']),
+      'value' => t('Earn with Aura', [], ['context' => 'aura']),
     ],
     [
       'key' => 'link_card_body_title_logged_in',
-      'value' => t('Link your card through', [], ['context' => 'aura']),
+      'value' => t('Link your Aura with', [], ['context' => 'aura']),
     ],
     [
       'key' => 'link_card_body_title_guest',
-      'value' => t('Are you a member already?', [], ['context' => 'aura']),
+      'value' => t('Already a member?', [], ['context' => 'aura']),
     ],
     [
       'key' => 'link_card_body_sub_title_guest',
-      'value' => t('Enter your details to earn points for this order.', [], ['context' => 'aura']),
+      'value' => t('Enter your details to earn points on this order.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_link_your_card',
@@ -400,7 +384,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'didnt_recieve_the_otp_message',
-      'value' => t('Didn’t recieve the One Time Pin?', [], ['context' => 'aura']),
+      'value' => t('Didn’t receive the OTP?', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_account_number_label',
@@ -408,11 +392,11 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'aura_otp_label',
-      'value' => t('One Time Pin', [], ['context' => 'aura']),
+      'value' => t('OTP', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_link_unlinked_card_body_title',
-      'value' => t('@firstName an Aura loyalty card is associate with your email address. It just a takes one click to link.', [], ['context' => 'aura']),
+      'value' => t('Hi @firstName,<br>An Aura account is associated with your email address. Link your Aura with just one click.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_link_unlinked_card_body_sub_title',
@@ -422,5 +406,22 @@ function _alshaya_aura_static_strings() {
       'key' => 'aura_link_unlinked_card_field_title',
       'value' => t('Aura Card Number', [], ['context' => 'aura']),
     ],
+    [
+      'key' => 'aura_resend_code',
+      'value' => t('Resend', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_otp_sent_to_mobile',
+      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_points_redeemed_successfully_msg',
+      'value' => t('<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'checkout_check_your_points_value',
+      'value' => t('Check your points value:', [], ['context' => 'aura']),
+    ],
+
   ];
 }

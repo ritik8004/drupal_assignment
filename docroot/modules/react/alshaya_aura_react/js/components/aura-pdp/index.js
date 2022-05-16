@@ -166,7 +166,7 @@ class AuraPDP extends React.Component {
       return (
         <div className="points-text">
           {parse(Drupal.t(
-            'Earn <span><b>@pts</b> Aura points</span> with this purchase.',
+            'Earn <span><b>@pts points with Aura</b></span> on this purchase',
             { '@pts': productPoints },
             { context: 'aura' },
           ))}

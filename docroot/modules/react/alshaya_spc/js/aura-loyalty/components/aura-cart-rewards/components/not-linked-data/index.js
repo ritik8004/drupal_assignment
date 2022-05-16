@@ -97,10 +97,8 @@ class AuraNotLinkedData extends React.Component {
             </div>
             <div className="spc-aura-cart-content">
               <span className="spc-aura-points-to-earn">
-                {/* We are using !pts as it does not encode the html into string
-              while using this in Drupal t() function. */}
                 {parse(getStringMessage('cart_earn_with_this_purchase', {
-                  '!pts': wait ? renderToString(<Loading />) : pointsToEarn,
+                  '@pts': wait ? renderToString(<Loading />) : pointsToEarn,
                 }))}
                 <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
               </span>
@@ -128,10 +126,10 @@ class AuraNotLinkedData extends React.Component {
                   {getStringMessage('aura_link_aura')}
                 </a>
               </span>
-              {getStringMessage(
+              {parse(getStringMessage(
                 'cart_to_earn_with_points',
                 { '@pts': wait ? renderToString(<Loading />) : pointsToEarn },
-              )}
+              ))}
               <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
             </div>
           </div>

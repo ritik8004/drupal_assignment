@@ -163,10 +163,10 @@
           line-height: rem(19);
         }
 
-        .points-to-earn-count {
+        span {
           color: $aura-cart-points;
           font-family: $aura-bold;
-          margin-#{$left}: rem(5);
+          margin: 0 rem(4);
         }
 
         .join-aura {
@@ -396,9 +396,13 @@
           align-items: center;
         }
 
+        & > span {
+          margin-top: rem(5);
+        }
+
         .join-aura {
           position: relative;
-          margin: 0 rem(5);
+          margin: 0 rem(5) rem(5);
 
           svg {
             max-height: rem(29);

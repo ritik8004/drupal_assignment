@@ -74,8 +74,8 @@ function _alshaya_aura_react_translations() {
       'Resend code' => [
         'ar' => 'إعادة إرسال الرمز',
       ],
-      'One time PIN' => [
-        'ar' => 'رمز الاستخدام لمرة واحدة',
+      'OTP' => [
+        'ar' => 'OTP',
       ],
       'Country Code' => [
         'ar' => 'رمز الدولة',
@@ -420,12 +420,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'انضم إلى أورا',
         'context' => 'aura',
       ],
-      'Link Aura' => [
-        'ar' => 'ربط الهالة',
-        'context' => 'aura',
-      ],
-      'to earn @pts points.' => [
-        'ar' => 'لكسب @pts نقطة.',
+      'to earn <b>@pts</b> points on this purchase.' => [
+        'ar' => 'لكسب <b>@pts</b> نقطة على هذا الشراء.',
         'context' => 'aura',
       ],
       'To redeem points download Aura app.' => [
@@ -442,23 +438,23 @@ function _alshaya_aura_react_translations() {
       ],
       // We are using !pts as it does not encode the html into string while
       // using this in Drupal t() function.
-      "Earn <span class='spc-aura-highlight'>!pts Aura points</span>. To redeem points download Aura app." => [
-        'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span>. لاستبدال النقاط قم بتحميل أورا تطبيق.",
+      'Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.' => [
+        'ar' => "يكسب <span><b>@pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
         'context' => 'aura',
       ],
-      "Earn <span class='spc-aura-highlight'>!pts Aura points</span> with this purchase." => [
-        'ar' => "يكسب <span class = 'spc-aura-highlight'>!pts نقاط الهالة </span> مع عملية الشراء هذه.",
+      "Earn <span><b>@pts</b> points with Aura</span> on this purchase." => [
+        'ar' => "اربح <span> <b>! pts </b> من النقاط مع Aura </span> على عملية الشراء هذه.",
       ],
-      'Congrats!' => [
-        'ar' => 'تهاني!',
+      'Congratulations!' => [
+        'ar' => 'تهانينا',
         'context' => 'aura',
       ],
-      'You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store' => [
-        'ar' => 'أنت الآن جزء من نادي Aura الحصري. اكسب نقاطًا أثناء التسوق ، سواء كان ذلك عبر الإنترنت أو في المتجر',
+      'You can now start building your Aura. Earn points when you shop online or in-store.' => [
+        'ar' => 'يمكنك الآن البدء في بناء هالتك. اكسب نقاطًا عند التسوق عبر الإنترنت أو في المتجر.',
         'context' => 'aura',
       ],
-      'To spend your points online, please download Aura app available both on App Store and Play Store.' => [
-        'ar' => 'لإنفاق نقاطك عبر الإنترنت ، يرجى تنزيل تطبيق Aura المتاح في كل من App Store و Play Store.',
+      'To spend your points, complete your registration on the Aura MENA app, available on the App store and Google Play.' => [
+        'ar' => 'لإنفاق نقاطك ، أكمل تسجيلك في تطبيق Aura MENA المتوفر في App store و Google Play.',
         'context' => 'aura',
       ],
       "By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>" => [
@@ -469,9 +465,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'عضوا فعلا؟',
         'context' => 'aura',
       ],
-      // To do- translation should be checked once we get it from alshaya.
-      'You will earn @pts @aura_icon points with this purchase.' => [
-        'ar' => 'سوف تكسب @pts @aura_icon نقاط مع هذا الشراء.',
+      'Earn @pts points with @aura_icon on this purchase.' => [
+        'ar' => 'على هذا الشراء. @aura_icon النقاط مع @pts يكسب ',
         'context' => 'aura',
       ],
       'You will earn @pts Aura points with this purchase.' => [
@@ -482,12 +477,12 @@ function _alshaya_aura_react_translations() {
         'ar' => 'سوف تكسب aura_icon @pts@ النقاط.',
         'context' => 'aura',
       ],
-      'To earn and spend points while you shop and enjoy exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Know more</a> about Aura.' => [
-        'ar' => 'لكسب النقاط وإنفاقها أثناء التسوق والاستمتاع بمزايا حصرية. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">تعرف أكثر</a> حول الهالة.',
+      'Earn and spend points when you shop at your favourite brands and unlock exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Learn more</a>' => [
+        'ar' => 'اربح وأنفق النقاط عندما تتسوق من العلامات التجارية المفضلة لديك وتحصل على مزايا حصرية. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">يتعلم أكثر</a>',
         'context' => 'aura',
       ],
-      'Redeem @aura_icon points' => [
-        'ar' => 'يسترد @aura_icon النقاط',
+      '@aura_icon Redeem your points' => [
+        'ar' => 'استبدل نقاطك @aura_icon',
         'context' => 'aura',
       ],
       'You have @pts points,' => [
@@ -498,24 +493,20 @@ function _alshaya_aura_react_translations() {
         'ar' => '@pts ستنتهي النقاط بحلول @date',
         'context' => 'aura',
       ],
-      'Earn <span><b>@pts</b> Aura points</span> with this purchase.' => [
-        'ar' => 'يكسب <span><b>@pts</b> هالة نقاط</span> مع هذا الشراء.',
+      'Earn <span><b>@pts points with Aura</b></span> on this purchase' => [
+        'ar' => 'اربح <span> <b>pts من النقاط مع Aura </b> </span> على عملية الشراء هذه',
         'context' => 'aura',
       ],
-      'Experience Aura' => [
-        'ar' => 'جرّب أورا',
+      'Earn with Aura' => [
+        'ar' => 'اكسب مع Aura',
         'context' => 'aura',
       ],
-      'Link your card through' => [
-        'ar' => 'ربط بطاقتك من خلال',
+      'Link your Aura with' => [
+        'ar' => 'اربط بطاقتك بـ',
         'context' => 'aura',
       ],
-      'Are you a member already?' => [
-        'ar' => 'هل انت عضو بالفعل؟',
-        'context' => 'aura',
-      ],
-      'Enter your details to earn points for this order.' => [
-        'ar' => 'أدخل التفاصيل الخاصة بك لكسب النقاط لهذا الطلب.',
+      'Enter your details to earn points on this order.' => [
+        'ar' => 'أدخل التفاصيل الخاصة بك لكسب النقاط على هذا الطلب.',
         'context' => 'aura',
       ],
       'Link your card' => [
@@ -534,28 +525,28 @@ function _alshaya_aura_react_translations() {
         'ar' => 'الربط الآن',
         'context' => 'aura',
       ],
-      'Didn’t recieve the One Time Pin?' => [
-        'ar' => 'ألم تستلم دبوس الوقت الواحد؟',
+      'Didn’t receive the OTP?' => [
+        'ar' => 'لم تستلم OTP؟',
         'context' => 'aura',
       ],
       'Aura account number' => [
         'ar' => 'رقم حساب أورا',
         'context' => 'aura',
       ],
-      'OTP has been sent to your phone number' => [
-        'ar' => 'تم إرسال OTP إلى رقم هاتفك',
+      'A One Time Password (OTP) has been sent to your mobile number @mobile' => [
+        'ar' => 'تم إرسال كلمة مرور لمرة واحدة (OTP) إلى رقم هاتفك المحمول @mobile',
         'context' => 'aura',
       ],
       'One Time Pin' => [
         'ar' => 'رمز الاستخدام لمرة واحدة',
         'context' => 'aura',
       ],
-      'Know More' => [
-        'ar' => 'تعرف أكثر',
+      'Learn more' => [
+        'ar' => 'يتعلم أكثر',
         'context' => 'aura',
       ],
-      '@firstName an Aura loyalty card is associate with your email address. It just a takes one click to link.' => [
-        'ar' => '@firstName ترتبط بطاقة ولاء Aura بعنوان بريدك الإلكتروني. يستغرق الأمر نقرة واحدة فقط للربط.',
+      'Hi @firstName,<br>An Aura account is associated with your email address. Link your Aura with just one click.' => [
+        'ar' => 'أهلاً @firstName,  <br>حساب Aura مرتبط بعنوان بريدك الإلكتروني. اربط هالتك بنقرة واحدة فقط.',
         'context' => 'aura',
       ],
       'Do you want to link now?' => [
@@ -564,6 +555,22 @@ function _alshaya_aura_react_translations() {
       ],
       'Aura Card Number' => [
         'ar' => 'رقم بطاقة Aura',
+        'context' => 'aura',
+      ],
+      'Link your Aura' => [
+        'ar' => 'ربط الهالة الخاصة بك',
+        'context' => 'aura',
+      ],
+      'Resend' => [
+        'ar' => 'إعادة إرسال',
+        'context' => 'aura',
+      ],
+      '<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase' => [
+        'ar' => 'قيمة <b>@currencyCode @money</b> تم استردادها بنجاح مقابل عملية الشراء هذه <b>@points points</b>',
+        'context' => 'aura',
+      ],
+      'Check your points value:' => [
+        'ar' => 'تحقق من قيمة النقاط الخاصة بك:',
         'context' => 'aura',
       ],
     ],

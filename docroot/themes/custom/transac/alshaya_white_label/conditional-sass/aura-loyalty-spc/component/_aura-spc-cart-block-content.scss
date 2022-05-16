@@ -47,7 +47,7 @@
     }
 
     .spc-aura-cart-content {
-      max-width: 56%;
+      max-width: 60%;
       line-height: rem(26);
 
       @include breakpoint($only-mobile) {
@@ -56,7 +56,7 @@
 
       .spc-aura-or-text {
         margin: 0 rem(3);
-        color: $aura-normal-text;
+        color: $aura-loyalty-dark-text;
       }
 
       .tooltip-anchor {
@@ -84,7 +84,7 @@
     .spc-aura-points-to-earn {
       color: $aura-loyalty-pts-to-earn-txt;
 
-      .spc-aura-highlight {
+      span {
         color: $aura-highlight;
         font-family: $aura-bold;
       }
@@ -137,7 +137,7 @@
   .block-content.registered-user-linked,
   .block-content.registered-user-linked-pending-enrollment {
     .spc-aura-points-to-earn {
-      .spc-aura-highlight {
+      span {
         color: $aura-cart-points;
         font-family: $aura-caption-regular;
 
