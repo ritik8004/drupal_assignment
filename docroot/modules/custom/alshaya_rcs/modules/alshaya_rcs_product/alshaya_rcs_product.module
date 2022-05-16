@@ -143,6 +143,7 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
       'data-cleaned-sku',
       'data-drupal-form-fields',
       'data-main-sku',
+      'data-rcs-sku',
     ],
   );
 

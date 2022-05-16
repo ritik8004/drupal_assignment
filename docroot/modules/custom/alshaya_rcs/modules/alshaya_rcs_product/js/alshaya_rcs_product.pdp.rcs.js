@@ -166,10 +166,10 @@ window.commerceBackend = window.commerceBackend || {};
 
     var addToCartForm = null;
     if (Drupal.hasValue(e.detail.placeholder) && e.detail.placeholder === 'product-recommendation') {
-      addToCartForm = jQuery('#drupal-modal #add_to_cart_form');
+      addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + mainProduct.sku + '"]');
     }
     else {
-      addToCartForm = jQuery('#add_to_cart_form');
+      addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + mainProduct.sku + '"]');
     }
 
     var addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(mainProduct, 'add_to_cart');
