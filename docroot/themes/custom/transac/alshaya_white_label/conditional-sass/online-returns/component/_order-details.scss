@@ -2,7 +2,9 @@
 .block-alshaya-user-recent-orders {
   .user__order--detail {
     div.order-item-row.delivered-items,
-    tr.order-item-row.delivered-items {
+    tr.order-item-row.delivered-items,
+    div.order-item-row.cancelled-items,
+    tr.order-item-row.cancelled-items {
       > div,
       td {
         padding: rem(38) 0 rem(8) !important;
@@ -14,6 +16,38 @@
         div {
           margin-bottom: 0;
         }
+      }
+    }
+
+    .cancelled-items + .order-item-row {
+      .image-wrapper {
+        span {
+          width: rem(144);
+          font-size: rem(11);
+          line-height: rem(13);
+          color: $order-cancelled-txt;
+          background: $order-cancelled-label;
+          padding: rem(4) 0;
+          height: rem(20);
+
+          @include breakpoint($tablet) {
+            width: rem(120);
+          }
+
+          @include breakpoint($desktop) {
+            width: rem(136);
+          }
+        }
+      }
+    }
+  }
+}
+
+.user__order--detail {
+  .recent__orders--body {
+    .cancelled-items {
+      div {
+        padding: 0;
       }
     }
   }
@@ -274,6 +308,12 @@
             width: 100%;
           }
         }
+      }
+    }
+
+    .cancelled-items {
+      div {
+        padding: 0;
       }
     }
   }
