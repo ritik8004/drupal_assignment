@@ -1,6 +1,7 @@
 import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { getTypeFromReturnItem, isReturnClosed } from '../../utilities/order_details_util';
 import ReturnedItems from './returned-items';
 
 class ReturnedItemsListing extends React.Component {
@@ -16,15 +17,15 @@ class ReturnedItemsListing extends React.Component {
     return '';
   };
 
-  getReturnsByType = (type) => {
+  getReturnsByType = (returnItem) => {
     const { returns } = this.props;
+    const type = getTypeFromReturnItem(returnItem);
 
-    // @todo: Update this code to filter out returns based on type.
-    if (type === 'online') {
-      return returns;
-    }
-
-    return returns;
+    // Filter out all the returns based on type.
+    return returns.filter((item) => {
+      const itemType = getTypeFromReturnItem(item);
+      return itemType === type;
+    });
   };
 
   render() {
@@ -36,13 +37,26 @@ class ReturnedItemsListing extends React.Component {
 
     return (
       <div className="returned-items-wrapper">
-        <ConditionalView condition={hasValue(this.getReturnsByType('online'))}>
-          <ReturnedItems
-            key="online"
-            subTitle={this.getReturnedItemsSubTitle('online')}
-            returns={returns}
-          />
-        </ConditionalView>
+        {returns.map((returnItem) => (
+          <ConditionalView condition={hasValue(this.getReturnsByType(returnItem))
+            && isReturnClosed(returnItem)}
+          >
+            <div className="title-wrapper">
+              <span>
+                {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
+                {' '}
+                {'-'}
+                {' '}
+                {this.getReturnedItemsSubTitle(getTypeFromReturnItem(returnItem))}
+              </span>
+            </div>
+
+            <ReturnedItems
+              key={getTypeFromReturnItem(returnItem)}
+              returns={this.getReturnsByType(returnItem)}
+            />
+          </ConditionalView>
+        ))}
       </div>
     );
   }

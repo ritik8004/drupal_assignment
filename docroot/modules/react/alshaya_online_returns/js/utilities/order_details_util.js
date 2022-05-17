@@ -27,6 +27,27 @@ function processReturnData(returns) {
   return allReturns;
 }
 
+/**
+ * Utility function to return the type of return.
+ */
+function getTypeFromReturnItem(returnItem) {
+  // Based on the `is_online` flag we will identify the type of return.
+  if (returnItem.returnInfo.extension_attributes.is_online) {
+    return 'online';
+  } else {
+    return 'store';
+  }
+}
+
+/**
+ * Utility function to check if return is open or not.
+ */
+function isReturnClosed(returnItem) {
+  return returnItem.returnInfo.extension_attributes.is_closed;
+}
+
 export {
   processReturnData,
+  getTypeFromReturnItem,
+  isReturnClosed,
 };
