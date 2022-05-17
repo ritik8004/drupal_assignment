@@ -1,5 +1,4 @@
 import React from 'react';
-import SectionTitle from '../../../utilities/section-title';
 import ConditionalView from '../../../common/components/conditional-view';
 import AuraNotLinkedNoData from './components/not-linked-no-data';
 import AuraLinkedVerified from './components/linked-verified';
@@ -189,6 +188,7 @@ class AuraCartRewards extends React.Component {
       expiringPoints,
       expiryDate,
       cardNumber,
+      firstName,
       loyaltyStatus,
       auraPointsToEarn,
       waitForPoints,
@@ -197,7 +197,6 @@ class AuraCartRewards extends React.Component {
     if (wait) {
       return (
         <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: '0.4s' }}>
-          <SectionTitle>{this.getSectionTitle(allAuraStatus, loyaltyStatus)}</SectionTitle>
           <Loading />
         </div>
       );
@@ -205,7 +204,6 @@ class AuraCartRewards extends React.Component {
 
     return (
       <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: '0.4s' }}>
-        <SectionTitle>{this.getSectionTitle(allAuraStatus, loyaltyStatus)}</SectionTitle>
 
         {/* Guest */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
@@ -243,7 +241,7 @@ class AuraCartRewards extends React.Component {
           <AuraNotLinkedData
             pointsToEarn={auraPointsToEarn}
             cardNumber={cardNumber}
-            loyaltyStatus={loyaltyStatus}
+            firstName={firstName}
             wait={waitForPoints}
           />
         </ConditionalView>

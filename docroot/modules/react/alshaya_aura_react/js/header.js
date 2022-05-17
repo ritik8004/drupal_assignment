@@ -11,22 +11,36 @@ if (isAuraEnabled()) {
     if (getUserDetails().id) {
       if (document.querySelector('#username-points-wrapper-mobile-menu')) {
         // For logged in user mobile menu tab.
+        // 'renderCongratulationPopup' will render congratulation
+        // popup markup in mobile for logged in users.
         ReactDOM.render(
-          <Header isMobileTab />,
+          <Header isMobileTab renderCongratulationPopup />,
           document.querySelector('#username-points-wrapper-mobile-menu'),
         );
       }
     } else {
       // Guest user.
+      // 'renderCongratulationPopup' will render congratulation
+      // popup in mobile for guest users. Please note that we are using this
+      // variable to restrict congratulation popup markup rendering once on a
+      // page else it will display multiple times in mobile.
+
       if (document.querySelector('#points-wrapper-mobile-menu')) {
         // For guest user mobile menu tab.
         ReactDOM.render(
-          <Header isMobileTab />,
+          <Header isMobileTab renderCongratulationPopup />,
           document.querySelector('#points-wrapper-mobile-menu'),
         );
       }
 
-      if (document.querySelector('#aura-mobile-header-signin-register')) {
+      // Check if the sign in and register menu tab is available within the
+      // secondary menu region. We need to ensure that Aura block display
+      // at the end of this region in mobile.
+      const secondaryMenu = document.getElementsByClassName('region__menu-secondary');
+      if (secondaryMenu.length > 0) {
+        const auraMobileHeader = document.createElement('div');
+        auraMobileHeader.id = 'aura-mobile-header-signin-register';
+        secondaryMenu[0].appendChild(auraMobileHeader);
         // For guest user sign in/register tab.
         ReactDOM.render(
           <Header isNotExpandable />,
@@ -45,8 +59,9 @@ if (isAuraEnabled()) {
     }
   } else if (document.querySelector('#aura-header-modal')) {
     // Desktop header.
+    // 'renderCongratulationPopup' will render congratulation popup for desktop.
     ReactDOM.render(
-      <Header isDesktop />,
+      <Header isDesktop renderCongratulationPopup />,
       document.querySelector('#aura-header-modal'),
     );
   }
