@@ -68,6 +68,10 @@
 
   .block-alshaya-super-category-menu {
     .menu--one__list li {
+      @include breakpoint($upto-desktop) {
+        overflow: hidden;
+      }
+
       &:last-child {
         a::after {
           display: none;
