@@ -137,10 +137,12 @@
       .egift-linked-card-number-value {
         border: none;
         background: transparent;
+        width: rem(144);
 
         @include breakpoint($only-mobile) {
           -webkit-text-fill-color: $egift-black-text;
           opacity: 1;
+          width: 100%;
         }
 
         html[lang=ar] & {
