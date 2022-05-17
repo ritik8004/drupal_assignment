@@ -41,20 +41,6 @@ class AuraBlockViewBuilder implements RenderCallbackInterface {
   }
 
   /**
-   * Pre render callback for system_menu_block:account block.
-   *
-   * @param array $build
-   *   The block build array.
-   *
-   * @return array
-   *   The altered block build array.
-   */
-  public static function systemAccountBlockPreRender(array $build): array {
-    $build['content']['#prefix'] = '<div id="aura-mobile-header-signin-register"></div>';
-    return $build;
-  }
-
-  /**
    * Pre render callback for page_title_block block.
    *
    * @param array $build
