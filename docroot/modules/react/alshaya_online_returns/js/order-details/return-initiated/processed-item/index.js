@@ -56,7 +56,7 @@ class ProcessedItem extends React.Component {
                 type="button"
                 onClick={this.showCancelReturnPopup}
               >
-                <span className="cancel-button-label">{Drupal.t('Cancel Return Request', {}, { context: 'online_returns' })}</span>
+                <span className="cancel-button-label">{Drupal.t('Cancel Return', {}, { context: 'online_returns' })}</span>
               </button>
             </div>
           </ConditionalView>
