@@ -10,7 +10,18 @@ class ProcessedItem extends React.Component {
     this.state = {
       popup: false,
       cancelBtnState: true,
+      showPrintLabelBtn: false,
     };
+  }
+
+  componentDidMount() {
+    const { returnData } = this.props;
+    // Set the `showPrintLabelBtn` to true if awb path is available.
+    if (hasValue(returnData.returnInfo.extension_attributes.awb_path)) {
+      this.setState({
+        showPrintLabelBtn: true,
+      });
+    }
   }
 
   /**
@@ -32,8 +43,15 @@ class ProcessedItem extends React.Component {
     });
   };
 
+  /**
+   * Downloads the print label pdf.
+   */
+  getPrintLabelPdf = () => {
+    // @todo Write the logic to download the PDF.
+  }
+
   render() {
-    const { popup, cancelBtnState } = this.state;
+    const { popup, cancelBtnState, showPrintLabelBtn } = this.state;
     const { returnData, returnStatus, returnMessage } = this.props;
 
     // @todo: Breaking/Grouping of return items as per status.
@@ -50,6 +68,16 @@ class ProcessedItem extends React.Component {
               {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
             </div>
           </div>
+          <ConditionalView condition={showPrintLabelBtn}>
+            <div className="print-return-label-wrapper">
+              <button
+                type="button"
+                onClick={this.getPrintLabelPdf}
+              >
+                <span className="print-button-label">{Drupal.t('Print Return Label', {}, { context: 'online_returns' })}</span>
+              </button>
+            </div>
+          </ConditionalView>
           <ConditionalView condition={cancelBtnState}>
             <div className="cancel-return-button-wrapper">
               <button
