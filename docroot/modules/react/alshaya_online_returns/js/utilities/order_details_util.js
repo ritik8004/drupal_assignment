@@ -29,6 +29,12 @@ function processReturnData(returns) {
 
 /**
  * Utility function to return the type of return.
+ *
+ * @param {object} returnItem
+ *   The individual return item object.
+ *
+ * @returns {string}
+ *   A string to tell the type of return.
  */
 function getTypeFromReturnItem(returnItem) {
   // Based on the `is_online` flag we will identify the type of return.
@@ -41,6 +47,12 @@ function getTypeFromReturnItem(returnItem) {
 
 /**
  * Utility function to check if return is open or not.
+ *
+ * @param {object} returnItem
+ *   The individual return item object.
+ *
+ * @returns {boolean}
+ *   True if order return if closed else False.
  */
 function isReturnClosed(returnItem) {
   return returnItem.returnInfo.extension_attributes.is_closed;
