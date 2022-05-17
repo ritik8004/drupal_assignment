@@ -114,7 +114,16 @@ class UserRegistrationMail extends ResourceBase {
 
     // Get user from mdc and create new user account, when user does not
     // exists in drupal.
-    $user = $this->mobileAppUtility->createUserFromCommerce($email);
+    try {
+      $user = $this->mobileAppUtility->createUserFromCommerce($email);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to create user for email: @email, error: @error', [
+        '@email' => $email,
+        '@error' => $e->getMessage(),
+      ]);
+      return $this->mobileAppUtility->sendErrorResponse($e->getMessage());
+    }
 
     if (!$user instanceof UserInterface) {
       $this->logger->error('User with email @email does not exist.', ['@email' => $email]);
