@@ -371,10 +371,6 @@ export default class Checkout extends React.Component {
               </ClicknCollectContextProvider>
             </ConditionalView>
 
-            <ConditionalView condition={isAuraEnabled()}>
-              <AuraCheckoutContainer cart={cart} />
-            </ConditionalView>
-
             <PaymentMethods
               ref={this.paymentMethods}
               refreshCart={this.refreshCart}
@@ -387,6 +383,10 @@ export default class Checkout extends React.Component {
                 cart={cart}
                 refreshCart={this.refreshCart}
               />
+            </ConditionalView>
+
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraCheckoutContainer cart={cart} />
             </ConditionalView>
 
             {billingComponent}
