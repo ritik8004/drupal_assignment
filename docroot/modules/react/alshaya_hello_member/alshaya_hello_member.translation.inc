@@ -11,11 +11,13 @@
 function _alshaya_hello_member_react_translations() {
   return [
     'v1' => [
-      'My hello membership' => [
-        'ar' => 'حساب أورا الخاص بي',
+      'H&M Membership' => [
+        'ar' => 'عضوية H&M',
+        'context' => 'hello_member',
       ],
-      'Already a hello membership?' => [
-        'ar' => 'هل أنت عضو في أورا؟',
+      'Membership info' => [
+        'ar' => 'معلومات العضوية',
+        'context' => 'hello_member',
       ],
     ],
   ];
