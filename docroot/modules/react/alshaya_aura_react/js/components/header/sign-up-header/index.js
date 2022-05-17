@@ -108,7 +108,9 @@ class SignUpHeader extends React.Component {
                 className="join-aura"
                 onClick={() => this.openOTPModal()}
               >
-                {Drupal.t('Join now')}
+                {Drupal.t('Join Aura', {}, {
+                  context: 'aura',
+                })}
               </div>
             </div>
           </div>

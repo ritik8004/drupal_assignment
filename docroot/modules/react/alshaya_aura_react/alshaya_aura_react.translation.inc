@@ -445,7 +445,7 @@ function _alshaya_aura_react_translations() {
       "Earn <span><b>@pts</b> points with Aura</span> on this purchase." => [
         'ar' => "اربح <span> <b>! pts </b> من النقاط مع Aura </span> على عملية الشراء هذه.",
       ],
-      'Congratulations!' => [
+      'Congratulations' => [
         'ar' => 'تهانينا',
         'context' => 'aura',
       ],

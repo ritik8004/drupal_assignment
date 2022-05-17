@@ -288,7 +288,7 @@ class AuraFormRedeemPoints extends React.Component {
         ? 'spc-aura-redeem-points-form-wrapper in-active'
         : 'spc-aura-redeem-points-form-wrapper'}
       >
-        <span className="label">{ getStringMessage('checkout_use_your_points') }</span>
+        <span className="label">{ getStringMessage('checkout_check_your_points_value') }</span>
         <div className="form-items">
           <div className="inputs">
             <ConditionalView condition={!auraTransaction}>
