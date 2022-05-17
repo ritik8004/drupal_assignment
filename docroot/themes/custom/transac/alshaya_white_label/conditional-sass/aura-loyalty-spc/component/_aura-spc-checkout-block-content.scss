@@ -10,8 +10,12 @@
 
 .spc-aura-checkout-rewards-block {
   &.in-active {
-    .spc-checkout-section-title {
+    .spc-checkout-section-title,
+    .redeem-aura-points-header-container,
+    .block-content,
+    .redeem-aura-footer {
       opacity: 0.2;
+      pointer-events: none;
     }
 
     .registered-user-linked,
@@ -122,7 +126,8 @@
     color: $aura-spc-checkout-text-content;
 
     &.guest-user,
-    &.registered-user-unlinked-card {
+    &.registered-user-unlinked-card,
+    &.points-to-earn-with-the-purchase {
       > div {
         @include defaultBlockStyles;
       }
@@ -140,6 +145,49 @@
         color: $aura-spc-checkout-highlight;
         font-family: $aura-bold;
         font-weight: normal;
+      }
+    }
+
+    &.points-to-earn-with-the-purchase {
+      .points-to-earn-text {
+        display: flex;
+        align-items: center;
+        font-size: rem(16);
+        line-height: rem(18);
+        border-radius: 0;
+        flex-wrap: wrap;
+        padding: rem(17) rem(20) rem(18);
+
+        @include breakpoint($upto-desktop) {
+          width: 100%;
+          line-height: rem(19);
+        }
+
+        span {
+          color: $aura-cart-points;
+          font-family: $aura-bold;
+          margin: 0 rem(4);
+        }
+
+        .join-aura {
+          position: relative;
+          top: rem(1.6);
+          margin: 0 rem(5);
+          max-height: rem(25);
+
+          @include breakpoint($only-mobile) {
+            top: rem(0.8);
+          }
+
+          svg {
+            max-height: rem(25);
+            width: auto;
+          }
+        }
+
+        .tooltip-anchor {
+          top: rem(-1);
+        }
       }
     }
 
@@ -310,6 +358,179 @@
       color: $aura-spc-cod-disabled-text;
       margin-top: 0.75rem;
       font-size: 0.75rem;
+    }
+  }
+}
+
+#spc-checkout {
+  .spc-content {
+    .spc-aura-checkout-rewards-block {
+      padding-top: rem(5) !important;
+    }
+  }
+}
+
+.spc-aura-checkout-rewards-block {
+  &.active,
+  &.in-active {
+    .redeem-aura-points {
+      background: $aura-spc-checkout-block-bg;
+
+      .redeem-aura-points-header-container {
+        min-height: rem(60);
+        display: flex;
+        align-items: center;
+        padding-#{$left}: rem(20);
+        position: relative;
+        background: $aura-spc-checkout-block-bg;
+        line-height: rem(19);
+        font-size: rem(16);
+        letter-spacing: rem(1);
+
+        span {
+          color: $aura-redeem-pts-cart-header-text;
+          letter-spacing: rem(1);
+          line-height: rem(20);
+          font-size: rem(16);
+          display: flex;
+          align-items: center;
+        }
+
+        & > span {
+          margin-top: rem(5);
+        }
+
+        .join-aura {
+          position: relative;
+          margin: 0 rem(5) rem(5);
+
+          svg {
+            max-height: rem(29);
+            width: auto;
+          }
+        }
+
+        .accordion-icon {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          flex-grow: 1;
+          cursor: pointer;
+
+          @include icon('chevrondown') {
+            font-size: rem(32);
+            position: absolute;
+            top: 50%;
+            #{$right}: rem(14);
+            transform: translateY(-50%);
+            transition: transform 0.3s ease-in-out;
+          }
+        }
+
+        &.active {
+          .accordion-icon {
+            &::before {
+              transform: rotate(180deg);
+              bottom: rem(10);
+            }
+          }
+        }
+      }
+
+      .redeem-aura-points-content {
+        display: none;
+
+        &.active {
+          display: block;
+          padding: rem(8) rem(20) rem(18);
+          background: $aura-spc-checkout-block-bg;
+
+          @include breakpoint($tablet) {
+            padding-top: 0;
+          }
+        }
+
+        .block-content {
+          background: $aura-spc-checkout-block-bg-gradient;
+          padding: rem(10) rem(20) rem(16);
+          font-family: $aura-regular;
+          line-height: rem(20);
+          font-size: rem(14);
+
+          html[lang=ar] & {
+            background: $aura-spc-checkout-block-bg-gradient-ar;
+          }
+
+          @include breakpoint($tablet) {
+            border-radius: rem(10);
+          }
+
+          .current-available-points {
+            .spc-aura-highlight {
+              margin: 0 rem(2);
+              color: $aura-highlight;
+            }
+          }
+
+          .points-expiring {
+            .spc-aura-points-expiry-item {
+              background: none;
+              padding: 0;
+              width: auto;
+              display: inline-block;
+              color: $aura-spc-checkout-text-content;
+
+              &::before {
+                content: '';
+              }
+
+              b {
+                color: $aura-highlight;
+              }
+            }
+          }
+        }
+
+        .spc-aura-redeem-points-form-wrapper {
+          padding: rem(20) 0 0;
+        }
+      }
+    }
+
+    .redeem-aura-footer {
+      color: $aura-checkout-footer-redeem-text;
+      font-size: rem(12);
+      line-height: rem(18);
+      margin-top: rem(12);
+      margin-#{$left}: rem(20);
+
+      b {
+        font-family: $aura-bold;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: rem(16);
+      }
+
+      &::before {
+        content: '!';
+        color: $aura-spc-checkout-block-bg;
+        background-color: $aura-spc-checkout-highlight;
+        width: rem(16);
+        height: rem(16);
+        border-radius: 50%;
+        padding: rem(3) rem(7);
+        margin-#{$right}: rem(8);
+        font-size: rem(12);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+
+      .points-earned-with-purchase {
+        margin: 0 rem(3);
+      }
     }
   }
 }

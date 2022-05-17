@@ -189,12 +189,12 @@ class AuraFormSignUpOTPModal extends React.Component {
       mobile_maxlength: countryMobileCodeMaxLength,
     } = getAuraConfig();
 
-    const submitButtonText = otpRequested ? Drupal.t('Verify') : Drupal.t('Send one time PIN');
+    const submitButtonText = otpRequested ? Drupal.t('Verify') : getStringMessage('otp_button_label');
 
     return (
       <div className="aura-otp-form">
         <div className="aura-modal-header">
-          <SectionTitle>{getStringMessage('otp_modal_title')}</SectionTitle>
+          <SectionTitle>{Drupal.t('Join Aura', {}, { context: 'aura' })}</SectionTitle>
           <button type="button" className="close" onClick={() => closeOTPModal()} />
         </div>
         <div className="aura-modal-form">

@@ -171,9 +171,6 @@ class CrossellPopupContent extends React.Component {
                 promotions={promotions}
               />
             </div>
-            <ConditionalView condition={isAuraEnabled()}>
-              <AuraPDP mode="related" />
-            </ConditionalView>
             {stockStatus ? (
               <PdpCart
                 skuCode={relatedSku}
@@ -187,6 +184,14 @@ class CrossellPopupContent extends React.Component {
                 closeModal={closeModal}
               />
             ) : outOfStock}
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraPDP
+                mode="related"
+                skuCode={relatedSku}
+                firstChild={firstChild}
+                productInfo={relatedProductInfo}
+              />
+            </ConditionalView>
             {(relatedProductData.link)
               ? (
                 <div className="magv2-product-redirect-link">
