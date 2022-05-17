@@ -318,7 +318,31 @@ class CustomerController extends ControllerBase {
 
     // Allow other modules to update order details build.
     $this->moduleHandler()->alter('alshaya_acm_customer_orders_details_build', $order, $build);
+
+    $build['#attached']['drupalSettings']['order_details'] = $this->drupalSettingsOrderDetails($build);
+
     return $build;
+  }
+
+  /**
+   * Returns drupal settings with order details.
+   *
+   * @param array $build
+   *   The build array.
+   *
+   * @return array
+   *   Settings array.
+   */
+  private function drupalSettingsOrderDetails(array $build) {
+    dump($build);
+    $settings = $build['#order'];
+    // @todo set aura class.
+    $settings['aura_class'] = 'aura';
+    $settings['total'] = $build['order']['grand_total'];
+    $settings['online_booking_notice'] = $build['#online_booking_notice'] ?? [];
+    $settings['delivery_detail_notice'] = $build['#delivery_detail_notice'] ?? [];
+    dump($settings);
+    return $settings;
   }
 
   /**
