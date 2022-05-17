@@ -21,6 +21,12 @@
           display: inline;
         }
       }
+
+      .successful-redeem-msg {
+        b {
+          color: $aura-spc-checkout-highlight;
+        }
+      }
     }
   }
 

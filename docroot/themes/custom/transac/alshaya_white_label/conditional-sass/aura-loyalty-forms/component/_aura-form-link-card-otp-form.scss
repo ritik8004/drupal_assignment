@@ -1,6 +1,7 @@
 .aura-guest-user-link-card-otp-form {
   .aura-modal-form {
-    .linkingoptions-label {
+    .linkingoptions-label,
+    .otp-sent-to-mobile-label {
       color: $aura-spc-checkout-text-content;
       font-size: 0.875rem;
     }

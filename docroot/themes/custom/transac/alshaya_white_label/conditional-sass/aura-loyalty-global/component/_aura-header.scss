@@ -54,6 +54,7 @@
 
   .aura-header-popup-wrapper {
     padding: 1.25rem;
+    font-family: $aura-regular;
 
     @include breakpoint($upto-desktop) {
       display: block;
@@ -62,8 +63,8 @@
     @include breakpoint($desktop) {
       position: absolute;
       width: 100%;
-      min-width: 19.6875rem;
-      padding: 1.875rem;
+      min-width: rem(282);
+      padding: rem(12) rem(16);
       border-radius: 0.625rem;
       box-shadow: 0 0.125rem 1.25rem 0 rgba(0, 0, 0, 0.24);
       #{$left}: 50%;
@@ -76,7 +77,8 @@
       }
 
       &.sign-up-complete {
-        padding: 1.25rem;
+        padding: 0;
+        min-width: rem(298);
 
         .aura-popup-body {
           margin-bottom: 1.25rem;
@@ -144,6 +146,46 @@ body.aura-enabled {
         }
       }
     }
+
+    .desktop-only {
+      display: flex;
+      align-items: center;
+      margin-bottom: rem(8);
+      color: $aura-normal-text;
+
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+
+      .aura-header-icon {
+        margin-#{$left}: rem(6);
+        position: relative;
+        top: rem(1.5);
+
+        svg {
+          max-height: rem(28);
+          width: auto;
+        }
+      }
+
+      .close {
+        background: none;
+        border: none;
+        position: absolute;
+        #{$right}: 0.375rem;
+        top: 0.375rem;
+        padding: 0;
+
+        @include breakpoint($upto-desktop) {
+          display: none;
+        }
+
+        @include icon(close, before) {
+          background: none;
+          font-size: 2rem;
+        }
+      }
+    }
   }
 
   .aura-popup-sub-header {
@@ -161,12 +203,26 @@ body.aura-enabled {
   }
 
   .aura-popup-body {
-    margin-bottom: 1rem;
-    text-align: center;
+    margin-bottom: rem(8);
+    color: $aura-loyalty-activity-txt;
+    text-align: $left;
+    line-height: rem(18);
+    font-size: rem(12);
 
-    @include breakpoint($desktop) {
-      margin-bottom: 1.5rem;
-      text-align: #{$left};
+    span {
+      a {
+        display: inline-block;
+        padding: rem(1) 0;
+        color: inherit;
+        text-decoration: underline;
+        font-size: rem(12);
+        line-height: rem(18);
+        font-family: $aura-regular;
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
     }
 
     p {
@@ -191,18 +247,22 @@ body.aura-enabled {
     }
 
     a.learn-more {
-      font-size: 0.875rem;
-      line-height: 1.4375rem;
-      color: $aura-header-popup-learn-more-link;
+      font-size: rem(12);
+      line-height: rem(18);
+      color: $aura-loyalty-activity-txt;
+      text-decoration: underline;
 
       @include breakpoint($desktop) {
-        padding: 0.5rem 0 0;
+        padding: rem(3) 0 0;
+        display: inline-block;
       }
     }
   }
 
   .aura-popup-footer {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     a {
       font-size: 1rem;
@@ -211,17 +271,21 @@ body.aura-enabled {
     }
 
     .join-aura {
-      background: $join-aura-link-bg;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0.3125rem 1.75rem;
-      height: 2.875rem;
-      color: $join-aura-link;
-      letter-spacing: 0.0443rem;
-      font-family: $aura-bold;
-      border-radius: 1.75rem;
+      color: $aura-header-popup-learn-more-link;
       cursor: pointer;
+      font-size: rem(12);
+      line-height: rem(24);
+      font-family: $aura-caption-regular;
+    }
+
+    .already-member {
+      .already-a-member-link {
+        color: $aura-header-popup-learn-more-link;
+        cursor: pointer;
+        font-size: rem(12);
+        line-height: rem(24);
+        font-family: $aura-caption-regular;
+      }
     }
 
     .learn-more {
