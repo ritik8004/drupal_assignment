@@ -81,8 +81,7 @@ export default class AddToBagConfigurable extends React.Component {
    * An object with product's information.
    */
   openDrawer = (productInfoData) => {
-    const { drawerStatus } = this.state;
-    const nextStatus = (drawerStatus === 'opened') ? 'closed' : 'opened';
+    const nextStatus = 'opened';
 
     // Trigger Product Details View GTM push.
     Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'));
