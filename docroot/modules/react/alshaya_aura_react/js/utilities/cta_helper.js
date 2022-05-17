@@ -49,7 +49,10 @@ function handleSignUp(auraUserDetails) {
     );
   }
 
-  dispatchCustomEvent('loyaltyStatusUpdated', { stateValues: auraUserData });
+  dispatchCustomEvent('loyaltyStatusUpdated', {
+    showCongratulationsPopup: true,
+    stateValues: auraUserData,
+  });
 }
 
 function updateUsersLoyaltyStatus(cardNumber, link) {
@@ -114,6 +117,7 @@ function handleNotYou(cardNumber) {
  */
 function handleLinkYourCard(cardNumber) {
   let stateValues = {};
+  let showCongratulations = true;
   removeInlineError('.error-placeholder');
   addInlineLoader('.link-card-wrapper');
   const apiData = updateUsersLoyaltyStatus(cardNumber, 'Y');
@@ -149,10 +153,19 @@ function handleLinkYourCard(cardNumber) {
         stateValues = {
           linkCardFailed: true,
         };
+        // Set showCongratulations to false.
+        // We don't want to show congratulations popup in case if linking is failed.
+        showCongratulations = false;
         showInlineError('.error-placeholder', Drupal.t('Unexpected error occured.'));
       }
-      dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
+
+      // Dispatch loyaltyStatusUpdated as loyalty status is updated.
+      dispatchCustomEvent('loyaltyStatusUpdated', {
+        showCongratulationsPopup: showCongratulations,
+        stateValues,
+      });
       removeInlineLoader('.link-card-wrapper');
+      removeFullScreenLoader();
     });
   }
 }
@@ -200,7 +213,10 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
             firstName: firstName || '',
             lastName: lastName || '',
           };
-          dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
+          dispatchCustomEvent('loyaltyStatusUpdated', {
+            showCongratulationsPopup: true,
+            stateValues,
+          });
           removeFullScreenLoader();
           return;
         }

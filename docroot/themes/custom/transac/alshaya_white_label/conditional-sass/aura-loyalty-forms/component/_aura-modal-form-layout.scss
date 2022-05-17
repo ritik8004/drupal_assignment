@@ -1,5 +1,7 @@
-.popup-overlay.aura-modal-form {
-  .popup-content.aura-modal-form {
+.popup-overlay.aura-modal-form,
+.aura-modal-congratulations-overlay {
+  .popup-content.aura-modal-form,
+  .aura-modal-congratulations-content {
     padding: 0 !important;
     color: $aura-form-otp-text;
     max-width: 23.4375rem;
@@ -12,6 +14,35 @@
       overflow: hidden;
       border: none !important;
       padding: 0 !important;
+    }
+
+    &.link-card-otp-modal-content,
+    &.link-old-card-modal-content {
+      max-width: rem(412);
+
+      .aura-guest-user-link-card-otp-form {
+        .aura-modal-form {
+          .aura-modal-form-items {
+            padding: rem(24) rem(20);
+
+            .aura-form-items-link-card-options {
+              margin-top: rem(16);
+            }
+          }
+
+          .aura-modal-form-actions {
+            .aura-otp-submit-description {
+              .resend-otp {
+                display: inline-block;
+              }
+            }
+
+            .aura-modal-footer {
+              padding: rem(5) 0;
+            }
+          }
+        }
+      }
     }
 
     .aura-modal-header {
@@ -49,7 +80,8 @@
       }
     }
 
-    .aura-modal-form {
+    .aura-modal-form,
+    .spc-aura-unlink-card-wrapper {
       background: $aura-form-modal-section-bg;
 
       .aura-modal-form-items {
@@ -62,7 +94,9 @@
         padding-bottom: 1.5rem;
         border-top: 0.625rem solid $aura-form-otp-background;
 
-        .aura-modal-form-submit {
+        .aura-modal-form-submit,
+        .aura-modal-form-submit-without-otp,
+        .spc-aura-link-card-submit {
           height: 2.875rem;
           border-radius: 1.75rem;
           background-image: $aura-modal-submit;
@@ -79,6 +113,214 @@
       }
     }
 
+    .aura-otp-form,
+    .aura-new-user-form,
+    .aura-congratulations-modal,
+    .aura-guest-user-link-card-otp-form,
+    .spc-aura-unlink-card-wrapper {
+      .aura-modal-header {
+        background: $aura-header-join-now-bg;
+        margin-bottom: 0;
+
+        .spc-checkout-section-title {
+          font-family: $aura-caption-regular;
+        }
+      }
+
+      .aura-modal-body {
+        max-width: rem(312);
+        text-align: center;
+        margin: rem(32) auto rem(24);
+        font-family: $aura-regular;
+        line-height: rem(26);
+
+        .congratulations-text {
+          margin-bottom: rem(40);
+          color: $aura-header-sign-link;
+
+          @include breakpoint($only-mobile) {
+            margin-bottom: rem(24);
+          }
+        }
+
+        .download-text {
+          color: $aura-congratulation-highlight-text;
+        }
+
+        .mobile-only {
+          display: none;
+
+          @include breakpoint($only-mobile) {
+            display: block;
+
+            .app-links {
+              display: flex;
+              justify-content: center;
+              margin-top: rem(20);
+
+              a {
+                svg {
+                  max-height: rem(49);
+                  width: auto;
+                }
+              }
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          font-size: rem(14);
+          line-height: rem(22);
+          max-width: rem(280);
+        }
+      }
+
+      .aura-modal-form {
+        .aura-modal-form-items {
+          padding: rem(40) rem(20);
+        }
+
+        .linkingoptions-label,
+        .otp-sent-to-mobile-label {
+          font-family: $aura-bold;
+
+          span {
+            display: inline-block;
+            font-family: $aura-bold;
+          }
+        }
+
+        .otp-sent-to-mobile-label {
+          position: relative;
+          margin-bottom: rem(30);
+        }
+      }
+
+      .aura-modal-form-actions {
+        .aura-new-user-t-c {
+          margin: rem(32);
+          padding: 0;
+          color: $aura-otp-submit-description;
+
+          a {
+            display: inline-block;
+
+            &:hover {
+              background-color: transparent;
+            }
+          }
+        }
+
+        .aura-modal-form-submit,
+        .aura-modal-form-submit-without-otp,
+        .spc-aura-link-card-submit {
+          color: $aura-join-submit-text;
+          border-image-source: $aura-join-now-submit-bg-src;
+          border-image-slice: 1;
+          background-image: $aura-join-now-submit-button-bg;
+          background-origin: border-box;
+          background-clip: content-box, border-box;
+          border-style: solid;
+          border-width: rem(2);
+          margin: rem(20);
+        }
+
+        @include breakpoint($only-mobile) {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+        }
+      }
+
+      .aura-modal-form-footer,
+      .aura-modal-footer {
+        text-align: center;
+
+        .already-a-member-link,
+        .join-aura {
+          text-decoration: underline;
+          font-family: $aura-caption-regular;
+          font-size: rem(12);
+          color: $aura-header-sign-link;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .spc-aura-unlink-card-wrapper {
+      .aura-modal-body {
+        max-width: rem(328);
+        margin: rem(34) auto rem(37);
+
+        .description {
+          font-size: rem(14);
+          line-height: rem(20);
+          text-align: $left;
+          color: $aura-loyalty-dark-text;
+          margin-bottom: rem(26);
+        }
+
+        .spc-aura-unlink-card-form-content {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          text-align: $left;
+
+          @include breakpoint($only-mobile) {
+            padding-bottom: rem(50);
+          }
+
+          .form-items {
+            display: flex;
+            flex-direction: column;
+
+            label {
+              color: $aura-loyalty-activity-txt;
+              font-size: rem(12);
+              line-height: normal;
+              margin-bottom: rem(8);
+            }
+
+            input {
+              height: rem(34);
+              border: 1px solid $aura-spc-textbox-border;
+              max-width: rem(262);
+              font-size: rem(10);
+              padding: rem(12) rem(13) rem(10);
+              color: $aura-spc-checkout-text-content;
+            }
+          }
+
+          .no-link-message {
+            height: rem(34);
+
+            a {
+              display: inline-block;
+              font-size: rem(10);
+              color: $aura-loyalty-dark-text;
+              padding: rem(8) 0 0;
+            }
+          }
+
+          input {
+            width: rem(262);
+          }
+        }
+      }
+
+      .aura-modal-form-actions {
+        .spc-aura-link-card-submit {
+          margin: rem(26) rem(20) rem(21);
+        }
+
+        .aura-modal-footer {
+          .join-aura {
+            line-height: rem(28);
+          }
+        }
+      }
+    }
+
     .aura-guest-user-link-card-otp-form {
       @include breakpoint($only-mobile) {
         height: 100%;
@@ -91,9 +333,38 @@
   }
 }
 
+
+.aura-modal-popup-overlay {
+  z-index: 1000 !important;
+
+  @include breakpoint($only-tablet) {
+    width: 100vw;
+    top: rem(-47) !important;
+  }
+
+  .aura-modal-popup-content {
+    border-radius: rem(10);
+
+    @include breakpoint($only-mobile) {
+      width: rem(336) !important;
+      height: auto;
+    }
+
+    .aura-congratulations-modal {
+      .aura-modal-header {
+        .spc-checkout-section-title {
+          font-family: $aura-bold;
+          color: $aura-congratulation-highlight-text;
+        }
+      }
+    }
+  }
+}
+
 .aura-otp-form,
 .aura-new-user-form,
-.aura-guest-user-link-card-otp-form {
+.aura-guest-user-link-card-otp-form,
+.spc-aura-unlink-card-wrapper {
   @include breakpoint($only-mobile) {
     .aura-modal-form {
       height: calc(100vh - 3.5rem);
