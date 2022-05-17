@@ -33,7 +33,14 @@ if (isAuraEnabled()) {
         );
       }
 
-      if (document.querySelector('#aura-mobile-header-signin-register')) {
+      // Check if the sign in and register menu tab is available within the
+      // secondary menu region. We need to ensure that Aura block display
+      // at the end of this region in mobile.
+      const secondaryMenu = document.getElementsByClassName('region__menu-secondary');
+      if (secondaryMenu.length > 0) {
+        const auraMobileHeader = document.createElement('div');
+        auraMobileHeader.id = 'aura-mobile-header-signin-register';
+        secondaryMenu[0].appendChild(auraMobileHeader);
         // For guest user sign in/register tab.
         ReactDOM.render(
           <Header isNotExpandable />,
