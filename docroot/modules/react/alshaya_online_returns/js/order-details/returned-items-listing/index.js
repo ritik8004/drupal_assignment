@@ -17,6 +17,15 @@ class ReturnedItemsListing extends React.Component {
     return '';
   };
 
+  /**
+   * Filters return items based on the return item type.
+   *
+   * @param {object} returnItem
+   *   The object containing individual return item.
+   *
+   * @returns {object}
+   *   The filter return item object.
+   */
   getReturnsByType = (returnItem) => {
     const { returns } = this.props;
     const type = getTypeFromReturnItem(returnItem);
