@@ -13,11 +13,7 @@ import HeaderLoggedIn from './header-loggedIn';
 import HeaderGuest from './header-guest';
 import AuraCongratulationsModal from '../../../../alshaya_spc/js/aura-loyalty/components/aura-congratulations';
 import getStringMessage from '../../../../js/utilities/strings';
-
-// Define a global variable to to identify if congratulation popup is already
-// open or not. If already open, we will change this variable value to avoid
-// having two popups display at the same time.
-window.isCongratulationPopupOpen = false;
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 class Header extends React.Component {
   constructor(props) {
@@ -108,8 +104,6 @@ class Header extends React.Component {
   };
 
   closeCongratulationsModal = () => {
-    // Set the congratulation popup global variable flag to false.
-    window.isCongratulationPopupOpen = false;
     // We need this code to close the mobile menu that opens up when
     // congratulations popup display. To close the menu, we are triggeing
     // mobile menu close button.
@@ -127,17 +121,7 @@ class Header extends React.Component {
   getCongratulationsPopup() {
     const { showCongratulations } = this.state;
 
-    // If congratulation popup is already open, we will return null.
-    if (window.isCongratulationPopupOpen) {
-      return null;
-    }
-
-    // If congratulation popup is not yet open and show popup flag is true, we
-    // will set global variable isCongratulationPopupOpen value to true to avoid
-    // having two popups open at the same time.
-    if (showCongratulations && !window.isCongratulationPopupOpen) {
-      window.isCongratulationPopupOpen = true;
-
+    if (showCongratulations) {
       // We need this code to close the mobile menu that opens up when
       // congratulations popup display. To close the menu, we are triggeing
       // mobile menu close button.
@@ -185,6 +169,8 @@ class Header extends React.Component {
       isDesktop,
       isMobileTab,
       isHeaderShop,
+      // Only render congratulations popup markup when the flag is true.
+      renderCongratulationPopup,
     } = this.props;
 
     const { id: userId } = getUserDetails();
@@ -217,7 +203,8 @@ class Header extends React.Component {
             firstName={firstName}
             lastName={lastName}
           />
-          {this.getCongratulationsPopup()}
+          {hasValue(renderCongratulationPopup)
+            && this.getCongratulationsPopup()}
         </>
       );
     }
@@ -237,7 +224,8 @@ class Header extends React.Component {
           notYouFailed={notYouFailed}
           tier={tier}
         />
-        {this.getCongratulationsPopup()}
+        {hasValue(renderCongratulationPopup)
+          && this.getCongratulationsPopup()}
       </>
     );
   }
