@@ -176,16 +176,15 @@ async function validateReturnRequest(orderDetails) {
     return false;
   }
 
-  // @todo: Write logic to check for status of returns, we can create
-  // a second return only after first return is finished.
-
-  // Return false if return already exists for same order.
+  // Return false if any active return already exists for same order.
   if (hasValue(returnItems.data.items)) {
-    logger.notice('Error while trying to create return request. Return request already raised for Order: @orderId', {
-      '@data': JSON.stringify(returnItems.data),
-      '@orderId': orderDetails['#order'].orderId,
-    });
-    return false;
+    if (returnItems.data.items.some((item) => item.extension_attributes.is_closed === false)) {
+      logger.notice('Error while trying to create return request. Return request already raised for Order: @orderId', {
+        '@data': JSON.stringify(returnItems.data),
+        '@orderId': orderDetails['#order'].orderId,
+      });
+      return false;
+    }
   }
 
   // Return false if current order is not eligible for return.
