@@ -62,7 +62,7 @@ class ReturnedItemsListing extends React.Component {
 
             <ReturnedItems
               key={getTypeFromReturnItem(returnItem)}
-              returns={this.getReturnsByType(returnItem)}
+              returnData={returnItem}
             />
           </ConditionalView>
         ))}
