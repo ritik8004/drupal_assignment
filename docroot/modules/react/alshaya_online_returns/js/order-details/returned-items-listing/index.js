@@ -17,26 +17,6 @@ class ReturnedItemsListing extends React.Component {
     return '';
   };
 
-  /**
-   * Filters return items based on the return item type.
-   *
-   * @param {object} returnItem
-   *   The object containing individual return item.
-   *
-   * @returns {object}
-   *   The filter return item object.
-   */
-  getReturnsByType = (returnItem) => {
-    const { returns } = this.props;
-    const type = getTypeFromReturnItem(returnItem);
-
-    // Filter out all the returns based on type.
-    return returns.filter((item) => {
-      const itemType = getTypeFromReturnItem(item);
-      return itemType === type;
-    });
-  };
-
   render() {
     const { returns } = this.props;
 
@@ -47,7 +27,7 @@ class ReturnedItemsListing extends React.Component {
     return (
       <div className="returned-items-wrapper">
         {returns.map((returnItem) => (
-          <ConditionalView condition={hasValue(this.getReturnsByType(returnItem))
+          <ConditionalView condition={hasValue(getTypeFromReturnItem(returnItem))
             && isReturnClosed(returnItem)}
           >
             <div className="title-wrapper">
