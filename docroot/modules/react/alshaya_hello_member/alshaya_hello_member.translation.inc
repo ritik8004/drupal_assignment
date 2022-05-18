@@ -27,7 +27,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
-      'Add More Get More' => [
+      'Add More & Get More' => [
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
