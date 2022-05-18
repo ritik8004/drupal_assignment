@@ -11,11 +11,11 @@ import OrderItems from '../order-items';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const UserOrderDetails = () => {
-  const order = drupalSettings.order_details;
+  const { order } = drupalSettings;
 
   return (
     <>
-      <div className={`user__order--detail ${order.aura_class}`}>
+      <div className={`user__order--detail ${order.auraEnabled ? 'has-aura-points' : ''}`}>
         <div className="order-summary-row">
           <div className="order-transaction">
             <div className="light font-small">{ Drupal.t('Order ID') }</div>
@@ -91,7 +91,7 @@ const UserOrderDetails = () => {
         <OrderItems products={order.products} />
         { hasValue(order.cancelled_items_count) && (
           <>
-            <div id="cancelled-items" className="order-item-row">
+            <div id="cancelled-items" className="order-item-row cancelled-items">
               <div>
                 <div>{Drupal.t('Cancelled Items')}</div>
               </div>
@@ -172,6 +172,18 @@ const UserOrderDetails = () => {
           </div>
         )}
       </div>
+
+      { hasValue(order.refund_text) && (
+        <div className="order-item-row">
+          <div>
+            <div className="tooltip-anchor cancelled-item-tooltip-refund-text info">
+              <span>
+                {order.refund_text}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

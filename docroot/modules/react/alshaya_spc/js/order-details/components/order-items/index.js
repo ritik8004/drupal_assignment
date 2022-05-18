@@ -20,9 +20,7 @@ const OrderItems = (props) => {
 
           { !hasValue(cancelled) && hasValue(product.image) && (
             <div className="order__product--image">
-              <div className="image-wrapper">
-                {parse(product.image)}
-              </div>
+              {parse(product.image)}
             </div>
           )}
 

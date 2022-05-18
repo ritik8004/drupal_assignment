@@ -319,30 +319,43 @@ class CustomerController extends ControllerBase {
     // Allow other modules to update order details build.
     $this->moduleHandler()->alter('alshaya_acm_customer_orders_details_build', $order, $build);
 
-    $build['#attached']['drupalSettings']['order_details'] = $this->drupalSettingsOrderDetails($build);
+    // Get order details and expose via Drupal settings.
+    $build['#attached']['drupalSettings']['order'] = $this->prepareOrderDetails($build);
 
     return $build;
   }
 
   /**
-   * Returns drupal settings with order details.
+   * Prepares order details for front end.
    *
    * @param array $build
    *   The build array.
    *
    * @return array
-   *   Settings array.
+   *   The order details.
    */
-  private function drupalSettingsOrderDetails(array $build) {
-    dump($build);
-    $settings = $build['#order'];
-    // @todo set aura class.
-    $settings['aura_class'] = 'aura';
-    $settings['total'] = $build['order']['grand_total'];
-    $settings['online_booking_notice'] = $build['#online_booking_notice'] ?? [];
-    $settings['delivery_detail_notice'] = $build['#delivery_detail_notice'] ?? [];
-    dump($settings);
-    return $settings;
+  private function prepareOrderDetails(array $build) {
+    $details = $build['#order'];
+    $details['total'] = $build['order']['grand_total'];
+    $details['order_details'] = $build['#order_details'] ?? [];
+    $details['order_details']['payment'] = $build['#order_details']['payment'] ?? [];
+    $details['order_details']['store_open_hours'] = $build['#order_details']['store_open_hours'] ?? [];
+    $details['online_booking_notice'] = $build['#online_booking_notice'] ?? [];
+    $details['delivery_detail_notice'] = $build['#delivery_detail_notice'] ?? [];
+    $details['vat_text'] = $build['#vat_text'] ?? '';
+    $details['products'] = $build['#products'] ?? [];
+    $details['cancelled_products'] = $build['#cancelled_products'] ?? [];
+
+    // Render product images.
+    foreach (['products', 'cancelled_products'] as $type) {
+      foreach ($details[$type] as &$product) {
+        if (isset($product['image'])) {
+          $product['image'] = render($product['image']);
+        }
+      }
+    }
+
+    return $details;
   }
 
   /**
