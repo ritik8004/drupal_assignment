@@ -44,6 +44,11 @@ class SignUpCompleteHeader extends React.Component {
    */
   componentWillUnmount() {
     document.removeEventListener('loyaltyStatusUpdated', this.updateState, false);
+    // Remove aura-header-modal-open class from the main menu,
+    // This class will have no usage once component is unmounted.
+    if (document.getElementById('block-alshayamainmenu')) {
+      document.getElementById('block-alshayamainmenu').classList.remove('aura-header-modal-open');
+    }
   }
 
   /**
