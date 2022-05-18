@@ -28,7 +28,7 @@ class ReturnedItemsListing extends React.Component {
       <div className="returned-items-wrapper">
         {returns.map((returnItem) => (
           <ConditionalView condition={hasValue(getTypeFromReturnItem(returnItem))
-            && isReturnClosed(returnItem)}
+            && isReturnClosed(returnItem.returnInfo)}
           >
             <div className="title-wrapper">
               <span>

@@ -56,7 +56,7 @@ function getTypeFromReturnItem(returnItem) {
  *   True if order return if closed else False.
  */
 function isReturnClosed(returnItem) {
-  return returnItem.returnInfo.extension_attributes.is_closed;
+  return returnItem.extension_attributes.is_closed;
 }
 
 export {
