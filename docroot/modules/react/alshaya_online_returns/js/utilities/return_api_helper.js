@@ -3,6 +3,7 @@ import { getErrorResponse } from '../../../js/utilities/error';
 import logger from '../../../js/utilities/logger';
 import { callMagentoApi, prepareFilterData } from '../../../js/utilities/requestHelper';
 import { getOrderDetails } from './online_returns_util';
+import { isReturnClosed } from './order_details_util';
 
 /**
  * Prepare data to create return request.
@@ -178,7 +179,7 @@ async function validateReturnRequest(orderDetails) {
 
   // Return false if any active return already exists for same order.
   if (hasValue(returnItems.data.items)) {
-    if (returnItems.data.items.some((item) => item.extension_attributes.is_closed === false)) {
+    if (returnItems.data.items.some((item) => isReturnClosed(item) === false)) {
       logger.notice('Error while trying to create return request. Return request already raised for Order: @orderId', {
         '@data': JSON.stringify(returnItems.data),
         '@orderId': orderDetails['#order'].orderId,
