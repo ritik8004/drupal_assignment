@@ -61,7 +61,9 @@ const UserOrderDetails = () => {
 
           <div className="above-mobile blend order-total">
             <div className="light">{Drupal.t('Order Total')}</div>
-            <div className="dark" dangerouslySetInnerHTML={{ __html: order.order_details.order_total }} />
+            <div className="dark">
+              {parse(order.order_details.order_total)}
+            </div>
           </div>
 
           <Aura order={order} />
@@ -102,7 +104,9 @@ const UserOrderDetails = () => {
           <div className="desktop-only">&nbsp;</div>
           <div className="above-mobile">&nbsp;</div>
           <div className="right--align">{Drupal.t('Subtotal')}</div>
-          <div className="blend" dangerouslySetInnerHTML={{ __html: order.order_details.sub_total }} />
+          <div className="blend">
+            {parse(order.order_details.sub_total)}
+          </div>
           <div className="above-mobile empty--cell">&nbsp;</div>
         </div>
 
@@ -111,7 +115,9 @@ const UserOrderDetails = () => {
             <div className="desktop-only">&nbsp;</div>
             <div className="above-mobile">&nbsp;</div>
             <div className="right--align">{Drupal.t('Discount')}</div>
-            <div className="blend" dangerouslySetInnerHTML={{ __html: order.order_details.discount }} />
+            <div className="blend">
+              {parse(order.order_details.discount)}
+            </div>
             <div className="above-mobile empty--cell">&nbsp;</div>
           </div>
         </ConditionalView>
@@ -121,7 +127,9 @@ const UserOrderDetails = () => {
             <div className="desktop-only">&nbsp;</div>
             <div className="above-mobile">&nbsp;</div>
             <div className="right--align">{order.order_details.is_pudo_pickup ? Drupal.t('Collection Charge') : Drupal.t('Delivery charge')}</div>
-            <div className="blend" dangerouslySetInnerHTML={{ __html: order.order_details.delivery_charge }} />
+            <div className="blend">
+              {parse(order.order_details.delivery_charge)}
+            </div>
             <div className="above-mobile empty--cell">&nbsp;</div>
           </div>
         </ConditionalView>
@@ -131,7 +139,9 @@ const UserOrderDetails = () => {
             <div className="desktop-only">&nbsp;</div>
             <div className="above-mobile">&nbsp;</div>
             <div className="right--align">{order.order_details.surcharge_label}</div>
-            <div className="blend" dangerouslySetInnerHTML={{ __html: order.order_details.surcharge }} />
+            <div className="blend">
+              {parse(order.order_details.surcharge)}
+            </div>
             <div className="above-mobile empty--cell">&nbsp;</div>
           </div>
         </ConditionalView>
@@ -143,7 +153,9 @@ const UserOrderDetails = () => {
             <div className="dark upcase">{Drupal.t('Order Total')}</div>
           </div>
           <div className="warm--white">
-            <div className="dark" dangerouslySetInnerHTML={{ __html: order.order_details.order_total }} />
+            <div className="dark">
+              {parse(order.order_details.order_total)}
+            </div>
           </div>
           <div className="above-mobile empty--cell">&nbsp;</div>
         </div>

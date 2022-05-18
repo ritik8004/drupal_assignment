@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
@@ -11,14 +12,18 @@ const OrderItems = (props) => {
         <div className="order-item-row" key={`${product.sku}${cancelled ? '_cancelled' : ''}`}>
           <ConditionalView condition={hasValue(cancelled) && hasValue(product.image)}>
             <div className="order__product--image">
-              <div className="image-wrapper" dangerouslySetInnerHTML={{ __html: product.image }} />
+              <div className="image-wrapper">
+                {parse(product.image)}
+              </div>
               <span>{Drupal.t('Cancelled')}</span>
             </div>
           </ConditionalView>
 
           <ConditionalView condition={!hasValue(cancelled) && hasValue(product.image)}>
             <div className="order__product--image">
-              <div className="image-wrapper" dangerouslySetInnerHTML={{ __html: product.image }} />
+              <div className="image-wrapper">
+                {parse(product.image)}
+              </div>
             </div>
           </ConditionalView>
 
@@ -49,17 +54,23 @@ const OrderItems = (props) => {
 
             <div className="tablet-only">
               <div className="light">{Drupal.t('Unit price')}</div>
-              <div className="dark" dangerouslySetInnerHTML={{ __html: product.price }} />
+              <div className="dark">
+                {parse(product.price)}
+              </div>
             </div>
 
             <div className="mobile-only">
               <ConditionalView condition={hasValue(product.total)}>
                 <div className="light">{Drupal.t('Total')}</div>
                 <ConditionalView condition={hasValue(cancelled)}>
-                  <div className="dark cancelled-total-price" dangerouslySetInnerHTML={{ __html: product.total }} />
+                  <div className="dark cancelled-total-price">
+                    {parse(product.total)}
+                  </div>
                 </ConditionalView>
                 <ConditionalView condition={!hasValue(cancelled)}>
-                  <div className="dark" dangerouslySetInnerHTML={{ __html: product.total }} />
+                  <div className="dark">
+                    {parse(product.total)}
+                  </div>
                 </ConditionalView>
               </ConditionalView>
 
@@ -71,17 +82,23 @@ const OrderItems = (props) => {
 
           <div className="desktop-only">
             <div className="light">{Drupal.t('Unit price')}</div>
-            <div className="dark" dangerouslySetInnerHTML={{ __html: product.price }} />
+            <div className="dark">
+              {parse(product.price)}
+            </div>
           </div>
 
           <div className="above-mobile blend">
             <ConditionalView condition={hasValue(product.total)}>
               <div className="light">{Drupal.t('Total')}</div>
               <ConditionalView condition={hasValue(cancelled)}>
-                <div className="dark cancelled-total-price" dangerouslySetInnerHTML={{ __html: product.total }} />
+                <div className="dark cancelled-total-price">
+                  {parse(product.total)}
+                </div>
               </ConditionalView>
               <ConditionalView condition={!hasValue(cancelled)}>
-                <div className="dark" dangerouslySetInnerHTML={{ __html: product.total }} />
+                <div className="dark">
+                  {parse(product.total)}
+                </div>
               </ConditionalView>
             </ConditionalView>
           </div>

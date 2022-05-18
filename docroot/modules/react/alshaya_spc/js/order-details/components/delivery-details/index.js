@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
@@ -29,7 +30,9 @@ const DeliveryDetails = (props) => {
 
         <ConditionalView condition={orderDetails.type !== 'cc' && hasValue(orderDetails.delivery_address)}>
           <div className="label font-small">{Drupal.t('Delivery details')}</div>
-          <div dangerouslySetInnerHTML={{ __html: orderDetails.delivery_address }} />
+          <div>
+            {parse(orderDetails.delivery_address)}
+          </div>
         </ConditionalView>
 
         <ConditionalView condition={hasValue(orderDetails.payment_method)}>
@@ -94,7 +97,9 @@ const DeliveryDetails = (props) => {
 
         <ConditionalView condition={orderDetails.type !== 'cc' && hasValue(orderDetails.billing_address)}>
           <div className="label font-small">{Drupal.t('Billing details')}</div>
-          <div dangerouslySetInnerHTML={{ __html: orderDetails.billing_address }} />
+          <div>
+            {parse(orderDetails.billing_address)}
+          </div>
         </ConditionalView>
 
         <ConditionalView condition={hasValue(orderDetails.delivery_method)}>
@@ -108,7 +113,9 @@ const DeliveryDetails = (props) => {
       <div className="desktop-only">
         <ConditionalView condition={orderDetails.type === 'cc' && hasValue(orderDetails.billing_address)}>
           <div className="label font-small">{Drupal.t('Billing details')}</div>
-          <div dangerouslySetInnerHTML={{ __html: orderDetails.billing_address }} />
+          <div>
+            {parse(orderDetails.billing_address)}
+          </div>
         </ConditionalView>
       </div>
       <div className="above-mobile blend">
