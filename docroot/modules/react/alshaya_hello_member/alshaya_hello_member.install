@@ -22,6 +22,11 @@ function alshaya_hello_member_install() {
   $page_title_weight = (int) $config_factory->get('block.block.page_title')->get('weight');
   $config_factory->getEditable('block.block.myaccountshellomemberblock')->set('weight', $page_title_weight + 1)->save();
 
+  // Set the My Membership info block
+  // to appear just above the my account links.
+  $my_account_links = (int) $config_factory->get('block.block.alshayamyaccountlinks')->get('weight');
+  $config_factory->getEditable('block.block.mymembershipinfoblock')->set('weight', $my_account_links - 1)->save();
+
   // Add translations.
   module_load_include('inc', 'alshaya_hello_member', 'alshaya_hello_member.translation');
   if ($translations = _alshaya_hello_member_get_translations()) {

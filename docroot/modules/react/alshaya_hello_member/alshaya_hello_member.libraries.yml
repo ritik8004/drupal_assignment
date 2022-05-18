@@ -3,3 +3,8 @@ alshaya_hello_member_my_accounts:
     dist/my_accounts.bundle.js: {}
   dependencies:
     - alshaya_react/react
+alshaya_hello_member_my_membership_info:
+  js:
+    dist/my_membership_info.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

@@ -25,6 +25,7 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   $current_route_name = $current_route->getRouteName();
   if ($current_route_name === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_my_accounts';
+    $page['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_my_membership_info';
   }
   $page['#attached']['drupalSettings']['hello_member'] = $settings;
 }
@@ -35,6 +36,11 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
 function alshaya_hello_member_theme() {
   $theme = [
     'my_accounts_hello_member_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'my_membership_info_block' => [
       'variables' => [
         'strings' => [],
       ],
