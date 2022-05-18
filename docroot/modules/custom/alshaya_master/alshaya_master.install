@@ -24,10 +24,10 @@ function alshaya_master_update_8053() {
 }
 
 /**
-* Implements hook_update_N().
-*
-* Adds storage config.
-*/
+ * Implements hook_update_N().
+ *
+ * Adds storage config.
+ */
 function alshaya_master_update_8052() {
   // Save default cookie keys.
   \Drupal::configFactory()->getEditable('alshaya_master.settings')
