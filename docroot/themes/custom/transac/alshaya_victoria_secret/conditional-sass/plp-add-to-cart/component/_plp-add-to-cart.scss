@@ -1,12 +1,30 @@
 .is-not-buyable,
 .addtobag-config-button,
-.addtobag-button,
-.product-drawer-content-wrapper .config-form-addtobag-button {
+.addtobag-button {
   text-transform: uppercase;
-  border-radius: 0;
+  border-radius: rem(3);
   font-family: $alshaya-bold;
+  color: $primary_btn_text;
+  border: 1px solid $btn_border;
+
 
   @include normal-arabic-letter-spacing;
+}
+
+.addtobag-button {
+  border: 0;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+.product-drawer-content-wrapper .config-form-addtobag-button {
+  border: 0;
+
+  &:hover {
+    background: $primary_btn_bg;
+  }
 }
 
 .qty-sel-btn {

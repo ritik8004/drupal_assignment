@@ -9,10 +9,17 @@
       label {
         @include breakpoint($only-mobile) {
           position: relative;
-          margin-bottom: 0.4rem;
+          margin-bottom: rem(7);
         }
       }
     }
   }
-}
 
+  .form-select-wrapper {
+    label {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+    }
+  }
+}

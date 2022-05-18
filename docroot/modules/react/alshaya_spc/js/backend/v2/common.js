@@ -266,9 +266,9 @@ const formatCart = (cartData) => {
 /**
  * Static cache for getProductStatus().
  *
- * @type {null}
+ * @type {object}
  */
-const staticProductStatus = [];
+let staticProductStatus = {};
 
 /**
  * Get data related to product status.
@@ -285,13 +285,20 @@ const getProductStatus = async (sku, parentSKU) => {
   }
 
   // Return from static, if available.
-  if (typeof staticProductStatus[sku] !== 'undefined') {
+  if (Drupal.hasValue(staticProductStatus) && Drupal.hasValue(staticProductStatus[sku])) {
     return staticProductStatus[sku];
   }
 
   staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku, parentSKU);
 
   return staticProductStatus[sku];
+};
+
+/**
+ * Clears static cache for product status data.
+ */
+const clearProductStatusStaticCache = () => {
+  staticProductStatus = {};
 };
 
 /**
@@ -314,8 +321,9 @@ const getProcessedCartData = async (cartData) => {
     return null;
   }
 
+  const cartId = window.commerceBackend.getCartId();
   const data = {
-    cart_id: window.commerceBackend.getCartId(),
+    cart_id: cartId,
     cart_id_int: cartData.cart.id,
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
@@ -350,10 +358,15 @@ const getProcessedCartData = async (cartData) => {
     data.minicart_total = cartData.totals.base_grand_total;
   }
 
-  // If Aura enabled, add aura related details.
-  // If Egift card is enabled get balance_payable.
-  if (isAuraEnabled() || isEgiftCardEnabled()) {
-    cartData.totals.total_segments.forEach((element) => {
+  // Total segments.
+  cartData.totals.total_segments.forEach((element) => {
+    // If subtotal order total available.
+    if (element.code === 'subtotal_with_discount_incl_tax') {
+      data.totals.subtotalWithDiscountInclTax = element.value;
+    }
+    // If Aura enabled, add aura related details.
+    // If Egift card is enabled get balance_payable.
+    if (isAuraEnabled() || isEgiftCardEnabled()) {
       if (element.code === 'balance_payable') {
         data.totals.balancePayable = element.value;
         // Adding an extra total balance payable attribute, so that we can use
@@ -365,10 +378,18 @@ const getProcessedCartData = async (cartData) => {
       if (element.code === 'aura_payment') {
         data.totals.paidWithAura = element.value;
       }
-    });
-  }
+    }
+  });
+
   if (isAuraEnabled()) {
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
+  }
+
+  // Check if online booking is enabled and have confirmation number.
+  if (hasValue(cartData.cart.extension_attributes)
+    && hasValue(cartData.cart.extension_attributes.hfd_hold_confirmation_number)) {
+    data.hfd_hold_confirmation_number = cartData
+      .cart.extension_attributes.hfd_hold_confirmation_number;
   }
 
   // If egift card enabled, add the hps_redeemed_amount
@@ -1266,4 +1287,5 @@ export {
   getProductStatus,
   getLocations,
   getProductShippingMethods,
+  clearProductStatusStaticCache,
 };

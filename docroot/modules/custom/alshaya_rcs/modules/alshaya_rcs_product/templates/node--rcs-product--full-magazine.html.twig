@@ -43,7 +43,7 @@
         {% endblock %}
 
         <div class="info-wrapper">
-          <div class="price-block {{ content.price_block_identifier }}">
+          <div class="price-block #rcs.product._self|price_block_identifier#">
             #rcs.product._self|price#
           </div>
 
@@ -57,7 +57,7 @@
           {% endif %}
 
           <div class="promotion-discount-wrapper">
-            <div class="price--discount discount-{{ content.price_block_identifier }}">
+            <div class="price--discount discount-#rcs.product._self|price_block_identifier#">
               {% if content.price_block['#discount'] %}
                 ({{ content.price_block['#discount'] }})
               {% endif %}
@@ -81,11 +81,6 @@
 
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
-        {% if aura_enabled is defined and aura_enabled %}
-          {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
-          <div id="aura-pdp"></div>
-        {% endif %}
-
         {% if content.reviews_rating %}
           {{content.reviews_rating}}
         {% endif %}
@@ -103,7 +98,7 @@
                   <div class="field__label">SKU</div>
                   <div class="field__item">#rcs.product._self|sku#</div>
                 </div>
-                <div>#rcs.product._self|add_to_cart#</div>
+                <div class="add_to_cart_form" data-rcs-sku="#rcs.product._self|sku#"></div>
               </article>
             </div>
           </div>
@@ -117,6 +112,10 @@
           </div>
           {% if quantity_limit_enabled == true %}
             <div class="order-quantity-limit-message"></div>
+          {% endif %}
+          {% if aura_enabled is defined and aura_enabled %}
+            {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+            <div id="aura-pdp"></div>
           {% endif %}
         </div>
       </div>

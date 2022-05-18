@@ -54,6 +54,9 @@ export default class Checkout extends React.Component {
       errorSuccessMessage: null,
       isPostpayInitialised: false,
       isExpressDeliveryAvailable: false,
+      // shippingInfoUpdated is used to maintain flag when shipping information updated in cart.
+      // it can be used in component props.
+      shippingInfoUpdated: false,
     };
   }
 
@@ -130,10 +133,19 @@ export default class Checkout extends React.Component {
     document.addEventListener('alshayaPostpayInit', () => {
       this.setState({ isPostpayInitialised: true });
     });
+    // Listen to the event which is dispatch from addShippingInfo (v2/checkout.js).
+    // This event listen on every shipping address update during cart update.
+    document.addEventListener('onAddShippingInfoUpdate', this.onAddShippingInfoUpdate, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
+    document.removeEventListener('onAddShippingInfoUpdate', this.onAddShippingInfoUpdate, false);
+  }
+
+  // Set shippingInfoUpdated to true on shipping address update in cart.
+  onAddShippingInfoUpdate = () => {
+    this.setState({ shippingInfoUpdated: true });
   }
 
   processCheckout = (result) => {
@@ -304,6 +316,7 @@ export default class Checkout extends React.Component {
       messageType,
       isPostpayInitialised,
       isExpressDeliveryAvailable,
+      shippingInfoUpdated,
     } = this.state;
     // While page loads and all info available.
 
@@ -350,15 +363,12 @@ export default class Checkout extends React.Component {
               <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
               <ClicknCollectContextProvider cart={cart}>
                 <DeliveryInformation
+                  shippingInfoUpdated={shippingInfoUpdated}
                   refreshCart={this.refreshCart}
                   cart={cart}
                   isExpressDeliveryAvailable={isExpressDeliveryAvailable}
                 />
               </ClicknCollectContextProvider>
-            </ConditionalView>
-
-            <ConditionalView condition={isAuraEnabled()}>
-              <AuraCheckoutContainer cart={cart} />
             </ConditionalView>
 
             <PaymentMethods
@@ -373,6 +383,10 @@ export default class Checkout extends React.Component {
                 cart={cart}
                 refreshCart={this.refreshCart}
               />
+            </ConditionalView>
+
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraCheckoutContainer cart={cart} />
             </ConditionalView>
 
             {billingComponent}

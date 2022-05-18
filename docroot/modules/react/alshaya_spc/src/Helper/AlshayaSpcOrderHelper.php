@@ -28,6 +28,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\locale\StringStorageInterface;
 
 /**
  * Class Alshaya Spc Order Helper.
@@ -184,6 +186,20 @@ class AlshayaSpcOrderHelper {
   protected $deliveryOptionsHelper;
 
   /**
+   * Date time formatter interface.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
+   * The locale string storage handler.
+   *
+   * @var Drupal\locale\StringStorageInterface
+   */
+  protected $stringStorageHandler;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -226,6 +242,10 @@ class AlshayaSpcOrderHelper {
    *   Spc helper service.
    * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
    *   Delivery Options Helper.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter.
+   * @param \Drupal\locale\StringStorageInterface $string_storage_handler
+   *   The string storage handler.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -246,7 +266,9 @@ class AlshayaSpcOrderHelper {
                               RendererInterface $renderer,
                               SkuImagesHelper $images_helper,
                               AlshayaSpcHelper $spc_helper,
-                              DeliveryOptionsHelper $delivery_options_helper) {
+                              DeliveryOptionsHelper $delivery_options_helper,
+                              DateFormatterInterface $date_formatter,
+                              StringStorageInterface $string_storage_handler) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -267,6 +289,8 @@ class AlshayaSpcOrderHelper {
     $this->skuImagesHelper = $images_helper;
     $this->spcHelper = $spc_helper;
     $this->deliveryOptionsHelper = $delivery_options_helper;
+    $this->dateFormatter = $date_formatter;
+    $this->stringStorageHandler = $string_storage_handler;
   }
 
   /**
@@ -561,6 +585,77 @@ class AlshayaSpcOrderHelper {
         $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'] ?? '';
 
         break;
+    }
+
+    // Process HFD online booking information if available and if the order is
+    // eligible for the HFD booking.
+    if (isset($order['online_booking_information'])
+      && isset($order['online_booking_information']['is_hfd_booking_order'])
+      && $order['online_booking_information']['is_hfd_booking_order']) {
+      // Check if the appointment is booked with order or failed. To confirm
+      // this we will check if the 'appointment_date' and 'start_time' are
+      // available of not. If 'appointment_date' and 'start_time' values are
+      // available, we will process to display booking details on FE.
+      if (!empty($order['online_booking_information']['appointment_date'])
+        && !empty($order['online_booking_information']['start_time'])) {
+        // For the translations of AM and PM in start and end time of booking.
+        // We assume time will always be in format of '10:00 AM' or '11:00 PM',
+        // having a space as delimitor. We will translate the AM/PM from the
+        // exploded array and implode it again with translated string.
+        $start_time = $order['online_booking_information']['start_time'];
+        $end_time = $order['online_booking_information']['end_time'];
+
+        // If the current language is not the english, we will fetch and update
+        // translations.
+        $current_language = $this->languageManager->getCurrentLanguage()->getId();
+        if ($current_language !== 'en') {
+          // We can't use the variables in t function so need to fetch the AM/PM
+          // translations from the storage directly.
+          // Translation for AM/PM in start time.
+          $start_time_array = explode(' ', $start_time);
+          if (count($start_time_array) > 1) {
+            $string = $this->stringStorageHandler->getTranslations([
+              'source' => $start_time_array[1],
+              'language' => $current_language,
+              'context' => 'online_booking',
+            ]);
+            $start_time_array[1] = (!empty($string)) ? $string[0]->getString() : $start_time_array[1];
+            $start_time = implode(' ', $start_time_array);
+          }
+          // Translation for AM/PM in end time.
+          $end_time_array = explode(' ', $end_time);
+          if (count($end_time_array) > 1) {
+            $string = $this->stringStorageHandler->getTranslations([
+              'source' => $end_time_array[1],
+              'language' => $current_language,
+              'context' => 'online_booking',
+            ]);
+            $end_time_array[1] = (!empty($string)) ? $string[0]->getString() : $end_time_array[1];
+            $end_time = implode(' ', $end_time_array);
+          }
+        }
+
+        $orderDetails['online_booking_information'] = $this->t('<b>@appointment_date</b> between <b>@start_time</b> - <b>@end_time</b>', [
+          '@appointment_date' => $this->dateFormatter->format(
+            strtotime($order['online_booking_information']['appointment_date']),
+            'online_booking',
+            'd-M-Y',
+          ),
+          '@start_time' => $start_time,
+          '@end_time' => $end_time,
+        ],
+        [
+          'context' => 'online_booking',
+        ]
+        );
+      }
+      else {
+        // If the order is HFD order, i.e. 'is_hfd_booking_order' is set to
+        // true and 'appointment_date' isn't available, it means there were
+        // some errors in appointment booking during the order placement. We
+        // need to show an error message to customer in this case.
+        $orderDetails['online_booking_information'] = $this->t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
+      }
     }
 
     return $orderDetails;

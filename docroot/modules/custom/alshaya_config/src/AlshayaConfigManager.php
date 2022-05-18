@@ -497,7 +497,7 @@ class AlshayaConfigManager {
       }
     }
 
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     global $magentos;
 
     $settings = [];

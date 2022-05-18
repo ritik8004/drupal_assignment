@@ -1,5 +1,9 @@
 (function (drupalSettings) {
   window.postpayAsyncInit = function () {
+    if (!postpay || !drupalSettings.postpay) {
+      return;
+    }
+
     postpay.init({
       merchantId: drupalSettings.postpay.merchant_id,
       sandbox: drupalSettings.postpay.sandbox,

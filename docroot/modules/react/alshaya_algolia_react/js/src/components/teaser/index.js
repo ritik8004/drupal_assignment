@@ -90,19 +90,24 @@ const Teaser = ({
   if (attribute.title === undefined) {
     return null;
   }
-  const labels = [];
+  let labels = [];
   if (attribute.product_labels.length > 0) {
-    attribute.product_labels.forEach((label) => {
-      labels.push({
-        image: {
-          url: label.image,
-          alt: label.text,
-          title: label.text,
-          styles: label.styles,
-        },
-        position: label.position,
+    // Check if product labels are in V3 format by checking if image is string.
+    if (typeof attribute.product_labels[0].image === 'string') {
+      attribute.product_labels.forEach((label) => {
+        labels.push({
+          image: {
+            url: label.image,
+            alt: label.text,
+            title: label.text,
+            styles: label.styles,
+          },
+          position: label.position,
+        });
       });
-    });
+    } else {
+      labels = attribute.product_labels;
+    }
   }
 
 
@@ -135,6 +140,10 @@ const Teaser = ({
   const showOOSButton = (isWishlistPage(extraInfo)
     && typeof extraInfo.inStock !== 'undefined'
     && !extraInfo.inStock);
+
+  // Create a ref for wishlist icon button. This ref will be used to update the
+  // icon in teaser when product is added to wishlist from drawer.
+  const ref = React.createRef();
 
   return (
     <div className={teaserClass}>
@@ -190,6 +199,7 @@ const Teaser = ({
               sku={hit.sku}
               title={attribute.title && Parser(attribute.title)}
               format="icon"
+              setWishListButtonRef={ref}
             />
           </ConditionalView>
           <div className="product-plp-detail-wrapper">
@@ -278,6 +288,7 @@ const Teaser = ({
             isBuyable={attribute.is_buyable}
             // Pass extra information to the component for update the behaviour.
             extraInfo={extraInfo}
+            wishListButtonRef={ref}
           />
         </ConditionalView>
         {/* Render OOS message on wishlist page if product is OOS. */}

@@ -6,9 +6,6 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
  * Implements hook_theme().
@@ -75,67 +72,6 @@ function alshaya_click_collect_theme($existing, $type, $theme, $path) {
   ];
 
   return $items;
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view_alter().
- */
-function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  if ($entity->bundle() == 'acq_product' && $build['#view_mode'] == 'full') {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $sku = $skuManager->getSkuForNode($entity);
-    $sku_entity = SKU::loadFromSku($sku);
-
-    if (empty($sku_entity)) {
-      return;
-    }
-
-    // Display delivery options only if product is buyable.
-    if (!alshaya_acm_product_is_buyable($sku_entity)) {
-      return;
-    }
-
-    // Adding cache tags for the on-off feature.
-    $build['#cache']['tags'][] = 'click-collect-cache-tag';
-
-    // Adding shipping options.
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-    $config = alshaya_click_collect_get_config();
-
-    // Click and collect availability for given sku.
-    $state = alshaya_acm_product_available_click_collect($sku);
-
-    // Here we just show static text, we will get stores info using ajax.
-    // We need lat/lon info of user to get stores.
-    $store_form = \Drupal::formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
-    $build['click_and_collect'] = [
-      '#theme' => 'pdp_click_collect_default',
-      '#state' => $state ? 'enabled' : 'disabled',
-      '#sku' => $sku,
-      '#type' => $sku_entity->bundle(),
-      '#title' => $config['title'],
-      '#title_price' => alshaya_acm_price_get_formatted_price($config['title_price']),
-      '#subtitle' => $state ? $config['subtitle'] : $config['unavailable'],
-      '#help_text' => $config['help_text'],
-      '#select_option_text' => $config['select_option_text'],
-      '#available_at_title' => '',
-      '#store_finder_form' => render($store_form),
-      '#attached' => [
-        'drupalSettings' => [
-          'alshaya_click_collect' => [
-            'pdp' => ['ajax_call' => FALSE],
-            // Default site country to limit autocomplete result.
-            'country' => _alshaya_custom_get_site_level_country_code(),
-          ],
-        ],
-        'library' => [
-          'alshaya_click_collect/click-and-collect.pdp',
-        ],
-      ],
-    ];
-  }
 }
 
 /**

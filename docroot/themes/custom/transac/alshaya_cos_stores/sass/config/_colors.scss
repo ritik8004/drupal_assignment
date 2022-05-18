@@ -386,9 +386,12 @@ $plp_all_filter_button_color: $primary_btn_bg;
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $_plp_cta_hover;
 $plp-quick-view-product-size-active-bg: transparent;
-$plp-quick-view-product-size-border-hover: $bright-gray;
+$plp-quick-view-product-size-border-hover: $eerie-black;
 $plp-quick-view-product-size-text-active: $eerie-black;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+$plp-quick-view-product-size-text-disabled: $bright-gray;
+$plp-quick-view-product-size-border: $bright-gray;
+$plp-quick-view-product-size-text: $eerie-black;
 
 // Dynamic Promotions.
 $promo_dynamic_label_bg: $eerie-black;

@@ -42,7 +42,7 @@
 
           {% if content.postpay %}
             {{ attach_library('alshaya_white_label/postpay-pdp') }}
-            <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
+            <div class="postpay mobile-only-hide {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
           {% if content.tabby %}
@@ -94,21 +94,12 @@
           </div>
         {% endif %}
 
-        {% if aura_enabled is defined and aura_enabled %}
-          {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
-          <div id="aura-pdp"></div>
-        {% endif %}
-
         {% if content.postpay %}
           {{ attach_library('alshaya_white_label/postpay-pdp') }}
-          <div class="postpay"> {{ content.postpay }} </div>
+          <div class="postpay mobile-only-show"> {{ content.postpay }} </div>
         {% endif %}
 
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
-
-        {% if aura_enabled is defined and aura_enabled %}
-          <div id="aura-pdp"></div>
-        {% endif %}
 
         {% if content.reviews_rating %}
           {{content.reviews_rating}}
@@ -136,6 +127,10 @@
           {% endif %}
           {% if quantity_limit_enabled == true %}
             <div class="order-quantity-limit-message"></div>
+          {% endif %}
+          {% if aura_enabled is defined and aura_enabled %}
+            {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+            <div id="aura-pdp"></div>
           {% endif %}
         </div>
       </div>

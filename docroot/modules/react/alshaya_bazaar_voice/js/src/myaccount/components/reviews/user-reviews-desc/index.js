@@ -1,4 +1,5 @@
 import React from 'react';
+import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import { getDate } from '../../../../../../../js/utilities/dateUtility';
 import ConditionalView from '../../../../common/components/conditional-view';
 import ReviewPhotos from '../../../../reviews/components/review-photo';
@@ -16,9 +17,7 @@ const UserReviewsDescription = ({
       <div className="review-title">{reviewsIndividualSummary.Title}</div>
       <div className="review-date">{reviewDate}</div>
       <div className="review-text">{reviewsIndividualSummary.ReviewText}</div>
-      <ConditionalView condition={reviewsIndividualSummary.Photos
-        && reviewsIndividualSummary.Photos.length > 0}
-      >
+      <ConditionalView condition={hasValue(reviewsIndividualSummary.Photos)}>
         <ReviewPhotos photoCollection={reviewsIndividualSummary.Photos} />
       </ConditionalView>
     </div>

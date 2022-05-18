@@ -20,6 +20,8 @@ function WishlistContainer(props) {
     format,
     title,
     options,
+    setWishListButtonRef,
+    wishListButtonRef,
   } = props;
 
   // Lazy load wishlist button component.
@@ -36,6 +38,8 @@ function WishlistContainer(props) {
           sku={sku}
           title={title}
           options={options}
+          ref={setWishListButtonRef}
+          wishListButtonRef={wishListButtonRef}
         />
       </Suspense>
     </EmptyErrorBoundary>

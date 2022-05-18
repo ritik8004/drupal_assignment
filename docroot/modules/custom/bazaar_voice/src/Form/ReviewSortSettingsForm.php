@@ -88,7 +88,7 @@ class ReviewSortSettingsForm extends ConfigFormBase {
     // Maintaining the weight.
     $weight = 0;
     foreach ($sort_options as $id => $title) {
-      $option = isset($sort_options[$id]) ? $sort_options[$id] : 0;
+      $option = $sort_options[$id] ?? 0;
       $element[$id]['#attributes']['class'][] = 'draggable';
       $element[$id]['#weight'] = $weight;
 

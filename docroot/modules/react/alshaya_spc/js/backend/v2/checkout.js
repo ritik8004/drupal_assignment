@@ -46,6 +46,7 @@ import {
 } from '../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -351,12 +352,15 @@ const getStoreInfo = async (storeInformation) => {
 
     // Fetch store info from Drupal.
     const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-    if (!hasValue(response.data)
-      || (hasValue(response.data.error) && response.data.error)
-    ) {
+
+    // If some error occurred, return empty object.
+    if (!hasValue(response)
+      || !hasValue(response.data)
+      || hasValue(response.data.error)) {
       setDrupalStoreData(storageKey, storeData);
-      return null;
+      return storeData;
     }
+
     storeInfo = response.data;
 
     // Set the Drupal store data into storage.
@@ -488,8 +492,8 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
   try {
     stores = await Promise.all(storeInfoPromises);
 
-    // Remove null/empty values.
-    stores = stores.filter((value) => value != null && value !== '');
+    // Remove null/empty stores and stores without address.
+    stores = stores.filter((value) => hasValue(value) && hasValue(value.address));
 
     // Sort the stores first by distance and then by rnc.
     if (stores.length > 1) {
@@ -755,6 +759,11 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
       || cartData.billing_address.city === 'NONE')) {
     cart = await updateBilling(params.shipping.shipping_address);
   }
+
+  // Trigger event on every shipping address update,
+  // as this is the final place where shipping is updated.
+  // Components can use this event to do action when shipping address is updated in cart.
+  dispatchCustomEvent('onAddShippingInfoUpdate', cart);
 
   return cart;
 };
@@ -1290,7 +1299,6 @@ window.commerceBackend.addBillingMethod = async (data) => {
     '@data': JSON.stringify(billingInfo),
     '@address': JSON.stringify(billingData),
   });
-
 
   const cart = await updateBilling(billingData);
 

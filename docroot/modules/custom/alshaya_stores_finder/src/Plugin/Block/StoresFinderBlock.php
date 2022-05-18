@@ -97,12 +97,12 @@ class StoresFinderBlock extends BlockBase implements ContainerFactoryPluginInter
     // Current route name.
     $current_route = $this->routeMatch->getRouteName();
     // If current page, add class.
-    if ($current_route == 'view.stores_finder.page_2') {
+    if ($current_route == 'alshaya_geolocation.store_finder') {
       $is_active = 'is-active';
     }
 
     return [
-      '#markup' => Link::createFromRoute($this->configuration['link_title'], 'view.stores_finder.page_2', [], [
+      '#markup' => Link::createFromRoute($this->configuration['link_title'], 'alshaya_geolocation.store_finder', [], [
         'attributes' =>
           [
             'class' => ['stores-finder', $is_active],

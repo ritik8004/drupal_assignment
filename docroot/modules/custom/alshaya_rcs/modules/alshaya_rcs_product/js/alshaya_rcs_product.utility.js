@@ -1,5 +1,10 @@
+/**
+ * Global variable which will contain acq_product related data/methods among
+ * other things.
+ */
+window.commerceBackend = window.commerceBackend || {};
+
 (function (Drupal) {
-  window.commerceBackend = window.commerceBackend || {};
 
   /**
    * Local static data store.
@@ -8,7 +13,22 @@
     cnc_status: {},
     configurableColorData: {},
     attrLabels: {},
+    cartItemsStock: {},
+    labels: {},
+    parent: {},
+    configurableCombinations: {},
+    configurables: {},
   };
+
+  /**
+   * Checks if current user is authenticated or not.
+   *
+   * @returns {bool}
+   *   True if user is authenticated, else false.
+   */
+  function isUserAuthenticated() {
+    return Boolean(window.drupalSettings.userDetails.customerId);
+  }
 
   /**
    * Utility function to check if an item is an object or not.
@@ -50,6 +70,19 @@
       });
     return output;
     }
+  }
+
+  /**
+   * Sets product data to storage.
+   *
+   * @param {object} product
+   *   The raw product object.
+   * @param {string} context
+   *   Context in which the product data was fetched.
+   */
+  window.commerceBackend.setRcsProductToStorage = function setRcsProductToStorage(product, context) {
+    product.context = Drupal.hasValue(context) ? context : null;
+    globalThis.RcsPhStaticStorage.set('product_data_' + product.sku, product);
   }
 
   /**
@@ -156,13 +189,13 @@
    *   The product entity.
    */
   function getConfigurables(product) {
-    const staticKey = product.sku + '_configurables';
+    var sku = product.sku;
 
-    if (typeof staticDataStore[staticKey] !== 'undefined') {
-      return staticDataStore[staticKey];
+    if (typeof staticDataStore.configurables[sku] !== 'undefined') {
+      return staticDataStore.configurables[sku];
     }
 
-    const configurables = {};
+    var configurables = {};
     product.configurable_options.forEach(function (option) {
       configurables[option.attribute_code] = {
         attribute_id: parseInt(atob(option.attribute_uid), 10),
@@ -178,7 +211,7 @@
       };
     });
 
-    staticDataStore[staticKey] = configurables;
+    staticDataStore.configurables[sku] = configurables;
 
     return configurables;
   }
@@ -274,6 +307,42 @@
   }
 
   /**
+   * Returns layout value for product.
+   *
+   * @param {object} product
+   *   The processed product object.
+   *
+   * @returns {string}
+   *   The product layout.
+   */
+  function getLayoutFromContext(product) {
+    var layout = drupalSettings.alshayaRcs.pdpLayout;
+    switch (product.context) {
+      case 'modal':
+        layout = 'pdp-magazine' ? 'modal-magazine' : layout;
+        break;
+    }
+
+    return layout;
+  }
+
+  /**
+   * Returns the context value for the product.
+   *
+   * @param {object} product
+   *   Processed product object.
+   *
+   * @returns {string}
+   *   Returns the product context value.
+   */
+  function getContext(product) {
+    return product.context;
+  }
+
+  // Expose the function to global level.
+  window.commerceBackend.getProductContext = getContext;
+
+  /**
    * Gets the variants for the given product entity.
    *
    * @param {object} product
@@ -281,10 +350,16 @@
    */
   function getVariantsInfo(product) {
     const info = {};
-
+    var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
       const variantSku = variantInfo.sku;
+      // Do not process data for OOS variants.
+      if (!Drupal.hasValue(combinations.bySku[variantSku])) {
+        return;
+      }
+      const variantParentSku = variantInfo.parent_sku;
+      const variantParentProduct = window.commerceBackend.getProductData(null, null, false)[variantParentSku];
       // @todo Add code for commented keys.
       info[variantSku] = {
         cart_image: window.commerceBackend.getCartImage(variant.product),
@@ -293,10 +368,10 @@
         color_attribute: Drupal.hasValue(variantInfo.color_attribute) ? variantInfo.color_attribute : '',
         color_value: Drupal.hasValue(variantInfo.color) ? variantInfo.color : '',
         sku: variantInfo.sku,
-        parent_sku: variantInfo.parent_sku,
+        parent_sku: variantParentSku,
         configurableOptions: getVariantConfigurableOptions(product, variant),
-        // @todo Fetch layout dynamically.
-        layout: drupalSettings.alshayaRcs.pdpLayout,
+        layout: getLayoutFromContext(product),
+        context: getContext(product),
         gallery: '',
         stock: {
           qty: variantInfo.stock_data.qty,
@@ -322,9 +397,9 @@
       info[variantSku].max_sale_qty_parent = false;
 
       if (isQuantityLimitEnabled()) {
-        let maxSaleQuantity = product.maxSaleQty;
+        let maxSaleQuantity = variantParentProduct.maxSaleQty;
         // If max sale quantity is available at parent level, we use that.
-        if (product.maxSaleQty > 0) {
+        if (variantParentProduct.maxSaleQty > 0) {
           info[variantSku].max_sale_qty_parent = true;
         }
 
@@ -358,6 +433,8 @@
       sku: product.sku,
       type: product.type_id,
       gtm_attributes: product.gtm_attributes,
+      layout: getLayoutFromContext(product),
+      context: getContext(product),
       gallery: null,
       identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
       cart_image: window.commerceBackend.getCartImage(product),
@@ -413,6 +490,45 @@
   }
 
   /**
+   * Returns all the custom attributes with values.
+   *
+   * @returns {object}
+   *  Custom attributes with values.
+   */
+  function getAllCustomAttributes() {
+    return staticDataStore['attrLabels'];
+  }
+
+  /**
+   * Sorts and returns the configurable attribute values for products.
+   *
+   * @param {object} configurables
+   *   Configurables data.
+   *
+   * @returns {object}
+   *   Configurables data with sorted values.
+   */
+  function getSortedConfigurableAttributes(configurables) {
+    var configurablesClone = JSON.parse(JSON.stringify(configurables));
+    var allAttributes = getAllCustomAttributes();
+    Object.keys(configurables).forEach(function eachConfigurable(attributeName) {
+      var unsortedValues = {};
+      var sortedValues = [];
+      configurables[attributeName].values.forEach(function eachValue(value) {
+        var key = Object.keys(allAttributes[attributeName]).indexOf(String(value.value_id));
+        unsortedValues[key] = value;
+      });
+
+      Object.keys(unsortedValues).sort().forEach(function eachElement(value, index) {
+        sortedValues.push(unsortedValues[value]);
+      });
+      configurablesClone[attributeName].values = sortedValues;
+    });
+
+    return configurablesClone;
+  }
+
+  /**
    * Gets the configurable combinations for the given sku.
    *
    * @param {string} sku
@@ -423,18 +539,17 @@
    *   Returns null if no product is found.
    */
   window.commerceBackend.getConfigurableCombinations = function (sku) {
-    var staticKey = 'product' + sku + '_configurableCombinations';
-    if (typeof staticDataStore[staticKey] !== 'undefined') {
-      return staticDataStore[staticKey];
+    if (typeof staticDataStore.configurableCombinations[sku] !== 'undefined') {
+      return staticDataStore.configurableCombinations[sku];
     }
 
-    var productData = window.commerceBackend.getProductData(sku);
-    if (!productData) {
+    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
+    if (!rawProductData) {
       return null;
     }
 
-    const configurables = productData.configurables;
-    // @todo The configurables should be sorted.
+    var configurables = getConfigurables(rawProductData);
+    configurables = getSortedConfigurableAttributes(configurables);
     const configurableCodes = Object.keys(configurables);
 
     const combinations = {
@@ -446,10 +561,19 @@
       firstChild: '',
     };
 
-    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
 
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
+      // Don't consider OOS products.
+      if (product.stock_status === 'OUT_OF_STOCK') {
+        return;
+      }
+      // Prepare the attributes variable to have key value pair.
+      let attributes = [];
+      variant.attributes.forEach((item) => {
+        attributes[item['code']] = item['value_index'];
+      });
+
       const variantSku = product.sku;
       let attributeVal = null;
 
@@ -457,7 +581,13 @@
         attributeVal = product[configurableCodes[i]];
 
         if (typeof attributeVal === 'undefined') {
-          return;
+          // Validate if the configurable code is available in attributes list.
+          if (typeof attributes[configurableCodes[i]] === 'undefined') {
+            return;
+          }
+          else {
+            attributeVal = attributes[configurableCodes[i]];
+          }
         }
 
         combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'
@@ -498,7 +628,7 @@
     combinations.bySku = combinations.by_sku;
     combinations.byAttribute = combinations.by_attribute;
 
-    staticDataStore[staticKey] = combinations;
+    staticDataStore.configurableCombinations[sku] = combinations;
 
     return combinations;
   }
@@ -616,7 +746,9 @@
 
       configurableOptions.forEach(function (option) {
         option.values.forEach(function (value) {
-          if (Drupal.hasValue(combinations.attribute_sku[configColorAttribute][value.value_index])) {
+          if (Drupal.hasValue(combinations.attribute_sku[configColorAttribute]
+            && Drupal.hasValue(combinations.attribute_sku[configColorAttribute][value.value_index]))
+          ) {
             combinations.attribute_sku[configColorAttribute][value.value_index].forEach(function (variantSku) {
               var colorOptionsList = {
                 display_label: window.commerceBackend.getAttributeValueLabel(option.attribute_code, variants[variantSku].product[colorLabelAttribute]),
@@ -687,13 +819,14 @@
     // Product data, containing stock information, is already present in local
     // storage before this function is invoked. So no need to call a separate
     // API to fetch stock status for V2.
-    const product = await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
+    var product = await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
+    var stock = await window.commerceBackend.loadProductStockDataFromCart(sku);
 
     return {
-      stock: product.stock.qty,
-      in_stock: product.stock.in_stock,
+      stock: stock.qty,
+      in_stock: (stock.status === 'IN_STOCK'),
       cnc_enabled: product.cncEnabled,
-      max_sale_qty: product.maxSaleQty,
+      max_sale_qty: stock.max_sale_qty,
     };
   };
 
@@ -763,7 +896,8 @@
 
     var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
     // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata.items.forEach(function (option) {
+    response.data.customAttributeMetadata.items
+    && response.data.customAttributeMetadata.items.forEach(function (option) {
       var allOptionsForAttribute = {};
       option.attribute_options.forEach(function (optionValue) {
         allOptionsForAttribute[optionValue.value] = optionValue.label;
@@ -773,7 +907,9 @@
     });
 
     // Return the label.
-    return staticDataStore['attrLabels'][attrName][attrValue];
+    return Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue])
+      ? staticDataStore['attrLabels'][attrName][attrValue]
+      : '';
   };
 
   /**
@@ -789,7 +925,7 @@
    */
   const getFirstChildWithMedia = function (product) {
     const firstChild = product.variants.find(function (variant) {
-      return Drupal.hasValue(variant.product.media) ? variant.product : false;
+      return Drupal.hasValue(variant.product.hasMedia) ? variant.product : false;
     });
 
     if (Drupal.hasValue(firstChild)) {
@@ -813,11 +949,20 @@
   const getSkuForGallery = function (product) {
     let skuForGallery = product;
     let child = null;
+    let isProductConfigurable = product.type_id === 'configurable';
 
     switch (drupalSettings.alshayaRcs.useParentImages) {
       case 'never':
-        if (product.type_id === 'configurable') {
+        if (isProductConfigurable) {
           child = getFirstChildWithMedia(product);
+        }
+        break;
+
+      case 'always':
+        if (isProductConfigurable) {
+          if (!Drupal.hasValue(product.media_gallery)) {
+            child = getFirstChildWithMedia(product);
+          }
         }
         break;
     }
@@ -938,29 +1083,59 @@
   }
 
   /**
-   * Gets the labels data for the given product ID.
+   * Gets the parent SKU for the given SKU.
    *
-   * @param sku
-   *   The sku value.
+   * @param {string} mainSku
+   *   The main sku. This will be used to fetch the product data from static
+   *   storage.
+   * @param {string} sku
+   *   SKU value.
    *
-   * @returns object
-   *   The labels data for the given product ID.
+   * @returns {string}
+   *   The parent SKU value.
    */
-  window.commerceBackend.getProductLabelsData = async function  (sku) {
-    if (typeof staticDataStore.labels === 'undefined') {
-      staticDataStore.labels = {};
-      staticDataStore.labels[sku] = null;
+  function getParentSkuBySku(mainSku, sku) {
+    if (Drupal.hasValue(staticDataStore.parent[sku])) {
+      return staticDataStore.parent[sku];
+    }
+    staticDataStore.parent[sku] = null;
+    var productData = window.commerceBackend.getProductData(mainSku);
+    if (Drupal.hasValue(productData.variants)
+      && Drupal.hasValue(productData.variants[sku])
+      && Drupal.hasValue(productData.variants[sku].parent_sku)
+    ) {
+      staticDataStore.parent[sku] = productData.variants[sku].parent_sku;
     }
 
-    if (staticDataStore.labels[sku]) {
-      return staticDataStore.labels[sku];
+    return staticDataStore.parent[sku];
+  }
+
+  /**
+   * Fetches product labels from backend, processes and stores them in storage.
+   *
+   * @param {string} mainSku
+   *   Main sku value.
+   */
+  async function processAllLabels(mainSku) {
+    // If labels have already been fetched for mainSku, they will be available
+    // in static storage. Hence no need to process them again.
+    if (typeof staticDataStore.labels[mainSku] !== 'undefined') {
+      return;
     }
 
-    const products = getSkuSiblingsAndParent(sku);
+    // Fetch the parent and siblings of the product.
+    const products = getSkuSiblingsAndParent(mainSku);
     const productIds = {};
     Object.keys(products).forEach(function (sku) {
       staticDataStore.labels[sku] = [];
       productIds[products[sku].id] = sku;
+    });
+
+    // Fetch all sku values, both for the main product and the styled products.
+    var allProductsData = window.commerceBackend.getProductData();
+    Object.keys(allProductsData).forEach(function eachProduct(productSku) {
+      staticDataStore.labels[productSku] = [];
+      productIds[allProductsData[productSku].id] = productSku;
     });
 
     const labels = await globalThis.rcsPhCommerceBackend.getData(
@@ -981,8 +1156,91 @@
         staticDataStore.labels[sku] = productLabels.items;
       });
     }
+  }
 
-    return staticDataStore.labels[sku];
+  /**
+   * Gets the labels data for the given product ID.
+   *
+   * @param mainSku
+   *   The sku value.
+   *
+   * @returns object
+   *   The labels data for the given product ID.
+   */
+  window.commerceBackend.getProductLabelsData = async function getProductLabelsData(mainSku, skuForLabel) {
+    await processAllLabels(mainSku);
+    // If it is a child product not having any label, we display the labels
+    // from the parent.
+    var parentSku = getParentSkuBySku(mainSku, skuForLabel);
+    if (Drupal.hasValue(parentSku)) {
+      Object.assign(staticDataStore.labels[skuForLabel], staticDataStore.labels[parentSku]);
+    }
+
+    return staticDataStore.labels[skuForLabel];
+  }
+
+  /**
+   * Clears static cache for stock data.
+   */
+  window.commerceBackend.clearStockStaticCache = function clearStockStaticCache() {
+    staticDataStore.cartItemsStock = {};
+  }
+
+  /**
+   * Gets the stock data for cart items.
+   *
+   * @param {string} sku
+   *   SKU value for which stock is to be returned.
+   *
+   * @returns {Promise}
+   *   Returns a promise so that await executes on the calling function.
+   */
+  window.commerceBackend.loadProductStockDataFromCart = async function loadProductStockDataFromCart(sku) {
+    // Load the stock data.
+    var cartId = window.commerceBackend.getCartId();
+    if (Drupal.hasValue(staticDataStore.cartItemsStock[sku])) {
+      return staticDataStore.cartItemsStock[sku];
+    }
+    var isAuthUser = isUserAuthenticated();
+    var authenticationToken = isAuthUser
+      ? 'Bearer ' + window.drupalSettings.userDetails.customerToken
+      : null;
+
+    return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }, null, null, null, false, authenticationToken).then(function processStock(response) {
+      const cartKey = isAuthUser ? 'customerCart' : 'cart';
+      // Do not proceed if for some reason there are no cart items.
+      if (!response[cartKey].items.length) {
+        return;
+      }
+      response[cartKey].items.forEach(function eachCartItem(cartItem) {
+        if (!Drupal.hasValue(cartItem)) {
+          return;
+        }
+        var stockData = null;
+        if (cartItem.product.type_id === 'configurable') {
+          stockData = cartItem.configured_variant.stock_data;
+          stockData.status = cartItem.configured_variant.stock_status;
+          staticDataStore.cartItemsStock[cartItem.configured_variant.sku] = stockData;
+        }
+        else {
+          stockData = cartItem.product.stock_data;
+          stockData.status = cartItem.product.stock_status;
+          staticDataStore.cartItemsStock[cartItem.product.sku] = stockData;
+        }
+      });
+
+      return staticDataStore.cartItemsStock[sku];
+    });
+  }
+
+  /**
+   * Clears static cache of product data.
+   */
+  window.commerceBackend.resetStaticStoragePostProductUpdate = function resetStaticStoragePostProductUpdate() {
+    staticDataStore.configurableCombinations = {};
+    staticDataStore.configurableColorData = {};
+    staticDataStore.configurables = {};
+    staticDataStore.labels = {};
   }
 
   // Event listener to update static promotion.
@@ -993,9 +1251,17 @@
       return null;
     }
 
+    // Set parent sku value for all the variants.
+    var product = e.detail.result;
+    if (product.type_id === 'configurable') {
+      product.variants.forEach(function eachVariant(variant) {
+        variant.parent_sku = product.sku;
+      });
+    }
+
     var promotionVal = [];
-    if (Drupal.hasValue(e.detail.result.promotions)) {
-      var promotions = e.detail.result.promotions;
+    if (Drupal.hasValue(product.promotions)) {
+      var promotions = product.promotions;
       // Update the promotions attribute based on the requirement.
       promotions.forEach((promotion, index) => {
         promotionVal[index] = {
@@ -1007,7 +1273,6 @@
       });
     }
 
-    e.detail.result.promotions = promotionVal;
+    product.promotions = promotionVal;
   });
-
 })(Drupal, drupalSettings);

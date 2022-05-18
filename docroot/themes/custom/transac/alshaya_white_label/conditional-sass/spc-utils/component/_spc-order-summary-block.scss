@@ -242,6 +242,11 @@
           display: inline-block;
           margin-#{$right}: 0.1875rem;
         }
+
+        .spc-cart-product-attribute-value {
+          display: inline-block;
+          direction: ltr;
+        }
       }
 
       .product-flag {
@@ -266,5 +271,10 @@
         }
       }
     }
+  }
+
+  .hero-subtotal-after-discount {
+    border-top: 1px solid $spc-order-summary-hero-total-border;
+    padding: rem(19) 0 rem(6);
   }
 }

@@ -140,7 +140,6 @@ function alshaya_user_install() {
   drupal_static_reset();
   \Drupal::entityTypeManager()->clearCachedDefinitions();
   \Drupal::service('router.builder')->rebuild();
-  \Drupal::service('entity.definition_update_manager')->applyUpdates();
 
   $user_settings = \Drupal::configFactory()->getEditable('user.settings');
 

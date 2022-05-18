@@ -1,0 +1,19 @@
+#alshaya-algolia-search {
+  .c-products__item {
+    .express_delivery {
+      html[lang=ar] & {
+        font-size: 0.625rem;
+      }
+    }
+  }
+}
+
+.acq-content-product {
+  .express-delivery-title-wrapper {
+    &.ui-state-active {
+      .c-accordion__title {
+        @include icon(minus, after);
+      }
+    }
+  }
+}

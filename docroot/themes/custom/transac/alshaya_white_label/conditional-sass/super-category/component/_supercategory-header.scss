@@ -54,12 +54,8 @@
       }
 
       @include breakpoint($desktop) {
-        padding-top: 2rem;
-
-        html[lang="ar"] & {
-          padding-top: 1.625rem;
-          padding-bottom: 2.5rem;
-        }
+        padding-top: rem(24);
+        padding-bottom: rem(43);
       }
     }
 
@@ -203,7 +199,7 @@
     .c-menu-secondary,
     .toggle--sign,
     .main--menu ul.menu--one__list {
-      width: 16.875rem;
+      width: 20rem;
     }
 
     .c-my-account-nav {
@@ -436,6 +432,10 @@
             width: 10rem;
           }
         }
+
+        picture {
+          display: inline-flex;
+        }
       }
     }
   }
@@ -469,6 +469,50 @@
           .page-standard {
             &.l-container {
               margin-top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .super-category-enabled {
+    &.super-category-american-eagle {
+      .branding__menu {
+        .c-header__region {
+          .block-system-branding-block {
+            .site-brand-home {
+              img {
+                height: rem(42);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    header {
+      .c-header__region {
+        @include breakpoint($desktop) {
+          padding-bottom: rem(43);
+        }
+      }
+    }
+  }
+}
+
+body {
+  &.super-category-enabled {
+    .block-alshaya-algolia-react-autocomplete {
+      &.focused {
+        .algolia-search-back-icon {
+          @include breakpoint($only-tablet) {
+            @include icon(arrow-#{$left}) {
+              bottom: 0;
+              margin: auto;
+              top: 0;
             }
           }
         }

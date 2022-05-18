@@ -404,9 +404,8 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    *   List of domains.
    */
   private function getBrandDomains() {
-    // @codingStandardsIgnoreStart
+    // phpcs:ignore
     global $acsf_site_code;
-    // @codingStandardsIgnoreEnd
 
     $selfRecord = $this->siteAliasManager()->getSelf();
 

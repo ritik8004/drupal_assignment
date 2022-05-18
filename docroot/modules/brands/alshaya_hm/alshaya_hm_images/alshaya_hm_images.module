@@ -7,7 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_hm_images\SkuAssetManager;
+use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
@@ -18,9 +18,11 @@ use Drupal\image\Entity\ImageStyle;
 function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
   // Process assets data & create attributes which are needed for sorting
   // the assets while displaying them.
+  // phpcs:disable
   $existing_assets = !empty($existing_data['attr_assets'])
     ? unserialize($existing_data['attr_assets'][0]['value'])
     : [];
+  // phpcs:enable
 
   $sku->get('attr_assets')->setValue(_alshaya_hm_images_acq_sku_process_assets($product, $existing_assets));
 }
@@ -75,7 +77,7 @@ function _alshaya_hm_images_acq_sku_process_assets(array $product, array $existi
 
       $asset_type_parts = (!empty($asset['Data']['AssetType'])) ? explode('/', $asset['Data']['AssetType']) : [];
       $assets[$key]['sortAssetType'] = !empty($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
-      $face_type = SkuAssetManager::LP_DEFAULT_ANGLE;
+      $face_type = SkuAssetManagerInterface::LP_DEFAULT_ANGLE;
 
       if (!empty($asset['Data']['Angle']['Facing']) && !empty($asset['Data']['Angle']['Identifier'])) {
         $face_type = $asset['Data']['Angle']['Facing'] . $asset['Data']['Angle']['Identifier'];
@@ -100,8 +102,8 @@ function _alshaya_hm_images_acq_sku_process_assets(array $product, array $existi
  * Implements hook_alshaya_acm_product_gallery_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $sku, $context = 'pdp') {
-  /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
-  $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_assets_manager */
+  $sku_assets_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
 
   // Check if the gallery has a main image. If not, look for assets.
   if ($context == 'search') {
@@ -141,8 +143,8 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
  * Implements hook_alshaya_acm_product_media_items_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_media_items_alter(array &$media, SKU $sku) {
-  /** @var \Drupal\alshaya_hm_images\SkuAssetManager $assetsManager */
-  $assetsManager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $assetsManager */
+  $assetsManager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
 
   $assets = $assetsManager->getAssets($sku);
 
@@ -159,8 +161,8 @@ function alshaya_hm_images_alshaya_acm_product_media_items_alter(array &$media, 
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp') {
-  /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
-  $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_assets_manager */
+  $sku_assets_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -257,8 +259,8 @@ function alshaya_hm_images_alshaya_acm_product_light_product_data_alter(SKU $sku
     return;
   }
 
-  /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
-  $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_assets_manager */
+  $sku_assets_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
   // Get colors for the SKU.
   $colors = $sku_assets_manager->getColorsForSku($sku);
 
@@ -302,12 +304,12 @@ function alshaya_hm_images_block_view_alter(array &$build, BlockPluginInterface 
  * Implements hook_alshaya_acm_product_pdp_swath_type_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
-  /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_asset_manager */
-  $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_asset_manager */
+  $sku_asset_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
   $swatch_type = $sku_asset_manager->getSkuSwatchType($sku);
 
   $assets = [];
-  if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
+  if (strtoupper($swatch_type) !== SkuAssetManagerInterface::LP_SWATCH_RGB) {
     $assets = $sku_asset_manager->getSkuAssets($variant_sku, 'swatch');
   }
 

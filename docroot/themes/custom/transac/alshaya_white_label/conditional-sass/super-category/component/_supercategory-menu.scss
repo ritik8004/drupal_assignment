@@ -16,10 +16,14 @@
 
       .block-alshaya-super-category-menu {
         .menu--one__list {
-          height: 3.75rem;
+          height: rem(60);
 
           li {
-            height: 3.75rem;
+            height: rem(60);
+
+            @include breakpoint($upto-desktop) {
+              padding: 0;
+            }
           }
 
           .menu--one__link {
@@ -36,7 +40,7 @@
     a {
       @include breakpoint($desktop) {
         padding: 1.31rem 1.438rem;
-        height: 3.68rem;
+        height: rem(60);
       }
     }
 
@@ -64,9 +68,16 @@
       .en {
         a {
           @include breakpoint($desktop) {
-            height: 3.68rem;
+            height: rem(60);
           }
         }
+      }
+    }
+
+    .region__menu-secondary {
+      @include breakpoint($desktop) {
+        display: flex;
+        justify-content: flex-end;
       }
     }
   }
@@ -183,10 +194,14 @@
 
   &:not(.no-sticky-algolia-search-bar) {
     @include breakpoint($upto-desktop) {
-      margin-top: 8.5rem;
+      margin-top: rem(136);
 
       &.alias--cart-login {
         margin-top: 0;
+      }
+
+      &.hide-header {
+        margin-top: rem(162);
       }
     }
 
@@ -209,6 +224,16 @@
       .c-header__region {
         @include breakpoint($upto-desktop) {
           height: auto;
+        }
+      }
+    }
+  }
+
+  &.no-sticky-algolia-search-bar {
+    @include breakpoint($upto-desktop) {
+      &.search-enabled {
+        &.hide-header {
+          margin-top: rem(88);
         }
       }
     }
@@ -316,6 +341,10 @@
           @include breakpoint($upto-desktop) {
             visibility: visible;
             top: 0;
+          }
+
+          @include breakpoint($only-tablet) {
+            top: rem(120);
           }
 
           .algolia-search-back-icon {
@@ -522,7 +551,7 @@
     }
 
     .algolia-search-cleartext-icon {
-      top: 0.25rem;
+      top: rem(10);
       #{$right}: 0.5rem;
 
       @include breakpoint($only-tablet) {
@@ -533,6 +562,12 @@
       @include breakpoint($desktop) {
         top: 1.2rem !important;
         #{$right}: 2rem;
+      }
+    }
+
+    .algolia-search-back-icon {
+      @include breakpoint($only-tablet) {
+        top: rem(9);
       }
     }
 

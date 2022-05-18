@@ -10,6 +10,19 @@ use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add missing translation for Alshaya wish-list.
+ */
+function alshaya_wishlist_update_8001() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_wishlist', 'alshaya_wishlist.translations');
+  if ($translations = _alshaya_wishlist_get_translations('v2')) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
  * Implements hook_install().
  *
  * Update default configurations for the wishlist feature.
@@ -35,6 +48,7 @@ function alshaya_wishlist_install() {
 
   // Enable My wishlist link in the menu.
   $config = \Drupal::configFactory()->getEditable('alshaya_user.settings');
+  // phpcs:ignore
   $alshaya_wishlist = unserialize($config->get('my_account_enabled_links'));
   $alshaya_wishlist['alshaya_wishlist'] = 'alshaya_wishlist';
   $config->set('my_account_enabled_links', serialize($alshaya_wishlist));

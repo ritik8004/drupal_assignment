@@ -14,7 +14,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
  * @Condition(
  *   id = "hide_facet_condition_plp",
  *   label = @Translation("Hide facet on PLP condition"),
- *   context = {
+ *   context_definitions = {
  *     "taxonomy_term" = @ContextDefinition(
  *        "entity:taxonomy_term",
  *        label = @Translation("taxonomy_term")

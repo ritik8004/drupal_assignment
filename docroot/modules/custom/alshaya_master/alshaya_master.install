@@ -24,6 +24,18 @@ function alshaya_master_update_8053() {
 }
 
 /**
+* Implements hook_update_N().
+*
+* Adds storage config.
+*/
+function alshaya_master_update_8052() {
+  // Save default cookie keys.
+  \Drupal::configFactory()->getEditable('alshaya_master.settings')
+    ->set('cookie_keys', 'cart_id')
+    ->save();
+}
+
+/**
  * Implements hook_update_N().
  *
  * Add translation for You may also like with context.
@@ -2325,7 +2337,7 @@ function alshaya_master_install() {
   $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
 
   // Enable only FB, Twitter, Pinterest.
-  // @codingStandardsIgnoreLine
+  // phpcs:ignore
   $configFactory->set('service_option', "'Facebook:facebook','Twitter:twitter','Pinterest:pinterest'");
 
   // Disable all extras.

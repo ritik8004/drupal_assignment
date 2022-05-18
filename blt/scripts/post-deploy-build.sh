@@ -47,21 +47,6 @@ then
   rm -Rf $deployDir/docroot/modules/contrib/devel
 fi
 
-# Removing `vendor` and `var` directory dynamically from gitignore to push/commit
-# to the acquia cloud.
-if [ $uname_string == 'Darwin' ]
-then
-  sed -i'' '/vendor/d' $deployDir/docroot/appointment/.gitignore
-  sed -i'' '/var/d' $deployDir/docroot/appointment/.gitignore
-  sed -i'' '/vendor/d' $deployDir/docroot/proxy/.gitignore
-  sed -i'' '/var/d' $deployDir/docroot/proxy/.gitignore
-else
-  sed -i '/vendor/d' $deployDir/docroot/appointment/.gitignore
-  sed -i '/var/d' $deployDir/docroot/appointment/.gitignore
-  sed -i '/vendor/d' $deployDir/docroot/proxy/.gitignore
-  sed -i '/var/d' $deployDir/docroot/proxy/.gitignore
-fi
-
 # Delete patches directory which is not used on acquia git.
 # It can't be done via deploy-exclude-additions.txt given it is needed to
 # build the artifact.

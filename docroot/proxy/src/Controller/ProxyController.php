@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Service\Config\SystemSettings;
 use Proxy\Proxy;
 use Proxy\Adapter\Guzzle\GuzzleAdapter;
 use Proxy\Filter\RemoveEncodingFilter;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Laminas\Diactoros\ServerRequestFactory;
 use GuzzleHttp\Exception\ClientException;
@@ -28,11 +30,14 @@ class ProxyController {
   public function proxy(Request $request) {
     $url = $this->getUrl($request);
 
+    $settings = new SystemSettings(new RequestStack($request));
+
     /** @var \Laminas\Diactoros\ServerRequest $request */
     $request = ServerRequestFactory::fromGlobals();
 
     // Create a guzzle client.
-    $guzzle = new Client();
+    // Since proxy is used only on non-prod disabling SSL check.
+    $guzzle = new Client(['verify' => FALSE]);
 
     // Create the proxy instance.
     $proxy = new Proxy(new GuzzleAdapter($guzzle));
@@ -41,7 +46,7 @@ class ProxyController {
     $proxy->filter(new RemoveEncodingFilter());
 
     // Apply proxy filters.
-    $proxy->filter(new ProxyFilter($url));
+    $proxy->filter(new ProxyFilter($url, $settings));
 
     try {
       // Forward the request and get the response.

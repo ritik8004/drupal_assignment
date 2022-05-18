@@ -1,0 +1,10 @@
+.egift-card-linked-wrapper {
+  .action-buttons {
+    button[type=button] {
+      &.egift-topup-btn {
+        color: $egift-myaccount-button;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

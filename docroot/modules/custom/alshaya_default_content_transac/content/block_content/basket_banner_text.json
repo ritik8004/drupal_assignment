@@ -69,6 +69,16 @@
       "lang": "ar"
     }
   ],
+  "machine_name": [
+    {
+      "value": "basketpromotionmessage",
+      "lang": "en"
+    },
+    {
+      "value": "basketpromotionmessage",
+      "lang": "ar"
+    }
+  ],
   "changed": [
     {
       "value": "2017-05-10T12:47:49+00:00",

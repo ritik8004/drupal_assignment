@@ -120,3 +120,12 @@ function alshaya_furnitures_alshaya_search_facet_price_alter($range, &$displayVa
   // Remove decimal points from price block filter.
   $displayValue = str_replace('.' . str_repeat('0', $config->get('decimal_points')), '', $displayValue);
 }
+
+/**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ *
+ * Attach online booking library for Furniture brands.
+ */
+function alshaya_furnitures_alshaya_spc_checkout_build_alter(array &$build) {
+  $build['#attached']['library'][] = 'alshaya_white_label/online-booking';
+}

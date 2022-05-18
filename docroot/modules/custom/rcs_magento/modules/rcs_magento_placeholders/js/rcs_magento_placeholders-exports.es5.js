@@ -12,12 +12,18 @@ async function handleNoItemsInResponse(request, urlKey) {
   let response = await rcsCommerceBackend.invokeApi(request);
   let rcs404 = `${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`;
 
-  if (response.data.urlResolver === null) {
+  if (response.data.urlResolver === null
+    || response.data.urlResolver.redirectCode == 404) {
+    // Hide body so that placeholders are not visible.
+    document.body.classList.add('hidden');
     return rcsRedirectToPage(rcs404);
   }
 
   if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
-    return rcsRedirectToPage(response.data.urlResolver.relative_url);
+    let relative_url = response.data.urlResolver.relative_url.startsWith('/')
+      ? response.data.urlResolver.relative_url
+      : `/${drupalSettings.path.currentLanguage}/${response.data.urlResolver.relative_url}`;
+    return rcsRedirectToPage(relative_url);
   }
 
   RcsEventManager.fire('error', {
@@ -91,6 +97,7 @@ exports.getEntity = async function getEntity(langcode) {
 
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
+        result.context = 'pdp';
         // Store product data in static storage.
         globalThis.RcsPhStaticStorage.set('product_data_' + result.sku, result);
         // Set product options data to static storage.
@@ -124,8 +131,10 @@ exports.getEntity = async function getEntity(langcode) {
       if (response.data.promotionUrlResolver) {
         result = response.data.promotionUrlResolver;
       }
-      if (!result || (typeof result.title !== 'string')) {
-        globalThis.rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`);
+
+      // Check if title is null and call UrlResolver for redirection.
+      if(result.title == null) {
+        await handleNoItemsInResponse(request, urlKey);
       }
       break;
 
@@ -146,13 +155,29 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
+    // Fire another event to perform actions after results are updated.
+    RcsEventManager.fire('postUpdateResultsAction', {
+      detail: {
+        result: updateResult.detail.result,
+        pageType: pageType,
+      }
+    });
+
     return updateResult.detail.result;
   }
 
   return result;
 };
 
-exports.getData = async function getData(placeholder, params, entity, langcode, markup, loaderOnUpdates = false) {
+exports.getData = async function getData(
+  placeholder,
+  params,
+  entity,
+  langcode,
+  markup,
+  loaderOnUpdates = false,
+  authorizationToken = null
+) {
   const request = {
     uri: '/graphql',
     method: 'GET',
@@ -163,8 +188,13 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
     language: langcode,
   };
 
+  if (authorizationToken) {
+    request.headers.push(['Authorization', authorizationToken]);
+  }
+
   let response = null;
   let result = null;
+  let context = null;
 
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
@@ -179,6 +209,13 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
         return null;
       }
 
+      const staticKey = placeholder + '_data';
+      const staticNavigationData = globalThis.RcsPhStaticStorage.get(staticKey);
+      // Return the data from static storage if available.
+      if (staticNavigationData !== null) {
+        return staticNavigationData;
+      }
+
       // Prepare request parameters.
       // Fetch categories for navigation menu using categories api.
       request.data = prepareQuery(rcsPhGraphqlQuery.navigationMenu.query, rcsPhGraphqlQuery.navigationMenu.variables);
@@ -191,6 +228,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       ) {
         // Get children for root category.
         result = response.data.categories.items[0].children;
+        // Store category data in static storage.
+        globalThis.RcsPhStaticStorage.set(placeholder + '_data', result);
       }
       break;
 
@@ -221,13 +260,15 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'product-recommendation':
-      let prVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
+      let prVariables = rcsPhGraphqlQuery.single_complete_product_by_sku.variables;
       prVariables.sku = params.sku;
       // @TODO Review this query to use only fields that are required for the display.
-      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, prVariables);
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_complete_product_by_sku.query, prVariables);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
+      context = 'modal';
+      result.context = context;
       globalThis.RcsPhStaticStorage.set('product_data_' + result.sku, result);
 
       break;
@@ -247,6 +288,40 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       result = response.data.products.items[0];
       break;
 
+    case 'category_parents_by_path':
+      let productCategoryParentVariables = rcsPhGraphqlQuery.category_parents_by_path.variables;
+      productCategoryParentVariables.urlPath = params.urlPath;
+      request.data = prepareQuery(rcsPhGraphqlQuery.category_parents_by_path.query, productCategoryParentVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.categories.items[0];
+      break;
+
+    case 'category_children_by_path':
+      let productCategoryChildrenVariables = rcsPhGraphqlQuery.category_children_by_path.variables;
+      productCategoryChildrenVariables.urlPath = params.urlPath;
+      request.data = prepareQuery(rcsPhGraphqlQuery.category_children_by_path.query, productCategoryChildrenVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.categories.items[0];
+      break;
+
+    case 'cart_items_stock':
+      let cartItemsStockVariables = rcsPhGraphqlQuery.cart_items_stock.variables;
+      cartItemsStockVariables.cartId = params.cartId;
+      request.data = prepareQuery(rcsPhGraphqlQuery.cart_items_stock.query, cartItemsStockVariables);
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data;
+      break;
+
+    case 'products-in-style':
+      let variables = rcsPhGraphqlQuery.styled_products.variables;
+      variables.styleCode = params.styleCode;
+
+      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
@@ -259,13 +334,24 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       RcsEventManager.fire('startLoader');
     }
 
-    // Creating custom event to to perform extra operation and update the result
+    // Creating custom event to perform extra operation and update the result
     // object.
     const updateResult = RcsEventManager.fire('rcsUpdateResults', {
       detail: {
         result: result,
         params: params,
         placeholder: placeholder,
+        context,
+      }
+    });
+
+    const pageType = globalThis.rcsPhGetPageType();
+    // Fire another event to perform actions after results are updated.
+    RcsEventManager.fire('postUpdateResultsAction', {
+      detail: {
+        result: updateResult.detail.result,
+        pageType,
+        placeholder,
       }
     });
 
@@ -294,15 +380,6 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
   let result = null;
 
   switch (placeholder) {
-    case 'products-in-style':
-      let variables = rcsPhGraphqlQuery.styled_products.variables;
-      variables.styleCode = params.styleCode;
-
-      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
-      response = rcsCommerceBackend.invokeApiSynchronous(request);
-      result = response.data.products.items;
-      break;
-
     // Get the product data for the given sku.
     case 'single_product_by_sku':
       // Build query.

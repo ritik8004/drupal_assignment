@@ -653,6 +653,10 @@ body.ratings-reviews-overlay {
     padding: 0 0 0.875rem;
     justify-content: $left;
 
+    @include breakpoint($only-tablet) {
+      padding: 0 0 rem(4);
+    }
+
     .empty-stars {
       &:hover {
         .histogram-data {
@@ -671,6 +675,10 @@ body.ratings-reviews-overlay {
   .rating-wrapper {
     display: flex;
 
+    @include breakpoint($only-tablet) {
+      display: block;
+    }
+
     .inline-rating,
     .button-wrapper {
       align-self: center;
@@ -679,11 +687,16 @@ body.ratings-reviews-overlay {
     .inline-rating {
       + .button-wrapper {
         margin-#{$left}: 1rem;
-        padding: 0 0 1.125rem;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
       }
     }
 
     .button-wrapper {
+      padding-bottom: rem(14);
+
       @include breakpoint($only-mobile) {
         padding-#{$left}: 0.5rem;
       }
@@ -723,6 +736,12 @@ body.ratings-reviews-overlay {
   .express-delivery {
     + .rating-wrapper {
       margin-top: 0.875rem;
+    }
+  }
+
+  .histogram-data-section {
+    .rating-wrapper {
+      display: block;
     }
   }
 }
