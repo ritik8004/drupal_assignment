@@ -421,7 +421,7 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       'to earn <b>@pts</b> points on this purchase.' => [
-        'ar' => 'للفوز <b>@pts</b> بنقاط عند إتمام عملية الشراء',
+        'ar' => 'للفوز <b>@pts</b> بنقاط عند إتمام عملية الشراء.',
         'context' => 'aura',
       ],
       'To redeem points download Aura app.' => [
@@ -439,11 +439,11 @@ function _alshaya_aura_react_translations() {
       // We are using !pts as it does not encode the html into string while
       // using this in Drupal t() function.
       'Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.' => [
-        'ar' => "يكسب <span><b>@pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
+        'ar' => "اكسب <span><b>@pts</b> نقاط مع أورا </span> عند إتمام عملية الشراء. لتفعيل النقاط، استكمل عملية التسجيل في تطبيق أورا MENA.",
         'context' => 'aura',
       ],
       "Earn <span><b>@pts</b> points with Aura</span> on this purchase." => [
-        'ar' => "اربح <span> <b>! pts </b> من النقاط مع Aura </span> على عملية الشراء هذه.",
+        'ar' => "اكسب <span><b>@pts</b> نقاط مع أورا</span> عند إتمام عملية الشراء.",
       ],
       'Congratulations' => [
         'ar' => 'تهانينا',
@@ -458,7 +458,7 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       "By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>" => [
-        'ar' => "بالضغط على إرسال ، فإنك توافق على قراءة <a href='!tncLink' target='_blank'> البنود والشروط </a> والموافقة عليها",
+        'ar' => "الضغط على زر إرسال يعني قراءتك وموافقتك على<a href='!tncLink' target='_blank'>شروطنا وأحكامنا</a>",
         'context' => 'aura',
       ],
       'Already a member?' => [
@@ -470,7 +470,7 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       'You will earn @pts Aura points with this purchase.' => [
-        'ar' => 'سوف تفوز @pts بنقاط أورا عند إتمام عملية الشراء',
+        'ar' => 'سوف تفوز @pts بنقاط أورا عند إتمام عملية الشراء.',
         'context' => 'aura',
       ],
       'You will earn @pts @aura_icon points.' => [
@@ -478,11 +478,11 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       'Earn and spend points when you shop at your favourite brands and unlock exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Learn more</a>' => [
-        'ar' => 'اكسب النقاط وأنفقها عند التسوق من ماركاتك المفضلة واحصل على مزايا حصرية <a href="@know_more_link" target="_blank" rel="noopener noreferrer"> أعرف أكثر</a> ',
+        'ar' => 'اكسب النقاط وأنفقها عند التسوق من ماركاتك المفضلة واحصل على مزايا حصرية. <a href="@know_more_link" target="_blank" rel="noopener noreferrer"> أعرف أكثر</a>',
         'context' => 'aura',
       ],
       '@aura_icon Redeem your points' => [
-        'ar' => 'تفعيل نقاط @aura_icon',
+        'ar' => '@aura_icon تفعيل النقاط',
         'context' => 'aura',
       ],
       'You have @pts points,' => [
@@ -490,11 +490,11 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       '@pts points will expire by @date.' => [
-        'ar' => 'تنتهي صلاحية @pts النقاط بتاريخ @date',
+        'ar' => '@pts تنتهي صلاحية النقاط بتاريخ @date.',
         'context' => 'aura',
       ],
       'Earn <span><b>@pts points with Aura</b></span> on this purchase' => [
-        'ar' => 'اربح <span> <b>pts من النقاط مع Aura </b> </span> على عملية الشراء هذه',
+        'ar' => 'اكسب <span><b>@ptsنقاط مع أورا</b></span> عند إتمام عملية الشراء ',
         'context' => 'aura',
       ],
       'Earn with Aura' => [
@@ -566,7 +566,7 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       '<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase' => [
-        'ar' => 'قيمة <b>@currencyCode @money</b> تم استردادها بنجاح مقابل عملية الشراء هذه <b>@points points</b>',
+        'ar' => '<b>@points قيمة</b><span> النقاط </span><b>@currencyCode @money</b> تم استبدالها بنجاح لإتمام عملية الشراء',
         'context' => 'aura',
       ],
       'Check your points value:' => [
