@@ -45,11 +45,9 @@ class ProcessedItem extends React.Component {
   };
 
   /**
-   * Downloads the print label pdf.
+   * Returns the return print label link.
    */
-  getPrintLabelPdf = () => {
-    // @todo Write the logic to download the PDF.
-  }
+  getPrintLabelPdfLink = () => '#';
 
   render() {
     const { popup, cancelBtnState, showPrintLabelBtn } = this.state;
@@ -71,7 +69,7 @@ class ProcessedItem extends React.Component {
           </div>
           <ConditionalView condition={showPrintLabelBtn}>
             <div className="print-return-label-wrapper">
-              <a className="print-label-button" href={this.getPrintLabelPdf()}>
+              <a className="print-label-button" href={this.getPrintLabelPdfLink()}>
                 {Drupal.t('Print Return Label', {}, { context: 'online_returns' })}
               </a>
             </div>
