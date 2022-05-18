@@ -333,6 +333,50 @@
   }
 }
 
+.aura-modal-congratulations-overlay {
+  .aura-modal-congratulations-content {
+    border-radius: rem(10);
+
+    @include breakpoint($only-mobile) {
+      width: rem(336) !important;
+      height: auto;
+      text-transform: none;
+    }
+
+    .aura-congratulations-modal {
+      .aura-modal-header {
+        .spc-checkout-section-title {
+          color: $aura-congratulation-highlight-text;
+          font-weight: 700;
+        }
+      }
+
+      .aura-modal-body {
+        margin: rem(30) auto rem(24);
+
+        @include breakpoint($tablet) {
+          margin: rem(33) auto rem(38);
+        }
+
+        .congratulations-text {
+          margin-bottom: rem(22);
+
+          @include breakpoint($tablet) {
+            margin-bottom: rem(24);
+          }
+        }
+
+        .mobile-only {
+          .app-links {
+            a {
+              display: inline-flex;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
 .aura-modal-popup-overlay {
   z-index: 1000 !important;
