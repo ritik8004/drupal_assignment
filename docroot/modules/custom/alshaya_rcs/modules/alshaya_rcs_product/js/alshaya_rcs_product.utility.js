@@ -350,10 +350,14 @@ window.commerceBackend = window.commerceBackend || {};
    */
   function getVariantsInfo(product) {
     const info = {};
-
+    var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
       const variantSku = variantInfo.sku;
+      // Do not process data for OOS variants.
+      if (!Drupal.hasValue(combinations.bySku[variantSku])) {
+        return;
+      }
       const variantParentSku = variantInfo.parent_sku;
       const variantParentProduct = window.commerceBackend.getProductData(null, null, false)[variantParentSku];
       // @todo Add code for commented keys.
@@ -539,12 +543,12 @@ window.commerceBackend = window.commerceBackend || {};
       return staticDataStore.configurableCombinations[sku];
     }
 
-    var productData = window.commerceBackend.getProductData(sku);
-    if (!productData) {
+    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
+    if (!rawProductData) {
       return null;
     }
 
-    var configurables = productData.configurables;
+    var configurables = getConfigurables(rawProductData);
     configurables = getSortedConfigurableAttributes(configurables);
     const configurableCodes = Object.keys(configurables);
 
@@ -557,7 +561,6 @@ window.commerceBackend = window.commerceBackend || {};
       firstChild: '',
     };
 
-    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
 
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
