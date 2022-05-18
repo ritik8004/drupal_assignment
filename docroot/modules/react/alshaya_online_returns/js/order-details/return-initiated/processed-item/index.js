@@ -71,12 +71,9 @@ class ProcessedItem extends React.Component {
           </div>
           <ConditionalView condition={showPrintLabelBtn}>
             <div className="print-return-label-wrapper">
-              <button
-                type="button"
-                onClick={this.getPrintLabelPdf}
-              >
-                <span className="print-button-label">{Drupal.t('Print Return Label', {}, { context: 'online_returns' })}</span>
-              </button>
+              <a className="print-label-button" href={this.getPrintLabelPdf()}>
+                {Drupal.t('Print Return Label', {}, { context: 'online_returns' })}
+              </a>
             </div>
           </ConditionalView>
           <ConditionalView condition={cancelBtnState}>
