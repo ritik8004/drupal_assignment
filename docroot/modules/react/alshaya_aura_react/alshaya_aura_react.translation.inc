@@ -439,11 +439,11 @@ function _alshaya_aura_react_translations() {
       // We are using !pts as it does not encode the html into string while
       // using this in Drupal t() function.
       'Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.' => [
-        'ar' => "اكسب <b>@pts</b> نقاط مع أورا </span> عند إتمام عملية الشراء .لتفعيل النقاط، استكمل عملية التسجيل في تطبيق أورا MENA",
+        'ar' => "يكسب <span><b>@pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
         'context' => 'aura',
       ],
       "Earn <span><b>@pts</b> points with Aura</span> on this purchase." => [
-        'ar' => "اكسب <b>@pts</b> نقاط مع أورا </span> عند إتمام عملية الشراء.",
+        'ar' => "اربح <span> <b>! pts </b> من النقاط مع Aura </span> على عملية الشراء هذه.",
       ],
       'Congratulations' => [
         'ar' => 'تهانينا',
@@ -458,7 +458,7 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       "By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>" => [
-        'ar' => "إن الضغط على زر إرسال يعني قراءتك وموافقتك على <a href=!tncLink target=_blank> شروطنا وأحكامنا</a>",
+        'ar' => "بالضغط على إرسال ، فإنك توافق على قراءة <a href='!tncLink' target='_blank'> البنود والشروط </a> والموافقة عليها",
         'context' => 'aura',
       ],
       'Already a member?' => [
@@ -494,7 +494,7 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       'Earn <span><b>@pts points with Aura</b></span> on this purchase' => [
-        'ar' => 'اكسب <b>@pts</b> نقاط مع أورا </span> عند إتمام عملية الشراء.',
+        'ar' => 'اربح <span> <b>pts من النقاط مع Aura </b> </span> على عملية الشراء هذه',
         'context' => 'aura',
       ],
       'Earn with Aura' => [
@@ -566,7 +566,7 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       '<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase' => [
-        'ar' => '<b>تم استبدال </b></span>قيمة<span><b>@  @pointsالنقاط بنجاح لعملية الشراء',
+        'ar' => 'قيمة <b>@currencyCode @money</b> تم استردادها بنجاح مقابل عملية الشراء هذه <b>@points points</b>',
         'context' => 'aura',
       ],
       'Check your points value:' => [
