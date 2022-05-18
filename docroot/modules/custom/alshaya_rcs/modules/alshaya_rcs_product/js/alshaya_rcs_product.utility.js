@@ -286,10 +286,14 @@ window.commerceBackend = window.commerceBackend || {};
    */
   function getVariantsInfo(product) {
     const info = {};
-
+    var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
       const variantSku = variantInfo.sku;
+      // Do not process data for OOS variants.
+      if (!Drupal.hasValue(combinations.bySku[variantSku])) {
+        return;
+      }
       // @todo Add code for commented keys.
       info[variantSku] = {
         cart_image: window.commerceBackend.getCartImage(variant.product),
@@ -433,13 +437,12 @@ window.commerceBackend = window.commerceBackend || {};
       return staticDataStore[staticKey];
     }
 
-    var productData = window.commerceBackend.getProductData(sku);
-    if (!productData) {
+    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
+    if (!rawProductData) {
       return null;
     }
 
-    const configurables = productData.configurables;
-    // @todo The configurables should be sorted.
+    var configurables = getConfigurables(rawProductData);
     const configurableCodes = Object.keys(configurables);
 
     const combinations = {
@@ -451,7 +454,6 @@ window.commerceBackend = window.commerceBackend || {};
       firstChild: '',
     };
 
-    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
 
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
