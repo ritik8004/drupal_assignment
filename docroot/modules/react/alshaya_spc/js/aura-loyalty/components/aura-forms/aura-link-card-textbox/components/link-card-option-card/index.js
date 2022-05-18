@@ -26,7 +26,9 @@ const LinkCardOptionCard = (props) => {
           onBlur={(e) => labelEffect(e)}
         />
         <div className="c-input__bar" />
-        <label>{Drupal.t('Card number')}</label>
+        <label>
+          {getStringMessage('aura_account_number_label')}
+        </label>
         <div id="link-card-number-error" className="error" />
       </div>
     );

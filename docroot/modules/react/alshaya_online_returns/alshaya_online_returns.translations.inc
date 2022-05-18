@@ -214,6 +214,49 @@ function _alshaya_online_returns_translations() {
         'ar' => 'طلبات الإرجاع عبر المحل',
         'context' => 'online_returns',
       ],
+      'Return Confirmation' => [
+        'ar' => 'تأكيد عملية الإرجاع',
+        'context' => 'online_returns',
+      ],
+      'What\'s next?' => [
+        'ar' => 'ما التالي؟',
+        'context' => 'online_returns',
+      ],
+      'Go to order details' => [
+        'ar' => 'الذهاب إلى تفاصيل الطلبية',
+        'context' => 'online_returns',
+      ],
+      'Items to return' => [
+        'ar' => 'المنتجات المطلوب إرجاعها',
+        'context' => 'online_returns',
+      ],
+      'Ineligible for return' => [
+        'ar' => 'قابلة للإرجاع',
+        'context' => 'online_returns',
+      ],
+      'Session Code' => [
+        'ar' => 'أعد إرسال الرمز',
+      ],
+      'Cancel Return' => [
+        'ar' => 'إلغاء طلب الإرجاع',
+        'context' => 'online_returns',
+      ],
+      'Cancel Return Request' => [
+        'ar' => 'إلغاء طلب الإرجاع',
+        'context' => 'online_returns',
+      ],
+      'Are you sure you would like to cancel this return request?' => [
+        'ar' => 'هل أنت متأكد أنك تريد إلغاء طلب الإرجاع هذا؟',
+        'context' => 'online_returns',
+      ],
+      'No' => [
+        'ar' => 'لا',
+        'context' => 'online_returns',
+      ],
+      'Return request has been successfully placed.' => [
+        'ar' => '.تم تسجيل طلب الارجاع بنجاح',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 

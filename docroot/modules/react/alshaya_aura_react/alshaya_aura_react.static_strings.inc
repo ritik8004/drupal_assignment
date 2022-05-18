@@ -123,10 +123,6 @@ function _alshaya_aura_static_strings() {
       'value' => t('with this purchase'),
     ],
     [
-      'key' => 'checkout_use_your_points',
-      'value' => t('Use your points'),
-    ],
-    [
       'key' => 'checkout_use_points',
       'value' => t('Use points'),
     ],
@@ -278,5 +274,154 @@ function _alshaya_aura_static_strings() {
       'key' => 'checkout_already_member_question_tooltip',
       'value' => t('Add your mobile number, Aura account number or email address below to link this purchase.'),
     ],
+    [
+      'key' => 'points_to_earn_with_purchase',
+      'value' => t('points with this purchase.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'redeem_aura_points_header',
+      'value' => t('@aura_icon Redeem your points', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'checkout_aura_points_with_purchase',
+      'value' => t('Aura points with this purchase.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_checkout_reward_points_to_earn',
+      'value' => t('You will earn @pts Aura points with this purchase.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_checkout_reward_points_to_earn_guest',
+      'value' => t('Earn @pts points with @aura_icon on this purchase.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'checkout_you_have_pts',
+      'value' => t('You have @pts points,', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'checkout_point_expiry_with_date',
+      'value' => t('@pts points will expire by @date.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'cart_earn_with_this_purchase',
+      'value' => t('Earn <span><b>@pts</b> points with Aura</span> on this purchase.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_or',
+      'value' => t('or', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_join_aura',
+      'value' => t('Join Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_aura',
+      'value' => t('Link your Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_sign_in',
+      'value' => t('Sign in'),
+    ],
+    [
+      'key' => 'cart_to_earn_with_points',
+      'value' => t('to earn <b>@pts</b> points on this purchase.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'cart_redeem_points_msg',
+      'value' => t('Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'app_store_link_text',
+      'value' => t('App Store', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'play_store_link_text',
+      'value' => t('Play Store.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'join_aura_congratulations_header',
+      'value' => t('Congratulations', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'join_aura_congratulations_text',
+      'value' => t('You can now start building your Aura. Earn points when you shop online or in-store.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'join_aura_congratulations_download_text',
+      'value' => t('To spend your points, complete your registration on the Aura MENA app, available on the App store and Google Play.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'tnc_description_text',
+      'value' => t("By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>", [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_header_guest',
+      'value' => t('Earn with Aura', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_title_logged_in',
+      'value' => t('Link your Aura with', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_title_guest',
+      'value' => t('Already a member?', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'link_card_body_sub_title_guest',
+      'value' => t('Enter your details to earn points on this order.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_your_card',
+      'value' => t('Link your card', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_send_otp',
+      'value' => t('Send OTP', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_now',
+      'value' => t('Link Now', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'didnt_recieve_the_otp_message',
+      'value' => t('Didn’t receive the OTP?', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_account_number_label',
+      'value' => t('Aura account number', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_otp_label',
+      'value' => t('OTP', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_unlinked_card_body_title',
+      'value' => t('Hi @firstName,<br>An Aura account is associated with your email address. Link your Aura with just one click.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_unlinked_card_body_sub_title',
+      'value' => t('Do you want to link now?', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_link_unlinked_card_field_title',
+      'value' => t('Aura Card Number', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_resend_code',
+      'value' => t('Resend', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_otp_sent_to_mobile',
+      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_points_redeemed_successfully_msg',
+      'value' => t('<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'checkout_check_your_points_value',
+      'value' => t('Check your points value:', [], ['context' => 'aura']),
+    ],
+
   ];
 }

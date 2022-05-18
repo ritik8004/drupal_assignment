@@ -10,7 +10,19 @@ class ProcessedItem extends React.Component {
     this.state = {
       popup: false,
       cancelBtnState: true,
+      showPrintLabelBtn: false,
     };
+  }
+
+  componentDidMount() {
+    const { returnData } = this.props;
+    const { awb_path: AwbPath, is_picked: isPicked } = returnData.returnInfo.extension_attributes;
+    // Set the `showPrintLabelBtn` to true if awb path is available.
+    if (hasValue(AwbPath) && !hasValue(isPicked)) {
+      this.setState({
+        showPrintLabelBtn: true,
+      });
+    }
   }
 
   /**
@@ -32,8 +44,13 @@ class ProcessedItem extends React.Component {
     });
   };
 
+  /**
+   * Returns the return print label link.
+   */
+  getPrintLabelPdfLink = () => '#';
+
   render() {
-    const { popup, cancelBtnState } = this.state;
+    const { popup, cancelBtnState, showPrintLabelBtn } = this.state;
     const { returnData, returnStatus, returnMessage } = this.props;
 
     // @todo: Breaking/Grouping of return items as per status.
@@ -50,13 +67,20 @@ class ProcessedItem extends React.Component {
               {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
             </div>
           </div>
+          <ConditionalView condition={showPrintLabelBtn}>
+            <div className="print-return-label-wrapper">
+              <a className="print-label-button" href={this.getPrintLabelPdfLink()}>
+                {Drupal.t('Print Return Label', {}, { context: 'online_returns' })}
+              </a>
+            </div>
+          </ConditionalView>
           <ConditionalView condition={cancelBtnState}>
             <div className="cancel-return-button-wrapper">
               <button
                 type="button"
                 onClick={this.showCancelReturnPopup}
               >
-                <span className="cancel-button-label">{Drupal.t('Cancel Return Request', {}, { context: 'online_returns' })}</span>
+                <span className="cancel-button-label">{Drupal.t('Cancel Return', {}, { context: 'online_returns' })}</span>
               </button>
             </div>
           </ConditionalView>

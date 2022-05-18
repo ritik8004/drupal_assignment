@@ -2,7 +2,9 @@
 .block-alshaya-user-recent-orders {
   .user__order--detail {
     div.order-item-row.delivered-items,
-    tr.order-item-row.delivered-items {
+    tr.order-item-row.delivered-items,
+    div.order-item-row.cancelled-items,
+    tr.order-item-row.cancelled-items {
       > div,
       td {
         font-family: $hnm-demibold;
@@ -21,11 +23,11 @@
       .item-list-wrapper {
         border-bottom: rem(1) solid $white;
       }
-    }
 
-    .cancel-return-popup-container {
-      .cancel-return-options {
-        font-family: $hnm-demibold;
+      .return-status-wrapper {
+        .status-label {
+          font-family: $hnm-demibold;
+        }
       }
     }
   }

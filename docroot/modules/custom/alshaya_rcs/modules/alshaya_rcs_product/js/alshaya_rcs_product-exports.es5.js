@@ -340,10 +340,9 @@ exports.render = function render(
       };
 
       if (entity.type_id === 'configurable') {
-        const skuForGallery = params.sku;
         // Fetch the media for the gallery sku.
         entity.variants.every(function (variant) {
-          if (variant.product.sku !== skuForGallery) {
+          if (variant.product.sku !== params.skuForGallery) {
             // Continue with the loop.
             return true;
           }
@@ -397,6 +396,7 @@ exports.render = function render(
         thumbnails: mediaCollection.thumbnails,
         lazy_load_placeholder: drupalSettings.alshayaRcs.lazyLoadPlaceholder,
         pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
+        skuForGallery: params.skuForGallery,
       }
 
       if (placeholder === 'classic-gallery') {

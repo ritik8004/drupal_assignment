@@ -1,16 +1,16 @@
 rows:
   -
-    title: 'Print Return label'
+    title: 'اطبع ملصق الإرجاع'
     description:
-      value: '<p>We''ll mail you the return label shortly.</p><p>You can also print it from your order details page.</p>'
+      value: '<p>سنقوم بإرسال ملصق الإرجاع قريباً عبر البريد الإلكتروني.</p><p>يمكنك أيضاً طباعة الملصق من صفحة تفاصيل الطلبية </p>'
       format: 'rich_text'
   -
-    title: 'Pack your Item & Return'
+    title: 'جهّز منتجك للإرجاع'
     description:
-      value: '<p>We''ll mail you the return label shortly.</p><p>You can also print it from your order details page.</p>'
+      value: '<p>سنقوم بإرسال ملصق الإرجاع قريباً عبر البريد الإلكتروني.</p><p>يمكنك أيضاً طباعة الملصق من صفحة تفاصيل الطلبية.</p>'
       format: 'rich_text'
   -
-    title: 'Receive refunds'
+    title: 'استلام المبالغ المستردة'
     description:
-      value: '<p>Once we recieve the return items we will initiate your refund and the refund will be credited in your account in 3-5 days.</p>'
+      value: '<p>عند استلامنا للمنتجات المسترجعة، ستبدأ عملية رد المال إلى حسابك في غضون 3 - 5 أيام. </p>'
       format: 'rich_text'

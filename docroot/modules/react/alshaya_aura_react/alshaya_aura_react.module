@@ -197,12 +197,6 @@ function alshaya_aura_react_block_view_alter(&$build, $block) {
       'myAccountBlockPreRender',
     ];
   }
-  if ($block->getPluginId() === 'system_menu_block:account') {
-    $build['#pre_render'][] = [
-      AuraBlockViewBuilder::class,
-      'systemAccountBlockPreRender',
-    ];
-  }
 }
 
 /**

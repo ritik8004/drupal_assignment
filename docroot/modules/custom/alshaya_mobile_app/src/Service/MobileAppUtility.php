@@ -827,7 +827,8 @@ class MobileAppUtility {
       // Do nothing except for downtime exception, let default validation
       // handle the error messages.
       if (acq_commerce_is_exception_api_down_exception($e)) {
-        $this->logger->error($e->getMessage());
+        $this->getLogger('MobileAppUtility')->error('Sorry, unable to process your request right now due to connection timeout. Please try again later.');
+        throw $e;
       }
     }
 
@@ -1134,6 +1135,21 @@ class MobileAppUtility {
       }
     }
     return $deeplink;
+  }
+
+  /**
+   * Helper method to return an error response.
+   *
+   * @param string $message
+   *   Error message.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   HTTP Response.
+   */
+  public function sendErrorResponse(string $message) {
+    $response['success'] = FALSE;
+    $response['message'] = $message;
+    return (new ResourceResponse($response));
   }
 
 }

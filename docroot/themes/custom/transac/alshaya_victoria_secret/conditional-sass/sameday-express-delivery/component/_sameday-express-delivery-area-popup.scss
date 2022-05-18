@@ -5,4 +5,10 @@
       padding-#{$left}: 0.25rem;
     }
   }
+
+  .actions {
+    a.select-area-link {
+      color: $primary_btn_text;
+    }
+  }
 }

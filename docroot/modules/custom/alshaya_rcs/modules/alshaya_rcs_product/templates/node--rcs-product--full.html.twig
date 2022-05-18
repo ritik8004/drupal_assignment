@@ -75,11 +75,6 @@ set classes = [
         </div>
       {% endblock %}
 
-      {% if aura_enabled is defined and aura_enabled %}
-        {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
-        <div id="aura-pdp"></div>
-      {% endif %}
-
       {% block pdpSidebar %}
         <div class="content__sidebar">
           {% if content.reviews_rating %}
@@ -97,12 +92,17 @@ set classes = [
                     <div class="field__label">SKU</div>
                     <div class="field__item">#rcs.product._self|sku#</div>
                   </div>
-                  <div id="add_to_cart_form"></div>
+                  <div class="add_to_cart_form" data-rcs-sku="#rcs.product._self|sku#"></div>
                 </article>
                 </div>
               </div>
               {% if quantity_limit_enabled == true %}
                 <div class="order-quantity-limit-message"></div>
+              {% endif %}
+
+              {% if aura_enabled is defined and aura_enabled %}
+                {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+                <div id="aura-pdp"></div>
               {% endif %}
             </div>
 

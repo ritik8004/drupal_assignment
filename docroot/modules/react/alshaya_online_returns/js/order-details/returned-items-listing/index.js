@@ -1,6 +1,7 @@
 import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { getTypeFromReturnItem, isReturnClosed } from '../../utilities/order_details_util';
 import ReturnedItems from './returned-items';
 
 class ReturnedItemsListing extends React.Component {
@@ -16,17 +17,6 @@ class ReturnedItemsListing extends React.Component {
     return '';
   };
 
-  getReturnsByType = (type) => {
-    const { returns } = this.props;
-
-    // @todo: Update this code to filter out returns based on type.
-    if (type === 'online') {
-      return returns;
-    }
-
-    return returns;
-  };
-
   render() {
     const { returns } = this.props;
 
@@ -36,13 +26,28 @@ class ReturnedItemsListing extends React.Component {
 
     return (
       <div className="returned-items-wrapper">
-        <ConditionalView condition={hasValue(this.getReturnsByType('online'))}>
-          <ReturnedItems
-            key="online"
-            subTitle={this.getReturnedItemsSubTitle('online')}
-            returns={returns}
-          />
-        </ConditionalView>
+        <div className="returned-items">
+          {returns.map((returnItem) => (
+            <ConditionalView condition={hasValue(getTypeFromReturnItem(returnItem))
+              && isReturnClosed(returnItem.returnInfo)}
+            >
+              <div className="title-wrapper">
+                <span>
+                  {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
+                  {' '}
+                  {'-'}
+                  {' '}
+                  {this.getReturnedItemsSubTitle(getTypeFromReturnItem(returnItem))}
+                </span>
+              </div>
+
+              <ReturnedItems
+                key={getTypeFromReturnItem(returnItem)}
+                returnData={returnItem}
+              />
+            </ConditionalView>
+          ))}
+        </div>
       </div>
     );
   }

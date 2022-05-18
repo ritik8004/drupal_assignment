@@ -9,6 +9,7 @@ use Drupal\Core\File\Exception\FileException;
 use Drupal\locale\StringStorageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Alshaya Export Translation Commands class.
@@ -20,7 +21,7 @@ class AlshayaExportTranslationCommands extends DrushCommands {
    *
    * @var string
    */
-  const PATH = 'public://exports/v3/';
+  const PATH = 'public://exports/v3/translations/';
 
   /**
    * The filename prefix for the output file.
@@ -65,6 +66,13 @@ class AlshayaExportTranslationCommands extends DrushCommands {
   protected $database;
 
   /**
+   * The date time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $dateTime;
+
+  /**
    * AlshayaExportTranslationCommands constructor.
    *
    * @param Drupal\Core\File\FileSystemInterface $file_system
@@ -77,19 +85,23 @@ class AlshayaExportTranslationCommands extends DrushCommands {
    *   The language manager.
    * @param \Drupal\Core\Database\Connection $database
    *   Database connection service.
+   * @param \Drupal\Component\Datetime\TimeInterface $date_time
+   *   The date time service.
    */
   public function __construct(
     FileSystemInterface $file_system,
     LoggerChannelFactoryInterface $logger_factory,
     StringStorageInterface $string_storage,
     LanguageManagerInterface $language_manager,
-    Connection $database
+    Connection $database,
+    TimeInterface $date_time
   ) {
     $this->fileSystem = $file_system;
     $this->logger = $logger_factory->get('alshaya_rcs_export_translation');
     $this->stringStorage = $string_storage;
     $this->languageManager = $language_manager;
     $this->database = $database;
+    $this->dateTime = $date_time;
   }
 
   /**
@@ -111,6 +123,14 @@ class AlshayaExportTranslationCommands extends DrushCommands {
 
     // Create directory for export if it doesn't exists.
     $path = self::PATH;
+    // Delete all existing translations exports.
+    try {
+      $this->fileSystem->deleteRecursive($path);
+    }
+    catch (FileException $e) {
+      $this->logger->notice('Files not deleted as directory may not exists.');
+    }
+
     $output_directory = $this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
     if (!$output_directory) {
       $this->logger->error('Could not read/create the directory to export the data.');
@@ -119,7 +139,8 @@ class AlshayaExportTranslationCommands extends DrushCommands {
 
     // Create translation csv.
     try {
-      $file_location = $this->fileSystem->getDestinationFilename($path . self::FILE_NAME_PREFIX . '.csv', FileSystemInterface::EXISTS_REPLACE);
+      $timestamp = $this->dateTime->getCurrentTime();
+      $file_location = $this->fileSystem->getDestinationFilename($path . self::FILE_NAME_PREFIX . '-' . $timestamp . '.csv', FileSystemInterface::EXISTS_REPLACE);
       if ($file_location) {
         $file = fopen($file_location, 'wb+');
         // Insert translations into csv file.
