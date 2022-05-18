@@ -172,6 +172,11 @@ fi
 
 # Force the push to avoid issues with previous commit history.
 log_message_and_details "Pushing changes"
+git checkout --orphan $branch-tmp &>> ${log_file}
+git add . --quiet &>> ${log_file}
+git commit -m "Commit from tag $tag." &>> ${log_file}
+git branch -D $branch &>> ${log_file}
+git branch -m $branch &>> ${log_file}
 git push origin $branch --force &>> ${log_file}
 if [ $? -ne 0 ]
 then
