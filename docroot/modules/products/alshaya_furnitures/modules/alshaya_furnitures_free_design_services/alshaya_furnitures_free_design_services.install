@@ -5,6 +5,7 @@
  * Install file.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -54,4 +55,20 @@ function alshaya_furnitures_free_design_services_install() {
   $config->set('settings', $settings);
 
   $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update free design services form.
+ */
+function alshaya_furnitures_free_design_services_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['webform.webform.free_design_services'],
+    'alshaya_furnitures_free_design_services',
+    'optional',
+    AlshayaConfigManager::MODE_REPLACE
+  );
 }
