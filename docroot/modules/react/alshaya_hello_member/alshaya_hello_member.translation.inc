@@ -39,7 +39,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
-      'DH&M wants to give you special treat on your birthday' => [
+      'H&M wants to give you special treat on your birthday' => [
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
