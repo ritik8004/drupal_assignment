@@ -23,6 +23,12 @@
       .item-list-wrapper {
         border-bottom: rem(1) solid $white;
       }
+
+      .return-status-wrapper {
+        .status-label {
+          font-family: $hnm-demibold;
+        }
+      }
     }
   }
 }

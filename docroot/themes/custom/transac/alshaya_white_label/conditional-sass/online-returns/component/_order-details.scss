@@ -188,6 +188,44 @@
       .return-items-wrapper {
         margin-bottom: 0;
       }
+
+      .return-status-wrapper {
+        padding-top: rem(16);
+        margin-bottom: 0;
+
+        @include breakpoint($tablet) {
+          padding-top: rem(32);
+        }
+
+        .return-status {
+          margin-bottom: 0;
+        }
+
+        .status-label {
+          font-size: rem(18);
+          line-height: rem(22);
+          font-family: $alshaya-bold;
+
+          @include breakpoint($only-mobile) {
+            display: inline-block;
+            padding-bottom: rem(5);
+          }
+
+          &.closed {
+            color: $online-return-rejected-label;
+          }
+        }
+
+        .status-message {
+          font-size: rem(14);
+          line-height: rem(18);
+
+          @include breakpoint($only-mobile) {
+            display: block;
+            padding-bottom: rem(4);
+          }
+        }
+      }
     }
 
     .return-status-header {
