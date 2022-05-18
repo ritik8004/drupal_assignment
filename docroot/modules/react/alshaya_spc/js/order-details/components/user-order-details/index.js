@@ -10,15 +10,6 @@ import DeliveryDetails from '../delivery-details';
 import OrderItems from '../order-items';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
-import Aura from '../aura';
-import TotalItemCount from '../total-item-count';
-import CancelledItems from '../cancelled-items';
-import OnlineReturns from '../online-returns';
-import OnlineBooking from '../online-booking';
-import DeliveryDetailNotice from '../delivery-detail-notice';
-import DeliveryDetails from '../delivery-details';
-import OrderItems from '../order-items';
-import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const UserOrderDetails = () => {
   const order = drupalSettings.order_details;
