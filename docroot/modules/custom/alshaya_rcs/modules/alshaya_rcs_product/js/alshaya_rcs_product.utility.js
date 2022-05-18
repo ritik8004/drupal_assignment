@@ -418,6 +418,45 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
+   * Returns all the custom attributes with values.
+   *
+   * @returns {object}
+   *  Custom attributes with values.
+   */
+  function getAllCustomAttributes() {
+    return staticDataStore['attrLabels'];
+  }
+
+  /**
+   * Sorts and returns the configurable attribute values for products.
+   *
+   * @param {object} configurables
+   *   Configurables data.
+   *
+   * @returns {object}
+   *   Configurables data with sorted values.
+   */
+  function getSortedConfigurableAttributes(configurables) {
+    var configurablesClone = JSON.parse(JSON.stringify(configurables));
+    var allAttributes = getAllCustomAttributes();
+    Object.keys(configurables).forEach(function eachConfigurable(attributeName) {
+      var unsortedValues = {};
+      var sortedValues = [];
+      configurables[attributeName].values.forEach(function eachValue(value) {
+        var key = Object.keys(allAttributes[attributeName]).indexOf(String(value.value_id));
+        unsortedValues[key] = value;
+      });
+
+      Object.keys(unsortedValues).sort().forEach(function eachElement(value, index) {
+        sortedValues.push(unsortedValues[value]);
+      });
+      configurablesClone[attributeName].values = sortedValues;
+    });
+
+    return configurablesClone;
+  }
+
+  /**
    * Gets the configurable combinations for the given sku.
    *
    * @param {string} sku
@@ -438,8 +477,8 @@ window.commerceBackend = window.commerceBackend || {};
       return null;
     }
 
-    const configurables = productData.configurables;
-    // @todo The configurables should be sorted.
+    var configurables = productData.configurables;
+    configurables = getSortedConfigurableAttributes(configurables);
     const configurableCodes = Object.keys(configurables);
 
     const combinations = {
