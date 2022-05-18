@@ -423,7 +423,7 @@ window.commerceBackend = window.commerceBackend || {};
    * @returns {object}
    *  Custom attributes with values.
    */
-   function getAllCustomAttributes() {
+  function getAllCustomAttributes() {
     return staticDataStore['attrLabels'];
   }
 
