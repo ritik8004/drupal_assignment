@@ -36,6 +36,12 @@
     align-items: center;
 
     .spc-aura-cart-icon {
+      max-width: 30%;
+
+      @include breakpoint($tablet) {
+        max-width: 35%;
+      }
+
       & > svg {
         max-height: rem(37);
         width: auto;
