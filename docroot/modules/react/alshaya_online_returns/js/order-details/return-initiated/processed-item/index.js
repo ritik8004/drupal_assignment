@@ -16,8 +16,9 @@ class ProcessedItem extends React.Component {
 
   componentDidMount() {
     const { returnData } = this.props;
+    const { awb_path: AwbPath, is_picked: isPicked } = returnData.returnInfo.extension_attributes;
     // Set the `showPrintLabelBtn` to true if awb path is available.
-    if (hasValue(returnData.returnInfo.extension_attributes.awb_path)) {
+    if (hasValue(AwbPath) && isPicked === false) {
       this.setState({
         showPrintLabelBtn: true,
       });
