@@ -34,7 +34,7 @@ class EgiftCardHelper {
   protected $token;
 
   /**
-   * Entity Query.
+   * Entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
@@ -208,17 +208,18 @@ class EgiftCardHelper {
   }
 
   /**
-   * Get eGift landing page node.
-   */
-  public function egiftLandingPageNode() {
+   * Get egift landing page nid.
+   *
+   * @result null|int
+   *   The eGift landing nid or null.
+   **/
+  public function egiftLandingPageNid() {
     // Set cache id for query result.
     $cid = 'egift_landing_page.advanced_page.nid';
 
     // Get data from cache.
-    $cached = $this->cacheBackend->get($cid);
-
-    if ($cached !== FALSE && $cached->valid) {
-      return $cached->data;
+    if ($cache = $this->cacheBackend->get($cid)) {
+      return $cache->data;
     }
 
     // Query nids of type advanced_page and field use as landing page
@@ -236,23 +237,11 @@ class EgiftCardHelper {
     // Set query result with egift landing page nid in cache.
     // This cache tag is invalidated on queue when insert / update / delete
     // advanced_page node.
-    $this->cacheBackend->set($cid, $egift_landing_page, Cache::PERMANENT, ['node_type:advanced_page']);
-
-    return $egift_landing_page;
-  }
-
-  /**
-   * Gets breadcrumb link for egift pages.
-   */
-  public function getBreadcrumbLink() {
-    $landing_page_node_id = $this->egiftLandingPageNode();
-    if (!empty($landing_page_node_id)) {
-      // If eGift landing page exists then link to landing page
-      return Link::createFromRoute($this->t('eGift Card', [], ['context' => 'egift']), 'entity.node.canonical', ['node' => $landing_page_node_id], ['attributes' => ['class' => ['egift-brdcrb-nav']]]);
+    if (!empty($egift_landing_page)) {
+      $this->cacheBackend->set($cid, $egift_landing_page, Cache::PERMANENT, ['node_type:advanced_page']);
     }
 
-    // If eGift landing page doesn't exist then link to the front page.
-    return Link::createFromRoute($this->t('eGift Card', [], ['context' => 'egift']), '<front>', [], ['attributes' => ['class' => ['egift-brdcrb-nav']]]);
+    return $egift_landing_page;
   }
 
 }
