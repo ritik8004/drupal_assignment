@@ -9,7 +9,6 @@ import DeliveryDetailNotice from '../delivery-detail-notice';
 import DeliveryDetails from '../delivery-details';
 import OrderItems from '../order-items';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 const UserOrderDetails = () => {
   const order = drupalSettings.order_details;
@@ -78,28 +77,32 @@ const UserOrderDetails = () => {
           <DeliveryDetails order={order} />
         </div>
 
-        <ConditionalView condition={hasValue(order.online_returns_status)}>
-          <div className="order-item-row" id="online-return-initiated">@todo make react component render here using states</div>
-          <div className="order-item-row delivered-items">
-            <div>
-              <div>{Drupal.t('Delivered Items')}</div>
+        { hasValue(order.online_returns_status) && (
+          <>
+            <div className="order-item-row" id="online-return-initiated">@todo make react component render here using states</div>
+            <div className="order-item-row delivered-items">
+              <div>
+                <div>{Drupal.t('Delivered Items')}</div>
+              </div>
             </div>
-          </div>
-        </ConditionalView>
+          </>
+        )}
 
         <OrderItems products={order.products} />
-        <ConditionalView condition={hasValue(order.cancelled_items_count)}>
-          <div id="cancelled-items" className="order-item-row">
-            <div>
-              <div>{Drupal.t('Cancelled Items')}</div>
+        { hasValue(order.cancelled_items_count) && (
+          <>
+            <div id="cancelled-items" className="order-item-row">
+              <div>
+                <div>{Drupal.t('Cancelled Items')}</div>
+              </div>
             </div>
-          </div>
-          <OrderItems products={order.cancelled_products} cancelled />
-        </ConditionalView>
+            <OrderItems products={order.cancelled_products} cancelled />
+          </>
+        )}
 
-        <ConditionalView condition={hasValue(order.online_returns_status)}>
+        { hasValue(order.online_returns_status) && (
           <div className="order-item-row" id="online-returned-items">@todo make react component render here using states</div>
-        </ConditionalView>
+        )}
 
         <div className="sub-total-row">
           <div className="desktop-only">&nbsp;</div>
@@ -111,7 +114,7 @@ const UserOrderDetails = () => {
           <div className="above-mobile empty--cell">&nbsp;</div>
         </div>
 
-        <ConditionalView condition={hasValue(order.order_details.discount)}>
+        { hasValue(order.order_details.discount) && (
           <div className="discount-row collapse-row">
             <div className="desktop-only">&nbsp;</div>
             <div className="above-mobile">&nbsp;</div>
@@ -121,9 +124,9 @@ const UserOrderDetails = () => {
             </div>
             <div className="above-mobile empty--cell">&nbsp;</div>
           </div>
-        </ConditionalView>
+        )}
 
-        <ConditionalView condition={hasValue(order.order_details.delivery_charge)}>
+        { hasValue(order.order_details.delivery_charge) && (
           <div className="delivery-charge-row">
             <div className="desktop-only">&nbsp;</div>
             <div className="above-mobile">&nbsp;</div>
@@ -133,9 +136,9 @@ const UserOrderDetails = () => {
             </div>
             <div className="above-mobile empty--cell">&nbsp;</div>
           </div>
-        </ConditionalView>
+        )}
 
-        <ConditionalView condition={hasValue(order.order_details.surcharge)}>
+        { hasValue(order.order_details.surcharge) && (
           <div className="surcharge-row collapse-row">
             <div className="desktop-only">&nbsp;</div>
             <div className="above-mobile">&nbsp;</div>
@@ -145,7 +148,7 @@ const UserOrderDetails = () => {
             </div>
             <div className="above-mobile empty--cell">&nbsp;</div>
           </div>
-        </ConditionalView>
+        )}
 
         <div className="total-row">
           <div className="desktop-only">&nbsp;</div>
@@ -161,13 +164,13 @@ const UserOrderDetails = () => {
           <div className="above-mobile empty--cell">&nbsp;</div>
         </div>
 
-        <ConditionalView condition={hasValue(order.vat_text)}>
+        { hasValue(order.vat_text) && (
           <div className="total-row vat-row collapse-row">
             <div className="warm--white">
               <div className="dark">{order.vat_text}</div>
             </div>
           </div>
-        </ConditionalView>
+        )}
       </div>
     </>
   );

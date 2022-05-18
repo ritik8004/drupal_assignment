@@ -1,6 +1,5 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const DeliveryDetails = (props) => {
@@ -11,145 +10,168 @@ const DeliveryDetails = (props) => {
     <>
       {/* @todo test this */}
       <div className="order__user--info">
-        <ConditionalView condition={orderDetails.type === 'cc'}>
-          <div className="label font-small">{Drupal.t('Collection Address')}</div>
-          <div className="store-name-and-address">
-            <div className="store-name dark">{orderDetails.store_name}</div>
-            <div className="store-address">{orderDetails.store_address}</div>
-            <div className="store-phone no-direction">{orderDetails.store_phone}</div>
-            <div className="store-map-link">
-              <a href={orderDetails.view_on_map_link} target="_blank" rel="noopener noreferrer">{Drupal.t('View on map')}</a>
+        { orderDetails.type === 'cc' && (
+          <>
+            <div className="label font-small">{Drupal.t('Collection Address')}</div>
+            <div className="store-name-and-address">
+              <div className="store-name dark">{orderDetails.store_name}</div>
+              <div className="store-address">{orderDetails.store_address}</div>
+              <div className="store-phone no-direction">{orderDetails.store_phone}</div>
+              <div className="store-map-link">
+                <a href={orderDetails.view_on_map_link} target="_blank" rel="noopener noreferrer">{Drupal.t('View on map')}</a>
+              </div>
             </div>
-          </div>
 
-          <div className="contact">
-            <div className="label font-small">{Drupal.t('Collector contact no.')}</div>
-            <div className="dark no-direction">{orderDetails.contact_no}</div>
-          </div>
-        </ConditionalView>
+            <div className="contact">
+              <div className="label font-small">{Drupal.t('Collector contact no.')}</div>
+              <div className="dark no-direction">{orderDetails.contact_no}</div>
+            </div>
+          </>
+        )}
 
-        <ConditionalView condition={orderDetails.type !== 'cc' && hasValue(orderDetails.delivery_address)}>
-          <div className="label font-small">{Drupal.t('Delivery details')}</div>
-          <div>
-            {parse(orderDetails.delivery_address)}
-          </div>
-        </ConditionalView>
+        { orderDetails.type !== 'cc' && hasValue(orderDetails.delivery_address) && (
+          <>
+            <div className="label font-small">{Drupal.t('Delivery details')}</div>
+            <div>
+              {parse(orderDetails.delivery_address)}
+            </div>
+          </>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment_method)}>
+        { hasValue(orderDetails.payment_method) && (
           <div className="mobile-only payment--details">
             <div className="label font-small">{Drupal.t('Payment method')}</div>
             <div className="dark">{orderDetails.payment_method}</div>
           </div>
-        </ConditionalView>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment.referenceNumber)}>
+        { hasValue(orderDetails.payment.referenceNumber) && (
           <div className="mobile-only payment--details">
             <div className="label font-small">{Drupal.t('Reference No')}</div>
             <div className="dark">{orderDetails.payment.referenceNumber}</div>
           </div>
-        </ConditionalView>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment.banktransfer_payment_details)}>
+        { hasValue(orderDetails.payment.banktransfer_payment_details) && (
           <div className="mobile-only banktransfer">{orderDetails.payment.banktransfer_payment_details}</div>
-        </ConditionalView>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment.transactionId)}>
+        { hasValue(orderDetails.payment.transactionId) && (
           <div className="mobile-only transaction-id">
             <div className="label font-small">{Drupal.t('Transaction ID')}</div>
             <div className="dark">{orderDetails.payment.transactionId}</div>
           </div>
-        </ConditionalView>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment.paymentId)}>
+        { hasValue(orderDetails.payment.paymentId) && (
           <div className="mobile-only payment-id">
             <div className="label font-small">{Drupal.t('Payment ID')}</div>
             <div className="dark">{orderDetails.payment.paymentId}</div>
           </div>
-        </ConditionalView>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment.resultCode)}>
+        { hasValue(orderDetails.payment.resultCode) && (
           <div className="mobile-only result-code">
             <div className="label font-small">{Drupal.t('Result code')}</div>
             <div className="dark">{orderDetails.payment.resultCode}</div>
           </div>
-        </ConditionalView>
+        )}
       </div>
       <div className="order__delivery-details">
         {/* @todo test this */}
-        <ConditionalView condition={orderDetails.type === 'cc'}>
-          <div className="label font-small">{Drupal.t('Collection times')}</div>
-          <div>
-            <div className="store-open-hours">
-              <div className="hours--wrapper selector--hours">
-                <div className="open--hours">
-                  {Object.keys(orderDetails.store_open_hours).map((item) => (
-                    <div>
-                      <span className="key-value-key dark">{item.key}</span>
-                      {/* @todo test this */}
-                      <span className="key-value-value">{hasValue(item.value) ? item.value : Drupal.t('Holiday')}</span>
-                    </div>
-                  ))}
+        { orderDetails.type === 'cc' && hasValue(orderDetails.store_open_hours) && (
+          <>
+            <div className="label font-small">{Drupal.t('Collection times')}</div>
+            <div>
+              <div className="store-open-hours">
+                <div className="hours--wrapper selector--hours">
+                  <div className="open--hours">
+                    {Object.keys(orderDetails.store_open_hours).map((item) => (
+                      <div>
+                        <span className="key-value-key dark">{item.key}</span>
+                        {/* @todo test this */}
+                        <span className="key-value-value">{hasValue(item.value) ? item.value : Drupal.t('Holiday')}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ConditionalView>
+          </>
+        )}
 
-        <ConditionalView condition={orderDetails.type !== 'cc' && hasValue(orderDetails.billing_address)}>
-          <div className="label font-small">{Drupal.t('Billing details')}</div>
-          <div>
-            {parse(orderDetails.billing_address)}
-          </div>
-        </ConditionalView>
+        { orderDetails.type !== 'cc' && hasValue(orderDetails.billing_address) && (
+          <>
+            <div className="label font-small">{Drupal.t('Billing details')}</div>
+            <div>
+              {parse(orderDetails.billing_address)}
+            </div>
+          </>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.delivery_method)}>
-          {/* @todo test this */}
+        {/* @todo test this */}
+        { hasValue(orderDetails.delivery_method) && (
           <div className="mobile-only delivery--method">
             <div className="label font-small">{Drupal.t('Delivery method')}</div>
             <div className="dark">{orderDetails.delivery_method}</div>
           </div>
-        </ConditionalView>
+        )}
       </div>
+
       <div className="desktop-only">
-        <ConditionalView condition={orderDetails.type === 'cc' && hasValue(orderDetails.billing_address)}>
-          <div className="label font-small">{Drupal.t('Billing details')}</div>
-          <div>
-            {parse(orderDetails.billing_address)}
-          </div>
-        </ConditionalView>
+        { orderDetails.type === 'cc' && hasValue(orderDetails.billing_address) && (
+          <>
+            <div className="label font-small">{Drupal.t('Billing details')}</div>
+            <div>
+              {parse(orderDetails.billing_address)}
+            </div>
+          </>
+        )}
       </div>
       <div className="above-mobile blend">
         <div className="label payment-method font-small">{Drupal.t('Payment method')}</div>
         <div className="dark">{orderDetails.payment_method}</div>
 
-        <ConditionalView condition={hasValue(orderDetails.payment.referenceNumber)}>
-          <div className="label delivery-method font-small">{Drupal.t('Reference No')}</div>
-          <div className="dark reference-no">{orderDetails.payment.referenceNumber}</div>
-        </ConditionalView>
+        { hasValue(orderDetails.payment.referenceNumber) && (
+          <>
+            <div className="label delivery-method font-small">{Drupal.t('Reference No')}</div>
+            <div className="dark reference-no">{orderDetails.payment.referenceNumber}</div>
+          </>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment.banktransfer_payment_details)}>
-          {orderDetails.payment.banktransfer_payment_details}
-        </ConditionalView>
+        { hasValue(orderDetails.payment.banktransfer_payment_details) && (
+          <>
+            {orderDetails.payment.banktransfer_payment_details}
+          </>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment.transactionId)}>
-          <div className="label transaction-id font-small">{Drupal.t('Transaction ID')}</div>
-          <div className="dark">{orderDetails.payment.transactionId}</div>
-        </ConditionalView>
+        { hasValue(orderDetails.payment.transactionId) && (
+          <>
+            <div className="label transaction-id font-small">{Drupal.t('Transaction ID')}</div>
+            <div className="dark">{orderDetails.payment.transactionId}</div>
+          </>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment.paymentId)}>
-          <div className="label payment-id font-small">{Drupal.t('Payment ID')}</div>
-          <div className="dark">{orderDetails.payment.paymentId}</div>
-        </ConditionalView>
+        { hasValue(orderDetails.payment.paymentId) && (
+          <>
+            <div className="label payment-id font-small">{Drupal.t('Payment ID')}</div>
+            <div className="dark">{orderDetails.payment.paymentId}</div>
+          </>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.payment.resultCode)}>
-          <div className="label result-code font-small">{Drupal.t('Result code')}</div>
-          <div className="dark">{orderDetails.payment.resultCode}</div>
-        </ConditionalView>
+        { hasValue(orderDetails.payment.resultCode) && (
+          <>
+            <div className="label result-code font-small">{Drupal.t('Result code')}</div>
+            <div className="dark">{orderDetails.payment.resultCode}</div>
+          </>
+        )}
 
-        <ConditionalView condition={hasValue(orderDetails.delivery_method)}>
-          <div className="label delivery-method font-small">{Drupal.t('Delivery method')}</div>
-          <div className="dark">{orderDetails.delivery_method}</div>
-        </ConditionalView>
+        { hasValue(orderDetails.delivery_method) && (
+          <>
+            <div className="label delivery-method font-small">{Drupal.t('Delivery method')}</div>
+            <div className="dark">{orderDetails.delivery_method}</div>
+          </>
+        )}
       </div>
       <div className="above-mobile empty--cell">&nbsp;</div>
     </>

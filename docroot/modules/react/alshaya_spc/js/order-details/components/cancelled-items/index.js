@@ -1,19 +1,18 @@
 import React from 'react';
-import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const CancelledItems = (props) => {
   const { order } = props;
+  if (!hasValue(order.cancelled_items_count)) {
+    return null;
+  }
 
   return (
-    <>
-      <ConditionalView condition={order.cancelled_items_count > 0}>
-        <div className="cancel-item">
-          <a href="#cancelled-items" className="cancel-link">
-            {Drupal.t('@count Cancelled', { '@count': order.cancelled_items_count }, {})}
-          </a>
-        </div>
-      </ConditionalView>
-    </>
+    <div className="cancel-item">
+      <a href="#cancelled-items" className="cancel-link">
+        {Drupal.t('@count Cancelled', { '@count': order.cancelled_items_count }, {})}
+      </a>
+    </div>
   );
 };
 
