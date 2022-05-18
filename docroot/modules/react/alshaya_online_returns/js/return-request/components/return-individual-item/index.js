@@ -9,6 +9,13 @@ const ReturnIndividualItem = ({
 }) => {
   const eligibleClass = item.is_returnable ? 'return-eligible' : 'in-eligible';
   const bigTicketClass = item.is_big_ticket ? 'big-ticket-item' : '';
+  let itemQuantity = item.qty_ordered;
+  // For returned items data, we process return data
+  // else we process order items data.
+  if (item.returnData) {
+    itemQuantity = item.returnData.qty_returned !== null
+      ? item.returnData.qty_returned : item.returnData.qty_requested;
+  }
 
   const {
     url: imageUrl,
@@ -43,7 +50,7 @@ const ReturnIndividualItem = ({
             { Drupal.t('Item Code: @sku', { '@sku': item.sku }, { context: 'online_returns' }) }
           </div>
           <div className="item-quantity light">
-            { Drupal.t('Quantity: @quantity', { '@quantity': item.ordered }, { context: 'online_returns' }) }
+            { Drupal.t('Quantity: @quantity', { '@quantity': itemQuantity }, { context: 'online_returns' }) }
           </div>
         </div>
 

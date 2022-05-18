@@ -17,18 +17,18 @@ function getReturnIdFromUrl() {
  * Utility function to get details of all the returned items.
  */
 function getReturnedItems(returnData) {
-  let returnedItems = [];
+  const returnedItems = [];
   if (hasValue(drupalSettings.returnInfo)
     && hasValue(drupalSettings.returnInfo.orderDetails)
     && hasValue(drupalSettings.returnInfo.orderDetails['#products'])) {
     // Filter out returned items from order details array.
     const allProducts = drupalSettings.returnInfo.orderDetails['#products'];
     const returnedItemsRaw = returnData.items;
-    returnedItems = allProducts.filter(
-      (product) => returnedItemsRaw.some(
-        (returnItem) => product.item_id === returnItem.order_item_id,
-      ),
-    );
+    returnedItemsRaw.forEach((returnItem) => {
+      const productDetails = allProducts.find((item) => item.item_id === returnItem.order_item_id);
+      const mergedItem = Object.assign(productDetails, { returnData: returnItem });
+      returnedItems.push(mergedItem);
+    });
   }
   return returnedItems;
 }

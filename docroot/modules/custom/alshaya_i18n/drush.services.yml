@@ -7,5 +7,6 @@ services:
       - '@locale.storage'
       - '@language_manager'
       - '@database'
+      - '@datetime.time'
     tags:
       - { name: drush.command }

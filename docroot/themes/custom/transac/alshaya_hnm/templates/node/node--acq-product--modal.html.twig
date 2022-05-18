@@ -56,10 +56,6 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
           <span class="field__value">{{ content.item_code }}</span>
         </div>
 
-        {% if aura_enabled is defined and aura_enabled %}
-          <div id="aura-pdp-modal"></div>
-        {% endif %}
-
       </div>
 
       <div class="content__main {{ image_slider_position_pdp }}">
@@ -76,6 +72,10 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
       <div class="content__sidebar">
         <div class="basic-details-wrapper">
           {{ content.field_skus }}
+
+          {% if aura_enabled is defined and aura_enabled %}
+            <div id="aura-pdp-modal"></div>
+          {% endif %}
         </div>
 
         {% if sku_out_of_stock %}

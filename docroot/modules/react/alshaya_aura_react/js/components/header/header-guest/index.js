@@ -37,6 +37,7 @@ const HeaderGuest = (props) => {
         />
         <SignUpCompleteHeader
           isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
+          openHeaderModal={openHeaderModal}
           cardNumber={cardNumber}
           noRegisterLinks={!isDesktop}
           notYouFailed={notYouFailed}
