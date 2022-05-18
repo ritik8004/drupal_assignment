@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 import Aura from '../aura';
 import TotalItemCount from '../total-item-count';
 import CancelledItems from '../cancelled-items';
-import OnlineReturns from '../online-returns';
+import OnlineReturnEligibility from '../online-return-eligibility';
 import OnlineBooking from '../online-booking';
 import DeliveryDetailNotice from '../delivery-detail-notice';
 import DeliveryDetails from '../delivery-details';
@@ -69,7 +69,7 @@ const UserOrderDetails = () => {
           <Aura order={order} />
         </div>
 
-        <OnlineReturns order={order} />
+        <OnlineReturnEligibility order={order} />
         <OnlineBooking order={order} />
         <DeliveryDetailNotice order={order} />
 
@@ -79,7 +79,7 @@ const UserOrderDetails = () => {
 
         { hasValue(order.online_returns_status) && (
           <>
-            <div className="order-item-row" id="online-return-initiated">@todo make react component render here using states</div>
+            <div className="order-item-row" id="online-return-initiated">@todo render online return initiated</div>
             <div className="order-item-row delivered-items">
               <div>
                 <div>{Drupal.t('Delivered Items')}</div>
@@ -101,7 +101,7 @@ const UserOrderDetails = () => {
         )}
 
         { hasValue(order.online_returns_status) && (
-          <div className="order-item-row" id="online-returned-items">@todo make react component render here using states</div>
+          <div className="order-item-row" id="online-returned-items">@todo render online returned items</div>
         )}
 
         <div className="sub-total-row">

@@ -1,5 +1,28 @@
 /* eslint-disable */
 
+import {
+  removeFullScreenLoader,
+  showFullScreenLoader
+} from '../../../js/utilities/showRemoveFullScreenLoader';
+import { getReturnsByOrderId } from './return_api_helper';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
+
+/**
+ * Method to handle the modal on load event and render component.
+ */
+const getReturns = async () => {
+  const { orderEntityId } = drupalSettings.onlineReturns;
+  showFullScreenLoader();
+  const returnData = await getReturnsByOrderId(orderEntityId);
+  removeFullScreenLoader();
+  // @todo: Get return status and return message from api call.
+  if (hasValue(returnData) && hasValue(returnData.data) && hasValue(returnData.data.items)) {
+    const returns = processReturnData(returnData.data.items);
+    return returns;
+  }
+  return null;
+};
+
 /**
  * Utility function to process return data.
  */
@@ -60,6 +83,7 @@ function isReturnClosed(returnItem) {
 }
 
 export {
+  getReturns,
   processReturnData,
   getTypeFromReturnItem,
   isReturnClosed,

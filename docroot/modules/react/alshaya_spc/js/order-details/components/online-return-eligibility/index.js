@@ -2,7 +2,7 @@ import React from 'react';
 import ReturnEligibility from '../../../../../alshaya_online_returns/js/order-details/return-eligibility';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
-const OnlineReturns = (props) => {
+const OnlineReturnEligibility = (props) => {
   const { order } = props;
   if (!hasValue(order.online_returns_status)) {
     return null;
@@ -19,4 +19,4 @@ const OnlineReturns = (props) => {
   );
 };
 
-export default OnlineReturns;
+export default OnlineReturnEligibility;
