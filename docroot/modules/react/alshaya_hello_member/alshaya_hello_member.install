@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_hello_member.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_hello_member_install() {
+  // Move myaccountshellomemberblock and block to proper theme.
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+
+  $config_factory = \Drupal::configFactory();
+
+  // Set the My Accounts hello member block
+  // to appear just below the page title.
+  $page_title_weight = (int) $config_factory->get('block.block.page_title')->get('weight');
+  $config_factory->getEditable('block.block.myaccountshellomemberblock')->set('weight', $page_title_weight + 1)->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_hello_member', 'alshaya_hello_member.translation');
+  if ($translations = _alshaya_hello_member_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}

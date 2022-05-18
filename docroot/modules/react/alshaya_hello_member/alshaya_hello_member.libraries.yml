@@ -1,0 +1,5 @@
+alshaya_hello_member_my_accounts:
+  js:
+    dist/my_accounts.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

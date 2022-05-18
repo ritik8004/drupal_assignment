@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_hello_member
+    - user
+  theme:
+    - alshaya_white_label
+id: myaccountshellomemberblock
+theme: alshaya_white_label
+region: content
+weight: -73
+provider: null
+plugin: my_accounts_hello_member_block
+settings:
+  id: my_accounts_hello_member_block
+  label: 'My Accounts Hello member block'
+  provider: alshaya_hello_member
+  label_display: '0'
+visibility:
+  user_role:
+    id: user_role
+    roles:
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
