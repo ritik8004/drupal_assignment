@@ -30,7 +30,6 @@ const OrderItems = (props) => {
               <>
                 {Object.values(product.attributes).map((attribute) => (
                   <div className="light attr-wrapper" key={`${attribute.label}_${attribute.value}`}>
-                    {/* @todo test order page in Arabic */}
                     {attribute.label}
                     :
                     {attribute.value}
@@ -62,16 +61,9 @@ const OrderItems = (props) => {
               { hasValue(product.total) && (
                 <>
                   <div className="light">{Drupal.t('Total')}</div>
-                  { hasValue(cancelled) && (
-                    <div className="dark cancelled-total-price">
-                      {parse(product.total)}
-                    </div>
-                  )}
-                  { !hasValue(cancelled) && (
-                    <div className="dark">
-                      {parse(product.total)}
-                    </div>
-                  )}
+                  <div className={`dark ${hasValue(cancelled) ? 'cancelled-total-price' : ''}`}>
+                    {parse(product.total)}
+                  </div>
                 </>
               )}
 
@@ -89,20 +81,12 @@ const OrderItems = (props) => {
           </div>
 
           <div className="above-mobile blend">
-            {/* @todo This is repeated. Improve logic to add a simple class */}
             { hasValue(product.total) && (
               <>
                 <div className="light">{Drupal.t('Total')}</div>
-                { hasValue(cancelled) && (
-                  <div className="dark cancelled-total-price">
-                    {parse(product.total)}
-                  </div>
-                )}
-                { !hasValue(cancelled) && (
-                  <div className="dark">
-                    {parse(product.total)}
-                  </div>
-                )}
+                <div className={`dark ${hasValue(cancelled) ? 'cancelled-total-price' : ''}`}>
+                  {parse(product.total)}
+                </div>
               </>
             )}
           </div>

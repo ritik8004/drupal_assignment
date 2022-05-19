@@ -102,7 +102,6 @@ const OrderDeliveryDetails = (props) => {
                       {Object.keys(orderDetails.store_open_hours).map((item) => (
                         <div>
                           <span className="key-value-key dark">{item.key}</span>
-                          {/* @todo test this */}
                           <span className="key-value-value">{hasValue(item.value) ? item.value : Drupal.t('Holiday')}</span>
                         </div>
                       ))}
@@ -122,7 +121,6 @@ const OrderDeliveryDetails = (props) => {
             </>
           )}
 
-          {/* @todo test this */}
           { hasValue(orderDetails.delivery_method) && (
             <div className="mobile-only delivery--method">
               <div className="label font-small">{Drupal.t('Delivery method')}</div>
