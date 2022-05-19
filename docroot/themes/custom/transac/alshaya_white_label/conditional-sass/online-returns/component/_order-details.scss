@@ -194,7 +194,7 @@
         margin-bottom: 0;
 
         @include breakpoint($tablet) {
-          padding-top: rem(32);
+          padding-top: rem(24);
         }
 
         .return-status {
@@ -213,6 +213,10 @@
 
           &.closed {
             color: $online-return-rejected-label;
+          }
+
+          &.processed_closed {
+            color: $online-return-refunded-label;
           }
         }
 
