@@ -17,37 +17,19 @@ else
   exit 1
 fi
 
+# Get the list of environments using the API.
 stage_res=$(curl -sk "https://www.alshaya.acsitefactory.com/api/v1/stage" -u ${username}:${api_key} --max-time 60)
 envs=$(php -r '$json = '"'$stage_res'"'; echo implode(" ", array_keys((array)json_decode($json)->environments));')
 
+# Get the list of stacks using the API. Exclude the "Alshaya DC 1" stack.
+stacks_res=$(curl -sk "https://www.alshaya.acsitefactory.com/api/v1/stacks" -u ${username}:${api_key} --max-time 60)
+stacks=$(php -r '$json = '"'$stacks_res'"'; $stacks = (array)json_decode($json)->stacks; if (isset($stacks[5]) && $stacks[5] === "Alshaya DC 1") { unset($stacks[5]); } echo implode(" ", array_keys($stacks));')
+
+# For each env+stack combination, print the deployed branch.
 for env in $envs ; do
-  # Get branch deployed on Stack 1.
-  vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=1" -u ${username}:${api_key} --max-time 30)
-  curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
-  echo "$env: $curr_branch"
-
-  # Get branch deployed on Stack 2.
-  vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=2" -u ${username}:${api_key} --max-time 30)
-  curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
-  echo "$env: $curr_branch"
-
-  # Get branch deployed on Stack 3.
-  vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=4" -u ${username}:${api_key} --max-time 30)
-  curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
-  echo "$env: $curr_branch"
-
-  # Get branch deployed on Stack 4.
-  vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=6" -u ${username}:${api_key} --max-time 30)
-  curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
-  echo "$env: $curr_branch"
-
-  # Get branch deployed on Stack 5.
-  vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=7" -u ${username}:${api_key} --max-time 30)
-  curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
-  echo "$env: $curr_branch"
-
-  # Get branch deployed on Stack 7.
-  vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=11" -u ${username}:${api_key} --max-time 30)
-  curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
-  echo "$env: $curr_branch"
+  for stack in $stacks ; do
+    vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=$stack" -u ${username}:${api_key} --max-time 30)
+    curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
+    echo "Stack $stack - Env $env: $curr_branch"
+  done
 done
