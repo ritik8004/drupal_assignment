@@ -11,6 +11,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update arabic string translation for View all.
+ */
+function alshaya_master_update_8053() {
+  // Add string translations.
+  $strings = [
+    'View All' => [
+      'ar' => 'اظهار الكل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adds storage config.
  */
 function alshaya_master_update_8052() {
@@ -2233,6 +2248,9 @@ function alshaya_master_install() {
     ],
     'Sort by' => [
       'ar' => 'رتبي حسب',
+    ],
+    'View All' => [
+      'ar' => 'اظهار الكل',
     ],
   ];
 
