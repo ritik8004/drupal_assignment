@@ -48,7 +48,7 @@ done
 echo "$sites" | while IFS= read -r site
 do
   # Get the installed profile on the given site.
-  profile="$(drush -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
+  profile="$(drush -l $site.$env-alshaya.acsitefactory.com php-eval 'echo \Drupal::installProfile();')"
 
   # For transac sites, we launch the commerce clean.
   if [ $profile = "alshaya_transac" ]
