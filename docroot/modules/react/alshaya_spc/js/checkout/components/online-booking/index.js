@@ -238,7 +238,7 @@ export default class OnlineBooking extends React.Component {
       appointment_slot_time: selectedScheduleDetails.appointment_slot_time,
       appointment_length_time: selectedScheduleDetails.appointment_length_time,
       existing_hold_confirmation_number:
-      bookingDetails.hfd_appointment_details.hold_confirmation_number,
+        bookingDetails.hfd_appointment_details.hold_confirmation_number,
     };
 
     // Hold the new slot for the user, overriding the existing slot.
@@ -297,7 +297,7 @@ export default class OnlineBooking extends React.Component {
             {/**
              * Validate bookingDetails have data, otherwise display the internal error message.
              */}
-            { hasValue(bookingDetails.hfd_appointment_details) && (
+            {hasValue(bookingDetails.hfd_appointment_details) && (
               <>
                 <div className="online-booking__title">
                   {
@@ -308,11 +308,12 @@ export default class OnlineBooking extends React.Component {
                   }
                 </div>
                 <div className="online-booking__delivery">
+                  <span className="online-booking__delivery-icon" />
                   <div className="online-booking__available-delivery">
                     {
                       parse(
                         Drupal.t(
-                          'Earliest available delivery on !appointment_date between !time_slot',
+                          'Delivery Scheduled on !appointment_date between !time_slot',
                           {
                             '!appointment_date': `<div class="online-booking__available-delivery-slot"><div class="online-booking__available-delivery-date">
                             ${moment(bookingDetails.hfd_appointment_details.appointment_date).format('DD')}-
@@ -326,7 +327,7 @@ export default class OnlineBooking extends React.Component {
                     }
                   </div>
                   <div className="online-booking__change-delivery-schedule" onClick={() => this.openScheduleDeliveryModal()}>
-                    {Drupal.t('Change Delivery Schedule', {}, { context: 'online_booking' })}
+                    {Drupal.t('Change Schedule', {}, { context: 'online_booking' })}
                   </div>
                 </div>
                 <Popup
@@ -345,32 +346,42 @@ export default class OnlineBooking extends React.Component {
                 </Popup>
                 <ConditionalView condition={bookingDetails.status}>
                   <div className="online-booking__hold-delivery">
-                    {
-                      parse(
-                        Drupal.t(
-                          'We will hold this delivery schedule for next <b>2 hours</b>',
-                          {}, { context: 'online_booking' },
-                        ),
-                      )
-                    }
+                    <span className="online-booking__hold-delivery-icon" />
+                    <div className="online-booking__hold-delivery-text">
+                      {
+                        parse(
+                          Drupal.t(
+                            'We will hold this delivery schedule for the next 2 hours',
+                            {}, { context: 'online_booking' },
+                          ),
+                        )
+                      }
+                    </div>
                   </div>
                 </ConditionalView>
                 {/**
                  * Placeholder to display the error message when api return success false.
                  */}
                 <ConditionalView condition={!bookingDetails.status}>
-                  <div className="online-booking__error-message">{bookingDetails.error_message}</div>
+                  <div className="online-booking__error-message">
+                    <span className="online-booking__error-message-icon" />
+                    <div className="online-booking__error-message-text">
+                      {bookingDetails.error_message}
+                    </div>
+                  </div>
                 </ConditionalView>
                 <div className="online-booking__hold-notification">
-                  <button type="button" className="online-booking__hold-notification-icon" />
-                  {
-                    parse(
-                      Drupal.t(
-                        'Once the order is placed, changes are not allowed <b>three days</b> before the selected schedule.',
-                        {}, { context: 'online_booking' },
-                      ),
-                    )
-                  }
+                  <span className="online-booking__hold-notification-icon" />
+                  <div className="online-booking__hold-notification-text">
+                    {
+                      parse(
+                        Drupal.t(
+                          'Once the order is placed, changes are not allowed <b>three days</b> before the selected schedule.',
+                          {}, { context: 'online_booking' },
+                        ),
+                      )
+                    }
+                  </div>
                 </div>
               </>
             )}
@@ -378,15 +389,18 @@ export default class OnlineBooking extends React.Component {
              * Placeholder to display the default internal error message.
              */}
             <ConditionalView condition={!hasValue(bookingDetails.hfd_appointment_details)
-            && !hasValue(bookingDetails.status)}
+              && !hasValue(bookingDetails.status)}
             >
               <div className="online-booking__error-message">
-                {
-                  Drupal.t(
-                    'Online booking: Sorry, something went wrong. Please try again later.',
-                    {}, { context: 'online_booking' },
-                  )
-                }
+                <span className="online-booking__error-message-icon" />
+                <div className="online-booking__error-message-text">
+                  {
+                    Drupal.t(
+                      'Online booking: Sorry, something went wrong. Please try again later.',
+                      {}, { context: 'online_booking' },
+                    )
+                  }
+                </div>
               </div>
             </ConditionalView>
             <span className="spc-price">{price}</span>
