@@ -6,7 +6,9 @@ repos="alshaya@svn-5975.enterprise-g1.hosting.acquia.com:alshaya.git alshaya2@sv
 for repo in $repos ; do
   i=0
   to_delete=""
-  refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | sort -r -t '/' -k 3 -V)
+
+  # Get the release tags and keep the last ones (using nb_to_keep).
+  refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -E "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | sort -r -t '/' -k 3 -V)
   for ref in $refs ; do
     tag=$(echo $ref | cut -d'/' -f3)
 
@@ -20,6 +22,19 @@ for repo in $repos ; do
       else
         to_delete+=" $tag"
       fi
+    fi
+  done
+
+  # Get the other tags except the "WELCOME" one.
+  refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | grep -o -vE "refs/tags/WELCOME" | sort -r -t '/' -k 3 -V)
+  for ref in $refs ; do
+    tag=$(echo $ref | cut -d'/' -f3)
+
+    echo "Marking $tag as to be deleted"
+    if [ "$to_delete" = "" ] ; then
+      to_delete="$tag"
+    else
+      to_delete+=" $tag"
     fi
   done
   echo

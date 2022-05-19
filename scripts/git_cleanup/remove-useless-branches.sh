@@ -3,7 +3,7 @@
 script_name=$0
 script_full_path=$(dirname "$0")
 
-deployed_branches=$($script_full_path/get-deployed-branches.sh | cut -d' ' -f2)
+deployed_branches=$($script_full_path/get-deployed-branches.sh | cut -d' ' -f6)
 echo "Deployed branches:"
 echo $deployed_branches
 echo
