@@ -22,7 +22,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\redirect\RedirectRepository;
-use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\file\Entity\File;
 use Drupal\Core\Entity\EntityInterface;
@@ -125,7 +125,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Product category tree.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   The renderer.
    * @param \Drupal\redirect\RedirectRepository $redirect_repository
    *   Redirect repository.
@@ -156,7 +156,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     ModuleHandlerInterface $module_handler,
     ProductCategoryTreeInterface $product_category_tree,
     ConfigFactoryInterface $config_factory,
-    APIWrapper $api_wrapper,
+    AlshayaApiWrapper $api_wrapper,
     RedirectRepository $redirect_repository,
     SkuInfoHelper $sku_info_helper,
     BlockManagerInterface $block_plugin_manager,
