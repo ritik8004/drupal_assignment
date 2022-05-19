@@ -374,6 +374,25 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
               ] + $default_values,
             ],
           ],
+          'image_title_subtitle_link' => [
+            'callback' => 'prepareParagraphImageTitleSubtitleLink',
+            'fields' => [
+              'field_title' => [
+                'label' => 'title',
+              ] + $default_values,
+              'field_sub_title' => [
+                'label' => 'subtitle',
+              ] + $default_values,
+              'field_banner' => [
+                'callback' => 'getImages',
+                'label' => 'field_banner',
+              ] + $default_values,
+              'field_links' => [
+                'callback' => 'getFieldLink',
+                'label' => 'url',
+              ] + $default_values,
+            ],
+          ],
         ],
       ];
     }
@@ -697,6 +716,44 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * Prepare paragraph data based on given fields for given entity.
    *
    * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   Paragrpah entity.
+   * @param array $fields
+   *   Paragraph fields.
+   *
+   * @return array
+   *   Data array.
+   */
+  public function prepareParagraphImageTitleSubtitleLink(ParagraphInterface $entity, array $fields) {
+    $data = [];
+    foreach ($fields as $field_name => $field_array) {
+      if (empty($row = $this->processParagraphReferenceField($entity, $field_name))) {
+        $row = $entity->get($field_name)->getValue();
+        if ($field_name == 'field_banner' || $field_name == 'thumbnail') {
+          if (!empty($row)) {
+            $image_file = $this->fileStorage->load($row[0]['target_id']);
+            if ($image_file instanceof File) {
+              $row[0]['url'] = file_create_url($image_file->getFileUri());
+            }
+          }
+        }
+        if ($field_name == 'field_link' || $field_name == 'field_button_link') {
+          if (!empty($row) && UrlHelper::isValid($row[0]['uri'])) {
+            $url_object = Url::fromUri($row[0]['uri']);
+            if (isset($url_object)) {
+              $row[0]['deeplink'] = $this->getDeepLinkFromUrl($url_object);
+            }
+          }
+        }
+      }
+      $data[$field_name] = $row;
+    }
+    return $data;
+  }
+
+  /**
+   * Prepare paragraph data based on given fields for given entity.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
    *   The paragraph entity object.
    * @param array $fields
    *   The array of fields to return for given entity.
@@ -892,6 +949,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       }
       elseif ($item['plugin_id'] == 'alshaya_dp_navigation_link' || $item['plugin_id'] == 'alshaya_rcs_dp_app_navigation') {
         return $this->prepareAppNavigationLinks($item);
+      }
+      elseif ($item['plugin_id'] == 'alshaya_check_balance') {
+        // This is for a custom block created for eGift balance check.
+        return $item['settings'];
       }
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
