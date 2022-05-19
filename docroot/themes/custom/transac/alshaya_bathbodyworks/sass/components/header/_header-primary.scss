@@ -670,6 +670,8 @@ header .block-views-exposed-filter-blocksearch-page {
   .menu__in {
     margin-top: -2.5rem;
     margin-#{$right}: 0.51rem;
+    height: rem(32);
+    width: rem(32);
 
     @include icon(chevron#{$right}, after) {
       font-size: 2rem;
