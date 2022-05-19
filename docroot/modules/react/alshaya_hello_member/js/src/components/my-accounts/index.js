@@ -2,6 +2,7 @@
 import React from 'react';
 import MembershipPopup from './membership-popup';
 import MyBenefits from './my-benefits';
+import MyPoints from './my-points';
 
 class MyAccount extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class MyAccount extends React.Component {
           membershipStatus={membershipStatus}
         />
         <MyBenefits />
+        <MyPoints />
       </>
     );
   }

@@ -1,6 +1,5 @@
 import React from 'react';
 import MyOffersAndVouchers from './my-offers-vouchers';
-import MyPoints from './my-points';
 
 class MyBenefits extends React.Component {
   constructor(props) {
@@ -22,7 +21,6 @@ class MyBenefits extends React.Component {
     return (
       <div className="my-benefits-wrapper">
         <MyOffersAndVouchers />
-        <MyPoints />
       </div>
     );
   }
