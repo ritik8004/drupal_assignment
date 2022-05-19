@@ -67,23 +67,25 @@ class ProcessedItem extends React.Component {
               {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
             </div>
           </div>
-          <ConditionalView condition={showPrintLabelBtn}>
-            <div className="print-return-label-wrapper">
-              <a className="print-label-button" href={this.getPrintLabelPdfLink()}>
-                {Drupal.t('Print Return Label', {}, { context: 'online_returns' })}
-              </a>
-            </div>
-          </ConditionalView>
-          <ConditionalView condition={cancelBtnState}>
-            <div className="cancel-return-button-wrapper">
-              <button
-                type="button"
-                onClick={this.showCancelReturnPopup}
-              >
-                <span className="cancel-button-label">{Drupal.t('Cancel Return', {}, { context: 'online_returns' })}</span>
-              </button>
-            </div>
-          </ConditionalView>
+          <div className="print-cancel-wrapper">
+            <ConditionalView condition={showPrintLabelBtn}>
+              <div className="print-return-label-wrapper">
+                <a className="print-label-button" href={this.getPrintLabelPdfLink()}>
+                  {Drupal.t('Print Return Label', {}, { context: 'online_returns' })}
+                </a>
+              </div>
+            </ConditionalView>
+            <ConditionalView condition={cancelBtnState}>
+              <div className="cancel-return-button-wrapper">
+                <button
+                  type="button"
+                  onClick={this.showCancelReturnPopup}
+                >
+                  <span className="cancel-button-label">{Drupal.t('Cancel Return', {}, { context: 'online_returns' })}</span>
+                </button>
+              </div>
+            </ConditionalView>
+          </div>
         </div>
         <ConditionalView condition={popup}>
           <CancelReturnPopUp
