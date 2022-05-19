@@ -304,7 +304,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_earn_with_this_purchase',
-      'value' => t('Earn <span><b>@pts</b> points with Aura</span> on this purchase.', [], ['context' => 'aura']),
+      'value' => t('Earn <span><b>!pts</b> points with Aura</span> on this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_or',
@@ -328,7 +328,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_redeem_points_msg',
-      'value' => t('Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.', [], ['context' => 'aura']),
+      'value' => t('Earn <span><b>!pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'app_store_link_text',
