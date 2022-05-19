@@ -216,6 +216,32 @@ function getPdpSwatchImageUrl(product, childSku) {
   return swatchImageUrl;
 }
 
+/**
+ * Removes unavailable option values from provided configurable options.
+ *
+ * @param {string} sku
+ *   SKU value.
+ * @param {object} configurableOptions
+ *   Configurable options of the product.
+ *
+ * @returns {object}
+ *   The configurable options minus the unavailable values.
+ */
+function disableUnavailableOptions(sku, configurableOptions) {
+  const combinations = window.commerceBackend.getConfigurableCombinations(sku);
+  // Clone this so as to not modify the original object.
+  configurableOptionsClone = JSON.parse(JSON.stringify(configurableOptions));
+  configurableOptionsClone.forEach(function eachOption(option) {
+    option.values.forEach(function eachValue(value, index) {
+      if (typeof combinations.attribute_sku[option.attribute_code][value.value_index] === 'undefined') {
+        option.values.splice(index, 1);
+      }
+    });
+  });
+
+  return configurableOptionsClone;
+}
+
 exports.render = function render(
   settings,
   placeholder,
@@ -568,7 +594,9 @@ exports.computePhFilters = function (input, filter) {
           ? drupalSettings.hidden_form_attributes
           : [];
 
-        configurableOptions.forEach((option) => {
+        const availableOptions = disableUnavailableOptions(input.sku, configurableOptions);
+
+        availableOptions.forEach((option) => {
           // Get the field wrapper div.
           const optionsListWrapper = jQuery('.rcs-templates--form_element_select').clone().children();
           // The list containing the options.
