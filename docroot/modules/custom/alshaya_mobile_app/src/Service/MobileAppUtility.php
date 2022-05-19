@@ -29,7 +29,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\ResourceResponse;
-use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\redirect\RedirectRepository;
 use Drupal\Core\Database\Connection;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
@@ -142,7 +142,7 @@ class MobileAppUtility {
   /**
    * API Wrapper object.
    *
-   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
   protected $apiWrapper;
 
@@ -229,7 +229,7 @@ class MobileAppUtility {
    *   Product category tree.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   The ApiWrapper object.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
@@ -255,7 +255,7 @@ class MobileAppUtility {
                               ModuleHandlerInterface $module_handler,
                               ProductCategoryTreeInterface $product_category_tree,
                               ConfigFactoryInterface $config_factory,
-                              APIWrapper $api_wrapper,
+                              AlshayaApiWrapper $api_wrapper,
                               RendererInterface $renderer,
                               RedirectRepository $redirect_repsitory,
                               SkuInfoHelper $sku_info_helper,
@@ -806,7 +806,7 @@ class MobileAppUtility {
     $user = FALSE;
     // Try to get user from mdc and create new user account.
     try {
-      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
       $customer = $this->apiWrapper->getCustomer($email);
 
       if (!empty($customer)) {
