@@ -26,6 +26,7 @@ import cartActions from '../../../utilities/cart_actions';
 import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
 import isAuraEnabled from '../../../../../js/utilities/helper';
 import PaymentMethodTabby from '../payment-method-tabby';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 
 export default class PaymentMethod extends React.Component {
@@ -42,6 +43,12 @@ export default class PaymentMethod extends React.Component {
 
   componentDidMount() {
     setUpapiApplePayCofig();
+    // Check if the tabby is enabled.
+    if (Tabby.isTabbyEnabled()) {
+      const { cart } = this.props;
+      // Initialize the tabby popup for info icon.
+      Drupal.tabbyPromoPopup(cart.cart.totals.base_grand_total);
+    }
   }
 
   validateBeforePlaceOrder = async () => {
