@@ -517,16 +517,16 @@ function _alshaya_spc_translations() {
       'ar' => 'سيتم توصيل جميع المنتجات في عربة التسوق حسب تاريخك المفضل',
       'context' => 'online_booking',
     ],
-    'Earliest available delivery on !appointment_date between !time_slot' => [
-      'ar' => 'أقرب موعد توصيل متوفر بتاريخ !appointment_date في الساعة !time_slot',
+    'Delivery Scheduled on !appointment_date between !time_slot' => [
+      'ar' => 'تم تحديد موعد التوصيل بتاريخ !appointment_date في الفترة ما بين !time_slot',
       'context' => 'online_booking',
     ],
-    'Change Delivery Schedule' => [
-      'ar' => 'تغيير موعد التوصيل',
+    'Change Schedule' => [
+      'ar' => 'تغيير الموعد',
       'context' => 'online_booking',
     ],
-    'We will hold this delivery schedule for next <b>2 hours</b>' => [
-      'ar' => 'سنحتفظ بموعد التوصيل خلال <b>الساعتين </b> القادمتين',
+    'We will hold this delivery schedule for the next 2 hours' => [
+      'ar' => 'سنحتفظ بموعد التوصيل هذا خلال الساعتين القادمتين',
       'context' => 'online_booking',
     ],
     'Once the order is placed, changes are not allowed <b>three days</b> before the selected schedule.' => [

@@ -89,6 +89,7 @@
     font-size: 1rem;
     padding: 0 1rem;
     letter-spacing: 0.071rem;
+    text-transform: uppercase;
 
     @include breakpoint($only-mobile) {
       width: 100%;
