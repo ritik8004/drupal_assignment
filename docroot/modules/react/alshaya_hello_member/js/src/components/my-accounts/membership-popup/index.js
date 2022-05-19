@@ -31,9 +31,6 @@ class MembershipPopup extends React.Component {
           closeOnEscape={false}
         >
           <div className="hello-member-popup-form">
-            <div className="title-block">
-              <a className="close-modal" onClick={(e) => this.closeModal(e)}>Close</a>
-            </div>
             <MembershipInfo />
           </div>
         </Popup>

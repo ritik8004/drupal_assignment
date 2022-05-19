@@ -766,3 +766,8 @@ online-booking:
   css:
     theme:
       css/conditional-sass/online-booking/online-booking.ltr.css: {}
+
+my-accounts-hello-member:
+  css:
+    theme:
+      css/conditional-sass/my-accounts-hello-member/my-accounts-hello-member.ltr.css: {}

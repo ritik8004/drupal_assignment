@@ -1,0 +1,73 @@
+#my-accounts-hello-member {
+  .hello-member-popup-form {
+    background: $hm-membership-success-popup-bg;
+    text-align: center;
+
+    .hello-membership-info {
+      padding: rem(48) rem(60);
+
+      @include breakpoint($only-mobile) {
+        padding: rem(40) rem(24);
+      }
+
+      .hello-membership- {
+        &title {
+          font-size: rem(32);
+          margin-bottom: rem(24);
+          color: $hm-membership-success-popup-title;
+        }
+
+        &details {
+          margin-bottom: rem(46);
+
+          @include breakpoint($only-mobile) {
+            font-size: rem(14);
+            padding: 0 rem(32);
+          }
+        }
+
+        &info-button {
+          @extend %button-wide;
+
+          margin-bottom: rem(36);
+          min-width: rem(246);
+          padding: rem(15);
+        }
+
+        &info-link {
+          text-decoration: underline;
+          font-size: rem(14);
+          margin-bottom: rem(29);
+        }
+
+        &terms-privacy {
+          color: $hm-content-link;
+          font-size: rem(12);
+
+          @include breakpoint($only-mobile) {
+            font-size: rem(10);
+          }
+
+          span {
+            text-decoration: underline;
+            margin: 0 rem(4);
+          }
+        }
+      }
+    }
+  }
+
+  .hello_member_popup-content {
+    padding: 0 !important;
+    width: 30% !important;
+    border: 0 !important;
+
+    @include breakpoint($only-tablet) {
+      width: 50% !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      width: 95% !important;
+    }
+  }
+}

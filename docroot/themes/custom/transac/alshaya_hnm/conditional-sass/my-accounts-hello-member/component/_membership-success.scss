@@ -1,0 +1,18 @@
+#my-accounts-hello-member {
+  .hello-member-popup-form {
+    .hello-membership-info {
+      .hello-membership- {
+        &info-button {
+          font-size: rem(16);
+          font-family: $alshaya-bold;
+        }
+
+        &terms-privacy {
+          span {
+            font-family: $hnm-demibold;
+          }
+        }
+      }
+    }
+  }
+}

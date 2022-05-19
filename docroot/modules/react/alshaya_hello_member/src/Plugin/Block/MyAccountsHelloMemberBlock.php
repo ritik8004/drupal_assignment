@@ -94,6 +94,11 @@ class MyAccountsHelloMemberBlock extends BlockBase implements ContainerFactoryPl
     return [
       '#theme' => 'my_accounts_hello_member_block',
       '#strings' => _alshaya_hello_member_static_strings(),
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/my-accounts-hello-member',
+        ],
+      ],
     ];
   }
 

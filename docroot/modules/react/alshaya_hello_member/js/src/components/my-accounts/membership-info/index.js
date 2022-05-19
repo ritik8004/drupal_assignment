@@ -16,6 +16,7 @@ const MembershipInfo = () => (
       {getStringMessage('membership_info_link')}
     </div>
     <div className="hello-membership-terms-privacy">
+      {Drupal.t('Read')}
       <span className="terms-link">{getStringMessage('membership_terms')}</span>
       {Drupal.t('and')}
       <span className="privacy-link">{getStringMessage('membership_privacy')}</span>
