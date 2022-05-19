@@ -6,6 +6,7 @@ use Drupal\user\UserInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
@@ -15,6 +16,9 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\address\Repository\CountryRepository;
+use Drupal\alshaya_api\AlshayaApiWrapper;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Online controller to prepare data for return pages.
@@ -57,6 +61,13 @@ class OnlineReturnController extends ControllerBase {
   protected $onlineReturnsApiHelper;
 
   /**
+   * Api wrapper.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $apiWrapper;
+
+  /**
    * The language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -87,6 +98,8 @@ class OnlineReturnController extends ControllerBase {
    *   The language manager.
    * @param \Drupal\address\Repository\CountryRepository $address_country_repository
    *   Address Country Repository service object.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   Api wrapper.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleHandlerInterface $module_handler,
@@ -94,7 +107,8 @@ class OnlineReturnController extends ControllerBase {
                               EntityTypeManagerInterface $entity_type_manager,
                               OnlineReturnsApiHelper $online_returns_api_helper,
                               LanguageManagerInterface $language_manager,
-                              CountryRepository $address_country_repository) {
+                              CountryRepository $address_country_repository,
+                              AlshayaApiWrapper $api_wrapper) {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->onlineReturnsHelper = $online_returns_helper;
@@ -102,6 +116,7 @@ class OnlineReturnController extends ControllerBase {
     $this->onlineReturnsApiHelper = $online_returns_api_helper;
     $this->languageManager = $language_manager;
     $this->addressCountryRepository = $address_country_repository;
+    $this->apiWrapper = $api_wrapper;
   }
 
   /**
@@ -116,6 +131,7 @@ class OnlineReturnController extends ControllerBase {
       $container->get('alshaya_online_returns.online_returns_api_helper'),
       $container->get('language_manager'),
       $container->get('address.country_repository'),
+      $container->get('alshaya_api.api'),
     );
   }
 
@@ -304,6 +320,87 @@ class OnlineReturnController extends ControllerBase {
       $orderDetails['#order_details']['delivery_address_raw']['country_label'] = $country_list[$country_label];
     }
     return $orderDetails;
+  }
+
+  /**
+   * Controller function for return label download.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   User object for which the return request page is being viewed.
+   * @param string $order_id
+   *   Order id to view the detail for.
+   * @param string $return_id
+   *   Entity id for the return request.
+   *
+   * @return mixed
+   *   The return label or exception.
+   */
+  public function getReturnPrintLabel(UserInterface $user, $order_id, $return_id) {
+    // Decode the return id.
+    $decoded_return_id = json_decode(base64_decode($return_id), TRUE)['return_id'] ?? NULL;
+    if ($decoded_return_id) {
+      // Get the return request first.
+      $endpoint = "rma/returns/$decoded_return_id";
+      $request_options = [
+        'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_get'),
+      ];
+
+      // Request from magento to get return items.
+      $return_item_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+      // Decode the response and get the increment return id.
+      $decoded_return_item = json_decode($return_item_response, TRUE);
+
+      // Do the validation before getting return item label PDF.
+      if ($this->isValidReturnRequest($user, $decoded_return_item)) {
+        $incremented_return_id = $decoded_return_item['increment_id'];
+
+        $endpoint = "awb/$incremented_return_id";
+        // Request from magento to get return print label.
+        $return_print_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+
+        // If json_decode is not successful, means we have actual file response.
+        // Otherwise we have error message which can be decoded by json.
+        if (!json_decode($return_print_response)) {
+          $response = new Response($return_print_response);
+          $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'Return_Print_Label_' . $incremented_return_id . '.pdf'
+          );
+          $response->headers->set('Content-Disposition', $disposition);
+          return $response;
+        }
+      }
+      else {
+        throw new AccessDeniedHttpException();
+      }
+    }
+
+    // Return print label not found.
+    throw new NotFoundHttpException();
+  }
+
+  /**
+   * Function to check if a valid return request is raised for the print label.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   User object for which the return request page is being viewed.
+   * @param array $returnItem
+   *   The array containing return item info.
+   */
+  protected function isValidReturnRequest(UserInterface $user, array $returnItem) {
+    // Validated that `awb_path` and `is_picked` is present and have valid data.
+    if (array_key_exists('awb_path', $returnItem['extension_attributes'])
+      && $returnItem['awb_path']
+      && array_key_exists('is_picked', $returnItem['extension_attributes'])
+      && !$returnItem['is_picked']
+      && array_key_exists('is_closed', $returnItem['extension_attributes'])
+      && !$returnItem['is_closed']
+      && array_key_exists('customer_id', $returnItem)
+      && $returnItem['customer_id'] == $user->get('acq_customer_id')->getString()) {
+      return TRUE;
+    }
+
+    return FALSE;
   }
 
 }
