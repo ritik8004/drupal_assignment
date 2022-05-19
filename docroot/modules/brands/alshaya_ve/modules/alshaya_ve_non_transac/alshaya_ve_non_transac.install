@@ -152,11 +152,6 @@ function alshaya_ve_non_transac_install() {
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('vision_express');
 
-  // Enable acquia search on cloud.
-  if (isset($_ENV['AH_SITE_NAME'])) {
-    \Drupal::service('module_installer')->install(['acquia_search']);
-  }
-
   // Disable default search.
   \Drupal::service('module_installer')->uninstall(['search']);
 
