@@ -20,7 +20,11 @@
     }
 
     &-slot {
-      display: inline;
+      display: block;
+
+      @include breakpoint($only-mobile) {
+        margin-top: rem(8);
+      }
     }
 
     @include breakpoint($only-mobile) {
@@ -31,19 +35,46 @@
 
   &__delivery {
     margin-top: 1.1875rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: rem(20);
+    display: flex;
+
+    &-icon {
+      &::before {
+        @include online-booking-icon('online-booking-calendar.svg');
+
+        top: rem(4);
+      }
+    }
   }
 
   &__change-delivery-schedule {
-    color: $_online-booking-change-delivery-schedule;
-    font-size: 0.875rem;
-    font-weight: bold;
+    color: $_online-booking-black-text;
+    font-size: rem(13);
+    text-align: center;
+    height: rem(36);
+    width: rem(118);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-end;
+    padding-top: rem(10);
+    padding-bottom: rem(10);
+    margin-#{$left}: auto;
+    border: rem(1) solid $_online-booking-black-text;
+    border-radius: rem(4);
     cursor: pointer;
-    padding: 0.5rem 0;
-    width: fit-content;
 
-    &:hover {
-      color: $checkout_order_details_label;
+    &.loading {
+      width: rem(118);
+    }
+
+    @include breakpoint($only-mobile) {
+      width: rem(200);
+      align-self: center;
+
+      &.loading {
+        width: rem(200);
+      }
     }
   }
 
@@ -57,47 +88,55 @@
   }
 
   &__hold-delivery {
-    margin-bottom: 0.75rem;
-    color: $label_black;
+    color: $_online-booking-black-text;
+    display: flex;
+    margin-bottom: rem(20);
+
+    &-icon {
+      &::before {
+        @include online-booking-icon('wall-clock.svg');
+      }
+    }
+
+    @include breakpoint($tablet) {
+      margin-#{$right}: rem(112);
+    }
   }
 
   &__error-message {
     color: $spc-promo-code-error;
-    font-size: 0.875rem;
-    margin-bottom: 0.6875rem;
+    display: flex;
+    margin-top: rem(19);
+    margin-bottom: rem(20);
+
+    &-icon {
+      &::before {
+        @include online-booking-icon('wall-clock-red.svg');
+      }
+    }
+
+    @include breakpoint($tablet) {
+      margin-#{$right}: rem(112);
+    }
   }
 
   &__hold-notification {
     color: $_spc-billing-help;
-    margin-bottom: 0.6875rem;
+    display: flex;
 
     &-icon {
-      @include icon(infomation, after) {
-        display: block;
-        font-size: 1rem;
-        width: 1.063rem;
-        height: 1.063rem;
-        position: absolute;
-        top: -0.0625rem;
-        #{$left}: 0;
-        bottom: 0.125rem;
-
-        html[lang=ar] & {
-          top: 0;
-        }
+      @include icon(infomation, before) {
+        position: relative;
+        font-size: rem(23);
+        margin-#{$right}: rem(14);
+        margin-#{$right}: rem(6);
+        #{$left}: rem(-3);
+        top: rem(-2);
       }
+    }
 
-      flex-grow: 1;
-      background: unset;
-      border: unset;
-      padding: 0;
-      position: relative;
-      width: 1.063rem;
-      height: 1.063rem;
-      display: inline-block;
-      vertical-align: middle;
-      margin-#{$right}: 0.46875rem;
-      cursor: default;
+    @include breakpoint($tablet) {
+      margin-#{$right}: rem(112);
     }
   }
 
