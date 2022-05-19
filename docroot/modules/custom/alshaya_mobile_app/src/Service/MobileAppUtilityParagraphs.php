@@ -614,7 +614,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           // We are interested in paragraph types that are stored inside
           // layout paragraph items.
           if (!empty($paragraph_data = $this->processParagraphReferenceField($entity, $field_name))) {
-            $data = array_merge($paragraph_data, $data);
+            $data = array_merge($data, $paragraph_data);
             continue;
           }
           $field_values = $entity->get($field_name)->getValue();
