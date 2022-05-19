@@ -4,7 +4,7 @@ import OrderItems from '../order-items';
 
 const OrderCancelledItems = (props) => {
   const { order } = props;
-  if (hasValue(order.cancelled_items_count)) {
+  if (!hasValue(order.cancelled_items_count)) {
     return null;
   }
 
