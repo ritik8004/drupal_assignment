@@ -23,7 +23,7 @@
       .aura-guest-user-link-card-otp-form {
         .aura-modal-form {
           .aura-modal-form-items {
-            padding: rem(24) rem(20);
+            padding: rem(24) rem(30) rem(10);
 
             .aura-form-items-link-card-options {
               margin-top: rem(16);
@@ -39,6 +39,18 @@
 
             .aura-modal-footer {
               padding: rem(5) 0;
+            }
+          }
+        }
+      }
+    }
+
+    &.link-card-otp-modal-content {
+      .aura-guest-user-link-card-otp-form {
+        .aura-modal-form {
+          .aura-modal-form-actions {
+            .aura-modal-footer {
+              padding: 0;
             }
           }
         }
@@ -61,7 +73,7 @@
         font-family: inherit;
         font-size: inherit;
         margin: 0;
-        color: inherit;
+        color: $aura-header-title-1;
       }
 
       .close {
@@ -91,8 +103,7 @@
       }
 
       .aura-modal-form-actions {
-        padding-bottom: 1.5rem;
-        border-top: 0.625rem solid $aura-form-otp-background;
+        padding-bottom: rem(23);
 
         .aura-modal-form-submit,
         .aura-modal-form-submit-without-otp,
@@ -223,6 +234,10 @@
           border-style: solid;
           border-width: rem(2);
           margin: rem(20);
+        }
+
+        .aura-modal-form-submit-without-otp {
+          margin-bottom: rem(21);
         }
 
         @include breakpoint($only-mobile) {
