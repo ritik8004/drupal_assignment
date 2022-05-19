@@ -96,7 +96,7 @@ class MyAccountsHelloMemberBlock extends BlockBase implements ContainerFactoryPl
       '#strings' => _alshaya_hello_member_static_strings(),
       '#attached' => [
         'library' => [
-          'alshaya_white_label/hello-member-invitation-popup',
+          'alshaya_white_label/my-accounts-hello-member',
         ],
       ],
     ];

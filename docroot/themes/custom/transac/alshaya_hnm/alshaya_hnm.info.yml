@@ -260,7 +260,7 @@ libraries-override:
       theme:
         css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css
 
-  alshaya_white_label/hello-member-invitation-popup:
+  alshaya_white_label/my-accounts-hello-member:
     css:
       theme:
-        css/conditional-sass/hello-member-invitation-popup/hello-member-invitation-popup.ltr.css: css/conditional-sass/hello-member-invitation-popup/hello-member-invitation-popup.ltr.css
+        css/conditional-sass/my-accounts-hello-member/my-accounts-hello-member.ltr.css: css/conditional-sass/my-accounts-hello-member/my-accounts-hello-member.ltr.css
