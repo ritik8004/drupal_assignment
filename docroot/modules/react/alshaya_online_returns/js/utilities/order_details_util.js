@@ -31,8 +31,10 @@ function processReturnData(returns) {
         return element.item_id === item.order_item_id;
       });
 
-      const mergedItem = Object.assign(productDetails, {returnData: item});
-      itemsData.push(mergedItem);
+      if (hasValue(productDetails)) {
+        const mergedItem = Object.assign(productDetails, {returnData: item});
+        itemsData.push(mergedItem);
+      }
     });
 
     const returnData = {

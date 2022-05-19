@@ -42,6 +42,7 @@ order_details:
   js:
     dist/order_details.bundle.js: { }
   dependencies:
+    - core/drupalSettings
     - alshaya_react/react
     - alshaya_white_label/tooltip
 

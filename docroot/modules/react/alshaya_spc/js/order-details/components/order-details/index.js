@@ -6,7 +6,7 @@ import OrderDeliveryDetails from '../order-delivery-details';
 import OrderItems from '../order-items';
 import OrderCancelledItems from '../order-cancelled-items';
 import OrderReturnEligibility from '../order-return-eligibility';
-import OrderReturnInitiated from "../order-return-initiated";
+import OrderReturnInitiated from '../order-return-initiated';
 import ReturnedItemsListing from '../../../../../alshaya_online_returns/js/order-details/returned-items-listing';
 import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
@@ -101,11 +101,14 @@ class OrderDetails extends React.Component {
             </div>
           )}
 
-          { hasValue(order.order_details.surcharge) && (
+          { hasValue(order.order_details.surcharge)
+          && hasValue(order.order_details.surcharge_label) && (
             <div className="surcharge-row collapse-row">
               <div className="desktop-only">&nbsp;</div>
               <div className="above-mobile">&nbsp;</div>
-              <div className="right--align">{order.order_details.surcharge_label}</div>
+              <div className="right--align">
+                {order.order_details.surcharge_label}
+              </div>
               <div className="blend">
                 {parse(order.order_details.surcharge)}
               </div>
