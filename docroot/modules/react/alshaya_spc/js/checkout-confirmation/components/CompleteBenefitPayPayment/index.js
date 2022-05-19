@@ -41,7 +41,9 @@ class CompleteBenefitPayPayment extends React.Component {
     } = drupalSettings.alshaya_spc.currency_config;
 
     const data = {
-      transactionAmount: totals.base_grand_total.toFixed(decimalPoints),
+      // Use `totalBalancePayable` as transaction amount as it contains the
+      // actual transaction amount after e-gift redeemption.
+      transactionAmount: totals.totalBalancePayable.toFixed(decimalPoints),
       transactionCurrency: currencyCode,
       referenceNumber: payment.referenceNumber,
       merchantId: payment.benefitpayMerchantId,
