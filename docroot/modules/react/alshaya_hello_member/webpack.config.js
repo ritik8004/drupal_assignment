@@ -4,6 +4,7 @@ var buildPath = '/modules/react/alshaya_hello_member/dist/';
 var config = {
   entry: {
     my_accounts: './js/src/my-accounts.js',
+    my_membership_info: './js/src/my-membership-info.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

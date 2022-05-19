@@ -1,0 +1,5 @@
+<div class="my-membership" id="my-membership-info"></div>
+
+{% for string in strings %}
+  <input type="hidden" data-string-id="{{ string.key }}" value="{{ string.value }}" />
+{% endfor %}
