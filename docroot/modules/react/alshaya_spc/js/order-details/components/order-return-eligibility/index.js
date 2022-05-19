@@ -3,7 +3,7 @@ import ReturnEligibility from '../../../../../alshaya_online_returns/js/order-de
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
 
-const OnlineReturnEligibility = (props) => {
+const OrderReturnEligibility = (props) => {
   const { order } = props;
   if (!isOnlineReturnsEnabled() || !hasValue(order.online_returns_status)) {
     return null;
@@ -20,4 +20,4 @@ const OnlineReturnEligibility = (props) => {
   );
 };
 
-export default OnlineReturnEligibility;
+export default OrderReturnEligibility;

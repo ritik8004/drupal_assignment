@@ -1,16 +1,14 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import Aura from '../aura';
-import TotalItemCount from '../total-item-count';
-import CancelledItems from '../cancelled-items';
-import OnlineReturnEligibility from '../online-return-eligibility';
+import OrderSummary from '../order-summary';
 import OnlineBooking from '../online-booking';
-import DeliveryDetailNotice from '../delivery-detail-notice';
-import DeliveryDetails from '../delivery-details';
+import OrderDeliveryDetails from '../order-delivery-details';
 import OrderItems from '../order-items';
-import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
-import ReturnInitiated from '../../../../../alshaya_online_returns/js/order-details/return-initiated';
+import OrderCancelledItems from '../order-cancelled-items';
+import OrderReturnEligibility from '../order-return-eligibility';
+import OrderReturnInitiated from "../order-return-initiated";
 import ReturnedItemsListing from '../../../../../alshaya_online_returns/js/order-details/returned-items-listing';
+import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getReturns } from '../../../../../alshaya_online_returns/js/utilities/order_details_util';
 import {
@@ -18,7 +16,7 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
-class UserOrderDetails extends React.Component {
+class OrderDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,89 +55,13 @@ class UserOrderDetails extends React.Component {
     return (
       <>
         <div className={`user__order--detail ${order.auraEnabled ? 'has-aura-points' : ''}`}>
-          <div className="order-summary-row">
-            <div className="order-transaction">
-              <div className="light font-small">{ Drupal.t('Order ID') }</div>
-              <div className="dark">{ order.orderId }</div>
-              <div className="light font-small">{ order.orderDate }</div>
-
-              <div className="mobile-only">
-                <div className="dark">
-                  { order.name }
-                  ...
-                </div>
-                <div className="light">
-                  <TotalItemCount order={order} />
-                  <CancelledItems order={order} />
-                </div>
-              </div>
-            </div>
-
-            <div className="above-mobile order-name">
-              <div className="dark">
-                <div className="dark">
-                  { order.name }
-                  ...
-                </div>
-              </div>
-              <div className="light">
-                <TotalItemCount order={order} />
-                <CancelledItems order={order} />
-              </div>
-
-              <div className="tablet-only">
-                <div className={`button ${order.status.class}`}>{order.status.text}</div>
-              </div>
-            </div>
-
-            <div className="mobile-only">
-              <div className={`button ${order.status.class}`}>{order.status.text}</div>
-            </div>
-
-            <div className="desktop-only order__summary--status">
-              <div className={`button ${order.status.class}`}>{order.status.text}</div>
-            </div>
-
-            <div className="above-mobile blend order-total">
-              <div className="light">{Drupal.t('Order Total')}</div>
-              <div className="dark">
-                {parse(order.order_details.order_total)}
-              </div>
-            </div>
-
-            <Aura order={order} />
-          </div>
-
-          <OnlineReturnEligibility order={order} />
+          <OrderSummary order={order} />
+          <OrderReturnEligibility order={order} />
           <OnlineBooking order={order} />
-          <DeliveryDetailNotice order={order} />
-
-          <div className="order-details-row">
-            <DeliveryDetails order={order} />
-          </div>
-
-          { isOnlineReturnsEnabled() && hasValue(order.online_returns_status) && (
-            <>
-              <ReturnInitiated returns={returns} />
-              <div className="order-item-row delivered-items">
-                <div>
-                  <div>{Drupal.t('Delivered Items')}</div>
-                </div>
-              </div>
-            </>
-          )}
-
+          <OrderDeliveryDetails order={order} />
+          <OrderReturnInitiated order={order} returns={returns} />
           <OrderItems products={order.products} />
-          { hasValue(order.cancelled_items_count) && (
-            <>
-              <div id="cancelled-items" className="order-item-row cancelled-items">
-                <div>
-                  <div>{Drupal.t('Cancelled Items')}</div>
-                </div>
-              </div>
-              <OrderItems products={order.cancelled_products} cancelled />
-            </>
-          )}
+          <OrderCancelledItems order={order} />
 
           { isOnlineReturnsEnabled() && hasValue(order.online_returns_status) && (
             <ReturnedItemsListing returns={returns} />
@@ -230,4 +152,4 @@ class UserOrderDetails extends React.Component {
   }
 }
 
-export default UserOrderDetails;
+export default OrderDetails;

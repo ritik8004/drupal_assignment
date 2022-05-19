@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import UserOrderDetails from './components/user-order-details';
+import OrderDetails from './components/order-details';
 
 ReactDOM.render(
-  <UserOrderDetails />,
+  <OrderDetails />,
   document.querySelector('#user-order-details'),
 );
