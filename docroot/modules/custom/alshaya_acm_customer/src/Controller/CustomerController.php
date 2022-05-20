@@ -355,9 +355,9 @@ class CustomerController extends ControllerBase {
       }
     }
 
-    // Render Markup items.
+    // Render details.
     foreach ($details['order_details'] as &$item) {
-      if (is_array($item) && isset($item['#markup'])) {
+      if (is_array($item) && (isset($item['#markup']) || isset($item['#theme']))) {
         $item = render($item);
       }
     }

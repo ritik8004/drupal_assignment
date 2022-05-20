@@ -28,7 +28,7 @@ const OrderDeliveryDetails = (props) => {
               <div className="label font-small">{Drupal.t('Collection Address')}</div>
               <div className="store-name-and-address">
                 <div className="store-name dark">{orderDetails.store_name}</div>
-                <div className="store-address">{orderDetails.store_address}</div>
+                <div className="store-address">{parse(orderDetails.store_address)}</div>
                 <div className="store-phone no-direction">{orderDetails.store_phone}</div>
                 <div className="store-map-link">
                   <a href={orderDetails.view_on_map_link} target="_blank" rel="noopener noreferrer">{Drupal.t('View on map')}</a>
@@ -65,8 +65,10 @@ const OrderDeliveryDetails = (props) => {
             </div>
           )}
 
-          { hasValue(orderDetails.payment.banktransfer_payment_details) && (
-            <div className="mobile-only banktransfer">{orderDetails.payment.banktransfer_payment_details}</div>
+          { hasValue(orderDetails.banktransfer_payment_details) && (
+            <div className="mobile-only banktransfer">
+              {parse(orderDetails.banktransfer_payment_details)}
+            </div>
           )}
 
           { hasValue(orderDetails.payment.transactionId) && (
@@ -99,7 +101,7 @@ const OrderDeliveryDetails = (props) => {
                 <div className="store-open-hours">
                   <div className="hours--wrapper selector--hours">
                     <div className="open--hours">
-                      {Object.keys(orderDetails.store_open_hours).map((item) => (
+                      {Object.values(orderDetails.store_open_hours).map((item) => (
                         <div>
                           <span className="key-value-key dark">{item.key}</span>
                           <span className="key-value-value">{hasValue(item.value) ? item.value : Drupal.t('Holiday')}</span>
@@ -151,9 +153,9 @@ const OrderDeliveryDetails = (props) => {
             </>
           )}
 
-          { hasValue(orderDetails.payment.banktransfer_payment_details) && (
+          { hasValue(orderDetails.banktransfer_payment_details) && (
             <>
-              {orderDetails.payment.banktransfer_payment_details}
+              {parse(orderDetails.banktransfer_payment_details)}
             </>
           )}
 
