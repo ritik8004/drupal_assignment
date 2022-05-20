@@ -18,19 +18,18 @@ window.commerceBackend = window.commerceBackend || {};
     });
   }
 
-  // Add the styled products.
-  window.commerceBackend.getProductsInStyle = async function getProductsInStyle(product) {
-    // Return if result is empty.
-    if (!Drupal.hasValue(product)
-      || !Drupal.hasValue(product.style_code)) {
-      return;
-    }
-
+  /**
+   * Processes and stores style products data in static cache.
+   *
+   * @param {object} product
+   *   Raw product object.
+   * @param {object} styleProducts
+   *   Raw style products object.
+   *
+   * @returns {void}
+   */
+  function getProcessedStyleProducts(product, styleProducts) {
     var mainProduct = JSON.parse(JSON.stringify(product));
-
-    // Get the products with the same style.
-    var styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: mainProduct.style_code });
-
     // This will hold the configugrable options for the main product keyed by
     // the attribute code and then the value index of the options.
     // Eg: {size: {11: {value_index: 10, store_label: "XS"}}}
@@ -158,4 +157,71 @@ window.commerceBackend = window.commerceBackend || {};
     window.commerceBackend.resetStaticStoragePostProductUpdate();
     return mainProduct;
   }
+
+  /**
+   * Asynchronously fetches and processes style products data.
+   *
+   * This is used only for PDP.
+   *
+   * @param {object} product
+   *   Raw product object.
+   *
+   * @returns {void}
+   */
+  window.commerceBackend.getProductsInStyle = async function getProductsInStyle(product) {
+    // Return if result is empty.
+    if (!Drupal.hasValue(product)
+      || !Drupal.hasValue(product.style_code)) {
+      return;
+    }
+    // Get the products with the same style.
+    var styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: product.style_code });
+    return getProcessedStyleProducts(product, styleProducts);
+  }
+
+  /**
+   * Synchronously fetches and processes style products data.
+   *
+   * This is used only for cart checkout pages when local storage data expires.
+   *
+   * @param {object} product
+   *   Raw product object.
+   *
+   * @returns {void}
+   */
+  function getProductsInStyleSynchronous(product) {
+    // Return if result is empty.
+    if (!Drupal.hasValue(product)
+      || !Drupal.hasValue(product.style_code)) {
+      return;
+    }
+    var mainProduct = product;
+    // Get the products with the same style.
+    var styleProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('products-in-style', { styleCode: product.style_code });
+    // Get the main product entity from the style products list.
+    for (var index = 0; index < styleProducts.length; index++) {
+      if (styleProducts[index].sku === mainProduct.sku) {
+        try {
+          // Deep clone the object received in the response.
+          mainProduct = styleProducts[index];
+          // The object in the event only contains minimal data.
+          // So we replace that with the actual product object containing all
+          // the required data.
+          product = mainProduct;
+          break;
+        } catch (error) {
+          Drupal.alshayaLogger('error', 'Could not parse product data for SKU @sku', {
+            '@sku': mainProduct.sku,
+          });
+          return;
+        }
+      }
+    }
+
+    getProcessedStyleProducts(mainProduct, styleProducts);
+  }
+
+  RcsEventManager.addListener('rcsUpdateResults', function (e) {
+    getProductsInStyleSynchronous(e.detail.result);
+  }, 100);
 })();
