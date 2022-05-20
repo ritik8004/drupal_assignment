@@ -68,11 +68,11 @@
       .facet-item__value {
         display: flex;
         align-items: center;
-        direction: ltr;
       }
 
       .facet-item__label {
         display: flex;
+        direction: if-ltr(ltr, rtl);
 
         &::before {
           margin-#{$left}: 0;

@@ -58,6 +58,7 @@
       &.spc-aura-link-card-input-card {
         height: rem(36);
         border: 1px solid $aura-spc-textbox-border;
+        padding: 0 rem(9);
 
         & ~ label {
           padding: rem(8);
