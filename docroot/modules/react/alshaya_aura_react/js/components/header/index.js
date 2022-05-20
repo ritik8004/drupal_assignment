@@ -1,5 +1,4 @@
 import React from 'react';
-import Popup from 'reactjs-popup';
 import { getAuraLocalStorageKey, getAuraDetailsDefaultState } from '../../utilities/aura_utils';
 import {
   getUserDetails,
@@ -11,9 +10,6 @@ import {
 } from '../../utilities/customer_helper';
 import HeaderLoggedIn from './header-loggedIn';
 import HeaderGuest from './header-guest';
-import AuraCongratulationsModal from '../../../../alshaya_spc/js/aura-loyalty/components/aura-congratulations';
-import getStringMessage from '../../../../js/utilities/strings';
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 class Header extends React.Component {
   constructor(props) {
@@ -23,7 +19,6 @@ class Header extends React.Component {
     this.state = {
       wait: true,
       signUpComplete: false,
-      showCongratulations: false,
       isHeaderModalOpen: !!isNotExpandable,
       ...getAuraDetailsDefaultState(),
     };
@@ -71,7 +66,7 @@ class Header extends React.Component {
 
   // Event listener callback to update header states.
   updateState = (data) => {
-    const { stateValues, clickedNotYou, showCongratulationsPopup } = data.detail;
+    const { stateValues, clickedNotYou } = data.detail;
     const states = { ...stateValues };
 
     if (clickedNotYou) {
@@ -80,13 +75,6 @@ class Header extends React.Component {
 
     if (stateValues.loyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED) {
       states.signUpComplete = true;
-    }
-
-    // Show congratulations popup only if showCongratulationsPopup is defined and true.
-    if ((typeof showCongratulationsPopup !== 'undefined')
-      && showCongratulationsPopup
-    ) {
-      states.showCongratulations = true;
     }
 
     this.setState({
@@ -102,52 +90,6 @@ class Header extends React.Component {
       }));
     }
   };
-
-  closeCongratulationsModal = () => {
-    // We need this code to close the mobile menu that opens up when
-    // congratulations popup display. To close the menu, we are triggeing
-    // mobile menu close button.
-    document
-      .querySelector('.mobile--close')
-      .dispatchEvent(
-        new CustomEvent('click'),
-      );
-
-    this.setState({
-      showCongratulations: false,
-    });
-  };
-
-  getCongratulationsPopup() {
-    const { showCongratulations } = this.state;
-
-    if (showCongratulations) {
-      // We need this code to close the mobile menu that opens up when
-      // congratulations popup display. To close the menu, we are triggeing
-      // mobile menu close button.
-      document
-        .querySelector('.mobile--close')
-        .dispatchEvent(
-          new CustomEvent('click'),
-        );
-    }
-
-    return (
-      <Popup
-        className="aura-modal-congratulations"
-        open={showCongratulations}
-        closeOnEscape={false}
-        closeOnDocumentClick={false}
-      >
-        <AuraCongratulationsModal
-          closeCongratulationsModal={() => this.closeCongratulationsModal()}
-          headerText={getStringMessage('join_aura_congratulations_header')}
-          bodyText={getStringMessage('join_aura_congratulations_text')}
-          downloadText={getStringMessage('join_aura_congratulations_download_text')}
-        />
-      </Popup>
-    );
-  }
 
   render() {
     const {
@@ -169,8 +111,6 @@ class Header extends React.Component {
       isDesktop,
       isMobileTab,
       isHeaderShop,
-      // Only render congratulations popup markup when the flag is true.
-      renderCongratulationPopup,
     } = this.props;
 
     const { id: userId } = getUserDetails();
@@ -203,8 +143,6 @@ class Header extends React.Component {
             firstName={firstName}
             lastName={lastName}
           />
-          {hasValue(renderCongratulationPopup)
-            && this.getCongratulationsPopup()}
         </>
       );
     }
@@ -224,8 +162,6 @@ class Header extends React.Component {
           notYouFailed={notYouFailed}
           tier={tier}
         />
-        {hasValue(renderCongratulationPopup)
-          && this.getCongratulationsPopup()}
       </>
     );
   }
