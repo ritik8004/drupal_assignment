@@ -146,11 +146,6 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css
-  
-  alshaya_white_label/aura-loyalty-spc:
-    css:
-      theme:
-        css/conditional-sass/aura-loyalty-spc/aura-loyalty-spc.ltr.css: css/conditional-sass/aura-loyalty-spc/aura-loyalty-spc.ltr.css
 
   alshaya_white_label/contact:
     css:
