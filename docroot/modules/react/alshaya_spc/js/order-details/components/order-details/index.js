@@ -27,6 +27,7 @@ class OrderDetails extends React.Component {
   }
 
   componentDidMount() {
+    showFullScreenLoader();
     if (isOnlineReturnsEnabled()) {
       this.setState({ loading: true });
       getReturns().then((returnResponse) => {
@@ -46,7 +47,6 @@ class OrderDetails extends React.Component {
     } = this.state;
 
     if (loading) {
-      showFullScreenLoader();
       return null;
     }
     removeFullScreenLoader();
