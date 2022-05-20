@@ -349,6 +349,8 @@
 }
 
 .aura-modal-congratulations-overlay {
+  z-index: 1001 !important;
+
   .aura-modal-congratulations-content {
     border-radius: rem(10);
 
