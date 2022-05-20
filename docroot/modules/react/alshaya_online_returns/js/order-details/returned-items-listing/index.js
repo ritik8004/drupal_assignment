@@ -1,7 +1,8 @@
 import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import { getTypeFromReturnItem, isReturnClosed } from '../../utilities/order_details_util';
+import { getTypeFromReturnItem } from '../../utilities/order_details_util';
+import { isReturnClosed } from '../../utilities/return_api_helper';
 import ReturnedItems from './returned-items';
 
 class ReturnedItemsListing extends React.Component {

@@ -66,22 +66,8 @@ function getTypeFromReturnItem(returnItem) {
   }
 }
 
-/**
- * Utility function to check if return is open or not.
- *
- * @param {object} returnItem
- *   The individual return item object.
- *
- * @returns {boolean}
- *   True if order return if closed else False.
- */
-function isReturnClosed(returnItem) {
-  return returnItem.extension_attributes.is_closed;
-}
-
 export {
   getReturns,
   processReturnData,
   getTypeFromReturnItem,
-  isReturnClosed,
 };
