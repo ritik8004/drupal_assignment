@@ -45,7 +45,8 @@
 
           &:last-child {
             background: transparent;
-            border-color: $egift-card-redeem-button;
+            border-color: $egift-landing-page-button;
+            color: $egift-landing-page-button;
           }
         }
       }
