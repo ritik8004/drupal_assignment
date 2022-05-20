@@ -45,6 +45,10 @@ order_details:
     - core/drupalSettings
     - alshaya_react/react
     - alshaya_white_label/tooltip
+    - alshaya_spc/cart_utilities
+    - bazaar_voice/bazaar_voice
+    - alshaya_bazaar_voice/utility
+    - alshaya_acm_product/acq_product_info
 
 add_to_cart:
   version: 1.x

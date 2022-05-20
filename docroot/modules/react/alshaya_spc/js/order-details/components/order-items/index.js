@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import RecentOrders from '../../../../../alshaya_bazaar_voice/js/src/myaccount/components/orders/recent-orders';
 
 const OrderItems = (props) => {
   const { products, cancelled } = props;
