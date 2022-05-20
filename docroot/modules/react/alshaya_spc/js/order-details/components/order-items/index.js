@@ -68,7 +68,9 @@ const OrderItems = (props) => {
               )}
 
               { hasValue(product.bazaarvoice_link) && (
-                <div className="myaccount-write-review" data-sku={product.parent_sku} />
+                <div className="myaccount-write-review" data-sku={product.parent_sku}>
+                  <RecentOrders productId={product.parent_sku} />
+                </div>
               )}
             </div>
           </div>
@@ -93,7 +95,9 @@ const OrderItems = (props) => {
 
           { hasValue(product.bazaarvoice_link) && (
             <div className="above-mobile user-review bazaarvoice-enable">
-              <div className="myaccount-write-review" data-sku={product.parent_sku} />
+              <div className="myaccount-write-review" data-sku={product.parent_sku}>
+                <RecentOrders productId={product.parent_sku} />
+              </div>
             </div>
           )}
         </div>
