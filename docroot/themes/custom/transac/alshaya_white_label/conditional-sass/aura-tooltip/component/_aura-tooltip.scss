@@ -18,10 +18,6 @@
       #{$left}: 50%;
       transform: translateX(-50%);
 
-      html[lang=ar] & {
-        transform: translateX(50%);
-      }
-
       @include breakpoint($only-tablet) {
         #{$left}: -50%;
       }
