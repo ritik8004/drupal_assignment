@@ -29,6 +29,7 @@
     li {
       .facet-item__label {
         display: flex;
+        direction: if-ltr(ltr, rtl);
 
         &::before {
           content: '';
