@@ -445,9 +445,10 @@
   }
 }
 
-// iOS - Safari.
+// Join Aura Modal Positioning Fix For Mobile Devices.
+
 @include breakpoint($only-mobile) {
-  body.aura-enabled.safari {
+  body.aura-enabled {
     #block-alshayamainmenu.aura-header-modal-open {
       ul.menu__list.menu--one__list {
         width: 100vw;
