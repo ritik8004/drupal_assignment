@@ -99,6 +99,10 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
       return;
     }
 
+    $this->drupalLogger->notice('Asset files to check: @count.', [
+      '@count' => count($unused_assets),
+    ]);
+
     $batch = [
       'operations' => [],
       'init_message' => dt('Processing all files to check if they are still used...'),
@@ -148,6 +152,10 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
         }
       }
     }
+
+    $logger->notice('Asset files checked: @count.', [
+      '@count' => count($files),
+    ]);
   }
 
   /**
@@ -211,6 +219,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
   public function deleteUnusedBrandAssetsAllMarkets(array $options = [
     'batch-size' => 50,
     'dry-run' => FALSE,
+    'common-only' => FALSE,
   ]) {
     if (!$this->configFactory->get('alshaya_brand.settings')->get('brand_main_site')) {
       $this->drupalLogger->notice('Skipping as not main site of the brand.');
@@ -218,6 +227,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     }
 
     $dry_run = (bool) $options['dry-run'];
+    $common_only = (bool) $options['common-only'];
     $batch_size = (int) $options['batch-size'];
 
     $domains = $this->getBrandDomains();
@@ -243,6 +253,12 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
           $unused_brand_assets[$current_domain][$array[0]] = $array[1];
         }
       }
+
+      $this->drupalLogger->notice('Un-used brand assets found for @domain : @count.', [
+        '@count' => count($unused_brand_assets[$current_domain]),
+        '@domain' => $current_domain,
+      ]);
+
       // Batch operation to clean up unused file entities.
       $batch_operation_clean_up_unused_file_entities[] = [
         [__CLASS__, 'deleteUnusedUnavailableFileEntitiesForDomain'],
@@ -257,6 +273,8 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
       return;
     }
 
+    $this->drupalLogger->notice('Un-used brand assets found, processing.');
+
     $batch = [
       'operations' => [],
       'init_message' => dt('Processing all files to check if they are still used...'),
@@ -267,6 +285,10 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     // Get list of unused assets common in all the markets of a brand.
     $unused_brand_assets_common = call_user_func_array('array_intersect', $unused_brand_assets);
 
+    $this->drupalLogger->notice('Count of common un-used brand assets: @count.', [
+      '@count' => count($unused_brand_assets_common),
+    ]);
+
     // First delete the files which are marked as unused for all the domains.
     foreach (array_chunk($unused_brand_assets_common, $batch_size, TRUE) as $chunk) {
       $batch['operations'][] = [
@@ -275,8 +297,20 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
       ];
     }
 
+    // If we have too many changes, we can start by just removing
+    // the common un-used files.
+    if ($common_only && count($unused_brand_assets_common) > 0) {
+      batch_set($batch);
+      drush_backend_batch_process();
+      return;
+    }
+
     // Get list of unused assets not common to all markets.
     $unused_brand_assets_diff = array_diff($unused_brand_assets_merged, $unused_brand_assets_common);
+
+    $this->drupalLogger->notice('Count of uncommon un-used brand assets: @count.', [
+      '@count' => count($unused_brand_assets_diff),
+    ]);
 
     // Below we try to check if brand asset which was not returned in unused
     // list is actually used or not there at all. It is possible a product was
