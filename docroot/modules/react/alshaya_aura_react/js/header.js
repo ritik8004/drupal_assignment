@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Header from './components/header';
 import { getUserDetails } from './utilities/helper';
 import isAuraEnabled from '../../js/utilities/helper';
+import AuraCongratulationsModal from '../../alshaya_spc/js/aura-loyalty/components/aura-congratulations';
 
 if (isAuraEnabled()) {
   // Upto desktop header.
@@ -11,24 +12,17 @@ if (isAuraEnabled()) {
     if (getUserDetails().id) {
       if (document.querySelector('#username-points-wrapper-mobile-menu')) {
         // For logged in user mobile menu tab.
-        // 'renderCongratulationPopup' will render congratulation
-        // popup markup in mobile for logged in users.
         ReactDOM.render(
-          <Header isMobileTab renderCongratulationPopup />,
+          <Header isMobileTab />,
           document.querySelector('#username-points-wrapper-mobile-menu'),
         );
       }
     } else {
       // Guest user.
-      // 'renderCongratulationPopup' will render congratulation
-      // popup in mobile for guest users. Please note that we are using this
-      // variable to restrict congratulation popup markup rendering once on a
-      // page else it will display multiple times in mobile.
-
       if (document.querySelector('#points-wrapper-mobile-menu')) {
         // For guest user mobile menu tab.
         ReactDOM.render(
-          <Header isMobileTab renderCongratulationPopup />,
+          <Header isMobileTab />,
           document.querySelector('#points-wrapper-mobile-menu'),
         );
       }
@@ -59,10 +53,23 @@ if (isAuraEnabled()) {
     }
   } else if (document.querySelector('#aura-header-modal')) {
     // Desktop header.
-    // 'renderCongratulationPopup' will render congratulation popup for desktop.
     ReactDOM.render(
-      <Header isDesktop renderCongratulationPopup />,
+      <Header isDesktop />,
       document.querySelector('#aura-header-modal'),
     );
   }
+
+  // Create a wrapper element for aura congratulation popup. We will append this
+  // dynamic element at the end of the `<body>` tag and render the
+  // `AuraCongratulationsModal` component markup within this. This modal will
+  // be used globally for all aura signup and signin popups from header, cart
+  // and checkout pages.
+  const bodyElem = document.querySelector('body');
+  const auraCongratulationPopupWrapper = document.createElement('div');
+  auraCongratulationPopupWrapper.id = 'aura-congratulation-popup-modal';
+  bodyElem.appendChild(auraCongratulationPopupWrapper);
+  ReactDOM.render(
+    <AuraCongratulationsModal />,
+    document.querySelector('#aura-congratulation-popup-modal'),
+  );
 }
