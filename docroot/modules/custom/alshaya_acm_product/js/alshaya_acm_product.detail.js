@@ -27,6 +27,11 @@
     attach: function (context, settings) {
 
       var node = $('.entity--type-node', context).not('[data-sku *= "#"]');
+      var $context = $(context);
+      if ($context && $context.hasClass('entity--type-node')){
+        node = $context;
+      }
+
       if (node.length === 0) {
         return;
       }
