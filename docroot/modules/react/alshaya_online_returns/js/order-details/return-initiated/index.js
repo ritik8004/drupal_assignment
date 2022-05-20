@@ -1,6 +1,8 @@
 import React from 'react';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import ProcessedItems from './processed-items';
+import { isReturnClosed } from '../../utilities/order_details_util';
+import ProcessedItem from './processed-item';
 
 const ReturnInitiated = ({
   returns,
@@ -8,16 +10,19 @@ const ReturnInitiated = ({
   if (!hasValue(returns)) {
     return null;
   }
-
-  // @todo: Filtering of return items as per returnId and statuses.
-  // @todo: Get returnStatus and returnStatusMessage from api result.
   return (
-    <div className="return-initiated-items">
-      <ProcessedItems
-        returnStatus={Drupal.t('Refund Initiated')}
-        returnMessage={Drupal.t('The courier will be assigned within 1-2 days', { context: 'online_returns' })}
-        returns={returns}
-      />
+    <div className="return-processed-items">
+      <ConditionalView condition={hasValue(returns)}>
+        {returns.map((returnItem) => (
+          <div className="return-items" key={returnItem.returnInfo.increment_id}>
+            <ConditionalView condition={!isReturnClosed(returnItem.returnInfo)}>
+              <ProcessedItem
+                returnData={returnItem}
+              />
+            </ConditionalView>
+          </div>
+        ))}
+      </ConditionalView>
     </div>
   );
 };

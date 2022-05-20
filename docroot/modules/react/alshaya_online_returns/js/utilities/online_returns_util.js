@@ -183,6 +183,18 @@ function getOrderDetails() {
   return orderDetails;
 }
 
+/**
+ * Utility function to get print label button status.
+ */
+function getPrintLabelStatus(returnData) {
+  const { awb_path: AwbPath, is_picked: isPicked } = returnData.returnInfo.extension_attributes;
+  // Set the `showPrintLabelBtn` to true if awb path is available.
+  if (hasValue(AwbPath) && !hasValue(isPicked)) {
+    return true;
+  }
+  return false;
+}
+
 export {
   isReturnEligible,
   getReturnExpiration,
@@ -198,4 +210,5 @@ export {
   getAdressData,
   formatDateTime,
   getOrderDetails,
+  getPrintLabelStatus,
 };

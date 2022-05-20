@@ -12,9 +12,10 @@ function processReturnData(returns) {
       const productDetails = drupalSettings.onlineReturns.products.find((element) => {
         return element.item_id === item.order_item_id;
       });
-
-      const mergedItem = Object.assign(productDetails, {returnData: item});
-      itemsData.push(mergedItem);
+      if (productDetails) {
+        const mergedItem = Object.assign(productDetails, {returnData: item});
+        itemsData.push(mergedItem);
+      }
     });
 
     const returnData = {
