@@ -138,6 +138,13 @@
         }
       }
     }
+
+    .spc-join-aura-link,
+    .spc-link-aura-link {
+      html[lang=ar] & {
+        background: none;
+      }
+    }
   }
 
   .block-content.registered-user-linked,
