@@ -10,20 +10,21 @@ const OrderItems = (props) => {
     <>
       {Object.values(products).map((product) => (
         <div className="order-item-row" key={`${product.sku}${cancelled ? '_cancelled' : ''}`}>
-          { hasValue(cancelled) && hasValue(product.image) && (
-            <div className="order__product--image">
-              <div className="image-wrapper">
-                {parse(product.image)}
-                <span>{Drupal.t('Cancelled')}</span>
-              </div>
-            </div>
-          )}
-
-          { !hasValue(cancelled) && hasValue(product.image) && (
-            <div className="order__product--image">
-              {parse(product.image)}
-            </div>
-          )}
+          <div className="order__product--image">
+            { hasValue(product.image) && (
+              <>
+                { hasValue(cancelled) && (
+                  <div className="image-wrapper">
+                    {parse(product.image)}
+                    <span>{Drupal.t('Cancelled')}</span>
+                  </div>
+                )}
+                { !hasValue(cancelled) && (
+                  parse(product.image)
+                )}
+              </>
+            )}
+          </div>
 
           <div>
             <div className="dark">{product.name}</div>

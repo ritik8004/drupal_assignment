@@ -21,21 +21,20 @@ class OrderDetails extends React.Component {
     super(props);
     this.state = {
       returns: [],
-      loading: true,
+      loading: false,
       order: drupalSettings.order,
     };
   }
 
   componentDidMount() {
     if (isOnlineReturnsEnabled()) {
+      this.setState({ loading: true });
       getReturns().then((returnResponse) => {
         if (hasValue(returnResponse)) {
           this.setState({ returns: returnResponse });
-          this.setState({ loading: false });
         }
+        this.setState({ loading: false });
       });
-    } else {
-      this.setState({ loading: false });
     }
   }
 
