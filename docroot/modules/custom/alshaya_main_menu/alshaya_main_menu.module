@@ -267,7 +267,7 @@ function alshaya_main_menu_alshaya_acm_product_category_tree_data_alter(&$data, 
   }
   // Add display view all flag to product category tree data.
   $data[$term->tid]['display_view_all'] = (bool) $display_view_all;
-  $aliasManager = \Drupal::service('path.alias_manager');
+  $aliasManager = \Drupal::service('path_alias.manager');
   $alias = $aliasManager->getAliasByPath('/taxonomy/term/' . $term->tid);
   $data[$term->tid]['display_view_all_link'] = $alias . '/view-all';
 }
