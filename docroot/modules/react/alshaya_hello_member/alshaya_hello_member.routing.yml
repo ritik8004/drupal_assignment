@@ -5,3 +5,15 @@ alshaya_hello_member.hello_member_config:
     _title: 'Alshaya Hello Member Configurations'
   requirements:
     _permission: 'administer site configuration'
+alshaya_hello_member.user.points_history:
+  path: '/user/{user}/points-history'
+  defaults:
+    _controller: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::pointsHistory'
+    _title: 'Points History'
+  requirements:
+    _custom_access: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::checkAccess'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user

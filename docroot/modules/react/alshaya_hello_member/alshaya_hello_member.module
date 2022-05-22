@@ -45,6 +45,11 @@ function alshaya_hello_member_theme() {
         'strings' => [],
       ],
     ],
+    'my_accounts_points_history' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
   ];
 
   return $theme;
@@ -92,4 +97,30 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     ],
   ];
   $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
+  // Do not proceed if Hello member is not enabled.
+  if (\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled() !== TRUE) {
+    return;
+  }
+
+  // Add Points history link.
+  $links['points_history'] = [
+    'text' => t('Points History', [], ['context' => 'hello_member']),
+    'route' => 'alshaya_hello_member.user.points_history',
+    'weight' => 41,
+  ];
+}
+
+/**
+ * Implements hook_alshaya_user_breadcrumb_routes_alter().
+ */
+function alshaya_hello_member_alshaya_user_breadcrumb_routes_alter(array &$routes) {
+  $routes['alshaya_hello_member.user.points_history'] = [
+    'user' => \Drupal::currentUser()->id(),
+  ];
 }
