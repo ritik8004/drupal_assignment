@@ -26,11 +26,11 @@
     color: $hm-registration-labels-txt !important;
     position: absolute !important;
     #{$left}: 0 !important;
-    top: -1rem !important;
+    top: rem(-16) !important;
   }
 
   input[type=date]:focus ~ label {
-    top: -1rem !important;
+    top: rem(-16) !important;
     bottom: 0 !important;
     #{$left}: 0 !important;
     opacity: 1 !important;
