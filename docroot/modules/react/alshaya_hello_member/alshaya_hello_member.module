@@ -111,7 +111,7 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
   // Add Points history link.
   $links['points_history'] = [
     'text' => t('Points History', [], ['context' => 'hello_member']),
-    'route' => 'alshaya_hello_member.user.points_history',
+    'route' => 'alshaya_hello_member.my_accounts.points_history',
     'weight' => 41,
   ];
 }
@@ -120,7 +120,7 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
  * Implements hook_alshaya_user_breadcrumb_routes_alter().
  */
 function alshaya_hello_member_alshaya_user_breadcrumb_routes_alter(array &$routes) {
-  $routes['alshaya_hello_member.user.points_history'] = [
+  $routes['alshaya_hello_member.my_accounts.points_history'] = [
     'user' => \Drupal::currentUser()->id(),
   ];
 }
