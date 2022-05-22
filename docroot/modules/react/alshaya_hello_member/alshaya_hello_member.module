@@ -67,18 +67,18 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
   ];
   $form['hello_member'] = [
     '#type' => 'details',
-    '#title' => '<div class="HM-add-more">' . t('Add More & Get More', [], ['context' => 'hello_member']) . '</div>',
+    '#title' => '<div class="hello-member-add-more">' . t('Add More & Get More', [], ['context' => 'hello_member']) . '</div>',
     '#open' => FALSE,
     '#weight' => '5',
   ];
   $form['hello_member']['teasing'] = [
     '#type' => 'markup',
     '#markup' => t('Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?', [], ['context' => 'hello_member']),
-    '#prefix' => '<div class="HM-accordion-wrapper">',
+    '#prefix' => '<div class="hello-member-accordion-wrapper">',
   ];
   $form['hello_member']['dob'] = [
     '#title' => t('Date of birth', [], ['context' => 'hello_member']),
-    '#suffix' => '<div class="HM-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>',
+    '#suffix' => '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>',
     '#type' => 'date',
     '#title_display' => 'before',
   ];
@@ -90,7 +90,7 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
       'female' => t('Female', [], ['context' => 'hello_member']),
       'nosay' => t('Prefer not to say', [], ['context' => 'hello_member']),
     ],
-    '#prefix' => '<div class="HM-gender">',
+    '#prefix' => '<div class="hello-member-gender">',
     '#suffix' => '</div>',
     '#suffix' => '</div>',
   ];

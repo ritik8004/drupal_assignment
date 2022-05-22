@@ -67,15 +67,15 @@
     }
   }
 
-  .HM-accordion-wrapper {
+  .hello-member-accordion-wrapper {
     padding: 0 rem(20) rem(28);
 
-    .HM-gift-info {
+    .hello-member-gift-info {
       margin-top: rem(6);
       color: $hm-registration-labels-txt;
     }
 
-    .HM-gender {
+    .hello-member-gender {
       @include breakpoint($upto-desktop) {
         padding-#{$right}: rem(36);
       }
