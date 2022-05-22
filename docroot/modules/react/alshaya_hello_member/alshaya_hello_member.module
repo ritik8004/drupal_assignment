@@ -67,29 +67,34 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
   ];
   $form['hello_member'] = [
     '#type' => 'details',
-    '#title' => t('Add More & Get More', [], ['context' => 'hello_member']),
+    '#title' => '<div class="hello-member-add-more">' . t('Add More & Get More', [], ['context' => 'hello_member']) . '</div>',
     '#open' => FALSE,
     '#weight' => '5',
   ];
   $form['hello_member']['teasing'] = [
     '#type' => 'markup',
     '#markup' => t('Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?', [], ['context' => 'hello_member']),
+    '#prefix' => '<div class="hello-member-accordion-wrapper">',
   ];
   $form['hello_member']['dob'] = [
     '#title' => t('Date of birth', [], ['context' => 'hello_member']),
-    '#suffix' => t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']),
+    '#suffix' => '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>',
     '#type' => 'date',
     '#title_display' => 'before',
   ];
   $form['hello_member']['select'] = [
-    '#title' => t('Gender', [], ['context' => 'hello_member']),
     '#type' => 'select',
-    '#empty_option' => t('- Select Gender -', [], ['context' => 'hello_member']),
+    '#empty_option' => t('Select Gender', [], ['context' => 'hello_member']),
     '#options' => [
       'male' => t('Male', [], ['context' => 'hello_member']),
       'female' => t('Female', [], ['context' => 'hello_member']),
       'nosay' => t('Prefer not to say', [], ['context' => 'hello_member']),
     ],
+    '#prefix' => '<div class="hello-member-gender">',
+    '#suffix' => '</div>',
+    '#suffix' => '</div>',
   ];
   $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
+  $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
+  $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
 }
