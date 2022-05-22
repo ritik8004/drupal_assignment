@@ -29,6 +29,10 @@
           minimumResultsForSearch: -1
         });
 
+        $('.HM-gender .form-select').once('select2select').select2({
+          minimumResultsForSearch: -1
+        });
+
         $('#table-cart-items .form-select').once('select2select').select2({
           minimumResultsForSearch: -1
         });

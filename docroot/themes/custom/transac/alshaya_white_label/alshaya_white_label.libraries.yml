@@ -771,3 +771,8 @@ my-accounts-hello-member:
   css:
     theme:
       css/conditional-sass/my-accounts-hello-member/my-accounts-hello-member.ltr.css: {}
+
+hello-member-registration:
+  css:
+    theme:
+      css/conditional-sass/hello-member-registration/hello-member-registration.ltr.css: {}
