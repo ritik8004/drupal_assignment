@@ -42,12 +42,14 @@ class ProcessedItem extends React.Component {
 
   render() {
     const { popup, cancelBtnState, showPrintLabelBtn } = this.state;
-    const { returnData, returnStatus } = this.props;
+    const { returnData } = this.props;
+    const returnStatus = returnData.returnInfo.extension_attributes.customer_status;
+    const returnStatusClass = returnStatus.replace(/\s+/g, '-').toLowerCase();
     return (
       <div key={returnData.returnInfo.increment_id} className="return-status-header">
         <div className="return-status-wrapper">
           <div className="return-status">
-            <span className={`status-label ${returnStatus}`}>{returnData.returnInfo.extension_attributes.customer_status}</span>
+            <span className={`status-label ${returnStatusClass}`}>{returnStatus}</span>
             <span className="status-message">
               {' - '}
               {returnData.returnInfo.extension_attributes.description}
