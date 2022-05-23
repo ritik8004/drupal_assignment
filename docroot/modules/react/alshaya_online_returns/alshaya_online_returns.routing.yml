@@ -20,6 +20,15 @@ alshaya_online_returns.return_confirmation:
   options:
     user: \d+
 
+alshaya_online_returns.return_label_download:
+  path: '/user/{user}/order/{order_id}/return/{return_id}/label'
+  defaults:
+    _controller: '\Drupal\alshaya_online_returns\Controller\OnlineReturnController::getReturnPrintLabel'
+  requirements:
+    _custom_access: '\Drupal\acq_customer\Controller\CustomerController::checkAccess'
+  options:
+    user: \d+
+
 alshaya_online_returns.alshaya_return_confirmation_settings:
   path: '/admin/config/alshaya/return-confirmation'
   defaults:

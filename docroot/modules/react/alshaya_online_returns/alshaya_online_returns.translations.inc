@@ -234,7 +234,7 @@ function _alshaya_online_returns_translations() {
         'ar' => 'قابلة للإرجاع',
         'context' => 'online_returns',
       ],
-      'Session Code' => [
+      'Season code' => [
         'ar' => 'أعد إرسال الرمز',
       ],
       'Cancel Return' => [
