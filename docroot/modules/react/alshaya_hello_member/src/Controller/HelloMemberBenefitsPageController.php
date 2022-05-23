@@ -85,7 +85,7 @@ class HelloMemberBenefitsPageController extends ControllerBase {
    * Returns a page title.
    */
   public function getTitle() {
-    return $this->t('Benefits');
+    return $this->t('Benefits', [], ['context' => 'hello_member']);
   }
 
 }

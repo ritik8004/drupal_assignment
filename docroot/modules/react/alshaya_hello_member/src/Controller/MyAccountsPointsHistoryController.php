@@ -85,7 +85,7 @@ class MyAccountsPointsHistoryController extends ControllerBase {
    * Returns a page title.
    */
   public function getTitle() {
-    return $this->t('Points History');
+    return $this->t('Points History', [], ['context' => 'hello_member']);
   }
 
 }
