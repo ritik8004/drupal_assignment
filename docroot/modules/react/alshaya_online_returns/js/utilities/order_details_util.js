@@ -1,22 +1,5 @@
 /* eslint-disable */
-import { getReturnsByOrderId } from './return_api_helper';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
-
-/**
- * Method to handle the modal on load event and render component.
- */
-const getReturns = async () => {
-  const { orderEntityId } = drupalSettings.onlineReturns;
-  const returnData = await getReturnsByOrderId(orderEntityId);
-
-  // @todo: Get return status and return message from api call.
-  if (hasValue(returnData) && hasValue(returnData.data) && hasValue(returnData.data.items)) {
-    const returns = processReturnData(returnData.data.items);
-    return returns;
-  }
-
-  return null;
-};
 
 /**
  * Utility function to process return data.
@@ -70,7 +53,6 @@ function getTypeFromReturnItem(returnItem) {
 }
 
 export {
-  getReturns,
   processReturnData,
   getTypeFromReturnItem,
 };

@@ -10,7 +10,7 @@ import OrderReturnInitiated from '../order-return-initiated';
 import ReturnedItemsListing from '../../../../../alshaya_online_returns/js/order-details/returned-items-listing';
 import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getReturns } from '../../../../../alshaya_online_returns/js/utilities/order_details_util';
+import { getReturns } from '../../../../../alshaya_online_returns/js/utilities/return_eligibility_util';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
@@ -55,7 +55,7 @@ class OrderDetails extends React.Component {
       <>
         <div className={`user__order--detail ${order.auraEnabled ? 'has-aura-points' : ''}`}>
           <OrderSummary order={order} />
-          <OrderReturnEligibility order={order} />
+          <OrderReturnEligibility order={order} returns={returns} />
           <OnlineBooking order={order} />
           <OrderDeliveryDetails order={order} />
           <OrderReturnInitiated order={order} returns={returns} />

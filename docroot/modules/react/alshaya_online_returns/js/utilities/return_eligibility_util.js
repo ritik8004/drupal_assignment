@@ -18,4 +18,19 @@ const getProcessedReturnsData = async (orderEntityId, context) => {
   return null;
 };
 
-export default getProcessedReturnsData;
+/**
+ * Method to handle the modal on load event and render component.
+ */
+const getReturns = async () => {
+  const { orderEntityId } = drupalSettings.onlineReturns;
+  const returns = await getProcessedReturnsData(orderEntityId, 'order_detail');
+  if (hasValue(returns)) {
+    return returns;
+  }
+  return null;
+};
+
+export {
+  getReturns,
+  getProcessedReturnsData,
+};

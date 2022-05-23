@@ -9,7 +9,7 @@ import {
 } from '../../utilities/online_returns_util';
 import ReturnEligibilityMessage from '../../common/return-eligibility-message';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import getProcessedReturnsData from '../../utilities/return_eligibility_util';
+import { getProcessedReturnsData } from '../../utilities/return_eligibility_util';
 
 class OnlineReturnsEligibility extends React.Component {
   componentDidMount() {
