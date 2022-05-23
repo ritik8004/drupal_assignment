@@ -5,6 +5,7 @@ var config = {
   entry: {
     my_accounts: './js/src/my-accounts.js',
     my_membership_info: './js/src/my-membership-info.js',
+    hello_member_benefits_page: './js/src/hello-member-benefits-page.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

@@ -45,6 +45,11 @@ function alshaya_hello_member_theme() {
         'strings' => [],
       ],
     ],
+    'hello_member_benefits_page' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
   ];
 
   return $theme;
