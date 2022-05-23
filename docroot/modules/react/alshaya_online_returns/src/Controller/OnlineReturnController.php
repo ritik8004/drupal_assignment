@@ -6,7 +6,6 @@ use Drupal\user\UserInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
@@ -342,36 +341,37 @@ class OnlineReturnController extends ControllerBase {
       // Get the return request first.
       $endpoint = "rma/returns/$decoded_return_id";
       $request_options = [
-        'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_get'),
+        'timeout' => $this->configFactory->get('alshaya_online_returns.settings')->get('return_get'),
       ];
 
       // Request from magento to get return items.
       $return_item_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
-      // Decode the response and get the increment return id.
-      $decoded_return_item = json_decode($return_item_response, TRUE);
 
-      // Do the validation before getting return item label PDF.
-      if ($this->isValidReturnRequest($user, $decoded_return_item)) {
-        $incremented_return_id = $decoded_return_item['increment_id'];
+      if ($return_item_response) {
+        // Decode the response and get the increment return id.
+        $decoded_return_item = json_decode($return_item_response, TRUE);
 
-        $endpoint = "awb/$incremented_return_id";
-        // Request from magento to get return print label.
-        $return_print_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+        // Do the validation before getting return item label PDF.
+        if ($this->isValidReturnRequest($user, $decoded_return_item)) {
+          $incremented_return_id = $decoded_return_item['increment_id'];
 
-        // If json_decode is not successful, means we have actual file response.
-        // Otherwise we have error message which can be decoded by json.
-        if (!json_decode($return_print_response)) {
-          $response = new Response($return_print_response);
-          $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'Return_Print_Label_' . $incremented_return_id . '.pdf'
-          );
-          $response->headers->set('Content-Disposition', $disposition);
-          return $response;
+          $endpoint = "awb/$incremented_return_id";
+          // Request from magento to get return print label.
+          $return_print_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+
+          // If json_decode is not successful, means we have actual file
+          // response. Otherwise we have error message which can be decoded by
+          // json.
+          if (!json_decode($return_print_response)) {
+            $response = new Response($return_print_response);
+            $disposition = $response->headers->makeDisposition(
+              ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+              'ReturnLabel-' . $incremented_return_id . '.pdf'
+            );
+            $response->headers->set('Content-Disposition', $disposition);
+            return $response;
+          }
         }
-      }
-      else {
-        throw new AccessDeniedHttpException();
       }
     }
 
@@ -390,11 +390,11 @@ class OnlineReturnController extends ControllerBase {
   protected function isValidReturnRequest(UserInterface $user, array $returnItem) {
     // Validated that `awb_path` and `is_picked` is present and have valid data.
     if (array_key_exists('awb_path', $returnItem['extension_attributes'])
-      && $returnItem['awb_path']
+      && $returnItem['extension_attributes']['awb_path']
       && array_key_exists('is_picked', $returnItem['extension_attributes'])
-      && !$returnItem['is_picked']
+      && !$returnItem['extension_attributes']['is_picked']
       && array_key_exists('is_closed', $returnItem['extension_attributes'])
-      && !$returnItem['is_closed']
+      && !$returnItem['extension_attributes']['is_closed']
       && array_key_exists('customer_id', $returnItem)
       && $returnItem['customer_id'] == $user->get('acq_customer_id')->getString()) {
       return TRUE;
