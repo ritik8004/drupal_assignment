@@ -359,10 +359,6 @@ class CustomerController extends ControllerBase {
             if ($attribute['label'] instanceof TranslatableMarkup) {
               $attribute['label'] = render($attribute['label']);
             }
-            elseif (is_string($attribute['label'])) {
-              // phpcs:ignore
-              $attribute['label'] = $this->t($attribute['label']);
-            }
           }
         }
       }
