@@ -362,6 +362,8 @@ window.commerceBackend.refreshCart = async (data) => {
         && response.data.response_message[0].indexOf('out of stock') > -1) {
         clearProductStatusStaticCache();
         window.commerceBackend.clearStockStaticCache();
+        // Refresh stock for all items in the cart.
+        window.commerceBackend.triggerStockRefresh(null);
       }
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
