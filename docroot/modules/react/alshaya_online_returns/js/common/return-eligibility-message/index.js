@@ -35,7 +35,6 @@ class ReturnEligibilityMessage extends React.Component {
 
     const returnInactiveMessage = getReturnWindowNotActiveMessage();
     if (hasValue(returns) && ifOrderHasActiveReturns(returns.returns)) {
-      document.querySelector('#online-returns-eligibility-window').classList.add('return-window-closed');
       return (
         <div className="eligibility-window-container">
           <div className="eligibility-message-wrapper">
