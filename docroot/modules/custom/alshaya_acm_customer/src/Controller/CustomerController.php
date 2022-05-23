@@ -356,8 +356,13 @@ class CustomerController extends ControllerBase {
         // Translate attribute labels.
         if (isset($product['attributes'])) {
           foreach ($product['attributes'] as &$attribute) {
-            // phpcs:ignore
-            $attribute['label'] = $this->t($attribute['label']);
+            if ($attribute['label'] instanceof TranslatableMarkup) {
+              $attribute['label'] = render($attribute['label']);
+            }
+            elseif (is_string($attribute['label'])) {
+              // phpcs:ignore
+              $attribute['label'] = $this->t($attribute['label']);
+            }
           }
         }
       }
