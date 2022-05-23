@@ -41,11 +41,11 @@ const OrderItems = (props) => {
             )}
 
             <div className="light">
-              {Drupal.t('Item Code: @sku', { '@sku': product.sku })}
+              {Drupal.t('Item Code: @sku', { '@sku': product.sku }, { context: 'online_returns' })}
             </div>
 
             <div className="light">
-              {Drupal.t('Quantity: @quantity', { '@quantity': product.ordered })}
+              {Drupal.t('Quantity: @quantity', { '@quantity': product.ordered }, { context: 'online_returns' })}
             </div>
 
             { hasValue(product.free_gift_label) && (

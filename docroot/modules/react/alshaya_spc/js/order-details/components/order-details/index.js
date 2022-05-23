@@ -69,7 +69,7 @@ class OrderDetails extends React.Component {
           <div className="sub-total-row">
             <div className="desktop-only">&nbsp;</div>
             <div className="above-mobile">&nbsp;</div>
-            <div className="right--align">{Drupal.t('Subtotal')}</div>
+            <div className="right--align">{Drupal.t('Sub total')}</div>
             <div className="blend">
               {parse(order.order_details.sub_total)}
             </div>

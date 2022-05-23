@@ -346,11 +346,19 @@ class CustomerController extends ControllerBase {
     $details['products'] = $build['#products'] ?? [];
     $details['cancelled_products'] = $build['#cancelled_products'] ?? [];
 
-    // Render product images.
+    // Render product images, translate attribute labels.
     foreach (['products', 'cancelled_products'] as $type) {
       foreach ($details[$type] as &$product) {
+        // Render images.
         if (isset($product['image'])) {
           $product['image'] = render($product['image']);
+        }
+        // Translate attribute labels.
+        if (isset($product['attributes'])) {
+          foreach ($product['attributes'] as &$attribute) {
+            // phpcs:ignore
+            $attribute['label'] = $this->t($attribute['label']);
+          }
         }
       }
     }
