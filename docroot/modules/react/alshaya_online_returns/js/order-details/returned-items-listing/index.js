@@ -1,7 +1,8 @@
 import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import { getTypeFromReturnItem, isReturnClosed } from '../../utilities/order_details_util';
+import { getTypeFromReturnItem } from '../../utilities/order_details_util';
+import { isReturnClosed } from '../../utilities/return_api_helper';
 import ReturnedItems from './returned-items';
 
 class ReturnedItemsListing extends React.Component {
@@ -25,31 +26,29 @@ class ReturnedItemsListing extends React.Component {
     }
 
     return (
-      <div className="returned-items-wrapper">
-        <div className="returned-items">
-          {returns.map((returnItem) => (
-            <div key={returnItem.returnInfo.increment_id} className="return-items-wrapper">
-              <ConditionalView condition={hasValue(getTypeFromReturnItem(returnItem))
+      <div className="returned-items-row returned-items">
+        {returns.map((returnItem) => (
+          <div key={returnItem.returnInfo.increment_id} className="items-wrapper">
+            <ConditionalView condition={hasValue(getTypeFromReturnItem(returnItem))
               && isReturnClosed(returnItem.returnInfo)}
-              >
-                <div className="title-wrapper">
-                  <span>
-                    {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
-                    {' '}
-                    {'-'}
-                    {' '}
-                    {this.getReturnedItemsSubTitle(getTypeFromReturnItem(returnItem))}
-                  </span>
+            >
+              <div className="title-wrapper">
+                <span>
+                  {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
+                  {' '}
+                  {'-'}
+                  {' '}
+                  {this.getReturnedItemsSubTitle(getTypeFromReturnItem(returnItem))}
+                </span>
+              </div>
 
-                  <ReturnedItems
-                    key={getTypeFromReturnItem(returnItem)}
-                    returnData={returnItem}
-                  />
-                </div>
-              </ConditionalView>
-            </div>
-          ))}
-        </div>
+              <ReturnedItems
+                key={getTypeFromReturnItem(returnItem)}
+                returnData={returnItem}
+              />
+            </ConditionalView>
+          </div>
+        ))}
       </div>
     );
   }

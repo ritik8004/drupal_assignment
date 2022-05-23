@@ -6,7 +6,6 @@ var config = {
     pdp: './js/pdp',
     returnrequest: './js/returnrequest',
     my_accounts: './js/my-accounts',
-    order_details: './js/order-details',
     returnconfirmation: './js/return-confirmation',
   },
   output: {

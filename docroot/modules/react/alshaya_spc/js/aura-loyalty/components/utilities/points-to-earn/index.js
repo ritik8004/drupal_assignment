@@ -9,6 +9,7 @@ import AuraHeaderIcon from '../../../../../../alshaya_aura_react/js/svg-componen
 import AuraVerticalIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-vertical-icon';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
+import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 
 const PointsToEarnMessage = (props) => {
   const { pointsToEarn, loyaltyStatus, wait } = props;
@@ -69,24 +70,26 @@ const PointsToEarnMessage = (props) => {
               '@pts': wait ? renderToString(<Loading />) : pointsToEarn,
             }))}
             <div>
-              <a
-                className="spc-link-play-store"
-                href={appleAppStoreLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {getStringMessage('app_store_link_text')}
-              </a>
-              <span className="spc-aura-or-text">/</span>
-              <a
-                className="spc-link-play-store"
-                href={googlePlayStoreLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {getStringMessage('play_store_link_text')}
-              </a>
-              <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
+              <ConditionalView condition={window.innerWidth < 768}>
+                <a
+                  className="spc-link-play-store"
+                  href={appleAppStoreLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {getStringMessage('app_store_link_text')}
+                </a>
+                <span className="spc-aura-or-text">/</span>
+                <a
+                  className="spc-link-play-store"
+                  href={googlePlayStoreLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {getStringMessage('play_store_link_text')}
+                </a>
+                <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
+              </ConditionalView>
             </div>
           </span>
         </div>
