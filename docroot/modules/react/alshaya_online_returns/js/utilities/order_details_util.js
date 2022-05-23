@@ -3,19 +3,22 @@
 /**
  * Utility function to process return data.
  */
-function processReturnData(returns) {
+function processReturnData(returns, context = 'order_detail') {
   const allReturns = [];
 
   returns.forEach((returnItem) => {
     let itemsData = [];
-    returnItem.items.forEach((item) => {
-      const productDetails = drupalSettings.onlineReturns.products.find((element) => {
-        return element.item_id === item.order_item_id;
-      });
+    // We need product items on order details page.
+    if (context === 'order_detail') {
+      returnItem.items.forEach((item) => {
+        const productDetails = drupalSettings.onlineReturns.products.find((element) => {
+          return element.item_id === item.order_item_id;
+        });
 
-      const mergedItem = Object.assign(productDetails, {returnData: item});
-      itemsData.push(mergedItem);
-    });
+        const mergedItem = Object.assign(productDetails, {returnData: item});
+        itemsData.push(mergedItem);
+      });
+    }
 
     const returnData = {
       returnInfo: returnItem,

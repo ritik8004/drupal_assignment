@@ -1,7 +1,7 @@
 import React from 'react';
 import ReturnEligibilityMessage from '../../common/return-eligibility-message';
 
-const ReturnEligibility = () => {
+const ReturnEligibility = (returns) => {
   const {
     onlineReturns: {
       orderId,
@@ -19,6 +19,7 @@ const ReturnEligibility = () => {
       returnExpiration={returnExpiration}
       paymentMethod={paymentMethod}
       orderType={orderType}
+      returns={returns}
     />
   );
 };

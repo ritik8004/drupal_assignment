@@ -100,6 +100,25 @@ function getReturnWindowClosedMessage(date) {
 }
 
 /**
+ * Utility function to get return window not active message.
+ */
+function getReturnWindowEligibleDateMessage(date) {
+  const message = Drupal.t('Eligible for return until @date',
+    { '@date': formatDate(date) },
+    { context: 'online_returns' });
+  return message;
+}
+
+/**
+ * Utility function to get return window not active message.
+ */
+function getReturnWindowNotActiveMessage() {
+  const message = Drupal.t('Online returns can be placed once existing returns are processed.',
+    { context: 'online_returns' });
+  return message;
+}
+
+/**
  * Utility function to get return window open message.
  */
 function getReturnWindowOpenMessage(date) {
@@ -114,6 +133,17 @@ function getReturnWindowOpenMessage(date) {
  */
 function isReturnWindowClosed(date) {
   return (new Date(date) < new Date());
+}
+
+/**
+ * Helper function to check if any active return exists.
+ */
+function ifOrderHasActiveReturns(returns) {
+  if (hasValue(returns)
+    && returns.some((item) => item.returnInfo.extension_attributes.is_closed === false)) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -198,4 +228,7 @@ export {
   getAdressData,
   formatDateTime,
   getOrderDetails,
+  ifOrderHasActiveReturns,
+  getReturnWindowEligibleDateMessage,
+  getReturnWindowNotActiveMessage,
 };

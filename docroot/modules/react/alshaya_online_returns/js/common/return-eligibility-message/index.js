@@ -5,6 +5,9 @@ import {
   getReturnWindowOpenMessage,
   isReturnWindowClosed,
   getReturnRequestUrl,
+  ifOrderHasActiveReturns,
+  getReturnWindowEligibleDateMessage,
+  getReturnWindowNotActiveMessage,
 } from '../../utilities/online_returns_util';
 import ReturnAction from '../return-action';
 import ReturnAtStore from '../return-at-store';
@@ -23,10 +26,25 @@ class ReturnEligibilityMessage extends React.Component {
       returnExpiration,
       paymentMethod,
       orderType,
+      returns,
     } = this.props;
 
     if (!hasValue(orderId) || isReturnEligible === null) {
       return null;
+    }
+
+    const returnInactiveMessage = getReturnWindowNotActiveMessage();
+    if (hasValue(returns) && ifOrderHasActiveReturns(returns.returns)) {
+      document.querySelector('#online-returns-eligibility-window').classList.add('return-window-closed');
+      return (
+        <div className="eligibility-window-container">
+          <div className="eligibility-message-wrapper">
+            <ReturnWindow message={getReturnWindowEligibleDateMessage(returnExpiration)} />
+            <div className="return-inactive">{returnInactiveMessage}</div>
+          </div>
+          <ReturnAtStore returnButtonclass="return-button-enabled" />
+        </div>
+      );
     }
 
     if (isReturnWindowClosed(returnExpiration)) {
