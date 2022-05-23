@@ -139,7 +139,7 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
           'id' => 'alshaya-algolia-plp',
           'data-hierarchy' => $algoliaSearch['hierarchy'] ?? '',
           'data-level' => $algoliaSearch['level'] ?? '',
-          'data-rule-context' => $algoliaSearch['ruleContext'] ?? [],
+          'data-rule-context' => $algoliaSearch['ruleContext'] ? implode(',', $algoliaSearch['ruleContext']) : '',
           'data-category-field' => $algoliaSearch['category_field'] ?? '',
           'data-promotion-id' => $algoliaSearch['promotionNodeId'] ?? '',
         ],
