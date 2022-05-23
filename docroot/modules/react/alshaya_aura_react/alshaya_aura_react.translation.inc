@@ -420,8 +420,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'انضم إلى أورا',
         'context' => 'aura',
       ],
-      'to earn <b>@pts</b> points on this purchase.' => [
-        'ar' => 'للفوز <b>@pts</b> بنقاط عند إتمام عملية الشراء.',
+      'to earn <b>!pts</b> points on this purchase.' => [
+        'ar' => 'للفوز <b>!pts</b> بنقاط عند إتمام عملية الشراء.',
         'context' => 'aura',
       ],
       'To redeem points download Aura app.' => [

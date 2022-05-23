@@ -22,7 +22,7 @@ const PointsToEarnMessage = (props) => {
       <span className="spc-aura-points-to-earn">
         {parse(getStringMessage(
           'cart_to_earn_with_points',
-          { '@pts': pointsToEarn },
+          { '!pts': pointsToEarn },
         ))}
       </span>
     );
@@ -41,7 +41,7 @@ const PointsToEarnMessage = (props) => {
         <div className="spc-aura-cart-content">
           <span className="spc-aura-points-to-earn">
             {parse(getStringMessage('cart_earn_with_this_purchase', {
-              '@pts': wait ? renderToString(<Loading />) : pointsToEarn,
+              '!pts': wait ? renderToString(<Loading />) : pointsToEarn,
             }))}
             <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
           </span>
