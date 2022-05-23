@@ -390,11 +390,11 @@ class OnlineReturnController extends ControllerBase {
   protected function isValidReturnRequest(UserInterface $user, array $returnItem) {
     // Validated that `awb_path` and `is_picked` is present and have valid data.
     if (!empty($returnItem['extension_attributes']['awb_path'])
-      && array_key_exists('is_picked', $returnItem['extension_attributes'])
+      && !empty($returnItem['extension_attributes']['is_picked'])
       && !$returnItem['extension_attributes']['is_picked']
-      && array_key_exists('is_closed', $returnItem['extension_attributes'])
+      && !empty($returnItem['extension_attributes']['is_closed'])
       && !$returnItem['extension_attributes']['is_closed']
-      && array_key_exists('customer_id', $returnItem)
+      && !empty($returnItem['customer_id'])
       && $returnItem['customer_id'] == $user->get('acq_customer_id')->getString()) {
       return TRUE;
     }
