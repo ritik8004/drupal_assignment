@@ -897,6 +897,10 @@ window.commerceBackend = window.commerceBackend || {};
     }
 
     window.commerceBackend.clearStockStaticCache();
+    // As static cache is cleared above, this will now make a new call to the
+    // cart API to fetch fresh stock data. Later calls will fetch from this
+    // static cache only.
+    window.commerceBackend.loadProductStockDataFromCart(null);
     // Now store the product data to local storage.
     await Object.entries(skus).forEach(async function ([ parentSku, sku ]) {
       var stockData = await window.commerceBackend.loadProductStockDataFromCart(sku);
