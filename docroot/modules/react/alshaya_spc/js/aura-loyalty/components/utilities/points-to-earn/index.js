@@ -69,23 +69,25 @@ const PointsToEarnMessage = (props) => {
               '@pts': wait ? renderToString(<Loading />) : pointsToEarn,
             }))}
             <div>
-              <a
-                className="spc-link-play-store"
-                href={appleAppStoreLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {getStringMessage('app_store_link_text')}
-              </a>
-              <span className="spc-aura-or-text">/</span>
-              <a
-                className="spc-link-play-store"
-                href={googlePlayStoreLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {getStringMessage('play_store_link_text')}
-              </a>
+              <div className="mobile-only">
+                <a
+                  className="spc-link-play-store"
+                  href={appleAppStoreLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {getStringMessage('app_store_link_text')}
+                </a>
+                <span className="spc-aura-or-text">/</span>
+                <a
+                  className="spc-link-play-store"
+                  href={googlePlayStoreLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {getStringMessage('play_store_link_text')}
+                </a>
+              </div>
               <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
             </div>
           </span>
