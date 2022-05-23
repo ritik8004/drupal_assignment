@@ -78,10 +78,26 @@
         .tooltip-box {
           background-color: $aura-spc-checkout-highlight;
           border: rem(1) solid $aura-spc-checkout-highlight;
+          #{$left}: rem(-127);
+
+          html[lang=ar] & {
+            @include breakpoint($desktop) {
+              right: 0;
+            }
+          }
 
           &::before,
           &::after {
             border-top-color: $aura-spc-checkout-highlight;
+            margin-#{$left}: rem(37);
+
+            html[lang=ar] & {
+              @include breakpoint($upto-desktop) {
+                left: 22%;
+              }
+
+              left: 93%;
+            }
           }
         }
       }
