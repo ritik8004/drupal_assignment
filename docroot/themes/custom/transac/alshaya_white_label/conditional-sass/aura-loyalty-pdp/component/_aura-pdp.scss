@@ -26,18 +26,20 @@
     max-height: rem(16);
 
     .tooltip-box {
-      transform: translateX(-75%);
-
-      .new-pdp-magazine-layout &,
-      .magazine-layout &,
-      .magazine-layout-v2 & {
-        transform: translateX(-50%);
-      }
+      transform: translateX(0);
+      #{$left}: rem(-150);
+      z-index: 4;
     }
 
     &::before {
       width: rem(16);
       height: rem(16);
+    }
+  }
+
+  .tooltip-anchor.tooltip-box {
+    html[lang=ar] & {
+      transform: translateX(0);
     }
   }
 
