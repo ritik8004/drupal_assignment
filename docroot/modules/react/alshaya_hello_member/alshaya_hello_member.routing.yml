@@ -9,7 +9,7 @@ alshaya_hello_member.my_accounts.hm_points_history:
   path: '/user/{user}/hm-points-history'
   defaults:
     _controller: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::pointsHistory'
-    _title: 'Points History'
+    _title_callback: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::getTitle'
   requirements:
     _custom_access: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::checkAccess'
     user: \d+
@@ -21,7 +21,7 @@ alshaya_hello_member.hm_benefits_page:
   path: '/user/{user}/hm-benefits'
   defaults:
     _controller: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::getBenefitsDetails'
-    _title: 'Points History'
+    _title_callback: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::getTitle'
   requirements:
     _custom_access: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::checkAccess'
     user: \d+

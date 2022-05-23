@@ -19,7 +19,6 @@ class MyBenefitsPage extends React.Component {
 
     return (
       <div className="my-benefits-page-wrapper">
-        display my benefits in page.
         {/* Display my benefits on page in details */}
       </div>
     );

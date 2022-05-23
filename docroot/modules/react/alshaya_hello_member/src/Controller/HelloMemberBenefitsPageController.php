@@ -77,7 +77,15 @@ class HelloMemberBenefitsPageController extends ControllerBase {
    *   Return access result object.
    */
   public function checkAccess() {
-    return AccessResult::allowedIf($this->helloMemberHelper->isHelloMemberEnabled());
+    $settings['enabled'] = $this->helloMemberHelper->isHelloMemberEnabled();
+    return AccessResult::allowedIf($settings['enabled'])->addCacheTags(['config:' . $settings['enabled'] . '.settings']);
+  }
+
+  /**
+   * Returns a page title.
+   */
+  public function getTitle() {
+    return $this->t('Benefits');
   }
 
 }

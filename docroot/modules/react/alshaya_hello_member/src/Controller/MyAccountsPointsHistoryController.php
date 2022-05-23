@@ -77,8 +77,15 @@ class MyAccountsPointsHistoryController extends ControllerBase {
    *   Return access result object.
    */
   public function checkAccess() {
-    $settings['enabled'] = $hello_member_helper->isHelloMemberEnabled();
+    $settings['enabled'] = $this->helloMemberHelper->isHelloMemberEnabled();
     return AccessResult::allowedIf($settings['enabled'])->addCacheTags(['config:' . $settings['enabled'] . '.settings']);
+  }
+
+  /**
+   * Returns a page title.
+   */
+  public function getTitle() {
+    return $this->t('Points History');
   }
 
 }
