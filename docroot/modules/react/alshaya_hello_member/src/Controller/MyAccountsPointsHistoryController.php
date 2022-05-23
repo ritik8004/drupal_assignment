@@ -3,8 +3,6 @@
 namespace Drupal\alshaya_hello_member\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Cache\Cache;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -59,10 +57,6 @@ class MyAccountsPointsHistoryController extends ControllerBase {
    * View hello member points history.
    */
   public function pointsHistory() {
-    $cache_tags = [];
-    $alshaya_hello_member_config = $this->config('alshaya_hello_member.hello_member_helper');
-
-    $cache_tags = Cache::mergeTags($cache_tags, $alshaya_hello_member_config->getCacheTags());
     $this->moduleHandler->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
 
     return [
@@ -72,9 +66,6 @@ class MyAccountsPointsHistoryController extends ControllerBase {
         'library' => [
           'alshaya_hello_member/alshaya_hello_member_my_accounts_points_history',
         ],
-      ],
-      '#cache' => [
-        'tags' => $cache_tags,
       ],
     ];
   }

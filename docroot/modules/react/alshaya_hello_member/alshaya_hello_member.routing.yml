@@ -5,8 +5,8 @@ alshaya_hello_member.hello_member_config:
     _title: 'Alshaya Hello Member Configurations'
   requirements:
     _permission: 'administer site configuration'
-alshaya_hello_member.my_accounts.points_history:
-  path: '/user/{user}/points-history'
+alshaya_hello_member.my_accounts.hm_points_history:
+  path: '/user/{user}/hm-points-history'
   defaults:
     _controller: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::pointsHistory'
     _title: 'Points History'
