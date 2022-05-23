@@ -57,7 +57,7 @@ class ProcessedItem extends React.Component {
       return_id: returnId,
     }));
 
-    return `/user/${uid}/order/${orderId}/return/${encodedReturnId}/label`;
+    return Drupal.url(`user/${uid}/order/${orderId}/return/${encodedReturnId}/label`);
   }
 
   render() {

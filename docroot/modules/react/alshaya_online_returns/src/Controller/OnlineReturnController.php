@@ -341,7 +341,7 @@ class OnlineReturnController extends ControllerBase {
       // Get the return request first.
       $endpoint = "rma/returns/$decoded_return_id";
       $request_options = [
-        'timeout' => $this->configFactory->get('alshaya_online_returns.settings')->get('return_get'),
+        'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('return_get'),
       ];
 
       // Request from magento to get return items.
