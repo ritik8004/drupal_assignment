@@ -29,6 +29,13 @@ class ProcessedItem extends React.Component {
         showPrintLabelBtn: true,
       });
     }
+
+    // Hide Cancel button when return is picked up.
+    if (hasValue(isPicked)) {
+      this.setState({
+        cancelBtnState: false,
+      });
+    }
   }
 
   /**
