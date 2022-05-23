@@ -5,8 +5,25 @@
  * Install file for alshaya_media.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update media image config to display image upload field.
+ */
+function alshaya_media_update_8106() {
+  // Update media image config to display image upload field.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['core.entity_form_display.media.image.default'],
+    'lightning_media_image',
+    'optional',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+}
 
 /**
  * Implements hook_update_N().
