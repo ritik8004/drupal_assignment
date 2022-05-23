@@ -38,7 +38,18 @@ class ProcessedItem extends React.Component {
   /**
    * Returns the return print label link.
    */
-  getPrintLabelPdfLink = () => '#';
+  getPrintLabelPdfLink = () => {
+    const { uid } = drupalSettings.user;
+    const { returnData } = this.props;
+    // Extract the return id and order id from the return data.
+    const { order_increment_id: orderId, entity_id: returnId } = returnData.returnInfo;
+    // Encode the return entity id.
+    const encodedReturnId = btoa(JSON.stringify({
+      return_id: returnId,
+    }));
+
+    return Drupal.url(`user/${uid}/order/${orderId}/return/${encodedReturnId}/label`);
+  }
 
   render() {
     const { popup, cancelBtnState, showPrintLabelBtn } = this.state;

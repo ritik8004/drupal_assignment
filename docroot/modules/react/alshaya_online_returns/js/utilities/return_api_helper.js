@@ -3,7 +3,6 @@ import { getErrorResponse } from '../../../js/utilities/error';
 import logger from '../../../js/utilities/logger';
 import { callMagentoApi, prepareFilterData } from '../../../js/utilities/requestHelper';
 import { getOrderDetails } from './online_returns_util';
-import { isReturnClosed } from './order_details_util';
 
 /**
  * Prepare data to create return request.
@@ -167,6 +166,19 @@ const getReturnsByOrderId = async (orderId) => {
 };
 
 /**
+ * Utility function to check if return is open or not.
+ *
+ * @param {object} returnItem
+ *   The individual return item object.
+ *
+ * @returns {boolean}
+ *   True if order return if closed else False.
+ */
+function isReturnClosed(returnItem) {
+  return returnItem.extension_attributes.is_closed;
+}
+
+/**
  * Utility function to validate if return request is valid.
  */
 async function validateReturnRequest(orderDetails) {
@@ -277,4 +289,5 @@ export {
   validateReturnRequest,
   prepareCancelRequestData,
   cancelReturnRequest,
+  isReturnClosed,
 };

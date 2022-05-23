@@ -6,6 +6,7 @@
     color: $aura-form-otp-text;
     max-width: 23.4375rem;
     background: $aura-form-otp-background !important;
+    z-index: 0;
 
     @include breakpoint($only-mobile) {
       width: 100% !important;
@@ -94,7 +95,16 @@
 
     .aura-modal-form,
     .spc-aura-unlink-card-wrapper {
-      background: $aura-form-modal-section-bg;
+      &::after {
+        content: "";
+        background: $aura-form-modal-section-bg;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -2;
+      }
 
       .aura-modal-form-items {
         font-family: $aura-regular;
@@ -225,15 +235,26 @@
         .aura-modal-form-submit,
         .aura-modal-form-submit-without-otp,
         .spc-aura-link-card-submit {
+          $border: rem(2);
+
           color: $aura-join-submit-text;
-          border-image-source: $aura-join-now-submit-bg-src;
-          border-image-slice: 1;
-          background-image: $aura-join-now-submit-button-bg;
-          background-origin: border-box;
-          background-clip: content-box, border-box;
-          border-style: solid;
-          border-width: rem(2);
-          margin: rem(20);
+          background: $aura-form-modal-section-bg;
+          background-clip: padding-box;
+          border: solid $border transparent;
+          position: relative;
+
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            margin: -$border;
+            border-radius: inherit;
+            background: $aura-join-now-submit-bg-src;
+          }
         }
 
         .aura-modal-form-submit-without-otp {
@@ -349,6 +370,8 @@
 }
 
 .aura-modal-congratulations-overlay {
+  z-index: 1001 !important;
+
   .aura-modal-congratulations-content {
     border-radius: rem(10);
 
@@ -445,9 +468,10 @@
   }
 }
 
-// iOS - Safari.
+// Join Aura Modal Positioning Fix For Mobile Devices.
+
 @include breakpoint($only-mobile) {
-  body.aura-enabled.safari {
+  body.aura-enabled {
     #block-alshayamainmenu.aura-header-modal-open {
       ul.menu__list.menu--one__list {
         width: 100vw;

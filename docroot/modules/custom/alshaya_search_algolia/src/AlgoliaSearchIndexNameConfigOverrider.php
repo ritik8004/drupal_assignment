@@ -56,8 +56,8 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_list'] = '';
     $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_batch_deletion'] = TRUE;
 
-    $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_batch_deletion'] = TRUE;
-    $overrides['search_api.index.alshaya_algolia_index']['options']['object_id_field'] = 'field_skus';
+    $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_batch_deletion'] = TRUE;
+    $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['object_id_field'] = 'field_skus';
 
     // @codingStandardsIgnoreLine
     global $_acsf_site_name;
