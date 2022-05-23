@@ -27,6 +27,14 @@ function alshaya_hello_member_install() {
   $my_account_links = (int) $config_factory->get('block.block.alshayamyaccountlinks')->get('weight');
   $config_factory->getEditable('block.block.mymembershipinfoblock')->set('weight', $my_account_links - 1)->save();
 
+  // Enable points history link in the menu.
+  $config = $config_factory->getEditable('alshaya_user.settings');
+  // phpcs:ignore
+  $alshaya_hello_member = unserialize($config->get('my_account_enabled_links'));
+  $alshaya_hello_member['points_history'] = 'points_history';
+  $config->set('my_account_enabled_links', serialize($alshaya_hello_member));
+  $config->save();
+
   // Add translations.
   module_load_include('inc', 'alshaya_hello_member', 'alshaya_hello_member.translation');
   if ($translations = _alshaya_hello_member_get_translations()) {

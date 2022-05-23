@@ -573,6 +573,10 @@ function _alshaya_aura_react_translations() {
         'ar' => 'تحقق من قيمة نقاطك:',
         'context' => 'aura',
       ],
+      'A card number is required to link your card. Please enter your details to proceed.' => [
+        'ar' => 'رقم البطاقة يحتاج الربط مع بطاقتك. يرجى ادخال بياناتك للاستمرار.',
+        'context' => 'aura',
+      ],
     ],
   ];
 }
