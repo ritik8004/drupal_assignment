@@ -137,6 +137,7 @@ class AlshayaReviewFormFieldsDrushCommand extends DrushCommands {
           $possible_val = '';
           $wrapper_attributes_val = '';
           $required_val = 'no';
+          $title_val = (isset($value['#title']) && !empty($value['#title'])) ? $value['#title'] : $value['#id'];
           // For select type fields.
           if ($value['#type'] === 'select' && !empty($value['#options'])) {
             $possible_val = implode(", ", array_keys($value['#options']));
@@ -148,7 +149,7 @@ class AlshayaReviewFormFieldsDrushCommand extends DrushCommands {
             $required_val = 'yes';
           }
           // Writing the values in CSV.
-          fputcsv($handle, [$value['#title'], $value['#type'], $possible_val,
+          fputcsv($handle, [$title_val, $value['#type'], $possible_val,
             $required_val, $value['#minlength'], $value['#maxlength'],
             $value['#default_value'], $value['#visible'],
             $value['#group_type'], $wrapper_attributes_val,
