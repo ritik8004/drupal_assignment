@@ -11,4 +11,11 @@
       text-transform: uppercase;
     }
   }
+
+  .egift-open-amount-wrapper {
+    button {
+      background-color: $egift-myaccount-topup-button;
+      border-color: $egift-myaccount-topup-button;
+    }
+  }
 }
