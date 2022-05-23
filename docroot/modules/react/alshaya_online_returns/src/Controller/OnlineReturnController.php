@@ -388,18 +388,28 @@ class OnlineReturnController extends ControllerBase {
    *   The array containing return item info.
    */
   protected function isValidReturnRequest(UserInterface $user, array $returnItem) {
-    // Validated that `awb_path` and `is_picked` is present and have valid data.
-    if (!empty($returnItem['extension_attributes']['awb_path'])
-      && !empty($returnItem['extension_attributes']['is_picked'])
-      && !$returnItem['extension_attributes']['is_picked']
-      && !empty($returnItem['extension_attributes']['is_closed'])
-      && !$returnItem['extension_attributes']['is_closed']
-      && !empty($returnItem['customer_id'])
-      && $returnItem['customer_id'] == $user->get('acq_customer_id')->getString()) {
-      return TRUE;
+    // Return from here if `awb_path` is empty.
+    if (empty($returnItem['extension_attributes']['awb_path'])) {
+      return FALSE;
     }
 
-    return FALSE;
+    // Return from here if `is_picked` is empty or the return is already picked.
+    if (!empty($returnItem['extension_attributes']['is_picked'])) {
+      return FALSE;
+    }
+
+    // Return from here if `is_closed` is empty or the return is already closed.
+    if (!empty($returnItem['extension_attributes']['is_closed'])) {
+      return FALSE;
+    }
+
+    // Validated if the return request is of the valid user.
+    $customer_id = $returnItem['customer_id'] ?? '';
+    if ($customer_id != $user->get('acq_customer_id')->getString()) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 }
