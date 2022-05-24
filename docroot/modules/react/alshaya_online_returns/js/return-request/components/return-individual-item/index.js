@@ -16,6 +16,10 @@ const ReturnIndividualItem = ({
     itemQuantity = item.returnData.qty_returned !== null
       ? item.returnData.qty_returned : item.returnData.qty_requested;
   }
+  // For refunded items if any, update the itemQuantity.
+  if (item.qty_refunded < item.qty_ordered) {
+    itemQuantity -= item.qty_refunded;
+  }
 
   const {
     url: imageUrl,
@@ -23,9 +27,14 @@ const ReturnIndividualItem = ({
     title: imageTitle,
   } = item.image_data || {};
 
+  const {
+    qty_ordered: qtyOrdered,
+    qty_refunded: qtyRefunded,
+  } = item;
+
   return (
     <>
-      <ConditionalView condition={hasValue(imageUrl)}>
+      <ConditionalView condition={hasValue(imageUrl) && qtyRefunded < qtyOrdered}>
         <div className="order-item-image">
           <div className={`image-data-wrapper ${eligibleClass} ${bigTicketClass}`}>
             <img src={`${imageUrl}`} alt={`${imageAlt}`} title={`${imageTitle}`} />
