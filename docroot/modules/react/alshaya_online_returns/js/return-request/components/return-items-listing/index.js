@@ -166,6 +166,7 @@ class ReturnItemsListing extends React.Component {
 
     this.setState({
       promotionModalOpen: false,
+      btnDisabled: products.some((item) => (!hasValue(item.reason) || item.reason === 0)),
     });
   };
 
