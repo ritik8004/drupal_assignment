@@ -357,6 +357,8 @@
           location = $(location);
           var position = new google.maps.LatLng(parseFloat(location.data('lat')), parseFloat(location.data('lng')));
 
+          // Prepend 0 for numbers less than 10.
+          let rowCounter = ('0' + (key + 1)).slice(-2);
           bounds.extend(position);
 
           /**
@@ -368,7 +370,7 @@
             title: location.children('h2').text(),
             infoWindowContent: location.html(),
             infoWindowSolitary: true,
-            label: (key + 1).toString(),
+            label: rowCounter.toString(),
             zIndex: key + 1,
             optimized: false
           };
