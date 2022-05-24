@@ -101,6 +101,8 @@ class AlshayaReviewFormFieldsDrushCommand extends DrushCommands {
     // Check if it is possible to create the output files.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       try {
+        // Override the config language to the current language.
+        $this->languageManager->setConfigOverrideLanguage($language);
         $location = $this->fileSystem->getDestinationFilename($path . self::FILE_NAME_PREFIX . '-' . $langcode . '-' . time() . '.csv', FileSystemInterface::EXISTS_REPLACE);
         if ($location === FALSE) {
           $this->drupalLogger->warning('Could not create the file to export the data.');
