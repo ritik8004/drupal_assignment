@@ -55,14 +55,12 @@
 
 .order-detail {
   .user__order--detail {
-    #online-returned-items,
-    #online-return-initiated {
+    #online-returned-items {
       display: block;
       border: none;
     }
 
     div.order-item-row {
-      .returned-items-wrapper,
       .return-initiated-items {
         padding: 0;
 
@@ -72,11 +70,10 @@
       }
     }
 
-    .return-processed-items,
-    .returned-items-wrapper {
+    .return-initiated-item,
+    .returned-items-row {
       .returned-items,
       .title-wrapper,
-      .return-items,
       .return-status-header,
       .return-status-wrapper,
       .return-status-id-container,
@@ -242,6 +239,7 @@
 
       .return-items-wrapper {
         margin-bottom: 0;
+        padding: 0;
       }
 
       .return-status-wrapper {
@@ -347,13 +345,13 @@
       }
     }
 
-    #online-return-initiated {
-      .return-processed-items {
+    .return-initiated-item {
+      .return-status-header {
         padding: 0 !important;
+      }
 
-        .return-id {
-          border: none;
-        }
+      .return-id {
+        border: none;
       }
 
       .return-status-wrapper {
@@ -372,6 +370,16 @@
 
       .return-status-id-container {
         padding-#{$right}: rem(20);
+      }
+    }
+
+    .order-item-image {
+      img {
+        width: 8rem;
+
+        @include breakpoint($tablet) {
+          width: 7.125rem;
+        }
       }
     }
   }
