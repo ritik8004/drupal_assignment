@@ -1,6 +1,7 @@
 import React from 'react';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import ProcessedItems from './processed-items';
+import { isReturnClosed } from '../../utilities/return_api_helper';
+import ProcessedItem from './processed-item';
 
 const ReturnInitiated = ({
   returns,
@@ -9,14 +10,15 @@ const ReturnInitiated = ({
     return null;
   }
 
-  // @todo: Filtering of return items as per returnId and statuses.
-  // @todo: Get returnStatus and returnStatusMessage from api result.
+  const initiatedReturnItem = returns.find((returnItem) => !isReturnClosed(returnItem.returnInfo));
+
+  if (!hasValue(initiatedReturnItem)) {
+    return null;
+  }
   return (
-    <div className="return-initiated-items">
-      <ProcessedItems
-        returnStatus={Drupal.t('Refund Initiated')}
-        returnMessage={Drupal.t('The courier will be assigned within 1-2 days', { context: 'online_returns' })}
-        returns={returns}
+    <div className="return-initiated-item">
+      <ProcessedItem
+        returnData={initiatedReturnItem}
       />
     </div>
   );
