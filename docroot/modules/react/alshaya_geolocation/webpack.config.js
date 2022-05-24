@@ -6,6 +6,7 @@ var config = {
     store_finder: './js/src/store-finder.js',
     store_finder_list: './js/src/store-finder-list.js',
     store_click_collect_list: './js/src/store-click-collect-list.js',
+    store_click_collect_list_rcs: './js/src/store-click-collect-list-rcs.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

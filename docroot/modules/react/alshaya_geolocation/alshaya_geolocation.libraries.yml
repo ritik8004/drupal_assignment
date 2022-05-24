@@ -23,7 +23,16 @@ alshaya-store-finder-list:
 alshaya-store-click-collect-list:
   version: 1.x
   js:
+    js/alshaya_geolocation.utility.js: { }
     dist/store_click_collect_list.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
+alshaya-store-click-collect-list-rcs:
+  version: 1.x
+  js:
+    js/alshaya_geolocation_rcs.utility.js: { }
+    dist/store_click_collect_list_rcs.bundle.js: { }
   dependencies:
     - alshaya_react/react
 

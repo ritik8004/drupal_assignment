@@ -91,6 +91,23 @@ function alshaya_geolocation_node_view_alter(array &$build, EntityInterface $ent
         ],
       ],
     ];
+  }
+  elseif ($entity->bundle() === 'rcs_product') {
+    $api_url = '/alshaya-locations/stores-list';
+    $config = alshaya_click_collect_get_config();
 
+    $build['#attached']['library'][] = 'alshaya_geolocation/alshaya-store-click-collect-list-rcs';
+    $build['#attached']['drupalSettings']['storeLabels'] = [
+      'apiUrl' => $api_url,
+      'title' => $config['title'],
+      'title_price' => alshaya_acm_price_get_formatted_price($config['title_price']),
+      'subtitle_texts' => [
+        'enabled' => $config['subtitle'],
+        'disabled' => $config['unavailable'],
+      ],
+      'help_text' => $config['help_text'],
+      'available_at_title' => '',
+      'select_option_text' => $config['select_option_text'],
+    ];
   }
 }
