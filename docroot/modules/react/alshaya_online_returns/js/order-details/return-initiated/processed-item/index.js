@@ -16,9 +16,15 @@ class ProcessedItem extends React.Component {
 
   componentDidMount() {
     const { returnData } = this.props;
-    const { awb_path: AwbPath, is_picked: isPicked } = returnData.returnInfo.extension_attributes;
+    const {
+      awb_path: AwbPath,
+      is_picked: isPicked,
+      is_closed: isClosed,
+    } = returnData.returnInfo.extension_attributes;
     // Set the `showPrintLabelBtn` to true if awb path is available.
-    if (hasValue(AwbPath) && !hasValue(isPicked)) {
+    if (hasValue(AwbPath)
+      && !hasValue(isPicked)
+      && !hasValue(isClosed)) {
       this.setState({
         showPrintLabelBtn: true,
       });
@@ -47,7 +53,18 @@ class ProcessedItem extends React.Component {
   /**
    * Returns the return print label link.
    */
-  getPrintLabelPdfLink = () => '#';
+  getPrintLabelPdfLink = () => {
+    const { uid } = drupalSettings.user;
+    const { returnData } = this.props;
+    // Extract the return id and order id from the return data.
+    const { order_increment_id: orderId, entity_id: returnId } = returnData.returnInfo;
+    // Encode the return entity id.
+    const encodedReturnId = btoa(JSON.stringify({
+      return_id: returnId,
+    }));
+
+    return Drupal.url(`user/${uid}/order/${orderId}/return/${encodedReturnId}/label`);
+  }
 
   render() {
     const { popup, cancelBtnState, showPrintLabelBtn } = this.state;

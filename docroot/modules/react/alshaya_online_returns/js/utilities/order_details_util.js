@@ -1,4 +1,22 @@
 /* eslint-disable */
+import { getReturnsByOrderId } from './return_api_helper';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
+
+/**
+ * Method to handle the modal on load event and render component.
+ */
+const getReturns = async () => {
+  const { orderEntityId } = drupalSettings.onlineReturns;
+  const returnData = await getReturnsByOrderId(orderEntityId);
+
+  // @todo: Get return status and return message from api call.
+  if (hasValue(returnData) && hasValue(returnData.data) && hasValue(returnData.data.items)) {
+    const returns = processReturnData(returnData.data.items);
+    return returns;
+  }
+
+  return null;
+};
 
 /**
  * Utility function to process return data.
@@ -13,8 +31,10 @@ function processReturnData(returns) {
         return element.item_id === item.order_item_id;
       });
 
-      const mergedItem = Object.assign(productDetails, {returnData: item});
-      itemsData.push(mergedItem);
+      if (hasValue(productDetails)) {
+        const mergedItem = Object.assign(productDetails, {returnData: item});
+        itemsData.push(mergedItem);
+      }
     });
 
     const returnData = {
@@ -46,21 +66,8 @@ function getTypeFromReturnItem(returnItem) {
   }
 }
 
-/**
- * Utility function to check if return is open or not.
- *
- * @param {object} returnItem
- *   The individual return item object.
- *
- * @returns {boolean}
- *   True if order return if closed else False.
- */
-function isReturnClosed(returnItem) {
-  return returnItem.extension_attributes.is_closed;
-}
-
 export {
+  getReturns,
   processReturnData,
   getTypeFromReturnItem,
-  isReturnClosed,
 };
