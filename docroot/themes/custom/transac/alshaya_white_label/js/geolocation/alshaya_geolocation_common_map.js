@@ -358,7 +358,7 @@
           var position = new google.maps.LatLng(parseFloat(location.data('lat')), parseFloat(location.data('lng')));
 
           // Prepend 0 for numbers less than 10.
-          let rowCounter = ('0' + (key + 1)).slice(-2);
+          var rowCounter = ('0' + (key + 1)).slice(-2);
           bounds.extend(position);
 
           /**
