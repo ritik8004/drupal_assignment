@@ -89,6 +89,7 @@ export default class EgiftTopupFor extends React.Component {
                 </span>
                 <PriceElement
                   amount={linkedCardBalance !== null ? parseFloat(linkedCardBalance) : undefined}
+                  showZeroValue
                 />
               </div>
               <div className="egift-linked-card-balance">
