@@ -43,7 +43,7 @@ class ReturnItemsListing extends React.Component {
       });
 
       this.setState({
-        btnDisabled: selectedReason.value === 0,
+        btnDisabled: items.some((item) => (!hasValue(item.reason) || item.reason === 0)),
       });
 
       handleSelectedItems(items);
