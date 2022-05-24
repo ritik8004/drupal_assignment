@@ -155,6 +155,7 @@ $cyan-blue: #387fcb;
 $prussian_blue: #063971;
 $egift-button-hover: rgba(51, 51, 51, 0.1);
 $speech-red: #c00;
+$red-orange: #e6591b;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -2238,6 +2239,7 @@ $online-return-refund-grey-txt: $greyish;
 $online-return-order-detail-border: $white;
 $online-return-refund-blue-txt: $new-pdp-blue;
 $online-return-cancel-button-border: $warm-grey-two;
-$online-return-rejected-label: $speech-red;
-$online-return-refunded-label: $light-green;
+$online-return-status-red-label: $speech-red;
 $online-return-print-button-bg: $white-five;
+$online-return-status-green-label: $light-green;
+$online-return-status-orange-label: $red-orange;
