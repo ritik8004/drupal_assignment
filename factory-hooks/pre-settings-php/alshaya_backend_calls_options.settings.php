@@ -16,6 +16,9 @@ $settings['alshaya_backend_calls_options'] = [
     'order_place' => [
       'timeout' => 60,
     ],
+    'return_get' => [
+      'timeout' => 30,
+    ],
     'cart_update' => [
       'timeout' => 15,
     ],

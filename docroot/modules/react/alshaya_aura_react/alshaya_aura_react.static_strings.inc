@@ -244,7 +244,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'link_card_empty_card_number',
-      'value' => t('A card number is required to link your card. Please enter your details to proceed.'),
+      'value' => t('A card number is required to link your card. Please enter your details to proceed.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'mobile_not_registered',
@@ -304,7 +304,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_earn_with_this_purchase',
-      'value' => t('Earn <span><b>@pts</b> points with Aura</span> on this purchase.', [], ['context' => 'aura']),
+      'value' => t('Earn <span><b>!pts</b> points with Aura</span> on this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_or',
@@ -324,11 +324,11 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_to_earn_with_points',
-      'value' => t('to earn <b>@pts</b> points on this purchase.', [], ['context' => 'aura']),
+      'value' => t('to earn <b>!pts</b> points on this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'cart_redeem_points_msg',
-      'value' => t('Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.', [], ['context' => 'aura']),
+      'value' => t('Earn <span><b>!pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'app_store_link_text',
