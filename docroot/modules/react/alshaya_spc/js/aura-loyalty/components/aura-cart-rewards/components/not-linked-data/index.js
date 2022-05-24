@@ -98,7 +98,7 @@ class AuraNotLinkedData extends React.Component {
             <div className="spc-aura-cart-content">
               <span className="spc-aura-points-to-earn">
                 {parse(getStringMessage('cart_earn_with_this_purchase', {
-                  '@pts': wait ? renderToString(<Loading />) : pointsToEarn,
+                  '!pts': wait ? renderToString(<Loading />) : pointsToEarn,
                 }))}
                 <ToolTip enable question>{getTooltipPointsOnHoldMsg()}</ToolTip>
               </span>
@@ -128,7 +128,7 @@ class AuraNotLinkedData extends React.Component {
               </span>
               {parse(getStringMessage(
                 'cart_to_earn_with_points',
-                { '@pts': wait ? renderToString(<Loading />) : pointsToEarn },
+                { '!pts': wait ? renderToString(<Loading />) : pointsToEarn },
               ))}
               <ToolTip enable question>{getStringMessage('checkout_earn_and_redeem_tooltip')}</ToolTip>
             </div>

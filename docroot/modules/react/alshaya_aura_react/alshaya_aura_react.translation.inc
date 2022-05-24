@@ -420,8 +420,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'انضم إلى أورا',
         'context' => 'aura',
       ],
-      'to earn <b>@pts</b> points on this purchase.' => [
-        'ar' => 'للفوز <b>@pts</b> بنقاط عند إتمام عملية الشراء.',
+      'to earn <b>!pts</b> points on this purchase.' => [
+        'ar' => 'للفوز <b>!pts</b> بنقاط عند إتمام عملية الشراء.',
         'context' => 'aura',
       ],
       'To redeem points download Aura app.' => [
@@ -438,12 +438,12 @@ function _alshaya_aura_react_translations() {
       ],
       // We are using !pts as it does not encode the html into string while
       // using this in Drupal t() function.
-      'Earn <span><b>@pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.' => [
-        'ar' => "اكسب <span><b>@pts</b> نقاط مع أورا </span> عند إتمام عملية الشراء. لتفعيل النقاط، استكمل عملية التسجيل في تطبيق أورا MENA.",
+      'Earn <span><b>!pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.' => [
+        'ar' => "يكسب <span><b>!pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
         'context' => 'aura',
       ],
-      "Earn <span><b>@pts</b> points with Aura</span> on this purchase." => [
-        'ar' => "اكسب <span><b>@pts</b> نقاط مع أورا</span> عند إتمام عملية الشراء.",
+      'Earn <span><b>!pts</b> points with Aura</span> on this purchase.' => [
+        'ar' => 'اربح <span> <b>!pts</b> من النقاط مع Aura </span> على عملية الشراء هذه.',
       ],
       'Congratulations' => [
         'ar' => 'تهانينا',
