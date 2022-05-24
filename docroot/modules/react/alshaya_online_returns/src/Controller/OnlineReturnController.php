@@ -313,7 +313,8 @@ class OnlineReturnController extends ControllerBase {
     }
 
     // Update the order total based on the item qty.
-    if ($orderDetails['#products'][$key]['qty_refunded'] < $orderDetails['#products'][$key]['qty_ordered']) {
+    if ($orderDetails['#products'][$key]['qty_refunded'] > 0
+      && $orderDetails['#products'][$key]['qty_refunded'] < $orderDetails['#products'][$key]['qty_ordered']) {
       $orderDetails['#products'][$key]['qty_ordered'] -= $orderDetails['#products'][$key]['qty_refunded'];
 
       // Updating total value as `qty_ordered` is updated.
