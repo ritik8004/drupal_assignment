@@ -2,40 +2,18 @@ import React from 'react';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ReturnIndividualItem from '../../../return-request/components/return-individual-item';
+import { getPrintLabelStatus } from '../../../utilities/online_returns_util';
 import CancelReturnPopUp from '../cancel-return-popup';
 
 class ProcessedItem extends React.Component {
   constructor(props) {
+    const { returnData } = props;
     super(props);
     this.state = {
       popup: false,
       cancelBtnState: true,
-      showPrintLabelBtn: false,
+      showPrintLabelBtn: getPrintLabelStatus(returnData),
     };
-  }
-
-  componentDidMount() {
-    const { returnData } = this.props;
-    const {
-      awb_path: AwbPath,
-      is_picked: isPicked,
-      is_closed: isClosed,
-    } = returnData.returnInfo.extension_attributes;
-    // Set the `showPrintLabelBtn` to true if awb path is available.
-    if (hasValue(AwbPath)
-      && !hasValue(isPicked)
-      && !hasValue(isClosed)) {
-      this.setState({
-        showPrintLabelBtn: true,
-      });
-    }
-
-    // Hide Cancel button when return is picked up.
-    if (hasValue(isPicked)) {
-      this.setState({
-        cancelBtnState: false,
-      });
-    }
   }
 
   /**
@@ -75,21 +53,20 @@ class ProcessedItem extends React.Component {
 
   render() {
     const { popup, cancelBtnState, showPrintLabelBtn } = this.state;
-    const { returnData, returnStatus, returnMessage } = this.props;
-
-    // @todo: Breaking/Grouping of return items as per status.
-    // @todo: Items will be listed under specific return statuses.
+    const { returnData } = this.props;
+    // @todo: Use utility function to trim status text for css class.
+    // Refer DIG-8004 for more info.
+    const returnStatus = returnData.returnInfo.extension_attributes.customer_status;
+    const returnStatusClass = returnStatus.replace(/\s+/g, '-').toLowerCase();
     return (
-      <>
-        <div className="return-status-header">
-          <div className="return-status-wrapper">
-            <div className="return-status">
-              <span className="status-label">{returnStatus}</span>
-              <span className="status-message">{returnMessage}</span>
-            </div>
-            <div className="return-id">
-              {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
-            </div>
+      <div key={returnData.returnInfo.increment_id} className="return-status-header">
+        <div className="return-status-wrapper">
+          <div className="return-status">
+            <span className={`status-label ${returnStatusClass}`}>{returnStatus}</span>
+            <span className="status-message">
+              {' - '}
+              {returnData.returnInfo.extension_attributes.description}
+            </span>
           </div>
           <div className="print-cancel-wrapper">
             <ConditionalView condition={showPrintLabelBtn}>
@@ -111,6 +88,9 @@ class ProcessedItem extends React.Component {
             </ConditionalView>
           </div>
         </div>
+        <div className="return-id">
+          {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
+        </div>
         <ConditionalView condition={popup}>
           <CancelReturnPopUp
             returnInfo={returnData.returnInfo}
@@ -119,12 +99,12 @@ class ProcessedItem extends React.Component {
         </ConditionalView>
         <ConditionalView condition={hasValue(returnData.items)}>
           {returnData.items.map((item) => (
-            <div className="item-list-wrapper">
-              <ReturnIndividualItem key={item.id} item={item} />
+            <div className="item-list-wrapper" key={item.sku}>
+              <ReturnIndividualItem key={item.sku} item={item} />
             </div>
           ))}
         </ConditionalView>
-      </>
+      </div>
     );
   }
 }
