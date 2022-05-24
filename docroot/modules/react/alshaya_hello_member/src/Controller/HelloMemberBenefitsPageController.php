@@ -9,11 +9,11 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_hello_member\Helper\HelloMemberHelper;
 
 /**
- * MyAccountsPointsHistoryController for hello membter points history page.
+ * HelloMemberBenefitsPageController for hello membter points history page.
  *
  * @package Drupal\alshaya_hello_member\Controller
  */
-class MyAccountsPointsHistoryController extends ControllerBase {
+class HelloMemberBenefitsPageController extends ControllerBase {
 
   /**
    * Hello Member Helper service object.
@@ -30,7 +30,7 @@ class MyAccountsPointsHistoryController extends ControllerBase {
   protected $moduleHandler;
 
   /**
-   * MyAccountsPointsHistoryController constructor.
+   * HelloMemberBenefitsPageController constructor.
    *
    * @param Drupal\alshaya_hello_member\Helper\HelloMemberHelper $hello_member_helper
    *   The hello member helper service.
@@ -54,17 +54,17 @@ class MyAccountsPointsHistoryController extends ControllerBase {
   }
 
   /**
-   * View hello member points history.
+   * View details per benefits.
    */
-  public function pointsHistory() {
+  public function getBenefitsDetails() {
     $this->moduleHandler->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
 
     return [
-      '#theme' => 'my_accounts_points_history',
+      '#theme' => 'hello_member_benefits_page',
       '#strings' => _alshaya_hello_member_static_strings(),
       '#attached' => [
         'library' => [
-          'alshaya_hello_member/alshaya_hello_member_my_accounts_points_history',
+          'alshaya_hello_member/alshaya_hello_member_benefits_page',
         ],
       ],
     ];
@@ -85,7 +85,7 @@ class MyAccountsPointsHistoryController extends ControllerBase {
    * Returns a page title.
    */
   public function getTitle() {
-    return $this->t('Points History', [], ['context' => 'hello_member']);
+    return $this->t('Benefits', [], ['context' => 'hello_member']);
   }
 
 }

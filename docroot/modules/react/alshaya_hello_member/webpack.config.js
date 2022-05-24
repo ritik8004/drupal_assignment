@@ -5,6 +5,7 @@ var config = {
   entry: {
     my_accounts: './js/src/my-accounts.js',
     my_membership_info: './js/src/my-membership-info.js',
+    hello_member_benefits_page: './js/src/hello-member-benefits-page.js',
     my_accounts_points_history: './js/src/my-accounts-points-history.js',
   },
   output: {
