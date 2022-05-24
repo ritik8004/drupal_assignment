@@ -1,4 +1,4 @@
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal) {
   'use strict';
   /**
    * Drupal utility functions for the local storage manager.
@@ -20,7 +20,6 @@
     storageKey,
     storageData = null,
     expireAfterTime = null) {
-
     // Return if data to store is not provided, or
     // the local storage key is not set, of
     // storage expiry time is zero.
@@ -38,14 +37,11 @@
     // Prepare data to store.
     const dataToStore = { data: storageData };
 
-    // Specialkeys for the cookie.
-    var specialKeys = drupalSettings?.alshaya_master?.cookie_keys;
+    // If this is null, we don't set any expiry to the data storage in the local storage.
     if (expireAfterTime) {
       dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime) * 1000);
     }
 
-    // Avoids insecure notice in mobile browsers when cookies are disabled.
-    // If this is null, we don't set any expiry to the data storage in the local storage.
     try {
       // Store data in the local storage with the expiry time.
       localStorage.setItem(storageKey, JSON.stringify(dataToStore));
@@ -66,18 +62,11 @@
         }
       } else {
         Drupal.alshayaLogger('error', e.message);
-        if (specialKeys && $.inArray(storageKey, specialKeys) > -1) {
-          // Local storeage is not available save it in cookie only for allowed keys.
-          var expiry = new Date().getTime() + (parseInt(expireAfterTime) * 1000);
-          var cookieOptions = {path: '/', expires: expiry, secure: true};
-          // Set cookie.
-          $.cookie('local_storage_' + storageKey, JSON.stringify(dataToStore), cookieOptions);
-          // Return true as an indication of values stored successfully.
-          return true;
-        }
       }
     }
-    return false;
+
+    // Return true as an indication of values stored successfully.
+    return true;
   };
 
   /**
@@ -87,16 +76,7 @@
    *  Local storage key to remove associated data.
    */
   Drupal.removeItemFromLocalStorage = function (storageKey) {
-    // Avoids insecure notice in mobile browsers when localStorage is disabled.
-    $.removeCookie('local_storage_' + storageKey, {path: '/'});
-    try {
-      localStorage.removeItem(storageKey)
-    }
-    catch(e) {
-      Drupal.alshayaLogger('warning', 'Error occurred while executing Drupal.removeItemFromLocalStorage. Error: @message.', {
-        '@message': e.message,
-      });
-    }
+    localStorage.removeItem(storageKey)
   };
 
   /**
@@ -112,31 +92,29 @@
    *  Return data object if available.
    */
   Drupal.getItemFromLocalStorage = function (storageKey) {
-    // Avoids insecure notice in mobile browsers when cookies are disabled.
-    try {
-      // Return is item not found in the storage with the provided key.
-      var storageItem = localStorage.getItem(storageKey);
-    }
-    catch(e) {
-      // Log issue with localstorage.
-      Drupal.alshayaLogger('warning', 'Error occurred while executing Drupal.getItemFromLocalStorage. Error: @message.', {
-        '@message': e.message,
-      });
-      // Fetch from cookie if localstorage not present.
-      var storageItem = $.cookie('local_storage_' + storageKey);
-    }
-
-    if (!storageItem) {
-      return null;
-    }
+    // Return is item not found in the storage with the provided key.
+    let storageItem = localStorage.getItem(storageKey);
 
     try {
       // If item is available parse the info to JSON object.
       storageItem = JSON.parse(storageItem);
     }
     catch (error) {
-      // If JSON parse failed we return string.
-      return storageItem;
+      // Return strings as is.
+      if (typeof storageItem === 'string') {
+        return storageItem;
+      }
+
+      // Unknown reason.
+      Drupal.alshayaLogger('warning', 'Drupal.getItemFromLocalStorage failed to fetch the data for @key.', {
+        '@key': storageKey,
+      });
+
+      return null;
+    }
+
+    if (storageItem == null) {
+      return null;
     }
 
     // Check if the storage items data isn't expired. For that,
@@ -172,21 +150,14 @@
    * and remove if expiry time for that data is reached.
    */
   Drupal.runLocalStorageCleaner = async function () {
-    try {
-      // Get all the local storage keys having the above defined key strings.
-      const filteredKeys = Object.keys(localStorage);
+    // Get all the local storage keys having the above defined key strings.
+    const filteredKeys = Object.keys(localStorage);
 
-      // If we have keys available to clean, iterate and run get item storage
-      // helper func for each to remove it from local storage, if expired
-      if (filteredKeys) {
-        filteredKeys.forEach(storageKey => {
-          Drupal.getItemFromLocalStorage(storageKey);
-        });
-      }
-    }
-    catch(e) {
-      Drupal.alshayaLogger('warning', 'Error occurred while executing Drupal.runLocalStorageCleaner. Error: @message.', {
-        '@message': e.message,
+    // If we have keys available to clean, iterate and run get item storage
+    // helper func for each to remove it from local storage, if expired
+    if (filteredKeys) {
+      filteredKeys.forEach(storageKey => {
+        Drupal.getItemFromLocalStorage(storageKey);
       });
     }
   };
@@ -196,4 +167,4 @@
     Drupal.runLocalStorageCleaner();
   });
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal);
