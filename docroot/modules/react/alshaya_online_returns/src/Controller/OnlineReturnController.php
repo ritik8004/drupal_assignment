@@ -312,6 +312,16 @@ class OnlineReturnController extends ControllerBase {
       }
     }
 
+    // Update the order total based on the item qty.
+    if ($orderDetails['#products'][$key]['qty_refunded'] < $orderDetails['#products'][$key]['qty_ordered']) {
+      $orderDetails['#products'][$key]['qty_ordered'] -= $orderDetails['#products'][$key]['qty_refunded'];
+
+      // Updating total value as `qty_ordered` is updated.
+      $orderDetails['#products'][$key]['total'] = alshaya_acm_price_format(
+        $orderDetails['#products'][$key]['qty_ordered'] * $orderDetails['#products'][$key]['price_incl_tax'],
+      );
+    }
+
     // Adding country label to display country along with address.
     $country_list = $this->addressCountryRepository->getList();
     $country_label = _alshaya_custom_get_site_level_country_code();

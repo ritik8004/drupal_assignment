@@ -16,10 +16,6 @@ const ReturnIndividualItem = ({
     itemQuantity = item.returnData.qty_returned !== null
       ? item.returnData.qty_returned : item.returnData.qty_requested;
   }
-  // For refunded items if any, update the itemQuantity.
-  if (item.qty_refunded < item.qty_ordered) {
-    itemQuantity -= item.qty_refunded;
-  }
 
   const {
     url: imageUrl,
