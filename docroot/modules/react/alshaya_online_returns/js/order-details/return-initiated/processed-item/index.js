@@ -2,7 +2,7 @@ import React from 'react';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ReturnIndividualItem from '../../../return-request/components/return-individual-item';
-import { getPrintLabelStatus } from '../../../utilities/online_returns_util';
+import { getPrintLabelStatus, getCancelButtonStatus } from '../../../utilities/online_returns_util';
 import CancelReturnPopUp from '../cancel-return-popup';
 
 class ProcessedItem extends React.Component {
@@ -11,7 +11,7 @@ class ProcessedItem extends React.Component {
     super(props);
     this.state = {
       popup: false,
-      cancelBtnState: true,
+      cancelBtnState: getCancelButtonStatus(returnData),
       showPrintLabelBtn: getPrintLabelStatus(returnData),
     };
   }

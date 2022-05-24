@@ -184,6 +184,28 @@ function getOrderDetails() {
 }
 
 /**
+ * Utility function to get cancel button status.
+ *
+ * @param {Object} returnData
+ *   The return data.
+ *
+ * @returns {boolean}
+ *   True if button should be visible or False otherwise.
+ */
+function getCancelButtonStatus(returnData) {
+  const {
+    is_picked: isPicked,
+    is_closed: isClosed,
+  } = returnData.returnInfo.extension_attributes;
+  // Hide Cancel button when return is picked up or closed.
+  if (hasValue(isPicked) || hasValue(isClosed)) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * Utility function to get print label button status.
  */
 function getPrintLabelStatus(returnData) {
@@ -217,4 +239,5 @@ export {
   formatDateTime,
   getOrderDetails,
   getPrintLabelStatus,
+  getCancelButtonStatus,
 };
