@@ -34,5 +34,17 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'membership_privacy',
       'value' => t('Privacy policy', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'qr_code_title',
+      'value' => t('QR Code', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'view_qr_code',
+      'value' => t('View QR code', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'qr_code_redeem',
+      'value' => t('To redeem in store use this QR code.', [], ['context' => 'hello_member']),
+    ],
   ];
 }

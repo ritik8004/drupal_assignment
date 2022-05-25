@@ -79,7 +79,8 @@ $mariner: #283d5a;
 $sky_blue: #93cdff;
 $_plp_secondary_cta_hover: rgba(34, 34, 34, 0.1);
 $white-linen: #f1ebdf;
-
+$nickel: #6d7278;
+$gainsboro: #d8d8d8;
 /* ------- 2. Primary Colors ------- */
 // Global elements.
 $content_pagetitle: $hnm-black-three;
@@ -833,3 +834,9 @@ $hm-membership-success-popup-bg: $white-linen;
 // Hello Member registration
 $hm-registration-accordion-bg: $white-linen;
 $hm-registration-fields-bg: $white-linen;
+
+// Hello Member points block
+$hm-points-block-bg: $white-linen;
+$hm-points-block-light-txt: $nickel;
+$hm-points-block-tire-progress: $gainsboro;
+$hm-points-block-tire-progress-active: $hnm-red;

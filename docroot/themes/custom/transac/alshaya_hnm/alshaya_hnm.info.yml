@@ -269,3 +269,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/hello-member-registration/hello-member-registration.ltr.css: css/conditional-sass/hello-member-registration/hello-member-registration.ltr.css
+
+  alshaya_white_label/my-membership-info:
+    css:
+      theme:
+        css/conditional-sass/my-membership-info/my-membership-info.ltr.css: css/conditional-sass/my-membership-info/my-membership-info.ltr.css
