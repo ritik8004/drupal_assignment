@@ -1,23 +1,26 @@
 import React from 'react';
+import MemberID from './member-id';
+import TierProgress from './tier-progress';
+import QrCode from './qr-code';
 
 const MyMembership = () => (
-  <div className="my-membership">
-    <div className="my-points">
-      {/* 55 points */}
+  <>
+    <div className="member-name">
+      Hi Abdul
     </div>
-    <div className="my-tier-progress">
-      {/* My tier progress  */}
+    <div className="points-block">
+      <div className="my-points">
+        55 points
+      </div>
+      <TierProgress />
+      <div className="my-points-details">
+        You are 45 points away from getting your next bonus voucher and 245 points away
+        to become a Plus member.Vouchers have a 30-day delay.
+      </div>
+      <QrCode />
+      <MemberID />
     </div>
-    <div className="my-points-details">
-      {/* points details  */}
-    </div>
-    <div className="qr-code-button">
-      {/* QR code view popup  */}
-    </div>
-    <div className="my-membership-id">
-      {/* display memebership id  */}
-    </div>
-  </div>
+  </>
 );
 
 export default MyMembership;

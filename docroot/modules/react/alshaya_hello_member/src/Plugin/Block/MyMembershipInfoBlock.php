@@ -94,6 +94,11 @@ class MyMembershipInfoBlock extends BlockBase implements ContainerFactoryPluginI
     return [
       '#theme' => 'my_membership_info_block',
       '#strings' => _alshaya_hello_member_static_strings(),
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/my-membership-info',
+        ],
+      ],
     ];
   }
 
