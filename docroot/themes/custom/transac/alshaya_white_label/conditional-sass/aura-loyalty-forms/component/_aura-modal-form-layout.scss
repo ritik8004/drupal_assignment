@@ -44,6 +44,26 @@
           }
         }
       }
+
+      @include breakpoint($only-mobile) {
+        &.link-old-card-modal-content {
+          overflow-y: auto !important;
+          height: auto !important;
+          bottom: 0;
+          position: absolute !important;
+
+          .spc-aura-unlink-card-wrapper {
+            .spc-aura-unlink-card-form-content {
+              padding-bottom: 0;
+            }
+
+            .aura-modal-form-actions {
+              position: relative;
+              background: none;
+            }
+          }
+        }
+      }
     }
 
     &.link-card-otp-modal-content {
@@ -272,7 +292,6 @@
           position: absolute;
           bottom: 0;
           width: 100%;
-          background: none;
         }
       }
 
@@ -311,7 +330,7 @@
           text-align: $left;
 
           @include breakpoint($only-mobile) {
-            padding-bottom: rem(72);
+            padding-bottom: rem(50);
           }
 
           .form-items {
@@ -350,10 +369,6 @@
             width: rem(262);
           }
         }
-
-        @include breakpoint($only-mobile) {
-          margin-bottom: rem(92);
-        }
       }
 
       .aura-modal-form-actions {
@@ -382,15 +397,6 @@
           height: calc(100% - 3.5rem);
         }
       }
-    }
-  }
-
-  .popup-content {
-    @include breakpoint($only-mobile) {
-      position: absolute !important;
-      overflow-y: auto !important;
-      height: auto !important;
-      bottom: 0;
     }
   }
 }
