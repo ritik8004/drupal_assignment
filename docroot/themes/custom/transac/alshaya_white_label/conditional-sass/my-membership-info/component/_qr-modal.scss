@@ -22,7 +22,7 @@
       border-bottom: 1px solid $primary-border;
 
       .close-modal {
-        @include icon(close, after){
+        @include icon(close, after) {
           font-weight: bold;
         }
 
