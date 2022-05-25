@@ -135,7 +135,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   Response event Object.
    */
   public function onConfigSave(ConfigCrudEvent $event) {
-    if (static::$processingOnLanguageConfigOverrideSave || $this->localeConfigManager->isUpdatingTranslationsFromLocale()) {
+    if (static::$processingOnLanguageConfigOverrideSave) {
       return;
     }
 
@@ -169,9 +169,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     }
 
     // Log the config changes.
-    if ($this->configFactory->get('alshaya_config.settings')->get('log_config_changes')
-      && json_encode($data) != json_encode($original_config)
-    ) {
+    if (json_encode($data) != json_encode($original_config)) {
       $this->logConfigChanges($config_name, $original_config, $data);
     }
   }
@@ -364,6 +362,18 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   Context.
    */
   protected function log(string $severity, string $message, array $args = []) {
+    static $log_config_changes = NULL;
+
+    if (!isset($log_config_changes)) {
+      $log_config_changes = $this->configFactory
+        ->get('alshaya_config.settings')
+        ->get('log_config_changes');
+    }
+
+    if (!$log_config_changes) {
+      return;
+    }
+
     try {
       $this->logger->log($severity, $message, $args);
     }
