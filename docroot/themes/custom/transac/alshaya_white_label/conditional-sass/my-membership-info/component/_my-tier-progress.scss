@@ -29,8 +29,8 @@
       width: 67%;
     }
 
-    .tire-bar-back {
-      background: $hm-points-block-tire-progress;
+    .tier-bar-back {
+      background: $hm-points-block-tier-progress;
       width: 100%;
       height: rem(3);
       position: relative;
@@ -50,7 +50,7 @@
             content: '';
             height: rem(8);
             width: rem(8);
-            background: $hm-points-block-tire-progress;
+            background: $hm-points-block-tier-progress;
             border-radius: 50%;
             display: block;
             top: rem(-20);
@@ -65,8 +65,8 @@
         }
       }
 
-      .tire-bar-front {
-        background: $hm-points-block-tire-progress-active;
+      .tier-bar-front {
+        background: $hm-points-block-tier-progress-active;
         position: absolute;
         height: rem(3);
       }
