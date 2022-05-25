@@ -6,10 +6,8 @@ let componentRendered = false;
 
 Drupal.behaviors.alshayaGeolocationCncRcsBehavior = {
   attach: function alshayaGeolocationCnCRcs() {
-    if (jQuery('.entity--type-node').not('[data-sku *= "#"]').length === 0) {
-      return;
-    }
-    if (componentRendered) {
+    const node = jQuery('.entity--type-node').not('[data-sku *= "#"]');
+    if (!node.length || (node.length && componentRendered)) {
       return;
     }
 
