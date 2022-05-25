@@ -208,6 +208,7 @@
             color: $online-return-status-green-label;
           }
 
+          &.pending,
           &.courier-assigned,
           &.collection-initiated,
           &.refund-initiated {
