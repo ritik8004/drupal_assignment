@@ -50,7 +50,7 @@
       {{else}}
         <li>
           <img
-            loading="lazy"
+            loading={{#if (eq @index 0)}}"eager"{{else}}"lazy"{{/if}}
             src="{{this.zoomurl}}"
             alt="{{this.label}}"
             title="{{this.label}}"
