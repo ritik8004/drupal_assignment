@@ -22,6 +22,7 @@ function alshaya_cos_transac_rcs_install() {
     'alshaya_rcs_seo',
     'alshaya_rcs_color_split',
     'alshaya_pims',
+    'alshaya_rcs_geolocation',
   ]);
 }
 

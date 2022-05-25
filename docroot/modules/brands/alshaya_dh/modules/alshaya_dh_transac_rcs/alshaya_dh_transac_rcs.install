@@ -20,6 +20,7 @@ function alshaya_dh_transac_rcs_install() {
     'alshaya_rcs_seo',
     'alshaya_pims',
     'alshaya_rcs_add_to_bag',
+    'alshaya_rcs_geolocation',
   ]);
 
   if (\Drupal::service('module_handler')->moduleExists('alshaya_mobile_app')) {

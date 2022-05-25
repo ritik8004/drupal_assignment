@@ -23,6 +23,7 @@ function alshaya_hm_transac_rcs_install() {
     'alshaya_rcs_color_split',
     'alshaya_rcs_mobile_app',
     'alshaya_pims',
+    'alshaya_rcs_geolocation',
   ]);
 }
 
