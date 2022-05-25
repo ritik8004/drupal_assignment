@@ -54,12 +54,21 @@
   .block-content .tooltip-anchor .tooltip-box {
     @include breakpoint($only-mobile) {
       #{$left}: -54%;
+      bottom: 100%;
+      transform: translateX(-75%);
 
       html[lang=ar] & {
         left: 0;
         right: unset;
         transform: none;
       }
+    }
+  }
+
+
+  .points-expiring {
+    @include breakpoint($only-mobile) {
+      display: flex;
     }
   }
 }
