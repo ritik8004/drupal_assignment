@@ -287,32 +287,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $alshaya_master_settings->getCacheTags());
 
-  // PDP Click and Collect.
-  $build['#attached']['library'][] = 'alshaya_click_collect/click-and-collect.pdp';
-
-  $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
-  $config = alshaya_click_collect_get_config();
-
-  // Here we just show static text, we will get stores info using ajax.
-  // We need lat/lon info of user to get stores.
-  $store_form = \Drupal::formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
-
-  $build['#attached']['drupalSettings']['alshaya_click_collect'] = [
-    'pdp' => ['ajax_call' => FALSE],
-    'country' => _alshaya_custom_get_site_level_country_code(),
-    'status' => $cnc_settings->get('feature_status'),
-    'title' => $config['title'],
-    'subtitle' => [
-      'enabled' => $config['subtitle'],
-      'disabled' => $config['unavailable'],
-    ],
-    'store_finder_form' => render($store_form),
-    'help_text' => $config['help_text'],
-    'select_option_text' => $config['select_option_text'],
-  ];
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $cnc_settings->getCacheTags());
-  $build['#cache']['tags'][] = 'click-collect-cache-tag';
-
   // PDP Home delivery.
   $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
   $home_delivery_config['title_class'] = Html::getClass($home_delivery_config['title']);
