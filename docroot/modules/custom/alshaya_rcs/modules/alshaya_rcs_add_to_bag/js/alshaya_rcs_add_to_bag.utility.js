@@ -78,12 +78,13 @@ window.commerceBackend = window.commerceBackend || {};
    */
   async function processVariants(product, variantProduct) {
     var variantData = variantProduct.product;
+    var parent_sku = variantProduct.parent_sku;
     var prices = window.commerceBackend.getPrices(variantData);
     var productLabels = await getProductLabels(variantData.parent_sku, variantData.sku);
 
     return {
       sku: variantData.sku,
-      parent_sku: variantData.parent_sku,
+      parent_sku: parent_sku,
       cart_title: product.name,
       cart_image: variantData.media_cart,
       media: {images: variantData.media},
