@@ -19,7 +19,7 @@
       }
     }
 
-    .cancelled-items + .order-item-row {
+    .cancelled-items ~ .order-item-row {
       .image-wrapper {
         span {
           width: rem(144);
@@ -61,6 +61,8 @@
     }
 
     div.order-item-row {
+      word-break: break-all;
+
       .return-initiated-items {
         padding: 0;
 
