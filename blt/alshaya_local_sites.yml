@@ -174,6 +174,10 @@ sites:
     module: alshaya_aeo
     type: alshaya_transac
     country: eg
+  aeoqa:
+    module: alshaya_aeo
+    type: alshaya_transac
+    country: qa
   bpkw:
     module: alshaya_bp
     type: alshaya_transac
