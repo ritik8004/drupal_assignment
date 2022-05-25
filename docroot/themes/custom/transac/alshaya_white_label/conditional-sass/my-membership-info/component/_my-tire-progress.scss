@@ -13,6 +13,10 @@
     width: 14%;
     text-align: $left;
 
+    @include breakpoint($only-tablet) {
+      width: 24%;
+    }
+
     &:last-of-type {
       padding-#{$left}: rem(6);
     }
@@ -20,6 +24,10 @@
 
   .progress-wrapper {
     width: 72%;
+
+    @include breakpoint($only-tablet) {
+      width: 67%;
+    }
 
     .tire-bar-back {
       background: $hm-points-block-tire-progress;

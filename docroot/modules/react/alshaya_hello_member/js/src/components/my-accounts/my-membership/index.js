@@ -15,9 +15,9 @@ const MyMembership = () => (
         <TierProgress />
       </div>
       <div className="my-points-details">
-          You are 45 points away from getting your next bonus voucher and 245 points away
-          to become a Plus member. Vouchers have
-          a 30-day delay.
+        You are 45 points away from getting your next bonus voucher and 245 points away
+        to become a Plus member. Vouchers have
+        a 30-day delay.
       </div>
       <QrCode />
       <div className="my-membership-id">

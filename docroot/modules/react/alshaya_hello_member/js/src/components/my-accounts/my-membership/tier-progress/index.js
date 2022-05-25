@@ -6,11 +6,11 @@ const MemberProgress = () => (
     <div className="progress-wrapper">
       <div className="tire-bar-back">
         <ul>
-          <li/>
-          <li/>
-          <li/>
+          <li />
+          <li />
+          <li />
         </ul>
-        <div style={{ width: "55%" }} className="tire-bar-front"></div>
+        <div style={{ width: '55%' }} className="tire-bar-front" />
       </div>
     </div>
     <div className="progress-label">Plus</div>
