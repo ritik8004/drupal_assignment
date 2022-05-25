@@ -178,7 +178,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
             max={eGiftCardAttributes.amount_open_to_hps.value}
             onFocus={() => this.handleErrorMessage()}
             onKeyPress={this.handleKeypress}
-            onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
+            onKeyDown={(e) => (e.key === 'e' || e.key === 'E') && e.preventDefault()}
             onPaste={(e) => this.handlePaste(e)}
             onChange={this.handleChange}
             readOnly={openAmountInputDisabled}
