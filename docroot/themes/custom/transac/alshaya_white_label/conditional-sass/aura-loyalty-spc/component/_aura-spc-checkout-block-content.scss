@@ -456,13 +456,10 @@
           font-family: $aura-regular;
           line-height: rem(20);
           font-size: rem(14);
+          border-radius: rem(10);
 
           html[lang=ar] & {
             background: $aura-spc-checkout-block-bg-gradient-ar;
-          }
-
-          @include breakpoint($tablet) {
-            border-radius: rem(10);
           }
 
           .current-available-points {
@@ -509,7 +506,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        margin-#{$left}: rem(16);
+        margin-#{$left}: rem(21);
       }
 
       &::before {
