@@ -20,18 +20,18 @@
     }
 
     #aura-header-modal {
-      svg {
-        // Footlocker needs a white logo as header is black.
-        .letter {
-          fill: #bcc9ff;
-        }
-
-        .circle {
-          fill: url("#gradient2");
-        }
-      }
-
       a.join-aura {
+        svg {
+          // Footlocker needs a white logo as header is black.
+          .letter {
+            fill: #bcc9ff;
+          }
+
+          .circle {
+            fill: url("#gradient2");
+          }
+        }
+
         &:hover {
           background: #fff;
 
