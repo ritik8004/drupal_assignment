@@ -18,6 +18,10 @@
       #{$left}: 50%;
       transform: translateX(-50%);
 
+      html[lang=ar] & {
+        transform: translateX(50%);
+      }
+
       @include breakpoint($only-tablet) {
         #{$left}: -50%;
       }
@@ -36,10 +40,35 @@
   }
 }
 
+.aura-pdp-points-section {
+  .tooltip-anchor {
+    .tooltip-box {
+      html[lang=ar] & {
+        transform: translateX(0);
+      }
+    }
+  }
+}
+
 .spc-aura-checkout-rewards-block {
   .block-content .tooltip-anchor .tooltip-box {
     @include breakpoint($only-mobile) {
       #{$left}: -54%;
+      bottom: 100%;
+      transform: translateX(-75%);
+
+      html[lang=ar] & {
+        left: 0;
+        right: unset;
+        transform: none;
+      }
+    }
+  }
+
+
+  .points-expiring {
+    @include breakpoint($only-mobile) {
+      display: flex;
     }
   }
 }

@@ -112,11 +112,23 @@ class AlshayaReviewFormFieldsDrushCommand extends DrushCommands {
         fclose($file);
         // Get optional fields and set based on categories.
         $fields_config = $this->alshayaBazaarVoice->getWriteReviewFieldsConfig();
+        if ($langcode !== 'en') {
+          // Override the config language to the current language.
+          $this->languageManager->setConfigOverrideLanguage($language);
+          $fields_config_data = $this->alshayaBazaarVoice->getWriteReviewFieldsConfig();
+          // Getting the difference of the field configs
+          // with the original language config data.
+          $result = array_diff_key($fields_config, $fields_config_data);
+          // Merging the field configs of original language which are
+          // not present in the translated config data.
+          $fields_config = array_merge($fields_config_data, $result);
+        }
 
         // Opening the file in append mode.
         $handle = fopen($location, 'a');
         // Declaring headers for CSV.
         $headers = [
+          'ID',
           'Translated Title',
           'Type of field',
           'Possible values (if select)',
@@ -132,7 +144,7 @@ class AlshayaReviewFormFieldsDrushCommand extends DrushCommands {
         fputcsv($handle, $headers);
 
         // Process all the fields and put the same in csv file.
-        foreach ($fields_config as $value) {
+        foreach ($fields_config as $key => $value) {
           // Assigning default values.
           $possible_val = '';
           $wrapper_attributes_val = '';
@@ -149,7 +161,7 @@ class AlshayaReviewFormFieldsDrushCommand extends DrushCommands {
             $required_val = 'yes';
           }
           // Writing the values in CSV.
-          fputcsv($handle, [$title_val, $value['#type'], $possible_val,
+          fputcsv($handle, [$key, $title_val, $value['#type'], $possible_val,
             $required_val, $value['#minlength'], $value['#maxlength'],
             $value['#default_value'], $value['#visible'],
             $value['#group_type'], $wrapper_attributes_val,

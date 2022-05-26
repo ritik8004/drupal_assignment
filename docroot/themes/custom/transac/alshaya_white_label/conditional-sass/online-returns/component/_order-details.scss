@@ -55,13 +55,12 @@
 
 .order-detail {
   .user__order--detail {
-    #online-returned-items,
-    #online-return-initiated {
+    #online-returned-items {
       display: block;
+      border: none;
     }
 
     div.order-item-row {
-      .returned-items-wrapper,
       .return-initiated-items {
         padding: 0;
 
@@ -71,10 +70,13 @@
       }
     }
 
-    .returned-items {
-      margin: 0;
-
+    .return-initiated-item,
+    .returned-items-row {
+      .returned-items,
       .title-wrapper,
+      .return-status-header,
+      .return-status-wrapper,
+      .return-status-id-container,
       .return-id,
       .item-list-wrapper,
       .order-item-image,
@@ -95,15 +97,6 @@
         @include breakpoint($only-tablet) {
           padding: rem(22) rem(8) rem(55) rem(16) !important;
         }
-      }
-
-      .title-wrapper {
-        font-size: rem(18);
-        line-height: rem(22);
-        text-transform: uppercase;
-        font-family: $alshaya-bold;
-        padding: rem(38) 0 rem(8);
-        border-bottom: rem(1) solid $online-return-order-detail-border;
       }
 
       .return-id {
@@ -185,19 +178,8 @@
         }
       }
 
-      .return-items-wrapper {
-        margin-bottom: 0;
-        padding: 0;
-      }
-
-      .return-status-wrapper {
-        padding-top: rem(16);
-        margin-bottom: 0;
-
-        @include breakpoint($tablet) {
-          padding-top: rem(24);
-        }
-
+      .return-status-wrapper,
+      .return-status-id-container {
         .return-status {
           margin-bottom: 0;
         }
@@ -212,12 +194,24 @@
             padding-bottom: rem(5);
           }
 
-          &.closed {
-            color: $online-return-rejected-label;
+          &.closed,
+          &.return-rejected,
+          &.goods-collection-failed {
+            color: $online-return-status-red-label;
           }
 
-          &.processed_closed {
-            color: $online-return-refunded-label;
+          &.processed_closed,
+          &.return-request-raised,
+          &.return-request-accepted,
+          &.goods-collected,
+          &.refunded {
+            color: $online-return-status-green-label;
+          }
+
+          &.courier-assigned,
+          &.collection-initiated,
+          &.refund-initiated {
+            color: $online-return-status-orange-label;
           }
         }
 
@@ -233,17 +227,28 @@
       }
     }
 
-    .return-status-header {
-      display: flex;
-      justify-content: space-between;
-      padding: rem(33) 0 rem(12);
-      margin: 0;
-      border-bottom: rem(1) solid $online-return-order-detail-border;
-      flex-direction: column;
+    .returned-items {
+      .title-wrapper {
+        font-size: rem(18);
+        line-height: rem(22);
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+        padding: rem(38) 0 rem(8);
+        border-bottom: rem(1) solid $online-return-order-detail-border;
+      }
 
-      @include breakpoint($tablet) {
-        flex-direction: row;
-        flex-wrap: wrap;
+      .return-items-wrapper {
+        margin-bottom: 0;
+        padding: 0;
+      }
+
+      .return-status-wrapper {
+        padding-top: rem(16);
+        margin-bottom: 0;
+
+        @include breakpoint($tablet) {
+          padding-top: rem(24);
+        }
       }
     }
 
@@ -337,6 +342,44 @@
     .cancelled-items {
       div {
         padding: 0;
+      }
+    }
+
+    .return-initiated-item {
+      .return-status-header {
+        padding: 0 !important;
+      }
+
+      .return-id {
+        border: none;
+      }
+
+      .return-status-wrapper {
+        display: flex;
+        justify-content: space-between;
+        padding: rem(33) 0 rem(10);
+        margin: 0;
+        border-bottom: rem(1) solid $online-return-order-detail-border;
+        flex-direction: column;
+
+        @include breakpoint($tablet) {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+      }
+
+      .return-status-id-container {
+        padding-#{$right}: rem(20);
+      }
+    }
+
+    .order-item-image {
+      img {
+        width: 8rem;
+
+        @include breakpoint($tablet) {
+          width: 7.125rem;
+        }
       }
     }
   }

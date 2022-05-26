@@ -43,7 +43,7 @@ class ReturnItemsListing extends React.Component {
       });
 
       this.setState({
-        btnDisabled: selectedReason.value === 0,
+        btnDisabled: items.some((item) => (!hasValue(item.reason) || item.reason === 0)),
       });
 
       handleSelectedItems(items);
@@ -75,19 +75,22 @@ class ReturnItemsListing extends React.Component {
    */
   processSelectedItems = (checked, item) => {
     const { handleSelectedItems, itemsSelected } = this.props;
+    const itemHasApportionedPrice = hasValue(item.extension_attributes.apportioned_line_price);
+    const itemHasPromotion = hasValue(item.applied_rule_ids);
     const itemDetails = item;
 
     // Set checked status.
     itemDetails.isChecked = checked;
 
-    // Check if any promotion is applied to the item.
-    if (hasValue(item.applied_rule_ids) && checked) {
-      // Display promotions warning modal.
-      this.setState({
-        promotionModalOpen: true,
-        ruleId: item.applied_rule_ids,
-      });
-    } else if (checked) {
+    if (checked) {
+      // Check if any promotion is applied to the item.
+      if (itemHasPromotion && !itemHasApportionedPrice) {
+        // Display promotions warning modal.
+        this.setState({
+          promotionModalOpen: true,
+          ruleId: item.applied_rule_ids,
+        });
+      }
       // Add default quantity and resolution.
       itemDetails.qty_requested = 1;
       itemDetails.resolution = getDefaultResolutionId();
@@ -96,6 +99,8 @@ class ReturnItemsListing extends React.Component {
         btnDisabled: true,
       });
       handleSelectedItems([...itemsSelected, itemDetails]);
+    } else if (itemHasPromotion && !itemHasApportionedPrice) {
+      this.handlePromotionDeselect();
     } else {
       handleSelectedItems(itemsSelected.filter((product) => product.sku !== itemDetails.sku));
     }
@@ -139,8 +144,31 @@ class ReturnItemsListing extends React.Component {
   };
 
   handlePromotionDeselect = () => {
+    const { products, handleSelectedItems, itemsSelected } = this.props;
+    const { ruleId } = this.state;
+
+    if (!hasValue(ruleId)) {
+      return;
+    }
+
+    const promotionalItems = [];
+
+    products.forEach((product) => {
+      const productDetails = product;
+
+      if (productDetails.applied_rule_ids === ruleId) {
+        productDetails.isChecked = false;
+        promotionalItems.push(productDetails);
+      }
+    });
+
+    if (hasValue(promotionalItems)) {
+      handleSelectedItems(itemsSelected.filter((item) => !promotionalItems.includes(item)));
+    }
+
     this.setState({
       promotionModalOpen: false,
+      btnDisabled: products.some((item) => (!hasValue(item.reason) || item.reason === 0)),
     });
   };
 

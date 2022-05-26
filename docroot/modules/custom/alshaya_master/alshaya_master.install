@@ -13,7 +13,7 @@ use Drupal\Core\Config\FileStorage;
  *
  * Update arabic string translation for View all.
  */
-function alshaya_master_update_8053() {
+function alshaya_master_update_8052() {
   // Add string translations.
   $strings = [
     'View All' => [
@@ -21,18 +21,6 @@ function alshaya_master_update_8053() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Implements hook_update_N().
- *
- * Adds storage config.
- */
-function alshaya_master_update_8052() {
-  // Save default cookie keys.
-  \Drupal::configFactory()->getEditable('alshaya_master.settings')
-    ->set('cookie_keys', 'cart_id')
-    ->save();
 }
 
 /**

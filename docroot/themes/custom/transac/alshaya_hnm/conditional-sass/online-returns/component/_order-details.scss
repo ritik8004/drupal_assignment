@@ -19,7 +19,10 @@
       .title-wrapper {
         font-family: $hnm-demibold;
       }
+    }
 
+    .returned-items,
+    .return-initiated-item {
       .item-list-wrapper {
         border-bottom: rem(1) solid $white;
       }

@@ -234,9 +234,6 @@ function _alshaya_online_returns_translations() {
         'ar' => 'قابلة للإرجاع',
         'context' => 'online_returns',
       ],
-      'Season code' => [
-        'ar' => 'أعد إرسال الرمز',
-      ],
       'Cancel Return' => [
         'ar' => 'إلغاء طلب الإرجاع',
         'context' => 'online_returns',
@@ -255,6 +252,10 @@ function _alshaya_online_returns_translations() {
       ],
       'Return request has been successfully placed.' => [
         'ar' => '.تم تسجيل طلب الارجاع بنجاح',
+        'context' => 'online_returns',
+      ],
+      'Print Return Label' => [
+        'ar' => 'طباعة ملصق الإرجاع',
         'context' => 'online_returns',
       ],
     ],
