@@ -136,6 +136,22 @@ class OrderDetails extends React.Component {
               </div>
             </div>
           )}
+
+          <div className="total-refund-row">
+            <div className="desktop-only">&nbsp;</div>
+            <div className="above-mobile">&nbsp;</div>
+            <div className="right--align">
+              <div className="dark upcase">{Drupal.t('Total Refund Amount')}</div>
+            </div>
+            <div className="blend">
+              <div className="dark">
+                {/* @todo: Replace with actual value once available in data.
+                Markup to be similar to order total. */}
+                KWD 1234.123
+              </div>
+            </div>
+            <div className="above-mobile empty--cell">&nbsp;</div>
+          </div>
         </div>
 
         { hasValue(order.refund_text) && (
