@@ -122,15 +122,16 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
     return;
   }
 
-  // Updated the ordered quantity based on the refunded items.
+  // Remove the full product item if the refunded item is equal to ordered
+  // items.
   foreach ($build['#products'] as $key => &$value) {
-    if ($value['refunded'] > 0 && $value['refunded'] < $value['ordered']) {
-      $value['ordered'] -= $value['refunded'];
-    }
-    // Remove the full product item if the refunded item is equal to ordered
-    // items.
     if ($value['refunded'] === $value['ordered']) {
       unset($build['#products'][$key]);
+      continue;
+    }
+
+    if ($value['refunded'] > 0 && $value['refunded'] < $value['ordered']) {
+      $value['ordered'] -= $value['refunded'];
     }
 
     // Get the new total based the the available quantity.

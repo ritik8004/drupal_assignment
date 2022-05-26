@@ -13,10 +13,10 @@ class ReturnItemDetails extends React.Component {
   constructor(props) {
     // Adding default reason and default quantity values.
     super(props);
-    const { item: { qty_ordered: qtyOrdered, qty_refunded: qtyRefunded } } = props;
+    const { item: { qty_ordered: qtyOrdered } } = props;
     this.state = {
       returnReasons: getReturnReasons(),
-      qtyOptions: getQuantityOptions(qtyOrdered, qtyRefunded),
+      qtyOptions: getQuantityOptions(qtyOrdered),
     };
   }
 

@@ -27,16 +27,10 @@ function getReturnReasons() {
 /**
  * Utility function to get values for quantity options.
  */
-function getQuantityOptions(itemQtyOrdered, itemQtyRefunded) {
+function getQuantityOptions(itemQtyOrdered) {
   const qtyOptions = [];
-  let orderedQty = itemQtyOrdered;
-  // Check if there are any refunded items, if 'Yes' then reduce the ordered
-  // qty.
-  if (itemQtyRefunded < orderedQty) {
-    orderedQty -= itemQtyRefunded;
-  }
-  if (orderedQty) {
-    for (let i = 1; i <= orderedQty; i++) {
+  if (itemQtyOrdered) {
+    for (let i = 1; i <= itemQtyOrdered; i++) {
       qtyOptions.push({
         value: i,
         label: i,
