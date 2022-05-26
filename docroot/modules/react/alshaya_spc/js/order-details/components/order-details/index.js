@@ -35,6 +35,9 @@ class OrderDetails extends React.Component {
         if (hasValue(returnResponse) && hasValue(returnResponse.data)
           && hasValue(returnResponse.data.items)) {
           const allReturns = [];
+          // Looping through each return items.
+          // If return item id matches with order api responses, we
+          // merge both the api responses and prepare complete product data.
           returnResponse.data.items.forEach((returnItem) => {
             const itemsData = [];
             returnItem.items.forEach((item) => {
@@ -47,6 +50,9 @@ class OrderDetails extends React.Component {
                 }
               }
             });
+            // Here, returnInfo consists of return api related information
+            // and items has all info related to products including return details
+            // like how many quantities of item were returned.
             const returnData = {
               returnInfo: returnItem,
               items: itemsData,

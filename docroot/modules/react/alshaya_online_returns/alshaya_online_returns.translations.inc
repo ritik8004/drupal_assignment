@@ -258,8 +258,8 @@ function _alshaya_online_returns_translations() {
         'ar' => 'طباعة ملصق الإرجاع',
         'context' => 'online_returns',
       ],
-      'Return request has been successfully placed.' => [
-        'ar' => '.تم تسجيل طلب الارجاع بنجاح',
+      'Eligible for return until @date' => [
+        'ar' => 'قابل للإرجاع حتى @date',
         'context' => 'online_returns',
       ],
       'Online returns can be placed once existing returns are processed.' => [
