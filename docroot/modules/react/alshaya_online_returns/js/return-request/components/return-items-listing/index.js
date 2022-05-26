@@ -75,6 +75,8 @@ class ReturnItemsListing extends React.Component {
    */
   processSelectedItems = (checked, item) => {
     const { handleSelectedItems, itemsSelected } = this.props;
+    const itemHasApportionedPrice = hasValue(item.extension_attributes.apportioned_line_price);
+    const itemHasPromotion = hasValue(item.applied_rule_ids);
     const itemDetails = item;
 
     // Set checked status.
@@ -82,7 +84,7 @@ class ReturnItemsListing extends React.Component {
 
     if (checked) {
       // Check if any promotion is applied to the item.
-      if (hasValue(item.applied_rule_ids)) {
+      if (itemHasPromotion && !itemHasApportionedPrice) {
         // Display promotions warning modal.
         this.setState({
           promotionModalOpen: true,
@@ -97,7 +99,7 @@ class ReturnItemsListing extends React.Component {
         btnDisabled: true,
       });
       handleSelectedItems([...itemsSelected, itemDetails]);
-    } else if (hasValue(item.applied_rule_ids)) {
+    } else if (itemHasPromotion && !itemHasApportionedPrice) {
       this.handlePromotionDeselect();
     } else {
       handleSelectedItems(itemsSelected.filter((product) => product.sku !== itemDetails.sku));
