@@ -12,11 +12,13 @@ const OrderReturnInitiated = (props) => {
   return (
     <>
       <ReturnInitiated returns={returns} />
-      <div className="order-item-row delivered-items">
-        <div>
-          <div>{Drupal.t('Delivered Items')}</div>
+      { hasValue(order.products) && (
+        <div className="order-item-row delivered-items">
+          <div>
+            <div>{Drupal.t('Delivered Items')}</div>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

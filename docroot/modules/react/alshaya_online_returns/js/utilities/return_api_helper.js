@@ -189,6 +189,18 @@ async function validateReturnRequest(orderDetails) {
     return false;
   }
 
+  // Validate if all the items are refunded or cancelled.
+  let totalProductQty = 0;
+  let totalRefundedQty = 0;
+  orderDetails['#products'].forEach((item) => {
+    totalProductQty += item.ordered;
+    totalRefundedQty += item.refunded;
+  });
+
+  if (totalProductQty === totalRefundedQty) {
+    return false;
+  }
+
   // Return false if any active return already exists for same order.
   if (hasValue(returnItems.data.items)) {
     if (returnItems.data.items.some((item) => isReturnClosed(item) === false)) {

@@ -9,6 +9,17 @@ const OrderReturnEligibility = (props) => {
     return null;
   }
 
+  const {
+    onlineReturns: {
+      products,
+    },
+  } = drupalSettings;
+
+  // Return if products are empty.
+  if (!hasValue(products)) {
+    return null;
+  }
+
   return (
     <div className="order-item-row online-returns-eligibility-message">
       <div>
