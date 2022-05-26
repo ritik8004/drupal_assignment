@@ -4,7 +4,7 @@
   .aura-modal-congratulations-content {
     padding: 0 !important;
     color: $aura-form-otp-text;
-    max-width: 23.4375rem;
+    max-width: rem(412);
     background: $aura-form-otp-background !important;
     z-index: 0;
 
@@ -40,6 +40,26 @@
 
             .aura-modal-footer {
               padding: rem(5) 0;
+            }
+          }
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        &.link-old-card-modal-content {
+          overflow-y: auto !important;
+          height: auto !important;
+          bottom: 0;
+          position: absolute !important;
+
+          .spc-aura-unlink-card-wrapper {
+            .spc-aura-unlink-card-form-content {
+              padding-bottom: 0;
+            }
+
+            .aura-modal-form-actions {
+              position: relative;
+              background: none;
             }
           }
         }
@@ -95,6 +115,8 @@
 
     .aura-modal-form,
     .spc-aura-unlink-card-wrapper {
+      max-width: rem(412);
+
       &::after {
         content: "";
         background: $aura-form-modal-section-bg;
@@ -114,18 +136,19 @@
 
       .aura-modal-form-actions {
         padding-bottom: rem(23);
+        border-top: rem(8) solid $spc-cart-delivery-popup-button-shadow;
 
         .aura-modal-form-submit,
         .aura-modal-form-submit-without-otp,
         .spc-aura-link-card-submit {
-          height: 2.875rem;
+          height: rem(50);
           border-radius: 1.75rem;
           background-image: $aura-modal-submit;
           display: flex;
           align-items: center;
           justify-content: center;
           color: $aura-form-modal-section-bg;
-          margin: 1.25rem 1.25rem 0;
+          margin: rem(25) rem(30) rem(21);
           cursor: pointer;
           font-family: $aura-bold;
           font-size: 1rem;
@@ -243,6 +266,10 @@
           border: solid $border transparent;
           position: relative;
 
+          @include breakpoint($desktop) {
+            width: rem(352);
+          }
+
           &::before {
             content: '';
             position: absolute;
@@ -346,7 +373,12 @@
 
       .aura-modal-form-actions {
         .spc-aura-link-card-submit {
-          margin: rem(26) rem(20) rem(21);
+          margin: rem(26) rem(30) rem(21);
+
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: rem(21);
+            margin-#{$right}: rem(21);
+          }
         }
 
         .aura-modal-footer {
