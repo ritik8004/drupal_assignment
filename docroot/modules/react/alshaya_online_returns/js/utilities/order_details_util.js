@@ -1,38 +1,4 @@
 /* eslint-disable */
-import { hasValue } from '../../../js/utilities/conditionsUtility';
-
-/**
- * Utility function to process return data.
- */
-function processReturnData(returns, context = 'order_detail') {
-  const allReturns = [];
-
-  returns.forEach((returnItem) => {
-    let itemsData = [];
-    // We need product items on order details page.
-    if (context === 'order_detail') {
-      returnItem.items.forEach((item) => {
-        const productDetails = drupalSettings.onlineReturns.products.find((element) => {
-          return element.item_id === item.order_item_id;
-        });
-
-        if (hasValue(productDetails)) {
-          const mergedItem = Object.assign(productDetails, {returnData: item});
-          itemsData.push(mergedItem);
-        }
-      });
-    }
-
-    const returnData = {
-      returnInfo: returnItem,
-      items: itemsData,
-    };
-
-    allReturns.push(returnData);
-  });
-
-  return allReturns;
-}
 
 /**
  * Utility function to return the type of return.
@@ -53,6 +19,5 @@ function getTypeFromReturnItem(returnItem) {
 }
 
 export {
-  processReturnData,
   getTypeFromReturnItem,
 };

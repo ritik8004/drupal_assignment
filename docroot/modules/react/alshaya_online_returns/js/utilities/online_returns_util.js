@@ -110,15 +110,6 @@ function getReturnWindowEligibleDateMessage(date) {
 }
 
 /**
- * Utility function to get return window not active message.
- */
-function getReturnWindowNotActiveMessage() {
-  const message = Drupal.t('Online returns can be placed once existing returns are processed.',
-    { context: 'online_returns' });
-  return message;
-}
-
-/**
  * Utility function to get return window open message.
  */
 function getReturnWindowOpenMessage(date) {
@@ -138,7 +129,7 @@ function isReturnWindowClosed(date) {
 /**
  * Helper function to check if any active return exists.
  */
-function ifOrderHasActiveReturns(returns) {
+function hasActiveReturns(returns) {
   if (hasValue(returns)
     && returns.some((item) => item.returnInfo.extension_attributes.is_closed === false)) {
     return true;
@@ -268,9 +259,8 @@ export {
   getAdressData,
   formatDateTime,
   getOrderDetails,
-  ifOrderHasActiveReturns,
+  hasActiveReturns,
   getReturnWindowEligibleDateMessage,
-  getReturnWindowNotActiveMessage,
   getPrintLabelStatus,
   getCancelButtonStatus,
 };

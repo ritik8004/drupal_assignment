@@ -5,9 +5,8 @@ import {
   getReturnWindowOpenMessage,
   isReturnWindowClosed,
   getReturnRequestUrl,
-  ifOrderHasActiveReturns,
+  hasActiveReturns,
   getReturnWindowEligibleDateMessage,
-  getReturnWindowNotActiveMessage,
 } from '../../utilities/online_returns_util';
 import ReturnAction from '../return-action';
 import ReturnAtStore from '../return-at-store';
@@ -33,13 +32,14 @@ class ReturnEligibilityMessage extends React.Component {
       return null;
     }
 
-    const returnInactiveMessage = getReturnWindowNotActiveMessage();
-    if (hasValue(returns) && ifOrderHasActiveReturns(returns.returns)) {
+    if (hasValue(returns) && hasActiveReturns(returns.returns)) {
       return (
         <div className="eligibility-window-container">
           <div className="eligibility-message-wrapper">
             <ReturnWindow message={getReturnWindowEligibleDateMessage(returnExpiration)} />
-            <div className="return-inactive">{returnInactiveMessage}</div>
+            <div className="return-inactive">
+              {Drupal.t('Online returns can be placed once existing returns are processed.', { context: 'online_returns' })}
+            </div>
           </div>
           <ReturnAtStore returnButtonclass="return-button-enabled" />
         </div>

@@ -9,7 +9,8 @@ import {
 } from '../../utilities/online_returns_util';
 import ReturnEligibilityMessage from '../../common/return-eligibility-message';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import { getProcessedReturnsData } from '../../utilities/return_eligibility_util';
+import { getReturnsByOrderId } from '../../utilities/return_api_helper';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class OnlineReturnsEligibility extends React.Component {
   componentDidMount() {
@@ -23,7 +24,8 @@ class OnlineReturnsEligibility extends React.Component {
   showReturnEligibility = (orderDetails) => {
     const { data } = orderDetails.detail;
     const { orderEntityId } = drupalSettings.onlineReturns.recentOrders[data.orderId];
-    const returns = getProcessedReturnsData(orderEntityId, 'recent_orders');
+    const returns = getReturnsByOrderId(orderEntityId);
+    showFullScreenLoader();
 
     // Unmount component from all orders.
     Object.keys(drupalSettings.onlineReturns.recentOrders).forEach((orderId) => {
@@ -34,7 +36,17 @@ class OnlineReturnsEligibility extends React.Component {
 
     if (returns instanceof Promise) {
       returns.then((returnResponse) => {
-        if (hasValue(returnResponse)) {
+        if (hasValue(returnResponse) && hasValue(returnResponse.data)) {
+          const allReturns = [];
+          if (hasValue(returnResponse.data.items)) {
+            returnResponse.data.items.forEach((returnItem) => {
+              const returnData = {
+                returnInfo: returnItem,
+              };
+              allReturns.push(returnData);
+            });
+          }
+          removeFullScreenLoader();
           // Render component for the selected order.
           const selector = document.querySelector(`*[data-order-id="${data.orderId}"] #online-returns-eligibility-window`);
           if (selector) {
@@ -44,7 +56,7 @@ class OnlineReturnsEligibility extends React.Component {
             }
 
             ReactDOM.render(
-              <OnlineReturnsEligibility orderId={data.orderId} returnData={returnResponse} />,
+              <OnlineReturnsEligibility orderId={data.orderId} returnData={allReturns} />,
               selector,
             );
           }
