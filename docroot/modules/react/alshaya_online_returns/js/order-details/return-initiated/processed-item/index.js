@@ -57,7 +57,7 @@ class ProcessedItem extends React.Component {
     // @todo: Use utility function to trim status text for css class.
     // Refer DIG-8004 for more info.
     const returnStatus = returnData.returnInfo.extension_attributes.customer_status;
-    const returnStatusClass = returnStatus.replace(/\s+/g, '-').toLowerCase();
+    const returnStatusClass = Drupal.cleanCssIdentifier(returnStatus);
     return (
       <div key={returnData.returnInfo.increment_id} className="return-status-header">
         <div className="return-status-wrapper">
