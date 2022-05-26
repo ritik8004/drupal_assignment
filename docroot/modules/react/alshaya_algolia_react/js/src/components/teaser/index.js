@@ -71,6 +71,10 @@ const Teaser = ({
       && value !== null) {
       if (value[currentLanguage] !== undefined) {
         attribute[key] = value[currentLanguage];
+      } else {
+        // If the value for current language code does not exist
+        // then use value from first available language code.
+        attribute[key] = value[Object.keys(value)[0]];
       }
     } else {
       attribute[key] = value;
