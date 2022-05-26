@@ -29,7 +29,7 @@ const ReturnIndividualItem = ({
   } = item;
 
   // Return from here only if refunded is greater or equal to ordered item.
-  if (qtyOrdered >= qtyRefunded) {
+  if (qtyOrdered <= qtyRefunded) {
     return null;
   }
 
