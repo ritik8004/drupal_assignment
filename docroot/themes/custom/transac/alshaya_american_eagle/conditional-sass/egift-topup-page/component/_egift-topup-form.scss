@@ -5,6 +5,12 @@
         background-color: $egift-myaccount-topup-button;
         border-color: $egift-myaccount-topup-button;
         text-transform: uppercase;
+
+        &:disabled,
+        &[disabled] {
+          background-color: $egift-purchase-inactive-step-text;
+          border-color: $egift-purchase-inactive-step-text;
+        }
       }
     }
   }
@@ -13,6 +19,12 @@
     .open-amount-btn {
       background-color: $egift-myaccount-topup-button;
       border-color: $egift-myaccount-topup-button;
+
+      &:disabled,
+      &[disabled] {
+        background-color: $egift-purchase-inactive-step-text;
+        border-color: $egift-purchase-inactive-step-text;
+      }
     }
   }
 }
