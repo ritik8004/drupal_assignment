@@ -673,26 +673,33 @@ export const removeDiffFromWishlist = (productsObj) => {
   const wishListItems = getWishListData();
 
   if (wishListItems) {
-    Object.keys(wishListItems).forEach((keySku) => {
+    wishListItems.forEach((item) => {
       // Check if wishlist product sku exist in given
       // products array and if not, we will remove that
       // product from the wishlist of users.
       if (!productsObj.find(
-        (productObj) => productObj.sku === keySku,
+        (productObj) => productObj.sku === item.sku,
       )) {
         // Call remove product from wishlist function. This
         // will handle removing product from wishlist for both
         // anonymous and logged in users.
-        removeProductFromWishList(keySku).then((response) => {
+        removeProductFromWishList(item.sku).then((response) => {
           if (hasValue(response)
             && hasValue(response.data)
             && hasValue(response.data.status)
             && response.data.status) {
-            // Remove the entry for given product sku from existing storage data.
-            delete wishListItems[keySku];
+            // Get the SKU index from the wishlist local storage array. This will
+            // return a position index number i.e. > -1 if product exists else will
+            // return -1. We need to remove product from the local storage if
+            // skuIndex is greater than -1.
+            const skuIndex = getWishListDataIndexForSku(item.sku);
+            if (skuIndex > -1) {
+              // Remove the entry for given product sku from existing storage data.
+              wishListItems.splice(skuIndex, 1);
 
-            // Save back to storage.
-            addWishListInfoInStorage(wishListItems);
+              // Save back to storage.
+              addWishListInfoInStorage(wishListItems);
+            }
           }
         });
       }
