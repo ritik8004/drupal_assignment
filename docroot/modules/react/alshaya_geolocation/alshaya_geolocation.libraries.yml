@@ -27,14 +27,8 @@ alshaya-store-click-collect-list:
     dist/store_click_collect_list.bundle.js: { }
   dependencies:
     - alshaya_react/react
+    - core/drupalSettings
 
-alshaya-store-click-collect-list-rcs:
-  version: 1.x
-  js:
-    js/alshaya_geolocation_rcs.utility.js: { }
-    dist/store_click_collect_list_rcs.bundle.js: { }
-  dependencies:
-    - alshaya_react/react
 
 marker-dropdown:
   js:

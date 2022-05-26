@@ -19,7 +19,7 @@ function alshaya_rcs_geolocation_node_view_alter(array &$build, EntityInterface 
   $api_url = '/alshaya-locations/stores-list';
   $config = alshaya_click_collect_get_config();
 
-  $build['#attached']['library'][] = 'alshaya_geolocation/alshaya-store-click-collect-list-rcs';
+  $build['#attached']['library'][] = 'alshaya_geolocation/alshaya-store-click-collect-list';
   $build['#attached']['drupalSettings']['storeLabels'] = [
     'apiUrl' => $api_url,
     'title' => $config['title'],
@@ -32,4 +32,31 @@ function alshaya_rcs_geolocation_node_view_alter(array &$build, EntityInterface 
     'available_at_title' => '',
     'select_option_text' => $config['select_option_text'],
   ];
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_geolocation_library_info_alter(&$libraries, $extension) {
+  $self_module_path = drupal_get_path('module', 'alshaya_rcs_geolocation');
+
+  if ($extension === 'alshaya_geolocation'
+    && isset($libraries['alshaya-store-click-collect-list'])
+  ) {
+    $cnc_library = &$libraries['alshaya-store-click-collect-list'];
+    // Alter the geolocation library to replace the base JS file with the
+    // utility file provided by this module.
+    foreach ($cnc_library['js'] as $source => $options) {
+      if ($source === 'js/alshaya_geolocation.utility.js') {
+        unset($cnc_library['js'][$source]);
+        $cnc_library['js']["/$self_module_path/js/alshaya_geolocation_rcs.utility.js"] = $options;
+        $cnc_library['dependencies'] = [
+          'core/jquery',
+          'core/drupalSettings',
+          'alshaya_acm_product/product_utility',
+        ];
+        break;
+      }
+    }
+  }
 }

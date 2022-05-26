@@ -287,6 +287,10 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $alshaya_master_settings->getCacheTags());
 
+  $cnc_settings = _get_cnc_settings();
+  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
+  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
+
   // PDP Home delivery.
   $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
   $home_delivery_config['title_class'] = Html::getClass($home_delivery_config['title']);
