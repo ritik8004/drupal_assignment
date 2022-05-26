@@ -236,7 +236,7 @@ function prepareCancelRequestData(returnInfo) {
       {
         entity_id: item.entity_id,
         rma_entity_id: item.rma_entity_id,
-        status: item.status,
+        status,
         order_item_id: item.order_item_id,
       },
     );
