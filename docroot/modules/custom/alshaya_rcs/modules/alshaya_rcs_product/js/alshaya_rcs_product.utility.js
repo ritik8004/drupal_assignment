@@ -489,6 +489,20 @@ window.commerceBackend = window.commerceBackend || {};
     return productData;
   }
 
+  function fetchAndProcessCustomAttributes() {
+    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
+    // Process the data to extract what we require and format it into an object.
+    response.data.customAttributeMetadata.items
+    && response.data.customAttributeMetadata.items.forEach(function (option) {
+      var allOptionsForAttribute = {};
+      option.attribute_options.forEach(function (optionValue) {
+        allOptionsForAttribute[optionValue.value] = optionValue.label;
+      })
+      // Set to static storage.
+      staticDataStore['attrLabels'][option.attribute_code] = allOptionsForAttribute;
+    });
+  }
+
   /**
    * Returns all the custom attributes with values.
    *
@@ -496,6 +510,9 @@ window.commerceBackend = window.commerceBackend || {};
    *  Custom attributes with values.
    */
   function getAllCustomAttributes() {
+    if (!Drupal.hasValue(staticDataStore['attrLabels'])) {
+      fetchAndProcessCustomAttributes();
+    }
     return staticDataStore['attrLabels'];
   }
 
@@ -924,17 +941,7 @@ window.commerceBackend = window.commerceBackend || {};
       return staticDataStore['attrLabels'][attrName][attrValue];
     }
 
-    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
-    // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata.items
-    && response.data.customAttributeMetadata.items.forEach(function (option) {
-      var allOptionsForAttribute = {};
-      option.attribute_options.forEach(function (optionValue) {
-        allOptionsForAttribute[optionValue.value] = optionValue.label;
-      })
-      // Set to static storage.
-      staticDataStore['attrLabels'][option.attribute_code] = allOptionsForAttribute;
-    });
+    fetchAndProcessCustomAttributes();
 
     // Return the label.
     return Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue])
