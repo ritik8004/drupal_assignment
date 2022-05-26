@@ -5,6 +5,10 @@
     padding-bottom: rem(6);
     margin-top: rem(-8);
     font-family: $alshaya-bold;
+
+    @include breakpoint($only-tablet) {
+      margin-top: rem(7);
+    }
   }
 
   .points-block {
@@ -14,6 +18,7 @@
 
     @include breakpoint($only-tablet) {
       padding: rem(16) rem(4);
+      margin-top: rem(36);
     }
 
     .my-points {
