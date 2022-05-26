@@ -141,7 +141,13 @@ export const getWishListData = (strgKey) => {
   const storageKey = hasValue(strgKey) ? strgKey : getWishListStorageKey();
 
   // Get data from local storage.
-  return Drupal.getItemFromLocalStorage(storageKey);
+  const wishlistItems = Drupal.getItemFromLocalStorage(storageKey);
+
+  // Check if this returns an object, we will type cast it to an array and
+  // and return an array of wishlist items. Else return null.
+  return (wishlistItems && typeof wishlistItems === 'object')
+    ? Object.values(wishlistItems)
+    : null;
 };
 
 /**
@@ -152,11 +158,15 @@ export const isProductExistInWishList = (productSku) => {
   const wishListItems = getWishListData();
 
   // Check if product sku is in existing data.
-  if (wishListItems && Object.prototype.hasOwnProperty.call(wishListItems, productSku)) {
-    return true;
+  let ifProductExist = false;
+  if (wishListItems) {
+    // We need to match the given sku with the sku property for each wishlist
+    // item to verify if it exist.
+    ifProductExist = wishListItems.find((product) => product.sku === productSku);
   }
 
-  return false;
+  // Return true/false based on the data.
+  return hasValue(ifProductExist);
 };
 
 /**
@@ -170,12 +180,35 @@ export const getWishListDataForSku = (sku) => {
   const wishListItems = getWishListData();
 
   // Return null if product sku is not in existing data.
-  if (!wishListItems
-    || !Object.prototype.hasOwnProperty.call(wishListItems, sku)) {
+  if (!wishListItems) {
     return null;
   }
 
-  return wishListItems[sku];
+  // Get the data from the matched SKU from the local storage values.
+  const skuData = wishListItems.find((product) => product.sku === sku);
+
+  // Return the given sku data if available else return null.
+  return hasValue(skuData) ? skuData : null;
+};
+
+/**
+ * Return the local storage array index for the given sku if available.
+ *
+ * @returns {number}
+ *  Index of given sku in wishlist items array. Default to -1, if not found.
+ */
+export const getWishListDataIndexForSku = (sku) => {
+  // Get existing wishlist data from storage.
+  const wishListItems = getWishListData();
+
+  // Return null if product sku is not in existing data.
+  if (!wishListItems) {
+    return null;
+  }
+
+  // Find the index of given sku in wishlist item array. This will return -1
+  // if the given sku doesn't found in the array.
+  return _.findIndex(wishListItems, (product) => product.sku === sku);
 };
 
 /**
@@ -340,14 +373,14 @@ export const addProductToWishListForGuestUsers = (productInfo) => {
   let wishListItems = getWishListData();
 
   // If no existing data, create an array.
-  wishListItems = wishListItems || {};
+  wishListItems = wishListItems || [];
 
   // Add new data to storage.
   // We only need to store sku and options and not title.
-  wishListItems[productInfo.sku] = {
+  wishListItems.push({
     sku: productInfo.sku,
     options: productInfo.options,
-  };
+  });
 
   // Save back to storage.
   addWishListInfoInStorage(wishListItems);
@@ -499,7 +532,7 @@ export const removeProductFromWishList = (productSku) => {
 
   // Return is no existing data found.
   if (!wishListItems
-    || typeof wishListItems[productSku] === 'undefined') {
+    || !isProductExistInWishList(productSku)) {
     logger.warning('Product not found in local storage. Product SKU: @productSku. Wishlist Data: @wishlistData.', {
       '@productSku': productSku,
       '@wishlistData': JSON.stringify(wishListItems),
@@ -520,7 +553,8 @@ export const removeProductFromWishList = (productSku) => {
 
   // For logged in users, check if product's wishlistItemId exist.
   // If not return Promise object with null response.
-  if (typeof wishListItems[productSku].wishlistItemId === 'undefined') {
+  const skuData = getWishListDataForSku(productSku);
+  if (skuData && typeof skuData.wishlistItemId === 'undefined') {
     // Always return a Promise object.
     return new Promise((resolve) => {
       resolve(null);
@@ -530,7 +564,7 @@ export const removeProductFromWishList = (productSku) => {
   // If wishlistItemId exists, do remove product from backend
   // and return the response of API call.
   return removeProductFromWishListForLoggedInUsers({
-    wishlistItemId: wishListItems[productSku].wishlistItemId,
+    wishlistItemId: skuData.wishlistItemId,
   });
 };
 
