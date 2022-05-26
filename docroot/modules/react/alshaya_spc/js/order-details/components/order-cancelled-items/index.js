@@ -15,6 +15,17 @@ const OrderCancelledItems = (props) => {
           <div>{Drupal.t('Cancelled Items')}</div>
         </div>
       </div>
+      {hasValue(order.refund_text) && (
+        <div className="order-item-row">
+          <div>
+            <div className="tooltip-anchor cancelled-item-tooltip-refund-text info">
+              <span>
+                {order.refund_text}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
       <OrderItems products={order.cancelled_products} cancelled />
     </>
   );

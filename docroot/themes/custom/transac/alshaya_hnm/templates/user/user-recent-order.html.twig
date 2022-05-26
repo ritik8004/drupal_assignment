@@ -90,9 +90,6 @@
           <div>{{ "Cancelled Items"|t }}</div>
         </td>
       </tr>
-      {% for item in order.cancelled_items %}
-        {{ _self.order_item(item, true) }}
-      {% endfor %}
       {% if order.refund_text is not empty %}
         <tr class="order-item-row">
           <td class="cancelled-item-refund-text" colspan="4">
@@ -102,6 +99,9 @@
           </td>
         </tr>
       {% endif %}
+      {% for item in order.cancelled_items %}
+        {{ _self.order_item(item, true) }}
+      {% endfor %}
     {% endif %}
 
     <tr class="order-item-row order__detail--link">
