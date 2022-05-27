@@ -10,8 +10,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\address\Repository\CountryRepository;
@@ -264,64 +262,15 @@ class OnlineReturnController extends ControllerBase {
     $order = $orders[$order_index];
     $orderDetails = alshaya_acm_customer_build_order_detail($order);
 
+    // Allow other modules to update order details build.
+    $this->moduleHandler()->alter('alshaya_online_returns_order_details_build', $order, $orderDetails);
+
     $orderDetails['#order'] = array_merge(
       $orderDetails['#order'] ?? [],
       $this->onlineReturnsHelper->prepareOrderData($order)
     );
 
-    // Check if complete payment done via egift.
-    // For multiple payment and if some amount is paid via egift
-    // then also include eGift Card payment in payment details.
-    if ($orderDetails['#order_details']['payment_method'] === 'hps_payment'
-      || ($orderDetails['#order_details']['payment_method_code'] !== 'hps_payment'
-      && isset($order['extension']['hps_redeemed_amount'])
-      && $order['extension']['hps_redeemed_amount'] > 0 && isset($order['extension']['hps_redemption_card_number']))) {
-      $egift_data = [
-        'card_type' => $this->t('eGift Card', [], ['context' => 'egift']),
-        'card_number' => substr($order['extension']['hps_redemption_card_number'], -4),
-        'payment_type' => 'egift',
-      ];
-      $orderDetails['#order_details']['paymentDetails']['egift'] = $egift_data;
-    }
-
-    // Get display image for each product.
-    // Converting image url to renderable drupal url.
-    foreach ($orderDetails['#products'] as $key => $item) {
-      if (!empty($item['image'])) {
-        if ($item['image']['#theme'] == 'image_style') {
-          $image_style = $this->entityTypeManager->getStorage('image_style');
-          $data = [
-            'url' => $image_style->load($item['image']['#style_name'])->buildUrl($item['image']['#uri']),
-            'title' => $item['image']['#title'],
-            'alt' => $item['image']['#alt'],
-          ];
-        }
-        elseif ($item['image']['#theme'] == 'image') {
-          $data = [
-            'url' => $item['image']['#attributes']['src'],
-            'title' => $item['image']['#attributes']['title'],
-            'alt' => $item['image']['#attributes']['alt'],
-          ];
-        }
-      }
-      $orderDetails['#products'][$key]['image_data'] = $data ?? NULL;
-      $sku = SKU::loadFromSku($item['sku']);
-      if ($sku instanceof SKUInterface) {
-        $orderDetails['#products'][$key]['is_returnable'] = $this->onlineReturnsHelper->isSkuReturnable($sku);
-        $orderDetails['#products'][$key]['is_big_ticket'] = $this->onlineReturnsHelper->isSkuBigTicket($sku);
-      }
-    }
-
-    // Update the order total based on the item qty.
-    if ($orderDetails['#products'][$key]['qty_refunded'] > 0
-      && $orderDetails['#products'][$key]['qty_refunded'] < $orderDetails['#products'][$key]['qty_ordered']) {
-      $orderDetails['#products'][$key]['qty_ordered'] -= $orderDetails['#products'][$key]['qty_refunded'];
-
-      // Updating total value as `qty_ordered` is updated.
-      $orderDetails['#products'][$key]['total'] = alshaya_acm_price_format(
-        $orderDetails['#products'][$key]['qty_ordered'] * $orderDetails['#products'][$key]['price_incl_tax'],
-      );
-    }
+    $orderDetails['#products'] = $this->onlineReturnsHelper->prepareProductsData($orderDetails["#products"]);
 
     // Adding country label to display country along with address.
     $country_list = $this->addressCountryRepository->getList();
