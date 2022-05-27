@@ -385,5 +385,57 @@
         }
       }
     }
+
+    .total-refund-row {
+      display: grid;
+      grid-template: "a b" auto/11.6875rem auto;
+      background: $order_detail_total_tr_row;
+
+      @include breakpoint($tablet) {
+        grid-template: "a b c d" auto/8.4375rem 10.125rem 8.625rem 8.75rem;
+      }
+
+      @include breakpoint($desktop) {
+        grid-template: "a b c d e" auto/11.5rem auto 14.375rem 10.5625rem 11.25rem;
+      }
+
+      > div {
+        padding: rem(10) rem(22);
+
+        @include breakpoint($only-tablet) {
+          padding: rem(10) rem(16);
+        }
+      }
+
+      div.right--align {
+        text-align: $right;
+        min-width: rem(128);
+
+        html[lang=ar] & {
+          @include breakpoint($only-mobile) {
+            min-width: rem(160);
+            padding: rem(10) rem(16);
+          }
+        }
+      }
+
+      .price-type__wrapper,
+      .price,
+      .dark {
+        margin-bottom: 0;
+      }
+
+      div.blend {
+        background: $order_detail_total_tr_row_price_td;
+
+        @include breakpoint($tablet) {
+          background: $order_detail_total_tr_row_price_td_tablet;
+        }
+
+        div {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 }
