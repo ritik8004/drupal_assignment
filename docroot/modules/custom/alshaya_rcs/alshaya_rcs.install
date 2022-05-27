@@ -34,7 +34,7 @@ function alshaya_rcs_install() {
     'alshaya_rcs_geolocation',
   ];
   $module_installer->install($modules);
-  \Drupal::logger('alshaya_rcs')->notice('Installed rcs modules: @modules', [
+  \Drupal::logger('alshaya_rcs')->notice('Installed RCS modules: @modules', [
     '@modules' => implode(',', $modules),
   ]);
 
@@ -48,7 +48,7 @@ function alshaya_rcs_install() {
   foreach ($modules as $module_to_check => $module_to_install) {
     if ($module_handler->moduleExists($module_to_check)) {
       $module_installer->install([$module_to_install]);
-      \Drupal::logger('alshaya_rcs')->notice('Installed rcs module: @module', [
+      \Drupal::logger('alshaya_rcs')->notice('Installed RCS module: @module', [
         '@module' => $module_to_install,
       ]);
     }
