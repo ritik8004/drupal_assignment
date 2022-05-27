@@ -10,7 +10,6 @@ use Drupal\alshaya_acm\Service\AlshayaAcmApiWrapper;
 use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -127,13 +126,6 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuImagesHelper;
 
   /**
-   * GTM manager.
-   *
-   * @var \Drupal\alshaya_seo_transac\AlshayaGtmManager
-   */
-  protected $gtmManager;
-
-  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -194,16 +186,6 @@ class AlshayaFeedSkuInfoHelper {
     $this->tokenService = $token;
     $this->skuPriceHelper = $sku_price_helper;
     $this->skuImagesHelper = $sku_images_helper;
-  }
-
-  /**
-   * Set Injection for Gtm manager.
-   *
-   * @param \Drupal\alshaya_seo_transac\AlshayaGtmManager $alshayaGtmManager
-   *   Gtm manager.
-   */
-  public function setGtmManager(AlshayaGtmManager $alshayaGtmManager) {
-    $this->gtmManager = $alshayaGtmManager;
   }
 
   /**
@@ -282,7 +264,6 @@ class AlshayaFeedSkuInfoHelper {
           'short_description',
         ]),
         'promotion_label' => $promotion_label,
-        'gtm' => $this->gtmManager->fetchProductGtmAttributes($node, 'dy'),
       ];
 
       $parentProduct['linked_skus'] = [];
@@ -337,7 +318,6 @@ class AlshayaFeedSkuInfoHelper {
             'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
             'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
             'url' => $this->skuInfoHelper->getEntityUrl($node) . '?selected=' . $child->id(),
-            'gtm' => $this->gtmManager->fetchProductGtmAttributes($node, 'dy', $child),
           ];
           // Allow other modules to add/alter variant info.
           $this->moduleHandler->alter('alshaya_feed_variant_info', $variant, $child);
