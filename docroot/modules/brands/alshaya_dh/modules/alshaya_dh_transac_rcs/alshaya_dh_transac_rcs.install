@@ -16,5 +16,5 @@ function alshaya_dh_transac_rcs_install() {
  * Implements hook_uninstall().
  */
 function alshaya_dh_transac_rcs_uninstall() {
-  \Drupal::service('module_installer')->uninstall(['alshaya_rcs']);
+  \Drupal::service('module_installer')->uninstall(['rcs_placeholders']);
 }
