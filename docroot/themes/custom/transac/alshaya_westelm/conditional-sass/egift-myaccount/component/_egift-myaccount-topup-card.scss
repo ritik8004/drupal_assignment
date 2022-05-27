@@ -4,10 +4,10 @@
       background: $egift-myaccount-topup-button;
       border-color: $egift-myaccount-topup-button;
       text-transform: uppercase !important;
-    }
 
-    .my-topup-cancel-btn {
-      background: transparent;
+      &.my-topup-cancel-btn {
+        background: transparent;
+      }
     }
   }
 }
