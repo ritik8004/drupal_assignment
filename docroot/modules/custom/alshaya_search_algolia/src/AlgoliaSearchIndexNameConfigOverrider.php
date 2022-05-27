@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_search_algolia;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Site\Settings;
@@ -21,13 +22,34 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
   protected $state;
 
   /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Algolia search config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $alshayaAlgoliaConfig;
+
+  /**
    * AlgoliaSearchIndexNameConfigOverrider constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
    *   Drupal State Service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory service.
    */
-  public function __construct(StateInterface $state) {
+  public function __construct(
+    StateInterface $state,
+    ConfigFactoryInterface $config_factory
+  ) {
     $this->state = $state;
+    $this->configFactory = $config_factory;
+    $this->alshayaAlgoliaConfig = $this->configFactory->get('alshaya_search_algolia.settings');
   }
 
   /**
@@ -42,6 +64,24 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     }
 
     if (!empty($overrides)) {
+      return $overrides;
+    }
+
+    if (!($this->alshayaAlgoliaConfig->get('index_from_drupal'))) {
+      $site_info = alshaya_get_site_country_code();
+      $algolia_env = Settings::get('algolia_env');
+
+      // Alter the indices name.
+      $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
+      $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
+      $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'] . '_product_list';
+
+      // Make indices read-only.
+      $overrides['search_api.index.alshaya_algolia_index']['read_only'] = TRUE;
+      $overrides['search_api.index.acquia_search_index']['read_only'] = TRUE;
+      $overrides['search_api.index.alshaya_algolia_product_list_index']['read_only'] = TRUE;
+
+      $this->overrideSecretKeys($overrides, $algolia_env);
       return $overrides;
     }
 
@@ -65,8 +105,6 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     $algolia_env = Settings::get('env');
     // Use local env for travis.
     $algolia_env = $algolia_env === 'travis' ? 'local' : $algolia_env;
-
-    $algolia_settings = Settings::get('algolia_sandbox.settings');
 
     // We want to use Algolia index name with 01 prefix all the time.
     $env_number = substr($algolia_env, 0, 2);
@@ -95,14 +133,27 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
 
     // This will need to be overridden in brand specific settings files on each
     // env using prod app for each brand.
+    $this->overrideSecretKeys($overrides, $algolia_env);
+
+    return $overrides;
+  }
+
+  /**
+   * Utility function to override secret keys for Algolia.
+   *
+   * @param array $overrides
+   *   Array of overrides.
+   * @param string $algolia_env
+   *   Algolia env value.
+   */
+  private function overrideSecretKeys(array &$overrides, $algolia_env) {
+    $algolia_settings = Settings::get('algolia_sandbox.settings');
     if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
       $overrides['search_api.server.algolia']['backend_config']['application_id'] = $algolia_settings['app_id'];
       $overrides['search_api.server.algolia']['backend_config']['api_key'] = $algolia_settings['write_api_key'];
       $overrides['alshaya_algolia_react.settings']['application_id'] = $algolia_settings['app_id'];
       $overrides['alshaya_algolia_react.settings']['search_api_key'] = $algolia_settings['search_api_key'];
     }
-
-    return $overrides;
   }
 
   /**
