@@ -263,8 +263,9 @@
   .block-content.registered-user-unlinked-card {
     .spc-aura-cart-content {
       .spc-link-aura-link-wrapper {
-        display: block;
+        display: inline-block;
         text-align: $left;
+        margin-#{$right}: rem(5);
       }
     }
 

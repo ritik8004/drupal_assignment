@@ -54,8 +54,6 @@ class ProcessedItem extends React.Component {
   render() {
     const { popup, cancelBtnState, showPrintLabelBtn } = this.state;
     const { returnData } = this.props;
-    // @todo: Use utility function to trim status text for css class.
-    // Refer DIG-8004 for more info.
     const returnStatus = returnData.returnInfo.extension_attributes.customer_status;
     const returnStatusClass = Drupal.cleanCssIdentifier(returnStatus);
     return (
@@ -92,6 +90,9 @@ class ProcessedItem extends React.Component {
               </div>
             </ConditionalView>
           </div>
+        </div>
+        <div className="return-id">
+          {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
         </div>
         <ConditionalView condition={popup}>
           <CancelReturnPopUp

@@ -189,6 +189,18 @@ async function validateReturnRequest(orderDetails) {
     return false;
   }
 
+  // Validate if all the items are refunded or cancelled.
+  let totalProductQty = 0;
+  let totalRefundedQty = 0;
+  orderDetails['#products'].forEach((item) => {
+    totalProductQty += item.ordered;
+    totalRefundedQty += item.refunded;
+  });
+
+  if (totalProductQty === totalRefundedQty) {
+    return false;
+  }
+
   // Return false if any active return already exists for same order.
   if (hasValue(returnItems.data.items)) {
     if (returnItems.data.items.some((item) => isReturnClosed(item) === false)) {
@@ -224,7 +236,7 @@ function prepareCancelRequestData(returnInfo) {
       {
         entity_id: item.entity_id,
         rma_entity_id: item.rma_entity_id,
-        status: item.status,
+        status,
         order_item_id: item.order_item_id,
       },
     );

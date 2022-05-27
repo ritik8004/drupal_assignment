@@ -174,17 +174,17 @@ export default class WishlistHeader extends React.Component {
     getWishlistFromBackend().then((response) => {
       let wishListItemCount = 0;
       if (hasValue(response.data.items)) {
-        const wishListItems = {};
+        const wishListItems = [];
 
         response.data.items.forEach((item) => {
-          wishListItems[item.sku] = {
+          wishListItems.push({
             sku: item.sku,
             options: item.options,
             // We need this for removing the item from the wishlist.
             wishlistItemId: item.wishlist_item_id,
             // OOS status of product in backend.
             inStock: item.is_in_stock,
-          };
+          });
         });
 
         // Save back to storage.

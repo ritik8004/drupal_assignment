@@ -28,24 +28,26 @@ class ReturnedItemsListing extends React.Component {
     return (
       <div className="returned-items-row returned-items">
         {returns.map((returnItem) => (
-          <ConditionalView condition={hasValue(getTypeFromReturnItem(returnItem))
-            && isReturnClosed(returnItem.returnInfo)}
-          >
-            <div className="title-wrapper">
-              <span>
-                {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
-                {' '}
-                {'-'}
-                {' '}
-                {this.getReturnedItemsSubTitle(getTypeFromReturnItem(returnItem))}
-              </span>
-            </div>
+          <div key={returnItem.returnInfo.increment_id} className="items-wrapper">
+            <ConditionalView condition={hasValue(getTypeFromReturnItem(returnItem))
+              && isReturnClosed(returnItem.returnInfo)}
+            >
+              <div className="title-wrapper">
+                <span>
+                  {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
+                  {' '}
+                  {'-'}
+                  {' '}
+                  {this.getReturnedItemsSubTitle(getTypeFromReturnItem(returnItem))}
+                </span>
+              </div>
 
-            <ReturnedItems
-              key={getTypeFromReturnItem(returnItem)}
-              returnData={returnItem}
-            />
-          </ConditionalView>
+              <ReturnedItems
+                key={getTypeFromReturnItem(returnItem)}
+                returnData={returnItem}
+              />
+            </ConditionalView>
+          </div>
         ))}
       </div>
     );
