@@ -299,7 +299,7 @@ exports.render = function render(
             ? drupalSettings.alshaya_click_collect.subtitle.enabled
             : drupalSettings.alshaya_click_collect.subtitle.disabled,
             sku: entity.sku,
-            sku_clean: window.commerceBackend.cleanCssIdentifier(entity.sku),
+            sku_clean: Drupal.cleanCssIdentifier(entity.sku),
             sku_type: entity.type_id,
             help_text: drupalSettings.alshaya_click_collect.help_text,
             available_at_title: '',
@@ -527,7 +527,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'sku-clean':
-      value = window.commerceBackend.cleanCssIdentifier(input.sku);
+      value = Drupal.cleanCssIdentifier(input.sku);
       break;
 
     case 'sku-type':
@@ -807,7 +807,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'price_block_identifier':
-      const cleanSku = window.commerceBackend.cleanCssIdentifier(input.sku);
+      const cleanSku = Drupal.cleanCssIdentifier(input.sku);
       value = `price-block-${cleanSku}`;
       break;
 
