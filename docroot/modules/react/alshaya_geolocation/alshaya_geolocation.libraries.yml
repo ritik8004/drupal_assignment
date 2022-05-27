@@ -29,7 +29,6 @@ alshaya-store-click-collect-list:
     - alshaya_react/react
     - core/drupalSettings
 
-
 marker-dropdown:
   js:
     js/marker-dropdown.js: {}
