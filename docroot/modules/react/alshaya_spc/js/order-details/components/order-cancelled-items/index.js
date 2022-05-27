@@ -16,7 +16,7 @@ const OrderCancelledItems = (props) => {
         </div>
       </div>
       {hasValue(order.refund_text) && (
-        <div className="order-item-row">
+        <div className="order-item-row cancelled-refund-text">
           <div>
             <div className="tooltip-anchor cancelled-item-tooltip-refund-text info">
               <span>
