@@ -43,7 +43,8 @@ class OrderDetails extends React.Component {
             returnItem.items.forEach((item) => {
               const { products } = drupalSettings.onlineReturns;
               if (hasValue(products)) {
-                const productDetails = products.find((e) => e.item_id === item.order_item_id);
+                const productsObj = Object.values(products);
+                const productDetails = productsObj.find((e) => e.item_id === item.order_item_id);
                 if (hasValue(productDetails)) {
                   const mergedItem = Object.assign(productDetails, { returnData: item });
                   itemsData.push(mergedItem);
