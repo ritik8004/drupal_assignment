@@ -60,7 +60,7 @@
       border: none;
     }
 
-    div.order-item-row {
+    div.order-item-row:not(.cancelled-refund-text) {
       word-break: break-all;
 
       .return-initiated-items {
