@@ -4,7 +4,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
 
 const OrderReturnEligibility = (props) => {
-  const { order } = props;
+  const { order, returns } = props;
   if (!isOnlineReturnsEnabled() || !hasValue(order.online_returns_status)) {
     return null;
   }
@@ -24,7 +24,7 @@ const OrderReturnEligibility = (props) => {
     <div className="order-item-row online-returns-eligibility-message">
       <div>
         <div id="online-returns-eligibility-window">
-          <ReturnEligibility />
+          <ReturnEligibility returns={returns} />
         </div>
       </div>
     </div>

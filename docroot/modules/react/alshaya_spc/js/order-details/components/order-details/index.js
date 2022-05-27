@@ -10,11 +10,11 @@ import OrderReturnInitiated from '../order-return-initiated';
 import ReturnedItemsListing from '../../../../../alshaya_online_returns/js/order-details/returned-items-listing';
 import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getReturns } from '../../../../../alshaya_online_returns/js/utilities/order_details_util';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import { getReturnsByOrderId } from '../../../../../alshaya_online_returns/js/utilities/return_api_helper';
 
 class OrderDetails extends React.Component {
   constructor(props) {
@@ -30,9 +30,36 @@ class OrderDetails extends React.Component {
     showFullScreenLoader();
     if (isOnlineReturnsEnabled()) {
       this.setState({ loading: true });
-      getReturns().then((returnResponse) => {
-        if (hasValue(returnResponse)) {
-          this.setState({ returns: returnResponse });
+      const { orderEntityId } = drupalSettings.onlineReturns;
+      getReturnsByOrderId(orderEntityId).then((returnResponse) => {
+        if (hasValue(returnResponse) && hasValue(returnResponse.data)
+          && hasValue(returnResponse.data.items)) {
+          const allReturns = [];
+          // Looping through each return items.
+          // If return item id matches with order api responses, we
+          // merge both the api responses and prepare complete product data.
+          returnResponse.data.items.forEach((returnItem) => {
+            const itemsData = [];
+            returnItem.items.forEach((item) => {
+              const { products } = drupalSettings.onlineReturns;
+              if (hasValue(products)) {
+                const productDetails = products.find((e) => e.item_id === item.order_item_id);
+                if (hasValue(productDetails)) {
+                  const mergedItem = Object.assign(productDetails, { returnData: item });
+                  itemsData.push(mergedItem);
+                }
+              }
+            });
+            // Here, returnInfo consists of return api related information
+            // and items has all info related to products including return details
+            // like how many quantities of item were returned.
+            const returnData = {
+              returnInfo: returnItem,
+              items: itemsData,
+            };
+            allReturns.push(returnData);
+          });
+          this.setState({ returns: allReturns });
         }
         this.setState({ loading: false });
       });
@@ -55,7 +82,7 @@ class OrderDetails extends React.Component {
       <>
         <div className={`user__order--detail ${order.auraEnabled ? 'has-aura-points' : ''}`}>
           <OrderSummary order={order} />
-          <OrderReturnEligibility order={order} />
+          <OrderReturnEligibility order={order} returns={returns} />
           <OnlineBooking order={order} />
           <OrderDeliveryDetails order={order} />
           <OrderReturnInitiated order={order} returns={returns} />
