@@ -11,7 +11,7 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
-    let enrichmentData = globalThis.rcsGetEnrichedCategories(globalThis.rcsSetEnrichedCategoriesInStaticStorage);
+    let enrichmentData = globalThis.rcsGetEnrichedCategories();
 
     // Sort the remaining category menu items by position in asc order.
     inputs.sort(function (a, b) {

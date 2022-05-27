@@ -192,6 +192,8 @@ exports.getData = async function getData(
     request.headers.push(['Authorization', authorizationToken]);
   }
 
+  request.rcsType = placeholder;
+
   let response = null;
   let result = null;
   let context = null;
