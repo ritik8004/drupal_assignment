@@ -1,8 +1,11 @@
 import React from 'react';
 
-const MemberProgress = () => (
+const TierProgress = ({
+  currentTier,
+  nextTier,
+}) => (
   <div className="my-tier-progress">
-    <div className="progress-label">Hello</div>
+    <div className="progress-label">{currentTier}</div>
     <div className="progress-wrapper">
       <div className="tier-bar-back">
         <ul>
@@ -13,8 +16,8 @@ const MemberProgress = () => (
         <div style={{ width: '55%' }} className="tier-bar-front" />
       </div>
     </div>
-    <div className="progress-label">Plus</div>
+    <div className="progress-label">{nextTier}</div>
   </div>
 );
 
-export default MemberProgress;
+export default TierProgress;
