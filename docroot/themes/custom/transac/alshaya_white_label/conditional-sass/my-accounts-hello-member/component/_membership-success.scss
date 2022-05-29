@@ -18,39 +18,20 @@
         }
 
         &details {
-          margin-bottom: rem(46);
+          p {
+            font-family: $alshaya-bold;
+            margin-bottom: rem(8);
+
+            & + p {
+              font-family: $alshaya-thin;
+              font-size: rem(14);
+              margin-top: 0;
+            }
+          }
 
           @include breakpoint($only-mobile) {
             font-size: rem(14);
             padding: 0 rem(32);
-          }
-        }
-
-        &info-button {
-          @extend %button-wide;
-
-          margin-bottom: rem(36);
-          min-width: rem(246);
-          padding: rem(15);
-        }
-
-        &info-link {
-          text-decoration: underline;
-          font-size: rem(14);
-          margin-bottom: rem(29);
-        }
-
-        &terms-privacy {
-          color: $hm-content-link;
-          font-size: rem(12);
-
-          @include breakpoint($only-mobile) {
-            font-size: rem(10);
-          }
-
-          span {
-            text-decoration: underline;
-            margin: 0 rem(4);
           }
         }
       }
@@ -68,6 +49,19 @@
 
     @include breakpoint($only-mobile) {
       width: 95% !important;
+    }
+
+    .close-modal {
+      @include icon(close, after) {
+        font-weight: bold;
+      }
+
+      position: relative;
+      float: $right;
+      top: rem(18);
+      font-size: rem(16);
+      cursor: pointer;
+      #{$right}: rem(18)
     }
   }
 }
