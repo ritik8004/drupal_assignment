@@ -11,12 +11,8 @@
 function _alshaya_hello_member_react_translations() {
   return [
     'v1' => [
-      'H&M Membership' => [
-        'ar' => 'عضوية H&M',
-        'context' => 'hello_member',
-      ],
-      'Membership info' => [
-        'ar' => 'معلومات العضوية',
+      'Congrats!' => [
+        'ar' => 'تهاني!',
         'context' => 'hello_member',
       ],
       'Become a Member' => [
