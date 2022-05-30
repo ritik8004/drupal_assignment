@@ -140,7 +140,6 @@ export default class EgiftCheckBalanceStepOne extends React.Component {
                       onBlur={(e) => this.handleEvent(e)}
                       defaultValue={egiftCardNumber}
                       onInput={(e) => allowWholeNumbers(e)}
-                      maxLength="16"
                     />
                     <div className="c-input__bar" />
                     <label>
