@@ -177,6 +177,7 @@ window.commerceBackend = window.commerceBackend || {};
     var addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(mainProduct, 'add_to_cart');
     // Render the HTML to the div.
     addToCartForm.html(addToCartFormHtml);
+    addToCartForm.addClass('rcs-loaded');
     globalThis.rcsPhApplyDrupalJs(document);
   });
 
