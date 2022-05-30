@@ -67,24 +67,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
       return $overrides;
     }
 
-    if (!($this->alshayaAlgoliaConfig->get('index_from_drupal'))) {
-      $site_info = alshaya_get_site_country_code();
-      $algolia_env = Settings::get('algolia_env');
-
-      // Alter the indices name.
-      $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
-      $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
-      $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'] . '_product_list';
-
-      // Make indices read-only.
-      $overrides['search_api.index.alshaya_algolia_index']['read_only'] = TRUE;
-      $overrides['search_api.index.acquia_search_index']['read_only'] = TRUE;
-      $overrides['search_api.index.alshaya_algolia_product_list_index']['read_only'] = TRUE;
-
-      $this->overrideSecretKeys($overrides, $algolia_env);
-      return $overrides;
-    }
-
+    $algolia_env = $this->getAlgoliaEnv();
     // Default overrides for acquia_search_index.
     $overrides['search_api.index.acquia_search_index']['read_only'] = TRUE;
     $overrides['search_api.index.acquia_search_index']['status'] = TRUE;
@@ -101,10 +84,6 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
 
     // @codingStandardsIgnoreLine
     global $_acsf_site_name;
-
-    $algolia_env = Settings::get('env');
-    // Use local env for travis.
-    $algolia_env = $algolia_env === 'travis' ? 'local' : $algolia_env;
 
     // We want to use Algolia index name with 01 prefix all the time.
     $env_number = substr($algolia_env, 0, 2);
@@ -125,28 +104,8 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
       $algolia_env = substr($algolia_env, 0, -2);
     }
 
-    // Ensure we never connect to Index of another ENV.
-    $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
-    $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
-    // Algolia Index name will be like 01live_bbwae_product_list.
-    $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name . '_product_list';
-
     // This will need to be overridden in brand specific settings files on each
     // env using prod app for each brand.
-    $this->overrideSecretKeys($overrides, $algolia_env);
-
-    return $overrides;
-  }
-
-  /**
-   * Utility function to override secret keys for Algolia.
-   *
-   * @param array $overrides
-   *   Array of overrides.
-   * @param string $algolia_env
-   *   Algolia env value.
-   */
-  private function overrideSecretKeys(array &$overrides, $algolia_env) {
     $algolia_settings = Settings::get('algolia_sandbox.settings');
     if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
       $overrides['search_api.server.algolia']['backend_config']['application_id'] = $algolia_settings['app_id'];
@@ -154,6 +113,68 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
       $overrides['alshaya_algolia_react.settings']['application_id'] = $algolia_settings['app_id'];
       $overrides['alshaya_algolia_react.settings']['search_api_key'] = $algolia_settings['search_api_key'];
     }
+
+    $is_indexing_done_from_drupal = $this->isIndexingFromDrupal();
+    if ($is_indexing_done_from_drupal) {
+      // Ensure we never connect to Index of another ENV.
+      $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
+      $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
+      // Algolia Index name will be like 01live_bbwae_product_list.
+      $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name . '_product_list';
+    }
+    else {
+      $site_info = alshaya_get_site_country_code();
+
+      // Alter the indices name.
+      $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
+      $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
+      $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'] . '_product_list';
+
+      // Make indices read-only.
+      $overrides['search_api.index.alshaya_algolia_index']['read_only'] = TRUE;
+      $overrides['search_api.index.alshaya_algolia_product_list_index']['read_only'] = TRUE;
+    }
+
+    return $overrides;
+  }
+
+  /**
+   * Returns if indexing happens from Drupal or not.
+   *
+   * @return bool
+   *   Returns true if indexing happens from Drupal else false if it happens
+   *   from Magento.
+   */
+  private function isIndexingFromDrupal() {
+    static $val = NULL;
+    if (!empty($val)) {
+      return $val;
+    }
+    $val = $this->alshayaAlgoliaConfig->get('index_from_drupal');
+    return $val;
+  }
+
+  /**
+   * Gets the Algolia env.
+   *
+   * @return string
+   *   Algoia env.
+   */
+  private function getAlgoliaEnv() {
+    static $algolia_env = NULL;
+    if (!empty($algolia_env)) {
+      return $algolia_env;
+    }
+    $is_indexing_done_from_drupal = $this->isIndexingFromDrupal();
+    if ($is_indexing_done_from_drupal) {
+      $algolia_env = Settings::get('env');
+      // Use local env for travis.
+      $algolia_env = $algolia_env === 'travis' ? 'local' : $algolia_env;
+    }
+    else {
+      $algolia_env = Settings::get('algolia_env');
+    }
+    return $algolia_env;
   }
 
   /**
