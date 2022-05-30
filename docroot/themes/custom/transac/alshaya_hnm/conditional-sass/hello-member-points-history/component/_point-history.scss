@@ -1,0 +1,7 @@
+.my-points-history-wrapper {
+  & > div {
+    .history-dark-title {
+      font-family: $hnm-demibold;
+    }
+  }
+}

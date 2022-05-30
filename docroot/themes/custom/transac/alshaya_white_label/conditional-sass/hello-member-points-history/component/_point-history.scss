@@ -1,0 +1,44 @@
+.my-points-history-wrapper {
+  display: flex;
+  font-size: rem(14);
+  border-bottom: 1px solid $primary_table_border;
+  padding-top: rem(28);
+  padding-bottom: rem(4);
+  align-items: center;
+
+  @include breakpoint($only-mobile) {
+    display: inline-flex;
+  }
+
+  & > div {
+    width: 25%;
+
+    @include breakpoint($only-mobile) {
+      min-width: rem(132);
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .history-light-title {
+      font-size: rem(12);
+      color: $hm-history-points-light-title;
+    }
+
+    .history-dark-title {
+      font-family: $alshaya-bold;
+    }
+  }
+
+  .points-date {
+    font-size: rem(12);
+  }
+}
+
+.my-accounts-points-history {
+  @include breakpoint($only-mobile) {
+    overflow-x: auto;
+    padding-bottom: rem(20);
+  }
+}

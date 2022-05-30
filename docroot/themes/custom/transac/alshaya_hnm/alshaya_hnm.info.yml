@@ -274,3 +274,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/my-membership-info/my-membership-info.ltr.css: css/conditional-sass/my-membership-info/my-membership-info.ltr.css
+
+  alshaya_white_label/hello-member-points-history:
+    css:
+      theme:
+        css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css: css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css

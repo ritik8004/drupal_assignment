@@ -781,3 +781,8 @@ my-membership-info:
   css:
     theme:
       css/conditional-sass/my-membership-info/my-membership-info.ltr.css: {}
+
+hello-member-points-history:
+  css:
+    theme:
+      css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css: {}
