@@ -154,6 +154,13 @@ class OrderDetails extends React.Component {
             <div className="above-mobile">&nbsp;</div>
             <div className="right--align">
               <div className="dark upcase">{Drupal.t('Order Total')}</div>
+              { hasValue(order.vat_text) && (
+                <div className="total-row vat-row collapse-row">
+                  <div className="warm--white">
+                    <div className="dark">{(order.vat_text)}</div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="warm--white">
               <div className="dark">
@@ -162,14 +169,6 @@ class OrderDetails extends React.Component {
             </div>
             <div className="above-mobile empty--cell">&nbsp;</div>
           </div>
-
-          { hasValue(order.vat_text) && (
-            <div className="total-row vat-row collapse-row">
-              <div className="warm--white">
-                <div className="dark">{order.vat_text}</div>
-              </div>
-            </div>
-          )}
 
           {totalRefundAmount > 0 && (
             <div className="total-refund-row">
