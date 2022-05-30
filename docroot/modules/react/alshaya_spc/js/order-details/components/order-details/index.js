@@ -15,6 +15,8 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { getReturnsByOrderId } from '../../../../../alshaya_online_returns/js/utilities/return_api_helper';
+import { getTotalRefundAmount } from '../../../../../alshaya_online_returns/js/utilities/order_details_util';
+import PriceElement from '../../../../../js/utilities/components/price/price-element';
 
 class OrderDetails extends React.Component {
   constructor(props) {
@@ -23,6 +25,7 @@ class OrderDetails extends React.Component {
       returns: [],
       loading: false,
       order: drupalSettings.order,
+      totalRefundAmount: 0,
     };
   }
 
@@ -59,7 +62,10 @@ class OrderDetails extends React.Component {
             };
             allReturns.push(returnData);
           });
-          this.setState({ returns: allReturns });
+          this.setState({
+            returns: allReturns,
+            totalRefundAmount: getTotalRefundAmount(returnResponse.data.items),
+          });
         }
         this.setState({ loading: false });
       });
@@ -71,6 +77,7 @@ class OrderDetails extends React.Component {
       loading,
       returns,
       order,
+      totalRefundAmount,
     } = this.state;
 
     if (loading) {
@@ -164,21 +171,19 @@ class OrderDetails extends React.Component {
             </div>
           )}
 
-          <div className="total-refund-row">
-            <div className="desktop-only">&nbsp;</div>
-            <div className="above-mobile">&nbsp;</div>
-            <div className="right--align">
-              <div className="dark upcase">{Drupal.t('Total Refund Amount')}</div>
-            </div>
-            <div className="blend">
-              <div className="dark">
-                {/* @todo: Replace with actual value once available in data.
-                Markup to be similar to order total. */}
-                KWD 1234.123
+          {totalRefundAmount > 0 && (
+            <div className="total-refund-row">
+              <div className="desktop-only">&nbsp;</div>
+              <div className="above-mobile">&nbsp;</div>
+              <div className="right--align">
+                <div className="dark upcase">{Drupal.t('Total Refund Amount')}</div>
               </div>
+              <div className="blend">
+                <div className="dark"><PriceElement amount={totalRefundAmount} /></div>
+              </div>
+              <div className="above-mobile empty--cell">&nbsp;</div>
             </div>
-            <div className="above-mobile empty--cell">&nbsp;</div>
-          </div>
+          )}
         </div>
       </>
     );
