@@ -42,11 +42,8 @@ class MyMembership extends React.Component {
         </div>
         <div className="points-block">
           <div className="my-points">
-            {myMembershipData.apc_points}
-            {' '}
-            {' '}
-            {' '}
-            {Drupal.t('Points')}
+            <span>{myMembershipData.apc_points}</span>
+            <span>{Drupal.t('Points')}</span>
           </div>
           <TierProgress
             currentTier={myMembershipData.current_tier}
