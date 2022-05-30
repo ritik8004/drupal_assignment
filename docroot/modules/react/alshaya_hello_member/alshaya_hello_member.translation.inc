@@ -59,6 +59,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
+      'My Details' => [
+        'ar' => 'معلومات العضوية',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
