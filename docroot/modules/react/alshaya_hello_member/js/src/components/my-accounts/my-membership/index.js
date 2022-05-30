@@ -1,7 +1,7 @@
 import React from 'react';
 import TierProgress from './tier-progress';
 import QrCode from './qr-code';
-// import MembershipData from './MembershipData.json';
+import MembershipData from './MembershipData.json';
 import Loading from '../../../../../../js/utilities/loading';
 import { getFormatedMemberId, getFullName } from '../../../utilities';
 
@@ -18,7 +18,7 @@ class MyMembership extends React.Component {
     // --TODO-- API integration task to be started once we have api from MDC.
     this.setState({
       wait: true,
-      myMembershipData: '',
+      myMembershipData: MembershipData,
     });
   }
 
@@ -51,6 +51,7 @@ class MyMembership extends React.Component {
           <TierProgress
             currentTier={myMembershipData.current_tier}
             nextTier={myMembershipData.next_tier}
+            memberPointsInfo={myMembershipData.member_points_info}
           />
           <div className="my-points-details">
             {myMembershipData.points_summary}
