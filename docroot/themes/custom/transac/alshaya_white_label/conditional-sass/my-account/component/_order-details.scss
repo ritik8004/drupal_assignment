@@ -211,7 +211,7 @@
 
     .order-summary-row,
     .order-details-row,
-    .order-item-row:not(.online-returns-eligibility-message):not(.delivered-items):not(.cancelled-items),
+    .order-item-row:not(.online-returns-eligibility-message):not(.delivered-items):not(.cancelled-items):not(.cancelled-refund-text),
     .sub-total-row,
     .delivery-charge-row,
     .surcharge-row,
@@ -226,6 +226,26 @@
 
       @include breakpoint($desktop) {
         grid-template: "a b c d e" auto/ rem(184) auto rem(166) rem(169) rem(180);
+      }
+    }
+
+    div.cancelled-refund-text {
+      > div {
+        padding: rem(16) 0 rem(3);
+
+        @include breakpoint($tablet) {
+          padding: rem(26) 0 rem(7) !important;
+        }
+      }
+
+      .tooltip-anchor {
+        &::before {
+          content: unset;
+        }
+      }
+
+      span {
+        color: inherit;
       }
     }
   }
@@ -1014,6 +1034,22 @@
     td {
       padding: rem(22) rem(16);
       vertical-align: top;
+    }
+
+    .cancelled-item-refund-text {
+      @include breakpoint($tablet) {
+        padding: rem(26) 0 rem(7);
+      }
+
+      .tooltip-anchor {
+        &::before {
+          content: unset;
+        }
+      }
+
+      span {
+        color: inherit;
+      }
     }
   }
 

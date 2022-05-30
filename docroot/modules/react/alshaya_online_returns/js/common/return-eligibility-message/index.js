@@ -38,7 +38,7 @@ class ReturnEligibilityMessage extends React.Component {
           <div className="eligibility-message-wrapper">
             <ReturnWindow message={getReturnWindowEligibleDateMessage(returnExpiration)} />
             <div className="return-inactive">
-              {Drupal.t('Online returns can be placed once existing returns are processed.', { context: 'online_returns' })}
+              {Drupal.t('Online returns can be placed once existing returns are processed.', {}, { context: 'online_returns' })}
             </div>
           </div>
           <ReturnAtStore returnButtonclass="return-button-enabled" />
