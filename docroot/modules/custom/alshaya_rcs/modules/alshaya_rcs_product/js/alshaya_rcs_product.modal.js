@@ -85,12 +85,13 @@
             var modalContext = $('.pdp-modal-box');
             globalThis.rcsPhApplyDrupalJs(modalContext);
 
+            var mainProduct = entity;
+            // Now render the add to cart form.
             if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
-              var mainProduct = entity;
               mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
-              window.commerceBackend.renderAddToCartForm(mainProduct);
-              globalThis.rcsPhApplyDrupalJs(modalContext);
             }
+            window.commerceBackend.renderAddToCartForm(mainProduct);
+            globalThis.rcsPhApplyDrupalJs(modalContext);
           },
           function () {
             // @todo shall we remove loaders when this happens?
