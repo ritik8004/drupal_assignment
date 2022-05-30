@@ -137,6 +137,8 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
     // Get the new total based the the available quantity.
     $value['total'] = alshaya_acm_price_format($value['ordered'] * $value['price_incl_tax']);
   }
+  // Rebuilding the array as after unsetting key, array
+  // gets converted to object in react if first index missing.
   $build['#products'] = array_values($build['#products']);
 
   $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
