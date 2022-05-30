@@ -85,7 +85,7 @@
     {% endfor %}
 
     {% if order.cancelled_items_count > 0 %}
-      <tr id="cancel-order-item-{{ order.id }}" class="order-item-row">
+      <tr id="cancel-order-item-{{ order.id }}" class="order-item-row cancelled-items">
         <td colspan="4">
           <div>{{ "Cancelled Items"|t }}</div>
         </td>
