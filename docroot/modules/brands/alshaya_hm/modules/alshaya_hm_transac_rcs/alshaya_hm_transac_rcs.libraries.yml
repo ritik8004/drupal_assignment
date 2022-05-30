@@ -21,3 +21,8 @@ product.block.short_description.pdp-magazine:
   version: 1.x
   js:
     templates/rcs-product-short-description-full-magazine-block.handlebars: { }
+
+gallery.product.product_gallery_magazine:
+  version: 1.x
+  js:
+    templates/rcs-product-gallery-magazine.handlebars: {}

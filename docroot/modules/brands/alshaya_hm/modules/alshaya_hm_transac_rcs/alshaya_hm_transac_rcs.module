@@ -38,6 +38,7 @@ function alshaya_hm_transac_rcs_rcs_handlebars_templates_alter(&$templates, $ent
 
   if ($sku_manager->getPdpLayout($entity) == 'pdp-magazine') {
     $templates['product.block.short_description.pdp-magazine'] = "alshaya_hm_transac_rcs";
+    $templates['gallery.product.product_gallery_magazine'] = "alshaya_hm_transac_rcs";
   }
 }
 
