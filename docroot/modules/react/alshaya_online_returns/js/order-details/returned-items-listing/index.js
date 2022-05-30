@@ -18,6 +18,30 @@ class ReturnedItemsListing extends React.Component {
     return '';
   };
 
+  /**
+   * Group the store and online return items.
+   *
+   * @returns {object}
+   *   A object containing all the grouped items.
+   */
+  getReturnsByType = () => {
+    const { returns } = this.props;
+    const groupedItems = {};
+
+    returns.forEach((item) => {
+      // Check if return type is initialized or not.
+      const itemReturnType = getTypeFromReturnItem(item);
+      if (groupedItems[itemReturnType]) {
+        groupedItems[itemReturnType].push(item);
+      } else {
+        groupedItems[itemReturnType] = [];
+        groupedItems[itemReturnType].push(item);
+      }
+    });
+
+    return groupedItems;
+  };
+
   render() {
     const { returns } = this.props;
 
@@ -25,28 +49,31 @@ class ReturnedItemsListing extends React.Component {
       return null;
     }
 
+    // Get all the items by grouping them into store and online returns.
+    const groupedItems = this.getReturnsByType();
+
     return (
       <div className="returned-items-row returned-items">
-        {returns.map((returnItem) => (
-          <div key={returnItem.returnInfo.increment_id} className="items-wrapper">
-            <ConditionalView condition={hasValue(getTypeFromReturnItem(returnItem))
-              && isReturnClosed(returnItem.returnInfo)}
-            >
-              <div className="title-wrapper">
-                <span>
-                  {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
-                  {' '}
-                  {'-'}
-                  {' '}
-                  {this.getReturnedItemsSubTitle(getTypeFromReturnItem(returnItem))}
-                </span>
-              </div>
+        {Object.keys(groupedItems).map((index) => (
+          <div className="items-wrapper">
+            <div className="title-wrapper">
+              <span>
+                {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
+                {' '}
+                {'-'}
+                {' '}
+                {this.getReturnedItemsSubTitle(index)}
+              </span>
+            </div>
 
-              <ReturnedItems
-                key={getTypeFromReturnItem(returnItem)}
-                returnData={returnItem}
-              />
-            </ConditionalView>
+            {groupedItems[index].map((returnItem) => (
+              <ConditionalView condition={isReturnClosed(returnItem.returnInfo)}>
+                <ReturnedItems
+                  key={returnItem.returnInfo.increment_id}
+                  returnData={returnItem}
+                />
+              </ConditionalView>
+            ))}
           </div>
         ))}
       </div>
