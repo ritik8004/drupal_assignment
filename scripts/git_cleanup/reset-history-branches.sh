@@ -22,8 +22,8 @@ for repo in $repos ; do
     git checkout $ref_name
     git pull --all
     git checkout --orphan $ref_name-tmp
-    git add . --quiet
-    git commit -m "Starting fresh orphan branch for $ref_name"
+    git add .
+    git commit -m "Starting fresh orphan branch for $ref_name" --quiet
     git branch -D $ref_name
     git branch -m $ref_name
 
