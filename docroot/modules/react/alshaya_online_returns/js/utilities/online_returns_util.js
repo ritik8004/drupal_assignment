@@ -113,7 +113,7 @@ function getReturnWindowEligibleDateMessage(date) {
  * Utility function to get return window open message.
  */
 function getReturnWindowOpenMessage(date) {
-  const message = Drupal.t('You have untill @date to return the items',
+  const message = Drupal.t('You have until @date to return the items',
     { '@date': formatDate(date) },
     { context: 'online_returns' });
   return message;
