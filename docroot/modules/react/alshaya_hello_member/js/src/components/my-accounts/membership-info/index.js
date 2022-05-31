@@ -7,19 +7,8 @@ const MembershipInfo = () => (
       {getStringMessage('membership_title')}
     </div>
     <div className="hello-membership-details">
-      {getStringMessage('membership_details')}
-    </div>
-    <div className="hello-membership-info-button">
-      {getStringMessage('membership_info_button')}
-    </div>
-    <div className="hello-membership-info-link">
-      {getStringMessage('membership_info_link')}
-    </div>
-    <div className="hello-membership-terms-privacy">
-      {Drupal.t('Read')}
-      <span className="terms-link">{getStringMessage('membership_terms')}</span>
-      {Drupal.t('and')}
-      <span className="privacy-link">{getStringMessage('membership_privacy')}</span>
+      <p>{getStringMessage('membership_sub_title')}</p>
+      <p>{getStringMessage('membership_details')}</p>
     </div>
   </div>
 );
