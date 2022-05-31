@@ -315,7 +315,6 @@ class EgiftCardHelper {
         }
       }
     }
-    return;
   }
 
 }
