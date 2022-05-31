@@ -1,4 +1,5 @@
 import React from 'react';
+import Parser from 'html-react-parser';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getOrderDetailsUrl, getOrderDetails } from '../../../utilities/online_returns_util';
 import { getReturnIdFromUrl } from '../../../utilities/return_confirmation_util';
@@ -29,6 +30,7 @@ class ReturnConfirmation extends React.Component {
 
   render() {
     const { returnId, orderDetails } = this.state;
+    const { helperBlock } = drupalSettings.returnInfo;
     if (!hasValue(orderDetails) || !hasValue(returnId)) {
       return null;
     }
@@ -41,6 +43,9 @@ class ReturnConfirmation extends React.Component {
           orderDetails={orderDetails}
           returnId={returnId}
         />
+        { helperBlock && (
+          <div className="helper-block-wrapper">{ Parser(helperBlock) }</div>
+        )}
       </div>
     );
   }

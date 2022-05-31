@@ -1,4 +1,5 @@
 import React from 'react';
+import Parser from 'html-react-parser';
 import ReturnOrderSummary from '../return-order-summary';
 import ReturnItemsListing from '../return-items-listing';
 import { getOrderDetails, getOrderDetailsUrl } from '../../../utilities/online_returns_util';
@@ -94,6 +95,7 @@ class ReturnRequest extends React.Component {
     const {
       itemsSelected, errorMessage, orderDetails, wait,
     } = this.state;
+    const { helperBlock } = drupalSettings.returnInfo;
     const { orderId } = orderDetails['#order'];
     if (!hasValue(orderDetails) || wait) {
       return null;
@@ -126,6 +128,9 @@ class ReturnRequest extends React.Component {
             </a>
           </span>
         </div>
+        { helperBlock && (
+          <div className="helper-block-wrapper">{ Parser(helperBlock) }</div>
+        )}
       </div>
     );
   }
