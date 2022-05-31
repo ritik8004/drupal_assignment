@@ -1,6 +1,9 @@
 #!/bin/bash
 
-repos="alshaya@svn-5975.enterprise-g1.hosting.acquia.com:alshaya.git alshaya2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya2.git alshaya3bis@svn-5975.enterprise-g1.hosting.acquia.com:alshaya3bis.git alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git"
+scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+bltDir="$scriptDir/../../blt"
+
+repos=`grep -Ei '@svn-5975.enterprise-g1.hosting.acquia.com' ${bltDir}/blt.yml | sed -r "s/'//g" | tr -d "-"`
 
 for repo in $repos ; do
   refs=$(git ls-remote -h $repo | grep -o -E "refs/heads/.*-build$")
