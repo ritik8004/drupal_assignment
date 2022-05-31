@@ -1,5 +1,4 @@
 import React from 'react';
-import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getTypeFromReturnItem } from '../../utilities/order_details_util';
 import { isReturnClosed } from '../../utilities/return_api_helper';
@@ -28,15 +27,17 @@ class ReturnedItemsListing extends React.Component {
     const { returns } = this.props;
     const groupedItems = {};
 
-    returns.forEach((item) => {
-      // Check if return type is initialized or not.
+    // Filter out all the closed returns.
+    const updateResults = returns.filter((item) => isReturnClosed(item.returnInfo));
+
+    updateResults.forEach((item) => {
       const itemReturnType = getTypeFromReturnItem(item);
-      if (groupedItems[itemReturnType]) {
-        groupedItems[itemReturnType].push(item);
-      } else {
+      // Check if return type is initialized or not.
+      if (!groupedItems[itemReturnType]) {
         groupedItems[itemReturnType] = [];
-        groupedItems[itemReturnType].push(item);
       }
+      // Push the item in the return type group.
+      groupedItems[itemReturnType].push(item);
     });
 
     return groupedItems;
@@ -55,7 +56,7 @@ class ReturnedItemsListing extends React.Component {
     return (
       <div className="returned-items-row returned-items">
         {Object.keys(groupedItems).map((index) => (
-          <div className="items-wrapper">
+          <div key={index} className="items-wrapper">
             <div className="title-wrapper">
               <span>
                 {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
@@ -66,13 +67,11 @@ class ReturnedItemsListing extends React.Component {
               </span>
             </div>
 
-            {groupedItems[index].map((returnItem) => (
-              <ConditionalView condition={isReturnClosed(returnItem.returnInfo)}>
-                <ReturnedItems
-                  key={returnItem.returnInfo.increment_id}
-                  returnData={returnItem}
-                />
-              </ConditionalView>
+            {hasValue(groupedItems) && groupedItems[index].map((returnItem) => (
+              <ReturnedItems
+                key={returnItem.returnInfo.increment_id}
+                returnData={returnItem}
+              />
             ))}
           </div>
         ))}
