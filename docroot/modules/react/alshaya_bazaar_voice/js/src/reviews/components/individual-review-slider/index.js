@@ -1,6 +1,7 @@
 import React from 'react';
 import DynamicDot from '../dynamic-dot';
 import ConditionalView from '../../../common/components/conditional-view';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const IndividualReviewSlider = ({
   sliderData,
@@ -19,10 +20,15 @@ const IndividualReviewSlider = ({
                 {sliderData[item].Label}
               </span>
               <span className="slider-header-label">
-                <ConditionalView condition={sliderData[item].ValueLabel !== undefined}>
+                <ConditionalView condition={!hasValue(sliderData[item].AverageRating)}>
                   :
                   {' '}
                   {sliderData[item].ValueLabel}
+                </ConditionalView>
+                <ConditionalView condition={hasValue(sliderData[item].AverageRating)}>
+                  :
+                  {' '}
+                  {sliderData[item].ValueLabel[(Math.round(sliderData[item].AverageRating) - 1)]}
                 </ConditionalView>
               </span>
             </div>

@@ -1,0 +1,46 @@
+.egift-landing-page {
+  .paragraph--type--_-row-2-col {
+    .field--name-field-1-row-2-col {
+      .field--name-field-1-row-2-col {
+        .check-balance-wrapper {
+          .checkbalance-title,
+          .checkbalance-description {
+            color: $egift-banner-title;
+          }
+
+          #check-balance-button {
+            & > button {
+              color: $egift-landing-page-button;
+              border-color: $egift-landing-page-button;
+
+              &:hover {
+                background: $egift-landing-page-button-hover;
+              }
+            }
+          }
+        }
+
+        .paragraph--type--image-title-subtitle {
+          .field--name-field-title {
+            color: $egift-banner-title;
+          }
+
+          .field--name-field-description {
+            p {
+              color: $egift-banner-title;
+            }
+          }
+
+          & > .field--name-field-button-link {
+            color: $egift-landing-page-button;
+            border-color: $egift-landing-page-button;
+
+            &:hover {
+              background: $egift-landing-page-button-hover;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+.egifts-form-wrapper {
+  .egift-card-amount-list-wrapper {
+    li {
+      color: $egift-landing-page-button;
+      border-color: $egift-landing-page-button;
+
+      &:hover,
+      &.active {
+        background: $egift-myaccount-button;
+        border-color: $egift-myaccount-button;
+      }
+    }
+  }
+}

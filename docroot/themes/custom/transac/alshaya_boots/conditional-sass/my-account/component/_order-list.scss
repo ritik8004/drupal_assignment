@@ -30,6 +30,10 @@
       font-size: 0.875rem;
     }
   }
+
+  .order--items {
+    text-transform: inherit;
+  }
 }
 
 .user__order--detail {
@@ -37,7 +41,7 @@
     .dark {
       margin-bottom: 0.75rem;
       font-family: $bp-light;
-      text-transform: capitalize;
+      text-transform: inherit;
       line-height: 1.3;
     }
   }

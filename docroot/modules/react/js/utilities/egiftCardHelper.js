@@ -178,3 +178,11 @@ export const performRedemption = (quoteId, updateAmount, egiftCardNumber, cardTy
   const response = callEgiftApi('eGiftRedemption', 'POST', postData);
   return response;
 };
+
+/**
+ * Allow user to enter only numbers.
+ */
+export const allowWholeNumbers = (e) => {
+  const element = e.target;
+  element.value = element.value.replace(/[^\p{N}]/gu, '');
+};

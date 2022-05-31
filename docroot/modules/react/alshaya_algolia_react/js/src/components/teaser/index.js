@@ -71,6 +71,10 @@ const Teaser = ({
       && value !== null) {
       if (value[currentLanguage] !== undefined) {
         attribute[key] = value[currentLanguage];
+      } else {
+        // If the value for current language code does not exist
+        // then use value from first available language code.
+        attribute[key] = value[Object.keys(value)[0]];
       }
     } else {
       attribute[key] = value;
@@ -141,6 +145,10 @@ const Teaser = ({
     && typeof extraInfo.inStock !== 'undefined'
     && !extraInfo.inStock);
 
+  // Create a ref for wishlist icon button. This ref will be used to update the
+  // icon in teaser when product is added to wishlist from drawer.
+  const ref = React.createRef();
+
   return (
     <div className={teaserClass}>
       <article
@@ -195,6 +203,7 @@ const Teaser = ({
               sku={hit.sku}
               title={attribute.title && Parser(attribute.title)}
               format="icon"
+              setWishListButtonRef={ref}
             />
           </ConditionalView>
           <div className="product-plp-detail-wrapper">
@@ -283,6 +292,7 @@ const Teaser = ({
             isBuyable={attribute.is_buyable}
             // Pass extra information to the component for update the behaviour.
             extraInfo={extraInfo}
+            wishListButtonRef={ref}
           />
         </ConditionalView>
         {/* Render OOS message on wishlist page if product is OOS. */}

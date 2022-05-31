@@ -1,0 +1,28 @@
+.egift-landing-page {
+  .paragraph--type--_-row-2-col {
+    .field--name-field-1-row-2-col {
+      .field--name-field-1-row-2-col {
+        .check-balance-wrapper {
+          .checkbalance-title,
+          .checkbalance-description {
+            color: $egift-banner-title;
+          }
+        }
+
+        .paragraph--type--image-title-subtitle {
+          .field--name-field-title {
+            color: $egift-banner-title;
+            margin-top: 0;
+            text-transform: inherit;
+          }
+
+          .field--name-field-description {
+            p {
+              color: $egift-banner-title;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,169 @@
+.online-booking {
+  color: $checkout_section_titles;
+
+  &__title,
+  &__hold-delivery {
+    font-size: 0.875rem;
+    line-height: 1.29;
+  }
+
+  &__available-delivery {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: $label_black;
+
+    &-time,
+    &-date {
+      font-size: 1rem;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    &-slot {
+      display: block;
+
+      @include breakpoint($only-mobile) {
+        margin-top: rem(8);
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &__delivery {
+    margin-top: 1.1875rem;
+    margin-bottom: rem(20);
+    display: flex;
+
+    &-icon {
+      &::before {
+        @include online-booking-icon('online-booking-calendar.svg');
+
+        top: rem(4);
+      }
+    }
+  }
+
+  &__change-delivery-schedule {
+    color: $_online-booking-black-text;
+    font-size: rem(13);
+    text-align: center;
+    height: rem(36);
+    width: rem(118);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-end;
+    padding-top: rem(10);
+    padding-bottom: rem(10);
+    margin-#{$left}: auto;
+    border: rem(1) solid $_online-booking-black-text;
+    border-radius: rem(4);
+    cursor: pointer;
+
+    &.loading {
+      width: rem(118);
+    }
+
+    @include breakpoint($only-mobile) {
+      width: rem(200);
+      align-self: center;
+
+      &.loading {
+        width: rem(200);
+      }
+    }
+  }
+
+  &__available-delivery-block {
+    display: inline-block;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__hold-delivery {
+    color: $_online-booking-black-text;
+    display: flex;
+    margin-bottom: rem(20);
+
+    &-icon {
+      &::before {
+        @include online-booking-icon('wall-clock.svg');
+      }
+    }
+
+    @include breakpoint($tablet) {
+      margin-#{$right}: rem(112);
+    }
+  }
+
+  &__error-message {
+    color: $spc-promo-code-error;
+    display: flex;
+    margin-top: rem(19);
+    margin-bottom: rem(20);
+
+    &-icon {
+      &::before {
+        @include online-booking-icon('wall-clock-red.svg');
+      }
+    }
+
+    @include breakpoint($tablet) {
+      margin-#{$right}: rem(112);
+    }
+  }
+
+  &__hold-notification {
+    color: $_spc-billing-help;
+    display: flex;
+
+    &-icon {
+      @include icon(infomation, before) {
+        position: relative;
+        font-size: rem(23);
+        margin-#{$right}: rem(14);
+        margin-#{$right}: rem(6);
+        #{$left}: rem(-3);
+        top: rem(-2);
+      }
+    }
+
+    @include breakpoint($tablet) {
+      margin-#{$right}: rem(112);
+    }
+  }
+
+  .carrier-title {
+    font-weight: bold;
+  }
+}
+
+.loading {
+  @include throbberLoader;
+
+  padding-left: 0;
+  padding-right: 0;
+  width: auto;
+
+  @include breakpoint($only-mobile) {
+    background-position: 57% 50% !important;
+  }
+}
+
+.delivery-block-loading {
+  @include throbberLoader;
+
+  padding: 0;
+  height: 2rem;
+}
+
+.delivery-name {
+  font-weight: 600;
+}

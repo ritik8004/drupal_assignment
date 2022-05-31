@@ -27,6 +27,11 @@
     attach: function (context, settings) {
 
       var node = $('.entity--type-node', context).not('[data-sku *= "#"]');
+      var $context = $(context);
+      if ($context && $context.hasClass('entity--type-node')){
+        node = $context;
+      }
+
       if (node.length === 0) {
         return;
       }
@@ -152,7 +157,7 @@
         // On form load set order qty limit message.
         Drupal.disableLimitExceededProducts(sku, sku);
 
-        node = $(this).parents('article.entity--type-node:first');
+        var node = $(this).parents('article.entity--type-node:first');
         // This is used for simple products and for sofa-sectional products
         // where the variant is not selected on page load.
         window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, productData.sku);

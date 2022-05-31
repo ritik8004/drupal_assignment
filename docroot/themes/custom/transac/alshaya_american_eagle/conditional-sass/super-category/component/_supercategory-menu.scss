@@ -1,0 +1,19 @@
+.super-category-enabled {
+  .c-menu-secondary {
+    .region__menu-secondary {
+      @include breakpoint($desktop) {
+        height: 100%;
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    .menu--account,
+    .block-alshaya-stores-finder,
+    .block-language-blocklanguage-interface {
+      @include breakpoint($desktop) {
+        padding-top: rem(2);
+      }
+    }
+  }
+}

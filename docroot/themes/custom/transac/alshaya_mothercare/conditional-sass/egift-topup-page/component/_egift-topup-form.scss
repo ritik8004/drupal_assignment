@@ -1,0 +1,28 @@
+#egift-topup-wrapper {
+  .action-buttons {
+    button {
+      &.btn {
+        background-color: $primary-btn-bg;
+        border: rem(1) solid $primary_btn_bg;
+        text-transform: uppercase;
+
+        &[disabled] {
+          background-color: $egift-purchase-inactive-step-text;
+          border-color: $egift-purchase-inactive-step-text;
+        }
+      }
+    }
+  }
+
+  .egift-open-amount-wrapper {
+    .open-amount-btn {
+      background-color: $egift-myaccount-topup-button;
+      border-color: $egift-myaccount-topup-button;
+
+      &[disabled] {
+        background-color: $egift-purchase-inactive-step-text;
+        border-color: $egift-purchase-inactive-step-text;
+      }
+    }
+  }
+}
