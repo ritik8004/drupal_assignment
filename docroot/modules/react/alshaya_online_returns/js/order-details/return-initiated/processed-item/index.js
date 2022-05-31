@@ -94,9 +94,6 @@ class ProcessedItem extends React.Component {
             </ConditionalView>
           </div>
         </div>
-        <div className="return-id">
-          {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
-        </div>
         <ConditionalView condition={popup}>
           <CancelReturnPopUp
             returnInfo={returnData.returnInfo}
