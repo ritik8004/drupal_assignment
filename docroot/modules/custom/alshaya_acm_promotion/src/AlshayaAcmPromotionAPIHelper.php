@@ -103,7 +103,7 @@ class AlshayaAcmPromotionAPIHelper {
     }
 
     // Update value in cache.
-    $this->cache->set($cache_key, json_encode($status));
+    $this->cache->set($cache_key, $status);
 
     return $status;
   }

@@ -203,7 +203,6 @@ class TotalLineItems extends React.Component {
             <TabbyWidget
               pageType="cart"
               classNames="spc-tabby"
-              mobileOnly={false}
               id="tabby-promo-cart"
             />
           </ConditionalView>

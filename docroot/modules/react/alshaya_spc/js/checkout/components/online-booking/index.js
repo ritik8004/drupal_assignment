@@ -260,6 +260,11 @@ export default class OnlineBooking extends React.Component {
           .hfd_appointment_details.hold_confirmation_number;
         refreshCart(cart);
       }
+    } else if (!hasValue(result.error_code) && !hasValue(result.hfd_appointment_details)) {
+      // Check if the status is false and error code is 0
+      // We need to show the previous booking details
+      // so that user can select different slot.
+      result.hfd_appointment_details = bookingDetails.hfd_appointment_details;
     }
 
     // Set booking Details response and close the modal.
