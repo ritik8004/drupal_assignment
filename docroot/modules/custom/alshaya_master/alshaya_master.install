@@ -13,7 +13,7 @@ use Drupal\Core\Config\FileStorage;
  *
  * Update arabic string translation for order details.
  */
-function alshaya_master_update_8053() {
+function alshaya_master_update_8054() {
   // Add string translations.
   $strings = [
     'print' => [
@@ -32,7 +32,7 @@ function alshaya_master_update_8053() {
       'ar' => 'المجموع: @count قطع',
     ],
     '@count Cancelled' => [
-      'ar' => 'إلغاء @count',
+      'ar' => 'تم إلغاء @count',
     ],
   ];
   alshaya_i18n_save_translations($strings);
@@ -2283,7 +2283,7 @@ function alshaya_master_install() {
       'ar' => 'المجموع: @count قطع',
     ],
     '@count Cancelled' => [
-      'ar' => 'إلغاء @count',
+      'ar' => 'تم إلغاء @count',
     ],
   ];
 
