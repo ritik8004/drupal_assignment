@@ -48,6 +48,16 @@ product.promotions:
   js:
     templates/rcs-product-promotions.handlebars: {}
 
+product.sku_base_form:
+  version: 1.x
+  js:
+    templates/rcs-sku-base-form.handlebars: {}
+
+product.not_buyable_product:
+  version: 1.x
+  js:
+    templates/rcs-not-buyable-product.html.handlebars: {}
+
 product.delivery_info:
   version: 1.x
   js:

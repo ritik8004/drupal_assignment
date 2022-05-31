@@ -550,39 +550,39 @@ exports.computePhFilters = function (input, filter) {
 
       if (!isProductBuyable(input)) {
         // Just show the not buyable text and don't show the form.
-        value = jQuery('.rcs-templates--not-buyable-product').html();
+        data = {
+          not_buyable_message: drupalSettings.alshayaRcs.not_buyable_message,
+          not_buyable_help_text: drupalSettings.alshayaRcs.not_buyable_help_text,
+        };
+        value = handlebarsRenderer.render(`product.not_buyable_product`, data);
         break;
       }
 
-      const skuBaseForm = jQuery('.rcs-templates--sku-base-form').clone();
-      skuBaseForm.find('.sku-base-form-template').removeClass('sku-base-form-template').addClass('sku-base-form');
+      data.sku = input.sku;
+      data.sku_clean = window.commerceBackend.cleanCssIdentifier(input.sku);
+      data.add_to_cart_text = Drupal.t('add to cart');
 
       if (drupalSettings.alshayaRcs.showQuantity) {
-        // @todo Check for how to fetch the max sale quantity.
         const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
-        const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
-        // Remove the quantity filter.
-        quantityDroprown.html('');
-
+        let quantityDroprown = jQuery('<select>').attr('name', 'quantity').addClass('edit-quantity form-select');
         for (let i = 1; i <= quantity; i++) {
+          const option = jQuery('<option>').attr('value', i).html(i);
           if (i === 1) {
-            quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
-            continue;
+            option.attr('selected', 'selected');
           }
-          quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
+          quantityDroprown.append(option);
         }
-        jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
+        quantityDroprownWrapper = jQuery('<div>');
+        quantityDroprownWrapper = quantityDroprownWrapper.append(quantityDroprown);
+        data.quantity_dropdown = quantityDroprownWrapper.html();
       }
-      else {
-        jQuery('.js-form-item-quantity', skuBaseForm).remove();
-      }
-
 
       // This wrapper will be removed after processing.
       const tempDivWrapper = jQuery('<div>');
       let configurableOptions = input.configurable_options;
 
       if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
+        // @todo: Work on handlebars for this.
         const sizeGuide = jQuery('.rcs-templates--size-guide').clone();
         let sizeGuideAttributes = [];
         if (sizeGuide.length) {
@@ -598,7 +598,8 @@ exports.computePhFilters = function (input, filter) {
 
         availableOptions.forEach((option) => {
           // Get the field wrapper div.
-          const optionsListWrapper = jQuery('.rcs-templates--form_element_select').clone().children();
+          const optionsListWrapper = jQuery('<div>')
+            .addClass(`js-form-item form-item js-form-type-select form-type-select js-form-item-configurables-${option.attribute_code} form-item-configurables-${option.attribute_code}`);
           // The list containing the options.
           const configurableOptionsList = jQuery('<select></select>');
           // Get the value to be used in HTML attributes.
@@ -679,7 +680,6 @@ exports.computePhFilters = function (input, filter) {
 
           optionsListWrapper.append(configurableOptionsList);
           // Replace the placeholder class name.
-          optionsListWrapper.attr('class', optionsListWrapper[0].className.replaceAll('ATTRIBUTENAME', formattedAttributeCode));
           // Hide field if supposed to be hidden.
           if (hiddenFormAttributes.includes(option.attribute_code)) {
             optionsListWrapper.addClass('hidden');
@@ -687,18 +687,9 @@ exports.computePhFilters = function (input, filter) {
         });
 
         // Add the configurable options to the form.
-        jQuery('#configurable_ajax', skuBaseForm).append(tempDivWrapper.children());
+        data.configurable_options = tempDivWrapper.html();
       }
-
-      let finalHtml = skuBaseForm.html();
-      rcsPhReplaceEntityPh(finalHtml, 'product_add_to_cart', input, drupalSettings.path.currentLanguage)
-        .forEach(function eachReplacement(r) {
-          const fieldPh = r[0];
-          const entityFieldValue = r[1];
-          finalHtml = globalThis.rcsReplaceAll(finalHtml, fieldPh, entityFieldValue);
-        });
-
-      value = finalHtml;
+      value = handlebarsRenderer.render(`product.sku_base_form`, data);
       break;
 
     case 'gtm-price':
