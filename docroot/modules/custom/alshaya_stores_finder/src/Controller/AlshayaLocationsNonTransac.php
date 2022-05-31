@@ -1,20 +1,17 @@
 <?php
 
-namespace Drupal\alshaya_locations_api\Controller;
+namespace Drupal\alshaya_stores_finder\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\alshaya_api\AlshayaApiWrapper;
-use Drupal\alshaya_api\Helper\MagentoApiHelper;
 
 /**
- * Class Alshaya Locations Controller.
+ * Class Alshaya Locations Controller Non Transac.
  */
-class AlshayaLocationsController extends ControllerBase {
+class AlshayaLocationsNonTransac extends ControllerBase {
 
   /**
    * The entity type manager.
@@ -31,84 +28,35 @@ class AlshayaLocationsController extends ControllerBase {
   protected $languageManager;
 
   /**
-   * The lconfigfactory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * The Api wrapper.
-   *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
-   */
-  protected $alshayaApi;
-
-  /**
-   * The mdc helper.
-   *
-   * @var \Drupal\alshaya_api\Helper\MagentoApiHelper
-   */
-  protected $mdcHelper;
-
-  /**
-   * AlshayaLocationsController constructor.
+   * AlshayaLocationsNonTransac constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   EntityTypeManagerInterface service object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   LanguageManagerInterface service object.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   Config object.
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshayaApi
-   *   Config object.
-   * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
-   *   The magento api helper.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager, ConfigFactoryInterface $configFactory, AlshayaApiWrapper $alshayaApi, MagentoApiHelper $mdc_helper) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager) {
     $this->entityTypeManager = $entityTypeManager;
     $this->languageManager = $languageManager;
-    $this->configFactory = $configFactory;
-    $this->alshayaApi = $alshayaApi;
-    $this->mdcHelper = $mdc_helper;
   }
 
   /**
-   * Inherits doc.
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('language_manager'),
-      $container->get('config.factory'),
-      $container->get('alshaya_api.api'),
-      $container->get('alshaya_api.mdc_helper'),
     );
   }
 
   /**
-   * Stores controller for site.
+   * Stores list for the brand non-transac site.
    *
    * @return object
-   *   Click and collect for site.
+   *   Stores list fetched from the database(store content type).
    */
-  public function stores($data = NULL) {
-    $request_options = [
-      'timeout' => $this->mdcHelper->getPhpTimeout('store_search'),
-    ];
-    $endpoint = ltrim($this->configFactory->get('alshaya_stores_finder.settings')->get('filter_path'), '/');
-    $result = $this->alshayaApi->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
-
-    return new JsonResponse(json_decode($result));
-  }
-
-  /**
-   * Stores controller for site.
-   *
-   * @return object
-   *   Click and collect for site.
-   */
-  public function getLocalStores($data = NULL) {
+  public function stores() {
     $languageId = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
     $query->condition('status', 1);
