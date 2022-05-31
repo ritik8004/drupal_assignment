@@ -104,3 +104,47 @@ window.commerceBackend.addRemoveWishlistItemsInBackend = async (data, action) =>
 
   return response;
 };
+
+/**
+ * Get the raw wishlist information from the backend using API.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+window.commerceBackend.getWishlistInfoFromBackend = async () => {
+  // Call magento api to get the wishlist items of current logged in user.
+  const response = await callMagentoApi('/V1/wishlist/me/get', 'GET');
+  if (hasValue(response.data)) {
+    if (hasValue(response.data.error)) {
+      logger.warning('Error getting wishlist items. Response: @response', {
+        '@response': JSON.stringify(response.data),
+      });
+    }
+  }
+
+  // Return response to perform necessary operation
+  // from where this function called.
+  return response;
+};
+
+/**
+ * Get the shared wishlist information from the backend using API.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+window.commerceBackend.getSharedWishlistFromBackend = () => {
+  // Call magento api to get the wishlist items from sharing code.
+  const response = callMagentoApi(`/V1/wishlist/code/${drupalSettings.wishlist.sharedCode}/items`, 'GET');
+  if (hasValue(response.data)) {
+    if (hasValue(response.data.error)) {
+      logger.warning('Error getting wishlist items. Response: @response', {
+        '@response': JSON.stringify(response.data),
+      });
+    }
+  }
+
+  // Return response to perform necessary operation
+  // from where this function called.
+  return response;
+};

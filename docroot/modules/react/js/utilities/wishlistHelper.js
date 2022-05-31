@@ -1,5 +1,4 @@
 import { hasValue } from './conditionsUtility';
-import { callMagentoApi } from './requestHelper';
 import logger from './logger';
 
 /**
@@ -487,49 +486,7 @@ export const removeFromWishlistAfterAddtocart = () => {
 /**
  * Utility function to get wishlist notification time.
  */
-export const getWishlistNotificationTime = () => (3000);/**
- * Get the shared wishlist information from the backend using API.
- *
- * @returns {Promise<object>}
- *   A promise object.
- */
-export const getSharedWishlistFromBackend = () => {
-  // Call magento api to get the wishlist items from sharing code.
-  const response = callMagentoApi(`/V1/wishlist/code/${drupalSettings.wishlist.sharedCode}/items`, 'GET');
-  if (hasValue(response.data)) {
-    if (hasValue(response.data.error)) {
-      logger.warning('Error getting wishlist items. Response: @response', {
-        '@response': JSON.stringify(response.data),
-      });
-    }
-  }
-
-  // Return response to perform necessary operation
-  // from where this function called.
-  return response;
-};
-
-/**
- * Get the raw wishlist information from the backend using API.
- *
- * @returns {Promise<object>}
- *   A promise object.
- */
-export const getWishlistInfoFromBackend = async () => {
-  // Call magento api to get the wishlist items of current logged in user.
-  const response = await callMagentoApi('/V1/wishlist/me/get', 'GET');
-  if (hasValue(response.data)) {
-    if (hasValue(response.data.error)) {
-      logger.warning('Error getting wishlist items. Response: @response', {
-        '@response': JSON.stringify(response.data),
-      });
-    }
-  }
-
-  // Return response to perform necessary operation
-  // from where this function called.
-  return response;
-};
+export const getWishlistNotificationTime = () => (3000);
 
 /**
  * Helper function to check the stock status of the product with search

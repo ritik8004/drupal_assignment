@@ -6,7 +6,7 @@
  */
 Drupal.alshayaWishlist = Drupal.alshayaWishlist || {};
 
-(function ($, Drupal) {
+(function (Drupal) {
 
   /**
    * Helper function to load wishlist information from the magento backend.
@@ -141,4 +141,4 @@ Drupal.alshayaWishlist = Drupal.alshayaWishlist || {};
       }
     }
   };
-})(jQuery, Drupal);
+})(Drupal);

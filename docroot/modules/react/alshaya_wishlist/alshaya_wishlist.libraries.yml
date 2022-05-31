@@ -45,6 +45,4 @@ wishlist_load_merge:
   js:
     assets/js/wishlist_load_merge.js: {}
   dependencies:
-    - core/jquery
-    - core/jquery.once
     - alshaya_wishlist/wishlist_backend
