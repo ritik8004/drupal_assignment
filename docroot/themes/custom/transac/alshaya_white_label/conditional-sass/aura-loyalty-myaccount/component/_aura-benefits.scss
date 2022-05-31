@@ -24,7 +24,7 @@
     grid-template-columns: 19rem 1fr 1fr 1fr;
     height: 4.5625rem;
     font-family: $aura-regular;
-    color: $aura-loyalty-club-benefits-text;
+    color: $aura-loyalty-club-normal-text;
     font-size: 1.125rem;
 
     @include breakpoint($upto-desktop) {
@@ -183,7 +183,7 @@
       & > div {
         &:nth-child(2) {
           @include breakpoint($upto-desktop) {
-            color: $aura-loyalty-club-benefits-text;
+            color: $aura-loyalty-club-normal-text;
           }
         }
 
