@@ -114,8 +114,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
       $overrides['alshaya_algolia_react.settings']['search_api_key'] = $algolia_settings['search_api_key'];
     }
 
-    $is_indexing_done_from_drupal = $this->isIndexingFromDrupal();
-    if ($is_indexing_done_from_drupal) {
+    if ($this->isIndexingFromDrupal()) {
       // Ensure we never connect to Index of another ENV.
       $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
       $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
@@ -165,8 +164,8 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     if (!empty($algolia_env)) {
       return $algolia_env;
     }
-    $is_indexing_done_from_drupal = $this->isIndexingFromDrupal();
-    if ($is_indexing_done_from_drupal) {
+
+    if ($this->isIndexingFromDrupal()) {
       $algolia_env = Settings::get('env');
       // Use local env for travis.
       $algolia_env = $algolia_env === 'travis' ? 'local' : $algolia_env;
