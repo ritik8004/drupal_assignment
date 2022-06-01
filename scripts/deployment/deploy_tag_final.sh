@@ -141,6 +141,20 @@ then
   exit
 fi
 
+# Create an orphan commit.
+log_message_and_details "Reset $branch git history"
+git checkout --orphan $branch-tmp &>> ${log_file}
+git add . &>> ${log_file}
+git commit -m "Orphan commit from $tag." --quiet &>> ${log_file}
+git branch -D $branch &>> ${log_file}
+git branch -m $branch &>> ${log_file}
+git prune
+if [ $? -ne 0 ]
+then
+  log_message_and_details "Failed to reset the branch history, aborting"
+  exit
+fi
+
 if [ "$mode" = "prep" ]
 then
   log_message_and_details "Release preparation completed"
@@ -172,11 +186,6 @@ fi
 
 # Force the push to avoid issues with previous commit history.
 log_message_and_details "Pushing changes"
-git checkout --orphan $branch-tmp &>> ${log_file}
-git add . --quiet &>> ${log_file}
-git commit -m "Commit from tag $tag." &>> ${log_file}
-git branch -D $branch &>> ${log_file}
-git branch -m $branch &>> ${log_file}
 git push origin $branch --force &>> ${log_file}
 if [ $? -ne 0 ]
 then
