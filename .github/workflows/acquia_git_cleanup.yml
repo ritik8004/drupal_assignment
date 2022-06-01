@@ -1,0 +1,25 @@
+name: Acquia Git Cleanup
+
+on:
+  schedule:
+    - cron: "0 6 * * 2" # Every Tuesday at 6am.
+
+jobs:
+  cleanup:
+    name: Cleanup
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Prepare environment variables
+        run: |
+          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/scripts)" >> $GITHUB_ENV
+
+      - name: Tag cleanup
+        run: bash ${SCRIPT_DIR}/git_cleanup/remove-old-tags.sh
+
+      - name: Branch cleanup
+        run: bash ${SCRIPT_DIR}/git_cleanup/remove-useless-branches.sh
+
+      - name: Branch history reset
+        run: bash ${SCRIPT_DIR}/git_cleanup/reset-history-branches.sh
