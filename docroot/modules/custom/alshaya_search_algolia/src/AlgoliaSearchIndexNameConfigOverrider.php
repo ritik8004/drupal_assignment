@@ -119,24 +119,19 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     if ($this->isIndexingFromDrupal()) {
       // Ensure we never connect to Index of another ENV.
       $algolia_index_name = $algolia_env . '_' . $_acsf_site_name;
-      $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_index_name;
-      $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_index_name;
-      // Algolia Index name will be like 01live_bbwae_product_list.
-      $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_index_name . '_product_list';
     }
     else {
       $site_info = alshaya_get_site_country_code();
-
-      // Alter the indices name.
-      $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
-      $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
-      $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'] . '_product_list';
-
+      $algolia_index_name = $algolia_env . '_' . $site_info['country_code'];
       // Make indices read-only.
       $overrides['search_api.index.alshaya_algolia_index']['read_only'] = TRUE;
       $overrides['search_api.index.alshaya_algolia_product_list_index']['read_only'] = TRUE;
     }
 
+    $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_index_name;
+    $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_index_name;
+    // Algolia Index name will be like 01live_bbwae_product_list.
+    $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_index_name . '_product_list';
     return $overrides;
   }
 
@@ -164,7 +159,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
    */
   private function getAlgoliaEnv() {
     static $algolia_env;
-    if (!isset($algolia_env)) {
+    if (isset($algolia_env)) {
       return $algolia_env;
     }
 
