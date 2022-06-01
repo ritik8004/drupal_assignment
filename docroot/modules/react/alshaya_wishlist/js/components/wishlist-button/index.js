@@ -303,10 +303,15 @@ class WishlistButton extends React.Component {
       element: this.buttonContainerRef.current,
     };
 
+    if (!addedInWishList) {
+      // Add product to wishlist if product not in wishlist.
+      this.addToWishList(productInfo);
+    }
+
     // If product is in wishlist and context is cart
     // then remove the product from wishlist before adding from cart
     // as the wishlist api does not update product options on add to wishlist.
-    if (addedInWishList && context === 'cart') {
+    if (context === 'cart') {
       removeProductFromWishList(skuCode).then(() => {
         this.addToWishList(productInfo);
       });
@@ -315,19 +320,13 @@ class WishlistButton extends React.Component {
 
     // If product is in wishlist and context is not cart
     // then remove the product from wishlist.
-    if (addedInWishList && context !== 'cart') {
+    if (context === 'wishlist_page') {
       // Add full screen loader for wishlist page.
-      if (context === 'wishlist_page') {
-        showFullScreenLoader();
-      }
+      showFullScreenLoader();
+
+      // Remove product from wishlist.
       this.handleProductRemovalFromWishlist(skuCode);
-
-      // don't execute further if product is removed from the wishlist.
-      return;
     }
-
-    // Add product to wishlist if product not in wishlist.
-    this.addToWishList(productInfo);
   }
 
   /**
