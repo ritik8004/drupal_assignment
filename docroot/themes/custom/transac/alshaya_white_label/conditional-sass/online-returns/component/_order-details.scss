@@ -231,6 +231,10 @@
     }
 
     .returned-items {
+      .items-wrapper {
+        padding: 0;
+      }
+
       .title-wrapper {
         font-size: rem(18);
         line-height: rem(22);

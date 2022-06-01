@@ -95,22 +95,22 @@
 
     {% if order.cancelled_items_count > 0 %}
       <tr id="cancel-order-item-{{ order.id }}" class="order-item-row cancelled-items">
-        <td colspan="4">
+        <td colspan="5">
           <div>{{ "Cancelled Items"|t }}</div>
         </td>
       </tr>
-      {% for item in order.cancelled_items %}
-        {{ _self.order_item(item, true) }}
-      {% endfor %}
       {% if order.refund_text is not empty %}
         <tr class="order-item-row">
-          <td class="cancelled-item-refund-text" colspan="4">
+          <td class="cancelled-item-refund-text" colspan="5">
             <div class="tooltip-anchor info">
               <span>{{ order.refund_text }}</span>
             </div>
           </td>
         </tr>
       {% endif %}
+      {% for item in order.cancelled_items %}
+        {{ _self.order_item(item, true) }}
+      {% endfor %}
     {% endif %}
 
     <tr class="order-item-row order__detail--link">
@@ -170,7 +170,7 @@
       <span class="currency-code dark prefix">{{ item.price }}</span>
     </td>
 
-    <td class="above-mobile total--price order__details--summary">
+    <td class="above-mobile total--price order__details--summary" colspan={{item.bazaarvoice_link ? "1" : "2" }}>
       <div class="light">{{ 'Total' | t }}</div>
       <span class="currency-code dark prefix">{{ item.total_price }}</span>
     </td>
