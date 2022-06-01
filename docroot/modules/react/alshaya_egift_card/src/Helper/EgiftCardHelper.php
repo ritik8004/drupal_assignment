@@ -310,7 +310,6 @@ class EgiftCardHelper {
             'value' => $product_options['hps_giftcard_message'],
           ];
         }
-        // @todo update key for card number from order details.
         if (!empty($product_options['hps_card_number'])) {
           $product['attributes'][3] = [
             'label' => t('Card No', [], ['context' => 'egift']),
