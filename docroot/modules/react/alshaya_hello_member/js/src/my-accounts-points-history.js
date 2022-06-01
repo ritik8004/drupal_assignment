@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import isHelloMemberEnabled from '../../../js/helloMemberHelper';
+import isHelloMemberEnabled from '../../../js/utilities/helloMemberHelper';
 import MyPointsHistory from './components/my-accounts/my-points-history';
 
 
