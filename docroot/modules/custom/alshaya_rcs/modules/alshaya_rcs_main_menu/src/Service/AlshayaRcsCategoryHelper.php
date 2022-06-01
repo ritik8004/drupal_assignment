@@ -147,7 +147,7 @@ class AlshayaRcsCategoryHelper {
 
     // Return if none available.
     if (empty($terms)) {
-      return NULL;
+      return [];
     }
 
     $data = [];
