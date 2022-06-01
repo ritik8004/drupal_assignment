@@ -184,10 +184,8 @@ const PdpLayout = () => {
       <div className={`magv2-header ${(isMobile ? 'fadeInVertical' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
         <PdpHeader
           title={title}
-          finalPrice={parseFloat(finalPrice)
-            .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
-          pdpProductPrice={parseFloat(priceRaw)
-            .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
+          finalPrice={finalPrice}
+          pdpProductPrice={priceRaw}
           brandLogo={brandLogo}
           brandLogoAlt={brandLogoAlt}
           brandLogoTitle={brandLogoTitle}
@@ -302,10 +300,8 @@ const PdpLayout = () => {
             pdpDescription={description}
             pdpShortDesc={shortDesc}
             title={title}
-            pdpProductPrice={parseFloat(priceRaw)
-              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
-            finalPrice={parseFloat(finalPrice)
-              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
+            pdpProductPrice={priceRaw}
+            finalPrice={finalPrice}
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />

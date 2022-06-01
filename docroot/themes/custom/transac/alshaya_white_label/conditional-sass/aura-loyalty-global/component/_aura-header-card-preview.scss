@@ -23,10 +23,6 @@
         }
       }
 
-      html[lang=ar] & {
-        background-image: $aura-header-card-wrapper-ar;
-      }
-
       .heading-section {
         min-height: rem(25);
         width: 100%;
@@ -122,6 +118,10 @@
         @include breakpoint($upto-desktop) {
           background-image: $aura-hello-tier-mobile;
           border-radius: rem(10);
+
+          html[lang=ar] & {
+            background-image: $aura-hello-tier-mobile-ar;
+          }
         }
       }
     }

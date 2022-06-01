@@ -42,7 +42,7 @@
           // if (data.type === 'StillMedia/Fabricswatch') {
             e.detail.colorOptionsList = Object.assign(e.detail.colorOptionsList, {
               // @todo Use the proper image style.
-              display_value: '<img loading="lazy" src="' + data[0].styles.pdp_gallery_thumbnail + '">',
+              display_value: '<img src="' + data[0].styles.pdp_gallery_thumbnail + '">',
               swatch_type: data[0].image_type,
             });
           // }

@@ -126,7 +126,6 @@ export default class EgiftTopupFor extends React.Component {
                 onBlur={(e) => this.handleEvent(e)}
                 onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
                 onInput={(e) => allowWholeNumbers(e)}
-                maxLength="16"
               />
               <div className="error" id="card-number-error">
                 {cardNumberError}

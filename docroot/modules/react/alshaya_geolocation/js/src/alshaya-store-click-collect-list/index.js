@@ -30,7 +30,7 @@ export class StoreClickCollectList extends React.PureComponent {
 
   componentDidMount() {
     // This will be replace with MDC data api call.
-    const { apiUrl } = drupalSettings.storeLabels;
+    const { apiUrl } = window.alshayaGeolocation.getStoreLabelsPdp();
     Axios.get(apiUrl).then((response) => {
       const stores = response.data;
       if (Object.keys(stores).length !== 0) {
@@ -88,7 +88,7 @@ export class StoreClickCollectList extends React.PureComponent {
       isModalOpen,
     } = this.state;
     const shorts = results.slice(0, 2);
-    const cncLabels = drupalSettings.storeLabels;
+    const cncLabels = window.alshayaGeolocation.getStoreLabelsPdp();
     return (
       <>
         <div className="delivery-options-wrapper">
@@ -112,7 +112,7 @@ export class StoreClickCollectList extends React.PureComponent {
                                 <span className="label">{Drupal.t('Check in-store availability')}</span>
                                 <div>
                                   <AutocompleteSearch
-                                    placeholder={drupalSettings.storeLabels.search_placeholder}
+                                    placeholder={cncLabels.search_placeholder}
                                     searchStores={(place) => this.searchStores(place)}
                                   />
                                   <button className="search-stores-button" type="button">search stores</button>
