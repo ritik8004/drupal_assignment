@@ -1,7 +1,7 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardDetails from '../../../return-confirmation/components/card-details';
-import { getSortedPaymentByWeight } from '../../../utilities/return_request_util';
+import { sortPaymentByWeight } from '../../../utilities/return_request_util';
 
 const ReturnRefundMethod = ({
   paymentDetails,
@@ -10,7 +10,7 @@ const ReturnRefundMethod = ({
     return null;
   }
   // Get sorted payment details by weight.
-  const sortedPaymentData = getSortedPaymentByWeight(paymentDetails);
+  const sortedPaymentData = sortPaymentByWeight(paymentDetails);
   return (
     <>
       <div className="refund-method-wrapper">

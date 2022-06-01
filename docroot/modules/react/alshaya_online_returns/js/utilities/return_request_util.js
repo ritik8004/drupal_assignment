@@ -107,7 +107,7 @@ function getDefaultResolutionId() {
   return hasValue(defaultResolution) ? defaultResolution.shift().id : '';
 }
 
-function getSortedPaymentByWeight(paymentDetails) {
+function sortPaymentByWeight(paymentDetails) {
   const sortedPayment = Object.fromEntries(
     Object.entries(paymentDetails).sort((x, y) => x[1].weight - y[1].weight),
   );
@@ -121,5 +121,5 @@ export {
   getPaymentDetails,
   addCheckboxToReturnItem,
   getDefaultResolutionId,
-  getSortedPaymentByWeight,
+  sortPaymentByWeight,
 };
