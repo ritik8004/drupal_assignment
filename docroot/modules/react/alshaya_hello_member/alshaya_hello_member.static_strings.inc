@@ -42,5 +42,13 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'hi',
       'value' => t('Hi', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'show_less',
+      'value' => t('SHOW LESS', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'show_all',
+      'value' => t('SHOW ALL', [], ['context' => 'hello_member']),
+    ],
   ];
 }

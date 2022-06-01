@@ -1,27 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
+import getStringMessage from '../../../../../../../js/utilities/strings';
+import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 
-const MyOffersAndVouchers = () => (
-  <>
-    <div className="my-offers-vouchers-details">
-      <div className="image-container">
-        {/* display offers or vouchers image */}
-      </div>
-      <div className="voucher-wrapper">
-        <div className="title">
-          {/* display offers or vouchers title */}
+const MyOffersAndVouchers = ({ myBenefitsList }) => {
+  const showMoreLimit = 3;
+  const [expanded, setExpanded] = useState(false);
+  const dataForDisplay = expanded ? myBenefitsList : myBenefitsList.slice(0, showMoreLimit);
+
+  return (
+    <div className="my-benefits-wrapper">
+      {dataForDisplay.map((data) => (
+        <div className="my-offers-vouchers-details" key={data.id}>
+          <div className="image-container">
+            <img src={data.image} />
+          </div>
+          <div className="voucher-wrapper">
+            <div className="title">
+              {data.name}
+            </div>
+            <div className="info">
+              {data.description}
+            </div>
+            <div className="expiry">
+              {data.end_date}
+            </div>
+          </div>
         </div>
-        <div className="info">
-          {/* display offers or vouchers info */}
+      ))}
+      <ConditionalView condition={myBenefitsList.length > showMoreLimit}>
+        <div className="btn-wrapper">
+          <a onClick={() => setExpanded(!expanded)}>
+            {expanded ? getStringMessage('show_less') : getStringMessage('show_all')}
+          </a>
         </div>
-        <div className="expiry">
-          {/* display offers or vouchers expiry */}
-        </div>
-      </div>
+      </ConditionalView>
     </div>
-    <div className="btn-wrapper">
-      <a>SHOW ALL</a>
-    </div>
-  </>
-);
+  );
+};
 
 export default MyOffersAndVouchers;
