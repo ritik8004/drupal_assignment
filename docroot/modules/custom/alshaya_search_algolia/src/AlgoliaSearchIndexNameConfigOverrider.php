@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_search_algolia;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Site\Settings;
@@ -21,13 +22,36 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
   protected $state;
 
   /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Algolia search config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $alshayaAlgoliaConfig;
+
+  /**
    * AlgoliaSearchIndexNameConfigOverrider constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
    *   Drupal State Service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory service.
    */
-  public function __construct(StateInterface $state) {
+  public function __construct(
+    StateInterface $state,
+    ConfigFactoryInterface $config_factory
+  ) {
     $this->state = $state;
+    $this->configFactory = $config_factory;
+    // We load the config here in order to prevent a recursive loop as this
+    // class is a config overrider class.
+    $this->alshayaAlgoliaConfig = $this->configFactory->get('alshaya_search_algolia.settings');
   }
 
   /**
@@ -45,6 +69,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
       return $overrides;
     }
 
+    $algolia_env = $this->getAlgoliaEnv();
     // Default overrides for acquia_search_index.
     $overrides['search_api.index.acquia_search_index']['read_only'] = TRUE;
     $overrides['search_api.index.acquia_search_index']['status'] = TRUE;
@@ -61,12 +86,6 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
 
     // @codingStandardsIgnoreLine
     global $_acsf_site_name;
-
-    $algolia_env = Settings::get('env');
-    // Use local env for travis.
-    $algolia_env = $algolia_env === 'travis' ? 'local' : $algolia_env;
-
-    $algolia_settings = Settings::get('algolia_sandbox.settings');
 
     // We want to use Algolia index name with 01 prefix all the time.
     $env_number = substr($algolia_env, 0, 2);
@@ -87,14 +106,9 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
       $algolia_env = substr($algolia_env, 0, -2);
     }
 
-    // Ensure we never connect to Index of another ENV.
-    $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
-    $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
-    // Algolia Index name will be like 01live_bbwae_product_list.
-    $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name . '_product_list';
-
     // This will need to be overridden in brand specific settings files on each
     // env using prod app for each brand.
+    $algolia_settings = Settings::get('algolia_sandbox.settings');
     if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
       $overrides['search_api.server.algolia']['backend_config']['application_id'] = $algolia_settings['app_id'];
       $overrides['search_api.server.algolia']['backend_config']['api_key'] = $algolia_settings['write_api_key'];
@@ -102,7 +116,62 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
       $overrides['alshaya_algolia_react.settings']['search_api_key'] = $algolia_settings['search_api_key'];
     }
 
+    if ($this->isIndexingFromDrupal()) {
+      // Ensure we never connect to Index of another ENV.
+      $algolia_index_name = $algolia_env . '_' . $_acsf_site_name;
+    }
+    else {
+      $site_info = alshaya_get_site_country_code();
+      $algolia_index_name = $algolia_env . '_' . $site_info['country_code'];
+      // Make indices read-only.
+      $overrides['search_api.index.alshaya_algolia_index']['read_only'] = TRUE;
+      $overrides['search_api.index.alshaya_algolia_product_list_index']['read_only'] = TRUE;
+    }
+
+    $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_index_name;
+    $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_index_name;
+    // Algolia Index name will be like 01live_bbwae_product_list.
+    $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_index_name . '_product_list';
     return $overrides;
+  }
+
+  /**
+   * Returns if indexing happens from Drupal or not.
+   *
+   * @return bool
+   *   Returns true if indexing happens from Drupal else false if it happens
+   *   from Magento.
+   */
+  private function isIndexingFromDrupal() {
+    static $val;
+    if (isset($val)) {
+      return $val;
+    }
+    $val = $this->alshayaAlgoliaConfig->get('index_from_drupal');
+    return $val;
+  }
+
+  /**
+   * Gets the Algolia env.
+   *
+   * @return string
+   *   Algoia env.
+   */
+  private function getAlgoliaEnv() {
+    static $algolia_env;
+    if (isset($algolia_env)) {
+      return $algolia_env;
+    }
+
+    if ($this->isIndexingFromDrupal()) {
+      $algolia_env = Settings::get('env');
+      // Use local env for travis.
+      $algolia_env = $algolia_env === 'travis' ? 'local' : $algolia_env;
+    }
+    else {
+      $algolia_env = Settings::get('algolia_env');
+    }
+    return $algolia_env;
   }
 
   /**

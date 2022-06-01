@@ -28,5 +28,6 @@ services:
     class: Drupal\alshaya_search_algolia\AlgoliaSearchIndexNameConfigOverrider
     arguments:
       - '@state'
+      - '@config.factory'
     tags:
       - { name: config.factory.override, priority: -2 }
