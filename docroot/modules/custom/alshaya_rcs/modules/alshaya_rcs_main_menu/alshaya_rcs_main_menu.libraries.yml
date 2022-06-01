@@ -4,6 +4,11 @@ category_enrichment:
   dependencies:
     - rcs_placeholders/helpers
 
+view_all:
+  version: 1.x
+  js:
+    js/alshaya_rcs_view_all.js: {}
+
 renderer:
   js:
     dist/alshaya_rcs_main_menu_renderer.bundle.js: {}
