@@ -3,7 +3,7 @@
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 bltDir="$scriptDir/../../blt"
 
-repos=`grep -Ei '@svn-5975.enterprise-g1.hosting.acquia.com' ${bltDir}/blt.yml | sed -r "s/'//g" | tr -d "-"`
+repos=`grep -Ei '@svn-5975.enterprise-g1.hosting.acquia.com' ${bltDir}/blt.yml | sed -r "s/'//g" | sed -r "s/- //g"`
 
 for repo in $repos ; do
   refs=$(git ls-remote -h $repo | grep -o -E "refs/heads/.*-build$")
