@@ -81,6 +81,7 @@ $_plp_secondary_cta_hover: rgba(34, 34, 34, 0.1);
 $white-linen: #f1ebdf;
 $nickel: #6d7278;
 $gainsboro: #d8d8d8;
+$silver-chalice: #afacac;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -845,3 +846,8 @@ $hm-points-block-tier-progress-active: $hnm-red;
 // Hello Member benefit block
 $hm-my-offers-bg: $_grey_11;
 $hm-my-offers-expiry-txt: $grey-light;
+$hm-history-points-light-title: $silver-chalice;
+
+// Hello member history point
+$hm-points-expiry-accordion-title: $hnm-red;
+$hm-points-expiry-accordion-icon: $hnm-red;

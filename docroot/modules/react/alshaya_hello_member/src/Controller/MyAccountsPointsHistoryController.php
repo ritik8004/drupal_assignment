@@ -65,6 +65,7 @@ class MyAccountsPointsHistoryController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_hello_member/alshaya_hello_member_my_accounts_points_history',
+          'alshaya_white_label/hello-member-points-history',
         ],
       ],
     ];
