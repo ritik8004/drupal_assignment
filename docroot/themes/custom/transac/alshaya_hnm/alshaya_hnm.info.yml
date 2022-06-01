@@ -264,3 +264,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/online-returns/online-returns.ltr.css: css/conditional-sass/online-returns/online-returns.ltr.css
+
+  alshaya_white_label/rcs-product-related:
+    css:
+      theme:
+        css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css: css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css

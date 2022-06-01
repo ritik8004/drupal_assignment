@@ -6,8 +6,7 @@ import ReturnIndividualItem from '../../../return-request/components/return-indi
 const ReturnedItems = ({
   returnData,
 }) => {
-  let returnStatus = returnData.returnInfo.status;
-  returnStatus = returnStatus.replace(/\s+/g, '-').toLowerCase();
+  const returnStatus = Drupal.cleanCssIdentifier(returnData.returnInfo.status);
   return (
     <ConditionalView condition={hasValue(returnData)}>
       <div key={returnData.returnInfo.increment_id} className="return-items-wrapper">
