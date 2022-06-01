@@ -1,7 +1,6 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardDetails from '../../../return-confirmation/components/card-details';
-import { sortPaymentByWeight } from '../../../utilities/return_request_util';
 
 const ReturnRefundMethod = ({
   paymentDetails,
@@ -9,8 +8,7 @@ const ReturnRefundMethod = ({
   if (!hasValue(paymentDetails)) {
     return null;
   }
-  // Get sorted payment details by weight.
-  const sortedPaymentData = sortPaymentByWeight(paymentDetails);
+
   return (
     <>
       <div className="refund-method-wrapper">
@@ -21,7 +19,7 @@ const ReturnRefundMethod = ({
           <div className="method-listing-label">
             { Drupal.t('Your refund will be credited back to the following payment methods.', {}, { context: 'online_returns' }) }
           </div>
-          <CardDetails paymentDetails={sortedPaymentData} />
+          <CardDetails paymentDetails={paymentDetails} />
           <div className="refund-message">
             { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
           </div>

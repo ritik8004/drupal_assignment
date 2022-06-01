@@ -264,6 +264,9 @@ class OnlineReturnController extends ControllerBase {
 
     // Allow other modules to update order details build.
     $this->moduleHandler()->alter('alshaya_online_returns_order_details_build', $order, $orderDetails);
+    // Sort payment details by weight.
+    $weight = array_column($orderDetails['#order_details']['paymentDetails'], 'weight');
+    array_multisort($weight, SORT_ASC, $orderDetails['#order_details']['paymentDetails']);
 
     $orderDetails['#order'] = array_merge(
       $orderDetails['#order'] ?? [],
