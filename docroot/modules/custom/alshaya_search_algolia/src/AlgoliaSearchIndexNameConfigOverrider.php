@@ -145,8 +145,8 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
    *   from Magento.
    */
   private function isIndexingFromDrupal() {
-    static $val = NULL;
-    if (!empty($val)) {
+    static $val;
+    if (!isset($val)) {
       return $val;
     }
     $val = $this->alshayaAlgoliaConfig->get('index_from_drupal');
@@ -160,8 +160,8 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
    *   Algoia env.
    */
   private function getAlgoliaEnv() {
-    static $algolia_env = NULL;
-    if (!empty($algolia_env)) {
+    static $algolia_env;
+    if (!isset($algolia_env)) {
       return $algolia_env;
     }
 
