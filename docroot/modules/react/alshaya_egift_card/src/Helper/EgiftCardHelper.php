@@ -248,6 +248,10 @@ class EgiftCardHelper {
    * Update order details with egift related details.
    **/
   public function prepareOrderDetailsData(&$order, &$orderDetails) {
+    // Do not proceed if Egift card is not enabled.
+    if (!$this->isEgiftCardEnabled()) {
+      return;
+    }
     // Set order name if first item is virtual product.
     $item = reset($order['items']);
     if ($item['is_virtual']) {
@@ -307,7 +311,6 @@ class EgiftCardHelper {
             'value' => $product_options['hps_giftcard_message'],
           ];
         }
-        // @todo update key for card number from order details.
         if (!empty($product_options['hps_card_number'])) {
           $product['attributes'][3] = [
             'label' => t('Card No', [], ['context' => 'egift']),
