@@ -19,3 +19,19 @@
     visibility: hidden;
   }
 }
+
+.add_to_cart_form:not(.rcs-loaded) {
+  height: rem(280);
+  margin-bottom: rem(20);
+
+  @include text-block-loader;
+
+  .pdp-modal-box & {
+    height: rem(260);
+    margin-top: rem(20);
+  }
+
+  @include breakpoint($tablet) {
+    height: rem(400);
+  }
+}

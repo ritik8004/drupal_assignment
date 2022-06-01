@@ -155,14 +155,6 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
-    // Fire another event to perform actions after results are updated.
-    RcsEventManager.fire('postUpdateResultsAction', {
-      detail: {
-        result: updateResult.detail.result,
-        pageType: pageType,
-      }
-    });
-
     return updateResult.detail.result;
   }
 
@@ -342,16 +334,6 @@ exports.getData = async function getData(
         params: params,
         placeholder: placeholder,
         context,
-      }
-    });
-
-    const pageType = globalThis.rcsPhGetPageType();
-    // Fire another event to perform actions after results are updated.
-    RcsEventManager.fire('postUpdateResultsAction', {
-      detail: {
-        result: updateResult.detail.result,
-        pageType,
-        placeholder,
       }
     });
 

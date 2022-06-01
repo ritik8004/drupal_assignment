@@ -13,7 +13,6 @@ import {
   getWishListData,
   isAnonymousUser,
   isShareWishlistPage,
-  getSharedWishlistFromBackend,
   getWishlistLabel,
 } from '../../../../js/utilities/wishlistHelper';
 import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelper';
@@ -57,7 +56,7 @@ class WishlistProductList extends React.Component {
     // products from the backend via API and show on the page.
     if (isShareWishlistPage()) {
       // Get the shared wishlist items from the backend API.
-      getSharedWishlistFromBackend().then((response) => {
+      window.commerceBackend.getSharedWishlistFromBackend().then((response) => {
         if (hasValue(response.data.items)) {
           const wishListItems = [];
 
