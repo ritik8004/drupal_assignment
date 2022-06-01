@@ -39,7 +39,7 @@ for repo in $repos ; do
   echo
 
   if [ ! "$to_delete" = "" ] ; then
-    read -p "Do you confirm the deletion of '$to_delete' branches on $repo? " -n 1 yn
+    read -p "Do you confirm the deletion of '$to_delete' branches on $repo? " yn
     echo
     if [ "$yn" = y ] ; then
       for b in $to_delete ; do
