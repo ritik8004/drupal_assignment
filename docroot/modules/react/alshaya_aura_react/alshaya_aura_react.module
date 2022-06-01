@@ -251,8 +251,16 @@ function alshaya_aura_react_block_view_page_title_block_alter(&$build, $block) {
     return;
   }
 
+  // Add 'my-aura-page-title-block' to My aura page title block,
+  // To remove text transform property,
+  // So that "My Aura"/"About Aura" should not have any text transform.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'alshaya_aura_react.my_loyalty_club') {
+    $build['#attributes']['class'][] = 'my-aura-page-title-block';
+  }
+
   // Add edit account link beside page title block.
-  if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
+  if ($route_name === 'entity.user.canonical') {
     $build['#pre_render'][] = '_alshaya_aura_react_page_title_pre_render';
   }
 }
