@@ -149,7 +149,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
    */
   private function isIndexingFromDrupal() {
     static $val;
-    if (!isset($val)) {
+    if (isset($val)) {
       return $val;
     }
     $val = $this->alshayaAlgoliaConfig->get('index_from_drupal');
