@@ -559,13 +559,6 @@ function _alshaya_spc_translations() {
     ],
   ];
 
-  // Strings related to subtotal after discount label.
-  // for cart & checkout pages.
-  $strings['v14'] = [
-    'Subtotal After Discount' => [
-      'ar' => 'المجموع الفرعي بعد الخصم',
-    ],
-  ];
   return $strings;
 }
 

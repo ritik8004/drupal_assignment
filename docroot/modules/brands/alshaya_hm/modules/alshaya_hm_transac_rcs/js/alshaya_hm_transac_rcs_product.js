@@ -40,7 +40,7 @@
         try {
           const data = JSON.parse(variant.product.assets_swatch);
           e.detail.colorOptionsList = Object.assign(e.detail.colorOptionsList, {
-            display_value: '<img loading="lazy" src="' + data[0].styles.pdp_gallery_thumbnail + '">',
+            display_value: '<img src="' + data[0].styles.pdp_gallery_thumbnail + '">',
             swatch_type: data[0].image_type,
           });
         } catch (e) {

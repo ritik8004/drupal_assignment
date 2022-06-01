@@ -7,7 +7,6 @@ import {
   addProductToWishList,
   removeProductFromWishList,
   getWishlistLabel,
-  getWishlistFromBackend,
   removeFromWishlistAfterAddtocart,
   pushWishlistSeoGtmData,
   getWishListDataIndexForSku,
@@ -354,7 +353,7 @@ class WishlistButton extends React.Component {
           // the wishlist_item_id from the backend that we use while
           // removing the product from backend for logged in user.
           // Load wishlist information from the magento backend.
-          getWishlistFromBackend().then((responseData) => {
+          window.commerceBackend.getWishlistFromBackend().then((responseData) => {
             if (hasValue(responseData.data.items)) {
               const wishListItems = {};
 
