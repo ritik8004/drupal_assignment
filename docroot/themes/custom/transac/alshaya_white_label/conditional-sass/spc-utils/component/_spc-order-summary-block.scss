@@ -272,4 +272,9 @@
       }
     }
   }
+
+  .hero-subtotal-after-discount {
+    border-top: 1px solid $spc-order-summary-hero-total-border;
+    padding: rem(19) 0 rem(6);
+  }
 }
