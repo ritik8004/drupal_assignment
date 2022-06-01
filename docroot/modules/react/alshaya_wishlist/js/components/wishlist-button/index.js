@@ -293,18 +293,6 @@ class WishlistButton extends React.Component {
       addInlineLoader('.wishlist-loader .loading');
     }
 
-    // If product already in wishlist remove this else add.
-    if (addedInWishList) {
-      // Add full screen loader for wishlist page.
-      if (context === 'wishlist_page') {
-        showFullScreenLoader();
-      }
-      this.handleProductRemovalFromWishlist(skuCode);
-
-      // don't execute further if product is removed from the wishlist.
-      return;
-    }
-
     // Prepare the product info to store.
     const productInfo = {
       sku: skuCode,
@@ -315,6 +303,37 @@ class WishlistButton extends React.Component {
       element: this.buttonContainerRef.current,
     };
 
+    // If product is in wishlist and context is cart
+    // then remove the product from wishlist before adding from cart
+    // as the wishlist api does not update product options on add to wishlist.
+    if (addedInWishList && context === 'cart') {
+      removeProductFromWishList(skuCode).then(() => {
+        this.addToWishList(productInfo);
+      });
+      return;
+    }
+
+    // If product is in wishlist and context is not cart
+    // then remove the product from wishlist.
+    if (addedInWishList && context !== 'cart') {
+      // Add full screen loader for wishlist page.
+      if (context === 'wishlist_page') {
+        showFullScreenLoader();
+      }
+      this.handleProductRemovalFromWishlist(skuCode);
+
+      // don't execute further if product is removed from the wishlist.
+      return;
+    }
+
+    // Add product to wishlist if product not in wishlist.
+    this.addToWishList(productInfo);
+  }
+
+  /**
+   * Add product to the wish list.
+   */
+  addToWishList = (productInfo) => {
     // Add product to the wishlist. For guest users it'll store in local
     // storage and for logged in user this will store in backend using API
     // then will update the local storage as well.
@@ -458,11 +477,6 @@ class WishlistButton extends React.Component {
       buttonTextKey = 'remove_from_wishlist';
     }
 
-    // If product is already added into wishlist, button is not required on cart page.
-    if (addedInWishList && context === 'cart') {
-      return null;
-    }
-
     // Display format can be 'link' or 'icon'.
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
@@ -476,11 +490,6 @@ class WishlistButton extends React.Component {
 
     // Wishlist text for Basket page.
     if (context === 'cart') {
-      // We don't show remove from wishlist on basket page.
-      if (addedInWishList) {
-        return null;
-      }
-
       // We only need move to wishlist button on cart page.
       buttonTextKey = 'move_to_wishlist';
     }
