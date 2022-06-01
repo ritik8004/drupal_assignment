@@ -155,10 +155,6 @@ function alshaya_egift_card_page_attachments(array &$page) {
 function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
   // Add egift settings config tags to make it work on config change.
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
-  // Do not proceed if Egift card is not enabled.
-  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
-    return;
-  }
 
   \Drupal::service('alshaya_egift_card.egift_card_helper')->prepareOrderDetailsData($order, $build);
 }
@@ -291,11 +287,5 @@ function alshaya_egift_card_block_view_alter(&$build, $block) {
  * Implements hook_alshaya_online_returns_order_details_build_alter().
  */
 function alshaya_egift_card_alshaya_online_returns_order_details_build_alter(array &$order, array &$orderDetails) {
-  // Do not proceed if Egift card is not enabled.
-  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
-    return;
-  }
-
   \Drupal::service('alshaya_egift_card.egift_card_helper')->prepareOrderDetailsData($order, $orderDetails);
-
 }
