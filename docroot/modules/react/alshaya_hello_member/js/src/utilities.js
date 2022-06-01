@@ -1,33 +1,40 @@
 /**
- * Get the memberId with required format.
+ * Update the memberId with required format (4343 6443 6554 2322).
  */
 const getFormatedMemberId = (memberId) => memberId.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, '$1 $2 $3 $4');
 
 /**
- * Get the full name.
+ * Get the points data to be used in point summary block.
  */
-const getFullName = (firsName, lastName) => `${Drupal.t('Hi')} ${firsName} ${lastName}`;
-
-/**
- * Get percentage value for gathered points to show progress bar.
- */
-const getPercentage = (memberPointsInfo) => {
-  let getPointsPlus = '';
-  let pointsGathered = '';
+const getPointsData = (currentTier, memberPointsInfo) => {
+  let totalPoints = 0;
+  let getPlusPoints = 0;
+  let newVoucherPoints = 0;
+  const pointsData = {};
+  // Get points based on points code.
   memberPointsInfo.forEach((points) => {
     if (points.code === 'GET_PLUS') {
-      getPointsPlus = points.value;
+      getPlusPoints = parseInt(points.value, 10);
     } else if (points.code === 'POINTS_GATHERED') {
-      pointsGathered = points.value;
+      pointsData.pointsGathered = parseInt(points.value, 10);
+    } else if (points.code === 'NEW_VOUCHER') {
+      newVoucherPoints = parseInt(points.value, 10);
     }
   });
-  const percentVal = (pointsGathered / getPointsPlus) * 100;
+  // Get total/reached points based on current tier type
+  // to calculate percentage for points bar.
+  if (currentTier === 'Hello') {
+    totalPoints = getPlusPoints + pointsData.pointsGathered;
+  } else if (currentTier === 'Plus') {
+    totalPoints = newVoucherPoints * 50;
+  }
 
-  return percentVal.toFixed(2);
+  pointsData.pointsGatheredInPercent = ((pointsData.pointsGathered / totalPoints) * 100).toFixed(2);
+
+  return pointsData;
 };
 
 export {
   getFormatedMemberId,
-  getFullName,
-  getPercentage,
+  getPointsData,
 };

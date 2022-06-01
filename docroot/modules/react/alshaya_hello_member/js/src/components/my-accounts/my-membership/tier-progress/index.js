@@ -1,13 +1,12 @@
 import React from 'react';
-import { getPercentage } from '../../../../utilities';
+import { getPointsData } from '../../../../utilities';
 
 const TierProgress = ({
   currentTier,
   nextTier,
   memberPointsInfo,
 }) => {
-  const pointsPercent = getPercentage(memberPointsInfo);
-
+  const pointsData = getPointsData(currentTier, memberPointsInfo);
   return (
     <div className="my-tier-progress">
       <div className="progress-label">{currentTier}</div>
@@ -18,7 +17,7 @@ const TierProgress = ({
             <li />
             <li />
           </ul>
-          <div style={{ width: `${pointsPercent}%` }} className="tier-bar-front" />
+          <div style={{ width: `${pointsData.pointsGatheredInPercent}%` }} className="tier-bar-front" />
         </div>
       </div>
       <div className="progress-label">{nextTier}</div>
