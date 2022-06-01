@@ -519,17 +519,11 @@ exports.computePhFilters = function (input, filter) {
 
       if (drupalSettings.alshayaRcs.showQuantity) {
         const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
-        let quantityDroprown = jQuery('<select>').attr('name', 'quantity').addClass('edit-quantity form-select');
+        const quantityValues = [];
         for (let i = 1; i <= quantity; i++) {
-          const option = jQuery('<option>').attr('value', i).html(i);
-          if (i === 1) {
-            option.attr('selected', 'selected');
-          }
-          quantityDroprown.append(option);
+          quantityValues.push(i);
         }
-        quantityDroprownWrapper = jQuery('<div>');
-        quantityDroprownWrapper = quantityDroprownWrapper.append(quantityDroprown);
-        data.quantity_dropdown = quantityDroprownWrapper.html();
+        data.quantity_dropdown = quantityValues;
       }
 
       // This wrapper will be removed after processing.

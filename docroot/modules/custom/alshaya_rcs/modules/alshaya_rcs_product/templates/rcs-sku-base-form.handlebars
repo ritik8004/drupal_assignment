@@ -8,7 +8,15 @@
   <span class="quantity-{{ sku }}">
     {{#if quantity_dropdown }}
       <div class="js-form-item form-item js-form-type-select form-type-select js-form-item-quantity form-item-quantity">
-        {{{ quantity_dropdown }}}
+        <select name="quantity" class="edit-quantity form-select">
+          {{#each quantity_dropdown}}
+            {{#if (eq @index 0)}}
+              <option value="{{this}}" selected="selected">{{this}}</option>
+            {{else}}
+              <option value="{{this}}">{{this}}</option>
+            {{/if}}
+          {{/each}}
+        </select>
       </div>
     {{/if}}
   </span>
