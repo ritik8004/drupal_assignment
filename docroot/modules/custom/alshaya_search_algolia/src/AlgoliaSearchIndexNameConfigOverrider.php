@@ -49,6 +49,8 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
   ) {
     $this->state = $state;
     $this->configFactory = $config_factory;
+    // We load the config here in order to prevent a recursive loop as this
+    // class is a config overrider class.
     $this->alshayaAlgoliaConfig = $this->configFactory->get('alshaya_search_algolia.settings');
   }
 
