@@ -1,5 +1,5 @@
 import React from 'react';
-import Parser from 'html-react-parser';
+import parse from 'html-react-parser';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getOrderDetailsUrl, getOrderDetails } from '../../../utilities/online_returns_util';
 import { getReturnIdFromUrl } from '../../../utilities/return_confirmation_util';
@@ -44,7 +44,7 @@ class ReturnConfirmation extends React.Component {
           returnId={returnId}
         />
         { helperBlock && (
-          <div className="helper-block-wrapper">{ Parser(helperBlock) }</div>
+          <div className="helper-block-wrapper">{ parse(helperBlock) }</div>
         )}
       </div>
     );

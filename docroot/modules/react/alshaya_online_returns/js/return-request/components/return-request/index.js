@@ -1,5 +1,5 @@
 import React from 'react';
-import Parser from 'html-react-parser';
+import parse from 'html-react-parser';
 import ReturnOrderSummary from '../return-order-summary';
 import ReturnItemsListing from '../return-items-listing';
 import { getOrderDetails, getOrderDetailsUrl } from '../../../utilities/online_returns_util';
@@ -129,7 +129,7 @@ class ReturnRequest extends React.Component {
           </span>
         </div>
         { helperBlock && (
-          <div className="helper-block-wrapper">{ Parser(helperBlock) }</div>
+          <div className="helper-block-wrapper">{ parse(helperBlock) }</div>
         )}
       </div>
     );
