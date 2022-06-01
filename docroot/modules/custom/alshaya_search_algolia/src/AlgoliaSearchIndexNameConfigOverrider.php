@@ -116,10 +116,11 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
 
     if ($this->isIndexingFromDrupal()) {
       // Ensure we never connect to Index of another ENV.
-      $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
-      $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
+      $algolia_index_name = $algolia_env . '_' . $_acsf_site_name;
+      $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_index_name;
+      $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_index_name;
       // Algolia Index name will be like 01live_bbwae_product_list.
-      $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name . '_product_list';
+      $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_index_name . '_product_list';
     }
     else {
       $site_info = alshaya_get_site_country_code();
