@@ -157,7 +157,11 @@ class OrderDetails extends React.Component {
               { hasValue(order.vat_text) && (
                 <div className="total-row vat-row collapse-row">
                   <div className="warm--white">
-                    <div className="dark">{(order.vat_text)}</div>
+                    <div className="dark">
+                      {'(*'}
+                      {order.vat_text}
+                      {')'}
+                    </div>
                   </div>
                 </div>
               )}
