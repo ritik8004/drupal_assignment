@@ -143,6 +143,13 @@ class OnlineReturnsHelper {
             'alt' => $item['image']['#alt'],
           ];
         }
+        elseif ($item['is_virtual'] && $item['image']['#theme'] == 'image') {
+          $data = [
+            'url' => $item['extension_attributes']['product_media'][0]['file'],
+            'title' => $item['image']['#alt'],
+            'alt' => $item['image']['#alt'],
+          ];
+        }
         elseif ($item['image']['#theme'] == 'image') {
           $data = [
             'url' => $item['image']['#attributes']['src'],
@@ -157,8 +164,17 @@ class OnlineReturnsHelper {
         $products[$key]['is_returnable'] = $this->isSkuReturnable($sku);
         $products[$key]['is_big_ticket'] = $this->isSkuBigTicket($sku);
       }
-    }
+      // Update the order total based on the item qty.
+      if ($products[$key]['qty_refunded'] > 0
+      && $products[$key]['qty_refunded'] < $products[$key]['qty_ordered']) {
+        $products[$key]['qty_ordered'] -= $products['qty_refunded'];
 
+        // Updating total value as `qty_ordered` is updated.
+        $products[$key]['total'] = alshaya_acm_price_format(
+          $products[$key]['qty_ordered'] * $products[$key]['price_incl_tax'],
+        );
+      }
+    }
     return $products;
   }
 

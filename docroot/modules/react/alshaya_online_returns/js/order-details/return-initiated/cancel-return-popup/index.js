@@ -33,6 +33,7 @@ export default class CancelReturnPopUp extends React.Component {
     if (hasValue(cancelReturn.data)) {
       this.setState({ cancelBtnState: false }, () => {
         this.closeModal();
+        window.location.reload();
       });
     }
   }

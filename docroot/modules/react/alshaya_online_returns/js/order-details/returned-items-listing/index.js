@@ -1,5 +1,4 @@
 import React from 'react';
-import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getTypeFromReturnItem } from '../../utilities/order_details_util';
 import { isReturnClosed } from '../../utilities/return_api_helper';
@@ -18,6 +17,32 @@ class ReturnedItemsListing extends React.Component {
     return '';
   };
 
+  /**
+   * Group the store and online return items.
+   *
+   * @returns {object}
+   *   A object containing all the grouped items.
+   */
+  getReturnsByType = () => {
+    const { returns } = this.props;
+    const groupedItems = {};
+
+    // Filter out all the closed returns.
+    const updateResults = returns.filter((item) => isReturnClosed(item.returnInfo));
+
+    updateResults.forEach((item) => {
+      const itemReturnType = getTypeFromReturnItem(item);
+      // Check if return type is initialized or not.
+      if (!groupedItems[itemReturnType]) {
+        groupedItems[itemReturnType] = [];
+      }
+      // Push the item in the return type group.
+      groupedItems[itemReturnType].push(item);
+    });
+
+    return groupedItems;
+  };
+
   render() {
     const { returns } = this.props;
 
@@ -25,28 +50,29 @@ class ReturnedItemsListing extends React.Component {
       return null;
     }
 
+    // Get all the items by grouping them into store and online returns.
+    const groupedItems = this.getReturnsByType();
+
     return (
       <div className="returned-items-row returned-items">
-        {returns.map((returnItem) => (
-          <div key={returnItem.returnInfo.increment_id} className="items-wrapper">
-            <ConditionalView condition={hasValue(getTypeFromReturnItem(returnItem))
-              && isReturnClosed(returnItem.returnInfo)}
-            >
-              <div className="title-wrapper">
-                <span>
-                  {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
-                  {' '}
-                  {'-'}
-                  {' '}
-                  {this.getReturnedItemsSubTitle(getTypeFromReturnItem(returnItem))}
-                </span>
-              </div>
+        {Object.keys(groupedItems).map((index) => (
+          <div key={index} className="items-wrapper">
+            <div className="title-wrapper">
+              <span>
+                {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
+                {' '}
+                {'-'}
+                {' '}
+                {this.getReturnedItemsSubTitle(index)}
+              </span>
+            </div>
 
+            {hasValue(groupedItems) && groupedItems[index].map((returnItem) => (
               <ReturnedItems
-                key={getTypeFromReturnItem(returnItem)}
+                key={returnItem.returnInfo.increment_id}
                 returnData={returnItem}
               />
-            </ConditionalView>
+            ))}
           </div>
         ))}
       </div>

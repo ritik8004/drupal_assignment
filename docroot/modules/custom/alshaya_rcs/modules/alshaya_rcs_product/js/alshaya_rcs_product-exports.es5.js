@@ -1,32 +1,4 @@
 /**
- * Check if product is available for home delivery.
- *
- * @param {object} entity
- *   The product entity.
- *
- * @returns {Boolean}
- *   Returns true if the product is available for home delivery else false.
- *
- * @see alshaya_acm_product_available_home_delivery().
- */
-function isProductAvailableForHomeDelivery(entity) {
-  return isProductBuyable(entity);
-}
-
-/**
- * Check if the provided product is available for Click and Collect.
- *
- * @param entity
- *   The entity.
- *
- * @return {Boolean}
- *   True if CNC is available, otherwise false.
- */
-function isProductAvailableForClickAndCollect(entity) {
-  return window.commerceBackend.isProductAvailableForClickAndCollect(entity);
-}
-
-/**
  * Check if the product is buyable.
  *
  * @param {object} entity
@@ -290,23 +262,6 @@ exports.render = function render(
       }
 
       const deliveryOptions = {};
-      const cncEnabled = isProductAvailableForClickAndCollect(entity);
-      if (cncEnabled) {
-        deliveryOptions.cnc = {
-          state: cncEnabled ? 'enabled' : 'disabled',
-            title: drupalSettings.alshaya_click_collect.title,
-            subtitle: (cncEnabled === true)
-            ? drupalSettings.alshaya_click_collect.subtitle.enabled
-            : drupalSettings.alshaya_click_collect.subtitle.disabled,
-            sku: entity.sku,
-            sku_clean: Drupal.cleanCssIdentifier(entity.sku),
-            sku_type: entity.type_id,
-            help_text: drupalSettings.alshaya_click_collect.help_text,
-            available_at_title: '',
-            select_option_text: drupalSettings.alshaya_click_collect.select_option_text,
-            store_finder_form: drupalSettings.alshaya_click_collect.store_finder_form,
-        };
-      }
 
       if (drupalSettings.expressDelivery.enabled) {
         // Express delivery options.

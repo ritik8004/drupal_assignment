@@ -1,8 +1,8 @@
 import React from 'react';
-import parse from 'html-react-parser';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Price from '../../../../../js/utilities/components/price';
+import PriceElement from '../../../../../js/utilities/components/price/price-element';
 
 const ReturnIndividualItem = ({
   item,
@@ -26,6 +26,7 @@ const ReturnIndividualItem = ({
   const {
     qty_ordered: qtyOrdered,
     qty_refunded: qtyRefunded,
+    price_incl_tax: priceIncTax,
   } = item;
 
   // Return from here only if refunded is greater or equal to ordered item.
@@ -79,7 +80,7 @@ const ReturnIndividualItem = ({
         <ConditionalView condition={window.innerWidth < 768}>
           <div className="item-total-price">
             <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
-            <span className="dark">{parse(item.total)}</span>
+            <span className="dark"><PriceElement amount={itemQuantity * priceIncTax} /></span>
           </div>
         </ConditionalView>
       </div>
@@ -87,7 +88,7 @@ const ReturnIndividualItem = ({
       <ConditionalView condition={window.innerWidth > 767}>
         <div className="item-total-price">
           <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
-          <span className="dark">{parse(item.total)}</span>
+          <span className="dark"><PriceElement amount={itemQuantity * priceIncTax} /></span>
         </div>
       </ConditionalView>
 

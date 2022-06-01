@@ -39,14 +39,6 @@ function _alshaya_online_returns_translations() {
         'ar' => '1. اختر المنتج المطلوب إرجاعه',
         'context' => 'online_returns',
       ],
-      'Item Code: @sku' => [
-        'ar' => 'كود المنتج: @sku',
-        'context' => 'online_returns',
-      ],
-      'Quantity: @quantity' => [
-        'ar' => 'الكمية: @quantity',
-        'context' => 'online_returns',
-      ],
       'Unit Price' => [
         'ar' => 'سعر الوحدة',
         'context' => 'online_returns',
@@ -75,7 +67,7 @@ function _alshaya_online_returns_translations() {
         'ar' => 'سيتم إغلاق نافذة الإرجاع بتاريخ @date',
         'context' => 'online_returns',
       ],
-      'You have untill @date to return the items' => [
+      'You have until @date to return the items' => [
         'ar' => 'الموعد النهائي لإرجاع المنتجات هو @date',
         'context' => 'online_returns',
       ],
