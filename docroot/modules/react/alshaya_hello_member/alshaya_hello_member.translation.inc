@@ -75,6 +75,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عرض الكل',
         'context' => 'hello_member',
       ],
+      'Benefits' => [
+        'ar' => 'فوائد',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

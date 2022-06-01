@@ -32,7 +32,7 @@ export const getApiEndpoint = (action) => {
       endpoint = '/V2/customers/apcCustomerData'; // endpoint to check hello member customer data.
       break;
     case 'helloMemberBenefitsList':
-      endpoint = '/V2/customers/hellomember/benefitsList'; // endpoint to check hello member customer data.
+      endpoint = '/V2/customers/hellomember/benefitsList'; // endpoint to get hello member benefits.
       break;
 
     default:
