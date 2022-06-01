@@ -368,6 +368,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     'card_type' => $orderDetails['payment_method'],
     'card_number' => '',
     'payment_type' => $payment_method,
+    'weight' => 0,
   ];
 
   switch ($payment_method) {

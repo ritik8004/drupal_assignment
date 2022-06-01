@@ -268,6 +268,7 @@ class EgiftCardHelper {
         'card_type' => t('eGift Card', [], ['context' => 'egift']),
         'card_number' => substr($order['extension']['hps_redemption_card_number'], -4),
         'payment_type' => 'egift',
+        'weight' => -2,
       ];
       $orderDetails['#order_details']['paymentDetails']['egift'] = $egift_data;
     }
