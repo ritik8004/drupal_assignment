@@ -4,6 +4,8 @@ namespace Drupal\alshaya_online_returns\Controller;
 
 use Drupal\user\UserInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\block\BlockViewBuilder;
+use Drupal\Core\Render\Renderer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -79,6 +81,13 @@ class OnlineReturnController extends ControllerBase {
   protected $addressCountryRepository;
 
   /**
+   * Renderer service object.
+   *
+   * @var \Drupal\Core\Render\Renderer
+   */
+  protected $renderer;
+
+  /**
    * ReturnRequestController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -97,6 +106,8 @@ class OnlineReturnController extends ControllerBase {
    *   Address Country Repository service object.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
+   * @param \Drupal\Core\Render\Renderer $renderer
+   *   Renderer service object.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleHandlerInterface $module_handler,
@@ -105,7 +116,8 @@ class OnlineReturnController extends ControllerBase {
                               OnlineReturnsApiHelper $online_returns_api_helper,
                               LanguageManagerInterface $language_manager,
                               CountryRepository $address_country_repository,
-                              AlshayaApiWrapper $api_wrapper) {
+                              AlshayaApiWrapper $api_wrapper,
+                              Renderer $renderer) {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->onlineReturnsHelper = $online_returns_helper;
@@ -114,6 +126,7 @@ class OnlineReturnController extends ControllerBase {
     $this->languageManager = $language_manager;
     $this->addressCountryRepository = $address_country_repository;
     $this->apiWrapper = $api_wrapper;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -129,6 +142,7 @@ class OnlineReturnController extends ControllerBase {
       $container->get('language_manager'),
       $container->get('address.country_repository'),
       $container->get('alshaya_api.api'),
+      $container->get('renderer'),
     );
   }
 
@@ -175,6 +189,7 @@ class OnlineReturnController extends ControllerBase {
     $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
       'returnConfig' => $returnConfig,
+      'helperBlock' => $this->getHelperBlock(),
     ];
     return $build;
   }
@@ -225,6 +240,7 @@ class OnlineReturnController extends ControllerBase {
       'orderDetails' => $orderDetails,
       'returnConfirmationStrings' => $returnConfig->get('rows'),
       'dateFormat' => $returnConfig->get('return_date_format'),
+      'helperBlock' => $this->getHelperBlock(),
     ];
     return $build;
   }
@@ -370,6 +386,19 @@ class OnlineReturnController extends ControllerBase {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Function returns the html of the account helper block.
+   */
+  protected function getHelperBlock() {
+    $helper_block = BlockViewBuilder::lazyBuilder('myaccountneedhelp', 'full');
+    // Validate if the block exists.
+    if ($helper_block) {
+      return $this->renderer->renderPlain($helper_block)->__toString();
+    }
+
+    return NULL;
   }
 
 }
