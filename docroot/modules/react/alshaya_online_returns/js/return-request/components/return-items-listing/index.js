@@ -15,6 +15,7 @@ class ReturnItemsListing extends React.Component {
       open: true,
       promotionModalOpen: false,
       ruleId: null,
+      hideModalButton: false,
     };
     this.handleSelectedReason = this.handleSelectedReason.bind(this);
     this.processSelectedItems = this.processSelectedItems.bind(this);
@@ -74,13 +75,31 @@ class ReturnItemsListing extends React.Component {
    * as per item selection.
    */
   processSelectedItems = (checked, item) => {
-    const { handleSelectedItems, itemsSelected } = this.props;
+    const { handleSelectedItems, itemsSelected, products } = this.props;
     const itemHasApportionedPrice = hasValue(item.extension_attributes.apportioned_line_price);
     const itemHasPromotion = hasValue(item.applied_rule_ids);
     const itemDetails = item;
 
-    // Set checked status.
-    itemDetails.isChecked = checked;
+    let itemEligibleForReturn = true;
+    products.forEach((individualItem) => {
+      // Check if item is eligible for return or not.
+      if (individualItem.sku !== itemDetails.sku
+        && individualItem.applied_rule_ids === itemDetails.applied_rule_ids
+        && !individualItem.is_returnable) {
+        itemEligibleForReturn = individualItem.is_returnable;
+      }
+    });
+
+    if (!itemEligibleForReturn && !itemHasApportionedPrice) {
+      this.setState({
+        promotionModalOpen: true,
+        ruleId: item.applied_rule_ids,
+        hideModalButton: true,
+      });
+    } else {
+      // Set checked status.
+      itemDetails.isChecked = checked;
+    }
 
     if (checked) {
       // Check if any promotion is applied to the item.
@@ -218,7 +237,12 @@ class ReturnItemsListing extends React.Component {
   }
 
   render() {
-    const { btnDisabled, open, promotionModalOpen } = this.state;
+    const {
+      btnDisabled,
+      open,
+      promotionModalOpen,
+      hideModalButton,
+    } = this.state;
     const { products, itemsSelected } = this.props;
     // If no item is selected, button remains disabled.
     const btnState = !!((itemsSelected.length === 0 || btnDisabled));
@@ -259,6 +283,7 @@ class ReturnItemsListing extends React.Component {
             closePromotionsWarningModal={this.closePromotionsWarningModal}
             handlePromotionDeselect={this.handlePromotionDeselect}
             handlePromotionContinue={this.handlePromotionContinue}
+            hideModalButton={hideModalButton}
           />
         </Popup>
       </div>
