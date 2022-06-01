@@ -8,6 +8,7 @@ const ReturnRefundMethod = ({
   if (!hasValue(paymentDetails)) {
     return null;
   }
+
   return (
     <>
       <div className="refund-method-wrapper">

@@ -578,6 +578,11 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
     ],
+    'v5' => [
+      'Aura Loyalty Card' => [
+        'ar' => 'بطاقة الولاء من أورا',
+      ],
+    ],
   ];
 }
 
