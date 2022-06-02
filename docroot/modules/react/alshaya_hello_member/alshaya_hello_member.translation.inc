@@ -67,6 +67,18 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'أهلاً',
         'context' => 'hello_member',
       ],
+      'SHOW LESS' => [
+        'ar' => 'تظهر أقل',
+        'context' => 'hello_member',
+      ],
+      'SHOW ALL' => [
+        'ar' => 'عرض الكل',
+        'context' => 'hello_member',
+      ],
+      'Benefits' => [
+        'ar' => 'فوائد',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

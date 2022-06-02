@@ -134,3 +134,18 @@ function alshaya_hello_member_alshaya_user_breadcrumb_routes_alter(array &$route
     'user' => \Drupal::currentUser()->id(),
   ];
 }
+
+/**
+ * Implements hook_page_title().
+ */
+function alshaya_hello_member_preprocess_page_title(&$variables) {
+  // Do not proceed if Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'entity.user.canonical') {
+    $variables['title'] = t('Benefits', [], ['context' => 'hello_member']);
+  }
+}

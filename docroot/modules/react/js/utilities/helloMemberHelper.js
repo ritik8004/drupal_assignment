@@ -31,6 +31,9 @@ export const getApiEndpoint = (action) => {
     case 'helloMemberGetCustomerData':
       endpoint = '/V2/customers/apcCustomerData'; // endpoint to check hello member customer data.
       break;
+    case 'helloMemberBenefitsList':
+      endpoint = '/V2/customers/hellomember/benefitsList'; // endpoint to get hello member benefits.
+      break;
 
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
