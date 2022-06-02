@@ -8,12 +8,8 @@ use Drupal\block\BlockViewBuilder;
 use Drupal\Core\Render\Renderer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,32 +21,11 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class OnlineReturnController extends ControllerBase {
 
   /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * Alshaya Online Returns Helper.
    *
    * @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper
    */
   protected $onlineReturnsHelper;
-
-  /**
-   * Entity Type Manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
 
   /**
    * Alshaya Online Returns API Helper.
@@ -65,13 +40,6 @@ class OnlineReturnController extends ControllerBase {
    * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
   protected $apiWrapper;
-
-  /**
-   * The language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
 
   /**
    * Address Country Repository service object.
@@ -90,18 +58,10 @@ class OnlineReturnController extends ControllerBase {
   /**
    * ReturnRequestController constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
    * @param \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $online_returns_helper
    *   Alshaya online returns helper.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity Type Manager.
    * @param \Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper $online_returns_api_helper
    *   Alshaya online returns helper.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
    * @param \Drupal\address\Repository\CountryRepository $address_country_repository
    *   Address Country Repository service object.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
@@ -109,21 +69,13 @@ class OnlineReturnController extends ControllerBase {
    * @param \Drupal\Core\Render\Renderer $renderer
    *   Renderer service object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
-                              ModuleHandlerInterface $module_handler,
-                              OnlineReturnsHelper $online_returns_helper,
-                              EntityTypeManagerInterface $entity_type_manager,
+  public function __construct(OnlineReturnsHelper $online_returns_helper,
                               OnlineReturnsApiHelper $online_returns_api_helper,
-                              LanguageManagerInterface $language_manager,
                               CountryRepository $address_country_repository,
                               AlshayaApiWrapper $api_wrapper,
                               Renderer $renderer) {
-    $this->configFactory = $config_factory;
-    $this->moduleHandler = $module_handler;
     $this->onlineReturnsHelper = $online_returns_helper;
-    $this->entityTypeManager = $entity_type_manager;
     $this->onlineReturnsApiHelper = $online_returns_api_helper;
-    $this->languageManager = $language_manager;
     $this->addressCountryRepository = $address_country_repository;
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
@@ -134,12 +86,8 @@ class OnlineReturnController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory'),
-      $container->get('module_handler'),
       $container->get('alshaya_online_returns.online_returns_helper'),
-      $container->get('entity_type.manager'),
       $container->get('alshaya_online_returns.online_returns_api_helper'),
-      $container->get('language_manager'),
       $container->get('address.country_repository'),
       $container->get('alshaya_api.api'),
       $container->get('renderer'),
@@ -158,14 +106,8 @@ class OnlineReturnController extends ControllerBase {
    *   Build array.
    */
   public function returnRequest(UserInterface $user, $order_id) {
-    $config['enabled'] = $this->onlineReturnsHelper->isOnlineReturnsEnabled();
-    $build['#cache']['tags'] = array_merge(
-      $build['#cache']['tags'] ?? [],
-      $this->configFactory->get('alshaya_online_returns.settings')->getCacheTags()
-    );
-
     // Do not proceed if Online returns is not enabled.
-    if ($config['enabled'] !== TRUE) {
+    if (!$this->onlineReturnsHelper->isOnlineReturnsEnabled()) {
       throw new \Exception('Online Returns feature not enabled.');
     }
 
@@ -174,9 +116,13 @@ class OnlineReturnController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
+    $build = [];
+
+    $build['#cache']['tags'] = $this->onlineReturnsHelper->getCacheTags();
+
     // Get return configurations.
     $returnConfig = $this->onlineReturnsApiHelper->getReturnsApiConfig(
-      $this->languageManager->getCurrentLanguage()->getId(),
+      $this->languageManager()->getCurrentLanguage()->getId(),
     );
 
     // Adding address fields configuration to display user address details.
@@ -206,27 +152,27 @@ class OnlineReturnController extends ControllerBase {
    *   Build array.
    */
   public function returnConfirmation(UserInterface $user, $order_id) {
-    $config['enabled'] = $this->onlineReturnsHelper->isOnlineReturnsEnabled();
-    $build['#cache']['tags'] = array_merge(
-      $build['#cache']['tags'] ?? [],
-      $this->configFactory->get('alshaya_online_returns.settings')->getCacheTags()
-    );
+    $build = [];
 
-    // Invalidate cache for return id query parameter.
-    $build['#cache']['contexts'][] = 'url.query_args:returnId';
+    $build['#cache']['tags'] = $this->onlineReturnsHelper->getCacheTags();
+
     // Do not proceed if Online returns is not enabled.
-    if ($config['enabled'] !== TRUE) {
+    if (!$this->onlineReturnsHelper->isOnlineReturnsEnabled()) {
       throw new \Exception('Online Returns feature not enabled.');
     }
+
+    // Have separate cache entry for each return id query parameter.
+    $build['#cache']['contexts'][] = 'url.query_args:returnId';
 
     $orderDetails = $this->getOrderReturnDetails($user, $order_id);
 
     // Get config for return confirmations page.
     // This will include what's next section of the page.
-    $returnConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
+    $returnConfig = $this->config('alshaya_online_returns.return_confirmation');
+
     $build['#cache']['tags'] = array_merge(
       $build['#cache']['tags'] ?? [],
-      $this->configFactory->get('alshaya_online_returns.return_confirmation')->getCacheTags()
+      $returnConfig->getCacheTags()
     );
 
     // Adding address fields configuration to display user address details.
@@ -257,8 +203,7 @@ class OnlineReturnController extends ControllerBase {
    *   Build array.
    */
   public function getOrderReturnDetails(UserInterface $user, $order_id) {
-
-    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get all the orders of logged in user.
     $customer_id = (int) $user->get('acq_customer_id')->getString();
