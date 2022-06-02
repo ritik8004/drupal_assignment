@@ -50,5 +50,41 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'show_all',
       'value' => t('SHOW ALL', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'membership_renew_message',
+      'value' => t('Your memership will be renewed on @expiry_date and points will be reset every year.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'earned_points',
+      'value' => t('@points pt', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'purchase',
+      'value' => t('Purchase', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'points_earned',
+      'value' => t('Points earned', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'submit_review',
+      'value' => t('Submit Rating and Review', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'profile_complete',
+      'value' => t('Complete your profile', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'purchanse_message',
+      'value' => t('Every time you shop online or in store, you will earn points. @currency_value @currency_code = @points_value points.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'write_review_message',
+      'value' => t('Review your latest online purchase and earn @review_points points.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'profile_complete_message',
+      'value' => t('Add your date of birth, Gender, Mobile Number to earn @profile_completion_value points.', [], ['context' => 'hello_member']),
+    ],
   ];
 }

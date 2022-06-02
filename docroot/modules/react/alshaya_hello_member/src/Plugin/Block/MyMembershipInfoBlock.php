@@ -97,6 +97,7 @@ class MyMembershipInfoBlock extends BlockBase implements ContainerFactoryPluginI
       '#attached' => [
         'library' => [
           'alshaya_white_label/my-membership-info',
+          'alshaya_hello_member/alshaya_hello_member_my_membership_info',
         ],
       ],
     ];
@@ -106,11 +107,9 @@ class MyMembershipInfoBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account) {
-    $route_name = $this->routeMatch->getRouteName();
-
-    // Show block only on my accounts page if hello member is enabled.
+    // Show block only if hello member is enabled.
     return AccessResult::allowedIf(
-      $this->helloMemberHelper->isHelloMemberEnabled() && $route_name === 'entity.user.canonical'
+      $this->helloMemberHelper->isHelloMemberEnabled()
     );
   }
 
