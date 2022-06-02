@@ -1,58 +1,3 @@
-.order-detail,
-.block-alshaya-user-recent-orders {
-  .user__order--detail {
-    div.order-item-row.delivered-items,
-    tr.order-item-row.delivered-items,
-    div.order-item-row.cancelled-items,
-    tr.order-item-row.cancelled-items {
-      > div,
-      td {
-        padding: rem(38) 0 rem(8) !important;
-        font-size: rem(18);
-        line-height: rem(22);
-        text-transform: uppercase;
-        font-family: $alshaya-bold;
-
-        div {
-          margin-bottom: 0;
-        }
-      }
-    }
-
-    .cancelled-items ~ .order-item-row {
-      .image-wrapper {
-        span {
-          width: rem(144);
-          font-size: rem(11);
-          line-height: rem(13);
-          color: $order-cancelled-txt;
-          background: $order-cancelled-label;
-          padding: rem(4) 0;
-          height: rem(20);
-
-          @include breakpoint($tablet) {
-            width: rem(120);
-          }
-
-          @include breakpoint($desktop) {
-            width: rem(136);
-          }
-        }
-      }
-    }
-  }
-}
-
-.user__order--detail {
-  .recent__orders--body {
-    .cancelled-items {
-      div {
-        padding: 0;
-      }
-    }
-  }
-}
-
 .order-detail {
   .user__order--detail {
     #online-returned-items {
@@ -343,12 +288,6 @@
           font-size: rem(16);
           margin-#{$right}: rem(8);
         }
-      }
-    }
-
-    .cancelled-items {
-      div {
-        padding: 0;
       }
     }
 
