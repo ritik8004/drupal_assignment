@@ -51,6 +51,8 @@ for repo in $repos ; do
         echo "Deleting $t"
         git push --delete $repo $t
       done
+
+      git remote prune $repo
     else
       echo "Nothing deleted"
     fi

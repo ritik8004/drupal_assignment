@@ -40,9 +40,9 @@ jobs:
         run: yes | bash ${SCRIPT_DIR}/git_cleanup/remove-old-tags.sh
         if: ${{ env.SSH_DEPLOYMENT_KEY }}
 
-      - name: Branch cleanup
-        run: yes | bash ${SCRIPT_DIR}/git_cleanup/remove-useless-branches.sh
-        if: ${{ env.SSH_DEPLOYMENT_KEY }}
+      #- name: Branch cleanup
+      #  run: yes | bash ${SCRIPT_DIR}/git_cleanup/remove-useless-branches.sh
+      #  if: ${{ env.SSH_DEPLOYMENT_KEY }}
 
       # - name: Branch history reset
       #   run: bash ${SCRIPT_DIR}/git_cleanup/reset-history-branches.sh
