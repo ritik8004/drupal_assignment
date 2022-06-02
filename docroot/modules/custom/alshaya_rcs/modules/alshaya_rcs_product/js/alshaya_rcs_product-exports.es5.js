@@ -570,10 +570,8 @@ exports.computePhFilters = function (input, filter) {
 
           const configurableOption = ({
             data_configurable_code: option.attribute_code,
-            // @todo: Find out the correct label for color.
             data_default_title: dataDefaultTitle,
             default_title: dataTitle,
-            // @todo: Find out the correct label for color.
             data_selected_title: option.label,
             data_drupal_selector: `edit-configurables-${formattedAttributeCode}`,
             id: `edit-configurables-${formattedAttributeCode}`,
