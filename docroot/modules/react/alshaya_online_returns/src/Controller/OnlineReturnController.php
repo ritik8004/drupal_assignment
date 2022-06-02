@@ -8,7 +8,6 @@ use Drupal\block\BlockViewBuilder;
 use Drupal\Core\Render\Renderer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -23,13 +22,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  * Online controller to prepare data for return pages.
  */
 class OnlineReturnController extends ControllerBase {
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
 
   /**
    * The module handler.
@@ -90,8 +82,6 @@ class OnlineReturnController extends ControllerBase {
   /**
    * ReturnRequestController constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $online_returns_helper
@@ -109,8 +99,7 @@ class OnlineReturnController extends ControllerBase {
    * @param \Drupal\Core\Render\Renderer $renderer
    *   Renderer service object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
-                              ModuleHandlerInterface $module_handler,
+  public function __construct(ModuleHandlerInterface $module_handler,
                               OnlineReturnsHelper $online_returns_helper,
                               EntityTypeManagerInterface $entity_type_manager,
                               OnlineReturnsApiHelper $online_returns_api_helper,
@@ -118,7 +107,6 @@ class OnlineReturnController extends ControllerBase {
                               CountryRepository $address_country_repository,
                               AlshayaApiWrapper $api_wrapper,
                               Renderer $renderer) {
-    $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->onlineReturnsHelper = $online_returns_helper;
     $this->entityTypeManager = $entity_type_manager;
@@ -134,7 +122,6 @@ class OnlineReturnController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory'),
       $container->get('module_handler'),
       $container->get('alshaya_online_returns.online_returns_helper'),
       $container->get('entity_type.manager'),
@@ -158,14 +145,8 @@ class OnlineReturnController extends ControllerBase {
    *   Build array.
    */
   public function returnRequest(UserInterface $user, $order_id) {
-    $config['enabled'] = $this->onlineReturnsHelper->isOnlineReturnsEnabled();
-    $build['#cache']['tags'] = array_merge(
-      $build['#cache']['tags'] ?? [],
-      $this->configFactory->get('alshaya_online_returns.settings')->getCacheTags()
-    );
-
     // Do not proceed if Online returns is not enabled.
-    if ($config['enabled'] !== TRUE) {
+    if (!$this->onlineReturnsHelper->isOnlineReturnsEnabled()) {
       throw new \Exception('Online Returns feature not enabled.');
     }
 
@@ -173,6 +154,10 @@ class OnlineReturnController extends ControllerBase {
     if ($orderDetails['#order']['orderType'] == 'ship_to_store') {
       throw new NotFoundHttpException();
     }
+
+    $build = [];
+
+    $build['#cache']['tags'] = $this->onlineReturnsHelper->getCacheTags();
 
     // Get return configurations.
     $returnConfig = $this->onlineReturnsApiHelper->getReturnsApiConfig(
@@ -206,27 +191,27 @@ class OnlineReturnController extends ControllerBase {
    *   Build array.
    */
   public function returnConfirmation(UserInterface $user, $order_id) {
-    $config['enabled'] = $this->onlineReturnsHelper->isOnlineReturnsEnabled();
-    $build['#cache']['tags'] = array_merge(
-      $build['#cache']['tags'] ?? [],
-      $this->configFactory->get('alshaya_online_returns.settings')->getCacheTags()
-    );
+    $build = [];
 
-    // Invalidate cache for return id query parameter.
-    $build['#cache']['contexts'][] = 'url.query_args:returnId';
+    $build['#cache']['tags'] = $this->onlineReturnsHelper->getCacheTags();
+
     // Do not proceed if Online returns is not enabled.
-    if ($config['enabled'] !== TRUE) {
+    if (!$this->onlineReturnsHelper->isOnlineReturnsEnabled()) {
       throw new \Exception('Online Returns feature not enabled.');
     }
+
+    // Have separate cache entry for each return id query parameter.
+    $build['#cache']['contexts'][] = 'url.query_args:returnId';
 
     $orderDetails = $this->getOrderReturnDetails($user, $order_id);
 
     // Get config for return confirmations page.
     // This will include what's next section of the page.
-    $returnConfig = $this->configFactory->get('alshaya_online_returns.return_confirmation');
+    $returnConfig = $this->config('alshaya_online_returns.return_confirmation');
+
     $build['#cache']['tags'] = array_merge(
       $build['#cache']['tags'] ?? [],
-      $this->configFactory->get('alshaya_online_returns.return_confirmation')->getCacheTags()
+      $returnConfig->getCacheTags()
     );
 
     // Adding address fields configuration to display user address details.
@@ -257,7 +242,6 @@ class OnlineReturnController extends ControllerBase {
    *   Build array.
    */
   public function getOrderReturnDetails(UserInterface $user, $order_id) {
-
     $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get all the orders of logged in user.
