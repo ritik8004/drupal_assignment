@@ -5,6 +5,7 @@ import ProcessedItem from './processed-item';
 
 const ReturnInitiated = ({
   returns,
+  handleErrorMessage,
 }) => {
   if (!hasValue(returns)) {
     return null;
@@ -19,6 +20,7 @@ const ReturnInitiated = ({
     <div className="return-initiated-item">
       <ProcessedItem
         returnData={initiatedReturnItem}
+        handleErrorMessage={handleErrorMessage}
       />
     </div>
   );
