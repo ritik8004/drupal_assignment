@@ -306,6 +306,7 @@ class WishlistButton extends React.Component {
     if (!addedInWishList) {
       // Add product to wishlist if product not in wishlist.
       this.addToWishList(productInfo);
+      return;
     }
 
     // If product is in wishlist and context is cart
