@@ -56,6 +56,21 @@
     }
   }
 
+  .order-detail & {
+    .order-summary-row div {
+      .points-earned,
+      .points-redeemed {
+        font-size: rem(12);
+
+        span:first-child {
+          display: inline-block;
+          min-width: rem(96);
+          margin-#{$right}: rem(16);
+        }
+      }
+    }
+  }
+
   &.has-aura-points {
     .order-transaction {
       @include breakpoint($tablet) {

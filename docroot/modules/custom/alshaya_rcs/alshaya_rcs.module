@@ -13,6 +13,7 @@ use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 function alshaya_rcs_library_info_alter(&$libraries, $extension) {
   if ($extension === 'rcs_placeholders' && isset($libraries['rcs_placeholders'])) {
     $libraries['rcs_placeholders']['dependencies'][] = 'alshaya_white_label/rcs-placeholders';
+    $libraries['rcs_placeholders']['dependencies'][] = 'alshaya_rcs/utility';
   }
 }
 

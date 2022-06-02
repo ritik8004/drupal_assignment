@@ -10,7 +10,7 @@ exports.render = function render(
   // Proceed only if entity is present.
   if (breadcrumbs !== null) {
     // Get the enrichment data. It's a sync call.
-    let enrichmentData = globalThis.rcsGetEnrichedCategories(globalThis.rcsSetEnrichedCategoriesInStaticStorage);
+    let enrichmentData = globalThis.rcsGetEnrichedCategories();
 
     let breadcrumbHtml = '';
 

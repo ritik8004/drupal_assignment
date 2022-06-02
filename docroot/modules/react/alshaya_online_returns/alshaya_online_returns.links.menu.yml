@@ -1,0 +1,5 @@
+alshaya_online_returns.alshaya_return_confirmation_settings:
+  route_name: alshaya_online_returns.alshaya_return_confirmation_settings
+  title: 'Alshaya Return Confirmation Configuration'
+  description: 'Configure text for Return Confirmation Screen'
+  parent: alshaya_master.alshaya_admin

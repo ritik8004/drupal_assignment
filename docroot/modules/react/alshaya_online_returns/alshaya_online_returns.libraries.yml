@@ -1,0 +1,24 @@
+alshaya_online_returns_pdp:
+  js:
+    dist/pdp.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+
+alshaya_return_requests:
+  js:
+    dist/returnrequest.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+
+alshaya_online_returns_my_accounts:
+  js:
+    dist/my_accounts.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+    - alshaya_master/common_functions
+
+alshaya_return_confirmation:
+  js:
+    dist/returnconfirmation.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

@@ -40,13 +40,8 @@
 
 .geolocation-common-map-container {
   [aria-hidden=true] {
-    padding-left: rem(1);
     color: $store_finder_map_marker_text !important;
     padding-top: rem(17);
     font-weight: bold;
-
-    html[lang=ar] & {
-      padding-right: rem(7);
-    }
   }
 }

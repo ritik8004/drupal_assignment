@@ -1,0 +1,58 @@
+body.nodetype--acq_product {
+  div[id*="online-returns-pdp"],
+  .online-returns-pdp {
+    font-size: 0.875rem;
+    font-family: $alshaya-bold;
+    line-height: 1.75rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+
+    @include breakpoint($tablet) {
+      font-size: 1rem;
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+
+      @include icon(infomation, before) {
+        font-size: 1.25rem;
+        padding-#{$right}: 0.625rem;
+      }
+
+      @include breakpoint($tablet) {
+        &::before {
+          font-size: 1.75rem;
+        }
+      }
+    }
+
+    &.desktop-only {
+      display: none;
+
+      @include breakpoint($tablet) {
+        display: flex;
+      }
+    }
+
+    &.mobile-only {
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+  }
+
+  &.magazine-layout-v2 {
+    .online-returns-pdp {
+      margin-top: 1.25rem;
+      margin-bottom: 0;
+      font-size: 1rem;
+
+      &::before {
+        color: $new-pdp-blue;
+        font-size: 1.75rem;
+      }
+    }
+  }
+}
