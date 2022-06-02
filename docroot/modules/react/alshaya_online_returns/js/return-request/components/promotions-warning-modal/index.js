@@ -4,11 +4,11 @@ const PromotionsWarningModal = ({
   closePromotionsWarningModal,
   handlePromotionDeselect,
   handlePromotionContinue,
-  hideModalButton,
+  itemNotEligibleForReturn,
 }) => (
   <div className="promotions-warning-modal-wrapper">
     <button type="button" className="close" onClick={() => closePromotionsWarningModal()} />
-    { !hideModalButton && (
+    { !itemNotEligibleForReturn && (
       <>
         <div className="title">
           {Drupal.t('Selected Item is Promotional Item', {}, { context: 'online_returns' })}
@@ -21,9 +21,17 @@ const PromotionsWarningModal = ({
             {Drupal.t('Clicking continue will select all items in this promotion.', {}, { context: 'online_returns' })}
           </span>
         </div>
+        <div className="cta-wrapper">
+          <button type="button" className="continue-button" onClick={handlePromotionContinue}>
+            <span className="continue-button-label">{Drupal.t('Continue', {}, { context: 'online_returns' })}</span>
+          </button>
+          <button type="button" className="deselect-button" onClick={handlePromotionDeselect}>
+            <span className="deselect-button-label">{Drupal.t('Deselect this item', {}, { context: 'online_returns' })}</span>
+          </button>
+        </div>
       </>
     )}
-    { hideModalButton && (
+    { itemNotEligibleForReturn && (
       <>
         <div className="description">
           <span>
@@ -31,16 +39,6 @@ const PromotionsWarningModal = ({
           </span>
         </div>
       </>
-    )}
-    { !hideModalButton && (
-      <div className="cta-wrapper">
-        <button type="button" className="continue-button" onClick={handlePromotionContinue}>
-          <span className="continue-button-label">{Drupal.t('Continue', {}, { context: 'online_returns' })}</span>
-        </button>
-        <button type="button" className="deselect-button" onClick={handlePromotionDeselect}>
-          <span className="deselect-button-label">{Drupal.t('Deselect this item', {}, { context: 'online_returns' })}</span>
-        </button>
-      </div>
     )}
   </div>
 );

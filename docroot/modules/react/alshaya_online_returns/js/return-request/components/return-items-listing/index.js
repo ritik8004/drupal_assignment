@@ -15,7 +15,7 @@ class ReturnItemsListing extends React.Component {
       open: true,
       promotionModalOpen: false,
       ruleId: null,
-      hideModalButton: false,
+      itemNotEligibleForReturn: false,
     };
     this.handleSelectedReason = this.handleSelectedReason.bind(this);
     this.processSelectedItems = this.processSelectedItems.bind(this);
@@ -80,21 +80,18 @@ class ReturnItemsListing extends React.Component {
     const itemHasPromotion = hasValue(item.applied_rule_ids);
     const itemDetails = item;
 
-    let itemEligibleForReturn = true;
-    products.forEach((individualItem) => {
-      // Check if item is eligible for return or not.
-      if (individualItem.sku !== itemDetails.sku
-        && individualItem.applied_rule_ids === itemDetails.applied_rule_ids
-        && !individualItem.is_returnable) {
-        itemEligibleForReturn = individualItem.is_returnable;
-      }
-    });
+    // Check if item is eligible for return or not.
+    const itemEligibleForReturn = !(products.some(
+      (individualItem) => individualItem.sku !== itemDetails.sku
+      && individualItem.applied_rule_ids === itemDetails.applied_rule_ids
+      && !individualItem.is_returnable,
+    ));
 
     if (!itemEligibleForReturn && !itemHasApportionedPrice) {
       this.setState({
         promotionModalOpen: true,
         ruleId: item.applied_rule_ids,
-        hideModalButton: true,
+        itemNotEligibleForReturn: true,
       });
     } else {
       // Set checked status.
@@ -241,7 +238,7 @@ class ReturnItemsListing extends React.Component {
       btnDisabled,
       open,
       promotionModalOpen,
-      hideModalButton,
+      itemNotEligibleForReturn,
     } = this.state;
     const { products, itemsSelected } = this.props;
     // If no item is selected, button remains disabled.
@@ -283,7 +280,7 @@ class ReturnItemsListing extends React.Component {
             closePromotionsWarningModal={this.closePromotionsWarningModal}
             handlePromotionDeselect={this.handlePromotionDeselect}
             handlePromotionContinue={this.handlePromotionContinue}
-            hideModalButton={hideModalButton}
+            itemNotEligibleForReturn={itemNotEligibleForReturn}
           />
         </Popup>
       </div>
