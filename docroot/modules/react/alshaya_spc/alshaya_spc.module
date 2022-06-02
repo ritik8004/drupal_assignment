@@ -327,6 +327,8 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // Add product settings.
   $product_config = \Drupal::config('alshaya_acm_product.settings');
   $page['#attached']['drupalSettings']['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
+  // Global error message.
+  $page['#attached']['drupalSettings']['globalErrorMessage'] = _alshaya_spc_global_error_message();
 }
 
 /**
