@@ -53,7 +53,7 @@ class ProcessedItem extends React.Component {
 
   render() {
     const { popup, cancelBtnState, showPrintLabelBtn } = this.state;
-    const { returnData } = this.props;
+    const { returnData, handleErrorMessage } = this.props;
     const returnStatus = returnData.returnInfo.extension_attributes.customer_status;
     const returnStatusClass = Drupal.cleanCssIdentifier(returnStatus);
     return (
@@ -95,6 +95,7 @@ class ProcessedItem extends React.Component {
           <CancelReturnPopUp
             returnInfo={returnData.returnInfo}
             closeCancelReturnModal={this.closeCancelReturnModal}
+            handleErrorMessage={handleErrorMessage}
           />
         </ConditionalView>
         <ConditionalView condition={hasValue(returnData.items)}>

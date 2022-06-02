@@ -47,7 +47,7 @@ export default class AddToBagConfigurable extends React.Component {
         if (response === null) {
           // Trigger a minicart notification with error.
           triggerCartTextNotification(
-            drupalSettings.add_to_bag.global_error_message,
+            drupalSettings.globalErrorMessage,
             'error',
           );
           return;
