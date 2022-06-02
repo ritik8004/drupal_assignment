@@ -482,7 +482,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'sku-clean':
-      value = window.commerceBackend.cleanCssIdentifier(input.sku);
+      value = Drupal.cleanCssIdentifier(input.sku);
       break;
 
     case 'sku-type':
@@ -762,7 +762,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'price_block_identifier':
-      const cleanSku = window.commerceBackend.cleanCssIdentifier(input.sku);
+      const cleanSku = Drupal.cleanCssIdentifier(input.sku);
       value = `price-block-${cleanSku}`;
       break;
 

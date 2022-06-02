@@ -244,4 +244,81 @@ class EgiftCardHelper {
     return $egift_landing_page;
   }
 
+  /**
+   * Update order details with egift related details.
+   **/
+  public function prepareOrderDetailsData(&$order, &$orderDetails) {
+    // Do not proceed if Egift card is not enabled.
+    if (!$this->isEgiftCardEnabled()) {
+      return;
+    }
+    // Set order name if first item is virtual product.
+    $item = reset($order['items']);
+    if ($item['is_virtual']) {
+      $orderDetails['#order']['name'] = $item['sku'] == 'giftcard_topup'
+        ? t('eGift Card Top up', [], ['context' => 'egift'])
+        : t('eGift Card', [], ['context' => 'egift']);
+    }
+
+    // Update Payment method name for hps payment.
+    if ($orderDetails["#order_details"]["payment_method"] === 'hps_payment') {
+      $orderDetails["#order_details"]["payment_method"] = t('eGift Card', [], ['context' => 'egift']);
+    }
+
+    // For multiple payment and if some amount is paid via egift then add eGift Card payment.
+    if ($orderDetails["#order_details"]["payment_method_code"] !== 'hps_payment' && isset($order['extension']['hps_redeemed_amount']) && $order['extension']['hps_redeemed_amount'] > 0) {
+      $orderDetails["#order_details"]["payment_method"] .= ', ' . t('eGift Card', [], ['context' => 'egift']);
+      $egift_data = [
+        'card_type' => t('eGift Card', [], ['context' => 'egift']),
+        'card_number' => substr($order['extension']['hps_redemption_card_number'], -4),
+        'payment_type' => 'egift',
+        'weight' => -2,
+      ];
+      $orderDetails['#order_details']['paymentDetails']['egift'] = $egift_data;
+    }
+    // Update virtual product details.
+    foreach ($orderDetails['#products'] as $key => &$product) {
+      $style = $product['name'];
+
+      // Show eGift card image and options from order details.
+      if ($product['is_virtual']) {
+        $product['name'] = $product['sku'] == 'giftcard_topup'
+          ? t('eGift Card Top up', [], ['context' => 'egift'])
+          : t('eGift Card', [], ['context' => 'egift']);
+
+        // Get virtual product image.
+        $product['image'] = [
+          '#theme' => 'image',
+          '#uri' => $product['extension_attributes']['product_media'][0]['file'],
+          '#alt' => $product['name'],
+        ];
+
+        // Get product options and add them to attributes.
+        $product_options = json_decode($product['extension_attributes']['product_options'][0], TRUE);
+        $product['attributes'][0] = [
+          'label' => t('Style', [], ['context' => 'egift']),
+          'value' => $style,
+        ];
+        if (!empty($product_options['hps_giftcard_recipient_email'])) {
+          $product['attributes'][1] = [
+            'label' => t('Send to', [], ['context' => 'egift']),
+            'value' => $product_options['hps_giftcard_recipient_email'],
+          ];
+        }
+        if (!empty($product_options['hps_giftcard_message'])) {
+          $product['attributes'][2] = [
+            'label' => t('Message', [], ['context' => 'egift']),
+            'value' => $product_options['hps_giftcard_message'],
+          ];
+        }
+        if (!empty($product_options['hps_card_number'])) {
+          $product['attributes'][3] = [
+            'label' => t('Card No', [], ['context' => 'egift']),
+            'value' => $product_options['hps_card_number'],
+          ];
+        }
+      }
+    }
+  }
+
 }

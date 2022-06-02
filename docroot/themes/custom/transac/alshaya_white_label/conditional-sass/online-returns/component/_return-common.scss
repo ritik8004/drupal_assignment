@@ -1,0 +1,17 @@
+.light {
+  color: $order_detail_td_light_content;
+  line-height: 1.4;
+}
+
+.dark {
+  color: $order_detail_td_dark_content;
+  font-weight: 700;
+}
+
+.font-small {
+  font-size: 0.75rem;
+}
+
+.bold-text {
+  font-family: $alshaya-bold;
+}
