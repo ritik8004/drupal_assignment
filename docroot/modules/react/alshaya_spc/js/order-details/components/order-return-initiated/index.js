@@ -1,6 +1,6 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
+import { isOnlineReturnsEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
 import ReturnInitiated from '../../../../../alshaya_online_returns/js/order-details/return-initiated';
 
 const OrderReturnInitiated = (props) => {

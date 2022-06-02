@@ -8,14 +8,15 @@ import OrderCancelledItems from '../order-cancelled-items';
 import OrderReturnEligibility from '../order-return-eligibility';
 import OrderReturnInitiated from '../order-return-initiated';
 import ReturnedItemsListing from '../../../../../alshaya_online_returns/js/order-details/returned-items-listing';
-import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
+import {
+  getProcessedReturnsData,
+  isOnlineReturnsEnabled,
+} from '../../../../../js/utilities/onlineReturnsHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
-import { getReturnsByOrderId } from '../../../../../alshaya_online_returns/js/utilities/return_api_helper';
-import { getTotalRefundAmount } from '../../../../../alshaya_online_returns/js/utilities/order_details_util';
 import PriceElement from '../../../../../js/utilities/components/price/price-element';
 
 class OrderDetails extends React.Component {
@@ -31,45 +32,24 @@ class OrderDetails extends React.Component {
 
   componentDidMount() {
     showFullScreenLoader();
+
+    // If Online Returns is enabled we need to process order data
+    // based on returns.
     if (isOnlineReturnsEnabled()) {
       this.setState({ loading: true });
-      const { orderEntityId } = drupalSettings.onlineReturns;
-      getReturnsByOrderId(orderEntityId).then((returnResponse) => {
-        if (hasValue(returnResponse) && hasValue(returnResponse.data)
-          && hasValue(returnResponse.data.items)) {
-          const allReturns = [];
-          // Looping through each return items.
-          // If return item id matches with order api responses, we
-          // merge both the api responses and prepare complete product data.
-          returnResponse.data.items.forEach((returnItem) => {
-            const itemsData = [];
-            returnItem.items.forEach((item) => {
-              const { products } = drupalSettings.onlineReturns;
-              if (hasValue(products)) {
-                const productDetails = products.find((e) => e.item_id === item.order_item_id);
-                if (hasValue(productDetails)) {
-                  const mergedItem = Object.assign(productDetails, { returnData: item });
-                  itemsData.push(mergedItem);
-                }
-              }
-            });
-            // Here, returnInfo consists of return api related information
-            // and items has all info related to products including return details
-            // like how many quantities of item were returned.
-            const returnData = {
-              returnInfo: returnItem,
-              items: itemsData,
-            };
-            allReturns.push(returnData);
-          });
-          this.setState({
-            returns: allReturns,
-            totalRefundAmount: getTotalRefundAmount(returnResponse.data.items),
-          });
-        }
-        this.setState({ loading: false });
-      });
+      this.processOrderData();
     }
+  }
+
+  processOrderData = async () => {
+    const { orderEntityId, products } = drupalSettings.onlineReturns;
+
+    const returnsData = await getProcessedReturnsData(orderEntityId, products);
+
+    this.setState({
+      loading: false,
+      ...returnsData,
+    });
   }
 
   render() {

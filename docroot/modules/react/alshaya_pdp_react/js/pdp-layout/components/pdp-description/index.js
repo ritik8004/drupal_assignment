@@ -5,7 +5,7 @@ import PdpSectionText from '../utilities/pdp-section-text';
 import DescriptionContent from '../pdp-desc-popup-content';
 import ProductDetailSVG from '../../../svg-component/product-detail-svg';
 import OnlineReturnsPDP from '../../../../../alshaya_online_returns/js/pdp/components/online-returns-pdp';
-import isOnlineReturnsEnabled from '../../../../../js/utilities/onlineReturnsHelper';
+import { isOnlineReturnsEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 const PpdDescription = (props) => {

@@ -1,8 +1,64 @@
 import { hasValue } from './conditionsUtility';
+import {
+  getReturnsByOrderId,
+} from '../../alshaya_online_returns/js/utilities/return_api_helper';
+import {
+  getTotalRefundAmount,
+} from '../../alshaya_online_returns/js/utilities/order_details_util';
 
 /**
  * Helper function to check if Online Returns is enabled.
  */
-const isOnlineReturnsEnabled = () => hasValue(drupalSettings.onlineReturns);
+export const isOnlineReturnsEnabled = () => hasValue(drupalSettings.onlineReturns);
 
-export default isOnlineReturnsEnabled;
+/**
+ * Helper function to get processed returns data for Order.
+ *
+ * @param orderEntityId
+ * @param products
+ * @returns {Promise<{}|{returns: *[], totalRefundAmount: StandardLonghandProperties.float}>}
+ */
+export const getProcessedReturnsData = async (orderEntityId, products) => {
+  if (!hasValue(products)) {
+    return {};
+  }
+
+  const returnResponse = await getReturnsByOrderId(orderEntityId);
+
+  // Return early if no returns available for this order.
+  if (!hasValue(returnResponse)
+    || !hasValue(returnResponse.data)
+    || !hasValue(returnResponse.data.items)) {
+    return {};
+  }
+
+  const allReturns = [];
+
+  // Looping through each return items.
+  returnResponse.data.items.forEach((returnItem) => {
+    const itemsData = [];
+    returnItem.items.forEach((item) => {
+      const productDetails = products.find((e) => e.item_id === item.order_item_id);
+      if (!hasValue(productDetails)) {
+        return;
+      }
+
+      // If return item id matches with order api responses, we
+      // merge both the api responses and prepare complete product data.
+      itemsData.push(Object.assign(productDetails, { returnData: item }));
+    });
+
+    // Here, returnInfo consists of return api related information
+    // and items has all info related to products including return details
+    // like how many quantities of item were returned.
+    allReturns.push({
+      returnInfo: returnItem,
+      items: itemsData,
+    });
+  });
+
+  return {
+    returns: allReturns,
+    totalRefundAmount: getTotalRefundAmount(returnResponse.data.items),
+  };
+};

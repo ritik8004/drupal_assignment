@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import OnlineReturnsEligibility from './my-account/online-returns-eligibility';
-import isOnlineReturnsEnabled from '../../js/utilities/onlineReturnsHelper';
+import { isOnlineReturnsEnabled } from '../../js/utilities/onlineReturnsHelper';
 
 const returnWindowPlaceholder = document.querySelector('#online-returns-eligibility-window');
 
