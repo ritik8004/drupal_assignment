@@ -79,6 +79,29 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'فوائد',
         'context' => 'hello_member',
       ],
+      'Your memership will be renewed on @expiry_date and points will be reset every year.' => [
+        'ar' => 'سيتم تجديد عضويتك بنسبة @expiry_date وستتم إعادة تعيين النقاط كل عام.',
+      ],
+      '@points pt' => [
+        'ar' => 'نقطة @points',
+        'context' => 'hello_member',
+      ],
+      'Points earned' => [
+        'ar' => 'النقاط التي أحرزتها',
+        'context' => 'hello_member',
+      ],
+      'Purchase' => [
+        'ar' => 'عملية الشراء',
+        'context' => 'hello_member',
+      ],
+      'Submit Rating and Review' => [
+        'ar' => 'إرسال التقييم والمراجعة',
+        'context' => 'hello_member',
+      ],
+      'Complete your profile' => [
+        'ar' => 'أكمل ملفك الشخصي',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

@@ -21,12 +21,6 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
     return;
   }
 
-  $current_route = \Drupal::routeMatch();
-  $current_route_name = $current_route->getRouteName();
-  if ($current_route_name === 'entity.user.canonical') {
-    $page['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_my_accounts';
-    $page['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_my_membership_info';
-  }
   $page['#attached']['drupalSettings']['hello_member'] = $settings;
 }
 
