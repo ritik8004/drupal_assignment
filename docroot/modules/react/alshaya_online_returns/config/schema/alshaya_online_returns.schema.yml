@@ -17,12 +17,12 @@ alshaya_online_returns.return_confirmation:
       type: sequence
       label: 'Whats next row'
       sequence:
-        - type: return_whats_next_row    
+        - type: return_whats_next_row
 
 return_whats_next_row:
   type: mapping
   label: 'Whats next row'
-  mapping: 
+  mapping:
     title:
       type: label
       label: 'Title'
