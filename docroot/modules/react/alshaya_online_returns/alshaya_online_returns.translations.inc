@@ -262,6 +262,10 @@ function _alshaya_online_returns_translations() {
         'ar' => 'المنتج أو المنتجات المختارة لا يمكن استبدالها ﻷنها ضمن فترة التنزيلات. يرجى اختيار منتج آخر للمتابعة.',
         'context' => 'online_returns',
       ],
+      'Total Refund Amount' => [
+        'ar' => 'إجمالي المبلغ المسترد',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 
