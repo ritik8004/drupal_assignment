@@ -18,6 +18,9 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import PriceElement from '../../../../../js/utilities/components/price/price-element';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import ErrorMessage from '../../../../../js/utilities/components/error-message';
+import smoothScrollTo from '../../../../../js/utilities/components/smooth-scroll';
 
 class OrderDetails extends React.Component {
   constructor(props) {
@@ -27,6 +30,7 @@ class OrderDetails extends React.Component {
       loading: false,
       order: drupalSettings.order,
       totalRefundAmount: 0,
+      errorMessage: '',
     };
   }
 
@@ -52,12 +56,23 @@ class OrderDetails extends React.Component {
     });
   }
 
+  handleErrorMessage = (errorMessage) => {
+    if (hasValue(errorMessage)) {
+      this.setState({ errorMessage });
+      // Scroll user to the error message.
+      if (document.getElementsByClassName('error-message').length > 0) {
+        smoothScrollTo('.error-message');
+      }
+    }
+  };
+
   render() {
     const {
       loading,
       returns,
       order,
       totalRefundAmount,
+      errorMessage,
     } = this.state;
 
     if (loading) {
@@ -68,11 +83,18 @@ class OrderDetails extends React.Component {
     return (
       <>
         <div className={`user__order--detail ${order.auraEnabled ? 'has-aura-points' : ''}`}>
+          <ConditionalView condition={hasValue(errorMessage)}>
+            <ErrorMessage message={errorMessage} />
+          </ConditionalView>
           <OrderSummary order={order} />
           <OrderReturnEligibility order={order} returns={returns} />
           <OnlineBooking order={order} />
           <OrderDeliveryDetails order={order} />
-          <OrderReturnInitiated order={order} returns={returns} />
+          <OrderReturnInitiated
+            order={order}
+            returns={returns}
+            handleErrorMessage={this.handleErrorMessage}
+          />
           <OrderItems products={order.products} />
           <OrderCancelledItems order={order} />
 

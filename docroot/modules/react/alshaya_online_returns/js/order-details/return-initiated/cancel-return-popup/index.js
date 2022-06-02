@@ -1,6 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import logger from '../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { cancelReturnRequest } from '../../../utilities/return_api_helper';
 
@@ -26,7 +27,13 @@ export default class CancelReturnPopUp extends React.Component {
     removeFullScreenLoader();
 
     if (hasValue(cancelReturn.error)) {
-      // @todo: Handle error message for cancellation.
+      const { handleErrorMessage } = this.props;
+      logger.error('Error while trying to cancel the return request. Data: @data.', {
+        '@data': JSON.stringify(cancelReturn),
+      });
+      handleErrorMessage('Sorry, something went wrong. Please try again later.');
+      this.closeModal();
+
       return;
     }
 
