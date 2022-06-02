@@ -1,0 +1,11 @@
+.qr-code-modal-overlay {
+  .qr-code-block {
+    .qr-code-title {
+      border-bottom-color: $content_pagetitle_border;
+    }
+
+    .close-modal {
+      top: rem(2);
+    }
+  }
+}

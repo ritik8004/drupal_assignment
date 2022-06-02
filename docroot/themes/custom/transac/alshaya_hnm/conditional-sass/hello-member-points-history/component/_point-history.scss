@@ -1,0 +1,21 @@
+.my-points-history-wrapper {
+  .history-points-row {
+    & > div {
+      .history-dark-title {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}
+
+.member-expiry-block {
+  .expiry-point {
+    font-family: $hnm-demibold;
+  }
+}
+
+.expiry-accordion {
+  .title {
+    font-family: $hnm-demibold;
+  }
+}
