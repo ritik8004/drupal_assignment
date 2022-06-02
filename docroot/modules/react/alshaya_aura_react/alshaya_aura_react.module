@@ -194,9 +194,6 @@ function alshaya_aura_react_block_view_alter(&$build, $block) {
   if ($block->getPluginId() === 'alshaya_my_account_links') {
     $build['#pre_render'][] = '_alshaya_aura_react_my_account_block_pre_render';
   }
-  if ($block->getPluginId() === 'system_menu_block:account') {
-    $build['#pre_render'][] = '_alshaya_aura_react_system_menu_block_account_pre_render';
-  }
 }
 
 /**
@@ -215,6 +212,16 @@ function _alshaya_aura_react_my_account_block_pre_render(array $build) {
   ];
 
   $build['#attributes']['class'][] = 'aura-enabled';
+  /* Class is added on my aura to manage arrow icon. */
+  if (isset($build['content']['my_account_links'])
+    && isset($build['content']['my_account_links']['#items'])
+    && isset($build['content']['my_account_links']['#items']['alshaya_loyalty_club'])) {
+    $build['content']['my_account_links']['#items']['alshaya_loyalty_club']['#wrapper_attributes'] = [
+      'class' => [
+        'my-aura-link',
+      ],
+    ];
+  }
 
   return $build;
 }
@@ -244,8 +251,16 @@ function alshaya_aura_react_block_view_page_title_block_alter(&$build, $block) {
     return;
   }
 
+  // Add 'my-aura-page-title-block' to My aura page title block,
+  // To remove text transform property,
+  // So that "My Aura"/"About Aura" should not have any text transform.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'alshaya_aura_react.my_loyalty_club') {
+    $build['#attributes']['class'][] = 'my-aura-page-title-block';
+  }
+
   // Add edit account link beside page title block.
-  if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
+  if ($route_name === 'entity.user.canonical') {
     $build['#pre_render'][] = '_alshaya_aura_react_page_title_pre_render';
   }
 }

@@ -35,39 +35,43 @@ class AuraMyAccountNoLinkedCard extends React.Component {
     });
   };
 
-  openOTPModal = () => {
+  /**
+   * Toggles OTP/Join now Modal visibility based on passed value.
+   *
+   * @param toggle
+   *   True will show the OTP/Join now Modal.
+   *   And hide the Link card Modal.
+   */
+  toggleOTPModal = (toggle) => {
     this.setState({
-      isOTPModalOpen: true,
+      isOTPModalOpen: toggle,
+      isLinkCardModalOpen: !toggle,
     });
   };
 
-  closeOTPModal = () => {
+  /**
+   * Toggles Link card Modal visibility based on passed value.
+   *
+   * @param toggle
+   *   True will show the link card Modal.
+   *   And hide the New User Modal.
+   */
+  toggleLinkCardModal = (toggle) => {
     this.setState({
-      isOTPModalOpen: false,
+      isLinkCardModalOpen: toggle,
+      isNewUserModalOpen: !toggle,
     });
   };
 
-  openLinkCardModal = () => {
+  /**
+   * Toggles new user Modal visibility based on passed value.
+   *
+   * @param toggle
+   *   True will show the new user Modal.
+   */
+  toggleNewUserModal = (toggle) => {
     this.setState({
-      isLinkCardModalOpen: true,
-    });
-  };
-
-  closeLinkCardModal = () => {
-    this.setState({
-      isLinkCardModalOpen: false,
-    });
-  };
-
-  openNewUserModal = () => {
-    this.setState({
-      isNewUserModalOpen: true,
-    });
-  };
-
-  closeNewUserModal = () => {
-    this.setState({
-      isNewUserModalOpen: false,
+      isNewUserModalOpen: toggle,
     });
   };
 
@@ -100,7 +104,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                 { Drupal.t('Already an Aura member?') }
                 <div
                   className="btn"
-                  onClick={() => this.openLinkCardModal()}
+                  onClick={() => this.toggleLinkCardModal(true)}
                 >
                   { Drupal.t('Link your account') }
                 </div>
@@ -110,7 +114,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
               { Drupal.t('Ready to be rewarded?') }
               <div
                 className="btn"
-                onClick={() => this.openOTPModal()}
+                onClick={() => this.toggleOTPModal(true)}
               >
                 { Drupal.t('Join now') }
               </div>
@@ -121,8 +125,10 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                 closeOnDocumentClick={false}
               >
                 <AuraFormSignUpOTPModal
-                  closeOTPModal={() => this.closeOTPModal()}
-                  openNewUserModal={() => this.openNewUserModal()}
+                  closeOTPModal={() => this.setState({
+                    isOTPModalOpen: false,
+                  })}
+                  openNewUserModal={() => this.toggleNewUserModal(true)}
                   setChosenCountryCode={this.setChosenCountryCode}
                   setChosenUserMobile={this.setChosenUserMobile}
                   chosenCountryCode={chosenCountryCode}
@@ -137,7 +143,8 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                 <AuraFormNewAuraUserModal
                   chosenCountryCode={chosenCountryCode}
                   chosenUserMobile={chosenUserMobile}
-                  closeNewUserModal={() => this.closeNewUserModal()}
+                  closeNewUserModal={() => this.toggleNewUserModal(false)}
+                  openLinkCardModal={() => this.toggleLinkCardModal(true)}
                 />
               </Popup>
               <Popup
@@ -147,9 +154,12 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                 closeOnDocumentClick={false}
               >
                 <AuraFormLinkCardOTPModal
-                  closeLinkCardOTPModal={() => this.closeLinkCardModal()}
+                  closeLinkCardOTPModal={() => this.setState({
+                    isLinkCardModalOpen: false,
+                  })}
                   setChosenCountryCode={this.setChosenCountryCode}
                   chosenCountryCode={chosenCountryCode}
+                  openOTPModal={() => this.toggleOTPModal(true)}
                 />
               </Popup>
             </div>

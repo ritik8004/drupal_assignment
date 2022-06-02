@@ -23,6 +23,12 @@
     margin-bottom: 1.5rem;
   }
 
+  .spc-aura-mobile-number {
+    & + .spc-type-textfield {
+      margin-top: rem(32);
+    }
+  }
+
   input:disabled {
     background: none;
     opacity: 0.5;
@@ -48,6 +54,20 @@
       border: none;
       border-bottom: 1px solid $primary_input_border;
       padding: 0;
+
+      &.spc-aura-link-card-input-card {
+        height: rem(36);
+        border: 1px solid $aura-spc-textbox-border;
+        padding: 0 rem(9);
+
+        & ~ label {
+          padding: rem(8);
+        }
+
+        &:focus ~ label {
+          padding: 0;
+        }
+      }
     }
 
     label {
@@ -57,6 +77,8 @@
     input:focus ~ label,
     input.focus ~ label {
       @include aura-placeholder-active;
+
+      padding: 0 !important;
     }
   }
 }

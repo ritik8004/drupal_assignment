@@ -74,8 +74,8 @@ function _alshaya_aura_react_translations() {
       'Resend code' => [
         'ar' => 'إعادة إرسال الرمز',
       ],
-      'One time PIN' => [
-        'ar' => 'رمز الاستخدام لمرة واحدة',
+      'OTP' => [
+        'ar' => 'OTP',
       ],
       'Country Code' => [
         'ar' => 'رمز الدولة',
@@ -124,12 +124,6 @@ function _alshaya_aura_react_translations() {
       ],
       'Personalised for you.' => [
         'ar' => 'مخصص لك.',
-      ],
-      'Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.' => [
-        'ar' => 'أورا هو برنامج المكافآت الجديد يمنحك النقاط عند تسوقك في الأماكن المفضلة ويعطيك فرصة حصرية لتجارب لا مثيل لها.',
-      ],
-      'Learn more' => [
-        'ar' => 'تعرف على المزيد',
       ],
       'Your Aura card number' => [
         'ar' => 'رقم بطاقة أورا الخاصة بك',
@@ -401,6 +395,187 @@ function _alshaya_aura_react_translations() {
     'v3' => [
       'You can only redeem full pending balance or use other payment method.' => [
         'ar' => 'يمكنك استرداد الرصيد المعلق بالكامل أو استخدام وسيلة دفع أخرى.',
+      ],
+    ],
+    'v4' => [
+      // To do- translation should be checked once we get it from alshaya.
+      'Redeem' => [
+        'ar' => 'يسترد',
+        'context' => 'aura',
+      ],
+      // To do- translation should be checked once we get it from alshaya.
+      'Aura points with this purchase.' => [
+        'ar' => 'نقاط Aura مع هذا الشراء.',
+        'context' => 'aura',
+      ],
+      'with this purchase.' => [
+        'ar' => 'مع عملية الشراء هذه.',
+        'context' => 'aura',
+      ],
+      'or' => [
+        'ar' => 'أو',
+        'context' => 'aura',
+      ],
+      'Join Aura' => [
+        'ar' => 'انضم إلى أورا',
+        'context' => 'aura',
+      ],
+      'to earn <b>!pts</b> points on this purchase.' => [
+        'ar' => 'للفوز <b>!pts</b> بنقاط عند إتمام عملية الشراء.',
+        'context' => 'aura',
+      ],
+      'To redeem points download Aura app.' => [
+        'ar' => 'لاستبدال النقاط قم بتحميل أورا تطبيق.',
+        'context' => 'aura',
+      ],
+      'App Store' => [
+        'ar' => 'آب ستور',
+        'context' => 'aura',
+      ],
+      'Play Store.' => [
+        'ar' => 'بلاي ستور',
+        'context' => 'aura',
+      ],
+      // We are using !pts as it does not encode the html into string while
+      // using this in Drupal t() function.
+      'Earn <span><b>!pts</b> points with Aura</span> on this purchase. To redeem points, complete your registration on the Aura MENA app.' => [
+        'ar' => "يكسب <span><b>!pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
+        'context' => 'aura',
+      ],
+      'Earn <span><b>!pts</b> points with Aura</span> on this purchase.' => [
+        'ar' => 'اربح <span> <b>!pts</b> من النقاط مع Aura </span> على عملية الشراء هذه.',
+      ],
+      'Congratulations' => [
+        'ar' => 'تهانينا',
+        'context' => 'aura',
+      ],
+      'You can now start building your Aura. Earn points when you shop online or in-store.' => [
+        'ar' => 'يمكنك الآن البدء في بناء أورا الخاص بك. اكسب نقاط أورا عند التسوق أونلاين أو في المحلات.',
+        'context' => 'aura',
+      ],
+      'To spend your points, complete your registration on the Aura MENA app, available on the App store and Google Play.' => [
+        'ar' => 'لاستخدام النقاط في الشراء، استكمل عملية التسجيل في تطبيق أورا MENA، متوفر على آب ستور وجوجل بلاي.',
+        'context' => 'aura',
+      ],
+      "By pressing submit, you agree to have read and accepted our <a href='!tncLink' target='_blank'>Terms & Conditions</a>" => [
+        'ar' => "الضغط على زر إرسال يعني قراءتك وموافقتك على<a href='!tncLink' target='_blank'>شروطنا وأحكامنا</a>",
+        'context' => 'aura',
+      ],
+      'Already a member?' => [
+        'ar' => 'هل أنت عضو بالفعل؟',
+        'context' => 'aura',
+      ],
+      'Earn @pts points with @aura_icon on this purchase.' => [
+        'ar' => 'اكسب @pts نقاط مع @aura_icon عند إتمام عملية الشراء.',
+        'context' => 'aura',
+      ],
+      'You will earn @pts Aura points with this purchase.' => [
+        'ar' => 'سوف تفوز @pts بنقاط أورا عند إتمام عملية الشراء.',
+        'context' => 'aura',
+      ],
+      'You will earn @pts @aura_icon points.' => [
+        'ar' => 'سوف تكسب aura_icon @pts@ النقاط.',
+        'context' => 'aura',
+      ],
+      'Earn and spend points when you shop at your favourite brands and unlock exclusive benefits. <a href="@know_more_link" target="_blank" rel="noopener noreferrer">Learn more</a>' => [
+        'ar' => 'اكسب النقاط وأنفقها عند التسوق من ماركاتك المفضلة واحصل على مزايا حصرية. <a href="@know_more_link" target="_blank" rel="noopener noreferrer"> أعرف أكثر</a>',
+        'context' => 'aura',
+      ],
+      '@aura_icon Redeem your points' => [
+        'ar' => '@aura_icon تفعيل النقاط',
+        'context' => 'aura',
+      ],
+      'You have @pts points,' => [
+        'ar' => 'متوفر لديك @pts نقاط,',
+        'context' => 'aura',
+      ],
+      '@pts points will expire by @date.' => [
+        'ar' => '@pts تنتهي صلاحية النقاط بتاريخ @date.',
+        'context' => 'aura',
+      ],
+      'Earn <span><b>@pts points with Aura</b></span> on this purchase' => [
+        'ar' => 'اكسب <span><b>@ptsنقاط مع أورا</b></span> عند إتمام عملية الشراء ',
+        'context' => 'aura',
+      ],
+      'Earn with Aura' => [
+        'ar' => 'اكسب مع أورا',
+        'context' => 'aura',
+      ],
+      'Link your Aura with' => [
+        'ar' => 'اربط حساب أورا مع',
+        'context' => 'aura',
+      ],
+      'Enter your details to earn points on this order.' => [
+        'ar' => 'أدخل بياناتك للفوز بنقاط أورا على هذه الطلبية',
+        'context' => 'aura',
+      ],
+      'Link your card' => [
+        'ar' => 'اربط بطاقتك',
+        'context' => 'aura',
+      ],
+      'Send OTP' => [
+        'ar' => 'أرسل رمز التحقق',
+        'context' => 'aura',
+      ],
+      'Apply' => [
+        'ar' => 'قدّم',
+        'context' => 'aura',
+      ],
+      'Link Now' => [
+        'ar' => 'اربط الآن',
+        'context' => 'aura',
+      ],
+      'Didn’t receive the OTP?' => [
+        'ar' => 'لم تستلم رمز التحقق؟',
+        'context' => 'aura',
+      ],
+      'Aura account number' => [
+        'ar' => 'رقم حساب أورا',
+        'context' => 'aura',
+      ],
+      'A One Time Password (OTP) has been sent to your mobile number @mobile' => [
+        'ar' => 'تم إرسال رمز التحقق (OTP) إلى رقم هاتفك @mobile',
+        'context' => 'aura',
+      ],
+      'One Time Pin' => [
+        'ar' => 'كلمة مرور لمرة واحدة',
+        'context' => 'aura',
+      ],
+      'Learn more' => [
+        'ar' => 'أعرف أكثر',
+        'context' => 'aura',
+      ],
+      'Hi @firstName,<br>An Aura account is associated with your email address. Link your Aura with just one click.' => [
+        'ar' => 'مرحباً @firstName,<br> حساب أورا مرتبط ببريدك الإلكتروني. اربط حسابك بضغطة واحدة.',
+        'context' => 'aura',
+      ],
+      'Do you want to link now?' => [
+        'ar' => 'هل ترغب في الربط الآن؟',
+        'context' => 'aura',
+      ],
+      'Aura Card Number' => [
+        'ar' => 'رقم بطاقة أورا',
+        'context' => 'aura',
+      ],
+      'Link your Aura' => [
+        'ar' => 'اربط بطاقتك',
+        'context' => 'aura',
+      ],
+      'Resend' => [
+        'ar' => 'أعد الإرسال',
+        'context' => 'aura',
+      ],
+      '<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase' => [
+        'ar' => '<b>@points قيمة</b><span> النقاط </span><b>@currencyCode @money</b> تم استبدالها بنجاح لإتمام عملية الشراء',
+        'context' => 'aura',
+      ],
+      'Check your points value:' => [
+        'ar' => 'تحقق من قيمة نقاطك:',
+        'context' => 'aura',
+      ],
+      'A card number is required to link your card. Please enter your details to proceed.' => [
+        'ar' => 'رقم البطاقة يحتاج الربط مع بطاقتك. يرجى ادخال بياناتك للاستمرار.',
+        'context' => 'aura',
       ],
     ],
   ];
