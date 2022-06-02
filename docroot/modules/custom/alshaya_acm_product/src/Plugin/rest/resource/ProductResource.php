@@ -505,7 +505,7 @@ class ProductResource extends ResourceBase {
                   continue;
                 }
 
-                $size_values[$value_id] = $this->getAlternativeValues($alternates, $child_sku);
+                $size_values[$value][$value_id] = $this->getAlternativeValues($alternates, $child_sku);
               }
 
             }
