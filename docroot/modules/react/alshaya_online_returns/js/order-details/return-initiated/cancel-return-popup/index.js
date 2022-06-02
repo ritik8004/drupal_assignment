@@ -29,7 +29,7 @@ export default class CancelReturnPopUp extends React.Component {
     if (hasValue(cancelReturn.error)) {
       const { handleErrorMessage } = this.props;
       logger.error('Error while trying to cancel the return request. Data: @data.', {
-        '@data': JSON.stringify(cancelReturn),
+        '@data': cancelReturn,
       });
       handleErrorMessage(drupalSettings.onlineReturns.global_error_message);
       this.closeModal();
