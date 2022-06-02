@@ -17,7 +17,7 @@ const WhatsNextSection = () => {
       <div className="whats-next-wrapper">
         {confirmationStrings.map((str) => (
           <div key={str.icon} className="item-list-wrapper">
-            <ConditionalView condition={str.hide_this_row}>
+            <ConditionalView condition={!str.hide_this_row}>
               <div className={`${str.icon}`} />
               <div className="whats-next-content">
                 <div className="title">{str.title}</div>
