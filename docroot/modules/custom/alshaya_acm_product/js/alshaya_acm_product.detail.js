@@ -286,6 +286,9 @@
           if (productData.type === 'simple') {
             data.eligibleForReturn = productData.eligibleForReturn;
           } else {
+            // For configurable products if variant is not selected yet, we
+            // do not want to display anything so by default we set the value
+            // to TRUE. Example scenario: Sofas and Sectionals.
             data.eligibleForReturn = data.variantSelected
               ? productData.variants[data.variantSelected].eligibleForReturn
               : true;
