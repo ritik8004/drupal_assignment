@@ -45,13 +45,23 @@ class OnlineReturnsHelper {
   }
 
   /**
-   * Helper to check if aura is enabled.
+   * Helper to check if Online Returns is enabled.
    *
    * @return bool
    *   TRUE/FALSE
    */
   public function isOnlineReturnsEnabled() {
-    return $this->configFactory->get('alshaya_online_returns.settings')->get('status');
+    return $this->getConfig()->get('status');
+  }
+
+  /**
+   * Helper to get Cache Tags for Online Returns Config.
+   *
+   * @return string[]
+   *   A set of cache tags.
+   */
+  public function getCacheTags() {
+    return $this->getConfig()->getCacheTags();
   }
 
   /**
@@ -176,6 +186,22 @@ class OnlineReturnsHelper {
       }
     }
     return $products;
+  }
+
+  /**
+   * Wrapper function to get Online Returns Config.
+   *
+   * @return \Drupal\Core\Config\ImmutableConfig
+   *   Online Returns Config.
+   */
+  protected function getConfig() {
+    static $config;
+
+    if (is_null($config)) {
+      $config = $this->configFactory->get('alshaya_online_returns.settings');
+    }
+
+    return $config;
   }
 
 }

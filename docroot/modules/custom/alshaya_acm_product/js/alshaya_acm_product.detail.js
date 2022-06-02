@@ -282,8 +282,7 @@
         };
 
         // If Online Returns feature is enabled, add eligibleForReturn to event.
-        if (Drupal.hasValue(drupalSettings.onlineReturns)
-          && Drupal.hasValue(drupalSettings.onlineReturns.enabled)) {
+        if (Drupal.hasValue(drupalSettings.onlineReturns)) {
           if (productData.type === 'simple') {
             data.eligibleForReturn = productData.eligibleForReturn;
           } else {
