@@ -13,6 +13,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\google_tag\Entity\Container;
+use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
 
 /**
  * Alshaya Acm Config Check.
@@ -83,6 +84,13 @@ class AlshayaAcmConfigCheck {
   private $moduleExtensionList;
 
   /**
+   * Algolia index helper service.
+   *
+   * @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper
+   */
+  private $algoliaIndexHelper;
+
+  /**
    * AlshayaAcmConfigCheck constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -103,6 +111,8 @@ class AlshayaAcmConfigCheck {
    *   The config manager service.
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
    *   Module Extension List Manager.
+   * @param \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index_helper
+   *   Algolia index helper service.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleInstallerInterface $module_installer,
@@ -112,7 +122,8 @@ class AlshayaAcmConfigCheck {
                               StateInterface $state,
                               AlshayaCountryManager $alshaya_country_manager,
                               AlshayaConfigManager $config_manager,
-                              ModuleExtensionList $module_extension_list) {
+                              ModuleExtensionList $module_extension_list,
+                              AlshayaAlgoliaIndexHelper $algolia_index_helper) {
     $this->configFactory = $config_factory;
     $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
@@ -122,6 +133,7 @@ class AlshayaAcmConfigCheck {
     $this->alshayaCountryManager = $alshaya_country_manager;
     $this->configManager = $config_manager;
     $this->moduleExtensionList = $module_extension_list;
+    $this->algoliaIndexHelper = $algolia_index_helper;
   }
 
   /**
@@ -264,7 +276,40 @@ class AlshayaAcmConfigCheck {
     // Configure GTM Container ID.
     $this->configureGtmContainerId(Settings::get('google_tag.container.primary'));
 
+    // Get index name currently set in config.
+    $index_name = $this->configFactory->getEditable('search_api.index.alshaya_algolia_index')->get('options.algolia_index_name');
+    $env_number = substr($index_name, 0, 2);
+    if (is_numeric($env_number) && $env_number === '01') {
+      // Set Drupal index as index prefix based on current environment.
+      $this->algoliaIndexHelper->setAlgoliaIndexPrefix('drupal');
+    }
+    else {
+      // Set MDC index as index prefix based on current environment.
+      $this->algoliaIndexHelper->setAlgoliaIndexPrefix('mdc');
+    }
+    // Update indices for current environment.
+    $this->setAlshayaIndexNames();
+
     return TRUE;
+  }
+
+  /**
+   * Set alshaya search indices based on the current environment.
+   */
+  private function setAlshayaIndexNames() {
+    $index_prefix = $this->algoliaIndexHelper->getAlgoliaIndexPrefix();
+
+    $configs = [
+      'search_api.index.alshaya_algolia_index' => $index_prefix,
+      'search_api.index.acquia_search_index' => $index_prefix,
+      'search_api.index.alshaya_algolia_product_list_index' => $index_prefix . '_product_list',
+    ];
+
+    foreach ($configs as $config => $value) {
+      $algolia_index_config = $this->configFactory->getEditable($config);
+      $algolia_index_config->set('options.algolia_index_name', $value);
+      $algolia_index_config->save();
+    }
   }
 
   /**

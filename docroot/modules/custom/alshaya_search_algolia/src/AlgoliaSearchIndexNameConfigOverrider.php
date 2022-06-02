@@ -84,6 +84,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_batch_deletion'] = TRUE;
     $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['object_id_field'] = 'field_skus';
 
+    // Get index prefix for current environment.
     $index_prefix = \Drupal::service('alshaya_search_algolia.index_helper')->getAlgoliaIndexPrefix();
 
     // Ensure we never connect to Index of another ENV.
@@ -95,6 +96,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     // This will need to be overridden in brand specific settings files on each
     // env using prod app for each brand.
     $algolia_settings = Settings::get('algolia_sandbox.settings');
+    $algolia_env = current(explode('_', $index_prefix));
     if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
       $overrides['search_api.server.algolia']['backend_config']['application_id'] = $algolia_settings['app_id'];
       $overrides['search_api.server.algolia']['backend_config']['api_key'] = $algolia_settings['write_api_key'];
