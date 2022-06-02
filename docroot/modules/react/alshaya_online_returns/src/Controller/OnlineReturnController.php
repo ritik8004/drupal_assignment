@@ -8,9 +8,7 @@ use Drupal\block\BlockViewBuilder;
 use Drupal\Core\Render\Renderer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\address\Repository\CountryRepository;
@@ -24,25 +22,11 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class OnlineReturnController extends ControllerBase {
 
   /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * Alshaya Online Returns Helper.
    *
    * @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper
    */
   protected $onlineReturnsHelper;
-
-  /**
-   * Entity Type Manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
 
   /**
    * Alshaya Online Returns API Helper.
@@ -82,12 +66,8 @@ class OnlineReturnController extends ControllerBase {
   /**
    * ReturnRequestController constructor.
    *
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
    * @param \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $online_returns_helper
    *   Alshaya online returns helper.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity Type Manager.
    * @param \Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper $online_returns_api_helper
    *   Alshaya online returns helper.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -99,17 +79,13 @@ class OnlineReturnController extends ControllerBase {
    * @param \Drupal\Core\Render\Renderer $renderer
    *   Renderer service object.
    */
-  public function __construct(ModuleHandlerInterface $module_handler,
-                              OnlineReturnsHelper $online_returns_helper,
-                              EntityTypeManagerInterface $entity_type_manager,
+  public function __construct(OnlineReturnsHelper $online_returns_helper,
                               OnlineReturnsApiHelper $online_returns_api_helper,
                               LanguageManagerInterface $language_manager,
                               CountryRepository $address_country_repository,
                               AlshayaApiWrapper $api_wrapper,
                               Renderer $renderer) {
-    $this->moduleHandler = $module_handler;
     $this->onlineReturnsHelper = $online_returns_helper;
-    $this->entityTypeManager = $entity_type_manager;
     $this->onlineReturnsApiHelper = $online_returns_api_helper;
     $this->languageManager = $language_manager;
     $this->addressCountryRepository = $address_country_repository;
@@ -122,9 +98,7 @@ class OnlineReturnController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('module_handler'),
       $container->get('alshaya_online_returns.online_returns_helper'),
-      $container->get('entity_type.manager'),
       $container->get('alshaya_online_returns.online_returns_api_helper'),
       $container->get('language_manager'),
       $container->get('address.country_repository'),
@@ -242,7 +216,7 @@ class OnlineReturnController extends ControllerBase {
    *   Build array.
    */
   public function getOrderReturnDetails(UserInterface $user, $order_id) {
-    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get all the orders of logged in user.
     $customer_id = (int) $user->get('acq_customer_id')->getString();
