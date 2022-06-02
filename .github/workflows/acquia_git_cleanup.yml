@@ -28,6 +28,10 @@ jobs:
       - name: Prepare environment variables
         run: |
           echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/scripts)" >> $GITHUB_ENV
+          echo "BLT_SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
+
+      - name: Setup environment
+        run: bash $BLT_SCRIPT_DIR/setup_env.sh
 
       - name: Tag cleanup
         run: yes | bash ${SCRIPT_DIR}/git_cleanup/remove-old-tags.sh
