@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Prepare environment variables
         run: |
           echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/scripts)" >> $GITHUB_ENV
