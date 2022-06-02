@@ -18,7 +18,6 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import PriceElement from '../../../../../js/utilities/components/price/price-element';
-import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import ErrorMessage from '../../../../../js/utilities/components/error-message';
 import smoothScrollTo from '../../../../../js/utilities/components/smooth-scroll';
 
@@ -59,9 +58,9 @@ class OrderDetails extends React.Component {
   handleErrorMessage = (errorMessage) => {
     if (hasValue(errorMessage)) {
       this.setState({ errorMessage });
-      // Scroll user to the error message.
-      if (document.getElementsByClassName('error-message').length > 0) {
-        smoothScrollTo('.error-message');
+      // Scroll user to the top parent wrapper.
+      if (document.getElementsByClassName('user__order--detail').length > 0) {
+        smoothScrollTo('.user__order--detail');
       }
     }
   };
@@ -83,9 +82,9 @@ class OrderDetails extends React.Component {
     return (
       <>
         <div className={`user__order--detail ${order.auraEnabled ? 'has-aura-points' : ''}`}>
-          <ConditionalView condition={hasValue(errorMessage)}>
+          { hasValue(errorMessage) && (
             <ErrorMessage message={errorMessage} />
-          </ConditionalView>
+          )}
           <OrderSummary order={order} />
           <OrderReturnEligibility order={order} returns={returns} />
           <OnlineBooking order={order} />
