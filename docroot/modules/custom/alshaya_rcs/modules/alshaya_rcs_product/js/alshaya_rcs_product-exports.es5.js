@@ -196,7 +196,7 @@ function getPdpSwatchImageUrl(product, childSku) {
  * @param {object} configurableOptions
  *   Configurable options of the product.
  *
- * @returns {object}
+ * @returns {Array}
  *   The configurable options minus the unavailable values.
  */
 function disableUnavailableOptions(sku, configurableOptions) {
@@ -526,8 +526,6 @@ exports.computePhFilters = function (input, filter) {
         data.quantity_dropdown = quantityValues;
       }
 
-      // This wrapper will be removed after processing.
-      const tempDivWrapper = jQuery('<div>');
       let configurableOptions = input.configurable_options;
 
       if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
@@ -544,73 +542,58 @@ exports.computePhFilters = function (input, filter) {
           : [];
 
         const availableOptions = disableUnavailableOptions(input.sku, configurableOptions);
+        let processedOptions = [];
 
         availableOptions.forEach((option) => {
-          // Get the field wrapper div.
-          const optionsListWrapper = jQuery('<div>')
-            .addClass(`js-form-item form-item js-form-type-select form-type-select js-form-item-configurables-${option.attribute_code} form-item-configurables-${option.attribute_code}`);
-          // The list containing the options.
-          const configurableOptionsList = jQuery('<select></select>');
           // Get the value to be used in HTML attributes.
           const formattedAttributeCode = option.attribute_code.replaceAll('_', '-');
-
-          configurableOptionsList.attr({
-            'data-configurable-code': option.attribute_code,
-            // @todo: Find out the correct label for color.
-            'data-default-title': option.label,
-            // @todo: Find out the correct label for color.
-            'data-selected-title': option.label,
-            'data-drupal-selector': `edit-configurables-${formattedAttributeCode}`,
-            id: `edit-configurables-${formattedAttributeCode}`,
-            class: 'form-select required valid',
-            name: `configurables[${option.attribute_code}]`,
-            'aria-require': true,
-            'aria-invalid': false,
-          });
-
           // Check if the attribute is a swatch attribute.
-          let optionIsSwatch = false;
-          if (drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code)) {
-            optionIsSwatch = true;
-            configurableOptionsList.addClass('form-item-configurable-swatch');
-            optionsListWrapper.addClass('configurable-swatch');
-          }
-          else {
-            configurableOptionsList.addClass('form-item-configurable-select');
-            optionsListWrapper.addClass('configurable-select');
-          }
-
-          // Add a disabled option which will be used as the label for the option.
-          let selectOption = jQuery('<option></option>');
-          let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
-          selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
-          configurableOptionsList.append(selectOption);
-
+          const isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
+          let dataDefaultTitle = option.label;
+          let dataTitle = null;
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
 
-          if (Drupal.hasValue(configurableColorDetails) && optionIsSwatch){
-            configurableOptionsList.attr({
-              'data-default-title': Drupal.t('Color'),
-              'title': Drupal.t('Color'),
-            });
+          if (Drupal.hasValue(configurableColorDetails) && isOptionSwatch){
+            dataDefaultTitle = Drupal.t('Color');
+            dataTitle = Drupal.t('Color');
           }
 
+          const selectOptions = [];
           // Add the option values.
           option.values.forEach((value) => {
-            selectOption = jQuery('<option></option>');
             const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
-            selectOption.attr({ value: value.value_index }).text(label);
-            configurableOptionsList.append(selectOption);
+            let selectOption = { value: value.value_index, text: label };
 
-            if (optionIsSwatch) {
+            if (isOptionSwatch) {
               const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
               // If configurableColorDetails has value, then we process the
               // swatch data in
               // Drupal.alshaya_color_images_generate_swatch_markup().
               if (childSku !== null && !Drupal.hasValue(configurableColorDetails)) {
-                selectOption.attr({'swatch-image': getPdpSwatchImageUrl(input, childSku)});
+                selectOption['swatch-image'] = getPdpSwatchImageUrl(input, childSku);
               }
             }
+            selectOptions.push(selectOption);
+          });
+
+          const configurableOption = ({
+            data_configurable_code: option.attribute_code,
+            // @todo: Find out the correct label for color.
+            data_default_title: dataDefaultTitle,
+            default_title: dataTitle,
+            // @todo: Find out the correct label for color.
+            data_selected_title: option.label,
+            data_drupal_selector: `edit-configurables-${formattedAttributeCode}`,
+            id: `edit-configurables-${formattedAttributeCode}`,
+            class: isOptionSwatch ? 'form-item-configurable-swatch' : 'form-item-configurable-select',
+            wrapperClass: isOptionSwatch ? 'configurable-swatch' : 'configurable-select',
+            name: `configurables[${option.attribute_code}]`,
+            aria_require: true,
+            aria_invalid: false,
+            select_option_label: Drupal.t(`Select @attr`, { '@attr': option.attribute_code }),
+            select_options: selectOptions,
+            hidden: hiddenFormAttributes.includes(option.attribute_code),
+            attribute_has_size_guide: sizeGuideAttributes.includes(option.attribute_code),
           });
 
           if (sizeGuideAttributes.includes(option.attribute_code)) {
@@ -618,25 +601,16 @@ exports.computePhFilters = function (input, filter) {
             const sizeGuideWrapper = jQuery('<div>');
             sizeGuideWrapper.addClass('size-guide-form-and-link-wrapper');
             sizeGuideWrapper.append(sizeGuideLink);
-            sizeGuideWrapper.append(optionsListWrapper);
             // Append to the main wrapper.
-            tempDivWrapper.append(sizeGuideWrapper);
-          }
-          else {
-            // Append to the main wrapper.
-            tempDivWrapper.append(optionsListWrapper);
+            // @todo Check if a wrapper is required or not.
+            configurableOption.size_guide = sizeGuideWrapper.html();
           }
 
-          optionsListWrapper.append(configurableOptionsList);
-          // Replace the placeholder class name.
-          // Hide field if supposed to be hidden.
-          if (hiddenFormAttributes.includes(option.attribute_code)) {
-            optionsListWrapper.addClass('hidden');
-          }
+          processedOptions.push(configurableOption);
         });
 
         // Add the configurable options to the form.
-        data.configurable_options = tempDivWrapper.html();
+        data.configurable_options = processedOptions;
       }
       value = handlebarsRenderer.render(`product.sku_base_form`, data);
       break;

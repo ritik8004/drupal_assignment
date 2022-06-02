@@ -1,8 +1,29 @@
+{{#*inline "renderSelectList"}}
+  <div class="js-form-item form-item js-form-type-select form-type-select js-form-item-configurables-{{this.data_configurable_code}} form-item-configurables-{{this.data_configurable_code}} {{ wrapperClass }}">
+    <select id="{{ this.id }}" class="form-select required valid {{ this.class }}" name="{{ this.name }}" data-configurable-code="{{ this.data_configurable_code }}" data-default-title="{{ this.data_default_title }}" data-selected-title="{{ this.data_selected_title }}" data-drupal-selector="{{ this.data_drupal_selector }}" aria-require="{{ this.aria_require }}" aria-invalid="{{ this.aria_invalid }}">
+      <option selected="selected" disabled="disabled">{{ this.select_option_label }}</option>
+      {{#each this.select_options}}
+        <option value="{{ this.value }}">{{ this.text }}</option>
+      {{/each}}
+    </select>
+  </div>
+{{/inline}}
+
 <form class="sku-base-form" data-sku="{{ sku }}" data-cleaned-sku="{{ sku_clean }}" data-sku-type="{{ sku_type }}">
   <div class="errors-container error-container-{{ sku }} js-form-wrapper form-wrapper" data-drupal-selector="edit-errors-container" data-msg-required="Please enter your This field." id="edit-errors-container"></div>
   {{#if configurable_options}}
     <div id="configurable_ajax" class="configurable-wrapper-{{ sku }} js-form-wrapper form-wrapper" data-drupal-selector="edit-ajax" data-msg-required="Please enter your This field.">
-      {{{ configurable_options }}}
+      {{#each configurable_options}}
+        {{#if this.attribute_has_size_guide}}
+          <div class="size-guide-form-and-link-wrapper">
+            {{!-- @todo Get this dynamically --}}
+            <a href="/en/modal-link-views/size-guide" class="size-guide-link use-ajax" data-dialog-type="dialog" data-dialog-options="{\"height\":400,\"width\":700}" rel="nofollow">Size Guide</a>
+            {{> renderSelectList}}
+          </div>
+        {{else}}
+          {{> renderSelectList}}
+        {{/if}}
+      {{/each}}
     </div>
   {{/if}}
   <span class="quantity-{{ sku }}">
