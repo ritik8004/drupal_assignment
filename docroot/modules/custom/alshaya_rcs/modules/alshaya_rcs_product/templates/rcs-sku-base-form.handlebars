@@ -16,8 +16,7 @@
       {{#each configurable_options}}
         {{#if this.attribute_has_size_guide}}
           <div class="size-guide-form-and-link-wrapper">
-            {{!-- @todo Get this dynamically --}}
-            <a href="/en/modal-link-views/size-guide" class="size-guide-link use-ajax" data-dialog-type="dialog" data-dialog-options="{\"height\":400,\"width\":700}" rel="nofollow">Size Guide</a>
+            {{{../size_guide_link}}}
             {{> renderSelectList}}
           </div>
         {{else}}

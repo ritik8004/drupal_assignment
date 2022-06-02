@@ -380,17 +380,10 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
   ];
 
   $size_guide = _alshaya_acm_product_get_size_guide_info(NULL);
-  if (isset($size_guide['link']) && isset($size_guide['attributes'])) {
-    $variables['rcs_templates']['size_guide'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#value' => $size_guide['link'],
-      '#attributes' => [
-        'class' => 'rcs-templates--size-guide',
-        'data-attributes' => implode(',', $size_guide['attributes']),
-      ],
-    ];
-  }
+  $variables['#attached']['drupalSettings']['alshayaRcs']['sizeGuide'] = [
+    'link' => $size_guide['link'],
+    'attributes' => $size_guide['attributes'],
+  ];
 
   $is_category_page = FALSE;
   // Skip product rcs_templates of sku_base_form for rcs category.
@@ -658,13 +651,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
   // authenticated users. So we vary by this context.
   $query_fields['#cache']['contexts'][] = 'user.roles:anonymous';
   return $query_fields;
-}
-
-/**
- * Implements template_preprocess_HOOK().
- */
-function template_preprocess_rcs_sku_base_form(&$variables) {
-  $variables['#attached']['library'][] = 'alshaya_spc/add_to_cart';
 }
 
 /**

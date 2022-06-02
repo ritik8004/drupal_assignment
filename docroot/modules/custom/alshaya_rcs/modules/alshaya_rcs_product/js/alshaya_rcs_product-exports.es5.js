@@ -529,14 +529,6 @@ exports.computePhFilters = function (input, filter) {
       let configurableOptions = input.configurable_options;
 
       if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
-        // @todo: Work on handlebars for this.
-        const sizeGuide = jQuery('.rcs-templates--size-guide').clone();
-        let sizeGuideAttributes = [];
-        if (sizeGuide.length) {
-          sizeGuideAttributes = sizeGuide.attr('data-attributes');
-          sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
-        }
-
         const hiddenFormAttributes = (typeof drupalSettings.hidden_form_attributes !== 'undefined')
           ? drupalSettings.hidden_form_attributes
           : [];
@@ -593,22 +585,12 @@ exports.computePhFilters = function (input, filter) {
             select_option_label: Drupal.t(`Select @attr`, { '@attr': option.attribute_code }),
             select_options: selectOptions,
             hidden: hiddenFormAttributes.includes(option.attribute_code),
-            attribute_has_size_guide: sizeGuideAttributes.includes(option.attribute_code),
+            attribute_has_size_guide: drupalSettings.alshayaRcs.sizeGuide.attributes.includes(option.attribute_code),
           });
-
-          if (sizeGuideAttributes.includes(option.attribute_code)) {
-            const sizeGuideLink = sizeGuide.children();
-            const sizeGuideWrapper = jQuery('<div>');
-            sizeGuideWrapper.addClass('size-guide-form-and-link-wrapper');
-            sizeGuideWrapper.append(sizeGuideLink);
-            // Append to the main wrapper.
-            // @todo Check if a wrapper is required or not.
-            configurableOption.size_guide = sizeGuideWrapper.html();
-          }
 
           processedOptions.push(configurableOption);
         });
-
+        data.size_guide_link = drupalSettings.alshayaRcs.sizeGuide.link;
         // Add the configurable options to the form.
         data.configurable_options = processedOptions;
       }
