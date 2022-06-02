@@ -49,26 +49,26 @@ class UserController extends ControllerBase {
    */
   public function registerComplete() {
     // Get data from query string.
-    $userDataString = $this->currentRequest->query->get('user');
+    $encryptedUserId = $this->currentRequest->query->get('user');
 
     // Redirect to home if no value in query string.
-    if (empty($userDataString)) {
+    if (empty($encryptedUserId)) {
       return new RedirectResponse(Url::fromRoute('<front>')->toString());
     }
 
     // Decode that data from query string.
-    $userData = json_decode(SecureText::decrypt(
-        $userDataString,
-        Settings::get('alshaya_api.settings')['consumer_secret']
-      ), TRUE);
+    $userId = SecureText::decrypt(
+        $encryptedUserId,
+        Settings::get('hash_salt')
+      );
 
     // Redirect to home if value in query string is invalid.
-    if (empty($userData)) {
+    if (empty($userId)) {
       return new RedirectResponse(Url::fromRoute('<front>')->toString());
     }
 
     // Load the user.
-    $account = $this->entityTypeManager()->getStorage('user')->load($userData['id']);
+    $account = $this->entityTypeManager()->getStorage('user')->load($userId);
 
     // Check if no user found or user is already active.
     if (empty($account) || $account->isActive()) {
