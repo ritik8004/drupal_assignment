@@ -1,0 +1,7 @@
+name: Alshaya Online Returns
+type: module
+description: 'Module to implement Online Returns feature.'
+package: 'Alshaya'
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - alshaya_react:alshaya_react

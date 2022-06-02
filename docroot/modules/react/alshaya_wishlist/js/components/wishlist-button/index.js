@@ -7,9 +7,9 @@ import {
   addProductToWishList,
   removeProductFromWishList,
   getWishlistLabel,
-  getWishlistFromBackend,
   removeFromWishlistAfterAddtocart,
   pushWishlistSeoGtmData,
+  getWishListDataIndexForSku,
 } from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
@@ -133,24 +133,31 @@ class WishlistButton extends React.Component {
       if (hasValue(response.data)
         && hasValue(response.data.status)
         && response.data.status) {
-        // Get existing wishlist data from storage.
-        const wishListItems = getWishListData();
+        // Get the SKU index from the wishlist local storage array. This will
+        // return a position index number i.e. > -1 if product exists else will
+        // return -1. We need to remove product from the local storage if
+        // skuIndex is greater than -1.
+        const skuIndex = getWishListDataIndexForSku(sku);
+        if (skuIndex > -1) {
+          // Get existing wishlist data from storage.
+          const wishListItems = getWishListData();
 
-        // Remove the entry for given product sku from existing storage data.
-        delete wishListItems[sku];
+          // Remove the entry for given product sku from existing storage data.
+          wishListItems.splice(skuIndex, 1);
 
-        // Save back to storage.
-        addWishListInfoInStorage(wishListItems);
+          // Save back to storage.
+          addWishListInfoInStorage(wishListItems);
 
-        // Push product values to GTM for removeFromWishlist event.
-        pushWishlistSeoGtmData({
-          sku,
-          context,
-          element: this.buttonContainerRef.current,
-        }, 'remove');
+          // Push product values to GTM for removeFromWishlist event.
+          pushWishlistSeoGtmData({
+            sku,
+            context,
+            element: this.buttonContainerRef.current,
+          }, 'remove');
 
-        // Set the product wishlist status.
-        this.updateWishListStatus(false);
+          // Set the product wishlist status.
+          this.updateWishListStatus(false);
+        }
 
         // For wishlist page, we remove full loader.
         // For other layouts, we remove inline loader of button.
@@ -286,18 +293,6 @@ class WishlistButton extends React.Component {
       addInlineLoader('.wishlist-loader .loading');
     }
 
-    // If product already in wishlist remove this else add.
-    if (addedInWishList) {
-      // Add full screen loader for wishlist page.
-      if (context === 'wishlist_page') {
-        showFullScreenLoader();
-      }
-      this.handleProductRemovalFromWishlist(skuCode);
-
-      // don't execute further if product is removed from the wishlist.
-      return;
-    }
-
     // Prepare the product info to store.
     const productInfo = {
       sku: skuCode,
@@ -308,6 +303,37 @@ class WishlistButton extends React.Component {
       element: this.buttonContainerRef.current,
     };
 
+    if (!addedInWishList) {
+      // Add product if its not in wishlist.
+      this.addToWishList(productInfo);
+      return;
+    }
+
+    // If product is in wishlist and context is cart
+    // then remove the product from wishlist before adding from cart
+    // as the wishlist api does not update product options on add to wishlist.
+    if (context === 'cart') {
+      removeProductFromWishList(skuCode).then(() => {
+        this.addToWishList(productInfo);
+      });
+      return;
+    }
+
+    // If product is in wishlist and context is not cart
+    // then remove the product from wishlist.
+    if (context === 'wishlist_page') {
+      // Add full screen loader for wishlist page.
+      showFullScreenLoader();
+
+      // Remove product from wishlist.
+      this.handleProductRemovalFromWishlist(skuCode);
+    }
+  }
+
+  /**
+   * Add product to the wish list.
+   */
+  addToWishList = (productInfo) => {
     // Add product to the wishlist. For guest users it'll store in local
     // storage and for logged in user this will store in backend using API
     // then will update the local storage as well.
@@ -346,7 +372,7 @@ class WishlistButton extends React.Component {
           // the wishlist_item_id from the backend that we use while
           // removing the product from backend for logged in user.
           // Load wishlist information from the magento backend.
-          getWishlistFromBackend().then((responseData) => {
+          window.commerceBackend.getWishlistFromBackend().then((responseData) => {
             if (hasValue(responseData.data.items)) {
               const wishListItems = {};
 
@@ -451,11 +477,6 @@ class WishlistButton extends React.Component {
       buttonTextKey = 'remove_from_wishlist';
     }
 
-    // If product is already added into wishlist, button is not required on cart page.
-    if (addedInWishList && context === 'cart') {
-      return null;
-    }
-
     // Display format can be 'link' or 'icon'.
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
@@ -469,11 +490,6 @@ class WishlistButton extends React.Component {
 
     // Wishlist text for Basket page.
     if (context === 'cart') {
-      // We don't show remove from wishlist on basket page.
-      if (addedInWishList) {
-        return null;
-      }
-
       // We only need move to wishlist button on cart page.
       buttonTextKey = 'move_to_wishlist';
     }

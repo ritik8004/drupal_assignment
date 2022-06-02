@@ -1,32 +1,4 @@
 /**
- * Check if product is available for home delivery.
- *
- * @param {object} entity
- *   The product entity.
- *
- * @returns {Boolean}
- *   Returns true if the product is available for home delivery else false.
- *
- * @see alshaya_acm_product_available_home_delivery().
- */
-function isProductAvailableForHomeDelivery(entity) {
-  return isProductBuyable(entity);
-}
-
-/**
- * Check if the provided product is available for Click and Collect.
- *
- * @param entity
- *   The entity.
- *
- * @return {Boolean}
- *   True if CNC is available, otherwise false.
- */
-function isProductAvailableForClickAndCollect(entity) {
-  return window.commerceBackend.isProductAvailableForClickAndCollect(entity);
-}
-
-/**
  * Check if the product is buyable.
  *
  * @param {object} entity
@@ -290,23 +262,6 @@ exports.render = function render(
       }
 
       const deliveryOptions = {};
-      const cncEnabled = isProductAvailableForClickAndCollect(entity);
-      if (cncEnabled) {
-        deliveryOptions.cnc = {
-          state: cncEnabled ? 'enabled' : 'disabled',
-            title: drupalSettings.alshaya_click_collect.title,
-            subtitle: (cncEnabled === true)
-            ? drupalSettings.alshaya_click_collect.subtitle.enabled
-            : drupalSettings.alshaya_click_collect.subtitle.disabled,
-            sku: entity.sku,
-            sku_clean: window.commerceBackend.cleanCssIdentifier(entity.sku),
-            sku_type: entity.type_id,
-            help_text: drupalSettings.alshaya_click_collect.help_text,
-            available_at_title: '',
-            select_option_text: drupalSettings.alshaya_click_collect.select_option_text,
-            store_finder_form: drupalSettings.alshaya_click_collect.store_finder_form,
-        };
-      }
 
       if (drupalSettings.expressDelivery.enabled) {
         // Express delivery options.
@@ -358,37 +313,49 @@ exports.render = function render(
       break;
 
     case 'classic-gallery':
+    case 'magazine-gallery':
       let mediaCollection = {
         gallery: [],
         zoom: [],
         thumbnails: [],
       };
 
-      switch (drupalSettings.alshayaRcs.useParentImages) {
-        case 'never':
-          // Get the images from the variants.
-          entity.variants.forEach(function (variant) {
-            // Only fetch media for the selected variant.
-            if (variant.product.sku !== params.sku) {
-              return;
-            }
-            variant.product.media.forEach(function (variantMedia) {
-              mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
-                type: 'image',
-                thumburl: variantMedia.thumbnails,
-                mediumurl: variantMedia.medium,
-                zoomurl: variantMedia.zoom,
-                fullurl: variantMedia.url,
-              });
+      if (entity.type_id === 'configurable') {
+        // Fetch the media for the gallery sku.
+        entity.variants.every(function (variant) {
+          if (variant.product.sku !== params.skuForGallery) {
+            // Continue with the loop.
+            return true;
+          }
+          variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia, i) {
+            mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+              index: i,
+              type: 'image',
+              alt: entity.name,
+              title: entity.name,
+              thumburl: variantMedia.thumbnails,
+              mediumurl: variantMedia.medium,
+              zoomurl: variantMedia.zoom,
+              fullurl: variantMedia.url,
+              last: (i + 1 === length) ? 'last' : '',
             });
-            // Break from the loop.
-            return false;
           });
-          break;
-
-        default:
-          // @todo Add default case when working on other brands.
-          break;
+        });
+      }
+      else {
+        entity.media.forEach(function setEntityThumbnails(entityMedia, i) {
+          mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+            index: i,
+            type: 'image',
+            alt: entity.name,
+            title: entity.name,
+            thumburl: entityMedia.thumbnails,
+            mediumurl: entityMedia.medium,
+            zoomurl: entityMedia.zoom,
+            fullurl: entityMedia.url,
+            last: (i + 1 === length) ? 'last' : '',
+          });
+        });
       }
 
       // If no media, return;
@@ -398,6 +365,7 @@ exports.render = function render(
       }
 
       const data = {
+        description: entity.description.html,
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
@@ -409,9 +377,14 @@ exports.render = function render(
         thumbnails: mediaCollection.thumbnails,
         lazy_load_placeholder: drupalSettings.alshayaRcs.lazyLoadPlaceholder,
         pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
+        skuForGallery: params.skuForGallery,
       }
 
-      html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      if (placeholder === 'classic-gallery') {
+        html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      } else {
+        html += handlebarsRenderer.render('gallery.product.product_gallery_magazine', data);
+      }
       break;
 
     case 'product-labels':
@@ -508,9 +481,9 @@ exports.computePhFilters = function (input, filter) {
       value = input.sku;
       break;
 
-      case 'sku-clean':
-        value = window.commerceBackend.cleanCssIdentifier(input.sku);
-        break;
+    case 'sku-clean':
+      value = Drupal.cleanCssIdentifier(input.sku);
+      break;
 
     case 'sku-type':
       value = input.type_id;
@@ -615,7 +588,7 @@ exports.computePhFilters = function (input, filter) {
           // Add a disabled option which will be used as the label for the option.
           let selectOption = jQuery('<option></option>');
           let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
-          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(text);
+          selectOption.attr({ selected: 'selected', disabled: 'disabled' }).text(text);
           configurableOptionsList.append(selectOption);
 
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
@@ -631,7 +604,7 @@ exports.computePhFilters = function (input, filter) {
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
             const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
-            selectOption.attr({value: value.value_index}).text(label);
+            selectOption.attr({ value: value.value_index }).text(label);
             configurableOptionsList.append(selectOption);
 
             if (optionIsSwatch) {
@@ -713,14 +686,13 @@ exports.computePhFilters = function (input, filter) {
 
     case 'brand_logo':
       if (input.brand_logo_data.url !== null) {
-        const image = jQuery('img');
-        image.attr({
-          src: input.brand_logo_data.url,
-          alt: input.brand_logo_data.alt,
-          title: input.brand_logo_data.title,
-        });
-        value = jQuery('.rcs-templates--brand_logo').clone().append(image).html();
+        data = {
+          url : input.brand_logo_data.url,
+          alt : input.brand_logo_data.alt,
+          title : input.brand_logo_data.title,
+        };
       }
+      value = handlebarsRenderer.render(`attribute.brand.logo`, data);
 
       break;
 
@@ -787,6 +759,11 @@ exports.computePhFilters = function (input, filter) {
 
       // Render handlebars plugin.
       value = handlebarsRenderer.render(`product.${filter}`, data);
+      break;
+
+    case 'price_block_identifier':
+      const cleanSku = Drupal.cleanCssIdentifier(input.sku);
+      value = `price-block-${cleanSku}`;
       break;
 
     default:

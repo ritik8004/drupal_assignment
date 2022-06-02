@@ -1922,7 +1922,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iClickJqueryElementOnPage($element)
   {
-    $this->getSession()->executeScript("jQuery('$element').trigger('click');");
+    $this->getSession()->executeScript("document.querySelector('$element').click();");
   }
 
   /**
@@ -2807,7 +2807,7 @@ JS;
     $session = $this->getSession();
     $email_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(0).text()');
     $order_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(1).text()');
-    $payment_method = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-detail .spc-value\').eq(3).text()');
+    $payment_method = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-detail .spc-value\').eq(4).text()');
     $order_detail = [
       'email' => $email_id,
       'order_id' => $order_id,

@@ -224,7 +224,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         }
 
         $cache_tags = ['node:' . $node->id()];
-        $product_base_url = $product_url = $node->url();
+        $product_base_url = $product_url = $node->toUrl()->toString();
         $product_label = $node->getTitle();
 
         $all_galleries = [];

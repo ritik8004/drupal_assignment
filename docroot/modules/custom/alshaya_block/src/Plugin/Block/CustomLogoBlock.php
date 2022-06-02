@@ -185,7 +185,7 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
       $element = $helper['element'];
       $options = $element->link->getOptions();
 
-      $attributes = isset($options['attributes']) ? $options['attributes'] : [];
+      $attributes = $options['attributes'] ?? [];
 
       // Class attribute needs special handling because Drupal
       // may add an "active" class to it.

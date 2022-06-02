@@ -188,7 +188,7 @@ class AlshayaFrontendCommand extends BltTasks {
 
         // Else copy from acquia repo if build is not needed.
         if ($build === FALSE) {
-          $cssFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $themePath);
+          $cssFromDir = '/tmp/blt-deploy/' . substr($themePath, strpos($themePath, 'docroot'));
           // Building folder paths for copying.
           // In non_transac themes css is inside /dist folder.
           if ($type === 'non_transac') {
@@ -340,7 +340,7 @@ class AlshayaFrontendCommand extends BltTasks {
 
         // Else copy from acquia repo if build is not needed.
         if ($build === FALSE) {
-          $reactFromDir = str_replace('docroot', 'docroot/../deploy/docroot', $dir) . 'dist';
+          $reactFromDir = '/tmp/blt-deploy/' . substr($dir, strpos($dir, 'docroot')) . 'dist';
           $reactToDir = $dir . 'dist';
 
           // Copy step.
@@ -402,6 +402,92 @@ class AlshayaFrontendCommand extends BltTasks {
     $this->say($result->getOutputData());
     $this->say($result->getMessage());
     return $result;
+  }
+
+  /**
+   * Minify all SVG images inside modules and themes folder during deployment.
+   *
+   * To minify svg files manually, please check npm script svg-minify.
+   *
+   * @command alshayafe:minify-svg
+   * @aliases minify-svg
+   */
+  public function buildMinifiedSvg() {
+    $processOutput = 0;
+    // Github CI env push event check.
+    // Only proceed if we are in Github CI.
+    if (getenv('GITHUB_ACTIONS') == 'true' && getenv('GITHUB_EVENT_NAME') == 'push') {
+      $tasks = $this->taskExecStack();
+      $tasks->stopOnFail();
+
+      // Process all svg files inside docroot/modules folder.
+      $tasks = $this->processSvgFiles(
+        $tasks,
+        'modules',
+        [
+          'brands',
+          'commerce',
+          'custom',
+          'products',
+        ]);
+      // Process all svg files inside docroot/themes/custom folder.
+      $tasks = $this->processSvgFiles(
+        $tasks,
+        'themes/custom',
+        self::$themeTypes
+      );
+
+      $tasks->stopOnFail();
+      $processOutput = $tasks->run();
+    }
+    else {
+      $this->say('No need to minify svg files outside Github CI as we do it during deployments.');
+    }
+
+    return $processOutput;
+  }
+
+  /**
+   * List all files in a directory.
+   *
+   * @param object $tasks
+   *   Executable task object.
+   * @param string $containingFolderPath
+   *   Folder where its running like modules or themes.
+   * @param array $subFolders
+   *   Sub-folders inside modules or themes like custom, brands, non-transac.
+   *
+   * @return object
+   *   Executable task object.
+   */
+  private function processSvgFiles(object $tasks, string $containingFolderPath, array $subFolders): object {
+    $docroot = $this->getConfigValue('docroot');
+    // Ignore these directories.
+    $ignoredDirs = [
+      'js',
+      'alshaya_example_subtheme',
+      'node_modules',
+      'gulp-tasks',
+    ];
+
+    // Process svg files inside modules folder.
+    $containingFolderPath = $docroot . '/' . $containingFolderPath;
+    foreach ($subFolders as $singleFolder) {
+      foreach (new \DirectoryIterator($containingFolderPath . '/' . $singleFolder) as $subDir) {
+        $baseFolder = $subDir->getBasename();
+        // Skip ignored directories and
+        // directories that does not contain a svg file.
+        if ($subDir->isDir()
+          && !$subDir->isDot()
+          && !in_array($baseFolder, $ignoredDirs)
+          && (new Finder())->name('*.svg')->in($subDir->getRealpath())->hasResults()) {
+          // Minify command.
+          $tasks->exec("cd $docroot; npm run svg-minify --folderPath=$containingFolderPath/$singleFolder/$baseFolder");
+        }
+      }
+    }
+
+    return $tasks;
   }
 
   /**
@@ -471,6 +557,9 @@ class AlshayaFrontendCommand extends BltTasks {
 
     // Validate utility files.
     $tasks->exec("cd $reactDir; npm run lint $reactDir/js/");
+
+    // Run Jest tests.
+    $tasks->exec("cd $reactDir; npm test");
 
     foreach (new \DirectoryIterator($reactDir) as $subDir) {
       if ($subDir->isDir()

@@ -80,7 +80,8 @@ class AlshayaBazaarVoiceController extends ControllerBase {
   public function uploadFile(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
     $data_url = $request_content['dataUrl'];
-    $file_name = $request_content['fileName'];
+    // Replace space with hyphen to resolve upload issue.
+    $file_name = str_replace(" ", "-", $request_content['fileName']);
 
     $review_photo_temp_upload = 'public://review_photo_temp_upload';
     // Make sure the directory exists and is writable.

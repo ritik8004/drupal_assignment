@@ -1,0 +1,14 @@
+.spc-select {
+  .spcSelect {
+    &__control {
+      border-radius: rem(3);
+      background-color: $primary_dropdown_bg;
+    }
+
+    &__dropdown-indicator {
+      &::before {
+        font-size: rem(24);
+      }
+    }
+  }
+}

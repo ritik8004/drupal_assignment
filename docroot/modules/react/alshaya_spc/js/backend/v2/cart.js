@@ -3,7 +3,7 @@ import {
   isAuthenticatedUserWithoutCart,
   updateCart,
   getProcessedCartData,
-  getCartWithProcessedData, getCart, associateCartToCustomer,
+  getCartWithProcessedData, getCart, associateCartToCustomer, clearProductStatusStaticCache,
 } from './common';
 import {
   getApiEndpoint,
@@ -355,6 +355,16 @@ window.commerceBackend.refreshCart = async (data) => {
 
   return updateCart(postData)
     .then(async (response) => {
+      // If we get OOS error on refresh cart, then we clear the static stock
+      // storages so that fresh stock data is fetched.
+      if (hasValue(response.data.response_message)
+        && response.data.response_message[1] === 'json_error'
+        && response.data.response_message[0].indexOf('out of stock') > -1) {
+        clearProductStatusStaticCache();
+        window.commerceBackend.clearStockStaticCache();
+        // Refresh stock for all items in the cart.
+        window.commerceBackend.triggerStockRefresh(null);
+      }
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
       // Remove redemption of egift when feature is enabled and redemption is

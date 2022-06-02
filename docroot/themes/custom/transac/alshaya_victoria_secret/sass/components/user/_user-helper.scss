@@ -106,15 +106,15 @@
 .order-detail .print--button,
 .block-alshaya-acm-customer > .edit-account {
   color: $order_edit_account_link;
-  background: transparent;
+  background: $primary_btn_bg;
   text-decoration: none;
   font-family: $vs-bold;
   font-weight: normal;
-  font-size: 0.875rem;
-  border: 1px solid $order_edit_account_link;
+  font-size: 0.75rem;
   text-transform: uppercase;
   padding: 0.75rem;
   height: 2.5rem;
+  border-radius: rem(3);
 
   &:hover,
   &:active,
@@ -129,6 +129,9 @@
 
 .block-alshaya-acm-customer > .edit-account {
   padding: 0.75rem 1.25rem;
+  line-height: normal;
+  background: none;
+  border: 1px solid $btn_border;
 }
 
 .c-page-title,

@@ -59,6 +59,7 @@ function alshaya_egift_card_install() {
   }
   // Enable My Gift Card link in the menu.
   $config = \Drupal::configFactory()->getEditable('alshaya_user.settings');
+  // phpcs:ignore
   $alshaya_my_egift_card = unserialize($config->get('my_account_enabled_links'));
   $alshaya_my_egift_card['alshaya_my_egift_card'] = 'alshaya_my_egift_card';
   $config->set('my_account_enabled_links', serialize($alshaya_my_egift_card));

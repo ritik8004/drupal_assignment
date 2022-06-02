@@ -322,7 +322,7 @@ class ProductExportCommands extends DrushCommands {
 
         case 'meta':
           // Key can be one of the following: name or property.
-          $key = isset($tag['#attributes']['name']) ? $tag['#attributes']['name'] : $tag['#attributes']['property'];
+          $key = $tag['#attributes']['name'] ?? $tag['#attributes']['property'];
           $value = $tag['#attributes']['content'];
 
           // Magento cannot import description text > 255 chars. Also the

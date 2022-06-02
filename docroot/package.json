@@ -19,14 +19,18 @@
     "gulp-ignore": "^3.0.0",
     "gulp-iife": "0.4.0",
     "gulp-load-plugins": "^2.0.0",
+    "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.0",
     "lazypipe": "^1.0.2",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.6",
+    "svgo": "^2.8.0"
   },
   "private": true,
   "scripts": {
     "uninstall-tools": "rm -r node_modules",
     "build": "node_modules/gulp/bin/gulp.js performance-build",
+    "build:dev": "node_modules/gulp/bin/gulp.js performance-build:dev",
+    "svg-minify": "node_modules/.bin/svgo -f ${npm_config_folderPath} -r",
     "preinstall": "npx npm-force-resolutions"
   },
   "resolutions": {

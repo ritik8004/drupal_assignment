@@ -47,6 +47,8 @@
 
       // Prepare Assets.
       item['image'] = window.commerceBackend.getTeaserImage(item);
+      // Clean sku value to be used in CSS class.
+      item['cleanSku'] = Drupal.cleanCssIdentifier(item.sku);
     });
   });
 })(drupalSettings);

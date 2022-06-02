@@ -105,9 +105,17 @@
         searchImpressions.push(impression);
 
         $(this).once('js-event').on('click', function (e) {
-          var that = $(this);
-          var position = $(this).attr('data-insights-position');
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.reactTeaserView.price.currency, 'Search Results Page', position);
+          var cartRemoveElement = $(this).find('button.qty-sel-btn--down') !== undefined ? $(this).find('button.qty-sel-btn--down')[0] : null;
+          // Product Click GTM event should not be triggered
+          // when removing from cart.
+          if (e.target !== cartRemoveElement) {
+            Drupal.alshaya_seo_gtm_push_product_clicks(
+              $(this),
+              drupalSettings.reactTeaserView.price.currency,
+              'Search Results Page',
+              $(this).attr('data-insights-position')
+            );
+          }
         });
 
         // When search results load, process only the default number of

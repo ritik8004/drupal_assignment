@@ -1,0 +1,16 @@
+.egifts-form-wrapper {
+  .action-buttons {
+    button[type="submit"],
+    button[type="button"]:not(.my-topup-cancel-btn) {
+      border-radius: rem(3);
+    }
+  }
+
+  .egift-open-amount-wrapper {
+    button {
+      &::after {
+        background: url('#{$brand_theme_img_directory_path}/icons/new-pdp-tick-icon.svg') center center no-repeat;
+      }
+    }
+  }
+}

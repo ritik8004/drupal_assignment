@@ -62,8 +62,6 @@ $grey-ash: #666;
 $marine-blue-two: #003971;
 $white: #ddd;
 $white-two: #e5e5e5;
-$white-five: #fff;
-$matterhorn: #535353;
 $cerulean-two: #0084cc;
 $red-error: #c00;
 $light-ash: #9c9c9c;
@@ -74,14 +72,14 @@ $blue-two: #03295e;
 $blue-three: #032760;
 $faun: #f9f8f6;
 $message-info: #ffee9c;
-$special-price: #b70025;
+$special-price: #af5071;
 $ladda-disabled: #999;
 $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
 // VS colors.
 $nero: #232323;
 $vanilla: #fff;
-$brilliant-rose: #ef5f96;
+$brilliant-rose: #f4c6cf;
 $gainsboro: #dadada;
 $ash-triplet: #777;
 $vivid-raspberry: #d91560;
@@ -99,22 +97,28 @@ $dark-pink: #fc45b2;
 $pink-hover:  #d84e82;
 $_plp_secondary_cta_hover: rgba(239, 95, 150, 0.1);
 $_egift_landing_page_banner_bg: #fcf2f6;
-
+$cultured: #f7f7f8;
+$light-orange: #e0dad5;
+$platinum: #e8e3df;
+$matterhorn: #4e3844;
+$zambezi: #605858;
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
 $_grey_two: #f3f3f3;
 $_pink_one: #636363;
 $_grey_three: #e1e1e1;
+$_grey_four: #f5f5f6;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
-$primary_bg: $nero;
+$primary_bg: $_grey_four;
+$secondary_bg: $cultured;
 $body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $content_pagetitle_border: $gainsboro;
 $primary_text: $black;
-$primary_link: $black;
+$primary_link: $brilliant-rose;
 $primary_link-hover: $brilliant-rose;
 $primary_link-active: $brilliant-rose;
 $primary_border: $gainsboro;
@@ -138,7 +142,8 @@ $formitem_input: $black;
 
 //Buttons.
 $primary_btn_bg: $brilliant-rose;
-$primary_btn_text: $vanilla;
+$primary_btn_text: $matterhorn;
+$btn_border: $matterhorn;
 $primary_empty_btn: $black;
 $primary_empty_btn_border: $black;
 $primary_brand_button: $brilliant-rose;
@@ -162,17 +167,17 @@ $primary_td_highlight2: $whisper-light; // used on order total (basket).
 $primary_td_highlight3: $_grey_one; // used on blend class.
 $primary_th_bg_order_highlight: $pale-grey;
 $primary_td_bg_highlight: $_grey_one;
-$primary_td_bg: $white-five;
+$primary_td_bg: $vanilla;
 $primary_tr_hover: rgba(247, 247, 247, 0.72);
 $primary_table_border: $white;
 $primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
 $highlights_subtitle_hover: $brilliant-rose;
 
 // Dropdown.
-$primary_dropdown_bg: $white-five;
+$primary_dropdown_bg: $cultured;
 $primary_dropdown_arrow_bg: transparent;
 $primary_dropdown_text: $black;
-$primary_dropdown_border: $gainsboro;
+$primary_dropdown_border: $cultured;
 $primary_dropdown_option_hover: $white-four;
 $primary_dropdown_option_border: $white;
 $primary_dropdown_option_disbled: $greyish;
@@ -188,11 +193,11 @@ $total_td_2nd_child_bg: $white-smoke-light;
 $total_order_total_txt: $black;
 $total_order_total_row_td_2nd_child: $gainsboro;
 $total_discount_total: $red-error;
-$total_discount_total_td_2nd_child_bg: $white-five;
+$total_discount_total_td_2nd_child_bg: $vanilla;
 
 // Modal
-$modal_bg: $white-five;
-$modal_subtext: $white-five;
+$modal_bg: $vanilla;
+$modal_subtext: $vanilla;
 $modal_subtext_bg: $black;
 $modal_close_bg: $black;
 $modal_close_icon: $vanilla;
@@ -210,17 +215,17 @@ $secondary_border: $black;
 $secondary_link: $black;
 
 /* ------- 4. Tertiary Colors ------- */
-$tertiary_btn_text: $white-five;
+$tertiary_btn_text: $vanilla;
 $tertiary_btn_border: $black;
 
 /* ------- 5. Components --------------- */
 // Counters.
 $primary_counter_bg: $brilliant-rose;
-$primary_counter_text: $white-five;
+$primary_counter_text: $vanilla;
 $secondary_counter_bg: $black;
-$secondary_counter_text: $white-five;
+$secondary_counter_text: $vanilla;
 $tertiary_counter_bg: $brilliant-rose;
-$tertiary_counter_text: $white-five;
+$tertiary_counter_text: $vanilla;
 $tertiary_counter_border: $brilliant-rose;
 
 // Titles.
@@ -250,7 +255,7 @@ $formitem_error_label: $red-error;
 
 // Out of stock button.
 $oos_btn_bg: $red-error;
-$oos_btn_text: $white-five;
+$oos_btn_text: $vanilla;
 $oos_wrapper: $whisper-dark;
 $oos_wrapper_text: $black;
 $oos_quantity_text: $vanilla;
@@ -272,7 +277,7 @@ $tooltip_link: $black;
 // Back to top
 $btt_bg: rgba(35, 35, 35, 0.25);
 $btt_hover_text: $grey-ash;
-$btt_text: $white-five;
+$btt_text: $vanilla;
 
 // Breadcrumb.
 $breadcrumb_bg: $white-smoke-light;
@@ -288,10 +293,11 @@ $maintenance_body_bg: $vanilla;
 $maintenance_link: $brilliant-rose;
 
 // Language Switcher
-$lang_switch: $brilliant-rose;
-$lang_switch_active: $vanilla;
+$lang_switch: $mothercare-black;
+$lang_switch_divider: $light-orange;
+$lang_switch_active: $mothercare-black;
 $lang_switch_firsttime_bg: $nero;
-$lang_switch_firsttime_border: $white-five;
+$lang_switch_firsttime_border: $vanilla;
 $lang_switch_list: $vanilla;
 $lang_switch_close_icon: $vanilla;
 
@@ -306,15 +312,15 @@ $cloudzoom_hovertext: $mothercare-black;
 $cloudzoom_zoombox_border: $white;
 
 // Mobile Gallery
-$gallery_bg: $white-five;
+$gallery_bg: $vanilla;
 $gallery_subtext_bg: $black;
-$gallery_subtext: $white-five;
-$gallery_arrows_bg: $white-five;
+$gallery_subtext: $vanilla;
+$gallery_arrows_bg: $vanilla;
 $gallery_arrows: $black;
 $gallery_arrows_border: $black;
 $gallery_arrows_disabled: $white;
 $gallery_pager_border: $marine-blue-two;
-$gallery_pager_bg: $white-five;
+$gallery_pager_bg: $vanilla;
 $gallery_pager_active_bg: $marine-blue-two;
 $gallery_zoombtn_bg: $white;
 $gallery_zoombtn_disabled: $light-ash;
@@ -325,11 +331,11 @@ $hp_slider_dots: $nero;
 $hp_slider_arrows_dark: $nero;
 
 // Sharethis
-$sharethis_icon: $gainsboro;
-$sharethis_icon_hover: $black;
+$sharethis_icon: $mothercare-black;
+$sharethis_icon_hover: $gainsboro;
 
 // Autocomplete
-$autocomplete_bg: $white-five;
+$autocomplete_bg: $vanilla;
 $autocomplete_border_last: $white;
 $autocomplete_hover: $gainsboro;
 $autocomplete_text: $grey-ash;
@@ -338,10 +344,11 @@ $autocomplete_text: $grey-ash;
 
 // Header.
 $header_bg: $vanilla;
-$header_top_bg: $nero;
+$header_top_bg: $cultured;
 $header_search_block_bg: $vanilla;
 $header_border: $white;
-$header_super_category_bg: $vanilla;
+$header_super_category_bg: $cultured;
+$header_super_category_menu_divider: $light-orange;
 
 // Header mobile search.
 $header_search_border_mobile: $nero;
@@ -360,29 +367,29 @@ $primary_search_result_hover: $white-smoke-light;
 // C-menu primary i:e Mobile and tablet header menu links.
 $header_c_menu_text: $brownish-grey;
 $header_c_menu_icon_color: $black;
-$header_c_menu_icon_text: $white-five;
+$header_c_menu_icon_text: $vanilla;
 $header_c_menu_search_active_icon: $brilliant-rose;
 $header_c_menu_store_active_icon: $brilliant-rose;
-$header_toggle_sign_default: $white-smoke-light;
+$header_toggle_sign_default: $vanilla;
 $header_toggle_sign_active_tab: $black;
-$header_toggle_sign_active_tab_bg: $white-five;
-$header_mobile_menu_bg: $vanilla;
+$header_toggle_sign_active_tab_bg: $vanilla;
+$header_mobile_menu_bg: $cultured;
 $header_mobile_menu_arrow: $black;
-$header_mobile_menu_active: $white-five;
+$header_mobile_menu_active: $vanilla;
 $header_mobile_menu_close_bg: $brilliant-rose;
 $header_mobile_menu_close: $black;
-$header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
+$header_mobile_menu_overlay: rgba(249, 249, 249, 0.82);
 $header_mobile_border: $white-smoke-light;
 
 // Branding menu mobile.
 $header_branding_shadow: $greyish;
 
 // Header secondary: ie: top header.
-$header_secondary_bg: $nero;
-$header_secondary_bg_upto_desk: $vanilla;
+$header_secondary_bg: $cultured;
+$header_secondary_bg_upto_desk: $cultured;
 $header_secondary_menu_link_mobile: $nero;
-$header_secondary_menu_link: $vanilla;
-$header_secondary_menu_link_hover_bg: $black;
+$header_secondary_menu_link: $nero;
+$header_secondary_menu_link_hover_bg: $vanilla;
 $header_secondary_menu_mobile_link: $brilliant-rose;
 $header_secondary_menu_link_mobile_hover_bg: $vanilla;
 
@@ -395,7 +402,7 @@ $header_my_account_mobile_link_hover: $brilliant-rose;
 $header_my_account_icon: $black;
 
 // Mega menu.
-$mm_bg: $white-five;
+$mm_bg: $vanilla;
 $mm_top_border: $white-smoke-light;
 $mm_body_overlay: rgba(0, 0, 0, 0.48);
 $mm_l1_border: $gainsboro;
@@ -404,24 +411,24 @@ $mm_l1_link_bg: $brilliant-rose;
 $mm_l1_link_active: $brilliant-rose;
 $mm_l1_link_hover: $black;
 $mm_l1_link_hover_border_to_fill_space: $brilliant-rose;
-$mm_l1_link_active_border: transparent;
+$mm_l1_link_active_border: $brilliant-rose;
 $mm_l2_link: $black;
 $mm_l2_link_hover: $brilliant-rose;
 $mm_l2_p: $brownish-grey;
 $mm_l3_link: $nero;
 $mm_l3_link_2: $peacock-blue; // possible old markup.
-$mm_l3_link_bg: $white-five;
+$mm_l3_link_bg: $cultured;
 $mm_l3_link_hover: $brilliant-rose;
 $mm_highlight_bg: $white-smoke-light;
 $mm_highlight_label: $black;
 $mm_highlight_title: $black;
 $mm_highlight_description: $nero;
-$mm_p_a_text: $white-five;
+$mm_p_a_text: $vanilla;
 
 //  Mini Cart.
 $primary_minicart_text: $black;
-$primary_minicart_quantity_text: $white-five;
-$primary_minicart_quantity_bg: $brilliant-rose;
+$primary_minicart_quantity_text: $black;
+$primary_minicart_quantity_bg: $platinum;
 $mobile_continue_shopping_btn_text: $vanilla;
 $mobile_continue_shopping_btn_bg: $brilliant-rose;
 $mobile_continue_shopping_btn_border: $brilliant-rose;
@@ -430,13 +437,13 @@ $desktop_continue_shopping_btn_bg: $brilliant-rose;
 $desktop_continue_shopping_btn_border: $brilliant-rose;
 
 // Notification popup.
-$minicart_notification_bg: $white-five;
+$minicart_notification_bg: $vanilla;
 $minicart_notification_border: $brilliant-rose;
 $minicart_notification_shadow: $white-two;
 $minicart_notification_name: $grey-ash;
 $minicart_notification_text: $brilliant-rose;
 $minicart_notification_btn_bg: $brilliant-rose;
-$minicart_notification_btn_text: $white-five;
+$minicart_notification_btn_text: $matterhorn;
 $minicart_notification_product_title: $grey-ash;
 
 // Delivery tabs.
@@ -457,32 +464,33 @@ $promo_panel_label: $nero;
 $promo_panel_label_icon: $brilliant-rose;
 
 //3. Footer
-$footer_bg: $nero;
-$footer_text: $vanilla;
-$footer_border_top: $nero;
-$primary_footer_input_label: $vanilla;
-$footer_title_h3: $vanilla;
-$footer_link_mobile: $vanilla;
-$footer_link: $vanilla;
+$footer_bg: $_grey_four;
+$footer_mobile_bg: $vanilla;
+$footer_text: $mothercare-black;
+$footer_border_top: $_grey_four;
+$primary_footer_input_label: $mothercare-black;
+$footer_title_h3: $mothercare-black;
+$footer_link_mobile: $mothercare-black;
+$footer_link: $mothercare-black;
 $footer_link_hover: $brilliant-rose;
 
 // Social links.
-$social_links: $vanilla;
-$social_links_hover: $vanilla;
+$social_links: $mothercare-black;
+$social_links_hover: $mothercare-black;
 
 //1. Copyright
-$copyright_footer_bg: $white-four;
+$copyright_footer_bg: $vanilla;
 $copyright_footer_text: $black;
 
 //7. Newsletter-signup
 $newsletter_title_h3: $vanilla;
 $newsletter_block_text: $vanilla;
-$newsletter_input_placeholder: $vanilla;
+$newsletter_input_placeholder: $mothercare-black;
 $newsletter_input_border: $vanilla;
-$newsletter_input_bg: $nero;
+$newsletter_input_bg: $vanilla;
 $newsletter_submit_btn: $vanilla;
 $newsletter_submit_btn_text: $black;
-$footer_input_text: $vanilla;
+$footer_input_text: $mothercare-black;
 $footer_input_border_active: $vanilla;
 $newsletter_success: $brilliant-rose;
 
@@ -492,8 +500,9 @@ $checkout_progress_complete: $brilliant-rose;
 $checkout_progress_complete_text: $brilliant-rose;
 $checkout_progress_text: $ash-triplet;
 $checkout_progress_current_text: $black;
-$checkout_progress_next_bg: $white-five;
+$checkout_progress_next_bg: $vanilla;
 $checkout_progress_next_txt: $nero;
+$checkout_login_submit_button_text: $matterhorn;
 // @todo: My account priv card content block.
 
 /* ------- 7. Pages ----- */
@@ -506,7 +515,7 @@ $plp_facet_filter: $brilliant-rose;
 $plp_facet_item_label: $black;
 $plp_facet_filter_bg: transparent;
 $plp_facet_filter_link: $nero;
-$plp_facet_clear_border: $nero;
+$plp_facet_clear_border: $light-orange;
 $plp_facet_clear_border_mobile: $nero;
 $plp_facet_clear_text: $nero;
 $plp_facet_filter_count: $nero;
@@ -515,20 +524,21 @@ $plp_facet_label: $black;
 $plp_facet_dropdown_bg: $vanilla;
 $plp_facet_label_border_mobile: $gainsboro;
 $plp_facet_summary_filter_icon: $nero;
-$plp_facet_active_bg: $white-five;
+$plp_facet_active_bg: $vanilla;
 $plp_facet_filter_label: $black;
 $plp_facet_title: $grey-ash;
 $plp_facet_border: $gainsboro;
 $plp_item_label: $black;
 $plp_promotion_description: $ash-triplet;
 $plp_facet_filter_count_background: $brilliant-rose;
-$plp-primary-cta-hover-bg: $pink-hover;
+$plp-primary-cta-hover-bg: $brilliant-rose;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+$plp_selected_filter_label_text: $nero;
 
 // PLP Filter bar.
 $plp_filterbar_filter_bg: $nero;
-$plp_filterbar_filter_text: $white-five;
-$plp_filterbar_filter_clear: $white-five;
+$plp_filterbar_filter_text: $vanilla;
+$plp_filterbar_filter_clear: $vanilla;
 $plp_filterbar_clearall_border: $nero;
 $plp_filterbar_clearall_text: $nero;
 $plp_search_count: $nero;
@@ -544,11 +554,11 @@ $plp_tile_product_text: $black;
 $plp_tile_product_title: $black;
 $plp_tile_product_title_hover: $nero;
 $plp_tile_product_price: $black;
-$plp_tile_product_special_price: $red-error;
+$plp_tile_product_special_price: $special-price;
 $plp_tile_product_discount_label: $red-error;
 $plp_tile_product_hover_border: $gainsboro;
 $plp_tile_product_hover_shadow: $whisper-light;
-$plp_tile_product_hover_bg: $white-five;
+$plp_tile_product_hover_bg: $vanilla;
 
 // PLP Product title hover.
 $plp_tile_hover_slider_hover: $grey-ash;
@@ -561,16 +571,17 @@ $plp_pager_link_border: $nero;
 // Product detail page.
 $pdp_product_title: $mothercare-black;
 $pdp_product_price: $mothercare-black;
-$pdp_product_special_price: $red-error;
-$pdp_product_special_price_text: $red-error;
-$pdp_product_discount_price: $red-error;
-$pdp_product_discount_text: $red-error;
+$pdp_product_special_price: $special-price;
+$pdp_product_special_price_text: $special-price;
+$pdp_product_discount_price: $special-price;
+$pdp_product_discount_text: $special-price;
 $pdp_product_itemcode: $ash-triplet;
 $pdp_product_itemcode_border: $gainsboro;
 $pdp_filter_selector_label: $nero;
 $pdp_title_section_border: $gainsboro;
-$pdp_mobile_wrapper: $white-five;
+$pdp_mobile_wrapper: $vanilla;
 $pdp_sell_title: $nero;
+$pdp_add_cart_fix_btn_border: $vanilla;
 $pdp_title_collection_name: $mothercare-black;
 $pdp_color_attribute: $gainsboro;
 $pdp_color_attribute_hover: $nero;
@@ -593,19 +604,20 @@ $pdp_size_option_bg: $black;
 $pdp_size_option_border: $black;
 $pdp_size_option_text: $black;
 $pdp_size_option_selected_text: $black;
-$pdp_size_option_selected_bg: $vanilla;
-$pdp_swatch_disabled: $white;
-$pdp_size_option_text_hover : $white-five;
+$pdp_size_option_selected_bg: $light-orange;
+$pdp_size_option_selected_border: $zambezi;
+$pdp_swatch_disabled: $mothercare-black;
+$pdp_size_option_text_hover : $vanilla;
 $pdp_size_option_bg_hover: $black;
 $pdp_sidebar_label: $mothercare-black;
-$pdp_sidebar_link: $brilliant-rose;
-$pdp_desc_wrapper: $white-five;
+$pdp_sidebar_link: $matterhorn;
+$pdp_desc_wrapper: $vanilla;
 $pdp_desc_wrapper_border: $black;
 $pdp_desc_wrapper_close_bg: $black;
 $pdp_desc_wrapper_close_icon: $white-two;
 $pdp_accordion_title: $black;
-$pdp_cc_btn_text: $white-five;
-$pdp_cc_btn_bg: $nero;
+$pdp_cc_btn_text: $matterhorn;
+$pdp_cc_btn_bg: $brilliant-rose;
 $pdp_cc_highlight: $brilliant-rose;
 $pdp_cc_storefinder_label: $grey-ash;
 $pdp_cc_storefinder_input: $greyish;
@@ -620,7 +632,7 @@ $pdp_cc_top_stores_list_name: $black;
 $pdp_cc_top_stores_list_time: $black;
 $pdp_cc_other_stores: $black;
 $pdp_cc_other_stores_mobile: $brilliant-rose;
-$pdp_all_stores_modal_bg: $white-five;
+$pdp_all_stores_modal_bg: $vanilla;
 $pdp_all_stores_modal_border: $black;
 $pdp_all_stores_name: $breadcrumb-active;
 $pdp_all_stores_modal_close_icon: $white-two;
@@ -633,10 +645,10 @@ $pdp_all_stores_modal_list_name: $blue-three;
 $pdp_all_stores_modal_list_time: $black;
 $pdp_skus_border: $gainsboro;
 $pdp_field_label: $peacock-blue;
-$pdp_basic_wrapper_border: $white-five;
+$pdp_basic_wrapper_border: $vanilla;
 $pdp_error_text: $white-four;
 $fake_apply_btn: $white-four;
-$fake_apply_btn_border: $white-five;
+$fake_apply_btn_border: $vanilla;
 $clear_btn_border: $gainsboro;
 $clear_btn_text: $gainsboro;
 $not_buyable_msg: $black;
@@ -710,7 +722,7 @@ $order_summary_sec_text: $greyish;
 $order_summary_ter_text: $black;
 
 // Checkout Global.
-$checkout_footer_bg: $white-five;
+$checkout_footer_bg: $vanilla;
 $checkout_footer_border-top: $gainsboro;
 $checkout_footer_txt: $black;
 $checkout_footer_light_txt: $ash-triplet;
@@ -738,7 +750,7 @@ $checkout_out_btn: $white-four;
 $checkout_securely_txt: $black;
 $checkout_securely_icon_bg: $brilliant-rose;
 $checkout_securely_icon_mobile_txt: $black;
-$checkout_securely_icon_txt: $white-five;
+$checkout_securely_icon_txt: $vanilla;
 
 // Checkout Login page.
 $checkout_login_footer_actions_bg: $white-four;
@@ -753,9 +765,9 @@ $multistep_checkout_text: $nero;
 $checkout_request_password_link: $nero;
 $checkout_login_form_action: $black;
 $checkout_login_btn_bg: $brilliant-rose;
-$checkout_guest_button_border: $brilliant-rose;
-$checkout_guest_button_txt: $brilliant-rose;
-$checkout_guest_button_bg: $white-five;
+$checkout_guest_button_border: $matterhorn;
+$checkout_guest_button_txt: $matterhorn;
+$checkout_guest_button_bg: $vanilla;
 $checkout_login_page_title: $gainsboro;
 $checkout_login_wrapper_text: $nero;
 $checkout_login_back_to_basket_text: $black;
@@ -791,7 +803,7 @@ $checkout_cc_location_result_label: $black;
 $checkout_cc_list_bg: $vanilla;
 $checkout_cc_list_bg_hover: $white-smoke;
 $checkout_cc_list_border: $gainsboro;
-$checkout_cc_list_select_store_btn_bg: $white-five;
+$checkout_cc_list_select_store_btn_bg: $vanilla;
 $checkout_cc_list_select_store_btn_border: $black;
 $checkout_cc_list_select_store_btn_txt: $nero;
 $checkout_cc_store_name: $black;
@@ -817,7 +829,7 @@ $checkout_cc_tab_border: $gainsboro;
 $checkout_cc_cnc_form_title_border: $gainsboro;
 
 // Checkout tabs & form.
-$checkout_tab_bg: $white-five;
+$checkout_tab_bg: $vanilla;
 $checkout_tab_active_bg: $white-two;
 $checkout_tab_default_title: $black;
 $checkout_tab_active_title: $black;
@@ -828,13 +840,13 @@ $checkout_tab_disabled_text: $light-greyish;
 $checkout_tab_active_border_2: $black; // Probably outdated.
 $checkout_tab_active_hr: $black;
 $checkout_form_actions_footer: $white-smoke-fog;
-$checkout_form_actions_footer_white: $white-five;
+$checkout_form_actions_footer_white: $vanilla;
 $checkout_tab_text_default: $black;
 $checkout_tab_description: $black;
 $checkout_tab_separator: $black;
 
 // Checkout tabs mobile.
-$checkout_tab_mob_active_bg: $white-five;
+$checkout_tab_mob_active_bg: $vanilla;
 $checkout_tab_mob_active_border: $black;
 
 // Checkout delivery options.
@@ -874,9 +886,9 @@ $checkout_method_choice_tab_title_active: $black;
 $checkout_mobile_back_link_icon: $black;
 
 // Checkout order confirmation.
-$checkout_confirm_discount_row: $white-five;
+$checkout_confirm_discount_row: $vanilla;
 $checkout_confirm_discount_row_td_4th_child: $white-smoke-light;
-$checkout_confirm_continue_shopping_bg: $white-five;
+$checkout_confirm_continue_shopping_bg: $vanilla;
 $checkout_confirm_continue_shopping_border: $marine-blue;
 $checkout_confirm_order_summary_row: $vanilla;
 $checkout_confirm_order_summary_row_text: $brilliant-rose;
@@ -885,7 +897,7 @@ $checkout_order_print_btn_border: $nero;
 $checkout_order_print_btn_txt: $nero;
 $checkout_confirm_info_icon: $nero;
 $checkout_order_details_label: $cerulean-two;
-$checkout_order_details_product_count_border: $white-five;
+$checkout_order_details_product_count_border: $vanilla;
 
 // Address form.
 $address_form_country_disabled: $ladda-disabled;
@@ -908,7 +920,7 @@ $user_nav_mobile_title2: $ash-triplet;
 $user_nav_mobile_link: $nero;
 $user_order_list_text: $black;
 $user_order_list_border: $whisper-dark;
-$user_order_list_bg: $white-five;
+$user_order_list_bg: $vanilla;
 $user_order_list_hover_bg: $white-four;
 $user_order_list_hover_link_bg: $white-smoke;
 $user_order_list_light: $ash-triplet;
@@ -921,7 +933,7 @@ $user_login_section_title: $nero;
 
 // User Form
 $user_form_text: $black;
-$user_form_error_label: $white-five;
+$user_form_error_label: $vanilla;
 $user_field_link: $brilliant-rose;
 $user_captcha: $greyish;
 $user_pwd_input: $grey-ash;
@@ -956,7 +968,7 @@ $privilege_card_form_input_placeholder: $grey-shade;
 $privilege_card_form_error: $red-error;
 
 //Address book
-$address_tile_bg: $white-five;
+$address_tile_bg: $vanilla;
 $address_tile_selected_bg: $white-four;
 $address_tile_label: $grey-ash;
 $address_tile_content: $black;
@@ -973,7 +985,7 @@ $basket_oos_tr_bg: $white-four;
 $basket_oos_inline_txt: $brilliant-rose;
 $basket_oos_inline_qty_border: $red-error;
 $basket_img_border: $gainsboro;
-$basket_img_bg: $white-five;
+$basket_img_bg: $vanilla;
 $basket_th_4th_child: #ededed;
 $basket_continue_shopping_btn_border: $black;
 $basket_continue_shopping_link: $nero;
@@ -1041,7 +1053,7 @@ $order_recent_order_order_summary_bg: $vanilla;
 $order_no_orders_txt_mobile: $black;
 $order_no_orders_txt: $brownish-grey;
 $order_accordion_open_bg: $whisper-dark;
-$order_edit_account_link: $nero;
+$order_edit_account_link: $matterhorn;
 
 // Order print.
 $order_print_order_details_row_bg: $white-smoke-light;
@@ -1064,9 +1076,9 @@ $category_facet_txt: $black;
 $block_acm_customer_txt: $black;
 
 // Free Gifts
-$free-gifts-label: $red-error;
+$free-gifts-label: $special-price;
 $free-gifts-title-text: $nero;
-$free-gifts-coupon-code-text: $brilliant-rose;
+$free-gifts-coupon-code-text: $matterhorn;
 $free-gifts-border: $brilliant-rose;
 $free-gifts-text: $nero;
 $free-gifts-select-button-bg: $brilliant-rose;
@@ -1079,7 +1091,7 @@ $cart-free-gifts-label: $vanilla;
 $cart-free-gifts-label-background: $brilliant-rose;
 
 // Bra size filters
-$bra_size_filter_box_bg: $white-five;
+$bra_size_filter_box_bg: $vanilla;
 $bra_size_filter_box_border: $_grey_three;
 $bra_size_active_filter_box_bg: $brilliant-rose;
 $bra_size_active_filter_box_bg_pink: $dark-pink;
@@ -1129,11 +1141,18 @@ $algolia-search-clear-text-icon: $nero;
 $algolia-search-icon: $black;
 
 // SPC Cart.
-$spc-deliver-button: $brilliant-rose;
+$spc-deliver-button: $matterhorn;
 $spc-cnc-toggle-bg-active: $brilliant-rose;
 $spc-checkout-cnc-map-expand: $brilliant-rose;
 $spc-cart-free-gift-coupon-code: $brilliant-rose;
 $spc-cart-free-gifts-link: $nero;
+$spc-cart-promo-code-apply-btn-txt: $mothercare-black;
+$spc-cart-promo-code-apply-btn-bg: $vanilla;
+$spc-promotion-link: $special-price;
+$spc-select-border: $cultured;
+$spc-select-arrow-bg: $cultured;
+$spc-checkout-add-new-address-bg: $vanilla;
+$spc-checkout-btn-hover-bg: $brilliant-rose;
 
 // Fit Calculator.
 $fit-calc-select-border: $_grey_three;
@@ -1142,29 +1161,33 @@ $fit-calc-size-guide-btn-bg: $brilliant-rose;
 $fit-calc-empty-input: $brilliant-rose;
 $fit-calc-result: $vivid-raspberry;
 $fit-calc-selected-radio: $vivid-raspberry;
+$fit-calc-btn-text: $matterhorn;
 
 // Quick view size filter.
 $plp-quick-view-product-size-text: $black;
 $plp-quick-view-product-size-text-active: $black;
 $plp-quick-view-product-size-border: $_grey-51-6;
 $plp-quick-view-product-size-border-hover: $black;
-$plp-quick-view-product-size-active-bg: $_grey-51-6;
+$plp-quick-view-product-size-active-bg: $light-orange;
 $plp-quick-view-product-size-text-disabled: $white;
+$plp-quick-view-product-size-bg-border: $white-three;
 
 // Wishlist
 $wishlist-header-notification-border: $brilliant-rose;
-$wishlist-button-border: $brilliant-rose;
+$wishlist-button-border: $matterhorn;
 $wishlist-header-notification-text: $black;
 $wishlist-header-notification-span: $brilliant-rose;
 $wishlist-header-login-message: $black;
 $wishlist-button-bg: $primary_btn_bg;
 $wishlist-button-bg-hover: $primary_btn_bg;
-$wishlist-button-register-txt: $brilliant-rose;
-$wishlist-basket-modal-close-bg: $brilliant-rose;
+$wishlist-button-register-txt: $matterhorn;
+$wishlist-basket-modal-close-bg: $mothercare-black;
 $wishlist-share-text: $black;
 $my-wishlist-share-modal-hover-bg: $primary_btn_bg;
 $wishlist-oos: $red-error;
 $my-wishlist-share-modal-header: $brilliant-rose;
+$wishlist-button-txt: $matterhorn;
+$wishlist-basket-button-border: $matterhorn;
 
 // Express delivery
 $sameday-express-delivery-drawer-btn: $primary_btn_bg;
@@ -1181,12 +1204,12 @@ $rr-stars-color: $nero;
 $rr-form-head-row-border: $brilliant-rose;
 $rr-switchOn-active-bg: $nero;
 $rr-select-arrow-icon: $mothercare-black;
-$rr-select-arrow-bg: $white-five;
-$rr-static-links-txt: $brilliant-rose;
+$rr-select-arrow-bg: $vanilla;
+$rr-static-links-txt: $matterhorn;
 $rr-form-label-txt: $ash-triplet;
 $rr-selected-slider-value: $nero;
-$rr-write-review-cancel-btn-txt: $ash-triplet;
-$rr-write-review-cancel-btn-border: $ash-triplet;
+$rr-write-review-cancel-btn-txt: $matterhorn;
+$rr-write-review-cancel-btn-border: $matterhorn;
 $rr-static-links-border: $ash-triplet;
 $rr-tag-label-active-bg: $brilliant-rose;
 $rr-tag-label-active-border: $brilliant-rose;
@@ -1194,8 +1217,11 @@ $rr-switchOn-active-bg: $brilliant-rose;
 $rr-recommendation-icon-bg: $brilliant-rose;
 $rr-histogram-dynamic-bar-bg: $brilliant-rose;
 $rr-recommendation-icon-bg: $brilliant-rose;
-$rr-review-form-title: $brilliant-rose;
-$rr-review-terms-condition: $brilliant-rose;
+$rr-review-form-title: $nero;
+$rr-review-terms-condition: $matterhorn;
 $rr-review-summary-btn-color: $brilliant-rose;
 $rr-review-summary-btn-border: $brilliant-rose;
 $rr-recommendation-icon-bg: $brilliant-rose;
+$rr-review-summary-btn-text: $matterhorn;
+$rr-recommendation-icon: $mothercare-black;
+$rr-switchOn-active-txt: $matterhorn;
