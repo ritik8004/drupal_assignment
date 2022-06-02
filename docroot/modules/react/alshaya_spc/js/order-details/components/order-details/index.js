@@ -159,7 +159,7 @@ class OrderDetails extends React.Component {
               <div className="desktop-only">&nbsp;</div>
               <div className="above-mobile">&nbsp;</div>
               <div className="right--align">
-                <div className="dark upcase">{Drupal.t('Total Refund Amount')}</div>
+                <div className="dark upcase">{Drupal.t('Total Refund Amount', {}, { context: 'online_returns' })}</div>
               </div>
               <div className="blend">
                 <div className="dark"><PriceElement amount={totalRefundAmount} /></div>
