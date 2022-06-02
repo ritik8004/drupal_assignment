@@ -22,3 +22,4 @@ dependencies:
   - drupal:taxonomy
   - drupal:user
   - pcb:pcb
+  - alshaya_search_algolia:alshaya_search_algolia
