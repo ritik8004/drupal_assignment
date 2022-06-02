@@ -282,7 +282,7 @@ header {
         padding: 0.625rem 1.5rem;
         height: 2.5rem;
         margin-top: 0;
-        border-top: 2px solid transparent !important;
+        border-top: rem(2) solid transparent !important;
 
         &::after {
           content: '';
