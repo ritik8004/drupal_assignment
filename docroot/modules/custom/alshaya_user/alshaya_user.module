@@ -13,8 +13,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
 use Drupal\Core\Url;
+use Drupal\alshaya_spc\Helper\SecureText;
 
 /**
  * Implements hook_theme().
@@ -180,7 +182,10 @@ function alshaya_user_form_user_register_form_submit($form, FormStateInterface $
     // Prepare user data array.
     $user_data = ['id' => $account->id()];
     // Get the string to pass into GET.
-    $user_data_string = base64_encode(json_encode($user_data));
+    $user_data_string = SecureText::encrypt(
+      json_encode($user_data),
+      Settings::get('alshaya_api.settings')['consumer_secret']
+    );
     $form_state->setRedirect('alshaya_user.user_register_complete', ['user' => $user_data_string]);
   }
 }

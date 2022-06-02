@@ -7,6 +7,8 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\alshaya_spc\Helper\SecureText;
+use Drupal\Core\Site\Settings;
 
 /**
  * Customer controller to add/override pages for customer.
@@ -55,7 +57,10 @@ class UserController extends ControllerBase {
     }
 
     // Decode that data from query string.
-    $userData = json_decode(base64_decode($userDataString), TRUE);
+    $userData = json_decode(SecureText::decrypt(
+        $userDataString,
+        Settings::get('alshaya_api.settings')['consumer_secret']
+      ), TRUE);
 
     // Redirect to home if value in query string is invalid.
     if (empty($userData)) {
