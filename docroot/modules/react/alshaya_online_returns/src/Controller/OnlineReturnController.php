@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,13 +42,6 @@ class OnlineReturnController extends ControllerBase {
   protected $apiWrapper;
 
   /**
-   * The language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
    * Address Country Repository service object.
    *
    * @var \Drupal\address\Repository\CountryRepository
@@ -70,8 +62,6 @@ class OnlineReturnController extends ControllerBase {
    *   Alshaya online returns helper.
    * @param \Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper $online_returns_api_helper
    *   Alshaya online returns helper.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
    * @param \Drupal\address\Repository\CountryRepository $address_country_repository
    *   Address Country Repository service object.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
@@ -81,13 +71,11 @@ class OnlineReturnController extends ControllerBase {
    */
   public function __construct(OnlineReturnsHelper $online_returns_helper,
                               OnlineReturnsApiHelper $online_returns_api_helper,
-                              LanguageManagerInterface $language_manager,
                               CountryRepository $address_country_repository,
                               AlshayaApiWrapper $api_wrapper,
                               Renderer $renderer) {
     $this->onlineReturnsHelper = $online_returns_helper;
     $this->onlineReturnsApiHelper = $online_returns_api_helper;
-    $this->languageManager = $language_manager;
     $this->addressCountryRepository = $address_country_repository;
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
@@ -100,7 +88,6 @@ class OnlineReturnController extends ControllerBase {
     return new static(
       $container->get('alshaya_online_returns.online_returns_helper'),
       $container->get('alshaya_online_returns.online_returns_api_helper'),
-      $container->get('language_manager'),
       $container->get('address.country_repository'),
       $container->get('alshaya_api.api'),
       $container->get('renderer'),
@@ -135,7 +122,7 @@ class OnlineReturnController extends ControllerBase {
 
     // Get return configurations.
     $returnConfig = $this->onlineReturnsApiHelper->getReturnsApiConfig(
-      $this->languageManager->getCurrentLanguage()->getId(),
+      $this->languageManager()->getCurrentLanguage()->getId(),
     );
 
     // Adding address fields configuration to display user address details.
