@@ -102,8 +102,8 @@ html[lang=ar] {
     .grid-buttons {
       .large-col-grid,
       .small-col-grid {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: rem(24);
+        height: rem(24);
         display: inline-block;
         margin-#{$left}: 0;
 

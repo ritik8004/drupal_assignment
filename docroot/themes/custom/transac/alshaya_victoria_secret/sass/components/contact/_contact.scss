@@ -12,29 +12,29 @@
 
 .c-user-edit .user-form {
   #edit-account {
-    margin-top: 2.813rem;
+    margin-top: rem(45);
   }
 
   > div:first-child {
-    margin-top: 3rem !important;
+    margin-top: rem(48) !important;
   }
 
   .form-wrapper,
   .form-item:not(.mobile-number-field) {
-    margin-top: 1.975rem;
+    margin-top: rem(31);
 
     @include breakpoint($only-tablet) {
-      margin-top: 1.25rem;
+      margin-top: rem(20);
     }
   }
 
   .form-actions {
     @include breakpoint($desktop) {
-      margin-top: 0.8rem;
+      margin-top: rem(13);
     }
 
     @include breakpoint($tablet) {
-      margin-top: 1rem;
+      margin-top: rem(16);
     }
 
     input {
@@ -44,8 +44,8 @@
 
   .form-item-field-subscribe-newsletter-value {
     label {
-      padding-#{$left}: 1.875rem;
-      text-indent: -2rem;
+      padding-#{$left}: rem(30);
+      text-indent: rem(-32);
       display: block;
     }
   }
@@ -55,7 +55,7 @@ html[lang=ar] {
   form.user-form {
     .form-type-email {
       input[type=email] {
-        margin-top: 0.3125rem;
+        margin-top: rem(5);
 
         & ~ label {
           background: transparent !important;
@@ -75,7 +75,7 @@ html[lang=ar] {
 .path--user .c-address-book {
   .address-book-address {
     .country-field-wrapper {
-      height: 3rem;
+      height: rem(48);
       line-height: 1.43;
     }
   }
@@ -86,13 +86,13 @@ html[lang=ar] {
     .field--name-field-first-name,
     .field--name-field-last-name {
       @include breakpoint($desktop) {
-        margin-top: 0.5rem;
+        margin-top: rem(8);
       }
     }
 
     .mobile-number-field {
       margin-top: 0;
-      margin-bottom: 0.75rem;
+      margin-bottom: rem(12);
     }
 
     .field--type-mobile-number {
