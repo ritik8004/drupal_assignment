@@ -258,6 +258,10 @@ function _alshaya_online_returns_translations() {
         'ar' => '.يمكن تقديم طلبات الإرجاع أونلاين بعد استكمال طلبات الإرجاع الحالية',
         'context' => 'online_returns',
       ],
+      'One or more products selected are not eligible for a return as they are on promotion. Please select a different product to proceed.' => [
+        'ar' => 'المنتج أو المنتجات المختارة لا يمكن استبدالها ﻷنها ضمن فترة التنزيلات. يرجى اختيار منتج آخر للمتابعة.',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 
