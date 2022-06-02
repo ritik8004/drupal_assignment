@@ -122,7 +122,7 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
           $rows[$key]['icon'] = $row_values['row_' . $key . '_icon'];
         }
         if (isset($row_values['row_' . $key . '_hide_this_row'])) {
-          $rows[$key]['hide_this_row'] = $row_values['row_' . $key . '_hide_this_row'];
+          $rows[$key]['hide_this_row'] = $row_values['row_' . $key . '_hide_this_row'] === '0' ? FALSE : TRUE;
         }
       }
       // Save the row fields array in config.
