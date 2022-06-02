@@ -3,7 +3,7 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Price from '../../../../../js/utilities/components/price';
 import PriceElement from '../../../../../js/utilities/components/price/price-element';
-import { isDesktop, isMobile } from '../../../../../js/utilities/display';
+import { isMobile } from '../../../../../js/utilities/display';
 
 const ReturnIndividualItem = ({
   item,
@@ -66,7 +66,7 @@ const ReturnIndividualItem = ({
           </div>
         </div>
 
-        <ConditionalView condition={isDesktop()}>
+        <ConditionalView condition={!isMobile()}>
           <div className="item-price">
             <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
             <div className="dark">
@@ -86,7 +86,7 @@ const ReturnIndividualItem = ({
         </ConditionalView>
       </div>
 
-      <ConditionalView condition={isDesktop()}>
+      <ConditionalView condition={!isMobile()}>
         <div className="item-total-price">
           <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
           <span className="dark"><PriceElement amount={itemQuantity * priceIncTax} /></span>
