@@ -10,4 +10,3 @@ dependencies:
   - alshaya_product:alshaya_product
   - alshaya_config:alshaya_config
   - alshaya_i18n:alshaya_i18n
-  - alshaya_acm_product:alshaya_acm_product
