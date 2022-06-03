@@ -275,41 +275,7 @@ class AlshayaAcmConfigCheck {
 
     // Configure GTM Container ID.
     $this->configureGtmContainerId(Settings::get('google_tag.container.primary'));
-
-    // Get index name currently set in config.
-    $index_name = $this->configFactory->getEditable('search_api.index.alshaya_algolia_index')->get('options.algolia_index_name');
-    $env_number = substr($index_name, 0, 2);
-    if (is_numeric($env_number) && $env_number === '01') {
-      // Set Drupal index as index prefix based on current environment.
-      $this->algoliaIndexHelper->setAlgoliaIndexPrefix('drupal');
-    }
-    else {
-      // Set MDC index as index prefix based on current environment.
-      $this->algoliaIndexHelper->setAlgoliaIndexPrefix('mdc');
-    }
-    // Update indices for current environment.
-    $this->setAlshayaIndexNames();
-
     return TRUE;
-  }
-
-  /**
-   * Set alshaya search indices based on the current environment.
-   */
-  private function setAlshayaIndexNames() {
-    $index_prefix = $this->algoliaIndexHelper->getAlgoliaIndexPrefix();
-
-    $configs = [
-      'search_api.index.alshaya_algolia_index' => $index_prefix,
-      'search_api.index.acquia_search_index' => $index_prefix,
-      'search_api.index.alshaya_algolia_product_list_index' => $index_prefix . '_product_list',
-    ];
-
-    foreach ($configs as $config => $value) {
-      $algolia_index_config = $this->configFactory->getEditable($config);
-      $algolia_index_config->set('options.algolia_index_name', $value);
-      $algolia_index_config->save();
-    }
   }
 
   /**

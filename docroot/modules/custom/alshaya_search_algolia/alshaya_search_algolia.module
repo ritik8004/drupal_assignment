@@ -214,3 +214,44 @@ function _alshaya_search_algolia_sort_settings_submit(&$form, FormStateInterface
     $algolia_search_helper->updateReplicaIndex($sort_fields);
   }
 }
+
+/**
+ * Implements hook_alshaya_reset_config_configs_to_reset().
+ */
+function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+
+  $algolia_search_helper = \Drupal::service('alshaya_search_algolia.index_helper');
+  // Get index name currently set in config.
+  $index_name = \Drupal::configFactory()->getEditable('search_api.index.alshaya_algolia_index')->get('options.algolia_index_name');
+  $env_number = substr($index_name, 0, 2);
+  if (is_numeric($env_number) && $env_number === '01') {
+    // Set Drupal index as index prefix based on current environment.
+    $algolia_search_helper->setAlgoliaIndexPrefix('drupal');
+  }
+  else {
+    // Set MDC index as index prefix based on current environment.
+    $algolia_search_helper->setAlgoliaIndexPrefix('mdc');
+  }
+  // Update indices for current environment.
+  _set_alshaya_index_names();
+}
+
+/**
+ * Sets search index prefix based on config.
+ */
+function _set_alshaya_index_names() {
+  $index_prefix = \Drupal::service('alshaya_search_algolia.index_helper')->getAlgoliaIndexPrefix();
+
+  $configs = [
+    'search_api.index.alshaya_algolia_index' => $index_prefix,
+    'search_api.index.acquia_search_index' => $index_prefix,
+    'search_api.index.alshaya_algolia_product_list_index' => $index_prefix . '_product_list',
+  ];
+
+  foreach ($configs as $config => $value) {
+    $algolia_index_config = \Drupal::configFactory()->getEditable($config);
+    $algolia_index_config->set('options.algolia_index_name', $value);
+    $algolia_index_config->save();
+  }
+
+}
