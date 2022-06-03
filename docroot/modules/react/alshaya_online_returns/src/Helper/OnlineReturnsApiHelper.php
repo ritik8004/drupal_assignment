@@ -88,8 +88,9 @@ class OnlineReturnsApiHelper {
    */
   public function getReturnsApiConfig($langcode = 'en', $reset = FALSE) {
     $cache_key = 'alshaya_online_returns:returns_api_config:' . $langcode;
+    $cache = $this->cache->get($cache_key);
 
-    if (!$reset && $cache = $this->cache->get($cache_key)) {
+    if (!$reset && $cache) {
       return $cache->data;
     }
 
