@@ -1,0 +1,23 @@
+.paragraph_banner_block {
+  .paragraph_banner_buttons {
+    .field--name-field-links {
+      .field--name-field-links {
+        a {
+          color: $primary_btn_text;
+          border: rem(1) solid $btn_border;
+          border-radius: rem(3);
+        }
+
+        &:last-child {
+          a {
+            border: 0;
+
+            &:hover {
+              background: $plp-secondary-cta-hover-bg;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.spc-cart-items {
+  .spc-cart-item {
+    .spc-product-tile {
+      .spc-remove-btn {
+        width: rem(24);
+        height: rem(24);
+        display: inline-block;
+        margin-#{$left}: 0;
+        background: url('#{$brand_theme_img_directory_path}/icons/spc-close.svg') no-repeat center;
+
+        &:hover {
+          background: url('#{$brand_theme_img_directory_path}/icons/spc-close-hover.svg') no-repeat center;
+        }
+
+        svg {
+          display: none;
+        }
+      }
+    }
+  }
+}

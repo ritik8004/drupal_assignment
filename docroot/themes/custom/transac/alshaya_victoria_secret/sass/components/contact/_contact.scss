@@ -1,0 +1,121 @@
+.address-book-address,
+.contact-form,
+.user-communication-preference,
+.webform-submission-alshaya-contact-form,
+.profile-form {
+  .form-submit {
+    text-transform: unset;
+    border-radius: rem(3);
+    font-family: $vs-bentonsans-medium;
+  }
+}
+
+.c-user-edit .user-form {
+  #edit-account {
+    margin-top: rem(45);
+  }
+
+  > div:first-child {
+    margin-top: rem(48) !important;
+  }
+
+  .form-wrapper,
+  .form-item:not(.mobile-number-field) {
+    margin-top: rem(31);
+
+    @include breakpoint($only-tablet) {
+      margin-top: rem(20);
+    }
+  }
+
+  .form-actions {
+    @include breakpoint($desktop) {
+      margin-top: rem(13);
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: rem(16);
+    }
+
+    input {
+      margin-top: 0;
+    }
+  }
+
+  .form-item-field-subscribe-newsletter-value {
+    label {
+      padding-#{$left}: rem(30);
+      text-indent: rem(-32);
+      display: block;
+    }
+  }
+}
+
+html[lang=ar] {
+  form.user-form {
+    .form-type-email {
+      input[type=email] {
+        margin-top: rem(5);
+
+        & ~ label {
+          background: transparent !important;
+        }
+      }
+    }
+
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      input[type=text] {
+        font-family: $arial-nodir;
+      }
+    }
+  }
+}
+
+.path--user .c-address-book {
+  .address-book-address {
+    .country-field-wrapper {
+      height: rem(48);
+      line-height: 1.43;
+    }
+  }
+}
+
+.c-user-edit.user-page {
+  .user-form {
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      @include breakpoint($desktop) {
+        margin-top: rem(8);
+      }
+    }
+
+    .mobile-number-field {
+      margin-top: 0;
+      margin-bottom: rem(12);
+    }
+
+    .field--type-mobile-number {
+      @include breakpoint($desktop) {
+        position: relative;
+        clear: both;
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .c-user-edit.user-page {
+    .user-form {
+      .field--type-mobile-number {
+        position: relative;
+        clear: both;
+      }
+    }
+  }
+}
+
+.c-user-edit.user-page .mobile-number-field {
+  width: 100%;
+  display: inline-block;
+}

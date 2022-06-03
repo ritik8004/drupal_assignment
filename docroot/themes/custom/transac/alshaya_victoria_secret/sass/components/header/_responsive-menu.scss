@@ -50,11 +50,12 @@ header {
     }
 
     @include breakpoint($upto-tablet) {
-      height: 2.625rem;
+      height: rem(43);
     }
 
     @include breakpoint($upto-desktop) {
       background-position: center;
+      background-size: rem(20);
     }
   }
 
@@ -70,7 +71,8 @@ header {
     }
 
     @include breakpoint($desktop) {
-      padding-top: 2rem;
+      padding-top: 0;
+      padding-bottom: rem(30);
 
       html[lang=ar] & {
         padding-top: 1.625rem;
@@ -130,6 +132,7 @@ header {
 
   .main--menu ul.menu--one__list {
     padding-bottom: 6.0625rem;
+    background: $header_secondary_bg;
 
     .menu__link {
       text-transform: uppercase;
@@ -336,8 +339,10 @@ header {
 
     .site-brand-home {
       img {
+        width: auto;
+
         @include breakpoint($desktop) {
-          max-width: 18.75rem;
+          max-width: rem(384);
           margin: auto;
           text-align: center;
         }

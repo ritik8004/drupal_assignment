@@ -4,4 +4,20 @@
       font-size: 0.75rem;
     }
   }
+
+  .review-inline-feedback {
+    .review-feedback-comment,
+    .review-comment-form {
+      button {
+        border-radius: rem(3);
+      }
+    }
+
+    button {
+      .form-cancel-btn,
+      .form-submit-btn {
+        border-radius: rem(3);
+      }
+    }
+  }
 }
