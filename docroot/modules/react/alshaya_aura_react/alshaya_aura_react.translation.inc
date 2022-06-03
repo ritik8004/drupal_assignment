@@ -26,12 +26,6 @@ function _alshaya_aura_react_translations() {
       'Sign up now' => [
         'ar' => 'تسجيل الاشتراك الآن',
       ],
-      'Congrats! You are now part of the exclusive AURA club. You’ll now earn points as you shop online and in stores.' => [
-        'ar' => 'تهانينا! أنت الآن جزء من نادي أورا الحصري. سوف تربح الآن نقاط أثناء التسوق أونلاين وفي المحلات.',
-      ],
-      'To use your points online, please download the AURA app and provide us with a few more details.' => [
-        'ar' => 'يرجى تنزيل تطبيق أورا وتزويدنا ببعض التفاصيل الإضافية وذلك لاستخدام النقاط عبر أونلاين.',
-      ],
       'Do you want to link now?' => [
         'ar' => 'هل ترغب في الربط الآن؟',
       ],
@@ -576,6 +570,12 @@ function _alshaya_aura_react_translations() {
       'A card number is required to link your card. Please enter your details to proceed.' => [
         'ar' => 'رقم البطاقة يحتاج الربط مع بطاقتك. يرجى ادخال بياناتك للاستمرار.',
         'context' => 'aura',
+      ],
+      'Congrats! You are now part of the exclusive Aura club. You’ll now earn points as you shop online and in stores.' => [
+        'ar' => 'تهانينا! أنت الآن جزء من نادي أورا الحصري. سوف تربح الآن نقاط أثناء التسوق أونلاين وفي المحلات.',
+      ],
+      'To use your points online, please download the Aura MENA app and provide us with a few more details.' => [
+        'ar' => 'يرجى تنزيل تطبيق أورا وتزويدنا ببعض التفاصيل الإضافية وذلك لاستخدام النقاط عبر أونلاين.',
       ],
     ],
   ];
