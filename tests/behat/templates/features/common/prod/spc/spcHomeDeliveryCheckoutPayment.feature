@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @homeDelivery @pbkaepprod @pbksapprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @westelmsapprod @westelmkwpprod @westelmaepprod @vskwpprod @pbkaeprod @pbksaprod @pbkkwprod @mujiaeprod @mujisaprod @mujikwprod @bpkwprod @tbsegprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @vskwprod @vssapprod @vsaepprod @pbsapprod @pbaepprod @pbkwpprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwpprod @mcsapprod @mckwprod @vssaprod @vsaeprod @pbsaprod @pbaeprod @pbkwprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod @mcsaprod @mckwprod
+@javascript @guest @checkoutPayment @homeDelivery @coskwprod @cosaeprod @cossaprod @pbkaepprod @pbksapprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @westelmsapprod @westelmkwpprod @westelmaepprod @vskwpprod @pbkaeprod @pbksaprod @pbkkwprod @mujiaeprod @mujisaprod @mujikwprod @bpkwprod @tbsegprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @vskwprod @vssapprod @vsaepprod @pbsapprod @pbaepprod @pbkwpprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwpprod @mcsapprod @mckwprod @vssaprod @vsaeprod @pbsaprod @pbaeprod @pbkwprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod @mcsaprod @mckwprod
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
 
   Background:
@@ -24,7 +24,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
@@ -66,7 +66,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
@@ -107,7 +107,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
