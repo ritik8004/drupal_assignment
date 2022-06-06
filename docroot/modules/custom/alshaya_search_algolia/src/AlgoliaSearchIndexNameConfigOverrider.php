@@ -36,13 +36,6 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
   protected $alshayaAlgoliaConfig;
 
   /**
-   * Algolia Index Helper.
-   *
-   * @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper
-   */
-  protected $algoliaIndexHelper;
-
-  /**
    * AlgoliaSearchIndexNameConfigOverrider constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -92,7 +85,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['object_id_field'] = 'field_skus';
 
     // Get index prefix for current environment.
-    $index_prefix = $this->getAlgoliaIndexHelper()->getAlgoliaIndexPrefix();
+    $index_prefix = $this->configFactory->get('alshaya_search_algolia.settings')->get('index_prefix');
     // Ensure we never connect to Index of another ENV.
     $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $index_prefix;
     $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $index_prefix;
@@ -178,21 +171,6 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     $metadata = new CacheableMetadata();
     $metadata->setCacheContexts(['languages:language_interface']);
     return $metadata;
-  }
-
-  /**
-   * Sets algolia index service.
-   *
-   * @return \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper
-   *   Algolia index helper service.
-   */
-  protected function getAlgoliaIndexHelper() {
-    // We need to set it this way or else
-    // we get circular service dependency error for  "router.route_provider".
-    if (!$this->algoliaIndexHelper) {
-      $this->algoliaIndexHelper = \Drupal::service('alshaya_search_algolia.index_helper');
-    }
-    return $this->algoliaIndexHelper;
   }
 
 }
