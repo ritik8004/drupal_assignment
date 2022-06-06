@@ -31,8 +31,8 @@
 
     &::after {
       @include breakpoint($upto-desktop) {
-        font-size: 1.5rem;
-        #{$right}: -0.1875rem;
+        font-size: rem(24);
+        #{$right}: rem(-3);
       }
     }
   }

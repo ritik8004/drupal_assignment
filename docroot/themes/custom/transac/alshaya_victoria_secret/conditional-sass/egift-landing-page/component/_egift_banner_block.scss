@@ -4,7 +4,7 @@
       .field--name-field-links {
         a {
           color: $primary_btn_text;
-          border: 1px solid $btn_border;
+          border: rem(1) solid $btn_border;
           border-radius: rem(3);
         }
 
