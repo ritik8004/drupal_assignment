@@ -345,7 +345,9 @@ class CustomerController extends ControllerBase {
     $details['vat_text'] = $build['#vat_text'] ?? '';
     $details['products'] = $build['#products'] ?? [];
     $details['cancelled_products'] = $build['#cancelled_products'] ?? [];
-
+    $details['order_details']['billing_address_title'] = $this->t('Billing details');
+    $details['order_details']['delivery_address_title'] = $this->t('Delivery details');
+    $details['total_quantity_text'] = $this->formatPlural($build['#order']['quantity'], 'Total: @count item', 'Total: @count items');
     // Render product images, translate attribute labels.
     foreach (['products', 'cancelled_products'] as $type) {
       foreach ($details[$type] as &$product) {
