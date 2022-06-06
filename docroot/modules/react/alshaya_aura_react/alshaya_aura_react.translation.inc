@@ -579,6 +579,10 @@ function _alshaya_aura_react_translations() {
         'ar' => 'يرجى تنزيل تطبيق أورا وتزويدنا ببعض التفاصيل الإضافية وذلك لاستخدام النقاط عبر أونلاين.',
         'context' => 'aura',
       ],
+      'Sign In' => [
+        'ar' => 'تسجيل الدخول',
+        'context' => 'aura',
+      ],
     ],
   ];
 }
