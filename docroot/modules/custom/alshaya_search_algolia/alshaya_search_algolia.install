@@ -15,14 +15,10 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  */
 function alshaya_search_algolia_update_8013() {
   // Check if alshaya_rcs is enabled and update index prefix based on it.
-  if (\Drupal::service('module_handler')->moduleExists('alshaya_rcs')) {
-    // Set MDC index as index prefix.
-    \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix('mdc');
-  }
-  else {
-    // Set Drupal index as index prefix.
-    \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix('drupal');
-  }
+  $index_source = \Drupal::service('module_handler')->moduleExists('alshaya_rcs')
+  ? 'mdc'
+  : 'drupal';
+  \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix($index_source);
 }
 
 /**
