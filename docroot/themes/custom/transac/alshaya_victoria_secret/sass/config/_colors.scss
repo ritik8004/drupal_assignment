@@ -118,11 +118,11 @@ $body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $content_pagetitle_border: $gainsboro;
 $primary_text: $black;
-$primary_link: $brilliant-rose;
-$primary_link-hover: $brilliant-rose;
-$primary_link-active: $brilliant-rose;
+$primary_link: $matterhorn;
+$primary_link-hover: $matterhorn;
+$primary_link-active: $matterhorn;
 $primary_border: $gainsboro;
-$content_link_color: $brilliant-rose;
+$content_link_color: $matterhorn;
 
 // Form elements.
 $primary_form_selector_border: $black;
@@ -418,7 +418,7 @@ $mm_l2_p: $brownish-grey;
 $mm_l3_link: $nero;
 $mm_l3_link_2: $peacock-blue; // possible old markup.
 $mm_l3_link_bg: $cultured;
-$mm_l3_link_hover: $brilliant-rose;
+$mm_l3_link_hover: $matterhorn;
 $mm_highlight_bg: $white-smoke-light;
 $mm_highlight_label: $black;
 $mm_highlight_title: $black;
@@ -472,7 +472,7 @@ $primary_footer_input_label: $mothercare-black;
 $footer_title_h3: $mothercare-black;
 $footer_link_mobile: $mothercare-black;
 $footer_link: $mothercare-black;
-$footer_link_hover: $brilliant-rose;
+$footer_link_hover: $matterhorn;
 
 // Social links.
 $social_links: $mothercare-black;
@@ -569,8 +569,8 @@ $plp_pager_link: $nero;
 $plp_pager_link_border: $nero;
 
 // Product detail page.
-$pdp_product_title: $mothercare-black;
-$pdp_product_price: $mothercare-black;
+$pdp_product_title: $black;
+$pdp_product_price: $black;
 $pdp_product_special_price: $special-price;
 $pdp_product_special_price_text: $special-price;
 $pdp_product_discount_price: $special-price;
@@ -934,14 +934,14 @@ $user_login_section_title: $nero;
 // User Form
 $user_form_text: $black;
 $user_form_error_label: $vanilla;
-$user_field_link: $brilliant-rose;
+$user_field_link: $matterhorn;
 $user_captcha: $greyish;
 $user_pwd_input: $grey-ash;
 $user_pwd_unmask: $black;
 $user_account_nav: $matterhorn;
 $my_account_nav: $nero;
 $my_account_nav_active: $black;
-$my_account_nav_hover: $brilliant-rose;
+$my_account_nav_hover: $matterhorn;
 
 //block-myaccountneedhelp
 $myaccountneedhelp_bg: $pale-grey;
@@ -1144,7 +1144,7 @@ $algolia-search-icon: $black;
 $spc-deliver-button: $matterhorn;
 $spc-cnc-toggle-bg-active: $brilliant-rose;
 $spc-checkout-cnc-map-expand: $brilliant-rose;
-$spc-cart-free-gift-coupon-code: $brilliant-rose;
+$spc-cart-free-gift-coupon-code: $matterhorn;
 $spc-cart-free-gifts-link: $nero;
 $spc-cart-promo-code-apply-btn-txt: $mothercare-black;
 $spc-cart-promo-code-apply-btn-bg: $vanilla;
@@ -1161,7 +1161,8 @@ $fit-calc-size-guide-btn-bg: $brilliant-rose;
 $fit-calc-empty-input: $brilliant-rose;
 $fit-calc-result: $vivid-raspberry;
 $fit-calc-selected-radio: $vivid-raspberry;
-$fit-calc-btn-text: $matterhorn;
+$fit-calc-btn-text: $vanilla;
+$fit-select-arrow-bg: $vanilla;
 
 // Quick view size filter.
 $plp-quick-view-product-size-text: $black;
@@ -1186,7 +1187,7 @@ $wishlist-basket-modal-close-bg: $mothercare-black;
 $wishlist-share-text: $black;
 $my-wishlist-share-modal-hover-bg: $primary_btn_bg;
 $wishlist-oos: $red-error;
-$my-wishlist-share-modal-header: $brilliant-rose;
+$my-wishlist-share-modal-header: $matterhorn;
 $wishlist-button-txt: $matterhorn;
 $wishlist-basket-button-border: $matterhorn;
 
