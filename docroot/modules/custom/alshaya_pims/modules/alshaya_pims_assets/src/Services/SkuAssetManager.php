@@ -37,8 +37,8 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     SkuAssetManagerInterface $alshaya_media_assets_manager,
     ConfigFactory $configFactory
   ) {
-    $this->configFactory = $configFactory;
     $this->mediaAssetManager = $alshaya_media_assets_manager;
+    $this->configFactory = $configFactory;
   }
 
   /**
