@@ -2,7 +2,7 @@
   'use strict';
 
   /**
-   * Global fuunction to perform add to cart.
+   * Global goinstore function to perform add to cart.
    *
    * @param {string} parentSku
    *   The sku value.
