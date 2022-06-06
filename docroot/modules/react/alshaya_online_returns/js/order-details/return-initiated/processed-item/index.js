@@ -54,14 +54,14 @@ class ProcessedItem extends React.Component {
   render() {
     const { popup, cancelBtnState, showPrintLabelBtn } = this.state;
     const { returnData, handleErrorMessage } = this.props;
-    const returnStatus = returnData.returnInfo.extension_attributes.customer_status;
+    const returnStatus = returnData.returnInfo.extension_attributes.customer_status_key;
     const returnStatusClass = Drupal.cleanCssIdentifier(returnStatus);
     return (
       <div key={returnData.returnInfo.increment_id} className="return-status-header">
         <div className="return-status-wrapper">
           <div className="return-status-id-container">
             <div className="return-status">
-              <span className={`status-label ${returnStatusClass}`}>{returnStatus}</span>
+              <span className={`status-label ${returnStatusClass}`}>{returnData.returnInfo.extension_attributes.customer_status}</span>
               <span className="status-message">
                 {' - '}
                 {returnData.returnInfo.extension_attributes.description}

@@ -143,11 +143,12 @@
 
           &.closed,
           &.return-rejected,
-          &.goods-collection-failed {
+          &.goods-collection-failed,
+          &.customer-cancelled-return {
             color: $online-return-status-red-label;
           }
 
-          &.processed_closed,
+          &.processed-closed,
           &.return-request-raised,
           &.return-request-accepted,
           &.goods-collected,
