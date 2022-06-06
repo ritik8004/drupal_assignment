@@ -9,6 +9,8 @@ use Drupal\search_api\Entity\Index;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_update_N().
+ *
  * Added index prefix config for algolia to use drupal or mdc indices.
  */
 function alshaya_search_algolia_update_8013() {

@@ -197,7 +197,7 @@ class AlshayaAlgoliaIndexHelper {
   protected $skuImagesHelper;
 
   /**
-   * SkuInfoHelper constructor.
+   * AlshayaAlgoliaIndexHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
@@ -1219,9 +1219,9 @@ class AlshayaAlgoliaIndexHelper {
 
     // Get brand and country.
     global $_acsf_site_name;
-    $brand = substr($_acsf_site_name, 0, -2);
     $country = substr($_acsf_site_name, -2);
     if ($index_source === 'drupal') {
+      $brand = substr($_acsf_site_name, 0, -2);
       // Use drupal indices.
       $env = mb_strtolower(Settings::get('env'));
       $env = $env === 'travis' ? 'local' : $env;
