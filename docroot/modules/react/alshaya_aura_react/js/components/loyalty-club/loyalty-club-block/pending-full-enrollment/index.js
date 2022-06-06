@@ -13,10 +13,10 @@ const AuraMyAccountPendingFullEnrollment = () => {
     <div className="aura-pending-full-enrollment-wrapper fadeInUp">
       <div className="pending-full-enrollment-description">
         <div className="title">
-          {Drupal.t('Congrats! You are now part of the exclusive Aura club. You’ll now earn points as you shop online and in stores.')}
+          {Drupal.t('Congrats! You are now part of the exclusive Aura club. You’ll now earn points as you shop online and in stores.', {}, { context: 'aura' })}
         </div>
         <div className="description">
-          {Drupal.t('To use your points online, please download the Aura MENA app and provide us with a few more details.')}
+          {Drupal.t('To use your points online, please download the Aura MENA app and provide us with a few more details.', {}, { context: 'aura' })}
         </div>
         <div className="app-links">
           <a

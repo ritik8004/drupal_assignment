@@ -573,9 +573,11 @@ function _alshaya_aura_react_translations() {
       ],
       'Congrats! You are now part of the exclusive Aura club. You’ll now earn points as you shop online and in stores.' => [
         'ar' => 'تهانينا! أنت الآن جزء من نادي أورا الحصري. سوف تربح الآن نقاط أثناء التسوق أونلاين وفي المحلات.',
+        'context' => 'aura',
       ],
       'To use your points online, please download the Aura MENA app and provide us with a few more details.' => [
         'ar' => 'يرجى تنزيل تطبيق أورا وتزويدنا ببعض التفاصيل الإضافية وذلك لاستخدام النقاط عبر أونلاين.',
+        'context' => 'aura',
       ],
     ],
   ];
