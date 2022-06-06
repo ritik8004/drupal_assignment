@@ -13,6 +13,7 @@ use Drupal\acq_sku\Entity\SKU;
  */
 function alshaya_hm_images_update_9001() {
   \Drupal::service('module_installer')->install(['alshaya_media_assets']);
+  \Drupal::configFactory()->getEditable('alshaya_hm_images.settings')->delete();
 }
 
 /**

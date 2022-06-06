@@ -19,13 +19,26 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   protected $configFactory;
 
   /**
+   * Alshaya media asset manager service.
+   *
+   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface
+   */
+  protected $mediaAssetManager;
+
+  /**
    * SkuAssetManager constructor.
    *
+   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $alshaya_media_assets_manager
+   *   Alshaya media assets service.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Config Factory service.
    */
-  public function __construct(ConfigFactory $configFactory) {
+  public function __construct(
+    SkuAssetManagerInterface $alshaya_media_assets_manager,
+    ConfigFactory $configFactory
+  ) {
     $this->configFactory = $configFactory;
+    $this->mediaAssetManager = $alshaya_media_assets_manager;
   }
 
   /**
@@ -110,11 +123,11 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    * {@inheritDoc}
    */
   public function sortSkuAssets($sku, $page_type, array $assets) {
-    $alshaya_cos_images_config = $this->configFactory->get('alshaya_cos_images.settings');
+    $alshaya_pims_assets = $this->getImageSettings();
     // Fetch weights of asset types based on the pagetype.
-    $sku_asset_type_weights = $alshaya_cos_images_config->get('weights')[$page_type];
+    $sku_asset_type_weights = $alshaya_pims_assets->get('weights')[$page_type];
     // Fetch angle config.
-    $sort_angle_weights = $alshaya_cos_images_config->get('weights')['angle'];
+    $sort_angle_weights = $alshaya_pims_assets->get('weights')['angle'];
 
     // Create multi-dimensional array of assets keyed by their asset type.
     if (!empty($assets)) {
@@ -262,6 +275,13 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    */
   public function getSkuSwatchType(SKU $sku) {
     return '';
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getImageSettings() {
+    return $this->mediaAssetManager->getImageSettings();
   }
 
 }
