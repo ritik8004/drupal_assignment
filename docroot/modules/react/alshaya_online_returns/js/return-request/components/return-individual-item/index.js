@@ -26,12 +26,12 @@ const ReturnIndividualItem = ({
 
   const {
     qty_ordered: qtyOrdered,
-    qty_refunded: qtyRefunded,
     price_incl_tax: priceIncTax,
   } = item;
 
-  // Return from here only if refunded is greater or equal to ordered item.
-  if (qtyOrdered <= qtyRefunded) {
+  // Return from here if the ordered quantity is 0 or less, That means the
+  // items are refunded and no item is left over.
+  if (qtyOrdered <= 0) {
     return null;
   }
 
