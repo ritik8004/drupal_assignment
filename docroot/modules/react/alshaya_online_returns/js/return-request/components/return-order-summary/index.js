@@ -24,7 +24,7 @@ const ReturnOrderSummary = ({
               <div className="item-count">
                 { itemNames.length === 1
                   ? Drupal.t('Total: 1 item')
-                  : Drupal.t('Total: @count items', { '@count': itemNames.length }, {}) }
+                  : Drupal.t('Total: @count items', { '@count': itemNames.length }) }
               </div>
             </div>
           </div>
