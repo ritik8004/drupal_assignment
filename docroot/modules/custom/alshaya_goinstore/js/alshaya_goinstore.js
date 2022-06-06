@@ -8,11 +8,13 @@
    *   The sku value.
    * @param {string} childSku
    *   The child sku value.
+   * @param {string} qty
+   *   The child sku value.
    *
    * @returns {object}
    *   The product info object.
    */
-  Drupal.goinstore = function (parentSku,childSku) {
+  Drupal.goinstore = function (parentSku,childSku,qty) {
     // GoInStore global function to add product to cart.
     const options = [];
     var productData = Drupal.getProductData(parentSku);
@@ -37,7 +39,7 @@
     const responce =  window.commerceBackend.addUpdateRemoveCartItem({
       action: 'add item',
       sku: parentSku,
-      quantity: "1",
+      quantity: qty,
       options: options,
     });
     if (responce instanceof Promise) {

@@ -15,5 +15,6 @@
 ## Configurations
 
 - Enable `alshaya_goinstoe` module
-- After the module is enabled, a global JavaScript snippet that mocks our add to bag functionality is made available for Goinstore widget, to trigger guided purchase on our site during a video call.
-- Goinstore widget will trigger add to basket by calling our global JavaScript function `Drupal.goinstore(ParentSku, childSku)`
+- By default config is set as fasle to enable the config run drush command: `drush -l <url> cset alshaya_goinstore.settings enabled TRUE --input-format=yaml -y`
+- After the module and config is enabled, a global JavaScript snippet that mocks our add to bag functionality is made available for Goinstore widget, to trigger guided purchase on our site during a video call.
+- Goinstore widget will trigger add to basket by calling our global JavaScript function `Drupal.goinstore(ParentSku, childSku,qty)`
