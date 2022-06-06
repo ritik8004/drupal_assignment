@@ -159,7 +159,7 @@ class OrderDetails extends React.Component {
                 <div className="total-row vat-row collapse-row">
                   <div className="warm--white">
                     <div className="dark">
-                      {'(*'}
+                      {'('}
                       {order.vat_text}
                       {')'}
                     </div>
