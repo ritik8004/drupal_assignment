@@ -4,10 +4,13 @@ namespace Drupal\alshaya_online_returns\Controller;
 
 use Drupal\user\UserInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Url;
 use Drupal\block\BlockViewBuilder;
 use Drupal\Core\Render\Renderer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Cache\CacheableRedirectResponse;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
 use Drupal\address\Repository\CountryRepository;
@@ -108,12 +111,13 @@ class OnlineReturnController extends ControllerBase {
   public function returnRequest(UserInterface $user, $order_id) {
     // Do not proceed if Online returns is not enabled.
     if (!$this->onlineReturnsHelper->isOnlineReturnsEnabled()) {
-      throw new \Exception('Online Returns feature not enabled.');
+      return $this->getCacheableRedirectResponse()->send();
     }
 
     $orderDetails = $this->getOrderReturnDetails($user, $order_id);
-    if ($orderDetails['#order']['orderType'] == 'ship_to_store') {
-      throw new NotFoundHttpException();
+    if ($orderDetails['#order']['orderType'] == 'ship_to_store'
+      || !$this->onlineReturnsHelper->validateReturnRequest($orderDetails)) {
+      return $this->getCacheableRedirectResponse()->send();
     }
 
     $build = [];
@@ -347,6 +351,28 @@ class OnlineReturnController extends ControllerBase {
     }
 
     return NULL;
+  }
+
+  /**
+   * Controller function to return the cacheable redirect response.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   User object for which the orders detail page is being viewed.
+   * @param string $order_id
+   *   Order id to view the detail for.
+   */
+  protected function getCacheableRedirectResponse(UserInterface $user, $order_id) {
+    $cacheable_response = new CacheableRedirectResponse(Url::fromRoute('alshaya_acm_customer.orders_detail', [
+      'user' => $user->id(),
+      'order_id' => $order_id,
+    ])->toString());
+
+    // Make response cacheable.
+    $cacheable_metadata = new CacheableMetadata();
+    $cacheable_metadata->setCacheTags($this->onlineReturnsHelper->getCacheTags());
+    $cacheable_response->addCacheableDependency($cacheable_metadata);
+
+    return $cacheable_response;
   }
 
 }

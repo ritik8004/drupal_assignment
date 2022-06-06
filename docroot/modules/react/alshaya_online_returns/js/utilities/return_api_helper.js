@@ -221,21 +221,6 @@ async function validateReturnRequest(orderDetails) {
     return false;
   }
 
-  // Return false if current order return date is expired.
-  if (orderDetails['#order'].returnExpiration) {
-    // Convert the string to date object and compare the timestamp with current
-    // time.
-    const returnDate = new Date(orderDetails['#order'].returnExpiration);
-    const currentDate = new Date();
-
-    if (returnDate.getTime() < currentDate.getTime()) {
-      logger.notice('Order return date expired. Order: @orderId', {
-        '@orderId': orderDetails['#order'].orderId,
-      });
-      return false;
-    }
-  }
-
   return true;
 }
 
