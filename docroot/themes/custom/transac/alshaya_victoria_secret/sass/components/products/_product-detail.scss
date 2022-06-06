@@ -8,14 +8,14 @@
 }
 
 .short-description-wrapper {
-  .field__content-wrapper {
-    background: $secondary_bg;
-    padding: rem(1) rem(15);
-  }
-
   &:not(.matchback-description-wrapper) {
     .c-pdp & {
       border-top: 0;
+    }
+
+    .field__content-wrapper {
+      background: $secondary_bg;
+      padding: rem(1) rem(15);
     }
   }
 
@@ -29,7 +29,9 @@
   }
 
   .read-more-description-link,
-  .read-more-description-link-gift {
+  .read-more-description-link-gift,
+  .read-more-description-link-mobile,
+  .show-less-link {
     margin: 0.75rem 0 0.875rem;
     font-family: $vs-bentonsans-medium;
     text-decoration: underline;
@@ -157,6 +159,7 @@
         font-size: 0.875rem;
         color: $pdp_title_collection_name;
         padding-bottom: 0.375rem;
+        font-family: $vs-bentonsans-medium;
       }
     }
 
@@ -600,7 +603,8 @@ html[lang="en"] {
 
           .title--main,
           &.field--name-name {
-            font-size: 1.625rem;
+            font-size: 1rem;
+            font-family: $alshaya-thin;
           }
         }
       }
@@ -680,7 +684,7 @@ html[lang="ar"] {
       .price,
       .price--discount {
         font-family: $vs-bentonsans-regular;
-        font-size: 0.875rem;
+        font-size: rem(16);
         // Using px value for .04em.
         letter-spacing: 0.56px;
       }
