@@ -349,10 +349,7 @@ class CustomerController extends ControllerBase {
       ? $this->t('Billing details') : '';
     $details['order_details']['delivery_address_title'] = $build['#order_details']['delivery_address']
       ? $this->t('Delivery details') : '';
-    $details['total_quantity_text'] = $build['#order']['quantity'] > 1 ?
-      $this->t('Total: @count items', ['@count' => $build['#order']['quantity']]) :
-      $this->t('Total: @count item', ['@count' => $build['#order']['quantity']]);
-
+    $details['total_quantity_text'] = $this->formatPlural($build['#order']['quantity'], 'Total: @count item', 'Total: @count items');
     // Render product images, translate attribute labels.
     foreach (['products', 'cancelled_products'] as $type) {
       foreach ($details[$type] as &$product) {
