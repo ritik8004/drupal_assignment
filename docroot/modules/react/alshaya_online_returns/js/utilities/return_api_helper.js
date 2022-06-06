@@ -184,8 +184,9 @@ function isReturnClosed(returnItem) {
 async function validateReturnRequest(orderDetails) {
   const returnItems = await getReturnsByOrderId(orderDetails['#order'].orderEntityId);
 
-  // Return false if the api results in some error.
-  if (hasValue(returnItems.error)) {
+  // Return false if the api results in some error or items is empty.
+  if (hasValue(returnItems.error)
+    || ((hasValue(returnItems.data)) && !hasValue(returnItems.data.items))) {
     return false;
   }
 
@@ -218,6 +219,21 @@ async function validateReturnRequest(orderDetails) {
       '@orderId': orderDetails['#order'].orderId,
     });
     return false;
+  }
+
+  // Return false if current order return date is expired.
+  if (orderDetails['#order'].returnExpiration) {
+    // Convert the string to date object and compare the timestamp with current
+    // time.
+    const returnDate = new Date(orderDetails['#order'].returnExpiration);
+    const currentDate = new Date();
+
+    if (returnDate.getTime() < currentDate.getTime()) {
+      logger.notice('Order return date expired. Order: @orderId', {
+        '@orderId': orderDetails['#order'].orderId,
+      });
+      return false;
+    }
   }
 
   return true;
