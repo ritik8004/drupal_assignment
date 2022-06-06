@@ -237,7 +237,7 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     $this->lock = $lock;
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
 
-    $this->imageSettings = $this->configFactory->get('alshaya_hm_images.settings');
+    $this->imageSettings = $this->configFactory->get('alshaya_media_assets.settings');
     $this->fileSystem = $file_system;
     $this->languageManager = $language_manager;
     $this->database = $database;
