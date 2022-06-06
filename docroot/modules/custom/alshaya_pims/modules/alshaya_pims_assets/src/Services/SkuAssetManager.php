@@ -123,11 +123,11 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    * {@inheritDoc}
    */
   public function sortSkuAssets($sku, $page_type, array $assets) {
-    $alshaya_pims_assets = $this->getImageSettings();
+    $image_settings = $this->getImageSettings();
     // Fetch weights of asset types based on the pagetype.
-    $sku_asset_type_weights = $alshaya_pims_assets->get('weights')[$page_type];
+    $sku_asset_type_weights = $image_settings->get('weights')[$page_type];
     // Fetch angle config.
-    $sort_angle_weights = $alshaya_pims_assets->get('weights')['angle'];
+    $sort_angle_weights = $image_settings->get('weights')['angle'];
 
     // Create multi-dimensional array of assets keyed by their asset type.
     if (!empty($assets)) {
