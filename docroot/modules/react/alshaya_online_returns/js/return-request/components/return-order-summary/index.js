@@ -22,13 +22,9 @@ const ReturnOrderSummary = ({
             <div className="dark order--items">{ itemNames.join(',') }</div>
             <div className="light">
               <div className="item-count">
-                { Drupal.t('Total', {}, { context: 'online_returns' }) }
-                { ':' }
-                {itemNames.length}
-                {' '}
-                { itemNames.length > 1
-                  ? Drupal.t('items', {}, { context: 'online_returns' })
-                  : Drupal.t('item', {}, { context: 'online_returns' }) }
+                { itemNames.length === 1
+                  ? Drupal.t('Total: 1 item')
+                  : Drupal.t('Total: @count items', { '@count': itemNames.length }) }
               </div>
             </div>
           </div>
