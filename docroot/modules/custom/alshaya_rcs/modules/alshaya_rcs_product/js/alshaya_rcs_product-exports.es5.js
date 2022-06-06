@@ -516,6 +516,7 @@ exports.computePhFilters = function (input, filter) {
       data.sku = input.sku;
       data.sku_clean = Drupal.cleanCssIdentifier(input.sku);
       data.add_to_cart_text = Drupal.t('add to cart');
+      data.sku_type = input.type_id;
 
       if (drupalSettings.alshayaRcs.showQuantity) {
         const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
