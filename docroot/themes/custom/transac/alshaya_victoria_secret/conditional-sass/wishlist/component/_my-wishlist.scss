@@ -3,7 +3,7 @@
     .actions {
       button {
         &.copy-share-link {
-          border: 1px solid $wishlist-button-border;
+          border: rem(1) solid $wishlist-button-border;
           background-color: transparent;
           color: $wishlist-button-txt;
 
