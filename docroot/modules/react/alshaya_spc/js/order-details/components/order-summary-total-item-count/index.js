@@ -1,12 +1,10 @@
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+
 const TotalItemCount = (props) => {
   const { order } = props;
 
-  if (order.quantity === 1) {
-    return Drupal.t('Total: @count item', { '@count': order.quantity }, {});
-  }
-
-  if (order.quantity > 1) {
-    return Drupal.t('Total: @count items', { '@count': order.quantity }, {});
+  if (hasValue(order.quantity) && hasValue(order.total_quantity_text)) {
+    return order.total_quantity_text;
   }
 
   return null;

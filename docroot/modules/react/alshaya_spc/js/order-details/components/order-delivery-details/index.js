@@ -44,7 +44,7 @@ const OrderDeliveryDetails = (props) => {
 
           { orderDetails.type !== 'cc' && hasValue(orderDetails.delivery_address) && (
             <>
-              <div className="label font-small">{Drupal.t('Delivery details')}</div>
+              <div className="label font-small">{orderDetails.delivery_address_title}</div>
               <div>
                 {parse(orderDetails.delivery_address)}
               </div>
@@ -116,7 +116,7 @@ const OrderDeliveryDetails = (props) => {
 
           { orderDetails.type !== 'cc' && hasValue(orderDetails.billing_address) && (
             <>
-              <div className="label font-small">{Drupal.t('Billing details')}</div>
+              <div className="label font-small">{orderDetails.billing_address_title}</div>
               <div>
                 {parse(orderDetails.billing_address)}
               </div>
@@ -134,7 +134,7 @@ const OrderDeliveryDetails = (props) => {
         <div className="desktop-only">
           { orderDetails.type === 'cc' && hasValue(orderDetails.billing_address) && (
             <>
-              <div className="label font-small">{Drupal.t('Billing details')}</div>
+              <div className="label font-small">{orderDetails.billing_address_title}</div>
               <div>
                 {parse(orderDetails.billing_address)}
               </div>
