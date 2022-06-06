@@ -216,8 +216,15 @@
         margin-top: 0;
       }
 
-      > div.blend {
-        background: $order_detail_order_summary_row_td_blend;
+      > div {
+        .blend {
+          background: $order_detail_order_summary_row_td_blend;
+        }
+
+        &.above-mobile,
+        &.empty--cell {
+          width: auto;
+        }
       }
     }
 
@@ -258,6 +265,12 @@
 
       span {
         color: inherit;
+      }
+    }
+
+    .cancelled-items {
+      div {
+        padding: 0;
       }
     }
   }
@@ -994,6 +1007,14 @@
       }
     }
   }
+
+  .recent__orders--body {
+    .cancelled-items {
+      div {
+        padding: 0;
+      }
+    }
+  }
 }
 
 .cancelled-item-tooltip-refund-text {
@@ -1134,6 +1155,51 @@
   &:hover .second-third .second .dark::after {
     html[lang=ar] & {
       background-color: $order_recent_orders_product_title_elipsis_bg_hover;
+    }
+  }
+}
+
+.order-detail,
+.block-alshaya-user-recent-orders {
+  .user__order--detail {
+    div.order-item-row.delivered-items,
+    tr.order-item-row.delivered-items,
+    div.order-item-row.cancelled-items,
+    tr.order-item-row.cancelled-items {
+      > div,
+      td {
+        padding: rem(38) 0 rem(8) !important;
+        font-size: rem(18);
+        line-height: rem(22);
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+
+        div {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .cancelled-items ~ .order-item-row {
+      .image-wrapper {
+        span {
+          width: rem(144);
+          font-size: rem(11);
+          line-height: rem(13);
+          color: $order-cancelled-txt;
+          background: $order-cancelled-label;
+          padding: rem(4) 0;
+          height: rem(20);
+
+          @include breakpoint($tablet) {
+            width: rem(120);
+          }
+
+          @include breakpoint($desktop) {
+            width: rem(136);
+          }
+        }
+      }
     }
   }
 }
