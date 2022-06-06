@@ -6,7 +6,7 @@
     letter-spacing: 1.58px;
     height: rem(42);
     width: rem(111);
-    border: 1px solid;
+    border: rem(1) solid;
     background: $spc-cart-promo-code-apply-btn-bg;
     color: $spc-cart-promo-code-apply-btn-txt;
     border-radius: rem(3);
@@ -27,6 +27,6 @@
     height: rem(42);
     width: calc(100% - 7.5rem);
     border-radius: rem(3);
-    margin-right: rem(9);
+    margin-#{$right}: rem(9);
   }
 }
