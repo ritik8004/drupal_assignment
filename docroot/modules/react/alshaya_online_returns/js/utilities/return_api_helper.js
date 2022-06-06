@@ -179,6 +179,19 @@ function isReturnClosed(returnItem) {
 }
 
 /**
+ * Utility function to check if return is picked or not.
+ *
+ * @param {object} returnItem
+ *   The individual return item object.
+ *
+ * @returns {boolean}
+ *   True if order return if picked else False.
+ */
+function isReturnPicked(returnItem) {
+  return returnItem.extension_attributes.is_picked;
+}
+
+/**
  * Utility function to validate if return request is valid.
  */
 async function validateReturnRequest(orderDetails) {
@@ -302,4 +315,5 @@ export {
   prepareCancelRequestData,
   cancelReturnRequest,
   isReturnClosed,
+  isReturnPicked,
 };
