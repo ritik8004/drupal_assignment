@@ -5,6 +5,9 @@ alshaya_spc.settings:
     order_id_fallback:
       type: string
       label: 'Order id fallback if new encrypted parameter not available'
+    subtotal_after_discount:
+      type: boolean
+      label: 'To show/hide subtotal after discount on cart/checkout page.'
 
 alshaya_spc.click_n_collect:
   type: config_object

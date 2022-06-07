@@ -1065,6 +1065,10 @@ class AlshayaSpcController extends ControllerBase {
       ];
     }
 
+    // Subtotal after discount related config for Cart/Checkout.
+    $alshaya_spc_config = $this->config('alshaya_spc.settings');
+    $settings['alshaya_spc']['subtotal_after_discount'] = $alshaya_spc_config->get('subtotal_after_discount');
+
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
 
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cache_tags);
