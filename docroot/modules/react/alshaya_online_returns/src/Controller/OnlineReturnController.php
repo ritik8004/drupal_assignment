@@ -111,12 +111,12 @@ class OnlineReturnController extends ControllerBase {
   public function returnRequest(UserInterface $user, $order_id) {
     // Do not proceed if Online returns is not enabled.
     if (!$this->onlineReturnsHelper->isOnlineReturnsEnabled()) {
-      return $this->getCacheableRedirectResponse()->send();
+      return $this->getCacheableRedirectResponse($user, $order_id)->send();
     }
 
     $orderDetails = $this->getOrderReturnDetails($user, $order_id);
     if (!$this->onlineReturnsHelper->validateReturnRequest($orderDetails)) {
-      return $this->getCacheableRedirectResponse()->send();
+      return $this->getCacheableRedirectResponse($user, $order_id)->send();
     }
 
     $build = [];
