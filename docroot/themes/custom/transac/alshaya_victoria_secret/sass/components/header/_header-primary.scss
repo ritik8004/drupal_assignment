@@ -140,8 +140,8 @@ header {
       @include breakpoint($upto-desktop) {
         width: rem(14);
         height: rem(14);
-        bottom: rem(10);
-        #{$left}: rem(42);
+        bottom: rem(12);
+        #{$left}: rem(40);
         #{$right}: 0;
         margin: 0 auto;
       }
