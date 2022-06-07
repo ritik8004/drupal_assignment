@@ -48,7 +48,6 @@ variables:
   city_option: 'Dubai'
   street: 'Street A'
   building: 'Building B'
-  locality: ''
   floor: 'Floor C'
   landmark: ''
   postal_code: ''
