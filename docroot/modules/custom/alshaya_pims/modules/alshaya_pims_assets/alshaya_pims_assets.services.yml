@@ -5,6 +5,7 @@ services:
     decorates: alshaya_media_assets.skuassetsmanager
     decoration_priority: 1
     arguments:
+      - '@alshaya_pims_assets.skuassetsmanager.inner'
       - '@config.factory'
       - '@current_route_match'
       - '@alshaya_acm_product.skumanager'
