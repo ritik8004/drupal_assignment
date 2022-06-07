@@ -176,8 +176,8 @@ class OnlineReturnsHelper {
       }
       // Update the order total based on the item qty.
       if ($products[$key]['qty_refunded'] > 0
-      && $products[$key]['qty_refunded'] < $products[$key]['qty_ordered']) {
-        $products[$key]['qty_ordered'] -= $products['qty_refunded'];
+        && $products[$key]['qty_refunded'] <= $products[$key]['qty_ordered']) {
+        $products[$key]['qty_ordered'] -= $products[$key]['qty_refunded'];
 
         // Updating total value as `qty_ordered` is updated.
         $products[$key]['total'] = alshaya_acm_price_format(

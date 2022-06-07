@@ -144,7 +144,7 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
       continue;
     }
 
-    if ($value['refunded'] > 0 && $value['refunded'] < $value['ordered']) {
+    if ($value['refunded'] > 0 && $value['refunded'] <= $value['ordered']) {
       $value['ordered'] -= $value['refunded'];
     }
 
