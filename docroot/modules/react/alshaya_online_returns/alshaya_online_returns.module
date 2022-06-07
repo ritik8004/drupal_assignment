@@ -135,6 +135,10 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
   // Remove the full product item if the refunded item is equal to ordered
   // items.
   foreach ($build['#products'] as $key => &$value) {
+    // Store the product info in a new variable so that we can use it to build
+    // the refunded block.
+    $build['#refunded_products'][$key] = $value;
+
     if ($value['refunded'] === $value['ordered']) {
       unset($build['#products'][$key]);
       continue;
@@ -153,6 +157,7 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
 
   $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
   $build['#attached']['drupalSettings']['onlineReturns']['products'] = $onlineReturnsHelper->prepareProductsData($build["#products"]);
+  $build['#attached']['drupalSettings']['onlineReturns']['refunded_products'] = $onlineReturnsHelper->prepareProductsData($build["#refunded_products"]);
 
   // Attach the theming library.
   $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
