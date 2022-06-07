@@ -45,7 +45,7 @@ class OrderDetails extends React.Component {
   }
 
   processOrderData = async () => {
-    const { orderEntityId, products } = drupalSettings.onlineReturns;
+    const { orderEntityId, refunded_products: products } = drupalSettings.onlineReturns;
 
     const returnsData = await getProcessedReturnsData(orderEntityId, products);
 

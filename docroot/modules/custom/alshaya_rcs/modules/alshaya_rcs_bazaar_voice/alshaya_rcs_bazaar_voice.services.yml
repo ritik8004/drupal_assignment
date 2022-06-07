@@ -6,7 +6,7 @@ services:
     decoration_priority: 1
     arguments:
       - '@config.factory'
-      - '@entity.manager'
+      - '@entity_type.manager'
       - '@database'
       - '@alshaya_bazaar_voice.api_helper'
       - '@current_user'

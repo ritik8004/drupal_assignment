@@ -16,6 +16,9 @@ settings:
     -
       value: mobile_app
       label: 'Mobile App'
+    -
+      value: mobile_app_v3
+      label: 'Mobile APP V3'
   allowed_values_function: ''
 module: options
 locked: false
