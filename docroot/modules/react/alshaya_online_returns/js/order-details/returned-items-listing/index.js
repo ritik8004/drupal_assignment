@@ -1,7 +1,7 @@
 import React from 'react';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getTypeFromReturnItem } from '../../utilities/order_details_util';
-import { isReturnClosed } from '../../utilities/return_api_helper';
+import { isReturnClosed, isReturnPicked } from '../../utilities/return_api_helper';
 import ReturnedItems from './returned-items';
 
 class ReturnedItemsListing extends React.Component {
@@ -27,8 +27,9 @@ class ReturnedItemsListing extends React.Component {
     const { returns } = this.props;
     const groupedItems = {};
 
-    // Filter out all the closed returns.
-    const updateResults = returns.filter((item) => isReturnClosed(item.returnInfo));
+    // Filter out all the closed & picked returns.
+    const updateResults = returns.filter((item) => isReturnClosed(item.returnInfo)
+      && isReturnPicked(item.returnInfo));
 
     updateResults.forEach((item) => {
       const itemReturnType = getTypeFromReturnItem(item);
