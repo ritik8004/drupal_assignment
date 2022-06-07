@@ -26,9 +26,9 @@ const IndividualReviewSlider = ({
                   {sliderData[item].ValueLabel}
                 </ConditionalView>
                 <ConditionalView condition={hasValue(sliderData[item].AverageRating)}>
-                  :
-                  {' '}
-                  {sliderData[item].ValueLabel[(Math.round(sliderData[item].AverageRating) - 1)]}
+                  {(sliderData[item].ValueLabel)
+                    ? `: ${sliderData[item].ValueLabel[(Math.round(sliderData[item].AverageRating) - 1)]}`
+                    : ''}
                 </ConditionalView>
               </span>
             </div>
