@@ -33,24 +33,25 @@
             options.push(option);
           });
         }
-      });
-    }
-    // Perform Add to cart.
-    const responce =  window.commerceBackend.addUpdateRemoveCartItem({
-      action: 'add item',
-      sku: parentSku,
-      quantity: qty,
-      options: options,
-    });
-    if (responce instanceof Promise) {
-      responce.then((result) => {
-        if (result.status === 200 && result.data !== undefined) {
-          // Refreshing mini-cart.
-          const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => result.data } });
-          document.dispatchEvent(eventMiniCart);
-          // Refreshing cart components.
-          const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result.data } });
-          document.dispatchEvent(eventCart);
+
+        // Perform Add to cart.
+        const responce =  window.commerceBackend.addUpdateRemoveCartItem({
+          action: 'add item',
+          sku: parentSku,
+          quantity: qty,
+          options: options,
+        });
+        if (responce instanceof Promise) {
+          responce.then((result) => {
+            if (result.status === 200 && result.data !== undefined) {
+              // Refreshing mini-cart.
+              const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => result.data } });
+              document.dispatchEvent(eventMiniCart);
+              // Refreshing cart components.
+              const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result.data } });
+              document.dispatchEvent(eventCart);
+            }
+          });
         }
       });
     }
