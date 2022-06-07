@@ -336,13 +336,10 @@ function alshaya_aura_react_alshaya_online_returns_order_details_build_alter(arr
   if (!\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled()) {
     return;
   }
-
-  // Do not proceed if payment is not done with aura.
-  if (!isset($order['extension']['loyalty_card']) ||
-    (isset($order['extension']['aura_payment_value']) && $order['extension']['aura_payment_value'] === 0)) {
+  // Do not proceed if loyalty card is not used for payment.
+  if (!isset($order['extension']['loyalty_card'])) {
     return;
   }
-
   $orderDetails["#order_details"]["payment_method"] .= ', ' . t('Aura Loyalty Card', [], ['context' => 'aura']);
   $aura_data = [
     'card_type' => t('Aura Loyalty Card', [], ['context' => 'aura']),
