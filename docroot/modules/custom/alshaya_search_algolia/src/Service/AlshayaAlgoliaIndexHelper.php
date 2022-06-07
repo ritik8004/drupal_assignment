@@ -31,6 +31,7 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Class Alshaya Algolia Index Helper.
@@ -196,7 +197,7 @@ class AlshayaAlgoliaIndexHelper {
   protected $skuImagesHelper;
 
   /**
-   * SkuInfoHelper constructor.
+   * AlshayaAlgoliaIndexHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
@@ -1205,6 +1206,61 @@ class AlshayaAlgoliaIndexHelper {
     $this->moduleHandler->alter('alshaya_product_list_exclude_attribute', $excludedAttributes);
 
     return $excludedAttributes;
+  }
+
+  /**
+   * Sets algolia index prefixes to use either Drupal or MDC indices.
+   *
+   * @param string $index_source
+   *   Type of index to be set drupal/mdc.
+   */
+  public function setAlgoliaIndexPrefix($index_source = 'drupal') {
+    $search_settings = $this->configFactory->getEditable('alshaya_search_algolia.settings');
+
+    // Get brand and country.
+    global $_acsf_site_name;
+    $country = substr($_acsf_site_name, -2);
+    if ($index_source === 'drupal') {
+      $brand = substr($_acsf_site_name, 0, -2);
+      // Use drupal indices.
+      $env = mb_strtolower(Settings::get('env'));
+      $env = $env === 'travis' ? 'local' : $env;
+      $env_number = substr($env, 0, 2);
+      if (is_numeric($env_number) && $env_number !== '01') {
+        $env = '01' . substr($env, 2);
+      }
+      // During the production deployment, `01update` env is used and that is
+      // not a valid index name prefix, we want to use `01live` only even there.
+      if ($env == '01update') {
+        $env = '01live';
+      }
+      // For non-prod env, we have env likes `01dev3up`, `01qaup` which are used
+      // during release/deployment. We just remove last `up` from the env name
+      // to use the original env. For example - original env for `01dev3up` will
+      // be `01dev3`.
+      elseif (substr($env, -2) == 'up') {
+        $env = substr($env, 0, -2);
+      }
+      $index_prefix = $env . '_' . $brand . $country;
+    }
+    elseif ($index_source = 'mdc') {
+      // Use MDC indices.
+      $algolia_env = Settings::get('algolia_env');
+      $index_prefix = $algolia_env . '_' . $country;
+    }
+
+    $search_settings->set('index_prefix', $index_prefix)
+      ->save();
+  }
+
+  /**
+   * Get Algolia index prefix.
+   *
+   * @return string
+   *   Returns the drupal/mdc index name.
+   */
+  public function getAlgoliaIndexPrefix() {
+    return $this->configFactory->get('alshaya_search_algolia.settings')->get('index_prefix');
   }
 
 }
