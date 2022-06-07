@@ -69,7 +69,6 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
       return $overrides;
     }
 
-    $algolia_env = $this->getAlgoliaEnv();
     // Default overrides for acquia_search_index.
     $overrides['search_api.index.acquia_search_index']['read_only'] = TRUE;
     $overrides['search_api.index.acquia_search_index']['status'] = TRUE;
@@ -85,7 +84,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['object_id_field'] = 'field_skus';
 
     // Get index prefix for current environment.
-    $index_prefix = $this->configFactory->get('alshaya_search_algolia.settings')->get('index_prefix');
+    $index_prefix = $this->alshayaAlgoliaConfig->get('index_prefix');
     // Ensure we never connect to Index of another ENV.
     $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $index_prefix;
     $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $index_prefix;
@@ -94,7 +93,7 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
 
     // This will need to be overridden in brand specific settings files on each
     // env using prod app for each brand.
-    $algolia_env = current(explode('_', $index_prefix));
+    $algolia_env = $this->getAlgoliaEnv();
     $algolia_settings = Settings::get('algolia_sandbox.settings');
     if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
       $overrides['search_api.server.algolia']['backend_config']['application_id'] = $algolia_settings['app_id'];
