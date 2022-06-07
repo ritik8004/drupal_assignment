@@ -1,5 +1,3 @@
-@import "../../utils";
-
 .show-overlay {
   @include breakpoint($upto-desktop) {
     position: relative;
