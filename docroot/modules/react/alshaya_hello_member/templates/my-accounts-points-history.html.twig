@@ -1,0 +1,5 @@
+<div class="my-accounts-points-history" id="my-accounts-points-history"></div>
+
+{% for string in strings %}
+  <input type="hidden" data-string-id="{{ string.key }}" value="{{ string.value }}" />
+{% endfor %}
