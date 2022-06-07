@@ -289,7 +289,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
                 continue;
               }
 
-              $values[$value_id] = $this->getAlternativeValues($alternates, $child_sku);
+              $values[$value][$value_id] = $this->getAlternativeValues($alternates, $child_sku);
               $this->getProductLabels($child_sku_code, $child_sku, $vars);
 
             }
