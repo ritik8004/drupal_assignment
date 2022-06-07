@@ -381,17 +381,7 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
       request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
 
-      response = rcsCommerceBackend.invokeApiSynchronous(request);
-
-      if (response && response.data.products.total_count) {
-        response.data.products.items.forEach(function (product) {
-          RcsEventManager.fire('rcsUpdateResults', {
-            detail: {
-              result: product,
-            }
-          });
-        });
-      }
+      result = rcsCommerceBackend.invokeApiSynchronous(request);
       break;
 
     // Get the product data for the given sku.

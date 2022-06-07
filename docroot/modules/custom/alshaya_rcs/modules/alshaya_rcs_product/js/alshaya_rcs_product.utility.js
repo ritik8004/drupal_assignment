@@ -769,7 +769,10 @@ window.commerceBackend = window.commerceBackend || {};
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    globalThis.rcsPhCommerceBackend.getDataSynchronous('single_product_by_sku', {sku: mainSKU});
+    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('single_product_by_sku', {sku: mainSKU});
+    if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
+      await window.commerceBackend.getProductsInStyle(response.data.products.items[0]);
+    }
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
   };
