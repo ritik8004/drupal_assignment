@@ -198,6 +198,11 @@ class OnlineReturnsHelper {
    *   True if the return request is valid else false.
    */
   public function validateReturnRequest(array $order_details) {
+    // Return from here if order type is not ship_to_store.
+    if ($orderDetails['#order']['orderType'] == 'ship_to_store') {
+      return FALSE;
+    }
+
     // Validate if order is expired or not.
     if ($order_details['#order']['returnExpiration']) {
       // Convert the string to date object and compare the timestamp with

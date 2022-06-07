@@ -115,8 +115,7 @@ class OnlineReturnController extends ControllerBase {
     }
 
     $orderDetails = $this->getOrderReturnDetails($user, $order_id);
-    if ($orderDetails['#order']['orderType'] == 'ship_to_store'
-      || !$this->onlineReturnsHelper->validateReturnRequest($orderDetails)) {
+    if (!$this->onlineReturnsHelper->validateReturnRequest($orderDetails)) {
       return $this->getCacheableRedirectResponse()->send();
     }
 
@@ -354,7 +353,7 @@ class OnlineReturnController extends ControllerBase {
   }
 
   /**
-   * Controller function to return the cacheable redirect response.
+   * Wrapper function to return the cacheable redirect response.
    *
    * @param \Drupal\user\UserInterface $user
    *   User object for which the orders detail page is being viewed.
