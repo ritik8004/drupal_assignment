@@ -24,7 +24,8 @@ function alshaya_aura_react_update_8004() {
     ['alshaya_aura_react.loyalty_benefits'],
     'alshaya_aura_react',
     'install',
-    AlshayaConfigManager::MODE_RESAVE
+    AlshayaConfigManager::MODE_REPLACE_KEY,
+    ['replace_keys' => ['loyalty_benefits_content']]
   );
 }
 
