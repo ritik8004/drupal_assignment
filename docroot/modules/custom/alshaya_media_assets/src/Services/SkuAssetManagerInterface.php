@@ -157,4 +157,12 @@ interface SkuAssetManagerInterface {
    */
   public function getSkuSwatchType(SKU $sku);
 
+  /**
+   * Image settings.
+   *
+   * @return \Drupal\Core\Config\ImmutableConfig
+   *   Image settings config.
+   */
+  public function getImageSettings();
+
 }
