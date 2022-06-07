@@ -12,4 +12,3 @@ dynamic_yield.script_injection:
     - core/jquery
     - core/drupalSettings
     - core/jquery.once
-    - alshaya_master/common_functions
