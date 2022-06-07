@@ -266,7 +266,7 @@ class ConfigurableProductForm extends React.Component {
             {Object.keys(configurables).map((key) => {
               if (/size/.test(key) && attributeAvailable) {
                 return (
-                  <SizeGuide attrId={key} />
+                  <SizeGuide attrId={key} key={key} />
                 );
               }
               return null;
