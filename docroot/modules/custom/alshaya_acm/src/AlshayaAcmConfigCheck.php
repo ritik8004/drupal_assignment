@@ -263,6 +263,7 @@ class AlshayaAcmConfigCheck {
 
     // Configure GTM Container ID.
     $this->configureGtmContainerId(Settings::get('google_tag.container.primary'));
+
     return TRUE;
   }
 
