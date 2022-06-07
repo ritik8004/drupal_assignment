@@ -1,16 +1,16 @@
 <?php
 
-namespace Drupal\alshaya_hm_images\Form;
+namespace Drupal\alshaya_media_assets\Form;
 
 use Drupal\alshaya_acm_product\Form\ProductSettingsForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Contains Hm Product Settings Form methods.
+ * Contains Alshaya Media Assets Product Settings Form methods.
  *
- * @package Drupal\alshaya_hm_images\Form
+ * @package Drupal\alshaya_media_assets\Form
  */
-class HmProductSettingsForm extends ProductSettingsForm {
+class AlshayaMediaAssetsProductSettingsForm extends ProductSettingsForm {
 
   /**
    * {@inheritdoc}
