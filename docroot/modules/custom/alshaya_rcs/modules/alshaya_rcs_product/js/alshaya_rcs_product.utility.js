@@ -481,7 +481,7 @@ window.commerceBackend = window.commerceBackend || {};
       return null;
     }
 
-    var configurables = productData.configurables;
+    var configurables = getConfigurables(rawProductData);
     configurables = getSortedConfigurableAttributes(configurables);
     const configurableCodes = Object.keys(configurables);
 
