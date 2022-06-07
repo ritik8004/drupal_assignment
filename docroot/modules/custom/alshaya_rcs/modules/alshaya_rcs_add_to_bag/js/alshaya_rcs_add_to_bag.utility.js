@@ -149,14 +149,7 @@ window.commerceBackend = window.commerceBackend || {};
 
     // Display size guide information in product configurable drawer.
     // @see _alshaya_acm_product_get_size_guide_info()
-    const sizeGuide = document.querySelector('.rcs-templates--size-guide');
-    var link = sizeGuide.innerHTML;
-    var sizeAttr = sizeGuide.getAttribute("data-attributes");
-    sizeAttr = sizeAttr ? sizeAttr.split(',') : sizeAttr;
-    productInfo.size_guide = {
-      link: link,
-      attributes: sizeAttr,
-    };
+    productInfo.size_guide = drupalSettings.alshayaRcs.sizeGuide;
 
     // Set configurable attributes.
     productInfo.configurable_attributes = [];
