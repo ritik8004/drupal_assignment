@@ -184,8 +184,9 @@ function isReturnClosed(returnItem) {
 async function validateReturnRequest(orderDetails) {
   const returnItems = await getReturnsByOrderId(orderDetails['#order'].orderEntityId);
 
-  // Return false if the api results in some error.
-  if (hasValue(returnItems.error)) {
+  // Return false if the api results in some error or items is empty.
+  if (hasValue(returnItems.error)
+    || ((hasValue(returnItems.data)) && !hasValue(returnItems.data.items))) {
     return false;
   }
 
