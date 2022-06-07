@@ -97,13 +97,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   protected $httpClient;
 
   /**
-   * Config alshaya_media_assets.settings.
-   *
-   * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
-   */
-  protected $imageSettings;
-
-  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -236,8 +229,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     $this->fileUsage = $file_usage;
     $this->lock = $lock;
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
-
-    $this->imageSettings = $this->configFactory->get('alshaya_media_assets.settings');
     $this->fileSystem = $file_system;
     $this->languageManager = $language_manager;
     $this->database = $database;
@@ -355,8 +346,9 @@ class SkuAssetManager implements SkuAssetManagerInterface {
       return NULL;
     }
 
-    $base_url = $this->imageSettings->get('pims_base_url');
-    $pims_directory = $this->imageSettings->get('pims_directory');
+    $image_settings = $this->getImageSettings();
+    $base_url = $image_settings->get('pims_base_url');
+    $pims_directory = $image_settings->get('pims_directory');
 
     // Prepare the directory path.
     $directory = ($asset_type === 'video')
@@ -609,10 +601,11 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     }
 
     $file = NULL;
+    $image_settings = $this->getImageSettings();
     if (isset($asset['pims_' . $type]) && is_array($asset['pims_' . $type])) {
       $file = $this->downloadPimsAsset($asset['pims_' . $type], $sku, $type);
     }
-    elseif ($this->imageSettings->get('fallback_to_liquidpixel')) {
+    elseif ($image_settings->get('fallback_to_liquidpixel')) {
       $file = $this->downloadLiquidPixelImage($asset, $sku);
     }
 
@@ -682,7 +675,8 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    *   Asset url.
    */
   private function getSkuAssetUrlLiquidPixel(array $asset) {
-    $base_url = $this->imageSettings->get('base_url');
+    $image_settings = $this->getImageSettings();
+    $base_url = $image_settings->get('base_url');
     $asset_attributes = $this->getAssetAttributes($asset, 'pdp_fullscreen');
     $query_options = $this->getAssetQueryString(
       $asset_attributes['set'],
@@ -735,20 +729,21 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    *   Array of asset attributes.
    */
   private function getAssetAttributes(array $asset, $location_image) {
-    $image_location_identifier = $this->imageSettings->get('style_identifiers')[$location_image];
+    $image_settings = $this->getImageSettings();
+    $image_location_identifier = $image_settings->get('style_identifiers')[$location_image];
 
     if (isset($asset['is_old_format']) && $asset['is_old_format']) {
       return [['url' => $asset['Url']], $image_location_identifier];
     }
     else {
-      $origin = $this->imageSettings->get('origin');
+      $origin = $image_settings->get('origin');
 
       $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
       $set['origin'] = "origin[" . $origin . "]";
       $set['type'] = "type[" . $asset['sortAssetType'] . "]";
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
 
-      $set['res'] = "res[" . $this->imageSettings->get('dimensions')[$location_image]['desktop'] . "]";
+      $set['res'] = "res[" . $image_settings->get('dimensions')[$location_image]['desktop'] . "]";
     }
 
     return [
@@ -771,8 +766,8 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   private function overrideConfig($sku, $page_type) {
     // @todo Check and remove this include.
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-    $overrides = $this->imageSettings->get('overrides');
+    $image_settings = $this->getImageSettings();
+    $overrides = $image_settings->get('overrides');
 
     // No further processing if overrides is empty.
     if (empty($overrides)) {
@@ -814,11 +809,12 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    * {@inheritDoc}
    */
   public function sortSkuAssets($sku, $page_type, array $assets) {
+    $image_settings = $this->getImageSettings();
     // Fetch weights of asset types based on the pagetype.
-    $sku_asset_type_weights = $this->imageSettings->get('weights')[$page_type];
+    $sku_asset_type_weights = $image_settings->get('weights')[$page_type];
 
     // Fetch angle config.
-    $sort_angle_weights = $this->imageSettings->get('weights')['angle'];
+    $sort_angle_weights = $image_settings->get('weights')['angle'];
 
     // Check if there are any overrides for category this product page is
     // tagged with.
@@ -1157,7 +1153,11 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    * {@inheritDoc}
    */
   public function getImageSettings() {
-    return $this->imageSettings;
+    static $image_settings = NULL;
+    $image_settings = is_null($image_settings)
+      ? $this->configFactory->get('alshaya_media_assets.settings')
+      : $image_settings;
+    return $image_settings;
   }
 
 }
