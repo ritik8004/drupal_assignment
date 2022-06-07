@@ -199,7 +199,7 @@ class OnlineReturnsHelper {
    */
   public function validateReturnRequest(array $order_details) {
     // Return from here if order type is not ship_to_store.
-    if ($orderDetails['#order']['orderType'] == 'ship_to_store') {
+    if ($order_details['#order']['orderType'] == 'ship_to_store') {
       return FALSE;
     }
 
