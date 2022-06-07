@@ -26,3 +26,8 @@ services:
       - '@file_system'
       - '@language_manager'
       - '@database'
+
+  alshaya_media_assets.route_subscriber:
+    class: Drupal\alshaya_media_assets\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
