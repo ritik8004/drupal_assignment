@@ -396,6 +396,20 @@
         top: 0.25rem;
       }
     }
+
+    ul {
+      padding: rem(7) 0;
+
+      li {
+        &:first-child {
+          &::after {
+            html[lang=ar] & {
+              top: rem(4);
+            }
+          }
+        }
+      }
+    }
   }
 }
 

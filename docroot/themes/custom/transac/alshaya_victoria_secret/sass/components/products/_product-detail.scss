@@ -70,7 +70,7 @@
 
       @include breakpoint($desktop) {
         html[lang=ar] & {
-          margin-right: 0.5rem;
+          margin-right: rem(32);
           font-size: 1rem;
         }
       }
@@ -233,9 +233,10 @@
           border: 0;
           width: rem(88);
 
-          &__rendered {
-            line-height: rem(36);
+          .select2-selection__rendered {
+            line-height: rem(34);
             font-family: $vs-bentonsans-medium;
+            text-align: center;
           }
 
           &__arrow {
@@ -628,7 +629,7 @@ html[lang="ar"] {
         width: 100%;
 
         span {
-          font-size: 1.5rem;
+          font-size: rem(16);
 
           &.title--sub {
             font-size: 0.875rem;
