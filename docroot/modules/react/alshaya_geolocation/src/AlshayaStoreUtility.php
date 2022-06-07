@@ -29,18 +29,15 @@ class AlshayaStoreUtility {
   /**
    * Store finder list labels.
    */
-  public function storeLabels($transac = TRUE) {
+  public function storeLabels() {
     $labels = [];
     $config = $this->configFactory->getEditable('alshaya_stores_finder.settings');
     $labels['search_proximity_radius'] = $config->get('search_proximity_radius');
     $labels['store_list_label'] = $config->get('store_list_label');
     $labels['search_placeholder'] = $config->get('store_search_placeholder');
     $labels['load_more_item_limit'] = $config->get('load_more_item_limit');
-    if ($transac) {
-      $labels['apiUrl'] = '/alshaya-locations/stores-list';
-      return $labels;
-    }
-    $labels['apiUrl'] = '/alshaya-locations/local';
+    $labels['apiUrl'] = '/alshaya-locations/stores-list';
+
     return $labels;
   }
 
