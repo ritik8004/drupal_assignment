@@ -10,6 +10,7 @@ services:
       - '@file_system'
       - '@alshaya_api.mdc_helper'
       - '@module_handler'
+      - '@current_route_match'
 
   alshaya_api.mdc_helper:
     class: Drupal\alshaya_api\Helper\MagentoApiHelper

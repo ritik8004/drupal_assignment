@@ -25,15 +25,8 @@ const ReturnIndividualItem = ({
   } = item.image_data || {};
 
   const {
-    qty_ordered: qtyOrdered,
     price_incl_tax: priceIncTax,
   } = item;
-
-  // Return from here if the ordered quantity is 0 or less, That means the
-  // items are refunded and no item is left over.
-  if (qtyOrdered <= 0) {
-    return null;
-  }
 
   return (
     <>

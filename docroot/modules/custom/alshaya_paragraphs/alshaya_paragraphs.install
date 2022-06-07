@@ -13,6 +13,17 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add 'Mobile APP V3' option for 'visible on' field.
+ */
+function alshaya_paragraphs_update_8131() {
+  alshaya_config_install_configs([
+    'field.storage.paragraph.field_promo_block_visible_on',
+  ], 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enhance existing paragraph and added accordian
  * and mul row mul col paragraph type.
  */

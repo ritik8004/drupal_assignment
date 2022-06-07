@@ -189,6 +189,34 @@ class OnlineReturnsHelper {
   }
 
   /**
+   * Wrapper function to validate if the return request is valid or not.
+   *
+   * @param array $order_details
+   *   An array containing all the order details.
+   *
+   * @return bool
+   *   True if the return request is valid else false.
+   */
+  public function validateReturnRequest(array $order_details) {
+    // Return from here if order type is not ship_to_store.
+    if ($orderDetails['#order']['orderType'] == 'ship_to_store') {
+      return FALSE;
+    }
+
+    // Validate if order is expired or not.
+    if ($order_details['#order']['returnExpiration']) {
+      // Convert the string to date object and compare the timestamp with
+      // current time.
+      $return_time = strtotime($order_details['#order']['returnExpiration']);
+      if ($return_time < time()) {
+        return FALSE;
+      }
+    }
+
+    return TRUE;
+  }
+
+  /**
    * Wrapper function to get Online Returns Config.
    *
    * @return \Drupal\Core\Config\ImmutableConfig

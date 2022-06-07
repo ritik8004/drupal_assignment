@@ -344,6 +344,7 @@ class CustomerController extends ControllerBase {
     $details['delivery_detail_notice'] = $build['#delivery_detail_notice'] ?? [];
     $details['vat_text'] = $build['#vat_text'] ?? '';
     $details['products'] = $build['#products'] ?? [];
+    $details['refunded_products'] = $build['refunded_products'] ?? [];
     $details['cancelled_products'] = $build['#cancelled_products'] ?? [];
     $details['order_details']['billing_address_title'] = $this->t('Billing details');
     $details['order_details']['delivery_address_title'] = $this->t('Delivery details');
