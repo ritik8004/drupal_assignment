@@ -44,7 +44,7 @@ log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.
 server_root="/var/www/html/$AH_SITE_NAME"
 deployment_identifier=$(cat "$server_root/deployment_identifier")
 docroot="${server_root}/docroot"
-
+blt_dir="${server_root}/vendor/acquia/blt"
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 slack_file="${script_dir}/post_to_slack.sh"
 clear_caches_post_command="${script_dir}/../cloudflare/clear_caches_post_command.sh"
@@ -180,17 +180,15 @@ then
 fi
 
 # Wait for code to be available on server before moving forward.
-while [ "${deployment_identifier}" != "${tag}" ]
+cloud_task=`$blt_dir/bin/blt cloud:get-application-task ${AH_APPLICATION_UUID} ${tag}`
+while [ "${cloud_task}" != 0 ]
 do
-  log_message_and_details "Waiting for code to be deployed on server (current=$deployment_identifier)"
+  log_message_and_details "Waiting for code to be deployed on server."
   sleep 5
-  deployment_identifier=$(cat "$server_root/deployment_identifier")
+  cloud_task=`$blt_dir/bin/blt cloud:get-application-task ${AH_APPLICATION_UUID} ${tag}`
 done
 
-log_message_and_details "Code deployment finished, we will wait for 30 more seconds."
-
-# Wait 30 more seconds to ensure code is deployed on all webs.
-sleep 30
+log_message_and_details "Code deployment finished"
 
 if [ "$mode" = "updb" ]
 then
