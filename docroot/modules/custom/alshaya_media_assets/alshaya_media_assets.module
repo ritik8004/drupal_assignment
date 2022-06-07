@@ -48,3 +48,22 @@ function alshaya_media_assets_page_attachments_alter(&$attachments) {
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_reset_config_configs_to_reset_alter().
+ */
+function alshaya_media_assets_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  // We need pims_base_url to be set per Magento instance.
+  // We add it to the list of configs to be reset so it is done with other
+  // configs like Connector URL, Magento URL, etc.
+  $reset[] = 'alshaya_media_assets.settings';
+}
+
+/**
+ * Implements hook_alshaya_acm_switch_magento_configs_alter().
+ */
+function alshaya_media_assets_alshaya_acm_switch_magento_configs_alter(array &$configs) {
+  // We need pims_base_url to be set per Magento instance.
+  // We add below for configs to be switched so it is set for Magento instance.
+  $configs['alshaya_media_assets.settings'] = 'pims_base_url';
+}
