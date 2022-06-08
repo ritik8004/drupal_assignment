@@ -8,7 +8,6 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
-use Drupal\Core\Block\BlockPluginInterface;
 
 /**
  * Implements hook_acq_sku_product_sku_alter().
@@ -87,15 +86,6 @@ function alshaya_pims_assets_alshaya_acm_product_media_items_alter(array &$media
 
       $media[] = $asset;
     }
-  }
-}
-
-/**
- * Implements hook_block_view_alter().
- */
-function alshaya_pims_assets_block_view_alter(array &$build, BlockPluginInterface $block) {
-  if ($build['#configuration']['id'] == 'alshaya_algolia_react_autocomplete') {
-    $build['#attached']['library'][] = 'alshaya_pims_assets/pims_images';
   }
 }
 
