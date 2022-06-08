@@ -179,6 +179,20 @@ header {
 
     .one.shop {
       width: 49.5%;
+
+      &::after {
+        content: '';
+        float: $right;
+        margin-#{$right}: rem(-35);
+        border-#{$right}: rem(1) solid $header_toggle_sign_divider;
+        height: rem(31);
+        position: relative;
+        top: rem(-8);
+
+        html[lang=ar] & {
+          margin-left: rem(-22);
+        }
+      }
     }
   }
 
@@ -317,10 +331,14 @@ header {
     }
   }
 
-  li::after {
-    @include breakpoint($upto-desktop) {
-      font-size: 1.5rem;
-      #{$right}: -0.1875rem;
+  li {
+    border-bottom: 0;
+
+    &::after {
+      @include breakpoint($upto-desktop) {
+        font-size: rem(24);
+        #{$right}: rem(-3);
+      }
     }
   }
 }
