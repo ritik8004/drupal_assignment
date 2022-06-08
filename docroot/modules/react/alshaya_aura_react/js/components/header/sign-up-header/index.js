@@ -113,8 +113,8 @@ class SignUpHeader extends React.Component {
                 })}
               </div>
               <div className="already-member">
-                <span className="already-member__text">{Drupal.t('Already a member?')}</span>
-                <span className="already-member__text">{Drupal.t('Add your account details at shopping bag.')}</span>
+                <span className="already-member__text">{Drupal.t('Already a member?', {}, { context: 'aura' })}</span>
+                <span className="already-member__text">{Drupal.t('Add your account details at shopping bag.', {}, { context: 'aura' })}</span>
               </div>
             </div>
           </div>

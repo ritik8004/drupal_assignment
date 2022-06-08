@@ -587,6 +587,10 @@ function _alshaya_aura_react_translations() {
         'ar' => 'تسجيل الدخول',
         'context' => 'aura',
       ],
+      'Add your account details at shopping bag.' => [
+        'ar' => 'أضف تفاصيل حسابك في حقيبة التسوق.',
+        'context' => 'aura',
+      ],
     ],
   ];
 }
