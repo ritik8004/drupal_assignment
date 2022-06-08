@@ -6,7 +6,7 @@ import ReturnedItems from './returned-items';
 
 class ReturnedItemsListing extends React.Component {
   getReturnedItemsSubTitle = (type) => {
-    if (type === 'online') {
+    if (type === 'online' || type === 'rejected') {
       return Drupal.t('Online Returns', {}, { context: 'online_returns' });
     }
 
@@ -16,6 +16,18 @@ class ReturnedItemsListing extends React.Component {
 
     return '';
   };
+
+  getReturnedItemsTitle = (type) => {
+    if (type === 'online' || type === 'store') {
+      return Drupal.t('Returned Items', {}, { context: 'online_returns' });
+    }
+
+    if (type === 'rejected') {
+      return Drupal.t('Rejected Items', {}, { context: 'online_returns' });
+    }
+
+    return '';
+  }
 
   /**
    * Group the store and online return items.
@@ -60,7 +72,7 @@ class ReturnedItemsListing extends React.Component {
           <div key={index} className="items-wrapper">
             <div className="title-wrapper">
               <span>
-                {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
+                {this.getReturnedItemsTitle(index)}
                 {' '}
                 {'-'}
                 {' '}
