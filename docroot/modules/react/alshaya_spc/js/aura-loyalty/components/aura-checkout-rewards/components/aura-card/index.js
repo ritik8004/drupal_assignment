@@ -63,6 +63,7 @@ export default class AuraLinkedCheckout extends React.Component {
                   {parse(parse(getStringMessage('checkout_you_have_pts', {
                     '@pts': `<span class="spc-aura-highlight">${pointsInAccount}</span>`,
                   })))}
+                  <ConditionalView condition={expiringPoints !== 0}>,</ConditionalView>
                 </span>
               </div>
               <div className="points-expiring">

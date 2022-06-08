@@ -476,8 +476,8 @@ function _alshaya_aura_react_translations() {
         'ar' => '@aura_icon تفعيل النقاط',
         'context' => 'aura',
       ],
-      'You have @pts points,' => [
-        'ar' => 'متوفر لديك @pts نقاط,',
+      'You have @pts points' => [
+        'ar' => 'متوفر لديك @pts نقاط',
         'context' => 'aura',
       ],
       '@pts points will expire by @date.' => [
