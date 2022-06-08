@@ -43,7 +43,7 @@ for ref in $refs ; do
   ref_name=$(echo $ref | cut -d '/' -f3)
   echo "Processing branch $ref_name."
 
-  git checkout origin/$ref_name
+  git checkout $ref_name
   git checkout --orphan $ref_name-tmp
   git add .
   git commit -m "Starting fresh orphan branch for $ref_name" --quiet
