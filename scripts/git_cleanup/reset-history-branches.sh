@@ -22,8 +22,11 @@ for repo in $repos ; do
   git remote add $repo_name $repo
 done
 
-echo "Settings origin as the default remote."
+echo "Settings git configs."
+git config user.name "Github-Actions-CI"
+git config user.email "noreply@github.com"
 git config checkout.defaultRemote origin
+git config advice.detachedHead false
 
 echo "Fetching all remotes."
 git pull --all
