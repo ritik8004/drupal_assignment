@@ -72,6 +72,16 @@ log_message_and_details()
   echo
 }
 
+get_cloud_task()
+{
+  cloud_task=`$blt_dir/bin/blt cloud:get-application-task ${AH_APPLICATION_UUID} ${tag}`
+  if [ $? -ne 0 ]
+  then
+    log_message_and_details "Error occurred while fetching cloud task, aborting"
+    exit
+  fi
+}
+
 log_message "============================================"
 log_message "Tag to deploy: $tag"
 log_message "Tag currently deployed: $deployment_identifier"
@@ -180,12 +190,20 @@ then
 fi
 
 # Wait for code to be available on server before moving forward.
-cloud_task=`$blt_dir/bin/blt cloud:get-application-task ${AH_APPLICATION_UUID} ${tag}`
-while [ "${cloud_task}" != 0 ]
+while [ "${deployment_identifier}" != "${tag}" ]
 do
-  log_message_and_details "Waiting for code to be deployed on server."
+  log_message_and_details "Waiting for code to be deployed on server (current=$deployment_identifier)"
   sleep 5
-  cloud_task=`$blt_dir/bin/blt cloud:get-application-task ${AH_APPLICATION_UUID} ${tag}`
+  deployment_identifier=$(cat "$server_root/deployment_identifier")
+done
+
+log_message_and_details "Checking cloud tasks if deployment is still in process."
+get_cloud_task
+while [ "${cloud_task}" != "0" ]
+do
+  echo "Cloud Task: Waiting for code to be deployed on server."
+  sleep 15
+  get_cloud_task
 done
 
 log_message_and_details "Code deployment finished"
