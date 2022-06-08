@@ -18,7 +18,10 @@ const renderWishListButton = (
 ) => {
   const selectedElements = document.getElementsByClassName(elementSelector);
   Array.from(selectedElements).forEach((element) => {
-    const sku = element.closest('article').getAttribute('data-sku');
+    // Check if V3 is enabled.
+    const sku = globalThis.rcsPhGetPageType() === null
+      ? element.closest('article').getAttribute('data-sku')
+      : element.closest('form').getAttribute('data-sku');
     if (sku && sku !== null) {
       ReactDOM.render(
         <WishlistButton
@@ -52,6 +55,13 @@ const handleMatchBackLoad = () => {
   renderWishListButton('wishlist-pdp-matchback', 'matchback');
 };
 
+/**
+ * Method to handle pdp
+ */
+const handlePdpLoad = () => {
+  renderWishListButton('wishlist-pdp-full', 'pdp');
+};
+
 // Check if the wishlist element on PDP exist and
 // data-sku is present, then render the wishlist button.
 renderWishListButton('wishlist-pdp-full', 'pdp');
@@ -63,3 +73,5 @@ document.addEventListener('onModalLoad', handleModalOnLoad);
 // Add modal load event listener to render
 // wishlist button whenever modal opens.
 document.addEventListener('onMatchbackLoad', handleMatchBackLoad);
+
+RcsEventManager.addListener('alshayaAddToCartLoaded', handlePdpLoad);

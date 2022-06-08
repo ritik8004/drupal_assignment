@@ -186,6 +186,19 @@ function alshaya_rcs_product_alshaya_spc_checkout_confirmation_order_build_alter
 }
 
 /**
+ * Implements hook_alshaya_rcs_product_build_alter().
+ */
+function alshaya_rcs_product_alshaya_rcs_product_build_alter(array $build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if (\Drupal::service('alshaya_wishlist.helper')->isWishListEnabled()) {
+    $build['#attached']['drupalSettings']['alshayaRcs']['vmode'] = $view_mode;
+    $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
+    // Add cache tag.
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_wishlist.settings']);
+  }
+  return $build;
+}
+
+/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
@@ -321,6 +334,12 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
   $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
+
+  // Invoke hook_alshaya_rcs_product_build_alter.
+  $build = \Drupal::moduleHandler()->invokeAll(
+    'alshaya_rcs_product_build_alter',
+    [$build, $entity, $display, $view_mode]
+  );
 }
 
 /**

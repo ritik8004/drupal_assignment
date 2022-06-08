@@ -593,6 +593,7 @@ exports.computePhFilters = function (input, filter) {
         // Add the configurable options to the form.
         data.configurable_options = processedOptions;
       }
+      data.vmode = drupalSettings.alshayaRcs.vmode;
       value = handlebarsRenderer.render(`product.sku_base_form`, data);
       break;
 

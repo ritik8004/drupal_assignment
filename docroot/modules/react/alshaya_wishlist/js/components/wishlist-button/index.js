@@ -45,7 +45,7 @@ class WishlistButton extends React.Component {
     if (contextArray.includes(context)) {
       // Set title for sku product on page load.
       const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-      const productInfo = drupalSettings[productKey];
+      const productInfo = this.getProductInfo(sku, productKey);
       this.setState({
         title: productInfo[sku].cart_title ? productInfo[sku].cart_title : '',
       });
@@ -92,6 +92,24 @@ class WishlistButton extends React.Component {
       // Remove event listener bind in componentDidMount.
       document.removeEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
     }
+  };
+
+  /**
+   * Get product info for V2 or V3.
+   *
+   * @param {string} sku
+   *   Product sku.
+   * @param {string} productKey
+   *   Product context key.
+   */
+  getProductInfo = (sku, productKey) => {
+    let productInfo = [];
+    if (globalThis.rcsPhGetPageType() === null) {
+      productInfo = drupalSettings[productKey];
+    } else {
+      productInfo[sku] = window.commerceBackend.getProductData(sku, false, false);
+    }
+    return productInfo;
   };
 
   /**
@@ -417,7 +435,7 @@ class WishlistButton extends React.Component {
   ifExistsInSameGroup = (skuItem) => {
     const { sku, context } = this.props;
     const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-    const productInfo = drupalSettings[productKey];
+    const productInfo = this.getProductInfo(sku, productKey);
     let found = false;
     // Check in variant list for grouped configurable product.
     // Else check in item list for grouped simple product.

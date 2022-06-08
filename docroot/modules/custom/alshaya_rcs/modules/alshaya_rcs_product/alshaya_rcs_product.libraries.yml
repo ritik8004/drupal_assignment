@@ -169,3 +169,7 @@ attribute.brand.logo:
   version: 1.x
   js:
     templates/handlebars/rcs-attribute-brand-logo.handlebars: {}
+
+product_wishlist:
+  js:
+    js/alshaya_rcs_product_wishlist.js: {}
