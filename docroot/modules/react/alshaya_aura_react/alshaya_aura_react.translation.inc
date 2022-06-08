@@ -584,6 +584,10 @@ function _alshaya_aura_react_translations() {
         'ar' => 'تسجيل الدخول',
         'context' => 'aura',
       ],
+      'Add your account details at shopping bag.' => [
+        'ar' => 'أضف تفاصيل حسابك في حقيبة التسوق.',
+        'context' => 'aura',
+      ],
       'Your points will be credited to your Aura account. You will be able to redeem these a day after your order is delivered.' => [
         'ar' => 'سيتم إضافة نقاطك إلى حسابك في أورا. وستتمكن من إستردادها بعد يوم من توصيل الطلبية.',
         'context' => 'aura',
