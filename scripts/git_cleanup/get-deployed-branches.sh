@@ -29,7 +29,15 @@ stacks=$(php -r '$json = '"'$stacks_res'"'; $stacks = (array)json_decode($json)-
 for env in $envs ; do
   for stack in $stacks ; do
     vcs_res=$(curl -sk "https://www.$env-alshaya.acsitefactory.com/api/v1/vcs?type=sites&stack_id=$stack" -u ${username}:${api_key} --max-time 30)
-    curr_branch=$(php -r '$json = '"'$vcs_res'"'; echo json_decode($json)->current;')
+    curr_branch=$(php -r '$json = '"'$vcs_res'"'; $decoded = json_decode($json); echo isset($decoded->current) ? $decoded->current : "error" ;')
+
+    if [ "$curr_branch" = "error" ]; then
+      echo "Impossible to fetch the name of the deployed for env $env on stack id $stack."
+      exit 1
+    fi
+
     echo "Stack $stack - Env $env: $curr_branch"
   done
 done
+
+exit 0
