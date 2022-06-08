@@ -170,6 +170,6 @@ attribute.brand.logo:
   js:
     templates/handlebars/rcs-attribute-brand-logo.handlebars: {}
 
-product_wishlist:
+cart_load_event:
   js:
-    js/alshaya_rcs_product_wishlist.js: {}
+    js/alshaya_rcs_cart_load_event.js: {}
