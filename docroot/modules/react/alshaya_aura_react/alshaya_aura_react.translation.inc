@@ -56,9 +56,6 @@ function _alshaya_aura_react_translations() {
       'Aura benefits' => [
         'ar' => 'مميزات أورا',
       ],
-      'Your points will be credited to your account. You will be able to redeem them 14 days after delivery as per Aura Terms & Conditions and Alshaya exchange and refund policies.' => [
-        'ar' => 'سيتم إيداع النقاط في حسابك. يمكنك استبدالها بعد 14 يوم من التوصيل طبقا للشروط والأحكام الخاصة ببرنامج أورا وسياسات الاستبدال والاسترجاع الخاصة بالشايع.',
-      ],
       'Say hello to Aura' => [
         'ar' => 'مرحباً بكم في أورا',
       ],
@@ -589,6 +586,10 @@ function _alshaya_aura_react_translations() {
       ],
       'Add your account details at shopping bag.' => [
         'ar' => 'أضف تفاصيل حسابك في حقيبة التسوق.',
+        'context' => 'aura',
+      ],
+      'Your points will be credited to your Aura account. You will be able to redeem these a day after your order is delivered.' => [
+        'ar' => 'سيتم إضافة نقاطك إلى حسابك في أورا. وستتمكن من إستردادها بعد يوم من توصيل الطلبية.',
         'context' => 'aura',
       ],
     ],

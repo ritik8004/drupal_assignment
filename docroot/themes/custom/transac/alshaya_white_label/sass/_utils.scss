@@ -673,4 +673,6 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-image: url('#{$base_theme_img_directory_path}/icons/#{$icon}');
+
+  @content;
 }
