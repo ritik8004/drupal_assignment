@@ -60,6 +60,8 @@ for repo in $repos ; do
         echo "Deleting $b"
         git push $repo  :refs/heads/$b
       done
+
+      git remote prune $repo
     else
       echo "Nothing deleted"
     fi
