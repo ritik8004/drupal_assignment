@@ -566,6 +566,15 @@ function _alshaya_spc_translations() {
       'ar' => 'المجموع الفرعي بعد الخصم',
     ],
   ];
+
+  // Strings related to ICT.
+  // @todo Update Arabic strings.
+  $strings['v15'] = [
+    'Expected Delivery on' => [
+      'ar' => 'Expected Delivery on',
+    ],
+  ];
+
   return $strings;
 }
 

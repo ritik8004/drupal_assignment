@@ -3,7 +3,7 @@ import OnlineBooking from '../../online-booking';
 import PriceElement from '../../../../utilities/special-price/PriceElement';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import DefaultShippingElement from './DefaultShippingElement';
-import IntercountryTransfer from '../../online-booking/intercountry-transfer';
+import ExpectedDelivery from '../../online-booking/expected-delivery';
 
 const ShippingMethodCommon = ({
   cart, refreshCart, method, selected, shippingInfoUpdated,
@@ -14,11 +14,12 @@ const ShippingMethodCommon = ({
   }
 
   // Check if the ict feature is enabled.
+  // @todo Pass ict variables to component.
   if (selected
     && hasValue(method.extension_attributes)
     && hasValue(method.extension_attributes.ict)) {
     return (
-      <IntercountryTransfer ictData={method.extension_attributes.ict} />
+      <ExpectedDelivery />
     );
   }
 
