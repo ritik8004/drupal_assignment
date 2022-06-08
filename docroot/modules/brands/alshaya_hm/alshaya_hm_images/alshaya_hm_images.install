@@ -14,9 +14,6 @@ use Drupal\acq_sku\Entity\SKU;
 function alshaya_hm_images_update_8014() {
   \Drupal::service('module_installer')->install(['alshaya_media_assets']);
   \Drupal::configFactory()->getEditable('alshaya_hm_images.settings')->delete();
-  \Drupal::configFactory()->getEditable('alshaya_media_assets.settings')
-    ->set('swatch_asset_type', 'StillMedia/DescriptiveStillLife')
-    ->save();
 }
 
 /**
