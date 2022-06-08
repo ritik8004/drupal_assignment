@@ -296,7 +296,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_you_have_pts',
-      'value' => t('You have @pts points,', [], ['context' => 'aura']),
+      'value' => t('You have @pts points', [], ['context' => 'aura']),
     ],
     [
       'key' => 'checkout_point_expiry_with_date',
