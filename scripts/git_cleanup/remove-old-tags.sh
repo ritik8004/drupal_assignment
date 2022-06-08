@@ -12,7 +12,7 @@ for repo in $repos ; do
   to_delete=""
 
   # Get the release tags and keep the last ones (using nb_to_keep).
-  refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -E "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | sort -r -t '/' -k 3 -V)
+  refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -E "refs/tags/[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+-build$" | sort -r -t '/' -k 3 -V)
   for ref in $refs ; do
     tag=$(echo $ref | cut -d'/' -f3)
 
@@ -37,20 +37,20 @@ for repo in $repos ; do
   echo "T2"
   echo "$t2"
 
-  t3=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$")
+  t3=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+-build$")
   echo "T3"
   echo "$t3"
 
-  t4=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | grep -o -vE "refs/tags/WELCOME")
+  t4=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+-build$" | grep -o -vE "refs/tags/WELCOME")
   echo "T4"
   echo "$t4"
 
-  t5=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | grep -o -vE "refs/tags/WELCOME" | sort -r -t '/' -k 3 -V)
+  t5=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+-build$" | grep -o -vE "refs/tags/WELCOME" | sort -r -t '/' -k 3 -V)
   echo "T5"
   echo "$t5"
 
   # Get the other tags except the "WELCOME" one.
-  refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | grep -o -vE "refs/tags/WELCOME" | sort -r -t '/' -k 3 -V)
+  refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+-build$" | grep -o -vE "refs/tags/WELCOME" | sort -r -t '/' -k 3 -V)
   echo "$refs"
   for ref in $refs ; do
     tag=$(echo $ref | cut -d'/' -f3)
