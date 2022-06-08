@@ -29,11 +29,9 @@ for repo in $repos ; do
     fi
   done
 
-  t=$(git ls-remote -t --refs $repo)
-  echo "$t"
-
   # Get the other tags except the "WELCOME" one.
   refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | grep -o -vE "refs/tags/WELCOME" | sort -r -t '/' -k 3 -V)
+  echo "$refs"
   for ref in $refs ; do
     tag=$(echo $ref | cut -d'/' -f3)
 
