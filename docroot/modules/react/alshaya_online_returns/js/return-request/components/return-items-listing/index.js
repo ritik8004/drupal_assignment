@@ -76,7 +76,9 @@ class ReturnItemsListing extends React.Component {
    */
   processSelectedItems = (checked, item) => {
     const { handleSelectedItems, itemsSelected, products } = this.props;
-    const itemHasApportionedPrice = hasValue(item.extension_attributes.apportioned_line_price);
+    const itemHasApportionedPrice = hasValue(
+      parseFloat(item.extension_attributes.apportioned_line_price),
+    );
     const itemHasPromotion = hasValue(item.applied_rule_ids);
     const itemDetails = item;
 
