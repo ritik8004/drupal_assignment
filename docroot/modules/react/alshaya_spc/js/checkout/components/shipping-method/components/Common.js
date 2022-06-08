@@ -3,7 +3,7 @@ import OnlineBooking from '../../online-booking';
 import PriceElement from '../../../../utilities/special-price/PriceElement';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import DefaultShippingElement from './DefaultShippingElement';
-import ExpectedDelivery from '../../online-booking/expected-delivery';
+import IctDeliveryInformation from '../../online-booking/ict-delivery-information';
 
 const ShippingMethodCommon = ({
   cart, refreshCart, method, selected, shippingInfoUpdated,
@@ -19,7 +19,7 @@ const ShippingMethodCommon = ({
     && hasValue(method.extension_attributes)
     && hasValue(method.extension_attributes.ict)) {
     return (
-      <ExpectedDelivery />
+      <IctDeliveryInformation deliveryMethod="home_delivery" date="29th May 2022" />
     );
   }
 

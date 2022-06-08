@@ -19,6 +19,8 @@ import {
 import ConditionalView from '../../../common/components/conditional-view';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import IctDeliveryInformation from '../online-booking/ict-delivery-information';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class ClicknCollectDeiveryInfo extends React.Component {
   isComponentMounted = true;
@@ -135,6 +137,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
               name, address, open_hours_group: openHoursGroup, delivery_time: deliveryTime,
             },
           },
+          extension_attributes: extensionAttribute,
         },
       },
     } = this.props;
@@ -229,6 +232,10 @@ class ClicknCollectDeiveryInfo extends React.Component {
                 {Drupal.t('Edit')}
               </div>
             </div>
+            {/** @todo Use date from MDC */}
+            <ConditionalView condition={hasValue(extensionAttribute.ict)}>
+              <IctDeliveryInformation deliveryMethod="click_and_collect" date="29th May 2022" />
+            </ConditionalView>
             <Popup
               open={isModalOpen}
               closeOnEscape={false}

@@ -573,6 +573,9 @@ function _alshaya_spc_translations() {
     'Expected Delivery on' => [
       'ar' => 'Expected Delivery on',
     ],
+    'Available in store from' => [
+      'ar' => 'Available in store from',
+    ],
   ];
 
   return $strings;
