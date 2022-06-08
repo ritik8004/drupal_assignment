@@ -11,4 +11,7 @@
 function alshaya_cos_images_update_9001() {
   \Drupal::service('module_installer')->install(['alshaya_pims_assets']);
   \Drupal::configFactory()->getEditable('alshaya_cos_images.settings')->delete();
+  \Drupal::configFactory()->getEditable('alshaya_media_assets.settings')
+    ->set('swatch_asset_type', 'StillMedia/Fabricswatch')
+    ->save();
 }

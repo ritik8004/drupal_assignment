@@ -31,3 +31,20 @@ services:
     class: Drupal\alshaya_media_assets\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+
+  alshaya_media_assets.product_info_requested_event:
+    class: Drupal\alshaya_media_assets\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_media_assets.skuassetsmanager'
+    tags:
+      - { name: 'event_subscriber' }
+
+  alshaya_media_assets.product_updated_event:
+    class: Drupal\alshaya_media_assets\EventSubscriber\ProductUpdatedEventSubscriber
+    arguments:
+      - '@entity_type.manager'
+      - '@logger.factory'
+      - '@file.usage'
+      - '@alshaya_media_assets.skuassetsmanager'
+    tags:
+      - { name: 'event_subscriber' }

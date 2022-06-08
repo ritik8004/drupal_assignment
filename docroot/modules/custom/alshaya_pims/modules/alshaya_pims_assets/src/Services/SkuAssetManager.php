@@ -104,12 +104,13 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     $swatch = [];
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $assets_data = $skuEntity->get('attr_assets')->getValue();
+    $sku_asset_type = $this->mediaAssetManager->getImageSettings()->get('swatch_asset_type');
 
     if ($assets_data && isset($assets_data[0], $assets_data[0]['value'])) {
       // phpcs:ignore
       $unserialized_assets = unserialize($assets_data[0]['value']);
       foreach ($unserialized_assets as $assets) {
-        if ($assets['Data']['AssetType'] === 'StillMedia/Fabricswatch') {
+        if ($assets['Data']['AssetType'] === $sku_asset_type) {
           $swatch['url'] = $assets['Data']['PublicAssetService'];
           $swatch['type'] = $assets['sortAssetType'];
         }

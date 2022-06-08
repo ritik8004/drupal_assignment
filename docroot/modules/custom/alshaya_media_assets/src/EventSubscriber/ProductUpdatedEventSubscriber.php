@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_hm_images\EventSubscriber;
+namespace Drupal\alshaya_media_assets\EventSubscriber;
 
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -13,7 +13,7 @@ use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
 /**
  * Class Product Updated Event Subscriber.
  *
- * @package Drupal\alshaya_hm_images\EventSubscriber
+ * @package Drupal\alshaya_media_assets\EventSubscriber
  */
 class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
 
@@ -62,7 +62,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
                               FileUsageInterface $file_usage,
                               SkuAssetManagerInterface $sku_assets_manager) {
     $this->entityTypeManager = $entity_type_manager;
-    $this->logger = $logger_factory->get('alshaya_hm_images');
+    $this->logger = $logger_factory->get('alshaya_media_assets');
     $this->fileUsage = $file_usage;
     $this->skuAssetsManager = $sku_assets_manager;
   }
