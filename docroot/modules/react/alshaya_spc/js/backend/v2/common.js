@@ -353,7 +353,8 @@ const getProcessedCartData = async (cartData) => {
   // Total segments.
   cartData.totals.total_segments.forEach((element) => {
     // If subtotal order total available.
-    if (element.code === 'subtotal_with_discount_incl_tax') {
+    if (drupalSettings.alshaya_spc.subtotal_after_discount
+      && element.code === 'subtotal_with_discount_incl_tax') {
       data.totals.subtotalWithDiscountInclTax = element.value;
     }
     // If Aura enabled, add aura related details.
