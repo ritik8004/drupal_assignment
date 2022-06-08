@@ -2,7 +2,7 @@ import React from 'react';
 
 const ExpectedDelivery = () => (
   <>
-    <div id="intercountry-transfer" className="intercountry-transfer">
+    <div id="ict-expected-delivery" className="ict-expected-delivery">
       <label className="radio-sim radio-label">
         <span className="carrier-title">
           {/** @todo Use date from MDC */}
