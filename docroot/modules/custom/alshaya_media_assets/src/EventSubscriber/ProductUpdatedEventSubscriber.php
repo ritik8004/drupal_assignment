@@ -8,7 +8,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 
 /**
  * Class Product Updated Event Subscriber.
@@ -41,7 +41,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   /**
    * SKU Assets Manager.
    *
-   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface
+   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManager
    */
   private $skuAssetsManager;
 
@@ -54,13 +54,13 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Logger Factory.
    * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
    *   File usage.
-   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_assets_manager
+   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager
    *   SKU Assets Manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LoggerChannelFactoryInterface $logger_factory,
                               FileUsageInterface $file_usage,
-                              SkuAssetManagerInterface $sku_assets_manager) {
+                              SkuAssetManager $sku_assets_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger_factory->get('alshaya_media_assets');
     $this->fileUsage = $file_usage;

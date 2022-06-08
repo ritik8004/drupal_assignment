@@ -3,43 +3,12 @@
 namespace Drupal\alshaya_pims_assets\Services;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
-use Drupal\Core\Config\ConfigFactory;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager as MediaAssetsManager;
 
 /**
  * Sku Asset Manager Class.
  */
-class SkuAssetManager implements SkuAssetManagerInterface {
-
-  /**
-   * The Config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactory
-   */
-  protected $configFactory;
-
-  /**
-   * Alshaya media asset manager service.
-   *
-   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface
-   */
-  protected $mediaAssetManager;
-
-  /**
-   * SkuAssetManager constructor.
-   *
-   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $alshaya_media_assets_manager
-   *   Alshaya media assets service.
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
-   *   Config Factory service.
-   */
-  public function __construct(
-    SkuAssetManagerInterface $alshaya_media_assets_manager,
-    ConfigFactory $configFactory
-  ) {
-    $this->mediaAssetManager = $alshaya_media_assets_manager;
-    $this->configFactory = $configFactory;
-  }
+class SkuAssetManager extends MediaAssetsManager {
 
   /**
    * {@inheritDoc}
@@ -104,7 +73,7 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     $swatch = [];
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $assets_data = $skuEntity->get('attr_assets')->getValue();
-    $sku_asset_type = $this->mediaAssetManager->getImageSettings()->get('swatch_asset_type');
+    $sku_asset_type = $this->getImageSettings()->get('swatch_asset_type');
 
     if ($assets_data && isset($assets_data[0], $assets_data[0]['value'])) {
       // phpcs:ignore
@@ -269,13 +238,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    */
   public function getSkuSwatchType(SKU $sku) {
     return '';
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function getImageSettings() {
-    return $this->mediaAssetManager->getImageSettings();
   }
 
 }

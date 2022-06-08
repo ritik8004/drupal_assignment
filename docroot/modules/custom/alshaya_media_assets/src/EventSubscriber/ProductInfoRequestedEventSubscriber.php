@@ -4,7 +4,7 @@ namespace Drupal\alshaya_media_assets\EventSubscriber;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
-use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -20,17 +20,17 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   /**
    * SKU Assets Manager.
    *
-   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface
+   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManager
    */
   private $skuAssetsManager;
 
   /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
-   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_assets_manager
+   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager
    *   SKU Assets Manager.
    */
-  public function __construct(SkuAssetManagerInterface $sku_assets_manager) {
+  public function __construct(SkuAssetManager $sku_assets_manager) {
     $this->skuAssetsManager = $sku_assets_manager;
   }
 
@@ -168,7 +168,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     $swatch_type = $this->skuAssetsManager->getSkuSwatchType($parent);
 
-    if (strtoupper($swatch_type) !== SkuAssetManagerInterface::LP_SWATCH_RGB) {
+    if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
       $assets = $this->skuAssetsManager->getSkuAssets($sku, 'swatch');
     }
 
@@ -176,7 +176,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     // sku, use rgb color code instead.
     $swatch = [
       'display_label' => $sku->get('attr_color_label')->getString(),
-      'swatch_type' => empty($assets) ? SkuAssetManagerInterface::LP_SWATCH_RGB : $swatch_type,
+      'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
     ];
 
     $swatch['display_value'] = empty($assets)

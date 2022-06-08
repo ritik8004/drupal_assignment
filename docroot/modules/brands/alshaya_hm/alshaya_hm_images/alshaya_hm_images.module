@@ -7,7 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 use Drupal\image\Entity\ImageStyle;
 
 /**
@@ -57,12 +57,12 @@ function alshaya_hm_images_alshaya_acm_product_light_product_data_alter(SKU $sku
  * Implements hook_alshaya_acm_product_pdp_swath_type_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
-  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_asset_manager */
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_asset_manager */
   $sku_asset_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
   $swatch_type = $sku_asset_manager->getSkuSwatchType($sku);
 
   $assets = [];
-  if (strtoupper($swatch_type) !== SkuAssetManagerInterface::LP_SWATCH_RGB) {
+  if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
     $assets = $sku_asset_manager->getSkuAssets($variant_sku, 'swatch');
   }
 
@@ -77,7 +77,7 @@ function alshaya_hm_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp') {
-  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_assets_manager */
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager */
   $sku_assets_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */

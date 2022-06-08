@@ -7,7 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\file\FileInterface;
 
@@ -139,7 +139,7 @@ function _alshaya_media_assets_acq_sku_process_assets(array $product, array $exi
 
       $asset_type_parts = (!empty($asset['Data']['AssetType'])) ? explode('/', $asset['Data']['AssetType']) : [];
       $assets[$key]['sortAssetType'] = !empty($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
-      $face_type = SkuAssetManagerInterface::LP_DEFAULT_ANGLE;
+      $face_type = SkuAssetManager::LP_DEFAULT_ANGLE;
 
       if (!empty($asset['Data']['Angle']['Facing']) && !empty($asset['Data']['Angle']['Identifier'])) {
         $face_type = $asset['Data']['Angle']['Facing'] . $asset['Data']['Angle']['Identifier'];
@@ -164,7 +164,7 @@ function _alshaya_media_assets_acq_sku_process_assets(array $product, array $exi
  * Implements hook_alshaya_acm_product_gallery_alter().
  */
 function alshaya_media_assets_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $sku, $context = 'pdp') {
-  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_assets_manager */
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager */
   $sku_assets_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
 
   // Check if the gallery has a main image. If not, look for assets.
@@ -205,7 +205,7 @@ function alshaya_media_assets_alshaya_acm_product_gallery_alter(array &$gallery,
  * Implements hook_alshaya_acm_product_media_items_alter().
  */
 function alshaya_media_assets_alshaya_acm_product_media_items_alter(array &$media, SKU $sku) {
-  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $assetsManager */
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $assetsManager */
   $assetsManager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
 
   $assets = $assetsManager->getAssets($sku);

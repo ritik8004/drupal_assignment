@@ -27,7 +27,27 @@ use GuzzleHttp\TransferStats;
 /**
  * Sku Asset Manager Class.
  */
-class SkuAssetManager implements SkuAssetManagerInterface {
+class SkuAssetManager {
+
+  /**
+   * Constant to denote that the current asset has no angle data associated.
+   */
+  const LP_DEFAULT_ANGLE = 'NO_ANGLE';
+
+  /**
+   * Constant for RGB swatch display type.
+   */
+  const LP_SWATCH_RGB = 'RGB';
+
+  /**
+   * Constant for default weight in case no weight has been set via config.
+   */
+  const LP_DEFAULT_WEIGHT = 100;
+
+  /**
+   * Constant for default swatch display type.
+   */
+  const LP_SWATCH_DEFAULT = 'RGB';
 
   /**
    * The Config factory service.
