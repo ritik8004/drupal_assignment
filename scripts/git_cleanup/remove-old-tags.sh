@@ -29,6 +29,26 @@ for repo in $repos ; do
     fi
   done
 
+  t1=$(git ls-remote -t --refs $repo)
+  echo "T1"
+  echo "$t1"
+
+  t2=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$")
+  echo "T2"
+  echo "$t2"
+
+  t3=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$")
+  echo "T3"
+  echo "$t3"
+
+  t4=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | grep -o -vE "refs/tags/WELCOME")
+  echo "T4"
+  echo "$t4"
+
+  t5=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | grep -o -vE "refs/tags/WELCOME" | sort -r -t '/' -k 3 -V)
+  echo "T5"
+  echo "$t5"
+
   # Get the other tags except the "WELCOME" one.
   refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -vE "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | grep -o -vE "refs/tags/WELCOME" | sort -r -t '/' -k 3 -V)
   echo "$refs"
