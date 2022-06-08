@@ -7,3 +7,11 @@ services:
       - '@logger.factory'
     tags:
       - { name: 'event_subscriber' }
+
+  alshaya_hm_images.images_helper:
+    class: Drupal\alshaya_hm_images\Services\HmImagesHelper
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.cache_manager'
+      - '@language_manager'
+      - '@database'

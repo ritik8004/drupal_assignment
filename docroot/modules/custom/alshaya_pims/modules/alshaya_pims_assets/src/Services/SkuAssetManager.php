@@ -267,13 +267,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function getColorsForSku(SKU $sku) {
-    return [];
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public function getSkuSwatchType(SKU $sku) {
     return '';
   }

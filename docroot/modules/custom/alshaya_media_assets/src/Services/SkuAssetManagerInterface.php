@@ -136,17 +136,6 @@ interface SkuAssetManagerInterface {
   public function getAssetType(array $asset);
 
   /**
-   * Helper function to fetch list of color options supported by a parent SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Parent sku.
-   *
-   * @return array
-   *   Array of RGB color values keyed by article_castor_id.
-   */
-  public function getColorsForSku(SKU $sku);
-
-  /**
    * Helper function to fetch swatch type for the sku.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku

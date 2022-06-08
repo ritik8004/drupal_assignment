@@ -40,10 +40,10 @@ function alshaya_hm_images_alshaya_acm_product_light_product_data_alter(SKU $sku
     return;
   }
 
-  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $sku_assets_manager */
-  $sku_assets_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
+  /** @var \Drupal\alshaya_hm_images\Services\HmImagesHelper $hm_images_helper */
+  $hm_images_helper = \Drupal::service('alshaya_hm_images.images_helper');
   // Get colors for the SKU.
-  $colors = $sku_assets_manager->getColorsForSku($sku);
+  $colors = $hm_images_helper->getColorsForSku($sku);
 
   foreach ($colors as $key => $color) {
     $data['swatches'][] = [
@@ -89,7 +89,9 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
     // We do not display swatches for color nodes.
     $color = $build['#color'] ?? '';
     if ($swatches_display_status && empty($color)) {
-      $swatches = array_filter($sku_assets_manager->getColorsForSku($sku));
+      /** @var \Drupal\alshaya_hm_images\Services\HmImagesHelper $hm_images_helper */
+      $hm_images_helper = \Drupal::service('alshaya_hm_images.images_helper');
+      $swatches = array_filter($hm_images_helper->getColorsForSku($sku));
       if ($swatches) {
         $swatch_plp_limit = \Drupal::config('alshaya_media_assets.settings')->get('swatch_plp_limit');
         $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit, TRUE);

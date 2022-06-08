@@ -2,16 +2,13 @@
 
 namespace Drupal\alshaya_media_assets\Services;
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuConfig;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
@@ -20,7 +17,6 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
@@ -74,13 +70,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
-
-  /**
-   * Product Cache Manager.
-   *
-   * @var \Drupal\alshaya_acm_product\Service\ProductCacheManager
-   */
-  protected $productCacheManager;
 
   /**
    * PIMS ID <=> FID cache.
@@ -146,20 +135,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   protected $fileSystem;
 
   /**
-   * The Language Manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
-   * The Database connection service.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
-
-  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -174,8 +149,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module Handler service object.
-   * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
-   *   Product Cache Manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_pims_files
    *   PIMS ID <=> Drupal File URI cache.
    * @param \GuzzleHttp\Client $http_client
@@ -192,10 +165,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    *   Cache for media_file_mapping.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   File system service.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language manager service.
-   * @param \Drupal\Core\Database\Connection $database
-   *   Database service.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -203,7 +172,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
                               SKUPluginManager $skuPluginManager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ModuleHandlerInterface $moduleHandler,
-                              ProductCacheManager $product_cache_manager,
                               CacheBackendInterface $cache_pims_files,
                               Client $http_client,
                               LoggerChannelFactoryInterface $logger_factory,
@@ -211,9 +179,7 @@ class SkuAssetManager implements SkuAssetManagerInterface {
                               FileUsageInterface $file_usage,
                               LockBackendInterface $lock,
                               CacheBackendInterface $cache_media_file_mapping,
-                              FileSystemInterface $file_system,
-                              LanguageManagerInterface $language_manager,
-                              Connection $database) {
+                              FileSystemInterface $file_system) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -221,7 +187,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->moduleHandler = $moduleHandler;
-    $this->productCacheManager = $product_cache_manager;
     $this->cachePimsFiles = $cache_pims_files;
     $this->httpClient = $http_client;
     $this->logger = $logger_factory->get('SkuAssetManager');
@@ -230,8 +195,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     $this->lock = $lock;
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
     $this->fileSystem = $file_system;
-    $this->languageManager = $language_manager;
-    $this->database = $database;
   }
 
   /**
@@ -965,51 +928,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function getColorsForSku(SKU $sku) {
-    if ($sku->bundle() != 'configurable') {
-      return [];
-    }
-
-    if ($cache = $this->productCacheManager->get($sku, 'hm_colors_for_sku')) {
-      return $cache;
-    }
-
-    $combinations = $this->skuManager->getConfigurableCombinations($sku);
-    if (empty($combinations)) {
-      return [];
-    }
-
-    $article_castor_ids = [];
-    foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $skus) {
-      $child_sku_entity = NULL;
-      $color_attributes = [];
-
-      // Use only the first SKU for which we get color attributes.
-      foreach ($skus as $child_sku) {
-        // Show only for colors for which we have stock.
-        $child_sku_entity = SKU::loadFromSku($child_sku);
-
-        if ($child_sku_entity instanceof SKUInterface && $this->skuManager->isProductInStock($child_sku_entity)) {
-          $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
-          if ($color_attributes) {
-            break;
-          }
-        }
-      }
-
-      if ($child_sku_entity instanceof SKUInterface && $color_attributes) {
-        $article_castor_ids[$child_sku_entity->id()] = $color_attributes['attr_rgb_color'];
-      }
-    }
-
-    $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids);
-
-    return $article_castor_ids;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public function getAssetsForSku(SKU $sku, $page_type) {
     $assets = [];
     if ($sku->bundle() == 'simple') {
@@ -1019,24 +937,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
       $assets = $this->getChildSkuAssets($sku, $page_type);
     }
     return $assets;
-  }
-
-  /**
-   * Helper function to get color label & rgb code for SKU.
-   *
-   * @param int $sku_id
-   *   Entity id for the SKU being processed.
-   *
-   * @return array
-   *   Associative array returning color label & code.
-   */
-  private function getColorAttributesFromSku($sku_id) {
-    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $query = $this->database->select('acq_sku_field_data', 'asfd');
-    $query->fields('asfd', ['attr_color_label', 'attr_rgb_color']);
-    $query->condition('id', $sku_id);
-    $query->condition('langcode', $current_langcode);
-    return $query->execute()->fetchAssoc();
   }
 
   /**
