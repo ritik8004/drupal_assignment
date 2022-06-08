@@ -164,7 +164,7 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
     if ($routename == 'entity.node.canonical'
       && $node
       && $node->bundle() == 'advanced_page'
-      && $node->get('field_use_as_department_page')->value == 0
+      && $node->get('field_use_as_department_page')->getString() == '0'
     ) {
       return [];
     }
