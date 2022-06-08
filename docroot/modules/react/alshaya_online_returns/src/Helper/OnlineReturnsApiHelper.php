@@ -88,8 +88,10 @@ class OnlineReturnsApiHelper {
    */
   public function getReturnsApiConfig($langcode = 'en', $reset = FALSE) {
     $cache_key = 'alshaya_online_returns:returns_api_config:' . $langcode;
+    $cache = $this->cache->get($cache_key);
 
-    if (!$reset && $cache = $this->cache->get($cache_key)) {
+    // Return the cache info only if the value exists.
+    if (!$reset && $cache && $cache->data) {
       return $cache->data;
     }
 
@@ -122,9 +124,14 @@ class OnlineReturnsApiHelper {
         '@api' => $endpoint,
         '@response' => Json::encode($response),
       ]);
+      // Update the config with the old cache value.
+      if ($cache->data) {
+        $configs = $cache->data;
+      }
     }
-
-    $this->cache->set($cache_key, $configs, Cache::PERMANENT);
+    else {
+      $this->cache->set($cache_key, $configs, Cache::PERMANENT);
+    }
 
     return $configs;
   }
