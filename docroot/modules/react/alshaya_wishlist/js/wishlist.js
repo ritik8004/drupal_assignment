@@ -56,7 +56,7 @@ const handleMatchBackLoad = () => {
 };
 
 /**
- * Method to handle pdp
+ * Method to handle pdp add to cart loaded event for wishlist.
  */
 const handlePdpLoad = () => {
   renderWishListButton('wishlist-pdp-full', 'pdp');
