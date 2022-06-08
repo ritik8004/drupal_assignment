@@ -23,3 +23,10 @@ services:
       - '@file_system'
       - '@language_manager'
       - '@database'
+
+  alshaya_pims_assets.product_info_requested_event:
+    class: Drupal\alshaya_pims_assets\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_media_assets.skuassetsmanager'
+    tags:
+      - { name: 'event_subscriber' }

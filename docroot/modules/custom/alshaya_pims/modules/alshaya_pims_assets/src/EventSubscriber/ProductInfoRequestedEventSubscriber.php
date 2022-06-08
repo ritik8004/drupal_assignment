@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_cos_images\EventSubscriber;
+namespace Drupal\alshaya_pims_assets\EventSubscriber;
 
 use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Class Product Info Requested Event Subscriber.
  *
- * @package Drupal\alshaya_cos_images\EventSubscriber
+ * @package Drupal\alshaya_pims_assets\EventSubscriber
  */
 class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
