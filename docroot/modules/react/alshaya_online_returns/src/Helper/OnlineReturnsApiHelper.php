@@ -124,6 +124,10 @@ class OnlineReturnsApiHelper {
         '@api' => $endpoint,
         '@response' => Json::encode($response),
       ]);
+      // Update the config with the old cache value.
+      if ($cache->data) {
+        $configs = $cache->data;
+      }
     }
     else {
       $this->cache->set($cache_key, $configs, Cache::PERMANENT);
