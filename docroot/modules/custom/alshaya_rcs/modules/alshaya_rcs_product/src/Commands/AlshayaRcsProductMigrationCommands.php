@@ -101,7 +101,7 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
    * Deletes all acq product nodes from the system.
    *
    * @command alshaya_rcs_product:delete-acq-product-nodes
-   * @aliases arpdelproductnodes
+   * @aliases arpdelproductnodes,rcs-delete-product-nodes
    *
    * @usage alshaya_rcs_product:delete-acq-product_nodes
    *   Deletes all acq product nodes.
@@ -147,7 +147,7 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
    * Deletes all acq product nodes from the system.
    *
    * @command alshaya_rcs_product:delete-acq-sku
-   * @aliases arpdelacqsku
+   * @aliases arpdelacqsku,rcs-delete-product-skus
    *
    * @usage alshaya_rcs_product:delete-acq-sku
    *   Deletes all acq sku entities.
