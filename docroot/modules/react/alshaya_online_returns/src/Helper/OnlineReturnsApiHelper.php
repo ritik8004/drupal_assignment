@@ -91,7 +91,7 @@ class OnlineReturnsApiHelper {
     $cache = $this->cache->get($cache_key);
 
     // Return the cache info only if the value exists.
-    if (!$reset && $cache) {
+    if (!$reset && $cache && $cache->data) {
       return $cache->data;
     }
 
