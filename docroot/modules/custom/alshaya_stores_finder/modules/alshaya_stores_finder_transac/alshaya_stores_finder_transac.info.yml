@@ -3,7 +3,7 @@ type: module
 core: 8.x
 core_version_requirement: ^8 || ^9
 package: Alshaya
-description: 'Alshaya stores CT and related settings.'
+description: 'Alshaya stores CT and related settings for Transac sites.'
 dependencies:
   - alshaya_addressbook:alshaya_addressbook
   - alshaya_stores_finder:alshaya_stores_finder
