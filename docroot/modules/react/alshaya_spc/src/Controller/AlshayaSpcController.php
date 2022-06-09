@@ -789,6 +789,10 @@ class AlshayaSpcController extends ControllerBase {
         'items' => $productList,
         'payment' => $orderDetails['payment'],
         'billing' => $orderDetails['billing'],
+        // @todo update ict details from order details.
+        'ict' => [
+          'date' => '29th May 2022',
+        ],
       ],
       'cnc_collection_points_enabled' => $cnc_collection_points_enabled ?? FALSE,
     ];
