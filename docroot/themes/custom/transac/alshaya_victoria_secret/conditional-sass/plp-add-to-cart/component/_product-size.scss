@@ -19,4 +19,15 @@
       }
     }
   }
+
+  &_size {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+
+      & + .alshaya-select-wrapper {
+        width: 100%;
+        margin-top: rem(16);
+      }
+    }
+  }
 }
