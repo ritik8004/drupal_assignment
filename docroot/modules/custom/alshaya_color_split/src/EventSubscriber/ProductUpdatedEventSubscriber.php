@@ -65,7 +65,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     // Invalidate cache tags for all the products in same style.
     $entity = $event->getSku();
     $variants = $this->colorSplitManager->getProductsInStyle($entity, TRUE);
-    foreach ($variants as $variant) {
+    foreach ($variants ?? [] as $variant) {
       $this->cacheTagsInvalidator->invalidateTags($variant->getCacheTagsToInvalidate());
       $node = $variant->getPluginInstance()->getDisplayNode($variant, FALSE, FALSE);
       if ($node instanceof NodeInterface) {
