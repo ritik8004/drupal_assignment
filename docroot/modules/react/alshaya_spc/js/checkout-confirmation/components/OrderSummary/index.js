@@ -47,10 +47,9 @@ const OrderSummary = (props) => {
 
   let etaLabel = Drupal.t('expected delivery within');
   // Update etaLabel and expected delivery date for home delivery and ICT.
-  if (typeof drupalSettings.order_details.ict !== 'undefined'
-    && drupalSettings.order_details.ict.date !== null) {
+  if (hasValue(drupalSettings.order_details.ict_date)) {
     etaLabel = Drupal.t('Expected Delivery by', {}, { context: 'ict' });
-    expectedDelivery = drupalSettings.order_details.ict.date;
+    expectedDelivery = drupalSettings.order_details.ict_date;
   }
   let methodIcon = '';
   const storeAddress = [];
@@ -91,10 +90,9 @@ const OrderSummary = (props) => {
       : Drupal.t('available instore within');
 
     // Update etaLabel and availability for cnc and ICT.
-    if (typeof drupalSettings.order_details.ict !== 'undefined'
-      && drupalSettings.order_details.ict.date !== null) {
+    if (hasValue(drupalSettings.order_details.ict_date)) {
       etaLabel = Drupal.t('Available in store from', {}, { context: 'ict' });
-      expectedDelivery = drupalSettings.order_details.ict.date;
+      expectedDelivery = drupalSettings.order_details.ict_date;
     }
   }
 
