@@ -11,6 +11,8 @@ on:
   create:
     tags:
 
+concurrency: deploy-${{ github.ref }}
+
 defaults:
   run:
     shell: bash
