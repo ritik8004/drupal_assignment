@@ -2,11 +2,12 @@ services:
   alshaya_hm_images.alshaya_hm_process_blacklisted_products:
     class: Drupal\alshaya_hm_images\EventSubscriber\AlshayaHMProcessBlacklistedProductsSubscriber
     arguments:
-      - '@alshaya_media_assets.skuassetsmanager'
       - '@database'
       - '@logger.factory'
     tags:
       - { name: 'event_subscriber' }
+    calls:
+      - [setSkuAssetManager, ['@?alshaya_media_assets.skuassetsmanager']]
   alshaya_hm_images.images_helper:
     class: Drupal\alshaya_hm_images\Services\HmImagesHelper
     arguments:
