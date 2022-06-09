@@ -7,7 +7,10 @@ const ReturnOrderSummary = ({
   const itemNames = [];
   Object.keys(orderDetails['#products']).forEach((item) => {
     const itemName = orderDetails['#products'][item].name;
-    itemNames.push(itemName);
+    // Consider only the valid product items where ordered qty is more then 0.
+    if (orderDetails['#products'][item].qty_ordered > 0) {
+      itemNames.push(itemName);
+    }
   });
   return (
     <div className="order-details-wrapper">

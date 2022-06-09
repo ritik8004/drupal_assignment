@@ -18,6 +18,11 @@ const ReturnIndividualItem = ({
       ? item.returnData.qty_returned : item.returnData.qty_requested;
   }
 
+  // Return null if itemQuantity is not valid.
+  if (itemQuantity <= 0) {
+    return null;
+  }
+
   const {
     url: imageUrl,
     alt: imageAlt,
