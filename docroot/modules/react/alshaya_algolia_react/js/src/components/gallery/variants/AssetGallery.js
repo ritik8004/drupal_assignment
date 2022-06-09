@@ -31,7 +31,7 @@ const AssetGallery = ({
               <ImageElement
                 src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
                 title={title}
-                className="lazy"
+                loading="lazy"
               />
             </div>
           )
