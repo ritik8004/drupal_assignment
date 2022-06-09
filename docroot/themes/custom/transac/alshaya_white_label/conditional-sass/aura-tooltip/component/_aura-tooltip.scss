@@ -60,6 +60,66 @@
   }
 }
 
+.loyalty-club-details-wrapper {
+  .tooltip-anchor {
+    .tooltip-box {
+      transform: translateX(-75%);
+
+      &::before,
+      &::after {
+        @include breakpoint($tablet) {
+          left: 75%;
+        }
+      }
+
+      html[lang=ar] & {
+        transform: translateX(80%);
+
+        &::before,
+        &::after {
+          @include breakpoint($tablet) {
+            left: 10%;
+          }
+
+          @include breakpoint($desktop) {
+            left: 20%;
+          }
+        }
+      }
+    }
+  }
+
+  .aura-loyalty-benefits-row {
+    .tooltip-anchor {
+      .tooltip-box {
+        transform: translateX(-55%);
+
+        &::before,
+        &::after {
+          left: 20%;
+
+          @include breakpoint($tablet) {
+            left: 55%;
+          }
+        }
+
+        html[lang=ar] & {
+          transform: translateX(50%);
+
+          &::before,
+          &::after {
+            left: 50%;
+
+            @include breakpoint($tablet) {
+              left: 40%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .aura-card-linked-verified-wrapper {
   .aura-points-on-hold {
     .tooltip-anchor {
