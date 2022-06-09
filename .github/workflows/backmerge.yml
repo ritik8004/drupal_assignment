@@ -31,6 +31,8 @@ name: Back-merge
 
 on: push
 
+concurrency: backmerge-${{ github.ref_name }}
+
 jobs:
   validate:
     name: Validate workflow req.
