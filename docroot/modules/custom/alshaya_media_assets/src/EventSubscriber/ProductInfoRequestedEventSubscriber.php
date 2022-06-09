@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_media_assets\EventSubscriber;
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -58,10 +57,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     switch ($event->getFieldCode()) {
       case 'media':
         $this->processMedia($event);
-        break;
-
-      case 'swatch':
-        $this->processSwatch($event);
         break;
     }
   }
@@ -150,45 +145,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         $event->setValue($return);
         break;
     }
-  }
-
-  /**
-   * Process swatch for SKU based on brand specific rules.
-   *
-   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
-   *   Event object.
-   */
-  public function processSwatch(ProductInfoRequestedEvent $event): void {
-    $sku = $event->getSku();
-    $plugin = $sku->getPluginInstance();
-    $parent = $plugin->getParentSku($sku);
-    if (!($parent instanceof SKUInterface)) {
-      return;
-    }
-
-    $swatch_type = $this->skuAssetsManager->getSkuSwatchType($parent);
-
-    if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
-      $assets = $this->skuAssetsManager->getSkuAssets($sku, 'swatch');
-    }
-
-    // If swatch type is not miniature_image or assets were missing from
-    // sku, use rgb color code instead.
-    $swatch = [
-      'display_label' => $sku->get('attr_color_label')->getString(),
-      'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
-    ];
-
-    $swatch['display_value'] = empty($assets)
-      ? $sku->get('attr_rgb_color')->getString()
-      : file_create_url($assets[0]['drupal_uri']);
-
-    $event->setValue($swatch);
-
-    // For HM brand we have custom requirements around swatch fields
-    // so we do not want generic eventSubscriber to be executed further
-    // so we stop the propogation.
-    $event->stopPropagation();
   }
 
 }
