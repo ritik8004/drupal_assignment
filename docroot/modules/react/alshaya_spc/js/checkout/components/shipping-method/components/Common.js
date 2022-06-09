@@ -14,12 +14,13 @@ const ShippingMethodCommon = ({
   }
 
   // Check if the ict feature is enabled.
-  // @todo Pass ict variables to component.
   if (selected
     && hasValue(method.extension_attributes)
     && hasValue(method.extension_attributes.ict)) {
+    // @todo Pass ictDate variables to component from MDC.
+    const ictDate = '29th May 2022';
     return (
-      <IctDeliveryInformation deliveryMethod="home_delivery" date="29th May 2022" />
+      <IctDeliveryInformation deliveryMethod="home_delivery" date={ictDate} />
     );
   }
 

@@ -393,6 +393,13 @@ const getProcessedCartData = async (cartData) => {
       .cart.extension_attributes.hfd_hold_confirmation_number;
   }
 
+  // Check if intercountry transfer feature is enabled and have delivery date.
+  // @todo Change the attribute w.r.t MDC value for ICT.
+  if (hasValue(cartData.cart.extension_attributes)
+    && hasValue(cartData.cart.extension_attributes.ict)) {
+    data.ictDate = '29th May 2022';
+  }
+
   // If egift card enabled, add the hps_redeemed_amount
   // add hps_redemption_type to cart.
   if (isEgiftCardEnabled()) {

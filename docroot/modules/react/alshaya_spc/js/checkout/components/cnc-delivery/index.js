@@ -137,7 +137,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
               name, address, open_hours_group: openHoursGroup, delivery_time: deliveryTime,
             },
           },
-          extension_attributes: extensionAttribute,
+          ictDate, // Intercountry transfer delivery date from cart.
         },
       },
     } = this.props;
@@ -232,9 +232,8 @@ class ClicknCollectDeiveryInfo extends React.Component {
                 {Drupal.t('Edit')}
               </div>
             </div>
-            {/** @todo Use date from MDC */}
-            <ConditionalView condition={hasValue(extensionAttribute.ict)}>
-              <IctDeliveryInformation deliveryMethod="click_and_collect" date="29th May 2022" />
+            <ConditionalView condition={hasValue(ictDate)}>
+              <IctDeliveryInformation deliveryMethod="click_and_collect" date={ictDate} />
             </ConditionalView>
             <Popup
               open={isModalOpen}

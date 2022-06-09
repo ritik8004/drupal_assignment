@@ -567,14 +567,19 @@ function _alshaya_spc_translations() {
     ],
   ];
 
-  // Strings related to ICT.
-  // @todo Update Arabic strings.
+  // Strings related to Intercountry transfer.
   $strings['v15'] = [
     'Expected Delivery on' => [
-      'ar' => 'Expected Delivery on',
+      'ar' => 'تاريخ التوصيل المتوقع',
+      'context' => 'ict',
     ],
     'Available in store from' => [
-      'ar' => 'Available in store from',
+      'ar' => 'متوفر في المحل ابتداءً من',
+      'context' => 'ict',
+    ],
+    'Expected Delivery by' => [
+      'ar' => 'التوصيل المتوقع بحلول',
+      'context' => 'ict',
     ],
   ];
 
