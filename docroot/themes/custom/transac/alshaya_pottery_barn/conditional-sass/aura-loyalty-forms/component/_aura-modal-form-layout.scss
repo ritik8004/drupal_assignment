@@ -3,6 +3,7 @@
     #block-alshayamainmenu.aura-header-modal-open {
       ul.menu__list.menu--one__list {
         width: 100vw !important;
+        transform: unset;
       }
     }
   }
