@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @pbkaepprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @westelmsapprod @westelmkwpprod @westelmaepprod @vskwpprod @pbkaeprod @pbksaprod @pbkkwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @vssaprod @mcaeprod @vskwprod @tbskwprod @pbaepprod @vsaeprod @pbsaprod @pbaeprod @pbkwprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod @mcsaprod @mckwprod @vssapprod @vsaepprod @pbsapprod @pbaepprod @pbkwpprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwpprod @mcsapprod @mckwpprod
+@javascript @returnUser @checkoutPayment @coskwprod @cosaeprod @cossaprod @pbkaepprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @westelmsapprod @westelmkwpprod @westelmaepprod @vskwpprod @pbkaeprod @pbksaprod @pbkkwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @vssaprod @mcaeprod @vskwprod @tbskwprod @pbaepprod @vsaeprod @pbsaprod @pbaeprod @pbkwprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod @mcsaprod @mckwprod @vssapprod @vsaepprod @pbsapprod @pbaepprod @pbkwpprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwpprod @mcsapprod @mckwpprod
 Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2D) Card Payment Method
 
   Background:
@@ -27,7 +27,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
@@ -70,7 +70,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
@@ -113,7 +113,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address

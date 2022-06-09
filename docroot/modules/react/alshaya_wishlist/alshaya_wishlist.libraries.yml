@@ -1,20 +1,29 @@
+wishlist_backend:
+  js:
+    dist/wishlist_backend.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+
 my-wishlist:
   js:
     dist/mywishlist.bundle.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_wishlist/wishlist_backend
 
 wishlist:
   js:
     dist/wishlist.bundle.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_wishlist/wishlist_backend
 
 wishlistheader:
   js:
     dist/wishlistheader.bundle.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_wishlist/wishlist_backend
 
 wishlist_add_to_cart:
   version: 1.x
@@ -30,3 +39,10 @@ wishlist_gtm:
     assets/js/wishlist_gtm.js: {}
   dependencies:
     - core/jquery
+
+wishlist_load_merge:
+  version: 1.x
+  js:
+    assets/js/wishlist_load_merge.js: {}
+  dependencies:
+    - alshaya_wishlist/wishlist_backend

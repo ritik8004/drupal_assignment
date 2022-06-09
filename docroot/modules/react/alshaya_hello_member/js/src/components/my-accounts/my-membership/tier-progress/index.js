@@ -1,20 +1,28 @@
 import React from 'react';
+import { getPointsData } from '../../../../utilities';
 
-const MemberProgress = () => (
-  <div className="my-tier-progress">
-    <div className="progress-label">Hello</div>
-    <div className="progress-wrapper">
-      <div className="tier-bar-back">
-        <ul>
-          <li />
-          <li />
-          <li />
-        </ul>
-        <div style={{ width: '55%' }} className="tier-bar-front" />
+const TierProgress = ({
+  currentTier,
+  nextTier,
+  memberPointsInfo,
+}) => {
+  const pointsData = getPointsData(currentTier, memberPointsInfo);
+  return (
+    <div className="my-tier-progress">
+      <div className="progress-label">{currentTier}</div>
+      <div className="progress-wrapper">
+        <div className="tier-bar-back">
+          <ul>
+            <li />
+            <li />
+            <li />
+          </ul>
+          <div style={{ width: `${pointsData.pointsGatheredInPercent}%` }} className="tier-bar-front" />
+        </div>
       </div>
+      <div className="progress-label">{nextTier}</div>
     </div>
-    <div className="progress-label">Plus</div>
-  </div>
-);
+  );
+};
 
-export default MemberProgress;
+export default TierProgress;

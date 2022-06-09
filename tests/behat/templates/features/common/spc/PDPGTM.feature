@@ -1,4 +1,4 @@
-@javascript @hmkwuat @mckwuat
+@javascript
 Feature: Test GTm tracking
 
   Background:

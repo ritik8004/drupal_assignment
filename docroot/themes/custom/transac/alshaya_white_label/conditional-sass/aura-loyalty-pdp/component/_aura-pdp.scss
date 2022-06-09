@@ -1,5 +1,5 @@
 .aura-pdp-points-section {
-  padding: rem(8) rem(12) rem(14);
+  padding: rem(10) rem(12) rem(12);
   margin: rem(12) 0 rem(36);
   font-size: rem(14);
   background: $aura-pdp-points-bg;
@@ -29,6 +29,17 @@
       transform: translateX(0);
       #{$left}: rem(-150);
       z-index: 4;
+
+      &::before,
+      &::after {
+        margin-#{$left}: rem(56);
+
+        html[lang=ar] & {
+          margin-left: auto;
+          margin-right: auto;
+          left: rem(10);
+        }
+      }
     }
 
     &::before {

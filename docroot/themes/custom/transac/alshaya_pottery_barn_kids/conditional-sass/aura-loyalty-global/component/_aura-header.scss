@@ -1,0 +1,33 @@
+body {
+  &.aura-enabled {
+    .region__menu-secondary {
+      & > div,
+      & > nav {
+        @include breakpoint($desktop) {
+          display: inline-flex;
+          height: auto;
+
+          .aura-rewards-wrapper {
+            .aura-header-popup-wrapper {
+              a {
+                height: auto;
+              }
+            }
+          }
+
+          li,
+          a {
+            align-items: center;
+            display: inline-flex;
+          }
+        }
+      }
+
+      #block-welcomeuser {
+        @include breakpoint($desktop) {
+          display: inline-flex;
+        }
+      }
+    }
+  }
+}

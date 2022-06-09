@@ -13,8 +13,8 @@
         var entity = e.detail.page_entity;
         // Assign product GTM variables.
         var data = e.detail.data();
-        data.productSKU = (entity.type_id === 'configurable') ? '' : entity.style_code;
-        data.productStyleCode = entity.style_code;
+        data.productSKU = (entity.type_id === 'configurable') ? '' : entity.sku;
+        data.productStyleCode = entity.sku;
         data.pageType = 'product detail page';
         data.stockStatus = (entity.stock_status === 'IN_STOCK') ? 'in stock' : 'out of stock';
         data.productName = entity.name;

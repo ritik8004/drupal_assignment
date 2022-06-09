@@ -1,0 +1,18 @@
+.wishlist-share-popup-container {
+  .wishlist-share-popup-block {
+    .actions {
+      button {
+        &.copy-share-link {
+          border: rem(1) solid $wishlist-button-border;
+          background-color: transparent;
+          color: $wishlist-button-txt;
+
+          &:hover {
+            background-color: $wishlist-button-bg-hover;
+            opacity: 0.75;
+          }
+        }
+      }
+    }
+  }
+}

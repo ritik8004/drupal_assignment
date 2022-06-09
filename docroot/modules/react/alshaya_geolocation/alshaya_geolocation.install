@@ -45,10 +45,6 @@ function alshaya_geolocation_update_8003() {
       \Drupal::logger('alshaya_geolocation')->warning('Installing Alshaya React module.');
       \Drupal::service('module_installer')->install(['alshaya_react']);
     }
-    if (!\Drupal::service('module_handler')->moduleExists('alshaya_locations_api')) {
-      \Drupal::logger('alshaya_geolocation')->warning('Installing Alshaya Locations API module.');
-      \Drupal::service('module_installer')->install(['alshaya_locations_api']);
-    }
     // Set geolocation map settings.
     $geo_config = $config_factory->getEditable('geolocation.settings');
     $fields = $geo_config->getRawData();

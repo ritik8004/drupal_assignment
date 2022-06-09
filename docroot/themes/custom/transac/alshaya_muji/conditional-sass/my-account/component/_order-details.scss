@@ -13,12 +13,27 @@
 
   td {
     div {
-      margin-bottom: 0.625rem;
+      margin-bottom: rem(10);
       line-height: 1.5;
+    }
+  }
+
+  .total-row.vat-row {
+    .warm--white {
+      background: unset;
     }
   }
 
   .label {
     color: $order_detail_delivery_details_row_subtitle_content;
+  }
+
+  .order-detail & {
+    > div > div {
+      div {
+        margin-bottom: rem(10);
+        line-height: 1.5;
+      }
+    }
   }
 }

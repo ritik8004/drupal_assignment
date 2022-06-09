@@ -2,9 +2,15 @@
   color: $checkout_section_titles;
 
   &__title,
-  &__hold-delivery {
+  &__error-message,
+  &__hold-delivery-text,
+  &__hold-notification-text {
     font-size: 0.875rem;
     line-height: 1.29;
+
+    html[lang='ar'] & {
+      line-height: 1.5;
+    }
   }
 
   &__available-delivery {
@@ -94,7 +100,11 @@
 
     &-icon {
       &::before {
-        @include online-booking-icon('wall-clock.svg');
+        @include online-booking-icon('wall-clock.svg') {
+          html[lang='ar'] & {
+            top: rem(3);
+          }
+        }
       }
     }
 
@@ -111,7 +121,11 @@
 
     &-icon {
       &::before {
-        @include online-booking-icon('wall-clock-red.svg');
+        @include online-booking-icon('wall-clock-red.svg') {
+          html[lang='ar'] & {
+            top: rem(3);
+          }
+        }
       }
     }
 
@@ -132,16 +146,16 @@
         margin-#{$right}: rem(6);
         #{$left}: rem(-3);
         top: rem(-2);
+
+        html[lang='ar'] & {
+          top: 0;
+        }
       }
     }
 
     @include breakpoint($tablet) {
       margin-#{$right}: rem(112);
     }
-  }
-
-  .carrier-title {
-    font-weight: bold;
   }
 }
 

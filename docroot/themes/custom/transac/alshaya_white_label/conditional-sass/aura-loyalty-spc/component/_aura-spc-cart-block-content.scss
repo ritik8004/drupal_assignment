@@ -76,19 +76,21 @@
         }
 
         .tooltip-box {
-          background-color: $aura-spc-checkout-highlight;
-          border: rem(1) solid $aura-spc-checkout-highlight;
+          background: $aura-order-confirmation-points-tooltip-bg;
+          box-shadow: 0 rem(2) rem(20) 0 $spc-checkout-link-btn-box-shadow-mobile;
+          border: none;
+          color: $aura-order-confirmation-points-tooltip-txt;
           #{$left}: rem(-127);
 
           html[lang=ar] & {
             @include breakpoint($desktop) {
-              right: 0;
+              right: rem(-10);
             }
           }
 
           &::before,
           &::after {
-            border-top-color: $aura-spc-checkout-highlight;
+            border-top-color: $aura-order-confirmation-points-tooltip-bg;
             margin-#{$left}: rem(37);
 
             html[lang=ar] & {
@@ -96,7 +98,7 @@
                 left: 22%;
               }
 
-              left: 93%;
+              left: 87%;
             }
           }
         }

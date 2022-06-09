@@ -167,7 +167,7 @@ class AlshayaLoyaltyController extends ControllerBase {
    */
   public function getLoyaltyClubTitle() {
     if ($this->currentUser()->isAuthenticated()) {
-      return $this->t('My AURA');
+      return $this->t('My Aura');
     }
 
     return $this->t('About Aura');

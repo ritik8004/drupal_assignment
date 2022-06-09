@@ -61,4 +61,26 @@
     border-bottom-color: $checkout_section_titles;
     font-size: 1.125rem;
   }
+
+  .order-detail & {
+    > div > div div,
+    .dark {
+      line-height: 1.29;
+      font-weight: normal;
+    }
+
+    .delivery-details-row {
+      > div {
+        @include breakpoint($tablet) {
+          padding: rem(8) rem(22) rem(10);
+          padding-#{$left}: rem(56);
+        }
+
+        .icon-ic_infomation {
+          top: rem(4);
+          position: relative;
+        }
+      }
+    }
+  }
 }

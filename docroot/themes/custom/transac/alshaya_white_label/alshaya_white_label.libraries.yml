@@ -757,6 +757,11 @@ egift-card-checkout-confirmation:
     theme:
       css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: {}
 
+online-returns:
+  css:
+    theme:
+      css/conditional-sass/online-returns/online-returns.ltr.css: {}
+
 super-category:
   css:
     theme:
@@ -781,3 +786,8 @@ my-membership-info:
   css:
     theme:
       css/conditional-sass/my-membership-info/my-membership-info.ltr.css: {}
+
+hello-member-points-history:
+  css:
+    theme:
+      css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css: {}

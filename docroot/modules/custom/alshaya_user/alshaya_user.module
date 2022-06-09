@@ -13,8 +13,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
 use Drupal\Core\Url;
+use Drupal\alshaya_spc\Helper\SecureText;
 
 /**
  * Implements hook_theme().
@@ -177,11 +179,12 @@ function alshaya_user_form_user_register_form_submit($form, FormStateInterface $
     // We don't want to display any status messages after registration as we are
     // redirecting user to a page that contains all the information.
     \Drupal::service('messenger')->deleteByType(MessengerInterface::TYPE_STATUS);
-    // Prepare user data array.
-    $user_data = ['id' => $account->id()];
     // Get the string to pass into GET.
-    $user_data_string = base64_encode(json_encode($user_data));
-    $form_state->setRedirect('alshaya_user.user_register_complete', ['user' => $user_data_string]);
+    $encrypted_user_id = SecureText::encrypt(
+      $account->id(),
+      Settings::get('hash_salt')
+    );
+    $form_state->setRedirect('alshaya_user.user_register_complete', ['user' => $encrypted_user_id]);
   }
 }
 

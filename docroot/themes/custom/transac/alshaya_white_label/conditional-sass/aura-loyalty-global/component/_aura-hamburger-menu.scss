@@ -35,7 +35,7 @@ body.aura-enabled {
         .aura-header-hb-menu-title {
           display: flex;
           align-items: center;
-          padding: rem(12) rem(20);
+          padding: rem(14) rem(20);
           position: relative;
 
           span.preview-text {
@@ -83,7 +83,8 @@ body.aura-enabled {
     }
 
     .aura-header-popup-wrapper {
-      padding: 0 rem(18) rem(18);
+      padding: 0 rem(18) rem(16);
+      font-family: $aura-regular;
     }
   }
 }

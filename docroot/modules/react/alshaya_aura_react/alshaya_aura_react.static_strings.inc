@@ -296,7 +296,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_you_have_pts',
-      'value' => t('You have @pts points,', [], ['context' => 'aura']),
+      'value' => t('You have @pts points', [], ['context' => 'aura']),
     ],
     [
       'key' => 'checkout_point_expiry_with_date',
@@ -320,7 +320,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'aura_sign_in',
-      'value' => t('Sign in'),
+      'value' => t('Sign In', [], ['context' => 'aura']),
     ],
     [
       'key' => 'cart_to_earn_with_points',
@@ -422,6 +422,5 @@ function _alshaya_aura_static_strings() {
       'key' => 'checkout_check_your_points_value',
       'value' => t('Check your points value:', [], ['context' => 'aura']),
     ],
-
   ];
 }

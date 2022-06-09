@@ -59,7 +59,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
    *
    * @command alshaya-rcs-category:migrate
    *
-   * @aliases arcm,arc-migrate
+   * @aliases arcm,arc-migrate,rcs-category-migrate
    *
    * @options batch_size
    *   The number of rcs category to migrate per batch.
@@ -138,7 +138,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
    * Deletes all acq product category terms from the system.
    *
    * @command alshaya_rcs_listing:delete-acq-product-category-terms
-   * @aliases arldelterm
+   * @aliases arldelterm,rcs-delete-category
    *
    * @usage alshaya_rcs_listing:delete-acq-product-category-terms
    *   Deletes all acq category terms.

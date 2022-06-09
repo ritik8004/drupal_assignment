@@ -70,11 +70,6 @@ export const egiftFormElement = ({
     focusClass += ' focus';
   }
 
-  let maxLength = '';
-  if (name === 'card_number') {
-    maxLength = 16;
-  }
-
   // Separate template based on type.
   let rtnTemplate = '';
   switch (type) {
@@ -123,7 +118,6 @@ export const egiftFormElement = ({
             defaultValue={value}
             disabled={disabled}
             onBlur={(e) => handleEvent(e)}
-            maxLength={maxLength}
             onInput={(e) => checkCardNumber(e)}
           />
           <div className="c-input__bar" />

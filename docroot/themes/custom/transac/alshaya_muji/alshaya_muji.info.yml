@@ -24,7 +24,6 @@ regions:
 
 libraries:
   - alshaya_white_label/global_styles
-  - alshaya_muji/global_styles
 
 libraries-override:
   alshaya_white_label/ltr_print_styles:
@@ -194,3 +193,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css: css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css
+
+  alshaya_white_label/online-booking:
+    css:
+      theme:
+        css/conditional-sass/online-booking/online-booking.ltr.css: css/conditional-sass/online-booking/online-booking.ltr.css
