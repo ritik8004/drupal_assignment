@@ -35,9 +35,6 @@ git pull --all
 refs=$(git ls-remote -h $repo1 | grep -o -E "refs/heads/.*-build$")
 refs+=" distro"
 
-# Temporary security to test only with develop-build branch.
-refs="develop-build"
-
 # Reset the history of each branch and push to all repos.
 for ref in $refs ; do
   ref_name=$(echo $ref | cut -d '/' -f3)
