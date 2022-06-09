@@ -23,13 +23,19 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {object} product
    *   Raw product object.
-   * @param {object} styleProducts
+   * @param {Array} styleProducts
    *   Raw style products object.
    *
    * @returns {void}
    */
   function getProcessedStyleProducts(product, styleProducts) {
-    var mainProduct = JSON.parse(JSON.stringify(product));
+    var mainProduct = null;
+    styleProducts.forEach(function eachStyleProduct(styleProduct) {
+      if (styleProduct.sku === product.sku) {
+        mainProduct = JSON.parse(JSON.stringify(styleProduct));
+      }
+    });
+
     // This will hold the configugrable options for the main product keyed by
     // the attribute code and then the value index of the options.
     // Eg: {size: {11: {value_index: 10, store_label: "XS"}}}

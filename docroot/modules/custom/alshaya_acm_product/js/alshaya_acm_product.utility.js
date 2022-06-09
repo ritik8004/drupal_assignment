@@ -12,6 +12,7 @@ window.commerceBackend = window.commerceBackend || {};
    * This is just a helper method for Drupal.alshayaSpc.getProductData() and
    * Drupal.alshayaSpc.getProductDataV2().
    * Do not invoke directly.
+   * This is an async function.
    *
    * @param {string} sku
    *   The sku value.

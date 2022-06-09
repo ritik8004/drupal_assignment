@@ -316,6 +316,15 @@ exports.getData = async function getData(
       result = response.data.products.items;
       break;
 
+    // Get the product data for the given sku.
+    case 'single_product_by_sku':
+      // Build query.
+      let singleProductQueryVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
+      singleProductQueryVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
+      result = rcsCommerceBackend.invokeApi(request);
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
@@ -371,27 +380,6 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
       request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
       response = rcsCommerceBackend.invokeApiSynchronous(request);
       result = response.data.products.items;
-      break;
-
-    // Get the product data for the given sku.
-    case 'single_product_by_sku':
-      // Build query.
-      let singleProductQueryVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
-      singleProductQueryVariables.sku = params.sku;
-
-      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
-
-      response = rcsCommerceBackend.invokeApiSynchronous(request);
-
-      if (response && response.data.products.total_count) {
-        response.data.products.items.forEach(function (product) {
-          RcsEventManager.fire('rcsUpdateResults', {
-            detail: {
-              result: product,
-            }
-          });
-        });
-      }
       break;
 
     // Get the product data for the given sku.
