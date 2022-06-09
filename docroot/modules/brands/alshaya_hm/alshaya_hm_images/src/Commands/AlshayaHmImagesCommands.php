@@ -106,7 +106,7 @@ class AlshayaHmImagesCommands extends DrushCommands {
   public static function generateImageReportChunk(array $skus, string $filename, $check_faults, $faulty_size) {
     $fp = fopen($filename, 'a');
 
-    /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface $manager */
+    /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $manager */
     $manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
 
     foreach ($skus as $sku) {
