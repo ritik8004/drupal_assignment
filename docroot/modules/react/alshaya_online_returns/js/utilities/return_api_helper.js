@@ -210,7 +210,9 @@ async function validateReturnRequest(orderDetails) {
     totalRefundedQty += item.refunded;
   });
 
-  if (totalProductQty === totalRefundedQty) {
+  if (totalProductQty > 0
+    && totalRefundedQty > 0
+    && totalProductQty === totalRefundedQty) {
     return false;
   }
 
