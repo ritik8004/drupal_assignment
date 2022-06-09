@@ -2,7 +2,7 @@
   @include breakpoint($desktop) {
     #aura-header-modal {
       a.join-aura {
-        padding: 0.5625rem 0;
+        padding: rem(9) 0;
       }
     }
   }
