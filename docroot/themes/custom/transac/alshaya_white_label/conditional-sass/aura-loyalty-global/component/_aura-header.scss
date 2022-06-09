@@ -152,7 +152,7 @@ body.aura-enabled {
       align-items: center;
       justify-content: center;
       margin-bottom: rem(16);
-      margin-top: rem(20);
+      margin-top: rem(18);
       color: $aura-normal-text;
 
       @include breakpoint($upto-desktop) {
@@ -219,7 +219,7 @@ body.aura-enabled {
       a {
         display: inline-block;
         padding: rem(1) 0;
-        color: $aura-normal-text;
+        color: inherit;
         font-family: $aura-regular;
         text-decoration: underline;
         font-size: rem(12);
@@ -228,6 +228,10 @@ body.aura-enabled {
 
         &:hover {
           background-color: transparent;
+        }
+
+        @include breakpoint($desktop) {
+          color: $aura-normal-text;
         }
       }
     }
