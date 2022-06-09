@@ -5,7 +5,7 @@ Multi brands and multi countries solution for selling Alshaya products online.
 
 ## Build status for main branches:
 * Develop: [![Develop](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml/badge.svg?branch=develop)](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml)
-* Test (QA): <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=qa" alt="qa build status" />
+* Test (QA): [![Develop](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml/badge.svg?branch=qa)](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml)
 * UAT: <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=uat" alt="uat build status" />
 * Master: <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=master" alt="master build status" />
 
