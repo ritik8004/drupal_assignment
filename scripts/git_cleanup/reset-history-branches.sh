@@ -60,7 +60,7 @@ done
 echo "Processing branch master."
 git checkout develop-build
 git checkout --orphan master-tmp
-git add
+git add .
 git commit -m "Realign master with develop-build" --quiet
 git branch -D master
 git branch -m master
