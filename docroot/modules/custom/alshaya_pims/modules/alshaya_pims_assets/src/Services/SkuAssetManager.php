@@ -74,10 +74,13 @@ class SkuAssetManager extends MediaAssetsManager {
     $sku_asset_type = $this->getImageSettings()->get('swatch_asset_type');
 
     if ($assets_data && isset($assets_data[0], $assets_data[0]['value'])) {
+      // Supress the unserialize class warning.
+      // @codingStandardsIgnoreLine
       $unserialized_assets = unserialize($assets_data[0]['value']);
+
       foreach ($unserialized_assets as $assets) {
         if ($assets['Data']['AssetType'] === $sku_asset_type) {
-          $swatch['url'] = $assets['Data']['PublicAssetService'];
+          $swatch['url'] = $assets['pims_image']['url'];
           $swatch['type'] = $assets['sortAssetType'];
         }
       }
