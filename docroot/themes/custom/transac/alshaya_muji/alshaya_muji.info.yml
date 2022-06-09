@@ -199,3 +199,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/online-booking/online-booking.ltr.css: css/conditional-sass/online-booking/online-booking.ltr.css
+
+  alshaya_white_label/aura-loyalty-pdp:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css
