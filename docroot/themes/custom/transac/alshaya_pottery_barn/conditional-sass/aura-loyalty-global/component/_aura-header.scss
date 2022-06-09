@@ -1,0 +1,7 @@
+body.aura-enabled.supermenu:not(.menu--open) {
+  .c-menu-secondary {
+    #aura-mobile-header-signin-register {
+      display: none;
+    }
+  }
+}
