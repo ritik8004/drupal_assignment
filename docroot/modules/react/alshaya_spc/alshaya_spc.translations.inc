@@ -572,11 +572,11 @@ function _alshaya_spc_translations() {
   $strings['v15'] = [
     'Expected Delivery by' => [
       'ar' => 'Expected Delivery by',
-      'context' => 'ICT',
+      'context' => 'ict',
     ],
     'Available in store from' => [
       'ar' => 'Available in store from',
-      'context' => 'ICT',
+      'context' => 'ict',
     ],
   ];
 

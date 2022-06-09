@@ -49,7 +49,7 @@ const OrderSummary = (props) => {
   // Update etaLabel and expected delivery date for home delivery and ICT.
   if (typeof drupalSettings.order_details.ict !== 'undefined'
     && drupalSettings.order_details.ict.date !== null) {
-    etaLabel = Drupal.t('Expected Delivery by', {}, { context: 'ICT' });
+    etaLabel = Drupal.t('Expected Delivery by', {}, { context: 'ict' });
     expectedDelivery = drupalSettings.order_details.ict.date;
   }
   let methodIcon = '';
@@ -93,7 +93,7 @@ const OrderSummary = (props) => {
     // Update etaLabel and availability for cnc and ICT.
     if (typeof drupalSettings.order_details.ict !== 'undefined'
       && drupalSettings.order_details.ict.date !== null) {
-      etaLabel = Drupal.t('Available in store from', {}, { context: 'ICT' });
+      etaLabel = Drupal.t('Available in store from', {}, { context: 'ict' });
       expectedDelivery = drupalSettings.order_details.ict.date;
     }
   }
