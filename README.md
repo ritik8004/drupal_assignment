@@ -4,7 +4,7 @@ ACSF D8 commerce project with Magento integration done via Acquia Conductor.
 Multi brands and multi countries solution for selling Alshaya products online.
 
 ## Build status for main branches:
-[![Develop](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml/badge.svg?branch=develop)](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml)
+* Develop: [![Develop](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml/badge.svg?branch=develop)](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml)
 * Test (QA): <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=qa" alt="qa build status" />
 * UAT: <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=uat" alt="uat build status" />
 * Master: <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=master" alt="master build status" />
