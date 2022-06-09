@@ -55,6 +55,23 @@ for ref in $refs ; do
   done
 done
 
+# Master is a default branch available after provisioning. It may not be safe to delete. To avoid
+# too much divergent branch, we reset the master branch based on latest develop-build.
+echo "Processing branch master."
+git checkout develop-build
+git checkout --orphan master-tmp
+git add
+git commit -m "Realign master with develop-build" --quiet
+git branch -D master
+git branch -m master
+
+# Push the reset branch to all the remotes.
+for repo in $repos ; do
+  repo_name=$(echo $repo | cut -d '@' -f1)
+  echo "Pushing new master to $repo_name"
+  git push -f $repo_name master
+done
+
 # Execute a git prune on all the repos.
 for repo in $repos ; do
   repo_name=$(echo $repo | cut -d '@' -f1)
