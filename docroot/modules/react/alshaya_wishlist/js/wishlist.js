@@ -55,13 +55,6 @@ const handleMatchBackLoad = () => {
   renderWishListButton('wishlist-pdp-matchback', 'matchback');
 };
 
-/**
- * Method to handle pdp add to cart loaded event for wishlist.
- */
-const handlePdpLoad = () => {
-  renderWishListButton('wishlist-pdp-full', 'pdp');
-};
-
 // Check if the wishlist element on PDP exist and
 // data-sku is present, then render the wishlist button.
 renderWishListButton('wishlist-pdp-full', 'pdp');
@@ -74,4 +67,7 @@ document.addEventListener('onModalLoad', handleModalOnLoad);
 // wishlist button whenever modal opens.
 document.addEventListener('onMatchbackLoad', handleMatchBackLoad);
 
-RcsEventManager.addListener('alshayaAddToCartLoaded', handlePdpLoad);
+// Render wishlist button once add to cart is loaded in V3.
+document.addEventListener('alshayaAddToCartLoaded', () => {
+  renderWishListButton('wishlist-pdp-full', 'pdp');
+});

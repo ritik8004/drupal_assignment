@@ -192,11 +192,11 @@ function alshaya_rcs_product_alshaya_rcs_product_build_alter(array $build, Entit
   if (\Drupal::service('alshaya_wishlist.helper')->isWishListEnabled()) {
     $build['#attached']['drupalSettings']['alshayaRcs']['vmode'] = $view_mode;
     $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
-    $build['#attached']['library'][] = 'alshaya_rcs_product/cart_load_event';
-
-    // Add cache tag.
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_wishlist.settings']);
   }
+  // Add cache tag for wishlist config.
+  $config = \Drupal::config('config:alshaya_wishlist.settings');
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $config->getCacheTags());
+
   return $build;
 }
 

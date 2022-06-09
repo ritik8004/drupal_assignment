@@ -163,6 +163,9 @@ window.commerceBackend = window.commerceBackend || {};
     // Render the HTML to the div.
     addToCartForm.html(addToCartFormHtml);
     addToCartForm.addClass('rcs-loaded');
+
+    const addToCartLoaded = new CustomEvent('alshayaAddToCartLoaded');
+    document.dispatchEvent(addToCartLoaded);
     globalThis.rcsPhApplyDrupalJs(document);
   };
 
