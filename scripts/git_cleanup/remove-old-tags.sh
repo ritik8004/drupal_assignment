@@ -11,7 +11,7 @@ for repo in $repos ; do
   echo "Processing repo $repo."
   i=0
   to_delete=""
-  to_keep="WELCOME"
+  to_keep=""
 
   # Get the release tags and keep the last ones (using nb_to_keep).
   refs=$(git ls-remote -t --refs $repo | grep -o -E "refs/tags/.*$" | grep -o -E "refs/tags/[0-9]+\.[0-9]+\.[0-9]+-build$" | sort -r -t '/' -k 3 -V)
