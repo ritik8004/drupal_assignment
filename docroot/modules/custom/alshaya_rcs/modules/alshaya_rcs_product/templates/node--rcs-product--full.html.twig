@@ -75,11 +75,6 @@ set classes = [
         </div>
       {% endblock %}
 
-      {% if aura_enabled is defined and aura_enabled %}
-        {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
-        <div id="aura-pdp"></div>
-      {% endif %}
-
       {% block pdpSidebar %}
         <div class="content__sidebar">
           {% if content.reviews_rating %}
@@ -103,6 +98,11 @@ set classes = [
               </div>
               {% if quantity_limit_enabled == true %}
                 <div class="order-quantity-limit-message"></div>
+              {% endif %}
+
+              {% if aura_enabled is defined and aura_enabled %}
+                {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+                <div id="aura-pdp"></div>
               {% endif %}
             </div>
 

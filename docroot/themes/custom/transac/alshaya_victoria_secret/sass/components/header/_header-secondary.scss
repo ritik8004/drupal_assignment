@@ -1,10 +1,6 @@
 .c-menu-secondary {
   text-transform: none;
 
-  @include breakpoint($desktop) {
-    margin-#{$right}: 2.25rem;
-  }
-
   .menu--account,
   .block-alshaya-stores-finder,
   .block-language-blocklanguage-interface,
@@ -28,10 +24,16 @@
     }
   }
 
-  li::after {
+  li {
     @include breakpoint($upto-desktop) {
-      font-size: 1.5rem;
-      #{$right}: -0.1875rem;
+      border-bottom: 0;
+    }
+
+    &::after {
+      @include breakpoint($upto-desktop) {
+        font-size: rem(24);
+        #{$right}: rem(-3);
+      }
     }
   }
 

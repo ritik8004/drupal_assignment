@@ -3,3 +3,21 @@
 .spc-payment-saved-cards-header {
   text-transform: capitalize;
 }
+
+.spc-title-wrapper {
+  .spc-checkout-section-title {
+    span {
+      font-size: rem(20);
+      font-family: $alshaya-thin;
+
+      &:first-of-type {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+}
+
+.spc-checkout-section-title {
+  font-size: rem(24);
+  font-family: $vs-bentonsans-regular;
+}

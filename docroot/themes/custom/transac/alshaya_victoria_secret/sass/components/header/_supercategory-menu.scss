@@ -11,6 +11,69 @@
     .menu--one__list {
       .menu--one__link {
         font-size: 0;
+        height: rem(38);
+        display: flex;
+        line-height: 4;
+        border-bottom: rem(3) solid transparent;
+
+        @include breakpoint($only-mobile) {
+          justify-content: center;
+        }
+
+        @include breakpoint($only-tablet) {
+          padding: rem(9) rem(10);
+          line-height: 1;
+        }
+
+        @include breakpoint ($desktop) {
+          padding: rem(8) rem(24);
+        }
+
+        &::before {
+          @include breakpoint($upto-desktop) {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .menu--one__link {
+      &:hover,
+      &.active {
+        border-bottom: rem(3) solid $mm_l1_link_active;
+      }
+    }
+  }
+
+  .block-alshaya-super-category-menu {
+    .menu--one__list li {
+      @include breakpoint($upto-desktop) {
+        overflow: hidden;
+      }
+
+      &:last-child {
+        &::after {
+          display: none;
+        }
+      }
+
+      &::after {
+        content: "|";
+        display: block;
+        color: $header_super_category_menu_divider;
+        font-size: rem(16);
+        margin-top: rem(-30);
+        float: $right;
+        margin-#{$right}: rem(-2);
+
+        @include breakpoint($only-tablet) {
+          font-size: rem(21);
+          margin-top: rem(34);
+        }
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: rem(-1);
+        }
       }
     }
   }
@@ -24,6 +87,10 @@
         justify-content: center;
       }
     }
+
+    .c-menu-primary & {
+      display: flex;
+    }
   }
 
   .brand-victorias-secret,
@@ -31,24 +98,26 @@
   .brand-beauty,
   .brand-swim {
     img {
-      height: 1.625rem;
+      height: auto;
     }
   }
 
   .brand-victorias-secret img {
-    width: 3.4375rem;
+    width: rem(60);
   }
 
   .brand-pink img {
-    width: 2.5rem;
+    width: rem(34);
   }
 
   .brand-beauty img {
-    width: 3.125rem;
+    width: rem(64);
   }
 
-  .brand-swim img {
-    width: 1.75rem;
+  .brand-swim {
+    img {
+      width: rem(27);
+    }
   }
 }
 

@@ -50,11 +50,12 @@ header {
     }
 
     @include breakpoint($upto-tablet) {
-      height: 2.625rem;
+      height: rem(43);
     }
 
     @include breakpoint($upto-desktop) {
       background-position: center;
+      background-size: rem(20);
     }
   }
 
@@ -70,7 +71,8 @@ header {
     }
 
     @include breakpoint($desktop) {
-      padding-top: 2rem;
+      padding-top: 0;
+      padding-bottom: rem(30);
 
       html[lang=ar] & {
         padding-top: 1.625rem;
@@ -130,6 +132,7 @@ header {
 
   .main--menu ul.menu--one__list {
     padding-bottom: 6.0625rem;
+    background: $header_secondary_bg;
 
     .menu__link {
       text-transform: uppercase;
@@ -176,6 +179,20 @@ header {
 
     .one.shop {
       width: 49.5%;
+
+      &::after {
+        content: '';
+        float: $right;
+        margin-#{$right}: rem(-35);
+        border-#{$right}: rem(1) solid $header_toggle_sign_divider;
+        height: rem(31);
+        position: relative;
+        top: rem(-8);
+
+        html[lang=ar] & {
+          margin-left: rem(-22);
+        }
+      }
     }
   }
 
@@ -314,10 +331,14 @@ header {
     }
   }
 
-  li::after {
-    @include breakpoint($upto-desktop) {
-      font-size: 1.5rem;
-      #{$right}: -0.1875rem;
+  li {
+    border-bottom: 0;
+
+    &::after {
+      @include breakpoint($upto-desktop) {
+        font-size: rem(24);
+        #{$right}: rem(-3);
+      }
     }
   }
 }
@@ -336,8 +357,10 @@ header {
 
     .site-brand-home {
       img {
+        width: auto;
+
         @include breakpoint($desktop) {
-          max-width: 18.75rem;
+          max-width: rem(384);
           margin: auto;
           text-align: center;
         }

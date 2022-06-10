@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
 import AuraMobileNumberField from '../aura-mobile-number-field';
@@ -17,6 +18,8 @@ import {
 } from '../../utilities/link_card_sign_up_modal_helper';
 import { validateElementValueByType } from '../../utilities/validation_helper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
+import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 
 class AuraFormNewAuraUserModal extends React.Component {
   constructor(props) {
@@ -24,24 +27,30 @@ class AuraFormNewAuraUserModal extends React.Component {
     this.state = {
       messageType: null,
       messageContent: null,
+      // Flag to determine if we have to show "Already a member?" link or not.
+      // We only show this link in popup,
+      // - If user is an authenticate
+      // - Guest user has an active cart
+      showAlreadyMember: false,
     };
   }
 
-  getNewUserFormDescription = () => {
-    const { signUpTermsAndConditionsLink } = getAuraConfig();
-
-    return [
-      <span key="part1">{Drupal.t('By clicking submit, you agree to have read and accepted our')}</span>,
-      <a
-        key="part2"
-        href={signUpTermsAndConditionsLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="t-c-link"
-      >
-        {Drupal.t('Terms & Conditions')}
-      </a>,
-    ];
+  componentDidMount() {
+    // Check if user is authenticated then show "Already a member?" link.
+    if (isUserAuthenticated()) {
+      this.setState({
+        showAlreadyMember: true,
+      });
+    } else {
+      // If user is a guest user and user has cart then show "Already a member?"
+      // link.
+      const userHasCart = window.commerceBackend.getCartId();
+      if (hasValue(userHasCart)) {
+        this.setState({
+          showAlreadyMember: true,
+        });
+      }
+    }
   }
 
   getCountryMobileCode = () => {
@@ -92,7 +101,6 @@ class AuraFormNewAuraUserModal extends React.Component {
       email: getElementValueByType('signUpEmail'),
       mobile: `+${this.getCountryMobileCode()}${getElementValueByType('signUpMobile')}`,
     };
-
     const apiData = window.auraBackend.loyaltyClubSignUp(data);
     showFullScreenLoader();
 
@@ -147,21 +155,24 @@ class AuraFormNewAuraUserModal extends React.Component {
       closeNewUserModal,
       chosenCountryCode,
       chosenUserMobile,
+      openLinkCardModal,
     } = this.props;
 
     const {
       messageType,
       messageContent,
+      showAlreadyMember,
     } = this.state;
 
     const submitButtonText = Drupal.t('Submit');
 
     const email = getUserDetails().email || '';
+    const { signUpTermsAndConditionsLink } = getAuraConfig();
 
     return (
       <div className="aura-new-user-form">
         <div className="aura-modal-header">
-          <SectionTitle>{Drupal.t('Say hello to Aura')}</SectionTitle>
+          <SectionTitle>{Drupal.t('Join Aura', {}, { context: 'aura' })}</SectionTitle>
           <button type="button" className="close" onClick={() => closeNewUserModal()} />
         </div>
         <div className="aura-modal-form">
@@ -172,12 +183,6 @@ class AuraFormNewAuraUserModal extends React.Component {
                 messageContent={messageContent}
               />
             </div>
-            <AuraMobileNumberField
-              isDisabled
-              name="new-aura-user"
-              countryMobileCode={chosenCountryCode}
-              defaultValue={chosenUserMobile}
-            />
             <TextField
               type="text"
               required
@@ -191,14 +196,29 @@ class AuraFormNewAuraUserModal extends React.Component {
               label={Drupal.t('Email address')}
               defaultValue={email}
             />
+            <AuraMobileNumberField
+              isDisabled
+              name="new-aura-user"
+              countryMobileCode={chosenCountryCode}
+              defaultValue={chosenUserMobile}
+            />
           </div>
           <div className="aura-modal-form-actions">
             <div className="aura-new-user-t-c aura-otp-submit-description">
-              {this.getNewUserFormDescription()}
+              {parse(getStringMessage('tnc_description_text', {
+                '!tncLink': signUpTermsAndConditionsLink,
+              }))}
             </div>
             <div className="aura-modal-form-submit" onClick={() => this.registerUser()}>
               {submitButtonText}
             </div>
+            <ConditionalView condition={hasValue(showAlreadyMember)}>
+              <div className="aura-modal-form-footer">
+                <div className="already-a-member-link" onClick={() => openLinkCardModal()}>
+                  {Drupal.t('Already a member?', {}, { context: 'aura' })}
+                </div>
+              </div>
+            </ConditionalView>
           </div>
         </div>
       </div>

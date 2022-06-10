@@ -1,11 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-    <g fill="none" fill-rule="evenodd">
-        <path d="M0 0h48v48H0z"/>
-        <path fill="#FFF" d="M48 48H0V0h48z"/>
-        <g fill="#232323">
-            <path d="M34.046 37.831l3.483.908V19.397l-1.177-2.59.525-2.106h-25.48l.643 2.116-1.602 2.592v19.33l3.483-.908v-3.218h20.125v3.218zm3.852 1.388l-4.22-1.099v-3.135H14.29v3.135l-4.22 1.099V19.302l1.569-2.54-.74-2.433h26.449l-.607 2.443 1.157 2.584v19.863z"/>
-            <path d="M10.058 39.815h27.83V19.343h-27.83z"/>
-            <path d="M31.556 19.97H30.8c0-6.081-3.151-11.03-7.025-11.03-3.874 0-7.026 4.949-7.026 11.03h-.754c0-6.502 3.49-11.792 7.78-11.792s7.78 5.29 7.78 11.793"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icons/Base/shopping-bag</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="20" height="20"></rect>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Components/Cards/Site-Header/Mobile/English-375" transform="translate(-317.000000, -99.000000)">
+            <g id="Group-2" transform="translate(20.000000, 99.000000)">
+                <g id="Icons/Base/shopping-bag" transform="translate(297.000000, 0.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Icons/Base/shopping-bag-(Background/Mask)" fill-opacity="0" fill="#FFFFFF" xlink:href="#path-1"></use>
+                    <g id="Group-178" mask="url(#mask-2)" stroke="#221D1D" stroke-dasharray="0,0" stroke-width="1.20000005">
+                        <g transform="translate(1.526004, 1.388457)">
+                            <path d="M16.8788295,5.24558454 L16.1613759,16.2879183 C16.1271998,16.813923 15.6905937,17.223082 15.16348,17.223082 L1.78455779,17.223082 C1.25744405,17.223082 0.820837981,16.813923 0.786661878,16.2879183 L0.0692082644,5.24558454 C0.0334001665,4.69446185 0.451145186,4.21866043 1.00226788,4.18285233 C1.02385154,4.18144998 1.04547501,4.18074825 1.06710418,4.18074825 L15.8809336,4.18074825 C16.4332184,4.18074825 16.8809336,4.6284635 16.8809336,5.18074825 C16.8809336,5.20237741 16.8802319,5.22400089 16.8788295,5.24558454 Z" id="Rectangle-115" stroke-linejoin="round" fill-rule="nonzero"></path>
+                            <path d="M4.5720052,-1.40299579e-06 L4.5720052,3.90012501 C4.57200304,3.90221141 4.5720056,3.90429781 4.57200613,3.90638423 C4.57327571,6.87649584 5.87395246,8.36155164 8.4740364,8.36155164 C11.0753912,8.36155164 12.3760687,6.87506375 12.3760687,3.90208797 L12.3760687,-1.40299579e-06" id="Vector" stroke-linecap="round" transform="translate(8.474037, 4.180775) rotate(-179.999995) translate(-8.474037, -4.180775) "></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
         </g>
     </g>
 </svg>

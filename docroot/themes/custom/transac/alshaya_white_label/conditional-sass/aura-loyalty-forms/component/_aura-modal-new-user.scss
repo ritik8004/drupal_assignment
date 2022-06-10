@@ -1,8 +1,23 @@
-.aura-new-user-form {
-  .aura-new-user-t-c a {
-    color: #8f1c7d;
-    text-decoration: underline;
-    cursor: pointer;
-    padding-#{$left}: 0.3125rem;
+.aura-enabled {
+  .c-menu-secondary,
+  .no--desktop {
+    .aura-new-user-form {
+      .aura-otp-submit-description {
+        line-height: 1.2;
+      }
+
+      .aura-new-user-t-c a {
+        color: $aura-modal-link;
+        cursor: pointer;
+        font-family: $aura-regular;
+        height: auto;
+        padding: 0;
+        text-decoration: underline;
+
+        html[lang=ar] & {
+          padding-top: rem(6.5);
+        }
+      }
+    }
   }
 }

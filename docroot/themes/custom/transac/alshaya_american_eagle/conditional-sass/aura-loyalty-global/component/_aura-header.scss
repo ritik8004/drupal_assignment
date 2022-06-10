@@ -5,9 +5,14 @@ body {
         & > div,
         & > nav {
           height: auto;
+          padding-top: rem(2);
 
           .aura-rewards-wrapper {
-            font-size: unset;
+            .aura-header-popup-wrapper {
+              a {
+                height: auto;
+              }
+            }
           }
         }
 

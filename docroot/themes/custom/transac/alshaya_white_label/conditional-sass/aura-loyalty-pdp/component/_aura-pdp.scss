@@ -1,21 +1,60 @@
 .aura-pdp-points-section {
-  padding: 0 0 0.75rem;
-  font-size: 1rem;
+  padding: rem(10) rem(12) rem(12);
+  margin: rem(12) 0 rem(36);
+  font-size: rem(14);
+  background: $aura-pdp-points-bg;
   color: $aura-pdp-string;
-  font-family: $alshaya-thin;
+  font-family: $aura-regular;
   display: flex;
   align-items: center;
+  border-radius: rem(10);
+  line-height: rem(16);
 
   .new-pdp-magazine-layout &,
-  .magazine-layout & {
-    padding: 0;
+  .magazine-layout &,
+  .magazine-layout-v2 & {
+    margin: rem(36) 0;
+  }
+
+  .points-text {
+    span {
+      color: $aura-cart-points;
+    }
   }
 
   .tooltip-anchor.question {
-    padding: 0.25rem 0.25rem 0.25rem 0;
+    max-height: rem(16);
+
+    .tooltip-box {
+      transform: translateX(0);
+      #{$left}: rem(-150);
+      z-index: 4;
+
+      &::before,
+      &::after {
+        margin-#{$left}: rem(56);
+
+        html[lang=ar] & {
+          margin-left: auto;
+          margin-right: auto;
+          left: rem(10);
+        }
+      }
+    }
+
+    &::before {
+      width: rem(16);
+      height: rem(16);
+    }
+  }
+
+  .tooltip-anchor.tooltip-box {
+    html[lang=ar] & {
+      transform: translateX(0);
+    }
   }
 
   b {
-    font-family: $alshaya-bold;
+    font-family: $aura-bold;
   }
 }

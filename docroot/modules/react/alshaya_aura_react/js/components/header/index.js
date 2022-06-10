@@ -102,6 +102,8 @@ class Header extends React.Component {
       clickedNotYou,
       notYouFailed,
       tier,
+      firstName,
+      lastName,
     } = this.state;
 
     const {
@@ -124,8 +126,30 @@ class Header extends React.Component {
     // For logged in users.
     if (userId) {
       return (
-        <HeaderLoggedIn
-          loyaltyStatus={loyaltyStatus}
+        <>
+          <HeaderLoggedIn
+            loyaltyStatus={loyaltyStatus}
+            points={points}
+            cardNumber={cardNumber}
+            isMobileTab={isMobileTab}
+            isDesktop={isDesktop}
+            isHeaderModalOpen={isHeaderModalOpen}
+            openHeaderModal={this.openHeaderModal}
+            isNotExpandable={isNotExpandable}
+            isHeaderShop={isHeaderShop}
+            signUpComplete={signUpComplete}
+            notYouFailed={notYouFailed}
+            tier={tier}
+            firstName={firstName}
+            lastName={lastName}
+          />
+        </>
+      );
+    }
+    // For guest users.
+    return (
+      <>
+        <HeaderGuest
           points={points}
           cardNumber={cardNumber}
           isMobileTab={isMobileTab}
@@ -133,28 +157,12 @@ class Header extends React.Component {
           isHeaderModalOpen={isHeaderModalOpen}
           openHeaderModal={this.openHeaderModal}
           isNotExpandable={isNotExpandable}
-          isHeaderShop={isHeaderShop}
           signUpComplete={signUpComplete}
+          clickedNotYou={clickedNotYou}
           notYouFailed={notYouFailed}
           tier={tier}
         />
-      );
-    }
-    // For guest users.
-    return (
-      <HeaderGuest
-        points={points}
-        cardNumber={cardNumber}
-        isMobileTab={isMobileTab}
-        isDesktop={isDesktop}
-        isHeaderModalOpen={isHeaderModalOpen}
-        openHeaderModal={this.openHeaderModal}
-        isNotExpandable={isNotExpandable}
-        signUpComplete={signUpComplete}
-        clickedNotYou={clickedNotYou}
-        notYouFailed={notYouFailed}
-        tier={tier}
-      />
+      </>
     );
   }
 }

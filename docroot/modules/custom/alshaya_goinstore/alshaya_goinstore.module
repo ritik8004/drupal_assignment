@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Module file for Alshaya GoInStore.
+ */
+
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_goinstore_page_attachments(array &$attachments) {
+  $settings = \Drupal::config('alshaya_goinstore.settings');
+
+  $cache_tags = $attachments['#cache']['tags'] ?? [];
+  $attachments['#cache']['tags'] = Cache::mergeTags(
+    $settings->getCacheTags(),
+    $cache_tags
+  );
+
+  $alshaya_goinstore_enabled = $settings->get('enabled');
+  // Do nothing if Goinstore is not enabled or is a admin page.
+  if (!$alshaya_goinstore_enabled || \Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+  $attachments['#attached']['library'][] = 'alshaya_goinstore/goinstore';
+}
