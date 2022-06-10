@@ -44,7 +44,7 @@ log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.
 server_root="/var/www/html/$AH_SITE_NAME"
 deployment_identifier=$(cat "$server_root/deployment_identifier")
 docroot="${server_root}/docroot"
-
+blt_dir="${server_root}/vendor/acquia/blt"
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 slack_file="${script_dir}/post_to_slack.sh"
 clear_caches_post_command="${script_dir}/../cloudflare/clear_caches_post_command.sh"
@@ -70,6 +70,16 @@ log_message_and_details()
   message=$1
   echo "$message. Date `date`, Tag $tag, Stack $stack, Mode $mode" | tee -a ${log_file}
   echo
+}
+
+get_cloud_task()
+{
+  cloud_task=`$blt_dir/bin/blt cloud:get-application-task ${AH_APPLICATION_UUID} ${tag}`
+  if [ $? -ne 0 ]
+  then
+    log_message_and_details "Error occurred while fetching cloud task, aborting"
+    exit
+  fi
 }
 
 log_message "============================================"
@@ -203,10 +213,16 @@ do
   deployment_identifier=$(cat "$server_root/deployment_identifier")
 done
 
-log_message_and_details "Code deployment finished, we will wait for 30 more seconds."
+log_message_and_details "Checking cloud tasks if deployment is still in process."
+get_cloud_task
+while [ "${cloud_task}" != "0" ]
+do
+  echo "Cloud Task: Waiting for code to be deployed on server."
+  sleep 15
+  get_cloud_task
+done
 
-# Wait 30 more seconds to ensure code is deployed on all webs.
-sleep 30
+log_message_and_details "Code deployment finished"
 
 if [ "$mode" = "updb" ]
 then

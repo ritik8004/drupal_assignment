@@ -124,7 +124,8 @@
         "mobiledetect/mobiledetectlib": "^2.8",
         "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "springimport/magento2-api-v1": "^1.0",
-        "symfony/lock": "4.3.*"
+        "symfony/lock": "4.3.*",
+        "typhonius/acquia-php-sdk-v2": "^2"
     },
     "require-dev": {
         "acquia/blt-require-dev": "11.x-dev",
