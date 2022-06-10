@@ -41,9 +41,6 @@
     {{/if}}
   </span>
   <button name="add_to_cart_{{ sku }}" id="edit-add-to-cart-{{ sku }}" class='cv-validate-before-ajax edit-add-to-cart add-to-cart-button ladda-button' data-twig-suggestion="addtocart" type="submit">{{{ add_to_cart_text }}}</button>
-  {{#if wishlist_enabled }}
-    <div class="wishlist-pdp-{{ vmode }}"></div>
-  {{/if}}
   <input class="selected-variant-sku selected-variant-sku-{{  sku_clean }}" data-drupal-selector="edit-selected-variant-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_variant_sku" value="{{ sku }}">
   <input class="selected-parent-sku" data-drupal-selector="edit-selected-parent-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_parent_sku" value="{{ sku }}">
 </form>

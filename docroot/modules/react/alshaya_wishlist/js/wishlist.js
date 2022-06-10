@@ -19,9 +19,7 @@ const renderWishListButton = (
   const selectedElements = document.getElementsByClassName(elementSelector);
   Array.from(selectedElements).forEach((element) => {
     // Check if V3 is enabled.
-    const sku = globalThis.rcsPhGetPageType() === null
-      ? element.closest('article').getAttribute('data-sku')
-      : element.closest('form').getAttribute('data-sku');
+    const sku = element.closest('article').getAttribute('data-sku');
     if (sku && sku !== null) {
       ReactDOM.render(
         <WishlistButton
@@ -57,7 +55,9 @@ const handleMatchBackLoad = () => {
 
 // Check if the wishlist element on PDP exist and
 // data-sku is present, then render the wishlist button.
-renderWishListButton('wishlist-pdp-full', 'pdp');
+if (globalThis.rcsPhGetPageType() === null) {
+  renderWishListButton('wishlist-pdp-full', 'pdp');
+}
 
 // Add modal load event listener to render
 // wishlist button whenever modal opens.

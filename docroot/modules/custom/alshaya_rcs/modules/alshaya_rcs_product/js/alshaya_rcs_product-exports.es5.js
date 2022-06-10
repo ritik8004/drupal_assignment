@@ -593,12 +593,6 @@ exports.computePhFilters = function (input, filter) {
         // Add the configurable options to the form.
         data.configurable_options = processedOptions;
       }
-
-      data.wishlist_enabled = false;
-      if (Drupal.hasValue(drupalSettings.wishlist)) {
-        data.wishlist_enabled = drupalSettings.wishlist.enabled;
-        data.vmode = drupalSettings.alshayaRcs.vmode;
-      }
       value = handlebarsRenderer.render(`product.sku_base_form`, data);
       break;
 

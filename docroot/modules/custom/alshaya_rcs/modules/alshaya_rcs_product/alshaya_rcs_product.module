@@ -190,7 +190,7 @@ function alshaya_rcs_product_alshaya_spc_checkout_confirmation_order_build_alter
  */
 function alshaya_rcs_product_alshaya_rcs_product_build_alter(array $build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (\Drupal::service('alshaya_wishlist.helper')->isWishListEnabled()) {
-    $build['#attached']['drupalSettings']['alshayaRcs']['vmode'] = $view_mode;
+    $build['wishlist_enabled']['#markup'] = '<div class="wishlist-pdp-' . $view_mode . '"></div>';
     $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
   }
   // Add cache tag for wishlist config.
