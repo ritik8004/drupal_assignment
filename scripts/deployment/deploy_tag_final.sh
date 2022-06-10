@@ -104,7 +104,7 @@ then
 
   mkdir -p $directory
   cd $directory
-  git clone $repo &>> ${log_file}
+  git clone -b $branch $repo &>> ${log_file}
 
   if [ $? -ne 0 ]
   then
@@ -148,6 +148,22 @@ git reset --hard $tag &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message_and_details "Failed to reset to tag, aborting"
+  exit
+fi
+
+# Create an orphan commit.
+log_message_and_details "Reset $branch git history"
+git config user.name "Deployment Script"
+git config user.email "noreply@acquia-deployer.com"
+git checkout --orphan $branch-tmp &>> ${log_file}
+git add . &>> ${log_file}
+git commit -m "Orphan commit from $tag." --quiet &>> ${log_file}
+git branch -D $branch &>> ${log_file}
+git branch -m $branch &>> ${log_file}
+git prune
+if [ $? -ne 0 ]
+then
+  log_message_and_details "Failed to reset the branch history, aborting"
   exit
 fi
 
