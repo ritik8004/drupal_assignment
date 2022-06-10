@@ -100,10 +100,13 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {object} data
    *   The object of sku values and their requested quantity, like {sku1: qty1}.
+   * @param function
+   *   Function to Call Drupal API.
+   *
    * @returns {Promise}
    *   The stock status for all skus.
    */
-  window.commerceBackend.triggerStockRefresh = async function (data) {
+  window.commerceBackend.triggerStockRefresh = async function (data, callDrupalApi) {
     return callDrupalApi(
       '/spc/checkout-event',
       'POST',
