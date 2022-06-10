@@ -216,8 +216,8 @@ export default class ConfigurableForm extends React.Component {
     let cartImage = null;
     for (let index = 0; index < productData.variants.length; index++) {
       // Convert both product data variant SKU and selectedVariant SKU values
-      // to string for better comparison, otherwise it will failed if SKU code
-      // only contains numeric values.
+      // to string for better comparison, or it will failed if SKU code only
+      // contains numeric values.
       if (productData.variants[index].sku.toString()
         === selectedVariant.toString()) {
         cartTitle = productData.variants[index].cart_title;
