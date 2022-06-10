@@ -380,7 +380,7 @@
         min-height: rem(60);
         display: flex;
         align-items: center;
-        padding-#{$left}: rem(20);
+        padding-#{$left}: rem(16);
         position: relative;
         background: $aura-spc-checkout-block-bg;
         line-height: rem(19);
@@ -402,7 +402,10 @@
 
         .join-aura {
           position: relative;
-          margin: 0 rem(5) rem(5);
+          margin-top: 0;
+          margin-bottom: rem(5);
+          margin-#{$left}: 0;
+          margin-#{$right}: rem(5);
 
           svg {
             max-height: rem(29);
@@ -442,7 +445,7 @@
 
         &.active {
           display: block;
-          padding: rem(8) rem(20) rem(18);
+          padding: rem(8) rem(16) rem(18);
           background: $aura-spc-checkout-block-bg;
 
           @include breakpoint($tablet) {
@@ -500,7 +503,7 @@
       font-size: rem(12);
       line-height: rem(18);
       margin-top: rem(12);
-      margin-#{$left}: rem(20);
+      margin-#{$left}: rem(16);
       position: relative;
 
       b {
@@ -508,7 +511,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        margin-#{$left}: rem(21);
+        margin-#{$left}: rem(16);
       }
 
       &::before {

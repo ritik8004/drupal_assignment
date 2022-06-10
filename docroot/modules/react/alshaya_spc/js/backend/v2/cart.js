@@ -20,7 +20,11 @@ import {
   isString,
   isNumber,
 } from '../../../../js/utilities/conditionsUtility';
-import { callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
+import {
+  callDrupalApi,
+  callMagentoApi,
+  getCartSettings,
+} from '../../../../js/utilities/requestHelper';
 import { getExceptionMessageType } from '../../../../js/utilities/error';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
@@ -275,9 +279,9 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
     const exceptionType = getExceptionMessageType(response.data.error_message);
     if (exceptionType === 'OOS') {
-      await window.commerceBackend.triggerStockRefresh({ [sku]: 0 });
+      await window.commerceBackend.triggerStockRefresh({ [sku]: 0 }, callDrupalApi);
     } else if (exceptionType === 'not_enough') {
-      await window.commerceBackend.triggerStockRefresh({ [sku]: quantity });
+      await window.commerceBackend.triggerStockRefresh({ [sku]: quantity }, callDrupalApi);
     }
 
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
@@ -363,7 +367,7 @@ window.commerceBackend.refreshCart = async (data) => {
         clearProductStatusStaticCache();
         window.commerceBackend.clearStockStaticCache();
         // Refresh stock for all items in the cart.
-        window.commerceBackend.triggerStockRefresh(null);
+        window.commerceBackend.triggerStockRefresh(null, callDrupalApi);
       }
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
