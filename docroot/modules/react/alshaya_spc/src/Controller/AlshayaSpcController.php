@@ -793,6 +793,15 @@ class AlshayaSpcController extends ControllerBase {
       'cnc_collection_points_enabled' => $cnc_collection_points_enabled ?? FALSE,
     ];
 
+    // Check if we are getting Intercountry transfer details
+    // along with order details,
+    // if yes, we are assigning this to drupalSettings.
+    // @todo update if condition based on the data what we are getting in '$orderDetails'
+    // @todo Replace hardcoding of date with the Intercountry transfer date, Which we will be getting from $orderDetails.
+    if (isset($orderDetails['ict'])) {
+      $settings['order_details']['ict_date'] = '29th May 2022';
+    }
+
     if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
       $strings = array_merge($strings, CashOnDelivery::getCodSurchargeStrings());
     }
