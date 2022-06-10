@@ -65,6 +65,18 @@
           display: block;
           flex-basis: 16.25rem;
         }
+
+        .price {
+          .price-currency.suffix {
+            @include breakpoint($tablet) {
+              margin-#{$right}: rem(7);
+            }
+
+            @include breakpoint($desktop) {
+              margin-#{$right}: rem(9);
+            }
+          }
+        }
       }
 
       .order-total-wrapper {
