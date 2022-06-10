@@ -140,8 +140,8 @@ header {
       @include breakpoint($upto-desktop) {
         width: rem(14);
         height: rem(14);
-        bottom: rem(10);
-        #{$left}: rem(42);
+        bottom: rem(12);
+        #{$left}: rem(40);
         #{$right}: 0;
         margin: 0 auto;
       }
@@ -282,14 +282,14 @@ header {
         padding: 0.625rem 1.5rem;
         height: 2.5rem;
         margin-top: 0;
-        border-top: 2px solid transparent !important;
+        border-top: rem(2) solid transparent !important;
 
         &::after {
           content: '';
-          height: 0.125rem;
+          height: rem(2);
           width: auto;
           transition: all 0.3s ease-out;
-          margin: 0.625rem auto 0;
+          margin: rem(10) auto 0;
           display: block;
         }
       }

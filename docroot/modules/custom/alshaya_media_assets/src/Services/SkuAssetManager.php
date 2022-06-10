@@ -2,16 +2,13 @@
 
 namespace Drupal\alshaya_media_assets\Services;
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuConfig;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
@@ -20,7 +17,6 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
@@ -31,7 +27,27 @@ use GuzzleHttp\TransferStats;
 /**
  * Sku Asset Manager Class.
  */
-class SkuAssetManager implements SkuAssetManagerInterface {
+class SkuAssetManager {
+
+  /**
+   * Constant to denote that the current asset has no angle data associated.
+   */
+  const LP_DEFAULT_ANGLE = 'NO_ANGLE';
+
+  /**
+   * Constant for RGB swatch display type.
+   */
+  const LP_SWATCH_RGB = 'RGB';
+
+  /**
+   * Constant for default weight in case no weight has been set via config.
+   */
+  const LP_DEFAULT_WEIGHT = 100;
+
+  /**
+   * Constant for default swatch display type.
+   */
+  const LP_SWATCH_DEFAULT = 'RGB';
 
   /**
    * The Config factory service.
@@ -76,13 +92,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   protected $moduleHandler;
 
   /**
-   * Product Cache Manager.
-   *
-   * @var \Drupal\alshaya_acm_product\Service\ProductCacheManager
-   */
-  protected $productCacheManager;
-
-  /**
    * PIMS ID <=> FID cache.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -95,13 +104,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    * @var \GuzzleHttp\Client
    */
   protected $httpClient;
-
-  /**
-   * Config alshaya_hm_images.settings.
-   *
-   * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
-   */
-  protected $hmImageSettings;
 
   /**
    * Logger.
@@ -153,20 +155,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   protected $fileSystem;
 
   /**
-   * The Language Manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
-   * The Database connection service.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
-
-  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -181,8 +169,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module Handler service object.
-   * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
-   *   Product Cache Manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_pims_files
    *   PIMS ID <=> Drupal File URI cache.
    * @param \GuzzleHttp\Client $http_client
@@ -199,10 +185,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    *   Cache for media_file_mapping.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   File system service.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language manager service.
-   * @param \Drupal\Core\Database\Connection $database
-   *   Database service.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -210,7 +192,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
                               SKUPluginManager $skuPluginManager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ModuleHandlerInterface $moduleHandler,
-                              ProductCacheManager $product_cache_manager,
                               CacheBackendInterface $cache_pims_files,
                               Client $http_client,
                               LoggerChannelFactoryInterface $logger_factory,
@@ -218,9 +199,7 @@ class SkuAssetManager implements SkuAssetManagerInterface {
                               FileUsageInterface $file_usage,
                               LockBackendInterface $lock,
                               CacheBackendInterface $cache_media_file_mapping,
-                              FileSystemInterface $file_system,
-                              LanguageManagerInterface $language_manager,
-                              Connection $database) {
+                              FileSystemInterface $file_system) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -228,7 +207,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->moduleHandler = $moduleHandler;
-    $this->productCacheManager = $product_cache_manager;
     $this->cachePimsFiles = $cache_pims_files;
     $this->httpClient = $http_client;
     $this->logger = $logger_factory->get('SkuAssetManager');
@@ -236,11 +214,7 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     $this->fileUsage = $file_usage;
     $this->lock = $lock;
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
-
-    $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
     $this->fileSystem = $file_system;
-    $this->languageManager = $language_manager;
-    $this->database = $database;
   }
 
   /**
@@ -355,8 +329,9 @@ class SkuAssetManager implements SkuAssetManagerInterface {
       return NULL;
     }
 
-    $base_url = $this->hmImageSettings->get('pims_base_url');
-    $pims_directory = $this->hmImageSettings->get('pims_directory');
+    $image_settings = $this->getImageSettings();
+    $base_url = $image_settings->get('pims_base_url');
+    $pims_directory = $image_settings->get('pims_directory');
 
     // Prepare the directory path.
     $directory = ($asset_type === 'video')
@@ -609,10 +584,11 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     }
 
     $file = NULL;
+    $image_settings = $this->getImageSettings();
     if (isset($asset['pims_' . $type]) && is_array($asset['pims_' . $type])) {
       $file = $this->downloadPimsAsset($asset['pims_' . $type], $sku, $type);
     }
-    elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
+    elseif ($image_settings->get('fallback_to_liquidpixel')) {
       $file = $this->downloadLiquidPixelImage($asset, $sku);
     }
 
@@ -682,7 +658,8 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    *   Asset url.
    */
   private function getSkuAssetUrlLiquidPixel(array $asset) {
-    $base_url = $this->hmImageSettings->get('base_url');
+    $image_settings = $this->getImageSettings();
+    $base_url = $image_settings->get('base_url');
     $asset_attributes = $this->getAssetAttributes($asset, 'pdp_fullscreen');
     $query_options = $this->getAssetQueryString(
       $asset_attributes['set'],
@@ -735,21 +712,21 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    *   Array of asset attributes.
    */
   private function getAssetAttributes(array $asset, $location_image) {
-    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
-    $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
+    $image_settings = $this->getImageSettings();
+    $image_location_identifier = $image_settings->get('style_identifiers')[$location_image];
 
     if (isset($asset['is_old_format']) && $asset['is_old_format']) {
       return [['url' => $asset['Url']], $image_location_identifier];
     }
     else {
-      $origin = $alshaya_hm_images_settings->get('origin');
+      $origin = $image_settings->get('origin');
 
       $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
       $set['origin'] = "origin[" . $origin . "]";
       $set['type'] = "type[" . $asset['sortAssetType'] . "]";
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
 
-      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] . "]";
+      $set['res'] = "res[" . $image_settings->get('dimensions')[$location_image]['desktop'] . "]";
     }
 
     return [
@@ -772,9 +749,8 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   private function overrideConfig($sku, $page_type) {
     // @todo Check and remove this include.
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
-    $overrides = $alshaya_hm_images_settings->get('overrides');
+    $image_settings = $this->getImageSettings();
+    $overrides = $image_settings->get('overrides');
 
     // No further processing if overrides is empty.
     if (empty($overrides)) {
@@ -816,12 +792,12 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    * {@inheritDoc}
    */
   public function sortSkuAssets($sku, $page_type, array $assets) {
-    $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
+    $image_settings = $this->getImageSettings();
     // Fetch weights of asset types based on the pagetype.
-    $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
+    $sku_asset_type_weights = $image_settings->get('weights')[$page_type];
 
     // Fetch angle config.
-    $sort_angle_weights = $alshaya_hm_images_config->get('weights')['angle'];
+    $sort_angle_weights = $image_settings->get('weights')['angle'];
 
     // Check if there are any overrides for category this product page is
     // tagged with.
@@ -972,51 +948,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function getColorsForSku(SKU $sku) {
-    if ($sku->bundle() != 'configurable') {
-      return [];
-    }
-
-    if ($cache = $this->productCacheManager->get($sku, 'hm_colors_for_sku')) {
-      return $cache;
-    }
-
-    $combinations = $this->skuManager->getConfigurableCombinations($sku);
-    if (empty($combinations)) {
-      return [];
-    }
-
-    $article_castor_ids = [];
-    foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $skus) {
-      $child_sku_entity = NULL;
-      $color_attributes = [];
-
-      // Use only the first SKU for which we get color attributes.
-      foreach ($skus as $child_sku) {
-        // Show only for colors for which we have stock.
-        $child_sku_entity = SKU::loadFromSku($child_sku);
-
-        if ($child_sku_entity instanceof SKUInterface && $this->skuManager->isProductInStock($child_sku_entity)) {
-          $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
-          if ($color_attributes) {
-            break;
-          }
-        }
-      }
-
-      if ($child_sku_entity instanceof SKUInterface && $color_attributes) {
-        $article_castor_ids[$child_sku_entity->id()] = $color_attributes['attr_rgb_color'];
-      }
-    }
-
-    $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids);
-
-    return $article_castor_ids;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public function getAssetsForSku(SKU $sku, $page_type) {
     $assets = [];
     if ($sku->bundle() == 'simple') {
@@ -1026,24 +957,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
       $assets = $this->getChildSkuAssets($sku, $page_type);
     }
     return $assets;
-  }
-
-  /**
-   * Helper function to get color label & rgb code for SKU.
-   *
-   * @param int $sku_id
-   *   Entity id for the SKU being processed.
-   *
-   * @return array
-   *   Associative array returning color label & code.
-   */
-  private function getColorAttributesFromSku($sku_id) {
-    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $query = $this->database->select('acq_sku_field_data', 'asfd');
-    $query->fields('asfd', ['attr_color_label', 'attr_rgb_color']);
-    $query->condition('id', $sku_id);
-    $query->condition('langcode', $current_langcode);
-    return $query->execute()->fetchAssoc();
   }
 
   /**
@@ -1155,5 +1068,16 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    * {@inheritDoc}
    */
   public function getSkuSwatch($sku) {}
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getImageSettings() {
+    static $image_settings = NULL;
+    $image_settings = is_null($image_settings)
+      ? $this->configFactory->get('alshaya_media_assets.settings')
+      : $image_settings;
+    return $image_settings;
+  }
 
 }

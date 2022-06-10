@@ -6,7 +6,7 @@
 
 .c-footer-secondary {
   @include breakpoint($only-mobile) {
-    border-top: 1px solid $primary_border;
+    border-top: rem(1) solid $primary_border;
   }
 
   .c-footer__copy {

@@ -151,33 +151,28 @@ window.commerceBackend = window.commerceBackend || {};
     }
   }
 
-  // Event Listener to perform action post the results are updated.
-  RcsEventManager.addListener('postUpdateResultsAction', async function loadAddToCartForm(e) {
-    // Return if result is empty and page type is not product.
-    if (e.detail.pageType !== 'product'
-      || !Drupal.hasValue(e.detail.result)
-      || (Drupal.hasValue(e.detail.placeholder) && e.detail.placeholder !== 'product-recommendation')) {
-      return null;
-    }
+  /**
+   * Renders add to cart form for the given product.
+   *
+   * @param {object} product
+   *   The raw product entity.
+   */
+  window.commerceBackend.renderAddToCartForm = function renderAddToCartForm(product) {
+    var addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + product.sku + '"]');
+    var addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
+    // Render the HTML to the div.
+    addToCartForm.html(addToCartFormHtml);
+    addToCartForm.addClass('rcs-loaded');
+    globalThis.rcsPhApplyDrupalJs(document);
+  };
 
-    var mainProduct = e.detail.result;
-    // If color split is enabled, we process the styled products.
+  RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
+    var mainProduct = e.detail.entity;
     if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
       mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
     }
 
-    var addToCartForm = null;
-    if (Drupal.hasValue(e.detail.placeholder) && e.detail.placeholder === 'product-recommendation') {
-      addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + mainProduct.sku + '"]');
-    }
-    else {
-      addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + mainProduct.sku + '"]');
-    }
-
-    var addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(mainProduct, 'add_to_cart');
-    // Render the HTML to the div.
-    addToCartForm.html(addToCartFormHtml);
-    globalThis.rcsPhApplyDrupalJs(document);
+    window.commerceBackend.renderAddToCartForm(mainProduct);
   });
 
   Drupal.behaviors.rcsProductPdpBehavior = {

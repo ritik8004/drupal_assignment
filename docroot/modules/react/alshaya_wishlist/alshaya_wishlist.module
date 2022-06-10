@@ -84,6 +84,13 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   $page['#attached']['library'][] = 'alshaya_wishlist/wishlist_add_to_cart';
   // Add custom js library to handle gtm push events for wishlist.
   $page['#attached']['library'][] = 'alshaya_wishlist/wishlist_gtm';
+  // Add custom js library that contains the logic of merging anonymous wishlist
+  // products upon sign in. Also, responsible for loading wishlist items for
+  // authenticate customers on page load as per the configurations. Attach only
+  // if user is an authenticate user.
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    $page['#attached']['library'][] = 'alshaya_wishlist/wishlist_load_merge';
+  }
 
   // Check if one time user login identification cookie is set
   // and add a drupal settings in wishlist for enable merging.

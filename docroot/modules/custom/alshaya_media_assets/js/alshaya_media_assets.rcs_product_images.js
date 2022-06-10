@@ -1,8 +1,10 @@
+window.commerceBackend = window.commerceBackend || {};
+
 /**
  * Listens to the 'rcsUpdateResults' event and updates the result object
  * with media data.
  */
- (function () {
+(function () {
   /**
    * Sets the configurable product media data in the main product object.
    *

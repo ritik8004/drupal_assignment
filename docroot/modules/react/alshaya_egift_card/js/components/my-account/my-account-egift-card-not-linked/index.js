@@ -231,7 +231,6 @@ class EgiftCardNotLinked extends React.Component {
               readOnly={enableVerifyCode}
               onBlur={(e) => this.handleEvent(e)}
               onInput={(e) => allowWholeNumbers(e)}
-              maxLength="16"
             />
             <div className="c-input__bar" />
             <label>{Drupal.t('eGift Card Number', {}, { context: 'egift' })}</label>

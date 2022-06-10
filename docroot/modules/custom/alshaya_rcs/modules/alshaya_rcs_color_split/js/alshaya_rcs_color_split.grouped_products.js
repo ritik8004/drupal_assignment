@@ -18,18 +18,23 @@ window.commerceBackend = window.commerceBackend || {};
     });
   }
 
-  // Add the styled products.
-  window.commerceBackend.getProductsInStyle = async function getProductsInStyle(product) {
-    // Return if result is empty.
-    if (!Drupal.hasValue(product)
-      || !Drupal.hasValue(product.style_code)) {
-      return;
-    }
-
-    var mainProduct = JSON.parse(JSON.stringify(product));
-
-    // Get the products with the same style.
-    var styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: mainProduct.style_code });
+  /**
+   * Processes and stores style products data in static cache.
+   *
+   * @param {object} product
+   *   Raw product object.
+   * @param {Array} styleProducts
+   *   Raw style products object.
+   *
+   * @returns {void}
+   */
+  function getProcessedStyleProducts(product, styleProducts) {
+    var mainProduct = null;
+    styleProducts.forEach(function eachStyleProduct(styleProduct) {
+      if (styleProduct.sku === product.sku) {
+        mainProduct = JSON.parse(JSON.stringify(styleProduct));
+      }
+    });
 
     // This will hold the configugrable options for the main product keyed by
     // the attribute code and then the value index of the options.
@@ -157,5 +162,26 @@ window.commerceBackend = window.commerceBackend || {};
     // now.
     window.commerceBackend.resetStaticStoragePostProductUpdate();
     return mainProduct;
+  }
+
+  /**
+   * Asynchronously fetches and processes style products data.
+   *
+   * This is used only for PDP.
+   *
+   * @param {object} product
+   *   Raw product object.
+   *
+   * @returns {void}
+   */
+  window.commerceBackend.getProductsInStyle = async function getProductsInStyle(product) {
+    // Return if result is empty.
+    if (!Drupal.hasValue(product)
+      || !Drupal.hasValue(product.style_code)) {
+      return;
+    }
+    // Get the products with the same style.
+    var styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: product.style_code });
+    return getProcessedStyleProducts(product, styleProducts);
   }
 })();

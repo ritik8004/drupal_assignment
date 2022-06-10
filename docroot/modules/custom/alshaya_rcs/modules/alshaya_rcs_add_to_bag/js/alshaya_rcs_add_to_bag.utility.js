@@ -78,12 +78,13 @@ window.commerceBackend = window.commerceBackend || {};
    */
   async function processVariants(product, variantProduct) {
     var variantData = variantProduct.product;
+    var parent_sku = variantProduct.parent_sku;
     var prices = window.commerceBackend.getPrices(variantData);
     var productLabels = await getProductLabels(variantData.parent_sku, variantData.sku);
 
     return {
       sku: variantData.sku,
-      parent_sku: variantData.parent_sku,
+      parent_sku: parent_sku,
       cart_title: product.name,
       cart_image: variantData.media_cart,
       media: {images: variantData.media},
@@ -148,14 +149,7 @@ window.commerceBackend = window.commerceBackend || {};
 
     // Display size guide information in product configurable drawer.
     // @see _alshaya_acm_product_get_size_guide_info()
-    const sizeGuide = document.querySelector('.rcs-templates--size-guide');
-    var link = sizeGuide.innerHTML;
-    var sizeAttr = sizeGuide.getAttribute("data-attributes");
-    sizeAttr = sizeAttr ? sizeAttr.split(',') : sizeAttr;
-    productInfo.size_guide = {
-      link: link,
-      attributes: sizeAttr,
-    };
+    productInfo.size_guide = drupalSettings.alshayaRcs.sizeGuide;
 
     // Set configurable attributes.
     productInfo.configurable_attributes = [];

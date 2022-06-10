@@ -508,13 +508,6 @@ function alshaya_master_form_system_site_information_settings_alter(&$form, Form
     '#default_value' => $settings->get('sub_brand_logo_link'),
   ];
 
-  $form['cookie_keys'] = [
-    '#type' => 'textfield',
-    '#title' => t('Cookie key names'),
-    '#description' => t('List of keys to save it cookie when localStorage is absent, seperate the keys with the ",".'),
-    '#default_value' => $settings->get('cookie_keys'),
-  ];
-
   $form['#submit'][] = '_alshaya_admin_site_information_submit';
 }
 
@@ -992,9 +985,4 @@ function alshaya_master_preprocess_html(&$variables) {
   $variables['#attached']['library'][] = 'alshaya_master/common_fixes';
   // Add Alshaya library for managing local storage.
   $variables['#attached']['library'][] = 'alshaya_master/local_storage_manager';
-  $storage_settings = \Drupal::configFactory()->get('alshaya_master.settings');
-  if ($storage_keys = $storage_settings->get('cookie_keys')) {
-    $storage_keys = explode(',', preg_replace('/\s+/', '', $storage_keys));
-    $variables['#attached']['drupalSettings']['alshaya_master']['cookie_keys'] = $storage_keys;
-  }
 }

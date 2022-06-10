@@ -93,8 +93,6 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   $alshaya_acm_settings = \Drupal::config('alshaya_acm.settings');
   $page['#attached']['drupalSettings']['add_to_bag']['max_sale_quantity_enabled'] = $alshaya_acm_settings->get('quantity_limit_enabled');
   $page['#attached']['drupalSettings']['add_to_bag']['max_sale_hide_message'] = $alshaya_acm_settings->get('hide_max_qty_limit_message');
-  // Make global error message available in drupal settings..
-  $page['#attached']['drupalSettings']['add_to_bag']['global_error_message'] = _alshaya_spc_global_error_message();
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $alshaya_acm_settings->getCacheTags());
 
   // Pass config for showing/hiding quantity selector in configurable product

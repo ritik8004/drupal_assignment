@@ -154,6 +154,8 @@ $egift-gray: #979797;
 $cyan-blue: #387fcb;
 $prussian_blue: #063971;
 $egift-button-hover: rgba(51, 51, 51, 0.1);
+$speech-red: #c00;
+$red-orange: #e6591b;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -167,6 +169,7 @@ $aura-pink: #e91674;
 $aura-pink-2: #e64876;
 $aura-purple: #7a2682;
 $aura-purple-2: #1e264a;
+$aura-purple-3: #42125a;
 $aura-darkblue: #1e2a54;
 $aura-purpleTwo: #772583;
 $night-blue: #140247;
@@ -254,6 +257,7 @@ $aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 9
 $aura-hello-tier: linear-gradient(128deg, #efc06e 2%, #e31c79 63%, #772583 102%);
 $aura-hello-tier-ar: linear-gradient(-128deg, #efc06e 2%, #e31c79 63%, #772583 102%);
 $aura-hello-tier-mobile: linear-gradient(104deg, #efc06e 8%, #e31c79 65%, #772583 100%);
+$aura-hello-tier-mobile-ar: linear-gradient(-104deg, #efc06e 8%, #e31c79 65%, #772583 100%);
 $aura-stars-tier: linear-gradient(121deg, #2d68c4, #481463 70%, #2c0b3d 100%);
 $aura-stars-tier-ar: linear-gradient(-121deg, #2d68c4, #481463 70%, #2c0b3d 100%);
 $aura-stars-tier-mobile: linear-gradient(101deg, #2d68c4, #481463 70%, #2c0b3d 100%);
@@ -278,6 +282,7 @@ $aura-myaccount-vip-mobile: linear-gradient(151deg, #7f2482 1%, #25035a 65%, #16
 $aura-myaccount-vip-mobile-ar: linear-gradient(-151deg, #7f2482 1%, #25035a 65%, #160235);
 $aura-myaccount-user-dp-star: #4a90e2;
 $aura-myaccount-user-dp-vip: #bd10e0;
+$aura-modal-link: #8f1c7d;
 $_aura-disabled: #979797;
 $_aura-disabled-desc: #31281b;
 $pinterest-red: #bc091d;
@@ -307,6 +312,8 @@ $_sofa-section-grey: #d9d9d9;
 $_sofa-section-grey2: #1a1a1a;
 $_sofa-section-brown: #866347;
 $white-six: #f9f9f9;
+$light-green: #39b54a;
+$dark-green: #007522;
 $_online-booking-change-delivery-schedule: #4a7fc5;
 
 /* ------- 2. Primary Colors ------- */
@@ -1053,6 +1060,7 @@ $checkout_order_details_product_count_border: $white-five;
 // Online Booking
 $_online-booking-delivery-detail: $cyan-blue;
 $_online-booking-primary-text: $white-five;
+$_online-booking-black-text: $mothercare-black;
 
 // Address form.
 $address_form_country_disabled: $ladda-disabled;
@@ -1794,9 +1802,11 @@ $aura-checkout-footer-redeem-text: $musical-silk;
 $aura-header-popup-footer-text: $dark-night-owl;
 $aura-redeem-pts-cart-header-text: $_gray_222;
 $aura-header-join-now-bg: $aura-gradient-21;
+$aura-header-title-1: $aura-purple-3;
 $aura-join-now-submit-button-bg: $aura-gradient-25;
 $aura-join-now-submit-bg-src: $aura-gradient-26;
 $aura-congratulation-highlight-text: $musical-silk;
+$auro-join-signin-text: $musical-silk;
 
 // Aura My Account.
 $aura-loyalty-club-title-1: $aura-blue;
@@ -2121,6 +2131,7 @@ $egift-input-radio-background: $white-five;
 $egift-purchase-inactive-step-text: $_ancestral-water;
 $egift-purchase-disabled-btn-border: $egift-disabled-gray1;
 $egift-purchase-disabled-btn-text: $egift-disabled-gray2;
+$egift-purchase-enabled-btn-text: $white-five;
 $egift-purchase-radio-label: $mothercare-black;
 $egift-purchase-page-title: $mothercare-black;
 
@@ -2206,3 +2217,60 @@ $egift-checkout-card-number: $spc-product-attributes;
 
 // Redeem eGift.
 $egift-redeem-form-subtitle: $egift-disabled-gray2;
+
+// Online Returns
+$online-return-eligibility-message-bg: $light-green;
+$online-return-eligibility-message-txt: $white-five;
+$online-return-eligibility-button-txt: $brownish-grey;
+$online-return-eligibility-button-box-shadow: $dark-green;
+$online-return-eligibility-button-hover: $white-three;
+$online-return-window-closed-bg: $new-pdp-blue;
+$online-return-bg: rgba(235, 235, 235, 0.59);
+$online-return-dark-bg: $_gray_222;
+$online-return-label-txt: $white-five;
+$online-return-detail-bg: rgba(247, 247, 247, 0.7);
+$online-return-ineligible-label-bg: $scarlet;
+$order-cancelled-label: $scarlet;
+$order-cancelled-txt: $white-five;
+$online-return-steps-label-txt: $white-five;
+$online-return-request-button-bg: $white-smoke-light;
+$online-return-big-ticket-label-bg: $_spc_search_icon;
+$online-return-big-ticket-label-txt: $white-five;
+$online-return-refund-label-inactive-bg: $warm-grey-two;
+$online-return-refund-grey-txt: $greyish;
+$online-return-order-detail-border: $white;
+$online-return-refund-blue-txt: $new-pdp-blue;
+$online-return-cancel-button-border: $warm-grey-two;
+$online-return-status-red-label: $speech-red;
+$online-return-print-button-bg: $white-five;
+$online-return-status-green-label: $light-green;
+$online-return-status-orange-label: $red-orange;
+
+// Hello Member membership success popup
+$hm-membership-success-popup-bg: $white-five;
+$hm-membership-success-popup-title: $_spc-discount-text;
+$hm-content-link: $black-two;
+
+// Hello Member registration
+$hm-registration-accordion-bg: $whisper;
+$hm-registration-fields-bg: $whisper;
+$hm-registration-labels-txt: $grey-light;
+
+// Hello Member points block
+$hm-points-block-bg: $whisper;
+$hm-points-block-light-txt: $light-ash;
+$hm-points-block-tier-progress: $light-ash;
+$hm-points-block-tier-progress-active: $cherry;
+
+// Hello member QR code
+$hm-qr-code-redeem-txt: $grey-light;
+
+// Hello Member benefit block
+$hm-my-offers-bg: $white-three;
+$hm-my-offers-expiry-txt: $grey-light;
+
+// Hello member history point
+$hm-history-points-light-title: $greyish;
+$hm-points-expiry-accordion-bg: $white-smoke;
+$hm-points-expiry-accordion-title: $error-red;
+$hm-points-expiry-accordion-icon: $error-red;

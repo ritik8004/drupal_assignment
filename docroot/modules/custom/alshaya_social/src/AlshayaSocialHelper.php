@@ -172,9 +172,11 @@ class AlshayaSocialHelper {
           'email' => $fields['mail'],
         ];
 
-        $customer = $this->apiWrapper->updateCustomer($customer_array, [
-          'password' => $fields['pass'],
-        ]);
+        $customer = $this->apiWrapper->updateCustomer($customer_array, []);
+
+        if (!empty($customer['customer_id']) && !empty($fields['pass'])) {
+          $this->apiWrapper->updateCustomerPass($customer, $fields['pass']);
+        }
 
         if (empty($customer)) {
           throw new \Exception('Create or update customer failed.');

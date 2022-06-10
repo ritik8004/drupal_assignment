@@ -217,7 +217,7 @@ class ProductOptionsHelper {
       $option_id = $result->option_id;
       // Check the term again exists after the options sync.
       // If present we attach it to sku.
-      if ($term = $this->productOptionsManager->loadProductOptionByOptionId($attribute_code, $option_id)) {
+      if ($term = $this->productOptionsManager->loadProductOptionByOptionId($attribute_code, $option_id, NULL)) {
         if ($sku = SKU::loadFromSku($sku_id)) {
           foreach ($sku->getTranslationLanguages() as $language) {
             $sku = $sku->getTranslation($language->getId());
@@ -231,7 +231,7 @@ class ProductOptionsHelper {
           }
         }
         // Delete custom table entry, when the sku is updated with the term.
-        $this->deleteUpdatedRow($attribute_code, $option_id, $sku);
+        $this->deleteUpdatedRow($attribute_code, $option_id, $sku_id);
         // Logging the process.
         $this->logger->notice('Term found for option_id: @option_id having attribute_code @attribute_code and SKU field is updated for @sku_id', [
           '@option_id' => $option_id,

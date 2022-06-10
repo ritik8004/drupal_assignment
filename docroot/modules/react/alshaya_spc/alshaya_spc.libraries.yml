@@ -37,6 +37,17 @@ checkout:
     - alshaya_react/react
     - alshaya_spc/cart_utilities
 
+order_details:
+  version: 1.x
+  js:
+    dist/order_details.bundle.js: { }
+  dependencies:
+    - core/drupalSettings
+    - alshaya_react/react
+    - alshaya_white_label/tooltip
+    - alshaya_spc/cart_utilities
+    - alshaya_master/common_functions
+
 add_to_cart:
   version: 1.x
   js:

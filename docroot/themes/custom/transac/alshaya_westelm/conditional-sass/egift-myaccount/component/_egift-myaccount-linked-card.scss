@@ -2,7 +2,7 @@
   .action-buttons {
     button[type=button] {
       &.egift-topup-btn {
-        color: $egift-myaccount-button;
+        color: $egift-myaccount-topup-button-text;
         text-transform: uppercase;
       }
     }

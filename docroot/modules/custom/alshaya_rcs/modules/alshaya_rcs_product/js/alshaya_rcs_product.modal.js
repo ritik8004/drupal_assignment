@@ -21,7 +21,7 @@
         }
 
         globalThis.rcsPhCommerceBackend.getData('product-recommendation', {sku: sku}, null, null, null, true)
-          .then(function (entity) {
+          .then(async function (entity) {
             if (entity === null || typeof entity === 'undefined') {
               return;
             }
@@ -59,7 +59,7 @@
               promotions: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'promotions'),
               postpay: Drupal.hasValue(drupalSettings.postpay_widget_info) ? drupalSettings.postpay_widget_info : {},
               tabby: Drupal.hasValue(drupalSettings.tabby) ? drupalSettings.tabby.widgetInfo : {},
-              cleanSku: window.commerceBackend.cleanCssIdentifier(entity.sku),
+              cleanSku: Drupal.cleanCssIdentifier(entity.sku),
             };
 
             var elem = document.createElement('div');
@@ -83,6 +83,14 @@
 
             // Call behaviours with modal context.
             var modalContext = $('.pdp-modal-box');
+            globalThis.rcsPhApplyDrupalJs(modalContext);
+
+            var mainProduct = entity;
+            // Now render the add to cart form.
+            if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
+              mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
+            }
+            window.commerceBackend.renderAddToCartForm(mainProduct);
             globalThis.rcsPhApplyDrupalJs(modalContext);
           },
           function () {

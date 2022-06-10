@@ -10,7 +10,6 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Symfony\Component\Yaml\Yaml;
 
-
 /**
  * Implements hook_update_N().
  *
@@ -18,6 +17,9 @@ use Symfony\Component\Yaml\Yaml;
  */
 function acq_sku_update_8027() {
   $schema = acq_sku_schema();
+  if (\Drupal::database()->schema()->tableExists('product_attribute_options_missing')) {
+    \Drupal::database()->schema()->dropTable('product_attribute_options_missing');
+  }
   \Drupal::database()->schema()->createTable('product_attribute_options_missing', $schema['product_attribute_options_missing']);
 }
 
@@ -485,25 +487,25 @@ function acq_sku_schema() {
       'sku' => [
         'type' => 'varchar',
         'not null' => TRUE,
-        'length' => 20,
+        'length' => 100,
         'default' => '',
       ],
       'attribute_code' => [
         'type' => 'varchar',
         'not null' => TRUE,
-        'length' => 20,
+        'length' => 255,
         'default' => '',
       ],
       'option_id' => [
         'type' => 'varchar',
         'not null' => TRUE,
-        'length' => 20,
+        'length' => 100,
         'default' => '',
       ],
       'field_key' => [
         'type' => 'varchar',
         'not null' => TRUE,
-        'length' => 20,
+        'length' => 255,
         'default' => '',
       ],
     ],

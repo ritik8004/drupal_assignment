@@ -23,9 +23,6 @@ regions:
   footer_primary: 'Footer Primary'
   footer_secondary: 'Footer Secondary'
 
-libraries:
-  - alshaya_pottery_barn_kids/global_styles
-
 libraries-override:
   alshaya_white_label/font-face: alshaya_pottery_barn_kids/font-face
 
@@ -173,3 +170,8 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css
+
+  alshaya_white_label/aura-loyalty-forms:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css: css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css

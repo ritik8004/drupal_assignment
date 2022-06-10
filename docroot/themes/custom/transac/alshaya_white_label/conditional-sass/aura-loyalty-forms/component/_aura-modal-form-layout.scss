@@ -4,8 +4,9 @@
   .aura-modal-congratulations-content {
     padding: 0 !important;
     color: $aura-form-otp-text;
-    max-width: 23.4375rem;
+    max-width: rem(412);
     background: $aura-form-otp-background !important;
+    z-index: 0;
 
     @include breakpoint($only-mobile) {
       width: 100% !important;
@@ -23,7 +24,7 @@
       .aura-guest-user-link-card-otp-form {
         .aura-modal-form {
           .aura-modal-form-items {
-            padding: rem(24) rem(20);
+            padding: rem(24) rem(30) rem(10);
 
             .aura-form-items-link-card-options {
               margin-top: rem(16);
@@ -39,6 +40,38 @@
 
             .aura-modal-footer {
               padding: rem(5) 0;
+            }
+          }
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        &.link-old-card-modal-content {
+          overflow-y: auto !important;
+          height: auto !important;
+          bottom: 0;
+          position: absolute !important;
+
+          .spc-aura-unlink-card-wrapper {
+            .spc-aura-unlink-card-form-content {
+              padding-bottom: 0;
+            }
+
+            .aura-modal-form-actions {
+              position: relative;
+              background: none;
+            }
+          }
+        }
+      }
+    }
+
+    &.link-card-otp-modal-content {
+      .aura-guest-user-link-card-otp-form {
+        .aura-modal-form {
+          .aura-modal-form-actions {
+            .aura-modal-footer {
+              padding: 0;
             }
           }
         }
@@ -61,7 +94,7 @@
         font-family: inherit;
         font-size: inherit;
         margin: 0;
-        color: inherit;
+        color: $aura-header-title-1;
       }
 
       .close {
@@ -82,7 +115,18 @@
 
     .aura-modal-form,
     .spc-aura-unlink-card-wrapper {
-      background: $aura-form-modal-section-bg;
+      max-width: rem(412);
+
+      &::after {
+        content: "";
+        background: $aura-form-modal-section-bg;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -2;
+      }
 
       .aura-modal-form-items {
         font-family: $aura-regular;
@@ -91,20 +135,20 @@
       }
 
       .aura-modal-form-actions {
-        padding-bottom: 1.5rem;
-        border-top: 0.625rem solid $aura-form-otp-background;
+        padding-bottom: rem(23);
+        border-top: rem(8) solid $spc-cart-delivery-popup-button-shadow;
 
         .aura-modal-form-submit,
         .aura-modal-form-submit-without-otp,
         .spc-aura-link-card-submit {
-          height: 2.875rem;
+          height: rem(50);
           border-radius: 1.75rem;
           background-image: $aura-modal-submit;
           display: flex;
           align-items: center;
           justify-content: center;
           color: $aura-form-modal-section-bg;
-          margin: 1.25rem 1.25rem 0;
+          margin: rem(25) rem(30) rem(21);
           cursor: pointer;
           font-family: $aura-bold;
           font-size: 1rem;
@@ -214,21 +258,41 @@
         .aura-modal-form-submit,
         .aura-modal-form-submit-without-otp,
         .spc-aura-link-card-submit {
+          $border: rem(2);
+
           color: $aura-join-submit-text;
-          border-image-source: $aura-join-now-submit-bg-src;
-          border-image-slice: 1;
-          background-image: $aura-join-now-submit-button-bg;
-          background-origin: border-box;
-          background-clip: content-box, border-box;
-          border-style: solid;
-          border-width: rem(2);
-          margin: rem(20);
+          background: $aura-form-modal-section-bg;
+          background-clip: padding-box;
+          border: solid $border transparent;
+          position: relative;
+
+          @include breakpoint($desktop) {
+            width: rem(352);
+          }
+
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            margin: -$border;
+            border-radius: inherit;
+            background: $aura-join-now-submit-bg-src;
+          }
+        }
+
+        .aura-modal-form-submit-without-otp {
+          margin-bottom: rem(21);
         }
 
         @include breakpoint($only-mobile) {
           position: absolute;
           bottom: 0;
           width: 100%;
+          z-index: 1;
         }
       }
 
@@ -310,7 +374,12 @@
 
       .aura-modal-form-actions {
         .spc-aura-link-card-submit {
-          margin: rem(26) rem(20) rem(21);
+          margin: rem(26) rem(30) rem(21);
+
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: rem(21);
+            margin-#{$right}: rem(21);
+          }
         }
 
         .aura-modal-footer {
@@ -333,6 +402,52 @@
   }
 }
 
+.aura-modal-congratulations-overlay {
+  z-index: 1001 !important;
+
+  .aura-modal-congratulations-content {
+    border-radius: rem(10);
+
+    @include breakpoint($only-mobile) {
+      width: rem(336) !important;
+      height: auto;
+      text-transform: none;
+    }
+
+    .aura-congratulations-modal {
+      .aura-modal-header {
+        .spc-checkout-section-title {
+          color: $aura-congratulation-highlight-text;
+          font-weight: 700;
+        }
+      }
+
+      .aura-modal-body {
+        margin: rem(30) auto rem(24);
+
+        @include breakpoint($tablet) {
+          margin: rem(33) auto rem(38);
+        }
+
+        .congratulations-text {
+          margin-bottom: rem(22);
+
+          @include breakpoint($tablet) {
+            margin-bottom: rem(24);
+          }
+        }
+
+        .mobile-only {
+          .app-links {
+            a {
+              display: inline-flex;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
 .aura-modal-popup-overlay {
   z-index: 1000 !important;
@@ -386,9 +501,10 @@
   }
 }
 
-// iOS - Safari.
+// Join Aura Modal Positioning Fix For Mobile Devices.
+
 @include breakpoint($only-mobile) {
-  body.aura-enabled.safari {
+  body.aura-enabled {
     #block-alshayamainmenu.aura-header-modal-open {
       ul.menu__list.menu--one__list {
         width: 100vw;

@@ -1,0 +1,9 @@
+// Hiding the aura accordian when menu is not open and supermenu is enabled.
+
+body.aura-enabled.supermenu:not(.menu--open) {
+  .c-menu-secondary {
+    #aura-mobile-header-signin-register {
+      display: none;
+    }
+  }
+}

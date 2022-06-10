@@ -3,30 +3,12 @@
 namespace Drupal\alshaya_pims_assets\Services;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_media_assets\Services\SkuAssetManagerInterface;
-use Drupal\Core\Config\ConfigFactory;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager as MediaAssetsManager;
 
 /**
  * Sku Asset Manager Class.
  */
-class SkuAssetManager implements SkuAssetManagerInterface {
-
-  /**
-   * The Config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactory
-   */
-  protected $configFactory;
-
-  /**
-   * SkuAssetManager constructor.
-   *
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
-   *   Config Factory service.
-   */
-  public function __construct(ConfigFactory $configFactory) {
-    $this->configFactory = $configFactory;
-  }
+class SkuAssetManager extends MediaAssetsManager {
 
   /**
    * {@inheritDoc}
@@ -91,13 +73,16 @@ class SkuAssetManager implements SkuAssetManagerInterface {
     $swatch = [];
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $assets_data = $skuEntity->get('attr_assets')->getValue();
+    $sku_asset_type = $this->getImageSettings()->get('swatch_asset_type');
 
     if ($assets_data && isset($assets_data[0], $assets_data[0]['value'])) {
-      // phpcs:ignore
+      // Supress the unserialize class warning.
+      // @codingStandardsIgnoreLine
       $unserialized_assets = unserialize($assets_data[0]['value']);
+
       foreach ($unserialized_assets as $assets) {
-        if ($assets['Data']['AssetType'] === 'StillMedia/Fabricswatch') {
-          $swatch['url'] = $assets['Data']['PublicAssetService'];
+        if ($assets['Data']['AssetType'] === $sku_asset_type) {
+          $swatch['url'] = $assets['pims_image']['url'];
           $swatch['type'] = $assets['sortAssetType'];
         }
       }
@@ -110,11 +95,11 @@ class SkuAssetManager implements SkuAssetManagerInterface {
    * {@inheritDoc}
    */
   public function sortSkuAssets($sku, $page_type, array $assets) {
-    $alshaya_cos_images_config = $this->configFactory->get('alshaya_cos_images.settings');
+    $image_settings = $this->getImageSettings();
     // Fetch weights of asset types based on the pagetype.
-    $sku_asset_type_weights = $alshaya_cos_images_config->get('weights')[$page_type];
+    $sku_asset_type_weights = $image_settings->get('weights')[$page_type];
     // Fetch angle config.
-    $sort_angle_weights = $alshaya_cos_images_config->get('weights')['angle'];
+    $sort_angle_weights = $image_settings->get('weights')['angle'];
 
     // Create multi-dimensional array of assets keyed by their asset type.
     if (!empty($assets)) {
@@ -248,13 +233,6 @@ class SkuAssetManager implements SkuAssetManagerInterface {
       : 'image';
 
     return $type;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function getColorsForSku(SKU $sku) {
-    return [];
   }
 
   /**

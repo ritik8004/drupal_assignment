@@ -11,13 +11,46 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * Adds storage config.
+ * Update arabic string translation for order details.
+ */
+function alshaya_master_update_8054() {
+  // Add string translations.
+  $strings = [
+    'print' => [
+      'ar' => 'طباعة',
+    ],
+    'Quantity: @quantity' => [
+      'ar' => 'الكمية: @quantity',
+    ],
+    'Item code: @sku' => [
+      'ar' => 'رمز القطعة: @sku',
+    ],
+    'Total: @count item' => [
+      'ar' => 'المجموع: @count قطعة',
+    ],
+    'Total: @count items' => [
+      'ar' => 'المجموع: @count قطع',
+    ],
+    '@count Cancelled' => [
+      'ar' => 'تم إلغاء @count',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update arabic string translation for View all.
  */
 function alshaya_master_update_8052() {
-  // Save default cookie keys.
-  \Drupal::configFactory()->getEditable('alshaya_master.settings')
-    ->set('cookie_keys', 'cart_id')
-    ->save();
+  // Add string translations.
+  $strings = [
+    'View All' => [
+      'ar' => 'اظهار الكل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
@@ -2233,6 +2266,24 @@ function alshaya_master_install() {
     ],
     'Sort by' => [
       'ar' => 'رتبي حسب',
+    ],
+    'View All' => [
+      'ar' => 'اظهار الكل',
+    ],
+    'Quantity: @quantity' => [
+      'ar' => 'الكمية: @quantity',
+    ],
+    'Item code: @sku' => [
+      'ar' => 'رمز القطعة: @sku',
+    ],
+    'Total: @count item' => [
+      'ar' => 'المجموع: @count قطعة',
+    ],
+    'Total: @count items' => [
+      'ar' => 'المجموع: @count قطع',
+    ],
+    '@count Cancelled' => [
+      'ar' => 'تم إلغاء @count',
     ],
   ];
 

@@ -1,0 +1,57 @@
+name: Acquia Git Cleanup
+
+on:
+  schedule:
+    - cron: "0 6 * * 6" # Every Saturday at 6am.
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    name: Cleanup
+
+    runs-on: ubuntu-latest
+
+    env:
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      SSH_DEPLOYMENT_KEY: ${{ secrets.BLT_SSH_DEPLOYMENT_KEY }}
+      ACSF_API_USERNAME: ${{ secrets.ACSF_API_USERNAME }}
+      ACSF_API_KEY: ${{ secrets.ACSF_API_KEY }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Prepare deployment key
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ env.SSH_DEPLOYMENT_KEY }}"
+        if: ${{ env.SSH_DEPLOYMENT_KEY }}
+
+      - name: Prepare environment variables
+        run: |
+          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/scripts)" >> $GITHUB_ENV
+
+      - name: Prepare SSH
+        run: |
+          mkdir -p ~/.ssh
+          touch ~/.ssh/config
+          chmod 600 ~/.ssh/config
+          printf "Host *.enterprise-g1.hosting.acquia.com\n  StrictHostKeyChecking no\n" >> ~/.ssh/config
+
+      - name: Prepare ACSF API credentials
+        run: |
+          touch $HOME/acsf_api_settings
+          chmod 600 $HOME/acsf_api_settings
+          printf 'username="%s"\napi_key="%s"' "${{ env.ACSF_API_USERNAME }}" "${{ env.ACSF_API_KEY }}" >> $HOME/acsf_api_settings
+
+      - name: Tag cleanup
+        run: yes | bash ${SCRIPT_DIR}/git_cleanup/remove-old-tags.sh
+        if: ${{ env.SSH_DEPLOYMENT_KEY }}
+
+      - name: Branch cleanup
+        run: yes | bash ${SCRIPT_DIR}/git_cleanup/remove-useless-branches.sh
+        if: ${{ env.SSH_DEPLOYMENT_KEY }}
+
+      - name: Branch history reset
+        run: bash ${SCRIPT_DIR}/git_cleanup/reset-history-branches.sh
+        if: ${{ env.SSH_DEPLOYMENT_KEY }}

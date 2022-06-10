@@ -36,6 +36,12 @@
     align-items: center;
 
     .spc-aura-cart-icon {
+      max-width: 30%;
+
+      @include breakpoint($tablet) {
+        max-width: 35%;
+      }
+
       & > svg {
         max-height: rem(37);
         width: auto;
@@ -70,12 +76,30 @@
         }
 
         .tooltip-box {
-          background-color: $aura-spc-checkout-highlight;
-          border: rem(1) solid $aura-spc-checkout-highlight;
+          background: $aura-order-confirmation-points-tooltip-bg;
+          box-shadow: 0 rem(2) rem(20) 0 $spc-checkout-link-btn-box-shadow-mobile;
+          border: none;
+          color: $aura-order-confirmation-points-tooltip-txt;
+          #{$left}: rem(-127);
+
+          html[lang=ar] & {
+            @include breakpoint($desktop) {
+              right: rem(-10);
+            }
+          }
 
           &::before,
           &::after {
-            border-top-color: $aura-spc-checkout-highlight;
+            border-top-color: $aura-order-confirmation-points-tooltip-bg;
+            margin-#{$left}: rem(37);
+
+            html[lang=ar] & {
+              @include breakpoint($upto-desktop) {
+                left: 22%;
+              }
+
+              left: 87%;
+            }
           }
         }
       }
@@ -91,6 +115,21 @@
 
       b {
         font-family: $aura-caption-bold;
+      }
+
+      .spc-loading-container {
+        min-height: auto;
+        display: inline-flex;
+
+        .spc-loader {
+          height: rem(16);
+          width: rem(24);
+          background-size: rem(26);
+          padding: 0;
+          background-position: center;
+          min-width: auto;
+          min-height: auto;
+        }
       }
     }
 
@@ -109,7 +148,7 @@
       cursor: pointer;
       line-height: 1.63;
       font-size: 1rem;
-      color: $aura-join-link-text;
+      color: $auro-join-signin-text;
       text-decoration: underline;
 
       @include breakpoint($only-tablet) {
@@ -130,6 +169,14 @@
         @include breakpoint($only-mobile) {
           text-align: center;
         }
+      }
+    }
+
+    .spc-join-aura-link,
+    .spc-link-aura-link,
+    .spc-link-play-store {
+      html[lang=ar] & {
+        background: none;
       }
     }
   }
@@ -218,8 +265,9 @@
   .block-content.registered-user-unlinked-card {
     .spc-aura-cart-content {
       .spc-link-aura-link-wrapper {
-        display: block;
+        display: inline-block;
         text-align: $left;
+        margin-#{$right}: rem(5);
       }
     }
 

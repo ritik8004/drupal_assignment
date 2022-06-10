@@ -155,14 +155,6 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
-    // Fire another event to perform actions after results are updated.
-    RcsEventManager.fire('postUpdateResultsAction', {
-      detail: {
-        result: updateResult.detail.result,
-        pageType: pageType,
-      }
-    });
-
     return updateResult.detail.result;
   }
 
@@ -191,6 +183,8 @@ exports.getData = async function getData(
   if (authorizationToken) {
     request.headers.push(['Authorization', authorizationToken]);
   }
+
+  request.rcsType = placeholder;
 
   let response = null;
   let result = null;
@@ -322,6 +316,15 @@ exports.getData = async function getData(
       result = response.data.products.items;
       break;
 
+    // Get the product data for the given sku.
+    case 'single_product_by_sku':
+      // Build query.
+      let singleProductQueryVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
+      singleProductQueryVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
+      result = rcsCommerceBackend.invokeApi(request);
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
@@ -342,16 +345,6 @@ exports.getData = async function getData(
         params: params,
         placeholder: placeholder,
         context,
-      }
-    });
-
-    const pageType = globalThis.rcsPhGetPageType();
-    // Fire another event to perform actions after results are updated.
-    RcsEventManager.fire('postUpdateResultsAction', {
-      detail: {
-        result: updateResult.detail.result,
-        pageType,
-        placeholder,
       }
     });
 
@@ -380,25 +373,13 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
   let result = null;
 
   switch (placeholder) {
-    // Get the product data for the given sku.
-    case 'single_product_by_sku':
-      // Build query.
-      let singleProductQueryVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
-      singleProductQueryVariables.sku = params.sku;
+    case 'products-in-style':
+      let variables = rcsPhGraphqlQuery.styled_products.variables;
+      variables.styleCode = params.styleCode;
 
-      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
-
+      request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
       response = rcsCommerceBackend.invokeApiSynchronous(request);
-
-      if (response && response.data.products.total_count) {
-        response.data.products.items.forEach(function (product) {
-          RcsEventManager.fire('rcsUpdateResults', {
-            detail: {
-              result: product,
-            }
-          });
-        });
-      }
+      result = response.data.products.items;
       break;
 
     // Get the product data for the given sku.

@@ -40,8 +40,17 @@ class CompleteBenefitPayPayment extends React.Component {
       currency_code: currencyCode,
     } = drupalSettings.alshaya_spc.currency_config;
 
+    // Check if 'balancePayable' is set and has value greater than zero else
+    // use the 'base_grand_total' variable to use as a transaction amount.
+    // 'balancePayable' will be available in case or e-gift or aura methods are
+    // used for the partial payment.
+    const transactionAmount = (typeof totals.balancePayable !== 'undefined'
+      && totals.balancePayable > 0)
+      ? totals.balancePayable.toFixed(decimalPoints)
+      : totals.base_grand_total.toFixed(decimalPoints);
+
     const data = {
-      transactionAmount: totals.base_grand_total.toFixed(decimalPoints),
+      transactionAmount,
       transactionCurrency: currencyCode,
       referenceNumber: payment.referenceNumber,
       merchantId: payment.benefitpayMerchantId,

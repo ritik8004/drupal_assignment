@@ -3,12 +3,30 @@
 script_name=$0
 script_full_path=$(dirname "$0")
 
-deployed_branches=$($script_full_path/get-deployed-branches.sh | cut -d' ' -f2)
+echo "Fetching deployed branches. Please wait..."
+branches_str=$($script_full_path/get-deployed-branches.sh)
+
+# Avoid further processing if we can't fetch the list of deployed branches.
+if [ $? -eq 1 ] ; then
+  echo "Impossible to fetch deployed branches using Acquia Cloud API."
+  exit
+fi
+
+# Find the branch names from the script's response (Stack %d - Env %s: %s).
+deployed_branches=$(echo "$branches_str" | cut -d' ' -f6)
+echo "$deployed_branches"
+
+# Hardcode some branches for security. These branches are supposed to always be deployed at least on one env/stack.
+deployed_branches+=" develop-build qa-build uat-build"
 echo "Deployed branches:"
 echo $deployed_branches
 echo
 
-repos="alshaya@svn-5975.enterprise-g1.hosting.acquia.com:alshaya.git alshaya2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya2.git alshaya3bis@svn-5975.enterprise-g1.hosting.acquia.com:alshaya3bis.git alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git"
+scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+bltDir="$scriptDir/../../blt"
+
+repos=`grep -Ei '@svn-5975.enterprise-g1.hosting.acquia.com' ${bltDir}/blt.yml | sed -r "s/'//g" | sed -r "s/- //g"`
+
 for repo in $repos ; do
   to_delete=""
   refs=$(git ls-remote -h $repo | grep -o -E "refs/heads/.*-build$")
@@ -35,13 +53,15 @@ for repo in $repos ; do
   echo
 
   if [ ! "$to_delete" = "" ] ; then
-    read -p "Do you confirm the deletion of '$to_delete' branches on $repo? " -n 1 yn
+    read -p "Do you confirm the deletion of '$to_delete' branches on $repo? " yn
     echo
     if [ "$yn" = y ] ; then
       for b in $to_delete ; do
         echo "Deleting $b"
         git push $repo  :refs/heads/$b
       done
+
+      git remote prune $repo
     else
       echo "Nothing deleted"
     fi

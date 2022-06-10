@@ -120,7 +120,7 @@ class LocalCommand extends BltTasks {
 
     $this->say('Disable cloud modules');
     $this->taskDrush()
-      ->drush('pmu purge acquia_search acquia_connector shield dblog datadog_js')
+      ->drush('pmu purge acquia_connector shield dblog datadog_js')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();

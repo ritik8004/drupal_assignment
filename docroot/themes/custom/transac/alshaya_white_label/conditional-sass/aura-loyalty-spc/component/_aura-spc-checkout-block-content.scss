@@ -456,13 +456,10 @@
           font-family: $aura-regular;
           line-height: rem(20);
           font-size: rem(14);
+          border-radius: rem(10);
 
           html[lang=ar] & {
             background: $aura-spc-checkout-block-bg-gradient-ar;
-          }
-
-          @include breakpoint($tablet) {
-            border-radius: rem(10);
           }
 
           .current-available-points {
@@ -499,33 +496,41 @@
 
     .redeem-aura-footer {
       color: $aura-checkout-footer-redeem-text;
+      display: flex;
       font-size: rem(12);
       line-height: rem(18);
       margin-top: rem(12);
       margin-#{$left}: rem(20);
+      position: relative;
 
       b {
         font-family: $aura-bold;
       }
 
       @include breakpoint($only-mobile) {
-        margin-#{$left}: rem(16);
+        margin-#{$left}: rem(21);
       }
 
       &::before {
-        content: '!';
-        color: $aura-spc-checkout-block-bg;
+        content: '';
         background-color: $aura-spc-checkout-highlight;
         width: rem(16);
         height: rem(16);
         border-radius: 50%;
-        padding: rem(3) rem(7);
         margin-#{$right}: rem(8);
-        font-size: rem(12);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+      }
+
+      &::after {
+        content: "!";
+        color: $aura-spc-checkout-block-bg;
+        position: absolute;
+        #{$left}: rem(6);
+        top: rem(1);
         font-weight: 700;
+
+        html[lang=ar] & {
+          top: rem(-1);
+        }
       }
 
       .points-earned-with-purchase {

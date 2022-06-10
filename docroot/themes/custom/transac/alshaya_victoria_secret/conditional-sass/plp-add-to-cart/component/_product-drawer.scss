@@ -1,0 +1,11 @@
+.product-drawer {
+  &-content-wrapper {
+    .alshayaSelect {
+      &__control {
+        @include breakpoint($only-mobile) {
+          min-width: 100%;
+        }
+      }
+    }
+  }
+}

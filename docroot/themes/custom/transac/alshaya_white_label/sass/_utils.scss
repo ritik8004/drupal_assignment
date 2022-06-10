@@ -660,3 +660,19 @@ body {
 
   @return $remValue;
 }
+
+// Online Booking Delivery Schedule Block Icons
+@mixin online-booking-icon($icon, $width: 18, $height: 18) {
+  content: '';
+  position: relative;
+  display: inline-block;
+  min-width: rem($width);
+  min-height: rem($height);
+  margin-#{$right}: rem(14);
+  align-self: flex-start;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('#{$base_theme_img_directory_path}/icons/#{$icon}');
+
+  @content;
+}

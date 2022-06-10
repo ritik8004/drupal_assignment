@@ -14,7 +14,7 @@
       box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.24);
       border: none;
       color: $aura-order-confirmation-points-tooltip-txt;
-      bottom: 1.75rem;
+      bottom: rem(32);
       #{$left}: 50%;
       transform: translateX(-50%);
 
@@ -28,7 +28,27 @@
 
       &::before,
       &::after {
-        display: none;
+        border-top-color: $aura-order-confirmation-points-tooltip-bg;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: rem(6);
+        }
+
+        @include breakpoint($only-mobile) {
+          margin-#{$left}: rem(50);
+        }
+
+        html[lang=ar] & {
+          left: 10%;
+
+          @include breakpoint($tablet) {
+            left: 40%;
+          }
+
+          @include breakpoint($desktop) {
+            left: 50%;
+          }
+        }
       }
     }
 
@@ -40,10 +60,122 @@
   }
 }
 
+.loyalty-club-details-wrapper {
+  .tooltip-anchor {
+    .tooltip-box {
+      transform: translateX(-75%);
+
+      &::before,
+      &::after {
+        @include breakpoint($tablet) {
+          left: 75%;
+        }
+      }
+
+      html[lang=ar] & {
+        transform: translateX(80%);
+
+        &::before,
+        &::after {
+          @include breakpoint($tablet) {
+            left: 10%;
+          }
+
+          @include breakpoint($desktop) {
+            left: 20%;
+          }
+        }
+      }
+    }
+  }
+
+  .aura-loyalty-benefits-row {
+    .tooltip-anchor {
+      .tooltip-box {
+        transform: translateX(-55%);
+
+        &::before,
+        &::after {
+          left: 20%;
+
+          @include breakpoint($tablet) {
+            left: 55%;
+          }
+        }
+
+        html[lang=ar] & {
+          transform: translateX(50%);
+
+          &::before,
+          &::after {
+            left: 50%;
+
+            @include breakpoint($tablet) {
+              left: 40%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.aura-card-linked-verified-wrapper {
+  .aura-points-on-hold {
+    .tooltip-anchor {
+      .tooltip-box {
+        &::before,
+        &::after {
+          @include breakpoint($only-tablet) {
+            margin-#{$left}: rem(5);
+          }
+
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: rem(-13);
+          }
+
+          html[lang=ar] & {
+            left: 50%;
+
+            @include breakpoint($only-mobile) {
+              left: 50%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.aura-pdp-points-section {
+  .tooltip-anchor {
+    .tooltip-box {
+      html[lang=ar] & {
+        transform: translateX(0);
+      }
+    }
+  }
+}
+
 .spc-aura-checkout-rewards-block {
   .block-content .tooltip-anchor .tooltip-box {
     @include breakpoint($only-mobile) {
       #{$left}: -54%;
+      bottom: rem(32);
+      transform: translateX(-75%);
+
+      html[lang=ar] & {
+        left: rem(-10);
+        right: unset;
+        transform: none;
+      }
+    }
+  }
+
+
+  .points-expiring {
+    @include breakpoint($only-mobile) {
+      display: flex;
     }
   }
 }

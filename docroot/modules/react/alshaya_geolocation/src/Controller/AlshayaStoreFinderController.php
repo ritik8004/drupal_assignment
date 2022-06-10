@@ -52,14 +52,12 @@ class AlshayaStoreFinderController extends ControllerBase {
    * Store Finder controller.
    */
   public function store() {
-    // For non-transac.
+    $labels = $this->storeUtility->storeLabels();
+    // Site specific libraries.
     if ($this->installProfile == 'alshaya_non_transac') {
-      $labels = $this->storeUtility->storeLabels(FALSE);
       $libraries = $this->storeUtility->storeLibraries(FALSE);
     }
     else {
-      // For transac.
-      $labels = $this->storeUtility->storeLabels();
       $libraries = $this->storeUtility->storeLibraries();
     }
     $libraries[] = 'alshaya_geolocation/alshaya-store-finder';
@@ -79,14 +77,12 @@ class AlshayaStoreFinderController extends ControllerBase {
    * Store finder list controller.
    */
   public function storeList() {
-    // For non-transac.
+    $labels = $this->storeUtility->storeLabels();
+    // Site specific libraries.
     if ($this->installProfile == 'alshaya_non_transac') {
-      $labels = $this->storeUtility->storeLabels(FALSE);
       $libraries = $this->storeUtility->storeLibraries(FALSE);
     }
     else {
-      // For transac.
-      $labels = $this->storeUtility->storeLabels();
       $libraries = $this->storeUtility->storeLibraries();
     }
     $libraries[] = 'alshaya_geolocation/alshaya-store-finder-list';

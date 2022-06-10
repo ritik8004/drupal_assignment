@@ -118,12 +118,16 @@
     }
 
     &:not(.normal) > div {
-      &:nth-child(3) {
+      &:nth-child(2) {
         color: $aura-loyalty-club-hello-text;
       }
 
-      &:nth-child(4) {
+      &:nth-child(3) {
         color: $aura-loyalty-club-stars-text;
+      }
+
+      &:nth-child(4) {
+        color: $aura-loyalty-club-vip-text;
       }
 
       &:nth-child(5) {
@@ -171,6 +175,28 @@
           width: 2.375rem;
           height: 2.375rem;
           font-size: 2.375rem;
+        }
+      }
+    }
+
+    &.tick-row {
+      & > div {
+        &:nth-child(2) {
+          @include breakpoint($upto-desktop) {
+            color: $aura-loyalty-club-normal-text;
+          }
+        }
+
+        &:nth-child(3) {
+          color: $aura-loyalty-club-hello-text;
+        }
+
+        &:nth-child(4) {
+          color: $aura-loyalty-club-stars-text;
+        }
+
+        &:nth-child(5) {
+          color: $aura-loyalty-club-vip-text;
         }
       }
     }
