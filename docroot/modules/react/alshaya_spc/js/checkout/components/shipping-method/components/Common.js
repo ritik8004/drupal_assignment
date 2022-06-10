@@ -3,6 +3,7 @@ import OnlineBooking from '../../online-booking';
 import PriceElement from '../../../../utilities/special-price/PriceElement';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import DefaultShippingElement from './DefaultShippingElement';
+import IctDeliveryInformation from '../../online-booking/ict-delivery-information';
 
 const ShippingMethodCommon = ({
   cart, refreshCart, method, selected, shippingInfoUpdated,
@@ -10,6 +11,17 @@ const ShippingMethodCommon = ({
   let price = Drupal.t('FREE');
   if (method.amount > 0) {
     price = <PriceElement amount={method.amount} />;
+  }
+
+  // Check if the ict feature is enabled.
+  if (selected
+    && hasValue(method.extension_attributes)
+    && hasValue(method.extension_attributes.ict)) {
+    // @todo Pass ictDate variables to component from MDC.
+    const ictDate = '29th May 2022';
+    return (
+      <IctDeliveryInformation deliveryMethod="home_delivery" date={ictDate} />
+    );
   }
 
   // Check if the order booking feature is enabled.
