@@ -12,12 +12,7 @@
 function getTypeFromReturnItem(returnItem) {
   const {
     is_online: isOnline,
-    qty_rejected: qtyRejected,
   } = returnItem.returnInfo.extension_attributes;
-  // For rejected item, check if `qty_rejected` is valid.
-  if (qtyRejected > 0) {
-    return 'rejected';
-  }
   // Based on the `is_online` flag we will identify the type of return.
   if (isOnline) {
     return 'online';
