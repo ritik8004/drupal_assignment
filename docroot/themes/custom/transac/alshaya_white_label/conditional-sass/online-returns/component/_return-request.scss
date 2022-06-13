@@ -193,6 +193,7 @@
 
           @include breakpoint($tablet) {
             padding-top: 1.5rem;
+            flex-basis: rem(116);
           }
 
           @include breakpoint($desktop) {
@@ -221,6 +222,7 @@
           @include breakpoint($tablet) {
             padding: 1.5rem;
             flex-basis: 12.5rem;
+            word-break: break-word;
           }
 
           @include breakpoint($desktop) {
