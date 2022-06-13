@@ -54,7 +54,7 @@ class ReturnedItemsListing extends React.Component {
   getReturnsByType = () => {
     const { returns } = this.props;
     const groupedItems = {};
-    const rejectedItems = {};
+    const rejectedItems = [];
 
     // Filter out all the closed & picked returns.
     const updateResults = returns.filter((item) => isReturnClosed(item.returnInfo)
@@ -67,7 +67,7 @@ class ReturnedItemsListing extends React.Component {
         if (qtyRejected > 0) {
           // Initialize the empty array for rejected key.
           if (!rejectedItems[returnItem.returnInfo.increment_id]) {
-            rejectedItems[returnItem.returnInfo.increment_id] = {};
+            rejectedItems[returnItem.returnInfo.increment_id] = [];
           }
           rejectedItems[returnItem.returnInfo.increment_id][item.order_item_id] = returnItem;
         }
