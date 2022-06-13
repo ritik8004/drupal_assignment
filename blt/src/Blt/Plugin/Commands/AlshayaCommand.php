@@ -4,8 +4,6 @@ namespace Alshaya\Blt\Plugin\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Consolidation\AnnotatedCommand\CommandData;
-use AcquiaCloudApi\Connector\Client;
-use AcquiaCloudApi\Connector\Connector;
 
 /**
  * This class defines hooks.
@@ -84,49 +82,6 @@ class AlshayaCommand extends BltTasks {
     if ($failed) {
       throw new \Exception('Please fix failing tests.');
     }
-  }
-
-  /**
-   * Get cloud deployment task details for application.
-   *
-   * @param string $applicationUuid
-   *   Acquia Cloud application UUID.
-   * @param string $tag
-   *   Tag we need to search for.
-   * @param string $status
-   *   Status of deployment task.
-   *
-   * @command cloud:get-application-task
-   *
-   * @description Get cloud deployment task details for application with tag.
-   *
-   * @throws \Exception
-   */
-  public function getCloudTask($applicationUuid, $tag, $status = 'in_progress') {
-    $_clientId = '';
-    $_clientSecret = '';
-    $api_cred_file = getenv('HOME') . '/acquia_cloud_api_creds.php';
-    if (!file_exists($api_cred_file)) {
-      throw new \Exception('Acquia cloud cred file acquia_cloud_api_creds.php missing at home directory.');
-    }
-    require $api_cred_file;
-    $config = [
-      'key' => $_clientId,
-      'secret' => $_clientSecret,
-    ];
-
-    $connector = new Connector($config);
-    $client = Client::factory($connector);
-    $client->addQuery('filter', "status=$status");
-    // @todo Create endpoint for hosting tasks in https://github.com/typhonius/acquia-php-sdk-v2.
-    $tasks = $client->request(
-      'GET',
-      "/applications/$applicationUuid/hosting-tasks",
-    );
-    $task = array_filter($tasks, function ($value) use ($tag) {
-      return strpos($value->description, "refs/tags/$tag");
-    });
-    echo (integer) !empty($task);
   }
 
 }
