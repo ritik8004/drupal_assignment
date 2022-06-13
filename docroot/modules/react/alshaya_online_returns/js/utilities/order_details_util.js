@@ -10,8 +10,11 @@
  *   A string to tell the type of return.
  */
 function getTypeFromReturnItem(returnItem) {
+  const {
+    is_online: isOnline,
+  } = returnItem.returnInfo.extension_attributes;
   // Based on the `is_online` flag we will identify the type of return.
-  if (returnItem.returnInfo.extension_attributes.is_online) {
+  if (isOnline) {
     return 'online';
   } else {
     return 'store';
