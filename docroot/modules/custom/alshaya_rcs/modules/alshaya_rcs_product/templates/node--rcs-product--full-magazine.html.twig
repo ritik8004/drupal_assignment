@@ -23,9 +23,9 @@
     {% else %}
       <div id="product-zoom-container"></div>
     {% endif %}
-    {% if content.wishlist_enabled %}
+    {% if content.wishlist %}
       <div class="wishlist-pdp-wrapper mobile-only">
-        {{ content.wishlist_enabled }}
+        {{ content.wishlist }}
       </div>
     {% endif %}
   </div>
@@ -115,9 +115,9 @@
               {{ content.sharethis }}
             </div>
           </div>
-          {% if content.wishlist_enabled %}
+          {% if content.wishlist %}
             <div class="wishlist-pdp-wrapper desktop-only">
-              {{ content.wishlist_enabled }}
+              {{ content.wishlist }}
             </div>
           {% endif %}
           {% if quantity_limit_enabled == true %}

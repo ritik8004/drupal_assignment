@@ -18,7 +18,7 @@ const renderWishListButton = (
 ) => {
   const selectedElements = document.getElementsByClassName(elementSelector);
   Array.from(selectedElements).forEach((element) => {
-    // Check if V3 is enabled.
+    // Get sku from closest article element.
     const sku = element.closest('article').getAttribute('data-sku');
     if (sku && sku !== null) {
       ReactDOM.render(
@@ -53,8 +53,9 @@ const handleMatchBackLoad = () => {
   renderWishListButton('wishlist-pdp-matchback', 'matchback');
 };
 
-// Check if the wishlist element on PDP exist and
+// Check if the wishlist element on PDP exists and
 // data-sku is present, then render the wishlist button.
+// For V3 we wait for alshayaAddToCartLoaded event to render wishlist.
 if (globalThis.rcsPhGetPageType() === null) {
   renderWishListButton('wishlist-pdp-full', 'pdp');
 }

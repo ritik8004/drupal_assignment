@@ -45,7 +45,7 @@ class WishlistButton extends React.Component {
     if (contextArray.includes(context)) {
       // Set title for sku product on page load.
       const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-      const productInfo = window.commerceBackend.getProductData(sku, productKey, false);
+      const productInfo = window.commerceBackend.getProductData(sku, productKey, true);
       this.setState({
         title: productInfo.cart_title ? productInfo.cart_title : '',
       });
