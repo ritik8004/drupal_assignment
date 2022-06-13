@@ -102,7 +102,7 @@ export default class SharePopup extends React.Component {
                 className="email-share-link"
                 onClick={(e) => this.emailClickHandler(e)}
               >
-                {getStringMessage('wishlist_email_button')}
+                {Drupal.t('Email', {}, { context: 'wishlist' })}
               </button>
               <ConditionalView condition={!hideCopyLinkText}>
                 {copyLinkStatus
@@ -110,7 +110,7 @@ export default class SharePopup extends React.Component {
                     <span
                       className="copy-share-link link-copied"
                     >
-                      {getStringMessage('wishlist_link_copied')}
+                      {Drupal.t('Link Copied', {}, { context: 'wishlist' })}
                     </span>
                   )
                   : (
@@ -119,7 +119,7 @@ export default class SharePopup extends React.Component {
                       className="copy-share-link"
                       onClick={this.copyShareLink}
                     >
-                      {getStringMessage('wishlist_link_copy')}
+                      {Drupal.t('Copy Link', {}, { context: 'wishlist' })}
                     </button>
                   )}
               </ConditionalView>
