@@ -510,6 +510,7 @@
         width: 100vw;
         top: 0;
         overflow: auto;
+        transform: unset;
 
         #aura-mobile-header-shop {
           .popup-overlay.aura-modal-form {
