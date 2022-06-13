@@ -14,8 +14,36 @@ class ReturnedItemsListing extends React.Component {
       return Drupal.t('Store Returns', {}, { context: 'online_returns' });
     }
 
+    if (type === 'rejected') {
+      return Drupal.t('Rejected Items', {}, { context: 'online_returns' });
+    }
+
     return '';
   };
+
+  getReturnedItemsTitle = (type) => {
+    if (type === 'online' || type === 'store') {
+      return Drupal.t('Returned Items', {}, { context: 'online_returns' });
+    }
+
+    if (type === 'rejected') {
+      return Drupal.t('Online Returns', {}, { context: 'online_returns' });
+    }
+
+    return '';
+  }
+
+  // To filter out items that are rejected.
+  getRejectedFilteredItems = (returnItem, rejectedItems) => {
+    // Storing in a separate variable as function param cannot be updated.
+    const updatedReturnItem = returnItem;
+
+    updatedReturnItem.items = returnItem.items.filter((item) => !(
+      hasValue(rejectedItems[returnItem.returnInfo.increment_id])
+      && hasValue(rejectedItems[returnItem.returnInfo.increment_id][item.item_id])));
+
+    return updatedReturnItem;
+  }
 
   /**
    * Group the store and online return items.
@@ -26,19 +54,49 @@ class ReturnedItemsListing extends React.Component {
   getReturnsByType = () => {
     const { returns } = this.props;
     const groupedItems = {};
+    const rejectedItems = [];
 
     // Filter out all the closed & picked returns.
     const updateResults = returns.filter((item) => isReturnClosed(item.returnInfo)
       && isReturnPicked(item.returnInfo));
 
-    updateResults.forEach((item) => {
-      const itemReturnType = getTypeFromReturnItem(item);
+    updateResults.forEach((returnItem) => {
+      // Filter out the items which are rejected.
+      returnItem.returnInfo.items.forEach((item) => {
+        const { qty_rejected: qtyRejected } = item.extension_attributes;
+        if (qtyRejected > 0) {
+          // Initialize the empty array for rejected key.
+          if (!rejectedItems[returnItem.returnInfo.increment_id]) {
+            rejectedItems[returnItem.returnInfo.increment_id] = [];
+          }
+          rejectedItems[returnItem.returnInfo.increment_id][item.order_item_id] = returnItem;
+        }
+      });
+
+      const itemReturnType = getTypeFromReturnItem(returnItem);
       // Check if return type is initialized or not.
       if (!groupedItems[itemReturnType]) {
         groupedItems[itemReturnType] = [];
       }
       // Push the item in the return type group.
-      groupedItems[itemReturnType].push(item);
+      groupedItems[itemReturnType].push(this.getRejectedFilteredItems(
+        { ...returnItem }, rejectedItems,
+      ));
+
+      // Build the rejected item list.
+      returnItem.items.forEach((item, index) => {
+        if (hasValue(rejectedItems[returnItem.returnInfo.increment_id])
+          && rejectedItems[returnItem.returnInfo.increment_id][item.item_id]) {
+          // Store the rejected items in grouped items.
+          if (!groupedItems.rejected) {
+            groupedItems.rejected = [];
+          }
+
+          groupedItems.rejected[index] = { ...returnItem };
+          groupedItems.rejected[index].items = [];
+          groupedItems.rejected[index].items.push({ ...returnItem.items[index] });
+        }
+      });
     });
 
     return groupedItems;
@@ -60,7 +118,7 @@ class ReturnedItemsListing extends React.Component {
           <div key={index} className="items-wrapper">
             <div className="title-wrapper">
               <span>
-                {Drupal.t('Returned Items', {}, { context: 'online_returns' })}
+                {this.getReturnedItemsTitle(index)}
                 {' '}
                 {'-'}
                 {' '}
@@ -72,6 +130,7 @@ class ReturnedItemsListing extends React.Component {
               <ReturnedItems
                 key={returnItem.returnInfo.increment_id}
                 returnData={returnItem}
+                returnType={index}
               />
             ))}
           </div>

@@ -5,20 +5,23 @@ import ReturnIndividualItem from '../../../return-request/components/return-indi
 
 const ReturnedItems = ({
   returnData,
+  returnType,
 }) => {
   const returnStatus = Drupal.cleanCssIdentifier(returnData.returnInfo.status);
   return (
-    <ConditionalView condition={hasValue(returnData)}>
+    <ConditionalView condition={hasValue(returnData) && hasValue(returnData.items)}>
       <div key={returnData.returnInfo.increment_id} className="return-items-wrapper">
-        <div className="return-status-wrapper">
-          <div className="return-status">
-            <span className={`status-label ${returnStatus}`}>{returnData.returnInfo.extension_attributes.customer_status}</span>
-            <span className="status-message">
-              {' - '}
-              {returnData.returnInfo.extension_attributes.description}
-            </span>
+        { returnType !== 'rejected' && (
+          <div className="return-status-wrapper">
+            <div className="return-status">
+              <span className={`status-label ${returnStatus}`}>{returnData.returnInfo.extension_attributes.customer_status}</span>
+              <span className="status-message">
+                {' - '}
+                {returnData.returnInfo.extension_attributes.description}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
         <div className="return-id">
           {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
         </div>
