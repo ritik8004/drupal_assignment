@@ -195,6 +195,10 @@ function alshaya_media_assets_alshaya_acm_product_gallery_alter(array &$gallery,
       $gallery['#label'] = $sku->label();
 
       if ($plp_hover_image) {
+        if (empty($plp_hover_image['#attributes'])) {
+          $plp_hover_image['#attributes'] = [];
+        }
+        $plp_hover_image['#attributes']['loading'] = 'lazy';
         $gallery['#hoverImage'] = $plp_hover_image;
       }
     }
