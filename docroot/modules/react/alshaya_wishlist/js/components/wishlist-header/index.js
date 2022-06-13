@@ -16,10 +16,12 @@ import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isDesktop } from '../../../../js/utilities/display';
 
-/**
- * Flag used to check if backend api for wishlist items is already called.
- */
+// Flag used to check if backend api for wishlist items is already called.
 window.loadWishListFromBackend = window.loadWishListFromBackend || false;
+
+// Flag used to check if wishlist data are already loaded from backend and
+// stored data in local storage.
+window.wishListLoadedFromBackend = window.wishListLoadedFromBackend || false;
 
 export default class WishlistHeader extends React.Component {
   constructor(props) {
@@ -123,9 +125,6 @@ export default class WishlistHeader extends React.Component {
           || (wishListData === null
           || (typeof wishListData === 'object'
           && Object.keys(wishListData).length === 0))) {
-          // First clean the existing data in storage.
-          addWishListInfoInStorage({});
-
           // Load wishlist information from the magento backend, if wishlist
           // data is empty in local storage for authenticate users. First check
           // if wishlist is available for the customer in backend.
@@ -171,6 +170,10 @@ export default class WishlistHeader extends React.Component {
       return;
     }
     window.loadWishListFromBackend = true;
+
+    // First clean the existing data in storage.
+    addWishListInfoInStorage({});
+
     getWishlistFromBackend().then((response) => {
       let wishListItemCount = 0;
       if (hasValue(response.data.items)) {
@@ -202,6 +205,13 @@ export default class WishlistHeader extends React.Component {
         },
       });
       document.dispatchEvent(getWishlistFromBackendSuccess);
+
+      // Alongside dispatching an success event above, let's set the global
+      // variable flag to true as well. So other components like wishlist
+      // product list, if rendered lately, can utilise this flag to fetch data
+      // from the local storage as well instead of completing relying on
+      // `getWishlistFromBackendSuccess` success event.
+      window.wishListLoadedFromBackend = true;
     });
   };
 
