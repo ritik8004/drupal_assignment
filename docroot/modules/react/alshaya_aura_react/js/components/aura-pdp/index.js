@@ -72,11 +72,10 @@ class AuraPDP extends React.Component {
       selector = document.querySelector('#drupal-modal .special--price .price-amount') || document.querySelector('#drupal-modal .price-amount');
     }
 
-    const productPoints = (selector !== null)
-      ? Math.round(selector.innerText.replace(/,/g, ''))
-      : 0;
+    // Fetch Product price using selector.
+    const productPrice = (selector !== null) ? selector.innerText.replace(/,/g, '') : 0;
 
-    return productPoints;
+    return getPriceToPoint(productPrice);
   };
 
   loadModalAuraPoints = () => {
