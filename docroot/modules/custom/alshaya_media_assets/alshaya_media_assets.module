@@ -72,14 +72,18 @@ function alshaya_media_assets_alshaya_acm_switch_magento_configs_alter(array &$c
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_media_assets_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
-  // Process assets data & create attributes which are needed for sorting
-  // the assets while displaying them.
-  // phpcs:disable
+  // Suppress the unserialize class warning.
+  // @codingStandardsIgnoreLine
   $existing_assets = !empty($existing_data['attr_assets'])
     ? unserialize($existing_data['attr_assets'][0]['value'])
     : [];
-  // phpcs:enable
 
+  if (!is_array($existing_assets) || empty($existing_assets)) {
+    $existing_assets = [];
+  }
+
+  // Process assets data & create attributes which are needed for sorting
+  // the assets while displaying them.
   $sku->get('attr_assets')->setValue(_alshaya_media_assets_acq_sku_process_assets($product, $existing_assets));
 }
 
@@ -94,10 +98,10 @@ function alshaya_media_assets_acq_sku_product_sku_alter(SKU $sku, array $product
  * @return string
  *   Serialized & processed assets.
  */
-function _alshaya_media_assets_acq_sku_process_assets(array $product, array $existing_assets) {
+function _alshaya_media_assets_acq_sku_process_assets(array $product, array $existing_assets = []) {
   $existing_assets_mapping = [];
 
-  foreach ($existing_assets ?? [] as $key => $asset) {
+  foreach ($existing_assets ?? [] as $asset) {
     if (empty($asset['fid'])) {
       continue;
     }

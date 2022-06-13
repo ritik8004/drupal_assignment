@@ -123,18 +123,20 @@ function alshaya_hm_images_alshaya_acm_product_light_product_data_alter(SKU $sku
  * Implements hook_alshaya_acm_product_pdp_swath_type_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
+  /** @var \Drupal\alshaya_hm_images\Services\HmImagesHelper $hm_images_helper */
+  $hm_images_helper = \Drupal::service('alshaya_hm_images.images_helper');
+  $swatch_type = $hm_images_helper->getSkuSwatchType($sku);
+
   /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_asset_manager */
   $sku_asset_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
-  $swatch_type = $sku_asset_manager->getSkuSwatchType($sku);
 
-  $assets = [];
   if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
     $assets = $sku_asset_manager->getSkuAssets($variant_sku, 'swatch');
-  }
 
-  if (!empty($assets)) {
-    $url = ImageStyle::load('pdp_gallery_thumbnail')->buildUrl($assets[0]['drupal_uri']);
-    $color_options_list[key($color_options_list)]['display_value'] = '<img loading="lazy" src="' . file_url_transform_relative($url) . '">';
-    $color_options_list[key($color_options_list)]['swatch_type'] = $swatch_type;
+    if (!empty($assets)) {
+      $url = ImageStyle::load('pdp_gallery_thumbnail')->buildUrl($assets[0]['drupal_uri']);
+      $color_options_list[key($color_options_list)]['display_value'] = '<img loading="lazy" src="' . file_url_transform_relative($url) . '">';
+      $color_options_list[key($color_options_list)]['swatch_type'] = $swatch_type;
+    }
   }
 }
