@@ -19,7 +19,7 @@ const ReturnRefundMethod = ({
           <div className="method-listing-label">
             { Drupal.t('Your refund will be credited back to the following payment methods.', {}, { context: 'online_returns' }) }
           </div>
-          <CardDetails paymentDetails={paymentDetails} />
+          <CardDetails paymentDetails={paymentDetails} showCardIcon />
           <div className="refund-message">
             { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
           </div>
