@@ -168,11 +168,25 @@ body[class*="return-confirmation"] {
         }
       }
 
+      .refund-method-wrapper {
+        .method-wrapper {
+          margin-bottom: rem(4);
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+
       .return-confirmation-address {
         @include breakpoint($only-mobile) {
           margin-bottom: 1rem;
         }
       }
+    }
+
+    .bold-text {
+      font-family: $alshaya-thin;
     }
 
     .return-note-label {
@@ -269,11 +283,23 @@ body[class*="return-confirmation"] {
         padding-#{$left}: 1.5rem;
       }
     }
+
+    .item-price,
+    .item-total-price {
+      .price-currency.suffix {
+        margin-#{$right}: rem(25);
+
+        @include breakpoint($tablet) {
+          margin-#{$right}: rem(7);
+        }
+
+        @include breakpoint($desktop) {
+          margin-#{$right}: rem(9);
+        }
+      }
+    }
   }
 
-  .return-id-info,
-  .refund-method-wrapper,
-  .return-confirmation-address,
   .order__details--summary,
   .item-price,
   .item-total-price {
