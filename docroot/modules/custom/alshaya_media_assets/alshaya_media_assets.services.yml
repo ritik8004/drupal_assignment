@@ -1,0 +1,47 @@
+services:
+  cache.pims_files:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [pims_files]
+
+  alshaya_media_assets.skuassetsmanager:
+    class: Drupal\alshaya_media_assets\Services\SkuAssetManager
+    arguments:
+      - '@config.factory'
+      - '@current_route_match'
+      - '@alshaya_acm_product.skumanager'
+      - '@plugin.manager.sku'
+      - '@entity_type.manager'
+      - '@module_handler'
+      - '@cache.pims_files'
+      - '@http_client'
+      - '@logger.factory'
+      - '@datetime.time'
+      - '@file.usage'
+      - '@lock.persistent'
+      - '@cache.media_file_mapping'
+      - '@file_system'
+
+  alshaya_media_assets.route_subscriber:
+    class: Drupal\alshaya_media_assets\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  alshaya_media_assets.product_info_requested_event:
+    class: Drupal\alshaya_media_assets\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_media_assets.skuassetsmanager'
+    tags:
+      - { name: 'event_subscriber' }
+
+  alshaya_media_assets.product_updated_event:
+    class: Drupal\alshaya_media_assets\EventSubscriber\ProductUpdatedEventSubscriber
+    arguments:
+      - '@entity_type.manager'
+      - '@logger.factory'
+      - '@file.usage'
+      - '@alshaya_media_assets.skuassetsmanager'
+    tags:
+      - { name: 'event_subscriber' }

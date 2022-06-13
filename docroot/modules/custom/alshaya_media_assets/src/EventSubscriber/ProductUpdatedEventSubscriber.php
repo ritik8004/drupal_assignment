@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_hm_images\EventSubscriber;
+namespace Drupal\alshaya_media_assets\EventSubscriber;
 
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -8,12 +8,12 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\alshaya_hm_images\SkuAssetManager;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 
 /**
  * Class Product Updated Event Subscriber.
  *
- * @package Drupal\alshaya_hm_images\EventSubscriber
+ * @package Drupal\alshaya_media_assets\EventSubscriber
  */
 class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
 
@@ -41,7 +41,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   /**
    * SKU Assets Manager.
    *
-   * @var \Drupal\alshaya_hm_images\SkuAssetManager
+   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManager
    */
   private $skuAssetsManager;
 
@@ -54,7 +54,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Logger Factory.
    * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
    *   File usage.
-   * @param \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager
+   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager
    *   SKU Assets Manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
@@ -62,7 +62,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
                               FileUsageInterface $file_usage,
                               SkuAssetManager $sku_assets_manager) {
     $this->entityTypeManager = $entity_type_manager;
-    $this->logger = $logger_factory->get('alshaya_hm_images');
+    $this->logger = $logger_factory->get('alshaya_media_assets');
     $this->fileUsage = $file_usage;
     $this->skuAssetsManager = $sku_assets_manager;
   }

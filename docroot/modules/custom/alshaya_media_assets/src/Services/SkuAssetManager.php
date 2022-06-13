@@ -1,12 +1,10 @@
 <?php
 
-namespace Drupal\alshaya_hm_images;
+namespace Drupal\alshaya_media_assets\Services;
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuConfig;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -37,6 +35,11 @@ class SkuAssetManager {
   const LP_DEFAULT_ANGLE = 'NO_ANGLE';
 
   /**
+   * Constant for RGB swatch display type.
+   */
+  const LP_SWATCH_RGB = 'RGB';
+
+  /**
    * Constant for default weight in case no weight has been set via config.
    */
   const LP_DEFAULT_WEIGHT = 100;
@@ -45,11 +48,6 @@ class SkuAssetManager {
    * Constant for default swatch display type.
    */
   const LP_SWATCH_DEFAULT = 'RGB';
-
-  /**
-   * Constant for RGB swatch display type.
-   */
-  const LP_SWATCH_RGB = 'RGB';
 
   /**
    * The Config factory service.
@@ -94,13 +92,6 @@ class SkuAssetManager {
   protected $moduleHandler;
 
   /**
-   * Product Cache Manager.
-   *
-   * @var \Drupal\alshaya_acm_product\Service\ProductCacheManager
-   */
-  protected $productCacheManager;
-
-  /**
    * PIMS ID <=> FID cache.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -113,13 +104,6 @@ class SkuAssetManager {
    * @var \GuzzleHttp\Client
    */
   protected $httpClient;
-
-  /**
-   * Config alshaya_hm_images.settings.
-   *
-   * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
-   */
-  protected $hmImageSettings;
 
   /**
    * Logger.
@@ -185,8 +169,6 @@ class SkuAssetManager {
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module Handler service object.
-   * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
-   *   Product Cache Manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_pims_files
    *   PIMS ID <=> Drupal File URI cache.
    * @param \GuzzleHttp\Client $http_client
@@ -210,7 +192,6 @@ class SkuAssetManager {
                               SKUPluginManager $skuPluginManager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ModuleHandlerInterface $moduleHandler,
-                              ProductCacheManager $product_cache_manager,
                               CacheBackendInterface $cache_pims_files,
                               Client $http_client,
                               LoggerChannelFactoryInterface $logger_factory,
@@ -226,7 +207,6 @@ class SkuAssetManager {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->moduleHandler = $moduleHandler;
-    $this->productCacheManager = $product_cache_manager;
     $this->cachePimsFiles = $cache_pims_files;
     $this->httpClient = $http_client;
     $this->logger = $logger_factory->get('SkuAssetManager');
@@ -234,21 +214,11 @@ class SkuAssetManager {
     $this->fileUsage = $file_usage;
     $this->lock = $lock;
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
-
-    $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
     $this->fileSystem = $file_system;
   }
 
   /**
-   * Get assets for SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   *
-   * @return array
-   *   Get assets for SKU.
-   *
-   * @throws \Exception
+   * {@inheritDoc}
    */
   public function getAssets(SKU $sku) {
     $assets = unserialize($sku->get('attr_assets')->getString());
@@ -358,8 +328,9 @@ class SkuAssetManager {
       return NULL;
     }
 
-    $base_url = $this->hmImageSettings->get('pims_base_url');
-    $pims_directory = $this->hmImageSettings->get('pims_directory');
+    $image_settings = $this->getImageSettings();
+    $base_url = $image_settings->get('pims_base_url');
+    $pims_directory = $image_settings->get('pims_directory');
 
     // Prepare the directory path.
     $directory = ($asset_type === 'video')
@@ -611,10 +582,11 @@ class SkuAssetManager {
     }
 
     $file = NULL;
+    $image_settings = $this->getImageSettings();
     if (isset($asset['pims_' . $type]) && is_array($asset['pims_' . $type])) {
       $file = $this->downloadPimsAsset($asset['pims_' . $type], $sku, $type);
     }
-    elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
+    elseif ($image_settings->get('fallback_to_liquidpixel')) {
       $file = $this->downloadLiquidPixelImage($asset, $sku);
     }
 
@@ -639,17 +611,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Utility function to construct CDN url for the asset.
-   *
-   * @param mixed $sku
-   *   SKU text or full entity object.
-   * @param string $page_type
-   *   Page on which the asset needs to be rendered.
-   * @param array $avoid_assets
-   *   (optional) Array of AssetId to avoid.
-   *
-   * @return array
-   *   Array of urls to sku assets.
+   * {@inheritDoc}
    */
   public function getSkuAssets($sku, $page_type, array $avoid_assets = []) {
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
@@ -693,7 +655,8 @@ class SkuAssetManager {
    *   Asset url.
    */
   private function getSkuAssetUrlLiquidPixel(array $asset) {
-    $base_url = $this->hmImageSettings->get('base_url');
+    $image_settings = $this->getImageSettings();
+    $base_url = $image_settings->get('base_url');
     $asset_attributes = $this->getAssetAttributes($asset, 'pdp_fullscreen');
     $query_options = $this->getAssetQueryString(
       $asset_attributes['set'],
@@ -745,22 +708,22 @@ class SkuAssetManager {
    * @return array
    *   Array of asset attributes.
    */
-  protected function getAssetAttributes(array $asset, $location_image) {
-    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
-    $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
+  private function getAssetAttributes(array $asset, $location_image) {
+    $image_settings = $this->getImageSettings();
+    $image_location_identifier = $image_settings->get('style_identifiers')[$location_image];
 
     if (isset($asset['is_old_format']) && $asset['is_old_format']) {
       return [['url' => $asset['Url']], $image_location_identifier];
     }
     else {
-      $origin = $alshaya_hm_images_settings->get('origin');
+      $origin = $image_settings->get('origin');
 
       $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
       $set['origin'] = "origin[" . $origin . "]";
       $set['type'] = "type[" . $asset['sortAssetType'] . "]";
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
 
-      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] . "]";
+      $set['res'] = "res[" . $image_settings->get('dimensions')[$location_image]['desktop'] . "]";
     }
 
     return [
@@ -780,12 +743,11 @@ class SkuAssetManager {
    * @return array
    *   Overridden config in context of the category product belongs to.
    */
-  public function overrideConfig($sku, $page_type) {
+  private function overrideConfig($sku, $page_type) {
     // @todo Check and remove this include.
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
-    $overrides = $alshaya_hm_images_settings->get('overrides');
+    $image_settings = $this->getImageSettings();
+    $overrides = $image_settings->get('overrides');
 
     // No further processing if overrides is empty.
     if (empty($overrides)) {
@@ -824,25 +786,15 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to sort based on angles.
-   *
-   * @param string $sku
-   *   SKU code for which the assets needs to be sorted on angles.
-   * @param string $page_type
-   *   Page on which the asset needs to be rendered.
-   * @param array $assets
-   *   Array of mixed asset types.
-   *
-   * @return array
-   *   Array of assets sorted by their asset types & angles.
+   * {@inheritDoc}
    */
   public function sortSkuAssets($sku, $page_type, array $assets) {
-    $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
+    $image_settings = $this->getImageSettings();
     // Fetch weights of asset types based on the pagetype.
-    $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
+    $sku_asset_type_weights = $image_settings->get('weights')[$page_type];
 
     // Fetch angle config.
-    $sort_angle_weights = $alshaya_hm_images_config->get('weights')['angle'];
+    $sort_angle_weights = $image_settings->get('weights')['angle'];
 
     // Check if there are any overrides for category this product page is
     // tagged with.
@@ -943,15 +895,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to filter out specific asset types from a list.
-   *
-   * @param array $assets
-   *   Array of assets with mixed asset types.
-   * @param string $asset_type
-   *   Asset type that needs to be filtered out.
-   *
-   * @return array
-   *   Array of assets matching the asset type.
+   * {@inheritDoc}
    */
   public function filterSkuAssetType(array $assets, $asset_type) {
     $filtered_assets = [];
@@ -966,17 +910,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to pull child sku assets.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Parent sku for which we pulling child assets.
-   * @param string $context
-   *   Page on which the asset needs to be rendered.
-   * @param array $avoid_assets
-   *   (optional) Array of AssetId to avoid.
-   *
-   * @return array
-   *   Array of sku child assets.
+   * {@inheritDoc}
    */
   public function getChildSkuAssets(SKU $sku, $context, array $avoid_assets = []) {
     $child_skus = $this->skuManager->getValidChildSkusAsString($sku);
@@ -990,13 +924,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to fetch swatch type for the sku.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Sku for which swatch type needs to be fetched.
-   *
-   * @return string
-   *   Swatch type for the sku.
+   * {@inheritDoc}
    */
   public function getSkuSwatchType(SKU $sku) {
     $swatch_type = self::LP_SWATCH_DEFAULT;
@@ -1019,66 +947,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to fetch list of color options supported by a parent SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Parent sku.
-   *
-   * @return array
-   *   Array of RGB color values keyed by article_castor_id.
-   */
-  public function getColorsForSku(SKU $sku) {
-    if ($sku->bundle() != 'configurable') {
-      return [];
-    }
-
-    if ($cache = $this->productCacheManager->get($sku, 'hm_colors_for_sku')) {
-      return $cache;
-    }
-
-    $combinations = $this->skuManager->getConfigurableCombinations($sku);
-    if (empty($combinations)) {
-      return [];
-    }
-
-    $article_castor_ids = [];
-    foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $skus) {
-      $child_sku_entity = NULL;
-      $color_attributes = [];
-
-      // Use only the first SKU for which we get color attributes.
-      foreach ($skus as $child_sku) {
-        // Show only for colors for which we have stock.
-        $child_sku_entity = SKU::loadFromSku($child_sku);
-
-        if ($child_sku_entity instanceof SKUInterface && $this->skuManager->isProductInStock($child_sku_entity)) {
-          $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
-          if ($color_attributes) {
-            break;
-          }
-        }
-      }
-
-      if ($child_sku_entity instanceof SKUInterface && $color_attributes) {
-        $article_castor_ids[$child_sku_entity->id()] = $color_attributes['attr_rgb_color'];
-      }
-    }
-
-    $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids);
-
-    return $article_castor_ids;
-  }
-
-  /**
-   * Helper function to get assets for a SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Parent Sku.
-   * @param string $page_type
-   *   Type of page.
-   *
-   * @return array|assets
-   *   Array of assets for the SKU.
+   * {@inheritDoc}
    */
   public function getAssetsForSku(SKU $sku, $page_type) {
     $assets = [];
@@ -1089,24 +958,6 @@ class SkuAssetManager {
       $assets = $this->getChildSkuAssets($sku, $page_type);
     }
     return $assets;
-  }
-
-  /**
-   * Helper function to get color label & rgb code for SKU.
-   *
-   * @param int $sku_id
-   *   Entity id for the SKU being processed.
-   *
-   * @return array
-   *   Associative array returning color label & code.
-   */
-  public function getColorAttributesFromSku($sku_id) {
-    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $query = \Drupal::database()->select('acq_sku_field_data', 'asfd');
-    $query->fields('asfd', ['attr_color_label', 'attr_rgb_color']);
-    $query->condition('id', $sku_id);
-    $query->condition('langcode', $current_langcode);
-    return $query->execute()->fetchAssoc();
   }
 
   /**
@@ -1142,13 +993,7 @@ class SkuAssetManager {
   }
 
   /**
-   * Helper function to get asset type.
-   *
-   * @param array $asset
-   *   Array of asset details.
-   *
-   * @return string
-   *   Asset type (video/image).
+   * {@inheritDoc}
    */
   public function getAssetType(array $asset) {
     $type = (strpos($asset['Data']['AssetType'], 'MovingMedia') !== FALSE)
@@ -1218,6 +1063,22 @@ class SkuAssetManager {
     };
 
     return $this->httpClient->get($url, $request_options);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSkuSwatch($sku) {}
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getImageSettings() {
+    static $image_settings = NULL;
+    $image_settings = is_null($image_settings)
+      ? $this->configFactory->get('alshaya_media_assets.settings')
+      : $image_settings;
+    return $image_settings;
   }
 
 }

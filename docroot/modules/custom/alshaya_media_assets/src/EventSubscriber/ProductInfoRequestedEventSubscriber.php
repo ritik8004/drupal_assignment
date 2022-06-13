@@ -1,16 +1,16 @@
 <?php
 
-namespace Drupal\alshaya_cos_images\EventSubscriber;
+namespace Drupal\alshaya_media_assets\EventSubscriber;
 
 use Drupal\acq_sku\ProductInfoRequestedEvent;
-use Drupal\alshaya_cos_images\SkuAssetManager;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class Product Info Requested Event Subscriber.
  *
- * @package Drupal\alshaya_cos_images\EventSubscriber
+ * @package Drupal\alshaya_media_assets\EventSubscriber
  */
 class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
@@ -19,14 +19,14 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   /**
    * SKU Assets Manager.
    *
-   * @var \Drupal\alshaya_cos_images\SkuAssetManager
+   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManager
    */
   private $skuAssetsManager;
 
   /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
-   * @param \Drupal\alshaya_cos_images\SkuAssetManager $sku_assets_manager
+   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager
    *   SKU Assets Manager.
    */
   public function __construct(SkuAssetManager $sku_assets_manager) {
@@ -77,6 +77,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $context = $event->getContext();
+
     // We show same images for pdp, modal, modal-magazine.
     // To avoid adding extra configs for them (sorting assets) we use pdp
     // for all three cases.
@@ -86,6 +87,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'cart':
       case 'pdp':
         $media = $this->skuAssetsManager->getAssetsForSku($sku, $context);
+
         $return = [];
         foreach ($media as $item) {
           $asset_type = $this->skuAssetsManager->getAssetType($item);
@@ -105,6 +107,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
               continue 2;
           }
         }
+
         $event->setValue($return);
         break;
 

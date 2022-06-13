@@ -1,17 +1,16 @@
 <?php
 
-namespace Drupal\alshaya_hm_images\EventSubscriber;
+namespace Drupal\alshaya_pims_assets\EventSubscriber;
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
-use Drupal\alshaya_hm_images\SkuAssetManager;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class Product Info Requested Event Subscriber.
  *
- * @package Drupal\alshaya_hm_images\EventSubscriber
+ * @package Drupal\alshaya_pims_assets\EventSubscriber
  */
 class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
@@ -20,14 +19,14 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   /**
    * SKU Assets Manager.
    *
-   * @var \Drupal\alshaya_hm_images\SkuAssetManager
+   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManager
    */
   private $skuAssetsManager;
 
   /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
-   * @param \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager
+   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager
    *   SKU Assets Manager.
    */
   public function __construct(SkuAssetManager $sku_assets_manager) {
@@ -59,10 +58,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'media':
         $this->processMedia($event);
         break;
-
-      case 'swatch':
-        $this->processSwatch($event);
-        break;
     }
   }
 
@@ -82,7 +77,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $context = $event->getContext();
-
     // We show same images for pdp, modal, modal-magazine.
     // To avoid adding extra configs for them (sorting assets) we use pdp
     // for all three cases.
@@ -92,7 +86,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'cart':
       case 'pdp':
         $media = $this->skuAssetsManager->getAssetsForSku($sku, $context);
-
         $return = [];
         foreach ($media as $item) {
           $asset_type = $this->skuAssetsManager->getAssetType($item);
@@ -112,7 +105,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
               continue 2;
           }
         }
-
         $event->setValue($return);
         break;
 
@@ -150,45 +142,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         $event->setValue($return);
         break;
     }
-  }
-
-  /**
-   * Process swatch for SKU based on brand specific rules.
-   *
-   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
-   *   Event object.
-   */
-  public function processSwatch(ProductInfoRequestedEvent $event): void {
-    $sku = $event->getSku();
-    $plugin = $sku->getPluginInstance();
-    $parent = $plugin->getParentSku($sku);
-    if (!($parent instanceof SKUInterface)) {
-      return;
-    }
-
-    $swatch_type = $this->skuAssetsManager->getSkuSwatchType($parent);
-
-    if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
-      $assets = $this->skuAssetsManager->getSkuAssets($sku, 'swatch');
-    }
-
-    // If swatch type is not miniature_image or assets were missing from
-    // sku, use rgb color code instead.
-    $swatch = [
-      'display_label' => $sku->get('attr_color_label')->getString(),
-      'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
-    ];
-
-    $swatch['display_value'] = empty($assets)
-      ? $sku->get('attr_rgb_color')->getString()
-      : file_create_url($assets[0]['drupal_uri']);
-
-    $event->setValue($swatch);
-
-    // For HM brand we have custom requirements around swatch fields
-    // so we do not want generic eventSubscriber to be executed further
-    // so we stop the propogation.
-    $event->stopPropagation();
   }
 
 }
