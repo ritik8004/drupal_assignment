@@ -56,7 +56,7 @@ const handleMatchBackLoad = () => {
 // Check if the wishlist element on PDP exists and
 // data-sku is present, then render the wishlist button.
 // For V3 we wait for alshayaAddToCartLoaded event to render wishlist.
-if (globalThis.rcsPhGetPageType() === null) {
+if (typeof drupalSettings.rcsPage === 'undefined') {
   renderWishListButton('wishlist-pdp-full', 'pdp');
 }
 
