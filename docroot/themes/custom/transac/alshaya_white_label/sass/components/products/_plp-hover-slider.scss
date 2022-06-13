@@ -117,7 +117,7 @@
     article:hover {
       .alshaya_search_gallery {
         .alshaya_search_mainimage {
-          .img-wrapper {
+          .slider-wrapper {
             > img {
               @include breakpoint($desktop) {
                 visibility: hidden;
