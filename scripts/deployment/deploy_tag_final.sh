@@ -74,7 +74,7 @@ log_message_and_details()
 
 get_cloud_task()
 {
-  cloud_task=`$blt_dir/bin/blt cloud:get-application-task ${AH_APPLICATION_UUID} ${tag}`
+  cloud_task=`$blt_dir/bin/blt acquia-cloud-task-available ${branch}`
   if [ $? -ne 0 ]
   then
     log_message_and_details "Error occurred while fetching cloud task, aborting"
@@ -215,6 +215,16 @@ done
 
 log_message_and_details "Checking cloud tasks if deployment is still in process."
 get_cloud_task
+
+if [ "${cloud_task}" != "404" ]
+then
+  echo "Cloud Task: API gave 404, we will sleep for 2 minutes now but please check this."
+  sleep 120
+
+  # Set the variable to 0 so next condition passes.
+  cloud_task="0"
+fi
+
 while [ "${cloud_task}" != "0" ]
 do
   echo "Cloud Task: Waiting for code to be deployed on server."
