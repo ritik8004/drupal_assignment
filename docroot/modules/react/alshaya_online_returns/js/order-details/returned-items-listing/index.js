@@ -38,9 +38,9 @@ class ReturnedItemsListing extends React.Component {
     // Storing in a separate variable as function param cannot be updated.
     const updatedReturnItem = returnItem;
 
-    updatedReturnItem.items = returnItem.items.filter((item) => !(hasValue(
-      rejectedItems[returnItem.returnInfo.increment_id],
-    ) && hasValue(rejectedItems[returnItem.returnInfo.increment_id][item.item_id])));
+    updatedReturnItem.items = returnItem.items.filter((item) => !(
+      hasValue(rejectedItems[returnItem.returnInfo.increment_id])
+      && hasValue(rejectedItems[returnItem.returnInfo.increment_id][item.item_id])));
 
     return updatedReturnItem;
   }
