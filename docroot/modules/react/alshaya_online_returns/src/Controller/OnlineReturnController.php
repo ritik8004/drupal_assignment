@@ -189,6 +189,7 @@ class OnlineReturnController extends ControllerBase {
       'orderDetails' => $orderDetails,
       'returnConfirmationStrings' => $returnConfig->get('rows'),
       'dateFormat' => $returnConfig->get('return_date_format'),
+      'timeZone' => $this->config('system.date')->get('timezone.default'),
       'helperBlock' => $this->getHelperBlock(),
     ];
     return $build;
