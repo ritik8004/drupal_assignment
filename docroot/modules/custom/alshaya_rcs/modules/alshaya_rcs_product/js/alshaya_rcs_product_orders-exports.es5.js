@@ -19,17 +19,19 @@ exports.render = function render(
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
   // Proceed only if inputs is not empty.
   if (inputs) {
+    // Convert array to object indexed by the SKU value.
+    const indexedInput = inputs.reduce((prev, curr) => ({...prev, [curr.sku]: curr}), {});
     // Get row item HTML.
-    let rowElms = innerHtmlObj.find('tr.order-item-row');
+    let rowElms = innerHtmlObj.find('.order-item-row');
     // Iterate each order row item and replace the placeholders with proper
     // data.
-    if (rowElms) {
+    if (rowElms.length) {
       rowElms.each((index, row) => {
         const dataAttr = jQuery(row).find('img.rcs-image').data();
         if (dataAttr) {
           jQuery(row).html(replaceOrderPlaceHolders(
-            inputs[dataAttr.itemSku],
-            row.outerHTML,
+            indexedInput[dataAttr.itemSku],
+            row.innerHTML,
             settings,
           ));
         }
