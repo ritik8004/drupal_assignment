@@ -395,7 +395,7 @@ $header_secondary_menu_mobile_link: $matterhorn;
 $header_secondary_menu_link_mobile_hover_bg: $cultured;
 
 // Header my account nav.
-$header_my_account_h3_title: $vanilla;
+$header_my_account_h3_title: $black;
 $header_my_account_mobile_h3_title: $black;
 $header_my_account_bg: $cultured;
 $header_my_account_link_hover: $vanilla;
@@ -605,7 +605,7 @@ $pdp_size_option_bg: $black;
 $pdp_size_option_border: $black;
 $pdp_size_option_text: $black;
 $pdp_size_option_selected_text: $black;
-$pdp_size_option_selected_bg: $light-orange;
+$pdp_size_option_selected_bg: rgba(224, 218, 213, 0.3);
 $pdp_size_option_selected_border: $zambezi;
 $pdp_swatch_disabled: $mothercare-black;
 $pdp_size_option_text_hover : $vanilla;
@@ -1170,10 +1170,11 @@ $plp-quick-view-product-size-text: $black;
 $plp-quick-view-product-size-text-active: $black;
 $plp-quick-view-product-size-border: $_grey-51-6;
 $plp-quick-view-product-size-border-hover: $black;
-$plp-quick-view-product-size-active-bg: $light-orange;
+$plp-quick-view-product-size-active-bg: rgba(224, 218, 213, 0.3);
 $plp-quick-view-product-size-text-disabled: $white;
 $plp-quick-view-product-size-bg-border: $white-three;
 $plp-quick-view-product-select-bg: $whisper-dark;
+$plp_quick_color_variant_hover_border: $nero;
 
 // Wishlist
 $wishlist-header-notification-border: $brilliant-rose;

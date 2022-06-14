@@ -19,17 +19,6 @@
 
   .c-content__region {
     .sticky-filter-wrapper {
-      .c-collapse-item {
-        .c-collapse__title {
-          text-transform: uppercase;
-
-          &::after {
-            color: $algolia-react-facet-title;
-            top: 49%;
-          }
-        }
-      }
-
       #attr_product_collection {
         ul {
           li.facet-item {
@@ -90,6 +79,19 @@ html[lang=ar] {
       .star-ratings-wrapper {
         .inline-star {
           top: 0.375rem;
+        }
+      }
+    }
+  }
+
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        text-transform: uppercase;
+
+        &::after {
+          color: $algolia-react-facet-title;
+          top: 49%;
         }
       }
     }
