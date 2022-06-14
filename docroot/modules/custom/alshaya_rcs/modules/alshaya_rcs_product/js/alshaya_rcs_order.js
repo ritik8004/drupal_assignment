@@ -12,7 +12,7 @@
       var parentSkus = JSON.parse(e.params['parent-skus']);
       var itemSkus = JSON.parse(e.params['item-skus']);
       parentSkus.map(function eachSku(sku, key) {
-        e.promises = e.promises.concat(Drupal.alshayaSpc.getProductDataV2(itemSkus[key], sku));
+        e.promises.push(Drupal.alshayaSpc.getProductDataV2(itemSkus[key], sku));
       });
     }
   });
