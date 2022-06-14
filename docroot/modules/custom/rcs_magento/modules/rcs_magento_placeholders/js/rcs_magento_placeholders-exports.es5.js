@@ -327,8 +327,10 @@ exports.getData = async function getData(
       const eventData = {
         request,
         promises: [],
-        params,
-        placeholder,
+        extraData: {
+          params,
+          placeholder,
+        },
       }
       // Allow the custom code to initiate other AJAX requests in parallel
       // and make the rendering blocked till all of them are finished.
