@@ -218,6 +218,15 @@
           <div class="label delivery-method font-small">{{ "Delivery method"|t }}</div>
           <div class="dark">{{ order_details.delivery_method }}</div>
         {% endif %}
+
+        {% if order_details.ictDate %}
+          {% if order_details.type == 'cc' %}
+            <div class="label ict-date font-small">{{ "Available in store from"|t({}, {'context' : 'ict'}) }}</div>
+          {% else %}
+            <div class="label ict-date font-small">{{ "Expected Delivery by"|t({}, {'context' : 'ict'}) }}</div>
+          {% endif %}
+          <div class="dark">{{ order_details.ictDate }}</div>
+        {% endif %}
       </td>
       <td class="above-mobile empty--cell">&nbsp;</td>
     </tr>

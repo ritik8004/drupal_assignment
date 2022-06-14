@@ -426,6 +426,14 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       break;
   }
 
+  // Intercountry transfer.
+  // Check if the delivery date is available in extension_attributes
+  // pass it for further processing.
+  // @todo change this with MDC date.
+  if (isset($order['extension']['ict_date'])) {
+    $orderDetails['ictDate'] = '29th May 2022';
+  }
+
   return $orderDetails;
 }
 

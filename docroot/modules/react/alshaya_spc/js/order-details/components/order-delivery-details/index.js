@@ -6,6 +6,15 @@ const OrderDeliveryDetails = (props) => {
   const { order } = props;
   const orderDetails = order.order_details;
 
+  // Check if intercountry transfer date is available.
+  let ictLabel;
+  if (hasValue(orderDetails.ictDate)) {
+    if (orderDetails.type === 'cc') {
+      ictLabel = Drupal.t('Available in store from', {}, { context: 'ict' });
+    } else {
+      ictLabel = Drupal.t('Expected Delivery by', {}, { context: 'ict' });
+    }
+  }
   return (
     <>
       { hasValue(order.delivery_detail_notice) && (
@@ -184,6 +193,13 @@ const OrderDeliveryDetails = (props) => {
             <>
               <div className="label delivery-method font-small">{Drupal.t('Delivery method')}</div>
               <div className="dark">{orderDetails.delivery_method}</div>
+            </>
+          )}
+
+          { hasValue(orderDetails.ictDate) && (
+            <>
+              <div className="label ict-date font-small">{ictLabel}</div>
+              <div className="dark">{orderDetails.ictDate}</div>
             </>
           )}
         </div>
