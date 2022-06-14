@@ -241,6 +241,10 @@ Drupal.alshaya_color_images_generate_swatch_markup = function (currentOption, se
   var pageMainSku = currentOption.parents('.sku-base-form').attr('data-sku');
   var configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(pageMainSku);
 
+  // If no configurable options are available return empty.
+  if (Object.entries(configurableColorDetails.sku_configurable_options_color).length === 0) {
+    return;
+  }
   if (typeof configurableColorDetails.sku_configurable_color_attribute !== 'undefined'
     && configurableColorDetails.sku_configurable_color_attribute.length !== 0) {
     configurable_color_attribute = configurableColorDetails.sku_configurable_color_attribute;

@@ -242,7 +242,7 @@
           }
         });
 
-        if (typeof productData.variants !== 'undefined') {
+        if (typeof productData.variants !== 'undefined' && Object.entries(productData.variants).length !== 0) {
           var variants = productData.variants;
 
           // Use first child provided in settings if available.
