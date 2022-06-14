@@ -114,7 +114,14 @@ header {
       height: rem(20);
 
       @include breakpoint($desktop) {
-        top: 0;
+        top: rem(3);
+        #{$right}: rem(1);
+      }
+
+      @include breakpoint($upto-desktop) {
+        .frontpage & {
+          #{$right}: rem(-14);
+        }
       }
     }
 
@@ -369,9 +376,19 @@ header {
 }
 
 .c-menu-primary {
-  li:hover a {
-    @include breakpoint($upto-desktop) {
-      color: $header_my_account_mobile_link_hover;
+  li {
+    &:hover a {
+      @include breakpoint($upto-desktop) {
+        color: $header_my_account_mobile_link_hover;
+      }
+    }
+
+    .mobile--search {
+      &::before {
+        @include breakpoint($only-mobile) {
+          #{$left}: rem(-21);
+        }
+      }
     }
   }
 
@@ -483,7 +500,7 @@ header {
         display: table-cell;
         vertical-align: middle;
         width: 33.33%;
-        text-align: center;
+        text-align: $left;
       }
     }
   }
@@ -494,6 +511,14 @@ header {
     position: static;
     margin-top: 0;
     padding: rem(14);
+    padding-#{$left}: rem(17);
+    width: rem(36);
+
+    &::before {
+      @include breakpoint($upto-desktop) {
+        width: rem(20);
+      }
+    }
   }
 
   .mobile--search,
