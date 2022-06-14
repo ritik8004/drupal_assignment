@@ -72,9 +72,6 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     return;
   }
   if (\Drupal::currentUser()->isAnonymous()) {
-    $form['field_date_of_birth']['#access'] = FALSE;
-    $form['field_gender']['#access'] = FALSE;
-
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
       '#weight' => -12,
@@ -92,26 +89,19 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
       '#prefix' => '<div class="hello-member-accordion-wrapper">',
       '#weight' => 9,
     ];
-    $form['hello_member']['dob'] = [
-      '#title' => t('Date of birth', [], ['context' => 'hello_member']),
-      '#suffix' => '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>',
-      '#type' => 'date',
-      '#title_display' => 'before',
-      '#weight' => 10,
-    ];
-    $form['hello_member']['gender_select'] = [
-      '#type' => 'select',
-      '#empty_option' => t('Select Gender', [], ['context' => 'hello_member']),
-      '#options' => [
-        'm' => t('Male', [], ['context' => 'hello_member']),
-        'f' => t('Female', [], ['context' => 'hello_member']),
-        'ns' => t('Prefer not to say', [], ['context' => 'hello_member']),
-      ],
-      '#prefix' => '<div class="hello-member-gender">',
-      '#suffix' => '</div>',
-      '#suffix' => '</div>',
-      '#weight' => 11,
-    ];
+    $form['hello_member']['dob'] = $form['field_date_of_birth'];
+    $form['hello_member']['dob']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
+    $form['hello_member']['dob']['#weight'] = 10;
+    unset($form['field_date_of_birth']);
+
+    $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
+    unset($form['field_gender']['widget']['#options']['_none']);
+    $form['hello_member']['select'] = $form['field_gender'];
+    $form['hello_member']['select']['#prefix'] = '<div class="hello-member-gender">';
+    $form['hello_member']['select']['#suffix'] = '</div>';
+    $form['hello_member']['select']['#weight'] = 11;
+    unset($form['field_gender']);
+
     $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
     $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
