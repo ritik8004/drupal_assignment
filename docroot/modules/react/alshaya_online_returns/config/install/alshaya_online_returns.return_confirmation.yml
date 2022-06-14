@@ -20,4 +20,4 @@ rows:
       format: 'rich_text'
     icon: 'refund'
     hide_this_row: 0
-return_date_format: 'DD MMM YYYY @h[h]mm'
+return_date_format: 'DD MMM YYYY @H[h]mm'
