@@ -3,12 +3,9 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const OnlineBooking = (props) => {
   const { order } = props;
-  if (!hasValue(order.online_booking_notice)) {
-    return null;
-  }
-  const { notice } = order.online_booking_notice;
+  const notice = order.online_booking_notice;
 
-  return (
+  return hasValue(notice) && Object.values(notice).length > 0 && (
     <div className="online-booking-details-row">
       <div>
         <span className="icon-ic_infomation" />
