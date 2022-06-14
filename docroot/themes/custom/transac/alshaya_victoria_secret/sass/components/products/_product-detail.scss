@@ -199,6 +199,11 @@
   .price--discount {
     display: inline;
   }
+
+  @include breakpoint($only-mobile) {
+    margin: 0 rem(20);
+    padding: 0;
+  }
 }
 
 .basic-details-wrapper {
@@ -430,7 +435,7 @@
           margin-#{$right}: 0.625rem;
           width: auto;
           min-width: 2.375rem;
-          border: 0;
+          border: rem(1) solid transparent;
           display: block;
           text-align: center;
           background: $secondary_bg;
@@ -463,6 +468,7 @@
           span {
             border: none;
             padding: 0;
+            background: transparent;
 
             &.picked,
             &:hover {
@@ -698,6 +704,12 @@ html[lang="ar"] {
       .field__label {
         font-family: $vs-bold;
         font-size: rem(14);
+      }
+    }
+
+    .mobile-content-wrapper {
+      @include breakpoint($only-mobile) {
+        padding: 0 rem(20);
       }
     }
   }
