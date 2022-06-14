@@ -134,6 +134,7 @@ attribute.common:
     - core/jquery
     - core/jquery.once
     - core/drupal
+    - alshaya_master/common_functions
 
 attribute:
   js:

@@ -154,6 +154,12 @@ exports.getFormattedAmount = getFormattedAmount;
 function getChildSkuFromAttribute(sku, attribute, option_id) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
 
+  if (!Drupal.hasValue(combinations.attribute_sku) ) {
+    Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
+      '@sku': sku
+    });
+    return null;
+  }
   if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
     Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
       '@attribute': attribute,
@@ -203,11 +209,16 @@ function disableUnavailableOptions(sku, configurableOptions) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
   // Clone this so as to not modify the original object.
   configurableOptionsClone = JSON.parse(JSON.stringify(configurableOptions));
+  // Check if configurable options is available for the product
+  // and filter unavailable options.
   configurableOptionsClone.forEach(function eachOption(option) {
-    option.values.forEach(function eachValue(value, index) {
-      if (typeof combinations.attribute_sku[option.attribute_code][value.value_index] === 'undefined') {
-        option.values.splice(index, 1);
+    option.values = option.values.filter(function eachValue(value) {
+      if (!Drupal.hasValue(combinations.attribute_sku)
+       || typeof combinations.attribute_sku[option.attribute_code][value.value_index] === 'undefined'
+      ) {
+        return false;
       }
+      return true;
     });
   });
 
