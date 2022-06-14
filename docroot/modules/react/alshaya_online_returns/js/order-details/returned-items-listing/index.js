@@ -129,25 +129,27 @@ class ReturnedItemsListing extends React.Component {
     return (
       <div className="returned-items-row returned-items">
         {Object.keys(groupedItems).map((index) => (
-          <div key={index} className="items-wrapper">
-            <div className="title-wrapper">
-              <span>
-                {this.getReturnedItemsTitle(index)}
-                {' '}
-                {'-'}
-                {' '}
-                {this.getReturnedItemsSubTitle(index)}
-              </span>
-            </div>
+          this.isValidGroupedItemsExists(groupedItems[index]) && (
+            <div key={index} className="items-wrapper">
+              <div className="title-wrapper">
+                <span>
+                  {this.getReturnedItemsTitle(index)}
+                  {' '}
+                  {'-'}
+                  {' '}
+                  {this.getReturnedItemsSubTitle(index)}
+                </span>
+              </div>
 
-            {hasValue(groupedItems) && groupedItems[index].map((returnItem) => (
-              <ReturnedItems
-                key={returnItem.returnInfo.increment_id}
-                returnData={returnItem}
-                returnType={index}
-              />
-            ))}
-          </div>
+              {hasValue(groupedItems) && groupedItems[index].map((returnItem) => (
+                <ReturnedItems
+                  key={returnItem.returnInfo.increment_id}
+                  returnData={returnItem}
+                  returnType={index}
+                />
+              ))}
+            </div>
+          )
         ))}
       </div>
     );
