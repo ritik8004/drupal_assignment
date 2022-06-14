@@ -6,6 +6,10 @@
  */
 Drupal.alshayaWishlist = Drupal.alshayaWishlist || {};
 
+// Flag used to check if wishlist data are already loaded from backend and
+// stored data in local storage.
+window.wishListLoadedFromBackend = window.wishListLoadedFromBackend || false;
+
 (function (Drupal) {
 
   /**
@@ -53,6 +57,13 @@ Drupal.alshayaWishlist = Drupal.alshayaWishlist || {};
         },
       });
       document.dispatchEvent(getWishlistFromBackendSuccess);
+
+      // Alongside dispatching an success event above, let's set the global
+      // variable flag to true as well. So other components like wishlist
+      // product list, if rendered lately, can utilise this flag to fetch data
+      // from the local storage as well instead of completing relying on
+      // `getWishlistFromBackendSuccess` success event.
+      window.wishListLoadedFromBackend = true;
     });
   };
 
