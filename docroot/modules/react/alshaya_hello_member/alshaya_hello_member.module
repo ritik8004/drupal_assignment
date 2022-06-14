@@ -89,25 +89,22 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
       '#prefix' => '<div class="hello-member-accordion-wrapper">',
       '#weight' => 9,
     ];
-    $form['hello_member']['dob'] = $form['field_date_of_birth'];
-    $form['hello_member']['dob']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
-    $form['hello_member']['dob']['#weight'] = 10;
+    $form['hello_member']['field_date_of_birth'] = $form['field_date_of_birth'];
+    $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
+    $form['hello_member']['field_date_of_birth']['#weight'] = 10;
     unset($form['field_date_of_birth']);
 
     $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
     unset($form['field_gender']['widget']['#options']['_none']);
-    $form['hello_member']['select'] = $form['field_gender'];
-    $form['hello_member']['select']['#prefix'] = '<div class="hello-member-gender">';
-    $form['hello_member']['select']['#suffix'] = '</div>';
-    $form['hello_member']['select']['#weight'] = 11;
+    $form['hello_member']['field_gender'] = $form['field_gender'];
+    $form['hello_member']['field_gender']['#prefix'] = '<div class="hello-member-gender">';
+    $form['hello_member']['field_gender']['#suffix'] = '</div>';
+    $form['hello_member']['field_gender']['#weight'] = 11;
     unset($form['field_gender']);
 
     $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
     $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
-
-    // Save the value of user dob and gender.
-    array_unshift($form['actions']['submit']['#submit'], 'alshaya_hello_member_user_set_member_details');
   }
 }
 
@@ -195,18 +192,6 @@ function alshaya_hello_member_preprocess_page_title(&$variables) {
   $route_name = \Drupal::routeMatch()->getRouteName();
   if ($route_name === 'entity.user.canonical') {
     $variables['title'] = t('Benefits', [], ['context' => 'hello_member']);
-  }
-}
-
-/**
- * Set dob and gender values for register form.
- */
-function alshaya_hello_member_user_set_member_details(array &$form, FormStateInterface $form_state) {
-  if ($dob = $form_state->getValue('dob')) {
-    $form_state->setValue('field_date_of_birth', [['value' => $dob]]);
-  }
-  if ($gender_value = $form_state->getValue('gender_select')) {
-    $form_state->setValue('field_gender', [['value' => $gender_value]]);
   }
 }
 
