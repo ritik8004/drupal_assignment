@@ -5,6 +5,15 @@ import { isReturnClosed, isReturnPicked } from '../../utilities/return_api_helpe
 import ReturnedItems from './returned-items';
 
 class ReturnedItemsListing extends React.Component {
+  /**
+   * To get the return sub title.
+   *
+   * @param {string} type
+   *   The string define the type of return.
+   *
+   * @returns {string}
+   *   Subtitle for the return type.
+   */
   getReturnedItemsSubTitle = (type) => {
     if (type === 'online') {
       return Drupal.t('Online Returns', {}, { context: 'online_returns' });
@@ -21,6 +30,15 @@ class ReturnedItemsListing extends React.Component {
     return '';
   };
 
+  /**
+   * To get the return group title.
+   *
+   * @param {string} type
+   *   The string define the type of return.
+   *
+   * @returns {string}
+   *   Group title that defines the return type.
+   */
   getReturnedItemsTitle = (type) => {
     if (type === 'online' || type === 'store') {
       return Drupal.t('Returned Items', {}, { context: 'online_returns' });
@@ -33,18 +51,6 @@ class ReturnedItemsListing extends React.Component {
     return '';
   }
 
-  // To filter out items that are rejected.
-  getRejectedFilteredItems = (returnItem, rejectedItems) => {
-    // Storing in a separate variable as function param cannot be updated.
-    const updatedReturnItem = returnItem;
-
-    updatedReturnItem.items = returnItem.items.filter((item) => !(
-      hasValue(rejectedItems[returnItem.returnInfo.increment_id])
-      && hasValue(rejectedItems[returnItem.returnInfo.increment_id][item.item_id])));
-
-    return updatedReturnItem;
-  }
-
   /**
    * Group the store and online return items.
    *
@@ -54,53 +60,61 @@ class ReturnedItemsListing extends React.Component {
   getReturnsByType = () => {
     const { returns } = this.props;
     const groupedItems = {};
-    const rejectedItems = [];
 
     // Filter out all the closed & picked returns.
     const updateResults = returns.filter((item) => isReturnClosed(item.returnInfo)
       && isReturnPicked(item.returnInfo));
 
     updateResults.forEach((returnItem) => {
-      // Filter out the items which are rejected.
-      returnItem.returnInfo.items.forEach((item) => {
-        const { qty_rejected: qtyRejected } = item.extension_attributes;
-        if (qtyRejected > 0) {
-          // Initialize the empty array for rejected key.
-          if (!rejectedItems[returnItem.returnInfo.increment_id]) {
-            rejectedItems[returnItem.returnInfo.increment_id] = [];
-          }
-          rejectedItems[returnItem.returnInfo.increment_id][item.order_item_id] = returnItem;
+      // Proceed only if the item length is positive.
+      if (returnItem.items.length > 0) {
+        const itemReturnType = getTypeFromReturnItem(returnItem);
+        // Check if return type is initialized or not.
+        if (!groupedItems[itemReturnType]) {
+          groupedItems[itemReturnType] = [];
         }
-      });
-
-      const itemReturnType = getTypeFromReturnItem(returnItem);
-      // Check if return type is initialized or not.
-      if (!groupedItems[itemReturnType]) {
-        groupedItems[itemReturnType] = [];
+        // Push the item in the return type group.
+        groupedItems[itemReturnType].push(returnItem);
       }
-      // Push the item in the return type group.
-      groupedItems[itemReturnType].push(this.getRejectedFilteredItems(
-        { ...returnItem }, rejectedItems,
-      ));
 
       // Build the rejected item list.
-      returnItem.items.forEach((item, index) => {
-        if (hasValue(rejectedItems[returnItem.returnInfo.increment_id])
-          && rejectedItems[returnItem.returnInfo.increment_id][item.item_id]) {
+      if (returnItem.rejectedItems.length > 0) {
+        returnItem.rejectedItems.forEach((item) => {
           // Store the rejected items in grouped items.
           if (!groupedItems.rejected) {
             groupedItems.rejected = [];
           }
 
-          groupedItems.rejected[index] = { ...returnItem };
-          groupedItems.rejected[index].items = [];
-          groupedItems.rejected[index].items.push({ ...returnItem.items[index] });
-        }
-      });
+          // Update the items with rejected item list.
+          const updateItem = { ...returnItem };
+          updateItem.items = [{ ...item }];
+
+          groupedItems.rejected.push(updateItem);
+        });
+      }
     });
 
     return groupedItems;
   };
+
+  /**
+   * Validates if the groupedItems contain valid items.
+   */
+  isValidGroupedItemsExists = (groupedItems) => {
+    let valid = false;
+    groupedItems.forEach((item) => {
+      // If valid is already true then return from here.
+      if (valid) {
+        return;
+      }
+
+      if (item.items.length > 0) {
+        valid = true;
+      }
+    });
+
+    return valid;
+  }
 
   render() {
     const { returns } = this.props;
