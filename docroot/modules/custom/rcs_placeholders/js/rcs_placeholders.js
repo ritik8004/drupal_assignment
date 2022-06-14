@@ -131,7 +131,7 @@
     }
 
     // Extract the parameters.
-    const params = [];
+    const params = {};
     $($(this)[0].attributes).each(function eachBlockPhAttributes() {
       const blockPhParamRegex = /data-param-([^"]+)/;
       const blockPhParamId = $(this)[0].name.match(
