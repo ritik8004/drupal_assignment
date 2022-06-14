@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Contains install hooks for alshaya_pims_assets.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function alshaya_pims_assets_schema() {
+  $schema = [];
+  $schema['pims_style_mapping'] = [
+    'description' => 'PIMS mapping table',
+    // @todo Set proper size of field.
+    'fields' => [
+      'original_url' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'description' => 'Original Image URL',
+      ],
+      'style' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'description' => 'Image style',
+      ],
+      'styled_url' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'description' => 'Styled Image URL',
+      ],
+    ],
+    'unique keys' => [
+      'unique' => ['original_url', 'style', 'styled_url'],
+    ],
+  ];
+
+  return $schema;
+}
