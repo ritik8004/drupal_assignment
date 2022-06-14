@@ -1,6 +1,6 @@
 services:
   alshaya_pims_assets.skuassetsmanager:
-    class: Drupal\alshaya_pims_assets\Services\SkuAssetManager
+    class: Drupal\alshaya_pims_assets\Services\PimsSkuAssetManager
     public: false
     decorates: alshaya_media_assets.skuassetsmanager
     decoration_priority: 1
@@ -19,10 +19,3 @@ services:
       - '@lock.persistent'
       - '@cache.media_file_mapping'
       - '@file_system'
-
-  alshaya_pims_assets.product_info_requested_event:
-    class: Drupal\alshaya_pims_assets\EventSubscriber\ProductInfoRequestedEventSubscriber
-    arguments:
-      - '@alshaya_media_assets.skuassetsmanager'
-    tags:
-      - { name: 'event_subscriber' }
