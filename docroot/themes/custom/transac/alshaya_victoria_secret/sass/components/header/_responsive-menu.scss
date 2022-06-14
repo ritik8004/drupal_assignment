@@ -289,20 +289,6 @@ header {
   }
 }
 
-.toggle--sign {
-  .shop,
-  .account {
-    @include breakpoint($only-tablet) {
-      html[lang=ar] & {
-        padding: 0 0.25rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-  }
-}
-
 .logged-in {
   .toggle--sign {
     .account {
