@@ -1,4 +1,4 @@
-(function main(Drupal) {
+(function main(Drupal, RcsEventManager) {
   RcsEventManager.addListener('invokingApi', function invokingApi(e) {
     // For the order teaser section, add the promises of requests to get product
     // data to the promises array so that these are resolved before we render
@@ -16,4 +16,4 @@
       });
     }
   });
-})(Drupal);
+})(Drupal, RcsEventManager);
