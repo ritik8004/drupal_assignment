@@ -13,11 +13,6 @@ import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isDesktop } from '../../../../js/utilities/display';
 
-/**
- * Flag used to check if backend api for wishlist items is already called.
- */
-window.loadWishListFromBackend = window.loadWishListFromBackend || false;
-
 export default class WishlistHeader extends React.Component {
   constructor(props) {
     super(props);

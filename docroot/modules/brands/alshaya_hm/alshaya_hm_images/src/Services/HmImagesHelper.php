@@ -7,12 +7,19 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class containing methods dealing with HM images.
  */
 class HmImagesHelper {
+
+  /**
+   * Constant for default swatch display type.
+   */
+  const LP_SWATCH_DEFAULT = 'RGB';
 
   /**
    * Sku Manager service.
@@ -43,6 +50,13 @@ class HmImagesHelper {
   protected $database;
 
   /**
+   * Term Storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $termStorage;
+
+  /**
    * HmImagesHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -53,17 +67,21 @@ class HmImagesHelper {
    *   Language manager service.
    * @param \Drupal\Core\Database\Connection $database
    *   Database service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
   public function __construct(
     SkuManager $sku_manager,
     ProductCacheManager $product_cache_manager,
     LanguageManagerInterface $language_manager,
-    Connection $database
+    Connection $database,
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     $this->skuManager = $sku_manager;
     $this->productCacheManager = $product_cache_manager;
     $this->languageManager = $language_manager;
     $this->database = $database;
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
   }
 
   /**
@@ -133,6 +151,42 @@ class HmImagesHelper {
     $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids);
 
     return $article_castor_ids;
+  }
+
+  /**
+   * Helper function to fetch swatch type for the sku.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Sku for which swatch type needs to be fetched.
+   *
+   * @return string
+   *   Swatch type for the sku.
+   */
+  public function getSkuSwatchType(SKU $sku) {
+    $swatch_type = self::LP_SWATCH_DEFAULT;
+
+    $product_node = $this->skuManager->getDisplayNode($sku);
+
+    if (empty($product_node)) {
+      return $swatch_type;
+    }
+
+    $terms = $product_node->get('field_category')->getValue();
+    if (empty($terms)) {
+      return $swatch_type;
+    }
+
+    foreach ($terms as $value) {
+      $term = $this->termStorage->load($value['target_id']);
+      if ($term instanceof TermInterface) {
+        $field_swatch_type = $term->get('field_swatch_type')->getString();
+        if (!empty($field_swatch_type)) {
+          return $field_swatch_type;
+        }
+      }
+    }
+
+    return $swatch_type;
   }
 
 }

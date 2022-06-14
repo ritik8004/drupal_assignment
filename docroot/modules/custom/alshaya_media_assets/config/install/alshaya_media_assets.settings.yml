@@ -123,37 +123,3 @@ style_identifiers:
   checkout_summary: 'file:/product/thumb'
 swatch_plp_limit: 3
 swatch_asset_type: 'StillMedia/DescriptiveStillLife'
-# Sample structure for override, until we have a config UI.
-#overrides:
-#  146:
-#    weights:
-#      plp_front: DescriptiveStillLife
-#      plp_back: Lookbook
-#      pdp:
-#        Lookbook: 1
-#        Environmental: 2
-#        CreativeDetail : 3
-#        DescriptiveStillLife : 4
-#        Pictogram : 5
-#        DescriptiveDetail : 6
-#    style_identifiers:
-#      teaser: 'file:/product/pra'
-#    dimensions:
-#      plp:
-#        width: 222
-#        height: 333
-#      pdp_main:
-#        width: 384
-#        height: 576
-#      pdp_thumbnail:
-#        width: 74
-#        height: 111
-#      pdp_zoom:
-#        width: 1152
-#        height: 1728
-#      pdp_fullscreen:
-#        width: 758
-#        height: 1137
-#  140:
-#    plp_front: DescriptiveStillLife
-#    plp_back: Lookbook
