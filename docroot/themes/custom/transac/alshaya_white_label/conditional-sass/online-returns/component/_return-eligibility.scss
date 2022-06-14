@@ -12,6 +12,19 @@
       margin-bottom: 0;
     }
 
+    .return-button-enabled {
+      flex-basis: 40%;
+      text-align: $right;
+
+      html[lang=ar] & {
+        flex-basis: 35%;
+      }
+    }
+
+    .return-inactive {
+      margin-#{$left}: rem(12);
+    }
+
     #online-returns-eligibility-window {
       .eligibility-window-container {
         font-size: rem(12);
