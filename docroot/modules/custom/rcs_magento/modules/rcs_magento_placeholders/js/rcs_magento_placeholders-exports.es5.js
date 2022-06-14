@@ -267,10 +267,6 @@ exports.getData = async function getData(
 
       break;
 
-    case 'order_teaser':
-      // @todo To use graphql query to get the order details.
-      break;
-
     // Get the product data for the given sku.
     case 'product_by_sku':
       // Build query.
@@ -326,12 +322,25 @@ exports.getData = async function getData(
       break;
 
     default:
-      console.log(`Placeholder ${placeholder} not supported for get_data.`);
-      break;
+      console.log(`Placeholder ${placeholder} not supported by default for get_data.`);
+
+      const eventData = {
+        request,
+        promises: [],
+        extraData: {
+          params,
+          placeholder,
+        },
+      }
+      // Allow the custom code to initiate other AJAX requests in parallel
+      // and make the rendering blocked till all of them are finished.
+      RcsEventManager.fire('invokingApi', eventData);
+      if (eventData.promises.length) {
+        return Promise.all(eventData.promises);
+      }
   }
 
-  if ((result && result !== null)
-    || placeholder === 'order_teaser') {
+  if ((result && result !== null)) {
     // Display loader.
     if (loaderOnUpdates) {
       RcsEventManager.fire('startLoader');
