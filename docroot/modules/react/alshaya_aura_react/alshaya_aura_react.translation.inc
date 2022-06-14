@@ -433,9 +433,6 @@ function _alshaya_aura_react_translations() {
         'ar' => "يكسب <span><b>!pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
         'context' => 'aura',
       ],
-      'Earn <span><b>!pts</b> points with Aura</span> on this purchase.' => [
-        'ar' => 'اربح <span> <b>!pts</b> من النقاط مع Aura </span> على عملية الشراء هذه.',
-      ],
       'Congratulations' => [
         'ar' => 'تهانينا',
         'context' => 'aura',
@@ -590,6 +587,12 @@ function _alshaya_aura_react_translations() {
       ],
       'Your points will be credited to your Aura account. You will be able to redeem these a day after your order is delivered.' => [
         'ar' => 'سيتم إضافة نقاطك إلى حسابك في أورا. وستتمكن من إستردادها بعد يوم من توصيل الطلبية.',
+        'context' => 'aura',
+      ],
+    ],
+    'v5' => [
+      'Earn <span><b>!pts</b> points with Aura</span> on this purchase.' => [
+        'ar' => 'اربح <span> <b>!pts</b> من النقاط مع Aura </span> على عملية الشراء هذه.',
         'context' => 'aura',
       ],
     ],

@@ -304,7 +304,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_earn_with_this_purchase',
-      'value' => t('Earn <span><b>!pts</b> points with Aura</span> on this purchase.'),
+      'value' => t('Earn <span><b>!pts</b> points with Aura</span> on this purchase.', [], ['context' => 'aura']),
     ],
     [
       'key' => 'aura_or',
