@@ -7,7 +7,7 @@ alshaya_online_returns.settings:
       label: 'Config to enable/disable Online Returns feature'
 
 alshaya_online_returns.return_confirmation:
-  type: sequence
+  type: config_object
   label: 'Return confirmation settings'
   mapping:
     return_date_format:
