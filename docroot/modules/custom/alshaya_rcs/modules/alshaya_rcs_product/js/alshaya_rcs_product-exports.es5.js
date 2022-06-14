@@ -160,7 +160,7 @@ function getChildSkuFromAttribute(sku, attribute, option_id) {
     });
     return null;
   }
-  else if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
+  if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
     Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
       '@attribute': attribute,
       '@option_id': option_id,
@@ -212,8 +212,8 @@ function disableUnavailableOptions(sku, configurableOptions) {
   // Check if configurable options is available for the product
   // and filter unavailable options.
   configurableOptionsClone.forEach(function eachOption(option) {
-    option.values = option.values.filter(function (value) {
-      if (Object.entries(combinations.attribute_sku).length === 0
+    option.values = option.values.filter(function eachValue(value) {
+      if (!Drupal.hasValue(combinations.attribute_sku)
        || typeof combinations.attribute_sku[option.attribute_code][value.value_index] === 'undefined'
       ) {
         return false;

@@ -242,7 +242,7 @@
           }
         });
 
-        if (typeof productData.variants !== 'undefined' && Object.entries(productData.variants).length !== 0) {
+        if (typeof productData.variants !== 'undefined' && Drupal.hasValue(productData.variants)) {
           var variants = productData.variants;
 
           // Use first child provided in settings if available.
