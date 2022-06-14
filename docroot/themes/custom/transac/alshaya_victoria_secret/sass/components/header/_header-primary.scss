@@ -376,9 +376,19 @@ header {
 }
 
 .c-menu-primary {
-  li:hover a {
-    @include breakpoint($upto-desktop) {
-      color: $header_my_account_mobile_link_hover;
+  li {
+    &:hover a {
+      @include breakpoint($upto-desktop) {
+        color: $header_my_account_mobile_link_hover;
+      }
+    }
+
+    .mobile--search {
+      &::before {
+        @include breakpoint($only-mobile) {
+          #{$left}: rem(-21);
+        }
+      }
     }
   }
 
@@ -444,10 +454,6 @@ header {
       @include breakpoint($only-tablet) {
         font-size: 2.25rem;
         top: -0.35rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        #{$left}: rem(-21);
       }
     }
   }
