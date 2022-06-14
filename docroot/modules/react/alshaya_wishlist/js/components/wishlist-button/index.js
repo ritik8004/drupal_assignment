@@ -325,9 +325,9 @@ class WishlistButton extends React.Component {
       // Add full screen loader for wishlist page.
       showFullScreenLoader();
     }
-    if (context === 'pdp') {
-      this.handleProductRemovalFromWishlist(skuCode);
-    }
+
+    // Remove product from wishlist.
+    this.handleProductRemovalFromWishlist(skuCode);
   }
 
   /**
