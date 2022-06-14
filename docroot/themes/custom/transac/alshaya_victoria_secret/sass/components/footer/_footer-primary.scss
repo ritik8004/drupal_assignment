@@ -158,20 +158,18 @@
   }
 
   h3 {
-    font-size: 0.875rem;
+    font-size: rem(12);
     text-transform: uppercase;
-
-    @include breakpoint($tablet) {
-      font-size: 0.75rem;
-    }
+    font-family: $vs-bentonsans-medium;
 
     @include breakpoint($only-mobile) {
-      padding: rem(14) rem(27);
+      padding: rem(16) rem(27) rem(6);
+      letter-spacing: 0.96px;
 
       @include icon(plus, after) {
-        #{$right}: rem(27);
+        #{$right}: rem(24);
         font-size: rem(11);
-        font-weight: bold;
+        top: rem(22);
       }
     }
   }
