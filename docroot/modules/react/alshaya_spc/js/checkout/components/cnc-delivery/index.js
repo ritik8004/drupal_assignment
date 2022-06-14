@@ -232,9 +232,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
                 {Drupal.t('Edit')}
               </div>
             </div>
-            <ConditionalView condition={hasValue(ictDate)}>
-              <IctDeliveryInformation deliveryMethod="click_and_collect" date={ictDate} />
-            </ConditionalView>
+            { hasValue(ictDate) && (<IctDeliveryInformation deliveryMethod="click_and_collect" date={ictDate} />)}
             <Popup
               open={isModalOpen}
               closeOnEscape={false}
