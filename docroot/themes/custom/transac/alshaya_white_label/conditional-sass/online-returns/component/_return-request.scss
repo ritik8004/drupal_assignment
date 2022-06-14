@@ -174,14 +174,14 @@
             margin-bottom: rem(5);
 
             .price-currency.suffix {
-              margin-#{$right}: rem(25);
+              margin-right: rem(25);
 
               @include breakpoint($tablet) {
-                margin-#{$right}: rem(7);
+                margin-right: rem(7);
               }
 
               @include breakpoint($desktop) {
-                margin-#{$right}: rem(9);
+                margin-right: rem(9);
               }
             }
           }
