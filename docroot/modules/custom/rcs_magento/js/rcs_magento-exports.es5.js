@@ -40,7 +40,8 @@ exports.invokeApi = async function (request) {
 
   const eventData = {
     request,
-    promises: [mainApi]
+    promises: [mainApi],
+    extraData: {},
   }
 
   // Allow the custom code to initiate other AJAX requests in parallel

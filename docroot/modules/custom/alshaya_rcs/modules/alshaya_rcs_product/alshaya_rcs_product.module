@@ -787,7 +787,6 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
   // Updated recent order build array.
   if (array_key_exists('recent_order', $build)) {
     $orders = $build['recent_order'];
-    $counter = 0;
     foreach ($orders as $id => $order) {
       // Iterate over each order item.
       foreach ($order['#order']['items'] as $key => $item) {
