@@ -22,7 +22,7 @@ exports.render = function render(
     // Convert array to object indexed by the SKU value.
     const indexedInput = inputs.reduce((prev, curr) => ({...prev, [curr.sku]: curr}), {});
     // Get row item HTML.
-    let rowElms = innerHtmlObj.find('tr.order-item-row');
+    let rowElms = innerHtmlObj.find('.order-item-row');
     // Iterate each order row item and replace the placeholders with proper
     // data.
     if (rowElms.length) {
@@ -31,7 +31,7 @@ exports.render = function render(
         if (dataAttr) {
           jQuery(row).html(replaceOrderPlaceHolders(
             indexedInput[dataAttr.itemSku],
-            row.outerHTML,
+            row.innerHTML,
             settings,
           ));
         }
