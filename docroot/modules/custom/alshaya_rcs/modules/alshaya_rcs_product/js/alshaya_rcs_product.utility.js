@@ -580,6 +580,7 @@ window.commerceBackend = window.commerceBackend || {};
       firstChild: '',
     };
 
+
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
       // Don't consider OOS products.
