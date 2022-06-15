@@ -6,7 +6,7 @@
     }
 
     div.order-item-row:not(.cancelled-refund-text) {
-      word-break: break-all;
+      word-break: break-word;
 
       .return-initiated-items {
         padding: 0;
@@ -60,7 +60,7 @@
         border-bottom: rem(1) solid $primary_border;
 
         @include breakpoint($tablet) {
-          grid-template: "a b c d" auto/rem(135) rem(162) rem(138) rem(140);
+          grid-template: "a b c d" auto/rem(135) minmax(auto, 2fr) minmax(auto, 1.75fr) minmax(8.75rem, auto);
         }
 
         @include breakpoint($desktop) {
@@ -88,6 +88,8 @@
         }
 
         .order__details--description {
+          word-break: break-word;
+
           @include breakpoint($only-mobile) {
             padding: 0;
           }
@@ -336,7 +338,7 @@
       background: $order_detail_total_tr_row;
 
       @include breakpoint($tablet) {
-        grid-template: "a b c d" auto/8.4375rem 10.125rem 8.625rem 8.75rem;
+        grid-template: "a b c d" auto/rem(135) minmax(auto, 2fr) minmax(auto, 1.75fr) minmax(8.75rem, auto);
       }
 
       @include breakpoint($desktop) {
