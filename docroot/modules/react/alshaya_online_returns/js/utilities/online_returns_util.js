@@ -129,8 +129,7 @@ function isReturnWindowClosed(date) {
   const split = dateStr.split(' ');
   if (Array.isArray(split)) {
     // Keep only the date.
-    const index = 0;
-    dateStr = split[index];
+    [dateStr] = split;
   }
 
   // Get UTC dates.
