@@ -616,7 +616,8 @@ function alshaya_mobile_app_schema() {
       ],
       'styled_url' => [
         'type' => 'varchar',
-        'not null' => TRUE,
+        // This can be null as image style may not be present.
+        'not null' => FALSE,
         'length' => 255,
         'description' => 'Styled Image URL',
       ],
