@@ -37,15 +37,22 @@ export const getProcessedReturnsData = async (orderEntityId, products) => {
   // Looping through each return items.
   returnResponse.data.items.forEach((returnItem) => {
     const itemsData = [];
+    const rejectedItemsData = [];
     returnItem.items.forEach((item) => {
       const productDetails = products.find((e) => e.item_id === item.order_item_id);
       if (!hasValue(productDetails)) {
         return;
       }
 
-      // If return item id matches with order api responses, we
-      // merge both the api responses and prepare complete product data.
-      itemsData.push(Object.assign(productDetails, { returnData: item }));
+      // If return item id matches with order api responses and the item is not
+      // rejected, we merge both the api responses and prepare complete product
+      // data.
+      const { qty_rejected: qtyRejected } = item.extension_attributes;
+      if (qtyRejected > 0) {
+        rejectedItemsData.push({ ...productDetails, returnData: item });
+      } else {
+        itemsData.push({ ...productDetails, returnData: item });
+      }
     });
 
     // Here, returnInfo consists of return api related information
@@ -54,6 +61,7 @@ export const getProcessedReturnsData = async (orderEntityId, products) => {
     allReturns.push({
       returnInfo: returnItem,
       items: itemsData,
+      rejectedItems: rejectedItemsData,
     });
   });
 
