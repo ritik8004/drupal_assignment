@@ -25,13 +25,12 @@
    * @param objectId
    *   Sku value of the product.
    */
-  Drupal.pushAlshayaAlgoliaInsightsAddToCart = function (queryId, objectId) {
-
+  Drupal.pushAlshayaAlgoliaInsightsAddToCart = function (queryId, objectId, indexName) {
     try {
       window.aa('convertedObjectIDsAfterSearch', {
         userToken: Drupal.getAlgoliaUserToken(),
         eventName: 'Add to cart',
-        index: "...",
+        index: indexName,
         queryID: queryId,
         objectIDs: [objectId],
       });

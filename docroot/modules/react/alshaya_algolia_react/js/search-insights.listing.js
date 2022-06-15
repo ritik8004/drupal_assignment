@@ -27,13 +27,14 @@
         algolia_clicks[hit.attr('gtm-main-sku')] = {
           'query-id': hit.attr('data-insights-query-id'),
           'object-id': hit.attr('data-insights-object-id'),
+          'index-name': hit.attr('data-insights-index'),
         };
         Drupal.addItemInLocalStorage('algolia_search_clicks', algolia_clicks);
 
         window.aa('clickedObjectIDsAfterSearch', {
           userToken: Drupal.getAlgoliaUserToken(),
           eventName: 'Visit Detail Page',
-          index: "...",
+          index: hit.attr('data-insights-index'),
           queryID: hit.attr('data-insights-query-id'),
           objectIDs: [hit.attr('data-insights-object-id')],
           positions: [parseInt(hit.attr('data-insights-position'))],
