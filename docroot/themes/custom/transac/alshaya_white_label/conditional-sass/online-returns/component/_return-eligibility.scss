@@ -13,8 +13,14 @@
     }
 
     .return-button-enabled {
-      flex-basis: 40%;
-      text-align: $right;
+      @include breakpoint($tablet) {
+        margin-#{$left}: rem(10);
+      }
+
+      @include breakpoint($desktop) {
+        flex-basis: 40%;
+        text-align: $right;
+      }
 
       html[lang=ar] & {
         flex-basis: 35%;
@@ -22,7 +28,9 @@
     }
 
     .return-inactive {
-      margin-#{$left}: rem(12);
+      @include breakpoint($desktop) {
+        margin-#{$left}: rem(12);
+      }
     }
 
     #online-returns-eligibility-window {
