@@ -106,21 +106,7 @@ class ReturnedItemsListing extends React.Component {
    * @return {bool}
    *   True if we have non zero items else False.
    */
-  isValidGroupedItemsExists = (groupedItems) => {
-    let valid = false;
-    groupedItems.forEach((item) => {
-      // If valid is already true then return from here.
-      if (valid) {
-        return;
-      }
-
-      if (item.items.length > 0) {
-        valid = true;
-      }
-    });
-
-    return valid;
-  }
+  groupedItemsNotEmpty = (groupedItems) => groupedItems.filter((el) => el.items.length > 0);
 
   render() {
     const { returns } = this.props;
@@ -135,7 +121,7 @@ class ReturnedItemsListing extends React.Component {
     return (
       <div className="returned-items-row returned-items">
         {Object.keys(groupedItems).map((index) => (
-          this.isValidGroupedItemsExists(groupedItems[index]) && (
+          this.groupedItemsNotEmpty(groupedItems[index]).length > 0 && (
             <div key={index} className="items-wrapper">
               <div className="title-wrapper">
                 <span>
