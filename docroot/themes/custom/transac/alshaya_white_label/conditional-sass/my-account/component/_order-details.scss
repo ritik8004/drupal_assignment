@@ -206,6 +206,7 @@
         > div.blend {
           @include breakpoint($only-tablet) {
             width: auto;
+            min-width: auto;
           }
         }
       }
@@ -240,7 +241,7 @@
       grid-template: "a b" auto/ rem(187) auto;
 
       @include breakpoint($tablet) {
-        grid-template: "a b c d" auto/ rem(135) rem(162) rem(138) rem(140);
+        grid-template: "a b c d" auto/rem(135) minmax(auto, 2fr) minmax(auto, 1.75fr) minmax(8.75rem, auto);
       }
 
       @include breakpoint($desktop) {
