@@ -177,12 +177,12 @@ class AlshayaJsOptimisationHelper {
    *   Return the processed values.
    */
   public function generateProcessedLibraries(array $critical_js = [], $reset = FALSE) {
+    $settings = $this->configFactory->getEditable('alshaya_js_optimisations.settings');
     if (empty($critical_js)) {
-      $settings = $this->configFactory->getEditable('alshaya_js_optimisations.settings');
       $critical_js = $settings->get('critical_js');
     }
     $processed_libraries = $this->resolveCategories($critical_js);
-    if ($reset && isset($settings)) {
+    if ($reset && !empty($critical_js)) {
       $settings->set('critical_js.processed_libraries', $processed_libraries)->save();
     }
     return $processed_libraries;
