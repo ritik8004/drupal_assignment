@@ -2,6 +2,9 @@
 
 namespace Drupal\alshaya_mobile_app\EventSubscriber;
 
+use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -14,6 +17,11 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
  * Redirects requests from mobile APP for PIMS images.
  */
 class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInterface {
+
+  /**
+   * PIMS styles mapping table name constant.
+   */
+  const PIMS_IMAGE_STYLES_MAPPING_TABLE = 'pims_style_mapping';
 
   /**
    * The config object.
@@ -30,23 +38,45 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
   protected $database;
 
   /**
+   * SKU Images Manager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImagesManager;
+
+  /**
+   * SKU Images Helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * The class constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory service.
    * @param \Drupal\Core\Database\Connection $database
    *   Database service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
+   *   SKU Images Manager service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   SKU Images Helper service.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    Connection $database
+    Connection $database,
+    SkuImagesManager $sku_images_manager,
+    SkuImagesHelper $sku_images_helper
   ) {
     $this->configFactory = $config_factory;
     $this->database = $database;
+    $this->skuImagesManager = $sku_images_manager;
+    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
-   * Initializes the language manager at the beginning of the request.
+   * Prepares the PIMS image URL.
    *
    * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    *   The Event to process.
@@ -81,8 +111,8 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
 
     // Fetch the styled PIMS image URL from the database.
     $image_style = $matches[1];
-    $query = $this->database->select('pims_style_mapping');
-    $query->addField('pims_style_mapping', 'styled_url');
+    $query = $this->database->select(self::PIMS_IMAGE_STYLES_MAPPING_TABLE, 'mapping');
+    $query->addField('mapping', 'styled_url');
     $query->condition('original_url', $path);
     $query->condition('style', $image_style);
     $pims_styled_image_url = $query->execute()->fetchField();
@@ -103,6 +133,39 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
   }
 
   /**
+   * Adds/updates entry in pims_style_mapping table.
+   *
+   * @param \Drupal\alshaya_acm_product\Event\ProductUpdatedEvent $event
+   *   Event object.
+   */
+  public function onProductUpdated(ProductUpdatedEvent $event) {
+    // @todo How to handle the case where images are removed.
+    if ($event->getOperation() === ProductUpdatedEvent::EVENT_DELETE) {
+      return;
+    }
+
+    $sku_entity = $event->getSku();
+    $media = $this->skuImagesManager->getProductMedia($sku_entity, 'pdp');
+    $data = [];
+    foreach ($media['media_items']['images'] as $media_item) {
+      $styled_images = $this->skuImagesHelper->getAllStyledImages($media_item);
+      foreach ($styled_images as $image_style => $styled_image_url) {
+        $data[] = [
+          'original_url' => $media_item['image_url'],
+          'style' => $image_style,
+          'styled_url' => $styled_image_url,
+        ];
+      }
+    }
+
+    $query = $this->database->upsert(self::PIMS_IMAGE_STYLES_MAPPING_TABLE);
+    foreach ($data as $value) {
+      $query->values($value);
+    }
+    $query->execute();
+  }
+
+  /**
    * Registers the methods in this class that should be listeners.
    *
    * @return array
@@ -110,6 +173,7 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
    */
   public static function getSubscribedEvents() {
     $events[KernelEvents::REQUEST][] = ['onKernelRequestPimsImage', 255];
+    $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdated', 100];
     return $events;
   }
 

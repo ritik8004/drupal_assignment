@@ -84,4 +84,33 @@ class SkuImagesHelperPims extends SkuImagesHelper {
     return '';
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public function getAllStyledImages(array $media) {
+    if (isset($media['pims_image']['styles']) && !empty($media['pims_image']['styles'])) {
+      $media = $media['pims_image'];
+    }
+    else {
+      return [];
+    }
+
+    $styles = [
+      self::STYLE_PRODUCT_LISTING,
+      self::STYLE_PRODUCT_SLIDE,
+      self::STYLE_PRODUCT_ZOOM,
+      self::STYLE_PRODUCT_THUMBNAIL,
+      self::STYLE_PRODUCT_TEASER,
+      self::STYLE_CART_THUMBNAIL,
+    ];
+    $styled_image_urls = [];
+    foreach ($styles as $style_name) {
+      $styled_image_urls[$style_name] = !empty($media['styles'][$style_name])
+        ? $media['styles'][$style_name]
+        : NULL;
+    }
+
+    return $styled_image_urls;
+  }
+
 }
