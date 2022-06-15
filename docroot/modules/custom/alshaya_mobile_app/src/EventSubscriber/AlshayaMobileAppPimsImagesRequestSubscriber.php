@@ -151,7 +151,7 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
       $styled_images = $this->skuImagesHelper->getAllStyledImages($media_item);
       foreach ($styled_images as $image_style => $styled_image_url) {
         $data[] = [
-          'original_url' => $media_item['image_url'],
+          'original_url' => $media_item['drupal_uri'],
           'style' => $image_style,
           'styled_url' => $styled_image_url,
         ];
@@ -159,9 +159,11 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
     }
 
     $query = $this->database->upsert(self::PIMS_IMAGE_STYLES_MAPPING_TABLE);
+    $query->fields(['original_url', 'style', 'styled_url']);
     foreach ($data as $value) {
       $query->values($value);
     }
+    $query->key('original_url');
     $query->execute();
   }
 
