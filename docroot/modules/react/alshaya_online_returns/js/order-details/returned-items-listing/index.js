@@ -99,6 +99,12 @@ class ReturnedItemsListing extends React.Component {
 
   /**
    * Validates if the groupedItems contain valid items.
+   *
+   * @param {object} groupedItems
+   *   An object containing all grouped items based on return type.
+   *
+   * @return {bool}
+   *   True if we have non zero items else False.
    */
   isValidGroupedItemsExists = (groupedItems) => {
     let valid = false;
