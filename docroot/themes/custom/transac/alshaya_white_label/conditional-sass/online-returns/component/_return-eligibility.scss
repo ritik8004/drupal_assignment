@@ -28,9 +28,7 @@
     }
 
     .return-inactive {
-      @include breakpoint($desktop) {
-        margin-#{$left}: rem(12);
-      }
+      margin-#{$left}: rem(38);
     }
 
     #online-returns-eligibility-window {
