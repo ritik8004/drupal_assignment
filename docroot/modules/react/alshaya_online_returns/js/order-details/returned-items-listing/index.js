@@ -106,7 +106,7 @@ class ReturnedItemsListing extends React.Component {
    * @return {bool}
    *   True if we have non zero items else False.
    */
-  groupedItemsNotEmpty = (groupedItems) => groupedItems.filter((el) => el.items.length > 0);
+  groupWithItems = (groupedItems) => groupedItems.filter((el) => el.items.length > 0);
 
   render() {
     const { returns } = this.props;
@@ -121,7 +121,7 @@ class ReturnedItemsListing extends React.Component {
     return (
       <div className="returned-items-row returned-items">
         {Object.keys(groupedItems).map((index) => (
-          this.groupedItemsNotEmpty(groupedItems[index]).length > 0 && (
+          this.groupWithItems(groupedItems[index]).length > 0 && (
             <div key={index} className="items-wrapper">
               <div className="title-wrapper">
                 <span>
