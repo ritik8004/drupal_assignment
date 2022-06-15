@@ -123,7 +123,20 @@ function getReturnWindowOpenMessage(date) {
  * Helper function to check if return window is closed.
  */
 function isReturnWindowClosed(date) {
-  return (new Date(date) < new Date());
+  let dateStr = date;
+
+  // Temporary fix to split the date/time string and capture only the date;
+  const split = dateStr.split(' ');
+  if (Array.isArray(split)) {
+    // Keep only the date.
+    [dateStr] = split;
+  }
+
+  // Get UTC dates.
+  const expireDate = moment.utc(dateStr).endOf('day');
+  const currDate = moment.utc();
+
+  return (currDate.valueOf() > expireDate.valueOf());
 }
 
 /**
