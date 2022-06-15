@@ -64,3 +64,10 @@ services:
       - '@alshaya_acm_product.price_helper'
       - '@alshaya_product_options.swatches'
       - '@config.factory'
+  alshaya_mobile_app.pims_image_url_subscriber:
+    class: Drupal\alshaya_mobile_app\EventSubscriber\AlshayaMobileAppPimsImagesRequestSubscriber
+    arguments:
+      - '@config.factory'
+      - '@database'
+    tags:
+      - { name: event_subscriber }
