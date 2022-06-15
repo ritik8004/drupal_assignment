@@ -206,7 +206,7 @@ async function validateReturnRequest(orderDetails) {
   let totalProductQty = 0;
   let totalRefundedQty = 0;
   orderDetails['#products'].forEach((item) => {
-    totalProductQty += item.ordered;
+    totalProductQty += item.actual_ordered;
     totalRefundedQty += item.refunded;
   });
 
