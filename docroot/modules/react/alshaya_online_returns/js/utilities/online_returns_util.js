@@ -123,8 +123,9 @@ function getReturnWindowOpenMessage(date) {
  * Helper function to check if return window is closed.
  */
 function isReturnWindowClosed(date) {
-  // Temporary fix to split the date/time string and capture only the date;
   let dateStr = date;
+
+  // Temporary fix to split the date/time string and capture only the date;
   const split = dateStr.split(' ');
   if (Array.isArray(split)) {
     // Keep only the date.
