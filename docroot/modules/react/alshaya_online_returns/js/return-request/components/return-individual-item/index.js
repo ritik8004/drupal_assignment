@@ -16,6 +16,11 @@ const ReturnIndividualItem = ({
   if (item.returnData) {
     itemQuantity = item.returnData.qty_returned !== null
       ? item.returnData.qty_returned : item.returnData.qty_requested;
+
+    // Update the itemQuantity if the item is a rejected item.
+    itemQuantity = item.returnData.extension_attributes.qty_rejected != null
+      ? item.returnData.extension_attributes.qty_rejected
+      : itemQuantity;
   }
 
   // Return null if itemQuantity is not valid.
