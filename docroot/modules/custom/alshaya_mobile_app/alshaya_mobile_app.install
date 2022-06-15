@@ -15,6 +15,17 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Installs new table for mapping image URL with PIMS image URL.
+ */
+function alshaya_mobile_app_update_8082() {
+  $spec = alshaya_mobile_app_schema()['pims_style_mapping'];
+  $schema = \Drupal::database()->schema();
+  $schema->createTable('pims_style_mapping', $spec);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Import config to set "process_image_url_for_pims" key.
  */
 function alshaya_mobile_app_update_8081() {
@@ -576,4 +587,40 @@ function _alshaya_mobile_app_create_consumer() {
     'roles' => ['mobile_app_consumer'],
   ]);
   $client->save();
+}
+
+/**
+ * Implements hook_schema().
+ */
+function alshaya_mobile_app_schema() {
+  $schema = [];
+  $schema['pims_style_mapping'] = [
+    'description' => 'PIMS mapping table',
+    // @todo Set proper size of field.
+    'fields' => [
+      'original_url' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'description' => 'Original Image URL',
+      ],
+      'style' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'description' => 'Image style',
+      ],
+      'styled_url' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'description' => 'Styled Image URL',
+      ],
+    ],
+    'unique keys' => [
+      'unique' => ['original_url', 'style', 'styled_url'],
+    ],
+  ];
+
+  return $schema;
 }
