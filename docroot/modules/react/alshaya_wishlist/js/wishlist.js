@@ -53,12 +53,12 @@ const handleMatchBackLoad = () => {
   renderWishListButton('wishlist-pdp-matchback', 'matchback');
 };
 
-// Check if the wishlist element on PDP exists and
-// data-sku is present, then render the wishlist button.
-// For V3 we wait for alshayaAddToCartLoaded event to render wishlist.
-if (typeof drupalSettings.rcsPage === 'undefined') {
+// Render wishlist button once sku base form is loaded.
+document.addEventListener('onSkuBaseFormLoad', () => {
+  // Check if the wishlist element on PDP exists and
+  // data-sku is present, then render the wishlist button.
   renderWishListButton('wishlist-pdp-full', 'pdp');
-}
+});
 
 // Add modal load event listener to render
 // wishlist button whenever modal opens.
@@ -67,8 +67,3 @@ document.addEventListener('onModalLoad', handleModalOnLoad);
 // Add modal load event listener to render
 // wishlist button whenever modal opens.
 document.addEventListener('onMatchbackLoad', handleMatchBackLoad);
-
-// Render wishlist button once add to cart is loaded in V3.
-document.addEventListener('alshayaAddToCartLoaded', () => {
-  renderWishListButton('wishlist-pdp-full', 'pdp');
-});
