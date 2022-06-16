@@ -92,12 +92,6 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
       return;
     }
 
-    // Do not proceed if we do not need to process the image urls.
-    $config = $this->configFactory->get('alshaya_mobile_app.settings');
-    if (!($config->get('process_image_url_for_pims'))) {
-      return;
-    }
-
     // Fetch the image style from the path.
     $matches = [];
     preg_match('/styles\/(\w+)\/public\/(.*?)$/', $path, $matches);
