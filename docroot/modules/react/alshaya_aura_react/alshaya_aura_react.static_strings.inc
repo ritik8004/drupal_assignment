@@ -55,10 +55,6 @@ function _alshaya_aura_static_strings() {
       'value' => t('Mobile Number'),
     ],
     [
-      'key' => 'otp_label',
-      'value' => t('One time PIN'),
-    ],
-    [
       'key' => 'form_error_full_name',
       'value' => t('Your full name is required to sign-up. Please enter your details to proceed.'),
     ],
@@ -421,6 +417,10 @@ function _alshaya_aura_static_strings() {
     [
       'key' => 'checkout_check_your_points_value',
       'value' => t('Check your points value:', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'otp_label',
+      'value' => t('One Time Pin', [], ['context' => 'aura']),
     ],
   ];
 }
