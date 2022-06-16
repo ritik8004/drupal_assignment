@@ -25,6 +25,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides a resource to get product details excliding linked products.
@@ -131,6 +132,13 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected $optionsHelper;
 
   /**
+   * Config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -165,6 +173,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   The request stack service.
    * @param \Drupal\alshaya_product_options\ProductOptionsHelper $options_helper
    *   Product Options Helper.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory service.
    */
   public function __construct(
     array $configuration,
@@ -182,7 +192,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     SkuInfoHelper $sku_info_helper,
     ProductCategoryHelper $product_category_helper,
     RequestStack $request_stack,
-    ProductOptionsHelper $options_helper
+    ProductOptionsHelper $options_helper,
+    ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -201,6 +212,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $this->productCategoryHelper = $product_category_helper;
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->optionsHelper = $options_helper;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -223,7 +235,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('alshaya_acm_product.category_helper'),
       $container->get('request_stack'),
-      $container->get('alshaya_product_options.helper')
+      $container->get('alshaya_product_options.helper'),
+      $container->get('config.factory')
     );
   }
 
@@ -299,6 +312,43 @@ class ProductExcludeLinkedResource extends ResourceBase {
   }
 
   /**
+   * Returns if PIMS images setting is enabled for App.
+   *
+   * @return bool
+   *   TRUE if enabled, else FALSE.
+   */
+  private function isPimsImagesEnabledForApp() {
+    static $static = NULL;
+    if (!is_null($static)) {
+      return $static;
+    }
+    $static = $this->configFactory->get('alshaya_mobile_app.settings')->get('process_image_url_for_pims');
+    return $static;
+  }
+
+  /**
+   * Processes the media data.
+   *
+   * @param array $sku_media
+   *   The media for the sku.
+   */
+  private function processSkuMedia(array &$sku_media) {
+    if (!($this->isPimsImagesEnabledForApp())) {
+      return;
+    }
+    $no_of_media_items = !empty($sku_media['images'])
+      ? count($sku_media['images'])
+      : 0;
+    if ($no_of_media_items === 0) {
+      return;
+    }
+
+    for ($i = 0; $i < $no_of_media_items; $i++) {
+      $sku_media['images'][$i]['url'] = preg_replace('/\/assets/', '/pims-assets/files/assets/files/assets', $sku_media['images'][$i]['url']);
+    }
+  }
+
+  /**
    * Wrapper function to get product data.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
@@ -365,9 +415,11 @@ class ProductExcludeLinkedResource extends ResourceBase {
       'teaser' => 'teaser',
     ];
     foreach ($media_contexts as $key => $context) {
+      $sku_media = $this->skuInfoHelper->getMedia($sku, $key);
+      $this->processSkuMedia($sku_media);
       $data['media'][] = [
         'context' => $context,
-        'media' => $this->skuInfoHelper->getMedia($sku, $key),
+        'media' => $sku_media,
       ];
     }
 
