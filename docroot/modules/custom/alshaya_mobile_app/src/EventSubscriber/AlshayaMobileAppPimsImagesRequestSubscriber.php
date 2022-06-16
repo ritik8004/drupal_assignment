@@ -150,9 +150,13 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
     $data = [];
     foreach ($media['media_items']['images'] as $media_item) {
       $styled_images = $this->skuImagesHelper->getAllStyledImages($media_item);
+      // Remove the domain from the base image URL.
+      preg_match('/\/assets(.*?)$/', $media_item['drupal_uri'], $base_image_path);
+      $base_image_path = $base_image_path[0];
+      // Prepare the data.
       foreach ($styled_images as $image_style => $styled_image_url) {
         $data[] = [
-          'original_url' => $media_item['drupal_uri'],
+          'original_url' => $base_image_path,
           'style' => $image_style,
           'styled_url' => $styled_image_url,
         ];
