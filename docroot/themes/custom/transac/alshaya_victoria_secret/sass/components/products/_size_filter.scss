@@ -19,13 +19,15 @@
   }
 
   > div {
-    display: inline-block;
+    display: inline-flex;
     width: 4rem;
     padding: 0.8125rem 0;
     background-color: $bra_size_filter_box_bg;
     border: 1px solid $bra_size_filter_box_border;
     border-#{$right}: none;
     cursor: pointer;
+    justify-content: center;
+    flex-direction: column;
 
     &:last-child {
       border-#{$right}: 1px solid $bra_size_filter_box_border;
@@ -57,9 +59,9 @@
   }
 
   .shop-by-size {
-    display: block;
     text-align: center;
     letter-spacing: 0.44px;
+    min-height: rem(14);
 
     &:first-child {
       font-family: $vs-regular;
