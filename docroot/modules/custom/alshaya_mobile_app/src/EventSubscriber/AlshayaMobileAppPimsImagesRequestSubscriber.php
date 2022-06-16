@@ -88,7 +88,7 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
     // Do not proceed if the request is not for PIMS assets made by mobile app.
     $path = $event->getRequest()->getRequestUri();
     $matches = [];
-    if (strpos($path, 'pims-assets') === FALSE) {
+    if (strpos($path, '/pims-assets') === 0) {
       return;
     }
 
