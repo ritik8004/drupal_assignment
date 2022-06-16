@@ -126,7 +126,7 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
     // We use TrustedRedirectResponse here in order to allow redirecting to
     // external domain. For eg. on PPROD, we will have PROD image urls, so
     // using normal RedirectResponse() will not allow us to do that redirect.
-    $response = new TrustedRedirectResponse($pims_styled_image_url);
+    $response = new TrustedRedirectResponse($pims_styled_image_url, Response::HTTP_MOVED_PERMANENTLY);
     // Set max-age for 30 days.
     $response->setMaxAge(2592000);
     $response->setExpires(new \DateTime('+1 month'));
