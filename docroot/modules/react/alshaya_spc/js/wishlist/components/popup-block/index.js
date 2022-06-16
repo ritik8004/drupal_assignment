@@ -85,7 +85,12 @@ export default class WishlistPopupBlock extends React.Component {
                 // Prepare and dispatch an event when product added to the storage
                 // so other components like wishlist header can listen and do the
                 // needful.
-                dispatchCustomEvent('productAddedToWishlist', {});
+                dispatchCustomEvent('productAddedToWishlist', {
+                  productInfo,
+                  extraOptions: {
+                    notification: false,
+                  },
+                });
               }
             });
           }
