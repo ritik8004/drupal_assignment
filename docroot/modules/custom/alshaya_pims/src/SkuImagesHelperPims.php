@@ -88,10 +88,7 @@ class SkuImagesHelperPims extends SkuImagesHelper {
    * {@inheritDoc}
    */
   public function getAllStyledImages(array $media) {
-    if (isset($media['pims_image']['styles']) && !empty($media['pims_image']['styles'])) {
-      $media = $media['pims_image'];
-    }
-    else {
+    if (empty($media['pims_image']['styles'])) {
       return [];
     }
 
@@ -105,7 +102,7 @@ class SkuImagesHelperPims extends SkuImagesHelper {
     ];
     $styled_image_urls = [];
     foreach ($styles as $style_name) {
-      $styled_image_urls[$style_name] = $media['styles'][$style_name];
+      $styled_image_urls[$style_name] = $media['pims_image']['styles'][$style_name];
     }
 
     return $styled_image_urls;
