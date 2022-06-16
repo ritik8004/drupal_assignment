@@ -214,7 +214,7 @@ class SignUpCompleteHeader extends React.Component {
                   </div>
                   <div className="content-section">
                     <div className="title">
-                      {Drupal.t('Aura account number')}
+                      {Drupal.t('Aura account number', {}, { context: 'aura' })}
                     </div>
                     <Cleave
                       name="aura-my-account-link-card"
