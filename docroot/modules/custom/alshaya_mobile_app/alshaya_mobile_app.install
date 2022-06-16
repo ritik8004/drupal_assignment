@@ -31,9 +31,6 @@ function alshaya_mobile_app_update_8081() {
   $spec = alshaya_mobile_app_schema()['pims_style_mapping'];
   $schema = \Drupal::database()->schema();
   $schema->createTable('pims_style_mapping', $spec);
-
-  // Queue all products to add data to the pims_style_mapping table.
-  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
