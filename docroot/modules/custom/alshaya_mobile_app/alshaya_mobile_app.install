@@ -618,7 +618,7 @@ function alshaya_mobile_app_schema() {
       ],
     ],
     'unique keys' => [
-      'unique' => ['original_url', 'style', 'styled_url'],
+      'unique' => ['original_url', 'style'],
     ],
   ];
 
