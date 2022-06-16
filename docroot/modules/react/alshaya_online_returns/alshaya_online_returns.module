@@ -146,6 +146,8 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
 
     if ($value['refunded'] > 0 && $value['refunded'] <= $value['ordered']) {
       $value['ordered'] -= $value['refunded'];
+      // Update the `qty_ordered` flag as well.
+      $value['qty_ordered'] = $value['ordered'];
     }
 
     // Get the new total based the the available quantity.

@@ -9,7 +9,7 @@ rows:
   -
     title: 'Pack your Item & Return'
     description:
-      value: '<p>We''ll mail you the return label shortly.</p><p>You can also print it from your order details page.</p>'
+      value: '<p>Please make sure you pack your items in the same fashion it was received.</p><p>Place the return label you printed on the outside of the package.</p>'
       format: 'rich_text'
     icon: 'packitem'
     hide_this_row: 0
