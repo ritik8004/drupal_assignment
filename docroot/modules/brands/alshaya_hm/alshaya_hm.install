@@ -15,17 +15,6 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * Set value for the new mobile app config.
- */
-function alshaya_hm_update_8057() {
-  \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings')
-    ->set('process_image_url_for_pims', TRUE)
-    ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Set config to allow the all level of categories can be used
  * under department page.
  */
@@ -1308,11 +1297,6 @@ function alshaya_hm_update_dependencies() {
     'alshaya_hm' => [
       '8034' => [
         'alshaya_seo_transac' => '8402',
-      ],
-    ],
-    'alshaya_hm' => [
-      '8057' => [
-        'alshaya_mobile_app' => '8081',
       ],
     ],
   ];
