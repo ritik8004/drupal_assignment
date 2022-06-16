@@ -144,6 +144,7 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
       return;
     }
 
+    // Prepare the mapping data that needs to be added to the table.
     $sku_entity = $event->getSku();
     $media = $this->skuImagesManager->getProductMedia($sku_entity, 'pdp');
     $data = [];
@@ -158,6 +159,7 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
       }
     }
 
+    // Enter the data into the table.
     $query = $this->database->upsert(self::PIMS_IMAGE_STYLES_MAPPING_TABLE);
     $query->fields(['original_url', 'style', 'styled_url']);
     foreach ($data as $value) {
