@@ -1,8 +1,9 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import QRCode from 'react-qr-code';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 
-class QrCode extends React.Component {
+class QrCodeDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +31,7 @@ class QrCode extends React.Component {
 
   render() {
     const { isModelOpen } = this.state;
-    const { qrImage, memberId } = this.props;
+    const { memberId } = this.props;
 
     return (
       <>
@@ -51,7 +52,7 @@ class QrCode extends React.Component {
             <div className="qr-img-block">
               <div className="qr-redeem">{getStringMessage('qr_code_redeem')}</div>
               <div className="img-container">
-                <img src={qrImage} />
+                <QRCode value={memberId} />
               </div>
             </div>
             <div className="my-membership-id">
@@ -64,4 +65,4 @@ class QrCode extends React.Component {
   }
 }
 
-export default QrCode;
+export default QrCodeDisplay;
