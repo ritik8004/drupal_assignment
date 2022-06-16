@@ -12,6 +12,25 @@
       margin-bottom: 0;
     }
 
+    .return-button-enabled {
+      @include breakpoint($tablet) {
+        margin-#{$left}: rem(10);
+      }
+
+      @include breakpoint($desktop) {
+        flex-basis: 40%;
+        text-align: $right;
+      }
+
+      html[lang=ar] & {
+        flex-basis: 35%;
+      }
+    }
+
+    .return-inactive {
+      margin-#{$left}: rem(38);
+    }
+
     #online-returns-eligibility-window {
       .eligibility-window-container {
         font-size: rem(12);
