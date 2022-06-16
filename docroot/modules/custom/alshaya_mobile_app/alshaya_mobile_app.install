@@ -15,9 +15,18 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
- * Installs new table for mapping image URL with PIMS image URL.
+ * Perform actions for storing PIMS image mapping in database and providing
+ * stopgap URLs in API response.
  */
-function alshaya_mobile_app_update_8082() {
+function alshaya_mobile_app_update_8081() {
+  // Import config to set "process_image_url_for_pims" key.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['alshaya_mobile_app.settings'],
+    'alshaya_mobile_app',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
   // Create table `pims_style_mapping`.
   $spec = alshaya_mobile_app_schema()['pims_style_mapping'];
   $schema = \Drupal::database()->schema();
@@ -25,20 +34,6 @@ function alshaya_mobile_app_update_8082() {
 
   // Queue all products to add data to the pims_style_mapping table.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Import config to set "process_image_url_for_pims" key.
- */
-function alshaya_mobile_app_update_8081() {
-  \Drupal::service('alshaya_config.manager')->updateConfigs(
-    ['alshaya_mobile_app.settings'],
-    'alshaya_mobile_app',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
 }
 
 /**
