@@ -7,9 +7,9 @@ use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
@@ -100,7 +100,7 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
 
     // Fetch the image style from the path.
     $matches = [];
-    preg_match('/styles\/(\w+)\/public/', $path, $matches);
+    preg_match('/styles\/(\w+)\/public\/(.*?)$/', $path, $matches);
     // Image style is mandatory. If not present, return 400 error.
     if (empty($matches[1])) {
       $event->stopPropagation();
@@ -110,11 +110,10 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
     }
 
     // Fetch the styled PIMS image URL from the database.
-    $image_style = $matches[1];
     $query = $this->database->select(self::PIMS_IMAGE_STYLES_MAPPING_TABLE, 'mapping');
     $query->addField('mapping', 'styled_url');
-    $query->condition('original_url', $path);
-    $query->condition('style', $image_style);
+    $query->condition('original_url', $matches[2]);
+    $query->condition('style', $matches[1]);
     $pims_styled_image_url = $query->execute()->fetchField();
     if (empty($pims_styled_image_url)) {
       $event->stopPropagation();
@@ -124,7 +123,10 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
     }
 
     // Redirect the request to the URL of the styled image.
-    $response = new RedirectResponse($pims_styled_image_url);
+    // We use TrustedRedirectResponse here in order to allow redirecting to
+    // external domain. For eg. on PPROD, we will have PROD image urls, so
+    // using normal RedirectResponse() will not allow us to do that redirect.
+    $response = new TrustedRedirectResponse($pims_styled_image_url);
     // Set max-age for 30 days.
     $response->setMaxAge(2592000);
     $response->setExpires(new \DateTime('+1 month'));
@@ -139,7 +141,6 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
    *   Event object.
    */
   public function onProductUpdated(ProductUpdatedEvent $event) {
-    // @todo How to handle the case where images are removed.
     if ($event->getOperation() === ProductUpdatedEvent::EVENT_DELETE) {
       return;
     }
@@ -151,7 +152,8 @@ class AlshayaMobileAppPimsImagesRequestSubscriber implements EventSubscriberInte
     foreach ($media['media_items']['images'] as $media_item) {
       $styled_images = $this->skuImagesHelper->getAllStyledImages($media_item);
       // Remove the domain from the base image URL.
-      preg_match('/\/assets(.*?)$/', $media_item['drupal_uri'], $base_image_path);
+      // $base_image_path will be like 'assets/HNM/13601843/24c83ed80665...'.
+      preg_match('/assets\/(.*?)$/', $media_item['drupal_uri'], $base_image_path);
       $base_image_path = $base_image_path[0];
       // Prepare the data.
       foreach ($styled_images as $image_style => $styled_image_url) {
