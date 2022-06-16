@@ -26,9 +26,10 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 
 /**
- * Provides a resource to get product details excliding linked products.
+ * Provides a resource to get product details excluding linked products.
  *
  * @RestResource(
  *   id = "product_exclude_linked",
@@ -139,6 +140,13 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected $configFactory;
 
   /**
+   * Sku Image helper service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -175,6 +183,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   Product Options Helper.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   Sku images helper service.
    */
   public function __construct(
     array $configuration,
@@ -193,7 +203,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ProductCategoryHelper $product_category_helper,
     RequestStack $request_stack,
     ProductOptionsHelper $options_helper,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    SkuImagesHelper $sku_images_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -213,6 +224,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->optionsHelper = $options_helper;
     $this->configFactory = $config_factory;
+    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -236,7 +248,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $container->get('alshaya_acm_product.category_helper'),
       $container->get('request_stack'),
       $container->get('alshaya_product_options.helper'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_acm_product.sku_images_helper')
     );
   }
 
@@ -416,7 +429,9 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ];
     foreach ($media_contexts as $key => $context) {
       $sku_media = $this->skuInfoHelper->getMedia($sku, $key);
+      // $sku_media = $this->processMediaImageStyles($sku_media, $sku, $context);
       $this->processSkuMedia($sku_media);
+      // Add style images in media.
       $data['media'][] = [
         'context' => $context,
         'media' => $sku_media,
@@ -663,6 +678,66 @@ class ProductExcludeLinkedResource extends ResourceBase {
       ];
     }
     return $promotions;
+  }
+
+  /**
+   * Processes styled images in media.
+   *
+   * @param array $media
+   *   Array of product media to be processed.
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context - pdp/search/modal/teaser.
+   *
+   * @return array
+   *   media array containing styled images.
+   */
+  protected function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
+    /** @var \Drupal\acq_sku\Entity\SKU $sku */
+    $product_media = $this->skuImagesManager->getProductMedia($sku, $context);
+    $styled_images = [];
+    // Map styled images to media image url.
+    foreach ($product_media['media_items']['images'] ?? [] as $media_item) {
+      $styled_images[file_create_url($media_item['drupal_uri'])] = $this->getStyledImages($media_item);
+    }
+
+    // Add styled images for each media image.
+    foreach ($media['images'] as $key => $media_item) {
+      $media['images'][$key]['styles'] = $styled_images[$media_item['url']];
+    }
+
+    return $media;
+  }
+
+  /**
+   * Get styled images for media.
+   *
+   * @param array $media
+   *   Media array.
+   *
+   * @return array
+   *   Returns an array of styled product images.
+   */
+  protected function getStyledImages(array $media) {
+
+    // Get Product styles to be returned.
+    $product_styles = [
+      SkuImagesHelper::STYLE_PRODUCT_LISTING,
+      SkuImagesHelper::STYLE_PRODUCT_SLIDE,
+      SkuImagesHelper::STYLE_PRODUCT_ZOOM,
+      SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL,
+      SkuImagesHelper::STYLE_PRODUCT_TEASER,
+      SkuImagesHelper::STYLE_CART_THUMBNAIL,
+    ];
+
+    $styled_images = [];
+    // Get styled image url from media.
+    foreach ($product_styles as $product_style) {
+      $styled_images[$product_style] = $this->skuImagesHelper->getImageStyleUrl($media['pims_image'], $product_style);
+    }
+
+    return $styled_images;
   }
 
 }

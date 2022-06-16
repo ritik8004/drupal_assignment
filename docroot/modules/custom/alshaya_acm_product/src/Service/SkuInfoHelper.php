@@ -130,13 +130,6 @@ class SkuInfoHelper {
   protected $deliveryOptionsHelper;
 
   /**
-   * Sku Image helper service.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
-   */
-  protected $skuImagesHelper;
-
-  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -167,8 +160,6 @@ class SkuInfoHelper {
    *   Product Info Helper.
    * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
    *   Delivery Options Helper.
-   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
-   *   Sku Images Helper.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -184,8 +175,7 @@ class SkuInfoHelper {
     ConfigFactoryInterface $config_factory,
     ProductCategoryHelper $product_category_helper,
     ProductInfoHelper $product_info_helper,
-    DeliveryOptionsHelper $delivery_options_helper,
-    SkuImagesHelper $sku_images_helper
+    DeliveryOptionsHelper $delivery_options_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -201,7 +191,6 @@ class SkuInfoHelper {
     $this->productCategoryHelper = $product_category_helper;
     $this->productInfoHelper = $product_info_helper;
     $this->deliveryOptionsHelper = $delivery_options_helper;
-    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -368,7 +357,6 @@ class SkuInfoHelper {
       $return['images'][] = [
         'url' => file_create_url($media_item['drupal_uri']),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
-        'styles' => $this->getStyledImages($media_item),
       ];
     }
 
@@ -777,36 +765,6 @@ class SkuInfoHelper {
   public function getCartTitle(SKUInterface $sku) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     return $this->productInfoHelper->getTitle($sku, 'basket');
-  }
-
-  /**
-   * Get styled images for media.
-   *
-   * @param array $media
-   *   Media array.
-   *
-   * @return array
-   *   Returns an array of styled product images.
-   */
-  protected function getStyledImages(array $media) {
-
-    // Get Product styles to be returned.
-    $product_styles = [
-      SkuImagesHelper::STYLE_PRODUCT_LISTING,
-      SkuImagesHelper::STYLE_PRODUCT_SLIDE,
-      SkuImagesHelper::STYLE_PRODUCT_ZOOM,
-      SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL,
-      SkuImagesHelper::STYLE_PRODUCT_TEASER,
-      SkuImagesHelper::STYLE_CART_THUMBNAIL,
-    ];
-
-    $styled_images = [];
-    // Get styled image url from media.
-    foreach ($product_styles as $product_style) {
-      $styled_images[$product_style] = $this->skuImagesHelper->getImageStyleUrl($media['pims_image'], $product_style);
-    }
-
-    return $styled_images;
   }
 
 }
