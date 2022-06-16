@@ -102,8 +102,7 @@ jobs:
       - name: Run Composer install
         run: |
           composer self-update
-          composer self-update --1
-          composer global require hirak/prestissimo
+          composer self-update --2
           composer validate --no-check-all --ansi
           composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
@@ -111,9 +110,6 @@ jobs:
         run: |
           ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
           ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
-
-      - name: Build all middleware
-        run: bash ${GITHUB_WORKSPACE}/blt/scripts/middleware-build.sh "${GITHUB_WORKSPACE}"
 
       - name: Cache dependencies installed with Composer
         id: composer-cache

@@ -12,10 +12,9 @@ global_styles:
   dependencies:
     - core/jquery
     - core/jquery.once
-    - core/jquery.ui.accordion
-    - core/jquery.ui.core
-    - core/jquery.ui.effects.core
-    - core/jquery.ui.tabs
+    - jquery_ui_accordion/accordion
+    - jquery_ui_effects/core
+    - jquery_ui_tabs/tabs
     - core/jquery.cookie
     - mobile_number/element
     - alshaya_white_label/font-face
@@ -27,7 +26,7 @@ global_styles:
 detail_polyfill:
   js:
     vendor/js/details-polyfill.js: {attributes: { nomodule: true }}
-    
+
 ltr_styles:
   css:
     theme:
@@ -190,7 +189,7 @@ magazine_attribute:
   dependencies:
     - alshaya_white_label/pdp-video-player
     - alshaya_white_label/attribute.common
-    - core/jquery.ui.effects.slide
+    - jquery_ui_effects/slide
     - alshaya_white_label/pdp-additional-attributes
 
 campaign-plp-style-1-video-provider:
@@ -757,6 +756,11 @@ egift-card-checkout-confirmation:
   css:
     theme:
       css/conditional-sass/egift-card-checkout-confirmation/egift-card-checkout-confirmation.ltr.css: {}
+
+online-returns:
+  css:
+    theme:
+      css/conditional-sass/online-returns/online-returns.ltr.css: {}
 
 super-category:
   css:

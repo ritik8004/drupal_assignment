@@ -2,8 +2,13 @@
 
 namespace Drupal\alshaya_egift_card\Helper;
 
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\node\NodeInterface;
 use Drupal\token\TokenInterface;
 
 /**
@@ -29,6 +34,18 @@ class EgiftCardHelper {
   protected $token;
 
   /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cacheBackend;
+
+  /**
    * EgiftCardHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -38,10 +55,14 @@ class EgiftCardHelper {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    TokenInterface $token
+    TokenInterface $token,
+    EntityTypeManagerInterface $entity_type_manager,
+    CacheBackendInterface $cache_backend
   ) {
     $this->configFactory = $config_factory;
     $this->token = $token;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->cacheBackend = $cache_backend;
   }
 
   /**
@@ -184,6 +205,120 @@ class EgiftCardHelper {
       'virtualItemsExists' => $virtualItemsExists,
       'topUpItem' => $isTopup,
     ];
+  }
+
+  /**
+   * Get egift landing page nid.
+   *
+   * @result null|int
+   *   The eGift landing nid or null.
+   **/
+  public function egiftLandingPageNid() {
+    // Set cache id for query result.
+    $cid = 'egift_landing_page.advanced_page.nid';
+
+    // Get data from cache.
+    if ($cache = $this->cacheBackend->get($cid)) {
+      return $cache->data;
+    }
+
+    // Query nids of type advanced_page and field use as landing page
+    // is checked. Use the most recently created published node.
+    $query = $this->entityTypeManager->getStorage('node')
+      ->getQuery()
+      ->condition('type', 'advanced_page')
+      ->condition('field_use_as_egift_landing_page', TRUE)
+      ->condition('status', NodeInterface::PUBLISHED)
+      ->sort('created', 'DESC');
+    $results = $query->execute();
+    $egift_landing_page = reset($results);
+
+
+    // Set query result with egift landing page nid in cache.
+    // This cache tag is invalidated on queue when insert / update / delete
+    // advanced_page node.
+    if (!empty($egift_landing_page)) {
+      $this->cacheBackend->set($cid, $egift_landing_page, Cache::PERMANENT, ['node_type:advanced_page']);
+    }
+
+    return $egift_landing_page;
+  }
+
+  /**
+   * Update order details with egift related details.
+   **/
+  public function prepareOrderDetailsData(&$order, &$orderDetails) {
+    // Do not proceed if Egift card is not enabled.
+    if (!$this->isEgiftCardEnabled()) {
+      return;
+    }
+    // Set order name if first item is virtual product.
+    $item = reset($order['items']);
+    if ($item['is_virtual']) {
+      $orderDetails['#order']['name'] = $item['sku'] == 'giftcard_topup'
+        ? t('eGift Card Top up', [], ['context' => 'egift'])
+        : t('eGift Card', [], ['context' => 'egift']);
+    }
+
+    // Update Payment method name for hps payment.
+    if ($orderDetails["#order_details"]["payment_method"] === 'hps_payment') {
+      $orderDetails["#order_details"]["payment_method"] = t('eGift Card', [], ['context' => 'egift']);
+    }
+
+    // For multiple payment and if some amount is paid via egift then add eGift Card payment.
+    if ($orderDetails["#order_details"]["payment_method_code"] !== 'hps_payment' && isset($order['extension']['hps_redeemed_amount']) && $order['extension']['hps_redeemed_amount'] > 0) {
+      $orderDetails["#order_details"]["payment_method"] .= ', ' . t('eGift Card', [], ['context' => 'egift']);
+      $egift_data = [
+        'card_type' => t('eGift Card', [], ['context' => 'egift']),
+        'card_number' => substr($order['extension']['hps_redemption_card_number'], -4),
+        'payment_type' => 'egift',
+        'weight' => -2,
+      ];
+      $orderDetails['#order_details']['paymentDetails']['egift'] = $egift_data;
+    }
+    // Update virtual product details.
+    foreach ($orderDetails['#products'] as $key => &$product) {
+      $style = $product['name'];
+
+      // Show eGift card image and options from order details.
+      if ($product['is_virtual']) {
+        $product['name'] = $product['sku'] == 'giftcard_topup'
+          ? t('eGift Card Top up', [], ['context' => 'egift'])
+          : t('eGift Card', [], ['context' => 'egift']);
+
+        // Get virtual product image.
+        $product['image'] = [
+          '#theme' => 'image',
+          '#uri' => $product['extension_attributes']['product_media'][0]['file'],
+          '#alt' => $product['name'],
+        ];
+
+        // Get product options and add them to attributes.
+        $product_options = json_decode($product['extension_attributes']['product_options'][0], TRUE);
+        $product['attributes'][0] = [
+          'label' => t('Style', [], ['context' => 'egift']),
+          'value' => $style,
+        ];
+        if (!empty($product_options['hps_giftcard_recipient_email'])) {
+          $product['attributes'][1] = [
+            'label' => t('Send to', [], ['context' => 'egift']),
+            'value' => $product_options['hps_giftcard_recipient_email'],
+          ];
+        }
+        if (!empty($product_options['hps_giftcard_message'])) {
+          $product['attributes'][2] = [
+            'label' => t('Message', [], ['context' => 'egift']),
+            'value' => $product_options['hps_giftcard_message'],
+          ];
+        }
+        if (!empty($product_options['hps_card_number'])) {
+          $product['attributes'][3] = [
+            'label' => t('Card No', [], ['context' => 'egift']),
+            'value' => $product_options['hps_card_number'],
+          ];
+        }
+      }
+    }
   }
 
 }

@@ -19,7 +19,9 @@ exports.invokeApi = async function (request) {
     });
   }
 
-  return jQuery.ajax({
+  var mainApiResponse = null;
+
+  const mainApi = jQuery.ajax({
     url: drupalSettings.rcs.commerceBackend.baseUrl + request.uri,
     method: request.method,
     headers,
@@ -28,12 +30,31 @@ exports.invokeApi = async function (request) {
     // cart_notification.js.
     rcs: true,
     success: function (response) {
+      mainApiResponse = response;
       return response;
     },
     error: function () {
       console.log('Could not fetch data!');
     }
   });
+
+  const eventData = {
+    request,
+    promises: [mainApi],
+    extraData: {},
+  }
+
+  // Allow the custom code to initiate other AJAX requests in parallel
+  // and make the rendering blocked till all of them are finished.
+  RcsEventManager.fire('invokingApi', eventData);
+
+  return jQuery.when(...eventData.promises).then(
+    function jQueryWhenThen() {
+      // Return the main api response as is here,
+      // we don't care about other responses.
+      return mainApiResponse;
+    }
+  )
 };
 
 /**

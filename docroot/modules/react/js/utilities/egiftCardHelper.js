@@ -185,4 +185,5 @@ export const performRedemption = (quoteId, updateAmount, egiftCardNumber, cardTy
 export const allowWholeNumbers = (e) => {
   const element = e.target;
   element.value = element.value.replace(/[^\p{N}]/gu, '');
+  element.value = element.value.substr(0, 16);
 };

@@ -11,6 +11,51 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update arabic string translation for order details.
+ */
+function alshaya_master_update_8054() {
+  // Add string translations.
+  $strings = [
+    'print' => [
+      'ar' => 'طباعة',
+    ],
+    'Quantity: @quantity' => [
+      'ar' => 'الكمية: @quantity',
+    ],
+    'Item code: @sku' => [
+      'ar' => 'رمز القطعة: @sku',
+    ],
+    'Total: @count item' => [
+      'ar' => 'المجموع: @count قطعة',
+    ],
+    'Total: @count items' => [
+      'ar' => 'المجموع: @count قطع',
+    ],
+    '@count Cancelled' => [
+      'ar' => 'تم إلغاء @count',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update arabic string translation for View all.
+ */
+function alshaya_master_update_8052() {
+  // Add string translations.
+  $strings = [
+    'View All' => [
+      'ar' => 'اظهار الكل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translation for You may also like with context.
  */
 function alshaya_master_update_8051() {
@@ -2222,6 +2267,24 @@ function alshaya_master_install() {
     'Sort by' => [
       'ar' => 'رتبي حسب',
     ],
+    'View All' => [
+      'ar' => 'اظهار الكل',
+    ],
+    'Quantity: @quantity' => [
+      'ar' => 'الكمية: @quantity',
+    ],
+    'Item code: @sku' => [
+      'ar' => 'رمز القطعة: @sku',
+    ],
+    'Total: @count item' => [
+      'ar' => 'المجموع: @count قطعة',
+    ],
+    'Total: @count items' => [
+      'ar' => 'المجموع: @count قطع',
+    ],
+    '@count Cancelled' => [
+      'ar' => 'تم إلغاء @count',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -2307,7 +2370,7 @@ function alshaya_master_install() {
   $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
 
   // Enable only FB, Twitter, Pinterest.
-  // @codingStandardsIgnoreLine
+  // phpcs:ignore
   $configFactory->set('service_option', "'Facebook:facebook','Twitter:twitter','Pinterest:pinterest'");
 
   // Disable all extras.

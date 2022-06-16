@@ -13,6 +13,56 @@ use Drupal\block\BlockInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\facets\Entity\Facet;
 use Drupal\user\Entity\Role;
+use Drupal\search_api\Entity\Server;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable search api default server and uninstall acquia_search module.
+ */
+function alshaya_transac_update_8141() {
+  if (\Drupal::service('module_handler')->moduleExists('acquia_search')) {
+    // Disable search api default server.
+    $acquia_search_server = Server::load('acquia_search_server');
+    if (!empty($acquia_search_server)) {
+      $acquia_search_server->setStatus(FALSE)->save();
+    }
+    // Remove acquia_search module.
+    \Drupal::service('module_installer')->uninstall(['acquia_search']);
+  }
+
+  // Recreate acquia_search_index.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['search_api.index.acquia_search_index'],
+    'alshaya_search',
+    'optional',
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Installs jquery_ui_accordion, jquery_ui_effects module if it is not enabled.
+ */
+function alshaya_transac_update_8140() {
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_tabs'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_tabs']);
+  }
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_effects'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_effects']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Installs jquery_ui_accordion module if it is not enabled.
+ */
+function alshaya_transac_update_8139() {
+  if (!(\Drupal::moduleHandler()->moduleExists('jquery_ui_accordion'))) {
+    \Drupal::service('module_installer')->install(['jquery_ui_accordion']);
+  }
+}
 
 /**
  * Implements hook_update_n().
@@ -930,10 +980,6 @@ function alshaya_transac_update_8102() {
  * Implements hook_install().
  */
 function alshaya_transac_install() {
-  if (isset($_ENV['AH_SITE_NAME'])) {
-    \Drupal::service('module_installer')->install(['acquia_search']);
-  }
-
   $modules = [
     // Custom modules.
     'alshaya_arabic',
@@ -1023,7 +1069,7 @@ function alshaya_transac_install() {
   }
 
   // Set alshaya_white_label as the default theme.
-  \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'alshaya_white_label')->save();
 
   // Remove redundant drupal core themes.
   $theme_handler = \Drupal::service('theme_handler');

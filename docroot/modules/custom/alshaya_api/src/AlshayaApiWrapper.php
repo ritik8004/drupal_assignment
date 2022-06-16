@@ -21,6 +21,7 @@ use Drupal\Core\Url;
 use GuzzleHttp\TransferStats;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
+use Drupal\Core\Routing\CurrentRouteMatch;
 
 /**
  * Class Alshaya Api Wrapper.
@@ -100,6 +101,13 @@ class AlshayaApiWrapper {
   protected $moduleHandler;
 
   /**
+   * Current Route object.
+   *
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
+  protected $currentRoute;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -118,6 +126,8 @@ class AlshayaApiWrapper {
    *   The magento api helper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route
+   *   Current Route object.
    */
   public function __construct(
     LanguageManagerInterface $language_manager,
@@ -127,7 +137,8 @@ class AlshayaApiWrapper {
     StateInterface $state,
     FileSystemInterface $fileSystem,
     MagentoApiHelper $mdc_helper,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    CurrentRouteMatch $current_route
   ) {
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
@@ -138,6 +149,7 @@ class AlshayaApiWrapper {
     $this->fileSystem = $fileSystem;
     $this->mdcHelper = $mdc_helper;
     $this->moduleHandler = $module_handler;
+    $this->currentRoute = $current_route;
   }
 
   /**
@@ -291,11 +303,13 @@ class AlshayaApiWrapper {
           '@api' => $url,
           '@message' => $e->getMessage(),
         ]);
-        user_logout();
-        // We redirect to an user/login path.
-        $response = new LocalRedirectResponse(Url::fromRoute('user.login')->toString());
-        $response->send();
-        return $response;
+        if ($this->currentRoute->getRouteName() !== 'user.login') {
+          user_logout();
+          // We redirect to an user/login path.
+          $response = new LocalRedirectResponse(Url::fromRoute('user.login')->toString());
+          $response->send();
+          return $response;
+        }
       }
 
       $result = NULL;
@@ -1175,10 +1189,6 @@ class AlshayaApiWrapper {
 
     $opt['json']['customer'] = $customer;
 
-    if (isset($options['password']) && !empty($options['password'])) {
-      $opt['json']['password'] = $options['password'];
-    }
-
     // Invoke the alter hook to allow all modules to update the customer data.
     $this->moduleHandler->alter('alshaya_api_update_customer_api_request', $opt);
 
@@ -1425,6 +1435,30 @@ class AlshayaApiWrapper {
    */
   public function getMagentoApiHelper() {
     return $this->mdcHelper;
+  }
+
+  /**
+   * Function to subscribe an email for newsletter.
+   *
+   * @param string $email
+   *   E-Mail to subscribe.
+   *
+   * @return array
+   *   Array containing status of subscription.
+   */
+  public function subscribeNewsletter(string $email) {
+    try {
+      $request_options = [
+        'timeout' => $this->mdcHelper->getPhpTimeout('subscribe_newsletter'),
+      ];
+
+      $status = $this->invokeApi('newsletter/subscribe', ['email' => $email], 'JSON', TRUE, $request_options);
+      return json_decode($status, TRUE);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while calling newsletter subscribe API.');
+      return ['status' => 0];
+    }
   }
 
 }

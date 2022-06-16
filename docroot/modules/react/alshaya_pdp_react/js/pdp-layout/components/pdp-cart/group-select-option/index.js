@@ -43,7 +43,8 @@ const GroupSelectOption = ({
         <SizeGuide attrId={code} />
         <div className="group-option-wrapper">
           <ul id={code} className="select-attribute-group clicked">
-            {Object.keys(configurables.values).map((attr) => {
+            {Object.keys(configurables.values).map((key) => {
+              const attr = Object.keys(configurables.values[key])[0];
               // If the currennt attribute matches the
               // attribute code of the available values.
               if (code === nextCode) {
@@ -51,7 +52,7 @@ const GroupSelectOption = ({
                   <AvailableSelectOptions
                     nextValues={nextValues}
                     attr={attr}
-                    value={configurables.values[attr][groupName]}
+                    value={configurables.values[key][attr][groupName]}
                     key={attr}
                     selected={selected}
                     code={code}
@@ -63,7 +64,7 @@ const GroupSelectOption = ({
               return (
                 <DefaultSelectOptions
                   attr={attr}
-                  value={configurables.values[attr][groupName]}
+                  value={configurables.values[key][attr][groupName]}
                   key={attr}
                   selected={selected}
                   code={code}

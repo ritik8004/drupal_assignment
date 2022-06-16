@@ -22,9 +22,6 @@ regions:
   footer_primary: 'Footer Primary'
   footer_secondary: 'Footer Secondary'
 
-libraries:
-  - alshaya_mothercare/global_styles
-
 libraries-override:
   alshaya_white_label/ltr_print_styles:
     css:

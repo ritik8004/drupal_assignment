@@ -41,9 +41,12 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
   ];
 
   try {
-    $customer = $api_wrapper->updateCustomer($customer_array, [
-      'password' => $password,
-    ]);
+    $customer = $api_wrapper->updateCustomer($customer_array, []);
+
+    // Update customer password if password is set.
+    if (!empty($customer['customer_id']) && isset($password)) {
+      $api_wrapper->updateCustomerPass($customer, $password);
+    }
   }
   catch (\Exception $e) {
     // IF API Down or some other issue, log message is already added

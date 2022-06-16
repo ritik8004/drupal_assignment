@@ -25,7 +25,6 @@ regions:
 
 libraries:
   - alshaya_white_label/ucfix
-  - alshaya_westelm/global_styles
 
 libraries-override:
   alshaya_white_label/ltr_print_styles:

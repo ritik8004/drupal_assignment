@@ -64,6 +64,13 @@ product_category_carousel:
     dist/productCategoryCarousel.js: {}
   dependencies:
     - core/drupalSettings
+    - alshaya_acm_product_category/product_carousel_utility
+
+product_category_carousel_rcs:
+  js:
+    dist/ProductCategoryCarouselRcs.js: {}
+  dependencies:
+    - core/drupalSettings
 
 algolia_common:
   js:

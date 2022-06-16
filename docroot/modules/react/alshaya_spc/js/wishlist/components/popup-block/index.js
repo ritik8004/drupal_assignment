@@ -7,7 +7,6 @@ import {
   addWishListInfoInStorage,
   addProductToWishList,
   getWishlistLabel,
-  getWishlistFromBackend,
   pushWishlistSeoGtmData,
 } from '../../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
@@ -65,7 +64,7 @@ export default class WishlistPopupBlock extends React.Component {
           // removing the product from backend for logged in user.
           if (!isAnonymousUser()) {
             // Load wishlist information from the magento backend.
-            getWishlistFromBackend().then((responseData) => {
+            window.commerceBackend.getWishlistFromBackend().then((responseData) => {
               if (hasValue(responseData.data.items)) {
                 const wishListItems = {};
 
@@ -86,7 +85,12 @@ export default class WishlistPopupBlock extends React.Component {
                 // Prepare and dispatch an event when product added to the storage
                 // so other components like wishlist header can listen and do the
                 // needful.
-                dispatchCustomEvent('productAddedToWishlist', {});
+                dispatchCustomEvent('productAddedToWishlist', {
+                  productInfo,
+                  extraOptions: {
+                    notification: false,
+                  },
+                });
               }
             });
           }

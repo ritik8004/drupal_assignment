@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 /**
  * @file
@@ -105,10 +105,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'hm_test',
         'conductor' => 'hmkw_qa2',
       ],
-      'dev3' => [
-        'magento' => 'hm_giftcard',
-        'conductor' => 'hmkw_dev3',
-      ],
     ],
     'hmsa' => [
       'qa2' => [
@@ -163,6 +159,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'fl_qa',
         'conductor' => 'flkw_dev',
       ],
+      'dev3' => [
+        'magento' => 'fl_qa',
+        'conductor' => 'flkw_dev3',
+      ],
     ],
     'flsa' => [
       'dev' => [
@@ -170,7 +170,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'flsa_dev',
       ],
       'dev3' => [
-        'magento' => 'fl_apc',
+        'magento' => 'fl_qa',
         'conductor' => 'flsa_dev3',
       ],
     ],
@@ -199,6 +199,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'bbw_apc',
         'conductor' => 'bbwae_dev3',
       ],
+      'qa2' => [
+        'magento' => 'bbw_oms_sit',
+        'conductor' => 'bbwae_sit_dev2',
+      ],
     ],
     'bbwsa' => [
       'dev2' => [
@@ -216,6 +220,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev' => [
         'magento' => 'bbw_qa',
         'conductor' => 'bbwqa_dev',
+      ],
+      'dev3' => [
+        'magento' => 'bbw_uat',
+        'conductor' => 'bbwqa_dev3',
       ],
     ],
     'bbwjo' => [
@@ -264,6 +272,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev2' => [
         'magento' => 'pb_uat',
         'conductor' => 'pbkw_dev2',
+      ],
+      'dev3' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbkw_dev3',
       ],
     ],
     'pbae' => [

@@ -318,7 +318,63 @@ class CustomerController extends ControllerBase {
 
     // Allow other modules to update order details build.
     $this->moduleHandler()->alter('alshaya_acm_customer_orders_details_build', $order, $build);
+
+    // Get order details and expose via Drupal settings.
+    $build['#attached']['drupalSettings']['order'] = $this->prepareOrderDetails($build);
+
     return $build;
+  }
+
+  /**
+   * Prepares order details for front end.
+   *
+   * @param array $build
+   *   The build array.
+   *
+   * @return array
+   *   The order details.
+   */
+  private function prepareOrderDetails(array $build) {
+    $details = $build['#order'];
+    $details['total'] = $build['order']['grand_total'];
+    $details['order_details'] = $build['#order_details'] ?? [];
+    $details['order_details']['payment'] = $build['#order_details']['payment'] ?? [];
+    $details['order_details']['store_open_hours'] = $build['#order_details']['store_open_hours'] ?? [];
+    $details['online_booking_notice'] = $build['#online_booking_notice'] ?? [];
+    $details['delivery_detail_notice'] = $build['#delivery_detail_notice'] ?? [];
+    $details['vat_text'] = $build['#vat_text'] ?? '';
+    $details['products'] = $build['#products'] ?? [];
+    $details['refunded_products'] = $build['refunded_products'] ?? [];
+    $details['cancelled_products'] = $build['#cancelled_products'] ?? [];
+    $details['order_details']['billing_address_title'] = $this->t('Billing details');
+    $details['order_details']['delivery_address_title'] = $this->t('Delivery details');
+    $details['total_quantity_text'] = $this->formatPlural($build['#order']['quantity'], 'Total: @count item', 'Total: @count items');
+    // Render product images, translate attribute labels.
+    foreach (['products', 'cancelled_products'] as $type) {
+      foreach ($details[$type] as &$product) {
+        // Render images.
+        if (isset($product['image'])) {
+          $product['image'] = render($product['image']);
+        }
+        // Translate attribute labels.
+        if (isset($product['attributes'])) {
+          foreach ($product['attributes'] as &$attribute) {
+            if ($attribute['label'] instanceof TranslatableMarkup) {
+              $attribute['label'] = render($attribute['label']);
+            }
+          }
+        }
+      }
+    }
+
+    // Render details.
+    foreach ($details['order_details'] as &$item) {
+      if (is_array($item) && (isset($item['#markup']) || isset($item['#theme']))) {
+        $item = render($item);
+      }
+    }
+
+    return $details;
   }
 
   /**

@@ -155,71 +155,8 @@ function alshaya_egift_card_page_attachments(array &$page) {
 function alshaya_egift_card_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
   // Add egift settings config tags to make it work on config change.
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
-  // Do not proceed if Egift card is not enabled.
-  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
-    return;
-  }
 
-  // Set order name if first item is virtual product.
-  $item = reset($order['items']);
-  if ($item['is_virtual']) {
-    $build['#order']['name'] = $item['sku'] == 'giftcard_topup'
-      ? t('eGift Card Top up', [], ['context' => 'egift'])
-      : t('eGift Card', [], ['context' => 'egift']);
-  }
-
-  // Update Payment method name for hps payment.
-  if ($build["#order_details"]["payment_method"] === 'hps_payment') {
-    $build["#order_details"]["payment_method"] = t('eGift Card', [], ['context' => 'egift']);
-  }
-  // For multiple payment and if some amount is paid via egift then add eGift Card payment.
-  if ($build["#order_details"]["payment_method_code"] !== 'hps_payment' && isset($order['extension']['hps_redeemed_amount']) && $order['extension']['hps_redeemed_amount'] > 0) {
-    $build["#order_details"]["payment_method"] .= ', ' . t('eGift Card', [], ['context' => 'egift']);
-  }
-  // Update virtual product details.
-  foreach ($build['#products'] as $key => &$product) {
-    $style = $product['name'];
-
-    // Show eGift card image and options from order details.
-    if ($product['is_virtual']) {
-      $product['name'] = $product['sku'] == 'giftcard_topup'
-        ? t('eGift Card Top up', [], ['context' => 'egift'])
-        : t('eGift Card', [], ['context' => 'egift']);
-
-      // Get virtual product image.
-      $product['image'] = [
-        '#theme' => 'image',
-        '#uri' => $product['extension_attributes']['product_media'][0]['file'],
-        '#alt' => $product['name'],
-      ];
-
-      // Get product options and add them to attributes.
-      $product_options = json_decode($product['extension_attributes']['product_options'][0], TRUE);
-      $product['attributes'][0] = [
-        'label' => t('Style', [], ['context' => 'egift']),
-        'value' => $style,
-      ];
-      if (!empty($product_options['hps_giftcard_recipient_email'])) {
-        $product['attributes'][1] = [
-          'label' => t('Send to', [], ['context' => 'egift']),
-          'value' => $product_options['hps_giftcard_recipient_email'],
-        ];
-      }
-      if (!empty($product_options['hps_giftcard_message'])) {
-        $product['attributes'][2] = [
-          'label' => t('Message', [], ['context' => 'egift']),
-          'value' => $product_options['hps_giftcard_message'],
-        ];
-      }
-      // @todo update key for card number from order details.
-      if (!empty($product_options['hps_card_number'])) {
-        $product['attributes'][3] = [
-          'label' => t('Card No', [], ['context' => 'egift']),
-          'value' => $product_options['hps_card_number'],
-        ];
-      }
-    }
-  }
+  \Drupal::service('alshaya_egift_card.egift_card_helper')->prepareOrderDetailsData($order, $build);
 }
 
 
@@ -344,4 +281,11 @@ function alshaya_egift_card_block_view_alter(&$build, $block) {
   if ($block->getPluginId() === 'alshaya_my_account_links') {
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_egift_card.settings']);
   }
+}
+
+/**
+ * Implements hook_alshaya_online_returns_order_details_build_alter().
+ */
+function alshaya_egift_card_alshaya_online_returns_order_details_build_alter(array &$order, array &$orderDetails) {
+  \Drupal::service('alshaya_egift_card.egift_card_helper')->prepareOrderDetailsData($order, $orderDetails);
 }

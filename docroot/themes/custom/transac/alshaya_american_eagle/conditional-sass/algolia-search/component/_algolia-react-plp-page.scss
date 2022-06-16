@@ -1,0 +1,15 @@
+#alshaya-algolia-plp {
+  #plp-hits {
+    .alshaya_search_gallery {
+      @include breakpoint($desktop) {
+        height: rem(280);
+      }
+
+      .alshaya_search_mainimage {
+        @include breakpoint($only-mobile) {
+          height: rem(210);
+        }
+      }
+    }
+  }
+}

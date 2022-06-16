@@ -111,12 +111,6 @@ block-header-sign-up:
     theme:
       components/dist/css/_patterns/01-molecules/01-header-secondary/block-header-sign-up/block-header-sign-up.ltr.css: {}
 
-block-sub-navigation:
-  version: VERSION
-  css:
-    theme:
-      components/dist/css/_patterns/01-molecules/02-header-tertiary/block-sub-navigation/block-sub-navigation.ltr.css: {}
-
 menu-sub-navigation:
   version: VERSION
   css:
@@ -140,12 +134,6 @@ block-sub-navigation:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/02-header-tertiary/block-sub-navigation/block-sub-navigation.ltr.css: {}
-
-menu-sub-navigation:
-  version: VERSION
-  css:
-    theme:
-      components/dist/css/_patterns/01-molecules/02-header-tertiary/block-sub-navigation/menu-sub-navigation.ltr.css: {}
 
 block-store-finder-form:
   version: VERSION

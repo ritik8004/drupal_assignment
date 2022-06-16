@@ -497,10 +497,11 @@ class AlshayaConfigManager {
       }
     }
 
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     global $magentos;
 
     $settings = [];
+    $settings['algolia_env'] = $magentos[$mdc]['algolia_env'] ?? $mdc;
     $settings['alshaya_api.settings']['magento_host'] = $magentos[$mdc]['url'];
 
     $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';

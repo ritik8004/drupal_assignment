@@ -1,0 +1,23 @@
+<div class="c-accordion-delivery-options">
+  <h3 class="c-accordion__title">
+    {{#if title}}
+      <a href="{{ view_all_link }}">{{ title }}</a>
+    {{/if}}
+  </h3>
+  {{#if content}}
+    <div class="c-accordion_content">
+      <ul>
+        {{#each content as |term|}}
+          <li>
+            <a href="{{ term.path }}" class="{{ term.active_class }}">{{ term.label }}</a>
+          </li>
+        {{/each}}
+        {{#if view_all}}
+          <li>
+            <a class="category-accordion-view-all" href="{{ view_all_link }}">{{ view_all_text }}</a>
+          </li>
+        {{/if}}
+      </ul>
+    </div>
+  {{/if}}
+</div>

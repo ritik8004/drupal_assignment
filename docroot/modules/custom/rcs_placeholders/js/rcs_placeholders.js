@@ -36,7 +36,7 @@
           pageEntity = entity;
 
           // Process the block placeholders. This is async process, the
-          // rendering engine is responsible of the entire processing and
+          // rendering engine is responsible for the entire processing and
           // replacement.
           $("[id^=rcs-ph-]").once('rcs-ph-process').each(eachBlockPh);
 
@@ -121,8 +121,17 @@
     const blockPhRegex = /rcs-ph-([^"]+)/;
     const blockPhId = $(this)[0].id.match(blockPhRegex);
 
+    // Allowing process chaining.
+    // If multiple blocks rely on same data, we can set dependency in all
+    // except one. Once data is available for first one we trigger
+    // processing of rest all inside getData below.
+    const rcsDependency = $(this).attr('data-rcs-dependency') || '';
+    if (rcsDependency && rcsDependency !== 'none') {
+      return;
+    }
+
     // Extract the parameters.
-    const params = [];
+    const params = {};
     $($(this)[0].attributes).each(function eachBlockPhAttributes() {
       const blockPhParamRegex = /data-param-([^"]+)/;
       const blockPhParamId = $(this)[0].name.match(
@@ -161,6 +170,11 @@
         $(this)[0].innerHTML
       )
       .then(data => {
+        // Trigger replacements for the blocks dependent on this entity.
+        $("[id^=rcs-ph-][data-rcs-dependency='" + entityToGet + "']")
+          .attr('data-rcs-dependency', 'none')
+          .once('rcs-ph-post-process').each(eachBlockPh);
+
         if (!params["get-data"] || data) {
           try {
             // Pass the data to the rendering engine.

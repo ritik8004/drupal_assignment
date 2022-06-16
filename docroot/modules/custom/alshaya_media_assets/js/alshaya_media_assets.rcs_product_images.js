@@ -1,24 +1,27 @@
+window.commerceBackend = window.commerceBackend || {};
+
 /**
  * Listens to the 'rcsUpdateResults' event and updates the result object
- * with assets data.
+ * with media data.
  */
- (function () {
-
+(function () {
   /**
-   * Sets media data to the passed product object.
+   * Sets the configurable product media data in the main product object.
    *
-   * @param {object} product
-   *   The raw product object.
+   * @param {Object} product
+   *   Product object.
    */
-  function setMediaData(product) {
+  function setProductMediaConfigurable(product) {
+    // Temporary store for media data.
     let mediaData = {};
-    product.media = [];
     product.variants.forEach(function eachVariant(variant) {
       variant.product.media = [];
       variant.product.media_teaser = '';
+      variant.product.hasMedia = false;
 
       try {
         if (Drupal.hasValue(variant.product.assets_pdp)) {
+          variant.product.hasMedia = true;
           mediaData = JSON.parse(variant.product.assets_pdp);
           mediaData.forEach(function setGalleryMedia(media) {
             variant.product.media.push({
@@ -59,9 +62,6 @@
           mediaData = JSON.parse(variant.product.assets_teaser);
           mediaData.every(function setTeaserMedia(media) {
             variant.product.media_teaser = media.styles.product_teaser;
-            // We do this so that we are able to detect in getSkuForGallery
-            // that the variant has media.
-            variant.product.media = variant.product.media_teaser;
             // Break as there is only 1 teaser image expected.
             return false;
           });
@@ -74,37 +74,92 @@
         });
       }
     });
+  }
 
+  /**
+   * Sets media data into the configurable recommended product object.
+   *
+   * @param {Object} recommendedProduct
+   *   Recommended product object.
+   */
+  function setProductRecommendationsMediaConfigurable(recommendedProduct) {
+    if (Array.isArray(recommendedProduct.variants) && recommendedProduct.variants.length !== 0) {
+      recommendedProduct.variants.forEach(function setRecommendedProductImage(variant) {
+        variant.product.media_teaser = null;
+        try {
+          var mediaData = JSON.parse(variant.product.assets_teaser);
+          if (Drupal.hasValue(mediaData)) {
+            variant.product.hasMedia = true;
+            mediaData.every(function setTeaserMedia(media) {
+              variant.product.media_teaser = media.styles.product_teaser;
+              // We do this so that we are able to detect in getSkuForGallery
+              // that the variant has media.
+              variant.product.media = variant.product.media_teaser;
+              // Break as there is only 1 teaser image expected.
+              return false;
+            });
+          }
+        }
+        catch (e) {
+          Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
+            '@type': type,
+            '@sku': variant.product.sku,
+            '@message': e.message,
+          });
+        }
+      });
+    }
+  }
+
+  /**
+   * Sets product recommendations media data into the main product object.
+   *
+   * @param {Object} product
+   *   Product object.
+   */
+  function setProductRecommendationsMedia(product) {
     const productRecommendations = ['upsell_products', 'related_products', 'crosssell_products'];
     productRecommendations.forEach(function eachRecommendationType(type) {
       if (Drupal.hasValue(product[type])) {
         product[type].forEach(function (recommendedProduct) {
-          if (Array.isArray(recommendedProduct.variants) && recommendedProduct.variants.length !== 0) {
-            recommendedProduct.variants.forEach(function setRecommendedProductImage(variant) {
-              variant.product.media_teaser = null;
-              try {
-                mediaData = JSON.parse(variant.product.assets_teaser);
-                mediaData.every(function setTeaserMedia(media) {
-                  variant.product.media_teaser = media.styles.product_teaser;
-                  // We do this so that we are able to detect in getSkuForGallery
-                  // that the variant has media.
-                  variant.product.media = variant.product.media_teaser;
-                  // Break as there is only 1 teaser image expected.
-                  return false;
-                });
-              }
-              catch (e) {
-                Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
-                  '@type': type,
-                  '@sku': variant.product.sku,
-                  '@message': e.message,
-                });
-              }
-            });
+          if (recommendedProduct.type_id === 'configurable') {
+            setProductRecommendationsMediaConfigurable(recommendedProduct);
           }
         });
       }
     });
+  }
+
+  /**
+   * Sets media data to the passed product object.
+   *
+   * @param {object} product
+   *   The raw product object.
+   */
+  function setMediaData(product) {
+    product.media = [];
+    if (product.type_id === 'configurable') {
+      setProductMediaConfigurable(product);
+    }
+
+    setProductRecommendationsMedia(product);
+  }
+
+  /**
+   * Sets media data values in provided product object.
+   *
+   * @param {object} products
+   *   The products to set the media data for.
+   */
+  window.commerceBackend.setMediaData = function setProductMediaData(products) {
+    // Check if it is an array of products, for eg. for magazine article
+    // carousel we get an array of products here.
+    if (Array.isArray(products)) {
+      products.forEach(function (product) {setMediaData(product)});
+    }
+    else {
+      setMediaData(products);
+    }
   }
 
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
@@ -122,15 +177,6 @@
       return;
     }
 
-    let products = e.detail.result;
-
-    // Check if it is an array of products, for eg. for magazine article
-    // carousel we get an array of products here.
-    if (Array.isArray(products)) {
-      products.forEach(function (product) {setMediaData(product)});
-    }
-    else {
-      setMediaData(products);
-    }
+    window.commerceBackend.setMediaData(e.detail.result);
   }, 10);
 })();

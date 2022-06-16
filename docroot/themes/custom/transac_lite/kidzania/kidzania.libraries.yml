@@ -11,7 +11,7 @@ global_styles:
     js/global.js: {}
 
   dependencies:
-    - core/jquery.ui.datepicker
+    - jquery_ui_datepicker/datepicker
 
 ltr_styles:
   css:
