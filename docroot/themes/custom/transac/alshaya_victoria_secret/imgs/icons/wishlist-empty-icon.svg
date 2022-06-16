@@ -1,18 +1,12 @@
-<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="16px" viewBox="-1 0 20 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
-        <path d="M24.458 8.317c-.987-1.057-2.326-1.65-3.722-1.65S18 7.26 17.014 8.317L16 9.402l-1.014-1.085c-2.056-2.2-5.389-2.2-7.444 0-2.056 2.2-2.056 5.766 0 7.965L16 25.333l8.458-9.05C25.445 15.225 26 13.792 26 12.3c0-1.494-.555-2.927-1.542-3.983zm-8.418-.91c1.236-1.324 2.927-2.074 4.696-2.074 1.77 0 3.46.75 4.696 2.074 1.22 1.305 1.901 3.064 1.901 4.893 0 1.829-.68 3.588-1.901 4.893l-8.458 9.05a1.333 1.333 0 0 1-1.948 0l-8.458-9.05c-2.535-2.712-2.535-7.074 0-9.786 2.582-2.764 6.81-2.764 9.392 0h.08z" id="jcd1z1yp2a"/>
+        <path d="M15.810105,1.534197 C14.9718081,0.636728163 13.8345973,0.1325 12.6487881,0.1325 C11.4629789,0.1325 10.3257681,0.636728163 9.48747118,1.534197 L8.62603264,2.45600814 L7.7645941,1.534197 C6.01864698,-0.334112105 3.18790743,-0.334112082 1.44196034,1.53419705 C-0.303986761,3.40250618 -0.303986782,6.43163377 1.44196029,8.29994293 L8.62603264,15.9875 L15.810105,8.29994293 C16.6487955,7.40289529 17.12,6.18598477 17.12,4.91706996 C17.12,3.64815516 16.6487955,2.43124464 15.810105,1.534197 Z" id="path-1"></path>
     </defs>
-    <g fill="none" fill-rule="evenodd">
-        <path d="M0 0h32v32H0z"/>
-        <mask id="99ux1z4xcb" fill="#fff">
-            <use xlink:href="#jcd1z1yp2a"/>
+    <g id="Component-Library" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
         </mask>
-        <use fill="#000" fill-rule="nonzero" xlink:href="#jcd1z1yp2a"/>
-        <g mask="url(#99ux1z4xcb)" fill="#000">
-            <path d="M32 32H0V0h32z"/>
-        </g>
-        <g mask="url(#99ux1z4xcb)" fill="#FFF" fill-opacity=".25">
-            <path d="M0 0h32v32H0z"/>
-        </g>
+        <use id="Shape-Copy-8" stroke="#000" fill="transparent" fill-rule="nonzero" xlink:href="#path-1"></use>
     </g>
 </svg>
