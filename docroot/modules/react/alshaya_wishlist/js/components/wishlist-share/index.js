@@ -4,7 +4,6 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import {
   getWishListData,
   isAnonymousUser,
-  getWishlistInfoFromBackend,
 } from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../js/utilities/strings';
@@ -79,7 +78,7 @@ class WishlistShare extends React.Component {
    */
   openWishListShareModal = () => {
     // Call magento api to get the wishlist details of current logged in user.
-    getWishlistInfoFromBackend().then((response) => {
+    window.commerceBackend.getWishlistInfoFromBackend().then((response) => {
       if (hasValue(response.data)) {
         if (hasValue(response.data.status)
           && hasValue(response.data.sharing_code)) {

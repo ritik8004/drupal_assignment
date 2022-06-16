@@ -14,6 +14,7 @@ use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\file\Entity\File;
 
 /**
@@ -22,6 +23,8 @@ use Drupal\file\Entity\File;
  * @package Drupal\alshaya_acm_product
  */
 class SkuImagesManager {
+
+  use LoggerChannelTrait;
 
   const BASE_IMAGE_ROLE = 'image';
   const SWATCH_IMAGE_ROLE = 'swatch_image';
@@ -200,9 +203,17 @@ class SkuImagesManager {
       $skuForGallery = $check_parent_child ? $this->getSkuForGallery($sku, $check_parent_child) : $sku;
       $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? NULL;
 
-      foreach ($data['media_items']['images'] ?? [] as $key => $item) {
-        if (empty($item['label'])) {
-          $data['media_items']['images'][$key]['label'] = (string) $sku->label();
+      if (!isset($data['media_items']['images']) || empty($data['media_items']['images'])) {
+        $this->getLogger('SkuImagesManager')->notice('No images found for SKU: @sku, context: @context.', [
+          '@sku' => $skuForGallery->getSku(),
+          '@context' => $context,
+        ]);
+      }
+      else {
+        foreach ($data['media_items']['images'] as $key => $item) {
+          if (empty($item['label'])) {
+            $data['media_items']['images'][$key]['label'] = (string) $sku->label();
+          }
         }
       }
 
@@ -831,7 +842,7 @@ class SkuImagesManager {
 
             $thumbnails[] = [
               'zoomurl' => $image_zoom,
-              'fullurl' => $default_image->url(),
+              'fullurl' => $default_image->createFileUrl(),
               'label' => $sku->label(),
             ];
           }

@@ -812,7 +812,7 @@
       // If list variable is set in cookie, retrieve it.
       if ($.cookie('product-list') !== undefined) {
         var listValues = JSON.parse($.cookie('product-list'));
-        productData.list = (listValues[productData.id] === 'Search Results Page')
+        productData.list = (listValues[productData.id] === 'Search Results Page' || $('body').attr('gtm-list-name') === undefined)
           // For SRP, use list value 'Search Result Page'.
           ? listValues[productData.id]
           // For all other pages, use gtm-list-name html attribute.

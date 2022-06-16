@@ -14,6 +14,8 @@ class PimsSkuAssetManager extends SkuAssetManager {
    * {@inheritDoc}
    */
   public function getAssets(SKU $sku) {
+    // Suppress the unserialize class warning.
+    // @codingStandardsIgnoreLine
     $assets = unserialize($sku->get('attr_assets')->getString());
     if (!is_array($assets) || empty($assets)) {
       return [];

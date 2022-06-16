@@ -501,16 +501,18 @@ class SkuManager {
    *   SKU Entity.
    * @param string $color
    *   Color value to limit the scope of skus to get price.
+   * @param bool $reset
+   *   Flag to reset cache value.
    *
    * @return array
    *   Minimum final price and associated initial price.
    */
-  public function getMinPrices(SKU $sku_entity, string $color = '') {
+  public function getMinPrices(SKU $sku_entity, string $color = '', $reset = FALSE) {
     $cache_key = implode(':', array_filter(['product_price', $color]));
-    $cache = $this->productCacheManager->get($sku_entity, $cache_key);
+    $cache = $reset ? NULL : $this->productCacheManager->get($sku_entity, $cache_key);
 
     // Do not process the same thing again and again.
-    if (is_array($cache)) {
+    if ($cache && is_array($cache)) {
       return $cache;
     }
 
@@ -1053,6 +1055,7 @@ class SkuManager {
           foreach ($free_gift_skus as $free_gift_sku) {
             $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
           }
+          // phpcs:ignore
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           foreach ($data['condition']['conditions'][0]['conditions'] ?? [] as $condition) {
@@ -1079,6 +1082,7 @@ class SkuManager {
           if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
             $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
           }
+          // phpcs:ignore
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           $promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue();
@@ -1354,6 +1358,7 @@ class SkuManager {
    */
   protected function getSkuLabel(SKU $sku_entity, $parent = FALSE) {
     if ($labels = $sku_entity->get('attr_labels')->getString()) {
+      // phpcs:ignore
       $labels_data = unserialize($labels);
       if (!empty($labels_data) && is_array($labels_data)) {
         return $labels_data;
@@ -2454,6 +2459,7 @@ class SkuManager {
   public function getLabelFromParentSku(SKUInterface $sku, $attr_code) {
     $parent_sku = $this->getParentSkuBySku($sku);
     if ($parent_sku instanceof SKUInterface) {
+      // phpcs:ignore
       $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
       foreach ($configurables as $field) {
         if ($attr_code == $field['code']) {
@@ -3834,6 +3840,7 @@ class SkuManager {
 
     $attributes = [];
     if ($attrs = $parent_sku->get('field_configurable_attributes')->first()) {
+      // phpcs:ignore
       $configurable_attributes = unserialize($attrs->getString());
       if (!empty($configurable_attributes)) {
         foreach ($configurable_attributes as $attribute) {

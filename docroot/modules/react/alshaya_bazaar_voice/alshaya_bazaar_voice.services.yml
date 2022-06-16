@@ -9,7 +9,7 @@ services:
     class: Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice
     arguments:
       - '@config.factory'
-      - '@entity.manager'
+      - '@entity_type.manager'
       - '@database'
       - '@alshaya_bazaar_voice.api_helper'
       - '@current_user'

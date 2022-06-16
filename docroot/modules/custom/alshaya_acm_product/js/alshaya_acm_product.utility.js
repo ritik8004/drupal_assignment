@@ -12,6 +12,7 @@ window.commerceBackend = window.commerceBackend || {};
    * This is just a helper method for Drupal.alshayaSpc.getProductData() and
    * Drupal.alshayaSpc.getProductDataV2().
    * Do not invoke directly.
+   * This is an async function.
    *
    * @param {string} sku
    *   The sku value.
@@ -99,10 +100,13 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {object} data
    *   The object of sku values and their requested quantity, like {sku1: qty1}.
+   * @param function
+   *   Function to Call Drupal API.
+   *
    * @returns {Promise}
    *   The stock status for all skus.
    */
-  window.commerceBackend.triggerStockRefresh = async function (data) {
+  window.commerceBackend.triggerStockRefresh = async function (data, callDrupalApi) {
     return callDrupalApi(
       '/spc/checkout-event',
       'POST',
@@ -117,5 +121,26 @@ window.commerceBackend = window.commerceBackend || {};
         '@message': error.message,
       });
     });
+  }
+
+  /**
+   * This function does not have any implementation for V2 since for V2 we
+   * do a call to Drupal to get the stock data.
+   *
+   * @param {string} sku
+   *   SKU value for which stock is to be returned.
+   *
+   * @returns {Promise}
+   *   Returns a promise so that await executes on the calling function.
+   */
+  window.commerceBackend.loadProductStockDataFromCart = async function loadProductStockDataFromCart(sku) {
+    return true;
+  }
+
+  /**
+   * Function to clear static cache. Has implementation only for V3.
+   */
+  window.commerceBackend.clearStockStaticCache = function clearStockStaticCache() {
+    return null;
   }
 })(Drupal, jQuery);

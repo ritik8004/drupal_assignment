@@ -12,3 +12,13 @@ services:
       - '@alshaya_bazaar_voice.service'
     tags:
       - { name: drush.command }
+
+  alshaya_bazaar_voice.export_review_field_configs:
+    class: \Drupal\alshaya_bazaar_voice\Commands\AlshayaReviewFormFieldsDrushCommand
+    arguments:
+      - '@file_system'
+      - '@logger.factory'
+      - '@language_manager'
+      - '@alshaya_bazaar_voice.service'
+    tags:
+      - { name: drush.command }

@@ -707,7 +707,7 @@ export const updatePaymentAndPlaceOrder = (paymentMethod) => {
 
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
-          message: drupalSettings.global_error_message,
+          message: drupalSettings.globalErrorMessage,
         });
       } else {
         placeOrder(paymentMethod);

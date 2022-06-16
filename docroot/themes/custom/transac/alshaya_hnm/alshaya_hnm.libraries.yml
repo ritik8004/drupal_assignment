@@ -8,8 +8,8 @@ global_styles:
   dependencies:
     - core/jquery
     - core/jquery.once
-    - core/jquery.ui.accordion
-    - core/jquery.ui.tabs
+    - jquery_ui_accordion/accordion
+    - jquery_ui_tabs/tabs
     - core/jquery.cookie
     - mobile_number/element
     - alshaya_white_label/utils

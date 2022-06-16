@@ -171,7 +171,7 @@ class BazaarVoiceApiHelper {
           if (!empty($route_params) && isset($route_params['taxonomy_term'])) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
             $term = $route_params['taxonomy_term'];
-            $routeIdentifier .= ':' . $term->getVocabularyId();
+            $routeIdentifier .= ':' . $term->bundle();
           }
           break;
       }

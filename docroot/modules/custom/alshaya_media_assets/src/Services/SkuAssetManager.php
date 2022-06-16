@@ -210,6 +210,7 @@ class SkuAssetManager {
    * @throws \Exception
    */
   public function getAssets(SKU $sku) {
+    // phpcs:ignore
     $assets = unserialize($sku->get('attr_assets')->getString());
 
     if (!is_array($assets) || empty($assets)) {
@@ -333,7 +334,8 @@ class SkuAssetManager {
       return $file;
     }
 
-    $url = implode('/', [
+    // Use URL from response if available.
+    $url = $data['url'] ?? implode('/', [
       trim($base_url, '/'),
       trim($pims_directory, '/'),
       trim($data['path'], '/'),
@@ -619,6 +621,7 @@ class SkuAssetManager {
     $assets_data = $skuEntity->get('attr_assets')->getValue();
 
     if ($assets_data && isset($assets_data[0], $assets_data[0]['value'])) {
+      // phpcs:ignore
       $unserialized_assets = unserialize($assets_data[0]['value']);
 
       if ($unserialized_assets) {
@@ -784,7 +787,6 @@ class SkuAssetManager {
 
             $a_multi_pack = $a['Data']['IsMultiPack'] ?? NULL;
             $b_multi_pack = $b['Data']['IsMultiPack'] ?? NULL;
-
             if ($a_multi_pack != $b_multi_pack) {
               return $a_multi_pack === 'true' ? -1 : 1;
             }

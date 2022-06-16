@@ -19,12 +19,21 @@
   }
 
   .user__order--detail {
+    border-top: none;
+
     .total-row .dark .price {
       color: $black;
       font-family: $hnm-demibold;
 
       @include breakpoint($only-mobile) {
         font-size: 0.8125rem;
+      }
+    }
+
+    .order-summary-row {
+      > div {
+        background: $order_summary_row;
+        padding: rem(21) rem(16);
       }
     }
   }
@@ -89,7 +98,7 @@
   .delivery-details-row {
     color: $order_detail_total_bg;
 
-    td {
+    > div {
       background: $order_summary_blend_bg;
       font-family: $hnm-bold;
       font-weight: normal;

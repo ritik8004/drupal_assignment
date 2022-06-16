@@ -15,8 +15,6 @@ use Drupal\file\FileInterface;
  * Implements hook_alshaya_rcs_product_query_fields_alter().
  */
 function alshaya_media_assets_alshaya_rcs_product_query_fields_alter(array &$fields) {
-  array_push($fields['items'], 'asset_type');
-
   array_push(
     $fields['items']['... on ConfigurableProduct']['variants']['product'],
     'assets_swatch',
@@ -37,20 +35,23 @@ function alshaya_media_assets_alshaya_rcs_product_query_fields_alter(array &$fie
 }
 
 /**
- * Implements hook_ENTITY_view().
+ * Implements hook_page_attachments_alter().
  */
-function alshaya_media_assets_page_attachments(&$attachments) {
+function alshaya_media_assets_page_attachments_alter(&$attachments) {
   // Ignore admin paths.
   if (\Drupal::service('router.admin_context')->isAdminRoute()) {
     return;
   }
 
-  // Below code is getting refactored completely in next release.
-  // Adding condition here for module just as stopgap.
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_rcs')) {
-    // @todo Add the library to individual render arrays of pages rather than
-    // adding it in a generalized way like this.
-    $attachments['#attached']['library'][] = 'alshaya_media_assets/rcs_product_images';
+  // We override the default media library with the assets library.
+  foreach ($attachments['#attached']['library'] as $key => $value) {
+    if ($value === 'alshaya_rcs_product/rcs_product_images') {
+      // Remove the default library.
+      unset($attachments['#attached']['library'][$key]);
+      // Add assets library.
+      $attachments['#attached']['library'][] = 'alshaya_media_assets/rcs_product_images';
+      break;
+    }
   }
 }
 
@@ -79,9 +80,7 @@ function alshaya_media_assets_alshaya_acm_switch_magento_configs_alter(array &$c
 function alshaya_media_assets_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
   // Suppress the unserialize class warning.
   // @codingStandardsIgnoreLine
-  $existing_assets = !empty($existing_data['attr_assets'])
-    ? unserialize($existing_data['attr_assets'][0]['value'])
-    : [];
+  $existing_assets = !empty($existing_data['attr_assets']) ? unserialize($existing_data['attr_assets'][0]['value']) : [];
 
   if (!is_array($existing_assets) || empty($existing_assets)) {
     $existing_assets = [];

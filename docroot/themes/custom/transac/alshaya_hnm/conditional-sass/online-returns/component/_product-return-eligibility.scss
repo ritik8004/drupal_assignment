@@ -1,0 +1,12 @@
+body.magazine-layout {
+  div[id*="online-returns-pdp"] {
+    font-family: $hnm-demibold;
+    font-size: 1rem;
+
+    span {
+      &::before {
+        font-size: 2rem;
+      }
+    }
+  }
+}
