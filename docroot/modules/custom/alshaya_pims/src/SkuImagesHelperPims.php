@@ -105,9 +105,7 @@ class SkuImagesHelperPims extends SkuImagesHelper {
     ];
     $styled_image_urls = [];
     foreach ($styles as $style_name) {
-      $styled_image_urls[$style_name] = !empty($media['styles'][$style_name])
-        ? $media['styles'][$style_name]
-        : NULL;
+      $styled_image_urls[$style_name] = $media['styles'][$style_name];
     }
 
     return $styled_image_urls;
