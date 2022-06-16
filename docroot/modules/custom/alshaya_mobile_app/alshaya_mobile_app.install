@@ -15,14 +15,31 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
- * Add new API to expose Product configuration.
+ * 1/ Add new API to expose Product configuration.
+ * 2/ Perform actions for storing PIMS image mapping in database and providing
+ * stopgap URLs in API response.
  */
 function alshaya_mobile_app_update_8081() {
+  // Add new API to expose Product configuration.
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(['rest.resource.product_general_settings'],
     'alshaya_mobile_app',
     'install'
+  );
+
+  // Import config to set "process_image_url_for_pims" key.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['alshaya_mobile_app.settings'],
+    'alshaya_mobile_app',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  // Create table `pims_style_mapping`.
+  \Drupal::database()->schema()->createTable(
+    'pims_style_mapping',
+    alshaya_mobile_app_schema()['pims_style_mapping']
   );
 }
 
@@ -576,4 +593,40 @@ function _alshaya_mobile_app_create_consumer() {
     'roles' => ['mobile_app_consumer'],
   ]);
   $client->save();
+}
+
+/**
+ * Implements hook_schema().
+ */
+function alshaya_mobile_app_schema() {
+  $schema = [];
+  $schema['pims_style_mapping'] = [
+    'description' => 'PIMS mapping table',
+    'fields' => [
+      'original_url' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'description' => 'Original Image URL',
+      ],
+      'style' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'description' => 'Image style',
+      ],
+      'styled_url' => [
+        'type' => 'varchar',
+        // This can be null as image style may not be present.
+        'not null' => FALSE,
+        'length' => 255,
+        'description' => 'Styled Image URL',
+      ],
+    ],
+    'unique keys' => [
+      'unique' => ['original_url', 'style'],
+    ],
+  ];
+
+  return $schema;
 }
