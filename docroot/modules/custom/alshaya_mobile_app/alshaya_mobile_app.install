@@ -595,7 +595,6 @@ function alshaya_mobile_app_schema() {
   $schema = [];
   $schema['pims_style_mapping'] = [
     'description' => 'PIMS mapping table',
-    // @todo Set proper size of field.
     'fields' => [
       'original_url' => [
         'type' => 'varchar',
