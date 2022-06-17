@@ -419,7 +419,8 @@ export const removeProductFromWishListForLoggedInUsers = (productInfo) => (
   window.commerceBackend.addRemoveWishlistItemsInBackend(
     productInfo,
     'removeWishlistItem',
-  ));
+  )
+);
 
 /**
  * Utility function to remove a product from wishlist.
