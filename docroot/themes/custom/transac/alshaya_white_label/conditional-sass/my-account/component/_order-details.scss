@@ -165,6 +165,13 @@
           }
         }
       }
+
+      &:not(.vat-row) {
+        > .warm--white {
+          display: flex;
+          align-items: center;
+        }
+      }
     }
 
     .delivery-details-row {
