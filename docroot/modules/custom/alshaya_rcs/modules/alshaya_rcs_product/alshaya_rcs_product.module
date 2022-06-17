@@ -463,6 +463,13 @@ function alshaya_rcs_product_theme_suggestions_product_zoom_alter(array &$sugges
 }
 
 /**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_rcs_product_alshaya_rcs_product_query_fields_alter(array &$fields) {
+  array_push($fields['items']['... on ConfigurableProduct']['variants']['product'], 'size');
+}
+
+/**
  * Utility function to enable Bazaar voice reviews for RCS Product.
  */
 function _alshaya_rcs_product_change_bv_routes_list() {
