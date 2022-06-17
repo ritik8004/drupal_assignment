@@ -35,15 +35,22 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
-   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager
-   *   SKU Assets Manager.
    * @param \Drupal\alshaya_hm_images\Services\HmImagesHelper $images_helper
    *   Images Helper Service.
    */
-  public function __construct(SkuAssetManager $sku_assets_manager,
-    HmImagesHelper $images_helper) {
-    $this->skuAssetsManager = $sku_assets_manager;
+  public function __construct(HmImagesHelper $images_helper) {
     $this->imagesHelper = $images_helper;
+  }
+
+  /**
+   * Setter function for Sku Asset Manager service.
+   *
+   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager
+   *   SKU Assets Manager.
+   */
+  public function setSkuAssetManager(SkuAssetManager $sku_assets_manager) {
+    // @todo Move this back to normal/constructor once module enabled on prod.
+    $this->skuAssetsManager = $sku_assets_manager;
   }
 
   /**
