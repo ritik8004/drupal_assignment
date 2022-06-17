@@ -6,12 +6,13 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { getApcCustomerData } from '../../../hello_member_api_helper';
 import TierProgress from './tier-progress';
+import logger from '../../../../../../js/utilities/logger';
 
 class MyMembership extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      wait: false,
+      wait: true,
       myMembershipData: null,
     };
   }
@@ -20,9 +21,13 @@ class MyMembership extends React.Component {
     const apcCustomerData = getApcCustomerData();
     if (apcCustomerData instanceof Promise) {
       apcCustomerData.then((response) => {
-        if (hasValue(response) && hasValue(response.data)) {
+        if (hasValue(response.error)) {
+          logger.error('Error while trying to get apc customer data. Data: @data.', {
+            '@data': JSON.stringify(response),
+          });
+        } else if (hasValue(response) && hasValue(response.data)) {
           this.setState({
-            wait: true,
+            wait: false,
             myMembershipData: response.data,
           });
         }
@@ -33,7 +38,7 @@ class MyMembership extends React.Component {
   render() {
     const { wait, myMembershipData } = this.state;
 
-    if (!wait && myMembershipData === null) {
+    if (wait && myMembershipData === null) {
       return (
         <div className="membership-summary-wrapper" style={{ animationDelay: '0.4s' }}>
           <Loading />

@@ -1,18 +1,24 @@
 import React from 'react';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import Loading from '../../../../../../../js/utilities/loading';
+import logger from '../../../../../../../js/utilities/logger';
 import { getApcTierProgressData } from '../../../../hello_member_api_helper';
+
+const tier1Label = 'hello';
+const tier2Label = 'plus';
+const newVoucherCode = 'NEW_COUPON';
+const plusVoucherCode = 'GET_PLUS';
 
 class TierProgress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      wait: false,
+      wait: true,
       currentTier: null,
       nextTier: null,
       pointsSummmary: null,
       tierWidthData: null,
-      userProgressWidth: null,
+      userProgressWidth: '0',
     };
   }
 
@@ -20,9 +26,13 @@ class TierProgress extends React.Component {
     const apcCustomerData = getApcTierProgressData();
     if (apcCustomerData instanceof Promise) {
       apcCustomerData.then((response) => {
-        if (hasValue(response) && hasValue(response.data)) {
+        if (hasValue(response.error)) {
+          logger.error('Error while trying to get apc tier progress data. Data: @data.', {
+            '@data': JSON.stringify(response),
+          });
+        } else if (hasValue(response) && hasValue(response.data)) {
           this.setState({
-            wait: true,
+            wait: false,
             currentTier: response.data.extension_attributes.current_tier,
             nextTier: response.data.extension_attributes.next_tier,
             pointsSummmary: response.data.extension_attributes.points_summary,
@@ -38,9 +48,9 @@ class TierProgress extends React.Component {
    * Get constant tier width value calculated from api response data.
    */
   getTierWidthData = (tierData) => {
-    if ((tierData.extension_attributes.current_tier === 'hello')
+    if ((tierData.extension_attributes.current_tier === tier1Label)
       && hasValue(tierData.extension_attributes.interval)) {
-      const tierObj = tierData.tier_progress_tracker.find((item) => item.code === 'GET_PLUS');
+      const tierObj = tierData.tier_progress_tracker.find((item) => item.code === plusVoucherCode);
       if (hasValue(tierObj)) {
         const tierWidthData = {
           width: (tierData.extension_attributes.interval / tierObj.max_value) * 100,
@@ -58,16 +68,16 @@ class TierProgress extends React.Component {
   getUserProgressWidth = (tierData) => {
     let tierObj = null;
     // If user is new hello member, we check how far he is to become plus member.
-    if (tierData.extension_attributes.current_tier === 'hello') {
-      tierObj = tierData.tier_progress_tracker.find((item) => item.code === 'GET_PLUS');
+    if (tierData.extension_attributes.current_tier === tier1Label) {
+      tierObj = tierData.tier_progress_tracker.find((item) => item.code === plusVoucherCode);
       if (hasValue(tierObj)) {
         return (((tierObj.max_value - tierObj.current_value) / tierObj.max_value) * 100);
       }
     }
     // If user is plus member, we check how far he is to get next voucher.
-    if ((tierData.extension_attributes.current_tier === 'plus')
+    if ((tierData.extension_attributes.current_tier === tier2Label)
       && hasValue(tierData.extension_attributes.interval)) {
-      tierObj = tierData.tier_progress_tracker.find((item) => item.code === 'NEW_COUPON');
+      tierObj = tierData.tier_progress_tracker.find((item) => item.code === newVoucherCode);
       if (hasValue(tierObj)) {
         return (((tierData.extension_attributes.interval - tierObj.current_value)
         / tierData.extension_attributes.interval) * 100);
@@ -87,7 +97,7 @@ class TierProgress extends React.Component {
     } = this.state;
     const { myMembershipData } = this.props;
 
-    if (!wait || myMembershipData === null) {
+    if (wait || myMembershipData === null) {
       return (
         <div className="tier-summary-wrapper" style={{ animationDelay: '0.4s' }}>
           <Loading />
@@ -99,11 +109,11 @@ class TierProgress extends React.Component {
     const countTiers = hasValue(tierWidthData) ? tierWidthData.count : 1;
     const userProgressWidthValue = hasValue(userProgressWidth) ? userProgressWidth : '0';
     const tierTrackers = [];
-    if (currentTier === 'hello') {
+    if (currentTier === tier1Label) {
       for (let index = 0; index < countTiers; index++) {
         tierTrackers.push(<li key={index} style={{ width: `${tierWidthValue}%` }} />);
       }
-    } else if (currentTier === 'plus') {
+    } else if (currentTier === tier2Label) {
       tierTrackers.push(<li key="tier-1" style={{ width: '0%' }} />);
       tierTrackers.push(<li key="tier-2" style={{ width: '100%' }} />);
     }
