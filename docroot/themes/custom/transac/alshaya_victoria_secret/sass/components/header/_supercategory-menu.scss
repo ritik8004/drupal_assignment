@@ -46,33 +46,40 @@
   }
 
   .block-alshaya-super-category-menu {
-    .menu--one__list li {
+    .menu--one__list {
       @include breakpoint($upto-desktop) {
-        overflow: hidden;
+        height: rem(40);
       }
 
-      &:last-child {
+      li {
+        @include breakpoint($upto-desktop) {
+          overflow: hidden;
+          height: rem(40);
+        }
+
+        &:last-child {
+          &::after {
+            display: none;
+          }
+        }
+
         &::after {
-          display: none;
-        }
-      }
+          content: "|";
+          display: block;
+          color: $header_super_category_menu_divider;
+          font-size: rem(16);
+          margin-top: rem(-30);
+          float: $right;
+          margin-#{$right}: rem(-2);
 
-      &::after {
-        content: "|";
-        display: block;
-        color: $header_super_category_menu_divider;
-        font-size: rem(16);
-        margin-top: rem(-30);
-        float: $right;
-        margin-#{$right}: rem(-2);
+          @include breakpoint($only-tablet) {
+            font-size: rem(21);
+            margin-top: rem(34);
+          }
 
-        @include breakpoint($only-tablet) {
-          font-size: rem(21);
-          margin-top: rem(34);
-        }
-
-        @include breakpoint($only-mobile) {
-          margin-#{$right}: rem(-1);
+          @include breakpoint($only-mobile) {
+            margin-#{$right}: rem(-1);
+          }
         }
       }
     }

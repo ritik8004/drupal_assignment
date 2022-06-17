@@ -232,7 +232,7 @@ header {
 
   .menu--mobile-navigation {
     width: 75%;
-    top: 2.875rem;
+    top: rem(44);
     background-color: $header_mobile_menu_bg;
   }
 
@@ -253,7 +253,7 @@ header {
   .block-alshaya-react-mini-cart {
     width: 26%;
     #{$right}: 0;
-    top: 2.875rem;
+    top: rem(44);
     z-index: 1;
     text-align: center;
     background-color: $header_mobile_menu_bg;
@@ -381,6 +381,6 @@ header {
 
 .block-alshaya-react-mini-cart {
   @include breakpoint($upto-desktop) {
-    z-index: 2;
+    z-index: 1;
   }
 }
