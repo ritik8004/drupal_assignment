@@ -2,8 +2,8 @@
   &.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
     .wishlist-pdp-full {
       @include breakpoint($desktop) {
-        #{$right}: rem(123);
-        top: rem(8);
+        #{$right}: rem(121);
+        top: rem(7);
       }
     }
   }

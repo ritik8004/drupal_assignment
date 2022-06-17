@@ -1,6 +1,6 @@
 @include breakpoint($only-mobile) {
   .block-alshaya-super-category-menu {
-    height: 2.875rem;
+    height: rem(40);
     transition: height 0.4s;
 
     .hide-minimalistic-header.no-sticky-algolia-search-bar & {

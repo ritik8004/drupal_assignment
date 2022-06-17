@@ -30,3 +30,9 @@
 .qty-sel-btn {
   border-radius: 0;
 }
+
+.is-not-buyable {
+  &:hover {
+    color: $primary_btn_text;
+  }
+}
