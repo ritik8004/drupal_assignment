@@ -21,6 +21,7 @@ class AlshayaDisableSyncCommands extends DrushCommands {
     "acq_sku:sync-products",
     "acq_sku:sync-categories",
     "acq_sku:sync-products-test",
+    "bv_attr_val_algolia:index",
   ];
 
   /**
