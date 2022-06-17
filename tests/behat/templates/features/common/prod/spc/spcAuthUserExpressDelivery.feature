@@ -1,5 +1,5 @@
-@javascript @auth @same-dayDelivery @mujiqaprod @flqaprod
-Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
+@javascript @auth @expressDelivery
+Feature: SPC Checkout Express Delivery feature testing for Authenticated user
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
@@ -8,23 +8,27 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     When I am on "{spc_basket_page}"
     And I wait for the page to load
 
-  @same-dayDelivery
-  Scenario: As an Authenticated user, I should be able to verify the Same Day options in All Filters and on PDP page
+  @expressDelivery
+  Scenario: As an Authenticated user, I should be able to verify the Express Delivery options in All Filters and on PDP page
     Given I should see an ".plp-facet-product-filter .show-all-filters-algolia" element
-    And I apply the "SameDay" delivery filter
+    And I apply the "Express" delivery filter
+    Then I should see an "#plp-hits .express_delivery" element
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see an ".express-delivery .express-delivery-text" element
+    Then I should see an ".express-delivery .express-delivery-text:nth-child(2)" element
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#ui-id-1" element
+    Then the element "#express-delivery-options" should exist
     And I should see an "#pdp-area-select" element
     And I click on "#pdp-area-select" element
     And I wait 5 seconds
     Then I should see an ".spc-delivery-area" element
     Then I should see an ".spc-delivery-area .governate-label" element
+    Then I should see an ".spc-delivery-area .delivery-type-wrapper .express-delivery" element
     And I click on ".area-list-block-content ul li:first-child" element
     And I wait 2 seconds
     And I click on "div.select-area-link" element
@@ -56,27 +60,30 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
-
   @language @desktop
-  Scenario: As an authenticated user, I should be able to verify the Same-Day Delivery options in All Filters and on PDP page in second language
+  Scenario: As an authenticated user, I should be able to verify the Express Delivery options in All Filters and on PDP page in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    And I should see an ".plp-facet-product-filter .show-all-filters-algolia" element
-    And I apply the "SameDay" delivery filter
+    And  I should see an ".plp-facet-product-filter .show-all-filters-algolia" element
+    And I apply the "Express" delivery filter
+    Then I should see an "#plp-hits .express_delivery" element
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see an ".express-delivery .express-delivery-text" element
+    Then I should see an ".express-delivery .express-delivery-text:nth-child(2)" element
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#ui-id-1" element
+    Then the element "#express-delivery-options" should exist
     And I should see an "#pdp-area-select" element
     And I click on "#pdp-area-select" element
     And I wait 5 seconds
     Then I should see an ".spc-delivery-area" element
     Then I should see an ".spc-delivery-area .governate-label" element
+    Then I should see an ".spc-delivery-area .delivery-type-wrapper .express-delivery" element
     And I click on ".area-list-block-content ul li:first-child" element
     And I wait 2 seconds
     And I click on "div.select-area-link" element
@@ -108,27 +115,30 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
-
   @mobile
-  Scenario: As an authenticated user, I should be able to verify the Same-day Delivery options in All Filters and on PDP page on mobile
+  Scenario: As an authenticated user, I should be able to verify the Express Delivery options in All Filters and on PDP page on mobile
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I should see an ".plp-facet-product-filter .show-all-filters-algolia" element
-    And I apply the "SameDay" delivery filter
+    And  I should see an ".plp-facet-product-filter .show-all-filters-algolia" element
+    And I apply the "Express" delivery filter
+    Then I should see an "#plp-hits .express_delivery" element
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see an ".express-delivery .express-delivery-text" element
+    Then I should see an ".express-delivery .express-delivery-text:nth-child(2)" element
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#ui-id-1" element
+    Then the element "#express-delivery-options" should exist
     And I should see an "#pdp-area-select" element
     And I click on "#pdp-area-select" element
     And I wait 5 seconds
     Then I should see an ".spc-delivery-area" element
     Then I should see an ".spc-delivery-area .governate-label" element
+    Then I should see an ".spc-delivery-area .delivery-type-wrapper .express-delivery" element
     And I click on ".area-list-block-content ul li:first-child" element
     And I wait 2 seconds
     And I click on "div.select-area-link" element

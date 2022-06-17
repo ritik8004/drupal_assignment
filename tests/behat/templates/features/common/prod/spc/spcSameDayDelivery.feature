@@ -2,14 +2,11 @@
 Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
 
   Background:
-    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 10 seconds
-    Then I should be on "/user" page
-    When I am on "{spc_basket_page}"
-    And I wait for the page to load
+    Given I am on "{spc_basket_page}"
+    And I wait 2 seconds
 
   @same-dayDelivery
-  Scenario: As an Authenticated user, I should be able to verify the Same Day options in All Filters and on PDP page
+  Scenario: As a Guest user, I should be able to verify the Same Day options in All Filters and on PDP page
     Given I should see an ".plp-facet-product-filter .show-all-filters-algolia" element
     And I apply the "SameDay" delivery filter
     When I select a product in stock on ".c-products__item"
@@ -38,6 +35,11 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
+    Then I should be on "/cart/login" page
+    And I wait 10 seconds
+    When I click the anchor link ".edit-checkout-as-guest" on page
+    And I wait 10 seconds
+    And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
@@ -56,9 +58,8 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
-
   @language @desktop
-  Scenario: As an authenticated user, I should be able to verify the Same-Day Delivery options in All Filters and on PDP page in second language
+  Scenario: As a Guest user, I should be able to verify the Same-Day Delivery options in All Filters and on PDP page in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -90,6 +91,11 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
+    Then I should be on "/cart/login" page
+    And I wait 10 seconds
+    When I click the anchor link ".edit-checkout-as-guest" on page
+    And I wait 10 seconds
+    And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
@@ -108,9 +114,8 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
-
   @mobile
-  Scenario: As an authenticated user, I should be able to verify the Same-day Delivery options in All Filters and on PDP page on mobile
+  Scenario: As a Guest user, I should be able to verify the Same-day Delivery options in All Filters and on PDP page on mobile
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
