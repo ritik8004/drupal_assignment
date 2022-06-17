@@ -14,7 +14,7 @@ body.wishlist-enabled {
     @include breakpoint($upto-desktop) {
       width: 8%;
       #{$right}: rem(136);
-      top: rem(56);
+      top: rem(57);
     }
 
     @include breakpoint($only-tablet) {
@@ -26,6 +26,12 @@ body.wishlist-enabled {
 
     .wishlist-header {
       padding-bottom: 0;
+
+      .wishlist-icon {
+        @include breakpoint($desktop) {
+          margin-top: rem(4);
+        }
+      }
     }
   }
 
@@ -77,6 +83,11 @@ body.wishlist-enabled {
 }
 
 .wishlist-icon {
-  width: rem(20);
-  height: rem(20);
+  width: rem(25);
+  height: rem(25);
+
+  @include breakpoint($upto-desktop) {
+    width: rem(22);
+    height: rem(22);
+  }
 }
