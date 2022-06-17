@@ -45,9 +45,9 @@ class WishlistButton extends React.Component {
     if (contextArray.includes(context)) {
       // Set title for sku product on page load.
       const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-      const productInfo = drupalSettings[productKey];
+      const productInfo = window.commerceBackend.getProductData(sku, productKey, true);
       this.setState({
-        title: productInfo[sku].cart_title ? productInfo[sku].cart_title : '',
+        title: productInfo.cart_title ? productInfo.cart_title : '',
       });
       // Rendering wishlist button as per sku variant info.
       // Event listener is only required for old pdp, modal and matchback.
@@ -431,18 +431,18 @@ class WishlistButton extends React.Component {
   ifExistsInSameGroup = (skuItem) => {
     const { sku, context } = this.props;
     const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-    const productInfo = drupalSettings[productKey];
+    const productInfo = window.commerceBackend.getProductData(sku, productKey, false);
     let found = false;
     // Check in variant list for grouped configurable product.
     // Else check in item list for grouped simple product.
-    if (productInfo[sku].variants) {
-      Object.values(productInfo[sku].variants).forEach((variant) => {
+    if (productInfo.variants) {
+      Object.values(productInfo.variants).forEach((variant) => {
         if (variant.parent_sku && variant.parent_sku === skuItem) {
           found = true;
         }
       });
-    } else if (productInfo[sku].group) {
-      Object.values(productInfo[sku].group).forEach((item) => {
+    } else if (productInfo.group) {
+      Object.values(productInfo.group).forEach((item) => {
         if (item.sku && item.sku === skuItem) {
           found = true;
         }
