@@ -78,6 +78,22 @@
     }
   }
 
+  @include breakpoint($desktop) {
+    .header--wrapper {
+      background: $header_super_category_enabled_bg;
+    }
+  }
+
+  .c-menu-primary {
+    .region__menu-primary {
+      background: $header_super_category_enabled_bg;
+    }
+  }
+
+  .c-menu-secondary {
+    background: $header_super_category_enabled_bg;
+  }
+
   @include breakpoint($upto-desktop) {
     .menu--active .mobile--close,
     .logged-in .mobile--close,
