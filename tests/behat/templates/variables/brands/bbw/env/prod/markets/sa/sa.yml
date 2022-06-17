@@ -1,7 +1,7 @@
 variables:
-  url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
+  url_product_page: '/buy-cactus-blossom-3-wick-candle-0.html/'
   product_listing_page_url: '/shop-home-fragrance/featured/white-barn-shop/'
   spc_product_listing_page: '/shop-home-fragrance/featured/white-barn-shop/'
   spc_basket_page: '/shop-home-fragrance/featured/white-barn-shop/'
-  spc_pdp_page: '/buy-sun-drenched-linen-3-wick-candle.html/'
+  spc_pdp_page: '/buy-cactus-blossom-3-wick-candle-0.html/'
   spc_promotion_listing_page: '/shop-hand-soaps-sanitizers/hand-sanitizers/pocketbac-hand-sanitizers/'
