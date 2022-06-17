@@ -506,13 +506,7 @@
     return selectedCombination;
   };
 
-  Drupal.updateRelatedProducts = function (url) {
-    Drupal.ajax({
-      url: url,
-      progress: {type: 'throbber'},
-      type: 'GET',
-    }).execute();
-  };
+  Drupal.updateRelatedProducts = window.commerceBackend.updateRelatedProducts(url);
 
   Drupal.getRelatedProductPosition = function () {
     var sku = $('article[data-vmode="full"]').attr('data-sku');

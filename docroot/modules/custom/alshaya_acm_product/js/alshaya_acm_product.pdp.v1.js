@@ -118,3 +118,14 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
   }
   return data;
 }
+
+/**
+ * Updates US/Related products on PDP.
+ */
+window.commerceBackend.updateRelatedProducts = function updateRelatedProducts (url) {
+  Drupal.ajax({
+    url: url,
+    progress: {type: 'throbber'},
+    type: 'GET',
+  }).execute();
+};
