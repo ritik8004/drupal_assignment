@@ -22,6 +22,7 @@ variables:
   ar_brand_filter: ''
   ar_color_filter: ''
   ar_promotional_filter: 'المميزات'
+  language_spc_knet_option: 'عيديتي [KNET]'
   language_create_account: 'Create An Account'
   language_sign_in: 'Sign In'
   language_find_store: 'Find A Store'

@@ -37,7 +37,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I wait 10 seconds
     And I wait for the page to load
     And I wait 10 seconds
-    And I select "{spc_knet_option}" from dropdown ".paymentselect.bank"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect.bank"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
     And I select date and month in the form
