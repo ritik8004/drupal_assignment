@@ -183,12 +183,10 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     });
   }
 
-  openModal = (e) => {
+  openModal = () => {
     this.setState({
       openModal: true,
     });
-
-    e.stopPropagation();
   };
 
   closeModal = () => {
@@ -477,17 +475,14 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
           </div>
           <ConditionalView condition={!isEgiftCardExpired && cart.cart.totals.egiftRedemptionType === 'linked'}>
             <div className="payment-method-bottom-panel payment-method-form checkout_com_egift_linked_card">
-              <ConditionalView conditional={openModal}>
-                <UpdateEgiftCardAmount
-                  closeModal={this.closeModal}
-                  open={openModal}
-                  amount={cart.cart.totals.egiftRedeemedAmount}
-                  remainingAmount={egiftCardRemainingBalance}
-                  updateAmount={this.handleAmountUpdate}
-                  cart={cart.cart}
-                />
-              </ConditionalView>
-
+              <UpdateEgiftCardAmount
+                closeModal={this.closeModal}
+                open={openModal}
+                amount={cart.cart.totals.egiftRedeemedAmount}
+                remainingAmount={egiftCardRemainingBalance}
+                updateAmount={this.handleAmountUpdate}
+                cart={cart.cart}
+              />
               <ConditionalView condition={eGiftbalancePayable > 0}>
                 <div className="spc-payment-method-desc">
                   <div className="desc-content">
