@@ -76,6 +76,9 @@
 
     <div class="content__main {{ image_slider_position_pdp }}">
       <div class="gallery-wrapper"></div>
+      {{#if is_wishlist_enabled }}
+        <div class="wishlist-pdp-modal"></div>
+      {{/if}}
     </div>
 
     <div class="content__sidebar">
