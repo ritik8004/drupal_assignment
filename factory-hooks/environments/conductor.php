@@ -248,9 +248,9 @@ $conductors = [
     'site_id' => 571,
   ],
   'hmqa_oms' => [
-    'hmac_id' => '30305636064b4a37856ddc0efb9a7ab0',
-    'hmac_secret' => 'ZDFhNmM4OWMtOTdkZi00',
-    'site_id' => 572,
+    'hmac_id' => '57136dbbd8664fef94dc569ecd52e877',
+    'hmac_secret' => 'OWNjOTA5OTctYWM2ZC00',
+    'site_id' => 573,
   ],
   'hmkw_dev3' => [
     'hmac_id' => '1b56d617c277492597e27391f2752aed',
