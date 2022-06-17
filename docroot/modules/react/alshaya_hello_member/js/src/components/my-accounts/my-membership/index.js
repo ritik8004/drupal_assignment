@@ -27,23 +27,28 @@ class MyMembership extends React.Component {
           });
         } else if (hasValue(response) && hasValue(response.data)) {
           this.setState({
-            wait: false,
             myMembershipData: response.data,
           });
         }
+        this.setState({
+          wait: false,
+        });
       });
     }
   }
 
   render() {
     const { wait, myMembershipData } = this.state;
-
-    if (wait && myMembershipData === null) {
+    if (wait) {
       return (
         <div className="membership-summary-wrapper" style={{ animationDelay: '0.4s' }}>
           <Loading />
         </div>
       );
+    }
+
+    if (myMembershipData === null) {
+      return null;
     }
 
     const memberId = getFormatedMemberId(myMembershipData.apc_identifier_number);

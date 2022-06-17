@@ -14,7 +14,6 @@ const getApcCustomerData = async () => {
   // Get user details from session.
   const { customerId } = drupalSettings.userDetails;
   const { uid } = drupalSettings.user;
-  const endpoint = 'helloMemberGetCustomerData';
 
   // Check if we have user in session.
   if (!hasValue(customerId) || uid === 0) {
@@ -30,13 +29,12 @@ const getApcCustomerData = async () => {
     programCode: 'hello_member',
   };
 
-  return callHelloMemberApi(endpoint, 'GET', params)
+  return callHelloMemberApi('helloMemberGetCustomerData', 'GET', params)
     .then((response) => {
       if (hasValue(response.data.error)) {
         const message = hasValue(response.data.message) ? response.data.message : '';
-        logger.error('Error while trying to fetch customer apc information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+        logger.error('Error while trying to fetch customer apc information for user with customer id @customerId. Message: @message', {
           '@customerId': customerId,
-          '@endpoint': endpoint,
           '@message': message,
         });
         return getErrorResponse(message, 500);
@@ -56,7 +54,6 @@ const getApcTierProgressData = async () => {
   // Get user details from session.
   const { customerId } = drupalSettings.userDetails;
   const { uid } = drupalSettings.user;
-  const endpoint = 'helloMemberGetApcTierProgressData';
 
   // Check if we have user in session.
   if (!hasValue(customerId) || uid === 0) {
@@ -72,13 +69,12 @@ const getApcTierProgressData = async () => {
     programCode: 'hello_member',
   };
 
-  return callHelloMemberApi(endpoint, 'GET', params)
+  return callHelloMemberApi('helloMemberGetApcTierProgressData', 'GET', params)
     .then((response) => {
       if (hasValue(response.data.error)) {
         const message = hasValue(response.data.message) ? response.data.message : '';
-        logger.error('Error while trying to fetch tracking tier information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+        logger.error('Error while trying to fetch tracking tier information for user with customer id @customerId. Message: @message', {
           '@customerId': customerId,
-          '@endpoint': endpoint,
           '@message': message,
         });
         return getErrorResponse(message, 500);

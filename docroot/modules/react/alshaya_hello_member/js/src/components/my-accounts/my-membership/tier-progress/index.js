@@ -32,7 +32,6 @@ class TierProgress extends React.Component {
           });
         } else if (hasValue(response) && hasValue(response.data)) {
           this.setState({
-            wait: false,
             currentTier: response.data.extension_attributes.current_tier,
             nextTier: response.data.extension_attributes.next_tier,
             pointsSummmary: response.data.extension_attributes.points_summary,
@@ -40,6 +39,9 @@ class TierProgress extends React.Component {
             userProgressWidth: this.getUserProgressWidth(response.data),
           });
         }
+        this.setState({
+          wait: false,
+        });
       });
     }
   }
@@ -95,9 +97,8 @@ class TierProgress extends React.Component {
       tierWidthData,
       userProgressWidth,
     } = this.state;
-    const { myMembershipData } = this.props;
 
-    if (wait || myMembershipData === null) {
+    if (wait) {
       return (
         <div className="tier-summary-wrapper" style={{ animationDelay: '0.4s' }}>
           <Loading />
