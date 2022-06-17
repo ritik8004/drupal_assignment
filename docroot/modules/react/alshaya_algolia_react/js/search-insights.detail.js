@@ -9,7 +9,8 @@
     attach: function (context) {
       $('.sku-base-form').once('alshayaAlgoliaInsightsDetail').on('product-add-to-cart-success', function () {
         var sku = $(this).attr('data-sku');
-        var queryId, objectId= null;
+        var queryId, objectId = null;
+        var indexName = '...';
 
         try {
           if (Drupal.getItemFromLocalStorage('algolia_search_clicks') !== null) {
