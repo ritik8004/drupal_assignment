@@ -358,10 +358,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
 
     for ($i = 0; $i < $no_of_media_items; $i++) {
       $sku_media['images'][$i]['url'] = preg_replace('/\/assets/', '/pims-assets/files/assets/files/assets', $sku_media['images'][$i]['url']);
-      // Covert image style into pims styled url.
-      foreach ($sku_media['images'][$i]['styles'] as $style => $url) {
-        $sku_media['images'][$i]['styles'][$style] = preg_replace('/\/assets/', '/pims-assets/files/assets/files/assets', $url);
-      }
     }
   }
 
