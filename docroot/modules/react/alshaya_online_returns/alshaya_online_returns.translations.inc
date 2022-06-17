@@ -266,6 +266,30 @@ function _alshaya_online_returns_translations() {
         'ar' => 'إجمالي المبلغ المسترد',
         'context' => 'online_returns',
       ],
+      'Selected Item is Promotional Item' => [
+        'ar' => 'بعض المنتجات المختارة مشمولة بالعروض',
+        'context' => 'online_returns',
+      ],
+      'To receive refund for promotional items, all items related to the promotion has to be returned.' => [
+        'ar' => 'لرد أموال المنتجات المشمولة بالعروض، يجب إرجاع جميع المنتجات المرتبطة بالعرض. إن الضغط على استمرار يعني اختيار جميع المنتجات المشمولة بهذا العرض.',
+        'context' => 'online_returns',
+      ],
+      'Deselect this item' => [
+        'ar' => 'إلغاء تحديد هذا المنتج',
+        'context' => 'online_returns',
+      ],
+      'Clicking continue will select all items in this promotion.' => [
+        'ar' => 'الضغط على المتابعة سوف يقوم بتحديد كل المنتاج المشمولة بهذا العرض',
+        'context' => 'online_returns',
+      ],
+      'Big Ticket Item' => [
+        'ar' => 'منتج من طلبية كبيرة',
+        'context' => 'online_returns',
+      ],
+      'Kindly contact customer care for initiating the online returns for Big Ticket Items.' => [
+        'ar' => 'يرجى التواصل مع خدمة الزبائن للإعدادات المتعلقة باسترجاع المنتجات ذات الطلبية الكبيرة',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 
