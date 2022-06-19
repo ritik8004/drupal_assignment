@@ -19,6 +19,8 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
           slidesToScroll: 1,
           infinite: true,
           swipeToSlide: true,
+          variableWidth: true,
+          dots: false,
         },
       },
     ],

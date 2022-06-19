@@ -66,6 +66,11 @@
     font-family: $alshaya-bold;
     background: $hm-my-offers-bg;
 
+    @include breakpoint($only-mobile) {
+      width: rem(250) !important;
+      margin-#{$right}: rem(10);
+    }
+
     .title {
       font-size: rem(16);
       letter-spacing: 0.8px;
