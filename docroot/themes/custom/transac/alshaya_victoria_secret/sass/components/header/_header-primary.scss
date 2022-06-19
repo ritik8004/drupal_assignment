@@ -123,8 +123,12 @@ header {
           #{$right}: rem(-14);
         }
 
-        .logged-in & {
+        .frontpage.logged-in & {
           height: rem(41);
+        }
+
+        .logged-in & {
+          height: rem(42);
         }
       }
     }
