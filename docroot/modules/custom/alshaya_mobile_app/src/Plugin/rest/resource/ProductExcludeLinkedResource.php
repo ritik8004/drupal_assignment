@@ -236,8 +236,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $container->get('alshaya_acm_product.category_helper'),
       $container->get('request_stack'),
       $container->get('alshaya_product_options.helper'),
-      $container->get('config.factory'),
-      $container->get('alshaya_acm_product.sku_images_helper')
+      $container->get('config.factory')
     );
   }
 
