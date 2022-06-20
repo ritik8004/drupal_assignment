@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isMobile } from '../../../../../js/utilities/display';
 
 const OrderDeliveryDetails = (props) => {
   const { order } = props;
@@ -138,6 +139,14 @@ const OrderDeliveryDetails = (props) => {
               <div className="dark">{orderDetails.delivery_method}</div>
             </div>
           )}
+
+          {/* div will render only on Mobile */}
+          { hasValue(orderDetails.ictDate) && isMobile() ? (
+            <div className="mobile-only ict-date">
+              <div className="label font-small">{ictLabel}</div>
+              <div className="dark">{orderDetails.ictDate}</div>
+            </div>
+          ) : null }
         </div>
 
         <div className="desktop-only">
@@ -196,12 +205,13 @@ const OrderDeliveryDetails = (props) => {
             </>
           )}
 
-          { hasValue(orderDetails.ictDate) && (
+          {/* div will render only on viewports wider than mobile */}
+          { hasValue(orderDetails.ictDate) && !(isMobile()) ? (
             <>
               <div className="label ict-date font-small">{ictLabel}</div>
               <div className="dark">{orderDetails.ictDate}</div>
             </>
-          )}
+          ) : null }
         </div>
 
         <div className="above-mobile empty--cell">&nbsp;</div>
