@@ -162,55 +162,69 @@ class AlshayaRcsProductHelper {
    * @return array
    *   Recommended product query fields array.
    */
-  public function getRecommendedProductQuery() {
-    return [
-      'total_count',
-      'items' => [
-        'sku',
+  public function getRecommendedProductQuery(string $type) {
+    $query_fields = [
+      'sku',
+      'id',
+      'name',
+      'type_id',
+      'url_key',
+      'is_buyable',
+      'stock_status',
+      'price_range' => [
+        'maximum_price' => [
+          'regular_price' => [
+            'value',
+          ],
+          'final_price' => [
+            'value',
+          ],
+          'discount' => [
+            'percent_off',
+          ],
+        ],
+      ],
+      'media_gallery' => [
+        'url',
+        'label',
+        '... on ProductVideo' => [
+          'video_content' => [
+            'media_type',
+            'video_provider',
+            'video_url',
+            'video_title',
+            'video_description',
+            'video_metadata',
+          ],
+        ],
+      ],
+      'gtm_attributes' => [
         'id',
         'name',
-        'type_id',
-        'url_key',
-        'is_buyable',
-        'stock_status',
-        'price_range' => [
-          'maximum_price' => [
-            'regular_price' => [
-              'value',
-            ],
-            'final_price' => [
-              'value',
-            ],
-            'discount' => [
-              'percent_off',
-            ],
-          ],
-        ],
-        'media_gallery' => [
-          'url',
-          'label',
-          '... on ProductVideo' => [
-            'video_content' => [
-              'media_type',
-              'video_provider',
-              'video_url',
-              'video_title',
-              'video_description',
-              'video_metadata',
+        'variant',
+        'price',
+        'brand',
+        'category',
+        'dimension2',
+        'dimension3',
+        'dimension4',
+      ],
+    ];
+
+    $this->moduleHandler->alter('alshaya_rcs_recommended_product_query_fields', $query_fields);
+
+    return [
+      'query' => [
+        'query ($sku: String)' => [
+          'products(filter: {sku: {eq: $sku}})' => [
+            'items' => [
+              "$type" => $query_fields,
             ],
           ],
         ],
-        'gtm_attributes' => [
-          'id',
-          'name',
-          'variant',
-          'price',
-          'brand',
-          'category',
-          'dimension2',
-          'dimension3',
-          'dimension4',
-        ],
+      ],
+      'variables' => [
+        'sku' => NULL,
       ],
     ];
   }

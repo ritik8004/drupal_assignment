@@ -89,7 +89,7 @@ function getAdditionalPdpDescription() {
  * @returns {*}
  *   Html with placeholders replaced.
  */
-function getProductRecommendation(products, sectionTitle) {
+function  getProductRecommendation(products, sectionTitle) {
   // Create the containers for carousel.
   const related = jQuery('<div />');
   related.append(jQuery('.rcs-templates--related-product-wrapper').html());

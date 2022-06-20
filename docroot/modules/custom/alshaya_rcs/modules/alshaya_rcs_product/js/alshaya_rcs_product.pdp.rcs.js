@@ -206,13 +206,26 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
-   * Updates US/Related products on PDP.
+   * Updates CS/US/Related products on PDP.
+   *
+   * @param {string} type
+   *   Values - crosssel/upsell/related
+   * @param {string} sku
+   *   SKU value.
+   * @param {string} device
+   *   Device - mobile/desktop.
    */
-  window.commerceBackend.updateRelatedProducts = function updateRelatedProducts(url) {
-    Drupal.ajax({
-      url: url,
-      progress: {type: 'throbber'},
-      type: 'GET',
-    }).execute();
+  window.commerceBackend.updateRelatedProducts = function updateRelatedProducts (type, sku, device) {
+    var productType = type + '-products';
+    globalThis.rcsPhCommerceBackend.getData(productType, {sku}).then(function productList(response) {
+      var mainProduct = Drupal.hasValue(response[0]) ? response[0] : null;
+      if (mainProduct) {
+        var html = globalThis.renderRcsProduct.render(drupalSettings, productType, {}, {}, mainProduct);
+        var selector = '#rcs-' + productType;
+        $(selector).html(html);
+        globalThis.rcsPhApplyDrupalJs(selector);
+      }
+    });
   };
+
 })(jQuery, Drupal, drupalSettings);
