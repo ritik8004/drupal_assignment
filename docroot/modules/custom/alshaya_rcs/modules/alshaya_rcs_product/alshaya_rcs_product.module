@@ -329,7 +329,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     'view' => $view_mode,
   ];
   \Drupal::moduleHandler()->alter('alshaya_rcs_product_build', $build, $entity_info);
-
 }
 
 /**
