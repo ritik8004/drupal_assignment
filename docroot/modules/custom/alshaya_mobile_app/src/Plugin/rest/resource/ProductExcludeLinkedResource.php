@@ -28,7 +28,7 @@ use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Provides a resource to get product details excliding linked products.
+ * Provides a resource to get product details excluding linked products.
  *
  * @RestResource(
  *   id = "product_exclude_linked",
@@ -416,6 +416,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ];
     foreach ($media_contexts as $key => $context) {
       $sku_media = $this->skuInfoHelper->getMedia($sku, $key);
+      // Add style images in media.
+      $sku_media = $this->mobileAppUtility->processMediaImageStyles($sku_media, $sku, $context);
       $this->processSkuMedia($sku_media);
       $data['media'][] = [
         'context' => $context,
