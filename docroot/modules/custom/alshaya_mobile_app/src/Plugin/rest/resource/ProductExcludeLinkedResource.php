@@ -417,7 +417,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     foreach ($media_contexts as $key => $context) {
       $sku_media = $this->skuInfoHelper->getMedia($sku, $key);
       // Add style images in media.
-      $sku_media = $this->processMediaImageStyles($sku_media, $sku, $context);
+      $sku_media = $this->mobileAppUtility->processMediaImageStyles($sku_media, $sku, $context);
       $this->processSkuMedia($sku_media);
       $data['media'][] = [
         'context' => $context,
@@ -665,36 +665,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
       ];
     }
     return $promotions;
-  }
-
-  /**
-   * Processes styled images in media.
-   *
-   * @param array $media
-   *   Array of product media to be processed.
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $context
-   *   Context - pdp/search/modal/teaser.
-   *
-   * @return array
-   *   media array containing styled images.
-   */
-  protected function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
-    /** @var \Drupal\acq_sku\Entity\SKU $sku */
-    $product_media = $this->skuImagesManager->getProductMedia($sku, $context);
-    // Search image styles in product media using url and assign return styles.
-    foreach ($media['images'] as $mid => $media_item) {
-      $key = array_search(
-        $media_item['url'],
-        array_column(
-          $product_media['media_items']['images'],
-          'drupal_uri'
-        )
-      );
-      $media['images'][$mid]['styles'] = $product_media['media_items']['images'][$key]['pims_image']['styles'];
-    }
-    return $media;
   }
 
 }
