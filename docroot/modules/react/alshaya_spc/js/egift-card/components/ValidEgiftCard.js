@@ -213,16 +213,14 @@ export default class ValidEgiftCard extends React.Component {
 
     return (
       <div className="egift-wrapper">
-        <ConditionalView conditional={open}>
-          <UpdateEgiftCardAmount
-            closeModal={this.closeModal}
-            open={open}
-            amount={amount}
-            updateAmount={this.handleAmountUpdate}
-            cart={cart}
-            remainingAmount={cardBalance}
-          />
-        </ConditionalView>
+        <UpdateEgiftCardAmount
+          closeModal={this.closeModal}
+          open={open}
+          amount={amount}
+          updateAmount={this.handleAmountUpdate}
+          cart={cart}
+          remainingAmount={cardBalance}
+        />
         <div className="egift-redeem-applied-amount-wrapper">
           {egiftCardHeader({
             egiftHeading: appliedAmount,
