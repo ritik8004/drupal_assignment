@@ -696,48 +696,18 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $product_media = $this->skuImagesManager->getProductMedia($sku, $context);
-    $styled_images = [];
-    // Map styled images to media image url.
-    foreach ($product_media['media_items']['images'] ?? [] as $media_item) {
-      $styled_images[file_create_url($media_item['drupal_uri'])] = $this->getStyledImages($media_item);
+    // Search image styles in product media using url and assign return styles.
+    foreach ($media['images'] as $mid => $media_item) {
+      $key = array_search(
+        $media_item['url'],
+        array_column(
+          $product_media['media_items']['images'],
+          'drupal_uri'
+        )
+      );
+      $media['images'][$mid]['styles'] = $product_media['media_items']['images'][$key]['pims_image']['styles'];
     }
-
-    // Add styled images for each media image.
-    foreach ($media['images'] as $key => $media_item) {
-      $media['images'][$key]['styles'] = $styled_images[$media_item['url']];
-    }
-
     return $media;
-  }
-
-  /**
-   * Get styled images for media.
-   *
-   * @param array $media
-   *   Media array.
-   *
-   * @return array
-   *   Returns an array of styled product images.
-   */
-  protected function getStyledImages(array $media) {
-
-    // Get Product styles to be returned.
-    $product_styles = [
-      SkuImagesHelper::STYLE_PRODUCT_LISTING,
-      SkuImagesHelper::STYLE_PRODUCT_SLIDE,
-      SkuImagesHelper::STYLE_PRODUCT_ZOOM,
-      SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL,
-      SkuImagesHelper::STYLE_PRODUCT_TEASER,
-      SkuImagesHelper::STYLE_CART_THUMBNAIL,
-    ];
-
-    $styled_images = [];
-    // Get styled image url from media.
-    foreach ($product_styles as $product_style) {
-      $styled_images[$product_style] = $this->skuImagesHelper->getImageStyleUrl($media['pims_image'], $product_style);
-    }
-
-    return $styled_images;
   }
 
 }
