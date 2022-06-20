@@ -1,5 +1,6 @@
 .ict-delivery-info_home_delivery,
 .ict-delivery-info_click_and_collect {
+  font-family: $alshaya-bold;
   color: $inter-country-transfer-black-text;
   line-height: 1.29;
 }
@@ -13,7 +14,6 @@
 }
 
 .ict-delivery-info_click_and_collect {
-  font-family: $alshaya-bold;
   padding: rem(30) 0 rem(10);
   margin-top: rem(20);
   border-top: rem(1) solid $inter-country-transfer-border;
