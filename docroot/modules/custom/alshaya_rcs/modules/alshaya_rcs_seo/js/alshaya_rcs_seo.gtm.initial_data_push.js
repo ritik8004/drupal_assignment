@@ -25,7 +25,9 @@
 
         // Get product image.
         var image = window.commerceBackend.getFirstImage(entity);
-        data.productPictureURL = image.url;
+        data.productPictureURL = (Drupal.hasValue(image) && Drupal.hasValue(image.url))
+          ? image.url
+          : null;
         data.magentoProductID = entity.id;
 
         // Set categories.
