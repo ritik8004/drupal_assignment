@@ -792,3 +792,8 @@ hello-member-points-history:
   css:
     theme:
       css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css: {}
+
+inter-country-transfer:
+  css:
+    theme:
+      css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css: {}
