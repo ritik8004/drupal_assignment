@@ -16,7 +16,7 @@ rows:
   -
     title: 'Receive refunds'
     description:
-      value: '<p>Once we recieve the return items we will initiate your refund and the refund will be credited in your account in 3-5 days.</p>'
+      value: '<p>Once we receive the return items we will initiate your refund and the refund will be credited in your account in 3-5 days.</p>'
       format: 'rich_text'
     icon: 'refund'
     hide_this_row: 0
