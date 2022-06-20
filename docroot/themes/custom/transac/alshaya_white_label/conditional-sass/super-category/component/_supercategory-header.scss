@@ -79,14 +79,16 @@
   }
 
   @include breakpoint($upto-desktop) {
+    .menu--active .mobile--close,
     .logged-in .mobile--close,
     .mobile--close {
-      top: 3.9rem;
+      top: 3.9rem !important;
     }
 
+    .menu--active .toggle--sign,
     .logged-in .toggle--sign,
     .toggle--sign {
-      top: 3.8125rem;
+      top: rem(60) !important;
     }
 
     .main--menu {
@@ -235,7 +237,7 @@
     }
 
     @include breakpoint($upto-desktop) {
-      top: 5.7rem;
+      top: rem(107);
     }
 
     li::after {
