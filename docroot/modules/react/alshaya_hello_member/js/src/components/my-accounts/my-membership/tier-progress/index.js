@@ -29,7 +29,10 @@ class TierProgress extends React.Component {
         let currentTier = null;
         let nextTier = null;
         let pointsSummmary = null;
-        let tierWidthData = null;
+        let tierWidthData = {
+          width: '0',
+          count: 0,
+        };
         let userProgressWidth = '0';
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
           currentTier = response.data.extension_attributes.current_tier;
@@ -114,13 +117,10 @@ class TierProgress extends React.Component {
       );
     }
 
-    const tierWidthValue = hasValue(tierWidthData) ? tierWidthData.width : '0';
-    const countTiers = hasValue(tierWidthData) ? tierWidthData.count : 1;
-    const userProgressWidthValue = hasValue(userProgressWidth) ? userProgressWidth : '0';
     const tierTrackers = [];
     if (currentTier === tier1Label) {
-      for (let index = 0; index < countTiers; index++) {
-        tierTrackers.push(<li key={index} style={{ width: `${tierWidthValue}%` }} />);
+      for (let index = 0; index < tierWidthData.count; index++) {
+        tierTrackers.push(<li key={index} style={{ width: `${tierWidthData.width}%` }} />);
       }
     } else if (currentTier === tier2Label) {
       tierTrackers.push(<li key="tier-1" style={{ width: '0%' }} />);
@@ -135,7 +135,7 @@ class TierProgress extends React.Component {
               <ul>
                 {tierTrackers}
               </ul>
-              <div style={{ width: `${userProgressWidthValue}%` }} className="tier-bar-front" />
+              <div style={{ width: `${userProgressWidth}%` }} className="tier-bar-front" />
             </div>
           </div>
           <div className="progress-label">{nextTier}</div>
