@@ -204,10 +204,12 @@ body[class*="return-confirmation"] {
       grid-template: "a b" auto/ 10rem auto;
       padding: 1.5rem;
       border-bottom: 1px solid $online-return-dark-bg;
+      word-break: break-word;
 
       @include breakpoint($tablet) {
         font-size: 0.75rem;
-        grid-template: "a b c" auto/ 8rem 19rem auto;
+        grid-template: "a b c" auto/ rem(128) rem(288) auto;
+        padding: rem(16);
       }
 
       @include breakpoint($desktop) {
@@ -235,37 +237,27 @@ body[class*="return-confirmation"] {
 
     .order__details--summary {
       @include breakpoint($tablet) {
-        flex-basis: 12.8125rem;
+        flex-basis: rem(192);
         padding-#{$right}: 0.5rem;
-        padding-#{$left}: 2.9375rem;
+        padding-#{$left}: rem(24);
       }
 
       @include breakpoint($desktop) {
         flex-basis: 16.25rem;
         padding-#{$right}: 3.125rem;
+        padding-#{$left}: rem(47);
       }
     }
 
     .item-price {
       @include breakpoint($tablet) {
         padding-#{$right}: 0.5rem;
-        flex-basis: 6.25rem;
+        flex-basis: rem(96);
       }
 
       @include breakpoint($desktop) {
         padding-#{$left}: 2.5rem;
         flex-basis: 13.5rem;
-      }
-
-      .price-block {
-        @include breakpoint($desktop) {
-          display: flex;
-          flex-wrap: wrap;
-
-          .special--price {
-            margin-#{$left}: 0.3125rem;
-          }
-        }
       }
     }
 
