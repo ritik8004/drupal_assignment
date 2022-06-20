@@ -84,28 +84,4 @@ class SkuImagesHelperPims extends SkuImagesHelper {
     return '';
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public function getAllStyledImages(array $media) {
-    if (empty($media['pims_image']['styles'])) {
-      return [];
-    }
-
-    $styles = [
-      self::STYLE_PRODUCT_LISTING,
-      self::STYLE_PRODUCT_SLIDE,
-      self::STYLE_PRODUCT_ZOOM,
-      self::STYLE_PRODUCT_THUMBNAIL,
-      self::STYLE_PRODUCT_TEASER,
-      self::STYLE_CART_THUMBNAIL,
-    ];
-    $styled_image_urls = [];
-    foreach ($styles as $style_name) {
-      $styled_image_urls[$style_name] = $media['pims_image']['styles'][$style_name];
-    }
-
-    return $styled_image_urls;
-  }
-
 }
