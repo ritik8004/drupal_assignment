@@ -429,9 +429,9 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ];
     foreach ($media_contexts as $key => $context) {
       $sku_media = $this->skuInfoHelper->getMedia($sku, $key);
+      // Add style images in media.
       $sku_media = $this->processMediaImageStyles($sku_media, $sku, $context);
       $this->processSkuMedia($sku_media);
-      // Add style images in media.
       $data['media'][] = [
         'context' => $context,
         'media' => $sku_media,
