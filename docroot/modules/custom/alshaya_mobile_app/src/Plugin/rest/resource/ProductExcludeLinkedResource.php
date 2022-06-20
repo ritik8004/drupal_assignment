@@ -26,7 +26,6 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\alshaya_acm_product\SkuImagesHelper;
 
 /**
  * Provides a resource to get product details excluding linked products.
@@ -140,13 +139,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected $configFactory;
 
   /**
-   * Sku Image helper service.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
-   */
-  protected $skuImagesHelper;
-
-  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -183,8 +175,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   Product Options Helper.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory service.
-   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
-   *   Sku images helper service.
    */
   public function __construct(
     array $configuration,
@@ -203,8 +193,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ProductCategoryHelper $product_category_helper,
     RequestStack $request_stack,
     ProductOptionsHelper $options_helper,
-    ConfigFactoryInterface $config_factory,
-    SkuImagesHelper $sku_images_helper
+    ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -224,7 +213,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->optionsHelper = $options_helper;
     $this->configFactory = $config_factory;
-    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
