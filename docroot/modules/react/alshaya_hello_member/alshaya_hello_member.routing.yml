@@ -18,7 +18,7 @@ alshaya_hello_member.my_accounts.hm_points_history:
       user:
         type: entity:user
 alshaya_hello_member.hm_benefits_page:
-  path: '/user/{user}/hm-benefits'
+  path: '/user/{user}/hm-benefits/{code}'
   defaults:
     _controller: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::getBenefitsDetails'
     _title_callback: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::getTitle'
