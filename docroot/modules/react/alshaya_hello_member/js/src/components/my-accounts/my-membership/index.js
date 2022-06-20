@@ -21,17 +21,17 @@ class MyMembership extends React.Component {
     const apcCustomerData = getApcCustomerData();
     if (apcCustomerData instanceof Promise) {
       apcCustomerData.then((response) => {
-        if (hasValue(response.error)) {
+        let myMembershipData = null;
+        if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
+          myMembershipData = response.data;
+        } else if (hasValue(response.error)) {
           logger.error('Error while trying to get apc customer data. Data: @data.', {
             '@data': JSON.stringify(response),
-          });
-        } else if (hasValue(response) && hasValue(response.data)) {
-          this.setState({
-            myMembershipData: response.data,
           });
         }
         this.setState({
           wait: false,
+          myMembershipData,
         });
       });
     }

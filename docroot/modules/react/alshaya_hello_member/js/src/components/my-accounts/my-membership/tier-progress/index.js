@@ -26,21 +26,29 @@ class TierProgress extends React.Component {
     const apcCustomerData = getApcTierProgressData();
     if (apcCustomerData instanceof Promise) {
       apcCustomerData.then((response) => {
-        if (hasValue(response.error)) {
-          logger.error('Error while trying to get apc tier progress data. Data: @data.', {
+        let currentTier = null;
+        let nextTier = null;
+        let pointsSummmary = null;
+        let tierWidthData = null;
+        let userProgressWidth = '0';
+        if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
+          currentTier = response.data.extension_attributes.current_tier;
+          nextTier = response.data.extension_attributes.next_tier;
+          pointsSummmary = response.data.extension_attributes.points_summary;
+          tierWidthData = this.getTierWidthData(response.data);
+          userProgressWidth = this.getUserProgressWidth(response.data);
+        } else if (hasValue(response.error)) {
+          logger.error('Error while trying to get apc customer data. Data: @data.', {
             '@data': JSON.stringify(response),
-          });
-        } else if (hasValue(response) && hasValue(response.data)) {
-          this.setState({
-            currentTier: response.data.extension_attributes.current_tier,
-            nextTier: response.data.extension_attributes.next_tier,
-            pointsSummmary: response.data.extension_attributes.points_summary,
-            tierWidthData: this.getTierWidthData(response.data),
-            userProgressWidth: this.getUserProgressWidth(response.data),
           });
         }
         this.setState({
           wait: false,
+          currentTier,
+          nextTier,
+          pointsSummmary,
+          tierWidthData,
+          userProgressWidth,
         });
       });
     }
