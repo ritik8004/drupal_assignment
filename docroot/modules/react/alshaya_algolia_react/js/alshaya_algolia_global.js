@@ -14,6 +14,12 @@
           $(facet_block).find('ul').slideUp();
         }
       });
+
+      $(context)
+        .once('lazy-hover')
+        .on('mouseover', '.alshaya_search_gallery.lazy-hover', function () {
+          this.classList.remove('lazy-hover');
+        });
     }
   };
 

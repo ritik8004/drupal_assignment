@@ -193,7 +193,12 @@
 
       .alshaya_search_mainimage {
         height: 100%;
-        opacity: 1;
+      }
+
+      &.lazy-hover {
+        .alshaya_search_hoverimage {
+          display: none;
+        }
       }
     }
 
@@ -376,7 +381,6 @@
   height: 100%;
   display: flex;
   align-items: center;
-  background-color: $default_background_color;
 }
 
 .block-views-blockproduct-category-level-3-block-2 {

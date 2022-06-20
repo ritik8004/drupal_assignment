@@ -185,6 +185,12 @@
         opacity: 1;
         display: block;
       }
+
+      &.lazy-hover {
+        .alshaya_search_hoverimage {
+          display: none;
+        }
+      }
     }
 
     .alshaya_search_slider {
@@ -347,12 +353,6 @@
   transition: opacity 0.2s ease-out;
   width: 100%;
   z-index: 1;
-}
-
-article[data-vmode="search_result"]:hover .alshaya_search_mainimage {
-  @include breakpoint($only-mobile) {
-    opacity: 1;
-  }
 }
 
 .block-views-blockproduct-category-level-3-block-2 {
