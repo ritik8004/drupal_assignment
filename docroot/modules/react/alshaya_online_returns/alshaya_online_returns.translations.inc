@@ -238,10 +238,6 @@ function _alshaya_online_returns_translations() {
         'ar' => 'هل أنت متأكد أنك تريد إلغاء طلب الإرجاع هذا؟',
         'context' => 'online_returns',
       ],
-      'No' => [
-        'ar' => 'لا',
-        'context' => 'online_returns',
-      ],
       'Return request has been successfully placed.' => [
         'ar' => '.تم تسجيل طلب الارجاع بنجاح',
         'context' => 'online_returns',
@@ -271,7 +267,7 @@ function _alshaya_online_returns_translations() {
         'context' => 'online_returns',
       ],
       'To receive refund for promotional items, all items related to the promotion has to be returned.' => [
-        'ar' => 'لرد أموال المنتجات المشمولة بالعروض، يجب إرجاع جميع المنتجات المرتبطة بالعرض. إن الضغط على استمرار يعني اختيار جميع المنتجات المشمولة بهذا العرض.',
+        'ar' => 'رد أموال المنتجات المشمولة بالعروض، يجب إرجاع جميع المنتجات المرتبطة بالعرض.',
         'context' => 'online_returns',
       ],
       'Deselect this item' => [
