@@ -16,11 +16,9 @@ const IctDeliveryInformation = (props) => {
   // return the common markup.
   return (
     <>
-      <div>
-        <div>
-          {/** @todo Check if date formatting is required */}
-          {`${deliveryText} ${date}`}
-        </div>
+      <div className={`ict-delivery-info_${deliveryMethod}`}>
+        {/** @todo Check if date formatting is required */}
+        {`${deliveryText} ${date}`}
       </div>
     </>
   );

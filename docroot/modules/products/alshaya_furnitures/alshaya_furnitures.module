@@ -128,4 +128,5 @@ function alshaya_furnitures_alshaya_search_facet_price_alter($range, &$displayVa
  */
 function alshaya_furnitures_alshaya_spc_checkout_build_alter(array &$build) {
   $build['#attached']['library'][] = 'alshaya_white_label/online-booking';
+  $build['#attached']['library'][] = 'alshaya_white_label/inter-country-transfer';
 }
