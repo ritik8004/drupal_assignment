@@ -190,6 +190,10 @@
         font-family: $alshaya-bold;
         padding: rem(38) 0 rem(8);
         border-bottom: rem(1) solid $online-return-order-detail-border;
+
+        span.rejected {
+          color: $online-return-status-orange-label;
+        }
       }
 
       .return-items-wrapper {
