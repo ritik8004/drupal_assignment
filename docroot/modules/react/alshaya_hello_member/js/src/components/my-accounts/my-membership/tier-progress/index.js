@@ -18,7 +18,7 @@ class TierProgress extends React.Component {
       nextTier: null,
       pointsSummmary: null,
       tierWidthData: null,
-      userProgressWidth: '0',
+      userProgressWidth: 0,
     };
   }
 
@@ -30,10 +30,10 @@ class TierProgress extends React.Component {
         let nextTier = null;
         let pointsSummmary = null;
         let tierWidthData = {
-          width: '0',
+          width: 0,
           count: 0,
         };
-        let userProgressWidth = '0';
+        let userProgressWidth = 0;
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
           currentTier = response.data.extension_attributes.current_tier;
           nextTier = response.data.extension_attributes.next_tier;
@@ -81,6 +81,7 @@ class TierProgress extends React.Component {
   getUserProgressWidth = (tierData) => {
     let tierObj = null;
     // If user is new hello member, we check how far he is to become plus member.
+    // Here, percentage for tier progress is calculated from max and current value.
     if (tierData.extension_attributes.current_tier === tier1Label) {
       tierObj = tierData.tier_progress_tracker.find((item) => item.code === plusVoucherCode);
       if (hasValue(tierObj)) {
@@ -88,6 +89,8 @@ class TierProgress extends React.Component {
       }
     }
     // If user is plus member, we check how far he is to get next voucher.
+    // Here, percentage for tier progress is calculated by total voucher value and current value.
+    // User needs certain points to reach the voucher value.
     if ((tierData.extension_attributes.current_tier === tier2Label)
       && hasValue(tierData.extension_attributes.interval)) {
       tierObj = tierData.tier_progress_tracker.find((item) => item.code === newVoucherCode);
@@ -109,6 +112,10 @@ class TierProgress extends React.Component {
       userProgressWidth,
     } = this.state;
 
+    if (pointsSummmary === null || currentTier === null || nextTier === null) {
+      return null;
+    }
+
     if (wait) {
       return (
         <div className="tier-summary-wrapper" style={{ animationDelay: '0.4s' }}>
@@ -118,11 +125,15 @@ class TierProgress extends React.Component {
     }
 
     const tierTrackers = [];
+    // For new hello member, we show n dots calcuated by dividing max value by interval.
+    // So, we show n number of dots in the graph and hence n nummber of <li> is required.
     if (currentTier === tier1Label) {
       for (let index = 0; index < tierWidthData.count; index++) {
         tierTrackers.push(<li key={index} style={{ width: `${tierWidthData.width}%` }} />);
       }
     } else if (currentTier === tier2Label) {
+    // For plus member, we show only two dots - one at start and other at end
+    // It suggests that user has to get certain points to get the next voucher.
       tierTrackers.push(<li key="tier-1" style={{ width: '0%' }} />);
       tierTrackers.push(<li key="tier-2" style={{ width: '100%' }} />);
     }
