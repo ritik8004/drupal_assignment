@@ -806,13 +806,13 @@ class AlshayaSpcController extends ControllerBase {
       'cnc_collection_points_enabled' => $cnc_collection_points_enabled ?? FALSE,
     ];
 
-    // Check if we are getting Intercountry transfer details
+    // Check if we are getting Inter country transfer details
     // along with order details,
     // if yes, we are assigning this to drupalSettings.
-    if (isset($orderDetails['extension_attributes'])
-      && isset($orderDetails['extension_attributes']['oms_lead_time'])) {
+    if (isset($order['extension'])
+      && isset($order['extension']['oms_lead_time'])) {
       $settings['order_details']['ict_date'] = $this->dateFormatter->format(
-        strtotime($orderDetails['extension_attributes']['oms_lead_time']),
+        strtotime($order['extension']['oms_lead_time']),
         'ict',
         'dS M Y',
       );

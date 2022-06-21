@@ -132,10 +132,10 @@ const OrderDeliveryDetails = (props) => {
           )}
 
           {/* div will render only on Mobile */}
-          { hasValue(orderDetails.ictDate) && isMobile() ? (
+          { hasValue(orderDetails.ict) && isMobile() ? (
             <div className="mobile-only ict-date">
-              <div className="label font-small">{ictLabel}</div>
-              <div className="dark">{orderDetails.ictDate}</div>
+              <div className="label font-small">{orderDetails.ict.label}</div>
+              <div className="dark">{orderDetails.ict.date}</div>
             </div>
           ) : null }
         </div>
@@ -197,10 +197,10 @@ const OrderDeliveryDetails = (props) => {
           )}
 
           {/* div will render only on viewports wider than mobile */}
-          { hasValue(orderDetails.ictDate) && !(isMobile()) ? (
+          { hasValue(orderDetails.ict) && !(isMobile()) ? (
             <>
-              <div className="label ict-date font-small">{orderDetails.ictLabel}</div>
-              <div className="dark">{orderDetails.ictDate}</div>
+              <div className="label ict-date font-small">{orderDetails.ict.label}</div>
+              <div className="dark">{orderDetails.ict.date}</div>
             </>
           ) : null }
         </div>

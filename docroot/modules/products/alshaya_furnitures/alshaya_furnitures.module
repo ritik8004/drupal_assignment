@@ -130,3 +130,15 @@ function alshaya_furnitures_alshaya_spc_checkout_build_alter(array &$build) {
   $build['#attached']['library'][] = 'alshaya_white_label/online-booking';
   $build['#attached']['library'][] = 'alshaya_white_label/inter-country-transfer';
 }
+
+/**
+ * Implements hook_acm_customer_orders_details_build_alter().
+ *
+ * Attach inter country transfer library if enabled.
+ */
+function alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Attach library if inter country feature is enabled.
+  if (isset($build['#order_details']['ict'])) {
+    $build['#attached']['library'][] = 'alshaya_white_label/inter-country-transfer';
+  }
+}
