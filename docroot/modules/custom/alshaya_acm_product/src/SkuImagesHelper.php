@@ -72,20 +72,4 @@ class SkuImagesHelper {
     return ImageStyle::load($style_name)->buildUrl($media['drupal_uri']);
   }
 
-  /**
-   * Get style image URLs for all available image styles for given image.
-   *
-   * We only need this function when PIMS is enabled hence it has no
-   * implementation here.
-   *
-   * @param array $media
-   *   Media array.
-   *
-   * @return array
-   *   Array of \Drupal\Core\GeneratedUrl|false|string image style urls.
-   */
-  public function getAllStyledImages(array $media) {
-    return [];
-  }
-
 }
