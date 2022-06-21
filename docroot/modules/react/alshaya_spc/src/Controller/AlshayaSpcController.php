@@ -810,7 +810,7 @@ class AlshayaSpcController extends ControllerBase {
     // along with order details,
     // if yes, we are assigning this to drupalSettings.
     if (isset($order['extension'])
-      && isset($order['extension']['oms_lead_time'])) {
+      && !empty($order['extension']['oms_lead_time'])) {
       $settings['order_details']['ict_date'] = $this->dateFormatter->format(
         strtotime($order['extension']['oms_lead_time']),
         'ict',
