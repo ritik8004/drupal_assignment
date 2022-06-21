@@ -6,6 +6,9 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -214,6 +217,21 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
       if (!empty($user_gender)) {
         $request_options['json']['customer']['extension_attributes']['customer_gender'] = $user_gender;
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_hello_member_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'page_title_block' or alshaya_my_account_links blocks
+  // on my benefit page.
+  if ($operation == 'view' && ($block->getPluginId() == 'page_title_block' || $block->getPluginId() == 'alshaya_my_account_links')) {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+
+    if ($route_name === 'alshaya_hello_member.hm_benefits_page') {
+      return AccessResult::forbiddenIf(TRUE);
     }
   }
 }

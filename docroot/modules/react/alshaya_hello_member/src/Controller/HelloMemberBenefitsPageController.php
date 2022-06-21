@@ -55,8 +55,11 @@ class HelloMemberBenefitsPageController extends ControllerBase {
 
   /**
    * View details per benefits.
+   *
+   * @param string $code
+   *   Offer/Coupon code.
    */
-  public function getBenefitsDetails() {
+  public function getBenefitsDetails(string $code) {
     $this->moduleHandler->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
 
     return [
@@ -65,6 +68,11 @@ class HelloMemberBenefitsPageController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_hello_member/alshaya_hello_member_benefits_page',
+        ],
+        'drupalSettings' => [
+          'hmBenefits' => [
+            'code' => $code,
+          ],
         ],
       ],
     ];

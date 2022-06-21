@@ -107,9 +107,11 @@ class MyMembershipInfoBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account) {
+    $route_name = $this->routeMatch->getRouteName();
+
     // Show block only if hello member is enabled.
     return AccessResult::allowedIf(
-      $this->helloMemberHelper->isHelloMemberEnabled()
+      $this->helloMemberHelper->isHelloMemberEnabled() && $route_name !== 'alshaya_hello_member.hm_benefits_page'
     );
   }
 
