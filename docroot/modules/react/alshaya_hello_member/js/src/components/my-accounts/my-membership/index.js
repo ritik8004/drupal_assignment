@@ -4,7 +4,7 @@ import Loading from '../../../../../../js/utilities/loading';
 import { getFormatedMemberId } from '../../../utilities';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
-import { getApcCustomerData } from '../../../hello_member_api_helper';
+import { getHelloMemberCustomerData } from '../../../hello_member_api_helper';
 import TierProgress from './tier-progress';
 import logger from '../../../../../../js/utilities/logger';
 
@@ -18,14 +18,14 @@ class MyMembership extends React.Component {
   }
 
   componentDidMount() {
-    const apcCustomerData = getApcCustomerData();
-    if (apcCustomerData instanceof Promise) {
-      apcCustomerData.then((response) => {
+    const helloMemberCustomerData = getHelloMemberCustomerData();
+    if (helloMemberCustomerData instanceof Promise) {
+      helloMemberCustomerData.then((response) => {
         let myMembershipData = null;
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
           myMembershipData = response.data;
         } else if (hasValue(response.error)) {
-          logger.error('Error while trying to get apc customer data. Data: @data.', {
+          logger.error('Error while trying to get hello member customer data. Data: @data.', {
             '@data': JSON.stringify(response),
           });
         }

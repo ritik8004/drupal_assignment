@@ -2,7 +2,7 @@ import React from 'react';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import Loading from '../../../../../../../js/utilities/loading';
 import logger from '../../../../../../../js/utilities/logger';
-import { getApcTierProgressData } from '../../../../hello_member_api_helper';
+import { getHelloMemberTierProgressData } from '../../../../hello_member_api_helper';
 
 const tier1Label = 'hello';
 const tier2Label = 'plus';
@@ -23,9 +23,9 @@ class TierProgress extends React.Component {
   }
 
   componentDidMount() {
-    const apcCustomerData = getApcTierProgressData();
-    if (apcCustomerData instanceof Promise) {
-      apcCustomerData.then((response) => {
+    const helloMembertierData = getHelloMemberTierProgressData();
+    if (helloMembertierData instanceof Promise) {
+      helloMembertierData.then((response) => {
         let currentTier = null;
         let nextTier = null;
         let pointsSummmary = null;
@@ -41,7 +41,7 @@ class TierProgress extends React.Component {
           tierWidthData = this.getTierWidthData(response.data);
           userProgressWidth = this.getUserProgressWidth(response.data);
         } else if (hasValue(response.error)) {
-          logger.error('Error while trying to get apc customer data. Data: @data.', {
+          logger.error('Error while trying to get hello member tier data. Data: @data.', {
             '@data': JSON.stringify(response),
           });
         }
@@ -112,16 +112,16 @@ class TierProgress extends React.Component {
       userProgressWidth,
     } = this.state;
 
-    if (pointsSummmary === null || currentTier === null || nextTier === null) {
-      return null;
-    }
-
     if (wait) {
       return (
         <div className="tier-summary-wrapper" style={{ animationDelay: '0.4s' }}>
           <Loading />
         </div>
       );
+    }
+
+    if (pointsSummmary === null || currentTier === null) {
+      return null;
     }
 
     const tierTrackers = [];

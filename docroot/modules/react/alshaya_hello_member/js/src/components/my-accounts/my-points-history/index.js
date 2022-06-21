@@ -5,7 +5,7 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getHmPointsHistory } from '../../../hello_member_api_helper';
+import { getHelloMemberPointsHistory } from '../../../hello_member_api_helper';
 import { getPointstHistoryPageSize } from '../../../utilities';
 
 class MyPointsHistory extends React.Component {
@@ -34,7 +34,7 @@ class MyPointsHistory extends React.Component {
   getPointsHistoryData() {
     const { firstPage, pageSize, pointsHistoryData } = this.state;
     showFullScreenLoader();
-    const hmPointsHistoryData = getHmPointsHistory(firstPage, pageSize);
+    const hmPointsHistoryData = getHelloMemberPointsHistory(firstPage, pageSize);
     if (hmPointsHistoryData instanceof Promise) {
       hmPointsHistoryData.then((response) => {
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
@@ -43,7 +43,7 @@ class MyPointsHistory extends React.Component {
             totalCount: response.data.apc_transactions.length,
           });
         } else if (hasValue(response.error)) {
-          logger.error('Error while trying to get apc points history data. Data: @data.', {
+          logger.error('Error while trying to get hello member points history data. Data: @data.', {
             '@data': JSON.stringify(response),
           });
         }
