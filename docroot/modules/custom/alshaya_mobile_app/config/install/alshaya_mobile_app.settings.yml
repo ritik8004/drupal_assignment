@@ -13,4 +13,3 @@ static_page_mappings:
 dy_plp_banner_name: 'Generic PLP banners'
 max_product_limit: 24
 listing_ignore_algolia_data: FALSE
-process_image_url_for_pims: FALSE
