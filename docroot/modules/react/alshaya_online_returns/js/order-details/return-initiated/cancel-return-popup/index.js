@@ -78,7 +78,7 @@ export default class CancelReturnPopUp extends React.Component {
                 type="button"
                 onClick={() => this.confirmCancellation(true)}
               >
-                {Drupal.t('Yes', { context: 'online_returns' })}
+                {Drupal.t('Yes')}
               </button>
               <button
                 className="cancel-return-no"
@@ -86,7 +86,7 @@ export default class CancelReturnPopUp extends React.Component {
                 type="button"
                 onClick={() => this.closeModal()}
               >
-                {Drupal.t('No', {}, { context: 'online_returns' })}
+                {Drupal.t('No')}
               </button>
             </div>
           </div>

@@ -324,6 +324,14 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
   $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
+
+  // Invoke hook_alshaya_rcs_product_build_alter.
+  $entity_info = [
+    'entity' => $entity,
+    'display' => $display,
+    'view' => $view_mode,
+  ];
+  \Drupal::moduleHandler()->alter('alshaya_rcs_product_build', $build, $entity_info);
 }
 
 /**
@@ -735,6 +743,7 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
           $libraries['product_utility']['js']["/$self_module_path/js/alshaya_rcs_product.utility.js"] = $options;
           $libraries['product_utility']['dependencies'] = [
             'core/drupal',
+            'core/drupalSettings',
             'alshaya_master/common_functions',
             'alshaya_rcs_product/main',
           ];
