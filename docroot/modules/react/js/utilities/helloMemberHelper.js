@@ -38,7 +38,7 @@ export const getApiEndpoint = (action, params = {}) => {
     case 'helloMemberBenefitsList':
       endpoint = '/V2/customers/hellomember/benefitsList'; // endpoint to get hello member benefits.
       break;
-    case 'helloMemberGetApcPointsHistory':
+    case 'helloMemberGetPointsHistory':
       endpoint = '/V1/customers/apcTransactions'; // endpoint to get hello member points history.
       break;
 
