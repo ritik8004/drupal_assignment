@@ -1,4 +1,4 @@
-(function (Drupal) {
+(function (Drupal, drupalSettings) {
 
   Drupal.logViaDataDog = function (severity, message, context) {
     try {
@@ -10,6 +10,12 @@
       context = context || {};
 
       context.logSource = 'drupal_module';
+
+      // Pass the actual page load time upon user request to Datadog log for
+      // better monitoring.
+      context.pageLoadTime = (typeof drupalSettings.datadog.pageLoadTime !== undefined)
+        ? drupalSettings.datadog.pageLoadTime
+        : new Date().getTime();
 
       // Let other modules alter contexts.
       document.dispatchEvent(new CustomEvent('dataDogContextAlter', {
@@ -51,4 +57,4 @@
     return false;
   };
 
-})(Drupal);
+})(Drupal, drupalSettings);

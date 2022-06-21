@@ -4,3 +4,4 @@ logger:
     js/datadog_js.logger.js: {}
   dependencies:
     - core/drupal
+    - core/drupalSettings
