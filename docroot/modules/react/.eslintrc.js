@@ -33,6 +33,7 @@ module.exports = {
     BV: true,
     axios: true,
     _: true,
+    globalThis: true,
   },
   parser: "babel-eslint",
   parserOptions: {

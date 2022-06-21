@@ -49,19 +49,3 @@ function alshaya_dh_transac_rcs_node_view(array &$build, EntityInterface $entity
     $build['#attached']['library'][] = 'alshaya_dh_transac_rcs/product';
   }
 }
-
-/**
- * Implements hook_alshaya_rcs_product_product_options_to_query().
- */
-function alshaya_dh_transac_rcs_alshaya_rcs_product_product_options_to_query(array $options) {
-  $attributes = \Drupal::config('acq_sku.configurable_form_settings')->get('attribute_weights');
-  foreach ($attributes as $key => $value) {
-    foreach ($value as $attribute => $data) {
-      array_push($options, [
-        'attribute_code' => $attribute,
-        'entity_type' => '4',
-      ]);
-    }
-  }
-  return $options;
-}

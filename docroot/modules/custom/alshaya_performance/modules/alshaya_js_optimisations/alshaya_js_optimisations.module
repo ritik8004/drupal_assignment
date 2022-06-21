@@ -168,5 +168,13 @@ function alshaya_js_optimisations_js_alter(&$javascripts) {
  * @todo Find a better approach to rebuild the processed libraries.
  */
 function alshaya_js_optimisations_cache_flush() {
-  \Drupal::service('alshaya_js_optimisations.helper')->generateProcessedLibraries([], TRUE);
+  $js_optimisations = \Drupal::service('config.factory')
+    ->getEditable('alshaya_js_optimisations.settings');
+  $critical_js = $js_optimisations->get('critical_js');
+
+  if (!empty($critical_js) && $critical_js['status']) {
+    $processed_libraries = \Drupal::service('alshaya_js_optimisations.helper')
+      ->generateProcessedLibraries($critical_js);
+    $js_optimisations->set('critical_js.processed_libraries', $processed_libraries)->save();
+  }
 }
