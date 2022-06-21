@@ -13,12 +13,12 @@ const ShippingMethodCommon = ({
     price = <PriceElement amount={method.amount} />;
   }
 
-  // Check if the ict feature is enabled.
+  // Check if the inter country feature is enabled.
+  // return ict component if available.
   if (selected
     && hasValue(method.extension_attributes)
-    && hasValue(method.extension_attributes.ict)) {
-    // @todo Pass ictDate variables to component from MDC.
-    const ictDate = '29th May 2022';
+    && hasValue(method.extension_attributes.oms_lead_time)) {
+    const ictDate = method.extension_attributes.oms_lead_time;
     return (
       <IctDeliveryInformation deliveryMethod="home_delivery" date={ictDate} />
     );

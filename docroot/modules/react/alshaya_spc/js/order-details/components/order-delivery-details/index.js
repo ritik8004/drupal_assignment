@@ -7,15 +7,6 @@ const OrderDeliveryDetails = (props) => {
   const { order } = props;
   const orderDetails = order.order_details;
 
-  // Check if intercountry transfer date is available.
-  let ictLabel;
-  if (hasValue(orderDetails.ictDate)) {
-    if (orderDetails.type === 'cc') {
-      ictLabel = Drupal.t('Available in store from', {}, { context: 'ict' });
-    } else {
-      ictLabel = Drupal.t('Expected Delivery by', {}, { context: 'ict' });
-    }
-  }
   return (
     <>
       { hasValue(order.delivery_detail_notice) && (
@@ -141,10 +132,10 @@ const OrderDeliveryDetails = (props) => {
           )}
 
           {/* div will render only on Mobile */}
-          { hasValue(orderDetails.ictDate) && isMobile() ? (
+          { hasValue(orderDetails.ict) && isMobile() ? (
             <div className="mobile-only ict-date">
-              <div className="label font-small">{ictLabel}</div>
-              <div className="dark">{orderDetails.ictDate}</div>
+              <div className="label font-small">{orderDetails.ict.label}</div>
+              <div className="dark">{orderDetails.ict.date}</div>
             </div>
           ) : null }
         </div>
@@ -206,10 +197,10 @@ const OrderDeliveryDetails = (props) => {
           )}
 
           {/* div will render only on viewports wider than mobile */}
-          { hasValue(orderDetails.ictDate) && !(isMobile()) ? (
+          { hasValue(orderDetails.ict) && !(isMobile()) ? (
             <>
-              <div className="label ict-date font-small">{ictLabel}</div>
-              <div className="dark">{orderDetails.ictDate}</div>
+              <div className="label ict-date font-small">{orderDetails.ict.label}</div>
+              <div className="dark">{orderDetails.ict.date}</div>
             </>
           ) : null }
         </div>

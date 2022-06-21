@@ -426,14 +426,6 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       break;
   }
 
-  // Intercountry transfer.
-  // Check if the delivery date is available in extension_attributes
-  // pass it for further processing.
-  // @todo change this with MDC date.
-  if (isset($order['extension']['ict_date'])) {
-    $orderDetails['ictDate'] = '29th May 2022';
-  }
-
   return $orderDetails;
 }
 
@@ -678,6 +670,25 @@ function alshaya_acm_customer_build_order_detail(array $order) {
         $build['#online_booking_notice']['booking_error'] = t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
       }
     }
+  }
+
+  // Inter country transfer.
+  // Check if the delivery date is available in extension_attributes
+  // pass it for further processing.
+  if (!empty($order['extension']['oms_lead_time'])) {
+    $build['#order_details']['ict']['date'] = \Drupal::service('date.formatter')->format(
+      strtotime($order['extension']['oms_lead_time']),
+      'ict',
+      'dS M Y',
+    );
+    // Format labels to display.
+    if ($build['#order_details']['type'] === 'cc') {
+      $build['#order_details']['ict']['label'] = t('Available in store from', [], ['context' => 'ict']);
+    }
+    else {
+      $build['#order_details']['ict']['label'] = t('Expected Delivery by', [], ['context' => 'ict']);
+    }
+    $build['#attached']['library'][] = 'alshaya_white_label/inter-country-transfer';
   }
 
   return $build;
