@@ -38,7 +38,7 @@ export default class WishlistHeader extends React.Component {
     }
 
     // Check if user is an authenticate user, add an event listener for wishlist
-    // items load from Magento backend.
+    // items load from MDC backend.
     if (!isAnonymousUser()) {
       document.addEventListener('getWishlistFromBackendSuccess', this.updateWishListHeader);
     }
