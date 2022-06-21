@@ -34,11 +34,11 @@ class OrderDetails extends React.Component {
   }
 
   componentDidMount() {
-    showFullScreenLoader();
-
     // If Online Returns is enabled we need to process order data
     // based on returns.
     if (isOnlineReturnsEnabled()) {
+      showFullScreenLoader();
+
       this.setState({ loading: true });
       this.processOrderData();
     }
