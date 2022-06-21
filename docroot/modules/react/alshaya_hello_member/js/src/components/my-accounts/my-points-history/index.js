@@ -1,11 +1,12 @@
 import React from 'react';
+import moment from 'moment';
 import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getApcPointsHistory } from '../../../hello_member_api_helper';
-import { formatDate, getPointstHistoryPageSize } from '../../../utilities';
+import { getHmPointsHistory } from '../../../hello_member_api_helper';
+import { getPointstHistoryPageSize } from '../../../utilities';
 
 class MyPointsHistory extends React.Component {
   constructor(props) {
@@ -33,9 +34,9 @@ class MyPointsHistory extends React.Component {
   getPointsHistoryData() {
     const { firstPage, pageSize, pointsHistoryData } = this.state;
     showFullScreenLoader();
-    const apcPointsHistoryData = getApcPointsHistory(firstPage, pageSize);
-    if (apcPointsHistoryData instanceof Promise) {
-      apcPointsHistoryData.then((response) => {
+    const hmPointsHistoryData = getHmPointsHistory(firstPage, pageSize);
+    if (hmPointsHistoryData instanceof Promise) {
+      hmPointsHistoryData.then((response) => {
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
           this.setState({
             pointsHistoryData: pointsHistoryData.concat(response.data.apc_transactions),
@@ -71,7 +72,7 @@ class MyPointsHistory extends React.Component {
                   <p className="history-light-title">{data.location_name}</p>
                 </ConditionalView>
               </div>
-              <div className="points-date">{formatDate(data.date)}</div>
+              <div className="points-date">{moment(new Date(data.date)).format('DD/MM/YYYY')}</div>
               <div className="points-earned">
                 <p className="history-light-title">{getStringMessage('points_earned')}</p>
                 <p>{data.points}</p>

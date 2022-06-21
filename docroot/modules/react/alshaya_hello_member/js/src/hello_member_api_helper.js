@@ -90,7 +90,7 @@ const getApcTierProgressData = async () => {
  *   Promise that resolves to an object containing tier tracking data in case of
  *   success or an error object in case of failure.
  */
-const getApcPointsHistory = async (firstResult, pageSize) => {
+const getHmPointsHistory = async (firstResult, pageSize) => {
   // Get user details from session.
   const { customerId } = drupalSettings.userDetails;
   const { uid } = drupalSettings.user;
@@ -111,7 +111,7 @@ const getApcPointsHistory = async (firstResult, pageSize) => {
     pageSize,
   };
 
-  return callHelloMemberApi('helloMemberGetApcPointsHistory', 'GET', params)
+  return callHelloMemberApi('helloMemberGetPointsHistory', 'GET', params)
     .then((response) => {
       if (hasValue(response.data.error)) {
         const message = hasValue(response.data.message) ? response.data.message : '';
@@ -128,5 +128,5 @@ const getApcPointsHistory = async (firstResult, pageSize) => {
 export {
   getApcCustomerData,
   getApcTierProgressData,
-  getApcPointsHistory,
+  getHmPointsHistory,
 };

@@ -7,4 +7,4 @@ alshaya_hello_member.settings:
       label: 'Config to enable/disable hello member'
     points_history_page_size:
       type: integer
-      label: 'Page size for points history page.'
+      label: 'Page size for points history data.'

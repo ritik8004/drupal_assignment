@@ -16,11 +16,6 @@ export default setupAccordionHeight;
 const getFormatedMemberId = (memberId) => memberId.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, '$1 $2 $3 $4');
 
 /**
- * Utility function to format date.
- */
-const formatDate = (date) => new Date(date.replace(/ /g, 'T')).toLocaleString(drupalSettings.path.currentLanguage, { day: '2-digit', month: '2-digit', year: 'numeric' });
-
-/**
  * Utility function to get points history page size from config.
  * Default value we are keeping as 10,
  */
@@ -29,6 +24,5 @@ const getPointstHistoryPageSize = () => (drupalSettings.pointsHistoryPageSize
 
 export {
   getFormatedMemberId,
-  formatDate,
   getPointstHistoryPageSize,
 };
