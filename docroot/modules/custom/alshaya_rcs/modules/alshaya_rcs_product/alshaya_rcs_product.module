@@ -221,6 +221,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   ];
   $build['#attached']['drupalSettings']['display_upsell'] = (bool) $acm_settings->get('display_upsell');
   $build['#attached']['drupalSettings']['display_related'] = (bool) $acm_settings->get('display_related');
+  $build['#attached']['drupalSettings']['display_crosssell'] = (bool) $acm_settings->get('display_crosssell');
 
   // Attach required drupalSettings.
   $cart_config = \Drupal::config('alshaya_acm.cart_config');
