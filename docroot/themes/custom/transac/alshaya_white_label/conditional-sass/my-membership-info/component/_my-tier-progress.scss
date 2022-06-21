@@ -43,7 +43,6 @@
         @extend %list--horizontal;
 
         li {
-          width: calc(100% / 3);
           position: relative;
 
           &::after {

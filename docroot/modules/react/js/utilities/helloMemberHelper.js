@@ -25,11 +25,15 @@ export default function isHelloMemberEnabled() {
  * @returns {string}
  *   The api endpoint.
  */
-export const getApiEndpoint = (action) => {
+export const getApiEndpoint = (action, params = {}) => {
   let endpoint = '';
+  const endPointParams = params;
   switch (action) {
     case 'helloMemberGetCustomerData':
-      endpoint = '/V2/customers/apcCustomerData'; // endpoint to check hello member customer data.
+      endpoint = `/V1/customers/apcCustomerData/${endPointParams.customerId}`; // endpoint to check hello member customer data.
+      break;
+    case 'helloMemberGetApcTierProgressData':
+      endpoint = `/V1/customers/apcTierProgressData/customerId/${endPointParams.customerId}`; // endpoint to check hello member customer data.
       break;
     case 'helloMemberBenefitsList':
       endpoint = '/V2/customers/hellomember/benefitsList'; // endpoint to get hello member benefits.
@@ -60,6 +64,6 @@ export const getApiEndpoint = (action) => {
  *   Returns the promise object.
  */
 export const callHelloMemberApi = (action, method, postData, bearerToken = true) => {
-  const endpoint = getApiEndpoint(action);
+  const endpoint = getApiEndpoint(action, postData);
   return callMagentoApi(endpoint, method, postData, bearerToken);
 };
