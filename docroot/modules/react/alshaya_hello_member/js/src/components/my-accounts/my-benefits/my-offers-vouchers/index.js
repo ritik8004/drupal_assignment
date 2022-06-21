@@ -26,15 +26,11 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
     ],
   };
 
-  const handleClick = (id) => {
-    window.location.href = `${window.location.href}/hm-benefits/${id}`;
-  };
-
   return (
     <div className="my-benefits-wrapper">
       <Slider {...settings}>
         {myBenefitsList.map((data) => (
-          <div className="my-offers-vouchers-details" key={data.id} onClick={() => handleClick(data.id)}>
+          <a className="my-offers-vouchers-details" key={data.id} href={`${window.location.href}/hm-benefits/${data.id}`}>
             <div className="image-container">
               <img src={data.image} />
             </div>
@@ -49,7 +45,7 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
                 {data.end_date}
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </Slider>
     </div>

@@ -55,6 +55,9 @@ class HelloMemberBenefitsPageController extends ControllerBase {
 
   /**
    * View details per benefits.
+   *
+   * @param string $code
+   *   Offer/Coupon code.
    */
   public function getBenefitsDetails(string $code) {
     $this->moduleHandler->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
