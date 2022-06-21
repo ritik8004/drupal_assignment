@@ -346,6 +346,54 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
   }
 
   /**
+   * Ensure https is used for queues.
+   *
+   * @hook pre-init queue-run
+   *
+   * @throws Exception
+   */
+  public function preInitQueueRun(InputInterface $input, AnnotationData $annotationData) {
+    // Do the checks and throw error if not https.
+    $this->checkScheme();
+  }
+
+  /**
+   * Ensure https is used for search-api-index.
+   *
+   * @hook pre-init search-api-index
+   *
+   * @throws Exception
+   */
+  public function preInitSearchApiIndex(InputInterface $input, AnnotationData $annotationData) {
+    // Do the checks and throw error if not https.
+    $this->checkScheme();
+  }
+
+  /**
+   * Ensure https is used for create-products-feed.
+   *
+   * @hook pre-init create-products-feed
+   *
+   * @throws Exception
+   */
+  public function preInitCreateProductsFeed(InputInterface $input, AnnotationData $annotationData) {
+    // Do the checks and throw error if not https.
+    $this->checkScheme();
+  }
+
+  /**
+   * Ensure https is used for simple-sitemap-generate.
+   *
+   * @hook pre-init simple-sitemap-generate
+   *
+   * @throws Exception
+   */
+  public function preInitSimpleSitemapGenerate(InputInterface $input, AnnotationData $annotationData) {
+    // Do the checks and throw error if not https.
+    $this->checkScheme();
+  }
+
+  /**
    * Enable maintenance mode and memorise it is done via script.
    *
    * @command alshaya_master:enable-maintenance
@@ -418,6 +466,19 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
       $admin_user->setPassword(user_password());
       $admin_user->activate();
       $admin_user->save();
+    }
+  }
+
+  /**
+   * Check if drush command should be with https scheme.
+   */
+  public function checkScheme() {
+    $self = $this->siteAliasManager()->getSelf();
+    $uri = $self->get('uri');
+    $url = parse_url($uri);
+
+    if (!isset($url['scheme']) || $url['scheme'] == 'http') {
+      throw new \Exception('Please use https URI.');
     }
   }
 
