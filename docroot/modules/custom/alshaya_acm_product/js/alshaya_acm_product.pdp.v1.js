@@ -118,3 +118,23 @@ window.commerceBackend.getConfigurableColorDetails = function (sku) {
   }
   return data;
 }
+
+/**
+ * Updates CS/US/Related products on PDP.
+ *
+ * @param {string} type
+ *   Values - crosssel/upsell/related
+ * @param {string} sku
+ *   SKU value.
+ * @param {string} device
+ *   Device - mobile/desktop.
+ */
+window.commerceBackend.updateRelatedProducts = function updateRelatedProducts (type, sku, device) {
+  var url = Drupal.url('related-products/' + btoa(sku) + '/' + type + '/' + device + '?cacheable=1');
+
+  Drupal.ajax({
+    url,
+    progress: {type: 'throbber'},
+    type: 'GET',
+  }).execute();
+};
