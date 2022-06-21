@@ -39,6 +39,12 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('enabled'),
       '#title' => $this->t('Enable Hello Member on site.'),
     ];
+    $form['hello_member_configuration']['points_history_page_size'] = [
+      '#type' => 'text',
+      '#default_value' => $config->get('points_history_page_size'),
+      '#title' => $this->t('Points history page size.'),
+      '#description' => $this->t('Enter page size for points history page.'),
+    ];
 
     return parent::buildForm($form, $form_state);
   }
@@ -49,6 +55,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_hello_member.settings')
       ->set('enabled', $form_state->getValue('enable_disable_hello_member'))
+      ->set('points_history_page_size', $form_state->getValue('points_history_page_size'))
       ->save();
 
     parent::submitForm($form, $form_state);
