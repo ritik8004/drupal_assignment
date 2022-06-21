@@ -220,11 +220,7 @@
         {% endif %}
 
         {% if order_details.ictDate %}
-          {% if order_details.type == 'cc' %}
-            <div class="label ict-date font-small">{{ "Available in store from"|t({}, {'context' : 'ict'}) }}</div>
-          {% else %}
-            <div class="label ict-date font-small">{{ "Expected Delivery by"|t({}, {'context' : 'ict'}) }}</div>
-          {% endif %}
+          <div class="label ict-date font-small">{{ order_details.ictLabel }}</div>
           <div class="dark">{{ order_details.ictDate }}</div>
         {% endif %}
       </td>

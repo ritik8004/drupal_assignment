@@ -426,12 +426,22 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       break;
   }
 
-  // Intercountry transfer.
+  // Inter country transfer.
   // Check if the delivery date is available in extension_attributes
   // pass it for further processing.
-  // @todo change this with MDC date.
-  if (isset($order['extension']['ict_date'])) {
-    $orderDetails['ictDate'] = '29th May 2022';
+  if (isset($order['extension']['oms_lead_time'])) {
+    $orderDetails['ictDate'] = Drupal::service('date.formatter')->format(
+      strtotime($order['extension']['oms_lead_time']),
+      'ict',
+      'dS M Y',
+    );
+    // Format labels to display.
+    if ($orderDetails['type'] === 'cc') {
+      $orderDetails['ictLabel'] = t('Available in store from', [], ['context' => 'ict']);
+    }
+    else {
+      $orderDetails['ictLabel'] = t('Expected Delivery by', [], ['context' => 'ict']);
+    }
   }
 
   return $orderDetails;

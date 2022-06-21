@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 const IctDeliveryInformation = (props) => {
   const { deliveryMethod, date } = props;
@@ -17,8 +18,10 @@ const IctDeliveryInformation = (props) => {
   return (
     <>
       <div className={`ict-delivery-info_${deliveryMethod}`}>
-        {/** @todo Check if date formatting is required */}
-        {`${deliveryText} ${date}`}
+        {`${deliveryText} 
+        ${moment(date).format('Do')} 
+        ${moment(date).locale(drupalSettings.path.currentLanguage).format('MMM')} 
+        ${moment().format('YYYY')}`}
       </div>
     </>
   );

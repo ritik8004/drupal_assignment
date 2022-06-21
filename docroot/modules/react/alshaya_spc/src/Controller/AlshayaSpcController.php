@@ -11,6 +11,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Link;
@@ -118,6 +119,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $deliveryOptionsHelper;
 
   /**
+   * Date time formatter interface.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager $payment_method_manager
@@ -144,6 +152,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Spc helper service.
    * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
    *   Delivery Options Helper.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter.
    */
   public function __construct(AlshayaSpcPaymentMethodManager $payment_method_manager,
                               CheckoutOptionsManager $checkout_options_manager,
@@ -156,7 +166,8 @@ class AlshayaSpcController extends ControllerBase {
                               ModuleHandlerInterface $module_handler,
                               AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper,
                               AlshayaSpcHelper $spc_helper,
-                              DeliveryOptionsHelper $delivery_options_helper) {
+                              DeliveryOptionsHelper $delivery_options_helper,
+                              DateFormatterInterface $date_formatter) {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
@@ -169,6 +180,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->checkoutComApiHelper = $checkout_com_api_helper;
     $this->spcHelper = $spc_helper;
     $this->deliveryOptionsHelper = $delivery_options_helper;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -187,7 +199,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('module_handler'),
       $container->get('alshaya_acm_checkoutcom.api_helper'),
       $container->get('alshaya_spc.helper'),
-      $container->get('alshaya_acm_product.delivery_options_helper')
+      $container->get('alshaya_acm_product.delivery_options_helper'),
+      $container->get('date.formatter')
     );
   }
 
@@ -796,10 +809,13 @@ class AlshayaSpcController extends ControllerBase {
     // Check if we are getting Intercountry transfer details
     // along with order details,
     // if yes, we are assigning this to drupalSettings.
-    // @todo update if condition based on the data what we are getting in '$orderDetails'
-    // @todo Replace hardcoding of date with the Intercountry transfer date, Which we will be getting from $orderDetails.
-    if (isset($orderDetails['ict'])) {
-      $settings['order_details']['ict_date'] = '29th May 2022';
+    if (isset($orderDetails['extension_attributes'])
+      && isset($orderDetails['extension_attributes']['oms_lead_time'])) {
+      $settings['order_details']['ict_date'] = $this->dateFormatter->format(
+        strtotime($orderDetails['extension_attributes']['oms_lead_time']),
+        'ict',
+        'dS M Y',
+      );
     }
 
     if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
