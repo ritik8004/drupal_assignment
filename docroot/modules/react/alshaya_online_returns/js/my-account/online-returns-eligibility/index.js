@@ -8,7 +8,6 @@ import {
 import ReturnEligibilityMessage from '../../common/return-eligibility-message';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getReturnsByOrderId } from '../../utilities/return_api_helper';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class OnlineReturnsEligibility extends React.Component {
   constructor(props) {
@@ -29,7 +28,6 @@ class OnlineReturnsEligibility extends React.Component {
     const { data } = orderDetails.detail;
     const { orderEntityId } = drupalSettings.onlineReturns.recentOrders[data.orderId];
     const returns = getReturnsByOrderId(orderEntityId);
-    showFullScreenLoader();
 
     if (returns instanceof Promise) {
       returns.then((returnResponse) => {
@@ -50,8 +48,6 @@ class OnlineReturnsEligibility extends React.Component {
           });
           // Add the `content-loaded` class to remove the skeletal.
           selector.parentNode.classList.add('content-loaded');
-
-          removeFullScreenLoader();
         }
       });
     }
