@@ -15,23 +15,29 @@ class MyPointsHistory extends React.Component {
       pointsHistoryData: [],
       pageSize: getPointstHistoryPageSize(),
       firstPage: 1,
-      totalCount: null,
+      totalCount: 0,
     };
-    this.loadMore = this.loadMore.bind(this);
   }
 
   componentDidMount() {
+    // Get transactions data purchased via hello member points.
     this.getPointsHistoryData();
   }
 
-  loadMore() {
+  /**
+   * Load points history data for next page when user clicks on load more.
+   */
+  loadMore = () => {
     const { pageSize } = this.state;
     this.setState((prev) => ({ firstPage: prev.firstPage + pageSize }), () => {
       this.getPointsHistoryData();
     });
   }
 
-  getPointsHistoryData() {
+  /**
+   * Fetch all the points history data for purchase done via hello member points.
+   */
+  getPointsHistoryData = () => {
     const { firstPage, pageSize, pointsHistoryData } = this.state;
     showFullScreenLoader();
     const hmPointsHistoryData = getHelloMemberPointsHistory(firstPage, pageSize);

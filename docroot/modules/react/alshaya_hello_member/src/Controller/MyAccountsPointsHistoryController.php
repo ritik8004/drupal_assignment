@@ -109,8 +109,8 @@ class MyAccountsPointsHistoryController extends ControllerBase {
       return AccessResult::forbidden();
     }
 
-    // If current user is the one for which this page is requested
-    // or the user is administrator we allow access.
+    // Does not allow access if logged in user id does not matches with
+    // user id in the url and if user does not have access orders permission.
     if (!($this->currentUser->id() == $user->id() || $this->currentUser->hasPermission('access all orders'))) {
       return AccessResult::forbidden();
     }

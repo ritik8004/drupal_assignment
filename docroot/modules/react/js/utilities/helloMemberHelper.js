@@ -32,7 +32,7 @@ export const getApiEndpoint = (action, params = {}) => {
     case 'helloMemberGetCustomerData':
       endpoint = `/V1/customers/apcCustomerData/${endPointParams.customerId}`; // endpoint to check hello member customer data.
       break;
-    case 'helloMemberGetApcTierProgressData':
+    case 'helloMemberGetTierProgressData':
       endpoint = `/V1/customers/apcTierProgressData/customerId/${endPointParams.customerId}`; // endpoint to check hello member customer data.
       break;
     case 'helloMemberBenefitsList':
