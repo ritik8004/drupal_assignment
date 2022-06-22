@@ -1,4 +1,5 @@
 import React from 'react';
+import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import setupAccordionHeight from '../../../../utilities';
 
@@ -8,6 +9,9 @@ export default class PointsInfoSummary extends React.PureComponent {
     this.expandRef = React.createRef();
     this.state = {
       open: true,
+      pointsEarned: hasValue(props.expiryInfo) ? JSON.parse(props.expiryInfo) : null,
+      pointsSummary: hasValue(props.pointsSummaryInfo)
+        ? JSON.parse(props.pointsSummaryInfo) : null,
     };
   }
 
@@ -33,8 +37,11 @@ export default class PointsInfoSummary extends React.PureComponent {
   };
 
   render() {
-    const { open } = this.state;
-    const { pointsSummaryInfo } = this.props;
+    const { open, pointsSummary, pointsEarned } = this.state;
+
+    if (pointsSummary === null || pointsEarned === null) {
+      return null;
+    }
 
     // Add correct class.
     const expandedState = open === true ? 'show' : '';
@@ -52,7 +59,7 @@ export default class PointsInfoSummary extends React.PureComponent {
           <div className="">{getStringMessage('points_label')}</div>
           <div className="points-accordion">
             {getStringMessage('earned_points',
-              { '@points': pointsSummaryInfo.points_earned.total_points })}
+              { '@points': pointsEarned.total })}
           </div>
         </div>
         <div className="content">
@@ -61,21 +68,21 @@ export default class PointsInfoSummary extends React.PureComponent {
               <div className="item">{getStringMessage('purchase')}</div>
               <div className="points">
                 {getStringMessage('earned_points',
-                  { '@points': pointsSummaryInfo.points_earned.purchase })}
+                  { '@points': pointsEarned.purchase })}
               </div>
             </div>
             <div className="earned-items">
               <div className="item">{getStringMessage('submit_review')}</div>
               <div className="points">
                 {getStringMessage('earned_points',
-                  { '@points': pointsSummaryInfo.points_earned.rating_review })}
+                  { '@points': pointsSummary.rating_review })}
               </div>
             </div>
             <div className="earned-items">
               <div className="item">{getStringMessage('profile_complete')}</div>
               <div className="points">
                 {getStringMessage('earned_points',
-                  { '@points': pointsSummaryInfo.points_earned.profile_completion })}
+                  { '@points': pointsSummary.profile_complete })}
               </div>
             </div>
           </div>
@@ -85,9 +92,9 @@ export default class PointsInfoSummary extends React.PureComponent {
               <p className="info-item-subtitle">
                 {getStringMessage('purchanse_message',
                   {
-                    '@currency_value': pointsSummaryInfo.points_info.currency_value,
-                    '@currency_code': pointsSummaryInfo.points_info.currency_code,
-                    '@points_value': pointsSummaryInfo.points_info.points_value,
+                    '@currency_value': pointsSummary.conversion.currency_value,
+                    '@currency_code': pointsSummary.conversion.currency_code,
+                    '@points_value': pointsSummary.conversion.points_value,
                   })}
               </p>
             </div>
@@ -95,14 +102,14 @@ export default class PointsInfoSummary extends React.PureComponent {
               <p className="info-item-title">{getStringMessage('submit_review')}</p>
               <p className="info-item-subtitle">
                 {getStringMessage('write_review_message',
-                  { '@review_points': pointsSummaryInfo.points_info.rating_review })}
+                  { '@review_points': pointsSummary.rating_review })}
               </p>
             </div>
             <div className="info-items">
               <p className="info-item-title">{getStringMessage('profile_complete')}</p>
               <p className="info-item-subtitle">
                 {getStringMessage('profile_complete_message',
-                  { '@profile_completion_value': pointsSummaryInfo.points_info.profile_completion })}
+                  { '@profile_completion_value': pointsSummary.profile_complete })}
               </p>
             </div>
           </div>

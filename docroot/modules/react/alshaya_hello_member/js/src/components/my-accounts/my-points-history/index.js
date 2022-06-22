@@ -7,6 +7,8 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getHelloMemberPointsHistory } from '../../../hello_member_api_helper';
 import { getPointstHistoryPageSize } from '../../../utilities';
+import MembershipExpiryInfo from './membership-expiry-info';
+import PointsInfoSummary from './membership-expiry-points';
 
 class MyPointsHistory extends React.Component {
   constructor(props) {
@@ -16,12 +18,25 @@ class MyPointsHistory extends React.Component {
       pageSize: getPointstHistoryPageSize(),
       firstPage: 1,
       totalCount: 0,
+      customerData: null,
     };
   }
 
   componentDidMount() {
-    // Get transactions data purchased via hello member points.
-    this.getPointsHistoryData();
+    // Listen to `helloMemberPointsLoaded` event which will update points summary block.
+    document.addEventListener('helloMemberPointsLoaded', (e) => {
+      const data = e.detail;
+
+      // If no error from MDC.
+      if (hasValue(data) && !hasValue(data.error)) {
+        this.setState({
+          customerData: data,
+        });
+        showFullScreenLoader();
+        // Get transactions data purchased via hello member points.
+        this.getPointsHistoryData();
+      }
+    }, false);
   }
 
   /**
@@ -30,6 +45,7 @@ class MyPointsHistory extends React.Component {
   loadMore = () => {
     const { pageSize } = this.state;
     this.setState((prev) => ({ firstPage: prev.firstPage + pageSize }), () => {
+      showFullScreenLoader();
       this.getPointsHistoryData();
     });
   }
@@ -39,7 +55,6 @@ class MyPointsHistory extends React.Component {
    */
   getPointsHistoryData = () => {
     const { firstPage, pageSize, pointsHistoryData } = this.state;
-    showFullScreenLoader();
     const hmPointsHistoryData = getHelloMemberPointsHistory(firstPage, pageSize);
     if (hmPointsHistoryData instanceof Promise) {
       hmPointsHistoryData.then((response) => {
@@ -59,9 +74,10 @@ class MyPointsHistory extends React.Component {
   }
 
   render() {
-    const { pointsHistoryData, totalCount, pageSize } = this.state;
-
-    if (pointsHistoryData === null) {
+    const {
+      pointsHistoryData, totalCount, pageSize, customerData,
+    } = this.state;
+    if (pointsHistoryData === null || customerData === null) {
       return null;
     }
 
@@ -90,6 +106,13 @@ class MyPointsHistory extends React.Component {
               <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
             </div>
           </ConditionalView>
+          <MembershipExpiryInfo
+            expiryInfo={customerData.extension_attributes.member_points_earned}
+          />
+          <PointsInfoSummary
+            expiryInfo={customerData.extension_attributes.member_points_earned}
+            pointsSummaryInfo={customerData.extension_attributes.member_points_info}
+          />
         </div>
       </>
     );
