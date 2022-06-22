@@ -35,56 +35,6 @@
       }
     };
 
-    // Additional attributes to be displayed on overlay.
-    let overlay_attributes_codes = {
-      'product_designer_collection' : 'DESIGNER COLLECTION',
-      'concept' : 'CONCEPT',
-      'product_collection' : 'COLLECTION',
-      'product_environment' : 'ENVIRONMENT',
-      'product_quality' : 'QUALITY',
-      'product_feature' : 'FEATURE',
-      'function' : 'FUNCTION',
-      'washing_instructions' : 'WASHING INSTRUCTION',
-      'dry_cleaning_instructions' : 'DRY CLEAN INSTRUCTION',
-      'style' : 'STYLE',
-      'clothing_style' : 'CLOTHING STYLE',
-      'collar_style' : 'COLLAR STYLE',
-      'neckline_style' : 'NECKLINE STYLE',
-      'accessories_style' : 'ACCESSORIES STYLE',
-      'footwear_style' : 'FOOTWEAR STYLE',
-      'fit' : 'FIT',
-      'descriptive_length' : 'DESCRIPTIVE LENGTH',
-      'garment_length' : 'GARMENT LENGTH',
-      'sleeve_length' : 'SLEEVE LENGTH',
-      'waist_rise' : 'WAIST RISE',
-      'heel_height' : 'HEEL HEIGHT',
-      'measurements_in_cm' : 'MEASURMENTS IN CM',
-      'color_name' : 'COLOR NAME',
-      'fragrance_name' : 'FRAGRANCE NAME',
-      'article_fragrance_description' : 'FRAGRANCE DESCRIPTION',
-      'article_pattern' : 'PATTERN',
-      'article_visual_description' : 'VISUAL DESCRIPTION',
-      'textual_print' : 'TEXTUAL PRINT',
-      'article_license_company' : 'LICENSE COMPANY',
-      'article_license_item' : 'LICENSE ITEM',
-    };
-    let overlay_properties = [];
-    for (var attributes_code in overlay_attributes_codes) {
-      if (Drupal.hasValue(data[attributes_code])) {
-        // Attribute codes are comma seperated if they have multiple values.
-        let attr_values = data[attributes_code].split(",");
-        let labels = [];
-        for (let attr_value of attr_values) {
-          let label = window.commerceBackend.getAttributeValueLabel(attributes_code, attr_value);
-          labels.push(label);
-        }
-        overlay_properties.push({
-          title: overlay_attributes_codes[attributes_code],
-          data: labels,
-        });
-      }
-    };
-
     // Get composition attribute based on product type.
     let composition = fetchCompositionAttribute(data);
 
@@ -99,7 +49,6 @@
       show_product_detail_title: (data.composition || data.washing_instructions || data.article_warning),
       description_details: description_details,
       title_name: data.title_name,
-      overlay_properties: overlay_properties,
     };
 
     // Append field values to short_description.
@@ -148,4 +97,17 @@
     return entity.composition;
   }
 };
+
+  /**
+   * Fetch composition attribute for pdp.
+   */
+  var fetchCompositionAttribute = function (entity) {
+    if (entity.type_id == 'configurable') {
+    return entity.variants[0].product.composition;
+    }
+    else {
+      return entity.composition;
+    }
+  };
+
 })();

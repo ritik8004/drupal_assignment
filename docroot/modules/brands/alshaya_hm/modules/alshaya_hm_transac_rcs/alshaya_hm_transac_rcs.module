@@ -46,16 +46,75 @@ function alshaya_hm_transac_rcs_rcs_handlebars_templates_alter(&$templates, $ent
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_hm_transac_rcs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() == 'rcs_product') {
-    $build['#attached']['library'][] = 'alshaya_hm_transac_rcs/product';
+  if ($entity->bundle() !== 'rcs_product') {
+    return;
   }
+  $build['#attached']['library'][] = 'alshaya_hm_transac_rcs/product';
+  // Attach library to display product attributes in overlay.
+  $build['#attached']['library'][] = 'alshaya_hm_transac_rcs/product_overlay';
+  $build['#attached']['drupalSettings']['alshayaRcs']['additionalProductAttributes'] = _get_hm_additional_product_attributes();
 }
 
 /**
  * Implements hook_alshaya_rcs_product_query_fields_alter().
  */
 function alshaya_hm_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
-  array_push($fields['items']['... on ConfigurableProduct']['variants']['product'],
-    'color_label',
+  array_push(
+      $fields['items']['... on ConfigurableProduct']['variants']['product'],
+      'color_label',
   );
+}
+/**
+ * Additional product attributes to be fetched from Graphql.
+ *
+ * @param array $attributes
+ *   List of additional attributes to be fetched.
+ */
+function alshaya_hm_transac_rcs_alshaya_rcs_product_additional_attributes_query_fields(array $attributes) {
+  $hm_attributes = array_keys(_get_hm_additional_product_attributes());
+  foreach ($hm_attributes as $hm_attribute) {
+    array_push($attributes, $hm_attribute);
+  }
+  return $attributes;
+}
+
+/**
+ * Get list of additional product attributes.
+ *
+ * @return array
+ *   Returns list of product attributes.
+ */
+function _get_hm_additional_product_attributes() {
+  return [
+    'product_designer_collection' => t('DESIGNER COLLECTION'),
+    'concept' => t('CONCEPT'),
+    'product_collection' => t('COLLECTION'),
+    'product_environment' => t('ENVIRONMENT'),
+    'product_quality' => t('QUALITY'),
+    'product_feature' => t('FEATURE'),
+    'function' => t('FUNCTION'),
+    'washing_instructions' => t('WASHING INSTRUCTION'),
+    'dry_cleaning_instructions' => t('DRY CLEAN INSTRUCTION'),
+    'style' => t('STYLE'),
+    'clothing_style' => t('CLOTHING STYLE'),
+    'collar_style' => t('COLLAR STYLE'),
+    'neckline_style' => t('NECKLINE STYLE'),
+    'accessories_style' => t('ACCESSORIES STYLE'),
+    'footwear_style' => t('FOOTWEAR STYLE'),
+    'fit' => t('FIT'),
+    'descriptive_length' => t('DESCRIPTIVE LENGTH'),
+    'garment_length' => t('GARMENT LENGTH'),
+    'sleeve_length' => t('SLEEVE LENGTH'),
+    'waist_rise' => t('WAIST RISE'),
+    'heel_height' => t('HEEL HEIGHT'),
+    'measurements_in_cm' => t('MEASURMENTS IN CM'),
+    'color_name' => t('COLOR NAME'),
+    'fragrance_name' => t('FRAGRANCE NAME'),
+    'article_fragrance_description' => t('FRAGRANCE DESCRIPTION'),
+    'article_pattern' => t('PATTERN'),
+    'article_visual_description' => t('VISUAL DESCRIPTION'),
+    'textual_print' => t('TEXTUAL PRINT'),
+    'article_license_company' => t('LICENSE COMPANY'),
+    'article_license_item' => t('LICENSE ITEM'),
+  ];
 }

@@ -26,3 +26,13 @@ gallery.product.product_gallery_magazine:
   version: 1.x
   js:
     templates/rcs-product-gallery-magazine.handlebars: {}
+
+product_overlay:
+  version: 1.x
+  js:
+    js/alshaya_hm_load_overlay.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery
+    - rcs_placeholders/helpers

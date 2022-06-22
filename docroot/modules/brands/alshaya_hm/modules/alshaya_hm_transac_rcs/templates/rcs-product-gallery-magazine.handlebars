@@ -112,16 +112,7 @@
                       <h3>{{t 'COMPOSITION' }}</h3>
                       {{ description.composition }}
                   {{/if}}
-                  {{#description.overlay_properties}}
-                    {{#if (ne this.data.length 0) }}
-                      <h3>{{ this.title }}</h3>
-                      <ul>
-                        {{#each this.data }}
-                          <li>{{ this }}</li>
-                        {{/each}}
-                      </ul>
-                    {{/if}}
-                  {{/description.overlay_properties}}
+                  <div class="pdp-overlay-attributes"></div>
               </div>
             </div>
           </div>

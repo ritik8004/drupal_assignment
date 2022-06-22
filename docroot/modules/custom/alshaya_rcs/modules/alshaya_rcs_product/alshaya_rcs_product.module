@@ -666,6 +666,21 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ];
   }
 
+  // Fetch additional product attributes.
+  $product_additional_attributes_query_fields = $rcs_product_helper->getProductAdditionalAttributesQueryFields();
+  $query_fields['product_additional_attributes'] = [
+    'query' => [
+      'query($sku: String, $attributes: [AttributeInput!]!)' => [
+        'products(filter: {sku: {eq: $sku}})' => $product_additional_attributes_query_fields,
+        'customAttributeMetadata(attributes: $attributes)' => $product_options_query_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+      'attributes' => NULL,
+    ],
+  ];
+
   // We have two variations of the cart query, one for anonymous and one for
   // authenticated users. So we vary by this context.
   $query_fields['#cache']['contexts'][] = 'user.roles:anonymous';

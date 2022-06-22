@@ -1258,6 +1258,85 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
+   * Get additional product attributes.
+   *
+   * @param {string} sku
+   *   SKU value for which additional attributes is to be returned.
+   * @param {object} attributes
+   *   Attributes object cona
+   */
+  window.commerceBackend.getAdditionalAttributes = async function getAdditionalAttributes(sku, attributes) {
+    let attributes_variables = getAttributesVariable(attributes);
+    // Get product attributes and custom attribute metadata and labels.
+    response = await rcsPhCommerceBackend.getData('product_additional_attributes', {
+      'sku': sku ,
+      'attributes': attributes_variables,
+    })
+    let product_attributes = [];
+    if (Drupal.hasValue(response.data)) {
+      product_attributes = processProductAttributes(response.data);
+    }
+    return product_attributes;
+  };
+
+ /**
+  * Returns attributes in graphql variables format.
+  *
+  * @param {array} attributes
+  *   List of product attributes.
+  *
+  * @returns {array}
+  *  Product attributes in graphql attribute format.
+  */
+  var getAttributesVariable = function (attributes) {
+    attributes = Object.keys(attributes);
+    var attributes_variables = [];
+    attributes.forEach(function eachValue (value) {
+      attributes_variables.push({
+        'attribute_code' : value,
+        'entity_type': 4,
+      });
+    });
+    return attributes_variables;
+  }
+
+  /**
+   * Returns list of product attribute with labels.
+   *
+   * @param {object} data
+   *   Graphql response for additional product attributes.
+   *
+   * @returns {object}
+   *  List of product attributes values and labels.
+   */
+  var processProductAttributes = function (data) {
+
+    // Process custom attributes metadata.
+    let attributes_metadata = [];
+    data.customAttributeMetadata.items.forEach(function eachValue(value) {
+      attributes_metadata[value.attribute_code] = {};
+      for (let i = 0; i < value.attribute_options.length; i++) {
+        let option = value.attribute_options[i];
+        attributes_metadata[value.attribute_code][option.value] = option.label;
+      }
+    });
+    // Get labels for product attributes from custom attribute metadata.
+    let product_attribute_values = data.products.items[0];
+    product_attributes = {};
+    Object.entries(product_attribute_values).forEach(function (value) {
+      if (Drupal.hasValue(value[1])) {
+        // Split comma separated product attributes.
+        let value_arr = value[1].split(',');
+        product_attributes[value[0]] = [];
+        value_arr.forEach(function (option) {
+          product_attributes[value[0]].push(attributes_metadata[value[0]][option]);
+        });
+      }
+    });
+    return product_attributes;
+  };
+
+  /**
    * Clears static cache of product data.
    */
   window.commerceBackend.resetStaticStoragePostProductUpdate = function resetStaticStoragePostProductUpdate() {

@@ -463,6 +463,23 @@ class AlshayaRcsProductHelper {
   }
 
   /**
+   * Returns product additional attributes query fields.
+   *
+   * @return array
+   *   Product additional attributes query.
+   */
+  public function getProductAdditionalAttributesQueryFields() {
+    $attributes = &drupal_static(__METHOD__, []);
+    if (!empty($attributes)) {
+      return $attributes;
+    }
+    $query = [];
+    $attributes = $this->moduleHandler->invokeAll('alshaya_rcs_product_additional_attributes_query_fields', [$attributes]);
+    $query['items'] = $attributes;
+    return $query;
+  }
+
+  /**
    * Returns the main query and variables getting product options data.
    *
    * @return array
