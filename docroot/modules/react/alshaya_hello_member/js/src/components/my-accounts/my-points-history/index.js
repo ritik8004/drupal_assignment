@@ -23,21 +23,29 @@ class MyPointsHistory extends React.Component {
   }
 
   componentDidMount() {
+    this.isComponentMounted = true;
     // Listen to `helloMemberPointsLoaded` event which will update points summary block.
-    document.addEventListener('helloMemberPointsLoaded', (e) => {
-      const data = e.detail;
-
-      // If no error from MDC.
-      if (hasValue(data) && !hasValue(data.error)) {
-        this.setState({
-          customerData: data,
-        });
-        showFullScreenLoader();
-        // Get transactions data purchased via hello member points.
-        this.getPointsHistoryData();
-      }
-    }, false);
+    document.addEventListener('helloMemberPointsLoaded', this.eventListener, false);
   }
+
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    document.removeEventListener('helloMemberPointsLoaded', this.eventListener, false);
+  }
+
+  eventListener = (e) => {
+    const data = e.detail;
+
+    // If no error from MDC.
+    if (hasValue(data) && !hasValue(data.error)) {
+      this.setState({
+        customerData: data,
+      });
+      showFullScreenLoader();
+      // Get transactions data purchased via hello member points.
+      this.getPointsHistoryData();
+    }
+  };
 
   /**
    * Load points history data for next page when user clicks on load more.
