@@ -106,6 +106,26 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'أكمل ملفك الشخصي',
         'context' => 'hello_member',
       ],
+      'Please enter the OTP sent to' => [
+        'ar' => 'أكمل ملفك الشخصي',
+        'context' => 'hello_member',
+      ],
+      'Not recieved the code?' => [
+        'ar' => 'أكمل ملفك الشخصي',
+        'context' => 'hello_member',
+      ],
+      'Resend Code' => [
+        'ar' => 'أكمل ملفك الشخصي',
+        'context' => 'hello_member',
+      ],
+      'Verify' => [
+        'ar' => 'أكمل ملفك الشخصي',
+        'context' => 'hello_member',
+      ],
+      'Send OTP' => [
+        'ar' => 'أكمل ملفك الشخصي',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
