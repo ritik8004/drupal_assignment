@@ -31,9 +31,9 @@ const NonGroupSelectOption = ({
         <SizeGuide attrId={code} />
         <div className="non-group-option-wrapper">
           <ul id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
-            {Object.keys(configurables.values).map((key) => {
-              let attr = configurables?.values[key]?.value_id;
-              let value = configurables?.values[key]?.label;
+            {configurables.values && Object.keys(configurables.values).map((key) => {
+              let attr = configurables.values[key].value_id;
+              let value = configurables.values[key].label;
               if (hasValue(configurables.values[key])) {
                 // Check if the values object is multidimensional
                 // use the first key to get respected value.
