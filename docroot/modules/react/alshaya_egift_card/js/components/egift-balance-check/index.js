@@ -1,5 +1,4 @@
 import React from 'react';
-import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import EgiftCheckBalanceStepOne from './egift-check-balance-step-one';
 
 export default class EgiftCheckBalance extends React.Component {
@@ -49,15 +48,13 @@ export default class EgiftCheckBalance extends React.Component {
     return (
       <>
         { button }
-        <ConditionalView conditional={openModal}>
-          <EgiftCheckBalanceStepOne
-            closeModal={this.closeModal}
-            open={openModal}
-            initialStep={initialStep}
-            stepChange={this.handleStepChange}
-            egiftCardNumber={egiftCardNumber}
-          />
-        </ConditionalView>
+        <EgiftCheckBalanceStepOne
+          closeModal={this.closeModal}
+          open={openModal}
+          initialStep={initialStep}
+          stepChange={this.handleStepChange}
+          egiftCardNumber={egiftCardNumber}
+        />
       </>
     );
   }
