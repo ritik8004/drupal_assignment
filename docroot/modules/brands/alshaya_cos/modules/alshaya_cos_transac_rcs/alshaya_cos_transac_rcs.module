@@ -30,8 +30,6 @@ function alshaya_cos_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$
     'washing_instructions',
     'article_warning'
   );
-
-  array_push($fields['items']['... on ConfigurableProduct']['variants']['product'], 'size');
 }
 
 /**
