@@ -1,8 +1,9 @@
 langcode: en
 status: open
 dependencies:
-  module:
-    - alshaya_furnitures_free_design_services
+  enforced:
+    module:
+      - alshaya_furnitures_free_design_services
 open: null
 close: null
 weight: 0

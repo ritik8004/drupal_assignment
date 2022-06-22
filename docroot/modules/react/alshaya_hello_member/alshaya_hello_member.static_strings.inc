@@ -106,5 +106,9 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'verify_label',
       'value' => t('Verify', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'send_otp_label',
+      'value' => t('Send OTP', [], ['context' => 'hello_member']),
+    ],
   ];
 }

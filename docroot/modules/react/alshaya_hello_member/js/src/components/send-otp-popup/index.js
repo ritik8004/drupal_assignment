@@ -77,14 +77,11 @@ class SendOtpPopup extends React.Component {
 
   render() {
     const { openModal } = this.state;
-    const buttonName = Drupal.t('Send OTP', {}, { context: 'hello_member' });
-    const button = React.createElement('button', { type: 'submit', onClick: this.openModal }, buttonName);
     return (
       <>
-        { button }
+        <button onClick={this.openModal} type="button">{getStringMessage('send_otp_label')}</button>
         <Popup
           open={openModal}
-          className="hello_member_otp_popup"
           closeOnDocumentClick={false}
           closeOnEscape={false}
         >
@@ -93,7 +90,7 @@ class SendOtpPopup extends React.Component {
             { getStringMessage('sent_otp_message') }
             { document.getElementById('edit-field-mobile-number-0-mobile').value }
             <input
-              type="text"
+              type="number"
               id="OTP"
               name="OTP"
               className="OTP"

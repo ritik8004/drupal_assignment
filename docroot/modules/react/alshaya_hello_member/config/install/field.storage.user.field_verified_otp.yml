@@ -3,8 +3,6 @@ status: true
 dependencies:
   module:
     - user
-_core:
-  default_config_hash: iFfW7DrcdyjTadTT-DAv94ew6RvvRX4RDUbcSLJ_O9c
 id: user.field_verified_otp
 field_name: field_verified_otp
 entity_type: user
