@@ -104,11 +104,14 @@ class MyAccountsPointsHistoryController extends ControllerBase {
    *   Return access result object.
    */
   public function checkAccess(UserInterface $user) {
-    if (empty($user)) {
+    // Only logged in users will be able to access this page.
+    if (empty($user) || $this->currentUser->isAnonymous()) {
       return AccessResult::forbidden();
     }
 
-    if ($user->id() === 0 || $user->id() !== $this->currentUser->id()) {
+    // If current user is the one for which this page is requested
+    // or the user is administrator we allow access.
+    if (!($this->currentUser->id() == $user->id() || $this->currentUser->hasPermission('access all orders'))) {
       return AccessResult::forbidden();
     }
 
