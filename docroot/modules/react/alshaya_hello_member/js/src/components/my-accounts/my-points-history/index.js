@@ -1,121 +1,96 @@
 import React from 'react';
-import Loading from '../../../../../../js/utilities/loading';
+import moment from 'moment';
+import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import logger from '../../../../../../js/utilities/logger';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import MembershipExpiryInfo from './membership-expiry-info';
-import PointsInfoSummary from './membership-expiry-points';
+import { getHelloMemberPointsHistory } from '../../../hello_member_api_helper';
+import { getPointstHistoryPageSize } from '../../../utilities';
 
 class MyPointsHistory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      wait: false,
-      pointsHistoryData: null,
+      pointsHistoryData: [],
+      pageSize: getPointstHistoryPageSize(),
+      firstPage: 1,
+      totalCount: 0,
     };
   }
 
-  async componentDidMount() {
-    // --TODO-- API integration task to be started once we have api from MDC.
-    const pointsHistoryData = {
-      apc_transactions: [
-        {
-          location_name: 'lead trinity',
-          partner: 'HEN',
-          currency_code: 'KWD',
-          date: '2022-05-23T12:38:25Z',
-          identifier_no: '6111000000065683',
-          points: '2',
-          trn_no: '16534031963700',
-          channel: 'Online',
-          transaction_id: '5274981',
-          points_balances: [
-            {
-              point_type: 'XP',
-              points: '2',
-              status: 'B',
-              status_name: 'Booked',
-            },
-          ],
-        },
-        {
-          location_name: 'lead trinity',
-          partner: 'BAT',
-          currency_code: 'KWD',
-          date: '2022-05-23T12:38:25Z',
-          identifier_no: '6111000000065683',
-          points: '2',
-          trn_no: '16533787665520',
-          channel: 'Instore',
-          transaction_id: '5274982',
-          points_balances: [
-            {
-              point_type: 'CR',
-              points: '2',
-              status: 'B',
-              status_name: 'Booked',
-            },
-          ],
-        },
-      ],
-      points_summary: {
-        points_earned: {
-          purchase: '30',
-          rating_review: '20',
-          profile_completion: '5',
-          total_points: 55,
-          expiry_date: '2024-05-23',
-        },
-        points_info: {
-          currency_code: 'KWD',
-          currency_value: '1',
-          points_value: '5',
-          rating_review: '5',
-          profile_completion: '25',
-        },
-      },
-      message: null,
-      error: null,
-    };
+  componentDidMount() {
+    // Get transactions data purchased via hello member points.
+    this.getPointsHistoryData();
+  }
 
-    this.setState({
-      wait: true,
-      pointsHistoryData,
+  /**
+   * Load points history data for next page when user clicks on load more.
+   */
+  loadMore = () => {
+    const { pageSize } = this.state;
+    this.setState((prev) => ({ firstPage: prev.firstPage + pageSize }), () => {
+      this.getPointsHistoryData();
     });
   }
 
-  render() {
-    const { wait, pointsHistoryData } = this.state;
+  /**
+   * Fetch all the points history data for purchase done via hello member points.
+   */
+  getPointsHistoryData = () => {
+    const { firstPage, pageSize, pointsHistoryData } = this.state;
+    showFullScreenLoader();
+    const hmPointsHistoryData = getHelloMemberPointsHistory(firstPage, pageSize);
+    if (hmPointsHistoryData instanceof Promise) {
+      hmPointsHistoryData.then((response) => {
+        if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
+          this.setState({
+            pointsHistoryData: pointsHistoryData.concat(response.data.apc_transactions),
+            totalCount: response.data.apc_transactions.length,
+          });
+        } else if (hasValue(response.error)) {
+          logger.error('Error while trying to get hello member points history data. Data: @data.', {
+            '@data': JSON.stringify(response),
+          });
+        }
+        removeFullScreenLoader();
+      });
+    }
+  }
 
-    if (!wait && pointsHistoryData === null) {
-      return (
-        <div className="my-points-history-wrapper" style={{ animationDelay: '0.4s' }}>
-          <Loading />
-        </div>
-      );
+  render() {
+    const { pointsHistoryData, totalCount, pageSize } = this.state;
+
+    if (pointsHistoryData === null) {
+      return null;
     }
 
     return (
       <>
         <div className="my-points-history-wrapper">
-          {pointsHistoryData.apc_transactions.map((data) => (
-            <div className="history-points-row" key={data.transaction_id}>
+          {pointsHistoryData.map((data) => (
+            <div className="history-points-row" key={data.trn_no}>
               <div className="purchase-store">
                 <p className="history-dark-title">
                   {data.channel}
-                  {' '}
-                  {getStringMessage('purchase')}
                 </p>
-                <p className="history-light-title">{data.location_name}</p>
+                <ConditionalView condition={hasValue(data.location_name)}>
+                  <p className="history-light-title">{data.location_name}</p>
+                </ConditionalView>
               </div>
-              <div className="points-date">{data.date}</div>
+              <div className="points-date">{moment(new Date(data.date)).format('DD/MM/YYYY')}</div>
               <div className="points-earned">
                 <p className="history-light-title">{getStringMessage('points_earned')}</p>
                 <p>{data.points}</p>
               </div>
             </div>
           ))}
+          <ConditionalView condition={totalCount === pageSize}>
+            <div className="load-more-wrapper">
+              <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+            </div>
+          </ConditionalView>
         </div>
-        <MembershipExpiryInfo expiryInfo={pointsHistoryData.points_summary.points_earned} />
-        <PointsInfoSummary pointsSummaryInfo={pointsHistoryData.points_summary} />
       </>
     );
   }

@@ -86,5 +86,9 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'profile_complete_message',
       'value' => t('Add your date of birth, Gender, Mobile Number to earn @profile_completion_value points.', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'load_more',
+      'value' => t('Load more', [], ['context' => 'hello_member']),
+    ],
   ];
 }
