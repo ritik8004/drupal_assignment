@@ -298,11 +298,13 @@ class SkusProductList extends ResourceBase {
     ], TRUE);
 
     $media = $this->skuImagesManager->getProductMedia($sku, 'search');
+    $media = $this->mobileAppUtility->processMediaImageStyles($media, $sku, 'pdp');
     $data['images'] = [];
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       $data['images'][] = [
         'url' => file_create_url($media_item['drupal_uri']),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
+        'styles' => $media_item['pims_image']['styles'],
       ];
     }
 
