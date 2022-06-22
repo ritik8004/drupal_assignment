@@ -3,7 +3,11 @@ import {
   isAuthenticatedUserWithoutCart,
   updateCart,
   getProcessedCartData,
-  getCartWithProcessedData, getCart, associateCartToCustomer, clearProductStatusStaticCache,
+  getCartWithProcessedData,
+  getCart,
+  associateCartToCustomer,
+  clearProductStatusStaticCache,
+  mergeGuestCartToCustomer,
 } from './common';
 import {
   getApiEndpoint,
@@ -450,21 +454,17 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
 
   StaticStorage.set('associating_cart', true);
 
-  // Try to load customer's cart if not doing this on checkout page.
-  if (pageType !== 'checkout') {
-    const cart = await getCart();
-    if (hasValue(cart) && hasValue(cart.data) && hasValue(cart.data.cart.items)) {
-      // If the current cart has items, we carry on with this cart and remove
-      // the guest cart id from local storage.
-      removeCartIdFromStorage();
-      return;
-    }
+  if (document.referrer.indexOf('cart/login') > -1 && pageType === 'checkout') {
+    // If the user is authenticated and we have cart_id in the local storage
+    // it means the customer just became authenticated from cart login.
+    // We need to associate the cart and remove the cart_id from local storage.
+    await associateCartToCustomer(guestCartId);
+  } else {
+    // If user is authenticated and we have cart_id, user has logged in from
+    // other than cart login eg: user login, social login, user register then
+    // we merge guest cart with customer.
+    await mergeGuestCartToCustomer();
   }
-
-  // If the user is authenticated and we have cart_id in the local storage
-  // it means the customer just became authenticated.
-  // We need to associate the cart and remove the cart_id from local storage.
-  await associateCartToCustomer(guestCartId);
 
   StaticStorage.remove('associating_cart');
 };
