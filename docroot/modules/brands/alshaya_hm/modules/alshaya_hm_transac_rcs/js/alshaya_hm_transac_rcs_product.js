@@ -86,7 +86,7 @@
     })
   });
 
-    /**
+  /**
    * Fetch composition attribute for pdp.
    */
   var fetchCompositionAttribute = function(entity) {
@@ -97,17 +97,5 @@
     return entity.composition;
   }
 };
-
-  /**
-   * Fetch composition attribute for pdp.
-   */
-  var fetchCompositionAttribute = function (entity) {
-    if (entity.type_id == 'configurable') {
-    return entity.variants[0].product.composition;
-    }
-    else {
-      return entity.composition;
-    }
-  };
 
 })();
