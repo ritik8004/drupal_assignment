@@ -1,4 +1,5 @@
 import { hasValue } from './conditionsUtility';
+import { getErrorResponse } from './error';
 import logger from './logger';
 import { callMagentoApi } from './requestHelper';
 
@@ -15,6 +16,31 @@ export default function isHelloMemberEnabled() {
 
   return enabled;
 }
+
+/**
+ * Helper function to get the customer info from user session.
+ */
+export const getHelloMemberCustomerInfo = () => {
+  // Get user details from session.
+  const { customerId } = drupalSettings.userDetails;
+  const { uid } = drupalSettings.user;
+
+  // Check if we have user in session.
+  if (!hasValue(customerId) || uid === 0) {
+    logger.error('Error while trying to get customer info. No user available in session. User id: @user_id. Customer id: @customer_id.', {
+      '@user_id': uid,
+      '@customer_id': customerId,
+    });
+    return getErrorResponse('No user available in session', 403);
+  }
+
+  const params = {
+    customerId,
+    programCode: 'hello_member',
+  };
+
+  return params;
+};
 
 /**
  * Gets magento api endpoint by user role.
@@ -35,8 +61,17 @@ export const getApiEndpoint = (action, params = {}) => {
     case 'helloMemberGetTierProgressData':
       endpoint = `/V1/customers/apcTierProgressData/customerId/${endPointParams.customerId}`; // endpoint to check hello member customer data.
       break;
-    case 'helloMemberBenefitsList':
-      endpoint = '/V2/customers/hellomember/benefitsList'; // endpoint to get hello member benefits.
+    case 'helloMemberCouponsList':
+      endpoint = '/V1/hello-member/customers/coupons'; // endpoint to get hello member coupons list.
+      break;
+    case 'helloMemberCouponPage':
+      endpoint = `/V1/hello-member/customers/coupons/id/${endPointParams.code}`; // endpoint to get hello member coupon details.
+      break;
+    case 'helloMemberOffersList':
+      endpoint = '/V1/hello-member/customers/offers'; // endpoint to get hello member offers list.
+      break;
+    case 'helloMemberOfferPage':
+      endpoint = `/V1/hello-member/customers/offers/code/${endPointParams.code}`; // endpoint to get hello member offer details.
       break;
     case 'helloMemberGetPointsHistory':
       endpoint = '/V1/customers/apcTransactions'; // endpoint to get hello member points history.
