@@ -2,5 +2,4 @@ fields:
   is_returnable:
     label: 'Is returnable'
     type: 'string'
-    cardinality: 1
     description: 'Sku applicable for online returns or not.'
