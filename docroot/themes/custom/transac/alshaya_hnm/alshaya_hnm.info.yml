@@ -269,23 +269,3 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css: css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css
-
-  alshaya_white_label/my-accounts-hello-member:
-    css:
-      theme:
-        css/conditional-sass/my-accounts-hello-member/my-accounts-hello-member.ltr.css: css/conditional-sass/my-accounts-hello-member/my-accounts-hello-member.ltr.css
-
-  alshaya_white_label/hello-member-registration:
-    css:
-      theme:
-        css/conditional-sass/hello-member-registration/hello-member-registration.ltr.css: css/conditional-sass/hello-member-registration/hello-member-registration.ltr.css
-
-  alshaya_white_label/my-membership-info:
-    css:
-      theme:
-        css/conditional-sass/my-membership-info/my-membership-info.ltr.css: css/conditional-sass/my-membership-info/my-membership-info.ltr.css
-
-  alshaya_white_label/hello-member-points-history:
-    css:
-      theme:
-        css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css: css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css
