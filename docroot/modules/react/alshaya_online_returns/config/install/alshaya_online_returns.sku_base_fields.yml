@@ -3,3 +3,4 @@ fields:
     label: 'Is returnable'
     type: 'string'
     description: 'Sku applicable for online returns or not.'
+    translatable: 0
