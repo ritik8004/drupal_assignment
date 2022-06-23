@@ -27,7 +27,6 @@ class SendOtpPopup extends React.Component {
       });
     }
     e.preventDefault();
-    e.stopPropagation();
   };
 
   // Close Modal.
@@ -70,7 +69,7 @@ class SendOtpPopup extends React.Component {
           });
         }
         // If successfully verified make the otp verified checkbox seleted.
-        document.getElementById('edit-field-verified-otp-value').checked = true;
+        document.getElementById('edit-field-verified-otp-value').click();
       });
     }
   };
@@ -95,6 +94,7 @@ class SendOtpPopup extends React.Component {
               name="OTP"
               className="OTP"
               maxLength="6"
+              max="999999"
             />
           </div>
           <div className="hello-member-modal-form-actions">

@@ -177,6 +177,11 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['hello_member']['field_mobile_number'] = $form['field_mobile_number'];
   $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div>' . t('OTP will be send to your mobile number to verify', [], ['context' => 'hello_member']);
   $form['hello_member']['field_mobile_number']['#weight'] = 12;
+  $form['field_verified_otp']['widget']['value']['#ajax'] = [
+    'callback' => 'alshaya_hello_member_ajax_opt_verified',
+    'wrapper' => 'otp-verified',
+    'event' => 'change',
+  ];
   unset($form['field_gender']);
   unset($form['field_mobile_number']);
   $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
@@ -239,4 +244,13 @@ function alshaya_hello_member_block_access(Block $block, $operation, AccountInte
       return AccessResult::forbiddenIf(TRUE);
     }
   }
+}
+
+/**
+ * Ajax callback: Update verified otp field.
+ */
+function alshaya_hello_member_ajax_opt_verified(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\user\Entity\User $user */
+  $user = user_load_by_mail(\Drupal::currentUser()->getEmail());
+  $user->set('field_verified_otp', $form_state->getValue('field_verified_otp')['value'])->save();
 }
