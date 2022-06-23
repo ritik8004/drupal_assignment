@@ -172,12 +172,12 @@ function alshaya_aeo_transac_alshaya_super_category_status_update($status, $defa
   // Change branding block weight as per the design when super category feature
   // gets on/off.
   if ($status) {
-    $config = $this->configFactory->getEditable('block.block.branding');
+    $config = \Drupal::configFactory()->getEditable('block.block.branding');
     $config->set('weight', -20);
     $config->save();
   }
   else {
-    $config = $this->configFactory->getEditable('block.block.branding');
+    $config = \Drupal::configFactory()->getEditable('block.block.branding');
     $config->set('weight', -32);
     $config->save();
   }
