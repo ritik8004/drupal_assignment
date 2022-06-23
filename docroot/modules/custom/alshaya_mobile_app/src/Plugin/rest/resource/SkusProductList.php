@@ -298,7 +298,7 @@ class SkusProductList extends ResourceBase {
     ], TRUE);
 
     $media = $this->skuImagesManager->getProductMedia($sku, 'search');
-    $media = $this->mobileAppUtility->processMediaImageStyles($media, $sku, 'pdp');
+    $media = $this->skuImagesManager->processMediaImageStyles($media, $sku, 'pdp');
     $data['images'] = [];
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       $data['images'][] = [
