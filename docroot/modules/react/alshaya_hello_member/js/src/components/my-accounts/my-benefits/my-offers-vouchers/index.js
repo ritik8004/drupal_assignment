@@ -1,5 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
+import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 
 const MyOffersAndVouchers = ({ myBenefitsList }) => {
   const settings = {
@@ -25,24 +26,25 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
       },
     ],
   };
+  const { currentPath } = drupalSettings.path;
 
   return (
     <div className="my-benefits-wrapper">
       <Slider {...settings}>
         {myBenefitsList.map((data) => (
-          <a className="my-offers-vouchers-details" key={data.id} href={`${window.location.href}/hm-benefits/${data.id}`}>
+          <a className="my-offers-vouchers-details" key={data.id || data.code} href={`${Drupal.url(currentPath)}/hello-member-benefits/${hasValue(data.id) ? `coupon/${data.id}` : `offer/${data.code}`}`}>
             <div className="image-container">
-              <img src={data.image} />
+              <img src={data.small_image} />
             </div>
             <div className="voucher-wrapper">
               <div className="title">
                 {data.name}
               </div>
               <div className="info">
-                {data.description}
+                {data.short_description}
               </div>
               <div className="expiry">
-                {data.end_date}
+                {data.expiry_date || data.end_date}
               </div>
             </div>
           </a>

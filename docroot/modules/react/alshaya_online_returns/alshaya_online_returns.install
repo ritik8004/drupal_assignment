@@ -13,12 +13,7 @@
  * Add return confirmation configurations.
  */
 function alshaya_online_returns_install() {
-  // Install new SKU fields for Online Returns.
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_acm_product',
-  );
+  // Add Is returnable attribute to SKU entity.
   \Drupal::service('acq_sku.fields_manager')->addFields();
 
   // Add translations.

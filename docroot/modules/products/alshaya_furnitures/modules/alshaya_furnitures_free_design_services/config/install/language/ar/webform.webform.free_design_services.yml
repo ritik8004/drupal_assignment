@@ -1,0 +1,35 @@
+title: 'خدمات التصميم الداخلية المجانية'
+elements: |-
+  sub_title_mobile:
+    '#text': '<div class="h1">خدمات التصميم الداخلية المجانية</div><p>تعاون مع مصممينا وخبراء التركيب لدينا سواء في منزلك أو في أقرب محل إليك لتصمم منزل أحلامك. احجز موعد من الأسفل أو قم بزيارة أقرب محل إليك للبدء</p>'
+  banner:
+    '#text': "<p><img alt=\"Free Interior Design Services\" src=\"/modules/products/alshaya_furnitures/modules/alshaya_furnitures_free_design_services/images/design_crew_ar.png\" /></p>\r\n"
+  sub_title:
+    '#text': '<div class="h1">خدمات التصميم الداخلية المجانية</div><p>تعاون مع مصممينا وخبراء التركيب لدينا سواء في منزلك أو في أقرب محل إليك لتصمم منزل أحلامك. احجز موعد من الأسفل أو قم بزيارة أقرب محل إليك للبدء</p>'
+  contact_information:
+    '#title': 'معلومات الاتصال'
+    full_name: { '#type': textfield, '#title': 'الاسم بالكامل', '#required': true }
+    email: { '#type': email, '#title': 'البريد الإلكتروني', '#required': true }
+    mobile_number: { '#type': tel, '#title': 'رقم الهاتف النقال', '#autocomplete': 'off', '#required': true, '#international': true, '#international_initial_country': AE }
+  address:
+    '#title': 'العنوان (اختياري)'
+  preferred_store:
+    '#title': 'المحل المفضل'
+  room:
+    '#title': الغرفة
+    '#description': '<p>*حدد خيار واحد على الأقل</p>'
+    '#options': { Nursery: حضانة, 'Dining Room': 'غرفة الطعام', 'Formal Reception room': 'غرفة الاستقبال الرسمية', 'Family Living Room': 'غرفة المعيشة العائلية', Bedroom: 'غرفة النوم', 'Diwaniya / Majlis': الديوانية/المجلس, 'Home Office': 'المكتب المنزلي', Cinema: 'غرفة السينما' }
+  anything_else:
+    '#title': 'هل يوجد شيء آخر علينا معرفته؟'
+    '#placeholder': 'هل يوجد شيء آخر علينا معرفته؟'
+  privacy_text:
+    '#text': '<p>نحن نقدر خصوصيتك. لمزيد من التفاصيل، يرجى زيارة صفحة سياسة الخصوصية <a href="/ar/privacy-policy"></a></p>'
+  full_name:
+    '#title': 'الاسم بالكامل'
+  email:
+    '#title': 'البريد الإلكتروني'
+  mobile_number:
+    '#title': 'رقم الهاتف النقال'
+settings:
+  confirmation_title: 'شكراً لك!'
+  confirmation_message: "<div class=\"h1\">\r\nخدمات التصميم الداخلية المجانية\r\n</div>\r\n\r\n<p>تعاون مع مصممينا وخبراء التركيب لدينا سواء في منزلك أو في أقرب محل إليك لتصمم منزل أحلامك. احجز موعد من الأسفل أو قم بزيارة أقرب محل إليك للبدء</p>"

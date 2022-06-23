@@ -44,9 +44,9 @@ const GroupSelectOption = ({
         <SizeGuide attrId={code} />
         <div className="group-option-wrapper">
           <ul id={code} className="select-attribute-group clicked">
-            {Object.keys(configurables.values).map((key) => {
+            {configurables.values && Object.keys(configurables.values).map((key) => {
               let attr = key;
-              let value = configurables?.values[key][groupName];
+              let value = configurables.values[key][groupName];
               if (hasValue(configurables.values[key])) {
                 // Check if the values object is multidimensional.
                 // use the first key to get respected value.
