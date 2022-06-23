@@ -301,10 +301,16 @@ class SkusProductList extends ResourceBase {
     $media = $this->skuImagesManager->processMediaImageStyles($media, $sku, 'pdp');
     $data['images'] = [];
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      $styles = [];
+      if (!empty($media_item['styles']) || !empty($media_item['pims_image']['styles'])) {
+        $styles = $media_item['styles']
+          ? $media_item['styles']
+          : $media_item['pims_image']['styles'];
+      }
       $data['images'][] = [
         'url' => file_create_url($media_item['drupal_uri']),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
-        'styles' => $media_item['pims_image']['styles'],
+        'styles' => $styles,
       ];
     }
 

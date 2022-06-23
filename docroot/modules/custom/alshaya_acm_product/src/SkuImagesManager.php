@@ -1555,8 +1555,14 @@ class SkuImagesManager {
           'drupal_uri'
         )
       );
-      if ($key) {
-        $media['images'][$mid]['styles'] = $product_media['media_items']['images'][$key]['pims_image']['styles'];
+      // Check if images styles exists for the sku and return the urls.
+      if (isset($key)) {
+        $image = $product_media['media_items']['images'][$key];
+        if (!empty($image['styles']) || !empty($image['pims_image']['styles'])) {
+          $media['images'][$mid]['styles'] = $image['styles']
+            ? $image['styles']
+            : $image['pims_image']['styles'];
+        }
       }
     }
     return $media;
