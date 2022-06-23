@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 
 /**
  * Provides a resource to get product details with linked skus.
@@ -50,11 +50,11 @@ class ProductLinkedSkusResource extends ResourceBase {
   protected $skuManager;
 
   /**
-   * The mobile app utility service.
+   * SKU Images Manager.
    *
-   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
    */
-  private $mobileAppUtility;
+  private $skuImagesManager;
 
   /**
    * ProductResource constructor.
@@ -75,8 +75,8 @@ class ProductLinkedSkusResource extends ResourceBase {
    *   The request stack service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   The SKU manager.
-   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
-   *   The mobile app utility service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
+   *   SKU images manager.
    */
   public function __construct(
     array $configuration,
@@ -87,13 +87,13 @@ class ProductLinkedSkusResource extends ResourceBase {
     SkuInfoHelper $sku_info_helper,
     RequestStack $request_stack,
     SkuManager $skuManager,
-    MobileAppUtility $mobile_app_utility
+    SkuImagesManager $sku_images_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuInfoHelper = $sku_info_helper;
     $this->request = $request_stack->getCurrentRequest();
     $this->sku_manager = $skuManager;
-    $this->mobileAppUtility = $mobile_app_utility;
+    $this->skuImagesManager = $sku_images_manager;
   }
 
   /**
@@ -109,7 +109,7 @@ class ProductLinkedSkusResource extends ResourceBase {
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('request_stack'),
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('alshaya_mobile_app.utility')
+      $container->get('alshaya_acm_product.sku_images_manager')
     );
   }
 
@@ -186,7 +186,7 @@ class ProductLinkedSkusResource extends ResourceBase {
     foreach (array_keys($linkedSkus) as $linkedSku) {
       $linkedSkuEntity = SKU::loadFromSku($linkedSku);
       if ($lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)) {
-        $lightProduct['medias'] = $this->mobileAppUtility->processMediaImageStyles($lightProduct['medias'], $sku, 'pdp');
+        $lightProduct['medias'] = $this->skuImagesManager->processMediaImageStyles($lightProduct['medias'], $sku, 'pdp');
         $return[] = $lightProduct;
       }
     }
