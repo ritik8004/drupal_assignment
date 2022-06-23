@@ -239,6 +239,6 @@ function alshaya_media_assets_acq_sku_base_field_additions_alter(array &$fields 
     $fields = array_merge($fields, $alshaya_acm_product_fields);
   }
   else {
-    \Drupal::logger('alshaya_media_assets.sku_base_fields')->error('The config of SKU field is empty for media assets.');
+    \Drupal::logger('alshaya_media_assets')->error('The config alshaya_media_assets.sku_base_fields is empty for media assets.');
   }
 }
