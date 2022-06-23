@@ -228,5 +228,7 @@ function alshaya_media_assets_block_view_alter(array &$build, BlockPluginInterfa
  */
 function alshaya_media_assets_acq_sku_base_field_additions_alter(array &$fields = []) {
   $alshaya_acm_product_fields = \Drupal::config('alshaya_media_assets.sku_base_fields')->get('fields');
-  $fields = array_merge($fields, $alshaya_acm_product_fields);
+  if ($alshaya_acm_product_fields) {
+    $fields = array_merge($fields, $alshaya_acm_product_fields);
+  }
 }
