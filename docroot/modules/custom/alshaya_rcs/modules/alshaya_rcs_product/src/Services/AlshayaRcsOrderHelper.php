@@ -19,7 +19,7 @@ class AlshayaRcsOrderHelper extends AlshayaSpcOrderHelper {
       ? $item['extension_attributes']['parent_product_sku']
       : NULL;
 
-    return [
+    $data = [
       'sku' => $item['sku'],
       'parentSKU' => $parent_sku,
       'product_type' => $item['product_type'],
@@ -30,6 +30,9 @@ class AlshayaRcsOrderHelper extends AlshayaSpcOrderHelper {
       // Added quantity of product for checkout olapic pixel.
       'qtyOrdered' => $item['qty_ordered'],
     ];
+    $this->setEgiftDetailsToOrderItem($item, $data);
+
+    return $data;
   }
 
 }
