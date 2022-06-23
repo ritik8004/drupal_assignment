@@ -54,7 +54,7 @@ class QrCodeDisplay extends React.Component {
               <div className="img-container">
                 <QRCode
                   size={180}
-                  viewBox={`0 0 180 180`}
+                  viewBox="0 0 180 180"
                   value={memberId}
                 />
               </div>

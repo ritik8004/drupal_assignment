@@ -84,7 +84,7 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          <QrCodeDisplay memberId={`909990099`} />
+          <QrCodeDisplay memberId="909990099" />
           <div className="button-wide">{getStringMessage('benefit_add_to_bag')}</div>
         </div>
         <div className="benefit-description">

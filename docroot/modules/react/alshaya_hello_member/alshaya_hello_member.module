@@ -247,7 +247,6 @@ function alshaya_hello_member_preprocess_page(&$variables) {
   }
 }
 
-
 /**
  * Implements hook_preprocess_html().
  */
