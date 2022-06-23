@@ -241,7 +241,6 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
   }
   if ($user->get('field_verified_otp')->getString()) {
     $request_options['json']['customer']['extension_attributes']['is_verified'] = "Y";
-    $request_options['json']['customer']['extension_attributes']['is_subscribed'] = "Y";
     // Set otp verified unchecked to update in future.
     $user->set('field_verified_otp', 0)->save();
   }
