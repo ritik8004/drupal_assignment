@@ -18,7 +18,7 @@ elements: |
     '#title': 'Overall Rating'
     '#value': null
     '#minlength': 0
-    '#id': title
+    '#id': rating
     '#maxlength': 50
     '#default_value': null
     '#group_type': ratings

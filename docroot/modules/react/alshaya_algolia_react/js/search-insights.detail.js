@@ -9,7 +9,8 @@
     attach: function (context) {
       $('.sku-base-form').once('alshayaAlgoliaInsightsDetail').on('product-add-to-cart-success', function () {
         var sku = $(this).attr('data-sku');
-        var queryId, objectId= null;
+        var queryId, objectId = null;
+        var indexName = '...';
 
         try {
           if (Drupal.getItemFromLocalStorage('algolia_search_clicks') !== null) {
@@ -20,6 +21,7 @@
               && typeof algolia_clicks[sku] !== 'string') {
               queryId = algolia_clicks[sku]['query-id'];
               objectId = algolia_clicks[sku]['object-id'];
+              indexName = algolia_clicks[sku]['index-name'];
             }
           }
         }
@@ -32,7 +34,7 @@
           return;
         }
 
-        Drupal.pushAlshayaAlgoliaInsightsAddToCart(queryId, objectId);
+        Drupal.pushAlshayaAlgoliaInsightsAddToCart(queryId, objectId, indexName);
       });
     }
   };

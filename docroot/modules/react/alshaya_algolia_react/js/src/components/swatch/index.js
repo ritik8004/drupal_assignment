@@ -11,8 +11,8 @@ const Swatch = ({ swatch, url }) => {
     <a href={selectedImage}>
       <span className="swatch-block swatch-image">
         {swatch.product_image_url
-          ? <ImageElement data-sku-image={swatch.product_image_url} src={swatch.image_url} />
-          : <ImageElement src={swatch.image_url} />}
+          ? <ImageElement data-sku-image={swatch.product_image_url} src={swatch.image_url} loading="lazy" />
+          : <ImageElement src={swatch.image_url} loading="lazy" />}
       </span>
     </a>
   );

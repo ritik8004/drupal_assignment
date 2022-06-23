@@ -15,6 +15,7 @@ variables:
   size_filter: 'فئة العطر'
   filters: 'جميع اختياراتك'
   language_filters: 'all filters'
+  language_spc_knet_option: 'عيديتي [KNET]'
   promotional_filter: ''
   ar_collection_filter: ''
   ar_sort_filter: 'رتب حسب'

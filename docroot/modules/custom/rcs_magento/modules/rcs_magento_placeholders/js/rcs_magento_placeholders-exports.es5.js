@@ -318,6 +318,33 @@ exports.getData = async function getData(
       let singleProductQueryVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
       singleProductQueryVariables.sku = params.sku;
       request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
+    case 'related-products':
+      // Build query.
+      let relatedListVariables = rcsPhGraphqlQuery.related_products.variables;
+      relatedListVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.related_products.query, relatedListVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
+    case 'upsell-products':
+      // Build query.
+      let upsellListVariables = rcsPhGraphqlQuery.upsell_products.variables;
+      upsellListVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.upsell_products.query, upsellListVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
+    case 'crosssel-products':
+      // Build query.
+      let crosselListVariables = rcsPhGraphqlQuery.crosssel_products.variables;
+      crosselListVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.crosssel_products.query, crosselListVariables);
       result = rcsCommerceBackend.invokeApi(request);
       break;
 

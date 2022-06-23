@@ -86,3 +86,6 @@ foreach ($extensions as $extension) {
     }
   }
 }
+
+// Set css_js_query_string_for_compressed to TRUE.
+$settings['css_js_query_string_for_compressed'] = TRUE;
