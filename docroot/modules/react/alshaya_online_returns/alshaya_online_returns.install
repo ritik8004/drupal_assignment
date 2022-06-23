@@ -14,7 +14,8 @@
  */
 function alshaya_online_returns_install() {
   // Add Is returnable attribute to SKU entity.
-  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
   // Add translations.
   module_load_include('inc', 'alshaya_online_returns', 'alshaya_online_returns.translations');
   if ($translations = _alshaya_online_returns_get_translations()) {
