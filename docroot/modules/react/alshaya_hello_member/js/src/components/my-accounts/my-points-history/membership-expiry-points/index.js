@@ -9,9 +9,6 @@ export default class PointsInfoSummary extends React.PureComponent {
     this.expandRef = React.createRef();
     this.state = {
       open: true,
-      pointsEarned: hasValue(props.expiryInfo) ? JSON.parse(props.expiryInfo) : null,
-      pointsSummary: hasValue(props.pointsSummaryInfo)
-        ? JSON.parse(props.pointsSummaryInfo) : null,
     };
   }
 
@@ -37,9 +34,10 @@ export default class PointsInfoSummary extends React.PureComponent {
   };
 
   render() {
-    const { open, pointsSummary, pointsEarned } = this.state;
+    const { open } = this.state;
+    const { expiryInfo, pointsSummary } = this.props;
 
-    if (pointsSummary === null || pointsEarned === null) {
+    if (!hasValue(expiryInfo) || !hasValue(pointsSummary)) {
       return null;
     }
 
@@ -59,7 +57,7 @@ export default class PointsInfoSummary extends React.PureComponent {
           <div className="">{getStringMessage('points_label')}</div>
           <div className="points-accordion">
             {getStringMessage('earned_points',
-              { '@points': pointsEarned.total })}
+              { '@points': expiryInfo.total })}
           </div>
         </div>
         <div className="content">
@@ -68,7 +66,7 @@ export default class PointsInfoSummary extends React.PureComponent {
               <div className="item">{getStringMessage('purchase')}</div>
               <div className="points">
                 {getStringMessage('earned_points',
-                  { '@points': pointsEarned.purchase })}
+                  { '@points': expiryInfo.purchase })}
               </div>
             </div>
             <div className="earned-items">

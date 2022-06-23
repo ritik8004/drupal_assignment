@@ -14,19 +14,18 @@ class MemberPointsSummary extends React.Component {
   componentDidMount() {
     this.isComponentMounted = true;
     // Listen to `helloMemberPointsLoaded` event which will update points summary block.
-    document.addEventListener('helloMemberPointsLoaded', this.eventListener, false);
+    document.addEventListener('helloMemberPointsLoaded', this.updatePointSummary, false);
   }
 
   componentWillUnmount() {
     this.isComponentMounted = false;
-    document.removeEventListener('helloMemberPointsLoaded', this.eventListener, false);
+    document.removeEventListener('helloMemberPointsLoaded', this.updatePointSummary, false);
   }
 
-  eventListener = (e) => {
+  updatePointSummary = (e) => {
     const data = e.detail;
 
-    // If no error from MDC.
-    if (hasValue(data) && !hasValue(data.error)) {
+    if (hasValue(data)) {
       this.setState({
         customerData: data,
       });
@@ -42,11 +41,11 @@ class MemberPointsSummary extends React.Component {
     return (
       <>
         <MembershipExpiryInfo
-          expiryInfo={customerData.extension_attributes.member_points_earned}
+          expiryInfo={customerData.member_points_earned}
         />
         <PointsInfoSummary
-          expiryInfo={customerData.extension_attributes.member_points_earned}
-          pointsSummaryInfo={customerData.extension_attributes.member_points_info}
+          expiryInfo={customerData.member_points_earned}
+          pointsSummary={customerData.member_points_info}
         />
       </>
     );
