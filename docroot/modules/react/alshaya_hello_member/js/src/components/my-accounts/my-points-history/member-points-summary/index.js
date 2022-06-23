@@ -36,18 +36,23 @@ class MemberPointsSummary extends React.Component {
       return null;
     }
 
-    const expiryInfoData = JSON.parse(customerData.member_points_earned);
+    if (!hasValue(customerData.member_points_earned)
+      || !hasValue(customerData.member_points_info)) {
+      return null;
+    }
+
+    const memberPointsEarned = JSON.parse(customerData.member_points_earned);
+    const memberPointsInfo = JSON.parse(customerData.member_points_info);
 
     return (
       <>
         <MembershipExpiryInfo
-          pointTotal={expiryInfoData.total}
-          expiryDate={expiryInfoData.expiry_date}
+          pointTotal={memberPointsEarned.total}
+          expiryDate={memberPointsEarned.expiry_date}
         />
         <PointsInfoSummary
-          pointTotal={expiryInfoData.total}
-          purchasePoints={expiryInfoData.purchase}
-          pointsSummary={customerData.member_points_info}
+          pointsEarned={memberPointsEarned}
+          pointsSummary={memberPointsInfo}
         />
       </>
     );
