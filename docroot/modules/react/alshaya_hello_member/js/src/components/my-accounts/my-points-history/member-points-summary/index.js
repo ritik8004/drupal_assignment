@@ -12,13 +12,11 @@ class MemberPointsSummary extends React.Component {
   }
 
   componentDidMount() {
-    this.isComponentMounted = true;
     // Listen to `helloMemberPointsLoaded` event which will update points summary block.
     document.addEventListener('helloMemberPointsLoaded', this.updatePointSummary, false);
   }
 
   componentWillUnmount() {
-    this.isComponentMounted = false;
     document.removeEventListener('helloMemberPointsLoaded', this.updatePointSummary, false);
   }
 
@@ -38,13 +36,17 @@ class MemberPointsSummary extends React.Component {
       return null;
     }
 
+    const expiryInfoData = JSON.parse(customerData.member_points_earned);
+
     return (
       <>
         <MembershipExpiryInfo
-          expiryInfo={customerData.member_points_earned}
+          pointTotal={expiryInfoData.total}
+          expiryDate={expiryInfoData.expiry_date}
         />
         <PointsInfoSummary
-          expiryInfo={customerData.member_points_earned}
+          pointTotal={expiryInfoData.total}
+          purchasePoints={expiryInfoData.purchase}
           pointsSummary={customerData.member_points_info}
         />
       </>

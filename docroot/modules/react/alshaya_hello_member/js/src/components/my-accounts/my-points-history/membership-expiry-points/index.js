@@ -35,11 +35,14 @@ export default class PointsInfoSummary extends React.PureComponent {
 
   render() {
     const { open } = this.state;
-    const { expiryInfo, pointsSummary } = this.props;
+    const { pointTotal, purchasePoints, pointsSummary } = this.props;
 
-    if (!hasValue(expiryInfo) || !hasValue(pointsSummary)) {
+    if (!hasValue(pointsSummary) || !hasValue(purchasePoints)
+      || !hasValue(pointTotal)) {
       return null;
     }
+
+    const pointsSummaryData = JSON.parse(pointsSummary);
 
     // Add correct class.
     const expandedState = open === true ? 'show' : '';
@@ -57,7 +60,7 @@ export default class PointsInfoSummary extends React.PureComponent {
           <div className="">{getStringMessage('points_label')}</div>
           <div className="points-accordion">
             {getStringMessage('earned_points',
-              { '@points': expiryInfo.total })}
+              { '@points': pointTotal })}
           </div>
         </div>
         <div className="content">
@@ -66,21 +69,21 @@ export default class PointsInfoSummary extends React.PureComponent {
               <div className="item">{getStringMessage('purchase')}</div>
               <div className="points">
                 {getStringMessage('earned_points',
-                  { '@points': expiryInfo.purchase })}
+                  { '@points': purchasePoints })}
               </div>
             </div>
             <div className="earned-items">
               <div className="item">{getStringMessage('submit_review')}</div>
               <div className="points">
                 {getStringMessage('earned_points',
-                  { '@points': pointsSummary.rating_review })}
+                  { '@points': pointsSummaryData.rating_review })}
               </div>
             </div>
             <div className="earned-items">
               <div className="item">{getStringMessage('profile_complete')}</div>
               <div className="points">
                 {getStringMessage('earned_points',
-                  { '@points': pointsSummary.profile_complete })}
+                  { '@points': pointsSummaryData.profile_complete })}
               </div>
             </div>
           </div>
@@ -90,9 +93,9 @@ export default class PointsInfoSummary extends React.PureComponent {
               <p className="info-item-subtitle">
                 {getStringMessage('purchanse_message',
                   {
-                    '@currency_value': pointsSummary.conversion.currency_value,
-                    '@currency_code': pointsSummary.conversion.currency_code,
-                    '@points_value': pointsSummary.conversion.points_value,
+                    '@currency_value': pointsSummaryData.conversion.currency_value,
+                    '@currency_code': pointsSummaryData.conversion.currency_code,
+                    '@points_value': pointsSummaryData.conversion.points_value,
                   })}
               </p>
             </div>
@@ -100,14 +103,14 @@ export default class PointsInfoSummary extends React.PureComponent {
               <p className="info-item-title">{getStringMessage('submit_review')}</p>
               <p className="info-item-subtitle">
                 {getStringMessage('write_review_message',
-                  { '@review_points': pointsSummary.rating_review })}
+                  { '@review_points': pointsSummaryData.rating_review })}
               </p>
             </div>
             <div className="info-items">
               <p className="info-item-title">{getStringMessage('profile_complete')}</p>
               <p className="info-item-subtitle">
                 {getStringMessage('profile_complete_message',
-                  { '@profile_completion_value': pointsSummary.profile_complete })}
+                  { '@profile_completion_value': pointsSummaryData.profile_complete })}
               </p>
             </div>
           </div>
