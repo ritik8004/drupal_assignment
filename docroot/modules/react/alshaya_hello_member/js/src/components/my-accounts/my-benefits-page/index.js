@@ -5,6 +5,8 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import QrCodeDisplay from '../my-membership/qr-code-display';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 class MyBenefitsPage extends React.Component {
   constructor(props) {
@@ -76,17 +78,26 @@ class MyBenefitsPage extends React.Component {
             {myBenefit.short_description}
           </div>
           <div className="expiry">
+            {getStringMessage('benefit_expire')}
+            {' '}
             {moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY')}
           </div>
         </div>
-        <div>
-          <div>View QR Code</div>
-          <div>Add to bag</div>
+        <div className="btn-wrapper">
+          <QrCodeDisplay memberId={`909990099`} />
+          <div className="button-wide">{getStringMessage('benefit_add_to_bag')}</div>
         </div>
-        <div>
+        <div className="benefit-description">
           {HTMLReactParser(myBenefit.description)}
         </div>
-        <div>
+        <div className="expire-on">
+          <h3>
+            {getStringMessage('benefit_expire')}
+            {':'}
+          </h3>
+          {moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY')}
+        </div>
+        <div className="benefit-Tnc">
           {myBenefit.temrs_and_conditions}
         </div>
       </div>

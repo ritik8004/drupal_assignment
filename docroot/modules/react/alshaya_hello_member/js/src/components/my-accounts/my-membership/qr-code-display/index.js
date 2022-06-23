@@ -52,7 +52,11 @@ class QrCodeDisplay extends React.Component {
             <div className="qr-img-block">
               <div className="qr-redeem">{getStringMessage('qr_code_redeem')}</div>
               <div className="img-container">
-                <QRCode value={memberId} />
+                <QRCode
+                  size={180}
+                  viewBox={`0 0 180 180`}
+                  value={memberId}
+                />
               </div>
             </div>
             <div className="my-membership-id">

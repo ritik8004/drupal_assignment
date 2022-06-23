@@ -797,3 +797,13 @@ inter-country-transfer:
   css:
     theme:
       css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css: {}
+
+hello-member-benefit-landing-page:
+  css:
+    theme:
+      css/conditional-sass/hello-member-benefit-landing-page/hello-member-benefit-landing-page.ltr.css: {}
+
+hello-member-qr-code:
+  css:
+    theme:
+      css/conditional-sass/hello-member-qr-code/hello-member-qr-code.ltr.css: {}

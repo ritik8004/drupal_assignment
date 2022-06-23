@@ -90,5 +90,13 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'load_more',
       'value' => t('Load more', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'benefit_expire',
+      'value' => t('Expires on', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'benefit_add_to_bag',
+      'value' => t('Add to Bag', [], ['context' => 'hello_member']),
+    ],
   ];
 }

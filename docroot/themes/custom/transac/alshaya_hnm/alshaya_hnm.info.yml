@@ -289,3 +289,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css: css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css
+
+  alshaya_white_label/hello-member-benefit-landing-page:
+    css:
+      theme:
+        css/conditional-sass/hello-member-benefit-landing-page/hello-member-benefit-landing-page.ltr.css: css/conditional-sass/hello-member-benefit-landing-page/hello-member-benefit-landing-page.ltr.css
+
+  alshaya_white_label/hello-member-qr-code:
+    css:
+      theme:
+        css/conditional-sass/hello-member-qr-code/hello-member-qr-code.ltr.css: css/conditional-sass/hello-member-qr-code/hello-member-qr-code.ltr.css
