@@ -32,36 +32,22 @@
 
         // Open Gallery modal when we click on the zoom image.
         var myDialog = Drupal.dialog(element, dialogsettings);
-        $('.acq-content-product .cloudzoom #cloud-zoom-wrap img')
-          .off()
-          .on('click', function () {
-            $('body').addClass('pdp-modal-overlay');
-            myDialog.show();
-            myDialog.showModal();
-          });
+        $('.acq-content-product .cloudzoom #cloud-zoom-wrap img').off().on('click', function () {
+          $('body').addClass('pdp-modal-overlay');
+          myDialog.show();
+          myDialog.showModal();
+        });
 
         // $(document).once() because we need the same functionality for free gifts pdp modal too and we are
         // using HtmlCommand to render the free gifts pdp (Check viewProduct() in FreeGiftController.php).
-        $(document)
-          .once('dialog-opened')
-          .on(
-            'click',
-            '.dialog-product-image-gallery-container #product-full-screen-gallery li.slick-slide',
-            function (e) {
-              var productGallery = $(
-                '#product-full-screen-gallery',
-                $(this).closest('.dialog-product-image-gallery-container')
-              );
-              // Closing modal window before slick library gets removed.
-              $(this)
-                .closest('.dialog-product-image-gallery-container')
-                .find($('button.ui-dialog-titlebar-close'))
-                .trigger('mousedown');
-              productGallery.slick('unslick');
-              $('body').removeClass('pdp-modal-overlay');
-              e.preventDefault();
-            }
-          );
+        $(document).once('dialog-opened').on('click','.dialog-product-image-gallery-container #product-full-screen-gallery li.slick-slide', function (e) {
+          var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+          // Closing modal window before slick library gets removed.
+          $(this).closest('.dialog-product-image-gallery-container').find($('button.ui-dialog-titlebar-close')).trigger('mousedown');
+          productGallery.slick('unslick');
+          $('body').removeClass('pdp-modal-overlay');
+          e.preventDefault();
+        });
       }
 
       // Add mobile slick options for cart page free gifts.
