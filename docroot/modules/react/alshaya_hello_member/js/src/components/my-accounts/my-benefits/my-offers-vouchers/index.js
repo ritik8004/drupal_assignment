@@ -26,12 +26,13 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
       },
     ],
   };
+  const { currentPath } = drupalSettings.path;
 
   return (
     <div className="my-benefits-wrapper">
       <Slider {...settings}>
         {myBenefitsList.map((data) => (
-          <a className="my-offers-vouchers-details" key={data.id || data.code} href={`${window.location.pathname}/hello-member-benefits/${hasValue(data.id) ? `coupon/${data.id}` : `offer/${data.code}`}`}>
+          <a className="my-offers-vouchers-details" key={data.id || data.code} href={`${Drupal.url(currentPath)}/hello-member-benefits/${hasValue(data.id) ? `coupon/${data.id}` : `offer/${data.code}`}`}>
             <div className="image-container">
               <img src={data.small_image} />
             </div>
