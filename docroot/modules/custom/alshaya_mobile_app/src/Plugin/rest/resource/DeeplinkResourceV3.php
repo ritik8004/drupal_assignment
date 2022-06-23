@@ -206,6 +206,8 @@ class DeeplinkResourceV3 extends DeeplinkResource {
         return TRUE;
       }
     }
+
+    return FALSE;
   }
 
 }
