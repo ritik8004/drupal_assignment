@@ -4,6 +4,7 @@ import {
   getReturnExpiration,
   getOrderType,
   getPaymentMethod,
+  isReturnWindowClosed,
 } from '../../utilities/online_returns_util';
 import ReturnEligibilityMessage from '../../common/return-eligibility-message';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
@@ -48,6 +49,11 @@ class OnlineReturnsEligibility extends React.Component {
           });
           // Add the `content-loaded` class to remove the skeletal.
           selector.parentNode.classList.add('content-loaded');
+
+          // Add the `return-window-closed` class based on the validation.
+          if (isReturnWindowClosed(getReturnExpiration(data.orderId))) {
+            selector.classList.add('return-window-closed');
+          }
         }
       });
     }
