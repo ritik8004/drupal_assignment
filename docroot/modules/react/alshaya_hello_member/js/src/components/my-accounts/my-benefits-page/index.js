@@ -20,8 +20,8 @@ class MyBenefitsPage extends React.Component {
     const params = getHelloMemberCustomerInfo();
     if (!hasValue(params.error)) {
       showFullScreenLoader();
-      const { type } = drupalSettings.hmBenefits;
-      params.code = drupalSettings.hmBenefits.code;
+      const { type } = drupalSettings.helloMemberBenefits;
+      params.code = drupalSettings.helloMemberBenefits.code;
       if (type === 'coupon') {
         const response = await callHelloMemberApi('helloMemberCouponPage', 'GET', params);
         if (hasValue(response.data) && !hasValue(response.data.error)) {
@@ -31,15 +31,11 @@ class MyBenefitsPage extends React.Component {
           });
           removeFullScreenLoader();
         } else {
-          this.setState({
-            wait: true,
-          });
           // If coupon details API is returning Error.
           logger.error('Error while calling the coupon details Api @params, @message', {
             '@params': params,
             '@message': response.data.message,
           });
-          removeFullScreenLoader();
         }
       } else if (type === 'offer') {
         const response = await callHelloMemberApi('helloMemberOfferPage', 'GET', params);
@@ -50,15 +46,11 @@ class MyBenefitsPage extends React.Component {
           });
           removeFullScreenLoader();
         } else {
-          this.setState({
-            wait: true,
-          });
           // If offer details API is returning Error.
           logger.error('Error while calling the offer details Api @params, @message', {
             '@params': params,
             '@message': response.data.message,
           });
-          removeFullScreenLoader();
         }
       }
     }

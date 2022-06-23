@@ -40,9 +40,9 @@ class MyPointsHistory extends React.Component {
   getPointsHistoryData = () => {
     const { firstPage, pageSize, pointsHistoryData } = this.state;
     showFullScreenLoader();
-    const hmPointsHistoryData = getHelloMemberPointsHistory(firstPage, pageSize);
-    if (hmPointsHistoryData instanceof Promise) {
-      hmPointsHistoryData.then((response) => {
+    const helloMemberPointsHistoryData = getHelloMemberPointsHistory(firstPage, pageSize);
+    if (helloMemberPointsHistoryData instanceof Promise) {
+      helloMemberPointsHistoryData.then((response) => {
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
           this.setState({
             pointsHistoryData: pointsHistoryData.concat(response.data.apc_transactions),

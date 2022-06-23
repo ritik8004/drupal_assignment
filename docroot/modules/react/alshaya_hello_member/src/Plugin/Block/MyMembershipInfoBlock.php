@@ -111,7 +111,7 @@ class MyMembershipInfoBlock extends BlockBase implements ContainerFactoryPluginI
 
     // Show block only if hello member is enabled.
     return AccessResult::allowedIf(
-      $this->helloMemberHelper->isHelloMemberEnabled() && $route_name !== 'alshaya_hello_member.hm_benefits_page'
+      $this->helloMemberHelper->isHelloMemberEnabled() && $route_name !== 'alshaya_hello_member.hello_member_benefits_page'
     );
   }
 

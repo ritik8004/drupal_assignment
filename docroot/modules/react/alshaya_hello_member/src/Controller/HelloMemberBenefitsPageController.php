@@ -74,7 +74,7 @@ class HelloMemberBenefitsPageController extends ControllerBase {
           'alshaya_hello_member/alshaya_hello_member_benefits_page',
         ],
         'drupalSettings' => [
-          'hmBenefits' => [
+          'helloMemberBenefits' => [
             'type' => $type,
             'code' => $code,
           ],

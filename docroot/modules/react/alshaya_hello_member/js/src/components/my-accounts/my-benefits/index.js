@@ -29,15 +29,11 @@ class MyBenefits extends React.Component {
         });
         removeFullScreenLoader();
       } else {
-        this.setState({
-          wait: true,
-        });
         // If coupons API is returning Error.
         logger.error('Error while calling the coupons Api @params, @message', {
           '@params': params,
           '@message': couponResponse.data.message,
         });
-        removeFullScreenLoader();
       }
 
       // Get offers list.
@@ -49,15 +45,11 @@ class MyBenefits extends React.Component {
         });
         removeFullScreenLoader();
       } else {
-        this.setState({
-          wait: true,
-        });
         // If offers API is returning Error.
         logger.error('Error while calling the offers Api @params, @message', {
           '@params': params,
           '@message': offerResponse.data.message,
         });
-        removeFullScreenLoader();
       }
     }
   }

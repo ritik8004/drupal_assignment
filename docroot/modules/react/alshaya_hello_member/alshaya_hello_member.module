@@ -121,9 +121,9 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
   }
 
   // Add Points history link.
-  $links['hm_points_history'] = [
+  $links['hello_member_points_history'] = [
     'text' => t('Points History', [], ['context' => 'hello_member']),
-    'route' => 'alshaya_hello_member.my_accounts.hm_points_history',
+    'route' => 'alshaya_hello_member.hello_member_points_history',
     'weight' => 41,
   ];
   $links['contact_details'] = [
@@ -137,7 +137,7 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
  * Implements hook_alshaya_user_breadcrumb_routes_alter().
  */
 function alshaya_hello_member_alshaya_user_breadcrumb_routes_alter(array &$routes) {
-  $routes['alshaya_hello_member.my_accounts.hm_points_history'] = [
+  $routes['alshaya_hello_member.hello_member_points_history'] = [
     'user' => \Drupal::currentUser()->id(),
   ];
 }
@@ -230,7 +230,7 @@ function alshaya_hello_member_block_access(Block $block, $operation, AccountInte
   if ($operation == 'view' && ($block->getPluginId() == 'page_title_block' || $block->getPluginId() == 'alshaya_my_account_links')) {
     $route_name = \Drupal::routeMatch()->getRouteName();
 
-    if ($route_name === 'alshaya_hello_member.hm_benefits_page') {
+    if ($route_name === 'alshaya_hello_member.hello_member_benefits_page') {
       return AccessResult::forbiddenIf(TRUE);
     }
   }
