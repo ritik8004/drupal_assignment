@@ -13,107 +13,8 @@
       $('.gallery-wrapper #cloud-zoom img').removeAttr('title');
       $('.gallery-wrapper #cloud-zoom img').removeAttr('alt');
 
-      // Process main pdp gallery only once.
-      var zoomContainer = $('.acq-content-product .content__main #product-zoom-container');
-      if (zoomContainer.length > 0 && !zoomContainer.hasClass('product-zoom-processed')) {
-        zoomContainer.addClass('product-zoom-processed');
-
-        var lightSlider = $('.acq-content-product #lightSlider');
-        Drupal.productZoomApplyRtl(lightSlider, Drupal.getSlickOptions('slickOptions'), context);
-        // Adding class if there is no slider.
-        addPagerClass();
-
-        // If there is only one thumbnail and that is video.
-        if ($('li', lightSlider).length == 1 && $('li', lightSlider).hasClass('cloudzoom__thumbnails__video')) {
-          var video_url = $('li', lightSlider).attr('data-iframe');
-          appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), video_url);
-          // Hiding the main image container to correct position of video iframe.
-          $('.acq-content-product #cloud-zoom-wrap').hide();
-        }
-
-        var mobilegallery = $('.content__main #product-image-gallery-mobile', context);
-        mobilegallery.on('afterChange', function (event, slick) {
-          // Hide Labels on video slides.
-          Drupal.hideProductLabelOnVideo($(this), 'mobilegallery__thumbnails__video', true);
-          if (typeof Drupal.blazy !== 'undefined') {
-            Drupal.blazy.revalidate();
-          }
-        });
-
-        Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), context);
-        if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
-          // Do initial setup again for slick dots.
-          Drupal.behaviors.pdpInstagranDots.initialSetup(mobilegallery);
-          Drupal.attachBehaviors(context);
-        }
-        // Modal view on image click in desktop and tablet.
-        // Modal view for PDP Slider, when clicking on main image.
-        var element = $(zoomContainer.find('#product-full-screen-gallery-container'));
-
-        // Open Gallery modal when we click on the zoom image.
-        var myDialog = Drupal.dialog(element, dialogsettings);
-        $('.acq-content-product .cloudzoom #cloud-zoom-wrap img').off().on('click', function () {
-          $('body').addClass('pdp-modal-overlay');
-          myDialog.show();
-          myDialog.showModal();
-        });
-
-        // $(document).once() because we need the same functionality for free gifts pdp modal too and we are
-        // using HtmlCommand to render the free gifts pdp (Check viewProduct() in FreeGiftController.php).
-        $(document).once('dialog-opened').on('click','.dialog-product-image-gallery-container #product-full-screen-gallery li.slick-slide', function (e) {
-          var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
-          // Closing modal window before slick library gets removed.
-          $(this).closest('.dialog-product-image-gallery-container').find($('button.ui-dialog-titlebar-close')).trigger('mousedown');
-          productGallery.slick('unslick');
-          $('body').removeClass('pdp-modal-overlay');
-          e.preventDefault();
-        });
-
-        // Videos inside main PDP slider.
-        // For Desktop slider, we add a iframe on click on the image.
-        $('li', lightSlider).once('bind-js').on('click', function (e) {
-          if ($(this).hasClass('cloudzoom__thumbnails__video')) {
-            var URL = $(this).attr('data-iframe');
-            $('.acq-content-product .cloudzoom__video_main iframe').remove();
-            appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), URL);
-            $('.acq-content-product #cloud-zoom-wrap').hide();
-            $(this).siblings('.slick-slide').removeClass('slick-current');
-            $(this).addClass('slick-current');
-          }
-          else {
-            // Handle click on image thumbnails.
-            var anchor = $(this).find('a.cloudzoom__thumbnails__image');
-            if (anchor !== undefined && anchor.length > 0) {
-              $('.content__main #product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', anchor.attr('href'));
-              $('.content__main #product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('data-zoom-url', anchor.attr('data-zoom-url'));
-            }
-          }
-          // Hide Product labels on video slides.
-          Drupal.hideProductLabelOnVideo(lightSlider, 'cloudzoom__thumbnails__video', false);
-        });
-
-        // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
-        $('li a.cloudzoom__thumbnails__image', lightSlider).once('bind-js-img').on('click', function () {
-          var playerIframe = $('.acq-content-product .cloudzoom__video_main iframe');
-          // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
-          if (playerIframe.length > 0) {
-            playerIframe.remove();
-            $('.acq-content-product #cloud-zoom-wrap').show();
-          }
-        });
-
-        $('li a', lightSlider).once('bind-js').on('click', function (e) {
-          e.preventDefault();
-          var index = $(this).parent().attr('data-slick-index');
-          if (lightSlider.slick('slickCurrentSlide') !== index) {
-            lightSlider.slick('slickGoTo', index);
-          }
-          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-          $(this).parent().addClass('slick-current');
-          // Show Product labels on image slides.
-          Drupal.hideProductLabelOnVideo(lightSlider, 'cloudzoom__thumbnails__video', false);
-        });
-      }
+      // Show mobile slider only on mobile resolution.
+      toggleProductImageGallery(context);
 
       // Add mobile slick options for cart page free gifts.
       var freeGiftsZoomContainer = $('.acq-content-product-modal #product-zoom-container');
@@ -179,9 +80,6 @@
         event.stopPropagation();
         event.preventDefault();
       });
-
-      // Show mobile slider only on mobile resolution.
-      toggleProductImageGallery();
 
       // Zoom effect on image hover for desktop.
       if ($(window).width() > 1025) {
@@ -295,14 +193,181 @@
   /**
    * Toggles the product gallery based on screen width [between tab and mobile].
    */
-  function toggleProductImageGallery() {
+  function toggleProductImageGallery(context = document) {
     if ($(window).width() < 768) {
+      var mobilegallery = $(
+        '.content__main #product-image-gallery-mobile',
+        context
+      ).once('init-gallery');
+      if (mobilegallery.length > 0) {
+        mobilegallery.on('afterChange', function (event, slick) {
+          // Hide Labels on video slides.
+          Drupal.hideProductLabelOnVideo(
+            $(this),
+            'mobilegallery__thumbnails__video',
+            true
+          );
+          if (typeof Drupal.blazy !== 'undefined') {
+            Drupal.blazy.revalidate();
+          }
+        });
+
+        Drupal.productZoomApplyRtl(
+          mobilegallery,
+          Drupal.getSlickOptions('slickMobileOptions'),
+          context
+        );
+        if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
+          // Do initial setup again for slick dots.
+          Drupal.behaviors.pdpInstagranDots.initialSetup(mobilegallery);
+          Drupal.attachBehaviors(context);
+        }
+      }
+
       $('.mobilegallery').show();
       $('.cloudzoom').hide();
     }
     else {
+      var lightSlider = $('.acq-content-product #lightSlider').once('init-gallery');
+      if (lightSlider.length > 0) {
+        Drupal.productZoomApplyRtl(
+          lightSlider,
+          Drupal.getSlickOptions('slickOptions'),
+          context
+        );
+
+        // If there is only one thumbnail and that is video.
+        if (
+          $('li', lightSlider).length == 1 &&
+          $('li', lightSlider).hasClass('cloudzoom__thumbnails__video')
+        ) {
+          var video_url = $('li', lightSlider).attr('data-iframe');
+          appendVideoIframe(
+            $('.acq-content-product .cloudzoom__video_main'),
+            video_url
+          );
+          // Hiding the main image container to correct position of video iframe.
+          $('.acq-content-product #cloud-zoom-wrap').hide();
+        }
+
+        // Videos inside main PDP slider.
+        // For Desktop slider, we add a iframe on click on the image.
+        $('li', lightSlider)
+          .once('bind-js')
+          .on('click', function (e) {
+            if ($(this).hasClass('cloudzoom__thumbnails__video')) {
+              var URL = $(this).attr('data-iframe');
+              $('.acq-content-product .cloudzoom__video_main iframe').remove();
+              appendVideoIframe(
+                $('.acq-content-product .cloudzoom__video_main'),
+                URL
+              );
+              $('.acq-content-product #cloud-zoom-wrap').hide();
+              $(this).siblings('.slick-slide').removeClass('slick-current');
+              $(this).addClass('slick-current');
+            } else {
+              // Handle click on image thumbnails.
+              var anchor = $(this).find('a.cloudzoom__thumbnails__image');
+              if (anchor !== undefined && anchor.length > 0) {
+                $(
+                  '.content__main #product-zoom-container #cloud-zoom-wrap .img-wrap img'
+                ).attr('src', anchor.attr('href'));
+                $(
+                  '.content__main #product-zoom-container #cloud-zoom-wrap .img-wrap img'
+                ).attr('data-zoom-url', anchor.attr('data-zoom-url'));
+              }
+            }
+            // Hide Product labels on video slides.
+            Drupal.hideProductLabelOnVideo(
+              lightSlider,
+              'cloudzoom__thumbnails__video',
+              false
+            );
+          });
+
+        // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
+        $('li a.cloudzoom__thumbnails__image', lightSlider)
+          .once('bind-js-img')
+          .on('click', function () {
+            var playerIframe = $(
+              '.acq-content-product .cloudzoom__video_main iframe'
+            );
+            // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
+            if (playerIframe.length > 0) {
+              playerIframe.remove();
+              $('.acq-content-product #cloud-zoom-wrap').show();
+            }
+          });
+
+        $('li a', lightSlider)
+          .once('bind-js')
+          .on('click', function (e) {
+            e.preventDefault();
+            var index = $(this).parent().attr('data-slick-index');
+            if (lightSlider.slick('slickCurrentSlide') !== index) {
+              lightSlider.slick('slickGoTo', index);
+            }
+            $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+            $(this).parent().addClass('slick-current');
+            // Show Product labels on image slides.
+            Drupal.hideProductLabelOnVideo(
+              lightSlider,
+              'cloudzoom__thumbnails__video',
+              false
+            );
+          });
+      }
+
       $('.mobilegallery').hide();
       $('.cloudzoom').show();
+    }
+
+    // Process main pdp gallery only once.
+    var zoomContainer = $(
+      '.acq-content-product .content__main #product-zoom-container:not(.product-zoom-processed)'
+    );
+    if (zoomContainer.length > 0) {
+      zoomContainer.addClass('product-zoom-processed');
+
+      // Adding class if there is no slider.
+      addPagerClass();
+
+      // Modal view on image click in desktop and tablet.
+      // Modal view for PDP Slider, when clicking on main image.
+      var element = $(zoomContainer.find('#product-full-screen-gallery-container'));
+
+      // Open Gallery modal when we click on the zoom image.
+      var myDialog = Drupal.dialog(element, dialogsettings);
+      $('.acq-content-product .cloudzoom #cloud-zoom-wrap img')
+        .off()
+        .on('click', function () {
+          $('body').addClass('pdp-modal-overlay');
+          myDialog.show();
+          myDialog.showModal();
+        });
+
+      // $(document).once() because we need the same functionality for free gifts pdp modal too and we are
+      // using HtmlCommand to render the free gifts pdp (Check viewProduct() in FreeGiftController.php).
+      $(document)
+        .once('dialog-opened')
+        .on(
+          'click',
+          '.dialog-product-image-gallery-container #product-full-screen-gallery li.slick-slide',
+          function (e) {
+            var productGallery = $(
+              '#product-full-screen-gallery',
+              $(this).closest('.dialog-product-image-gallery-container')
+            );
+            // Closing modal window before slick library gets removed.
+            $(this)
+              .closest('.dialog-product-image-gallery-container')
+              .find($('button.ui-dialog-titlebar-close'))
+              .trigger('mousedown');
+            productGallery.slick('unslick');
+            $('body').removeClass('pdp-modal-overlay');
+            e.preventDefault();
+          }
+        );
     }
   }
 
