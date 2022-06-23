@@ -171,4 +171,7 @@ function alshaya_online_returns_acq_sku_base_field_additions_alter(array &$field
   if ($alshaya_online_returns_fields) {
     $fields = array_merge($fields, $alshaya_online_returns_fields);
   }
+  else {
+    \Drupal::logger('alshaya_online_returns')->warning('The config of SKU field is empty for online returns.');
+  }
 }
