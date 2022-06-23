@@ -7,6 +7,7 @@ import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { getFormatedMemberId } from '../../../utilities';
 
 class MyBenefitsPage extends React.Component {
   constructor(props) {
@@ -65,6 +66,8 @@ class MyBenefitsPage extends React.Component {
       return null;
     }
 
+    const memberId = getFormatedMemberId(myBenefit.member_identifier);
+
     return (
       <div className="my-benefit-page-wrapper">
         <div className="image-container">
@@ -84,7 +87,7 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          <QrCodeDisplay memberId="909990099" />
+          <QrCodeDisplay memberId={memberId} />
           <div className="button-wide">{getStringMessage('benefit_add_to_bag')}</div>
         </div>
         <div className="benefit-description">
