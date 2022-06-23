@@ -1347,8 +1347,6 @@
    */
   Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-    // This is populated only post add to cart.
-    product.variant = '';
 
     var data = {
       event: 'productDetailView',
