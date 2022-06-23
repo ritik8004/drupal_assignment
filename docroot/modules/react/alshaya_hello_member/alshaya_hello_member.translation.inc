@@ -126,6 +126,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'أكمل ملفك الشخصي',
         'context' => 'hello_member',
       ],
+      'Please enter valid OTP' => [
+        'ar' => 'أكمل ملفك الشخصي',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

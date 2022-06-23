@@ -43,7 +43,7 @@ class SendOtpPopup extends React.Component {
   verifyOtp = () => {
     // check if verify otp is less than 6 digit.
     if (document.getElementById('input-otp').value.length !== 6) {
-      document.getElementById('input-otp-error').innerHTML = Drupal.t('Please enter recipient name', {}, { context: 'egift' });
+      document.getElementById('input-otp-error').innerHTML = Drupal.t('Please enter valid OTP', {}, { context: 'hello_member' });
       document.getElementById('input-otp-error').classList.add('error');
       return;
     }
