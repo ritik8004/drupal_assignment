@@ -1530,4 +1530,40 @@ class SkuImagesManager {
     return $images;
   }
 
+  /**
+   * Processes styled images in media.
+   *
+   * @param array $media
+   *   Array of product media to be processed.
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context - pdp/search/modal/teaser.
+   *
+   * @return array
+   *   Media array containing styled images.
+   */
+  public function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
+    if (empty($media['images'])) {
+      return $media;
+    }
+    /** @var \Drupal\acq_sku\Entity\SKU $sku */
+    $product_media = $this->getProductMedia($sku, $context);
+    // Search image styles in product media using url and return styles.
+    foreach ($media['images'] as $mid => $media_item) {
+      $media['images'][$mid]['styles'] = [];
+      $key = array_search(
+        $media_item['url'],
+        array_column(
+          $product_media['media_items']['images'],
+          'drupal_uri'
+        )
+      );
+      if ($key) {
+        $media['images'][$mid]['styles'] = $product_media['media_items']['images'][$key]['pims_image']['styles'];
+      }
+    }
+    return $media;
+  }
+
 }
