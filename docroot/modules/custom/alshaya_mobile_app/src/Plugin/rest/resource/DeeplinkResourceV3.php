@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\rest\ModifiedResourceResponse;
-use Drupal\alshaya_mobile_app\Plugin\rest\resource\DeeplinkResource;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Path\PathValidatorInterface;
@@ -177,33 +176,33 @@ class DeeplinkResourceV3 extends DeeplinkResource {
     }
     // Get route name for the url.
     $url_object = $this->pathValidator->getUrlIfValid($alias);
-    if ($url_object) {
-      $route_name = $url_object->getRouteName();
-      $rcs_placeholder_settings = $this->configFactory->get('rcs_placeholders.settings');
-      // Check if its PLP route.
-      if ($route_name == 'entity.taxonomy_term.canonical') {
-        $options = $url_object->getRouteParameters();
-        // Get the placeholder for category from config.
-        $default_term_id = $rcs_placeholder_settings->get('category.placeholder_tid');
-        if ($options['taxonomy_term'] == $default_term_id) {
+    if ($url_object === FALSE) {
+      return FALSE;
+    }
+
+    $route_name = $url_object->getRouteName();
+    $rcs_placeholder_settings = $this->configFactory->get('rcs_placeholders.settings');
+    // Check if its PLP route.
+    if ($route_name == 'entity.taxonomy_term.canonical') {
+      $options = $url_object->getRouteParameters();
+      // Get the placeholder for category from config.
+      $default_term_id = $rcs_placeholder_settings->get('category.placeholder_tid');
+      if ($options['taxonomy_term'] == $default_term_id) {
+        return TRUE;
+      }
+    }
+    elseif ($route_name == 'entity.node.canonical') {
+      // Check if its PDP route.
+      $options = $url_object->getRouteParameters();
+      $node = $this->entityTypeManager->getStorage('node')->load($options['node']);
+      if ($node instanceof NodeInterface && $node->bundle() == 'rcs_product') {
+        // Get the placeholder rcs product node from config.
+        $entity_id = $rcs_placeholder_settings->get('product.placeholder_nid');
+        if ($options['node'] == $entity_id) {
           return TRUE;
         }
       }
-      elseif ($route_name == 'entity.node.canonical') {
-        // Check if its PDP route.
-        $options = $url_object->getRouteParameters();
-        $node = $this->entityTypeManager->getStorage('node')->load($options['node']);
-        if ($node instanceof NodeInterface && $node->bundle() == 'rcs_product') {
-          // Get the placeholder rcs product node from config.
-          $entity_id = $rcs_placeholder_settings->get('product.placeholder_nid');
-          if ($options['node'] == $entity_id) {
-            return TRUE;
-          }
-        }
-      }
     }
-
-    return FALSE;
   }
 
 }
