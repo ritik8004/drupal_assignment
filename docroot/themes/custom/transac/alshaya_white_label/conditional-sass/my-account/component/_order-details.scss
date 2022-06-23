@@ -881,6 +881,12 @@
         }
       }
     }
+
+    &.vat-row {
+      .warm--white {
+        background: unset;
+      }
+    }
   }
 
   .address--contact {
