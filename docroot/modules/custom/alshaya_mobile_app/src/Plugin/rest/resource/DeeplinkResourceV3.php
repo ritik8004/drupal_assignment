@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_rcs_mobile_app\Plugin\rest\resource;
+namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\alshaya_mobile_app\Plugin\rest\resource\DeeplinkResource;
