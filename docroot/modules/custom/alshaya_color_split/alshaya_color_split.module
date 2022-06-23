@@ -441,7 +441,10 @@ function alshaya_color_split_alshaya_acm_customer_order_details_alter(array &$or
       if (isset($item['sku']) && !empty($item['sku'])) {
         $sku = SKU::loadFromSku($item['sku']);
         if ($sku instanceof SKUInterface) {
-          $order['items'][$key]['attributes'][] = $manager->getGroupingAttributeValues($sku);
+          $grouping_attribute_value = $manager->getGroupingAttributeValues($sku);
+          if ($grouping_attribute_value) {
+            $order['items'][$key]['attributes'][] = $grouping_attribute_value;
+          }
         }
       }
     }
