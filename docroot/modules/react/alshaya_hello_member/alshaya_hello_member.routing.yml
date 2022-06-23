@@ -5,8 +5,8 @@ alshaya_hello_member.hello_member_config:
     _title: 'Alshaya Hello Member Configurations'
   requirements:
     _permission: 'administer site configuration'
-alshaya_hello_member.my_accounts.hm_points_history:
-  path: '/user/{user}/hm-points-history'
+alshaya_hello_member.hello_member_points_history:
+  path: '/user/{user}/hello-member-points-history'
   defaults:
     _controller: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::pointsHistory'
     _title_callback: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::getTitle'
@@ -17,8 +17,8 @@ alshaya_hello_member.my_accounts.hm_points_history:
     parameters:
       user:
         type: entity:user
-alshaya_hello_member.hm_benefits_page:
-  path: '/user/{user}/hm-benefits/{code}'
+alshaya_hello_member.hello_member_benefits_page:
+  path: '/user/{user}/hello-member-benefits/{type}/{code}'
   defaults:
     _controller: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::getBenefitsDetails'
     _title_callback: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::getTitle'

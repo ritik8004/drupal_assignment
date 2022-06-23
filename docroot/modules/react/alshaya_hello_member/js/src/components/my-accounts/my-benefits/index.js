@@ -1,5 +1,8 @@
 import React from 'react';
-import Loading from '../../../../../../js/utilities/loading';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
+import logger from '../../../../../../js/utilities/logger';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import MyOffersAndVouchers from './my-offers-vouchers';
 
 class MyBenefits extends React.Component {
@@ -7,122 +10,66 @@ class MyBenefits extends React.Component {
     super(props);
     this.state = {
       wait: false,
-      myBenefitsList: null,
+      myCouponsList: null,
+      myOffersList: null,
     };
   }
 
   async componentDidMount() {
-    // --TODO-- API integration task to be started once we have api from MDC.
-    const myBenefitsList = {
-      benefits_list: [
-        {
-          name: 'Sale at Foot Locker!',
-          description: '2 KWD bonus',
-          type: 'coupons',
-          id: 62556,
-          coupon_number: '4712405',
-          status: 'active',
-          value: '',
-          start_date: '2023-05-20',
-          end_date: '2023-05-29',
-          image: 'https://kw.hm.com/sites/g/files/hm/styles/product_listing/brand/assets-shared/HNM/14042059/c0a20985c2c017db55b80debcd9dbcf2221e98f7/2/8a0d9094e4331fa080d4e429c7e2a0c152b804b1.jpg?itok=KXtJxRNA',
-        },
-        {
-          name: 'Sale at Foot Locker!',
-          description: 'Winter adventures',
-          type: 'offers',
-          id: 62557,
-          coupon_number: '',
-          status: 'active',
-          value: '1000',
-          start_date: '2023-05-20',
-          end_date: '2023-06-10',
-          image: 'https://kw.hm.com/sites/g/files/hm/styles/product_listing/brand/assets-shared/HNM/14042059/c0a20985c2c017db55b80debcd9dbcf2221e98f7/2/8a0d9094e4331fa080d4e429c7e2a0c152b804b1.jpg?itok=KXtJxRNA',
-        },
-        {
-          name: 'Sale at Foot Locker!',
-          description: 'Winter adventures',
-          type: 'offers',
-          id: 62558,
-          coupon_number: '',
-          status: 'active',
-          value: '1000',
-          start_date: '2023-05-20',
-          end_date: '2023-06-10',
-          image: 'https://kw.hm.com/sites/g/files/hm/styles/product_listing/brand/assets-shared/HNM/14042059/c0a20985c2c017db55b80debcd9dbcf2221e98f7/2/8a0d9094e4331fa080d4e429c7e2a0c152b804b1.jpg?itok=KXtJxRNA',
-        },
-        {
-          name: 'Sale at Foot Locker!',
-          description: 'Winter adventures',
-          type: 'offers',
-          id: 62559,
-          coupon_number: '',
-          status: 'active',
-          value: '1000',
-          start_date: '2023-05-20',
-          end_date: '2023-06-10',
-          image: 'https://kw.hm.com/sites/g/files/hm/styles/product_listing/brand/assets-shared/HNM/14042059/c0a20985c2c017db55b80debcd9dbcf2221e98f7/2/8a0d9094e4331fa080d4e429c7e2a0c152b804b1.jpg?itok=KXtJxRNA',
-        },
-        {
-          name: 'Sale at Foot Locker!',
-          description: 'Winter adventures',
-          type: 'offers',
-          id: 62551,
-          coupon_number: '',
-          status: 'active',
-          value: '1000',
-          start_date: '2023-05-20',
-          end_date: '2023-06-10',
-          image: 'https://kw.hm.com/sites/g/files/hm/styles/product_listing/brand/assets-shared/HNM/14042059/c0a20985c2c017db55b80debcd9dbcf2221e98f7/2/8a0d9094e4331fa080d4e429c7e2a0c152b804b1.jpg?itok=KXtJxRNA',
-        },
-        {
-          name: 'Sale at Foot Locker!',
-          description: 'Winter adventures',
-          type: 'offers',
-          id: 62552,
-          coupon_number: '',
-          status: 'active',
-          value: '1000',
-          start_date: '2023-05-20',
-          end_date: '2023-06-10',
-          image: 'https://kw.hm.com/sites/g/files/hm/styles/product_listing/brand/assets-shared/HNM/14042059/c0a20985c2c017db55b80debcd9dbcf2221e98f7/2/8a0d9094e4331fa080d4e429c7e2a0c152b804b1.jpg?itok=KXtJxRNA',
-        },
-        {
-          name: 'Sale at Foot Locker!',
-          description: 'Winter adventures',
-          type: 'offers',
-          id: 62553,
-          coupon_number: '',
-          status: 'active',
-          value: '1000',
-          start_date: '2023-05-20',
-          end_date: '2023-06-10',
-          image: 'https://kw.hm.com/sites/g/files/hm/styles/product_listing/brand/assets-shared/HNM/14042059/c0a20985c2c017db55b80debcd9dbcf2221e98f7/2/8a0d9094e4331fa080d4e429c7e2a0c152b804b1.jpg?itok=KXtJxRNA',
-        },
-      ],
-      message: null,
-      error: null,
-    };
+    // Get customer info.
+    const params = getHelloMemberCustomerInfo();
+    if (!hasValue(params.error)) {
+      showFullScreenLoader();
+      // Get coupons list.
+      const couponResponse = await callHelloMemberApi('helloMemberCouponsList', 'GET', params);
+      if (hasValue(couponResponse.data) && !hasValue(couponResponse.data.error)) {
+        this.setState({
+          myCouponsList: couponResponse.data.coupons,
+          wait: true,
+        });
+        removeFullScreenLoader();
+      } else {
+        // If coupons API is returning Error.
+        logger.error('Error while calling the coupons Api @params, @message', {
+          '@params': params,
+          '@message': couponResponse.data.message,
+        });
+      }
 
-    this.setState({
-      wait: true,
-      myBenefitsList,
-    });
+      // Get offers list.
+      const offerResponse = await callHelloMemberApi('helloMemberOffersList', 'GET', params);
+      if (hasValue(offerResponse.data) && !hasValue(offerResponse.data.error)) {
+        this.setState({
+          myOffersList: offerResponse.data.offers,
+          wait: true,
+        });
+        removeFullScreenLoader();
+      } else {
+        // If offers API is returning Error.
+        logger.error('Error while calling the offers Api @params, @message', {
+          '@params': params,
+          '@message': offerResponse.data.message,
+        });
+      }
+    }
   }
 
   render() {
-    const { wait, myBenefitsList } = this.state;
+    const { wait, myOffersList, myCouponsList } = this.state;
+    if (!wait && myCouponsList === null && myOffersList === null) {
+      return null;
+    }
 
-    if (!wait && myBenefitsList === null) {
-      return (
-        <div className="my-benefits-list-wrapper" style={{ animationDelay: '0.4s' }}>
-          <Loading />
-        </div>
-      );
+    // Prepare the benefits list to render.
+    let myBenefitsList = null;
+    if (myCouponsList !== null && myOffersList !== null) {
+      myBenefitsList = [...myCouponsList, ...myOffersList];
+    } else if (myCouponsList !== null || myOffersList !== null) {
+      myBenefitsList = myCouponsList || myOffersList;
     }
 
     return (
-      <MyOffersAndVouchers myBenefitsList={myBenefitsList.benefits_list} />
+      <MyOffersAndVouchers myBenefitsList={myBenefitsList} />
     );
   }
 }
