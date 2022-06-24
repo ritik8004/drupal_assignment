@@ -7,11 +7,8 @@ var config = {
     my_membership_info: './js/src/my-membership-info.js',
     hello_member_benefits_page: './js/src/hello-member-benefits-page.js',
     my_accounts_points_history: './js/src/my-accounts-points-history.js',
-<<<<<<< HEAD
     pdp: './js/src/pdp.js',
-=======
     send_otp: './js/src/send-otp.js',
->>>>>>> f5ee1d5c04e3c66537147587e8e1abd9bdbd3cf7
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
