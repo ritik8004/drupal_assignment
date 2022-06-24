@@ -5,7 +5,7 @@
       {% if link.lhn == 1 %}
         <li>
           {% set depth = depth_offset == 1 ? link.depth - 1 : link.depth %}
-          {% set class = (link.id == current_term or link.id == current_term_parent_id) ? 'active' : '' %}
+          {% set class = (link.id == current_term or link.id == current_term_parent_id or link.path == path) ? 'active' : '' %}
           {% if link.clickable == 0 %}
             {# If not clickable link. #}
             <span class="lhn-{{ depth }} {{ class }}">{{ link.label }}</span>
