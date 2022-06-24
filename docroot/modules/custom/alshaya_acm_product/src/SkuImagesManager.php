@@ -1558,10 +1558,11 @@ class SkuImagesManager {
       // Check if images styles exists for the sku and return the urls.
       if (isset($key)) {
         $image = $product_media['media_items']['images'][$key];
-        if (!empty($image['styles']) || !empty($image['pims_image']['styles'])) {
-          $media['images'][$mid]['styles'] = $image['styles']
-            ? $image['styles']
-            : $image['pims_image']['styles'];
+        if (!empty($image['styles'])) {
+          $media['images'][$mid]['styles'] = $image['styles'];
+        }
+        elseif (!empty($image['pims_image']['styles'])) {
+          $media['images'][$mid]['styles'] = $image['pims_image']['styles'];
         }
       }
     }
