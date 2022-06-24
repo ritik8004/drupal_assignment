@@ -11,6 +11,18 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_hello_member_module_implements_alter(&$implementations, $hook) {
+  // Call hook_alshaya_api_update_customer_api_request_alter at last.
+  if ($hook == 'alshaya_api_update_customer_api_request_alter') {
+    $group = $implementations['alshaya_hello_member'];
+    unset($implementations['alshaya_hello_member']);
+    $implementations['alshaya_hello_member'] = $group;
+  }
+}
+
+/**
  * Implements hook_page_attachments_alter().
  */
 function alshaya_hello_member_page_attachments_alter(array &$page) {
@@ -148,8 +160,8 @@ function alshaya_hello_member_alshaya_user_breadcrumb_routes_alter(array &$route
 function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
   $hello_member_helper = \Drupal::service('alshaya_hello_member.hello_member_helper');
-  // Only add if hello member enabled.
-  if (!$hello_member_helper->isHelloMemberEnabled()) {
+  // Only add if hello member enabled and is Edit profile form.
+  if (!$hello_member_helper->isHelloMemberEnabled() && $form_id !== 'user_form') {
     return;
   }
   $form['#title'] = t('My Details', [], ['context' => 'hello_member']);
@@ -164,25 +176,29 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
     '#markup' => t('Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?', [], ['context' => 'hello_member']),
     '#prefix' => '<div class="hello-member-accordion-wrapper">',
   ];
-  $form['hello_member']['dob'] = [
-    '#title' => t('Date of birth', [], ['context' => 'hello_member']),
-    '#suffix' => '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>',
-    '#type' => 'date',
-    '#title_display' => 'before',
+  $form['hello_member']['field_date_of_birth'] = $form['field_date_of_birth'];
+  $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
+  $form['hello_member']['field_date_of_birth']['#weight'] = 10;
+  unset($form['field_date_of_birth']);
+  $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
+  unset($form['field_gender']['widget']['#options']['_none']);
+  $form['hello_member']['field_gender'] = $form['field_gender'];
+  $form['hello_member']['field_gender']['#prefix'] = '<div class="hello-member-gender">';
+  $form['hello_member']['field_gender']['#suffix'] = '</div></div>';
+  $form['hello_member']['field_gender']['#weight'] = 11;
+  $form['hello_member']['field_mobile_number'] = $form['field_mobile_number'];
+  $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div><div id="mobile-number-error"></div>' . t('OTP will be send to your mobile number to verify', [], ['context' => 'hello_member']);
+  $form['hello_member']['field_mobile_number']['#weight'] = 12;
+  $form['field_verified_otp']['widget']['value']['#ajax'] = [
+    'callback' => 'alshaya_hello_member_ajax_opt_verified',
+    'wrapper' => 'otp-verified',
+    'event' => 'change',
   ];
-  $form['hello_member']['select'] = [
-    '#type' => 'select',
-    '#empty_option' => t('Select Gender', [], ['context' => 'hello_member']),
-    '#options' => [
-      'male' => t('Male', [], ['context' => 'hello_member']),
-      'female' => t('Female', [], ['context' => 'hello_member']),
-      'nosay' => t('Prefer not to say', [], ['context' => 'hello_member']),
-    ],
-    '#prefix' => '<div class="hello-member-gender">',
-    '#suffix' => '</div></div>',
-  ];
+  unset($form['field_gender']);
+  unset($form['field_mobile_number']);
   $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
   $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
+  $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_send_otp';
 }
 
 /**
@@ -204,10 +220,14 @@ function alshaya_hello_member_preprocess_page_title(&$variables) {
  * Implements hook_alshaya_api_update_customer_api_request_alter().
  */
 function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(array &$request_options) {
+  // Do not proceed if Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+
   if (isset($request_options['json'], $request_options['json']['customer']['email'])) {
     /** @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($request_options['json']['customer']['email']);
-
     if (!empty($user)) {
       $user_date_of_birth = $user->get('field_date_of_birth')->getString();
       if (!empty($user_date_of_birth)) {
@@ -218,6 +238,16 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
         $request_options['json']['customer']['extension_attributes']['customer_gender'] = $user_gender;
       }
     }
+  }
+  if ($user->get('field_verified_otp')->getString()) {
+    $request_options['json']['customer']['extension_attributes']['is_verified'] = "Y";
+    // Set otp verified unchecked to update in future.
+    $user->set('field_verified_otp', 0)->save();
+  }
+  else {
+    // If Hello member enable and Mobile number not verified
+    // remove it from update customer api request.
+    unset($request_options['json']['customer']['extension']['phone_number']);
   }
 }
 
@@ -234,6 +264,15 @@ function alshaya_hello_member_block_access(Block $block, $operation, AccountInte
       return AccessResult::forbiddenIf(TRUE);
     }
   }
+}
+
+/**
+ * Ajax callback: Update verified otp field.
+ */
+function alshaya_hello_member_ajax_opt_verified(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\user\Entity\User $user */
+  $user = user_load_by_mail(\Drupal::currentUser()->getEmail());
+  $user->set('field_verified_otp', $form_state->getValue('field_verified_otp')['value'])->save();
 }
 
 /**
