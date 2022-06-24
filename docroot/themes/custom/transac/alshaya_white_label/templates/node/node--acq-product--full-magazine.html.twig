@@ -132,6 +132,9 @@
             {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
             <div id="aura-pdp"></div>
           {% endif %}
+          {% if hello_member_enabled is defined and hello_member_enabled %}
+            <div id="hello-member-pdp"></div>
+          {% endif %}
         </div>
 
         {% if online_returns_status is defined and online_returns_status %}
@@ -183,6 +186,9 @@
       </div>
     {% endblock %}
   </div>
+  {% if hello_member_strings %}
+    {{ hello_member_strings }}
+  {% endif %}
 <div class="size-tray">
     <div class="size-tray-content">
       <div class="size-tray-buttons"></div>
