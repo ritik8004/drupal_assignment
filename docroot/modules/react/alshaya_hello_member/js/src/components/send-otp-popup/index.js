@@ -45,9 +45,12 @@ class SendOtpPopup extends React.Component {
     );
     if (responseData instanceof Promise) {
       responseData.then((result) => {
-        if (result.status !== undefined) {
-          this.toggleSendOtpPopup(true);
+        if (result.error !== undefined || !result.status) {
+          document.getElementById('mobile-number-error').innerHTML = Drupal.t('Something went wrong please try again later', {}, { context: 'hello_member' });
+          document.getElementById('mobile-number-error').classList.add('error');
+          return;
         }
+        this.toggleSendOtpPopup(true);
       });
     }
   };

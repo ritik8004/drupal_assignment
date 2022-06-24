@@ -130,6 +130,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'أكمل ملفك الشخصي',
         'context' => 'hello_member',
       ],
+      'Something went wrong please try again later' => [
+        'ar' => 'أكمل ملفك الشخصي',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
