@@ -31,6 +31,19 @@
       margin-#{$left}: rem(38);
     }
 
+    > td:not(.content-loaded) {
+      #online-returns-eligibility-window {
+        height: rem(64);
+        overflow: hidden;
+
+        @include text-block-loader;
+
+        & > * {
+          visibility: hidden;
+        }
+      }
+    }
+
     #online-returns-eligibility-window {
       .eligibility-window-container {
         font-size: rem(12);
