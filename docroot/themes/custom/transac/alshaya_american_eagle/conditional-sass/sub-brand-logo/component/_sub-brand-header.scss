@@ -47,6 +47,12 @@ body.sub-brand-logo {
       .c-menu-primary .menu--mobile-navigation {
         z-index: 14;
       }
+
+      &:not(.super-category-enabled) {
+        .c-menu-primary .menu--mobile-navigation {
+          z-index: unset;
+        }
+      }
     }
 
     &.frontpage {
