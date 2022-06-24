@@ -6,6 +6,10 @@ window.commerceBackend = window.commerceBackend || {};
 
 (function addToBagListingUtility(Drupal, drupalSettings) {
 
+  var staticDataStore = {
+    processedProduct: {},
+  };
+
   /**
    * Return product info from backend.
    *
@@ -18,6 +22,10 @@ window.commerceBackend = window.commerceBackend || {};
    *   The product info object.
    */
   window.commerceBackend.getProductDataAddToBagListing = async function (sku, styleCode) {
+    if (Drupal.hasValue(staticDataStore.processedProduct[sku])) {
+      return staticDataStore.processedProduct[sku];
+    }
+
     var product = null;
     if (Drupal.hasValue(styleCode)) {
       product = await window.commerceBackend.getProductsInStyle({ sku, style_code: styleCode });
@@ -26,19 +34,21 @@ window.commerceBackend = window.commerceBackend || {};
       product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: sku});
     }
 
+    var productInfo = {};
     // The product will be fetched and saved in static storage.
     if (Drupal.hasValue(product.sku)) {
       window.commerceBackend.setRcsProductToStorage(product, 'plp');
-      var productInfo = await processProductInfo(product);
-      return productInfo;
+      productInfo = await processProductInfo(product);
     }
     else {
-      response = {
+      productInfo = {
         error: true,
         error_message: 'Product could not be loaded!',
       };
-      return response;
     }
+
+    staticDataStore.processedProduct[sku] = productInfo;
+    return productInfo;
   };
 
   /**
