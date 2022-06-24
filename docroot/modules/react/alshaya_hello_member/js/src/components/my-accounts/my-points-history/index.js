@@ -3,10 +3,11 @@ import moment from 'moment';
 import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import logger from '../../../../../../js/utilities/logger';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getHelloMemberPointsHistory } from '../../../hello_member_api_helper';
 import { getPointstHistoryPageSize } from '../../../utilities';
+import MemberPointsSummary from './member-points-summary';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class MyPointsHistory extends React.Component {
   constructor(props) {
@@ -43,7 +44,8 @@ class MyPointsHistory extends React.Component {
     const helloMemberPointsHistoryData = getHelloMemberPointsHistory(firstPage, pageSize);
     if (helloMemberPointsHistoryData instanceof Promise) {
       helloMemberPointsHistoryData.then((response) => {
-        if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
+        if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)
+          && hasValue(response.data.apc_transactions)) {
           this.setState({
             pointsHistoryData: pointsHistoryData.concat(response.data.apc_transactions),
             totalCount: response.data.apc_transactions.length,
@@ -59,7 +61,9 @@ class MyPointsHistory extends React.Component {
   }
 
   render() {
-    const { pointsHistoryData, totalCount, pageSize } = this.state;
+    const {
+      pointsHistoryData, totalCount, pageSize,
+    } = this.state;
 
     if (pointsHistoryData === null) {
       return null;
@@ -91,6 +95,7 @@ class MyPointsHistory extends React.Component {
             </div>
           </ConditionalView>
         </div>
+        <MemberPointsSummary />
       </>
     );
   }

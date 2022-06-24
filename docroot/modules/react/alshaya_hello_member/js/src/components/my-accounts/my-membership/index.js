@@ -7,6 +7,7 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { getHelloMemberCustomerData } from '../../../hello_member_api_helper';
 import TierProgress from './tier-progress';
 import logger from '../../../../../../js/utilities/logger';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 class MyMembership extends React.Component {
   constructor(props) {
@@ -24,6 +25,8 @@ class MyMembership extends React.Component {
         let myMembershipData = null;
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
           myMembershipData = response.data;
+          // Dispatch event when hello member points are loaded on my account points block.
+          dispatchCustomEvent('helloMemberPointsLoaded', response.data.extension_attributes);
         } else if (hasValue(response.error)) {
           logger.error('Error while trying to get hello member customer data. Data: @data.', {
             '@data': JSON.stringify(response),
