@@ -79,7 +79,7 @@ export class MultipeMarker extends React.Component {
           >
             <InfoPopUp
               selectedPlace={selectedPlace}
-              storeHours={selectedPlace.store_hours}
+              storeHours={selectedPlace.openHours}
             />
           </InfoWindow>
         )}

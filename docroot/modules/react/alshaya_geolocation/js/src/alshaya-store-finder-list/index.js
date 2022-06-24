@@ -283,7 +283,7 @@ export class StoreFinderList extends React.PureComponent {
                               >
                                 <InfoPopUp
                                   selectedPlace={selectedPlace}
-                                  storeHours={selectedPlace.store_hours}
+                                  storeHours={selectedPlace.openHours}
                                 />
                               </InfoWindow>
                             )}
