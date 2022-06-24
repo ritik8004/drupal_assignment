@@ -5,7 +5,6 @@
  * Module file.
  */
 
-use Drupal\alshaya_main_menu\PathProcessor\PathProcessorPrettyPaths;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\taxonomy\Entity\Term;
@@ -270,13 +269,4 @@ function alshaya_main_menu_alshaya_acm_product_category_tree_data_alter(&$data, 
   $aliasManager = \Drupal::service('path_alias.manager');
   $alias = $aliasManager->getAliasByPath('/taxonomy/term/' . $term->tid);
   $data[$term->tid]['display_view_all_link'] = $alias . '/view-all';
-}
-
-/**
- * Implements Module_preprocess_page_title()
- */
-function alshaya_main_menu_preprocess_page_title(&$variables) {
-  if (PathProcessorPrettyPaths::$isRequestViewAll) {
-    $variables['title'] = t('View All');
-  }
 }

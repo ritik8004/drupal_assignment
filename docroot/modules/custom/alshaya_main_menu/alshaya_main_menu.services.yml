@@ -4,7 +4,7 @@ services:
         arguments: ['@renderer']
         tags:
           - { name: twig.extension }
-    alshaya_facets_pretty_paths.path_processor:
+    alshaya_main_menu.path_processor:
       class: Drupal\alshaya_main_menu\PathProcessor\PathProcessorPrettyPaths
       arguments: [ '@current_route_match', '@path_alias.manager' ]
       tags:
