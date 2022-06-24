@@ -373,7 +373,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
             'description' => [
               '#markup' => $term->description__value,
             ],
-            'id' => $term->tid,
+            'id' => 'view-all-' . $term->tid,
             'path' => $path . 'view-all/',
             'active_class' => '',
             'class' => [],
@@ -531,7 +531,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $route_name = $this->routeMatch->getRouteName();
 
     // If /taxonomy/term/tid page.
-    if ($route_name == 'entity.taxonomy_term.canonical') {
+    if ($route_name === 'entity.taxonomy_term.canonical' || $route_name === 'alshaya_main_menu.category_view_all') {
       /** @var \Drupal\taxonomy\TermInterface $route_parameter_value */
       $term = $this->routeMatch->getParameter('taxonomy_term');
     }
