@@ -1,6 +1,6 @@
 services:
   alshaya_super_category.commands:
     class: Drupal\alshaya_super_category\Commands\AlshayaSuperCategoryCommands
-    arguments: [ '@config.factory', '@alshaya_acm_product_category.product_category_tree', '@entity_type.manager', '@module_handler', '@alshaya_config.manager' ]
+    arguments: [ '@config.factory', '@alshaya_acm_product_category.product_category_tree', '@entity_type.manager', '@module_handler', '@alshaya_config.manager', '@alshaya_super_category.super_category_feature_manager' ]
     tags:
       - { name: drush.command }
