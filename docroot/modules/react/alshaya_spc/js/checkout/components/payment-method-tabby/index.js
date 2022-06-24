@@ -1,4 +1,5 @@
 import React from 'react';
+import { getPayable } from '../../../utilities/checkout_util';
 
 class PaymentMethodTabby extends React.Component {
   componentDidMount = () => {
@@ -11,7 +12,9 @@ class PaymentMethodTabby extends React.Component {
 
   tabbyCardInit = () => {
     const { tabby, cart } = this.props;
-    Drupal.tabbyCardInit(`#${tabby.widgetInfo.id}`, cart.cart.totals.base_grand_total);
+    const amount = getPayable(cart);
+    Drupal.tabbyCardInit(`#${tabby.widgetInfo.id}`, amount);
+    Drupal.tabbyPromoPopup(amount);
   }
 
   render() {
