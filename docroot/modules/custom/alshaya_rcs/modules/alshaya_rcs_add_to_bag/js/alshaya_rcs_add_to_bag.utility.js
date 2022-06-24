@@ -156,26 +156,37 @@ window.commerceBackend = window.commerceBackend || {};
     productInfo.size_guide = drupalSettings.alshayaRcs.sizeGuide;
 
     // Set configurable attributes.
+    var configurableCombinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     productInfo.configurable_attributes = [];
     product.configurable_options.forEach(function (option) {
-      let attribute_id = parseInt(atob(option.attribute_uid), 10);
+      var attribute_id = parseInt(atob(option.attribute_uid), 10);
+      var optionValues = [];
+      // Filter and process the option values.
+      option.values.forEach(function eachValue(option_value) {
+        // Disable unavailable options.
+        if (!Drupal.hasValue(configurableCombinations.attribute_sku)
+          || typeof configurableCombinations.attribute_sku[option.attribute_code][option_value.value_index] === 'undefined'
+        ) {
+          return false;
+        }
+
+        optionValues.push({
+          label: option_value.store_label,
+          value: option_value.value_index.toString(),
+        });
+      });
       productInfo.configurable_attributes[option.attribute_code] = {
         id: attribute_id,
         label: option.label,
         position: option.position,
         is_swatch: false,
         is_pseudo_attribute: (attribute_id === drupalSettings.psudo_attribute),
-        values: option.values.map(function (option_value) {
-          return {
-            label: option_value.store_label,
-            value: option_value.value_index.toString(),
-          };
-        })
+        values: optionValues,
       };
     });
 
     // Set configurable combinations.
-    productInfo.configurable_combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
+    productInfo.configurable_combinations = configurableCombinations;
     productInfo.configurable_combinations.attribute_hierarchy_with_values = productInfo.configurable_combinations.combinations;
 
     return productInfo;
