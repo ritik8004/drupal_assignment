@@ -91,7 +91,6 @@ function _alshaya_hello_member_static_strings() {
       'value' => t('Load more', [], ['context' => 'hello_member']),
     ],
     [
-<<<<<<< HEAD
       'key' => 'sent_otp_message',
       'value' => t('Please enter the OTP sent to', [], ['context' => 'hello_member']),
     ],
@@ -111,6 +110,7 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'send_otp_label',
       'value' => t('Send OTP', [], ['context' => 'hello_member']),
     ],
+    [
       'key' => 'benefit_expire',
       'value' => t('Expires on', [], ['context' => 'hello_member']),
     ],
