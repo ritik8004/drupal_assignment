@@ -34,8 +34,8 @@ window.commerceBackend = window.commerceBackend || {};
       product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: sku});
     }
 
-    var productInfo = {};
     // The product will be fetched and saved in static storage.
+    var productInfo = {};
     if (Drupal.hasValue(product.sku)) {
       window.commerceBackend.setRcsProductToStorage(product, 'plp');
       productInfo = await processProductInfo(product);
