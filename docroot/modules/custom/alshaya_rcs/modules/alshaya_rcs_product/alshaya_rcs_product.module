@@ -391,10 +391,18 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
   ];
 
   $size_guide = _alshaya_acm_product_get_size_guide_info(NULL);
-  $variables['#attached']['drupalSettings']['alshayaRcs']['sizeGuide'] = [
-    'link' => $size_guide['link'],
-    'attributes' => $size_guide['attributes'],
-  ];
+  if (!empty($size_guide) && !empty($size_guide['link']) && !empty($size_guide['attributes'])) {
+    $variables['#attached']['drupalSettings']['alshayaRcs']['sizeGuide'] = [
+      'link' => $size_guide['link'],
+      'attributes' => $size_guide['attributes'],
+    ];
+  }
+  else {
+    $variables['#attached']['drupalSettings']['alshayaRcs']['sizeGuide'] = [
+      'link' => NULL,
+      'attributes' => [],
+    ];
+  }
 
   $is_category_page = FALSE;
   // Skip product rcs_templates of sku_base_form for rcs category.

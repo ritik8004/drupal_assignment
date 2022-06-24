@@ -5,7 +5,11 @@ import AddToBag from '../../../../alshaya_add_to_bag/js/components/addtobag';
 
 function AddToBagContainer(props) {
   const {
-    productData, isBuyable, extraInfo, wishListButtonRef,
+    productData,
+    isBuyable,
+    extraInfo,
+    wishListButtonRef,
+    styleCode,
   } = props;
 
   // Return if product data is undefined or empty.
@@ -29,6 +33,7 @@ function AddToBagContainer(props) {
             isBuyable={isBuyable}
             extraInfo={extraInfo || {}}
             wishListButtonRef={wishListButtonRef}
+            styleCode={styleCode}
           />
         </Suspense>
       </EmptyErrorBoundary>

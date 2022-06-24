@@ -306,6 +306,7 @@ const Teaser = ({
             // Pass extra information to the component for update the behaviour.
             extraInfo={extraInfo}
             wishListButtonRef={ref}
+            styleCode={hit.attr_style_code ? hit.attr_style_code : null}
           />
         </ConditionalView>
         {/* Render OOS message on wishlist page if product is OOS. */}

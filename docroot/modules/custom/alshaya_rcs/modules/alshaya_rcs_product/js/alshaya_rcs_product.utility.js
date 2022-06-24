@@ -1258,7 +1258,7 @@ window.commerceBackend = window.commerceBackend || {};
     var product = e.detail.result;
     if (product.type_id === 'configurable') {
       product.variants.forEach(function eachVariant(variant) {
-        variant.parent_sku = product.sku;
+        variant.product.parent_sku = product.sku;
       });
     }
 

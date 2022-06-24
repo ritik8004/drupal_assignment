@@ -4,25 +4,29 @@
  */
 window.commerceBackend = window.commerceBackend || {};
 
-(function (Drupal) {
+(function addToBagListingUtility(Drupal, drupalSettings) {
 
-   /**
+  /**
    * Return product info from backend.
    *
    * @param {string} sku
    *   The sku value.
-   * @param {string} parentSKU
-   *   (optional) The parent sku value.
+   * @param {string} styleCode
+   *   (optional) Style code value.
    *
    * @returns {object}
    *   The product info object.
    */
-  window.commerceBackend.getProductDataAddToBagListing = async function (sku, parentSKU) {
-    var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
+  window.commerceBackend.getProductDataAddToBagListing = async function (sku, styleCode) {
+    var product = null;
+    if (Drupal.hasValue(styleCode)) {
+      product = await window.commerceBackend.getProductsInStyle({ sku, style_code: styleCode });
+    }
+    else {
+      product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: sku});
+    }
 
     // The product will be fetched and saved in static storage.
-    var productInfo = {};
-    var product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU});
     if (Drupal.hasValue(product.sku)) {
       window.commerceBackend.setRcsProductToStorage(product, 'plp');
       var productInfo = await processProductInfo(product);
@@ -78,13 +82,13 @@ window.commerceBackend = window.commerceBackend || {};
    */
   async function processVariants(product, variantProduct) {
     var variantData = variantProduct.product;
-    var parent_sku = variantProduct.parent_sku;
+    var parentSku = variantData.parent_sku;
     var prices = window.commerceBackend.getPrices(variantData);
     var productLabels = await getProductLabels(variantData.parent_sku, variantData.sku);
 
     return {
       sku: variantData.sku,
-      parent_sku: parent_sku,
+      parent_sku: parentSku,
       cart_title: product.name,
       cart_image: variantData.media_cart,
       media: {images: variantData.media},
@@ -176,4 +180,4 @@ window.commerceBackend = window.commerceBackend || {};
 
     return productInfo;
   }
-})(Drupal);
+})(Drupal, drupalSettings);
