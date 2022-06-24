@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {
   isReturnEligible,
   getReturnExpiration,
@@ -10,29 +9,26 @@ import {
 import ReturnEligibilityMessage from '../../common/return-eligibility-message';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getReturnsByOrderId } from '../../utilities/return_api_helper';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class OnlineReturnsEligibility extends React.Component {
-  componentDidMount() {
-    document.addEventListener('onRecentOrderView', this.showReturnEligibility, false);
+  constructor(props) {
+    super(props);
+    const { orderId } = this.props;
+
+    this.state = {
+      orderId,
+      returnData: this.getReturnData(),
+    };
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('onRecentOrderView', this.showReturnEligibility, false);
-  }
-
-  showReturnEligibility = (orderDetails) => {
+  /**
+   * Function to get the data related to returns.
+   */
+  getReturnData = () => {
+    const { orderDetails, selector } = this.props;
     const { data } = orderDetails.detail;
     const { orderEntityId } = drupalSettings.onlineReturns.recentOrders[data.orderId];
     const returns = getReturnsByOrderId(orderEntityId);
-    showFullScreenLoader();
-
-    // Unmount component from all orders.
-    Object.keys(drupalSettings.onlineReturns.recentOrders).forEach((orderId) => {
-      ReactDOM.unmountComponentAtNode(
-        document.querySelector(`*[data-order-id="${orderId}"] #online-returns-eligibility-window`),
-      );
-    });
 
     if (returns instanceof Promise) {
       returns.then((returnResponse) => {
@@ -46,28 +42,25 @@ class OnlineReturnsEligibility extends React.Component {
               allReturns.push(returnData);
             });
           }
-          removeFullScreenLoader();
-          // Render component for the selected order.
-          const selector = document.querySelector(`*[data-order-id="${data.orderId}"] #online-returns-eligibility-window`);
-          if (selector) {
-            // Check if return window closed and add return-window-closed class.
-            if (isReturnWindowClosed(getReturnExpiration(data.orderId))) {
-              document.querySelector(`*[data-order-id="${data.orderId}"] #online-returns-eligibility-window`).classList.add('return-window-closed');
-            }
 
-            ReactDOM.render(
-              <OnlineReturnsEligibility orderId={data.orderId} returnData={allReturns} />,
-              selector,
-            );
+          this.setState({
+            orderId: data.orderId,
+            returnData: allReturns,
+          });
+          // Add the `content-loaded` class to remove the skeletal.
+          selector.parentNode.classList.add('content-loaded');
+
+          // Add the `return-window-closed` class based on the validation.
+          if (isReturnWindowClosed(getReturnExpiration(data.orderId))) {
+            selector.classList.add('return-window-closed');
           }
         }
       });
     }
-    return null;
-  };
+  }
 
   render() {
-    const { orderId, returnData } = this.props;
+    const { orderId, returnData } = this.state;
     // Preparing returns data similar to my orders page components.
     const returns = {
       returns: returnData,
