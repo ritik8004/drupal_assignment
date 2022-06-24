@@ -38,33 +38,18 @@
       color: $hm-points-block-light-txt;
       text-align: center;
       margin-top: rem(10);
-
-      ul {
-        @extend %list-clear;
-
-        display: inline-flex;
-
-        li {
-          margin-#{$right}: rem(10);
-          letter-spacing: 1.5px;
-
-          &:last-child {
-            margin-#{$right}: 0;
-          }
-        }
-      }
+      letter-spacing: 1.5px;
     }
 
     .qr-code-button {
-      @extend %button-brand;
-
-      text-align: center;
       margin-top: rem(36);
-      cursor: pointer;
-
-      @include breakpoint($only-tablet) {
-        font-size: rem(12);
-      }
     }
+  }
+}
+
+.qr-code-block {
+  .img-container {
+    width: rem(221);
+    padding: rem(20);
   }
 }

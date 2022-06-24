@@ -274,3 +274,25 @@ function alshaya_hello_member_ajax_opt_verified(&$form, FormStateInterface $form
   $user = user_load_by_mail(\Drupal::currentUser()->getEmail());
   $user->set('field_verified_otp', $form_state->getValue('field_verified_otp')['value'])->save();
 }
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_hello_member_preprocess_page(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  // Hide sidebar region for benefit page.
+  if ($route_name === 'alshaya_hello_member.hello_member_benefits_page') {
+    unset($variables['page']['sidebar_first']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_hello_member_preprocess_html(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  // Add class in body for benefit page.
+  if ($route_name === 'alshaya_hello_member.hello_member_benefits_page') {
+    $variables['attributes']['class'][] = 'hello-member-benefit-page';
+  }
+}

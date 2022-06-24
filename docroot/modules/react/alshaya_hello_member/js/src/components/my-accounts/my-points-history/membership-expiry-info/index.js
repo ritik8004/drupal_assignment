@@ -1,15 +1,25 @@
 import React from 'react';
+import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 
-const MembershipExpiryInfo = ({ expiryInfo }) => (
-  <div className="member-expiry-block">
-    <p className="expiry-point">
-      {expiryInfo.total_points}
-      {' '}
-      {getStringMessage('points_label')}
-    </p>
-    <p>{getStringMessage('membership_renew_message', { '@expiry_date': expiryInfo.expiry_date })}</p>
-  </div>
-);
+const MembershipExpiryInfo = ({
+  pointTotal,
+  expiryDate,
+}) => {
+  if (!hasValue(pointTotal) || !hasValue(expiryDate)) {
+    return null;
+  }
+
+  return (
+    <div className="member-expiry-block">
+      <p className="expiry-point">
+        {pointTotal}
+        {' '}
+        {getStringMessage('points_label')}
+      </p>
+      <p>{getStringMessage('membership_renew_message', { '@expiry_date': expiryDate })}</p>
+    </div>
+  );
+};
 
 export default MembershipExpiryInfo;

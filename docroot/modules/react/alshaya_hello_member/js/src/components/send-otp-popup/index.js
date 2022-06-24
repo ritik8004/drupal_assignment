@@ -24,6 +24,19 @@ class SendOtpPopup extends React.Component {
     });
   };
 
+  /**
+   * Handle Error message for otp field.
+   */
+  handleErrorMessage = (isError) => {
+    if (document.getElementById('input-otp').value.length !== 6 || isError) {
+      document.getElementById('input-otp-error').innerHTML = Drupal.t('Please enter valid OTP', {}, { context: 'hello_member' });
+      document.getElementById('input-otp-error').classList.add('error');
+      return;
+    }
+    // Reset error message to empty.
+    document.getElementById('input-otp-error').innerHTML = '';
+  };
+
   // Resend OTP.
   callSendOtpApi = () => {
     const responseData = sendOtp(
@@ -40,13 +53,8 @@ class SendOtpPopup extends React.Component {
   };
 
   // Verify OTP
-  verifyOtp = () => {
-    // check if verify otp is less than 6 digit.
-    if (document.getElementById('input-otp').value.length !== 6) {
-      document.getElementById('input-otp-error').innerHTML = Drupal.t('Please enter valid OTP', {}, { context: 'hello_member' });
-      document.getElementById('input-otp-error').classList.add('error');
-      return;
-    }
+  onClickVerify = () => {
+    this.handleErrorMessage(false);
     const responseData = verifyOtp(
       `${document.getElementById('edit-field-mobile-number-0-mobile').value}`,
       `${document.getElementById('input-otp').value}`,
@@ -55,11 +63,12 @@ class SendOtpPopup extends React.Component {
     );
     if (responseData instanceof Promise) {
       responseData.then((result) => {
-        if (result.data.status !== undefined) {
-          this.setState({
-            openModal: false,
-          });
+        // show error message if  otp verification api fails / returns false.
+        if (!result.data.status || result.data.error !== undefined) {
+          this.handleErrorMessage(true);
+          return;
         }
+        this.toggleSendOtpPopup(false);
         // If successfully verified make the otp verified checkbox seleted.
         document.getElementById('edit-field-verified-otp-value').click();
       });
@@ -92,7 +101,7 @@ class SendOtpPopup extends React.Component {
               { getStringMessage('resend_otp_desc') }
               <div className="hello-member-modal-form-resend-otp" onClick={() => this.callSendOtpApi()}>{ getStringMessage('resend_code_label') }</div>
             </div>
-            <div className="hello-member-modal-form-submit" onClick={() => this.verifyOtp()}>{ getStringMessage('verify_label') }</div>
+            <div className="hello-member-modal-form-submit" onClick={() => this.onClickVerify()}>{ getStringMessage('verify_label') }</div>
           </div>
         </Popup>
       </>
