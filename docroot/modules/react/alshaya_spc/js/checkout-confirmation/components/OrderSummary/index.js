@@ -15,6 +15,7 @@ import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import EgiftOrderSummaryItem from '../../../egift-card/components/egift-order-summary-item';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -128,7 +129,7 @@ const OrderSummary = (props) => {
   const customerShippingName = drupalSettings.order_details.delivery_type_info.customerNameShipping;
 
   const {
-    accruedPoints, redeemedPoints,
+    accruedPoints, redeemedPoints, hmAccuredPoints,
   } = drupalSettings.order_details;
 
   const { context, loyaltyStatus } = props;
@@ -282,6 +283,9 @@ const OrderSummary = (props) => {
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>
+      <ConditionalView condition={isHelloMemberEnabled()}>
+        <OrderSummaryItem context={context} label={Drupal.t('Member earn')} value={hmAccuredPoints} />
+      </ConditionalView>
       <ConditionalView condition={isAuraEnabled()}>
         <AuraEarnOrderSummaryItem
           pointsEarned={accruedPoints}
