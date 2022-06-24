@@ -97,6 +97,7 @@ class MyMembershipInfoBlock extends BlockBase implements ContainerFactoryPluginI
       '#attached' => [
         'library' => [
           'alshaya_white_label/my-membership-info',
+          'alshaya_white_label/hello-member-qr-code',
           'alshaya_hello_member/alshaya_hello_member_my_membership_info',
         ],
       ],

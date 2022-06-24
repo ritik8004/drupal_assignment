@@ -39,9 +39,33 @@
       color: $hm-qr-code-redeem-txt;
       font-size: rem(14);
     }
+
+    .img-container {
+      background: $hm-qr-code-bg;
+      margin: 0 auto;
+    }
   }
 
   .my-membership-id {
     padding-bottom: rem(41);
   }
+}
+
+.qr-code-button {
+  @extend %button-brand;
+
+  text-align: center;
+  cursor: pointer;
+
+  @include breakpoint($only-tablet) {
+    font-size: rem(12);
+  }
+}
+
+.my-membership-id {
+  font-size: rem(11);
+  color: $hm-points-block-light-txt;
+  text-align: center;
+  margin-top: rem(10);
+  letter-spacing: 1.5px;
 }
