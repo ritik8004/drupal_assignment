@@ -1,5 +1,6 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import OtpInput from 'react-otp-input';
 import { sendOtp, verifyOtp } from '../../../../../js/utilities/otp_helper';
 import getStringMessage from '../../../../../js/utilities/strings';
 
@@ -8,8 +9,11 @@ class SendOtpPopup extends React.Component {
     super(props);
     this.state = {
       openModal: false,
+      otp: '',
     };
   }
+
+  handleChange = (otp) => this.setState({ otp });
 
   // Open Modal.
   onClickSendOtp = (e) => {
@@ -80,33 +84,41 @@ class SendOtpPopup extends React.Component {
 
   render() {
     const { openModal } = this.state;
+    const { otp } = this.state;
     return (
       <>
-        <button onClick={(e) => this.onClickSendOtp(e)} type="button">{getStringMessage('send_otp_label')}</button>
-        <Popup
-          open={openModal}
-          closeOnDocumentClick={false}
-          closeOnEscape={false}
-        >
-          <div className="hello-member-otp-popup-form">
-            <a className="close-modal" onClick={() => this.toggleSendOtpPopup(false)} />
-            { getStringMessage('sent_otp_message') }
-            { document.getElementById('edit-field-mobile-number-0-mobile').value }
-            <input
-              type="number"
-              id="input-otp"
-              maxLength="6"
-            />
-            <label id="input-otp-error" className="error" />
-          </div>
-          <div className="hello-member-modal-form-actions">
-            <div className="hello-member-otp-submit-description">
-              { getStringMessage('resend_otp_desc') }
-              <div className="hello-member-modal-form-resend-otp" onClick={() => this.callSendOtpApi()}>{ getStringMessage('resend_code_label') }</div>
+        <div className="btn-wrapper">
+          <button onClick={(e) => this.onClickSendOtp(e)} type="button">{getStringMessage('send_otp_label')}</button>
+        </div>
+        <div className="popup-container">
+          <Popup
+            open={openModal}
+            closeOnDocumentClick={false}
+            closeOnEscape={false}
+          >
+            <div className="hello-member-otp-popup-form">
+              <a className="close-modal" onClick={() => this.toggleSendOtpPopup(false)}>X</a>
+              <div className="opt-title">
+                <p>{ getStringMessage('sent_otp_message') }</p>
+                <p>{ document.getElementById('edit-field-mobile-number-0-mobile').value }</p>
+              </div>
+              <OtpInput
+                value={otp}
+                onChange={this.handleChange}
+                numInputs={6}
+                separator={<span />}
+              />
+              <label id="input-otp-error" className="error" />
             </div>
-            <div className="hello-member-modal-form-submit" onClick={() => this.onClickVerify()}>{ getStringMessage('verify_label') }</div>
-          </div>
-        </Popup>
+            <div className="hello-member-modal-form-actions">
+              <div className="hello-member-modal-form-submit" onClick={() => this.onClickVerify()}>{ getStringMessage('verify_label') }</div>
+              <div className="hello-member-otp-submit-description">
+                <span>{ getStringMessage('resend_otp_desc') }</span>
+                <a className="hello-member-modal-form-resend-otp" onClick={() => this.callSendOtpApi()}>{ getStringMessage('resend_code_label') }</a>
+              </div>
+            </div>
+          </Popup>
+        </div>
       </>
     );
   }
