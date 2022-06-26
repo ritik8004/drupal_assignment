@@ -2,6 +2,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import QRCode from 'react-qr-code';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 
 class QrCodeDisplay extends React.Component {
   constructor(props) {
@@ -31,7 +32,9 @@ class QrCodeDisplay extends React.Component {
 
   render() {
     const { isModelOpen } = this.state;
-    const { memberId } = this.props;
+    const {
+      memberId, qrCodeTitle, codeId, width,
+    } = this.props;
 
     return (
       <>
@@ -50,18 +53,33 @@ class QrCodeDisplay extends React.Component {
               <a className="close-modal" onClick={(e) => this.closeModal(e)} />
             </div>
             <div className="qr-img-block">
-              <div className="qr-redeem">{getStringMessage('qr_code_redeem')}</div>
+              <div className="qr-redeem">{(qrCodeTitle) ? getStringMessage('member_id_title') : getStringMessage('qr_code_redeem')}</div>
               <div className="img-container">
                 <QRCode
-                  size={180}
-                  viewBox="0 0 180 180"
+                  size={width}
+                  viewBox={`0 0 ${width} ${width}`}
                   value={memberId}
                 />
               </div>
+              <div className="my-membership-id">
+                {memberId}
+              </div>
             </div>
-            <div className="my-membership-id">
-              {memberId}
-            </div>
+            <ConditionalView condition={qrCodeTitle && codeId}>
+              <div className="qr-img-block">
+                <div className="qr-redeem">{qrCodeTitle}</div>
+                <div className="img-container">
+                  <QRCode
+                    size={79}
+                    viewBox="0 0 79 79"
+                    value={codeId}
+                  />
+                </div>
+                <div className="my-membership-id">
+                  {codeId}
+                </div>
+              </div>
+            </ConditionalView>
           </div>
         </Popup>
       </>

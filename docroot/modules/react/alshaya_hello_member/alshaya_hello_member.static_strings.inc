@@ -118,5 +118,17 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'benefit_add_to_bag',
       'value' => t('Add to Bag', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'member_id_title',
+      'value' => t('Membership Id QR Code', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'coupon_id_title',
+      'value' => t('Coupon QR Code', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'offer_id_title',
+      'value' => t('Offer QR Code', [], ['context' => 'hello_member']),
+    ],
   ];
 }

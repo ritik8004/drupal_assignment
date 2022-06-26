@@ -7,7 +7,6 @@ import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getFormatedMemberId } from '../../../utilities';
 
 class MyBenefitsPage extends React.Component {
   constructor(props) {
@@ -15,6 +14,8 @@ class MyBenefitsPage extends React.Component {
     this.state = {
       wait: false,
       myBenefit: null,
+      qrCodeTitle: null,
+      codeId: null,
     };
   }
 
@@ -31,6 +32,8 @@ class MyBenefitsPage extends React.Component {
           this.setState({
             myBenefit: response.data.coupons[0],
             wait: true,
+            qrCodeTitle: getStringMessage('coupon_id_title'),
+            codeId: response.data.coupons[0].code,
           });
           removeFullScreenLoader();
         } else {
@@ -46,6 +49,8 @@ class MyBenefitsPage extends React.Component {
           this.setState({
             myBenefit: response.data.offers[0],
             wait: true,
+            qrCodeTitle: getStringMessage('offer_id_title'),
+            codeId: response.data.offers[0].code,
           });
           removeFullScreenLoader();
         } else {
@@ -60,13 +65,13 @@ class MyBenefitsPage extends React.Component {
   }
 
   render() {
-    const { wait, myBenefit } = this.state;
+    const {
+      wait, myBenefit, qrCodeTitle, codeId,
+    } = this.state;
 
     if (!wait && myBenefit === null) {
       return null;
     }
-
-    const memberId = getFormatedMemberId(myBenefit.member_identifier);
 
     return (
       <div className="my-benefit-page-wrapper">
@@ -87,11 +92,16 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          <QrCodeDisplay memberId={memberId} />
+          <QrCodeDisplay
+            memberId={myBenefit.member_identifier}
+            qrCodeTitle={qrCodeTitle}
+            codeId={codeId}
+            width={79}
+          />
           <div className="button-wide">{getStringMessage('benefit_add_to_bag')}</div>
         </div>
         <div className="benefit-description">
-          {HTMLReactParser(myBenefit.description)}
+          {(myBenefit.description !== null) ? HTMLReactParser(myBenefit.description) : ''}
         </div>
         <div className="expire-on">
           <h3>

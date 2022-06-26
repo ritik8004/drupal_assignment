@@ -73,7 +73,7 @@ class MyMembership extends React.Component {
           <TierProgress
             myMembershipData={myMembershipData}
           />
-          <QrCodeDisplay memberId={memberId} />
+          <QrCodeDisplay memberId={memberId} width={200} />
           <div className="my-membership-id">
             {memberId}
           </div>
