@@ -8,9 +8,9 @@
   }
 
   .spc-order-summary-item {
-    &:last-child {
-      .spc-value {
-        color: $hm-accured-points-txt
+    .spc-value {
+      &.hm-accured-points {
+        color: $hm-accured-points-txt;
       }
     }
   }
