@@ -29,6 +29,12 @@
 
     .error {
       padding-top: 0;
+      color: $primary_input_inline_error !important;
+      background: $primary_bg !important;
+    }
+
+    #input-otp-error {
+      padding-top: rem(5);
     }
 
     .mobile-input--wrapper {
