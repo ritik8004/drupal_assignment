@@ -134,6 +134,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'أكمل ملفك الشخصي',
         'context' => 'hello_member',
       ],
+      'Member earn' => [
+        'ar' => 'عضوية احصل على',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
