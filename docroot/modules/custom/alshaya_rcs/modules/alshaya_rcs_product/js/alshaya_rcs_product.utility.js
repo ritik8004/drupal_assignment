@@ -580,7 +580,6 @@ window.commerceBackend = window.commerceBackend || {};
       firstChild: '',
     };
 
-
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
       // Don't consider OOS products.
@@ -714,7 +713,7 @@ window.commerceBackend = window.commerceBackend || {};
       // Do this mapping for easy access.
       rawProductData.variants.forEach(function (variant) {
         variants[variant.product.sku] = variant;
-      })
+      });
 
       configurableOptions.forEach(function (option) {
         option.values.forEach(function (value) {

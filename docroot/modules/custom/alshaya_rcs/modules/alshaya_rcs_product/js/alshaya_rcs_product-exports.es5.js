@@ -204,9 +204,9 @@ function disableUnavailableOptions(sku, configurableOptions) {
   // Clone this so as to not modify the original object.
   configurableOptionsClone = JSON.parse(JSON.stringify(configurableOptions));
   configurableOptionsClone.forEach(function eachOption(option) {
-    option.values.forEach(function eachValue(value, index) {
-      if (typeof combinations.attribute_sku[option.attribute_code][value.value_index] === 'undefined') {
-        option.values.splice(index, 1);
+    option.values = option.values.filter(function eachValue(value) {
+      if (Drupal.hasValue(combinations.attribute_sku[option.attribute_code][value.value_index])) {
+        return true;
       }
     });
   });
