@@ -188,6 +188,7 @@ export default class PaymentMethod extends React.Component {
       disablePaymentMethod,
     } = this.props;
     const animationDelayValue = `${0.4 + animationOffset}s`;
+    const amount = getPayable(cart);
 
     if (method.code === 'checkout_com_applepay' && !(ApplePay.isAvailable())) {
       return (null);
@@ -247,11 +248,7 @@ export default class PaymentMethod extends React.Component {
                 <TabbyWidget
                   pageType="checkout"
                   classNames="installment-popup"
-                  amount={
-                      cart.cart.totals.totalBalancePayable
-                        ? cart.cart.totals.totalBalancePayable
-                        : cart.cart.totals.base_grand_total
-                    }
+                  amount={amount}
                 />
               </ConditionalView>
             </div>
