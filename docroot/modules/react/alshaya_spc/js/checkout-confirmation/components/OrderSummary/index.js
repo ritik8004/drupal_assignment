@@ -280,12 +280,17 @@ const OrderSummary = (props) => {
               <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
             </ConditionalView>
           </ConditionalView>
+          <ConditionalView condition={isHelloMemberEnabled()}>
+            <OrderSummaryItem
+              context={context}
+              type="hello_member"
+              label={Drupal.t('Member earn', {}, { context: 'hello_member' })}
+              value={hmAccuredPoints}
+            />
+          </ConditionalView>
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>
-      <ConditionalView condition={isHelloMemberEnabled()}>
-        <OrderSummaryItem context={context} label={Drupal.t('Member earn')} value={hmAccuredPoints} />
-      </ConditionalView>
       <ConditionalView condition={isAuraEnabled()}>
         <AuraEarnOrderSummaryItem
           pointsEarned={accruedPoints}
