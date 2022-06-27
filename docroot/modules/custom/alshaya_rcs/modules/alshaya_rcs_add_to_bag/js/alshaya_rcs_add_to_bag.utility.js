@@ -27,7 +27,9 @@ window.commerceBackend = window.commerceBackend || {};
     }
 
     var product = null;
-    if (Drupal.hasValue(styleCode)) {
+    if (Drupal.hasValue(styleCode)
+      && Drupal.hasValue(Drupal.hasValue(window.commerceBackend.getProductsInStyle))
+    ) {
       product = await window.commerceBackend.getProductsInStyle({ sku, style_code: styleCode });
     }
     else {
