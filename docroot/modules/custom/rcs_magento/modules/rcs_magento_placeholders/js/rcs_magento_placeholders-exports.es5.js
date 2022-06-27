@@ -305,7 +305,7 @@ exports.getData = async function getData(
 
     case 'products-in-style':
       let variables = rcsPhGraphqlQuery.styled_products.variables;
-      variables.styleCode = params.styleCode;
+      variables.styleCode = params.styleCode.toString();
 
       request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
       response = await rcsCommerceBackend.invokeApi(request);
