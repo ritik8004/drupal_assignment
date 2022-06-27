@@ -24,6 +24,11 @@ schema_org:
   dependencies:
     - rcs_placeholders/helpers
 
+product.block.name:
+  version: 1.x
+  js:
+    templates/rcs-product-name-block.handlebars: {}
+
 product.block.description:
   version: 1.x
   js:

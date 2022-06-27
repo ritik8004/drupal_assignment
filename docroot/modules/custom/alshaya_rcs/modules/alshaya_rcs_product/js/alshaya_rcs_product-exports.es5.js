@@ -648,7 +648,8 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'name':
-      value = input.name;
+      // Render handlebars plugin.
+      value = handlebarsRenderer.render(`product.block.${filter}`, input);
       break;
 
     case 'description':
