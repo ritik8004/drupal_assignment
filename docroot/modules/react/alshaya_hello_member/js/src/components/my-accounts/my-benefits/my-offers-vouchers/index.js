@@ -41,7 +41,7 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
                 {data.name}
               </div>
               <div className="info">
-                {data.short_description}
+                {data.description}
               </div>
               <div className="expiry">
                 {data.expiry_date || data.end_date}

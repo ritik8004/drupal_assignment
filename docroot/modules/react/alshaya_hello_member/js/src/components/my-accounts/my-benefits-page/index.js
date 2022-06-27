@@ -7,7 +7,7 @@ import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getFormatedMemberId } from '../../../utilities';
+import Loading from '../../../../../../js/utilities/loading';
 
 class MyBenefitsPage extends React.Component {
   constructor(props) {
@@ -15,6 +15,7 @@ class MyBenefitsPage extends React.Component {
     this.state = {
       wait: false,
       myBenefit: null,
+      codeId: null,
     };
   }
 
@@ -31,6 +32,7 @@ class MyBenefitsPage extends React.Component {
           this.setState({
             myBenefit: response.data.coupons[0],
             wait: true,
+            codeId: response.data.coupons[0].code,
           });
           removeFullScreenLoader();
         } else {
@@ -46,6 +48,7 @@ class MyBenefitsPage extends React.Component {
           this.setState({
             myBenefit: response.data.offers[0],
             wait: true,
+            codeId: response.data.offers[0].code,
           });
           removeFullScreenLoader();
         } else {
@@ -60,13 +63,26 @@ class MyBenefitsPage extends React.Component {
   }
 
   render() {
-    const { wait, myBenefit } = this.state;
+    const {
+      wait, myBenefit, codeId,
+    } = this.state;
 
-    if (!wait && myBenefit === null) {
+    if (!wait) {
+      return (
+        <div className="my-benefit-page-wrapper" style={{ animationDelay: '0.4s' }}>
+          <Loading />
+        </div>
+      );
+    }
+
+    if (myBenefit === null) {
       return null;
     }
 
-    const memberId = getFormatedMemberId(myBenefit.member_identifier);
+    let qrCodeTitle = getStringMessage('offer_id_title');
+    if (drupalSettings.helloMemberBenefits.type === 'coupon') {
+      qrCodeTitle = getStringMessage('coupon_id_title');
+    }
 
     return (
       <div className="my-benefit-page-wrapper">
@@ -78,7 +94,7 @@ class MyBenefitsPage extends React.Component {
             {myBenefit.name}
           </div>
           <div className="info">
-            {myBenefit.short_description}
+            {myBenefit.description}
           </div>
           <div className="expiry">
             {getStringMessage('benefit_expire')}
@@ -87,11 +103,16 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          <QrCodeDisplay memberId={memberId} />
+          <QrCodeDisplay
+            memberId={myBenefit.member_identifier}
+            qrCodeTitle={qrCodeTitle}
+            codeId={codeId}
+            width={79}
+          />
           <div className="button-wide">{getStringMessage('benefit_add_to_bag')}</div>
         </div>
         <div className="benefit-description">
-          {HTMLReactParser(myBenefit.description)}
+          {(myBenefit.applied_conditions !== null) ? HTMLReactParser(myBenefit.applied_conditions) : ''}
         </div>
         <div className="expire-on">
           <h3>
