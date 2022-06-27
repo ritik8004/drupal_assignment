@@ -312,14 +312,21 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     if (urlItems.length > 1) {
       urlItems[1] = `${settings.rcsPhSettings.categoryPathPrefix}${urlItems[1]}`;
     }
-    levelObj.url_path = `/${settings.path.pathPrefix}${urlItems.join('/')}/`;
+    levelObj.url_path = `${urlItems.join('/').replace(/\/+$/, '')}/`;
   } else {
-    levelObj.url_path = `/${settings.path.pathPrefix}${levelObjOrgUrlPath}/`;
+    levelObj.url_path = `${levelObjOrgUrlPath.replace(/\/+$/, '')}/`;
   }
 
-  const levelIdentifier = `c-footer-menu__tab`;
   // Clone the default clickable placeholder element from the given html.
-  var clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
+  // Store level markup in static storage so that it doesn't duplicate existing elements on re-render.
+  if (globalThis.RcsPhStaticStorage.get('shop_by_menu_level')) {
+    var clonePhEle = globalThis.RcsPhStaticStorage.get('shop_by_menu_level');
+  }
+  else {
+    const levelIdentifier = `c-footer-menu__tab`;
+    var clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
+    globalThis.RcsPhStaticStorage.set('shop_by_menu_level', clonePhEle);
+  }
 
   let enrichedDataObj = {};
   // Get the enrichment data from the settings.
