@@ -736,3 +736,16 @@ export const getNextAllowedPaymentMethodCode = (paymentMethods, cart) => {
   }
   return hasValue(paymentMethodCode) ? paymentMethodCode : sortedMethods[0].code;
 };
+
+/**
+ * Returns balance payable amount if present.
+ *
+ * @returns {string}
+ *   Amount.
+ */
+export const getPayable = (value) => {
+  const amount = hasValue(value.cart.totals.totalBalancePayable)
+    ? value.cart.totals.totalBalancePayable
+    : value.cart.totals.base_grand_total;
+  return amount;
+};
