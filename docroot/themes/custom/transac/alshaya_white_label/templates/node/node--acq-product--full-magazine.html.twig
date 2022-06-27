@@ -18,6 +18,9 @@
   <div class="content-sidebar-wrapper">
     {% block titleBlock %}
       <div class="content__title_wrapper">
+        {% if hello_member_enabled is defined and hello_member_enabled %}
+          <div id="hello-member-pdp"></div>
+        {% endif %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
@@ -131,9 +134,6 @@
           {% if aura_enabled is defined and aura_enabled %}
             {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
             <div id="aura-pdp"></div>
-          {% endif %}
-          {% if hello_member_enabled is defined and hello_member_enabled %}
-            <div id="hello-member-pdp"></div>
           {% endif %}
         </div>
 
