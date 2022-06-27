@@ -12,6 +12,23 @@ function isProductBuyable(entity) {
 }
 
 /**
+ * Check if the product is in stock.
+ *
+ * @param {object} entity
+ *   The product entity.
+ *
+ * @returns {Boolean}
+ *   True if product is in stock, else false.
+ */
+function isProductInStock(entity) {
+  if (entity.stock_status === 'OUT_OF_STOCK') {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * Create short text with ellipsis and Read more button.
  *
  * @param {string} value
@@ -510,6 +527,11 @@ exports.computePhFilters = function (input, filter) {
           not_buyable_help_text: drupalSettings.alshayaRcs.not_buyable_help_text,
         };
         value = handlebarsRenderer.render(`product.not_buyable_product`, data);
+        break;
+      }
+
+      if (!isProductInStock(input)) {
+        value = handlebarsRenderer.render(`product.sku_base_form_oos`, {text: Drupal.t('Out of stock')});
         break;
       }
 
