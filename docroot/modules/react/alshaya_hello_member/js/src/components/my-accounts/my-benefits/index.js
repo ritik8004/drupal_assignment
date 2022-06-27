@@ -1,6 +1,7 @@
 import React from 'react';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
+import Loading from '../../../../../../js/utilities/loading';
 import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import MyOffersAndVouchers from './my-offers-vouchers';
@@ -56,7 +57,16 @@ class MyBenefits extends React.Component {
 
   render() {
     const { wait, myOffersList, myCouponsList } = this.state;
-    if (!wait && myCouponsList === null && myOffersList === null) {
+
+    if (!wait) {
+      return (
+        <div className="my-benefit-wrapper" style={{ animationDelay: '0.4s' }}>
+          <Loading />
+        </div>
+      );
+    }
+
+    if (myCouponsList === null && myOffersList === null) {
       return null;
     }
 
