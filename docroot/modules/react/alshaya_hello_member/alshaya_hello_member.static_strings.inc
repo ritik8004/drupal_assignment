@@ -118,9 +118,5 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'benefit_add_to_bag',
       'value' => t('Add to Bag', [], ['context' => 'hello_member']),
     ],
-    [
-      'key' => 'pdp_member_points',
-      'value' => t('Members Earn @point_value points.', [], ['context' => 'hello_member']),
-    ],
   ];
 }
