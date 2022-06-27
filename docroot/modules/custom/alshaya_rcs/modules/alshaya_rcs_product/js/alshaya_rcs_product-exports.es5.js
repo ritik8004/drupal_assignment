@@ -589,12 +589,14 @@ exports.computePhFilters = function (input, filter) {
             id: `edit-configurables-${formattedAttributeCode}`,
             class: isOptionSwatch ? 'form-item-configurable-swatch' : 'form-item-configurable-select',
             wrapperClass: isOptionSwatch ? 'configurable-swatch' : 'configurable-select',
+            hiddenClass: (hiddenFormAttributes.includes(option.attribute_code)) ? 'hidden' : '',
             name: `configurables[${option.attribute_code}]`,
+            data_msg_required: Drupal.t('@title field is required.', { '@title': dataDefaultTitle }),
+            required: 'required',
             aria_require: true,
             aria_invalid: false,
-            select_option_label: Drupal.t(`Select @attr`, { '@attr': option.attribute_code }),
+            select_option_label: Drupal.t(`Select @title`, { '@title': option.label }),
             select_options: selectOptions,
-            hidden: hiddenFormAttributes.includes(option.attribute_code),
             attribute_has_size_guide: drupalSettings.alshayaRcs.sizeGuide.attributes.includes(option.attribute_code),
           });
 
