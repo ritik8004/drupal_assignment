@@ -2,7 +2,6 @@ import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi } from '../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../js/utilities/logger';
-import getStringMessage from '../../../../../js/utilities/strings';
 import { getPriceToHelloMemberPoint, getHelloMemberStorageKey } from '../../utilities';
 
 class HelloMemberPDP extends React.Component {
@@ -25,7 +24,7 @@ class HelloMemberPDP extends React.Component {
       const response = await callHelloMemberApi('helloMemberGetDictionaryData', 'GET', { programCode: 'hello_member' });
       if (hasValue(response.data) && !hasValue(response.data.error)) {
         // Save dictionary data in local storage as it would remain constant.
-        Drupal.addItemInLocalStorage('hello_member_pdp', response.data);
+        Drupal.addItemInLocalStorage('hello_member_pdp', response.data, 24 * 60 * 60);
         this.setState({
           dictionaryData: response.data,
           productPoints: this.getInitialProductPoints(),
@@ -91,7 +90,7 @@ class HelloMemberPDP extends React.Component {
     return (
       <>
         <div className="hello-member-points">
-          <p>{getStringMessage('pdp_member_points', { '@point_value': productPoints })}</p>
+          <p>{Drupal.t(' Members Earn @pointValue points.', { '@pointValue': productPoints }, { context: 'hello_member' })}</p>
         </div>
       </>
     );
