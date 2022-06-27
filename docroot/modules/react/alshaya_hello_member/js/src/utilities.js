@@ -42,7 +42,7 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
 };
 
 /**
- * Utility function to get aura localStorage key.
+ * Utility function to get hello member localStorage key.
  */
 const getHelloMemberStorageKey = () => 'hello_member_pdp';
 

@@ -38,8 +38,13 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
 
   $current_route = \Drupal::routeMatch();
   $current_route_name = $current_route->getRouteName();
+
   if ($current_route_name === 'entity.node.canonical'
-    && $current_route->getParameter('node')->bundle() === 'acq_product') {
+    && in_array($current_route->getParameter('node')->bundle(), [
+      'rcs_product',
+      'acq_product',
+    ])
+  ) {
     $page['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_pdp';
   }
 
@@ -67,11 +72,6 @@ function alshaya_hello_member_theme() {
       ],
     ],
     'hello_member_benefits_page' => [
-      'variables' => [
-        'strings' => [],
-      ],
-    ],
-    'hello_member_strings' => [
       'variables' => [
         'strings' => [],
       ],
@@ -173,7 +173,7 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
   $hello_member_helper = \Drupal::service('alshaya_hello_member.hello_member_helper');
   // Only add if hello member enabled and is Edit profile form.
-  if (!$hello_member_helper->isHelloMemberEnabled() && $form_id !== 'user_form') {
+  if (!$hello_member_helper->isHelloMemberEnabled() || $form_id !== 'user_form') {
     return;
   }
   $form['#title'] = t('My Details', [], ['context' => 'hello_member']);
@@ -249,18 +249,19 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
       if (!empty($user_gender)) {
         $request_options['json']['customer']['extension_attributes']['customer_gender'] = $user_gender;
       }
+      if ($user->get('field_verified_otp')->getString()) {
+        $request_options['json']['customer']['extension_attributes']['is_verified'] = "Y";
+        // Set otp verified unchecked to update in future.
+        $user->set('field_verified_otp', 0)->save();
+      }
+      else {
+        // If Hello member enable and Mobile number not verified
+        // remove it from update customer api request.
+        unset($request_options['json']['customer']['extension']['phone_number']);
+      }
     }
   }
-  if ($user->get('field_verified_otp')->getString()) {
-    $request_options['json']['customer']['extension_attributes']['is_verified'] = "Y";
-    // Set otp verified unchecked to update in future.
-    $user->set('field_verified_otp', 0)->save();
-  }
-  else {
-    // If Hello member enable and Mobile number not verified
-    // remove it from update customer api request.
-    unset($request_options['json']['customer']['extension']['phone_number']);
-  }
+
 }
 
 /**
@@ -314,12 +315,21 @@ function alshaya_hello_member_preprocess_html(&$variables) {
  */
 function alshaya_hello_member_preprocess_node(&$variables) {
   if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
-    $variables['hello_member_enabled'] = Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
-    \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
-    $hello_member_strings = [
-      '#strings' => _alshaya_hello_member_static_strings(),
-      '#theme' => 'hello_member_strings',
-    ];
-    $variables['hello_member_strings'] = $hello_member_strings;
+    $variables['hello_member_enabled'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_hello_member_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Do not proceed if Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+  // Add tnc markup for login form.
+  $form['alshaya_login_form_tnc'] = [
+    '#weight' => 10,
+    '#markup' => \Drupal::config('alshaya_user.settings')->get('terms_conditions.value'),
+  ];
 }

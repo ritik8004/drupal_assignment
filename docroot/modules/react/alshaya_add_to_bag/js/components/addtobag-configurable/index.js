@@ -27,7 +27,7 @@ export default class AddToBagConfigurable extends React.Component {
     e.persist();
     e.stopPropagation();
 
-    const { sku } = this.props;
+    const { sku, styleCode } = this.props;
 
     // Get the container element for placing the loader effect.
     const btn = e.target;
@@ -36,7 +36,7 @@ export default class AddToBagConfigurable extends React.Component {
     btn.classList.toggle('add-to-bag-loader');
 
     // Get product's information for drawer.
-    const productInfoData = window.commerceBackend.getProductDataAddToBagListing(sku);
+    const productInfoData = window.commerceBackend.getProductDataAddToBagListing(sku, styleCode);
 
     if (productInfoData instanceof Promise) {
       productInfoData.then((response) => {

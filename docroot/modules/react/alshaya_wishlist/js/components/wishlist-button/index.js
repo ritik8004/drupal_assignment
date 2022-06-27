@@ -314,6 +314,20 @@ class WishlistButton extends React.Component {
     // as the wishlist api does not update product options on add to wishlist.
     if (context === 'cart') {
       removeProductFromWishList(skuCode).then(() => {
+        if (isAnonymousUser()) {
+          // Remove product from wishlist.
+          const skuIndex = getWishListDataIndexForSku(skuCode);
+          if (skuIndex > -1) {
+            // Get existing wishlist data from storage.
+            const wishListItems = getWishListData();
+
+            // Remove the entry for given product sku from existing storage data.
+            wishListItems.splice(skuIndex, 1);
+
+            // Save back to storage.
+            addWishListInfoInStorage(wishListItems);
+          }
+        }
         this.addToWishList(productInfo);
       });
       return;
