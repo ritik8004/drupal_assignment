@@ -200,7 +200,7 @@ class DeeplinkResourceV3 extends DeeplinkResource {
           'acq_product',
           'rcs_product',
           'acq_promotion',
-          'node.rcs_promotion',
+          'rcs_promotion',
         ])
       ) {
         return TRUE;
