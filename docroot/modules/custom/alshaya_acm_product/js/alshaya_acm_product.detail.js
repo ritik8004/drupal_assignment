@@ -580,8 +580,8 @@
         var variantToDisableSelector = $('input[value="' + sku + '"]').closest('.sku-base-form');
         var allVariants = parentInfo.variants ? Object.keys(parentInfo.variants) : [];
 
-        var orderLimitMsg = typeof parentInfo.orderLimitMsg !== "undefined"
-          ? parentInfo.orderLimitMsg : '';
+        var orderLimitMsg = typeof variantInfo.orderLimitMsg !== "undefined"
+          ? variantInfo.orderLimitMsg : '';
         // If cart is not empty.
         if (typeof cart_items !== "undefined") {
           var itemQtyInCart = 0;
