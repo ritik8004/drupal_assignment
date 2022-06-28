@@ -318,16 +318,8 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
   }
 
   // Clone the default clickable placeholder element from the given html.
-  // Store level markup in static storage so that it doesn't duplicate existing elements on re-render.
-  let clonePhEle = {};
-  if (globalThis.RcsPhStaticStorage.get('shop_by_menu_level')) {
-    clonePhEle = globalThis.RcsPhStaticStorage.get('shop_by_menu_level');
-  }
-  else {
-    const levelIdentifier = `c-footer-menu__tab`;
-    clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
-    globalThis.RcsPhStaticStorage.set('shop_by_menu_level', clonePhEle);
-  }
+  const levelIdentifier = `c-footer-menu__tab`;
+  let clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
 
   let enrichedDataObj = {};
   // Get the enrichment data from the settings.

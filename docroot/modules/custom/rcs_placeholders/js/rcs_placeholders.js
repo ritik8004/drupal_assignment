@@ -129,6 +129,11 @@
     if (rcsDependency && rcsDependency !== 'none') {
       return;
     }
+    // Return if rcs placeholders are already replaced.
+    if ($(this).hasClass('rcs-processed')) {
+      return;
+    }
+    $(this).addClass('rcs-processed');
 
     // Extract the parameters.
     const params = {};
