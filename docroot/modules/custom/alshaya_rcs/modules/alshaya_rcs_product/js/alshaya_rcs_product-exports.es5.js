@@ -209,16 +209,11 @@ function disableUnavailableOptions(sku, configurableOptions) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
   // Clone this so as to not modify the original object.
   configurableOptionsClone = JSON.parse(JSON.stringify(configurableOptions));
-  // Check if configurable options is available for the product
-  // and filter unavailable options.
   configurableOptionsClone.forEach(function eachOption(option) {
     option.values = option.values.filter(function eachValue(value) {
-      if (!Drupal.hasValue(combinations.attribute_sku)
-       || typeof combinations.attribute_sku[option.attribute_code][value.value_index] === 'undefined'
-      ) {
-        return false;
+      if (Drupal.hasValue(combinations.attribute_sku[option.attribute_code][value.value_index])) {
+        return true;
       }
-      return true;
     });
   });
 
