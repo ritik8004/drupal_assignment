@@ -1,8 +1,0 @@
-name: Alshaya RCS Mobile App
-type: module
-description: Alshaya RCS implementation of RCS Mobile app.
-core: 8.x
-core_version_requirement: ^8 || ^9
-dependencies:
-  - rcs_placeholders:rcs_placeholders
-  - alshaya_mobile_app:alshaya_mobile_app

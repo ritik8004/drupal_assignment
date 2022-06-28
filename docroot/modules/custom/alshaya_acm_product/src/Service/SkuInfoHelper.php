@@ -511,7 +511,9 @@ class SkuInfoHelper {
         continue;
       }
 
-      $variants[$child->getSku()] = $this->getVariantInfo($child, $pdp_layout, $sku);
+      // Get parent sku from the child item.
+      $parent_sku = $this->skuManager->getParentSkuBySku($child);
+      $variants[$child->getSku()] = $this->getVariantInfo($child, $pdp_layout, $parent_sku);
     }
 
     return $variants;

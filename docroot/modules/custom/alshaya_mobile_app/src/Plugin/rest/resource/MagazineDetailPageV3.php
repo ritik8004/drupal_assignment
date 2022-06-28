@@ -1,9 +1,8 @@
 <?php
 
-namespace Drupal\alshaya_rcs_mobile_app\Plugin\rest\resource;
+namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\node\NodeInterface;
-use Drupal\alshaya_mobile_app\Plugin\rest\resource\MagazineDetailPage;
 
 /**
  * Provides a resource to get magazine detail deeplink.
