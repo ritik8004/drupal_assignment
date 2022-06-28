@@ -807,3 +807,8 @@ hello-member-qr-code:
   css:
     theme:
       css/conditional-sass/hello-member-qr-code/hello-member-qr-code.ltr.css: {}
+
+hello-member-otp:
+  css:
+    theme:
+      css/conditional-sass/hello-member-otp/hello-member-otp.ltr.css: {}

@@ -21,7 +21,7 @@
       width: calc(100% / 3);
 
       @include breakpoint($only-mobile) {
-        min-width: rem(132);
+        min-width: rem(119);
       }
 
       p {
@@ -40,16 +40,40 @@
 
     .points-date {
       font-size: rem(12);
+      text-align: center;
+    }
+
+    .purchase-store {
+      @include breakpoint($tablet) {
+        padding-#{$left}: rem(30);
+      }
+    }
+
+    .points-earned {
+      text-align: center;
+
+      @include breakpoint($tablet) {
+        padding-#{$left}: rem(80);
+      }
+    }
+  }
+
+  .load-more-wrapper {
+    padding: rem(40);
+    text-align: center;
+
+    button {
+      @extend %button-wide;
     }
   }
 }
 
 .member-expiry-block {
   text-align: center;
-  padding: rem(48) rem(24) 0;
+  padding: rem(7) rem(24) 0;
 
   @include breakpoint($tablet) {
-    padding: rem(48) rem(80) rem(20);
+    padding: rem(7) rem(80) rem(20);
   }
 
   @include breakpoint($only-mobile) {
@@ -69,8 +93,12 @@
 
 .expiry-accordion {
   background-color: $hm-points-expiry-accordion-bg;
-  margin-bottom: 0.625rem;
+  margin-bottom: rem(50);
   transition: max-height 0.1s ease-in-out;
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: rem(16);
+  }
 
   &:last-child {
     margin-bottom: 0;

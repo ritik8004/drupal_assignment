@@ -88,6 +88,9 @@
           @include select-wrapper(100%);
 
           &::after {
+            z-index: 0;
+            top: rem(18);
+
             @include breakpoint($upto-desktop) {
               top: rem(19);
               font-weight: bold;
@@ -106,6 +109,7 @@
 
                 &::after {
                   background: $hm-registration-fields-bg;
+                  z-index: -1;
                 }
               }
             }
