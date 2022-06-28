@@ -66,6 +66,9 @@ class HelloMemberBenefitsPageController extends ControllerBase {
   public function getBenefitsDetails(string $type, string $code) {
     $this->moduleHandler->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
 
+    // Get config for hello member.
+    $helloMemberConfig = $this->config('alshaya_hello_member.settings');
+
     return [
       '#theme' => 'hello_member_benefits_page',
       '#strings' => _alshaya_hello_member_static_strings(),
@@ -79,8 +82,12 @@ class HelloMemberBenefitsPageController extends ControllerBase {
           'helloMemberBenefits' => [
             'type' => $type,
             'code' => $code,
+            'terms_conditions' => $helloMemberConfig->get('terms_conditions'),
           ],
         ],
+      ],
+      '#cache' => [
+        'tags' => $helloMemberConfig->getCacheTags(),
       ],
     ];
   }

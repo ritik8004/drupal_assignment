@@ -122,7 +122,7 @@ class MyBenefitsPage extends React.Component {
           {moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY')}
         </div>
         <div className="benefit-Tnc">
-          {myBenefit.temrs_and_conditions}
+          {(drupalSettings.helloMemberBenefits.terms_conditions.value !== null) ? HTMLReactParser(drupalSettings.helloMemberBenefits.terms_conditions.value) : ''}
         </div>
       </div>
     );
