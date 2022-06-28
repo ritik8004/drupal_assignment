@@ -312,19 +312,20 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     if (urlItems.length > 1) {
       urlItems[1] = `${settings.rcsPhSettings.categoryPathPrefix}${urlItems[1]}`;
     }
-    levelObj.url_path = `${urlItems.join('/').replace(/\/+$/, '')}/`;
+    levelObj.url_path = urlItems.join('/').replace(/\/+$/, '/');
   } else {
-    levelObj.url_path = `${levelObjOrgUrlPath.replace(/\/+$/, '')}/`;
+    levelObj.url_path = levelObjOrgUrlPath.replace(/\/+$/, '/');
   }
 
   // Clone the default clickable placeholder element from the given html.
   // Store level markup in static storage so that it doesn't duplicate existing elements on re-render.
+  let clonePhEle = {};
   if (globalThis.RcsPhStaticStorage.get('shop_by_menu_level')) {
-    var clonePhEle = globalThis.RcsPhStaticStorage.get('shop_by_menu_level');
+    clonePhEle = globalThis.RcsPhStaticStorage.get('shop_by_menu_level');
   }
   else {
     const levelIdentifier = `c-footer-menu__tab`;
-    var clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
+    clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
     globalThis.RcsPhStaticStorage.set('shop_by_menu_level', clonePhEle);
   }
 
