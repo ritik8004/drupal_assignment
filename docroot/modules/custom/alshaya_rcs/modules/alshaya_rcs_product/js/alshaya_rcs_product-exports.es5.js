@@ -25,6 +25,7 @@ function isProductInStock(entity) {
     return false;
   }
 
+  // @todo Check for free gifts when checking the variants.
   // For configurable product, if all variants are OOS, then we consider the
   // product to be OOS.
   if (entity.type_id === 'configurable') {
