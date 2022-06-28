@@ -198,10 +198,6 @@ function _alshaya_online_returns_translations() {
         'ar' => 'المنتجات التي تم إرجاعها',
         'context' => 'online_returns',
       ],
-      'Rejected Items' => [
-        'ar' => 'المنتجات المرفوضة',
-        'context' => 'online_returns',
-      ],
       'Store Returns' => [
         'ar' => 'طلبات الإرجاع عبر المحل',
         'context' => 'online_returns',
