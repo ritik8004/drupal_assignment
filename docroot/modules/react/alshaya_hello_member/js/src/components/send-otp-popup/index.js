@@ -13,6 +13,7 @@ class SendOtpPopup extends React.Component {
     };
   }
 
+  // Set otp typed in inputs
   handleChange = (otp) => this.setState({ otp });
 
   // Open Modal.
