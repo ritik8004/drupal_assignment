@@ -5,6 +5,7 @@ product:
   dependencies:
     - core/jquery
     - rcs_placeholders/helpers
+    - alshaya_master/common_functions
 
 product.block.description:
   version: 1.x
