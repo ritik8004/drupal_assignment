@@ -9,6 +9,8 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -141,5 +143,38 @@ function alshaya_fl_transac_alshaya_performance_preload_alter(array &$preload) {
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
   if (isset($site_preloads[$language])) {
     $preload = array_merge($site_preloads[$language], $preload);
+  }
+}
+
+/**
+ * Implements hook_query_TAG_NAME_alter().
+ */
+function alshaya_fl_transac_query_product_category_child_terms_alter(AlterableInterface $query) {
+  // Add is_underlined field.
+  $query->leftJoin('taxonomy_term__field_is_underlined', 'is_underlined', 'is_underlined.entity_id=tfd.tid');
+  $query->addField('is_underlined', 'field_is_underlined_value', 'is_underlined');
+}
+
+/**
+ * Implements hook_acq_sku_commerce_category_alter().
+ */
+function alshaya_fl_transac_acq_sku_commerce_category_alter(TermInterface $term, array $category, $parent) {
+  if (!empty($category['custom_attributes'])) {
+    // Add the new attribute field for menu item underlined style.
+    if (isset($category['custom_attributes']['is_underlined'])) {
+      $term->get('field_is_underlined')->setValue($category['custom_attributes']['is_underlined']['value']);
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_category_tree_data_alter().
+ */
+function alshaya_fl_transac_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+  /** @var \Drupal\taxonomy\TermInterface $termObj **/
+  $termObj = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($term->tid);
+  if ($termObj->hasField('field_is_underlined')) {
+    $is_underlined = (bool) $termObj->get('field_is_underlined')->getString();
+    $data[$term->tid]['class'][] = $is_underlined ? 'is_underlined' : '';
   }
 }
