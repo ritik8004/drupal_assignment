@@ -54,5 +54,9 @@ function _alshaya_wishlist_strings() {
       'key' => 'wishlist_share_all',
       'value' => t('Share All', [], ['context' => 'wishlist']),
     ],
+    [
+      'key' => 'wishlist_go_shipping',
+      'value' => t('go shopping', [], ['context' => 'wishlist']),
+    ],
   ];
 }

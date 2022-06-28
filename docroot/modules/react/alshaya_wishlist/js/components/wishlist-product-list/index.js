@@ -198,7 +198,7 @@ class WishlistProductList extends React.Component {
     if (wishListItemsCount === 0) {
       return PageEmptyMessage(
         getStringMessage('empty_wishlist', { '@wishlist_label': getWishlistLabel() }),
-        'wishlist',
+        getStringMessage('wishlist_go_shipping'),
       );
     }
 
