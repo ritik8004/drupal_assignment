@@ -312,14 +312,14 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     if (urlItems.length > 1) {
       urlItems[1] = `${settings.rcsPhSettings.categoryPathPrefix}${urlItems[1]}`;
     }
-    levelObj.url_path = `/${settings.path.pathPrefix}${urlItems.join('/')}/`;
+    levelObj.url_path = urlItems.join('/').replace(/\/+$/, '/');
   } else {
-    levelObj.url_path = `/${settings.path.pathPrefix}${levelObjOrgUrlPath}/`;
+    levelObj.url_path = levelObjOrgUrlPath.replace(/\/+$/, '/');
   }
 
-  const levelIdentifier = `c-footer-menu__tab`;
   // Clone the default clickable placeholder element from the given html.
-  var clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
+  const levelIdentifier = `c-footer-menu__tab`;
+  let clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
 
   let enrichedDataObj = {};
   // Get the enrichment data from the settings.
