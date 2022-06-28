@@ -6,6 +6,14 @@
       font-size: 0.525rem;
     }
   }
+
+  .spc-order-summary-item {
+    .spc-value {
+      &.hm-accured-points {
+        color: $hm-accured-points-txt;
+      }
+    }
+  }
 }
 
 .spc-order-summary-order-preview,

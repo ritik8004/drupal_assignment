@@ -44,12 +44,17 @@ class MyPointsHistory extends React.Component {
     const helloMemberPointsHistoryData = getHelloMemberPointsHistory(firstPage, pageSize);
     if (helloMemberPointsHistoryData instanceof Promise) {
       helloMemberPointsHistoryData.then((response) => {
-        if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)
-          && hasValue(response.data.apc_transactions)) {
-          this.setState({
-            pointsHistoryData: pointsHistoryData.concat(response.data.apc_transactions),
-            totalCount: response.data.apc_transactions.length,
-          });
+        if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
+          if (hasValue(response.data.apc_transactions)) {
+            this.setState({
+              pointsHistoryData: pointsHistoryData.concat(response.data.apc_transactions),
+              totalCount: response.data.apc_transactions.length,
+            });
+          } else {
+            this.setState({
+              totalCount: 0,
+            });
+          }
         } else if (hasValue(response.error)) {
           logger.error('Error while trying to get hello member points history data. Data: @data.', {
             '@data': JSON.stringify(response),

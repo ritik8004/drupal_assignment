@@ -25,10 +25,27 @@ const getPointstHistoryPageSize = () => (drupalSettings.pointsHistoryPageSize
   ? drupalSettings.pointsHistoryPageSize : 10);
 
 /**
+ * Utility function to get hello member localStorage key.
+ */
+const getHelloMemberStorageKey = () => 'hello_member_pdp';
+
+/**
+ * Utility function to get dictionary data from local storage.
+ */
+const getDictionaryDataFromStorage = () => {
+  const dictionaryData = Drupal.getItemFromLocalStorage(getHelloMemberStorageKey());
+  if (hasValue(dictionaryData)) {
+    return dictionaryData;
+  }
+  return null;
+};
+
+/**
  * Utility function to get hello member points for given price.
  */
-const getPriceToHelloMemberPoint = (price, dictionaryData) => {
-  if (hasValue(drupalSettings.currency_code)) {
+const getPriceToHelloMemberPoint = (price) => {
+  const dictionaryData = getDictionaryDataFromStorage();
+  if (hasValue(drupalSettings.currency_code) && hasValue(dictionaryData)) {
     const accrualRatioData = dictionaryData.items.find(
       (item) => item.code === drupalSettings.currency_code,
     );
@@ -41,14 +58,10 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
   return null;
 };
 
-/**
- * Utility function to get hello member localStorage key.
- */
-const getHelloMemberStorageKey = () => 'hello_member_pdp';
-
 export {
   getFormatedMemberId,
   getPointstHistoryPageSize,
   getPriceToHelloMemberPoint,
   getHelloMemberStorageKey,
+  getDictionaryDataFromStorage,
 };

@@ -334,3 +334,18 @@ function alshaya_hello_member_form_user_login_form_alter(&$form, FormStateInterf
     '#markup' => \Drupal::config('alshaya_user.settings')->get('terms_conditions.value'),
   ];
 }
+
+/**
+ * Implements hook_alshaya_spc_order_details_settings_alter().
+ */
+function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$settings, $order) {
+  // Do not proceed if Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+
+  // Add hello member points for order confirmation.
+  if (isset($order['externsion_attributes']['hm_accured_points'])) {
+    $settings['order_details']['hmAccuredPoints'] = $order['externsion_attributes']['hm_accured_points'] ?? 0;
+  }
+}

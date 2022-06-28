@@ -2,20 +2,18 @@ import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi } from '../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../js/utilities/logger';
-import { getPriceToHelloMemberPoint, getHelloMemberStorageKey } from '../../utilities';
+import { getPriceToHelloMemberPoint, getDictionaryDataFromStorage } from '../../utilities';
 
 class HelloMemberPDP extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       productPoints: null,
-      dictionaryData: Drupal.getItemFromLocalStorage(getHelloMemberStorageKey()),
     };
   }
 
   async componentDidMount() {
-    const { dictionaryData } = this.state;
-    if (dictionaryData !== null) {
+    if (getDictionaryDataFromStorage() !== null) {
       this.setState({
         productPoints: this.getInitialProductPoints(),
       });
@@ -26,7 +24,6 @@ class HelloMemberPDP extends React.Component {
         // Save dictionary data in local storage as it would remain constant.
         Drupal.addItemInLocalStorage('hello_member_pdp', response.data, 24 * 60 * 60);
         this.setState({
-          dictionaryData: response.data,
           productPoints: this.getInitialProductPoints(),
         });
       } else {
@@ -49,7 +46,6 @@ class HelloMemberPDP extends React.Component {
    * Utility function to get hello member product points for current product.
    */
   getInitialProductPoints = () => {
-    const { dictionaryData } = this.state;
     // If above details are not there in props, proceed with usual approach to
     // get the data from price amount HTML text block.
     const selector = document.querySelector('.content__title_wrapper .special--price .price-amount') || document.querySelector('.content__title_wrapper .price-amount');
@@ -58,7 +54,7 @@ class HelloMemberPDP extends React.Component {
 
     // Return price as hello member points.
     this.setState({
-      productPoints: getPriceToHelloMemberPoint(productPrice, dictionaryData),
+      productPoints: getPriceToHelloMemberPoint(productPrice),
     });
   };
 
@@ -66,12 +62,11 @@ class HelloMemberPDP extends React.Component {
    * Utility function to update hello member points for variant selected.
    */
   updateHelloMemberPoints = (variantDetails) => {
-    const { dictionaryData } = this.state;
     const { data } = variantDetails.detail;
 
     if (data.length !== 0) {
       this.setState({
-        productPoints: getPriceToHelloMemberPoint(data.price, dictionaryData),
+        productPoints: getPriceToHelloMemberPoint(data.price),
       });
     }
 
