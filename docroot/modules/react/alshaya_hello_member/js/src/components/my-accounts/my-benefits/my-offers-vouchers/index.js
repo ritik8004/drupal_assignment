@@ -4,7 +4,6 @@ import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 
 const MyOffersAndVouchers = ({ myBenefitsList }) => {
   const settings = {
-    dots: true,
     infinite: false,
     speed: 500,
     slidesToShow: 3,
@@ -21,7 +20,6 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
           infinite: true,
           swipeToSlide: true,
           variableWidth: true,
-          dots: false,
         },
       },
     ],

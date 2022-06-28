@@ -108,14 +108,15 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
     $form['hello_member']['field_date_of_birth']['#weight'] = 10;
     unset($form['field_date_of_birth']);
-
     $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
     unset($form['field_gender']['widget']['#options']['_none']);
     $form['hello_member']['field_gender'] = $form['field_gender'];
     $form['hello_member']['field_gender']['#prefix'] = '<div class="hello-member-gender">';
     $form['hello_member']['field_gender']['#suffix'] = '</div>';
     $form['hello_member']['field_gender']['#weight'] = 11;
+    unset($form['hello_member']['field_gender']['widget']['#title']);
     unset($form['field_gender']);
+    $form['field_verified_otp']['#attributes']['class'][] = 'visually-hidden';
 
     $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
@@ -195,6 +196,8 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
     'wrapper' => 'otp-verified',
     'event' => 'change',
   ];
+  $form['field_verified_otp']['#attributes']['class'][] = 'visually-hidden';
+  unset($form['hello_member']['field_gender']['widget']['#title']);
   unset($form['field_gender']);
   unset($form['field_mobile_number']);
   $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';

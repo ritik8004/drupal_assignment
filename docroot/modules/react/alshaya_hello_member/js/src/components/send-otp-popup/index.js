@@ -28,19 +28,6 @@ class SendOtpPopup extends React.Component {
     });
   };
 
-  /**
-   * Handle Error message for otp field.
-   */
-  handleErrorMessage = (isError) => {
-    if (document.getElementById('input-otp').value.length !== 6 || isError) {
-      document.getElementById('input-otp-error').innerHTML = Drupal.t('Please enter valid OTP', {}, { context: 'hello_member' });
-      document.getElementById('input-otp-error').classList.add('error');
-      return;
-    }
-    // Reset error message to empty.
-    document.getElementById('input-otp-error').innerHTML = '';
-  };
-
   // Resend OTP.
   callSendOtpApi = () => {
     const responseData = sendOtp(
@@ -61,10 +48,10 @@ class SendOtpPopup extends React.Component {
 
   // Verify OTP
   onClickVerify = () => {
-    this.handleErrorMessage(false);
+    const { otp } = this.state;
     const responseData = verifyOtp(
       `${document.getElementById('edit-field-mobile-number-0-mobile').value}`,
-      `${document.getElementById('input-otp').value}`,
+      otp,
       'reg',
       `${drupalSettings.alshaya_mobile_prefix.slice(1)}`,
     );
@@ -72,7 +59,6 @@ class SendOtpPopup extends React.Component {
       responseData.then((result) => {
         // show error message if  otp verification api fails / returns false.
         if (!result.data.status || result.data.error !== undefined) {
-          this.handleErrorMessage(true);
           return;
         }
         this.toggleSendOtpPopup(false);
@@ -97,12 +83,13 @@ class SendOtpPopup extends React.Component {
             closeOnEscape={false}
           >
             <div className="hello-member-otp-popup-form">
-              <a className="close-modal" onClick={() => this.toggleSendOtpPopup(false)}>X</a>
+              <a className="close-modal" onClick={() => this.toggleSendOtpPopup(false)} />
               <div className="opt-title">
                 <p>{ getStringMessage('sent_otp_message') }</p>
                 <p>{ document.getElementById('edit-field-mobile-number-0-mobile').value }</p>
               </div>
               <OtpInput
+                isInputNum
                 value={otp}
                 onChange={this.handleChange}
                 numInputs={6}

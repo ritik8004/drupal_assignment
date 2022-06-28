@@ -97,6 +97,7 @@
   .hello-member-modal-form-resend-otp {
     margin-#{$left}: rem(10);
     text-decoration: underline;
+    cursor: pointer;
   }
 
   .hello-member-otp-popup-form {
@@ -116,6 +117,19 @@
 
     & > div {
       justify-content: center;
+    }
+
+    .close-modal {
+      @include icon(close, after) {
+        font-weight: bold;
+      }
+
+      position: relative;
+      float: $right;
+      top: rem(-44);
+      font-size: rem(16);
+      #{$right}: rem(-16);
+      cursor: pointer;
     }
   }
 }
