@@ -129,11 +129,11 @@
     if (rcsDependency && rcsDependency !== 'none') {
       return;
     }
-    // Return if rcs placeholders are already replaced.
-    if ($(this).hasClass('rcs-processed')) {
+    // Return if rcs placeholders are already processed or in process in other thread.
+    if ($(this).hasClass('rcs-ph-processed')) {
       return;
     }
-    $(this).addClass('rcs-processed');
+    $(this).addClass('rcs-ph-processed');
 
     // Extract the parameters.
     const params = {};
