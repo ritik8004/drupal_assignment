@@ -122,7 +122,7 @@ class MyBenefitsPage extends React.Component {
           {moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY')}
         </div>
         <div className="benefit-Tnc">
-          {(drupalSettings.helloMemberBenefits.terms_conditions.value !== null) ? HTMLReactParser(drupalSettings.helloMemberBenefits.terms_conditions.value) : ''}
+          {Drupal.t('Maximum one code per member, which can be used at one occasion for purchase of above stated models, directly from the online store in the UK. For more terms, please visit https://www2.hm.com/en')}
         </div>
       </div>
     );

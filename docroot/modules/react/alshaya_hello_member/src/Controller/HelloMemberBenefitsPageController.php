@@ -82,7 +82,6 @@ class HelloMemberBenefitsPageController extends ControllerBase {
           'helloMemberBenefits' => [
             'type' => $type,
             'code' => $code,
-            'terms_conditions' => $helloMemberConfig->get('terms_conditions'),
           ],
         ],
       ],
