@@ -300,6 +300,11 @@ libraries-override:
       theme:
         css/conditional-sass/hello-member-qr-code/hello-member-qr-code.ltr.css: css/conditional-sass/hello-member-qr-code/hello-member-qr-code.ltr.css
 
+  alshaya_white_label/hello-member-pdp:
+    css:
+      theme:
+        css/conditional-sass/hello-member-pdp/hello-member-pdp.ltr.css: css/conditional-sass/hello-member-pdp/hello-member-pdp.ltr.css
+
   alshaya_white_label/hello-member-otp:
     css:
       theme:

@@ -18,6 +18,11 @@ alshaya_hello_member_benefits_page:
     dist/hello_member_benefits_page.bundle.js: {}
   dependencies:
     - alshaya_react/react
+alshaya_hello_member_pdp:
+  js:
+    dist/pdp.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
 alshaya_hello_member_send_otp:
   js:
     dist/send_otp.bundle.js: {}

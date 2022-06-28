@@ -36,6 +36,19 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
     return;
   }
 
+  $current_route = \Drupal::routeMatch();
+  $current_route_name = $current_route->getRouteName();
+
+  if ($current_route_name === 'entity.node.canonical'
+    && in_array($current_route->getParameter('node')->bundle(), [
+      'rcs_product',
+      'acq_product',
+    ])
+  ) {
+    $page['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_pdp';
+    $page['#attached']['library'][] = 'alshaya_white_label/hello-member-pdp';
+  }
+
   $page['#attached']['drupalSettings']['hello_member'] = $settings;
 }
 
@@ -300,6 +313,15 @@ function alshaya_hello_member_preprocess_html(&$variables) {
   // Add class in body for benefit page.
   if ($route_name === 'alshaya_hello_member.hello_member_benefits_page') {
     $variables['attributes']['class'][] = 'hello-member-benefit-page';
+  }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_hello_member_preprocess_node(&$variables) {
+  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
+    $variables['hello_member_enabled'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
   }
 }
 

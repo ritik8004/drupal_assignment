@@ -7,6 +7,7 @@ var config = {
     my_membership_info: './js/src/my-membership-info.js',
     hello_member_benefits_page: './js/src/hello-member-benefits-page.js',
     my_accounts_points_history: './js/src/my-accounts-points-history.js',
+    pdp: './js/src/pdp.js',
     send_otp: './js/src/send-otp.js',
   },
   output: {

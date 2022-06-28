@@ -76,6 +76,9 @@ export const getApiEndpoint = (action, params = {}) => {
     case 'helloMemberGetPointsHistory':
       endpoint = '/V1/customers/apcTransactions'; // endpoint to get hello member points history.
       break;
+    case 'helloMemberGetDictionaryData':
+      endpoint = '/V1/customers/apcDicData/HM_ACCRUAL_RATIO'; // endpoint to get hello member dictonary data.
+      break;
 
     default:
       logger.critical('Endpoint does not exist for action: @action.', {

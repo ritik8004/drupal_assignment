@@ -808,6 +808,11 @@ hello-member-qr-code:
     theme:
       css/conditional-sass/hello-member-qr-code/hello-member-qr-code.ltr.css: {}
 
+hello-member-pdp:
+  css:
+    theme:
+      css/conditional-sass/hello-member-pdp/hello-member-pdp.ltr.css: {}
+
 hello-member-otp:
   css:
     theme:
