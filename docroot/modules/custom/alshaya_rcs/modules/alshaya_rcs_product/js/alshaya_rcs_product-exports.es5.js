@@ -25,6 +25,23 @@ function isProductInStock(entity) {
     return false;
   }
 
+  // For configurable product, if all variants are OOS, then we consider the
+  // product to be OOS.
+  if (entity.type_id === 'configurable') {
+    let isAnyVariantInStock = false;
+    entity.variants.every(function eachVariant(variant) {
+      if (variant.product.stock_status === 'IN_STOCK') {
+        isAnyVariantInStock = true
+        // Break.
+        return false;
+      }
+      return true;
+    });
+    if (!isAnyVariantInStock) {
+      return false;
+    }
+  }
+
   return true;
 }
 
