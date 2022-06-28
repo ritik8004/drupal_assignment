@@ -286,6 +286,10 @@ function _alshaya_online_returns_translations() {
         'ar' => 'يرجى التواصل مع خدمة الزبائن للإعدادات المتعلقة باسترجاع المنتجات ذات الطلبية الكبيرة',
         'context' => 'online_returns',
       ],
+      'Cancelled Items' => [
+        'ar' => 'المنتجات الملغاه',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 
