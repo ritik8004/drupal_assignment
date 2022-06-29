@@ -453,6 +453,15 @@ class AlshayaRcsProductHelper {
     if (!empty($options)) {
       return $options;
     }
+
+    // Add the configurable attributes.
+    $attributes = $this->configFactory->get('acq_sku.configurable_form_settings')->get('attribute_weights');
+    foreach ($attributes as $group) {
+      foreach (array_keys($group) as $attribute) {
+        array_push($options, $attribute);
+      }
+    }
+
     $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query', [$options]);
     if (count($options) > 0) {
       // Remove duplicate elements from the array.
