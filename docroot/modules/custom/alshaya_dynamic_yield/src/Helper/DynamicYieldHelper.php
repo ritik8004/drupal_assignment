@@ -37,8 +37,8 @@ class DynamicYieldHelper {
   public function getDynamicYieldConfig() {
     $alshaya_dynamic_yield_config = $this->configFactory->get('alshaya_dynamic_yield.settings');
     $config = [
-      'pdpEmptyDivs' => $alshaya_dynamic_yield_config->get('pdp_empty_divs'),
-      'cartEmptyDivs' => $alshaya_dynamic_yield_config->get('cart_empty_divs'),
+      'pdpDivPlaceholderCount' => $alshaya_dynamic_yield_config->get('pdp_div_placeholder_count'),
+      'cartDivPlaceholderCount' => $alshaya_dynamic_yield_config->get('cart_div_placeholder_count'),
     ];
 
     return $config;

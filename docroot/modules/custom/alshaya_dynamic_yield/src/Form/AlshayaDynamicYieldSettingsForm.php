@@ -38,18 +38,18 @@ class AlshayaDynamicYieldSettingsForm extends ConfigFormBase {
       '#open' => TRUE,
     ];
 
-    $form['basic_settings']['pdp_empty_divs'] = [
-      '#type' => 'textfield',
+    $form['basic_settings']['pdp_div_placeholder_count'] = [
+      '#type' => 'number',
       '#title' => $this->t('Number of empty divs for PDP'),
       '#description' => $this->t('Enter count of divs required on PDP pages for dynamic yield recommendations.'),
-      '#default_value' => $config->get('pdp_empty_divs'),
+      '#default_value' => $config->get('pdp_div_placeholder_count'),
     ];
 
-    $form['basic_settings']['cart_empty_divs'] = [
-      '#type' => 'textfield',
+    $form['basic_settings']['cart_div_placeholder_count'] = [
+      '#type' => 'number',
       '#title' => $this->t('Number of empty divs for cart'),
       '#description' => $this->t('Enter count of divs required on cart pages for dynamic yield recommendations.'),
-      '#default_value' => $config->get('cart_empty_divs'),
+      '#default_value' => $config->get('cart_div_placeholder_count'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -62,8 +62,8 @@ class AlshayaDynamicYieldSettingsForm extends ConfigFormBase {
     $values = $form_state->getValues();
 
     $this->config('alshaya_dynamic_yield.settings')
-      ->set('pdp_empty_divs', $values['pdp_empty_divs'])
-      ->set('cart_empty_divs', $values['cart_empty_divs'])
+      ->set('pdp_div_placeholder_count', $values['pdp_div_placeholder_count'])
+      ->set('cart_div_placeholder_count', $values['cart_div_placeholder_count'])
       ->save();
 
     parent::submitForm($form, $form_state);

@@ -1,7 +1,6 @@
 import React from 'react';
 
 const DynamicYieldPlaceholder = ({ context, placeHolderCount }) => {
-  // Get dynamic yield empty divs count for cart page if dynamic yield enabled.
   if (placeHolderCount <= 0) {
     return null;
   }

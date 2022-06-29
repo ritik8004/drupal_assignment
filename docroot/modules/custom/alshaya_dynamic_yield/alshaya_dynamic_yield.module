@@ -6,6 +6,7 @@
  */
 
 use Drupal\taxonomy\TermInterface;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_page_attachments().
@@ -33,33 +34,49 @@ function alshaya_dynamic_yield_acq_sku_commerce_category_alter(TermInterface $te
 function alshaya_dynamic_yield_preprocess_node(&$variables) {
   if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
     $dynamicYieldConfigs = \Drupal::service('alshaya_dynamic_yield.dynamic_yield_helper')->getDynamicYieldConfig();
-    if ($dynamicYieldConfigs['pdpEmptyDivs']) {
-      $variables['dynamicYieldPdpDivs'] = $dynamicYieldConfigs['pdpEmptyDivs'];
+    if ($dynamicYieldConfigs['pdpDivPlaceholderCount']) {
+      $variables['dynamicYieldPdpDivs'] = $dynamicYieldConfigs['pdpDivPlaceholderCount'];
     }
   }
 }
 
 /**
- * Implements hook_page_attachments_alter().
+ * Implements hook_alshaya_acm_product_build_alter().
  */
-function alshaya_dynamic_yield_page_attachments_alter(array &$page) {
-  $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_dynamic_yield.settings')->getCacheTags());
+function alshaya_dynamic_yield_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  if ($context !== 'pdp') {
+    return;
+  }
 
-  /** @var \Drupal\alshaya_dynamic_yield\Helper\DynamicYieldHelper */
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_dynamic_yield.settings')->getCacheTags());
+
   $dynamicYieldConfigs = \Drupal::service('alshaya_dynamic_yield.dynamic_yield_helper')->getDynamicYieldConfig();
+  if ($dynamicYieldConfigs['pdpDivPlaceholderCount']) {
+    $build['#attached']['drupalSettings']['pdpDyamicYieldDivsCount'] = $dynamicYieldConfigs['pdpDivPlaceholderCount'];
+  }
+}
 
-  $current_route = \Drupal::routeMatch();
-  $current_route_name = $current_route->getRouteName();
-  // Add configs for empty divs for cart and pdp pages.
-  if ($dynamicYieldConfigs['pdpEmptyDivs'] && ($current_route_name === 'entity.node.canonical'
-    && in_array($current_route->getParameter('node')->bundle(), [
-      'rcs_product',
-      'acq_product',
-    ]))
-  ) {
-    $page['#attached']['drupalSettings']['dynamicYieldConfig']['pdpEmptyDivs'] = $dynamicYieldConfigs['pdpEmptyDivs'];
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_dynamic_yield_alshaya_spc_cart_build_alter(array &$build) {
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_dynamic_yield.settings')->getCacheTags());
+
+  $dynamicYieldConfigs = \Drupal::service('alshaya_dynamic_yield.dynamic_yield_helper')->getDynamicYieldConfig();
+  if ($dynamicYieldConfigs['cartDivPlaceholderCount']) {
+    $build['#attached']['drupalSettings']['cartDyamicYieldDivsCount'] = $dynamicYieldConfigs['cartDivPlaceholderCount'];
   }
-  elseif ($current_route_name === 'acq_cart.cart' && $dynamicYieldConfigs['cartEmptyDivs']) {
-    $page['#attached']['drupalSettings']['dynamicYieldConfig']['cartEmptyDivs'] = $dynamicYieldConfigs['cartEmptyDivs'];
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_build_alter().
+ */
+function alshaya_dynamic_yield_alshaya_rcs_product_build_alter(array &$build, array &$entity_info) {
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_dynamic_yield.settings')->getCacheTags());
+
+  $dynamicYieldConfigs = \Drupal::service('alshaya_dynamic_yield.dynamic_yield_helper')->getDynamicYieldConfig();
+  if ($dynamicYieldConfigs['pdpDivPlaceholderCount']) {
+    $build['#attached']['drupalSettings']['pdpDyamicYieldDivsCount'] = $dynamicYieldConfigs['pdpDivPlaceholderCount'];
   }
+
 }
