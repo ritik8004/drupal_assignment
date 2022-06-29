@@ -86,9 +86,6 @@ export default class DeliveryOptions extends React.Component {
                     if (currentArea !== null) {
                       this.addShippingMethodWithArea(currentArea, productSku);
                     }
-
-                    // Dispatch event to show SDD / ED labels on PDP.
-                    dispatchCustomEvent('showPdpSddEdLabel', shippingMethodObj);
                   } else {
                     // Don't show DeliveryAreaSelect if product does notsupport
                     // SDD/ED on product level.
@@ -105,6 +102,9 @@ export default class DeliveryOptions extends React.Component {
                 }
               }
             }
+
+            // Dispatch event to show SDD / ED labels on PDP.
+            dispatchCustomEvent('showPdpSddEdLabel', response);
           },
         );
       } else {
@@ -119,6 +119,9 @@ export default class DeliveryOptions extends React.Component {
       (responseWithArea) => {
         if (responseWithArea && responseWithArea !== null) {
           this.checkShippingMethods(responseWithArea, productSku);
+
+          // Dispatch event to show SDD / ED labels on PDP.
+          dispatchCustomEvent('showPdpSddEdLabel', responseWithArea);
         }
       },
     );

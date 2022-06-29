@@ -19,10 +19,17 @@ export default class PdpSddEd extends React.Component {
    * Show SDD-ED labels on PDP.
    */
   showPdpSddEdLabel = (e) => {
-    const { applicable_shipping_methods: shippingMethods } = e.detail;
+    // Get shipping methods from event details.
+    const { applicable_shipping_methods: shippingMethods } = e.detail[0];
+
+    // Toggle SDD ED label display based on status received.
     if (checkShippingMethodsStatus(shippingMethods)) {
       this.setState({
         sddEdClass: 'active',
+      });
+    } else {
+      this.setState({
+        sddEdClass: 'in-active',
       });
     }
   }
