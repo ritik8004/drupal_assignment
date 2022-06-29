@@ -1289,28 +1289,28 @@ window.commerceBackend = window.commerceBackend || {};
    */
   var processProductAttributes = function (data) {
     // Process custom attributes metadata.
-    let attributes_metadata = [];
+    var attributesMetadata = [];
     data.customAttributeMetadata.items.forEach(function eachValue(value) {
-      attributes_metadata[value.attribute_code] = {};
+      attributesMetadata[value.attribute_code] = {};
       for (let i = 0; i < value.attribute_options.length; i++) {
         let option = value.attribute_options[i];
-        attributes_metadata[value.attribute_code][option.value] = option.label;
+        attributesMetadata[value.attribute_code][option.value] = option.label;
       }
     });
     // Get labels for product attributes from custom attribute metadata.
-    let product_attribute_values = data.products.items[0];
-    product_attributes = {};
-    Object.entries(product_attribute_values).forEach(function (value) {
+    var productAttributeValues = data.products.items[0];
+    productAttributes = {};
+    Object.entries(productAttributeValues).forEach(function (value) {
       if (Drupal.hasValue(value[1])) {
         // Split comma separated product attributes.
         let value_arr = value[1].split(',');
-        product_attributes[value[0]] = [];
+        productAttributes[value[0]] = [];
         value_arr.forEach(function (option) {
-          product_attributes[value[0]].push(attributes_metadata[value[0]][option]);
+          productAttributes[value[0]].push(attributesMetadata[value[0]][option]);
         });
       }
     });
-    return product_attributes;
+    return productAttributes;
   };
 
   /**

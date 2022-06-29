@@ -29,22 +29,22 @@
 
     var data = result;
     // Attributes to be displayed on main page.
-    let main_attributes_code = {
+    let mainAttributesCode = {
       'fit' : 'FIT',
       'article_description' : 'ARTICLE DESCRIPTION',
     };
-    let description_details = [];
-    for (var attributes_code in main_attributes_code) {
-      if (Drupal.hasValue(data[attributes_code])) {
+    let descriptionDetails = [];
+    for (var attributesCode in mainAttributesCode) {
+      if (Drupal.hasValue(data[attributesCode])) {
         // Attribute codes are comma seperated if they have multiple values.
-        let attr_values = data[attributes_code].split(",");
+        let attr_values = data[attributesCode].split(",");
         let labels = [];
         for (let attr_value of attr_values) {
-          let label = window.commerceBackend.getAttributeValueLabel(attributes_code, attr_value);
+          let label = window.commerceBackend.getAttributeValueLabel(attributesCode, attr_value);
           labels.push(label);
         }
-        description_details.push({
-          title: main_attributes_code[attributes_code],
+        descriptionDetails.push({
+          title: mainAttributesCode[attributesCode],
           data: labels,
         });
       }
@@ -62,17 +62,17 @@
       article_warning: data.article_warning,
       sku: data.sku,
       show_product_detail_title: (data.composition || data.washing_instructions || data.article_warning),
-      description_details: description_details,
+      description_details: descriptionDetails,
       title_name: data.title_name,
     };
 
     // Append field values to short_description.
     // The text will be trimmed if the description is longer than 160 characters.
-    var short_description = { html: data.description.html };
-    short_description.html += (data.composition) ? '' + data.composition : '';
-    short_description.html += (data.washing_instructions) ? '' + data.washing_instructions : '';
-    short_description.html += (data.article_warning) ? '' + data.article_warning : '';
-    result.short_description = short_description;
+    var shortDescription = { html: data.description.html };
+    shortDescription.html += (data.composition) ? '' + data.composition : '';
+    shortDescription.html += (data.washing_instructions) ? '' + data.washing_instructions : '';
+    shortDescription.html += (data.article_warning) ? '' + data.article_warning : '';
+    result.short_description = shortDescription;
   };
 
   RcsEventManager.addListener('alshayaRcsAlterPdpSwatch', function (e) {
