@@ -443,7 +443,29 @@ class AlshayaRcsProductHelper {
       return $options;
     }
     $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query', [$options]);
-    return $options;
+
+    // Remove duplicate elements from the array.
+    // Same attributes may be added by hook, so this is to prevent from
+    // querying the same attribute multiple times.
+    $unique_options = [];
+    $number_of_options = count($options);
+    if ($number_of_options) {
+      $unique_options[] = $options[0];
+      for ($i = 1; $i < $number_of_options - 1; $i++) {
+        $flag = 0;
+        for ($j = 0; $j < count($unique_options); $j++) {
+          if ($options[$i]['attribute_code'] === $unique_options[$j]['attribute_code']) {
+            $flag = 1;
+            break;
+          }
+        }
+        if (!$flag) {
+          $unique_options[] = $options[$i];
+        }
+      }
+    }
+
+    return $unique_options;
   }
 
   /**
