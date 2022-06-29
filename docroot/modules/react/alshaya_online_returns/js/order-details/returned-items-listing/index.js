@@ -43,7 +43,7 @@ class ReturnedItemsListing extends React.Component {
     if (type === 'rejected') {
       return (
         <span className={`${type}`}>
-          {Drupal.t('Rejected Items', {}, { context: 'online_returns' })}
+          {Drupal.t('Cancelled Items', {}, { context: 'online_returns' })}
         </span>
       );
     }
