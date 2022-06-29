@@ -43,6 +43,8 @@
   .c-menu-secondary {
     a {
       @include breakpoint($desktop) {
+        align-items: center;
+        display: inline-flex;
         padding: 1.31rem 1.438rem;
         height: rem(60);
       }

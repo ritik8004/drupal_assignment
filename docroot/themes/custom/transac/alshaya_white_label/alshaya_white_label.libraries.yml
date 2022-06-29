@@ -134,6 +134,7 @@ attribute.common:
     - core/jquery
     - core/jquery.once
     - core/drupal
+    - alshaya_master/common_functions
 
 attribute:
   js:
@@ -771,3 +772,8 @@ online-booking:
   css:
     theme:
       css/conditional-sass/online-booking/online-booking.ltr.css: {}
+
+inter-country-transfer:
+  css:
+    theme:
+      css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css: {}

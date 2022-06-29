@@ -54,6 +54,11 @@ product.sku_base_form:
   js:
     templates/rcs-sku-base-form.handlebars: {}
 
+product.sku_base_form_oos:
+  version: 1.x
+  js:
+    templates/rcs-sku-base-form-oos.handlebars: {}
+
 product.not_buyable_product:
   version: 1.x
   js:

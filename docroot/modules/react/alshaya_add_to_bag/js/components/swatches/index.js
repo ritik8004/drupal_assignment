@@ -1,5 +1,4 @@
 import React from 'react';
-import ConditionalView from '../../../../js/utilities/components/conditional-view';
 
 /**
  * Click handler for the swatch item.
@@ -7,9 +6,11 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
  * @param {object} e
  *   The event object.
  */
-const onSwatchSelect = (e, attributeName, onClick, isColor) => {
+const onSwatchSelect = (e, attributeName, onClick, type) => {
   e.preventDefault();
-  const swatchValue = isColor ? e.target.dataset.value : e.target.parentElement.dataset.value;
+  const swatchValue = (type !== 'image')
+    ? e.target.dataset.value
+    : e.target.parentElement.dataset.value;
   onClick(attributeName, swatchValue);
 };
 
@@ -36,37 +37,60 @@ const Swatch = (props) => {
     classes.push(disabledClass);
   }
 
-  const isColor = (type === 'color' || type === 'text');
+  // Render the LI based on the swatch type.
+  switch (type) {
+    // If swatch is a type of color.
+    case 'color':
+      return (
+        <li className="li-swatch-color" key={value}>
+          <span className="swatch-label">{label}</span>
+          <a
+            id={`value${value}`}
+            data-value={value}
+            className={classes}
+            href="#"
+            style={{ backgroundColor: data }}
+            onClick={(e) => onSwatchSelect(e, attributeName, onClick, type)}
+          />
+        </li>
+      );
 
-  return (
-    <li
-      className={isColor ? 'li-swatch-color' : 'li-swatch-image'}
-    >
-      <span className="swatch-label">{label}</span>
-      <ConditionalView condition={isColor}>
-        <a
-          id={`value${value}`}
-          data-value={value}
-          className={classes}
-          href="#"
-          style={{ backgroundColor: data }}
-          onClick={(e) => onSwatchSelect(e, attributeName, onClick, isColor)}
-        />
-      </ConditionalView>
-      <ConditionalView condition={!isColor}>
-        <a
-          id={`value${value}`}
-          data-value={value}
-          className={classes}
-          href="#"
-          onClick={(e) => onSwatchSelect(e, attributeName, onClick, isColor)}
-        >
-          <img loading="lazy" src={data} />
-        </a>
+    // If swatch is a type of text.
+    case 'text':
+      return (
+        <li className="li-swatch-text" key={value}>
+          <a
+            id={`value${value}`}
+            data-value={value}
+            className={classes}
+            href="#"
+            onClick={(e) => onSwatchSelect(e, attributeName, onClick, type)}
+          >
+            {label}
+          </a>
+        </li>
+      );
 
-      </ConditionalView>
-    </li>
-  );
+    // If swatch is a type of an image.
+    case 'image':
+      return (
+        <li className="li-swatch-image" key={value}>
+          <a
+            id={`value${value}`}
+            data-value={value}
+            className={classes}
+            href="#"
+            onClick={(e) => onSwatchSelect(e, attributeName, onClick, type)}
+          >
+            <img loading="lazy" src={data} />
+          </a>
+        </li>
+      );
+
+    // By detault return null.
+    default:
+      return null;
+  }
 };
 
 export default Swatch;

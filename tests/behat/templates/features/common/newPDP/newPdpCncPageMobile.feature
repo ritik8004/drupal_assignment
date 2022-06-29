@@ -1,4 +1,4 @@
-@javascript @smoke @mobile @newPdp @flkwprod @flaeprod @flsaprod
+@javascript @smoke @mobile @newPdp
 Feature: Testing new PDP CNC Block for Mobile
 
   Background:

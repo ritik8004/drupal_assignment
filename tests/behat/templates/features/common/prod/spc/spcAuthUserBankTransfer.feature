@@ -26,7 +26,7 @@ Feature: SPC Checkout Home Delivery using Bank Transfer method for Authenticated
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait 10 seconds
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -55,7 +55,7 @@ Feature: SPC Checkout Home Delivery using Bank Transfer method for Authenticated
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait 10 seconds
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -86,7 +86,7 @@ Feature: SPC Checkout Home Delivery using Bank Transfer method for Authenticated
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element

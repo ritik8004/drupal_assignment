@@ -78,6 +78,22 @@
     }
   }
 
+  @include breakpoint($desktop) {
+    .header--wrapper {
+      background: $header_super_category_enabled_bg;
+    }
+  }
+
+  .c-menu-primary {
+    .region__menu-primary {
+      background: $header_super_category_enabled_bg;
+    }
+  }
+
+  .c-menu-secondary {
+    background: $header_super_category_enabled_bg;
+  }
+
   @include breakpoint($upto-desktop) {
     .menu--active .mobile--close,
     .logged-in .mobile--close,
@@ -203,10 +219,6 @@
     .main--menu ul.menu--one__list {
       width: 20rem;
     }
-
-    .c-my-account-nav {
-      width: 16.875rem !important;
-    }
   }
 
   .c-menu-secondary,
@@ -237,7 +249,7 @@
     }
 
     @include breakpoint($upto-desktop) {
-      top: rem(107);
+      top: rem(120);
     }
 
     li::after {
@@ -517,6 +529,21 @@ body {
               top: 0;
             }
           }
+        }
+      }
+    }
+
+    &.aura-enabled {
+      .main--menu ul.menu--one__list,
+      .c-menu-secondary {
+        @include breakpoint($upto-desktop) {
+          top: rem(120);
+        }
+      }
+
+      .c-my-account-nav {
+        @include breakpoint($upto-desktop) {
+          top: rem(120);
         }
       }
     }

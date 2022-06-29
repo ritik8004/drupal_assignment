@@ -1,4 +1,5 @@
 import React from 'react';
+import { getPayable } from '../../../utilities/checkout_util';
 
 class PaymentMethodPostpay extends React.Component {
   componentDidMount = () => {
@@ -11,12 +12,13 @@ class PaymentMethodPostpay extends React.Component {
 
   render() {
     const { postpay, postpayWidgetInfo, cart } = this.props;
+    const amount = getPayable(cart);
     return (
       <>
         <div
           className={postpayWidgetInfo.class}
           data-type={postpayWidgetInfo['data-type']}
-          data-amount={(cart.cart.totals.base_grand_total * postpay.currency_multiplier).toFixed(0)}
+          data-amount={(amount * postpay.currency_multiplier).toFixed(0)}
           data-currency={postpayWidgetInfo['data-currency']}
           data-num-instalments={postpayWidgetInfo['data-num-instalments']}
           data-locale={postpayWidgetInfo['data-locale']}

@@ -1,8 +1,8 @@
 // Stylesheet mixins.
+$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/imgs/icons/ic-loader.svg';
 $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/imgs';
 
-%modal-overlay,
-.modal-overlay {
+%modal-overlay {
   overflow: hidden;
 
   &::before {
@@ -11,11 +11,10 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/i
   }
 }
 
-%modal-overlay-spinner,
-.modal-overlay--spinner {
+%modal-overlay-spinner {
   &::after {
     content: '';
-    background-image: url("../imgs/icons/ic-loader.svg");
+    background-image: url(#{$base_theme_loader_img_directory_path});
     width: 2rem;
     height: 1.7rem;
   }

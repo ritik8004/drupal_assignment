@@ -12,6 +12,35 @@ function isProductBuyable(entity) {
 }
 
 /**
+ * Check if the product is in stock.
+ *
+ * @param {object} entity
+ *   The product entity.
+ *
+ * @returns {Boolean}
+ *   True if product is in stock, else false.
+ */
+function isProductInStock(entity) {
+  if (entity.stock_status === 'OUT_OF_STOCK') {
+    return false;
+  }
+
+  // @todo Check for free gifts when checking the variants.
+  // For configurable product, if all variants are OOS, then we consider the
+  // product to be OOS.
+  if (entity.type_id === 'configurable') {
+    const isAnyVariantInStock = entity.variants.some((variant) =>
+      variant.product.stock_status === 'IN_STOCK'
+    );
+    if (!isAnyVariantInStock) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
  * Create short text with ellipsis and Read more button.
  *
  * @param {string} value
@@ -154,6 +183,12 @@ exports.getFormattedAmount = getFormattedAmount;
 function getChildSkuFromAttribute(sku, attribute, option_id) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
 
+  if (!Drupal.hasValue(combinations.attribute_sku) ) {
+    Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
+      '@sku': sku
+    });
+    return null;
+  }
   if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
     Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
       '@attribute': attribute,
@@ -204,9 +239,9 @@ function disableUnavailableOptions(sku, configurableOptions) {
   // Clone this so as to not modify the original object.
   configurableOptionsClone = JSON.parse(JSON.stringify(configurableOptions));
   configurableOptionsClone.forEach(function eachOption(option) {
-    option.values.forEach(function eachValue(value, index) {
-      if (typeof combinations.attribute_sku[option.attribute_code][value.value_index] === 'undefined') {
-        option.values.splice(index, 1);
+    option.values = option.values.filter(function eachValue(value) {
+      if (Drupal.hasValue(combinations.attribute_sku[option.attribute_code][value.value_index])) {
+        return true;
       }
     });
   });
@@ -510,6 +545,11 @@ exports.computePhFilters = function (input, filter) {
           not_buyable_help_text: drupalSettings.alshayaRcs.not_buyable_help_text,
         };
         value = handlebarsRenderer.render(`product.not_buyable_product`, data);
+        break;
+      }
+
+      if (!isProductInStock(input)) {
+        value = handlebarsRenderer.render(`product.sku_base_form_oos`, {text: Drupal.t('Out of stock')});
         break;
       }
 

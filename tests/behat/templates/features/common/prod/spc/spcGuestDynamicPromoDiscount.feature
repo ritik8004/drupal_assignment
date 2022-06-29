@@ -34,7 +34,7 @@ Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Guest
   And I wait for the page to load
   When I click the anchor link ".edit-checkout-as-guest" on page
   And I wait 30 seconds
-  And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+  And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
   And I wait 10 seconds
   And I wait for AJAX to finish
   And I select the home delivery address
@@ -83,7 +83,7 @@ Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Guest
   And I wait for the page to load
   When I click the anchor link ".edit-checkout-as-guest" on page
   And I wait 30 seconds
-  And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+  And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
   And I wait 10 seconds
   Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
   And I wait 10 seconds
@@ -132,7 +132,7 @@ Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Guest
   And I wait for the page to load
   When I click the anchor link ".edit-checkout-as-guest" on page
   And I wait 30 seconds
-  And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+  And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
   And I wait 10 seconds
   And I wait for AJAX to finish
   And I select the home delivery address

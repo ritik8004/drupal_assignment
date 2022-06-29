@@ -98,6 +98,8 @@ function alshaya_rcs_listing_install() {
     batch_set($batch);
   }
 
+  // Set MDC index as index prefix.
+  \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix('mdc');
 }
 
 /**
@@ -178,6 +180,9 @@ function alshaya_rcs_listing_uninstall() {
 
   // Reinstate ACQ Product Category Terms.
   \Drupal::service('alshaya_rcs_main_menu.category_data_migration')->rollbackProductCategoryMigration();
+
+  // Set Drupal index as index prefix.
+  \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix('drupal');
 }
 
 /**

@@ -580,7 +580,6 @@ window.commerceBackend = window.commerceBackend || {};
       firstChild: '',
     };
 
-
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
       // Don't consider OOS products.
@@ -625,9 +624,11 @@ window.commerceBackend = window.commerceBackend || {};
       }
     });
 
-    var firstChild = Object.entries(combinations.attribute_sku)[0];
-    firstChild = Object.entries(firstChild[1]);
-    combinations.firstChild = firstChild[0][1][0];
+    if (Drupal.hasValue(combinations.attribute_sku)) {
+      var firstChild = Object.entries(combinations.attribute_sku)[0];
+      firstChild = Object.entries(firstChild[1]);
+      combinations.firstChild = firstChild[0][1][0];
+    }
 
     // @todo: Add check for simple product.
     Object.keys(combinations.by_sku).forEach(function (sku) {
@@ -714,7 +715,7 @@ window.commerceBackend = window.commerceBackend || {};
       // Do this mapping for easy access.
       rawProductData.variants.forEach(function (variant) {
         variants[variant.product.sku] = variant;
-      })
+      });
 
       configurableOptions.forEach(function (option) {
         option.values.forEach(function (value) {

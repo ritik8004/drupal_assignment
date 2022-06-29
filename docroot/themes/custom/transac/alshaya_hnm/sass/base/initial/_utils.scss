@@ -1,0 +1,42 @@
+.modal-overlay {
+  height: initial;
+  width: 100%;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 7;
+  }
+}
+
+.modal-overlay--spinner {
+  @extend %modal-overlay;
+
+  &::before {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 1000;
+  }
+
+  &::after {
+    content: "";
+    position: fixed;
+    top: 50%;
+    right: 0;
+    left: 0;
+    transform: translateY(-50%);
+    background-image: url(#{$base_theme_loader_img_directory_path});
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: 0 auto;
+    width: 6rem;
+    height: 6rem;
+    z-index: 1001;
+  }
+}

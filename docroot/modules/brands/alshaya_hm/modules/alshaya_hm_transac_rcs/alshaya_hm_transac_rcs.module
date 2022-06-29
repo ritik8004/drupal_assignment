@@ -21,15 +21,6 @@ function alshaya_hm_transac_rcs_module_implements_alter(&$implementations, $hook
 }
 
 /**
- * Implements hook_alshaya_rcs_product_query_fields_alter().
- */
-function alshaya_hm_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
-  array_push($fields['items']['... on ConfigurableProduct']['variants']['product'],
-    'size',
-  );
-}
-
-/**
  * Implements hook_rcs_handlebars_templates_alter().
  */
 function alshaya_hm_transac_rcs_rcs_handlebars_templates_alter(&$templates, $entity) {
