@@ -41,7 +41,6 @@
 .geolocation-common-map-container {
   [aria-hidden=true] {
     color: $store_finder_map_marker_text !important;
-    padding-top: rem(17);
     font-weight: bold;
   }
 }

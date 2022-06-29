@@ -540,10 +540,6 @@
   .hours--label::after {
     color: $store_finder_search_results_down_arrow;
   }
-
-  [aria-hidden=true] {
-    padding-top: rem(5);
-  }
 }
 
 .views-field-field-store-open-hours {

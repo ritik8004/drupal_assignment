@@ -60,14 +60,6 @@
     }
   }
 
-  .geolocation-common-map-container {
-    html[lang=ar] & {
-      [aria-hidden="true"] {
-        padding-left: rem(16);
-      }
-    }
-  }
-
   .pager__item {
     list-style: none;
   }
