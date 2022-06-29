@@ -99,9 +99,4 @@ function datadog_js_page_attachments(array &$attachments) {
     $attachments['#attached']['library'][] = 'datadog_js/logger';
   }
 
-  // Initial a variable with page load timestamp to identify the actual time
-  // when page was requested and loaded. We will pass this to Datadog log for
-  // better monitoring.
-  $attachments['#attached']['drupalSettings']['datadog']['pageLoadTime'] = \Drupal::time()->getCurrentTime();
-
 }
