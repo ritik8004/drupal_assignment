@@ -5,14 +5,29 @@
   // Event listener to update the data layer object with the proper product
   // data.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
-    // @todo This is copied from COS brand module. We need to work on it for HM.
     // Return if result is empty.
-    if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'product') {
+    if (typeof e.detail.result === 'undefined' || (e.detail.pageType !== 'product' && e.detail.placeholder !== "products-in-style")) {
       return;
     }
+    if (!Array.isArray(e.detail.result)) {
+      result = processDescription(e.detail.result);
+    }
+    else {
+      e.detail.result.forEach(function eachValue (result) {
+        result = processDescription(result);
+      });
+    }
+  });
 
-    var data = e.detail.result;
+  /**
+   * Process PDP description.
+   *
+   * @param {object} result
+   *   Rcs Product entity.
+   */
+  function processDescription (result) {
 
+    var data = result;
     // Attributes to be displayed on main page.
     let main_attributes_code = {
       'fit' : 'FIT',
@@ -40,7 +55,7 @@
 
     // Add extra data to product description.
     // This will be rendered using handlebars templates to add P tags and H3 titles.
-    e.detail.result.description = {
+    result.description = {
       html: data.description.html,
       composition: composition,
       washing_instructions: data.washing_instructions,
@@ -57,8 +72,8 @@
     short_description.html += (data.composition) ? '' + data.composition : '';
     short_description.html += (data.washing_instructions) ? '' + data.washing_instructions : '';
     short_description.html += (data.article_warning) ? '' + data.article_warning : '';
-    e.detail.result.short_description = short_description;
-  });
+    result.short_description = short_description;
+  };
 
   RcsEventManager.addListener('alshayaRcsAlterPdpSwatch', function (e) {
     const rawProductData = window.commerceBackend.getProductData(e.detail.sku, false, false);
@@ -88,8 +103,11 @@
 
   /**
    * Fetch composition attribute for pdp.
+   *
+   * @param {object} entity
+   *   Rcs Product entity.
    */
-  var fetchCompositionAttribute = function(entity) {
+  function fetchCompositionAttribute (entity) {
     if (entity.type_id == 'configurable') {
     return entity.variants[0].product.composition;
   }

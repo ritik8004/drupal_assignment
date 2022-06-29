@@ -469,11 +469,8 @@ class AlshayaRcsProductHelper {
    *   Product additional attributes query.
    */
   public function getProductAdditionalAttributesQueryFields() {
-    $attributes = &drupal_static(__METHOD__, []);
-    if (!empty($attributes)) {
-      return $attributes;
-    }
     $query = [];
+    $attributes = [];
     $attributes = $this->moduleHandler->invokeAll('alshaya_rcs_product_additional_attributes_query_fields', [$attributes]);
     $query['items'] = $attributes;
     return $query;

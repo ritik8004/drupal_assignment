@@ -1263,42 +1263,20 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {string} sku
    *   SKU value for which additional attributes is to be returned.
    * @param {object} attributes
-   *   Attributes object cona
+   *   Product attributes lists.
    */
-  window.commerceBackend.getAdditionalAttributes = async function getAdditionalAttributes(sku, attributes) {
-    let attributes_variables = getAttributesVariable(attributes);
+  window.commerceBackend.getAdditionalAttributes = async function getAdditionalAttributes(sku, attributesVariable) {
     // Get product attributes and custom attribute metadata and labels.
     response = await rcsPhCommerceBackend.getData('product_additional_attributes', {
       'sku': sku ,
-      'attributes': attributes_variables,
+      'attributes': attributesVariable,
     })
-    let product_attributes = [];
+    var productAttributes = [];
     if (Drupal.hasValue(response.data)) {
-      product_attributes = processProductAttributes(response.data);
+      productAttributes = processProductAttributes(response.data);
     }
-    return product_attributes;
+    return productAttributes;
   };
-
- /**
-  * Returns attributes in graphql variables format.
-  *
-  * @param {array} attributes
-  *   List of product attributes.
-  *
-  * @returns {array}
-  *  Product attributes in graphql attribute format.
-  */
-  var getAttributesVariable = function (attributes) {
-    attributes = Object.keys(attributes);
-    var attributes_variables = [];
-    attributes.forEach(function eachValue (value) {
-      attributes_variables.push({
-        'attribute_code' : value,
-        'entity_type': 4,
-      });
-    });
-    return attributes_variables;
-  }
 
   /**
    * Returns list of product attribute with labels.
@@ -1310,7 +1288,6 @@ window.commerceBackend = window.commerceBackend || {};
    *  List of product attributes values and labels.
    */
   var processProductAttributes = function (data) {
-
     // Process custom attributes metadata.
     let attributes_metadata = [];
     data.customAttributeMetadata.items.forEach(function eachValue(value) {
