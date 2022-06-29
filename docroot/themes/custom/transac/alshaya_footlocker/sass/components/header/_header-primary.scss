@@ -342,11 +342,13 @@ header {
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
-    max-width: 76.75rem;
+    max-width: none;
 
     ul.menu--one__list {
       width: auto;
       background: $mm_bg_desk;
+      padding: 0;
+      margin: 0 auto;
     }
 
     li.menu--one__list-item {
@@ -388,6 +390,58 @@ header {
 
       .menu--two__list {
         background: $mm_l2_bg;
+
+        .menu--two__list-item {
+          padding-left: rem(20);
+        }
+      }
+    }
+
+    &:not(.megamenu-inline-layout) {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          height: auto !important;
+          justify-content: center;
+          padding: rem(20) 0 0;
+        }
+
+        .menu__links__wrapper {
+          max-width: rem(1218);
+          width: 100%;
+          padding: 0;
+
+          .column {
+            max-width: rem(210);
+            min-width: 0;
+            width: 100%;
+
+            &:last-child {
+              .menu--two__list-item {
+                padding-#{$right}: 0;
+              }
+            }
+
+            &:not(:last-child) {
+              margin-#{$right}: rem(42);
+            }
+
+            .menu__list-item {
+              &:last-child {
+                padding-bottom: rem(46);
+              }
+
+              .menu__list {
+                .menu--three__list-item {
+                  margin-#{$right}: 0;
+
+                  &:last-child {
+                    padding-bottom: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
