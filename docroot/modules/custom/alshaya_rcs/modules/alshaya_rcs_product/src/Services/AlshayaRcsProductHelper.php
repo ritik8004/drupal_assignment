@@ -406,15 +406,18 @@ class AlshayaRcsProductHelper {
       ],
     ];
 
+    $this->moduleHandler->alter('alshaya_rcs_product_query_fields', $fields);
+
     // Add the configurable product attributes dynamically.
     $attributes = $this->configFactory->get('acq_sku.configurable_form_settings')->get('attribute_weights');
     foreach ($attributes as $group) {
       foreach (array_keys($group) as $attribute) {
-        $fields['items']['... on ConfigurableProduct']['variants']['product'][] = $attribute;
+        // Prevent duplicate entry.
+        if (array_search($attribute, $fields['items']['... on ConfigurableProduct']['variants']['product']) === FALSE) {
+          $fields['items']['... on ConfigurableProduct']['variants']['product'][] = $attribute;
+        }
       }
     }
-
-    $this->moduleHandler->alter('alshaya_rcs_product_query_fields', $fields);
 
     $static = $fields;
 
