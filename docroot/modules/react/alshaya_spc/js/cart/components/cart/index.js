@@ -37,6 +37,8 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
+import { getCartDivsCount } from '../../../../../js/utilities/dynamicYieldHelper';
+import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -522,6 +524,10 @@ export default class Cart extends React.Component {
         <div className="spc-post-content">
           {drupalSettings.alshaya_spc.display_cart_crosssell
             && <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} items={items} />}
+          <DynamicYieldPlaceholder
+            context="cart"
+            placeHolderCount={getCartDivsCount()}
+          />
         </div>
         <div className="spc-footer">
           <VatFooterText />

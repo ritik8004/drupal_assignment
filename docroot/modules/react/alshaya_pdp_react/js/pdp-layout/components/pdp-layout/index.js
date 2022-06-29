@@ -26,6 +26,8 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import PdpExpressDelivery from '../pdp-express-delivery';
 import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
+import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
+import { getPdpDivsCount } from '../../../../../js/utilities/dynamicYieldHelper';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -336,6 +338,10 @@ const PdpLayout = () => {
         </div>
       ) : null}
       <PpdPanel panelContent={panelContent} />
+      <DynamicYieldPlaceholder
+        context="pdp"
+        placeHolderCount={getPdpDivsCount()}
+      />
     </>
   ) : emptyRes;
 };

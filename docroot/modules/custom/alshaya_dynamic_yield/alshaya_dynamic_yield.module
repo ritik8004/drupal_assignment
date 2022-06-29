@@ -26,3 +26,40 @@ function alshaya_dynamic_yield_acq_sku_commerce_category_alter(TermInterface $te
     $term->get('field_dy_category')->setValue($category['custom_attributes']['dy_categories']['value']);
   }
 }
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_dynamic_yield_preprocess_node(&$variables) {
+  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
+    $dynamicYieldConfigs = \Drupal::service('alshaya_dynamic_yield.dynamic_yield_helper')->getDynamicYieldConfig();
+    if ($dynamicYieldConfigs['pdpEmptyDivs']) {
+      $variables['dynamicYieldPdpDivs'] = $dynamicYieldConfigs['pdpEmptyDivs'];
+    }
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_dynamic_yield_page_attachments_alter(array &$page) {
+  $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_dynamic_yield.settings')->getCacheTags());
+
+  /** @var \Drupal\alshaya_dynamic_yield\Helper\DynamicYieldHelper */
+  $dynamicYieldConfigs = \Drupal::service('alshaya_dynamic_yield.dynamic_yield_helper')->getDynamicYieldConfig();
+
+  $current_route = \Drupal::routeMatch();
+  $current_route_name = $current_route->getRouteName();
+  // Add configs for empty divs for cart and pdp pages.
+  if ($dynamicYieldConfigs['pdpEmptyDivs'] && ($current_route_name === 'entity.node.canonical'
+    && in_array($current_route->getParameter('node')->bundle(), [
+      'rcs_product',
+      'acq_product',
+    ]))
+  ) {
+    $page['#attached']['drupalSettings']['dynamicYieldConfig']['pdpEmptyDivs'] = $dynamicYieldConfigs['pdpEmptyDivs'];
+  }
+  elseif ($current_route_name === 'acq_cart.cart' && $dynamicYieldConfigs['cartEmptyDivs']) {
+    $page['#attached']['drupalSettings']['dynamicYieldConfig']['cartEmptyDivs'] = $dynamicYieldConfigs['cartEmptyDivs'];
+  }
+}
