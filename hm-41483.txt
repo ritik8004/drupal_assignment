@@ -5298,3 +5298,54 @@ https://kw.hm.com/en/cart
 https://kw.hm.com/en/wishlist
 https://kw.hm.com/en/moments-memories/
 `
+
+`
+.cls-initial-layout {
+    @include breakpoint($only-mobile) {
+        .dialog-off-canvas-main-canvas {
+        div {
+            .branding__menu {
+            .c-header {
+                height: rem(100);
+            }
+            }
+            .c-footer {
+            .c-footer-primary {
+                .l-container {
+                .c-footer-primary__region {
+                    height: rem(500);
+                    .c-footer-primary {
+                    .l-container {
+                        .c-footer-primary__region {
+                        height: rem(450);
+                        .footer--menu {
+                            height: rem(400);
+                            .c-footer-menu--category {
+                            height: rem(60);
+                            }
+                            .c-footer-menu--about {
+                            height: rem(60);
+                            }
+                            .c-footer-menu--help {
+                            height: rem(60);
+                            }
+                            .footer_primary-right-block {
+                            height: rem(170);
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            .c-footer-secondary {
+                height: rem(400);
+            }
+            }
+        }
+        }
+    }
+}
+  
+`
