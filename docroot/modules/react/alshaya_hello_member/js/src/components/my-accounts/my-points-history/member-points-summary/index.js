@@ -1,5 +1,6 @@
 import React from 'react';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
+import Loading from '../../../../../../../js/utilities/loading';
 import MembershipExpiryInfo from '../membership-expiry-info';
 import PointsInfoSummary from '../membership-expiry-points';
 
@@ -8,6 +9,7 @@ class MemberPointsSummary extends React.Component {
     super(props);
     this.state = {
       customerData: null,
+      wait: false,
     };
   }
 
@@ -26,12 +28,22 @@ class MemberPointsSummary extends React.Component {
     if (hasValue(data)) {
       this.setState({
         customerData: data,
+        wait: true,
       });
     }
   };
 
   render() {
-    const { customerData } = this.state;
+    const { wait, customerData } = this.state;
+
+    if (!wait) {
+      return (
+        <div className="my-points-history-wrapper" style={{ animationDelay: '0.4s' }}>
+          <Loading />
+        </div>
+      );
+    }
+
     if (customerData === null) {
       return null;
     }
@@ -41,18 +53,15 @@ class MemberPointsSummary extends React.Component {
       return null;
     }
 
-    const memberPointsEarned = JSON.parse(customerData.member_points_earned);
-    const memberPointsInfo = JSON.parse(customerData.member_points_info);
-
     return (
       <>
         <MembershipExpiryInfo
-          pointTotal={memberPointsEarned.total}
-          expiryDate={memberPointsEarned.expiry_date}
+          pointTotal={customerData.member_points_earned.total}
+          expiryDate={customerData.member_points_earned.expiry_date}
         />
         <PointsInfoSummary
-          pointsEarned={memberPointsEarned}
-          pointsSummary={memberPointsInfo}
+          pointsEarned={customerData.member_points_earned}
+          pointsSummary={customerData.member_points_info}
         />
       </>
     );
