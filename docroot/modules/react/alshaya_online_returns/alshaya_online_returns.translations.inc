@@ -198,10 +198,6 @@ function _alshaya_online_returns_translations() {
         'ar' => 'المنتجات التي تم إرجاعها',
         'context' => 'online_returns',
       ],
-      'Rejected Items' => [
-        'ar' => 'المنتجات المرفوضة',
-        'context' => 'online_returns',
-      ],
       'Store Returns' => [
         'ar' => 'طلبات الإرجاع عبر المحل',
         'context' => 'online_returns',
@@ -284,6 +280,10 @@ function _alshaya_online_returns_translations() {
       ],
       'Kindly contact customer care for initiating the online returns for Big Ticket Items.' => [
         'ar' => 'يرجى التواصل مع خدمة الزبائن للإعدادات المتعلقة باسترجاع المنتجات ذات الطلبية الكبيرة',
+        'context' => 'online_returns',
+      ],
+      'Cancelled Items' => [
+        'ar' => 'المنتجات الملغاه',
         'context' => 'online_returns',
       ],
     ],
