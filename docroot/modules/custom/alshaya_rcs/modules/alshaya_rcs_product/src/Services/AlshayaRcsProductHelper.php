@@ -443,29 +443,20 @@ class AlshayaRcsProductHelper {
       return $options;
     }
     $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query', [$options]);
-
-    // Remove duplicate elements from the array.
-    // Same attributes may be added by hook, so this is to prevent from
-    // querying the same attribute multiple times.
-    $unique_options = [];
-    $number_of_options = count($options);
-    if ($number_of_options) {
-      $unique_options[] = $options[0];
-      for ($i = 1; $i < $number_of_options - 1; $i++) {
-        $flag = 0;
-        for ($j = 0; $j < count($unique_options); $j++) {
-          if ($options[$i]['attribute_code'] === $unique_options[$j]['attribute_code']) {
-            $flag = 1;
-            break;
-          }
-        }
-        if (!$flag) {
-          $unique_options[] = $options[$i];
-        }
-      }
+    if (count($options) > 0) {
+      // Remove duplicate elements from the array.
+      // Same attributes may be added by hook, so this is to prevent from
+      // querying the same attribute multiple times.
+      $options = array_unique($options);
+      // Reindex the array.
+      $options = array_values($options);
+      // Process data to required format.
+      $options = array_map(function ($option) {
+        return ['attribute_code' => $option , 'entity_type' => 4];
+      }, $options);
     }
 
-    return $unique_options;
+    return $options;
   }
 
   /**
