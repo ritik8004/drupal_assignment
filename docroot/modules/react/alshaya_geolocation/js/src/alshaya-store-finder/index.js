@@ -226,8 +226,8 @@ export class StoreFinder extends React.PureComponent {
                           </div>
                         </div>
                       </div>
-                      <a className={`list-view-link block-store-finder-form__list-view icon-list${listViewActive}`} onClick={this.showListingView}>{Drupal.t('List View')}</a>
-                      <a className={`map-view-link block-store-finder-form__list-view icon-map${mapViewActive}`} onClick={this.showMapView}>{Drupal.t('Map View')}</a>
+                      <a className={`list-view-link block-store-finder-form__list-view icon-list${listViewActive}`} onClick={this.showListingView}>{Drupal.t('List view')}</a>
+                      <a className={`map-view-link block-store-finder-form__list-view icon-map${mapViewActive}`} onClick={this.showMapView}>{Drupal.t('Map view')}</a>
                     </div>
                   )}
               </div>
@@ -261,7 +261,7 @@ export class StoreFinder extends React.PureComponent {
                       {showListingView
                         && (
                         <div>
-                          <div className="view-header">select a store to see details</div>
+                          <div className="view-header">{Drupal.t('select a store to see details')}</div>
                           <div className="view-content view-store-finder--list__columns">
                             <div className="c-side c-side-1 view-store-finder--list__column--1">
                               {firstColumn.map((value) => (
