@@ -234,11 +234,32 @@ window.commerceBackend = window.commerceBackend || {};
     const variantConfigurableOptions = [];
 
     Object.keys(productConfigurables).forEach(function (attributeCode) {
+      let label = productConfigurables[attributeCode].label;
+      let optionId = productConfigurables[attributeCode]['attribute_id'];
+      let optionValue = variant.product[attributeCode];
+      let value = window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]);
+
+      // Check if we have a replacement for the attributes.
+      if (Drupal.hasValue(drupalSettings.alshayaRcs.configurableFieldReplacements)) {
+        const { configurableFieldReplacements } = drupalSettings.alshayaRcs;
+        Object.keys(configurableFieldReplacements).forEach(function (field) {
+          if (configurableFieldReplacements[field].display_configurable_for === attributeCode &&
+            Drupal.hasValue(variant.product[field])
+          ) {
+            // Override default values.
+            attributeCode = field;
+            label = configurableFieldReplacements[field].label;
+            value = variant.product[field];
+          }
+        });
+      }
+
       variantConfigurableOptions.push({
         attribute_id: `attr_${attributeCode}`,
-        label: productConfigurables[attributeCode].label,
-        value: window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
-        value_id: variant.product[attributeCode],
+        label: label,
+        option_id: optionId,
+        option_value: optionValue,
+        value: value,
       });
     });
 
