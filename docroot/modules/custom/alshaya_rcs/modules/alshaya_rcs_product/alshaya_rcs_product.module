@@ -321,6 +321,12 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
   $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
+
+  // Invoke hook_alshaya_rcs_product_build_alter.
+  $build = \Drupal::moduleHandler()->invokeAll(
+    'alshaya_rcs_product_build_alter',
+    [$build, $entity, $display, $view_mode]
+  );
 }
 
 /**

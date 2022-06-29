@@ -42,6 +42,7 @@ function alshaya_rcs_install() {
     'alshaya_magazine' => 'alshaya_rcs_magazine',
     'alshaya_color_split' => 'alshaya_rcs_color_split',
     'alshaya_add_to_bag' => 'alshaya_rcs_add_to_bag',
+    'alshaya_wishlist' => 'alshaya_rcs_wishlist',
   ];
 
   foreach ($modules as $module_to_check => $module_to_install) {
