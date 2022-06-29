@@ -86,6 +86,9 @@ export default class DeliveryOptions extends React.Component {
                     if (currentArea !== null) {
                       this.addShippingMethodWithArea(currentArea, productSku);
                     }
+
+                    // Dispatch event to show SDD / ED labels on PDP.
+                    dispatchCustomEvent('showPdpSddEdLabel', shippingMethodObj);
                   } else {
                     // Don't show DeliveryAreaSelect if product does notsupport
                     // SDD/ED on product level.
