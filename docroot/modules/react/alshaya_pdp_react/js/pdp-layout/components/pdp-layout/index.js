@@ -26,6 +26,8 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import PdpExpressDelivery from '../pdp-express-delivery';
 import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
+import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -178,6 +180,12 @@ const PdpLayout = () => {
 
   // Get configurable options only for configurable product.
   const options = getAttributeOptionsForWishlist(configurableCombinations, skuItemCode, variant);
+
+  // Get empty divs count for dynamic yield recommendations.
+  let pdpEmptyDivsCount = 0;
+  if (hasValue(drupalSettings.pdpDyamicYieldDivsCount)) {
+    pdpEmptyDivsCount = drupalSettings.pdpDyamicYieldDivsCount;
+  }
 
   return (skuItemCode) ? (
     <>
@@ -336,6 +344,10 @@ const PdpLayout = () => {
         </div>
       ) : null}
       <PpdPanel panelContent={panelContent} />
+      <DynamicYieldPlaceholder
+        context="pdp"
+        placeHolderCount={pdpEmptyDivsCount}
+      />
     </>
   ) : emptyRes;
 };
