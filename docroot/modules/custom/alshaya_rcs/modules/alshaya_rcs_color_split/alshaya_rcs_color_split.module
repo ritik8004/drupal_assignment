@@ -22,7 +22,7 @@ function _alshaya_rcs_color_split_attach_info(array &$attachments) {
   $attachments['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');
 
   // Expose list of configurable field replacements.
-  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   // Limit keys to avoid exposing everything.
   $field_replacements = [];
   foreach ($fields as $name => $props) {
