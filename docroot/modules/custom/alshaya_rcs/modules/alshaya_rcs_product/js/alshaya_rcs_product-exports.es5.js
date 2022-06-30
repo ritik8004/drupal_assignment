@@ -609,6 +609,32 @@ exports.computePhFilters = function (input, filter) {
             selectOptions.push(selectOption);
           });
 
+          /**
+           * Returns the error message for labels.
+           *
+           * @param string attribute
+           *   The attribute.
+           *
+           * @param string label
+           *   The field label.
+           *
+           * @return string
+           *   The error message.
+           */
+          const getLabelErrorMessage = (attribute, label) => {
+            const messages = drupalSettings.alshayaRcs.fieldLabelErrorMessages;
+            const lang = drupalSettings.path.currentLanguage;
+            if (Drupal.hasValue(messages)
+              && Drupal.hasValue(messages[attribute])
+              && Drupal.hasValue(messages[attribute][lang])
+              && Drupal.hasValue(messages[attribute][lang].error)
+            ) {
+              return messages[attribute][lang].error;
+            }
+
+            return Drupal.t('@title field is required.', { '@title': label });
+          };
+
           const configurableOption = ({
             data_configurable_code: option.attribute_code,
             data_default_title: dataDefaultTitle,
@@ -620,7 +646,7 @@ exports.computePhFilters = function (input, filter) {
             wrapperClass: isOptionSwatch ? 'configurable-swatch' : 'configurable-select',
             hiddenClass: (hiddenFormAttributes.includes(option.attribute_code)) ? 'hidden' : '',
             name: `configurables[${option.attribute_code}]`,
-            data_msg_required: Drupal.t('@title field is required.', { '@title': dataDefaultTitle }),
+            data_msg_required: getLabelErrorMessage(option.attribute_code, dataDefaultTitle),
             required: 'required',
             aria_require: true,
             aria_invalid: false,
