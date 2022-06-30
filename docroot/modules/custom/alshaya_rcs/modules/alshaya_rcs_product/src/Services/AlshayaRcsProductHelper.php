@@ -362,7 +362,6 @@ class AlshayaRcsProductHelper {
               'ship_to_store',
               'reserve_and_collect',
               'attribute_set_id',
-              'size',
               'swatch_data' => [
                 'swatch_type',
               ],
