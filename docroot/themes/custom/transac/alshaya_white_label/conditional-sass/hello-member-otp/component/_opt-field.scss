@@ -15,7 +15,7 @@
           font-size: rem(16);
           padding: rem(7) rem(11);
           position: absolute;
-          #{$right}: 0;
+          right: 0; // For both lang we need button on the same place since it is mobile field.
           top: rem(-44);
           z-index: 1;
         }
@@ -25,6 +25,14 @@
     label,
     span {
       color: $hm-registration-labels-txt !important;
+    }
+
+    label {
+      html[lang=ar] & {
+        text-align: left;
+        width: 100%;
+        display: block;
+      }
     }
 
     .error {
