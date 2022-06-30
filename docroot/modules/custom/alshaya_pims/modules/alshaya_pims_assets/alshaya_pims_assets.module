@@ -102,11 +102,3 @@ function alshaya_pims_assets_alshaya_acm_product_pdp_swath_type_alter(SKUInterfa
     $color_options_list[key($color_options_list)]['swatch_type'] = $swatch['type'];
   }
 }
-
-/**
- * Implements hook_alshaya_rcs_recommended_product_query_fields_alter().
- */
-function alshaya_pims_assets_alshaya_rcs_recommended_product_query_fields_alter(array &$fields) {
-  // Query for teaser assets for product recommendations.
-  $fields['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-}
