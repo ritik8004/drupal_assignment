@@ -15,6 +15,7 @@ export default class PdpSddEd extends React.Component {
     document.addEventListener('showPdpSddEdLabel', this.showPdpSddEdLabel, false);
   }
 
+
   /**
    * Show SDD-ED labels on PDP.
    */
@@ -38,16 +39,11 @@ export default class PdpSddEd extends React.Component {
     const { sddEdClass } = this.state;
 
     const {
-      productValues,
+      deliveryOptions,
     } = this.props;
 
-    const {
-      expressDeliveryClass,
-      deliveryOptions,
-    } = productValues;
-
     return (
-      <div className={`express-delivery ${expressDeliveryClass}`}>
+      <div className={`express-delivery ${sddEdClass}`}>
         {deliveryOptions && deliveryOptions !== null
         && Object.keys(deliveryOptions).length > 0
         && Object.keys(deliveryOptions).map((option) => (

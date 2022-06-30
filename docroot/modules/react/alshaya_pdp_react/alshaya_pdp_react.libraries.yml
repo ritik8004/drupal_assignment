@@ -6,3 +6,12 @@ pdp_magazine_v2_layout:
     - alshaya_react/react
     - core/drupalSettings
     - core/drupal.debounce
+
+pdp_sdd_ed_labels:
+  version: 1.x
+  js:
+    dist/pdp_sdd_ed_labels.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - core/drupalSettings
+    - core/drupal.debounce

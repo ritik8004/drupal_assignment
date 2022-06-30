@@ -664,10 +664,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
           $delivery_options = alshaya_acm_product_get_delivery_options($sku);
           if (!empty($delivery_options['values'])) {
-            foreach ($delivery_options['values'] as $key => $option) {
-              $build['delivery_options'][$key]['status']['#markup'] = $option['status'];
-              $build['delivery_options'][$key]['label']['#markup'] = $option['label'];
-            }
+            $build['#attached']['drupalSettings']['deliveryOptions'] = $delivery_options['values'];
+            $build['#attached']['library'][] = 'alshaya_pdp_react/pdp_sdd_ed_labels';
           }
           $build['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] ? 'active' : 'in-active';
         }

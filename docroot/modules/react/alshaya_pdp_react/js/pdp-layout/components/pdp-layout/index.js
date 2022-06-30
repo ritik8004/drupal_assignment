@@ -82,6 +82,7 @@ const PdpLayout = () => {
     freeGiftPromoUrl,
     freeGiftMessage,
     freeGiftPromoType,
+    deliveryOptions,
     isProductBuyable,
     bigTickectProduct,
   } = productValues;
@@ -249,7 +250,7 @@ const PdpLayout = () => {
             />
           ) : null}
           <ConditionalView condition={isExpressDeliveryEnabled()}>
-            <PdpSddEd skuItemCode={skuItemCode} productValues={productValues} />
+            <PdpSddEd deliveryOptions={deliveryOptions} />
           </ConditionalView>
           <PpdRatingsReviews
             getPanelData={getPanelData}
