@@ -235,7 +235,7 @@ window.commerceBackend = window.commerceBackend || {};
 
     Object.keys(productConfigurables).forEach(function (attributeCode) {
       let label = productConfigurables[attributeCode].label;
-      let optionId = productConfigurables[attributeCode]['attribute_id'];
+      let optionId = productConfigurables[attributeCode].attribute_id;
       let optionValue = variant.product[attributeCode];
       let value = window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]);
 
