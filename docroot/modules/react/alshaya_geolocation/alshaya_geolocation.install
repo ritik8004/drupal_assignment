@@ -60,6 +60,18 @@ function alshaya_geolocation_update_8003() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
+ * Adds translations for geolocation.
+ */
+function alshaya_geolocation_update_8004() {
+  module_load_include('inc', 'alshaya_geolocation', 'alshaya_geolocation.translations');
+  if ($translations = _alshaya_geolocation_get_translations('v1')) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
  * Implements hook_update_dependencies().
  *
  * Have clearance for geolocation_google_maps update hooks to run.
