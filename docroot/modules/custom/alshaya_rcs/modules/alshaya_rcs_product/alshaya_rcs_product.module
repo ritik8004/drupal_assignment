@@ -474,22 +474,6 @@ function alshaya_rcs_product_theme_suggestions_product_zoom_alter(array &$sugges
 }
 
 /**
- * Implements hook_alshaya_rcs_product_product_options_to_query().
- */
-function alshaya_rcs_product_alshaya_rcs_product_product_options_to_query(array $options) {
-  $attributes = \Drupal::config('acq_sku.configurable_form_settings')->get('attribute_weights');
-  foreach ($attributes as $group) {
-    foreach (array_keys($group) as $attribute) {
-      array_push($options, [
-        'attribute_code' => $attribute,
-        'entity_type' => '4',
-      ]);
-    }
-  }
-  return $options;
-}
-
-/**
  * Utility function to enable Bazaar voice reviews for RCS Product.
  */
 function _alshaya_rcs_product_change_bv_routes_list() {
