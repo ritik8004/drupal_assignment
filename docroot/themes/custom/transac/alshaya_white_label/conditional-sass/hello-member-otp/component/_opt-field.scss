@@ -39,12 +39,17 @@
 
     .mobile-input--wrapper {
       input {
-        background-color: $hm-registration-fields-bg;
+        background-color: $hm-registration-fields-bg !important;
 
         ~ label:not(.active-label) {
           color: $hm-registration-labels-txt !important;
         }
       }
+    }
+
+    .mb-verifier {
+      color: $hm-registration-labels-txt;
+      padding-top: rem(16);
     }
   }
 }
