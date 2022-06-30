@@ -339,12 +339,13 @@ exports.getData = async function getData(
       result = response.data.products.items;
       break;
 
-    case 'crosssel-products':
+    case 'crosssell-products':
       // Build query.
-      let crosselListVariables = rcsPhGraphqlQuery.crosssel_products.variables;
+      let crosselListVariables = rcsPhGraphqlQuery.crosssell_products.variables;
       crosselListVariables.sku = params.sku;
-      request.data = prepareQuery(rcsPhGraphqlQuery.crosssel_products.query, crosselListVariables);
-      result = rcsCommerceBackend.invokeApi(request);
+      request.data = prepareQuery(rcsPhGraphqlQuery.crosssell_products.query, crosselListVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
       break;
 
     default:
