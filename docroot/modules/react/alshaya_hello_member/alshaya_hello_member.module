@@ -129,7 +129,6 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['hello_member']['field_gender']['#weight'] = 11;
     unset($form['hello_member']['field_gender']['widget']['#title']);
     unset($form['field_gender']);
-    $form['field_verified_otp']['#attributes']['class'][] = 'visually-hidden';
 
     $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
@@ -204,12 +203,15 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['hello_member']['field_mobile_number']['#prefix'] = '<div class="mobile-otp-wrapper">';
   $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div><div id="mobile-number-error"></div>' . '<span>' . t('OTP will be send to your mobile number to verify', [], ['context' => 'hello_member']) . '<span></div>';
   $form['hello_member']['field_mobile_number']['#weight'] = 12;
-  $form['field_verified_otp']['widget']['value']['#ajax'] = [
-    'callback' => 'alshaya_hello_member_ajax_opt_verified',
-    'wrapper' => 'otp-verified',
-    'event' => 'change',
+  // Virtual checkbox to temporary maintain otp verified status.
+  $form['otp_verified'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Otp Verified'),
+    '#prefix' => '<div class="visually-hidden">',
+    '#suffix' => '</div>',
   ];
-  $form['field_verified_otp']['#attributes']['class'][] = 'visually-hidden';
+  $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
+
   unset($form['hello_member']['field_gender']['widget']['#title']);
   unset($form['field_gender']);
   unset($form['field_mobile_number']);
@@ -255,10 +257,12 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
       if (!empty($user_gender)) {
         $request_options['json']['customer']['extension_attributes']['customer_gender'] = $user_gender;
       }
-      if ($user->get('field_verified_otp')->getString()) {
+      $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
+      // Set the key/value pair.
+      if ($temp_store->get('otpVerifiedPhone')) {
         $request_options['json']['customer']['extension_attributes']['is_verified'] = "Y";
         // Set otp verified unchecked to update in future.
-        $user->set('field_verified_otp', 0)->save();
+        $temp_store->delete('otpVerifiedPhone');
       }
       else {
         // If Hello member enable and Mobile number not verified
@@ -283,15 +287,6 @@ function alshaya_hello_member_block_access(Block $block, $operation, AccountInte
       return AccessResult::forbiddenIf(TRUE);
     }
   }
-}
-
-/**
- * Ajax callback: Update verified otp field.
- */
-function alshaya_hello_member_ajax_opt_verified(&$form, FormStateInterface $form_state) {
-  /** @var \Drupal\user\Entity\User $user */
-  $user = user_load_by_mail(\Drupal::currentUser()->getEmail());
-  $user->set('field_verified_otp', $form_state->getValue('field_verified_otp')['value'])->save();
 }
 
 /**
@@ -352,5 +347,17 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
   // Add hello member points for order confirmation.
   if (isset($order['externsion_attributes']['hm_accured_points'])) {
     $settings['order_details']['hmAccuredPoints'] = $order['externsion_attributes']['hm_accured_points'] ?? 0;
+  }
+}
+
+/**
+ * User Form Submit handler to set temp setting for otp verified.
+ */
+function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterface $form_state) {
+  // If Otp is successfully verified store temp varialble.
+  if ($form_state->getValue('otp_verified')) {
+    $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
+    // Set the key/value pair.
+    $temp_store->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
   }
 }
