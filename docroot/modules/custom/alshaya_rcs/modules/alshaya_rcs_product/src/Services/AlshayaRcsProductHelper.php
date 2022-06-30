@@ -474,11 +474,11 @@ class AlshayaRcsProductHelper {
       return $options;
     }
 
+    // Fetch the attributes provided by other modules.
+    $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query');
     $attributes = $this->getConfigurableAttributes();
     // Add the configurable attributes.
     $options = array_merge($options, $attributes);
-    // Alter the existing attributes/add more attributes.
-    $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query', [$options]);
     if (count($options) > 0) {
       // Remove duplicate elements from the array.
       // Same attributes may be added by hook, so this is to prevent from
