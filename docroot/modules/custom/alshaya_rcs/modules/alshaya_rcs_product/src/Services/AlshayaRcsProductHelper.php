@@ -230,6 +230,28 @@ class AlshayaRcsProductHelper {
   }
 
   /**
+   * Gets the configurable attributes for the products in the site.
+   *
+   * @return array
+   *   The configurable attributes for the products in the site.
+   */
+  private function getConfigurableAttributes() {
+    $attributes = &drupal_static(__METHOD__, []);
+    if (!empty($attributes)) {
+      return $attributes;
+    }
+
+    $attribute_weights = $this->configFactory->get('acq_sku.configurable_form_settings')->get('attribute_weights');
+    foreach ($attribute_weights as $group) {
+      foreach (array_keys($group) as $attribute) {
+        $attributes[] = $attribute;
+      }
+    }
+
+    return array_unique($attributes);
+  }
+
+  /**
    * Returns the basic fields needed to be added to the product graphql query.
    *
    * @return array
@@ -409,13 +431,11 @@ class AlshayaRcsProductHelper {
     $this->moduleHandler->alter('alshaya_rcs_product_query_fields', $fields);
 
     // Add the configurable product attributes dynamically.
-    $attributes = $this->configFactory->get('acq_sku.configurable_form_settings')->get('attribute_weights');
-    foreach ($attributes as $group) {
-      foreach (array_keys($group) as $attribute) {
-        // Prevent duplicate entry.
-        if (array_search($attribute, $fields['items']['... on ConfigurableProduct']['variants']['product']) === FALSE) {
-          $fields['items']['... on ConfigurableProduct']['variants']['product'][] = $attribute;
-        }
+    $attributes = $this->getConfigurableAttributes();
+    foreach ($attributes as $attribute) {
+      // Prevent duplicate entry.
+      if (array_search($attribute, $fields['items']['... on ConfigurableProduct']['variants']['product']) === FALSE) {
+        $fields['items']['... on ConfigurableProduct']['variants']['product'][] = $attribute;
       }
     }
 
@@ -454,14 +474,10 @@ class AlshayaRcsProductHelper {
       return $options;
     }
 
+    $attributes = $this->getConfigurableAttributes();
     // Add the configurable attributes.
-    $attributes = $this->configFactory->get('acq_sku.configurable_form_settings')->get('attribute_weights');
-    foreach ($attributes as $group) {
-      foreach (array_keys($group) as $attribute) {
-        array_push($options, $attribute);
-      }
-    }
-
+    $options = array_merge($options, $attributes);
+    // Alter the existing attributes/add more attributes.
     $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query', [$options]);
     if (count($options) > 0) {
       // Remove duplicate elements from the array.
