@@ -1,0 +1,19 @@
+.return-requests-wrapper {
+  .return-reasons-row,
+  .return-qty-row {
+    .return-reason-label {
+      font-family: $alshaya-bold;
+      color: $online-return-dark-txt;
+    }
+  }
+
+  .return-reasons-select,
+  .return-qty-select {
+    .reasonsSelect__menu,
+    .qtySelect__menu,
+    .reasonsSelect__control,
+    .qtySelect__control {
+      color: $online-return-dark-txt;
+    }
+  }
+}
