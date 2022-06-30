@@ -255,6 +255,7 @@ window.commerceBackend = window.commerceBackend || {};
       }
 
       variantConfigurableOptions.push({
+        attribute_code: `attr_${attributeCode}`,
         attribute_id: `attr_${attributeCode}`,
         label: label,
         option_id: optionId,
