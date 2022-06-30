@@ -31,11 +31,13 @@ export class ClickCollectPopup extends React.Component {
             <div className="available_store">
               <div className="available-store-text">
                 <span className="store-available-at-title">
-                  {Drupal.t('Available at ')}
-                  {results}
-                  {Drupal.t(' stores near ')}
+                  {Drupal.t('Available at @count stores near', { '@count': results })}
                 </span>
-                <div className="google-store-location">{address}</div>
+                <div className="google-store-location">
+                  &nbsp;
+                  {address}
+                  &nbsp;
+                </div>
               </div>
             </div>
             <p>{labels.subtitle}</p>
@@ -46,8 +48,8 @@ export class ClickCollectPopup extends React.Component {
           <div className="stores-list-all">
             <ul>
               {Object.keys(stores).map(([keyItem]) => (
-                <li>
-                  <span key={stores[keyItem].id} className="select-store">
+                <li key={stores[keyItem].id}>
+                  <span className="select-store">
                     <ListItemClick specificPlace={stores[keyItem]} isPopup={false} />
                   </span>
                 </li>
