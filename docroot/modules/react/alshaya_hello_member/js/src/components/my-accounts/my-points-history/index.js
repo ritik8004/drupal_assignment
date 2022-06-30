@@ -76,6 +76,7 @@ class MyPointsHistory extends React.Component {
 
     return (
       <>
+        <MemberPointsSummary />
         <div className="my-points-history-wrapper">
           {pointsHistoryData.map((data) => (
             <div className="history-points-row" key={data.trn_no}>
@@ -100,7 +101,6 @@ class MyPointsHistory extends React.Component {
             </div>
           </ConditionalView>
         </div>
-        <MemberPointsSummary />
       </>
     );
   }
