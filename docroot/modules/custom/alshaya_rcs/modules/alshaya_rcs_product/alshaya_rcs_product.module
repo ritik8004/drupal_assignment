@@ -325,6 +325,11 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
 
+  // Expose error messages for field labels.
+  $field_label_errors = \Drupal::config('alshaya_acm_product.fields_labels_n_error');
+  $build['#attached']['drupalSettings']['alshayaRcs']['fieldLabelErrorMessages'] = $field_label_errors->get();
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $field_label_errors->getCacheTags());
+
   // Invoke hook_alshaya_rcs_product_build_alter.
   $entity_info = [
     'entity' => $entity,
