@@ -3,7 +3,7 @@
  * Load overlay attributes.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function main ($, Drupal, drupalSettings) {
 
   Drupal.behaviors.loadHmOverlayAttributes = {
     attach: function attachRenderOverlay (context, settings) {
@@ -12,11 +12,10 @@
         $('.pdp-overlay-details').once('load-overlay').each(function processOverlay() {
           var sku = $(this).closest('article').attr('data-sku');
           Drupal.cartNotification.spinner_start();
-          var productAttributes = window.commerceBackend.getAdditionalAttributes(sku, drupalSettings.alshayaRcs.additionalAttributesVariable);
-          productAttributes.then(function processAttributes (response) {
+          window.commerceBackend.getAdditionalAttributes(sku, drupalSettings.alshayaRcs.additionalAttributesVariable).then(function processAttributes (response) {
             // Render additional attributes in sidebar.
             var html = renderOverlayAttributes(response);
-            $('.attribute-sliderbar__content .pdp-overlay-attributes').html(html);
+            $('.pdp-overlay-attributes').html(html);
             Drupal.cartNotification.spinner_stop();
             });
         });
@@ -34,13 +33,16 @@
     var html = '';
     var additionalProductAttributes = drupalSettings.alshayaRcs.additionalProductAttributes;
     Object.entries(response).forEach(function ([key, value]) {
-      html += '<h3>' + additionalProductAttributes[key] + '</h3>';
-      html += '<ul>';
+      var header = document.createElement('h3');
+      header.append(additionalProductAttributes[key]);
+      html += header.outerHTML;
+      var ulEle = document.createElement('ul');
       value.forEach(function (label) {
-        html += '<li>' + label + '</li>';
+        var liEle = document.createElement('li');
+        liEle.append(label);
+        ulEle.appendChild(liEle)
       });
-      html += '</ul>';
-
+      html += ulEle.outerHTML;
     });
     return html;
   };

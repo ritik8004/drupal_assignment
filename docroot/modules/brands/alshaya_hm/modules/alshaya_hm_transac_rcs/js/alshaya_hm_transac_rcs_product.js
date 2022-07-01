@@ -2,6 +2,22 @@
  * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
 (function main() {
+
+  /**
+   * Fetch composition attribute for pdp.
+   *
+   * @param {object} entity
+   *   Rcs Product entity.
+   */
+  function fetchCompositionAttribute (entity) {
+    if (entity.type_id == 'configurable') {
+    return entity.variants[0].product.composition;
+  }
+  else {
+    return entity.composition;
+  }
+};
+
   // Event listener to update the data layer object with the proper product
   // data.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
@@ -26,7 +42,6 @@
    *   Rcs Product entity.
    */
   function processDescription (result) {
-
     var data = result;
     // Attributes to be displayed on main page.
     let mainAttributesCode = {
@@ -101,19 +116,5 @@
     })
   });
 
-  /**
-   * Fetch composition attribute for pdp.
-   *
-   * @param {object} entity
-   *   Rcs Product entity.
-   */
-  function fetchCompositionAttribute (entity) {
-    if (entity.type_id == 'configurable') {
-    return entity.variants[0].product.composition;
-  }
-  else {
-    return entity.composition;
-  }
-};
 
 })();

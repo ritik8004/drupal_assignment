@@ -76,12 +76,11 @@ function alshaya_hm_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$f
 /**
  * Implements hook_alshaya_rcs_product_product_options_to_query().
  */
-function alshaya_hm_transac_rcs_alshaya_rcs_product_product_options_to_query(array $options) {
-  array_push($options,
+function alshaya_hm_transac_rcs_alshaya_rcs_product_product_options_to_query() {
+  return [
     'fit',
-    'article_description'
-  );
-  return $options;
+    'article_description',
+  ];
 }
 
 /**
@@ -90,7 +89,6 @@ function alshaya_hm_transac_rcs_alshaya_rcs_product_product_options_to_query(arr
 function alshaya_hm_transac_rcs_alshaya_rcs_product_additional_attributes_query_fields(array $attributes) {
   $hm_attributes = \Drupal::service('alshaya_hm_transac_rcs.product_attribute_helper')->getAttributes();
   $hm_attributes = array_keys($hm_attributes);
-  $attributes = $attributes ?? [];
   $attributes = array_merge($attributes, $hm_attributes);
   return $attributes;
 }
