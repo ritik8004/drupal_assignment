@@ -129,6 +129,8 @@ class ReturnItemsListing extends React.Component {
           promotionModalOpen: true,
           discountedRuleId: selectedItemDiscountPromotion,
         });
+        // Add a flag value to disable the qty button.
+        itemDetails.disableQtyBtn = true;
       }
       // Add default quantity and resolution.
       itemDetails.qty_requested = 1;
