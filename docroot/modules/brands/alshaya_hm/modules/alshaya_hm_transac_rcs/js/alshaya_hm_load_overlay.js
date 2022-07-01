@@ -28,6 +28,9 @@
    *
    * @param {object} response
    *   Product attributes and labels.
+   *
+   * @return {string}
+   *   Overlay attribute markup.
    */
   function renderOverlayAttributes (response) {
     var html = '';

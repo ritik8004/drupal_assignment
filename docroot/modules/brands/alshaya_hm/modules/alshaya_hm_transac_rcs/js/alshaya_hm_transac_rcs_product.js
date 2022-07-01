@@ -8,6 +8,9 @@
    *
    * @param {object} entity
    *   Rcs Product entity.
+   *
+   * @return {string}
+   *   Returns compostion for the product.
    */
   function fetchCompositionAttribute (entity) {
     if (entity.type_id == 'configurable') {
@@ -51,7 +54,7 @@
     let descriptionDetails = [];
     for (var attributesCode in mainAttributesCode) {
       if (Drupal.hasValue(data[attributesCode])) {
-        // Attribute codes are comma seperated if they have multiple values.
+        // Attribute codes are comma separated if they have multiple values.
         let attr_values = data[attributesCode].split(",");
         let labels = [];
         for (let attr_value of attr_values) {
