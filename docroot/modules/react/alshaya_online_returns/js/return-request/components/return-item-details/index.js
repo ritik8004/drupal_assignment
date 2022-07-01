@@ -64,7 +64,7 @@ class ReturnItemDetails extends React.Component {
             <ReturnQuantitySelect
               qtyOptions={qtyOptions}
               handleSelectedQuantity={handleSelectedQuantity}
-              disableQtyBtn={hasValue(item.disableQtyBtn) ? item.disableQtyBtn : false}
+              disableQtyBtn={hasValue(item.disableQtyBtn)}
               sku={item.sku}
             />
           </ConditionalView>

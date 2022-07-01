@@ -11,7 +11,7 @@ const ReturnQuantitySelect = ({
         classNamePrefix="qtySelect"
         className="return-qty-select"
         options={qtyOptions}
-        defaultValue={disableQtyBtn ? qtyOptions : qtyOptions[0]}
+        defaultValue={disableQtyBtn ? qtyOptions.at(-1) : qtyOptions[0]}
         isSearchable={false}
         isDisabled={disableQtyBtn}
         onChange={(selectedOption) => handleSelectedQuantity(selectedOption, sku)}
