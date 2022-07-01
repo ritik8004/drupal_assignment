@@ -1258,27 +1258,6 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
-   * Get additional product attributes.
-   *
-   * @param {string} sku
-   *   SKU value for which additional attributes is to be returned.
-   * @param {object} attributes
-   *   Product attributes lists.
-   */
-  window.commerceBackend.getAdditionalAttributes = async function getAdditionalAttributes(sku, attributesVariable) {
-    // Get product attributes and custom attribute metadata and labels.
-    response = await rcsPhCommerceBackend.getData('product_additional_attributes', {
-      'sku': sku ,
-      'attributes': attributesVariable,
-    })
-    var productAttributes = [];
-    if (Drupal.hasValue(response.data)) {
-      productAttributes = processProductAttributes(response.data);
-    }
-    return productAttributes;
-  };
-
-  /**
    * Returns list of product attribute with labels.
    *
    * @param {object} data
@@ -1287,7 +1266,7 @@ window.commerceBackend = window.commerceBackend || {};
    * @returns {object}
    *  List of product attributes values and labels.
    */
-  var processProductAttributes = function (data) {
+  function processProductAttributes (data) {
     // Process custom attributes metadata.
     var attributesMetadata = [];
     data.customAttributeMetadata.items.forEach(function eachValue(value) {
@@ -1312,6 +1291,27 @@ window.commerceBackend = window.commerceBackend || {};
     });
     return productAttributes;
   };
+
+  /**
+   * Get additional product attributes.
+   *
+   * @param {string} sku
+   *   SKU value for which additional attributes is to be returned.
+   * @param {object} attributes
+   *   Product attributes lists.
+   */
+  window.commerceBackend.getAdditionalAttributes = async function getAdditionalAttributes(sku, attributesVariable) {
+    // Get product attributes and custom attribute metadata and labels.
+    var response = await rcsPhCommerceBackend.getData('product_additional_attributes', {
+      sku: sku ,
+      attributes: attributesVariable,
+    })
+    var productAttributes = Drupal.hasValue(response.data)
+    ? processProductAttributes(response.data)
+    : [];
+    return productAttributes;
+  };
+
 
   /**
    * Clears static cache of product data.
