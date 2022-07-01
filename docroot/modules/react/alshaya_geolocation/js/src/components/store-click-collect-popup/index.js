@@ -33,11 +33,7 @@ export class ClickCollectPopup extends React.Component {
                 <span className="store-available-at-title">
                   {Drupal.t('Available at @count stores near', { '@count': results })}
                 </span>
-                <div className="google-store-location">
-                  &nbsp;
-                  {address}
-                  &nbsp;
-                </div>
+                <div className="google-store-location">{address}</div>
               </div>
             </div>
             <p>{labels.subtitle}</p>
