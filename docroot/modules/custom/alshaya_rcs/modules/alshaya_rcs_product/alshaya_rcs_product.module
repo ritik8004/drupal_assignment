@@ -219,6 +219,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',
   ];
+
+  $build['#attached']['drupalSettings']['pdpShowSpecifications'] = $acm_settings->get('pdp_show_specifications');
   $build['#attached']['drupalSettings']['display_upsell'] = (bool) $acm_settings->get('display_upsell');
   $build['#attached']['drupalSettings']['display_related'] = (bool) $acm_settings->get('display_related');
   $build['#attached']['drupalSettings']['display_crosssell'] = (bool) $acm_settings->get('display_crosssell');
@@ -703,6 +705,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
 
   // Libraries to attach.
   $libraries = [
+    'product.block.name' => 'alshaya_rcs_product',
     'product.block.description' => 'alshaya_rcs_product',
     'product.order_quantity_limit' => 'alshaya_rcs_product',
     'product.modal' => 'alshaya_rcs_product',
