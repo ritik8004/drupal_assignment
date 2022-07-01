@@ -143,7 +143,7 @@ class ReturnItemsListing extends React.Component {
     } else if (selectedItemDiscountPromotion.length > 0) {
       this.handlePromotionDeselect();
     } else {
-      handleSelectedItems([...itemsSelected, itemDetails]);
+      handleSelectedItems(itemsSelected.filter((product) => product.sku !== itemDetails.sku));
     }
   }
 
