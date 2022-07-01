@@ -273,6 +273,7 @@ export class StoreFinderList extends React.PureComponent {
                                 openHours={store.store_hours}
                                 position={{ lat: store.latitude, lng: store.longitude }}
                                 address={store.address}
+                                icon={drupalSettings.alshaya_stores_finder.map.marker_icon_path}
                               />
                             ))}
                             {showingInfoWindow && (

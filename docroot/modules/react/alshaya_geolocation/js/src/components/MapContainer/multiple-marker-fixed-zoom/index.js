@@ -70,6 +70,7 @@ export class MultipeMarkerFixedZoom extends React.Component {
             openHours={store.store_hours}
             address={store.address}
             position={{ lat: store.latitude, lng: store.longitude }}
+            icon={drupalSettings.alshaya_stores_finder.map.marker_icon_path}
           />
         ))}
         {showingInfoWindow && (
