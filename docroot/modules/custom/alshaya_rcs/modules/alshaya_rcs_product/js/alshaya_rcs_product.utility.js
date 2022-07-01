@@ -1307,8 +1307,8 @@ window.commerceBackend = window.commerceBackend || {};
       attributes: attributesVariable,
     })
     var productAttributes = Drupal.hasValue(response.data)
-    ? processProductAttributes(response.data)
-    : [];
+      ? processProductAttributes(response.data)
+      : [];
     return productAttributes;
   };
 

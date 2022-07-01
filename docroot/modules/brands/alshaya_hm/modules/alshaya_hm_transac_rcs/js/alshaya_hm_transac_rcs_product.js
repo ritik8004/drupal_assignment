@@ -12,31 +12,14 @@
    * @return {string}
    *   Returns compostion for the product.
    */
-  function fetchCompositionAttribute (entity) {
-    if (entity.type_id == 'configurable') {
-    return entity.variants[0].product.composition;
-  }
-  else {
-    return entity.composition;
-  }
-};
-
-  // Event listener to update the data layer object with the proper product
-  // data.
-  RcsEventManager.addListener('rcsUpdateResults', (e) => {
-    // Return if result is empty.
-    if (typeof e.detail.result === 'undefined' || (e.detail.pageType !== 'product' && e.detail.placeholder !== "products-in-style")) {
-      return;
-    }
-    if (!Array.isArray(e.detail.result)) {
-      result = processDescription(e.detail.result);
+  var fetchCompositionAttribute = function fetchCompositionAttribute (entity) {
+      if (entity.type_id == 'configurable') {
+      return entity.variants[0].product.composition;
     }
     else {
-      e.detail.result.forEach(function eachValue (result) {
-        result = processDescription(result);
-      });
+      return entity.composition;
     }
-  });
+  };
 
   /**
    * Process PDP description.
@@ -44,7 +27,7 @@
    * @param {object} result
    *   Rcs Product entity.
    */
-  function processDescription (result) {
+  var processDescription = function processDescription (result) {
     var data = result;
     // Attributes to be displayed on main page.
     let mainAttributesCode = {
@@ -92,6 +75,23 @@
     shortDescription.html += (data.article_warning) ? '' + data.article_warning : '';
     result.short_description = shortDescription;
   };
+
+  // Event listener to update the data layer object with the proper product
+  // data.
+  RcsEventManager.addListener('rcsUpdateResults', (e) => {
+    // Return if result is empty.
+    if (typeof e.detail.result === 'undefined' || (e.detail.pageType !== 'product' && e.detail.placeholder !== "products-in-style")) {
+      return;
+    }
+    if (!Array.isArray(e.detail.result)) {
+      result = processDescription(e.detail.result);
+    }
+    else {
+      e.detail.result.forEach(function eachValue (result) {
+        result = processDescription(result);
+      });
+    }
+  });
 
   RcsEventManager.addListener('alshayaRcsAlterPdpSwatch', function (e) {
     const rawProductData = window.commerceBackend.getProductData(e.detail.sku, false, false);
