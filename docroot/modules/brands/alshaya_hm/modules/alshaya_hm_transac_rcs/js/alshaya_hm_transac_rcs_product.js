@@ -21,14 +21,15 @@
     }
   };
 
-  /**
-   * Process PDP description.
-   *
-   * @param {object} result
-   *   Rcs Product entity.
-   */
-  var processDescription = function processDescription (result) {
-    var data = result;
+  // Event listener to update the data layer object with the proper product
+  // data.
+  RcsEventManager.addListener('rcsUpdateResults', (e) => {
+    // Return if result is empty.
+    if (typeof e.detail.result === 'undefined' || (e.detail.pageType !== 'product')) {
+      return;
+    }
+
+    var data = e.detail.result;
     // Attributes to be displayed on main page.
     let mainAttributesCode = {
       'fit' : 'FIT',
@@ -56,7 +57,7 @@
 
     // Add extra data to product description.
     // This will be rendered using handlebars templates to add P tags and H3 titles.
-    result.description = {
+    e.detail.result.description = {
       html: data.description.html,
       composition: composition,
       washing_instructions: data.washing_instructions,
@@ -73,24 +74,7 @@
     shortDescription.html += (data.composition) ? '' + data.composition : '';
     shortDescription.html += (data.washing_instructions) ? '' + data.washing_instructions : '';
     shortDescription.html += (data.article_warning) ? '' + data.article_warning : '';
-    result.short_description = shortDescription;
-  };
-
-  // Event listener to update the data layer object with the proper product
-  // data.
-  RcsEventManager.addListener('rcsUpdateResults', (e) => {
-    // Return if result is empty.
-    if (typeof e.detail.result === 'undefined' || (e.detail.pageType !== 'product' && e.detail.placeholder !== "products-in-style")) {
-      return;
-    }
-    if (!Array.isArray(e.detail.result)) {
-      result = processDescription(e.detail.result);
-    }
-    else {
-      e.detail.result.forEach(function eachValue (result) {
-        result = processDescription(result);
-      });
-    }
+    e.detail.result.short_description = shortDescription;
   });
 
   RcsEventManager.addListener('alshayaRcsAlterPdpSwatch', function (e) {

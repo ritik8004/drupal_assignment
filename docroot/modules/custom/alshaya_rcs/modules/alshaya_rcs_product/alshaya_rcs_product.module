@@ -736,6 +736,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'gallery.product.block.product_zoom_modal_gallery' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_magazine_gallery' => 'alshaya_rcs_product',
     'attribute.brand.logo' => 'alshaya_rcs_product',
+    'product.overlay_attributes' => 'alshaya_rcs_product',
   ];
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/

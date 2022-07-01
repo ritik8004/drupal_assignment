@@ -6,7 +6,7 @@
 (function main ($, Drupal, drupalSettings) {
 
   /**
-   * Return additional attributes markup.
+   * Process overlay attributes for rendering.
    *
    * @param {object} response
    *   Product attributes and labels.
@@ -14,22 +14,18 @@
    * @return {string}
    *   Overlay attribute markup.
    */
-  var renderOverlayAttributes = function renderOverlayAttributes (response) {
-    var overlayMarkup = document.createElement('div');
+  var getOverlayAttributes = function getOverlayAttributes (response) {
     var additionalProductAttributes = drupalSettings.alshayaRcs.additionalProductAttributes;
+    var data = {
+      overlay_attributes: [],
+    };
     Object.entries(response).forEach(function eachAttribute([key, value]) {
-      var header = document.createElement('h3');
-      header.append(additionalProductAttributes[key]);
-      overlayMarkup.appendChild(header);
-      var ulEle = document.createElement('ul');
-      value.forEach(function (label) {
-        var liEle = document.createElement('li');
-        liEle.append(label);
-        ulEle.appendChild(liEle)
+      data.overlay_attributes.push({
+        title: additionalProductAttributes[key],
+        values: value,
       });
-      overlayMarkup.appendChild(ulEle);
     });
-    return overlayMarkup.innerHTML;
+    return data;
   };
 
   Drupal.behaviors.loadHmOverlayAttributes = {
@@ -41,7 +37,8 @@
           Drupal.cartNotification.spinner_start();
           window.commerceBackend.getAdditionalAttributes(sku, drupalSettings.alshayaRcs.additionalAttributesVariable).then(function processAttributes (response) {
             // Render additional attributes in sidebar.
-            var html = renderOverlayAttributes(response);
+            var data = getOverlayAttributes(response);
+            var html = handlebarsRenderer.render('product.overlay_attributes', { data: data });
             $('.pdp-overlay-attributes').html(html);
             Drupal.cartNotification.spinner_stop();
             });
