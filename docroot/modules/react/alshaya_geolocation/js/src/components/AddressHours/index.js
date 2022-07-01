@@ -8,10 +8,10 @@ const AddressHours = (props) => {
     return (
       <div className={classname}>
         {address.map((item) => (
-          <>
+          <div key={item.code}>
             {item.code === 'address_building_segment' ? <span>{item.value}</span> : null}
             {item.code === 'street' ? <span>{item.value}</span> : null}
-          </>
+          </div>
         ))}
       </div>
     );
