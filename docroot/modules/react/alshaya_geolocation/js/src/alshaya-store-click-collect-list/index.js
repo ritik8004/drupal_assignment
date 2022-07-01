@@ -126,11 +126,7 @@ export class StoreClickCollectList extends React.PureComponent {
                               <span className="store-available-at-title">
                                 {Drupal.t('Available at @count stores near', { '@count': count })}
                               </span>
-                              <div className="google-store-location">
-                                &nbsp;
-                                {area.formatted_address}
-                                &nbsp;
-                              </div>
+                              <div className="google-store-location">{area.formatted_address}</div>
                               <div className="change-location-link" onClick={() => this.setState({ showAutomcomplete: true })}>{Drupal.t('change')}</div>
                             </div>
                           </div>
