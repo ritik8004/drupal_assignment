@@ -14,7 +14,7 @@ class ReturnItemsListing extends React.Component {
       btnDisabled: true,
       open: true,
       promotionModalOpen: false,
-      ruleId: null,
+      discountedRuleId: null,
       itemNotEligibleForReturn: false,
     };
     this.handleSelectedReason = this.handleSelectedReason.bind(this);
@@ -76,23 +76,43 @@ class ReturnItemsListing extends React.Component {
    */
   processSelectedItems = (checked, item) => {
     const { handleSelectedItems, itemsSelected, products } = this.props;
-    const itemHasApportionedPrice = hasValue(
-      parseFloat(item.extension_attributes.apportioned_line_price),
-    );
-    const itemHasPromotion = hasValue(item.applied_rule_ids);
+    const {
+      auto_select: autoSelect,
+      applied_rule_ids_with_discount: appliedRuleIdsWithDiscount,
+    } = item.extension_attributes;
+    let selectedItemDiscountPromotion = [];
+
+    // Check for discount promotion only if autoselect is set.
+    if (autoSelect && hasValue(appliedRuleIdsWithDiscount)) {
+      selectedItemDiscountPromotion = appliedRuleIdsWithDiscount.split(',');
+    }
     const itemDetails = item;
+    let discountedProducts = [];
+    let itemEligibleForReturn = true;
 
-    // Check if item is eligible for return or not.
-    const itemEligibleForReturn = !(products.some(
-      (individualItem) => individualItem.sku !== itemDetails.sku
-      && individualItem.applied_rule_ids === itemDetails.applied_rule_ids
-      && !individualItem.is_returnable,
-    ));
+    if (selectedItemDiscountPromotion.length > 0) {
+      // Filter out all the valid product which are having discounted rule id and
+      // non zero ordered qty available.
+      discountedProducts = products.filter(
+        (product) => product.extension_attributes.applied_rule_ids_with_discount
+        && product.ordered > 0,
+      );
 
-    if (!itemEligibleForReturn && !itemHasApportionedPrice) {
+      // Check if item is eligible for return or not.
+      itemEligibleForReturn = !(discountedProducts.some(
+        (individualItem) => {
+        // Explode all the applied discounted rule ids.
+          const itemDiscountedRuleIds = individualItem.extension_attributes.applied_rule_ids_with_discount.split(',');
+          return !(itemDiscountedRuleIds.some((pid) => selectedItemDiscountPromotion.includes(pid))
+            && individualItem.is_returnable);
+        },
+      ));
+    }
+
+    if (!itemEligibleForReturn) {
       this.setState({
         promotionModalOpen: true,
-        ruleId: item.applied_rule_ids,
+        discountedRuleId: selectedItemDiscountPromotion,
         itemNotEligibleForReturn: true,
       });
     } else {
@@ -102,11 +122,12 @@ class ReturnItemsListing extends React.Component {
 
     if (checked) {
       // Check if any promotion is applied to the item.
-      if (itemHasPromotion && !itemHasApportionedPrice) {
+      if (selectedItemDiscountPromotion.length > 0
+        && discountedProducts.length > 0) {
         // Display promotions warning modal.
         this.setState({
           promotionModalOpen: true,
-          ruleId: item.applied_rule_ids,
+          discountedRuleId: selectedItemDiscountPromotion,
         });
       }
       // Add default quantity and resolution.
@@ -117,10 +138,10 @@ class ReturnItemsListing extends React.Component {
         btnDisabled: true,
       });
       handleSelectedItems([...itemsSelected, itemDetails]);
-    } else if (itemHasPromotion && !itemHasApportionedPrice) {
+    } else if (selectedItemDiscountPromotion.length > 0) {
       this.handlePromotionDeselect();
     } else {
-      handleSelectedItems(itemsSelected.filter((product) => product.sku !== itemDetails.sku));
+      handleSelectedItems([...itemsSelected, itemDetails]);
     }
   }
 
@@ -132,9 +153,9 @@ class ReturnItemsListing extends React.Component {
 
   handlePromotionContinue = () => {
     const { products, handleSelectedItems, itemsSelected } = this.props;
-    const { ruleId } = this.state;
+    const { discountedRuleId } = this.state;
 
-    if (!hasValue(ruleId)) {
+    if (!hasValue(discountedRuleId)) {
       return;
     }
 
@@ -142,11 +163,19 @@ class ReturnItemsListing extends React.Component {
 
     products.forEach((product) => {
       const productDetails = product;
-
-      if (productDetails.applied_rule_ids === ruleId) {
+      let productDiscountedRuleIds = [];
+      if (hasValue(product.extension_attributes.applied_rule_ids_with_discount)) {
+        productDiscountedRuleIds = product.extension_attributes.applied_rule_ids_with_discount.split(',');
+      }
+      if (hasValue(productDiscountedRuleIds)
+        && productDiscountedRuleIds.some((pid) => discountedRuleId.includes(pid))
+        // We don't want to include the products which are already returned.
+        && productDetails.ordered > 0) {
         productDetails.qty_requested = 1;
         productDetails.resolution = getDefaultResolutionId();
         productDetails.isChecked = true;
+        // Add a flag value to disable the qty button.
+        productDetails.disableQtyBtn = true;
 
         promotionalItems.push(productDetails);
       }
@@ -163,9 +192,9 @@ class ReturnItemsListing extends React.Component {
 
   handlePromotionDeselect = () => {
     const { products, handleSelectedItems, itemsSelected } = this.props;
-    const { ruleId } = this.state;
+    const { discountedRuleId } = this.state;
 
-    if (!hasValue(ruleId)) {
+    if (!hasValue(discountedRuleId)) {
       return;
     }
 
@@ -173,9 +202,15 @@ class ReturnItemsListing extends React.Component {
 
     products.forEach((product) => {
       const productDetails = product;
-
-      if (productDetails.applied_rule_ids === ruleId) {
+      let productDiscountedRuleIds = [];
+      if (hasValue(product.extension_attributes.applied_rule_ids_with_discount)) {
+        productDiscountedRuleIds = product.extension_attributes.applied_rule_ids_with_discount.split(',');
+      }
+      if (hasValue(productDiscountedRuleIds)
+        && productDiscountedRuleIds.some((pid) => discountedRuleId.includes(pid))) {
         productDetails.isChecked = false;
+        // Enable the qty button.
+        productDetails.disableQtyBtn = false;
         promotionalItems.push(productDetails);
       }
     });

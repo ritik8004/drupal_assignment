@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 
 const ReturnQuantitySelect = ({
-  qtyOptions, handleSelectedQuantity, sku,
+  qtyOptions, handleSelectedQuantity, sku, disableQtyBtn,
 }) => (
   <>
     <div className="return-qty-row">
@@ -11,8 +11,9 @@ const ReturnQuantitySelect = ({
         classNamePrefix="qtySelect"
         className="return-qty-select"
         options={qtyOptions}
-        defaultValue={qtyOptions[0]}
+        defaultValue={disableQtyBtn ? qtyOptions : qtyOptions[0]}
         isSearchable={false}
+        isDisabled={disableQtyBtn}
         onChange={(selectedOption) => handleSelectedQuantity(selectedOption, sku)}
       />
     </div>
