@@ -1312,7 +1312,6 @@ window.commerceBackend = window.commerceBackend || {};
     return productAttributes;
   };
 
-
   /**
    * Clears static cache of product data.
    */
