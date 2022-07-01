@@ -60,6 +60,12 @@
     }
   }
 
+  .geolocation-common-map-container {
+    [aria-hidden="true"] {
+      padding-bottom: rem(18);
+    }
+  }
+
   .pager__item {
     list-style: none;
   }
