@@ -67,6 +67,9 @@ function alshaya_hm_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$f
     'article_warning',
     'article_description'
   );
+  array_push($fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'color_label',
+  );
 }
 
 /**
