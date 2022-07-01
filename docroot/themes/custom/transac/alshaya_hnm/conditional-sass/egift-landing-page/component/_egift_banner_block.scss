@@ -8,6 +8,10 @@
 
     .paragraph_banner_buttons {
       .field--name-field-links {
+        @include breakpoint($tablet) {
+          flex-direction: row-reverse;
+        }
+
         .field--name-field-links {
           a {
             font-family: $hnm-demibold;
