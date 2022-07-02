@@ -69,6 +69,26 @@
 
   .hello-member-accordion-wrapper {
     padding: 0 rem(20) rem(28);
+    color: $hm-accordion-txt;
+
+    .js-form-type-date  {
+      margin-top: 0;
+    }
+
+    .field--name-field-date-of-birth {
+      h4 {
+        color: $hm-registration-labels-txt;
+        font-size: rem(13);
+        margin: 0;
+        font-weight: normal;
+
+        html[lang=ar] & {
+          text-align: left;
+          width: 100%;
+          display: block;
+        }
+      }
+    }
 
     .hello-member-gift-info {
       margin-top: rem(6);
@@ -83,7 +103,7 @@
       .form-item {
         &.form-type-select {
           height: rem(26);
-          margin-top: rem(24);
+          margin-top: rem(38);
 
           @include select-wrapper(100%);
 
@@ -123,6 +143,12 @@
             }
           }
         }
+      }
+
+      label {
+        position: absolute;
+        top: rem(-20);
+        color: $hm-registration-labels-txt !important;
       }
     }
   }

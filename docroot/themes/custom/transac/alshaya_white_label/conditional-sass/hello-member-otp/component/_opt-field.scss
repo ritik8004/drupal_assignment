@@ -4,6 +4,12 @@
   .mobile-otp-wrapper {
     padding: 0 rem(20) rem(28);
 
+    .field--type-mobile-number {
+      #user-form & {
+        margin-top: 0;
+      }
+    }
+
     #hello-member-send-otp {
       .btn-wrapper {
         position: relative;

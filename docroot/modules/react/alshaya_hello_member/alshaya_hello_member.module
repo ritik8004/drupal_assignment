@@ -127,7 +127,6 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['hello_member']['field_gender']['#prefix'] = '<div class="hello-member-gender">';
     $form['hello_member']['field_gender']['#suffix'] = '</div>';
     $form['hello_member']['field_gender']['#weight'] = 11;
-    unset($form['hello_member']['field_gender']['widget']['#title']);
     unset($form['field_gender']);
 
     $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
@@ -212,7 +211,6 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   ];
   $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
 
-  unset($form['hello_member']['field_gender']['widget']['#title']);
   unset($form['field_gender']);
   unset($form['field_mobile_number']);
   $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
