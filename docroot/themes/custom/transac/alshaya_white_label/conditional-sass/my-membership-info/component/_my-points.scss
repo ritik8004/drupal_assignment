@@ -25,6 +25,10 @@
       font-size: rem(27);
       letter-spacing: 1.35px;
       font-family: $alshaya-bold;
+
+      span {
+        margin-#{$right}: rem(8);
+      }
     }
 
     .my-points-details {
