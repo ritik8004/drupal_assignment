@@ -1,6 +1,8 @@
 import React from 'react';
+import moment from 'moment';
 import Slider from 'react-slick';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const MyOffersAndVouchers = ({ myBenefitsList }) => {
   const settings = {
@@ -42,7 +44,9 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
                 {data.description}
               </div>
               <div className="expiry">
-                {data.expiry_date || data.end_date}
+                {getStringMessage('benefit_expire')}
+                {' '}
+                {moment(new Date(data.expiry_date || data.end_date)).format('DD MMMM YYYY')}
               </div>
             </div>
           </a>

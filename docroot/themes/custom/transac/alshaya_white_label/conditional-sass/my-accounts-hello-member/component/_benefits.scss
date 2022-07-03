@@ -65,6 +65,7 @@
     text-align: center;
     font-family: $alshaya-bold;
     background: $hm-my-offers-bg;
+    min-height: rem(366);
 
     @include breakpoint($only-mobile) {
       width: rem(250) !important;
