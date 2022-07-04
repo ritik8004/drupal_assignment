@@ -16,6 +16,21 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Add new config which contains configurable field label, error and label when
+ * a value is selected.
+ */
+function alshaya_acm_product_update_8080() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.fields_labels_n_error'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * New configuration 'show_size_guide_on_pdp_page'.
  */
 function alshaya_acm_product_update_8079() {
