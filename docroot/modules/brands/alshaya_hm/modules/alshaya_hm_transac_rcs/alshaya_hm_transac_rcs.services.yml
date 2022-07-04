@@ -1,0 +1,3 @@
+services:
+  alshaya_hm_transac_rcs.product_attribute_helper:
+    class: Drupal\alshaya_hm_transac_rcs\Helper\ProductAttributeHelper

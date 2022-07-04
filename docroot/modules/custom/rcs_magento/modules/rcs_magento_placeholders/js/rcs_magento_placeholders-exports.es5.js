@@ -356,6 +356,14 @@ exports.getData = async function getData(
       result = response.data.products.items;
       break;
 
+    case 'product_additional_attributes':
+      let additionalAttributesVariables = rcsPhGraphqlQuery.product_additional_attributes.variables;
+      additionalAttributesVariables.sku = params.sku;
+      additionalAttributesVariables.attributes = params.attributes;
+      request.data = prepareQuery(rcsPhGraphqlQuery.product_additional_attributes.query, additionalAttributesVariables);
+      result = rcsCommerceBackend.invokeApi(request);
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported by default for get_data.`);
 

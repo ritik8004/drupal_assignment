@@ -218,7 +218,7 @@ window.commerceBackend = window.commerceBackend || {};
   window.commerceBackend.updateRelatedProducts = function updateRelatedProducts (type, sku, device) {
     var productType = type + '-products';
     globalThis.rcsPhCommerceBackend.getData(productType, {sku}).then(function productList(response) {
-      var mainProduct = Drupal.hasValue(response) ? response[0] : null;
+      var mainProduct = (Drupal.hasValue(response) && Drupal.hasValue(response[0])) ? response[0] : null;
       if (mainProduct) {
         var html = globalThis.renderRcsProduct.render(drupalSettings, productType, {}, {}, mainProduct);
         var selector = '#rcs-' + productType;

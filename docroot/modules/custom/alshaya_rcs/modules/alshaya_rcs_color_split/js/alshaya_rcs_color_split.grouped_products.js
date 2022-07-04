@@ -30,11 +30,17 @@ window.commerceBackend = window.commerceBackend || {};
    */
   function getProcessedStyleProducts(product, styleProducts) {
     var mainProduct = null;
-    styleProducts.forEach(function eachStyleProduct(styleProduct) {
-      if (styleProduct.sku === product.sku) {
-        mainProduct = JSON.parse(JSON.stringify(styleProduct));
-      }
-    });
+    // Use main product on PDP to display product attributes.
+    if (globalThis.rcsPhGetPageType() === 'product') {
+      mainProduct = product;
+    }
+    else {
+      styleProducts.forEach(function eachStyleProduct(styleProduct) {
+        if (styleProduct.sku === product.sku) {
+          mainProduct = JSON.parse(JSON.stringify(styleProduct));
+        }
+      });
+    }
 
     // This will hold the configugrable options for the main product keyed by
     // the attribute code and then the value index of the options.

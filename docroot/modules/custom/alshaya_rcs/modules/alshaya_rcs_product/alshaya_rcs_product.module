@@ -673,6 +673,23 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ];
   }
 
+  // Fetch additional product attributes.
+  $attributes_fields = $rcs_product_helper->getProductAdditionalAttributesQueryFields();
+  if (!empty($attributes_fields['items'])) {
+    $query_fields['product_additional_attributes'] = [
+      'query' => [
+        'query($sku: String, $attributes: [AttributeInput!]!)' => [
+          'products(filter: {sku: {eq: $sku}})' => $attributes_fields,
+          'customAttributeMetadata(attributes: $attributes)' => $product_options_query_fields,
+        ],
+      ],
+      'variables' => [
+        'sku' => NULL,
+        'attributes' => NULL,
+      ],
+    ];
+  }
+
   // We have two variations of the cart query, one for anonymous and one for
   // authenticated users. So we vary by this context.
   $query_fields['#cache']['contexts'][] = 'user.roles:anonymous';
@@ -727,6 +744,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'gallery.product.block.product_zoom_modal_gallery' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_magazine_gallery' => 'alshaya_rcs_product',
     'attribute.brand.logo' => 'alshaya_rcs_product',
+    'product.overlay_attributes' => 'alshaya_rcs_product',
   ];
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/

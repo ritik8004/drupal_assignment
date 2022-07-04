@@ -1266,6 +1266,61 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
+   * Returns list of product attribute with labels.
+   *
+   * @param {object} data
+   *   Graphql response for additional product attributes.
+   *
+   * @returns {object}
+   *  List of product attributes values and labels.
+   */
+  function processProductAttributes (data) {
+    // Process custom attributes metadata.
+    var attributesMetadata = [];
+    data.customAttributeMetadata.items.forEach(function eachValue(value) {
+      attributesMetadata[value.attribute_code] = {};
+      for (let i = 0; i < value.attribute_options.length; i++) {
+        let option = value.attribute_options[i];
+        attributesMetadata[value.attribute_code][option.value] = option.label;
+      }
+    });
+    // Get labels for product attributes from custom attribute metadata.
+    var productAttributeValues = data.products.items[0];
+    productAttributes = {};
+    Object.entries(productAttributeValues).forEach(function (value) {
+      if (Drupal.hasValue(value[1])) {
+        // Split comma separated product attributes.
+        let value_arr = value[1].split(',');
+        productAttributes[value[0]] = [];
+        value_arr.forEach(function (option) {
+          productAttributes[value[0]].push(attributesMetadata[value[0]][option]);
+        });
+      }
+    });
+    return productAttributes;
+  };
+
+  /**
+   * Get additional product attributes.
+   *
+   * @param {string} sku
+   *   SKU value for which additional attributes is to be returned.
+   * @param {object} attributes
+   *   Product attributes lists.
+   */
+  window.commerceBackend.getAdditionalAttributes = async function getAdditionalAttributes(sku, attributesVariable) {
+    // Get product attributes and custom attribute metadata and labels.
+    var response = await rcsPhCommerceBackend.getData('product_additional_attributes', {
+      sku: sku ,
+      attributes: attributesVariable,
+    })
+    var productAttributes = Drupal.hasValue(response.data)
+      ? processProductAttributes(response.data)
+      : [];
+    return productAttributes;
+  };
+
+  /**
    * Clears static cache of product data.
    */
   window.commerceBackend.resetStaticStoragePostProductUpdate = function resetStaticStoragePostProductUpdate() {
