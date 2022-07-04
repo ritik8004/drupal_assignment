@@ -1,21 +1,19 @@
-const path = require('path');
-
-const buildPath = '/modules/react/alshaya_pdp_react/dist/';
-const config = {
+var path = require("path");
+var buildPath = '/modules/react/alshaya_pdp_react/dist/';
+var config = {
   entry: {
     pdp_layout: './js/pdp_layout.js',
-    pdp_sdd_ed_labels: './js/pdp_sdd_ed_labels.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
     publicPath: buildPath,
-    chunkFilename: '[id].chunk.[chunkhash].js',
-    jsonpFunction: 'jsonpAlsPdp',
+    chunkFilename: "[id].chunk.[chunkhash].js",
+    jsonpFunction: "jsonpAlsPdp",
   },
   devServer: {
     contentBase: './',
-    publicPath: buildPath,
+    publicPath: buildPath
   },
   externals: {
     react: 'React',
@@ -27,19 +25,19 @@ const config = {
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
         options: {
-          rootMode: 'upward',
-        },
+          rootMode: "upward",
+        }
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [ 'style-loader', 'css-loader' ],
       },
       {
         test: /\.(woff|woff2|ttf|otf|eot|svg|gif)$/,
-        use: ['file-loader'],
-      },
+        use: [ 'file-loader' ],
+      }
     ],
   },
 };
@@ -50,7 +48,7 @@ module.exports = (env, argv) => {
   }
   config.watchOptions = {
     poll: 800,
-    ignored: /node_modules/,
+    ignored: /node_modules/
   };
   return config;
 };

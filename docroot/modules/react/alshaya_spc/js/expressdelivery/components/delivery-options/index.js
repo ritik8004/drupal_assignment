@@ -104,7 +104,7 @@ export default class DeliveryOptions extends React.Component {
             }
 
             // Dispatch event to show SDD / ED labels on PDP.
-            dispatchCustomEvent('showPdpSddEdLabel', response);
+            dispatchCustomEvent('showPdpSddEdLabel', response[0]);
           },
         );
       } else {
@@ -121,7 +121,7 @@ export default class DeliveryOptions extends React.Component {
           this.checkShippingMethods(responseWithArea, productSku);
 
           // Dispatch event to show SDD / ED labels on PDP.
-          dispatchCustomEvent('showPdpSddEdLabel', responseWithArea);
+          dispatchCustomEvent('showPdpSddEdLabel', responseWithArea[0]);
         }
       },
     );

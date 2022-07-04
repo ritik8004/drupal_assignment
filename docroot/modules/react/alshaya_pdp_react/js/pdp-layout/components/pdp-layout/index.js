@@ -28,7 +28,7 @@ import WishlistContainer from '../../../../../js/utilities/components/wishlist-c
 import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
 import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import PdpSddEd from '../pdp-sdd-ed';
+import PdpSddEd from '../../../../../alshaya_spc/js/pdp-sdd-ed';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);

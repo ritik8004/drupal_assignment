@@ -129,3 +129,12 @@ express_delivery:
 dynamic_promotion_label:
   js:
     dist/dynamic_promotion_label.bundle.js: {}
+
+# This library adds sdd-ed label component on pdp layouts.
+pdp_sdd_ed_labels:
+  version: 1.0.0
+  js:
+    dist/pdp_sdd_ed_labels.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - core/drupalSettings
