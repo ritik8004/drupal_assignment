@@ -5,6 +5,9 @@
  * Install, uninstall, update function for alshaya_rcs_olapic.
  */
 
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
+
 /**
  * Implements hook_install().
  */
@@ -16,7 +19,7 @@ function alshaya_rcs_olapic_install() {
   }
   // Disable the V1 blocks that are not required.
   $blocks = [
-    'alshayaolapicwidget_2' => '',
+    'alshayaolapicwidget_2' => 'rcsalshayaolapicwidget_2',
   ];
   foreach ($blocks as $prev_block_id => $new_block_id) {
     $existing_block_weight = NULL;
