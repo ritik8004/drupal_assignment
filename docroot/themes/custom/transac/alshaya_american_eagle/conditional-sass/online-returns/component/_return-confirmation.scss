@@ -1,0 +1,21 @@
+.return-confirmation-wrapper {
+  color: $online-return-dark-txt;
+
+  .whats-next-section {
+    .whats-next-wrapper {
+      .title {
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+
+  .whats-next-section,
+  .return-details-section,
+  .return-items-wrapper {
+    .whats-next-title,
+    .return-details-title,
+    .return-items-label {
+      font-family: $alshaya-bold;
+    }
+  }
+}

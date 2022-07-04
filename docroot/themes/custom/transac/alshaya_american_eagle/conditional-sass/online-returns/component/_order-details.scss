@@ -1,0 +1,102 @@
+.order-detail {
+  .user__order--detail {
+    .return-initiated-item,
+    .returned-items-row {
+      .return-status-id-container,
+      .return-status-wrapper {
+        .status-message {
+          color: $online-return-dark-txt;
+        }
+      }
+
+      .item-list-wrapper {
+        .item-total-price {
+          background: $online-return-total-price-bg;
+        }
+      }
+    }
+
+    .return-initiated-item {
+      .return-status-wrapper {
+        background-color: $online-return-light-bg;
+      }
+    }
+
+    .return-initiated-item,
+    .returned-items-row {
+      .return-status-id-container,
+      .return-status-wrapper {
+        .status-label {
+          font-size: rem(16);
+        }
+      }
+    }
+
+    .order-item-row {
+      &.delivered-items,
+      &.cancelled-items {
+        background-color: $online-return-light-bg;
+      }
+    }
+
+    .returned-items {
+      .title-wrapper,
+      .return-status-wrapper,
+      .return-id {
+        background-color: $online-return-light-bg;
+      }
+
+      .title-wrapper {
+        text-transform: capitalize;
+        color: $online-return-dark-txt;
+
+        span.rejected {
+          color: $online-return-status-red-label;
+        }
+      }
+    }
+
+    .cancel-return-button-wrapper {
+      button {
+        border-color: $online-return-print-cancel-border;
+        padding: 0 rem(12);
+
+        .cancel-button-label {
+          color: $online-return-dark-txt;
+        }
+      }
+
+      .cancel-button-text {
+        &::before {
+          font-size: rem(32);
+          margin-#{$right}: rem(4);
+          color: $online-return-dark-txt;
+        }
+      }
+
+      .cancel-button-label {
+        position: relative;
+        top: rem(2);
+      }
+    }
+
+    .print-return-label-wrapper {
+      .print-label-button {
+        border-color: $online-return-print-cancel-border;
+        color: $online-return-dark-txt;
+      }
+    }
+
+    .cancel-return-popup-block {
+      color: $online-return-dark-txt;
+
+      .close-modal {
+        padding: 0;
+
+        &::before {
+          font-size: rem(32);
+        }
+      }
+    }
+  }
+}
