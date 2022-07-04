@@ -1,5 +1,6 @@
 import React from 'react';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import {
   getReturnReasons,
   getQuantityOptions,
@@ -34,7 +35,12 @@ class ReturnItemDetails extends React.Component {
     const {
       returnReasons, qtyOptions,
     } = this.state;
-    const { item, handleSelectedReason, handleSelectedQuantity } = this.props;
+    const {
+      item,
+      handleSelectedReason,
+      handleSelectedQuantity,
+    } = this.props;
+
     const checkedClass = item.isChecked ? 'is-checked' : '';
     return (
       <div className="items-table">
@@ -58,6 +64,7 @@ class ReturnItemDetails extends React.Component {
             <ReturnQuantitySelect
               qtyOptions={qtyOptions}
               handleSelectedQuantity={handleSelectedQuantity}
+              disableQtyBtn={hasValue(item.disableQtyBtn)}
               sku={item.sku}
             />
           </ConditionalView>

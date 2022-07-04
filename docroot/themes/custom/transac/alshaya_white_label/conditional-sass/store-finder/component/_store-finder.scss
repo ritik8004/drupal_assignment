@@ -61,10 +61,8 @@
   }
 
   .geolocation-common-map-container {
-    html[lang=ar] & {
-      [aria-hidden="true"] {
-        padding-left: rem(16);
-      }
+    [aria-hidden="true"] {
+      padding-bottom: rem(18);
     }
   }
 
