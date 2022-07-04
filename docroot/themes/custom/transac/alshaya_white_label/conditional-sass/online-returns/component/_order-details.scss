@@ -283,13 +283,14 @@
         }
       }
 
-      span {
+      .cancel-button-text {
         display: flex;
         align-items: center;
         text-transform: uppercase;
         justify-content: center;
         font-size: rem(14);
         line-height: rem(18);
+        margin-bottom: 0;
 
         @include icon(close, before) {
           font-size: rem(16);
