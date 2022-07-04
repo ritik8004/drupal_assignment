@@ -19,7 +19,9 @@ function getLocale(bazaarVoiceSettings) {
   return `&locale=${bazaarVoiceSettings.reviews.bazaar_voice.locale}`;
 }
 
-const getbazaarVoiceSettings = (productId = undefined) => window.alshayaBazaarVoice.getbazaarVoiceSettings(productId);
+function getbazaarVoiceSettings(productId = undefined) {
+  return window.alshayaBazaarVoice.getbazaarVoiceSettings(productId);
+}
 
 function getUserBazaarVoiceSettings() {
   const settings = [];
@@ -30,8 +32,14 @@ function getUserBazaarVoiceSettings() {
 }
 
 function fetchAPIData(apiUri, params, context = '') {
-  const bazaarVoiceSettings = context === 'user' ? getUserBazaarVoiceSettings() : getbazaarVoiceSettings();
-  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
+  const bazaarVoiceSettings = context === 'user'
+    ? getUserBazaarVoiceSettings()
+    : getbazaarVoiceSettings();
+  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(
+    bazaarVoiceSettings,
+  )}${getPassKey(bazaarVoiceSettings)}${getLocale(
+    bazaarVoiceSettings,
+  )}${params}`;
 
   return Axios.get(url)
     .then((response) => {
@@ -49,7 +57,9 @@ window.alshayaBazaarVoice.fetchAPIData = fetchAPIData;
 
 function postAPIData(apiUri, params, productId = undefined) {
   const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}`;
+  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(
+    bazaarVoiceSettings,
+  )}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}`;
 
   return Axios.post(url, params, {
     headers: {
@@ -68,7 +78,11 @@ function postAPIData(apiUri, params, productId = undefined) {
 
 function postAPIPhoto(apiUri, params) {
   const bazaarVoiceSettings = getbazaarVoiceSettings();
-  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
+  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(
+    bazaarVoiceSettings,
+  )}${getPassKey(bazaarVoiceSettings)}${getLocale(
+    bazaarVoiceSettings,
+  )}${params}`;
 
   return Axios.post(url)
     .then((response) => {
@@ -88,7 +102,10 @@ function getLanguageCode() {
 export async function getUserDetails(productId = undefined) {
   const settings = {};
 
-  if (productId !== '' && typeof drupalSettings.bazaarvoiceUserDetails !== 'undefined') {
+  if (
+    productId !== ''
+    && typeof drupalSettings.bazaarvoiceUserDetails !== 'undefined'
+  ) {
     settings.user = drupalSettings.bazaarvoiceUserDetails;
     settings.productReview = await window.alshayaBazaarVoice.getProductReviewForCurrrentUser(
       productId,
