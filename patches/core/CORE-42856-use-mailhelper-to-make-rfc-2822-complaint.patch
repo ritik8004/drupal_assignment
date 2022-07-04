@@ -1,0 +1,27 @@
+diff --git a/core/lib/Drupal/Core/Mail/MailManager.php b/core/lib/Drupal/Core/Mail/MailManager.php
+index ea819c0c11..ca39650327 100644
+--- a/core/lib/Drupal/Core/Mail/MailManager.php
++++ b/core/lib/Drupal/Core/Mail/MailManager.php
+@@ -5,6 +5,7 @@
+ use Drupal\Component\Render\MarkupInterface;
+ use Drupal\Component\Render\PlainTextOutput;
+ use Drupal\Component\Utility\Html;
++use Drupal\Component\Utility\Mail as MailHelper;
+ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+ use Drupal\Core\Messenger\MessengerTrait;
+ use Drupal\Core\Plugin\DefaultPluginManager;
+@@ -256,12 +257,9 @@ public function doMail($module, $key, $to, $langcode, $params = [], $reply = NUL
+     // To prevent email from looking like spam, the addresses in the Sender and
+     // Return-Path headers should have a domain authorized to use the
+     // originating SMTP server.
+-    $headers['From'] = $headers['Sender'] = $headers['Return-Path'] = $site_mail;
++    $headers['Sender'] = $headers['Return-Path'] = $site_mail;
+     // Make sure the site-name is a RFC-2822 compliant 'display-name'.
+-    if ($site_mail) {
+-      $mailbox = new MailboxHeader('From', new Address($site_mail, $site_config->get('name') ?: ''));
+-      $headers['From'] = $mailbox->getBodyAsString();
+-    }
++    $headers['From'] = MailHelper::formatDisplayName($site_config->get('name')) . ' <' . $site_mail . '>';
+     if ($reply) {
+       $headers['Reply-to'] = $reply;
+     }

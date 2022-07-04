@@ -270,7 +270,8 @@
                 "Add views render caching on views ajax requests": "https://www.drupal.org/files/issues/2021-01-19/views-render_caching_ajax_requests-2500313-70-92x.patch",
                 "Disable CSRF token check for non-CSRF vulnerable authentication providers": "https://www.drupal.org/files/issues/2019-05-17/core-X-CSRF-Token_request_header_check-3055260-3-8.7.1.patch",
                 "jQuery UI library order is incorrect": "https://www.drupal.org/files/issues/2021-07-19/3222107-jquery_ui_weight_fix-11.diff",
-                "Allow fixing corrupt CSS / JS issues without waiting for Browser cache to expire": "https://git.drupalcode.org/project/drupal/-/merge_requests/2377.patch"
+                "Allow fixing corrupt CSS / JS issues without waiting for Browser cache to expire": "https://git.drupalcode.org/project/drupal/-/merge_requests/2377.patch",
+                "Use Mailhelper to make site name RFC complaint": "patches/core/CORE-42856-use-mailhelper-to-make-rfc-2822-complaint.patch"
             },
             "drupal/mobile_number": {
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
