@@ -12,11 +12,12 @@
         event.preventDefault();
 
         var authLink = $(this).attr('social-auth-link');
-        var destination = urlParam('destination') || Drupal.url('user');
+        var destination = urlParam('destination', authLink) || Drupal.url('user');
 
         // Log the social login initiation.
-        Drupal.alshayaLogger('notice', 'User started social authentication on @authLink.', {
+        Drupal.alshayaLogger('notice', 'User started social authentication on @authLink with destination: @destination.', {
           '@authLink': authLink,
+          '@destination': destination,
         });
 
         Drupal.socialAuthPopup({
@@ -75,8 +76,9 @@
    * @param name
    * @returns {string|number|null}
    */
-  function urlParam (name) {
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+  function urlParam (name, url = null) {
+    url = url || window.location.href;
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(url);
     if (results == null){
        return null;
     }
