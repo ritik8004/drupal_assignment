@@ -13,27 +13,24 @@
    *   Returns compostion for the product.
    */
   var fetchCompositionAttribute = function fetchCompositionAttribute (entity) {
-      if (entity.type_id == 'configurable') {
-      return entity.variants[0].product.composition;
-    }
-    else {
-      return entity.composition;
-    }
+    return entity.type_id === 'configurable'
+      ? entity.variants[0].product.composition
+      : entity.composition;
   };
 
   // Event listener to update the data layer object with the proper product
   // data.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty.
-    if (typeof e.detail.result === 'undefined' || (e.detail.pageType !== 'product')) {
+    if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'product') {
       return;
     }
 
     var data = e.detail.result;
     // Attributes to be displayed on main page.
     let mainAttributesCode = {
-      'fit' : 'FIT',
-      'article_description' : 'ARTICLE DESCRIPTION',
+      'fit' : Drupal.t('FIT'),
+      'article_description' : Drupal.t('ARTICLE DESCRIPTION'),
     };
     let descriptionDetails = [];
     for (var attributesCode in mainAttributesCode) {

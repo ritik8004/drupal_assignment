@@ -3,6 +3,7 @@ product:
   js:
     js/alshaya_hm_transac_rcs_product.js: {}
   dependencies:
+    - core/drupal
     - core/jquery
     - rcs_placeholders/helpers
     - alshaya_master/common_functions
@@ -36,3 +37,4 @@ product_overlay:
     - core/drupalSettings
     - core/jquery
     - rcs_placeholders/helpers
+    - alshaya_acm_cart_notification/cart_notification_js

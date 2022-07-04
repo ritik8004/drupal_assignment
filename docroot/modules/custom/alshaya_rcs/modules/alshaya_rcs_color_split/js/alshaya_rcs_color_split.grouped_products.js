@@ -30,6 +30,7 @@ window.commerceBackend = window.commerceBackend || {};
    */
   function getProcessedStyleProducts(product, styleProducts) {
     var mainProduct = null;
+    // Use main product on PDP to display product attributes.
     if (globalThis.rcsPhGetPageType() === 'product') {
       mainProduct = product;
     }
