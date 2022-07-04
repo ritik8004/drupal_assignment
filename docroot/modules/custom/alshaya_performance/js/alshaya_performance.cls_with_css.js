@@ -12,16 +12,6 @@
     }
   };
 
-  const getDelay = () => {
-    const parsedUrl = new URL(window.location.href);
-    const delay = parsedUrl.searchParams.get("delay");
-    return parseInt(delay) || 0;
-  };
-
-  const loadEventHandler = () => {
-    setTimeout(removeInitialLayout, getDelay());
-  };
-
-  window.addEventListener("load", loadEventHandler);
+  window.addEventListener("load", removeInitialLayout);
 
 })();

@@ -6,15 +6,15 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AlshayaCssClsSettingsForm.
+ * Class AlshayaPerformanceSettingsForm.
  */
-class AlshayaCssClsSettingsForm extends ConfigFormBase {
+class AlshayaPerformanceSettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'alshaya_css_cls_settings_form';
+    return 'alshaya_performance_settings_form';
   }
 
   /**
