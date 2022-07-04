@@ -594,7 +594,10 @@ exports.computePhFilters = function (input, filter) {
           const selectOptions = [];
           // Add the option values.
           option.values.forEach((value) => {
-            const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            let label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            if (!Drupal.hasValue(label)) {
+              label = value.value_index;
+            }
             let selectOption = { value: value.value_index, text: label };
 
             if (isOptionSwatch) {
