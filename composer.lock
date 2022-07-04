@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46f537d933df54a110ee260251d2e3d9",
+    "content-hash": "a51bdf643ab8c345ccedf9735fb71eba",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -8782,6 +8782,10 @@
                     "homepage": "https://www.drupal.org/user/61114"
                 },
                 {
+                    "name": "bnjmnm",
+                    "homepage": "https://www.drupal.org/user/2369194"
+                },
+                {
                     "name": "jjeff",
                     "homepage": "https://www.drupal.org/user/17190"
                 },
@@ -11223,20 +11227,8 @@
             ],
             "authors": [
                 {
-                    "name": "Allie Micka",
-                    "homepage": "https://www.drupal.org/user/15091"
-                },
-                {
                     "name": "TR",
                     "homepage": "https://www.drupal.org/user/202830"
-                },
-                {
-                    "name": "jerdavis",
-                    "homepage": "https://www.drupal.org/user/228997"
-                },
-                {
-                    "name": "sgabe",
-                    "homepage": "https://www.drupal.org/user/232117"
                 }
             ],
             "description": "Sends MIME-encoded emails with embedded images and attachments.",
@@ -13018,6 +13010,10 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
+                    "name": "VladimirAus",
+                    "homepage": "https://www.drupal.org/user/673120"
+                },
+                {
                     "name": "dawehner",
                     "homepage": "https://www.drupal.org/user/99340"
                 },
@@ -13384,6 +13380,10 @@
                 {
                     "name": "ram4nd",
                     "homepage": "https://www.drupal.org/user/601534"
+                },
+                {
+                    "name": "ron_s",
+                    "homepage": "https://www.drupal.org/user/184990"
                 }
             ],
             "description": "Adds an Amazon Simple Storage Service-based remote file system to Drupal.",
