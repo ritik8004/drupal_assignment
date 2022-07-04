@@ -372,3 +372,15 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
     }
   }
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_bazaar_voice_library_info_alter(&$libraries, $extension) {
+  // Alter order_details library when Bazaar voice is enabled.
+  if ($extension === 'alshaya_spc') {
+    $libraries['order_details']['dependencies'][] = 'bazaar_voice/bazaar_voice';
+    $libraries['order_details']['dependencies'][] = 'alshaya_bazaar_voice/utility';
+    $libraries['order_details']['dependencies'][] = 'alshaya_acm_product/acq_product_info';
+  }
+}

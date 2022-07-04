@@ -1,0 +1,9 @@
+.aura-pdp-points-section {
+  .magazine-layout-v2 & {
+    margin: rem(16) 0 rem(36);
+  }
+
+  .magazine-layout-v2 .wishlist-button-wrapper + & {
+    margin: rem(36) 0;
+  }
+}

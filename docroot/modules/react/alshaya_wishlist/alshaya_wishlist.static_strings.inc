@@ -38,5 +38,25 @@ function _alshaya_wishlist_strings() {
       'key' => 'share_your_list_text',
       'value' => t('Share all your @wishlist_label with friends and family.', [], ['context' => 'wishlist']),
     ],
+    [
+      'key' => 'wishlist_email_button',
+      'value' => t('Email', [], ['context' => 'wishlist']),
+    ],
+    [
+      'key' => 'wishlist_link_copied',
+      'value' => t('Link Copied', [], ['context' => 'wishlist']),
+    ],
+    [
+      'key' => 'wishlist_link_copy',
+      'value' => t('Copy Link', [], ['context' => 'wishlist']),
+    ],
+    [
+      'key' => 'wishlist_share_all',
+      'value' => t('Share All', [], ['context' => 'wishlist']),
+    ],
+    [
+      'key' => 'wishlist_go_shipping',
+      'value' => t('go shopping', [], ['context' => 'wishlist']),
+    ],
   ];
 }

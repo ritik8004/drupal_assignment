@@ -1,4 +1,5 @@
-#alshaya-algolia-search {
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
   .filter-sort-title {
     text-transform: capitalize;
   }
@@ -15,9 +16,9 @@
 
   .show-all-filters-algolia {
     text-transform: uppercase;
-  }
 
-  .show-all-filters-algolia::before {
-    top: 46%;
+    &::before {
+      top: 46%;
+    }
   }
 }

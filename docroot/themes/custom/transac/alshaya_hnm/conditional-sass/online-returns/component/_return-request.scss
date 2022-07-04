@@ -1,0 +1,56 @@
+.return-requests-wrapper {
+  .products-list-wrapper {
+    .items-table {
+      .order-item-row {
+        .order-item-checkbox {
+          .return_item_checkbox {
+            @include icon(check-box-empty) {
+              font-size: 1.3125rem;
+              color: $primary_checkbox_empty;
+            }
+
+            &.is-checked {
+              @include icon(check-box-filled) {
+                color: $primary_checkbox_filled;
+              }
+            }
+          }
+        }
+
+        .order-item-image {
+          .image-data-wrapper {
+            &.in-eligible,
+            &.big-ticket-item {
+              .big-ticket-item-label,
+              .not-eligible-label {
+                font-family: $hnm-demibold;
+              }
+            }
+          }
+        }
+
+        .big-ticket-wrapper {
+          @include breakpoint($tablet) {
+            font-family: $hnm-demibold;
+          }
+        }
+      }
+    }
+  }
+
+  .refund-details-wrapper {
+    .return-address-wrapper {
+      .customer-name {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+
+  .continue-button-wrapper {
+    button {
+      span {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}

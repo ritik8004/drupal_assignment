@@ -1,28 +1,28 @@
 services:
-  alshaya_hm_images.route_subscriber:
-    class: Drupal\alshaya_hm_images\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }
-  alshaya_hm_images.product_info_requested_event:
-    class: Drupal\alshaya_hm_images\EventSubscriber\ProductInfoRequestedEventSubscriber
-    arguments:
-      - '@alshaya_media_assets.skuassetsmanager'
-    tags:
-      - { name: 'event_subscriber' }
-  alshaya_hm_images.product_updated_event:
-    class: Drupal\alshaya_hm_images\EventSubscriber\ProductUpdatedEventSubscriber
-    arguments:
-      - '@entity_type.manager'
-      - '@logger.factory'
-      - '@file.usage'
-      - '@alshaya_media_assets.skuassetsmanager'
-    tags:
-      - { name: 'event_subscriber' }
   alshaya_hm_images.alshaya_hm_process_blacklisted_products:
     class: Drupal\alshaya_hm_images\EventSubscriber\AlshayaHMProcessBlacklistedProductsSubscriber
     arguments:
-      - '@alshaya_media_assets.skuassetsmanager'
       - '@database'
       - '@logger.factory'
     tags:
       - { name: 'event_subscriber' }
+    calls:
+      - [setSkuAssetManager, ['@?alshaya_media_assets.skuassetsmanager']]
+
+  alshaya_hm_images.images_helper:
+    class: Drupal\alshaya_hm_images\Services\HmImagesHelper
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.cache_manager'
+      - '@language_manager'
+      - '@database'
+      - '@entity_type.manager'
+
+  alshaya_hm_images.product_info_requested_event:
+    class: Drupal\alshaya_hm_images\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_hm_images.images_helper'
+    tags:
+      - { name: 'event_subscriber' }
+    calls:
+      - [setSkuAssetManager, ['@?alshaya_media_assets.skuassetsmanager']]

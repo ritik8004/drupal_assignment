@@ -5,3 +5,4 @@ main:
   dependencies:
     - core/jquery
     - rcs_placeholders/helpers
+    - alshaya_master/common_functions

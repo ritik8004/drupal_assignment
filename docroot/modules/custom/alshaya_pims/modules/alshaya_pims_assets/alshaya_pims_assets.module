@@ -1,0 +1,104 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_pims_assets_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
+  // Process assets data & create attributes which are needed for sorting
+  // the assets while displaying them.
+  // phpcs:disable
+  $existing_assets = !empty($existing_data['attr_assets'])
+    ? unserialize($existing_data['attr_assets'][0]['value'])
+    : [];
+  // phpcs:enable
+
+  if (is_array($existing_assets)) {
+    $sku->get('attr_assets')->setValue(_alshaya_pims_assets_acq_sku_process_assets($product, $existing_assets));
+  }
+}
+
+/**
+ * Helper function to process asset attributes & calculate sorting params.
+ *
+ * @param array $product
+ *   Product array containing assets to be processed.
+ * @param array $existing_assets
+ *   Existing assets data.
+ *
+ * @return string
+ *   Serialized & processed assets.
+ */
+function _alshaya_pims_assets_acq_sku_process_assets(array $product, array $existing_assets) {
+  $existing_assets_mapping = [];
+
+  foreach ($existing_assets ?? [] as $key => $asset) {
+    $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+    $existing_assets_mapping[$id] = $asset;
+  }
+
+  $assets = [];
+  if (isset($product['extension'], $product['extension']['assets'])) {
+    $assets = $product['extension']['assets'];
+
+    foreach ($assets as $key => $asset) {
+      // If asset had no pims data before and has pims data now, asset id here
+      // won't match and hence we will not use old downloaded image.
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+
+      if (empty($asset['Data']['AssetType']) && ($asset['is_old_format'] && empty($asset['Type']))) {
+        continue;
+      }
+
+      $asset_type_parts = (!empty($asset['Data']['AssetType'])) ? explode('/', $asset['Data']['AssetType']) : [];
+      $assets[$key]['sortAssetType'] = !empty($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
+      $face_type = SkuAssetManager::LP_DEFAULT_ANGLE;
+
+      if (!empty($asset['Data']['Angle']['Facing']) && !empty($asset['Data']['Angle']['Identifier'])) {
+        $face_type = $asset['Data']['Angle']['Facing'] . $asset['Data']['Angle']['Identifier'];
+      }
+      $assets[$key]['sortFacingType'] = $face_type;
+    }
+  }
+
+  return serialize($assets);
+}
+
+/**
+ * Implements hook_alshaya_acm_product_media_items_alter().
+ */
+function alshaya_pims_assets_alshaya_acm_product_media_items_alter(array &$media, SKU $sku) {
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $assetsManager */
+  $assetsManager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
+  $assets = $assetsManager->getAssets($sku);
+
+  foreach ($assets ?? [] as $asset) {
+    if (!empty($asset['drupal_uri'])) {
+      $asset['media_type'] = $assetsManager->getAssetType($asset);
+
+      $media[] = $asset;
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_pdp_swath_type_alter().
+ */
+function alshaya_pims_assets_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
+  /** @var \Drupal\alshaya_pims_assets\Services\PimsSkuAssetManager $sku_asset_manager */
+  $sku_asset_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
+  $swatch = $sku_asset_manager->getSkuSwatch($variant_sku);
+
+  if (!empty($swatch)) {
+    $color_options_list[key($color_options_list)]['display_value'] = '<img loading="lazy" src="' . $swatch['url'] . '">';
+    $color_options_list[key($color_options_list)]['swatch_type'] = $swatch['type'];
+  }
+}

@@ -12,11 +12,45 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  *
  * Update Aura translation strings.
  */
+function alshaya_aura_react_update_8006() {
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  if ($translations = _alshaya_aura_react_get_translations('v6')) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Aura translation strings and Aura loyalty benefits strings.
+ */
+function alshaya_aura_react_update_8005() {
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  if ($translations = _alshaya_aura_react_get_translations('v5')) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Aura translation strings.
+ */
 function alshaya_aura_react_update_8004() {
   module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
   if ($translations = _alshaya_aura_react_get_translations('v4')) {
     alshaya_i18n_save_translations($translations);
   }
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_aura_react.loyalty_benefits'],
+    'alshaya_aura_react',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE_KEY,
+    ['replace_keys' => ['loyalty_benefits_content']]
+  );
 }
 
 /**

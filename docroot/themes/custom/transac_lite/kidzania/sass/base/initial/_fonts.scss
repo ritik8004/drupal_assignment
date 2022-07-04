@@ -1,0 +1,104 @@
+@font-face {
+  font-family: "Ubuntu";
+  src: url("Ubuntu.eot");
+  src: url("#{$base_theme_fonts_directory_path}/Ubuntu.eot?#iefix")
+      format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Ubuntu.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Ubuntu.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Ubuntu.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Ubuntu.svg#Ubuntu") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("OpenSans.eot");
+  src: url("#{$base_theme_fonts_directory_path}/OpenSans.eot?#iefix")
+      format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/OpenSans.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/OpenSans.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/OpenSans.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/OpenSans.svg#OpenSans")
+      format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Ubuntu-Bold";
+  src: url("Ubuntu-Bold.eot");
+  src: url("#{$base_theme_fonts_directory_path}/Ubuntu-Bold.eot?#iefix")
+      format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Ubuntu-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Ubuntu-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Ubuntu-Bold.ttf")
+      format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Ubuntu-Bold.svg#Ubuntu-Bold")
+      format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "OpenSans-Bold";
+  src: url("OpenSans-Extrabold.eot");
+  src: url("#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.eot?#iefix")
+      format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.woff2")
+      format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.woff")
+      format("woff"),
+    url("#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.ttf")
+      format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.svg#OpenSans-Extrabold")
+      format("svg");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Cairo";
+  src: url("#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.eot");
+  src: url("#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.eot?#iefix")
+      format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.woff")
+      format("woff"),
+    url("#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.ttf")
+      format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.svg#NotoKufiArabic-Bold")
+      format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Cairo-bold";
+  src: url("#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.eot");
+  src: url("#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.eot?#iefix")
+      format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.woff")
+      format("woff"),
+    url("#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.ttf")
+      format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.svg#NotoKufiArabic-Bold")
+      format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Icon Fonts
+@font-face {
+  font-family: "icomoon";
+  src: url("#{$base_theme_fonts_directory_path}/icomoon.eot?vey8d6");
+  src: url("#{$base_theme_fonts_directory_path}/icomoon.eot?vey8d6#iefix")
+      format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/icomoon.ttf?vey8d6")
+      format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/icomoon.woff?vey8d6")
+      format("woff"),
+    url("#{$base_theme_fonts_directory_path}/icomoon.svg?vey8d6#icomoon")
+      format("svg");
+  font-weight: normal;
+  font-style: normal;
+}

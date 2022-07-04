@@ -212,3 +212,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css
+
+  alshaya_white_label/online-booking:
+    css:
+      theme:
+        css/conditional-sass/online-booking/online-booking.ltr.css: css/conditional-sass/online-booking/online-booking.ltr.css
+
+  alshaya_white_label/aura-loyalty-forms:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css: css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css

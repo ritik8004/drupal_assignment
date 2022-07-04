@@ -83,6 +83,15 @@ class WishlistProductList extends React.Component {
     }
 
     if (!isAnonymousUser()) {
+      // We will check if the flag `window.wishListLoadedFromBackend` is set to
+      // true, which means the wishlist from MDC is already loaded thus we can
+      // show the products from the local storage. We need to set the flag to
+      // false again so next time, we don't load data from the local storage
+      // and relay on `getWishlistFromBackendSuccess` event.
+      if (window.wishListLoadedFromBackend) {
+        window.wishListLoadedFromBackend = false;
+        this.updateWisListProductsList();
+      }
       // Add event listener for get wishlist load event for logged in user.
       // This will execute when wishlist loaded from the backend
       // and page loads before.
@@ -189,7 +198,7 @@ class WishlistProductList extends React.Component {
     if (wishListItemsCount === 0) {
       return PageEmptyMessage(
         getStringMessage('empty_wishlist', { '@wishlist_label': getWishlistLabel() }),
-        'wishlist',
+        getStringMessage('wishlist_go_shipping'),
       );
     }
 

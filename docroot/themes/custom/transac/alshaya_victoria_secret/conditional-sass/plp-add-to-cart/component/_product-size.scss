@@ -4,18 +4,25 @@
       font-size: rem(12);
       font-family: $vs-bentonsans-medium;
       background: $plp-quick-view-product-size-bg-border;
-      border: 1px solid $plp-quick-view-product-size-bg-border;
-
-      &:hover {
-        background-color: unset;
-      }
+      border: rem(1) solid $plp-quick-view-product-size-bg-border;
 
       &.disabled {
         text-decoration: line-through;
-        font-family: $vs-regular;
+        font-family: $alshaya-thin;
         background: $plp-quick-view-product-size-bg-border;
         color: $plp-quick-view-product-size-text;
-        border: 1px solid $plp-quick-view-product-size-bg-border;
+        border: rem(1) solid $plp-quick-view-product-size-bg-border;
+      }
+    }
+  }
+
+  &_size {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+
+      & + .alshaya-select-wrapper {
+        width: 100%;
+        margin-top: rem(16);
       }
     }
   }

@@ -7,11 +7,11 @@ on:
       - qa
       - uat
       - master
-      - develop-online-returns
-      - develop-new-aura-checkout
-      - develop-new-aura-cart
+      - develop-hello-member
   create:
     tags:
+
+concurrency: deploy-${{ github.ref }}
 
 defaults:
   run:
@@ -36,9 +36,9 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | xargs)"
-          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
-          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)"
+          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
+          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
 
   deploy:
     name: Deploy

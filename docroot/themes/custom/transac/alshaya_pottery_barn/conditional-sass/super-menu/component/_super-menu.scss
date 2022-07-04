@@ -1,0 +1,19 @@
+body.logged-in {
+  .menu--super-menu {
+    ul {
+      li {
+        @include breakpoint($desktop) {
+          a {
+            padding-#{$right}: 0;
+          }
+
+          &:not(:first-child) {
+            a {
+              padding-#{$left}: rem(16);
+            }
+          }
+        }
+      }
+    }
+  }
+}

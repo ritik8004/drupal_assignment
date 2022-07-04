@@ -716,7 +716,6 @@ class AlshayaBazaarVoice {
   public function getOrdersPageAttachment(array $settings) {
     $attached = [
       'library' => [
-        'alshaya_bazaar_voice/myorders',
         'alshaya_bazaar_voice/iovation',
       ],
       'drupalSettings' => [

@@ -32,8 +32,6 @@
 
         @include breakpoint($desktop) {
           min-width: 3.375rem;
-          margin-#{$right}: 0.875rem;
-          margin-#{$left}: 0.3125rem;
           width: auto;
         }
       }
@@ -64,7 +62,7 @@
       position: absolute;
       width: 100%;
       min-width: rem(282);
-      padding: rem(12) rem(16);
+      padding: rem(12) rem(18);
       border-radius: 0.625rem;
       box-shadow: 0 0.125rem 1.25rem 0 rgba(0, 0, 0, 0.24);
       #{$left}: 50%;
@@ -150,7 +148,9 @@ body.aura-enabled {
     .desktop-only {
       display: flex;
       align-items: center;
-      margin-bottom: rem(8);
+      justify-content: center;
+      margin-bottom: rem(16);
+      margin-top: rem(18);
       color: $aura-normal-text;
 
       @include breakpoint($upto-desktop) {
@@ -172,8 +172,8 @@ body.aura-enabled {
         background: none;
         border: none;
         position: absolute;
-        #{$right}: 0.375rem;
-        top: 0.375rem;
+        #{$right}: rem(3);
+        top: rem(3);
         padding: 0;
 
         @include breakpoint($upto-desktop) {
@@ -182,7 +182,7 @@ body.aura-enabled {
 
         @include icon(close, before) {
           background: none;
-          font-size: 2rem;
+          font-size: rem(30);
         }
       }
     }
@@ -203,24 +203,33 @@ body.aura-enabled {
   }
 
   .aura-popup-body {
-    margin-bottom: rem(8);
+    margin-bottom: rem(24);
     color: $aura-loyalty-activity-txt;
-    text-align: $left;
-    line-height: rem(18);
+    line-height: 1.5;
     font-size: rem(12);
+
+    @include breakpoint($desktop) {
+      text-align: center;
+      margin-bottom: rem(17);
+    }
 
     span {
       a {
         display: inline-block;
         padding: rem(1) 0;
         color: inherit;
+        font-family: $aura-regular;
         text-decoration: underline;
         font-size: rem(12);
         line-height: rem(18);
-        font-family: $aura-regular;
+        text-transform: unset;
 
         &:hover {
           background-color: transparent;
+        }
+
+        @include breakpoint($desktop) {
+          color: $aura-normal-text;
         }
       }
     }
@@ -261,8 +270,12 @@ body.aura-enabled {
 
   .aura-popup-footer {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
+
+    @include breakpoint($desktop) {
+      align-items: center;
+    }
 
     a {
       font-size: 1rem;
@@ -271,20 +284,49 @@ body.aura-enabled {
     }
 
     .join-aura {
-      color: $aura-header-popup-learn-more-link;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: rem(46);
+      color: $_aura_dark_purple;
+      font-family: $aura-bold;
+      letter-spacing: rem(0.71);
+      border-style: solid;
+      border-width: rem(2);
+      border-radius: rem(28);
+      border-image-slice: 0;
+      border-image-source: $aura-loyalty-club-no-card-block-sign-up-border;
+      background-image: $aura-loyalty-club-no-card-block-sign-up-bg;
+      background-origin: border-box;
+      background-clip: content-box, border-box;
       cursor: pointer;
-      font-size: rem(12);
-      line-height: rem(24);
-      font-family: $aura-caption-regular;
+
+      html[lang=ar] & {
+        border-image-source: $aura-loyalty-club-no-card-block-sign-up-border-ar;
+        background-image: $aura-loyalty-club-no-card-block-sign-up-bg-ar;
+      }
+
+      @include breakpoint($desktop) {
+        width: rem(182);
+      }
     }
 
     .already-member {
-      .already-a-member-link {
-        color: $aura-header-popup-learn-more-link;
-        cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      margin-top: rem(20);
+
+      @include breakpoint($desktop) {
+        margin-top: rem(14);
+        margin-bottom: rem(20);
+        text-align: center;
+      }
+
+      &__text {
         font-size: rem(12);
-        line-height: rem(24);
-        font-family: $aura-caption-regular;
+        line-height: 1.5;
+        color: $aura-normal-text;
       }
     }
 

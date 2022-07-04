@@ -13,8 +13,8 @@
         var entity = e.detail.page_entity;
         // Assign product GTM variables.
         var data = e.detail.data();
-        data.productSKU = (entity.type_id === 'configurable') ? '' : entity.style_code;
-        data.productStyleCode = entity.style_code;
+        data.productSKU = (entity.type_id === 'configurable') ? '' : entity.sku;
+        data.productStyleCode = entity.sku;
         data.pageType = 'product detail page';
         data.stockStatus = (entity.stock_status === 'IN_STOCK') ? 'in stock' : 'out of stock';
         data.productName = entity.name;
@@ -25,7 +25,9 @@
 
         // Get product image.
         var image = window.commerceBackend.getFirstImage(entity);
-        data.productPictureURL = image.url;
+        data.productPictureURL = (Drupal.hasValue(image) && Drupal.hasValue(image.url))
+          ? image.url
+          : null;
         data.magentoProductID = entity.id;
 
         // Set categories.
@@ -85,10 +87,14 @@
         breadcrumbTitles.push(breadcrumbs[i].text);
       }
       categories.departmentName = breadcrumbTitles.join('|'),
-      categories.departmentId = breadcrumbs[0].id;
+      categories.departmentId = ( Array.isArray(breadcrumbs) && breadcrumbs.length > 0 )
+        ? breadcrumbs[0].id
+        : '';
       categories.list = breadcrumbTitles.join('|');
       // Lowest category as listing category.
-      var listing_category = breadcrumbs.pop();
+      var listing_category = (Array.isArray(breadcrumbs) && breadcrumbs.length > 0)
+        ? breadcrumbs.pop()
+        : { text : '', id : ''};
       categories.listingName = listing_category.text;
       categories.listingId = listing_category.id;
 

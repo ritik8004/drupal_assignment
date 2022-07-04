@@ -11,6 +11,36 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update arabic string translation for order details.
+ */
+function alshaya_master_update_8054() {
+  // Add string translations.
+  $strings = [
+    'print' => [
+      'ar' => 'طباعة',
+    ],
+    'Quantity: @quantity' => [
+      'ar' => 'الكمية: @quantity',
+    ],
+    'Item code: @sku' => [
+      'ar' => 'رمز القطعة: @sku',
+    ],
+    'Total: @count item' => [
+      'ar' => 'المجموع: @count قطعة',
+    ],
+    'Total: @count items' => [
+      'ar' => 'المجموع: @count قطع',
+    ],
+    '@count Cancelled' => [
+      'ar' => 'تم إلغاء @count',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update arabic string translation for View all.
  */
 function alshaya_master_update_8052() {
@@ -2239,6 +2269,21 @@ function alshaya_master_install() {
     ],
     'View All' => [
       'ar' => 'اظهار الكل',
+    ],
+    'Quantity: @quantity' => [
+      'ar' => 'الكمية: @quantity',
+    ],
+    'Item code: @sku' => [
+      'ar' => 'رمز القطعة: @sku',
+    ],
+    'Total: @count item' => [
+      'ar' => 'المجموع: @count قطعة',
+    ],
+    'Total: @count items' => [
+      'ar' => 'المجموع: @count قطع',
+    ],
+    '@count Cancelled' => [
+      'ar' => 'تم إلغاء @count',
     ],
   ];
 

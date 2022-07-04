@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_online_returns module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Install new SKU field for Online Returns.
+ * Add alshaya Online Returns translations.
+ * Add return confirmation configurations.
+ */
+function alshaya_online_returns_install() {
+  // Add Is returnable attribute to SKU entity.
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_online_returns', 'alshaya_online_returns.translations');
+  if ($translations = _alshaya_online_returns_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}

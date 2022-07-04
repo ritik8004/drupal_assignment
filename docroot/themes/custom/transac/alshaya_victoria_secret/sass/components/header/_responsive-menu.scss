@@ -179,6 +179,20 @@ header {
 
     .one.shop {
       width: 49.5%;
+
+      &::after {
+        content: '';
+        float: $right;
+        margin-#{$right}: rem(-35);
+        border-#{$right}: rem(1) solid $header_toggle_sign_divider;
+        height: rem(31);
+        position: relative;
+        top: rem(-8);
+
+        html[lang=ar] & {
+          margin-left: rem(-22);
+        }
+      }
     }
   }
 
@@ -218,7 +232,7 @@ header {
 
   .menu--mobile-navigation {
     width: 75%;
-    top: 2.875rem;
+    top: rem(44);
     background-color: $header_mobile_menu_bg;
   }
 
@@ -239,7 +253,7 @@ header {
   .block-alshaya-react-mini-cart {
     width: 26%;
     #{$right}: 0;
-    top: 2.875rem;
+    top: rem(44);
     z-index: 1;
     text-align: center;
     background-color: $header_mobile_menu_bg;
@@ -275,20 +289,6 @@ header {
   }
 }
 
-.toggle--sign {
-  .shop,
-  .account {
-    @include breakpoint($only-tablet) {
-      html[lang=ar] & {
-        padding: 0 0.25rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-  }
-}
-
 .logged-in {
   .toggle--sign {
     .account {
@@ -317,10 +317,14 @@ header {
     }
   }
 
-  li::after {
-    @include breakpoint($upto-desktop) {
-      font-size: 1.5rem;
-      #{$right}: -0.1875rem;
+  li {
+    border-bottom: 0;
+
+    &::after {
+      @include breakpoint($upto-desktop) {
+        font-size: rem(24);
+        #{$right}: rem(-3);
+      }
     }
   }
 }
@@ -377,6 +381,6 @@ header {
 
 .block-alshaya-react-mini-cart {
   @include breakpoint($upto-desktop) {
-    z-index: 2;
+    z-index: 1;
   }
 }

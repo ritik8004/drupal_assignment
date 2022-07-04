@@ -79,7 +79,7 @@ export const fetchCartData = async () => {
         // Dispatch event to show error message to the customer.
         dispatchCustomEvent('spcCartMessageUpdate', {
           type: 'error',
-          message: drupalSettings.global_error_message,
+          message: drupalSettings.globalErrorMessage,
         });
       }
 

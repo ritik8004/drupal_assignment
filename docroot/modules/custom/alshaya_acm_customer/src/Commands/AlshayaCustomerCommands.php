@@ -56,9 +56,11 @@ class AlshayaCustomerCommands extends DrushCommands {
         'email' => $mail,
       ];
 
-      $customer = $this->apiWrapper->updateCustomer($customer, [
-        'password' => $password,
-      ]);
+      $customer = $this->apiWrapper->updateCustomer($customer, []);
+
+      if (!empty($customer['customer_id']) && isset($password)) {
+        $this->apiWrapper->updateCustomerPass($customer, $password);
+      }
 
       $this->output->writeln($customer);
     }

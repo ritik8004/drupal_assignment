@@ -380,7 +380,7 @@
         min-height: rem(60);
         display: flex;
         align-items: center;
-        padding-#{$left}: rem(20);
+        padding-#{$left}: rem(16);
         position: relative;
         background: $aura-spc-checkout-block-bg;
         line-height: rem(19);
@@ -402,7 +402,10 @@
 
         .join-aura {
           position: relative;
-          margin: 0 rem(5) rem(5);
+          margin-top: 0;
+          margin-bottom: rem(5);
+          margin-#{$left}: 0;
+          margin-#{$right}: rem(5);
 
           svg {
             max-height: rem(29);
@@ -442,7 +445,7 @@
 
         &.active {
           display: block;
-          padding: rem(8) rem(20) rem(18);
+          padding: rem(8) rem(16) rem(18);
           background: $aura-spc-checkout-block-bg;
 
           @include breakpoint($tablet) {
@@ -497,10 +500,11 @@
     .redeem-aura-footer {
       color: $aura-checkout-footer-redeem-text;
       display: flex;
+      align-items: center;
       font-size: rem(12);
       line-height: rem(18);
       margin-top: rem(12);
-      margin-#{$left}: rem(20);
+      margin-#{$left}: rem(16);
       position: relative;
 
       b {
@@ -508,29 +512,16 @@
       }
 
       @include breakpoint($only-mobile) {
-        margin-#{$left}: rem(21);
+        margin-#{$left}: rem(16);
       }
 
       &::before {
-        content: '';
-        background-color: $aura-spc-checkout-highlight;
+        content: "";
         width: rem(16);
         height: rem(16);
-        border-radius: 50%;
         margin-#{$right}: rem(8);
-      }
-
-      &::after {
-        content: "!";
-        color: $aura-spc-checkout-block-bg;
-        position: absolute;
-        #{$left}: rem(6);
-        top: rem(1);
-        font-weight: 700;
-
-        html[lang=ar] & {
-          top: rem(-1);
-        }
+        background-image: url('#{$base_theme_img_directory_path}/icons/exclamation-circle-icon.svg');
+        background-position: top;
       }
 
       .points-earned-with-purchase {

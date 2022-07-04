@@ -139,7 +139,8 @@ class ProductCategoryPage {
 
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
     if (($url_object = $this->pathValidator->getUrlIfValid($url))
-        && ($url_object->getRouteName() == 'entity.taxonomy_term.canonical')
+        && (($url_object->getRouteName() === 'entity.taxonomy_term.canonical')
+        || ($url_object->getRouteName() === 'alshaya_main_menu.category_view_all'))
         && ($taxonomy_tid = $url_object->getRouteParameters()['taxonomy_term'])
         && (($taxonomy_term = $term_storage->load($taxonomy_tid)) instanceof TermInterface)
     ) {

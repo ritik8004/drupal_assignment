@@ -44,7 +44,7 @@ log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.
 server_root="/var/www/html/$AH_SITE_NAME"
 deployment_identifier=$(cat "$server_root/deployment_identifier")
 docroot="${server_root}/docroot"
-
+blt_dir="${server_root}/vendor/acquia/blt"
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 slack_file="${script_dir}/post_to_slack.sh"
 clear_caches_post_command="${script_dir}/../cloudflare/clear_caches_post_command.sh"
@@ -72,6 +72,16 @@ log_message_and_details()
   echo
 }
 
+get_cloud_task()
+{
+  cloud_task=`$blt_dir/bin/blt acquia-cloud-task-available ${branch}`
+  if [ $? -ne 0 ]
+  then
+    log_message_and_details "Error occurred while fetching cloud task, aborting"
+    exit
+  fi
+}
+
 log_message "============================================"
 log_message "Tag to deploy: $tag"
 log_message "Tag currently deployed: $deployment_identifier"
@@ -94,7 +104,7 @@ then
 
   mkdir -p $directory
   cd $directory
-  git clone $repo &>> ${log_file}
+  git clone -b $branch $repo &>> ${log_file}
 
   if [ $? -ne 0 ]
   then
@@ -138,6 +148,22 @@ git reset --hard $tag &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message_and_details "Failed to reset to tag, aborting"
+  exit
+fi
+
+# Create an orphan commit.
+log_message_and_details "Reset $branch git history"
+git config user.name "Deployment Script"
+git config user.email "noreply@acquia-deployer.com"
+git checkout --orphan $branch-tmp &>> ${log_file}
+git add . &>> ${log_file}
+git commit -m "Orphan commit from $tag." --quiet &>> ${log_file}
+git branch -D $branch &>> ${log_file}
+git branch -m $branch &>> ${log_file}
+git prune
+if [ $? -ne 0 ]
+then
+  log_message_and_details "Failed to reset the branch history, aborting"
   exit
 fi
 
@@ -187,10 +213,26 @@ do
   deployment_identifier=$(cat "$server_root/deployment_identifier")
 done
 
-log_message_and_details "Code deployment finished, we will wait for 30 more seconds."
+log_message_and_details "Checking cloud tasks if deployment is still in process."
+get_cloud_task
 
-# Wait 30 more seconds to ensure code is deployed on all webs.
-sleep 30
+if [ "${cloud_task}" != "404" ]
+then
+  echo "Cloud Task: API gave 404, we will sleep for 2 minutes now but please check this."
+  sleep 120
+
+  # Set the variable to 0 so next condition passes.
+  cloud_task="0"
+fi
+
+while [ "${cloud_task}" != "0" ]
+do
+  echo "Cloud Task: Waiting for code to be deployed on server."
+  sleep 15
+  get_cloud_task
+done
+
+log_message_and_details "Code deployment finished"
 
 if [ "$mode" = "updb" ]
 then

@@ -34,7 +34,7 @@ function hook_alshaya_acm_get_remove_from_basket_link_alter(&$remove_url, CartIn
  *   Configs to reset from Settings.
  */
 function hook_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
-  $reset[] = 'alshaya_hm_images.settings';
+  $reset[] = 'alshaya_media_assets.settings';
 }
 
 /**
@@ -46,7 +46,7 @@ function hook_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
 function hook_alshaya_acm_switch_magento_configs_alter(array &$configs) {
   // We need pims_base_url to be set per Magento instance.
   // We add below for configs to be switched so it is set for Magento instance.
-  $configs['alshaya_hm_images.settings'] = 'pims_base_url';
+  $configs['alshaya_media_assets.settings'] = 'pims_base_url';
 }
 
 /**

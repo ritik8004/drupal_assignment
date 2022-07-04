@@ -227,10 +227,30 @@ $conductors = [
     'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
     'site_id' => 135,
   ],
-  'hmkw_dev2' => [
-    'hmac_id' => 'bb8596447880451fa689e65e53506429',
-    'hmac_secret' => 'NjE4NDYzYmMtNWRmNy00',
-    'site_id' => 109,
+  'hmkw_oms' => [
+    'hmac_id' => 'f6f1fae170634642b9b43485a545784c',
+    'hmac_secret' => 'OWI3ZDBlZDAtNzk5Zi00',
+    'site_id' => 568,
+  ],
+  'hmsa_oms' => [
+    'hmac_id' => '037a4a5c2ba14c1d98337a4b67434cf8',
+    'hmac_secret' => 'OGZhZDRhZWYtZGYzOC00',
+    'site_id' => 569,
+  ],
+  'hmae_oms' => [
+    'hmac_id' => 'dae4c72ba8024aa58c7c105440a446ff',
+    'hmac_secret' => 'NDEzYWJiNDUtOWIwOC00',
+    'site_id' => 570,
+  ],
+  'hmeg_oms' => [
+    'hmac_id' => 'd32f8c38a5b84ed4a2dd5cc76b715c94',
+    'hmac_secret' => 'ZDdlNTU1YmEtMGY5MS00',
+    'site_id' => 571,
+  ],
+  'hmqa_oms' => [
+    'hmac_id' => '57136dbbd8664fef94dc569ecd52e877',
+    'hmac_secret' => 'OWNjOTA5OTctYWM2ZC00',
+    'site_id' => 573,
   ],
   'hmkw_dev3' => [
     'hmac_id' => '1b56d617c277492597e27391f2752aed',

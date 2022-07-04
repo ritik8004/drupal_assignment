@@ -1,0 +1,9 @@
+.fit-calculator-select {
+  .fitCalcSelect__control {
+    > div:nth-child(2) {
+      .fitCalcSelect__indicator {
+        background: $fit-select-arrow-bg;
+      }
+    }
+  }
+}

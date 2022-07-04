@@ -14,7 +14,7 @@
               include_in_menu: l3data.include_in_menu,
               is_anchor: l3data.is_anchor,
               level: (l3data.level) + 1,
-              meta_title: Drupal.t('View All') + '|' + Drupal.t(l3data.meta_title.substr(l3data.meta_title.indexOf("|") + 1)),
+              meta_title: l3data.meta_title,
               name: Drupal.t('View All'),
               position: 1,
               show_in_app_navigation: l3data.show_in_app_navigation,

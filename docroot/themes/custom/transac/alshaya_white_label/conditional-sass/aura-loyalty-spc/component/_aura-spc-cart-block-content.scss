@@ -84,7 +84,7 @@
 
           html[lang=ar] & {
             @include breakpoint($desktop) {
-              right: 0;
+              right: rem(-10);
             }
           }
 
@@ -98,7 +98,7 @@
                 left: 22%;
               }
 
-              left: 93%;
+              left: 87%;
             }
           }
         }

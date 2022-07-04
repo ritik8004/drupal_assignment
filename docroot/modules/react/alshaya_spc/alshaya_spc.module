@@ -327,6 +327,8 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // Add product settings.
   $product_config = \Drupal::config('alshaya_acm_product.settings');
   $page['#attached']['drupalSettings']['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
+  // Global error message.
+  $page['#attached']['drupalSettings']['globalErrorMessage'] = _alshaya_spc_global_error_message();
 }
 
 /**
@@ -478,4 +480,15 @@ function alshaya_spc_alshaya_rcs_product_order_build_alter(&$build) {
     'currency_code_position' => $currency_config->get('currency_code_position'),
     'decimal_points' => $currency_config->get('decimal_points'),
   ];
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_spc_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Avoid adding this in order details print page as Order print is still not
+  // built using react.
+  if (\Drupal::routeMatch()->getRouteName() != 'alshaya_acm_customer.orders_print') {
+    $build['#attached']['library'][] = 'alshaya_spc/order_details';
+  }
 }

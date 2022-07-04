@@ -19,3 +19,7 @@ services:
       - '@cache.data'
       - '@config.factory'
       - '@entity.repository'
+  alshaya_stores_finder_transac.route_subscriber:
+    class: Drupal\alshaya_stores_finder_transac\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

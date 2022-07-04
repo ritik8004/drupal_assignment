@@ -10,3 +10,7 @@ alshaya_search_algolia.settings:
       type: boolean
       label: 'Algolia Index from Drupal'
       description: 'Determines if Algolia indexation happens from Drupal or Magento'
+    index_prefix:
+      type: string
+      label: 'Algolia Index Prefix'
+      description: 'Store index prefix for Drupal or MDC indexes'

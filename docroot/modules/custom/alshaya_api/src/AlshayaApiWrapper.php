@@ -21,6 +21,7 @@ use Drupal\Core\Url;
 use GuzzleHttp\TransferStats;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
+use Drupal\Core\Routing\CurrentRouteMatch;
 
 /**
  * Class Alshaya Api Wrapper.
@@ -100,6 +101,13 @@ class AlshayaApiWrapper {
   protected $moduleHandler;
 
   /**
+   * Current Route object.
+   *
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
+  protected $currentRoute;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -118,6 +126,8 @@ class AlshayaApiWrapper {
    *   The magento api helper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route
+   *   Current Route object.
    */
   public function __construct(
     LanguageManagerInterface $language_manager,
@@ -127,7 +137,8 @@ class AlshayaApiWrapper {
     StateInterface $state,
     FileSystemInterface $fileSystem,
     MagentoApiHelper $mdc_helper,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    CurrentRouteMatch $current_route
   ) {
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
@@ -138,6 +149,7 @@ class AlshayaApiWrapper {
     $this->fileSystem = $fileSystem;
     $this->mdcHelper = $mdc_helper;
     $this->moduleHandler = $module_handler;
+    $this->currentRoute = $current_route;
   }
 
   /**
@@ -291,11 +303,13 @@ class AlshayaApiWrapper {
           '@api' => $url,
           '@message' => $e->getMessage(),
         ]);
-        user_logout();
-        // We redirect to an user/login path.
-        $response = new LocalRedirectResponse(Url::fromRoute('user.login')->toString());
-        $response->send();
-        return $response;
+        if ($this->currentRoute->getRouteName() !== 'user.login') {
+          user_logout();
+          // We redirect to an user/login path.
+          $response = new LocalRedirectResponse(Url::fromRoute('user.login')->toString());
+          $response->send();
+          return $response;
+        }
       }
 
       $result = NULL;
@@ -717,11 +731,7 @@ class AlshayaApiWrapper {
     $filters['page_size'] = $page_size;
 
     $endpoint = 'deliverymatrix/address-locations/search?';
-    $request_options = [
-      'timeout' => $this->mdcHelper->getPhpTimeout('dm_search'),
-    ];
-
-    return $this->invokeApiWithPageLimit($endpoint, $request_options, $page_size, $filters);
+    return $this->invokeApiWithPageLimit($endpoint, [], $page_size, $filters);
   }
 
   /**
@@ -812,12 +822,7 @@ class AlshayaApiWrapper {
    */
   public function getProductAttributeWithSwatches($attribute_code) {
     $endpoint = 'products/attributes-with-swatches/' . $attribute_code;
-
-    $request_options = [
-      'timeout' => $this->mdcHelper->getPhpTimeout('product_get'),
-    ];
-
-    return $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+    return $this->invokeApi($endpoint, [], 'GET');
   }
 
   /**
@@ -1174,10 +1179,6 @@ class AlshayaApiWrapper {
     $endpoint = 'customers';
 
     $opt['json']['customer'] = $customer;
-
-    if (isset($options['password']) && !empty($options['password'])) {
-      $opt['json']['password'] = $options['password'];
-    }
 
     // Invoke the alter hook to allow all modules to update the customer data.
     $this->moduleHandler->alter('alshaya_api_update_customer_api_request', $opt);

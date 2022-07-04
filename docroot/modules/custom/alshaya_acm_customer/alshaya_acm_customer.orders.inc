@@ -309,6 +309,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $shipping_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address);
     $shipping_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
 
+    // Add delivery address raw data for return request page.
+    $orderDetails['delivery_address_raw'] = $shipping_address_array;
     $delivery_address = [
       '#theme' => 'alshaya_address',
       '#address' => $shipping_address_array,
@@ -360,7 +362,16 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
   }
 
-  switch ($order['payment']['method']) {
+  // Store payment details.
+  $payment_method = $order['payment']['method'];
+  $orderDetails['paymentDetails'][$payment_method] = [
+    'card_type' => $orderDetails['payment_method'],
+    'card_number' => '',
+    'payment_type' => $payment_method,
+    'weight' => 0,
+  ];
+
+  switch ($payment_method) {
     case 'knet':
       $orderDetails['payment']['transactionId'] = $payment_info['transaction_id'];
       $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
@@ -371,6 +382,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       $orderDetails['payment']['transactionId'] = $payment_info['knet_transaction_id'];
       $orderDetails['payment']['paymentId'] = $payment_info['knet_payment_id'];
       $orderDetails['payment']['resultCode'] = $payment_info['knet_result'];
+      // Override payment_type.
+      $orderDetails['paymentDetails'][$payment_method]['payment_type'] = 'knet';
       break;
 
     case 'checkout_com_upapi_qpay':
@@ -399,6 +412,17 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
       $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
 
+      break;
+
+    case 'checkout_com_upapi':
+      // Preparing card details for checkout_com_upapi method.
+      // @todo To prepare data for all payment methods.
+      // Refer DIG-3519 for more info.
+      // Override payment details.
+      $card_type = t('@card_type Card', ['@card_type' => $payment_info['card_type']], ['context' => 'online_returns']);
+      $orderDetails['paymentDetails'][$payment_method]['card_type'] = $card_type;
+      $orderDetails['paymentDetails'][$payment_method]['card_number'] = $payment_info['last4'] ?: '';
+      $orderDetails['paymentDetails'][$payment_method]['payment_type'] = $payment_info['scheme'] ?: '';
       break;
   }
 
@@ -646,6 +670,25 @@ function alshaya_acm_customer_build_order_detail(array $order) {
         $build['#online_booking_notice']['booking_error'] = t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
       }
     }
+  }
+
+  // Inter country transfer.
+  // Check if the delivery date is available in extension_attributes
+  // pass it for further processing.
+  if (!empty($order['extension']['oms_lead_time'])) {
+    $build['#order_details']['ict']['date'] = \Drupal::service('date.formatter')->format(
+      strtotime($order['extension']['oms_lead_time']),
+      'ict',
+      'dS M Y',
+    );
+    // Format labels to display.
+    if ($build['#order_details']['type'] === 'cc') {
+      $build['#order_details']['ict']['label'] = t('Available in store from', [], ['context' => 'ict']);
+    }
+    else {
+      $build['#order_details']['ict']['label'] = t('Expected Delivery by', [], ['context' => 'ict']);
+    }
+    $build['#attached']['library'][] = 'alshaya_white_label/inter-country-transfer';
   }
 
   return $build;

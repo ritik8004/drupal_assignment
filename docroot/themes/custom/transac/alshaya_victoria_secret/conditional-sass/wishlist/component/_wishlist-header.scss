@@ -13,8 +13,8 @@ body.wishlist-enabled {
   #wishlist-header-wrapper {
     @include breakpoint($upto-desktop) {
       width: 8%;
-      #{$right}: 7.5rem;
-      top: 3.4375rem;
+      #{$right}: rem(136);
+      top: rem(57);
     }
 
     @include breakpoint($only-tablet) {
@@ -26,6 +26,12 @@ body.wishlist-enabled {
 
     .wishlist-header {
       padding-bottom: 0;
+
+      .wishlist-icon {
+        @include breakpoint($desktop) {
+          margin-top: rem(4);
+        }
+      }
     }
   }
 
@@ -66,12 +72,22 @@ body.wishlist-enabled {
       #{$right}: auto;
 
       @include breakpoint($only-mobile) {
-        #{$right}: calc(50% - 4%);
+        #{$right}: calc(50% - 3%);
 
         .wishlist-header {
           padding-#{$right}: 0;
         }
       }
     }
+  }
+}
+
+.wishlist-icon {
+  width: rem(25);
+  height: rem(25);
+
+  @include breakpoint($upto-desktop) {
+    width: rem(22);
+    height: rem(22);
   }
 }

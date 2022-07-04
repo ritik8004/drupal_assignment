@@ -45,9 +45,9 @@ class WishlistButton extends React.Component {
     if (contextArray.includes(context)) {
       // Set title for sku product on page load.
       const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-      const productInfo = drupalSettings[productKey];
+      const productInfo = window.commerceBackend.getProductData(sku, productKey, true);
       this.setState({
-        title: productInfo[sku].cart_title ? productInfo[sku].cart_title : '',
+        title: productInfo.cart_title ? productInfo.cart_title : '',
       });
       // Rendering wishlist button as per sku variant info.
       // Event listener is only required for old pdp, modal and matchback.
@@ -293,18 +293,6 @@ class WishlistButton extends React.Component {
       addInlineLoader('.wishlist-loader .loading');
     }
 
-    // If product already in wishlist remove this else add.
-    if (addedInWishList) {
-      // Add full screen loader for wishlist page.
-      if (context === 'wishlist_page') {
-        showFullScreenLoader();
-      }
-      this.handleProductRemovalFromWishlist(skuCode);
-
-      // don't execute further if product is removed from the wishlist.
-      return;
-    }
-
     // Prepare the product info to store.
     const productInfo = {
       sku: skuCode,
@@ -315,6 +303,51 @@ class WishlistButton extends React.Component {
       element: this.buttonContainerRef.current,
     };
 
+    if (!addedInWishList) {
+      // Add product if its not in wishlist.
+      this.addToWishList(productInfo);
+      return;
+    }
+
+    // If product is in wishlist and context is cart
+    // then remove the product from wishlist before adding from cart
+    // as the wishlist api does not update product options on add to wishlist.
+    if (context === 'cart') {
+      removeProductFromWishList(skuCode).then(() => {
+        if (isAnonymousUser()) {
+          // Remove product from wishlist.
+          const skuIndex = getWishListDataIndexForSku(skuCode);
+          if (skuIndex > -1) {
+            // Get existing wishlist data from storage.
+            const wishListItems = getWishListData();
+
+            // Remove the entry for given product sku from existing storage data.
+            wishListItems.splice(skuIndex, 1);
+
+            // Save back to storage.
+            addWishListInfoInStorage(wishListItems);
+          }
+        }
+        this.addToWishList(productInfo);
+      });
+      return;
+    }
+
+    // If product is in wishlist and context is not cart
+    // then remove the product from wishlist.
+    if (context === 'wishlist_page') {
+      // Add full screen loader for wishlist page.
+      showFullScreenLoader();
+    }
+
+    // Remove product from wishlist.
+    this.handleProductRemovalFromWishlist(skuCode);
+  }
+
+  /**
+   * Add product to the wish list.
+   */
+  addToWishList = (productInfo) => {
     // Add product to the wishlist. For guest users it'll store in local
     // storage and for logged in user this will store in backend using API
     // then will update the local storage as well.
@@ -398,18 +431,18 @@ class WishlistButton extends React.Component {
   ifExistsInSameGroup = (skuItem) => {
     const { sku, context } = this.props;
     const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-    const productInfo = drupalSettings[productKey];
+    const productInfo = window.commerceBackend.getProductData(sku, productKey, false);
     let found = false;
     // Check in variant list for grouped configurable product.
     // Else check in item list for grouped simple product.
-    if (productInfo[sku].variants) {
-      Object.values(productInfo[sku].variants).forEach((variant) => {
+    if (productInfo.variants) {
+      Object.values(productInfo.variants).forEach((variant) => {
         if (variant.parent_sku && variant.parent_sku === skuItem) {
           found = true;
         }
       });
-    } else if (productInfo[sku].group) {
-      Object.values(productInfo[sku].group).forEach((item) => {
+    } else if (productInfo.group) {
+      Object.values(productInfo.group).forEach((item) => {
         if (item.sku && item.sku === skuItem) {
           found = true;
         }
@@ -458,11 +491,6 @@ class WishlistButton extends React.Component {
       buttonTextKey = 'remove_from_wishlist';
     }
 
-    // If product is already added into wishlist, button is not required on cart page.
-    if (addedInWishList && context === 'cart') {
-      return null;
-    }
-
     // Display format can be 'link' or 'icon'.
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
@@ -476,11 +504,6 @@ class WishlistButton extends React.Component {
 
     // Wishlist text for Basket page.
     if (context === 'cart') {
-      // We don't show remove from wishlist on basket page.
-      if (addedInWishList) {
-        return null;
-      }
-
       // We only need move to wishlist button on cart page.
       buttonTextKey = 'move_to_wishlist';
     }

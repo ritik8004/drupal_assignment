@@ -771,9 +771,27 @@ function alshaya_acm_customer_change_pwd_form_update_password(array &$form, Form
     // Get password from user's input.
     $pass = trim($form_state->getValue('pass'));
 
-    // Update customer data with new password.
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-    alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
+    // Update password for existing customer.
+    $is_customer = alshaya_acm_customer_is_customer($user);
+
+    if ($is_customer && !empty($pass)) {
+      /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('alshaya_api.api');
+
+      $customer = [
+        'customer_id' => $user->get('acq_customer_id')->getString(),
+      ];
+
+      try {
+        $api_wrapper->updateCustomerPass($customer, $pass);
+      }
+      catch (\Exception $e) {
+        // IF API Down or some other issue, log message is already added
+        // Clear all messages first as there is success message available.
+        \Drupal::messenger()->deleteAll();
+        \Drupal::messenger()->addError(acq_commerce_api_down_global_error_message());
+      }
+    }
   }
 
   // Sign out user, and redirect to login page.

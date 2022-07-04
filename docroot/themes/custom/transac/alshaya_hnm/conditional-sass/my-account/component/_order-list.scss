@@ -227,15 +227,3 @@
     }
   }
 }
-
-@include breakpoint($only-tablet) {
-  .order__details--description {
-    position: relative;
-
-    .tablet-only {
-      position: absolute;
-      bottom: 1.8rem;
-      margin-bottom: 0;
-    }
-  }
-}

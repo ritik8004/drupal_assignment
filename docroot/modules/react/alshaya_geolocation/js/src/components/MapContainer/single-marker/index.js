@@ -27,6 +27,7 @@ export class SingleMarker extends React.Component {
             name={store.store_name}
             openHours={store.store_hours}
             position={{ lat: store.latitude, lng: store.longitude }}
+            icon={drupalSettings.alshaya_stores_finder.map.marker_icon_path}
           />
         </Map>
       </>

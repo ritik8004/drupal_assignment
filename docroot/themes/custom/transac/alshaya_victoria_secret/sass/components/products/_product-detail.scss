@@ -8,14 +8,14 @@
 }
 
 .short-description-wrapper {
-  .field__content-wrapper {
-    background: $secondary_bg;
-    padding: rem(1) rem(15);
-  }
-
   &:not(.matchback-description-wrapper) {
     .c-pdp & {
       border-top: 0;
+    }
+
+    .field__content-wrapper {
+      background: $secondary_bg;
+      padding: rem(1) rem(15);
     }
   }
 
@@ -29,7 +29,9 @@
   }
 
   .read-more-description-link,
-  .read-more-description-link-gift {
+  .read-more-description-link-gift,
+  .read-more-description-link-mobile,
+  .show-less-link {
     margin: 0.75rem 0 0.875rem;
     font-family: $vs-bentonsans-medium;
     text-decoration: underline;
@@ -68,7 +70,7 @@
 
       @include breakpoint($desktop) {
         html[lang=ar] & {
-          margin-right: 0.5rem;
+          margin-right: rem(32);
           font-size: 1rem;
         }
       }
@@ -157,6 +159,7 @@
         font-size: 0.875rem;
         color: $pdp_title_collection_name;
         padding-bottom: 0.375rem;
+        font-family: $vs-bentonsans-medium;
       }
     }
 
@@ -196,6 +199,11 @@
   .price--discount {
     display: inline;
   }
+
+  @include breakpoint($only-mobile) {
+    margin: 0 rem(20);
+    padding: 0;
+  }
 }
 
 .basic-details-wrapper {
@@ -230,9 +238,10 @@
           border: 0;
           width: rem(88);
 
-          &__rendered {
-            line-height: rem(36);
+          .select2-selection__rendered {
+            line-height: rem(34);
             font-family: $vs-bentonsans-medium;
+            text-align: center;
           }
 
           &__arrow {
@@ -376,7 +385,7 @@
           border: 0;
           color: $pdp_swatch_disabled;
           text-decoration: line-through;
-          font-family: $vs-regular !important;
+          font-family: $alshaya-thin !important;
 
           &:hover {
             border: 0 !important;
@@ -426,7 +435,7 @@
           margin-#{$right}: 0.625rem;
           width: auto;
           min-width: 2.375rem;
-          border: 0;
+          border: rem(1) solid transparent;
           display: block;
           text-align: center;
           background: $secondary_bg;
@@ -459,6 +468,7 @@
           span {
             border: none;
             padding: 0;
+            background: transparent;
 
             &.picked,
             &:hover {
@@ -600,7 +610,8 @@ html[lang="en"] {
 
           .title--main,
           &.field--name-name {
-            font-size: 1.625rem;
+            font-size: rem(16);
+            font-family: $alshaya-thin;
           }
         }
       }
@@ -624,7 +635,7 @@ html[lang="ar"] {
         width: 100%;
 
         span {
-          font-size: 1.5rem;
+          font-size: rem(16);
 
           &.title--sub {
             font-size: 0.875rem;
@@ -680,7 +691,7 @@ html[lang="ar"] {
       .price,
       .price--discount {
         font-family: $vs-bentonsans-regular;
-        font-size: 0.875rem;
+        font-size: rem(16);
         // Using px value for .04em.
         letter-spacing: 0.56px;
       }
@@ -693,6 +704,12 @@ html[lang="ar"] {
       .field__label {
         font-family: $vs-bold;
         font-size: rem(14);
+      }
+    }
+
+    .mobile-content-wrapper {
+      @include breakpoint($only-mobile) {
+        padding: 0 rem(20);
       }
     }
   }

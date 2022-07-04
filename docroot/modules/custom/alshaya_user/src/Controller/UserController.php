@@ -7,6 +7,8 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\alshaya_spc\Helper\SecureText;
+use Drupal\Core\Site\Settings;
 
 /**
  * Customer controller to add/override pages for customer.
@@ -47,23 +49,26 @@ class UserController extends ControllerBase {
    */
   public function registerComplete() {
     // Get data from query string.
-    $userDataString = $this->currentRequest->query->get('user');
+    $encryptedUserId = $this->currentRequest->query->get('user');
 
     // Redirect to home if no value in query string.
-    if (empty($userDataString)) {
+    if (empty($encryptedUserId)) {
       return new RedirectResponse(Url::fromRoute('<front>')->toString());
     }
 
     // Decode that data from query string.
-    $userData = json_decode(base64_decode($userDataString), TRUE);
+    $userId = SecureText::decrypt(
+        $encryptedUserId,
+        Settings::get('hash_salt')
+      );
 
     // Redirect to home if value in query string is invalid.
-    if (empty($userData)) {
+    if (empty($userId)) {
       return new RedirectResponse(Url::fromRoute('<front>')->toString());
     }
 
     // Load the user.
-    $account = $this->entityTypeManager()->getStorage('user')->load($userData['id']);
+    $account = $this->entityTypeManager()->getStorage('user')->load($userId);
 
     // Check if no user found or user is already active.
     if (empty($account) || $account->isActive()) {

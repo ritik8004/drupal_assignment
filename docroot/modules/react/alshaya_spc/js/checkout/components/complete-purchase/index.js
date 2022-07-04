@@ -251,7 +251,7 @@ export default class CompletePurchase extends React.Component {
       && balancePayable > 0) {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
-        message: drupalSettings.global_error_message,
+        message: drupalSettings.globalErrorMessage,
       });
       return false;
     }

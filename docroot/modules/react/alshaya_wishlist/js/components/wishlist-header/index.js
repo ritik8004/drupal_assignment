@@ -13,11 +13,6 @@ import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isDesktop } from '../../../../js/utilities/display';
 
-/**
- * Flag used to check if backend api for wishlist items is already called.
- */
-window.loadWishListFromBackend = window.loadWishListFromBackend || false;
-
 export default class WishlistHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +38,7 @@ export default class WishlistHeader extends React.Component {
     }
 
     // Check if user is an authenticate user, add an event listener for wishlist
-    // items load from Magento backend.
+    // items load from MDC backend.
     if (!isAnonymousUser()) {
       document.addEventListener('getWishlistFromBackendSuccess', this.updateWishListHeader);
     }

@@ -1,0 +1,7 @@
+goinstore:
+  version: 1.0
+  js:
+    js/alshaya_goinstore.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

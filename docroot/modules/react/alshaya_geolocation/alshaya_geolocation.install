@@ -45,10 +45,6 @@ function alshaya_geolocation_update_8003() {
       \Drupal::logger('alshaya_geolocation')->warning('Installing Alshaya React module.');
       \Drupal::service('module_installer')->install(['alshaya_react']);
     }
-    if (!\Drupal::service('module_handler')->moduleExists('alshaya_locations_api')) {
-      \Drupal::logger('alshaya_geolocation')->warning('Installing Alshaya Locations API module.');
-      \Drupal::service('module_installer')->install(['alshaya_locations_api']);
-    }
     // Set geolocation map settings.
     $geo_config = $config_factory->getEditable('geolocation.settings');
     $fields = $geo_config->getRawData();
@@ -60,6 +56,18 @@ function alshaya_geolocation_update_8003() {
     $store_config = $config_factory->getEditable('alshaya_stores_finder.settings');
     $store_config->set('filter_path', "storeLocator/search?searchCriteria[filter_groups][0][filters][0][field]=status&searchCriteria[filter_groups][0][filters][0][value]=1");
     $store_config->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adds translations for geolocation.
+ */
+function alshaya_geolocation_update_8004() {
+  module_load_include('inc', 'alshaya_geolocation', 'alshaya_geolocation.translations');
+  if ($translations = _alshaya_geolocation_get_translations('v1')) {
+    alshaya_i18n_save_translations($translations);
   }
 }
 

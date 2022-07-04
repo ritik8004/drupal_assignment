@@ -1,0 +1,177 @@
+<?php
+
+/**
+ * @file
+ * Contains alshaya_online_returns.module.
+ */
+
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_online_returns_preprocess_node(&$variables) {
+  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
+    $variables['online_returns_status'] = \Drupal::service('alshaya_online_returns.online_returns_helper')->isOnlineReturnsEnabled();
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_online_returns_page_attachments_alter(array &$page) {
+  /** @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $onlineReturnsHelper */
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  // Do not proceed if Online returns is not enabled.
+  if (!$onlineReturnsHelper->isOnlineReturnsEnabled()) {
+    return;
+  }
+
+  $current_route = \Drupal::routeMatch();
+  $current_route_name = $current_route->getRouteName();
+
+  if ($current_route_name === 'entity.node.canonical'
+    && in_array($current_route->getParameter('node')->bundle(), [
+      'rcs_product',
+      'acq_product',
+    ])
+  ) {
+    $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_pdp';
+
+    // Attach the theming library.
+    $page['#attached']['library'][] = 'alshaya_white_label/online-returns';
+  }
+  elseif ($current_route_name === 'entity.user.canonical') {
+    $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_my_accounts';
+
+    // Attach the theming library.
+    $page['#attached']['library'][] = 'alshaya_white_label/online-returns';
+  }
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_online_returns_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  /** @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $onlineReturnsHelper */
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  // Do not process further if feature is disabled.
+  if (!$onlineReturnsHelper->isOnlineReturnsEnabled()) {
+    return;
+  }
+
+  $variant['eligibleForReturn'] = $onlineReturnsHelper->isSkuReturnable($child);
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_online_returns_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  /** @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $onlineReturnsHelper */
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  $build['#cache']['tags'] = Cache::mergeTags(
+    $build['#cache']['tags'] ?? [],
+    $onlineReturnsHelper->getCacheTags(),
+  );
+
+  // Do not process further if feature is disabled.
+  if (!$onlineReturnsHelper->isOnlineReturnsEnabled()) {
+    return;
+  }
+
+  $build['#attached']['drupalSettings']['onlineReturns']['enabled'] = TRUE;
+
+  if (isset($build['#attached']['drupalSettings']['productInfo'][$sku->getSku()])) {
+    $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['eligibleForReturn'] = $onlineReturnsHelper->isSkuReturnable($sku);
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_online_returns_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $onlineReturnsHelper */
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  $build['#cache']['tags'] = Cache::mergeTags(
+    $build['#cache']['tags'] ?? [],
+    $onlineReturnsHelper->getCacheTags(),
+  );
+
+  // Do not process further if feature is disabled.
+  if (!$onlineReturnsHelper->isOnlineReturnsEnabled()) {
+    return;
+  }
+
+  foreach ($build['recent_order'] as $key => $order) {
+    $build['recent_order'][$key]['#order']['online_returns_status'] = TRUE;
+    $build['#attached']['drupalSettings']['onlineReturns']['recentOrders'][$order['#order']['id']] = $onlineReturnsHelper->prepareOrderData($order['#order']);
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  /** @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $onlineReturnsHelper */
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  $build['#cache']['tags'] = Cache::mergeTags(
+    $build['#cache']['tags'] ?? [],
+    $onlineReturnsHelper->getCacheTags()
+  );
+
+  // Do not process further if feature is disabled.
+  if (!$onlineReturnsHelper->isOnlineReturnsEnabled()) {
+    return;
+  }
+
+  $build['#order']['online_returns_status'] = TRUE;
+
+  // Remove the full product item if the refunded item is equal to ordered
+  // items.
+  foreach ($build['#products'] as $key => &$value) {
+    // Store the product info in a new variable so that we can use it to build
+    // the refunded block.
+    $build['#refunded_products'][$key] = $value;
+
+    if ($value['refunded'] === $value['ordered']) {
+      unset($build['#products'][$key]);
+      continue;
+    }
+
+    if ($value['refunded'] > 0 && $value['refunded'] <= $value['ordered']) {
+      $value['ordered'] -= $value['refunded'];
+    }
+
+    // Get the new total based the the available quantity.
+    $value['total'] = alshaya_acm_price_format($value['ordered'] * $value['price_incl_tax']);
+  }
+  // Rebuilding the array as after unsetting key, array
+  // gets converted to object in react if first index missing.
+  $build['#products'] = array_values($build['#products']);
+
+  $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
+  $build['#attached']['drupalSettings']['onlineReturns']['products'] = $onlineReturnsHelper->prepareProductsData($build["#products"]);
+  $build['#attached']['drupalSettings']['onlineReturns']['refunded_products'] = $onlineReturnsHelper->prepareProductsData($build["#refunded_products"]);
+
+  // Attach the theming library.
+  $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
+}
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_online_returns_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_online_returns_fields = \Drupal::config('alshaya_online_returns.sku_base_fields')->get('fields');
+  if ($alshaya_online_returns_fields) {
+    $fields = array_merge($fields, $alshaya_online_returns_fields);
+  }
+  else {
+    \Drupal::logger('alshaya_online_returns')->error('The config alshaya_online_returns.sku_base_fields is empty for online returns.');
+  }
+}

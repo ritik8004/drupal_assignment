@@ -11,6 +11,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Link;
@@ -118,6 +119,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $deliveryOptionsHelper;
 
   /**
+   * Date time formatter interface.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager $payment_method_manager
@@ -144,6 +152,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Spc helper service.
    * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
    *   Delivery Options Helper.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter.
    */
   public function __construct(AlshayaSpcPaymentMethodManager $payment_method_manager,
                               CheckoutOptionsManager $checkout_options_manager,
@@ -156,7 +166,8 @@ class AlshayaSpcController extends ControllerBase {
                               ModuleHandlerInterface $module_handler,
                               AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper,
                               AlshayaSpcHelper $spc_helper,
-                              DeliveryOptionsHelper $delivery_options_helper) {
+                              DeliveryOptionsHelper $delivery_options_helper,
+                              DateFormatterInterface $date_formatter) {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
@@ -169,6 +180,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->checkoutComApiHelper = $checkout_com_api_helper;
     $this->spcHelper = $spc_helper;
     $this->deliveryOptionsHelper = $delivery_options_helper;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -187,7 +199,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('module_handler'),
       $container->get('alshaya_acm_checkoutcom.api_helper'),
       $container->get('alshaya_spc.helper'),
-      $container->get('alshaya_acm_product.delivery_options_helper')
+      $container->get('alshaya_acm_product.delivery_options_helper'),
+      $container->get('date.formatter')
     );
   }
 
@@ -230,7 +243,6 @@ class AlshayaSpcController extends ControllerBase {
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
-          'global_error_message' => _alshaya_spc_global_error_message(),
           'address_fields' => _alshaya_spc_get_address_fields(),
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
@@ -636,7 +648,6 @@ class AlshayaSpcController extends ControllerBase {
               'method' => $cncTerm->get('field_shipping_method_code')->getString(),
             ],
           ],
-          'global_error_message' => _alshaya_spc_global_error_message(),
           'cnc_stores_limit' => $spc_cnc_config->get('cnc_stores_limit'),
           'cncStoreInfoCacheTime' => $checkout_settings->get('cnc_store_info_cache_time'),
           'cnc_collection_points_enabled' => $collection_points_config->get('click_collect_collection_points_enabled'),
@@ -794,6 +805,18 @@ class AlshayaSpcController extends ControllerBase {
       ],
       'cnc_collection_points_enabled' => $cnc_collection_points_enabled ?? FALSE,
     ];
+
+    // Check if we are getting Inter country transfer details
+    // along with order details,
+    // if yes, we are assigning this to drupalSettings.
+    if (isset($order['extension'])
+      && !empty($order['extension']['oms_lead_time'])) {
+      $settings['order_details']['ict_date'] = $this->dateFormatter->format(
+        strtotime($order['extension']['oms_lead_time']),
+        'ict',
+        'dS M Y',
+      );
+    }
 
     if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
       $strings = array_merge($strings, CashOnDelivery::getCodSurchargeStrings());
@@ -1064,6 +1087,12 @@ class AlshayaSpcController extends ControllerBase {
         'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
       ];
     }
+
+    // Subtotal after discount related config for Cart/Checkout.
+    $alshaya_spc_config = $this->config('alshaya_spc.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $alshaya_spc_config->getCacheTags());
+
+    $settings['alshaya_spc']['subtotal_after_discount'] = $alshaya_spc_config->get('subtotal_after_discount');
 
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
 

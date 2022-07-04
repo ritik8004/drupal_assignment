@@ -37,6 +37,18 @@
         @include breakpoint($only-mobile) {
           margin-#{$left}: rem(50);
         }
+
+        html[lang=ar] & {
+          left: 10%;
+
+          @include breakpoint($tablet) {
+            left: 40%;
+          }
+
+          @include breakpoint($desktop) {
+            left: 50%;
+          }
+        }
       }
     }
 
@@ -44,6 +56,93 @@
       background: $aura-order-confirmation-points-question-bg;
       border: none;
       color: $aura-order-confirmation-points-question-txt;
+    }
+  }
+}
+
+.loyalty-club-details-wrapper {
+  .tooltip-anchor {
+    .tooltip-box {
+      transform: translateX(-75%);
+
+      &::before,
+      &::after {
+        @include breakpoint($tablet) {
+          left: 75%;
+        }
+      }
+
+      html[lang=ar] & {
+        transform: translateX(80%);
+
+        &::before,
+        &::after {
+          @include breakpoint($tablet) {
+            left: 10%;
+          }
+
+          @include breakpoint($desktop) {
+            left: 20%;
+          }
+        }
+      }
+    }
+  }
+
+  .aura-loyalty-benefits-row {
+    .tooltip-anchor {
+      .tooltip-box {
+        transform: translateX(-55%);
+
+        &::before,
+        &::after {
+          left: 20%;
+
+          @include breakpoint($tablet) {
+            left: 55%;
+          }
+        }
+
+        html[lang=ar] & {
+          transform: translateX(50%);
+
+          &::before,
+          &::after {
+            left: 50%;
+
+            @include breakpoint($tablet) {
+              left: 40%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.aura-card-linked-verified-wrapper {
+  .aura-points-on-hold {
+    .tooltip-anchor {
+      .tooltip-box {
+        &::before,
+        &::after {
+          @include breakpoint($only-tablet) {
+            margin-#{$left}: rem(5);
+          }
+
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: rem(-13);
+          }
+
+          html[lang=ar] & {
+            left: 50%;
+
+            @include breakpoint($only-mobile) {
+              left: 50%;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -66,7 +165,7 @@
       transform: translateX(-75%);
 
       html[lang=ar] & {
-        left: 0;
+        left: rem(-10);
         right: unset;
         transform: none;
       }

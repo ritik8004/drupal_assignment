@@ -1,8 +1,7 @@
 $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs/icons/ic-loader.svg?sA1Tu82';
 $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs';
 
-%modal-overlay,
-.modal-overlay {
+%modal-overlay {
   height: initial;
   width: 100%;
   overflow: hidden;
@@ -19,8 +18,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs';
   }
 }
 
-%modal-overlay-spinner,
-.modal-overlay--spinner {
+%modal-overlay-spinner {
   @extend %modal-overlay;
 
   &::before {

@@ -16,6 +16,9 @@ $settings['alshaya_backend_calls_options'] = [
     'order_place' => [
       'timeout' => 60,
     ],
+    'return_get' => [
+      'timeout' => 30,
+    ],
     'cart_update' => [
       'timeout' => 15,
     ],
@@ -75,9 +78,6 @@ $settings['alshaya_backend_calls_options'] = [
     'default' => [
       'timeout' => 30,
     ],
-    'dm_search' => [
-      'timeout' => 5,
-    ],
     'customer_update' => [
       'timeout' => 10,
     ],
@@ -97,7 +97,7 @@ $settings['alshaya_backend_calls_options'] = [
       'timeout' => 5,
     ],
     'product_get' => [
-      'timeout' => 5,
+      'timeout' => 15,
     ],
     'customer_search' => [
       'timeout' => 5,
@@ -143,6 +143,9 @@ $settings['alshaya_backend_calls_options'] = [
     ],
     'aura_dictionary_config' => [
       'timeout' => 30,
+    ],
+    'online_returns_config' => [
+      'timeout' => 10,
     ],
     'subscribe_newsletter' => [
       'timeout' => 30,

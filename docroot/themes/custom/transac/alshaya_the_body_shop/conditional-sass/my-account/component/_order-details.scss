@@ -58,4 +58,16 @@
   .address--contact .no-direction {
     font-family: $tbs-medium;
   }
+
+  .order-detail & {
+    .sub-total-row,
+    .delivery-charge-row,
+    .total-row,
+    .surcharge-row,
+    .order-item-row {
+      div.right--align {
+        color: $order_detail_order_label;
+      }
+    }
+  }
 }

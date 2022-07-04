@@ -38,12 +38,13 @@
     position: relative;
   }
 
-  .order-transaction + td .dark {
+  .order-transaction + div .dark {
     @include breakpoint($tablet) {
       white-space: nowrap;
       overflow: hidden;
       max-width: 7.1rem;
       text-overflow: ellipsis;
+      line-height: 1.2;
 
       html[lang=ar] & {
         position: relative;
@@ -107,17 +108,27 @@
   }
 
   .user__order--detail {
-    tr.order-item-row,
-    tr.order-details-row,
-    tr.order-summary-row {
-      td {
+    border-top: none;
+
+    div.order-item-row,
+    div.order-details-row,
+    div.order-summary-row {
+      > div {
         @include breakpoint($only-tablet) {
-          padding: 1.375rem 0.5rem 3.438rem 1rem !important;
-          min-width: 7rem;
+          padding: rem(22) rem(8) rem(55) rem(16) !important;
+          min-width: rem(112);
 
           &.empty--cell {
-            min-width: 3rem;
+            min-width: rem(48);
           }
+        }
+      }
+    }
+
+    div.order-item-row {
+      > div:nth-child(2) {
+        @include breakpoint($only-tablet) {
+          overflow-wrap: break-word;
         }
       }
     }
@@ -127,20 +138,185 @@
     .total-row,
     .discount-row,
     .surcharge-row {
-      td {
+      > div {
         @include breakpoint($only-tablet) {
-          padding: 0.625rem 0.9375rem;
+          padding: rem(10) rem(15);
         }
       }
     }
 
     .total-row {
-      td:nth-child(3) > div {
+      div:nth-child(3) > div {
         margin-bottom: 0;
 
         html[lang=ar] & {
           line-height: 1.5 !important;
         }
+      }
+
+      .right--align {
+        .vat-row {
+          display: block;
+
+          div.warm--white {
+            padding: 0;
+            margin: 0;
+            margin-top: rem(4);
+          }
+        }
+      }
+
+      &:not(.vat-row) {
+        > .warm--white {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+
+    .delivery-details-row {
+      .above-mobile {
+        display: block;
+      }
+    }
+
+    .above-mobile {
+      @include breakpoint($only-mobile) {
+        display: none !important;
+      }
+    }
+
+    .desktop-only {
+      @include breakpoint($upto-desktop) {
+        display: none !important;
+      }
+    }
+
+    > div {
+      > div {
+        @include breakpoint($only-mobile) {
+          width: auto;
+        }
+
+        &.above-mobile.blend {
+          @include breakpoint($only-tablet) {
+            width: auto;
+            padding: rem(22) rem(8) rem(55) rem(16) !important;
+          }
+        }
+      }
+
+      &.sub-total-row,
+      &.delivery-charge-row,
+      &.surcharge-row,
+      &.discount-row {
+        > div.blend {
+          @include breakpoint($only-tablet) {
+            width: auto;
+            min-width: auto;
+          }
+        }
+      }
+    }
+
+    .order-summary-row {
+      > .mobile-only {
+        margin-top: 0;
+      }
+
+      > div {
+        .blend {
+          background: $order_detail_order_summary_row_td_blend;
+        }
+
+        &.above-mobile,
+        &.empty--cell {
+          width: auto;
+        }
+      }
+    }
+
+    .order-summary-row,
+    .order-details-row,
+    .order-item-row:not(.online-returns-eligibility-message):not(.delivered-items):not(.cancelled-items):not(.cancelled-refund-text),
+    .sub-total-row,
+    .delivery-charge-row,
+    .surcharge-row,
+    .discount-row,
+    .total-row {
+      display: grid;
+      grid-template: "a b" auto/ rem(187) auto;
+
+      @include breakpoint($tablet) {
+        grid-template: "a b c d" auto/rem(135) minmax(auto, 2fr) minmax(auto, 1.75fr) minmax(8.75rem, auto);
+      }
+
+      @include breakpoint($desktop) {
+        grid-template: "a b c d e" auto/ rem(184) auto rem(166) rem(169) rem(180);
+      }
+    }
+
+    div.cancelled-refund-text {
+      > div {
+        padding: rem(16) 0 rem(3);
+
+        @include breakpoint($tablet) {
+          padding: rem(26) 0 rem(7) !important;
+        }
+      }
+
+      .tooltip-anchor {
+        &::before {
+          content: unset;
+        }
+      }
+
+      span {
+        color: inherit;
+      }
+    }
+
+    .cancelled-items {
+      div {
+        padding: 0;
+      }
+    }
+  }
+
+  .order-summary-row {
+    .order-transaction,
+    .order-name.above-mobile,
+    .order__summary--status,
+    .order-total.above-mobile,
+    .aura-points.above-mobile {
+      width: auto;
+    }
+
+    .order-name,
+    .order__summary--status,
+    .aura-points {
+      @include breakpoint($desktop) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+  }
+
+  .vat-row {
+    > div {
+      grid-area: b;
+
+      @include breakpoint($only-mobile) {
+        #{$left}: 0 !important;
+      }
+
+      @include breakpoint($tablet) {
+        grid-area: c;
+      }
+
+      @include breakpoint($desktop) {
+        grid-area: d;
       }
     }
   }
@@ -200,27 +376,27 @@
   .surcharge-row {
     background: $order_detail_total_tr_row;
 
-    td {
-      padding: 0.625rem 1.375rem;
+    > div {
+      padding: rem(10) rem(22);
 
       @include breakpoint($only-tablet) {
-        padding: 0.625rem 1rem;
+        padding: rem(10) rem(16);
       }
     }
 
-    td.right--align {
+    div.right--align {
       text-align: $right;
-      min-width: 8rem;
+      min-width: rem(128);
 
       html[lang=ar] & {
         @include breakpoint($only-mobile) {
-          min-width: 10rem;
-          padding: 0.625rem 1rem;
+          min-width: rem(160);
+          padding: rem(10) rem(16);
         }
       }
     }
 
-    td.blend {
+    div.blend {
       div {
         margin-bottom: 0;
       }
@@ -228,7 +404,7 @@
   }
 
   .discount-row {
-    td {
+    > div {
       &:nth-child(3) {
         background: $order_detail_total_tr_row;
       }
@@ -249,10 +425,10 @@
       font-size: 0.9375rem;
     }
 
-    td {
+    > div {
       background: $order_detail_delivery_details_row_bg;
-      padding: 1.25rem 1rem;
-      padding-#{$left}: 56px;
+      padding: rem(20) rem(16);
+      padding-#{$left}: rem(56);
       text-indent: -2.5rem;
       vertical-align: middle;
 
@@ -399,12 +575,12 @@
   }
 
   .order-summary-row {
-    td {
+    > div {
       background: $order_detail_order_summary_row_bg;
       padding: 1.313rem 1rem;
 
       @include breakpoint($tablet) {
-        padding: 1.375rem 1.5rem;
+        padding: rem(22) rem(24);
       }
 
       @include breakpoint($desktop) {
@@ -497,8 +673,8 @@
     }
   }
 
-  tr.order-item-row {
-    td.blend {
+  div.order-item-row {
+    div.blend {
       @include breakpoint($only-tablet) {
         padding: 1.375rem 1rem !important;
       }
@@ -515,76 +691,78 @@
     }
   }
 
-  td {
-    padding: 22px 16px;
-    vertical-align: top;
+  > div {
+    > div {
+      padding: rem(22) rem(16);
+      vertical-align: top;
 
-    div {
-      margin-bottom: 0.3125rem;
-    }
-
-    @include breakpoint($upto-tablet) {
-      width: 50%;
-    }
-
-    @include breakpoint($tablet) {
-      padding: 1.375rem 1.5rem;
-
-      &.above-mobile.blend {
-        padding: 1.375rem 1.25rem !important;
+      div {
+        margin-bottom: rem(5);
       }
-    }
 
-    @include breakpoint($only-tablet) {
-      &.above-mobile.blend {
-        width: 21%;
+      @include breakpoint($upto-tablet) {
+        width: 50%;
       }
-    }
 
-    @include breakpoint($desktop) {
-      .order-confirmation & {
-        &.order__user--info {
-          width: 24%;
-        }
+      @include breakpoint($tablet) {
+        padding: rem(22) rem(24);
 
-        &.desktop-only {
-          width: 25%;
-        }
-
-        &.order__delivery-details {
-          width: 19.5%;
+        &.above-mobile.blend {
+          padding: rem(22) rem(20) !important;
         }
       }
 
-      &.order__delivery-details .open--hours > div {
-        margin-bottom: 0.5rem;
-      }
-    }
-
-    &.above-mobile.blend,
-    .mobile-only {
-      .dark {
-        line-height: 1.4;
-      }
-    }
-
-    &.order__user--info {
-      .address--contact {
-        margin-top: 1.25rem;
-        font-size: 0.75rem;
-
-        .no-direction {
-          font-size: 0.875rem;
-          margin-top: 0.5rem;
+      @include breakpoint($only-tablet) {
+        &.above-mobile.blend {
+          width: 21%;
         }
       }
-    }
 
-    .surcharge-row {
-      td:first-child {
-        @include breakpoint($only-tablet) {
-          .order-detail & {
-            display: none;
+      @include breakpoint($desktop) {
+        .order-confirmation & {
+          &.order__user--info {
+            width: 24%;
+          }
+
+          &.desktop-only {
+            width: 25%;
+          }
+
+          &.order__delivery-details {
+            width: 19.5%;
+          }
+        }
+
+        &.order__delivery-details .open--hours > div {
+          margin-bottom: rem(8);
+        }
+      }
+
+      &.above-mobile.blend,
+      .mobile-only {
+        .dark {
+          line-height: 1.4;
+        }
+      }
+
+      &.order__user--info {
+        .address--contact {
+          margin-top: rem(20);
+          font-size: rem(12);
+
+          .no-direction {
+            font-size: rem(14);
+            margin-top: rem(8);
+          }
+        }
+      }
+
+      .surcharge-row {
+        div:first-child {
+          @include breakpoint($only-tablet) {
+            .order-detail & {
+              display: none;
+            }
           }
         }
       }
@@ -678,7 +856,7 @@
   }
 
   .total-row {
-    td {
+    div {
       .right--align {
         margin-bottom: 0;
       }
@@ -691,7 +869,7 @@
     }
 
     &.vat-container {
-      td {
+      div {
         &:nth-child(3) {
           @include breakpoint($only-mobile) {
             display: block;
@@ -701,6 +879,12 @@
         &.warm--white {
           background-color: $basket_vat_price_bg !important;
         }
+      }
+    }
+
+    &.vat-row {
+      .warm--white {
+        background: unset;
       }
     }
   }
@@ -715,16 +899,16 @@
     }
   }
 
-  #cancelled-items {
+  .cancelled-items {
     color: $order_detail_td_dark_content;
 
-    td {
+    div {
       padding-bottom: 0.25rem;
       padding-top: 1.125rem;
       padding-#{$left}: 0;
     }
 
-    td > div {
+    div > div {
       font-size: 1.125rem;
       line-height: 1.22;
       color: $cancel-item-list-header;
@@ -732,7 +916,7 @@
   }
 
   .online-booking-details-row {
-    td {
+    > div {
       padding: 0.875rem 2.8125rem;
       background-color: $_order_limit_txt;
 
@@ -837,6 +1021,14 @@
       }
     }
   }
+
+  .recent__orders--body {
+    .cancelled-items {
+      div {
+        padding: 0;
+      }
+    }
+  }
 }
 
 .cancelled-item-tooltip-refund-text {
@@ -882,6 +1074,35 @@
       @include breakpoint($only-tablet) {
         font-size: 0.75rem;
       }
+    }
+  }
+
+  .user__order--detail {
+    td {
+      padding: rem(22) rem(16);
+      vertical-align: top;
+    }
+
+    .cancelled-item-refund-text {
+      @include breakpoint($tablet) {
+        padding: rem(26) 0 rem(7);
+      }
+
+      .tooltip-anchor {
+        &::before {
+          content: unset;
+        }
+      }
+
+      span {
+        color: inherit;
+      }
+    }
+  }
+
+  .order-summary-row {
+    td {
+      vertical-align: middle;
     }
   }
 }
@@ -948,6 +1169,51 @@
   &:hover .second-third .second .dark::after {
     html[lang=ar] & {
       background-color: $order_recent_orders_product_title_elipsis_bg_hover;
+    }
+  }
+}
+
+.order-detail,
+.block-alshaya-user-recent-orders {
+  .user__order--detail {
+    div.order-item-row.delivered-items,
+    tr.order-item-row.delivered-items,
+    div.order-item-row.cancelled-items,
+    tr.order-item-row.cancelled-items {
+      > div,
+      td {
+        padding: rem(38) 0 rem(8) !important;
+        font-size: rem(18);
+        line-height: rem(22);
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+
+        div {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .cancelled-items ~ .order-item-row {
+      .image-wrapper {
+        span {
+          width: rem(144);
+          font-size: rem(11);
+          line-height: rem(13);
+          color: $order-cancelled-txt;
+          background: $order-cancelled-label;
+          padding: rem(4) 0;
+          height: rem(20);
+
+          @include breakpoint($tablet) {
+            width: rem(120);
+          }
+
+          @include breakpoint($desktop) {
+            width: rem(136);
+          }
+        }
+      }
     }
   }
 }

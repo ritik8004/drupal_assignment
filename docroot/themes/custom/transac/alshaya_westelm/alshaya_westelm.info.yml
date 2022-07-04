@@ -211,3 +211,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-cart/egift-cart.ltr.css: css/conditional-sass/egift-cart/egift-cart.ltr.css
+
+  alshaya_white_label/aura-loyalty-forms:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css: css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css
+
+  alshaya_white_label/inter-country-transfer:
+    css:
+      theme:
+        css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css: css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css

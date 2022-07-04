@@ -37,15 +37,24 @@
     const rawProductData = window.commerceBackend.getProductData(e.detail.sku, false, false);
     rawProductData.variants.forEach(function (variant) {
       if (variant.product.sku === e.detail.variantSku) {
-        try {
-          const data = JSON.parse(variant.product.assets_swatch);
-          e.detail.colorOptionsList = Object.assign(e.detail.colorOptionsList, {
-            display_value: '<img src="' + data[0].styles.pdp_gallery_thumbnail + '">',
-            swatch_type: data[0].image_type,
-          });
-        } catch (e) {
-          // Do nothing.
+        // Update swatch elements.
+        if (variant.product.swatch_data.swatch_type === 'image') {
+          try {
+            const data = JSON.parse(variant.product.assets_swatch);
+            const uri = variant.product.media[0].thumbnails;
+            e.detail.colorOptionsList = Object.assign(e.detail.colorOptionsList, {
+              display_value: '<img src="' + uri + '">',
+              swatch_type: data[0].image_type,
+            });
+          }
+          catch (e) {
+            Drupal.alshayaLogger('warning', 'Invalid swatch asset data for sku @sku', {
+              '@sku': variant.product.sku,
+            });
+          }
         }
+        // Override color label.
+        e.detail.colorOptionsList.display_label = variant.product.color_label;
       }
     })
   });

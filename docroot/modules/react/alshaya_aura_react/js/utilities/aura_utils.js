@@ -179,7 +179,7 @@ function getNotYouLabel(notYouFailed) {
  * Utility function to get tooltip msg for points on hold.
  */
 function getTooltipPointsOnHoldMsg() {
-  return Drupal.t('Your points will be credited to your account. You will be able to redeem them 14 days after delivery as per Aura Terms & Conditions and Alshaya exchange and refund policies.');
+  return Drupal.t('Your points will be credited to your Aura account. You will be able to redeem these a day after your order is delivered.', {}, { context: 'aura' });
 }
 
 export {

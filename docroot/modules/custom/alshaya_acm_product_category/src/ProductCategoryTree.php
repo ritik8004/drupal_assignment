@@ -248,6 +248,16 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Processed term data.
    */
   protected function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
+    // If we are here, it means we are going to load full category tree.
+    // For many brands we have huge number of categories, let's increase the
+    // memory limit to ensure we have enough memory to process.
+    // We do this though only if the limit is default.
+    $memory_limit = ini_get('memory_limit');
+    $memory_limit = (int) $memory_limit;
+    if ($memory_limit === 128) {
+      ini_set('memory_limit', '256M');
+    }
+
     $language = $this->languageManager->getLanguage($langcode);
     $defaultLangcode = $this->languageManager->getDefaultLanguage()->getId();
     $uri_options = ['language' => $language];
@@ -277,6 +287,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $termEntity = $this->termStorage->load($term->tid);
         $translatedEntity = $this->entityRepository->getTranslationFromContext($termEntity, $defaultLangcode);
         $gtmLabel = $translatedEntity->getName();
+
+        // Destroy the variable once the required data is fetched.
+        $translatedEntity = NULL;
       }
       switch ($cache_name) {
         case 'product_list':
@@ -360,7 +373,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
             'description' => [
               '#markup' => $term->description__value,
             ],
-            'id' => $term->tid,
+            'id' => 'view-all-' . $term->tid,
             'path' => $path . 'view-all/',
             'active_class' => '',
             'class' => [],
@@ -518,7 +531,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $route_name = $this->routeMatch->getRouteName();
 
     // If /taxonomy/term/tid page.
-    if ($route_name == 'entity.taxonomy_term.canonical') {
+    if ($route_name === 'entity.taxonomy_term.canonical' || $route_name === 'alshaya_main_menu.category_view_all') {
       /** @var \Drupal\taxonomy\TermInterface $route_parameter_value */
       $term = $this->routeMatch->getParameter('taxonomy_term');
     }

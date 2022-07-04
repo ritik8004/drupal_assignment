@@ -1,7 +1,0 @@
-services:
-  alshaya_cos_images.product_info_requested_event:
-    class: Drupal\alshaya_cos_images\EventSubscriber\ProductInfoRequestedEventSubscriber
-    arguments:
-      - '@alshaya_media_assets.skuassetsmanager'
-    tags:
-      - { name: 'event_subscriber' }

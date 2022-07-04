@@ -60,9 +60,8 @@
             }
           });
         }
-        if (!isRcsPdp()) {
-          Drupal.getRelatedProductPosition();
-        }
+
+        Drupal.getRelatedProductPosition();
       });
 
       // Trigger matchback color change on main product color change.
@@ -187,6 +186,7 @@
                 sku: parentSku,
                 variantSelected: selected,
                 title,
+                eligibleForReturn: variantInfo.eligibleForReturn,
               }
             }
           });
@@ -241,7 +241,7 @@
           }
         });
 
-        if (typeof productData.variants !== 'undefined') {
+        if (typeof productData.variants !== 'undefined' && Drupal.hasValue(productData.variants)) {
           var variants = productData.variants;
 
           // Use first child provided in settings if available.
@@ -273,6 +273,29 @@
           $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
           $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
         }
+
+        // Trigger an event on SKU base form load.
+        var data = {
+          sku: sku,
+          variantSelected: $('[name="selected_variant_sku"]').val() || $('form.sku-base-form').attr('variantselected'),
+        };
+
+        // If Online Returns feature is enabled, add eligibleForReturn to event.
+        if (Drupal.hasValue(drupalSettings.onlineReturns)) {
+          if (productData.type === 'simple') {
+            data.eligibleForReturn = productData.eligibleForReturn;
+          } else {
+            // For configurable products if variant is not selected yet, we
+            // do not want to display anything so by default we set the value
+            // to TRUE. Example scenario: Sofas and Sectionals.
+            data.eligibleForReturn = data.variantSelected
+              ? productData.variants[data.variantSelected].eligibleForReturn
+              : true;
+          }
+        }
+
+        var skuBaseFormLoadedEvent = new CustomEvent('onSkuBaseFormLoad', { bubbles: true, detail: { data: data }});
+        document.dispatchEvent(skuBaseFormLoadedEvent);
       });
 
       // Show images for oos product on PDP.
@@ -289,12 +312,10 @@
         window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, sku);
       });
 
-      if (!isRcsPdp()) {
-        // Add related products on pdp on load and scroll.
-        $(window).once('updateRelatedProductsLoad').on('load scroll', function () {
-          Drupal.getRelatedProductPosition();
-        });
-      }
+      // Add related products on pdp on load and scroll.
+      $(window).once('updateRelatedProductsLoad').on('load scroll', function () {
+        Drupal.getRelatedProductPosition();
+      });
 
       // Add 'each' with price on change of quantity if matchback is enabled.
       if ($('.price-suffix-matchback').length) {
@@ -482,14 +503,6 @@
     return selectedCombination;
   };
 
-  Drupal.updateRelatedProducts = function (url) {
-    Drupal.ajax({
-      url: url,
-      progress: {type: 'throbber'},
-      type: 'GET',
-    }).execute();
-  };
-
   Drupal.getRelatedProductPosition = function () {
     var sku = $('article[data-vmode="full"]').attr('data-sku');
     var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
@@ -503,17 +516,17 @@
       || ((matchback.length > 0) && !matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold))) {
       matchback.addClass('matchback-processed');
       // Base64 encode sku so the sku with slash doesn't break the endpoint.
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + btoa(sku) + '/crosssell/' + device + '?cacheable=1'));
+      window.commerceBackend.updateRelatedProducts('crosssell', sku, device);
     }
     if ((upsell.length > 0) && !upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold) && drupalSettings.display_upsell) {
       upsell.addClass('upsell-processed');
       // Base64 encode sku so the sku with slash doesn't break the endpoint.
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + btoa(sku) + '/upsell/' + device + '?cacheable=1'));
+      window.commerceBackend.updateRelatedProducts('upsell', sku, device);
     }
     if ((related.length > 0) && !related.hasClass('related-processed') && (scrollPoint > related.offset().top - scrollThreshold) && drupalSettings.display_related) {
       related.addClass('related-processed');
       // Base64 encode sku so the sku with slash doesn't break the endpoint.
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + btoa(sku) + '/related/' + device + '?cacheable=1'));
+      window.commerceBackend.updateRelatedProducts('related', sku, device);
     }
   };
 
@@ -556,11 +569,11 @@
         var variantToDisableSelector = $('input[value="' + sku + '"]').closest('.sku-base-form');
         var allVariants = parentInfo.variants ? Object.keys(parentInfo.variants) : [];
 
+        var orderLimitMsg = typeof variantInfo.orderLimitMsg !== "undefined"
+          ? variantInfo.orderLimitMsg : '';
         // If cart is not empty.
         if (typeof cart_items !== "undefined") {
           var itemQtyInCart = 0;
-          var orderLimitMsg = typeof parentInfo.orderLimitMsg !== "undefined"
-            ? parentInfo.orderLimitMsg : '';
 
           if (cartProductQtyArg !== undefined) {
             itemQtyInCart = cartProductQtyArg;

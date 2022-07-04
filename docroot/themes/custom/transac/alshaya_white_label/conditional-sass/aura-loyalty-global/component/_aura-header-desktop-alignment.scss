@@ -31,50 +31,48 @@ body.aura-enabled {
   }
 
   @include breakpoint($upto-desktop) {
-    &.logged-in {
-      ul.menu--one__list.menu__list,
-      .c-my-account-nav {
-        top: rem(60);
+    ul.menu--one__list.menu__list,
+    .c-my-account-nav {
+      top: rem(60);
+    }
+
+    .toggle--sign {
+      .one {
+        flex: auto;
+        height: rem(60);
+
+        &.shop {
+          align-items: center;
+          display: inline-flex;
+          justify-content: center;
+          line-height: 1;
+          width: rem(120);
+        }
       }
 
-      .toggle--sign {
-        .one {
-          flex: auto;
-          height: rem(60);
+      .account,
+      .account--logged_in {
+        &.one {
+          width: calc(100% - 7.5rem);
 
-          &.shop {
+          .aura-logo-points {
             align-items: center;
-            display: inline-flex;
-            height: auto;
-            justify-content: center;
-            line-height: 1;
-            width: rem(120);
-          }
-        }
+            display: flex;
+            margin-top: rem(3);
 
-        .account--logged_in {
-          &.one {
-            width: calc(100% - 7.5rem);
+            .aura-logo {
+              display: inline-flex;
+              margin-#{$right}: rem(10);
+              max-width: 100%;
 
-            .aura-logo-points {
-              align-items: center;
-              display: flex;
-              margin-top: rem(3);
-
-              .aura-logo {
-                display: inline-flex;
-                margin-#{$right}: rem(10);
-                max-width: 100%;
-
-                svg {
-                  height: rem(22);
-                  width: auto;
-                }
+              svg {
+                height: rem(22);
+                width: auto;
               }
+            }
 
-              .account-points {
-                padding-top: 0;
-              }
+            .account-points {
+              padding-top: 0;
             }
           }
         }

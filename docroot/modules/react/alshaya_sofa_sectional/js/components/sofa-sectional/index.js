@@ -339,7 +339,6 @@ export default class SofaSectionalForm extends React.Component {
 
     const groupData = {};
     let { groupCode } = this.state;
-    let firstSwatch = true;
 
     const qty = getQuantityDropdownValues();
     const options = [];
@@ -387,13 +386,6 @@ export default class SofaSectionalForm extends React.Component {
           allowedValues = typeof allowedAttributeValues[attribute[0]] !== 'undefined'
             ? allowedAttributeValues[attribute[0]]
             : [];
-
-          // Show all the attribute options for the first
-          // swatch attribute only.
-          if (isSwatch && firstSwatch) {
-            allowedValues = [];
-            firstSwatch = false;
-          }
 
           // Prepare grouped filters data.
           groupData.isGroup = attribute[1].is_group;

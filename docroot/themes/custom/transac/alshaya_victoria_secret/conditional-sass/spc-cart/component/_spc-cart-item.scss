@@ -2,14 +2,14 @@
   .spc-cart-item {
     .spc-product-tile {
       .spc-remove-btn {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: rem(24);
+        height: rem(24);
         display: inline-block;
         margin-#{$left}: 0;
-        background: url('../../../imgs/icons/spc-close.svg') no-repeat center;
+        background: url('#{$brand_theme_img_directory_path}/icons/spc-close.svg') no-repeat center;
 
         &:hover {
-          background: url('../../../imgs/icons/spc-close-hover.svg') no-repeat center;
+          background: url('#{$brand_theme_img_directory_path}/icons/spc-close-hover.svg') no-repeat center;
         }
 
         svg {

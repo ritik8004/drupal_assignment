@@ -22,13 +22,19 @@ function invoke_api(string $api_url, string $method = 'GET', array $data = NULL)
   curl_setopt($ch, CURLOPT_URL, $api_url);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-  if ($method !== 'GET' && !empty($data)) {
+  if ($method === 'PATCH') {
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+  }
+  elseif ($method !== 'GET' && !empty($data)) {
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
   }
-
-  if ($method === 'PUT') {
+  elseif ($method === 'PUT') {
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+  }
+  elseif ($method === 'DELETE') {
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
   }
 
 
@@ -197,6 +203,11 @@ function delete_firewall_filter_for_domain(string $zone, string $id) {
   return invoke_api($api_url, 'DELETE');
 }
 
+function always_online_update(string $zone, string $value) {
+  $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/settings/always_online';
+  return invoke_api($api_url, 'PATCH', ['value' => $value]);
+}
+
 function clear_cache_for_domain(string $zone, string $domain) {
   $data = [
     'prefixes' => [
@@ -256,3 +267,9 @@ function create_page_rule_for_zone(string $zone, array $rule) {
   $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/pagerules';
   return invoke_api($api_url, 'POST', $rule);
 }
+
+function delete_page_rule_for_zone(string $zone, string $id) {
+  $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/pagerules/' . $id;
+  return invoke_api($api_url, 'DELETE');
+}
+

@@ -5,7 +5,7 @@
   border-radius: rem(3);
   font-family: $alshaya-bold;
   color: $primary_btn_text;
-  border: 1px solid $btn_border;
+  border: rem(1) solid $btn_border;
 
 
   @include normal-arabic-letter-spacing;
@@ -29,4 +29,10 @@
 
 .qty-sel-btn {
   border-radius: 0;
+}
+
+.is-not-buyable {
+  &:hover {
+    color: $primary_btn_text;
+  }
 }

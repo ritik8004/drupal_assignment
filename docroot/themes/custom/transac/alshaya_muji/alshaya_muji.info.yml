@@ -79,6 +79,7 @@ libraries-override:
       - core/jquery
       - core/jquery.once
       - core/drupal
+      - alshaya_master/common_functions
 
   alshaya_white_label/convert_to_select2:
     js:
@@ -193,3 +194,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css: css/conditional-sass/egift-landing-page/egift-landing-page.ltr.css
+
+  alshaya_white_label/online-booking:
+    css:
+      theme:
+        css/conditional-sass/online-booking/online-booking.ltr.css: css/conditional-sass/online-booking/online-booking.ltr.css
+
+  alshaya_white_label/aura-loyalty-pdp:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css

@@ -5,6 +5,12 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\file\FileInterface;
+
 /**
  * Implements hook_alshaya_rcs_product_query_fields_alter().
  */
@@ -15,17 +21,6 @@ function alshaya_media_assets_alshaya_rcs_product_query_fields_alter(array &$fie
     'assets_pdp',
     'assets_cart',
   );
-
-  // Query for teaser assets for product recommendations.
-  if (isset($fields['items']['upsell_products'])) {
-    $fields['items']['upsell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-  }
-  if (isset($fields['items']['related_products'])) {
-    $fields['items']['related_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-  }
-  if (isset($fields['items']['crosssell_products'])) {
-    $fields['items']['crosssell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-  }
 }
 
 /**
@@ -47,4 +42,204 @@ function alshaya_media_assets_page_attachments_alter(&$attachments) {
       break;
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_reset_config_configs_to_reset_alter().
+ */
+function alshaya_media_assets_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  // We need pims_base_url to be set per Magento instance.
+  // We add it to the list of configs to be reset so it is done with other
+  // configs like Connector URL, Magento URL, etc.
+  $reset[] = 'alshaya_media_assets.settings';
+}
+
+/**
+ * Implements hook_alshaya_acm_switch_magento_configs_alter().
+ */
+function alshaya_media_assets_alshaya_acm_switch_magento_configs_alter(array &$configs) {
+  // We need pims_base_url to be set per Magento instance.
+  // We add below for configs to be switched so it is set for Magento instance.
+  $configs['alshaya_media_assets.settings'] = 'pims_base_url';
+}
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_media_assets_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
+  // Suppress the unserialize class warning.
+  // @codingStandardsIgnoreLine
+  $existing_assets = !empty($existing_data['attr_assets']) ? unserialize($existing_data['attr_assets'][0]['value']) : [];
+
+  if (!is_array($existing_assets) || empty($existing_assets)) {
+    $existing_assets = [];
+  }
+
+  // Process assets data & create attributes which are needed for sorting
+  // the assets while displaying them.
+  $sku->get('attr_assets')->setValue(_alshaya_media_assets_acq_sku_process_assets($product, $existing_assets));
+}
+
+/**
+ * Helper function to process asset attributes & calculate sorting params.
+ *
+ * @param array $product
+ *   Product array containing assets to be processed.
+ * @param array $existing_assets
+ *   Existing assets data.
+ *
+ * @return string
+ *   Serialized & processed assets.
+ */
+function _alshaya_media_assets_acq_sku_process_assets(array $product, array $existing_assets = []) {
+  $existing_assets_mapping = [];
+
+  foreach ($existing_assets ?? [] as $asset) {
+    if (empty($asset['fid'])) {
+      continue;
+    }
+
+    $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+    $existing_assets_mapping[$id] = $asset;
+  }
+
+  $assets = [];
+  if (isset($product['extension'], $product['extension']['assets'])) {
+    $assets = $product['extension']['assets'];
+
+    foreach ($assets as $key => $asset) {
+      // If asset had no pims data before and has pims data now, asset id here
+      // won't match and hence we will not use old downloaded image.
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+
+      if (isset($existing_assets_mapping[$id])) {
+        $assets[$key]['fid'] = $existing_assets_mapping[$id]['fid'];
+        $assets[$key]['drupal_uri'] = $existing_assets_mapping[$id]['drupal_uri'];
+        unset($existing_assets_mapping[$id]);
+      }
+      else {
+        // Ensure fid and drupal_uri are not available in assets if we are
+        // not re-using.
+        unset($assets[$key]['fid']);
+        unset($assets[$key]['drupal_uri']);
+      }
+
+      if (empty($asset['Data']['AssetType']) && ($asset['is_old_format'] && empty($asset['Type']))) {
+        continue;
+      }
+
+      $asset_type_parts = (!empty($asset['Data']['AssetType'])) ? explode('/', $asset['Data']['AssetType']) : [];
+      $assets[$key]['sortAssetType'] = !empty($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
+      $face_type = SkuAssetManager::LP_DEFAULT_ANGLE;
+
+      if (!empty($asset['Data']['Angle']['Facing']) && !empty($asset['Data']['Angle']['Identifier'])) {
+        $face_type = $asset['Data']['Angle']['Facing'] . $asset['Data']['Angle']['Identifier'];
+      }
+      $assets[$key]['sortFacingType'] = $face_type;
+    }
+  }
+
+  $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
+  foreach ($existing_assets_mapping ?? [] as $asset) {
+    $file = $fileStorage->load($asset['fid']);
+
+    if ($file instanceof FileInterface) {
+      $file->delete();
+    }
+  }
+
+  return serialize($assets);
+}
+
+/**
+ * Implements hook_alshaya_acm_product_gallery_alter().
+ */
+function alshaya_media_assets_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $sku, $context = 'pdp') {
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager */
+  $sku_assets_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
+
+  // Check if the gallery has a main image. If not, look for assets.
+  if ($context == 'search') {
+    // Lookup images on current SKU if its a simple SKU.
+    $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp');
+    $avoid_assets = !empty($main_image_assets) && !empty($main_image_assets[0]['Data']) ? [$main_image_assets[0]['Data']['AssetId']] : [];
+    $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', $avoid_assets);
+
+    // If no assets attached & the sku is configurable, try to use the
+    // assets attached with first child sku.
+    if (empty($main_image_assets) && empty($hover_image_assets) && ($sku->bundle() === 'configurable')) {
+      $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp');
+      $avoid_assets = !empty($main_image_assets) && !empty($main_image_assets[0]['Data']) ? [$main_image_assets[0]['Data']['AssetId']] : [];
+      $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', $avoid_assets);
+    }
+
+    $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
+    $plp_hover_image = !empty($hover_image_assets) ? $hover_image_assets[0] : NULL;
+
+    if ($plp_main_image) {
+      $gallery = [
+        '#theme' => 'alshaya_assets_gallery',
+        '#mainImage' => $plp_main_image,
+      ];
+
+      // We don't get alt/title, we use product's title for that.
+      $gallery['#label'] = $sku->label();
+
+      if ($plp_hover_image) {
+        if (empty($plp_hover_image['#attributes'])) {
+          $plp_hover_image['#attributes'] = [];
+        }
+        $plp_hover_image['#attributes']['loading'] = 'lazy';
+        $gallery['#hoverImage'] = $plp_hover_image;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_media_items_alter().
+ */
+function alshaya_media_assets_alshaya_acm_product_media_items_alter(array &$media, SKU $sku) {
+  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $assetsManager */
+  $assetsManager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
+
+  $assets = $assetsManager->getAssets($sku);
+
+  foreach ($assets ?? [] as $asset) {
+    if (!empty($asset['drupal_uri'])) {
+      $asset['media_type'] = $assetsManager->getAssetType($asset);
+
+      $media[] = $asset;
+    }
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function alshaya_media_assets_block_view_alter(array &$build, BlockPluginInterface $block) {
+  if ($build['#configuration']['id'] == 'alshaya_algolia_react_autocomplete') {
+    $build['#attached']['library'][] = 'alshaya_media_assets/media_images';
+  }
+}
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_media_assets_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_acm_product_fields = \Drupal::config('alshaya_media_assets.sku_base_fields')->get('fields');
+  if ($alshaya_acm_product_fields) {
+    $fields = array_merge($fields, $alshaya_acm_product_fields);
+  }
+  else {
+    \Drupal::logger('alshaya_media_assets')->error('The config alshaya_media_assets.sku_base_fields is empty for media assets.');
+  }
+}
+
+/**
+ * Implements hook_alshaya_rcs_recommended_product_query_fields_alter().
+ */
+function alshaya_media_assets_alshaya_rcs_recommended_product_query_fields_alter(array &$fields) {
+  // Query for teaser assets for product recommendations.
+  $fields['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
 }

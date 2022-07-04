@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ConditionalView = ({ condition, children }) => {
-  if (condition === false) {
+  if (!condition) {
     return (null);
   }
 

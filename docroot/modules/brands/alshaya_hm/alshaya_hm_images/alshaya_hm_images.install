@@ -11,8 +11,9 @@ use Drupal\acq_sku\Entity\SKU;
 /**
  * Installs alshaya_media_assets module.
  */
-function alshaya_hm_images_update_9001() {
+function alshaya_hm_images_update_8014() {
   \Drupal::service('module_installer')->install(['alshaya_media_assets']);
+  \Drupal::configFactory()->getEditable('alshaya_hm_images.settings')->delete();
 }
 
 /**

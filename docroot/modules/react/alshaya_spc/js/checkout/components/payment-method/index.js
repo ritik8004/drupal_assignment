@@ -8,6 +8,7 @@ import {
   placeOrder,
   removeFullScreenLoader,
   setUpapiApplePayCofig,
+  getPayable,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
@@ -46,8 +47,9 @@ export default class PaymentMethod extends React.Component {
     // Check if the tabby is enabled.
     if (Tabby.isTabbyEnabled()) {
       const { cart } = this.props;
+      const amount = getPayable(cart);
       // Initialize the tabby popup for info icon.
-      Drupal.tabbyPromoPopup(cart.cart.totals.base_grand_total);
+      Drupal.tabbyPromoPopup(amount);
     }
   }
 
@@ -186,6 +188,7 @@ export default class PaymentMethod extends React.Component {
       disablePaymentMethod,
     } = this.props;
     const animationDelayValue = `${0.4 + animationOffset}s`;
+    const amount = getPayable(cart);
 
     if (method.code === 'checkout_com_applepay' && !(ApplePay.isAvailable())) {
       return (null);
@@ -245,7 +248,7 @@ export default class PaymentMethod extends React.Component {
                 <TabbyWidget
                   pageType="checkout"
                   classNames="installment-popup"
-                  amount={cart.cart.totals.base_grand_total}
+                  amount={amount}
                 />
               </ConditionalView>
             </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import AvailableSelectOptions from '../available-select-options';
 import DefaultSelectOptions from '../default-select-options';
 import SizeGuide from '../size-guide';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const NonGroupSelectOption = ({
   handleSelectionChanged, configurables, code,
@@ -30,15 +31,25 @@ const NonGroupSelectOption = ({
         <SizeGuide attrId={code} />
         <div className="non-group-option-wrapper">
           <ul id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
-            {Object.keys(configurables.values).map((attr) => {
+            {configurables.values && Object.keys(configurables.values).map((key) => {
+              let attr = configurables.values[key].value_id;
+              let value = configurables.values[key].label;
+              if (hasValue(configurables.values[key])) {
+                // Check if the values object is multidimensional
+                // use the first key to get respected value.
+                // This might be possible for size attribute.
+                const valueId = Object.keys(configurables.values[key])[0];
+                attr = configurables.values[key][valueId].value_id;
+                value = configurables.values[key][valueId].label;
+              }
               // If the currennt attribute matches the
               // attribute code of the available values.
               if (code === nextCode) {
                 return (
                   <AvailableSelectOptions
                     nextValues={nextValues}
-                    attr={configurables.values[attr].value_id}
-                    value={configurables.values[attr].label}
+                    attr={attr}
+                    value={value}
                     key={attr}
                     selected={selected}
                     handleLiClick={handleLiClick}
@@ -49,8 +60,8 @@ const NonGroupSelectOption = ({
               // Show the default options.
               return (
                 <DefaultSelectOptions
-                  attr={configurables.values[attr].value_id}
-                  value={configurables.values[attr].label}
+                  attr={attr}
+                  value={value}
                   key={attr}
                   selected={selected}
                   handleLiClick={handleLiClick}

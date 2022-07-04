@@ -1,0 +1,8 @@
+#aura-mobile-header-signin-register:not(:empty),
+#aura-mobile-header-shop:not(:empty) {
+  @include breakpoint($upto-desktop) {
+    .aura-header-popup-wrapper.sign-up-complete {
+      padding-top: rem(18);
+    }
+  }
+}

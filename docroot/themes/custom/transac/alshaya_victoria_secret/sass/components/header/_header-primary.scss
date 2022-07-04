@@ -114,7 +114,22 @@ header {
       height: rem(20);
 
       @include breakpoint($desktop) {
-        top: 0;
+        top: rem(3);
+        #{$right}: rem(1);
+      }
+
+      @include breakpoint($upto-desktop) {
+        .frontpage & {
+          #{$right}: rem(-14);
+        }
+
+        .frontpage.logged-in & {
+          height: rem(41);
+        }
+
+        .logged-in & {
+          height: rem(42);
+        }
       }
     }
 
@@ -140,8 +155,8 @@ header {
       @include breakpoint($upto-desktop) {
         width: rem(14);
         height: rem(14);
-        bottom: rem(10);
-        #{$left}: rem(42);
+        bottom: rem(12);
+        #{$left}: rem(40);
         #{$right}: 0;
         margin: 0 auto;
       }
@@ -282,14 +297,14 @@ header {
         padding: 0.625rem 1.5rem;
         height: 2.5rem;
         margin-top: 0;
-        border-top: 2px solid transparent !important;
+        border-top: rem(2) solid transparent !important;
 
         &::after {
           content: '';
-          height: 0.125rem;
+          height: rem(2);
           width: auto;
           transition: all 0.3s ease-out;
-          margin: 0.625rem auto 0;
+          margin: rem(10) auto 0;
           display: block;
         }
       }
@@ -342,6 +357,21 @@ header {
     li.menu--one__list-item {
       ul.menu--two__list {
         background: $mm_l3_link_bg;
+
+        .menu__links__wrapper {
+          .column {
+            border-#{$right}: rem(1) solid $mm_l1_border;
+            padding-#{$left}: rem(18);
+
+            &:last-of-type {
+              border-#{$right}: 0;
+            }
+
+            &:first-of-type {
+              padding-#{$left}: 0;
+            }
+          }
+        }
       }
     }
   }
@@ -369,9 +399,20 @@ header {
 }
 
 .c-menu-primary {
-  li:hover a {
-    @include breakpoint($upto-desktop) {
-      color: $header_my_account_mobile_link_hover;
+  li {
+    &:hover a {
+      @include breakpoint($upto-desktop) {
+        color: $header_my_account_mobile_link_hover;
+      }
+    }
+
+    .mobile--search {
+      &::before {
+        @include breakpoint($only-mobile) {
+          #{$left}: rem(-21);
+          top: rem(-3);
+        }
+      }
     }
   }
 
@@ -483,7 +524,7 @@ header {
         display: table-cell;
         vertical-align: middle;
         width: 33.33%;
-        text-align: center;
+        text-align: $left;
       }
     }
   }
@@ -494,6 +535,18 @@ header {
     position: static;
     margin-top: 0;
     padding: rem(14);
+    padding-#{$left}: rem(17);
+    width: rem(36);
+
+    .logged-in & {
+      margin-top: rem(6);
+    }
+
+    &::before {
+      @include breakpoint($upto-desktop) {
+        width: rem(20);
+      }
+    }
   }
 
   .mobile--search,
@@ -579,6 +632,20 @@ header {
     .menu__in {
       margin-top: -2.25rem;
     }
+
+    & > .menu-two__link-wrapper {
+      border-bottom: 0;
+    }
+  }
+
+  .menu--three__list-item {
+    & > .menu-two__link-wrapper {
+      border-bottom: 0;
+    }
+  }
+
+  .menu__back {
+    background: url('#{$brand_theme_img_directory_path}/icons/ic-chevronleft.svg') no-repeat;
   }
 }
 

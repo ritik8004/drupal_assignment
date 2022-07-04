@@ -19,17 +19,6 @@
 
   .c-content__region {
     .sticky-filter-wrapper {
-      .c-collapse-item {
-        .c-collapse__title {
-          text-transform: uppercase;
-
-          &::after {
-            color: $algolia-react-facet-title;
-            top: 49%;
-          }
-        }
-      }
-
       #attr_product_collection {
         ul {
           li.facet-item {
@@ -94,6 +83,19 @@ html[lang=ar] {
       }
     }
   }
+
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        text-transform: uppercase;
+
+        &::after {
+          color: $algolia-react-facet-title;
+          top: 49%;
+        }
+      }
+    }
+  }
 }
 
 #alshaya-algolia-search,
@@ -102,8 +104,8 @@ html[lang=ar] {
     .grid-buttons {
       .large-col-grid,
       .small-col-grid {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: rem(24);
+        height: rem(24);
         display: inline-block;
         margin-#{$left}: 0;
 
@@ -113,18 +115,18 @@ html[lang=ar] {
       }
 
       .large-col-grid {
-        background: url('../../../imgs/icons/large-grid-inactive.svg') no-repeat center;
+        background: url('#{$brand_theme_img_directory_path}/icons/large-grid-inactive.svg') no-repeat center;
 
         &.active {
-          background: url('../../../imgs/icons/large-grid-active.svg') no-repeat center;
+          background: url('#{$brand_theme_img_directory_path}/icons/large-grid-active.svg') no-repeat center;
         }
       }
 
       .small-col-grid {
-        background: url('../../../imgs/icons/small-grid-inactive.svg') no-repeat center;
+        background: url('#{$brand_theme_img_directory_path}/icons/small-grid-inactive.svg') no-repeat center;
 
         &.active {
-          background: url('../../../imgs/icons/small-grid-active.svg') no-repeat center;
+          background: url('#{$brand_theme_img_directory_path}/icons/small-grid-active.svg') no-repeat center;
         }
       }
     }

@@ -18,6 +18,8 @@ window.commerceBackend = window.commerceBackend || {};
     parent: {},
     configurableCombinations: {},
     configurables: {},
+    // This will prevent multiple requests to fetch same product data.
+    productDataFromBackend: {},
   };
 
   /**
@@ -232,11 +234,33 @@ window.commerceBackend = window.commerceBackend || {};
     const variantConfigurableOptions = [];
 
     Object.keys(productConfigurables).forEach(function (attributeCode) {
+      let label = productConfigurables[attributeCode].label;
+      let optionId = productConfigurables[attributeCode].attribute_id;
+      let optionValue = variant.product[attributeCode];
+      let value = window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]);
+
+      // Check if we have a replacement for the attributes.
+      if (Drupal.hasValue(drupalSettings.alshayaRcs.configurableFieldReplacements)) {
+        const { configurableFieldReplacements } = drupalSettings.alshayaRcs;
+        Object.keys(configurableFieldReplacements).forEach(function (field) {
+          if (configurableFieldReplacements[field].display_configurable_for === attributeCode &&
+            Drupal.hasValue(variant.product[field])
+          ) {
+            // Override default values.
+            attributeCode = field;
+            label = configurableFieldReplacements[field].label;
+            value = variant.product[field];
+          }
+        });
+      }
+
       variantConfigurableOptions.push({
+        attribute_code: `attr_${attributeCode}`,
         attribute_id: `attr_${attributeCode}`,
-        label: productConfigurables[attributeCode].label,
-        value: window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
-        value_id: variant.product[attributeCode],
+        label: label,
+        option_id: optionId,
+        option_value: optionValue,
+        value: value,
       });
     });
 
@@ -436,7 +460,7 @@ window.commerceBackend = window.commerceBackend || {};
       layout: getLayoutFromContext(product),
       context: getContext(product),
       gallery: null,
-      identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
+      identifier: Drupal.cleanCssIdentifier(product.sku),
       cart_image: window.commerceBackend.getCartImage(product),
       cart_title: product.name,
       url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
@@ -578,7 +602,6 @@ window.commerceBackend = window.commerceBackend || {};
       firstChild: '',
     };
 
-
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
       // Don't consider OOS products.
@@ -623,9 +646,11 @@ window.commerceBackend = window.commerceBackend || {};
       }
     });
 
-    var firstChild = Object.entries(combinations.attribute_sku)[0];
-    firstChild = Object.entries(firstChild[1]);
-    combinations.firstChild = firstChild[0][1][0];
+    if (Drupal.hasValue(combinations.attribute_sku)) {
+      var firstChild = Object.entries(combinations.attribute_sku)[0];
+      firstChild = Object.entries(firstChild[1]);
+      combinations.firstChild = firstChild[0][1][0];
+    }
 
     // @todo: Add check for simple product.
     Object.keys(combinations.by_sku).forEach(function (sku) {
@@ -676,53 +701,6 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
-   * Prepares a string for use as a CSS identifier (element, class, or ID name).
-   *
-   * This is the JS implementation of \Drupal\Component\Utility\Html::getClass().
-   * Link below shows the syntax for valid CSS identifiers (including element
-   * names, classes, and IDs in selectors).
-   *
-   * @param {string} identifier
-   *   The string to clean.
-   *
-   * @returns {string}
-   *   The cleaned string which can be used as css class/id.
-   *
-   * @see http://www.w3.org/TR/CSS21/syndata.html#characters
-   */
-  window.commerceBackend.cleanCssIdentifier = function (identifier) {
-    let cleanedIdentifier = identifier;
-
-    // In order to keep '__' to stay '__' we first replace it with a different
-    // placeholder after checking that it is not defined as a filter.
-    cleanedIdentifier = cleanedIdentifier
-                          .replaceAll('__', '##')
-                          .replaceAll(' ', '-')
-                          .replaceAll('_', '-')
-                          .replaceAll('/', '-')
-                          .replaceAll('[', '-')
-                          .replaceAll(']', '')
-                          .replaceAll('##', '__');
-
-    // Valid characters in a CSS identifier are:
-    // - the hyphen (U+002D)
-    // - a-z (U+0030 - U+0039)
-    // - A-Z (U+0041 - U+005A)
-    // - the underscore (U+005F)
-    // - 0-9 (U+0061 - U+007A)
-    // - ISO 10646 characters U+00A1 and higher
-    // We strip out any character not in the above list.
-    cleanedIdentifier = cleanedIdentifier.replaceAll(/[^\u{002D}\u{0030}-\u{0039}\u{0041}-\u{005A}\u{005F}\u{0061}-\u{007A}\u{00A1}-\u{FFFF}]/gu, '');
-
-    // Identifiers cannot start with a digit, two hyphens, or a hyphen followed by a digit.
-    cleanedIdentifier = cleanedIdentifier.replace(/^[0-9]/, '_').replace(/^(-[0-9])|^(--)/, '__');
-
-    return cleanedIdentifier.toLowerCase();
-  }
-
-
-
-  /**
    * Gets the configurable color details.
    *
    * @param {string} sku
@@ -759,7 +737,7 @@ window.commerceBackend = window.commerceBackend || {};
       // Do this mapping for easy access.
       rawProductData.variants.forEach(function (variant) {
         variants[variant.product.sku] = variant;
-      })
+      });
 
       configurableOptions.forEach(function (option) {
         option.values.forEach(function (value) {
@@ -814,11 +792,20 @@ window.commerceBackend = window.commerceBackend || {};
    */
   window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
+    if (Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU])) {
+      return staticDataStore.productDataFromBackend[mainSKU];
+    }
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    globalThis.rcsPhCommerceBackend.getDataSynchronous('single_product_by_sku', {sku: mainSKU});
+    staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
+      if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
+        await window.commerceBackend.getProductsInStyle(response.data.products.items[0]);
+      }
 
-    window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
+      window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
+    });
+
+    return staticDataStore.productDataFromBackend[mainSKU];
   };
 
   /**
@@ -1292,7 +1279,7 @@ window.commerceBackend = window.commerceBackend || {};
     var product = e.detail.result;
     if (product.type_id === 'configurable') {
       product.variants.forEach(function eachVariant(variant) {
-        variant.parent_sku = product.sku;
+        variant.product.parent_sku = product.sku;
       });
     }
 

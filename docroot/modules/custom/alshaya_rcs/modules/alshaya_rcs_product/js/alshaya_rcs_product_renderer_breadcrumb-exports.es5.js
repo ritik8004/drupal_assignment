@@ -54,7 +54,7 @@ exports.normalize = function normalize(
     } else {
       // If we could not find a top level category, we get it from the breadcrumb
       // on the next category.
-      if (typeof c.breadcrumbs[0].category_id !== 'undefined') {
+      if (Array.isArray(c.breadcrumbs) && typeof c.breadcrumbs[0].category_id !== 'undefined') {
         return rootCategoryId = c.breadcrumbs[0].category_id;
       }
     }
@@ -71,8 +71,8 @@ exports.normalize = function normalize(
       && categories[i].breadcrumbs[0].category_id === rootCategoryId
     ) {
       const depth = categories[i].level;
-      // Find the category with deepest depth.
-      if (depth > max) {
+      // Find the category with deepest depth and breadcrumbs.
+      if (depth > max && categories[i].breadcrumbs !== null) {
         deepestCategory = categories[i];
         max = depth;
       }

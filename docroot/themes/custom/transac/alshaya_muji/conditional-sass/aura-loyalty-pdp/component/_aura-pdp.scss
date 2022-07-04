@@ -1,0 +1,5 @@
+.aura-pdp-points-section {
+  @include breakpoint($upto-tablet) {
+    width: 100%;
+  }
+}

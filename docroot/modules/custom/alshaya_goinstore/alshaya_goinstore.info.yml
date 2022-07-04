@@ -1,0 +1,4 @@
+name: Alshaya Goinstore
+type: module
+description: 'Adds Alshaya Goinstore integration to Drupal.'
+core_version_requirement: ^8 || ^9

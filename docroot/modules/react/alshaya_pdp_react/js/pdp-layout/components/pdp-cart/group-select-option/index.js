@@ -2,6 +2,7 @@ import React from 'react';
 import AvailableSelectOptions from '../available-select-options';
 import DefaultSelectOptions from '../default-select-options';
 import SizeGuide from '../size-guide';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const GroupSelectOption = ({
   groupSelect, configurables,
@@ -43,7 +44,17 @@ const GroupSelectOption = ({
         <SizeGuide attrId={code} />
         <div className="group-option-wrapper">
           <ul id={code} className="select-attribute-group clicked">
-            {Object.keys(configurables.values).map((attr) => {
+            {configurables.values && Object.keys(configurables.values).map((key) => {
+              let attr = key;
+              let value = configurables.values[key][groupName];
+              if (hasValue(configurables.values[key])) {
+                // Check if the values object is multidimensional.
+                // use the first key to get respected value.
+                // This might be possible for size attribute.
+                const [attrKey] = Object.keys(configurables.values[key]);
+                attr = attrKey;
+                value = configurables.values[key][attr][groupName];
+              }
               // If the currennt attribute matches the
               // attribute code of the available values.
               if (code === nextCode) {
@@ -51,7 +62,7 @@ const GroupSelectOption = ({
                   <AvailableSelectOptions
                     nextValues={nextValues}
                     attr={attr}
-                    value={configurables.values[attr][groupName]}
+                    value={value}
                     key={attr}
                     selected={selected}
                     code={code}
@@ -63,7 +74,7 @@ const GroupSelectOption = ({
               return (
                 <DefaultSelectOptions
                   attr={attr}
-                  value={configurables.values[attr][groupName]}
+                  value={value}
                   key={attr}
                   selected={selected}
                   code={code}

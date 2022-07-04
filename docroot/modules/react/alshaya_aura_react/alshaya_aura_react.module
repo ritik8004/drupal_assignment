@@ -327,3 +327,27 @@ function alshaya_aura_react_alshaya_acm_customer_update_order_summary_alter(arra
   $orderRow['apcAccruedPoints'] = $order['extension']['apc_accrued_points'] ?? '';
   $orderRow['apcRedeemedPoints'] = $order['extension']['apc_redeemed_points'] ?? '';
 }
+
+/**
+ * Implements hook_alshaya_online_returns_order_details_build_alter().
+ */
+function alshaya_aura_react_alshaya_online_returns_order_details_build_alter(array &$order, array &$orderDetails) {
+  // Do not proceed if Egift card is not enabled.
+  if (!\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled()) {
+    return;
+  }
+  // Do not proceed if payment is not done with aura.
+  if (!isset($order['extension']['loyalty_card']) ||
+    (isset($order['extension']['aura_payment_value']) && $order['extension']['aura_payment_value'] === 0)) {
+    return;
+  }
+  $orderDetails["#order_details"]["payment_method"] .= ', ' . t('Aura Loyalty Card', [], ['context' => 'aura']);
+  $aura_data = [
+    'card_type' => t('Aura Loyalty Card', [], ['context' => 'aura']),
+    'card_number' => substr($order['extension']['loyalty_card'], -4),
+    'payment_type' => 'aura',
+    'weight' => -1,
+  ];
+  $orderDetails['#order_details']['paymentDetails']['aura'] = $aura_data;
+
+}

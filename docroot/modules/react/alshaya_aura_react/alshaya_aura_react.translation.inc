@@ -26,12 +26,6 @@ function _alshaya_aura_react_translations() {
       'Sign up now' => [
         'ar' => 'تسجيل الاشتراك الآن',
       ],
-      'Congrats! You are now part of the exclusive AURA club. You’ll now earn points as you shop online and in stores.' => [
-        'ar' => 'تهانينا! أنت الآن جزء من نادي أورا الحصري. سوف تربح الآن نقاط أثناء التسوق أونلاين وفي المحلات.',
-      ],
-      'To use your points online, please download the AURA app and provide us with a few more details.' => [
-        'ar' => 'يرجى تنزيل تطبيق أورا وتزويدنا ببعض التفاصيل الإضافية وذلك لاستخدام النقاط عبر أونلاين.',
-      ],
       'Do you want to link now?' => [
         'ar' => 'هل ترغب في الربط الآن؟',
       ],
@@ -61,9 +55,6 @@ function _alshaya_aura_react_translations() {
       ],
       'Aura benefits' => [
         'ar' => 'مميزات أورا',
-      ],
-      'Your points will be credited to your account. You will be able to redeem them 14 days after delivery as per Aura Terms & Conditions and Alshaya exchange and refund policies.' => [
-        'ar' => 'سيتم إيداع النقاط في حسابك. يمكنك استبدالها بعد 14 يوم من التوصيل طبقا للشروط والأحكام الخاصة ببرنامج أورا وسياسات الاستبدال والاسترجاع الخاصة بالشايع.',
       ],
       'Say hello to Aura' => [
         'ar' => 'مرحباً بكم في أورا',
@@ -442,9 +433,6 @@ function _alshaya_aura_react_translations() {
         'ar' => "يكسب <span><b>!pts</b> النقاط مع الهالة</span>على هذا الشراء. لاسترداد النقاط ، أكمل تسجيلك في تطبيق Aura MENA.",
         'context' => 'aura',
       ],
-      'Earn <span><b>!pts</b> points with Aura</span> on this purchase.' => [
-        'ar' => 'اربح <span> <b>!pts</b> من النقاط مع Aura </span> على عملية الشراء هذه.',
-      ],
       'Congratulations' => [
         'ar' => 'تهانينا',
         'context' => 'aura',
@@ -485,8 +473,8 @@ function _alshaya_aura_react_translations() {
         'ar' => '@aura_icon تفعيل النقاط',
         'context' => 'aura',
       ],
-      'You have @pts points,' => [
-        'ar' => 'متوفر لديك @pts نقاط,',
+      'You have @pts points' => [
+        'ar' => 'متوفر لديك @pts نقاط',
         'context' => 'aura',
       ],
       '@pts points will expire by @date.' => [
@@ -575,6 +563,42 @@ function _alshaya_aura_react_translations() {
       ],
       'A card number is required to link your card. Please enter your details to proceed.' => [
         'ar' => 'رقم البطاقة يحتاج الربط مع بطاقتك. يرجى ادخال بياناتك للاستمرار.',
+        'context' => 'aura',
+      ],
+      'Congratulations! You are now part of Aura, the loyalty experience personalised for you. You can now earn points when you shop online or instore.' => [
+        'ar' => 'تهانينا! أنت الآن جزء من أورا، برنامج المكافآت المصمم خصيصاً لك. اجمع النقاط كل مرة تتسوق فيها أونلاين أو في المحلات.',
+        'context' => 'aura',
+      ],
+      'To use your points online, complete your registration on the Aura MENA app.' => [
+        'ar' => 'استخدام نقاطك أونلاين، أكمل التسجيل عبر تطبيق Aura MENA.',
+        'context' => 'aura',
+      ],
+      'To use your points online, please download the Aura MENA app and provide us with a few more details.' => [
+        'ar' => 'يرجى تنزيل تطبيق أورا وتزويدنا ببعض التفاصيل الإضافية وذلك لاستخدام النقاط عبر أونلاين.',
+        'context' => 'aura',
+      ],
+      'Sign In' => [
+        'ar' => 'تسجيل الدخول',
+        'context' => 'aura',
+      ],
+      'Add your account details at shopping bag.' => [
+        'ar' => 'أضف تفاصيل حسابك في حقيبة التسوق.',
+        'context' => 'aura',
+      ],
+      'Your points will be credited to your Aura account. You will be able to redeem these a day after your order is delivered.' => [
+        'ar' => 'سيتم إضافة نقاطك إلى حسابك في أورا. وستتمكن من إستردادها بعد يوم من توصيل الطلبية.',
+        'context' => 'aura',
+      ],
+    ],
+    'v5' => [
+      'Earn <span><b>!pts</b> points with Aura</span> on this purchase.' => [
+        'ar' => 'اربح <span> <b>!pts</b> من النقاط مع Aura </span> على عملية الشراء هذه.',
+        'context' => 'aura',
+      ],
+    ],
+    'v6' => [
+      'Aura Loyalty Card' => [
+        'ar' => 'بطاقة الولاء من أورا',
         'context' => 'aura',
       ],
     ],

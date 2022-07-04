@@ -118,11 +118,11 @@ $body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $content_pagetitle_border: $gainsboro;
 $primary_text: $black;
-$primary_link: $brilliant-rose;
-$primary_link-hover: $brilliant-rose;
-$primary_link-active: $brilliant-rose;
+$primary_link: $matterhorn;
+$primary_link-hover: $matterhorn;
+$primary_link-active: $matterhorn;
 $primary_border: $gainsboro;
-$content_link_color: $brilliant-rose;
+$content_link_color: $matterhorn;
 
 // Form elements.
 $primary_form_selector_border: $black;
@@ -147,7 +147,7 @@ $btn_border: $matterhorn;
 $primary_empty_btn: $black;
 $primary_empty_btn_border: $black;
 $primary_brand_button: $brilliant-rose;
-$primary_brand_button_text: $brilliant-rose;
+$primary_brand_button_text: $matterhorn;
 $primary_button_disabled: $ladda-disabled;
 $pending_btn_bg: $tomato;
 $returned_btn_bg: $ash-triplet;
@@ -238,7 +238,7 @@ $label_dark: $black;
 $user_sidebar_block_title: $nero;
 
 // Messages and Errors
-$default_msg_text: $brilliant-rose;
+$default_msg_text: $matterhorn;
 $default_msg_bg: $vanilla;
 $default_msg_border: $gainsboro;
 $default_msg_icon: $nero;
@@ -290,7 +290,7 @@ $maintenance_container_bg: $nero;
 $maintenance_container_border: $nero;
 $maintenance_container_border_top: $nero;
 $maintenance_body_bg: $vanilla;
-$maintenance_link: $brilliant-rose;
+$maintenance_link: $matterhorn;
 
 // Language Switcher
 $lang_switch: $mothercare-black;
@@ -368,14 +368,15 @@ $primary_search_result_hover: $white-smoke-light;
 $header_c_menu_text: $brownish-grey;
 $header_c_menu_icon_color: $black;
 $header_c_menu_icon_text: $vanilla;
-$header_c_menu_search_active_icon: $brilliant-rose;
+$header_c_menu_search_active_icon: $matterhorn;
 $header_c_menu_store_active_icon: $brilliant-rose;
 $header_toggle_sign_default: $vanilla;
 $header_toggle_sign_active_tab: $black;
 $header_toggle_sign_active_tab_bg: $vanilla;
-$header_mobile_menu_bg: $cultured;
+$header_toggle_sign_divider: $light-orange;
+$header_mobile_menu_bg: $vanilla;
 $header_mobile_menu_arrow: $black;
-$header_mobile_menu_active: $vanilla;
+$header_mobile_menu_active: $cultured;
 $header_mobile_menu_close_bg: $brilliant-rose;
 $header_mobile_menu_close: $black;
 $header_mobile_menu_overlay: rgba(249, 249, 249, 0.82);
@@ -390,15 +391,15 @@ $header_secondary_bg_upto_desk: $cultured;
 $header_secondary_menu_link_mobile: $nero;
 $header_secondary_menu_link: $nero;
 $header_secondary_menu_link_hover_bg: $vanilla;
-$header_secondary_menu_mobile_link: $brilliant-rose;
-$header_secondary_menu_link_mobile_hover_bg: $vanilla;
+$header_secondary_menu_mobile_link: $matterhorn;
+$header_secondary_menu_link_mobile_hover_bg: $cultured;
 
 // Header my account nav.
-$header_my_account_h3_title: $vanilla;
+$header_my_account_h3_title: $black;
 $header_my_account_mobile_h3_title: $black;
-$header_my_account_bg: $vanilla;
+$header_my_account_bg: $cultured;
 $header_my_account_link_hover: $vanilla;
-$header_my_account_mobile_link_hover: $brilliant-rose;
+$header_my_account_mobile_link_hover: $matterhorn;
 $header_my_account_icon: $black;
 
 // Mega menu.
@@ -418,7 +419,7 @@ $mm_l2_p: $brownish-grey;
 $mm_l3_link: $nero;
 $mm_l3_link_2: $peacock-blue; // possible old markup.
 $mm_l3_link_bg: $cultured;
-$mm_l3_link_hover: $brilliant-rose;
+$mm_l3_link_hover: $matterhorn;
 $mm_highlight_bg: $white-smoke-light;
 $mm_highlight_label: $black;
 $mm_highlight_title: $black;
@@ -432,7 +433,7 @@ $primary_minicart_quantity_bg: $platinum;
 $mobile_continue_shopping_btn_text: $vanilla;
 $mobile_continue_shopping_btn_bg: $brilliant-rose;
 $mobile_continue_shopping_btn_border: $brilliant-rose;
-$desktop_continue_shopping_btn_text: $vanilla;
+$desktop_continue_shopping_btn_text: $matterhorn;
 $desktop_continue_shopping_btn_bg: $brilliant-rose;
 $desktop_continue_shopping_btn_border: $brilliant-rose;
 
@@ -441,17 +442,17 @@ $minicart_notification_bg: $vanilla;
 $minicart_notification_border: $brilliant-rose;
 $minicart_notification_shadow: $white-two;
 $minicart_notification_name: $grey-ash;
-$minicart_notification_text: $brilliant-rose;
+$minicart_notification_text: $matterhorn;
 $minicart_notification_btn_bg: $brilliant-rose;
 $minicart_notification_btn_text: $matterhorn;
 $minicart_notification_product_title: $grey-ash;
 
 // Delivery tabs.
-$deliverybanner_title: $brilliant-rose;
+$deliverybanner_title: $matterhorn;
 $deliverybanner_subtitle: $nero;
 $deliverybanner_border: $gainsboro;
 $deliverybanner_shadow: $white-smoke-light;
-$deliverybanner_link: $brilliant-rose;
+$deliverybanner_link: $matterhorn;
 
 // Promo panel.
 $promo_panel_mobile_bg: $nero;
@@ -472,7 +473,7 @@ $primary_footer_input_label: $mothercare-black;
 $footer_title_h3: $mothercare-black;
 $footer_link_mobile: $mothercare-black;
 $footer_link: $mothercare-black;
-$footer_link_hover: $brilliant-rose;
+$footer_link_hover: $matterhorn;
 
 // Social links.
 $social_links: $mothercare-black;
@@ -492,7 +493,7 @@ $newsletter_submit_btn: $vanilla;
 $newsletter_submit_btn_text: $black;
 $footer_input_text: $mothercare-black;
 $footer_input_border_active: $vanilla;
-$newsletter_success: $brilliant-rose;
+$newsletter_success: $medium-green;
 
 // Checkout Progress.
 $checkout_seperator: $ash-triplet;
@@ -543,7 +544,7 @@ $plp_filterbar_clearall_border: $nero;
 $plp_filterbar_clearall_text: $nero;
 $plp_search_count: $nero;
 $plp_grid_active_color: $brilliant-rose;
-$plp_all_filter_title: $brilliant-rose;
+$plp_all_filter_title: $matterhorn;
 $plp_clear_all_btn_text: $nero;
 $plp_all_filter_button_color: $brilliant-rose;
 $plp_filter_icon: $black;
@@ -569,8 +570,8 @@ $plp_pager_link: $nero;
 $plp_pager_link_border: $nero;
 
 // Product detail page.
-$pdp_product_title: $mothercare-black;
-$pdp_product_price: $mothercare-black;
+$pdp_product_title: $black;
+$pdp_product_price: $black;
 $pdp_product_special_price: $special-price;
 $pdp_product_special_price_text: $special-price;
 $pdp_product_discount_price: $special-price;
@@ -604,7 +605,7 @@ $pdp_size_option_bg: $black;
 $pdp_size_option_border: $black;
 $pdp_size_option_text: $black;
 $pdp_size_option_selected_text: $black;
-$pdp_size_option_selected_bg: $light-orange;
+$pdp_size_option_selected_bg: rgba(224, 218, 213, 0.3);
 $pdp_size_option_selected_border: $zambezi;
 $pdp_swatch_disabled: $mothercare-black;
 $pdp_size_option_text_hover : $vanilla;
@@ -621,7 +622,7 @@ $pdp_cc_btn_bg: $brilliant-rose;
 $pdp_cc_highlight: $brilliant-rose;
 $pdp_cc_storefinder_label: $grey-ash;
 $pdp_cc_storefinder_input: $greyish;
-$pdp_cc_storefinder_link: $brilliant-rose;
+$pdp_cc_storefinder_link: $matterhorn;
 $pdp_cc_changelocation: $white-two;
 $pdp_cc_changelocation_icon: $black;
 $pac_item: $grey-ash;
@@ -631,7 +632,7 @@ $pdp_cc_top_stores_list_border: $black;
 $pdp_cc_top_stores_list_name: $black;
 $pdp_cc_top_stores_list_time: $black;
 $pdp_cc_other_stores: $black;
-$pdp_cc_other_stores_mobile: $brilliant-rose;
+$pdp_cc_other_stores_mobile: $matterhorn;
 $pdp_all_stores_modal_bg: $vanilla;
 $pdp_all_stores_modal_border: $black;
 $pdp_all_stores_name: $breadcrumb-active;
@@ -652,10 +653,10 @@ $fake_apply_btn_border: $vanilla;
 $clear_btn_border: $gainsboro;
 $clear_btn_text: $gainsboro;
 $not_buyable_msg: $black;
-$not_buyable_help: $brilliant-rose;
+$not_buyable_help: $matterhorn;
 
 // Department page
-$department_category_list_hover: $brilliant-rose;
+$department_category_list_hover: $matterhorn;
 $department_category_accordion_title_arrow: $nero;
 $department_category_accordion_link_arrow: $nero;
 $department_category_accordion_title: $black;
@@ -664,7 +665,7 @@ $department_category_accordion_title: $black;
 // Store finder header form.
 $store_finder_header: $black;
 $store_finder_header_desktop: $black;
-$store_finder_subheader: $brilliant-rose;
+$store_finder_subheader: $matterhorn;
 $store_finder_backbtn: $black;
 $store_finder_icon: $black;
 $store_finder_text: $black;
@@ -684,10 +685,10 @@ $store_finder_glossary_title: $nero;
 $store_finder_glossary_alphabet: $brilliant-rose;
 $store_finder_glossary_text: $nero;
 $store_finder_glossary_icon: $black;
-$store_finder_glossary_text_hover: $brilliant-rose;
+$store_finder_glossary_text_hover: $matterhorn;
 $store_finder_glossary_text_border: $white;
 $store_finder_glossary_border: $greyish;
-$store_finder_glossary_link: $brilliant-rose;
+$store_finder_glossary_link: $matterhorn;
 // Store finder search results.
 $store_finder_search_results_label: $black;
 $store_finder_search_results_counter_bg: $vivid-raspberry;
@@ -891,7 +892,7 @@ $checkout_confirm_discount_row_td_4th_child: $white-smoke-light;
 $checkout_confirm_continue_shopping_bg: $vanilla;
 $checkout_confirm_continue_shopping_border: $marine-blue;
 $checkout_confirm_order_summary_row: $vanilla;
-$checkout_confirm_order_summary_row_text: $brilliant-rose;
+$checkout_confirm_order_summary_row_text: $matterhorn;
 $checkout_order_print_btn_bg: $vanilla;
 $checkout_order_print_btn_border: $nero;
 $checkout_order_print_btn_txt: $nero;
@@ -925,7 +926,7 @@ $user_order_list_hover_bg: $white-four;
 $user_order_list_hover_link_bg: $white-smoke;
 $user_order_list_light: $ash-triplet;
 $user_order_list_dark: $black;
-$user_order_help_text: $brilliant-rose;
+$user_order_help_text: $matterhorn;
 $user_order_help_text_links: $nero;
 $user_order_help_bg: transparent;
 $user_order_help_border: $gainsboro;
@@ -934,14 +935,14 @@ $user_login_section_title: $nero;
 // User Form
 $user_form_text: $black;
 $user_form_error_label: $vanilla;
-$user_field_link: $brilliant-rose;
+$user_field_link: $matterhorn;
 $user_captcha: $greyish;
 $user_pwd_input: $grey-ash;
 $user_pwd_unmask: $black;
 $user_account_nav: $matterhorn;
 $my_account_nav: $nero;
 $my_account_nav_active: $black;
-$my_account_nav_hover: $brilliant-rose;
+$my_account_nav_hover: $matterhorn;
 
 //block-myaccountneedhelp
 $myaccountneedhelp_bg: $pale-grey;
@@ -982,7 +983,7 @@ $address_pp_delete_closebtn_icon: $black;
 $basket_page_title: $black;
 $basket_sku_promo_link: $red-error;
 $basket_oos_tr_bg: $white-four;
-$basket_oos_inline_txt: $brilliant-rose;
+$basket_oos_inline_txt: $matterhorn;
 $basket_oos_inline_qty_border: $red-error;
 $basket_img_border: $gainsboro;
 $basket_img_bg: $vanilla;
@@ -991,7 +992,7 @@ $basket_continue_shopping_btn_border: $black;
 $basket_continue_shopping_link: $nero;
 $basket_sell_hover_link: $nero;
 $basket_content_link_color: $nero;
-$basket_available_code: $brilliant-rose;
+$basket_available_code: $matterhorn;
 // Pri text is product title, price, etc.
 $basket_td_pri_txt: $black;
 // Sec text is Size, color, item code attributes.
@@ -1012,7 +1013,7 @@ $privilege_earn_txt: $grey-ash;
 
 // Basket Promotions.
 $basket_fixed_percentage_inactive_header_promo_bg: $brilliant-rose;
-$basket_fixed_percentage_active_header_promo_txt: $brilliant-rose;
+$basket_fixed_percentage_active_header_promo_txt: $matterhorn;
 $basket_free_delivery_inactive_header_promo_bg: $brownish-grey;
 $basket_free_delivery_active_header_promo_txt: $brownish-grey;
 
@@ -1104,7 +1105,7 @@ $bra_size_filter_sizeguide: $grey-ash;
 $bra_size_filter_slider_arrow_color: $mothercare-black;
 
 // PLP Sub category block.
-$plp_sub_cat_block_cat_title_hover: $brilliant-rose;
+$plp_sub_cat_block_cat_title_hover: $matterhorn;
 $plp_sub_cat_block_cat_title: $nero;
 $plp_sub_cat_page_cat_title: $black;
 $plp_sub_cat_page_cat_desc: $ash-triplet;
@@ -1144,7 +1145,7 @@ $algolia-search-icon: $black;
 $spc-deliver-button: $matterhorn;
 $spc-cnc-toggle-bg-active: $brilliant-rose;
 $spc-checkout-cnc-map-expand: $brilliant-rose;
-$spc-cart-free-gift-coupon-code: $brilliant-rose;
+$spc-cart-free-gift-coupon-code: $matterhorn;
 $spc-cart-free-gifts-link: $nero;
 $spc-cart-promo-code-apply-btn-txt: $mothercare-black;
 $spc-cart-promo-code-apply-btn-bg: $vanilla;
@@ -1161,22 +1162,25 @@ $fit-calc-size-guide-btn-bg: $brilliant-rose;
 $fit-calc-empty-input: $brilliant-rose;
 $fit-calc-result: $vivid-raspberry;
 $fit-calc-selected-radio: $vivid-raspberry;
-$fit-calc-btn-text: $matterhorn;
+$fit-calc-btn-text: $vanilla;
+$fit-select-arrow-bg: $vanilla;
 
 // Quick view size filter.
 $plp-quick-view-product-size-text: $black;
 $plp-quick-view-product-size-text-active: $black;
 $plp-quick-view-product-size-border: $_grey-51-6;
 $plp-quick-view-product-size-border-hover: $black;
-$plp-quick-view-product-size-active-bg: $light-orange;
+$plp-quick-view-product-size-active-bg: rgba(224, 218, 213, 0.3);
 $plp-quick-view-product-size-text-disabled: $white;
 $plp-quick-view-product-size-bg-border: $white-three;
+$plp-quick-view-product-select-bg: $whisper-dark;
+$plp_quick_color_variant_hover_border: $nero;
 
 // Wishlist
 $wishlist-header-notification-border: $brilliant-rose;
 $wishlist-button-border: $matterhorn;
 $wishlist-header-notification-text: $black;
-$wishlist-header-notification-span: $brilliant-rose;
+$wishlist-header-notification-span: $matterhorn;
 $wishlist-header-login-message: $black;
 $wishlist-button-bg: $primary_btn_bg;
 $wishlist-button-bg-hover: $primary_btn_bg;
@@ -1185,7 +1189,7 @@ $wishlist-basket-modal-close-bg: $mothercare-black;
 $wishlist-share-text: $black;
 $my-wishlist-share-modal-hover-bg: $primary_btn_bg;
 $wishlist-oos: $red-error;
-$my-wishlist-share-modal-header: $brilliant-rose;
+$my-wishlist-share-modal-header: $matterhorn;
 $wishlist-button-txt: $matterhorn;
 $wishlist-basket-button-border: $matterhorn;
 

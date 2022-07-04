@@ -1,0 +1,29 @@
+@include breakpoint($upto-desktop) {
+  body.aura-enabled {
+    &.logged-in {
+      ul.menu--one__list.menu__list,
+      .c-my-account-nav {
+        top: rem(91.2);
+      }
+
+      .toggle--sign {
+        .one.shop {
+          display: inline-block;
+          width: 49.5%;
+          height: rem(47);
+        }
+
+        .account--logged_in.one {
+          width: 50.5%;
+          height: rem(47);
+        }
+      }
+    }
+
+    .toggle--sign {
+      .account.one {
+        padding: 0 rem(8);
+      }
+    }
+  }
+}

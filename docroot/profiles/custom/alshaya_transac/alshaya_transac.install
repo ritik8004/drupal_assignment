@@ -21,13 +21,13 @@ use Drupal\search_api\Entity\Server;
  * Disable search api default server and uninstall acquia_search module.
  */
 function alshaya_transac_update_8141() {
-  // Disable search api default server.
-  $acquia_search_server = Server::load('acquia_search_server');
-  if (!empty($acquia_search_server)) {
-    $acquia_search_server->setStatus(FALSE)->save();
-  }
-  // Remove acquia_search module.
   if (\Drupal::service('module_handler')->moduleExists('acquia_search')) {
+    // Disable search api default server.
+    $acquia_search_server = Server::load('acquia_search_server');
+    if (!empty($acquia_search_server)) {
+      $acquia_search_server->setStatus(FALSE)->save();
+    }
+    // Remove acquia_search module.
     \Drupal::service('module_installer')->uninstall(['acquia_search']);
   }
 

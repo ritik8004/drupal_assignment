@@ -1,0 +1,391 @@
+.order-detail {
+  .user__order--detail {
+    #online-returned-items {
+      display: block;
+      border: none;
+    }
+
+    div.order-item-row:not(.cancelled-refund-text) {
+      word-break: break-word;
+
+      .return-initiated-items {
+        padding: 0;
+
+        @include breakpoint($tablet) {
+          padding: 0 !important;
+        }
+      }
+    }
+
+    .return-initiated-item,
+    .returned-items-row {
+      .returned-items,
+      .title-wrapper,
+      .return-status-header,
+      .return-status-wrapper,
+      .return-status-id-container,
+      .return-id,
+      .item-list-wrapper,
+      .order-item-image,
+      .image-data-wrapper,
+      .order__details--wrapper,
+      .order__details--description,
+      .item-price,
+      .item-total-price {
+        margin: 0;
+      }
+
+      .order-item-image,
+      .order__details--description,
+      .item-price,
+      .item-total-price {
+        padding: rem(22) rem(24);
+
+        @include breakpoint($only-tablet) {
+          padding: rem(22) rem(8) rem(55) rem(16) !important;
+        }
+      }
+
+      .return-id {
+        font-size: rem(12);
+        line-height: rem(16);
+        color: $online-return-refund-grey-txt;
+        padding: rem(4) 0 rem(8);
+        border-bottom: rem(1) solid $online-return-order-detail-border;
+      }
+
+      .item-list-wrapper {
+        display: grid;
+        grid-template: "a b" auto/rem(187) auto;
+        border-bottom: rem(1) solid $primary_border;
+
+        @include breakpoint($tablet) {
+          grid-template: "a b c d" auto/rem(135) minmax(auto, 2fr) minmax(auto, 1.75fr) minmax(8.75rem, auto);
+        }
+
+        @include breakpoint($desktop) {
+          grid-template: "a b c d" auto/rem(184) auto rem(169) rem(180);
+        }
+
+        .order-item-image {
+          @include breakpoint($only-mobile) {
+            padding: rem(22) rem(16);
+          }
+        }
+
+        .order__details--wrapper {
+          display: block;
+          grid-area: b;
+          overflow-wrap: break-word;
+
+          @include breakpoint($only-mobile) {
+            padding: rem(22) rem(16);
+          }
+
+          @include breakpoint($desktop) {
+            display: flex;
+          }
+        }
+
+        .order__details--description {
+          word-break: break-word;
+
+          @include breakpoint($only-mobile) {
+            padding: 0;
+          }
+
+          @include breakpoint($only-tablet) {
+            padding-bottom: 0 !important;
+          }
+
+          @include breakpoint($desktop) {
+            flex-basis: rem(222);
+          }
+        }
+
+        .item-price {
+          @include breakpoint($only-tablet) {
+            padding-top: 0 !important;
+            margin-top: rem(45);
+          }
+
+          @include breakpoint($desktop) {
+            flex-basis: rem(166);
+            grid-area: c;
+          }
+        }
+
+        .item-total-price {
+          grid-area: c;
+          background: $order_detail_total_tr_row_price_td;
+
+          @include breakpoint($only-mobile) {
+            padding: 0;
+            margin-top: rem(29);
+            background: none;
+          }
+        }
+      }
+
+      .return-status-wrapper,
+      .return-status-id-container {
+        .return-status {
+          margin-bottom: 0;
+        }
+
+        .status-label {
+          font-size: rem(18);
+          line-height: rem(22);
+          font-family: $alshaya-bold;
+
+          @include breakpoint($only-mobile) {
+            display: inline-block;
+            padding-bottom: rem(5);
+          }
+
+          &.closed,
+          &.return-rejected,
+          &.goods-collection-failed,
+          &.customer-cancelled-return {
+            color: $online-return-status-red-label;
+          }
+
+          &.processed-closed,
+          &.return-request-raised,
+          &.return-request-accepted,
+          &.goods-collected,
+          &.refunded {
+            color: $online-return-status-green-label;
+          }
+
+          &.pending,
+          &.courier-assigned,
+          &.collection-initiated,
+          &.refund-initiated {
+            color: $online-return-status-orange-label;
+          }
+        }
+
+        .status-message {
+          font-size: rem(14);
+          line-height: rem(18);
+
+          @include breakpoint($only-mobile) {
+            display: block;
+            padding-bottom: rem(4);
+          }
+        }
+      }
+    }
+
+    .returned-items {
+      .items-wrapper {
+        padding: 0;
+      }
+
+      .title-wrapper {
+        font-size: rem(18);
+        line-height: rem(22);
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+        padding: rem(38) 0 rem(8);
+        border-bottom: rem(1) solid $online-return-order-detail-border;
+
+        span.rejected {
+          color: $online-return-status-orange-label;
+        }
+      }
+
+      .return-items-wrapper {
+        margin-bottom: 0;
+        padding: 0;
+      }
+
+      .return-status-wrapper {
+        padding-top: rem(16);
+        margin-bottom: 0;
+
+        @include breakpoint($tablet) {
+          padding-top: rem(24);
+        }
+      }
+    }
+
+    .print-cancel-wrapper {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      margin-bottom: 0;
+
+      @include breakpoint($tablet) {
+        flex-direction: row;
+      }
+    }
+
+    .print-return-label-wrapper {
+      margin-#{$right}: rem(16);
+      margin-bottom: 0;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-#{$right}: 0;
+        margin-top: rem(5);
+      }
+
+      .print-label-button {
+        padding: rem(11);
+        padding-#{$left}: rem(13);
+        border: rem(1) solid $online-return-cancel-button-border;
+        font-size: rem(14);
+        line-height: rem(18);
+        text-transform: uppercase;
+        background: $online-return-print-button-bg;
+        display: flex;
+        align-items: center;
+        height: rem(40);
+
+        @include breakpoint($only-mobile) {
+          justify-content: center;
+        }
+
+        &::before {
+          content: '';
+          display: block;
+          width: rem(22);
+          height: rem(22);
+          background: url('#{$base_theme_img_directory_path}/icons/print-icon.svg') no-repeat;
+          margin-#{$right}: rem(9);
+        }
+      }
+    }
+
+    .print-return-label-wrapper + .cancel-return-button-wrapper {
+      @include breakpoint($only-mobile) {
+        margin-top: rem(16);
+      }
+    }
+
+    .cancel-return-button-wrapper {
+      margin-bottom: 0;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+
+      button {
+        padding: rem(11) rem(13);
+        border: rem(1) solid $online-return-cancel-button-border;
+        width: 100%;
+        height: rem(40);
+
+        @include breakpoint($tablet) {
+          width: auto;
+        }
+      }
+
+      span {
+        display: flex;
+        align-items: center;
+        text-transform: uppercase;
+        justify-content: center;
+        font-size: rem(14);
+        line-height: rem(18);
+
+        @include icon(close, before) {
+          font-size: rem(16);
+          margin-#{$right}: rem(8);
+        }
+      }
+    }
+
+    .return-initiated-item {
+      .return-status-header {
+        padding: 0 !important;
+      }
+
+      .return-id {
+        border: none;
+      }
+
+      .return-status-wrapper {
+        display: flex;
+        justify-content: space-between;
+        padding: rem(33) 0 rem(10);
+        margin: 0;
+        border-bottom: rem(1) solid $online-return-order-detail-border;
+        flex-direction: column;
+
+        @include breakpoint($tablet) {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+      }
+
+      .return-status-id-container {
+        padding-#{$right}: rem(20);
+      }
+    }
+
+    .order-item-image {
+      img {
+        width: 8rem;
+
+        @include breakpoint($tablet) {
+          width: 7.125rem;
+        }
+      }
+    }
+
+    .total-refund-row {
+      display: grid;
+      grid-template: "a b" auto/11.6875rem auto;
+      background: $order_detail_total_tr_row;
+
+      @include breakpoint($tablet) {
+        grid-template: "a b c d" auto/rem(135) minmax(auto, 2fr) minmax(auto, 1.75fr) minmax(8.75rem, auto);
+      }
+
+      @include breakpoint($desktop) {
+        grid-template: "a b c d e" auto/11.5rem auto 14.375rem 10.5625rem 11.25rem;
+      }
+
+      > div {
+        padding: rem(10) rem(22);
+
+        @include breakpoint($only-tablet) {
+          padding: rem(10) rem(16);
+        }
+      }
+
+      div.right--align {
+        text-align: $right;
+        min-width: rem(128);
+
+        html[lang=ar] & {
+          @include breakpoint($only-mobile) {
+            min-width: rem(160);
+            padding: rem(10) rem(16);
+          }
+        }
+      }
+
+      .price-type__wrapper,
+      .price,
+      .dark {
+        margin-bottom: 0;
+      }
+
+      div.blend {
+        background: $order_detail_total_tr_row_price_td;
+
+        @include breakpoint($tablet) {
+          background: $order_detail_total_tr_row_price_td_tablet;
+        }
+
+        div {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}

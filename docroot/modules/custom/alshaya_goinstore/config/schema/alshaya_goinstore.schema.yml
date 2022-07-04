@@ -1,0 +1,7 @@
+alshaya_goinstore.settings:
+  type: config_object
+  label: 'Goinstore settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Config to enable/disable Goinstore'

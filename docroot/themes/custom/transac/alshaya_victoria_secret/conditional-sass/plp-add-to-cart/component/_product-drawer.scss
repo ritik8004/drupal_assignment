@@ -1,0 +1,47 @@
+.product-drawer {
+  &-content-wrapper {
+    .alshayaSelect {
+      &__control {
+        @include breakpoint($only-mobile) {
+          min-width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.swatch-list {
+  .li-swatch-image,
+  .li-swatch-color {
+    a {
+      &.active {
+        &::after {
+          border: rem(1) solid $pdp_white_color_attribute_border;
+          border-radius: 50%;
+        }
+      }
+
+      &:hover {
+        &::after {
+          content: '';
+          border: rem(1) solid $plp_quick_color_variant_hover_border;
+          border-radius: 50%;
+          position: absolute;
+          display: inline-block;
+          z-index: 1;
+          pointer-events: none;
+          height: rem(44);
+          width: rem(44);
+          top: rem(-3);
+          #{$left}: rem(-3);
+        }
+      }
+    }
+  }
+
+  .li-swatch-image {
+    img {
+      border-radius: 50%;
+    }
+  }
+}

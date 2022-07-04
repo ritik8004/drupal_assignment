@@ -46,4 +46,27 @@
       }
     }
   }
+
+  .order-detail & {
+    > div > div div {
+      line-height: normal;
+      font-weight: normal;
+    }
+
+    .delivery-details-row {
+      color: $order_detail_delivery_details_row_text;
+
+      > div {
+        @include breakpoint($tablet) {
+          padding: rem(8) rem(22) rem(10);
+          padding-#{$left}: rem(56);
+        }
+
+        .icon-ic_infomation {
+          top: rem(4);
+          position: relative;
+        }
+      }
+    }
+  }
 }
