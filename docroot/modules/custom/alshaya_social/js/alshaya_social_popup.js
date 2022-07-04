@@ -8,21 +8,27 @@
   Drupal.behaviors.alshayaSocial = {
     attach: function (context, settings) {
       // create new Social auth popup window and monitor it
-      $('.auth-link').click(function () {
+      $('.auth-link').once('auth-link').on('click', function (event) {
+        event.preventDefault();
+
         var authLink = $(this).attr('social-auth-link');
-        var destination = $.urlParam('destination');
+        var destination = urlParam('destination') || Drupal.url('user');
+
+        // Log the social login initiation.
+        Drupal.alshayaLogger('notice', 'User started social authentication on @authLink.', {
+          '@authLink': authLink,
+        });
+
         Drupal.socialAuthPopup({
           path: authLink,
-          callback: function () {
-            if (destination) {
-              window.location.href = destination;
-            } else {
-              // Log the social login.
-              Drupal.alshayaLogger('warning', 'User performed social authentication on @authLink and failed.', {
-                '@authLink': authLink,
-              });
-              window.location.reload();
-            }
+          destination: destination,
+          callback: function (authLink, destination) {
+            // Log the social login completion.
+            Drupal.alshayaLogger('notice', 'User logged in via social authentication on @authLink.', {
+              '@authLink': authLink,
+            });
+
+            window.location.href = destination;
           }
         });
       });
@@ -36,15 +42,25 @@
   Drupal.socialAuthPopup = function (options) {
     options.windowName = options.windowName || 'ConnectWithSocialAuth';
     options.windowOptions = options.windowOptions || 'location=0,status=0,width=600,height=600,top=100,left=500';
-    options.callback = options.callback || function () { window.location.reload(); };
+
     var that = this;
     that._socialAuthWindow = window.open(options.path, options.windowName, options.windowOptions);
     that._socialAuthInterval = window.setInterval(function () {
       try {
+        // If popup closed by user, reload the page.
+        if(that._socialAuthWindow.closed) {
+          // Log the social login failure.
+          Drupal.alshayaLogger('warning', 'User login via social authentication on @authLink failed.', {
+            '@authLink': options.path,
+          });
+
+          window.clearInterval(that._socialAuthInterval);
+        }
+
         if (typeof that._socialAuthWindow.drupalSettings.user.uid !== 'undefined' && that._socialAuthWindow.drupalSettings.user.uid !== 0) {
           window.clearInterval(that._socialAuthInterval);
           that._socialAuthWindow.close();
-          options.callback();
+          options.callback(options.path, options.destination);
         }
       }
       catch (e) {
@@ -53,7 +69,13 @@
     }, 1000);
   };
 
-  $.urlParam = function (name) {
+  /**
+   * Helper function to get param value from URL query string.
+   *
+   * @param name
+   * @returns {string|number|null}
+   */
+  function urlParam (name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results == null){
        return null;
