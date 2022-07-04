@@ -1,0 +1,10 @@
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu.megamenu-fullwidth-layout {
+    // Making the height of the mengamenu dynamic according to the inner content height
+    li.menu--one__list-item {
+      ul.menu--two__list {
+        height: auto !important;
+      }
+    }
+  }
+}

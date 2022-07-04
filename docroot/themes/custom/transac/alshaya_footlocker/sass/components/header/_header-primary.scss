@@ -390,14 +390,6 @@ header {
         background: $mm_l2_bg;
       }
     }
-
-    &:not(.megamenu-inline-layout) {
-      li.menu--one__list-item {
-        ul.menu--two__list {
-          height: auto !important;
-        }
-      }
-    }
   }
 }
 
