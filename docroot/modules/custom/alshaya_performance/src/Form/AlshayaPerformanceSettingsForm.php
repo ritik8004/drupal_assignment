@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AlshayaPerformanceSettingsForm.
+ * Class Alshaya Performance Settings Form to store and alter configuration.
  */
 class AlshayaPerformanceSettingsForm extends ConfigFormBase {
 
