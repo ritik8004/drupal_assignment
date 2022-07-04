@@ -935,9 +935,13 @@ window.commerceBackend = window.commerceBackend || {};
     fetchAndProcessCustomAttributes();
 
     // Return the label.
-    return Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue])
-      ? staticDataStore['attrLabels'][attrName][attrValue]
-      : '';
+    if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])
+      && Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue]))
+    {
+      return staticDataStore['attrLabels'][attrName][attrValue];
+    }
+
+    return '';
   };
 
   /**
