@@ -33,6 +33,12 @@
   }
 }
 
+.c-promo__item:nth-child(2) {
+  @include breakpoint($desktop) {
+    margin-bottom: 1.75rem;
+  }
+}
+
 .c-promo__item {
   text-align: $left;
 
