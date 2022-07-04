@@ -1,0 +1,7 @@
+alshaya_performance.css_cls_settings:
+  path: '/admin/config/alshaya/css-cls-settings'
+  defaults:
+    _form: '\Drupal\alshaya_performance\Form\AlshayaCssClsSettingsForm'
+    _title: 'CSS CLS Settings'
+  requirements:
+    _permission: 'administer site configuration'

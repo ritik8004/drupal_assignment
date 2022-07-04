@@ -158,6 +158,11 @@ function alshaya_performance_flush_frontend_caches($include_twig = FALSE) {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_performance_page_attachments_alter(array &$attachments) {
+
+  if (\Drupal::config('alshaya_performance.settings')->get('enable_css_cls')) {
+    $attachments['#attached']['library'][] = 'alshaya_performance/improve_cls_css';
+  }
+
   // No preloads if param present.
   $preload_param = \Drupal::request()->get('preload');
   if (isset($preload_param) && $preload_param == 0) {
@@ -248,5 +253,14 @@ function alshaya_performance_css_alter(&$css, AttachedAssetsInterface $assets) {
         unset($css[$path]);
       }
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_performance_preprocess_html(&$variables) {
+  if (\Drupal::config('alshaya_performance.settings')->get('enable_css_cls')) {
+    $variables['attributes']['class'][] = 'cls-initial-layout';
   }
 }

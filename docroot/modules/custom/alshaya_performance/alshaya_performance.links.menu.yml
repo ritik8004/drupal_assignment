@@ -1,0 +1,5 @@
+alshaya_performance.css_cls_settings:
+  route_name: alshaya_performance.css_cls_settings
+  title: 'Alshaya CLS with CSS Settings'
+  description: 'Configure CLS with CSS Settings from here.'
+  parent: alshaya_master.alshaya_admin
