@@ -400,7 +400,7 @@ exports.render = function render(
       }
 
       const data = {
-        description: entity.description.html,
+        description: entity.description,
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,

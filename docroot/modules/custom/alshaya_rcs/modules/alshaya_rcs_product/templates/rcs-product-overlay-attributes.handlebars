@@ -1,0 +1,9 @@
+{{'Handlebars template for overlay attributes, see docroot/modules/custom/alshaya_acm_product/templates/pdp-additional-attribute-overlay.html.twig'}}
+{{#data.overlay_attributes}}
+  <h3> {{this.title}}</h3>
+  <ul>
+    {{#each this.values}}
+      <li>{{this}}</li>
+    {{/each}}
+  <ul>
+{{/data.overlay_attributes}}
