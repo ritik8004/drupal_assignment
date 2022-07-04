@@ -19,25 +19,7 @@ function getLocale(bazaarVoiceSettings) {
   return `&locale=${bazaarVoiceSettings.reviews.bazaar_voice.locale}`;
 }
 
-function getbazaarVoiceSettings(productId = undefined) {
-  const settings = [];
-  let productInfo = window.commerceBackend.getProductData(productId);
-
-  if (typeof productId !== 'undefined' && productInfo !== null) {
-    settings.productid = productId;
-    settings.reviews = productInfo.alshaya_bazaar_voice;
-  } else {
-    productInfo = window.commerceBackend.getProductData(null, 'productInfo');
-    Object.entries(productInfo).forEach(([key]) => {
-      settings.productid = key;
-      settings.reviews = productInfo[key].alshaya_bazaar_voice;
-    });
-  }
-  return settings;
-}
-
-// @todo Find a better way to do this in V3.
-window.alshayaBazaarVoice.getbazaarVoiceSettings = getbazaarVoiceSettings;
+const getbazaarVoiceSettings = (productId = undefined) => window.alshayaBazaarVoice.getbazaarVoiceSettings(productId);
 
 function getUserBazaarVoiceSettings() {
   const settings = [];

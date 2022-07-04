@@ -92,7 +92,19 @@ function alshaya_rcs_bazaar_voice_library_info_alter(&$libraries, $extension) {
       $libraries['utility']['js']["/$self_module_path/js/alshaya_rcs_bazaar_voice.utility.js"] = $options;
       $libraries['utility']['dependencies'] = [
         'core/drupalSettings',
+        'core/drupal',
       ];
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_rcs_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  /** @var \Drupal\alshaya_rcs_bazaar_voice\Service\AlshayaRcsBazaarVoice $alshaya_bazaar_voice */
+  $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
+  $basic_configs = $alshaya_bazaar_voice->getBasicConfigurations();
+  $settings = $alshaya_bazaar_voice->getProductBazaarVoiceDetails(NULL, $basic_configs);
+  $build['#attached']['drupalSettings']['alshaya_bazaar_voice'] = $settings;
 }
