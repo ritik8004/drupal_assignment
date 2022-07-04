@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5f697c78a65139f0fed8fa7c29d203e",
+    "content-hash": "a64f0d7d70792033b5aafa9a83bd557f",
     "packages": [
         {
             "name": "acquia/acsf-tools",
