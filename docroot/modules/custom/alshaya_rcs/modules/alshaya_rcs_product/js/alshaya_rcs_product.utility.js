@@ -556,14 +556,18 @@ window.commerceBackend = window.commerceBackend || {};
       var unsortedValues = {};
       var sortedValues = [];
       configurables[attributeName].values.forEach(function eachValue(value) {
-        var key = Object.keys(allAttributes[attributeName]).indexOf(String(value.value_id));
-        unsortedValues[key] = value;
+        if (Drupal.hasValue(value.value_id) && Drupal.hasValue(allAttributes[attributeName])) {
+          var key = Object.keys(allAttributes[attributeName]).indexOf(String(value.value_id));
+          unsortedValues[key] = value;
+        }
       });
 
-      Object.keys(unsortedValues).sort().forEach(function eachElement(value, index) {
-        sortedValues.push(unsortedValues[value]);
-      });
-      configurablesClone[attributeName].values = sortedValues;
+      if (Drupal.hasValue(unsortedValues)) {
+        Object.keys(unsortedValues).sort().forEach(function eachElement(value, index) {
+          sortedValues.push(unsortedValues[value]);
+        });
+        configurablesClone[attributeName].values = sortedValues;
+      }
     });
 
     return configurablesClone;
