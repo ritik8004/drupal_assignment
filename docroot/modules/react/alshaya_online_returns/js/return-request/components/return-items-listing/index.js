@@ -173,7 +173,7 @@ class ReturnItemsListing extends React.Component {
         && productDiscountedRuleIds.some((pid) => discountedRuleId.includes(pid))
         // We don't want to include the products which are already returned.
         && productDetails.ordered > 0) {
-        productDetails.qty_requested = 1;
+        productDetails.qty_requested = productDetails.qty_ordered;
         productDetails.resolution = getDefaultResolutionId();
         productDetails.isChecked = true;
         // Add a flag value to disable the qty button.
