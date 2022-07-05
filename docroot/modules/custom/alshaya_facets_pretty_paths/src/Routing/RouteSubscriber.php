@@ -7,6 +7,8 @@ use Drupal\Core\Url;
 use Drupal\facets\FacetSource\FacetSourcePluginManager;
 use Symfony\Component\Routing\RouteCollection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Symfony\Component\Routing\Route;
+use Drupal\Core\Routing\RoutingEvents;
 
 /**
  * Alter facet source routes, adding a parameter.
@@ -44,6 +46,20 @@ class RouteSubscriber extends RouteSubscriberBase {
   /**
    * {@inheritdoc}
    */
+  public static function getSubscribedEvents() {
+    $events = parent::getSubscribedEvents();
+    // Ensure to run after
+    // \Drupal\views\Plugin\views\display\PathPluginBase::alterRoutes
+    // Hence we need to trigger this after
+    // \Drupal\views\EventSubscriber\RouteSubscriber::alterRoutes.
+    $events[RoutingEvents::ALTER] = ['onAlterRoutes', -200];
+
+    return $events;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function alterRoutes(RouteCollection $collection) {
     $sources = $this->facetSourcePluginManager->getDefinitions();
     foreach ($sources as $source) {
@@ -73,32 +89,20 @@ class RouteSubscriber extends RouteSubscriberBase {
         $sourceRoute = $collection->get($routeName);
 
         if ($sourceRoute) {
-          if (strpos($sourceRoute->getPath(), '{facets_query}') === FALSE) {
-            $sourceRoute->setPath($sourceRoute->getPath() . '/{facets_query}');
+          $originalPath = $sourceRoute->getPath();
+          if (!strpos($originalPath, '{facets_query}')) {
+            // Remove the existing route object so that we can rebuild.
+            $collection->remove($routeName);
+            // Building new route object with {facets_query} param.
+            $newFacetRoute = new Route($originalPath . '/{facets_query}', $sourceRoute->getDefaults());
+            $newFacetRoute->setMethods($sourceRoute->getMethods());
+            $newFacetRoute->setDefault('facets_query', '');
+            $newFacetRoute->setRequirements($sourceRoute->getRequirements());
+            $newFacetRoute->setRequirement('facets_query', '.*');
+            $newFacetRoute->setOptions($sourceRoute->getOptions());
+            // Assigning the new route object to same route name.
+            $collection->add($routeName, $newFacetRoute);
           }
-          $sourceRoute->setDefault('facets_query', '');
-          $sourceRoute->setRequirement('facets_query', '.*');
-
-          // Core improperly checks for route parameters that can have a slash
-          // in them, only making the route match for parameters that don't
-          // have a slash.
-          // Workaround that here by adding fake optional parameters to the
-          // route, that'll never be filled, and won't get any value set because
-          // {facets_query} will already have matched the whole path.
-          // Note that until the core bug is resolved, the path maximum length
-          // of 255 in the router table induces a limit to the number of facets
-          // that can be triggered, which will depend on the facets source path
-          // length. For a base path of "/search", 40 placeholders can be added,
-          // which means 20 active filter pairs.
-          // See https://www.drupal.org/project/drupal/issues/2741939
-          $routePath = $sourceRoute->getPath();
-
-          for ($i = 0; strlen($routePath) < 250; $i++) {
-            $sourceRoute->setDefault('f' . $i, '');
-            $routePath .= "/{f{$i}}";
-          }
-
-          $sourceRoute->setPath($routePath);
         }
       }
       catch (\Exception $e) {
