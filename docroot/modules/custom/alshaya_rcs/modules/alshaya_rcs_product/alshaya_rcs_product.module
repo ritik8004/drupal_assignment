@@ -66,9 +66,6 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     'product_gallery_mobile' => [
       'variables' => [],
     ],
-    'rcs_product_teaser' => [
-      'variables' => [],
-    ],
     'rcs_related_products_wrapper' => [
       'variables' => [],
     ],
@@ -256,6 +253,9 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   ]);
   $build['#attached']['drupalSettings']['alshayaRcs']['not_buyable_message'] = $product_settings->get('not_buyable_message.value');
   $build['#attached']['drupalSettings']['alshayaRcs']['not_buyable_help_text'] = $not_buyable_help_text;
+  $build['#attached']['drupalSettings']['alshayaRcs']['showCartFormInRelated'] = $product_settings->get('show_cart_form_in_related') == 0
+    ? 'no-cart-form'
+    : '';
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_settings->getCacheTags());
 
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
@@ -431,20 +431,6 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     '#attributes' => [
       'class' => 'rcs-templates--product_schema_data',
       'data-product-schema' => json_encode($product_schema_data),
-    ],
-  ];
-
-  // @todo Remove this theme and rcs-product-teaser.html.twig temlate.
-  // @todo Use handlebars with rcs-product-teaser.handlebars template.
-  $product_teaser = [
-    '#theme' => 'rcs_product_teaser',
-  ];
-  $variables['rcs_templates']['product_teaser'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($product_teaser),
-    '#attributes' => [
-      'class' => 'rcs-templates--product-teaser',
     ],
   ];
 
@@ -745,6 +731,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'gallery.product.block.product_zoom_magazine_gallery' => 'alshaya_rcs_product',
     'attribute.brand.logo' => 'alshaya_rcs_product',
     'product.overlay_attributes' => 'alshaya_rcs_product',
+    'product.recommended_products_teaser' => 'alshaya_rcs_product',
   ];
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/

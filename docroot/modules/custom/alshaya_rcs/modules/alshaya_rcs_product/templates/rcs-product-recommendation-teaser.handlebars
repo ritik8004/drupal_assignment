@@ -1,0 +1,73 @@
+<h3 class="subtitle crossell-title">{{ subtitle }}</h3>
+<div class="views-element-container">
+  <div class="view view-product-slider view-id-product_slider view-display-id-block_product_slider">
+    <div class="owl-carousel no-cart-form">
+      {{#each products as | product |}}
+        <div id="row{{ @index }}" class="views-row">
+          <article
+            data-sku='{{ product.sku }}'
+            role='article'
+            about='{{ product.url }}'
+            data-vmode='teaser'
+            class='entity--type-node'
+            gtm-type='gtm-product-link'
+            gtm-category='{{ gtm.category }}'
+            gtm-container='not defined'
+            gtm-view-mode='teaser'
+            gtm-cart-value=''
+            gtm-main-sku='{{ product.sku }}'
+            gtm-name='{{ gtm.name }}'
+            gtm-product-sku='{{ product.sku }}'
+            gtm-product-sku-class-identifier='{{ gtm.id }}'
+            gtm-sku-type={{ gtm.dimension2 }}
+            gtm-brand='{{ gtm.brand }}'
+            gtm-dimension4='{{ gtm.dimension4 }}'
+            gtm-price='{{ gtm.price }}'
+            gtm-dimension3='{{ gtm.dimension3 }}'
+            gtm-stock=''
+          >
+            <a class="above-mobile-block open-modal-pdp" href="{{ product.url }}" data-dialog-type="modal" data-dialog-options="{'width':'auto'}" tabindex="0">
+              <div class="image-label-wrapper">
+                {{#if product.image }}
+                  <img src="{{ product.image }}" alt="{{ product.name }}" title="{{ product.name }}" typeof="foaf:Image">
+                {{/if}}
+                <div class="labels-wrapper" data-type="plp" data-sku="{{ product.sku }}" data-main-sku="{{ product.sku }}"></div>
+              </div>
+              <h2 class="c-products__item__label">
+                <span>{{ product.name }}</span>
+              </h2>
+              <div class="price-block price-block-{{ cleanSku }}">
+                {{{ render 'product.block.price' product.price_details }}}
+              </div>
+            </a>
+            <table class="mobile--only--sell {{ ../show_cart_form }}">
+              <tbody>
+                <tr>
+                  <td class="sell--image">
+                    {{#if product.image }}
+                      <a href="{{ product.url }}" rel="bookmark" tabindex="0">
+                        <img src="{{ product.image }}" alt="{{ product.name }}" title="{{ product.name }}" typeof="foaf:Image" loading="lazy" data-src="#rcs.product_teaser._self|teaser_image#">
+                      </a>
+                    {{/if}}
+                    <div class="labels-wrapper" data-type="plp" data-sku="{{ product.sku }}" data-main-sku="{{ product.sku }}">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="sell--description">
+                    <h2 class="c-products__item__label">
+                      <a href="{{ product.url }}" rel="bookmark" tabindex="0"><span>{{ product.name }}</span></a>
+                    </h2>
+                    <div class="price-block price-block-{{ product.cleanSku }}">
+                      {{{render 'product.block.price' product.price_details }}}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</div>
