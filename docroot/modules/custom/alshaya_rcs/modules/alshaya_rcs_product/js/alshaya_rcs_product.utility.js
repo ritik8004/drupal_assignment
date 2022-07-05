@@ -1286,7 +1286,7 @@ window.commerceBackend = window.commerceBackend || {};
     });
     // Get labels for product attributes from custom attribute metadata.
     var productAttributeValues = data.products.items[0];
-    productAttributes = {};
+    var productAttributes = {};
     Object.entries(productAttributeValues).forEach(function (value) {
       if (Drupal.hasValue(value[1])) {
         // Split comma separated product attributes.
@@ -1305,8 +1305,11 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {string} sku
    *   SKU value for which additional attributes is to be returned.
-   * @param {object} attributes
+   * @param {object} attributesVariable
    *   Product attributes lists.
+   *
+   * @returns {object}
+   *   List of product attributes values and labels.
    */
   window.commerceBackend.getAdditionalAttributes = async function getAdditionalAttributes(sku, attributesVariable) {
     // Get product attributes and custom attribute metadata and labels.
