@@ -1,6 +1,6 @@
 window.commerceBackend = window.commerceBackend || {};
 
-(function () {
+(function (Drupal) {
   'use strict';
 
   /**
@@ -190,4 +190,4 @@ window.commerceBackend = window.commerceBackend || {};
     var styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: product.style_code });
     return getProcessedStyleProducts(product, styleProducts);
   }
-})();
+})(Drupal);
