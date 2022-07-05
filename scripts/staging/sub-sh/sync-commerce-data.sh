@@ -13,11 +13,11 @@ echo "Syncing stores."
 drush --uri=$uri sync-stores
 
 echo "Syncing promotions."
-drush --uri=$uri sync-commerce-promotions --types=cart
-drush --uri=$uri sync-commerce-promotions --types=category
+drush --uri=$uri sync-and-process-promotions --types=cart
+drush --uri=$uri sync-and-process-promotions --types=category
 
 echo "Running queues to attach catalogue promotions to products."
 drush --uri=$uri queue-run acq_promotion_attach_queue
 
 echo "Index all items."
-drush --uri=$uri sapi-i
+drush --uri=$uri ev "\Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();"
