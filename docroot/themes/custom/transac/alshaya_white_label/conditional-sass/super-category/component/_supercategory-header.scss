@@ -136,10 +136,6 @@
 
     .menu__back {
       height: 0.8125rem;
-
-      html[lang="ar"] & {
-        transform: rotate(180deg);
-      }
     }
 
     .toggle--sign {
