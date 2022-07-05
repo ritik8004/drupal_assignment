@@ -2,15 +2,21 @@
   &-content-wrapper {
     .product-details-wrapper {
       .size-guide-link {
+        @include breakpoint($only-mobile) {
+          #{$left}: 52%;
+        }
+
         @include breakpoint($upto-desktop) {
           top: rem(18);
-          #{$left}: 28%;
+        }
+
+        @include breakpoint($tablet) {
+          #{$left}: 50%;
         }
 
         @include breakpoint($desktop) {
           top: rem(2);
           position: absolute;
-          #{$left}: 26%;
           font-size: rem(14);
         }
 
