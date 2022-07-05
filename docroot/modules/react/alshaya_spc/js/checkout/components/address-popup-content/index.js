@@ -16,6 +16,7 @@ const AddressContent = (props) => {
     shippingAsBilling = null,
     areaUpdated,
     isExpressDeliveryAvailable,
+    fillDefaultValue,
   } = props;
 
   if (drupalSettings.user.uid > 0
@@ -46,6 +47,7 @@ const AddressContent = (props) => {
       formContext={formContext}
       shippingAsBilling={shippingAsBilling}
       isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+      fillDefaultValue={fillDefaultValue}
     />
   );
 };
