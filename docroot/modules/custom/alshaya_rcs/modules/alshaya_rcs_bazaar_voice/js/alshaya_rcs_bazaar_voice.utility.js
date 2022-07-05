@@ -1,4 +1,4 @@
-(function (drupalSettings) {
+(function (drupalSettings, Drupal) {
     // Initialize the global object.
   window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
 
@@ -14,7 +14,7 @@
    *   The product review data.
    */
   window.alshayaBazaarVoice.getProductReviewForCurrrentUser = async function getProductReviewForCurrrentUser(productIdentifier) {
-    const bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings();
+    const bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
     const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
     const userId = bazaarVoiceSettings.reviews.customer_id;
     const staticStorageKey = `${userId}_${productId}`;
@@ -69,4 +69,35 @@
     staticStorage[staticStorageKey] = response;
     return response;
   }
-})(drupalSettings);
+
+  /**
+   * Gets bazaar voice settings.
+   *
+   * (optional) @param {string} productId
+   * Product SKU value.
+   *
+   * @returns {Object}
+   *   Bazaar voice settings.
+   */
+  window.alshayaBazaarVoice.getbazaarVoiceSettings = function getbazaarVoiceSettings(productId) {
+    var settings = {};
+    if (Drupal.hasValue(productId)) {
+      var product = Drupal.alshayaSpc.getProductDataV2Synchronous(productId);
+      settings = {
+        product: {
+          url: product.url,
+          title: product.title,
+          // @todo Image will be same as alshaya_acm_get_product_display_image().
+          image_url: product.image,
+        }
+      };
+    }
+
+    settings = Object.assign(settings, drupalSettings.alshaya_bazaar_voice);
+
+    return {
+      productId: productId,
+      reviews: settings,
+    };
+  }
+})(drupalSettings, Drupal);
