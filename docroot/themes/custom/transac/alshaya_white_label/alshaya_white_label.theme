@@ -421,6 +421,14 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['class'][] = 'megamenu-dynamic-layout';
       $variables['#attached']['library'][] = 'alshaya_white_label/megamenu_dynamic_layout';
     }
+
+    // Add a class and attach full width library, if `show_menu_full_width`
+    // config is set to true.
+    $mega_menu_full_width = \Drupal::config('alshaya_main_menu.settings')->get('show_menu_full_width');
+    if ($mega_menu_full_width) {
+      $variables['attributes']['class'][] = 'megamenu-fullwidth-layout';
+      $variables['#attached']['library'][] = 'alshaya_white_label/megamenu-fullwidth-layout';
+    }
   }
 
   if ($variables['plugin_id'] == 'system_menu_block:super-menu') {

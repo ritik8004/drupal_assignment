@@ -158,12 +158,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       '#settings' => [
         'desktop_main_menu_highlight_timing' => $desktop_main_menu_highlight_timing,
       ],
-      // @todo conditionally attach libraries according to menu config
-      '#attached' => [
-        'library' => [
-          'alshaya_white_label/megamenu-fullwidth-layout',
-        ],
-      ],
       '#term_tree' => $term_data,
       '#column_tree' => $columns_tree ?? [],
       '#menu_type' => $desktop_main_menu_layout,
