@@ -158,15 +158,21 @@ function alshaya_performance_flush_frontend_caches($include_twig = FALSE) {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_performance_page_attachments_alter(array &$attachments) {
+  $request = \Drupal::request();
   // Adding CLS improvement only if enabled and
   // current route is not an admin route.
   if (\Drupal::config('alshaya_performance.settings')->get('enable_css_cls')
     && !\Drupal::service('router.admin_context')->isAdminRoute()) {
     $attachments['#attached']['library'][] = 'alshaya_performance/improve_cls_css';
+
+    // Attach cls common styles to all pages except checkout.
+    if (stripos($request->getPathInfo(), '/checkout') === FALSE) {
+      $attachments['#attached']['library'][] = 'alshaya_white_label/cls-initial-layout.common';
+    }
   }
 
   // No preloads if param present.
-  $preload_param = \Drupal::request()->get('preload');
+  $preload_param = $request->get('preload');
   if (isset($preload_param) && $preload_param == 0) {
     return;
   }
