@@ -156,6 +156,7 @@ export default class HomeDeliveryInfo extends React.Component {
                     }
                     areaUpdated={areaUpdated}
                     isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+                    fillDefaultValue
                   />
                 </React.Suspense>
               </Popup>
