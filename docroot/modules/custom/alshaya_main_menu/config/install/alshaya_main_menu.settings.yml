@@ -1,3 +1,9 @@
 mobile_main_menu_max_depth: 2
 desktop_main_menu_highlight_timing: 250
 desktop_main_menu_layout: 'default'
+# This config is to show each L2 and their child in a separate columns.
+show_l2_in_separate_column: false
+# This config is to show / hide the highlights CTA in menu overlay.
+show_highlight: true
+# This config is to show the menu overlay in full width regardless of layout.
+show_menu_full_width: false
