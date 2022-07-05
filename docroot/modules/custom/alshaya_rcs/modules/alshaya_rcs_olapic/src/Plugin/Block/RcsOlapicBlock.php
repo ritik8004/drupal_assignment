@@ -33,19 +33,25 @@ class RcsOlapicBlock extends OlapicBlock {
       'lang' => $data_lang,
     ];
 
+    $olapic_config = $this->configFactory->get('alshaya_olapic.settings');
+    $olapic_external_script_url = $olapic_config->get('olapic_external_script_url');
+
     return [
       '#type' => 'container',
       '#attributes' => [
         'rcs_instance_id' => $data_instance,
         'rcs_div_id' => $this->configuration['div_id'] ?? '',
-        'rcs_dynamic_product_id' => '#rcs.product.sku#',
         'rcs_data_olapic' => 'block-rcsalshayaolapicwidget-2',
         'rcs_data_apikey' => $olapic_keys['data_apikey'],
       ],
       '#attached' => [
-        'library' => 'alshaya_rcs_olapic/product',
+        'library' => [
+          'alshaya_rcs_olapic/product',
+          'alshaya_olapic/alshaya_olapic_widget',
+        ],
         'drupalSettings' => [
           'olapic_keys' => $olapic_keys,
+          'olapic_external_script_url' => $olapic_external_script_url,
         ],
       ],
     ];

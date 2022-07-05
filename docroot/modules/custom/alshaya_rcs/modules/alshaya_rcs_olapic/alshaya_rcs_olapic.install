@@ -41,3 +41,19 @@ function alshaya_rcs_olapic_install() {
     }
   }
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_rcs_olapic_uninstall() {
+  // Enable the V1 blocks.
+  $blocks = [
+    'alshayaolapicwidget_2' => 'rcsalshayaolapicwidget_2',
+  ];
+  foreach ($blocks as $prev_block_id => $new_block_id) {
+    $block = Block::load($prev_block_id);
+    if ($block instanceof BlockInterface) {
+      $block->enable()->save();
+    }
+  }
+}
