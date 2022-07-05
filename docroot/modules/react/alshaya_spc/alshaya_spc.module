@@ -440,6 +440,10 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   $build['#attached']['drupalSettings']['expressDelivery'] = [
     'enabled' => TRUE,
     'deliveryOptionsOrder' => $express_delivery_config->get('delivery_options_order'),
+    'deliveryOptionsLabel' => [
+      'same_day_delivery' => $express_delivery_config->get('same_day_delivery_label'),
+      'express_delivery' => $express_delivery_config->get('express_delivery_label'),
+    ],
   ];
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
