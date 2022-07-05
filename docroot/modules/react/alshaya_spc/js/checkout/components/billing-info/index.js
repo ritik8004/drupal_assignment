@@ -125,6 +125,7 @@ export default class BillingInfo extends React.Component {
                     formContext="billing"
                     headingText={Drupal.t('billing information')}
                     default_val={this.formatAddressData(billing)}
+                    fillDefaultValue
                   />
                 </React.Suspense>
               </Popup>
