@@ -13,7 +13,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Add new setting in alshaya_main_menu - show_l2_in_separate_column,
  * show_highlight and show_menu_full_width.
  */
-function alshaya_main_menu_update_9001() {
+function alshaya_main_menu_update_9201() {
   \Drupal::configFactory()->getEditable('alshaya_main_menu.settings')
     ->set('show_l2_in_separate_column', FALSE)
     ->set('show_highlight', TRUE)
