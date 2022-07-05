@@ -2,7 +2,7 @@
  * Listens to the 'rcsUpdateResults' event and updates the result object
  * with assets data.
  */
- (function () {
+ (function (Drupal, RcsEventManager) {
 
   /**
    * Processes and returns an object containing media for given sku.
@@ -242,4 +242,4 @@
       setMediaData(products);
     }
   }, 10);
-})();
+})(Drupal, RcsEventManager);

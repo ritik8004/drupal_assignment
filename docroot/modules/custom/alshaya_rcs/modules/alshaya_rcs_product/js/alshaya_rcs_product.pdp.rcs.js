@@ -4,7 +4,7 @@
  */
 window.commerceBackend = window.commerceBackend || {};
 
-(function ($, Drupal, drupalSettings){
+(function ($, Drupal, drupalSettings, RcsEventManager){
 
   /**
    * Get the labels data for the selected SKU.
@@ -228,4 +228,4 @@ window.commerceBackend = window.commerceBackend || {};
     });
   };
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, RcsEventManager);
