@@ -781,4 +781,4 @@ inter-country-transfer:
 megamenu-fullwidth-layout:
   css:
     theme:
-      css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.scss: {}
+      css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css: {}
