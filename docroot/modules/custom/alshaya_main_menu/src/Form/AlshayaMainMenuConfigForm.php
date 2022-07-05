@@ -82,6 +82,24 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
       '#default_value' => (!empty($config->get('ideal_max_col_length'))) ? $config->get('ideal_max_col_length') : 10,
     ];
 
+    $form['show_l2_in_separate_column'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show each L2 and their child menus in a separate column'),
+      '#default_value' => $config->get('show_l2_in_separate_column'),
+    ];
+
+    $form['show_highlight'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show / Hide menu highlights CTA'),
+      '#default_value' => $config->get('show_highlight'),
+    ];
+
+    $form['show_menu_full_width'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show menu overlay in full width'),
+      '#default_value' => $config->get('show_menu_full_width'),
+    ];
+
     return $form;
   }
 
@@ -94,6 +112,9 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
     $config->set('desktop_main_menu_layout', $form_state->getValue('desktop_main_menu_layout'));
     $config->set('max_nb_col', $form_state->getValue('max_nb_col'));
     $config->set('ideal_max_col_length', $form_state->getValue('ideal_max_col_length'));
+    $config->set('show_l2_in_separate_column', $form_state->getValue('show_l2_in_separate_column'));
+    $config->set('show_highlight', $form_state->getValue('show_highlight'));
+    $config->set('show_menu_full_width', $form_state->getValue('show_menu_full_width'));
     $config->save();
     Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
 
