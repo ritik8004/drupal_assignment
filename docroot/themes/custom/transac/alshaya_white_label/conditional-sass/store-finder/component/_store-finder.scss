@@ -1423,6 +1423,20 @@
   > div {
     max-width: none !important;
   }
+
+  &-c {
+    html[lang='ar'] & {
+      padding-left: 0 !important;
+      padding-right: rem(12) !important;
+    }
+  }
+}
+
+.gm-ui-hover-effect {
+  html[lang='ar'] & {
+    left: rem(-6) !important;
+    right: unset !important;
+  }
 }
 
 .path--store-finder .store-finder--wrapper .input--wrapper [id^=edit-actions] {
