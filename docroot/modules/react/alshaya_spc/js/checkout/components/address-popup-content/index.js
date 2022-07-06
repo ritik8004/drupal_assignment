@@ -19,6 +19,7 @@ const AddressContent = (props) => {
     fillDefaultValue,
   } = props;
 
+  // For users who are logged in and have saved an address.
   if (drupalSettings.user.uid > 0
     && cart.cart.customer.addresses !== undefined
     && cart.cart.customer.addresses.length > 0) {
