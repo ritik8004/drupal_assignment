@@ -4,37 +4,53 @@
  */
 window.commerceBackend = window.commerceBackend || {};
 
-(function (Drupal) {
+(function addToBagListingUtility(Drupal, drupalSettings) {
 
-   /**
+  var staticDataStore = {
+    processedProduct: {},
+  };
+
+  /**
    * Return product info from backend.
    *
    * @param {string} sku
    *   The sku value.
-   * @param {string} parentSKU
-   *   (optional) The parent sku value.
+   * @param {string} styleCode
+   *   (optional) Style code value.
    *
    * @returns {object}
    *   The product info object.
    */
-  window.commerceBackend.getProductDataAddToBagListing = async function (sku, parentSKU) {
-    var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
+  window.commerceBackend.getProductDataAddToBagListing = async function (sku, styleCode) {
+    if (Drupal.hasValue(staticDataStore.processedProduct[sku])) {
+      return staticDataStore.processedProduct[sku];
+    }
+
+    var product = null;
+    if (Drupal.hasValue(styleCode)
+      && Drupal.hasValue(window.commerceBackend.getProductsInStyle)
+    ) {
+      product = await window.commerceBackend.getProductsInStyle({ sku, style_code: styleCode });
+    }
+    else {
+      product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: sku});
+    }
 
     // The product will be fetched and saved in static storage.
     var productInfo = {};
-    var product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU});
     if (Drupal.hasValue(product.sku)) {
       window.commerceBackend.setRcsProductToStorage(product, 'plp');
-      var productInfo = await processProductInfo(product);
-      return productInfo;
+      productInfo = await processProductInfo(product);
     }
     else {
-      response = {
+      productInfo = {
         error: true,
         error_message: 'Product could not be loaded!',
       };
-      return response;
     }
+
+    staticDataStore.processedProduct[sku] = productInfo;
+    return productInfo;
   };
 
   /**
@@ -78,13 +94,13 @@ window.commerceBackend = window.commerceBackend || {};
    */
   async function processVariants(product, variantProduct) {
     var variantData = variantProduct.product;
-    var parent_sku = variantProduct.parent_sku;
+    var parentSku = variantData.parent_sku;
     var prices = window.commerceBackend.getPrices(variantData);
     var productLabels = await getProductLabels(variantData.parent_sku, variantData.sku);
 
     return {
       sku: variantData.sku,
-      parent_sku: parent_sku,
+      parent_sku: parentSku,
       cart_title: product.name,
       cart_image: variantData.media_cart,
       media: {images: variantData.media},
@@ -152,28 +168,39 @@ window.commerceBackend = window.commerceBackend || {};
     productInfo.size_guide = drupalSettings.alshayaRcs.sizeGuide;
 
     // Set configurable attributes.
+    var configurableCombinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     productInfo.configurable_attributes = [];
     product.configurable_options.forEach(function (option) {
-      let attribute_id = parseInt(atob(option.attribute_uid), 10);
+      var attribute_id = parseInt(atob(option.attribute_uid), 10);
+      var optionValues = [];
+      // Filter and process the option values.
+      option.values.forEach(function eachValue(option_value) {
+        // Disable unavailable options.
+        if (!Drupal.hasValue(configurableCombinations.attribute_sku)
+          || typeof configurableCombinations.attribute_sku[option.attribute_code][option_value.value_index] === 'undefined'
+        ) {
+          return false;
+        }
+
+        optionValues.push({
+          label: option_value.store_label,
+          value: option_value.value_index.toString(),
+        });
+      });
       productInfo.configurable_attributes[option.attribute_code] = {
         id: attribute_id,
         label: option.label,
         position: option.position,
         is_swatch: false,
         is_pseudo_attribute: (attribute_id === drupalSettings.psudo_attribute),
-        values: option.values.map(function (option_value) {
-          return {
-            label: option_value.store_label,
-            value: option_value.value_index.toString(),
-          };
-        })
+        values: optionValues,
       };
     });
 
     // Set configurable combinations.
-    productInfo.configurable_combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
+    productInfo.configurable_combinations = configurableCombinations;
     productInfo.configurable_combinations.attribute_hierarchy_with_values = productInfo.configurable_combinations.combinations;
 
     return productInfo;
   }
-})(Drupal);
+})(Drupal, drupalSettings);
