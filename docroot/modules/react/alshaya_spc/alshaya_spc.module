@@ -469,6 +469,9 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
     ? 'alshaya_spc/express_delivery'
     : 'alshaya_spc/commerce_backend.cart.v2';
 
+  // Attaching library for react component to show PDP express delivery labels.
+  $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';
+
   unset($build['home_delivery']);
 }
 

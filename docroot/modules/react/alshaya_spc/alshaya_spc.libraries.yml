@@ -130,8 +130,9 @@ dynamic_promotion_label:
   js:
     dist/dynamic_promotion_label.bundle.js: {}
 
-# This library adds sdd-ed label component on pdp layouts.
-pdp_sdd_ed_labels:
+# Library for PDP express-delivery labels react component.
+# This component show SDD (same day delivery) / ED (express delivery) labels on all PDP layouts below sku price.
+pdp_express_delivery_labels:
   version: 1.0.0
   js:
     dist/pdp_sdd_ed_labels.bundle.js: { }

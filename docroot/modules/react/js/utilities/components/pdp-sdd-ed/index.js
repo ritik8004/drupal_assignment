@@ -5,17 +5,13 @@ export default class PdpSddEd extends React.Component {
   constructor(props) {
     super(props);
 
-    const { expressDelivery } = drupalSettings;
-    const {
-      deliveryOptionsOrder,
-      deliveryOptionsLabel,
-    } = expressDelivery;
-
     this.state = {
-      shippingMethods: null,
-      deliveryOptionsOrder,
-      deliveryOptionsLabel,
+      // Store shipping method details including express-delivery.
+      expressDeliveryLabels: null,
     };
+
+    // Get express-delivery settings.
+    ({ expressDelivery: this.expressDelivery } = drupalSettings);
   }
 
   componentDidMount() {
@@ -23,6 +19,9 @@ export default class PdpSddEd extends React.Component {
     document.addEventListener('showPdpSddEdLabel', this.showPdpSddEdLabel, false);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('showPdpSddEdLabel', this.showPdpSddEdLabel, false);
+  }
 
   /**
    * Show SDD-ED labels on PDP.
@@ -31,56 +30,62 @@ export default class PdpSddEd extends React.Component {
     // Get shipping methods from event details.
     const { applicable_shipping_methods: shippingMethods } = e.detail;
 
+    const {
+      deliveryOptionsLabel,
+      deliveryOptionsOrder,
+    } = this.expressDelivery;
+
+    const expressDeliveryLabels = [];
+
     // Toggle SDD ED label display based on status received.
     if (checkShippingMethodsStatus(shippingMethods)) {
-      this.setState({
-        shippingMethods,
-      });
-    }
-  }
-
-  render() {
-    const {
-      shippingMethods,
-      deliveryOptionsOrder,
-      deliveryOptionsLabel,
-    } = this.state;
-
-    if (shippingMethods === null) {
-      return (null);
-    }
-
-    const sddEdLabels = [];
-    if (shippingMethods !== null) {
       shippingMethods.forEach((shippingMethod) => {
         if (shippingMethod.available !== 'undefined' && shippingMethod.available) {
           if ((shippingMethod.carrier_code === 'SAMEDAY') || (shippingMethod.carrier_code === 'EXPRESS')) {
             const deliveryOptionKey = shippingMethod.carrier_title.toLowerCase().replaceAll(' ', '_');
-            sddEdLabels.push({
+            expressDeliveryLabels.push({
               key: deliveryOptionKey,
               value: deliveryOptionsLabel[deliveryOptionKey],
             });
           }
         }
       });
+
+      // Sort labels as per settings.
+      if (expressDeliveryLabels.length > 1) {
+        // eslint-disable-next-line max-len
+        expressDeliveryLabels.sort((a, b) => deliveryOptionsOrder.indexOf(a.key) > deliveryOptionsOrder.indexOf(b.key));
+      }
+
+      this.setState({
+        expressDeliveryLabels,
+      });
+    }
+  }
+
+  render() {
+    const {
+      expressDeliveryLabels,
+    } = this.state;
+
+    if (expressDeliveryLabels === null) {
+      return (null);
     }
 
-    // Sort labels as per settings.
-    if (sddEdLabels.length > 1) {
-      // eslint-disable-next-line max-len
-      sddEdLabels.sort((a, b) => deliveryOptionsOrder.indexOf(a.key) > deliveryOptionsOrder.indexOf(b.key));
-    }
+    let sddEdLabels = [];
+    sddEdLabels = expressDeliveryLabels.map((sddEdLabel) => (
+      <div
+        key={sddEdLabel.key}
+        className={`express-delivery-text ${sddEdLabel.key} active`}
+      >
+        <span>{sddEdLabel.value}</span>
+      </div>
+    ));
+
 
     return (
       <div className="express-delivery active">
-        {sddEdLabels.length > 0 && sddEdLabels.map((sddEdLabel) => (
-          <div
-            key={sddEdLabel.key}
-            className={`express-delivery-text ${sddEdLabel.key} active`}
-          >
-            <span>{sddEdLabel.value}</span>
-          </div>
-        ))}
+        {sddEdLabels}
       </div>
     );
   }

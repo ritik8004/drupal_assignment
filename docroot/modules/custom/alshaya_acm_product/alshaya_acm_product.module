@@ -656,7 +656,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
         // Check if express delivery feature enabled and product buyable.
         $build['delivery_options'] = [];
-        $build['delivery_options']['sdd_ed_enabled'] = $deliveryOptionsHelper->ifSddEdFeatureEnabled();
         if ($deliveryOptionsHelper->ifSddEdFeatureEnabled() && (alshaya_acm_product_is_buyable($sku_entity)) && !$bigTickectProduct) {
           $build['express_delivery'] = [
             '#theme' => 'pdp_express_delivery_option',
@@ -671,7 +670,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             }
           }
           $build['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] ? 'active' : 'in-active';
-          $build['#attached']['library'][] = 'alshaya_spc/pdp_sdd_ed_labels';
         }
 
         // Delivery in only city.
