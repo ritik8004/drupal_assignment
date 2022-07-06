@@ -27,6 +27,7 @@ export class StoreFinderList extends React.PureComponent {
       zoom: 10,
       loadmore: true,
       page: 10,
+      locationName: '',
     };
   }
 
@@ -58,6 +59,7 @@ export class StoreFinderList extends React.PureComponent {
             },
             loadmore: true,
             page: drupalSettings.storeLabels.load_more_item_limit,
+            locationName: params.location ? params.location : '',
           },
         );
       }
@@ -101,7 +103,8 @@ export class StoreFinderList extends React.PureComponent {
     const nearbyStores = nearByStores(stores, currentLocation);
     const prevState = this.state;
     this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-    window.location.href = `/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+    const { currentLanguage } = drupalSettings.path;
+    window.location.href = `/${currentLanguage}/store-finder/list?location=${place.formatted_address}&latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
   }
 
   findNearMe = () => {
@@ -162,6 +165,7 @@ export class StoreFinderList extends React.PureComponent {
       zoom,
       page,
       loadmore,
+      locationName,
     } = this.state;
     const { google } = this.props;
     return (
@@ -180,7 +184,11 @@ export class StoreFinderList extends React.PureComponent {
                     </div>
                     <div className="input--wrapper block-store-finder-form__input__wrapper">
                       <div className="form-item-geolocation-geocoder-google-places-api input__inner-container">
-                        <AutocompleteSearch searchStores={(place) => this.searchStores(place)} />
+                        <AutocompleteSearch
+                          searchStores={this.searchStores}
+                          placeholder={drupalSettings.storeLabels.search_placeholder}
+                          locationName={locationName}
+                        />
                         <div className="c-input__bar" />
                       </div>
                       <div className="block-store-finder-form__input__submit__wrapper icon-search form-actions js-form-wrapper form-wrapper" id="edit-actions--2">
