@@ -420,20 +420,11 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       }
     }
 
-    // Page type will be set to 'egift card' for these routes.
-    $egiftRoutes = [
-      'alshaya_egift_card.egift_card_purchase',
-      'alshaya_egift_card.topup_card',
-      'alshaya_egift_card.my_egift_card',
-    ];
     if (strpos($current_path, '/user') === 0) {
-      $page_type = in_array($current_route['route_name'], $egiftRoutes) ? 'egift card' : trim('myaccount ' . implode('', $path_parts));
+      $page_type = trim('myaccount ' . implode('', $path_parts));
     }
     elseif ($page_type === 'not defined') {
-      $page_type = in_array($current_route['route_name'], $egiftRoutes) ? 'egift card' : ltrim(implode('-', $path_parts), '-');
-    }
-    elseif ($page_type === 'advanced page' && strpos(\Drupal::request()->getRequestUri(), '/egift') >= 0) {
-      $page_type = 'egift card';
+      $page_type = ltrim(implode('-', $path_parts), '-');
     }
 
     $data_layer['pageType'] = $page_type;
