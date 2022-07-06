@@ -11,6 +11,16 @@
   }
 }
 
+.block-alshaya-main-menu {
+  li {
+    &.menu--one__list-item {
+      .menu__link {
+        text-transform: none;
+      }
+    }
+  }
+}
+
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     ul {
