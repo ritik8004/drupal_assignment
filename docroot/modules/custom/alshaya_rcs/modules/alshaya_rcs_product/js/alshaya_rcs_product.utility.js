@@ -384,6 +384,9 @@ window.commerceBackend = window.commerceBackend || {};
       }
       const variantParentSku = variantInfo.parent_sku;
       const variantParentProduct = window.commerceBackend.getProductData(null, null, false)[variantParentSku];
+      const productUrl = Drupal.hasValue(variantInfo.url_key)
+       ? getProductUrls(variantInfo.url_key)
+       : getProductUrls(product.url_key);
       // @todo Add code for commented keys.
       info[variantSku] = {
         cart_image: window.commerceBackend.getCartImage(variant.product),
@@ -411,7 +414,7 @@ window.commerceBackend = window.commerceBackend || {};
         promotionsRaw: product.promotions,
         // @todo Add free gift promotion value here.
         freeGiftPromotion: [],
-        url: getProductUrls(variantInfo.url_key),
+        url: productUrl,
         gtm_price: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
         deliveryOptions: variantInfo.deliveryOptions,
       }
@@ -794,7 +797,7 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {string} parentSKU
    *   (optional) The parent sku value.
    */
-  window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null) {
+  window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null, loadStyles = true) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     if (Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU])) {
       return staticDataStore.productDataFromBackend[mainSKU];
@@ -802,10 +805,10 @@ window.commerceBackend = window.commerceBackend || {};
     // Get the product data.
     // The product will be fetched and saved in static storage.
     staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
-      if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
-        await window.commerceBackend.getProductsInStyle(response.data.products.items[0]);
+      if (Drupal.hasValue(window.commerceBackend.getProductsInStyle) && loadStyles) {
+        await window.commerceBackend.getProductsInStyle(response);
       }
-
+      window.commerceBackend.setRcsProductToStorage(response);
       window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
     });
 
