@@ -5,6 +5,9 @@
  * Module file with hooks specific to PB brand.
  */
 
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
