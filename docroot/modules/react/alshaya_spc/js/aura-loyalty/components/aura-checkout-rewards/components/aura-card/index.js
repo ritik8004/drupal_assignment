@@ -95,12 +95,14 @@ export default class AuraLinkedCheckout extends React.Component {
           </div>
         </div>
         <div className="redeem-aura-footer">
-          {parse(parse(getStringMessage(
-            'aura_checkout_reward_points_to_earn',
-            {
-              '@pts': pointsToEarn,
-            },
-          )))}
+          <div className="redeem-aura-footer__text">
+            {parse(parse(getStringMessage(
+              'aura_checkout_reward_points_to_earn',
+              {
+                '@pts': `<b>${pointsToEarn}</b>`,
+              },
+            )))}
+          </div>
         </div>
       </div>
     );
