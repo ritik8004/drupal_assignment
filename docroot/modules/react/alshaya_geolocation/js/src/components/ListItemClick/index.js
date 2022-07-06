@@ -30,8 +30,7 @@ export class ListItemClick extends React.Component {
           </ConditionalView>
         </div>
         <div className="store-delivery-time">
-          {Drupal.t('Collect from store in ')}
-          <em>{specificPlace.sts_delivery_time_label}</em>
+          { Drupal.t('Collect from store in @time', { '@time': specificPlace.sts_delivery_time_label }, { context: 'click and collect' })}
         </div>
       </div>
     );

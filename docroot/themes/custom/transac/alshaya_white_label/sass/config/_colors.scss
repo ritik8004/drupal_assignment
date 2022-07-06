@@ -539,6 +539,7 @@ $header_bg: $white-five;
 $header_top_bg: $white-four;
 $header_border: $white;
 $header_super_category_bg: $white-five;
+$header_super_category_enabled_bg: $_screeching_white;
 
 // Header mobile search.
 $header_search_border_mobile: $marine-blue-two;
@@ -1061,6 +1062,10 @@ $checkout_order_details_product_count_border: $white-five;
 $_online-booking-delivery-detail: $cyan-blue;
 $_online-booking-primary-text: $white-five;
 $_online-booking-black-text: $mothercare-black;
+
+// Intercountry Transfer
+$inter-country-transfer-black-text: $mothercare-black;
+$inter-country-transfer-border: $warm-grey-two;
 
 // Address form.
 $address_form_country_disabled: $ladda-disabled;
@@ -2245,32 +2250,3 @@ $online-return-status-red-label: $speech-red;
 $online-return-print-button-bg: $white-five;
 $online-return-status-green-label: $light-green;
 $online-return-status-orange-label: $red-orange;
-
-// Hello Member membership success popup
-$hm-membership-success-popup-bg: $white-five;
-$hm-membership-success-popup-title: $_spc-discount-text;
-$hm-content-link: $black-two;
-
-// Hello Member registration
-$hm-registration-accordion-bg: $whisper;
-$hm-registration-fields-bg: $whisper;
-$hm-registration-labels-txt: $grey-light;
-
-// Hello Member points block
-$hm-points-block-bg: $whisper;
-$hm-points-block-light-txt: $light-ash;
-$hm-points-block-tier-progress: $light-ash;
-$hm-points-block-tier-progress-active: $cherry;
-
-// Hello member QR code
-$hm-qr-code-redeem-txt: $grey-light;
-
-// Hello Member benefit block
-$hm-my-offers-bg: $white-three;
-$hm-my-offers-expiry-txt: $grey-light;
-
-// Hello member history point
-$hm-history-points-light-title: $greyish;
-$hm-points-expiry-accordion-bg: $white-smoke;
-$hm-points-expiry-accordion-title: $error-red;
-$hm-points-expiry-accordion-icon: $error-red;

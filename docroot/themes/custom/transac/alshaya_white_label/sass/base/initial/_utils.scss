@@ -109,6 +109,11 @@ body {
   opacity: 0;
 }
 
+// Remove the text-transform property from an element.
+.no-text-transform {
+  text-transform: none !important;
+}
+
 // Fade Effect.
 @keyframes fadeEffect {
   from {

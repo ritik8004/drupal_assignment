@@ -297,6 +297,13 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           }
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $values;
         }
+        elseif (($key == 'size')) {
+          $size_values = [];
+          foreach ($configurable['values'] as $size_key => $size_value) {
+            $size_values[][$size_value['value_id']] = $size_value;
+          }
+          $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $size_values;
+        }
       }
 
       foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {

@@ -13,6 +13,9 @@ set classes = [
       <div class="content__main {{ image_slider_position_pdp }}">
         {# The image gallery and thumnails. #}
         <div class="gallery-wrapper"></div>
+        {% if content.wishlist %}
+          {{ content.wishlist }}
+        {% endif %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
@@ -31,7 +34,7 @@ set classes = [
           {% block productBrand %}
           {% endblock %}
 
-          <h1><span class="field field-product-name">#rcs.product._self|name#</span></h1>
+          <h1>#rcs.product._self|name#</h1>
 
           {% block pricePrefix %}
           {% endblock %}

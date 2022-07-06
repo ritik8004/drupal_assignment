@@ -62,10 +62,10 @@ const ReturnIndividualItem = ({
             </div>
           ))}
           <div className="item-code light">
-            {Drupal.t('Item Code: @sku', { '@sku': item.sku }, { context: 'online_returns' })}
+            {Drupal.t('Item Code: @sku', { '@sku': item.sku })}
           </div>
           <div className="item-quantity light">
-            {Drupal.t('Quantity: @quantity', { '@quantity': itemQuantity }, { context: 'online_returns' })}
+            {Drupal.t('Quantity: @quantity', { '@quantity': itemQuantity })}
           </div>
         </div>
 

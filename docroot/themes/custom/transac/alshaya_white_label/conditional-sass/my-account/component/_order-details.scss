@@ -165,6 +165,13 @@
           }
         }
       }
+
+      &:not(.vat-row) {
+        > .warm--white {
+          display: flex;
+          align-items: center;
+        }
+      }
     }
 
     .delivery-details-row {
@@ -872,6 +879,12 @@
         &.warm--white {
           background-color: $basket_vat_price_bg !important;
         }
+      }
+    }
+
+    &.vat-row {
+      .warm--white {
+        background: unset;
       }
     }
   }

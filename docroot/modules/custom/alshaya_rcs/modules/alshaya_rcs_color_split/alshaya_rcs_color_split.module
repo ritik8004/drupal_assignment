@@ -146,12 +146,8 @@ function alshaya_rcs_color_split_node_view(array &$build, EntityInterface $entit
 /**
  * Implements hook_alshaya_rcs_product_product_options_to_query().
  */
-function alshaya_rcs_color_split_alshaya_rcs_product_product_options_to_query(array $options) {
+function alshaya_rcs_color_split_alshaya_rcs_product_product_options_to_query() {
   $color_attribute = \Drupal::config('alshaya_acm_product.display_settings')
     ->get('color_attribute_config')['configurable_color_attribute'];
-  array_push($options, [
-    "attribute_code" => $color_attribute,
-    "entity_type" => "4",
-  ]);
-  return $options;
+  return [$color_attribute];
 }

@@ -61,10 +61,8 @@
   }
 
   .geolocation-common-map-container {
-    html[lang=ar] & {
-      [aria-hidden="true"] {
-        padding-left: rem(16);
-      }
+    [aria-hidden="true"] {
+      padding-bottom: rem(18);
     }
   }
 
@@ -1424,6 +1422,20 @@
 
   > div {
     max-width: none !important;
+  }
+
+  &-c {
+    html[lang='ar'] & {
+      padding-left: 0 !important;
+      padding-right: rem(12) !important;
+    }
+  }
+}
+
+.gm-ui-hover-effect {
+  html[lang='ar'] & {
+    left: rem(-6) !important;
+    right: unset !important;
   }
 }
 

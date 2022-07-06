@@ -221,7 +221,11 @@
     if ((typeof e.detail.pageType !== 'undefined' && e.detail.pageType !== 'product')
       || typeof e.detail.result === 'undefined'
       || (typeof e.detail.placeholder !=='undefined'
-           &&  !(['product-recommendation', 'field_magazine_shop_the_story'].includes(e.detail.placeholder))
+           && !([
+              'product-recommendation',
+              'field_magazine_shop_the_story',
+              'product_by_sku',
+            ].includes(e.detail.placeholder))
          )
       ) {
       return;

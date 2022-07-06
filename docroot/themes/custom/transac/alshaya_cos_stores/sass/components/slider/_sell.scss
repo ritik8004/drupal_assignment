@@ -31,3 +31,11 @@
     }
   }
 }
+
+.price--discount,
+.special--price .price-amount,
+.special--price .price-currency,
+.special--price .price-wrapper,
+.special--price {
+  color: $plp_product_special_price_text !important;
+}

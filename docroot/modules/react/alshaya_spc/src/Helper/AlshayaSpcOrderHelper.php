@@ -348,9 +348,30 @@ class AlshayaSpcOrderHelper {
   }
 
   /**
+   * Sets E-gift details to order item.
+   *
+   * @param array $item
+   *   Order item.
+   * @param array $data
+   *   Array in which to set the E-gift details.
+   */
+  protected function setEgiftDetailsToOrderItem(array $item, array &$data) {
+    // Prepare Egift Card Product, if item is virtual means its an egift card.
+    if ($item['is_virtual']) {
+      $data['isEgiftCard'] = $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_enabled');
+      $data['media'] = $item['extension_attributes']['product_media'][0]['file'];
+      $data['egiftOptions'] = json_decode($item['extension_attributes']['product_options'][0], TRUE);
+      $data['price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
+    }
+  }
+
+  /**
    * Responds to GET requests.
    *
    * Returns available delivery method data.
+   *
+   * @param array $item
+   *   Order item.
    *
    * @return array|null
    *   The response containing delivery methods data.
@@ -369,14 +390,7 @@ class AlshayaSpcOrderHelper {
     $data['isNonRefundable'] = NULL;
     // Added quantity of product for checkout olapic pixel.
     $data['qtyOrdered'] = $item['qty_ordered'];
-    // Prepare Egift Card Product,If item is virtual means its an egift card.
-    if ($item['is_virtual']) {
-      $data['isEgiftCard'] = $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_enabled');
-      $data['media'] = $item['extension_attributes']['product_media'][0]['file'];
-      $data['egiftOptions'] = json_decode($item['extension_attributes']['product_options'][0], TRUE);
-      $data['price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
-      return $data;
-    }
+    $this->setEgiftDetailsToOrderItem($item, $data);
 
     $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);

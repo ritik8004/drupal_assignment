@@ -155,7 +155,7 @@
           flex-grow: 1;
 
           @include breakpoint($tablet) {
-            flex-basis: 9.6875rem;
+            flex-basis: rem(151);
             padding-bottom: 1.5rem;
           }
 
@@ -193,24 +193,13 @@
 
           @include breakpoint($tablet) {
             padding-top: 1.5rem;
-            flex-basis: rem(116);
+            flex-basis: rem(120);
           }
 
           @include breakpoint($desktop) {
             padding-#{$right}: rem(8);
             padding-#{$left}: rem(32);
             flex-basis: rem(212);
-          }
-
-          .price-block {
-            @include breakpoint($desktop) {
-              display: flex;
-              flex-wrap: wrap;
-
-              .special--price {
-                margin-#{$left}: 0.3125rem;
-              }
-            }
           }
         }
 
@@ -220,7 +209,7 @@
           padding-bottom: 1.375rem;
 
           @include breakpoint($tablet) {
-            padding: 1.5rem;
+            padding: rem(24) rem(16);
             flex-basis: 12.5rem;
             word-break: break-word;
           }
@@ -354,7 +343,7 @@
       }
 
       @include breakpoint($desktop) {
-        grid-template: "a b"/ 20rem 26rem;
+        grid-template: "a b"/ rem(320) rem(448);
       }
     }
 
@@ -545,6 +534,20 @@
     a {
       text-decoration: underline;
       margin-#{$left}: 1.125rem;
+    }
+  }
+
+  div.errors-container {
+    margin-top: 0;
+
+    .error-message {
+      padding-top: rem(17);
+      padding-bottom: rem(17);
+      line-height: rem(18);
+
+      &::before {
+        top: rem(14);
+      }
     }
   }
 }

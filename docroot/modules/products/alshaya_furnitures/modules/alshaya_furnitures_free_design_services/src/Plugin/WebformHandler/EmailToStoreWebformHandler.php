@@ -13,9 +13,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @WebformHandler(
  *   id = "email_to_store",
- *   label = @Translation("Email to store"),
- *   category = @Translation("Notification"),
- *   description = @Translation("Sends Mail to Store mail address."),
+ *   label = "Email to store",
+ *   category = "Notification",
+ *   description = "Sends Mail to Store mail address.",
  *   cardinality = \Drupal\webform\Plugin\WebformHandlerInterface::CARDINALITY_UNLIMITED,
  *   results = \Drupal\webform\Plugin\WebformHandlerInterface::RESULTS_PROCESSED,
  *   submission = \Drupal\webform\Plugin\WebformHandlerInterface::SUBMISSION_OPTIONAL,

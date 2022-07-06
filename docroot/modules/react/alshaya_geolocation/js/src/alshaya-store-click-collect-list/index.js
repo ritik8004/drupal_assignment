@@ -1,6 +1,5 @@
 import React from 'react';
 import Axios from 'axios';
-import Parser from 'html-react-parser';
 import { ClickCollectPopup } from '../components/store-click-collect-popup';
 import AutocompleteSearch from '../components/autocomplete-search';
 import { ListItemClick } from '../components/ListItemClick';
@@ -81,6 +80,7 @@ export class StoreClickCollectList extends React.PureComponent {
   render() {
     const {
       results,
+      count,
       showListingView,
       area,
       showAutomcomplete,
@@ -103,7 +103,6 @@ export class StoreClickCollectList extends React.PureComponent {
                   <div className="click-collect-empty-selection" />
                   <div className="click-collect-form">
                     <div className="text">
-                      <div>{Parser(cncLabels.help_text)}</div>
                       {showAutomcomplete
                         ? (
                           <div className="store-finder-form-wrapper">
@@ -112,10 +111,10 @@ export class StoreClickCollectList extends React.PureComponent {
                                 <span className="label">{Drupal.t('Check in-store availability')}</span>
                                 <div>
                                   <AutocompleteSearch
-                                    placeholder={cncLabels.search_placeholder}
+                                    placeholder={Drupal.t('Enter your area')}
                                     searchStores={(place) => this.searchStores(place)}
                                   />
-                                  <button className="search-stores-button" type="button">search stores</button>
+                                  <button className="search-stores-button" type="button">{Drupal.t('search stores')}</button>
                                 </div>
                               </form>
                             </div>
@@ -125,12 +124,10 @@ export class StoreClickCollectList extends React.PureComponent {
                           <div className="available_store">
                             <div className="available-store-text">
                               <span className="store-available-at-title">
-                                {Drupal.t('Available at ')}
-                                {results.length}
-                                {Drupal.t(' stores near ')}
+                                {Drupal.t('Available at @count stores near', { '@count': count })}
                               </span>
                               <div className="google-store-location">{area.formatted_address}</div>
-                              <div className="change-location-link" onClick={() => this.setState({ showAutomcomplete: true })}>{Drupal.t(' change')}</div>
+                              <div className="change-location-link" onClick={() => this.setState({ showAutomcomplete: true })}>{Drupal.t('change')}</div>
                             </div>
                           </div>
                         )}

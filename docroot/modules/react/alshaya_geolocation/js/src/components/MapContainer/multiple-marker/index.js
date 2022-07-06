@@ -69,6 +69,7 @@ export class MultipeMarker extends React.Component {
             openHours={store.store_hours}
             address={store.address}
             position={{ lat: store.latitude, lng: store.longitude }}
+            icon={drupalSettings.alshaya_stores_finder.map.marker_icon_path}
           />
         ))}
         {showingInfoWindow && (
@@ -79,7 +80,7 @@ export class MultipeMarker extends React.Component {
           >
             <InfoPopUp
               selectedPlace={selectedPlace}
-              storeHours={selectedPlace.store_hours}
+              storeHours={selectedPlace.openHours}
             />
           </InfoWindow>
         )}

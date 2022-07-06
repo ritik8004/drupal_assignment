@@ -78,15 +78,35 @@
     }
   }
 
+  @include breakpoint($desktop) {
+    .header--wrapper {
+      background: $header_super_category_enabled_bg;
+    }
+  }
+
+  .c-menu-primary {
+    .region__menu-primary {
+      background: $header_super_category_enabled_bg;
+    }
+  }
+
+  .c-menu-secondary {
+    @include breakpoint($desktop) {
+      background: $header_super_category_enabled_bg;
+    }
+  }
+
   @include breakpoint($upto-desktop) {
+    .menu--active .mobile--close,
     .logged-in .mobile--close,
     .mobile--close {
-      top: 3.9rem;
+      top: 3.9rem !important;
     }
 
+    .menu--active .toggle--sign,
     .logged-in .toggle--sign,
     .toggle--sign {
-      top: 3.8125rem;
+      top: rem(60) !important;
     }
 
     .main--menu {
@@ -116,10 +136,6 @@
 
     .menu__back {
       height: 0.8125rem;
-
-      html[lang="ar"] & {
-        transform: rotate(180deg);
-      }
     }
 
     .toggle--sign {
@@ -130,17 +146,24 @@
       }
 
       .one {
+        align-items: center;
+        display: inline-flex;
+        justify-content: center;
         width: 50.5%;
         padding: 1.1rem 0.5rem;
+        height: rem(60);
       }
 
       .one.shop {
+        align-items: center;
+        display: inline-flex;
+        justify-content: center;
         width: 49.5%;
       }
     }
 
     & {
-      margin-top: 5.5rem;
+      margin-top: rem(114);
 
       @include breakpoint($only-tablet) {
         margin-top: 5.4375rem;
@@ -153,7 +176,7 @@
       }
 
       html[lang="ar"] & {
-        margin-top: 5.5rem;
+        margin-top: rem(114);
 
         @include breakpoint($only-tablet) {
           margin-top: 5.4375rem;
@@ -201,10 +224,6 @@
     .main--menu ul.menu--one__list {
       width: 20rem;
     }
-
-    .c-my-account-nav {
-      width: 16.875rem !important;
-    }
   }
 
   .c-menu-secondary,
@@ -212,6 +231,7 @@
   .main--menu ul.menu--one__list {
     @include breakpoint($only-mobile) {
       width: calc(100% - 2.8125rem);
+      top: rem(120);
     }
   }
 
@@ -235,7 +255,7 @@
     }
 
     @include breakpoint($upto-desktop) {
-      top: 5.7rem;
+      top: rem(120);
     }
 
     li::after {
@@ -515,6 +535,21 @@ body {
               top: 0;
             }
           }
+        }
+      }
+    }
+
+    &.aura-enabled {
+      .main--menu ul.menu--one__list,
+      .c-menu-secondary {
+        @include breakpoint($upto-desktop) {
+          top: rem(120);
+        }
+      }
+
+      .c-my-account-nav {
+        @include breakpoint($upto-desktop) {
+          top: rem(120);
         }
       }
     }

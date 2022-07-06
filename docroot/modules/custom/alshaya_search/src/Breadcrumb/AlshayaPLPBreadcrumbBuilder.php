@@ -53,7 +53,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function applies(RouteMatchInterface $route_match) {
     // Breadcrumb for 'plp' pages.
-    if ($route_match->getRouteName() == 'entity.taxonomy_term.canonical') {
+    if ($route_match->getRouteName() === 'entity.taxonomy_term.canonical' || $route_match->getRouteName() === 'alshaya_main_menu.category_view_all') {
       $term = $route_match->getParameter('taxonomy_term');
       if ($term->bundle() === 'acq_product_category') {
         return TRUE;
@@ -88,7 +88,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $breadcrumb->addCacheableDependency($term);
 
       $options = [];
-      if (!$term->get('field_display_as_clickable_link')->getString()) {
+      if (!$term->get('field_display_as_clickable_link')->getString() || $term->get('field_display_view_all')->getString()) {
         // Make term link non-clickable.
         $options = [
           'attributes' => [

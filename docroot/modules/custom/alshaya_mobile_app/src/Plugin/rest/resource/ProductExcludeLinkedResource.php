@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 
 /**
- * Provides a resource to get product details excliding linked products.
+ * Provides a resource to get product details excluding linked products.
  *
  * @RestResource(
  *   id = "product_exclude_linked",
@@ -365,9 +365,12 @@ class ProductExcludeLinkedResource extends ResourceBase {
       'teaser' => 'teaser',
     ];
     foreach ($media_contexts as $key => $context) {
+      $sku_media = $this->skuInfoHelper->getMedia($sku, $key);
+      // Add style images in media.
+      $sku_media = $this->skuImagesManager->processMediaImageStyles($sku_media, $sku, $context);
       $data['media'][] = [
         'context' => $context,
-        'media' => $this->skuInfoHelper->getMedia($sku, $key),
+        'media' => $sku_media,
       ];
     }
 

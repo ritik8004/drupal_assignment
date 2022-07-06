@@ -2,19 +2,38 @@
   .popup-content.egift-balance-check-content {
     .egift-balance-check-form {
       .egift-button {
-        color: $primary_brand_button;
-        border-color: $primary_brand_button;
+        @include button-brand;
+
+        font-family: $dh-semibold;
+
+        &:hover {
+          background: $primary_brand_button;
+          border: none;
+          transition: none;
+        }
       }
     }
 
     .egift-balance-response {
       .egift-topup-btn-wrapper {
         button {
-          color: $primary_brand_button;
-          border-color: $primary_brand_button;
+          @include button-brand;
+
+          font-family: $dh-semibold;
+
+          &:hover {
+            background: $primary_brand_button;
+            border: none;
+            transition: none;
+          }
 
           &:last-child {
-            color: $primary_brand_button;
+            @include btn;
+
+            &:hover {
+              border: none;
+              transition: none;
+            }
           }
         }
       }

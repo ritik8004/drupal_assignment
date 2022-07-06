@@ -1,0 +1,11 @@
+.user__order--detail {
+  .order-details-row {
+    .ict-date {
+      margin-top: rem(30);
+
+      &.mobile-only {
+        margin-top: rem(34);
+      }
+    }
+  }
+}

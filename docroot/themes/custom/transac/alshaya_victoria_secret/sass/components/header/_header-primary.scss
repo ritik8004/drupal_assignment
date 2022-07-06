@@ -122,6 +122,14 @@ header {
         .frontpage & {
           #{$right}: rem(-14);
         }
+
+        .frontpage.logged-in & {
+          height: rem(41);
+        }
+
+        .logged-in & {
+          height: rem(42);
+        }
       }
     }
 
@@ -349,6 +357,21 @@ header {
     li.menu--one__list-item {
       ul.menu--two__list {
         background: $mm_l3_link_bg;
+
+        .menu__links__wrapper {
+          .column {
+            border-#{$right}: rem(1) solid $mm_l1_border;
+            padding-#{$left}: rem(18);
+
+            &:last-of-type {
+              border-#{$right}: 0;
+            }
+
+            &:first-of-type {
+              padding-#{$left}: 0;
+            }
+          }
+        }
       }
     }
   }
@@ -387,6 +410,7 @@ header {
       &::before {
         @include breakpoint($only-mobile) {
           #{$left}: rem(-21);
+          top: rem(-3);
         }
       }
     }
@@ -514,6 +538,10 @@ header {
     padding-#{$left}: rem(17);
     width: rem(36);
 
+    .logged-in & {
+      margin-top: rem(6);
+    }
+
     &::before {
       @include breakpoint($upto-desktop) {
         width: rem(20);
@@ -604,6 +632,20 @@ header {
     .menu__in {
       margin-top: -2.25rem;
     }
+
+    & > .menu-two__link-wrapper {
+      border-bottom: 0;
+    }
+  }
+
+  .menu--three__list-item {
+    & > .menu-two__link-wrapper {
+      border-bottom: 0;
+    }
+  }
+
+  .menu__back {
+    background: url('#{$brand_theme_img_directory_path}/icons/ic-chevronleft.svg') no-repeat;
   }
 }
 

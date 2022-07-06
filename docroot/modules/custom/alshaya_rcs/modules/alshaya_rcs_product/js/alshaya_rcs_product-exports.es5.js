@@ -12,6 +12,35 @@ function isProductBuyable(entity) {
 }
 
 /**
+ * Check if the product is in stock.
+ *
+ * @param {object} entity
+ *   The product entity.
+ *
+ * @returns {Boolean}
+ *   True if product is in stock, else false.
+ */
+function isProductInStock(entity) {
+  if (entity.stock_status === 'OUT_OF_STOCK') {
+    return false;
+  }
+
+  // @todo Check for free gifts when checking the variants.
+  // For configurable product, if all variants are OOS, then we consider the
+  // product to be OOS.
+  if (entity.type_id === 'configurable') {
+    const isAnyVariantInStock = entity.variants.some((variant) =>
+      variant.product.stock_status === 'IN_STOCK'
+    );
+    if (!isAnyVariantInStock) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
  * Create short text with ellipsis and Read more button.
  *
  * @param {string} value
@@ -209,16 +238,11 @@ function disableUnavailableOptions(sku, configurableOptions) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
   // Clone this so as to not modify the original object.
   configurableOptionsClone = JSON.parse(JSON.stringify(configurableOptions));
-  // Check if configurable options is available for the product
-  // and filter unavailable options.
   configurableOptionsClone.forEach(function eachOption(option) {
     option.values = option.values.filter(function eachValue(value) {
-      if (!Drupal.hasValue(combinations.attribute_sku)
-       || typeof combinations.attribute_sku[option.attribute_code][value.value_index] === 'undefined'
-      ) {
-        return false;
+      if (Drupal.hasValue(combinations.attribute_sku[option.attribute_code][value.value_index])) {
+        return true;
       }
-      return true;
     });
   });
 
@@ -524,6 +548,11 @@ exports.computePhFilters = function (input, filter) {
         break;
       }
 
+      if (!isProductInStock(input)) {
+        value = handlebarsRenderer.render(`product.sku_base_form_oos`, {text: Drupal.t('Out of stock')});
+        break;
+      }
+
       data.sku = input.sku;
       data.sku_clean = Drupal.cleanCssIdentifier(input.sku);
       data.add_to_cart_text = Drupal.t('add to cart');
@@ -648,7 +677,8 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'name':
-      value = input.name;
+      // Render handlebars plugin.
+      value = handlebarsRenderer.render(`product.block.${filter}`, input);
       break;
 
     case 'description':

@@ -7,7 +7,7 @@ on:
       - qa
       - uat
       - master
-      - develop-new-aura-checkout
+      - develop-hello-member
   create:
     tags:
 

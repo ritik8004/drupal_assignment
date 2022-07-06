@@ -1,0 +1,9 @@
+name: Alshaya RCS Wishlist
+type: module
+description: Alshaya RCS implementation of Wishlist.
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - rcs_placeholders:rcs_placeholders
+  - alshaya_wishlist:alshaya_wishlist
+  - alshaya_rcs_product:alshaya_rcs_product

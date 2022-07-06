@@ -23,6 +23,11 @@
     {% else %}
       <div id="product-zoom-container"></div>
     {% endif %}
+    {% if content.wishlist %}
+      <div class="wishlist-pdp-wrapper mobile-only">
+        {{ content.wishlist }}
+      </div>
+    {% endif %}
   </div>
 {% endblock %}
 {% block contentSidebar %}
@@ -37,7 +42,7 @@
         {% block productBrand %}
         {% endblock %}
 
-        <h1><span>#rcs.product.name#</span></h1>
+        <h1>#rcs.product._self|name#</h1>
 
         {% block pricePrefix %}
         {% endblock %}
@@ -110,6 +115,11 @@
               {{ content.sharethis }}
             </div>
           </div>
+          {% if content.wishlist %}
+            <div class="wishlist-pdp-wrapper desktop-only">
+              {{ content.wishlist }}
+            </div>
+          {% endif %}
           {% if quantity_limit_enabled == true %}
             <div class="order-quantity-limit-message"></div>
           {% endif %}
@@ -165,4 +175,3 @@
     {{content.reviews_section}}
   {% endif %}
 {% endblock %}
-

@@ -580,7 +580,6 @@ window.commerceBackend = window.commerceBackend || {};
       firstChild: '',
     };
 
-
     rawProductData.variants.forEach(function (variant) {
       const product = variant.product;
       // Don't consider OOS products.
@@ -716,7 +715,7 @@ window.commerceBackend = window.commerceBackend || {};
       // Do this mapping for easy access.
       rawProductData.variants.forEach(function (variant) {
         variants[variant.product.sku] = variant;
-      })
+      });
 
       configurableOptions.forEach(function (option) {
         option.values.forEach(function (value) {
@@ -1225,10 +1224,13 @@ window.commerceBackend = window.commerceBackend || {};
           stockData.status = cartItem.configured_variant.stock_status;
           staticDataStore.cartItemsStock[cartItem.configured_variant.sku] = stockData;
         }
-        else {
+        else if (cartItem.product.type_id === 'simple') {
           stockData = cartItem.product.stock_data;
           stockData.status = cartItem.product.stock_status;
           staticDataStore.cartItemsStock[cartItem.product.sku] = stockData;
+        }
+        else {
+          staticDataStore.cartItemsStock[sku] = null;
         }
       });
 
@@ -1258,7 +1260,7 @@ window.commerceBackend = window.commerceBackend || {};
     var product = e.detail.result;
     if (product.type_id === 'configurable') {
       product.variants.forEach(function eachVariant(variant) {
-        variant.parent_sku = product.sku;
+        variant.product.parent_sku = product.sku;
       });
     }
 

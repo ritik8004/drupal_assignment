@@ -15,16 +15,12 @@ class ReturnedItemsListing extends React.Component {
    *   Subtitle for the return type.
    */
   getReturnedItemsSubTitle = (type) => {
-    if (type === 'online') {
+    if (type === 'online' || type === 'rejected') {
       return Drupal.t('Online Returns', {}, { context: 'online_returns' });
     }
 
     if (type === 'store') {
       return Drupal.t('Store Returns', {}, { context: 'online_returns' });
-    }
-
-    if (type === 'rejected') {
-      return Drupal.t('Rejected Items', {}, { context: 'online_returns' });
     }
 
     return '';
@@ -45,7 +41,11 @@ class ReturnedItemsListing extends React.Component {
     }
 
     if (type === 'rejected') {
-      return Drupal.t('Online Returns', {}, { context: 'online_returns' });
+      return (
+        <span className={`${type}`}>
+          {Drupal.t('Cancelled Items', {}, { context: 'online_returns' })}
+        </span>
+      );
     }
 
     return '';

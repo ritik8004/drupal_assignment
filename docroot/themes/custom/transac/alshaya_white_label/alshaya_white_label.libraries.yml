@@ -773,22 +773,7 @@ online-booking:
     theme:
       css/conditional-sass/online-booking/online-booking.ltr.css: {}
 
-my-accounts-hello-member:
+inter-country-transfer:
   css:
     theme:
-      css/conditional-sass/my-accounts-hello-member/my-accounts-hello-member.ltr.css: {}
-
-hello-member-registration:
-  css:
-    theme:
-      css/conditional-sass/hello-member-registration/hello-member-registration.ltr.css: {}
-
-my-membership-info:
-  css:
-    theme:
-      css/conditional-sass/my-membership-info/my-membership-info.ltr.css: {}
-
-hello-member-points-history:
-  css:
-    theme:
-      css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css: {}
+      css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css: {}

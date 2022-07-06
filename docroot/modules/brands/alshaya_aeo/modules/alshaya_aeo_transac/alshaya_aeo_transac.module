@@ -164,3 +164,21 @@ function alshaya_aeo_transac_preprocess_html(&$variables) {
   // Add super category css library to show super catgeory menus.
   $variables['#attached']['library'][] = 'alshaya_white_label/super-category';
 }
+
+/**
+ * Implements hook_alshaya_super_category_status_update().
+ */
+function alshaya_aeo_transac_alshaya_super_category_status_update($status, $default_parent, $path_alter) {
+  // Change branding block weight as per the design when super category feature
+  // gets on/off.
+  if ($status) {
+    $config = \Drupal::configFactory()->getEditable('block.block.branding');
+    $config->set('weight', -20);
+    $config->save();
+  }
+  else {
+    $config = \Drupal::configFactory()->getEditable('block.block.branding');
+    $config->set('weight', -32);
+    $config->save();
+  }
+}

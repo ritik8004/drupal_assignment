@@ -24,6 +24,11 @@ schema_org:
   dependencies:
     - rcs_placeholders/helpers
 
+product.block.name:
+  version: 1.x
+  js:
+    templates/rcs-product-name-block.handlebars: {}
+
 product.block.description:
   version: 1.x
   js:
@@ -53,6 +58,11 @@ product.sku_base_form:
   version: 1.x
   js:
     templates/rcs-sku-base-form.handlebars: {}
+
+product.sku_base_form_oos:
+  version: 1.x
+  js:
+    templates/rcs-sku-base-form-oos.handlebars: {}
 
 product.not_buyable_product:
   version: 1.x

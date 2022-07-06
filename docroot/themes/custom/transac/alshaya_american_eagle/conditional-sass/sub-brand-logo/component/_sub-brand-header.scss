@@ -47,13 +47,17 @@ body.sub-brand-logo {
       .c-menu-primary .menu--mobile-navigation {
         z-index: 14;
       }
+
+      &:not(.super-category-enabled) {
+        .c-menu-primary .menu--mobile-navigation {
+          z-index: unset;
+        }
+      }
     }
 
-    &.frontpage {
-      #block-alshayareactcartminicartblock {
-        background: transparent;
-        z-index: 9;
-      }
+    #block-alshayareactcartminicartblock {
+      background: transparent;
+      z-index: 9;
     }
   }
 }

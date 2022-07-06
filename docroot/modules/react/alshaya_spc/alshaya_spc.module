@@ -486,5 +486,9 @@ function alshaya_spc_alshaya_rcs_product_order_build_alter(&$build) {
  * Implements hook_alshaya_acm_customer_orders_details_build_alter().
  */
 function alshaya_spc_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
-  $build['#attached']['library'][] = 'alshaya_spc/order_details';
+  // Avoid adding this in order details print page as Order print is still not
+  // built using react.
+  if (\Drupal::routeMatch()->getRouteName() != 'alshaya_acm_customer.orders_print') {
+    $build['#attached']['library'][] = 'alshaya_spc/order_details';
+  }
 }

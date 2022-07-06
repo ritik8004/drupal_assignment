@@ -220,6 +220,11 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     '#theme' => 'rcs_commerce_price',
   ];
 
+  $build['#attached']['drupalSettings']['pdpShowSpecifications'] = $acm_settings->get('pdp_show_specifications');
+  $build['#attached']['drupalSettings']['display_upsell'] = (bool) $acm_settings->get('display_upsell');
+  $build['#attached']['drupalSettings']['display_related'] = (bool) $acm_settings->get('display_related');
+  $build['#attached']['drupalSettings']['display_crosssell'] = (bool) $acm_settings->get('display_crosssell');
+
   // Attach required drupalSettings.
   $cart_config = \Drupal::config('alshaya_acm.cart_config');
   $build['#attached']['drupalSettings']['alshaya_spc']['cart_config']['max_cart_qty'] = $cart_config->get('max_cart_qty');
@@ -321,6 +326,14 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
   $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
+
+  // Invoke hook_alshaya_rcs_product_build_alter.
+  $entity_info = [
+    'entity' => $entity,
+    'display' => $display,
+    'view' => $view_mode,
+  ];
+  \Drupal::moduleHandler()->alter('alshaya_rcs_product_build', $build, $entity_info);
 }
 
 /**
@@ -380,10 +393,18 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
   ];
 
   $size_guide = _alshaya_acm_product_get_size_guide_info(NULL);
-  $variables['#attached']['drupalSettings']['alshayaRcs']['sizeGuide'] = [
-    'link' => $size_guide['link'],
-    'attributes' => $size_guide['attributes'],
-  ];
+  if (!empty($size_guide) && !empty($size_guide['link']) && !empty($size_guide['attributes'])) {
+    $variables['#attached']['drupalSettings']['alshayaRcs']['sizeGuide'] = [
+      'link' => $size_guide['link'],
+      'attributes' => $size_guide['attributes'],
+    ];
+  }
+  else {
+    $variables['#attached']['drupalSettings']['alshayaRcs']['sizeGuide'] = [
+      'link' => NULL,
+      'attributes' => [],
+    ];
+  }
 
   $is_category_page = FALSE;
   // Skip product rcs_templates of sku_base_form for rcs category.
@@ -650,6 +671,22 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
   // We have two variations of the cart query, one for anonymous and one for
   // authenticated users. So we vary by this context.
   $query_fields['#cache']['contexts'][] = 'user.roles:anonymous';
+
+  // Add the recommended products fields to the main query body.
+  $recommended_product_settings = \Drupal::config('alshaya_acm.settings');
+  // Add query for upsell products if display setting is true.
+  if ($recommended_product_settings->get('display_upsell')) {
+    $query_fields['upsell_products'] = $rcs_product_helper->getRecommendedProductQuery('upsell_products');
+  }
+  // Add query for related products if display setting is true.
+  if ($recommended_product_settings->get('display_related')) {
+    $query_fields['related_products'] = $rcs_product_helper->getRecommendedProductQuery('related_products');
+  }
+  // Add query for crosssell products if display setting is true.
+  if ($recommended_product_settings->get('display_crosssell')) {
+    $query_fields['crosssell_products'] = $rcs_product_helper->getRecommendedProductQuery('crosssell_products');
+  }
+
   return $query_fields;
 }
 
@@ -663,6 +700,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
 
   // Libraries to attach.
   $libraries = [
+    'product.block.name' => 'alshaya_rcs_product',
     'product.block.description' => 'alshaya_rcs_product',
     'product.order_quantity_limit' => 'alshaya_rcs_product',
     'product.modal' => 'alshaya_rcs_product',
@@ -670,6 +708,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'product.block.price.item' => 'alshaya_rcs_product',
     'product.promotions' => 'alshaya_rcs_product',
     'product.sku_base_form' => 'alshaya_rcs_product',
+    'product.sku_base_form_oos' => 'alshaya_rcs_product',
     'product.not_buyable_product' => 'alshaya_rcs_product',
     'product.delivery_info' => 'alshaya_rcs_product',
     'product.delivery_options' => 'alshaya_rcs_product',
@@ -716,6 +755,7 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
           $libraries['product_utility']['js']["/$self_module_path/js/alshaya_rcs_product.utility.js"] = $options;
           $libraries['product_utility']['dependencies'] = [
             'core/drupal',
+            'core/drupalSettings',
             'alshaya_master/common_functions',
             'alshaya_rcs_product/main',
           ];

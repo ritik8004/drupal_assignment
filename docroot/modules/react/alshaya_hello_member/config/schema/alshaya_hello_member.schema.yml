@@ -1,7 +1,0 @@
-alshaya_hello_member.settings:
-  type: config_object
-  label: 'Alshaya hello member settings'
-  mapping:
-    enabled:
-      type: boolean
-      label: 'Config to enable/disable hello member'

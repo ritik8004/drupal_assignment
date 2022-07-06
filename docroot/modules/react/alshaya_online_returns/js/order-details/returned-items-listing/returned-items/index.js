@@ -7,14 +7,15 @@ const ReturnedItems = ({
   returnData,
   returnType,
 }) => {
-  const returnStatus = Drupal.cleanCssIdentifier(returnData.returnInfo.status);
+  const returnStatus = returnData.returnInfo.extension_attributes.customer_status_key;
+  const returnStatusClass = Drupal.cleanCssIdentifier(returnStatus);
   return (
     <ConditionalView condition={hasValue(returnData) && hasValue(returnData.items)}>
       <div key={returnData.returnInfo.increment_id} className="return-items-wrapper">
         { returnType !== 'rejected' && (
           <div className="return-status-wrapper">
             <div className="return-status">
-              <span className={`status-label ${returnStatus}`}>{returnData.returnInfo.extension_attributes.customer_status}</span>
+              <span className={`status-label ${returnStatusClass}`}>{returnData.returnInfo.extension_attributes.customer_status}</span>
               <span className="status-message">
                 {' - '}
                 {returnData.returnInfo.extension_attributes.description}

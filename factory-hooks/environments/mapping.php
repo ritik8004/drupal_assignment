@@ -101,6 +101,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'hm_qa',
         'conductor' => 'hmkw_dev',
       ],
+      'test' => [
+        'magento' => 'hm_test',
+        'conductor' => 'hmkw_qa',
+      ],
       'qa2' => [
         'magento' => 'hm_test',
         'conductor' => 'hmkw_qa2',
@@ -342,10 +346,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'weae_dev2',
       ],
     ],
-    'aeokw' => [
-      'dev' => [
-        'magento' => 'aeo_qa',
-        'conductor' => 'aeokw_dev',
+    'aeoxb' => [
+      'dev3' => [
+        'magento' => 'aeo_apc',
+        'conductor' => 'aeoxb_dev3',
       ],
     ],
     'aeokw' => [

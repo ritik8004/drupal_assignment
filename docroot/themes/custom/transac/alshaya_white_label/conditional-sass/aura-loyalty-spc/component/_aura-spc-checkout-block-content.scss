@@ -520,8 +520,8 @@
         width: rem(16);
         height: rem(16);
         margin-#{$right}: rem(8);
-        background-image: url('#{$base_theme_img_directory_path}/icons/exclamation-icon.svg');
-        background-position: center;
+        background-image: url('#{$base_theme_img_directory_path}/icons/exclamation-circle-icon.svg');
+        background-position: top;
       }
 
       .points-earned-with-purchase {

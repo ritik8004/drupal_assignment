@@ -93,11 +93,19 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
    * @command alshaya_super_category:switch
    *
    * @option default_parent Default parent term id to render main menu
+   * @option exclude_path_alter
+   *  Don't trigger bulk update on product aliases
    *
    * @aliases alshaya-super-category-switch
+   *
+   * @usage drush alshaya-super-category-switch --exclude_path_alter
+   *   Exclude the bulk update on product aliases.
    */
   public function enableDisableSuperCategory(
-    array $options = ['default_parent' => 0]
+    array $options = [
+      'default_parent' => 0,
+      'exclude_path_alter' => 0,
+    ]
   ) {
     $config = $this->configFactory->getEditable('alshaya_super_category.settings');
 
@@ -108,7 +116,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
 
     // Check path alter status to display message and trigger bulk alias
     // generate.
-    $path_alter = $config->get('product_path_alter', TRUE);
+    $path_alter = (!$options['exclude_path_alter']) ? $config->get('product_path_alter', TRUE) : FALSE;
     if ($path_alter && 'enable' == $action) {
       $msg = dt('Are you sure you want to !action super category feature and do bulk update on product aliases', ['!action' => $action]);
     }
@@ -138,6 +146,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
     $block = reset($blocks);
     $block->setStatus($status);
     $block->save();
+
     if ($path_alter) {
       $this->productAliasBulkProcess();
     }
@@ -154,6 +163,12 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
       $this->configFactory->getEditable('metatag.metatag_defaults.node__acq_product')->save();
       $this->configFactory->getEditable('metatag.metatag_defaults.node__acq_promotion')->save();
       $this->configFactory->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')->save();
+
+      // Remove sub brand logo as we are using super category as a feature.
+      $config = $this->configFactory->getEditable('alshaya_master.settings');
+      $config->set('sub_brand_logo_img', '');
+      $config->set('sub_brand_logo_link', '');
+      $config->save();
     }
     else {
       $meta_configs = [

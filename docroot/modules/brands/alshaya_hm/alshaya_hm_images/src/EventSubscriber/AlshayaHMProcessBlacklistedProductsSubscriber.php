@@ -58,7 +58,7 @@ class AlshayaHMProcessBlacklistedProductsSubscriber implements EventSubscriberIn
    * @param \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager
    *   SKU Assets Manager.
    */
-  public function setStoreFinderUtility(SkuAssetManager $sku_assets_manager) {
+  public function setSkuAssetManager(SkuAssetManager $sku_assets_manager) {
     // @todo Move this back to normal/constructor once module enabled on prod.
     $this->skuAssetsManager = $sku_assets_manager;
   }
