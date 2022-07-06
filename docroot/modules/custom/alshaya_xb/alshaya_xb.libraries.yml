@@ -1,0 +1,5 @@
+alshaya_cross_border:
+ css:
+   theme:
+     # @todo The URL is hard coded for POC, we have to make this configurable.
+     '//intgepi.bglobale.com/includes/css/1197': { type: external, attributes: { id: GEPIStyles, type: text/css } }

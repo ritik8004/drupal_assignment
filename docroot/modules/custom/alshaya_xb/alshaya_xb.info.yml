@@ -1,0 +1,5 @@
+name: Alshaya Cross Border
+description: Provides alshaya cross border feature.
+package: Alshaya
+type: module
+core_version_requirement: ^8 || ^9

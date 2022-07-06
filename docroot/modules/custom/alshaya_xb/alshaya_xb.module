@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_xb_page_attachments(array &$attachments) {
+  $is_xb_route = \Drupal::service('alshaya_xb.xb_route_check')->isCrossBorderRoute();
+  if ($is_xb_route) {
+    $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_cross_border';
+  }
+
+}
+
+/**
+ * Implements hook_page_bottom().
+ */
+function alshaya_xb_page_bottom(array &$page_bottom) {
+  $is_xb_route = \Drupal::service('alshaya_xb.xb_route_check')->isCrossBorderRoute();
+  if ($is_xb_route) {
+    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $ge_store_code = 'row_' . $language;
+    // @todo The URL values present in "geStoreCodeInstance" and "s.src"
+    // variables is hard coded for POC, we have to make this configurable.
+    $js = "
+       var geStoreCode = $ge_store_code;
+       var geStoreCodeInstance = 'apc-uovxi7i-tw5uijob6hir2.eu-3.magentosite.cloud';
+       (function () {
+       var s = document.createElement('script');
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = '//intgepi.bglobale.com/includes/js/1197';
+       document.getElementsByTagName('head')[0].appendChild(s);
+       })();
+    ";
+    // Add inline script to the page bottom.
+    $page_bottom['alshaya_xb_cross_border'] = [
+      '#type'  => 'html_tag',
+      '#tag'   => 'script',
+      '#attributes' => ['id' => 'globaleScript'],
+      '#value' => Markup::create($js),
+    ];
+  }
+}
