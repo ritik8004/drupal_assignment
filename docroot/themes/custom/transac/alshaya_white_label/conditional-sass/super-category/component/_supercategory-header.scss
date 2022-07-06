@@ -163,7 +163,7 @@
     }
 
     & {
-      margin-top: 5.5rem;
+      margin-top: rem(114);
 
       @include breakpoint($only-tablet) {
         margin-top: 5.4375rem;
@@ -176,7 +176,7 @@
       }
 
       html[lang="ar"] & {
-        margin-top: 5.5rem;
+        margin-top: rem(114);
 
         @include breakpoint($only-tablet) {
           margin-top: 5.4375rem;
