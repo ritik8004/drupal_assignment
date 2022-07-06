@@ -480,6 +480,9 @@ window.commerceBackend = window.commerceBackend || {};
         status: 1,
         in_stock: product.stock_status === 'IN_STOCK',
       },
+      style_products_processed: Drupal.hasValue(product.style_products_processed)
+        ? product.style_products_processed
+        : true,
     };
 
     let maxSaleQty = 0;
@@ -796,6 +799,8 @@ window.commerceBackend = window.commerceBackend || {};
    *   The sku value.
    * @param {string} parentSKU
    *   (optional) The parent sku value.
+   * @param {boolean} loadStyles
+   *   (optional) Indicates if styled product need to be loaded.
    */
   window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null, loadStyles = true) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;

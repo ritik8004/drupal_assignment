@@ -226,7 +226,7 @@ window.commerceBackend = window.commerceBackend || {};
       && e.detail.placeholder === 'single_product_by_sku') {
       var product = e.detail.result;
       product.configurable_options.push(getColorAttribute(product));
-      product.style_product_processed = false;
+      product.style_products_processed = false;
     }
   });
 })();
