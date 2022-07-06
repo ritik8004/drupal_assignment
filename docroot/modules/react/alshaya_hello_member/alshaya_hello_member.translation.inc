@@ -31,33 +31,27 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
-      'Date of birth' => [
+      'Date of Birth' => [
         'ar' => 'معلومات العضوية',
-        'context' => 'hello_member',
       ],
       'H&M wants to give you special treat on your birthday' => [
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
       'Gender' => [
-        'ar' => 'معلومات العضوية',
-        'context' => 'hello_member',
+        'ar' => 'العضوية',
       ],
       '- Select Gender -' => [
         'ar' => 'معلومات العضوية',
-        'context' => 'hello_member',
       ],
       'Male' => [
         'ar' => 'معلومات العضوية',
-        'context' => 'hello_member',
       ],
       'Female' => [
         'ar' => 'معلومات العضوية',
-        'context' => 'hello_member',
       ],
       'Prefer not to say' => [
         'ar' => 'معلومات العضوية',
-        'context' => 'hello_member',
       ],
       'My Details' => [
         'ar' => 'معلومات العضوية',
@@ -136,6 +130,78 @@ function _alshaya_hello_member_react_translations() {
       ],
       'Member earn' => [
         'ar' => 'عضوية احصل على',
+        'context' => 'hello_member',
+      ],
+
+      'Add More Get More' => [
+        'ar' => 'أضف المزيد واحصل على المزيد',
+        'context' => 'hello_member',
+      ],
+      'Select Gender' => [
+        'ar' => 'حدد الجنس',
+      ],
+      'H&M Membership' => [
+        'ar' => 'عضوية اتش اند ام',
+        'context' => 'hello_member',
+      ],
+      'Membership info' => [
+        'ar' => 'معلومات العضوية',
+        'context' => 'hello_member',
+      ],
+      'You are one click away from becoming a H&M member. Get free delivery and 10% off on your first purchase.' => [
+        'ar' => 'أنت على بعد خطوة واحدة من الانضمام إلى عضوية اتش اند ام، احصل على توصيل مجاني وخصم %10 على طلبيتك الأولى',
+        'context' => 'hello_member',
+      ],
+      'Continue' => [
+        'ar' => 'متابعة',
+        'context' => 'hello_member',
+      ],
+      'Terms & conditions' => [
+        'ar' => 'الشروط والأحكام',
+        'context' => 'hello_member',
+      ],
+      'Privacy policy' => [
+        'ar' => 'سياسة الخصوصية',
+        'context' => 'hello_member',
+      ],
+      'QR Code' => [
+        'ar' => 'رمز QR',
+        'context' => 'hello_member',
+      ],
+      'View QR code' => [
+        'ar' => 'عرض رمز QR',
+        'context' => 'hello_member',
+      ],
+      'To redeem in store use this QR code.' => [
+        'ar' => 'لتفعيل هذا العرض في محلاتنا استخدم هذا الرمز',
+        'context' => 'hello_member',
+      ],
+      'Submit Rating and Review' => [
+        'ar' => 'تقديم التقييم والمراجعة',
+        'context' => 'hello_member',
+      ],
+      'Complete your profile' => [
+        'ar' => 'اكمل ملفك',
+        'context' => 'hello_member',
+      ],
+      'Expires on' => [
+        'ar' => 'تنتهي صلاحيته في',
+        'context' => 'hello_member',
+      ],
+      'Add to bag' => [
+        'ar' => 'أضف إلى الحقيبة',
+        'context' => 'hello_member',
+      ],
+      'Coupon QR Code' => [
+        'ar' => 'رمز QR الكوبون',
+        'context' => 'hello_member',
+      ],
+      'Offer QR Code' => [
+        'ar' => 'رمز QR العرض',
+        'context' => 'hello_member',
+      ],
+      'Membership Id QR Code' => [
+        'ar' => 'رمز QR لهوية العضوية',
         'context' => 'hello_member',
       ],
     ],
