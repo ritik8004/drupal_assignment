@@ -1254,10 +1254,13 @@ window.commerceBackend = window.commerceBackend || {};
           stockData.status = cartItem.configured_variant.stock_status;
           staticDataStore.cartItemsStock[cartItem.configured_variant.sku] = stockData;
         }
-        else {
+        else if (cartItem.product.type_id === 'simple') {
           stockData = cartItem.product.stock_data;
           stockData.status = cartItem.product.stock_status;
           staticDataStore.cartItemsStock[cartItem.product.sku] = stockData;
+        }
+        else {
+          staticDataStore.cartItemsStock[sku] = null;
         }
       });
 
