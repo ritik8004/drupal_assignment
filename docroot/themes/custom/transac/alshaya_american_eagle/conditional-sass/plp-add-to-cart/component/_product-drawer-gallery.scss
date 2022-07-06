@@ -1,0 +1,11 @@
+.configurable-product-form-wrapper {
+  .gallery-wrapper {
+    .slick-slider {
+      .magic-dots {
+        html[lang=ar] & {
+          padding-bottom: rem(4);
+        }
+      }
+    }
+  }
+}
