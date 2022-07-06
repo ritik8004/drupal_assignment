@@ -56,11 +56,11 @@ export default class PdpSddEd extends React.Component {
         // eslint-disable-next-line max-len
         expressDeliveryLabels.sort((a, b) => deliveryOptionsOrder.indexOf(a.key) > deliveryOptionsOrder.indexOf(b.key));
       }
-
-      this.setState({
-        expressDeliveryLabels,
-      });
     }
+
+    this.setState({
+      expressDeliveryLabels,
+    });
   }
 
   render() {
