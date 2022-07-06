@@ -55,11 +55,9 @@ body.sub-brand-logo {
       }
     }
 
-    &.frontpage {
-      #block-alshayareactcartminicartblock {
-        background: transparent;
-        z-index: 9;
-      }
+    #block-alshayareactcartminicartblock {
+      background: transparent;
+      z-index: 9;
     }
   }
 }
