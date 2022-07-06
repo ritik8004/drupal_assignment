@@ -798,6 +798,8 @@ header {
 
   .menu__list-item {
     @include menuListItem;
+    
+    text-transform: none;
   }
 
   .back--link {
