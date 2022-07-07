@@ -1259,9 +1259,6 @@ window.commerceBackend = window.commerceBackend || {};
           stockData.status = cartItem.product.stock_status;
           staticDataStore.cartItemsStock[cartItem.product.sku] = stockData;
         }
-        else {
-          staticDataStore.cartItemsStock[sku] = null;
-        }
       });
 
       return staticDataStore.cartItemsStock[sku];
