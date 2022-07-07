@@ -83,8 +83,10 @@
             });
 
             // Call behaviours with modal context.
-            var modalContext = $('.pdp-modal-box');
-            globalThis.rcsPhApplyDrupalJs(modalContext);
+            var modalContext = document.querySelector('.pdp-modal-box');
+            if (modalContext) {
+              globalThis.rcsPhApplyDrupalJs(modalContext);
+            }
 
             var mainProduct = entity;
             // Now render the add to cart form.
@@ -92,7 +94,9 @@
               mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
             }
             window.commerceBackend.renderAddToCartForm(mainProduct);
-            globalThis.rcsPhApplyDrupalJs(modalContext);
+            if (modalContext) {
+              globalThis.rcsPhApplyDrupalJs(modalContext);
+            }
           },
           function () {
             // @todo shall we remove loaders when this happens?

@@ -785,7 +785,7 @@
 
     try {
       // Remove comma from price before passing through parseFloat.
-      var amount = product.attr('gtm-price').replace(/\,/g,'');
+      var amount = product.attr('gtm-price')?.replace(/\,/g,'');
       productData = {
         name: product.attr('gtm-name'),
         id: product.attr('gtm-main-sku'),

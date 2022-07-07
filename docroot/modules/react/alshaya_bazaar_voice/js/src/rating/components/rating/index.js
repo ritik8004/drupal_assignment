@@ -86,21 +86,33 @@ export default class Rating extends React.Component {
           </ConditionalView>
         </ConditionalView>
 
-        <ConditionalView condition={renderLink
-          && userDetails.user.userId > 0 && !reviewedByCurrentUser}
-        >
-          <div className="button-wrapper">
-            <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review-button" href="#">{getStringMessage('write_a_review')}</a>
-          </div>
-        </ConditionalView>
+        {
+          renderLink
+          && userDetails.user
+          && userDetails.user.userId > 0
+          && !reviewedByCurrentUser
+          && (
+            <div className="button-wrapper">
+              <a
+                onClick={(e) => this.clickHandler(e, childClickHandler)}
+                className="write-review-button"
+                href="#"
+              >
+                {getStringMessage('write_a_review')}
+              </a>
+            </div>
+          )
+        }
+        {
+          renderLink && userDetails.user && userDetails.user.userId === 0 && (
+            <WriteReviewButton
+              reviewedByCurrentUser={reviewedByCurrentUser}
+              newPdp={renderLink}
+              isInline={isInline}
+            />
+          )
+        }
 
-        <ConditionalView condition={userDetails.user.userId === 0 && renderLink}>
-          <WriteReviewButton
-            reviewedByCurrentUser={reviewedByCurrentUser}
-            newPdp={renderLink}
-            isInline={isInline}
-          />
-        </ConditionalView>
         <ConditionalView condition={reviewedByCurrentUser && renderLink}>
           <WriteReviewButton
             reviewedByCurrentUser={reviewedByCurrentUser}

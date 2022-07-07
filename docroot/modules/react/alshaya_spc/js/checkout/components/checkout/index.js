@@ -183,7 +183,7 @@ export default class Checkout extends React.Component {
     }
 
     // Get promo info.
-    if (typeof result.error === 'undefined') {
+    if (!result.error && window.dynamicPromotion) {
       window.dynamicPromotion.apply(result);
     }
   }

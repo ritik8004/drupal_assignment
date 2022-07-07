@@ -76,7 +76,7 @@
    */
   Drupal.alshayaSeoPdpMagazineV2Gtm.getRecommendationListName = function (element) {
     var label = element.closest('.magv2-pdp-crossell-upsell-wrapper').find('.magv2-pdp-crossell-upsell-label').text();
-    var listName = $('body').attr('gtm-list-name');
+    var listName = $('body').attr('gtm-list-name') || '';
 
     return (productRecommendationsSuffix + listName.replace('placeholder', label)).toLowerCase();
   }

@@ -158,12 +158,14 @@ window.commerceBackend = window.commerceBackend || {};
    *   The raw product entity.
    */
   window.commerceBackend.renderAddToCartForm = function renderAddToCartForm(product) {
-    var addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + product.sku + '"]');
-    var addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
-    // Render the HTML to the div.
-    addToCartForm.html(addToCartFormHtml);
-    addToCartForm.addClass('rcs-loaded');
-    globalThis.rcsPhApplyDrupalJs(document);
+    if (product) {
+      var addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + product.sku + '"]');
+      var addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
+      // Render the HTML to the div.
+      addToCartForm.html(addToCartFormHtml);
+      addToCartForm.addClass('rcs-loaded');
+      globalThis.rcsPhApplyDrupalJs(document);
+    }
   };
 
   RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
@@ -221,9 +223,11 @@ window.commerceBackend = window.commerceBackend || {};
       var mainProduct = (Drupal.hasValue(response) && Drupal.hasValue(response[0])) ? response[0] : null;
       if (mainProduct) {
         var html = globalThis.renderRcsProduct.render(drupalSettings, productType, {}, {}, mainProduct);
-        var selector = '#rcs-' + productType;
-        $(selector).html(html);
-        globalThis.rcsPhApplyDrupalJs(selector);
+        var $selector = $('#rcs-' + productType);
+        if ($selector.length > 0) {
+          $selector.html(html);
+          globalThis.rcsPhApplyDrupalJs($selector[0]);
+        }
       }
     });
   };
