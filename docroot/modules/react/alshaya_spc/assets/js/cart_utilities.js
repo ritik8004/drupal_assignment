@@ -192,7 +192,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     }
 
     // Call API, fetch data and store product data in storage.
-    window.commerceBackend.getProductDataFromBackend(sku, parentSKU, false);
+    window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
 
     // Return product data from storage.
     return Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
