@@ -385,8 +385,8 @@ window.commerceBackend = window.commerceBackend || {};
       const variantParentSku = variantInfo.parent_sku;
       const variantParentProduct = window.commerceBackend.getProductData(null, null, false)[variantParentSku];
       const productUrl = Drupal.hasValue(variantInfo.url_key)
-       ? getProductUrls(variantInfo.url_key)
-       : getProductUrls(product.url_key);
+        ? getProductUrls(variantInfo.url_key)
+        : getProductUrls(product.url_key);
       // @todo Add code for commented keys.
       info[variantSku] = {
         cart_image: window.commerceBackend.getCartImage(variant.product),
