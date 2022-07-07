@@ -2,8 +2,8 @@
  * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
 (function main() {
-  // Event listener to update the data layer object with the proper product data.
-  RcsEventManager.addListener('rcsUpdateResults', (e) => {
+  // Event listener to update the product data object.
+  RcsEventManager.addListener('rcsUpdateResults', function updateProductData(e) {
     // Return if result is empty.
     if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'product') {
       return;
@@ -23,4 +23,4 @@
     // The text will be trimmed if the description is longer than 160 characters.
     e.detail.result.short_description = { html: data.description.html };
   });
-})();
+})(RcsEventManager);
