@@ -1,0 +1,4 @@
+services:
+  alshaya_xb.xb_route_check:
+    class: Drupal\alshaya_xb\Helper\AlshayaXbRouteCheckHelper
+    arguments: ['@current_route_match', '@path.current']
