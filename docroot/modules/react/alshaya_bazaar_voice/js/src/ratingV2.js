@@ -9,7 +9,7 @@ import Rating from './rating/components/rating';
         return;
       }
       const ratings = $('#reviews-rating');
-      if (!ratings.length && ratings.hasClass('processed')) {
+      if (!ratings.length || ratings.hasClass('processed')) {
         return;
       }
 
