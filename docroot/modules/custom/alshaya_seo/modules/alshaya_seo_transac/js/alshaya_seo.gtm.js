@@ -177,16 +177,17 @@
 
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
-        var md = new MobileDetect(window.navigator.userAgent);
-
-        if (md.tablet() !== null) {
-            userDetails.platformType = 'tablet';
-        }
-        else if (md.mobile()) {
-            userDetails.platformType = 'mobile';
-        }
-        else {
-            userDetails.platformType = 'desktop';
+        if (window.MobileDetect) {
+          var md = new MobileDetect(window.navigator.userAgent);
+          if (md.tablet() !== null) {
+              userDetails.platformType = 'tablet';
+          }
+          else if (md.mobile()) {
+              userDetails.platformType = 'mobile';
+          }
+          else {
+              userDetails.platformType = 'desktop';
+          }
         }
 
         // For checkout pages, privilegeCustomer is added in checkout step.
