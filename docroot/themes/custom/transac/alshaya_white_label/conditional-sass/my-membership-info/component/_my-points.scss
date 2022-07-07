@@ -26,6 +26,10 @@
       letter-spacing: 1.35px;
       font-family: $alshaya-bold;
 
+      @include breakpoint($only-tablet) {
+        font-size: rem(20);
+      }
+
       span {
         margin-#{$right}: rem(8);
       }
