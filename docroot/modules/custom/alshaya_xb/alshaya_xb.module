@@ -29,7 +29,7 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
     // @todo The URL values present in "geStoreCodeInstance" and "s.src"
     // variables is hard coded for POC, we have to make this configurable.
     $js = "
-       var geStoreCode = $ge_store_code;
+       var geStoreCode = '$ge_store_code';
        var geStoreCodeInstance = 'apc-uovxi7i-tw5uijob6hir2.eu-3.magentosite.cloud';
        (function () {
        var s = document.createElement('script');
