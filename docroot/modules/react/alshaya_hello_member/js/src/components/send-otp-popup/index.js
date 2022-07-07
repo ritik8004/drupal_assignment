@@ -87,7 +87,12 @@ class SendOtpPopup extends React.Component {
   };
 
   render() {
-    const { openModal, hasErrored, otp, errorStyle } = this.state;
+    const {
+      openModal,
+      hasErrored,
+      otp,
+      errorStyle,
+    } = this.state;
     return (
       <>
         <div className="btn-wrapper in-active">
