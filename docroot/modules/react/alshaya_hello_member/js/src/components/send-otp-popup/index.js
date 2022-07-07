@@ -82,6 +82,7 @@ class SendOtpPopup extends React.Component {
         this.toggleSendOtpPopup(false);
         // If successfully verified make the otp verified checkbox seleted.
         document.getElementById('edit-otp-verified').click();
+        document.getElementById('edit-submit').classList.remove('in-active');
       });
     }
   };
