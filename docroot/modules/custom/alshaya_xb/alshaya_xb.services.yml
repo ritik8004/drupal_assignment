@@ -2,3 +2,9 @@ services:
   alshaya_xb.xb_route_check:
     class: Drupal\alshaya_xb\Helper\AlshayaXbRouteCheckHelper
     arguments: ['@current_route_match', '@path.current']
+
+  alshaya_xb.set_xb_cookie_subscriber:
+    class: Drupal\alshaya_xb\EventSubscriber\SetXBCookieSubscriber
+    arguments: ['@request_stack']
+    tags:
+      - { name: event_subscriber }
