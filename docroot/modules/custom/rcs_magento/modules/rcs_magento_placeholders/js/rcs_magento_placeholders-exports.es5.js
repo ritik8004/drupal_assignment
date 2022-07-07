@@ -326,8 +326,7 @@ exports.getData = async function getData(
       let singleProductQueryVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
       singleProductQueryVariables.sku = params.sku;
       request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
-      response = await rcsCommerceBackend.invokeApi(request);
-      result = response.data.products.items[0];
+      result = await rcsCommerceBackend.invokeApi(request);
       break;
 
     case 'related-products':
