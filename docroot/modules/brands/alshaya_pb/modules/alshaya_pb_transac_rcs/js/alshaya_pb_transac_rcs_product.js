@@ -1,7 +1,7 @@
 /**
  * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
-(function main() {
+(function main(RcsEventManager) {
   // Event listener to update the product data object.
   RcsEventManager.addListener('rcsUpdateResults', function updateProductData(e) {
     // Return if result is empty.
