@@ -38,6 +38,8 @@ import { checkAreaAvailabilityStatusOnCart, isExpressDeliveryEnabled } from '../
 import RedeemEgiftCard from '../../../egift-card';
 import { cartContainsAnyNormalProduct, cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
+import HelloMemberCheckoutContainer from '../../../hello-member-loyalty/components/hello-member-checkout-rewards/hello-member-checkout-container';
 
 window.fetchStore = 'idle';
 
@@ -383,6 +385,10 @@ export default class Checkout extends React.Component {
                 cart={cart}
                 refreshCart={this.refreshCart}
               />
+            </ConditionalView>
+
+            <ConditionalView condition={isHelloMemberEnabled()}>
+              <HelloMemberCheckoutContainer cart={cart} />
             </ConditionalView>
 
             <ConditionalView condition={isAuraEnabled()}>

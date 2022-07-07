@@ -302,6 +302,14 @@ const getMagentoApiParams = (url, method = 'GET', data = {}, useBearerToken = tr
     }
   }
 
+  if (hasValue(drupalSettings.hello_member)) {
+    if (drupalSettings.hello_member.enabled && (url.indexOf('sales') > -1)) {
+      params.params = {
+        programCode: 'hello_member',
+      };
+    }
+  }
+
   params.headers = params.headers || {};
   params.headers.RequestTime = Date.now();
   return params;
