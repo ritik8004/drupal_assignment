@@ -106,6 +106,18 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
   ];
 
   // Alter this query.
+  $queries['single_product_by_sku'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $color_split_product_query_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
+
+  // Alter this query.
   $queries['multiple_products_by_sku'] = [
     'query' => [
       'query($skus: [String])' => [
