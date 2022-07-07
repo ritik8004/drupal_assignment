@@ -23,7 +23,7 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {object} product
    *   Raw product object.
-   * @param {Array} styleProducts
+   * @param {array} styleProducts
    *   Raw style products object.
    *
    * @returns {array}
@@ -226,7 +226,6 @@ window.commerceBackend = window.commerceBackend || {};
       && e.detail.placeholder === 'single_product_by_sku') {
       var product = e.detail.result;
       product.configurable_options.push(getColorAttribute(product));
-      product.style_products_processed = false;
     }
   });
 })();

@@ -480,9 +480,6 @@ window.commerceBackend = window.commerceBackend || {};
         status: 1,
         in_stock: product.stock_status === 'IN_STOCK',
       },
-      style_products_processed: Drupal.hasValue(product.style_products_processed)
-        ? product.style_products_processed
-        : true,
     };
 
     let maxSaleQty = 0;
