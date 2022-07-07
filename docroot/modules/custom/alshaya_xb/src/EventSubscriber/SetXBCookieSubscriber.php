@@ -34,13 +34,33 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
    *   The event to process.
    */
   public function setXbCookie(ResponseEvent $event) {
-    $cookie_value = $this->request->getCurrentRequest()->cookies->get('GlobalE_Data');
-    if (empty($cookie_value)) {
-      $response = $event->getResponse();
-      // @todo For POC we have hardcoded the currency to OMR,
-      // this needs to be changed later.
-      $response->headers->setCookie(new Cookie('GlobalE_Data', '{"countryISO":"OM","currencyCode":"OMR","cultureCode":"ar"}'));
+    if (!empty($this->request->getCurrentRequest()->cookies->get('GlobalE_Data'))) {
+      return;
     }
+
+    // @todo For POC we have hardcoded the currency to OMR,
+    // this needs to be changed later.
+    $cookie_value = json_encode([
+      'countryISO' => 'OM',
+      'currencyCode' => 'OMR',
+      'cultureCode' => 'ar',
+    ]);
+
+    $cookie = new Cookie(
+      'GlobalE_Data',
+      $cookie_value,
+      0,
+      '/',
+      NULL,
+      NULL,
+      FALSE,
+      TRUE,
+      NULL
+    );
+
+    $response = $event->getResponse();
+    $response->headers->setCookie($cookie);
+    $event->setResponse($response);
   }
 
   /**
