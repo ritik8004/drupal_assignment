@@ -227,7 +227,6 @@
               'product-recommendation',
               'field_magazine_shop_the_story',
               'product_by_sku',
-              'single_product_by_sku',
             ].includes(e.detail.placeholder))
          )
       ) {

@@ -178,7 +178,6 @@ window.commerceBackend = window.commerceBackend || {};
               'upsell-products',
               'related-products',
               'field_magazine_shop_the_story',
-              'single_product_by_sku',
             ].includes(e.detail.placeholder)))
       ) {
       return;

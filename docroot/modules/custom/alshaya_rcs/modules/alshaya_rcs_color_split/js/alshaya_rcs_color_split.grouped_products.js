@@ -220,12 +220,4 @@ window.commerceBackend = window.commerceBackend || {};
     return getProcessedStyleProducts(product, styleProducts);
   }
 
-  // Add color attribute for cart products.
-  RcsEventManager.addListener('rcsUpdateResults', (e) => {
-    if (typeof e.detail.placeholder !=='undefined'
-      && e.detail.placeholder === 'single_product_by_sku') {
-      var product = e.detail.result;
-      product.configurable_options.push(getColorAttribute(product));
-    }
-  });
 })();

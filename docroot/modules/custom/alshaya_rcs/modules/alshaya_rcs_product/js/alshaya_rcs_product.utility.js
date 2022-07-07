@@ -806,7 +806,7 @@ window.commerceBackend = window.commerceBackend || {};
     }
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
+    staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
       if (Drupal.hasValue(window.commerceBackend.getProductsInStyle) && loadStyles) {
         await window.commerceBackend.getProductsInStyle(response);
       }
