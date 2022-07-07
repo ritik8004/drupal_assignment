@@ -57,6 +57,8 @@
           product.media.push(productMedia);
         }
       });
+      product.media_cart = product.media[0].thumbnails;
+      product.media_teaser = product.media[0].teaser;
     }
   }
 
@@ -225,6 +227,7 @@
               'product-recommendation',
               'field_magazine_shop_the_story',
               'product_by_sku',
+              'single_product_by_sku',
             ].includes(e.detail.placeholder))
          )
       ) {
