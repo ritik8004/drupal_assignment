@@ -27,4 +27,4 @@ alshaya_online_returns_pdp_gtm:
   js:
     js/alshaya_online_returns_pdp_gtm.js: {}
   dependencies:
-    - core/drupalSettings
+    - core/jquery
