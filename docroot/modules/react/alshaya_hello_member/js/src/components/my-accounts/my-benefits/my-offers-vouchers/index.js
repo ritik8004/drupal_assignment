@@ -3,10 +3,11 @@ import moment from 'moment';
 import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import { isMobile } from '../../../../../../../js/utilities/display';
 
 const MyOffersAndVouchers = ({ myBenefitsList }) => {
   const showMoreLimit = 3;
-  const display = (window.innerWidth < 768);
+  const display = isMobile();
   const [expanded, setExpanded] = useState(display);
   const dataForDisplay = expanded ? myBenefitsList : myBenefitsList.slice(0, showMoreLimit);
   const { currentPath } = drupalSettings.path;
@@ -26,9 +27,7 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
               {data.description}
             </div>
             <div className="expiry">
-              {getStringMessage('benefit_expire')}
-              {' '}
-              {moment(new Date(data.expiry_date || data.end_date)).format('DD MMMM YYYY')}
+              {getStringMessage('benefit_expire', { '@expire_date': moment(new Date(data.expiry_date || data.end_date)).format('DD MMMM YYYY') })}
             </div>
           </div>
         </a>
