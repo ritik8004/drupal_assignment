@@ -778,7 +778,7 @@ inter-country-transfer:
     theme:
       css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css: {}
 
-cls-initial-layout.common:
+cls-initial-layout-common:
   css:
     theme:
-      css/conditional-sass/cls-initial-layout/common/common.ltr.css: {}
+      css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: {}
