@@ -384,6 +384,7 @@ window.commerceBackend = window.commerceBackend || {};
       }
       const variantParentSku = variantInfo.parent_sku;
       const variantParentProduct = window.commerceBackend.getProductData(null, null, false)[variantParentSku];
+      // Use URL from parent if not available in child - we add in variants only for styled products.
       const productUrl = Drupal.hasValue(variantInfo.url_key)
         ? getProductUrls(variantInfo.url_key)
         : getProductUrls(product.url_key);
