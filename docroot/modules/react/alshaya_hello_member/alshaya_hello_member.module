@@ -99,6 +99,7 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     }
     return;
   }
+  $form['field_date_of_birth']['#attributes']['max'] = 'now';
   if (\Drupal::currentUser()->isAnonymous()) {
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
@@ -117,8 +118,11 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
       '#prefix' => '<div class="hello-member-accordion-wrapper">',
       '#weight' => 9,
     ];
+    
     $form['hello_member']['field_date_of_birth'] = $form['field_date_of_birth'];
     $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
+    $form['hello_member']['field_date_of_birth']['#weight'] = 10;
+    $form['hello_member']['field_date_of_birth']['#weight'] = 10;
     $form['hello_member']['field_date_of_birth']['#weight'] = 10;
     unset($form['field_date_of_birth']);
     $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
@@ -167,6 +171,29 @@ function alshaya_hello_member_alshaya_user_breadcrumb_routes_alter(array &$route
 }
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_hello_member_element_info_alter(array &$types) {
+  // Alter dateteime fields
+  $types['datetime']['#process'][] = 'alshaya_hello_member_datetime_set_startdate';
+}
+
+/**
+ * Custom function to alter HTML 5 date fields.
+ */
+function alshaya_hello_member_datetime_set_startdate($element) {
+  if ($element['#parents'][0] == 'field_date_of_birth') {
+    // get the start date config value
+    $config = \Drupal::config('mymodule.config');
+    $minimumage = \Drupal::config('alshaya_hello_member.settings')->get('minimum_age');
+    $start_date = strtotime($minimumage);
+    // For browsers using the HTML 5 date pop-up, set the min attribute value
+    $element['date']['#attributes']['max'] = Drupal::service('date.formatter')->format($start_date, 'html_date');
+  }
+  return $element;
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -191,6 +218,11 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['hello_member']['field_date_of_birth'] = $form['field_date_of_birth'];
   $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
   $form['hello_member']['field_date_of_birth']['#weight'] = 10;
+   // disallow user to edit date of birth on edit profile form
+  if ($form['field_date_of_birth']['widget'][0]['value']['#default_value']) {
+    $form['hello_member']['field_date_of_birth']['#disabled'] = TRUE;
+  }
+  $form['hello_member']['field_date_of_birth']['#attributes']['max'] = 'now';
   unset($form['field_date_of_birth']);
   $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
   unset($form['field_gender']['widget']['#options']['_none']);

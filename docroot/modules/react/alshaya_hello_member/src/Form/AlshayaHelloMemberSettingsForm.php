@@ -45,6 +45,14 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Points history page size.'),
       '#description' => $this->t('Enter page size for points history page.'),
     ];
+    $form['hello_member_configuration']['minimum_age'] = [
+      '#type' => 'number',
+      '#title' => t('Minimum age'),
+      '#default_value' => $config->get('minimum_age') ?? 18,
+      '#required' => true,
+      '#min' => 0,
+      '#max' => 18,
+    ];
 
     return parent::buildForm($form, $form_state);
   }
@@ -56,6 +64,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
     $this->config('alshaya_hello_member.settings')
       ->set('enabled', $form_state->getValue('enable_disable_hello_member'))
       ->set('points_history_page_size', $form_state->getValue('points_history_page_size'))
+      ->set('minimum_age', $form_state->getValue('minimum_age'))
       ->save();
 
     parent::submitForm($form, $form_state);
