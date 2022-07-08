@@ -6,7 +6,7 @@ import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultResolutionId } from '../../../utilities/return_request_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PromotionsWarningModal from '../promotions-warning-modal';
-import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_util';
+import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
 
 class ReturnItemsListing extends React.Component {
   constructor(props) {
@@ -259,7 +259,7 @@ class ReturnItemsListing extends React.Component {
     // Push data to GTM.
     Drupal.alshayaSeoGtmPushReturn(
       getProductGtmInfo(itemsSelected),
-      getPreparedOrderGtm(),
+      getPreparedOrderGtm('item_confirmed'),
       'item_confirmed',
     );
     // When user clicks continue button, disable the item
