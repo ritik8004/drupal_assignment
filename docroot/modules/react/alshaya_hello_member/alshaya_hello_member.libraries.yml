@@ -28,9 +28,9 @@ alshaya_hello_member_send_otp:
     dist/send_otp.bundle.js: {}
   dependencies:
     - alshaya_react/react
-utility:
+alshaya_hello_member_profile_info:
   js:
-    js/assets/alshaya_hello_member.utility.js: {}
+    js/assets/alshaya_hello_member.profile_info.js: {}
   dependencies:
     - core/drupal
     - core/jquery
