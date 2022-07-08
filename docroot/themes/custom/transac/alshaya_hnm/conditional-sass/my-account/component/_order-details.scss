@@ -144,6 +144,14 @@
       background: $order_summary_row;
       padding: 1.313rem 1rem;
     }
+
+    .order--date--time,
+    .order-transaction > .light:nth-child(3) {
+      html[lang='ar'] & {
+        direction: ltr;
+        text-align: right;
+      }
+    }
   }
 
   .right--align {
