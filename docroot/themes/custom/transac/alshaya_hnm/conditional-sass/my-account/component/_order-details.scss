@@ -35,6 +35,10 @@
         background: $order_summary_row;
         padding: rem(21) rem(16);
       }
+
+      .blend {
+        background: $order_detail_order_summary_row_td_blend;
+      }
     }
   }
 
