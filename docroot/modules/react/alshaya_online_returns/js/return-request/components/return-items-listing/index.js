@@ -147,12 +147,6 @@ class ReturnItemsListing extends React.Component {
     }
   }
 
-  closePromotionsWarningModal = () => {
-    this.setState({
-      promotionModalOpen: false,
-    });
-  };
-
   handlePromotionContinue = () => {
     const { products, handleSelectedItems, itemsSelected } = this.props;
     const { discountedRuleId } = this.state;
@@ -316,7 +310,6 @@ class ReturnItemsListing extends React.Component {
           closeOnDocumentClick={false}
         >
           <PromotionsWarningModal
-            closePromotionsWarningModal={this.closePromotionsWarningModal}
             handlePromotionDeselect={this.handlePromotionDeselect}
             handlePromotionContinue={this.handlePromotionContinue}
             itemNotEligibleForReturn={itemNotEligibleForReturn}
