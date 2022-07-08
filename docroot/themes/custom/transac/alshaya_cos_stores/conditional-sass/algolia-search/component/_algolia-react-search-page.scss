@@ -14,6 +14,22 @@
   }
 }
 
+.alias--cart {
+  .l-one--w.lhn-without-sidebar {
+    #alshaya-algolia-search {
+      .c-content__region {
+        @media(min-width: $tablet) {
+          width: 96.5%;
+        }
+        @media(min-width: ($desktop + 1)) {
+          max-width: $desktop-wide;
+          padding: 0 rem(24);
+        }
+      }
+    }
+  }
+}
+
 #alshaya-algolia-search,
 #alshaya-algolia-plp {
   .sticky-filter-wrapper {
