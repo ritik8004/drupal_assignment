@@ -53,8 +53,11 @@ class SendOtpPopup extends React.Component {
         }
         this.setState({
           otp: '',
+          hasErrored: false,
         });
         this.toggleSendOtpPopup(true);
+        document.getElementById('hello-member-modal-form-verify').classList.add('in-active');
+        document.getElementById('input-otp-error').innerHTML = '';
       });
     }
   };
