@@ -22,7 +22,7 @@
           width: 96.5%;
         }
 
-        @include breakpoint(($desktop + 1)) {
+        @include breakpoint($desktop) {
           max-width: $desktop-wide;
           padding: 0 rem(24);
         }
