@@ -1347,6 +1347,8 @@
    */
   Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+    // Dispatch a custom event to alter the product detail view object.
+    document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => product } }));
 
     var data = {
       event: 'productDetailView',
