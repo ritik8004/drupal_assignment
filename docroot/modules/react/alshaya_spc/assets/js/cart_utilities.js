@@ -112,7 +112,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     }
 
     const parentSKU = Drupal.hasValue(extraData.parentSKU) ? extraData.parentSKU : null;
-    window.commerceBackend.getProductDataFromBackend(sku, parentSKU).then(function () {
+    window.commerceBackend.getProductDataFromBackend(sku, parentSKU, false).then(function () {
       window.commerceBackend.callProductDataCallbacks(sku);
     });
   };
@@ -168,7 +168,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     }
 
     // Call API, fetch data and store product data in storage.
-    await window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
+    await window.commerceBackend.getProductDataFromBackend(sku, parentSKU, false);
 
     // Return product data from storage.
     return Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);

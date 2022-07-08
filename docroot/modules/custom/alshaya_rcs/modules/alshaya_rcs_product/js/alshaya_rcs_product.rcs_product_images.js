@@ -57,6 +57,10 @@
           product.media.push(productMedia);
         }
       });
+      if (Drupal.hasValue(product.media[0])) {
+        product.media_cart = product.media[0].thumbnails;
+        product.media_teaser = product.media[0].teaser;
+      }
     }
   }
 
