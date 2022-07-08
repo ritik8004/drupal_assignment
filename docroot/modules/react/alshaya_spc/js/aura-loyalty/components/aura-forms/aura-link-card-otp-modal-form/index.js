@@ -124,8 +124,10 @@ class AuraFormLinkCardOTPModal extends React.Component {
       closeLinkCardOTPModal();
 
       // Update Loyalty status, Set it to 'APC_LINKED_NOT_VERIFIED',
-      // If not set.
+      // If not set or it is 'APC_NOT_LINKED_DATA' as there might be cases when
+      // Aura account exists but not linked to any MDC account.
       stateValues.loyaltyStatus = stateValues.loyaltyStatus
+      && parseInt(stateValues.loyaltyStatus, 10) !== getAllAuraStatus().APC_NOT_LINKED_DATA
         ? parseInt(stateValues.loyaltyStatus, 10)
         : getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
 
