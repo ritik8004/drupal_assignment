@@ -161,3 +161,20 @@ details {
     }
   }
 }
+
+.hm-benefit-subtitle {
+  font-size: rem(14);
+  color: $hm-registration-labels-txt;
+
+  @include breakpoint($tablet) {
+    position: absolute;
+    width: 100%;
+    margin-top: rem(-64);
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 0 rem(25) rem(25);
+    text-align: center;
+    margin-top: rem(-16);
+  }
+}
