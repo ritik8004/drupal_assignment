@@ -202,12 +202,9 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['hello_member']['field_mobile_number']['#prefix'] = '<div class="mobile-otp-wrapper">';
   $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div><div id="mobile-number-error"></div>' . '<div class="mb-verifier">' . t('OTP will be send to your mobile number to verify', [], ['context' => 'hello_member']) . '<div></div>';
   $form['hello_member']['field_mobile_number']['#weight'] = 12;
-  // Virtual checkbox to temporary maintain otp verified status.
+  // Virtual input to temporary maintain otp verified status.
   $form['otp_verified'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Otp Verified'),
-    '#prefix' => '<div class="visually-hidden">',
-    '#suffix' => '</div>',
+    '#type' => 'hidden',
   ];
   $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
 
