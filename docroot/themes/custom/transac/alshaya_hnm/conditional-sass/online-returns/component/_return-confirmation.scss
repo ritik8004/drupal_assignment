@@ -16,4 +16,15 @@
       }
     }
   }
+
+  .return-details-section {
+    .return-confirmation-detail-wrapper {
+      .return-request-date {
+        html[lang='ar'] & {
+          direction: ltr;
+          text-align: right;
+        }
+      }
+    }
+  }
 }
