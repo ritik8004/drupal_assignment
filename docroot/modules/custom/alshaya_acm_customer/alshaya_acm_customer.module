@@ -662,6 +662,13 @@ function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterf
 
   // Save acq_customer_id in Drupal.
   $user->get('acq_customer_id')->setValue($form_state->getTemporaryValue('customer_id'));
+
+  // Check if request is coming for the behat tests, we avtivate the customer
+  // without waiting for the email verification.
+  if (Settings::get('behat_secret_key') === \Drupal::request()->query->get('behat')) {
+    $user->activate();
+  }
+
   $user->save();
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
