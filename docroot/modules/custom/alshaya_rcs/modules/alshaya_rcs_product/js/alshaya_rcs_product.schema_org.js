@@ -15,7 +15,7 @@
     var additionalSchemaData = [];
 
     // Check for Bazaar voice metadata.
-    if (drupalSettings.alshaya_bazaar_voice && drupalSettings.alshaya_bazaar_voice.product_review_schema_request_data) {
+    if (typeof drupalSettings.alshaya_bazaar_voice !== 'undefined') {
       var bvData = null;
       var url = drupalSettings.alshaya_bazaar_voice.product_review_schema_request_data.url;
       var requestParams = drupalSettings.alshaya_bazaar_voice.product_review_schema_request_data.query;

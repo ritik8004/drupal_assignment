@@ -691,10 +691,6 @@ window.commerceBackend = window.commerceBackend || {};
    * @see alshaya_acm_product_available_click_collect().
    */
   window.commerceBackend.isProductAvailableForClickAndCollect = function (product) {
-    if (!product) {
-      return;
-    }
-
     if (Drupal.hasValue(staticDataStore.cnc_status[product.sku])) {
       return staticDataStore.cnc_status[product.sku];
     }

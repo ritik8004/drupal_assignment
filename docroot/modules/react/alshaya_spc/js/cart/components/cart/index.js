@@ -104,7 +104,7 @@ export default class Cart extends React.Component {
         const cartData = fetchCartData();
         if (cartData instanceof Promise) {
           cartData.then((result) => {
-            if (!result.error && window.dynamicPromotion) {
+            if (typeof result.error === 'undefined') {
               window.dynamicPromotion.apply(result);
             }
           });

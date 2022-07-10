@@ -8,17 +8,9 @@
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
- * Implements hook_install().
- */
-function alshaya_js_optimisations_install() {
-  // 'alshaya_js_optimisations' module must execute at last.
-  module_set_weight('alshaya_js_optimisations', 100);
-}
-
-/**
  * Implements hook_update_N().
  */
-function alshaya_js_optimisations_update_8001() {
+function alshaya_js_optimisations_update_9001() {
   _alshaya_js_optimisations_refresh_update_settings();
 }
 
@@ -32,8 +24,16 @@ function alshaya_js_optimisations_update_9000() {
 /**
  * Implements hook_update_N().
  */
-function alshaya_js_optimisations_update_9001() {
+function alshaya_js_optimisations_update_8001() {
   _alshaya_js_optimisations_refresh_update_settings();
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_js_optimisations_install() {
+  // 'alshaya_js_optimisations' module must execute at last.
+  module_set_weight('alshaya_js_optimisations', 100);
 }
 
 /**

@@ -158,14 +158,12 @@ window.commerceBackend = window.commerceBackend || {};
    *   The raw product entity.
    */
   window.commerceBackend.renderAddToCartForm = function renderAddToCartForm(product) {
-    if (product) {
-      var addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + product.sku + '"]');
-      var addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
-      // Render the HTML to the div.
-      addToCartForm.html(addToCartFormHtml);
-      addToCartForm.addClass('rcs-loaded');
-      globalThis.rcsPhApplyDrupalJs(document);
-    }
+    var addToCartForm = jQuery('.add_to_cart_form[data-rcs-sku="' + product.sku + '"]');
+    var addToCartFormHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'add_to_cart');
+    // Render the HTML to the div.
+    addToCartForm.html(addToCartFormHtml);
+    addToCartForm.addClass('rcs-loaded');
+    globalThis.rcsPhApplyDrupalJs(document);
   };
 
   RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {

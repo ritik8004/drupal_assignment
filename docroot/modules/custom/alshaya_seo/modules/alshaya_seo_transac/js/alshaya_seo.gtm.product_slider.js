@@ -49,7 +49,7 @@
    */
   Drupal.alshayaSeoGtmProductSlider.getRecommendationListName = function (element) {
     var label = element.closest('.views-element-container').siblings('.subtitle').text();
-    var listName = $('body').attr('gtm-list-name') || '';
+    var listName = $('body').attr('gtm-list-name');
 
     if (listName.indexOf('placeholder') > -1) {
       return productRecommendationsSuffix + listName.replace('placeholder', label).toLowerCase();
@@ -71,7 +71,7 @@
     var body = $('body');
     // We need to also check that the item is not in a slick clone.
     var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed, .slick-cloned article"):visible', context);
-    var listName = body.attr('gtm-list-name') || '';
+    var listName = body.attr('gtm-list-name');
 
     if (productLinkSelector.length > 0) {
       var finalListName = '';

@@ -9,7 +9,7 @@ import ReviewSummary from './reviews/components/review-summary';
         return;
       }
       const reviews = $('#reviews-section');
-      if (!reviews.length || reviews.hasClass('processed')) {
+      if (reviews.hasClass('processed')) {
         return;
       }
 

@@ -126,8 +126,7 @@ export default class WriteReviewButton extends React.Component {
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
       if (userDetails.user.userId === 0
         && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission
-        && userStorage && userStorage.uasToken === null
-        && bazaarVoiceSettings.reviews.product) {
+        && userStorage && userStorage.uasToken === null) {
         return (
           <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />
         );
