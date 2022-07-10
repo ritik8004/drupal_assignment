@@ -667,6 +667,11 @@ function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterf
   // without waiting for the email verification.
   if (Settings::get('behat_secret_key') === \Drupal::request()->query->get('behat')) {
     $user->activate();
+    // Log the details for the user thus we know that this is activated as
+    // during the behat request.
+    \Drupal::logger('alshaya_acm_customer')->notice('User: @email was activated programmatically as request is from behat.', [
+      '@email' => $user->getEmail(),
+    ]);
   }
 
   $user->save();
