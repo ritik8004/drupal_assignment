@@ -7,7 +7,6 @@ global_styles:
     js/menu.js: {}
     js/form.js: {}
     js/one_time_language_slider.js: {}
-    js/footer-space-filler.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
     - core/jquery
@@ -258,6 +257,7 @@ footer_js:
   js:
     js/back_to_top.js: {}
     js/footer-accordion.js: {}
+    js/footer-space-filler.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
