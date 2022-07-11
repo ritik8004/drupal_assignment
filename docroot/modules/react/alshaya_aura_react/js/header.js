@@ -8,7 +8,7 @@ import AuraCongratulationsModal from '../../alshaya_spc/js/aura-loyalty/componen
 /**
  * Renders the AURA header component.
  */
-function displayHeader() {
+export default function displayHeader() {
   if (isAuraEnabled()) {
     // Upto desktop header.
     if (window.innerWidth < 1024) {
@@ -79,22 +79,4 @@ function displayHeader() {
   }
 }
 
-const rcsMenu = document.getElementById('rcs-ph-navigation_menu');
-let auraHeaderDisplayed = false;
-
-(function auraHeader(Drupal) {
-  Drupal.behaviors.AuraHeaderBehavior = { // eslint-disable-line no-param-reassign
-    attach: function auraHeaderBehavior() {
-      // If header is already displayed, no further processing is required.
-      if (auraHeaderDisplayed) {
-        return;
-      }
-      // If RCS menu is present, we wait until we finish loading the menu data.
-      if (rcsMenu && !rcsMenu.classList.contains('rcs-loaded')) {
-        return;
-      }
-      auraHeaderDisplayed = true;
-      displayHeader();
-    },
-  };
-}(Drupal));
+displayHeader();
