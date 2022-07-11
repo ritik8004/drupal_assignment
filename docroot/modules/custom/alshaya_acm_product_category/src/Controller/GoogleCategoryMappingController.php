@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_acm_product_category\Controller;
 
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\Core\File\FileSystemInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
@@ -25,7 +25,7 @@ class GoogleCategoryMappingController extends ControllerBase {
   /**
    * The database service.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\mysql\Driver\Database\mysql\Connection
    */
   protected $database;
 
@@ -65,7 +65,7 @@ class GoogleCategoryMappingController extends ControllerBase {
   /**
    * ProductReportController constructor.
    *
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $database
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $database
    *   Database object.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   The filesystem service.
