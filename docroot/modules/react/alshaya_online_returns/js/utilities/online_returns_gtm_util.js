@@ -4,6 +4,9 @@ import { getDeliveryAddress } from './return_request_util';
 
 /**
  * Utility function to get order GTM info.
+ *
+ * @return {Object}
+ *   An object containing GTM info about the order.
  */
 function getOrderGtmInfo() {
   if (hasValue(drupalSettings.returnInfo)
@@ -12,7 +15,7 @@ function getOrderGtmInfo() {
     return drupalSettings.returnInfo.orderDetails['#gtm_info'];
   }
 
-  return '';
+  return {};
 }
 
 /**
@@ -30,8 +33,9 @@ function getProductGtmInfo(itemsSelected) {
   itemsSelected.forEach((item) => {
     const GtmInfo = getOrderGtmInfo();
     if (GtmInfo && hasValue(GtmInfo.products) && hasValue(GtmInfo.products[item.sku])) {
-      // Push the return reason for individual item.
+      // Push the return reason and qty returned for individual item.
       GtmInfo.products[item.sku].reason = item.reason;
+      GtmInfo.products[item.sku].quantity = item.qty_requested;
       skuProduct.push(GtmInfo.products[item.sku]);
     }
   });
@@ -50,25 +54,34 @@ function getProductGtmInfo(itemsSelected) {
  */
 function getPreparedOrderGtm(eventType) {
   const gtmInfo = getOrderGtmInfo();
-  const {
-    transactionId,
-    deliveryOption,
-    firstTimeTransaction,
-  } = gtmInfo.general;
+  let returnOrder = {};
+
+  // Check if general GTM info is present or not.
+  if (hasValue(gtmInfo.general)) {
+    const {
+      transactionId,
+      deliveryOption,
+      firstTimeTransaction,
+    } = gtmInfo.general;
+
+    // Prepare the Return order object.
+    returnOrder = {
+      orderTransactionId: transactionId,
+      orderType: deliveryOption,
+      orderFirstTimeTransaction: firstTimeTransaction,
+    };
+  }
 
   // Get delivery address info.
   const deliveryInfo = getDeliveryAddress(getOrderDetails());
 
   // Prepare the Return order object.
-  const returnOrder = {
-    orderTransactionId: transactionId,
-    orderType: deliveryOption,
-    orderFirstTimeTransaction: firstTimeTransaction,
-    orderDeliveryCity: deliveryInfo.area_parent_display,
-    orderDeliveryArea: deliveryInfo.administrative_area_display,
-    // This will always be online in our case.
-    returnType: 'online',
-  };
+  if (deliveryInfo) {
+    returnOrder.orderDeliveryCity = deliveryInfo.area_parent_display;
+    returnOrder.orderDeliveryArea = deliveryInfo.administrative_area_display;
+  }
+  // This will always be online in our case.
+  returnOrder.returnType = 'online';
 
   // @todo to update the info in the further GA tickets.
   // Add returned & refunded info for selected events.

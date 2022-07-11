@@ -1467,8 +1467,10 @@
       eventValue: 0,
       nonInteraction: 0,
       ecommerce: {
-        detail: order,
-        products: product,
+        detail: {
+          ...order,
+          products: product
+        }
       }
     }
 
