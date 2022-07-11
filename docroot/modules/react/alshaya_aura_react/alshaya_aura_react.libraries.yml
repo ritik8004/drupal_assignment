@@ -13,6 +13,7 @@ alshaya_aura_my_accounts:
 aura_header_library:
   js:
     dist/header.bundle.js: {}
+    js/load-header.js: {}
   dependencies:
     - alshaya_react/react
     - alshaya_aura_react/aura_backend.v2

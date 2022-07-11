@@ -8,7 +8,7 @@ import AuraCongratulationsModal from '../../alshaya_spc/js/aura-loyalty/componen
 /**
  * Renders the AURA header component.
  */
-export default function displayHeader() {
+Drupal.displayAuraHeader = () => {
   if (isAuraEnabled()) {
     // Upto desktop header.
     if (window.innerWidth < 1024) {
@@ -77,6 +77,4 @@ export default function displayHeader() {
       document.querySelector('#aura-congratulation-popup-modal'),
     );
   }
-}
-
-displayHeader();
+};

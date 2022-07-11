@@ -6,7 +6,6 @@ var config = {
     loyalty_club: './js/my-loyalty-club',
     my_accounts: './js/my-accounts',
     header: './js/header',
-    headerRcs: './js/headerRcs',
     pdp: './js/pdp',
     // This is dynamically added in alshaya_rcs_product_library_info_alter().
     pdpRcs: './js/PdpRcs',
