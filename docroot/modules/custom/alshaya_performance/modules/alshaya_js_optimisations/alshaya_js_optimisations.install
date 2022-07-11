@@ -8,6 +8,27 @@
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_update_N().
+ */
+function alshaya_js_optimisations_update_9001() {
+  _alshaya_js_optimisations_refresh_update_settings();
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_js_optimisations_update_9000() {
+  _alshaya_js_optimisations_refresh_update_settings();
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_js_optimisations_update_8001() {
+  _alshaya_js_optimisations_refresh_update_settings();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_js_optimisations_install() {
@@ -16,26 +37,9 @@ function alshaya_js_optimisations_install() {
 }
 
 /**
- * Implements hook_update_N().
+ * Helper function to refresh and update the latest settings.
  */
-function alshaya_js_optimisations_update_8001() {
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs(
-      ['alshaya_js_optimisations.settings'],
-      'alshaya_js_optimisations',
-      'install',
-      AlshayaConfigManager::MODE_REPLACE
-    );
-
-  // Clear Cache to trigger hook_library_info_alter with updated priorities.
-  \Drupal::service('library.discovery')->clearCachedDefinitions();
-  \Drupal::service('router.builder')->rebuild();
-}
-
-/**
- * Implements hook_update_N().
- */
-function alshaya_js_optimisations_update_9000() {
+function _alshaya_js_optimisations_refresh_update_settings() {
   \Drupal::service('alshaya_config.manager')
     ->updateConfigs(
       ['alshaya_js_optimisations.settings'],
