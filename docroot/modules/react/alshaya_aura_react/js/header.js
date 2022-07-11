@@ -85,15 +85,16 @@ let auraHeaderDisplayed = false;
 (function auraHeader(Drupal) {
   Drupal.behaviors.AuraHeaderBehavior = { // eslint-disable-line no-param-reassign
     attach: function auraHeaderBehavior() {
-      if (rcsMenu) {
-        if (!auraHeaderDisplayed && rcsMenu.classList.contains('rcs-loaded')) {
-          auraHeaderDisplayed = true;
-          displayHeader();
-        }
-      } else if (!auraHeaderDisplayed) {
-        auraHeaderDisplayed = true;
-        displayHeader();
+      // If header is already displayed, no further processing is required.
+      if (auraHeaderDisplayed) {
+        return;
       }
+      // If RCS menu is present, we wait until we finish loading the menu data.
+      if (rcsMenu && !rcsMenu.classList.contains('rcs-loaded')) {
+        return;
+      }
+      auraHeaderDisplayed = true;
+      displayHeader();
     },
   };
 }(Drupal));
