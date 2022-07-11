@@ -173,6 +173,7 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode) => 
       currencyCode,
       products,
     },
+    programCode: 'hello_member',
   };
 
   return callHelloMemberApi('helloMemberGetPointsEarned', 'POST', requestData, { identifierNo })
