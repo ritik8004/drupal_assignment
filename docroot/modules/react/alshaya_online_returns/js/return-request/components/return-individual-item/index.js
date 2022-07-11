@@ -39,7 +39,8 @@ const ReturnIndividualItem = ({
   } = item;
 
   let reasonDescription = [];
-  if (hasValue(item.returnData)) {
+  if (hasValue(item.returnData)
+    && hasValue(item.returnData.extension_attributes.reason_description)) {
     reasonDescription = item.returnData.extension_attributes.reason_description;
   }
 
@@ -105,7 +106,7 @@ const ReturnIndividualItem = ({
         <div className="big-ticket-wrapper">{Drupal.t('Kindly contact customer care for initiating the online returns for Big Ticket Items.', {}, { context: 'online_returns' })}</div>
       </ConditionalView>
 
-      <ConditionalView condition={reasonDescription.length > 0}>
+      {reasonDescription.length > 0 && (
         <div className="cancellation-reason">
           {reasonDescription.map((returnReason) => (
             <p>
@@ -123,7 +124,7 @@ const ReturnIndividualItem = ({
             </p>
           ))}
         </div>
-      </ConditionalView>
+      )}
     </>
   );
 };
