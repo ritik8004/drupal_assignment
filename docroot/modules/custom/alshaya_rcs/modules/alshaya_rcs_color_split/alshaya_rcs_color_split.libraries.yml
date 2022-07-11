@@ -3,4 +3,5 @@ rcs_grouped_products:
   js:
     js/alshaya_rcs_color_split.grouped_products.js: {}
   dependencies:
+    - core/drupal
     - rcs_placeholders/helpers
