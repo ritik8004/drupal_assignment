@@ -184,7 +184,7 @@ function alshaya_hello_member_datetime_set_startdate($element) {
   if ($element['#parents'][0] == 'field_date_of_birth') {
     // Get the start date config value.
     $config = \Drupal::config('alshaya_hello_member.settings');
-    $start_date = strtotime($config->get('minimum_age').' years ago');
+    $start_date = strtotime($config->get('minimum_age') . ' years ago');
     // For browsers using the HTML 5 date pop-up, set the min attribute value.
     $element['date']['#attributes']['max'] = Drupal::service('date.formatter')->format($start_date, 'html_date');
   }
