@@ -22,6 +22,7 @@ aura_header_library:
 aura_header_library_cart:
   js:
     dist/header.bundle.js: {}
+    js/load-header.js: {}
   dependencies:
     - alshaya_spc/cart
     - alshaya_aura_react/aura_backend.v2
@@ -30,6 +31,7 @@ aura_header_library_cart:
 aura_header_library_user:
   js:
     dist/header.bundle.js: {}
+    js/load-header.js: {}
   dependencies:
     - alshaya_react/react
     - alshaya_aura_react/alshaya_aura_my_accounts
@@ -39,6 +41,7 @@ aura_header_library_user:
 aura_header_library_loyalty_club:
   js:
     dist/header.bundle.js: {}
+    js/load-header.js: {}
   dependencies:
     - alshaya_react/react
     - alshaya_aura_react/alshaya_aura_loyalty_club
