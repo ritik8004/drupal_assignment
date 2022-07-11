@@ -252,7 +252,7 @@
       }
 
       @include breakpoint($desktop) {
-        grid-template: "a b c d e" auto/ rem(184) auto rem(166) rem(169) rem(180);
+        grid-template: "a b c d e" auto/ rem(200) auto rem(166) rem(169) rem(180);
       }
     }
 
@@ -578,10 +578,6 @@
     > div {
       background: $order_detail_order_summary_row_bg;
       padding: 1.313rem 1rem;
-
-      @include breakpoint($tablet) {
-        padding: rem(22) rem(24);
-      }
 
       @include breakpoint($desktop) {
         vertical-align: middle;
