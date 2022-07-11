@@ -1,4 +1,4 @@
-(function auraHeaderloadAuraHeader(Drupal) {
+(function loadAuraHeader(Drupal) {
   const rcsMenu = document.getElementById('rcs-ph-navigation_menu');
   let auraHeaderDisplayed = false;
 
