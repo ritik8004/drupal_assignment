@@ -147,7 +147,6 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode) => 
       totalPrice += (item.qty * item.price);
     });
 
-    // If dictionary data does not exists in storage, we do api call.
     const response = await callHelloMemberApi('helloMemberGetDictionaryData', 'GET', { programCode: 'hello_member' });
     if (hasValue(response.data) && !hasValue(response.data.error)) {
       return {
