@@ -222,10 +222,8 @@ window.commerceBackend = window.commerceBackend || {};
       if (mainProduct) {
         var html = globalThis.renderRcsProduct.render(drupalSettings, productType, {}, {}, mainProduct);
         var $selector = $('#rcs-' + productType);
-        if ($selector.length > 0) {
-          $selector.html(html);
-          globalThis.rcsPhApplyDrupalJs($selector[0]);
-        }
+        $selector.html(html);
+        globalThis.rcsPhApplyDrupalJs($selector[0]);
       }
     });
   };
