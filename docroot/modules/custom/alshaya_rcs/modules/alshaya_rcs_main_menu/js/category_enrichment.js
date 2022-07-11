@@ -9,7 +9,7 @@ globalThis.rcsGetEnrichedCategories = () => {
 }
 
 // Load the enrichment along with categories from Commerce Backend.
-(function main() {
+(function main(RcsEventManager) {
   RcsEventManager.addListener('invokingApi', function invokingApi (e) {
     var rcsType = e.request.rcsType || '';
     if (rcsType === 'navigation_menu') {
@@ -21,5 +21,4 @@ globalThis.rcsGetEnrichedCategories = () => {
       }));
     }
   });
-})();
-
+})(RcsEventManager);

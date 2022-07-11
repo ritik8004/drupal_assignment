@@ -2,7 +2,8 @@ order_confirmation:
   js:
     js/alshaya_rcs_seo.order_confirmation.js: {}
   dependencies:
-    - core/jquery
+    - core/drupal
+    - core/drupalSettings
     - alshaya_spc/cart_utilities
     - alshaya_acm_product/product_utility
 
@@ -12,5 +13,5 @@ alshaya_rcs_product_seo:
   js:
     js/alshaya_rcs_seo.gtm.initial_data_push.js: {}
   dependencies:
-    - core/drupalSettings
+    - core/drupal
     - alshaya_acm_product/product_utility

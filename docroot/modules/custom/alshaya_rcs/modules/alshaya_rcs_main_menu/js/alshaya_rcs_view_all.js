@@ -1,4 +1,4 @@
-(function main(Drupal) {
+(function main(Drupal, RcsEventManager) {
   // Event listener to add the View All link in L3 menus.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Only when placeholder is navigation_menu.
@@ -28,4 +28,4 @@
       });
     }
   });
-})(Drupal);
+})(Drupal, RcsEventManager);
