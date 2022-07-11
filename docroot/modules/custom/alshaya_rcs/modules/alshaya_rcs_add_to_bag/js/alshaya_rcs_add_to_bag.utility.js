@@ -30,14 +30,9 @@ window.commerceBackend = window.commerceBackend || {};
     if (Drupal.hasValue(styleCode)
       && Drupal.hasValue(window.commerceBackend.getProductsInStyle)
     ) {
-      var styleCodeValue = '';
-      if (typeof styleCode === 'object') {
-        var lang = drupalSettings.path.currentLanguage;
-        styleCodeValue = styleCode[lang];
-      }
-      else {
-        styleCodeValue = styleCode;
-      }
+      var styleCodeValue = typeof styleCode === 'object'
+        ? styleCode[drupalSettings.path.currentLanguage]
+        : styleCode;
       product = await window.commerceBackend.getProductsInStyle({ sku, style_code: styleCodeValue });
     }
     else {
