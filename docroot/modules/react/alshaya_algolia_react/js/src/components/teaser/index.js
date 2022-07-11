@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
@@ -20,6 +20,7 @@ import Promotions from '../promotions';
 import { checkExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import ExpressDeliveryLabel from './ExpressDeliveryLabel';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo,
@@ -34,22 +35,6 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
-
-  const [expressDeliveryFlag, setExpressDeliveryFlag] = useState(window.expressDeliveryLabel);
-
-  const ExpressDeliveryLabelsDisplay = (e) => {
-    const expressDeliveryStatus = e.detail;
-    if (!expressDeliveryStatus) {
-      setExpressDeliveryFlag(expressDeliveryStatus);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('expressDeliveryLabelsDisplay', ExpressDeliveryLabelsDisplay, false);
-    return () => {
-      document.removeEventListener('expressDeliveryLabelsDisplay', ExpressDeliveryLabelsDisplay, false);
-    };
-  }, []);
 
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
@@ -292,12 +277,9 @@ const Teaser = ({
               && checkExpressDeliveryStatus()
               && hit.attr_express_delivery !== undefined
               && hit.attr_express_delivery[0] === '1'
-              && expressDeliveryFlag
             }
           >
-            <div className="express_delivery">
-              {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
-            </div>
+            <ExpressDeliveryLabel />
           </ConditionalView>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
@@ -305,12 +287,9 @@ const Teaser = ({
               && pageType === 'plp'
               && hit.attr_express_delivery !== undefined
               && hit.attr_express_delivery[currentLanguage][0] === '1'
-              && expressDeliveryFlag
             }
           >
-            <div className="express_delivery">
-              {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
-            </div>
+            <ExpressDeliveryLabel />
           </ConditionalView>
         </div>
         {/* Don't render component on wishlist page if product is OOS. */}

@@ -1,8 +1,5 @@
 import { hasCategoryFilter } from './FilterUtils';
 import { getSearchQuery, getLangRedirect } from './localStorage';
-import { callMagentoApi } from '../../../../js/utilities/requestHelper';
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import logger from '../../../../js/utilities/logger';
 
 const contentDiv = document.querySelector('.page-standard main');
 const body = document.querySelector('body');
@@ -118,67 +115,6 @@ function removeLoader() {
   }
 }
 
-/**
- * Gets the express delivery configuration from magento for listing pages.
- */
-async function getExpressDeliveryStatus() {
-  // Get express-delivery settings from MDC for labels display.
-  // Here we don't pass any sku, we only pass get_config_details as true
-  // in order to MDC configuration for listing page to control the display of
-  // Express delivery label on teaser.
-  const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
-  const params = {
-    productAndAddressInformation: {
-      cart_id: null,
-      product_sku: null,
-      address: {
-        custom_attributes: [],
-      },
-      get_config_details: true,
-    },
-  };
-
-  try {
-    const response = await callMagentoApi(url, 'POST', params);
-    if (!hasValue(response.data) || hasValue(response.data.error)) {
-      logger.error('Error occurred while fetching governates, Response: @response.', {
-        '@response': JSON.stringify(response.data),
-      });
-      return null;
-    }
-
-    // If no city available, return empty.
-    if (!hasValue(response.data)) {
-      return null;
-    }
-
-    const expressDeliveryStatus = response.data;
-    expressDeliveryStatus.forEach((label) => {
-      if (label.carrier_code.toString() !== 'SAMEDAY' && label.carrier_code.toString() !== 'EXPRESS') {
-        window.expressDeliveryLabel = false;
-      } else {
-        // Set the global variable as this will be used when filters are applied
-        // on any listing pages.
-        window.expressDeliveryLabel = label.status;
-      }
-    });
-
-    // Dispatch event for teaser component as they will rendered before the
-    // api response.
-    const event = new CustomEvent('expressDeliveryLabelsDisplay', {
-      bubbles: true,
-      detail: window.expressDeliveryLabel,
-    });
-    document.dispatchEvent(event);
-  } catch (error) {
-    logger.error('Error occurred while fetching governates data. Message: @message.', {
-      '@message': error.message,
-    });
-  }
-
-  return true;
-}
-
 export {
   contentDiv,
   createSearchResultDiv,
@@ -187,5 +123,4 @@ export {
   showLoader,
   removeLoader,
   toggleBlockCategoryFilter,
-  getExpressDeliveryStatus,
 };

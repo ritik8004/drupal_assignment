@@ -1,4 +1,6 @@
 import { hasValue } from './conditionsUtility';
+import { callMagentoApi } from './requestHelper';
+import logger from './logger';
 
 /**
  * Helper function to check if Express delivery is enabled.
@@ -90,6 +92,57 @@ const checkExpressDeliveryStatus = () => {
   return false;
 };
 
+/**
+ * Gets the express delivery configuration from magento for listing pages.
+ */
+async function getExpressDeliveryStatus() {
+  // Get express-delivery settings from MDC for labels display.
+  // Here we don't pass any sku, we only pass get_config_details as true
+  // in order to MDC configuration for listing page to control the display of
+  // Express delivery label on teaser.
+  const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
+  const params = {
+    productAndAddressInformation: {
+      cart_id: null,
+      product_sku: null,
+      address: {
+        custom_attributes: [],
+      },
+      get_config_details: true,
+    },
+  };
+
+  let labelStatus = true;
+
+  try {
+    const response = await callMagentoApi(url, 'POST', params);
+    if (!hasValue(response.data) || hasValue(response.data.error)) {
+      logger.error('Error occurred while fetching governates, Response: @response.', {
+        '@response': JSON.stringify(response.data),
+      });
+      return null;
+    }
+
+    response.data.forEach((label) => {
+      labelStatus = (label.carrier_code.toString() === 'SAMEDAY' || label.carrier_code.toString() === 'EXPRESS') && label.status;
+    });
+
+    // Dispatch event for teaser component as they will rendered before the
+    // api response.
+    const event = new CustomEvent('expressDeliveryLabelsDisplay', {
+      bubbles: true,
+      detail: window.expressDeliveryLabel,
+    });
+    document.dispatchEvent(event);
+  } catch (error) {
+    logger.error('Error occurred while fetching the delivery status config for listing. Message: @message.', {
+      '@message': error.message,
+    });
+  }
+
+  return labelStatus;
+}
+
 export {
   isExpressDeliveryEnabled,
   checkProductExpressDeliveryStatus,
@@ -97,4 +150,5 @@ export {
   checkAreaAvailabilityStatusOnCart,
   checkSameDayDeliveryStatus,
   checkExpressDeliveryStatus,
+  getExpressDeliveryStatus,
 };

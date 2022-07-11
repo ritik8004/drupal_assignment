@@ -19,7 +19,7 @@ import {
   createSearchResultDiv,
 } from '../utils';
 import { algoliaSearchClient } from '../config/SearchClient';
-import { getExpressDeliveryStatus } from '../utils/SearchUtility';
+import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -50,7 +50,7 @@ class SearchApp extends React.PureComponent {
 
     // Get Magento configuration to display express delivery label on
     // listing pages.
-    getExpressDeliveryStatus();
+    window.expressDeliveryLabel = await getExpressDeliveryStatus();
   }
 
   setQueryValue = (queryValue, inputTag = null) => {
