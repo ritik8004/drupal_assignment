@@ -261,6 +261,9 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
       }
     }
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
+    // Attaching the "myorders" library for write a review button,
+    // only for orders in My Account.
+    $build['recent_order'][$key]['#attached']['library'][] = 'alshaya_bazaar_voice/myorders';
   }
   if (!isset($build['bazaarvoice_strings'])) {
     $build['bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();

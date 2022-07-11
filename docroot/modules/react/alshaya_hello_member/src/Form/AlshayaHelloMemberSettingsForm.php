@@ -47,9 +47,9 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
     ];
     $form['hello_member_configuration']['minimum_age'] = [
       '#type' => 'number',
-      '#title' => t('Minimum age'),
+      '#title' => $this->t('Minimum age'),
       '#default_value' => $config->get('minimum_age') ?? 18,
-      '#required' => true,
+      '#required' => TRUE,
       '#min' => 0,
       '#max' => 18,
     ];

@@ -104,7 +104,7 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
       '#weight' => -12,
-      '#markup' => '<div class="section-title">' . t('Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.', [], ['context' => 'hello_member']) . '</div>',
+      '#markup' => '<div class="hm-benefit-subtitle">' . t('Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.', [], ['context' => 'hello_member']) . '</div>',
     ];
     $form['hello_member'] = [
       '#type' => 'details',
@@ -173,7 +173,7 @@ function alshaya_hello_member_alshaya_user_breadcrumb_routes_alter(array &$route
  * Implements hook_element_info_alter().
  */
 function alshaya_hello_member_element_info_alter(array &$types) {
-  // Alter dateteime fields.
+  // Alter dateteime field.
   $types['datetime']['#process'][] = 'alshaya_hello_member_datetime_set_startdate';
 }
 
