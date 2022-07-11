@@ -13,7 +13,7 @@ function getCheckoutLoginLink() {
 }
 
 /**
- * Helper function to get aura points to earn from sales api.
+ * Helper function to get hello member text for guest user.
  */
 function getHelloMemberTextForGuestUser(helloMemberPoints) {
   return parse(parse(Drupal.t('@hm_icon @login_link or Become a member to earn @points points', {
@@ -24,7 +24,7 @@ function getHelloMemberTextForGuestUser(helloMemberPoints) {
 }
 
 /**
- * Helper function to get aura points to earn from sales api.
+ * Helper function to get hello member text for logged in user.
  */
 function getHelloMemberTextForRegisteredUser(helloMemberPoints) {
   return parse(parse(Drupal.t('@hm_icon Member earns @points points', {
@@ -34,7 +34,7 @@ function getHelloMemberTextForRegisteredUser(helloMemberPoints) {
 }
 
 /**
- * Helper function to get aura points to earn from sales api.
+ * Helper function to get aura points redeem text.
  */
 function getAuraRedeemText() {
   return parse(parse(Drupal.t('Earn/Redeem @aura_icon Points', {

@@ -51,7 +51,7 @@ export const getHelloMemberCustomerInfo = () => {
  * @returns {string}
  *   The api endpoint.
  */
-export const getApiEndpoint = (action, params = {}, urlParams) => {
+export const getApiEndpoint = (action, params = {}, postParams) => {
   let endpoint = '';
   const endPointParams = params;
   switch (action) {
@@ -80,7 +80,7 @@ export const getApiEndpoint = (action, params = {}, urlParams) => {
       endpoint = '/V1/customers/apcDicData/HM_ACCRUAL_RATIO'; // endpoint to get hello member dictonary data.
       break;
     case 'helloMemberGetPointsEarned':
-      endpoint = `/V1/apc/${urlParams.identifierNo}/sales`; // endpoint to get hello member dictonary data.
+      endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member dictonary data.
       break;
 
     default:
@@ -107,7 +107,7 @@ export const getApiEndpoint = (action, params = {}, urlParams) => {
  * @returns {object}
  *   Returns the promise object.
  */
-export const callHelloMemberApi = (action, method, postData, urlParams, bearerToken = true) => {
-  const endpoint = getApiEndpoint(action, postData, urlParams);
+export const callHelloMemberApi = (action, method, postData, postParams, bearerToken = true) => {
+  const endpoint = getApiEndpoint(action, postData, postParams);
   return callMagentoApi(endpoint, method, postData, bearerToken);
 };
