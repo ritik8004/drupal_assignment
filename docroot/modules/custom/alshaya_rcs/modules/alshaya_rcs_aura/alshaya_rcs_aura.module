@@ -13,7 +13,6 @@ function alshaya_rcs_aura_library_info_alter(&$libraries, $extension) {
   if ($extension === 'alshaya_aura_react') {
     if (isset($libraries['aura_header_library'])
       && isset($libraries['aura_header_library']['js']['js/load-header.js'])) {
-      // \Drupal::logger('alrcsaura')->notice(serialize($libraries['aura_header_library']['js']));
       $options = $libraries['aura_header_library']['js']['js/load-header.js'];
       unset($libraries['aura_header_library']['js']['js/load-header.js']);
       $libraries['aura_header_library']['js']["/$self_module_path/js/load-header.js"] = $options;
