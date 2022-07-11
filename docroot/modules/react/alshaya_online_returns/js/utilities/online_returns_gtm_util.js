@@ -29,14 +29,33 @@ function getOrderGtmInfo() {
  */
 function getProductGtmInfo(itemsSelected) {
   // Build the product SKU object for all the selected items.
-  const skuProduct = [];
+  const skuProduct = {};
   itemsSelected.forEach((item) => {
     const GtmInfo = getOrderGtmInfo();
     if (GtmInfo && hasValue(GtmInfo.products) && hasValue(GtmInfo.products[item.sku])) {
       // Push the return reason and qty returned for individual item.
       GtmInfo.products[item.sku].reason = item.reason;
       GtmInfo.products[item.sku].quantity = item.qty_requested;
-      skuProduct.push(GtmInfo.products[item.sku]);
+      // Traverse all the object items and store them in a separate array.
+      Object.keys(GtmInfo.products[item.sku]).forEach((key) => {
+        if (!skuProduct[key]) {
+          skuProduct[key] = [];
+        }
+        // Push all the required info skuProduct.
+        if (GtmInfo.products[item.sku][key]) {
+          skuProduct[key].push(GtmInfo.products[item.sku][key]);
+        }
+      });
+    }
+  });
+
+  // Convert the array of all the attributes into single product object.
+  Object.keys((skuProduct)).forEach((key) => {
+    // Join only if the value is not empty.
+    if (skuProduct[key].length > 0) {
+      skuProduct[key] = skuProduct[key].join('|');
+    } else {
+      skuProduct[key] = '';
     }
   });
 
@@ -61,14 +80,14 @@ function getPreparedOrderGtm(eventType) {
     const {
       transactionId,
       deliveryOption,
-      firstTimeTransaction,
     } = gtmInfo.general;
 
     // Prepare the Return order object.
     returnOrder = {
       orderTransactionId: transactionId,
       orderType: deliveryOption,
-      orderFirstTimeTransaction: firstTimeTransaction,
+      // @todo Will done in DIG-10167.
+      orderFirstTimeTransaction: '',
     };
   }
 
