@@ -1,4 +1,4 @@
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   Drupal.alshayaRcs = Drupal.alshayaRcs || {};
@@ -83,7 +83,7 @@
             });
 
             // Call behaviours with modal context.
-            var modalContext = $('.pdp-modal-box');
+            var modalContext = document.querySelector('.pdp-modal-box');
             globalThis.rcsPhApplyDrupalJs(modalContext);
 
             var mainProduct = entity;
@@ -103,4 +103,4 @@
       });
     }
   };
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
