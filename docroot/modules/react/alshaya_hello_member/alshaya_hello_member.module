@@ -104,7 +104,7 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
       '#weight' => -12,
-      '#markup' => '<div class="section-title">' . t('Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.', [], ['context' => 'hello_member']) . '</div>',
+      '#markup' => '<div class="hm-benefit-subtitle">' . t('Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.', [], ['context' => 'hello_member']) . '</div>',
     ];
     $form['hello_member'] = [
       '#type' => 'details',
@@ -203,12 +203,9 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['hello_member']['field_mobile_number']['#prefix'] = '<div class="mobile-otp-wrapper">';
   $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div><div id="mobile-number-error"></div>' . '<div class="mb-verifier">' . t('OTP will be send to your mobile number to verify', [], ['context' => 'hello_member']) . '<div></div>';
   $form['hello_member']['field_mobile_number']['#weight'] = 12;
-  // Virtual checkbox to temporary maintain otp verified status.
+  // Virtual input to temporary maintain otp verified status.
   $form['otp_verified'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Otp Verified'),
-    '#prefix' => '<div class="visually-hidden">',
-    '#suffix' => '</div>',
+    '#type' => 'hidden',
   ];
   $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
 
@@ -218,6 +215,7 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_send_otp';
   $form['#attached']['library'][] = 'alshaya_white_label/hello-member-otp';
+  $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_profile_info';
 }
 
 /**

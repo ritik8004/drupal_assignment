@@ -10,7 +10,7 @@
 
 /* global globalThis */
 
-(function main($) {
+(function main($, Drupal, drupalSettings, RcsEventManager) {
 
   var pageEntity = null;
   const classRcsLoaded = 'rcs-loaded';
@@ -225,4 +225,4 @@
       });
   }
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, RcsEventManager);

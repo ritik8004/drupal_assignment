@@ -109,7 +109,7 @@
     &.product-small {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          height: 37.125rem;
+          height: auto;
         }
 
         .alshaya_search_mainimage {

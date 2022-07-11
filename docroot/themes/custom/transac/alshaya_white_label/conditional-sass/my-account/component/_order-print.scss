@@ -437,16 +437,6 @@ body.path--confirmation.alias--confirmation-print {
 }
 
 html[lang="ar"] {
-  .order__user--info {
-    @include breakpoint($ptablet) {
-      width: 33%;
-    }
-
-    @include breakpoint($desktop) {
-      width: 22%;
-    }
-  }
-
   .user__order--detail .order-item-row .dark {
     line-height: 1.4;
   }

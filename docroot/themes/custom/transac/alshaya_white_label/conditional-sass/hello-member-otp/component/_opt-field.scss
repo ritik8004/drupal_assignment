@@ -1,5 +1,11 @@
 // mobile number input field with otp btn
 
+%btn-disable {
+  background: $primary_button_disabled;
+  z-index: 3;
+  pointer-events: none;
+}
+
 #edit-hello-member {
   .mobile-otp-wrapper {
     padding: 0 rem(20) rem(28);
@@ -24,6 +30,12 @@
           right: 0; // For both lang we need button on the same place since it is mobile field.
           top: rem(-44);
           z-index: 1;
+        }
+
+        &.in-active {
+          button {
+            @extend %btn-disable;
+          }
         }
       }
     }
@@ -111,6 +123,10 @@
     font-size: rem(16);
     min-width: 100%;
     cursor: pointer;
+
+    &.in-active {
+      @extend %btn-disable;
+    }
   }
 
   .hello-member-modal-form-resend-otp {
@@ -149,6 +165,16 @@
       font-size: rem(16);
       #{$right}: rem(-16);
       cursor: pointer;
+    }
+  }
+}
+
+.user-page {
+  .user-form {
+    .form-submit {
+      &.in-active {
+        @extend %btn-disable;
+      }
     }
   }
 }

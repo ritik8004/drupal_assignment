@@ -35,6 +35,10 @@
         background: $order_summary_row;
         padding: rem(21) rem(16);
       }
+
+      .blend {
+        background: $order_detail_order_summary_row_td_blend;
+      }
     }
   }
 
@@ -143,6 +147,14 @@
     td {
       background: $order_summary_row;
       padding: 1.313rem 1rem;
+    }
+
+    .order--date--time,
+    .order-transaction > .light:nth-child(3) {
+      html[lang='ar'] & {
+        direction: ltr;
+        text-align: right;
+      }
     }
   }
 

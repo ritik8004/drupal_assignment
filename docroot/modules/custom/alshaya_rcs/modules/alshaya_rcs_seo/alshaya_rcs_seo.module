@@ -21,6 +21,9 @@ function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
   $libraries['datapush']['js'][$new_source] = $options;
 
   $libraries['datapush']['dependencies'] = [
+    'core/jquery',
+    'core/drupal',
+    'core/drupalSettings',
     'rcs_placeholders/helpers',
     'alshaya_rcs_seo/alshaya_rcs_product_seo',
   ];
