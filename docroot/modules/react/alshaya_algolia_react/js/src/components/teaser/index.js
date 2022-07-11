@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
@@ -34,6 +34,22 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
+
+  const [expressDeliveryFlag, setExpressDeliveryFlag] = useState(window.expressDeliveryLabel);
+
+  const ExpressDeliveryLabelsDisplay = (e) => {
+    const expressDeliveryStatus = e.detail;
+    if (!expressDeliveryStatus) {
+      setExpressDeliveryFlag(expressDeliveryStatus);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('expressDeliveryLabelsDisplay', ExpressDeliveryLabelsDisplay, false);
+    return () => {
+      document.removeEventListener('expressDeliveryLabelsDisplay', ExpressDeliveryLabelsDisplay, false);
+    };
+  }, []);
 
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
@@ -276,6 +292,7 @@ const Teaser = ({
               && checkExpressDeliveryStatus()
               && hit.attr_express_delivery !== undefined
               && hit.attr_express_delivery[0] === '1'
+              && expressDeliveryFlag
             }
           >
             <div className="express_delivery">
@@ -288,6 +305,7 @@ const Teaser = ({
               && pageType === 'plp'
               && hit.attr_express_delivery !== undefined
               && hit.attr_express_delivery[currentLanguage][0] === '1'
+              && expressDeliveryFlag
             }
           >
             <div className="express_delivery">

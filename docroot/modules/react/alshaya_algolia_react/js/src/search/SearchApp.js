@@ -19,10 +19,13 @@ import {
   createSearchResultDiv,
 } from '../utils';
 import { algoliaSearchClient } from '../config/SearchClient';
+import { getExpressDeliveryStatus } from '../utils/SearchUtility';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
 }
+
+window.expressDeliveryLabel = window.expressDeliveryLabel || true;
 
 class SearchApp extends React.PureComponent {
   constructor(props) {
@@ -36,11 +39,15 @@ class SearchApp extends React.PureComponent {
     createSearchResultDiv();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { query } = this.state;
     if (query !== '') {
       redirectToOtherLang(query);
     }
+
+    // Get Magento configuration to display express delivery label on
+    // listing pages.
+    getExpressDeliveryStatus();
   }
 
   setQueryValue = (queryValue, inputTag = null) => {
