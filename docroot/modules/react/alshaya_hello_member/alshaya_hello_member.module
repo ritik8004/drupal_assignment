@@ -368,6 +368,8 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
     return;
   }
 
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_hello_member.settings')->getCacheTags());
+
   $login_link = Link::createFromRoute(t('Sign in'),
     'alshaya_spc.checkout.login',
     [],

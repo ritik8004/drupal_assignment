@@ -8,6 +8,7 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import GuestUserLoyalty from './guest-user-loyalty';
 import RegisteredUserLoyalty from './registered-user-loyalty';
 import logger from '../../../../../js/utilities/logger';
+import getCurrencyCode from '../../../../../js/utilities/util';
 
 class HelloMemberLoyaltyOptions extends React.Component {
   constructor(props) {
@@ -19,6 +20,9 @@ class HelloMemberLoyaltyOptions extends React.Component {
   }
 
   componentDidMount() {
+    // For guest user, we calculate hello member points earned from item price
+    // and accrual ratio provided by dictonary api.
+    // For registered user, we get hello member points earned from the api.
     if (!isUserAuthenticated()) {
       this.getHelloMemberPoints();
     } else {
@@ -49,8 +53,8 @@ class HelloMemberLoyaltyOptions extends React.Component {
     const {
       cart: { cart: { items } },
     } = this.props;
-    const currencyCode = drupalSettings.alshaya_spc.currency_config.currency_code;
     let hmPoints = null;
+    const currencyCode = getCurrencyCode();
     if (hasValue(currencyCode)) {
       const hmPointsData = getHelloMemberPointsToEarn(items, identifierNo, currencyCode);
       if (hmPointsData instanceof Promise) {

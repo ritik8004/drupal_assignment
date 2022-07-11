@@ -25,24 +25,13 @@ const getPointstHistoryPageSize = () => (drupalSettings.pointsHistoryPageSize
   ? drupalSettings.pointsHistoryPageSize : 10);
 
 /**
- * Utility function to get currency code.
- */
-const getCurrencyCode = () => (drupalSettings.currency_code
-  ? drupalSettings.currency_code : null);
-
-/**
  * Utility function to get hello member points for given price.
  */
 const getPriceToHelloMemberPoint = (price, dictionaryData) => {
-  const currencyCode = getCurrencyCode();
-  if (hasValue(currencyCode) && hasValue(dictionaryData)) {
-    const accrualRatio = dictionaryData.items.find(
-      (item) => item.code === currencyCode,
-    );
-    if (hasValue(accrualRatio)) {
-      const points = accrualRatio.value ? (price * parseFloat(accrualRatio.value)) : 0;
-      return Math.round(points);
-    }
+  if (hasValue(dictionaryData) && hasValue(dictionaryData.items)) {
+    const accrualRatio = dictionaryData.items[0];
+    const points = accrualRatio.value ? (price * parseFloat(accrualRatio.value)) : 0;
+    return Math.round(points);
   }
   return null;
 };
@@ -51,5 +40,4 @@ export {
   getFormatedMemberId,
   getPointstHistoryPageSize,
   getPriceToHelloMemberPoint,
-  getCurrencyCode,
 };
