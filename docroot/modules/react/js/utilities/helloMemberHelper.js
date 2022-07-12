@@ -51,7 +51,7 @@ export const getHelloMemberCustomerInfo = () => {
  * @returns {string}
  *   The api endpoint.
  */
-export const getApiEndpoint = (action, params = {}) => {
+export const getApiEndpoint = (action, params = {}, postParams) => {
   let endpoint = '';
   const endPointParams = params;
   switch (action) {
@@ -79,6 +79,9 @@ export const getApiEndpoint = (action, params = {}) => {
     case 'helloMemberGetDictionaryData':
       endpoint = '/V1/customers/apcDicData/HM_ACCRUAL_RATIO'; // endpoint to get hello member dictonary data.
       break;
+    case 'helloMemberGetPointsEarned':
+      endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member dictonary data.
+      break;
 
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
@@ -104,7 +107,7 @@ export const getApiEndpoint = (action, params = {}) => {
  * @returns {object}
  *   Returns the promise object.
  */
-export const callHelloMemberApi = (action, method, postData, bearerToken = true) => {
-  const endpoint = getApiEndpoint(action, postData);
+export const callHelloMemberApi = (action, method, postData, postParams, bearerToken = true) => {
+  const endpoint = getApiEndpoint(action, postData, postParams);
   return callMagentoApi(endpoint, method, postData, bearerToken);
 };
