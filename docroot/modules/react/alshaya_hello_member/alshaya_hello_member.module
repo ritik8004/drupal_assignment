@@ -128,6 +128,7 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['hello_member']['field_gender']['#suffix'] = '</div>';
     $form['hello_member']['field_gender']['#weight'] = 11;
     unset($form['field_gender']);
+    $form['field_subscribe_newsletter']['widget']['value']['#title'] = t('Yes, email me offers, style updates, and special invites to sales and events.', [], ['context' => 'hello_member']);
 
     $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
