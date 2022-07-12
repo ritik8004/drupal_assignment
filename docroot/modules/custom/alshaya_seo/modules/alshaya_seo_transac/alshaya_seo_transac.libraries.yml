@@ -120,3 +120,11 @@ gtm_initial_data_push:
     - core/drupal
     - core/jquery
     - alshaya_master/local_storage_manager
+
+gtm_online_returns:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.online_returns.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal

@@ -6,6 +6,7 @@ import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultResolutionId } from '../../../utilities/return_request_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PromotionsWarningModal from '../promotions-warning-modal';
+import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
 
 class ReturnItemsListing extends React.Component {
   constructor(props) {
@@ -95,6 +96,7 @@ class ReturnItemsListing extends React.Component {
       // non zero ordered qty available.
       discountedProducts = products.filter(
         (product) => product.extension_attributes.applied_rule_ids_with_discount
+        && item.sku !== product.sku
         && product.ordered > 0,
       );
 
@@ -122,8 +124,7 @@ class ReturnItemsListing extends React.Component {
 
     if (checked) {
       // Check if any promotion is applied to the item.
-      if (selectedItemDiscountPromotion.length > 0
-        && discountedProducts.length > 0) {
+      if (selectedItemDiscountPromotion.length > 0) {
         // Display promotions warning modal.
         this.setState({
           promotionModalOpen: true,
@@ -147,12 +148,6 @@ class ReturnItemsListing extends React.Component {
     }
   }
 
-  closePromotionsWarningModal = () => {
-    this.setState({
-      promotionModalOpen: false,
-    });
-  };
-
   handlePromotionContinue = () => {
     const { products, handleSelectedItems, itemsSelected } = this.props;
     const { discountedRuleId } = this.state;
@@ -172,7 +167,8 @@ class ReturnItemsListing extends React.Component {
       if (hasValue(productDiscountedRuleIds)
         && productDiscountedRuleIds.some((pid) => discountedRuleId.includes(pid))
         // We don't want to include the products which are already returned.
-        && productDetails.ordered > 0) {
+        && productDetails.ordered > 0
+        && !itemsSelected.some((item) => item.sku === product.sku)) {
         productDetails.qty_requested = productDetails.qty_ordered;
         productDetails.resolution = getDefaultResolutionId();
         productDetails.isChecked = true;
@@ -218,12 +214,15 @@ class ReturnItemsListing extends React.Component {
     });
 
     if (hasValue(promotionalItems)) {
-      handleSelectedItems(itemsSelected.filter((item) => !promotionalItems.includes(item)));
+      handleSelectedItems(itemsSelected.filter(
+        (item) => !promotionalItems.some((promoItem) => promoItem.sku === item.sku),
+      ));
     }
 
     this.setState({
       promotionModalOpen: false,
-      btnDisabled: products.some((item) => (!hasValue(item.reason) || item.reason === 0)),
+      btnDisabled: itemsSelected.length > 0
+        && itemsSelected.some((item) => (!hasValue(item.reason) || item.reason === 0)),
     });
   };
 
@@ -256,6 +255,13 @@ class ReturnItemsListing extends React.Component {
   handleReturnContinue = () => {
     const { open } = this.state;
 
+    const { itemsSelected } = this.props;
+    // Push data to GTM.
+    Drupal.alshayaSeoGtmPushReturn(
+      getProductGtmInfo(itemsSelected),
+      getPreparedOrderGtm('item_confirmed'),
+      'item_confirmed',
+    );
     // When user clicks continue button, disable the item
     // details accordion and enable refund accordion.
     this.updateRefundAccordion(open);
@@ -316,7 +322,6 @@ class ReturnItemsListing extends React.Component {
           closeOnDocumentClick={false}
         >
           <PromotionsWarningModal
-            closePromotionsWarningModal={this.closePromotionsWarningModal}
             handlePromotionDeselect={this.handlePromotionDeselect}
             handlePromotionContinue={this.handlePromotionContinue}
             itemNotEligibleForReturn={itemNotEligibleForReturn}

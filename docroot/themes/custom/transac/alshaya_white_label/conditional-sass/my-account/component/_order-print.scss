@@ -93,6 +93,11 @@ body {
     .attr-wrapper {
       display: inline-block;
       direction: ltr;
+      width: 100%;
+
+      html[lang=ar] & {
+        text-align: right;
+      }
     }
 
     td:nth-child(3) {
@@ -437,16 +442,6 @@ body.path--confirmation.alias--confirmation-print {
 }
 
 html[lang="ar"] {
-  .order__user--info {
-    @include breakpoint($ptablet) {
-      width: 33%;
-    }
-
-    @include breakpoint($desktop) {
-      width: 22%;
-    }
-  }
-
   .user__order--detail .order-item-row .dark {
     line-height: 1.4;
   }

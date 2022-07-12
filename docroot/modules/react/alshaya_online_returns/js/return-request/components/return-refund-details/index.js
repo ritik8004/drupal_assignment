@@ -12,6 +12,7 @@ import { createReturnRequest } from '../../../utilities/return_api_helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getReturnConfirmationUrl, getOrderDetails, isReturnWindowClosed } from '../../../utilities/online_returns_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
 
 class ReturnRefundDetails extends React.Component {
   constructor(props) {
@@ -74,6 +75,12 @@ class ReturnRefundDetails extends React.Component {
     if (hasValue(returnRequest.data) && hasValue(returnRequest.data.increment_id)) {
       const returnId = returnRequest.data.entity_id;
       Drupal.addItemInLocalStorage('online_return_id', returnId);
+      // Push the required info to GTM.
+      Drupal.alshayaSeoGtmPushReturn(
+        getProductGtmInfo(itemsSelected),
+        getPreparedOrderGtm('refunddetails_confirmed', returnRequest.data),
+        'refunddetails_confirmed',
+      );
       // On success, redirect to return confirmation page.
       const { orderId } = getOrderDetails()['#order'];
       const returnUrl = getReturnConfirmationUrl(orderId, returnId);

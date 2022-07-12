@@ -22,6 +22,7 @@ export default class AutocompleteSearch extends React.Component {
     } = this.props;
     const apiKey = drupalSettings.alshaya_geolocation.api_key;
     const { regional } = drupalSettings.alshaya_geolocation;
+    const { currentLanguage } = drupalSettings.path;
     return (
       <>
         <Autocomplete
@@ -33,8 +34,10 @@ export default class AutocompleteSearch extends React.Component {
           }}
           placeholder={placeholder}
           type="text"
+          language={currentLanguage}
+          inputAutocompleteValue="off"
           options={{
-            types: ['(regions)'],
+            types: ['geocode'],
             componentRestrictions: { country: regional },
           }}
         />
