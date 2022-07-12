@@ -260,7 +260,9 @@ const Teaser = ({
                 )
               </div>
             </ConditionalView>
-            <Price price={attribute.original_price} finalPrice={attribute.final_price} />
+            {attribute.rendered_price
+              ? Parser(attribute.rendered_price)
+              : <Price price={attribute.original_price} finalPrice={attribute.final_price} />}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>
