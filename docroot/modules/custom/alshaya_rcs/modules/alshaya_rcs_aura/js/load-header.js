@@ -2,7 +2,8 @@
   const $rcsMenu = $('#rcs-ph-navigation_menu');
   let auraHeaderDisplayed = false;
 
-  Drupal.behaviors.AuraHeaderBehavior = { // eslint-disable-line no-param-reassign
+  // eslint-disable-next-line
+  Drupal.behaviors.AuraHeaderBehavior = {
     attach: function auraHeaderBehavior() {
       // If RCS menu is present, we wait until we finish loading the menu data.
       if (!auraHeaderDisplayed
