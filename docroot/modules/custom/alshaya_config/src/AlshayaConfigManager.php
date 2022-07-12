@@ -483,40 +483,41 @@ class AlshayaConfigManager {
     // Include overrides.
     $acsf_site_code = mb_strtolower(Settings::get('acsf_site_code'));
     $country_code = mb_strtolower(Settings::get('country_code'));
-    $env = mb_strtolower(Settings::get('env'));
     $settings_path = Settings::get('settings_override_yaml_file_path');
-
-    if (empty($mdc)) {
-      if (!$mdc) {
-        if ($env === 'local') {
-          $mdc = $acsf_site_code . '_qa';
-        }
-        else {
-          $mdc = $acsf_site_code . '_' . $env;
-        }
-      }
-    }
-
-    // phpcs:ignore
-    global $magentos;
-
-    $settings = [];
-    $settings['algolia_env'] = $magentos[$mdc]['algolia_env'] ?? $mdc;
-    $settings['alshaya_api.settings']['magento_host'] = $magentos[$mdc]['url'];
 
     $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
 
     if ($reset) {
       if (file_exists($settings_file)) {
         unlink($settings_file);
-        $this->logger->notice('Magento settings reset to default value');
-        return 1;
+        $this->logger->notice('Magento settings override file @file removed.', [
+          '@file' => $settings_file,
+        ]);
+      }
+
+      return 1;
+    }
+
+    if (empty($mdc)) {
+      $env = mb_strtolower(Settings::get('env_name'));
+      if ($env === 'local') {
+        $mdc = $acsf_site_code . '_qa';
       }
       else {
-        $this->logger->notice('Failed resetting magento settings.');
-        return 0;
+        $mdc = $acsf_site_code . '_' . $env;
       }
     }
+
+    // @codingStandardsIgnoreLine
+    global $magentos;
+
+    if (empty($magentos[$mdc])) {
+      throw new \Exception("MDC code $mdc unknown.");
+    }
+
+    $settings = [];
+    $settings['algolia_env'] = $magentos[$mdc]['algolia_env'] ?? $mdc;
+    $settings['alshaya_api.settings']['magento_host'] = $magentos[$mdc]['url'];
 
     foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
       $settings['alshaya_api.settings'][$key] = $value;
