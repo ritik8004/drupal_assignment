@@ -98,13 +98,13 @@ class HelloMemberLoyaltyOptions extends React.Component {
         <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('Loyalty')}</SectionTitle>
         <ConditionalView condition={!isUserAuthenticated()}>
           <GuestUserLoyalty
-            animationDelayValue={animationDelay}
+            animationDelay={animationDelay}
             helloMemberPoints={hmPoints}
           />
         </ConditionalView>
         <ConditionalView condition={isUserAuthenticated()}>
           <RegisteredUserLoyalty
-            animationDelayValue={animationDelay}
+            animationDelay={animationDelay}
             helloMemberPoints={hmPoints}
           />
         </ConditionalView>
