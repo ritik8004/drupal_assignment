@@ -121,8 +121,6 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['hello_member']['field_date_of_birth'] = $form['field_date_of_birth'];
     $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
     $form['hello_member']['field_date_of_birth']['#weight'] = 10;
-    $form['hello_member']['field_date_of_birth']['#weight'] = 10;
-    $form['hello_member']['field_date_of_birth']['#weight'] = 10;
     unset($form['field_date_of_birth']);
     $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
     unset($form['field_gender']['widget']['#options']['_none']);
