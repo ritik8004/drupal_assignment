@@ -294,12 +294,20 @@
 }
 
 html[lang=ar] {
-  .user__order--detail .total-row > .right--align {
-    padding: 0 0 0 0.75rem;
-    line-height: 2.3;
+  .user__order--detail {
+    .total-row > .right--align {
+      padding: 0 0 0 0.75rem;
+      line-height: 2.3;
 
-    @include breakpoint($desktop) {
-      padding: 0 0 0 1.375rem;
+      @include breakpoint($desktop) {
+        padding: 0 0 0 1.375rem;
+      }
+    }
+
+    .order-item-row {
+      .attr-wrapper {
+        direction: rtl;
+      }
     }
   }
 }
