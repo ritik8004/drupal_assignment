@@ -158,6 +158,7 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
   $build['#products'] = array_values($build['#products']);
 
   $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
+  $build['#attached']['drupalSettings']['onlineReturns']['gtm_info'] = \Drupal::service('alshaya_seo_transac.gtm_manager')->fetchCompletedOrderAttributes($order);
   $build['#attached']['drupalSettings']['onlineReturns']['products'] = $onlineReturnsHelper->prepareProductsData($build["#products"]);
   $build['#attached']['drupalSettings']['onlineReturns']['refunded_products'] = $onlineReturnsHelper->prepareProductsData($build["#refunded_products"]);
 

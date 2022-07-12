@@ -5,7 +5,6 @@ import logger from '../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { cancelReturnRequest } from '../../../utilities/return_api_helper';
 import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
-import { getReturnedItems } from '../../../utilities/return_confirmation_util';
 
 export default class CancelReturnPopUp extends React.Component {
   constructor(props) {
@@ -19,8 +18,8 @@ export default class CancelReturnPopUp extends React.Component {
    * Trigger cancel return api call.
    */
   confirmCancellation = () => {
-    const { returnInfo } = this.props;
-    this.cancelReturnRequest(returnInfo);
+    const { returnData } = this.props;
+    this.cancelReturnRequest(returnData.returnInfo);
   }
 
   cancelReturnRequest = async (returnInfo) => {
@@ -40,12 +39,16 @@ export default class CancelReturnPopUp extends React.Component {
     }
 
     if (hasValue(cancelReturn.data)) {
+      const { returnData } = this.props;
+
       // Push the required info to GTM.
-      Drupal.alshayaSeoGtmPushReturn(
-        getProductGtmInfo(getReturnedItems(cancelReturn.data)),
-        getPreparedOrderGtm('cancelreturnconfirmed', cancelReturn.data),
-        'cancelreturnconfirmed',
-      );
+      if (hasValue(returnData) && hasValue(returnData.items)) {
+        Drupal.alshayaSeoGtmPushReturn(
+          getProductGtmInfo(returnData.items),
+          getPreparedOrderGtm('cancelreturnconfirmed', returnInfo),
+          'cancelreturnconfirmed',
+        );
+      }
 
       this.setState({ cancelBtnState: false }, () => {
         this.closeModal();

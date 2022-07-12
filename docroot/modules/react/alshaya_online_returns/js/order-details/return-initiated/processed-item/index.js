@@ -93,7 +93,7 @@ class ProcessedItem extends React.Component {
         </div>
         <ConditionalView condition={popup}>
           <CancelReturnPopUp
-            returnInfo={returnData.returnInfo}
+            returnData={returnData}
             closeCancelReturnModal={this.closeCancelReturnModal}
             handleErrorMessage={handleErrorMessage}
           />

@@ -16,6 +16,12 @@ function getOrderGtmInfo() {
     return drupalSettings.returnInfo.orderDetails['#gtm_info'];
   }
 
+  // For order detail page, get the data from onlineReturns drupal settings.
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.gtm_info)) {
+    return drupalSettings.onlineReturns.gtm_info;
+  }
+
   return {};
 }
 
