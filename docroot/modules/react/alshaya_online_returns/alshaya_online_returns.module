@@ -163,6 +163,8 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
 
   // Attach the theming library.
   $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
+  // Attach the GTM library for online returns.
+  $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_online_returns';
 }
 
 /**
