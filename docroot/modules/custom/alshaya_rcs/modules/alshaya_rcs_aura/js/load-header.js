@@ -1,13 +1,13 @@
-(function loadAuraHeader(Drupal) {
-  const rcsMenu = document.getElementById('rcs-ph-navigation_menu');
+(function loadAuraHeader(Drupal, $) {
+  const $rcsMenu = $('#rcs-ph-navigation_menu');
   let auraHeaderDisplayed = false;
 
   Drupal.behaviors.AuraHeaderBehavior = { // eslint-disable-line no-param-reassign
     attach: function auraHeaderBehavior() {
       // If RCS menu is present, we wait until we finish loading the menu data.
       if (!auraHeaderDisplayed
-        && rcsMenu
-        && !rcsMenu.classList.contains('rcs-loaded')
+        && $rcsMenu.length
+        && !$rcsMenu.hasClass('rcs-loaded')
       ) {
         return;
       }
@@ -15,4 +15,4 @@
       Drupal.displayAuraHeader();
     },
   };
-}(Drupal));
+}(Drupal, jQuery));
