@@ -15,6 +15,7 @@ use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
 use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -59,6 +60,13 @@ class OnlineReturnController extends ControllerBase {
   protected $renderer;
 
   /**
+   * Alshaya GTM Manager.
+   *
+   * @var \Drupal\alshaya_seo_transac\AlshayaGtmManager
+   */
+  protected $gtmManager;
+
+  /**
    * ReturnRequestController constructor.
    *
    * @param \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $online_returns_helper
@@ -71,17 +79,21 @@ class OnlineReturnController extends ControllerBase {
    *   Api wrapper.
    * @param \Drupal\Core\Render\Renderer $renderer
    *   Renderer service object.
+   * @param \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager
+   *   Gtm Manager object.
    */
   public function __construct(OnlineReturnsHelper $online_returns_helper,
                               OnlineReturnsApiHelper $online_returns_api_helper,
                               CountryRepository $address_country_repository,
                               AlshayaApiWrapper $api_wrapper,
-                              Renderer $renderer) {
+                              Renderer $renderer,
+                              AlshayaGtmManager $gtm_manager) {
     $this->onlineReturnsHelper = $online_returns_helper;
     $this->onlineReturnsApiHelper = $online_returns_api_helper;
     $this->addressCountryRepository = $address_country_repository;
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
+    $this->gtmManager = $gtm_manager;
   }
 
   /**
@@ -94,6 +106,7 @@ class OnlineReturnController extends ControllerBase {
       $container->get('address.country_repository'),
       $container->get('alshaya_api.api'),
       $container->get('renderer'),
+      $container->get('alshaya_seo_transac.gtm_manager'),
     );
   }
 
@@ -135,6 +148,7 @@ class OnlineReturnController extends ControllerBase {
     $build['#markup'] = '<div id="alshaya-online-return-request"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
     $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
+    $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_online_returns';
     $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
       'returnConfig' => $returnConfig,
@@ -239,6 +253,7 @@ class OnlineReturnController extends ControllerBase {
     );
 
     $orderDetails['#products'] = $this->onlineReturnsHelper->prepareProductsData($orderDetails["#products"]);
+    $orderDetails['#gtm_info'] = $this->gtmManager->fetchCompletedOrderAttributes($order);
 
     // Adding country label to display country along with address.
     $country_list = $this->addressCountryRepository->getList();
