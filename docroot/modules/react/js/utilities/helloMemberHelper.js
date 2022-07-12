@@ -18,6 +18,19 @@ export default function isHelloMemberEnabled() {
 }
 
 /**
+ * Helper function to check if aura integration with hello member is enabled.
+ */
+export const isAuraIntegrationEnabled = () => {
+  let enabled = false;
+
+  if (hasValue(drupalSettings.hello_member)) {
+    enabled = drupalSettings.hello_member.aura_integration_enabled;
+  }
+
+  return enabled;
+};
+
+/**
  * Helper function to get the customer info from user session.
  */
 export const getHelloMemberCustomerInfo = () => {
