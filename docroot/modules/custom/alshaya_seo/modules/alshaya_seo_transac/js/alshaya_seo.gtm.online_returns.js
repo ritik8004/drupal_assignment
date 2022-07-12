@@ -7,14 +7,14 @@
   /**
    * Function to push the product return events to data layer.
    *
-   * @param {object} product
+   * @param {object} products
    *   Object containing the products that is getting returned.
    * @param {object} order
    *   Object containing the basic order details.
    * @param {string} eventAction
    *   The event that is getting performed during product return.
    */
-  Drupal.alshayaSeoGtmPushReturn = function (product, order, eventAction) {
+  Drupal.alshayaSeoGtmPushReturn = function (products, order, eventAction) {
     // Prepare the return data.
     var returnData = {
       event: "returns",
@@ -26,12 +26,14 @@
       ecommerce: {
         detail: {
           ...order,
-          products: product
+          products: products
         }
       }
     }
-
-    dataLayer.push(returnData);
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(returnData);
+    }
   }
 
 })(Drupal, dataLayer);
