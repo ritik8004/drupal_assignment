@@ -539,6 +539,11 @@
     .attr-wrapper {
       display: inline-block;
       direction: ltr;
+      width: 100%;
+
+      html[lang=ar] & {
+        text-align: right;
+      }
     }
 
     .blend {
