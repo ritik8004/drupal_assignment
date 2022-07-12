@@ -93,6 +93,11 @@ body {
     .attr-wrapper {
       display: inline-block;
       direction: ltr;
+      width: 100%;
+
+      html[lang=ar] & {
+        text-align: right;
+      }
     }
 
     td:nth-child(3) {
