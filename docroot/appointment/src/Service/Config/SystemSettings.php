@@ -57,6 +57,7 @@ class SystemSettings {
       $data = gardens_site_data_refresh_one($host);
       $GLOBALS['gardens_site_settings'] = $data['gardens_site_settings'];
       require_once DRUPAL_ROOT . '/../factory-hooks/post-sites-php/includes.php';
+      require_once DRUPAL_ROOT . '/../factory-hooks/post-sites-php/includes_alshaya.php';
     }
 
     $site_country_code = alshaya_get_site_country_code($this->getSiteCode());
@@ -87,7 +88,7 @@ class SystemSettings {
    *   Site code if available.
    */
   public function getSiteCode() {
-    // phpcs:ignore
+    // @codingStandardsIgnoreLine
     global $host_site_code, $_acsf_site_name;
 
     // Get host_site_code or acsf_site_name based on environment.
