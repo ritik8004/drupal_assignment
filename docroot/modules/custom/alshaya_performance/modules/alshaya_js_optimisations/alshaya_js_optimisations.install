@@ -11,12 +11,16 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Implements hook_update_N().
  */
 function alshaya_js_optimisations_update_9000() {
-  $settings = [
-    'critical_js.critical' => "alshaya_acm_cart_notification: cart_notification_js\r\nalshaya_algolia_react:\r\n  - plp\r\n  - autocomplete\r\nalshaya_spc:\r\n  - cart\r\n  - cart_utilities\r\n  - checkout\r\n  - commerce_backend.cart.v2\r\n  - commerce_backend.checkout.v2\r\nalshaya_white_label:\r\n  - algolia_search\r\n  - ucfix\r\ndatadog_js: logger\r\nalshaya_rcs_dynamic_yield: rcs_dynamic_yield\r\nalshaya_rcs_seo: order_confirmation\r\nalshaya_rcs_listing: renderer\r\nalshaya_rcs_main_menu: renderer\r\nalshaya_rcs_product:\r\n  - rcs_product_images\r\n  - rcs_product_info\r\nalshaya_rcs_promotion: renderer\r\nrcs_placeholders: rcs_placeholders",
-    'critical_js.sitewide_1' => "alshaya_hnm: global_styles\r\nalshaya_master:\r\n  - common_fixes\r\n  - common_functions\r\n  - jquery_is_in_viewport\r\nalshaya_seo_transac: gtm\r\nalshaya_spc: commerce_backend.cart.v2\r\nalshaya_user: user_action_logger\r\nalshaya_white_label:\r\n  - alshaya_image_lazy_load\r\n  - global_styles\r\n  - ucfix\r\n  - utils\r\nback_to_top:\r\n  - back_to_top_js\r\ndatadog_js: logger\r\ndynamic_yield: dynamic_yield.intelligent_tracking\r\nkidzania: global_styles\r\npottery_barn_non_trans: global_styles\r\nalshaya_performance: improve_cls_css\r\nrcs_placeholders: rcs_placeholders"
+  $options = [
+    'replace_keys' => [
+      'critical_js.critical',
+      'critical_js.sitewide_1',
+    ]
   ];
-  _alshaya_js_optimisations_settings_update($settings);
-  _alshaya_js_optimisations_settings_rebuild();
+  _alshaya_js_optimisations_update_settings(
+    AlshayaConfigManager::MODE_REPLACE_KEY,
+    $options
+  );
 }
 
 /**
@@ -31,7 +35,9 @@ function alshaya_js_optimisations_update_8001() {
       AlshayaConfigManager::MODE_REPLACE
     );
 
-  _alshaya_js_optimisations_settings_rebuild();
+  // Clear Cache to trigger hook_library_info_alter with updated priorities.
+  \Drupal::service('library.discovery')->clearCachedDefinitions();
+  \Drupal::service('router.builder')->rebuild();
 }
 
 /**
@@ -43,20 +49,22 @@ function alshaya_js_optimisations_install() {
 }
 
 /**
- * Clear Cache to trigger hook_library_info_alter with updated priorities.
+ * Helper function to update the JS Performance settings.
  */
-function _alshaya_js_optimisations_settings_rebuild() {
+function _alshaya_js_optimisations_update_settings(
+  $mode = AlshayaConfigManager::MODE_REPLACE,
+  $options = []
+) {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_js_optimisations.settings'],
+      'alshaya_js_optimisations',
+      'install',
+      $mode,
+      $options
+    );
+
+  // Clear Cache to trigger hook_library_info_alter with updated priorities.
   \Drupal::service('library.discovery')->clearCachedDefinitions();
   \Drupal::service('router.builder')->rebuild();
-}
-
-/**
- * Update JS Optimisations settings.
- */
-function _alshaya_js_optimisations_settings_update($settings) {
-  $config = \Drupal::configFactory()->getEditable('alshaya_js_optimisations.settings');
-  foreach ($settings as $key => $value) {
-    $config->set($key, $value);
-  }
-  $config->save();
 }

@@ -337,7 +337,21 @@ class AlshayaConfigManager {
 
       case self::MODE_REPLACE_KEY:
         foreach ($options['replace_keys'] as $replace_key) {
-          $existing[$replace_key] = $data[$replace_key];
+          if (strpos($replace_key, '.') === FALSE) {
+            $existing[$replace_key] = $data[$replace_key];
+          }
+          else {
+            $nested_keys = explode('.', $replace_key);
+            $tmp_existing = &$existing;
+            $tmp_data = $data;
+
+            foreach ($nested_keys as $key) {
+              $tmp_existing = &$tmp_existing[$key];
+              $tmp_data = $tmp_data[$key];
+            }
+
+            $tmp_existing = $tmp_data;
+          }
         }
         $data = $existing;
         break;
