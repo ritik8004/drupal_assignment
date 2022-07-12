@@ -40,8 +40,4 @@ class HelloMemberHelper {
     return $this->configFactory->get('alshaya_hello_member.settings')->get('enabled');
   }
 
-  public function ageHelloMember() {
-    return $this->configFactory->get('alshaya_hello_member.settings')->get('minimum_age');
-  }
-
 }
