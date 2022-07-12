@@ -4,7 +4,6 @@ import parse from 'html-react-parser';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import AuraHeaderIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
 import HelloMemberSvg from '../../../../svg-component/hello-member-svg';
-import { getCheckoutLoginLink } from '../../../../../../alshaya_hello_member/js/src/utilities';
 
 const GuestUserLoyalty = ({
   helloMemberPoints,
@@ -18,7 +17,7 @@ const GuestUserLoyalty = ({
       <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
         <div className="loaylty-option-text">
           {parse(parse(Drupal.t('@hm_icon @login_link or Become a member to earn @points points', {
-            '@login_link': getCheckoutLoginLink(),
+            '@login_link': `<a href="${Drupal.url('cart/login')}">${Drupal.t('Sign in')}</a>`,
             '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
             '@points': helloMemberPoints,
           })))}

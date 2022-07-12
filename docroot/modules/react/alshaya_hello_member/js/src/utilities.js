@@ -36,16 +36,8 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
   return null;
 };
 
-const getCheckoutLoginLink = () => {
-  if (hasValue(drupalSettings.checkout_login_link)) {
-    return drupalSettings.checkout_login_link;
-  }
-  return '';
-};
-
 export {
   getFormatedMemberId,
   getPointstHistoryPageSize,
   getPriceToHelloMemberPoint,
-  getCheckoutLoginLink,
 };
