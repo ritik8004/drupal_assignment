@@ -43,6 +43,8 @@ function alshaya_rcs_install() {
     'alshaya_color_split' => 'alshaya_rcs_color_split',
     'alshaya_add_to_bag' => 'alshaya_rcs_add_to_bag',
     'alshaya_wishlist' => 'alshaya_rcs_wishlist',
+    'alshaya_bazaar_voice' => 'alshaya_rcs_bazaar_voice',
+    'alshaya_aura_react' => 'alshaya_rcs_aura',
   ];
 
   foreach ($modules as $module_to_check => $module_to_install) {
