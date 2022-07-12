@@ -148,6 +148,13 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode) => 
     });
 
     const response = await callHelloMemberApi('helloMemberGetDictionaryData', 'GET', { programCode: 'hello_member' });
+    if (hasValue(response.data.error)) {
+      const message = hasValue(response.data.message) ? response.data.message : '';
+      logger.error('Error while trying to get hello member dictionary data. Message: @message', {
+        '@message': message,
+      });
+      return getErrorResponse(message, 500);
+    }
     if (hasValue(response.data) && !hasValue(response.data.error)) {
       return {
         data: { hm_points: getPriceToHelloMemberPoint(totalPrice, response.data) },

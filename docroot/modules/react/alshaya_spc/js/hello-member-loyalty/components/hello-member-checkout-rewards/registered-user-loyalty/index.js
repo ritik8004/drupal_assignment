@@ -1,5 +1,4 @@
 import React from 'react';
-import { getAuraRedeemText, getHelloMemberTextForRegisteredUser } from '../utilities/loyalty-options-helper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import LoyaltySelectOption from '../loyalty-select-option';
 
@@ -40,14 +39,14 @@ class RegisteredUserLoyalty extends React.Component {
           selectedOption={selectedOption}
           optionName="hello_member_loyalty"
           changeLoyaltyOption={this.changeLoyaltyOption}
-          optionText={getHelloMemberTextForRegisteredUser(helloMemberPoints)}
+          helloMemberPoints={helloMemberPoints}
         />
         <LoyaltySelectOption
           animationDelay={animationDelay}
           selectedOption={selectedOption}
           optionName="aura_loyalty"
           changeLoyaltyOption={this.changeLoyaltyOption}
-          optionText={getAuraRedeemText()}
+          helloMemberPoints={helloMemberPoints}
         />
       </div>
     );
