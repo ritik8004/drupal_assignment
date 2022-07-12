@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks for alshaya_rcs_aura.
+ */
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_aura_library_info_alter(&$libraries, $extension) {
+  $self_module_path = drupal_get_path('module', 'alshaya_rcs_aura');
+  if ($extension === 'alshaya_aura_react') {
+    if (isset($libraries['aura_header_library'])
+      && isset($libraries['aura_header_library']['js']['js/load-header.js'])) {
+      $options = $libraries['aura_header_library']['js']['js/load-header.js'];
+      unset($libraries['aura_header_library']['js']['js/load-header.js']);
+      $libraries['aura_header_library']['js']["/$self_module_path/js/load-header.js"] = $options;
+      $libraries['aura_header_library']['dependencies'][] = 'core/jquery';
+    }
+  }
+}
