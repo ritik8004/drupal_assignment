@@ -1,6 +1,6 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getOrderDetails } from './online_returns_util';
-import { getDeliveryAddress } from './return_request_util';
+import { getDeliveryAddress, getPaymentDetails } from './return_request_util';
 
 /**
  * Utility function to get order GTM info.
@@ -34,8 +34,19 @@ function getProductGtmInfo(itemsSelected) {
     const gtmInfo = getOrderGtmInfo();
     if (gtmInfo && hasValue(gtmInfo.products) && hasValue(gtmInfo.products[item.sku])) {
       // Push the return reason and qty returned for individual item.
-      gtmInfo.products[item.sku].reason = item.reason;
-      gtmInfo.products[item.sku].quantity = item.qty_requested;
+      if (hasValue(item.reason)) {
+        gtmInfo.products[item.sku].reason = item.reason;
+      } else if (hasValue(item.returnData)
+        && hasValue(item.returnData.reason)) {
+        gtmInfo.products[item.sku].reason = item.returnData.reason;
+      }
+
+      if (hasValue(item.qty_requested)) {
+        gtmInfo.products[item.sku].quantity = item.qty_requested;
+      } else if (hasValue(item.returnData)
+        && hasValue(item.returnData.qty_requested)) {
+        gtmInfo.products[item.sku].quantity = item.returnData.qty_requested;
+      }
       // Traverse all the object items and store them in a separate array.
       Object.keys(gtmInfo.products[item.sku]).forEach((key) => {
         if (!skuProduct[key]) {
@@ -68,10 +79,13 @@ function getProductGtmInfo(itemsSelected) {
  * @param {string} eventType
  *   The type of event which is getting performed.
  *
+ * @param {object} returnInfo
+ *   The object containing return information.
+ *
  * @returns {object}
  *   The return order GTM object.
  */
-function getPreparedOrderGtm(eventType) {
+function getPreparedOrderGtm(eventType, returnInfo) {
   const gtmInfo = getOrderGtmInfo();
   let returnOrder = {};
 
@@ -91,8 +105,18 @@ function getPreparedOrderGtm(eventType) {
     };
   }
 
+  const orderDetails = getOrderDetails();
   // Get delivery address info.
-  const deliveryInfo = getDeliveryAddress(getOrderDetails());
+  const deliveryInfo = getDeliveryAddress(orderDetails);
+  // Get the payment details.
+  const paymentDetails = getPaymentDetails(orderDetails);
+  // Combine all the payment methods.
+  const paymentMethods = [];
+  if (Object.keys(paymentDetails).length > 0) {
+    Object.keys(paymentDetails).forEach((index) => {
+      paymentMethods.push(paymentDetails[index].card_type);
+    });
+  }
 
   // Prepare the Return order object.
   if (deliveryInfo) {
@@ -102,12 +126,11 @@ function getPreparedOrderGtm(eventType) {
   // This will always be online in our case.
   returnOrder.returnType = 'online';
 
-  // @todo to update the info in the further GA tickets.
   // Add returned & refunded info for selected events.
-  if (eventType !== 'item_confirmed') {
-    returnOrder.refundAmount = '';
-    returnOrder.refundMethods = '';
-    returnOrder.returnId = '';
+  if (eventType !== 'item_confirmed' && returnInfo) {
+    returnOrder.refundAmount = returnInfo.extension_attributes.refund_amount;
+    returnOrder.refundMethods = paymentMethods.length > 0 ? paymentMethods.join('_') : '';
+    returnOrder.returnId = returnInfo.increment_id;
     // @Todo To add the firstTimeReturn info when available.
     returnOrder.firstTimeReturn = '';
   }
