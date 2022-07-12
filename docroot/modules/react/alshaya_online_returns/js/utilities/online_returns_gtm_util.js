@@ -31,19 +31,19 @@ function getProductGtmInfo(itemsSelected) {
   // Build the product SKU object for all the selected items.
   const skuProduct = {};
   itemsSelected.forEach((item) => {
-    const GtmInfo = getOrderGtmInfo();
-    if (GtmInfo && hasValue(GtmInfo.products) && hasValue(GtmInfo.products[item.sku])) {
+    const gtmInfo = getOrderGtmInfo();
+    if (gtmInfo && hasValue(gtmInfo.products) && hasValue(gtmInfo.products[item.sku])) {
       // Push the return reason and qty returned for individual item.
-      GtmInfo.products[item.sku].reason = item.reason;
-      GtmInfo.products[item.sku].quantity = item.qty_requested;
+      gtmInfo.products[item.sku].reason = item.reason;
+      gtmInfo.products[item.sku].quantity = item.qty_requested;
       // Traverse all the object items and store them in a separate array.
-      Object.keys(GtmInfo.products[item.sku]).forEach((key) => {
+      Object.keys(gtmInfo.products[item.sku]).forEach((key) => {
         if (!skuProduct[key]) {
           skuProduct[key] = [];
         }
         // Push all the required info skuProduct.
-        if (GtmInfo.products[item.sku][key]) {
-          skuProduct[key].push(GtmInfo.products[item.sku][key]);
+        if (gtmInfo.products[item.sku][key]) {
+          skuProduct[key].push(gtmInfo.products[item.sku][key]);
         }
       });
     }

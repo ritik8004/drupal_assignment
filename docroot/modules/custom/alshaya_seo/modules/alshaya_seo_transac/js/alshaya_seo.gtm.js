@@ -1448,36 +1448,6 @@
   }
 
   /**
-   * Function to push the product return events to data layer.
-   *
-   * @param {object} product
-   *   Object containing the products that is getting returned.
-   * @param {object} order
-   *   Object containing the basic order details.
-   * @param {string} eventAction
-   *   The event that is getting performed during product return.
-   */
-  Drupal.alshayaSeoGtmPushReturn = function(product, order, eventAction) {
-    // Prepare the return data.
-    var returnData = {
-      event: "returns",
-      eventCategory: "return",
-      eventAction: eventAction,
-      eventLabel: "",
-      eventValue: 0,
-      nonInteraction: 0,
-      ecommerce: {
-        detail: {
-          ...order,
-          products: product
-        }
-      }
-    }
-
-    dataLayer.push(returnData);
-  }
-
-  /**
    * Function to push GTM event to data layer on add to cart failure.
    */
   Drupal.alshayaSeoGtmPushAddToCartFailure = function (label, message) {

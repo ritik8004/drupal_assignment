@@ -148,6 +148,7 @@ class OnlineReturnController extends ControllerBase {
     $build['#markup'] = '<div id="alshaya-online-return-request"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
     $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
+    $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_online_returns';
     $build['#attached']['drupalSettings']['returnInfo'] = [
       'orderDetails' => $orderDetails,
       'returnConfig' => $returnConfig,
