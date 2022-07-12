@@ -21,7 +21,7 @@ class AlshayaDepartmentPageRouter extends Router {
   /**
    * {@inheritdoc}
    */
-  public function match($pathinfo) {
+  public function match($pathinfo): array {
     $request = Request::create($pathinfo);
 
     // This is to uniquely identify the sub-request.
