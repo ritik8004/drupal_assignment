@@ -50,8 +50,6 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Minimum age'),
       '#default_value' => $config->get('minimum_age') ?? 18,
       '#required' => TRUE,
-      '#min' => 0,
-      '#max' => 18,
     ];
 
     return parent::buildForm($form, $form_state);

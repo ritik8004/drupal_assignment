@@ -204,6 +204,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'رمز QR لهوية العضوية',
         'context' => 'hello_member',
       ],
+      'Minimum age' => [
+        'ar' => 'الحد الإدنى للعمر',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
