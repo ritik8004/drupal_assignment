@@ -1,13 +1,27 @@
 import React from 'react';
 
-const PriceElement = ({ amount }) => {
+const PriceElement = ({ amount, maxAmount }) => {
   if (typeof amount === 'undefined') {
     return (null);
   }
+  const { decimalPoints } = drupalSettings.reactTeaserView.price;
+  const priceItem = (typeof maxAmount !== 'undefined')
+    ? (
+      <span key="amount" className="price-amount">
+        {amount.toFixed(decimalPoints)}
+        <span className="min-max-separator">-</span>
+        {maxAmount.toFixed(decimalPoints)}
+      </span>
+    )
+    : (
+      <span key="amount" className="price-amount">{amount.toFixed(decimalPoints)}</span>
+    );
 
   const priceParts = [
-    (<span key="currency" className="price-currency suffix">{drupalSettings.reactTeaserView.price.currency}</span>),
-    (<span key="amount" className="price-amount">{amount.toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}</span>),
+    (
+      <span key="currency" className="price-currency suffix">{drupalSettings.reactTeaserView.price.currency}</span>
+    ),
+    (priceItem),
   ];
 
   return (

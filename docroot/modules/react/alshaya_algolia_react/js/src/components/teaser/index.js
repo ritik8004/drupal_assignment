@@ -15,12 +15,14 @@ import {
   isProductTitleTrimEnabled,
   isPromotionFrameEnabled,
   productListIndexStatus,
+  hasPriceRange,
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
 import { checkExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ExpressDeliveryLabel from './ExpressDeliveryLabel';
+import PriceRangeElement from '../price/PriceRangeElement';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo,
@@ -261,9 +263,14 @@ const Teaser = ({
                 )
               </div>
             </ConditionalView>
-            {attribute.rendered_price
-              ? Parser(attribute.rendered_price)
-              : <Price price={attribute.original_price} finalPrice={attribute.final_price} />}
+            <ConditionalView condition={!hasPriceRange(attribute.alshaya_price_range)}>
+              {attribute.rendered_price
+                ? Parser(attribute.rendered_price)
+                : <Price price={attribute.original_price} final_price={attribute.final_price} />}
+            </ConditionalView>
+            <ConditionalView condition={hasPriceRange(attribute.alshaya_price_range)}>
+              <PriceRangeElement alshayaPriceRange={attribute.alshaya_price_range} />
+            </ConditionalView>
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>
