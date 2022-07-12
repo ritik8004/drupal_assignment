@@ -1,5 +1,6 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getOrderDetails } from './online_returns_util';
+import { getReturnedItems } from './return_confirmation_util';
 import { getDeliveryAddress, getPaymentDetails } from './return_request_util';
 
 /**
@@ -128,7 +129,17 @@ function getPreparedOrderGtm(eventType, returnInfo) {
 
   // Add returned & refunded info for selected events.
   if (eventType !== 'item_confirmed' && returnInfo) {
-    returnOrder.refundAmount = returnInfo.extension_attributes.refund_amount;
+    // Calculate the refund amount based on the qty returned and individual item
+    // amount/discounted amount.
+    const returnedItems = getReturnedItems(returnInfo);
+    let refundAmount = 0;
+    returnedItems.forEach((item) => {
+      if (hasValue(item.returnData)) {
+        refundAmount += (item.returnData.qty_requested * item.price_incl_tax);
+      }
+    });
+
+    returnOrder.refundAmount = refundAmount;
     returnOrder.refundMethods = paymentMethods.length > 0 ? paymentMethods.join('_') : '';
     returnOrder.returnId = returnInfo.increment_id;
     // @Todo To add the firstTimeReturn info when available.
