@@ -10,22 +10,34 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  */
-function alshaya_js_optimisations_update_9001() {
-  _alshaya_js_optimisations_refresh_update_settings();
-}
-
-/**
- * Implements hook_update_N().
- */
 function alshaya_js_optimisations_update_9000() {
-  _alshaya_js_optimisations_refresh_update_settings();
+  $options = [
+    'replace_keys' => [
+      'critical_js.critical',
+      'critical_js.sitewide_1',
+    ]
+  ];
+  _alshaya_js_optimisations_update_settings(
+    AlshayaConfigManager::MODE_REPLACE_KEY,
+    $options
+  );
 }
 
 /**
  * Implements hook_update_N().
  */
 function alshaya_js_optimisations_update_8001() {
-  _alshaya_js_optimisations_refresh_update_settings();
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_js_optimisations.settings'],
+      'alshaya_js_optimisations',
+      'install',
+      AlshayaConfigManager::MODE_REPLACE
+    );
+
+  // Clear Cache to trigger hook_library_info_alter with updated priorities.
+  \Drupal::service('library.discovery')->clearCachedDefinitions();
+  \Drupal::service('router.builder')->rebuild();
 }
 
 /**
@@ -37,15 +49,19 @@ function alshaya_js_optimisations_install() {
 }
 
 /**
- * Helper function to refresh and update the latest settings.
+ * Helper function to update the JS Performance settings.
  */
-function _alshaya_js_optimisations_refresh_update_settings() {
+function _alshaya_js_optimisations_update_settings(
+  $mode = AlshayaConfigManager::MODE_REPLACE,
+  $options = []
+) {
   \Drupal::service('alshaya_config.manager')
     ->updateConfigs(
       ['alshaya_js_optimisations.settings'],
       'alshaya_js_optimisations',
       'install',
-      AlshayaConfigManager::MODE_REPLACE
+      $mode,
+      $options
     );
 
   // Clear Cache to trigger hook_library_info_alter with updated priorities.
