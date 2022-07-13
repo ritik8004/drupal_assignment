@@ -4,10 +4,21 @@ category_enrichment:
   dependencies:
     - rcs_placeholders/helpers
 
+view_all:
+  version: 1.x
+  js:
+    js/alshaya_rcs_view_all.js: {}
+  dependencies:
+    - core/drupal
+    - rcs_placeholders/helpers
+
 renderer:
   js:
     dist/alshaya_rcs_main_menu_renderer.bundle.js: {}
   dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
     - alshaya_rcs_magento_placeholders/main
     - rcs_magento_placeholders/rcs_magento_placeholders
     - alshaya_rcs_main_menu/category_enrichment

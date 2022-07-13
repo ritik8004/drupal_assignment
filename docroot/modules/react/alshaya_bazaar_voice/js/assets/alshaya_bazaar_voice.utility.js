@@ -22,4 +22,31 @@
     }
     return null;
   }
+
+  /**
+   * Gets bazaar voice settings.
+   *
+   * (optional) @param {string} productId
+   * Product SKU value.
+   *
+   * @returns {Object}
+   *   Bazaar voice settings.
+   */
+  window.alshayaBazaarVoice.getbazaarVoiceSettings = function getbazaarVoiceSettings(productId) {
+    var productInfo = window.commerceBackend.getProductData(productId);
+    var settings = {};
+
+    if (typeof productId !== 'undefined' && productInfo !== null) {
+      settings.productid = productId;
+      settings.reviews = productInfo.alshaya_bazaar_voice;
+    } else {
+      productInfo = window.commerceBackend.getProductData(null, 'productInfo');
+      Object.entries(productInfo).forEach(([key]) => {
+        settings.productid = key;
+        settings.reviews = productInfo[key].alshaya_bazaar_voice;
+      });
+    }
+
+    return settings;
+  }
 })(drupalSettings);

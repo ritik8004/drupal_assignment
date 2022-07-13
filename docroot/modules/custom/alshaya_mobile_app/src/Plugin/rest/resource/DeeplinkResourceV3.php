@@ -161,6 +161,21 @@ class DeeplinkResourceV3 extends DeeplinkResource {
   }
 
   /**
+   * Preprocess the alias.
+   *
+   * @param string $alias
+   *   Path alias.
+   */
+  private function preprocessAlias(&$alias) {
+    // Remove the base url from the alias.
+    $alias = str_replace($this->baseUrl, '', $alias);
+    // Append .html in the end if it is a product url without .html.
+    if (strpos($alias, 'buy-') !== FALSE && strpos($alias, '.html') === FALSE) {
+      $alias = "$alias.html";
+    }
+  }
+
+  /**
    * Check if its MDC url.
    *
    * @param string $alias
@@ -170,7 +185,7 @@ class DeeplinkResourceV3 extends DeeplinkResource {
    *   Returns true if its MDC url.
    */
   protected function checkMdcUrl($alias) {
-    $alias = str_replace($this->baseUrl, '', $alias);
+    $this->preprocessAlias($alias);
 
     if (empty($alias) || UrlHelper::isExternal($alias)) {
       return $this->mobileAppUtility->throwException();

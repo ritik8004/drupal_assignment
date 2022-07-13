@@ -20,6 +20,25 @@ function _alshaya_rcs_color_split_attach_info(array &$attachments) {
   $attachments['#attached']['library'][] = 'alshaya_rcs_color_split/rcs_grouped_products';
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $attachments['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');
+
+  // Expose list of configurable field replacements.
+  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
+  // Limit keys to avoid exposing everything.
+  $field_replacements = [];
+  foreach ($fields as $name => $props) {
+    // Filter out fields that do not contain the replacement information.
+    if (array_key_exists('display_configurable_for', $props)) {
+      $field_replacements[$name] = [];
+      foreach ($props as $prop => $value) {
+        // Key fields that are allowed to be exposed.
+        if (in_array($prop, ['label', 'display_configurable_for'])) {
+          $field_replacements[$name][$prop] = $value;
+        }
+      }
+    }
+  }
+  $attachments['#attached']['drupalSettings']['alshayaRcs']['configurableFieldReplacements'] = array_filter($field_replacements);
+
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');
   // Add the cache tags for the color split config.

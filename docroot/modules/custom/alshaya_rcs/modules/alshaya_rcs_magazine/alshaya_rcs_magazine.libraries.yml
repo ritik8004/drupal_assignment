@@ -3,6 +3,7 @@ main:
   js:
     js/alshaya_rcs_magazine.js: {}
   dependencies:
-    - core/jquery
+    - core/drupal
+    - core/drupalSettings
     - rcs_placeholders/helpers
     - alshaya_master/common_functions

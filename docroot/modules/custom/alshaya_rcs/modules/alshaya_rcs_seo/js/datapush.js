@@ -3,7 +3,7 @@
  * Push initial data to data layer.
  */
 
-(function ($) {
+(function ($, Drupal, drupalSettings, RcsEventManager) {
   'use strict';
 
   Drupal.behaviors.alshayaRcsSeo = {
@@ -36,4 +36,4 @@
       });
     }
   }
-})(jQuery);
+})(jQuery, Drupal, drupalSettings, RcsEventManager);

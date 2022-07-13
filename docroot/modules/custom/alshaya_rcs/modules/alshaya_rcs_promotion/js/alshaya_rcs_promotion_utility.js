@@ -1,7 +1,7 @@
 /**
  * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
-(function main($) {
+(function main(RcsEventManager) {
   // Event listener to update the data layer object with the proper category
   // data.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
@@ -13,4 +13,4 @@
     // properly.
     e.detail.result.name = e.detail.result.title;
   });
-})(jQuery);
+})(RcsEventManager);
