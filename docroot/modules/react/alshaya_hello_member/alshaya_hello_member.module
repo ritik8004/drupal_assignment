@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_module_implements_alter().
@@ -387,4 +388,32 @@ function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterfa
     // Set the key/value pair.
     $temp_store->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter().
+ */
+function alshaya_hello_member_alshaya_acm_customer_alshaya_user_recent_orders_build_alter(array &$build) {
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_hello_member.settings')->getCacheTags());
+  // Do not proceed if Alshaya Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
+    // On my account page, remove edit account link because we are adding
+    // it with Account Details section when Alshaya Hello Member is enabled.
+    unset($build['edit_account']);
+  }
+
+  return $build;
+}
+
+/**
+ * Implements hook_preprocess_user().
+ */
+function alshaya_hello_member_preprocess_user(&$variables) {
+  // If hello_member_enabled to add edit button above Account details.
+  $variables['hello_member_enabled'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
+  $variables['user_edit_url'] = Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]);
 }
