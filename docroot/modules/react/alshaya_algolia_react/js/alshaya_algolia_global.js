@@ -103,4 +103,10 @@
     return Math.ceil(resultsCount / drupalSettings.algoliaSearch.itemsPerPage);
   }
 
+  // Set global variable to flag express delivery label display on teaser.
+  // This flag will be set for all listing page teaser express-delivery label
+  // component. Since API is called only once this global variable will be used
+  // to show / hide delivery labels on teaser on filter and search listing.
+  window.sddEdStatus = window.sddEdStatus || true;
+
 })(jQuery, Drupal);
