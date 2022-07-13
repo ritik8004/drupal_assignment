@@ -43,7 +43,7 @@ class AlshayaPerformanceSettingsForm extends ConfigFormBase {
     $form['enable_css_cls'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Improve CLS with CSS'),
-      '#description' => $this->t('Provides better visual stability by adding temporary heights on drupal container markup, thereby reducing layout shifts when content is injected by JS'),
+      '#description' => $this->t('(EXPERIMENTAL) Provides better visual stability by adding temporary heights on drupal container markup, thereby reducing layout shifts when content is injected by JS'),
       '#default_value' => $config->get('enable_css_cls'),
     ];
     return $form;
