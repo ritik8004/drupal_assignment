@@ -388,3 +388,21 @@ function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterfa
     $temp_store->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
   }
 }
+
+/**
+ * Implements hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter().
+ */
+function alshaya_hello_member_alshaya_acm_customer_alshaya_user_recent_orders_build_alter(array &$build) {
+  // Do not proceed if Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
+    // On my account page, remove edit account link because we are adding
+    // it with Account Details section when Alshaya Hello Member is enabled.
+    unset($build['edit_account']);
+  }
+
+  return $build;
+}

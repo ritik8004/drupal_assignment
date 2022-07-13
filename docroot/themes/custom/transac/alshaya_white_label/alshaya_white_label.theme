@@ -989,6 +989,12 @@ function alshaya_white_label_preprocess_user(&$variables) {
         }
       }
     }
+    // Check if Alshaya Hello Member module is enabled.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_hello_member')) {
+      // hello_member_enabled to add edit button above Account details section.
+      $variables['hello_member_enabled'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
+      $variables['user_edit_url'] = Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]);
+    }
   }
 
   // Removing the metatag as it contains user specific information.
