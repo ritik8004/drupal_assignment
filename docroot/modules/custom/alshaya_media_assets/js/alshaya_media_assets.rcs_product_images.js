@@ -177,7 +177,7 @@ window.commerceBackend = window.commerceBackend || {};
               'crosssel-products',
               'upsell-products',
               'related-products',
-              'field_magazine_shop_the_story'
+              'field_magazine_shop_the_story',
             ].includes(e.detail.placeholder)))
       ) {
       return;

@@ -16,6 +16,16 @@ reviews:
     - alshaya_bazaar_voice/utility
     - alshaya_acm_product/acq_product_info
 
+myorders:
+  js:
+    dist/myorders.bundle.js: { attributes: { defer: true } }
+  dependencies:
+    - alshaya_react/react
+    - bazaar_voice/bazaar_voice
+    - alshaya_bazaar_voice/utility
+    - alshaya_acm_product/acq_product_info
+    - alshaya_white_label/myaccount-reviews
+
 myaccount:
   js:
     dist/myaccount.bundle.js: { attributes: { defer: true } }

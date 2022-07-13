@@ -30,7 +30,10 @@ window.commerceBackend = window.commerceBackend || {};
     if (Drupal.hasValue(styleCode)
       && Drupal.hasValue(window.commerceBackend.getProductsInStyle)
     ) {
-      product = await window.commerceBackend.getProductsInStyle({ sku, style_code: styleCode });
+      var styleCodeValue = typeof styleCode === 'object'
+        ? styleCode[drupalSettings.path.currentLanguage]
+        : styleCode;
+      product = await window.commerceBackend.getProductsInStyle({ sku, style_code: styleCodeValue });
     }
     else {
       product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: sku});
