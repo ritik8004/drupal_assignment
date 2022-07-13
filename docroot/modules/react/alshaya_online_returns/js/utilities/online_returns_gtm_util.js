@@ -112,7 +112,14 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     };
   }
 
-  const orderDetails = getOrderDetails();
+  let orderDetails = {};
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.order_details)) {
+    orderDetails['#order_details'] = drupalSettings.onlineReturns.order_details;
+  } else {
+    orderDetails = getOrderDetails();
+  }
+
   // Get delivery address info.
   const deliveryInfo = getDeliveryAddress(orderDetails);
   // Get the payment details.
