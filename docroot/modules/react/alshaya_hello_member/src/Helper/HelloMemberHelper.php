@@ -40,4 +40,14 @@ class HelloMemberHelper {
     return $this->configFactory->get('alshaya_hello_member.settings')->get('enabled');
   }
 
+  /**
+   * Helper to check if Aura integration with hello member is enabled.
+   *
+   * @return bool
+   *   TRUE/FALSE
+   */
+  public function isAuraIntegrationEnabled() {
+    return $this->configFactory->get('alshaya_hello_member.settings')->get('aura_integration_enabled');
+  }
+
 }

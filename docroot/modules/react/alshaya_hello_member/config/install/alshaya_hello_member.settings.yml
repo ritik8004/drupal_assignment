@@ -1,2 +1,3 @@
 enabled: false # Config to enable/disable hello member feature.
 points_history_page_size: 5 # Config to store page size for points history data.
+aura_integration_enabled: true
