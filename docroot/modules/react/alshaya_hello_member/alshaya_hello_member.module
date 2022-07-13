@@ -372,8 +372,8 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
   }
 
   // Add hello member points for order confirmation.
-  if (isset($order['externsion_attributes']['hm_accured_points'])) {
-    $settings['order_details']['hmAccuredPoints'] = $order['externsion_attributes']['hm_accured_points'] ?? 0;
+  if (isset($order['extension']['hm_accrued_points'])) {
+    $settings['order_details']['hmAccuredPoints'] = $order['extension']['hm_accrued_points'] ?? 0;
   }
 }
 

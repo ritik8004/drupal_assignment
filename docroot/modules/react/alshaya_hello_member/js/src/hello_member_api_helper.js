@@ -195,9 +195,44 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode) => 
     });
 };
 
+/**
+ * Sets hello member loyalty card option during checkout.
+ *
+ * @param {string} identifierNo
+ *   Identifier number.
+ * @param {string} quoteId
+ *   Quote/Cart ID.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object which contains the status true/false or
+ * the error object.
+ */
+const setHelloMemberLoyaltyCard = async (identifierNo, quoteId) => {
+  const requestData = {
+    quoteId,
+    identifierNo,
+    programCode: 'hello_member',
+  };
+
+  return callHelloMemberApi('helloMemberSetLoyaltyCard', 'POST', requestData)
+    .then((response) => {
+      if (hasValue(response.data.error)) {
+        const message = hasValue(response.data.message) ? response.data.message : '';
+        logger.error('Error while trying to set loyalty card data for hello member. Message: @message', {
+          '@message': message,
+        });
+        return getErrorResponse(message, 500);
+      }
+      return {
+        status: response,
+      };
+    });
+};
+
 export {
   getHelloMemberCustomerData,
   getHelloMemberTierProgressData,
   getHelloMemberPointsHistory,
   getHelloMemberPointsToEarn,
+  setHelloMemberLoyaltyCard,
 };
