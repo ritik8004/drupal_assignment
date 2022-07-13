@@ -167,7 +167,7 @@ function alshaya_performance_page_attachments_alter(array &$attachments) {
 
     // Attach cls common styles to all pages except checkout.
     if (stripos($request->getPathInfo(), '/checkout') === FALSE) {
-      $attachments['#attached']['library'][] = 'alshaya_white_label/cls-initial-layout.common';
+      $attachments['#attached']['library'][] = 'alshaya_white_label/cls-initial-layout-common';
     }
   }
 
