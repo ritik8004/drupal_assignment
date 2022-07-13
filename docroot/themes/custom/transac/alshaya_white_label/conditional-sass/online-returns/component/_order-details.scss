@@ -64,7 +64,7 @@
         }
 
         @include breakpoint($desktop) {
-          grid-template: "a b c d" auto/rem(184) auto rem(169) rem(180);
+          grid-template: "a b c d" auto/rem(200) auto rem(169) rem(180);
         }
 
         .order-item-image {
