@@ -260,6 +260,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       ],
       '#attached' => [
         // Pass in drupal settings for FE.
+        // @todo once we remove this block, these settings need to be exposed somewhere else.
         'drupalSettings' => [
           'alshayaRcs' => [
             'navigationMenu' => [
@@ -267,12 +268,17 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
               'maxNbCol' => $max_nb_col > 0 ? $max_nb_col : 6,
               'idealMaxColLength' => $ideal_max_col_length > 0 ? $ideal_max_col_length : 10,
               'menuLayout' => $desktop_main_menu_layout,
+              'highlightTiming' => $highlight_timing,
             ],
           ],
         ],
         // Attach required JS libraries.
         'library' => [
           'alshaya_rcs_main_menu/renderer',
+          'alshaya_rcs_main_menu/main_menu_level1',
+          'alshaya_rcs_main_menu/main_menu_level2',
+          'alshaya_rcs_main_menu/main_menu_level3',
+          'alshaya_rcs_main_menu/main_menu_level4',
           'alshaya_white_label/rcs-ph-navigation-menu',
         ],
       ],

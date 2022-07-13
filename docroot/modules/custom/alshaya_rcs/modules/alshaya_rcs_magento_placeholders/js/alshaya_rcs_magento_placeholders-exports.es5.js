@@ -11,6 +11,7 @@ exports.render = function render(
 
   switch (placeholder) {
     case "navigation_menu":
+      // @todo remove this
       // Process rcs navigation renderer, if available.
       if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
         html += globalThis.renderRcsNavigationMenu.render(
@@ -20,6 +21,14 @@ exports.render = function render(
           'navigation_menu'
         );
       }
+      const menuData = {
+        'menu_type': 'default', //@todo add setting
+        'menu_items': inputs,
+        'settings': drupalSettings.alshayaRcs.navigationMenu,
+        'logged_in': drupalSettings.user.uid > 1,
+        'aura_enabled': 0, //@todo add setting
+      };
+      html += handlebarsRenderer.render('main_menu_level1', menuData);
       break;
 
     case "shop_by_block":

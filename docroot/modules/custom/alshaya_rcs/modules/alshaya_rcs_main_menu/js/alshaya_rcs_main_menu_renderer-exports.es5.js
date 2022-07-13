@@ -4,6 +4,7 @@ exports.render = function render(
   innerHtml,
   navigationType
 ) {
+  // @todo clean up this file
   if (inputs.length == 0) {
     return '';
   }
@@ -105,6 +106,7 @@ exports.render = function render(
  *
  * @returns
  *  {string} Generated menu markup for given level.
+ *  @todo delete this
  */
 const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichmentData, isSuperCategoryEnabled) {
   // We support max depth by L4.

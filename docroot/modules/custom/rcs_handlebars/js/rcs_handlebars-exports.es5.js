@@ -130,3 +130,37 @@ Handlebars.registerHelper('cleanCssIdentifier', (identifier) => {
 
   return cleanedIdentifier.toLowerCase();
 });
+
+/**
+ * Returns values from a Json encoded string.
+ * Usage:
+ *  - With encoded string: {{getValueFromJsonString '{"foo": "bar"}' 'foo'}}
+ *  - With variable that contains encoded string {{getValueFromJsonString jsonString 'foo'}}
+ *
+ * @param jsonString string
+ *   The encoded json string
+ *
+ * @param key string
+ *   The key to fetch the value from.
+ *
+ * @return mixed
+ *   The value or empty space if errors happen while parsing Json string.
+ */
+Handlebars.registerHelper('getValueFromJsonString', function(jsonString, key) {
+  try {
+    return JSON.parse(jsonString)[key];
+  }
+  catch(err) {
+    return '';
+  }
+});
+
+/**
+ * Creates variables on the fly.
+ * Usage:
+ *  - First set foo with value bar: {{set 'foo' 'bar'}}
+ *  - Then you can print foo: {{@root.foo}}
+ */
+Handlebars.registerHelper('set', function(name, val, globals) {
+  globals.data.root[name] = val;
+});
