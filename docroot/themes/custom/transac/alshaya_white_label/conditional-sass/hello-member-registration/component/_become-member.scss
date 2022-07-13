@@ -15,6 +15,7 @@
     border: 0;
     border-bottom: 1px solid currentColor;
     width: 100%;
+    padding-top: 0;
 
     &::-webkit-calendar-picker-indicator {
       display: none;
@@ -42,6 +43,8 @@
     color: $red-error !important;
     position: relative !important;
     line-height: 1;
+    top: rem(2) !important;
+    background: $hm-registration-fields-bg !important;
   }
 
   summary {
