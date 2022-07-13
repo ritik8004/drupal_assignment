@@ -184,7 +184,7 @@ function alshaya_hello_member_datetime_set_startdate($element) {
     $config = \Drupal::config('alshaya_hello_member.settings');
     $start_date = strtotime($config->get('minimum_age') . ' years ago');
     // Set the max attribute value.
-    $element['date']['#attributes']['max'] = Drupal::service('date.formatter')->format($start_date, 'html_date');
+    $element['date']['#attributes']['max'] = \Drupal::service('date.formatter')->format($start_date, 'html_date');
     $element['date']['#max_error'] = t('The value in Date has to be less than', [], ['context' => 'hello_member']) . $element['date']['#attributes']['max'];
   }
   return $element;
