@@ -1,0 +1,6 @@
+.spc-loading-container {
+  .spc-loader {
+    animation: spin 0.75s linear infinite;
+    padding-#{$left}: 0;
+  }
+}

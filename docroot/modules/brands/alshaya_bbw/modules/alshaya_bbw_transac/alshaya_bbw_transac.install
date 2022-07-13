@@ -246,8 +246,8 @@ function alshaya_bbw_transac_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_bbw_transac', 'inc', 'alshaya_bbw_transac.content');
 
   // Enable and set bath_body_works as default theme.
-  \Drupal::service('theme_handler')->install(['alshaya_bathbodyworks'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('alshaya_bathbodyworks');
+  \Drupal::service('theme_installer')->install(['alshaya_bathbodyworks'], TRUE);
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'alshaya_bathbodyworks')->save();
 
   // Set store id - EN.
   \Drupal::configFactory()->getEditable('acq_commerce.store')

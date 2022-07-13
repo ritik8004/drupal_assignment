@@ -21,8 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "user_reset_password",
  *   label = @Translation("Alshaya user reset password"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/user/reset-password",
- *     "https://www.drupal.org/link-relations/create" = "/rest/v1/user/reset-password"
+ *     "create" = "/rest/v1/user/reset-password"
  *   }
  * )
  */

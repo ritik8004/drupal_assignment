@@ -21,6 +21,11 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
   protected $routeMatch;
 
   /**
+   * Request parameter to indicate that a request is a Drupal Ajax request.
+   */
+  const AJAX_REQUEST_PARAMETER = '_drupal_ajax';
+
+  /**
    * Constructs a AlshayaSeoRequestSubscriber object.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
@@ -40,6 +45,14 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
     $route_name = $this->routeMatch->getRouteName();
     $request = $event->getRequest();
     $request_path = $request->getPathInfo();
+    // For Drupal AJAX request, we get paths like "en/home?_wrapper_format=html"
+    // where there is no trailing slash at the end of the path. We don't want
+    // such requests to get redirected, so we prevent further processing if
+    // the request is an AJAX request.
+    $is_ajax_request = !empty($event->getRequest()->request->get(static::AJAX_REQUEST_PARAMETER));
+    if ($is_ajax_request) {
+      return;
+    }
 
     $redirect_routes = ['entity.taxonomy_term.canonical', 'alshaya_master.home'];
     $is_promotion_page = ($route_name == 'entity.node.canonical' && $this->routeMatch->getParameter('node')->bundle() == 'rcs_promotion');

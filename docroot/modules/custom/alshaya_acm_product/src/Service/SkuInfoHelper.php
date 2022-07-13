@@ -236,9 +236,8 @@ class SkuInfoHelper {
     $sku_string = $sku->get('sku')->getString();
 
     if (!isset($size_array[$sku_string])) {
-      $configurables = unserialize(
-        $sku->get('field_configurable_attributes')->getString()
-      );
+      // phpcs:ignore
+      $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
 
       if (empty($configurables)) {
         return [];
@@ -362,9 +361,7 @@ class SkuInfoHelper {
     }
 
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-      $video_url = isset($media_item['video_url'])
-        ? $media_item['video_url']
-        : file_create_url($media_item['drupal_uri']);
+      $video_url = $media_item['video_url'] ?? file_create_url($media_item['drupal_uri']);
 
       $return['videos'][] = [
         'video_url' => $video_url,
@@ -514,7 +511,9 @@ class SkuInfoHelper {
         continue;
       }
 
-      $variants[$child->getSku()] = $this->getVariantInfo($child, $pdp_layout, $sku);
+      // Get parent sku from the child item.
+      $parent_sku = $this->skuManager->getParentSkuBySku($child);
+      $variants[$child->getSku()] = $this->getVariantInfo($child, $pdp_layout, $parent_sku);
     }
 
     return $variants;

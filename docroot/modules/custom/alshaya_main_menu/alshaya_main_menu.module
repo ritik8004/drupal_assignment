@@ -254,3 +254,19 @@ function _alshaya_main_menu_process_tag_attributes_columns(array &$data) {
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_acm_product_category_tree_data_alter().
+ */
+function alshaya_main_menu_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+  /** @var \Drupal\taxonomy\TermInterface $termObj **/
+  $termObj = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($term->tid);
+  if ($termObj->hasField('field_display_view_all')) {
+    $display_view_all = $termObj->get('field_display_view_all')->getString();
+  }
+  // Add display view all flag to product category tree data.
+  $data[$term->tid]['display_view_all'] = (bool) $display_view_all;
+  $aliasManager = \Drupal::service('path_alias.manager');
+  $alias = $aliasManager->getAliasByPath('/taxonomy/term/' . $term->tid);
+  $data[$term->tid]['display_view_all_link'] = $alias . '/view-all';
+}

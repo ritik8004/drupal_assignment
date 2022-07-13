@@ -832,7 +832,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
   foreach ($promotions as $id => $promotion) {
     // 'condition_value' is set in promotions only for
     // rule with 'quote_item_qty' in conditions.
-    $condition_value = isset($promotion['condition_value']) ? $promotion['condition_value'] : '';
+    $condition_value = $promotion['condition_value'] ?? '';
     if (!empty($condition_value)) {
       // Calculate cart quantity.
       /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */

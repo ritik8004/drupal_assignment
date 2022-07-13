@@ -4,8 +4,12 @@ services:
     arguments:
       - '@config.factory'
       - '@token'
+      - '@entity_type.manager'
+      - '@alshaya_egift_card.cache_manager'
   alshaya_egift_card.egift_list_breadcrumb:
     class: Drupal\alshaya_egift_card\Breadcrumb\AlshayaEgiftCardBreadcrumb
+    arguments:
+      - '@alshaya_egift_card.egift_card_helper'
     tags:
       - { name: breadcrumb_builder, priority: 100 }
 
@@ -18,5 +22,17 @@ services:
 
   alshaya_egift_card.egift_topup_list_breadcrumb:
     class: Drupal\alshaya_egift_card\Breadcrumb\AlshayaTopupBreadcrumb
+    arguments:
+      - '@alshaya_egift_card.egift_card_helper'
     tags:
       - { name: breadcrumb_builder, priority: 100 }
+
+  alshaya_egift_card.cache_manager:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory:
+      - '@cache_factory'
+      - get
+    arguments:
+      - cache_manager

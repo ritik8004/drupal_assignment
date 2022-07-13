@@ -17,8 +17,7 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
  *   id = "user_registration_mail",
  *   label = @Translation("Alshaya user registration mail"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/user/send-registration-email",
- *     "https://www.drupal.org/link-relations/create" = "/rest/v1/user/send-registration-email"
+ *     "create" = "/rest/v1/user/send-registration-email"
  *   }
  * )
  */
@@ -115,7 +114,16 @@ class UserRegistrationMail extends ResourceBase {
 
     // Get user from mdc and create new user account, when user does not
     // exists in drupal.
-    $user = $this->mobileAppUtility->createUserFromCommerce($email);
+    try {
+      $user = $this->mobileAppUtility->createUserFromCommerce($email);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to create user for email: @email, error: @error', [
+        '@email' => $email,
+        '@error' => $e->getMessage(),
+      ]);
+      return $this->mobileAppUtility->sendErrorResponse($e->getMessage());
+    }
 
     if (!$user instanceof UserInterface) {
       $this->logger->error('User with email @email does not exist.', ['@email' => $email]);

@@ -24,7 +24,7 @@ use Drupal\file\Entity\File;
  */
 function alshaya_white_label_preprocess_html(&$variables) {
   $path = \Drupal::service('path.current')->getPath();
-  $alias = trim(\Drupal::service('path.alias_manager')
+  $alias = trim(\Drupal::service('path_alias.manager')
     ->getAliasByPath($path), '/');
   // Body classes for sidebars.
   if (isset($variables['page']['sidebar_first']) && isset($variables['page']['sidebar_second'])) {
@@ -193,7 +193,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
   }
 
   // Attach the plp search js library to PLP page.
-  if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
+  if ($routematch->getRouteName() === 'entity.taxonomy_term.canonical' || $routematch->getRouteName() === 'alshaya_main_menu.category_view_all') {
     $term = $routematch->getParameter('taxonomy_term');
     if ($term->bundle() == 'acq_product_category') {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
@@ -242,7 +242,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
           }
 
           // If mobile videos are not set, use desktop videos on mobile.
-          $mobileVideos = isset($mobileVideos) ? $mobileVideos : $desktopVideos;
+          $mobileVideos = $mobileVideos ?? $desktopVideos;
 
           $variables['#attached']['drupalSettings']['desktopVideos'] = $desktopVideos;
           $variables['#attached']['drupalSettings']['mobileVideos'] = $mobileVideos;
@@ -736,7 +736,7 @@ function alshaya_white_label_form_node_form_alter(&$form, FormStateInterface $fo
 /**
  * Implements hook_form_alter().
  */
-// @codingStandardsIgnoreLine
+// phpcs:ignore
 function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   switch ($form_id) {
     case "views_exposed_form":
@@ -819,9 +819,9 @@ function alshaya_white_label_theme() {
  */
 function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, array $variables) {
   $routmatch = \Drupal::routeMatch();
-  if ($routmatch->getRouteName() == 'entity.taxonomy_term.canonical') {
+  if ($routmatch->getRouteName() === 'entity.taxonomy_term.canonical' || $routmatch->getRouteName() === 'alshaya_main_menu.category_view_all') {
     $term = $routmatch->getParameter('taxonomy_term');
-    if ($term->bundle() == 'acq_product_category') {
+    if ($term->bundle() === 'acq_product_category') {
       $suggestions[] = 'page__plp';
     }
   }
@@ -1381,132 +1381,10 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $paragraph = $variables['elements']['#paragraph'];
     if ($paragraph) {
-
       // If category value is filled.
-      if (!empty($category = $paragraph->get('field_category_carousel'))) {
-        // Fetch values from the paragraph.
-        $category_id = $category->getValue()[0]['target_id'] ?? NULL;
-
-        // If category is null/empty, no need to process further.
-        if (!$category_id) {
-          $variables['content'] = [];
-          return;
-        }
-
-        $category_id = (int) $category_id;
-
-        $is_accordion = FALSE;
-        if ($paragraph->hasField('field_use_as_accordion')
-          && $accordion = $paragraph->get('field_use_as_accordion')->getValue()) {
-          $is_accordion = $accordion[0]['value'];
-        }
-
-        $view_all_text = $paragraph->get('field_view_all_text')->getString();
-
-        // By default we don't show any carousel content.
-        $variables['content'] = [];
-
-        $section_title = $paragraph->get('field_category_carousel_title')->getString();
-
-        if ($is_accordion) {
-          $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($category_id);
-          // If given category not available.
-          if (!$term instanceof TermInterface) {
-            return;
-          }
-
-          if (empty($section_title)) {
-            $section_title = $term->label();
-          }
-
-          // Create accordion title link.
-          $accordion_title = [
-            '#type' => 'link',
-            '#title' => $section_title,
-            '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-          ];
-
-          $link = [];
-          if ($view_all_text) {
-            $link = [
-              '#title' => $view_all_text,
-              '#type' => 'link',
-              '#attributes' => [
-                'class' => ['category-accordion-view-all'],
-              ],
-              '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-            ];
-          }
-
-          // Theme content as accordion.
-          $variables['content']['product_category_carousel'] = [
-            '#theme' => 'alshaya_white_label_accordion',
-            '#title' => $accordion_title ?: NULL,
-            '#content' => alshaya_acm_product_category_child_terms($category_id),
-            '#view_all' => $link,
-            '#cache' => [
-              'tags' => [
-                ProductCategoryTree::CACHE_TAG,
-              ],
-            ],
-            '#attached' => [
-              'library' => [
-                'alshaya_white_label/product-category-accordion',
-              ],
-            ],
-          ];
-        }
-        else {
-          $product_in_carousel = (int) $paragraph->get('field_category_carousel_limit')->getString();
-          $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-          $productCarousel = \Drupal::service('alshaya_acm_product_category.page')->getCurrentSelectedCategory($langcode, $category_id);
-          $settings = \Drupal::config('alshaya_acm_product.settings');
-
-          // Make carousel title link.
-          $carousel_title = [
-            'title' => $section_title,
-            'url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id])->toString(),
-          ];
-
-          $productCarousel = array_merge($productCarousel, [
-            'sectionTitle' => $carousel_title,
-            'itemsPerPage' => $product_in_carousel,
-            'vatText' => $settings->get('vat_text'),
-          ]);
-
-          $variables['content']['product_category_carousel'] = [
-            '#type' => 'container',
-            '#attributes' => [
-              'class' => ['alshaya-product-category-carousel'],
-              'data-pcc-id' => $category_id,
-            ],
-            '#attached' => [
-              'drupalSettings' => [
-                'alshayaProductCarousel' => [
-                  $category_id => $productCarousel,
-                ],
-                'hp_product_carousel_items' => $settings->get('product_carousel_items_settings.hp_product_carousel_items_number'),
-              ],
-              'library' => [
-                'alshaya_algolia_react/product_category_carousel',
-                'alshaya_white_label/product_carousel',
-              ],
-            ],
-          ];
-
-          if ($view_all_text) {
-            $variables['attributes']['class'][] = 'has-view-all-link';
-
-            $variables['content']['view_all'] = [
-              '#title' => $view_all_text,
-              '#type' => 'link',
-              '#attributes' => [
-                'class' => ['category-carousel-view-all'],
-              ],
-              '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-            ];
-          }
-        }
+      if (!empty($paragraph->get('field_category_carousel'))) {
+        $carousel = \Drupal::service('alshaya_acm_product_category.carousel_helper')->getCarousel($paragraph);
+        $variables = array_merge($variables, $carousel);
       }
     }
   }
@@ -1623,8 +1501,8 @@ function _alshaya_white_label_get_banner_margin_override($mobile_margin, $deskto
   if (isset($desktop_tablet_margin_value) || isset($mobile_margin_value)) {
     $selector_override = 'c-promo__item__override';
     $style_tag = '';
-    $style_tag .= isset($mobile_margin_value) ? $mobile_margin_value : NULL;
-    $style_tag .= isset($desktop_tablet_margin_value) ? $desktop_tablet_margin_value : NULL;
+    $style_tag .= $mobile_margin_value ?? NULL;
+    $style_tag .= $desktop_tablet_margin_value ?? NULL;
     return [
       'style_tag' => $style_tag,
       'selector_class' => [

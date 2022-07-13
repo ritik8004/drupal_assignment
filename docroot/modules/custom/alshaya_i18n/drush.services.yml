@@ -1,0 +1,12 @@
+services:
+  alshaya_i18n.translate_commands:
+    class: \Drupal\alshaya_i18n\Commands\AlshayaExportTranslationCommands
+    arguments:
+      - '@file_system'
+      - '@logger.factory'
+      - '@locale.storage'
+      - '@language_manager'
+      - '@database'
+      - '@datetime.time'
+    tags:
+      - { name: drush.command }

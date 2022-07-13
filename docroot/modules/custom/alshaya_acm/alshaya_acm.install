@@ -10,7 +10,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
-use Drupal\node\Entity\Node;
 use Drupal\user\Entity\User;
 use Symfony\Component\Yaml\Yaml;
 
@@ -377,33 +376,6 @@ function alshaya_acm_install() {
 
   $config->save();
 
-  // Delete default store node.
-  _alshaya_acm_delete_default_store_node();
-
   // Exclude sync requests from shield.
   _alshaya_acm_exclude_sync_from_shield();
-}
-
-/**
- * Delete default store node of type 'page'.
- */
-function _alshaya_acm_delete_default_store_node() {
-  // Get all nodes of 'page' type bundle.
-  $nids = \Drupal::entityQuery('node')
-    ->condition('type', 'page')
-    ->execute();
-  $nodes = Node::loadMultiple($nids);
-  // If there are any nodes.
-  if (!empty($nodes)) {
-    foreach ($nodes as $node) {
-      try {
-        // Delete the node.
-        $node->delete();
-      }
-      catch (\Exception $e) {
-        // If something goes wrong.
-        \Drupal::logger('alshaya_acm')->error('Unable to delete the node with nid @nid', ['@nid' => $node->id()]);
-      }
-    }
-  }
 }

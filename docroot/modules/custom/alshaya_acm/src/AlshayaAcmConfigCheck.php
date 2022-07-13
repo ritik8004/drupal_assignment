@@ -178,7 +178,7 @@ class AlshayaAcmConfigCheck {
     $reset = [
       'acq_commerce.conductor',
       'recaptcha.settings',
-      'geolocation.settings',
+      'geolocation_google_maps.settings',
       'exponea.settings',
       's3fs.settings',
     ];

@@ -289,13 +289,20 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
                 continue;
               }
 
-              $values[$value_id] = $this->getAlternativeValues($alternates, $child_sku);
+              $values[$value][$value_id] = $this->getAlternativeValues($alternates, $child_sku);
               $this->getProductLabels($child_sku_code, $child_sku, $vars);
 
             }
 
           }
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $values;
+        }
+        elseif (($key == 'size')) {
+          $size_values = [];
+          foreach ($configurable['values'] as $size_key => $size_value) {
+            $size_values[][$size_value['value_id']] = $size_value;
+          }
+          $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $size_values;
         }
       }
 
@@ -411,7 +418,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
     $cncFeatureStatus = $cc_config->get('feature_status') ?? 'enabled';
     $cnc_enabled = $cncFeatureStatus === 'enabled';
-    $geolocation_config = $this->configFactory->get('geolocation.settings');
+    $geolocation_config = $this->configFactory->get('geolocation_google_maps.settings');
     $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
     $vars['#attached']['drupalSettings']['clickNCollect']['cncEnabled'] = $cnc_enabled;
     $vars['#attached']['drupalSettings']['clickNCollect']['cncSubtitleAvailable'] = $cc_config->get('checkout_click_collect_available');

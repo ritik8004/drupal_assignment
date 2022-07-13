@@ -23,9 +23,6 @@ regions:
   footer_primary: 'Footer Primary'
   footer_secondary: 'Footer Secondary'
 
-libraries:
-  - alshaya_pottery_barn_kids/global_styles
-
 libraries-override:
   alshaya_white_label/font-face: alshaya_pottery_barn_kids/font-face
 

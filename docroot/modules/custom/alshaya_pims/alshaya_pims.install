@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_pims.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_pims_install() {
+  // Enable alshaya_pims_assets if alshaya_media_assets is enabled.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_media_assets')) {
+    \Drupal::service('module_installer')->install(['alshaya_pims_assets']);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function hook_uninstall() {
+  // Uninstall alshaya_pims_assets when uninstalling this module.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_pims_assets')) {
+    \Drupal::service('module_installer')->uninstall(['alshaya_pims_assets']);
+  }
+}

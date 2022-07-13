@@ -85,6 +85,7 @@ class UserConfigForm extends ConfigFormBase {
     $my_account_link_default_value = [];
 
     if ($my_account_enabled_links = $config->get('my_account_enabled_links')) {
+      // phpcs:ignore
       $my_account_enabled_links = unserialize($my_account_enabled_links);
     }
 

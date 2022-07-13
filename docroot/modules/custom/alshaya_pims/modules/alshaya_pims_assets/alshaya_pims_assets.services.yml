@@ -1,0 +1,21 @@
+services:
+  alshaya_pims_assets.skuassetsmanager:
+    class: Drupal\alshaya_pims_assets\Services\PimsSkuAssetManager
+    public: false
+    decorates: alshaya_media_assets.skuassetsmanager
+    decoration_priority: 1
+    arguments:
+      - '@config.factory'
+      - '@current_route_match'
+      - '@alshaya_acm_product.skumanager'
+      - '@plugin.manager.sku'
+      - '@entity_type.manager'
+      - '@module_handler'
+      - '@cache.pims_files'
+      - '@http_client'
+      - '@logger.factory'
+      - '@datetime.time'
+      - '@file.usage'
+      - '@lock.persistent'
+      - '@cache.media_file_mapping'
+      - '@file_system'

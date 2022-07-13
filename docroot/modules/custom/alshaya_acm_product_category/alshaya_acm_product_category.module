@@ -54,6 +54,7 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
         'current_term' => NULL,
         'depth_offset' => NULL,
         'current_term_parent_id' => NULL,
+        'path' => NULL,
       ],
     ],
     'alshaya_subcategory_block' => [
@@ -528,7 +529,7 @@ function alshaya_acm_product_category_views_pre_build(ViewExecutable $view) {
       $view->setItemsPerPage(0);
 
       // Remove show_on_load to avoid any extra processing.
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       unset($_GET['show_on_load']);
       \Drupal::request()->query->remove('show_on_load');
     }

@@ -7,6 +7,5 @@ package: Commerce
 dependencies:
   - drupal:rest
   - simple_oauth:simple_oauth
-  - simple_oauth:simple_oauth_extras
   - drupal:language
   - drupal:content_translation

@@ -15,6 +15,38 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Add new Deeplink V3 and Magazine Detail V3 APIs.
+ */
+function alshaya_mobile_app_update_8082() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'rest.resource.deeplink_v3',
+    'rest.resource.magazine_detail_page_v3',
+  ],
+    'alshaya_mobile_app',
+    'install'
+  );
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new API to expose Product configuration.
+ */
+function alshaya_mobile_app_update_8081() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['rest.resource.product_general_settings'],
+    'alshaya_mobile_app',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.5.0] Add new Product Exclude Linked,
  * Skus Product List resource and
  * Deeplink Resource v2.

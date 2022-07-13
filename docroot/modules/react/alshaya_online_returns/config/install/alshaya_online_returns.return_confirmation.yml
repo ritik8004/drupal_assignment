@@ -1,0 +1,23 @@
+rows:
+  -
+    title: 'Print Return label'
+    description:
+      value: '<p>We''ll mail you the return label shortly.</p><p>You can also print it from your order details page.</p>'
+      format: 'rich_text'
+    icon: 'print'
+    hide_this_row: 0
+  -
+    title: 'Pack your Item & Return'
+    description:
+      value: '<p>Please make sure you pack your items in the same fashion it was received.</p><p>Place the return label you printed on the outside of the package.</p>'
+      format: 'rich_text'
+    icon: 'packitem'
+    hide_this_row: 0
+  -
+    title: 'Receive refunds'
+    description:
+      value: '<p>Once we receive the return items we will initiate your refund and the refund will be credited in your account in 3-5 days.</p>'
+      format: 'rich_text'
+    icon: 'refund'
+    hide_this_row: 0
+return_date_format: 'DD MMM YYYY @H[h]mm'

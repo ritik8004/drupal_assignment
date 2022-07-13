@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product_category;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -134,12 +135,26 @@ class ProductCategoryHelper {
       return $tree_term['lhn'];
     });
 
+    $language = $this->languageManager->getLanguage($langcode);
+    $uri_options = ['language' => $language];
+    $path = Url::fromRoute(
+      'entity.taxonomy_term.canonical',
+      ['taxonomy_term' => $term->id()],
+      $uri_options
+    )->toString(TRUE)->getGeneratedUrl();
+
+    if ($term->hasField('field_display_view_all')) {
+      $path = $path . 'view-all/';
+    }
+
+
     $build = [
       '#theme' => 'alshaya_lhn_tree',
       '#lhn_cat_tree' => $lhn_tree,
       '#current_term' => $term->id(),
       '#depth_offset' => $context['depth_offset'],
       '#current_term_parent_id' => $term->get('parent')->getString(),
+      '#path' => $path,
     ];
 
     return $build;

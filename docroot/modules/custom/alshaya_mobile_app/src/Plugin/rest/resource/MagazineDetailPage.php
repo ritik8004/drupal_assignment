@@ -272,18 +272,9 @@ class MagazineDetailPage extends ResourceBase {
         }
       }
     }
-    if ($node->hasField('field_magazine_shop_the_story') && !empty($magazine_shop = $node->get('field_magazine_shop_the_story')->getValue())) {
-      foreach ($magazine_shop as $value) {
-        $sku_data = [];
-        $node_data = $this->sku_manager->getDisplayNode($value['value']);
-        if (is_object($node_data)) {
-          $sku_data = $this->mobileAppUtility->getLightProductFromNid($node_data->get('nid')->getValue()[0]['value'], $this->mobileAppUtility->currentLanguage());
-          $response_data['shop_the_story']['items'][] = $sku_data;
-        }
-      }
-      if (array_key_exists('shop_the_story', $response_data)) {
-        $response_data['shop_the_story']['label'] = $node->field_magazine_shop_the_story->getFieldDefinition()->getLabel();
-      }
+    // Get shop the story.
+    if ($node->hasField('field_magazine_shop_the_story') && !empty($node->get('field_magazine_shop_the_story')->getValue())) {
+      $response_data['shop_the_story'] = $this->getShopTheStory($node);
     }
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
@@ -304,6 +295,32 @@ class MagazineDetailPage extends ResourceBase {
       ],
     ]));
     return $response;
+  }
+
+  /**
+   * Get shop the story product details.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Magazine detail node.
+   *
+   * @return array
+   *   Returns product details for shop the story.
+   */
+  protected function getShopTheStory(NodeInterface $node) {
+    $skus = $node->get('field_magazine_shop_the_story')->getValue();
+    foreach ($skus as $value) {
+      $sku_data = [];
+      $node_data = $this->sku_manager->getDisplayNode($value['value']);
+      if (is_object($node_data)) {
+        $sku_data = $this->mobileAppUtility->getLightProductFromNid($node_data->get('nid')->getValue()[0]['value'], $this->mobileAppUtility->currentLanguage());
+        $shop_the_story['items'][] = $sku_data;
+      }
+    }
+    if (array_key_exists('shop_the_story', $shop_the_story)) {
+      $shop_the_story['label'] = $node->field_magazine_shop_the_story->getFieldDefinition()->getLabel();
+    }
+
+    return $shop_the_story;
   }
 
 }

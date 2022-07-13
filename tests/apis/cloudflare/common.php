@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 require_once __DIR__ . '/settings.php';
 

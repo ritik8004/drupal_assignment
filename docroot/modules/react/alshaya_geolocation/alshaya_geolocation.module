@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_geolocation_google_maps_parameters().
+ */
+function alshaya_geolocation_geolocation_google_maps_parameters() {
+  return [
+    'libraries' => [
+      'places',
+    ],
+    'language' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
+  ];
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_geolocation_preprocess_page(&$variables) {
+  $config = \Drupal::config('geolocation_google_maps.settings');
+  $api_key = $config->get('google_map_api_key');
+  $regional_config = \Drupal::config('system.date');
+  $regional = $regional_config->get('country.default');
+  $variables['#attached']['drupalSettings']['alshaya_geolocation']['api_key'] = $api_key;
+  $variables['#attached']['drupalSettings']['alshaya_geolocation']['regional'] = $regional;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_geolocation_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if ($entity->bundle() == 'acq_product' && $build['#view_mode'] == 'full') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if (empty($sku_entity)) {
+      return;
+    }
+
+    // Display delivery options only if product is buyable.
+    if (!alshaya_acm_product_is_buyable($sku_entity)) {
+      return;
+    }
+
+    // Adding cache tags for the on-off feature.
+    $build['#cache']['tags'][] = 'click-collect-cache-tag';
+
+    // Adding shipping options.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    $config = alshaya_click_collect_get_config();
+
+    // Click and collect availability for given sku.
+    $state = alshaya_acm_product_available_click_collect($sku);
+
+    // Set stores list url.
+    $langCode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $api_url = "/$langCode/alshaya-locations/stores-list";
+
+    $build['click_and_collect'] = [
+      '#markup' => '<div id="pdp-store-click-collect-list"></div>',
+      '#attached' => [
+        'drupalSettings' => [
+          'storeLabels' => [
+            'apiUrl' => $api_url,
+            'state' => $state ? 'enabled' : 'disabled',
+            'sku' => $sku,
+            'type' => $sku_entity->bundle(),
+            'title' => $config['title'],
+            'title_price' => alshaya_acm_price_get_formatted_price($config['title_price']),
+            'subtitle' => $state ? $config['subtitle'] : $config['unavailable'],
+            'help_text' => $config['help_text'],
+            'available_at_title' => '',
+            'select_option_text' => $config['select_option_text'],
+          ],
+        ],
+        'library' => [
+          'alshaya_geolocation/alshaya-store-click-collect-list',
+        ],
+      ],
+    ];
+
+  }
+}

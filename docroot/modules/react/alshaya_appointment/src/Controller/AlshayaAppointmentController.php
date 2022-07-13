@@ -114,7 +114,7 @@ class AlshayaAppointmentController extends ControllerBase {
 
     $alshaya_appointment_config = $this->config('alshaya_appointment.settings');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
-    $geolocation_config = $this->config('geolocation.settings');
+    $geolocation_config = $this->config('geolocation_google_maps.settings');
     $alshaya_master_config = $this->config('alshaya_master.mobile_number_settings');
     $social_login_enabled = $this->config('alshaya_social.settings');
 

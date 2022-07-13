@@ -4,5 +4,4 @@ alshaya_ve_non_transac_store_finder:
   dependencies:
     - core/jquery
     - core/jquery.cookie
-    - alshaya_geolocation/places-api-autocomplete
     - alshaya_master/common_functions

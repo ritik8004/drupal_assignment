@@ -1,0 +1,114 @@
+<article
+  data-sku="{{ entity.sku }}"
+  data-insights-object-id="entity:node/{{ entity.id }}:{{ language }}"
+  role="article"
+  about="/{{ language }}/{{ entity.url_key }}.html"
+  class="entity--type-node"
+  data-vmode="modal"
+  gtm-type="gtm-product-link"
+  gtm-category="{{ entity.gtm_attributes.category }}"
+  gtm-container="product detail page"
+  gtm-view-mode="modal"
+  gtm-cart-value=""
+  gtm-main-sku="{{ entity.sku }}"
+  gtm-name="{{ entity.name }}"
+  gtm-product-sku=""
+  gtm-product-sku-class-identifier="{{ entity.gtm_attributes.id }}"
+  gtm-sku-type="{{ entity.type_id }}"
+  gtm-brand="{{ entity.gtm_attributes.brand }}"
+  gtm-dimension4="{{ entity.gtm_attributes.dimension4 }}"
+  gtm-price="{{ entity.gtm_attributes.price }}"
+  gtm-dimension3="{{ entity.gtm_attributes.dimension3 }}"
+  gtm-stock="">
+
+  <div class="acq-content-product-modal">
+    <div class="content__title_wrapper">
+      {{#if entity.brand_logo_data.url }}
+        <div><img loading="lazy" className="sub-brand-logo"
+                  title="{{ entity.brand_logo_data.title }}"
+                  alt="{{ entity.brand_logo_data.alt }}"
+                  src="{{ entity.brand_logo_data.url }}" />
+        </div>
+      {{/if}}
+
+      {{ title_prefix }}
+      {{#unless is_page }}
+        <h2 class="c-products__item__label">{{ entity.name }}</h2>
+      {{/unless}}
+      {{ title_suffix }}
+
+      <div class="price-block price-block-{{ cleanSku }}">
+        {{{render 'product.block.price' price_details }}}
+      </div>
+
+      {{#if postpay }}
+        <div class="postpay {{ postpay.class }}">
+          <div class="postpay-widget"
+               data-type="{{ postpay.data-type }}"
+               data-currency="{{ postpay.data-currency }}"
+               data-num-instalments="{{ postpay.data-num-instalments }}"
+               data-locale="{{ postpay.data-locale }}">
+          </div>
+        </div>
+      {{/if}}
+
+      {{#if tabby }}
+        <div class="tabby mobile-only-hide">
+          <div class="{{ tabby.class }}" id="{{ tabby.id }}"></div>
+        </div>
+      {{/if}}
+
+      {{#if promotions }}
+        <div class="promotions">
+          {{{ promotions }}}
+        </div>
+      {{/if}}
+
+      {{#if vat_text }}
+        <div class="vat-text">{{ vat_text }}</div>
+      {{/if}}
+
+      <div class="content--item-code">
+        <span class="field__label">{{t 'Item Code' }}:</span>
+        <span class="field__value">{{ entity.sku }}</span>
+      </div>
+    </div>
+
+    <div class="content__main {{ image_slider_position_pdp }}">
+      <div class="gallery-wrapper"></div>
+      {{#if is_wishlist_enabled }}
+        <div class="wishlist-pdp-modal"></div>
+      {{/if}}
+    </div>
+
+    <div class="content__sidebar">
+      {{#if size_volume }}
+      <div class="content--size-volume">
+        <span class="field__label">{{t 'Size/Volume' }}:</span>
+        {{ size_volume }}
+      </div>
+      {{/if}}
+
+      <div class="basic-details-wrapper">
+        {{#if tabby }}
+          <div class="tabby mobile-only-show">
+            <div class="{{ tabby.class }}" id="tabby-promo-pdp-mobile"></div>
+          </div>
+        {{/if}}
+
+        <div class="field--name-field-skus field__items">
+          <div class="add_to_cart_form" data-rcs-sku="{{ entity.sku }}"></div>
+        </div>
+        {{#if quantity_limit_enabled }}
+          <div class="order-quantity-limit-message"></div>
+        {{/if}}
+      </div>
+
+      {{#if sku_out_of_stock }}
+        <div class="out-of-stock {{ sku_out_of_stock }}"></div>
+      {{/if}}
+
+      <a class="full-prod-link" href="{{ entity.url_key }}">{{t "View Full Product Details" }}</a>
+    </div>
+  </div>
+</article>

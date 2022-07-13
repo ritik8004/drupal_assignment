@@ -246,7 +246,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     if ($term instanceof TermInterface && parent::VOCABULARY_ID == $term->bundle()) {
       // Get the top level parent id if parent exists.
       $parents = $this->getSuperCategoryMapping($langcode);
-      return isset($parents[$term->id()]) ? $parents[$term->id()] : NULL;
+      return $parents[$term->id()] ?? NULL;
     }
     return NULL;
   }
@@ -268,7 +268,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     if (empty($term)) {
       $parent_terms = $this->getCategoryTreeCached(0, $langcode);
       $tid = alshaya_super_category_get_default_term($langcode);
-      return isset($parent_terms[$tid]) ? $parent_terms[$tid] : NULL;
+      return $parent_terms[$tid] ?? NULL;
     }
     return $term;
   }
@@ -386,7 +386,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     $current_language = $this->languageManager->getCurrentLanguage()->getId();
     // Get all the terms data in English for preparing label.
     $term_data_en = ($current_language !== 'en') ? $this->getCategoryRootTerms('en') : $term_data;
-    $term_info_en = isset($term_data_en[$tid]) ? $term_data_en[$tid] : "";
+    $term_info_en = $term_data_en[$tid] ?? "";
     if (!empty($term_info_en)) {
       $theme = $this->themeManager->getActiveTheme();
       $base_uri = $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();

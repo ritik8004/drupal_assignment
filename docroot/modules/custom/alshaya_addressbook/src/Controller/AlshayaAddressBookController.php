@@ -129,7 +129,7 @@ class AlshayaAddressBookController extends UserController {
       $this->messenger()->addMessage($this->t('Primary address is updated successfully.'));
     }
 
-    $url = $profile->urlInfo('collection');
+    $url = $profile->toUrl('collection');
     return $this->redirect($url->getRouteName(), $url->getRouteParameters(), $url->getOptions());
   }
 

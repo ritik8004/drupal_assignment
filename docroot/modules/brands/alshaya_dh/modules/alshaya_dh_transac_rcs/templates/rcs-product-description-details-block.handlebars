@@ -1,0 +1,56 @@
+{#
+  * @todo Copied this from COS. Need to check this as per
+  *   the design of Debenhams.
+  */
+#}
+<div class="desc-wrapper">
+  {{#if label }}
+  <div class="desc-label">
+    {{ label }}
+  </div>
+  {{/if}}
+  <div class="desc-value">
+    <p>{{{ html }}}</p>
+
+    {{#if show_product_detail_title }}
+      <h3>{{t 'Product Detail' }}</h3>
+    {{/if}}
+
+    {{#if composition }}
+      <p>{{ composition }}</p>
+    {{/if}}
+
+    {{#if washing_instructions }}
+      <p>{{ washing_instructions }}</p>
+    {{/if}}
+
+    {{#if article_warning }}
+      <p>{{ article_warning }}</p>
+    {{/if}}
+
+    {{#if additional_description.status }}
+    <div class="additional-description desc-wrapper">
+      <div class="desc-label">
+        {{ additional_description.label }}
+      </div>
+      <div class="desc-value">
+        <p>{{{ additional_description.summary }}}</p>
+      </div>
+    </div>
+    {{/if}}
+
+    <h3>{{t 'Product No:' }}</h3>
+    <p>{{ sku }}</p>
+
+    {{#if legal_notice.status }}
+    <div class="legal-notice desc-wrapper">
+      <div class="desc-label">
+        {{ legal_notice.label }}
+      </div>
+      <div class="desc-value">
+        {{{ legal_notice.summary }}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>

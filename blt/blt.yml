@@ -1,6 +1,6 @@
 project:
   machine_name: alshaya
-  prefix: (MMCPA|ACR2|AURA|CORE|AAVS|BBWAE|MAPP|KOTBP|ALGO|MCP|VMA)
+  prefix: (MMCPA|ACR2|AURA|CORE|AAVS|BBWAE|MAPP|KOTBP|ALGO|MCP|VMA|DIG)
   human_name: Alshaya
   profile:
     name: alshaya_transac
@@ -16,6 +16,7 @@ git:
     - 'alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git'
     - 'alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git'
     - 'alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git'
+    - 'alshayadc1@svn-5975.enterprise-g1.hosting.acquia.com:alshayadc1.git'
   hooks:
     pre-push: false
 deploy:
@@ -58,13 +59,13 @@ command-hooks:
     command: 'vendor/bin/blt alshayafe:setup && vendor/bin/blt js:setup && vendor/bin/blt alshayafe:setup-uglify'
   frontend-assets:
     dir: '${repo.root}'
-    command: 'vendor/bin/blt alshayafe:build-all-themes && vendor/bin/blt alshayafe:build-react && vendor/bin/blt js:build && vendor/bin/blt alshayafe:build-uglify'
+    command: 'vendor/bin/blt alshayafe:build-all-themes && vendor/bin/blt alshayafe:minify-svg && vendor/bin/blt alshayafe:build-react && vendor/bin/blt js:build && vendor/bin/blt alshayafe:build-uglify'
   pre-config-import:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
   post-deploy-build:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash middleware-build.sh ${deploy.dir}; bash post-deploy-build.sh ${deploy.dir}'
+    command: 'bash post-deploy-build.sh ${deploy.dir}'
   post-setup-build:
     dir: '${docroot}'
     command: 'echo ''No post-setup build configured.'''

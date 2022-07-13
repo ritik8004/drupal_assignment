@@ -24,7 +24,6 @@ regions:
   footer_secondary: 'Footer Secondary'
 
 libraries:
-  - alshaya_pottery_barn/global_styles
   - alshaya_white_label/ucfix
   - alshaya_pottery_barn/fonts
 

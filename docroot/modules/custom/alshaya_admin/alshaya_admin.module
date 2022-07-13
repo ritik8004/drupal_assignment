@@ -79,7 +79,7 @@ function alshaya_admin_form_alter(&$form, FormStateInterface $form_state, $form_
  */
 function _alshaya_admin_initialize_admin_theme($admin_theme) {
   // Enable theme.
-  \Drupal::service('theme_handler')->install([$admin_theme], TRUE);
+  \Drupal::service('theme_installer')->install([$admin_theme], TRUE);
 
   // Set it as the admin theme.
   $config = \Drupal::service('config.factory')->getEditable('system.theme');

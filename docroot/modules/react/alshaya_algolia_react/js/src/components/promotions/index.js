@@ -33,27 +33,48 @@ const isCurrentPromotion = (promotion) => {
   return false;
 };
 
-const Promotion = ({ promotion }) => (
-  <span className="sku-promotion-item">
-    {isCurrentPromotion(promotion) ? (
-      <span className="sku-promotion-text">{promotion.text}</span>
-    ) : (
-      <>
-        <ConditionalView condition={isPromotionFrameEnabled()}>
-          <div className="sku-promotion-text">{promotion.text}</div>
-          <a className="sku-promotion-link" href={fixHref(promotion[`url_${drupalSettings.path.currentLanguage}`])}>
-            {Drupal.t('Shop all products in this offer')}
-          </a>
-        </ConditionalView>
-        <ConditionalView condition={!isPromotionFrameEnabled()}>
-          <a className="sku-promotion-link" href={fixHref(promotion[`url_${drupalSettings.path.currentLanguage}`])}>
-            {promotion.text}
-          </a>
-        </ConditionalView>
-      </>
-    )}
-  </span>
-);
+const promotionUrl = (promotion) => {
+  const promotionKeys = Object.keys(promotion);
+
+  // Return the promotion URL of any available language.
+  for (let i = 0; i < promotionKeys.length; i++) {
+    if (promotionKeys[i].startsWith('url_')) {
+      return fixHref(promotion[promotionKeys[i]]);
+    }
+  }
+
+  return '#';
+};
+
+const Promotion = ({ promotion }) => {
+  // Get promotion URL for the current language. If the URL is not provided
+  // for current language, then use the URL of any other available language.
+  const currentPromotionUrl = (promotion[`url_${drupalSettings.path.currentLanguage}`])
+    ? fixHref(promotion[`url_${drupalSettings.path.currentLanguage}`])
+    : promotionUrl(promotion);
+
+  return (
+    <span className="sku-promotion-item">
+      {isCurrentPromotion(promotion) ? (
+        <span className="sku-promotion-text">{promotion.text}</span>
+      ) : (
+        <>
+          <ConditionalView condition={isPromotionFrameEnabled()}>
+            <div className="sku-promotion-text">{promotion.text}</div>
+            <a className="sku-promotion-link" href={currentPromotionUrl}>
+              {Drupal.t('Shop all products in this offer')}
+            </a>
+          </ConditionalView>
+          <ConditionalView condition={!isPromotionFrameEnabled()}>
+            <a className="sku-promotion-link" href={currentPromotionUrl}>
+              {promotion.text}
+            </a>
+          </ConditionalView>
+        </>
+      )}
+    </span>
+  );
+};
 
 const Promotions = ({ promotions }) => {
   const promotionList = (promotions)

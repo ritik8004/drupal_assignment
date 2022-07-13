@@ -1,4 +1,5 @@
 import React from 'react';
+import { isMobile } from '../../utilities/display';
 
 const TabbyWidget = (props) => {
   const {
@@ -14,7 +15,7 @@ const TabbyWidget = (props) => {
   switch (pageType) {
     case 'pdp':
     case 'cart':
-      if (pageType === 'cart' && (mobileOnly && window.innerWidth >= 768)) {
+      if (pageType === 'cart' && ((mobileOnly === true && !isMobile()) || (mobileOnly === false && isMobile()))) {
         return null;
       }
       return (

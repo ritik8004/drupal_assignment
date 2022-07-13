@@ -1,0 +1,37 @@
+alshaya_online_returns.settings:
+  type: config_object
+  label: 'Online Returns Settings'
+  mapping:
+    status:
+      type: boolean
+      label: 'Config to enable/disable Online Returns feature'
+
+alshaya_online_returns.return_confirmation:
+  type: config_object
+  label: 'Return confirmation settings'
+  mapping:
+    return_date_format:
+      type: label
+      label: 'Return Date format'
+    rows:
+      type: sequence
+      label: 'Whats next row'
+      sequence:
+        - type: return_whats_next_row
+
+return_whats_next_row:
+  type: mapping
+  label: 'Whats next row'
+  mapping:
+    title:
+      type: label
+      label: 'Title'
+    description:
+      type: text_format
+      label: 'Description'
+    icon:
+      type: string
+      label: 'Icon'
+    hide_this_row:
+      type: boolean
+      label: 'Hide This Row'

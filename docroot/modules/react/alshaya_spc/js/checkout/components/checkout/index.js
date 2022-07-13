@@ -178,7 +178,7 @@ export default class Checkout extends React.Component {
     if (cart.stale_cart !== undefined && cart.stale_cart === true) {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
         type: 'error',
-        message: drupalSettings.global_error_message,
+        message: drupalSettings.globalErrorMessage,
       });
     }
 

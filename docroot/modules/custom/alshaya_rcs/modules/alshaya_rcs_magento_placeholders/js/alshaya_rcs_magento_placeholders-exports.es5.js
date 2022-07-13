@@ -121,6 +121,7 @@ exports.render = function render(
     case 'mobile-crosssell-products':
     case 'crosssell-products':
     case 'classic-gallery':
+    case 'magazine-gallery':
     case 'product-labels':
       // Render super category block.
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
@@ -167,7 +168,6 @@ exports.render = function render(
           innerHtml
         );
       }
-      break;
 
     default:
       Drupal.alshayaLogger('debug', 'Placeholder @placeholder not supported for render.', {
@@ -209,6 +209,7 @@ exports.computePhFilters = function (input, filter) {
     case 'short_description':
     case 'promotions':
     case 'teaser_image':
+    case 'price_block_identifier':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }

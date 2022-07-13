@@ -13,18 +13,6 @@
           Drupal.cartNotification.spinner_start();
         }
 
-        // Get the template with placeholders for modal view.
-        var content = $('<div>').append($('.rcs-templates--product-modal').clone());
-        // Rename the class by removing the dummy suffix.
-        content
-          .find('.acq-content-product-modal-template')
-          .removeClass('acq-content-product-modal-template')
-          .addClass('acq-content-product-modal');
-
-        // Reset cloud zoom image attributes.
-        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('data-zoom-url', '"#rcs.product_modal._self|teaser_image#"');
-        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', '"#rcs.product_modal._self|teaser_image#"');
-
         // Try to get sku from the element clicked. Works with DY block.
         var sku = $(this).data('sku');
         if (!sku) {
@@ -33,28 +21,58 @@
         }
 
         globalThis.rcsPhCommerceBackend.getData('product-recommendation', {sku: sku}, null, null, null, true)
-          .then(function (entity) {
+          .then(async function (entity) {
             if (entity === null || typeof entity === 'undefined') {
               return;
             }
 
-            // Replace placeholders of modal content with product entity.
-            let finalMarkup = content.html();
-            rcsPhReplaceEntityPh(finalMarkup, 'product_modal', entity, settings.path.currentLanguage)
-              .forEach(function eachReplacement(r) {
-                const fieldPh = r[0];
-                const entityFieldValue = r[1];
-                finalMarkup = globalThis.rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
-              });
-            content.html(finalMarkup);
+            var currencyConfig = drupalSettings.alshaya_spc.currency_config;
+            var data = {
+              is_page: false,
+              title_prefix: '',
+              entity: entity,
+              language: drupalSettings.path.currentLanguage,
+              // @todo Create a function as this is also done in alshaya_rcs_magazine.js
+              price_details: {
+                display_mode: drupalSettings.alshayaRcs.priceDisplayMode,
+                discount: {
+                  percent_off: Math.round(entity.price_range.maximum_price.discount.percent_off)
+                },
+                regular_price: {
+                  value: entity.price_range.maximum_price.regular_price.value,
+                  currency_code: currencyConfig.currency_code,
+                  currency_code_position: currencyConfig.currency_code_position,
+                  decimal_points: currencyConfig.decimal_points,
+                },
+                final_price: {
+                  value: entity.price_range.maximum_price.final_price.value,
+                  currency_code: currencyConfig.currency_code,
+                  currency_code_position: currencyConfig.currency_code_position,
+                  decimal_points: currencyConfig.decimal_points,
+                },
+              },
+              sku_out_of_stock: false, //@todo Review this variable: It is used in few twig templates but never populated
+              size_volume: Drupal.hasValue(entity.size_volume) ? entity.size_volume : '',
+              vat_text: drupalSettings.vat_text,
+              quantity_limit_enabled: drupalSettings.alshayaRcs.quantity_limit_enabled,
+              image_slider_position_pdp: drupalSettings.alshaya_white_label.image_slider_position_pdp,
+              promotions: globalThis.rcsPhRenderingEngine.computePhFilters(entity, 'promotions'),
+              postpay: Drupal.hasValue(drupalSettings.postpay_widget_info) ? drupalSettings.postpay_widget_info : {},
+              tabby: Drupal.hasValue(drupalSettings.tabby) ? drupalSettings.tabby.widgetInfo : {},
+              cleanSku: Drupal.cleanCssIdentifier(entity.sku),
+              is_wishlist_enabled: drupalSettings.alshayaRcs.isWishlistEnabled,
+            };
 
-            // Open modal dailog.
-            Drupal.dialog(content, {
+            var elem = document.createElement('div');
+            elem.innerHTML = handlebarsRenderer.render('product.modal', data);
+
+            // Open modal.
+            Drupal.dialog(elem, {
               dialogClass: 'pdp-modal-box',
               autoResize: false,
               closeOnEscape: false,
               width: 'auto',
-              title:"do you want to publish this content ?",
+              title: entity.name,
             }).showModal();
 
             $('.pdp-modal-box').find('.ui-widget-content').attr('id', 'drupal-modal');
@@ -67,8 +85,17 @@
             // Call behaviours with modal context.
             var modalContext = $('.pdp-modal-box');
             globalThis.rcsPhApplyDrupalJs(modalContext);
+
+            var mainProduct = entity;
+            // Now render the add to cart form.
+            if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
+              mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
+            }
+            window.commerceBackend.renderAddToCartForm(mainProduct);
+            globalThis.rcsPhApplyDrupalJs(modalContext);
           },
           function () {
+            // @todo shall we remove loaders when this happens?
             Drupal.alshayaLogger('error', 'Could not fetch data for product recommendation!');
           });
 

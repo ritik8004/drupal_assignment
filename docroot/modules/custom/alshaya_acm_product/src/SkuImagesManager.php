@@ -14,6 +14,7 @@ use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\file\Entity\File;
 
 /**
@@ -22,6 +23,8 @@ use Drupal\file\Entity\File;
  * @package Drupal\alshaya_acm_product
  */
 class SkuImagesManager {
+
+  use LoggerChannelTrait;
 
   const BASE_IMAGE_ROLE = 'image';
   const SWATCH_IMAGE_ROLE = 'swatch_image';
@@ -200,9 +203,17 @@ class SkuImagesManager {
       $skuForGallery = $check_parent_child ? $this->getSkuForGallery($sku, $check_parent_child) : $sku;
       $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? NULL;
 
-      foreach ($data['media_items']['images'] ?? [] as $key => $item) {
-        if (empty($item['label'])) {
-          $data['media_items']['images'][$key]['label'] = (string) $sku->label();
+      if (!isset($data['media_items']['images']) || empty($data['media_items']['images'])) {
+        $this->getLogger('SkuImagesManager')->notice('No images found for SKU: @sku, context: @context.', [
+          '@sku' => $skuForGallery->getSku(),
+          '@context' => $context,
+        ]);
+      }
+      else {
+        foreach ($data['media_items']['images'] as $key => $item) {
+          if (empty($item['label'])) {
+            $data['media_items']['images'][$key]['label'] = (string) $sku->label();
+          }
         }
       }
 
@@ -831,7 +842,7 @@ class SkuImagesManager {
 
             $thumbnails[] = [
               'zoomurl' => $image_zoom,
-              'fullurl' => $default_image->url(),
+              'fullurl' => $default_image->createFileUrl(),
               'label' => $sku->label(),
             ];
           }
@@ -1513,6 +1524,49 @@ class SkuImagesManager {
     }
 
     return $images;
+  }
+
+  /**
+   * Processes styled images in media.
+   *
+   * @param array $media
+   *   Array of product media to be processed.
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context - pdp/search/modal/teaser.
+   *
+   * @return array
+   *   Media array containing styled images.
+   */
+  public function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
+    if (empty($media['images'])) {
+      return $media;
+    }
+    /** @var \Drupal\acq_sku\Entity\SKU $sku */
+    $product_media = $this->getProductMedia($sku, $context);
+    // Search image styles in product media using url and return styles.
+    foreach ($media['images'] as $mid => $media_item) {
+      $media['images'][$mid]['styles'] = [];
+      $key = array_search(
+        $media_item['url'],
+        array_column(
+          $product_media['media_items']['images'],
+          'drupal_uri'
+        )
+      );
+      // Check if images styles exists for the sku and return the urls.
+      if (isset($key)) {
+        $image = $product_media['media_items']['images'][$key];
+        if (!empty($image['styles'])) {
+          $media['images'][$mid]['styles'] = $image['styles'];
+        }
+        elseif (!empty($image['pims_image']['styles'])) {
+          $media['images'][$mid]['styles'] = $image['pims_image']['styles'];
+        }
+      }
+    }
+    return $media;
   }
 
 }

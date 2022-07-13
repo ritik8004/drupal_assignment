@@ -379,7 +379,7 @@ class AcqSkuDrushCommands extends DrushCommands {
   public function syncProductsTest($count) {
     $this->output->writeln(dt('Synchronizing @count commerce products for testing / dev...', ['@count' => $count]));
 
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     $container = \Drupal::getContainer();
     foreach ($this->i18nhelper->getStoreLanguageMapping() as $store_id) {
       $this->apiWrapper->updateStoreContext($store_id);

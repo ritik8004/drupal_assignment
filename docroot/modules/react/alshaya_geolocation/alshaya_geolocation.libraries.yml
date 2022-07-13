@@ -1,0 +1,34 @@
+places-api-autocomplete:
+  js:
+    js/alshaya_google_places_api.js: {}
+  dependencies:
+    - core/drupal.ajax
+    - core/underscore
+    - geolocation_google_maps/geocoder.googlegeocodingapi
+
+alshaya-store-finder:
+  version: 1.x
+  js:
+    dist/store_finder.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
+alshaya-store-finder-list:
+  version: 1.x
+  js:
+    dist/store_finder_list.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
+alshaya-store-click-collect-list:
+  version: 1.x
+  js:
+    js/alshaya_geolocation.utility.js: { }
+    dist/store_click_collect_list.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - core/drupalSettings
+
+marker-dropdown:
+  js:
+    js/marker-dropdown.js: {}

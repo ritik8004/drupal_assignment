@@ -45,7 +45,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   /**
    * Product category tree.
    *
-   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   * @var mixed
    */
   protected $productCategoryTree;
 
@@ -67,12 +67,12 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Plugin definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
+   * @param mixed $product_category_tree
    *   Product category tree.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ProductCategoryTree $product_category_tree, ModuleHandlerInterface $module_handler) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, $product_category_tree, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
@@ -83,12 +83,17 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+
+    // @todo remove this after removing inter connected dependency between
+    // alshaya_acm_product_category and alshaya_main_menu module.
+    $productCategoryService = $container->get('module_handler')->moduleExists('alshaya_acm_product_category') ? $container->get('alshaya_acm_product_category.product_category_tree') : NULL;
+
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('alshaya_acm_product_category.product_category_tree'),
+      $productCategoryService,
       $container->get('module_handler')
     );
   }
@@ -97,6 +102,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
+
+    // @todo remove this after removing inter connected dependency between
+    // alshaya_acm_product_category and alshaya_main_menu module.
+    if (empty($this->productCategoryTree)) {
+      return [];
+    }
+
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
 

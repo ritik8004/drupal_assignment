@@ -29,3 +29,11 @@ alshaya_stores_finder.configuration:
     _title: 'Store finder configuration'
   requirements:
     _permission: 'administer site configuration'
+alshaya_stores_finder.stores:
+  path: '/alshaya-locations/stores-list'
+  defaults:
+    _controller: '\Drupal\alshaya_stores_finder\Controller\AlshayaLocationsNonTransac::stores'
+    _title: 'Store Locations'
+  requirements:
+    # All user should able to access search page.
+    _access: 'TRUE'

@@ -72,6 +72,13 @@ trait Orders {
         'price' => ($item['price_incl_tax'] ?? 0),
         'price_without_tax' => ($item['price'] ?? 0),
         'ordered' => (int) ($item['qty_ordered'] ?? 0),
+        // Here we are storing the actual ordered qty. The `ordered` qty will
+        // get updated in online returns ( Based on the qty refunded, we change
+        // the ordered qty ). This actual_ordered will help us to do calculation
+        // on real value.
+        // @see Drupal\alshaya_online_returns\Helper::prepareProductsData().
+        // @see alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter().
+        'actual_ordered' => (int) ($item['qty_ordered'] ?? 0),
         'shipped' => (int) ($item['qty_shipped'] ?? 0),
         'refunded' => (int) ($item['qty_refunded'] ?? 0),
       ];

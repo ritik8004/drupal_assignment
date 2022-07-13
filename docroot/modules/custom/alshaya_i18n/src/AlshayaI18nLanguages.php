@@ -33,7 +33,7 @@ class AlshayaI18nLanguages {
    */
   public static function getLocale($langcode) {
     $languages = array_flip(self::getLanguages());
-    return isset($languages[$langcode]) ? $languages[$langcode] : FALSE;
+    return $languages[$langcode] ?? FALSE;
   }
 
   /**
@@ -66,7 +66,7 @@ class AlshayaI18nLanguages {
    */
   public static function getLanguage($locale) {
     $languages = self::getLanguages();
-    return isset($languages[$locale]) ? $languages[$locale] : FALSE;
+    return $languages[$locale] ?? FALSE;
   }
 
 }

@@ -480,6 +480,7 @@ class AlshayaFeedSkuInfoHelper {
       return $static[$cid];
     }
 
+    // phpcs:ignore
     $configurables = unserialize($parent->get('field_configurable_attributes')->getString());
     if (empty($configurables) || !is_array($configurables)) {
       return [];

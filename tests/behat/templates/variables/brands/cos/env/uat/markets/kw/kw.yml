@@ -1,6 +1,6 @@
 variables:
-  url_product_page: 'buy-lavender-vanilla-bubble-bath.html'
-  product_listing_page_url: "/shop-body-care/featured/new-arrivals/"
-  spc_product_listing_page: '/shop-body-care/featured/new-arrivals/'
-  spc_basket_page: '/shop-body-care/featured/new-arrivals/'
-  spc_pdp_page: 'buy-pure-wonder-super-smooth-body-lotion.html'
+  url_product_page: 'buy-relaxed-fit-hemp-t-shirt-beige.html'
+  product_listing_page_url: "/shop-women/new-arrivals/"
+  spc_product_listing_page: '/shop-women/new-arrivals/'
+  spc_basket_page: '/shop-women/new-arrivals/'
+  spc_pdp_page: 'buy-relaxed-fit-hemp-t-shirt-beige.html'

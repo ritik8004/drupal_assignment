@@ -1,0 +1,382 @@
+# Application 'alshayadc1', environment '02dev'.
+02dev:
+  root: /var/www/html/alshayadc1.02dev/docroot
+  ac-site: alshayadc1
+  ac-env: 02dev
+  ac-realm: enterprise-g1
+  uri: alshayadc102dev.enterprise-g1.acquia-sites.com
+  02dev.livedev:
+    parent: '@alshayadc1.02dev'
+    root: /mnt/gfs/alshayadc1.02dev/livedev/docroot
+  host: alshayadc102dev.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02dev
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02dev2'.
+02dev2:
+  root: /var/www/html/alshayadc1.02dev2/docroot
+  ac-site: alshayadc1
+  ac-env: 02dev2
+  ac-realm: enterprise-g1
+  uri: alshayadc102dev2.enterprise-g1.acquia-sites.com
+  02dev2.livedev:
+    parent: '@alshayadc1.02dev2'
+    root: /mnt/gfs/alshayadc1.02dev2/livedev/docroot
+  host: alshayadc102dev2.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02dev2
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02dev2up'.
+02dev2up:
+  root: /var/www/html/alshayadc1.02dev2up/docroot
+  ac-site: alshayadc1
+  ac-env: 02dev2up
+  ac-realm: enterprise-g1
+  uri: alshayadc102dev2up.enterprise-g1.acquia-sites.com
+  02dev2up.livedev:
+    parent: '@alshayadc1.02dev2up'
+    root: /mnt/gfs/alshayadc1.02dev2up/livedev/docroot
+  host: alshayadc102dev2up.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02dev2up
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02dev3'.
+02dev3:
+  root: /var/www/html/alshayadc1.02dev3/docroot
+  ac-site: alshayadc1
+  ac-env: 02dev3
+  ac-realm: enterprise-g1
+  uri: alshayadc102dev3.enterprise-g1.acquia-sites.com
+  02dev3.livedev:
+    parent: '@alshayadc1.02dev3'
+    root: /mnt/gfs/alshayadc1.02dev3/livedev/docroot
+  host: alshayadc102dev3.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02dev3
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02dev3up'.
+02dev3up:
+  root: /var/www/html/alshayadc1.02dev3up/docroot
+  ac-site: alshayadc1
+  ac-env: 02dev3up
+  ac-realm: enterprise-g1
+  uri: alshayadc102dev3up.enterprise-g1.acquia-sites.com
+  02dev3up.livedev:
+    parent: '@alshayadc1.02dev3up'
+    root: /mnt/gfs/alshayadc1.02dev3up/livedev/docroot
+  host: alshayadc102dev3up.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02dev3up
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02devup'.
+02devup:
+  root: /var/www/html/alshayadc1.02devup/docroot
+  ac-site: alshayadc1
+  ac-env: 02devup
+  ac-realm: enterprise-g1
+  uri: alshayadc102devup.enterprise-g1.acquia-sites.com
+  02devup.livedev:
+    parent: '@alshayadc1.02devup'
+    root: /mnt/gfs/alshayadc1.02devup/livedev/docroot
+  host: alshayadc102devup.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02devup
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02live'.
+02live:
+  root: /var/www/html/alshayadc1.02live/docroot
+  ac-site: alshayadc1
+  ac-env: 02live
+  ac-realm: enterprise-g1
+  uri: alshayadc102live.enterprise-g1.acquia-sites.com
+  02live.livedev:
+    parent: '@alshayadc1.02live'
+    root: /mnt/gfs/alshayadc1.02live/livedev/docroot
+  host: alshayadc102live.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02live
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02pprod'.
+02pprod:
+  root: /var/www/html/alshayadc1.02pprod/docroot
+  ac-site: alshayadc1
+  ac-env: 02pprod
+  ac-realm: enterprise-g1
+  uri: alshayadc102pprod.enterprise-g1.acquia-sites.com
+  02pprod.livedev:
+    parent: '@alshayadc1.02pprod'
+    root: /mnt/gfs/alshayadc1.02pprod/livedev/docroot
+  host: alshayadc102pprod.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02pprod
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02pprodup'.
+02pprodup:
+  root: /var/www/html/alshayadc1.02pprodup/docroot
+  ac-site: alshayadc1
+  ac-env: 02pprodup
+  ac-realm: enterprise-g1
+  uri: alshayadc102pprodup.enterprise-g1.acquia-sites.com
+  02pprodup.livedev:
+    parent: '@alshayadc1.02pprodup'
+    root: /mnt/gfs/alshayadc1.02pprodup/livedev/docroot
+  host: alshayadc102pprodup.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02pprodup
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02qa2'.
+02qa2:
+  root: /var/www/html/alshayadc1.02qa2/docroot
+  ac-site: alshayadc1
+  ac-env: 02qa2
+  ac-realm: enterprise-g1
+  uri: alshayadc102qa2.enterprise-g1.acquia-sites.com
+  02qa2.livedev:
+    parent: '@alshayadc1.02qa2'
+    root: /mnt/gfs/alshayadc1.02qa2/livedev/docroot
+  host: alshayadc102qa2.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02qa2
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02qa2up'.
+02qa2up:
+  root: /var/www/html/alshayadc1.02qa2up/docroot
+  ac-site: alshayadc1
+  ac-env: 02qa2up
+  ac-realm: enterprise-g1
+  uri: alshayadc102qa2up.enterprise-g1.acquia-sites.com
+  02qa2up.livedev:
+    parent: '@alshayadc1.02qa2up'
+    root: /mnt/gfs/alshayadc1.02qa2up/livedev/docroot
+  host: alshayadc102qa2up.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02qa2up
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02test'.
+02test:
+  root: /var/www/html/alshayadc1.02test/docroot
+  ac-site: alshayadc1
+  ac-env: 02test
+  ac-realm: enterprise-g1
+  uri: alshayadc102test.enterprise-g1.acquia-sites.com
+  02test.livedev:
+    parent: '@alshayadc1.02test'
+    root: /mnt/gfs/alshayadc1.02test/livedev/docroot
+  host: alshayadc102test.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02test
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02testup'.
+02testup:
+  root: /var/www/html/alshayadc1.02testup/docroot
+  ac-site: alshayadc1
+  ac-env: 02testup
+  ac-realm: enterprise-g1
+  uri: alshayadc102testup.enterprise-g1.acquia-sites.com
+  02testup.livedev:
+    parent: '@alshayadc1.02testup'
+    root: /mnt/gfs/alshayadc1.02testup/livedev/docroot
+  host: alshayadc102testup.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02testup
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02uat'.
+02uat:
+  root: /var/www/html/alshayadc1.02uat/docroot
+  ac-site: alshayadc1
+  ac-env: 02uat
+  ac-realm: enterprise-g1
+  uri: alshayadc102uat.enterprise-g1.acquia-sites.com
+  02uat.livedev:
+    parent: '@alshayadc1.02uat'
+    root: /mnt/gfs/alshayadc1.02uat/livedev/docroot
+  host: alshayadc102uat.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02uat
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02uatup'.
+02uatup:
+  root: /var/www/html/alshayadc1.02uatup/docroot
+  ac-site: alshayadc1
+  ac-env: 02uatup
+  ac-realm: enterprise-g1
+  uri: alshayadc102uatup.enterprise-g1.acquia-sites.com
+  02uatup.livedev:
+    parent: '@alshayadc1.02uatup'
+    root: /mnt/gfs/alshayadc1.02uatup/livedev/docroot
+  host: alshayadc102uatup.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02uatup
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment '02update'.
+02update:
+  root: /var/www/html/alshayadc1.02update/docroot
+  ac-site: alshayadc1
+  ac-env: 02update
+  ac-realm: enterprise-g1
+  uri: alshayadc102update.enterprise-g1.acquia-sites.com
+  02update.livedev:
+    parent: '@alshayadc1.02update'
+    root: /mnt/gfs/alshayadc1.02update/livedev/docroot
+  host: alshayadc102update.ssh.enterprise-g1.acquia-sites.com
+  user: alshayadc1.02update
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment 'dev'.
+dev:
+  root: /var/www/html/alshayadc1.dev/docroot
+  ac-site: alshayadc1
+  ac-env: dev
+  ac-realm: enterprise-g1
+  uri: alshayadc1dev.enterprise-g1.acquia-sites.com
+  dev.livedev:
+    parent: '@alshayadc1.dev'
+    root: /mnt/gfs/alshayadc1.dev/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment 'dev2'.
+dev2:
+  root: /var/www/html/alshayadc1.dev2/docroot
+  ac-site: alshayadc1
+  ac-env: dev2
+  ac-realm: enterprise-g1
+  uri: alshayadc1dev2.enterprise-g1.acquia-sites.com
+  dev2.livedev:
+    parent: '@alshayadc1.dev2'
+    root: /mnt/gfs/alshayadc1.dev2/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment 'dev3'.
+dev3:
+  root: /var/www/html/alshayadc1.dev3/docroot
+  ac-site: alshayadc1
+  ac-env: dev3
+  ac-realm: enterprise-g1
+  uri: alshayadc1dev3.enterprise-g1.acquia-sites.com
+  dev3.livedev:
+    parent: '@alshayadc1.dev3'
+    root: /mnt/gfs/alshayadc1.dev3/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment 'pprod'.
+pprod:
+  root: /var/www/html/alshayadc1.pprod/docroot
+  ac-site: alshayadc1
+  ac-env: pprod
+  ac-realm: enterprise-g1
+  uri: alshayadc1pprod.enterprise-g1.acquia-sites.com
+  pprod.livedev:
+    parent: '@alshayadc1.pprod'
+    root: /mnt/gfs/alshayadc1.pprod/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment 'prod'.
+prod:
+  root: /var/www/html/alshayadc1.prod/docroot
+  ac-site: alshayadc1
+  ac-env: prod
+  ac-realm: enterprise-g1
+  uri: alshayadc1prod.enterprise-g1.acquia-sites.com
+  prod.livedev:
+    parent: '@alshayadc1.prod'
+    root: /mnt/gfs/alshayadc1.prod/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment 'qa2'.
+qa2:
+  root: /var/www/html/alshayadc1.qa2/docroot
+  ac-site: alshayadc1
+  ac-env: qa2
+  ac-realm: enterprise-g1
+  uri: alshayadc1qa2.enterprise-g1.acquia-sites.com
+  qa2.livedev:
+    parent: '@alshayadc1.qa2'
+    root: /mnt/gfs/alshayadc1.qa2/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment 'test'.
+test:
+  root: /var/www/html/alshayadc1.test/docroot
+  ac-site: alshayadc1
+  ac-env: test
+  ac-realm: enterprise-g1
+  uri: alshayadc1test.enterprise-g1.acquia-sites.com
+  test.livedev:
+    parent: '@alshayadc1.test'
+    root: /mnt/gfs/alshayadc1.test/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshayadc1', environment 'uat'.
+uat:
+  root: /var/www/html/alshayadc1.uat/docroot
+  ac-site: alshayadc1
+  ac-env: uat
+  ac-realm: enterprise-g1
+  uri: alshayadc1uat.enterprise-g1.acquia-sites.com
+  uat.livedev:
+    parent: '@alshayadc1.uat'
+    root: /mnt/gfs/alshayadc1.uat/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9

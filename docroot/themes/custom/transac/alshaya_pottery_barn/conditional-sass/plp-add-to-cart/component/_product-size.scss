@@ -1,0 +1,16 @@
+.attribute-wrapper {
+  ul.attribute-options-list {
+    li {
+      padding: rem(9.6) rem(12);
+      font-size: rem(10);
+      height: auto;
+
+      &.disabled {
+        cursor: text;
+        border-color: $plp-quick-view-product-size-text-disabled;
+        color: $plp-quick-view-product-size-text-disabled;
+        pointer-events: none;
+      }
+    }
+  }
+}

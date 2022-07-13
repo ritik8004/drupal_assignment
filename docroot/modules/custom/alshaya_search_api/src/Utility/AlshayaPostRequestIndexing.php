@@ -1,6 +1,6 @@
 <?php
 
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 // Ingored as getting warning: Possible useless method overriding detected.
 
 namespace Drupal\alshaya_search_api\Utility;

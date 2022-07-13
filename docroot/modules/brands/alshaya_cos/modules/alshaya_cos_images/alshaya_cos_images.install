@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_cos_images module.
+ */
+
+/**
+ * Installs alshaya_pims_assets module.
+ */
+function alshaya_cos_images_update_8001() {
+  \Drupal::service('module_installer')->install(['alshaya_pims_assets']);
+  \Drupal::configFactory()->getEditable('alshaya_cos_images.settings')->delete();
+}

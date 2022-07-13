@@ -82,6 +82,7 @@ class AlshayaPaymentCardsController extends PaymentCardsController {
   public function checkAccess(AccountInterface $account, UserInterface $user) {
     $config = $this->config('alshaya_user.settings');
     $enabled_links = $config->get('my_account_enabled_links');
+    // phpcs:ignore
     $enabled_links = unserialize($enabled_links);
 
     $checkout_config = $this->config('alshaya_acm_checkout.settings');

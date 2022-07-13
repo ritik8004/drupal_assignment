@@ -18,6 +18,7 @@ const gulpIf = gulpPlugins.if;
 const { ignore, uglify, babel, iife } = gulpPlugins;
 const { src, dest, series } = require("gulp");
 const argv = require("minimist")(process.argv.slice(2));
+const sourcemaps = require("gulp-sourcemaps");
 
 // Libraries grouped to a single object for passing as parameter.
 const libraries = {
@@ -34,6 +35,7 @@ const libraries = {
   src,
   through,
   uglify,
+  sourcemaps,
 };
 
 // Configuration Settings.
@@ -46,7 +48,7 @@ const customStreams = require("./gulp/custom-streams")(libraries, config);
 const clean = require("./gulp/clean")(libraries, config);
 
 // JS Performance Task.
-const js_performance = require("./gulp/js-performance")(
+const { jsPerformance, jsPerformanceDev } = require("./gulp/js-performance")(
   libraries,
   config,
   customStreams
@@ -62,7 +64,14 @@ const { extractBuildPaths, outputBuildPaths } = require("./gulp/build-paths")(
 // JS Performance Build Task.
 exports["performance-build"] = series(
   clean,
-  js_performance,
+  jsPerformance,
+  extractBuildPaths,
+  outputBuildPaths
+);
+
+exports["performance-build:dev"] = series(
+  clean,
+  jsPerformanceDev,
   extractBuildPaths,
   outputBuildPaths
 );

@@ -5,6 +5,8 @@
  * Module file.
  */
 
+use Drupal\Core\Entity\EntityInterface;
+
 /**
  * Implements hook_theme().
  */
@@ -117,6 +119,49 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
     ],
   ];
 
+  // Query to get the parents of a category.
+  $query_fields['category_parents_by_path'] = [
+    'query' => [
+      'query($urlPath: String)' => [
+        'categories(filters: {url_path: {eq: $urlPath}})' => [
+          'items' => [
+            'uid',
+            'name',
+            'breadcrumbs' => [
+              'category_name',
+              'category_level',
+              'category_url_key',
+              'category_url_path',
+            ],
+          ],
+        ],
+      ],
+    ],
+    'variables' => [
+      'urlPath' => NULL,
+    ],
+  ];
+
+  // Query to get the children of the given category.
+  $query_fields['category_children_by_path'] = [
+    'query' => [
+      'query($urlPath: String)' => [
+        'categories(filters: {url_path: {eq: $urlPath}})' => [
+          'items' => [
+            'children' => [
+              'id',
+              'name',
+              'url_path',
+            ],
+          ],
+        ],
+      ],
+    ],
+    'variables' => [
+      'urlPath' => NULL,
+    ],
+  ];
+
   return $query_fields;
 }
 
@@ -141,4 +186,24 @@ function alshaya_rcs_listing_rcs_placeholders_processor_path_alter(string &$path
   if (stripos($path, '/--', 0) !== FALSE) {
     $path = substr($path, 0, stripos($path, '/--'));
   }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_listing_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'alshaya_algolia_react' && isset($libraries['product_category_carousel_rcs'])) {
+    $libraries['product_category_carousel_rcs']['dependencies'][] = 'alshaya_rcs_listing/product_carousel_utility';
+    $libraries['product_category_carousel_rcs']['dependencies'][] = 'rcs_magento_placeholders/rcs_magento_placeholders';
+  }
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates().
+ */
+function alshaya_rcs_listing_rcs_handlebars_templates(EntityInterface $entity) {
+  // Libraries to attach to all pages node/term.
+  $libraries = ['carousel.accordion' => 'alshaya_rcs_listing'];
+
+  return $libraries;
 }

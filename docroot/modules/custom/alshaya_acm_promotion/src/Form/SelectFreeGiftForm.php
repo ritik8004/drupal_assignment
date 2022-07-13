@@ -122,6 +122,7 @@ class SelectFreeGiftForm extends FormBase {
     }
 
     if ($promotion_node = $this->nodeStorage->load($promotion_id)) {
+      // phpcs:ignore
       $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
       $promo_type = $data['extension']['promo_type'] ?? SkuManager::FREE_GIFT_SUB_TYPE_ALL_SKUS;
       $promo_rule_id = $promotion_node->get('field_acq_promotion_rule_id')->getString();

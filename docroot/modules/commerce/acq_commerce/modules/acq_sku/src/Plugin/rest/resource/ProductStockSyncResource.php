@@ -19,8 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "acq_productstocksync",
  *   label = @Translation("Acquia Commerce Product Stock Sync"),
  *   uri_paths = {
- *     "canonical" = "/productstocksync",
- *     "https://www.drupal.org/link-relations/create" = "/productstocksync"
+ *     "create" = "/productstocksync"
  *   }
  * )
  */
@@ -78,19 +77,19 @@ class ProductStockSyncResource extends ResourceBase {
    *
    * Handle Conductor posting an array of product / SKU data for update.
    *
-   * @param array $message
+   * @param array $data
    *   Stock Data.
    *
    * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response object.
    */
-  public function post(array $message) {
+  public function post(array $data) {
     $this->logger->debug('Stock message received. @message', [
-      '@message' => json_encode($message),
+      '@message' => json_encode($data),
     ]);
 
     // Work with single message and array of messages.
-    $stockArray = array_key_exists('sku', $message) ? [$message] : $message;
+    $stockArray = array_key_exists('sku', $data) ? [$data] : $data;
 
     foreach ($stockArray as $stock) {
       try {

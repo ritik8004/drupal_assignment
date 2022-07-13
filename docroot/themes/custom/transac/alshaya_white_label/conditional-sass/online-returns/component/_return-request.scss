@@ -1,0 +1,553 @@
+.return-requests-wrapper {
+  line-height: 1;
+  font-size: 0.75rem;
+
+  @include breakpoint($desktop) {
+    font-size: 0.875rem;
+  }
+
+  .products-list-wrapper {
+    .items-table {
+      border-bottom: 1px solid $content_pagetitle_border;
+      margin-bottom: 0.625rem;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 0;
+      }
+
+      .order-item-row {
+        display: grid;
+        grid-template:
+          "a b c" auto
+          "d d d" auto
+          "e e ." / rem(37) rem(160) auto;
+        background: $online-return-detail-bg;
+        border-bottom: 1px solid $content_pagetitle_border;
+        position: relative;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        @include breakpoint($tablet) {
+          grid-template:
+            "a b c d" auto
+            "e f g h" auto / rem(37) rem(135) auto rem(110);
+        }
+
+        @include breakpoint($desktop) {
+          grid-template:
+            "a b c d" auto
+            "e f g h" auto / 5.15625rem 10.8125rem auto 12.4375rem;
+        }
+
+        .order-item-checkbox {
+          grid-area: a;
+          margin-#{$left}: 1rem;
+          position: absolute;
+          top: calc(50% - 1.3125rem);
+
+          @include breakpoint($desktop) {
+            margin-#{$left}: 1.125rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: initial;
+          }
+
+          .return_item_checkbox {
+            @include icon(checkboxempty) {
+              font-size: 1.5rem;
+              cursor: pointer;
+            }
+
+            &.is-checked {
+              @include icon(checkboxfull) {
+                color: $primary_checkbox_filled;
+              }
+            }
+          }
+        }
+
+        .order-item-detail {
+          display: flex;
+        }
+
+        .order-item-image {
+          padding: rem(24) rem(8);
+          padding-#{$left}: rem(16);
+          grid-area: b;
+
+          @include breakpoint($desktop) {
+            padding-#{$left}: 1.5625rem;
+            padding-#{$right}: rem(34);
+          }
+
+          .image-data-wrapper {
+            max-width: rem(128);
+            position: relative;
+
+            @include breakpoint($tablet) {
+              max-width: rem(114);
+            }
+
+            &.in-eligible,
+            &.big-ticket-item {
+              img {
+                opacity: 0.5;
+              }
+
+              .not-eligible-label,
+              .big-ticket-item-label {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 0.6875rem;
+                padding: 0.25rem 0.3125rem 0.1875rem;
+                width: rem(140);
+                font-family: $alshaya-bold;
+                text-align: center;
+                line-height: 0.8125rem;
+
+                @include breakpoint($tablet) {
+                  width: rem(120);
+                }
+
+                @include breakpoint($desktop) {
+                  width: rem(130);
+                }
+              }
+            }
+
+            &.in-eligible {
+              .not-eligible-label {
+                background-color: $online-return-ineligible-label-bg;
+                color: $online-return-eligibility-message-txt;
+              }
+            }
+
+            &.big-ticket-item {
+              .big-ticket-item-label {
+                background-color: $online-return-big-ticket-label-bg;
+                color: $online-return-big-ticket-label-txt;
+              }
+            }
+          }
+        }
+
+        .order__details--wrapper {
+          display: flex;
+          grid-area: c;
+          flex-direction: column;
+          word-break: break-word;
+
+          @include breakpoint($tablet) {
+            flex-direction: row;
+          }
+        }
+
+        .order__details--summary {
+          flex-basis: auto;
+          padding: rem(24);
+          padding-#{$right}: rem(8);
+          padding-bottom: 0.9375rem;
+          flex-grow: 1;
+
+          @include breakpoint($tablet) {
+            flex-basis: rem(151);
+            padding-bottom: 1.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            flex-basis: rem(254);
+            padding-#{$right}: rem(48);
+            padding-#{$left}: rem(48);
+          }
+        }
+
+        .item-price,
+        .item-total-price {
+          flex-basis: auto;
+
+          .price {
+            margin-bottom: rem(5);
+
+            .price-currency.suffix {
+              margin-right: rem(25);
+
+              @include breakpoint($tablet) {
+                margin-right: rem(7);
+              }
+
+              @include breakpoint($desktop) {
+                margin-right: rem(9);
+              }
+            }
+          }
+        }
+
+        .item-price {
+          padding: 1.5rem;
+          padding-top: 1.25rem;
+
+          @include breakpoint($tablet) {
+            padding-top: 1.5rem;
+            flex-basis: rem(120);
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$right}: rem(8);
+            padding-#{$left}: rem(32);
+            flex-basis: rem(212);
+          }
+        }
+
+        .item-total-price {
+          grid-area: d;
+          padding: 0.9375rem 1.5rem;
+          padding-bottom: 1.375rem;
+
+          @include breakpoint($tablet) {
+            padding: rem(24) rem(16);
+            flex-basis: 12.5rem;
+            word-break: break-word;
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$right}: 3.125rem;
+            padding-#{$left}: 3.125rem;
+          }
+        }
+
+        .image-data-wrapper,
+        .order__details--summary,
+        .item-price,
+        .item-total-price {
+          > div {
+            margin-bottom: 0.3125rem;
+          }
+        }
+
+        .big-ticket-wrapper {
+          grid-area: d;
+          margin-top: 0;
+          font-size: 0.75rem;
+          line-height: 1rem;
+          margin-bottom: 1.875rem;
+          color: $online-return-big-ticket-label-bg;
+          font-family: $alshaya-thin;
+
+          @include breakpoint($tablet) {
+            padding-#{$left}: 1.5rem;
+            margin-top: -2.25rem;
+            grid-area: g;
+            font-family: $alshaya-bold;
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$left}: 3.125rem;
+          }
+        }
+      }
+    }
+  }
+
+  .continue-button-wrapper,
+  .confirm-return-button-wrapper {
+    padding: 0.9375rem 0;
+    background: $online-return-request-button-bg;
+    border-bottom: 1px solid $content_pagetitle_border;
+    border-top: 1px solid $content_pagetitle_border;
+    margin-#{$left}: -0.5rem;
+    margin-#{$right}: -0.5rem;
+    margin-bottom: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 0;
+      margin-#{$right}: 0;
+      border-top: 0;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    button {
+      background: none;
+      padding: 0 0.5rem;
+      width: 100%;
+
+      @include breakpoint($tablet) {
+        width: auto;
+        margin-#{$right}: 1.5rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$right}: 0.75rem;
+      }
+
+      span {
+        background: $online-return-dark-bg;
+        color: $online-return-steps-label-txt;
+        padding: 0.6875rem 2.25rem;
+        font-size: 0.875rem;
+        line-height: 1.125rem;
+        display: block;
+        font-family: $alshaya-bold;
+        text-transform: uppercase;
+      }
+
+      &[disabled] {
+        span {
+          background: $content_pagetitle_border;
+        }
+      }
+    }
+  }
+
+  .confirm-return-button-wrapper {
+    button {
+      span {
+        padding-right: 1.25rem;
+        padding-left: 1.25rem;
+      }
+    }
+  }
+
+  .refund-details-wrapper {
+    .is-disabled {
+      .refund-detail-label {
+        background: $online-return-refund-label-inactive-bg;
+        cursor: unset;
+        color: $order_detail_td_dark_content;
+
+        .refund-detail-header {
+          &::before {
+            color: $order_detail_td_dark_content;
+          }
+        }
+      }
+    }
+
+    .refund-method-wrapper,
+    .refund-amount-wrapper,
+    .return-collection-wrapper,
+    .return-address-wrapper {
+      font-size: 0.875rem;
+      padding: 1.5625rem;
+      padding-bottom: 0.3125rem;
+
+      @include breakpoint($tablet) {
+        display: grid;
+        grid-template: "a b"/ 13rem 21rem;
+        padding-bottom: 1.5625rem;
+      }
+
+      @include breakpoint($desktop) {
+        grid-template: "a b"/ rem(320) rem(448);
+      }
+    }
+
+    div[class$="-title"] {
+      font-size: 1rem;
+      grid-area: a;
+      padding-#{$right}: 6.25rem;
+      margin-bottom: 1.5rem;
+
+      @include breakpoint($tablet) {
+        padding-#{$right}: 1.25rem;
+        margin-bottom: 0;
+      }
+
+      @include breakpoint($desktop) {
+        padding-#{$right}: 6.25rem;
+      }
+    }
+
+    .return-address-title {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    .refund-method-wrapper {
+      .method-listing-label {
+        margin-bottom: 1.5625rem;
+      }
+
+      .method-wrapper {
+        display: flex;
+        align-items: center;
+        margin-bottom: rem(24);
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .card-icon {
+          width: rem(35);
+          height: rem(22);
+
+          svg {
+            max-width: 100%;
+            max-height: 100%;
+          }
+        }
+
+        .card-detail {
+          margin-#{$left}: 1rem;
+        }
+      }
+
+      .refund-message {
+        font-size: 0.75rem;
+        line-height: 1.25rem;
+        margin-top: 1.5rem;
+        color: $online-return-refund-grey-txt;
+
+        @include breakpoint($tablet) {
+          margin-top: 0.75rem;
+        }
+      }
+    }
+
+    .return-address-details {
+      > div {
+        margin-bottom: 0.3125rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .Collapsible__contentInner {
+      line-height: 1.125rem;
+
+      > div:first-child {
+        margin-top: 0.3125rem;
+      }
+
+      > div:nth-child(2n) {
+        margin-bottom: 1.5625rem;
+      }
+    }
+
+    .return-collection-wrapper {
+      border-top: 1px solid $content_pagetitle_border;
+      padding-top: 1.875rem;
+
+      @include breakpoint($tablet) {
+        padding-top: 3.125rem;
+      }
+    }
+
+    .return-address-wrapper {
+      .return-address-desc {
+        grid-area: a;
+        margin-bottom: rem(24);
+        color: $online-return-refund-blue-txt;
+        font-size: rem(12);
+
+        @include breakpoint($tablet) {
+          margin-top: rem(24);
+          margin-bottom: 0;
+          padding-#{$right}: rem(100);
+        }
+      }
+
+      .customer-name {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+
+  .products-list-wrapper,
+  .refund-details-wrapper {
+    .select-items-label,
+    .refund-detail-label {
+      font-size: 1rem;
+      text-transform: uppercase;
+      padding: 0.875rem 2rem;
+      background: $online-return-dark-bg;
+      color: $online-return-label-txt;
+      margin-top: 1rem;
+      line-height: 1.22;
+      position: relative;
+      cursor: pointer;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 1.5rem;
+        margin-#{$left}: -0.5rem;
+        margin-#{$right}: -0.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+      }
+
+      .select-items-header,
+      .refund-detail-header {
+        @include icon(chevrondown, before) {
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          color: $online-return-label-txt;
+          #{$right}: 0.875rem;
+          font-size: 0.9rem;
+
+          html[lang=ar] & {
+            left: 2.25rem;
+          }
+        }
+      }
+
+      .items-count {
+        text-transform: capitalize;
+
+        @include breakpoint($tablet) {
+          padding-#{$left}: 1rem;
+        }
+      }
+    }
+
+    .is-open {
+      .select-items-label,
+      .refund-detail-label {
+        .select-items-header,
+        .refund-detail-header {
+          &::before {
+            transform: rotate(180deg) translate(50%, 50%);
+          }
+        }
+      }
+
+      & + .Collapsible__contentOuter {
+        overflow: unset !important;
+      }
+    }
+  }
+
+  .return-request-bottom-page-link {
+    margin-top: 1.5rem;
+    margin-#{$left}: 1.125rem;
+    font-size: 0.875rem;
+
+    a {
+      text-decoration: underline;
+      margin-#{$left}: 1.125rem;
+    }
+  }
+
+  div.errors-container {
+    margin-top: 0;
+
+    .error-message {
+      padding-top: rem(17);
+      padding-bottom: rem(17);
+      line-height: rem(18);
+
+      &::before {
+        top: rem(14);
+      }
+    }
+  }
+}

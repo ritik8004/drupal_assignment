@@ -90,7 +90,7 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
  */
 function alshaya_acm_checkout_taxonomy_term_presave(EntityInterface $entity) {
   /** @var \Drupal\taxonomy\Entity\Term $entity */
-  if ($entity->getVocabularyId() == 'payment_method') {
+  if ($entity->bundle() == 'payment_method') {
     if ($entity->get('field_payment_default')->getString() == 1) {
       /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
       $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');

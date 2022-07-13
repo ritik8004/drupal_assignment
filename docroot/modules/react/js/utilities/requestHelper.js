@@ -442,9 +442,39 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
     });
 };
 
+/**
+ * Helper function to prepare the data.
+ *
+ * @param array $filters
+ *   Array containing all filters, must contain field and value, can contain
+ *   condition_type too or all that is supported by Magento.
+ * @param string $base
+ *   Filter Base, mostly searchCriteria.
+ * @param int $group_id
+ *   Filter group id, mostly 0.
+ *
+ * @return object
+ *   Prepared data.
+ */
+const prepareFilterData = (filters, base = 'searchCriteria', groupId = 0) => {
+  const data = {};
+
+  filters.forEach((filter, index) => {
+    Object.keys(filter).forEach((key) => {
+      // Prepare string like below.
+      // searchCriteria[filter_groups][0][filters][0][field]=field
+      // This is how Magento search criteria in APIs work.
+      data[`${base}[filter_groups][${groupId}][filters][${index}][${key}]`] = filter[key];
+    });
+  });
+
+  return data;
+};
+
 export {
   callDrupalApi,
   callMagentoApi,
   getCartSettings,
   callMagentoApiSynchronous,
+  prepareFilterData,
 };

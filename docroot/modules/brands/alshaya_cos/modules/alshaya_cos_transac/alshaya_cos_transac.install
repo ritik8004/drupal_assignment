@@ -8,6 +8,16 @@
 /**
  * Implements hook_update_N().
  *
+ * Add field mappings for search api indexes.
+ */
+function alshaya_cos_transac_update_8002() {
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change widget for delivery_ways facets from checkbox
  * to widget "delivery_ways".
  */

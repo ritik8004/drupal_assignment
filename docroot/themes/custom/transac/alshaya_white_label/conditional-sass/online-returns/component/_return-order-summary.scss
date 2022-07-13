@@ -1,0 +1,106 @@
+.return-requests-wrapper {
+  .order-details-wrapper {
+    .order-summary-row {
+      display: flex;
+      background: $online-return-bg;
+      font-size: 0.75rem;
+      align-items: baseline;
+      border-bottom: 1px solid $content_pagetitle_border;
+
+      @include breakpoint($tablet) {
+        align-items: center;
+      }
+
+      @include breakpoint($desktop) {
+        font-size: 0.875rem;
+      }
+
+      .order-summary-details {
+        display: flex;
+        padding: 0;
+        flex-direction: column;
+        align-items: baseline;
+        flex-basis: 50%;
+
+        @include breakpoint($tablet) {
+          flex-direction: row;
+          align-items: center;
+          flex-basis: 29.5rem;
+        }
+      }
+
+      .order-transaction {
+        flex-basis: auto;
+        padding-bottom: 0 !important;
+
+        @include breakpoint($tablet) {
+          flex-basis: 13.25rem;
+          padding-bottom: 1rem !important;
+        }
+      }
+
+      .order-quantity {
+        flex-basis: auto;
+
+        @include breakpoint($tablet) {
+          flex-basis: 16.25rem;
+        }
+
+        .order--items {
+          line-height: normal;
+
+          @include breakpoint($only-mobile) {
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: rem(152);
+            text-overflow: ellipsis;
+          }
+        }
+      }
+
+      .order-total-column {
+        display: none;
+
+        @include breakpoint($tablet) {
+          display: block;
+          flex-basis: 16.25rem;
+        }
+
+        .price {
+          .price-currency.suffix {
+            @include breakpoint($tablet) {
+              margin-right: rem(7);
+            }
+
+            @include breakpoint($desktop) {
+              margin-right: rem(9);
+            }
+          }
+        }
+      }
+
+      .order-total-wrapper {
+        margin-bottom: 0;
+
+        > div {
+          margin-bottom: 0.3125rem;
+        }
+      }
+
+      .order-transaction,
+      .order-quantity,
+      .order-status,
+      .order-total-column {
+        padding: 1.313rem 1rem;
+
+        > div {
+          margin-bottom: 0.3125rem;
+        }
+      }
+
+      .order-status {
+        flex-basis: 11.5625rem;
+      }
+    }
+  }
+}

@@ -230,7 +230,6 @@ class AlshayaSpcController extends ControllerBase {
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
-          'global_error_message' => _alshaya_spc_global_error_message(),
           'address_fields' => _alshaya_spc_get_address_fields(),
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
@@ -346,7 +345,7 @@ class AlshayaSpcController extends ControllerBase {
 
     $spc_cnc_config = $this->config('alshaya_spc.click_n_collect');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
-    $geolocation_config = $this->config('geolocation.settings');
+    $geolocation_config = $this->config('geolocation_google_maps.settings');
     $collection_points_config = $this->config('alshaya_spc.collection_points');
 
     $cache_tags = Cache::mergeTags(
@@ -636,7 +635,6 @@ class AlshayaSpcController extends ControllerBase {
               'method' => $cncTerm->get('field_shipping_method_code')->getString(),
             ],
           ],
-          'global_error_message' => _alshaya_spc_global_error_message(),
           'cnc_stores_limit' => $spc_cnc_config->get('cnc_stores_limit'),
           'cncStoreInfoCacheTime' => $checkout_settings->get('cnc_store_info_cache_time'),
           'cnc_collection_points_enabled' => $collection_points_config->get('click_collect_collection_points_enabled'),

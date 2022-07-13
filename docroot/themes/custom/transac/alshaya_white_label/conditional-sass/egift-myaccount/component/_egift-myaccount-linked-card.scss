@@ -85,6 +85,12 @@
       font-size: 1rem;
     }
 
+    @include breakpoint($only-mobile) {
+      html[lang='ar'] & {
+        margin-top: rem(6);
+      }
+    }
+
     .price-wrapper {
       margin-#{$left}: 0.1875rem;
 

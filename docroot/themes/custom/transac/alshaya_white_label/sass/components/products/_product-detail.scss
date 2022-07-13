@@ -964,6 +964,21 @@
       }
     }
   }
+
+  .c-accordion-delivery-options {
+    .click-collect-modal-wrapper {
+      display: none;
+    }
+
+    .click-collect-modal-wrapper.click-collect-modal-wrapper-open {
+      display: block;
+    }
+
+    .ui-accordion-header,
+    .ui-accordion-content {
+      padding: 0;
+    }
+  }
 }
 
 .click-collect {
@@ -1152,6 +1167,7 @@
 
     .google-store-location {
       font-weight: bold;
+      padding: 0 rem(4);
 
       @include u-visibility(inline);
     }
@@ -1586,6 +1602,12 @@
           @include throbberLoader;
         }
       }
+    }
+  }
+
+  &.modal-wrapper-mobile {
+    @include breakpoint($only-mobile) {
+      display: block;
     }
   }
 }

@@ -641,9 +641,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
         default:
           if (isset($custom_fields[$attribute_code])) {
-            $magento_address['extension'][$attribute_code] = isset($address[$field_code])
-              ? $address[$field_code]
-              : '';
+            $magento_address['extension'][$attribute_code] = $address[$field_code] ?? '';
           }
           elseif (isset($address[$field_code])) {
             $magento_address[$attribute_code] = $address[$field_code];
@@ -682,7 +680,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Magento address array with empty values.
    */
   public function getAddressStructureWithEmptyValues($empty_value = NULL) {
-    $empty_value = isset($empty_value) ? $empty_value : self::INVISIBLE_CHARACTER;
+    $empty_value = $empty_value ?? self::INVISIBLE_CHARACTER;
 
     $magento_address = [];
 
@@ -946,15 +944,11 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
         // We want the fields to be sorted based on design needs and not
         // change if someone changes in Magento.
-        $form_item['sort_order'] = isset($sort_order[$mapping[$form_item['attribute_code']]])
-          ? $sort_order[$mapping[$form_item['attribute_code']]]
-          : $form_item['sort_order'] + 1000;
+        $form_item['sort_order'] = $sort_order[$mapping[$form_item['attribute_code']]] ?? $form_item['sort_order'] + 1000;
 
         // Required field configuration is not done properly as of today in
         // Magento and it will require code changes so we do workaround here.
-        $form_item['required'] = isset($required[$mapping[$form_item['attribute_code']]])
-          ? $required[$mapping[$form_item['attribute_code']]]
-          : $form_item['required'];
+        $form_item['required'] = $required[$mapping[$form_item['attribute_code']]] ?? $form_item['required'];
 
         $magento_form[$form_item['attribute_code']] = $form_item;
         unset($magento_form[$index]);

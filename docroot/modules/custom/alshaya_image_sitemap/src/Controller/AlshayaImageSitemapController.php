@@ -127,11 +127,11 @@ class AlshayaImageSitemapController extends ControllerBase {
    *
    * @param array $nids
    *   Array of nids.
-   * @codingStandardsIgnoreStart
+   * phpcs:disable
    */
   public static function batchStartCallback(array $nids) {
     \Drupal::service('alshaya_image_sitemap.generator')->process($nids);
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
   }
 
   /**
@@ -143,7 +143,7 @@ class AlshayaImageSitemapController extends ControllerBase {
    *   Result array.
    * @param array $operations
    *   Operation array.
-   * @codingStandardsIgnoreStart
+   * phpcs:disable
    */
   public static function batchFinishedCallback($success, array $results = [], array $operations = []) {
     if ($success) {
@@ -151,7 +151,7 @@ class AlshayaImageSitemapController extends ControllerBase {
         ->sitemapGenerateFinished();
       $request_time = \Drupal::time()->getRequestTime();
       \Drupal::state()->set('alshaya_image_sitemap.last_generated', $request_time);
-      // @codingStandardsIgnoreEnd
+      // phpcs:enable
       \Drupal::messenger()->addMessage(t('Image Sitemap Generated Successfully.'), 'success');
     }
     else {

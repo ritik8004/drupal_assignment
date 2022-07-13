@@ -15,7 +15,6 @@ $databases['default']['default']['init_commands']['isolation'] = "SET SESSION tx
 
 $ah_env = getenv('AH_SITE_ENVIRONMENT');
 if ($ah_env && $ah_env !== 'ide') {
-  // @codingStandardsIgnoreStart
+  // phpcs:ignore
   acquia_hosting_db_choose_active($conf['acquia_hosting_site_info']['db'], 'default', $databases, $conf);
-  // @codingStandardsIgnoreEnd
 }

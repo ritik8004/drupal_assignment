@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 /**
  * List all known Magento environments keyed by environment machine name.
@@ -125,6 +125,36 @@ $magentos = [
       'store_id' => ['en' => 40, 'ar' => 37],
     ],
   ],
+  'cos_test' => [
+    'url' => 'https://integration2-hohc4oi-vlvasu2xupli4.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '4rjkd4e17nu73kpaw9fqpb777vs0sdjr',
+      'consumer_secret' => 'nr4y6ba1xp0uzwpo5c6kpkz5ofsqck91',
+      'access_token' => '0vwpu1xq8ctwxr73mtajoehj4m918mm5',
+      'access_token_secret' => '1vm5ur46psiuecsu07dx4n7qqy29566q',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
+    ],
+  ],
   'cos_uat' => [
     'url' => 'https://cos-uat.store.alshaya.com',
     'magento_secrets' => [
@@ -210,6 +240,7 @@ $magentos = [
   ],
   'tbs_test' => [
     'url' => 'https://tbs-qa.store.alshaya.com',
+    'algolia_env' => 'tbs_qa',
     'magento_secrets' => [
       'consumer_key' => 'jgfegi5yv3h42vluf00i498g58x55s0l',
       'consumer_secret' => 'ymjszfarzko8d4b3mg3achu0o2uqrnmb',
@@ -587,6 +618,33 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
+  'hm_oms' => [
+    'url' => 'https://qa-oms-otewqla-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
+      'consumer_secret' => '7krmuncsf3c1rabxqhy5rfnpdvubocmi',
+      'access_token' => 'wuxd59ghyt7qwprhd86gs6cd3t1y6cyn',
+      'access_token_secret' => 'agpwx3guekmh6843nh5oaxonfjxy00ls',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 2],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
   'hm_giftcard' => [
     'url' => 'https://egift-ox2givq-zbrr3sobrsb3o.eu.magentosite.cloud',
     'pims_base_url' => 'http://34.249.182.88:3010',
@@ -666,6 +724,33 @@ $magentos = [
       'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
       'access_token' => 'ncevhsnmxu35fln4fq3c009lo09frfgm',
       'access_token_secret' => 'dm4h99kjd387rv29ivthpbatx7dn5g1b',
+    ],
+  ],
+  'hm_hello_member' => [
+    'url' => 'https://hello-member-5imjfny-zbrr3sobrsb3o.eu-3.magentosite.cloud/',
+    'magento_secrets' => [
+      'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
+      'consumer_secret' => '7krmuncsf3c1rabxqhy5rfnpdvubocmi',
+      'access_token' => 'wuxd59ghyt7qwprhd86gs6cd3t1y6cyn',
+      'access_token_secret' => 'agpwx3guekmh6843nh5oaxonfjxy00ls',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 2],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
   'hm_uat' => [
@@ -1195,33 +1280,6 @@ $magentos = [
       'store_id' => ['en' => 1, 'ar' => 19],
     ],
   ],
-  'fl_apc' => [
-    'url' => 'http://apc-7vc7xgy-z2fi6fmoo7n4a.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'f0er5posi7oc9e2p96195mb20e2hh05q',
-      'consumer_secret' => 'f0h2pwyren0ooppm6ix50705l5iouekj',
-      'access_token' => 'tkkes5bu2l9qn8y3hbaex7x6xbcsfvxr',
-      'access_token_secret' => 'p8e71whrsnx4pdim61wyush1qp5tvqqs',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'bh' => [
-      'store_id' => ['en' => 10, 'ar' => 9],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-  ],
   'fl_uat' => [
     'url' => 'https://fl-uat2.store.alshaya.com',
     'magento_secrets' => [
@@ -1544,6 +1602,9 @@ $magentos = [
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'xb' => [
+      'store_id' => ['en' => 15, 'ar' => 16],
     ],
     'sa' => [
       'store_id' => ['en' => 2, 'ar' => 3],
@@ -1995,6 +2056,12 @@ $magentos = [
       'magento_lang_prefix' => [
         'en' => 'jor_en',
         'ar' => 'jor_ar',
+      ],
+    ],
+    'xb' => [
+      'magento_lang_prefix' => [
+        'en' => 'row_en',
+        'ar' => 'row_ar',
       ],
     ],
   ],

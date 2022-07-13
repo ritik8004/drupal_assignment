@@ -5,12 +5,12 @@
       {% if link.lhn == 1 %}
         <li>
           {% set depth = depth_offset == 1 ? link.depth - 1 : link.depth %}
-          {% set class = (link.id == current_term or link.id == current_term_parent_id) ? 'active' : '' %}
+          {% set class = (link.id == current_term or link.id == current_term_parent_id or link.path == path) ? 'active' : '' %}
           {% if link.clickable == 0 %}
             {# If not clickable link. #}
             <span class="lhn-{{ depth }} {{ class }}">{{ link.label }}</span>
           {% else %}
-            <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': link.id}) }}" class="lhn-{{ depth }} {{ class }}">{{ link.label }}</a>
+            <a href="{{ link.path }}" class="lhn-{{ depth }} {{ class }}">{{ link.label }}</a>
           {% endif %}
           {% if link.child %}
             {% include "@alshaya_acm_product_category/alshaya-lhn.html.twig" with {'lhn_cat_tree': link.child, 'current_term': current_term, 'current_term_parent_id': current_term_parent_id} %}

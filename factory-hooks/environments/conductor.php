@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 /**
  * List all known Conductor environments keyed by environment machine name.
@@ -227,10 +227,30 @@ $conductors = [
     'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
     'site_id' => 135,
   ],
-  'hmkw_dev2' => [
-    'hmac_id' => 'bb8596447880451fa689e65e53506429',
-    'hmac_secret' => 'NjE4NDYzYmMtNWRmNy00',
-    'site_id' => 109,
+  'hmkw_oms' => [
+    'hmac_id' => 'f6f1fae170634642b9b43485a545784c',
+    'hmac_secret' => 'OWI3ZDBlZDAtNzk5Zi00',
+    'site_id' => 568,
+  ],
+  'hmsa_oms' => [
+    'hmac_id' => '037a4a5c2ba14c1d98337a4b67434cf8',
+    'hmac_secret' => 'OGZhZDRhZWYtZGYzOC00',
+    'site_id' => 569,
+  ],
+  'hmae_oms' => [
+    'hmac_id' => 'dae4c72ba8024aa58c7c105440a446ff',
+    'hmac_secret' => 'NDEzYWJiNDUtOWIwOC00',
+    'site_id' => 570,
+  ],
+  'hmeg_oms' => [
+    'hmac_id' => 'd32f8c38a5b84ed4a2dd5cc76b715c94',
+    'hmac_secret' => 'ZDdlNTU1YmEtMGY5MS00',
+    'site_id' => 571,
+  ],
+  'hmqa_oms' => [
+    'hmac_id' => '57136dbbd8664fef94dc569ecd52e877',
+    'hmac_secret' => 'OWNjOTA5OTctYWM2ZC00',
+    'site_id' => 573,
   ],
   'hmkw_dev3' => [
     'hmac_id' => '1b56d617c277492597e27391f2752aed',
@@ -368,6 +388,11 @@ $conductors = [
     'hmac_id' => 'ec5997a86c504abb882545513877c234',
     'hmac_secret' => 'ODQ1MWZlNjQtNTczYS00',
     'site_id' => 203,
+  ],
+  'pbkw_dev3' => [
+    'hmac_id' => '1dd964a4d2bb43d3829c3c819701eb26',
+    'hmac_secret' => 'NWQ4ZGQwMWItYTA1Mi00',
+    'site_id' => 566,
   ],
   'pbkw_qa' => [
     'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
@@ -812,6 +837,11 @@ $conductors = [
     'hmac_secret' => 'MTU5MWJiODYtNTEwZS00',
     'site_id' => 229,
   ],
+  'flkw_dev3' => [
+    'hmac_id' => '8f0e772d00ee42aba0c67e40c469d450',
+    'hmac_secret' => 'NzEwZDVhZTQtMGVlOC00',
+    'site_id' => 567,
+  ],
   'flkw_qa' => [
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
     'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
@@ -1110,6 +1140,11 @@ $conductors = [
     'hmac_id' => '19ca57995e874f5ca12d4c7d2903b146',
     'hmac_secret' => 'OTk1MDI2NWEtNmEzMC00',
     'site_id' => 339,
+  ],
+  'aeoxb_dev3' => [
+    'hmac_id' => '880da77391f0495db0fde6c5ba223ed4',
+    'hmac_secret' => 'YzI3YzlmOTgtMDA2OC00',
+    'site_id' => 574,
   ],
   'aeosa_dev' => [
     'hmac_id' => '8d434c6d92f649d085e519e59b820628',

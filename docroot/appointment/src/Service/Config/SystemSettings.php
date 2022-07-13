@@ -87,7 +87,7 @@ class SystemSettings {
    *   Site code if available.
    */
   public function getSiteCode() {
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     global $host_site_code, $_acsf_site_name;
 
     // Get host_site_code or acsf_site_name based on environment.

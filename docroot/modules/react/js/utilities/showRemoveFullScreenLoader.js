@@ -1,5 +1,5 @@
 /**
- * Place ajax fulll screen loader.
+ * Place ajax full screen loader.
  */
 export const showFullScreenLoader = () => {
   const loaderDivExisting = document.getElementsByClassName('ajax-progress-fullscreen');

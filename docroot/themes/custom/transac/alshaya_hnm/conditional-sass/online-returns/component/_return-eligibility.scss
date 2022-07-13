@@ -1,0 +1,29 @@
+.user__order--detail {
+  .order-item-row.online-returns-eligibility-message {
+    #online-returns-eligibility-window {
+      .eligibility-window-container {
+        font-family: $hnm-demibold;
+      }
+
+      .return-message {
+        span {
+          &:nth-child(2) {
+            font-family: $hnm-regular;
+          }
+        }
+      }
+
+      .return-window-closed {
+        font-family: $hnm-demibold;
+      }
+
+      .find-stores {
+        font-family: $hnm-regular;
+      }
+
+      .return-items-button {
+        font-family: $hnm-regular;
+      }
+    }
+  }
+}

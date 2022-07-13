@@ -44,7 +44,7 @@ class AlshayaResetFacetsProcessor extends ResetFacetsProcessor {
     $url = Url::fromUserInput($uri);
     $url->setOptions(['query' => $query_params]);
 
-    // @codingStandardsIgnoreLine
+    // phpcs:ignore
     $item = (new Link($this->t($conf['settings']['link_text']), $url))->toRenderable();
     array_unshift($build['#items'], $item);
     return $build;

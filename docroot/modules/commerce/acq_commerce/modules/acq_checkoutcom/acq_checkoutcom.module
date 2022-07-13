@@ -49,7 +49,7 @@ function template_preprocess_payment_card_teaser(array &$variables) {
   $type = ucfirst(strtolower($variables['card_info']['paymentMethod']));
 
   // Since card type is dynamic - VISA / Master / etc. we use t() with variable.
-  // @codingStandardsIgnoreLine
+  // phpcs:ignore
   $type = (string) t($type);
 
   $variables['card_info']['card_number_txt'] = t('@card_type card ending in @ending', [

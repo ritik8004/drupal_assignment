@@ -34,11 +34,11 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
-          echo "::set-output name=composer::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs)"
-          echo "::set-output name=docroot::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs)"
-          echo "::set-output name=js::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs)"
-          echo "::set-output name=scss::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs)"
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
+          echo "::set-output name=composer::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs)"
+          echo "::set-output name=docroot::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs)"
+          echo "::set-output name=js::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs)"
+          echo "::set-output name=scss::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs)"
       - name: Check if there are changes.
         run: |
           echo "No changes found in PR. This could also mean your branch is not updated, please rebase."
@@ -102,8 +102,7 @@ jobs:
       - name: Run Composer install
         run: |
           composer self-update
-          composer self-update --1
-          composer global require hirak/prestissimo
+          composer self-update --2
           composer validate --no-check-all --ansi
           composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
@@ -111,9 +110,6 @@ jobs:
         run: |
           ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
           ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
-
-      - name: Build all middleware
-        run: bash ${GITHUB_WORKSPACE}/blt/scripts/middleware-build.sh "${GITHUB_WORKSPACE}"
 
       - name: Cache dependencies installed with Composer
         id: composer-cache

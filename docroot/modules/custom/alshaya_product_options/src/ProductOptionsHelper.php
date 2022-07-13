@@ -13,6 +13,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Class Product Options Helper.
@@ -193,6 +194,65 @@ class ProductOptionsHelper {
     // On prod we do sync of all options only.
     $this->productOptionsManager->deleteUnavailableOptions($this->syncedOptions);
     $this->logger->debug('Sync for all product attribute options finished.');
+    // Sync the missed attributes.
+    $this->updateMissingAttributes();
+  }
+
+  /**
+   * Get the missing attributes during the product sync, updating those now.
+   */
+  private function updateMissingAttributes() {
+    // Fetching the missed terms during the product sync from the custom table.
+    $query = $this->connection->select('product_attribute_options_missing', 'pm');
+    $query->fields(
+      'pm',
+      ['attribute_code', 'option_id', 'sku', 'field_key']
+    );
+    $results = $query->execute()->fetchAll();
+
+    foreach ($results as $result) {
+      $sku_id = $result->sku;
+      $field_key = $result->field_key;
+      $attribute_code = $result->attribute_code;
+      $option_id = $result->option_id;
+      // Check the term again exists after the options sync.
+      // If present we attach it to sku.
+      if ($term = $this->productOptionsManager->loadProductOptionByOptionId($attribute_code, $option_id, NULL)) {
+        if ($sku = SKU::loadFromSku($sku_id)) {
+          foreach ($sku->getTranslationLanguages() as $language) {
+            $sku = $sku->getTranslation($language->getId());
+            $attribute_values = $sku->{$field_key}->getValue() ? $sku->{$field_key}->getValue() : [];
+            if ($term->hasTranslation($language->getId())) {
+              $term = $term->getTranslation($language->getId());
+            }
+            $attribute_values[] = $term->getName();
+            $sku->{$field_key}->setValue($attribute_values);
+            $sku->save();
+          }
+        }
+        // Delete custom table entry, when the sku is updated with the term.
+        $this->deleteUpdatedRow($attribute_code, $option_id, $sku_id);
+        // Logging the process.
+        $this->logger->notice('Term found for option_id: @option_id having attribute_code @attribute_code and SKU field is updated for @sku_id', [
+          '@option_id' => $option_id,
+          '@sku_id' => $sku_id,
+          '@attribute_code' => $attribute_code,
+        ]);
+        $this->logger->notice('Sync for all product attribute options finished.');
+      }
+    }
+
+  }
+
+  /**
+   * Delete the updated row.
+   */
+  private function deleteUpdatedRow($attribute_code, $option_id, $sku) {
+    $query = $this->connection->delete('product_attribute_options_missing');
+    $query->condition('attribute_code', $attribute_code);
+    $query->condition('option_id', $option_id);
+    $query->condition('sku', $sku);
+    $query->execute();
   }
 
   /**

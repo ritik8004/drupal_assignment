@@ -63,7 +63,7 @@ export default class PdpAsset extends React.Component {
               src={imageUrl}
               alt={alt}
               title={title}
-              loading="lazy"
+              loading={index <= 1 ? 'eager' : 'lazy'}
             />
             <div className="magazine-image-zoom-placeholder" style={{ backgroundImage: `url(${imageZoomUrl})` }} />
           </div>

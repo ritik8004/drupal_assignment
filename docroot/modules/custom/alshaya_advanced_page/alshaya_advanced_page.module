@@ -457,14 +457,14 @@ function alshaya_advanced_page_node_view(array &$build, EntityInterface $entity,
 
   $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
 
-  if ($request->getPathInfo() == $term->url()) {
+  if ($request->getPathInfo() == $term->toUrl()->toString()) {
     // We are already on term alias, no redirects required.
     return;
   }
 
   // When trying to access advanced page (department page) directly via
   // node alias we should redirect it to taxonomy term alias.
-  $response = new RedirectResponse($term->url(), 301);
+  $response = new RedirectResponse($term->toUrl()->toString(), 301);
   $response->send();
   exit;
 }

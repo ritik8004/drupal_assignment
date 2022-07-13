@@ -623,7 +623,12 @@ $spc-cart-free-gifts-link: $PB_grey_one;
 $plp-primary-cta-hover-bg: $PB_black_one;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
 $plp-quick-view-product-size-active-bg: $_black_two;
+$plp-quick-view-product-size-border: $_black_two;
 $plp-quick-view-product-size-border-hover: $_black_two;
+$plp-quick-view-product-size-text: $_black_two;
+
+// PLP Quick view drawer.
+$plp-quick-view-product-size-text-disabled: $white;
 
 // Sofa and sectional.
 $sofa-sectional-title: $_black_two;

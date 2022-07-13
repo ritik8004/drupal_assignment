@@ -5,3 +5,8 @@ rcs_product_images:
   dependencies:
     - core/jquery
     - rcs_placeholders/helpers
+
+media_images:
+  css:
+    theme:
+      css/alshaya_assets_hover.css: {}

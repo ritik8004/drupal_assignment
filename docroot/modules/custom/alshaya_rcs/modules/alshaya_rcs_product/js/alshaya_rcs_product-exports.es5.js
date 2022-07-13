@@ -1,32 +1,4 @@
 /**
- * Check if product is available for home delivery.
- *
- * @param {object} entity
- *   The product entity.
- *
- * @returns {Boolean}
- *   Returns true if the product is available for home delivery else false.
- *
- * @see alshaya_acm_product_available_home_delivery().
- */
-function isProductAvailableForHomeDelivery(entity) {
-  return isProductBuyable(entity);
-}
-
-/**
- * Check if the provided product is available for Click and Collect.
- *
- * @param entity
- *   The entity.
- *
- * @return {Boolean}
- *   True if CNC is available, otherwise false.
- */
-function isProductAvailableForClickAndCollect(entity) {
-  return window.commerceBackend.isProductAvailableForClickAndCollect(entity);
-}
-
-/**
  * Check if the product is buyable.
  *
  * @param {object} entity
@@ -37,6 +9,35 @@ function isProductAvailableForClickAndCollect(entity) {
  */
 function isProductBuyable(entity) {
   return drupalSettings.alshayaRcs.isAllProductsBuyable || parseInt(entity.is_buyable, 10);
+}
+
+/**
+ * Check if the product is in stock.
+ *
+ * @param {object} entity
+ *   The product entity.
+ *
+ * @returns {Boolean}
+ *   True if product is in stock, else false.
+ */
+function isProductInStock(entity) {
+  if (entity.stock_status === 'OUT_OF_STOCK') {
+    return false;
+  }
+
+  // @todo Check for free gifts when checking the variants.
+  // For configurable product, if all variants are OOS, then we consider the
+  // product to be OOS.
+  if (entity.type_id === 'configurable') {
+    const isAnyVariantInStock = entity.variants.some((variant) =>
+      variant.product.stock_status === 'IN_STOCK'
+    );
+    if (!isAnyVariantInStock) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -224,7 +225,7 @@ function getPdpSwatchImageUrl(product, childSku) {
  * @param {object} configurableOptions
  *   Configurable options of the product.
  *
- * @returns {object}
+ * @returns {Array}
  *   The configurable options minus the unavailable values.
  */
 function disableUnavailableOptions(sku, configurableOptions) {
@@ -232,9 +233,9 @@ function disableUnavailableOptions(sku, configurableOptions) {
   // Clone this so as to not modify the original object.
   configurableOptionsClone = JSON.parse(JSON.stringify(configurableOptions));
   configurableOptionsClone.forEach(function eachOption(option) {
-    option.values.forEach(function eachValue(value, index) {
-      if (typeof combinations.attribute_sku[option.attribute_code][value.value_index] === 'undefined') {
-        option.values.splice(index, 1);
+    option.values = option.values.filter(function eachValue(value) {
+      if (Drupal.hasValue(combinations.attribute_sku[option.attribute_code][value.value_index])) {
+        return true;
       }
     });
   });
@@ -290,23 +291,6 @@ exports.render = function render(
       }
 
       const deliveryOptions = {};
-      const cncEnabled = isProductAvailableForClickAndCollect(entity);
-      if (cncEnabled) {
-        deliveryOptions.cnc = {
-          state: cncEnabled ? 'enabled' : 'disabled',
-            title: drupalSettings.alshaya_click_collect.title,
-            subtitle: (cncEnabled === true)
-            ? drupalSettings.alshaya_click_collect.subtitle.enabled
-            : drupalSettings.alshaya_click_collect.subtitle.disabled,
-            sku: entity.sku,
-            sku_clean: window.commerceBackend.cleanCssIdentifier(entity.sku),
-            sku_type: entity.type_id,
-            help_text: drupalSettings.alshaya_click_collect.help_text,
-            available_at_title: '',
-            select_option_text: drupalSettings.alshaya_click_collect.select_option_text,
-            store_finder_form: drupalSettings.alshaya_click_collect.store_finder_form,
-        };
-      }
 
       if (drupalSettings.expressDelivery.enabled) {
         // Express delivery options.
@@ -358,37 +342,49 @@ exports.render = function render(
       break;
 
     case 'classic-gallery':
+    case 'magazine-gallery':
       let mediaCollection = {
         gallery: [],
         zoom: [],
         thumbnails: [],
       };
 
-      switch (drupalSettings.alshayaRcs.useParentImages) {
-        case 'never':
-          // Get the images from the variants.
-          entity.variants.forEach(function (variant) {
-            // Only fetch media for the selected variant.
-            if (variant.product.sku !== params.sku) {
-              return;
-            }
-            variant.product.media.forEach(function (variantMedia) {
-              mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
-                type: 'image',
-                thumburl: variantMedia.thumbnails,
-                mediumurl: variantMedia.medium,
-                zoomurl: variantMedia.zoom,
-                fullurl: variantMedia.url,
-              });
+      if (entity.type_id === 'configurable') {
+        // Fetch the media for the gallery sku.
+        entity.variants.every(function (variant) {
+          if (variant.product.sku !== params.skuForGallery) {
+            // Continue with the loop.
+            return true;
+          }
+          variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia, i) {
+            mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+              index: i,
+              type: 'image',
+              alt: entity.name,
+              title: entity.name,
+              thumburl: variantMedia.thumbnails,
+              mediumurl: variantMedia.medium,
+              zoomurl: variantMedia.zoom,
+              fullurl: variantMedia.url,
+              last: (i + 1 === length) ? 'last' : '',
             });
-            // Break from the loop.
-            return false;
           });
-          break;
-
-        default:
-          // @todo Add default case when working on other brands.
-          break;
+        });
+      }
+      else {
+        entity.media.forEach(function setEntityThumbnails(entityMedia, i) {
+          mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+            index: i,
+            type: 'image',
+            alt: entity.name,
+            title: entity.name,
+            thumburl: entityMedia.thumbnails,
+            mediumurl: entityMedia.medium,
+            zoomurl: entityMedia.zoom,
+            fullurl: entityMedia.url,
+            last: (i + 1 === length) ? 'last' : '',
+          });
+        });
       }
 
       // If no media, return;
@@ -398,6 +394,7 @@ exports.render = function render(
       }
 
       const data = {
+        description: entity.description.html,
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
@@ -409,9 +406,14 @@ exports.render = function render(
         thumbnails: mediaCollection.thumbnails,
         lazy_load_placeholder: drupalSettings.alshayaRcs.lazyLoadPlaceholder,
         pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
+        skuForGallery: params.skuForGallery,
       }
 
-      html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      if (placeholder === 'classic-gallery') {
+        html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      } else {
+        html += handlebarsRenderer.render('gallery.product.product_gallery_magazine', data);
+      }
       break;
 
     case 'product-labels':
@@ -508,9 +510,9 @@ exports.computePhFilters = function (input, filter) {
       value = input.sku;
       break;
 
-      case 'sku-clean':
-        value = window.commerceBackend.cleanCssIdentifier(input.sku);
-        break;
+    case 'sku-clean':
+      value = Drupal.cleanCssIdentifier(input.sku);
+      break;
 
     case 'sku-type':
       value = input.type_id;
@@ -532,155 +534,100 @@ exports.computePhFilters = function (input, filter) {
 
       if (!isProductBuyable(input)) {
         // Just show the not buyable text and don't show the form.
-        value = jQuery('.rcs-templates--not-buyable-product').html();
+        data = {
+          not_buyable_message: drupalSettings.alshayaRcs.not_buyable_message,
+          not_buyable_help_text: drupalSettings.alshayaRcs.not_buyable_help_text,
+        };
+        value = handlebarsRenderer.render(`product.not_buyable_product`, data);
         break;
       }
 
-      const skuBaseForm = jQuery('.rcs-templates--sku-base-form').clone();
-      skuBaseForm.find('.sku-base-form-template').removeClass('sku-base-form-template').addClass('sku-base-form');
+      if (!isProductInStock(input)) {
+        value = handlebarsRenderer.render(`product.sku_base_form_oos`, {text: Drupal.t('Out of stock')});
+        break;
+      }
+
+      data.sku = input.sku;
+      data.sku_clean = Drupal.cleanCssIdentifier(input.sku);
+      data.add_to_cart_text = Drupal.t('add to cart');
+      data.sku_type = input.type_id;
 
       if (drupalSettings.alshayaRcs.showQuantity) {
-        // @todo Check for how to fetch the max sale quantity.
         const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
-        const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
-        // Remove the quantity filter.
-        quantityDroprown.html('');
-
+        const quantityValues = [];
         for (let i = 1; i <= quantity; i++) {
-          if (i === 1) {
-            quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
-            continue;
-          }
-          quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
+          quantityValues.push(i);
         }
-        jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
-      }
-      else {
-        jQuery('.js-form-item-quantity', skuBaseForm).remove();
+        data.quantity_dropdown = quantityValues;
       }
 
-
-      // This wrapper will be removed after processing.
-      const tempDivWrapper = jQuery('<div>');
       let configurableOptions = input.configurable_options;
 
       if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
-        const sizeGuide = jQuery('.rcs-templates--size-guide').clone();
-        let sizeGuideAttributes = [];
-        if (sizeGuide.length) {
-          sizeGuideAttributes = sizeGuide.attr('data-attributes');
-          sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
-        }
-
         const hiddenFormAttributes = (typeof drupalSettings.hidden_form_attributes !== 'undefined')
           ? drupalSettings.hidden_form_attributes
           : [];
 
         const availableOptions = disableUnavailableOptions(input.sku, configurableOptions);
+        let processedOptions = [];
 
         availableOptions.forEach((option) => {
-          // Get the field wrapper div.
-          const optionsListWrapper = jQuery('.rcs-templates--form_element_select').clone().children();
-          // The list containing the options.
-          const configurableOptionsList = jQuery('<select></select>');
           // Get the value to be used in HTML attributes.
           const formattedAttributeCode = option.attribute_code.replaceAll('_', '-');
-
-          configurableOptionsList.attr({
-            'data-configurable-code': option.attribute_code,
-            // @todo: Find out the correct label for color.
-            'data-default-title': option.label,
-            // @todo: Find out the correct label for color.
-            'data-selected-title': option.label,
-            'data-drupal-selector': `edit-configurables-${formattedAttributeCode}`,
-            id: `edit-configurables-${formattedAttributeCode}`,
-            class: 'form-select required valid',
-            name: `configurables[${option.attribute_code}]`,
-            'aria-require': true,
-            'aria-invalid': false,
-          });
-
           // Check if the attribute is a swatch attribute.
-          let optionIsSwatch = false;
-          if (drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code)) {
-            optionIsSwatch = true;
-            configurableOptionsList.addClass('form-item-configurable-swatch');
-            optionsListWrapper.addClass('configurable-swatch');
-          }
-          else {
-            configurableOptionsList.addClass('form-item-configurable-select');
-            optionsListWrapper.addClass('configurable-select');
-          }
-
-          // Add a disabled option which will be used as the label for the option.
-          let selectOption = jQuery('<option></option>');
-          let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
-          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(text);
-          configurableOptionsList.append(selectOption);
-
+          const isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
+          let dataDefaultTitle = option.label;
+          let dataTitle = null;
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
 
-          if (Drupal.hasValue(configurableColorDetails) && optionIsSwatch){
-            configurableOptionsList.attr({
-              'data-default-title': Drupal.t('Color'),
-              'title': Drupal.t('Color'),
-            });
+          if (Drupal.hasValue(configurableColorDetails) && isOptionSwatch){
+            dataDefaultTitle = Drupal.t('Color');
+            dataTitle = Drupal.t('Color');
           }
 
+          const selectOptions = [];
           // Add the option values.
           option.values.forEach((value) => {
-            selectOption = jQuery('<option></option>');
             const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
-            selectOption.attr({value: value.value_index}).text(label);
-            configurableOptionsList.append(selectOption);
+            let selectOption = { value: value.value_index, text: label };
 
-            if (optionIsSwatch) {
+            if (isOptionSwatch) {
               const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
               // If configurableColorDetails has value, then we process the
               // swatch data in
               // Drupal.alshaya_color_images_generate_swatch_markup().
               if (childSku !== null && !Drupal.hasValue(configurableColorDetails)) {
-                selectOption.attr({'swatch-image': getPdpSwatchImageUrl(input, childSku)});
+                selectOption['swatch-image'] = getPdpSwatchImageUrl(input, childSku);
               }
             }
+            selectOptions.push(selectOption);
           });
 
-          if (sizeGuideAttributes.includes(option.attribute_code)) {
-            const sizeGuideLink = sizeGuide.children();
-            const sizeGuideWrapper = jQuery('<div>');
-            sizeGuideWrapper.addClass('size-guide-form-and-link-wrapper');
-            sizeGuideWrapper.append(sizeGuideLink);
-            sizeGuideWrapper.append(optionsListWrapper);
-            // Append to the main wrapper.
-            tempDivWrapper.append(sizeGuideWrapper);
-          }
-          else {
-            // Append to the main wrapper.
-            tempDivWrapper.append(optionsListWrapper);
-          }
+          const configurableOption = ({
+            data_configurable_code: option.attribute_code,
+            data_default_title: dataDefaultTitle,
+            default_title: dataTitle,
+            data_selected_title: option.label,
+            data_drupal_selector: `edit-configurables-${formattedAttributeCode}`,
+            id: `edit-configurables-${formattedAttributeCode}`,
+            class: isOptionSwatch ? 'form-item-configurable-swatch' : 'form-item-configurable-select',
+            wrapperClass: isOptionSwatch ? 'configurable-swatch' : 'configurable-select',
+            name: `configurables[${option.attribute_code}]`,
+            aria_require: true,
+            aria_invalid: false,
+            select_option_label: Drupal.t(`Select @attr`, { '@attr': option.attribute_code }),
+            select_options: selectOptions,
+            hidden: hiddenFormAttributes.includes(option.attribute_code),
+            attribute_has_size_guide: drupalSettings.alshayaRcs.sizeGuide.attributes.includes(option.attribute_code),
+          });
 
-          optionsListWrapper.append(configurableOptionsList);
-          // Replace the placeholder class name.
-          optionsListWrapper.attr('class', optionsListWrapper[0].className.replaceAll('ATTRIBUTENAME', formattedAttributeCode));
-          // Hide field if supposed to be hidden.
-          if (hiddenFormAttributes.includes(option.attribute_code)) {
-            optionsListWrapper.addClass('hidden');
-          }
+          processedOptions.push(configurableOption);
         });
-
+        data.size_guide_link = drupalSettings.alshayaRcs.sizeGuide.link;
         // Add the configurable options to the form.
-        jQuery('#configurable_ajax', skuBaseForm).append(tempDivWrapper.children());
+        data.configurable_options = processedOptions;
       }
-
-      let finalHtml = skuBaseForm.html();
-      rcsPhReplaceEntityPh(finalHtml, 'product_add_to_cart', input, drupalSettings.path.currentLanguage)
-        .forEach(function eachReplacement(r) {
-          const fieldPh = r[0];
-          const entityFieldValue = r[1];
-          finalHtml = globalThis.rcsReplaceAll(finalHtml, fieldPh, entityFieldValue);
-        });
-
-      value = finalHtml;
+      value = handlebarsRenderer.render(`product.sku_base_form`, data);
       break;
 
     case 'gtm-price':
@@ -713,14 +660,13 @@ exports.computePhFilters = function (input, filter) {
 
     case 'brand_logo':
       if (input.brand_logo_data.url !== null) {
-        const image = jQuery('img');
-        image.attr({
-          src: input.brand_logo_data.url,
-          alt: input.brand_logo_data.alt,
-          title: input.brand_logo_data.title,
-        });
-        value = jQuery('.rcs-templates--brand_logo').clone().append(image).html();
+        data = {
+          url : input.brand_logo_data.url,
+          alt : input.brand_logo_data.alt,
+          title : input.brand_logo_data.title,
+        };
       }
+      value = handlebarsRenderer.render(`attribute.brand.logo`, data);
 
       break;
 
@@ -787,6 +733,11 @@ exports.computePhFilters = function (input, filter) {
 
       // Render handlebars plugin.
       value = handlebarsRenderer.render(`product.${filter}`, data);
+      break;
+
+    case 'price_block_identifier':
+      const cleanSku = Drupal.cleanCssIdentifier(input.sku);
+      value = `price-block-${cleanSku}`;
       break;
 
     default:

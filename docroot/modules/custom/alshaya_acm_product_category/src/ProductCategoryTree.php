@@ -19,6 +19,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class Product Category Tree.
@@ -26,6 +27,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 class ProductCategoryTree implements ProductCategoryTreeInterface {
 
   use LoggerChannelTrait;
+  use StringTranslationTrait;
 
   const CACHE_BIN = 'alshaya';
 
@@ -246,12 +248,21 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Processed term data.
    */
   protected function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
+    // If we are here, it means we are going to load full category tree.
+    // For many brands we have huge number of categories, let's increase the
+    // memory limit to ensure we have enough memory to process.
+    // We do this though only if the limit is default.
+    $memory_limit = ini_get('memory_limit');
+    $memory_limit = (int) $memory_limit;
+    if ($memory_limit === 128) {
+      ini_set('memory_limit', '256M');
+    }
+
     $language = $this->languageManager->getLanguage($langcode);
     $defaultLangcode = $this->languageManager->getDefaultLanguage()->getId();
     $uri_options = ['language' => $language];
 
     $data = [];
-
     $exclude_not_in_menu = $this->getExcludeNotInMenu();
     $cache_name = $this->getCacheName();
 
@@ -276,6 +287,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $termEntity = $this->termStorage->load($term->tid);
         $translatedEntity = $this->entityRepository->getTranslationFromContext($termEntity, $defaultLangcode);
         $gtmLabel = $translatedEntity->getName();
+
+        // Destroy the variable once the required data is fetched.
+        $translatedEntity = NULL;
       }
       switch ($cache_name) {
         case 'product_list':
@@ -291,7 +305,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         ['taxonomy_term' => $term->tid],
         $uri_options
       )->toString(TRUE)->getGeneratedUrl();
-
+      $clickable = !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE;
+      if ($term->display_view_all) {
+        $clickable = FALSE;
+      }
       $data[$term->tid] = [
         'label' => $term->name,
         'gtm_menu_title' => $gtmLabel ?? $term->name,
@@ -302,7 +319,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'path' => $path,
         'active_class' => '',
         'class' => [],
-        'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
+        'clickable' => $clickable,
         'display_in_desktop' => $term->display_in_desktop,
         'display_in_mobile' => $term->display_in_mobile,
         // The actual depth of the term. For super category feature enabled,
@@ -349,6 +366,32 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
       if ($child) {
         $data[$term->tid]['child'] = $this->getCategoryTree($langcode, $term->tid);
+        if ($term->display_view_all && $term->depth_level == '2') {
+          $view_all = [
+            'label' => $this->t('View All'),
+            'gtm_menu_title' => 'View All',
+            'description' => [
+              '#markup' => $term->description__value,
+            ],
+            'id' => 'view-all-' . $term->tid,
+            'path' => $path . 'view-all/',
+            'active_class' => '',
+            'class' => [],
+            'clickable' => TRUE,
+            'display_in_desktop' => $term->display_in_desktop,
+            'display_in_mobile' => $term->display_in_mobile,
+            // The actual depth of the term. For super category feature enabled,
+            // the depth may be wrong according to main menu. which can be
+            // processed when required.
+            //
+            // @see alshaya_main_menu_alshaya_main_menu_links_alter().
+            'depth' => (int) $term->depth_level + 1,
+            'lhn' => $lhn,
+            'move_to_right' => !is_null($term->field_move_to_right_value) ? (bool) $term->field_move_to_right_value : FALSE,
+            'app_navigation_link' => !is_null($term->field_show_in_app_navigation_value) ? (bool) $term->field_show_in_app_navigation_value : FALSE,
+          ];
+          array_unshift($data[$term->tid]['child'], $view_all);
+        }
       }
 
       // Set the background/highlight color for the term.
@@ -488,7 +531,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $route_name = $this->routeMatch->getRouteName();
 
     // If /taxonomy/term/tid page.
-    if ($route_name == 'entity.taxonomy_term.canonical') {
+    if ($route_name === 'entity.taxonomy_term.canonical' || $route_name === 'alshaya_main_menu.category_view_all') {
       /** @var \Drupal\taxonomy\TermInterface $route_parameter_value */
       $term = $this->routeMatch->getParameter('taxonomy_term');
     }

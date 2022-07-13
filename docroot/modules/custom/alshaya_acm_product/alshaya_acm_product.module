@@ -1174,7 +1174,7 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     // per page, we ignore the parameter.
     if ($show_on_load > $per_page) {
       if ($show_on_load % $per_page !== 0) {
-        // @codingStandardsIgnoreLine
+        // phpcs:ignore
         unset($_GET['show_on_load']);
         $request->query->set('show_on_load', NULL);
       }
@@ -1686,7 +1686,7 @@ function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term,
   $query_string = !empty($query_string) ? $query_string : [];
   if (!empty($anchor) && !empty($anchor->first())) {
     foreach (explode(',', $anchor->first()->getString()) as $string) {
-      list($key, $value) = explode('=', trim($string));
+      [$key, $value] = explode('=', trim($string));
       $query_string[trim($key)] = trim($value);
     }
   }
@@ -2216,7 +2216,7 @@ function alshaya_acm_product_get_delivery_options($sku) {
       $delivery_options['values'][$option] = [
         'status' => $status === '1' ? 'active' : 'in-active',
         // @todo check why we really need to pass variable to t().
-        // @codingStandardsIgnoreLine
+        // phpcs:ignore
         'label' => t($express_delivery_config->get($option . '_label'), [], [
           'context' => $option . '_label',
         ]),

@@ -18,6 +18,7 @@ const renderWishListButton = (
 ) => {
   const selectedElements = document.getElementsByClassName(elementSelector);
   Array.from(selectedElements).forEach((element) => {
+    // Get sku from closest article element.
     const sku = element.closest('article').getAttribute('data-sku');
     if (sku && sku !== null) {
       ReactDOM.render(
@@ -52,9 +53,12 @@ const handleMatchBackLoad = () => {
   renderWishListButton('wishlist-pdp-matchback', 'matchback');
 };
 
-// Check if the wishlist element on PDP exist and
-// data-sku is present, then render the wishlist button.
-renderWishListButton('wishlist-pdp-full', 'pdp');
+// Render wishlist button once sku base form is loaded.
+document.addEventListener('onSkuBaseFormLoad', () => {
+  // Check if the wishlist element on PDP exists and
+  // data-sku is present, then render the wishlist button.
+  renderWishListButton('wishlist-pdp-full', 'pdp');
+});
 
 // Add modal load event listener to render
 // wishlist button whenever modal opens.

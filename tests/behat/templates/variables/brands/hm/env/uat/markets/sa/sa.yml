@@ -1,7 +1,7 @@
 variables:
-  url_product_page: 'buy-embroidered-cotton-blouse-white.html'
-  product_listing_page_url: "/shop-kids/new-arrivals/baby/"
-  spc_product_listing_page: '/shop-kids/new-arrivals/baby/'
-  spc_basket_page: '/shop-men/new-arrivals/new-arrival-articles/'
-  spc_pdp_page: 'buy-embroidered-cotton-blouse-white.html'
-  spc_promotion_listing_page: '/buy-embroidered-cotton-blouse-white.html/'
+  url_product_page: 'buy-linen-blend-t-shirt-beige.html'
+  product_listing_page_url: "/shop-men/new-arrivals/clothes/"
+  spc_product_listing_page: '/shop-men/new-arrivals/clothes/'
+  spc_basket_page: '/shop-men/new-arrivals/clothes/'
+  spc_pdp_page: 'buy-linen-blend-t-shirt-beige.html'
+  spc_promotion_listing_page: '/buy-linen-blend-t-shirt-beige.html/'

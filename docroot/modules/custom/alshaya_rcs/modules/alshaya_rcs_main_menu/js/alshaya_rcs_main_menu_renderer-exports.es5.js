@@ -4,91 +4,93 @@ exports.render = function render(
   innerHtml,
   navigationType
 ) {
+  if (inputs.length == 0) {
+    return '';
+  }
+
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
-  if (inputs.length !== 0) {
-    // Get the enrichment data. It's a sync call.
-    // Check if static storage is having value, If 'YES' then use that else call
-    // the API.
-    let enrichmentData = globalThis.rcsGetEnrichedCategories();
-    let menuListLevel1Ele = navigationType === 'shop_by_block'
-      ? innerHtmlObj.find('div.c-footer-menu')
-      : innerHtmlObj.find('.menu__list.menu--one__list');
+  // Get the enrichment data. It's a sync call.
+  // Check if static storage is having value, If 'YES' then use that else call
+  // the API.
+  let enrichmentData = globalThis.rcsGetEnrichedCategories();
+  let menuListLevel1Ele = navigationType === 'shop_by_block'
+    ? innerHtmlObj.find('div.c-footer-menu')
+    : innerHtmlObj.find('.menu__list.menu--one__list');
 
-    // Filter category menu items if include_in_menu flag true.
-    inputs = filterAvailableItems(inputs);
+  // Filter category menu items if include_in_menu flag true.
+  inputs = filterAvailableItems(inputs);
 
-    // Sort the remaining category menu items by position in asc order.
-    inputs.sort(function (a, b) {
-      return parseInt(a.position) - parseInt(b.position);
+  // Sort the remaining category menu items by position in asc order.
+  inputs.sort(function (a, b) {
+    return parseInt(a.position) - parseInt(b.position);
+  });
+
+  let menuHtml = '';
+  // Get the active super category.
+  const isSuperCategoryEnabled = (typeof settings.superCategory) != "undefined";
+  // Proceed only if superCategory is enabled.
+  if (isSuperCategoryEnabled) {
+    let activeSuperCategory = globalThis.rcsWindowLocation().pathname.split('/')[2];
+    // Check if the active super category is valid or not.
+    let validSuperCategory = false;
+    inputs.forEach((item) => {
+      if (activeSuperCategory == item.url_path) {
+        validSuperCategory = true;
+      }
     });
-
-    let menuHtml = '';
-    // Get the active super category.
-    const isSuperCategoryEnabled = (typeof settings.superCategory) != "undefined";
-    // Proceed only if superCategory is enabled.
+    if (!validSuperCategory && inputs[0].url_path.length) {
+      // If there are no active super category then make first item as default.
+      activeSuperCategory = inputs[0].url_path;
+    }
+    // Filter out the items that doesn't belong to the active super category.
     if (isSuperCategoryEnabled) {
-      let activeSuperCategory = globalThis.rcsWindowLocation().pathname.split('/')[2];
-      // Check if the active super category is valid or not.
-      let validSuperCategory = false;
-      inputs.forEach((item) => {
-        if (activeSuperCategory == item.url_path) {
-          validSuperCategory = true;
-        }
+      inputs = inputs.filter((item) => {
+        return activeSuperCategory == item.url_path;
       });
-      if (!validSuperCategory && inputs[0].url_path.length) {
-        // If there are no active super category then make first item as default.
-        activeSuperCategory = inputs[0].url_path;
-      }
-      // Filter out the items that doesn't belong to the active super category.
-      if (isSuperCategoryEnabled) {
-        inputs = inputs.filter((item) => {
-          return activeSuperCategory == item.url_path;
-        });
-      }
     }
-    // Iterate over each L1 item and get the inner markup
-    // prepared recursively.
-    inputs.forEach(function eachCategory(level1) {
-      // Change item level only if super category is enabled.
-      if (isSuperCategoryEnabled) {
-        // Return from here if L2 element is empty and if the child element is
-        // not associated with the current active super category.
-        if (!level1.children) {
-          return;
-        }
-        level1 = level1.children[0];
-      }
-
-      menuHtml = navigationType === 'shop_by_block'
-        ? menuHtml + getShopByMarkup(
-          level1,
-          1,
-          innerHtmlObj,
-          settings,
-          enrichmentData,
-          isSuperCategoryEnabled,
-        )
-        : menuHtml + getMenuMarkup(
-          level1,
-          1,
-          innerHtmlObj,
-          settings,
-          enrichmentData,
-          isSuperCategoryEnabled,
-        );
-    });
-
-    // Remove the placeholders markup.
-    if (navigationType === 'shop_by_block') {
-      menuListLevel1Ele.find('div.c-footer-menu__tab').remove();
-    } else {
-      menuListLevel1Ele.find('li').remove();
-    }
-
-    // Update with the resultant markups.
-    menuListLevel1Ele.append(menuHtml);
   }
+  // Iterate over each L1 item and get the inner markup
+  // prepared recursively.
+  inputs.forEach(function eachCategory(level1) {
+    // Change item level only if super category is enabled.
+    if (isSuperCategoryEnabled) {
+      // Return from here if L2 element is empty and if the child element is
+      // not associated with the current active super category.
+      if (!level1.children) {
+        return;
+      }
+      level1 = level1.children[0];
+    }
+
+    menuHtml = navigationType === 'shop_by_block'
+      ? menuHtml + getShopByMarkup(
+        level1,
+        1,
+        innerHtmlObj,
+        settings,
+        enrichmentData,
+        isSuperCategoryEnabled,
+      )
+      : menuHtml + getMenuMarkup(
+        level1,
+        1,
+        innerHtmlObj,
+        settings,
+        enrichmentData,
+        isSuperCategoryEnabled,
+      );
+  });
+
+  // Remove the placeholders markup.
+  if (navigationType === 'shop_by_block') {
+    menuListLevel1Ele.find('div.c-footer-menu__tab').remove();
+  } else {
+    menuListLevel1Ele.find('li').remove();
+  }
+
+  // Update with the resultant markups.
+  menuListLevel1Ele.append(menuHtml);
   return innerHtmlObj.html();
 };
 
@@ -310,14 +312,14 @@ const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichme
     if (urlItems.length > 1) {
       urlItems[1] = `${settings.rcsPhSettings.categoryPathPrefix}${urlItems[1]}`;
     }
-    levelObj.url_path = `/${settings.path.pathPrefix}${urlItems.join('/')}/`;
+    levelObj.url_path = urlItems.join('/').replace(/\/+$/, '/');
   } else {
-    levelObj.url_path = `/${settings.path.pathPrefix}${levelObjOrgUrlPath}/`;
+    levelObj.url_path = levelObjOrgUrlPath.replace(/\/+$/, '/');
   }
 
-  const levelIdentifier = `c-footer-menu__tab`;
   // Clone the default clickable placeholder element from the given html.
-  var clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
+  const levelIdentifier = `c-footer-menu__tab`;
+  let clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
 
   let enrichedDataObj = {};
   // Get the enrichment data from the settings.

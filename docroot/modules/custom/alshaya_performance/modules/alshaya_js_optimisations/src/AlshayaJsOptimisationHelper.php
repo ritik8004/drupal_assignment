@@ -45,7 +45,7 @@ class AlshayaJsOptimisationHelper {
    */
   public static $jsCategories = [
     'ie_only' => [
-      'weight' => -30,
+      'weight' => -31,
       'attributes' => [
         'nomodule' => TRUE,
         'data-group' => ['ie-only'],
@@ -53,7 +53,7 @@ class AlshayaJsOptimisationHelper {
       'dependencies' => [],
     ],
     'site_libraries' => [
-      'weight' => -29,
+      'weight' => -30,
       'attributes' => [
         'data-group' => ['site-library'],
       ],

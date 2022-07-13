@@ -16,7 +16,7 @@ class RouteSubscriber extends RouteSubscriberBase {
    */
   protected function alterRoutes(RouteCollection $collection) {
     $rest_apis_to_allow = [
-      'rest.csrftoken',
+      'alshaya_acm.csrftoken',
       'rest.stock.GET',
       'oauth2_token.token',
       'rest.alshaya_acm_product_category_mapping.POST',

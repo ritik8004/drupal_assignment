@@ -28,7 +28,6 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
  *   label = @Translation("SKUs Product List"),
  *   uri_paths = {
  *     "canonical" = "/rest/v1/skus/product-list",
- *      "https://www.drupal.org/link-relations/create" = "/rest/v1/skus/product-list"
  *   }
  * )
  */
@@ -299,12 +298,22 @@ class SkusProductList extends ResourceBase {
     ], TRUE);
 
     $media = $this->skuImagesManager->getProductMedia($sku, 'search');
+    $media = $this->skuImagesManager->processMediaImageStyles($media, $sku, 'pdp');
     $data['images'] = [];
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
-      $data['images'][] = [
+      $media_data = [
         'url' => file_create_url($media_item['drupal_uri']),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
       ];
+
+      if (!empty($media_item['styles'])) {
+        $media_data['styles'] = $media_item['styles'];
+      }
+      elseif (!empty($media_item['pims_image']['styles'])) {
+        $media_data['styles'] = $media_item['pims_image']['styles'];
+      }
+
+      $data['images'][] = $media_data;
     }
 
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);

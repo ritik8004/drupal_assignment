@@ -7,6 +7,7 @@ on:
       - qa
       - uat
       - master
+      - develop-new-aura-checkout
   create:
     tags:
 
@@ -33,9 +34,9 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | xargs)"
-          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
-          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)"
+          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
+          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
 
   deploy:
     name: Deploy
@@ -75,8 +76,7 @@ jobs:
       - name: Run Composer install
         run: |
           composer self-update
-          composer self-update --1
-          composer global require hirak/prestissimo
+          composer self-update --2
           composer validate --no-check-all --ansi
           composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 

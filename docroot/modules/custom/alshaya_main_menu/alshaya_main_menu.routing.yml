@@ -5,3 +5,13 @@ alshaya_main_menu.main_menu:
     _title: 'Main menu Settings'
   requirements:
     _permission: 'administer site configuration'
+
+alshaya_main_menu.category_view_all:
+  path: '/taxonomy/term/{taxonomy_term}/view-all'
+  defaults:
+    _controller: '\Drupal\alshaya_main_menu\Controller\CategoryViewAllController::getBuild'
+    _title: 'View All'
+    _title_callback: '\Drupal\alshaya_main_menu\Controller\CategoryViewAllController::getTitle'
+  requirements:
+    _entity_access: 'taxonomy_term.view'
+    taxonomy_term: \d+

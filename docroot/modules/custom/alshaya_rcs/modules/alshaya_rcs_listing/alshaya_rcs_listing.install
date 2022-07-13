@@ -8,6 +8,7 @@
 use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
 use Drupal\taxonomy\TermInterface;
+use Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration;
 
 /**
  * Get list of blocks which needs to be enabled/disabled.
@@ -76,14 +77,15 @@ function alshaya_rcs_listing_install() {
   batch_set($batch);
 
   // Fetch acq product category enriched terms.
-  $terms = \Drupal::service('alshaya_rcs_main_menu.category_data_migration')->processProductCategoryMigration(30, FALSE);
+  $terms = \Drupal::service('alshaya_rcs_main_menu.category_data_migration')->processProductCategoryMigration(NULL, FALSE);
   if (!empty($terms)) {
+    // Setting batch separately as it doesnt get executed in service.
     // Set batch operations to migrate terms.
     $operations = [];
     foreach (array_chunk($terms, 30) as $term_chunk) {
       $operations[] = [
         'Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration::batchProcess',
-        [$term_chunk, 30],
+        [$term_chunk, 30, AlshayaRcsCategoryDataMigration::TARGET_VOCABULARY_ID],
       ];
     }
     $batch = [
@@ -174,9 +176,8 @@ function alshaya_rcs_listing_uninstall() {
     Drupal::configFactory()->getEditable($name)->delete();
   }
 
-  // Rollback the enriched terms from the acq_product_category taxonomy.
-  \Drupal::service('alshaya_rcs_main_menu.category_data_migration')
-    ->rollbackProductCategoryMigration();
+  // Reinstate ACQ Product Category Terms.
+  \Drupal::service('alshaya_rcs_main_menu.category_data_migration')->rollbackProductCategoryMigration();
 }
 
 /**

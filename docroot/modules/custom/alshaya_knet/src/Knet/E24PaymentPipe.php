@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 namespace Drupal\alshaya_knet\Knet;
 

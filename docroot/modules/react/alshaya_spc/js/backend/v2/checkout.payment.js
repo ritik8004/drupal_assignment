@@ -45,7 +45,7 @@ const getPaymentMethods = async () => {
   }
 
   // Change the payment methods based on shipping method.
-  const staticCacheKey = `payment_methods_${cart.data.shipping.type}`;
+  const staticCacheKey = `payment_methods_${cart.data.shipping.type}_${cart.data.shipping.method}`;
   const cached = StaticStorage.get(staticCacheKey);
   if (hasValue(cached)) {
     return cached;

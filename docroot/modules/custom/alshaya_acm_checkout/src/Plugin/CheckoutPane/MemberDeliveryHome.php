@@ -231,7 +231,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
     $values = $form_state->getValue($pane_form['#parents']);
 
-    $shipping_method = isset($values['address']['shipping_methods']) ? $values['address']['shipping_methods'] : NULL;
+    $shipping_method = $values['address']['shipping_methods'] ?? NULL;
 
     if (empty($shipping_method)) {
       return;

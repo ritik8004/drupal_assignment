@@ -88,6 +88,7 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
 
       if ($node_route) {
         /** @var \Symfony\Component\Routing\Route $route */
+        // phpcs:ignore
         $route = unserialize($node_route[0]['route']);
         // Setting options to identify the department page later.
         if ($term_option) {

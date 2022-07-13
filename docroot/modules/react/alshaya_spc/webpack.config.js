@@ -7,6 +7,7 @@ var config = {
     minicart: './js/minicart',
     expressdelivery: './js/expressdelivery',
     checkout: './js/checkout',
+    order_details: './js/order-details',
     checkout_confirmation: './js/checkout-confirmation',
     backend_cart_v1: './js/backend/v1/cart.js',
     backend_cart_v2: './js/backend/v2/cart.js',

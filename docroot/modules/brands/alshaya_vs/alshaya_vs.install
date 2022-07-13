@@ -65,8 +65,8 @@ function alshaya_vs_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_vs', 'inc', 'alshaya_vs.content');
 
   // Enable and set victoria_secret as default theme.
-  \Drupal::service('theme_handler')->install(['victoria_secret'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('victoria_secret');
+  \Drupal::service('theme_installer')->install(['victoria_secret'], TRUE);
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'victoria_secret')->save();
 
   // Change region for main navigation block.
   alshaya_block_move_blocks(['main_navigation' => 'header_primary']);

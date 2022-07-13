@@ -1,5 +1,5 @@
 name: alshaya
-recipe: drupal8
+recipe: drupal9
 
 config:
   webroot: 'docroot'
@@ -18,7 +18,7 @@ services:
     app_mount: delegated
     ssl: true
     type: php:7.4
-    composer_version: 1-latest
+    composer_version: 2-latest
     build_as_root:
       - apt-get update -y
       - bash /app/.lando/scripts/configure-syslog.sh

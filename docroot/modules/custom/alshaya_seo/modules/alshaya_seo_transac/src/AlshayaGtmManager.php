@@ -78,7 +78,7 @@ class AlshayaGtmManager {
     'alshaya_spc.checkout' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
     'alshaya_spc.checkout.confirmation' => 'purchase confirmation page',
-    'view.stores_finder.page_2' => 'store finder',
+    'alshaya_geolocation.store_finder' => 'store finder',
     'view.stores_finder.page_1' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
     'user.pass' => 'user password page',
@@ -627,7 +627,7 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['taxonomy_term'])) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
             $term = $currentRoute['route_params']['taxonomy_term'];
-            $routeIdentifier .= ':' . $term->getVocabularyId();
+            $routeIdentifier .= ':' . $term->bundle();
           }
           break;
 
@@ -695,7 +695,7 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['taxonomy_term'])) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
             $term = $currentRoute['route_params']['taxonomy_term'];
-            $routeIdentifier .= ':' . $term->getVocabularyId();
+            $routeIdentifier .= ':' . $term->bundle();
           }
           break;
       }
@@ -1160,6 +1160,7 @@ class AlshayaGtmManager {
             $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')
               ->loadAllParents($taxonomy_term->id()));
             foreach ($taxonomy_parents as $taxonomy_parent) {
+              $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
               $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
             }
 
@@ -1371,7 +1372,7 @@ class AlshayaGtmManager {
       $cart_items_rr[] = [
         'id' => $item['sku'],
         'price' => (float) $item['price'],
-        'qnt' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
+        'qnt' => $item['qty'] ?? $item['ordered'],
       ];
     }
 
@@ -1410,7 +1411,7 @@ class AlshayaGtmManager {
       $cart_items_flock[] = [
         'id' => $item['sku'],
         'price' => (float) $item['price'],
-        'count' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
+        'count' => $item['qty'] ?? $item['ordered'],
         'title' => $item['name'],
         'image' => $sku_media_url,
       ];

@@ -1,0 +1,4 @@
+services:
+  alshaya_geolocation.store_utility:
+    class: Drupal\alshaya_geolocation\AlshayaStoreUtility
+    arguments: ['@config.factory', '@language_manager']

@@ -20,6 +20,7 @@ use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\Core\Database\IntegrityConstraintViolationException;
 
 /**
  * Class Product Sync Resource.
@@ -32,8 +33,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *   id = "acq_productsync",
  *   label = @Translation("Acquia Commerce Product Sync"),
  *   uri_paths = {
- *     "canonical" = "/productsync",
- *     "https://www.drupal.org/link-relations/create" = "/productsync"
+ *     "create" = "/productsync"
  *   }
  * )
  */
@@ -175,13 +175,13 @@ class ProductSyncResource extends ResourceBase {
    *
    * Handle Conductor posting an array of product / SKU data for update.
    *
-   * @param array $products
+   * @param array $data
    *   Product / SKU Data.
    *
    * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response object.
    */
-  public function post(array $products) {
+  public function post(array $data) {
     /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
     $lock = \Drupal::service('lock.persistent');
 
@@ -197,7 +197,7 @@ class ProductSyncResource extends ResourceBase {
     $debug = $config->get('debug');
     $debug_dir = $config->get('debug_dir');
 
-    foreach ($products as $product) {
+    foreach ($data as $product) {
       try {
         // First check, product needs to have SKU.
         if (!isset($product['sku']) || !strlen($product['sku'])) {
@@ -745,7 +745,7 @@ class ProductSyncResource extends ResourceBase {
 
     // Loop through all the fields we want to read from product data.
     foreach ($additionalFields as $key => $field) {
-      $source = isset($field['source']) ? $field['source'] : $key;
+      $source = $field['source'] ?? $key;
 
       // Field key.
       $field_key = 'attr_' . $key;
@@ -769,6 +769,19 @@ class ProductSyncResource extends ResourceBase {
           foreach ($value as $val) {
             if ($term = $this->productOptionsManager->loadProductOptionByOptionId($source, $val, $sku->language()->getId())) {
               $attribute_values[] = $term->getName();
+            }
+            else {
+              try {
+                $this->database->insert('product_attribute_options_missing')
+                  ->fields([
+                    'sku' => $sku->sku->value,
+                    'attribute_code' => $source,
+                    'option_id' => $val,
+                    'field_key' => $field_key
+                  ])
+                  ->execute();
+              }
+              catch(IntegrityConstraintViolationException $e) {}
             }
           }
 
@@ -834,7 +847,7 @@ class ProductSyncResource extends ResourceBase {
     }
 
     // Get old files mapped with commerce media value id.
-    $current_media = unserialize($current_value);
+    $current_media = unserialize($current_value, ['allowed_classes' => FALSE]);
     $current_mapping = [];
     // Checks for non-empty value to be used in loop.
     if (!empty($current_media) && is_iterable($current_media)) {

@@ -54,6 +54,7 @@
   color: $black;
   text-decoration: none;
   display: block;
+  cursor: pointer;
 
   @include breakpoint($upto-palm) {
     text-align: center;
@@ -300,6 +301,11 @@
   &.hidden {
     display: none;
   }
+}
+
+.store-list-back-to-glossary {
+  padding-top: 0.6rem;
+  cursor: pointer;
 }
 
 .block-store-finder-form__list-view,

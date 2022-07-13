@@ -154,6 +154,8 @@ $egift-gray: #979797;
 $cyan-blue: #387fcb;
 $prussian_blue: #063971;
 $egift-button-hover: rgba(51, 51, 51, 0.1);
+$speech-red: #c00;
+$red-orange: #e6591b;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -310,6 +312,8 @@ $_sofa-section-grey: #d9d9d9;
 $_sofa-section-grey2: #1a1a1a;
 $_sofa-section-brown: #866347;
 $white-six: #f9f9f9;
+$light-green: #39b54a;
+$dark-green: #007522;
 $_online-booking-change-delivery-schedule: #4a7fc5;
 
 /* ------- 2. Primary Colors ------- */
@@ -535,6 +539,7 @@ $header_bg: $white-five;
 $header_top_bg: $white-four;
 $header_border: $white;
 $header_super_category_bg: $white-five;
+$header_super_category_enabled_bg: $_screeching_white;
 
 // Header mobile search.
 $header_search_border_mobile: $marine-blue-two;
@@ -2213,3 +2218,31 @@ $egift-checkout-card-number: $spc-product-attributes;
 
 // Redeem eGift.
 $egift-redeem-form-subtitle: $egift-disabled-gray2;
+
+// Online Returns
+$online-return-eligibility-message-bg: $light-green;
+$online-return-eligibility-message-txt: $white-five;
+$online-return-eligibility-button-txt: $brownish-grey;
+$online-return-eligibility-button-box-shadow: $dark-green;
+$online-return-eligibility-button-hover: $white-three;
+$online-return-window-closed-bg: $new-pdp-blue;
+$online-return-bg: rgba(235, 235, 235, 0.59);
+$online-return-dark-bg: $_gray_222;
+$online-return-label-txt: $white-five;
+$online-return-detail-bg: rgba(247, 247, 247, 0.7);
+$online-return-ineligible-label-bg: $scarlet;
+$order-cancelled-label: $scarlet;
+$order-cancelled-txt: $white-five;
+$online-return-steps-label-txt: $white-five;
+$online-return-request-button-bg: $white-smoke-light;
+$online-return-big-ticket-label-bg: $_spc_search_icon;
+$online-return-big-ticket-label-txt: $white-five;
+$online-return-refund-label-inactive-bg: $warm-grey-two;
+$online-return-refund-grey-txt: $greyish;
+$online-return-order-detail-border: $white;
+$online-return-refund-blue-txt: $new-pdp-blue;
+$online-return-cancel-button-border: $warm-grey-two;
+$online-return-status-red-label: $speech-red;
+$online-return-print-button-bg: $white-five;
+$online-return-status-green-label: $light-green;
+$online-return-status-orange-label: $red-orange;

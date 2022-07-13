@@ -161,9 +161,14 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
   public function build() {
     $routename = $this->routeMatch->getRouteName();
     $node = $this->routeMatch->getParameter('node');
-    if ($routename == 'entity.node.canonical' && $node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 0) {
+    if ($routename == 'entity.node.canonical'
+      && $node
+      && $node->bundle() == 'advanced_page'
+      && $node->get('field_use_as_department_page')->getString() == '0'
+    ) {
       return [];
     }
+
     $isPdp = FALSE;
     // For PDP, we add current page sku as dynamic product id.
     if ($node instanceof NodeInterface && $node->bundle() == 'acq_product') {
@@ -209,8 +214,10 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
    */
   public function getCacheTags() {
     $cache_tags = parent::getCacheTags();
+
     // Rebuild olapic block when PDP page changes.
-    if ($node = $this->routeMatch->getParameter('node') && $node instanceof NodeInterface) {
+    $node = $this->routeMatch->getParameter('node');
+    if ($node && $node instanceof NodeInterface) {
       $cache_tags = Cache::mergeTags($cache_tags, ['node:' . $node->id()]);
     }
 

@@ -23,6 +23,10 @@ body.wishlist-enabled {
         &.sign-in {
           @include btn;
 
+          html[lang=ar] & {
+            padding: rem(10) rem(4) rem(6);
+          }
+
           &:hover {
             opacity: 1;
           }
@@ -30,6 +34,10 @@ body.wishlist-enabled {
 
         &.register {
           @include button-brand;
+
+          html[lang=ar] & {
+            padding: rem(10) rem(4) rem(6);
+          }
 
           &:hover {
             color: $primary_btn_text;

@@ -500,6 +500,7 @@
     .redeem-aura-footer {
       color: $aura-checkout-footer-redeem-text;
       display: flex;
+      align-items: center;
       font-size: rem(12);
       line-height: rem(18);
       margin-top: rem(12);
@@ -515,25 +516,12 @@
       }
 
       &::before {
-        content: '';
-        background-color: $aura-spc-checkout-highlight;
+        content: "";
         width: rem(16);
         height: rem(16);
-        border-radius: 50%;
         margin-#{$right}: rem(8);
-      }
-
-      &::after {
-        content: "!";
-        color: $aura-spc-checkout-block-bg;
-        position: absolute;
-        #{$left}: rem(6);
-        top: rem(1);
-        font-weight: 700;
-
-        html[lang=ar] & {
-          top: rem(-1);
-        }
+        background-image: url('#{$base_theme_img_directory_path}/icons/exclamation-circle-icon.svg');
+        background-position: top;
       }
 
       .points-earned-with-purchase {

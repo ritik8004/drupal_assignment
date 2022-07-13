@@ -10,3 +10,4 @@ dependencies:
   - search_api_autocomplete:search_api_autocomplete
   - search_api_spellcheck:search_api_spellcheck
   - search_api_solr:search_api_solr
+  - acquia_search:acquia_search

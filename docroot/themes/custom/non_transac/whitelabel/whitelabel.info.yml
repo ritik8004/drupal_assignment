@@ -23,15 +23,6 @@ libraries:
   - whitelabel/disable_mobile_modal
 
 libraries-override:
-  geolocation/geolocation.commonmap:
-    js:
-      js/geolocation-common-map.js: components/dist/js/geolocation/alshaya_geolocation_common_map.js
-  geolocation/geolocation.formatter.googlemap:
-    js:
-      js/geolocation-formatter-googlemap.js: components/dist/js/geolocation/alshaya_geolocation_formatter_googlemap.js
-  geolocation/geolocation.googlemapsapi:
-    js:
-      js/geolocation-google-maps-api.js: components/dist/js/geolocation/alshaya_geolocation_google_maps_api.js
   views_infinite_scroll/views-infinite-scroll:
     js:
       js/infinite-scroll.js : components/dist/js/infinite-scroll.js
@@ -41,24 +32,35 @@ libraries-override:
       theme:
         assets/vendor/jquery.ui/themes/base/theme.css: false
 
+  core/drupal.autocomplete:
+    css:
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+
+  core/drupal.dialog:
+    css:
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+
+  core/jquery.ui.dialog:
+    css:
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+
   kashmir/ltr:
     css:
       theme:
         css/ltr.css: false
 
-component-libraries:
-  atoms:
-    paths:
+components:
+  namespaces:
+    atoms:
       - components/_patterns/00-atoms
-  molecules:
-    paths:
+    molecules:
       - components/_patterns/01-molecules
-  organisms:
-    paths:
+    organisms:
       - components/_patterns/02-organisms
-  templates:
-    paths:
+    templates:
       - components/_patterns/03-templates
-  pages:
-    paths:
+    pages:
       - components/_patterns/04-pages

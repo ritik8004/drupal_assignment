@@ -184,7 +184,7 @@ function alshaya_stores_finder_update_8103() {
  * Update the Google Map API Key.
  */
 function alshaya_stores_finder_update_8102() {
-  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
+  $config = \Drupal::service('config.factory')->getEditable('geolocation_google_maps.settings');
   $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
   $config->save();
 }
@@ -212,8 +212,8 @@ function alshaya_stores_finder_update_8003() {
  */
 function alshaya_stores_finder_install() {
   // Set default google map api key.
-  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
-  $geolocation_settings = Settings::get('geolocation.settings');
+  $config = \Drupal::service('config.factory')->getEditable('geolocation_google_maps.settings');
+  $geolocation_settings = Settings::get('geolocation_google_maps.settings');
 
   foreach ($geolocation_settings as $key => $value) {
     $config->set($key, $value);

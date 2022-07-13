@@ -109,7 +109,7 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
     $form['critical_js']['status'] = [
       '#type' => 'checkbox',
       '#title' => $critical_js_text_config['status_label'],
-      '#default_value' => isset($critical_js['status']) ? $critical_js['status'] : FALSE,
+      '#default_value' => $critical_js['status'] ?? FALSE,
     ];
 
     foreach ($js_categories as $category) {
@@ -124,7 +124,7 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
             ':input[name="status"]' => ['checked' => FALSE],
           ],
         ],
-        '#default_value' => isset($critical_js[$category]) ? $critical_js[$category] : '',
+        '#default_value' => $critical_js[$category] ?? '',
       ];
     }
 

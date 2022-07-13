@@ -1,0 +1,41 @@
+field_settings:
+  attr_article_style:
+    label: Style
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_article_style
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_color_family:
+    label: 'Color Family'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_family
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_gender:
+    label: 'Gender'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_gender
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_materials:
+    label: 'Material'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_materials
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku

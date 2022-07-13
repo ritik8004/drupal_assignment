@@ -187,6 +187,7 @@
                 sku: parentSku,
                 variantSelected: selected,
                 title,
+                eligibleForReturn: variantInfo.eligibleForReturn,
               }
             }
           });
@@ -273,6 +274,29 @@
           $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
           $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
         }
+
+        // Trigger an event on SKU base form load.
+        var data = {
+          sku: sku,
+          variantSelected: $('[name="selected_variant_sku"]').val() || $('form.sku-base-form').attr('variantselected'),
+        };
+
+        // If Online Returns feature is enabled, add eligibleForReturn to event.
+        if (Drupal.hasValue(drupalSettings.onlineReturns)) {
+          if (productData.type === 'simple') {
+            data.eligibleForReturn = productData.eligibleForReturn;
+          } else {
+            // For configurable products if variant is not selected yet, we
+            // do not want to display anything so by default we set the value
+            // to TRUE. Example scenario: Sofas and Sectionals.
+            data.eligibleForReturn = data.variantSelected
+              ? productData.variants[data.variantSelected].eligibleForReturn
+              : true;
+          }
+        }
+
+        var skuBaseFormLoadedEvent = new CustomEvent('onSkuBaseFormLoad', { bubbles: true, detail: { data: data }});
+        document.dispatchEvent(skuBaseFormLoadedEvent);
       });
 
       // Show images for oos product on PDP.
@@ -556,11 +580,11 @@
         var variantToDisableSelector = $('input[value="' + sku + '"]').closest('.sku-base-form');
         var allVariants = parentInfo.variants ? Object.keys(parentInfo.variants) : [];
 
+        var orderLimitMsg = typeof variantInfo.orderLimitMsg !== "undefined"
+          ? variantInfo.orderLimitMsg : '';
         // If cart is not empty.
         if (typeof cart_items !== "undefined") {
           var itemQtyInCart = 0;
-          var orderLimitMsg = typeof parentInfo.orderLimitMsg !== "undefined"
-            ? parentInfo.orderLimitMsg : '';
 
           if (cartProductQtyArg !== undefined) {
             itemQtyInCart = cartProductQtyArg;

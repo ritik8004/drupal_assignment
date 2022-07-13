@@ -4,3 +4,9 @@ services:
         arguments: ['@renderer']
         tags:
           - { name: twig.extension }
+    alshaya_main_menu.path_processor:
+      class: Drupal\alshaya_main_menu\PathProcessor\PathProcessorPrettyPaths
+      arguments: [ '@current_route_match', '@path_alias.manager' ]
+      tags:
+        - { name: path_processor_inbound, priority: 80 }
+        - { name: path_processor_outbound, priority: 500 }

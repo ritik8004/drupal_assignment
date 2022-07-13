@@ -5,7 +5,7 @@ index 1dad3c1..dc494a7 100644
 @@ -184,6 +184,8 @@ AddEncoding gzip svgz
    # Copy and adapt this rule to directly execute PHP files in contributed or
    # custom modules or to run another PHP application in the same directory.
-   RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics.php$
+   RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics\.php$
 +  # Allow access to simplesaml paths
 +  RewriteCond %{REQUEST_URI} !^/simplesaml
    # ACSF requirement: allow access to apc_rebuild.php.

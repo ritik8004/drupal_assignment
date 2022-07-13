@@ -26,6 +26,7 @@ class AlshayaDepartmentPageRouteProvider extends RouteProvider {
             ->fetchAll(\PDO::FETCH_ASSOC);
           if ($node_route) {
             /** @var \Symfony\Component\Routing\Route $route */
+            // phpcs:ignore
             $route = unserialize($node_route[0]['route']);
             // Setting options to identify the department page later.
             $route->setOption('_department_page_term', $exploded_path[3]);

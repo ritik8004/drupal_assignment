@@ -145,6 +145,16 @@ export default class EgiftCardOpenAmountField extends React.Component {
     }
   }
 
+  /**
+   * Disallow user from entering e, E, +, -, ., in open amount field.
+   */
+  handleUserInput = (e) => (e.key === 'e'
+    || e.key === 'E'
+    || e.key === '+'
+    || e.key === '-'
+    || e.key === '.')
+    && e.preventDefault();
+
   render() {
     const { selected, field } = this.props;
     const { openAmountMessage, openAmountInputDisabled } = this.state;
@@ -178,7 +188,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
             max={eGiftCardAttributes.amount_open_to_hps.value}
             onFocus={() => this.handleErrorMessage()}
             onKeyPress={this.handleKeypress}
-            onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
+            onKeyDown={(e) => this.handleUserInput(e)}
             onPaste={(e) => this.handlePaste(e)}
             onChange={this.handleChange}
             readOnly={openAmountInputDisabled}

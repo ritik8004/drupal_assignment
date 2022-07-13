@@ -705,7 +705,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     return;
   }
 
-  $view_mode = isset($variables['elements']['#view_mode']) ? $variables['elements']['#view_mode'] : 'default';
+  $view_mode = $variables['elements']['#view_mode'] ?? 'default';
 
   $values = $profile->get('field_address')->getValue();
 
@@ -852,7 +852,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       if ($profile->access('delete') && $profile->hasLinkTemplate('delete-form')) {
         $variables['delete_operation'] = [
           'title' => t('Delete'),
-          'url' => $profile->urlInfo('delete-form', [
+          'url' => $profile->toUrl('delete-form', [
             'attributes' => [
               'class' => ['use-ajax'],
               'data-dialog-type' => 'modal',

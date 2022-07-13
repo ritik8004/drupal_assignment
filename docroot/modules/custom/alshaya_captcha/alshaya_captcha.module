@@ -172,7 +172,7 @@ function _alshaya_captcha_form_no_delay_captcha_validate(&$form, FormStateInterf
   if ($errors = $form_state->getErrors()) {
     if (isset($errors['captcha_response'])) {
       // If captcha response is empty (user didn't use the captcha).
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       if (empty($_POST['g-recaptcha-response'])) {
         $errors['captcha_response'] = t('Please fill the captcha.');
       }

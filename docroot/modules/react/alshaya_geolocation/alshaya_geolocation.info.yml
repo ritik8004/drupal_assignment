@@ -1,0 +1,6 @@
+name: 'Alshaya Geolocation'
+type: module
+description: 'Places api autocomplete and views filter integration with places api.'
+package: 'Alshaya'
+core: 8.x
+core_version_requirement: ^8 || ^9

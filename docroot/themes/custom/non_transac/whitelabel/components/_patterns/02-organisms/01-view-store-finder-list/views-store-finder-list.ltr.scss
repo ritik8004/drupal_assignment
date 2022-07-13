@@ -96,6 +96,27 @@
         padding-#{direction(right)}: 2.5rem;
       }
     }
+
+    .store-field-content {
+      padding: 0;
+    }
+  }
+
+  .individual-store-title {
+    padding: 0;
+    color: $black;
+  }
+
+  .individual-store-title:hover {
+    color: $marvel-red;
+
+    &::after {
+      color: $marvel-red;
+    }
+  }
+
+  .store-address {
+    color: $black;
   }
 }
 

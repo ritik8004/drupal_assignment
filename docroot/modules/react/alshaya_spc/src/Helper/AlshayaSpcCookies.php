@@ -130,6 +130,7 @@ class AlshayaSpcCookies {
 
     // Get the middleware session key from the record.
     $session_data = array_map(function ($data) {
+      // phpcs:ignore
       return @unserialize($data);
     }, explode('|', $this->spcSession));
 
@@ -160,6 +161,7 @@ class AlshayaSpcCookies {
 
     $prepare_session = [];
     foreach (explode('|', $this->spcSession) as $session_data) {
+      // phpcs:ignore
       $unserialized = @unserialize($session_data);
       if ($unserialized) {
         foreach ($unserialized as &$session_item) {

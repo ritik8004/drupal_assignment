@@ -23,3 +23,6 @@ permissions:
   - 'restful get product_exclude_linked_v2'
   - 'restful get skus_product_list_v2'
   - 'restful get deeplink_v2'
+  - 'restful get product_general_settings'
+  - 'restful get magazine_detail_page_v3'
+  - 'restful get deeplink_v3'

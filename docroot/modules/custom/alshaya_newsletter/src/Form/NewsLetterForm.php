@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_newsletter\Form;
 
-use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,7 +17,7 @@ class NewsLetterForm extends FormBase {
   /**
    * The api wrapper.
    *
-   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
   protected $apiWrapper;
 
@@ -31,10 +31,10 @@ class NewsLetterForm extends FormBase {
   /**
    * Class constructor.
    *
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   The api wrapper.
    */
-  public function __construct(APIWrapper $api_wrapper) {
+  public function __construct(AlshayaApiWrapper $api_wrapper) {
     $this->apiWrapper = $api_wrapper;
   }
 
@@ -43,7 +43,7 @@ class NewsLetterForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('acq_commerce.api')
+      $container->get('alshaya_api.api')
     );
   }
 

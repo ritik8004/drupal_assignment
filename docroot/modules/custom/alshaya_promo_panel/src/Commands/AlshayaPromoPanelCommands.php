@@ -69,7 +69,7 @@ class AlshayaPromoPanelCommands extends DrushCommands {
     $block_storage = $this->entityTypeManager->getStorage('block');
     $promo_panel_blocks = [];
     array_map(function ($block_name) use (&$promo_panel_blocks, $block_storage) {
-      list($block_machine_name, $mobile_path) = explode(':', $block_name);
+      [$block_machine_name, $mobile_path] = explode(':', $block_name);
       $block_results = $block_storage->loadByProperties(['id' => $block_machine_name]);
       $block = reset($block_results);
       if ($block instanceof BlockInterface) {

@@ -18,6 +18,7 @@ const PdpImageElement = ({
         alt={alt}
         title={title}
         data-index={index}
+        loading={index === 0 ? 'eager' : 'lazy'}
       />
     </div>
   );

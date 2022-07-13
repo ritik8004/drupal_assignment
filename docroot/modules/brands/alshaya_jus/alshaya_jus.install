@@ -12,8 +12,8 @@ function alshaya_jus_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_jus', 'inc', 'alshaya_jus.content');
 
   // Enable and set justice as default theme.
-  \Drupal::service('theme_handler')->install(['justice'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('justice');
+  \Drupal::service('theme_installer')->install(['justice'], TRUE);
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'justice')->save();
 
   // Create default content for the site.
   alshaya_jus_create_default_content();

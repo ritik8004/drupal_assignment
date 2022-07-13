@@ -200,7 +200,7 @@ class Cart implements CartInterface {
     if ($removed_products) {
       // Use traits in the class is resulting into "LogicException: The database
       // connection is not serializable." So we don't use it here.
-      // @codingStandardsIgnoreLine
+      // phpcs:ignore
       \Drupal::messenger()->addError((string) t('Sorry, one or more products in your basket are no longer available and were removed from your basket.'));
     }
 

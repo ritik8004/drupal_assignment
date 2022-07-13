@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Rcs wishlist module file.
+ */
+
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_alshaya_rcs_product_build_alter().
+ */
+function alshaya_rcs_wishlist_alshaya_rcs_product_build_alter(array &$build, array &$entity_info) {
+  // Add cache tag for wishlist config.
+  $view_mode = $entity_info['view'];
+  $config = \Drupal::config('config:alshaya_wishlist.settings');
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $config->getCacheTags());
+  $is_wishlist_enabled = \Drupal::service('alshaya_wishlist.helper')->isWishListEnabled();
+  $build['#attached']['drupalSettings']['alshayaRcs']['isWishlistEnabled'] = $is_wishlist_enabled;
+
+  if ($is_wishlist_enabled) {
+    $build['wishlist']['#markup'] = '<div class="wishlist-pdp-' . $view_mode . '"></div>';
+    $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
+  }
+
+}

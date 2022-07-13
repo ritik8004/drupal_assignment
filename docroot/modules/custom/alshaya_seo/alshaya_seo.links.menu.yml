@@ -1,9 +1,3 @@
-alshaya_seo.google_knowledge_graph_form:
-  title: 'Google Knowledge Graph'
-  parent: system.admin_config_search
-  description: 'Administer the Google Knowledge Graph data.'
-  route_name: alshaya_seo.google_knowledge_graph_form
-
 alshaya_seo.settings:
   title: 'SEO Settings'
   route_name: alshaya_seo.settings

@@ -16,18 +16,19 @@ reviews:
     - alshaya_bazaar_voice/utility
     - alshaya_acm_product/acq_product_info
 
-myaccount:
+myorders:
   js:
-    dist/myaccount.bundle.js: { attributes: { defer: true } }
+    dist/myorders.bundle.js: { attributes: { defer: true } }
   dependencies:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice
     - alshaya_bazaar_voice/utility
     - alshaya_acm_product/acq_product_info
+    - alshaya_white_label/myaccount-reviews
 
-myorders:
+myaccount:
   js:
-    dist/myorders.bundle.js: { attributes: { defer: true } }
+    dist/myaccount.bundle.js: { attributes: { defer: true } }
   dependencies:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice

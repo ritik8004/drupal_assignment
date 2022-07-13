@@ -4,11 +4,12 @@ main:
   dependencies:
     - rcs_magento_placeholders/rcs_magento_placeholders
     - alshaya_rcs_magento_placeholders/main
+    - alshaya_master/common_functions
 
 rcs_product_info:
   version: 1.x
   js:
-    js/alshaya_rcs_product.pdp.v2.js: {}
+    js/alshaya_rcs_product.pdp.rcs.js: {}
   dependencies:
     - core/jquery
     - rcs_handlebars/main
@@ -48,6 +49,21 @@ product.promotions:
   js:
     templates/rcs-product-promotions.handlebars: {}
 
+product.sku_base_form:
+  version: 1.x
+  js:
+    templates/rcs-sku-base-form.handlebars: {}
+
+product.sku_base_form_oos:
+  version: 1.x
+  js:
+    templates/rcs-sku-base-form-oos.handlebars: {}
+
+product.not_buyable_product:
+  version: 1.x
+  js:
+    templates/rcs-not-buyable-product.html.handlebars: {}
+
 product.delivery_info:
   version: 1.x
   js:
@@ -57,11 +73,6 @@ product.delivery_options:
   version: 1.x
   js:
     templates/rcs-pdp-delivery-options.handlebars: {}
-
-product.delivery_option_cnc:
-  version: 1.x
-  js:
-    templates/rcs-pdp-delivery-option-click-and-collect.handlebars: {}
 
 product.delivery_option_hd:
   version: 1.x
@@ -87,6 +98,13 @@ product.block.price.item:
   version: 1.x
   js:
     templates/rcs-product-price-item-block.handlebars: {}
+
+product.modal:
+  version: 1.x
+  js:
+    templates/rcs-product-modal.handlebars: {}
+  dependencies:
+    - alshaya_product_zoom/cloud_zoom_pdp_gallery
 
 gallery.product.product_zoom:
   version: 1.x
@@ -118,12 +136,18 @@ gallery.product.block.product_zoom_magazine_gallery:
   js:
     templates/rcs-product-zoom-magazine-gallery-block.handlebars: {}
 
+gallery.product.product_gallery_magazine:
+  version: 1.x
+  js:
+    templates/rcs-product-gallery-magazine.handlebars: {}
+
 product.order:
   version: 1.x
   js:
     js/alshaya_rcs_order.js: {}
   dependencies:
-    - rcs_magento_placeholders/rcs_magento_placeholders
+    - rcs_placeholders/helpers
+    - alshaya_spc/cart_utilities
 
 rcs_product_modal:
   version: 1.x
@@ -138,3 +162,16 @@ rcs_product_dynamic_yield:
     js/alshaya_rcs_product_dy.js: {}
   dependencies:
     - rcs_magento_placeholders/rcs_magento_placeholders
+
+rcs_product_images:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product.rcs_product_images.js: {}
+  dependencies:
+    - core/jquery
+    - rcs_placeholders/helpers
+
+attribute.brand.logo:
+  version: 1.x
+  js:
+    templates/handlebars/rcs-attribute-brand-logo.handlebars: {}

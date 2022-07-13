@@ -24,7 +24,6 @@ regions:
 
 libraries:
   - alshaya_white_label/ucfix
-  - alshaya_american_eagle/global_styles
 
 libraries-override:
   alshaya_white_label/ltr_print_styles:

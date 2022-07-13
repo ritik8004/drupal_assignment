@@ -11,8 +11,10 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\geolocation\GoogleMapsDisplayTrait;
-use Drupal\user\Entity\User;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\geolocation\MapProviderManager;
+use Drupal\user\UserStorageInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 
 /**
  * Provides the delivery CnC pane for members.
@@ -24,10 +26,7 @@ use Drupal\user\Entity\User;
  *   wrapperElement = "fieldset",
  * )
  */
-class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInterface {
-  // Add trait to get map url from getGoogleMapsApiUrl().
-  use GoogleMapsDisplayTrait;
-
+class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInterface, ContainerFactoryPluginInterface {
   // Add trait to get selected delivery method tab.
   use CheckoutDeliveryMethodTrait;
 
@@ -39,11 +38,80 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
   protected static $formHasError = FALSE;
 
   /**
+   * Map provider object.
+   *
+   * @var \Drupal\geolocation\MapProviderManager
+   */
+  protected $mapProvider;
+
+  /**
+   * User storage object.
+   *
+   * @var \Drupal\user\UserStorageInterface
+   */
+  protected $userStorage;
+
+  /**
+   * Current account object.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $account;
+
+  /**
+   * MemberDeliveryCollect constructor.
+   *
+   * @param array $configuration
+   *   Array config variable.
+   * @param string $plugin_id
+   *   String plugin id.
+   * @param mixed $plugin_definition
+   *   Plugin definition object.
+   * @param \Drupal\geolocation\MapProviderManager $mapProvider
+   *   Map provider object.
+   * @param \Drupal\user\UserStorageInterface $user_storage
+   *   User storage.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account
+   *   User account.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MapProviderManager $mapProvider, UserStorageInterface $user_storage, AccountProxyInterface $account) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->mapProvider = $mapProvider;
+    $this->userStorage = $user_storage;
+    $this->account = $account;
+  }
+
+  /**
+   * MemberDeliveryCollect create method.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   ContainerInterface object.
+   * @param array $configuration
+   *   Configuration array.
+   * @param string $plugin_id
+   *   Plugin id string.
+   * @param mixed $plugin_definition
+   *   Plugin id object.
+   *
+   * @return static
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('plugin.manager.geolocation.mapprovider'),
+      $container->get('entity_type.manager')->getStorage('user'),
+      $container->get('current_user')
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function isVisible() {
-    return \Drupal::currentUser()->isAuthenticated()
-      && alshaya_acm_customer_is_customer(\Drupal::currentUser())
+    return $this->account->isAuthenticated()
+      && alshaya_acm_customer_is_customer($this->account)
       && $this->getClickAndCollectAvailability();
   }
 
@@ -100,7 +168,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     if (empty($default_mobile)) {
       // Check once in customer profile.
-      $account = User::load(\Drupal::currentUser()->id());
+      $account = $this->userStorage->load($this->account->id());
 
       if ($account_phone = $account->get('field_mobile_number')->getValue()) {
         $default_mobile = $account_phone[0]['value'];
@@ -237,7 +305,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $pane_form['#attached'] = [
       'drupalSettings' => [
         'geolocation' => [
-          'google_map_url' => $this->getGoogleMapsApiUrl(),
+          'google_map_url' => $this->mapProvider->getMapProvider('google_maps')->getGoogleMapsApiUrl(),
           'google_map_settings' => [
             'type' => static::$ROADMAP,
             'zoom' => 11,
@@ -343,7 +411,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     // Adding first and last name from custom info.
     /** @var \Drupal\user\Entity\User $account */
-    $account = User::load(\Drupal::currentUser()->id());
+    $account = $this->userStorage->load($this->account->id());
     $address['firstname'] = $account->get('field_first_name')->getString();
     $address['lastname'] = $account->get('field_last_name')->getString();
 

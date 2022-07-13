@@ -1,5 +1,6 @@
 name: 'Alshaya social google login'
 type: module
+description: 'Handles google social auth login related functionalities in Alshaya'
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:

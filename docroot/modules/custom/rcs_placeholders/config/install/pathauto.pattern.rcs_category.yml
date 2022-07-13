@@ -7,16 +7,16 @@ dependencies:
 id: rcs_category
 label: 'RCS Category'
 type: 'canonical_entities:taxonomy_term'
-pattern: '[rcs:category-path-prefix][term:field_category_slug:value]'
+pattern: '[term:field_category_slug:value]'
 selection_criteria:
-  c8707e90-32f5-4231-a14c-f22008daa0ee:
+  ef4e6e05-ac3b-4943-a4db-2f94fd8b14d7:
     id: 'entity_bundle:taxonomy_term'
     bundles:
       rcs_category: rcs_category
     negate: false
     context_mapping:
       taxonomy_term: taxonomy_term
-    uuid: c8707e90-32f5-4231-a14c-f22008daa0ee
+    uuid: ef4e6e05-ac3b-4943-a4db-2f94fd8b14d7
 selection_logic: and
 weight: -5
 relationships: {  }

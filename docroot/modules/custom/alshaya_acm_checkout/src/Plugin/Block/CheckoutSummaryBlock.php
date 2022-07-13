@@ -201,7 +201,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     /** @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler */
     $moduleHandler = $container->get('module_handler');
-    if ($moduleHandler->moduleExists('alshaya_stores_finder')) {
+    if ($moduleHandler->moduleExists('alshaya_stores_finder_transac')) {
       $store_finder_utility = $container->get('alshaya_stores_finder_transac.utility');
     }
 
@@ -516,7 +516,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#attached' => [
         'library' => [
           'alshaya_acm/alshaya.acm.js',
-          'core/jquery.ui.accordion',
+          'jquery_ui_accordion/accordion',
         ],
       ],
     ];

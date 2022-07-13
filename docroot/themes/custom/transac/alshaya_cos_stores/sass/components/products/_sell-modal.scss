@@ -8,4 +8,12 @@
       }
     }
   }
+
+  .content {
+    &__main {
+      @include breakpoint($desktop) {
+        min-height: 31.25rem;
+      }
+    }
+  }
 }

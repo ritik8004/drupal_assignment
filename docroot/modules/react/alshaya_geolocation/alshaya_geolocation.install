@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_geolocation.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disables geolocation_google_maps module.
+ */
+function alshaya_geolocation_update_8001() {
+  // Disable geolocation_google_maps.
+  if (\Drupal::service('module_handler')->moduleExists('geolocation_google_maps')) {
+    \Drupal::service('module_installer')->uninstall(['geolocation_google_maps']);
+    drupal_flush_all_caches();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Deletes the geolocation_google_maps dummy config.
+ */
+function alshaya_geolocation_update_8002() {
+  // Delete geolocation_google_maps config.
+  \Drupal::service('config.factory')->getEditable('geolocation_google_maps.settings')->delete();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enables geolocation_google_maps module and update API key.
+ */
+function alshaya_geolocation_update_8003() {
+  // Update run with the drupal upgrade.
+  $config_factory = \Drupal::service('config.factory');
+  if ($config_factory->getEditable('views.view.stores_finder')->get('id')) {
+    // Remove exposed block if its still around.
+    if ($block_config = $config_factory->getEditable('block.block.exposedformstores_finderpage_1')) {
+      $block_config->delete();
+    }
+    if (!\Drupal::service('module_handler')->moduleExists('alshaya_react')) {
+      \Drupal::logger('alshaya_geolocation')->warning('Installing Alshaya React module.');
+      \Drupal::service('module_installer')->install(['alshaya_react']);
+    }
+    // Set geolocation map settings.
+    $geo_config = $config_factory->getEditable('geolocation.settings');
+    $fields = $geo_config->getRawData();
+    $config_factory->getEditable('geolocation_google_maps.settings')->setData($fields)->save();
+    // Delete storefinder view.
+    $config_factory->getEditable('views.view.stores_finder')->delete();
+    \Drupal::logger('alshaya_geolocation')->warning('Deleting the Store Finder view.');
+    // Set MDC path.
+    $store_config = $config_factory->getEditable('alshaya_stores_finder.settings');
+    $store_config->set('filter_path', "storeLocator/search?searchCriteria[filter_groups][0][filters][0][field]=status&searchCriteria[filter_groups][0][filters][0][value]=1");
+    $store_config->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adds translations for geolocation.
+ */
+function alshaya_geolocation_update_8004() {
+  module_load_include('inc', 'alshaya_geolocation', 'alshaya_geolocation.translations');
+  if ($translations = _alshaya_geolocation_get_translations('v1')) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ *
+ * Have clearance for geolocation_google_maps update hooks to run.
+ */
+function alshaya_geolocation_update_dependencies() {
+
+  // Run after the empty config delete.
+  $dependencies['geolocation'][8201] = [
+    'alshaya_geolocation' => 8002,
+  ];
+
+  // Run after contrib update hook.
+  $dependencies['alshaya_geolocation'][8003] = [
+    'geolocation' => 8201,
+  ];
+
+  // Run after lightning profile update.
+  $dependencies['alshaya_geolocation'][8002] = [
+    'lightning' => 8007,
+  ];
+  return $dependencies;
+}

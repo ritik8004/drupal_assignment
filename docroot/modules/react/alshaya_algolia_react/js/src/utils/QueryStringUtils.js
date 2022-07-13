@@ -92,11 +92,15 @@ const redirectToOtherLang = (queryValue, inputTag) => {
 
 /**
  * Return true if current view is mobile otherwise false.
+ *
+ * @deprecated: Please use it from global utilities.
  */
 const isMobile = () => (window.innerWidth < 768);
 
 /**
  * Return true if current view is desktop otherwise false.
+ *
+ * @deprecated: Please use it from global utilities.
  */
 const isDesktop = () => (window.innerWidth > 1024);
 

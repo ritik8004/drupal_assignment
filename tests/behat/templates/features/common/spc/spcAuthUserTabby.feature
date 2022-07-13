@@ -1,4 +1,4 @@
-@javascript @auth @Tabby @homeDelivery @flsauat @pbsauat @hmsauat
+@javascript @auth @Tabby @homeDelivery @pbsauat @hmsauat @bpaeuat
 Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
 
   Background:

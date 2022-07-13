@@ -6,6 +6,31 @@ core_version_requirement: ^8 || ^9
 dependencies:
   - block_content_machine_name:block_content_machine_name
   - menu_link_modal:menu_link_modal
+  - acsf:acsf
+  - block_content_machine_name:block_content_machine_name
+  - drupal:color
+  - pcb:pcb_memcache
+  - drupal:syslog
+  - menu_link_modal:menu_link_modal
+  - alshaya_performance:alshaya_performance
+  - alshaya_js_optimisations:alshaya_js_optimisations
+  - drupal:jquery_ui
+  - drupal:jquery_ui_datepicker
+  - drupal:jquery_ui_accordion
+  - drupal:jquery_ui_tabs
+  - drupal:jquery_ui_effects
+  - drupal:memory_limit_policy
+  - drupal:memory_limit_policy_path
+  - drupal:config_translation
+  - drupal:content_translation
+  - components:components
+  - drupal:dynamic_page_cache
+  - drupal:page_cache
+  - drupal:language
+  - drupal:locale
+  - memcache:memcache
+  - drupal:syslog
+  - twig_tweak:twig_tweak
 
 base profile: alshaya
 

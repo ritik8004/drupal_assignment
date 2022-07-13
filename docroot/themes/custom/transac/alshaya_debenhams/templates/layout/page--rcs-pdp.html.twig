@@ -1,0 +1,7 @@
+{% extends '@alshaya_rcs_product/page--rcs-pdp.html.twig' %}
+{% block primary_footer %}
+  {% if page.footer_primary %}
+      {% include directory ~ '/templates/partial/footer-primary.html.twig' %}
+    <!-- /footer-primary -->
+  {% endif %}
+{% endblock %}

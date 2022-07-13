@@ -266,9 +266,9 @@ const formatCart = (cartData) => {
 /**
  * Static cache for getProductStatus().
  *
- * @type {null}
+ * @type {object}
  */
-const staticProductStatus = [];
+let staticProductStatus = {};
 
 /**
  * Get data related to product status.
@@ -285,13 +285,20 @@ const getProductStatus = async (sku, parentSKU) => {
   }
 
   // Return from static, if available.
-  if (typeof staticProductStatus[sku] !== 'undefined') {
+  if (Drupal.hasValue(staticProductStatus) && Drupal.hasValue(staticProductStatus[sku])) {
     return staticProductStatus[sku];
   }
 
   staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku, parentSKU);
 
   return staticProductStatus[sku];
+};
+
+/**
+ * Clears static cache for product status data.
+ */
+const clearProductStatusStaticCache = () => {
+  staticProductStatus = {};
 };
 
 /**
@@ -314,8 +321,9 @@ const getProcessedCartData = async (cartData) => {
     return null;
   }
 
+  const cartId = window.commerceBackend.getCartId();
   const data = {
-    cart_id: window.commerceBackend.getCartId(),
+    cart_id: cartId,
     cart_id_int: cartData.cart.id,
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
@@ -1280,4 +1288,5 @@ export {
   getProductStatus,
   getLocations,
   getProductShippingMethods,
+  clearProductStatusStaticCache,
 };

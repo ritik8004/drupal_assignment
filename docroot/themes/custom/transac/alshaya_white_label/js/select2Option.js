@@ -29,7 +29,7 @@ jQuery.fn.select2Option = function (options) {
         if ($(this).attr('swatch-image')) {
           liHtml.addClass('li-swatch-image');
 
-          var swatchImage = '<img loading="lazy" src="' + $(this).attr('swatch-image') + '" alt="' + textValue + '" />';
+          var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + textValue + '" />';
           if (selectIndex === 0) {
             liHtml.hide();
           }
@@ -141,7 +141,8 @@ jQuery.fn.select2Option = function (options) {
 
     if (drupalSettings.color_swatches_hover && $(window).width() > 767) {
       if ((select.attr('data-drupal-selector') === 'edit-configurables-color') || (select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id')) {
-        $('.form-item-configurables-color .select2Option .list-title span:first-child').hide();
+        var skuBaseForm = select.closest('.sku-base-form');
+        $('.form-item-configurables-color .select2Option .list-title span:first-child', skuBaseForm).hide();
         buttonsHtml.find('a').on('mouseover', function (e) {
           e.preventDefault();
 

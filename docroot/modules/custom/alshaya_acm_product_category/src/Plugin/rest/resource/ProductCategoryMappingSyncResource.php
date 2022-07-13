@@ -20,8 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "alshaya_acm_product_category_mapping",
  *   label = @Translation("Alshaya Product Category Mapping Update"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/product-category-mapping",
- *     "https://www.drupal.org/link-relations/create" = "/rest/v1/product-category-mapping"
+ *     "create" = "/rest/v1/product-category-mapping"
  *   }
  * )
  */

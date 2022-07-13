@@ -39,7 +39,7 @@
 {%
 set classes = [
 'field__wrapper',
-field_name ? field_name|replace('_', '-'),
+field_name ? field_name|replace({'_':'-'}),
 ]
 %}
 {% set item_classes = [ 'field__item', default_item_class ] %}

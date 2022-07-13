@@ -1,0 +1,5 @@
+name: Alshaya TBS Transac RCS
+description: Enables RCS for TBS.
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9

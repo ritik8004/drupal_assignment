@@ -9,14 +9,48 @@
  * Implements hook_install().
  */
 function alshaya_rcs_install() {
+  $module_handler = \Drupal::moduleHandler();
+  $module_installer = \Drupal::service('module_installer');
   // Configure ShareThis widget for the RCS content type.
-  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+  if ($module_handler->moduleExists('sharethis')) {
     $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
     // Only enable sharethis for RCS content type if it is enabled for
     // Product content type.
     if (in_array('acq_product', $configFactory->get('node_types'))) {
       $configFactory->set('node_types.rcs_product', 'rcs_product');
       $configFactory->save();
+    }
+  }
+
+  // We install modules in this way instead of specifying them as dependencies
+  // in the info.yml file is because of the reason that new site installation
+  // fails because of specifying the dependencies.
+  $modules = [
+    'alshaya_rcs_product',
+    'alshaya_rcs_promotion',
+    'alshaya_rcs_listing',
+    'alshaya_rcs_main_menu',
+    'alshaya_rcs_seo',
+    'alshaya_rcs_geolocation',
+  ];
+  $module_installer->install($modules);
+  \Drupal::logger('alshaya_rcs')->notice('Installed RCS modules: @modules', [
+    '@modules' => implode(',', $modules),
+  ]);
+
+  $modules = [
+    'alshaya_magazine' => 'alshaya_rcs_magazine',
+    'alshaya_color_split' => 'alshaya_rcs_color_split',
+    'alshaya_add_to_bag' => 'alshaya_rcs_add_to_bag',
+    'alshaya_wishlist' => 'alshaya_rcs_wishlist',
+  ];
+
+  foreach ($modules as $module_to_check => $module_to_install) {
+    if ($module_handler->moduleExists($module_to_check)) {
+      $module_installer->install([$module_to_install]);
+      \Drupal::logger('alshaya_rcs')->notice('Installed RCS module: @module', [
+        '@module' => $module_to_install,
+      ]);
     }
   }
 }

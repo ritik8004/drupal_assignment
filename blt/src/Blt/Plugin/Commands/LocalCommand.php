@@ -23,6 +23,7 @@ class LocalCommand extends BltTasks {
     4 => 'alshaya4.04',
     5 => 'alshaya5.05',
     7 => 'alshaya7tmp.07',
+    8 => 'alshayadc1.02',
   ];
 
   /**
@@ -120,7 +121,7 @@ class LocalCommand extends BltTasks {
 
     $this->say('Disable cloud modules');
     $this->taskDrush()
-      ->drush('pmu purge acquia_search acquia_connector shield dblog datadog_js')
+      ->drush('pmu purge acquia_connector shield dblog datadog_js')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();

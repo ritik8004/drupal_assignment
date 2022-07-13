@@ -1,5 +1,4 @@
 import { hasValue } from './conditionsUtility';
-import { callMagentoApi } from './requestHelper';
 import logger from './logger';
 
 /**
@@ -141,7 +140,13 @@ export const getWishListData = (strgKey) => {
   const storageKey = hasValue(strgKey) ? strgKey : getWishListStorageKey();
 
   // Get data from local storage.
-  return Drupal.getItemFromLocalStorage(storageKey);
+  const wishlistItems = Drupal.getItemFromLocalStorage(storageKey);
+
+  // Check if this returns an object, we will type cast it to an array and
+  // and return an array of wishlist items. Else return null.
+  return (wishlistItems && typeof wishlistItems === 'object')
+    ? Object.values(wishlistItems)
+    : null;
 };
 
 /**
@@ -152,11 +157,15 @@ export const isProductExistInWishList = (productSku) => {
   const wishListItems = getWishListData();
 
   // Check if product sku is in existing data.
-  if (wishListItems && Object.prototype.hasOwnProperty.call(wishListItems, productSku)) {
-    return true;
+  let ifProductExist = false;
+  if (wishListItems) {
+    // We need to match the given sku with the sku property for each wishlist
+    // item to verify if it exist.
+    ifProductExist = wishListItems.find((product) => product.sku === productSku);
   }
 
-  return false;
+  // Return true/false based on the data.
+  return hasValue(ifProductExist);
 };
 
 /**
@@ -170,12 +179,35 @@ export const getWishListDataForSku = (sku) => {
   const wishListItems = getWishListData();
 
   // Return null if product sku is not in existing data.
-  if (!wishListItems
-    || !Object.prototype.hasOwnProperty.call(wishListItems, sku)) {
+  if (!wishListItems) {
     return null;
   }
 
-  return wishListItems[sku];
+  // Get the data from the matched SKU from the local storage values.
+  const skuData = wishListItems.find((product) => product.sku === sku);
+
+  // Return the given sku data if available else return null.
+  return hasValue(skuData) ? skuData : null;
+};
+
+/**
+ * Return the local storage array index for the given sku if available.
+ *
+ * @returns {number}
+ *  Index of given sku in wishlist items array. Default to -1, if not found.
+ */
+export const getWishListDataIndexForSku = (sku) => {
+  // Get existing wishlist data from storage.
+  const wishListItems = getWishListData();
+
+  // Return null if product sku is not in existing data.
+  if (!wishListItems) {
+    return null;
+  }
+
+  // Find the index of given sku in wishlist item array. This will return -1
+  // if the given sku doesn't found in the array.
+  return _.findIndex(wishListItems, (product) => product.sku === sku);
 };
 
 /**
@@ -340,14 +372,14 @@ export const addProductToWishListForGuestUsers = (productInfo) => {
   let wishListItems = getWishListData();
 
   // If no existing data, create an array.
-  wishListItems = wishListItems || {};
+  wishListItems = wishListItems || [];
 
   // Add new data to storage.
   // We only need to store sku and options and not title.
-  wishListItems[productInfo.sku] = {
+  wishListItems.push({
     sku: productInfo.sku,
     options: productInfo.options,
-  };
+  });
 
   // Save back to storage.
   addWishListInfoInStorage(wishListItems);
@@ -359,111 +391,10 @@ export const addProductToWishListForGuestUsers = (productInfo) => {
 };
 
 /**
- * Get the wishlist information from the backend using API.
- *
- * @returns {Promise<object>}
- *   A promise object.
- */
-export const getWishlistFromBackend = async () => {
-  // Call magento api to get the wishlist items of current logged in user.
-  const response = await callMagentoApi('/V1/wishlist/me/items', 'GET');
-  if (hasValue(response.data)) {
-    if (hasValue(response.data.error)) {
-      logger.warning('Error getting wishlist items. Response: @response', {
-        '@response': JSON.stringify(response.data),
-      });
-    }
-  }
-
-  // Return response to perform necessary operation
-  // from where this function called.
-  return response;
-};
-
-/**
- * Adds/removes products from wishlist in backend using API.
- *
- * @param {object} data
- *   The data object to send in the API call.
- *
- * @returns {Promise<object>}
- *   A promise object.
- */
-export const addRemoveWishlistItemsInBackend = async (data, action) => {
-  // Early return is no action is provided.
-  if (typeof action === 'undefined') {
-    return null;
-  }
-
-  let requestMethod = null;
-  let requestUrl = null;
-  let itemData = null;
-
-  switch (action) {
-    case 'addWishlistItem': {
-      requestMethod = 'POST';
-      requestUrl = '/V1/wishlist/me/item/add';
-
-      // Prepare sku options if available to push in backend api.
-      const skuOptions = [];
-      if (typeof data.options !== 'undefined'
-        && data.options.length > 0) {
-        data.options.forEach((option) => {
-          skuOptions.push({
-            id: option.option_id,
-            value: option.option_value,
-          });
-        });
-      }
-
-      // Prepare wishlist item to push in backend api.
-      itemData = {
-        items: [
-          {
-            sku: data.sku,
-            options: skuOptions,
-          },
-        ],
-      };
-      break;
-    }
-
-    case 'removeWishlistItem':
-      requestMethod = 'DELETE';
-      requestUrl = `/V1/wishlist/me/item/${data.wishlistItemId}/delete`;
-      break;
-
-    case 'mergeWishlistItems':
-      requestMethod = 'POST';
-      requestUrl = '/V1/wishlist/me/item/add';
-      itemData = { items: data };
-      break;
-
-    default:
-      logger.critical('Endpoint does not exist for action: @action.', {
-        '@action': action,
-      });
-  }
-
-  // Call magento backend with the api details.
-  const response = await callMagentoApi(requestUrl, requestMethod, itemData);
-
-  // Log if there are errors in the response.
-  if (hasValue(response.data) && hasValue(response.data.error)) {
-    logger.warning('Error adding item to wishlist. Post: @post, Response: @response', {
-      '@post': JSON.stringify(itemData),
-      '@response': JSON.stringify(response.data),
-    });
-  }
-
-  return response;
-};
-
-/**
  * Utility function to add a product to wishlist for logged in users.
  */
 export const addProductToWishListForLoggedInUsers = (productInfo) => (
-  addRemoveWishlistItemsInBackend(
+  window.commerceBackend.addRemoveWishlistItemsInBackend(
     productInfo,
     'addWishlistItem',
   ));
@@ -485,10 +416,11 @@ export const addProductToWishList = (productInfo) => {
  * Utility function to add a product to wishlist for logged in users.
  */
 export const removeProductFromWishListForLoggedInUsers = (productInfo) => (
-  addRemoveWishlistItemsInBackend(
+  window.commerceBackend.addRemoveWishlistItemsInBackend(
     productInfo,
     'removeWishlistItem',
-  ));
+  )
+);
 
 /**
  * Utility function to remove a product from wishlist.
@@ -499,7 +431,7 @@ export const removeProductFromWishList = (productSku) => {
 
   // Return is no existing data found.
   if (!wishListItems
-    || typeof wishListItems[productSku] === 'undefined') {
+    || !isProductExistInWishList(productSku)) {
     logger.warning('Product not found in local storage. Product SKU: @productSku. Wishlist Data: @wishlistData.', {
       '@productSku': productSku,
       '@wishlistData': JSON.stringify(wishListItems),
@@ -520,7 +452,8 @@ export const removeProductFromWishList = (productSku) => {
 
   // For logged in users, check if product's wishlistItemId exist.
   // If not return Promise object with null response.
-  if (typeof wishListItems[productSku].wishlistItemId === 'undefined') {
+  const skuData = getWishListDataForSku(productSku);
+  if (skuData && typeof skuData.wishlistItemId === 'undefined') {
     // Always return a Promise object.
     return new Promise((resolve) => {
       resolve(null);
@@ -530,7 +463,7 @@ export const removeProductFromWishList = (productSku) => {
   // If wishlistItemId exists, do remove product from backend
   // and return the response of API call.
   return removeProductFromWishListForLoggedInUsers({
-    wishlistItemId: wishListItems[productSku].wishlistItemId,
+    wishlistItemId: skuData.wishlistItemId,
   });
 };
 
@@ -554,49 +487,7 @@ export const removeFromWishlistAfterAddtocart = () => {
 /**
  * Utility function to get wishlist notification time.
  */
-export const getWishlistNotificationTime = () => (3000);/**
- * Get the shared wishlist information from the backend using API.
- *
- * @returns {Promise<object>}
- *   A promise object.
- */
-export const getSharedWishlistFromBackend = () => {
-  // Call magento api to get the wishlist items from sharing code.
-  const response = callMagentoApi(`/V1/wishlist/code/${drupalSettings.wishlist.sharedCode}/items`, 'GET');
-  if (hasValue(response.data)) {
-    if (hasValue(response.data.error)) {
-      logger.warning('Error getting wishlist items. Response: @response', {
-        '@response': JSON.stringify(response.data),
-      });
-    }
-  }
-
-  // Return response to perform necessary operation
-  // from where this function called.
-  return response;
-};
-
-/**
- * Get the raw wishlist information from the backend using API.
- *
- * @returns {Promise<object>}
- *   A promise object.
- */
-export const getWishlistInfoFromBackend = async () => {
-  // Call magento api to get the wishlist items of current logged in user.
-  const response = await callMagentoApi('/V1/wishlist/me/get', 'GET');
-  if (hasValue(response.data)) {
-    if (hasValue(response.data.error)) {
-      logger.warning('Error getting wishlist items. Response: @response', {
-        '@response': JSON.stringify(response.data),
-      });
-    }
-  }
-
-  // Return response to perform necessary operation
-  // from where this function called.
-  return response;
-};
+export const getWishlistNotificationTime = () => (3000);
 
 /**
  * Helper function to check the stock status of the product with search
@@ -639,26 +530,33 @@ export const removeDiffFromWishlist = (productsObj) => {
   const wishListItems = getWishListData();
 
   if (wishListItems) {
-    Object.keys(wishListItems).forEach((keySku) => {
+    wishListItems.forEach((item) => {
       // Check if wishlist product sku exist in given
       // products array and if not, we will remove that
       // product from the wishlist of users.
       if (!productsObj.find(
-        (productObj) => productObj.sku === keySku,
+        (productObj) => productObj.sku === item.sku,
       )) {
         // Call remove product from wishlist function. This
         // will handle removing product from wishlist for both
         // anonymous and logged in users.
-        removeProductFromWishList(keySku).then((response) => {
+        removeProductFromWishList(item.sku).then((response) => {
           if (hasValue(response)
             && hasValue(response.data)
             && hasValue(response.data.status)
             && response.data.status) {
-            // Remove the entry for given product sku from existing storage data.
-            delete wishListItems[keySku];
+            // Get the SKU index from the wishlist local storage array. This will
+            // return a position index number i.e. > -1 if product exists else will
+            // return -1. We need to remove product from the local storage if
+            // skuIndex is greater than -1.
+            const skuIndex = getWishListDataIndexForSku(item.sku);
+            if (skuIndex > -1) {
+              // Remove the entry for given product sku from existing storage data.
+              wishListItems.splice(skuIndex, 1);
 
-            // Save back to storage.
-            addWishListInfoInStorage(wishListItems);
+              // Save back to storage.
+              addWishListInfoInStorage(wishListItems);
+            }
           }
         });
       }

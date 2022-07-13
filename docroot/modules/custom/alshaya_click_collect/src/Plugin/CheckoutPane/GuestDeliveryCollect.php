@@ -12,7 +12,8 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\geolocation\GoogleMapsDisplayTrait;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\geolocation\MapProviderManager;
 
 /**
  * Provides the delivery CnC pane for guests.
@@ -24,10 +25,7 @@ use Drupal\geolocation\GoogleMapsDisplayTrait;
  *   wrapperElement = "fieldset",
  * )
  */
-class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInterface {
-  // Add trait to get map url from getGoogleMapsApiUrl().
-  use GoogleMapsDisplayTrait;
-
+class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInterface, ContainerFactoryPluginInterface {
   // Add trait to get selected delivery method tab.
   use CheckoutDeliveryMethodTrait;
 
@@ -37,6 +35,53 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * @var bool
    */
   protected static $formHasError = FALSE;
+
+  /**
+   * Map provider variable.
+   *
+   * @var \Drupal\geolocation\MapProviderManager
+   */
+  protected $mapProvider;
+
+  /**
+   * GuestDeliveryCollect construct.
+   *
+   * @param array $configuration
+   *   Config param.
+   * @param string $plugin_id
+   *   String of plugin id.
+   * @param mixed $plugin_definition
+   *   Param object of plugin definition.
+   * @param \Drupal\geolocation\MapProviderManager $mapProvider
+   *   Map provider object.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MapProviderManager $mapProvider) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->mapProvider = $mapProvider;
+  }
+
+  /**
+   * GuestDeliveryCollect create method.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   Container interface object.
+   * @param array $configuration
+   *   Configuration array.
+   * @param string $plugin_id
+   *   Plugin id string.
+   * @param mixed $plugin_definition
+   *   Plugin object.
+   *
+   * @return static
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('plugin.manager.geolocation.mapprovider')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -275,7 +320,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $pane_form['#attached'] = [
       'drupalSettings' => [
         'geolocation' => [
-          'google_map_url' => $this->getGoogleMapsApiUrl(),
+          'google_map_url' => $this->mapProvider->getMapProvider('google_maps')->getGoogleMapsApiUrl(),
           'google_map_settings' => [
             'type' => static::$ROADMAP,
             'zoom' => 11,

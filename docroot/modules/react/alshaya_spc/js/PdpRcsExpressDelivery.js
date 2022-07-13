@@ -10,9 +10,11 @@ Drupal.behaviors.alshayaSpcPdpRcsExpressDeliveryBehavior = {
   attach: function alshayaSpcPdpRcsExpressDelivery() {
     const pageLoaded = document.querySelector('.rcs-page.rcs-loaded');
     const element = document.querySelector('#express-delivery-options');
+    const skuBaseForm = document.querySelector('.sku-base-form');
     if (!componentAttached
         && pageLoaded
         && element
+        && skuBaseForm
     ) {
       componentAttached = true;
       ReactDOM.render(

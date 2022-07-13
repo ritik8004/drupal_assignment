@@ -3,7 +3,7 @@
 {% set aura_class = order.aura_enabled ? 'has-aura-points' %}
 
 <table class="user__order--detail recent__orders--list">
-  <tbody class="recent__orders--body">
+  <tbody class="recent__orders--body" data-order-id="{{order.id}}">
     <tr class="order-summary-row">
       <td class="order-transaction">
         <div class="light tablet-light">{{ 'Order ID' | t }}</div>
@@ -54,7 +54,7 @@
         <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
       </td>
 
-      <td class="above-mobile toggle--icon order-total-column {{ aura_class }}" colspan="{{ order.bazaarvoice ? '2' : '' }}">
+      <td class="above-mobile toggle--icon order-total-column {{ aura_class }}" colspan="2">
         <div class="order-total-wrapper">
           <div class="light">{{ "Order Total"|t }}</div>
           <div class="dark">{{ order.totals.grand }}</div>
@@ -75,38 +75,52 @@
       </td>
     </tr>
 
+    {% if order.online_returns_status is defined and order.online_returns_status %}
+      <tr class="order-item-row online-returns-eligibility-message">
+        <td colspan="5">
+          <div id="online-returns-eligibility-window"></div>
+        </td>
+      </tr>
+    {% endif %}
+
+    <tr class="order-item-row delivered-items">
+      <td colspan="5">
+        <div>{{ "Delivered Items"|t }}</div>
+      </td>
+    </tr>
+
     {% for item in order.items %}
       {{ _self.order_item(item, false) }}
     {% endfor %}
 
     {% if order.cancelled_items_count > 0 %}
-      <tr id="cancel-order-item-{{ order.id }}" class="order-item-row">
-        <td colspan="4">
+      <tr id="cancel-order-item-{{ order.id }}" class="order-item-row cancelled-items">
+        <td colspan="5">
           <div>{{ "Cancelled Items"|t }}</div>
         </td>
       </tr>
-      {% for item in order.cancelled_items %}
-        {{ _self.order_item(item, true) }}
-      {% endfor %}
       {% if order.refund_text is not empty %}
         <tr class="order-item-row">
-          <td class="cancelled-item-refund-text" colspan="4">
+          <td class="cancelled-item-refund-text" colspan="5">
             <div class="tooltip-anchor info">
               <span>{{ order.refund_text }}</span>
             </div>
           </td>
         </tr>
       {% endif %}
+      {% for item in order.cancelled_items %}
+        {{ _self.order_item(item, true) }}
+      {% endfor %}
     {% endif %}
 
     <tr class="order-item-row order__detail--link">
-      <td colspan="{{ order.bazaarvoice ? '5' : '4' }}" class="desktop-only">
+      <td colspan="5" class="desktop-only">
         <a href="{{ path('alshaya_acm_customer.orders_detail', {'user': order.user_id, 'order_id': order.id}) }}">{{ 'View order details'| t }}</a>
       </td>
-      <td colspan="{{ order.bazaarvoice ? '4' : '3' }}" class="tablet-only">
+      <td colspan="4" class="tablet-only">
         <a href="{{ path('alshaya_acm_customer.orders_detail', {'user': order.user_id, 'order_id': order.id}) }}">{{ 'View order details'| t }}</a>
       </td>
-      <td colspan="{{ order.bazaarvoice ? '4' : '3' }}" class="mobile-only">
+      <td colspan="4" class="mobile-only">
         <a href="{{ path('alshaya_acm_customer.orders_detail', {'user': order.user_id, 'order_id': order.id}) }}">{{ 'View order details'| t }}</a>
       </td>
     </tr>
@@ -161,10 +175,10 @@
       <span class="currency-code dark prefix">{{ item.total_price }}</span>
     </td>
 
-    {% if item.bazaarvoice_link %}
-      <td class="above-mobile user-review bazaarvoice-enable">
+    <td class="above-mobile user-review bazaarvoice-enable">
+      {% if item.bazaarvoice_link %}
         <div class="myaccount-write-review" data-sku={{ item.parent_sku }}></div>
-      </td>
-    {% endif %}
+      {% endif %}
+    </td>
   </tr>
 {% endmacro %}

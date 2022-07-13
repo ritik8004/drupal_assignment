@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Condition(
  *   id = "alshaya_super_category",
  *   label = @Translation("Alshaya Super Category"),
- *   context = {
+ *   context_definitions = {
  *     "term" = @ContextDefinition("entity:taxonomy_term", label = @Translation("Taxonomy term"), required = FALSE),
  *   }
  * )

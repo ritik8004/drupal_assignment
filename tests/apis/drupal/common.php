@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 function post($url, $data, array $headers = []) {
   $headers['Cache-Control'] = 'no-cache';

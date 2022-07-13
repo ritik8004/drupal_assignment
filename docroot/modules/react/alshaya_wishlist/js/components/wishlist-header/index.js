@@ -7,21 +7,11 @@ import {
   getWishListData,
   getWishlistLabel,
   getWishlistNotificationTime,
-  getWishlistFromBackend,
-  addRemoveWishlistItemsInBackend,
-  guestUserStorageKey,
   loggedInUserStorageKey,
 } from '../../../../js/utilities/wishlistHelper';
 import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isDesktop } from '../../../../js/utilities/display';
-
-// Flag used to check if backend api for wishlist items is already called.
-window.loadWishListFromBackend = window.loadWishListFromBackend || false;
-
-// Flag used to check if wishlist data are already loaded from backend and
-// stored data in local storage.
-window.wishListLoadedFromBackend = window.wishListLoadedFromBackend || false;
 
 export default class WishlistHeader extends React.Component {
   constructor(props) {
@@ -47,92 +37,10 @@ export default class WishlistHeader extends React.Component {
       addWishListInfoInStorage({}, loggedInUserStorageKey());
     }
 
-    // Check if user is an authenticate user, we have wishlist data
-    // in local storage from guest users and merge wishlist info for logged
-    // in user is true, we will call backend api to merge wishlist info
-    // in magento for the customer. Once it is merged, get updated
-    // data from magento and update the wishlist info data in local storage.
-    // If merge flag is false, we will check for wishlist data in local storage
-    // for logged in user and if found nothing, we will load from backend.
+    // Check if user is an authenticate user, add an event listener for wishlist
+    // items load from MDC backend.
     if (!isAnonymousUser()) {
-      // Guest user's wishlist data from local storage.
-      const wishListDataOfGuestUser = getWishListData(guestUserStorageKey());
-      if (wishListDataOfGuestUser
-        && typeof wishListDataOfGuestUser === 'object'
-        && Object.keys(wishListDataOfGuestUser).length > 0
-        && hasValue(drupalSettings.wishlist.mergeWishlistForLoggedInUsers)) {
-        // Remove wishlist info from local storage for guest users, as
-        // we don't want this info to share with logged in users.
-        addWishListInfoInStorage({}, guestUserStorageKey());
-
-        // Merge wishlist information to the magento backend from local storage,
-        // if wishlist data available in local storage and merging wishlist
-        // data flag is set to true.
-
-        // Prepare the wishlist item data to push in backend api.
-        const itemData = [];
-        Object.values(wishListDataOfGuestUser).forEach((item) => {
-          // Prepare sku options if available to push in backend api.
-          const skuOptions = [];
-          if (item.options.length > 0) {
-            item.options.forEach((option) => {
-              skuOptions.push({
-                id: option.option_id,
-                value: option.option_value,
-              });
-            });
-          }
-
-          itemData.push({
-            sku: item.sku,
-            options: skuOptions,
-          });
-        });
-
-        // If we have items for wishlist then add the items in backend
-        // wishlist with api call. Once added successfully, we need to
-        // load the latest wishlist information from backend as well.
-        if (itemData.length > 0) {
-          // Wishlist header component is placed in two different blocks header and
-          // sticky header. Header component calls merge items and
-          // loadWishlistFromBackend. To stop sticky header again calling
-          // loadWishlistFromBackend we set the flag here. This is unset after merge
-          // items call is ended.
-          window.loadWishListFromBackend = true;
-          addRemoveWishlistItemsInBackend(
-            itemData,
-            'mergeWishlistItems',
-          ).then((response) => {
-            if (typeof response.data.status !== 'undefined'
-              && response.data.status) {
-              // Wishlist header component is called in two different places,
-              // header and sticky header. The header component calls
-              // add remove wish list items to merge guest wishlist products
-              // and loadWishlistFromBackend. Before merging items,
-              // sticky header calls loadWishlistFromBackend in below else
-              // condition. Hence the flag is set to stop sticky header from
-              // loading wishlist items before merge. Here we override flag as
-              // items should be refreshed after merged from guest list.
-              window.loadWishListFromBackend = false;
-              this.loadWishlistFromBackend();
-            }
-          });
-        }
-      } else {
-        // Get wishlist data from the local storage.
-        const wishListData = getWishListData();
-        if (hasValue(drupalSettings.wishlist.config.forceLoadWishlistFromBackend)
-          || (wishListData === null
-          || (typeof wishListData === 'object'
-          && Object.keys(wishListData).length === 0))) {
-          // Load wishlist information from the magento backend, if wishlist
-          // data is empty in local storage for authenticate users. First check
-          // if wishlist is available for the customer in backend.
-          this.loadWishlistFromBackend();
-          // Get wishlist count after backend success then update header.
-          document.addEventListener('getWishlistFromBackendSuccess', this.updateWishListHeader);
-        }
-      }
+      document.addEventListener('getWishlistFromBackendSuccess', this.updateWishListHeader);
     }
 
     // Add event listener for add to wishlist action.
@@ -158,62 +66,6 @@ export default class WishlistHeader extends React.Component {
       this.setState({ wishListItemCount });
     }
   }
-
-  /**
-   * Helper function to load wishlist information from the magento backend.
-   */
-  loadWishlistFromBackend = () => {
-    // Since wishlist-header component is called more than once
-    // as it is also used for sticky header, we only call API once
-    // and use getWishlistFromBackendSuccess event to update header component.
-    if (window.loadWishListFromBackend) {
-      return;
-    }
-    window.loadWishListFromBackend = true;
-
-    // First clean the existing data in storage.
-    addWishListInfoInStorage({});
-
-    getWishlistFromBackend().then((response) => {
-      let wishListItemCount = 0;
-      if (hasValue(response.data.items)) {
-        const wishListItems = {};
-
-        response.data.items.forEach((item) => {
-          wishListItems[item.sku] = {
-            sku: item.sku,
-            options: item.options,
-            // We need this for removing the item from the wishlist.
-            wishlistItemId: item.wishlist_item_id,
-            // OOS status of product in backend.
-            inStock: item.is_in_stock,
-          };
-        });
-
-        // Save back to storage.
-        addWishListInfoInStorage(wishListItems);
-
-        // Get wishlist item count.
-        wishListItemCount = Object.keys(wishListItems).length;
-      }
-      // Dispatch an event for other modules to know
-      // that wishlist data is available in storage.
-      const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', {
-        bubbles: true,
-        detail: {
-          wishListItemCount,
-        },
-      });
-      document.dispatchEvent(getWishlistFromBackendSuccess);
-
-      // Alongside dispatching an success event above, let's set the global
-      // variable flag to true as well. So other components like wishlist
-      // product list, if rendered lately, can utilise this flag to fetch data
-      // from the local storage as well instead of completing relying on
-      // `getWishlistFromBackendSuccess` success event.
-      window.wishListLoadedFromBackend = true;
-    });
-  };
 
   /**
    * Set timer for wishlist notifcation.

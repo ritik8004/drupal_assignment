@@ -5,3 +5,7 @@ alshaya_subcategory_scroll:
     - core/drupal
     - core/jquery
     - core/jquery.once
+
+product_carousel_utility:
+  js:
+    js/alshaya_product_category_carousel.utility.js: {}

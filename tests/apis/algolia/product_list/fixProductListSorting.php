@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . '../parse_args.php';
 require_once __DIR__ . '/../../../../vendor/autoload.php';

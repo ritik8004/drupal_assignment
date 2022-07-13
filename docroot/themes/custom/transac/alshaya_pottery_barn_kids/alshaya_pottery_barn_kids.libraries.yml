@@ -1,8 +1,3 @@
-global_styles:
-  css:
-    theme:
-      css/colors.css: {}
-
 ltr_styles:
   css:
     theme:

@@ -5,10 +5,10 @@ namespace Drupal\alshaya_hm_images\EventSubscriber;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Event\ProcessBlackListedProductsEvent;
+use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\alshaya_hm_images\SkuAssetManager;
 
 /**
  * Class Alshaya HM Process Blacklisted Products Subscriber.
@@ -20,7 +20,7 @@ class AlshayaHMProcessBlacklistedProductsSubscriber implements EventSubscriberIn
   /**
    * SKU Assets Manager.
    *
-   * @var \Drupal\alshaya_hm_images\SkuAssetManager
+   * @var \Drupal\alshaya_media_assets\Services\SkuAssetManager
    */
   private $skuAssetsManager;
 
@@ -41,19 +41,26 @@ class AlshayaHMProcessBlacklistedProductsSubscriber implements EventSubscriberIn
   /**
    * AlshayaHMProcessBlacklistedProductsSubscriber constructor.
    *
-   * @param \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager
-   *   SKU Assets Manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   Logger factory.
    */
-  public function __construct(SkuAssetManager $sku_assets_manager,
-                              Connection $connection,
+  public function __construct(Connection $connection,
                               LoggerChannelFactory $logger_factory) {
-    $this->skuAssetsManager = $sku_assets_manager;
     $this->connection = $connection;
     $this->logger = $logger_factory->get('alshaya_hm_images');
+  }
+
+  /**
+   * Setter function for Sku Asset Manager service.
+   *
+   * @param \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_assets_manager
+   *   SKU Assets Manager.
+   */
+  public function setSkuAssetManager(SkuAssetManager $sku_assets_manager) {
+    // @todo Move this back to normal/constructor once module enabled on prod.
+    $this->skuAssetsManager = $sku_assets_manager;
   }
 
   /**

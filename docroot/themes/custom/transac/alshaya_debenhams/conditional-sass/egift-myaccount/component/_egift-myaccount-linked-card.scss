@@ -1,0 +1,18 @@
+.egift-card-linked-wrapper {
+  .egift-unlink-card-confirm-overlay {
+    .modal {
+      button.egift-card-remove-confirm-yes {
+        @include btn;
+      }
+
+      button.egift-card-remove-confirm-no {
+        @include button-brand;
+      }
+    }
+
+    .close {
+      #{$right}: -0.0625rem;
+      top: -0.0625rem;
+    }
+  }
+}

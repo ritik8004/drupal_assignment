@@ -1,0 +1,15 @@
+alshaya_geolocation.store_finder:
+  path: '/store-finder'
+  defaults:
+    _controller: '\Drupal\alshaya_geolocation\Controller\AlshayaStoreFinderController::store'
+    _title: 'Find Stores'
+  requirements:
+    _permission: 'access content'
+
+alshaya_geolocation.store_finder_list:
+  path: '/store-finder/list'
+  defaults:
+    _controller: '\Drupal\alshaya_geolocation\Controller\AlshayaStoreFinderController::storeList'
+    _title: 'Find Stores'
+  requirements:
+    _permission: 'access content'

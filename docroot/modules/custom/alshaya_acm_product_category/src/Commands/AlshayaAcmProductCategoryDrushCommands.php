@@ -372,7 +372,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
               // Load file and get the Image URL.
               $image = \Drupal::entityTypeManager()->getStorage('file')->load($target_id);
               if ($image) {
-                $data[$field] = $image->url();
+                $data[$field] = $image->createFileUrl();
               }
             }
             break;

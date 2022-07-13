@@ -1,0 +1,125 @@
+base_url: 'https://lp2.hm.com/hmgoepprod'
+pims_base_url: 'http://34.249.182.88:3020'
+pims_directory: 'website/var/assets'
+fallback_to_liquidpixel: 1
+origin: 'dam'
+# For any new key in 'dimension', update 'style_identifiers' with appropriate
+# file path.
+dimensions:
+  plp:
+    desktop: z
+    mobile: z
+  pdp_thumbnail:
+    desktop: y
+    mobile: m
+  pdp_main: &common_pdp
+    desktop: y
+    mobile: w
+  pdp_zoom:
+    <<: *common_pdp
+  pdp_fullscreen:
+    <<: *common_pdp
+  teaser:
+    desktop: z
+    mobile: q
+  swatch: &common_cart
+    desktop: q
+    mobile: q
+  cart:
+    <<: *common_cart
+  product_category_carousel:
+    <<: *common_cart
+  cart_notification:
+    <<: *common_cart
+  order_detail:
+    <<: *common_cart
+  checkout_summary:
+    desktop: m
+    mobile: q
+# Weights are used to sort asset-types. Items with lower weight get precedence
+# while displaying them.
+# Image Types:
+# Lookbook: Model's image
+# DescriptiveStillLife: Product's image
+# DescriptiveDetail: Zoomed version of DescriptiveStillLife image
+# MODEL_IMAGE, STILL_LIFE_FRONT_URL, DETAIL_IMAGE are mostly applicable only to
+# old season products(season 5) {is_old_format: TRUE}.
+weights:
+  plp:
+    Lookbook: 1
+    DescriptiveStillLife: 2
+    DescriptiveDetail: 3
+    MODEL_IMAGE: 3
+    STILL_LIFE_FRONT_URL: 4
+    DETAIL_IMAGE: 5
+  plp_hover:
+    DescriptiveStillLife: 1
+    Lookbook: 2
+    DescriptiveDetail: 3
+    MODEL_IMAGE: 3
+    STILL_LIFE_FRONT_URL: 4
+    DETAIL_IMAGE: 5
+  pdp:
+    Lookbook: 1
+    Environmental: 2
+    CreativeDetail: 3
+    DescriptiveStillLife: 4
+    Pictogram: 5
+    DescriptiveDetail: 6
+    MODEL_IMAGE: 7
+    STILL_LIFE_FRONT_URL: 8
+    DETAIL_IMAGE: 9
+    MovingMedia: 10
+  teaser:
+    Lookbook: 1
+    DescriptiveStillLife: 2
+    MODEL_IMAGE: 3
+    STILL_LIFE_FRONT_URL: 4
+    DETAIL_IMAGE: 5
+  swatch:
+    DescriptiveStillLife: 1
+    STILL_LIFE_FRONT_URL: 2
+    Lookbook: 3
+    MODEL_IMAGE: 4
+    DETAIL_IMAGE: 5
+  cart:
+    Lookbook: 1
+    DescriptiveStillLife: 2
+    MODEL_IMAGE: 3
+    STILL_LIFE_FRONT_URL: 4
+    DETAIL_IMAGE: 5
+  angle:
+    - 1C
+    - 1L
+    - 1R
+    - 2C
+    - 2L
+    - 2R
+    - 8C
+    - 8L
+    - 8R
+    - 7C
+    - 7L
+    - 7R
+    - 3C
+    - 3L
+    - 3R
+    - 9C
+    - 9L
+    - 9R
+    - NO_ANGLE
+style_identifiers:
+  plp: 'file:/product/listing'
+  pdp_main: 'file:/product/main'
+  pdp_thumbnail: 'file:/product/thumb'
+  pdp_zoom: 'file:/product/zoom'
+  pdp_fullscreen: 'file:/product/fullscreen'
+  teaser: 'file:/product/style'
+  product_category_carousel: 'file:/product/style'
+  swatch: 'file:/product/miniature'
+  cart: 'file:/product/thumb'
+  cart_notification: 'file:/product/thumb'
+  order_detail: 'file:/product/thumb'
+  checkout_summary: 'file:/product/thumb'
+swatch_plp_limit: 3
+swatch_asset_type: 'StillMedia/DescriptiveStillLife'

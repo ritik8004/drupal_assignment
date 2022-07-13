@@ -89,6 +89,7 @@ export default class EgiftTopupFor extends React.Component {
                 </span>
                 <PriceElement
                   amount={linkedCardBalance !== null ? parseFloat(linkedCardBalance) : undefined}
+                  showZeroValue
                 />
               </div>
               <div className="egift-linked-card-balance">
@@ -125,7 +126,6 @@ export default class EgiftTopupFor extends React.Component {
                 onBlur={(e) => this.handleEvent(e)}
                 onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
                 onInput={(e) => allowWholeNumbers(e)}
-                maxLength="16"
               />
               <div className="error" id="card-number-error">
                 {cardNumberError}

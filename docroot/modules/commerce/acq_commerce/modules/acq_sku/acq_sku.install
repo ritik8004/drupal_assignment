@@ -5,12 +5,23 @@
  * Contains install hooks for acq_sku.
  */
 
-use Drupal\node\Entity\Node;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding a custom table "product_attribute_options_missing".
+ */
+function acq_sku_update_8027() {
+  $schema = acq_sku_schema();
+  if (\Drupal::database()->schema()->tableExists('product_attribute_options_missing')) {
+    \Drupal::database()->schema()->dropTable('product_attribute_options_missing');
+  }
+  \Drupal::database()->schema()->createTable('product_attribute_options_missing', $schema['product_attribute_options_missing']);
+}
 
 /**
  * Implements hook_update_N().
@@ -313,26 +324,6 @@ function acq_sku_update_8001() {
  * Implements hook_install().
  */
 function acq_sku_install() {
-  Node::create([
-    'type' => 'page',
-    'title' => 'Store',
-    'langcode' => 'en',
-    'uid' => '1',
-    'status' => 1,
-    'path' => '/store',
-    'body' => [
-      'value' => '<p>Welcome to our store</p>',
-      'format' => 'rich_text',
-    ],
-  ])->save();
-
-  MenuLinkContent::create([
-    'title' => 'Store',
-    'link' => ['uri' => 'internal:/store'],
-    'menu_name' => 'main',
-    'weight' => 0,
-  ])->save();
-
   foreach (_acq_sku_indexes() as $index => $data) {
     if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
       \Drupal::database()
@@ -487,6 +478,43 @@ function acq_sku_schema() {
     ],
     'unique keys' => [
       'unique' => ['category_acm_id'],
+    ],
+  ];
+
+  $schema['product_attribute_options_missing'] = [
+    'description' => 'Storing the sku on missing attribute.',
+    'fields' => [
+      'sku' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 100,
+        'default' => '',
+      ],
+      'attribute_code' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'option_id' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 100,
+        'default' => '',
+      ],
+      'field_key' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+    ],
+    'unique keys' => [
+      'sku_attribute_code_option_id' => [
+        'sku',
+        'attribute_code',
+        'option_id',
+      ],
     ],
   ];
 

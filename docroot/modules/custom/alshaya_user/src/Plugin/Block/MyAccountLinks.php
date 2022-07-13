@@ -216,6 +216,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     $links = self::getMyAccountLinks();
 
     if ($config = $this->config->get('my_account_enabled_links')) {
+      // phpcs:ignore
       $config = unserialize($config);
       foreach ($links as $key => $link) {
         if (empty($config[$key])) {

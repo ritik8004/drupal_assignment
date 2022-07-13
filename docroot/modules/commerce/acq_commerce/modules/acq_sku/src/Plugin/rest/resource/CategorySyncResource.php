@@ -19,8 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "acq_categorysync",
  *   label = @Translation("Acquia Commerce Category Sync"),
  *   uri_paths = {
- *     "canonical" = "/categorysync",
- *     "https://www.drupal.org/link-relations/create" = "/categorysync"
+ *     "create" = "/categorysync"
  *   }
  * )
  */
@@ -80,14 +79,14 @@ class CategorySyncResource extends ResourceBase {
    *
    * Handle Conductor posting an array of category data for update.
    *
-   * @param array $categories
+   * @param array $data
    *   Category data for update.
    *
    * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response.
    */
-  public function post(array $categories) {
-    $this->categorySyncHelper->createItem($categories['category_id']);
+  public function post(array $data) {
+    $this->categorySyncHelper->createItem($data['category_id']);
     $response['success'] = TRUE;
     return (new ModifiedResourceResponse($response));
   }

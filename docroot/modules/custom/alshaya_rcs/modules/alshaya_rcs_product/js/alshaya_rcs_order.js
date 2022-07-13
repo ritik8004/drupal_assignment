@@ -1,24 +1,19 @@
-(function main(Drupal) {
-  // Event listener to update the the order listing and order detail results.
-  RcsEventManager.addListener('rcsUpdateResults', (e) => {
-    // Only when placeholder is order_teaser.
-    if (Drupal.hasValue(e.detail.placeholder)
-      && e.detail.placeholder === 'order_teaser'
-      && e.detail.params) {
-      // Extract parent skus and item skus.
-      const params = e.detail.params;
-      const result = [];
-      if (Drupal.hasValue(params['parent-skus'])
-        && Drupal.hasValue(params['item-skus'])) {
-        // Get the product data based on sku.
-        const parentSkus = JSON.parse(params['parent-skus']);
-        const itemSkus = JSON.parse(params['item-skus']);
-
-        parentSkus.forEach((sku, key) => {
-          result[itemSkus[key]] = Drupal.alshayaSpc.getProductDataV2Synchronous(itemSkus[key], sku);
-        });
-      }
-      e.detail.result = result;
+(function main(Drupal, RcsEventManager) {
+  RcsEventManager.addListener('invokingApi', function invokingApi(e) {
+    // For the order teaser section, add the promises of requests to get product
+    // data to the promises array so that these are resolved before we render
+    // the section.
+    if (e.extraData.placeholder === 'order_teaser'
+      && Drupal.hasValue(e.extraData.params)
+      && Drupal.hasValue(e.extraData.params['parent-skus'])
+      && Drupal.hasValue(e.extraData.params['item-skus'])
+    ) {
+      // Get the product data based on sku.
+      var parentSkus = JSON.parse(e.extraData.params['parent-skus']);
+      var itemSkus = JSON.parse(e.extraData.params['item-skus']);
+      parentSkus.map(function eachSku(sku, key) {
+        e.promises.push(Drupal.alshayaSpc.getProductDataV2(itemSkus[key], sku));
+      });
     }
   });
-})(Drupal);
+})(Drupal, RcsEventManager);

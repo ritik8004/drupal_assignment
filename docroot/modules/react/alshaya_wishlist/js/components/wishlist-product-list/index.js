@@ -13,7 +13,6 @@ import {
   getWishListData,
   isAnonymousUser,
   isShareWishlistPage,
-  getSharedWishlistFromBackend,
   getWishlistLabel,
 } from '../../../../js/utilities/wishlistHelper';
 import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelper';
@@ -57,15 +56,15 @@ class WishlistProductList extends React.Component {
     // products from the backend via API and show on the page.
     if (isShareWishlistPage()) {
       // Get the shared wishlist items from the backend API.
-      getSharedWishlistFromBackend().then((response) => {
+      window.commerceBackend.getSharedWishlistFromBackend().then((response) => {
         if (hasValue(response.data.items)) {
-          const wishListItems = {};
+          const wishListItems = [];
 
           response.data.items.forEach((item) => {
-            wishListItems[item.sku] = {
+            wishListItems.push({
               sku: item.sku,
               options: item.options,
-            };
+            });
           });
 
           // Update the wishlist items count and filters in state
@@ -168,14 +167,14 @@ class WishlistProductList extends React.Component {
    */
   getFiltersFromWishListItems = (wishListItems) => {
     const filters = [];
-    Object.keys(wishListItems).forEach((key, index) => {
+    wishListItems.forEach((item, index) => {
       // Prepare filter to pass in search widget. For example,
       // 1. "sku:0433350007 OR sku:0778064001 OR sku:HM0485540011187007"
       // 2. "sku:0433350007<score=5> OR sku:0778064001<score=4>
       // OR sku:HM0485540011187007<score=3>".
       // We are using filter scoring to sort the results. So
       // the higher score item will display first.
-      filters.push(`sku: "${key}"<score=${index}>`);
+      filters.push(`sku: "${item.sku}"<score=${index}>`);
     });
 
     // Prepare the final filter to pass in search widget.
@@ -199,7 +198,7 @@ class WishlistProductList extends React.Component {
     if (wishListItemsCount === 0) {
       return PageEmptyMessage(
         getStringMessage('empty_wishlist', { '@wishlist_label': getWishlistLabel() }),
-        'wishlist',
+        getStringMessage('wishlist_go_shipping'),
       );
     }
 
