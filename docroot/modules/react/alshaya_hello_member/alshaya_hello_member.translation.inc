@@ -212,6 +212,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'رمز لهوية العضوية',
         'context' => 'hello_member',
       ],
+      'The value in Date has to be less than' => [
+        'ar' => 'يجب أن تكون القيمة في "التاريخ',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
