@@ -16,6 +16,7 @@ git:
     - 'alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git'
     - 'alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git'
     - 'alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git'
+    - 'alshayadc1@svn-5975.enterprise-g1.hosting.acquia.com:alshayadc1.git'
   hooks:
     pre-push: false
 deploy:
