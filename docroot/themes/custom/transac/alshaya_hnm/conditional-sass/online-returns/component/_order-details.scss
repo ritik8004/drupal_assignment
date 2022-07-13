@@ -40,5 +40,11 @@
         font-weight: normal;
       }
     }
+
+    .cancellation-reason {
+      .reason-label {
+        font-family: $hnm-demibold;
+      }
+    }
   }
 }

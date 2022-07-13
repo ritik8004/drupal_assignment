@@ -190,10 +190,6 @@
         font-family: $alshaya-bold;
         padding: rem(38) 0 rem(8);
         border-bottom: rem(1) solid $online-return-order-detail-border;
-
-        span.rejected {
-          color: $online-return-status-orange-label;
-        }
       }
 
       .return-items-wrapper {
@@ -385,6 +381,30 @@
         div {
           margin-bottom: 0;
         }
+      }
+    }
+
+    .cancellation-reason {
+      padding-top: rem(16);
+      margin-bottom: 0;
+      line-height: rem(18);
+      font-size: rem(12);
+
+      @include breakpoint($tablet) {
+        padding: rem(22) rem(10);
+      }
+
+      @include breakpoint($desktop) {
+        font-size: rem(14);
+      }
+
+      > div:nth-child(2) {
+        margin-bottom: 0;
+      }
+
+      .reason-label {
+        color: $online-return-cancellation-reason;
+        font-family: $alshaya-bold;
       }
     }
   }
