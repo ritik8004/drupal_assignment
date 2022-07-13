@@ -113,7 +113,7 @@ class SkuPriceHelper {
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product sku for which we want the price block.
    * @param array $options
-   *   Additional flags like color.
+   *   Additional flags like color, langcode.
    *
    * @return array
    *   Build array.
@@ -128,15 +128,17 @@ class SkuPriceHelper {
       $options['color'] = '';
     }
 
+    $langcode = $options['langcode'] ?? '';
+
     $case = $sku->bundle() == 'configurable' ? $this->displayMode : 'simple';
     switch ($case) {
       case self::PRICE_DISPLAY_MODE_FROM_TO:
-        $this->buildPriceBlockFromTo($sku, $options['color']);
+        $this->buildPriceBlockFromTo($sku, $options['color'], $langcode);
         break;
 
       case self::PRICE_DISPLAY_MODE_SIMPLE:
       default:
-        $this->buildPriceBlockSimple($sku, $options['color']);
+        $this->buildPriceBlockSimple($sku, $options['color'], $langcode);
         break;
     }
 
@@ -150,8 +152,10 @@ class SkuPriceHelper {
    *   Product sku for which we want the price block.
    * @param string $color
    *   Color value for limiting scope of variants.
+   * @param string $langcode
+   *   Language code used.
    */
-  private function buildPriceBlockSimple(SKU $sku, string $color = '') {
+  private function buildPriceBlockSimple(SKU $sku, string $color = '', string $langcode = '') {
     $prices = $this->skuManager->getMinPrices($sku, $color);
     $price = $prices['price'];
     $final_price = $prices['final_price'];
@@ -176,7 +180,7 @@ class SkuPriceHelper {
 
         // Get discount if discounted price available.
         $this->build['#discount'] = [
-          '#markup' => $this->skuManager->getDiscountedPriceMarkup($price, $final_price),
+          '#markup' => $this->skuManager->getDiscountedPriceMarkup($price, $final_price, $langcode),
         ];
       }
     }
@@ -195,8 +199,10 @@ class SkuPriceHelper {
    *   Product sku for which we want the price block.
    * @param string $color
    *   Color value for limiting scope of variants.
+   * @param string $langcode
+   *   Language code used.
    */
-  private function buildPriceBlockFromTo(SKU $sku, string $color = '') {
+  private function buildPriceBlockFromTo(SKU $sku, string $color = '', string $langcode = '') {
     $prices = $this->skuManager->getMinPrices($sku, $color);
 
     $child_prices = array_column($prices['children'], 'price');
@@ -218,7 +224,7 @@ class SkuPriceHelper {
       || count(array_unique(array_filter($child_prices))) == 1
       || count(array_unique($selling_prices)) == 1)) {
 
-      return $this->buildPriceBlockSimple($sku);
+      return $this->buildPriceBlockSimple($sku, $langcode);
     }
 
     if (count(array_filter($child_prices)) == count(array_filter($child_final_prices))) {
@@ -237,7 +243,7 @@ class SkuPriceHelper {
     }
 
     $this->build['#discount'] = [
-      '#markup' => $this->getDiscountedPriceMarkup($discounts),
+      '#markup' => $this->getDiscountedPriceMarkup($discounts, $langcode),
     ];
   }
 
@@ -287,20 +293,23 @@ class SkuPriceHelper {
    *
    * @param array $discounts
    *   Discount percents.
+   * @param string $langcode
+   *   Language code used.
    *
    * @return string
    *   Price markup.
    */
-  public function getDiscountedPriceMarkup(array $discounts):string {
+  public function getDiscountedPriceMarkup(array $discounts, string $langcode = ''):string {
     if (empty($discounts) || empty(max($discounts))) {
       return '';
     }
+    $options = $langcode ? ['langcode' => $langcode] : [];
 
     if (count(array_unique($discounts)) == 1) {
-      return (string) $this->t('Save @discount%', ['@discount' => reset($discounts)]);
+      return (string) $this->t('Save @discount%', ['@discount' => reset($discounts)], $options);
     }
 
-    return (string) $this->t('Save upto @discount%', ['@discount' => max($discounts)]);
+    return (string) $this->t('Save upto @discount%', ['@discount' => max($discounts)], $options);
   }
 
 }
