@@ -204,8 +204,16 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'رمز QR لهوية العضوية',
         'context' => 'hello_member',
       ],
+      'Minimum age' => [
+        'ar' => 'الحد الإدنى للعمر',
+        'context' => 'hello_member',
+      ],
       'Yes, email me offers, style updates, and special invites to sales and events.' => [
         'ar' => 'رمز لهوية العضوية',
+        'context' => 'hello_member',
+      ],
+      'The value in Date has to be less than' => [
+        'ar' => 'يجب أن تكون القيمة في "التاريخ',
         'context' => 'hello_member',
       ],
     ],
