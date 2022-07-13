@@ -394,6 +394,8 @@ function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterfa
  * Implements hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter().
  */
 function alshaya_hello_member_alshaya_acm_customer_alshaya_user_recent_orders_build_alter(array &$build) {
+  $build['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_hello_member.settings')->getCacheTags());
+
   // Do not proceed if Hello member is not enabled.
   if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
     return;
