@@ -7,7 +7,7 @@ const DeliveryTypeFilter = ({
   items, itemCount, refine, searchForItems, isFromSearch, ...props
 }) => {
   // Set default state for express delivery state to show hide the facets.
-  const [expressDeliveryFlag, setExpressDeliveryFlag] = useState([]);
+  const [expressDeliveryFlag, setExpressDeliveryFlag] = useState(window.sddEdStatus);
 
   if (typeof itemCount !== 'undefined') {
     setTimeout(() => {
@@ -20,7 +20,7 @@ const DeliveryTypeFilter = ({
   // express delivery settings.
   const expressDeliveryFacet = (e) => {
     const expressDeliveryStatus = e.detail;
-    if (!expressDeliveryStatus) {
+    if (expressDeliveryStatus) {
       setExpressDeliveryFlag(expressDeliveryStatus);
       setTimeout(() => {
         itemCount(props.attribute, items.length);
@@ -38,17 +38,23 @@ const DeliveryTypeFilter = ({
     };
   }, []);
 
-  // Return empty ul here if the express delivery flag is set to false from API
-  // response.
-  if (!expressDeliveryFlag) {
-    return <ul />;
-  }
-
   if (!hasValue(items)) {
     return <ul />;
   }
   Object.entries(items).forEach(([key, item]) => {
-    deliveryItems[key] = item;
+    // Show sdd / ed facet filter if configuration is not received from
+    // magento from an event.
+    if (typeof expressDeliveryFlag === 'undefined') {
+      deliveryItems[key] = item;
+    }
+    // Check if express delivery is enabled on magento configuration and show the filter.
+    if (item.label === 'express_day_delivery_available' && expressDeliveryFlag.expressDelivery) {
+      deliveryItems[key] = item;
+    }
+    // Check if same day delivery is enabled on magento configuration and show the filter.
+    if (item.label === 'same_day_delivery_available' && expressDeliveryFlag.sameDayDelivery) {
+      deliveryItems[key] = item;
+    }
   });
   const { facetValues } = props;
   if (!hasValue(deliveryItems)) {

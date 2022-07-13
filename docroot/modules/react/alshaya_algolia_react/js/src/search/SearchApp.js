@@ -43,9 +43,12 @@ class SearchApp extends React.PureComponent {
       redirectToOtherLang(query);
     }
 
-    // Get Magento configuration to display express delivery label on
-    // listing pages.
-    window.expressDeliveryLabel = await getExpressDeliveryStatus();
+    // Listing pages product teaser have only express delivery label.
+    // This label on teaser is switched on and off by configuration on drupal at
+    // global level. However here we call a Magento API to control the display
+    // of the label as per magento configuration. We set global variable to avoid
+    // this API call again and used on filters and instant search.
+    window.sddEdStatus = await getExpressDeliveryStatus();
   }
 
   setQueryValue = (queryValue, inputTag = null) => {

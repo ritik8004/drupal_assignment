@@ -112,7 +112,10 @@ async function getExpressDeliveryStatus() {
     },
   };
 
-  let labelStatus = true;
+  const showExpressDeliveryLabel = {
+    sameDayDelivery: true,
+    expressDelivery: true,
+  };
 
   try {
     const response = await callMagentoApi(url, 'POST', params);
@@ -123,21 +126,23 @@ async function getExpressDeliveryStatus() {
       // Dispatch event for delivery label component with default true as
       // error response from magento.
       const event = new CustomEvent('expressDeliveryLabelsDisplay', {
-        bubbles: true,
-        detail: true,
+        detail: showExpressDeliveryLabel,
       });
       document.dispatchEvent(event);
     }
 
     response.data.forEach((label) => {
-      labelStatus = (label.carrier_code.toString() === 'EXPRESS') && label.status;
+      if (label.carrier_code === 'SAMEDAY') {
+        showExpressDeliveryLabel.sameDayDelivery = label.status;
+      } else if (label.carrier_code === 'EXPRESS') {
+        showExpressDeliveryLabel.expressDelivery = label.status;
+      }
     });
 
     // Dispatch event for delivery label component on teaser with API response
     // in event details.
     const event = new CustomEvent('expressDeliveryLabelsDisplay', {
-      bubbles: true,
-      detail: labelStatus,
+      detail: showExpressDeliveryLabel,
     });
     document.dispatchEvent(event);
   } catch (error) {
@@ -147,13 +152,12 @@ async function getExpressDeliveryStatus() {
     // Dispatch event for delivery label component with default true as
     // error response from magento.
     const event = new CustomEvent('expressDeliveryLabelsDisplay', {
-      bubbles: true,
-      detail: true,
+      detail: showExpressDeliveryLabel,
     });
     document.dispatchEvent(event);
   }
 
-  return labelStatus;
+  return showExpressDeliveryLabel;
 }
 
 export {
