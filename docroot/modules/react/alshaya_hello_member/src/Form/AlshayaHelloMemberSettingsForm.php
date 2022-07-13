@@ -52,6 +52,14 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
+    $form['hello_member_configuration']['aura_integration_enabled'] = [
+      '#type' => 'checkbox',
+      '#default_value' => $config->get('aura_integration_enabled'),
+      '#title' => $this->t('Enable aura integration with hello member..'),
+      '#description' => $this->t('When aura integration is enabled with hello member,
+        customer can choose to redeem aura points.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -61,6 +69,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_hello_member.settings')
       ->set('enabled', $form_state->getValue('enable_disable_hello_member'))
+      ->set('aura_integration_enabled', $form_state->getValue('aura_integration_enabled'))
       ->set('points_history_page_size', $form_state->getValue('points_history_page_size'))
       ->set('minimum_age', $form_state->getValue('minimum_age'))
       ->save();

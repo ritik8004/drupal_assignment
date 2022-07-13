@@ -11,3 +11,6 @@ alshaya_hello_member.settings:
     minimum_age:
       type: integer
       label: 'Minimum age for user registration.'  
+    aura_integration_enabled:
+      type: boolean
+      label: 'Config to enable/disable aura integration with hello member'
