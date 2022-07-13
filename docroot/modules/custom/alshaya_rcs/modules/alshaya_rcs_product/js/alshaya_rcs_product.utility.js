@@ -1249,16 +1249,32 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
-   * Checks if given product is in stock.
+   * Check if the product is in stock.
    *
-   * @param {Object} product
-   *   Product object.
+   * @param {object} entity
+   *   The product entity.
    *
    * @returns {Boolean}
-   *   True if product in stock, else false.
+   *   True if product is in stock, else false.
    */
-  window.commerceBackend.isProductInStock = function isProductInStock(product) {
-    return product.stock_status === 'IN_STOCK';
+  window.commerceBackend.isProductInStock = function isProductInStock(entity) {
+    if (entity.stock_status === 'OUT_OF_STOCK') {
+      return false;
+    }
+
+    // @todo Check for free gifts when checking the variants.
+    // For configurable product, if all variants are OOS, then we consider the
+    // product to be OOS.
+    if (entity.type_id === 'configurable') {
+      const isAnyVariantInStock = entity.variants.some((variant) =>
+        variant.product.stock_status === 'IN_STOCK'
+      );
+      if (!isAnyVariantInStock) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   // Event listener to update static promotion.
