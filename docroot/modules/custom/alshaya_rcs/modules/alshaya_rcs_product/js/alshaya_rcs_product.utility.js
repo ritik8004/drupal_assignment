@@ -624,7 +624,10 @@ window.commerceBackend = window.commerceBackend || {};
       }
     });
 
-    if (Drupal.hasValue(combinations.attribute_sku)) {
+    combinations.firstChild = rawProductData.firstChild;
+    if (!(Drupal.hasValue(combinations.firstChild))
+      && Drupal.hasValue(combinations.attribute_sku)
+    ) {
       var firstChild = Object.entries(combinations.attribute_sku)[0];
       firstChild = Object.entries(firstChild[1]);
       combinations.firstChild = firstChild[0][1][0];
@@ -1243,6 +1246,19 @@ window.commerceBackend = window.commerceBackend || {};
     staticDataStore.configurableColorData = {};
     staticDataStore.configurables = {};
     staticDataStore.labels = {};
+  }
+
+  /**
+   * Checks if given product is in stock.
+   *
+   * @param {Object} product
+   *   Product object.
+   *
+   * @returns {Boolean}
+   *   True if product in stock, else false.
+   */
+  window.commerceBackend.isProductInStock = function isProductInStock(product) {
+    return product.stock_status === 'IN_STOCK';
   }
 
   // Event listener to update static promotion.
