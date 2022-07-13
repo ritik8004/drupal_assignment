@@ -24,6 +24,10 @@ body.wishlist-enabled {
       z-index: 10;
     }
 
+    @include breakpoint($only-mobile) {
+      transition: transform 0.4s;
+    }
+
     .wishlist-header {
       padding-bottom: 0;
 
@@ -63,6 +67,12 @@ body.wishlist-enabled {
     #wishlist-header-wrapper {
       @include breakpoint($only-mobile) {
         transform: translate3d(0, -2.875rem, 0);
+      }
+    }
+
+    &.exponea-scrolled #wishlist-header-wrapper {
+      @include breakpoint($only-mobile) {
+        transform: translate3d(0, -5.6875rem, 0);
       }
     }
   }
