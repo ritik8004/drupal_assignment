@@ -132,9 +132,11 @@ class ReturnItemsListing extends React.Component {
         });
         // Add a flag value to disable the qty button.
         itemDetails.disableQtyBtn = true;
+        itemDetails.qty_requested = itemDetails.qty_ordered;
+      } else {
+        // Add default quantity and resolution.
+        itemDetails.qty_requested = 1;
       }
-      // Add default quantity and resolution.
-      itemDetails.qty_requested = 1;
       itemDetails.resolution = getDefaultResolutionId();
 
       this.setState({
