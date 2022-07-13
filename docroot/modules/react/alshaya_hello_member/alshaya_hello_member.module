@@ -89,6 +89,8 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
   /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
   $hello_member_helper = \Drupal::service('alshaya_hello_member.hello_member_helper');
   // Only add if hello member enabled.
+  //dump($form);
+   //echo '<pre>';print_r($form['field_date_of_birth']);exit;
   if (!$hello_member_helper->isHelloMemberEnabled()) {
     // For user registration form if we have the field, we remove it.
     if (isset($form['field_date_of_birth'])) {
@@ -185,6 +187,7 @@ function alshaya_hello_member_datetime_set_startdate($element) {
     $start_date = strtotime($config->get('minimum_age') . ' years ago');
     // Set the max attribute value.
     $element['date']['#attributes']['max'] = Drupal::service('date.formatter')->format($start_date, 'html_date');
+    $element['date']['#max_error'] = t('The value in Date has to be less than ') . $element['date']['#attributes']['max'];
   }
   return $element;
 }
@@ -214,6 +217,7 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['hello_member']['field_date_of_birth'] = $form['field_date_of_birth'];
   $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
   $form['hello_member']['field_date_of_birth']['#weight'] = 10;
+ 
   // Disallow user to edit date of birth on edit profile form.
   if ($form['field_date_of_birth']['widget'][0]['value']['#default_value']) {
     $form['hello_member']['field_date_of_birth']['#disabled'] = TRUE;
