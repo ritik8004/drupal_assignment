@@ -209,7 +209,7 @@ class OnlineReturnsHelper {
     if ($order_details['#order']['returnExpiration']) {
       // Convert the string to date object and compare the timestamp with
       // current time.
-      $return_time = strtotime($order_details['#order']['returnExpiration']);
+      $return_time = strtotime($order_details['#order']['returnExpiration'] . ' 23:59:59');
       if ($return_time < time()) {
         return FALSE;
       }
