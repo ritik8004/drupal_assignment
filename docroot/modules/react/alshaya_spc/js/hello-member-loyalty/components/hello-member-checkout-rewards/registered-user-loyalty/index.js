@@ -28,7 +28,7 @@ class RegisteredUserLoyalty extends React.Component {
   }
 
   /**
-   * Handle change in loyalty options by customer.
+   * Handles the state for loyalty popup block.
    *
    * @param {string} method
    *  Selected method by customer.
@@ -69,6 +69,9 @@ class RegisteredUserLoyalty extends React.Component {
     this.resetPopupStatus();
   }
 
+  /**
+   * Select hello member loyalty for the customer.
+   */
   setHelloMemberLoyalty = () => {
     const { cart, identifierNo } = this.props;
     const cartId = cart.cart.cart_id;

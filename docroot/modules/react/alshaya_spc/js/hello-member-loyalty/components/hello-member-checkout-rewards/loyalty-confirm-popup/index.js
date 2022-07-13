@@ -10,6 +10,9 @@ export default class LoyaltyConfirmPopup extends React.Component {
     };
   }
 
+  /**
+   * Close the modal if user selected cancel.
+   */
   closeModal = () => {
     const { resetPopupStatus } = this.props;
     this.setState({
@@ -18,6 +21,9 @@ export default class LoyaltyConfirmPopup extends React.Component {
     resetPopupStatus();
   }
 
+  /**
+   * Confirm the loyalty option if user clicked on yes.
+   */
   confirmLoyalty = (selectedOption) => {
     const { changeLoyaltyOption } = this.props;
     changeLoyaltyOption(selectedOption);
