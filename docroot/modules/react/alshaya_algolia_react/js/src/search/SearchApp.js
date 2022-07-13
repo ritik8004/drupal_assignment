@@ -25,11 +25,6 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
 }
 
-// Set global variable to flag express delivery label display on teaser.
-// This flag will be set for search / listing pages after calling
-// delivery matrix API for magento configuration.
-window.expressDeliveryLabel = window.expressDeliveryLabel || true;
-
 class SearchApp extends React.PureComponent {
   constructor(props) {
     super(props);

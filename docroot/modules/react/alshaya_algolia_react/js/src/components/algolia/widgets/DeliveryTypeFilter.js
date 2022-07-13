@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { checkExpressDeliveryStatus, checkSameDayDeliveryStatus } from '../../../../../../js/utilities/expressDeliveryHelper';
@@ -6,12 +6,44 @@ import { checkExpressDeliveryStatus, checkSameDayDeliveryStatus } from '../../..
 const DeliveryTypeFilter = ({
   items, itemCount, refine, searchForItems, isFromSearch, ...props
 }) => {
+  // Set default state for express delivery state to show hide the facets.
+  const [expressDeliveryFlag, setExpressDeliveryFlag] = useState([]);
+
   if (typeof itemCount !== 'undefined') {
     setTimeout(() => {
       itemCount(props.attribute, items.length);
     }, 1);
   }
   const deliveryItems = [];
+
+  // Set express delivery flag with settings in event from MDC API for
+  // express delivery settings.
+  const expressDeliveryFacet = (e) => {
+    const expressDeliveryStatus = e.detail;
+    if (!expressDeliveryStatus) {
+      setExpressDeliveryFlag(expressDeliveryStatus);
+      setTimeout(() => {
+        itemCount(props.attribute, items.length);
+      }, 1);
+    }
+  };
+
+  useEffect(() => {
+    // This event is dispatched from expressDeliveryHelper through SearchApp
+    // The event detail has response from API call to magento to get express
+    // delivery settings to show hide delivery facet.
+    document.addEventListener('expressDeliveryLabelsDisplay', expressDeliveryFacet, false);
+    return () => {
+      document.removeEventListener('expressDeliveryLabelsDisplay', expressDeliveryFacet, false);
+    };
+  }, []);
+
+  // Return empty ul here if the express delivery flag is set to false from API
+  // response.
+  if (!expressDeliveryFlag) {
+    return <ul />;
+  }
+
   if (!hasValue(items)) {
     return <ul />;
   }
@@ -22,6 +54,7 @@ const DeliveryTypeFilter = ({
   if (!hasValue(deliveryItems)) {
     return <ul />;
   }
+
   return (
     <ul>
       {deliveryItems.map((item) => {

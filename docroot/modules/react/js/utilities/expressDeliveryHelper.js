@@ -117,27 +117,40 @@ async function getExpressDeliveryStatus() {
   try {
     const response = await callMagentoApi(url, 'POST', params);
     if (!hasValue(response.data) || hasValue(response.data.error)) {
-      logger.error('Error occurred while fetching governates, Response: @response.', {
+      logger.error('Error occurred while fetching the express-delivery config for listing., Response: @response.', {
         '@response': JSON.stringify(response.data),
       });
-      return null;
+      // Dispatch event for delivery label component with default true as
+      // error response from magento.
+      const event = new CustomEvent('expressDeliveryLabelsDisplay', {
+        bubbles: true,
+        detail: true,
+      });
+      document.dispatchEvent(event);
     }
 
     response.data.forEach((label) => {
-      labelStatus = (label.carrier_code.toString() === 'SAMEDAY' || label.carrier_code.toString() === 'EXPRESS') && label.status;
+      labelStatus = (label.carrier_code.toString() === 'EXPRESS') && label.status;
     });
 
-    // Dispatch event for teaser component as they will rendered before the
-    // api response.
+    // Dispatch event for delivery label component on teaser with API response
+    // in event details.
     const event = new CustomEvent('expressDeliveryLabelsDisplay', {
       bubbles: true,
-      detail: window.expressDeliveryLabel,
+      detail: labelStatus,
     });
     document.dispatchEvent(event);
   } catch (error) {
-    logger.error('Error occurred while fetching the delivery status config for listing. Message: @message.', {
+    logger.error('Error occurred while fetching the express-delivery config for listing. Message: @message.', {
       '@message': error.message,
     });
+    // Dispatch event for delivery label component with default true as
+    // error response from magento.
+    const event = new CustomEvent('expressDeliveryLabelsDisplay', {
+      bubbles: true,
+      detail: true,
+    });
+    document.dispatchEvent(event);
   }
 
   return labelStatus;
