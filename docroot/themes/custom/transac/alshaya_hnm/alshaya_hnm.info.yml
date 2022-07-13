@@ -269,3 +269,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css: css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css
+
+  alshaya_white_label/cls-initial-layout-common:
+    css:
+      theme:
+        css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css
