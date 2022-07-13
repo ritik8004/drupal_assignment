@@ -111,9 +111,13 @@ body[class*="return-confirmation"] {
         }
       }
 
-      .refund {
-        @include breakpoint($only-mobile) {
-          width: 7.375rem;
+      @include breakpoint($only-mobile) {
+        .packitem {
+          width: rem(72);
+        }
+
+        .refund {
+          width: rem(118);
         }
       }
 

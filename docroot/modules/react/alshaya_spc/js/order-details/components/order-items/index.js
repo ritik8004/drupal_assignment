@@ -34,7 +34,7 @@ const OrderItems = (props) => {
                   <div className="light attr-wrapper" key={`${attribute.label}_${attribute.value}`}>
                     {attribute.label}
                     :
-                    {attribute.value}
+                    {` ${attribute.value}`}
                   </div>
                 ))}
               </>

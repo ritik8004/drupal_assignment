@@ -22,3 +22,9 @@ alshaya_return_confirmation:
     dist/returnconfirmation.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_online_returns_pdp_gtm:
+  js:
+    js/alshaya_online_returns_pdp_gtm.js: {}
+  dependencies:
+    - core/jquery
