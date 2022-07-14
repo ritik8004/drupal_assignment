@@ -111,15 +111,15 @@ class RegisteredUserLoyalty extends React.Component {
         </ConditionalView>
         <ConditionalView condition={isAuraIntegrationEnabled()}>
           <LoyaltySelectOption
+            currentOption={currentOption}
             animationDelay={animationDelay}
-            selectedOption={selectedOption}
             optionName="hello_member_loyalty"
             showLoyaltyPopup={this.showLoyaltyPopup}
             helloMemberPoints={helloMemberPoints}
           />
           <LoyaltySelectOption
+            currentOption={currentOption}
             animationDelay={animationDelay}
-            selectedOption={selectedOption}
             optionName="aura_loyalty"
             showLoyaltyPopup={this.showLoyaltyPopup}
             helloMemberPoints={helloMemberPoints}
