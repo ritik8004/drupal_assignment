@@ -274,7 +274,7 @@
                 "Add getoriginal method for languageConfigOverride": "https://www.drupal.org/files/issues/2021-11-10/getOriginal-method-for-languageConfigOverride-3248728-3.patch",
                 "Allow having separate CSS files for RTL": "patches/core/rtl_styles.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/2022-07-11/956186-141.patch",
-                "Combined custom patch for Core Issue 2500313 and 2876197 as involes double patching in same file": "patches/core/combined-custom-patch-for-core-Issue-2500313-and-2876197-as-involes-double-patching-in-same-file.patch",
+                "Custom Patch for CORE issues #2500313 and #2876197": "patches/core/combined-custom-patch-for-core-Issue-2500313-and-2876197-as-involes-double-patching-in-same-file.patch",
                 "Verify that the configured service exists before calling it in CacheFactory": "https://www.drupal.org/files/issues/2021-12-09/2429321-85.patch",
                 "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2021-01-06/3007424-108.patch",
                 "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2021-07-01/3063118-10.patch",

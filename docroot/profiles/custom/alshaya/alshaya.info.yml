@@ -2,27 +2,27 @@ name: 'Alshaya Profile'
 type: profile
 description: 'Alshaya base profile for transac, non-transac and transac lite brands'
 core: 8.x
-core_version_requirement: '^8 || ^9'
+core_version_requirement: ^8 || ^9
 dependencies:
-  - 'acsf:acsf'
-  - 'alshaya_performance:alshaya_performance'
-  - 'alshaya_security:alshaya_security'
-  - 'drupal:color'
-  - 'drupal:config_translation'
-  - 'drupal:content_translation'
-  - 'components:components'
-  - 'drupal:dynamic_page_cache'
-  - 'drupal:jquery_ui'
-  - 'drupal:jquery_ui_datepicker'
-  - 'drupal:page_cache'
-  - 'drupal:language'
-  - 'drupal:locale'
-  - 'memcache:memcache'
-  - 'drupal:syslog'
-  - 'twig_tweak:twig_tweak'
-  - 'drupal:restrict_role_login_by_ip'
-  - 'drupal:memory_limit_policy'
-  - 'drupal:memory_limit_policy_path'
+  - acsf:acsf
+  - alshaya_performance:alshaya_performance
+  - alshaya_security:alshaya_security
+  - drupal:color
+  - drupal:config_translation
+  - drupal:content_translation
+  - components:components
+  - drupal:dynamic_page_cache
+  - drupal:jquery_ui
+  - drupal:jquery_ui_datepicker
+  - drupal:page_cache
+  - drupal:language
+  - drupal:locale
+  - memcache:memcache
+  - drupal:syslog
+  - twig_tweak:twig_tweak
+  - drupal:restrict_role_login_by_ip
+  - drupal:memory_limit_policy
+  - drupal:memory_limit_policy_path
 themes:
   - bartik
   - seven
