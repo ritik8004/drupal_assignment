@@ -75,11 +75,13 @@ log_message_and_details()
 get_cloud_task()
 {
   cloud_task=`$blt_dir/bin/blt acquia-cloud-task-available ${branch}`
+  log_message_and_details "Cloud Task response: $cloud_task"
   if [ $? -ne 0 ]
   then
     log_message_and_details "Error occurred while fetching cloud task, aborting"
     exit
   fi
+  echo cloud_task
 }
 
 log_message "============================================"
@@ -214,11 +216,11 @@ do
 done
 
 log_message_and_details "Checking cloud tasks if deployment is still in process."
-get_cloud_task
+cloud_task=$(get_cloud_task)
 
 if [ "${cloud_task}" != "404" ]
 then
-  echo "Cloud Task: API gave 404, we will sleep for 2 minutes now but please check this."
+  log_message_and_details "Cloud Task: API gave 404, we will sleep for 2 minutes now but please check this."
   sleep 120
 
   # Set the variable to 0 so next condition passes.
@@ -227,9 +229,9 @@ fi
 
 while [ "${cloud_task}" != "0" ]
 do
-  echo "Cloud Task: Waiting for code to be deployed on server."
+  log_message_and_details "Cloud Task: Waiting for code to be deployed on server."
   sleep 15
-  get_cloud_task
+  cloud_task=$(get_cloud_task)
 done
 
 log_message_and_details "Code deployment finished"
@@ -240,6 +242,7 @@ then
   for site in `drush --root=$docroot acsf-tools-list | grep "1: " | tr "1: " " " | tr -d " "`
   do
     log_message_and_details "Running updates on $site"
+    drush --root=$docroot -l "${site}" updb -y &>> ${log_file}
     drush --root=$docroot -l "${site}" updb -y &>> ${log_file}
     if [ $? -ne 0 ]
     then
