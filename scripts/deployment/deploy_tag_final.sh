@@ -218,7 +218,7 @@ done
 log_message_and_details "Checking cloud tasks if deployment is still in process."
 cloud_task=$(get_cloud_task)
 
-if [ "${cloud_task}" != "404" ]
+if [ "${cloud_task}" = "404" ]
 then
   log_message_and_details "Cloud Task: API gave 404, we will sleep for 2 minutes now but please check this."
   sleep 120
