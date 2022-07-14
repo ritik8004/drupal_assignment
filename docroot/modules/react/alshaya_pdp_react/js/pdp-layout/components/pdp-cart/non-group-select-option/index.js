@@ -34,7 +34,7 @@ const NonGroupSelectOption = ({
             {configurables.values && Object.keys(configurables.values).map((key) => {
               let attr = configurables.values[key].value_id;
               let value = configurables.values[key].label;
-              if (hasValue(configurables.values[key])) {
+              if (hasValue(configurables.values[key])[0]) {
                 // Check if the values object is multidimensional
                 // use the first key to get respected value.
                 // This might be possible for size attribute.
