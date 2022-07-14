@@ -384,12 +384,16 @@
     }
   }
 
-  .get--directions a {
-    &::after {
-      #{$right}: 0.5rem;
-      width: 2.125rem;
-      height: 2.1875rem;
-      top: 0.5625rem;
+  .get--directions {
+    a {
+      position: relative;
+
+      &::after {
+        #{$right}: 0.5rem;
+        width: 2.125rem;
+        height: 2.1875rem;
+        top: rem(6);
+      }
     }
   }
 
