@@ -141,6 +141,11 @@
       });
 
       skuBaseForm.once('load').each(function () {
+        // Use this event to add elements to the page before the variant
+        // selected event is triggered.
+        var skuBaseFormPreloadevent = new CustomEvent('onSkuBaseFormPreLoad');
+        document.dispatchEvent(skuBaseFormPreloadevent);
+
         var sku = $(this).attr('data-sku');
         var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
         var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
