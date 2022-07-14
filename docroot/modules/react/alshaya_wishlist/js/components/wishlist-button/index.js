@@ -220,7 +220,7 @@ class WishlistButton extends React.Component {
    *  Contains configurable options for grouped product.
    */
   isConfigurableProduct = (sku, configurableCombinations) => {
-    if (configurableCombinations && configurableCombinations[sku]) {
+    if (configurableCombinations) {
       return true;
     }
     return false;
@@ -462,7 +462,9 @@ class WishlistButton extends React.Component {
       if (parentSkuSelected && variantSelected) {
         const { sku } = this.props;
         if (sku === e.detail.data.sku || this.ifExistsInSameGroup(parentSkuSelected)) {
-          const { configurableCombinations } = drupalSettings;
+          const configurableCombinations = window.commerceBackend.getConfigurableCombinations(
+            parentSkuSelected,
+          );
           this.setState({
             skuCode: parentSkuSelected,
             title,
@@ -472,7 +474,7 @@ class WishlistButton extends React.Component {
             // Get selected attribute options for selected variant.
             if (this.isConfigurableProduct(sku, configurableCombinations)
               && variantSelected) {
-              this.getSelectedOptions(variantSelected, configurableCombinations[sku]);
+              this.getSelectedOptions(variantSelected, configurableCombinations);
             }
           });
         }
