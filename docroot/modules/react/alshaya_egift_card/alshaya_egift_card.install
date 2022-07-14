@@ -11,6 +11,19 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Set default value for the Link card for faster payment for Top-up field
+ * of Alshaya Egift Card settings form.
+ */
+function alshaya_egift_card_update_9001() {
+  // Set default value as FALSE for the field.
+  $config = \Drupal::configFactory()->getEditable('alshaya_egift_card.settings');
+  $config->set('link_card_for_topup', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Allow breadcrumb on egift topup page & Update Unlink translation.
  */
 function alshaya_egift_card_update_8001() {
