@@ -145,6 +145,22 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     // Calculate the refund amount based on the qty returned and individual item
     // amount/discounted amount.
     const returnedItems = getReturnedItems(returnInfo);
+
+    // If returnted items is empty then get it from filtered from onlineReturns
+    // drupalSettings.
+    if (!returnedItems.length && hasValue(drupalSettings.onlineReturns)
+      && hasValue(drupalSettings.onlineReturns.products)) {
+      drupalSettings.onlineReturns.products.forEach((item) => {
+        const returnData = returnInfo.items.find(
+          (returnItem) => item.item_id === returnItem.order_item_id,
+        );
+        // Store the product only if the item codes are same.
+        if (returnData) {
+          returnedItems.push(Object.assign(item, { returnData }));
+        }
+      });
+    }
+
     let refundAmount = 0;
     returnedItems.forEach((item) => {
       if (hasValue(item.returnData)) {
