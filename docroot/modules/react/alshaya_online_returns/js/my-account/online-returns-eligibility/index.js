@@ -31,11 +31,12 @@ class OnlineReturnsEligibility extends React.Component {
       orderEntityId,
       isReturnEligible: returnEligible,
     } = drupalSettings.onlineReturns.recentOrders[data.orderId];
-    let returns = null;
-    // Don't call the return API if order is not having isReturnEligible info.
-    if (returnEligible !== null) {
-      returns = getReturnsByOrderId(orderEntityId);
+    // Return from here if order is not eligible for return.
+    if (!returnEligible) {
+      return;
     }
+
+    const returns = getReturnsByOrderId(orderEntityId);
 
     if (returns instanceof Promise) {
       returns.then((returnResponse) => {
