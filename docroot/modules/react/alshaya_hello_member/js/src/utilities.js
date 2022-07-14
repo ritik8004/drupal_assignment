@@ -36,21 +36,8 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
   return null;
 };
 
-/**
- * Utility function to get hello member points for given price.
- */
-const getLoyaltyOptionText = (key) => {
-  if (key === 'hello_member_loyalty') {
-    return Drupal.t('H&M membership', {}, { context: 'hello_member' });
-  } if (key === 'aura_loyalty') {
-    return Drupal.t('Aura', {}, { context: 'hello_member' });
-  }
-  return null;
-};
-
 export {
   getFormatedMemberId,
   getPointstHistoryPageSize,
   getPriceToHelloMemberPoint,
-  getLoyaltyOptionText,
 };

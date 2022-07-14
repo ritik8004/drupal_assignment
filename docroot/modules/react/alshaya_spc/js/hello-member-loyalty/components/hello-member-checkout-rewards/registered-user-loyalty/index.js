@@ -8,7 +8,6 @@ import ConditionalView from '../../../../../../js/utilities/components/condition
 import LoyaltySelectOption from '../loyalty-select-option';
 import LoyaltyConfirmPopup from '../loyalty-confirm-popup';
 import { setHelloMemberLoyaltyCard } from '../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
-import logger from '../../../../../../js/utilities/logger';
 
 class RegisteredUserLoyalty extends React.Component {
   constructor(props) {
@@ -24,7 +23,10 @@ class RegisteredUserLoyalty extends React.Component {
     // For registered user, we set loyalty card for the default option selected.
     // Currently, default option is hello_member_loyalty
     // @todo: Update default option if cart has been updated.
-    this.setHelloMemberLoyalty();
+    const { cart, identifierNo } = this.props;
+    const cartId = cart.cart.cart_id;
+    setHelloMemberLoyaltyCard(identifierNo, cartId);
+    // @todo: Handle update cart event on setting hello member loyalty.
   }
 
   /**
@@ -42,9 +44,9 @@ class RegisteredUserLoyalty extends React.Component {
     });
   }
 
-  resetPopupStatus = () => {
+  resetPopupStatus = (showLoyaltyPopup) => {
     this.setState({
-      showLoyaltyPopup: false,
+      showLoyaltyPopup,
     });
   }
 
@@ -58,7 +60,10 @@ class RegisteredUserLoyalty extends React.Component {
     // @todo: Trigger a pop-up to confirm the loyalty option.
     // @todo: Refresh cart with the selected value.
     if (method === 'hello_member_loyalty') {
-      this.setHelloMemberLoyalty();
+      const { cart, identifierNo } = this.props;
+      const cartId = cart.cart.cart_id;
+      setHelloMemberLoyaltyCard(identifierNo, cartId);
+      // @todo: Handle update cart event on setting hello member loyalty.
     } else if (method === 'aura_loyalty') {
       // @todo: Refresh cart with the selected value.
       // @todo: Open aura loyalty form and set aura loyalty after aura sign in validation.
@@ -66,27 +71,7 @@ class RegisteredUserLoyalty extends React.Component {
     this.setState({
       currentOption: method,
     });
-    this.resetPopupStatus();
-  }
-
-  /**
-   * Select hello member loyalty for the customer.
-   */
-  setHelloMemberLoyalty = () => {
-    const { cart, identifierNo } = this.props;
-    const cartId = cart.cart.cart_id;
-    const setHmLoyaltyCard = setHelloMemberLoyaltyCard(identifierNo, cartId);
-    if (setHmLoyaltyCard instanceof Promise) {
-      setHmLoyaltyCard.then((response) => {
-        if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
-          // @todo: Handle update cart event.
-        } else if (hasValue(response.error)) {
-          logger.error('Error while trying to get hello member customer data. Data: @data.', {
-            '@data': JSON.stringify(response),
-          });
-        }
-      });
-    }
+    this.resetPopupStatus(false);
   }
 
   render() {
@@ -103,6 +88,7 @@ class RegisteredUserLoyalty extends React.Component {
           && hasValue(selectedOption) && currentOption !== selectedOption}
         >
           <LoyaltyConfirmPopup
+            showLoyaltyPopup={showLoyaltyPopup}
             currentOption={currentOption}
             selectedOption={selectedOption}
             changeLoyaltyOption={this.changeLoyaltyOption}

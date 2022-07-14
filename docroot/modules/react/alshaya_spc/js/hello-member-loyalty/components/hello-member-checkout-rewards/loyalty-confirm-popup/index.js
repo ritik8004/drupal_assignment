@@ -1,12 +1,11 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import { getLoyaltyOptionText } from '../../../../../../alshaya_hello_member/js/src/utilities';
 
 export default class LoyaltyConfirmPopup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: true,
+      open: props.showLoyaltyPopup,
     };
   }
 
@@ -15,10 +14,7 @@ export default class LoyaltyConfirmPopup extends React.Component {
    */
   closeModal = () => {
     const { resetPopupStatus } = this.props;
-    this.setState({
-      open: false,
-    });
-    resetPopupStatus();
+    resetPopupStatus(false);
   }
 
   /**
@@ -28,6 +24,18 @@ export default class LoyaltyConfirmPopup extends React.Component {
     const { changeLoyaltyOption } = this.props;
     changeLoyaltyOption(selectedOption);
   }
+
+  /**
+   * Utility function to get hello member points for given price.
+   */
+  getLoyaltyOptionText = (option) => {
+    if (option === 'hello_member_loyalty') {
+      return Drupal.t('H&M membership', {}, { context: 'hello_member' });
+    } if (option === 'aura_loyalty') {
+      return Drupal.t('Aura', {}, { context: 'hello_member' });
+    }
+    return null;
+  };
 
   render() {
     const { open } = this.state;
@@ -43,7 +51,7 @@ export default class LoyaltyConfirmPopup extends React.Component {
           <div className="loyalty-popup-block">
             <a className="close-modal" onClick={() => this.closeModal()}>Close</a>
             <div className="loyalty-question">
-              {Drupal.t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits??', { '@current_option': getLoyaltyOptionText(currentOption), '@selected_option': getLoyaltyOptionText(selectedOption) }, { context: 'loyalty' })}
+              {Drupal.t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits??', { '@current_option': this.getLoyaltyOptionText(currentOption), '@selected_option': this.getLoyaltyOptionText(selectedOption) }, { context: 'loyalty' })}
             </div>
             <div className="loyalty-options">
               <button
