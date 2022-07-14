@@ -81,7 +81,6 @@ get_cloud_task()
     log_message_and_details "Error occurred while fetching cloud task, aborting"
     exit
   fi
-  echo cloud_task
 }
 
 log_message "============================================"
@@ -216,7 +215,7 @@ do
 done
 
 log_message_and_details "Checking cloud tasks if deployment is still in process."
-cloud_task=$(get_cloud_task)
+get_cloud_task
 
 if [ "${cloud_task}" = "404" ]
 then
@@ -231,7 +230,7 @@ while [ "${cloud_task}" != "0" ]
 do
   log_message_and_details "Cloud Task: Waiting for code to be deployed on server."
   sleep 15
-  cloud_task=$(get_cloud_task)
+  get_cloud_task
 done
 
 log_message_and_details "Code deployment finished"
