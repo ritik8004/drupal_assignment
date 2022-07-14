@@ -15,6 +15,21 @@
     }
   }
 
+  .edit-account {
+    @include breakpoint($tablet) {
+      float: $right;
+      top: rem(-15);
+
+      &:hover {
+        color: $primary_btn_text;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+
   .card--number {
     .black {
       color: $content_link_color;
