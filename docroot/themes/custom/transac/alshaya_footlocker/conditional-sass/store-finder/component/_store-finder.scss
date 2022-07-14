@@ -81,10 +81,10 @@
       position: relative;
 
       &::after {
-        width: 1.875rem;
-        height: 1.875rem;
+        width: rem(30);
+        height: rem(30);
         background-size: contain;
-        top: 0.25rem;
+        top: rem(4);
         #{$right}: rem(8);
       }
     }
