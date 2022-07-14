@@ -145,6 +145,65 @@ window.commerceBackend = window.commerceBackend || {};
   };
 
   /**
+   * Get the swatch image url for the provided sku.
+   *
+   * @param {object} product
+   *   Main product.
+   * @param {string} childSku
+   *   The SKU value.
+   *
+   * @returns {string}
+   *   The swatch image url.
+   */
+  function getPdpSwatchImageUrl(product, childSku) {
+    var swatchImageUrl = null;
+    product.variants.forEach(function (variant) {
+      if (variant.product.sku == childSku) {
+        var data = JSON.parse(variant.product.assets_swatch);
+        swatchImageUrl = data[0].styles.pdp_gallery_thumbnail;
+        // Break from the loop.
+        return false;
+      }
+    });
+
+    return swatchImageUrl;
+  }
+
+  /**
+   * Get SKU based on attribute option id.
+   *
+   * @param {string} sku
+   *   The parent sku value.
+   * @param {string} attribute
+   *   Attribute to search for.
+   * @param {Number} option_id
+   *   Option id for selected attribute.
+   *
+   * @return {string}
+   *   SKU value matching the attribute option id.
+   */
+  function getChildSkuFromAttribute(sku, attribute, option_id) {
+    const combinations = window.commerceBackend.getConfigurableCombinations(sku);
+
+    if (!Drupal.hasValue(combinations.attribute_sku) ) {
+      Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
+        '@sku': sku
+      });
+      return null;
+    }
+    if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
+      Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
+        '@attribute': attribute,
+        '@option_id': option_id,
+        '@sku': sku
+      });
+      return null;
+    }
+
+    return combinations.attribute_sku[attribute][option_id][0];
+  }
+
+  /**
    * Creates product info object from product.
    *
    * @param {object} product
@@ -198,7 +257,12 @@ window.commerceBackend = window.commerceBackend || {};
     // Set configurable attributes.
     var configurableCombinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     productInfo.configurable_attributes = {};
+
+    // Get color attribute config.
+    var colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
+    var configColorAttribute = colorAttributeConfig.configurable_color_attribute;
     product.configurable_options.forEach(function (option) {
+      var isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
       var attribute_id = parseInt(atob(option.attribute_uid), 10);
       var optionValues = [];
       // Filter and process the option values.
@@ -210,19 +274,34 @@ window.commerceBackend = window.commerceBackend || {};
           return false;
         }
 
-        optionValues.push({
-          label: option_value.store_label,
-          value: option_value.value_index.toString(),
-        });
+        // Populate images for color swatch.
+        if (isOptionSwatch && option.attribute_code === configColorAttribute) {
+          const childSku = getChildSkuFromAttribute(product.sku, option.attribute_code, option_value.value_index.toString());
+          optionValues.push({
+            label: option_value.store_label,
+            value: option_value.value_index.toString(),
+            data: getPdpSwatchImageUrl(product, childSku),
+            type: 'image',
+          });
+        }
+        else {
+          optionValues.push({
+            label: option_value.store_label,
+            value: option_value.value_index.toString(),
+          });
+        }
       });
       productInfo.configurable_attributes[option.attribute_code] = {
         id: attribute_id.toString(),
         label: option.label,
         position: option.position,
-        is_swatch: false,
+        is_swatch: isOptionSwatch,
         is_pseudo_attribute: (attribute_id === drupalSettings.psudo_attribute),
         values: optionValues,
       };
+      if (isOptionSwatch) {
+        productInfo.configurable_attributes[option.attribute_code].swatches = optionValues;
+      }
     });
 
     // Set configurable combinations.

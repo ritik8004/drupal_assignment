@@ -59,5 +59,7 @@ function alshaya_rcs_add_to_bag_page_attachments_alter(array &$page) {
     if (\Drupal::service('module_handler')->moduleExists('alshaya_rcs_color_split')) {
       $page['#attached']['drupalSettings']['alshayaColorSplit']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
     }
+    $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+    $page['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
   }
 }
