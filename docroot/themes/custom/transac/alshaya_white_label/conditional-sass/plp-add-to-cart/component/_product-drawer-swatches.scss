@@ -46,4 +46,30 @@
       width: 2.375rem;
     }
   }
+
+  .li-swatch-text {
+    list-style: none;
+    display: inline-block;
+
+    a {
+      @include u-visibility(block);
+
+      margin-top: rem(5);
+      margin-bottom: rem(5);
+      margin-#{$right}: rem(8);
+      margin-#{$left}: 0;
+      border: 1px solid $pdp_size_option_border;
+      text-align: center;
+      padding: rem(9.6) rem(12);
+      font-size: rem(10);
+      color: $pdp_size_option_text;
+      line-height: 1;
+
+      &.active,
+      &:hover {
+        color: $pdp_size_option_selected_text;
+        background: $pdp_size_option_selected_bg;
+      }
+    }
+  }
 }
