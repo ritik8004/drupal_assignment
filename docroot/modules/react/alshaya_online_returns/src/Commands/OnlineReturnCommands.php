@@ -58,32 +58,21 @@ class OnlineReturnCommands extends DrushCommands {
   /**
    * Syncs online returns api config cache.
    *
-   * @param array $options
-   *   Command options.
-   *
    * @command alshaya_online_returns:sync-returns-api-config
    *
    * @aliases sync-returns-api-config
    * @usage drush sync-returns-api-config
-   * @usage drush sync-returns-api-config --reset
-   * @usage drush sync-returns-api-config --langcode='en,ar' --reset
    */
-  public function syncReturnsConfig(array $options = [
-    'reset' => FALSE,
-    'langcode' => '',
-  ]) {
-    $langcode_list = !empty($options['langcode'])
-      ? explode(',', $options['langcode'])
-      : array_keys($this->languageManager->getLanguages());
-
-    foreach ($langcode_list as $langcode) {
-      $this->drupalLogger->info('Online Returns config sync started for language @langcode.', [
+  public function syncReturnsConfig() {
+    foreach (array_keys($this->languageManager->getLanguages()) as $langcode) {
+      $this->drupalLogger->notice('Online Returns config sync started for language @langcode.', [
         '@langcode' => $langcode,
       ]);
-      $this->apiHelper->getReturnsApiConfig($langcode);
+
+      $this->apiHelper->getReturnsApiConfig($langcode, TRUE);
     }
 
-    $this->drupalLogger->info('Online Returns API config synced.');
+    $this->drupalLogger->notice('Online Returns API config synced.');
   }
 
 }
