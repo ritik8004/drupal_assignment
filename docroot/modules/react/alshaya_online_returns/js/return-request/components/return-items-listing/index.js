@@ -146,7 +146,15 @@ class ReturnItemsListing extends React.Component {
     } else if (selectedItemDiscountPromotion.length > 0) {
       this.handlePromotionDeselect();
     } else {
-      handleSelectedItems(itemsSelected.filter((product) => product.sku !== itemDetails.sku));
+      const filteredSelectedItems = itemsSelected.filter(
+        (product) => product.sku !== itemDetails.sku,
+      );
+      handleSelectedItems(filteredSelectedItems);
+      this.setState({
+        btnDisabled: filteredSelectedItems.length > 0
+          && filteredSelectedItems.some((filteredItem) => (
+            !hasValue(filteredItem.reason) || filteredItem.reason === 0)),
+      });
     }
   }
 
