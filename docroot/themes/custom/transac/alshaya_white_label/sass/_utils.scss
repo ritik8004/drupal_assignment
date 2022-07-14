@@ -619,3 +619,37 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 
   @content;
 }
+
+// Mixin to add a plain skeletal loader.
+@mixin plain-loader() {
+  animation: plain-bg-load 1s infinite;
+  background-image: $plain-loader-gradient;
+  background-repeat: repeat-y;
+  background-size: 400% 8rem;
+  background-position: 100% 0;
+
+  @keyframes plain-bg-load {
+    to {
+      background-position: 0 0;
+    }
+  }
+}
+
+// Mixin to add a text block skeletal loader.
+@mixin text-block-loader() {
+  animation: text-bg-load 1s infinite;
+  background-image:
+    $text-loader-gradient,
+    $text-loader-gradient,
+    $text-loader-gradient,
+    $plain-loader-gradient;
+  background-repeat: repeat-y;
+  background-size: 90% 8rem, 90% 8rem, 75% 8rem, 400% 8rem;
+  background-position: center 2rem, center 4rem, center 6rem, 100% 0;
+
+  @keyframes text-bg-load {
+    to {
+      background-position: center 2rem, center 4rem, center 6rem, 0 0;
+    }
+  }
+}
