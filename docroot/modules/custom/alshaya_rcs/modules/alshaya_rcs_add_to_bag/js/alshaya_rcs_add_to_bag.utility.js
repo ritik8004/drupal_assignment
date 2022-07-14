@@ -216,7 +216,7 @@ window.commerceBackend = window.commerceBackend || {};
         });
       });
       productInfo.configurable_attributes[option.attribute_code] = {
-        id: attribute_id,
+        id: attribute_id.toString(),
         label: option.label,
         position: option.position,
         is_swatch: false,
