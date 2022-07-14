@@ -67,6 +67,7 @@ const LabelItems = ({ bifercatedLabels, directionKey }) => (
             src={labelItem.image.url}
             alt={labelItem.image.alt}
             title={labelItem.image.title}
+            loading="lazy"
           />
         </div>
       ))

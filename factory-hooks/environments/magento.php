@@ -591,7 +591,7 @@ $magentos = [
     ],
   ],
   'hm_qa' => [
-    'url' => 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'url' => 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu-3.magentosite.cloud',
     'pims_base_url' => 'http://34.249.182.88:3010',
     'magento_secrets' => [
       'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',

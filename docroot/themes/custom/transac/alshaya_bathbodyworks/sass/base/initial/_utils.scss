@@ -1,0 +1,17 @@
+.modal-overlay {
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    top: -3.75rem;
+  }
+}
+
+.modal-overlay--spinner {
+  &::after {
+    content: "";
+    background-image: url(#{$base_theme_loader_img_directory_path});
+    width: 2rem;
+    height: 1.7rem;
+  }
+}

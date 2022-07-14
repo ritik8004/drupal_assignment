@@ -219,6 +219,13 @@
           font-family: $hnm-demibold;
           font-weight: normal;
         }
+
+        .date {
+          html[lang='ar'] & {
+            direction: ltr;
+            text-align: right;
+          }
+        }
       }
 
       a.order-detail-page {

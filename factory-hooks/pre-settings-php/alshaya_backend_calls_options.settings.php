@@ -78,9 +78,6 @@ $settings['alshaya_backend_calls_options'] = [
     'default' => [
       'timeout' => 30,
     ],
-    'dm_search' => [
-      'timeout' => 5,
-    ],
     'customer_update' => [
       'timeout' => 10,
     ],
@@ -100,7 +97,7 @@ $settings['alshaya_backend_calls_options'] = [
       'timeout' => 5,
     ],
     'product_get' => [
-      'timeout' => 5,
+      'timeout' => 15,
     ],
     'customer_search' => [
       'timeout' => 5,

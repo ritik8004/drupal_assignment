@@ -205,10 +205,6 @@ function _alshaya_product_lpn_compare_season_codes(array $season_codes, $code_id
 /**
  * Implements hook_alshaya_rcs_product_product_options_to_query().
  */
-function alshaya_product_lpn_alshaya_rcs_product_product_options_to_query(array $options) {
-  array_push($options,
-    ['attribute_code' => 'season_code', 'entity_type' => '4'],
-  );
-
-  return $options;
+function alshaya_product_lpn_alshaya_rcs_product_product_options_to_query() {
+  return ['season_code'];
 }

@@ -12,23 +12,38 @@
 
     var data = e.detail.result;
 
+    // Top title attributes field values.
+    var topTitleAttributes = [];
+    if (Drupal.hasValue(data.top_three_attributes_1)) {
+      topTitleAttributes.push(data.top_three_attributes_1);
+    }
+    if (Drupal.hasValue(data.top_three_attributes_2)) {
+      topTitleAttributes.push(data.top_three_attributes_2);
+    }
+    if (Drupal.hasValue(data.top_three_attributes_3)) {
+      topTitleAttributes.push(data.top_three_attributes_3);
+    }
+
+    if (topTitleAttributes.length !== 0) {
+      // Append top title attributes field values in result.
+      e.detail.result.top_title_attributes = topTitleAttributes.join(', ');
+    }
+
     // Add extra data to product description.
     // This will be rendered using handlebars templates to add P tags and H3 titles.
+    // @todo We have to work on the description part once we get the "season"
+    // atrribute for the specifications part tracked in the following ticket -
+    // https://alshayagroup.atlassian.net/browse/CORE-34014
+    var description = data.description.html;
+    description += (Drupal.hasValue(data.bullet_points)) ? data.bullet_points : '';
+    description += (drupalSettings.pdpShowSpecifications && Drupal.hasValue(data.color)) ? data.color : '';
     e.detail.result.description = {
-      html: data.description.html,
-      composition: data.composition,
-      washing_instructions: data.washing_instructions,
-      article_warning: data.article_warning,
+      html: description,
       sku: data.sku,
-      show_product_detail_title: (data.composition || data.washing_instructions || data.article_warning),
     };
 
     // Append field values to short_description.
     // The text will be trimmed if the description is longer than 160 characters.
-    var short_description = { html: data.description.html };
-    short_description.html += (data.composition) ? '' + data.composition : '';
-    short_description.html += (data.washing_instructions) ? '' + data.washing_instructions : '';
-    short_description.html += (data.article_warning) ? '' + data.article_warning : '';
-    e.detail.result.short_description = short_description;
+    e.detail.result.short_description = { html: data.description.html };
   });
 })();

@@ -49,6 +49,15 @@ window.commerceBackend = window.commerceBackend || {};
       });
     });
 
+    // Set the first child of the main product, to be used later.
+    mainProduct.variants.some(function eachVariant(variant) {
+      if (window.commerceBackend.isProductInStock(variant.product)) {
+        mainProduct.firstChild = variant.product.sku;
+        return true;
+      }
+      return false;
+    });
+
     const mainProductAttributes = getProductConfigurableAttributes(mainProduct);
     // Alter the configurable variants list of the main product.
     // We will re-populate the variants.

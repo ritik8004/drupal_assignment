@@ -624,7 +624,10 @@ window.commerceBackend = window.commerceBackend || {};
       }
     });
 
-    if (Drupal.hasValue(combinations.attribute_sku)) {
+    combinations.firstChild = rawProductData.firstChild;
+    if (!(Drupal.hasValue(combinations.firstChild))
+      && Drupal.hasValue(combinations.attribute_sku)
+    ) {
       var firstChild = Object.entries(combinations.attribute_sku)[0];
       firstChild = Object.entries(firstChild[1]);
       combinations.firstChild = firstChild[0][1][0];
@@ -1245,6 +1248,35 @@ window.commerceBackend = window.commerceBackend || {};
     staticDataStore.labels = {};
   }
 
+  /**
+   * Check if the product is in stock.
+   *
+   * @param {object} entity
+   *   The product entity.
+   *
+   * @returns {Boolean}
+   *   True if product is in stock, else false.
+   */
+  window.commerceBackend.isProductInStock = function isProductInStock(entity) {
+    if (entity.stock_status === 'OUT_OF_STOCK') {
+      return false;
+    }
+
+    // @todo Check for free gifts when checking the variants.
+    // For configurable product, if all variants are OOS, then we consider the
+    // product to be OOS.
+    if (entity.type_id === 'configurable') {
+      const isAnyVariantInStock = entity.variants.some((variant) =>
+        variant.product.stock_status === 'IN_STOCK'
+      );
+      if (!isAnyVariantInStock) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty or event data is not for product.
@@ -1257,7 +1289,7 @@ window.commerceBackend = window.commerceBackend || {};
     var product = e.detail.result;
     if (product.type_id === 'configurable') {
       product.variants.forEach(function eachVariant(variant) {
-        variant.parent_sku = product.sku;
+        variant.product.parent_sku = product.sku;
       });
     }
 

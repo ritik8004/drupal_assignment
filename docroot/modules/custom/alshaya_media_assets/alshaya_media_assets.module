@@ -21,17 +21,6 @@ function alshaya_media_assets_alshaya_rcs_product_query_fields_alter(array &$fie
     'assets_pdp',
     'assets_cart',
   );
-
-  // Query for teaser assets for product recommendations.
-  if (isset($fields['items']['upsell_products'])) {
-    $fields['items']['upsell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-  }
-  if (isset($fields['items']['related_products'])) {
-    $fields['items']['related_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-  }
-  if (isset($fields['items']['crosssell_products'])) {
-    $fields['items']['crosssell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-  }
 }
 
 /**
@@ -197,6 +186,10 @@ function alshaya_media_assets_alshaya_acm_product_gallery_alter(array &$gallery,
       $gallery['#label'] = $sku->label();
 
       if ($plp_hover_image) {
+        if (empty($plp_hover_image['#attributes'])) {
+          $plp_hover_image['#attributes'] = [];
+        }
+        $plp_hover_image['#attributes']['loading'] = 'lazy';
         $gallery['#hoverImage'] = $plp_hover_image;
       }
     }
@@ -241,4 +234,12 @@ function alshaya_media_assets_acq_sku_base_field_additions_alter(array &$fields 
   else {
     \Drupal::logger('alshaya_media_assets')->error('The config alshaya_media_assets.sku_base_fields is empty for media assets.');
   }
+}
+
+/**
+ * Implements hook_alshaya_rcs_recommended_product_query_fields_alter().
+ */
+function alshaya_media_assets_alshaya_rcs_recommended_product_query_fields_alter(array &$fields) {
+  // Query for teaser assets for product recommendations.
+  $fields['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
 }

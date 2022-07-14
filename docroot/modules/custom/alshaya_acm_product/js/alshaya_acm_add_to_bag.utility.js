@@ -11,18 +11,17 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {string} sku
    *   The sku value.
-   * @param {string} parentSKU
-   *   (optional) The parent sku value.
+   * @param {string} styleCode
+   *   (optional) Style code value.
    *
    * @returns {object}
    *   The product info object.
    */
-  window.commerceBackend.getProductDataAddToBagListing = async function (productSKU, parentSKU) {
-    var sku = Drupal.hasValue(parentSKU) ? parentSKU : productSKU;
-    var storageKey = getProductInfoStorageKey(sku);
+  window.commerceBackend.getProductDataAddToBagListing = async function (productSKU, styleCode) {
+    var storageKey = getProductInfoStorageKey(productSKU);
 
     // Return null if the sku is undefined or null.
-    if (typeof sku === 'undefined' || sku === null) {
+    if (typeof productSKU === 'undefined' || productSKU === null) {
       Drupal.removeItemFromLocalStorage(storageKey);
       return null;
     }
@@ -40,7 +39,7 @@ window.commerceBackend = window.commerceBackend || {};
     }
 
     // Prepare the product info api url.
-    const apiUrl = Drupal.url(`rest/v1/product-info/${btoa(sku)}`);
+    const apiUrl = Drupal.url(`rest/v1/product-info/${btoa(productSKU)}`);
 
     // If product's info isn't available, fetch via api.
     return new Promise(function (resolve, reject) {
