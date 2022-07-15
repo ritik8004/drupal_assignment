@@ -17,10 +17,13 @@
  */
 if (isset($settings['behat_secret_key'])
   // phpcs:ignore
-  && isset($_REQUEST['behat'])
+  && !empty($_REQUEST['behat'])
   // phpcs:ignore
   && $settings['behat_secret_key'] === $_REQUEST['behat']) {
-  // Disable the captcha for the following form during the behat test runs.
+  // Set an additional config to identify the behat request.
+  $settings['is_behat_request'] = TRUE;
+
+  // Disable the captcha for the following forms during the behat test runs.
   // User login form.
   $config['captcha.captcha_point.user_login_form']['status'] = FALSE;
 
