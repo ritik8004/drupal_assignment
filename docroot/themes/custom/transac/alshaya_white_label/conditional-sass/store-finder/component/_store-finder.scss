@@ -1099,7 +1099,7 @@
     display: inline-block;
     position: absolute;
     background: url('../../../imgs/icons/ic-directions.svg');
-    #{$right}: 1rem;
+    #{$right}: rem(32);
     width: 18px;
     height: 18px;
 

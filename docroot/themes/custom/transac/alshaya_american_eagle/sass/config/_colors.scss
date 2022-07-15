@@ -714,8 +714,6 @@ $plp-quick-view-product-size-active-bg: $black;
 $plp-quick-view-product-size-border-hover: $black;
 $plp-quick-view-product-size-text-disabled: $grey;
 
-
-
 //eGift.
 $egift-banner-bg: $bright_gray;
 $egift-banner-title: $dark_gray;
@@ -728,3 +726,17 @@ $egift-check-balance-title: $cod-gray;
 $egift-landing-page-one-row-two-col-box-bg: $white-four;
 $egift-checkout-info: $black;
 $egift-card-redeem-icon: $black;
+
+// Online Returns
+$online-return-eligibility-button-txt: $black;
+$online-return-dark-bg: $black;
+$online-return-dark-txt: $black;
+$online-return-refund-grey-txt: $grey;
+$online-return-refund-blue-txt: $_order_limit_txt;
+$online-return-request-button-bg: $wild-sand;
+$online-return-disable-button-bg: $light-greyish;
+$online-return-confirmation-note-txt: $grey;
+$online-return-confirmation-border: $gallery;
+$online-return-light-bg: $white;
+$online-return-total-price-bg: $white_smoke;
+$online-return-print-cancel-border: $light-greyish;

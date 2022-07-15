@@ -4,7 +4,7 @@
  */
 window.commerceBackend = window.commerceBackend || {};
 
-(function ($, Drupal, drupalSettings){
+(function ($, Drupal, drupalSettings, RcsEventManager){
 
   /**
    * Get the labels data for the selected SKU.
@@ -204,4 +204,28 @@ window.commerceBackend = window.commerceBackend || {};
       }
     }
   }
-})(jQuery, Drupal, drupalSettings);
+
+  /**
+   * Updates CS/US/Related products on PDP.
+   *
+   * @param {string} type
+   *   Values - crosssel/upsell/related
+   * @param {string} sku
+   *   SKU value.
+   * @param {string} device
+   *   Device - mobile/desktop.
+   */
+  window.commerceBackend.updateRelatedProducts = function updateRelatedProducts (type, sku, device) {
+    var productType = type + '-products';
+    globalThis.rcsPhCommerceBackend.getData(productType, {sku}).then(function productList(response) {
+      var mainProduct = (Drupal.hasValue(response) && Drupal.hasValue(response[0])) ? response[0] : null;
+      if (mainProduct) {
+        var html = globalThis.renderRcsProduct.render(drupalSettings, productType, {}, {}, mainProduct);
+        var $selector = $('#rcs-' + productType);
+        $selector.html(html);
+        globalThis.rcsPhApplyDrupalJs($selector[0]);
+      }
+    });
+  };
+
+})(jQuery, Drupal, drupalSettings, RcsEventManager);

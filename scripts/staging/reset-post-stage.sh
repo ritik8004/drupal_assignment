@@ -32,7 +32,7 @@ echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site before doing anything."
   mkdir -p ~/backup/$target_env/pre-stage
-  drush sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
+  drush sql-dump -l https://$site-$env.factory.alshaya.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
 done
 
 # Run updb. In case of soft-stage, it is required to be sure next steps don't
@@ -41,22 +41,24 @@ done
 echo "$sites" | while IFS= read -r site
 do
   echo "Running database update on $site."
-  drush -l $site.$env-alshaya.acsitefactory.com updb -y
+  drush -l https://$site-$env.factory.alshaya.com updb -y
 done
 
 ###### CLEAR + SYNC.
 echo "$sites" | while IFS= read -r site
 do
+  url="https://$site-$env.factory.alshaya.com"
+
   # Get the installed profile on the given site.
-  profile="$(drush -l $site.$env-alshaya.acsitefactory.com php-eval 'echo \Drupal::installProfile();')"
+  profile="$(drush -l $url php-eval 'echo \Drupal::installProfile();')"
 
   # For transac sites, we launch the commerce clean.
   if [ $profile = "alshaya_transac" ]
   then
     echo "Cleaning and syncing commerce data on $site."
-    ./../scripts/staging/sub-sh/prepare-site-for-reset.sh $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub-sh/clean-commerce-data.sh $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub-sh/sync-commerce-data.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/prepare-site-for-reset.sh $url
+    ./../scripts/staging/sub-sh/clean-commerce-data.sh $url
+    ./../scripts/staging/sub-sh/sync-commerce-data.sh $url
   fi
 
 done
@@ -66,5 +68,5 @@ echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site after process."
   mkdir -p ~/backup/$target_env/post-stage
-  drush sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
+  drush sql-dump -l https://$site-$env.factory.alshaya.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
 done

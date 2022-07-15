@@ -47,8 +47,8 @@ const continueCheckout = (e, inStock) => {
     cartData.then((cartResult) => {
       // Remove loader.
       removeFullScreenLoader();
-      handleOutOfStock(cartResult);
       cartValidationOnUpdate(cartResult, true);
+      handleOutOfStock(cartResult);
     });
   }
 };

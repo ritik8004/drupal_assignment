@@ -72,8 +72,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 
 // @TODO: Replace the classes below with mixins.
 // Classes
-%show-overlay,
-.show-overlay {
+%show-overlay {
   @include breakpoint($upto-desktop) {
     position: relative;
 
@@ -92,15 +91,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
   }
 }
 
-.no-animate {
-  &::before {
-    transition: none !important;
-  }
-}
-
-%modal-overlay,
-.modal-overlay,
-body.modal-overlay {
+%modal-overlay {
   height: initial;
   width: 100%;
 
@@ -123,17 +114,7 @@ body.modal-overlay {
   }
 }
 
-body {
-  &.reduce-zindex {
-    .header--wrapper,
-    .branding__menu {
-      z-index: auto;
-    }
-  }
-}
-
-%modal-overlay-spinner,
-.modal-overlay--spinner {
+%modal-overlay-spinner {
   @extend %modal-overlay;
 
   &::before {
@@ -159,44 +140,11 @@ body {
   }
 }
 
-.mobile-only-block {
-  @include breakpoint($tablet) {
-    display: none;
-  }
-}
-
-.tablet-only-block {
-  display: none;
-
-  @include breakpoint($only-tablet) {
-    display: block;
-  }
-}
-
-.above-mobile-block {
-  display: none;
-
-  @include breakpoint($tablet) {
-    display: block;
-  }
-}
-
 @mixin clearfix {
   &::after {
     content: "";
     display: table;
     clear: both;
-  }
-}
-
-// Fade Effect.
-@keyframes fadeEffect {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
   }
 }
 
@@ -320,11 +268,6 @@ body {
     @content;
     @include fullPageTransparentOverlay($pseudo-element);
   }
-}
-
-// Allow things to be hidden visually without changing visibility.
-.whiteout {
-  opacity: 0;
 }
 
 @mixin arabic-letter-spacing {
@@ -675,4 +618,38 @@ body {
   background-image: url('#{$base_theme_img_directory_path}/icons/#{$icon}');
 
   @content;
+}
+
+// Mixin to add a plain skeletal loader.
+@mixin plain-loader() {
+  animation: plain-bg-load 1s infinite;
+  background-image: $plain-loader-gradient;
+  background-repeat: repeat-y;
+  background-size: 400% 8rem;
+  background-position: 100% 0;
+
+  @keyframes plain-bg-load {
+    to {
+      background-position: 0 0;
+    }
+  }
+}
+
+// Mixin to add a text block skeletal loader.
+@mixin text-block-loader() {
+  animation: text-bg-load 1s infinite;
+  background-image:
+    $text-loader-gradient,
+    $text-loader-gradient,
+    $text-loader-gradient,
+    $plain-loader-gradient;
+  background-repeat: repeat-y;
+  background-size: 90% 8rem, 90% 8rem, 75% 8rem, 400% 8rem;
+  background-position: center 2rem, center 4rem, center 6rem, 100% 0;
+
+  @keyframes text-bg-load {
+    to {
+      background-position: center 2rem, center 4rem, center 6rem, 0 0;
+    }
+  }
 }

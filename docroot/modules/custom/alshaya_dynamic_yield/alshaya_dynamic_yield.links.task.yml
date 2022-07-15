@@ -1,0 +1,4 @@
+alshaya_dynamic_yield.alshaya_dynamic_yield_settings:
+  route_name: alshaya_dynamic_yield.settings_form
+  title: 'Alshaya Dynamic yield settings'
+  base_route: alshaya_dynamic_yield.settings_form

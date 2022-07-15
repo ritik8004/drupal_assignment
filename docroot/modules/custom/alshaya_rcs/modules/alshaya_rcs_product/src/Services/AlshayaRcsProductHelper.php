@@ -157,13 +157,13 @@ class AlshayaRcsProductHelper {
   }
 
   /**
-   * Get the field query for recommended products.
+   * Get the query for recommended products.
    *
    * @return array
-   *   Fields array.
+   *   Recommended product query fields array.
    */
-  private function getRecommendedProductFieldQuery() {
-    return [
+  public function getRecommendedProductQuery(string $type) {
+    $query_fields = [
       'sku',
       'id',
       'name',
@@ -210,6 +210,45 @@ class AlshayaRcsProductHelper {
         'dimension4',
       ],
     ];
+
+    $this->moduleHandler->alter('alshaya_rcs_recommended_product_query_fields', $query_fields);
+
+    return [
+      'query' => [
+        'query ($sku: String)' => [
+          'products(filter: {sku: {eq: $sku}})' => [
+            'items' => [
+              "$type" => $query_fields,
+            ],
+          ],
+        ],
+      ],
+      'variables' => [
+        'sku' => NULL,
+      ],
+    ];
+  }
+
+  /**
+   * Gets the configurable attributes for the products in the site.
+   *
+   * @return array
+   *   The configurable attributes for the products in the site.
+   */
+  private function getConfigurableAttributes() {
+    $attributes = &drupal_static(__METHOD__, []);
+    if (!empty($attributes)) {
+      return $attributes;
+    }
+
+    $attribute_weights = $this->configFactory->get('acq_sku.configurable_form_settings')->get('attribute_weights');
+    foreach ($attribute_weights as $group) {
+      foreach (array_keys($group) as $attribute) {
+        $attributes[] = $attribute;
+      }
+    }
+
+    return array_unique($attributes);
   }
 
   /**
@@ -389,22 +428,16 @@ class AlshayaRcsProductHelper {
       ],
     ];
 
-    // Add the recommended products fields to the main query body.
-    $recommended_product_settings = $this->configFactory->get('alshaya_acm.settings');
-    // Add query for upsell products if display setting is true.
-    if ($recommended_product_settings->get('display_upsell')) {
-      $fields['items']['upsell_products'] = $this->getRecommendedProductFieldQuery();
-    }
-    // Add query for related products if display setting is true.
-    if ($recommended_product_settings->get('display_related')) {
-      $fields['items']['related_products'] = $this->getRecommendedProductFieldQuery();
-    }
-    // Add query for crosssell products if display setting is true.
-    if ($recommended_product_settings->get('display_crosssell')) {
-      $fields['items']['crosssell_products'] = $this->getRecommendedProductFieldQuery();
-    }
-
     $this->moduleHandler->alter('alshaya_rcs_product_query_fields', $fields);
+
+    // Add the configurable product attributes dynamically.
+    $attributes = $this->getConfigurableAttributes();
+    foreach ($attributes as $attribute) {
+      // Prevent duplicate entry.
+      if (array_search($attribute, $fields['items']['... on ConfigurableProduct']['variants']['product']) === FALSE) {
+        $fields['items']['... on ConfigurableProduct']['variants']['product'][] = $attribute;
+      }
+    }
 
     $static = $fields;
 
@@ -430,6 +463,20 @@ class AlshayaRcsProductHelper {
   }
 
   /**
+   * Returns product additional attributes query fields.
+   *
+   * @return array
+   *   Product additional attributes query.
+   */
+  public function getProductAdditionalAttributesQueryFields() {
+    $query = [];
+    $attributes = [];
+    $attributes = $this->moduleHandler->invokeAll('alshaya_rcs_product_additional_attributes_query_fields', [$attributes]);
+    $query['items'] = $attributes;
+    return $query;
+  }
+
+  /**
    * Returns the main query and variables getting product options data.
    *
    * @return array
@@ -440,7 +487,25 @@ class AlshayaRcsProductHelper {
     if (!empty($options)) {
       return $options;
     }
-    $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query', [$options]);
+
+    // Fetch the attributes provided by other modules.
+    $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query');
+    $attributes = $this->getConfigurableAttributes();
+    // Add the configurable attributes.
+    $options = array_merge($options, $attributes);
+    if (count($options) > 0) {
+      // Remove duplicate elements from the array.
+      // Same attributes may be added by hook, so this is to prevent from
+      // querying the same attribute multiple times.
+      $options = array_unique($options);
+      // Reindex the array.
+      $options = array_values($options);
+      // Process data to required format.
+      $options = array_map(function ($option) {
+        return ['attribute_code' => $option , 'entity_type' => 4];
+      }, $options);
+    }
+
     return $options;
   }
 

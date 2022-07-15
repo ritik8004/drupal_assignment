@@ -109,7 +109,7 @@
     &.product-small {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          height: 37.125rem;
+          height: auto;
         }
 
         .alshaya_search_mainimage {
@@ -184,6 +184,12 @@
       .alshaya_search_mainimage {
         opacity: 1;
         display: block;
+      }
+
+      &.lazy-hover {
+        .alshaya_search_hoverimage {
+          display: none;
+        }
       }
     }
 
@@ -347,12 +353,6 @@
   transition: opacity 0.2s ease-out;
   width: 100%;
   z-index: 1;
-}
-
-article[data-vmode="search_result"]:hover .alshaya_search_mainimage {
-  @include breakpoint($only-mobile) {
-    opacity: 1;
-  }
 }
 
 .block-views-blockproduct-category-level-3-block-2 {

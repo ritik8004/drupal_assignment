@@ -3,7 +3,7 @@
  * Event Listener to alter datalayer.
  */
 
-(function (drupalSettings) {
+(function (Drupal) {
   'use strict';
 
   // Load product details into initial Data layer.
@@ -87,10 +87,14 @@
         breadcrumbTitles.push(breadcrumbs[i].text);
       }
       categories.departmentName = breadcrumbTitles.join('|'),
-      categories.departmentId = breadcrumbs[0].id;
+      categories.departmentId = ( Array.isArray(breadcrumbs) && breadcrumbs.length > 0 )
+        ? breadcrumbs[0].id
+        : '';
       categories.list = breadcrumbTitles.join('|');
       // Lowest category as listing category.
-      var listing_category = breadcrumbs.pop();
+      var listing_category = (Array.isArray(breadcrumbs) && breadcrumbs.length > 0)
+        ? breadcrumbs.pop()
+        : { text : '', id : ''};
       categories.listingName = listing_category.text;
       categories.listingId = listing_category.id;
 
@@ -101,4 +105,4 @@
 
     return categories;
   }
-})(drupalSettings);
+})(Drupal);

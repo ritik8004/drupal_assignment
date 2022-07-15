@@ -6,6 +6,8 @@
           #check-balance-button {
             & > button {
               @include btn;
+
+              font-family: $dh-regular;
             }
           }
 
@@ -17,6 +19,8 @@
         .paragraph--type--image-title-subtitle {
           & > .field--name-field-button-link {
             @include btn;
+
+            font-family: $dh-regular;
           }
 
           .field--name-field-title {

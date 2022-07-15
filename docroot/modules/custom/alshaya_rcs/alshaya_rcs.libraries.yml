@@ -2,4 +2,6 @@ utility:
   js:
     js/alshaya_rcs_utility.js: {}
   dependencies:
-    - core/jquery
+    - core/drupal
+    - rcs_placeholders/helpers
+    - alshaya_master/common_functions

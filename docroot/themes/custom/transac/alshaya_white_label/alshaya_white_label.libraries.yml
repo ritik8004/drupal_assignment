@@ -7,7 +7,6 @@ global_styles:
     js/menu.js: {}
     js/form.js: {}
     js/one_time_language_slider.js: {}
-    js/footer-space-filler.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
     - core/jquery
@@ -134,6 +133,7 @@ attribute.common:
     - core/jquery
     - core/jquery.once
     - core/drupal
+    - alshaya_master/common_functions
 
 attribute:
   js:
@@ -257,6 +257,7 @@ footer_js:
   js:
     js/back_to_top.js: {}
     js/footer-accordion.js: {}
+    js/footer-space-filler.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
@@ -771,3 +772,13 @@ online-booking:
   css:
     theme:
       css/conditional-sass/online-booking/online-booking.ltr.css: {}
+
+inter-country-transfer:
+  css:
+    theme:
+      css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css: {}
+
+cls-initial-layout-common:
+  css:
+    theme:
+      css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: {}

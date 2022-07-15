@@ -116,6 +116,14 @@ exports.getEntity = async function getEntity(langcode) {
       response = await rcsCommerceBackend.invokeApi(request);
       if (response && response.data.categories.total_count) {
         result = response.data.categories.items[0];
+        var currentPath = window.location.href;
+        // The condition "currentPath.indexOf('/view-all')" is to ensure that
+        // this should execute only for view all page,
+        // "result.display_view_all !== 1" this one is to check whether we have
+        // the view_all field set to true or not.
+        if ((currentPath.indexOf('/view-all') != -1) && (result.display_view_all !== 1)) {
+          await handleNoItemsInResponse(request, urlKey);
+        }
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -305,7 +313,7 @@ exports.getData = async function getData(
 
     case 'products-in-style':
       let variables = rcsPhGraphqlQuery.styled_products.variables;
-      variables.styleCode = params.styleCode;
+      variables.styleCode = params.styleCode.toString();
 
       request.data = prepareQuery(rcsPhGraphqlQuery.styled_products.query, variables);
       response = await rcsCommerceBackend.invokeApi(request);
@@ -318,6 +326,41 @@ exports.getData = async function getData(
       let singleProductQueryVariables = rcsPhGraphqlQuery.single_product_by_sku.variables;
       singleProductQueryVariables.sku = params.sku;
       request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
+      result = rcsCommerceBackend.invokeApi(request);
+      break;
+
+    case 'related-products':
+      // Build query.
+      let relatedListVariables = rcsPhGraphqlQuery.related_products.variables;
+      relatedListVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.related_products.query, relatedListVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
+    case 'upsell-products':
+      // Build query.
+      let upsellListVariables = rcsPhGraphqlQuery.upsell_products.variables;
+      upsellListVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.upsell_products.query, upsellListVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
+    case 'crosssell-products':
+      // Build query.
+      let crosselListVariables = rcsPhGraphqlQuery.crosssell_products.variables;
+      crosselListVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.crosssell_products.query, crosselListVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
+    case 'product_additional_attributes':
+      let additionalAttributesVariables = rcsPhGraphqlQuery.product_additional_attributes.variables;
+      additionalAttributesVariables.sku = params.sku;
+      additionalAttributesVariables.attributes = params.attributes;
+      request.data = prepareQuery(rcsPhGraphqlQuery.product_additional_attributes.query, additionalAttributesVariables);
       result = rcsCommerceBackend.invokeApi(request);
       break;
 

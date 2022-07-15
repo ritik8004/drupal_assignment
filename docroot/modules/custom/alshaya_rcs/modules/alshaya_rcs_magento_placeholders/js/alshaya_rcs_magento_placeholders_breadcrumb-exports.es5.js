@@ -7,6 +7,20 @@ exports.render = function render(
 ) {
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
+  var currentPath = window.location.href;
+  var isViewAll = 0;
+  if (currentPath.indexOf('/view-all') != -1) {
+    breadcrumbs.map(function (bdata) {
+      if (bdata.data_url.indexOf('view-all') != -1) {
+        isViewAll = 1;
+      }
+    });
+    if (!isViewAll) {
+      let viewAllObj = { 'data_url' : '', 'id' :'', 'text' : 'View All', 'url' : '' };
+      breadcrumbs.push(viewAllObj);
+    }
+  }
+
   // Proceed only if entity is present.
   if (breadcrumbs !== null) {
     // Get the enrichment data. It's a sync call.

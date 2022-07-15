@@ -121,8 +121,3 @@ $border-default: 0.0625rem solid $promo_block_border;
     }
   }
 }
-
-@keyframes spin {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
-}

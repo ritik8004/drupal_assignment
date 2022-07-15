@@ -731,11 +731,7 @@ class AlshayaApiWrapper {
     $filters['page_size'] = $page_size;
 
     $endpoint = 'deliverymatrix/address-locations/search?';
-    $request_options = [
-      'timeout' => $this->mdcHelper->getPhpTimeout('dm_search'),
-    ];
-
-    return $this->invokeApiWithPageLimit($endpoint, $request_options, $page_size, $filters);
+    return $this->invokeApiWithPageLimit($endpoint, [], $page_size, $filters);
   }
 
   /**
@@ -826,12 +822,7 @@ class AlshayaApiWrapper {
    */
   public function getProductAttributeWithSwatches($attribute_code) {
     $endpoint = 'products/attributes-with-swatches/' . $attribute_code;
-
-    $request_options = [
-      'timeout' => $this->mdcHelper->getPhpTimeout('product_get'),
-    ];
-
-    return $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+    return $this->invokeApi($endpoint, [], 'GET');
   }
 
   /**

@@ -1,0 +1,5 @@
+services:
+  alshaya_dynamic_yield.dynamic_yield_helper:
+    class: Drupal\alshaya_dynamic_yield\Helper\DynamicYieldHelper
+    arguments:
+      - '@config.factory'

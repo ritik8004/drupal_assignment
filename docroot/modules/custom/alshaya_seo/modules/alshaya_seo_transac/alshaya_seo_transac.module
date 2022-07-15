@@ -427,6 +427,25 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       $page_type = ltrim(implode('-', $path_parts), '-');
     }
 
+    // Page type will be set to 'egift card' for these routes.
+    $egift_routes = [
+      'alshaya_egift_card.egift_card_purchase',
+      'alshaya_egift_card.topup_card',
+      'alshaya_egift_card.my_egift_card',
+    ];
+
+    if (in_array($current_route['route_name'], $egift_routes)) {
+      $page_type = 'egift card';
+    }
+
+    // For Advanced Page eGift node page.
+    if ($page_type === 'advanced page') {
+      $node = $current_route['route_params']['node'] ?? [];
+      if ($node && $node->get('field_use_as_egift_landing_page')->value) {
+        $page_type = 'egift card';
+      }
+    }
+
     $data_layer['pageType'] = $page_type;
     $page_dl_attributes = $gtm_manager->fetchPageSpecificAttributes($page_type, $current_route);
     $data_layer = array_merge($data_layer, $page_dl_attributes);

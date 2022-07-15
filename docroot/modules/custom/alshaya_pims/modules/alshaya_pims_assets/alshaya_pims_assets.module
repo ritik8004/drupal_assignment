@@ -93,7 +93,7 @@ function alshaya_pims_assets_alshaya_acm_product_media_items_alter(array &$media
  * Implements hook_alshaya_acm_product_pdp_swath_type_alter().
  */
 function alshaya_pims_assets_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
-  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $sku_asset_manager */
+  /** @var \Drupal\alshaya_pims_assets\Services\PimsSkuAssetManager $sku_asset_manager */
   $sku_asset_manager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
   $swatch = $sku_asset_manager->getSkuSwatch($variant_sku);
 

@@ -2,7 +2,7 @@
  * Listens to the 'rcsUpdateResults' event and updates the result object
  * with assets data.
  */
- (function () {
+ (function (Drupal, RcsEventManager) {
 
   /**
    * Processes and returns an object containing media for given sku.
@@ -57,6 +57,10 @@
           product.media.push(productMedia);
         }
       });
+      if (Drupal.hasValue(product.media[0])) {
+        product.media_cart = product.media[0].thumbnails;
+        product.media_teaser = product.media[0].teaser;
+      }
     }
   }
 
@@ -221,7 +225,11 @@
     if ((typeof e.detail.pageType !== 'undefined' && e.detail.pageType !== 'product')
       || typeof e.detail.result === 'undefined'
       || (typeof e.detail.placeholder !=='undefined'
-           &&  !(['product-recommendation', 'field_magazine_shop_the_story'].includes(e.detail.placeholder))
+           && !([
+              'product-recommendation',
+              'field_magazine_shop_the_story',
+              'product_by_sku',
+            ].includes(e.detail.placeholder))
          )
       ) {
       return;
@@ -238,4 +246,4 @@
       setMediaData(products);
     }
   }, 10);
-})();
+})(Drupal, RcsEventManager);

@@ -34,8 +34,8 @@ class SearchGallery extends React.PureComponent {
     this.onHoverAppendMarkup = this.onHoverAppendMarkup.bind(this);
   }
 
-  onHoverAppendMarkup = (sliderStatus, thumbnails) => (
-    <div className="alshaya_search_slider" data-slider-status={sliderStatus}>
+  onHoverAppendMarkup = (thumbnails) => (
+    <div className="alshaya_search_slider">
       <Slider {...sliderSettings} className="search-lightSlider" ref={this.getref}>
         {thumbnails}
       </Slider>
@@ -64,18 +64,22 @@ class SearchGallery extends React.PureComponent {
       ));
     });
 
-    const sliderStatus = thumbnails.length > sliderSettings.slidesToShow ? 'true' : 'false';
+    const sliderStatus = thumbnails.length > sliderSettings.slidesToShow;
+    let classWrapper = 'img-wrapper';
+    if (sliderStatus) {
+      classWrapper += ' slider-wrapper';
+    }
 
     return (
       <div className="alshaya_search_gallery">
         <div className="alshaya_search_mainimage" ref={this.mainImageRef} data-sku-image={`${mainImageUrl}`}>
-          <div className="img-wrapper">
+          <div className={classWrapper}>
             <ImageElement
               src={mainImageUrl}
               title={title}
               loading="lazy"
             />
-            {initSlider ? this.onHoverAppendMarkup(sliderStatus, thumbnails) : ''}
+            {(sliderStatus && initSlider) ? this.onHoverAppendMarkup(thumbnails) : ''}
           </div>
           <Lozenges labels={labels} sku={sku} />
         </div>

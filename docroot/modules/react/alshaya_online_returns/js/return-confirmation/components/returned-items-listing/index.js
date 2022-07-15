@@ -1,6 +1,7 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ReturnIndividualItem from '../../../return-request/components/return-individual-item';
+import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
 import { getReturnedItems } from '../../../utilities/return_confirmation_util';
 
 const ReturnedItemsListing = ({
@@ -10,6 +11,13 @@ const ReturnedItemsListing = ({
   if (!hasValue(returnedItems)) {
     return null;
   }
+
+  // Push the required info to GTM.
+  Drupal.alshayaSeoGtmPushReturn(
+    getProductGtmInfo(returnedItems),
+    getPreparedOrderGtm('returnconfirmed', returnData),
+    'returnconfirmed',
+  );
 
   return (
     <div className="return-items-wrapper">

@@ -12,35 +12,6 @@ function isProductBuyable(entity) {
 }
 
 /**
- * Check if the product is in stock.
- *
- * @param {object} entity
- *   The product entity.
- *
- * @returns {Boolean}
- *   True if product is in stock, else false.
- */
-function isProductInStock(entity) {
-  if (entity.stock_status === 'OUT_OF_STOCK') {
-    return false;
-  }
-
-  // @todo Check for free gifts when checking the variants.
-  // For configurable product, if all variants are OOS, then we consider the
-  // product to be OOS.
-  if (entity.type_id === 'configurable') {
-    const isAnyVariantInStock = entity.variants.some((variant) =>
-      variant.product.stock_status === 'IN_STOCK'
-    );
-    if (!isAnyVariantInStock) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-/**
  * Create short text with ellipsis and Read more button.
  *
  * @param {string} value
@@ -183,6 +154,12 @@ exports.getFormattedAmount = getFormattedAmount;
 function getChildSkuFromAttribute(sku, attribute, option_id) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
 
+  if (!Drupal.hasValue(combinations.attribute_sku) ) {
+    Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
+      '@sku': sku
+    });
+    return null;
+  }
   if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
     Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
       '@attribute': attribute,
@@ -394,7 +371,7 @@ exports.render = function render(
       }
 
       const data = {
-        description: entity.description.html,
+        description: entity.description,
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
@@ -542,7 +519,7 @@ exports.computePhFilters = function (input, filter) {
         break;
       }
 
-      if (!isProductInStock(input)) {
+      if (!window.commerceBackend.isProductInStock(input)) {
         value = handlebarsRenderer.render(`product.sku_base_form_oos`, {text: Drupal.t('Out of stock')});
         break;
       }
@@ -588,7 +565,10 @@ exports.computePhFilters = function (input, filter) {
           const selectOptions = [];
           // Add the option values.
           option.values.forEach((value) => {
-            const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            let label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            if (!Drupal.hasValue(label)) {
+              label = value.value_index;
+            }
             let selectOption = { value: value.value_index, text: label };
 
             if (isOptionSwatch) {
@@ -603,6 +583,32 @@ exports.computePhFilters = function (input, filter) {
             selectOptions.push(selectOption);
           });
 
+          /**
+           * Returns the error message for labels.
+           *
+           * @param string attribute
+           *   The attribute.
+           *
+           * @param string label
+           *   The field label.
+           *
+           * @return string
+           *   The error message.
+           */
+          const getLabelErrorMessage = (attribute, label) => {
+            const messages = drupalSettings.alshayaRcs.fieldLabelErrorMessages;
+            const lang = drupalSettings.path.currentLanguage;
+            if (Drupal.hasValue(messages)
+              && Drupal.hasValue(messages[attribute])
+              && Drupal.hasValue(messages[attribute][lang])
+              && Drupal.hasValue(messages[attribute][lang].error)
+            ) {
+              return messages[attribute][lang].error;
+            }
+
+            return Drupal.t('@title field is required.', { '@title': label });
+          };
+
           const configurableOption = ({
             data_configurable_code: option.attribute_code,
             data_default_title: dataDefaultTitle,
@@ -612,12 +618,14 @@ exports.computePhFilters = function (input, filter) {
             id: `edit-configurables-${formattedAttributeCode}`,
             class: isOptionSwatch ? 'form-item-configurable-swatch' : 'form-item-configurable-select',
             wrapperClass: isOptionSwatch ? 'configurable-swatch' : 'configurable-select',
+            hiddenClass: (hiddenFormAttributes.includes(option.attribute_code)) ? 'hidden' : '',
             name: `configurables[${option.attribute_code}]`,
+            data_msg_required: getLabelErrorMessage(option.attribute_code, dataDefaultTitle),
+            required: 'required',
             aria_require: true,
             aria_invalid: false,
-            select_option_label: Drupal.t(`Select @attr`, { '@attr': option.attribute_code }),
+            select_option_label: Drupal.t(`Select @title`, { '@title': option.label }),
             select_options: selectOptions,
-            hidden: hiddenFormAttributes.includes(option.attribute_code),
             attribute_has_size_guide: drupalSettings.alshayaRcs.sizeGuide.attributes.includes(option.attribute_code),
           });
 
@@ -671,7 +679,8 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'name':
-      value = input.name;
+      // Render handlebars plugin.
+      value = handlebarsRenderer.render(`product.block.${filter}`, input);
       break;
 
     case 'description':

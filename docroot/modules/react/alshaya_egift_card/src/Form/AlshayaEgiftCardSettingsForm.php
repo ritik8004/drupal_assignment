@@ -67,6 +67,12 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('egift_card_enabled'),
       '#title' => $this->t('Enable Egift card on site.'),
     ];
+    $form['egift_card_configuration']['link_card_for_topup'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Link card for faster payment for Top-up'),
+      '#description' => $this->t('Shows the "Link this card for faster payment next time" checkbox on check and stop showing on uncheck for top-up.'),
+      '#default_value' => $config->get('link_card_for_topup'),
+    ];
     // Payment methods.
     $payment_terms = $this->checkoutOptionManager->getDefaultPayment(FALSE);
     $options = [];
@@ -115,6 +121,7 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_egift_card.settings')
       ->set('egift_card_enabled', $form_state->getValue('enable_disable_egift_card'))
+      ->set('link_card_for_topup', $form_state->getValue('link_card_for_topup'))
       ->set('payment_methods_not_supported', $form_state->getValue('payment_methods_not_supported'))
       ->set('topup_terms_conditions_text', $form_state->getValue('topup_terms_conditions_text'))
       ->set('textarea_maxlength', $form_state->getValue('textarea_maxlength'))

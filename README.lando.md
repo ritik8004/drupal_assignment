@@ -11,7 +11,7 @@ Using Lando should be considered in BETA phase.
 ### Switching from DrupalVM to Lando
 * Reset your local.settings.php (docroot/sites/g/settings/local.settings.php) file
   from docroot/sites/default/settings/default.local.settings.php
-* Shut down (no need to destroy) vagrant (vagrant halt or vagrant suspend)
+* Shutdown (no need to destroy) vagrant (vagrant halt or vagrant suspend)
 
 ### Build steps
 
