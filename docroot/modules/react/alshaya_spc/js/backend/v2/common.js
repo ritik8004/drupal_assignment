@@ -330,6 +330,7 @@ const getProcessedCartData = async (cartData) => {
   const data = {
     cart_id: cartId,
     cart_id_int: cartData.cart.id,
+    ge_cart_id: cartData.cart.extension_attributes.cart_id,
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.customer,
