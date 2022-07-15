@@ -10,6 +10,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_hello_member\Helper\HelloMemberHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides Hello member header block.
@@ -116,15 +117,14 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
   public function build() {
     $config = $this->configFactory->get('alshaya_hello_member.settings');
     if ($config->get('membership_info_content_node')) {
-      $node_storage = $this->entityTypeManager->getStorage('node');
-      $node = $node_storage->load($config->get('membership_info_content_node'));
       // Get the URL for that node.
-      $node_url = $node->toUrl('canonical')->toString();
+      $options = ['absolute' => TRUE];
+      $url = Url::fromRoute('entity.node.canonical', ['node' => $config->get('membership_info_content_node')], $options);
     }
     return [
       '#theme' => 'hello_member_header_block',
       '#strings' => [
-        'value' => $node_url,
+        'value' => $url,
       ],
     ];
   }

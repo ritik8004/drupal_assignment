@@ -16,6 +16,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
     this.state = {
       wait: true,
       hmPoints: null,
+      identifierNo: null,
     };
   }
 
@@ -32,7 +33,11 @@ class HelloMemberLoyaltyOptions extends React.Component {
           if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
             // If we have apc customer data,
             // we get hello member points which can be earned by customer.
-            this.getHelloMemberPoints(response.data.apc_identifier_number);
+            this.setState({
+              identifierNo: response.data.apc_identifier_number,
+            }, () => {
+              this.getHelloMemberPoints(response.data.apc_identifier_number);
+            });
           } else if (hasValue(response.error)) {
             logger.error('Error while trying to get hello member customer data. Data: @data.', {
               '@data': JSON.stringify(response),
@@ -78,8 +83,8 @@ class HelloMemberLoyaltyOptions extends React.Component {
   }
 
   render() {
-    const { wait, hmPoints } = this.state;
-    const { animationDelay } = this.props;
+    const { wait, hmPoints, identifierNo } = this.state;
+    const { animationDelay, cart } = this.props;
 
     if (!hasValue(hmPoints)) {
       return null;
@@ -104,6 +109,8 @@ class HelloMemberLoyaltyOptions extends React.Component {
         </ConditionalView>
         <ConditionalView condition={isUserAuthenticated()}>
           <RegisteredUserLoyalty
+            identifierNo={identifierNo}
+            cart={cart}
             animationDelay={animationDelay}
             helloMemberPoints={hmPoints}
           />

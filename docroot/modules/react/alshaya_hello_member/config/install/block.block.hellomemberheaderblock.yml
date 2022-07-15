@@ -8,7 +8,7 @@ dependencies:
 id: hellomemberheaderblock
 theme: alshaya_hnm
 region: header
-weight: 0
+weight: -30
 provider: null
 plugin: hello_member_header_block
 settings:
@@ -16,12 +16,4 @@ settings:
   label: 'Hello member header block'
   provider: alshaya_hello_member
   label_display: '0'
-visibility:
-  alshaya_listing_page_types:
-    id: alshaya_listing_page_types
-    negate: null
-    page_types:
-      search: 0
-      plp: 0
-      promotion: 0
-    show_on_selected_pages: '0'
+visibility: { }

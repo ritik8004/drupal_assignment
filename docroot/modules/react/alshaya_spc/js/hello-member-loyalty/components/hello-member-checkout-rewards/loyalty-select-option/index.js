@@ -21,13 +21,13 @@ const getLoyaltySelectText = (optionName, helloMemberPoints) => {
 
 const LoyaltySelectOption = ({
   animationDelay,
-  selectedOption,
+  currentOption,
   optionName,
-  changeLoyaltyOption,
+  showLoyaltyPopup,
   helloMemberPoints,
 }) => (
-  <div className={`loyalty-option ${optionName} fadeInUp`} style={{ animationDelay }} onClick={() => changeLoyaltyOption(optionName)}>
-    <input id={`loyalty-option-${optionName}`} defaultChecked={selectedOption === optionName} value={optionName} name="loyalty-option" type="radio" />
+  <div className={`loyalty-option ${optionName} fadeInUp`} style={{ animationDelay }} onClick={() => showLoyaltyPopup(optionName)}>
+    <input id={`loyalty-option-${optionName}`} defaultChecked={currentOption === optionName} value={optionName} name="loyalty-option" type="radio" />
     <label className="radio-sim radio-label">
       <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>
     </label>
