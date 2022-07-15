@@ -27,7 +27,17 @@ class OnlineReturnsEligibility extends React.Component {
   getReturnData = () => {
     const { orderDetails, selector } = this.props;
     const { data } = orderDetails.detail;
-    const { orderEntityId } = drupalSettings.onlineReturns.recentOrders[data.orderId];
+    const {
+      orderEntityId,
+      isReturnEligible: returnEligible,
+    } = drupalSettings.onlineReturns.recentOrders[data.orderId];
+    // Return from here if order is not eligible for return.
+    if (!returnEligible) {
+      // Add the `content-loaded` class to remove the skeletal.
+      selector.parentNode.classList.add('content-loaded');
+      return;
+    }
+
     const returns = getReturnsByOrderId(orderEntityId);
 
     if (returns instanceof Promise) {

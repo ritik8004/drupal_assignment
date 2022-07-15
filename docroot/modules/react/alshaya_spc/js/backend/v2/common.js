@@ -114,6 +114,19 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   cartInfo.last_update = new Date().getTime();
   StaticStorage.set('cart', cartInfo);
 
+  // Store masked cart id for Global-e integration for checkout page.
+  if (hasValue(cartInfo.cart)
+    && hasValue(cartInfo.cart.ge_cart_id)
+  ) {
+    Drupal.addItemInLocalStorage(
+      'ge_cart_id',
+      cartInfo.cart.ge_cart_id,
+      parseInt(drupalSettings.alshaya_spc.cart_storage_expiration, 10) * 60,
+    );
+    // Delete from cart object.
+    delete (cartInfo.cart.ge_cart_id);
+  }
+
   // @todo find better way to get this using commerceBackend.
   // As of now it not possible to get it on page load before all
   // other JS is executed and for all other JS refactoring
@@ -330,6 +343,7 @@ const getProcessedCartData = async (cartData) => {
   const data = {
     cart_id: cartId,
     cart_id_int: cartData.cart.id,
+    ge_cart_id: cartData.cart.extension_attributes.cart_id,
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.customer,
