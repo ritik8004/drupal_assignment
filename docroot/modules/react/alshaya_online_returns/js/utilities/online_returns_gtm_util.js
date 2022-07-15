@@ -112,13 +112,7 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     };
   }
 
-  let orderDetails = {};
-  if (hasValue(drupalSettings.onlineReturns)
-    && hasValue(drupalSettings.onlineReturns.order_details)) {
-    orderDetails['#order_details'] = drupalSettings.onlineReturns.order_details;
-  } else {
-    orderDetails = getOrderDetails();
-  }
+  const orderDetails = getOrderDetails();
 
   // Get delivery address info.
   const deliveryInfo = getDeliveryAddress(orderDetails);
@@ -146,9 +140,9 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     // amount/discounted amount.
     const returnedItems = getReturnedItems(returnInfo);
 
-    // If returnted items is empty then get it from filtered from onlineReturns
+    // If returned items is empty then get it from filtered from onlineReturns
     // drupalSettings.
-    if (!returnedItems.length && hasValue(drupalSettings.onlineReturns)
+    if (!hasValue(returnedItems.length) && hasValue(drupalSettings.onlineReturns)
       && hasValue(drupalSettings.onlineReturns.products)) {
       drupalSettings.onlineReturns.products.forEach((item) => {
         const returnData = returnInfo.items.find(
