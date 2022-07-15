@@ -93,9 +93,11 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       endpoint = '/V1/customers/apcDicData/HM_ACCRUAL_RATIO'; // endpoint to get hello member dictonary data.
       break;
     case 'helloMemberGetPointsEarned':
-      endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member dictonary data.
+      endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member points earned data.
       break;
-
+    case 'helloMemberSetLoyaltyCard':
+      endpoint = '/V1/customers/mine/set-loyalty-card'; // endpoint to set hello member loyalty card details.
+      break;
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
