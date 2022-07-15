@@ -287,7 +287,7 @@ exports.render = function render(
       }
 
       const upsellProducts = getProductRecommendation(upsell_products, Drupal.t('You may also like', {}, { context: 'alshaya_static_text|pdp_upsell_title' }));
-      html += handlebarsRenderer.render('product.recommended_products_teaser', upsellProducts);
+      html += handlebarsRenderer.render('product.recommended_products_block', upsellProducts);
       break;
 
     case 'mobile-related-products':
@@ -299,7 +299,7 @@ exports.render = function render(
       }
 
       const relatedProducts = getProductRecommendation(related_products, Drupal.t('Related', {}, { context : 'alshaya_static_text|pdp_related_title' }));
-      html += handlebarsRenderer.render('product.recommended_products_teaser', relatedProducts);
+      html += handlebarsRenderer.render('product.recommended_products_block', relatedProducts);
       break;
 
     case 'mobile-crosssell-products':
@@ -311,7 +311,7 @@ exports.render = function render(
       }
 
       const crossselProducts = getProductRecommendation(crosssell_products, Drupal.t('Customers also bought', {}, { context: 'alshaya_static_text|pdp_crosssell_title' }));
-      html += handlebarsRenderer.render('product.recommended_products_teaser', crossselProducts);
+      html += handlebarsRenderer.render('product.recommended_products_block', crossselProducts);
       break;
 
     case 'classic-gallery':
