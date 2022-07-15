@@ -259,6 +259,8 @@ class ReturnItemsListing extends React.Component {
     // When user clicks continue button, disable the item
     // details accordion and enable refund accordion.
     this.updateRefundAccordion(open);
+    const { returnRefundDetailsRef } = this.props;
+    returnRefundDetailsRef.current.scrollIntoView();
   }
 
   /**

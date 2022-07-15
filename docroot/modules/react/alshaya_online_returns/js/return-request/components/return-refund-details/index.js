@@ -95,8 +95,9 @@ class ReturnRefundDetails extends React.Component {
 
   render() {
     const { paymentInfo, address, open } = this.state;
+    const { returnRefundDetailsRef } = this.props;
     return (
-      <div className="refund-details-wrapper">
+      <div className="refund-details-wrapper" ref={returnRefundDetailsRef}>
         <Collapsible trigger={this.refundDetailsHeader()} open={open} triggerDisabled={!open}>
           <ReturnRefundMethod paymentDetails={paymentInfo} />
           <ReturnAmountWrapper />
