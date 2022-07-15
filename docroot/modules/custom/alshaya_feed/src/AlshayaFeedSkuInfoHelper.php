@@ -119,11 +119,11 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuPriceHelper;
 
   /**
-   * SKU images helper.
+   * The 'product_listing' image style object.
    *
-   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   * @var \Drupal\image\ImageStyleInterface
    */
-  protected $skuImagesHelper;
+  protected $productListingStyle;
 
   /**
    * SkuInfoHelper constructor.
@@ -152,8 +152,6 @@ class AlshayaFeedSkuInfoHelper {
    *   The MetatagToken object.
    * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $sku_price_helper
    *   The SKU price helper service.
-   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
-   *   SKU images helper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -167,10 +165,10 @@ class AlshayaFeedSkuInfoHelper {
     ConfigFactoryInterface $config_factory,
     MetatagManager $metaTagManager,
     MetatagToken $token,
-    SkuPriceHelper $sku_price_helper,
-    SkuImagesHelper $sku_images_helper
+    SkuPriceHelper $sku_price_helper
   ) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->productListingStyle = $entity_type_manager->getStorage('image_style')->load(SkuImagesHelper::STYLE_PRODUCT_LISTING);
     $this->languageManager = $language_manager;
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -185,7 +183,6 @@ class AlshayaFeedSkuInfoHelper {
     $this->metaTagManager = $metaTagManager;
     $this->tokenService = $token;
     $this->skuPriceHelper = $sku_price_helper;
-    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -406,7 +403,7 @@ class AlshayaFeedSkuInfoHelper {
         return [
           'label' => $image['label'],
           'url' => file_create_url($image['drupal_uri']),
-          'url_product_listing' => $this->skuImagesHelper->getImageStyleUrl($image, SkuImagesHelper::STYLE_PRODUCT_LISTING),
+          'url_product_listing' => $this->productListingStyle->buildUrl($image['drupal_uri']),
         ];
       }
     }, $media_items['media_items']['images']);
