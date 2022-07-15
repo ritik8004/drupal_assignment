@@ -7,7 +7,7 @@ import {
   isValidResponseWithFalseResult,
   updateRedeemAmount,
 } from '../../utilities/egift_util';
-import { callEgiftApi } from '../../../../js/utilities/egiftCardHelper';
+import { callEgiftApi, getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import {
@@ -53,10 +53,16 @@ export default class ValidEgiftCard extends React.Component {
       const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
       if (response instanceof Promise) {
         response.then((result) => {
+          // Checking whether this is a top-up checkout page or not to render the link card checkbox
+          // using "getTopUpQuote" and "topUpLinkCardEnabled" variable.
           if (isValidResponseWithFalseResult(result)) {
+            let linkedCardApplicable = true;
+            if (getTopUpQuote() !== null && !drupalSettings.egiftCard.topUpLinkCardEnabled) {
+              linkedCardApplicable = false;
+            }
             // Set linkcard applicable as true.
             this.setState({
-              isLinkedCardApplicable: true,
+              isLinkedCardApplicable: linkedCardApplicable,
             });
           }
         });
