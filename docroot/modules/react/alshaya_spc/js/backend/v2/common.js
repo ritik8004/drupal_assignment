@@ -115,6 +115,8 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   StaticStorage.set('cart', cartInfo);
 
   // Store masked cart id for Global-e integration for checkout page.
+  // We need to keep this data on a dedicated key because cart_data is
+  // not available in local storage on checkout page.
   if (hasValue(cartInfo.cart)
     && hasValue(cartInfo.cart.ge_cart_id)
   ) {
