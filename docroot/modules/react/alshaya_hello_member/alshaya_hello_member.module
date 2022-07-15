@@ -169,6 +169,7 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
     'route' => 'entity.user.edit_form',
     'weight' => 30,
   ];
+  // Add Membership info link.
   $links['membership_info'] = [
     'text' => t('Membership Info', [], ['context' => 'hello_member']),
     'route' => 'entity.node.canonical',

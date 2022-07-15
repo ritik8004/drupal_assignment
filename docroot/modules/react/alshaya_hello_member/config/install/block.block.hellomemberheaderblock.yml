@@ -1,11 +1,8 @@
-uuid: 446ed7ab-485a-49c6-80c0-87dfc7cfed46
 langcode: en
 status: true
 dependencies:
   module:
     - alshaya_hello_member
-    - alshaya_search_api
-    - alshaya_super_category
   theme:
     - alshaya_hnm
 id: hellomemberheaderblock
@@ -28,18 +25,3 @@ visibility:
       plp: 0
       promotion: 0
     show_on_selected_pages: '0'
-  alshaya_super_category:
-    id: alshaya_super_category
-    use_super_category: false
-    categories:
-      142756: '142756'
-      142826: '142826'
-      142866: '142866'
-      142956: '142956'
-      142996: '142996'
-      143026: '143026'
-      143106: '143106'
-      143156: '143156'
-      143206: '143206'
-      143246: '143246'
-    negate: false

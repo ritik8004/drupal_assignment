@@ -106,7 +106,7 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
       $container->get('module_handler'),
       $container->get('alshaya_hello_member.hello_member_helper'),
       $container->get('entity_type.manager'),
-      $container->get('config.factory'),
+      $container->get('config.factory')
     );
   }
 
