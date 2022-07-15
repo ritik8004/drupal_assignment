@@ -93,7 +93,6 @@ function getProductRecommendation(products, sectionTitle) {
   const data = {
     products: [],
     subtitle: sectionTitle,
-    show_cart_form: drupalSettings.alshayaRcs.showCartFormInRelated,
   };
 
   products.forEach((product) => {

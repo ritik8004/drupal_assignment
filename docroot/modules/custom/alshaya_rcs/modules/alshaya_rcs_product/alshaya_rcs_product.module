@@ -253,9 +253,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   ]);
   $build['#attached']['drupalSettings']['alshayaRcs']['not_buyable_message'] = $product_settings->get('not_buyable_message.value');
   $build['#attached']['drupalSettings']['alshayaRcs']['not_buyable_help_text'] = $not_buyable_help_text;
-  $build['#attached']['drupalSettings']['alshayaRcs']['showCartFormInRelated'] = $product_settings->get('show_cart_form_in_related') == 0
-    ? 'no-cart-form'
-    : '';
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_settings->getCacheTags());
 
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
