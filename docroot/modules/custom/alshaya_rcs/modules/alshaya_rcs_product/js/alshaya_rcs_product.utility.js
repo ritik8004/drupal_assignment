@@ -234,9 +234,13 @@ window.commerceBackend = window.commerceBackend || {};
     const variantConfigurableOptions = [];
 
     Object.keys(productConfigurables).forEach(function (attributeCode) {
+      const optionId = productConfigurables[attributeCode].attribute_id;
+      const optionValue = variant.product[attributeCode];
       variantConfigurableOptions.push({
         attribute_id: `attr_${attributeCode}`,
         label: productConfigurables[attributeCode].label,
+        option_id: optionId.toString(),
+        option_value: optionValue.toString(),
         value: window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
         value_id: variant.product[attributeCode],
       });
