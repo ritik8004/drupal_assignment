@@ -235,8 +235,8 @@ window.commerceBackend = window.commerceBackend || {};
 
     Object.keys(productConfigurables).forEach(function (attributeCode) {
       let label = productConfigurables[attributeCode].label;
-      let optionId = productConfigurables[attributeCode].attribute_id;
-      let optionValue = variant.product[attributeCode];
+      const optionId = productConfigurables[attributeCode].attribute_id;
+      const optionValue = variant.product[attributeCode];
       let value = window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]);
 
       // Check if we have a replacement for the attributes.
@@ -258,8 +258,8 @@ window.commerceBackend = window.commerceBackend || {};
         attribute_code: `attr_${attributeCode}`,
         attribute_id: `attr_${attributeCode}`,
         label: label,
-        option_id: optionId,
-        option_value: optionValue,
+        option_id: optionId.toString(),
+        option_value: optionValue.toString(),
         value: value,
       });
     });
