@@ -6,10 +6,10 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_hello_member\Helper\HelloMemberHelper;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides Hello member header block.
@@ -43,6 +43,20 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
   protected $helloMemberHelper;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * MyMembershipInfoBlock constructor.
    *
    * @param array $configuration
@@ -57,17 +71,25 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
    *   Module handler.
    * @param Drupal\alshaya_hello_member\Helper\HelloMemberHelper $hello_member_helper
    *   The Hello Member service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration factory.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               RouteMatchInterface $route_match,
                               ModuleHandlerInterface $module_handler,
-                              HelloMemberHelper $hello_member_helper) {
+                              HelloMemberHelper $hello_member_helper,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
     $this->moduleHandler = $module_handler;
     $this->helloMemberHelper = $hello_member_helper;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -82,7 +104,9 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
       $plugin_definition,
       $container->get('current_route_match'),
       $container->get('module_handler'),
-      $container->get('alshaya_hello_member.hello_member_helper')
+      $container->get('alshaya_hello_member.hello_member_helper'),
+      $container->get('entity_type.manager'),
+      $container->get('config.factory'),
     );
   }
 
@@ -90,12 +114,12 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function build() {
-    $config = \Drupal::config('alshaya_hello_member.settings');
+    $config = $this->configFactory->get('alshaya_hello_member.settings');
     if ($config->get('membership_info_content_node')) {
-        $node_storage = \Drupal::EntityTypeManager() ->getStorage('node');
-        $node = $node_storage->load($config->get('membership_info_content_node'));
-        // Get the URL for that node.
-        $node_url = $node->toUrl('canonical')->toString();
+      $node_storage = $this->entityTypeManager->getStorage('node');
+      $node = $node_storage->load($config->get('membership_info_content_node'));
+      // Get the URL for that node.
+      $node_url = $node->toUrl('canonical')->toString();
     }
     return [
       '#theme' => 'hello_member_header_block',
@@ -104,6 +128,5 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
       ],
     ];
   }
-
 
 }

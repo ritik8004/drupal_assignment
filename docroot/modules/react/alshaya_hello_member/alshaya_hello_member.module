@@ -155,8 +155,8 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
   }
   $config = \Drupal::config('alshaya_hello_member.settings');
   if ($config->get('membership_info_content_node')) {
-      // Get the node ID from config.
-      $nid =  $config->get('membership_info_content_node'); 
+    // Get the node ID from config.
+    $nid = $config->get('membership_info_content_node');
   }
   // Add Points history link.
   $links['hello_member_points_history'] = [
@@ -173,7 +173,7 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
     'text' => t('Membership Info', [], ['context' => 'hello_member']),
     'route' => 'entity.node.canonical',
     'options' => [
-      'node' => $nid
+      'node' => $nid,
     ],
     'weight' => 100,
   ];

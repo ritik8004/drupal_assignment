@@ -4,12 +4,39 @@ namespace Drupal\alshaya_hello_member\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Configure Alshaya Hello Member settings.
  */
 class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Constructs a new Block.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -33,7 +60,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
     $target_bundles = ['static_html', 'advanced_page'];
     $node = NULL;
     if ($config->get('membership_info_content_node')) {
-      $node_storage = \Drupal::EntityTypeManager() ->getStorage('node');
+      $node_storage = $this->entityTypeManager->getStorage('node');
       $node = $node_storage->load($config->get('membership_info_content_node'));
     }
     $form['hello_member_configuration'] = [
