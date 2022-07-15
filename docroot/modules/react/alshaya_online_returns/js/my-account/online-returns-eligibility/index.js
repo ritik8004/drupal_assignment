@@ -33,6 +33,8 @@ class OnlineReturnsEligibility extends React.Component {
     } = drupalSettings.onlineReturns.recentOrders[data.orderId];
     // Return from here if order is not eligible for return.
     if (!returnEligible) {
+      // Add the `content-loaded` class to remove the skeletal.
+      selector.parentNode.classList.add('content-loaded');
       return;
     }
 
