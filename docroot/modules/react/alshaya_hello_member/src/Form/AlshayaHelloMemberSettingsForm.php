@@ -4,6 +4,7 @@ namespace Drupal\alshaya_hello_member\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Configure Alshaya Hello Member settings.
@@ -29,6 +30,12 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_hello_member.settings');
+    $target_bundles = ['static_html', 'advanced_page'];
+    $node = NULL;
+    if ($config->get('membership_info_content_node')) {
+      $node_storage = \Drupal::EntityTypeManager() ->getStorage('node');
+      $node = $node_storage->load($config->get('membership_info_content_node'));
+    }
     $form['hello_member_configuration'] = [
       '#type' => 'details',
       '#title' => $this->t('Configuration'),
@@ -60,6 +67,17 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
         customer can choose to redeem aura points.'),
     ];
 
+    $form['hello_member_configuration']['membership_info_content_node'] = [
+      '#type' => 'entity_autocomplete',
+      '#title' => $this->t('Membership info content node'),
+      '#target_type' => 'node',
+      '#selection_setttings' => ['target_bundles' => $target_bundles],
+      '#default_value' => $node,
+      '#size' => '60',
+      '#maxlength' => '60',
+      '#description' => $this->t('Please select the node which will be redirect on click of membership info link.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -72,6 +90,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       ->set('aura_integration_enabled', $form_state->getValue('aura_integration_enabled'))
       ->set('points_history_page_size', $form_state->getValue('points_history_page_size'))
       ->set('minimum_age', $form_state->getValue('minimum_age'))
+      ->set('membership_info_content_node', $form_state->getValue('membership_info_content_node'))
       ->save();
 
     parent::submitForm($form, $form_state);

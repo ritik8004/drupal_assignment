@@ -216,6 +216,14 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'يجب أن تكون القيمة في "التاريخ',
         'context' => 'hello_member',
       ],
+      'Membership Info' => [
+        'ar' => 'معلومات العضوية',
+        'context' => 'hello_member',
+      ],
+      'Membership info content node' => [
+        'ar' => 'معلومات العضوية',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
