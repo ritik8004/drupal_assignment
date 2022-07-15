@@ -38,6 +38,12 @@ const ReturnIndividualItem = ({
     price_incl_tax: priceIncTax,
   } = item;
 
+  let reasonDescription = [];
+  if (hasValue(item.returnData)
+    && hasValue(item.returnData.extension_attributes.reason_description)) {
+    reasonDescription = item.returnData.extension_attributes.reason_description;
+  }
+
   return (
     <>
       <ConditionalView condition={hasValue(imageUrl)}>
@@ -87,6 +93,28 @@ const ReturnIndividualItem = ({
             <span className="dark"><PriceElement amount={itemQuantity * priceIncTax} /></span>
           </div>
         </ConditionalView>
+
+        <ConditionalView condition={isMobile()}>
+          {reasonDescription.length > 0 && (
+            <div className="cancellation-reason">
+              {reasonDescription.map((returnReason) => (
+                <div>
+                  <span className="reason-label">{returnReason.reason_description}</span>
+                  {reasonDescription.length > 1 && (
+                    <>
+                      <span> - </span>
+                      <span>{`${returnReason.qty} `}</span>
+                    </>
+                  )}
+                  {reasonDescription.length > 1 && (returnReason.qty > 1
+                    ? Drupal.t('items', {}, { context: 'online_returns' })
+                    : Drupal.t('item', {}, { context: 'online_returns' })
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </ConditionalView>
       </div>
 
       <ConditionalView condition={!isMobile()}>
@@ -98,6 +126,28 @@ const ReturnIndividualItem = ({
 
       <ConditionalView condition={item.is_big_ticket}>
         <div className="big-ticket-wrapper">{Drupal.t('Kindly contact customer care for initiating the online returns for Big Ticket Items.', {}, { context: 'online_returns' })}</div>
+      </ConditionalView>
+
+      <ConditionalView condition={!isMobile()}>
+        {reasonDescription.length > 0 && (
+          <div className="cancellation-reason">
+            {reasonDescription.map((returnReason) => (
+              <div>
+                <span className="reason-label">{returnReason.reason_description}</span>
+                {reasonDescription.length > 1 && (
+                  <>
+                    <span> - </span>
+                    <span>{`${returnReason.qty} `}</span>
+                  </>
+                )}
+                {reasonDescription.length > 1 && (returnReason.qty > 1
+                  ? Drupal.t('items', {}, { context: 'online_returns' })
+                  : Drupal.t('item', {}, { context: 'online_returns' })
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </ConditionalView>
     </>
   );

@@ -1,7 +1,7 @@
 /**
  * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
-(function main(drupalSettings) {
+(function main(Drupal, drupalSettings, RcsEventManager) {
   // Event listener to update the data layer object with the proper category
   // data.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
@@ -35,4 +35,4 @@
       item['cleanSku'] = Drupal.cleanCssIdentifier(item.sku);
     });
   });
-})(drupalSettings);
+})(Drupal, drupalSettings, RcsEventManager);

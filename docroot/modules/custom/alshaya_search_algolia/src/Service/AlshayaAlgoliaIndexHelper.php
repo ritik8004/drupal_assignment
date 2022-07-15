@@ -334,7 +334,7 @@ class AlshayaAlgoliaIndexHelper {
     $original_language = $this->languageManager->getConfigOverrideLanguage();
     $this->languageManager->setConfigOverrideLanguage($language);
 
-    $sku_price_block = $this->skuPriceHelper->getPriceBlockForSku($sku);
+    $sku_price_block = $this->skuPriceHelper->getPriceBlockForSku($sku, ['langcode' => $node->language()->getId()]);
     $object['rendered_price'] = $this->renderer->renderPlain($sku_price_block);
 
     // Restore the language manager to it's original language.

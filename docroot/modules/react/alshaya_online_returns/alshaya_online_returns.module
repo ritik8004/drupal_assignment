@@ -39,6 +39,8 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
     ])
   ) {
     $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_pdp';
+    // Attach the online return pdp gtm library.
+    $page['#attached']['library'][] = 'alshaya_online_returns/alshaya_online_returns_pdp_gtm';
 
     // Attach the theming library.
     $page['#attached']['library'][] = 'alshaya_white_label/online-returns';
@@ -156,11 +158,15 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
   $build['#products'] = array_values($build['#products']);
 
   $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
+  $build['#attached']['drupalSettings']['onlineReturns']['gtm_info'] = \Drupal::service('alshaya_seo_transac.gtm_manager')->fetchCompletedOrderAttributes($order);
+  $build['#attached']['drupalSettings']['onlineReturns']['order_details'] = alshaya_acm_customer_get_processed_order_details($order);
   $build['#attached']['drupalSettings']['onlineReturns']['products'] = $onlineReturnsHelper->prepareProductsData($build["#products"]);
   $build['#attached']['drupalSettings']['onlineReturns']['refunded_products'] = $onlineReturnsHelper->prepareProductsData($build["#refunded_products"]);
 
   // Attach the theming library.
   $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
+  // Attach the GTM library for online returns.
+  $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_online_returns';
 }
 
 /**

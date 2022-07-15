@@ -35,6 +35,10 @@
         background: $order_summary_row;
         padding: rem(21) rem(16);
       }
+
+      .blend {
+        background: $order_detail_order_summary_row_td_blend;
+      }
     }
   }
 
@@ -143,6 +147,14 @@
     td {
       background: $order_summary_row;
       padding: 1.313rem 1rem;
+    }
+
+    .order--date--time,
+    .order-transaction > .light:nth-child(3) {
+      html[lang='ar'] & {
+        direction: ltr;
+        text-align: right;
+      }
     }
   }
 
@@ -282,12 +294,20 @@
 }
 
 html[lang=ar] {
-  .user__order--detail .total-row > .right--align {
-    padding: 0 0 0 0.75rem;
-    line-height: 2.3;
+  .user__order--detail {
+    .total-row > .right--align {
+      padding: 0 0 0 0.75rem;
+      line-height: 2.3;
 
-    @include breakpoint($desktop) {
-      padding: 0 0 0 1.375rem;
+      @include breakpoint($desktop) {
+        padding: 0 0 0 1.375rem;
+      }
+    }
+
+    .order-item-row {
+      .attr-wrapper {
+        direction: rtl;
+      }
     }
   }
 }

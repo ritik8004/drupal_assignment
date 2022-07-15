@@ -1,0 +1,7 @@
+.cls-initial-layout {
+  @include breakpoint($only-mobile) {
+    .c-header {
+      height: rem(100);
+    }
+  }
+}

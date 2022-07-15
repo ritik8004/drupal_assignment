@@ -199,7 +199,7 @@ class AlshayaAcmConfigCheck {
       $config = $this->configFactory->getEditable($config_key);
       $settings = Settings::get($config_key);
 
-      foreach ($settings as $key => $value) {
+      foreach ($settings ?? [] as $key => $value) {
         if (is_array($value)) {
           $existing = $config->get($key) ?? [];
           $value = array_replace_recursive($existing, $value);

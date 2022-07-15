@@ -1,13 +1,12 @@
 import React from 'react';
 
 const PromotionsWarningModal = ({
-  closePromotionsWarningModal,
   handlePromotionDeselect,
   handlePromotionContinue,
   itemNotEligibleForReturn,
 }) => (
   <div className="promotions-warning-modal-wrapper">
-    <button type="button" className="close" onClick={() => closePromotionsWarningModal()} />
+    <button type="button" className="close" onClick={() => handlePromotionDeselect()} />
     { !itemNotEligibleForReturn && (
       <>
         <div className="title">

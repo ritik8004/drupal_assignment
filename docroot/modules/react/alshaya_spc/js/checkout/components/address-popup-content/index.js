@@ -16,8 +16,10 @@ const AddressContent = (props) => {
     shippingAsBilling = null,
     areaUpdated,
     isExpressDeliveryAvailable,
+    fillDefaultValue,
   } = props;
 
+  // For users who are logged in and have saved an address.
   if (drupalSettings.user.uid > 0
     && cart.cart.customer.addresses !== undefined
     && cart.cart.customer.addresses.length > 0) {
@@ -46,6 +48,7 @@ const AddressContent = (props) => {
       formContext={formContext}
       shippingAsBilling={shippingAsBilling}
       isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+      fillDefaultValue={fillDefaultValue}
     />
   );
 };

@@ -12,35 +12,6 @@ function isProductBuyable(entity) {
 }
 
 /**
- * Check if the product is in stock.
- *
- * @param {object} entity
- *   The product entity.
- *
- * @returns {Boolean}
- *   True if product is in stock, else false.
- */
-function isProductInStock(entity) {
-  if (entity.stock_status === 'OUT_OF_STOCK') {
-    return false;
-  }
-
-  // @todo Check for free gifts when checking the variants.
-  // For configurable product, if all variants are OOS, then we consider the
-  // product to be OOS.
-  if (entity.type_id === 'configurable') {
-    const isAnyVariantInStock = entity.variants.some((variant) =>
-      variant.product.stock_status === 'IN_STOCK'
-    );
-    if (!isAnyVariantInStock) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-/**
  * Create short text with ellipsis and Read more button.
  *
  * @param {string} value
@@ -545,7 +516,7 @@ exports.computePhFilters = function (input, filter) {
         break;
       }
 
-      if (!isProductInStock(input)) {
+      if (!window.commerceBackend.isProductInStock(input)) {
         value = handlebarsRenderer.render(`product.sku_base_form_oos`, {text: Drupal.t('Out of stock')});
         break;
       }

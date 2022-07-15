@@ -492,14 +492,6 @@
       }
     }
 
-    .page-standard {
-      &.l-container {
-        @include breakpoint($upto-desktop) {
-          margin-top: 2.5rem;
-        }
-      }
-    }
-
     &.hide-header {
       @include breakpoint($upto-desktop) {
         margin-top: 2.375rem;
@@ -608,6 +600,29 @@
             &::after {
               opacity: 0;
             }
+          }
+        }
+      }
+    }
+  }
+
+  &.alias--shop-aerie {
+    .mobile--search {
+      @include breakpoint($upto-desktop) {
+        display: none !important;
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($upto-desktop) {
+        visibility: visible !important;
+        top: 7.125rem !important;
+      }
+
+      &.focused {
+        .algolia-search-back-icon {
+          @include breakpoint($upto-desktop) {
+            visibility: visible;
           }
         }
       }
