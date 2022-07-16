@@ -224,8 +224,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
 
     $desktop_main_menu_layout = $alshaya_main_menu_settings->get('desktop_main_menu_layout');
     if ($desktop_main_menu_layout == 'default' || $desktop_main_menu_layout == 'menu_dynamic_display') {
-      $columns_tree = $this->getColumnDataMenuAlgo($term_data);
-      $this->moduleHandler->alter('alshaya_main_menu_links', $columns_tree, $parent_id, $context);
+      // @todo review this change
     }
     else {
       $this->moduleHandler->alter('alshaya_main_menu_links', $term_data, $parent_id, $context);
@@ -242,7 +241,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         'desktop_main_menu_highlight_timing' => $highlight_timing,
       ],
       '#term_tree' => $term_data,
-      '#column_tree' => $columns_tree ?? [],
+      '#column_tree' => [],
       '#menu_type' => $desktop_main_menu_layout,
       '#attributes' => [
         'class' => [
@@ -276,9 +275,10 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         'library' => [
           'alshaya_rcs_main_menu/renderer',
           'alshaya_rcs_main_menu/main_menu_level1',
-          'alshaya_rcs_main_menu/main_menu_level2',
-          'alshaya_rcs_main_menu/main_menu_level3',
-          'alshaya_rcs_main_menu/main_menu_level4',
+          'alshaya_rcs_main_menu/main_menu_level1_items_partial',
+          'alshaya_rcs_main_menu/main_menu_level2_partial',
+          'alshaya_rcs_main_menu/main_menu_level3_partial',
+          'alshaya_rcs_main_menu/main_menu_level4_partial',
           'alshaya_white_label/rcs-ph-navigation-menu',
         ],
       ],

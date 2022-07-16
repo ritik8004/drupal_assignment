@@ -276,9 +276,10 @@ function alshaya_rcs_main_rcs_handlebars_templates(EntityInterface $entity) {
   // @todo Decide how to add the main_menu libraries for each layout.
   $libraries = [
     'main_menu_level1' => 'alshaya_rcs_product',
-    'main_menu_level2' => 'alshaya_rcs_product',
-    'main_menu_level3' => 'alshaya_rcs_product',
-    'main_menu_level4' => 'alshaya_rcs_product',
+    'main_menu_level1_items_partial' => 'alshaya_rcs_product',
+    'main_menu_level2_partial' => 'alshaya_rcs_product',
+    'main_menu_level3_partial' => 'alshaya_rcs_product',
+    'main_menu_level4_partial' => 'alshaya_rcs_product',
   ];
 
   return $libraries;

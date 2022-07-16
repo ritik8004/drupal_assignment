@@ -1,0 +1,38 @@
+{{'// @todo implement promopanel_class'}}
+{{'// @todo implement level_class'}}
+{{'// @todo implement remove hardcoded has-child '}}
+{{'// @todo implement has-child vs overridden-link '}}
+<li class="menu__list-item menu--one__list-item has-child {{ level_class }} {{ promopanel_class }}">
+  {{'// @todo implement remove hardcoded contains-sublink '}}
+  <div class="menu__link-wrapper menu-two__link-wrapper contains-sublink">
+    {{set 'style' ''}}
+
+    {{'// @todo implement term_bg_color'}}
+      {{#if menu_item.term_bg_color }}
+      {{set 'style' '@todo'}}
+    {{/if}}
+
+    {{'// @todo implement font_color'}}
+    {{#if menu_item.term_font_color }}
+      {{set 'style' '@todo'}}
+    {{/if}}
+
+    {{set 'tag' 'a'}}
+    {{'// @todo pass this variable'}}
+    {{#if menu_item.tag }}
+      {{set 'tag' menu_item.tag}}
+    {{/if}}
+
+    {{#if menu_item.icon }}
+      <{{@root.tag}} class="menu__link menu--one__link {{ level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ menu_item.url_path }}">
+        <span class="icon"><img src="{{ menu_item.icon.url }}" alt="{{ menu_item.name }}"/></span>
+        {{ menu_item.name }}
+      </{{@root.tag}}>
+    {{else}}
+      <{{@root.tag}} class="menu__link menu--one__link {{ level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
+    {{/if}}
+  </div>
+  {{#if menu_item.columns }}
+    {{> main_menu_level2_partial name=menu_item.name columns=menu_item.columns }}
+  {{/if}}
+</li>

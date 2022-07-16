@@ -24,6 +24,14 @@ function handlebarsRender(id, data) {
     throw new Error("No handlebars templates found on the page.");
   }
 
+  // Register templates as Handlebars partials.
+  Object.keys(rcsHandlebarsTemplates).forEach(function setPartial(id, content) {
+    // Check if the template id contains the word 'partial'.
+    if (id.indexOf('partial') > -1) {
+      Handlebars.registerPartial(id, rcsHandlebarsTemplates[id]);
+    }
+  });
+
   // Get the source template.
   const source = templates[id];
 
@@ -40,6 +48,34 @@ exports.render = function render(
 ) {
   return handlebarsRender(template, data);
 };
+
+/**
+ * Registers a partial.
+ *
+ * @param {string} id
+ *   The library id i.e "article.block.foo"
+ *
+ * @param {string} template
+ *   The contents of the template.
+ */
+// function xregisterPartial(id, template) {
+//   Handlebars.registerPartial(
+//     id,
+//     template
+//   );
+// }
+
+/**
+ * Registers Handlebars partials.
+ * Usage: registerPartial({ foo: '{{ partial }}', bar: '<div>bar</div>' });
+ *
+ * @param object partials
+ *   Object containing one or more partials.
+ */
+// exports.registerPartial = function registerPartial(partials) {
+//   Handlebars.registerPartial(partials);
+//   console.log(Handlebars.partials);
+// };
 
 /**
  * Helpers
@@ -64,9 +100,25 @@ Handlebars.registerHelper('t', (str, args, options) => {
 });
 
 /**
- * Register helper render other templates.
+ * Imports another Handlebars template so it can be used as inline block and
+ * have access to the variables passed.
  */
-Handlebars.registerHelper('render', (template, data) => handlebarsRender(template, data));
+Handlebars.registerHelper('import', (template) => {
+  this.registerPartial(
+    template,
+    rcsHandlebarsTemplates[template]
+  );
+});
+
+/**
+ * Register helper render other templates.
+ * Usage: {{{render 'template_name' data }}}
+ */
+Handlebars.registerHelper('render', (template, data) => {
+  console.log('templates', rcsHandlebarsTemplates);
+  console.log('partials', Handlebars.partials);
+  return handlebarsRender(template, data);
+});
 
 /**
  * Register helper format numbers.
@@ -135,7 +187,8 @@ Handlebars.registerHelper('cleanCssIdentifier', (identifier) => {
  * Returns values from a Json encoded string.
  * Usage:
  *  - With encoded string: {{getValueFromJsonString '{"foo": "bar"}' 'foo'}}
- *  - With variable that contains encoded string {{getValueFromJsonString jsonString 'foo'}}
+ *  - With variable that contains encoded string {{getValueFromJsonString
+ * jsonString 'foo'}}
  *
  * @param jsonString string
  *   The encoded json string
@@ -163,4 +216,17 @@ Handlebars.registerHelper('getValueFromJsonString', function(jsonString, key) {
  */
 Handlebars.registerHelper('set', function(name, val, globals) {
   globals.data.root[name] = val;
+});
+
+/**
+ * For loop.
+ * Usage: {{#for 0 10 2}}
+ *          <span>{{this}}</span>
+ *        {{/for}}
+ */
+Handlebars.registerHelper('for', function(from, to, incr, block) {
+  var accum = '';
+  for(var i = from; i < to; i += incr)
+    accum += block.fn(i);
+  return accum;
 });

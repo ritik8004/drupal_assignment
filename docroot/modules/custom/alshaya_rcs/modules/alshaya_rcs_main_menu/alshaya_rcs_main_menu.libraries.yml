@@ -26,19 +26,24 @@ renderer:
 main_menu_level1:
   version: 1.x
   js:
-    handlebars/alshaya-main-menu-level1.handlebars: {}
+    handlebars/rcs-main_menu_level1.handlebars: {}
 
-main_menu_level2:
+main_menu_level1_items_partial:
   version: 1.x
   js:
-    handlebars/alshaya-main-menu-level2.handlebars: {}
+    handlebars/rcs-main_menu_level1_items-partial.handlebars: {}
 
-main_menu_level3:
+main_menu_level2_partial:
   version: 1.x
   js:
-    handlebars/alshaya-main-menu-level3.handlebars: {}
+    handlebars/rcs-main_menu_level2-partial.handlebars: {}
 
-main_menu_level4:
+main_menu_level3_partial:
   version: 1.x
   js:
-    handlebars/alshaya-main-menu-level4.handlebars: {}
+    handlebars/rcs-main_menu_level3-partial.handlebars: {}
+
+main_menu_level4_partial:
+  version: 1.x
+  js:
+    handlebars/rcs-main_menu_level4-partial.handlebars: {}
