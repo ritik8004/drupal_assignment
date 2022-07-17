@@ -1,0 +1,12 @@
+<h3 class="subtitle crossell-title">{{ subtitle }}</h3>
+<div class="views-element-container">
+  <div class="view view-product-slider view-id-product_slider view-display-id-block_product_slider">
+    <div class="owl-carousel no-cart-form">
+      {{#each products as | product |}}
+        <div id="row{{ @index }}" class="views-row">
+          {{{render 'product.recommended_products_teaser' product}}}
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</div>

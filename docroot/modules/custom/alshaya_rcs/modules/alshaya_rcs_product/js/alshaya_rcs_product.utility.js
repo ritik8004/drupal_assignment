@@ -1343,6 +1343,37 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
+   * Get the processed price for render.
+   *
+   * @param {Object} price
+   *   Price object.
+   *
+   * @returns {Object}
+   *   Processed price object which can be used for rendering via handlebars.
+   */
+  window.commerceBackend.getPriceForRender = function getPriceForRender(price) {
+    let currencyConfig = drupalSettings.alshaya_spc.currency_config;
+    // @todo Work on from/to prices for products.
+    const item = {
+      display_mode: 'simple',
+    };
+    item.discount = price.price_range.maximum_price.discount;
+    item.regular_price = {
+      value: price.price_range.maximum_price.regular_price.value,
+      currency_code: currencyConfig.currency_code,
+      currency_code_position: currencyConfig.currency_code_position,
+      decimal_points: currencyConfig.decimal_points,
+    };
+    item.final_price = {
+      value: price.price_range.maximum_price.final_price.value,
+      currency_code: currencyConfig.currency_code,
+      currency_code_position: currencyConfig.currency_code_position,
+      decimal_points: currencyConfig.decimal_points,
+    };
+    return item;
+  }
+
+  /**
    * Check if the product is in stock.
    *
    * @param {object} entity
