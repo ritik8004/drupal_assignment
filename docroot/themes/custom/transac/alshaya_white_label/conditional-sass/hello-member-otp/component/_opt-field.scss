@@ -28,7 +28,7 @@
           padding: rem(7) rem(11);
           position: absolute;
           right: 0; // For both lang we need button on the same place since it is mobile field.
-          top: rem(-44);
+          top: rem(-43);
           z-index: 1;
         }
 
@@ -56,7 +56,7 @@
     .error {
       padding-top: 0;
       color: $primary_input_inline_error !important;
-      background: $primary_bg !important;
+      background: $hm-registration-fields-bg !important;
     }
 
     #input-otp-error {
@@ -76,6 +76,12 @@
     .mb-verifier {
       color: $hm-registration-labels-txt;
       padding-top: rem(16);
+    }
+
+    .hello-member-otp-popup-form {
+      .error {
+        background: $primary_bg !important;
+      }
     }
   }
 }
@@ -142,7 +148,7 @@
       border-color: $hm-opt-input-border;
 
       &:focus {
-        border-bottom: 1px solid $hm-opt-input-focus-border !important;
+        border-bottom: rem(1) solid $hm-opt-input-focus-border !important;
       }
     }
 

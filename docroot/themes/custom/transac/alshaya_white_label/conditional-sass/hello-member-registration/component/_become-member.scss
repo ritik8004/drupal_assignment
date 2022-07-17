@@ -13,7 +13,7 @@
   input[type=date] {
     background-color: $hm-registration-fields-bg;
     border: 0;
-    border-bottom: 1px solid currentColor;
+    border-bottom: rem(1) solid currentColor;
     width: 100%;
     padding-top: 0;
 
@@ -40,7 +40,7 @@
 
   input[type=date] ~ label.error {
     font-size: rem(12) !important;
-    color: $red-error !important;
+    color: $primary_input_inline_error !important;
     position: relative !important;
     line-height: 1;
     top: rem(2) !important;
