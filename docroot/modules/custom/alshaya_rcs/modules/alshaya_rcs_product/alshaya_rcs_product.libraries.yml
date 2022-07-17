@@ -99,6 +99,16 @@ product.teaser:
   js:
     templates/rcs-product-teaser.handlebars: {}
 
+product.recommended_products_block:
+  version: 1.x
+  js:
+    templates/rcs-product-recommendations-block.handlebars: {}
+
+product.recommended_products_teaser:
+  version: 1.x
+  js:
+    templates/rcs-product-recommendation-teaser.handlebars: {}
+
 product.block.price.item:
   version: 1.x
   js:
