@@ -1,7 +1,6 @@
+{{! @see docroot/modules/custom/alshaya_main_menu/templates/alshaya-main-menu-level3.html.twig }}
 <ul class="menu__list menu--three__list">
   <div class="level-three__wrapper">
-    {{log 'L3 items'}}
-    {{log this}}
     <span class="back--link"><span class="menu__back"></span> <span>{{ name }}</span></span>
     {{#each items as |menu_item|}}
       {{'// @todo implement level_class'}}
@@ -9,9 +8,8 @@
         <div class="menu__link-wrapper menu-two__link-wrapper">
           <{{@root.tag}} class="menu__link menu--three__link {{ level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
         </div>
-        {{#if foooo }}
-        {{'// @todo implement L4'}}
-        {{> main_menu_level3_partial }}
+        {{#if menu_item.children }}
+          {{> main_menu_level4_partial name=name items=item.children }}
         {{/if}}
       </li>
     {{/each}}

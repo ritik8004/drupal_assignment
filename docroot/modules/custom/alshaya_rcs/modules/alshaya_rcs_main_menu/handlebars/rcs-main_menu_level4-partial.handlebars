@@ -1,12 +1,14 @@
+{{! @see docroot/modules/custom/alshaya_main_menu/templates/alshaya-main-menu-level4.html.twig }}
 <ul class="menu__list menu--four__list">
   <div class="level-four__wrapper">
     <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
-    {% for key, level4 in data.child %}
-      <li class="menu__list-item menu--four__list-item {{ level4.class|join(' ') }}">
+    {{#each items as |menu_item|}}
+      {{'// @todo implement level_class'}}
+      <li class="menu__list-item menu--four__list-item {{ level_class }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
-          <{{ level4.tag }} class="menu__link menu--three__link {{ level4.class|join(' ') }} {{ data.sub-nav-class }}" gtm-menu-title="{{ level4.gtm_menu_title }}" {{ level4.tag_attr }}>{{ level4.label }}</{{ level4.tag }}>
+          <{{@root.tag}} class="menu__link menu--three__link {{ level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
         </div>
       </li>
-    {% endfor %}
+    {{/each}}
   </div>
 </ul>
