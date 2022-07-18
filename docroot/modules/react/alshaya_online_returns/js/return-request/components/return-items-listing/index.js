@@ -5,6 +5,7 @@ import ReturnItemDetails from '../return-item-details';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultResolutionId } from '../../../utilities/return_request_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isMobile } from '../../../../../js/utilities/display';
 import PromotionsWarningModal from '../promotions-warning-modal';
 import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
 
@@ -275,6 +276,26 @@ class ReturnItemsListing extends React.Component {
     // When user clicks continue button, disable the item
     // details accordion and enable refund accordion.
     this.updateRefundAccordion(open);
+    this.scrollToRefundDetails();
+  }
+
+  /**
+   * Scroll to the refund details step of accordion.
+   */
+  scrollToRefundDetails = () => {
+    const { returnRefundDetailsRef } = this.props;
+    const refundDetails = returnRefundDetailsRef.current;
+    const headerOffset = isMobile() ? 64 : 32;
+
+    setTimeout(() => {
+      const refundDetailsPosition = refundDetails.getBoundingClientRect().top;
+      const offsetPosition = refundDetailsPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }, 500);
   }
 
   /**
