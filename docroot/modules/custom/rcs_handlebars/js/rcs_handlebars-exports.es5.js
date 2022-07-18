@@ -72,23 +72,10 @@ Handlebars.registerHelper('t', (str, args, options) => {
 });
 
 /**
- * Imports another Handlebars template so it can be used as inline block and
- * have access to the variables passed.
- */
-Handlebars.registerHelper('import', (template) => {
-  this.registerPartial(
-    template,
-    rcsHandlebarsTemplates[template]
-  );
-});
-
-/**
  * Register helper render other templates.
  * Usage: {{{render 'template_name' data }}}
  */
-Handlebars.registerHelper('render', (template, data) => {
-  return handlebarsRender(template, data);
-});
+Handlebars.registerHelper('render', (template, data) => handlebarsRender(template, data));
 
 /**
  * Register helper format numbers.
