@@ -188,6 +188,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'تنتهي صلاحيته في',
         'context' => 'hello_member',
       ],
+      'Expires on @expire_date' => [
+        'ar' => '@expire_date تنتهي صلاحيته في',
+        'context' => 'hello_member',
+      ],
       'Add to bag' => [
         'ar' => 'أضف إلى الحقيبة',
         'context' => 'hello_member',
