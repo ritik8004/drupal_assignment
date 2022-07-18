@@ -220,6 +220,14 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'يجب أن تكون القيمة في "التاريخ',
         'context' => 'hello_member',
       ],
+      'Verified' => [
+        'ar' => 'verified AR',
+        'context' => 'hello_member',
+      ],
+      'OTP will be send to your mobile number to verify' => [
+        'ar' => 'OTP will be send to your mobile number to verify AR',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

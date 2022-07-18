@@ -229,10 +229,40 @@ const setHelloMemberLoyaltyCard = async (identifierNo, quoteId) => {
     });
 };
 
+/**
+ * Search hello member customer phone number.
+ *
+ * @param {string} phoneNumber
+ *   Customer phone number.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object which contains the response or
+ * the error object.
+ */
+const helloMemberCustomerPhoneSearch = async (phoneNumber) => {
+  const requestData = {
+    phoneNumber,
+    programCode: 'hello_member',
+  };
+
+  return callHelloMemberApi('helloMemberCustomerPhoneSearch', 'GET', requestData)
+    .then((response) => {
+      if (response.status !== 200) {
+        const message = hasValue(response.data.error_message) ? response.data.error_message : '';
+        logger.error('Error while trying to call customer phonesearch Api for hello member @params, Message: @message', {
+          '@message': message,
+          '@params': requestData,
+        });
+      }
+      return response;
+    });
+};
+
 export {
   getHelloMemberCustomerData,
   getHelloMemberTierProgressData,
   getHelloMemberPointsHistory,
   getHelloMemberPointsToEarn,
   setHelloMemberLoyaltyCard,
+  helloMemberCustomerPhoneSearch,
 };
