@@ -119,6 +119,13 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuPriceHelper;
 
   /**
+   * SKU images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * The 'product_listing' image style object.
    *
    * @var \Drupal\image\ImageStyleInterface
@@ -152,6 +159,8 @@ class AlshayaFeedSkuInfoHelper {
    *   The MetatagToken object.
    * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $sku_price_helper
    *   The SKU price helper service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   SKU images helper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -165,7 +174,8 @@ class AlshayaFeedSkuInfoHelper {
     ConfigFactoryInterface $config_factory,
     MetatagManager $metaTagManager,
     MetatagToken $token,
-    SkuPriceHelper $sku_price_helper
+    SkuPriceHelper $sku_price_helper,
+    SkuImagesHelper $sku_images_helper
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->productListingStyle = $entity_type_manager->getStorage('image_style')->load(SkuImagesHelper::STYLE_PRODUCT_LISTING);
@@ -183,6 +193,7 @@ class AlshayaFeedSkuInfoHelper {
     $this->metaTagManager = $metaTagManager;
     $this->tokenService = $token;
     $this->skuPriceHelper = $sku_price_helper;
+    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -403,7 +414,9 @@ class AlshayaFeedSkuInfoHelper {
         return [
           'label' => $image['label'],
           'url' => file_create_url($image['drupal_uri']),
-          'url_product_listing' => $this->productListingStyle->buildUrl($image['drupal_uri']),
+          'url_product_listing' => $this->moduleHandler->moduleExists('alshaya_pims')
+          ? $this->skuImagesHelper->getImageStyleUrl($image, SkuImagesHelper::STYLE_PRODUCT_LISTING)
+          : $this->productListingStyle->buildUrl($image['drupal_uri']),
         ];
       }
     }, $media_items['media_items']['images']);
