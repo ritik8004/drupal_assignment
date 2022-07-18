@@ -102,6 +102,10 @@
       margin: 0;
       color: $hm-benefit-description-heading-txt;
       font-size: rem(16);
+
+      html[lang=ar] & {
+        margin-bottom: rem(8);
+      }
     }
   }
 
