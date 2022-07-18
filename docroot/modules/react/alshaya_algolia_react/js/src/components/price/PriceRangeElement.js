@@ -2,6 +2,9 @@ import React from 'react';
 import PriceElement from './PriceElement';
 import { calculateDiscount } from '../../utils';
 
+/**
+ * Render price range elements.
+ */
 const PriceRangeElement = ({ alshayaPriceRange }) => {
   const discount = calculateDiscount(alshayaPriceRange.from.min, alshayaPriceRange.to.min);
   const discountTxt = (discount > 0)

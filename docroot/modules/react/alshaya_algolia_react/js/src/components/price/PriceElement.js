@@ -1,17 +1,32 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import ConditionalView from '../../../common/components/conditional-view';
 
+/**
+ * Render max amount element.
+ */
+const MaxPriceItem = ({ maxAmount }) => {
+  const { decimalPoints } = drupalSettings.reactTeaserView.price;
+  return (
+    <>
+    <span className="min-max-separator">-</span>
+    {Number(maxAmount).toFixed(decimalPoints)}
+    </>
+  );
+};
+
+/**
+ * Render price item element.
+ */
 const PriceItem = ({ amount, maxAmount }) => {
   const { decimalPoints } = drupalSettings.reactTeaserView.price;
+  const maxAmountItem = (hasValue(maxAmount))
+    ? <MaxPriceItem maxAmount={maxAmount} />
+    : '';
 
   return (
     <span key="amount" className="price-amount">
       {Number(amount).toFixed(decimalPoints)}
-      <ConditionalView condition={hasValue(maxAmount)}>
-        <span className="min-max-separator">-</span>
-        {Number(maxAmount).toFixed(decimalPoints)}
-      </ConditionalView>
+      {maxAmountItem}
     </span>
   );
 };

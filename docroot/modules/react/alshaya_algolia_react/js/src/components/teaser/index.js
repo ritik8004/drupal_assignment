@@ -164,6 +164,16 @@ const Teaser = ({
     ({ indexName } = drupalSettings.algoliaSearch.listing);
   }
 
+  // Check if price is a range or single value.
+  let renderPrice = '';
+  if (!hasPriceRange(attribute.alshaya_price_range)) {
+    renderPrice = hasValue(attribute.rendered_price)
+      ? Parser(attribute.rendered_price)
+      : <Price price={attribute.original_price} final_price={attribute.final_price} />;
+  } else {
+    renderPrice = <PriceRangeElement alshayaPriceRange={attribute.alshaya_price_range} />;
+  }
+
   return (
     <div className={teaserClass}>
       <article
@@ -263,14 +273,8 @@ const Teaser = ({
                 )
               </div>
             </ConditionalView>
-            <ConditionalView condition={!hasPriceRange(attribute.alshaya_price_range)}>
-              {attribute.rendered_price
-                ? Parser(attribute.rendered_price)
-                : <Price price={attribute.original_price} final_price={attribute.final_price} />}
-            </ConditionalView>
-            <ConditionalView condition={hasPriceRange(attribute.alshaya_price_range)}>
-              <PriceRangeElement alshayaPriceRange={attribute.alshaya_price_range} />
-            </ConditionalView>
+            {/* Render price based on range/single price conditionals */}
+            {renderPrice}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>
