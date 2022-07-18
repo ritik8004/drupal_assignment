@@ -199,8 +199,14 @@ window.commerceBackend = window.commerceBackend || {};
 
     var configurables = {};
     product.configurable_options.forEach(function (option) {
+      var attribute_id = atob(option.attribute_uid);
+      // We let the pseudo attribute remain as an integer.
+      attribute_id = (attribute_id == drupalSettings.psudo_attribute)
+        ? parseInt(attribute_id, 10)
+        : attribute_id;
+
       configurables[option.attribute_code] = {
-        attribute_id: parseInt(atob(option.attribute_uid), 10),
+        attribute_id,
         code: option.attribute_code,
         label: option.label,
         position: option.position,
@@ -239,8 +245,8 @@ window.commerceBackend = window.commerceBackend || {};
       variantConfigurableOptions.push({
         attribute_id: `attr_${attributeCode}`,
         label: productConfigurables[attributeCode].label,
-        option_id: optionId.toString(),
-        option_value: optionValue.toString(),
+        option_id: optionId,
+        option_value: optionValue,
         value: window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
         value_id: variant.product[attributeCode],
       });
@@ -615,7 +621,7 @@ window.commerceBackend = window.commerceBackend || {};
         combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'
           ? combinations.by_sku[variantSku]
           : {};
-        combinations.by_sku[variantSku][configurableCodes[i]] = attributeVal;
+        combinations.by_sku[variantSku][configurableCodes[i]] = attributeVal.toString();
 
         combinations.attribute_sku[configurableCodes[i]] = typeof combinations.attribute_sku[configurableCodes[i]] !== 'undefined'
           ? combinations.attribute_sku[configurableCodes[i]]
