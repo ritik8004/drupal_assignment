@@ -119,6 +119,16 @@ body[class*="return-confirmation"] {
         .refund {
           width: rem(118);
         }
+
+        html[lang=ar] & {
+          .packitem {
+            width: rem(56);
+          }
+
+          .refund {
+            width: rem(76);
+          }
+        }
       }
 
       .title {
