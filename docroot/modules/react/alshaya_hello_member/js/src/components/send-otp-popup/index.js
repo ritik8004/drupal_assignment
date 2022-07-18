@@ -3,6 +3,8 @@ import Popup from 'reactjs-popup';
 import OtpInput from 'react-otp-input';
 import { sendOtp, verifyOtp } from '../../../../../js/utilities/otp_helper';
 import getStringMessage from '../../../../../js/utilities/strings';
+import { callHelloMemberApi } from '../../../../../js/utilities/helloMemberHelper';
+import logger from '../../../../../js/utilities/logger';
 
 class SendOtpPopup extends React.Component {
   constructor(props) {
@@ -40,6 +42,34 @@ class SendOtpPopup extends React.Component {
 
   // Resend OTP.
   callSendOtpApi = () => {
+    const params = {
+      phoneNumber: `${drupalSettings.alshaya_mobile_prefix.slice(1)}${document.getElementById('edit-field-mobile-number-0-mobile').value}`,
+      programCode: 'hello_member',
+    };
+
+    const response = callHelloMemberApi('helloMemberCustomerPhoneSearch', 'GET', params);
+    if (response instanceof Promise) {
+      response.then((phoneResult) => {
+        if (phoneResult.status !== 200) {
+          // If Phone SearchAPI is returning Error.
+          document.getElementById('mobile-number-error').innerHTML = phoneResult.data.error_message;
+          document.getElementById('mobile-number-error').classList.add('error');
+
+          logger.error('Error while calling the offer details Api @params, @message', {
+            '@params': params,
+            '@message': phoneResult.data.error_message,
+          });
+          return;
+        }
+        if (phoneResult.data.apc_identifier_number === null
+          && phoneResult.data.error
+          && phoneResult.status === 200) {
+          document.getElementById('mobile-number-error').innerHTML = Drupal.t('This Phone number is already in use.', {}, { context: 'hello_member' });
+          document.getElementById('mobile-number-error').classList.add('error');
+        }
+      });
+    }
+
     const responseData = sendOtp(
       `${drupalSettings.alshaya_mobile_prefix.slice(1)}${document.getElementById('edit-field-mobile-number-0-mobile').value}`,
       'reg',
