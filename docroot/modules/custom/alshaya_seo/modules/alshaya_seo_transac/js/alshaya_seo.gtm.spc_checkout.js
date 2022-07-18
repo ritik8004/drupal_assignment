@@ -137,7 +137,7 @@
       dataLayer.push(step3_data);
     }
 
-    if(cartData.payment.method && data.deliveryOption && step === 4) {
+    if (cartData.payment.method && data.deliveryOption && step === 4) {
       var step4_data = JSON.parse(JSON.stringify(data));
       step4_data.ecommerce.checkout.actionField.step = 4;
       step4_data.pageType = checkoutPaymentPage;
@@ -195,7 +195,7 @@
 
   // Add checkout event step 4 for the purchase complete.
   document.addEventListener('orderCompleteEvent', function (e) {
-    if(e.detail.cart) {
+    if (e.detail.cart) {
       Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, 4);
     }
   });

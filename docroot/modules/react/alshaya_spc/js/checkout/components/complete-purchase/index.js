@@ -69,10 +69,6 @@ export default class CompletePurchase extends React.Component {
       return;
     }
 
-    dispatchCustomEvent('orderCompleteEvent', {
-      cart: cart.cart,
-    });
-
     // Flag to track pseudo payment method.
     let isPseudoPaymentMedthod = false;
 
@@ -143,6 +139,11 @@ export default class CompletePurchase extends React.Component {
         }
         return;
       }
+
+      // To add the custom event for the checkout step 4.
+      dispatchCustomEvent('orderCompleteEvent', {
+        cart: cart.cart,
+      });
 
       // If full payment is done by egift or egift + AURA then change the
       // payment method to hps_payment.
