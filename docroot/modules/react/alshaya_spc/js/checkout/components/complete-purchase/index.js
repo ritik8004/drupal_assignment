@@ -69,6 +69,10 @@ export default class CompletePurchase extends React.Component {
       return;
     }
 
+    dispatchCustomEvent('orderCompleteEvent', {
+      cart: cart.cart,
+    });
+
     // Flag to track pseudo payment method.
     let isPseudoPaymentMedthod = false;
 

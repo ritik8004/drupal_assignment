@@ -130,11 +130,18 @@
     }
 
     // Trigger checkout event for step 3 when payment method is available.
-    if (cartData.payment.method || step === 3) {
+    if ((cartData.payment.method || step === 3) && (step !== 4))  {
       var step3_data = JSON.parse(JSON.stringify(data));
       step3_data.ecommerce.checkout.actionField.step = 3;
       step3_data.pageType = checkoutPaymentPage;
       dataLayer.push(step3_data);
+    }
+
+    if(cartData.payment.method && data.deliveryOption && step === 4) {
+      var step4_data = JSON.parse(JSON.stringify(data));
+      step4_data.ecommerce.checkout.actionField.step = 4;
+      step4_data.pageType = checkoutPaymentPage;
+      dataLayer.push(step4_data);
     }
   }
 
@@ -184,6 +191,13 @@
       payment_method = 'egiftcard';
     }
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(payment_method, 3);
+  });
+
+  // Add checkout event step 4 for the purchase complete.
+  document.addEventListener('orderCompleteEvent', function (e) {
+    if(e.detail.cart) {
+      Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, 4);
+    }
   });
 
   document.addEventListener('egiftCardRedeemed', function (e) {
