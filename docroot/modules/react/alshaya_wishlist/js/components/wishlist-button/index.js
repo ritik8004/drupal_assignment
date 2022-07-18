@@ -431,7 +431,7 @@ class WishlistButton extends React.Component {
   ifExistsInSameGroup = (skuItem) => {
     const { sku, context } = this.props;
     const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-    const productInfo = window.commerceBackend.getProductData(sku, productKey, false);
+    const productInfo = window.commerceBackend.getProductData(sku, productKey, true);
     let found = false;
     // Check in variant list for grouped configurable product.
     // Else check in item list for grouped simple product.
