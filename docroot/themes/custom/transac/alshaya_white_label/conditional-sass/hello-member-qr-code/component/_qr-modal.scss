@@ -19,7 +19,7 @@
       padding: rem(13);
       font-size: rem(20);
       font-family: $alshaya-bold;
-      border-bottom: 1px solid $primary-border;
+      border-bottom: rem(1) solid $primary-border;
 
       .close-modal {
         @include icon(close, after) {
