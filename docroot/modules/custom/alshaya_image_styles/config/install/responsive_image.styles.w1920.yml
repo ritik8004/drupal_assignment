@@ -5,8 +5,6 @@ dependencies:
     - image.style.w1155
     - image.style.w1920
     - image.style.w761
-  theme:
-    - whitelabel
 id: w1920
 label: w1920
 image_style_mappings:
