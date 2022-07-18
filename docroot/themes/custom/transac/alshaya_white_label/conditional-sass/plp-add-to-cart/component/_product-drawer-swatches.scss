@@ -58,9 +58,9 @@
       margin-bottom: rem(5);
       margin-#{$right}: rem(8);
       margin-#{$left}: 0;
-      border: 1px solid $plp-quick-view-product-size-border;
+      border: rem(1) solid $plp-quick-view-product-size-border;
       text-align: center;
-      padding: rem(9.6) rem(12);
+      padding: rem(10) rem(12);
       font-size: rem(14);
       color: $plp-quick-view-product-size-text;
       line-height: 1;

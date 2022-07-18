@@ -37,7 +37,7 @@
     a {
       border-radius: rem(21);
       background: $plp-quick-view-product-size-active-bg;
-      border: 1px solid $plp-quick-view-product-size-border-hover;
+      border: rem(1) solid $plp-quick-view-product-size-border-hover;
 
       &:hover {
         background-color: $plp-quick-view-product-size-hover-bg;
