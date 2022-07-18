@@ -138,6 +138,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عضوية احصل على',
         'context' => 'hello_member',
       ],
+      'OTP will be send to your mobile number to verify' => [
+        'ar' => '',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
