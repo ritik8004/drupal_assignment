@@ -1622,10 +1622,6 @@ class SkuManager {
     $out = '';
     $materials = [];
 
-    if ($list) {
-      $out = "<ul>";
-    }
-
     foreach ($array as $key => $elem) {
       if (!is_array($elem)) {
         $materials[] = "$key $elem%";
@@ -1647,11 +1643,17 @@ class SkuManager {
       }
     }
 
-    if ($list) {
-      $out .= "</ul>";
-    }
-    elseif (!empty($materials)) {
+    if (!empty($materials)) {
       $out = implode('; ', $materials);
+    }
+
+    // Create the ul tags if there is an output.
+    if ($list && $out) {
+      // Add li tag for 1-D array.
+      if (!empty($materials)) {
+        $out = "<li>" . $out . "</li>";
+      }
+      $out = "<ul>" . $out . "</ul>";
     }
 
     return $out;
