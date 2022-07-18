@@ -7,6 +7,10 @@
     .qr-code-button,
     .button-wide {
       font-family: $hnm-demibold;
+
+      html[lang=ar] & {
+        line-height: normal;
+      }
     }
   }
 
