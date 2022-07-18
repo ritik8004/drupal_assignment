@@ -98,13 +98,13 @@ const ReturnIndividualItem = ({
           {reasonDescription.length > 0 && (
             <div className="cancellation-reason">
               {reasonDescription.map((returnReason) => (
-                <div>
+                <div className="reason-wrapper">
                   <span className="reason-label">{returnReason.reason_description}</span>
                   {reasonDescription.length > 1 && (
-                    <>
+                    <div>
                       <span> - </span>
                       <span>{`${returnReason.qty} `}</span>
-                    </>
+                    </div>
                   )}
                   {reasonDescription.length > 1 && (returnReason.qty > 1
                     ? Drupal.t('items', {}, { context: 'online_returns' })
@@ -132,13 +132,13 @@ const ReturnIndividualItem = ({
         {reasonDescription.length > 0 && (
           <div className="cancellation-reason">
             {reasonDescription.map((returnReason) => (
-              <div>
+              <div className="reason-wrapper">
                 <span className="reason-label">{returnReason.reason_description}</span>
                 {reasonDescription.length > 1 && (
-                  <>
+                  <div>
                     <span> - </span>
                     <span>{`${returnReason.qty} `}</span>
-                  </>
+                  </div>
                 )}
                 {reasonDescription.length > 1 && (returnReason.qty > 1
                   ? Drupal.t('items', {}, { context: 'online_returns' })
