@@ -209,11 +209,15 @@ function getAdressData(shippingAddress) {
  * Utility function to get order details for return pages.
  */
 function getOrderDetails() {
-  let orderDetails = null;
+  let orderDetails = {};
   if (hasValue(drupalSettings.returnInfo)
     && hasValue(drupalSettings.returnInfo.orderDetails)) {
     orderDetails = drupalSettings.returnInfo.orderDetails;
+  } else if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.order_details)) {
+    orderDetails['#order_details'] = drupalSettings.onlineReturns.order_details;
   }
+
   return orderDetails;
 }
 

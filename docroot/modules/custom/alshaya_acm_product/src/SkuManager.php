@@ -459,16 +459,22 @@ class SkuManager {
    *   Price value.
    * @param float|string $final_price
    *   Final price value.
+   * @param string $langcode
+   *   Language code used.
    *
    * @return string
    *   Price markup.
    */
-  public function getDiscountedPriceMarkup($price, $final_price):string {
+  public function getDiscountedPriceMarkup($price, $final_price, $langcode = ''):string {
     $discount = $this->getDiscountedPercent($price, $final_price);
 
-    return $discount > 0
-      ? (string) $this->t('Save @discount%', ['@discount' => $discount])
-      : '';
+    if ($discount > 0) {
+      $options = $langcode ? ['langcode' => $langcode] : [];
+
+      return (string) $this->t('Save @discount%', ['@discount' => $discount], $options);
+    }
+
+    return '';
   }
 
   /**

@@ -76,6 +76,16 @@ class EgiftCardHelper {
   }
 
   /**
+   * Helper to check if link card for faster payment option for top-up is enabled.
+   *
+   * @return bool
+   *   TRUE/FALSE
+   */
+  public function isLinkCardForTopupEnabled() {
+    return $this->configFactory->get('alshaya_egift_card.settings')->get('link_card_for_topup');
+  }
+
+  /**
    * Helper to get list of not supported payment methods for eGift card.
    *
    * @return array

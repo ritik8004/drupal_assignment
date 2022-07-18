@@ -3,7 +3,7 @@
  * Push initial data to dynamic yield.
  */
 
-(function (Drupal) {
+(function (Drupal, RcsEventManager) {
 
   window.DY = window.DY || [];
   var initialDyData = window.DY;
@@ -31,4 +31,4 @@
     });
   }
 
-})(Drupal);
+})(Drupal, RcsEventManager);

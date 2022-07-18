@@ -1,7 +1,7 @@
 .my-membership {
   .member-name {
     font-size: rem(20);
-    border-bottom: 1px solid $primary_border;
+    border-bottom: rem(1) solid $primary_border;
     padding-bottom: rem(10);
     margin-top: rem(-8);
     font-family: $alshaya-bold;
@@ -25,6 +25,10 @@
       font-size: rem(27);
       letter-spacing: 1.35px;
       font-family: $alshaya-bold;
+
+      @include breakpoint($only-tablet) {
+        font-size: rem(20);
+      }
 
       span {
         margin-#{$right}: rem(8);

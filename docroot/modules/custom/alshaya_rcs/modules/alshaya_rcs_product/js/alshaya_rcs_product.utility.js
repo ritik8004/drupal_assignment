@@ -235,8 +235,8 @@ window.commerceBackend = window.commerceBackend || {};
 
     Object.keys(productConfigurables).forEach(function (attributeCode) {
       let label = productConfigurables[attributeCode].label;
-      let optionId = productConfigurables[attributeCode].attribute_id;
-      let optionValue = variant.product[attributeCode];
+      const optionId = productConfigurables[attributeCode].attribute_id;
+      const optionValue = variant.product[attributeCode];
       let value = window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]);
 
       // Check if we have a replacement for the attributes.
@@ -258,8 +258,8 @@ window.commerceBackend = window.commerceBackend || {};
         attribute_code: `attr_${attributeCode}`,
         attribute_id: `attr_${attributeCode}`,
         label: label,
-        option_id: optionId,
-        option_value: optionValue,
+        option_id: optionId.toString(),
+        option_value: optionValue.toString(),
         value: value,
       });
     });
@@ -384,6 +384,10 @@ window.commerceBackend = window.commerceBackend || {};
       }
       const variantParentSku = variantInfo.parent_sku;
       const variantParentProduct = window.commerceBackend.getProductData(null, null, false)[variantParentSku];
+      // Use URL from parent if not available in child - we add in variants only for styled products.
+      const productUrl = Drupal.hasValue(variantInfo.url_key)
+        ? getProductUrls(variantInfo.url_key)
+        : getProductUrls(product.url_key);
       // @todo Add code for commented keys.
       info[variantSku] = {
         cart_image: window.commerceBackend.getCartImage(variant.product),
@@ -411,7 +415,7 @@ window.commerceBackend = window.commerceBackend || {};
         promotionsRaw: product.promotions,
         // @todo Add free gift promotion value here.
         freeGiftPromotion: [],
-        url: getProductUrls(variantInfo.url_key),
+        url: productUrl,
         gtm_price: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
         deliveryOptions: variantInfo.deliveryOptions,
       }
@@ -650,7 +654,10 @@ window.commerceBackend = window.commerceBackend || {};
       }
     });
 
-    if (Drupal.hasValue(combinations.attribute_sku)) {
+    combinations.firstChild = rawProductData.firstChild;
+    if (!(Drupal.hasValue(combinations.firstChild))
+      && Drupal.hasValue(combinations.attribute_sku)
+    ) {
       var firstChild = Object.entries(combinations.attribute_sku)[0];
       firstChild = Object.entries(firstChild[1]);
       combinations.firstChild = firstChild[0][1][0];
@@ -793,19 +800,21 @@ window.commerceBackend = window.commerceBackend || {};
    *   The sku value.
    * @param {string} parentSKU
    *   (optional) The parent sku value.
+   * @param {boolean} loadStyles
+   *   (optional) Indicates if styled product need to be loaded.
    */
-  window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null) {
+  window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null, loadStyles = true) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     if (Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU])) {
       return staticDataStore.productDataFromBackend[mainSKU];
     }
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
-      if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
-        await window.commerceBackend.getProductsInStyle(response.data.products.items[0]);
+    staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
+      if (Drupal.hasValue(window.commerceBackend.getProductsInStyle) && loadStyles) {
+        await window.commerceBackend.getProductsInStyle(response);
       }
-
+      window.commerceBackend.setRcsProductToStorage(response);
       window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
     });
 
@@ -1254,7 +1263,7 @@ window.commerceBackend = window.commerceBackend || {};
           stockData.status = cartItem.configured_variant.stock_status;
           staticDataStore.cartItemsStock[cartItem.configured_variant.sku] = stockData;
         }
-        else {
+        else if (cartItem.product.type_id === 'simple') {
           stockData = cartItem.product.stock_data;
           stockData.status = cartItem.product.stock_status;
           staticDataStore.cartItemsStock[cartItem.product.sku] = stockData;
@@ -1331,6 +1340,35 @@ window.commerceBackend = window.commerceBackend || {};
     staticDataStore.configurableColorData = {};
     staticDataStore.configurables = {};
     staticDataStore.labels = {};
+  }
+
+  /**
+   * Check if the product is in stock.
+   *
+   * @param {object} entity
+   *   The product entity.
+   *
+   * @returns {Boolean}
+   *   True if product is in stock, else false.
+   */
+  window.commerceBackend.isProductInStock = function isProductInStock(entity) {
+    if (entity.stock_status === 'OUT_OF_STOCK') {
+      return false;
+    }
+
+    // @todo Check for free gifts when checking the variants.
+    // For configurable product, if all variants are OOS, then we consider the
+    // product to be OOS.
+    if (entity.type_id === 'configurable') {
+      const isAnyVariantInStock = entity.variants.some((variant) =>
+        variant.product.stock_status === 'IN_STOCK'
+      );
+      if (!isAnyVariantInStock) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   // Event listener to update static promotion.

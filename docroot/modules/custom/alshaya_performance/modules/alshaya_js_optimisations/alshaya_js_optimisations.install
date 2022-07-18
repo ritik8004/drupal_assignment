@@ -8,11 +8,19 @@
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
- * Implements hook_install().
+ * Implements hook_update_N().
  */
-function alshaya_js_optimisations_install() {
-  // 'alshaya_js_optimisations' module must execute at last.
-  module_set_weight('alshaya_js_optimisations', 100);
+function alshaya_js_optimisations_update_9000() {
+  $options = [
+    'replace_keys' => [
+      'critical_js.critical',
+      'critical_js.sitewide_1',
+    ]
+  ];
+  _alshaya_js_optimisations_update_settings(
+    AlshayaConfigManager::MODE_REPLACE_KEY,
+    $options
+  );
 }
 
 /**
@@ -33,15 +41,27 @@ function alshaya_js_optimisations_update_8001() {
 }
 
 /**
- * Implements hook_update_N().
+ * Implements hook_install().
  */
-function alshaya_js_optimisations_update_9000() {
+function alshaya_js_optimisations_install() {
+  // 'alshaya_js_optimisations' module must execute at last.
+  module_set_weight('alshaya_js_optimisations', 100);
+}
+
+/**
+ * Helper function to update the JS Performance settings.
+ */
+function _alshaya_js_optimisations_update_settings(
+  $mode = AlshayaConfigManager::MODE_REPLACE,
+  $options = []
+) {
   \Drupal::service('alshaya_config.manager')
     ->updateConfigs(
       ['alshaya_js_optimisations.settings'],
       'alshaya_js_optimisations',
       'install',
-      AlshayaConfigManager::MODE_REPLACE
+      $mode,
+      $options
     );
 
   // Clear Cache to trigger hook_library_info_alter with updated priorities.

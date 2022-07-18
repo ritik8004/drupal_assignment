@@ -1,7 +1,9 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import { callHelloMemberApi } from '../../../js/utilities/helloMemberHelper';
+import { isUserAuthenticated } from '../../../js/utilities/helper';
 import logger from '../../../js/utilities/logger';
+import { getPriceToHelloMemberPoint } from './utilities';
 
 /**
  * Get hello member customer data.
@@ -125,8 +127,112 @@ const getHelloMemberPointsHistory = async (firstResult, pageSize) => {
     });
 };
 
+/**
+ * Fetches hello member points to earn for the current user.
+ *
+ * @returns {Object}
+ *   Return hello member points to earn.
+ */
+const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode) => {
+  if (!hasValue(items)) {
+    logger.warning('Error while trying to get hello member points to earn. Product details is required.');
+    return getErrorResponse('Product details is required.', 404);
+  }
+
+  // For guest user, there is no identifier number
+  // calculate hm points to earn using dictionary API ratio.
+  if (!(isUserAuthenticated()) && !hasValue(identifierNo)) {
+    let totalPrice = 0;
+    Object.entries(items).forEach(([, item]) => {
+      totalPrice += (item.qty * item.price);
+    });
+
+    const response = await callHelloMemberApi('helloMemberGetDictionaryData', 'GET', { programCode: 'hello_member' });
+    if (hasValue(response.data.error)) {
+      const message = hasValue(response.data.message) ? response.data.message : '';
+      logger.error('Error while trying to get hello member dictionary data. Message: @message', {
+        '@message': message,
+      });
+      return getErrorResponse(message, 500);
+    }
+    if (hasValue(response.data) && !hasValue(response.data.error)) {
+      return {
+        data: { hm_points: getPriceToHelloMemberPoint(totalPrice, response.data) },
+      };
+    }
+  }
+
+  // Prepare request data.
+  const products = [];
+
+  Object.entries(items).forEach(([, item]) => {
+    const itemDetails = {
+      code: item.sku,
+      quantity: item.qty,
+      amount: item.qty * item.price,
+    };
+    products.push(itemDetails);
+  });
+
+  const requestData = {
+    sales: {
+      currencyCode,
+      products,
+    },
+    programCode: 'hello_member',
+  };
+
+  return callHelloMemberApi('helloMemberGetPointsEarned', 'POST', requestData, { identifierNo })
+    .then((response) => {
+      if (hasValue(response.data.error)) {
+        const message = hasValue(response.data.message) ? response.data.message : '';
+        logger.error('Error while trying to get hello member points to earn. Message: @message', {
+          '@message': message,
+        });
+        return getErrorResponse(message, 500);
+      }
+      return response;
+    });
+};
+
+/**
+ * Sets hello member loyalty card option during checkout.
+ *
+ * @param {string} identifierNo
+ *   Identifier number.
+ * @param {string} quoteId
+ *   Quote/Cart ID.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object which contains the status true/false or
+ * the error object.
+ */
+const setHelloMemberLoyaltyCard = async (identifierNo, quoteId) => {
+  const requestData = {
+    quoteId,
+    identifierNo,
+    programCode: 'hello_member',
+  };
+
+  return callHelloMemberApi('helloMemberSetLoyaltyCard', 'POST', requestData)
+    .then((response) => {
+      if (hasValue(response.data.error)) {
+        const message = hasValue(response.data.message) ? response.data.message : '';
+        logger.error('Error while trying to set loyalty card data for hello member. Message: @message', {
+          '@message': message,
+        });
+        return getErrorResponse(message, 500);
+      }
+      return {
+        status: response,
+      };
+    });
+};
+
 export {
   getHelloMemberCustomerData,
   getHelloMemberTierProgressData,
   getHelloMemberPointsHistory,
+  getHelloMemberPointsToEarn,
+  setHelloMemberLoyaltyCard,
 };

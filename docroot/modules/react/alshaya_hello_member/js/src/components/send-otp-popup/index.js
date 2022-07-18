@@ -9,12 +9,21 @@ class SendOtpPopup extends React.Component {
     super(props);
     this.state = {
       openModal: false,
+      hasErrored: false,
       otp: '',
+      errorStyle: 'error',
     };
   }
 
   // Set otp typed in inputs
-  handleChange = (otp) => this.setState({ otp });
+  handleChange = (otp) => {
+    document.getElementById('hello-member-modal-form-verify').classList.add('in-active');
+    if (otp.length === 6) {
+      // Only enable verify button if all 6 digit entered in otp field.
+      document.getElementById('hello-member-modal-form-verify').classList.remove('in-active');
+    }
+    this.setState({ otp });
+  };
 
   // Open Modal.
   onClickSendOtp = (e) => {
@@ -42,7 +51,13 @@ class SendOtpPopup extends React.Component {
           document.getElementById('mobile-number-error').classList.add('error');
           return;
         }
+        this.setState({
+          otp: '',
+          hasErrored: false,
+        });
         this.toggleSendOtpPopup(true);
+        document.getElementById('hello-member-modal-form-verify').classList.add('in-active');
+        document.getElementById('input-otp-error').innerHTML = '';
       });
     }
   };
@@ -60,21 +75,31 @@ class SendOtpPopup extends React.Component {
       responseData.then((result) => {
         // show error message if  otp verification api fails / returns false.
         if (!result.data.status || result.data.error !== undefined) {
+          // Set error for OTP field if entered wrong OTP.
+          document.getElementById('input-otp-error').innerHTML = Drupal.t('Please enter valid otp.', {}, { context: 'hello_member' });
+          this.setState({
+            hasErrored: true,
+          });
           return;
         }
         this.toggleSendOtpPopup(false);
-        // If successfully verified make the otp verified checkbox seleted.
-        document.getElementById('edit-otp-verified').click();
+        // If successfully verified make the otp verified update otp_verified.
+        document.querySelector('input[name="otp_verified"]').value = 1;
+        document.getElementById('edit-submit').classList.remove('in-active');
       });
     }
   };
 
   render() {
-    const { openModal } = this.state;
-    const { otp } = this.state;
+    const {
+      openModal,
+      hasErrored,
+      otp,
+      errorStyle,
+    } = this.state;
     return (
       <>
-        <div className="btn-wrapper">
+        <div className="btn-wrapper in-active">
           <button onClick={(e) => this.onClickSendOtp(e)} type="button">{getStringMessage('send_otp_label')}</button>
         </div>
         <div className="popup-container">
@@ -91,15 +116,17 @@ class SendOtpPopup extends React.Component {
               </div>
               <OtpInput
                 isInputNum
+                errorStyle={errorStyle}
                 value={otp}
                 onChange={this.handleChange}
                 numInputs={6}
+                hasErrored={hasErrored}
                 separator={<span />}
               />
               <label id="input-otp-error" className="error" />
             </div>
             <div className="hello-member-modal-form-actions">
-              <div className="hello-member-modal-form-submit" onClick={() => this.onClickVerify()}>{ getStringMessage('verify_label') }</div>
+              <div id="hello-member-modal-form-verify" className="hello-member-modal-form-submit in-active" onClick={() => this.onClickVerify()}>{ getStringMessage('verify_label') }</div>
               <div className="hello-member-otp-submit-description">
                 <span>{ getStringMessage('resend_otp_desc') }</span>
                 <a className="hello-member-modal-form-resend-otp" onClick={() => this.callSendOtpApi()}>{ getStringMessage('resend_code_label') }</a>

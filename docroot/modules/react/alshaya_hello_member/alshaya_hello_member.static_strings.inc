@@ -112,7 +112,7 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'benefit_expire',
-      'value' => t('Expires on', [], ['context' => 'hello_member']),
+      'value' => t('Expires on @expire_date', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'benefit_add_to_bag',
@@ -129,6 +129,10 @@ function _alshaya_hello_member_static_strings() {
     [
       'key' => 'offer_id_title',
       'value' => t('Offer QR Code', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'benefit_expire_no_date',
+      'value' => t('Expires on', [], ['context' => 'hello_member']),
     ],
   ];
 }

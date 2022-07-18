@@ -2124,11 +2124,18 @@ $sofa-sectional-disabled-clear-option-text: $primary_text;
 $sofa-sectional-disabled-clear-option-border: $light-greyish;
 $sofa-sectional-select-border: $new-pdp-blue;
 
-// RCS Loaders.
+// Skeletal Loaders.
 $no-color: transparent;
 $loader-gradient-1: $white;
 $loader-gradient-2: $_screeching_white;
 $loader-text-ph: $white-six;
+$text-loader-gradient: linear-gradient($loader-text-ph 1rem, $no-color 0);
+$plain-loader-gradient: linear-gradient(
+  90deg,
+  $loader-gradient-1,
+  $loader-gradient-2,
+  $loader-gradient-1
+);
 
 // eGift purchase page.
 $egift-purchase-page-border: $warm-grey-two;
@@ -2254,6 +2261,7 @@ $online-return-dark-txt: $brownish-grey;
 $online-return-disable-button-bg: $white;
 $online-return-confirmation-note-txt: $greyish;
 $online-return-confirmation-border: $_gray_222;
+$online-return-cancellation-reason: $error-red;
 
 // Hello Member membership success popup
 $hm-membership-success-popup-bg: $white-five;
@@ -2295,7 +2303,11 @@ $hm-benefit-Tnc-txt: $grey-light;
 
 // hello member pdp
 $hm-pdp-points-earned-txt: $cherry;
+
 // Hello member otp popup
 $hm-opt-input-bg: $white-five;
 $hm-opt-input-border: $egift-gray;
 $hm-opt-input-focus-border: $mothercare-black;
+
+// Hello member loyalty SPC
+$hm-loyalty-labels-txt: $grey-light;

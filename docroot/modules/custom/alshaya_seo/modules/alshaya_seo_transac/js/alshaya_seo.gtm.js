@@ -725,29 +725,20 @@
     const url = e.detail.data()[2];
 
     if (product !== null && !lastUrl.includes(url)) {
-      var amount = product.attr('gtm-price').replace(/\,/g,'');
+      var productObj = Drupal.alshaya_seo_gtm_get_product_values(product);
+      // Dispatch a custom event to alter the product detail view object.
+      document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => productObj } }));
       // Prepare data.
       var data = {
         event: 'productDetailView',
         ecommerce: {
           currencyCode: drupalSettings.gtm.currency,
           detail: {
-            products: {
-              name: product.attr('gtm-name'),
-              id: product.attr('gtm-main-sku'),
-              price: parseFloat(amount),
-              category: product.attr('gtm-category'),
-              variant: product.attr('gtm-product-sku'),
-              dimension2: product.attr('gtm-sku-type'),
-              dimension3: product.attr('gtm-dimension3'),
-              dimension4: product.attr('gtm-dimension4')
-            }
+            products: [productObj]
           }
         }
       };
-      if (product.attr('gtm-brand')) {
-        data.ecommerce.detail.products.brand = product.attr('gtm-brand');
-      }
+
       // Push into datalayer.
       dataLayer.push(data);
     }
@@ -1347,6 +1338,8 @@
    */
   Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+    // Dispatch a custom event to alter the product detail view object.
+    document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => product } }));
 
     var data = {
       event: 'productDetailView',

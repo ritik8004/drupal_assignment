@@ -1099,7 +1099,7 @@
     display: inline-block;
     position: absolute;
     background: url('../../../imgs/icons/ic-directions.svg');
-    #{$right}: 1rem;
+    #{$right}: rem(32);
     width: 18px;
     height: 18px;
 
@@ -1422,6 +1422,20 @@
 
   > div {
     max-width: none !important;
+  }
+
+  &-c {
+    html[lang='ar'] & {
+      padding-left: 0 !important;
+      padding-right: rem(12) !important;
+    }
+  }
+}
+
+.gm-ui-hover-effect {
+  html[lang='ar'] & {
+    left: rem(-6) !important;
+    right: unset !important;
   }
 }
 

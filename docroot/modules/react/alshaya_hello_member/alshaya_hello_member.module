@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_module_implements_alter().
@@ -28,7 +29,10 @@ function alshaya_hello_member_module_implements_alter(&$implementations, $hook) 
 function alshaya_hello_member_page_attachments_alter(array &$page) {
   /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
   $hello_member_helper = \Drupal::service('alshaya_hello_member.hello_member_helper');
-  $settings['enabled'] = $hello_member_helper->isHelloMemberEnabled();
+  $settings = [
+    'enabled' => $hello_member_helper->isHelloMemberEnabled(),
+    'aura_integration_enabled' => $hello_member_helper->isAuraIntegrationEnabled(),
+  ];
   $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_hello_member.settings')->getCacheTags());
 
   // Do not proceed if hello member is not enabled.
@@ -103,7 +107,7 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
       '#weight' => -12,
-      '#markup' => '<div class="section-title">' . t('Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.', [], ['context' => 'hello_member']) . '</div>',
+      '#markup' => '<div class="hm-benefit-subtitle">' . t('Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.', [], ['context' => 'hello_member']) . '</div>',
     ];
     $form['hello_member'] = [
       '#type' => 'details',
@@ -128,6 +132,7 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['hello_member']['field_gender']['#suffix'] = '</div>';
     $form['hello_member']['field_gender']['#weight'] = 11;
     unset($form['field_gender']);
+    $form['field_subscribe_newsletter']['widget']['value']['#title'] = t('Yes, email me offers, style updates, and special invites to sales and events.', [], ['context' => 'hello_member']);
 
     $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
@@ -167,6 +172,29 @@ function alshaya_hello_member_alshaya_user_breadcrumb_routes_alter(array &$route
 }
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_hello_member_element_info_alter(array &$types) {
+  // Alter dateteime field.
+  $types['datetime']['#process'][] = 'alshaya_hello_member_datetime_set_startdate';
+}
+
+/**
+ * Custom function to alter HTML 5 date fields.
+ */
+function alshaya_hello_member_datetime_set_startdate($element) {
+  if ($element['#parents'][0] == 'field_date_of_birth') {
+    // Get the minimum age config value.
+    $config = \Drupal::config('alshaya_hello_member.settings');
+    $start_date = strtotime($config->get('minimum_age') . ' years ago');
+    // Set the max attribute value.
+    $element['date']['#attributes']['max'] = \Drupal::service('date.formatter')->format($start_date, 'html_date');
+    $element['date']['#max_error'] = t('The value in Date has to be less than', [], ['context' => 'hello_member']) . ' ' . $element['date']['#attributes']['max'];
+  }
+  return $element;
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -191,6 +219,10 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['hello_member']['field_date_of_birth'] = $form['field_date_of_birth'];
   $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
   $form['hello_member']['field_date_of_birth']['#weight'] = 10;
+  // Disallow user to edit date of birth on edit profile form.
+  if ($form['field_date_of_birth']['widget'][0]['value']['#default_value']) {
+    $form['hello_member']['field_date_of_birth']['#disabled'] = TRUE;
+  }
   unset($form['field_date_of_birth']);
   $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
   unset($form['field_gender']['widget']['#options']['_none']);
@@ -202,12 +234,9 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['hello_member']['field_mobile_number']['#prefix'] = '<div class="mobile-otp-wrapper">';
   $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div><div id="mobile-number-error"></div>' . '<div class="mb-verifier">' . t('OTP will be send to your mobile number to verify', [], ['context' => 'hello_member']) . '<div></div>';
   $form['hello_member']['field_mobile_number']['#weight'] = 12;
-  // Virtual checkbox to temporary maintain otp verified status.
+  // Virtual input to temporary maintain otp verified status.
   $form['otp_verified'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Otp Verified'),
-    '#prefix' => '<div class="visually-hidden">',
-    '#suffix' => '</div>',
+    '#type' => 'hidden',
   ];
   $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
 
@@ -217,6 +246,7 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_send_otp';
   $form['#attached']['library'][] = 'alshaya_white_label/hello-member-otp';
+  $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_profile_info';
 }
 
 /**
@@ -343,8 +373,8 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
   }
 
   // Add hello member points for order confirmation.
-  if (isset($order['externsion_attributes']['hm_accured_points'])) {
-    $settings['order_details']['hmAccuredPoints'] = $order['externsion_attributes']['hm_accured_points'] ?? 0;
+  if (isset($order['extension']['hm_accrued_points'])) {
+    $settings['order_details']['hmAccuredPoints'] = $order['extension']['hm_accrued_points'] ?? 0;
   }
 }
 
@@ -358,4 +388,32 @@ function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterfa
     // Set the key/value pair.
     $temp_store->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter().
+ */
+function alshaya_hello_member_alshaya_acm_customer_alshaya_user_recent_orders_build_alter(array &$build) {
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_hello_member.settings')->getCacheTags());
+  // Do not proceed if Alshaya Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
+    // On my account page, remove edit account link because we are adding
+    // it with Account Details section when Alshaya Hello Member is enabled.
+    unset($build['edit_account']);
+  }
+
+  return $build;
+}
+
+/**
+ * Implements hook_preprocess_user().
+ */
+function alshaya_hello_member_preprocess_user(&$variables) {
+  // If hello_member_enabled to add edit button above Account details.
+  $variables['hello_member_enabled'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
+  $variables['user_edit_url'] = Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]);
 }

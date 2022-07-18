@@ -12,6 +12,7 @@
     color: $hm-points-block-light-txt;
     width: 14%;
     text-align: $left;
+    text-transform: capitalize;
 
     @include breakpoint($only-tablet) {
       width: 24%;

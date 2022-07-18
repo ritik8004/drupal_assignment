@@ -18,6 +18,19 @@ export default function isHelloMemberEnabled() {
 }
 
 /**
+ * Helper function to check if aura integration with hello member is enabled.
+ */
+export const isAuraIntegrationEnabled = () => {
+  let enabled = false;
+
+  if (hasValue(drupalSettings.hello_member)) {
+    enabled = drupalSettings.hello_member.aura_integration_enabled;
+  }
+
+  return enabled;
+};
+
+/**
  * Helper function to get the customer info from user session.
  */
 export const getHelloMemberCustomerInfo = () => {
@@ -51,7 +64,7 @@ export const getHelloMemberCustomerInfo = () => {
  * @returns {string}
  *   The api endpoint.
  */
-export const getApiEndpoint = (action, params = {}) => {
+export const getApiEndpoint = (action, params = {}, postParams) => {
   let endpoint = '';
   const endPointParams = params;
   switch (action) {
@@ -79,7 +92,12 @@ export const getApiEndpoint = (action, params = {}) => {
     case 'helloMemberGetDictionaryData':
       endpoint = '/V1/customers/apcDicData/HM_ACCRUAL_RATIO'; // endpoint to get hello member dictonary data.
       break;
-
+    case 'helloMemberGetPointsEarned':
+      endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member points earned data.
+      break;
+    case 'helloMemberSetLoyaltyCard':
+      endpoint = '/V1/customers/mine/set-loyalty-card'; // endpoint to set hello member loyalty card details.
+      break;
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
@@ -104,7 +122,7 @@ export const getApiEndpoint = (action, params = {}) => {
  * @returns {object}
  *   Returns the promise object.
  */
-export const callHelloMemberApi = (action, method, postData, bearerToken = true) => {
-  const endpoint = getApiEndpoint(action, postData);
+export const callHelloMemberApi = (action, method, postData, postParams, bearerToken = true) => {
+  const endpoint = getApiEndpoint(action, postData, postParams);
   return callMagentoApi(endpoint, method, postData, bearerToken);
 };

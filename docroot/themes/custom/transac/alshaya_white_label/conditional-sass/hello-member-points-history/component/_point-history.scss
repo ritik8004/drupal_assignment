@@ -9,7 +9,7 @@
   .history-points-row {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid $primary_table_border;
+    border-bottom: rem(1) solid $primary_table_border;
     padding-top: rem(28);
     padding-bottom: rem(4);
 
@@ -139,8 +139,8 @@
     }
 
     .points-earned-block {
-      border-bottom: 1px solid $primary_table_border;
-      border-top: 1px solid $primary_table_border;
+      border-bottom: rem(1) solid $primary_table_border;
+      border-top: rem(1) solid $primary_table_border;
       padding: rem(32) 0;
       padding-#{$right}: rem(40);
 
@@ -199,7 +199,7 @@
   }
 
   &.close-expiry-accordion {
-    max-height: 5.625rem !important;
+    max-height: rem(90) !important;
     overflow: hidden;
 
     .content {

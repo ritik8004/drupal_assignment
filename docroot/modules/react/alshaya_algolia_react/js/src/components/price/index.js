@@ -7,7 +7,7 @@ const PriceBlock = ({
 }) => (
   <div className="price-block">
     {
-        (typeof children !== 'undefined' && children.length > 0)
+        (typeof children !== 'undefined' && React.isValidElement(children))
           ? children
           : <PriceElement {...props} />
       }

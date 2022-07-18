@@ -1,5 +1,11 @@
 // mobile number input field with otp btn
 
+%btn-disable {
+  background: $primary_button_disabled;
+  z-index: 3;
+  pointer-events: none;
+}
+
 #edit-hello-member {
   .mobile-otp-wrapper {
     padding: 0 rem(20) rem(28);
@@ -22,8 +28,14 @@
           padding: rem(7) rem(11);
           position: absolute;
           right: 0; // For both lang we need button on the same place since it is mobile field.
-          top: rem(-44);
+          top: rem(-43);
           z-index: 1;
+        }
+
+        &.in-active {
+          button {
+            @extend %btn-disable;
+          }
         }
       }
     }
@@ -44,7 +56,7 @@
     .error {
       padding-top: 0;
       color: $primary_input_inline_error !important;
-      background: $primary_bg !important;
+      background: $hm-registration-fields-bg !important;
     }
 
     #input-otp-error {
@@ -64,6 +76,12 @@
     .mb-verifier {
       color: $hm-registration-labels-txt;
       padding-top: rem(16);
+    }
+
+    .hello-member-otp-popup-form {
+      .error {
+        background: $primary_bg !important;
+      }
     }
   }
 }
@@ -111,6 +129,10 @@
     font-size: rem(16);
     min-width: 100%;
     cursor: pointer;
+
+    &.in-active {
+      @extend %btn-disable;
+    }
   }
 
   .hello-member-modal-form-resend-otp {
@@ -126,7 +148,7 @@
       border-color: $hm-opt-input-border;
 
       &:focus {
-        border-bottom: 1px solid $hm-opt-input-focus-border !important;
+        border-bottom: rem(1) solid $hm-opt-input-focus-border !important;
       }
     }
 
@@ -149,6 +171,16 @@
       font-size: rem(16);
       #{$right}: rem(-16);
       cursor: pointer;
+    }
+  }
+}
+
+.user-page {
+  .user-form {
+    .form-submit {
+      &.in-active {
+        @extend %btn-disable;
+      }
     }
   }
 }

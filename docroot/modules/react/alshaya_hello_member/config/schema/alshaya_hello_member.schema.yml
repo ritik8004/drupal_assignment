@@ -8,3 +8,9 @@ alshaya_hello_member.settings:
     points_history_page_size:
       type: integer
       label: 'Page size for points history data.'
+    minimum_age:
+      type: integer
+      label: 'Minimum age for user registration.'  
+    aura_integration_enabled:
+      type: boolean
+      label: 'Config to enable/disable aura integration with hello member'

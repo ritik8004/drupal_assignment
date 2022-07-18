@@ -97,9 +97,7 @@ class MyBenefitsPage extends React.Component {
             {myBenefit.description}
           </div>
           <div className="expiry">
-            {getStringMessage('benefit_expire')}
-            {' '}
-            {moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY')}
+            {getStringMessage('benefit_expire', { '@expire_date': moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY') })}
           </div>
         </div>
         <div className="btn-wrapper">
@@ -116,7 +114,7 @@ class MyBenefitsPage extends React.Component {
         </div>
         <div className="expire-on">
           <h3>
-            {getStringMessage('benefit_expire')}
+            {getStringMessage('benefit_expire_no_date')}
             {':'}
           </h3>
           {moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY')}

@@ -28,15 +28,10 @@ const getPointstHistoryPageSize = () => (drupalSettings.pointsHistoryPageSize
  * Utility function to get hello member points for given price.
  */
 const getPriceToHelloMemberPoint = (price, dictionaryData) => {
-  if (hasValue(drupalSettings.currency_code) && hasValue(dictionaryData)) {
-    const accrualRatioData = dictionaryData.items.find(
-      (item) => item.code === drupalSettings.currency_code,
-    );
-    if (hasValue(accrualRatioData)) {
-      const accrualRatio = parseInt(accrualRatioData.value.toString(), 10);
-      const points = accrualRatio ? (price * accrualRatio) : 0;
-      return Math.round(points);
-    }
+  if (hasValue(dictionaryData) && hasValue(dictionaryData.items)) {
+    const accrualRatio = dictionaryData.items[0];
+    const points = accrualRatio.value ? (price * parseFloat(accrualRatio.value)) : 0;
+    return Math.round(points);
   }
   return null;
 };

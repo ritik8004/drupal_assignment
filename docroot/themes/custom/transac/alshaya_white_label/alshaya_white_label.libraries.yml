@@ -7,7 +7,6 @@ global_styles:
     js/menu.js: {}
     js/form.js: {}
     js/one_time_language_slider.js: {}
-    js/footer-space-filler.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
     - core/jquery
@@ -258,6 +257,7 @@ footer_js:
   js:
     js/back_to_top.js: {}
     js/footer-accordion.js: {}
+    js/footer-space-filler.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
@@ -817,3 +817,8 @@ hello-member-otp:
   css:
     theme:
       css/conditional-sass/hello-member-otp/hello-member-otp.ltr.css: {}
+
+cls-initial-layout-common:
+  css:
+    theme:
+      css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: {}

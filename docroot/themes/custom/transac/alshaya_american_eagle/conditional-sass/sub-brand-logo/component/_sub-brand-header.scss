@@ -37,6 +37,18 @@ body.sub-brand-logo {
     #block-alshayareactcartminicartblock {
       background-color: $header_bg;
       z-index: 14;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+        background-color: $header_mobile_menu_overlay;
+        opacity: 0;
+      }
     }
 
     &:not(.frontpage) {
@@ -50,15 +62,26 @@ body.sub-brand-logo {
 
       &:not(.super-category-enabled) {
         .c-menu-primary .menu--mobile-navigation {
-          z-index: unset;
+          z-index: 11;
         }
       }
     }
 
     &.frontpage {
       #block-alshayareactcartminicartblock {
-        background: transparent;
         z-index: 9;
+      }
+    }
+  }
+}
+
+body.menu--open {
+  @include breakpoint($only-mobile) {
+    #block-alshayareactcartminicartblock {
+      z-index: 9;
+
+      &::before {
+        opacity: 1;
       }
     }
   }
