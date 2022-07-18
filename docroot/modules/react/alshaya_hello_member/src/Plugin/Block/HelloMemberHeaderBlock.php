@@ -11,8 +11,6 @@ use Drupal\alshaya_hello_member\Helper\HelloMemberHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
 
 /**
  * Provides Hello member header block.
@@ -117,28 +115,25 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function build() {
+    $build = [];
+    // Build block only if hello member is enabled.
+    if (!($this->helloMemberHelper->isHelloMemberEnabled())) {
+      return $build;
+    }
     $config = $this->configFactory->get('alshaya_hello_member.settings');
     if ($config->get('membership_info_content_node')) {
       // Get the URL for that node.
       $options = ['absolute' => TRUE];
       $url = Url::fromRoute('entity.node.canonical', ['node' => $config->get('membership_info_content_node')], $options);
     }
-    return [
+    $build = [
       '#theme' => 'hello_member_header_block',
       '#strings' => [
         'value' => $url,
       ],
     ];
-  }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function blockAccess(AccountInterface $account) {
-    // Show block only if hello member is enabled.
-    return AccessResult::allowedIf(
-      $this->helloMemberHelper->isHelloMemberEnabled()
-    );
+    return $build;
   }
 
 }
