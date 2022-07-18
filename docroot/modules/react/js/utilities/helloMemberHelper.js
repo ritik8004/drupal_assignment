@@ -99,7 +99,7 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       endpoint = '/V1/customers/mine/set-loyalty-card'; // endpoint to set hello member loyalty card details.
       break;
     case 'helloMemberCustomerPhoneSearch':
-      endpoint = `/V1/customers/apc-search/phones/${endPointParams.phoneNumber}`; // endpoint to search hello member by phone number.
+      endpoint = `/V1/customers/apc-search/phone/${endPointParams.phoneNumber}`; // endpoint to search hello member by phone number.
       break;
 
     default:
