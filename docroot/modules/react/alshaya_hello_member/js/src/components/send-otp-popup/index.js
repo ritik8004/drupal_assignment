@@ -72,7 +72,7 @@ class SendOtpPopup extends React.Component {
           if (responseData instanceof Promise) {
             responseData.then((result) => {
               if (result.error !== undefined || !result.status) {
-                this.setErrorMsgforPhone(Drupal.t('This Phone number is already in use.', {}, { context: 'hello_member' }));
+                this.setErrorMsgforPhone(result.error_message);
                 return;
               }
               this.setState({
