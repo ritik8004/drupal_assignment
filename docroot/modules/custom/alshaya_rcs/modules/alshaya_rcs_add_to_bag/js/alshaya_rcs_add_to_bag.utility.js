@@ -163,7 +163,7 @@ window.commerceBackend = window.commerceBackend || {};
       }
     });
 
-    if (Array.isArray(variants) && variants.length > 0) {
+    if (Drupal.hasValue(variants) && variants.length > 0) {
       try {
         var data = JSON.parse(variants[0].product.assets_swatch);
         swatchImageUrl = data[0].styles.pdp_gallery_thumbnail;
