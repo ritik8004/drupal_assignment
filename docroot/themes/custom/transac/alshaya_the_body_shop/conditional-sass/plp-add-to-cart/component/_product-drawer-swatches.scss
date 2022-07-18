@@ -12,4 +12,14 @@
       }
     }
   }
+
+  .li-swatch-text {
+    a {
+      background: $plp-quick-view-product-size-bg;
+
+      &.disabled {
+        border-color: $plp-quick-view-product-size-border-disabled;
+      }
+    }
+  }
 }
