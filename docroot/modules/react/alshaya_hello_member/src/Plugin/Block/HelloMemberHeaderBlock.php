@@ -11,6 +11,8 @@ use Drupal\alshaya_hello_member\Helper\HelloMemberHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Provides Hello member header block.
@@ -127,6 +129,16 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
         'value' => $url,
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function blockAccess(AccountInterface $account) {
+    // Show block only if hello member is enabled.
+    return AccessResult::allowedIf(
+      $this->helloMemberHelper->isHelloMemberEnabled()
+    );
   }
 
 }
