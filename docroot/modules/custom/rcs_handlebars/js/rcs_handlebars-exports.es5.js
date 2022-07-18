@@ -50,34 +50,6 @@ exports.render = function render(
 };
 
 /**
- * Registers a partial.
- *
- * @param {string} id
- *   The library id i.e "article.block.foo"
- *
- * @param {string} template
- *   The contents of the template.
- */
-// function xregisterPartial(id, template) {
-//   Handlebars.registerPartial(
-//     id,
-//     template
-//   );
-// }
-
-/**
- * Registers Handlebars partials.
- * Usage: registerPartial({ foo: '{{ partial }}', bar: '<div>bar</div>' });
- *
- * @param object partials
- *   Object containing one or more partials.
- */
-// exports.registerPartial = function registerPartial(partials) {
-//   Handlebars.registerPartial(partials);
-//   console.log(Handlebars.partials);
-// };
-
-/**
  * Helpers
  */
 
@@ -115,8 +87,6 @@ Handlebars.registerHelper('import', (template) => {
  * Usage: {{{render 'template_name' data }}}
  */
 Handlebars.registerHelper('render', (template, data) => {
-  console.log('templates', rcsHandlebarsTemplates);
-  console.log('partials', Handlebars.partials);
   return handlebarsRender(template, data);
 });
 
@@ -184,31 +154,6 @@ Handlebars.registerHelper('cleanCssIdentifier', (identifier) => {
 });
 
 /**
- * Returns values from a Json encoded string.
- * Usage:
- *  - With encoded string: {{getValueFromJsonString '{"foo": "bar"}' 'foo'}}
- *  - With variable that contains encoded string {{getValueFromJsonString
- * jsonString 'foo'}}
- *
- * @param jsonString string
- *   The encoded json string
- *
- * @param key string
- *   The key to fetch the value from.
- *
- * @return mixed
- *   The value or empty space if errors happen while parsing Json string.
- */
-Handlebars.registerHelper('getValueFromJsonString', function(jsonString, key) {
-  try {
-    return JSON.parse(jsonString)[key];
-  }
-  catch(err) {
-    return '';
-  }
-});
-
-/**
  * Creates variables on the fly.
  * Usage:
  *  - First set foo with value bar: {{set 'foo' 'bar'}}
@@ -216,17 +161,4 @@ Handlebars.registerHelper('getValueFromJsonString', function(jsonString, key) {
  */
 Handlebars.registerHelper('set', function(name, val, globals) {
   globals.data.root[name] = val;
-});
-
-/**
- * For loop.
- * Usage: {{#for 0 10 2}}
- *          <span>{{this}}</span>
- *        {{/for}}
- */
-Handlebars.registerHelper('for', function(from, to, incr, block) {
-  var accum = '';
-  for(var i = from; i < to; i += incr)
-    accum += block.fn(i);
-  return accum;
 });
