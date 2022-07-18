@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm_product\Breadcrumb;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Controller\TitleResolverInterface;
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -30,7 +30,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   /**
    * The database service.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\mysql\Driver\Database\mysql\Connection
    */
   protected $connection;
 
@@ -93,7 +93,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   /**
    * AlshayaPDPBreadcrumbBuilder constructor.
    *
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $connection
    *   Database service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The lnaguage manager service.

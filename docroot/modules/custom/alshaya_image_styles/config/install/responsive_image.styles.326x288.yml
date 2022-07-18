@@ -5,8 +5,6 @@ dependencies:
     - image.style.146x132
     - image.style.224x202
     - image.style.326x288
-  theme:
-    - whitelabel
 id: 326x288
 label: 326x288
 image_style_mappings:
