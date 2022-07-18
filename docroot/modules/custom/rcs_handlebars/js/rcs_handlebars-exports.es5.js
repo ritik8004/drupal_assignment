@@ -73,7 +73,6 @@ Handlebars.registerHelper('t', (str, args, options) => {
 
 /**
  * Register helper render other templates.
- * Usage: {{{render 'template_name' data }}}
  */
 Handlebars.registerHelper('render', (template, data) => handlebarsRender(template, data));
 
