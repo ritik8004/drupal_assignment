@@ -342,77 +342,85 @@ export default class ConfigurableForm extends React.Component {
       });
     }
 
+    let hasGroups = false;
+    const attributesContainer = Object.entries(configurableAttributes).map((attribute) => {
+      isSwatch = attribute[1].is_swatch;
+      defaultValue = formAttributeValues[attribute[0]];
+      isHidden = typeof hiddenAttributes !== 'undefined'
+        ? hiddenAttributes.includes(attribute[0])
+        : false;
+      allowedValues = typeof allowedAttributeValues[attribute[0]] !== 'undefined'
+        ? allowedAttributeValues[attribute[0]]
+        : [];
+
+      showSizeGuideCond = (typeof productData.size_guide.attributes !== 'undefined'
+        && productData.size_guide.attributes.indexOf(attribute[0]) !== -1
+        && showSizeGuide);
+      if (showSizeGuideCond && showSizeGuide) {
+        // We want size guide link to show only once.
+        showSizeGuide = false;
+      }
+
+      // Prepare grouped filters data.
+      groupData.isGroup = attribute[1].is_group;
+      if (groupData.isGroup) {
+        groupCode = groupCode || attribute[0];
+        groupData.defaultGroup = attribute[1].alternates[groupCode];
+        groupData.setGroupCode = this.setGroupCode;
+        groupData.groupAlternates = attribute[1].alternates;
+        hasGroups = true;
+      }
+
+      return (
+        <div key={attribute[0]} className={`attribute-wrapper attribute-wrapper_${attribute[0]}`}>
+          <ConditionalView condition={isSwatch}>
+            <FormElement
+              type="swatch"
+              attributeName={attribute[0]}
+              options={attribute[1].swatches}
+              label={attribute[1].label}
+              defaultValue={defaultValue}
+              activeClass="active"
+              disabledClass="disabled"
+              onChange={this.onSwatchClick}
+              isHidden={isHidden}
+              setAttribute={this.setAttribute}
+              allowedValues={[]}
+            />
+          </ConditionalView>
+          <ConditionalView condition={showSizeGuideCond}>
+            <SizeGuide
+              sizeGuideData={productData.size_guide}
+            />
+          </ConditionalView>
+          <ConditionalView condition={!isSwatch}>
+            <FormElement
+              type={widget}
+              attributeName={attribute[0]}
+              options={attribute[1].values}
+              label={attribute[1].label}
+              defaultValue={defaultValue}
+              activeClass="active"
+              disabledClass="disabled"
+              onChange={this.onListItemChange}
+              isHidden={isHidden}
+              setAttribute={this.setAttribute}
+              allowedValues={allowedValues}
+              groupData={groupData}
+            />
+          </ConditionalView>
+        </div>
+      );
+    });
+    let formClass = 'sku-form';
+    if (hasGroups) {
+      formClass += ' has-groups';
+    }
+
     return (
       <>
-        <form className="sku-form" data-sku={sku} key={sku} ref={this.formRef}>
-          {Object.entries(configurableAttributes).map((attribute) => {
-            isSwatch = attribute[1].is_swatch;
-            defaultValue = formAttributeValues[attribute[0]];
-            isHidden = typeof hiddenAttributes !== 'undefined'
-              ? hiddenAttributes.includes(attribute[0])
-              : false;
-            allowedValues = typeof allowedAttributeValues[attribute[0]] !== 'undefined'
-              ? allowedAttributeValues[attribute[0]]
-              : [];
-
-            showSizeGuideCond = (typeof productData.size_guide.attributes !== 'undefined'
-              && productData.size_guide.attributes.indexOf(attribute[0]) !== -1
-              && showSizeGuide);
-            if (showSizeGuideCond && showSizeGuide) {
-              // We want size guide link to show only once.
-              showSizeGuide = false;
-            }
-
-            // Prepare grouped filters data.
-            groupData.isGroup = attribute[1].is_group;
-            if (groupData.isGroup) {
-              groupCode = groupCode || attribute[0];
-              groupData.defaultGroup = attribute[1].alternates[groupCode];
-              groupData.setGroupCode = this.setGroupCode;
-              groupData.groupAlternates = attribute[1].alternates;
-            }
-
-            return (
-              <div key={attribute[0]} className={`attribute-wrapper attribute-wrapper_${attribute[0]}`}>
-                <ConditionalView condition={isSwatch}>
-                  <FormElement
-                    type="swatch"
-                    attributeName={attribute[0]}
-                    options={attribute[1].swatches}
-                    label={attribute[1].label}
-                    defaultValue={defaultValue}
-                    activeClass="active"
-                    disabledClass="disabled"
-                    onChange={this.onSwatchClick}
-                    isHidden={isHidden}
-                    setAttribute={this.setAttribute}
-                    allowedValues={[]}
-                  />
-                </ConditionalView>
-                <ConditionalView condition={showSizeGuideCond}>
-                  <SizeGuide
-                    sizeGuideData={productData.size_guide}
-                  />
-                </ConditionalView>
-                <ConditionalView condition={!isSwatch}>
-                  <FormElement
-                    type={widget}
-                    attributeName={attribute[0]}
-                    options={attribute[1].values}
-                    label={attribute[1].label}
-                    defaultValue={defaultValue}
-                    activeClass="active"
-                    disabledClass="disabled"
-                    onChange={this.onListItemChange}
-                    isHidden={isHidden}
-                    setAttribute={this.setAttribute}
-                    allowedValues={allowedValues}
-                    groupData={groupData}
-                  />
-                </ConditionalView>
-              </div>
-            );
-          })}
+        <form className={formClass} data-sku={sku} key={sku} ref={this.formRef}>
+          {attributesContainer}
           <QuantitySelector
             type="dropdown"
             options={getQuantityDropdownValues(selectedVariant, productData)}
