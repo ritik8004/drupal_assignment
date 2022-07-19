@@ -5,6 +5,8 @@
  * Install file for Alshaya Olapic.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
 /**
  * Implements hook_install().
  */
@@ -44,4 +46,23 @@ function alshaya_olapic_uninstall() {
   if ($config = \Drupal::configFactory()->getEditable('block.block.alshayaolapicwidget_4')) {
     $config->delete();
   }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update olapic block config to use entity_bundle condition plugin.
+ */
+function alshaya_olapic_update_9001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'block.block.alshayaolapicwidget_2',
+      'block.block.alshayaolapicwidget_4',
+    ],
+    'alshaya_olapic',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
 }
