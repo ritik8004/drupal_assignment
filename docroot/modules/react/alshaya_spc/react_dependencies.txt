@@ -2,3 +2,4 @@
 alshaya_aura_react
 alshaya_bazaar_voice
 alshaya_online_returns
+alshaya_hello_member

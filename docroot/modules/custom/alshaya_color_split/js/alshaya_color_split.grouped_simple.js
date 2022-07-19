@@ -43,6 +43,7 @@
               sku: $(this).val(),
               variantSelected: $(this).val(),
               title: variantInfo.cart_title,
+              price: variantInfo.finalPrice,
             }
           }
         });
