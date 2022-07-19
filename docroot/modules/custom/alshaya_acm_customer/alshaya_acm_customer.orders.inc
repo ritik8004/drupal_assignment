@@ -530,7 +530,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       // Check if we can find a parent SKU for this to get proper name.
       if (alshaya_acm_product_get_parent_sku_by_sku($sku)) {
         // Try to find attributes to display for this product.
-        $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
+        $product['attributes'] = \Drupal::service('alshaya_acm_product.skumanager')->getConfigurableValues($sku);
       }
 
       // If attribute value available for grouping attribute.

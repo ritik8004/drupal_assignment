@@ -3,11 +3,14 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Price from '../../../../../js/utilities/components/price';
 import PriceElement from '../../../../../js/utilities/components/price/price-element';
-import { isMobile } from '../../../../../js/utilities/display';
+import { getFilteredProductAttributes, isMobile } from '../../../../../js/utilities/display';
 
 const ReturnIndividualItem = ({
   item,
 }) => {
+  // Filter out all the lpn attributes.
+  const productAttributes = getFilteredProductAttributes(item);
+
   const eligibleClass = item.is_returnable ? 'return-eligible' : 'in-eligible';
   const bigTicketClass = item.is_big_ticket ? 'big-ticket-item' : '';
   let itemQuantity = item.qty_ordered;
@@ -62,9 +65,9 @@ const ReturnIndividualItem = ({
       <div className="order__details--wrapper">
         <div className="order__details--summary order__details--description">
           <div className="item-name dark">{item.name}</div>
-          {item.attributes && Object.keys(item.attributes).map((attribute) => (
-            <div key={item.attributes[attribute].label} className="attribute-detail light">
-              {Drupal.t('@attrLabel: @attrValue', { '@attrLabel': item.attributes[attribute].label, '@attrValue': item.attributes[attribute].value })}
+          {productAttributes && Object.keys(productAttributes).map((attribute) => (
+            <div key={productAttributes[attribute].label} className="attribute-detail light">
+              {Drupal.t('@attrLabel: @attrValue', { '@attrLabel': productAttributes[attribute].label, '@attrValue': productAttributes[attribute].value })}
             </div>
           ))}
           <div className="item-code light">
