@@ -58,6 +58,7 @@ function alshaya_rcs_add_to_bag_page_attachments_alter(array &$page) {
     // Get color split config on listing pages for add to bag.
     if (\Drupal::service('module_handler')->moduleExists('alshaya_rcs_color_split')) {
       $page['#attached']['drupalSettings']['alshayaColorSplit']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
+      $page['#attached']['drupalSettings']['alshayaColorSplit']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');
     }
   }
 }
