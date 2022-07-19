@@ -5,8 +5,6 @@
  * Install file for Alshaya Olapic.
  */
 
-use Drupal\alshaya_config\AlshayaConfigManager;
-
 /**
  * Implements hook_install().
  */
@@ -54,15 +52,35 @@ function alshaya_olapic_uninstall() {
  * Update olapic block config to use entity_bundle condition plugin.
  */
 function alshaya_olapic_update_9001() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    [
-      'block.block.alshayaolapicwidget_2',
-      'block.block.alshayaolapicwidget_4',
-    ],
-    'alshaya_olapic',
-    'install',
-    AlshayaConfigManager::MODE_REPLACE
-  );
+  $blocknames = [
+    'block.block.alshayaolapicwidget_2',
+    'block.block.alshayaolapicwidget_4',
+  ];
+  foreach ($blocknames as $configName) {
+    $configObject = \Drupal::configFactory()->getEditable($configName);
+    // Run update hook only if deprecated plugin exists.
+    if (!empty($nodeTypeVisibility = $configObject->get('visibility.node_type'))) {
+      // If entity_bundle:node condition already exists, then update.
+      if ($configObject->get('visibility.entity_bundle:node')) {
+        foreach (array_keys($nodeTypeVisibility['bundles']) as $bundleName) {
+          $configObject->set('visibility.entity_bundle:node.bundles.' . $bundleName, $bundleName);
+        }
+      }
+      // Create new entity_bundle:node condition.
+      else {
+        $value = [
+          'id' => 'entity_bundle:node',
+          'negate' => FALSE,
+          'context_mapping' => [
+            'node' => '@node.node_route_context:node',
+          ],
+          'bundles' => $nodeTypeVisibility['bundles'],
+        ];
+        $configObject->set('visibility.entity_bundle:node', $value);
+      }
+      // Delete deprecated plugin.
+      $configObject->clear('visibility.node_type');
+      $configObject->save();
+    }
+  }
 }
