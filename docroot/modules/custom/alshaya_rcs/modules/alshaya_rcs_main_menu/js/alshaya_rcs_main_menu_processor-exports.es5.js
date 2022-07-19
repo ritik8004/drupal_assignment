@@ -1,4 +1,13 @@
 exports.prepareData = function prepareData(settings, inputs) {
+  // @todo use menuMaxDepth;
+  const {
+    idealMaxColLength,
+    menuLayout,
+    maxNbCol,
+    menuMaxDepth,
+    highlightTiming,
+  } = settings;
+
   // List of keys that we will use to render Handlebars templates.
   const allowedKeys = [
     'name',
@@ -11,19 +20,21 @@ exports.prepareData = function prepareData(settings, inputs) {
   inputs = filterAllowedValues(inputs, allowedKeys);
 
   // Distribute L3 items into columns.
-  // @todo use menuLayout and menuMaxDepth;
-  const { idealMaxColLength, menuLayout, maxNbCol, menuMaxDepth } = settings;
   inputs = splitIntoCols(inputs, maxNbCol, idealMaxColLength);
 
   // Filter category menu items if include_in_menu flag true.
+  // @todo fix this
   // inputs = filterAvailableItems(inputs);
 
   return {
-    'menu_type': 'default', //@todo add setting
+    'menu_type': menuLayout,
     'menu_items': inputs,
-    'settings': drupalSettings.alshayaRcs.navigationMenu,
-    'logged_in': drupalSettings.user.uid > 1,
-    'aura_enabled': 0, //@todo add setting
+    'user_logged_in': drupalSettings.user.uid > 1,
+    'aura_enabled': drupalSettings.aura.enabled,
+    'highlight_timing': highlightTiming,
+    'level_class': '', // @todo Implement level_class class.
+    'promopanel_class': '', // @todo Implement promo panel block class.
+    'tag': 'a',
   };
 }
 

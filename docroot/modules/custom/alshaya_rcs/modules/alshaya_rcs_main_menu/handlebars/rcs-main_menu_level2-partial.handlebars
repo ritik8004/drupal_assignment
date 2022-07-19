@@ -5,28 +5,21 @@
           (eq @root.menu_type 'default')
           (eq @root.menu_type 'menu_dynamic_display')) }}
       <span class="back--link"><span class="menu__back"></span> <span>{{ name }}</span></span>
-      {{log 'L2 items'}}
-      {{log columns}}
       {{#each columns as |column col|}}
-        {{log 'column started'}}
         {{'// @todo implement level_class'}}
         {{'// @todo implement level_sub_classes'}}
-        {{log column}}
         <div class="column {{ col }}">
-          {{#each column as |item|}}
-            {{log item}}
-            {{'// @todo fix move-to-right condition'}}
-            <li class="menu__list-item menu--two__list-item {{ level2.class }} {{ 'move-to-right' }}">
+          {{#each column as |menu_item|}}
+            <li class="menu__list-item menu--two__list-item {{ level_class }} {{ move_to_right }}">
               <div class="menu__link-wrapper menu-two__link-wrapper">
-                <{{@root.tag}} class="menu__link menu-two__link {{ level_class }} {{ level_sub_classes }}" gtm-menu-title="{{ item.name }}" href="{{ item.url_path }}">{{ item.name }}</{{@root.tag}}>
+                <{{@root.tag}} class="menu__link menu-two__link {{ level_class }} {{ level_sub_classes }}" gtm-menu-title="{{ menu_item.name }}" href="{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
               </div>
-              {{#if item.children }}
-                {{> main_menu_level3_partial name=name items=item.children }}
+              {{#if menu_item.children }}
+                {{> main_menu_level3_partial name=name items=menu_item.children level_class=level_class }}
               {{/if}}
             </li>
           {{/each}}
         </div>
-        {{log 'column ended'}}
       {{/each}}
     {{else if (eq @root.menu_type 'menu_inline_display') }}
       {{'// @todo implement this'}}
