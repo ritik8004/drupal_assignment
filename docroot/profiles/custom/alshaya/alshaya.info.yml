@@ -1,7 +1,7 @@
 name: 'Alshaya Profile'
 type: profile
 description: 'Alshaya base profile for transac, non-transac and transac lite brands'
-core: '8.x'
+core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
   - acsf:acsf
@@ -23,13 +23,44 @@ dependencies:
   - drupal:restrict_role_login_by_ip
   - drupal:memory_limit_policy
   - drupal:memory_limit_policy_path
-
 themes:
   - bartik
   - seven
   - whitelabel
-
-base profile: lightning
-
-exclude:
-  - lightning_api
+  - claro
+install:
+  - block_content
+  - breakpoint
+  - ckeditor
+  - config
+  - contextual
+  - menu_link_content
+  - datetime
+  - editor
+  - entity_block
+  - menu_ui
+  - node
+  - options
+  - path
+  - pathauto
+  - page_cache
+  - redirect
+  - taxonomy
+  - text
+  - toolbar
+  - file
+  - rdf
+  - views
+  - views_ui
+  - diff
+  - metatag
+  - lightning_core
+  - lightning_media
+  - lightning_workflow
+  - lightning_contact_form
+  - lightning_page
+  - lightning_roles
+  - lightning_media_bulk_upload
+  - lightning_media_document
+  - lightning_media_image
+  - lightning_media_video

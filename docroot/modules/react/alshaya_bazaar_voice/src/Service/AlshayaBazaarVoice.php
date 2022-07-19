@@ -6,7 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\Core\File\Exception\FileException;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxy;
@@ -44,7 +44,7 @@ class AlshayaBazaarVoice {
   /**
    * The database service.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\mysql\Driver\Database\mysql\Connection
    */
   protected $connection;
 
@@ -118,7 +118,7 @@ class AlshayaBazaarVoice {
    *   Config Factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $connection
    *   Database service.
    * @param \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoiceApiHelper $alshaya_bazaar_voice_api_helper
    *   Alshaya BazaarVoice API helper.

@@ -199,8 +199,14 @@ window.commerceBackend = window.commerceBackend || {};
 
     var configurables = {};
     product.configurable_options.forEach(function (option) {
+      var attribute_id = atob(option.attribute_uid);
+      // We let the pseudo attribute remain as an integer.
+      attribute_id = (attribute_id == drupalSettings.psudo_attribute)
+        ? parseInt(attribute_id, 10)
+        : attribute_id;
+
       configurables[option.attribute_code] = {
-        attribute_id: parseInt(atob(option.attribute_uid), 10),
+        attribute_id,
         code: option.attribute_code,
         label: option.label,
         position: option.position,
@@ -258,8 +264,8 @@ window.commerceBackend = window.commerceBackend || {};
         attribute_code: `attr_${attributeCode}`,
         attribute_id: `attr_${attributeCode}`,
         label: label,
-        option_id: optionId.toString(),
-        option_value: optionValue.toString(),
+        option_id: optionId,
+        option_value: optionValue,
         value: value,
       });
     });
@@ -641,7 +647,7 @@ window.commerceBackend = window.commerceBackend || {};
         combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'
           ? combinations.by_sku[variantSku]
           : {};
-        combinations.by_sku[variantSku][configurableCodes[i]] = attributeVal;
+        combinations.by_sku[variantSku][configurableCodes[i]] = attributeVal.toString();
 
         combinations.attribute_sku[configurableCodes[i]] = typeof combinations.attribute_sku[configurableCodes[i]] !== 'undefined'
           ? combinations.attribute_sku[configurableCodes[i]]
@@ -1340,6 +1346,37 @@ window.commerceBackend = window.commerceBackend || {};
     staticDataStore.configurableColorData = {};
     staticDataStore.configurables = {};
     staticDataStore.labels = {};
+  }
+
+  /**
+   * Get the processed price for render.
+   *
+   * @param {Object} price
+   *   Price object.
+   *
+   * @returns {Object}
+   *   Processed price object which can be used for rendering via handlebars.
+   */
+  window.commerceBackend.getPriceForRender = function getPriceForRender(price) {
+    let currencyConfig = drupalSettings.alshaya_spc.currency_config;
+    // @todo Work on from/to prices for products.
+    const item = {
+      display_mode: 'simple',
+    };
+    item.discount = price.price_range.maximum_price.discount;
+    item.regular_price = {
+      value: price.price_range.maximum_price.regular_price.value,
+      currency_code: currencyConfig.currency_code,
+      currency_code_position: currencyConfig.currency_code_position,
+      decimal_points: currencyConfig.decimal_points,
+    };
+    item.final_price = {
+      value: price.price_range.maximum_price.final_price.value,
+      currency_code: currencyConfig.currency_code,
+      currency_code_position: currencyConfig.currency_code_position,
+      decimal_points: currencyConfig.decimal_points,
+    };
+    return item;
   }
 
   /**
