@@ -16,6 +16,12 @@
     margin: rem(36) 0;
   }
 
+  .magazine-layout & {
+    @include breakpoint($only-mobile) {
+      margin: 0;
+    }
+  }
+
   .points-text {
     span {
       color: $aura-cart-points;
@@ -57,4 +63,8 @@
   b {
     font-family: $aura-bold;
   }
+}
+
+#aura-pdp-mobile {
+  padding: 0 rem(16);
 }
