@@ -66,6 +66,16 @@
     }
   }
 
+  .geolocation-google-map {
+    [aria-hidden='true'] {
+      padding-bottom: rem(18);
+
+      html[lang='en'] & {
+        padding-right: rem(2);
+      }
+    }
+  }
+
   .pager__item {
     list-style: none;
   }
