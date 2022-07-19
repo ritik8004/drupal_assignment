@@ -11,6 +11,18 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update MDC API url for Store Finder page.
+ */
+function alshaya_stores_finder_update_9000() {
+  // Set MDC path.
+  $store_config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $store_config->set('filter_path', "storeLocator/search?searchCriteria[filter_groups][0][filters][0][field]=status&searchCriteria[filter_groups][0][filters][0][value]=1&searchCriteria[filter_groups][1][filters][0][field]=pudo_service&searchCriteria[filter_groups][1][filters][0][value]=0");
+  $store_config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Removes unnecessary view attachment from store finder glossary view.
  */
 function alshaya_stores_finder_update_8112() {
