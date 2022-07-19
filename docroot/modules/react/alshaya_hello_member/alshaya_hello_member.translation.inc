@@ -132,7 +132,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عضوية احصل على',
         'context' => 'hello_member',
       ],
-
+      'OTP will be send to your mobile number to verify' => [
+        'ar' => 'سيتم إرسال OTP إلى رقم هاتفك المحمول للتحقق',
+        'context' => 'hello_member',
+      ],
       'Add More Get More' => [
         'ar' => 'أضف المزيد واحصل على المزيد',
         'context' => 'hello_member',
