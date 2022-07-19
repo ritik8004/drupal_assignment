@@ -5,8 +5,8 @@ import { calculateDiscount } from '../../utils';
 /**
  * Render price range elements.
  */
-const PriceRangeElement = ({ alshayaPriceRange }) => {
-  const discount = calculateDiscount(alshayaPriceRange.from.min, alshayaPriceRange.to.min);
+const PriceRangeElement = ({ priceRange }) => {
+  const discount = calculateDiscount(priceRange.from.min, priceRange.to.min);
   const discountTxt = (discount > 0)
     ? (
       <div className="price--discount">
@@ -19,13 +19,13 @@ const PriceRangeElement = ({ alshayaPriceRange }) => {
 
   // Display special price if from and to prices are different.
   const specialPrice = (
-    (alshayaPriceRange.from.min !== alshayaPriceRange.to.min)
-    || (alshayaPriceRange.from.max !== alshayaPriceRange.to.max)
+    (priceRange.from.min !== priceRange.to.min)
+    || (priceRange.from.max !== priceRange.to.max)
   )
     ? (
       <PriceElement
-        amount={alshayaPriceRange.from.min}
-        maxAmount={alshayaPriceRange.from.max}
+        amount={priceRange.from.min}
+        maxAmount={priceRange.from.max}
       />
     )
     : '';
@@ -35,7 +35,7 @@ const PriceRangeElement = ({ alshayaPriceRange }) => {
         {specialPrice}
       </div>
       <div className="special--price">
-        <PriceElement amount={alshayaPriceRange.to.min} maxAmount={alshayaPriceRange.to.max} />
+        <PriceElement amount={priceRange.to.min} maxAmount={priceRange.to.max} />
       </div>
       <div className="discount">{discountTxt}</div>
     </div>

@@ -171,7 +171,7 @@ const Teaser = ({
       ? Parser(attribute.rendered_price)
       : <Price price={attribute.original_price} final_price={attribute.final_price} />;
   } else {
-    renderPrice = <PriceRangeElement alshayaPriceRange={attribute.alshaya_price_range} />;
+    renderPrice = <PriceRangeElement priceRange={attribute.alshaya_price_range} />;
   }
 
   return (

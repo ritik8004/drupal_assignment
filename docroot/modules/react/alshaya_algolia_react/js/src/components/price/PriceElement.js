@@ -5,11 +5,14 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
  * Render max amount element.
  */
 const MaxPriceItem = ({ maxAmount }) => {
+  if (!hasValue(maxAmount)) {
+    return (null);
+  }
   const { decimalPoints } = drupalSettings.reactTeaserView.price;
   return (
     <>
-    <span className="min-max-separator">-</span>
-    {Number(maxAmount).toFixed(decimalPoints)}
+      <span className="min-max-separator">-</span>
+      {Number(maxAmount).toFixed(decimalPoints)}
     </>
   );
 };
@@ -19,14 +22,11 @@ const MaxPriceItem = ({ maxAmount }) => {
  */
 const PriceItem = ({ amount, maxAmount }) => {
   const { decimalPoints } = drupalSettings.reactTeaserView.price;
-  const maxAmountItem = (hasValue(maxAmount))
-    ? <MaxPriceItem maxAmount={maxAmount} />
-    : '';
 
   return (
     <span key="amount" className="price-amount">
       {Number(amount).toFixed(decimalPoints)}
-      {maxAmountItem}
+      <MaxPriceItem maxAmount={maxAmount} />
     </span>
   );
 };
