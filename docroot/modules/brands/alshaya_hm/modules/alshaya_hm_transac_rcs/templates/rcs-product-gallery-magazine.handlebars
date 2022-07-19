@@ -28,12 +28,7 @@
               <div class="pdp-image-zoom-wrapper">
                 <img loading="lazy" data-zoom-url="{{ this.zoomurl }}" src="{{ this.mediumurl }}" alt="{{ this.alt }}" title="{{ this.title }}"/>
               </div>
-              {{! @todo figure how todo labels alshaya_acm_product/templates/product-labels.html.twig }}
-              {{#if labels }}
-                <div class="product-labels">
-                  {{ labels }}
-                </div>
-              {{/if}}
+                <div class="product-labels"></div>
             </figure>
           {{else}}
             <figure class="pdp-asset pdp-image pdp-asset-{{ this.index }} {{ this.last }}" data-image-index={{ this.index }} data-scale="2">
@@ -157,12 +152,7 @@
                     {{/if}}
                   {{/each}}
               </ul>
-                {{! @todo figure how todo labels alshaya_acm_product/templates/product-labels.html.twig }}
-                {{#if labels }}
-                  <div class="product-labels">
-                      {{ labels }}
-                  </div>
-                {{/if}}
+              <div class="product-labels"></div>
             </div>
           </div>
         {{! endblock }}
