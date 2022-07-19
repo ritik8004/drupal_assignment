@@ -115,10 +115,9 @@ class MyAccountsPointsHistoryController extends ControllerBase {
       return AccessResult::forbidden();
     }
 
-    // Check if my account reviews config enabled.
-    $settings['enabled'] = $this->helloMemberHelper->isHelloMemberEnabled();
-    if ($settings['enabled']) {
-      return AccessResult::allowedIf($settings['enabled'])->addCacheTags(['config:' . $settings['enabled'] . '.settings']);
+    // Check if hello member feature is not enabled.
+    if (!($this->helloMemberHelper->isHelloMemberEnabled())) {
+      return AccessResult::forbidden();
     }
 
     return AccessResult::allowed();

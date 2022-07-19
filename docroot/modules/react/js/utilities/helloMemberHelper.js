@@ -8,27 +8,14 @@ import { callMagentoApi } from './requestHelper';
  * Helper function to check if Hello Member is enabled.
  */
 export default function isHelloMemberEnabled() {
-  let enabled = false;
-
-  if (hasValue(drupalSettings.hello_member)) {
-    enabled = drupalSettings.hello_member.enabled;
-  }
-
-  return enabled;
+  return hasValue(drupalSettings.helloMember) && hasValue(drupalSettings.helloMember.status);
 }
 
 /**
  * Helper function to check if aura integration with hello member is enabled.
  */
-export const isAuraIntegrationEnabled = () => {
-  let enabled = false;
-
-  if (hasValue(drupalSettings.hello_member)) {
-    enabled = drupalSettings.hello_member.aura_integration_enabled;
-  }
-
-  return enabled;
-};
+export const isAuraIntegrationEnabled = () => isHelloMemberEnabled()
+  && hasValue(drupalSettings.helloMember.auraIntegrationStatus);
 
 /**
  * Helper function to get the customer info from user session.

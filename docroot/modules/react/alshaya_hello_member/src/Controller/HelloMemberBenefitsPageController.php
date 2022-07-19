@@ -102,8 +102,12 @@ class HelloMemberBenefitsPageController extends ControllerBase {
       return AccessResult::forbidden();
     }
 
-    $settings['enabled'] = $this->helloMemberHelper->isHelloMemberEnabled();
-    return AccessResult::allowedIf($settings['enabled'])->addCacheTags(['config:' . $settings['enabled'] . '.settings']);
+    // Check if hello member feature is not enabled.
+    if (!($this->helloMemberHelper->isHelloMemberEnabled())) {
+      return AccessResult::forbidden();
+    }
+
+    return AccessResult::allowed();
   }
 
   /**

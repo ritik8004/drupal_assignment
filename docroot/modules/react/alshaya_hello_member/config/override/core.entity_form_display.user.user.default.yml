@@ -5,7 +5,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_date_of_birth:
+  field_birth_date:
     type: datetime_default
     weight: 7
     region: content
