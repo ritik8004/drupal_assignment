@@ -1,4 +1,6 @@
 import { hasValue } from './conditionsUtility';
+import { callMagentoApi } from './requestHelper';
+import logger from './logger';
 
 /**
  * Helper function to check if Express delivery is enabled.
@@ -90,6 +92,74 @@ const checkExpressDeliveryStatus = () => {
   return false;
 };
 
+/**
+ * Gets the express delivery configuration from magento for listing pages.
+ */
+async function getExpressDeliveryStatus() {
+  // Get express-delivery settings from MDC for labels display.
+  // Here we don't pass any sku, we only pass get_config_details as true
+  // in order to MDC configuration for listing page to control the display of
+  // Express delivery label on teaser.
+  const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
+  const params = {
+    productAndAddressInformation: {
+      cart_id: null,
+      product_sku: null,
+      address: {
+        custom_attributes: [],
+      },
+      get_config_details: true,
+    },
+  };
+
+  const showExpressDeliveryLabel = {
+    sameDayDelivery: true,
+    expressDelivery: true,
+  };
+
+  try {
+    const response = await callMagentoApi(url, 'POST', params);
+    if (!hasValue(response.data) || hasValue(response.data.error)) {
+      logger.error('Error occurred while fetching the express-delivery config for listing., Response: @response.', {
+        '@response': JSON.stringify(response.data),
+      });
+      // Dispatch event for delivery label component with default true as
+      // error response from magento.
+      const event = new CustomEvent('expressDeliveryLabelsDisplay', {
+        detail: showExpressDeliveryLabel,
+      });
+      document.dispatchEvent(event);
+    }
+
+    response.data.forEach((label) => {
+      if (label.carrier_code === 'SAMEDAY') {
+        showExpressDeliveryLabel.sameDayDelivery = label.status;
+      } else if (label.carrier_code === 'EXPRESS') {
+        showExpressDeliveryLabel.expressDelivery = label.status;
+      }
+    });
+
+    // Dispatch event for delivery label component on teaser with API response
+    // in event details.
+    const event = new CustomEvent('expressDeliveryLabelsDisplay', {
+      detail: showExpressDeliveryLabel,
+    });
+    document.dispatchEvent(event);
+  } catch (error) {
+    logger.error('Error occurred while fetching the express-delivery config for listing. Message: @message.', {
+      '@message': error.message,
+    });
+    // Dispatch event for delivery label component with default true as
+    // error response from magento.
+    const event = new CustomEvent('expressDeliveryLabelsDisplay', {
+      detail: showExpressDeliveryLabel,
+    });
+    document.dispatchEvent(event);
+  }
+
+  return showExpressDeliveryLabel;
+}
+
 export {
   isExpressDeliveryEnabled,
   checkProductExpressDeliveryStatus,
@@ -97,4 +167,5 @@ export {
   checkAreaAvailabilityStatusOnCart,
   checkSameDayDeliveryStatus,
   checkExpressDeliveryStatus,
+  getExpressDeliveryStatus,
 };

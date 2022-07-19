@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_image_sitemap;
 
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -32,7 +32,7 @@ class AlshayaImageSitemapGenerator {
   /**
    * The database service.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\mysql\Driver\Database\mysql\Connection
    */
   protected $database;
 
@@ -109,7 +109,7 @@ class AlshayaImageSitemapGenerator {
   /**
    * AlshayaImageSitemapGenerator constructor.
    *
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $database
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $database
    *   Database service.
    * @param \Drupal\Core\State\StateInterface $state
    *   State interface service object.
