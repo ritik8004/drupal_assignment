@@ -126,13 +126,6 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuImagesHelper;
 
   /**
-   * The 'product_listing' image style object.
-   *
-   * @var \Drupal\image\ImageStyleInterface
-   */
-  protected $productListingStyle;
-
-  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -178,7 +171,6 @@ class AlshayaFeedSkuInfoHelper {
     SkuImagesHelper $sku_images_helper
   ) {
     $this->entityTypeManager = $entity_type_manager;
-    $this->productListingStyle = $entity_type_manager->getStorage('image_style')->load(SkuImagesHelper::STYLE_PRODUCT_LISTING);
     $this->languageManager = $language_manager;
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -414,9 +406,7 @@ class AlshayaFeedSkuInfoHelper {
         return [
           'label' => $image['label'],
           'url' => file_create_url($image['drupal_uri']),
-          'url_product_listing' => $this->moduleHandler->moduleExists('alshaya_pims')
-          ? $this->skuImagesHelper->getImageStyleUrl($image, SkuImagesHelper::STYLE_PRODUCT_LISTING)
-          : $this->productListingStyle->buildUrl($image['drupal_uri']),
+          'url_product_listing' => $this->skuImagesHelper->getImageStyleUrl($image, SkuImagesHelper::STYLE_PRODUCT_LISTING),
         ];
       }
     }, $media_items['media_items']['images']);
