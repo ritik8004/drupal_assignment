@@ -52,18 +52,19 @@ function alshaya_olapic_uninstall() {
  * Update olapic block config to use entity_bundle condition plugin.
  */
 function alshaya_olapic_update_9001() {
-  $blocknames = [
+  $block_configs = [
     'block.block.alshayaolapicwidget_2',
     'block.block.alshayaolapicwidget_4',
   ];
-  foreach ($blocknames as $configName) {
-    $configObject = \Drupal::configFactory()->getEditable($configName);
+  foreach ($block_configs as $block_id) {
+    $config = \Drupal::configFactory()->getEditable($block_id);
+    $node_type_visibility = $config ? $config->get('visibility.node_type') : [];
     // Run update hook only if deprecated plugin exists.
-    if (!empty($nodeTypeVisibility = $configObject->get('visibility.node_type'))) {
+    if (!empty($node_type_visibility)) {
       // If entity_bundle:node condition already exists, then update.
-      if ($configObject->get('visibility.entity_bundle:node')) {
-        foreach (array_keys($nodeTypeVisibility['bundles']) as $bundleName) {
-          $configObject->set('visibility.entity_bundle:node.bundles.' . $bundleName, $bundleName);
+      if ($config->get('visibility.entity_bundle:node')) {
+        foreach (array_keys($node_type_visibility['bundles']) as $bundle_name) {
+          $config->set('visibility.entity_bundle:node.bundles.' . $bundle_name, $bundle_name);
         }
       }
       // Create new entity_bundle:node condition.
@@ -74,13 +75,13 @@ function alshaya_olapic_update_9001() {
           'context_mapping' => [
             'node' => '@node.node_route_context:node',
           ],
-          'bundles' => $nodeTypeVisibility['bundles'],
+          'bundles' => $node_type_visibility['bundles'],
         ];
-        $configObject->set('visibility.entity_bundle:node', $value);
+        $config->set('visibility.entity_bundle:node', $value);
       }
       // Delete deprecated plugin.
-      $configObject->clear('visibility.node_type');
-      $configObject->save();
+      $config->clear('visibility.node_type');
+      $config->save();
     }
   }
 }
