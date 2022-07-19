@@ -20,6 +20,7 @@ import Promotions from '../promotions';
 import { checkExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import ExpressDeliveryLabel from './ExpressDeliveryLabel';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo,
@@ -278,9 +279,7 @@ const Teaser = ({
               && hit.attr_express_delivery[0] === '1'
             }
           >
-            <div className="express_delivery">
-              {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
-            </div>
+            <ExpressDeliveryLabel />
           </ConditionalView>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
@@ -290,9 +289,7 @@ const Teaser = ({
               && hit.attr_express_delivery[currentLanguage][0] === '1'
             }
           >
-            <div className="express_delivery">
-              {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
-            </div>
+            <ExpressDeliveryLabel />
           </ConditionalView>
         </div>
         {/* Don't render component on wishlist page if product is OOS. */}
