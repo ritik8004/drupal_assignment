@@ -45,3 +45,12 @@
     font-weight: bold;
   }
 }
+
+.path--store-finder,
+.nodetype--store {
+  .geolocation-google-map {
+    [aria-hidden='true'] {
+      padding-bottom: 0;
+    }
+  }
+}
