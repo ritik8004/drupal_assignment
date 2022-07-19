@@ -70,7 +70,7 @@ class HelloMemberHelper {
     static $config;
 
     if (is_null($config)) {
-      $config = $this->configFactory->get('alshaya_online_returns.settings');
+      $config = $this->configFactory->get('alshaya_hello_member.settings');
     }
 
     return $config;
