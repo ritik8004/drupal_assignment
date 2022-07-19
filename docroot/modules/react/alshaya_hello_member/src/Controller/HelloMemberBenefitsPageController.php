@@ -5,7 +5,6 @@ namespace Drupal\alshaya_hello_member\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_hello_member\Helper\HelloMemberHelper;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
@@ -25,24 +24,13 @@ class HelloMemberBenefitsPageController extends ControllerBase {
   protected $helloMemberHelper;
 
   /**
-   * Module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * HelloMemberBenefitsPageController constructor.
    *
    * @param Drupal\alshaya_hello_member\Helper\HelloMemberHelper $hello_member_helper
    *   The hello member helper service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   Module handler.
    */
-  public function __construct(HelloMemberHelper $hello_member_helper,
-                              ModuleHandlerInterface $module_handler) {
+  public function __construct(HelloMemberHelper $hello_member_helper) {
     $this->helloMemberHelper = $hello_member_helper;
-    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -51,7 +39,6 @@ class HelloMemberBenefitsPageController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_hello_member.hello_member_helper'),
-      $container->get('module_handler'),
     );
   }
 
@@ -64,7 +51,7 @@ class HelloMemberBenefitsPageController extends ControllerBase {
    *   Offer/Coupon code.
    */
   public function getBenefitsDetails(string $type, string $code) {
-    $this->moduleHandler->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
+    $this->moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
 
     return [
       '#theme' => 'hello_member_benefits_page',

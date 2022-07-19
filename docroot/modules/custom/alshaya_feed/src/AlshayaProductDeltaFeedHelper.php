@@ -18,7 +18,7 @@ use Drupal\metatag\MetatagToken;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\mysql\Driver\Database\mysql\Connection;
 use Psr\Log\LoggerInterface;
 use Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper;
 
@@ -107,7 +107,7 @@ class AlshayaProductDeltaFeedHelper {
   /**
    * Database connection service.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\mysql\Driver\Database\mysql\Connection
    */
   protected $connection;
 
@@ -146,7 +146,7 @@ class AlshayaProductDeltaFeedHelper {
    *   Matatag manager.
    * @param \Drupal\metatag\MetatagToken $token
    *   The MetatagToken object.
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $connection
    *   Database connection service.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
