@@ -19,6 +19,7 @@ import {
   createSearchResultDiv,
 } from '../utils';
 import { algoliaSearchClient } from '../config/SearchClient';
+import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -36,11 +37,18 @@ class SearchApp extends React.PureComponent {
     createSearchResultDiv();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { query } = this.state;
     if (query !== '') {
       redirectToOtherLang(query);
     }
+
+    // Listing pages product teaser have only express delivery label.
+    // This label on teaser is switched on and off by configuration on drupal at
+    // global level. However here we call a Magento API to control the display
+    // of the label as per magento configuration. We set global variable to avoid
+    // this API call again and used on filters and instant search.
+    window.sddEdStatus = await getExpressDeliveryStatus();
   }
 
   setQueryValue = (queryValue, inputTag = null) => {
