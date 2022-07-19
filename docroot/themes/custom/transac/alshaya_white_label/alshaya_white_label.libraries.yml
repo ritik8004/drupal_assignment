@@ -782,8 +782,6 @@ hello-member-registration:
   css:
     theme:
       css/conditional-sass/hello-member-registration/hello-member-registration.ltr.css: {}
-  dependencies:
-    - alshaya_white_label/convert_to_select2
 
 my-membership-info:
   css:
