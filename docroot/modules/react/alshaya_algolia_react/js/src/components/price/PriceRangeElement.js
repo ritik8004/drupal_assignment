@@ -9,35 +9,39 @@ const PriceRangeElement = ({ priceRange }) => {
   const discount = calculateDiscount(priceRange.from.min, priceRange.to.min);
   const discountTxt = (discount > 0)
     ? (
-      <div className="price--discount">
-        (
-        {Drupal.t('Save @discount%', { '@discount': discount })}
-        )
+      <div className="discount">
+        <div className="price--discount">
+          (
+          {Drupal.t('Save @discount%', { '@discount': discount })}
+          )
+        </div>
       </div>
     )
     : '';
 
   // Display special price if from and to prices are different.
-  const specialPrice = (
-    (priceRange.from.min !== priceRange.to.min)
-    || (priceRange.from.max !== priceRange.to.max)
-  )
-    ? (
-      <PriceElement
-        amount={priceRange.from.min}
-        maxAmount={priceRange.from.max}
-      />
-    )
-    : '';
+  let priceClass = 'price';
+  let specialPrice = '';
+  if ((priceRange.from.min !== priceRange.to.min)
+    || (priceRange.from.max !== priceRange.to.max)) {
+    specialPrice = (
+      <div className="has--special--price">
+        <PriceElement
+          amount={priceRange.from.min}
+          maxAmount={priceRange.from.max}
+        />
+      </div>
+    );
+    priceClass = 'special--price';
+  }
+
   return (
     <div className="special-price-block">
-      <div className="has--special--price">
-        {specialPrice}
-      </div>
-      <div className="special--price">
+      {specialPrice}
+      <div className={priceClass}>
         <PriceElement amount={priceRange.to.min} maxAmount={priceRange.to.max} />
       </div>
-      <div className="discount">{discountTxt}</div>
+      {discountTxt}
     </div>
   );
 };
