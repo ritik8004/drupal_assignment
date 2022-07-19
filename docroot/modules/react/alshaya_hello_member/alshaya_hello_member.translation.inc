@@ -132,7 +132,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عضوية احصل على',
         'context' => 'hello_member',
       ],
-
+      'OTP will be send to your mobile number to verify' => [
+        'ar' => 'سيتم إرسال OTP إلى رقم هاتفك المحمول للتحقق',
+        'context' => 'hello_member',
+      ],
       'Add More Get More' => [
         'ar' => 'أضف المزيد واحصل على المزيد',
         'context' => 'hello_member',
@@ -188,6 +191,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'تنتهي صلاحيته في',
         'context' => 'hello_member',
       ],
+      'Expires on @expire_date' => [
+        'ar' => '@expire_date تنتهي صلاحيته في',
+        'context' => 'hello_member',
+      ],
       'Add to bag' => [
         'ar' => 'أضف إلى الحقيبة',
         'context' => 'hello_member',
@@ -216,12 +223,12 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'يجب أن تكون القيمة في "التاريخ',
         'context' => 'hello_member',
       ],
-      'Membership Info' => [
+      'Membership info content node' => [
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
-      'Membership info content node' => [
-        'ar' => 'معلومات العضوية',
+      'Verified' => [
+        'ar' => 'verified AR',
         'context' => 'hello_member',
       ],
     ],

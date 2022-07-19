@@ -199,7 +199,7 @@
   }
 
   &.close-expiry-accordion {
-    max-height: 5.625rem !important;
+    max-height: rem(90) !important;
     overflow: hidden;
 
     .content {
