@@ -193,8 +193,8 @@
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(payment_method, 3);
   });
 
-  // Add checkout event step 4 for the purchase complete.
-  document.addEventListener('orderCompleteEvent', function (e) {
+  // Add checkout event step 4 for the click on complete purchase button.
+  document.addEventListener('orderValidated', function (e) {
     if (e.detail.cart) {
       Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, 4);
     }
