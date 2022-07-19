@@ -1,0 +1,31 @@
+alshaya_hello_member.hello_member_config:
+  path: '/admin/config/alshaya/hello-member'
+  defaults:
+    _form: '\Drupal\alshaya_hello_member\Form\AlshayaHelloMemberSettingsForm'
+    _title: 'Alshaya Hello Member Configurations'
+  requirements:
+    _permission: 'administer site configuration'
+alshaya_hello_member.hello_member_points_history:
+  path: '/user/{user}/hello-member-points-history'
+  defaults:
+    _controller: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::pointsHistory'
+    _title_callback: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\alshaya_hello_member\Controller\MyAccountsPointsHistoryController::checkAccess'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+alshaya_hello_member.hello_member_benefits_page:
+  path: '/user/{user}/hello-member-benefits/{type}/{code}'
+  defaults:
+    _controller: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::getBenefitsDetails'
+    _title_callback: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::getTitle'
+  requirements:
+    _custom_access: '\Drupal\alshaya_hello_member\Controller\HelloMemberBenefitsPageController::checkAccess'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
