@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup';
 import OtpInput from 'react-otp-input';
 import { sendOtp, verifyOtp } from '../../../../../js/utilities/otp_helper';
 import getStringMessage from '../../../../../js/utilities/strings';
+import { helloMemberCustomerPhoneSearch } from '../../hello_member_api_helper';
 
 class SendOtpPopup extends React.Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class SendOtpPopup extends React.Component {
       hasErrored: false,
       otp: '',
       errorStyle: 'error',
+      otpVerified: false,
     };
   }
 
@@ -38,26 +40,52 @@ class SendOtpPopup extends React.Component {
     });
   };
 
-  // Resend OTP.
+  // Set error message for phone number field
+  setErrorMsgforPhone = (errMsg) => {
+    document.getElementById('mobile-number-error').innerHTML = errMsg;
+    document.getElementById('mobile-number-error').classList.add('error');
+  };
+
+
+  // send OTP.
   callSendOtpApi = () => {
-    const responseData = sendOtp(
-      `${drupalSettings.alshaya_mobile_prefix.slice(1)}${document.getElementById('edit-field-mobile-number-0-mobile').value}`,
-      'reg',
-    );
-    if (responseData instanceof Promise) {
-      responseData.then((result) => {
-        if (result.error !== undefined || !result.status) {
-          document.getElementById('mobile-number-error').innerHTML = Drupal.t('Something went wrong please try again later', {}, { context: 'hello_member' });
-          document.getElementById('mobile-number-error').classList.add('error');
+    const phoneNumber = `${drupalSettings.alshaya_mobile_prefix.slice(1)}${document.getElementById('edit-field-mobile-number-0-mobile').value}`;
+    // Check the entered phone number is already in use by another customer.
+    const phoneSearchResponse = helloMemberCustomerPhoneSearch(phoneNumber);
+    if (phoneSearchResponse instanceof Promise) {
+      phoneSearchResponse.then((phoneResult) => {
+        if (phoneResult.status !== 200) {
+          // If Phone SearchAPI is returning Error.
+          this.setErrorMsgforPhone(phoneResult.data.error_message);
           return;
         }
-        this.setState({
-          otp: '',
-          hasErrored: false,
-        });
-        this.toggleSendOtpPopup(true);
-        document.getElementById('hello-member-modal-form-verify').classList.add('in-active');
-        document.getElementById('input-otp-error').innerHTML = '';
+        if (phoneResult.data.apc_identifier_number !== null
+          && phoneResult.data.error === null
+          && phoneResult.status === 200) {
+          this.setErrorMsgforPhone(Drupal.t('This Phone number is already in use.', {}, { context: 'hello_member' }));
+        } else {
+          // Call send otp Api only if the Phone number is not in use by any other customer.
+          const responseData = sendOtp(
+            phoneNumber,
+            'reg',
+          );
+          if (responseData instanceof Promise) {
+            responseData.then((result) => {
+              if (result.error !== undefined || !result.status) {
+                this.setErrorMsgforPhone(result.error_message);
+                return;
+              }
+              this.setState({
+                otp: '',
+                hasErrored: false,
+                otpVerified: true,
+              });
+              this.toggleSendOtpPopup(true);
+              document.getElementById('hello-member-modal-form-verify').classList.add('in-active');
+              document.getElementById('input-otp-error').innerHTML = '';
+            });
+          }
+        }
       });
     }
   };
@@ -96,11 +124,23 @@ class SendOtpPopup extends React.Component {
       hasErrored,
       otp,
       errorStyle,
+      otpVerified,
     } = this.state;
+    let phoneNumberMsg = Drupal.t('OTP will be send to your mobile number to verify', {}, { context: 'hello_member' });
+    if (otpVerified) {
+      phoneNumberMsg = (
+        <span className="verified-msg">
+          { Drupal.t('Verified', {}, { context: 'hello_member' }) }
+        </span>
+      );
+    }
     return (
       <>
         <div className="btn-wrapper in-active">
           <button onClick={(e) => this.onClickSendOtp(e)} type="button">{getStringMessage('send_otp_label')}</button>
+        </div>
+        <div className="mb-verifier">
+          {phoneNumberMsg}
         </div>
         <div className="popup-container">
           <Popup
