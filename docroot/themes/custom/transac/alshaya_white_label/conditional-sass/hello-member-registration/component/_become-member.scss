@@ -78,7 +78,7 @@
       margin-top: 0;
     }
 
-    .field--name-field-date-of-birth {
+    .field--name-field-birth-date {
       h4 {
         color: $hm-registration-labels-txt;
         font-size: rem(13);
@@ -132,7 +132,6 @@
 
                 &::after {
                   background: $hm-registration-fields-bg;
-                  z-index: -1;
                 }
               }
             }
