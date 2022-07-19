@@ -30,6 +30,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     'menu_type': menuLayout,
     'menu_items': inputs,
     'user_logged_in': drupalSettings.user.uid > 1,
+    'path_prefix': drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix,
     'aura_enabled': drupalSettings.aura.enabled,
     'highlight_timing': highlightTiming,
     'level_class': '', // @todo Implement level_class class.

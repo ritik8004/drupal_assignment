@@ -5,7 +5,7 @@
     {{#each items as |menu_item|}}
       <li class="menu__list-item menu--three__list-item {{ level_class }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
-          <{{@root.tag}} class="menu__link menu--three__link {{ level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
+          <{{@root.tag}} class="menu__link menu--three__link {{ level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
         </div>
         {{#if menu_item.children }}
           {{> main_menu_level4_partial name=name items=item.children level_class=level_class }}

@@ -5,12 +5,12 @@
     {{'// @todo implement style'}}
     {{set 'style' ''}}
     {{#if menu_item.icon }}
-      <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ menu_item.url_path }}">
+      <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">
         <span class="icon"><img src="{{ menu_item.icon.url }}" alt="{{ menu_item.name }}"/></span>
         {{ menu_item.name }}
       </{{@root.tag}}>
     {{else}}
-      <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
+      <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
     {{/if}}
   </div>
   {{#if menu_item.columns }}

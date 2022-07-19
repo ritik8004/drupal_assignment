@@ -5,14 +5,13 @@
           (eq @root.menu_type 'default')
           (eq @root.menu_type 'menu_dynamic_display')) }}
       <span class="back--link"><span class="menu__back"></span> <span>{{ name }}</span></span>
+      {{set 'sub_nav_name' name }}
       {{#each columns as |column col|}}
-        {{'// @todo implement level_class'}}
-        {{'// @todo implement level_sub_classes'}}
         <div class="column {{ col }}">
           {{#each column as |menu_item|}}
             <li class="menu__list-item menu--two__list-item {{ level_class }} {{ move_to_right }}">
               <div class="menu__link-wrapper menu-two__link-wrapper">
-                <{{@root.tag}} class="menu__link menu-two__link {{ level_class }} {{ level_sub_classes }}" gtm-menu-title="{{ menu_item.name }}" href="{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
+                <{{@root.tag}} class="menu__link menu-two__link {{ level_class }} sub-nav-{{cleanCssIdentifier @root.sub_nav_name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
               </div>
               {{#if menu_item.children }}
                 {{> main_menu_level3_partial name=name items=menu_item.children level_class=level_class }}
