@@ -37,7 +37,7 @@ class HelloMemberHelper {
    *   TRUE/FALSE
    */
   public function isHelloMemberEnabled() {
-    return $this->configFactory->get('alshaya_hello_member.settings')->get('enabled');
+    return $this->getConfig()->get('status');
   }
 
   /**
@@ -47,7 +47,33 @@ class HelloMemberHelper {
    *   TRUE/FALSE
    */
   public function isAuraIntegrationEnabled() {
-    return $this->configFactory->get('alshaya_hello_member.settings')->get('aura_integration_enabled');
+    return $this->getConfig()->get('aura_integration_status');
+  }
+
+  /**
+   * Helper to get Cache Tags for Hello member Config.
+   *
+   * @return string[]
+   *   A set of cache tags.
+   */
+  public function getCacheTags() {
+    return $this->getConfig()->getCacheTags();
+  }
+
+  /**
+   * Wrapper function to get Hello member Config.
+   *
+   * @return \Drupal\Core\Config\ImmutableConfig
+   *   Online Returns Config.
+   */
+  public function getConfig() {
+    static $config;
+
+    if (is_null($config)) {
+      $config = $this->configFactory->get('alshaya_online_returns.settings');
+    }
+
+    return $config;
   }
 
 }

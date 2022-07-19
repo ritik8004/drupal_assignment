@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import logger from '../../../../../../js/utilities/logger';
 import getStringMessage from '../../../../../../js/utilities/strings';
@@ -84,9 +83,9 @@ class MyPointsHistory extends React.Component {
                 <p className="history-dark-title">
                   {data.channel}
                 </p>
-                <ConditionalView condition={hasValue(data.location_name)}>
+                {hasValue(data.location_name) && (
                   <p className="history-light-title">{data.location_name}</p>
-                </ConditionalView>
+                )}
               </div>
               <div className="points-date">{moment(new Date(data.date)).format('DD/MM/YYYY')}</div>
               <div className="points-earned">
@@ -95,11 +94,11 @@ class MyPointsHistory extends React.Component {
               </div>
             </div>
           ))}
-          <ConditionalView condition={totalCount === pageSize}>
+          {(totalCount === pageSize) && (
             <div className="load-more-wrapper">
               <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
             </div>
-          </ConditionalView>
+          )}
         </div>
       </>
     );

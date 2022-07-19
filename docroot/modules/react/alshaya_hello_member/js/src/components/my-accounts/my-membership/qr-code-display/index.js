@@ -2,7 +2,6 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import QRCode from 'react-qr-code';
 import getStringMessage from '../../../../../../../js/utilities/strings';
-import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 
 class QrCodeDisplay extends React.Component {
   constructor(props) {
@@ -65,7 +64,7 @@ class QrCodeDisplay extends React.Component {
                 {memberId}
               </div>
             </div>
-            <ConditionalView condition={qrCodeTitle && codeId}>
+            {(qrCodeTitle && codeId) && (
               <div className="qr-img-block">
                 <div className="qr-redeem">{qrCodeTitle}</div>
                 <div className="img-container">
@@ -79,7 +78,7 @@ class QrCodeDisplay extends React.Component {
                   {codeId}
                 </div>
               </div>
-            </ConditionalView>
+            )}
           </div>
         </Popup>
       </>

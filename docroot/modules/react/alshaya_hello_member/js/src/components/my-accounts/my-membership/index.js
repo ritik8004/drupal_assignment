@@ -59,11 +59,8 @@ class MyMembership extends React.Component {
     return (
       <>
         <div className="member-name">
-          {getStringMessage('hi')}
-          {' '}
-          {myMembershipData.apc_first_name}
-          {' '}
-          {myMembershipData.apc_last_name}
+          {Drupal.t('@hello_text @first_name @last_name',
+            { '@hello_text': getStringMessage('hi'), '@first_name': myMembershipData.apc_first_name, '@last_name': myMembershipData.apc_last_name }, { context: 'hello_member' })}
         </div>
         <div className="points-block">
           <div className="my-points">

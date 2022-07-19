@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { isMobile } from '../../../../../../../js/utilities/display';
@@ -32,13 +31,13 @@ const MyOffersAndVouchers = ({ myBenefitsList }) => {
           </div>
         </a>
       ))}
-      <ConditionalView condition={myBenefitsList.length > showMoreLimit}>
+      {(myBenefitsList.length > showMoreLimit) && (
         <div className="btn-wrapper">
           <a onClick={() => setExpanded(!expanded)}>
             {expanded ? getStringMessage('show_less') : getStringMessage('show_all')}
           </a>
         </div>
-      </ConditionalView>
+      )}
     </div>
   );
 };
