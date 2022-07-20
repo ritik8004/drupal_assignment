@@ -45,3 +45,43 @@ function alshaya_olapic_uninstall() {
     $config->delete();
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update olapic block config to use entity_bundle condition plugin.
+ */
+function alshaya_olapic_update_9001() {
+  $block_configs = [
+    'block.block.alshayaolapicwidget_2',
+    'block.block.alshayaolapicwidget_4',
+  ];
+  foreach ($block_configs as $block_id) {
+    $config = \Drupal::configFactory()->getEditable($block_id);
+    $node_type_visibility = $config ? $config->get('visibility.node_type') : [];
+    // Run update hook only if deprecated plugin exists.
+    if (!empty($node_type_visibility)) {
+      // If entity_bundle:node condition already exists, then update.
+      if ($config->get('visibility.entity_bundle:node')) {
+        foreach (array_keys($node_type_visibility['bundles']) as $bundle_name) {
+          $config->set('visibility.entity_bundle:node.bundles.' . $bundle_name, $bundle_name);
+        }
+      }
+      // Create new entity_bundle:node condition.
+      else {
+        $value = [
+          'id' => 'entity_bundle:node',
+          'negate' => FALSE,
+          'context_mapping' => [
+            'node' => '@node.node_route_context:node',
+          ],
+          'bundles' => $node_type_visibility['bundles'],
+        ];
+        $config->set('visibility.entity_bundle:node', $value);
+      }
+      // Delete deprecated plugin.
+      $config->clear('visibility.node_type');
+      $config->save();
+    }
+  }
+}
