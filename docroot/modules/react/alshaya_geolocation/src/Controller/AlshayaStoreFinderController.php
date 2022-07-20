@@ -70,6 +70,12 @@ class AlshayaStoreFinderController extends ControllerBase {
           'storeLabels' => $labels,
         ],
       ],
+      '#cache' => [
+        'tags' => [
+          'config:alshaya_stores_finder.settings',
+          'node_list:store',
+        ],
+      ],
     ];
   }
 
@@ -93,6 +99,12 @@ class AlshayaStoreFinderController extends ControllerBase {
         'library' => $libraries,
         'drupalSettings' => [
           'storeLabels' => $labels,
+        ],
+      ],
+      '#cache' => [
+        'tags' => [
+          'config:alshaya_stores_finder.settings',
+          'node_list:store',
         ],
       ],
     ];

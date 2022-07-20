@@ -2,8 +2,9 @@
 
 namespace Drupal\alshaya_stores_finder\Controller;
 
+use Drupal\Core\Cache\CacheableJsonResponse;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -118,7 +119,20 @@ class AlshayaLocationsNonTransac extends ControllerBase {
       $data['items'][] = $node_data;
     }
 
-    return new JsonResponse(($data));
+    $response = new CacheableJsonResponse($data, 200);
+
+    // Adding cacheability metadata, so whenever, cache invalidates, this
+    // url's cached response also gets invalidate.
+    $cacheMetadata = new CacheableMetadata();
+
+    // Adding cache tags.
+    $cacheMetadata->addCacheTags([
+      'config:alshaya_stores_finder.settings',
+      'node_list:store',
+    ]);
+    $response->addCacheableDependency($cacheMetadata);
+
+    return $response;
   }
 
 }
