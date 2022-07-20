@@ -76,6 +76,19 @@
     .mb-verifier {
       color: $hm-registration-labels-txt;
       padding-top: rem(16);
+
+      .verified-msg {
+        color: $hm-opt-success !important;
+        display: flex;
+        margin-#{$left}: rem(-5);
+
+        @include icon(check) {
+          color: $hm-opt-success;
+          background: $hm-registration-fields-bg;
+          position: relative;
+          font-size: rem(24);
+        }
+      }
     }
 
     .hello-member-otp-popup-form {
